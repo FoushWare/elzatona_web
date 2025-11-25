@@ -1,0 +1,1902 @@
+[
+  {
+    "id": "b9e2950f-5cc2-482f-9557-9fe136a3633e",
+    "title": "What are the lifecycle methods going to be deprecated in React v16?",
+    "content": "What are the lifecycle methods going to be deprecated in React v16?",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "The following lifecycle methods going to be unsafe coding practices and will be more problematic with async rendering.\n\n    1. `componentWillMount()`\n    2. `componentWillReceiveProps()`\n    3. `componentWillUpdate()`\n\n    Starting with React v16.3 these methods are aliased with `UNSAFE_` prefix, and the unprefixed version will be removed in React v17.",
+    "options": null,
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=SqcY0GlETPk",
+        "type": "video",
+        "title": "React Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "8:25:00",
+        "description": "Complete React tutorial from scratch"
+      },
+      {
+        "url": "https://react.dev/learn",
+        "type": "article",
+        "title": "React Documentation",
+        "author": "React Team",
+        "description": "Official React documentation and tutorials"
+      },
+      {
+        "url": "https://www.udemy.com/course/react-the-complete-guide-incl-redux/",
+        "type": "course",
+        "title": "React - The Complete Guide",
+        "author": "Maximilian Schwarzmüller",
+        "duration": "48 hours",
+        "description": "Master React and Redux with hands-on projects"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-18T23:14:50.561347+00:00",
+    "updatedAt": "2025-11-24T22:52:08.102565+00:00"
+  },
+  {
+    "id": "edcc3165-321b-4b21-9739-272f44971b80",
+    "title": "What is the recommended ordering of methods in component class?",
+    "content": "What is the recommended ordering of methods in component class?",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "_Recommended_ ordering of methods from _mounting_ to _render stage_:\n\n    1. `static` methods\n    2. `constructor()`\n    3. `getChildContext()`\n    4. `componentWillMount()`\n    5. `componentDidMount()`\n    6. `componentWillReceiveProps()`\n    7. `shouldComponentUpdate()`\n    8. `componentWillUpdate()`\n    9. `componentDidUpdate()`\n    10. `componentWillUnmount()`\n    11. click handlers or event handlers like `onClickSubmit()` or `onChangeDescription()`\n    12. getter methods for render like `getSelectReason()` or `getFooterContent()`\n    13. optional render methods like `renderNavigation()` or `renderProfilePicture()`\n    14. `render()`",
+    "options": null,
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=SqcY0GlETPk",
+        "type": "video",
+        "title": "React Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "8:25:00",
+        "description": "Complete React tutorial from scratch"
+      },
+      {
+        "url": "https://react.dev/learn",
+        "type": "article",
+        "title": "React Documentation",
+        "author": "React Team",
+        "description": "Official React documentation and tutorials"
+      },
+      {
+        "url": "https://www.udemy.com/course/react-the-complete-guide-incl-redux/",
+        "type": "course",
+        "title": "React - The Complete Guide",
+        "author": "Maximilian Schwarzmüller",
+        "duration": "48 hours",
+        "description": "Master React and Redux with hands-on projects"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-18T23:14:50.561347+00:00",
+    "updatedAt": "2025-11-24T22:52:08.102565+00:00"
+  },
+  {
+    "id": "0a46da53-76dd-4a0d-b9c5-86bb75e802ef",
+    "title": "What is CRA and its benefits?",
+    "content": "What is CRA and its benefits?\n\n```javascript\n    # Installation\n    $ npm install -g create-react-app\n\n    # Create new project\n    $ create-react-app todo-app\n    $ cd todo-app\n\n    # Build, test and run\n    $ npm run build\n    $ npm run test\n    $ npm start\n```",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "The `create-react-app` CLI tool allows you to quickly create & run React applications with no configuration step.\n\n    Let's create Todo App using _CRA_:\n\n\n    It includes everything we need to build a React app:\n\n    1. React, JSX, ES6, and Flow syntax support.\n    2. Language extras beyond ES6 like the object spread operator.\n    3. Autoprefixed CSS, so you don't need -webkit- or other prefixes.\n    4. A fast interactive unit test runner with built-in support for coverage reporting.\n    5. A live development server that warns about common mistakes.\n    6. A build script to bundle JS, CSS, and images for production, with hashes and sourcemaps.",
+    "options": null,
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=SqcY0GlETPk",
+        "type": "video",
+        "title": "React Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "8:25:00",
+        "description": "Complete React tutorial from scratch"
+      },
+      {
+        "url": "https://react.dev/learn",
+        "type": "article",
+        "title": "React Documentation",
+        "author": "React Team",
+        "description": "Official React documentation and tutorials"
+      },
+      {
+        "url": "https://www.udemy.com/course/react-the-complete-guide-incl-redux/",
+        "type": "course",
+        "title": "React - The Complete Guide",
+        "author": "Maximilian Schwarzmüller",
+        "duration": "48 hours",
+        "description": "Master React and Redux with hands-on projects"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-18T23:14:50.561347+00:00",
+    "updatedAt": "2025-11-24T22:52:08.102565+00:00"
+  },
+  {
+    "id": "f25bf421-b22f-4a6b-a9c1-cfc4bb784375",
+    "title": "What is the difference between constructor and getInitialState?",
+    "content": "What is the difference between constructor and getInitialState?\n\n```javascript\n    const MyComponent = React.createClass({\n      getInitialState() {\n        return {\n          /* initial state */\n        };\n      },\n    });\n```",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "You should initialize state in the constructor when using ES6 classes, and `getInitialState()` method when using `React.createClass()`.\n\n    **Using ES6 classes:**\n\n\n    **Using `React.createClass()`:**\n\n\n    **Note:** `React.createClass()` is deprecated and removed in React v16. Use plain JavaScript classes instead.",
+    "options": null,
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=SqcY0GlETPk",
+        "type": "video",
+        "title": "React Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "8:25:00",
+        "description": "Complete React tutorial from scratch"
+      },
+      {
+        "url": "https://react.dev/learn",
+        "type": "article",
+        "title": "React Documentation",
+        "author": "React Team",
+        "description": "Official React documentation and tutorials"
+      },
+      {
+        "url": "https://www.udemy.com/course/react-the-complete-guide-incl-redux/",
+        "type": "course",
+        "title": "React - The Complete Guide",
+        "author": "Maximilian Schwarzmüller",
+        "duration": "48 hours",
+        "description": "Master React and Redux with hands-on projects"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-18T23:14:50.561347+00:00",
+    "updatedAt": "2025-11-24T22:52:08.102565+00:00"
+  },
+  {
+    "id": "878e31a5-1e2c-4296-8bf1-43247e41d601",
+    "title": "Why is `isMounted()` an anti-pattern and what is the proper solution?",
+    "content": "Why is `isMounted()` an anti-pattern and what is the proper solution?\n\n```javascript\n    if (this.isMounted()) {\n      this.setState({...})\n    }\n```",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "The primary use case for `isMounted()` is to avoid calling `setState()` after a component has been unmounted, because it will emit a warning.\n\n\n    Checking `isMounted()` before calling `setState()` does eliminate the warning, but it also defeats the purpose of the warning. Using `isMounted()` is a code smell because the only reason you would check is because you think you might be holding a reference after the component has unmounted.\n\n    An optimal solution would be to find places where `setState()` might be called after a component has unmounted, and fix them. Such situations most commonly occur due to callbacks, when a component is waiting for some data and gets unmounted before the data arrives. Ideally, any callbacks should be canceled in `componentWillUnmount()`, prior to unmounting.",
+    "options": null,
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=SqcY0GlETPk",
+        "type": "video",
+        "title": "React Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "8:25:00",
+        "description": "Complete React tutorial from scratch"
+      },
+      {
+        "url": "https://react.dev/learn",
+        "type": "article",
+        "title": "React Documentation",
+        "author": "React Team",
+        "description": "Official React documentation and tutorials"
+      },
+      {
+        "url": "https://www.udemy.com/course/react-the-complete-guide-incl-redux/",
+        "type": "course",
+        "title": "React - The Complete Guide",
+        "author": "Maximilian Schwarzmüller",
+        "duration": "48 hours",
+        "description": "Master React and Redux with hands-on projects"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-18T23:14:50.561347+00:00",
+    "updatedAt": "2025-11-24T22:52:08.102565+00:00"
+  },
+  {
+    "id": "61130ec9-307b-4421-9e34-4c76d4e38779",
+    "title": "Why we need to pass a function to setState()?",
+    "content": "Why we need to pass a function to setState()?\n\n```javascript\n    // Correct\n    this.setState((prevState, props) => ({\n      counter: prevState.counter + props.increment,\n    }));\n```",
+    "type": "code",
+    "difficulty": "intermediate",
+    "explanation": "The reason behind for this is that `setState()` is an asynchronous operation. React batches state changes for performance reasons, so the state may not change immediately after `setState()` is called. That means you should not rely on the current state when calling `setState()` since you can't be sure what that state will be. The solution is to pass a function to `setState()`, with the previous state as an argument. By doing this you can avoid issues with the user getting the old state value on access due to the asynchronous nature of `setState()`.\n\n    Let's say the initial count value is zero. After three consecutive increment operations, the value is going to be incremented only by one.\n\n\n    If we pass a function to `setState()`, the count gets incremented correctly.\n\n\n    **(OR)**\n\n    ### Why function is preferred over object for `setState()`?\n\n    React may batch multiple `setState()` calls into a single update for performance. Because `this.props` and `this.state` may be updated asynchronously, you should not rely on their values for calculating the next state.\n\n    This counter example will fail to update as expected:\n\n\n    The preferred approach is to call `setState()` with function rather than object. That function will receive the previous state as the first argument, and the props at the time the update is applied as the second argument.",
+    "options": null,
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=SqcY0GlETPk",
+        "type": "video",
+        "title": "React Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "8:25:00",
+        "description": "Complete React tutorial from scratch"
+      },
+      {
+        "url": "https://react.dev/learn",
+        "type": "article",
+        "title": "React Documentation",
+        "author": "React Team",
+        "description": "Official React documentation and tutorials"
+      },
+      {
+        "url": "https://www.udemy.com/course/react-the-complete-guide-incl-redux/",
+        "type": "course",
+        "title": "React - The Complete Guide",
+        "author": "Maximilian Schwarzmüller",
+        "duration": "48 hours",
+        "description": "Master React and Redux with hands-on projects"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-18T23:14:50.561347+00:00",
+    "updatedAt": "2025-11-24T23:39:20.943477+00:00"
+  },
+  {
+    "id": "9826a616-6037-465b-a775-39cc114d537a",
+    "title": "What is the purpose of `getSnapshotBeforeUpdate()` lifecycle method?",
+    "content": "What is the purpose of `getSnapshotBeforeUpdate()` lifecycle method?\n\n```javascript\n    class MyComponent extends React.Component {\n      getSnapshotBeforeUpdate(prevProps, prevState) {\n        // ...\n      }\n    }\n```",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "The new `getSnapshotBeforeUpdate()` lifecycle method is called right before DOM updates. The return value from this method will be passed as the third parameter to `componentDidUpdate()`.\n\n\n    This lifecycle method along with `componentDidUpdate()` covers all the use cases of `componentWillUpdate()`.",
+    "options": null,
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=SqcY0GlETPk",
+        "type": "video",
+        "title": "React Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "8:25:00",
+        "description": "Complete React tutorial from scratch"
+      },
+      {
+        "url": "https://react.dev/learn",
+        "type": "article",
+        "title": "React Documentation",
+        "author": "React Team",
+        "description": "Official React documentation and tutorials"
+      },
+      {
+        "url": "https://www.udemy.com/course/react-the-complete-guide-incl-redux/",
+        "type": "course",
+        "title": "React - The Complete Guide",
+        "author": "Maximilian Schwarzmüller",
+        "duration": "48 hours",
+        "description": "Master React and Redux with hands-on projects"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-18T23:14:50.561347+00:00",
+    "updatedAt": "2025-11-24T22:52:08.102565+00:00"
+  },
+  {
+    "id": "4bbf3f36-4c85-47f4-8ff4-9e4c2b95b507",
+    "title": "How are error boundaries handled in React v15?",
+    "content": "How are error boundaries handled in React v15?",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "React v15 provided very basic support for _error boundaries_ using `unstable_handleError` method. It has been renamed to `componentDidCatch` in React v16.",
+    "options": null,
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=SqcY0GlETPk",
+        "type": "video",
+        "title": "React Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "8:25:00",
+        "description": "Complete React tutorial from scratch"
+      },
+      {
+        "url": "https://react.dev/learn",
+        "type": "article",
+        "title": "React Documentation",
+        "author": "React Team",
+        "description": "Official React documentation and tutorials"
+      },
+      {
+        "url": "https://www.udemy.com/course/react-the-complete-guide-incl-redux/",
+        "type": "course",
+        "title": "React - The Complete Guide",
+        "author": "Maximilian Schwarzmüller",
+        "duration": "48 hours",
+        "description": "Master React and Redux with hands-on projects"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-18T23:14:23.658819+00:00",
+    "updatedAt": "2025-11-24T22:52:08.102565+00:00"
+  },
+  {
+    "id": "dae8051b-3502-4c7c-a442-5a38ffe0e834",
+    "title": "What will happen if you use `setState()` in constructor?",
+    "content": "What will happen if you use `setState()` in constructor?",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "When you use `setState()`, then apart from assigning to the object state React also re-renders the component and all its children. You would get error like this: _Can only update a mounted or mounting component._ So we need to use `this.state` to initialize variables inside constructor.",
+    "options": null,
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=SqcY0GlETPk",
+        "type": "video",
+        "title": "React Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "8:25:00",
+        "description": "Complete React tutorial from scratch"
+      },
+      {
+        "url": "https://react.dev/learn",
+        "type": "article",
+        "title": "React Documentation",
+        "author": "React Team",
+        "description": "Official React documentation and tutorials"
+      },
+      {
+        "url": "https://www.udemy.com/course/react-the-complete-guide-incl-redux/",
+        "type": "course",
+        "title": "React - The Complete Guide",
+        "author": "Maximilian Schwarzmüller",
+        "duration": "48 hours",
+        "description": "Master React and Redux with hands-on projects"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-18T23:14:23.658819+00:00",
+    "updatedAt": "2025-11-24T22:52:08.102565+00:00"
+  },
+  {
+    "id": "37169353-9c85-412e-9103-69cf816d1995",
+    "title": "What are error boundaries in React v16?",
+    "content": "What are error boundaries in React v16?\n\n```javascript\n    <ErrorBoundary\n      <MyWidget />\n    </ErrorBoundary\n```",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "_Error boundaries_ are components that catch JavaScript errors anywhere in their child component tree, log those errors, and display a fallback UI instead of the component tree that crashed.\n\n    A class component becomes an error boundary if it defines a new lifecycle method called `componentDidCatch(error, info)` or `static getDerivedStateFromError() `:\n\n\n    After that use it as a regular component:",
+    "options": null,
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=SqcY0GlETPk",
+        "type": "video",
+        "title": "React Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "8:25:00",
+        "description": "Complete React tutorial from scratch"
+      },
+      {
+        "url": "https://react.dev/learn",
+        "type": "article",
+        "title": "React Documentation",
+        "author": "React Team",
+        "description": "Official React documentation and tutorials"
+      },
+      {
+        "url": "https://www.udemy.com/course/react-the-complete-guide-incl-redux/",
+        "type": "course",
+        "title": "React - The Complete Guide",
+        "author": "Maximilian Schwarzmüller",
+        "duration": "48 hours",
+        "description": "Master React and Redux with hands-on projects"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-18T23:14:23.658819+00:00",
+    "updatedAt": "2025-11-24T22:52:08.102565+00:00"
+  },
+  {
+    "id": "a9b80df1-233a-4f14-99a1-eb2504e7cf67",
+    "title": "What is the purpose of using super constructor with props argument?",
+    "content": "What is the purpose of using super constructor with props argument?\n\n```javascript\n    class MyComponent extends React.Component {\n      constructor(props) {\n        super();\n\n        console.log(this.props); // prints undefined\n\n        // but props parameter is still available\n        console.log(props); // prints { name: 'John', age: 42 }\n      }\n\n      render() {\n        // no difference outside constructor\n        console.log(this.props); // prints { name: 'John', age: 42 }\n      }\n    }\n```",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "A child class constructor cannot make use of `this` reference until the `super()` method has been called. The same applies to ES6 sub-classes as well. The main reason for passing props parameter to `super()` call is to access `this.props` in your child constructors.\n\n    **Passing props:**\n\n\n    **Not passing props:**\n\n\n    The above code snippets reveals that `this.props` is different only within the constructor. It would be the same outside the constructor.",
+    "options": null,
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=SqcY0GlETPk",
+        "type": "video",
+        "title": "React Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "8:25:00",
+        "description": "Complete React tutorial from scratch"
+      },
+      {
+        "url": "https://react.dev/learn",
+        "type": "article",
+        "title": "React Documentation",
+        "author": "React Team",
+        "description": "Official React documentation and tutorials"
+      },
+      {
+        "url": "https://www.udemy.com/course/react-the-complete-guide-incl-redux/",
+        "type": "course",
+        "title": "React - The Complete Guide",
+        "author": "Maximilian Schwarzmüller",
+        "duration": "48 hours",
+        "description": "Master React and Redux with hands-on projects"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-18T23:14:23.658819+00:00",
+    "updatedAt": "2025-11-24T22:52:08.102565+00:00"
+  },
+  {
+    "id": "036c3db8-f258-488d-9fcc-d62a949e757f",
+    "title": "What will happen if you use props in initial state?",
+    "content": "What will happen if you use props in initial state?\n\n```javascript\n    class MyComponent extends React.Component {\n      constructor(props) {\n        super(props);\n\n        this.state = {\n          record: [],\n        };\n      }\n\n      render() {\n        return <div{this.props.inputValue}</div;\n      }\n    }\n```",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "If the props on the component are changed without the component being refreshed, the new prop value will never be displayed because the constructor function will never update the current state of the component. The initialization of state from props only runs when the component is first created.\n\n    The below component won't display the updated input value:\n\n\n    Using props inside render method will update the value:",
+    "options": null,
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=SqcY0GlETPk",
+        "type": "video",
+        "title": "React Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "8:25:00",
+        "description": "Complete React tutorial from scratch"
+      },
+      {
+        "url": "https://react.dev/learn",
+        "type": "article",
+        "title": "React Documentation",
+        "author": "React Team",
+        "description": "Official React documentation and tutorials"
+      },
+      {
+        "url": "https://www.udemy.com/course/react-the-complete-guide-incl-redux/",
+        "type": "course",
+        "title": "React - The Complete Guide",
+        "author": "Maximilian Schwarzmüller",
+        "duration": "48 hours",
+        "description": "Master React and Redux with hands-on projects"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-18T23:14:23.658819+00:00",
+    "updatedAt": "2025-11-24T22:52:08.102565+00:00"
+  },
+  {
+    "id": "0e69f443-c88b-4603-84f3-4675049cb313",
+    "title": "What would be the common mistake of function being called every time the component renders?",
+    "content": "What would be the common mistake of function being called every time the component renders?\n\n```javascript\n    render() {\n      // Correct: handleClick is passed as a reference!\n      return <button onClick={this.handleClick}>{'Click Me'}</button\n    }\n```",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "You need to make sure that function is not being called while passing the function as a parameter.\n\n\n    Instead, pass the function itself without parenthesis:",
+    "options": null,
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=SqcY0GlETPk",
+        "type": "video",
+        "title": "React Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "8:25:00",
+        "description": "Complete React tutorial from scratch"
+      },
+      {
+        "url": "https://react.dev/learn",
+        "type": "article",
+        "title": "React Documentation",
+        "author": "React Team",
+        "description": "Official React documentation and tutorials"
+      },
+      {
+        "url": "https://www.udemy.com/course/react-the-complete-guide-incl-redux/",
+        "type": "course",
+        "title": "React - The Complete Guide",
+        "author": "Maximilian Schwarzmüller",
+        "duration": "48 hours",
+        "description": "Master React and Redux with hands-on projects"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-18T23:14:23.658819+00:00",
+    "updatedAt": "2025-11-24T22:52:08.102565+00:00"
+  },
+  {
+    "id": "d198f09c-9128-4f1c-ba1d-1e82e58d470d",
+    "title": "What is the purpose of render method of `react-dom`?",
+    "content": "What is the purpose of render method of `react-dom`?\n\n```javascript\n    ReactDOM.render(element, container, [callback])\n```",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "This method is used to render a React element into the DOM in the supplied container and return a reference to the component. If the React element was previously rendered into container, it will perform an update on it and only mutate the DOM as necessary to reflect the latest changes.\n\n\n    If the optional callback is provided, it will be executed after the component is rendered or updated.",
+    "options": null,
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=SqcY0GlETPk",
+        "type": "video",
+        "title": "React Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "8:25:00",
+        "description": "Complete React tutorial from scratch"
+      },
+      {
+        "url": "https://react.dev/learn",
+        "type": "article",
+        "title": "React Documentation",
+        "author": "React Team",
+        "description": "Official React documentation and tutorials"
+      },
+      {
+        "url": "https://www.udemy.com/course/react-the-complete-guide-incl-redux/",
+        "type": "course",
+        "title": "React - The Complete Guide",
+        "author": "Maximilian Schwarzmüller",
+        "duration": "48 hours",
+        "description": "Master React and Redux with hands-on projects"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-18T23:14:23.658819+00:00",
+    "updatedAt": "2025-11-24T22:52:08.102565+00:00"
+  },
+  {
+    "id": "deaa7efe-7921-42ae-99db-8a76a2fe24cc",
+    "title": "How to set state with a dynamic key name?",
+    "content": "How to set state with a dynamic key name?\n\n```javascript\n    handleInputChange(event) {\n      this.setState({ [event.target.id]: event.target.value })\n    }\n```",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "If you are using ES6 or the Babel transpiler to transform your JSX code then you can accomplish this with _computed property names_.",
+    "options": null,
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=SqcY0GlETPk",
+        "type": "video",
+        "title": "React Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "8:25:00",
+        "description": "Complete React tutorial from scratch"
+      },
+      {
+        "url": "https://react.dev/learn",
+        "type": "article",
+        "title": "React Documentation",
+        "author": "React Team",
+        "description": "Official React documentation and tutorials"
+      },
+      {
+        "url": "https://www.udemy.com/course/react-the-complete-guide-incl-redux/",
+        "type": "course",
+        "title": "React - The Complete Guide",
+        "author": "Maximilian Schwarzmüller",
+        "duration": "48 hours",
+        "description": "Master React and Redux with hands-on projects"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-18T23:14:23.658819+00:00",
+    "updatedAt": "2025-11-24T22:52:08.102565+00:00"
+  },
+  {
+    "id": "c0730e88-da1f-43e7-b3f4-350008e299a3",
+    "title": "How you use decorators in React?",
+    "content": "How you use decorators in React?\n\n```javascript\n    @setTitle(\"Profile\")\n    class Profile extends React.Component {\n      //....\n    }\n\n    /*\n      title is a string that will be set as a document title\n      WrappedComponent is what our decorator will receive when\n      put directly above a component class as seen in the example above\n    */\n    const setTitle = (title) => (WrappedComponent) => {\n      return class extends React.Component {\n        componentDidMount() {\n          document.title = title;\n        }\n\n        render() {\n          return <WrappedComponent {...this.props} />;\n        }\n      };\n    };\n```",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "You can _decorate_ your _class_ components, which is the same as passing the component into a function. **Decorators** are flexible and readable way of modifying component functionality.\n\n\n    **Note:** Decorators are a feature that didn't make it into ES7, but are currently a _stage 2 proposal_.",
+    "options": null,
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=SqcY0GlETPk",
+        "type": "video",
+        "title": "React Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "8:25:00",
+        "description": "Complete React tutorial from scratch"
+      },
+      {
+        "url": "https://react.dev/learn",
+        "type": "article",
+        "title": "React Documentation",
+        "author": "React Team",
+        "description": "Official React documentation and tutorials"
+      },
+      {
+        "url": "https://www.udemy.com/course/react-the-complete-guide-incl-redux/",
+        "type": "course",
+        "title": "React - The Complete Guide",
+        "author": "Maximilian Schwarzmüller",
+        "duration": "48 hours",
+        "description": "Master React and Redux with hands-on projects"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-18T23:14:23.658819+00:00",
+    "updatedAt": "2025-11-24T22:52:08.102565+00:00"
+  },
+  {
+    "id": "68d16b8e-2320-4f9d-90a1-56c23457bffd",
+    "title": "Is it good to use `setState()` in `componentWillMount()` method?",
+    "content": "Is it good to use `setState()` in `componentWillMount()` method?\n\n```javascript\n    componentDidMount() {\n      axios.get(`api/todos`)\n        .then((result) => {\n          this.setState({\n            messages: [...result.data]\n          })\n        })\n    }\n```",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "Yes, it is safe to use `setState()` inside `componentWillMount()` method. But at the same it is recommended to avoid async initialization in `componentWillMount()` lifecycle method. `componentWillMount()` is invoked immediately before mounting occurs. It is called before `render()`, therefore setting state in this method will not trigger a re-render. Avoid introducing any side-effects or subscriptions in this method. We need to make sure async calls for component initialization happened in `componentDidMount()` instead of `componentWillMount()`.",
+    "options": null,
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=SqcY0GlETPk",
+        "type": "video",
+        "title": "React Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "8:25:00",
+        "description": "Complete React tutorial from scratch"
+      },
+      {
+        "url": "https://react.dev/learn",
+        "type": "article",
+        "title": "React Documentation",
+        "author": "React Team",
+        "description": "Official React documentation and tutorials"
+      },
+      {
+        "url": "https://www.udemy.com/course/react-the-complete-guide-incl-redux/",
+        "type": "course",
+        "title": "React - The Complete Guide",
+        "author": "Maximilian Schwarzmüller",
+        "duration": "48 hours",
+        "description": "Master React and Redux with hands-on projects"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-18T23:14:23.658819+00:00",
+    "updatedAt": "2025-11-24T22:52:08.102565+00:00"
+  },
+  {
+    "id": "40a30691-db2e-4f73-80c6-5ff317e0ab28",
+    "title": "What are the lifecycle methods of React?",
+    "content": "What are the lifecycle methods of React?",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "Before React 16.3\n\n    - **componentWillMount:** Executed before rendering and is used for App level configuration in your root component.\n    - **componentDidMount:** Executed after first rendering and here all AJAX requests, DOM or state updates, and set up event listeners should occur.\n    - **componentWillReceiveProps:** Executed when particular prop updates to trigger state transitions.\n    - **shouldComponentUpdate:** Determines if the component will be updated or not. By default it returns `true`. If you are sure that the component doesn't need to render after state or props are updated, you can return false value. It is a great place to improve performance as it allows you to prevent a re-render if component receives new prop.\n    - **componentWillUpdate:** Executed before re-rendering the component when there are props & state changes confirmed by `shouldComponentUpdate()` which returns true.\n    - **componentDidUpdate:** Mostly it is used to update the DOM in response to prop or state changes.\n    - **componentWillUnmount:** It will be used to cancel any outgoing network requests, or remove all event listeners associated with the component.\n\n    React 16.3+\n\n    - **getDerivedStateFromProps:** Invoked right before calling `render()` and is invoked on _every_ render. This exists for rare use cases where you need a derived state. Worth reading [if you need derived state](https://reactjs.org/blog/2018/06/07/you-probably-dont-need-derived-state.html).\n    - **componentDidMount:** Executed after first rendering and where all AJAX requests, DOM or state updates, and set up event listeners should occur.\n    - **shouldComponentUpdate:** Determines if the component will be updated or not. By default, it returns `true`. If you are sure that the component doesn't need to render after the state or props are updated, you can return a false value. It is a great place to improve performance as it allows you to prevent a re-render if component receives a new prop.\n    - **getSnapshotBeforeUpdate:** Executed right before rendered output is committed to the DOM. Any value returned by this will be passed into `componentDidUpdate()`. This is useful to capture information from the DOM i.e. scroll position.\n    - **componentDidUpdate:** Mostly it is used to update the DOM in response to prop or state changes. This will not fire if `shouldComponentUpdate()` returns `false`.\n    - **componentWillUnmount** It will be used to cancel any outgoing network requests, or remove all event listeners associated with the component.",
+    "options": null,
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=SqcY0GlETPk",
+        "type": "video",
+        "title": "React Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "8:25:00",
+        "description": "Complete React tutorial from scratch"
+      },
+      {
+        "url": "https://react.dev/learn",
+        "type": "article",
+        "title": "React Documentation",
+        "author": "React Team",
+        "description": "Official React documentation and tutorials"
+      },
+      {
+        "url": "https://www.udemy.com/course/react-the-complete-guide-incl-redux/",
+        "type": "course",
+        "title": "React - The Complete Guide",
+        "author": "Maximilian Schwarzmüller",
+        "duration": "48 hours",
+        "description": "Master React and Redux with hands-on projects"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-18T23:14:02.167239+00:00",
+    "updatedAt": "2025-11-24T22:52:08.102565+00:00"
+  },
+  {
+    "id": "66e9733f-bef6-4fd3-963f-be4a9f8cb9d9",
+    "title": "Why are String Refs legacy?",
+    "content": "Why are String Refs legacy?\n\n```javascript\n      class MyComponent extends Component {\n        renderRow = (index) => {\n          // This won't work. Ref will get attached to DataTable rather than MyComponent:\n          return <input ref={\"input-\" + index} />;\n\n          // This would work though! Callback refs are awesome.\n          return <input ref={(input) => (this[\"input-\" + index] = input)} />;\n        };\n\n        render() {\n          return (\n            <DataTable data={this.props.data} renderRow={this.renderRow} />\n          );\n        }\n      }\n```",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "If you worked with React before, you might be familiar with an older API where the `ref` attribute is a string, like `ref={'textInput'}`, and the DOM node is accessed as `this.refs.textInput`. We advise against it because _string refs have below issues_, and are considered legacy. String refs were **removed in React v16**.\n\n   1. They _force React to keep track of currently executing component_. This is problematic because it makes react module stateful, and thus causes weird errors when react module is duplicated in the bundle.\n   2. They are _not composable_ — if a library puts a ref on the passed child, the user can't put another ref on it. Callback refs are perfectly composable.\n   3. They _don't work with static analysis_ like Flow. Flow can't guess the magic that framework does to make the string ref appear on `this.refs`, as well as its type (which could be different). Callback refs are friendlier to static analysis.\n   4. It doesn't work as most people would expect with the \"render callback\" pattern (e.g. <DataGrid renderRow={this.renderRow} />)",
+    "options": null,
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=SqcY0GlETPk",
+        "type": "video",
+        "title": "React Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "8:25:00",
+        "description": "Complete React tutorial from scratch"
+      },
+      {
+        "url": "https://react.dev/learn",
+        "type": "article",
+        "title": "React Documentation",
+        "author": "React Team",
+        "description": "Official React documentation and tutorials"
+      },
+      {
+        "url": "https://www.udemy.com/course/react-the-complete-guide-incl-redux/",
+        "type": "course",
+        "title": "React - The Complete Guide",
+        "author": "Maximilian Schwarzmüller",
+        "duration": "48 hours",
+        "description": "Master React and Redux with hands-on projects"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-18T23:14:02.167239+00:00",
+    "updatedAt": "2025-11-24T22:52:08.102565+00:00"
+  },
+  {
+    "id": "6ffb8660-0ef7-438b-9b1e-945912454ab1",
+    "title": "What is context?",
+    "content": "What is context?\n\n```javascript\n    const { Provider, Consumer } = React.createContext(defaultValue);\n```",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "_Context_ provides a way to pass data through the component tree without having to pass props down manually at every level.\n\n    For example, authenticated users, locale preferences, UI themes need to be accessed in the application by many components.",
+    "options": null,
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=SqcY0GlETPk",
+        "type": "video",
+        "title": "React Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "8:25:00",
+        "description": "Complete React tutorial from scratch"
+      },
+      {
+        "url": "https://react.dev/learn",
+        "type": "article",
+        "title": "React Documentation",
+        "author": "React Team",
+        "description": "Official React documentation and tutorials"
+      },
+      {
+        "url": "https://www.udemy.com/course/react-the-complete-guide-incl-redux/",
+        "type": "course",
+        "title": "React - The Complete Guide",
+        "author": "Maximilian Schwarzmüller",
+        "duration": "48 hours",
+        "description": "Master React and Redux with hands-on projects"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-18T23:14:02.167239+00:00",
+    "updatedAt": "2025-11-24T22:52:08.102565+00:00"
+  },
+  {
+    "id": "39b2cfac-b47a-402b-b48e-9125fbb3f98d",
+    "title": "How to create props proxy for HOC component?",
+    "content": "How to create props proxy for HOC component?\n\n```javascript\n    function HOC(WrappedComponent) {\n      return class Test extends Component {\n        render() {\n          const newProps = {\n            title: \"New Header\",\n            footer: false,\n            showFeatureX: false,\n            showFeatureY: true,\n          };\n\n          return <WrappedComponent {...this.props} {...newProps} />;\n        }\n      };\n    }\n```",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "You can add/edit props passed to the component using _props proxy_ pattern like this:",
+    "options": null,
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=SqcY0GlETPk",
+        "type": "video",
+        "title": "React Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "8:25:00",
+        "description": "Complete React tutorial from scratch"
+      },
+      {
+        "url": "https://react.dev/learn",
+        "type": "article",
+        "title": "React Documentation",
+        "author": "React Team",
+        "description": "Official React documentation and tutorials"
+      },
+      {
+        "url": "https://www.udemy.com/course/react-the-complete-guide-incl-redux/",
+        "type": "course",
+        "title": "React - The Complete Guide",
+        "author": "Maximilian Schwarzmüller",
+        "duration": "48 hours",
+        "description": "Master React and Redux with hands-on projects"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-18T23:14:02.167239+00:00",
+    "updatedAt": "2025-11-24T22:52:08.102565+00:00"
+  },
+  {
+    "id": "3ccdace7-3719-4ce5-af82-3158a69cb0d6",
+    "title": "What are forward refs?",
+    "content": "What are forward refs?\n\n```javascript\n   const ButtonElement = React.forwardRef((props, ref) => (\n     <button ref={ref} className=\"CustomButton\">\n       {props.children}\n     </button\n   ));\n\n   // Create ref to the DOM button:\n   const ref = React.createRef();\n   <ButtonElement ref={ref}>{\"Forward Ref\"}</ButtonElement;\n```",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "_Ref forwarding_ is a feature that lets some components take a _ref_ they receive, and pass it further down to a child.",
+    "options": null,
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=SqcY0GlETPk",
+        "type": "video",
+        "title": "React Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "8:25:00",
+        "description": "Complete React tutorial from scratch"
+      },
+      {
+        "url": "https://react.dev/learn",
+        "type": "article",
+        "title": "React Documentation",
+        "author": "React Team",
+        "description": "Official React documentation and tutorials"
+      },
+      {
+        "url": "https://www.udemy.com/course/react-the-complete-guide-incl-redux/",
+        "type": "course",
+        "title": "React - The Complete Guide",
+        "author": "Maximilian Schwarzmüller",
+        "duration": "48 hours",
+        "description": "Master React and Redux with hands-on projects"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-18T23:14:02.167239+00:00",
+    "updatedAt": "2025-11-24T22:52:08.102565+00:00"
+  },
+  {
+    "id": "a15d3f72-383f-470c-a73a-331d930f284d",
+    "title": "What are the different phases of component lifecycle?",
+    "content": "What are the different phases of component lifecycle?",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "The component lifecycle has three distinct lifecycle phases:\n\n    1. **Mounting:** The component is ready to mount in the browser DOM. This phase covers initialization from `constructor()`, `getDerivedStateFromProps()`, `render()`, and `componentDidMount()` lifecycle methods.\n\n    2. **Updating:** In this phase, the component gets updated in two ways, sending the new props and updating the state either from `setState()` or `forceUpdate()`. This phase covers `getDerivedStateFromProps()`, `shouldComponentUpdate()`, `render()`, `getSnapshotBeforeUpdate()` and `componentDidUpdate()` lifecycle methods.\n\n    3. **Unmounting:** In this last phase, the component is not needed and gets unmounted from the browser DOM. This phase includes `componentWillUnmount()` lifecycle method.\n\n    It's worth mentioning that React internally has a concept of phases when applying changes to the DOM. They are separated as follows\n\n    4. **Render** The component will render without any side effects. This applies to Pure components and in this phase, React can pause, abort, or restart the render.\n\n    5. **Pre-commit** Before the component actually applies the changes to the DOM, there is a moment that allows React to read from the DOM through the `getSnapshotBeforeUpdate()`.\n\n    6. **Commit** React works with the DOM and executes the final lifecycles respectively `componentDidMount()` for mounting, `componentDidUpdate()` for updating, and `componentWillUnmount()` for unmounting.\n\n    React 16.3+ Phases (or an [interactive version](http://projects.wojtekmaj.pl/react-lifecycle-methods-diagram/))\n\n    ![phases 16.4+](images/phases16.4.png)\n\n    Before React 16.3\n\n    ![phases 16.2](images/phases.png)",
+    "options": null,
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=SqcY0GlETPk",
+        "type": "video",
+        "title": "React Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "8:25:00",
+        "description": "Complete React tutorial from scratch"
+      },
+      {
+        "url": "https://react.dev/learn",
+        "type": "article",
+        "title": "React Documentation",
+        "author": "React Team",
+        "description": "Official React documentation and tutorials"
+      },
+      {
+        "url": "https://www.udemy.com/course/react-the-complete-guide-incl-redux/",
+        "type": "course",
+        "title": "React - The Complete Guide",
+        "author": "Maximilian Schwarzmüller",
+        "duration": "48 hours",
+        "description": "Master React and Redux with hands-on projects"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-18T23:14:02.167239+00:00",
+    "updatedAt": "2025-11-24T22:52:08.102565+00:00"
+  },
+  {
+    "id": "f8ebcf87-3ebd-48e9-8713-d5829b800a30",
+    "title": "Which is preferred option with in callback refs and findDOMNode()?",
+    "content": "Which is preferred option with in callback refs and findDOMNode()?\n\n```javascript\n   class MyComponent extends Component {\n     constructor(props) {\n       super(props);\n       this.node = createRef();\n     }\n     componentDidMount() {\n       this.node.current.scrollIntoView();\n     }\n\n     render() {\n       return <div ref={this.node} />;\n     }\n   }\n```",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "It is preferred to use _callback refs_ over `findDOMNode()` API. Because `findDOMNode()` prevents certain improvements in React in the future.\n\n   The **legacy** approach of using `findDOMNode`:\n\n\n   The recommended approach is:",
+    "options": null,
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=SqcY0GlETPk",
+        "type": "video",
+        "title": "React Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "8:25:00",
+        "description": "Complete React tutorial from scratch"
+      },
+      {
+        "url": "https://react.dev/learn",
+        "type": "article",
+        "title": "React Documentation",
+        "author": "React Team",
+        "description": "Official React documentation and tutorials"
+      },
+      {
+        "url": "https://www.udemy.com/course/react-the-complete-guide-incl-redux/",
+        "type": "course",
+        "title": "React - The Complete Guide",
+        "author": "Maximilian Schwarzmüller",
+        "duration": "48 hours",
+        "description": "Master React and Redux with hands-on projects"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-18T23:14:02.167239+00:00",
+    "updatedAt": "2025-11-24T22:52:08.102565+00:00"
+  },
+  {
+    "id": "a3207c2d-7483-46d3-aaba-4dab079530e2",
+    "title": "How to pass a parameter to an event handler or callback?",
+    "content": "How to pass a parameter to an event handler or callback?\n\n```javascript\n   <button onClick={this.handleClick(id)} />;\n   handleClick = (id) => () => {\n     console.log(\"Hello, your ticket number is\", id);\n   };\n```",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "You can use an _arrow function_ to wrap around an _event handler_ and pass parameters:\n\n\n   This is an equivalent to calling `.bind`:\n\n\n   Apart from these two approaches, you can also pass arguments to a function which is defined as arrow function",
+    "options": null,
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=SqcY0GlETPk",
+        "type": "video",
+        "title": "React Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "8:25:00",
+        "description": "Complete React tutorial from scratch"
+      },
+      {
+        "url": "https://react.dev/learn",
+        "type": "article",
+        "title": "React Documentation",
+        "author": "React Team",
+        "description": "Official React documentation and tutorials"
+      },
+      {
+        "url": "https://www.udemy.com/course/react-the-complete-guide-incl-redux/",
+        "type": "course",
+        "title": "React - The Complete Guide",
+        "author": "Maximilian Schwarzmüller",
+        "duration": "48 hours",
+        "description": "Master React and Redux with hands-on projects"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-18T23:14:02.167239+00:00",
+    "updatedAt": "2025-11-24T22:52:08.102565+00:00"
+  },
+  {
+    "id": "9f4887a0-3f31-4fd3-886d-3ea6b942bcfe",
+    "title": "What is the use of refs?",
+    "content": "What is the use of refs?",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "The _ref_ is used to return a reference to the element. They _should be avoided_ in most cases, however, they can be useful when you need a direct access to the DOM element or an instance of a component.",
+    "options": null,
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=SqcY0GlETPk",
+        "type": "video",
+        "title": "React Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "8:25:00",
+        "description": "Complete React tutorial from scratch"
+      },
+      {
+        "url": "https://react.dev/learn",
+        "type": "article",
+        "title": "React Documentation",
+        "author": "React Team",
+        "description": "Official React documentation and tutorials"
+      },
+      {
+        "url": "https://www.udemy.com/course/react-the-complete-guide-incl-redux/",
+        "type": "course",
+        "title": "React - The Complete Guide",
+        "author": "Maximilian Schwarzmüller",
+        "duration": "48 hours",
+        "description": "Master React and Redux with hands-on projects"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-18T23:14:02.167239+00:00",
+    "updatedAt": "2025-11-24T22:52:08.102565+00:00"
+  },
+  {
+    "id": "80a1275e-2855-4674-936e-6c63cb6562c9",
+    "title": "How to create refs?",
+    "content": "How to create refs?\n\n```javascript\n      class SearchBar extends Component {\n        constructor(props) {\n          super(props);\n          this.txtSearch = null;\n          this.state = { term: \"\" };\n          this.setInputSearchRef = (e) => {\n            this.txtSearch = e;\n          };\n        }\n        onInputChange(event) {\n          this.setState({ term: this.txtSearch.value });\n        }\n        render() {\n          return (\n            <input\n              value={this.state.term}\n              onChange={this.onInputChange.bind(this)}\n              ref={this.setInputSearchRef}\n            />\n          );\n        }\n      }\n```",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "There are two approaches\n\n   1. This is a recently added approach. _Refs_ are created using `React.createRef()` method and attached to React elements via the `ref` attribute. In order to use _refs_ throughout the component, just assign the _ref_ to the instance property within constructor.\n\n\n   2. You can also use ref callbacks approach regardless of React version. For example, the search bar component's input element is accessed as follows,\n\n   You can also use _refs_ in function components using **closures**.\n   **Note**: You can also use inline ref callbacks even though it is not a recommended approach.",
+    "options": null,
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=SqcY0GlETPk",
+        "type": "video",
+        "title": "React Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "8:25:00",
+        "description": "Complete React tutorial from scratch"
+      },
+      {
+        "url": "https://react.dev/learn",
+        "type": "article",
+        "title": "React Documentation",
+        "author": "React Team",
+        "description": "Official React documentation and tutorials"
+      },
+      {
+        "url": "https://www.udemy.com/course/react-the-complete-guide-incl-redux/",
+        "type": "course",
+        "title": "React - The Complete Guide",
+        "author": "Maximilian Schwarzmüller",
+        "duration": "48 hours",
+        "description": "Master React and Redux with hands-on projects"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-18T23:14:02.167239+00:00",
+    "updatedAt": "2025-11-24T22:52:08.102565+00:00"
+  },
+  {
+    "id": "ac25a21a-61fc-4e16-957a-175f11f351a9",
+    "title": "Is that possible to use useImperativeHandle without forwardRef?",
+    "content": "Is that possible to use useImperativeHandle without forwardRef?",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "**No.** `useImperativeHandle` only works when the component is wrapped in `forwardRef`. It's the combination that allows parent components to use a `ref` on a function component.",
+    "options": null,
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=SqcY0GlETPk",
+        "type": "video",
+        "title": "React Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "8:25:00",
+        "description": "Complete React tutorial from scratch"
+      },
+      {
+        "url": "https://react.dev/learn",
+        "type": "article",
+        "title": "React Documentation",
+        "author": "React Team",
+        "description": "Official React documentation and tutorials"
+      },
+      {
+        "url": "https://www.udemy.com/course/react-the-complete-guide-incl-redux/",
+        "type": "course",
+        "title": "React - The Complete Guide",
+        "author": "Maximilian Schwarzmüller",
+        "duration": "48 hours",
+        "description": "Master React and Redux with hands-on projects"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-18T23:13:18.084797+00:00",
+    "updatedAt": "2025-11-24T22:52:08.102565+00:00"
+  },
+  {
+    "id": "dcadb6ab-6729-48bb-9707-366d4d2aa167",
+    "title": "What are Custom React Hooks, and How Can You Develop One?",
+    "content": "What are Custom React Hooks, and How Can You Develop One?\n\n```javascript\n      function AuthorList() {\n        const { data, loading, error } = useFetchData('https://api.example.com/authors');\n\n        if (loading) return <p Loading authors...</p;\n        if (error) return <p Error: {error}</p;\n\n        return (\n          <ul\n            {data.map((author) => (\n              <li key={author.id}>{author.name}</li\n            ))}\n          </ul\n        );\n      }\n```",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "**Custom Hooks** in React are JavaScript functions that allow you to **extract and reuse component logic** using React's built-in Hooks like `useState`, `useEffect`, etc.\n\n      They start with the word **\"use\"** and let you encapsulate logic that multiple components might share—such as fetching data, handling forms, or managing timers—without repeating code.\n\n      Let's explain the custom hook usage with `useFetchData` example. The `useFetchData` custom Hook is a reusable function in React that simplifies the process of fetching data from an API. It encapsulates common logic such as initiating the fetch request, managing loading and error states, and storing the fetched data. By using built-in Hooks like `useState` and `useEffect`, `useFetchData` provides a clean interface that returns the `data`, `loading`, and `error` values, which can be directly used in components.\n\n\n      The above custom hook can be used to retrieve users data for `AuthorList`, `ReviewerList` components.\n\n      **Example: AuthorList component**\n     \n      Some of the benefits of custom hooks are:\n       *   Promotes **code reuse**\n       *   Keeps components **clean and focused**\n       *   Makes complex logic **easier to test and maintain**",
+    "options": null,
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+        "type": "video",
+        "title": "React Custom Hooks Tutorial",
+        "author": "Traversy Media",
+        "duration": "15:30",
+        "description": "Learn how to create and use custom hooks in React"
+      },
+      {
+        "url": "https://react.dev/learn/reusing-logic-with-custom-hooks",
+        "type": "article",
+        "title": "Building Your Own React Hooks",
+        "author": "React Team",
+        "description": "Official React documentation on custom hooks"
+      },
+      {
+        "url": "https://www.udemy.com/course/advanced-react-patterns/",
+        "type": "course",
+        "title": "Advanced React Patterns",
+        "author": "React Mastery",
+        "duration": "6 hours",
+        "description": "Master React patterns including custom hooks"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-18T23:13:18.084797+00:00",
+    "updatedAt": "2025-11-24T22:52:08.102565+00:00"
+  },
+  {
+    "id": "077ed93c-ebf6-4d90-b1ce-d1719f188c30",
+    "title": "How to bind methods or event handlers in JSX callbacks?",
+    "content": "How to bind methods or event handlers in JSX callbacks?\n\n```javascript\n      handleClick() {\n          console.log('SingOut triggered');\n      }\n      render() {\n          return <button onClick={() => this.handleClick()}>SignOut</button;\n      }\n```",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "There are 3 possible ways to achieve this in class components:\n\n   1. **Binding in Constructor:** In JavaScript classes, the methods are not bound by default. The same rule applies for React event handlers defined as class methods. Normally we bind them in constructor.\n\n\n   2. **Public class fields syntax:** If you don't like to use bind approach then _public class fields syntax_ can be used to correctly bind callbacks. The Create React App enables this syntax by default.\n\n\n\n   3. **Arrow functions in callbacks:** It is possible to use _arrow functions_ directly in the callbacks.\n\n\n   **Note:** If the callback is passed as prop to child components, those components might do an extra re-rendering. In those cases, it is preferred to go with `.bind()` or _public class fields syntax_ approach considering performance.",
+    "options": null,
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=SqcY0GlETPk",
+        "type": "video",
+        "title": "React Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "8:25:00",
+        "description": "Complete React tutorial from scratch"
+      },
+      {
+        "url": "https://react.dev/learn",
+        "type": "article",
+        "title": "React Documentation",
+        "author": "React Team",
+        "description": "Official React documentation and tutorials"
+      },
+      {
+        "url": "https://www.udemy.com/course/react-the-complete-guide-incl-redux/",
+        "type": "course",
+        "title": "React - The Complete Guide",
+        "author": "Maximilian Schwarzmüller",
+        "duration": "48 hours",
+        "description": "Master React and Redux with hands-on projects"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-18T23:13:18.084797+00:00",
+    "updatedAt": "2025-11-24T22:52:08.102565+00:00"
+  },
+  {
+    "id": "d8b4bc31-4cb3-4130-9840-8d4666ea4f9e",
+    "title": "How does React Fiber works? Explain in detail.",
+    "content": "How does React Fiber works? Explain in detail.",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "React Fiber is the **core engine** that enables advanced features like **concurrent rendering**, **prioritization**, and **interruptibility** in React. Here's how it works:\n          \n      ### 1. **Fiber Tree Structure**\n          \n      Each component in your app is represented by a **Fiber node** in a tree structure. A Fiber node contains:\n      *   Component type\n      *   Props & state\n      *   Pointers to parent, child, and sibling nodes\n      *   Effect tags to track changes (e.g., update, placement)\n      *   This forms the **Fiber Tree**, a data structure React uses instead of the traditional call stack.\n          \n      ### 2. **Two Phases of Rendering**\n          \n        #### **A. Render Phase (work-in-progress)**\n          \n      *   React builds a **work-in-progress Fiber tree**.\n      *   It walks through each component (begin phase), calculates what needs to change, and collects side effects (complete phase).\n      *   This phase is **interruptible**—React can pause it and resume later.\n        #### **B. Commit Phase**\n          \n      *   React applies changes to the **Real DOM**.\n      *   Runs lifecycle methods (e.g., `componentDidMount`, `useEffect`).\n      *   This phase is **non-interruptible** but fast.\n          \n        ### 3. **Work Units and Scheduling**\n          \n      *   React breaks rendering into **units of work** (small tasks).\n      *   These units are scheduled based on **priority** using the **React Scheduler**.\n      *   If time runs out (e.g., user starts typing), React can **pause and yield** control back to the browser.\n          \n        ### 4. **Double Buffering with Two Trees**\n          \n      *   React maintains two trees:\n      *   **Current Tree** – what's visible on the screen.\n      *   **Work-In-Progress Tree** – the next version being built in memory.\n      *   Only after the new tree is fully ready, React **commits** it, making it the new current tree.\n          \n        ### 5. **Concurrency and Prioritization**\n          \n      *   React can prepare multiple versions of UI at once (e.g., during slow data loading).\n      *   Updates can be **assigned priorities**, so urgent updates (like clicks) are handled faster than background work.",
+    "options": null,
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=SqcY0GlETPk",
+        "type": "video",
+        "title": "React Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "8:25:00",
+        "description": "Complete React tutorial from scratch"
+      },
+      {
+        "url": "https://react.dev/learn",
+        "type": "article",
+        "title": "React Documentation",
+        "author": "React Team",
+        "description": "Official React documentation and tutorials"
+      },
+      {
+        "url": "https://www.udemy.com/course/react-the-complete-guide-incl-redux/",
+        "type": "course",
+        "title": "React - The Complete Guide",
+        "author": "Maximilian Schwarzmüller",
+        "duration": "48 hours",
+        "description": "Master React and Redux with hands-on projects"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-18T23:13:18.084797+00:00",
+    "updatedAt": "2025-11-24T22:52:08.102565+00:00"
+  },
+  {
+    "id": "d83b0e4b-3e35-40cc-aec3-ea9db198a9d0",
+    "title": "What is `useCallback` and why is it used?",
+    "content": "What is `useCallback` and why is it used?\n\n```javascript\n        const handleClick = useCallback(() => {\n          console.log('Button clicked');\n        }, []);\n```",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "The `useCallback` is a React Hook used to memoize **function definitions** between renders. It returns the same function reference unless its dependencies change. This is especially useful when passing callbacks to optimized child components (e.g. those wrapped in `React.memo`) to prevent unnecessary re-renders.\n        \n        **Example:**\n        \n        \n        Without `useCallback`, a new function is created on every render, potentially causing child components to re-render unnecessarily.",
+    "options": null,
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=SqcY0GlETPk",
+        "type": "video",
+        "title": "React Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "8:25:00",
+        "description": "Complete React tutorial from scratch"
+      },
+      {
+        "url": "https://react.dev/learn",
+        "type": "article",
+        "title": "React Documentation",
+        "author": "React Team",
+        "description": "Official React documentation and tutorials"
+      },
+      {
+        "url": "https://www.udemy.com/course/react-the-complete-guide-incl-redux/",
+        "type": "course",
+        "title": "React - The Complete Guide",
+        "author": "Maximilian Schwarzmüller",
+        "duration": "48 hours",
+        "description": "Master React and Redux with hands-on projects"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-18T23:13:18.084797+00:00",
+    "updatedAt": "2025-11-24T22:52:08.102565+00:00"
+  },
+  {
+    "id": "92a66438-4591-4822-b8b3-2eeb9e68f6be",
+    "title": "Does useMemo prevent re-rendering of child components?",
+    "content": "Does useMemo prevent re-rendering of child components?",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "The `useMemo` hook **does not directly prevent re-rendering of child components**. Its main purpose is to memoize the result of an expensive computation so that it doesn't get recalculated unless its dependencies change. While this can improve performance, it doesn't inherently control whether a child component re-renders.\n        \n        However, `useMemo` **can help prevent re-renders** when the memoized value is passed as a prop to a child component that is wrapped in `React.memo`. In that case, if the memoized value doesn't change between renders (i.e., it has the same reference), React.memo can skip re-rendering the child. So, while `useMemo` doesn't stop renders on its own, it **works in combination** with tools like `React.memo` to optimize rendering behavior.",
+    "options": null,
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=SqcY0GlETPk",
+        "type": "video",
+        "title": "React Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "8:25:00",
+        "description": "Complete React tutorial from scratch"
+      },
+      {
+        "url": "https://react.dev/learn",
+        "type": "article",
+        "title": "React Documentation",
+        "author": "React Team",
+        "description": "Official React documentation and tutorials"
+      },
+      {
+        "url": "https://www.udemy.com/course/react-the-complete-guide-incl-redux/",
+        "type": "course",
+        "title": "React - The Complete Guide",
+        "author": "Maximilian Schwarzmüller",
+        "duration": "48 hours",
+        "description": "Master React and Redux with hands-on projects"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-18T23:13:18.084797+00:00",
+    "updatedAt": "2025-11-24T22:52:08.102565+00:00"
+  },
+  {
+    "id": "65e1b7a3-4734-4065-a0e1-0ec26d8fd6d5",
+    "title": "What is the purpose of callback function as an argument of `setState()`?",
+    "content": "What is the purpose of callback function as an argument of `setState()`?\n\n```javascript\n    this.setState({ name: \"Sudheer\" }, () => {\n      console.log(\"The name has been updated and the component has re-rendered.\");\n    });\n```",
+    "type": "code",
+    "difficulty": "intermediate",
+    "explanation": "The callback function provided as the second argument to `setState` is executed after the state has been updated and the component has re-rendered. Because `setState()` is asynchronous, you cannot reliably perform actions that require the updated state immediately after calling `setState`. The callback ensures your code runs only after the update and re-render are complete.\n\n    #### Example\n\n\n    #### When to use the callback?\n\n    Use the `setState` callback when you need to perform an action immediately after the DOM has been updated in response to a state change. i.e, The callback is a reliable way to perform actions after a state update and re-render, especially when the timing is critical due to the asynchronous nature of state updates in React. For example, if you need to interact with the updated DOM, trigger analytics, or perform further computations that depend on the new state or rendered output.\n\n    #### Note\n\n    - In modern React (with function components), you can achieve similar effects using the `useEffect` hook to respond to state changes.\n    - In class components, you can also use lifecycle methods like `componentDidUpdate` for broader post-update logic.\n    - The `setState` callback is still useful for one-off actions that directly follow a specific state change.",
+    "options": null,
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=SqcY0GlETPk",
+        "type": "video",
+        "title": "React Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "8:25:00",
+        "description": "Complete React tutorial from scratch"
+      },
+      {
+        "url": "https://react.dev/learn",
+        "type": "article",
+        "title": "React Documentation",
+        "author": "React Team",
+        "description": "Official React documentation and tutorials"
+      },
+      {
+        "url": "https://www.udemy.com/course/react-the-complete-guide-incl-redux/",
+        "type": "course",
+        "title": "React - The Complete Guide",
+        "author": "Maximilian Schwarzmüller",
+        "duration": "48 hours",
+        "description": "Master React and Redux with hands-on projects"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-18T23:13:18.084797+00:00",
+    "updatedAt": "2025-11-24T23:39:20.943477+00:00"
+  },
+  {
+    "id": "49b5b087-1941-4f57-a818-564e525fb715",
+    "title": "How is useMemo different from useCallback?",
+    "content": "How is useMemo different from useCallback?",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "The following table compares both useMemo and useCallback:\n\n      | Feature | `useMemo` | `useCallback` |\n      | --- | --- | --- |\n      | **Purpose** | Memoizes the **result of a computation** | Memoizes a **function reference** |\n      | **Returns** | A **value** (e.g., result of a function) | A **function** |\n      | **Usage** | `useMemo(() => computeValue(), [deps])` | `useCallback(() => doSomething(), [deps])` |\n      | **Primary Use Case** | Avoid expensive recalculations | Prevent unnecessary re-creations of functions |\n      | **Common Scenario** | Filtering, sorting, calculating derived data | Passing callbacks to child components |\n      | **When It's Useful** | When the value is expensive to compute | When referential equality matters (e.g., props) |\n      | **Recomputed When** | Dependencies change | Dependencies change |\n      | **Returned Value Type** | Any (number, object, array, etc.) | Always a function |\n      | **Overhead** | Slight (evaluates a function and caches result) | Slight (caches a function reference) |",
+    "options": null,
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=SqcY0GlETPk",
+        "type": "video",
+        "title": "React Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "8:25:00",
+        "description": "Complete React tutorial from scratch"
+      },
+      {
+        "url": "https://react.dev/learn",
+        "type": "article",
+        "title": "React Documentation",
+        "author": "React Team",
+        "description": "Official React documentation and tutorials"
+      },
+      {
+        "url": "https://www.udemy.com/course/react-the-complete-guide-incl-redux/",
+        "type": "course",
+        "title": "React - The Complete Guide",
+        "author": "Maximilian Schwarzmüller",
+        "duration": "48 hours",
+        "description": "Master React and Redux with hands-on projects"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-18T23:13:18.084797+00:00",
+    "updatedAt": "2025-11-24T22:52:08.102565+00:00"
+  },
+  {
+    "id": "4ea53cca-0b7d-4c4d-bd14-d95929e97b65",
+    "title": "When should you use useImperativeHandle?",
+    "content": "When should you use useImperativeHandle?",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "The useImperativeHandler hook will be used in below cases:\n\n      *   You want to expose **imperative methods** from a child component \n            - Custom input controls exposing `focus`, `clear`, or `validate` methods\n            - Modal components exposing `open()` and `close()` methods\n            - Scroll containers exposing `scrollToTop()` or `scrollToBottom()` methods\n      *   You want to **hide internal implementation** but provide controlled external access.\n      *   You're building **reusable component libraries** (e.g., inputs, modals, form controls).",
+    "options": null,
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=SqcY0GlETPk",
+        "type": "video",
+        "title": "React Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "8:25:00",
+        "description": "Complete React tutorial from scratch"
+      },
+      {
+        "url": "https://react.dev/learn",
+        "type": "article",
+        "title": "React Documentation",
+        "author": "React Team",
+        "description": "Official React documentation and tutorials"
+      },
+      {
+        "url": "https://www.udemy.com/course/react-the-complete-guide-incl-redux/",
+        "type": "course",
+        "title": "React - The Complete Guide",
+        "author": "Maximilian Schwarzmüller",
+        "duration": "48 hours",
+        "description": "Master React and Redux with hands-on projects"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-18T23:13:18.084797+00:00",
+    "updatedAt": "2025-11-24T22:52:08.102565+00:00"
+  },
+  {
+    "id": "044d11b2-789c-43cb-9ffc-041e2c9a1648",
+    "title": "Why should we not update the state directly?",
+    "content": "Why should we not update the state directly?\n\n```javascript\n   //Correct\n   this.setState({ message: \"Hello World\" });\n```",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "If you try to update the state directly then it won't re-render the component.\n\n\n   Instead use `setState()` method. It schedules an update to a component's state object. When state changes, the component responds by re-rendering.\n\n\n   **Note:** You can directly assign to the state object either in _constructor_ or using latest javascript's class field declaration syntax.",
+    "options": null,
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=SqcY0GlETPk",
+        "type": "video",
+        "title": "React Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "8:25:00",
+        "description": "Complete React tutorial from scratch"
+      },
+      {
+        "url": "https://react.dev/learn",
+        "type": "article",
+        "title": "React Documentation",
+        "author": "React Team",
+        "description": "Official React documentation and tutorials"
+      },
+      {
+        "url": "https://www.udemy.com/course/react-the-complete-guide-incl-redux/",
+        "type": "course",
+        "title": "React - The Complete Guide",
+        "author": "Maximilian Schwarzmüller",
+        "duration": "48 hours",
+        "description": "Master React and Redux with hands-on projects"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-18T23:13:18.084797+00:00",
+    "updatedAt": "2025-11-24T22:52:08.102565+00:00"
+  },
+  {
+    "id": "eb766684-f290-4f39-b206-13caeb312d9f",
+    "title": "How Do You Use useRef to Access a DOM Element in React? Give an example.",
+    "content": "How Do You Use useRef to Access a DOM Element in React? Give an example.\n\n```javascript\n        import React, { useRef } from 'react';\n        \n        function FocusInput() {\n          const inputRef = useRef(null); // create the ref\n        \n          const handleFocus = () => {\n            inputRef.current.focus(); // access DOM element and focus it\n          };\n        \n          return (\n              <input type=\"text\" ref={inputRef} />\n              <button onClick={handleFocus}>Focus the input</button\n          );\n        }\n```",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "The `useRef` hook is commonly used in React to directly reference and interact with DOM elements — like focusing an input, scrolling to a section, or controlling media elements.\n        \n        When you assign a ref to a DOM element using useRef, React gives you access to the underlying DOM node via the .current property of the ref object.\n        \n        **Example: Focus an input**\n\n       **Note:** The DOM reference is only available **after the component has mounted** — typically accessed in `useEffect` or event handlers.",
+    "options": null,
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=SqcY0GlETPk",
+        "type": "video",
+        "title": "React Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "8:25:00",
+        "description": "Complete React tutorial from scratch"
+      },
+      {
+        "url": "https://react.dev/learn",
+        "type": "article",
+        "title": "React Documentation",
+        "author": "React Team",
+        "description": "Official React documentation and tutorials"
+      },
+      {
+        "url": "https://www.udemy.com/course/react-the-complete-guide-incl-redux/",
+        "type": "course",
+        "title": "React - The Complete Guide",
+        "author": "Maximilian Schwarzmüller",
+        "duration": "48 hours",
+        "description": "Master React and Redux with hands-on projects"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-18T23:11:16.442364+00:00",
+    "updatedAt": "2025-11-24T22:52:08.102565+00:00"
+  },
+  {
+    "id": "28d7280d-44a8-4ca7-8754-446e66a9fddc",
+    "title": "Is it possible to access a ref in the render method?",
+    "content": "Is it possible to access a ref in the render method?\n\n```javascript\n        const divRef = useRef(null);\n        \n        console.log(divRef.current); // ❌ null on initial render\n        return <div ref={divRef}>Hello</div;\n```",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "Yes, you can access a ref in the render method, but what you get from it depends on how you're using the ref and when in the component lifecycle you're rendering.\n        \n        For example, when using ref to access a DOM node (e.g., divRef.current), it's not immediately available on the first render.",
+    "options": null,
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=SqcY0GlETPk",
+        "type": "video",
+        "title": "React Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "8:25:00",
+        "description": "Complete React tutorial from scratch"
+      },
+      {
+        "url": "https://react.dev/learn",
+        "type": "article",
+        "title": "React Documentation",
+        "author": "React Team",
+        "description": "Official React documentation and tutorials"
+      },
+      {
+        "url": "https://www.udemy.com/course/react-the-complete-guide-incl-redux/",
+        "type": "course",
+        "title": "React - The Complete Guide",
+        "author": "Maximilian Schwarzmüller",
+        "duration": "48 hours",
+        "description": "Master React and Redux with hands-on projects"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-18T23:11:16.442364+00:00",
+    "updatedAt": "2025-11-24T22:52:08.102565+00:00"
+  },
+  {
+    "id": "b78adcbb-018d-488f-a073-163600b33765",
+    "title": "What is useImperativeHandle Hook? Give an example.",
+    "content": "What is useImperativeHandle Hook? Give an example.\n\n```javascript\n      import React, {\n        useRef,\n        useState,\n        useImperativeHandle,\n        forwardRef,\n      } from 'react';\n      import './Dialog.css'; \n\n      const Dialog = forwardRef((props, ref) => {\n        const [isOpen, setIsOpen] = useState(false);\n        const [formData, setFormData] = useState('');\n\n        useImperativeHandle(ref, () => ({\n          open: () => setIsOpen(true),\n          close: () => setIsOpen(false),\n          reset: () => setFormData(''),\n        }));\n\n        if (!isOpen) return null;\n\n        return (\n            <h2 Dialog</h2\n            <input\n              type=\"text\"\n              value={formData}\n              placeholder=\"Type something...\"\n              onChange={(e) => setFormData(e.target.value)}\n            />\n            <br />\n            <button onClick={() => setIsOpen(false)}>Close</button\n        );\n      });\n\n      function Parent() {\n        const dialogRef = useRef();\n\n        return (\n            <h1 useImperativeHandle Dialog Example</h1\n            <button onClick={() => dialogRef.current.open()}>Open Dialog</button\n            <button onClick={() => dialogRef.current.reset()}>Reset Dialog</button\n            <button onClick={() => dialogRef.current.close()}>Close Dialog</button\n\n            <Dialog ref={dialogRef} />\n        );\n      }\n\n      export default Parent;\n```",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "`useImperativeHandle` is a React Hook that allows a **child component** to expose **custom functions or properties** to its **parent component**, when using `ref`.\n      It is typically used with `forwardRef` and is very useful in cases like **modals**, **dialogs**, **custom inputs**, etc., where the parent needs to **control behavior imperatively** (e.g., open, close, reset).\n\n      **Example: Dialog component**",
+    "options": null,
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=SqcY0GlETPk",
+        "type": "video",
+        "title": "React Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "8:25:00",
+        "description": "Complete React tutorial from scratch"
+      },
+      {
+        "url": "https://react.dev/learn",
+        "type": "article",
+        "title": "React Documentation",
+        "author": "React Team",
+        "description": "Official React documentation and tutorials"
+      },
+      {
+        "url": "https://www.udemy.com/course/react-the-complete-guide-incl-redux/",
+        "type": "course",
+        "title": "React - The Complete Guide",
+        "author": "Maximilian Schwarzmüller",
+        "duration": "48 hours",
+        "description": "Master React and Redux with hands-on projects"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-18T23:11:16.442364+00:00",
+    "updatedAt": "2025-11-24T22:52:08.102565+00:00"
+  },
+  {
+    "id": "d2381750-41e4-4545-a6f7-abf7e8ab6031",
+    "title": "What are the usecases of useLayoutEffect?",
+    "content": "What are the usecases of useLayoutEffect?\n\n```javascript\n      useLayoutEffect(() => {\n        const width = divRef.current.offsetWidth;\n        if (width < 400) {\n          divRef.current.style.background = 'blue'; // prevents flicker\n        }\n      }, []);\n```",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "You need to use `useLayoutEffect` when your effect **must run before the browser paints**, such as:\n\n      *   **Reading layout measurements** (e.g., element size, scroll position)\n      *   **Synchronously applying DOM styles** to prevent visual flicker\n      *   **Animating layout or transitions**\n      *   **Integrating with third-party libraries** that require DOM manipulation\n\n      If there's no visual or layout dependency, prefer `useEffect` — it's more performance-friendly.",
+    "options": null,
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=SqcY0GlETPk",
+        "type": "video",
+        "title": "React Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "8:25:00",
+        "description": "Complete React tutorial from scratch"
+      },
+      {
+        "url": "https://react.dev/learn",
+        "type": "article",
+        "title": "React Documentation",
+        "author": "React Team",
+        "description": "Official React documentation and tutorials"
+      },
+      {
+        "url": "https://www.udemy.com/course/react-the-complete-guide-incl-redux/",
+        "type": "course",
+        "title": "React - The Complete Guide",
+        "author": "Maximilian Schwarzmüller",
+        "duration": "48 hours",
+        "description": "Master React and Redux with hands-on projects"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-18T23:11:16.442364+00:00",
+    "updatedAt": "2025-11-24T22:52:08.102565+00:00"
+  },
+  {
+    "id": "856d2d6f-192f-47d2-9289-59b18eeed42e",
+    "title": "Can useRef be used to store previous values?",
+    "content": "Can useRef be used to store previous values?\n\n```javascript\n        import { useEffect, useRef, useState } from 'react';\n        \n        function PreviousValueExample() {\n          const [count, setCount] = useState(0);\n          const prevCountRef = useRef();\n        \n          useEffect(() => {\n            prevCountRef.current = count;\n          }, [count]);\n        \n          const prevCount = prevCountRef.current;\n        \n          return (\n              <p Current: {count}</p\n              <p Previous: {prevCount}</p\n              <button onClick={() => setCount(c => c + 1)}>Increment</button\n          );\n        }\n```",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "Yes, `useRef` is a common pattern when you want to compare current and previous props or state without causing re-renders.\n        \n        **Example: Storing previous state value**",
+    "options": null,
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=SqcY0GlETPk",
+        "type": "video",
+        "title": "React Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "8:25:00",
+        "description": "Complete React tutorial from scratch"
+      },
+      {
+        "url": "https://react.dev/learn",
+        "type": "article",
+        "title": "React Documentation",
+        "author": "React Team",
+        "description": "Official React documentation and tutorials"
+      },
+      {
+        "url": "https://www.udemy.com/course/react-the-complete-guide-incl-redux/",
+        "type": "course",
+        "title": "React - The Complete Guide",
+        "author": "Maximilian Schwarzmüller",
+        "duration": "48 hours",
+        "description": "Master React and Redux with hands-on projects"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-18T23:11:16.442364+00:00",
+    "updatedAt": "2025-11-24T22:52:08.102565+00:00"
+  },
+  {
+    "id": "324acef0-cb27-4905-9dc5-cd171808884a",
+    "title": "How does useLayoutEffect work during server-side rendering (SSR)?",
+    "content": "How does useLayoutEffect work during server-side rendering (SSR)?\n\n```javascript\n      const useIsomorphicLayoutEffect =\n        typeof window !== 'undefined' ? useLayoutEffect : useEffect;\n```",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "The `useLayoutEffect` hook does **not run on the server**, because there is no DOM. React issues a warning in server environments like Next.js if `useLayoutEffect` is used directly.\n\n     This can be mitigated using a conditional polyfill:\n\n\n      i.e, Use `useIsomorphicLayoutEffect` in components that render both on client and server.",
+    "options": null,
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=SqcY0GlETPk",
+        "type": "video",
+        "title": "React Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "8:25:00",
+        "description": "Complete React tutorial from scratch"
+      },
+      {
+        "url": "https://react.dev/learn",
+        "type": "article",
+        "title": "React Documentation",
+        "author": "React Team",
+        "description": "Official React documentation and tutorials"
+      },
+      {
+        "url": "https://www.udemy.com/course/react-the-complete-guide-incl-redux/",
+        "type": "course",
+        "title": "React - The Complete Guide",
+        "author": "Maximilian Schwarzmüller",
+        "duration": "48 hours",
+        "description": "Master React and Redux with hands-on projects"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-18T23:11:16.442364+00:00",
+    "updatedAt": "2025-11-24T22:52:08.102565+00:00"
+  },
+  {
+    "id": "ad466eda-9f60-4ff9-97ee-43972cbaddfa",
+    "title": "What happens if you use useLayoutEffect for non-layout logic?",
+    "content": "What happens if you use useLayoutEffect for non-layout logic?\n\n```javascript\n      useLayoutEffect(() => {\n        console.log(\"Tracking analytics\");\n        fetch('/log-page-view');\n      }, []);\n```",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "Using `useLayoutEffect` for logic **unrelated to layout or visual DOM changes** (such as logging, data fetching, or analytics) is **not recommended**. It can lead to **performance issues** or even unexpected behavior.\n\n      **Example: Anti-pattern**\n      The above usage delays the paint of the UI just to send a network request, which could (and should) be done after paint using useEffect.",
+    "options": null,
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=SqcY0GlETPk",
+        "type": "video",
+        "title": "React Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "8:25:00",
+        "description": "Complete React tutorial from scratch"
+      },
+      {
+        "url": "https://react.dev/learn",
+        "type": "article",
+        "title": "React Documentation",
+        "author": "React Team",
+        "description": "Official React documentation and tutorials"
+      },
+      {
+        "url": "https://www.udemy.com/course/react-the-complete-guide-incl-redux/",
+        "type": "course",
+        "title": "React - The Complete Guide",
+        "author": "Maximilian Schwarzmüller",
+        "duration": "48 hours",
+        "description": "Master React and Redux with hands-on projects"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-18T23:11:16.442364+00:00",
+    "updatedAt": "2025-11-24T22:52:08.102565+00:00"
+  },
+  {
+    "id": "6ec9789f-e075-466f-baa7-c0f2adf1204e",
+    "title": "What are the common usecases of useRef hook?",
+    "content": "What are the common usecases of useRef hook?",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "Some of the common cases are:\n      *   Automatically focus an input when a component mounts.\n      *   Scroll to a specific element.\n      *   Measure element dimensions (`offsetWidth`, `clientHeight`).\n      *   Control video/audio playback.\n      *   Integrate with non-React libraries (like D3 or jQuery).",
+    "options": null,
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=SqcY0GlETPk",
+        "type": "video",
+        "title": "React Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "8:25:00",
+        "description": "Complete React tutorial from scratch"
+      },
+      {
+        "url": "https://react.dev/learn",
+        "type": "article",
+        "title": "React Documentation",
+        "author": "React Team",
+        "description": "Official React documentation and tutorials"
+      },
+      {
+        "url": "https://www.udemy.com/course/react-the-complete-guide-incl-redux/",
+        "type": "course",
+        "title": "React - The Complete Guide",
+        "author": "Maximilian Schwarzmüller",
+        "duration": "48 hours",
+        "description": "Master React and Redux with hands-on projects"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-18T23:11:16.442364+00:00",
+    "updatedAt": "2025-11-24T22:52:08.102565+00:00"
+  },
+  {
+    "id": "eb4794d6-c0e9-424c-a78b-00f909884737",
+    "title": "How does useLayoutEffect cause layout thrashing?",
+    "content": "How does useLayoutEffect cause layout thrashing?\n\n```javascript\n      function ThrashingComponent() {\n        const ref = useRef();\n\n        useLayoutEffect(() => {\n          const height = ref.current.offsetHeight; //Read\n          ref.current.style.height = height + 20 + 'px'; //Write\n          const newHeight = ref.current.offsetHeight; //Read again — forces reflow\n        }, []);\n\n        return <div ref={ref}>Hello</div;\n      }\n```",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "The `useLayoutEffect` can **cause layout thrashing** when you **repeatedly read and write to the DOM** in ways that force the browser to recalculate layout multiple times per frame. This is because `useLayoutEffect` runs _before the browser paints_, these reflows happen _synchronously_, blocking rendering and degrading performance.\n\n      **Example:**\n      In the above code, each read/write cycle triggers synchronous reflows, blocking the main thread and delays UI rendering.\n\n      This issue can be avoided by batching your DOM reads and writes and prevent unnecessary reads after writes.",
+    "options": null,
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=SqcY0GlETPk",
+        "type": "video",
+        "title": "React Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "8:25:00",
+        "description": "Complete React tutorial from scratch"
+      },
+      {
+        "url": "https://react.dev/learn",
+        "type": "article",
+        "title": "React Documentation",
+        "author": "React Team",
+        "description": "Official React documentation and tutorials"
+      },
+      {
+        "url": "https://www.udemy.com/course/react-the-complete-guide-incl-redux/",
+        "type": "course",
+        "title": "React - The Complete Guide",
+        "author": "Maximilian Schwarzmüller",
+        "duration": "48 hours",
+        "description": "Master React and Redux with hands-on projects"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-18T23:11:16.442364+00:00",
+    "updatedAt": "2025-11-24T22:52:08.102565+00:00"
+  },
+  {
+    "id": "6da25760-d17d-4de1-9ab6-beed1ee44b60",
+    "title": "Can you use useRef to persist values across renders??",
+    "content": "Can you use useRef to persist values across renders??\n\n```javascript\n        function Timer() {\n          const renderCount = useRef(0);\n          useEffect(() => {\n            renderCount.current++;\n            console.log(\"Render count:\", renderCount.current);\n          });\n        \n          return <div Check console for render count.</div;\n        }\n```",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "Yes, you can use `useRef` to persist values across renders in React. Unlike `useState`, changing `.current` does not cause re-renders, but the value is preserved across renders.\n        \n        **Example:**",
+    "options": null,
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=SqcY0GlETPk",
+        "type": "video",
+        "title": "React Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "8:25:00",
+        "description": "Complete React tutorial from scratch"
+      },
+      {
+        "url": "https://react.dev/learn",
+        "type": "article",
+        "title": "React Documentation",
+        "author": "React Team",
+        "description": "Official React documentation and tutorials"
+      },
+      {
+        "url": "https://www.udemy.com/course/react-the-complete-guide-incl-redux/",
+        "type": "course",
+        "title": "React - The Complete Guide",
+        "author": "Maximilian Schwarzmüller",
+        "duration": "48 hours",
+        "description": "Master React and Redux with hands-on projects"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-18T23:11:16.442364+00:00",
+    "updatedAt": "2025-11-24T22:52:08.102565+00:00"
+  },
+  {
+    "id": "43f7119a-9ed8-4a56-84a5-06434609ec7d",
+    "title": "Can You Use Multiple Contexts in One Component?",
+    "content": "Can You Use Multiple Contexts in One Component?\n\n```javascript\n     import React, { createContext, useContext } from 'react';\n\n      // Step 1: Create two contexts\n      const ThemeContext = createContext();\n      const UserContext = createContext();\n\n      function Dashboard() {\n        // Step 2: Use both contexts\n        const theme = useContext(ThemeContext);\n        const user = useContext(UserContext);\n\n        return (\n            <h1 Welcome, {user.name}</h1\n            <p Current theme: {theme}</p\n        );\n      }\n\n      // Step 3: Provide both contexts\n      function App() {\n        return (\n          <ThemeContext.Provider value=\"dark\">\n            <UserContext.Provider value={{ name: 'Sudheer' }}>\n              <Dashboard />\n            </UserContext.Provider\n          </ThemeContext.Provider\n        );\n      }\n\n      export default App;\n```",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "Yes, it is possible. You can use multiple contexts inside the same component by calling useContext multiple times, once for each context.\n\n     It can be achieved with below steps,\n\n        *   Create multiple contexts using `createContext()`.\n        *   Wrap your component tree with multiple `<Provider`s.\n        *   Call `useContext()` separately for each context in the same component.\n     \n     **Example: Using `ThemeContext` and `UserContext` Together**",
+    "options": null,
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=SqcY0GlETPk",
+        "type": "video",
+        "title": "React Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "8:25:00",
+        "description": "Complete React tutorial from scratch"
+      },
+      {
+        "url": "https://react.dev/learn",
+        "type": "article",
+        "title": "React Documentation",
+        "author": "React Team",
+        "description": "Official React documentation and tutorials"
+      },
+      {
+        "url": "https://www.udemy.com/course/react-the-complete-guide-incl-redux/",
+        "type": "course",
+        "title": "React - The Complete Guide",
+        "author": "Maximilian Schwarzmüller",
+        "duration": "48 hours",
+        "description": "Master React and Redux with hands-on projects"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-18T23:10:44.981226+00:00",
+    "updatedAt": "2025-11-24T22:52:08.102565+00:00"
+  },
+  {
+    "id": "883e24c0-370c-4c76-9619-214322ca9857",
+    "title": "How does useContext works? Explain with an example",
+    "content": "How does useContext works? Explain with an example\n\n```javascript\n        // Dashboard.js\n        import React from 'react';\n        import { useAuth } from './AuthContext';\n        \n        function Dashboard() {\n          const { user, logout } = useAuth();\n        \n          if (!user) {\n            return <p Please login to view the dashboard.</p;\n          }\n        \n          return (\n              <h2 Dashboard</h2\n              <p Logged in as: {user.name}</p\n              <button onClick={logout}>Logout</button\n          );\n        }\n        \n        export default Dashboard;\n```",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "The `useContext` hook can be used for authentication state management across multiple components and pages in a React application.\n    \n     Let's build a simple authentication flow with:\n\n        *   **Login and Logout buttons**\n        *   Global `AuthContext` to share state\n        *   Components that can **access and update** auth status\n     \n      **1. Create the Auth Context:**\n\n       You can define `AuthProvider` which holds and provides `user`, `login()`, and `logout()` via context.\n     **2. Wrap Your App with the Provider:**\n       \n        Wrap the above created provider in main `App.js` file      \n     **3. Home page with login:**\n      Read or access user and login details through custom useAuth hook and use it inside home page.\n\n     \n     **4. Dashboard with logout:**\n      Read or access user and logout details from `useAuth` custom hook and use it inside dashboard page.",
+    "options": null,
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=SqcY0GlETPk",
+        "type": "video",
+        "title": "React Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "8:25:00",
+        "description": "Complete React tutorial from scratch"
+      },
+      {
+        "url": "https://react.dev/learn",
+        "type": "article",
+        "title": "React Documentation",
+        "author": "React Team",
+        "description": "Official React documentation and tutorials"
+      },
+      {
+        "url": "https://www.udemy.com/course/react-the-complete-guide-incl-redux/",
+        "type": "course",
+        "title": "React - The Complete Guide",
+        "author": "Maximilian Schwarzmüller",
+        "duration": "48 hours",
+        "description": "Master React and Redux with hands-on projects"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-18T23:10:44.981226+00:00",
+    "updatedAt": "2025-11-24T22:52:08.102565+00:00"
+  },
+  {
+    "id": "3c43bd51-fa00-40de-91a2-9c1ee5f20482",
+    "title": "What happens if you return a Promise from useEffect??",
+    "content": "What happens if you return a Promise from useEffect??\n\n```javascript\n      useEffect(() => {\n        const fetchData = async () => {\n          const res = await fetch('/api');\n          const data = await res.json();\n          setData(data);\n        };\n\n        fetchData();\n      }, []);\n```",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "You should NOT return a Promise from useEffect. React expects the function passed to useEffect to return either nothing (undefined) or a cleanup function (synchronous function). i.e, It does not expect or handle a returned Promise. If you still return a Promise, React will ignore it silently, and it may lead to bugs or warnings in strict mode.\n\n      **Incorrect:**\n      **Correct:**",
+    "options": null,
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=SqcY0GlETPk",
+        "type": "video",
+        "title": "React Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "8:25:00",
+        "description": "Complete React tutorial from scratch"
+      },
+      {
+        "url": "https://react.dev/learn",
+        "type": "article",
+        "title": "React Documentation",
+        "author": "React Team",
+        "description": "Official React documentation and tutorials"
+      },
+      {
+        "url": "https://www.udemy.com/course/react-the-complete-guide-incl-redux/",
+        "type": "course",
+        "title": "React - The Complete Guide",
+        "author": "Maximilian Schwarzmüller",
+        "duration": "48 hours",
+        "description": "Master React and Redux with hands-on projects"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-18T23:10:44.981226+00:00",
+    "updatedAt": "2025-11-24T22:52:08.102565+00:00"
+  }
+]

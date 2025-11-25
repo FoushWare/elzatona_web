@@ -1,0 +1,2698 @@
+[
+  {
+    "id": "df0ae6d9-63ba-4ae9-91bf-105f5c751000",
+    "title": "This is incorrect. Please refer to system design best practices.",
+    "content": "Explain the role of HTTP-only cookies in frontend security.",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "HTTP-only cookies cannot be accessed by JavaScript, reducing the risk of XSS attacks stealing session data.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "HTTP-only cookies cannot be accessed by JavaScript, reducing the risk of XSS attacks stealing session data.",
+        "isCorrect": true,
+        "explanation": "HTTP-only cookies cannot be accessed by JavaScript, reducing the risk of XSS attacks stealing session data."
+      },
+      {
+        "id": "o2",
+        "text": "HTTP-only cookies cannot be accessed by JavaScript, reducing the risk of XSS attacks stealing session data",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o3",
+        "text": "This method prioritizes user experience and maintainability.",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o4",
+        "text": "This is incorrect. Please refer to system design best practices.",
+        "isCorrect": false,
+        "explanation": null
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://github.com/donnemartin/system-design-primer",
+        "type": "article",
+        "title": "System Design Primer",
+        "author": "Donne Martin",
+        "description": "Learn how to design large-scale systems"
+      },
+      {
+        "url": "https://www.educative.io/courses/grokking-the-system-design-interview",
+        "type": "course",
+        "title": "Grokking the System Design Interview",
+        "author": "Educative",
+        "duration": "20 hours",
+        "description": "Master system design interviews"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-20T23:53:17.88894+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "ba2cb0d5-a518-4260-83cf-668d07678290",
+    "title": "This is incorrect. Please refer to system design best practices.",
+    "content": "Describe methods to identify and fix memory leaks in JavaScript apps.",
+    "type": "multiple-choice",
+    "difficulty": "advanced",
+    "explanation": "Use Chrome DevTools Memory tab, take heap snapshots, look for detached DOM nodes, and clean up event listeners or intervals to prevent leaks.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Use Chrome DevTools Memory tab, take heap snapshots, look for detached DOM nodes, and clean up event listeners or intervals to prevent leaks.",
+        "isCorrect": true,
+        "explanation": "Use Chrome DevTools Memory tab, take heap snapshots, look for detached DOM nodes, and clean up event listeners or intervals to prevent leaks."
+      },
+      {
+        "id": "o2",
+        "text": "Use Chrome DevTools Memory tab, take heap snapshots, look for detached DOM nodes, and clean up event listeners or intervals to prevent leaks",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o3",
+        "text": "This method prioritizes user experience and maintainability.",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o4",
+        "text": "This is incorrect. Please refer to system design best practices.",
+        "isCorrect": false,
+        "explanation": null
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://github.com/donnemartin/system-design-primer",
+        "type": "article",
+        "title": "System Design Primer",
+        "author": "Donne Martin",
+        "description": "Learn how to design large-scale systems"
+      },
+      {
+        "url": "https://www.educative.io/courses/grokking-the-system-design-interview",
+        "type": "course",
+        "title": "Grokking the System Design Interview",
+        "author": "Educative",
+        "duration": "20 hours",
+        "description": "Master system design interviews"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-20T23:53:17.88894+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "1432726e-ff17-4252-adb1-8e9dd361d78f",
+    "title": "This is incorrect. Please refer to system design best practices.",
+    "content": "Explain the TTI metric and its significance for user experience.",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "TTI measures the time until the page becomes fully interactive for users. Lower TTI improves perceived performance and UX.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "TTI measures the time until the page becomes fully interactive for users. Lower TTI improves perceived performance and UX.",
+        "isCorrect": true,
+        "explanation": "TTI measures the time until the page becomes fully interactive for users. Lower TTI improves perceived performance and UX."
+      },
+      {
+        "id": "o2",
+        "text": "TTI measures the time until the page becomes fully interactive for users",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o3",
+        "text": "Lower TTI improves perceived performance and UX",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o4",
+        "text": "This is incorrect. Please refer to system design best practices.",
+        "isCorrect": false,
+        "explanation": null
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://github.com/donnemartin/system-design-primer",
+        "type": "article",
+        "title": "System Design Primer",
+        "author": "Donne Martin",
+        "description": "Learn how to design large-scale systems"
+      },
+      {
+        "url": "https://www.educative.io/courses/grokking-the-system-design-interview",
+        "type": "course",
+        "title": "Grokking the System Design Interview",
+        "author": "Educative",
+        "duration": "20 hours",
+        "description": "Master system design interviews"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-20T23:53:17.88894+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "306b044f-5698-41f6-9576-877f62904791",
+    "title": "JWT cannot be used in SPAs",
+    "content": "Compare JWT and opaque tokens for frontend authentication.",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "The correct answer is: JWT is self-contained, includes claims, can be verified without server",
+    "options": [
+      {
+        "id": "o1",
+        "text": "JWT is self-contained, includes claims, can be verified without server",
+        "isCorrect": true,
+        "explanation": null
+      },
+      {
+        "id": "o2",
+        "text": "Opaque tokens are random identifiers, require server to validate",
+        "isCorrect": true,
+        "explanation": null
+      },
+      {
+        "id": "o3",
+        "text": "JWT cannot be used in SPAs",
+        "isCorrect": false,
+        "explanation": null
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://github.com/donnemartin/system-design-primer",
+        "type": "article",
+        "title": "System Design Primer",
+        "author": "Donne Martin",
+        "description": "Learn how to design large-scale systems"
+      },
+      {
+        "url": "https://www.educative.io/courses/grokking-the-system-design-interview",
+        "type": "course",
+        "title": "Grokking the System Design Interview",
+        "author": "Educative",
+        "duration": "20 hours",
+        "description": "Master system design interviews"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-20T23:53:17.88894+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "69aa979a-ef88-4ece-b5f4-074244208144",
+    "title": "This is incorrect. Please refer to system design best practices.",
+    "content": "Explain LCP and strategies to reduce its value.",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "LCP measures time for the largest visible element to load. Optimize by lazy loading images, compressing resources, using critical CSS, and serving assets via CDN.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "LCP measures time for the largest visible element to load. Optimize by lazy loading images, compressing resources, using critical CSS, and serving assets via CDN.",
+        "isCorrect": true,
+        "explanation": "LCP measures time for the largest visible element to load. Optimize by lazy loading images, compressing resources, using critical CSS, and serving assets via CDN."
+      },
+      {
+        "id": "o2",
+        "text": "LCP measures time for the largest visible element to load",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o3",
+        "text": "Optimize by lazy loading images, compressing resources, using critical CSS, and serving assets via CDN",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o4",
+        "text": "This is incorrect. Please refer to system design best practices.",
+        "isCorrect": false,
+        "explanation": null
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://github.com/donnemartin/system-design-primer",
+        "type": "article",
+        "title": "System Design Primer",
+        "author": "Donne Martin",
+        "description": "Learn how to design large-scale systems"
+      },
+      {
+        "url": "https://www.educative.io/courses/grokking-the-system-design-interview",
+        "type": "course",
+        "title": "Grokking the System Design Interview",
+        "author": "Educative",
+        "duration": "20 hours",
+        "description": "Master system design interviews"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-20T23:53:17.88894+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "3b25defa-f506-45d2-93a1-29b2c0e16393",
+    "title": "This is incorrect. Please refer to system design best practices.",
+    "content": "Explain the purpose of signed URLs for accessing private resources.",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "Signed URLs provide temporary, time-limited access to private resources on a server or CDN. They prevent unauthorized access and allow caching while maintaining security.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Signed URLs provide temporary, time-limited access to private resources on a server or CDN. They prevent unauthorized access and allow caching while maintaining security.",
+        "isCorrect": true,
+        "explanation": "Signed URLs provide temporary, time-limited access to private resources on a server or CDN. They prevent unauthorized access and allow caching while maintaining security."
+      },
+      {
+        "id": "o2",
+        "text": "Signed URLs provide temporary, time-limited access to private resources on a server or CDN",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o3",
+        "text": "They prevent unauthorized access and allow caching while maintaining security",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o4",
+        "text": "This is incorrect. Please refer to system design best practices.",
+        "isCorrect": false,
+        "explanation": null
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://github.com/donnemartin/system-design-primer",
+        "type": "article",
+        "title": "System Design Primer",
+        "author": "Donne Martin",
+        "description": "Learn how to design large-scale systems"
+      },
+      {
+        "url": "https://www.educative.io/courses/grokking-the-system-design-interview",
+        "type": "course",
+        "title": "Grokking the System Design Interview",
+        "author": "Educative",
+        "duration": "20 hours",
+        "description": "Master system design interviews"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-20T23:53:17.88894+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "3a975e49-a67d-4dc3-ac5c-2a29f269fb30",
+    "title": "GraphQL eliminates the need for pagination",
+    "content": "Explain how each API style affects data fetching, over-fetching, and frontend flexibility.",
+    "type": "code",
+    "difficulty": "intermediate",
+    "explanation": "The correct answer is: REST endpoints return fixed data structures",
+    "options": [
+      {
+        "id": "o1",
+        "text": "REST endpoints return fixed data structures",
+        "isCorrect": true,
+        "explanation": null
+      },
+      {
+        "id": "o2",
+        "text": "GraphQL allows querying only required fields",
+        "isCorrect": true,
+        "explanation": null
+      },
+      {
+        "id": "o3",
+        "text": "GraphQL eliminates the need for pagination",
+        "isCorrect": false,
+        "explanation": null
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://github.com/donnemartin/system-design-primer",
+        "type": "article",
+        "title": "System Design Primer",
+        "author": "Donne Martin",
+        "description": "Learn how to design large-scale systems"
+      },
+      {
+        "url": "https://www.educative.io/courses/grokking-the-system-design-interview",
+        "type": "course",
+        "title": "Grokking the System Design Interview",
+        "author": "Educative",
+        "duration": "20 hours",
+        "description": "Master system design interviews"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-20T23:52:15.735189+00:00",
+    "updatedAt": "2025-11-24T23:33:46.870735+00:00"
+  },
+  {
+    "id": "e5ddaf70-bfb5-4326-899d-998fa91b2fa2",
+    "title": "This is incorrect. Please refer to system design best practices.",
+    "content": "Explain techniques for identifying and fixing slow JS execution.",
+    "type": "multiple-choice",
+    "difficulty": "advanced",
+    "explanation": "Use Chrome DevTools Performance tab to record JS execution, identify long tasks, optimize loops, debounce/throttle events, and memoize expensive calculations.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Use Chrome DevTools Performance tab to record JS execution, identify long tasks, optimize loops, debounce/throttle events, and memoize expensive calculations.",
+        "isCorrect": true,
+        "explanation": "Use Chrome DevTools Performance tab to record JS execution, identify long tasks, optimize loops, debounce/throttle events, and memoize expensive calculations."
+      },
+      {
+        "id": "o2",
+        "text": "Use Chrome DevTools Performance tab to record JS execution, identify long tasks, optimize loops, debounce/throttle events, and memoize expensive calculations",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o3",
+        "text": "This method prioritizes user experience and maintainability.",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o4",
+        "text": "This is incorrect. Please refer to system design best practices.",
+        "isCorrect": false,
+        "explanation": null
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://github.com/donnemartin/system-design-primer",
+        "type": "article",
+        "title": "System Design Primer",
+        "author": "Donne Martin",
+        "description": "Learn how to design large-scale systems"
+      },
+      {
+        "url": "https://www.educative.io/courses/grokking-the-system-design-interview",
+        "type": "course",
+        "title": "Grokking the System Design Interview",
+        "author": "Educative",
+        "duration": "20 hours",
+        "description": "Master system design interviews"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-20T23:52:15.735189+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "768549ac-f354-4f47-8895-3cf30cb47e6c",
+    "title": "This is incorrect. Please refer to system design best practices.",
+    "content": "Discuss tools and techniques for identifying re-render bottlenecks.",
+    "type": "multiple-choice",
+    "difficulty": "advanced",
+    "explanation": "Use React DevTools Profiler to measure component render times, identify unnecessary renders, optimize with memoization, lazy loading, and virtualization.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Use React DevTools Profiler to measure component render times, identify unnecessary renders, optimize with memoization, lazy loading, and virtualization.",
+        "isCorrect": true,
+        "explanation": "Use React DevTools Profiler to measure component render times, identify unnecessary renders, optimize with memoization, lazy loading, and virtualization."
+      },
+      {
+        "id": "o2",
+        "text": "Use React DevTools Profiler to measure component render times, identify unnecessary renders, optimize with memoization, lazy loading, and virtualization",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o3",
+        "text": "This method prioritizes user experience and maintainability.",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o4",
+        "text": "This is incorrect. Please refer to system design best practices.",
+        "isCorrect": false,
+        "explanation": null
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://github.com/donnemartin/system-design-primer",
+        "type": "article",
+        "title": "System Design Primer",
+        "author": "Donne Martin",
+        "description": "Learn how to design large-scale systems"
+      },
+      {
+        "url": "https://www.educative.io/courses/grokking-the-system-design-interview",
+        "type": "course",
+        "title": "Grokking the System Design Interview",
+        "author": "Educative",
+        "duration": "20 hours",
+        "description": "Master system design interviews"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-20T23:52:15.735189+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "4f6be7e2-602d-47fb-8b9d-569c267375b9",
+    "title": "This is incorrect. Please refer to system design best practices.",
+    "content": "Describe the concept of a performance budget and how it helps maintain good UX.",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "A performance budget sets limits on page weight, script size, or request counts to prevent regressions and maintain fast load times.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "A performance budget sets limits on page weight, script size, or request counts to prevent regressions and maintain fast load times.",
+        "isCorrect": true,
+        "explanation": "A performance budget sets limits on page weight, script size, or request counts to prevent regressions and maintain fast load times."
+      },
+      {
+        "id": "o2",
+        "text": "A performance budget sets limits on page weight, script size, or request counts to prevent regressions and maintain fast load times",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o3",
+        "text": "This method prioritizes user experience and maintainability.",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o4",
+        "text": "This is incorrect. Please refer to system design best practices.",
+        "isCorrect": false,
+        "explanation": null
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://github.com/donnemartin/system-design-primer",
+        "type": "article",
+        "title": "System Design Primer",
+        "author": "Donne Martin",
+        "description": "Learn how to design large-scale systems"
+      },
+      {
+        "url": "https://www.educative.io/courses/grokking-the-system-design-interview",
+        "type": "course",
+        "title": "Grokking the System Design Interview",
+        "author": "Educative",
+        "duration": "20 hours",
+        "description": "Master system design interviews"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-20T23:52:15.735189+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "5623de45-aadf-4ff2-8670-84f37f95317e",
+    "title": "This is incorrect. Please refer to system design best practices.",
+    "content": "Explain the structure and normalization strategies for storing related entities in frontend state.",
+    "type": "multiple-choice",
+    "difficulty": "advanced",
+    "explanation": "Normalize entities: store posts in a dictionary keyed by id, store comments separately keyed by id, reference relationships via ids to reduce duplication and simplify updates.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Normalize entities: store posts in a dictionary keyed by id, store comments separately keyed by id, reference relationships via ids to reduce duplication and simplify updates.",
+        "isCorrect": true,
+        "explanation": "Normalize entities: store posts in a dictionary keyed by id, store comments separately keyed by id, reference relationships via ids to reduce duplication and simplify updates."
+      },
+      {
+        "id": "o2",
+        "text": "Normalize entities: store posts in a dictionary keyed by id, store comments separately keyed by id, reference relationships via ids to reduce duplication and simplify updates",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o3",
+        "text": "This method prioritizes user experience and maintainability.",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o4",
+        "text": "This is incorrect. Please refer to system design best practices.",
+        "isCorrect": false,
+        "explanation": null
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://github.com/donnemartin/system-design-primer",
+        "type": "article",
+        "title": "System Design Primer",
+        "author": "Donne Martin",
+        "description": "Learn how to design large-scale systems"
+      },
+      {
+        "url": "https://www.educative.io/courses/grokking-the-system-design-interview",
+        "type": "course",
+        "title": "Grokking the System Design Interview",
+        "author": "Educative",
+        "duration": "20 hours",
+        "description": "Master system design interviews"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-20T23:52:15.735189+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "3001acbd-531c-4086-bd21-a5e4d2da9bf8",
+    "title": "This is incorrect. Please refer to system design best practices.",
+    "content": "Explain strategies for caching API responses and syncing with the server.",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "Use in-memory stores, IndexedDB, or libraries like React Query / SWR to cache API responses, invalidate stale data, and optionally persist cache across sessions.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Use in-memory stores, IndexedDB, or libraries like React Query / SWR to cache API responses, invalidate stale data, and optionally persist cache across sessions.",
+        "isCorrect": true,
+        "explanation": "Use in-memory stores, IndexedDB, or libraries like React Query / SWR to cache API responses, invalidate stale data, and optionally persist cache across sessions."
+      },
+      {
+        "id": "o2",
+        "text": "Use in-memory stores, IndexedDB, or libraries like React Query / SWR to cache API responses, invalidate stale data, and optionally persist cache across sessions",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o3",
+        "text": "This method prioritizes user experience and maintainability.",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o4",
+        "text": "This is incorrect. Please refer to system design best practices.",
+        "isCorrect": false,
+        "explanation": null
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://github.com/donnemartin/system-design-primer",
+        "type": "article",
+        "title": "System Design Primer",
+        "author": "Donne Martin",
+        "description": "Learn how to design large-scale systems"
+      },
+      {
+        "url": "https://www.educative.io/courses/grokking-the-system-design-interview",
+        "type": "course",
+        "title": "Grokking the System Design Interview",
+        "author": "Educative",
+        "duration": "20 hours",
+        "description": "Master system design interviews"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-20T23:52:15.735189+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "1bb48d26-e6b9-4e93-9695-62636a4c3774",
+    "title": "This is incorrect. Please refer to system design best practices.",
+    "content": "Explain tools and metrics used to analyze network requests in frontend applications.",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "Use browser dev tools, Lighthouse, or WebPageTest to measure TTFB, total request size, request count, and loading time for critical assets.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Use browser dev tools, Lighthouse, or WebPageTest to measure TTFB, total request size, request count, and loading time for critical assets.",
+        "isCorrect": true,
+        "explanation": "Use browser dev tools, Lighthouse, or WebPageTest to measure TTFB, total request size, request count, and loading time for critical assets."
+      },
+      {
+        "id": "o2",
+        "text": "Use browser dev tools, Lighthouse, or WebPageTest to measure TTFB, total request size, request count, and loading time for critical assets",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o3",
+        "text": "This method prioritizes user experience and maintainability.",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o4",
+        "text": "This is incorrect. Please refer to system design best practices.",
+        "isCorrect": false,
+        "explanation": null
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://github.com/donnemartin/system-design-primer",
+        "type": "article",
+        "title": "System Design Primer",
+        "author": "Donne Martin",
+        "description": "Learn how to design large-scale systems"
+      },
+      {
+        "url": "https://www.educative.io/courses/grokking-the-system-design-interview",
+        "type": "course",
+        "title": "Grokking the System Design Interview",
+        "author": "Educative",
+        "duration": "20 hours",
+        "description": "Master system design interviews"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-20T23:52:15.735189+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "1dffcaec-6972-41fa-bf53-090aa0058761",
+    "title": "localStorage automatically syncs with the server",
+    "content": "Explain when to use each browser storage type for frontend data persistence.",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "The correct answer is: localStorage persists data indefinitely across sessions",
+    "options": [
+      {
+        "id": "o1",
+        "text": "localStorage persists data indefinitely across sessions",
+        "isCorrect": true,
+        "explanation": null
+      },
+      {
+        "id": "o2",
+        "text": "sessionStorage persists data only for the session",
+        "isCorrect": true,
+        "explanation": null
+      },
+      {
+        "id": "o3",
+        "text": "IndexedDB is useful for storing large structured data",
+        "isCorrect": true,
+        "explanation": null
+      },
+      {
+        "id": "o4",
+        "text": "localStorage automatically syncs with the server",
+        "isCorrect": false,
+        "explanation": null
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://github.com/donnemartin/system-design-primer",
+        "type": "article",
+        "title": "System Design Primer",
+        "author": "Donne Martin",
+        "description": "Learn how to design large-scale systems"
+      },
+      {
+        "url": "https://www.educative.io/courses/grokking-the-system-design-interview",
+        "type": "course",
+        "title": "Grokking the System Design Interview",
+        "author": "Educative",
+        "duration": "20 hours",
+        "description": "Master system design interviews"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-20T23:52:15.735189+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "baf4adc3-7fa1-4cd1-b63c-67dbcb7adba3",
+    "title": "This is incorrect. Please refer to system design best practices.",
+    "content": "Explain the purpose of Lighthouse and its reports for performance and accessibility.",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "Lighthouse audits provide automated reports for performance, accessibility, best practices, SEO, and PWA compliance, helping developers optimize their apps.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Lighthouse audits provide automated reports for performance, accessibility, best practices, SEO, and PWA compliance, helping developers optimize their apps.",
+        "isCorrect": true,
+        "explanation": "Lighthouse audits provide automated reports for performance, accessibility, best practices, SEO, and PWA compliance, helping developers optimize their apps."
+      },
+      {
+        "id": "o2",
+        "text": "Lighthouse audits provide automated reports for performance, accessibility, best practices, SEO, and PWA compliance, helping developers optimize their apps",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o3",
+        "text": "This method prioritizes user experience and maintainability.",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o4",
+        "text": "This is incorrect. Please refer to system design best practices.",
+        "isCorrect": false,
+        "explanation": null
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://github.com/donnemartin/system-design-primer",
+        "type": "article",
+        "title": "System Design Primer",
+        "author": "Donne Martin",
+        "description": "Learn how to design large-scale systems"
+      },
+      {
+        "url": "https://www.educative.io/courses/grokking-the-system-design-interview",
+        "type": "course",
+        "title": "Grokking the System Design Interview",
+        "author": "Educative",
+        "duration": "20 hours",
+        "description": "Master system design interviews"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-20T23:52:15.735189+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "76ed73de-8e20-446f-b44c-8a89baaeb293",
+    "title": "This is incorrect. Please refer to system design best practices.",
+    "content": "Describe tools and methods to detect and fix a11y problems.",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "Use tools like Axe, Lighthouse, WAVE, or browser extensions to audit accessibility, detect color contrast issues, missing ARIA labels, and keyboard navigation problems.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Use tools like Axe, Lighthouse, WAVE, or browser extensions to audit accessibility, detect color contrast issues, missing ARIA labels, and keyboard navigation problems.",
+        "isCorrect": true,
+        "explanation": "Use tools like Axe, Lighthouse, WAVE, or browser extensions to audit accessibility, detect color contrast issues, missing ARIA labels, and keyboard navigation problems."
+      },
+      {
+        "id": "o2",
+        "text": "Use tools like Axe, Lighthouse, WAVE, or browser extensions to audit accessibility, detect color contrast issues, missing ARIA labels, and keyboard navigation problems",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o3",
+        "text": "This method prioritizes user experience and maintainability.",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o4",
+        "text": "This is incorrect. Please refer to system design best practices.",
+        "isCorrect": false,
+        "explanation": null
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://github.com/donnemartin/system-design-primer",
+        "type": "article",
+        "title": "System Design Primer",
+        "author": "Donne Martin",
+        "description": "Learn how to design large-scale systems"
+      },
+      {
+        "url": "https://www.educative.io/courses/grokking-the-system-design-interview",
+        "type": "course",
+        "title": "Grokking the System Design Interview",
+        "author": "Educative",
+        "duration": "20 hours",
+        "description": "Master system design interviews"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-20T23:52:15.735189+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "d778118a-06a8-4f47-a639-e283c5df651c",
+    "title": "This is incorrect. Please refer to system design best practices.",
+    "content": "Explain how memoization improves rendering performance in React.",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "Memoization (using React.memo, useMemo, or useCallback) avoids unnecessary re-rendering of components or expensive calculations when props/state haven't changed.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Memoization (using React.memo, useMemo, or useCallback) avoids unnecessary re-rendering of components or expensive calculations when props/state haven't changed.",
+        "isCorrect": true,
+        "explanation": "Memoization (using React.memo, useMemo, or useCallback) avoids unnecessary re-rendering of components or expensive calculations when props/state haven't changed."
+      },
+      {
+        "id": "o2",
+        "text": "Memoization (using React",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o3",
+        "text": "memo, useMemo, or useCallback) avoids unnecessary re-rendering of components or expensive calculations when props/state haven't changed",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o4",
+        "text": "This is incorrect. Please refer to system design best practices.",
+        "isCorrect": false,
+        "explanation": null
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://github.com/donnemartin/system-design-primer",
+        "type": "article",
+        "title": "System Design Primer",
+        "author": "Donne Martin",
+        "description": "Learn how to design large-scale systems"
+      },
+      {
+        "url": "https://www.educative.io/courses/grokking-the-system-design-interview",
+        "type": "course",
+        "title": "Grokking the System Design Interview",
+        "author": "Educative",
+        "duration": "20 hours",
+        "description": "Master system design interviews"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-20T23:51:01.527788+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "41524355-3e47-4ab9-8f1f-22f56b364901",
+    "title": "Infinite scroll replaces the need for backend pagination",
+    "content": "Explain how infinite scroll works and its impact on UX and performance.",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "The correct answer is: Infinite scroll automatically loads more content as user scrolls",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Infinite scroll automatically loads more content as user scrolls",
+        "isCorrect": true,
+        "explanation": null
+      },
+      {
+        "id": "o2",
+        "text": "Pros: improves UX for browsing feeds, keeps engagement high",
+        "isCorrect": true,
+        "explanation": null
+      },
+      {
+        "id": "o3",
+        "text": "Cons: harder to track scroll position and can impact memory",
+        "isCorrect": true,
+        "explanation": null
+      },
+      {
+        "id": "o4",
+        "text": "Infinite scroll replaces the need for backend pagination",
+        "isCorrect": false,
+        "explanation": null
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://github.com/donnemartin/system-design-primer",
+        "type": "article",
+        "title": "System Design Primer",
+        "author": "Donne Martin",
+        "description": "Learn how to design large-scale systems"
+      },
+      {
+        "url": "https://www.educative.io/courses/grokking-the-system-design-interview",
+        "type": "course",
+        "title": "Grokking the System Design Interview",
+        "author": "Educative",
+        "duration": "20 hours",
+        "description": "Master system design interviews"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-20T23:51:01.527788+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "fe6cdbeb-f7c5-4d1b-a025-cfe824e9329c",
+    "title": "This is incorrect. Please refer to system design best practices.",
+    "content": "Explain criteria for dividing a large component into smaller reusable components.",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "Break components when parts are reusable, have independent state, or to improve readability and maintainability. Follow Single Responsibility Principle and avoid deep prop drilling.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Break components when parts are reusable, have independent state, or to improve readability and maintainability. Follow Single Responsibility Principle and avoid deep prop drilling.",
+        "isCorrect": true,
+        "explanation": "Break components when parts are reusable, have independent state, or to improve readability and maintainability. Follow Single Responsibility Principle and avoid deep prop drilling."
+      },
+      {
+        "id": "o2",
+        "text": "Break components when parts are reusable, have independent state, or to improve readability and maintainability",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o3",
+        "text": "Follow Single Responsibility Principle and avoid deep prop drilling",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o4",
+        "text": "This is incorrect. Please refer to system design best practices.",
+        "isCorrect": false,
+        "explanation": null
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://github.com/donnemartin/system-design-primer",
+        "type": "article",
+        "title": "System Design Primer",
+        "author": "Donne Martin",
+        "description": "Learn how to design large-scale systems"
+      },
+      {
+        "url": "https://www.educative.io/courses/grokking-the-system-design-interview",
+        "type": "course",
+        "title": "Grokking the System Design Interview",
+        "author": "Educative",
+        "duration": "20 hours",
+        "description": "Master system design interviews"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-20T23:51:01.527788+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "c97ffa28-3114-4a4f-9693-67a495f66bb0",
+    "title": "This is incorrect. Please refer to system design best practices.",
+    "content": "Describe the process of identifying components and their hierarchy from design files.",
+    "type": "multiple-choice",
+    "difficulty": "advanced",
+    "explanation": "Analyze the design, identify repeated patterns, break down UI into smallest reusable components, map dependencies, and visualize parent-child relationships in a graph.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Analyze the design, identify repeated patterns, break down UI into smallest reusable components, map dependencies, and visualize parent-child relationships in a graph.",
+        "isCorrect": true,
+        "explanation": "Analyze the design, identify repeated patterns, break down UI into smallest reusable components, map dependencies, and visualize parent-child relationships in a graph."
+      },
+      {
+        "id": "o2",
+        "text": "Analyze the design, identify repeated patterns, break down UI into smallest reusable components, map dependencies, and visualize parent-child relationships in a graph",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o3",
+        "text": "This method prioritizes user experience and maintainability.",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o4",
+        "text": "This is incorrect. Please refer to system design best practices.",
+        "isCorrect": false,
+        "explanation": null
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://github.com/donnemartin/system-design-primer",
+        "type": "article",
+        "title": "System Design Primer",
+        "author": "Donne Martin",
+        "description": "Learn how to design large-scale systems"
+      },
+      {
+        "url": "https://www.educative.io/courses/grokking-the-system-design-interview",
+        "type": "course",
+        "title": "Grokking the System Design Interview",
+        "author": "Educative",
+        "duration": "20 hours",
+        "description": "Master system design interviews"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-20T23:51:01.527788+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "ca1f4f01-ae4a-4f0d-a9cd-bd7ef36ad34f",
+    "title": "All states are automatically synchronized with the server",
+    "content": "Explain how different state types are managed and synchronized.",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "The correct answer is: Local state is component-specific",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Local state is component-specific",
+        "isCorrect": true,
+        "explanation": null
+      },
+      {
+        "id": "o2",
+        "text": "Global state is shared across multiple components",
+        "isCorrect": true,
+        "explanation": null
+      },
+      {
+        "id": "o3",
+        "text": "Server state comes from APIs and must be synchronized",
+        "isCorrect": true,
+        "explanation": null
+      },
+      {
+        "id": "o4",
+        "text": "All states are automatically synchronized with the server",
+        "isCorrect": false,
+        "explanation": null
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://github.com/donnemartin/system-design-primer",
+        "type": "article",
+        "title": "System Design Primer",
+        "author": "Donne Martin",
+        "description": "Learn how to design large-scale systems"
+      },
+      {
+        "url": "https://www.educative.io/courses/grokking-the-system-design-interview",
+        "type": "course",
+        "title": "Grokking the System Design Interview",
+        "author": "Educative",
+        "duration": "20 hours",
+        "description": "Master system design interviews"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-20T23:51:01.527788+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "8ceb7a3a-c698-4e06-aae0-9fabd410bd42",
+    "title": "This is incorrect. Please refer to system design best practices.",
+    "content": "Discuss principles for making components modular and reusable.",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "Keep components focused on a single responsibility, accept props for configuration, avoid hardcoding styles or behavior, and make them testable and composable.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Keep components focused on a single responsibility, accept props for configuration, avoid hardcoding styles or behavior, and make them testable and composable.",
+        "isCorrect": true,
+        "explanation": "Keep components focused on a single responsibility, accept props for configuration, avoid hardcoding styles or behavior, and make them testable and composable."
+      },
+      {
+        "id": "o2",
+        "text": "Keep components focused on a single responsibility, accept props for configuration, avoid hardcoding styles or behavior, and make them testable and composable",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o3",
+        "text": "This method prioritizes user experience and maintainability.",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o4",
+        "text": "This is incorrect. Please refer to system design best practices.",
+        "isCorrect": false,
+        "explanation": null
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://github.com/donnemartin/system-design-primer",
+        "type": "article",
+        "title": "System Design Primer",
+        "author": "Donne Martin",
+        "description": "Learn how to design large-scale systems"
+      },
+      {
+        "url": "https://www.educative.io/courses/grokking-the-system-design-interview",
+        "type": "course",
+        "title": "Grokking the System Design Interview",
+        "author": "Educative",
+        "duration": "20 hours",
+        "description": "Master system design interviews"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-20T23:51:01.527788+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "41ba5d93-6167-4cde-b887-3c1d406222b8",
+    "title": "This is incorrect. Please refer to system design best practices.",
+    "content": "Explain Redux for state management and use cases for global state.",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "Redux is a predictable state container for JavaScript apps, useful for managing global state shared across multiple components, especially in large or complex apps.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Redux is a predictable state container for JavaScript apps, useful for managing global state shared across multiple components, especially in large or complex apps.",
+        "isCorrect": true,
+        "explanation": "Redux is a predictable state container for JavaScript apps, useful for managing global state shared across multiple components, especially in large or complex apps."
+      },
+      {
+        "id": "o2",
+        "text": "Redux is a predictable state container for JavaScript apps, useful for managing global state shared across multiple components, especially in large or complex apps",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o3",
+        "text": "This method prioritizes user experience and maintainability.",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o4",
+        "text": "This is incorrect. Please refer to system design best practices.",
+        "isCorrect": false,
+        "explanation": null
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://github.com/donnemartin/system-design-primer",
+        "type": "article",
+        "title": "System Design Primer",
+        "author": "Donne Martin",
+        "description": "Learn how to design large-scale systems"
+      },
+      {
+        "url": "https://www.educative.io/courses/grokking-the-system-design-interview",
+        "type": "course",
+        "title": "Grokking the System Design Interview",
+        "author": "Educative",
+        "duration": "20 hours",
+        "description": "Master system design interviews"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-20T23:51:01.527788+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "a73bb904-2ae0-497c-957d-b9c2d6445c5d",
+    "title": "Controlled components are faster than uncontrolled in all cases",
+    "content": "Explain how controlled and uncontrolled components manage state.",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "The correct answer is: Controlled components have state managed by React via props",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Controlled components have state managed by React via props",
+        "isCorrect": true,
+        "explanation": null
+      },
+      {
+        "id": "o2",
+        "text": "Uncontrolled components manage state internally using refs",
+        "isCorrect": true,
+        "explanation": null
+      },
+      {
+        "id": "o3",
+        "text": "Controlled components are faster than uncontrolled in all cases",
+        "isCorrect": false,
+        "explanation": null
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://github.com/donnemartin/system-design-primer",
+        "type": "article",
+        "title": "System Design Primer",
+        "author": "Donne Martin",
+        "description": "Learn how to design large-scale systems"
+      },
+      {
+        "url": "https://www.educative.io/courses/grokking-the-system-design-interview",
+        "type": "course",
+        "title": "Grokking the System Design Interview",
+        "author": "Educative",
+        "duration": "20 hours",
+        "description": "Master system design interviews"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-20T23:51:01.527788+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "0f090874-9cfa-4ba0-a8ab-fbd4a1a1785d",
+    "title": "This is incorrect. Please refer to system design best practices.",
+    "content": "Explain how splitting JavaScript bundles improves performance.",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "Bundle splitting breaks the app into smaller chunks, allowing the browser to load only necessary code on demand, reducing initial load time.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Bundle splitting breaks the app into smaller chunks, allowing the browser to load only necessary code on demand, reducing initial load time.",
+        "isCorrect": true,
+        "explanation": "Bundle splitting breaks the app into smaller chunks, allowing the browser to load only necessary code on demand, reducing initial load time."
+      },
+      {
+        "id": "o2",
+        "text": "Bundle splitting breaks the app into smaller chunks, allowing the browser to load only necessary code on demand, reducing initial load time",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o3",
+        "text": "This method prioritizes user experience and maintainability.",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o4",
+        "text": "This is incorrect. Please refer to system design best practices.",
+        "isCorrect": false,
+        "explanation": null
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://github.com/donnemartin/system-design-primer",
+        "type": "article",
+        "title": "System Design Primer",
+        "author": "Donne Martin",
+        "description": "Learn how to design large-scale systems"
+      },
+      {
+        "url": "https://www.educative.io/courses/grokking-the-system-design-interview",
+        "type": "course",
+        "title": "Grokking the System Design Interview",
+        "author": "Educative",
+        "duration": "20 hours",
+        "description": "Master system design interviews"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-20T23:51:01.527788+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "f00ab570-55f8-4fb0-b734-60d7164add58",
+    "title": "This is incorrect. Please refer to system design best practices.",
+    "content": "Explain performance benefits of HTTPS beyond security.",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "HTTPS enables HTTP/2 or HTTP/3 which supports multiplexing, header compression, and better caching, improving load performance.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "HTTPS enables HTTP/2 or HTTP/3 which supports multiplexing, header compression, and better caching, improving load performance.",
+        "isCorrect": true,
+        "explanation": "HTTPS enables HTTP/2 or HTTP/3 which supports multiplexing, header compression, and better caching, improving load performance."
+      },
+      {
+        "id": "o2",
+        "text": "HTTPS enables HTTP/2 or HTTP/3 which supports multiplexing, header compression, and better caching, improving load performance",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o3",
+        "text": "This method prioritizes user experience and maintainability.",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o4",
+        "text": "This is incorrect. Please refer to system design best practices.",
+        "isCorrect": false,
+        "explanation": null
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://github.com/donnemartin/system-design-primer",
+        "type": "article",
+        "title": "System Design Primer",
+        "author": "Donne Martin",
+        "description": "Learn how to design large-scale systems"
+      },
+      {
+        "url": "https://www.educative.io/courses/grokking-the-system-design-interview",
+        "type": "course",
+        "title": "Grokking the System Design Interview",
+        "author": "Educative",
+        "duration": "20 hours",
+        "description": "Master system design interviews"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-20T23:51:01.527788+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "0f0b8a93-c34c-44a2-8253-c836df6b2915",
+    "title": "This is incorrect. Please refer to system design best practices.",
+    "content": "Discuss strategies for updating the UI when new posts or comments arrive.",
+    "type": "multiple-choice",
+    "difficulty": "advanced",
+    "explanation": "Use WebSockets or SSE to push updates, update frontend state optimistically, maintain a local cache, and optionally batch updates to reduce re-renders.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Use WebSockets or SSE to push updates, update frontend state optimistically, maintain a local cache, and optionally batch updates to reduce re-renders.",
+        "isCorrect": true,
+        "explanation": "Use WebSockets or SSE to push updates, update frontend state optimistically, maintain a local cache, and optionally batch updates to reduce re-renders."
+      },
+      {
+        "id": "o2",
+        "text": "Use WebSockets or SSE to push updates, update frontend state optimistically, maintain a local cache, and optionally batch updates to reduce re-renders",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o3",
+        "text": "This method prioritizes user experience and maintainability.",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o4",
+        "text": "This is incorrect. Please refer to system design best practices.",
+        "isCorrect": false,
+        "explanation": null
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://github.com/donnemartin/system-design-primer",
+        "type": "article",
+        "title": "System Design Primer",
+        "author": "Donne Martin",
+        "description": "Learn how to design large-scale systems"
+      },
+      {
+        "url": "https://www.educative.io/courses/grokking-the-system-design-interview",
+        "type": "course",
+        "title": "Grokking the System Design Interview",
+        "author": "Educative",
+        "duration": "20 hours",
+        "description": "Master system design interviews"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-20T23:49:55.562304+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "6d5b21b3-81ef-4b2f-be0a-21f64407e327",
+    "title": "All approaches are identical in performance",
+    "content": "Compare offset-based, cursor-based, and infinite scroll pagination in frontend apps.",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "Offset-based pagination is simple but can have duplicates on fast-changing data. Cursor-based is more reliable for real-time feeds. Infinite scroll is UX dependent.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Offset-based: simple, can have duplicates",
+        "isCorrect": true,
+        "explanation": null
+      },
+      {
+        "id": "o2",
+        "text": "Cursor-based: more reliable for dynamic data",
+        "isCorrect": true,
+        "explanation": null
+      },
+      {
+        "id": "o3",
+        "text": "Infinite scroll: UX-friendly but can be tricky to manage state",
+        "isCorrect": true,
+        "explanation": null
+      },
+      {
+        "id": "o4",
+        "text": "All approaches are identical in performance",
+        "isCorrect": false,
+        "explanation": null
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://github.com/donnemartin/system-design-primer",
+        "type": "article",
+        "title": "System Design Primer",
+        "author": "Donne Martin",
+        "description": "Learn how to design large-scale systems"
+      },
+      {
+        "url": "https://www.educative.io/courses/grokking-the-system-design-interview",
+        "type": "course",
+        "title": "Grokking the System Design Interview",
+        "author": "Educative",
+        "duration": "20 hours",
+        "description": "Master system design interviews"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-20T23:49:55.562304+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "d8b1520f-7831-4cff-96ea-9b4ce5b56aa5",
+    "title": "This is incorrect. Please refer to system design best practices.",
+    "content": "Describe the structure of a frontend entity object for a Post.",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "Normalize entities: store posts in a dictionary keyed by id, store comments separately keyed by id, reference relationships via ids to reduce duplication and simplify updates.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Normalize entities: store posts in a dictionary keyed by id, store comments separately keyed by id, reference relationships via ids to reduce duplication and simplify updates.",
+        "isCorrect": true,
+        "explanation": "Normalize entities: store posts in a dictionary keyed by id, store comments separately keyed by id, reference relationships via ids to reduce duplication and simplify updates."
+      },
+      {
+        "id": "o2",
+        "text": "Normalize entities: store posts in a dictionary keyed by id, store comments separately keyed by id, reference relationships via ids to reduce duplication and simplify updates",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o3",
+        "text": "This method prioritizes user experience and maintainability.",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o4",
+        "text": "This is incorrect. Please refer to system design best practices.",
+        "isCorrect": false,
+        "explanation": null
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://github.com/donnemartin/system-design-primer",
+        "type": "article",
+        "title": "System Design Primer",
+        "author": "Donne Martin",
+        "description": "Learn how to design large-scale systems"
+      },
+      {
+        "url": "https://www.educative.io/courses/grokking-the-system-design-interview",
+        "type": "course",
+        "title": "Grokking the System Design Interview",
+        "author": "Educative",
+        "duration": "20 hours",
+        "description": "Master system design interviews"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-20T23:49:55.562304+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "131c4e96-0cb4-40a3-84ea-f904620abc2d",
+    "title": "This is incorrect. Please refer to system design best practices.",
+    "content": "Explain the purpose of signed URLs and their impact on security and performance.",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "Signed URLs provide temporary, time-limited access to private resources (like images) on CDNs. They ensure secure access while allowing caching and CDN optimization.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Signed URLs provide temporary, time-limited access to private resources (like images) on CDNs. They ensure secure access while allowing caching and CDN optimization.",
+        "isCorrect": true,
+        "explanation": "Signed URLs provide temporary, time-limited access to private resources (like images) on CDNs. They ensure secure access while allowing caching and CDN optimization."
+      },
+      {
+        "id": "o2",
+        "text": "Signed URLs provide temporary, time-limited access to private resources (like images) on CDNs",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o3",
+        "text": "They ensure secure access while allowing caching and CDN optimization",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o4",
+        "text": "This is incorrect. Please refer to system design best practices.",
+        "isCorrect": false,
+        "explanation": null
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://github.com/donnemartin/system-design-primer",
+        "type": "article",
+        "title": "System Design Primer",
+        "author": "Donne Martin",
+        "description": "Learn how to design large-scale systems"
+      },
+      {
+        "url": "https://www.educative.io/courses/grokking-the-system-design-interview",
+        "type": "course",
+        "title": "Grokking the System Design Interview",
+        "author": "Educative",
+        "duration": "20 hours",
+        "description": "Master system design interviews"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-20T23:49:55.562304+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "39ab4fa1-6499-4b0b-8813-96a18853190b",
+    "title": "This is incorrect. Please refer to system design best practices.",
+    "content": "Explain techniques like WebP format, responsive images, lazy loading, and CDN caching.",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "Use modern formats like WebP, serve different resolutions with srcset, lazy load offscreen images, compress images, and cache via CDN.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Use modern formats like WebP, serve different resolutions with `srcset`, lazy load offscreen images, compress images, and cache via CDN.",
+        "isCorrect": true,
+        "explanation": "Use modern formats like WebP, serve different resolutions with `srcset`, lazy load offscreen images, compress images, and cache via CDN."
+      },
+      {
+        "id": "o2",
+        "text": "Use modern formats like WebP, serve different resolutions with `srcset`, lazy load offscreen images, compress images, and cache via CDN",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o3",
+        "text": "This method prioritizes user experience and maintainability.",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o4",
+        "text": "This is incorrect. Please refer to system design best practices.",
+        "isCorrect": false,
+        "explanation": null
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://github.com/donnemartin/system-design-primer",
+        "type": "article",
+        "title": "System Design Primer",
+        "author": "Donne Martin",
+        "description": "Learn how to design large-scale systems"
+      },
+      {
+        "url": "https://www.educative.io/courses/grokking-the-system-design-interview",
+        "type": "course",
+        "title": "Grokking the System Design Interview",
+        "author": "Educative",
+        "duration": "20 hours",
+        "description": "Master system design interviews"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-20T23:49:55.562304+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "1e5ad58b-f5d4-4f99-a564-b075fa9ee7e7",
+    "title": "SSE requires a persistent TCP connection like WebSocket",
+    "content": "Explain SSE and how it differs from WebSocket.",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "SSE provides a unidirectional stream of updates from server to client over HTTP.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "SSE is unidirectional (server -> client)",
+        "isCorrect": true,
+        "explanation": null
+      },
+      {
+        "id": "o2",
+        "text": "WebSocket is bidirectional (client <-> server)",
+        "isCorrect": true,
+        "explanation": null
+      },
+      {
+        "id": "o3",
+        "text": "SSE requires a persistent TCP connection like WebSocket",
+        "isCorrect": false,
+        "explanation": null
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://github.com/donnemartin/system-design-primer",
+        "type": "article",
+        "title": "System Design Primer",
+        "author": "Donne Martin",
+        "description": "Learn how to design large-scale systems"
+      },
+      {
+        "url": "https://www.educative.io/courses/grokking-the-system-design-interview",
+        "type": "course",
+        "title": "Grokking the System Design Interview",
+        "author": "Educative",
+        "duration": "20 hours",
+        "description": "Master system design interviews"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-20T23:49:55.562304+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "d8482e79-90a8-4ea6-b6ad-741bd63e5d50",
+    "title": "This is incorrect. Please refer to system design best practices.",
+    "content": "Explain the concept of critical CSS and how it improves page load performance.",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "Critical CSS is the CSS required to render above-the-fold content. Load it inline in the HTML to reduce render-blocking, while deferring non-critical CSS.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Critical CSS is the CSS required to render above-the-fold content. Load it inline in the HTML to reduce render-blocking, while deferring non-critical CSS.",
+        "isCorrect": true,
+        "explanation": "Critical CSS is the CSS required to render above-the-fold content. Load it inline in the HTML to reduce render-blocking, while deferring non-critical CSS."
+      },
+      {
+        "id": "o2",
+        "text": "Critical CSS is the CSS required to render above-the-fold content",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o3",
+        "text": "Load it inline in the HTML to reduce render-blocking, while deferring non-critical CSS",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o4",
+        "text": "This is incorrect. Please refer to system design best practices.",
+        "isCorrect": false,
+        "explanation": null
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://github.com/donnemartin/system-design-primer",
+        "type": "article",
+        "title": "System Design Primer",
+        "author": "Donne Martin",
+        "description": "Learn how to design large-scale systems"
+      },
+      {
+        "url": "https://www.educative.io/courses/grokking-the-system-design-interview",
+        "type": "course",
+        "title": "Grokking the System Design Interview",
+        "author": "Educative",
+        "duration": "20 hours",
+        "description": "Master system design interviews"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-20T23:49:55.562304+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "158ffcc9-57c9-4a9c-9aa7-a9a9cc6ecbc9",
+    "title": "This is incorrect. Please refer to system design best practices.",
+    "content": "Discuss techniques like windowing, virtualization, and memoization for list rendering.",
+    "type": "multiple-choice",
+    "difficulty": "advanced",
+    "explanation": "Use libraries like react-window or react-virtualized to render only visible items, memoize list items to avoid unnecessary re-renders, and paginate data if possible.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Use libraries like react-window or react-virtualized to render only visible items, memoize list items to avoid unnecessary re-renders, and paginate data if possible.",
+        "isCorrect": true,
+        "explanation": "Use libraries like react-window or react-virtualized to render only visible items, memoize list items to avoid unnecessary re-renders, and paginate data if possible."
+      },
+      {
+        "id": "o2",
+        "text": "Use libraries like react-window or react-virtualized to render only visible items, memoize list items to avoid unnecessary re-renders, and paginate data if possible",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o3",
+        "text": "This method prioritizes user experience and maintainability.",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o4",
+        "text": "This is incorrect. Please refer to system design best practices.",
+        "isCorrect": false,
+        "explanation": null
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://github.com/donnemartin/system-design-primer",
+        "type": "article",
+        "title": "System Design Primer",
+        "author": "Donne Martin",
+        "description": "Learn how to design large-scale systems"
+      },
+      {
+        "url": "https://www.educative.io/courses/grokking-the-system-design-interview",
+        "type": "course",
+        "title": "Grokking the System Design Interview",
+        "author": "Educative",
+        "duration": "20 hours",
+        "description": "Master system design interviews"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-20T23:49:55.562304+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "1806ee71-1a13-41f0-ab4e-5bb51d21e0d2",
+    "title": "REST APIs can never be cached",
+    "content": "Compare REST and GraphQL in terms of data fetching and flexibility.",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "The correct answer is: REST returns fixed data structures per endpoint",
+    "options": [
+      {
+        "id": "o1",
+        "text": "REST returns fixed data structures per endpoint",
+        "isCorrect": true,
+        "explanation": null
+      },
+      {
+        "id": "o2",
+        "text": "GraphQL allows client to request exactly the fields needed",
+        "isCorrect": true,
+        "explanation": null
+      },
+      {
+        "id": "o3",
+        "text": "GraphQL cannot support real-time updates",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o4",
+        "text": "REST APIs can never be cached",
+        "isCorrect": false,
+        "explanation": null
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://github.com/donnemartin/system-design-primer",
+        "type": "article",
+        "title": "System Design Primer",
+        "author": "Donne Martin",
+        "description": "Learn how to design large-scale systems"
+      },
+      {
+        "url": "https://www.educative.io/courses/grokking-the-system-design-interview",
+        "type": "course",
+        "title": "Grokking the System Design Interview",
+        "author": "Educative",
+        "duration": "20 hours",
+        "description": "Master system design interviews"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-20T23:49:55.562304+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "20593cfc-9961-430b-9d3a-40bd52b044d3",
+    "title": "Reflow and repaint are the same",
+    "content": "Explain how reflow and repaint affect rendering performance.",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "The correct answer is: Reflow recalculates layout and can trigger repaint",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Reflow recalculates layout and can trigger repaint",
+        "isCorrect": true,
+        "explanation": null
+      },
+      {
+        "id": "o2",
+        "text": "Repaint only redraws pixels without layout calculation",
+        "isCorrect": true,
+        "explanation": null
+      },
+      {
+        "id": "o3",
+        "text": "Reflow and repaint are the same",
+        "isCorrect": false,
+        "explanation": null
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://github.com/donnemartin/system-design-primer",
+        "type": "article",
+        "title": "System Design Primer",
+        "author": "Donne Martin",
+        "description": "Learn how to design large-scale systems"
+      },
+      {
+        "url": "https://www.educative.io/courses/grokking-the-system-design-interview",
+        "type": "course",
+        "title": "Grokking the System Design Interview",
+        "author": "Educative",
+        "duration": "20 hours",
+        "description": "Master system design interviews"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-20T23:49:55.562304+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "c0550f70-fa06-432f-8e9f-ff53c9507019",
+    "title": "This is incorrect. Please refer to system design best practices.",
+    "content": "Explain the WebSocket protocol and its benefits for real-time communication.",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "WebSocket establishes a persistent bidirectional connection between client and server, allowing real-time updates with lower overhead compared to HTTP polling.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "WebSocket establishes a persistent bidirectional connection between client and server, allowing real-time updates with lower overhead compared to HTTP polling.",
+        "isCorrect": true,
+        "explanation": "WebSocket establishes a persistent bidirectional connection between client and server, allowing real-time updates with lower overhead compared to HTTP polling."
+      },
+      {
+        "id": "o2",
+        "text": "WebSocket establishes a persistent bidirectional connection between client and server, allowing real-time updates with lower overhead compared to HTTP polling",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o3",
+        "text": "This method prioritizes user experience and maintainability.",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o4",
+        "text": "This is incorrect. Please refer to system design best practices.",
+        "isCorrect": false,
+        "explanation": null
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://github.com/donnemartin/system-design-primer",
+        "type": "article",
+        "title": "System Design Primer",
+        "author": "Donne Martin",
+        "description": "Learn how to design large-scale systems"
+      },
+      {
+        "url": "https://www.educative.io/courses/grokking-the-system-design-interview",
+        "type": "course",
+        "title": "Grokking the System Design Interview",
+        "author": "Educative",
+        "duration": "20 hours",
+        "description": "Master system design interviews"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-20T23:49:07.55138+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "30d734c9-01c2-4c7e-aaaa-838b4d21c1b9",
+    "title": "Semantic HTML automatically optimizes bundle size",
+    "content": "Discuss how semantic HTML improves usability and accessibility.",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "Semantic elements like <cod<header, <cod<nav, <cod<main provide meaning, improving navigation for assistive technologies.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Semantic HTML improves SEO",
+        "isCorrect": true,
+        "explanation": null
+      },
+      {
+        "id": "o2",
+        "text": "Semantic HTML is ignored by screen readers",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o3",
+        "text": "Semantic HTML improves accessibility for keyboard and screen reader users",
+        "isCorrect": true,
+        "explanation": null
+      },
+      {
+        "id": "o4",
+        "text": "Semantic HTML automatically optimizes bundle size",
+        "isCorrect": false,
+        "explanation": null
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://github.com/donnemartin/system-design-primer",
+        "type": "article",
+        "title": "System Design Primer",
+        "author": "Donne Martin",
+        "description": "Learn how to design large-scale systems"
+      },
+      {
+        "url": "https://www.educative.io/courses/grokking-the-system-design-interview",
+        "type": "course",
+        "title": "Grokking the System Design Interview",
+        "author": "Educative",
+        "duration": "20 hours",
+        "description": "Master system design interviews"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-20T23:49:07.55138+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "fbe61ec6-d5ad-4c07-b359-4c04f3aac7d6",
+    "title": "This is incorrect. Please refer to system design best practices.",
+    "content": "Explain how ARIA roles help assistive technologies interpret UI components.",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "ARIA roles provide semantic information about elements to assistive technologies, improving accessibility for screen readers and keyboard navigation.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "ARIA roles provide semantic information about elements to assistive technologies, improving accessibility for screen readers and keyboard navigation.",
+        "isCorrect": true,
+        "explanation": "ARIA roles provide semantic information about elements to assistive technologies, improving accessibility for screen readers and keyboard navigation."
+      },
+      {
+        "id": "o2",
+        "text": "ARIA roles provide semantic information about elements to assistive technologies, improving accessibility for screen readers and keyboard navigation",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o3",
+        "text": "This method prioritizes user experience and maintainability.",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o4",
+        "text": "This is incorrect. Please refer to system design best practices.",
+        "isCorrect": false,
+        "explanation": null
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://github.com/donnemartin/system-design-primer",
+        "type": "article",
+        "title": "System Design Primer",
+        "author": "Donne Martin",
+        "description": "Learn how to design large-scale systems"
+      },
+      {
+        "url": "https://www.educative.io/courses/grokking-the-system-design-interview",
+        "type": "course",
+        "title": "Grokking the System Design Interview",
+        "author": "Educative",
+        "duration": "20 hours",
+        "description": "Master system design interviews"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-20T23:49:07.55138+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "f74ea7a2-de61-44d1-bdf8-283ccf8c1a55",
+    "title": "This is incorrect. Please refer to system design best practices.",
+    "content": "Explain the importance of sufficient color contrast in frontend UI design.",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "Color contrast ensures that text and UI elements are distinguishable for users with visual impairments. WCAG recommends a minimum contrast ratio of 4.5:1 for normal text.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Color contrast ensures that text and UI elements are distinguishable for users with visual impairments. WCAG recommends a minimum contrast ratio of 4.5:1 for normal text.",
+        "isCorrect": true,
+        "explanation": "Color contrast ensures that text and UI elements are distinguishable for users with visual impairments. WCAG recommends a minimum contrast ratio of 4.5:1 for normal text."
+      },
+      {
+        "id": "o2",
+        "text": "Color contrast ensures that text and UI elements are distinguishable for users with visual impairments",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o3",
+        "text": "WCAG recommends a minimum contrast ratio of 4",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o4",
+        "text": "This is incorrect. Please refer to system design best practices.",
+        "isCorrect": false,
+        "explanation": null
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://github.com/donnemartin/system-design-primer",
+        "type": "article",
+        "title": "System Design Primer",
+        "author": "Donne Martin",
+        "description": "Learn how to design large-scale systems"
+      },
+      {
+        "url": "https://www.educative.io/courses/grokking-the-system-design-interview",
+        "type": "course",
+        "title": "Grokking the System Design Interview",
+        "author": "Educative",
+        "duration": "20 hours",
+        "description": "Master system design interviews"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-20T23:49:07.55138+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "f2dbe7d1-868b-4352-9a19-7556c0223fac",
+    "title": "This is incorrect. Please refer to system design best practices.",
+    "content": "Discuss how Web Workers improve performance in web applications and provide an example use case.",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "Web Workers run scripts in background threads separate from the main UI thread. They are useful for CPU-intensive tasks like parsing large JSON, image processing, or data transformations without blocking the UI.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Web Workers run scripts in background threads separate from the main UI thread. They are useful for CPU-intensive tasks like parsing large JSON, image processing, or data transformations without block...",
+        "isCorrect": true,
+        "explanation": "Web Workers run scripts in background threads separate from the main UI thread. They are useful for CPU-intensive tasks like parsing large JSON, image processing, or data transformations without blocking the UI."
+      },
+      {
+        "id": "o2",
+        "text": "Web Workers run scripts in background threads separate from the main UI thread",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o3",
+        "text": "They are useful for CPU-intensive tasks like parsing large JSON, image processing, or data transformations without blocking the UI",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o4",
+        "text": "This is incorrect. Please refer to system design best practices.",
+        "isCorrect": false,
+        "explanation": null
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://github.com/donnemartin/system-design-primer",
+        "type": "article",
+        "title": "System Design Primer",
+        "author": "Donne Martin",
+        "description": "Learn how to design large-scale systems"
+      },
+      {
+        "url": "https://www.educative.io/courses/grokking-the-system-design-interview",
+        "type": "course",
+        "title": "Grokking the System Design Interview",
+        "author": "Educative",
+        "duration": "20 hours",
+        "description": "Master system design interviews"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-20T23:49:07.55138+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "bead0c5d-9465-4f46-9f28-fdcea8b7057f",
+    "title": "Preload defers resources until user interaction",
+    "content": "Explain how prefetch and preload directives differ in terms of resource loading strategy.",
+    "type": "multiple-choice",
+    "difficulty": "advanced",
+    "explanation": "Prefetch loads resources for future navigation, while preload ensures critical resources are fetched earlier for the current page.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Prefetch is for resources needed immediately",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o2",
+        "text": "Preload is for resources needed immediately",
+        "isCorrect": true,
+        "explanation": null
+      },
+      {
+        "id": "o3",
+        "text": "Prefetch is for resources likely needed in future",
+        "isCorrect": true,
+        "explanation": null
+      },
+      {
+        "id": "o4",
+        "text": "Preload defers resources until user interaction",
+        "isCorrect": false,
+        "explanation": null
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://github.com/donnemartin/system-design-primer",
+        "type": "article",
+        "title": "System Design Primer",
+        "author": "Donne Martin",
+        "description": "Learn how to design large-scale systems"
+      },
+      {
+        "url": "https://www.educative.io/courses/grokking-the-system-design-interview",
+        "type": "course",
+        "title": "Grokking the System Design Interview",
+        "author": "Educative",
+        "duration": "20 hours",
+        "description": "Master system design interviews"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-20T23:49:07.55138+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "05509106-64d7-4264-a973-1d49503861ea",
+    "title": "Client uses WebSocket connection for continuous streaming",
+    "content": "Explain how long-polling works for real-time updates.",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "Long-polling keeps an HTTP request open until the server has data, then immediately sends a new request for the next update.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Client repeatedly sends requests at a fixed interval",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o2",
+        "text": "Client sends a request, server responds only when new data is available, then client repeats",
+        "isCorrect": true,
+        "explanation": null
+      },
+      {
+        "id": "o3",
+        "text": "Client uses WebSocket connection for continuous streaming",
+        "isCorrect": false,
+        "explanation": null
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://github.com/donnemartin/system-design-primer",
+        "type": "article",
+        "title": "System Design Primer",
+        "author": "Donne Martin",
+        "description": "Learn how to design large-scale systems"
+      },
+      {
+        "url": "https://www.educative.io/courses/grokking-the-system-design-interview",
+        "type": "course",
+        "title": "Grokking the System Design Interview",
+        "author": "Educative",
+        "duration": "20 hours",
+        "description": "Master system design interviews"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-20T23:49:07.55138+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "6b894987-747d-4c95-9afe-f4aa46a473e9",
+    "title": "This is incorrect. Please refer to system design best practices.",
+    "content": "Explain optimistic updates and when they are used.",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "Optimistic updates immediately update the UI assuming the server request will succeed. If the request fails, the UI is reverted. It improves perceived responsiveness.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Optimistic updates immediately update the UI assuming the server request will succeed. If the request fails, the UI is reverted. It improves perceived responsiveness.",
+        "isCorrect": true,
+        "explanation": "Optimistic updates immediately update the UI assuming the server request will succeed. If the request fails, the UI is reverted. It improves perceived responsiveness."
+      },
+      {
+        "id": "o2",
+        "text": "Optimistic updates immediately update the UI assuming the server request will succeed",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o3",
+        "text": "If the request fails, the UI is reverted",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o4",
+        "text": "This is incorrect. Please refer to system design best practices.",
+        "isCorrect": false,
+        "explanation": null
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://github.com/donnemartin/system-design-primer",
+        "type": "article",
+        "title": "System Design Primer",
+        "author": "Donne Martin",
+        "description": "Learn how to design large-scale systems"
+      },
+      {
+        "url": "https://www.educative.io/courses/grokking-the-system-design-interview",
+        "type": "course",
+        "title": "Grokking the System Design Interview",
+        "author": "Educative",
+        "duration": "20 hours",
+        "description": "Master system design interviews"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-20T23:49:07.55138+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "a11f29ae-f2ae-44f4-afe9-41661a80de6f",
+    "title": "This is incorrect. Please refer to system design best practices.",
+    "content": "Describe best practices to make interactive components accessible via keyboard.",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "Ensure focusable elements have tabindex, use aria attributes correctly, manage focus order for dialogs/modals, and provide keyboard shortcuts where necessary.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Ensure focusable elements have `tabindex`, use `aria` attributes correctly, manage focus order for dialogs/modals, and provide keyboard shortcuts where necessary.",
+        "isCorrect": true,
+        "explanation": "Ensure focusable elements have `tabindex`, use `aria` attributes correctly, manage focus order for dialogs/modals, and provide keyboard shortcuts where necessary."
+      },
+      {
+        "id": "o2",
+        "text": "Ensure focusable elements have `tabindex`, use `aria` attributes correctly, manage focus order for dialogs/modals, and provide keyboard shortcuts where necessary",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o3",
+        "text": "This method prioritizes user experience and maintainability.",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o4",
+        "text": "This is incorrect. Please refer to system design best practices.",
+        "isCorrect": false,
+        "explanation": null
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://github.com/donnemartin/system-design-primer",
+        "type": "article",
+        "title": "System Design Primer",
+        "author": "Donne Martin",
+        "description": "Learn how to design large-scale systems"
+      },
+      {
+        "url": "https://www.educative.io/courses/grokking-the-system-design-interview",
+        "type": "course",
+        "title": "Grokking the System Design Interview",
+        "author": "Educative",
+        "duration": "20 hours",
+        "description": "Master system design interviews"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-20T23:49:07.55138+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "38ce0c92-3332-40e5-b3fb-10ef3fd18527",
+    "title": "This is incorrect. Please refer to system design best practices.",
+    "content": "Explain pessimistic updates and how they differ from optimistic updates.",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "Pessimistic updates wait for server confirmation before updating the UI. This ensures consistency but may feel slower to the user.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Pessimistic updates wait for server confirmation before updating the UI. This ensures consistency but may feel slower to the user.",
+        "isCorrect": true,
+        "explanation": "Pessimistic updates wait for server confirmation before updating the UI. This ensures consistency but may feel slower to the user."
+      },
+      {
+        "id": "o2",
+        "text": "Pessimistic updates wait for server confirmation before updating the UI",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o3",
+        "text": "This ensures consistency but may feel slower to the user",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o4",
+        "text": "This is incorrect. Please refer to system design best practices.",
+        "isCorrect": false,
+        "explanation": null
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://github.com/donnemartin/system-design-primer",
+        "type": "article",
+        "title": "System Design Primer",
+        "author": "Donne Martin",
+        "description": "Learn how to design large-scale systems"
+      },
+      {
+        "url": "https://www.educative.io/courses/grokking-the-system-design-interview",
+        "type": "course",
+        "title": "Grokking the System Design Interview",
+        "author": "Educative",
+        "duration": "20 hours",
+        "description": "Master system design interviews"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-20T23:49:07.55138+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "ebe435ed-f4d3-45af-94c9-ce5b488e714c",
+    "title": "They increase architectural complexity",
+    "content": "Explain the concept of micro-frontends and their trade-offs.",
+    "type": "multiple-choice",
+    "difficulty": "advanced",
+    "explanation": "Micro-frontends split the UI into smaller, independently deployable apps. They improve scalability but increase complexity.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Micro-frontends allow independent teams to build and deploy parts of the UI",
+        "isCorrect": true,
+        "explanation": null
+      },
+      {
+        "id": "o2",
+        "text": "Micro-frontends always simplify performance optimization",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o3",
+        "text": "They increase architectural complexity",
+        "isCorrect": true,
+        "explanation": null
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://github.com/donnemartin/system-design-primer",
+        "type": "article",
+        "title": "System Design Primer",
+        "author": "Donne Martin",
+        "description": "Learn how to design large-scale systems"
+      },
+      {
+        "url": "https://www.educative.io/courses/grokking-the-system-design-interview",
+        "type": "course",
+        "title": "Grokking the System Design Interview",
+        "author": "Educative",
+        "duration": "20 hours",
+        "description": "Master system design interviews"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-20T23:48:06.414618+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "9e1047c2-6748-436b-a7ad-ac8fd67578c6",
+    "title": "SSG cannot be cached on CDN.",
+    "content": "Compare CSR, SSR, and SSG in terms of performance, SEO, and user experience.",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "CSR is good for highly interactive apps, SSR helps SEO-driven apps like e-commerce, and SSG is ideal for blogs, docs, and marketing sites.",
+    "options": [
+      {
+        "id": "1",
+        "text": "CSR loads JavaScript first and renders in the browser; SSR renders HTML on the server per request; SSG pre-renders HTML at build time.",
+        "isCorrect": true,
+        "explanation": "CSR delays first render but enables rich interactivity; SSR improves SEO and first load but adds server cost; SSG is best for static content with CDN delivery."
+      },
+      {
+        "id": "2",
+        "text": "CSR is faster than SSR in all cases.",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "3",
+        "text": "SSG cannot be cached on CDN.",
+        "isCorrect": false,
+        "explanation": null
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://github.com/donnemartin/system-design-primer",
+        "type": "article",
+        "title": "System Design Primer",
+        "author": "Donne Martin",
+        "description": "Learn how to design large-scale systems"
+      },
+      {
+        "url": "https://www.educative.io/courses/grokking-the-system-design-interview",
+        "type": "course",
+        "title": "Grokking the System Design Interview",
+        "author": "Educative",
+        "duration": "20 hours",
+        "description": "Master system design interviews"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-20T23:48:06.414618+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "8435b6b2-9897-47f3-814a-7ba082311d3f",
+    "title": "Both approaches are identical",
+    "content": "Describe the difference between optimistic and pessimistic updates in state management.",
+    "type": "multiple-choice",
+    "difficulty": "advanced",
+    "explanation": "Optimistic updates update UI immediately before server confirmation. Pessimistic updates wait for server response.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Optimistic update: update UI before server confirms",
+        "isCorrect": true,
+        "explanation": null
+      },
+      {
+        "id": "o2",
+        "text": "Pessimistic update: update UI after server confirms",
+        "isCorrect": true,
+        "explanation": null
+      },
+      {
+        "id": "o3",
+        "text": "Both approaches are identical",
+        "isCorrect": false,
+        "explanation": null
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://github.com/donnemartin/system-design-primer",
+        "type": "article",
+        "title": "System Design Primer",
+        "author": "Donne Martin",
+        "description": "Learn how to design large-scale systems"
+      },
+      {
+        "url": "https://www.educative.io/courses/grokking-the-system-design-interview",
+        "type": "course",
+        "title": "Grokking the System Design Interview",
+        "author": "Educative",
+        "duration": "20 hours",
+        "description": "Master system design interviews"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-20T23:48:06.414618+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "2ed7c3ef-3d55-4572-89a8-a0c8647ec96a",
+    "title": "This is incorrect. Please refer to system design best practices.",
+    "content": "Describe how virtual DOM improves rendering performance in frontend frameworks.",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "The virtual DOM is an in-memory representation of the UI. Instead of updating the real DOM directly, frameworks update the virtual DOM and compute the minimal changes, which are then applied to the real DOM.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "The virtual DOM is an in-memory representation of the UI. Instead of updating the real DOM directly, frameworks update the virtual DOM and compute the minimal changes, which are then applied to the re...",
+        "isCorrect": true,
+        "explanation": "The virtual DOM is an in-memory representation of the UI. Instead of updating the real DOM directly, frameworks update the virtual DOM and compute the minimal changes, which are then applied to the real DOM."
+      },
+      {
+        "id": "o2",
+        "text": "The virtual DOM is an in-memory representation of the UI",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o3",
+        "text": "Instead of updating the real DOM directly, frameworks update the virtual DOM and compute the minimal changes, which are then applied to the real DOM",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o4",
+        "text": "This is incorrect. Please refer to system design best practices.",
+        "isCorrect": false,
+        "explanation": null
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://github.com/donnemartin/system-design-primer",
+        "type": "article",
+        "title": "System Design Primer",
+        "author": "Donne Martin",
+        "description": "Learn how to design large-scale systems"
+      },
+      {
+        "url": "https://www.educative.io/courses/grokking-the-system-design-interview",
+        "type": "course",
+        "title": "Grokking the System Design Interview",
+        "author": "Educative",
+        "duration": "20 hours",
+        "description": "Master system design interviews"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-20T23:48:06.414618+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  }
+]

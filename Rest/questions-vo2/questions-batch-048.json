@@ -1,0 +1,1902 @@
+[
+  {
+    "id": "cecfb754-a9df-463c-a8fb-8389c03c9507",
+    "title": "What is an action in Redux?",
+    "content": "What is an action in Redux?\n\n```javascript\n     {\n       type: ADD_TODO,\n       text: 'Add todo item'\n     }\n```",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "_Actions_ are plain JavaScript objects or payloads of information that send data from your application to your store. They are the only source of information for the store. Actions must have a type property that indicates the type of action being performed.\n\n     For example, let's take an action which represents adding a new todo item:",
+    "options": null,
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=SqcY0GlETPk",
+        "type": "video",
+        "title": "React Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "8:25:00",
+        "description": "Complete React tutorial from scratch"
+      },
+      {
+        "url": "https://react.dev/learn",
+        "type": "article",
+        "title": "React Documentation",
+        "author": "React Team",
+        "description": "Official React documentation and tutorials"
+      },
+      {
+        "url": "https://www.udemy.com/course/react-the-complete-guide-incl-redux/",
+        "type": "course",
+        "title": "React - The Complete Guide",
+        "author": "Maximilian Schwarzmüller",
+        "duration": "48 hours",
+        "description": "Master React and Redux with hands-on projects"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-18T22:59:08.945848+00:00",
+    "updatedAt": "2025-11-24T22:52:08.102565+00:00"
+  },
+  {
+    "id": "08e34f81-1b13-446b-94c4-e29c3c738570",
+    "title": "How to debug your React Native?",
+    "content": "How to debug your React Native?",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "Follow the below steps to debug React Native app:\n\n     1. Run your application in the iOS simulator.\n     2. Press `Command + D` and a webpage should open up at `http://localhost:8081/debugger-ui`.\n     3. Enable _Pause On Caught Exceptions_ for a better debugging experience.\n     4. Press `Command + Option + I` to open the Chrome Developer tools, or open it via `View` -> `Developer` -> `Developer Tools`.\n     5. You should now be able to debug as you normally would.",
+    "options": null,
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=SqcY0GlETPk",
+        "type": "video",
+        "title": "React Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "8:25:00",
+        "description": "Complete React tutorial from scratch"
+      },
+      {
+        "url": "https://react.dev/learn",
+        "type": "article",
+        "title": "React Documentation",
+        "author": "React Team",
+        "description": "Official React documentation and tutorials"
+      },
+      {
+        "url": "https://www.udemy.com/course/react-the-complete-guide-incl-redux/",
+        "type": "course",
+        "title": "React - The Complete Guide",
+        "author": "Maximilian Schwarzmüller",
+        "duration": "48 hours",
+        "description": "Master React and Redux with hands-on projects"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-18T22:59:08.945848+00:00",
+    "updatedAt": "2025-11-24T22:52:08.102565+00:00"
+  },
+  {
+    "id": "066c7737-b748-4cc4-8a89-92fa548110d6",
+    "title": "What are the main features of Redux Form?",
+    "content": "What are the main features of Redux Form?",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "Some of the main features of Redux Form are:\n\n     1. Field values persistence via Redux store.\n     2. Validation (sync/async) and submission.\n     3. Formatting, parsing and normalization of field values.",
+    "options": null,
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=SqcY0GlETPk",
+        "type": "video",
+        "title": "React Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "8:25:00",
+        "description": "Complete React tutorial from scratch"
+      },
+      {
+        "url": "https://react.dev/learn",
+        "type": "article",
+        "title": "React Documentation",
+        "author": "React Team",
+        "description": "Official React documentation and tutorials"
+      },
+      {
+        "url": "https://www.udemy.com/course/react-the-complete-guide-incl-redux/",
+        "type": "course",
+        "title": "React - The Complete Guide",
+        "author": "Maximilian Schwarzmüller",
+        "duration": "48 hours",
+        "description": "Master React and Redux with hands-on projects"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-18T22:59:08.945848+00:00",
+    "updatedAt": "2025-11-24T22:52:08.102565+00:00"
+  },
+  {
+    "id": "36b2ce2d-e228-479e-996f-dd39262e7bc6",
+    "title": "What is the difference between React Native and React?",
+    "content": "What is the difference between React Native and React?",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "**React** is a JavaScript library, supporting both front end web and being run on the server, for building user interfaces and web applications.\n\n     **React Native** is a mobile framework that compiles to native app components, allowing you to build native mobile applications (iOS, Android, and Windows) in JavaScript that allows you to use React to build your components, and implements React under the hood.",
+    "options": null,
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=SqcY0GlETPk",
+        "type": "video",
+        "title": "React Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "8:25:00",
+        "description": "Complete React tutorial from scratch"
+      },
+      {
+        "url": "https://react.dev/learn",
+        "type": "article",
+        "title": "React Documentation",
+        "author": "React Team",
+        "description": "Official React documentation and tutorials"
+      },
+      {
+        "url": "https://www.udemy.com/course/react-the-complete-guide-incl-redux/",
+        "type": "course",
+        "title": "React - The Complete Guide",
+        "author": "Maximilian Schwarzmüller",
+        "duration": "48 hours",
+        "description": "Master React and Redux with hands-on projects"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-18T22:59:08.945848+00:00",
+    "updatedAt": "2025-11-24T22:52:08.102565+00:00"
+  },
+  {
+    "id": "762487c7-b28d-4024-87ee-cef9a3283352",
+    "title": "How to add multiple middlewares to Redux?",
+    "content": "How to add multiple middlewares to Redux?\n\n```javascript\n     import { createStore, applyMiddleware } from \"redux\";\n     const createStoreWithMiddleware = applyMiddleware(\n       ReduxThunk,\n       logger\n     )(createStore);\n```",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "You can use `applyMiddleware()`.\n\n     For example, you can add `redux-thunk` and `logger` passing them as arguments to `applyMiddleware()`:",
+    "options": null,
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=SqcY0GlETPk",
+        "type": "video",
+        "title": "React Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "8:25:00",
+        "description": "Complete React tutorial from scratch"
+      },
+      {
+        "url": "https://react.dev/learn",
+        "type": "article",
+        "title": "React Documentation",
+        "author": "React Team",
+        "description": "Official React documentation and tutorials"
+      },
+      {
+        "url": "https://www.udemy.com/course/react-the-complete-guide-incl-redux/",
+        "type": "course",
+        "title": "React - The Complete Guide",
+        "author": "Maximilian Schwarzmüller",
+        "duration": "48 hours",
+        "description": "Master React and Redux with hands-on projects"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-18T22:59:08.945848+00:00",
+    "updatedAt": "2025-11-24T22:52:08.102565+00:00"
+  },
+  {
+    "id": "44427fed-22e2-4d28-acb3-d72781bbf7bb",
+    "title": "What is reselect and how it works?",
+    "content": "What is reselect and how it works?",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "_Reselect_ is a **selector library** (for Redux) which uses _memoization_ concept. It was originally written to compute derived data from Redux-like applications state, but it can't be tied to any architecture or library.\n\n     Reselect keeps a copy of the last inputs/outputs of the last call, and recomputes the result only if one of the inputs changes. If the same inputs are provided twice in a row, Reselect returns the cached output. It's memoization and cache are fully customizable.",
+    "options": null,
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=SqcY0GlETPk",
+        "type": "video",
+        "title": "React Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "8:25:00",
+        "description": "Complete React tutorial from scratch"
+      },
+      {
+        "url": "https://react.dev/learn",
+        "type": "article",
+        "title": "React Documentation",
+        "author": "React Team",
+        "description": "Official React documentation and tutorials"
+      },
+      {
+        "url": "https://www.udemy.com/course/react-the-complete-guide-incl-redux/",
+        "type": "course",
+        "title": "React - The Complete Guide",
+        "author": "Maximilian Schwarzmüller",
+        "duration": "48 hours",
+        "description": "Master React and Redux with hands-on projects"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-18T22:59:08.945848+00:00",
+    "updatedAt": "2025-11-24T22:52:08.102565+00:00"
+  },
+  {
+    "id": "6ce1a29a-1282-4b4c-aca1-39c9be11a6d3",
+    "title": "How to test React Native apps?",
+    "content": "How to test React Native apps?",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "React Native can be tested only in mobile simulators like iOS and Android. You can run the app in your mobile using expo app (https://expo.io) Where it syncs using QR code, your mobile and computer should be in same wireless network.",
+    "options": null,
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=SqcY0GlETPk",
+        "type": "video",
+        "title": "React Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "8:25:00",
+        "description": "Complete React tutorial from scratch"
+      },
+      {
+        "url": "https://react.dev/learn",
+        "type": "article",
+        "title": "React Documentation",
+        "author": "React Team",
+        "description": "Official React documentation and tutorials"
+      },
+      {
+        "url": "https://www.udemy.com/course/react-the-complete-guide-incl-redux/",
+        "type": "course",
+        "title": "React - The Complete Guide",
+        "author": "Maximilian Schwarzmüller",
+        "duration": "48 hours",
+        "description": "Master React and Redux with hands-on projects"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-18T22:59:08.945848+00:00",
+    "updatedAt": "2025-11-24T22:52:08.102565+00:00"
+  },
+  {
+    "id": "877d1d36-5284-42bd-be7b-a8a6275930d8",
+    "title": "What are Redux selectors and why use them?",
+    "content": "What are Redux selectors and why use them?\n\n```javascript\n     const getUserData = (state) => state.user.data;\n```",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "_Selectors_ are functions that take Redux state as an argument and return some data to pass to the component.\n\n     For example, to get user details from the state:\n\n\n     These selectors have two main benefits,\n\n     1. The selector can compute derived data, allowing Redux to store the minimal possible state\n     2. The selector is not recomputed unless one of its arguments changes",
+    "options": null,
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=SqcY0GlETPk",
+        "type": "video",
+        "title": "React Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "8:25:00",
+        "description": "Complete React tutorial from scratch"
+      },
+      {
+        "url": "https://react.dev/learn",
+        "type": "article",
+        "title": "React Documentation",
+        "author": "React Team",
+        "description": "Official React documentation and tutorials"
+      },
+      {
+        "url": "https://www.udemy.com/course/react-the-complete-guide-incl-redux/",
+        "type": "course",
+        "title": "React - The Complete Guide",
+        "author": "Maximilian Schwarzmüller",
+        "duration": "48 hours",
+        "description": "Master React and Redux with hands-on projects"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-18T22:58:47.480914+00:00",
+    "updatedAt": "2025-11-24T22:52:08.102565+00:00"
+  },
+  {
+    "id": "54616ba2-21c1-46f3-b78a-54518d4847bc",
+    "title": "What is the mental model of redux-saga?",
+    "content": "What is the mental model of redux-saga?",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "_Saga_ is like a separate thread in your application, that's solely responsible for side effects. `redux-saga` is a redux _middleware_, which means this thread can be started, paused and cancelled from the main application with normal Redux actions, it has access to the full Redux application state and it can dispatch Redux actions as well.",
+    "options": null,
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=SqcY0GlETPk",
+        "type": "video",
+        "title": "React Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "8:25:00",
+        "description": "Complete React tutorial from scratch"
+      },
+      {
+        "url": "https://react.dev/learn",
+        "type": "article",
+        "title": "React Documentation",
+        "author": "React Team",
+        "description": "Official React documentation and tutorials"
+      },
+      {
+        "url": "https://www.udemy.com/course/react-the-complete-guide-incl-redux/",
+        "type": "course",
+        "title": "React - The Complete Guide",
+        "author": "Maximilian Schwarzmüller",
+        "duration": "48 hours",
+        "description": "Master React and Redux with hands-on projects"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-18T22:58:47.480914+00:00",
+    "updatedAt": "2025-11-24T22:52:08.102565+00:00"
+  },
+  {
+    "id": "b343aa5b-2185-45ea-8f83-9f23d7c901b2",
+    "title": "How to structure Redux top level directories?",
+    "content": "How to structure Redux top level directories?",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "Most of the applications has several top-level directories as below:\n\n     1. **Components**: Used for _dumb_ components unaware of Redux.\n     2. **Containers**: Used for _smart_ components connected to Redux.\n     3. **Actions**: Used for all action creators, where file names correspond to part of the app.\n     4. **Reducers**: Used for all reducers, where files name correspond to state key.\n     5. **Store**: Used for store initialization.\n\n     This structure works well for small and medium size apps.",
+    "options": null,
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=SqcY0GlETPk",
+        "type": "video",
+        "title": "React Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "8:25:00",
+        "description": "Complete React tutorial from scratch"
+      },
+      {
+        "url": "https://react.dev/learn",
+        "type": "article",
+        "title": "React Documentation",
+        "author": "React Team",
+        "description": "Official React documentation and tutorials"
+      },
+      {
+        "url": "https://www.udemy.com/course/react-the-complete-guide-incl-redux/",
+        "type": "course",
+        "title": "React - The Complete Guide",
+        "author": "Maximilian Schwarzmüller",
+        "duration": "48 hours",
+        "description": "Master React and Redux with hands-on projects"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-18T22:58:47.480914+00:00",
+    "updatedAt": "2025-11-24T22:52:08.102565+00:00"
+  },
+  {
+    "id": "ba42786b-d025-4620-8454-02a9e5babdf5",
+    "title": "What are the differences between `redux-saga` and `redux-thunk`?",
+    "content": "What are the differences between `redux-saga` and `redux-thunk`?",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "Both _Redux Thunk_ and _Redux Saga_ take care of dealing with side effects. In most of the scenarios, Thunk uses _Promises_ to deal with them, whereas Saga uses _Generators_. Thunk is simple to use and Promises are familiar to many developers, Sagas/Generators are more powerful but you will need to learn them. But both middleware can coexist, so you can start with Thunks and introduce Sagas when/if you need them.",
+    "options": null,
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=SqcY0GlETPk",
+        "type": "video",
+        "title": "React Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "8:25:00",
+        "description": "Complete React tutorial from scratch"
+      },
+      {
+        "url": "https://react.dev/learn",
+        "type": "article",
+        "title": "React Documentation",
+        "author": "React Team",
+        "description": "Official React documentation and tutorials"
+      },
+      {
+        "url": "https://www.udemy.com/course/react-the-complete-guide-incl-redux/",
+        "type": "course",
+        "title": "React - The Complete Guide",
+        "author": "Maximilian Schwarzmüller",
+        "duration": "48 hours",
+        "description": "Master React and Redux with hands-on projects"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-18T22:58:47.480914+00:00",
+    "updatedAt": "2025-11-24T22:52:08.102565+00:00"
+  },
+  {
+    "id": "1427913b-5e97-4b76-b579-7b750a9e2669",
+    "title": "What is Redux Form?",
+    "content": "What is Redux Form?",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "_Redux Form_ works with React and Redux to enable a form in React to use Redux to store all of its state. Redux Form can be used with raw HTML5 inputs, but it also works very well with common UI frameworks like Material UI, React Widgets and React Bootstrap.",
+    "options": null,
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=SqcY0GlETPk",
+        "type": "video",
+        "title": "React Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "8:25:00",
+        "description": "Complete React tutorial from scratch"
+      },
+      {
+        "url": "https://react.dev/learn",
+        "type": "article",
+        "title": "React Documentation",
+        "author": "React Team",
+        "description": "Official React documentation and tutorials"
+      },
+      {
+        "url": "https://www.udemy.com/course/react-the-complete-guide-incl-redux/",
+        "type": "course",
+        "title": "React - The Complete Guide",
+        "author": "Maximilian Schwarzmüller",
+        "duration": "48 hours",
+        "description": "Master React and Redux with hands-on projects"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-18T22:58:47.480914+00:00",
+    "updatedAt": "2025-11-24T22:52:08.102565+00:00"
+  },
+  {
+    "id": "fc4655ce-93c1-4fa7-83db-b60d55a0b188",
+    "title": "What is Redux DevTools?",
+    "content": "What is Redux DevTools?",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "_Redux DevTools_ is a live-editing time travel environment for Redux with hot reloading, action replay, and customizable UI. If you don't want to bother with installing Redux DevTools and integrating it into your project, consider using Redux DevTools Extension for Chrome and Firefox.",
+    "options": null,
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=SqcY0GlETPk",
+        "type": "video",
+        "title": "React Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "8:25:00",
+        "description": "Complete React tutorial from scratch"
+      },
+      {
+        "url": "https://react.dev/learn",
+        "type": "article",
+        "title": "React Documentation",
+        "author": "React Team",
+        "description": "Official React documentation and tutorials"
+      },
+      {
+        "url": "https://www.udemy.com/course/react-the-complete-guide-incl-redux/",
+        "type": "course",
+        "title": "React - The Complete Guide",
+        "author": "Maximilian Schwarzmüller",
+        "duration": "48 hours",
+        "description": "Master React and Redux with hands-on projects"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-18T22:58:47.480914+00:00",
+    "updatedAt": "2025-11-24T22:52:08.102565+00:00"
+  },
+  {
+    "id": "b1425963-6a1c-44b9-a28a-e4f82da5921c",
+    "title": "What is redux-saga?",
+    "content": "What is redux-saga?\n\n```javascript\n     $ npm install --save redux-saga\n```",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "`redux-saga` is a library that aims to make side effects (asynchronous things like data fetching and impure things like accessing the browser cache) in React/Redux applications easier and better.\n\n     It is available in NPM:",
+    "options": null,
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=SqcY0GlETPk",
+        "type": "video",
+        "title": "React Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "8:25:00",
+        "description": "Complete React tutorial from scratch"
+      },
+      {
+        "url": "https://react.dev/learn",
+        "type": "article",
+        "title": "React Documentation",
+        "author": "React Team",
+        "description": "Official React documentation and tutorials"
+      },
+      {
+        "url": "https://www.udemy.com/course/react-the-complete-guide-incl-redux/",
+        "type": "course",
+        "title": "React - The Complete Guide",
+        "author": "Maximilian Schwarzmüller",
+        "duration": "48 hours",
+        "description": "Master React and Redux with hands-on projects"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-18T22:58:47.480914+00:00",
+    "updatedAt": "2025-11-24T22:52:08.102565+00:00"
+  },
+  {
+    "id": "5f5c9236-8c40-4f50-ac49-ccca22926c58",
+    "title": "What is Redux Thunk?",
+    "content": "What is Redux Thunk?",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "_Redux Thunk_ middleware allows you to write action creators that return a function instead of an action. The thunk can be used to delay the dispatch of an action, or to dispatch only if a certain condition is met. The inner function receives the store methods `dispatch()` and `getState()` as parameters.",
+    "options": null,
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=SqcY0GlETPk",
+        "type": "video",
+        "title": "React Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "8:25:00",
+        "description": "Complete React tutorial from scratch"
+      },
+      {
+        "url": "https://react.dev/learn",
+        "type": "article",
+        "title": "React Documentation",
+        "author": "React Team",
+        "description": "Official React documentation and tutorials"
+      },
+      {
+        "url": "https://www.udemy.com/course/react-the-complete-guide-incl-redux/",
+        "type": "course",
+        "title": "React - The Complete Guide",
+        "author": "Maximilian Schwarzmüller",
+        "duration": "48 hours",
+        "description": "Master React and Redux with hands-on projects"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-18T22:58:47.480914+00:00",
+    "updatedAt": "2025-11-24T22:52:08.102565+00:00"
+  },
+  {
+    "id": "dc16f2c3-81ac-44bc-b183-dfbbbef489a9",
+    "title": "What are the features of Redux DevTools?",
+    "content": "What are the features of Redux DevTools?",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "Some of the main features of Redux DevTools are below,\n\n     1. Lets you inspect every state and action payload.\n     2. Lets you go back in time by _cancelling_ actions.\n     3. If you change the reducer code, each _staged_ action will be re-evaluated.\n     4. If the reducers throw, you will see during which action this happened, and what the error was.\n     5. With `persistState()` store enhancer, you can persist debug sessions across page reloads.",
+    "options": null,
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=SqcY0GlETPk",
+        "type": "video",
+        "title": "React Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "8:25:00",
+        "description": "Complete React tutorial from scratch"
+      },
+      {
+        "url": "https://react.dev/learn",
+        "type": "article",
+        "title": "React Documentation",
+        "author": "React Team",
+        "description": "Official React documentation and tutorials"
+      },
+      {
+        "url": "https://www.udemy.com/course/react-the-complete-guide-incl-redux/",
+        "type": "course",
+        "title": "React - The Complete Guide",
+        "author": "Maximilian Schwarzmüller",
+        "duration": "48 hours",
+        "description": "Master React and Redux with hands-on projects"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-18T22:58:47.480914+00:00",
+    "updatedAt": "2025-11-24T22:52:08.102565+00:00"
+  },
+  {
+    "id": "f48934fe-a4f1-4cae-abda-21b8cfb2c519",
+    "title": "What are the differences between `call()` and `put()` in redux-saga?",
+    "content": "What are the differences between `call()` and `put()` in redux-saga?\n\n```javascript\n     function* fetchUserSaga(action) {\n       // `call` function accepts rest arguments, which will be passed to `api.fetchUser` function.\n       // Instructing middleware to call promise, it resolved value will be assigned to `userData` variable\n       const userData = yield call(api.fetchUser, action.userId);\n\n       // Instructing middleware to dispatch corresponding action.\n       yield put({\n         type: \"FETCH_USER_SUCCESS\",\n         userData,\n       });\n     }\n```",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "Both `call()` and `put()` are effect creator functions. `call()` function is used to create effect description, which instructs middleware to call the promise. `put()` function creates an effect, which instructs middleware to dispatch an action to the store.\n\n     Let's take example of how these effects work for fetching particular user data.",
+    "options": null,
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=SqcY0GlETPk",
+        "type": "video",
+        "title": "React Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "8:25:00",
+        "description": "Complete React tutorial from scratch"
+      },
+      {
+        "url": "https://react.dev/learn",
+        "type": "article",
+        "title": "React Documentation",
+        "author": "React Team",
+        "description": "Official React documentation and tutorials"
+      },
+      {
+        "url": "https://www.udemy.com/course/react-the-complete-guide-incl-redux/",
+        "type": "course",
+        "title": "React - The Complete Guide",
+        "author": "Maximilian Schwarzmüller",
+        "duration": "48 hours",
+        "description": "Master React and Redux with hands-on projects"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-18T22:58:47.480914+00:00",
+    "updatedAt": "2025-11-24T22:52:08.102565+00:00"
+  },
+  {
+    "id": "8c3a078f-91be-4ac2-b331-507f256a3ece",
+    "title": "What is the difference between React context and React Redux?",
+    "content": "What is the difference between React context and React Redux?",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "You can use **Context** in your application directly and is going to be great for passing down data to deeply nested components which what it was designed for.\n\n     Whereas **Redux** is much more powerful and provides a large number of features that the Context API doesn't provide. Also, React Redux uses context internally but it doesn't expose this fact in the public API.",
+    "options": null,
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=SqcY0GlETPk",
+        "type": "video",
+        "title": "React Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "8:25:00",
+        "description": "Complete React tutorial from scratch"
+      },
+      {
+        "url": "https://react.dev/learn",
+        "type": "article",
+        "title": "React Documentation",
+        "author": "React Team",
+        "description": "Official React documentation and tutorials"
+      },
+      {
+        "url": "https://www.udemy.com/course/react-the-complete-guide-incl-redux/",
+        "type": "course",
+        "title": "React - The Complete Guide",
+        "author": "Maximilian Schwarzmüller",
+        "duration": "48 hours",
+        "description": "Master React and Redux with hands-on projects"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-18T22:58:24.463045+00:00",
+    "updatedAt": "2025-11-24T22:52:08.102565+00:00"
+  },
+  {
+    "id": "62171a31-506e-46a7-a167-edb3f9dbd723",
+    "title": "What is the purpose of the constants in Redux?",
+    "content": "What is the purpose of the constants in Redux?\n\n```javascript\n        import { ADD_TODO } from \"./actionTypes\";\n\n        export default (state = [], action) => {\n          switch (action.type) {\n            case ADD_TODO:\n              return [\n                ...state,\n                {\n                  text: action.text,\n                  completed: false,\n                },\n              ];\n            default:\n              return state;\n          }\n        };\n```",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "Constants allows you to easily find all usages of that specific functionality across the project when you use an IDE. It also prevents you from introducing silly bugs caused by typos – in which case, you will get a `ReferenceError` immediately.\n\n     Normally we will save them in a single file (`constants.js` or `actionTypes.js`).\n\n\n     In Redux, you use them in two places:\n\n     1. **During action creation:**\n\n        Let's take `actions.js`:\n\n\n     2. **In reducers:**\n\n        Let's create `reducer.js`:",
+    "options": null,
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=SqcY0GlETPk",
+        "type": "video",
+        "title": "React Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "8:25:00",
+        "description": "Complete React tutorial from scratch"
+      },
+      {
+        "url": "https://react.dev/learn",
+        "type": "article",
+        "title": "React Documentation",
+        "author": "React Team",
+        "description": "Official React documentation and tutorials"
+      },
+      {
+        "url": "https://www.udemy.com/course/react-the-complete-guide-incl-redux/",
+        "type": "course",
+        "title": "React - The Complete Guide",
+        "author": "Maximilian Schwarzmüller",
+        "duration": "48 hours",
+        "description": "Master React and Redux with hands-on projects"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-18T22:58:24.463045+00:00",
+    "updatedAt": "2025-11-24T22:52:08.102565+00:00"
+  },
+  {
+    "id": "b1922740-8756-4c11-b9b2-96e3dc3f17ad",
+    "title": "Should I keep all component's state in Redux store?",
+    "content": "Should I keep all component's state in Redux store?",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "Keep your data in the Redux store, and the UI related state internally in the component.",
+    "options": null,
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=SqcY0GlETPk",
+        "type": "video",
+        "title": "React Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "8:25:00",
+        "description": "Complete React tutorial from scratch"
+      },
+      {
+        "url": "https://react.dev/learn",
+        "type": "article",
+        "title": "React Documentation",
+        "author": "React Team",
+        "description": "Official React documentation and tutorials"
+      },
+      {
+        "url": "https://www.udemy.com/course/react-the-complete-guide-incl-redux/",
+        "type": "course",
+        "title": "React - The Complete Guide",
+        "author": "Maximilian Schwarzmüller",
+        "duration": "48 hours",
+        "description": "Master React and Redux with hands-on projects"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-18T22:58:24.463045+00:00",
+    "updatedAt": "2025-11-24T22:52:08.102565+00:00"
+  },
+  {
+    "id": "d7dc445a-6048-4019-aa34-e432f90e9aca",
+    "title": "What is the use of the `ownProps` parameter in `mapStateToProps()` and `mapDispatchToProps()`?",
+    "content": "What is the use of the `ownProps` parameter in `mapStateToProps()` and `mapDispatchToProps()`?\n\n```javascript\n     {\n       user: \"john\";\n     }\n```",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "If the `ownProps` parameter is specified, React Redux will pass the props that were passed to the component into your _connect_ functions. So, if you use a connected component:\n\n\n     The `ownProps` inside your `mapStateToProps()` and `mapDispatchToProps()` functions will be an object:\n\n\n     You can use this object to decide what to return from those functions.",
+    "options": null,
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=SqcY0GlETPk",
+        "type": "video",
+        "title": "React Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "8:25:00",
+        "description": "Complete React tutorial from scratch"
+      },
+      {
+        "url": "https://react.dev/learn",
+        "type": "article",
+        "title": "React Documentation",
+        "author": "React Team",
+        "description": "Official React documentation and tutorials"
+      },
+      {
+        "url": "https://www.udemy.com/course/react-the-complete-guide-incl-redux/",
+        "type": "course",
+        "title": "React - The Complete Guide",
+        "author": "Maximilian Schwarzmüller",
+        "duration": "48 hours",
+        "description": "Master React and Redux with hands-on projects"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-18T22:58:24.463045+00:00",
+    "updatedAt": "2025-11-24T22:52:08.102565+00:00"
+  },
+  {
+    "id": "ebc8120c-648e-4549-9d62-b35b22d7e9b4",
+    "title": "What is the difference between component and container in React Redux?",
+    "content": "What is the difference between component and container in React Redux?",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "**Component** is a class or function component that describes the presentational part of your application.\n\n     **Container** is an informal term for a component that is connected to a Redux store. Containers _subscribe_ to Redux state updates and _dispatch_ actions, and they usually don't render DOM elements; they delegate rendering to presentational child components.",
+    "options": null,
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=SqcY0GlETPk",
+        "type": "video",
+        "title": "React Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "8:25:00",
+        "description": "Complete React tutorial from scratch"
+      },
+      {
+        "url": "https://react.dev/learn",
+        "type": "article",
+        "title": "React Documentation",
+        "author": "React Team",
+        "description": "Official React documentation and tutorials"
+      },
+      {
+        "url": "https://www.udemy.com/course/react-the-complete-guide-incl-redux/",
+        "type": "course",
+        "title": "React - The Complete Guide",
+        "author": "Maximilian Schwarzmüller",
+        "duration": "48 hours",
+        "description": "Master React and Redux with hands-on projects"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-18T22:58:24.463045+00:00",
+    "updatedAt": "2025-11-24T22:52:08.102565+00:00"
+  },
+  {
+    "id": "e39b5123-b5ec-4f16-befd-e3ae0580cb39",
+    "title": "Why are Redux state functions called reducers?",
+    "content": "Why are Redux state functions called reducers?",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "Reducers always return the accumulation of the state (based on all previous and current actions). Therefore, they act as a reducer of state. Each time a Redux reducer is called, the state and action are passed as parameters. This state is then reduced (or accumulated) based on the action, and then the next state is returned. You could _reduce_ a collection of actions and an initial state (of the store) on which to perform these actions to get the resulting final state.",
+    "options": null,
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=SqcY0GlETPk",
+        "type": "video",
+        "title": "React Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "8:25:00",
+        "description": "Complete React tutorial from scratch"
+      },
+      {
+        "url": "https://react.dev/learn",
+        "type": "article",
+        "title": "React Documentation",
+        "author": "React Team",
+        "description": "Official React documentation and tutorials"
+      },
+      {
+        "url": "https://www.udemy.com/course/react-the-complete-guide-incl-redux/",
+        "type": "course",
+        "title": "React - The Complete Guide",
+        "author": "Maximilian Schwarzmüller",
+        "duration": "48 hours",
+        "description": "Master React and Redux with hands-on projects"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-18T22:58:24.463045+00:00",
+    "updatedAt": "2025-11-24T22:52:08.102565+00:00"
+  },
+  {
+    "id": "2d3edc93-7464-4ab5-b5f0-121d0ec7878b",
+    "title": "What is the proper way to access Redux store?",
+    "content": "What is the proper way to access Redux store?\n\n```javascript\n     function MyComponent {\n       someMethod() {\n         doSomethingWith(this.context.store);\n       }\n     }\n```",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "The best way to access your store in a component is to use the `connect()` function, that creates a new component that wraps around your existing one. This pattern is called _Higher-Order Components_, and is generally the preferred way of extending a component's functionality in React. This allows you to map state and action creators to your component, and have them passed in automatically as your store updates.\n\n     Let's take an example of `<FilterLink` component using connect:\n\n\n     Due to it having quite a few performance optimizations and generally being less likely to cause bugs, the Redux developers almost always recommend using `connect()` over accessing the store directly (using context API).",
+    "options": null,
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=SqcY0GlETPk",
+        "type": "video",
+        "title": "React Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "8:25:00",
+        "description": "Complete React tutorial from scratch"
+      },
+      {
+        "url": "https://react.dev/learn",
+        "type": "article",
+        "title": "React Documentation",
+        "author": "React Team",
+        "description": "Official React documentation and tutorials"
+      },
+      {
+        "url": "https://www.udemy.com/course/react-the-complete-guide-incl-redux/",
+        "type": "course",
+        "title": "React - The Complete Guide",
+        "author": "Maximilian Schwarzmüller",
+        "duration": "48 hours",
+        "description": "Master React and Redux with hands-on projects"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-18T22:58:24.463045+00:00",
+    "updatedAt": "2025-11-24T22:52:08.102565+00:00"
+  },
+  {
+    "id": "253680ac-1b15-459c-a385-4e1a0f272929",
+    "title": "What are the different ways to write `mapDispatchToProps()`?",
+    "content": "What are the different ways to write `mapDispatchToProps()`?\n\n```javascript\n     const mapDispatchToProps = { action };\n```",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "There are a few ways of binding _action creators_ to `dispatch()` in `mapDispatchToProps()`.\n\n     Below are the possible options:\n\n\n\n\n     The third option is just a shorthand for the first one.",
+    "options": null,
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=SqcY0GlETPk",
+        "type": "video",
+        "title": "React Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "8:25:00",
+        "description": "Complete React tutorial from scratch"
+      },
+      {
+        "url": "https://react.dev/learn",
+        "type": "article",
+        "title": "React Documentation",
+        "author": "React Team",
+        "description": "Official React documentation and tutorials"
+      },
+      {
+        "url": "https://www.udemy.com/course/react-the-complete-guide-incl-redux/",
+        "type": "course",
+        "title": "React - The Complete Guide",
+        "author": "Maximilian Schwarzmüller",
+        "duration": "48 hours",
+        "description": "Master React and Redux with hands-on projects"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-18T22:58:24.463045+00:00",
+    "updatedAt": "2025-11-24T22:52:08.102565+00:00"
+  },
+  {
+    "id": "7c9263a3-e179-4891-96f4-0a9ca8703716",
+    "title": "How to make AJAX request in Redux?",
+    "content": "How to make AJAX request in Redux?\n\n```javascript\n     export function fetchAccount(id) {\n       return (dispatch) => {\n         dispatch(setLoadingAccountState()); // Show a loading spinner\n         fetch(`/account/${id}`, (response) => {\n           dispatch(doneFetchingAccount()); // Hide loading spinner\n           if (response.status === 200) {\n             dispatch(setAccount(response.json)); // Use a normal function to set the received state\n           } else {\n             dispatch(someError);\n           }\n         });\n       };\n     }\n\n     function setAccount(data) {\n       return { type: \"SET_Account\", data: data };\n     }\n```",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "You can use `redux-thunk` middleware which allows you to define async actions.\n\n     Let's take an example of fetching specific account as an AJAX call using _fetch API_:",
+    "options": null,
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=SqcY0GlETPk",
+        "type": "video",
+        "title": "React Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "8:25:00",
+        "description": "Complete React tutorial from scratch"
+      },
+      {
+        "url": "https://react.dev/learn",
+        "type": "article",
+        "title": "React Documentation",
+        "author": "React Team",
+        "description": "Official React documentation and tutorials"
+      },
+      {
+        "url": "https://www.udemy.com/course/react-the-complete-guide-incl-redux/",
+        "type": "course",
+        "title": "React - The Complete Guide",
+        "author": "Maximilian Schwarzmüller",
+        "duration": "48 hours",
+        "description": "Master React and Redux with hands-on projects"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-18T22:58:24.463045+00:00",
+    "updatedAt": "2025-11-24T22:52:08.102565+00:00"
+  },
+  {
+    "id": "c69f3c14-1538-4fd1-b7f2-b12a827e4ef1",
+    "title": "How to reset state in Redux?",
+    "content": "How to reset state in Redux?\n\n```javascript\n     const appReducer = combineReducers({\n       /* your app's top-level reducers */\n     });\n\n     const rootReducer = (state, action) => {\n       if (action.type === \"USER_LOGOUT\") {\n         Object.keys(state).forEach((key) => {\n           storage.removeItem(`persist:${key}`);\n         });\n\n         state = undefined;\n       }\n\n       return appReducer(state, action);\n     };\n```",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "You need to write a _root reducer_ in your application which delegate handling the action to the reducer generated by `combineReducers()`.\n\n     For example, let us take `rootReducer()` to return the initial state after `USER_LOGOUT` action. As we know, reducers are supposed to return the initial state when they are called with `undefined` as the first argument, no matter the action.\n\n\n     In case of using `redux-persist`, you may also need to clean your storage. `redux-persist` keeps a copy of your state in a storage engine. First, you need to import the appropriate storage engine and then, to parse the state before setting it to undefined and clean each storage state key.",
+    "options": null,
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=SqcY0GlETPk",
+        "type": "video",
+        "title": "React Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "8:25:00",
+        "description": "Complete React tutorial from scratch"
+      },
+      {
+        "url": "https://react.dev/learn",
+        "type": "article",
+        "title": "React Documentation",
+        "author": "React Team",
+        "description": "Official React documentation and tutorials"
+      },
+      {
+        "url": "https://www.udemy.com/course/react-the-complete-guide-incl-redux/",
+        "type": "course",
+        "title": "React - The Complete Guide",
+        "author": "Maximilian Schwarzmüller",
+        "duration": "48 hours",
+        "description": "Master React and Redux with hands-on projects"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-18T22:58:24.463045+00:00",
+    "updatedAt": "2025-11-24T22:52:08.102565+00:00"
+  },
+  {
+    "id": "2349902d-a238-42a6-9c5a-e11596b4d5e8",
+    "title": "What are the downsides of Redux compared to Flux?",
+    "content": "What are the downsides of Redux compared to Flux?",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "While Redux offers a powerful and predictable state management solution, it comes with a few trade-offs when compared to Flux. These include:\n\n     1.  **Immutability is essential**  \n        Redux enforces a strict immutability model for state updates, which differs from Flux's more relaxed approach. This means you must avoid mutating state directly. Many Redux-related libraries assume immutability, so your team must be disciplined in writing pure update logic. You can use tools like `redux-immutable-state-invariant`, `Immer`, or `Immutable.js` to help enforce this practice, especially during development.\n     2.  **Careful selection of complementary packages**  \n        Redux is more minimal by design and provides extension points such as middleware and store enhancers. This has led to a large ecosystem, but it also means you must thoughtfully choose and configure additional packages for features like undo/redo, persistence, or form handling—something Flux explicitly leaves out but may be simpler to manage in smaller setups.\n     3.  **Limited static type integration**  \n        While Flux has mature support for static type checking with tools like Flow, Redux's type integration is less seamless. Although TypeScript is commonly used with Redux now, early Flow support was limited, and more boilerplate was required for static type safety. This may affect teams that rely heavily on type systems for large codebases.",
+    "options": null,
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=SqcY0GlETPk",
+        "type": "video",
+        "title": "React Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "8:25:00",
+        "description": "Complete React tutorial from scratch"
+      },
+      {
+        "url": "https://react.dev/learn",
+        "type": "article",
+        "title": "React Documentation",
+        "author": "React Team",
+        "description": "Official React documentation and tutorials"
+      },
+      {
+        "url": "https://www.udemy.com/course/react-the-complete-guide-incl-redux/",
+        "type": "course",
+        "title": "React - The Complete Guide",
+        "author": "Maximilian Schwarzmüller",
+        "duration": "48 hours",
+        "description": "Master React and Redux with hands-on projects"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-18T22:57:51.682721+00:00",
+    "updatedAt": "2025-11-24T22:52:08.102565+00:00"
+  },
+  {
+    "id": "620b446c-e486-47a1-bac1-b33a95381fa2",
+    "title": "How to access Redux store outside a component?",
+    "content": "How to access Redux store outside a component?\n\n```javascript\n     store = createStore(myReducer);\n\n     export default store;\n```",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "You just need to export the store from the module where it created with `createStore()`. Also, it shouldn't pollute the global window object.",
+    "options": null,
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=SqcY0GlETPk",
+        "type": "video",
+        "title": "React Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "8:25:00",
+        "description": "Complete React tutorial from scratch"
+      },
+      {
+        "url": "https://react.dev/learn",
+        "type": "article",
+        "title": "React Documentation",
+        "author": "React Team",
+        "description": "Official React documentation and tutorials"
+      },
+      {
+        "url": "https://www.udemy.com/course/react-the-complete-guide-incl-redux/",
+        "type": "course",
+        "title": "React - The Complete Guide",
+        "author": "Maximilian Schwarzmüller",
+        "duration": "48 hours",
+        "description": "Master React and Redux with hands-on projects"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-18T22:57:51.682721+00:00",
+    "updatedAt": "2025-11-24T22:52:08.102565+00:00"
+  },
+  {
+    "id": "c05b48bb-c3dc-438a-9c5b-01b4ca1cfb8c",
+    "title": "What is the difference between `mapStateToProps()` and `mapDispatchToProps()`?",
+    "content": "What is the difference between `mapStateToProps()` and `mapDispatchToProps()`?\n\n```javascript\n     const mapDispatchToProps = {\n       onTodoClick,\n     };\n```",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "`mapStateToProps()` is a utility which helps your component get updated state (which is updated by some other components):\n\n\n     `mapDispatchToProps()` is a utility which will help your component to fire an action event (dispatching action which may cause change of application state):\n\n\n     It is recommended to always use the \"object shorthand\" form for the `mapDispatchToProps`.\n\n     Redux wraps it in another function that looks like (…args) => dispatch(onTodoClick(…args)), and pass that wrapper function as a prop to your component.",
+    "options": null,
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=SqcY0GlETPk",
+        "type": "video",
+        "title": "React Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "8:25:00",
+        "description": "Complete React tutorial from scratch"
+      },
+      {
+        "url": "https://react.dev/learn",
+        "type": "article",
+        "title": "React Documentation",
+        "author": "React Team",
+        "description": "Official React documentation and tutorials"
+      },
+      {
+        "url": "https://www.udemy.com/course/react-the-complete-guide-incl-redux/",
+        "type": "course",
+        "title": "React - The Complete Guide",
+        "author": "Maximilian Schwarzmüller",
+        "duration": "48 hours",
+        "description": "Master React and Redux with hands-on projects"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-18T22:57:51.682721+00:00",
+    "updatedAt": "2025-11-24T22:52:08.102565+00:00"
+  },
+  {
+    "id": "91448690-616b-4ab9-ac3c-0689832005ab",
+    "title": "What are the core principles of Redux?",
+    "content": "What are the core principles of Redux?\n\n```javascript\n      function counter(state = 0, action) {\n        switch (action.type) {\n          case 'INCREMENT':\n            return state + 1;\n          case 'DECREMENT':\n            return state - 1;\n          default:\n            return state;\n        }\n      }\n```",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "Redux follows three fundamental principles:\n\n     1. **Single source of truth:** The state of your whole application is stored in an object tree within a single store. The single state tree makes it easier to keep track of changes over time and debug or inspect the application.\n   \n     2. **State is read-only:** The only way to change the state is to emit an action, an object describing what happened. This ensures that neither the views nor the network callbacks will ever write directly to the state.\n     3. **Changes are made with pure functions(Reducers):** To specify how the state tree is transformed by actions, you write reducers. Reducers are just pure functions that take the previous state and an action as parameters, and return the next state.",
+    "options": null,
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=SqcY0GlETPk",
+        "type": "video",
+        "title": "React Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "8:25:00",
+        "description": "Complete React tutorial from scratch"
+      },
+      {
+        "url": "https://react.dev/learn",
+        "type": "article",
+        "title": "React Documentation",
+        "author": "React Team",
+        "description": "Official React documentation and tutorials"
+      },
+      {
+        "url": "https://www.udemy.com/course/react-the-complete-guide-incl-redux/",
+        "type": "course",
+        "title": "React - The Complete Guide",
+        "author": "Maximilian Schwarzmüller",
+        "duration": "48 hours",
+        "description": "Master React and Redux with hands-on projects"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-18T22:57:51.682721+00:00",
+    "updatedAt": "2025-11-24T22:52:08.102565+00:00"
+  },
+  {
+    "id": "ed1e2966-8f7c-4d7b-bc26-1b26742f9854",
+    "title": "What are the drawbacks of MVW pattern?",
+    "content": "What are the drawbacks of MVW pattern?",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "1. DOM manipulation is very expensive which causes applications to behave slow and inefficient.\n     2. Due to circular dependencies, a complicated model was created around models and views.\n     3. Lot of data changes happens for collaborative applications(like Google Docs).\n     4. No way to do undo (travel back in time) easily without adding so much extra code.",
+    "options": null,
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=SqcY0GlETPk",
+        "type": "video",
+        "title": "React Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "8:25:00",
+        "description": "Complete React tutorial from scratch"
+      },
+      {
+        "url": "https://react.dev/learn",
+        "type": "article",
+        "title": "React Documentation",
+        "author": "React Team",
+        "description": "Official React documentation and tutorials"
+      },
+      {
+        "url": "https://www.udemy.com/course/react-the-complete-guide-incl-redux/",
+        "type": "course",
+        "title": "React - The Complete Guide",
+        "author": "Maximilian Schwarzmüller",
+        "duration": "48 hours",
+        "description": "Master React and Redux with hands-on projects"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-18T22:57:51.682721+00:00",
+    "updatedAt": "2025-11-24T22:52:08.102565+00:00"
+  },
+  {
+    "id": "9560eaf5-7dd1-4270-a212-bf2d35b9016d",
+    "title": "What is Redux?",
+    "content": "What is Redux?",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "Redux is a predictable state container for JavaScript applications, most commonly used with React. It helps you manage and centralize your application's state in a single source of truth, enabling easier debugging, testing, and maintenance—especially in large or complex applications. Redux core is tiny library(about 2.5kB gzipped) and has no dependencies.",
+    "options": null,
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=SqcY0GlETPk",
+        "type": "video",
+        "title": "React Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "8:25:00",
+        "description": "Complete React tutorial from scratch"
+      },
+      {
+        "url": "https://react.dev/learn",
+        "type": "article",
+        "title": "React Documentation",
+        "author": "React Team",
+        "description": "Official React documentation and tutorials"
+      },
+      {
+        "url": "https://www.udemy.com/course/react-the-complete-guide-incl-redux/",
+        "type": "course",
+        "title": "React - The Complete Guide",
+        "author": "Maximilian Schwarzmüller",
+        "duration": "48 hours",
+        "description": "Master React and Redux with hands-on projects"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-18T22:57:51.682721+00:00",
+    "updatedAt": "2025-11-24T22:52:08.102565+00:00"
+  },
+  {
+    "id": "7907028f-0e38-466a-ac07-a2afd6c24379",
+    "title": "What is flux?",
+    "content": "What is flux?",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "**Flux** is an **application architecture** (not a framework or library) designed by Facebook to manage **data flow** in React applications. It was created as an alternative to the traditional **MVC (Model-View-Controller)** pattern, and it emphasizes a **unidirectional data flow** to make state changes more predictable and easier to debug.\n\n       Flux complements React by organizing the way data moves through your application, especially in large-scale or complex projects.\n\n       #### Core Concepts of Flux\n\n       Flux operates using **four key components**, each with a specific responsibility:\n       *   **Actions**\n             *   Plain JavaScript objects or functions that describe _what happened_ (e.g., user interactions or API responses).\n             *   Example: `{ type: 'ADD_TODO', payload: 'Buy milk' }`\n       *   **Dispatcher**\n             *   A central hub that receives actions and **dispatches** them to the appropriate stores.\n             *   There is **only one dispatcher** in a Flux application.\n       *   **Stores**\n             *   Hold the **application state** and business logic.\n             *   Respond to actions from the dispatcher and update themselves accordingly.\n             *   They **emit change events** that views can listen to.\n       *   **Views (React Components)**\n             *   Subscribe to stores and **re-render** when the data changes.\n             *   They can also trigger new actions (e.g., on user input).\n\n\n       The workflow between dispatcher, stores and views components with distinct inputs and outputs as follows:\n\n       ![flux](images/flux.png)",
+    "options": null,
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=SqcY0GlETPk",
+        "type": "video",
+        "title": "React Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "8:25:00",
+        "description": "Complete React tutorial from scratch"
+      },
+      {
+        "url": "https://react.dev/learn",
+        "type": "article",
+        "title": "React Documentation",
+        "author": "React Team",
+        "description": "Official React documentation and tutorials"
+      },
+      {
+        "url": "https://www.udemy.com/course/react-the-complete-guide-incl-redux/",
+        "type": "course",
+        "title": "React - The Complete Guide",
+        "author": "Maximilian Schwarzmüller",
+        "duration": "48 hours",
+        "description": "Master React and Redux with hands-on projects"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-18T22:57:51.682721+00:00",
+    "updatedAt": "2025-11-24T22:52:08.102565+00:00"
+  },
+  {
+    "id": "58683dd3-2ada-49bf-bf57-af6e929d85c4",
+    "title": "Give a simple example of Jest test case",
+    "content": "Give a simple example of Jest test case\n\n```javascript\n     $ yarn test\n     PASS ./sum.test.js\n     ✓ adds 1 + 2 to equal 3 (2ms)\n```",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "Let's write a test for a function that adds two numbers in `sum.js` file:\n\n\n     Create a file named `sum.test.js` which contains actual test:\n\n\n     And then add the following section to your `package.json`:\n\n\n     Finally, run `yarn test` or `npm test` and Jest will print a result:",
+    "options": null,
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=SqcY0GlETPk",
+        "type": "video",
+        "title": "React Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "8:25:00",
+        "description": "Complete React tutorial from scratch"
+      },
+      {
+        "url": "https://react.dev/learn",
+        "type": "article",
+        "title": "React Documentation",
+        "author": "React Team",
+        "description": "Official React documentation and tutorials"
+      },
+      {
+        "url": "https://www.udemy.com/course/react-the-complete-guide-incl-redux/",
+        "type": "course",
+        "title": "React - The Complete Guide",
+        "author": "Maximilian Schwarzmüller",
+        "duration": "48 hours",
+        "description": "Master React and Redux with hands-on projects"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-18T22:57:51.682721+00:00",
+    "updatedAt": "2025-11-24T22:52:08.102565+00:00"
+  },
+  {
+    "id": "3374f192-f1b8-43af-8901-6cd089eba98a",
+    "title": "Can I dispatch an action in reducer?",
+    "content": "Can I dispatch an action in reducer?",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "Dispatching an action within a reducer is an **anti-pattern**. Your reducer should be _without side effects_, simply digesting the action payload and returning a new state object. Adding listeners and dispatching actions within the reducer can lead to chained actions and other side effects.",
+    "options": null,
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=SqcY0GlETPk",
+        "type": "video",
+        "title": "React Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "8:25:00",
+        "description": "Complete React tutorial from scratch"
+      },
+      {
+        "url": "https://react.dev/learn",
+        "type": "article",
+        "title": "React Documentation",
+        "author": "React Team",
+        "description": "Official React documentation and tutorials"
+      },
+      {
+        "url": "https://www.udemy.com/course/react-the-complete-guide-incl-redux/",
+        "type": "course",
+        "title": "React - The Complete Guide",
+        "author": "Maximilian Schwarzmüller",
+        "duration": "48 hours",
+        "description": "Master React and Redux with hands-on projects"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-18T22:57:51.682721+00:00",
+    "updatedAt": "2025-11-24T22:52:08.102565+00:00"
+  },
+  {
+    "id": "e4821611-18f6-4461-8a7c-5baaa8947115",
+    "title": "Are there any similarities between Redux and RxJS?",
+    "content": "Are there any similarities between Redux and RxJS?",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "These libraries are very different for very different purposes, but there are some vague similarities.\n\n     Redux is a tool for managing state throughout the application. It is usually used as an architecture for UIs. Think of it as an alternative to (half of) Angular. RxJS is a reactive programming library. It is usually used as a tool to accomplish asynchronous tasks in JavaScript. Think of it as an alternative to Promises. Redux uses the Reactive paradigm because the Store is reactive. The Store observes actions from a distance, and changes itself. RxJS also uses the Reactive paradigm, but instead of being an architecture, it gives you basic building blocks, Observables, to accomplish this pattern.",
+    "options": null,
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=SqcY0GlETPk",
+        "type": "video",
+        "title": "React Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "8:25:00",
+        "description": "Complete React tutorial from scratch"
+      },
+      {
+        "url": "https://react.dev/learn",
+        "type": "article",
+        "title": "React Documentation",
+        "author": "React Team",
+        "description": "Official React documentation and tutorials"
+      },
+      {
+        "url": "https://www.udemy.com/course/react-the-complete-guide-incl-redux/",
+        "type": "course",
+        "title": "React - The Complete Guide",
+        "author": "Maximilian Schwarzmüller",
+        "duration": "48 hours",
+        "description": "Master React and Redux with hands-on projects"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-18T22:57:51.682721+00:00",
+    "updatedAt": "2025-11-24T22:52:08.102565+00:00"
+  },
+  {
+    "id": "85f4eec6-7466-4f46-b32f-765fe0b63609",
+    "title": "What is the purpose of ReactTestUtils package?",
+    "content": "What is the purpose of ReactTestUtils package?",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "_ReactTestUtils_ are provided in the `with-addons` package and allow you to perform actions against a simulated DOM for the purpose of unit testing.",
+    "options": null,
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=SqcY0GlETPk",
+        "type": "video",
+        "title": "React Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "8:25:00",
+        "description": "Complete React tutorial from scratch"
+      },
+      {
+        "url": "https://react.dev/learn",
+        "type": "article",
+        "title": "React Documentation",
+        "author": "React Team",
+        "description": "Official React documentation and tutorials"
+      },
+      {
+        "url": "https://www.udemy.com/course/react-the-complete-guide-incl-redux/",
+        "type": "course",
+        "title": "React - The Complete Guide",
+        "author": "Maximilian Schwarzmüller",
+        "duration": "48 hours",
+        "description": "Master React and Redux with hands-on projects"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-18T22:56:32.052149+00:00",
+    "updatedAt": "2025-11-24T22:52:08.102565+00:00"
+  },
+  {
+    "id": "f2addade-ca65-48e7-8b17-9146ca4e6627",
+    "title": "What are the main features of React Intl?",
+    "content": "What are the main features of React Intl?",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "Below are the main features of React Intl,\n\n    1.  Display numbers with separators.\n    2.  Display dates and times correctly.\n    3.  Display dates relative to \"now\".\n    4.  Pluralize labels in strings.\n    5.  Support for 150+ languages.\n    6.  Runs in the browser and Node.\n    7.  Built on standards.",
+    "options": null,
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=SqcY0GlETPk",
+        "type": "video",
+        "title": "React Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "8:25:00",
+        "description": "Complete React tutorial from scratch"
+      },
+      {
+        "url": "https://react.dev/learn",
+        "type": "article",
+        "title": "React Documentation",
+        "author": "React Team",
+        "description": "Official React documentation and tutorials"
+      },
+      {
+        "url": "https://www.udemy.com/course/react-the-complete-guide-incl-redux/",
+        "type": "course",
+        "title": "React - The Complete Guide",
+        "author": "Maximilian Schwarzmüller",
+        "duration": "48 hours",
+        "description": "Master React and Redux with hands-on projects"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-18T22:56:32.052149+00:00",
+    "updatedAt": "2025-11-24T22:52:08.102565+00:00"
+  },
+  {
+    "id": "a14a60de-0a5a-4f19-ac0f-0ccc7dd8e91f",
+    "title": "What is Jest?",
+    "content": "What is Jest?",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "_Jest_ is a JavaScript unit testing framework created by Facebook based on Jasmine and provides automated mock creation and a `jsdom` environment. It's often used for testing components.",
+    "options": null,
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=SqcY0GlETPk",
+        "type": "video",
+        "title": "React Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "8:25:00",
+        "description": "Complete React tutorial from scratch"
+      },
+      {
+        "url": "https://react.dev/learn",
+        "type": "article",
+        "title": "React Documentation",
+        "author": "React Team",
+        "description": "Official React documentation and tutorials"
+      },
+      {
+        "url": "https://www.udemy.com/course/react-the-complete-guide-incl-redux/",
+        "type": "course",
+        "title": "React - The Complete Guide",
+        "author": "Maximilian Schwarzmüller",
+        "duration": "48 hours",
+        "description": "Master React and Redux with hands-on projects"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-18T22:56:32.052149+00:00",
+    "updatedAt": "2025-11-24T22:52:08.102565+00:00"
+  },
+  {
+    "id": "ac40837b-2a3b-4ff6-bf20-46066081525d",
+    "title": "What are the two ways of formatting in React Intl?",
+    "content": "What are the two ways of formatting in React Intl?\n\n```javascript\n        const messages = defineMessages({\n          accountMessage: {\n            id: \"account\",\n            defaultMessage: \"The amount is less than minimum balance.\",\n          },\n        });\n\n        formatMessage(messages.accountMessage);\n```",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "The library provides two ways to format strings, numbers, and dates:\n\n    1.  **Using react components:**\n\n\n    2.  **Using an API:**",
+    "options": null,
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=SqcY0GlETPk",
+        "type": "video",
+        "title": "React Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "8:25:00",
+        "description": "Complete React tutorial from scratch"
+      },
+      {
+        "url": "https://react.dev/learn",
+        "type": "article",
+        "title": "React Documentation",
+        "author": "React Team",
+        "description": "Official React documentation and tutorials"
+      },
+      {
+        "url": "https://www.udemy.com/course/react-the-complete-guide-incl-redux/",
+        "type": "course",
+        "title": "React - The Complete Guide",
+        "author": "Maximilian Schwarzmüller",
+        "duration": "48 hours",
+        "description": "Master React and Redux with hands-on projects"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-18T22:56:32.052149+00:00",
+    "updatedAt": "2025-11-24T22:52:08.102565+00:00"
+  },
+  {
+    "id": "50df951b-66f2-4b16-9e51-36b42edd4962",
+    "title": "What are the advantages of Jest over Jasmine?",
+    "content": "What are the advantages of Jest over Jasmine?",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "There are couple of advantages compared to Jasmine:\n\n     - Automatically finds tests to execute in your source code.\n     - Automatically mocks dependencies when running your tests.\n     - Allows you to test asynchronous code synchronously.\n     - Runs your tests with a fake DOM implementation (via `jsdom`) so that your tests can be run on the command line.\n     - Runs tests in parallel processes so that they finish sooner.",
+    "options": null,
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=SqcY0GlETPk",
+        "type": "video",
+        "title": "React Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "8:25:00",
+        "description": "Complete React tutorial from scratch"
+      },
+      {
+        "url": "https://react.dev/learn",
+        "type": "article",
+        "title": "React Documentation",
+        "author": "React Team",
+        "description": "Official React documentation and tutorials"
+      },
+      {
+        "url": "https://www.udemy.com/course/react-the-complete-guide-incl-redux/",
+        "type": "course",
+        "title": "React - The Complete Guide",
+        "author": "Maximilian Schwarzmüller",
+        "duration": "48 hours",
+        "description": "Master React and Redux with hands-on projects"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-18T22:56:32.052149+00:00",
+    "updatedAt": "2025-11-24T22:52:08.102565+00:00"
+  },
+  {
+    "id": "8a8146a0-f866-456b-ad80-2692d269aa40",
+    "title": "How to use `<FormattedMessage>` as placeholder using React Intl?",
+    "content": "How to use `<FormattedMessag` as placeholder using React Intl?\n\n```javascript\n    import React from \"react\";\n    import { injectIntl, intlShape } from \"react-intl\";\n\n    const MyComponent = ({ intl }) => {\n      const placeholder = intl.formatMessage({ id: \"messageId\" });\n      return <input placeholder={placeholder} />;\n    };\n\n    MyComponent.propTypes = {\n      intl: intlShape.isRequired,\n    };\n\n    export default injectIntl(MyComponent);\n```",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "The `<Formatted... />` components from `react-intl` return elements, not plain text, so they can't be used for placeholders, alt text, etc. In that case, you should use lower level API `formatMessage()`. You can inject the `intl` object into your component using `injectIntl()` higher-order component and then format the message using `formatMessage()` available on that object.",
+    "options": null,
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=SqcY0GlETPk",
+        "type": "video",
+        "title": "React Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "8:25:00",
+        "description": "Complete React tutorial from scratch"
+      },
+      {
+        "url": "https://react.dev/learn",
+        "type": "article",
+        "title": "React Documentation",
+        "author": "React Team",
+        "description": "Official React documentation and tutorials"
+      },
+      {
+        "url": "https://www.udemy.com/course/react-the-complete-guide-incl-redux/",
+        "type": "course",
+        "title": "React - The Complete Guide",
+        "author": "Maximilian Schwarzmüller",
+        "duration": "48 hours",
+        "description": "Master React and Redux with hands-on projects"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-18T22:56:32.052149+00:00",
+    "updatedAt": "2025-11-24T22:52:08.102565+00:00"
+  },
+  {
+    "id": "09617fe2-4b0d-4ef7-af78-a3a363bfb651",
+    "title": "What is Shallow Renderer in React testing?",
+    "content": "What is Shallow Renderer in React testing?\n\n```javascript\n    import ShallowRenderer from \"react-test-renderer/shallow\";\n\n    // in your test\n    const renderer = new ShallowRenderer();\n    renderer.render(<MyComponent />);\n\n    const result = renderer.getRenderOutput();\n\n    expect(result.type).toBe(\"div\");\n    expect(result.props.children).toEqual([\n      <span className={\"heading\"}>{\"Title\"}</span,\n      <span className={\"description\"}>{\"Description\"}</span,\n    ]);\n```",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "_Shallow rendering_ is useful for writing unit test cases in React. It lets you render a component _one level deep_ and assert facts about what its render method returns, without worrying about the behavior of child components, which are not instantiated or rendered.\n\n    For example, if you have the following component:\n\n\n    Then you can assert as follows:",
+    "options": null,
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=SqcY0GlETPk",
+        "type": "video",
+        "title": "React Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "8:25:00",
+        "description": "Complete React tutorial from scratch"
+      },
+      {
+        "url": "https://react.dev/learn",
+        "type": "article",
+        "title": "React Documentation",
+        "author": "React Team",
+        "description": "Official React documentation and tutorials"
+      },
+      {
+        "url": "https://www.udemy.com/course/react-the-complete-guide-incl-redux/",
+        "type": "course",
+        "title": "React - The Complete Guide",
+        "author": "Maximilian Schwarzmüller",
+        "duration": "48 hours",
+        "description": "Master React and Redux with hands-on projects"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-18T22:56:32.052149+00:00",
+    "updatedAt": "2025-11-24T22:52:08.102565+00:00"
+  },
+  {
+    "id": "35979b1e-34b8-4a02-9d3e-58ba25c0369e",
+    "title": "How to access current locale with React Intl?",
+    "content": "How to access current locale with React Intl?\n\n```javascript\n    import { injectIntl, intlShape } from \"react-intl\";\n\n    const MyComponent = ({ intl }) => (\n    );\n\n    MyComponent.propTypes = {\n      intl: intlShape.isRequired,\n    };\n\n    export default injectIntl(MyComponent);\n```",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "You can get the current locale in any component of your application using `injectIntl()`:",
+    "options": null,
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=SqcY0GlETPk",
+        "type": "video",
+        "title": "React Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "8:25:00",
+        "description": "Complete React tutorial from scratch"
+      },
+      {
+        "url": "https://react.dev/learn",
+        "type": "article",
+        "title": "React Documentation",
+        "author": "React Team",
+        "description": "Official React documentation and tutorials"
+      },
+      {
+        "url": "https://www.udemy.com/course/react-the-complete-guide-incl-redux/",
+        "type": "course",
+        "title": "React - The Complete Guide",
+        "author": "Maximilian Schwarzmüller",
+        "duration": "48 hours",
+        "description": "Master React and Redux with hands-on projects"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-18T22:56:32.052149+00:00",
+    "updatedAt": "2025-11-24T22:52:08.102565+00:00"
+  },
+  {
+    "id": "49921302-dde9-4bae-8e4f-eea49db6e071",
+    "title": "How to format date using React Intl?",
+    "content": "How to format date using React Intl?\n\n```javascript\n     import { injectIntl, intlShape } from \"react-intl\";\n\n     const stringDate = this.props.intl.formatDate(date, {\n       year: \"numeric\",\n       month: \"numeric\",\n       day: \"numeric\",\n     });\n\n     const MyComponent = ({ intl }) => (\n     );\n\n     MyComponent.propTypes = {\n       intl: intlShape.isRequired,\n     };\n\n     export default injectIntl(MyComponent);\n```",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "The `injectIntl()` higher-order component will give you access to the `formatDate()` method via the props in your component. The method is used internally by instances of `FormattedDate` and it returns the string representation of the formatted date.",
+    "options": null,
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=SqcY0GlETPk",
+        "type": "video",
+        "title": "React Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "8:25:00",
+        "description": "Complete React tutorial from scratch"
+      },
+      {
+        "url": "https://react.dev/learn",
+        "type": "article",
+        "title": "React Documentation",
+        "author": "React Team",
+        "description": "Official React documentation and tutorials"
+      },
+      {
+        "url": "https://www.udemy.com/course/react-the-complete-guide-incl-redux/",
+        "type": "course",
+        "title": "React - The Complete Guide",
+        "author": "Maximilian Schwarzmüller",
+        "duration": "48 hours",
+        "description": "Master React and Redux with hands-on projects"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-18T22:56:32.052149+00:00",
+    "updatedAt": "2025-11-24T22:52:08.102565+00:00"
+  },
+  {
+    "id": "593b824f-812f-46bc-9efa-246a0b6d6eea",
+    "title": "What is `TestRenderer` package in React?",
+    "content": "What is `TestRenderer` package in React?\n\n```javascript\n    import TestRenderer from \"react-test-renderer\";\n\n    const Link = ({ page, children }) => <a href={page}>{children}</a;\n\n    const testRenderer = TestRenderer.create(\n      <Link page={\"https://www.facebook.com/\"}>{\"Facebook\"}</Link\n    );\n\n    console.log(testRenderer.toJSON());\n    // {\n    //   type: 'a',\n    //   props: { href: 'https://www.facebook.com/' },\n    //   children: [ 'Facebook' ]\n    // }\n```",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "This package provides a renderer that can be used to render components to pure JavaScript objects, without depending on the DOM or a native mobile environment. This package makes it easy to grab a snapshot of the platform view hierarchy (similar to a DOM tree) rendered by a ReactDOM or React Native without using a browser or `jsdom`.",
+    "options": null,
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=SqcY0GlETPk",
+        "type": "video",
+        "title": "React Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "8:25:00",
+        "description": "Complete React tutorial from scratch"
+      },
+      {
+        "url": "https://react.dev/learn",
+        "type": "article",
+        "title": "React Documentation",
+        "author": "React Team",
+        "description": "Official React documentation and tutorials"
+      },
+      {
+        "url": "https://www.udemy.com/course/react-the-complete-guide-incl-redux/",
+        "type": "course",
+        "title": "React - The Complete Guide",
+        "author": "Maximilian Schwarzmüller",
+        "duration": "48 hours",
+        "description": "Master React and Redux with hands-on projects"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-18T22:56:32.052149+00:00",
+    "updatedAt": "2025-11-24T22:52:08.102565+00:00"
+  },
+  {
+    "id": "ddcbf0d8-3246-4ef5-b7d6-34a5d32b77f4",
+    "title": "What is React Intl?",
+    "content": "What is React Intl?",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "The _React Intl_ library makes internationalization in React straightforward, with off-the-shelf components and an API that can handle everything from formatting strings, dates, and numbers, to pluralization. React Intl is part of _FormatJS_ which provides bindings to React via its components and API.",
+    "options": null,
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=SqcY0GlETPk",
+        "type": "video",
+        "title": "React Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "8:25:00",
+        "description": "Complete React tutorial from scratch"
+      },
+      {
+        "url": "https://react.dev/learn",
+        "type": "article",
+        "title": "React Documentation",
+        "author": "React Team",
+        "description": "Official React documentation and tutorials"
+      },
+      {
+        "url": "https://www.udemy.com/course/react-the-complete-guide-incl-redux/",
+        "type": "course",
+        "title": "React - The Complete Guide",
+        "author": "Maximilian Schwarzmüller",
+        "duration": "48 hours",
+        "description": "Master React and Redux with hands-on projects"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-18T22:55:59.74606+00:00",
+    "updatedAt": "2025-11-24T22:52:08.102565+00:00"
+  },
+  {
+    "id": "b5c7d36d-270b-494d-b6b6-33696b7d947a",
+    "title": "How to implement _default_ or _NotFound_ page?",
+    "content": "How to implement _default_ or _NotFound_ page?\n\n```javascript\n    <Switch\n      <Route exact path=\"/\" component={Home} />\n      <Route path=\"/user\" component={User} />\n      <Route component={NotFound} />\n    </Switch\n```",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "A `<Switch` renders the first child `<Rout` that matches. A `<Rout` with no path always matches. So you just need to simply drop path attribute as below",
+    "options": null,
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=SqcY0GlETPk",
+        "type": "video",
+        "title": "React Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "8:25:00",
+        "description": "Complete React tutorial from scratch"
+      },
+      {
+        "url": "https://react.dev/learn",
+        "type": "article",
+        "title": "React Documentation",
+        "author": "React Team",
+        "description": "Official React documentation and tutorials"
+      },
+      {
+        "url": "https://www.udemy.com/course/react-the-complete-guide-incl-redux/",
+        "type": "course",
+        "title": "React - The Complete Guide",
+        "author": "Maximilian Schwarzmüller",
+        "duration": "48 hours",
+        "description": "Master React and Redux with hands-on projects"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-18T22:55:59.74606+00:00",
+    "updatedAt": "2025-11-24T22:52:08.102565+00:00"
+  },
+  {
+    "id": "058768e7-71a5-4a9e-899a-405e752966ac",
+    "title": "How to perform automatic redirect after login?",
+    "content": "How to perform automatic redirect after login?\n\n```javascript\n    import React, { Component } from \"react\";\n    import { Redirect } from \"react-router\";\n\n    export default class LoginComponent extends Component {\n      render() {\n        if (this.state.isLoggedIn === true) {\n          return <Redirect to=\"/your/redirect/page\" />;\n        } else {\n          return <div{\"Login Please\"}</div;\n        }\n      }\n    }\n```",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "The `react-router` package provides `<Redirect` component in React Router. Rendering a `<Redirect` will navigate to a new location. Like server-side redirects, the new location will override the current location in the history stack.\n\n\n      <p\n\n\n       </p",
+    "options": null,
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=SqcY0GlETPk",
+        "type": "video",
+        "title": "React Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "8:25:00",
+        "description": "Complete React tutorial from scratch"
+      },
+      {
+        "url": "https://react.dev/learn",
+        "type": "article",
+        "title": "React Documentation",
+        "author": "React Team",
+        "description": "Official React documentation and tutorials"
+      },
+      {
+        "url": "https://www.udemy.com/course/react-the-complete-guide-incl-redux/",
+        "type": "course",
+        "title": "React - The Complete Guide",
+        "author": "Maximilian Schwarzmüller",
+        "duration": "48 hours",
+        "description": "Master React and Redux with hands-on projects"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-18T22:55:59.74606+00:00",
+    "updatedAt": "2025-11-24T22:52:08.102565+00:00"
+  }
+]

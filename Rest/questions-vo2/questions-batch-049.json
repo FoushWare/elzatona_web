@@ -1,0 +1,1902 @@
+[
+  {
+    "id": "9cafc80b-c039-4067-86b0-51977b8aff79",
+    "title": "How to get history on React Router v4?",
+    "content": "How to get history on React Router v4?\n\n```javascript\n        // some-other-file.js\n        import history from \"./history\";\n\n        history.push(\"/go-here\");\n```",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "Below are the list of steps to get history object on React Router v4,\n\n    1.  Create a module that exports a `history` object and import this module across the project.\n\n        For example, create `history.js` file:\n\n\n    2.  You should use the `<Router` component instead of built-in routers. Import the above `history.js` inside `index.js` file:\n\n\n    3.  You can also use push method of `history` object similar to built-in history object:",
+    "options": null,
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=SqcY0GlETPk",
+        "type": "video",
+        "title": "React Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "8:25:00",
+        "description": "Complete React tutorial from scratch"
+      },
+      {
+        "url": "https://react.dev/learn",
+        "type": "article",
+        "title": "React Documentation",
+        "author": "React Team",
+        "description": "Official React documentation and tutorials"
+      },
+      {
+        "url": "https://www.udemy.com/course/react-the-complete-guide-incl-redux/",
+        "type": "course",
+        "title": "React - The Complete Guide",
+        "author": "Maximilian Schwarzmüller",
+        "duration": "48 hours",
+        "description": "Master React and Redux with hands-on projects"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-18T22:55:59.74606+00:00",
+    "updatedAt": "2025-11-24T22:52:08.102565+00:00"
+  },
+  {
+    "id": "0b8d8dcc-dcb4-4168-9158-3813a925ef6b",
+    "title": "Why you get \"Router may have only one child element\" warning?",
+    "content": "Why you get \"Router may have only one child element\" warning?\n\n```javascript\n    <Router\n      <Switch\n        <Route {/* ... */} />\n        <Route {/* ... */} />\n      </Switch\n    </Router\n```",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "You have to wrap your Route's in a `<Switch` block because `<Switch` is unique in that it renders a route exclusively.\n\n    At first you need to add `Switch` to your imports:\n\n\n    Then define the routes within `<Switch` block:",
+    "options": null,
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=SqcY0GlETPk",
+        "type": "video",
+        "title": "React Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "8:25:00",
+        "description": "Complete React tutorial from scratch"
+      },
+      {
+        "url": "https://react.dev/learn",
+        "type": "article",
+        "title": "React Documentation",
+        "author": "React Team",
+        "description": "Official React documentation and tutorials"
+      },
+      {
+        "url": "https://www.udemy.com/course/react-the-complete-guide-incl-redux/",
+        "type": "course",
+        "title": "React - The Complete Guide",
+        "author": "Maximilian Schwarzmüller",
+        "duration": "48 hours",
+        "description": "Master React and Redux with hands-on projects"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-18T22:55:59.74606+00:00",
+    "updatedAt": "2025-11-24T22:52:08.102565+00:00"
+  },
+  {
+    "id": "b2796081-5171-40dc-91f7-e793d20631ec",
+    "title": "What is the purpose of `push()` and `replace()` methods of `history`?",
+    "content": "What is the purpose of `push()` and `replace()` methods of `history`?",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "A history instance has two methods for navigation purpose.\n\n    1.  `push()`\n    2.  `replace()`\n\n    If you think of the history as an array of visited locations, `push()` will add a new location to the array and `replace()` will replace the current location in the array with the new one.",
+    "options": null,
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=SqcY0GlETPk",
+        "type": "video",
+        "title": "React Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "8:25:00",
+        "description": "Complete React tutorial from scratch"
+      },
+      {
+        "url": "https://react.dev/learn",
+        "type": "article",
+        "title": "React Documentation",
+        "author": "React Team",
+        "description": "Official React documentation and tutorials"
+      },
+      {
+        "url": "https://www.udemy.com/course/react-the-complete-guide-incl-redux/",
+        "type": "course",
+        "title": "React - The Complete Guide",
+        "author": "Maximilian Schwarzmüller",
+        "duration": "48 hours",
+        "description": "Master React and Redux with hands-on projects"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-18T22:55:59.74606+00:00",
+    "updatedAt": "2025-11-24T22:52:08.102565+00:00"
+  },
+  {
+    "id": "b31356a6-6975-48d1-92ce-36bc906cb9b5",
+    "title": "What are the `<Router>` components of React Router v6?",
+    "content": "What are the `<Router` components of React Router v6?",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "React Router v6 provides below 4 `<Router` components:\n\n    1.  `<BrowserRouter`:Uses the HTML5 history API for standard web apps.\n    2.  `<HashRouter`:Uses hash-based routing for static servers.\n    3.  `<MemoryRouter`:Uses in-memory routing for testing and non-browser environments.\n    4.  `<StaticRouter`:Provides static routing for server-side rendering (SSR).\n\n    The above components will create _browser_, _hash_, _memory_ and _static_ history instances. React Router v6 makes the properties and methods of the `history` instance associated with your router available through the context in the `router` object.",
+    "options": null,
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=SqcY0GlETPk",
+        "type": "video",
+        "title": "React Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "8:25:00",
+        "description": "Complete React tutorial from scratch"
+      },
+      {
+        "url": "https://react.dev/learn",
+        "type": "article",
+        "title": "React Documentation",
+        "author": "React Team",
+        "description": "Official React documentation and tutorials"
+      },
+      {
+        "url": "https://www.udemy.com/course/react-the-complete-guide-incl-redux/",
+        "type": "course",
+        "title": "React - The Complete Guide",
+        "author": "Maximilian Schwarzmüller",
+        "duration": "48 hours",
+        "description": "Master React and Redux with hands-on projects"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-18T22:55:59.74606+00:00",
+    "updatedAt": "2025-11-24T22:52:08.102565+00:00"
+  },
+  {
+    "id": "25ff777a-dbc4-4bf7-b943-955f81df591a",
+    "title": "How do you programmatically navigate using React Router v4?",
+    "content": "How do you programmatically navigate using React Router v4?\n\n```javascript\n        const Button = (props, context) => (\n          <button\n            type=\"button\"\n            onClick={() => {\n              context.history.push(\"/new-location\");\n            }} {\"Click Me!\"}\n          </button\n        );\n\n        Button.contextTypes = {\n          history: React.PropTypes.shape({\n            push: React.PropTypes.func.isRequired,\n          }),\n        };\n```",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "There are three different ways to achieve programmatic routing/navigation within components.\n\n    1.  **Using the `withRouter()` higher-order function:**\n\n        The `withRouter()` higher-order function will inject the history object as a prop of the component. This object provides `push()` and `replace()` methods to avoid the usage of context.\n\n\n    2.  **Using `<Rout` component and render props pattern:**\n\n        The `<Rout` component passes the same props as `withRouter()`, so you will be able to access the history methods through the history prop.\n\n\n    3.  **Using context:**\n\n        This option is not recommended and treated as unstable API.",
+    "options": null,
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=SqcY0GlETPk",
+        "type": "video",
+        "title": "React Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "8:25:00",
+        "description": "Complete React tutorial from scratch"
+      },
+      {
+        "url": "https://react.dev/learn",
+        "type": "article",
+        "title": "React Documentation",
+        "author": "React Team",
+        "description": "Official React documentation and tutorials"
+      },
+      {
+        "url": "https://www.udemy.com/course/react-the-complete-guide-incl-redux/",
+        "type": "course",
+        "title": "React - The Complete Guide",
+        "author": "Maximilian Schwarzmüller",
+        "duration": "48 hours",
+        "description": "Master React and Redux with hands-on projects"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-18T22:55:59.74606+00:00",
+    "updatedAt": "2025-11-24T22:52:08.102565+00:00"
+  },
+  {
+    "id": "88fdef5d-f902-48bb-ba66-d71bef4036b7",
+    "title": "How to pass params to `history.push` method in React Router v4?",
+    "content": "How to pass params to `history.push` method in React Router v4?\n\n```javascript\n    this.props.history.push({\n      pathname: \"/template\",\n      search: \"?name=sudheer\",\n      state: { detail: response.data },\n    });\n```",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "While navigating you can pass props to the `history` object:\n\n\n    The `search` property is used to pass query params in `push()` method.",
+    "options": null,
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=SqcY0GlETPk",
+        "type": "video",
+        "title": "React Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "8:25:00",
+        "description": "Complete React tutorial from scratch"
+      },
+      {
+        "url": "https://react.dev/learn",
+        "type": "article",
+        "title": "React Documentation",
+        "author": "React Team",
+        "description": "Official React documentation and tutorials"
+      },
+      {
+        "url": "https://www.udemy.com/course/react-the-complete-guide-incl-redux/",
+        "type": "course",
+        "title": "React - The Complete Guide",
+        "author": "Maximilian Schwarzmüller",
+        "duration": "48 hours",
+        "description": "Master React and Redux with hands-on projects"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-18T22:55:59.74606+00:00",
+    "updatedAt": "2025-11-24T22:52:08.102565+00:00"
+  },
+  {
+    "id": "6d81cced-821a-4f8b-99b5-47f021857532",
+    "title": "How to get query parameters in React Router v4?",
+    "content": "How to get query parameters in React Router v4?\n\n```javascript\n    const params = new URLSearchParams(props.location.search);\n    const foo = params.get(\"name\");\n```",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "The ability to parse query strings was taken out of React Router v4 because there have been user requests over the years to support different implementation. So the decision has been given to users to choose the implementation they like. The recommended approach is to use query strings library.\n\n\n    You can also use `URLSearchParams` if you want something native:\n\n\n    You should use a _polyfill_ for IE11.",
+    "options": null,
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=SqcY0GlETPk",
+        "type": "video",
+        "title": "React Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "8:25:00",
+        "description": "Complete React tutorial from scratch"
+      },
+      {
+        "url": "https://react.dev/learn",
+        "type": "article",
+        "title": "React Documentation",
+        "author": "React Team",
+        "description": "Official React documentation and tutorials"
+      },
+      {
+        "url": "https://www.udemy.com/course/react-the-complete-guide-incl-redux/",
+        "type": "course",
+        "title": "React - The Complete Guide",
+        "author": "Maximilian Schwarzmüller",
+        "duration": "48 hours",
+        "description": "Master React and Redux with hands-on projects"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-18T22:55:59.74606+00:00",
+    "updatedAt": "2025-11-24T22:52:08.102565+00:00"
+  },
+  {
+    "id": "d14b0c99-b213-4dd8-90ec-e3aaf04e41c8",
+    "title": "Is it possible to use async/await in plain React?",
+    "content": "Is it possible to use async/await in plain React?\n\n```javascript\n    import { useEffect, useState } from 'react';\n\n    function UserProfile() {\n      const [user, setUser] = useState(null);\n\n      useEffect(() => {\n        const fetchUser = async () => {\n          const response = await fetch('/api/user');\n          const data = await response.json();\n          setUser(data);\n        };\n\n        fetchUser();\n      }, []);\n\n      return user ? <div Hello, {user.name}</div : <div Loading...</div;\n    }\n```",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "Yes, you can use `async/await` in plain React, as long as your JavaScript environment supports ES2017+. Nowadays most modern browsers and build tools support ES2017+ version. If you're using **Create React App**, **Next.js**, **Remix**, or any modern React setup, `async/await` is supported out of the box through **Babel**.\n\n    ### Example Usage\n\n    But If you're not using a bundler like **Webpack or Babel**, you will need _Babel_ and [transform-async-to-generator](https://babeljs.io/docs/en/babel-plugin-transform-async-to-generator) plugin. However, React Native ships with Babel and a set of transforms.",
+    "options": null,
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=SqcY0GlETPk",
+        "type": "video",
+        "title": "React Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "8:25:00",
+        "description": "Complete React tutorial from scratch"
+      },
+      {
+        "url": "https://react.dev/learn",
+        "type": "article",
+        "title": "React Documentation",
+        "author": "React Team",
+        "description": "Official React documentation and tutorials"
+      },
+      {
+        "url": "https://www.udemy.com/course/react-the-complete-guide-incl-redux/",
+        "type": "course",
+        "title": "React - The Complete Guide",
+        "author": "Maximilian Schwarzmüller",
+        "duration": "48 hours",
+        "description": "Master React and Redux with hands-on projects"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-18T22:55:24.603811+00:00",
+    "updatedAt": "2025-11-24T22:52:08.102565+00:00"
+  },
+  {
+    "id": "0308d9ac-01c7-4869-8b1d-cab5a8a430f5",
+    "title": "What are the common folder structures for React?",
+    "content": "What are the common folder structures for React?\n\n```javascript\n        api/\n        ├─ APIUtils.js\n        ├─ APIUtils.test.js\n        ├─ ProfileAPI.js\n        └─ UserAPI.js\n        components/\n        ├─ Avatar.js\n        ├─ Avatar.css\n        ├─ Feed.js\n        ├─ Feed.css\n        ├─ FeedStory.js\n        ├─ FeedStory.test.js\n        ├─ Profile.js\n        ├─ ProfileHeader.js\n        └─ ProfileHeader.css\n```",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "There are two common practices for React project file structure.\n\n     1.  **Grouping by features or routes:**\n\n        One common way to structure projects is locate CSS, JS, and tests together, grouped by feature or route.\n\n\n     2.  **Grouping by file type:**\n\n        Another popular way to structure projects is to group similar files together.",
+    "options": null,
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=SqcY0GlETPk",
+        "type": "video",
+        "title": "React Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "8:25:00",
+        "description": "Complete React tutorial from scratch"
+      },
+      {
+        "url": "https://react.dev/learn",
+        "type": "article",
+        "title": "React Documentation",
+        "author": "React Team",
+        "description": "Official React documentation and tutorials"
+      },
+      {
+        "url": "https://www.udemy.com/course/react-the-complete-guide-incl-redux/",
+        "type": "course",
+        "title": "React - The Complete Guide",
+        "author": "Maximilian Schwarzmüller",
+        "duration": "48 hours",
+        "description": "Master React and Redux with hands-on projects"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-18T22:55:24.603811+00:00",
+    "updatedAt": "2025-11-24T22:52:08.102565+00:00"
+  },
+  {
+    "id": "72c958ac-a177-40fa-b67e-328412361ac5",
+    "title": "How do you apply vendor prefixes to inline styles in React?",
+    "content": "How do you apply vendor prefixes to inline styles in React?\n\n```javascript\n      style={{\n        transform: \"rotate(90deg)\",\n        WebkitTransform: \"rotate(90deg)\", // note the capital 'W' here\n        msTransform: \"rotate(90deg)\", // 'ms' is the only lowercase vendor prefix\n      }}\n    />\n```",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "React _does not_ apply _vendor prefixes_ automatically. You need to add vendor prefixes manually.",
+    "options": null,
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=SqcY0GlETPk",
+        "type": "video",
+        "title": "React Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "8:25:00",
+        "description": "Complete React tutorial from scratch"
+      },
+      {
+        "url": "https://react.dev/learn",
+        "type": "article",
+        "title": "React Documentation",
+        "author": "React Team",
+        "description": "Official React documentation and tutorials"
+      },
+      {
+        "url": "https://www.udemy.com/course/react-the-complete-guide-incl-redux/",
+        "type": "course",
+        "title": "React - The Complete Guide",
+        "author": "Maximilian Schwarzmüller",
+        "duration": "48 hours",
+        "description": "Master React and Redux with hands-on projects"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-18T22:55:24.603811+00:00",
+    "updatedAt": "2025-11-24T22:52:08.102565+00:00"
+  },
+  {
+    "id": "5eb534c8-e279-4526-a05e-57bc87085681",
+    "title": "How to import and export components using React and ES6?",
+    "content": "How to import and export components using React and ES6?\n\n```javascript\n\n\n```",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "You should use default for exporting the components\n\n\n    <p\n    </p\n\n    With the export specifier, the MyProfile is going to be the member and exported to this module and the same can be imported without mentioning the name in other components.",
+    "options": null,
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=SqcY0GlETPk",
+        "type": "video",
+        "title": "React Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "8:25:00",
+        "description": "Complete React tutorial from scratch"
+      },
+      {
+        "url": "https://react.dev/learn",
+        "type": "article",
+        "title": "React Documentation",
+        "author": "React Team",
+        "description": "Official React documentation and tutorials"
+      },
+      {
+        "url": "https://www.udemy.com/course/react-the-complete-guide-incl-redux/",
+        "type": "course",
+        "title": "React - The Complete Guide",
+        "author": "Maximilian Schwarzmüller",
+        "duration": "48 hours",
+        "description": "Master React and Redux with hands-on projects"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-18T22:55:24.603811+00:00",
+    "updatedAt": "2025-11-24T22:52:08.102565+00:00"
+  },
+  {
+    "id": "0f85e173-6507-4cce-a224-feda5ee8c097",
+    "title": "What are the popular React-specific linters?",
+    "content": "What are the popular React-specific linters?",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "ESLint is a popular JavaScript linter. There are plugins available that analyse specific code styles. One of the most common for React is an npm package called `eslint-plugin-react`. By default, it will check a number of best practices, with rules checking things from keys in iterators to a complete set of prop types.\n\n    Another popular plugin is `eslint-plugin-jsx-a11y`, which will help fix common issues with accessibility. As JSX offers slightly different syntax to regular HTML, issues with `alt` text and `tabindex`, for example, will not be picked up by regular plugins.",
+    "options": null,
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=SqcY0GlETPk",
+        "type": "video",
+        "title": "React Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "8:25:00",
+        "description": "Complete React tutorial from scratch"
+      },
+      {
+        "url": "https://react.dev/learn",
+        "type": "article",
+        "title": "React Documentation",
+        "author": "React Team",
+        "description": "Official React documentation and tutorials"
+      },
+      {
+        "url": "https://www.udemy.com/course/react-the-complete-guide-incl-redux/",
+        "type": "course",
+        "title": "React - The Complete Guide",
+        "author": "Maximilian Schwarzmüller",
+        "duration": "48 hours",
+        "description": "Master React and Redux with hands-on projects"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-18T22:55:24.603811+00:00",
+    "updatedAt": "2025-11-24T22:52:08.102565+00:00"
+  },
+  {
+    "id": "2b490850-727f-4d3d-b3fb-ea4ee7a18aff",
+    "title": "What is the benefit of styles modules?",
+    "content": "What is the benefit of styles modules?\n\n```javascript\n    import { space, colors } from \"./styles\";\n```",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "It is recommended to avoid hard coding style values in components. Any values that are likely to be used across different UI components should be extracted into their own modules.\n\n    For example, these styles could be extracted into a separate component:\n\n\n    And then imported individually in other components:",
+    "options": null,
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=SqcY0GlETPk",
+        "type": "video",
+        "title": "React Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "8:25:00",
+        "description": "Complete React tutorial from scratch"
+      },
+      {
+        "url": "https://react.dev/learn",
+        "type": "article",
+        "title": "React Documentation",
+        "author": "React Team",
+        "description": "Official React documentation and tutorials"
+      },
+      {
+        "url": "https://www.udemy.com/course/react-the-complete-guide-incl-redux/",
+        "type": "course",
+        "title": "React - The Complete Guide",
+        "author": "Maximilian Schwarzmüller",
+        "duration": "48 hours",
+        "description": "Master React and Redux with hands-on projects"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-18T22:55:24.603811+00:00",
+    "updatedAt": "2025-11-24T22:52:08.102565+00:00"
+  },
+  {
+    "id": "1e2fc9a3-1aea-4241-b39f-01fe6764464d",
+    "title": "How React Router is different from history library?",
+    "content": "How React Router is different from history library?",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "React Router is a wrapper around the `history` library which handles interaction with the browser's `window.history` with its browser and hash histories. It also provides memory history which is useful for environments that don't have global history, such as mobile app development (React Native) and unit testing with Node.",
+    "options": null,
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=SqcY0GlETPk",
+        "type": "video",
+        "title": "React Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "8:25:00",
+        "description": "Complete React tutorial from scratch"
+      },
+      {
+        "url": "https://react.dev/learn",
+        "type": "article",
+        "title": "React Documentation",
+        "author": "React Team",
+        "description": "Official React documentation and tutorials"
+      },
+      {
+        "url": "https://www.udemy.com/course/react-the-complete-guide-incl-redux/",
+        "type": "course",
+        "title": "React - The Complete Guide",
+        "author": "Maximilian Schwarzmüller",
+        "duration": "48 hours",
+        "description": "Master React and Redux with hands-on projects"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-18T22:55:24.603811+00:00",
+    "updatedAt": "2025-11-24T22:52:08.102565+00:00"
+  },
+  {
+    "id": "a3f6130b-6e64-48e4-a0bc-5ff0984a2322",
+    "title": "What is React Router?",
+    "content": "What is React Router?",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "React Router is a powerful routing library built on top of React that helps you add new screens and flows to your application incredibly quickly, all while keeping the URL in sync with what's being displayed on the page.",
+    "options": null,
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=SqcY0GlETPk",
+        "type": "video",
+        "title": "React Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "8:25:00",
+        "description": "Complete React tutorial from scratch"
+      },
+      {
+        "url": "https://react.dev/learn",
+        "type": "article",
+        "title": "React Documentation",
+        "author": "React Team",
+        "description": "Official React documentation and tutorials"
+      },
+      {
+        "url": "https://www.udemy.com/course/react-the-complete-guide-incl-redux/",
+        "type": "course",
+        "title": "React - The Complete Guide",
+        "author": "Maximilian Schwarzmüller",
+        "duration": "48 hours",
+        "description": "Master React and Redux with hands-on projects"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-18T22:55:24.603811+00:00",
+    "updatedAt": "2025-11-24T22:52:08.102565+00:00"
+  },
+  {
+    "id": "2d936cf5-5703-443c-808a-ba5d4d1a8f58",
+    "title": "What are the exceptions on React component naming?",
+    "content": "What are the exceptions on React component naming?\n\n```javascript\n         render() {\n              return (\n                <obj.component/> // `React.createElement(obj.component)`\n              )\n        }\n```",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "The component names should start with an uppercase letter but there are few exceptions to this convention. The lowercase tag names with a dot (property accessors) are still considered as valid component names.\n    For example, the below tag can be compiled to a valid component,",
+    "options": null,
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=SqcY0GlETPk",
+        "type": "video",
+        "title": "React Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "8:25:00",
+        "description": "Complete React tutorial from scratch"
+      },
+      {
+        "url": "https://react.dev/learn",
+        "type": "article",
+        "title": "React Documentation",
+        "author": "React Team",
+        "description": "Official React documentation and tutorials"
+      },
+      {
+        "url": "https://www.udemy.com/course/react-the-complete-guide-incl-redux/",
+        "type": "course",
+        "title": "React - The Complete Guide",
+        "author": "Maximilian Schwarzmüller",
+        "duration": "48 hours",
+        "description": "Master React and Redux with hands-on projects"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-18T22:55:24.603811+00:00",
+    "updatedAt": "2025-11-24T22:52:08.102565+00:00"
+  },
+  {
+    "id": "8eb898ac-5c17-4aff-8e6f-833048dc1601",
+    "title": "What are the popular packages for animation?",
+    "content": "What are the popular packages for animation?",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "_React Transition Group_ and _React Motion_ are popular animation packages in React ecosystem.",
+    "options": null,
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=SqcY0GlETPk",
+        "type": "video",
+        "title": "React Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "8:25:00",
+        "description": "Complete React tutorial from scratch"
+      },
+      {
+        "url": "https://react.dev/learn",
+        "type": "article",
+        "title": "React Documentation",
+        "author": "React Team",
+        "description": "Official React documentation and tutorials"
+      },
+      {
+        "url": "https://www.udemy.com/course/react-the-complete-guide-incl-redux/",
+        "type": "course",
+        "title": "React - The Complete Guide",
+        "author": "Maximilian Schwarzmüller",
+        "duration": "48 hours",
+        "description": "Master React and Redux with hands-on projects"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-18T22:55:24.603811+00:00",
+    "updatedAt": "2025-11-24T22:52:08.102565+00:00"
+  },
+  {
+    "id": "3ff54e0b-83c1-408b-8047-f35fe7fecaf6",
+    "title": "How to use React label element?",
+    "content": "How to use React label element?\n\n```javascript\n    <label htmlFor={'user'}>{'User'}</label\n    <input type={'text'} id={'user'} />\n```",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "If you try to render a `<label` element bound to a text input using the standard `for` attribute, then it produces HTML missing that attribute and prints a warning to the console.\n\n\n    Since `for` is a reserved keyword in JavaScript, use `htmlFor` instead.",
+    "options": null,
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=SqcY0GlETPk",
+        "type": "video",
+        "title": "React Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "8:25:00",
+        "description": "Complete React tutorial from scratch"
+      },
+      {
+        "url": "https://react.dev/learn",
+        "type": "article",
+        "title": "React Documentation",
+        "author": "React Team",
+        "description": "Official React documentation and tutorials"
+      },
+      {
+        "url": "https://www.udemy.com/course/react-the-complete-guide-incl-redux/",
+        "type": "course",
+        "title": "React - The Complete Guide",
+        "author": "Maximilian Schwarzmüller",
+        "duration": "48 hours",
+        "description": "Master React and Redux with hands-on projects"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-18T22:54:52.739072+00:00",
+    "updatedAt": "2025-11-24T22:52:08.102565+00:00"
+  },
+  {
+    "id": "576625d8-89c7-467f-90fd-b8d974cdc387",
+    "title": "What is the difference between React and ReactDOM?",
+    "content": "What is the difference between React and ReactDOM?",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "The `react` package contains `React.createElement()`, `React.Component`, `React.Children`, and other helpers related to elements and component classes. You can think of these as the isomorphic or universal helpers that you need to build components. The `react-dom` package contains `ReactDOM.render()`, and in `react-dom/server` we have _server-side rendering_ support with `ReactDOMServer.renderToString()` and `ReactDOMServer.renderToStaticMarkup()`.",
+    "options": null,
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=SqcY0GlETPk",
+        "type": "video",
+        "title": "React Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "8:25:00",
+        "description": "Complete React tutorial from scratch"
+      },
+      {
+        "url": "https://react.dev/learn",
+        "type": "article",
+        "title": "React Documentation",
+        "author": "React Team",
+        "description": "Official React documentation and tutorials"
+      },
+      {
+        "url": "https://www.udemy.com/course/react-the-complete-guide-incl-redux/",
+        "type": "course",
+        "title": "React - The Complete Guide",
+        "author": "Maximilian Schwarzmüller",
+        "duration": "48 hours",
+        "description": "Master React and Redux with hands-on projects"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-18T22:54:52.739072+00:00",
+    "updatedAt": "2025-11-24T22:52:08.102565+00:00"
+  },
+  {
+    "id": "49b040ea-cb2c-4238-8d65-138ea2c19a98",
+    "title": "How to combine multiple inline style objects?",
+    "content": "How to combine multiple inline style objects?\n\n```javascript\n    <button style={[styles.panel.button, styles.panel.submitButton]}>\n      {\"Submit\"}\n    </button\n```",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "You can use _spread operator_ in regular React:\n\n\n    If you're using React Native then you can use the array notation:",
+    "options": null,
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=SqcY0GlETPk",
+        "type": "video",
+        "title": "React Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "8:25:00",
+        "description": "Complete React tutorial from scratch"
+      },
+      {
+        "url": "https://react.dev/learn",
+        "type": "article",
+        "title": "React Documentation",
+        "author": "React Team",
+        "description": "Official React documentation and tutorials"
+      },
+      {
+        "url": "https://www.udemy.com/course/react-the-complete-guide-incl-redux/",
+        "type": "course",
+        "title": "React - The Complete Guide",
+        "author": "Maximilian Schwarzmüller",
+        "duration": "48 hours",
+        "description": "Master React and Redux with hands-on projects"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-18T22:54:52.739072+00:00",
+    "updatedAt": "2025-11-24T22:52:08.102565+00:00"
+  },
+  {
+    "id": "72f51681-f6ac-4fc9-a09f-c85831659d53",
+    "title": "Why ReactDOM is separated from React?",
+    "content": "Why ReactDOM is separated from React?",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "The React team worked on extracting all DOM-related features into a separate library called _ReactDOM_. React v0.14 is the first release in which the libraries are split. By looking at some of the packages, `react-native`, `react-art`, `react-canvas`, and `react-three`, it has become clear that the beauty and essence of React has nothing to do with browsers or the DOM.\n\n    To build more environments that React can render to, React team planned to split the main React package into two: `react` and `react-dom`. This paves the way to writing components that can be shared between the web version of React and React Native.",
+    "options": null,
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=SqcY0GlETPk",
+        "type": "video",
+        "title": "React Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "8:25:00",
+        "description": "Complete React tutorial from scratch"
+      },
+      {
+        "url": "https://react.dev/learn",
+        "type": "article",
+        "title": "React Documentation",
+        "author": "React Team",
+        "description": "Official React documentation and tutorials"
+      },
+      {
+        "url": "https://www.udemy.com/course/react-the-complete-guide-incl-redux/",
+        "type": "course",
+        "title": "React - The Complete Guide",
+        "author": "Maximilian Schwarzmüller",
+        "duration": "48 hours",
+        "description": "Master React and Redux with hands-on projects"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-18T22:54:52.739072+00:00",
+    "updatedAt": "2025-11-24T22:52:08.102565+00:00"
+  },
+  {
+    "id": "65de1ece-5939-435f-8b75-30dd4d038353",
+    "title": "How can we find the version of React at runtime in the browser?",
+    "content": "How can we find the version of React at runtime in the browser?\n\n```javascript\n    const REACT_VERSION = React.version;\n\n    ReactDOM.render(\n      document.getElementById(\"app\")\n    );\n```",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "You can use `React.version` to get the version.",
+    "options": null,
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=SqcY0GlETPk",
+        "type": "video",
+        "title": "React Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "8:25:00",
+        "description": "Complete React tutorial from scratch"
+      },
+      {
+        "url": "https://react.dev/learn",
+        "type": "article",
+        "title": "React Documentation",
+        "author": "React Team",
+        "description": "Official React documentation and tutorials"
+      },
+      {
+        "url": "https://www.udemy.com/course/react-the-complete-guide-incl-redux/",
+        "type": "course",
+        "title": "React - The Complete Guide",
+        "author": "Maximilian Schwarzmüller",
+        "duration": "48 hours",
+        "description": "Master React and Redux with hands-on projects"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-18T22:54:52.739072+00:00",
+    "updatedAt": "2025-11-24T22:52:08.102565+00:00"
+  },
+  {
+    "id": "da073f04-1d0d-4f7e-88c7-5d5c81be92ba",
+    "title": "Why can't you update props in React?",
+    "content": "Why can''t you update props in React?",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "The React philosophy is that props should be _immutable_(read only) and _top-down_. This means that a parent can send any prop values to a child, but the child can't modify received props.",
+    "options": null,
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=SqcY0GlETPk",
+        "type": "video",
+        "title": "React Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "8:25:00",
+        "description": "Complete React tutorial from scratch"
+      },
+      {
+        "url": "https://react.dev/learn",
+        "type": "article",
+        "title": "React Documentation",
+        "author": "React Team",
+        "description": "Official React documentation and tutorials"
+      },
+      {
+        "url": "https://www.udemy.com/course/react-the-complete-guide-incl-redux/",
+        "type": "course",
+        "title": "React - The Complete Guide",
+        "author": "Maximilian Schwarzmüller",
+        "duration": "48 hours",
+        "description": "Master React and Redux with hands-on projects"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-18T22:54:52.739072+00:00",
+    "updatedAt": "2025-11-24T22:52:08.102565+00:00"
+  },
+  {
+    "id": "3df90d06-638a-4c96-ad35-4c980829adc3",
+    "title": "How to re-render the view when the browser is resized?",
+    "content": "How to re-render the view when the browser is resized?\n\n```javascript\n    class WindowDimensions extends React.Component {\n      constructor(props) {\n        super(props);\n        this.updateDimensions = this.updateDimensions.bind(this);\n      }\n\n      componentWillMount() {\n        this.updateDimensions();\n      }\n\n      componentDidMount() {\n        window.addEventListener(\"resize\", this.updateDimensions);\n      }\n\n      componentWillUnmount() {\n        window.removeEventListener(\"resize\", this.updateDimensions);\n      }\n\n      updateDimensions() {\n        this.setState({\n          width: window.innerWidth,\n          height: window.innerHeight,\n        });\n      }\n\n      render() {\n        return (\n          <span\n            {this.state.width} x {this.state.height}\n          </span\n        );\n      }\n    }\n```",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "You can use the `useState` hook to manage the width and height state variables, and the `useEffect` hook to add and remove the `resize` event listener. The `[]` dependency array passed to useEffect ensures that the effect only runs once (on mount) and not on every re-render.\n\n\n\n    You can listen to the `resize` event in `componentDidMount()` and then update the dimensions (`width` and `height`). You should remove the listener in `componentWillUnmount()` method.",
+    "options": null,
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=SqcY0GlETPk",
+        "type": "video",
+        "title": "React Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "8:25:00",
+        "description": "Complete React tutorial from scratch"
+      },
+      {
+        "url": "https://react.dev/learn",
+        "type": "article",
+        "title": "React Documentation",
+        "author": "React Team",
+        "description": "Official React documentation and tutorials"
+      },
+      {
+        "url": "https://www.udemy.com/course/react-the-complete-guide-incl-redux/",
+        "type": "course",
+        "title": "React - The Complete Guide",
+        "author": "Maximilian Schwarzmüller",
+        "duration": "48 hours",
+        "description": "Master React and Redux with hands-on projects"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-18T22:54:52.739072+00:00",
+    "updatedAt": "2025-11-24T22:52:08.102565+00:00"
+  },
+  {
+    "id": "07e19e91-40db-461a-98a1-e5446be4f569",
+    "title": "How to focus an input element on page load?",
+    "content": "How to focus an input element on page load?\n\n```javascript\n    class App extends React.Component {\n      componentDidMount() {\n        this.nameInput.focus();\n      }\n\n      render() {\n        return (\n            <input defaultValue={\"Won't focus\"} />\n            <input\n              ref={(input) => (this.nameInput = input)}\n              defaultValue={\"Will focus\"}\n            />\n        );\n      }\n    }\n\n    ReactDOM.render(<App />, document.getElementById(\"app\"));\n```",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "You need to use `useEffect` hook to set focus on input field during page load time for functional component.\n\n\n      <p\n      You can do it by creating _ref_ for `input` element and using it in `componentDidMount()`:\n\n\n      </p",
+    "options": null,
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=SqcY0GlETPk",
+        "type": "video",
+        "title": "React Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "8:25:00",
+        "description": "Complete React tutorial from scratch"
+      },
+      {
+        "url": "https://react.dev/learn",
+        "type": "article",
+        "title": "React Documentation",
+        "author": "React Team",
+        "description": "Official React documentation and tutorials"
+      },
+      {
+        "url": "https://www.udemy.com/course/react-the-complete-guide-incl-redux/",
+        "type": "course",
+        "title": "React - The Complete Guide",
+        "author": "Maximilian Schwarzmüller",
+        "duration": "48 hours",
+        "description": "Master React and Redux with hands-on projects"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-18T22:54:52.739072+00:00",
+    "updatedAt": "2025-11-24T22:52:08.102565+00:00"
+  },
+  {
+    "id": "fef4335f-f532-4d66-a1b1-4c7384a69de8",
+    "title": "How to add Google Analytics for React Router?",
+    "content": "How to add Google Analytics for React Router?\n\n```javascript\n    history.listen(function (location) {\n      window.ga(\"set\", \"page\", location.pathname + location.search);\n      window.ga(\"send\", \"pageview\", location.pathname + location.search);\n    });\n```",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "Add a listener on the `history` object to record each page view:",
+    "options": null,
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=SqcY0GlETPk",
+        "type": "video",
+        "title": "React Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "8:25:00",
+        "description": "Complete React tutorial from scratch"
+      },
+      {
+        "url": "https://react.dev/learn",
+        "type": "article",
+        "title": "React Documentation",
+        "author": "React Team",
+        "description": "Official React documentation and tutorials"
+      },
+      {
+        "url": "https://www.udemy.com/course/react-the-complete-guide-incl-redux/",
+        "type": "course",
+        "title": "React - The Complete Guide",
+        "author": "Maximilian Schwarzmüller",
+        "duration": "48 hours",
+        "description": "Master React and Redux with hands-on projects"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-18T22:54:52.739072+00:00",
+    "updatedAt": "2025-11-24T22:52:08.102565+00:00"
+  },
+  {
+    "id": "a8a6f229-04df-4a0d-b435-2441af2d0c24",
+    "title": "How to pretty print JSON with React?",
+    "content": "How to pretty print JSON with React?\n\n```javascript\n    const data = { name: \"John\", age: 42 };\n\n    class User extends React.Component {\n      render() {\n        return <pre><code>e{JSON.stringify(data, null, 2)}</code></pre>;\n      }\n    }\n\n    React.render(<User />, document.getElementById(\"container\"));\n```",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "We can use `<pr` tag so that the formatting of the `JSON.stringify()` is retained:\n\n\n      <p\n\n\n      </p",
+    "options": null,
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=SqcY0GlETPk",
+        "type": "video",
+        "title": "React Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "8:25:00",
+        "description": "Complete React tutorial from scratch"
+      },
+      {
+        "url": "https://react.dev/learn",
+        "type": "article",
+        "title": "React Documentation",
+        "author": "React Team",
+        "description": "Official React documentation and tutorials"
+      },
+      {
+        "url": "https://www.udemy.com/course/react-the-complete-guide-incl-redux/",
+        "type": "course",
+        "title": "React - The Complete Guide",
+        "author": "Maximilian Schwarzmüller",
+        "duration": "48 hours",
+        "description": "Master React and Redux with hands-on projects"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-18T22:54:52.739072+00:00",
+    "updatedAt": "2025-11-24T22:52:08.102565+00:00"
+  },
+  {
+    "id": "af13a28e-d2a5-4d34-a220-0da038e6d58b",
+    "title": "What are the Pointer Events supported in React?",
+    "content": "What are the Pointer Events supported in React?",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "_Pointer Events_ provide a unified way of handling all input events. In the old days we had a mouse and respective event listeners to handle them but nowadays we have many devices which don't correlate to having a mouse, like phones with touch surface or pens. We need to remember that these events will only work in browsers that support the _Pointer Events_ specification.\n\n    The following event types are now available in _React DOM_:\n\n    1. `onPointerDown`\n    2. `onPointerMove`\n    3. `onPointerUp`\n    4. `onPointerCancel`\n    5. `onGotPointerCapture`\n    6. `onLostPointerCapture`\n    7. `onPointerEnter`\n    8. `onPointerLeave`\n    9. `onPointerOver`\n    10. `onPointerOut`",
+    "options": null,
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=SqcY0GlETPk",
+        "type": "video",
+        "title": "React Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "8:25:00",
+        "description": "Complete React tutorial from scratch"
+      },
+      {
+        "url": "https://react.dev/learn",
+        "type": "article",
+        "title": "React Documentation",
+        "author": "React Team",
+        "description": "Official React documentation and tutorials"
+      },
+      {
+        "url": "https://www.udemy.com/course/react-the-complete-guide-incl-redux/",
+        "type": "course",
+        "title": "React - The Complete Guide",
+        "author": "Maximilian Schwarzmüller",
+        "duration": "48 hours",
+        "description": "Master React and Redux with hands-on projects"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-18T22:54:03.928573+00:00",
+    "updatedAt": "2025-11-24T22:52:08.102565+00:00"
+  },
+  {
+    "id": "72bce38e-f88b-41f8-8757-a94776a57a7f",
+    "title": "How to loop inside JSX?",
+    "content": "How to loop inside JSX?\n\n```javascript\n    <tbody\n      for (let i = 0; i < items.length; i++) {\n        <SomeComponent key={items[i].id} name={items[i].name} />\n      }\n    </tbody\n```",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "You can simply use `Array.prototype.map` with ES6 _arrow function_ syntax.\n\n    For example, the `items` array of objects is mapped into an array of components:\n\n\n    But you can't iterate using `for` loop:\n\n\n    This is because JSX tags are transpiled into _function calls_, and you can't use statements inside expressions. This may change thanks to `do` expressions which are _stage 1 proposal_.",
+    "options": null,
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=SqcY0GlETPk",
+        "type": "video",
+        "title": "React Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "8:25:00",
+        "description": "Complete React tutorial from scratch"
+      },
+      {
+        "url": "https://react.dev/learn",
+        "type": "article",
+        "title": "React Documentation",
+        "author": "React Team",
+        "description": "Official React documentation and tutorials"
+      },
+      {
+        "url": "https://www.udemy.com/course/react-the-complete-guide-incl-redux/",
+        "type": "course",
+        "title": "React - The Complete Guide",
+        "author": "Maximilian Schwarzmüller",
+        "duration": "48 hours",
+        "description": "Master React and Redux with hands-on projects"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-18T22:54:03.928573+00:00",
+    "updatedAt": "2025-11-24T22:52:08.102565+00:00"
+  },
+  {
+    "id": "633496b3-dfb8-4e54-aadd-9ee456d2373b",
+    "title": "How to conditionally apply class attributes?",
+    "content": "How to conditionally apply class attributes?",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "You shouldn't use curly braces inside quotes because it is going to be evaluated as a string.\n\n\n    Instead you need to move curly braces outside (don't forget to include spaces between class names):\n\n\n    _Template strings_ will also work:",
+    "options": null,
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=SqcY0GlETPk",
+        "type": "video",
+        "title": "React Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "8:25:00",
+        "description": "Complete React tutorial from scratch"
+      },
+      {
+        "url": "https://react.dev/learn",
+        "type": "article",
+        "title": "React Documentation",
+        "author": "React Team",
+        "description": "Official React documentation and tutorials"
+      },
+      {
+        "url": "https://www.udemy.com/course/react-the-complete-guide-incl-redux/",
+        "type": "course",
+        "title": "React - The Complete Guide",
+        "author": "Maximilian Schwarzmüller",
+        "duration": "48 hours",
+        "description": "Master React and Redux with hands-on projects"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-18T22:54:03.928573+00:00",
+    "updatedAt": "2025-11-24T22:52:08.102565+00:00"
+  },
+  {
+    "id": "cdf746bd-5518-4f71-986e-2e8cf10fba3d",
+    "title": "How do you access props in attribute quotes?",
+    "content": "How do you access props in attribute quotes?\n\n```javascript\n    <img className=\"image\" src={`images/${this.props.image}`} />\n```",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "React (or JSX) doesn't support variable interpolation inside an attribute value. The below representation won't work:\n\n\n    But you can put any JS expression inside curly braces as the entire attribute value. So the below expression works:\n\n\n    Using _template strings_ will also work:",
+    "options": null,
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=SqcY0GlETPk",
+        "type": "video",
+        "title": "React Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "8:25:00",
+        "description": "Complete React tutorial from scratch"
+      },
+      {
+        "url": "https://react.dev/learn",
+        "type": "article",
+        "title": "React Documentation",
+        "author": "React Team",
+        "description": "Official React documentation and tutorials"
+      },
+      {
+        "url": "https://www.udemy.com/course/react-the-complete-guide-incl-redux/",
+        "type": "course",
+        "title": "React - The Complete Guide",
+        "author": "Maximilian Schwarzmüller",
+        "duration": "48 hours",
+        "description": "Master React and Redux with hands-on projects"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-18T22:54:03.928573+00:00",
+    "updatedAt": "2025-11-24T22:52:08.102565+00:00"
+  },
+  {
+    "id": "e069e91c-4931-46e3-b97b-382a372d0d22",
+    "title": "Do Hooks replace render props and higher order components?",
+    "content": "Do Hooks replace render props and higher order components?",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "Both render props and higher-order components render only a single child but in most of the cases Hooks are a simpler way to serve this by reducing nesting in your tree.",
+    "options": null,
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=SqcY0GlETPk",
+        "type": "video",
+        "title": "React Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "8:25:00",
+        "description": "Complete React tutorial from scratch"
+      },
+      {
+        "url": "https://react.dev/learn",
+        "type": "article",
+        "title": "React Documentation",
+        "author": "React Team",
+        "description": "Official React documentation and tutorials"
+      },
+      {
+        "url": "https://www.udemy.com/course/react-the-complete-guide-incl-redux/",
+        "type": "course",
+        "title": "React - The Complete Guide",
+        "author": "Maximilian Schwarzmüller",
+        "duration": "48 hours",
+        "description": "Master React and Redux with hands-on projects"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-18T22:54:03.928573+00:00",
+    "updatedAt": "2025-11-24T22:52:08.102565+00:00"
+  },
+  {
+    "id": "bccb8038-d504-43ad-a841-dad88b69d0ac",
+    "title": "What is React proptype array with shape?",
+    "content": "What is React proptype array with shape?\n\n```javascript\n    ReactComponent.propTypes = {\n      arrayWithShape: React.PropTypes.arrayOf(\n        React.PropTypes.shape({\n          color: React.PropTypes.string.isRequired,\n          fontSize: React.PropTypes.number.isRequired,\n        })\n      ).isRequired,\n    };\n```",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "If you want to pass an array of objects to a component with a particular shape then use `React.PropTypes.shape()` as an argument to `React.PropTypes.arrayOf()`.",
+    "options": null,
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=SqcY0GlETPk",
+        "type": "video",
+        "title": "React Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "8:25:00",
+        "description": "Complete React tutorial from scratch"
+      },
+      {
+        "url": "https://react.dev/learn",
+        "type": "article",
+        "title": "React Documentation",
+        "author": "React Team",
+        "description": "Official React documentation and tutorials"
+      },
+      {
+        "url": "https://www.udemy.com/course/react-the-complete-guide-incl-redux/",
+        "type": "course",
+        "title": "React - The Complete Guide",
+        "author": "Maximilian Schwarzmüller",
+        "duration": "48 hours",
+        "description": "Master React and Redux with hands-on projects"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-18T22:54:03.928573+00:00",
+    "updatedAt": "2025-11-24T22:52:08.102565+00:00"
+  },
+  {
+    "id": "dee8f54a-a033-42d3-bd46-0c12bbd64df9",
+    "title": "Why should component names start with capital letter?",
+    "content": "Why should component names start with capital letter?\n\n```javascript\n    import MyComponent from \"./myComponent\";\n```",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "If you are rendering your component using JSX, the name of that component has to begin with a capital letter otherwise React will throw an error as an unrecognized tag. This convention is because only HTML elements and SVG tags can begin with a lowercase letter.\n\n\n    You can define function component whose name starts with lowercase letter, but when it's imported it should have a capital letter. Here lowercase is fine:\n\n\n    While when imported in another file it should start with capital letter:",
+    "options": null,
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=SqcY0GlETPk",
+        "type": "video",
+        "title": "React Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "8:25:00",
+        "description": "Complete React tutorial from scratch"
+      },
+      {
+        "url": "https://react.dev/learn",
+        "type": "article",
+        "title": "React Documentation",
+        "author": "React Team",
+        "description": "Official React documentation and tutorials"
+      },
+      {
+        "url": "https://www.udemy.com/course/react-the-complete-guide-incl-redux/",
+        "type": "course",
+        "title": "React - The Complete Guide",
+        "author": "Maximilian Schwarzmüller",
+        "duration": "48 hours",
+        "description": "Master React and Redux with hands-on projects"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-18T22:54:03.928573+00:00",
+    "updatedAt": "2025-11-24T22:52:08.102565+00:00"
+  },
+  {
+    "id": "64158701-75e9-4b96-a0fb-e336aa2f55b1",
+    "title": "What are React Mixins?",
+    "content": "What are React Mixins?\n\n```javascript\n    const PureRenderMixin = require(\"react-addons-pure-render-mixin\");\n\n    const Button = React.createClass({\n      mixins: [PureRenderMixin],\n      // ...\n    });\n```",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "_Mixins_ are a way to totally separate components to have a common functionality. Mixins **should not be used** and can be replaced with _higher-order components_ or _decorators_.\n\n    One of the most commonly used mixins is `PureRenderMixin`. You might be using it in some components to prevent unnecessary re-renders when the props and state are shallowly equal to the previous props and state:\n\n\n     <!-- TODO: mixins are deprecated --",
+    "options": null,
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=SqcY0GlETPk",
+        "type": "video",
+        "title": "React Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "8:25:00",
+        "description": "Complete React tutorial from scratch"
+      },
+      {
+        "url": "https://react.dev/learn",
+        "type": "article",
+        "title": "React Documentation",
+        "author": "React Team",
+        "description": "Official React documentation and tutorials"
+      },
+      {
+        "url": "https://www.udemy.com/course/react-the-complete-guide-incl-redux/",
+        "type": "course",
+        "title": "React - The Complete Guide",
+        "author": "Maximilian Schwarzmüller",
+        "duration": "48 hours",
+        "description": "Master React and Redux with hands-on projects"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-18T22:54:03.928573+00:00",
+    "updatedAt": "2025-11-24T22:52:08.102565+00:00"
+  },
+  {
+    "id": "42102a71-77a8-4bcd-8bb4-66f1cb8b98ad",
+    "title": "Are custom DOM attributes supported in React v16?",
+    "content": "Are custom DOM attributes supported in React v16?",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "Yes. In the past, React used to ignore unknown DOM attributes. If you wrote JSX with an attribute that React doesn't recognize, React would just skip it.\n\n    For example, let's take a look at the below attribute:\n\n\n    Would render an empty div to the DOM with React v15:\n\n\n    In React v16 any unknown attributes will end up in the DOM:\n\n\n    This is useful for supplying browser-specific non-standard attributes, trying new DOM APIs, and integrating with opinionated third-party libraries.",
+    "options": null,
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=SqcY0GlETPk",
+        "type": "video",
+        "title": "React Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "8:25:00",
+        "description": "Complete React tutorial from scratch"
+      },
+      {
+        "url": "https://react.dev/learn",
+        "type": "article",
+        "title": "React Documentation",
+        "author": "React Team",
+        "description": "Official React documentation and tutorials"
+      },
+      {
+        "url": "https://www.udemy.com/course/react-the-complete-guide-incl-redux/",
+        "type": "course",
+        "title": "React - The Complete Guide",
+        "author": "Maximilian Schwarzmüller",
+        "duration": "48 hours",
+        "description": "Master React and Redux with hands-on projects"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-18T22:54:03.928573+00:00",
+    "updatedAt": "2025-11-24T22:52:08.102565+00:00"
+  },
+  {
+    "id": "45a70ec9-4ebd-41d7-9e3c-f86e0e312328",
+    "title": "What is a switching component?",
+    "content": "What is a switching component?\n\n```javascript\n    import HomePage from \"./HomePage\";\n    import AboutPage from \"./AboutPage\";\n    import ServicesPage from \"./ServicesPage\";\n    import ContactPage from \"./ContactPage\";\n\n    const PAGES = {\n      home: HomePage,\n      about: AboutPage,\n      services: ServicesPage,\n      contact: ContactPage,\n    };\n\n    const Page = (props) => {\n      const Handler = PAGES[props.page] || ContactPage;\n\n      return <Handler {...props} />;\n    };\n\n    // The keys of the PAGES object can be used in the prop types to catch dev-time errors.\n    Page.propTypes = {\n      page: PropTypes.oneOf(Object.keys(PAGES)).isRequired,\n    };\n```",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "A _switching component_ is a component that renders one of many components. We need to use object to map prop values to components.\n\n    For example, a switching component to display different pages based on `page` prop:",
+    "options": null,
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=SqcY0GlETPk",
+        "type": "video",
+        "title": "React Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "8:25:00",
+        "description": "Complete React tutorial from scratch"
+      },
+      {
+        "url": "https://react.dev/learn",
+        "type": "article",
+        "title": "React Documentation",
+        "author": "React Team",
+        "description": "Official React documentation and tutorials"
+      },
+      {
+        "url": "https://www.udemy.com/course/react-the-complete-guide-incl-redux/",
+        "type": "course",
+        "title": "React - The Complete Guide",
+        "author": "Maximilian Schwarzmüller",
+        "duration": "48 hours",
+        "description": "Master React and Redux with hands-on projects"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-18T22:54:03.928573+00:00",
+    "updatedAt": "2025-11-24T22:52:08.102565+00:00"
+  },
+  {
+    "id": "1af85276-2c6c-47f5-9f9f-4b2e13b8040c",
+    "title": "Why we need to be careful when spreading props on DOM elements?",
+    "content": "Why we need to be careful when spreading props on DOM elements?\n\n```javascript\n    const ComponentA = () => (\n      <ComponentB isDisplay={true} className={\"componentStyle\"} />\n    );\n\n    const ComponentB = ({ isDisplay, ...domProps }) => (\n    );\n```",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "When we _spread props_ we run into the risk of adding unknown HTML attributes, which is a bad practice. Instead we can use prop destructuring with `...rest` operator, so it will add only required props.\n\n    For example,",
+    "options": null,
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=SqcY0GlETPk",
+        "type": "video",
+        "title": "React Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "8:25:00",
+        "description": "Complete React tutorial from scratch"
+      },
+      {
+        "url": "https://react.dev/learn",
+        "type": "article",
+        "title": "React Documentation",
+        "author": "React Team",
+        "description": "Official React documentation and tutorials"
+      },
+      {
+        "url": "https://www.udemy.com/course/react-the-complete-guide-incl-redux/",
+        "type": "course",
+        "title": "React - The Complete Guide",
+        "author": "Maximilian Schwarzmüller",
+        "duration": "48 hours",
+        "description": "Master React and Redux with hands-on projects"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-18T22:53:21.354208+00:00",
+    "updatedAt": "2025-11-24T22:52:08.102565+00:00"
+  },
+  {
+    "id": "da9540ad-7a38-42f8-8a12-11909f1ad676",
+    "title": "What is the impact of indexes as keys?",
+    "content": "What is the impact of indexes as keys?\n\n```javascript\n    {\n      todos.map((todo) => <Todo {...todo} key={todo.id} />);\n    }\n```",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "Keys should be stable, predictable, and unique so that React can keep track of elements.\n\n    In the below code snippet each element's key will be based on ordering, rather than tied to the data that is being represented. This limits the optimizations that React can do and creates confusing bugs in the application.\n\n\n    If you use element data for unique key, assuming `todo.id` is unique to this list and stable, React would be able to reorder elements without needing to reevaluate them as much.\n\n\n    **Note:** If you don't specify `key` prop at all, React will use index as a key's value while iterating over an array of data.",
+    "options": null,
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=SqcY0GlETPk",
+        "type": "video",
+        "title": "React Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "8:25:00",
+        "description": "Complete React tutorial from scratch"
+      },
+      {
+        "url": "https://react.dev/learn",
+        "type": "article",
+        "title": "React Documentation",
+        "author": "React Team",
+        "description": "Official React documentation and tutorials"
+      },
+      {
+        "url": "https://www.udemy.com/course/react-the-complete-guide-incl-redux/",
+        "type": "course",
+        "title": "React - The Complete Guide",
+        "author": "Maximilian Schwarzmüller",
+        "duration": "48 hours",
+        "description": "Master React and Redux with hands-on projects"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-18T22:53:21.354208+00:00",
+    "updatedAt": "2025-11-24T22:52:08.102565+00:00"
+  },
+  {
+    "id": "c7b9dcec-f3fe-46d5-ac43-fea0cbc19df2",
+    "title": "How events are different in React?",
+    "content": "How events are different in React?",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "Handling events in React elements has some syntactic differences:\n\n    1. React event handlers are named using camelCase, rather than lowercase.\n    2. With JSX you pass a function as the event handler, rather than a string.",
+    "options": null,
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=SqcY0GlETPk",
+        "type": "video",
+        "title": "React Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "8:25:00",
+        "description": "Complete React tutorial from scratch"
+      },
+      {
+        "url": "https://react.dev/learn",
+        "type": "article",
+        "title": "React Documentation",
+        "author": "React Team",
+        "description": "Official React documentation and tutorials"
+      },
+      {
+        "url": "https://www.udemy.com/course/react-the-complete-guide-incl-redux/",
+        "type": "course",
+        "title": "React - The Complete Guide",
+        "author": "Maximilian Schwarzmüller",
+        "duration": "48 hours",
+        "description": "Master React and Redux with hands-on projects"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-18T22:53:21.354208+00:00",
+    "updatedAt": "2025-11-24T22:52:08.102565+00:00"
+  },
+  {
+    "id": "c4f148ff-ccb3-4881-98cc-962830424b6e",
+    "title": "How to use innerHTML in React?",
+    "content": "How to use innerHTML in React?\n\n```javascript\n    function createMarkup() {\n      return { __html: \"First &middot; Second\" };\n    }\n\n    function MyComponent() {\n      return <div dangerouslySetInnerHTML={createMarkup()} />;\n    }\n```",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "The `dangerouslySetInnerHTML` attribute is React's replacement for using `innerHTML` in the browser DOM. Just like `innerHTML`, it is risky to use this attribute considering cross-site scripting (XSS) attacks. You just need to pass a `__html` object as key and HTML text as value.\n\n    In this example MyComponent uses `dangerouslySetInnerHTML` attribute for setting HTML markup:",
+    "options": null,
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=SqcY0GlETPk",
+        "type": "video",
+        "title": "React Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "8:25:00",
+        "description": "Complete React tutorial from scratch"
+      },
+      {
+        "url": "https://react.dev/learn",
+        "type": "article",
+        "title": "React Documentation",
+        "author": "React Team",
+        "description": "Official React documentation and tutorials"
+      },
+      {
+        "url": "https://www.udemy.com/course/react-the-complete-guide-incl-redux/",
+        "type": "course",
+        "title": "React - The Complete Guide",
+        "author": "Maximilian Schwarzmüller",
+        "duration": "48 hours",
+        "description": "Master React and Redux with hands-on projects"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-18T22:53:21.354208+00:00",
+    "updatedAt": "2025-11-24T22:52:08.102565+00:00"
+  },
+  {
+    "id": "329119c7-b7f4-4126-87c9-1b1471c36072",
+    "title": "How you implement Server Side Rendering or SSR?",
+    "content": "How you implement Server Side Rendering or SSR?\n\n```javascript\n    import ReactDOMServer from \"react-dom/server\";\n    import App from \"./App\";\n\n    ReactDOMServer.renderToString(<App />);\n```",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "React is already equipped to handle rendering on Node servers. A special version of the DOM renderer is available, which follows the same pattern as on the client side.\n\n\n    This method will output the regular HTML as a string, which can be then placed inside a page body as part of the server response. On the client side, React detects the pre-rendered content and seamlessly picks up where it left off.",
+    "options": null,
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=SqcY0GlETPk",
+        "type": "video",
+        "title": "React Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "8:25:00",
+        "description": "Complete React tutorial from scratch"
+      },
+      {
+        "url": "https://react.dev/learn",
+        "type": "article",
+        "title": "React Documentation",
+        "author": "React Team",
+        "description": "Official React documentation and tutorials"
+      },
+      {
+        "url": "https://www.udemy.com/course/react-the-complete-guide-incl-redux/",
+        "type": "course",
+        "title": "React - The Complete Guide",
+        "author": "Maximilian Schwarzmüller",
+        "duration": "48 hours",
+        "description": "Master React and Redux with hands-on projects"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-18T22:53:21.354208+00:00",
+    "updatedAt": "2025-11-24T22:52:08.102565+00:00"
+  },
+  {
+    "id": "dbac056e-08b3-4066-886d-b335c2cbb55c",
+    "title": "How do you conditionally render components?",
+    "content": "How do you conditionally render components?\n\n```javascript\n    const MyComponent = ({ name, address }) => (\n        <h2{name}</h2\n        {address ? <p{address}</p : <p{\"Address is not available\"}</p}\n    );\n```",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "In some cases you want to render different components depending on some state. JSX does not render `false` or `undefined`, so you can use conditional _short-circuiting_ to render a given part of your component only if a certain condition is true.\n\n\n    If you need an `if-else` condition then use _ternary operator_.",
+    "options": null,
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=SqcY0GlETPk",
+        "type": "video",
+        "title": "React Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "8:25:00",
+        "description": "Complete React tutorial from scratch"
+      },
+      {
+        "url": "https://react.dev/learn",
+        "type": "article",
+        "title": "React Documentation",
+        "author": "React Team",
+        "description": "Official React documentation and tutorials"
+      },
+      {
+        "url": "https://www.udemy.com/course/react-the-complete-guide-incl-redux/",
+        "type": "course",
+        "title": "React - The Complete Guide",
+        "author": "Maximilian Schwarzmüller",
+        "duration": "48 hours",
+        "description": "Master React and Redux with hands-on projects"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-18T22:53:21.354208+00:00",
+    "updatedAt": "2025-11-24T22:52:08.102565+00:00"
+  },
+  {
+    "id": "ec225c76-cf6d-4c7f-ac04-3ce30f2dc3b1",
+    "title": "What is ReactDOMServer?",
+    "content": "What is ReactDOMServer?\n\n```javascript\n    // using Express\n    import { renderToString } from \"react-dom/server\";\n    import MyPage from \"./MyPage\";\n\n    app.get(\"/\", (req, res) => {\n      res.write(\n        \"<!DOCTYPE html<html<head<titlMy Page</titl</head<body\"\n      );\n      res.write('<div id=\"content\">');\n      res.write(renderToString(<MyPage />));\n      res.write(\"</div</body</html\");\n      res.end();\n    });\n```",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "The `ReactDOMServer` object enables you to render components to static markup (typically used on node server). This object is mainly used for _server-side rendering_ (SSR). The following methods can be used in both the server and browser environments:\n\n    1. `renderToString()`\n    2. `renderToStaticMarkup()`\n\n    For example, you generally run a Node-based web server like Express, Hapi, or Koa, and you call `renderToString` to render your root component to a string, which you then send as response.",
+    "options": null,
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=SqcY0GlETPk",
+        "type": "video",
+        "title": "React Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "8:25:00",
+        "description": "Complete React tutorial from scratch"
+      },
+      {
+        "url": "https://react.dev/learn",
+        "type": "article",
+        "title": "React Documentation",
+        "author": "React Team",
+        "description": "Official React documentation and tutorials"
+      },
+      {
+        "url": "https://www.udemy.com/course/react-the-complete-guide-incl-redux/",
+        "type": "course",
+        "title": "React - The Complete Guide",
+        "author": "Maximilian Schwarzmüller",
+        "duration": "48 hours",
+        "description": "Master React and Redux with hands-on projects"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-18T22:53:21.354208+00:00",
+    "updatedAt": "2025-11-24T22:52:08.102565+00:00"
+  },
+  {
+    "id": "1ab3f864-c0f3-4a0a-831b-33c8bbdbf39b",
+    "title": "How to use styles in React?",
+    "content": "How to use styles in React?\n\n```javascript\n    const divStyle = {\n      color: \"blue\",\n      backgroundImage: \"url(\" + imgUrl + \")\",\n    };\n\n    function HelloWorldComponent() {\n      return <div style={divStyle}>Hello World!</div;\n    }\n```",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "The `style` attribute accepts a JavaScript object with camelCased properties rather than a CSS string. This is consistent with the DOM style JavaScript property, is more efficient, and prevents XSS security holes.\n\n\n    Style keys are camelCased in order to be consistent with accessing the properties on DOM nodes in JavaScript (e.g. `node.style.backgroundImage`).",
+    "options": null,
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=SqcY0GlETPk",
+        "type": "video",
+        "title": "React Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "8:25:00",
+        "description": "Complete React tutorial from scratch"
+      },
+      {
+        "url": "https://react.dev/learn",
+        "type": "article",
+        "title": "React Documentation",
+        "author": "React Team",
+        "description": "Official React documentation and tutorials"
+      },
+      {
+        "url": "https://www.udemy.com/course/react-the-complete-guide-incl-redux/",
+        "type": "course",
+        "title": "React - The Complete Guide",
+        "author": "Maximilian Schwarzmüller",
+        "duration": "48 hours",
+        "description": "Master React and Redux with hands-on projects"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-18T22:53:21.354208+00:00",
+    "updatedAt": "2025-11-24T22:52:08.102565+00:00"
+  },
+  {
+    "id": "6641ebc7-3803-4087-a275-dcea2326dc89",
+    "title": "How do you memoize a component?",
+    "content": "How do you memoize a component?\n\n```javascript\n    const MemoComponent = React.memo(function MemoComponent(props) {\n      /* render using props */\n    });\n    OR;\n    export default React.memo(MyFunctionComponent);\n```",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "There are memoize libraries available which can be used on function components.\n\n    For example `moize` library can memoize the component in another component.\n\n\n    **Update:** Since React v16.6.0, we have a `React.memo`. It provides a higher order component which memoizes component unless the props change. To use it, simply wrap the component using React.memo before you use it.",
+    "options": null,
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=SqcY0GlETPk",
+        "type": "video",
+        "title": "React Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "8:25:00",
+        "description": "Complete React tutorial from scratch"
+      },
+      {
+        "url": "https://react.dev/learn",
+        "type": "article",
+        "title": "React Documentation",
+        "author": "React Team",
+        "description": "Official React documentation and tutorials"
+      },
+      {
+        "url": "https://www.udemy.com/course/react-the-complete-guide-incl-redux/",
+        "type": "course",
+        "title": "React - The Complete Guide",
+        "author": "Maximilian Schwarzmüller",
+        "duration": "48 hours",
+        "description": "Master React and Redux with hands-on projects"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-18T22:53:21.354208+00:00",
+    "updatedAt": "2025-11-24T22:52:08.102565+00:00"
+  },
+  {
+    "id": "3611d28a-d7b9-4e73-b053-a0bec43d4e78",
+    "title": "How to enable production mode in React?",
+    "content": "How to enable production mode in React?",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "You should use Webpack's `DefinePlugin` method to set `NODE_ENV` to `production`, by which it strip out things like propType validation and extra warnings. Apart from this, if you minify the code, for example, Uglify's dead-code elimination to strip out development only code and comments, it will drastically reduce the size of your bundle.",
+    "options": null,
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=SqcY0GlETPk",
+        "type": "video",
+        "title": "React Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "8:25:00",
+        "description": "Complete React tutorial from scratch"
+      },
+      {
+        "url": "https://react.dev/learn",
+        "type": "article",
+        "title": "React Documentation",
+        "author": "React Team",
+        "description": "Official React documentation and tutorials"
+      },
+      {
+        "url": "https://www.udemy.com/course/react-the-complete-guide-incl-redux/",
+        "type": "course",
+        "title": "React - The Complete Guide",
+        "author": "Maximilian Schwarzmüller",
+        "duration": "48 hours",
+        "description": "Master React and Redux with hands-on projects"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-18T22:53:21.354208+00:00",
+    "updatedAt": "2025-11-24T22:52:08.102565+00:00"
+  },
+  {
+    "id": "c0aea237-d57c-41be-9d0f-92e2d2481b23",
+    "title": "What is the use of `react-dom` package?",
+    "content": "What is the use of `react-dom` package?",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "The `react-dom` package provides _DOM-specific methods_ that can be used at the top level of your app. Most of the components are not required to use this module. Some of the methods of this package are:\n\n    1. `render()`\n    2. `hydrate()`\n    3. `unmountComponentAtNode()`\n    4. `findDOMNode()`\n    5. `createPortal()`",
+    "options": null,
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=SqcY0GlETPk",
+        "type": "video",
+        "title": "React Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "8:25:00",
+        "description": "Complete React tutorial from scratch"
+      },
+      {
+        "url": "https://react.dev/learn",
+        "type": "article",
+        "title": "React Documentation",
+        "author": "React Team",
+        "description": "Official React documentation and tutorials"
+      },
+      {
+        "url": "https://www.udemy.com/course/react-the-complete-guide-incl-redux/",
+        "type": "course",
+        "title": "React - The Complete Guide",
+        "author": "Maximilian Schwarzmüller",
+        "duration": "48 hours",
+        "description": "Master React and Redux with hands-on projects"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-18T22:51:53.729421+00:00",
+    "updatedAt": "2025-11-24T22:52:08.102565+00:00"
+  },
+  {
+    "id": "2902a31f-0674-4349-9c4c-10bd56fe9954",
+    "title": "What are the limitations of React?",
+    "content": "What are the limitations of React?",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "Apart from the advantages, there are few limitations of React too,\n\n    1. React is just a view library, not a full framework.\n    2. There is a learning curve for beginners who are new to web development.\n    3. Integrating React into a traditional MVC framework requires some additional configuration.\n    4. The code complexity increases with inline templating and JSX.\n    5. Too many smaller components leading to over engineering or boilerplate.",
+    "options": null,
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=SqcY0GlETPk",
+        "type": "video",
+        "title": "React Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "8:25:00",
+        "description": "Complete React tutorial from scratch"
+      },
+      {
+        "url": "https://react.dev/learn",
+        "type": "article",
+        "title": "React Documentation",
+        "author": "React Team",
+        "description": "Official React documentation and tutorials"
+      },
+      {
+        "url": "https://www.udemy.com/course/react-the-complete-guide-incl-redux/",
+        "type": "course",
+        "title": "React - The Complete Guide",
+        "author": "Maximilian Schwarzmüller",
+        "duration": "48 hours",
+        "description": "Master React and Redux with hands-on projects"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-18T22:51:49.969625+00:00",
+    "updatedAt": "2025-11-24T22:52:08.102565+00:00"
+  },
+  {
+    "id": "1b905905-caac-4d62-a909-1d3941f6c677",
+    "title": "What are the recommended ways for static type checking?",
+    "content": "What are the recommended ways for static type checking?",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "Normally we use _PropTypes library_ (`React.PropTypes` moved to a `prop-types` package since React v15.5) for _type checking_ in the React applications. For large code bases, it is recommended to use _static type checkers_ such as Flow or TypeScript, that perform type checking at compile time and provide auto-completion features.",
+    "options": null,
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=SqcY0GlETPk",
+        "type": "video",
+        "title": "React Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "8:25:00",
+        "description": "Complete React tutorial from scratch"
+      },
+      {
+        "url": "https://react.dev/learn",
+        "type": "article",
+        "title": "React Documentation",
+        "author": "React Team",
+        "description": "Official React documentation and tutorials"
+      },
+      {
+        "url": "https://www.udemy.com/course/react-the-complete-guide-incl-redux/",
+        "type": "course",
+        "title": "React - The Complete Guide",
+        "author": "Maximilian Schwarzmüller",
+        "duration": "48 hours",
+        "description": "Master React and Redux with hands-on projects"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-18T22:51:49.969625+00:00",
+    "updatedAt": "2025-11-24T22:52:08.102565+00:00"
+  }
+]

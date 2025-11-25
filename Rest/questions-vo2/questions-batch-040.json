@@ -1,0 +1,2918 @@
+[
+  {
+    "id": "7f13f3eb-98ed-4442-afdb-f9f02290bd4b",
+    "title": "A vending machine dispensing products",
+    "content": "Which analogy best describes the Mediator Pattern?",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "The correct answer is: An air traffic controller guiding planes so they don't talk to each other directly",
+    "options": [
+      {
+        "id": "a",
+        "text": "A librarian managing which books readers can borrow",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "b",
+        "text": "An air traffic controller guiding planes so they don't talk to each other directly",
+        "isCorrect": true,
+        "explanation": null
+      },
+      {
+        "id": "c",
+        "text": "A teacher grading exams",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "d",
+        "text": "A vending machine dispensing products",
+        "isCorrect": false,
+        "explanation": null
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.patterns.dev/",
+        "type": "article",
+        "title": "JavaScript Design Patterns",
+        "author": "Patterns.dev",
+        "description": "Modern JavaScript design patterns"
+      },
+      {
+        "url": "https://www.udemy.com/course/javascript-design-patterns/",
+        "type": "course",
+        "title": "JavaScript Design Patterns",
+        "author": "Pluralsight",
+        "duration": "10 hours",
+        "description": "Master design patterns in JavaScript"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-19T18:24:35.44804+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "e1c3e103-ac7c-465c-9efb-194cb3e8da1d",
+    "title": "Provides a single point of communication",
+    "content": "Which of the following are advantages of using the Mediator Pattern?",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "The correct answer is: Reduces coupling between components",
+    "options": [
+      {
+        "id": "a",
+        "text": "Reduces coupling between components",
+        "isCorrect": true,
+        "explanation": null
+      },
+      {
+        "id": "b",
+        "text": "Simplifies many-to-many relationships",
+        "isCorrect": true,
+        "explanation": null
+      },
+      {
+        "id": "c",
+        "text": "Always improves performance",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "d",
+        "text": "Provides a single point of communication",
+        "isCorrect": true,
+        "explanation": null
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.patterns.dev/",
+        "type": "article",
+        "title": "JavaScript Design Patterns",
+        "author": "Patterns.dev",
+        "description": "Modern JavaScript design patterns"
+      },
+      {
+        "url": "https://www.udemy.com/course/javascript-design-patterns/",
+        "type": "course",
+        "title": "JavaScript Design Patterns",
+        "author": "Pluralsight",
+        "duration": "10 hours",
+        "description": "Master design patterns in JavaScript"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-19T18:24:35.44804+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "3070e60d-6d53-46aa-bc66-6e2c1c74e58c",
+    "title": "Request has test header: undefined",
+    "content": "Given this Express code:\n\n<pre><code>app.use(\n  \"/\",\n  (req, res, next) => {\n    req.headers[\"test-header\"] = 1234;\n    next();\n  },\n  (req, res, next) => {\n    console.log(eRequest has test header: $${!!req.headers[\"test-header\"]});\n    next();\n  }\n);</code></pre>\nWhat will the second middleware log?",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "The correct answer is: Request has test header: true",
+    "options": [
+      {
+        "id": "a",
+        "text": "Request has test header: false",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "b",
+        "text": "Request has test header: true",
+        "isCorrect": true,
+        "explanation": null
+      },
+      {
+        "id": "c",
+        "text": "Request has test header: undefined",
+        "isCorrect": false,
+        "explanation": null
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.patterns.dev/",
+        "type": "article",
+        "title": "JavaScript Design Patterns",
+        "author": "Patterns.dev",
+        "description": "Modern JavaScript design patterns"
+      },
+      {
+        "url": "https://www.udemy.com/course/javascript-design-patterns/",
+        "type": "course",
+        "title": "JavaScript Design Patterns",
+        "author": "Pluralsight",
+        "duration": "10 hours",
+        "description": "Master design patterns in JavaScript"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-19T18:24:35.44804+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "1a82d407-b8e8-4824-ada8-5975af987dd1",
+    "title": "This is a common misconception. The correct answer is different.",
+    "content": "How does the Mediator Pattern differ from the Observer Pattern?",
+    "type": "multiple-choice",
+    "difficulty": "advanced",
+    "explanation": "Observer Pattern is event-driven, where subscribers listen to changes. Mediator centralizes interactions by routing communication between participants. Mediator reduces direct object references, Observer reduces direct polling.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Observer Pattern is event-driven, where subscribers listen to changes. Mediator centralizes interactions by routing communication between participants.",
+        "isCorrect": true,
+        "explanation": "Observer Pattern is event-driven, where subscribers listen to changes. Mediator centralizes interactions by routing communication between participants. Mediator reduces direct object references, Observer reduces direct polling."
+      },
+      {
+        "id": "o2",
+        "text": "This is not correct. Please refer to the explanation.",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o3",
+        "text": "Incorrect. Review the design pattern concepts.",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o4",
+        "text": "This is a common misconception. The correct answer is different.",
+        "isCorrect": false,
+        "explanation": null
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.patterns.dev/",
+        "type": "article",
+        "title": "JavaScript Design Patterns",
+        "author": "Patterns.dev",
+        "description": "Modern JavaScript design patterns"
+      },
+      {
+        "url": "https://www.udemy.com/course/javascript-design-patterns/",
+        "type": "course",
+        "title": "JavaScript Design Patterns",
+        "author": "Pluralsight",
+        "duration": "10 hours",
+        "description": "Master design patterns in JavaScript"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-19T18:24:35.44804+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "6bccde1e-cf37-401e-b3eb-80403044a7b7",
+    "title": "backwards only works with JavaScript",
+    "content": "Animation fill modes control element state before/after animation. Explain the different fill modes.",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "none: no styles before/after. forwards: keeps final keyframe styles after animation. backwards: applies first keyframe styles before delay. both: forwards + backwards. Useful for maintaining animation end state or starting state during delay.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "forwards: keep final styles; backwards: apply first styles during delay; both: combine both",
+        "isCorrect": true,
+        "explanation": "Correct. fill-mode controls pre/post animation styles."
+      },
+      {
+        "id": "o2",
+        "text": "They are identical",
+        "isCorrect": false,
+        "explanation": "Incorrect. They control different aspects."
+      },
+      {
+        "id": "o3",
+        "text": "forwards prevents animation",
+        "isCorrect": false,
+        "explanation": "Incorrect. forwards maintains end state."
+      },
+      {
+        "id": "o4",
+        "text": "backwards only works with JavaScript",
+        "isCorrect": false,
+        "explanation": "Incorrect. fill-mode is pure CSS."
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=1Rs2ND1ryYc",
+        "type": "video",
+        "title": "CSS Tutorial for Beginners",
+        "author": "freeCodeCamp.org",
+        "duration": "6:18:00",
+        "description": "Learn CSS from scratch"
+      },
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/CSS",
+        "type": "article",
+        "title": "CSS: Cascading Style Sheets - MDN",
+        "author": "Mozilla Developer Network",
+        "description": "Complete CSS reference and guide"
+      },
+      {
+        "url": "https://css-tricks.com/",
+        "type": "article",
+        "title": "CSS-Tricks",
+        "author": "CSS-Tricks",
+        "description": "Tips, tricks, and techniques for CSS"
+      }
+    ],
+    "points": 15,
+    "isActive": true,
+    "createdAt": "2025-11-19T18:13:28.356774+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "9cdc6d69-c3dd-484b-8b8a-77e5ccbf50eb",
+    "title": "All properties have equal performance",
+    "content": "Animation performance matters for smooth UX. Identify properties that impact animation performance.",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "Properties: transform and opacity are GPU-accelerated (best). width, height, margin, padding trigger layout (slow). background-color triggers paint (medium). Use transform/opacity when possible. Avoid animating layout-triggering properties.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "transform (GPU-accelerated, best performance)",
+        "isCorrect": true,
+        "explanation": "Correct. transform is highly performant."
+      },
+      {
+        "id": "o2",
+        "text": "opacity (GPU-accelerated, best performance)",
+        "isCorrect": true,
+        "explanation": "Correct. opacity is highly performant."
+      },
+      {
+        "id": "o3",
+        "text": "width/height (triggers layout, slower)",
+        "isCorrect": true,
+        "explanation": "Correct. Layout-triggering properties are slower."
+      },
+      {
+        "id": "o4",
+        "text": "All properties have equal performance",
+        "isCorrect": false,
+        "explanation": "Incorrect. Performance varies significantly."
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=1Rs2ND1ryYc",
+        "type": "video",
+        "title": "CSS Tutorial for Beginners",
+        "author": "freeCodeCamp.org",
+        "duration": "6:18:00",
+        "description": "Learn CSS from scratch"
+      },
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/CSS",
+        "type": "article",
+        "title": "CSS: Cascading Style Sheets - MDN",
+        "author": "Mozilla Developer Network",
+        "description": "Complete CSS reference and guide"
+      },
+      {
+        "url": "https://css-tricks.com/",
+        "type": "article",
+        "title": "CSS-Tricks",
+        "author": "CSS-Tricks",
+        "description": "Tips, tricks, and techniques for CSS"
+      }
+    ],
+    "points": 15,
+    "isActive": true,
+    "createdAt": "2025-11-19T18:13:28.356774+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "fa99a516-df23-4b4c-81fc-64cc7c1d4a12",
+    "title": "Only works with JavaScript",
+    "content": "Transform origin controls the point around which transformations occur. Explain its purpose and usage.",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "transform-origin sets the point for transform operations (rotate, scale, skew). Default: center (50% 50%). Can be keywords (top, left, center) or coordinates. Affects where element rotates/scales from. Essential for natural-looking animations.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Sets the point for transform operations (rotate/scale); default is center",
+        "isCorrect": true,
+        "explanation": "Correct. transform-origin controls transformation point."
+      },
+      {
+        "id": "o2",
+        "text": "Controls animation speed",
+        "isCorrect": false,
+        "explanation": "Incorrect. It controls transformation point, not speed."
+      },
+      {
+        "id": "o3",
+        "text": "Is deprecated",
+        "isCorrect": false,
+        "explanation": "Incorrect. transform-origin is a standard property."
+      },
+      {
+        "id": "o4",
+        "text": "Only works with JavaScript",
+        "isCorrect": false,
+        "explanation": "Incorrect. transform-origin is pure CSS."
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=1Rs2ND1ryYc",
+        "type": "video",
+        "title": "CSS Tutorial for Beginners",
+        "author": "freeCodeCamp.org",
+        "duration": "6:18:00",
+        "description": "Learn CSS from scratch"
+      },
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/CSS",
+        "type": "article",
+        "title": "CSS: Cascading Style Sheets - MDN",
+        "author": "Mozilla Developer Network",
+        "description": "Complete CSS reference and guide"
+      },
+      {
+        "url": "https://css-tricks.com/",
+        "type": "article",
+        "title": "CSS-Tricks",
+        "author": "CSS-Tricks",
+        "description": "Tips, tricks, and techniques for CSS"
+      }
+    ],
+    "points": 15,
+    "isActive": true,
+    "createdAt": "2025-11-19T18:13:28.356774+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "cee00004-0c6e-45ef-843b-aaa3d6db907a",
+    "title": "All properties should always be animated separately",
+    "content": "Grouping animated properties affects performance. Identify best practices for property grouping.",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "Group GPU-accelerated properties (transform, opacity) together. Avoid mixing layout properties (width, margin) with transform. Animate transform properties together (translate, rotate, scale). Keep animations on same composite layer.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "transform properties together (translate, rotate, scale)",
+        "isCorrect": true,
+        "explanation": "Correct. Transform properties work well together."
+      },
+      {
+        "id": "o2",
+        "text": "opacity with transform (both GPU-accelerated)",
+        "isCorrect": true,
+        "explanation": "Correct. Both are performant together."
+      },
+      {
+        "id": "o3",
+        "text": "width with transform (mixing layout and composite)",
+        "isCorrect": false,
+        "explanation": "Incorrect. Mixing layout and composite hurts performance."
+      },
+      {
+        "id": "o4",
+        "text": "All properties should always be animated separately",
+        "isCorrect": false,
+        "explanation": "Incorrect. Grouping compatible properties is better."
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=1Rs2ND1ryYc",
+        "type": "video",
+        "title": "CSS Tutorial for Beginners",
+        "author": "freeCodeCamp.org",
+        "duration": "6:18:00",
+        "description": "Learn CSS from scratch"
+      },
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/CSS",
+        "type": "article",
+        "title": "CSS: Cascading Style Sheets - MDN",
+        "author": "Mozilla Developer Network",
+        "description": "Complete CSS reference and guide"
+      },
+      {
+        "url": "https://css-tricks.com/",
+        "type": "article",
+        "title": "CSS-Tricks",
+        "author": "CSS-Tricks",
+        "description": "Tips, tricks, and techniques for CSS"
+      }
+    ],
+    "points": 15,
+    "isActive": true,
+    "createdAt": "2025-11-19T18:13:28.356774+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "e5b3b166-57c4-4130-9f99-8337c4266fb2",
+    "title": "animation only works with JavaScript",
+    "content": "CSS provides two animation mechanisms. Explain transitions vs animations and their use cases.",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "transition: simple state changes (hover, focus), single property changes, triggered by state. animation: complex multi-step animations, keyframe-based, can loop/reverse, more control. Use transition for simple changes, animation for complex sequences.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "transition: simple state changes; animation: complex keyframe sequences",
+        "isCorrect": true,
+        "explanation": "Correct. Transitions are simpler, animations more powerful."
+      },
+      {
+        "id": "o2",
+        "text": "They are identical",
+        "isCorrect": false,
+        "explanation": "Incorrect. They serve different purposes."
+      },
+      {
+        "id": "o3",
+        "text": "transition is deprecated",
+        "isCorrect": false,
+        "explanation": "Incorrect. Both are valid and useful."
+      },
+      {
+        "id": "o4",
+        "text": "animation only works with JavaScript",
+        "isCorrect": false,
+        "explanation": "Incorrect. CSS animations are pure CSS."
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=1Rs2ND1ryYc",
+        "type": "video",
+        "title": "CSS Tutorial for Beginners",
+        "author": "freeCodeCamp.org",
+        "duration": "6:18:00",
+        "description": "Learn CSS from scratch"
+      },
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/CSS",
+        "type": "article",
+        "title": "CSS: Cascading Style Sheets - MDN",
+        "author": "Mozilla Developer Network",
+        "description": "Complete CSS reference and guide"
+      },
+      {
+        "url": "https://css-tricks.com/",
+        "type": "article",
+        "title": "CSS-Tricks",
+        "author": "CSS-Tricks",
+        "description": "Tips, tricks, and techniques for CSS"
+      }
+    ],
+    "points": 15,
+    "isActive": true,
+    "createdAt": "2025-11-19T18:13:28.356774+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "70148ba4-045b-4695-ad2b-d663dd2552e5",
+    "title": "Only works on mobile devices",
+    "content": "Accessibility requires respecting user motion preferences. Explain prefers-reduced-motion and implementation.",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "prefers-reduced-motion: user prefers less animation (accessibility setting). Should disable or reduce animations. Use <cod@media (prefers-reduced-motion: reduce) to disable animations. Essential for accessibility, prevents motion sickness, respects user choice.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Detects user preference for reduced motion; should disable/reduce animations for accessibility",
+        "isCorrect": true,
+        "explanation": "Correct. Essential for accessibility."
+      },
+      {
+        "id": "o2",
+        "text": "Increases animation speed",
+        "isCorrect": false,
+        "explanation": "Incorrect. It detects preference to reduce motion."
+      },
+      {
+        "id": "o3",
+        "text": "Is optional and not important",
+        "isCorrect": false,
+        "explanation": "Incorrect. It's important for accessibility."
+      },
+      {
+        "id": "o4",
+        "text": "Only works on mobile devices",
+        "isCorrect": false,
+        "explanation": "Incorrect. Works on all devices with the setting."
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=1Rs2ND1ryYc",
+        "type": "video",
+        "title": "CSS Tutorial for Beginners",
+        "author": "freeCodeCamp.org",
+        "duration": "6:18:00",
+        "description": "Learn CSS from scratch"
+      },
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/CSS",
+        "type": "article",
+        "title": "CSS: Cascading Style Sheets - MDN",
+        "author": "Mozilla Developer Network",
+        "description": "Complete CSS reference and guide"
+      },
+      {
+        "url": "https://css-tricks.com/",
+        "type": "article",
+        "title": "CSS-Tricks",
+        "author": "CSS-Tricks",
+        "description": "Tips, tricks, and techniques for CSS"
+      }
+    ],
+    "points": 15,
+    "isActive": true,
+    "createdAt": "2025-11-19T18:13:28.356774+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "ec2db6c2-fdd1-4388-a7db-d9163e30850a",
+    "title": "color (animatable)",
+    "content": "Not all CSS properties are animatable. Identify which properties can be animated smoothly.",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "Animatable: transform, opacity, color, background-color, width, height, margin, padding, border-radius, etc. Non-animatable: display, position (static/relative/absolute), font-family, z-index (discrete). Transform and opacity are most performant (GPU-accelerated).",
+    "options": [
+      {
+        "id": "o1",
+        "text": "transform (GPU-accelerated, performant)",
+        "isCorrect": true,
+        "explanation": "Correct. transform is highly performant."
+      },
+      {
+        "id": "o2",
+        "text": "opacity (GPU-accelerated, performant)",
+        "isCorrect": true,
+        "explanation": "Correct. opacity is highly performant."
+      },
+      {
+        "id": "o3",
+        "text": "display (not animatable)",
+        "isCorrect": false,
+        "explanation": "Incorrect. display cannot be animated."
+      },
+      {
+        "id": "o4",
+        "text": "color (animatable)",
+        "isCorrect": true,
+        "explanation": "Correct. color can be animated."
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=1Rs2ND1ryYc",
+        "type": "video",
+        "title": "CSS Tutorial for Beginners",
+        "author": "freeCodeCamp.org",
+        "duration": "6:18:00",
+        "description": "Learn CSS from scratch"
+      },
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/CSS",
+        "type": "article",
+        "title": "CSS: Cascading Style Sheets - MDN",
+        "author": "Mozilla Developer Network",
+        "description": "Complete CSS reference and guide"
+      },
+      {
+        "url": "https://css-tricks.com/",
+        "type": "article",
+        "title": "CSS-Tricks",
+        "author": "CSS-Tricks",
+        "description": "Tips, tricks, and techniques for CSS"
+      }
+    ],
+    "points": 15,
+    "isActive": true,
+    "createdAt": "2025-11-19T18:13:28.356774+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "e16892a6-e9bc-41ca-a976-20862d8cadd3",
+    "title": "Only works with JavaScript",
+    "content": "Timing functions control animation speed curves. Explain different timing functions and their effects.",
+    "type": "code",
+    "difficulty": "intermediate",
+    "explanation": "Timing function controls speed curve: ease (slow-fast-slow, default), linear (constant speed), ease-in (slow start), ease-out (slow end), ease-in-out (slow both ends), cubic-bezier() (custom curve). Creates natural-feeling motion.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Controls animation speed curve; ease: slow-fast-slow; linear: constant; cubic-bezier: custom",
+        "isCorrect": true,
+        "explanation": "Correct. Timing functions create motion curves."
+      },
+      {
+        "id": "o2",
+        "text": "They are identical",
+        "isCorrect": false,
+        "explanation": "Incorrect. They create different motion feels."
+      },
+      {
+        "id": "o3",
+        "text": "Controls animation duration",
+        "isCorrect": false,
+        "explanation": "Incorrect. animation-duration controls duration."
+      },
+      {
+        "id": "o4",
+        "text": "Only works with JavaScript",
+        "isCorrect": false,
+        "explanation": "Incorrect. Timing functions are pure CSS."
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=1Rs2ND1ryYc",
+        "type": "video",
+        "title": "CSS Tutorial for Beginners",
+        "author": "freeCodeCamp.org",
+        "duration": "6:18:00",
+        "description": "Learn CSS from scratch"
+      },
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/CSS",
+        "type": "article",
+        "title": "CSS: Cascading Style Sheets - MDN",
+        "author": "Mozilla Developer Network",
+        "description": "Complete CSS reference and guide"
+      },
+      {
+        "url": "https://css-tricks.com/",
+        "type": "article",
+        "title": "CSS-Tricks",
+        "author": "CSS-Tricks",
+        "description": "Tips, tricks, and techniques for CSS"
+      }
+    ],
+    "points": 15,
+    "isActive": true,
+    "createdAt": "2025-11-19T18:13:28.356774+00:00",
+    "updatedAt": "2025-11-24T23:33:46.870735+00:00"
+  },
+  {
+    "id": "74dc42e9-7053-470a-9960-409bad27e28c",
+    "title": "transform only works with JavaScript",
+    "content": "Positioning animations can be done multiple ways. Explain why transform is preferred over position properties.",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "transform: translate() uses GPU, doesn't trigger layout, smoother. left/top: triggers layout recalculation, repaint, slower. Transform is composited on GPU layer. Position properties cause reflow. Always prefer transform for animations.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "transform: GPU-accelerated, no layout; left/top: triggers layout, slower",
+        "isCorrect": true,
+        "explanation": "Correct. transform is much more performant."
+      },
+      {
+        "id": "o2",
+        "text": "They are identical in performance",
+        "isCorrect": false,
+        "explanation": "Incorrect. transform is significantly faster."
+      },
+      {
+        "id": "o3",
+        "text": "left/top is always better",
+        "isCorrect": false,
+        "explanation": "Incorrect. transform is preferred for animations."
+      },
+      {
+        "id": "o4",
+        "text": "transform only works with JavaScript",
+        "isCorrect": false,
+        "explanation": "Incorrect. CSS transform is pure CSS."
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=1Rs2ND1ryYc",
+        "type": "video",
+        "title": "CSS Tutorial for Beginners",
+        "author": "freeCodeCamp.org",
+        "duration": "6:18:00",
+        "description": "Learn CSS from scratch"
+      },
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/CSS",
+        "type": "article",
+        "title": "CSS: Cascading Style Sheets - MDN",
+        "author": "Mozilla Developer Network",
+        "description": "Complete CSS reference and guide"
+      },
+      {
+        "url": "https://css-tricks.com/",
+        "type": "article",
+        "title": "CSS-Tricks",
+        "author": "CSS-Tricks",
+        "description": "Tips, tricks, and techniques for CSS"
+      }
+    ],
+    "points": 15,
+    "isActive": true,
+    "createdAt": "2025-11-19T18:13:28.356774+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "27a02ab3-1d0c-4fdf-b764-4e9b274af037",
+    "title": "Prevents animations from running",
+    "content": "Performance optimization for animations. Explain will-change and best practices for usage.",
+    "type": "multiple-choice",
+    "difficulty": "advanced",
+    "explanation": "will-change hints browser about upcoming changes, enables optimization (GPU layer promotion). Use sparingly: only when animation is about to start, remove after. Overuse causes memory issues. Better to use only when needed, not preemptively.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Hints browser about upcoming changes for optimization; use sparingly, remove after animation",
+        "isCorrect": true,
+        "explanation": "Correct. will-change should be used carefully."
+      },
+      {
+        "id": "o2",
+        "text": "Should be applied to all animated elements",
+        "isCorrect": false,
+        "explanation": "Incorrect. Overuse causes performance issues."
+      },
+      {
+        "id": "o3",
+        "text": "Is required for all animations",
+        "isCorrect": false,
+        "explanation": "Incorrect. Most animations work fine without it."
+      },
+      {
+        "id": "o4",
+        "text": "Prevents animations from running",
+        "isCorrect": false,
+        "explanation": "Incorrect. will-change optimizes animations."
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=1Rs2ND1ryYc",
+        "type": "video",
+        "title": "CSS Tutorial for Beginners",
+        "author": "freeCodeCamp.org",
+        "duration": "6:18:00",
+        "description": "Learn CSS from scratch"
+      },
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/CSS",
+        "type": "article",
+        "title": "CSS: Cascading Style Sheets - MDN",
+        "author": "Mozilla Developer Network",
+        "description": "Complete CSS reference and guide"
+      },
+      {
+        "url": "https://css-tricks.com/",
+        "type": "article",
+        "title": "CSS-Tricks",
+        "author": "CSS-Tricks",
+        "description": "Tips, tricks, and techniques for CSS"
+      }
+    ],
+    "points": 20,
+    "isActive": true,
+    "createdAt": "2025-11-19T18:13:28.356774+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "9d31e2a9-cff2-4674-bfd2-560deff36dfa",
+    "title": "Is deprecated",
+    "content": "Utility-first CSS uses utility classes. Explain the approach, benefits, and when to use it.",
+    "type": "multiple-choice",
+    "difficulty": "advanced",
+    "explanation": "Utility-first: small utility classes (e<cod.g., <cod.text-center, <cod.p-4). Advantages: rapid development, consistent design, small bundle (with purging). Trade-offs: HTML verbosity, learning curve, less semantic.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Small utility classes; rapid development; consistent design; trade-off: HTML verbosity",
+        "isCorrect": true,
+        "explanation": "Correct. Utility-first has trade-offs."
+      },
+      {
+        "id": "o2",
+        "text": "Always better than component CSS",
+        "isCorrect": false,
+        "explanation": "Incorrect. Depends on use case."
+      },
+      {
+        "id": "o3",
+        "text": "Only works with Tailwind",
+        "isCorrect": false,
+        "explanation": "Incorrect. Concept applies to any utility framework."
+      },
+      {
+        "id": "o4",
+        "text": "Is deprecated",
+        "isCorrect": false,
+        "explanation": "Incorrect. Utility-first is popular."
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=1Rs2ND1ryYc",
+        "type": "video",
+        "title": "CSS Tutorial for Beginners",
+        "author": "freeCodeCamp.org",
+        "duration": "6:18:00",
+        "description": "Learn CSS from scratch"
+      },
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/CSS",
+        "type": "article",
+        "title": "CSS: Cascading Style Sheets - MDN",
+        "author": "Mozilla Developer Network",
+        "description": "Complete CSS reference and guide"
+      },
+      {
+        "url": "https://css-tricks.com/",
+        "type": "article",
+        "title": "CSS-Tricks",
+        "author": "CSS-Tricks",
+        "description": "Tips, tricks, and techniques for CSS"
+      }
+    ],
+    "points": 20,
+    "isActive": true,
+    "createdAt": "2025-11-19T18:08:20.172501+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "822d7046-d77c-4471-b293-91501817d098",
+    "title": "Is deprecated",
+    "content": "Critical CSS is above-the-fold CSS. Explain critical CSS extraction and its impact on FCP.",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "Critical CSS: styles needed for above-the-fold content. Inline in <head, load rest asynchronously. Improves FCP by reducing render-blocking CSS. Extract with tools, inline manually, or use loadCSS.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Above-the-fold CSS; inline in <head; improves FCP by reducing render-blocking",
+        "isCorrect": true,
+        "explanation": "Correct. Critical CSS improves initial render."
+      },
+      {
+        "id": "o2",
+        "text": "All CSS is critical",
+        "isCorrect": false,
+        "explanation": "Incorrect. Only above-fold is critical."
+      },
+      {
+        "id": "o3",
+        "text": "Slows down rendering",
+        "isCorrect": false,
+        "explanation": "Incorrect. It speeds up initial render."
+      },
+      {
+        "id": "o4",
+        "text": "Is deprecated",
+        "isCorrect": false,
+        "explanation": "Incorrect. Critical CSS is best practice."
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=1Rs2ND1ryYc",
+        "type": "video",
+        "title": "CSS Tutorial for Beginners",
+        "author": "freeCodeCamp.org",
+        "duration": "6:18:00",
+        "description": "Learn CSS from scratch"
+      },
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/CSS",
+        "type": "article",
+        "title": "CSS: Cascading Style Sheets - MDN",
+        "author": "Mozilla Developer Network",
+        "description": "Complete CSS reference and guide"
+      },
+      {
+        "url": "https://css-tricks.com/",
+        "type": "article",
+        "title": "CSS-Tricks",
+        "author": "CSS-Tricks",
+        "description": "Tips, tricks, and techniques for CSS"
+      }
+    ],
+    "points": 15,
+    "isActive": true,
+    "createdAt": "2025-11-19T18:08:20.172501+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "ec5e8e4a-d0c8-47c7-ab3a-88452b08767e",
+    "title": "Is deprecated",
+    "content": "Font display controls font loading behavior. Explain font-display values and their impact on performance.",
+    "type": "multiple-choice",
+    "difficulty": "advanced",
+    "explanation": "font-display: auto (browser default), block (<cod3s block, infinite swap), swap (immediate swap), fallback (<cod100ms block, <cod3s swap), optional (<cod100ms block, no swap). Controls FOIT/FOUT, affects CLS.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Controls font loading: block/swap/fallback/optional; affects FOIT/FOUT and CLS",
+        "isCorrect": true,
+        "explanation": "Correct. font-display controls loading behavior."
+      },
+      {
+        "id": "o2",
+        "text": "Only affects visual appearance",
+        "isCorrect": false,
+        "explanation": "Incorrect. It affects performance metrics."
+      },
+      {
+        "id": "o3",
+        "text": "Slows down rendering",
+        "isCorrect": false,
+        "explanation": "Incorrect. Proper use improves performance."
+      },
+      {
+        "id": "o4",
+        "text": "Is deprecated",
+        "isCorrect": false,
+        "explanation": "Incorrect. font-display is essential for performance."
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=1Rs2ND1ryYc",
+        "type": "video",
+        "title": "CSS Tutorial for Beginners",
+        "author": "freeCodeCamp.org",
+        "duration": "6:18:00",
+        "description": "Learn CSS from scratch"
+      },
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/CSS",
+        "type": "article",
+        "title": "CSS: Cascading Style Sheets - MDN",
+        "author": "Mozilla Developer Network",
+        "description": "Complete CSS reference and guide"
+      },
+      {
+        "url": "https://css-tricks.com/",
+        "type": "article",
+        "title": "CSS-Tricks",
+        "author": "CSS-Tricks",
+        "description": "Tips, tricks, and techniques for CSS"
+      }
+    ],
+    "points": 20,
+    "isActive": true,
+    "createdAt": "2025-11-19T18:08:20.172501+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "579085dd-09ae-437d-ba56-52387813b91c",
+    "title": "Is deprecated",
+    "content": "BEM is a CSS naming methodology. Explain Block__Element<cod--Modifier structure and its benefits.",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "BEM: Block (component), Element (part of block), Modifier (variant). Syntax: <cod.block__element--modifier. Benefits: prevents conflicts, clear structure, no nesting needed, self-documenting.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Block__Element<cod--Modifier; prevents conflicts; clear structure; self-documenting",
+        "isCorrect": true,
+        "explanation": "Correct. BEM provides clear naming."
+      },
+      {
+        "id": "o2",
+        "text": "Only uses classes",
+        "isCorrect": false,
+        "explanation": "Incorrect. BEM can use any selector."
+      },
+      {
+        "id": "o3",
+        "text": "Requires deep nesting",
+        "isCorrect": false,
+        "explanation": "Incorrect. BEM avoids deep nesting."
+      },
+      {
+        "id": "o4",
+        "text": "Is deprecated",
+        "isCorrect": false,
+        "explanation": "Incorrect. BEM is widely used."
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=1Rs2ND1ryYc",
+        "type": "video",
+        "title": "CSS Tutorial for Beginners",
+        "author": "freeCodeCamp.org",
+        "duration": "6:18:00",
+        "description": "Learn CSS from scratch"
+      },
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/CSS",
+        "type": "article",
+        "title": "CSS: Cascading Style Sheets - MDN",
+        "author": "Mozilla Developer Network",
+        "description": "Complete CSS reference and guide"
+      },
+      {
+        "url": "https://css-tricks.com/",
+        "type": "article",
+        "title": "CSS-Tricks",
+        "author": "CSS-Tricks",
+        "description": "Tips, tricks, and techniques for CSS"
+      }
+    ],
+    "points": 15,
+    "isActive": true,
+    "createdAt": "2025-11-19T18:08:20.172501+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "e52e6fa2-a6ff-4273-98cf-e3e043a3a0c3",
+    "title": "Which PostCSS features enable modern CSS syntax in older browsers? (Select all that apply)",
+    "content": "PostCSS can transform modern CSS. Identify features that enable modern syntax support.",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "postcss-preset-env: enables modern CSS (custom properties, nesting, etc.). autoprefixer: adds vendor prefixes. cssnano: minifies. These enable modern syntax with fallbacks.",
+    "options": null,
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=1Rs2ND1ryYc",
+        "type": "video",
+        "title": "CSS Tutorial for Beginners",
+        "author": "freeCodeCamp.org",
+        "duration": "6:18:00",
+        "description": "Learn CSS from scratch"
+      },
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/CSS",
+        "type": "article",
+        "title": "CSS: Cascading Style Sheets - MDN",
+        "author": "Mozilla Developer Network",
+        "description": "Complete CSS reference and guide"
+      },
+      {
+        "url": "https://css-tricks.com/",
+        "type": "article",
+        "title": "CSS-Tricks",
+        "author": "CSS-Tricks",
+        "description": "Tips, tricks, and techniques for CSS"
+      }
+    ],
+    "points": 15,
+    "isActive": true,
+    "createdAt": "2025-11-19T18:08:20.172501+00:00",
+    "updatedAt": "2025-11-24T22:52:08.102565+00:00"
+  },
+  {
+    "id": "65d6473a-5aea-4f6e-bb50-57e6ec86cd94",
+    "title": "Which CSS loading strategies improve performance? (Select all that apply)",
+    "content": "CSS loading affects performance. Identify strategies that optimize CSS delivery.",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "Strategies: media attribute (load conditionally), preload (hint browser), async loading, critical CSS inline, split CSS files, remove unused CSS. All improve performance.",
+    "options": null,
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=1Rs2ND1ryYc",
+        "type": "video",
+        "title": "CSS Tutorial for Beginners",
+        "author": "freeCodeCamp.org",
+        "duration": "6:18:00",
+        "description": "Learn CSS from scratch"
+      },
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/CSS",
+        "type": "article",
+        "title": "CSS: Cascading Style Sheets - MDN",
+        "author": "Mozilla Developer Network",
+        "description": "Complete CSS reference and guide"
+      },
+      {
+        "url": "https://css-tricks.com/",
+        "type": "article",
+        "title": "CSS-Tricks",
+        "author": "CSS-Tricks",
+        "description": "Tips, tricks, and techniques for CSS"
+      }
+    ],
+    "points": 15,
+    "isActive": true,
+    "createdAt": "2025-11-19T18:08:20.172501+00:00",
+    "updatedAt": "2025-11-24T22:52:08.102565+00:00"
+  },
+  {
+    "id": "58a0198c-41d1-48a9-a012-e3dc44717245",
+    "title": "Is deprecated",
+    "content": "CSS Modules provide scoped CSS. Explain how CSS Modules work and solve global scope issues.",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "CSS Modules: locally scoped classes, generated unique class names, imported as objects. Solves global scope pollution, enables component-scoped styles. Works with build tools (Webpack, Vite).",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Locally scoped classes; unique names; imported as objects; solves global scope issues",
+        "isCorrect": true,
+        "explanation": "Correct. CSS Modules provide scoping."
+      },
+      {
+        "id": "o2",
+        "text": "Only works with React",
+        "isCorrect": false,
+        "explanation": "Incorrect. Works with any framework."
+      },
+      {
+        "id": "o3",
+        "text": "Requires global classes",
+        "isCorrect": false,
+        "explanation": "Incorrect. CSS Modules are scoped."
+      },
+      {
+        "id": "o4",
+        "text": "Is deprecated",
+        "isCorrect": false,
+        "explanation": "Incorrect. CSS Modules are widely used."
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=1Rs2ND1ryYc",
+        "type": "video",
+        "title": "CSS Tutorial for Beginners",
+        "author": "freeCodeCamp.org",
+        "duration": "6:18:00",
+        "description": "Learn CSS from scratch"
+      },
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/CSS",
+        "type": "article",
+        "title": "CSS: Cascading Style Sheets - MDN",
+        "author": "Mozilla Developer Network",
+        "description": "Complete CSS reference and guide"
+      },
+      {
+        "url": "https://css-tricks.com/",
+        "type": "article",
+        "title": "CSS-Tricks",
+        "author": "CSS-Tricks",
+        "description": "Tips, tricks, and techniques for CSS"
+      }
+    ],
+    "points": 15,
+    "isActive": true,
+    "createdAt": "2025-11-19T18:08:20.172501+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "4db02d32-ff9d-481d-b5b1-386a7cb7a210",
+    "title": "Is deprecated",
+    "content": "Content visibility enables lazy rendering. Explain content-visibility and its performance benefits for long pages.",
+    "type": "multiple-choice",
+    "difficulty": "advanced",
+    "explanation": "content-visibility: auto (skips rendering until needed), hidden (skips rendering), visible (normal). Enables virtual scrolling, improves initial render. Browser skips layout/paint for off-screen content. Use for long lists, feeds.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Skips rendering off-screen content; improves initial load; enables virtual scrolling",
+        "isCorrect": true,
+        "explanation": "Correct. content-visibility improves performance."
+      },
+      {
+        "id": "o2",
+        "text": "Only affects visual appearance",
+        "isCorrect": false,
+        "explanation": "Incorrect. It affects rendering performance."
+      },
+      {
+        "id": "o3",
+        "text": "Slows down rendering",
+        "isCorrect": false,
+        "explanation": "Incorrect. It improves performance."
+      },
+      {
+        "id": "o4",
+        "text": "Is deprecated",
+        "isCorrect": false,
+        "explanation": "Incorrect. content-visibility is a modern feature."
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=1Rs2ND1ryYc",
+        "type": "video",
+        "title": "CSS Tutorial for Beginners",
+        "author": "freeCodeCamp.org",
+        "duration": "6:18:00",
+        "description": "Learn CSS from scratch"
+      },
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/CSS",
+        "type": "article",
+        "title": "CSS: Cascading Style Sheets - MDN",
+        "author": "Mozilla Developer Network",
+        "description": "Complete CSS reference and guide"
+      },
+      {
+        "url": "https://css-tricks.com/",
+        "type": "article",
+        "title": "CSS-Tricks",
+        "author": "CSS-Tricks",
+        "description": "Tips, tricks, and techniques for CSS"
+      }
+    ],
+    "points": 20,
+    "isActive": true,
+    "createdAt": "2025-11-19T18:07:03.149822+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "a772d1ba-3f9a-43f3-9e22-7c08a9bf5e90",
+    "title": "Is deprecated",
+    "content": "JavaScript can control CSS animations. Explain how to synchronize and control animations programmatically.",
+    "type": "multiple-choice",
+    "difficulty": "advanced",
+    "explanation": "Use animation events: animationstart, animationend, animationiteration. Access via element<cod.ontransitionend or addEventListener. Can pause/resume with animation-play-state. Use requestAnimationFrame for synchronization.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Use animation events (animationstart/end/iteration); control with animation-play-state; sync with requestAnimationFrame",
+        "isCorrect": true,
+        "explanation": "Correct. Multiple APIs enable control."
+      },
+      {
+        "id": "o2",
+        "text": "Cannot be controlled",
+        "isCorrect": false,
+        "explanation": "Incorrect. JavaScript can control animations."
+      },
+      {
+        "id": "o3",
+        "text": "Only works with inline styles",
+        "isCorrect": false,
+        "explanation": "Incorrect. Works with CSS classes too."
+      },
+      {
+        "id": "o4",
+        "text": "Is deprecated",
+        "isCorrect": false,
+        "explanation": "Incorrect. Animation APIs are standard."
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=1Rs2ND1ryYc",
+        "type": "video",
+        "title": "CSS Tutorial for Beginners",
+        "author": "freeCodeCamp.org",
+        "duration": "6:18:00",
+        "description": "Learn CSS from scratch"
+      },
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/CSS",
+        "type": "article",
+        "title": "CSS: Cascading Style Sheets - MDN",
+        "author": "Mozilla Developer Network",
+        "description": "Complete CSS reference and guide"
+      },
+      {
+        "url": "https://css-tricks.com/",
+        "type": "article",
+        "title": "CSS-Tricks",
+        "author": "CSS-Tricks",
+        "description": "Tips, tricks, and techniques for CSS"
+      }
+    ],
+    "points": 20,
+    "isActive": true,
+    "createdAt": "2025-11-19T18:07:03.149822+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "72a7bee7-db1c-4baa-b559-d052b1a93f78",
+    "title": "Is deprecated",
+    "content": "Animation direction controls how keyframes are played. Explain direction values and their effects.",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "animation-direction: normal (forward), reverse (backward), alternate (forward then reverse), alternate-reverse (reverse then forward). Controls keyframe sequence playback direction.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "normal: forward; reverse: backward; alternate: forward/reverse; alternate-reverse: reverse/forward",
+        "isCorrect": true,
+        "explanation": "Correct. Each value controls playback direction."
+      },
+      {
+        "id": "o2",
+        "text": "They are identical",
+        "isCorrect": false,
+        "explanation": "Incorrect. They play differently."
+      },
+      {
+        "id": "o3",
+        "text": "Only 'normal' works",
+        "isCorrect": false,
+        "explanation": "Incorrect. All values are valid."
+      },
+      {
+        "id": "o4",
+        "text": "Is deprecated",
+        "isCorrect": false,
+        "explanation": "Incorrect. direction is standard."
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=1Rs2ND1ryYc",
+        "type": "video",
+        "title": "CSS Tutorial for Beginners",
+        "author": "freeCodeCamp.org",
+        "duration": "6:18:00",
+        "description": "Learn CSS from scratch"
+      },
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/CSS",
+        "type": "article",
+        "title": "CSS: Cascading Style Sheets - MDN",
+        "author": "Mozilla Developer Network",
+        "description": "Complete CSS reference and guide"
+      },
+      {
+        "url": "https://css-tricks.com/",
+        "type": "article",
+        "title": "CSS-Tricks",
+        "author": "CSS-Tricks",
+        "description": "Tips, tricks, and techniques for CSS"
+      }
+    ],
+    "points": 15,
+    "isActive": true,
+    "createdAt": "2025-11-19T18:07:03.149822+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "749b23e3-1fee-4fc4-beb8-88053e05930c",
+    "title": "Are deprecated",
+    "content": "Design tokens standardize design values. Explain CSS custom properties as design tokens and their benefits.",
+    "type": "multiple-choice",
+    "difficulty": "advanced",
+    "explanation": "Design tokens: standardized design values (colors, spacing, typography). CSS custom properties enable tokens. Benefits: single source of truth, easy theming, consistency, maintainability. Use for colors, spacing, typography scales.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Standardized design values; single source of truth; enables theming and consistency",
+        "isCorrect": true,
+        "explanation": "Correct. Design tokens improve maintainability."
+      },
+      {
+        "id": "o2",
+        "text": "Only for colors",
+        "isCorrect": false,
+        "explanation": "Incorrect. Tokens can be any design value."
+      },
+      {
+        "id": "o3",
+        "text": "Require JavaScript",
+        "isCorrect": false,
+        "explanation": "Incorrect. CSS custom properties work without JS."
+      },
+      {
+        "id": "o4",
+        "text": "Are deprecated",
+        "isCorrect": false,
+        "explanation": "Incorrect. Design tokens are modern best practice."
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=1Rs2ND1ryYc",
+        "type": "video",
+        "title": "CSS Tutorial for Beginners",
+        "author": "freeCodeCamp.org",
+        "duration": "6:18:00",
+        "description": "Learn CSS from scratch"
+      },
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/CSS",
+        "type": "article",
+        "title": "CSS: Cascading Style Sheets - MDN",
+        "author": "Mozilla Developer Network",
+        "description": "Complete CSS reference and guide"
+      },
+      {
+        "url": "https://css-tricks.com/",
+        "type": "article",
+        "title": "CSS-Tricks",
+        "author": "CSS-Tricks",
+        "description": "Tips, tricks, and techniques for CSS"
+      }
+    ],
+    "points": 20,
+    "isActive": true,
+    "createdAt": "2025-11-19T18:07:03.149822+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "30419e4c-fd10-441f-a86d-dc3012a1d419",
+    "title": "Is deprecated",
+    "content": "ITCSS is a CSS architecture methodology. Explain the inverted triangle structure and how it organizes CSS.",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "ITCSS layers (bottom to top): Settings (variables), Tools (mixins), Generic (resets), Elements (base styles), Objects (layout), Components (UI), Utilities (helpers). Organizes CSS by specificity and reach. Prevents specificity conflicts.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Layers: Settings → Tools → Generic → Elements → Objects → Components → Utilities; organizes by specificity",
+        "isCorrect": true,
+        "explanation": "Correct. ITCSS uses layered architecture."
+      },
+      {
+        "id": "o2",
+        "text": "Only one layer",
+        "isCorrect": false,
+        "explanation": "Incorrect. ITCSS has multiple layers."
+      },
+      {
+        "id": "o3",
+        "text": "Utilities come first",
+        "isCorrect": false,
+        "explanation": "Incorrect. Utilities are at the top."
+      },
+      {
+        "id": "o4",
+        "text": "Is deprecated",
+        "isCorrect": false,
+        "explanation": "Incorrect. ITCSS is still used."
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=1Rs2ND1ryYc",
+        "type": "video",
+        "title": "CSS Tutorial for Beginners",
+        "author": "freeCodeCamp.org",
+        "duration": "6:18:00",
+        "description": "Learn CSS from scratch"
+      },
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/CSS",
+        "type": "article",
+        "title": "CSS: Cascading Style Sheets - MDN",
+        "author": "Mozilla Developer Network",
+        "description": "Complete CSS reference and guide"
+      },
+      {
+        "url": "https://css-tricks.com/",
+        "type": "article",
+        "title": "CSS-Tricks",
+        "author": "CSS-Tricks",
+        "description": "Tips, tricks, and techniques for CSS"
+      }
+    ],
+    "points": 15,
+    "isActive": true,
+    "createdAt": "2025-11-19T18:07:03.149822+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "6c0e22dd-cacb-44bf-9bc3-79707098d904",
+    "title": "Both are deprecated",
+    "content": "SASS <cod@use is modern replacement for <cod@import. Explain differences and migration considerations.",
+    "type": "code",
+    "difficulty": "advanced",
+    "explanation": "<cod@use: modern module system, namespaced, loaded once. <cod@import: legacy, global scope, can cause duplicates. <cod@use prevents conflicts, better performance. Migrate from <cod@import to <cod@use for new code.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "<cod@use: modern, namespaced, loaded once; <cod@import: legacy, global, can duplicate; prefer @use",
+        "isCorrect": true,
+        "explanation": "Correct. <code>@use</code> is preferred."
+      },
+      {
+        "id": "o2",
+        "text": "They are identical",
+        "isCorrect": false,
+        "explanation": "Incorrect. <code>@use</code> is improved version."
+      },
+      {
+        "id": "o3",
+        "text": "<cod@import is always better",
+        "isCorrect": false,
+        "explanation": "Incorrect. <code>@use</code> is preferred."
+      },
+      {
+        "id": "o4",
+        "text": "Both are deprecated",
+        "isCorrect": false,
+        "explanation": "Incorrect. <code>@use</code> is modern standard."
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=1Rs2ND1ryYc",
+        "type": "video",
+        "title": "CSS Tutorial for Beginners",
+        "author": "freeCodeCamp.org",
+        "duration": "6:18:00",
+        "description": "Learn CSS from scratch"
+      },
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/CSS",
+        "type": "article",
+        "title": "CSS: Cascading Style Sheets - MDN",
+        "author": "Mozilla Developer Network",
+        "description": "Complete CSS reference and guide"
+      },
+      {
+        "url": "https://css-tricks.com/",
+        "type": "article",
+        "title": "CSS-Tricks",
+        "author": "CSS-Tricks",
+        "description": "Tips, tricks, and techniques for CSS"
+      }
+    ],
+    "points": 20,
+    "isActive": true,
+    "createdAt": "2025-11-19T18:07:03.149822+00:00",
+    "updatedAt": "2025-11-24T23:33:46.870735+00:00"
+  },
+  {
+    "id": "141b43b0-f2c8-43a9-b328-f3e2105b4b51",
+    "title": "Is deprecated",
+    "content": "Timing functions control animation speed curves. Explain timing functions and their visual effects.",
+    "type": "code",
+    "difficulty": "intermediate",
+    "explanation": "Timing functions: ease (default), linear (constant), ease-in (slow start), ease-out (slow end), ease-in-out (slow start/end), cubic-bezier (custom curve), steps (discrete steps). Controls acceleration/deceleration.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Controls speed curve: ease, linear, ease-in, ease-out, ease-in-out, cubic-bezier, steps",
+        "isCorrect": true,
+        "explanation": "Correct. Timing functions control animation curve."
+      },
+      {
+        "id": "o2",
+        "text": "Only 'ease' exists",
+        "isCorrect": false,
+        "explanation": "Incorrect. Multiple functions available."
+      },
+      {
+        "id": "o3",
+        "text": "Controls animation duration",
+        "isCorrect": false,
+        "explanation": "Incorrect. Duration is separate property."
+      },
+      {
+        "id": "o4",
+        "text": "Is deprecated",
+        "isCorrect": false,
+        "explanation": "Incorrect. Timing functions are essential."
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=1Rs2ND1ryYc",
+        "type": "video",
+        "title": "CSS Tutorial for Beginners",
+        "author": "freeCodeCamp.org",
+        "duration": "6:18:00",
+        "description": "Learn CSS from scratch"
+      },
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/CSS",
+        "type": "article",
+        "title": "CSS: Cascading Style Sheets - MDN",
+        "author": "Mozilla Developer Network",
+        "description": "Complete CSS reference and guide"
+      },
+      {
+        "url": "https://css-tricks.com/",
+        "type": "article",
+        "title": "CSS-Tricks",
+        "author": "CSS-Tricks",
+        "description": "Tips, tricks, and techniques for CSS"
+      }
+    ],
+    "points": 15,
+    "isActive": true,
+    "createdAt": "2025-11-19T18:07:03.149822+00:00",
+    "updatedAt": "2025-11-24T23:33:46.870735+00:00"
+  },
+  {
+    "id": "8b9469ee-b0c6-4a45-8012-09e302d2a660",
+    "title": "Which CSS architecture methodologies emphasize component-based organization? (Select all that apply)",
+    "content": "Component-based CSS organization is common. Identify methodologies that focus on component structure.",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "Component-based: BEM (Block Element Modifier), CSS Modules, Styled Components, CSS-in-JS. These organize CSS around components rather than pages. Better for component libraries, React/Vue apps.",
+    "options": null,
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=1Rs2ND1ryYc",
+        "type": "video",
+        "title": "CSS Tutorial for Beginners",
+        "author": "freeCodeCamp.org",
+        "duration": "6:18:00",
+        "description": "Learn CSS from scratch"
+      },
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/CSS",
+        "type": "article",
+        "title": "CSS: Cascading Style Sheets - MDN",
+        "author": "Mozilla Developer Network",
+        "description": "Complete CSS reference and guide"
+      },
+      {
+        "url": "https://css-tricks.com/",
+        "type": "article",
+        "title": "CSS-Tricks",
+        "author": "CSS-Tricks",
+        "description": "Tips, tricks, and techniques for CSS"
+      }
+    ],
+    "points": 15,
+    "isActive": true,
+    "createdAt": "2025-11-19T18:07:03.149822+00:00",
+    "updatedAt": "2025-11-24T22:52:08.102565+00:00"
+  },
+  {
+    "id": "c69bb526-16b8-4682-a384-086b4ff4cd8a",
+    "title": "Are deprecated",
+    "content": "SASS partials enable modular CSS. Explain partials, <cod@import, and how they organize code.",
+    "type": "code",
+    "difficulty": "intermediate",
+    "explanation": "Partials: files starting with _ (e<cod.g., _variables<cod.scss). <cod@import includes partials, combines into single CSS. Enables modular organization, reusability. Modern: use <cod@use/<cod@forward instead of <cod@import.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Partials: _filename<cod.scss; <cod@import includes them; enables modular organization",
+        "isCorrect": true,
+        "explanation": "Correct. Partials improve organization."
+      },
+      {
+        "id": "o2",
+        "text": "They are identical",
+        "isCorrect": false,
+        "explanation": "Incorrect. Partials are special imports."
+      },
+      {
+        "id": "o3",
+        "text": "Only work with JavaScript",
+        "isCorrect": false,
+        "explanation": "Incorrect. Partials are SASS feature."
+      },
+      {
+        "id": "o4",
+        "text": "Are deprecated",
+        "isCorrect": false,
+        "explanation": "Incorrect. Still used, though <code>@use</code> is preferred."
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=1Rs2ND1ryYc",
+        "type": "video",
+        "title": "CSS Tutorial for Beginners",
+        "author": "freeCodeCamp.org",
+        "duration": "6:18:00",
+        "description": "Learn CSS from scratch"
+      },
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/CSS",
+        "type": "article",
+        "title": "CSS: Cascading Style Sheets - MDN",
+        "author": "Mozilla Developer Network",
+        "description": "Complete CSS reference and guide"
+      },
+      {
+        "url": "https://css-tricks.com/",
+        "type": "article",
+        "title": "CSS-Tricks",
+        "author": "CSS-Tricks",
+        "description": "Tips, tricks, and techniques for CSS"
+      }
+    ],
+    "points": 15,
+    "isActive": true,
+    "createdAt": "2025-11-19T18:07:03.149822+00:00",
+    "updatedAt": "2025-11-24T23:33:46.870735+00:00"
+  },
+  {
+    "id": "3ad99673-9d64-4b59-8c82-5c58628c0879",
+    "title": "Which CSS properties trigger layout reflow? (Select all that apply)",
+    "content": "Layout reflow is expensive. Identify CSS properties that trigger layout calculations and should be avoided in animations.",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "Properties that trigger reflow: width, height, top, left, margin, padding, border, display, position, float. These cause layout recalculation. Use transform/opacity for animations instead.",
+    "options": null,
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=1Rs2ND1ryYc",
+        "type": "video",
+        "title": "CSS Tutorial for Beginners",
+        "author": "freeCodeCamp.org",
+        "duration": "6:18:00",
+        "description": "Learn CSS from scratch"
+      },
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/CSS",
+        "type": "article",
+        "title": "CSS: Cascading Style Sheets - MDN",
+        "author": "Mozilla Developer Network",
+        "description": "Complete CSS reference and guide"
+      },
+      {
+        "url": "https://css-tricks.com/",
+        "type": "article",
+        "title": "CSS-Tricks",
+        "author": "CSS-Tricks",
+        "description": "Tips, tricks, and techniques for CSS"
+      }
+    ],
+    "points": 15,
+    "isActive": true,
+    "createdAt": "2025-11-19T18:07:03.149822+00:00",
+    "updatedAt": "2025-11-24T22:52:08.102565+00:00"
+  },
+  {
+    "id": "254cc28b-3a22-472d-956a-aab44355bdfb",
+    "title": "Which CSS properties enable hardware acceleration for animations? (Select all that apply)",
+    "content": "Hardware acceleration improves animation performance. Identify CSS properties that trigger GPU acceleration.",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "Properties that trigger GPU: transform (translate, scale, rotate), opacity, filter, will-change. These use compositor layer, avoid layout/paint. Avoid animating width, height, top, left (trigger layout).",
+    "options": null,
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=1Rs2ND1ryYc",
+        "type": "video",
+        "title": "CSS Tutorial for Beginners",
+        "author": "freeCodeCamp.org",
+        "duration": "6:18:00",
+        "description": "Learn CSS from scratch"
+      },
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/CSS",
+        "type": "article",
+        "title": "CSS: Cascading Style Sheets - MDN",
+        "author": "Mozilla Developer Network",
+        "description": "Complete CSS reference and guide"
+      },
+      {
+        "url": "https://css-tricks.com/",
+        "type": "article",
+        "title": "CSS-Tricks",
+        "author": "CSS-Tricks",
+        "description": "Tips, tricks, and techniques for CSS"
+      }
+    ],
+    "points": 15,
+    "isActive": true,
+    "createdAt": "2025-11-19T18:04:04.200335+00:00",
+    "updatedAt": "2025-11-24T22:52:08.102565+00:00"
+  },
+  {
+    "id": "d6c6b4db-88bb-4026-9922-1e2df4e880e3",
+    "title": "Which PostCSS plugins are commonly used in modern CSS workflows? (Select all that apply)",
+    "content": "PostCSS is a powerful CSS tool. Identify commonly used PostCSS plugins and their purposes.",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "Common plugins: autoprefixer (adds vendor prefixes), cssnano (minification), postcss-preset-env (modern CSS), postcss-nested (nesting), postcss-import (imports). Essential for modern CSS workflows.",
+    "options": null,
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=1Rs2ND1ryYc",
+        "type": "video",
+        "title": "CSS Tutorial for Beginners",
+        "author": "freeCodeCamp.org",
+        "duration": "6:18:00",
+        "description": "Learn CSS from scratch"
+      },
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/CSS",
+        "type": "article",
+        "title": "CSS: Cascading Style Sheets - MDN",
+        "author": "Mozilla Developer Network",
+        "description": "Complete CSS reference and guide"
+      },
+      {
+        "url": "https://css-tricks.com/",
+        "type": "article",
+        "title": "CSS-Tricks",
+        "author": "CSS-Tricks",
+        "description": "Tips, tricks, and techniques for CSS"
+      }
+    ],
+    "points": 15,
+    "isActive": true,
+    "createdAt": "2025-11-19T18:04:04.200335+00:00",
+    "updatedAt": "2025-11-24T22:52:08.102565+00:00"
+  },
+  {
+    "id": "54026248-accc-4c26-8076-2c3931333221",
+    "title": "Mixins are deprecated",
+    "content": "SASS provides mixins and functions. Explain the differences between mixins and functions and their use cases.",
+    "type": "code",
+    "difficulty": "intermediate",
+    "explanation": "Mixins: generate CSS code blocks, can include properties, can take parameters, output CSS. Functions: return values, used in calculations, don't output CSS directly. Use mixins for reusable styles, functions for calculations.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Mixins: generate CSS blocks; Functions: return values for calculations",
+        "isCorrect": true,
+        "explanation": "Correct. They serve different purposes."
+      },
+      {
+        "id": "o2",
+        "text": "They are identical",
+        "isCorrect": false,
+        "explanation": "Incorrect. They work differently."
+      },
+      {
+        "id": "o3",
+        "text": "Functions generate CSS",
+        "isCorrect": false,
+        "explanation": "Incorrect. Functions return values, not CSS."
+      },
+      {
+        "id": "o4",
+        "text": "Mixins are deprecated",
+        "isCorrect": false,
+        "explanation": "Incorrect. Mixins are still widely used."
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=1Rs2ND1ryYc",
+        "type": "video",
+        "title": "CSS Tutorial for Beginners",
+        "author": "freeCodeCamp.org",
+        "duration": "6:18:00",
+        "description": "Learn CSS from scratch"
+      },
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/CSS",
+        "type": "article",
+        "title": "CSS: Cascading Style Sheets - MDN",
+        "author": "Mozilla Developer Network",
+        "description": "Complete CSS reference and guide"
+      },
+      {
+        "url": "https://css-tricks.com/",
+        "type": "article",
+        "title": "CSS-Tricks",
+        "author": "CSS-Tricks",
+        "description": "Tips, tricks, and techniques for CSS"
+      }
+    ],
+    "points": 15,
+    "isActive": true,
+    "createdAt": "2025-11-19T18:04:04.200335+00:00",
+    "updatedAt": "2025-11-24T23:33:46.870735+00:00"
+  },
+  {
+    "id": "e25e514b-1d66-49ed-acc7-b810ec2206e5",
+    "title": "transition only works with JavaScript",
+    "content": "Transitions and animations both create motion. Explain the differences and appropriate use cases for each.",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "transition: simple state changes (hover, focus), single property changes, automatic trigger. animation: complex sequences, multiple keyframes, programmatic control, loops. Use transition for simple changes, animation for complex sequences.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "transition: simple state changes; animation: complex sequences with keyframes",
+        "isCorrect": true,
+        "explanation": "Correct. They serve different purposes."
+      },
+      {
+        "id": "o2",
+        "text": "They are identical",
+        "isCorrect": false,
+        "explanation": "Incorrect. They work differently."
+      },
+      {
+        "id": "o3",
+        "text": "animation is deprecated",
+        "isCorrect": false,
+        "explanation": "Incorrect. Both are valid and useful."
+      },
+      {
+        "id": "o4",
+        "text": "transition only works with JavaScript",
+        "isCorrect": false,
+        "explanation": "Incorrect. transition is pure CSS."
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=1Rs2ND1ryYc",
+        "type": "video",
+        "title": "CSS Tutorial for Beginners",
+        "author": "freeCodeCamp.org",
+        "duration": "6:18:00",
+        "description": "Learn CSS from scratch"
+      },
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/CSS",
+        "type": "article",
+        "title": "CSS: Cascading Style Sheets - MDN",
+        "author": "Mozilla Developer Network",
+        "description": "Complete CSS reference and guide"
+      },
+      {
+        "url": "https://css-tricks.com/",
+        "type": "article",
+        "title": "CSS-Tricks",
+        "author": "CSS-Tricks",
+        "description": "Tips, tricks, and techniques for CSS"
+      }
+    ],
+    "points": 15,
+    "isActive": true,
+    "createdAt": "2025-11-19T18:04:04.200335+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "261bd2ab-6cc4-4408-b352-fa17df3533e6",
+    "title": "Is deprecated",
+    "content": "Accessibility is crucial for animations. Explain how to respect user motion preferences and create accessible animations.",
+    "type": "multiple-choice",
+    "difficulty": "advanced",
+    "explanation": "prefers-reduced-motion: user preference for less motion. Use <cod@media (prefers-reduced-motion: reduce) to disable or simplify animations. Essential for vestibular disorders, motion sensitivity. Always provide reduced-motion alternative.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Use <cod@media (prefers-reduced-motion: reduce) to disable/simplify animations; essential for accessibility",
+        "isCorrect": true,
+        "explanation": "Correct. Always respect motion preferences."
+      },
+      {
+        "id": "o2",
+        "text": "Animations ignore user preferences",
+        "isCorrect": false,
+        "explanation": "Incorrect. We should respect preferences."
+      },
+      {
+        "id": "o3",
+        "text": "Only works with JavaScript",
+        "isCorrect": false,
+        "explanation": "Incorrect. Can be handled with CSS media queries."
+      },
+      {
+        "id": "o4",
+        "text": "Is deprecated",
+        "isCorrect": false,
+        "explanation": "Incorrect. prefers-reduced-motion is essential for accessibility."
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=1Rs2ND1ryYc",
+        "type": "video",
+        "title": "CSS Tutorial for Beginners",
+        "author": "freeCodeCamp.org",
+        "duration": "6:18:00",
+        "description": "Learn CSS from scratch"
+      },
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/CSS",
+        "type": "article",
+        "title": "CSS: Cascading Style Sheets - MDN",
+        "author": "Mozilla Developer Network",
+        "description": "Complete CSS reference and guide"
+      },
+      {
+        "url": "https://css-tricks.com/",
+        "type": "article",
+        "title": "CSS-Tricks",
+        "author": "CSS-Tricks",
+        "description": "Tips, tricks, and techniques for CSS"
+      }
+    ],
+    "points": 20,
+    "isActive": true,
+    "createdAt": "2025-11-19T18:04:04.200335+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "ca9bc335-3f55-4ab8-9b79-8f0806b68a91",
+    "title": "Is deprecated",
+    "content": "SASS <cod@extend enables selector inheritance. Explain <cod@extend, its benefits, and common pitfalls.",
+    "type": "multiple-choice",
+    "difficulty": "advanced",
+    "explanation": "<cod@extend: shares styles between selectors, creates selector groups. Advantages: DRY, maintains relationships. Issues: can create large selector groups, specificity issues, harder to debug. Use mixins for better control.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Shares styles between selectors; can create large selector groups; use mixins for better control",
+        "isCorrect": true,
+        "explanation": "Correct. <code>@extend</code> has trade-offs."
+      },
+      {
+        "id": "o2",
+        "text": "Always better than mixins",
+        "isCorrect": false,
+        "explanation": "Incorrect. Mixins often provide better control."
+      },
+      {
+        "id": "o3",
+        "text": "Only works with JavaScript",
+        "isCorrect": false,
+        "explanation": "Incorrect. <code>@extend</code> is SASS feature."
+      },
+      {
+        "id": "o4",
+        "text": "Is deprecated",
+        "isCorrect": false,
+        "explanation": "Incorrect. <code>@extend</code> is still valid but use carefully."
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=1Rs2ND1ryYc",
+        "type": "video",
+        "title": "CSS Tutorial for Beginners",
+        "author": "freeCodeCamp.org",
+        "duration": "6:18:00",
+        "description": "Learn CSS from scratch"
+      },
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/CSS",
+        "type": "article",
+        "title": "CSS: Cascading Style Sheets - MDN",
+        "author": "Mozilla Developer Network",
+        "description": "Complete CSS reference and guide"
+      },
+      {
+        "url": "https://css-tricks.com/",
+        "type": "article",
+        "title": "CSS-Tricks",
+        "author": "CSS-Tricks",
+        "description": "Tips, tricks, and techniques for CSS"
+      }
+    ],
+    "points": 20,
+    "isActive": true,
+    "createdAt": "2025-11-19T18:04:04.200335+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "2f446ad8-f396-4043-86ba-8ccb35bdb97e",
+    "title": "Is deprecated",
+    "content": "Animation play state controls animation execution. Explain how to pause and resume animations dynamically.",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "animation-play-state: running (default, plays), paused (pauses animation). Can be toggled with <cod:hover, JavaScript, or media queries. Useful for interactive controls, accessibility (prefers-reduced-motion).",
+    "options": [
+      {
+        "id": "o1",
+        "text": "running: plays animation; paused: pauses animation; can be toggled dynamically",
+        "isCorrect": true,
+        "explanation": "Correct. play-state controls animation execution."
+      },
+      {
+        "id": "o2",
+        "text": "They are identical",
+        "isCorrect": false,
+        "explanation": "Incorrect. They control different states."
+      },
+      {
+        "id": "o3",
+        "text": "Only works with JavaScript",
+        "isCorrect": false,
+        "explanation": "Incorrect. Can be controlled with CSS."
+      },
+      {
+        "id": "o4",
+        "text": "Is deprecated",
+        "isCorrect": false,
+        "explanation": "Incorrect. play-state is a standard property."
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=1Rs2ND1ryYc",
+        "type": "video",
+        "title": "CSS Tutorial for Beginners",
+        "author": "freeCodeCamp.org",
+        "duration": "6:18:00",
+        "description": "Learn CSS from scratch"
+      },
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/CSS",
+        "type": "article",
+        "title": "CSS: Cascading Style Sheets - MDN",
+        "author": "Mozilla Developer Network",
+        "description": "Complete CSS reference and guide"
+      },
+      {
+        "url": "https://css-tricks.com/",
+        "type": "article",
+        "title": "CSS-Tricks",
+        "author": "CSS-Tricks",
+        "description": "Tips, tricks, and techniques for CSS"
+      }
+    ],
+    "points": 15,
+    "isActive": true,
+    "createdAt": "2025-11-19T18:04:04.200335+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "0e3438e8-a75f-42da-a510-74029161bf9e",
+    "title": "Is deprecated",
+    "content": "CSS containment enables performance optimizations. Explain the contain property and its performance benefits.",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "contain: layout (isolates layout), paint (isolates paint), size (size depends only on self), style (isolates counters). Enables browser optimizations: skip layout/paint for contained elements, improves performance.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Isolates layout/paint/size; enables browser optimizations; improves rendering performance",
+        "isCorrect": true,
+        "explanation": "Correct. contain enables performance optimizations."
+      },
+      {
+        "id": "o2",
+        "text": "Only affects visual appearance",
+        "isCorrect": false,
+        "explanation": "Incorrect. contain affects rendering performance."
+      },
+      {
+        "id": "o3",
+        "text": "Slows down rendering",
+        "isCorrect": false,
+        "explanation": "Incorrect. contain improves performance."
+      },
+      {
+        "id": "o4",
+        "text": "Is deprecated",
+        "isCorrect": false,
+        "explanation": "Incorrect. contain is a modern performance feature."
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=1Rs2ND1ryYc",
+        "type": "video",
+        "title": "CSS Tutorial for Beginners",
+        "author": "freeCodeCamp.org",
+        "duration": "6:18:00",
+        "description": "Learn CSS from scratch"
+      },
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/CSS",
+        "type": "article",
+        "title": "CSS: Cascading Style Sheets - MDN",
+        "author": "Mozilla Developer Network",
+        "description": "Complete CSS reference and guide"
+      },
+      {
+        "url": "https://css-tricks.com/",
+        "type": "article",
+        "title": "CSS-Tricks",
+        "author": "CSS-Tricks",
+        "description": "Tips, tricks, and techniques for CSS"
+      }
+    ],
+    "points": 15,
+    "isActive": true,
+    "createdAt": "2025-11-19T18:04:04.200335+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "b9afa2fd-4789-464b-8906-f64def2e39b4",
+    "title": "Is deprecated",
+    "content": "will-change hints to browser about upcoming changes. Explain proper usage and performance implications.",
+    "type": "multiple-choice",
+    "difficulty": "advanced",
+    "explanation": "will-change: hints browser to optimize for property changes. Use sparingly: only when animation is about to start, remove after. Overuse causes memory issues. Don't use preemptively. Remove when animation ends.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Hints browser for optimization; use only when animation starts, remove after; overuse causes memory issues",
+        "isCorrect": true,
+        "explanation": "Correct. will-change should be used judiciously."
+      },
+      {
+        "id": "o2",
+        "text": "Always use for all elements",
+        "isCorrect": false,
+        "explanation": "Incorrect. Overuse causes performance issues."
+      },
+      {
+        "id": "o3",
+        "text": "Only works with JavaScript",
+        "isCorrect": false,
+        "explanation": "Incorrect. will-change is pure CSS."
+      },
+      {
+        "id": "o4",
+        "text": "Is deprecated",
+        "isCorrect": false,
+        "explanation": "Incorrect. will-change is a modern optimization feature."
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=1Rs2ND1ryYc",
+        "type": "video",
+        "title": "CSS Tutorial for Beginners",
+        "author": "freeCodeCamp.org",
+        "duration": "6:18:00",
+        "description": "Learn CSS from scratch"
+      },
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/CSS",
+        "type": "article",
+        "title": "CSS: Cascading Style Sheets - MDN",
+        "author": "Mozilla Developer Network",
+        "description": "Complete CSS reference and guide"
+      },
+      {
+        "url": "https://css-tricks.com/",
+        "type": "article",
+        "title": "CSS-Tricks",
+        "author": "CSS-Tricks",
+        "description": "Tips, tricks, and techniques for CSS"
+      }
+    ],
+    "points": 20,
+    "isActive": true,
+    "createdAt": "2025-11-19T18:04:04.200335+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "ce08e4b3-e7c2-435d-a5d7-a920a0027f64",
+    "title": "Is deprecated",
+    "content": "Animation fill mode controls element state before/after animation. Explain fill-mode values and their behavior.",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "animation-fill-mode: none (default, no styles before/after), forwards (keeps final keyframe), backwards (applies first keyframe before start), both (forwards + backwards). Controls element appearance outside animation duration.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "none: no styles; forwards: keeps final; backwards: applies first; both: forwards + backwards",
+        "isCorrect": true,
+        "explanation": "Correct. Each value controls different timing."
+      },
+      {
+        "id": "o2",
+        "text": "They are identical",
+        "isCorrect": false,
+        "explanation": "Incorrect. They behave differently."
+      },
+      {
+        "id": "o3",
+        "text": "Only 'forwards' works",
+        "isCorrect": false,
+        "explanation": "Incorrect. All values are valid."
+      },
+      {
+        "id": "o4",
+        "text": "Is deprecated",
+        "isCorrect": false,
+        "explanation": "Incorrect. fill-mode is a standard property."
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=1Rs2ND1ryYc",
+        "type": "video",
+        "title": "CSS Tutorial for Beginners",
+        "author": "freeCodeCamp.org",
+        "duration": "6:18:00",
+        "description": "Learn CSS from scratch"
+      },
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/CSS",
+        "type": "article",
+        "title": "CSS: Cascading Style Sheets - MDN",
+        "author": "Mozilla Developer Network",
+        "description": "Complete CSS reference and guide"
+      },
+      {
+        "url": "https://css-tricks.com/",
+        "type": "article",
+        "title": "CSS-Tricks",
+        "author": "CSS-Tricks",
+        "description": "Tips, tricks, and techniques for CSS"
+      }
+    ],
+    "points": 15,
+    "isActive": true,
+    "createdAt": "2025-11-19T18:04:04.200335+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "8f8c96af-3734-4faf-b3f5-72b3ebf9b490",
+    "title": "Require media queries",
+    "content": "CSS comparison functions enable flexible sizing. Explain min(), max(), and clamp() for responsive design.",
+    "type": "code",
+    "difficulty": "intermediate",
+    "explanation": "min(a, b): returns smaller value (sets maximum). max(a, b): returns larger value (sets minimum). clamp(min, val, max): constrains between min and max. Enable responsive sizing without media queries. clamp() is most useful for fluid typography.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "min(): maximum limit; max(): minimum limit; clamp(): value between min and max",
+        "isCorrect": true,
+        "explanation": "Correct. Each function serves different comparison purposes."
+      },
+      {
+        "id": "o2",
+        "text": "They are identical",
+        "isCorrect": false,
+        "explanation": "Incorrect. They perform different comparisons."
+      },
+      {
+        "id": "o3",
+        "text": "Only work with pixels",
+        "isCorrect": false,
+        "explanation": "Incorrect. They work with any CSS units."
+      },
+      {
+        "id": "o4",
+        "text": "Require media queries",
+        "isCorrect": false,
+        "explanation": "Incorrect. They enable responsive sizing without media queries."
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=1Rs2ND1ryYc",
+        "type": "video",
+        "title": "CSS Tutorial for Beginners",
+        "author": "freeCodeCamp.org",
+        "duration": "6:18:00",
+        "description": "Learn CSS from scratch"
+      },
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/CSS",
+        "type": "article",
+        "title": "CSS: Cascading Style Sheets - MDN",
+        "author": "Mozilla Developer Network",
+        "description": "Complete CSS reference and guide"
+      },
+      {
+        "url": "https://css-tricks.com/",
+        "type": "article",
+        "title": "CSS-Tricks",
+        "author": "CSS-Tricks",
+        "description": "Tips, tricks, and techniques for CSS"
+      }
+    ],
+    "points": 15,
+    "isActive": true,
+    "createdAt": "2025-11-19T18:01:32.341948+00:00",
+    "updatedAt": "2025-11-24T23:33:46.870735+00:00"
+  },
+  {
+    "id": "8990939d-7f41-4ba4-ac80-bac365713577",
+    "title": "min-width only works on mobile",
+    "content": "Media query direction affects responsive strategy. Explain min-width vs max-width and mobile-first vs desktop-first.",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "min-width: applies when viewport >= value (mobile-first). max-width: applies when viewport <= value (desktop-first). Mobile-first (min-width) is preferred: progressive enhancement, better performance. Desktop-first (max-width) is legacy approach.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "min-width: mobile-first (viewport >= X); max-width: desktop-first (viewport <= X)",
+        "isCorrect": true,
+        "explanation": "Correct. min-width is for mobile-first approach."
+      },
+      {
+        "id": "o2",
+        "text": "They are identical",
+        "isCorrect": false,
+        "explanation": "Incorrect. They work in opposite directions."
+      },
+      {
+        "id": "o3",
+        "text": "max-width is always better",
+        "isCorrect": false,
+        "explanation": "Incorrect. min-width (mobile-first) is generally preferred."
+      },
+      {
+        "id": "o4",
+        "text": "min-width only works on mobile",
+        "isCorrect": false,
+        "explanation": "Incorrect. min-width works on all devices."
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=1Rs2ND1ryYc",
+        "type": "video",
+        "title": "CSS Tutorial for Beginners",
+        "author": "freeCodeCamp.org",
+        "duration": "6:18:00",
+        "description": "Learn CSS from scratch"
+      },
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/CSS",
+        "type": "article",
+        "title": "CSS: Cascading Style Sheets - MDN",
+        "author": "Mozilla Developer Network",
+        "description": "Complete CSS reference and guide"
+      },
+      {
+        "url": "https://css-tricks.com/",
+        "type": "article",
+        "title": "CSS-Tricks",
+        "author": "CSS-Tricks",
+        "description": "Tips, tricks, and techniques for CSS"
+      }
+    ],
+    "points": 15,
+    "isActive": true,
+    "createdAt": "2025-11-19T18:01:32.341948+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "4fb6e601-6290-4fa5-aab3-332c190961e2",
+    "title": "Require JavaScript",
+    "content": "Media elements need proper fitting. Explain object-fit and object-position for responsive media.",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "object-fit: how content fits (fill, contain, cover, none, scale-down). object-position: where content is positioned (like background-position). Essential for responsive images in fixed containers. Prevents distortion, enables cropping/centering.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "object-fit: how content fits container; object-position: where content is positioned",
+        "isCorrect": true,
+        "explanation": "Correct. They control different aspects of media display."
+      },
+      {
+        "id": "o2",
+        "text": "They are identical",
+        "isCorrect": false,
+        "explanation": "Incorrect. They control different properties."
+      },
+      {
+        "id": "o3",
+        "text": "Only work with background images",
+        "isCorrect": false,
+        "explanation": "Incorrect. They work with img and video elements."
+      },
+      {
+        "id": "o4",
+        "text": "Require JavaScript",
+        "isCorrect": false,
+        "explanation": "Incorrect. They are pure CSS properties."
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=1Rs2ND1ryYc",
+        "type": "video",
+        "title": "CSS Tutorial for Beginners",
+        "author": "freeCodeCamp.org",
+        "duration": "6:18:00",
+        "description": "Learn CSS from scratch"
+      },
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/CSS",
+        "type": "article",
+        "title": "CSS: Cascading Style Sheets - MDN",
+        "author": "Mozilla Developer Network",
+        "description": "Complete CSS reference and guide"
+      },
+      {
+        "url": "https://css-tricks.com/",
+        "type": "article",
+        "title": "CSS-Tricks",
+        "author": "CSS-Tricks",
+        "description": "Tips, tricks, and techniques for CSS"
+      }
+    ],
+    "points": 15,
+    "isActive": true,
+    "createdAt": "2025-11-19T18:01:32.341948+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "4c882565-d707-4986-b426-d378e1c17cbc",
+    "title": "JavaScript resize handlers (not CSS-only)",
+    "content": "Responsive images are crucial for performance. Identify CSS-only techniques for responsive images.",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "<pictur element with <sourc and media queries, <img srcset sizes, CSS object-fit, max-width: 100%, aspect-ratio. All enable responsive images without JavaScript. Modern approach: use srcset/sizes or picture element.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "<pictur element with media queries",
+        "isCorrect": true,
+        "explanation": "Correct. Picture element enables responsive images."
+      },
+      {
+        "id": "o2",
+        "text": "srcset and sizes attributes",
+        "isCorrect": true,
+        "explanation": "Correct. srcset enables responsive images."
+      },
+      {
+        "id": "o3",
+        "text": "object-fit for container fitting",
+        "isCorrect": true,
+        "explanation": "Correct. object-fit helps with responsive display."
+      },
+      {
+        "id": "o4",
+        "text": "JavaScript resize handlers (not CSS-only)",
+        "isCorrect": false,
+        "explanation": "Incorrect. This requires JavaScript."
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=1Rs2ND1ryYc",
+        "type": "video",
+        "title": "CSS Tutorial for Beginners",
+        "author": "freeCodeCamp.org",
+        "duration": "6:18:00",
+        "description": "Learn CSS from scratch"
+      },
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/CSS",
+        "type": "article",
+        "title": "CSS: Cascading Style Sheets - MDN",
+        "author": "Mozilla Developer Network",
+        "description": "Complete CSS reference and guide"
+      },
+      {
+        "url": "https://css-tricks.com/",
+        "type": "article",
+        "title": "CSS-Tricks",
+        "author": "CSS-Tricks",
+        "description": "Tips, tricks, and techniques for CSS"
+      }
+    ],
+    "points": 15,
+    "isActive": true,
+    "createdAt": "2025-11-19T18:01:32.341948+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "ac945d52-d7dc-47dd-9dba-f628b8bb61c0",
+    "title": "device-width (not a preference feature)",
+    "content": "Media queries can detect user preferences. Identify features that enable preference-based styling.",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "prefers-color-scheme: dark/light mode. prefers-reduced-motion: motion sensitivity. prefers-contrast: contrast preferences. prefers-reduced-transparency: transparency preferences. These enable accessible, user-preference-aware designs.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "prefers-color-scheme (dark/light mode)",
+        "isCorrect": true,
+        "explanation": "Correct. Enables dark mode detection."
+      },
+      {
+        "id": "o2",
+        "text": "prefers-reduced-motion (accessibility)",
+        "isCorrect": true,
+        "explanation": "Correct. Essential for motion-sensitive users."
+      },
+      {
+        "id": "o3",
+        "text": "prefers-contrast (contrast preferences)",
+        "isCorrect": true,
+        "explanation": "Correct. Enables contrast adjustments."
+      },
+      {
+        "id": "o4",
+        "text": "device-width (not a preference feature)",
+        "isCorrect": false,
+        "explanation": "Incorrect. device-width is for viewport size, not preferences."
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=1Rs2ND1ryYc",
+        "type": "video",
+        "title": "CSS Tutorial for Beginners",
+        "author": "freeCodeCamp.org",
+        "duration": "6:18:00",
+        "description": "Learn CSS from scratch"
+      },
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/CSS",
+        "type": "article",
+        "title": "CSS: Cascading Style Sheets - MDN",
+        "author": "Mozilla Developer Network",
+        "description": "Complete CSS reference and guide"
+      },
+      {
+        "url": "https://css-tricks.com/",
+        "type": "article",
+        "title": "CSS-Tricks",
+        "author": "CSS-Tricks",
+        "description": "Tips, tricks, and techniques for CSS"
+      }
+    ],
+    "points": 15,
+    "isActive": true,
+    "createdAt": "2025-11-19T18:01:32.341948+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "32f29894-51c6-4092-9921-e27034a6c475",
+    "title": "Requires JavaScript",
+    "content": "Layout shift hurts user experience. Explain how aspect-ratio prevents Cumulative Layout Shift (CLS).",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "aspect-ratio maintains width<cod:height ratio. Prevents layout shift when images/media load. Set aspect-ratio on container, image loads and fills. No height jump = no CLS. Essential for Core Web Vitals. Works with width or height, maintains ratio.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Maintains width<cod:height ratio; prevents layout shift when content loads; improves CLS",
+        "isCorrect": true,
+        "explanation": "Correct. aspect-ratio prevents layout shift."
+      },
+      {
+        "id": "o2",
+        "text": "Only works with images",
+        "isCorrect": false,
+        "explanation": "Incorrect. aspect-ratio works with any element."
+      },
+      {
+        "id": "o3",
+        "text": "Causes layout shift",
+        "isCorrect": false,
+        "explanation": "Incorrect. It prevents layout shift."
+      },
+      {
+        "id": "o4",
+        "text": "Requires JavaScript",
+        "isCorrect": false,
+        "explanation": "Incorrect. aspect-ratio is pure CSS."
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=1Rs2ND1ryYc",
+        "type": "video",
+        "title": "CSS Tutorial for Beginners",
+        "author": "freeCodeCamp.org",
+        "duration": "6:18:00",
+        "description": "Learn CSS from scratch"
+      },
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/CSS",
+        "type": "article",
+        "title": "CSS: Cascading Style Sheets - MDN",
+        "author": "Mozilla Developer Network",
+        "description": "Complete CSS reference and guide"
+      },
+      {
+        "url": "https://css-tricks.com/",
+        "type": "article",
+        "title": "CSS-Tricks",
+        "author": "CSS-Tricks",
+        "description": "Tips, tricks, and techniques for CSS"
+      }
+    ],
+    "points": 15,
+    "isActive": true,
+    "createdAt": "2025-11-19T18:01:32.341948+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "c110430f-1025-444b-8099-67f5116da134",
+    "title": "Are deprecated",
+    "content": "Modern viewport units account for browser UI. Explain dynamic and small viewport units vs standard units.",
+    "type": "multiple-choice",
+    "difficulty": "advanced",
+    "explanation": "vw/vh: viewport size (can change with browser UI). dvw/dvh: dynamic viewport (accounts for browser UI changes). svw/svh: small viewport (minimum size, ignores browser UI). lvw/lvh: large viewport (maximum size). Use dvw/dvh for mobile where browser UI shows/hides.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "dvw/dvh: dynamic (accounts for browser UI); svw/svh: small (minimum, ignores UI); vw/vh: standard",
+        "isCorrect": true,
+        "explanation": "Correct. New units handle browser UI better."
+      },
+      {
+        "id": "o2",
+        "text": "They are identical",
+        "isCorrect": false,
+        "explanation": "Incorrect. They handle browser UI differently."
+      },
+      {
+        "id": "o3",
+        "text": "Only work on desktop",
+        "isCorrect": false,
+        "explanation": "Incorrect. They're especially useful on mobile."
+      },
+      {
+        "id": "o4",
+        "text": "Are deprecated",
+        "isCorrect": false,
+        "explanation": "Incorrect. They're modern features for better mobile support."
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=1Rs2ND1ryYc",
+        "type": "video",
+        "title": "CSS Tutorial for Beginners",
+        "author": "freeCodeCamp.org",
+        "duration": "6:18:00",
+        "description": "Learn CSS from scratch"
+      },
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/CSS",
+        "type": "article",
+        "title": "CSS: Cascading Style Sheets - MDN",
+        "author": "Mozilla Developer Network",
+        "description": "Complete CSS reference and guide"
+      },
+      {
+        "url": "https://css-tricks.com/",
+        "type": "article",
+        "title": "CSS-Tricks",
+        "author": "CSS-Tricks",
+        "description": "Tips, tricks, and techniques for CSS"
+      }
+    ],
+    "points": 20,
+    "isActive": true,
+    "createdAt": "2025-11-19T18:01:32.341948+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "25dfe086-37a4-46e5-acb0-7ddb6dedacce",
+    "title": "Container queries work in all browsers",
+    "content": "Container queries are a modern alternative to media queries. Explain when container queries are more appropriate.",
+    "type": "multiple-choice",
+    "difficulty": "advanced",
+    "explanation": "Media queries: viewport-based (page-level). Container queries: container-based (component-level). Use container queries for reusable components that need to adapt to container size, not viewport. Better for component libraries, cards, widgets. Limited support (Chrome 105+, Safari 16+).",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Container queries: component-level responsiveness; better for reusable components",
+        "isCorrect": true,
+        "explanation": "Correct. Container queries enable component-level responsiveness."
+      },
+      {
+        "id": "o2",
+        "text": "They are identical",
+        "isCorrect": false,
+        "explanation": "Incorrect. They query different things."
+      },
+      {
+        "id": "o3",
+        "text": "Media queries are always better",
+        "isCorrect": false,
+        "explanation": "Incorrect. Container queries solve different problems."
+      },
+      {
+        "id": "o4",
+        "text": "Container queries work in all browsers",
+        "isCorrect": false,
+        "explanation": "Incorrect. Browser support is limited."
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=1Rs2ND1ryYc",
+        "type": "video",
+        "title": "CSS Tutorial for Beginners",
+        "author": "freeCodeCamp.org",
+        "duration": "6:18:00",
+        "description": "Learn CSS from scratch"
+      },
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/CSS",
+        "type": "article",
+        "title": "CSS: Cascading Style Sheets - MDN",
+        "author": "Mozilla Developer Network",
+        "description": "Complete CSS reference and guide"
+      },
+      {
+        "url": "https://css-tricks.com/",
+        "type": "article",
+        "title": "CSS-Tricks",
+        "author": "CSS-Tricks",
+        "description": "Tips, tricks, and techniques for CSS"
+      }
+    ],
+    "points": 20,
+    "isActive": true,
+    "createdAt": "2025-11-19T18:01:32.341948+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "7f4ca5b2-cef5-4913-91ea-7148df89ac07",
+    "title": "Fixed px values (not fluid)",
+    "content": "Fluid typography scales smoothly. Identify CSS techniques that create fluid, responsive text sizing.",
+    "type": "code",
+    "difficulty": "intermediate",
+    "explanation": "clamp() function (min, preferred, max), calc() with viewport units, vw/vh units, fluid typography formulas. clamp() is most common: clamp(1rem, 4vw, 2rem). Enables text that scales smoothly between breakpoints.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "clamp() function (min, preferred, max)",
+        "isCorrect": true,
+        "explanation": "Correct. clamp() enables fluid sizing."
+      },
+      {
+        "id": "o2",
+        "text": "vw/vh units (viewport-relative)",
+        "isCorrect": true,
+        "explanation": "Correct. Viewport units enable fluid sizing."
+      },
+      {
+        "id": "o3",
+        "text": "calc() with viewport units",
+        "isCorrect": true,
+        "explanation": "Correct. calc() enables fluid calculations."
+      },
+      {
+        "id": "o4",
+        "text": "Fixed px values (not fluid)",
+        "isCorrect": false,
+        "explanation": "Incorrect. Fixed pixels are not fluid."
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=1Rs2ND1ryYc",
+        "type": "video",
+        "title": "CSS Tutorial for Beginners",
+        "author": "freeCodeCamp.org",
+        "duration": "6:18:00",
+        "description": "Learn CSS from scratch"
+      },
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/CSS",
+        "type": "article",
+        "title": "CSS: Cascading Style Sheets - MDN",
+        "author": "Mozilla Developer Network",
+        "description": "Complete CSS reference and guide"
+      },
+      {
+        "url": "https://css-tricks.com/",
+        "type": "article",
+        "title": "CSS-Tricks",
+        "author": "CSS-Tricks",
+        "description": "Tips, tricks, and techniques for CSS"
+      }
+    ],
+    "points": 15,
+    "isActive": true,
+    "createdAt": "2025-11-19T18:01:32.341948+00:00",
+    "updatedAt": "2025-11-24T23:33:46.870735+00:00"
+  }
+]

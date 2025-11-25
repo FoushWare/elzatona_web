@@ -24,6 +24,7 @@ import {
   Textarea,
   Checkbox,
 } from '@elzatona/shared-components';
+import { FormModal } from '../../components/FormModal';
 import {
   Plus,
   Edit,
@@ -918,459 +919,80 @@ export default function AdminContentQuestionsPage() {
       </div>
 
       {/* View Question Modal */}
-      <Dialog open={isViewModalOpen} onOpenChange={setIsViewModalOpen}>
-        <DialogContent className='!max-w-6xl h-[95vh] max-h-[95vh] flex flex-col mx-auto my-4 p-0 overflow-hidden'>
-          <DialogHeader className='px-6 pt-6 pb-4 border-b flex-shrink-0 sticky top-0 bg-white dark:bg-gray-900 z-10'>
-            <div className='flex items-center justify-between'>
-              <DialogTitle className='text-2xl font-bold flex items-center gap-2'>
-                <Eye className='w-6 h-6 text-blue-600' />
-                Question Details
-              </DialogTitle>
-              <Button
-                variant='ghost'
-                size='sm'
-                onClick={() => setIsViewModalOpen(false)}
-                className='h-8 w-8 p-0'
-              >
-                <X className='w-4 h-4' />
-              </Button>
-            </div>
-            <DialogDescription className='text-gray-600 dark:text-gray-400 mt-2'>
-              View and analyze question information
-            </DialogDescription>
-          </DialogHeader>
-          <div className='flex-1 overflow-y-auto overflow-x-hidden min-h-0 px-6 py-4 scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100 dark:scrollbar-thumb-gray-600 dark:scrollbar-track-gray-800'>
-            {selectedQuestion && (
-              <>
-                {/* Header Section */}
-                <div className='bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 p-6 rounded-lg border'>
-                  <div className='flex items-start justify-between'>
-                    <div className='flex-1'>
-                      <h3 className='text-xl font-semibold text-gray-900 dark:text-white mb-2'>
-                        {selectedQuestion.title}
-                      </h3>
-                      <div className='flex flex-wrap gap-2'>
-                        <Badge
-                          variant='outline'
-                          className='bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200'
-                        >
-                          {selectedQuestion.type
-                            ?.replace('-', ' ')
-                            .toUpperCase()}
-                        </Badge>
-                        <Badge
-                          variant={
-                            selectedQuestion.difficulty === 'beginner'
-                              ? 'default'
-                              : selectedQuestion.difficulty === 'intermediate'
-                                ? 'outline'
-                                : 'destructive'
-                          }
-                        >
-                          {selectedQuestion.difficulty?.toUpperCase()}
-                        </Badge>
-                        <Badge
-                          variant='secondary'
-                          className='bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200'
-                        >
-                          {selectedQuestion.points || 1} Points
-                        </Badge>
-                      </div>
-                    </div>
-                    <div className='flex items-center gap-2'>
-                      <Badge
-                        variant={
-                          selectedQuestion.isActive ? 'default' : 'secondary'
-                        }
-                      >
-                        {selectedQuestion.isActive
-                          ? '✅ Active'
-                          : '❌ Inactive'}
-                      </Badge>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Content Section */}
-                <div className='grid grid-cols-1 lg:grid-cols-2 gap-6'>
-                  {/* Left Column */}
-                  <div className='space-y-6'>
-                    <div className='bg-white dark:bg-gray-800 p-6 rounded-lg border shadow-sm'>
-                      <h4 className='text-lg font-semibold mb-4 flex items-center gap-2'>
-                        <BookOpen className='w-5 h-5 text-blue-600' />
-                        Question Content
-                      </h4>
-                      <div className='prose prose-sm max-w-none dark:prose-invert'>
-                        <p className='text-gray-700 dark:text-gray-300 leading-relaxed'>
-                          {selectedQuestion.content}
-                        </p>
-                      </div>
-                    </div>
-
-                    {/* Categories and Topics */}
-                    <div className='bg-white dark:bg-gray-800 p-6 rounded-lg border shadow-sm'>
-                      <h4 className='text-lg font-semibold mb-4 flex items-center gap-2'>
-                        <BarChart3 className='w-5 h-5 text-green-600' />
-                        Categories & Topics
-                      </h4>
-                      <div className='space-y-4'>
-                        {/* Topics */}
-                        {selectedQuestion.topics &&
-                        selectedQuestion.topics.length > 0 ? (
-                          <div>
-                            <Label className='text-sm font-medium text-gray-600 dark:text-gray-400'>
-                              Topics
-                            </Label>
-                            <div className='flex flex-wrap gap-2 mt-2'>
-                              {selectedQuestion.topics.map((topic, index) => (
-                                <Badge
-                                  key={`${selectedQuestion.id}-topic-${index}`}
-                                  variant={
-                                    topic.is_primary ? 'default' : 'secondary'
-                                  }
-                                  className={`${
-                                    topic.is_primary
-                                      ? 'bg-blue-600 text-white'
-                                      : 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200'
-                                  }`}
-                                >
-                                  {topic.is_primary && '⭐ '}
-                                  {topic.name}
-                                </Badge>
-                              ))}
-                            </div>
-                          </div>
-                        ) : (
-                          <div>
-                            <Label className='text-sm font-medium text-gray-600 dark:text-gray-400'>
-                              Topics
-                            </Label>
-                            <Badge
-                              variant='outline'
-                              className='mt-2 bg-gray-100 text-gray-600 dark:bg-gray-800 dark:text-gray-400'
-                            >
-                              No Topics Assigned
-                            </Badge>
-                          </div>
-                        )}
-
-                        {/* Categories */}
-                        {selectedQuestion.categories &&
-                        selectedQuestion.categories.length > 0 ? (
-                          <div>
-                            <Label className='text-sm font-medium text-gray-600 dark:text-gray-400'>
-                              Categories
-                            </Label>
-                            <div className='flex flex-wrap gap-2 mt-2'>
-                              {selectedQuestion.categories.map(
-                                (category, index) => (
-                                  <Badge
-                                    key={`${selectedQuestion.id}-category-${index}`}
-                                    variant={
-                                      category.is_primary
-                                        ? 'default'
-                                        : 'secondary'
-                                    }
-                                    className={`${
-                                      category.is_primary
-                                        ? 'bg-green-600 text-white'
-                                        : 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200'
-                                    }`}
-                                  >
-                                    {category.is_primary && '⭐ '}
-                                    {category.name}
-                                  </Badge>
-                                )
-                              )}
-                            </div>
-                          </div>
-                        ) : (
-                          <div>
-                            <Label className='text-sm font-medium text-gray-600 dark:text-gray-400'>
-                              Categories
-                            </Label>
-                            <Badge
-                              variant='outline'
-                              className='mt-2 bg-gray-100 text-gray-600 dark:bg-gray-800 dark:text-gray-400'
-                            >
-                              No Categories Assigned
-                            </Badge>
-                          </div>
-                        )}
-
-                        {/* Learning Card */}
-                        {selectedQuestion.learning_card && (
-                          <div>
-                            <Label className='text-sm font-medium text-gray-600 dark:text-gray-400'>
-                              Learning Card
-                            </Label>
-                            <div className='mt-2'>
-                              <Badge
-                                variant='secondary'
-                                className='bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200'
-                              >
-                                📚 {selectedQuestion.learning_card.title}
-                              </Badge>
-                            </div>
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Right Column */}
-                  <div className='space-y-6'>
-                    {/* Options Display for Multiple Choice Questions */}
-                    {selectedQuestion.type === 'multiple-choice' &&
-                      selectedQuestion.options &&
-                      selectedQuestion.options.length > 0 && (
-                        <div className='bg-white dark:bg-gray-800 p-6 rounded-lg border shadow-sm'>
-                          <h4 className='text-lg font-semibold mb-4 flex items-center gap-2'>
-                            <TrendingUp className='w-5 h-5 text-purple-600' />
-                            Answer Options
-                          </h4>
-                          <div className='space-y-3'>
-                            {selectedQuestion.options.map((option, index) => (
-                              <div
-                                key={index}
-                                className={`p-4 rounded-lg border-2 transition-all duration-200 ${
-                                  option.isCorrect
-                                    ? 'bg-green-50 border-green-300 dark:bg-green-900/30 dark:border-green-600 shadow-md'
-                                    : 'bg-gray-50 border-gray-200 dark:bg-gray-700 dark:border-gray-600 hover:border-gray-300 dark:hover:border-gray-500'
-                                }`}
-                              >
-                                <div className='flex items-center space-x-3'>
-                                  <div
-                                    className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold ${
-                                      option.isCorrect
-                                        ? 'bg-green-600 text-white'
-                                        : 'bg-gray-300 text-gray-700 dark:bg-gray-600 dark:text-gray-300'
-                                    }`}
-                                  >
-                                    {String.fromCharCode(65 + index)}
-                                  </div>
-                                  <div className='flex-1'>
-                                    <p
-                                      className={`text-sm leading-relaxed ${
-                                        option.isCorrect
-                                          ? 'text-green-800 dark:text-green-200 font-medium'
-                                          : 'text-gray-700 dark:text-gray-300'
-                                      }`}
-                                    >
-                                      {option.text}
-                                    </p>
-                                  </div>
-                                  {option.isCorrect && (
-                                    <Badge
-                                      variant='default'
-                                      className='bg-green-600 text-white text-xs px-2 py-1'
-                                    >
-                                      ✅ Correct Answer
-                                    </Badge>
-                                  )}
-                                </div>
-                              </div>
-                            ))}
-                          </div>
-                        </div>
-                      )}
-
-                    {/* Answer/Explanation Section */}
-                    <div className='bg-white dark:bg-gray-800 p-6 rounded-lg border shadow-sm'>
-                      <h4 className='text-lg font-semibold mb-4 flex items-center gap-2'>
-                        <HelpCircle className='w-5 h-5 text-orange-600' />
-                        {selectedQuestion.type === 'multiple-choice'
-                          ? 'Explanation'
-                          : 'Correct Answer'}
-                      </h4>
-                      <div className='bg-gray-50 dark:bg-gray-700 p-4 rounded-lg'>
-                        <p className='text-sm text-gray-700 dark:text-gray-300 leading-relaxed'>
-                          {selectedQuestion.explanation ||
-                            'No explanation provided'}
-                        </p>
-                      </div>
-                    </div>
-
-                    {/* Metadata Section */}
-                    <div className='bg-white dark:bg-gray-800 p-6 rounded-lg border shadow-sm'>
-                      <h4 className='text-lg font-semibold mb-4 flex items-center gap-2'>
-                        <BarChart3 className='w-5 h-5 text-gray-600' />
-                        Question Metadata
-                      </h4>
-                      <div className='grid grid-cols-2 gap-4 text-sm'>
-                        <div>
-                          <Label className='text-gray-600 dark:text-gray-400'>
-                            Question ID
-                          </Label>
-                          <p className='font-mono text-xs text-gray-500 dark:text-gray-400 mt-1'>
-                            {selectedQuestion.id}
-                          </p>
-                        </div>
-                        <div>
-                          <Label className='text-gray-600 dark:text-gray-400'>
-                            Created
-                          </Label>
-                          <p className='text-gray-700 dark:text-gray-300 mt-1'>
-                            {selectedQuestion.createdAt
-                              ? new Date(
-                                  selectedQuestion.createdAt
-                                ).toLocaleDateString()
-                              : 'Unknown'}
-                          </p>
-                        </div>
-                        <div>
-                          <Label className='text-gray-600 dark:text-gray-400'>
-                            Last Updated
-                          </Label>
-                          <p className='text-gray-700 dark:text-gray-300 mt-1'>
-                            {selectedQuestion.updatedAt
-                              ? new Date(
-                                  selectedQuestion.updatedAt
-                                ).toLocaleDateString()
-                              : 'Unknown'}
-                          </p>
-                        </div>
-                        <div>
-                          <Label className='text-gray-600 dark:text-gray-400'>
-                            Status
-                          </Label>
-                          <p className='text-gray-700 dark:text-gray-300 mt-1'>
-                            {selectedQuestion.isActive ? 'Active' : 'Inactive'}
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </>
-            )}
-          </div>
-          <DialogFooter className='px-6 py-4 border-t flex-shrink-0 sticky bottom-0 bg-gray-50 dark:bg-gray-900/50 z-10'>
-            <Button
-              variant='outline'
-              onClick={() => setIsViewModalOpen(false)}
-              type='button'
-            >
-              Close
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
+      <FormModal
+        isOpen={isViewModalOpen}
+        onClose={() => setIsViewModalOpen(false)}
+        title="View Question"
+        maxWidth="max-w-6xl"
+        cancelText="Close"
+        saveText=""
+        onSave={() => {}}
+        saveDisabled={true}
+      >
+        {selectedQuestion && (
+          <QuestionForm
+            ref={createFormRef}
+            initialData={selectedQuestion}
+            onSubmit={() => {}}
+            onCancel={() => setIsViewModalOpen(false)}
+            cards={cards}
+            allCategories={allCategories}
+            allTags={[]}
+            readOnly={true}
+          />
+        )}
+      </FormModal>
 
       {/* Edit Question Modal */}
-      <Dialog open={isEditModalOpen} onOpenChange={setIsEditModalOpen}>
-        <DialogContent className='!max-w-6xl h-[95vh] max-h-[95vh] flex flex-col mx-auto my-4 p-0 overflow-hidden'>
-          <DialogHeader className='px-6 pt-6 pb-4 border-b flex-shrink-0 sticky top-0 bg-white dark:bg-gray-900 z-10'>
-            <div className='flex items-center justify-between'>
-              <DialogTitle className='text-2xl font-bold flex items-center gap-2'>
-                <Edit className='w-6 h-6 text-green-600' />
-                Edit Question
-              </DialogTitle>
-              <Button
-                variant='ghost'
-                size='sm'
-                onClick={() => setIsEditModalOpen(false)}
-                className='h-8 w-8 p-0'
-              >
-                <X className='w-4 h-4' />
-              </Button>
-            </div>
-            <DialogDescription className='text-gray-600 dark:text-gray-400 mt-2'>
-              Modify question details and options
-            </DialogDescription>
-          </DialogHeader>
-          <div className='flex-1 overflow-y-auto overflow-x-hidden min-h-0 px-6 py-4'>
-            {selectedQuestion && (
-              <QuestionForm
-                ref={editFormRef}
-                initialData={selectedQuestion}
-                onSubmit={handleUpdateQuestion}
-                onCancel={() => setIsEditModalOpen(false)}
-                cards={cards}
-                allCategories={allCategories}
-                allTags={[]}
-              />
-            )}
-          </div>
-          <DialogFooter className='px-6 py-4 border-t flex-shrink-0 sticky bottom-0 bg-gray-50 dark:bg-gray-900/50 z-10'>
-            <Button
-              variant='outline'
-              onClick={() => setIsEditModalOpen(false)}
-              type='button'
-            >
-              Cancel
-            </Button>
-            <Button
-              type='submit'
-              onClick={(e) => {
-                e.preventDefault();
-                if (editFormRef.current) {
-                  editFormRef.current.requestSubmit();
-                }
-              }}
-              className='bg-blue-600 hover:bg-blue-700'
-            >
-              Update Question
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
+      <FormModal
+        isOpen={isEditModalOpen}
+        onClose={() => setIsEditModalOpen(false)}
+        title="Edit Question"
+        maxWidth="max-w-6xl"
+        cancelText="Cancel"
+        saveText="Update Question"
+        onSave={() => {
+          if (editFormRef.current) {
+            editFormRef.current.requestSubmit();
+          }
+        }}
+      >
+        {selectedQuestion && (
+          <QuestionForm
+            ref={editFormRef}
+            initialData={selectedQuestion}
+            onSubmit={handleUpdateQuestion}
+            onCancel={() => setIsEditModalOpen(false)}
+            cards={cards}
+            allCategories={allCategories}
+            allTags={[]}
+          />
+        )}
+      </FormModal>
 
       {/* Create Question Modal */}
-      <Dialog open={isCreateModalOpen} onOpenChange={setIsCreateModalOpen}>
-        <DialogContent className='!max-w-6xl h-[95vh] max-h-[95vh] flex flex-col mx-auto my-4 p-0 overflow-hidden'>
-          <DialogHeader className='px-6 pt-6 pb-4 border-b flex-shrink-0 sticky top-0 bg-white dark:bg-gray-900 z-10'>
-            <div className='flex items-center justify-between'>
-              <DialogTitle className='text-2xl font-bold flex items-center gap-2'>
-                <Plus className='w-6 h-6 text-blue-600' />
-                Add Question
-              </DialogTitle>
-              <Button
-                variant='ghost'
-                size='sm'
-                onClick={() => setIsCreateModalOpen(false)}
-                className='h-8 w-8 p-0'
-              >
-                <X className='w-4 h-4' />
-              </Button>
-            </div>
-            <DialogDescription className='text-gray-600 dark:text-gray-400 mt-2'>
-              Add a new question to the database
-            </DialogDescription>
-          </DialogHeader>
-          <div className='flex-1 overflow-y-auto overflow-x-hidden min-h-0 px-6 py-4'>
-            <QuestionForm
-              ref={createFormRef}
-              onSubmit={handleCreateQuestion}
-              onCancel={() => setIsCreateModalOpen(false)}
-              cards={cards}
-              allCategories={allCategories}
-              allTags={[]}
-            />
-          </div>
-          <DialogFooter className='px-6 py-4 border-t flex-shrink-0 sticky bottom-0 bg-gray-50 dark:bg-gray-900/50 z-10'>
-            <Button
-              variant='outline'
-              onClick={() => setIsCreateModalOpen(false)}
-              type='button'
-            >
-              Cancel
-            </Button>
-            <Button
-              type='submit'
-              onClick={(e) => {
-                e.preventDefault();
-                if (createFormRef.current) {
-                  createFormRef.current.requestSubmit();
-                }
-              }}
-              className='bg-blue-600 hover:bg-blue-700'
-            >
-              Create Question
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
+      <FormModal
+        isOpen={isCreateModalOpen}
+        onClose={() => setIsCreateModalOpen(false)}
+        title="Add Question"
+        maxWidth="max-w-6xl"
+        cancelText="Cancel"
+        saveText="Create Question"
+        onSave={() => {
+          if (createFormRef.current) {
+            createFormRef.current.requestSubmit();
+          }
+        }}
+      >
+        <QuestionForm
+          ref={createFormRef}
+          onSubmit={handleCreateQuestion}
+          onCancel={() => setIsCreateModalOpen(false)}
+          cards={cards}
+          allCategories={allCategories}
+          allTags={[]}
+        />
+      </FormModal>
     </div>
   );
 }
@@ -1382,12 +1004,13 @@ interface QuestionFormProps {
   cards: Array<{ id: string; title: string }>;
   allCategories: string[];
   allTags: string[];
+  readOnly?: boolean;
 }
 
 const QuestionForm = React.forwardRef<
   HTMLFormElement,
   QuestionFormProps
->(({ initialData, onSubmit, onCancel, cards, allCategories, allTags }, ref) => {
+>(({ initialData, onSubmit, onCancel, cards, allCategories, allTags, readOnly = false }, ref) => {
   const [formData, setFormData] = useState<Partial<UnifiedQuestion>>(
     initialData || {
       title: '',
@@ -1403,8 +1026,8 @@ const QuestionForm = React.forwardRef<
   );
   
   // State for showing/hiding collapsible sections
-  const [showExplanation, setShowExplanation] = useState(false);
-  const [showResources, setShowResources] = useState(false);
+  const [showExplanation, setShowExplanation] = useState(readOnly);
+  const [showResources, setShowResources] = useState(readOnly);
 
   useEffect(() => {
     if (initialData) {
@@ -1416,11 +1039,11 @@ const QuestionForm = React.forwardRef<
         tags: initialData.tags || [],
         explanation: initialData.explanation || '',
       });
-      // Show explanation/resources if they have content
-      setShowExplanation(!!initialData.explanation);
-      setShowResources(!!(initialData as any).resources);
+      // Show explanation/resources if they have content or in read-only mode
+      setShowExplanation(readOnly || !!initialData.explanation);
+      setShowResources(readOnly || !!(initialData as any).resources);
     }
-  }, [initialData]);
+  }, [initialData, readOnly]);
 
   const handleChange = (
     e: React.ChangeEvent<
@@ -1457,7 +1080,9 @@ const QuestionForm = React.forwardRef<
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    onSubmit(formData);
+    if (!readOnly) {
+      onSubmit(formData);
+    }
   };
 
   const questionTypes = ['multiple-choice', 'open-ended', 'true-false', 'code'];
@@ -1480,8 +1105,10 @@ const QuestionForm = React.forwardRef<
               name='title'
               value={formData.title || ''}
               onChange={handleChange}
-              required
-              className='mt-1'
+              required={!readOnly}
+              readOnly={readOnly}
+              disabled={readOnly}
+              className={`mt-1 ${readOnly ? 'bg-gray-50 dark:bg-gray-900 cursor-text' : ''}`}
               placeholder='Enter question title...'
             />
           </div>
@@ -1492,8 +1119,9 @@ const QuestionForm = React.forwardRef<
             <Select
               value={formData.type || 'multiple-choice'}
               onValueChange={value => handleSelectChange('type', value)}
+              disabled={readOnly}
             >
-              <SelectTrigger className='mt-1'>
+              <SelectTrigger className={`mt-1 ${readOnly ? 'bg-gray-50 dark:bg-gray-900 cursor-not-allowed' : ''}`}>
                 <SelectValue placeholder='Select Type' />
               </SelectTrigger>
               <SelectContent>
@@ -1513,8 +1141,9 @@ const QuestionForm = React.forwardRef<
             <Select
               value={formData.difficulty || 'beginner'}
               onValueChange={value => handleSelectChange('difficulty', value)}
+              disabled={readOnly}
             >
-              <SelectTrigger className='mt-1'>
+              <SelectTrigger className={`mt-1 ${readOnly ? 'bg-gray-50 dark:bg-gray-900 cursor-not-allowed' : ''}`}>
                 <SelectValue placeholder='Select Difficulty' />
               </SelectTrigger>
               <SelectContent>
@@ -1533,8 +1162,9 @@ const QuestionForm = React.forwardRef<
             <Select
               value={formData.category || ''}
               onValueChange={value => handleSelectChange('category', value)}
+              disabled={readOnly}
             >
-              <SelectTrigger className='mt-1'>
+              <SelectTrigger className={`mt-1 ${readOnly ? 'bg-gray-50 dark:bg-gray-900 cursor-not-allowed' : ''}`}>
                 <SelectValue placeholder='Select Category' />
               </SelectTrigger>
               <SelectContent>
@@ -1555,8 +1185,9 @@ const QuestionForm = React.forwardRef<
               onValueChange={value =>
                 handleSelectChange('learning_card_id', value)
               }
+              disabled={readOnly}
             >
-              <SelectTrigger className='mt-1'>
+              <SelectTrigger className={`mt-1 ${readOnly ? 'bg-gray-50 dark:bg-gray-900 cursor-not-allowed' : ''}`}>
                 <SelectValue placeholder='Select Learning Card' />
               </SelectTrigger>
               <SelectContent>
@@ -1578,7 +1209,9 @@ const QuestionForm = React.forwardRef<
               type='number'
               value={formData.points || 1}
               onChange={handleChange}
-              className='mt-1'
+              readOnly={readOnly}
+              disabled={readOnly}
+              className={`mt-1 ${readOnly ? 'bg-gray-50 dark:bg-gray-900 cursor-text' : ''}`}
               min='1'
               max='10'
             />
@@ -1586,7 +1219,7 @@ const QuestionForm = React.forwardRef<
         </div>
       </div>
 
-      {/* Content Section */}
+      {/* Content Section - Moved to be more prominent */}
       <div className='bg-white dark:bg-gray-800 p-6 rounded-lg border shadow-sm'>
         <h4 className='text-lg font-semibold mb-4 flex items-center gap-2'>
           <BookOpen className='w-5 h-5 text-blue-600' />
@@ -1601,9 +1234,11 @@ const QuestionForm = React.forwardRef<
             name='content'
             value={formData.content || ''}
             onChange={handleChange}
-            rows={6}
-            required
-            className='mt-1 w-full resize-y'
+            rows={8}
+            required={!readOnly}
+            readOnly={readOnly}
+            disabled={readOnly}
+            className={`mt-1 w-full resize-y ${readOnly ? 'bg-gray-50 dark:bg-gray-900 cursor-text' : ''}`}
             placeholder='Enter the question content...'
           />
           <p className='text-xs text-gray-500 dark:text-gray-400 mt-2'>
@@ -1625,14 +1260,17 @@ const QuestionForm = React.forwardRef<
               variant='outline'
               size='sm'
               onClick={() => {
-                setFormData(prev => ({
-                  ...prev,
-                  options: [
-                    ...(prev.options || []),
-                    { id: `option-${Date.now()}`, text: '', isCorrect: false },
-                  ],
-                }));
+                if (!readOnly) {
+                  setFormData(prev => ({
+                    ...prev,
+                    options: [
+                      ...(prev.options || []),
+                      { id: `option-${Date.now()}`, text: '', isCorrect: false },
+                    ],
+                  }));
+                }
               }}
+              disabled={readOnly}
               className='bg-purple-50 hover:bg-purple-100 text-purple-700 border-purple-200'
             >
               <Plus className='w-4 h-4 mr-2' />
@@ -1665,12 +1303,16 @@ const QuestionForm = React.forwardRef<
                     <Input
                       value={option.text}
                       onChange={e => {
-                        const newOptions = [...(formData.options || [])];
-                        newOptions[index] = { ...option, text: e.target.value };
-                        setFormData(prev => ({ ...prev, options: newOptions }));
+                        if (!readOnly) {
+                          const newOptions = [...(formData.options || [])];
+                          newOptions[index] = { ...option, text: e.target.value };
+                          setFormData(prev => ({ ...prev, options: newOptions }));
+                        }
                       }}
+                      readOnly={readOnly}
+                      disabled={readOnly}
                       placeholder={`Option ${String.fromCharCode(65 + index)}`}
-                      className='border-0 bg-transparent p-0 text-sm'
+                      className={`border-0 bg-transparent p-0 text-sm ${readOnly ? 'cursor-text' : ''}`}
                     />
                   </div>
 
@@ -1678,30 +1320,35 @@ const QuestionForm = React.forwardRef<
                     <Checkbox
                       checked={option.isCorrect}
                       onCheckedChange={checked => {
-                        const newOptions = [...(formData.options || [])];
-                        newOptions[index] = { ...option, isCorrect: !!checked };
-                        setFormData(prev => ({ ...prev, options: newOptions }));
+                        if (!readOnly) {
+                          const newOptions = [...(formData.options || [])];
+                          newOptions[index] = { ...option, isCorrect: !!checked };
+                          setFormData(prev => ({ ...prev, options: newOptions }));
+                        }
                       }}
+                      disabled={readOnly}
                     />
                     <Label className='text-sm font-medium'>
                       {option.isCorrect ? '✅ Correct' : '❌ Incorrect'}
                     </Label>
                   </div>
 
-                  <Button
-                    type='button'
-                    variant='outline'
-                    size='sm'
-                    onClick={() => {
-                      const newOptions = (formData.options || []).filter(
-                        (_, i) => i !== index
-                      );
-                      setFormData(prev => ({ ...prev, options: newOptions }));
-                    }}
-                    className='text-red-600 hover:text-red-700 hover:bg-red-50'
-                  >
-                    <Trash2 className='w-4 h-4' />
-                  </Button>
+                  {!readOnly && (
+                    <Button
+                      type='button'
+                      variant='outline'
+                      size='sm'
+                      onClick={() => {
+                        const newOptions = (formData.options || []).filter(
+                          (_, i) => i !== index
+                        );
+                        setFormData(prev => ({ ...prev, options: newOptions }));
+                      }}
+                      className='text-red-600 hover:text-red-700 hover:bg-red-50'
+                    >
+                      <Trash2 className='w-4 h-4' />
+                    </Button>
+                  )}
                 </div>
               </div>
             ))}
@@ -1733,7 +1380,8 @@ const QuestionForm = React.forwardRef<
             type='button'
             variant='outline'
             size='sm'
-            onClick={() => setShowExplanation(!showExplanation)}
+            onClick={() => !readOnly && setShowExplanation(!showExplanation)}
+            disabled={readOnly}
             className='flex items-center gap-2'
           >
             {showExplanation ? (
@@ -1760,7 +1408,9 @@ const QuestionForm = React.forwardRef<
               value={formData.explanation || ''}
               onChange={handleChange}
               rows={4}
-              className='mt-1'
+              readOnly={readOnly}
+              disabled={readOnly}
+              className={`mt-1 ${readOnly ? 'bg-gray-50 dark:bg-gray-900 cursor-text' : ''}`}
               placeholder={
                 formData.type === 'multiple-choice'
                   ? 'Enter explanation for the correct answer...'
@@ -1782,7 +1432,8 @@ const QuestionForm = React.forwardRef<
             type='button'
             variant='outline'
             size='sm'
-            onClick={() => setShowResources(!showResources)}
+            onClick={() => !readOnly && setShowResources(!showResources)}
+            disabled={readOnly}
             className='flex items-center gap-2'
           >
             {showResources ? (
@@ -1813,7 +1464,9 @@ const QuestionForm = React.forwardRef<
               }
               onChange={e => handleResourcesChange(e.target.value)}
               rows={8}
-              className='mt-1 font-mono text-sm'
+              readOnly={readOnly}
+              disabled={readOnly}
+              className={`mt-1 font-mono text-sm ${readOnly ? 'bg-gray-50 dark:bg-gray-900 cursor-text' : ''}`}
               placeholder={`[\n  {\n    "type": "video",\n    "title": "Video Title",\n    "url": "https://example.com/video",\n    "description": "Video description",\n    "duration": "10:30"\n  },\n  {\n    "type": "article",\n    "title": "Article Title",\n    "url": "https://example.com/article",\n    "description": "Article description"\n  }\n]`}
             />
             <p className='text-xs text-gray-500 dark:text-gray-400 mt-2'>
@@ -1837,8 +1490,9 @@ const QuestionForm = React.forwardRef<
             name='isActive'
             checked={formData.isActive || false}
             onCheckedChange={checked =>
-              setFormData(prev => ({ ...prev, isActive: !!checked }))
+              !readOnly && setFormData(prev => ({ ...prev, isActive: !!checked }))
             }
+            disabled={readOnly}
           />
           <Label htmlFor='isActive' className='text-sm font-medium'>
             Question is Active

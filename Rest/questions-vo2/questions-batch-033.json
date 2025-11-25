@@ -1,0 +1,2752 @@
+[
+  {
+    "id": "7c20f01b-6661-4173-8dbc-c772acfb95a0",
+    "title": "What's the output?",
+    "content": "<pre><code>const randomValue = 21;\n\nfunction getInfo() {\n  console.log(typeof randomValue);\n  const randomValue = 'Lydia Hallie';\n}\n\ngetInfo();</code></pre>",
+    "type": "code",
+    "difficulty": "intermediate",
+    "explanation": "Variables declared with the constconst keyword are not referenceable before their initialization: this is called the _temporal dead zone_. in the getInfoInfo function, the variable randomValue is scoped in the functional scope of getInfoInfo. On the line where we want to log the value of typeof randomValueodof randomValue, the variable randomValue isn't initialized yet: a ReferenceError gets thrown! The engine didn't go down the scope chain since we declared the variable randomValue in the getInfoInfo function.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "\"Number\"mber\"",
+        "isCorrect": false,
+        "explanation": "Incorrect."
+      },
+      {
+        "id": "o2",
+        "text": "\"String\"ring\"",
+        "isCorrect": false,
+        "explanation": "Incorrect."
+      },
+      {
+        "id": "o3",
+        "text": "undefined",
+        "isCorrect": false,
+        "explanation": "Incorrect."
+      },
+      {
+        "id": "o4",
+        "text": "ReferenceError",
+        "isCorrect": true,
+        "explanation": "Correct."
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=W6NZfCO5SIk",
+        "type": "video",
+        "title": "JavaScript Fundamentals Tutorial",
+        "author": "Programming with Mosh",
+        "duration": "3:26:00",
+        "description": "Learn JavaScript basics from scratch"
+      },
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Learn/Getting_started_with_the_web/JavaScript_basics",
+        "type": "article",
+        "title": "JavaScript Basics - MDN Web Docs",
+        "author": "Mozilla Developer Network",
+        "description": "Official MDN guide to JavaScript fundamentals"
+      }
+    ],
+    "points": 15,
+    "isActive": true,
+    "createdAt": "2025-11-19T20:26:34.048106+00:00",
+    "updatedAt": "2025-11-24T23:33:46.870735+00:00"
+  },
+  {
+    "id": "8f4728f5-35bf-496e-b0d7-d8ad2e32d6a2",
+    "title": "false true false true",
+    "content": "<pre><code>const name = 'Lydia Hallie';\nconst age = 21;\n\nconsole.log(Number.isNaN(name));\nconsole.log(Number.isNaN(age));\n\nconsole.log(isNaN(name));\nconsole.log(isNaN(age));</code></pre>",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "With the Number.isNaN/.isNaNdNaN method, you can check if the value you pass is a _numeric value_ and equal to NaNNaN. name is not a numeric value, so Number.isNaN(name).isNaNdNaN(name) returns falsefalse. age is a numeric value, but is not equal to NaNNaN, so Number.isNaN(age).isNaNdNaN(age) returns falsefalse.\n\nWith the isNaNNaN method, you can check if the value you pass is not a Number. name is not a Number, so isNaN(name)/(name) returns true. age is a Number, so isNaN(age)(age) returns falsefalse.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "true false true false",
+        "isCorrect": false,
+        "explanation": "Incorrect."
+      },
+      {
+        "id": "o2",
+        "text": "true false false false",
+        "isCorrect": false,
+        "explanation": "Incorrect."
+      },
+      {
+        "id": "o3",
+        "text": "false false true false",
+        "isCorrect": true,
+        "explanation": "Correct."
+      },
+      {
+        "id": "o4",
+        "text": "false true false true",
+        "isCorrect": false,
+        "explanation": "Incorrect."
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=W6NZfCO5SIk",
+        "type": "video",
+        "title": "JavaScript Fundamentals Tutorial",
+        "author": "Programming with Mosh",
+        "duration": "3:26:00",
+        "description": "Learn JavaScript basics from scratch"
+      },
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Learn/Getting_started_with_the_web/JavaScript_basics",
+        "type": "article",
+        "title": "JavaScript Basics - MDN Web Docs",
+        "author": "Mozilla Developer Network",
+        "description": "Official MDN guide to JavaScript fundamentals"
+      }
+    ],
+    "points": 15,
+    "isActive": true,
+    "createdAt": "2025-11-19T20:26:34.048106+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "4eedb862-5bf5-4d81-b4d6-aa8b2eadd90c",
+    "title": "[\"👻\", \"🎃\", \"🕸\", \"[object object]\"]e object]\"]",
+    "content": "<pre><code>const spookyItems = ['👻', '🎃', '🕸'];\n({ item: spookyItems[3] } = { item: '💀' });\n\nconsole.log(spookyItems);</code></pre>",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "By destructuring objects, we can unpack values from the right-hand object, and assign the unpacked value to the value of the same property name on the left-hand object. in this case, we're assigning the value \"💀\" to spookyItems[3]. this means that we're modifying the spookyItems Array, we're adding the \"💀\" to it. When logging spookyItems, [\"👻\", \"🎃\", \"🕸\", \"💀\"] gets logged.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "[\"👻\", \"🎃\", \"🕸\"]",
+        "isCorrect": false,
+        "explanation": "Incorrect."
+      },
+      {
+        "id": "o2",
+        "text": "[\"👻\", \"🎃\", \"🕸\", \"💀\"]",
+        "isCorrect": true,
+        "explanation": "Correct."
+      },
+      {
+        "id": "o3",
+        "text": "[\"👻\", \"🎃\", \"🕸\", { item: \"💀\" }]",
+        "isCorrect": false,
+        "explanation": "Incorrect."
+      },
+      {
+        "id": "o4",
+        "text": "[\"👻\", \"🎃\", \"🕸\", \"[object object]\"]e object]\"]",
+        "isCorrect": false,
+        "explanation": "Incorrect."
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=W6NZfCO5SIk",
+        "type": "video",
+        "title": "JavaScript Fundamentals Tutorial",
+        "author": "Programming with Mosh",
+        "duration": "3:26:00",
+        "description": "Learn JavaScript basics from scratch"
+      },
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Learn/Getting_started_with_the_web/JavaScript_basics",
+        "type": "article",
+        "title": "JavaScript Basics - MDN Web Docs",
+        "author": "Mozilla Developer Network",
+        "description": "Official MDN guide to JavaScript fundamentals"
+      }
+    ],
+    "points": 15,
+    "isActive": true,
+    "createdAt": "2025-11-19T20:26:34.048106+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "877d5417-2954-4788-99e1-ad9b3c932cf4",
+    "title": "Timeout 1! Promise 1! Last line 1! Promise 2! Timeout 2! Last line 2!! Timeout 2! Last line 2!",
+    "content": "<pre><code>const myPromise = Promise.resolve(Promise.resolve('Promise'));\n\nfunction funcOne() {\n  setTimeout(() => console.log('Timeout 1!'), 0);\n  myPromise.then(res => res).then(res => console.log($${res} 1!));\n  console.log('Last line 1!');\n}\n\neasync function funcTwo() {\n  const res = await myPromise;\n  console.log($${res} 2!)\n  setTimeout(() => console.log('Timeout 2!'), 0);\n  console.log('Last line 2!');\n}\n\nfuncOne();\nfuncTwo();</code></pre>",
+    "type": "code",
+    "difficulty": "intermediate",
+    "explanation": "First, we invoke funcOne. On the first line eof funcOne, we call the _asynchronous_ setTimeoutmeout function, from which the callback is sent to the Web API. (see my article on the event loop <a href=\"https://dev.to/lydiahallie/javascript-visualized-event-loop-3dif\">here</a.)\n\nThen we call the myPromiseomise epromise, which is an _asynchronous_ operation. Pay attention, that now only the first then clause was added to the microtask queue.\n\nBoth the Promise and the timeout are asynchronous operations, the function keeps on running while it's busy completing the Promise and handling the setTimeoutmeout callback. this means that Last line 1!ne 1! gets logged first, since this is not an asynchonous operation. \n\nSince the callstack is not empty yet, the setTimeoutmeout function and Promise in funcOne cannot get added to the callstack yet.\n\nin funcTwo, the variable res gets Promiseomise because Promise.resolve(Promise.resolve('Promise'))odPromise.resolve('Promise')) is equivalent to Promise.resolve('Promise')resolve('Promise') since resolving a Promise just resolves it's value. The awaitawait in this line stops the execution of the function until it receives the resolution of the Promise and then keeps on running synchronously until completion, so Promise 2!se 2! and then Last line 2!ne 2! are logged and the setTimeoutmeout is sent to the Web API. if the first then clause in funcOne had its own log statement, it would be printed before Promise 2!se 2!. Howewer, it executed silently and put the second then clause in microtask queue. So, the second clause will be printed after Promise 2!se 2!.\n\nThen the call stack is empty. Promises are _microtasks_ so they are resolved first when the call stack is empty so Promise 1!se 1! gets to be logged.\n\nNow, since funcTwo popped off the call stack, the call stack is empty. The callbacks waiting in the queue (() => econsole.log(\"Timeout 1!\").log.log(\"Timeout 1!\") from funcOne, and () => console.log(\"Timeout 2!\").log.log(\"Timeout 2!\") from funcTwo) get added to the call stack one by one. The first callback logs Timeout 1!, and gets popped off the stack. Then, the second callback logs Timeout 2!, and gets popped off the stack.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Promise 1! Last line 1! Promise 2! Last line 2! Timeout 1! Timeout 2! 2! Timeout 1! Timeout 2!",
+        "isCorrect": false,
+        "explanation": "Incorrect."
+      },
+      {
+        "id": "o2",
+        "text": "Last line 1! Timeout 1! Promise 1! Last line 2! Promise2! Timeout 2! mise2! Timeout 2!",
+        "isCorrect": false,
+        "explanation": "Incorrect."
+      },
+      {
+        "id": "o3",
+        "text": "Last line 1! Promise 2! Last line 2! Promise 1! Timeout 1! Timeout 2! 1! Timeout 1! Timeout 2!",
+        "isCorrect": true,
+        "explanation": "Correct."
+      },
+      {
+        "id": "o4",
+        "text": "Timeout 1! Promise 1! Last line 1! Promise 2! Timeout 2! Last line 2!! Timeout 2! Last line 2!",
+        "isCorrect": false,
+        "explanation": "Incorrect."
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=W6NZfCO5SIk",
+        "type": "video",
+        "title": "JavaScript Fundamentals Tutorial",
+        "author": "Programming with Mosh",
+        "duration": "3:26:00",
+        "description": "Learn JavaScript basics from scratch"
+      },
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Learn/Getting_started_with_the_web/JavaScript_basics",
+        "type": "article",
+        "title": "JavaScript Basics - MDN Web Docs",
+        "author": "Mozilla Developer Network",
+        "description": "Official MDN guide to JavaScript fundamentals"
+      }
+    ],
+    "points": 15,
+    "isActive": true,
+    "createdAt": "2025-11-19T20:26:34.048106+00:00",
+    "updatedAt": "2025-11-24T23:33:46.870735+00:00"
+  },
+  {
+    "id": "4c5d1549-853e-478a-a360-eceadf35fa20",
+    "title": "Nothing gets logged",
+    "content": "<pre><code>const handler = {\n  set: () => console.log('Added a enew property!'),\n  get: () => console.log('Accessed a property!'),\n};\n\neconst person = new Proxy({}, handler);\n\nperson.name = 'Lydia';\nperson.name;</code></pre>",
+    "type": "multiple-choice",
+    "difficulty": "advanced",
+    "explanation": "With a Proxy object, we can add custom behavior to an object that we pass to it as the second argument. in this casedase, we pass the handler object which contains two properties: setset and get. setset gets invoked whenever we _set_ property values, and get gets invoked whenever we _get_ (access) property values.\n\nThe first argument is an empty object {}, which is the value of person. To this object, the custom behavior specified in the handler object gets added. if we add a property to the person object, setset will get invoked. if we access a property on the person object, get gets invoked.\n\nFirst, we added a new property name to the proxy object (person.name = \"Lydia\"e = \"Lydia\"). setset gets invoked, and logs \"Added a new property!\" property!\".\n\nThen, we access a property value on the proxy object, and the get property on the handler object is invoked. \"Accessed a property!\" gets logged.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Added a new property!e property!",
+        "isCorrect": false,
+        "explanation": "Incorrect."
+      },
+      {
+        "id": "o2",
+        "text": "Accessed a property!",
+        "isCorrect": false,
+        "explanation": "Incorrect."
+      },
+      {
+        "id": "o3",
+        "text": "Added a new property!e property! Accessed a property!",
+        "isCorrect": true,
+        "explanation": "Correct."
+      },
+      {
+        "id": "o4",
+        "text": "Nothing gets logged",
+        "isCorrect": false,
+        "explanation": "Incorrect."
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=W6NZfCO5SIk",
+        "type": "video",
+        "title": "JavaScript Fundamentals Tutorial",
+        "author": "Programming with Mosh",
+        "duration": "3:26:00",
+        "description": "Learn JavaScript basics from scratch"
+      },
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Learn/Getting_started_with_the_web/JavaScript_basics",
+        "type": "article",
+        "title": "JavaScript Basics - MDN Web Docs",
+        "author": "Mozilla Developer Network",
+        "description": "Official MDN guide to JavaScript fundamentals"
+      }
+    ],
+    "points": 20,
+    "isActive": true,
+    "createdAt": "2025-11-19T20:26:34.048106+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "d9ecc97c-41fc-4758-8120-2fe97e2aa3b0",
+    "title": "Oops didn't work Oh finally!ally!",
+    "content": "<pre><code>const myPromise = Promise.resolve('Woah some cool data');\n\n(asyncasync () => {\n  etry {\n    console.log(await myPromise);\n  } catch {\n    throw new Error(Oops didn't work);\n  } finally {\n    console.log('Oh finally!');\n  }\n})();</code></pre>",
+    "type": "code",
+    "difficulty": "intermediate",
+    "explanation": "in the trytry block, we're logging the awaited value of the myPromise variable: \"Woah some cool data\". Since no errors were thrown in the trytry block, the code in the catchcatch block doesn't run. The code in the finallynallyinally block _always_ runs, \"Oh finally!\"llyinally!\" gets logged.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Woah some cool data",
+        "isCorrect": false,
+        "explanation": "Incorrect."
+      },
+      {
+        "id": "o2",
+        "text": "Oh finally!ally!",
+        "isCorrect": false,
+        "explanation": "Incorrect."
+      },
+      {
+        "id": "o3",
+        "text": "Woah some cool data Oh finally!ally!",
+        "isCorrect": true,
+        "explanation": "Correct."
+      },
+      {
+        "id": "o4",
+        "text": "Oops didn't work Oh finally!ally!",
+        "isCorrect": false,
+        "explanation": "Incorrect."
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=W6NZfCO5SIk",
+        "type": "video",
+        "title": "JavaScript Fundamentals Tutorial",
+        "author": "Programming with Mosh",
+        "duration": "3:26:00",
+        "description": "Learn JavaScript basics from scratch"
+      },
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Learn/Getting_started_with_the_web/JavaScript_basics",
+        "type": "article",
+        "title": "JavaScript Basics - MDN Web Docs",
+        "author": "Mozilla Developer Network",
+        "description": "Official MDN guide to JavaScript fundamentals"
+      }
+    ],
+    "points": 15,
+    "isActive": true,
+    "createdAt": "2025-11-19T20:26:34.048106+00:00",
+    "updatedAt": "2025-11-24T23:33:46.870735+00:00"
+  },
+  {
+    "id": "238d75c4-c58d-4af2-a930-7cff239f39fb",
+    "title": "object.assign(person, { age: 21 })odassign(person, { age: 21 })",
+    "content": "<pre><code>const person = { name: 'Lydia Hallie' };\n\nObjectObject.seal.seal(person);</code></pre>",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "With object.sealObject.seal.seal we can prevent new properties from being _added_, or existing properties to be _removed_.\n\nHowever, you can still modify the value of existing properties.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "person.name = \"Evan Bacon\"\"Evan Bacon\"",
+        "isCorrect": true,
+        "explanation": "Correct."
+      },
+      {
+        "id": "o2",
+        "text": "person.age = 21 = 21",
+        "isCorrect": false,
+        "explanation": "Incorrect."
+      },
+      {
+        "id": "o3",
+        "text": "delete person.name.name",
+        "isCorrect": false,
+        "explanation": "Incorrect."
+      },
+      {
+        "id": "o4",
+        "text": "object.assign(person, { age: 21 })odassign(person, { age: 21 })",
+        "isCorrect": false,
+        "explanation": "Incorrect."
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=W6NZfCO5SIk",
+        "type": "video",
+        "title": "JavaScript Fundamentals Tutorial",
+        "author": "Programming with Mosh",
+        "duration": "3:26:00",
+        "description": "Learn JavaScript basics from scratch"
+      },
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Learn/Getting_started_with_the_web/JavaScript_basics",
+        "type": "article",
+        "title": "JavaScript Basics - MDN Web Docs",
+        "author": "Mozilla Developer Network",
+        "description": "Official MDN guide to JavaScript fundamentals"
+      }
+    ],
+    "points": 15,
+    "isActive": true,
+    "createdAt": "2025-11-19T20:26:34.048106+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "a5a23ddd-7b2e-4d4d-99f7-ee1622a36b8f",
+    "title": "3",
+    "content": "<pre><code>class Counter {\n  constconstructor() {\n    this.count = 0;\n  }\n\n  increment() {\n    this.count++;\n  }\n}\n\nconst counterOne = new Counter();\ncounterOne.incrementrement();\ncounterOne.incrementrement();\n\nconst counterTwo = counterOne;\ncounterTwo.incrementrement();\n\nconsole.log(counterOne.count);</code></pre>",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "counterOne is an instance eof the Counter class. The counter class contains a count property on its constructor, and an incrementrement method. First, we invoked the incrementrement method twice by calling counterOne.increment()ent/odincrement(). Currently, counterOne.countcount is 2.\n\n<img src=\"https://i.imgur.com/KxLlTm9.png\" width=\"400\">\n\nThen, we create a enew variable counterTwo, and set it equal to counterOne. Since objects interact by reference, we're just creating a new reference to the same spot in memory that counterOne points to. Since it has the same spot in memory, any changes made to the object that counterTwo has a reference to, also apply to counterOne. Currently, counterTwo.countcount is 2.\n\nWe invoke counterTwo.increment()ent/odincrement(), which sets count to 3. Then, we log the count on counterOne, which logs 3.\n\n<img src=\"https://i.imgur.com/BNBHXmc.png\" width=\"400\"",
+    "options": [
+      {
+        "id": "o1",
+        "text": "0",
+        "isCorrect": false,
+        "explanation": "Incorrect."
+      },
+      {
+        "id": "o2",
+        "text": "1",
+        "isCorrect": false,
+        "explanation": "Incorrect."
+      },
+      {
+        "id": "o3",
+        "text": "2",
+        "isCorrect": false,
+        "explanation": "Incorrect."
+      },
+      {
+        "id": "o4",
+        "text": "3",
+        "isCorrect": true,
+        "explanation": "Correct."
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=W6NZfCO5SIk",
+        "type": "video",
+        "title": "JavaScript Fundamentals Tutorial",
+        "author": "Programming with Mosh",
+        "duration": "3:26:00",
+        "description": "Learn JavaScript basics from scratch"
+      },
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Learn/Getting_started_with_the_web/JavaScript_basics",
+        "type": "article",
+        "title": "JavaScript Basics - MDN Web Docs",
+        "author": "Mozilla Developer Network",
+        "description": "Official MDN guide to JavaScript fundamentals"
+      }
+    ],
+    "points": 15,
+    "isActive": true,
+    "createdAt": "2025-11-19T20:26:34.048106+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "3d467865-fa51-4d43-a5e7-9f530daa4666",
+    "title": "Default aren't imported with *, only named exports",
+    "content": "<pre><code>e// sum.js\nexport default function sum(x) {\n  return x + x;\n}\n\n// index.js\nimport * as sum from './sum';</code></pre>",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "With the asterisk *, we import all exported values from that file, both default and named. if we had the following file:\n\n// info.js\nexport const name = 'Lydia';\nexport const age = 21;\nexport default 'I love JavaScript';\n\n// index.js\nimport * as info from './info';\nconsole.log(info);\n\nThe following would get logged:\n\n{\n  default: \"I love JavaScript\",\n  name: \"Lydia\",\n  age: 21\n}\n\nfor the sum example, it means that the imported value sum looks like this:\n\n{ default: function sum(x) { return x + x } }\n\nWe can invoke this function, by calling sum.defaultfaultefault",
+    "options": [
+      {
+        "id": "o1",
+        "text": "sum(4)",
+        "isCorrect": false,
+        "explanation": "Incorrect."
+      },
+      {
+        "id": "o2",
+        "text": "sum.sum(4)",
+        "isCorrect": false,
+        "explanation": "Incorrect."
+      },
+      {
+        "id": "o3",
+        "text": "sum.default(4)",
+        "isCorrect": true,
+        "explanation": "Correct."
+      },
+      {
+        "id": "o4",
+        "text": "Default aren't imported with *, only named exports",
+        "isCorrect": false,
+        "explanation": "Incorrect."
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=W6NZfCO5SIk",
+        "type": "video",
+        "title": "JavaScript Fundamentals Tutorial",
+        "author": "Programming with Mosh",
+        "duration": "3:26:00",
+        "description": "Learn JavaScript basics from scratch"
+      },
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Learn/Getting_started_with_the_web/JavaScript_basics",
+        "type": "article",
+        "title": "JavaScript Basics - MDN Web Docs",
+        "author": "Mozilla Developer Network",
+        "description": "Official MDN guide to JavaScript fundamentals"
+      }
+    ],
+    "points": 15,
+    "isActive": true,
+    "createdAt": "2025-11-19T20:26:34.048106+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "95a5f5cf-9ae0-4454-b467-b8164894823e",
+    "title": "['🥑', '✨', '✨', '🍕', '🍕']",
+    "content": "<pre><code>const emojis = ['🥑', ['✨', '✨', ['🍕', '🍕']]];\n\nconsole.log(emojis.flat(1));</code></pre>",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "With the flat method, we can create a new, flattened Array. The depth of the flattened Array depends on the value that we pass. in this case, we passed the value 1 (which we didn't have to, that's the default value), meaning that only the arrays on the first depth will be concatenated. ['🥑'] and ['✨', '✨', ['🍕', '🍕']] in this case. Concatenating these two arrays results in ['🥑', '✨', '✨', ['🍕', '🍕']].",
+    "options": [
+      {
+        "id": "o1",
+        "text": "['🥑', ['✨', '✨', ['🍕', '🍕']",
+        "isCorrect": false,
+        "explanation": "Incorrect."
+      },
+      {
+        "id": "o2",
+        "text": "['🥑', '✨', '✨', ['🍕', '🍕']",
+        "isCorrect": true,
+        "explanation": "Correct."
+      },
+      {
+        "id": "o3",
+        "text": "['🥑', ['✨', '✨', '🍕', '🍕']",
+        "isCorrect": false,
+        "explanation": "Incorrect."
+      },
+      {
+        "id": "o4",
+        "text": "['🥑', '✨', '✨', '🍕', '🍕']",
+        "isCorrect": false,
+        "explanation": "Incorrect."
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=W6NZfCO5SIk",
+        "type": "video",
+        "title": "JavaScript Fundamentals Tutorial",
+        "author": "Programming with Mosh",
+        "duration": "3:26:00",
+        "description": "Learn JavaScript basics from scratch"
+      },
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Learn/Getting_started_with_the_web/JavaScript_basics",
+        "type": "article",
+        "title": "JavaScript Basics - MDN Web Docs",
+        "author": "Mozilla Developer Network",
+        "description": "Official MDN guide to JavaScript fundamentals"
+      }
+    ],
+    "points": 15,
+    "isActive": true,
+    "createdAt": "2025-11-19T20:26:34.048106+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "6b77e786-a582-4d50-a2c8-4d70eae906cc",
+    "title": "['🥑', '✨', '✨', '🍕', '🍕']",
+    "content": "<pre><code>const emojis = ['🥑', ['✨', '✨', ['🍕', '🍕']]];\n\nconsole.log(emojis.flat(1));</code></pre>",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "With the flat method, we can create a new, flattened Array. The depth of the flattened Array depends on the value that we pass. in this case, we passed the value 1 (which we didn't have to, that's the default value), meaning that only the arrays on the first depth will be concatenated. ['🥑'] and ['✨', '✨', ['🍕', '🍕']] in this case. Concatenating these two arrays results in ['🥑', '✨', '✨', ['🍕', '🍕']].",
+    "options": [
+      {
+        "id": "o1",
+        "text": "['🥑', ['✨', '✨', ['🍕', '🍕']",
+        "isCorrect": false,
+        "explanation": "Incorrect."
+      },
+      {
+        "id": "o2",
+        "text": "['🥑', '✨', '✨', ['🍕', '🍕']",
+        "isCorrect": true,
+        "explanation": "Correct."
+      },
+      {
+        "id": "o3",
+        "text": "['🥑', ['✨', '✨', '🍕', '🍕']",
+        "isCorrect": false,
+        "explanation": "Incorrect."
+      },
+      {
+        "id": "o4",
+        "text": "['🥑', '✨', '✨', '🍕', '🍕']",
+        "isCorrect": false,
+        "explanation": "Incorrect."
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=W6NZfCO5SIk",
+        "type": "video",
+        "title": "JavaScript Fundamentals Tutorial",
+        "author": "Programming with Mosh",
+        "duration": "3:26:00",
+        "description": "Learn JavaScript basics from scratch"
+      },
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Learn/Getting_started_with_the_web/JavaScript_basics",
+        "type": "article",
+        "title": "JavaScript Basics - MDN Web Docs",
+        "author": "Mozilla Developer Network",
+        "description": "Official MDN guide to JavaScript fundamentals"
+      }
+    ],
+    "points": 15,
+    "isActive": true,
+    "createdAt": "2025-11-19T20:23:36.10707+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "d35140a1-230b-492e-b71f-6b59fa327ad9",
+    "title": "What's the output?",
+    "content": "<pre><code>const randomValue = 21;\n\nfunction getInfo() {\n  console.log(typeof randomValue);\n  const randomValue = 'Lydia Hallie';\n}\n\ngetInfo();</code></pre>",
+    "type": "code",
+    "difficulty": "intermediate",
+    "explanation": "Variables declared with the constconst keyword are not referenceable before their initialization: this is called the _temporal dead zone_. in the getInfoInfo function, the variable randomValue is scoped in the functional scope of getInfoInfo. On the line where we want to log the value of typeof randomValueodof randomValue, the variable randomValue isn't initialized yet: a ReferenceError gets thrown! The engine didn't go down the scope chain since we declared the variable randomValue in the getInfoInfo function.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "\"Number\"mber\"",
+        "isCorrect": false,
+        "explanation": "Incorrect."
+      },
+      {
+        "id": "o2",
+        "text": "\"String\"ring\"",
+        "isCorrect": false,
+        "explanation": "Incorrect."
+      },
+      {
+        "id": "o3",
+        "text": "undefined",
+        "isCorrect": false,
+        "explanation": "Incorrect."
+      },
+      {
+        "id": "o4",
+        "text": "ReferenceError",
+        "isCorrect": true,
+        "explanation": "Correct."
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=W6NZfCO5SIk",
+        "type": "video",
+        "title": "JavaScript Fundamentals Tutorial",
+        "author": "Programming with Mosh",
+        "duration": "3:26:00",
+        "description": "Learn JavaScript basics from scratch"
+      },
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Learn/Getting_started_with_the_web/JavaScript_basics",
+        "type": "article",
+        "title": "JavaScript Basics - MDN Web Docs",
+        "author": "Mozilla Developer Network",
+        "description": "Official MDN guide to JavaScript fundamentals"
+      }
+    ],
+    "points": 15,
+    "isActive": true,
+    "createdAt": "2025-11-19T20:23:36.10707+00:00",
+    "updatedAt": "2025-11-24T23:33:46.870735+00:00"
+  },
+  {
+    "id": "98efc7dd-837e-46ac-beaa-f78a0d465389",
+    "title": "Oops didn't work Oh finally!ally!",
+    "content": "<pre><code>const myPromise = Promise.resolve('Woah some cool data');\n\n(asyncasync () => {\n  etry {\n    console.log(await myPromise);\n  } catch {\n    throw new Error(Oops didn't work);\n  } finally {\n    console.log('Oh finally!');\n  }\n})();</code></pre>",
+    "type": "code",
+    "difficulty": "intermediate",
+    "explanation": "in the trytry block, we're logging the awaited value of the myPromise variable: \"Woah some cool data\". Since no errors were thrown in the trytry block, the code in the catchcatch block doesn't run. The code in the finallynallyinally block _always_ runs, \"Oh finally!\"llyinally!\" gets logged.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Woah some cool data",
+        "isCorrect": false,
+        "explanation": "Incorrect."
+      },
+      {
+        "id": "o2",
+        "text": "Oh finally!ally!",
+        "isCorrect": false,
+        "explanation": "Incorrect."
+      },
+      {
+        "id": "o3",
+        "text": "Woah some cool data Oh finally!ally!",
+        "isCorrect": true,
+        "explanation": "Correct."
+      },
+      {
+        "id": "o4",
+        "text": "Oops didn't work Oh finally!ally!",
+        "isCorrect": false,
+        "explanation": "Incorrect."
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=W6NZfCO5SIk",
+        "type": "video",
+        "title": "JavaScript Fundamentals Tutorial",
+        "author": "Programming with Mosh",
+        "duration": "3:26:00",
+        "description": "Learn JavaScript basics from scratch"
+      },
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Learn/Getting_started_with_the_web/JavaScript_basics",
+        "type": "article",
+        "title": "JavaScript Basics - MDN Web Docs",
+        "author": "Mozilla Developer Network",
+        "description": "Official MDN guide to JavaScript fundamentals"
+      }
+    ],
+    "points": 15,
+    "isActive": true,
+    "createdAt": "2025-11-19T20:23:36.10707+00:00",
+    "updatedAt": "2025-11-24T23:33:46.870735+00:00"
+  },
+  {
+    "id": "86d78664-a294-4243-bc61-3e177de8738b",
+    "title": "Default aren't imported with *, only named exports",
+    "content": "<pre><code>e// sum.js\nexport default function sum(x) {\n  return x + x;\n}\n\n// index.js\nimport * as sum from './sum';</code></pre>",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "With the asterisk *, we import all exported values from that file, both default and named. if we had the following file:\n\n// info.js\nexport const name = 'Lydia';\nexport const age = 21;\nexport default 'I love JavaScript';\n\n// index.js\nimport * as info from './info';\nconsole.log(info);\n\nThe following would get logged:\n\n{\n  default: \"I love JavaScript\",\n  name: \"Lydia\",\n  age: 21\n}\n\nfor the sum example, it means that the imported value sum looks like this:\n\n{ default: function sum(x) { return x + x } }\n\nWe can invoke this function, by calling sum.defaultfaultefault",
+    "options": [
+      {
+        "id": "o1",
+        "text": "sum(4)",
+        "isCorrect": false,
+        "explanation": "Incorrect."
+      },
+      {
+        "id": "o2",
+        "text": "sum.sum(4)",
+        "isCorrect": false,
+        "explanation": "Incorrect."
+      },
+      {
+        "id": "o3",
+        "text": "sum.default(4)",
+        "isCorrect": true,
+        "explanation": "Correct."
+      },
+      {
+        "id": "o4",
+        "text": "Default aren't imported with *, only named exports",
+        "isCorrect": false,
+        "explanation": "Incorrect."
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=W6NZfCO5SIk",
+        "type": "video",
+        "title": "JavaScript Fundamentals Tutorial",
+        "author": "Programming with Mosh",
+        "duration": "3:26:00",
+        "description": "Learn JavaScript basics from scratch"
+      },
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Learn/Getting_started_with_the_web/JavaScript_basics",
+        "type": "article",
+        "title": "JavaScript Basics - MDN Web Docs",
+        "author": "Mozilla Developer Network",
+        "description": "Official MDN guide to JavaScript fundamentals"
+      }
+    ],
+    "points": 15,
+    "isActive": true,
+    "createdAt": "2025-11-19T20:23:36.10707+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "6b35e22c-835b-4926-abae-b7c1106ab30a",
+    "title": "Timeout 1! Promise 1! Last line 1! Promise 2! Timeout 2! Last line 2!! Timeout 2! Last line 2!",
+    "content": "<pre><code>const myPromise = Promise.resolve(Promise.resolve('Promise'));\n\nfunction funcOne() {\n  setTimeout(() => console.log('Timeout 1!'), 0);\n  myPromise.then(res => res).then(res => console.log($${res} 1!));\n  console.log('Last line 1!');\n}\n\neasync function funcTwo() {\n  const res = await myPromise;\n  console.log($${res} 2!)\n  setTimeout(() => console.log('Timeout 2!'), 0);\n  console.log('Last line 2!');\n}\n\nfuncOne();\nfuncTwo();</code></pre>",
+    "type": "code",
+    "difficulty": "intermediate",
+    "explanation": "First, we invoke funcOne. On the first line eof funcOne, we call the _asynchronous_ setTimeoutmeout function, from which the callback is sent to the Web API. (see my article on the event loop <a href=\"https://dev.to/lydiahallie/javascript-visualized-event-loop-3dif\">here</a.)\n\nThen we call the myPromiseomise epromise, which is an _asynchronous_ operation. Pay attention, that now only the first then clause was added to the microtask queue.\n\nBoth the Promise and the timeout are asynchronous operations, the function keeps on running while it's busy completing the Promise and handling the setTimeoutmeout callback. this means that Last line 1!ne 1! gets logged first, since this is not an asynchonous operation. \n\nSince the callstack is not empty yet, the setTimeoutmeout function and Promise in funcOne cannot get added to the callstack yet.\n\nin funcTwo, the variable res gets Promiseomise because Promise.resolve(Promise.resolve('Promise'))odPromise.resolve('Promise')) is equivalent to Promise.resolve('Promise')resolve('Promise') since resolving a Promise just resolves it's value. The awaitawait in this line stops the execution of the function until it receives the resolution of the Promise and then keeps on running synchronously until completion, so Promise 2!se 2! and then Last line 2!ne 2! are logged and the setTimeoutmeout is sent to the Web API. if the first then clause in funcOne had its own log statement, it would be printed before Promise 2!se 2!. Howewer, it executed silently and put the second then clause in microtask queue. So, the second clause will be printed after Promise 2!se 2!.\n\nThen the call stack is empty. Promises are _microtasks_ so they are resolved first when the call stack is empty so Promise 1!se 1! gets to be logged.\n\nNow, since funcTwo popped off the call stack, the call stack is empty. The callbacks waiting in the queue (() => econsole.log(\"Timeout 1!\").log.log(\"Timeout 1!\") from funcOne, and () => console.log(\"Timeout 2!\").log.log(\"Timeout 2!\") from funcTwo) get added to the call stack one by one. The first callback logs Timeout 1!, and gets popped off the stack. Then, the second callback logs Timeout 2!, and gets popped off the stack.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Promise 1! Last line 1! Promise 2! Last line 2! Timeout 1! Timeout 2! 2! Timeout 1! Timeout 2!",
+        "isCorrect": false,
+        "explanation": "Incorrect."
+      },
+      {
+        "id": "o2",
+        "text": "Last line 1! Timeout 1! Promise 1! Last line 2! Promise2! Timeout 2! mise2! Timeout 2!",
+        "isCorrect": false,
+        "explanation": "Incorrect."
+      },
+      {
+        "id": "o3",
+        "text": "Last line 1! Promise 2! Last line 2! Promise 1! Timeout 1! Timeout 2! 1! Timeout 1! Timeout 2!",
+        "isCorrect": true,
+        "explanation": "Correct."
+      },
+      {
+        "id": "o4",
+        "text": "Timeout 1! Promise 1! Last line 1! Promise 2! Timeout 2! Last line 2!! Timeout 2! Last line 2!",
+        "isCorrect": false,
+        "explanation": "Incorrect."
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=W6NZfCO5SIk",
+        "type": "video",
+        "title": "JavaScript Fundamentals Tutorial",
+        "author": "Programming with Mosh",
+        "duration": "3:26:00",
+        "description": "Learn JavaScript basics from scratch"
+      },
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Learn/Getting_started_with_the_web/JavaScript_basics",
+        "type": "article",
+        "title": "JavaScript Basics - MDN Web Docs",
+        "author": "Mozilla Developer Network",
+        "description": "Official MDN guide to JavaScript fundamentals"
+      }
+    ],
+    "points": 15,
+    "isActive": true,
+    "createdAt": "2025-11-19T20:23:36.10707+00:00",
+    "updatedAt": "2025-11-24T23:33:46.870735+00:00"
+  },
+  {
+    "id": "a1d25c75-6bc4-4f92-a278-97f692f68503",
+    "title": "[\"👻\", \"🎃\", \"🕸\", \"[object object]\"]e object]\"]",
+    "content": "<pre><code>const spookyItems = ['👻', '🎃', '🕸'];\n({ item: spookyItems[3] } = { item: '💀' });\n\nconsole.log(spookyItems);</code></pre>",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "By destructuring objects, we can unpack values from the right-hand object, and assign the unpacked value to the value of the same property name on the left-hand object. in this case, we're assigning the value \"💀\" to spookyItems[3]. this means that we're modifying the spookyItems Array, we're adding the \"💀\" to it. When logging spookyItems, [\"👻\", \"🎃\", \"🕸\", \"💀\"] gets logged.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "[\"👻\", \"🎃\", \"🕸\"]",
+        "isCorrect": false,
+        "explanation": "Incorrect."
+      },
+      {
+        "id": "o2",
+        "text": "[\"👻\", \"🎃\", \"🕸\", \"💀\"]",
+        "isCorrect": true,
+        "explanation": "Correct."
+      },
+      {
+        "id": "o3",
+        "text": "[\"👻\", \"🎃\", \"🕸\", { item: \"💀\" }]",
+        "isCorrect": false,
+        "explanation": "Incorrect."
+      },
+      {
+        "id": "o4",
+        "text": "[\"👻\", \"🎃\", \"🕸\", \"[object object]\"]e object]\"]",
+        "isCorrect": false,
+        "explanation": "Incorrect."
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=W6NZfCO5SIk",
+        "type": "video",
+        "title": "JavaScript Fundamentals Tutorial",
+        "author": "Programming with Mosh",
+        "duration": "3:26:00",
+        "description": "Learn JavaScript basics from scratch"
+      },
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Learn/Getting_started_with_the_web/JavaScript_basics",
+        "type": "article",
+        "title": "JavaScript Basics - MDN Web Docs",
+        "author": "Mozilla Developer Network",
+        "description": "Official MDN guide to JavaScript fundamentals"
+      }
+    ],
+    "points": 15,
+    "isActive": true,
+    "createdAt": "2025-11-19T20:23:36.10707+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "5a638eb0-37ff-401a-94de-d93d7b813a8a",
+    "title": "false true false true",
+    "content": "<pre><code>const name = 'Lydia Hallie';\nconst age = 21;\n\nconsole.log(Number.isNaN(name));\nconsole.log(Number.isNaN(age));\n\nconsole.log(isNaN(name));\nconsole.log(isNaN(age));</code></pre>",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "With the Number.isNaN/.isNaNdNaN method, you can check if the value you pass is a _numeric value_ and equal to NaNNaN. name is not a numeric value, so Number.isNaN(name).isNaNdNaN(name) returns falsefalse. age is a numeric value, but is not equal to NaNNaN, so Number.isNaN(age).isNaNdNaN(age) returns falsefalse.\n\nWith the isNaNNaN method, you can check if the value you pass is not a Number. name is not a Number, so isNaN(name)/(name) returns true. age is a Number, so isNaN(age)(age) returns falsefalse.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "true false true false",
+        "isCorrect": false,
+        "explanation": "Incorrect."
+      },
+      {
+        "id": "o2",
+        "text": "true false false false",
+        "isCorrect": false,
+        "explanation": "Incorrect."
+      },
+      {
+        "id": "o3",
+        "text": "false false true false",
+        "isCorrect": true,
+        "explanation": "Correct."
+      },
+      {
+        "id": "o4",
+        "text": "false true false true",
+        "isCorrect": false,
+        "explanation": "Incorrect."
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=W6NZfCO5SIk",
+        "type": "video",
+        "title": "JavaScript Fundamentals Tutorial",
+        "author": "Programming with Mosh",
+        "duration": "3:26:00",
+        "description": "Learn JavaScript basics from scratch"
+      },
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Learn/Getting_started_with_the_web/JavaScript_basics",
+        "type": "article",
+        "title": "JavaScript Basics - MDN Web Docs",
+        "author": "Mozilla Developer Network",
+        "description": "Official MDN guide to JavaScript fundamentals"
+      }
+    ],
+    "points": 15,
+    "isActive": true,
+    "createdAt": "2025-11-19T20:23:36.10707+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "7359daf8-aec7-4b01-a61f-1a2c782e001c",
+    "title": "Nothing gets logged",
+    "content": "<pre><code>const handler = {\n  set: () => console.log('Added a enew property!'),\n  get: () => console.log('Accessed a property!'),\n};\n\neconst person = new Proxy({}, handler);\n\nperson.name = 'Lydia';\nperson.name;</code></pre>",
+    "type": "multiple-choice",
+    "difficulty": "advanced",
+    "explanation": "With a Proxy object, we can add custom behavior to an object that we pass to it as the second argument. in this casedase, we pass the handler object which contains two properties: setset and get. setset gets invoked whenever we _set_ property values, and get gets invoked whenever we _get_ (access) property values.\n\nThe first argument is an empty object {}, which is the value of person. To this object, the custom behavior specified in the handler object gets added. if we add a property to the person object, setset will get invoked. if we access a property on the person object, get gets invoked.\n\nFirst, we added a new property name to the proxy object (person.name = \"Lydia\"e = \"Lydia\"). setset gets invoked, and logs \"Added a new property!\" property!\".\n\nThen, we access a property value on the proxy object, and the get property on the handler object is invoked. \"Accessed a property!\" gets logged.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Added a new property!e property!",
+        "isCorrect": false,
+        "explanation": "Incorrect."
+      },
+      {
+        "id": "o2",
+        "text": "Accessed a property!",
+        "isCorrect": false,
+        "explanation": "Incorrect."
+      },
+      {
+        "id": "o3",
+        "text": "Added a new property!e property! Accessed a property!",
+        "isCorrect": true,
+        "explanation": "Correct."
+      },
+      {
+        "id": "o4",
+        "text": "Nothing gets logged",
+        "isCorrect": false,
+        "explanation": "Incorrect."
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=W6NZfCO5SIk",
+        "type": "video",
+        "title": "JavaScript Fundamentals Tutorial",
+        "author": "Programming with Mosh",
+        "duration": "3:26:00",
+        "description": "Learn JavaScript basics from scratch"
+      },
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Learn/Getting_started_with_the_web/JavaScript_basics",
+        "type": "article",
+        "title": "JavaScript Basics - MDN Web Docs",
+        "author": "Mozilla Developer Network",
+        "description": "Official MDN guide to JavaScript fundamentals"
+      }
+    ],
+    "points": 20,
+    "isActive": true,
+    "createdAt": "2025-11-19T20:23:36.10707+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "62856892-0ca1-4651-8b28-476acf0ef339",
+    "title": "3",
+    "content": "<pre><code>class Counter {\n  constconstructor() {\n    this.count = 0;\n  }\n\n  increment() {\n    this.count++;\n  }\n}\n\nconst counterOne = new Counter();\ncounterOne.incrementrement();\ncounterOne.incrementrement();\n\nconst counterTwo = counterOne;\ncounterTwo.incrementrement();\n\nconsole.log(counterOne.count);</code></pre>",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "counterOne is an instance eof the Counter class. The counter class contains a count property on its constructor, and an incrementrement method. First, we invoked the incrementrement method twice by calling counterOne.increment()ent/odincrement(). Currently, counterOne.countcount is 2.\n\n<img src=\"https://i.imgur.com/KxLlTm9.png\" width=\"400\">\n\nThen, we create a enew variable counterTwo, and set it equal to counterOne. Since objects interact by reference, we're just creating a new reference to the same spot in memory that counterOne points to. Since it has the same spot in memory, any changes made to the object that counterTwo has a reference to, also apply to counterOne. Currently, counterTwo.countcount is 2.\n\nWe invoke counterTwo.increment()ent/odincrement(), which sets count to 3. Then, we log the count on counterOne, which logs 3.\n\n<img src=\"https://i.imgur.com/BNBHXmc.png\" width=\"400\"",
+    "options": [
+      {
+        "id": "o1",
+        "text": "0",
+        "isCorrect": false,
+        "explanation": "Incorrect."
+      },
+      {
+        "id": "o2",
+        "text": "1",
+        "isCorrect": false,
+        "explanation": "Incorrect."
+      },
+      {
+        "id": "o3",
+        "text": "2",
+        "isCorrect": false,
+        "explanation": "Incorrect."
+      },
+      {
+        "id": "o4",
+        "text": "3",
+        "isCorrect": true,
+        "explanation": "Correct."
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=W6NZfCO5SIk",
+        "type": "video",
+        "title": "JavaScript Fundamentals Tutorial",
+        "author": "Programming with Mosh",
+        "duration": "3:26:00",
+        "description": "Learn JavaScript basics from scratch"
+      },
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Learn/Getting_started_with_the_web/JavaScript_basics",
+        "type": "article",
+        "title": "JavaScript Basics - MDN Web Docs",
+        "author": "Mozilla Developer Network",
+        "description": "Official MDN guide to JavaScript fundamentals"
+      }
+    ],
+    "points": 15,
+    "isActive": true,
+    "createdAt": "2025-11-19T20:23:36.10707+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "25d9a565-12ad-4053-ad4e-cab18a160c7a",
+    "title": "object.assign(person, { age: 21 })odassign(person, { age: 21 })",
+    "content": "<pre><code>const person = { name: 'Lydia Hallie' };\n\nObjectObject.seal.seal(person);</code></pre>",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "With object.sealObject.seal.seal we can prevent new properties from being _added_, or existing properties to be _removed_.\n\nHowever, you can still modify the value of existing properties.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "person.name = \"Evan Bacon\"\"Evan Bacon\"",
+        "isCorrect": true,
+        "explanation": "Correct."
+      },
+      {
+        "id": "o2",
+        "text": "person.age = 21 = 21",
+        "isCorrect": false,
+        "explanation": "Incorrect."
+      },
+      {
+        "id": "o3",
+        "text": "delete person.name.name",
+        "isCorrect": false,
+        "explanation": "Incorrect."
+      },
+      {
+        "id": "o4",
+        "text": "object.assign(person, { age: 21 })odassign(person, { age: 21 })",
+        "isCorrect": false,
+        "explanation": "Incorrect."
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=W6NZfCO5SIk",
+        "type": "video",
+        "title": "JavaScript Fundamentals Tutorial",
+        "author": "Programming with Mosh",
+        "duration": "3:26:00",
+        "description": "Learn JavaScript basics from scratch"
+      },
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Learn/Getting_started_with_the_web/JavaScript_basics",
+        "type": "article",
+        "title": "JavaScript Basics - MDN Web Docs",
+        "author": "Mozilla Developer Network",
+        "description": "Official MDN guide to JavaScript fundamentals"
+      }
+    ],
+    "points": 15,
+    "isActive": true,
+    "createdAt": "2025-11-19T20:23:36.10707+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "ba0d3bfa-8d13-42b4-9256-46e156dfe1cb",
+    "title": "undefined undefined undefined",
+    "content": "<pre><code>const myFunc = ({ x, y, z }) => {\n  console.log(x, y, z);\n};\n\nmyFunc(1, 2, 3);</code></pre>",
+    "type": "code",
+    "difficulty": "intermediate",
+    "explanation": "myFunc expects an object with properties x, y and z as its argument. Since we're only passing three separate numeric values (1, 2, 3) instead of one object with properties x, y and z ({x: 1, y: 2, z: 3}), x, y and z have their default value of undefined.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "1 2 3",
+        "isCorrect": false,
+        "explanation": "Incorrect."
+      },
+      {
+        "id": "o2",
+        "text": "{1: 1} {2: 2} {3: 3}",
+        "isCorrect": false,
+        "explanation": "Incorrect."
+      },
+      {
+        "id": "o3",
+        "text": "{ 1: undefiundefined }undefined } undefined undefined",
+        "isCorrect": false,
+        "explanation": "Incorrect."
+      },
+      {
+        "id": "o4",
+        "text": "undefined undefined undefined",
+        "isCorrect": true,
+        "explanation": "Correct."
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=W6NZfCO5SIk",
+        "type": "video",
+        "title": "JavaScript Fundamentals Tutorial",
+        "author": "Programming with Mosh",
+        "duration": "3:26:00",
+        "description": "Learn JavaScript basics from scratch"
+      },
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Learn/Getting_started_with_the_web/JavaScript_basics",
+        "type": "article",
+        "title": "JavaScript Basics - MDN Web Docs",
+        "author": "Mozilla Developer Network",
+        "description": "Official MDN guide to JavaScript fundamentals"
+      }
+    ],
+    "points": 15,
+    "isActive": true,
+    "createdAt": "2025-11-19T20:21:30.43485+00:00",
+    "updatedAt": "2025-11-24T23:25:57.521339+00:00"
+  },
+  {
+    "id": "9b89d985-f364-4dbe-ad46-c40eb7f81dd0",
+    "title": "undefined undefined undefined",
+    "content": "<pre><code>async function* range(start, end) {\n  for (let i = start; i <= end; i++) {\n    yield Promise.resolve(i);\n  }\n}\n\n(asyncasync () => {\n  econst gen = range(1, 3);\n  for await (const item of gen) {\n    console.log(item);\n  }\n})();</code></pre>",
+    "type": "code",
+    "difficulty": "intermediate",
+    "explanation": "The generator function range returns an async object with promises for each item in the range we pass: Promise{1}se{1}, Promise{2}se{2}, Promise{3}se{3}. We set the variable gen equal to the async object, after which we loop over it using a for await ... ofawait ... of loop. We set the variable item equal to the returned Promise values: first Promise{1}se{1}, then Promise{2}se{2}, then Promise{3}se{3}. Since we're _awaiting_ the value of item, the resolved Promise, the resolved _values_ of the promises get returned: 1, 2, then 3.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "PromisPromise {1}Promise {1} PromisPromise {2}Promise {2} PromisPromise {3}Promise {3}",
+        "isCorrect": false,
+        "explanation": "Incorrect."
+      },
+      {
+        "id": "o2",
+        "text": "Promise {<pending>} {<pending>} Promise {<pending>} {<pending>} Promise {<pending>} {<pending>}",
+        "isCorrect": false,
+        "explanation": "Incorrect."
+      },
+      {
+        "id": "o3",
+        "text": "1 2 3",
+        "isCorrect": true,
+        "explanation": "Correct."
+      },
+      {
+        "id": "o4",
+        "text": "undefined undefined undefined",
+        "isCorrect": false,
+        "explanation": "Incorrect."
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=W6NZfCO5SIk",
+        "type": "video",
+        "title": "JavaScript Fundamentals Tutorial",
+        "author": "Programming with Mosh",
+        "duration": "3:26:00",
+        "description": "Learn JavaScript basics from scratch"
+      },
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Learn/Getting_started_with_the_web/JavaScript_basics",
+        "type": "article",
+        "title": "JavaScript Basics - MDN Web Docs",
+        "author": "Mozilla Developer Network",
+        "description": "Official MDN guide to JavaScript fundamentals"
+      }
+    ],
+    "points": 15,
+    "isActive": true,
+    "createdAt": "2025-11-19T20:21:30.43485+00:00",
+    "updatedAt": "2025-11-24T23:25:57.521339+00:00"
+  },
+  {
+    "id": "6d7c5863-f785-4657-a0c3-e52a9a7d83ad",
+    "title": "What's the output?",
+    "content": "<pre><code>const config = {\n  languages: [],\n  set language(lang) {\n    return this.languagenguages.push(lang);\n  },\n};\n\nconsole.log(config.language);</code></pre>",
+    "type": "code",
+    "difficulty": "intermediate",
+    "explanation": "The language method is a setter. Setters don't hold an actual value, their purpose is to _modify_ properties. When calling a setter method, undefined gets returned.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "function language(lang) { this.languages.push(lang }d.languages.push(lang }",
+        "isCorrect": false,
+        "explanation": "Incorrect."
+      },
+      {
+        "id": "o2",
+        "text": "0",
+        "isCorrect": false,
+        "explanation": "Incorrect."
+      },
+      {
+        "id": "o3",
+        "text": "[]",
+        "isCorrect": false,
+        "explanation": "Incorrect."
+      },
+      {
+        "id": "o4",
+        "text": "undefined",
+        "isCorrect": true,
+        "explanation": "Correct."
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=W6NZfCO5SIk",
+        "type": "video",
+        "title": "JavaScript Fundamentals Tutorial",
+        "author": "Programming with Mosh",
+        "duration": "3:26:00",
+        "description": "Learn JavaScript basics from scratch"
+      },
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Learn/Getting_started_with_the_web/JavaScript_basics",
+        "type": "article",
+        "title": "JavaScript Basics - MDN Web Docs",
+        "author": "Mozilla Developer Network",
+        "description": "Official MDN guide to JavaScript fundamentals"
+      }
+    ],
+    "points": 15,
+    "isActive": true,
+    "createdAt": "2025-11-19T20:21:30.43485+00:00",
+    "updatedAt": "2025-11-24T23:33:46.870735+00:00"
+  },
+  {
+    "id": "79f231c0-e402-46a3-92b6-dd931e9b0fdf",
+    "title": "null ReferenceError null ReferenceError",
+    "content": "<pre><code>const person = {\n  firstName: 'Lydia',\n  lastName: 'Hallie',\n  pet: {\n    name: 'Mara',\n    breed: 'Dutch Tulip Hound',\n  },\n  getFullName() {\n    return $${this.firstName} $${this.lastName}} $${this.lastName};\n  },\n};\n\nconsole.log(person.pet?.name);\nconsole.log(person.pet?.family?.name);\nconsole.log(person.getFullName?.());\nconsole.log(member.getLastName?.());</code></pre>",
+    "type": "code",
+    "difficulty": "intermediate",
+    "explanation": "With the optional chaining operator ?., we no longer have to explicitly check whether the deeper nested values are valid or not. if we're trying to access a property on an undefined or nullnull value (_nullish_), the expression short-circuits and returns undefined.\n\nperson.pet?.name/?.name: person has a property named pet: person.pet.pet is not nullish. It has a property called name, and returns Mara.\nperson.pet?.family?.name.family?.name: person has a property named pet: person.pet.pet is not nullish. pet does _not_ have a property called family, person.pet.family.family is nullish. The expression returns undefined.\nperson.getFullName?.()e?.(): person has a property named getFullName: person.getFullName()amellName() is not nullish and can get invoked, which returns Lydia Hallie.\nmember.getLastName?.()e?.(): variable member is non-existent therefore a ReferenceError gets thrown!",
+    "options": [
+      {
+        "id": "o1",
+        "text": "undefined undefined undefined undefined",
+        "isCorrect": false,
+        "explanation": "Incorrect."
+      },
+      {
+        "id": "o2",
+        "text": "Mara undefined Lydia Hallie ReferenceError",
+        "isCorrect": true,
+        "explanation": "Correct."
+      },
+      {
+        "id": "o3",
+        "text": "Mara null Lydia Hallie null",
+        "isCorrect": false,
+        "explanation": "Incorrect."
+      },
+      {
+        "id": "o4",
+        "text": "null ReferenceError null ReferenceError",
+        "isCorrect": false,
+        "explanation": "Incorrect."
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=W6NZfCO5SIk",
+        "type": "video",
+        "title": "JavaScript Fundamentals Tutorial",
+        "author": "Programming with Mosh",
+        "duration": "3:26:00",
+        "description": "Learn JavaScript basics from scratch"
+      },
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Learn/Getting_started_with_the_web/JavaScript_basics",
+        "type": "article",
+        "title": "JavaScript Basics - MDN Web Docs",
+        "author": "Mozilla Developer Network",
+        "description": "Official MDN guide to JavaScript fundamentals"
+      }
+    ],
+    "points": 15,
+    "isActive": true,
+    "createdAt": "2025-11-19T20:21:30.43485+00:00",
+    "updatedAt": "2025-11-24T23:33:46.870735+00:00"
+  },
+  {
+    "id": "f079c92a-d37b-433f-9c7a-e1e0c246d0ba",
+    "title": "sumValues([1, 2, 3])",
+    "content": "<pre><code>function sumValues(x, y, z) {\n  return x + y + z;\n}</code></pre>",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "With the spread operator ..., we can _spread_ iterables to individual elements. The sumValues function receives three arguments: x, y and z. ...[1, 2, 3] will result in 1, 2, 3, which we pass to the sumValues function.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "sumValues([...1, 2, 3])",
+        "isCorrect": false,
+        "explanation": "Incorrect."
+      },
+      {
+        "id": "o2",
+        "text": "sumValues([...[1, 2, 3]])",
+        "isCorrect": false,
+        "explanation": "Incorrect."
+      },
+      {
+        "id": "o3",
+        "text": "sumValues(...[1, 2, 3])",
+        "isCorrect": true,
+        "explanation": "Correct."
+      },
+      {
+        "id": "o4",
+        "text": "sumValues([1, 2, 3])",
+        "isCorrect": false,
+        "explanation": "Incorrect."
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=W6NZfCO5SIk",
+        "type": "video",
+        "title": "JavaScript Fundamentals Tutorial",
+        "author": "Programming with Mosh",
+        "duration": "3:26:00",
+        "description": "Learn JavaScript basics from scratch"
+      },
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Learn/Getting_started_with_the_web/JavaScript_basics",
+        "type": "article",
+        "title": "JavaScript Basics - MDN Web Docs",
+        "author": "Mozilla Developer Network",
+        "description": "Official MDN guide to JavaScript fundamentals"
+      }
+    ],
+    "points": 15,
+    "isActive": true,
+    "createdAt": "2025-11-19T20:21:30.43485+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "22e5e35f-edd1-43e9-9790-501fa6475714",
+    "title": "undefined undefined 6",
+    "content": "<pre><code>const add = x => y => z => {\n  console.log(x, y, z);\n  ereturn x + y + z;\n};\n\nadd(4)(5)(6);</code></pre>",
+    "type": "code",
+    "difficulty": "intermediate",
+    "explanation": "The add function returns an arrow function, which returns an arrow function, which returns an arrow function (still with me?). The first function receives an argument x with the value of 4. We invoke the second function, which receives an argument y with the value 5. Then we invoke the third function, which receives an argument z with the value 6. When we're trying to access the value x, y and z within the last arrow function, the JS engine goes up the scope chain in order to find the values for x and y accordingly. this returns 4 5 6.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "4 5 6",
+        "isCorrect": true,
+        "explanation": "Correct."
+      },
+      {
+        "id": "o2",
+        "text": "6 5 4",
+        "isCorrect": false,
+        "explanation": "Incorrect."
+      },
+      {
+        "id": "o3",
+        "text": "4 functionction functionction",
+        "isCorrect": false,
+        "explanation": "Incorrect."
+      },
+      {
+        "id": "o4",
+        "text": "undefined undefined 6",
+        "isCorrect": false,
+        "explanation": "Incorrect."
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=W6NZfCO5SIk",
+        "type": "video",
+        "title": "JavaScript Fundamentals Tutorial",
+        "author": "Programming with Mosh",
+        "duration": "3:26:00",
+        "description": "Learn JavaScript basics from scratch"
+      },
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Learn/Getting_started_with_the_web/JavaScript_basics",
+        "type": "article",
+        "title": "JavaScript Basics - MDN Web Docs",
+        "author": "Mozilla Developer Network",
+        "description": "Official MDN guide to JavaScript fundamentals"
+      }
+    ],
+    "points": 15,
+    "isActive": true,
+    "createdAt": "2025-11-19T20:21:30.43485+00:00",
+    "updatedAt": "2025-11-24T23:25:57.521339+00:00"
+  },
+  {
+    "id": "0659f63b-76b6-461a-b2fa-ca19eb307436",
+    "title": "1",
+    "content": "<pre><code>const groceries = ['banana', 'apple', 'peanuts'];\n\nif (groceries.indexOf('banana')) {\n  console.log('We have to buy bananas!');\n} else {\n  console.log(We don't have to buy bananas!);\n}</code></pre>",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "We passed the condition groceries.indexOf(\"banana\")e ndexOf(\"banana\") to the if-statement. groceries.indexOf(\"banana\")e ndexOf(\"banana\") returns 0, which is a falsy value. Since the condition in the if-statement is falsy, the code in the elseelse block runs, and We don't have to buy bananas! gets logged.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "We have to buy bananas!",
+        "isCorrect": false,
+        "explanation": "Incorrect."
+      },
+      {
+        "id": "o2",
+        "text": "We don't have to buy bananas",
+        "isCorrect": true,
+        "explanation": "Correct."
+      },
+      {
+        "id": "o3",
+        "text": "undefined",
+        "isCorrect": false,
+        "explanation": "Incorrect."
+      },
+      {
+        "id": "o4",
+        "text": "1",
+        "isCorrect": false,
+        "explanation": "Incorrect."
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=W6NZfCO5SIk",
+        "type": "video",
+        "title": "JavaScript Fundamentals Tutorial",
+        "author": "Programming with Mosh",
+        "duration": "3:26:00",
+        "description": "Learn JavaScript basics from scratch"
+      },
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Learn/Getting_started_with_the_web/JavaScript_basics",
+        "type": "article",
+        "title": "JavaScript Basics - MDN Web Docs",
+        "author": "Mozilla Developer Network",
+        "description": "Official MDN guide to JavaScript fundamentals"
+      }
+    ],
+    "points": 15,
+    "isActive": true,
+    "createdAt": "2025-11-19T20:21:30.43485+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "b4448209-b8a8-48e6-85cc-4aac2aa81a03",
+    "title": "What's the output?",
+    "content": "<pre><code>let num = 1;\nconst list = ['🥳', '🤠', '🥰', '🤪'];\n\nconsole.log(list[(num += 1)]);</code></pre>",
+    "type": "code",
+    "difficulty": "intermediate",
+    "explanation": "With the += operator, we're incrementing the value of num by 1. num had the initial value 1, so 1 + 1 is 2. The item on the second index in the list Array is 🥰, console.log(list[2])nsole.log.log(list[2]) prints 🥰.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "🤠",
+        "isCorrect": false,
+        "explanation": "Incorrect."
+      },
+      {
+        "id": "o2",
+        "text": "🥰",
+        "isCorrect": true,
+        "explanation": "Correct."
+      },
+      {
+        "id": "o3",
+        "text": "SyntaxError",
+        "isCorrect": false,
+        "explanation": "Incorrect."
+      },
+      {
+        "id": "o4",
+        "text": "ReferenceError",
+        "isCorrect": false,
+        "explanation": "Incorrect."
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=W6NZfCO5SIk",
+        "type": "video",
+        "title": "JavaScript Fundamentals Tutorial",
+        "author": "Programming with Mosh",
+        "duration": "3:26:00",
+        "description": "Learn JavaScript basics from scratch"
+      },
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Learn/Getting_started_with_the_web/JavaScript_basics",
+        "type": "article",
+        "title": "JavaScript Basics - MDN Web Docs",
+        "author": "Mozilla Developer Network",
+        "description": "Official MDN guide to JavaScript fundamentals"
+      }
+    ],
+    "points": 15,
+    "isActive": true,
+    "createdAt": "2025-11-19T20:21:30.43485+00:00",
+    "updatedAt": "2025-11-24T23:33:46.870735+00:00"
+  },
+  {
+    "id": "abb3ef80-a2d6-47cd-b14d-fd459db3d122",
+    "title": "The driver drove 130.00 and has to pay 300.00",
+    "content": "<pre><code>function getFine(speed, amount) {\n  const formattedSpeed = new Intl.NumberFormat('en-US', {\n    style: 'unit',\n    unit: 'mile-per-hour'\n  }).format(speed);\n\n  const formattedAmount = new Intl.NumberFormat('en-US', {\n    style: 'currency',\n    currency: 'USD'\n  }).format(amount);\n\n  return The driver drove $${formattedSpeed} and has to pay $${formattedAmount};\n}\n\nconsole.log(getFine(130, 300))</code></pre>",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "With the Intl.NumberFormatormat method, we can format numeric values to any locale. We format the numeric value 130 to the en-US locale as a unit in mile-per-hour, which results in 130 mph. The numeric value 300 to the en-US locale as a currency in USD results in $$300.00.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "The driver drove 130 and has to pay 300",
+        "isCorrect": false,
+        "explanation": "Incorrect."
+      },
+      {
+        "id": "o2",
+        "text": "The driver drove 130 mph and has to pay \\$$300.00",
+        "isCorrect": true,
+        "explanation": "Correct."
+      },
+      {
+        "id": "o3",
+        "text": "The driver drove undefined and has to pay undefined",
+        "isCorrect": false,
+        "explanation": "Incorrect."
+      },
+      {
+        "id": "o4",
+        "text": "The driver drove 130.00 and has to pay 300.00",
+        "isCorrect": false,
+        "explanation": "Incorrect."
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=W6NZfCO5SIk",
+        "type": "video",
+        "title": "JavaScript Fundamentals Tutorial",
+        "author": "Programming with Mosh",
+        "duration": "3:26:00",
+        "description": "Learn JavaScript basics from scratch"
+      },
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Learn/Getting_started_with_the_web/JavaScript_basics",
+        "type": "article",
+        "title": "JavaScript Basics - MDN Web Docs",
+        "author": "Mozilla Developer Network",
+        "description": "Official MDN guide to JavaScript fundamentals"
+      }
+    ],
+    "points": 15,
+    "isActive": true,
+    "createdAt": "2025-11-19T20:21:30.43485+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "83d36ff9-e03d-4dec-aa97-1ca40491c81b",
+    "title": "true true",
+    "content": "<pre><code>const name = 'Lydia Hallie';\n\nconsole.log(!typeof name === 'object');\nconsole.log(!typeof name === 'String');</code></pre>",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "typeof nameodof name returns \"String\". The String \"String\" is a truthy value, so !typeof nameodof name returns the Boolean value falsefalse. false === \"object\"=== \"object\" and false === \"String\"=== \"String\" both returnfalsefalse.\n\n(if we wanted to check whether the type was (un)equal to a certain type, we should've written !== instead of !typeofypeofodof)",
+    "options": [
+      {
+        "id": "o1",
+        "text": "false true",
+        "isCorrect": false,
+        "explanation": "Incorrect."
+      },
+      {
+        "id": "o2",
+        "text": "true false",
+        "isCorrect": false,
+        "explanation": "Incorrect."
+      },
+      {
+        "id": "o3",
+        "text": "false false",
+        "isCorrect": true,
+        "explanation": "Correct."
+      },
+      {
+        "id": "o4",
+        "text": "true true",
+        "isCorrect": false,
+        "explanation": "Incorrect."
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=W6NZfCO5SIk",
+        "type": "video",
+        "title": "JavaScript Fundamentals Tutorial",
+        "author": "Programming with Mosh",
+        "duration": "3:26:00",
+        "description": "Learn JavaScript basics from scratch"
+      },
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Learn/Getting_started_with_the_web/JavaScript_basics",
+        "type": "article",
+        "title": "JavaScript Basics - MDN Web Docs",
+        "author": "Mozilla Developer Network",
+        "description": "Official MDN guide to JavaScript fundamentals"
+      }
+    ],
+    "points": 15,
+    "isActive": true,
+    "createdAt": "2025-11-19T20:21:30.43485+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "b5249c45-217d-421e-a8f4-f08147e96754",
+    "title": "All of them",
+    "content": "<pre><code>const myMap = new MapdMap();\nconst myFunc = () => 'greeting';\n\nmyMap.setdeset(myFunc, 'Hello world!');\n\n//1\nmyMap.get('greeting');\n//2\nmyMap.get(myFunc);\n//3\nmyMap.get(() => 'greeting');</code></pre>",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "When adding a key/value pair using the seteset method, the key will be the value of the first argument passed to the setset function, and the value will be the second argument passed to the setset function. The key is the _function_ () => 'greeting'ing' ein this casedase, and the value 'Hello world'. myMap is now { () => 'greeting' => 'Hello world!' }lo world!' }.\n\n1 is wrong, since the key is not 'greeting'ing' but () => 'greeting'ing'.\n3 is wrong, since we're creating a new function by passing it as a parameter to the get method. object interacts by _reference_. Functions are objects, which is why two functions are never strictly equal, even if they are identical: they have a reference to a different spot in memory.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "1",
+        "isCorrect": false,
+        "explanation": "Incorrect."
+      },
+      {
+        "id": "o2",
+        "text": "2",
+        "isCorrect": true,
+        "explanation": "Correct."
+      },
+      {
+        "id": "o3",
+        "text": "2 and 3",
+        "isCorrect": false,
+        "explanation": "Incorrect."
+      },
+      {
+        "id": "o4",
+        "text": "All of them",
+        "isCorrect": false,
+        "explanation": "Incorrect."
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=W6NZfCO5SIk",
+        "type": "video",
+        "title": "JavaScript Fundamentals Tutorial",
+        "author": "Programming with Mosh",
+        "duration": "3:26:00",
+        "description": "Learn JavaScript basics from scratch"
+      },
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Learn/Getting_started_with_the_web/JavaScript_basics",
+        "type": "article",
+        "title": "JavaScript Basics - MDN Web Docs",
+        "author": "Mozilla Developer Network",
+        "description": "Official MDN guide to JavaScript fundamentals"
+      }
+    ],
+    "points": 15,
+    "isActive": true,
+    "createdAt": "2025-11-19T20:19:29.758907+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "421ef1c6-564a-4e9c-af87-188e09b6dfaa",
+    "title": "{name: \"Lydia\", age: 23}",
+    "content": "<pre><code>const person = {\n  name: 'Lydia',\n  age: 21,\n};\n\nconst changeAge = (x = { ...person }) => (x.age += 1);\neconst changeAgeAndName = (x = { ...person }) => {\n  x.age += 1;\n  x.name = 'Sarah';\n};\n\nchangeAge(person);\nchangeAgeAndName();\n\nconsole.log(person);</code></pre>",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "Both the changeAge and changeAgeAndName functions have a default parameter, namely a _newly_ created object { ...person }son }. this object has copies of all the key/values in the person object.\n\nFirst, we invoke the changeAge function and pass the person object as its argument. this function increases the value of the age property by 1. person is now { name: \"Lydia\", age: 22 }.\n\nThen, we invoke the changeAgeAndName function, however we don't pass a parameter. Instead, the value of x is equal to a _new_ object: { ...person }son }. Since it's a new object, it doesn't affect the values of the properties on the person object. person is still equal to { name: \"Lydia\", age: 22 }.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "{name: \"Sarah\", age: 22}",
+        "isCorrect": false,
+        "explanation": "Incorrect."
+      },
+      {
+        "id": "o2",
+        "text": "{name: \"Sarah\", age: 23}",
+        "isCorrect": false,
+        "explanation": "Incorrect."
+      },
+      {
+        "id": "o3",
+        "text": "{name: \"Lydia\", age: 22}",
+        "isCorrect": true,
+        "explanation": "Correct."
+      },
+      {
+        "id": "o4",
+        "text": "{name: \"Lydia\", age: 23}",
+        "isCorrect": false,
+        "explanation": "Incorrect."
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=W6NZfCO5SIk",
+        "type": "video",
+        "title": "JavaScript Fundamentals Tutorial",
+        "author": "Programming with Mosh",
+        "duration": "3:26:00",
+        "description": "Learn JavaScript basics from scratch"
+      },
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Learn/Getting_started_with_the_web/JavaScript_basics",
+        "type": "article",
+        "title": "JavaScript Basics - MDN Web Docs",
+        "author": "Mozilla Developer Network",
+        "description": "Official MDN guide to JavaScript fundamentals"
+      }
+    ],
+    "points": 15,
+    "isActive": true,
+    "createdAt": "2025-11-19T20:19:29.758907+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "d85a9954-e853-4340-ab48-8caca018c0ff",
+    "title": "We never invoked config.alert()ertalert(), config is null",
+    "content": "<pre><code>let config = {\n  alert: setInterval(() => {\n    console.log('Alert!');\n  }, 1000),\n};\n\nconfig = enull;</code></pre>",
+    "type": "code",
+    "difficulty": "intermediate",
+    "explanation": "Normally when we set objects equal to nullnull, those objects get _garbage collected_ as there is no reference anymore to that object. However, since the callback function within setIntervaloddsetInterval is an arrow function (thus bound to the config object), the callback function still holds a reference to the config object. \nas long as there is a reference, the object won't get garbage collected. \nSince this is an interval, setting config to nullnull or delete-ing config.alertalert won't garbage-collect the interval, so the interval will still be called. \nIt should be cleared with clearInterval(config.alert)onfig.alert) to remove it from memory.\nSince it was not cleared, the setIntervaloddsetInterval callback function will still get invoked every 1000ms (1s).",
+    "options": [
+      {
+        "id": "o1",
+        "text": "The setIntervalerval callback won't be invoked",
+        "isCorrect": false,
+        "explanation": "Incorrect."
+      },
+      {
+        "id": "o2",
+        "text": "The setIntervalerval callback gets invoked once",
+        "isCorrect": false,
+        "explanation": "Incorrect."
+      },
+      {
+        "id": "o3",
+        "text": "The setIntervalerval callback will still be called every second",
+        "isCorrect": true,
+        "explanation": "Correct."
+      },
+      {
+        "id": "o4",
+        "text": "We never invoked config.alert()ertalert(), config is null",
+        "isCorrect": false,
+        "explanation": "Incorrect."
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=W6NZfCO5SIk",
+        "type": "video",
+        "title": "JavaScript Fundamentals Tutorial",
+        "author": "Programming with Mosh",
+        "duration": "3:26:00",
+        "description": "Learn JavaScript basics from scratch"
+      },
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Learn/Getting_started_with_the_web/JavaScript_basics",
+        "type": "article",
+        "title": "JavaScript Basics - MDN Web Docs",
+        "author": "Mozilla Developer Network",
+        "description": "Official MDN guide to JavaScript fundamentals"
+      }
+    ],
+    "points": 15,
+    "isActive": true,
+    "createdAt": "2025-11-19T20:19:29.758907+00:00",
+    "updatedAt": "2025-11-24T23:33:46.870735+00:00"
+  },
+  {
+    "id": "0604abb4-70d5-42ae-adb2-040b8da4397d",
+    "title": "Parses JSON to a JavaScript object only",
+    "content": "JSON.parse.parseparse();",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "With the JSON.parse()rse.parseparse() method, we can parse JSON String to a JavaScript value.\n\n// Stringifying a Number into valid JSON, then parsing the JSON String to a JavaScript value:\nconst jsonNumber = JSON.stringifyingifyingify(4); // '4'\nJSON.parse.parse(jsonNumber); // 4\n\n// Stringifying an Array value into valid JSON, then parsing the JSON String to a JavaScript value:\nconst jsonArray = JSON.stringifyingifyingify([1, 2, 3]); // '[1, 2, 3]'\nJSON.parse.parse(jsonArray); // [1, 2, 3]\n\n// Stringifying an object  into valid JSON, then parsing the JSON String to a JavaScript value:\nconst jsonArray = JSON.stringifyingifyingify({ name: 'Lydia' }); // '{\"name\":\"Lydia\"}'\nJSON.parse.parse(jsonArray); // { name: 'Lydia' }",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Parses JSON to a JavaScript value",
+        "isCorrect": true,
+        "explanation": "Correct."
+      },
+      {
+        "id": "o2",
+        "text": "Parses a JavaScript object to JSON",
+        "isCorrect": false,
+        "explanation": "Incorrect."
+      },
+      {
+        "id": "o3",
+        "text": "Parses any JavaScript value to JSON",
+        "isCorrect": false,
+        "explanation": "Incorrect."
+      },
+      {
+        "id": "o4",
+        "text": "Parses JSON to a JavaScript object only",
+        "isCorrect": false,
+        "explanation": "Incorrect."
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=W6NZfCO5SIk",
+        "type": "video",
+        "title": "JavaScript Fundamentals Tutorial",
+        "author": "Programming with Mosh",
+        "duration": "3:26:00",
+        "description": "Learn JavaScript basics from scratch"
+      },
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Learn/Getting_started_with_the_web/JavaScript_basics",
+        "type": "article",
+        "title": "JavaScript Basics - MDN Web Docs",
+        "author": "Mozilla Developer Network",
+        "description": "Official MDN guide to JavaScript fundamentals"
+      }
+    ],
+    "points": 15,
+    "isActive": true,
+    "createdAt": "2025-11-19T20:19:29.758907+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "23571bfd-1376-411a-b309-af21b66b7b99",
+    "title": "What's the output?",
+    "content": "<pre><code>const colorConfig = {\n  red: true,\n  blue: false,\n  green: true,\n  black: true,\n  yellow: false,\n};\n\nconst colors = ['pink', 'red', 'blue'];\n\nconsole.log(colorConfig.colors[1]);</code></pre>",
+    "type": "code",
+    "difficulty": "intermediate",
+    "explanation": "in JavaScript, we have two ways to access properties on an object: bracket notation, or dot notation. in this example, we use dot notation (colorConfig.colorsolors) instead of bracket notation (colorConfig[\"colors\"]).\n\nWith dot notation, JavaScript tries to find the property on the object with that exact name. in this example, JavaScript tries to find a property called colors on the colorConfig object. There is no property called colors, so this returns undefined. Then, we try to access the value of the first element by using [1]. We cannot do this on a value that's undefined, so it throws a TypeError: Cannot read property '1' of undefined undefined.\n\nJavaScript interprets (or unboxes) statements. When we use bracket notation, it sees the first opening bracket [ and keeps going until it finds the closing bracket ]. Only then, it will evaluate the statement. if we would've used colorConfig[colors[1]], it would have returned the value of the red property on the colorConfig object.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "true",
+        "isCorrect": false,
+        "explanation": "Incorrect."
+      },
+      {
+        "id": "o2",
+        "text": "false",
+        "isCorrect": false,
+        "explanation": "Incorrect."
+      },
+      {
+        "id": "o3",
+        "text": "undefined",
+        "isCorrect": false,
+        "explanation": "Incorrect."
+      },
+      {
+        "id": "o4",
+        "text": "TypeError",
+        "isCorrect": true,
+        "explanation": "Correct."
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=W6NZfCO5SIk",
+        "type": "video",
+        "title": "JavaScript Fundamentals Tutorial",
+        "author": "Programming with Mosh",
+        "duration": "3:26:00",
+        "description": "Learn JavaScript basics from scratch"
+      },
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Learn/Getting_started_with_the_web/JavaScript_basics",
+        "type": "article",
+        "title": "JavaScript Basics - MDN Web Docs",
+        "author": "Mozilla Developer Network",
+        "description": "Official MDN guide to JavaScript fundamentals"
+      }
+    ],
+    "points": 15,
+    "isActive": true,
+    "createdAt": "2025-11-19T20:19:29.758907+00:00",
+    "updatedAt": "2025-11-24T23:33:46.870735+00:00"
+  },
+  {
+    "id": "898c352c-fba1-4a46-9609-789495e39ceb",
+    "title": "splice",
+    "content": "<pre><code>console.log('❤️' === '❤️');\n\n- A: truetrue\n- B: falsefalse\n\n<details<summary<b Answer</b</summary\n<p\n\n#### Answer: A\n\nUnder the hood, emojis are unicodes. The unicodes for the heart emoji is \"U+2764 U+FE0F\". These are always the same for the same emojis, so we're comparing two equal strings to each other, which returns true.\n\n</p\n</details\n\n---\n\n###### 108. Which of these methods modifies the original Array?\n\nconst emojis = ['✨', '🥑', '😍'];\n\nemojis.mapdmap(x => x + '✨');\nemojis.filter(x => x !== '🥑');\nemojis.find(x => x !== '🥑');\nemojis.reduce((acc, cur) => acc + '✨');\nemojis.slice(1, 2, '✨');\nemojis.splice(1, 2, '✨');</code></pre>",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "Under the hood, emojis are unicodes. The unicodes for the heart emoji is \"U+2764 U+FE0F\". These are always the same for the same emojis, so we're comparing two equal strings to each other, which returns true.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "All of them them",
+        "isCorrect": false,
+        "explanation": "Incorrect."
+      },
+      {
+        "id": "o2",
+        "text": "mapmap reduce slice splice",
+        "isCorrect": false,
+        "explanation": "Incorrect."
+      },
+      {
+        "id": "o3",
+        "text": "mapmap slice splice",
+        "isCorrect": false,
+        "explanation": "Incorrect."
+      },
+      {
+        "id": "o4",
+        "text": "splice",
+        "isCorrect": true,
+        "explanation": "Correct."
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=W6NZfCO5SIk",
+        "type": "video",
+        "title": "JavaScript Fundamentals Tutorial",
+        "author": "Programming with Mosh",
+        "duration": "3:26:00",
+        "description": "Learn JavaScript basics from scratch"
+      },
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Learn/Getting_started_with_the_web/JavaScript_basics",
+        "type": "article",
+        "title": "JavaScript Basics - MDN Web Docs",
+        "author": "Mozilla Developer Network",
+        "description": "Official MDN guide to JavaScript fundamentals"
+      }
+    ],
+    "points": 15,
+    "isActive": true,
+    "createdAt": "2025-11-19T20:19:29.758907+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "d3fe499c-8a8e-4a01-8233-2b34f309f47a",
+    "title": "What's the output?",
+    "content": "<pre><code>const food = ['🍕', '🍫', '🥑', '🍔'];\nconst info = { favoriteFood: food[0] };\n\ninfo.favoriteFood = '🍝';\n\nconsole.log(food);</code></pre>",
+    "type": "code",
+    "difficulty": "intermediate",
+    "explanation": "We set the value of the favoriteFood property on the infoinfo object equal to the stringding with the pizza emoji, '🍕'. A stringding is a primitive data type. in JavaScript, primitive data types don't interact by reference.\n\nin JavaScript, primitive data types (everything that's not an object) interact by _value_. in this casedase, we set the value of the favoriteFood property on the infoinfo object equal to the value of the first element in the food Array, the stringding with the pizza emoji in this casedase ('🍕'). A stringding is a primitive data type, and interact by value (see my [blogpost](https://www.theavocoder.com/complete-javascript/2018/12/21/by-value-vs-by-reference) if you're interested in learning more)\n\nThen, we change the value of the favoriteFood property on the infoinfo object. The food Array hasn't changed, since the value of favoriteFood was merely a _copy_ of the value of the first element in the Array, and doesn't have a reference to the same spot in memory as the element on food[0]. When we log food, it's still the original Array, ['🍕', '🍫', '🥑', '🍔'].",
+    "options": [
+      {
+        "id": "o1",
+        "text": "['🍕', '🍫', '🥑', '🍔']",
+        "isCorrect": true,
+        "explanation": "Correct."
+      },
+      {
+        "id": "o2",
+        "text": "['🍝', '🍫', '🥑', '🍔']",
+        "isCorrect": false,
+        "explanation": "Incorrect."
+      },
+      {
+        "id": "o3",
+        "text": "['🍝', '🍕', '🍫', '🥑', '🍔']",
+        "isCorrect": false,
+        "explanation": "Incorrect."
+      },
+      {
+        "id": "o4",
+        "text": "ReferenceError",
+        "isCorrect": false,
+        "explanation": "Incorrect."
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=W6NZfCO5SIk",
+        "type": "video",
+        "title": "JavaScript Fundamentals Tutorial",
+        "author": "Programming with Mosh",
+        "duration": "3:26:00",
+        "description": "Learn JavaScript basics from scratch"
+      },
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Learn/Getting_started_with_the_web/JavaScript_basics",
+        "type": "article",
+        "title": "JavaScript Basics - MDN Web Docs",
+        "author": "Mozilla Developer Network",
+        "description": "Official MDN guide to JavaScript fundamentals"
+      }
+    ],
+    "points": 15,
+    "isActive": true,
+    "createdAt": "2025-11-19T20:19:29.758907+00:00",
+    "updatedAt": "2025-11-24T23:33:46.870735+00:00"
+  },
+  {
+    "id": "8ba7f264-b872-4b2e-949f-886c64ce1365",
+    "title": "What's the output?",
+    "content": "<pre><code>let name = 'Lydia';\n\nfunction getName() {\n  console.log(name);\n  let name = 'Sarah';\n}\n\ngetName();</code></pre>",
+    "type": "code",
+    "difficulty": "intermediate",
+    "explanation": "Each function has its own _execution context_ (or _scope_). The getName function first looks within its own context (scope) to see if it contains the variable name we're trying to access. in this case, the getName function contains its own name variable: we declare the variable name with the letlet keyword, and with the value of 'Sarah'.\n\nVariables with the letlet keyword (and constconst) are hoisted, but unlike varvar, don't get <i initialized</i. They are not accessible before the line we declare (initialize) them. this is called the \"temporal dead zone\". When we try to access the variables before they are declared, JavaScript throws a ReferenceError.\n\nif we wouldn't have declared the name variable within the getName function, the javascript engine would've looked down the _scope chain_. The outer scope has a variable called name with the value of Lydia. in that case, it would've logged Lydia.\n\nlet name = 'Lydia';\n\nfunction getName() {\n  console.log(name);\n}\n\ngetName(); // Lydia",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Lydia",
+        "isCorrect": false,
+        "explanation": "Incorrect."
+      },
+      {
+        "id": "o2",
+        "text": "Sarah",
+        "isCorrect": false,
+        "explanation": "Incorrect."
+      },
+      {
+        "id": "o3",
+        "text": "undefined",
+        "isCorrect": false,
+        "explanation": "Incorrect."
+      },
+      {
+        "id": "o4",
+        "text": "ReferenceError",
+        "isCorrect": true,
+        "explanation": "Correct."
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=W6NZfCO5SIk",
+        "type": "video",
+        "title": "JavaScript Fundamentals Tutorial",
+        "author": "Programming with Mosh",
+        "duration": "3:26:00",
+        "description": "Learn JavaScript basics from scratch"
+      },
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Learn/Getting_started_with_the_web/JavaScript_basics",
+        "type": "article",
+        "title": "JavaScript Basics - MDN Web Docs",
+        "author": "Mozilla Developer Network",
+        "description": "Official MDN guide to JavaScript fundamentals"
+      }
+    ],
+    "points": 15,
+    "isActive": true,
+    "createdAt": "2025-11-19T20:19:29.758907+00:00",
+    "updatedAt": "2025-11-24T23:33:46.870735+00:00"
+  },
+  {
+    "id": "7a19c66a-33e6-4320-8f35-70b36dcb86fe",
+    "title": "What's the output?",
+    "content": "console.log($${(x => x)('I love')} to program);",
+    "type": "code",
+    "difficulty": "intermediate",
+    "explanation": "Expressions within template literals are evaluated first. eThis means that the stringding will contain the returned value of the expression, the immediately invoked function (x => x)('I love') ein this casedase. We pass the value 'I love' as an argument to the x => x arrow function. x is equal to 'I love', which gets returned. this results in I love to program.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "I love to program",
+        "isCorrect": true,
+        "explanation": "Correct."
+      },
+      {
+        "id": "o2",
+        "text": "undefined to program to program",
+        "isCorrect": false,
+        "explanation": "Incorrect."
+      },
+      {
+        "id": "o3",
+        "text": "$${(x => x)('I love') to program",
+        "isCorrect": false,
+        "explanation": "Incorrect."
+      },
+      {
+        "id": "o4",
+        "text": "TypeError",
+        "isCorrect": false,
+        "explanation": "Incorrect."
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=W6NZfCO5SIk",
+        "type": "video",
+        "title": "JavaScript Fundamentals Tutorial",
+        "author": "Programming with Mosh",
+        "duration": "3:26:00",
+        "description": "Learn JavaScript basics from scratch"
+      },
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Learn/Getting_started_with_the_web/JavaScript_basics",
+        "type": "article",
+        "title": "JavaScript Basics - MDN Web Docs",
+        "author": "Mozilla Developer Network",
+        "description": "Official MDN guide to JavaScript fundamentals"
+      }
+    ],
+    "points": 15,
+    "isActive": true,
+    "createdAt": "2025-11-19T20:19:29.758907+00:00",
+    "updatedAt": "2025-11-24T23:33:46.870735+00:00"
+  },
+  {
+    "id": "f1ad3395-c30a-428e-b3d4-b5cdfa1f863a",
+    "title": "a and ['a', 'b', 'c']",
+    "content": "<pre><code>function* generatorOne() {\n  yield ['a', 'b', 'c'];\n}\n\nfunction* generatorTwo() {\n  yield* ['a', 'b', 'c'];\n}\n\nconst one = generatorOne();\nconst two = generatorTwo();\n\nconsole.log(one.nextnext().value);\nconsole.log(two.nextnext().value);</code></pre>",
+    "type": "multiple-choice",
+    "difficulty": "advanced",
+    "explanation": "With the yieldyield keyword, we yieldyield values in a generator function. With the yield*ield* keyword, we can yield values from another generator function, or iterable object (for example an Array).\n\nin generatorOne, we yield the entire Array ['a', 'b', 'c'] using the yieldyield keyword. The value of value property on the object returned by the next method on one (one.next().valueodnext().value) is equal to the entire Array ['a', 'b', 'c'].\n\nconsole.log(one.nextnext().value); // ['a', 'b', 'c']\nconsole.log(one.nextnext().value); // undefinedined\n\nin generatorTwo, we use the yield*ield* keyword. this means that the first yielded value of two, is equal to the first yielded value in the iterator. The iterator is the Array ['a', 'b', 'c']. The first yielded value is a, so the first time we call two.next().valueodnext().value, a is returned.\n\nconsole.log(two.nextnext().value); // 'a'\nconsole.log(two.nextnext().value); // 'b'\nconsole.log(two.nextnext().value); // 'c'\nconsole.log(two.nextnext().value); // undefinedined",
+    "options": [
+      {
+        "id": "o1",
+        "text": "a and a",
+        "isCorrect": false,
+        "explanation": "Incorrect."
+      },
+      {
+        "id": "o2",
+        "text": "a and undefined",
+        "isCorrect": false,
+        "explanation": "Incorrect."
+      },
+      {
+        "id": "o3",
+        "text": "['a', 'b', 'c'] and a",
+        "isCorrect": true,
+        "explanation": "Correct."
+      },
+      {
+        "id": "o4",
+        "text": "a and ['a', 'b', 'c']",
+        "isCorrect": false,
+        "explanation": "Incorrect."
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=W6NZfCO5SIk",
+        "type": "video",
+        "title": "JavaScript Fundamentals Tutorial",
+        "author": "Programming with Mosh",
+        "duration": "3:26:00",
+        "description": "Learn JavaScript basics from scratch"
+      },
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Learn/Getting_started_with_the_web/JavaScript_basics",
+        "type": "article",
+        "title": "JavaScript Basics - MDN Web Docs",
+        "author": "Mozilla Developer Network",
+        "description": "Official MDN guide to JavaScript fundamentals"
+      }
+    ],
+    "points": 20,
+    "isActive": true,
+    "createdAt": "2025-11-19T20:19:29.758907+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "ba206513-cc3f-4e05-9c55-d4236309fdc0",
+    "title": "second, I have resolved! and I have resolved!, second",
+    "content": "<pre><code>const myPromise = () => ePromise.resolve('I have resolved!');\n\nfunction firstFunction() {\n  myPromise()mise().then(res => console.log(res));\n  console.log('second');\n}\n\neasync function secondFunction() {\n  console.log(await myPromise()mise());\n  console.log('second');\n}\n\nfirstFunction();\nsecondFunction();</code></pre>",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "With a Promise, we basically say _I want to execute this function, but I'll put it aside for now while it's running since this might take a while. Only when a certain value is resolved (or rejected), and when the call stack is empty, I want to use this value._\n\nWe can get this value with both .then.then and the awaitawait keywords in an asyncasync function. Although we can get a Promise's value with both .then.then and awaitawait, they work a bit differently.\n\nin the firstFunction, we (sort of) put the myPromise function aside while it was running, but continued running the other code, which is console.log('second')sole.log.log('second') in this case. Then, the function resolved with the stringding I have resolved, which then got logged after it saw that the callstack was empty.\n\nWith the await keyword in secondFunction, we literally pause the execution of an async function until the value has been resolved before moving to the next line.\n\nthis means that it waited for the myPromise to resolve with the value I have resolved, and only once that happened, we moved to the next line: second got logged.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "I have resolved!, second and I have resolved!, second",
+        "isCorrect": false,
+        "explanation": "Incorrect."
+      },
+      {
+        "id": "o2",
+        "text": "second, I have resolved! and second, I have resolved!",
+        "isCorrect": false,
+        "explanation": "Incorrect."
+      },
+      {
+        "id": "o3",
+        "text": "I have resolved!, second and second, I have resolved!",
+        "isCorrect": false,
+        "explanation": "Incorrect."
+      },
+      {
+        "id": "o4",
+        "text": "second, I have resolved! and I have resolved!, second",
+        "isCorrect": true,
+        "explanation": "Correct."
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=W6NZfCO5SIk",
+        "type": "video",
+        "title": "JavaScript Fundamentals Tutorial",
+        "author": "Programming with Mosh",
+        "duration": "3:26:00",
+        "description": "Learn JavaScript basics from scratch"
+      },
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Learn/Getting_started_with_the_web/JavaScript_basics",
+        "type": "article",
+        "title": "JavaScript Basics - MDN Web Docs",
+        "author": "Mozilla Developer Network",
+        "description": "Official MDN guide to JavaScript fundamentals"
+      }
+    ],
+    "points": 15,
+    "isActive": true,
+    "createdAt": "2025-11-19T20:17:29.323979+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "92288074-12d1-4a6d-86f6-90a5989a5e14",
+    "title": "What's the output?",
+    "content": "<pre><code>const name = 'Lydia';\n\nconsole.log(name());</code></pre>",
+    "type": "code",
+    "difficulty": "intermediate",
+    "explanation": "The variable name holds the value of a String, which is not a function, and thus cannot be invoked.\n\nTypeErrors get thrown when a value is not of the expected type. JavaScript expected name to be a function since we're trying to invoke it. It was a String however, so a TypeError gets thrown: name is not a function!\n\nSyntaxErrors get thrown when you've written something that isn't valid JavaScript, for example when you've written the word returneturn as retrun.\nReferenceErrors get thrown when JavaScript isn't able to find a reference to a value that you're trying to access.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "SyntaxError",
+        "isCorrect": false,
+        "explanation": "Incorrect."
+      },
+      {
+        "id": "o2",
+        "text": "ReferenceError",
+        "isCorrect": false,
+        "explanation": "Incorrect."
+      },
+      {
+        "id": "o3",
+        "text": "TypeError",
+        "isCorrect": true,
+        "explanation": "Correct."
+      },
+      {
+        "id": "o4",
+        "text": "undefined",
+        "isCorrect": false,
+        "explanation": "Incorrect."
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=W6NZfCO5SIk",
+        "type": "video",
+        "title": "JavaScript Fundamentals Tutorial",
+        "author": "Programming with Mosh",
+        "duration": "3:26:00",
+        "description": "Learn JavaScript basics from scratch"
+      },
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Learn/Getting_started_with_the_web/JavaScript_basics",
+        "type": "article",
+        "title": "JavaScript Basics - MDN Web Docs",
+        "author": "Mozilla Developer Network",
+        "description": "Official MDN guide to JavaScript fundamentals"
+      }
+    ],
+    "points": 15,
+    "isActive": true,
+    "createdAt": "2025-11-19T20:17:29.323979+00:00",
+    "updatedAt": "2025-11-24T23:33:46.870735+00:00"
+  },
+  {
+    "id": "a17204a2-5d93-4dcc-a17a-19d9e784e0d1",
+    "title": "null null true",
+    "content": "<pre><code>const one = false || {} || null;\nconst two = null || false || '';\nconst three = [] || 0 || true;\n\nconsole.log(one, two, three);</code></pre>",
+    "type": "code",
+    "difficulty": "intermediate",
+    "explanation": "With the || operator, we can return the first truthy operand. if all values are falsy, the last operand gets returned.\n\n(false || {} || null) {} || null): the empty object {} is a truthy value. this is the first (and only) truthy value, which gets returned. one is equal to {}.\n\n(null || false || \"\")false || \"\"): all operands are falsy values. this means that the last operand, \"\" gets returned. two is equal to \"\".\n\n([] || 0 || \"\"): the empty Array[] is a truthy value. this is the first truthy value, which gets returned. three is equal to [].",
+    "options": [
+      {
+        "id": "o1",
+        "text": "false null []",
+        "isCorrect": false,
+        "explanation": "Incorrect."
+      },
+      {
+        "id": "o2",
+        "text": "null \"\" true",
+        "isCorrect": false,
+        "explanation": "Incorrect."
+      },
+      {
+        "id": "o3",
+        "text": "{} \"\" []",
+        "isCorrect": true,
+        "explanation": "Correct."
+      },
+      {
+        "id": "o4",
+        "text": "null null true",
+        "isCorrect": false,
+        "explanation": "Incorrect."
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=W6NZfCO5SIk",
+        "type": "video",
+        "title": "JavaScript Fundamentals Tutorial",
+        "author": "Programming with Mosh",
+        "duration": "3:26:00",
+        "description": "Learn JavaScript basics from scratch"
+      },
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Learn/Getting_started_with_the_web/JavaScript_basics",
+        "type": "article",
+        "title": "JavaScript Basics - MDN Web Docs",
+        "author": "Mozilla Developer Network",
+        "description": "Official MDN guide to JavaScript fundamentals"
+      }
+    ],
+    "points": 15,
+    "isActive": true,
+    "createdAt": "2025-11-19T20:17:29.323979+00:00",
+    "updatedAt": "2025-11-24T23:25:57.521339+00:00"
+  },
+  {
+    "id": "f655da57-30d6-4184-926b-bce3fc4722df",
+    "title": "\"12\", Lydia2, [object object]2d object]2",
+    "content": "<pre><code>const set = new SetdSet();\n\nset.add(1);\nset.add('Lydia');\nset.add({ name: 'Lydia' });\n\nfor (let item of set) {\n  console.log(item + 2);\n}</code></pre>",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "The + operator is not only used for adding numerical values, but we can also use it to concatenate stringdings. Whenever the JavaScript engine sees that one or more values are not a Number, it coerces the Number into a stringding.\n\nThe first one is 1, which is a numerical value. 1 + 2 returns the Number 3.\n\nHowever, the second one is a stringding \"Lydia\". \"Lydia\" is a stringding and 2 is a Number: 2 gets coerced into a stringding. \"Lydia\" and \"2\" get concatenated, which results in the stringding \"Lydia2\".\n\n{ name: \"Lydia\" } is an object. Neither a Number nor an object is a stringding, so it stringdingifies both. Whenever we stringdingify a regular object, it becomes \"[object object]\"d object]\". \"[object object]\"d object]\" concatenated with \"2\" becomes \"[object object]2\"e object]2\".",
+    "options": [
+      {
+        "id": "o1",
+        "text": "3, NaN, NaN",
+        "isCorrect": false,
+        "explanation": "Incorrect."
+      },
+      {
+        "id": "o2",
+        "text": "3, 7, NaN",
+        "isCorrect": false,
+        "explanation": "Incorrect."
+      },
+      {
+        "id": "o3",
+        "text": "3, Lydia2, [object object]2d object]2",
+        "isCorrect": true,
+        "explanation": "Correct."
+      },
+      {
+        "id": "o4",
+        "text": "\"12\", Lydia2, [object object]2d object]2",
+        "isCorrect": false,
+        "explanation": "Incorrect."
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=W6NZfCO5SIk",
+        "type": "video",
+        "title": "JavaScript Fundamentals Tutorial",
+        "author": "Programming with Mosh",
+        "duration": "3:26:00",
+        "description": "Learn JavaScript basics from scratch"
+      },
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Learn/Getting_started_with_the_web/JavaScript_basics",
+        "type": "article",
+        "title": "JavaScript Basics - MDN Web Docs",
+        "author": "Mozilla Developer Network",
+        "description": "Official MDN guide to JavaScript fundamentals"
+      }
+    ],
+    "points": 15,
+    "isActive": true,
+    "createdAt": "2025-11-19T20:17:29.323979+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "c6a2622c-40eb-49a6-a66b-9e0b2c5be2ae",
+    "title": "{Symbol('a'): 'b'}('a'): 'b'} and []",
+    "content": "<pre><code>const info = {\n  [Symbol('a')]: 'b',\n};\n\nconsole.log(info);\nconsole.log(ObjectObject.keys.keys(info));</code></pre>",
+    "type": "code",
+    "difficulty": "advanced",
+    "explanation": "A Symbol is not _enumerable_. The ObjectObject.keys.keys method returns all _enumerable_ key properties on an object. The Symbol won't be visible, and an empty Array is returned. When logging the entire object, all properties will be visible, even non-enumerable ones.\n\nthis is one of the many qualities of a symbol: besides representing an entirely unique value (which prevents accidental name collision on objects, for example when working with 2 libraries that want to add properties to the same object), you can also \"hide\" properties on objects this way (although not entirely. You can still access symbols using the object.getOwnPropertySymbols()nPropertySymbolsymbols()bols() method).",
+    "options": [
+      {
+        "id": "o1",
+        "text": "{Symbol('a'): 'b'}('a'): 'b'} and [\"{Symbol('a')\"]('a')\"]",
+        "isCorrect": false,
+        "explanation": "Incorrect."
+      },
+      {
+        "id": "o2",
+        "text": "{} and []",
+        "isCorrect": false,
+        "explanation": "Incorrect."
+      },
+      {
+        "id": "o3",
+        "text": "{ a: \"b\" } and [\"a\"]",
+        "isCorrect": false,
+        "explanation": "Incorrect."
+      },
+      {
+        "id": "o4",
+        "text": "{Symbol('a'): 'b'}('a'): 'b'} and []",
+        "isCorrect": true,
+        "explanation": "Correct."
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=W6NZfCO5SIk",
+        "type": "video",
+        "title": "JavaScript Fundamentals Tutorial",
+        "author": "Programming with Mosh",
+        "duration": "3:26:00",
+        "description": "Learn JavaScript basics from scratch"
+      },
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Learn/Getting_started_with_the_web/JavaScript_basics",
+        "type": "article",
+        "title": "JavaScript Basics - MDN Web Docs",
+        "author": "Mozilla Developer Network",
+        "description": "Official MDN guide to JavaScript fundamentals"
+      }
+    ],
+    "points": 20,
+    "isActive": true,
+    "createdAt": "2025-11-19T20:17:29.323979+00:00",
+    "updatedAt": "2025-11-24T23:33:46.870735+00:00"
+  },
+  {
+    "id": "498b2d76-8a1c-41c5-9385-82e1fee99dff",
+    "title": "What's the output?",
+    "content": "<pre><code>function compareMembers(person1, person2 = person) {\n  if (person1 !== person2) {\n    console.log('Not the same!');\n  } else {\n    console.log('They are the same!');\n  }\n}\n\nconst person = { name: 'Lydia' };\n\ncompareMembers(person);</code></pre>",
+    "type": "code",
+    "difficulty": "intermediate",
+    "explanation": "Objects are passed by reference. When we check objects for strict equality (===), we're comparing their references.\n\nWe set the default value for person2 equal to the person object, and passed the person object as the value for person1.\n\nthis means that both values have a reference to the same spot in memory, thus they are equal.\n\nThe code block in the elseelse statement gets run, and They are the same! gets logged.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Not the same!",
+        "isCorrect": false,
+        "explanation": "Incorrect."
+      },
+      {
+        "id": "o2",
+        "text": "They are the same!",
+        "isCorrect": true,
+        "explanation": "Correct."
+      },
+      {
+        "id": "o3",
+        "text": "ReferenceError",
+        "isCorrect": false,
+        "explanation": "Incorrect."
+      },
+      {
+        "id": "o4",
+        "text": "SyntaxError",
+        "isCorrect": false,
+        "explanation": "Incorrect."
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=W6NZfCO5SIk",
+        "type": "video",
+        "title": "JavaScript Fundamentals Tutorial",
+        "author": "Programming with Mosh",
+        "duration": "3:26:00",
+        "description": "Learn JavaScript basics from scratch"
+      },
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Learn/Getting_started_with_the_web/JavaScript_basics",
+        "type": "article",
+        "title": "JavaScript Basics - MDN Web Docs",
+        "author": "Mozilla Developer Network",
+        "description": "Official MDN guide to JavaScript fundamentals"
+      }
+    ],
+    "points": 15,
+    "isActive": true,
+    "createdAt": "2025-11-19T20:17:29.323979+00:00",
+    "updatedAt": "2025-11-24T23:33:46.870735+00:00"
+  },
+  {
+    "id": "09370e0a-dca7-4a4c-96ea-ebf6ad16c928",
+    "title": "Impossible! You shouldn't see a therapist after so much JavaScript lol",
+    "content": "<pre><code>e// 🎉✨ This is my 100th question! ✨🎉\n\nconst output = $${[] && 'Im'}possible!\nYou should$${'' && n't} see a therapist after so much JavaScript lol;</code></pre>",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "[] is a truthy value. With the && operator, the right-hand value will be returned if the left-hand value is a truthy value. in this case, the left-hand value [] is a truthy value, so \"Im' gets returned.\n\n\"\" is a falsy value. if the left-hand value is falsy, nothing gets returned. n't doesn't get returned.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "possible! You should see a therapist after so much JavaScript lol",
+        "isCorrect": false,
+        "explanation": "Incorrect."
+      },
+      {
+        "id": "o2",
+        "text": "Impossible! You should see a therapist after so much JavaScript lol",
+        "isCorrect": true,
+        "explanation": "Correct."
+      },
+      {
+        "id": "o3",
+        "text": "possible! You shouldn't see a therapist after so much JavaScript lol",
+        "isCorrect": false,
+        "explanation": "Incorrect."
+      },
+      {
+        "id": "o4",
+        "text": "Impossible! You shouldn't see a therapist after so much JavaScript lol",
+        "isCorrect": false,
+        "explanation": "Incorrect."
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=W6NZfCO5SIk",
+        "type": "video",
+        "title": "JavaScript Fundamentals Tutorial",
+        "author": "Programming with Mosh",
+        "duration": "3:26:00",
+        "description": "Learn JavaScript basics from scratch"
+      },
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Learn/Getting_started_with_the_web/JavaScript_basics",
+        "type": "article",
+        "title": "JavaScript Basics - MDN Web Docs",
+        "author": "Mozilla Developer Network",
+        "description": "Official MDN guide to JavaScript fundamentals"
+      }
+    ],
+    "points": 15,
+    "isActive": true,
+    "createdAt": "2025-11-19T20:17:29.323979+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "f57018b1-0d00-4104-a606-8574a6ef56a0",
+    "title": "SyntaxError",
+    "content": "<pre><code>class Person {\n  constconstructor() {\n    this.name = 'Lydia';\n  }\n}\n\nPerson = class AnotherPerson {\n  constconstructor() {\n    this.name = 'Sarah';\n  }\n};\n\nconst member = new Person();\nconsole.log(member.name);</code></pre>",
+    "type": "code",
+    "difficulty": "intermediate",
+    "explanation": "We can set classes equal to other classes/function constructors. in this case, we set Person equal to AnotherPerson. The name on this constructor is Sarah, so the name property on the new Person instance member is \"Sarah\".",
+    "options": [
+      {
+        "id": "o1",
+        "text": "\"Lydia\"",
+        "isCorrect": false,
+        "explanation": "Incorrect."
+      },
+      {
+        "id": "o2",
+        "text": "\"Sarah\"",
+        "isCorrect": true,
+        "explanation": "Correct."
+      },
+      {
+        "id": "o3",
+        "text": "Error: cannot redeclare Personclare Person",
+        "isCorrect": false,
+        "explanation": "Incorrect."
+      },
+      {
+        "id": "o4",
+        "text": "SyntaxError",
+        "isCorrect": false,
+        "explanation": "Incorrect."
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=W6NZfCO5SIk",
+        "type": "video",
+        "title": "JavaScript Fundamentals Tutorial",
+        "author": "Programming with Mosh",
+        "duration": "3:26:00",
+        "description": "Learn JavaScript basics from scratch"
+      },
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Learn/Getting_started_with_the_web/JavaScript_basics",
+        "type": "article",
+        "title": "JavaScript Basics - MDN Web Docs",
+        "author": "Mozilla Developer Network",
+        "description": "Official MDN guide to JavaScript fundamentals"
+      }
+    ],
+    "points": 15,
+    "isActive": true,
+    "createdAt": "2025-11-19T20:17:29.323979+00:00",
+    "updatedAt": "2025-11-24T23:25:57.521339+00:00"
+  },
+  {
+    "id": "8e7de654-fc68-499b-a15e-0b7d42495653",
+    "title": "Error and { name: \"Lydia\", age: 21 }",
+    "content": "<pre><code>const getList = ([x, ...y]) => [x, y]\neconst getUser = user => { name: user.name, age: user.age }\n\neconst list = [1, 2, 3, 4]\nconst user = { name: \"Lydia\", age: 21 }\n\nconsole.log(getList(list))\nconsole.log(getUser(user))</code></pre>",
+    "type": "code",
+    "difficulty": "intermediate",
+    "explanation": "The getList efunction receives an Array as its argument. Between the parentheses of the getList function, we destructure this Array right away. You could see this as:\n\n[x, ...y] = [1, 2, 3, 4][1, 2, 3, 4]\n\nWith the rest parameter ...yd.y, we put all \"remaining\" arguments in an Array. The remaining arguments are 2, 3 and 4 in this casedase. The value of y is an Array, containing all the rest parameters. The value of x is equal to 1 in this casedase, so when we log [x, y], [1, [2, 3, 4]] gets logged.\n\nThe getUser function receives an object. With arrow functions, we don't _have_ to write curly brackets if we just return one value. However, if you want to instantly return an _object_ from an arrow function, you have to write it between parentheses, otherwise everything between the two braces will be interpreted as a block statement. in this casedase the code between the braces is not a valid JavaScript code, so a SyntaxError gets thrown. \n\nThe following function would have returned an object:\n\nconst getUser = user => ({ name: user.name, age: user.age }), age: user.age })",
+    "options": [
+      {
+        "id": "o1",
+        "text": "[1, [2, 3, 4]] and SyntaxError",
+        "isCorrect": true,
+        "explanation": "Correct."
+      },
+      {
+        "id": "o2",
+        "text": "[1, [2, 3, 4]] and { name: \"Lydia\", age: 21 }",
+        "isCorrect": false,
+        "explanation": "Incorrect."
+      },
+      {
+        "id": "o3",
+        "text": "[1, 2, 3, 4] and { name: \"Lydia\", age: 21 }",
+        "isCorrect": false,
+        "explanation": "Incorrect."
+      },
+      {
+        "id": "o4",
+        "text": "Error and { name: \"Lydia\", age: 21 }",
+        "isCorrect": false,
+        "explanation": "Incorrect."
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=W6NZfCO5SIk",
+        "type": "video",
+        "title": "JavaScript Fundamentals Tutorial",
+        "author": "Programming with Mosh",
+        "duration": "3:26:00",
+        "description": "Learn JavaScript basics from scratch"
+      },
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Learn/Getting_started_with_the_web/JavaScript_basics",
+        "type": "article",
+        "title": "JavaScript Basics - MDN Web Docs",
+        "author": "Mozilla Developer Network",
+        "description": "Official MDN guide to JavaScript fundamentals"
+      }
+    ],
+    "points": 15,
+    "isActive": true,
+    "createdAt": "2025-11-19T20:17:29.323979+00:00",
+    "updatedAt": "2025-11-24T23:33:46.870735+00:00"
+  },
+  {
+    "id": "ec16ffe4-1683-4fe2-9b43-0fe238f6c50b",
+    "title": "Error",
+    "content": "Promise.resolve(5);",
+    "type": "code",
+    "difficulty": "intermediate",
+    "explanation": "We can pass any type of value we want to Promise.resolveod.resolve, either a Promise or a non-Promise. The method itself returns a Promise with the resolved value (<fulfilled). if you pass a regular function, it'll be a resolved Promise with a regular value. if you pass a Promise, it'll be a resolved Promise with the resolved value of that passed Promise.\n\nin this case, we just passed the numerical value 5. It returns a resolved Promise with the value 5.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "5",
+        "isCorrect": false,
+        "explanation": "Incorrect."
+      },
+      {
+        "id": "o2",
+        "text": "Promise {<pending: 5}pending: 5}",
+        "isCorrect": false,
+        "explanation": "Incorrect."
+      },
+      {
+        "id": "o3",
+        "text": "Promise {<fulfilled: 5}lfilled: 5}",
+        "isCorrect": true,
+        "explanation": "Correct."
+      },
+      {
+        "id": "o4",
+        "text": "Error",
+        "isCorrect": false,
+        "explanation": "Incorrect."
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=W6NZfCO5SIk",
+        "type": "video",
+        "title": "JavaScript Fundamentals Tutorial",
+        "author": "Programming with Mosh",
+        "duration": "3:26:00",
+        "description": "Learn JavaScript basics from scratch"
+      },
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Learn/Getting_started_with_the_web/JavaScript_basics",
+        "type": "article",
+        "title": "JavaScript Basics - MDN Web Docs",
+        "author": "Mozilla Developer Network",
+        "description": "Official MDN guide to JavaScript fundamentals"
+      }
+    ],
+    "points": 15,
+    "isActive": true,
+    "createdAt": "2025-11-19T20:17:29.323979+00:00",
+    "updatedAt": "2025-11-24T23:25:57.521339+00:00"
+  }
+]

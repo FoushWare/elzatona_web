@@ -1,0 +1,2828 @@
+[
+  {
+    "id": "c5cdc2a9-e02a-45b4-a6bf-841ce76ba279",
+    "title": "Prevents cookies from being accessed via JavaScript",
+    "content": "Select the correct behavior.",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "SameSite restricts cross-site sending of cookies to reduce CSRF risks. It does not encrypt cookies or make them HttpOnly.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Prevents cookies from being sent with cross-site requests by default",
+        "isCorrect": true,
+        "explanation": null
+      },
+      {
+        "id": "o2",
+        "text": "Mitigates CSRF attacks",
+        "isCorrect": true,
+        "explanation": null
+      },
+      {
+        "id": "o3",
+        "text": "Encrypts cookie contents",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o4",
+        "text": "Prevents cookies from being accessed via JavaScript",
+        "isCorrect": false,
+        "explanation": null
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/Security",
+        "type": "article",
+        "title": "Web Security - MDN",
+        "author": "Mozilla Developer Network",
+        "description": "Web security best practices"
+      },
+      {
+        "url": "https://owasp.org/www-project-top-ten/",
+        "type": "article",
+        "title": "OWASP Top 10",
+        "author": "OWASP",
+        "description": "Top 10 web application security risks"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-20T20:37:27.557401+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "f2020176-b389-4b21-84c6-7c439145a5c2",
+    "title": "Use SameSite attribute to mitigate CSRF",
+    "content": "Select all correct options.",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "HttpOnly, Secure, and SameSite attributes protect cookies from XSS and CSRF attacks. Sensitive tokens should not be stored in localStorage.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Use HttpOnly to prevent JavaScript access",
+        "isCorrect": true,
+        "explanation": null
+      },
+      {
+        "id": "o2",
+        "text": "Use Secure flag to enforce HTTPS transmission",
+        "isCorrect": true,
+        "explanation": null
+      },
+      {
+        "id": "o3",
+        "text": "Avoid storing sensitive tokens in localStorage",
+        "isCorrect": true,
+        "explanation": null
+      },
+      {
+        "id": "o4",
+        "text": "Use SameSite attribute to mitigate CSRF",
+        "isCorrect": true,
+        "explanation": null
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/Security",
+        "type": "article",
+        "title": "Web Security - MDN",
+        "author": "Mozilla Developer Network",
+        "description": "Web security best practices"
+      },
+      {
+        "url": "https://owasp.org/www-project-top-ten/",
+        "type": "article",
+        "title": "OWASP Top 10",
+        "author": "OWASP",
+        "description": "Top 10 web application security risks"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-20T20:37:27.557401+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "6adbffe2-d183-4c80-acd6-ed2fcc9a2b27",
+    "title": "Not quite. Consider security best practices.",
+    "content": "Explain what MITM attacks are and how they affect web communication.",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "A MITM attack occurs when an attacker intercepts communication between the client and server, potentially reading, modifying, or injecting data without either party noticing.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "A MITM attack occurs when an attacker intercepts communication between the client and server, potentially reading, modifying, or injecting data without either party noticing.",
+        "isCorrect": true,
+        "explanation": "A MITM attack occurs when an attacker intercepts communication between the client and server, potentially reading, modifying, or injecting data without either party noticing."
+      },
+      {
+        "id": "o2",
+        "text": "This is not correct. Please refer to the explanation.",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o3",
+        "text": "Incorrect. Review web security concepts.",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o4",
+        "text": "This is a common misconception. The correct answer is different.",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o5",
+        "text": "Not quite. Consider security best practices.",
+        "isCorrect": false,
+        "explanation": null
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/Security",
+        "type": "article",
+        "title": "Web Security - MDN",
+        "author": "Mozilla Developer Network",
+        "description": "Web security best practices"
+      },
+      {
+        "url": "https://owasp.org/www-project-top-ten/",
+        "type": "article",
+        "title": "OWASP Top 10",
+        "author": "OWASP",
+        "description": "Top 10 web application security risks"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-20T20:37:27.557401+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "818f940b-0e23-4101-86c9-ab1f9a99bc1f",
+    "title": "Not applicable",
+    "content": "Evaluate this statement.",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "The correct answer is: False",
+    "options": [
+      {
+        "id": "o1",
+        "text": "True",
+        "isCorrect": false,
+        "explanation": "Even over HTTPS, malicious or vulnerable third-party JS can introduce XSS or malware."
+      },
+      {
+        "id": "o2",
+        "text": "False",
+        "isCorrect": true,
+        "explanation": "Even over HTTPS, malicious or vulnerable third-party JS can introduce XSS or malware."
+      },
+      {
+        "id": "o3",
+        "text": "Partially true - depends on the context",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o4",
+        "text": "Not applicable",
+        "isCorrect": false,
+        "explanation": null
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/Security",
+        "type": "article",
+        "title": "Web Security - MDN",
+        "author": "Mozilla Developer Network",
+        "description": "Web security best practices"
+      },
+      {
+        "url": "https://owasp.org/www-project-top-ten/",
+        "type": "article",
+        "title": "OWASP Top 10",
+        "author": "OWASP",
+        "description": "Top 10 web application security risks"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-20T20:37:27.557401+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "a73b8aea-02e9-4c43-8328-9a40fd7b444f",
+    "title": "Automatically rotates session cookies",
+    "content": "Select the correct option.",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "HttpOnly restricts access to cookies from JavaScript, reducing XSS risks.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Prevents JavaScript from accessing the cookie",
+        "isCorrect": true,
+        "explanation": null
+      },
+      {
+        "id": "o2",
+        "text": "Encrypts cookie contents",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o3",
+        "text": "Prevents cookies from being sent over HTTP",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o4",
+        "text": "Automatically rotates session cookies",
+        "isCorrect": false,
+        "explanation": null
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/Security",
+        "type": "article",
+        "title": "Web Security - MDN",
+        "author": "Mozilla Developer Network",
+        "description": "Web security best practices"
+      },
+      {
+        "url": "https://owasp.org/www-project-top-ten/",
+        "type": "article",
+        "title": "OWASP Top 10",
+        "author": "OWASP",
+        "description": "Top 10 web application security risks"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-20T20:37:27.557401+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "69766cac-6816-432c-b9c4-86393c08a820",
+    "title": "Not applicable",
+    "content": "Evaluate this statement.",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "The correct answer is: False",
+    "options": [
+      {
+        "id": "o1",
+        "text": "True",
+        "isCorrect": false,
+        "explanation": "HTTPS protects against MITM attacks in transit, but misconfigured certificates or weak crypto can still be exploited."
+      },
+      {
+        "id": "o2",
+        "text": "False",
+        "isCorrect": true,
+        "explanation": "HTTPS protects against MITM attacks in transit, but misconfigured certificates or weak crypto can still be exploited."
+      },
+      {
+        "id": "o3",
+        "text": "Partially true - depends on the context",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o4",
+        "text": "Not applicable",
+        "isCorrect": false,
+        "explanation": null
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/Security",
+        "type": "article",
+        "title": "Web Security - MDN",
+        "author": "Mozilla Developer Network",
+        "description": "Web security best practices"
+      },
+      {
+        "url": "https://owasp.org/www-project-top-ten/",
+        "type": "article",
+        "title": "OWASP Top 10",
+        "author": "OWASP",
+        "description": "Top 10 web application security risks"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-20T20:37:27.557401+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "f99c66d3-c30d-4e87-ab53-558aa979eb06",
+    "title": "Not quite. Consider security best practices.",
+    "content": "Explain common security headers and their role in protecting frontend applications.",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "Security headers protect users from XSS, clickjacking, and other attacks. Examples include Content-Security-Policy, X-Frame-Options, X-XSS-Protection, and Strict-Transport-Security.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Security headers protect users from XSS, clickjacking, and other attacks. Examples include Content-Security-Policy, X-Frame-Options, X-XSS-Protection, and Strict-Transport-Security.",
+        "isCorrect": true,
+        "explanation": "Security headers protect users from XSS, clickjacking, and other attacks. Examples include Content-Security-Policy, X-Frame-Options, X-XSS-Protection, and Strict-Transport-Security."
+      },
+      {
+        "id": "o2",
+        "text": "This is not correct. Please refer to the explanation.",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o3",
+        "text": "Incorrect. Review web security concepts.",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o4",
+        "text": "This is a common misconception. The correct answer is different.",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o5",
+        "text": "Not quite. Consider security best practices.",
+        "isCorrect": false,
+        "explanation": null
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/Security",
+        "type": "article",
+        "title": "Web Security - MDN",
+        "author": "Mozilla Developer Network",
+        "description": "Web security best practices"
+      },
+      {
+        "url": "https://owasp.org/www-project-top-ten/",
+        "type": "article",
+        "title": "OWASP Top 10",
+        "author": "OWASP",
+        "description": "Top 10 web application security risks"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-20T20:35:44.751333+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "2df4d645-4389-4b83-8cea-bde21b0d9093",
+    "title": "X-Powered-By",
+    "content": "Select all correct HTTP headers.",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "HSTS, X-Content-Type-Options, and X-Frame-Options improve security; X-Powered-By reveals server info and is not protective.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Strict-Transport-Security",
+        "isCorrect": true,
+        "explanation": null
+      },
+      {
+        "id": "o2",
+        "text": "X-Content-Type-Options",
+        "isCorrect": true,
+        "explanation": null
+      },
+      {
+        "id": "o3",
+        "text": "X-Frame-Options",
+        "isCorrect": true,
+        "explanation": null
+      },
+      {
+        "id": "o4",
+        "text": "X-Powered-By",
+        "isCorrect": false,
+        "explanation": null
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/Security",
+        "type": "article",
+        "title": "Web Security - MDN",
+        "author": "Mozilla Developer Network",
+        "description": "Web security best practices"
+      },
+      {
+        "url": "https://owasp.org/www-project-top-ten/",
+        "type": "article",
+        "title": "OWASP Top 10",
+        "author": "OWASP",
+        "description": "Top 10 web application security risks"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-20T20:35:44.751333+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "fcfafb5d-b389-46fd-ad93-f00a821ecb61",
+    "title": "Store sensitive info in localStorage",
+    "content": "Select all correct options.",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "HttpOnly prevents JS access, Secure restricts to HTTPS, and SameSite limits cross-site requests. LocalStorage is accessible by JS and vulnerable to XSS.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Set HttpOnly flag",
+        "isCorrect": true,
+        "explanation": null
+      },
+      {
+        "id": "o2",
+        "text": "Set Secure flag",
+        "isCorrect": true,
+        "explanation": null
+      },
+      {
+        "id": "o3",
+        "text": "Use SameSite=strict",
+        "isCorrect": true,
+        "explanation": null
+      },
+      {
+        "id": "o4",
+        "text": "Store sensitive info in localStorage",
+        "isCorrect": false,
+        "explanation": null
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/Security",
+        "type": "article",
+        "title": "Web Security - MDN",
+        "author": "Mozilla Developer Network",
+        "description": "Web security best practices"
+      },
+      {
+        "url": "https://owasp.org/www-project-top-ten/",
+        "type": "article",
+        "title": "OWASP Top 10",
+        "author": "OWASP",
+        "description": "Top 10 web application security risks"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-20T20:35:44.751333+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "969eb32f-0b81-4322-b9b9-81894ece12b9",
+    "title": "Not quite. Consider security best practices.",
+    "content": "Explain how SameSite helps with web security.",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "The SameSite attribute restricts how cookies are sent with cross-site requests. 'Strict' blocks all cross-site cookie usage, 'Lax' allows certain safe methods, helping prevent CSRF attacks.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "The SameSite attribute restricts how cookies are sent with cross-site requests. 'Strict' blocks all cross-site cookie usage, 'Lax' allows certain safe methods, helping prevent CSRF attacks.",
+        "isCorrect": true,
+        "explanation": "The SameSite attribute restricts how cookies are sent with cross-site requests. 'Strict' blocks all cross-site cookie usage, 'Lax' allows certain safe methods, helping prevent CSRF attacks."
+      },
+      {
+        "id": "o2",
+        "text": "This is not correct. Please refer to the explanation.",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o3",
+        "text": "Incorrect. Review web security concepts.",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o4",
+        "text": "This is a common misconception. The correct answer is different.",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o5",
+        "text": "Not quite. Consider security best practices.",
+        "isCorrect": false,
+        "explanation": null
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/Security",
+        "type": "article",
+        "title": "Web Security - MDN",
+        "author": "Mozilla Developer Network",
+        "description": "Web security best practices"
+      },
+      {
+        "url": "https://owasp.org/www-project-top-ten/",
+        "type": "article",
+        "title": "OWASP Top 10",
+        "author": "OWASP",
+        "description": "Top 10 web application security risks"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-20T20:35:44.751333+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "ed52ef3f-cb29-47da-9359-1797c019c044",
+    "title": "Not quite. Consider security best practices.",
+    "content": "Explain the purpose of frontend security audits.",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "A security audit identifies vulnerabilities in frontend code, including XSS, CSRF, insecure storage, misconfigured headers, and third-party libraries, and provides recommendations to fix them.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "A security audit identifies vulnerabilities in frontend code, including XSS, CSRF, insecure storage, misconfigured headers, and third-party libraries, and provides recommendations to fix them.",
+        "isCorrect": true,
+        "explanation": "A security audit identifies vulnerabilities in frontend code, including XSS, CSRF, insecure storage, misconfigured headers, and third-party libraries, and provides recommendations to fix them."
+      },
+      {
+        "id": "o2",
+        "text": "This is not correct. Please refer to the explanation.",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o3",
+        "text": "Incorrect. Review web security concepts.",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o4",
+        "text": "This is a common misconception. The correct answer is different.",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o5",
+        "text": "Not quite. Consider security best practices.",
+        "isCorrect": false,
+        "explanation": null
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/Security",
+        "type": "article",
+        "title": "Web Security - MDN",
+        "author": "Mozilla Developer Network",
+        "description": "Web security best practices"
+      },
+      {
+        "url": "https://owasp.org/www-project-top-ten/",
+        "type": "article",
+        "title": "OWASP Top 10",
+        "author": "OWASP",
+        "description": "Top 10 web application security risks"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-20T20:35:44.751333+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "24664f0e-b5fe-4eb2-b4d1-07c3e0f6eb0f",
+    "title": "Not applicable",
+    "content": "Evaluate the statement.",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "The correct answer is: True",
+    "options": [
+      {
+        "id": "o1",
+        "text": "True",
+        "isCorrect": true,
+        "explanation": "HttpOnly prevents JavaScript access to cookies, mitigating XSS; Secure ensures cookies are only sent over HTTPS, mitigating MITM attacks."
+      },
+      {
+        "id": "o2",
+        "text": "False",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o3",
+        "text": "Partially true - depends on the context",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o4",
+        "text": "Not applicable",
+        "isCorrect": false,
+        "explanation": null
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/Security",
+        "type": "article",
+        "title": "Web Security - MDN",
+        "author": "Mozilla Developer Network",
+        "description": "Web security best practices"
+      },
+      {
+        "url": "https://owasp.org/www-project-top-ten/",
+        "type": "article",
+        "title": "OWASP Top 10",
+        "author": "OWASP",
+        "description": "Top 10 web application security risks"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-20T20:35:44.751333+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "fbd659ee-1ebd-4075-ace2-00c15cf7666a",
+    "title": "Not quite. Consider security best practices.",
+    "content": "Explain their role and importance in web security.",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "Security headers like CSP, X-Frame-Options, and Strict-Transport-Security help protect against XSS, clickjacking, and MITM attacks by instructing the browser on safe behavior.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Security headers like CSP, X-Frame-Options, and Strict-Transport-Security help protect against XSS, clickjacking, and MITM attacks by instructing the browser on safe behavior.",
+        "isCorrect": true,
+        "explanation": "Security headers like CSP, X-Frame-Options, and Strict-Transport-Security help protect against XSS, clickjacking, and MITM attacks by instructing the browser on safe behavior."
+      },
+      {
+        "id": "o2",
+        "text": "This is not correct. Please refer to the explanation.",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o3",
+        "text": "Incorrect. Review web security concepts.",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o4",
+        "text": "This is a common misconception. The correct answer is different.",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o5",
+        "text": "Not quite. Consider security best practices.",
+        "isCorrect": false,
+        "explanation": null
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/Security",
+        "type": "article",
+        "title": "Web Security - MDN",
+        "author": "Mozilla Developer Network",
+        "description": "Web security best practices"
+      },
+      {
+        "url": "https://owasp.org/www-project-top-ten/",
+        "type": "article",
+        "title": "OWASP Top 10",
+        "author": "OWASP",
+        "description": "Top 10 web application security risks"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-20T20:35:44.751333+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "ccf481e9-52c9-4a59-8d84-a58b0e4c0a73",
+    "title": "Not quite. Consider security best practices.",
+    "content": "Explain how the HttpOnly and Secure flags help prevent attacks.",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "HttpOnly prevents JavaScript from reading cookies (protects against XSS). Secure ensures cookies are only sent over HTTPS.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "HttpOnly prevents JavaScript from reading cookies (protects against XSS). Secure ensures cookies are only sent over HTTPS.",
+        "isCorrect": true,
+        "explanation": "HttpOnly prevents JavaScript from reading cookies (protects against XSS). Secure ensures cookies are only sent over HTTPS."
+      },
+      {
+        "id": "o2",
+        "text": "This is not correct. Please refer to the explanation.",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o3",
+        "text": "Incorrect. Review web security concepts.",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o4",
+        "text": "This is a common misconception. The correct answer is different.",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o5",
+        "text": "Not quite. Consider security best practices.",
+        "isCorrect": false,
+        "explanation": null
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/Security",
+        "type": "article",
+        "title": "Web Security - MDN",
+        "author": "Mozilla Developer Network",
+        "description": "Web security best practices"
+      },
+      {
+        "url": "https://owasp.org/www-project-top-ten/",
+        "type": "article",
+        "title": "OWASP Top 10",
+        "author": "OWASP",
+        "description": "Top 10 web application security risks"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-20T20:35:44.751333+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "3f78fb57-85ce-4de4-aacd-ea896c445a19",
+    "title": "Store passwords directly in cookies",
+    "content": "Select all correct options.",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "HttpOnly, Secure, and SameSite protect cookies from XSS, MITM, and CSRF. Storing passwords in cookies is insecure.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Set HttpOnly flag",
+        "isCorrect": true,
+        "explanation": null
+      },
+      {
+        "id": "o2",
+        "text": "Set Secure flag for HTTPS",
+        "isCorrect": true,
+        "explanation": null
+      },
+      {
+        "id": "o3",
+        "text": "Use SameSite attribute",
+        "isCorrect": true,
+        "explanation": null
+      },
+      {
+        "id": "o4",
+        "text": "Store passwords directly in cookies",
+        "isCorrect": false,
+        "explanation": null
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/Security",
+        "type": "article",
+        "title": "Web Security - MDN",
+        "author": "Mozilla Developer Network",
+        "description": "Web security best practices"
+      },
+      {
+        "url": "https://owasp.org/www-project-top-ten/",
+        "type": "article",
+        "title": "OWASP Top 10",
+        "author": "OWASP",
+        "description": "Top 10 web application security risks"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-20T20:35:44.751333+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "784276b6-9595-411b-b2c1-f60cd7db7a2e",
+    "title": "Not quite. Consider security best practices.",
+    "content": "Explain the role of input validation in preventing attacks like XSS and SQL Injection.",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "Input validation ensures that user-supplied data matches expected formats and content. It prevents malicious scripts or commands from being injected, mitigating XSS, SQL Injection, and other attacks.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Input validation ensures that user-supplied data matches expected formats and content. It prevents malicious scripts or commands from being injected, mitigating XSS, SQL Injection, and other attacks.",
+        "isCorrect": true,
+        "explanation": "Input validation ensures that user-supplied data matches expected formats and content. It prevents malicious scripts or commands from being injected, mitigating XSS, SQL Injection, and other attacks."
+      },
+      {
+        "id": "o2",
+        "text": "This is not correct. Please refer to the explanation.",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o3",
+        "text": "Incorrect. Review web security concepts.",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o4",
+        "text": "This is a common misconception. The correct answer is different.",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o5",
+        "text": "Not quite. Consider security best practices.",
+        "isCorrect": false,
+        "explanation": null
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/Security",
+        "type": "article",
+        "title": "Web Security - MDN",
+        "author": "Mozilla Developer Network",
+        "description": "Web security best practices"
+      },
+      {
+        "url": "https://owasp.org/www-project-top-ten/",
+        "type": "article",
+        "title": "OWASP Top 10",
+        "author": "OWASP",
+        "description": "Top 10 web application security risks"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-20T20:35:44.751333+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "f00c7fd4-88d9-47ea-ac4f-fa4e468df19f",
+    "title": "Not quite. Consider security best practices.",
+    "content": "Explain the mechanism of a CSRF attack and its potential impact.",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "CSRF tricks an authenticated user into unknowingly performing actions on a web application, like changing account details or transferring funds, by submitting malicious requests from another site.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "CSRF tricks an authenticated user into unknowingly performing actions on a web application, like changing account details or transferring funds, by submitting malicious requests from another site.",
+        "isCorrect": true,
+        "explanation": "CSRF tricks an authenticated user into unknowingly performing actions on a web application, like changing account details or transferring funds, by submitting malicious requests from another site."
+      },
+      {
+        "id": "o2",
+        "text": "This is not correct. Please refer to the explanation.",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o3",
+        "text": "Incorrect. Review web security concepts.",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o4",
+        "text": "This is a common misconception. The correct answer is different.",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o5",
+        "text": "Not quite. Consider security best practices.",
+        "isCorrect": false,
+        "explanation": null
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/Security",
+        "type": "article",
+        "title": "Web Security - MDN",
+        "author": "Mozilla Developer Network",
+        "description": "Web security best practices"
+      },
+      {
+        "url": "https://owasp.org/www-project-top-ten/",
+        "type": "article",
+        "title": "OWASP Top 10",
+        "author": "OWASP",
+        "description": "Top 10 web application security risks"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-20T20:34:23.641181+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "9530403e-17ac-42ad-ae8c-5b387599472a",
+    "title": "Disable cookies completely",
+    "content": "Select all correct options.",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "CSRF tokens, SameSite cookies, and HTTPS help prevent CSRF attacks. Disabling cookies is not practical for most web apps.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Use CSRF tokens in forms",
+        "isCorrect": true,
+        "explanation": null
+      },
+      {
+        "id": "o2",
+        "text": "Use SameSite cookie attribute",
+        "isCorrect": true,
+        "explanation": null
+      },
+      {
+        "id": "o3",
+        "text": "Use HTTPS",
+        "isCorrect": true,
+        "explanation": null
+      },
+      {
+        "id": "o4",
+        "text": "Disable cookies completely",
+        "isCorrect": false,
+        "explanation": null
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/Security",
+        "type": "article",
+        "title": "Web Security - MDN",
+        "author": "Mozilla Developer Network",
+        "description": "Web security best practices"
+      },
+      {
+        "url": "https://owasp.org/www-project-top-ten/",
+        "type": "article",
+        "title": "OWASP Top 10",
+        "author": "OWASP",
+        "description": "Top 10 web application security risks"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-20T20:34:23.641181+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "acb64d40-001e-40aa-a978-c780ab78388e",
+    "title": "Depends on browser",
+    "content": "Select the correct answer.",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "HTTPS encrypts data in transit, ensuring confidentiality, integrity, and protection against MITM attacks, unlike HTTP.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "HTTP",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o2",
+        "text": "HTTPS",
+        "isCorrect": true,
+        "explanation": null
+      },
+      {
+        "id": "o3",
+        "text": "Both are equally safe",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o4",
+        "text": "Depends on browser",
+        "isCorrect": false,
+        "explanation": null
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/Security",
+        "type": "article",
+        "title": "Web Security - MDN",
+        "author": "Mozilla Developer Network",
+        "description": "Web security best practices"
+      },
+      {
+        "url": "https://owasp.org/www-project-top-ten/",
+        "type": "article",
+        "title": "OWASP Top 10",
+        "author": "OWASP",
+        "description": "Top 10 web application security risks"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-20T20:34:23.641181+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "265501d7-13df-412c-b699-71faad857ff4",
+    "title": "Rely only on HTTPS",
+    "content": "Select all correct options.",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "CSRF tokens, SameSite cookies, and header validation prevent CSRF. HTTPS alone does not protect against CSRF.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Use CSRF tokens in forms and API requests",
+        "isCorrect": true,
+        "explanation": null
+      },
+      {
+        "id": "o2",
+        "text": "Use SameSite cookies",
+        "isCorrect": true,
+        "explanation": null
+      },
+      {
+        "id": "o3",
+        "text": "Validate the origin or referer header",
+        "isCorrect": true,
+        "explanation": null
+      },
+      {
+        "id": "o4",
+        "text": "Rely only on HTTPS",
+        "isCorrect": false,
+        "explanation": null
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/Security",
+        "type": "article",
+        "title": "Web Security - MDN",
+        "author": "Mozilla Developer Network",
+        "description": "Web security best practices"
+      },
+      {
+        "url": "https://owasp.org/www-project-top-ten/",
+        "type": "article",
+        "title": "OWASP Top 10",
+        "author": "OWASP",
+        "description": "Top 10 web application security risks"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-20T20:34:23.641181+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "1c356f0c-8fa0-42df-89a5-8fed8d79be4a",
+    "title": "Not quite. Consider security best practices.",
+    "content": "Explain how CSRF attacks work and why they are dangerous.",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "CSRF tricks a logged-in user's browser into making unwanted requests to a web application, potentially changing account settings, making purchases, or performing administrative actions without the user's consent.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "CSRF tricks a logged-in user's browser into making unwanted requests to a web application, potentially changing account settings, making purchases, or performing administrative actions without the user's consent.",
+        "isCorrect": true,
+        "explanation": "CSRF tricks a logged-in user's browser into making unwanted requests to a web application, potentially changing account settings, making purchases, or performing administrative actions without the user's consent."
+      },
+      {
+        "id": "o2",
+        "text": "This is not correct. Please refer to the explanation.",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o3",
+        "text": "Incorrect. Review web security concepts.",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o4",
+        "text": "This is a common misconception. The correct answer is different.",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o5",
+        "text": "Not quite. Consider security best practices.",
+        "isCorrect": false,
+        "explanation": null
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/Security",
+        "type": "article",
+        "title": "Web Security - MDN",
+        "author": "Mozilla Developer Network",
+        "description": "Web security best practices"
+      },
+      {
+        "url": "https://owasp.org/www-project-top-ten/",
+        "type": "article",
+        "title": "OWASP Top 10",
+        "author": "OWASP",
+        "description": "Top 10 web application security risks"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-20T20:34:23.641181+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "d105d803-8149-424d-8941-f971ede38174",
+    "title": "Not quite. Consider security best practices.",
+    "content": "Explain how CSRF attacks work and why they are dangerous.",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "CSRF attacks trick a user's browser into making unwanted requests to a web application where they are authenticated. This can lead to unauthorized actions like changing account details, making purchases, or deleting content.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "CSRF attacks trick a user's browser into making unwanted requests to a web application where they are authenticated. This can lead to unauthorized actions like changing account details, making purchases, or deleting content.",
+        "isCorrect": true,
+        "explanation": "CSRF attacks trick a user's browser into making unwanted requests to a web application where they are authenticated. This can lead to unauthorized actions like changing account details, making purchases, or deleting content."
+      },
+      {
+        "id": "o2",
+        "text": "This is not correct. Please refer to the explanation.",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o3",
+        "text": "Incorrect. Review web security concepts.",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o4",
+        "text": "This is a common misconception. The correct answer is different.",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o5",
+        "text": "Not quite. Consider security best practices.",
+        "isCorrect": false,
+        "explanation": null
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/Security",
+        "type": "article",
+        "title": "Web Security - MDN",
+        "author": "Mozilla Developer Network",
+        "description": "Web security best practices"
+      },
+      {
+        "url": "https://owasp.org/www-project-top-ten/",
+        "type": "article",
+        "title": "OWASP Top 10",
+        "author": "OWASP",
+        "description": "Top 10 web application security risks"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-20T20:34:23.641181+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "a7cbb869-6b5f-41a2-ab9d-c8741f5211b0",
+    "title": "Use SameSite attribute on cookies",
+    "content": "Select all correct options.",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "CSRF tokens, checking Origin/Referer, and setting cookies as SameSite help prevent CSRF attacks. HTTPS alone does not prevent CSRF.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Use CSRF tokens for forms",
+        "isCorrect": true,
+        "explanation": null
+      },
+      {
+        "id": "o2",
+        "text": "Validate Origin and Referer headers",
+        "isCorrect": true,
+        "explanation": null
+      },
+      {
+        "id": "o3",
+        "text": "Rely only on HTTPS",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o4",
+        "text": "Use SameSite attribute on cookies",
+        "isCorrect": true,
+        "explanation": null
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/Security",
+        "type": "article",
+        "title": "Web Security - MDN",
+        "author": "Mozilla Developer Network",
+        "description": "Web security best practices"
+      },
+      {
+        "url": "https://owasp.org/www-project-top-ten/",
+        "type": "article",
+        "title": "OWASP Top 10",
+        "author": "OWASP",
+        "description": "Top 10 web application security risks"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-20T20:34:23.641181+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "951e4636-e1da-401c-8d55-c81037f4b93a",
+    "title": "Provides server authentication",
+    "content": "Select all correct options.",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "HTTPS/TLS encrypts data, ensures integrity, and authenticates servers. It does not sanitize inputs.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Encrypts data in transit",
+        "isCorrect": true,
+        "explanation": null
+      },
+      {
+        "id": "o2",
+        "text": "Prevents eavesdropping and tampering",
+        "isCorrect": true,
+        "explanation": null
+      },
+      {
+        "id": "o3",
+        "text": "Automatically sanitizes user inputs",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o4",
+        "text": "Provides server authentication",
+        "isCorrect": true,
+        "explanation": null
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/Security",
+        "type": "article",
+        "title": "Web Security - MDN",
+        "author": "Mozilla Developer Network",
+        "description": "Web security best practices"
+      },
+      {
+        "url": "https://owasp.org/www-project-top-ten/",
+        "type": "article",
+        "title": "OWASP Top 10",
+        "author": "OWASP",
+        "description": "Top 10 web application security risks"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-20T20:34:23.641181+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "725c48fc-d5f6-4ce9-ae22-a3964fca4c50",
+    "title": "Not quite. Consider security best practices.",
+    "content": "Explain what CSRF attacks are and how they affect web applications.",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "CSRF occurs when an attacker tricks a logged-in user into submitting requests on a web application without their knowledge, performing actions like changing passwords or making transactions.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "CSRF occurs when an attacker tricks a logged-in user into submitting requests on a web application without their knowledge, performing actions like changing passwords or making transactions.",
+        "isCorrect": true,
+        "explanation": "CSRF occurs when an attacker tricks a logged-in user into submitting requests on a web application without their knowledge, performing actions like changing passwords or making transactions."
+      },
+      {
+        "id": "o2",
+        "text": "This is not correct. Please refer to the explanation.",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o3",
+        "text": "Incorrect. Review web security concepts.",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o4",
+        "text": "This is a common misconception. The correct answer is different.",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o5",
+        "text": "Not quite. Consider security best practices.",
+        "isCorrect": false,
+        "explanation": null
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/Security",
+        "type": "article",
+        "title": "Web Security - MDN",
+        "author": "Mozilla Developer Network",
+        "description": "Web security best practices"
+      },
+      {
+        "url": "https://owasp.org/www-project-top-ten/",
+        "type": "article",
+        "title": "OWASP Top 10",
+        "author": "OWASP",
+        "description": "Top 10 web application security risks"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-20T20:34:23.641181+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "716d0da6-7850-4e82-9c55-75dd0f442b84",
+    "title": "Validate origin and referer headers",
+    "content": "Select all correct methods to prevent CSRF.",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "Anti-CSRF tokens, SameSite cookies, and validating headers are standard defenses; disabling HTTPS weakens security.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Use anti-CSRF tokens in forms",
+        "isCorrect": true,
+        "explanation": null
+      },
+      {
+        "id": "o2",
+        "text": "Use SameSite cookie attributes",
+        "isCorrect": true,
+        "explanation": null
+      },
+      {
+        "id": "o3",
+        "text": "Disable HTTPS",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o4",
+        "text": "Validate origin and referer headers",
+        "isCorrect": true,
+        "explanation": null
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/Security",
+        "type": "article",
+        "title": "Web Security - MDN",
+        "author": "Mozilla Developer Network",
+        "description": "Web security best practices"
+      },
+      {
+        "url": "https://owasp.org/www-project-top-ten/",
+        "type": "article",
+        "title": "OWASP Top 10",
+        "author": "OWASP",
+        "description": "Top 10 web application security risks"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-20T20:34:23.641181+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "eb61e458-4970-40fb-9d47-36e49edf12ba",
+    "title": "Not quite. Consider security best practices.",
+    "content": "Explain what CSRF attacks are and how they work in web applications.",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "CSRF tricks a logged-in user into performing unwanted actions on a web application by submitting requests without their consent, using their authentication credentials.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "CSRF tricks a logged-in user into performing unwanted actions on a web application by submitting requests without their consent, using their authentication credentials.",
+        "isCorrect": true,
+        "explanation": "CSRF tricks a logged-in user into performing unwanted actions on a web application by submitting requests without their consent, using their authentication credentials."
+      },
+      {
+        "id": "o2",
+        "text": "This is not correct. Please refer to the explanation.",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o3",
+        "text": "Incorrect. Review web security concepts.",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o4",
+        "text": "This is a common misconception. The correct answer is different.",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o5",
+        "text": "Not quite. Consider security best practices.",
+        "isCorrect": false,
+        "explanation": null
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/Security",
+        "type": "article",
+        "title": "Web Security - MDN",
+        "author": "Mozilla Developer Network",
+        "description": "Web security best practices"
+      },
+      {
+        "url": "https://owasp.org/www-project-top-ten/",
+        "type": "article",
+        "title": "OWASP Top 10",
+        "author": "OWASP",
+        "description": "Top 10 web application security risks"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-20T20:33:10.700298+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "aed0d010-9ea2-4339-aaed-4e2aea5b3cfe",
+    "title": "Not quite. Consider security best practices.",
+    "content": "Explain CORS and its role in web security.",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "CORS is a security feature implemented by browsers to restrict web pages from making requests to a different domain than the one that served the web page. Proper CORS headers allow safe cross-origin requests while preventing unauthorized access.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "CORS is a security feature implemented by browsers to restrict web pages from making requests to a different domain than the one that served the web page. Proper CORS headers allow safe cross-origin requests while preventing unauthorized access.",
+        "isCorrect": true,
+        "explanation": "CORS is a security feature implemented by browsers to restrict web pages from making requests to a different domain than the one that served the web page. Proper CORS headers allow safe cross-origin requests while preventing unauthorized access."
+      },
+      {
+        "id": "o2",
+        "text": "This is not correct. Please refer to the explanation.",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o3",
+        "text": "Incorrect. Review web security concepts.",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o4",
+        "text": "This is a common misconception. The correct answer is different.",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o5",
+        "text": "Not quite. Consider security best practices.",
+        "isCorrect": false,
+        "explanation": null
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/Security",
+        "type": "article",
+        "title": "Web Security - MDN",
+        "author": "Mozilla Developer Network",
+        "description": "Web security best practices"
+      },
+      {
+        "url": "https://owasp.org/www-project-top-ten/",
+        "type": "article",
+        "title": "OWASP Top 10",
+        "author": "OWASP",
+        "description": "Top 10 web application security risks"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-20T20:33:10.700298+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "673ec10e-c504-419c-b837-5eb8c7e6e1ac",
+    "title": "Not applicable",
+    "content": "Evaluate this statement.",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "The correct answer is: True",
+    "options": [
+      {
+        "id": "o1",
+        "text": "True",
+        "isCorrect": true,
+        "explanation": "CORS allows controlled access to resources from different origins, effectively relaxing SOP for approved domains."
+      },
+      {
+        "id": "o2",
+        "text": "False",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o3",
+        "text": "Partially true - depends on the context",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o4",
+        "text": "Not applicable",
+        "isCorrect": false,
+        "explanation": null
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/Security",
+        "type": "article",
+        "title": "Web Security - MDN",
+        "author": "Mozilla Developer Network",
+        "description": "Web security best practices"
+      },
+      {
+        "url": "https://owasp.org/www-project-top-ten/",
+        "type": "article",
+        "title": "OWASP Top 10",
+        "author": "OWASP",
+        "description": "Top 10 web application security risks"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-20T20:33:10.700298+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "91d44cdc-41f3-4635-8b46-cc2d14e547c1",
+    "title": "Use server-side proxy to handle requests",
+    "content": "Select all correct options.",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "Allow only trusted domains, use credentials carefully, and proxy requests server-side to control access. Using '*' allows any domain and is unsafe for sensitive data.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Set Access-Control-Allow-Origin to a specific trusted domain",
+        "isCorrect": true,
+        "explanation": null
+      },
+      {
+        "id": "o2",
+        "text": "Use credentials (cookies) only when necessary",
+        "isCorrect": true,
+        "explanation": null
+      },
+      {
+        "id": "o3",
+        "text": "Set Access-Control-Allow-Origin to '*'",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o4",
+        "text": "Use server-side proxy to handle requests",
+        "isCorrect": true,
+        "explanation": null
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/Security",
+        "type": "article",
+        "title": "Web Security - MDN",
+        "author": "Mozilla Developer Network",
+        "description": "Web security best practices"
+      },
+      {
+        "url": "https://owasp.org/www-project-top-ten/",
+        "type": "article",
+        "title": "OWASP Top 10",
+        "author": "OWASP",
+        "description": "Top 10 web application security risks"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-20T20:33:10.700298+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "a7c676d8-f49b-44fd-a679-b2070249792c",
+    "title": "Whitelist only trusted sources",
+    "content": "Choose all that apply.",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "CSP works via meta tags or headers, and whitelisting trusted sources restricts malicious content.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Use meta tag in HTML",
+        "isCorrect": true,
+        "explanation": null
+      },
+      {
+        "id": "o2",
+        "text": "Set HTTP response headers",
+        "isCorrect": true,
+        "explanation": null
+      },
+      {
+        "id": "o3",
+        "text": "Rely solely on HTTPS",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o4",
+        "text": "Whitelist only trusted sources",
+        "isCorrect": true,
+        "explanation": null
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/Security",
+        "type": "article",
+        "title": "Web Security - MDN",
+        "author": "Mozilla Developer Network",
+        "description": "Web security best practices"
+      },
+      {
+        "url": "https://owasp.org/www-project-top-ten/",
+        "type": "article",
+        "title": "OWASP Top 10",
+        "author": "OWASP",
+        "description": "Top 10 web application security risks"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-20T20:33:10.700298+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "9fdc0d9f-f938-4248-ba1d-9691f12f520d",
+    "title": "Require user confirmation for critical actions",
+    "content": "Select all correct prevention techniques.",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "CSRF prevention uses tokens, checks headers, and sometimes asks users for confirmation.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Use anti-CSRF tokens in forms",
+        "isCorrect": true,
+        "explanation": null
+      },
+      {
+        "id": "o2",
+        "text": "Validate the Origin and Referer headers",
+        "isCorrect": true,
+        "explanation": null
+      },
+      {
+        "id": "o3",
+        "text": "Enable HttpOnly cookies",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o4",
+        "text": "Require user confirmation for critical actions",
+        "isCorrect": true,
+        "explanation": null
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/Security",
+        "type": "article",
+        "title": "Web Security - MDN",
+        "author": "Mozilla Developer Network",
+        "description": "Web security best practices"
+      },
+      {
+        "url": "https://owasp.org/www-project-top-ten/",
+        "type": "article",
+        "title": "OWASP Top 10",
+        "author": "OWASP",
+        "description": "Top 10 web application security risks"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-20T20:33:10.700298+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "6e1a5d50-337f-4de1-9094-258f1fcc7741",
+    "title": "Mitigate XSS attacks",
+    "content": "Select all correct options.",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "CSP controls which sources are allowed for scripts and styles, blocks inline scripts, and helps mitigate XSS attacks. It does not encrypt cookies.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Restrict sources of scripts, styles, and media",
+        "isCorrect": true,
+        "explanation": null
+      },
+      {
+        "id": "o2",
+        "text": "Prevent inline script execution",
+        "isCorrect": true,
+        "explanation": null
+      },
+      {
+        "id": "o3",
+        "text": "Encrypt cookies automatically",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o4",
+        "text": "Mitigate XSS attacks",
+        "isCorrect": true,
+        "explanation": null
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/Security",
+        "type": "article",
+        "title": "Web Security - MDN",
+        "author": "Mozilla Developer Network",
+        "description": "Web security best practices"
+      },
+      {
+        "url": "https://owasp.org/www-project-top-ten/",
+        "type": "article",
+        "title": "OWASP Top 10",
+        "author": "OWASP",
+        "description": "Top 10 web application security risks"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-20T20:33:10.700298+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "a0119c08-037d-4b68-a9d6-7ca49919f812",
+    "title": "Can block inline styles and scripts if configured",
+    "content": "Select all correct options.",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "CSP controls resource loading and helps prevent XSS, but does not replace input validation.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Restricts sources of scripts and other resources",
+        "isCorrect": true,
+        "explanation": null
+      },
+      {
+        "id": "o2",
+        "text": "Helps prevent XSS attacks",
+        "isCorrect": true,
+        "explanation": null
+      },
+      {
+        "id": "o3",
+        "text": "Replaces the need for input validation",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o4",
+        "text": "Can block inline styles and scripts if configured",
+        "isCorrect": true,
+        "explanation": null
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/Security",
+        "type": "article",
+        "title": "Web Security - MDN",
+        "author": "Mozilla Developer Network",
+        "description": "Web security best practices"
+      },
+      {
+        "url": "https://owasp.org/www-project-top-ten/",
+        "type": "article",
+        "title": "OWASP Top 10",
+        "author": "OWASP",
+        "description": "Top 10 web application security risks"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-20T20:33:10.700298+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "1348bba7-351b-499d-a801-e55eb8ae7846",
+    "title": "Not quite. Consider security best practices.",
+    "content": "Explain how CSP helps prevent XSS and other attacks.",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "CSP allows developers to define which sources of scripts, images, and other resources are trusted. It blocks inline scripts and unauthorized domains, reducing the risk of XSS, clickjacking, and data injection attacks.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "CSP allows developers to define which sources of scripts, images, and other resources are trusted. It blocks inline scripts and unauthorized domains, reducing the risk of XSS, clickjacking, and data injection attacks.",
+        "isCorrect": true,
+        "explanation": "CSP allows developers to define which sources of scripts, images, and other resources are trusted. It blocks inline scripts and unauthorized domains, reducing the risk of XSS, clickjacking, and data injection attacks."
+      },
+      {
+        "id": "o2",
+        "text": "This is not correct. Please refer to the explanation.",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o3",
+        "text": "Incorrect. Review web security concepts.",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o4",
+        "text": "This is a common misconception. The correct answer is different.",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o5",
+        "text": "Not quite. Consider security best practices.",
+        "isCorrect": false,
+        "explanation": null
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/Security",
+        "type": "article",
+        "title": "Web Security - MDN",
+        "author": "Mozilla Developer Network",
+        "description": "Web security best practices"
+      },
+      {
+        "url": "https://owasp.org/www-project-top-ten/",
+        "type": "article",
+        "title": "OWASP Top 10",
+        "author": "OWASP",
+        "description": "Top 10 web application security risks"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-20T20:33:10.700298+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "075a02f6-ba46-42bd-b7f0-702fa09e5768",
+    "title": "Not applicable",
+    "content": "Evaluate whether this statement is true or false.",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "The correct answer is: True",
+    "options": [
+      {
+        "id": "o1",
+        "text": "True",
+        "isCorrect": true,
+        "explanation": "CSRF exploits the fact that the user is already authenticated."
+      },
+      {
+        "id": "o2",
+        "text": "False",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o3",
+        "text": "Partially true - depends on the context",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o4",
+        "text": "Not applicable",
+        "isCorrect": false,
+        "explanation": null
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/Security",
+        "type": "article",
+        "title": "Web Security - MDN",
+        "author": "Mozilla Developer Network",
+        "description": "Web security best practices"
+      },
+      {
+        "url": "https://owasp.org/www-project-top-ten/",
+        "type": "article",
+        "title": "OWASP Top 10",
+        "author": "OWASP",
+        "description": "Top 10 web application security risks"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-20T20:33:10.700298+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "a25250b2-1eb1-4a45-93b9-9a273601f6c9",
+    "title": "Not quite. Consider security best practices.",
+    "content": "Explain how CSP helps protect frontend applications.",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "CSP defines allowed sources for scripts, styles, images, and other resources, mitigating XSS, clickjacking, and data injection by restricting what can be loaded or executed.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "CSP defines allowed sources for scripts, styles, images, and other resources, mitigating XSS, clickjacking, and data injection by restricting what can be loaded or executed.",
+        "isCorrect": true,
+        "explanation": "CSP defines allowed sources for scripts, styles, images, and other resources, mitigating XSS, clickjacking, and data injection by restricting what can be loaded or executed."
+      },
+      {
+        "id": "o2",
+        "text": "This is not correct. Please refer to the explanation.",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o3",
+        "text": "Incorrect. Review web security concepts.",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o4",
+        "text": "This is a common misconception. The correct answer is different.",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o5",
+        "text": "Not quite. Consider security best practices.",
+        "isCorrect": false,
+        "explanation": null
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/Security",
+        "type": "article",
+        "title": "Web Security - MDN",
+        "author": "Mozilla Developer Network",
+        "description": "Web security best practices"
+      },
+      {
+        "url": "https://owasp.org/www-project-top-ten/",
+        "type": "article",
+        "title": "OWASP Top 10",
+        "author": "OWASP",
+        "description": "Top 10 web application security risks"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-20T20:30:42.293633+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "70f1f6d9-d80a-403d-a32c-c5d0f1514281",
+    "title": "Implement UI overlays as security measure",
+    "content": "Select all correct options.",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "X-Frame-Options and CSP frame-ancestors prevent your site from being embedded in iframes, mitigating clickjacking attacks.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Use X-Frame-Options header to deny framing",
+        "isCorrect": true,
+        "explanation": null
+      },
+      {
+        "id": "o2",
+        "text": "Use Content Security Policy frame-ancestors directive",
+        "isCorrect": true,
+        "explanation": null
+      },
+      {
+        "id": "o3",
+        "text": "Rely only on HTTPS",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o4",
+        "text": "Implement UI overlays as security measure",
+        "isCorrect": false,
+        "explanation": null
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/Security",
+        "type": "article",
+        "title": "Web Security - MDN",
+        "author": "Mozilla Developer Network",
+        "description": "Web security best practices"
+      },
+      {
+        "url": "https://owasp.org/www-project-top-ten/",
+        "type": "article",
+        "title": "OWASP Top 10",
+        "author": "OWASP",
+        "description": "Top 10 web application security risks"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-20T20:30:42.293633+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "08fbe47e-ebd5-437d-ba82-5a8c7b33b4f6",
+    "title": "Not quite. Consider security best practices.",
+    "content": "Explain how CSP protects web applications and what types of attacks it mitigates.",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "CSP restricts which sources are allowed for scripts, styles, and media. It reduces XSS, clickjacking, and data injection risks.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "CSP restricts which sources are allowed for scripts, styles, and media. It reduces XSS, clickjacking, and data injection risks.",
+        "isCorrect": true,
+        "explanation": "CSP restricts which sources are allowed for scripts, styles, and media. It reduces XSS, clickjacking, and data injection risks."
+      },
+      {
+        "id": "o2",
+        "text": "This is not correct. Please refer to the explanation.",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o3",
+        "text": "Incorrect. Review web security concepts.",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o4",
+        "text": "This is a common misconception. The correct answer is different.",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o5",
+        "text": "Not quite. Consider security best practices.",
+        "isCorrect": false,
+        "explanation": null
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/Security",
+        "type": "article",
+        "title": "Web Security - MDN",
+        "author": "Mozilla Developer Network",
+        "description": "Web security best practices"
+      },
+      {
+        "url": "https://owasp.org/www-project-top-ten/",
+        "type": "article",
+        "title": "OWASP Top 10",
+        "author": "OWASP",
+        "description": "Top 10 web application security risks"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-20T20:30:42.293633+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "6c6f831f-4105-4262-91d2-5c404805e3fb",
+    "title": "Not quite. Consider security best practices.",
+    "content": "Explain how clickjacking attacks work and why they are dangerous.",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "Clickjacking tricks a user into clicking on invisible or disguised elements on a page, performing actions without their knowledge, such as changing settings or authorizing payments.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Clickjacking tricks a user into clicking on invisible or disguised elements on a page, performing actions without their knowledge, such as changing settings or authorizing payments.",
+        "isCorrect": true,
+        "explanation": "Clickjacking tricks a user into clicking on invisible or disguised elements on a page, performing actions without their knowledge, such as changing settings or authorizing payments."
+      },
+      {
+        "id": "o2",
+        "text": "This is not correct. Please refer to the explanation.",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o3",
+        "text": "Incorrect. Review web security concepts.",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o4",
+        "text": "This is a common misconception. The correct answer is different.",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o5",
+        "text": "Not quite. Consider security best practices.",
+        "isCorrect": false,
+        "explanation": null
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/Security",
+        "type": "article",
+        "title": "Web Security - MDN",
+        "author": "Mozilla Developer Network",
+        "description": "Web security best practices"
+      },
+      {
+        "url": "https://owasp.org/www-project-top-ten/",
+        "type": "article",
+        "title": "OWASP Top 10",
+        "author": "OWASP",
+        "description": "Top 10 web application security risks"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-20T20:30:42.293633+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "2f3dc67a-ecd7-4f64-933e-662ef904a026",
+    "title": "Not quite. Consider security best practices.",
+    "content": "Explain how clickjacking works and why it's dangerous.",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "Clickjacking tricks users into clicking invisible or disguised elements, causing unintended actions like approving transactions, changing settings, or enabling permissions.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Clickjacking tricks users into clicking invisible or disguised elements, causing unintended actions like approving transactions, changing settings, or enabling permissions.",
+        "isCorrect": true,
+        "explanation": "Clickjacking tricks users into clicking invisible or disguised elements, causing unintended actions like approving transactions, changing settings, or enabling permissions."
+      },
+      {
+        "id": "o2",
+        "text": "This is not correct. Please refer to the explanation.",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o3",
+        "text": "Incorrect. Review web security concepts.",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o4",
+        "text": "This is a common misconception. The correct answer is different.",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o5",
+        "text": "Not quite. Consider security best practices.",
+        "isCorrect": false,
+        "explanation": null
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/Security",
+        "type": "article",
+        "title": "Web Security - MDN",
+        "author": "Mozilla Developer Network",
+        "description": "Web security best practices"
+      },
+      {
+        "url": "https://owasp.org/www-project-top-ten/",
+        "type": "article",
+        "title": "OWASP Top 10",
+        "author": "OWASP",
+        "description": "Top 10 web application security risks"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-20T20:30:42.293633+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "c4fa0e99-da6e-4e59-841c-f00e41c783d0",
+    "title": "Require user confirmation for critical actions",
+    "content": "Select all correct mitigation strategies.",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "X-Frame-Options and CSP frame-ancestors prevent your site from being framed; additional user confirmation mitigates risk. CSS obfuscation is not a reliable defense.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Use X-Frame-Options header",
+        "isCorrect": true,
+        "explanation": null
+      },
+      {
+        "id": "o2",
+        "text": "Use Content Security Policy frame-ancestors directive",
+        "isCorrect": true,
+        "explanation": null
+      },
+      {
+        "id": "o3",
+        "text": "Obfuscate your buttons with CSS",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o4",
+        "text": "Require user confirmation for critical actions",
+        "isCorrect": true,
+        "explanation": null
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/Security",
+        "type": "article",
+        "title": "Web Security - MDN",
+        "author": "Mozilla Developer Network",
+        "description": "Web security best practices"
+      },
+      {
+        "url": "https://owasp.org/www-project-top-ten/",
+        "type": "article",
+        "title": "OWASP Top 10",
+        "author": "OWASP",
+        "description": "Top 10 web application security risks"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-20T20:30:42.293633+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "c48fbcc6-6bb0-4afb-a1fc-f81bded4e488",
+    "title": "Not applicable",
+    "content": "Evaluate whether this statement is true or false.",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "The correct answer is: True",
+    "options": [
+      {
+        "id": "o1",
+        "text": "True",
+        "isCorrect": true,
+        "explanation": "CSP restricts allowed script sources, mitigating XSS."
+      },
+      {
+        "id": "o2",
+        "text": "False",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o3",
+        "text": "Partially true - depends on the context",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o4",
+        "text": "Not applicable",
+        "isCorrect": false,
+        "explanation": null
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/Security",
+        "type": "article",
+        "title": "Web Security - MDN",
+        "author": "Mozilla Developer Network",
+        "description": "Web security best practices"
+      },
+      {
+        "url": "https://owasp.org/www-project-top-ten/",
+        "type": "article",
+        "title": "OWASP Top 10",
+        "author": "OWASP",
+        "description": "Top 10 web application security risks"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-20T20:30:42.293633+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "f9719b8e-bf6b-42e7-a82e-8405b714abeb",
+    "title": "Not quite. Consider security best practices.",
+    "content": "Explain how clickjacking attacks manipulate user interface elements.",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "Clickjacking occurs when attackers overlay a transparent or disguised element over a legitimate UI element, tricking users into clicking it and performing unintended actions like submitting forms or changing settings.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Clickjacking occurs when attackers overlay a transparent or disguised element over a legitimate UI element, tricking users into clicking it and performing unintended actions like submitting forms or changing settings.",
+        "isCorrect": true,
+        "explanation": "Clickjacking occurs when attackers overlay a transparent or disguised element over a legitimate UI element, tricking users into clicking it and performing unintended actions like submitting forms or changing settings."
+      },
+      {
+        "id": "o2",
+        "text": "This is not correct. Please refer to the explanation.",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o3",
+        "text": "Incorrect. Review web security concepts.",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o4",
+        "text": "This is a common misconception. The correct answer is different.",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o5",
+        "text": "Not quite. Consider security best practices.",
+        "isCorrect": false,
+        "explanation": null
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/Security",
+        "type": "article",
+        "title": "Web Security - MDN",
+        "author": "Mozilla Developer Network",
+        "description": "Web security best practices"
+      },
+      {
+        "url": "https://owasp.org/www-project-top-ten/",
+        "type": "article",
+        "title": "OWASP Top 10",
+        "author": "OWASP",
+        "description": "Top 10 web application security risks"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-20T20:30:42.293633+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "e0b82015-82d7-4494-afd5-64666e0e0d1e",
+    "title": "X-Content-Type-Options",
+    "content": "Select the correct answer.",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "The X-Frame-Options header prevents your site from being embedded in iframes, mitigating clickjacking.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "X-Frame-Options",
+        "isCorrect": true,
+        "explanation": null
+      },
+      {
+        "id": "o2",
+        "text": "Content-Security-Policy",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o3",
+        "text": "Strict-Transport-Security",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o4",
+        "text": "X-Content-Type-Options",
+        "isCorrect": false,
+        "explanation": null
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/Security",
+        "type": "article",
+        "title": "Web Security - MDN",
+        "author": "Mozilla Developer Network",
+        "description": "Web security best practices"
+      },
+      {
+        "url": "https://owasp.org/www-project-top-ten/",
+        "type": "article",
+        "title": "OWASP Top 10",
+        "author": "OWASP",
+        "description": "Top 10 web application security risks"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-20T20:30:42.293633+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "22981d53-6647-4484-9741-a4a11f943731",
+    "title": "Use secure authentication only",
+    "content": "Select all correct options.",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "X-Frame-Options and CSP frame-ancestors prevent a site from being embedded in iframes, mitigating clickjacking attacks.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Use X-Frame-Options header",
+        "isCorrect": true,
+        "explanation": null
+      },
+      {
+        "id": "o2",
+        "text": "Use Content Security Policy frame-ancestors directive",
+        "isCorrect": true,
+        "explanation": null
+      },
+      {
+        "id": "o3",
+        "text": "Disable JavaScript completely",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o4",
+        "text": "Use secure authentication only",
+        "isCorrect": false,
+        "explanation": null
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/Security",
+        "type": "article",
+        "title": "Web Security - MDN",
+        "author": "Mozilla Developer Network",
+        "description": "Web security best practices"
+      },
+      {
+        "url": "https://owasp.org/www-project-top-ten/",
+        "type": "article",
+        "title": "OWASP Top 10",
+        "author": "OWASP",
+        "description": "Top 10 web application security risks"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-20T20:30:42.293633+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "3b35f971-220a-46c1-9ad4-0345283c454a",
+    "title": "Not quite. Consider security best practices.",
+    "content": "Explain how clickjacking works and its impact on users.",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "Clickjacking tricks users into clicking hidden or disguised UI elements, performing unintended actions such as changing settings, submitting forms, or executing transactions.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Clickjacking tricks users into clicking hidden or disguised UI elements, performing unintended actions such as changing settings, submitting forms, or executing transactions.",
+        "isCorrect": true,
+        "explanation": "Clickjacking tricks users into clicking hidden or disguised UI elements, performing unintended actions such as changing settings, submitting forms, or executing transactions."
+      },
+      {
+        "id": "o2",
+        "text": "This is not correct. Please refer to the explanation.",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o3",
+        "text": "Incorrect. Review web security concepts.",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o4",
+        "text": "This is a common misconception. The correct answer is different.",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o5",
+        "text": "Not quite. Consider security best practices.",
+        "isCorrect": false,
+        "explanation": null
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/Security",
+        "type": "article",
+        "title": "Web Security - MDN",
+        "author": "Mozilla Developer Network",
+        "description": "Web security best practices"
+      },
+      {
+        "url": "https://owasp.org/www-project-top-ten/",
+        "type": "article",
+        "title": "OWASP Top 10",
+        "author": "OWASP",
+        "description": "Top 10 web application security risks"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-20T20:29:17.811248+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "6d36ee21-1a67-4e38-a265-94a2ac981580",
+    "title": "Detect and prevent iframes using JS",
+    "content": "Select all correct methods to prevent clickjacking attacks.",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "X-Frame-Options and frame-ancestors protect against embedding. JS detection can add extra protection; disabling JS is impractical.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Use X-Frame-Options: DENY or SAMEORIGIN",
+        "isCorrect": true,
+        "explanation": null
+      },
+      {
+        "id": "o2",
+        "text": "Use Content Security Policy frame-ancestors",
+        "isCorrect": true,
+        "explanation": null
+      },
+      {
+        "id": "o3",
+        "text": "Disable JavaScript entirely",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o4",
+        "text": "Detect and prevent iframes using JS",
+        "isCorrect": true,
+        "explanation": null
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/Security",
+        "type": "article",
+        "title": "Web Security - MDN",
+        "author": "Mozilla Developer Network",
+        "description": "Web security best practices"
+      },
+      {
+        "url": "https://owasp.org/www-project-top-ten/",
+        "type": "article",
+        "title": "OWASP Top 10",
+        "author": "OWASP",
+        "description": "Top 10 web application security risks"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-20T20:29:17.811248+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "d26c03ba-327e-4fff-aa4a-fe18d1a316b3",
+    "title": "Not quite. Consider security best practices.",
+    "content": "Explain how rate limiting protects web applications.",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "Rate limiting restricts the number of requests a client can make in a given time period, protecting the server from abuse, brute-force attacks, and denial-of-service attacks.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Rate limiting restricts the number of requests a client can make in a given time period, protecting the server from abuse, brute-force attacks, and denial-of-service attacks.",
+        "isCorrect": true,
+        "explanation": "Rate limiting restricts the number of requests a client can make in a given time period, protecting the server from abuse, brute-force attacks, and denial-of-service attacks."
+      },
+      {
+        "id": "o2",
+        "text": "This is not correct. Please refer to the explanation.",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o3",
+        "text": "Incorrect. Review web security concepts.",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o4",
+        "text": "This is a common misconception. The correct answer is different.",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o5",
+        "text": "Not quite. Consider security best practices.",
+        "isCorrect": false,
+        "explanation": null
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/Security",
+        "type": "article",
+        "title": "Web Security - MDN",
+        "author": "Mozilla Developer Network",
+        "description": "Web security best practices"
+      },
+      {
+        "url": "https://owasp.org/www-project-top-ten/",
+        "type": "article",
+        "title": "OWASP Top 10",
+        "author": "OWASP",
+        "description": "Top 10 web application security risks"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-20T20:29:17.811248+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "08884713-9fb0-4320-abed-4a50517d38c8",
+    "title": "Strict-Transport-Security",
+    "content": "Select the correct header used to prevent clickjacking attacks.",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "X-Frame-Options and CSP frame-ancestors prevent malicious iframe embedding.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "X-Frame-Options",
+        "isCorrect": true,
+        "explanation": null
+      },
+      {
+        "id": "o2",
+        "text": "Content-Security-Policy (frame-ancestors)",
+        "isCorrect": true,
+        "explanation": null
+      },
+      {
+        "id": "o3",
+        "text": "X-Content-Type-Options",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o4",
+        "text": "Strict-Transport-Security",
+        "isCorrect": false,
+        "explanation": null
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/Security",
+        "type": "article",
+        "title": "Web Security - MDN",
+        "author": "Mozilla Developer Network",
+        "description": "Web security best practices"
+      },
+      {
+        "url": "https://owasp.org/www-project-top-ten/",
+        "type": "article",
+        "title": "OWASP Top 10",
+        "author": "OWASP",
+        "description": "Top 10 web application security risks"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-20T20:29:17.811248+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  }
+]

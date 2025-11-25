@@ -1,0 +1,375 @@
+[
+  {
+    "id": "24efcf70-0a20-43c3-8710-e253f8d202c6",
+    "title": "How do you create HOC using render props?",
+    "content": "<pre><code>e    function withMouse(Component) {\n      return class extends React.Component {\n        render() {\n          return (\n            <Mouse\n              render={(mouse) => <Component {...this.props} mouse={mouse} />}\n            />\n          );\n        }\n      };\n    }</code></pre>\n\nYou can implement most higher-order components (HOC) using a regular component with a render prop. For example, if you would prefer to have a withMouse HOC instead of a <Mous component, you could easily create one using a regular <Mous with a render prop.\n\n\n    This way render props gives the flexibility of using either pattern.",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "You can implement most higher-order components (HOC) using a regular component with a render prop. For example, if you would prefer to have a withMouse HOC instead of a <Mous component, you could easily create one using a regular <Mous with a render prop.\n\n\n    This way render props gives the flexibility of using either pattern.",
+    "options": null,
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=SqcY0GlETPk",
+        "type": "video",
+        "title": "React Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "8:25:00",
+        "description": "Complete React tutorial from scratch"
+      },
+      {
+        "url": "https://react.dev/learn",
+        "type": "article",
+        "title": "React Documentation",
+        "author": "React Team",
+        "description": "Official React documentation and tutorials"
+      },
+      {
+        "url": "https://www.udemy.com/course/react-the-complete-guide-incl-redux/",
+        "type": "course",
+        "title": "React - The Complete Guide",
+        "author": "Maximilian Schwarzmüller",
+        "duration": "48 hours",
+        "description": "Master React and Redux with hands-on projects"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-21 05:31:34.054904+00",
+    "updatedAt": "2025-11-24 22:52:08.102565+00"
+  },
+  {
+    "id": "443a8a26-f07e-4292-93f8-546aa317f94a",
+    "title": "What are the features of create react app?",
+    "content": "Below are the list of some of the features provided by create react app.\n\n    1.  React, JSX, ES6, Typescript and Flow syntax support.\n    2.  Autoprefixed CSS\n    3.  CSS Reset/Normalize\n    4.  A live development server\n    5.  A fast interactive unit test runner with built-in support for coverage reporting\n    6.  A build script to bundle JS, CSS, and images for production, with hashes and sourcemaps\n    7.  An offline-first service worker and a web app manifest, meeting all the Progressive Web App criteria.",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "Below are the list of some of the features provided by create react app.\n\n    1.  React, JSX, ES6, Typescript and Flow syntax support.\n    2.  Autoprefixed CSS\n    3.  CSS Reset/Normalize\n    4.  A live development server\n    5.  A fast interactive unit test runner with built-in support for coverage reporting\n    6.  A build script to bundle JS, CSS, and images for production, with hashes and sourcemaps\n    7.  An offline-first service worker and a web app manifest, meeting all the Progressive Web App criteria.",
+    "options": null,
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=SqcY0GlETPk",
+        "type": "video",
+        "title": "React Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "8:25:00",
+        "description": "Complete React tutorial from scratch"
+      },
+      {
+        "url": "https://react.dev/learn",
+        "type": "article",
+        "title": "React Documentation",
+        "author": "React Team",
+        "description": "Official React documentation and tutorials"
+      },
+      {
+        "url": "https://www.udemy.com/course/react-the-complete-guide-incl-redux/",
+        "type": "course",
+        "title": "React - The Complete Guide",
+        "author": "Maximilian Schwarzmüller",
+        "duration": "48 hours",
+        "description": "Master React and Redux with hands-on projects"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-21 05:31:34.054904+00",
+    "updatedAt": "2025-11-24 22:52:08.102565+00"
+  },
+  {
+    "id": "f18492bd-cffb-4cf4-8a4d-2b6429c1d864",
+    "title": "How do you get redux scaffolding using create-react-app?",
+    "content": "<pre><code>e    npx create-react-app my-app --template redux-typescript</code>>>>e></code></pre>\n\nRedux team has provided official redux+js or redux+typescript templates for create-react-app project. The generated project setup includes,\n    1.  Redux Toolkit and React-Redux dependencies\n    2.  Create and configure Redux store\n    3.  React-Redux `<pre><code>ovider` passing the store to React components\n    4.  Small \"counter\" example to demo how to add redux logic and React-Redux hooks API to interact with the store from components\n        The below commands need to be executed along with template option as below,\n    5.  **Javascript template:**\n    2.  **Typescript template:**",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "Redux team has provided official redux+js or redux+typescript templates for create-react-app project. The generated project setup includes,\n    1.  Redux Toolkit and React-Redux dependencies\n    2.  Create and configure Redux store\n    3.  React-Redux `<Provider` passing the store to React components\n    4.  Small \"counter\" example to demo how to add redux logic and React-Redux hooks API to interact with the store from components\n        The below commands need to be executed along with template option as below,\n    5.  **Javascript template:**\n    2.  **Typescript template:**",
+    "options": null,
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=SqcY0GlETPk",
+        "type": "video",
+        "title": "React Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "8:25:00",
+        "description": "Complete React tutorial from scratch"
+      },
+      {
+        "url": "https://react.dev/learn",
+        "type": "article",
+        "title": "React Documentation",
+        "author": "React Team",
+        "description": "Official React documentation and tutorials"
+      },
+      {
+        "url": "https://www.udemy.com/course/react-the-complete-guide-incl-redux/",
+        "type": "course",
+        "title": "React - The Complete Guide",
+        "author": "Maximilian Schwarzmüller",
+        "duration": "48 hours",
+        "description": "Master React and Redux with hands-on projects"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-21 05:31:34.054904+00",
+    "updatedAt": "2025-11-24 22:52:08.102565+00"
+  },
+  {
+    "id": "81ed5d60-0b9f-485f-a113-aa029dd4a387",
+    "title": "What is state mutation and how to prevent it?",
+    "content": "<pre><code>e    class A extends React.component {\n      constructor(props) {\n        super(props);\n        this.state = {\n          loading: false\n        }\n     }\n\n    componentDidMount() {\n      let { loading } = this.state;\n      loading = (() => true)(); // Trying to perform an operation and directly saving in a state variable\n    }\n</code></pre>\n\n`State mutation` happens when you try to update the state of a component without actually using `setState` function. This can happen when you are trying to do some computations using a state variable and unknowingly save the result in the same state variable. This is the main reason why it is advised to return new instances of state variables from the reducers by using Object.assign({}, ...) or spread syntax.\n\n    This can cause unknown issues in the UI as the value of the state variable got updated without telling React to check what all components were being affected from this update and it can cause UI bugs.\n\n    Ex:\n\n\n    **How to prevent it:** Make sure your state variables are immutable by either enforcing immutability by using plugins like Immutable.js, always using `setState` to make updates, and returning new instances in reducers when sending updated state values.",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "`State mutation` happens when you try to update the state of a component without actually using `setState` function. This can happen when you are trying to do some computations using a state variable and unknowingly save the result in the same state variable. This is the main reason why it is advised to return new instances of state variables from the reducers by using Object.assign({}, ...) or spread syntax.\n\n    This can cause unknown issues in the UI as the value of the state variable got updated without telling React to check what all components were being affected from this update and it can cause UI bugs.\n\n    Ex:\n\n\n    **How to prevent it:** Make sure your state variables are immutable by either enforcing immutability by using plugins like Immutable.js, always using `setState` to make updates, and returning new instances in reducers when sending updated state values.",
+    "options": null,
+    "resources": [
+      {
+        "url": "https://react.dev/learn/updating-arrays-in-state",
+        "type": "article",
+        "title": "Immutability in React",
+        "author": "React Team",
+        "description": "Learn how to update state immutably in React"
+      },
+      {
+        "url": "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+        "type": "video",
+        "title": "React State Immutability Explained",
+        "author": "Web Dev Simplified",
+        "duration": "10:15",
+        "description": "Understanding why and how to prevent state mutations"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-21 05:31:34.054904+00",
+    "updatedAt": "2025-11-24 22:52:08.102565+00"
+  },
+  {
+    "id": "1ce1b5bf-c521-4b54-b705-14a843c09acc",
+    "title": "What is the purpose of renderToNodeStream method?",
+    "content": "The `ReactDOMServer#renderToNodeStream` method is used to generate HTML on the server and send the markup down on the initial request for faster page loads. It also helps search engines to crawl your pages easily for SEO purposes.\n    **Note:** Remember this method is not available in the browser but only server.",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "The `ReactDOMServer#renderToNodeStream` method is used to generate HTML on the server and send the markup down on the initial request for faster page loads. It also helps search engines to crawl your pages easily for SEO purposes.\n    **Note:** Remember this method is not available in the browser but only server.",
+    "options": null,
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=SqcY0GlETPk",
+        "type": "video",
+        "title": "React Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "8:25:00",
+        "description": "Complete React tutorial from scratch"
+      },
+      {
+        "url": "https://react.dev/learn",
+        "type": "article",
+        "title": "React Documentation",
+        "author": "React Team",
+        "description": "Official React documentation and tutorials"
+      },
+      {
+        "url": "https://www.udemy.com/course/react-the-complete-guide-incl-redux/",
+        "type": "course",
+        "title": "React - The Complete Guide",
+        "author": "Maximilian Schwarzmüller",
+        "duration": "48 hours",
+        "description": "Master React and Redux with hands-on projects"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-21 05:31:34.054904+00",
+    "updatedAt": "2025-11-24 22:52:08.102565+00"
+  },
+  {
+    "id": "2a8d54ec-7c65-4621-9f15-30c82a15b149",
+    "title": "What is react scripts?",
+    "content": "The `react-scripts` package is a set of scripts from the create-react-app starter pack which helps you kick off projects without configuring. The `react-scripts start` command sets up the development environment and starts a server, as well as hot module reloading.",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "The `react-scripts` package is a set of scripts from the create-react-app starter pack which helps you kick off projects without configuring. The `react-scripts start` command sets up the development environment and starts a server, as well as hot module reloading.",
+    "options": null,
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=SqcY0GlETPk",
+        "type": "video",
+        "title": "React Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "8:25:00",
+        "description": "Complete React tutorial from scratch"
+      },
+      {
+        "url": "https://react.dev/learn",
+        "type": "article",
+        "title": "React Documentation",
+        "author": "React Team",
+        "description": "Official React documentation and tutorials"
+      },
+      {
+        "url": "https://www.udemy.com/course/react-the-complete-guide-incl-redux/",
+        "type": "course",
+        "title": "React - The Complete Guide",
+        "author": "Maximilian Schwarzmüller",
+        "duration": "48 hours",
+        "description": "Master React and Redux with hands-on projects"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-21 05:31:34.054904+00",
+    "updatedAt": "2025-11-24 22:52:08.102565+00"
+  },
+  {
+    "id": "501c97c3-b6a2-4a1a-ad0f-28e41f4133fd",
+    "title": "How do you use contextType?",
+    "content": "<pre><code>e        class MyClass extends React.Component {\n          static contextType = MyContext;\n          render() {\n            let value = this.context;\n            /* render something based on the value */\n          }\n        }</code></pre>\n\nContextType is used to consume the context object. The contextType property can be used in two ways,\n\n    1.  **contextType as property of class:**\n        The contextType property on a class can be assigned a Context object created by React.createContext(). After that, you can consume the nearest current value of that Context type using this.context in any of the lifecycle methods and render function.\n\n        Lets assign contextType property on MyClass as below,\n\n\n    2.  **Static field**\n        You can use a static class field to initialize your contextType using public class field syntax.",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "ContextType is used to consume the context object. The contextType property can be used in two ways,\n\n    1.  **contextType as property of class:**\n        The contextType property on a class can be assigned a Context object created by React.createContext(). After that, you can consume the nearest current value of that Context type using this.context in any of the lifecycle methods and render function.\n\n        Lets assign contextType property on MyClass as below,\n\n\n    2.  **Static field**\n        You can use a static class field to initialize your contextType using public class field syntax.",
+    "options": null,
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=SqcY0GlETPk",
+        "type": "video",
+        "title": "React Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "8:25:00",
+        "description": "Complete React tutorial from scratch"
+      },
+      {
+        "url": "https://react.dev/learn",
+        "type": "article",
+        "title": "React Documentation",
+        "author": "React Team",
+        "description": "Official React documentation and tutorials"
+      },
+      {
+        "url": "https://www.udemy.com/course/react-the-complete-guide-incl-redux/",
+        "type": "course",
+        "title": "React - The Complete Guide",
+        "author": "Maximilian Schwarzmüller",
+        "duration": "48 hours",
+        "description": "Master React and Redux with hands-on projects"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-21 05:31:09.019942+00",
+    "updatedAt": "2025-11-24 22:52:08.102565+00"
+  },
+  {
+    "id": "26ff9ebf-7eba-44a1-9cf0-9c316df88c1d",
+    "title": "What is the purpose of forward ref in HOCs?",
+    "content": "<pre><code>e    import FancyButton from \"./FancyButton\";\n\n    const ref = React.createRef();\n    ref.current.focus();\n    <FancyButton label=\"Click Me\" handleClick={handleClick} ref={ref} />;</code></pre>\n\nRefs will not get passed through because ref is not a prop. It is handled differently by React just like **key**. If you add a ref to a HOC, the ref will refer to the outermost container component, not the wrapped component. In this case, you can use Forward Ref API. For example, we can explicitly forward refs to the inner FancyButton component using the React.forwardRef API.\n\n    The below HOC logs all props,\n\n\n    Let's use this HOC to log all props that get passed to our \"fancy button\" component,\n\n\n    Now let's create a ref and pass it to FancyButton component. In this case, you can set focus to button element.",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "Refs will not get passed through because ref is not a prop. It is handled differently by React just like **key**. If you add a ref to a HOC, the ref will refer to the outermost container component, not the wrapped component. In this case, you can use Forward Ref API. For example, we can explicitly forward refs to the inner FancyButton component using the React.forwardRef API.\n\n    The below HOC logs all props,\n\n\n    Let's use this HOC to log all props that get passed to our \"fancy button\" component,\n\n\n    Now let's create a ref and pass it to FancyButton component. In this case, you can set focus to button element.",
+    "options": null,
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=SqcY0GlETPk",
+        "type": "video",
+        "title": "React Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "8:25:00",
+        "description": "Complete React tutorial from scratch"
+      },
+      {
+        "url": "https://react.dev/learn",
+        "type": "article",
+        "title": "React Documentation",
+        "author": "React Team",
+        "description": "Official React documentation and tutorials"
+      },
+      {
+        "url": "https://www.udemy.com/course/react-the-complete-guide-incl-redux/",
+        "type": "course",
+        "title": "React - The Complete Guide",
+        "author": "Maximilian Schwarzmüller",
+        "duration": "48 hours",
+        "description": "Master React and Redux with hands-on projects"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-21 05:31:09.019942+00",
+    "updatedAt": "2025-11-24 22:52:08.102565+00"
+  },
+  {
+    "id": "524091fc-e561-41fd-a374-5376b2b82c59",
+    "title": "What is a consumer?",
+    "content": "<pre><code>e    <MyContext.Consumer\n      {value => /* render something based on the context value */}\n    </MyContext.Consumer</code>>>>e></code></pre>\n\nA Consumer is a React component that subscribes to context changes. It requires a function as a child which receives current context value as argument and returns a react node. The value argument passed to the function will be equal to the value prop of the closest Provider for this context above in the tree.\n\n    Lets take a simple example,",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "A Consumer is a React component that subscribes to context changes. It requires a function as a child which receives current context value as argument and returns a react node. The value argument passed to the function will be equal to the value prop of the closest Provider for this context above in the tree.\n\n    Lets take a simple example,",
+    "options": null,
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=SqcY0GlETPk",
+        "type": "video",
+        "title": "React Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "8:25:00",
+        "description": "Complete React tutorial from scratch"
+      },
+      {
+        "url": "https://react.dev/learn",
+        "type": "article",
+        "title": "React Documentation",
+        "author": "React Team",
+        "description": "Official React documentation and tutorials"
+      },
+      {
+        "url": "https://www.udemy.com/course/react-the-complete-guide-incl-redux/",
+        "type": "course",
+        "title": "React - The Complete Guide",
+        "author": "Maximilian Schwarzmüller",
+        "duration": "48 hours",
+        "description": "Master React and Redux with hands-on projects"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-21 05:31:09.019942+00",
+    "updatedAt": "2025-11-24 22:52:08.102565+00"
+  },
+  {
+    "id": "cb5e9016-2f30-4a3f-a919-53d9920f5760",
+    "title": "Give an example on How to use context?",
+    "content": "<pre><code>e    //Lets create a context with a default theme value \"luna\"\n    const ThemeContext = React.createContext(\"luna\");\n    // Create App component where it uses provider to pass theme value in the tree\n    class App extends React.Component {\n      render() {\n        return (\n          <ThemeContext.Provider value=\"nova\">\n            <Toolbar />\n          </ThemeContext.Provider\n        );\n      }\n    }\n    // A middle component where you don't need to pass theme prop anymore\n    function Toolbar(props) {\n      return (\n          <ThemedButton />\n      );\n    }\n    // Lets read theme value in the button component to use\n    class ThemedButton extends React.Component {\n      static contextType = ThemeContext;\n      render() {\n        return <Button theme={this.context} />;\n      }\n    }</code></pre>\n\n**Context** is designed to share data that can be considered **global** for a tree of React components.\n\n    For example, in the code below lets manually thread through a \"theme\" prop in order to style the Button component.",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "**Context** is designed to share data that can be considered **global** for a tree of React components.\n\n    For example, in the code below lets manually thread through a \"theme\" prop in order to style the Button component.",
+    "options": null,
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=SqcY0GlETPk",
+        "type": "video",
+        "title": "React Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "8:25:00",
+        "description": "Complete React tutorial from scratch"
+      },
+      {
+        "url": "https://react.dev/learn",
+        "type": "article",
+        "title": "React Documentation",
+        "author": "React Team",
+        "description": "Official React documentation and tutorials"
+      },
+      {
+        "url": "https://www.udemy.com/course/react-the-complete-guide-incl-redux/",
+        "type": "course",
+        "title": "React - The Complete Guide",
+        "author": "Maximilian Schwarzmüller",
+        "duration": "48 hours",
+        "description": "Master React and Redux with hands-on projects"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-21 05:31:09.019942+00",
+    "updatedAt": "2025-11-24 22:52:08.102565+00"
+  }
+]
+

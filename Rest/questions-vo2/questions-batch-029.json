@@ -1,0 +1,2664 @@
+[
+  {
+    "id": "0cce0ed6-fa00-4f2d-be8c-3c15887b6a19",
+    "title": "Not applicable",
+    "content": "Evaluate the statement about PRPL's optimization focus.",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "The correct answer is: True",
+    "options": [
+      {
+        "id": "o1",
+        "text": "True",
+        "isCorrect": true,
+        "explanation": "PRPL prioritizes loading and rendering the initial route first, then caching and lazy-loading the rest."
+      },
+      {
+        "id": "o2",
+        "text": "False",
+        "isCorrect": false,
+        "explanation": "Other resources load only after the initial route completes."
+      },
+      {
+        "id": "o3",
+        "text": "Partially true - depends on the context",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "o4",
+        "text": "Not applicable",
+        "isCorrect": false,
+        "explanation": ""
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/Performance",
+        "type": "article",
+        "title": "Web Performance - MDN",
+        "author": "Mozilla Developer Network",
+        "description": "Guide to web performance optimization"
+      },
+      {
+        "url": "https://web.dev/performance/",
+        "type": "article",
+        "title": "Web.dev Performance",
+        "author": "Google Developers",
+        "description": "Learn web performance best practices"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-19T22:44:45.123985+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "afa443e0-3020-4512-ba1c-640ea3b9efb6",
+    "title": "Prepare, Run, Pre-cache, Load",
+    "content": "Choose the correct expansion of PRPL.",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "PRPL stands for Push critical resources, Render initial route, Pre-cache assets, and Lazy-load remaining routes.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Push, Render, Pre-cache, Lazy-load",
+        "isCorrect": true,
+        "explanation": ""
+      },
+      {
+        "id": "o2",
+        "text": "Preload, Render, Pre-fetch, Load",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "o3",
+        "text": "Push, Render, Preload, Link",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "o4",
+        "text": "Prepare, Run, Pre-cache, Load",
+        "isCorrect": false,
+        "explanation": ""
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/Performance",
+        "type": "article",
+        "title": "Web Performance - MDN",
+        "author": "Mozilla Developer Network",
+        "description": "Guide to web performance optimization"
+      },
+      {
+        "url": "https://web.dev/performance/",
+        "type": "article",
+        "title": "Web.dev Performance",
+        "author": "Google Developers",
+        "description": "Learn web performance best practices"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-19T22:44:45.123985+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "ce7a5c62-10fb-4247-b504-34a52f208832",
+    "title": "jQuery AJAX for resource loading",
+    "content": "Select all the technologies that typically support PRPL pattern implementation.",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "PRPL commonly uses HTTP/2 server push, service workers for caching, and an app shell for faster rendering.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "HTTP/2 Server Push",
+        "isCorrect": true,
+        "explanation": ""
+      },
+      {
+        "id": "o2",
+        "text": "Service Workers",
+        "isCorrect": true,
+        "explanation": ""
+      },
+      {
+        "id": "o3",
+        "text": "App Shell Architecture",
+        "isCorrect": true,
+        "explanation": ""
+      },
+      {
+        "id": "o4",
+        "text": "jQuery AJAX for resource loading",
+        "isCorrect": false,
+        "explanation": ""
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/Performance",
+        "type": "article",
+        "title": "Web Performance - MDN",
+        "author": "Mozilla Developer Network",
+        "description": "Guide to web performance optimization"
+      },
+      {
+        "url": "https://web.dev/performance/",
+        "type": "article",
+        "title": "Web.dev Performance",
+        "author": "Google Developers",
+        "description": "Learn web performance best practices"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-19T22:44:45.123985+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "8622d25b-bc27-4d05-9ea3-a7a7468affde",
+    "title": "Not applicable",
+    "content": "Assess whether Service Workers are necessary for caching and lazy loading in PRPL.",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "The correct answer is: True",
+    "options": [
+      {
+        "id": "o1",
+        "text": "True",
+        "isCorrect": true,
+        "explanation": "Service Workers enable background caching and lazy-loading of routes and assets in PRPL."
+      },
+      {
+        "id": "o2",
+        "text": "False",
+        "isCorrect": false,
+        "explanation": "PRPL relies heavily on Service Workers for offline caching and background resource fetching."
+      },
+      {
+        "id": "o3",
+        "text": "Partially true - depends on the context",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "o4",
+        "text": "Not applicable",
+        "isCorrect": false,
+        "explanation": ""
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/Performance",
+        "type": "article",
+        "title": "Web Performance - MDN",
+        "author": "Mozilla Developer Network",
+        "description": "Guide to web performance optimization"
+      },
+      {
+        "url": "https://web.dev/performance/",
+        "type": "article",
+        "title": "Web.dev Performance",
+        "author": "Google Developers",
+        "description": "Learn web performance best practices"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-19T22:44:45.123985+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "3fce078d-2b74-4972-b4e2-9234c310691d",
+    "title": "Not quite. Consider web performance best practices.",
+    "content": "### PRPL Pattern\nThe **PRPL Pattern** is a web performance optimization strategy that focuses on making applications load and run efficiently, even on low-end devices or slow networks.\n\n**PRPL** stands for:\n- **P**: Push critical resources for the initial route.\n- **R**: Render the initial route as soon as possible.\n- **P**: Pre-cache assets for future routes.\n- **L**: Lazy-load remaining routes and assets.\n\nThis approach improves load times, offline experience, and caching efficiency.\n\n**Example:** Progressive Web Apps (PWAs) that use an app shell, service workers, and code-splitting to load only what's needed.\n\n**Pros:**\n- Faster first render.\n- Improved caching and offline usability.\n- Reduced bandwidth usage.\n\n**Cons:**\n- Requires careful bundling and caching strategy.\n- Over-pushing or preloading can waste bandwidth.",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "A web performance pattern that optimizes loading by pushing critical resources, rendering fast, pre-caching assets, and lazy-loading the rest.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "A web performance pattern that optimizes loading by pushing critical resources, rendering fast, pre-caching assets, and lazy-loading the rest.",
+        "isCorrect": true,
+        "explanation": "A web performance pattern that optimizes loading by pushing critical resources, rendering fast, pre-caching assets, and lazy-loading the rest."
+      },
+      {
+        "id": "o2",
+        "text": "This is not correct. Please refer to the explanation.",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "o3",
+        "text": "Incorrect. Review performance optimization concepts.",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "o4",
+        "text": "This is a common misconception. The correct answer is different.",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "o5",
+        "text": "Not quite. Consider web performance best practices.",
+        "isCorrect": false,
+        "explanation": ""
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/Performance",
+        "type": "article",
+        "title": "Web Performance - MDN",
+        "author": "Mozilla Developer Network",
+        "description": "Guide to web performance optimization"
+      },
+      {
+        "url": "https://web.dev/performance/",
+        "type": "article",
+        "title": "Web.dev Performance",
+        "author": "Google Developers",
+        "description": "Learn web performance best practices"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-19T22:44:45.123985+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "c688373f-527c-413a-ab52-83959d7ad2c9",
+    "title": "Forces the app to reload on each navigation",
+    "content": "Identify how the App Shell architecture supports the PRPL pattern.",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "The App Shell delivers the minimal UI structure immediately, allowing PRPL to render the first route quickly and cache other assets later.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Provides a minimal structure that loads instantly and handles routing",
+        "isCorrect": true,
+        "explanation": ""
+      },
+      {
+        "id": "o2",
+        "text": "Delays rendering until all assets are fetched",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "o3",
+        "text": "Caches server responses in memory only",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "o4",
+        "text": "Forces the app to reload on each navigation",
+        "isCorrect": false,
+        "explanation": ""
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/Performance",
+        "type": "article",
+        "title": "Web Performance - MDN",
+        "author": "Mozilla Developer Network",
+        "description": "Guide to web performance optimization"
+      },
+      {
+        "url": "https://web.dev/performance/",
+        "type": "article",
+        "title": "Web.dev Performance",
+        "author": "Google Developers",
+        "description": "Learn web performance best practices"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-19T22:44:45.123985+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "9cb664a9-ec14-40e9-b910-c379ac340d67",
+    "title": "Not quite. Consider web performance best practices.",
+    "content": "### HTTP/2 and PRPL\nHTTP/2 enables multiplexing — allowing multiple request/response streams over a single TCP connection. This reduces 'head-of-line' blocking and speeds up resource delivery, which complements PRPL's 'Push' and 'Render' steps.",
+    "type": "multiple-choice",
+    "difficulty": "advanced",
+    "explanation": "HTTP/2 allows multiple requests in one TCP connection, reducing latency and supporting PRPL's goal of faster initial route rendering.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "HTTP/2 allows multiple requests in one TCP connection, reducing latency and supporting PRPL's goal of faster initial route rendering.",
+        "isCorrect": true,
+        "explanation": "HTTP/2 allows multiple requests in one TCP connection, reducing latency and supporting PRPL's goal of faster initial route rendering."
+      },
+      {
+        "id": "o2",
+        "text": "This is not correct. Please refer to the explanation.",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "o3",
+        "text": "Incorrect. Review performance optimization concepts.",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "o4",
+        "text": "This is a common misconception. The correct answer is different.",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "o5",
+        "text": "Not quite. Consider web performance best practices.",
+        "isCorrect": false,
+        "explanation": ""
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/Performance",
+        "type": "article",
+        "title": "Web Performance - MDN",
+        "author": "Mozilla Developer Network",
+        "description": "Guide to web performance optimization"
+      },
+      {
+        "url": "https://web.dev/performance/",
+        "type": "article",
+        "title": "Web.dev Performance",
+        "author": "Google Developers",
+        "description": "Learn web performance best practices"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-19T22:44:45.123985+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "48ea2e7f-85cf-4a8b-ab13-35b810f2f0c0",
+    "title": "Lazy-load",
+    "content": "Identify which phase of the PRPL process focuses on pre-caching routes for better offline performance.",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "Pre-caching ensures frequently visited routes and assets are stored for quick access and offline use.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Push",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "o2",
+        "text": "Render",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "o3",
+        "text": "Pre-cache",
+        "isCorrect": true,
+        "explanation": ""
+      },
+      {
+        "id": "o4",
+        "text": "Lazy-load",
+        "isCorrect": false,
+        "explanation": ""
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/Performance",
+        "type": "article",
+        "title": "Web Performance - MDN",
+        "author": "Mozilla Developer Network",
+        "description": "Guide to web performance optimization"
+      },
+      {
+        "url": "https://web.dev/performance/",
+        "type": "article",
+        "title": "Web.dev Performance",
+        "author": "Google Developers",
+        "description": "Learn web performance best practices"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-19T22:44:45.123985+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "4a72448b-2ce3-4ab1-a2aa-9d83a474457a",
+    "title": "Not quite. Consider web performance best practices.",
+    "content": "### Code-Splitting in PRPL\nCode-splitting divides the application into smaller, cachable chunks. This helps browsers load only what's necessary for the current route, improving performance and reducing cache bloat.",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "It ensures only the necessary parts of the app are loaded, improving performance and caching efficiency.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "It ensures only the necessary parts of the app are loaded, improving performance and caching efficiency.",
+        "isCorrect": true,
+        "explanation": "It ensures only the necessary parts of the app are loaded, improving performance and caching efficiency."
+      },
+      {
+        "id": "o2",
+        "text": "This is not correct. Please refer to the explanation.",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "o3",
+        "text": "Incorrect. Review performance optimization concepts.",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "o4",
+        "text": "This is a common misconception. The correct answer is different.",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "o5",
+        "text": "Not quite. Consider web performance best practices.",
+        "isCorrect": false,
+        "explanation": ""
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/Performance",
+        "type": "article",
+        "title": "Web Performance - MDN",
+        "author": "Mozilla Developer Network",
+        "description": "Guide to web performance optimization"
+      },
+      {
+        "url": "https://web.dev/performance/",
+        "type": "article",
+        "title": "Web.dev Performance",
+        "author": "Google Developers",
+        "description": "Learn web performance best practices"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-19T22:44:45.123985+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "a9460515-579e-4eec-8e98-6f976387f872",
+    "title": "Reduced initial load time",
+    "content": "Select the correct consequence of over-pushing or over-preloading resources.",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "Pushing unnecessary files wastes bandwidth and fills the browser cache, reducing overall performance.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Improved caching performance",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "o2",
+        "text": "Wasted bandwidth and filled browser cache",
+        "isCorrect": true,
+        "explanation": ""
+      },
+      {
+        "id": "o3",
+        "text": "Better offline support",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "o4",
+        "text": "Reduced initial load time",
+        "isCorrect": false,
+        "explanation": ""
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/Performance",
+        "type": "article",
+        "title": "Web Performance - MDN",
+        "author": "Mozilla Developer Network",
+        "description": "Guide to web performance optimization"
+      },
+      {
+        "url": "https://web.dev/performance/",
+        "type": "article",
+        "title": "Web.dev Performance",
+        "author": "Google Developers",
+        "description": "Learn web performance best practices"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-19T22:44:45.123985+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "723c849f-a4c0-480e-9dbb-b7ef1977d012",
+    "title": "It disables animations to speed up UI",
+    "content": "It lets the app load faster by deferring non-critical resources, making the UI interactive sooner.",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "By deferring low-priority code, dynamic imports shorten Time to Interactive (TTI) and improve perceived performance.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "It preloads everything at once",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "o2",
+        "text": "It blocks rendering until all files are loaded",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "o3",
+        "text": "It reduces initial bundle size and improves interactivity",
+        "isCorrect": true,
+        "explanation": ""
+      },
+      {
+        "id": "o4",
+        "text": "It disables animations to speed up UI",
+        "isCorrect": false,
+        "explanation": ""
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/Performance",
+        "type": "article",
+        "title": "Web Performance - MDN",
+        "author": "Mozilla Developer Network",
+        "description": "Guide to web performance optimization"
+      },
+      {
+        "url": "https://web.dev/performance/",
+        "type": "article",
+        "title": "Web.dev Performance",
+        "author": "Google Developers",
+        "description": "Learn web performance best practices"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-19T22:40:23.061828+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "05f42f91-24ca-47d5-b1b8-e6166e3a195b",
+    "title": "Not quite. Consider web performance best practices.",
+    "content": "How does prefetch differ from lazy loading when optimizing resources?",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "Prefetch loads resources before they are needed (proactively), while lazy loading loads them only when required (reactively).",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Prefetching anticipates future needs; lazy loading reacts to user actions or visibility.",
+        "isCorrect": true,
+        "explanation": "Prefetch loads resources before they are needed (proactively), while lazy loading loads them only when required (reactively)."
+      },
+      {
+        "id": "o2",
+        "text": "This is not correct. Please refer to the explanation.",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "o3",
+        "text": "Incorrect. Review performance optimization concepts.",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "o4",
+        "text": "This is a common misconception. The correct answer is different.",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "o5",
+        "text": "Not quite. Consider web performance best practices.",
+        "isCorrect": false,
+        "explanation": ""
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/Performance",
+        "type": "article",
+        "title": "Web Performance - MDN",
+        "author": "Mozilla Developer Network",
+        "description": "Guide to web performance optimization"
+      },
+      {
+        "url": "https://web.dev/performance/",
+        "type": "article",
+        "title": "Web.dev Performance",
+        "author": "Google Developers",
+        "description": "Learn web performance best practices"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-19T22:40:23.061828+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "8dc9bd76-27c8-4d52-a435-f8d869901bc7",
+    "title": "It delays rendering until all resources are loaded",
+    "content": "What happens when a prefetched module is requested by the user?",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "Prefetched resources are cached by the browser, allowing instant retrieval when the user requests them.",
+    "options": [
+      {
+        "id": "a",
+        "text": "It is fetched from cache instantly",
+        "isCorrect": true,
+        "explanation": ""
+      },
+      {
+        "id": "b",
+        "text": "It triggers a network request",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "c",
+        "text": "It delays rendering until all resources are loaded",
+        "isCorrect": false,
+        "explanation": ""
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/Performance",
+        "type": "article",
+        "title": "Web Performance - MDN",
+        "author": "Mozilla Developer Network",
+        "description": "Guide to web performance optimization"
+      },
+      {
+        "url": "https://web.dev/performance/",
+        "type": "article",
+        "title": "Web.dev Performance",
+        "author": "Google Developers",
+        "description": "Learn web performance best practices"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-19T22:40:23.061828+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "580a26a8-b7a7-4e0f-867c-fc202eaf74ba",
+    "title": "To immediately execute a script when the page loads",
+    "content": "What is the purpose of using e<link rel=\"prefetch\"> in web applications?",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "Prefetch allows browsers to fetch resources that may be needed later, improving responsiveness for upcoming interactions.",
+    "options": [
+      {
+        "id": "a",
+        "text": "To load resources that may be needed in the future",
+        "isCorrect": true,
+        "explanation": ""
+      },
+      {
+        "id": "b",
+        "text": "To defer resource loading until the user interacts",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "c",
+        "text": "To immediately execute a script when the page loads",
+        "isCorrect": false,
+        "explanation": ""
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/Performance",
+        "type": "article",
+        "title": "Web Performance - MDN",
+        "author": "Mozilla Developer Network",
+        "description": "Guide to web performance optimization"
+      },
+      {
+        "url": "https://web.dev/performance/",
+        "type": "article",
+        "title": "Web.dev Performance",
+        "author": "Google Developers",
+        "description": "Learn web performance best practices"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-19T22:40:23.061828+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "95fc28cc-3c45-4273-9e03-4b808bc660bb",
+    "title": "Only for images in the viewport",
+    "content": "Which is a good scenario to use prefetching in a web application?",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "Prefetching should be used for predictable user paths to balance performance and bandwidth usage.",
+    "options": [
+      {
+        "id": "a",
+        "text": "For pages or components the user is likely to visit soon",
+        "isCorrect": true,
+        "explanation": ""
+      },
+      {
+        "id": "b",
+        "text": "For every resource in the application",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "c",
+        "text": "Only for images in the viewport",
+        "isCorrect": false,
+        "explanation": ""
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/Performance",
+        "type": "article",
+        "title": "Web Performance - MDN",
+        "author": "Mozilla Developer Network",
+        "description": "Guide to web performance optimization"
+      },
+      {
+        "url": "https://web.dev/performance/",
+        "type": "article",
+        "title": "Web.dev Performance",
+        "author": "Google Developers",
+        "description": "Learn web performance best practices"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-19T22:40:23.061828+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "63fd86d6-fab7-4861-b4df-ef44e08fb179",
+    "title": "Improved SEO performance",
+    "content": "Users may experience a delay after clicking while the script loads if the resource is large or network is slow.",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "While the page loads faster initially, there might be a small delay when the resource is fetched on demand.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Reduced memory usage",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "o2",
+        "text": "Instantaneous interactivity always",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "o3",
+        "text": "Possible delay after user interaction",
+        "isCorrect": true,
+        "explanation": ""
+      },
+      {
+        "id": "o4",
+        "text": "Improved SEO performance",
+        "isCorrect": false,
+        "explanation": ""
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/Performance",
+        "type": "article",
+        "title": "Web Performance - MDN",
+        "author": "Mozilla Developer Network",
+        "description": "Guide to web performance optimization"
+      },
+      {
+        "url": "https://web.dev/performance/",
+        "type": "article",
+        "title": "Web.dev Performance",
+        "author": "Google Developers",
+        "description": "Learn web performance best practices"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-19T22:40:23.061828+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "97a95522-fefc-4b27-9108-d1f4829471b0",
+    "title": "To lazy load components on user interaction",
+    "content": "What is the purpose of using e<link rel=\"preload\"> in a web application?",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "Preload helps load critical resources early to improve metrics like Time to Interactive or First Input Delay.",
+    "options": [
+      {
+        "id": "a",
+        "text": "To load critical resources earlier for faster interactivity",
+        "isCorrect": true,
+        "explanation": ""
+      },
+      {
+        "id": "b",
+        "text": "To defer resource loading until needed",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "c",
+        "text": "To lazy load components on user interaction",
+        "isCorrect": false,
+        "explanation": ""
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/Performance",
+        "type": "article",
+        "title": "Web Performance - MDN",
+        "author": "Mozilla Developer Network",
+        "description": "Guide to web performance optimization"
+      },
+      {
+        "url": "https://web.dev/performance/",
+        "type": "article",
+        "title": "Web.dev Performance",
+        "author": "Google Developers",
+        "description": "Learn web performance best practices"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-19T22:40:23.061828+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "465dcb14-fa42-49a4-9d99-f26d6e740a28",
+    "title": "Preload is always handled automatically by the browser",
+    "content": "What is the main difference between preloading and prefetching resources?",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "Preload prioritizes resources needed right away; prefetch prepares resources for potential future use.",
+    "options": [
+      {
+        "id": "a",
+        "text": "Preload is for resources needed immediately, prefetch is for resources needed soon",
+        "isCorrect": true,
+        "explanation": ""
+      },
+      {
+        "id": "b",
+        "text": "Prefetch loads higher priority resources than preload",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "c",
+        "text": "Preload is always handled automatically by the browser",
+        "isCorrect": false,
+        "explanation": ""
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/Performance",
+        "type": "article",
+        "title": "Web Performance - MDN",
+        "author": "Mozilla Developer Network",
+        "description": "Guide to web performance optimization"
+      },
+      {
+        "url": "https://web.dev/performance/",
+        "type": "article",
+        "title": "Web.dev Performance",
+        "author": "Google Developers",
+        "description": "Learn web performance best practices"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-19T22:40:23.061828+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "11c4ca40-f4e4-4bf7-88f3-3291e2cff171",
+    "title": "Not quite. Consider web performance best practices.",
+    "content": "Why should developers avoid excessive use of prefetching?",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "Overusing prefetch may waste bandwidth and slow down critical resource loading if prefetched assets are never used.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Prefetching too many unused resources can waste network bandwidth and harm performance.",
+        "isCorrect": true,
+        "explanation": "Overusing prefetch may waste bandwidth and slow down critical resource loading if prefetched assets are never used."
+      },
+      {
+        "id": "o2",
+        "text": "This is not correct. Please refer to the explanation.",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "o3",
+        "text": "Incorrect. Review performance optimization concepts.",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "o4",
+        "text": "This is a common misconception. The correct answer is different.",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "o5",
+        "text": "Not quite. Consider web performance best practices.",
+        "isCorrect": false,
+        "explanation": ""
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/Performance",
+        "type": "article",
+        "title": "Web Performance - MDN",
+        "author": "Mozilla Developer Network",
+        "description": "Guide to web performance optimization"
+      },
+      {
+        "url": "https://web.dev/performance/",
+        "type": "article",
+        "title": "Web.dev Performance",
+        "author": "Google Developers",
+        "description": "Learn web performance best practices"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-19T22:40:23.061828+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "d4bd0a50-6672-432e-bdc6-c6a98a88eeec",
+    "title": "It disables the browser cache for those resources",
+    "content": "What is a potential downside of preloading too many resources?",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "Preloading too many assets can block more important ones, increasing First Contentful Paint time.",
+    "options": [
+      {
+        "id": "a",
+        "text": "It can delay critical rendering paths like CSS and hero images",
+        "isCorrect": true,
+        "explanation": ""
+      },
+      {
+        "id": "b",
+        "text": "It causes the browser to ignore other preload hints",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "c",
+        "text": "It disables the browser cache for those resources",
+        "isCorrect": false,
+        "explanation": ""
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/Performance",
+        "type": "article",
+        "title": "Web Performance - MDN",
+        "author": "Mozilla Developer Network",
+        "description": "Guide to web performance optimization"
+      },
+      {
+        "url": "https://web.dev/performance/",
+        "type": "article",
+        "title": "Web.dev Performance",
+        "author": "Google Developers",
+        "description": "Learn web performance best practices"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-19T22:40:23.061828+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "0ff8a3d7-7111-4ea8-8e71-e1a20cdb29f0",
+    "title": "HTTP/2 always provides perfect prioritization",
+    "content": "What is one major reason why achieving an optimal loading sequence is challenging?",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "Developers often expect browsers to prioritize resources in a specific order, but browsers handle requests differently, leading to suboptimal performance.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Browsers follow a standard universal resource prioritization model",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "o2",
+        "text": "Developers and browsers often differ in how they prioritize resources",
+        "isCorrect": true,
+        "explanation": ""
+      },
+      {
+        "id": "o3",
+        "text": "All third-party scripts automatically optimize for performance",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "o4",
+        "text": "HTTP/2 always provides perfect prioritization",
+        "isCorrect": false,
+        "explanation": ""
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/Performance",
+        "type": "article",
+        "title": "Web Performance - MDN",
+        "author": "Mozilla Developer Network",
+        "description": "Guide to web performance optimization"
+      },
+      {
+        "url": "https://web.dev/performance/",
+        "type": "article",
+        "title": "Web.dev Performance",
+        "author": "Google Developers",
+        "description": "Learn web performance best practices"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-19T22:36:08.810887+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "cbbfb7b8-e7da-4bdb-bdc7-34f03af7e4e5",
+    "title": "LCP is achieved faster",
+    "content": "What happens if resources are not pipelined correctly in terms of CPU and network usage?",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "Improper pipelining can lead to idle CPU or network times, where one waits for the other, decreasing efficiency.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "The browser caches all resources automatically",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "o2",
+        "text": "The CPU and network are always fully utilized",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "o3",
+        "text": "Dead time occurs on either CPU or network, causing delays",
+        "isCorrect": true,
+        "explanation": ""
+      },
+      {
+        "id": "o4",
+        "text": "LCP is achieved faster",
+        "isCorrect": false,
+        "explanation": ""
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/Performance",
+        "type": "article",
+        "title": "Web Performance - MDN",
+        "author": "Mozilla Developer Network",
+        "description": "Guide to web performance optimization"
+      },
+      {
+        "url": "https://web.dev/performance/",
+        "type": "article",
+        "title": "Web.dev Performance",
+        "author": "Google Developers",
+        "description": "Learn web performance best practices"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-19T22:36:08.810887+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "857a07c4-24a1-4af8-b875-9f576fbebb35",
+    "title": "Encrypts JavaScript files",
+    "content": "Minification removes unnecessary syntax like spaces, comments, and line breaks to reduce file size.",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "Minification optimizes code before compression, enabling smaller payloads without changing functionality.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Adds whitespace for readability",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "o2",
+        "text": "Removes unnecessary syntax to shrink file size",
+        "isCorrect": true,
+        "explanation": ""
+      },
+      {
+        "id": "o3",
+        "text": "Combines multiple files into one",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "o4",
+        "text": "Encrypts JavaScript files",
+        "isCorrect": false,
+        "explanation": ""
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/Performance",
+        "type": "article",
+        "title": "Web Performance - MDN",
+        "author": "Mozilla Developer Network",
+        "description": "Guide to web performance optimization"
+      },
+      {
+        "url": "https://web.dev/performance/",
+        "type": "article",
+        "title": "Web.dev Performance",
+        "author": "Google Developers",
+        "description": "Learn web performance best practices"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-19T22:36:08.810887+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "5d6cd00f-edff-4188-bf0c-30866cbd09d1",
+    "title": "For critical fonts and CSS",
+    "content": "When should you use the 'Lazy-Onload' priority for third-party scripts in Next.js?",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "'Lazy-Onload' should be used for non-critical third-party scripts like social widgets that can load after all main content.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "For critical polyfills and security scripts",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "o2",
+        "text": "For social widgets and feedback scripts",
+        "isCorrect": true,
+        "explanation": ""
+      },
+      {
+        "id": "o3",
+        "text": "For hydration-related scripts",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "o4",
+        "text": "For critical fonts and CSS",
+        "isCorrect": false,
+        "explanation": ""
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/Performance",
+        "type": "article",
+        "title": "Web Performance - MDN",
+        "author": "Mozilla Developer Network",
+        "description": "Guide to web performance optimization"
+      },
+      {
+        "url": "https://web.dev/performance/",
+        "type": "article",
+        "title": "Web.dev Performance",
+        "author": "Google Developers",
+        "description": "Learn web performance best practices"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-19T22:36:08.810887+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "dbb5918f-f5b2-42b4-8cce-9945961f84ff",
+    "title": "To improve SEO ranking",
+    "content": "Import On Interaction delays the loading of non-critical resources until the user interacts with the UI element that requires them, improving page load performance.",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "The Import On Interaction pattern improves load performance by deferring loading of non-critical JavaScript until a user interacts with a relevant element.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "To load all scripts eagerly on page load",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "o2",
+        "text": "To lazy-load non-critical resources when needed",
+        "isCorrect": true,
+        "explanation": ""
+      },
+      {
+        "id": "o3",
+        "text": "To compile code during build time",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "o4",
+        "text": "To improve SEO ranking",
+        "isCorrect": false,
+        "explanation": ""
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/Performance",
+        "type": "article",
+        "title": "Web Performance - MDN",
+        "author": "Mozilla Developer Network",
+        "description": "Guide to web performance optimization"
+      },
+      {
+        "url": "https://web.dev/performance/",
+        "type": "article",
+        "title": "Web.dev Performance",
+        "author": "Google Developers",
+        "description": "Learn web performance best practices"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-19T22:36:08.810887+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "d2caa9fb-cd67-48df-9b64-f81729cd1713",
+    "title": "Immediately after rendering ChatInput",
+    "content": "EmojiPicker is loaded only when the user clicks on the emoji icon, triggering the lazy import.",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "The lazy import ensures that the module is fetched and executed only upon user interaction with the emoji button.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "When the app starts",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "o2",
+        "text": "When the page is reloaded",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "o3",
+        "text": "Only when the emoji button is clicked",
+        "isCorrect": true,
+        "explanation": ""
+      },
+      {
+        "id": "o4",
+        "text": "Immediately after rendering ChatInput",
+        "isCorrect": false,
+        "explanation": ""
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/Performance",
+        "type": "article",
+        "title": "Web Performance - MDN",
+        "author": "Mozilla Developer Network",
+        "description": "Guide to web performance optimization"
+      },
+      {
+        "url": "https://web.dev/performance/",
+        "type": "article",
+        "title": "Web.dev Performance",
+        "author": "Google Developers",
+        "description": "Learn web performance best practices"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-19T22:36:08.810887+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "a00e2c54-25e4-4e4f-8c81-0ad38a8a62f9",
+    "title": "Always preload images before any CSS files",
+    "content": "Which of the following is a recommended best practice when using preload?",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "Preload should only be used for critical resources and its performance impact should be measured carefully.",
+    "options": [
+      {
+        "id": "a",
+        "text": "Use preload sparingly and measure its impact in production",
+        "isCorrect": true,
+        "explanation": ""
+      },
+      {
+        "id": "b",
+        "text": "Preload all JavaScript files to reduce bundle size",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "c",
+        "text": "Always preload images before any CSS files",
+        "isCorrect": false,
+        "explanation": ""
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/Performance",
+        "type": "article",
+        "title": "Web Performance - MDN",
+        "author": "Mozilla Developer Network",
+        "description": "Guide to web performance optimization"
+      },
+      {
+        "url": "https://web.dev/performance/",
+        "type": "article",
+        "title": "Web.dev Performance",
+        "author": "Google Developers",
+        "description": "Learn web performance best practices"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-19T22:36:08.810887+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "e9392f9b-f068-4fb5-9f24-6085a46a0d6a",
+    "title": "documentWrite",
+    "content": "Identify the strategies available in the Next.js Script component.",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "Next.js Script component allows beforeInteractive for critical scripts, afterInteractive for deferred scripts, and lazyOnload for scripts to load when idle.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "beforeInteractive",
+        "isCorrect": true,
+        "explanation": ""
+      },
+      {
+        "id": "o2",
+        "text": "afterInteractive",
+        "isCorrect": true,
+        "explanation": ""
+      },
+      {
+        "id": "o3",
+        "text": "lazyOnload",
+        "isCorrect": true,
+        "explanation": ""
+      },
+      {
+        "id": "o4",
+        "text": "documentWrite",
+        "isCorrect": false,
+        "explanation": ""
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/Performance",
+        "type": "article",
+        "title": "Web Performance - MDN",
+        "author": "Mozilla Developer Network",
+        "description": "Guide to web performance optimization"
+      },
+      {
+        "url": "https://web.dev/performance/",
+        "type": "article",
+        "title": "Web.dev Performance",
+        "author": "Google Developers",
+        "description": "Learn web performance best practices"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-19T22:36:08.810887+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "aa5efa39-66c7-4ea3-95b6-3a325951ffa6",
+    "title": "Not quite. Consider web performance best practices.",
+    "content": "### Lazy Loading\nLazy loading is a strategy where certain resources or components are loaded only when they're actually needed. When used with bundle splitting, lazy loading ensures that non-critical chunks are loaded later.\n\n**Example:** React's lazy() and Suspense help load components on demand.\n\n**Question:**\nDescribe how lazy loading works in combination with bundle splitting to improve user experience.",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "Lazy loading delays loading of non-critical components. Combined with bundle splitting, it ensures smaller initial bundles and faster interactive experiences.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Lazy loading delays loading of non-critical components. Combined with bundle splitting, it ensures smaller initial bundles and faster interactive experiences.",
+        "isCorrect": true,
+        "explanation": "Lazy loading delays loading of non-critical components. Combined with bundle splitting, it ensures smaller initial bundles and faster interactive experiences."
+      },
+      {
+        "id": "o2",
+        "text": "This is not correct. Please refer to the explanation.",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "o3",
+        "text": "Incorrect. Review performance optimization concepts.",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "o4",
+        "text": "This is a common misconception. The correct answer is different.",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "o5",
+        "text": "Not quite. Consider web performance best practices.",
+        "isCorrect": false,
+        "explanation": ""
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/Performance",
+        "type": "article",
+        "title": "Web Performance - MDN",
+        "author": "Mozilla Developer Network",
+        "description": "Guide to web performance optimization"
+      },
+      {
+        "url": "https://web.dev/performance/",
+        "type": "article",
+        "title": "Web.dev Performance",
+        "author": "Google Developers",
+        "description": "Learn web performance best practices"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-19T22:36:08.810887+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "28b6a1d2-10f6-496b-b91b-d761a065c452",
+    "title": "What is the purpose of the \"import on visibility\" pattern?",
+    "content": "\"Import on visibility\" defers loading of components until they are actually visible in the viewport, reducing the initial load time and improving performance.",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "By only importing components when they come into view, the application avoids loading unnecessary code at startup.",
+    "options": null,
+    "resources": [
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/Performance",
+        "type": "article",
+        "title": "Web Performance - MDN",
+        "author": "Mozilla Developer Network",
+        "description": "Guide to web performance optimization"
+      },
+      {
+        "url": "https://web.dev/performance/",
+        "type": "article",
+        "title": "Web.dev Performance",
+        "author": "Google Developers",
+        "description": "Learn web performance best practices"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-19T22:36:08.810887+00:00",
+    "updatedAt": "2025-11-24T22:52:08.102565+00:00"
+  },
+  {
+    "id": "ff488f25-2c04-4743-926f-d4d23f9d402c",
+    "title": "It loads on build time",
+    "content": "The library detects visibility and begins importing the EmojiPicker module, showing a loading indicator until it's ready.",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "The module import only begins when the element is visible.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "It loads immediately",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "o2",
+        "text": "It loads when visible",
+        "isCorrect": true,
+        "explanation": ""
+      },
+      {
+        "id": "o3",
+        "text": "It preloads on hover",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "o4",
+        "text": "It loads on build time",
+        "isCorrect": false,
+        "explanation": ""
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/Performance",
+        "type": "article",
+        "title": "Web Performance - MDN",
+        "author": "Mozilla Developer Network",
+        "description": "Guide to web performance optimization"
+      },
+      {
+        "url": "https://web.dev/performance/",
+        "type": "article",
+        "title": "Web.dev Performance",
+        "author": "Google Developers",
+        "description": "Learn web performance best practices"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-19T22:33:43.550056+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "a23f8625-a2c6-4856-947f-6466275129ec",
+    "title": "Chunk size has no impact on performance",
+    "content": "Smaller chunks improve caching but reduce compression efficiency, while larger chunks compress better but cache less effectively.",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "This is the granularity trade-off: compression efficiency and caching benefits often compete in bundle optimization.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Larger chunks are always better",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "o2",
+        "text": "Smaller chunks are always faster",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "o3",
+        "text": "Smaller chunks cache better, larger compress better",
+        "isCorrect": true,
+        "explanation": ""
+      },
+      {
+        "id": "o4",
+        "text": "Chunk size has no impact on performance",
+        "isCorrect": false,
+        "explanation": ""
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/Performance",
+        "type": "article",
+        "title": "Web Performance - MDN",
+        "author": "Mozilla Developer Network",
+        "description": "Guide to web performance optimization"
+      },
+      {
+        "url": "https://web.dev/performance/",
+        "type": "article",
+        "title": "Web.dev Performance",
+        "author": "Google Developers",
+        "description": "Learn web performance best practices"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-19T22:33:43.550056+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "c0848959-ffc0-41c8-b72d-96c5f23bc855",
+    "title": "Compression used only for media files",
+    "content": "Dynamic compression happens at runtime when the browser requests a resource, compressing it on the fly.",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "Dynamic compression is used for frequently changing content, balancing CPU time with real-time optimization.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Compression done before build",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "o2",
+        "text": "Compression applied during runtime on request",
+        "isCorrect": true,
+        "explanation": ""
+      },
+      {
+        "id": "o3",
+        "text": "Compression handled by the browser only",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "o4",
+        "text": "Compression used only for media files",
+        "isCorrect": false,
+        "explanation": ""
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/Performance",
+        "type": "article",
+        "title": "Web Performance - MDN",
+        "author": "Mozilla Developer Network",
+        "description": "Guide to web performance optimization"
+      },
+      {
+        "url": "https://web.dev/performance/",
+        "type": "article",
+        "title": "Web.dev Performance",
+        "author": "Google Developers",
+        "description": "Learn web performance best practices"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-19T22:33:43.550056+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "992386bf-42e3-4375-a6df-c4e462a6569d",
+    "title": "async await",
+    "content": "The dynamic import() function allows modules to be loaded only when needed.",
+    "type": "code",
+    "difficulty": "intermediate",
+    "explanation": "Dynamic import() returns a promise and can load modules lazily, which is ideal for import-on-interaction use cases.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "require()",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "o2",
+        "text": "import * from 'module'",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "o3",
+        "text": "dynamic import()",
+        "isCorrect": true,
+        "explanation": ""
+      },
+      {
+        "id": "o4",
+        "text": "async await",
+        "isCorrect": false,
+        "explanation": ""
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/Performance",
+        "type": "article",
+        "title": "Web Performance - MDN",
+        "author": "Mozilla Developer Network",
+        "description": "Guide to web performance optimization"
+      },
+      {
+        "url": "https://web.dev/performance/",
+        "type": "article",
+        "title": "Web.dev Performance",
+        "author": "Google Developers",
+        "description": "Learn web performance best practices"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-19T22:33:43.550056+00:00",
+    "updatedAt": "2025-11-24T23:33:46.870735+00:00"
+  },
+  {
+    "id": "63bf30e6-2358-4c19-bbf3-d395c7265675",
+    "title": "How does import-on-visibility differ from basic dynamic import?",
+    "content": "Dynamic import loads modules when triggered by user action, while import-on-visibility loads them automatically when they become visible on screen.",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "Import-on-visibility uses viewport detection rather than explicit user events to trigger the import.",
+    "options": null,
+    "resources": [
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/Performance",
+        "type": "article",
+        "title": "Web Performance - MDN",
+        "author": "Mozilla Developer Network",
+        "description": "Guide to web performance optimization"
+      },
+      {
+        "url": "https://web.dev/performance/",
+        "type": "article",
+        "title": "Web.dev Performance",
+        "author": "Google Developers",
+        "description": "Learn web performance best practices"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-19T22:33:43.550056+00:00",
+    "updatedAt": "2025-11-24T22:52:08.102565+00:00"
+  },
+  {
+    "id": "7e1322fb-30f6-444b-b740-9448cec4a075",
+    "title": "Load CSS after all JavaScript",
+    "content": "What is the best way to handle critical CSS for optimal performance?",
+    "type": "code",
+    "difficulty": "intermediate",
+    "explanation": "Inlining critical CSS ensures faster rendering of above-the-fold content, directly improving FCP and LCP.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Load all CSS files asynchronously",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "o2",
+        "text": "Inline critical CSS and preload if external",
+        "isCorrect": true,
+        "explanation": ""
+      },
+      {
+        "id": "o3",
+        "text": "Serve all CSS from third-party CDNs",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "o4",
+        "text": "Load CSS after all JavaScript",
+        "isCorrect": false,
+        "explanation": ""
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/Performance",
+        "type": "article",
+        "title": "Web Performance - MDN",
+        "author": "Mozilla Developer Network",
+        "description": "Guide to web performance optimization"
+      },
+      {
+        "url": "https://web.dev/performance/",
+        "type": "article",
+        "title": "Web.dev Performance",
+        "author": "Google Developers",
+        "description": "Learn web performance best practices"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-19T22:33:43.550056+00:00",
+    "updatedAt": "2025-11-24T23:33:46.870735+00:00"
+  },
+  {
+    "id": "243fcfc5-997d-4349-ab09-d3a33327fc82",
+    "title": "A performance monitoring technique",
+    "content": "A facade is a lightweight placeholder or preview that mimics a heavy component until the user interacts with it.",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "A facade prevents heavy resources from loading immediately by displaying a placeholder (like a thumbnail or fake button) until the user interacts.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "A placeholder element shown before real content loads",
+        "isCorrect": true,
+        "explanation": ""
+      },
+      {
+        "id": "o2",
+        "text": "A type of React component",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "o3",
+        "text": "A third-party API optimization tool",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "o4",
+        "text": "A performance monitoring technique",
+        "isCorrect": false,
+        "explanation": ""
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/Performance",
+        "type": "article",
+        "title": "Web Performance - MDN",
+        "author": "Mozilla Developer Network",
+        "description": "Guide to web performance optimization"
+      },
+      {
+        "url": "https://web.dev/performance/",
+        "type": "article",
+        "title": "Web.dev Performance",
+        "author": "Google Developers",
+        "description": "Learn web performance best practices"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-19T22:33:43.550056+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "92c87cd3-7fd9-4411-a446-632a3ade3590",
+    "title": "Compressing files multiple times after deployment",
+    "content": "Static compression pre-compresses resources at build time for better download performance of infrequently changing files.",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "Static compression is ideal for files that rarely change, improving transfer speeds without runtime cost.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Compression applied at runtime",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "o2",
+        "text": "Pre-compressing files during build time",
+        "isCorrect": true,
+        "explanation": ""
+      },
+      {
+        "id": "o3",
+        "text": "Client-side compression of resources",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "o4",
+        "text": "Compressing files multiple times after deployment",
+        "isCorrect": false,
+        "explanation": ""
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/Performance",
+        "type": "article",
+        "title": "Web Performance - MDN",
+        "author": "Mozilla Developer Network",
+        "description": "Guide to web performance optimization"
+      },
+      {
+        "url": "https://web.dev/performance/",
+        "type": "article",
+        "title": "Web.dev Performance",
+        "author": "Google Developers",
+        "description": "Learn web performance best practices"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-19T22:33:43.550056+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "584f4252-36fd-4e69-a92c-8d35ee8ec702",
+    "title": "Lazy-load all images",
+    "content": "Which images should be prioritized during the initial page load?",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "Above-the-fold (ATF) and hero images directly affect LCP and should be prioritized during initial loading.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Below the fold images",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "o2",
+        "text": "Above the fold images including the hero image",
+        "isCorrect": true,
+        "explanation": ""
+      },
+      {
+        "id": "o3",
+        "text": "All images equally",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "o4",
+        "text": "Lazy-load all images",
+        "isCorrect": false,
+        "explanation": ""
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/Performance",
+        "type": "article",
+        "title": "Web Performance - MDN",
+        "author": "Mozilla Developer Network",
+        "description": "Guide to web performance optimization"
+      },
+      {
+        "url": "https://web.dev/performance/",
+        "type": "article",
+        "title": "Web.dev Performance",
+        "author": "Google Developers",
+        "description": "Learn web performance best practices"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-19T22:33:43.550056+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "661e7805-d024-4605-92b6-ecb216c979fc",
+    "title": "Avoid using font fallbacks",
+    "content": "How can developers reduce the delay caused by fetching external fonts?",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "Using preconnect allows browsers to establish connections early, reducing delay in fetching critical font resources.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Use font preconnect for external domains",
+        "isCorrect": true,
+        "explanation": ""
+      },
+      {
+        "id": "o2",
+        "text": "Load all fonts after interactivity starts",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "o3",
+        "text": "Inline all font files directly into HTML",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "o4",
+        "text": "Avoid using font fallbacks",
+        "isCorrect": false,
+        "explanation": ""
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/Performance",
+        "type": "article",
+        "title": "Web Performance - MDN",
+        "author": "Mozilla Developer Network",
+        "description": "Guide to web performance optimization"
+      },
+      {
+        "url": "https://web.dev/performance/",
+        "type": "article",
+        "title": "Web.dev Performance",
+        "author": "Google Developers",
+        "description": "Learn web performance best practices"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-19T22:33:43.550056+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "b82703f1-be50-4ddb-8da2-f9ab3e6a3bdf",
+    "title": "Not quite. Consider web performance best practices.",
+    "content": "### Trade-offs\nWhile bundle splitting improves load times, over-splitting can lead to performance issues.\n\n**Possible issues include:**\n- Too many network requests\n- Increased HTTP overhead\n- Caching complexity\n\n**Question:** What are the main drawbacks developers should consider before aggressively splitting bundles?",
+    "type": "multiple-choice",
+    "difficulty": "advanced",
+    "explanation": "Excessive splitting can cause too many small network requests, increase latency, and make caching more complex.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Excessive splitting can cause too many small network requests, increase latency, and make caching more complex.",
+        "isCorrect": true,
+        "explanation": "Excessive splitting can cause too many small network requests, increase latency, and make caching more complex."
+      },
+      {
+        "id": "o2",
+        "text": "This is not correct. Please refer to the explanation.",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "o3",
+        "text": "Incorrect. Review performance optimization concepts.",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "o4",
+        "text": "This is a common misconception. The correct answer is different.",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "o5",
+        "text": "Not quite. Consider web performance best practices.",
+        "isCorrect": false,
+        "explanation": ""
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/Performance",
+        "type": "article",
+        "title": "Web Performance - MDN",
+        "author": "Mozilla Developer Network",
+        "description": "Guide to web performance optimization"
+      },
+      {
+        "url": "https://web.dev/performance/",
+        "type": "article",
+        "title": "Web.dev Performance",
+        "author": "Google Developers",
+        "description": "Learn web performance best practices"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-19T22:20:46.98693+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "22f41e2c-6ddc-43fe-b926-05e500e85c6b",
+    "title": "Lossless only applies to images",
+    "content": "Lossy compression slightly alters files while maintaining usability, while lossless compression preserves data exactly.",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "JavaScript requires lossless compression to preserve code integrity during compression and decompression.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Lossy retains exact data; lossless removes data",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "o2",
+        "text": "Lossy slightly changes files; lossless preserves them exactly",
+        "isCorrect": true,
+        "explanation": ""
+      },
+      {
+        "id": "o3",
+        "text": "Both compress with some data loss",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "o4",
+        "text": "Lossless only applies to images",
+        "isCorrect": false,
+        "explanation": ""
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/Performance",
+        "type": "article",
+        "title": "Web Performance - MDN",
+        "author": "Mozilla Developer Network",
+        "description": "Guide to web performance optimization"
+      },
+      {
+        "url": "https://web.dev/performance/",
+        "type": "article",
+        "title": "Web.dev Performance",
+        "author": "Google Developers",
+        "description": "Learn web performance best practices"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-19T22:20:46.98693+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "ceed0bca-3a0c-4800-adc1-92e8d221aecc",
+    "title": "Time To Interactive (TTI)",
+    "content": "Identify which performance metrics benefit most from applying bundle splitting.",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "FCP, LCP, and TTI improve as less code needs to be parsed and executed before meaningful content appears.",
+    "options": [
+      {
+        "id": "m1",
+        "text": "First Contentful Paint (FCP)",
+        "isCorrect": true,
+        "explanation": ""
+      },
+      {
+        "id": "m2",
+        "text": "Largest Contentful Paint (LCP)",
+        "isCorrect": true,
+        "explanation": ""
+      },
+      {
+        "id": "m3",
+        "text": "Cumulative Layout Shift (CLS)",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "m4",
+        "text": "Time To Interactive (TTI)",
+        "isCorrect": true,
+        "explanation": ""
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/Performance",
+        "type": "article",
+        "title": "Web Performance - MDN",
+        "author": "Mozilla Developer Network",
+        "description": "Guide to web performance optimization"
+      },
+      {
+        "url": "https://web.dev/performance/",
+        "type": "article",
+        "title": "Web.dev Performance",
+        "author": "Google Developers",
+        "description": "Learn web performance best practices"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-19T22:20:46.98693+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "255ec833-c552-4e55-b5e9-4b2dd02ac5a7",
+    "title": "Not quite. Consider web performance best practices.",
+    "content": "### Dynamic Import\nDynamic imports allow us to load JavaScript modules only when needed rather than at initial load. This enables bundle splitting by creating separate chunks for on-demand code.\n\n**Example:**\n<pre><code>import('./EmojiPicker').then(module => {\n  const EmojiPicker = module.default;\n  render(<EmojiPicker />);\n});</code></pre>\n\n**Question:**\nExplain how dynamic import statements contribute to bundle splitting and performance optimization.",
+    "type": "multiple-choice",
+    "difficulty": "advanced",
+    "explanation": "Dynamic imports allow JavaScript modules to be fetched on demand, automatically creating separate bundles for lazy-loaded components and reducing initial load size.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Dynamic imports allow JavaScript modules to be fetched on demand, automatically creating separate bundles for lazy-loaded components and reducing initial load size.",
+        "isCorrect": true,
+        "explanation": "Dynamic imports allow JavaScript modules to be fetched on demand, automatically creating separate bundles for lazy-loaded components and reducing initial load size."
+      },
+      {
+        "id": "o2",
+        "text": "This is not correct. Please refer to the explanation.",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "o3",
+        "text": "Incorrect. Review performance optimization concepts.",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "o4",
+        "text": "This is a common misconception. The correct answer is different.",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "o5",
+        "text": "Not quite. Consider web performance best practices.",
+        "isCorrect": false,
+        "explanation": ""
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/Performance",
+        "type": "article",
+        "title": "Web Performance - MDN",
+        "author": "Mozilla Developer Network",
+        "description": "Guide to web performance optimization"
+      },
+      {
+        "url": "https://web.dev/performance/",
+        "type": "article",
+        "title": "Web.dev Performance",
+        "author": "Google Developers",
+        "description": "Learn web performance best practices"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-19T22:20:46.98693+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "ee0310f1-81b1-4563-acc5-8c2819d6f51e",
+    "title": "Brotli compresses slower with worse ratios",
+    "content": "Brotli typically provides smaller file sizes compared to Gzip at similar compression levels.",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "Brotli achieves denser compression through context modeling and larger dictionary windows, reducing file size effectively.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Gzip has a higher compression ratio than Brotli",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "o2",
+        "text": "Brotli has a better compression ratio at similar levels",
+        "isCorrect": true,
+        "explanation": ""
+      },
+      {
+        "id": "o3",
+        "text": "Both perform the same at all levels",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "o4",
+        "text": "Brotli compresses slower with worse ratios",
+        "isCorrect": false,
+        "explanation": ""
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/Performance",
+        "type": "article",
+        "title": "Web Performance - MDN",
+        "author": "Mozilla Developer Network",
+        "description": "Guide to web performance optimization"
+      },
+      {
+        "url": "https://web.dev/performance/",
+        "type": "article",
+        "title": "Web.dev Performance",
+        "author": "Google Developers",
+        "description": "Learn web performance best practices"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-19T22:20:46.98693+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "fbde85d0-5c22-4913-aafe-dbf32bb58a71",
+    "title": "Not quite. Consider web performance best practices.",
+    "content": "### Problem Description\nLarge bundles can delay the time it takes before the browser paints the first visible content and becomes interactive. Even unused code has to be downloaded and parsed before rendering.\n\n**Question:**\nWhat core issue does bundle splitting address in modern web applications?",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "Bundle splitting addresses slow load times caused by downloading and parsing large monolithic bundles that contain code not needed on initial render.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Bundle splitting addresses slow load times caused by downloading and parsing large monolithic bundles that contain code not needed on initial render.",
+        "isCorrect": true,
+        "explanation": "Bundle splitting addresses slow load times caused by downloading and parsing large monolithic bundles that contain code not needed on initial render."
+      },
+      {
+        "id": "o2",
+        "text": "This is not correct. Please refer to the explanation.",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "o3",
+        "text": "Incorrect. Review performance optimization concepts.",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "o4",
+        "text": "This is a common misconception. The correct answer is different.",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "o5",
+        "text": "Not quite. Consider web performance best practices.",
+        "isCorrect": false,
+        "explanation": ""
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/Performance",
+        "type": "article",
+        "title": "Web Performance - MDN",
+        "author": "Mozilla Developer Network",
+        "description": "Guide to web performance optimization"
+      },
+      {
+        "url": "https://web.dev/performance/",
+        "type": "article",
+        "title": "Web.dev Performance",
+        "author": "Google Developers",
+        "description": "Learn web performance best practices"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-19T22:20:46.98693+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "507958f0-9cb8-4fa7-bd8e-008bbfe646b1",
+    "title": "WebP and AVIF",
+    "content": "The two most common compression algorithms used for HTTP and JavaScript data are Gzip and Brotli.",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "Modern browsers widely support Gzip and Brotli for compressing text-based assets like JavaScript, HTML, and CSS.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "JPEG and PNG",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "o2",
+        "text": "Gzip and Brotli",
+        "isCorrect": true,
+        "explanation": ""
+      },
+      {
+        "id": "o3",
+        "text": "Zlib and Snappy",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "o4",
+        "text": "WebP and AVIF",
+        "isCorrect": false,
+        "explanation": ""
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/Performance",
+        "type": "article",
+        "title": "Web Performance - MDN",
+        "author": "Mozilla Developer Network",
+        "description": "Guide to web performance optimization"
+      },
+      {
+        "url": "https://web.dev/performance/",
+        "type": "article",
+        "title": "Web.dev Performance",
+        "author": "Google Developers",
+        "description": "Learn web performance best practices"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-19T22:20:46.98693+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "fba8ffc8-a8fe-4f5e-acf8-43ef354ebf94",
+    "title": "Not applicable",
+    "content": "Evaluate this statement based on the performance pattern.",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "The correct answer is: False",
+    "options": [
+      {
+        "id": "o1",
+        "text": "True",
+        "isCorrect": false,
+        "explanation": "The total code size remains the same; bundle splitting optimizes loading sequence, not total size."
+      },
+      {
+        "id": "o2",
+        "text": "False",
+        "isCorrect": true,
+        "explanation": "The total code size remains the same; bundle splitting optimizes loading sequence, not total size."
+      },
+      {
+        "id": "o3",
+        "text": "Partially true - depends on the context",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "o4",
+        "text": "Not applicable",
+        "isCorrect": false,
+        "explanation": ""
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/Performance",
+        "type": "article",
+        "title": "Web Performance - MDN",
+        "author": "Mozilla Developer Network",
+        "description": "Guide to web performance optimization"
+      },
+      {
+        "url": "https://web.dev/performance/",
+        "type": "article",
+        "title": "Web.dev Performance",
+        "author": "Google Developers",
+        "description": "Learn web performance best practices"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-19T22:20:46.98693+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "c51d02e6-88f0-407d-9802-fc1310a09b33",
+    "title": "No compression",
+    "content": "JavaScript should always use lossless compression to ensure code runs correctly after decompression.",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "Since JavaScript must remain valid after compression, only lossless algorithms like Brotli or Gzip should be used.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Lossy compression",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "o2",
+        "text": "Lossless compression",
+        "isCorrect": true,
+        "explanation": ""
+      },
+      {
+        "id": "o3",
+        "text": "Dynamic compression only",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "o4",
+        "text": "No compression",
+        "isCorrect": false,
+        "explanation": ""
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/Performance",
+        "type": "article",
+        "title": "Web Performance - MDN",
+        "author": "Mozilla Developer Network",
+        "description": "Guide to web performance optimization"
+      },
+      {
+        "url": "https://web.dev/performance/",
+        "type": "article",
+        "title": "Web.dev Performance",
+        "author": "Google Developers",
+        "description": "Learn web performance best practices"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-19T22:20:46.98693+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "fe175f55-19f7-47b8-a027-20632dc454af",
+    "title": "Dynamic imports are part of the ES2020 specification.",
+    "content": "Select all correct statements related to dynamic imports and bundle splitting.",
+    "type": "code",
+    "difficulty": "intermediate",
+    "explanation": "Dynamic imports are asynchronous and allow bundlers like Webpack to split code into separate chunks that load only when needed, improving perceived performance.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Dynamic imports return a Promise that resolves to the requested module.",
+        "isCorrect": true,
+        "explanation": ""
+      },
+      {
+        "id": "o2",
+        "text": "Dynamic imports always block the initial page render.",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "o3",
+        "text": "Webpack automatically creates separate chunks for dynamically imported modules.",
+        "isCorrect": true,
+        "explanation": ""
+      },
+      {
+        "id": "o4",
+        "text": "Dynamic imports are part of the ES2020 specification.",
+        "isCorrect": true,
+        "explanation": ""
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/Performance",
+        "type": "article",
+        "title": "Web Performance - MDN",
+        "author": "Mozilla Developer Network",
+        "description": "Guide to web performance optimization"
+      },
+      {
+        "url": "https://web.dev/performance/",
+        "type": "article",
+        "title": "Web.dev Performance",
+        "author": "Google Developers",
+        "description": "Learn web performance best practices"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-19T22:20:46.98693+00:00",
+    "updatedAt": "2025-11-24T23:33:46.870735+00:00"
+  }
+]

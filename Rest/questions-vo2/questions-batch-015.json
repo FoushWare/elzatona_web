@@ -1,0 +1,2514 @@
+[
+  {
+    "id": "31abf8a3-e580-4134-9d33-e183bc27e4fa",
+    "title": "Not quite. Consider security best practices.",
+    "content": "Explain how clickjacking attacks work and why they are dangerous.",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "Clickjacking tricks a user into clicking on invisible or disguised elements on a page, performing actions without their knowledge, such as changing settings or authorizing payments.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Clickjacking tricks a user into clicking on invisible or disguised elements on a page, performing actions without their knowledge, such as changing settings or authorizing payments.",
+        "isCorrect": true,
+        "explanation": "Clickjacking tricks a user into clicking on invisible or disguised elements on a page, performing actions without their knowledge, such as changing settings or authorizing payments."
+      },
+      {
+        "id": "o2",
+        "text": "This is not correct. Please refer to the explanation.",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o3",
+        "text": "Incorrect. Review web security concepts.",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o4",
+        "text": "This is a common misconception. The correct answer is different.",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o5",
+        "text": "Not quite. Consider security best practices.",
+        "isCorrect": false,
+        "explanation": null
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/Security",
+        "type": "article",
+        "title": "Web Security - MDN",
+        "author": "Mozilla Developer Network",
+        "description": "Web security best practices"
+      },
+      {
+        "url": "https://owasp.org/www-project-top-ten/",
+        "type": "article",
+        "title": "OWASP Top 10",
+        "author": "OWASP",
+        "description": "Top 10 web application security risks"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-20T23:34:07.946886+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "6fc1ae1f-bf2c-4307-950a-de5fd600b3ea",
+    "title": "Not quite. Consider security best practices.",
+    "content": "Explain how CSP protects web applications and what types of attacks it mitigates.",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "CSP restricts which sources are allowed for scripts, styles, and media. It reduces XSS, clickjacking, and data injection risks.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "CSP restricts which sources are allowed for scripts, styles, and media. It reduces XSS, clickjacking, and data injection risks.",
+        "isCorrect": true,
+        "explanation": "CSP restricts which sources are allowed for scripts, styles, and media. It reduces XSS, clickjacking, and data injection risks."
+      },
+      {
+        "id": "o2",
+        "text": "This is not correct. Please refer to the explanation.",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o3",
+        "text": "Incorrect. Review web security concepts.",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o4",
+        "text": "This is a common misconception. The correct answer is different.",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o5",
+        "text": "Not quite. Consider security best practices.",
+        "isCorrect": false,
+        "explanation": null
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/Security",
+        "type": "article",
+        "title": "Web Security - MDN",
+        "author": "Mozilla Developer Network",
+        "description": "Web security best practices"
+      },
+      {
+        "url": "https://owasp.org/www-project-top-ten/",
+        "type": "article",
+        "title": "OWASP Top 10",
+        "author": "OWASP",
+        "description": "Top 10 web application security risks"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-20T23:34:07.946886+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "748e314e-c0d5-4a46-9743-7ac38c9bd9f1",
+    "title": "Not quite. Consider security best practices.",
+    "content": "Explain how CSP helps protect frontend applications.",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "CSP defines allowed sources for scripts, styles, images, and other resources, mitigating XSS, clickjacking, and data injection by restricting what can be loaded or executed.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "CSP defines allowed sources for scripts, styles, images, and other resources, mitigating XSS, clickjacking, and data injection by restricting what can be loaded or executed.",
+        "isCorrect": true,
+        "explanation": "CSP defines allowed sources for scripts, styles, images, and other resources, mitigating XSS, clickjacking, and data injection by restricting what can be loaded or executed."
+      },
+      {
+        "id": "o2",
+        "text": "This is not correct. Please refer to the explanation.",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o3",
+        "text": "Incorrect. Review web security concepts.",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o4",
+        "text": "This is a common misconception. The correct answer is different.",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o5",
+        "text": "Not quite. Consider security best practices.",
+        "isCorrect": false,
+        "explanation": null
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/Security",
+        "type": "article",
+        "title": "Web Security - MDN",
+        "author": "Mozilla Developer Network",
+        "description": "Web security best practices"
+      },
+      {
+        "url": "https://owasp.org/www-project-top-ten/",
+        "type": "article",
+        "title": "OWASP Top 10",
+        "author": "OWASP",
+        "description": "Top 10 web application security risks"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-20T23:34:07.946886+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "7ef833df-6ea7-4907-bb12-45f2bd99fb62",
+    "title": "Require user confirmation for critical actions",
+    "content": "Select all correct mitigation strategies.",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "X-Frame-Options and CSP frame-ancestors prevent your site from being framed; additional user confirmation mitigates risk. CSS obfuscation is not a reliable defense.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Use X-Frame-Options header",
+        "isCorrect": true,
+        "explanation": null
+      },
+      {
+        "id": "o2",
+        "text": "Use Content Security Policy frame-ancestors directive",
+        "isCorrect": true,
+        "explanation": null
+      },
+      {
+        "id": "o3",
+        "text": "Obfuscate your buttons with CSS",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o4",
+        "text": "Require user confirmation for critical actions",
+        "isCorrect": true,
+        "explanation": null
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/Security",
+        "type": "article",
+        "title": "Web Security - MDN",
+        "author": "Mozilla Developer Network",
+        "description": "Web security best practices"
+      },
+      {
+        "url": "https://owasp.org/www-project-top-ten/",
+        "type": "article",
+        "title": "OWASP Top 10",
+        "author": "OWASP",
+        "description": "Top 10 web application security risks"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-20T23:34:07.946886+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "49f285ae-4a3e-46db-ae93-9e081c160334",
+    "title": "X-Content-Type-Options",
+    "content": "Select the correct answer.",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "The X-Frame-Options header prevents your site from being embedded in iframes, mitigating clickjacking.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "X-Frame-Options",
+        "isCorrect": true,
+        "explanation": null
+      },
+      {
+        "id": "o2",
+        "text": "Content-Security-Policy",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o3",
+        "text": "Strict-Transport-Security",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o4",
+        "text": "X-Content-Type-Options",
+        "isCorrect": false,
+        "explanation": null
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/Security",
+        "type": "article",
+        "title": "Web Security - MDN",
+        "author": "Mozilla Developer Network",
+        "description": "Web security best practices"
+      },
+      {
+        "url": "https://owasp.org/www-project-top-ten/",
+        "type": "article",
+        "title": "OWASP Top 10",
+        "author": "OWASP",
+        "description": "Top 10 web application security risks"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-20T23:34:07.946886+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "9a0bd5ce-1ed6-48da-9442-72332458f54b",
+    "title": "Not quite. Consider security best practices.",
+    "content": "Explain how clickjacking attacks manipulate user interface elements.",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "Clickjacking occurs when attackers overlay a transparent or disguised element over a legitimate UI element, tricking users into clicking it and performing unintended actions like submitting forms or changing settings.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Clickjacking occurs when attackers overlay a transparent or disguised element over a legitimate UI element, tricking users into clicking it and performing unintended actions like submitting forms or changing settings.",
+        "isCorrect": true,
+        "explanation": "Clickjacking occurs when attackers overlay a transparent or disguised element over a legitimate UI element, tricking users into clicking it and performing unintended actions like submitting forms or changing settings."
+      },
+      {
+        "id": "o2",
+        "text": "This is not correct. Please refer to the explanation.",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o3",
+        "text": "Incorrect. Review web security concepts.",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o4",
+        "text": "This is a common misconception. The correct answer is different.",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o5",
+        "text": "Not quite. Consider security best practices.",
+        "isCorrect": false,
+        "explanation": null
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/Security",
+        "type": "article",
+        "title": "Web Security - MDN",
+        "author": "Mozilla Developer Network",
+        "description": "Web security best practices"
+      },
+      {
+        "url": "https://owasp.org/www-project-top-ten/",
+        "type": "article",
+        "title": "OWASP Top 10",
+        "author": "OWASP",
+        "description": "Top 10 web application security risks"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-20T23:34:07.946886+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "da40e12b-93b5-4bb4-9d2f-b8aba6ce1992",
+    "title": "Not quite. Consider security best practices.",
+    "content": "Explain OAuth 2.0 and its use in web applications.",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "OAuth 2.0 is an authorization framework that allows third-party applications to access user resources without exposing credentials. It issues tokens with limited scope and duration.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "OAuth 2.0 is an authorization framework that allows third-party applications to access user resources without exposing credentials. It issues tokens with limited scope and duration.",
+        "isCorrect": true,
+        "explanation": "OAuth 2.0 is an authorization framework that allows third-party applications to access user resources without exposing credentials. It issues tokens with limited scope and duration."
+      },
+      {
+        "id": "o2",
+        "text": "This is not correct. Please refer to the explanation.",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o3",
+        "text": "Incorrect. Review web security concepts.",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o4",
+        "text": "This is a common misconception. The correct answer is different.",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o5",
+        "text": "Not quite. Consider security best practices.",
+        "isCorrect": false,
+        "explanation": null
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/Security",
+        "type": "article",
+        "title": "Web Security - MDN",
+        "author": "Mozilla Developer Network",
+        "description": "Web security best practices"
+      },
+      {
+        "url": "https://owasp.org/www-project-top-ten/",
+        "type": "article",
+        "title": "OWASP Top 10",
+        "author": "OWASP",
+        "description": "Top 10 web application security risks"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-20T23:32:46.921072+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "d1e57a79-d8de-443d-ba43-7109cc73a961",
+    "title": "Not quite. Consider security best practices.",
+    "content": "Explain token expiration in authentication and session management.",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "Token expiration limits how long an authentication token is valid. This reduces risk if a token is leaked or stolen and forces users to re-authenticate after a set period.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Token expiration limits how long an authentication token is valid. This reduces risk if a token is leaked or stolen and forces users to re-authenticate after a set period.",
+        "isCorrect": true,
+        "explanation": "Token expiration limits how long an authentication token is valid. This reduces risk if a token is leaked or stolen and forces users to re-authenticate after a set period."
+      },
+      {
+        "id": "o2",
+        "text": "This is not correct. Please refer to the explanation.",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o3",
+        "text": "Incorrect. Review web security concepts.",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o4",
+        "text": "This is a common misconception. The correct answer is different.",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o5",
+        "text": "Not quite. Consider security best practices.",
+        "isCorrect": false,
+        "explanation": null
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/Security",
+        "type": "article",
+        "title": "Web Security - MDN",
+        "author": "Mozilla Developer Network",
+        "description": "Web security best practices"
+      },
+      {
+        "url": "https://owasp.org/www-project-top-ten/",
+        "type": "article",
+        "title": "OWASP Top 10",
+        "author": "OWASP",
+        "description": "Top 10 web application security risks"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-20T23:32:46.921072+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "9d3f6046-cc97-4e2f-9a9b-791fef75ea1b",
+    "title": "Not quite. Consider security best practices.",
+    "content": "Clickjacking is a type of attack where a user is tricked into clicking elements hidden under legitimate UI elements. Explain how it works and prevention strategies.",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "Clickjacking tricks users into clicking hidden elements using overlays or iframes. Prevention: X-Frame-Options header, CSP frame-ancestors, avoid transparent overlays.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Clickjacking tricks users into clicking hidden elements using overlays or iframes. Prevention: X-Frame-Options header, CSP frame-ancestors, avoid transparent overlays.",
+        "isCorrect": true,
+        "explanation": "Clickjacking tricks users into clicking hidden elements using overlays or iframes. Prevention: X-Frame-Options header, CSP frame-ancestors, avoid transparent overlays."
+      },
+      {
+        "id": "o2",
+        "text": "This is not correct. Please refer to the explanation.",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o3",
+        "text": "Incorrect. Review web security concepts.",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o4",
+        "text": "This is a common misconception. The correct answer is different.",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o5",
+        "text": "Not quite. Consider security best practices.",
+        "isCorrect": false,
+        "explanation": null
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/Security",
+        "type": "article",
+        "title": "Web Security - MDN",
+        "author": "Mozilla Developer Network",
+        "description": "Web security best practices"
+      },
+      {
+        "url": "https://owasp.org/www-project-top-ten/",
+        "type": "article",
+        "title": "OWASP Top 10",
+        "author": "OWASP",
+        "description": "Top 10 web application security risks"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-20T23:32:46.921072+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "0cc37c8b-9883-4fc0-b766-7d8d5ebb39ba",
+    "title": "Strict-Transport-Security",
+    "content": "Select the correct header used to prevent clickjacking attacks.",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "X-Frame-Options and CSP frame-ancestors prevent malicious iframe embedding.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "X-Frame-Options",
+        "isCorrect": true,
+        "explanation": null
+      },
+      {
+        "id": "o2",
+        "text": "Content-Security-Policy (frame-ancestors)",
+        "isCorrect": true,
+        "explanation": null
+      },
+      {
+        "id": "o3",
+        "text": "X-Content-Type-Options",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o4",
+        "text": "Strict-Transport-Security",
+        "isCorrect": false,
+        "explanation": null
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/Security",
+        "type": "article",
+        "title": "Web Security - MDN",
+        "author": "Mozilla Developer Network",
+        "description": "Web security best practices"
+      },
+      {
+        "url": "https://owasp.org/www-project-top-ten/",
+        "type": "article",
+        "title": "OWASP Top 10",
+        "author": "OWASP",
+        "description": "Top 10 web application security risks"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-20T23:32:46.921072+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "75a418d2-a842-45c3-b8fd-a98b3204fc30",
+    "title": "Rely only on client-side checks",
+    "content": "Select all correct options.",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "Server-side validation, HTTPS, and token-based authentication are essential. Client-side checks alone cannot ensure security.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Use authentication tokens like JWT",
+        "isCorrect": true,
+        "explanation": null
+      },
+      {
+        "id": "o2",
+        "text": "Enforce HTTPS for all API requests",
+        "isCorrect": true,
+        "explanation": null
+      },
+      {
+        "id": "o3",
+        "text": "Validate all user inputs on the server",
+        "isCorrect": true,
+        "explanation": null
+      },
+      {
+        "id": "o4",
+        "text": "Rely only on client-side checks",
+        "isCorrect": false,
+        "explanation": null
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/Security",
+        "type": "article",
+        "title": "Web Security - MDN",
+        "author": "Mozilla Developer Network",
+        "description": "Web security best practices"
+      },
+      {
+        "url": "https://owasp.org/www-project-top-ten/",
+        "type": "article",
+        "title": "OWASP Top 10",
+        "author": "OWASP",
+        "description": "Top 10 web application security risks"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-20T23:32:46.921072+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "094ac557-583a-430f-831a-32be5dbdeb8e",
+    "title": "Not quite. Consider security best practices.",
+    "content": "Explain how rate limiting protects web applications.",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "Rate limiting restricts the number of requests a client can make in a given time period, protecting the server from abuse, brute-force attacks, and denial-of-service attacks.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Rate limiting restricts the number of requests a client can make in a given time period, protecting the server from abuse, brute-force attacks, and denial-of-service attacks.",
+        "isCorrect": true,
+        "explanation": "Rate limiting restricts the number of requests a client can make in a given time period, protecting the server from abuse, brute-force attacks, and denial-of-service attacks."
+      },
+      {
+        "id": "o2",
+        "text": "This is not correct. Please refer to the explanation.",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o3",
+        "text": "Incorrect. Review web security concepts.",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o4",
+        "text": "This is a common misconception. The correct answer is different.",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o5",
+        "text": "Not quite. Consider security best practices.",
+        "isCorrect": false,
+        "explanation": null
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/Security",
+        "type": "article",
+        "title": "Web Security - MDN",
+        "author": "Mozilla Developer Network",
+        "description": "Web security best practices"
+      },
+      {
+        "url": "https://owasp.org/www-project-top-ten/",
+        "type": "article",
+        "title": "OWASP Top 10",
+        "author": "OWASP",
+        "description": "Top 10 web application security risks"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-20T23:32:46.921072+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "6b54c061-f114-41c7-ac85-7c5bc459f70c",
+    "title": "Detect and prevent iframes using JS",
+    "content": "Select all correct methods to prevent clickjacking attacks.",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "X-Frame-Options and frame-ancestors protect against embedding. JS detection can add extra protection; disabling JS is impractical.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Use X-Frame-Options: DENY or SAMEORIGIN",
+        "isCorrect": true,
+        "explanation": null
+      },
+      {
+        "id": "o2",
+        "text": "Use Content Security Policy frame-ancestors",
+        "isCorrect": true,
+        "explanation": null
+      },
+      {
+        "id": "o3",
+        "text": "Disable JavaScript entirely",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o4",
+        "text": "Detect and prevent iframes using JS",
+        "isCorrect": true,
+        "explanation": null
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/Security",
+        "type": "article",
+        "title": "Web Security - MDN",
+        "author": "Mozilla Developer Network",
+        "description": "Web security best practices"
+      },
+      {
+        "url": "https://owasp.org/www-project-top-ten/",
+        "type": "article",
+        "title": "OWASP Top 10",
+        "author": "OWASP",
+        "description": "Top 10 web application security risks"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-20T23:32:46.921072+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "5a4c960e-c65e-4ae5-90db-06aff25c909c",
+    "title": "Not quite. Consider security best practices.",
+    "content": "Explain what clickjacking is and how attackers can exploit it to trick users.",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "Clickjacking tricks a user into clicking on a hidden element or iframe, causing them to perform actions they didn't intend, such as changing settings, liking a page, or submitting forms.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Clickjacking tricks a user into clicking on a hidden element or iframe, causing them to perform actions they didn't intend, such as changing settings, liking a page, or submitting forms.",
+        "isCorrect": true,
+        "explanation": "Clickjacking tricks a user into clicking on a hidden element or iframe, causing them to perform actions they didn't intend, such as changing settings, liking a page, or submitting forms."
+      },
+      {
+        "id": "o2",
+        "text": "This is not correct. Please refer to the explanation.",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o3",
+        "text": "Incorrect. Review web security concepts.",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o4",
+        "text": "This is a common misconception. The correct answer is different.",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o5",
+        "text": "Not quite. Consider security best practices.",
+        "isCorrect": false,
+        "explanation": null
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/Security",
+        "type": "article",
+        "title": "Web Security - MDN",
+        "author": "Mozilla Developer Network",
+        "description": "Web security best practices"
+      },
+      {
+        "url": "https://owasp.org/www-project-top-ten/",
+        "type": "article",
+        "title": "OWASP Top 10",
+        "author": "OWASP",
+        "description": "Top 10 web application security risks"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-20T23:32:46.921072+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "08f905e2-988b-41ba-8868-aa64cd6bea75",
+    "title": "Not quite. Consider security best practices.",
+    "content": "Explain how clickjacking works and its impact on users.",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "Clickjacking tricks users into clicking hidden or disguised UI elements, performing unintended actions such as changing settings, submitting forms, or executing transactions.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Clickjacking tricks users into clicking hidden or disguised UI elements, performing unintended actions such as changing settings, submitting forms, or executing transactions.",
+        "isCorrect": true,
+        "explanation": "Clickjacking tricks users into clicking hidden or disguised UI elements, performing unintended actions such as changing settings, submitting forms, or executing transactions."
+      },
+      {
+        "id": "o2",
+        "text": "This is not correct. Please refer to the explanation.",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o3",
+        "text": "Incorrect. Review web security concepts.",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o4",
+        "text": "This is a common misconception. The correct answer is different.",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o5",
+        "text": "Not quite. Consider security best practices.",
+        "isCorrect": false,
+        "explanation": null
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/Security",
+        "type": "article",
+        "title": "Web Security - MDN",
+        "author": "Mozilla Developer Network",
+        "description": "Web security best practices"
+      },
+      {
+        "url": "https://owasp.org/www-project-top-ten/",
+        "type": "article",
+        "title": "OWASP Top 10",
+        "author": "OWASP",
+        "description": "Top 10 web application security risks"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-20T23:32:46.921072+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "e8de74d5-51ca-41f1-ad2b-4ac98435de6f",
+    "title": "Not quite. Consider security best practices.",
+    "content": "Explain JWT (JSON Web Token) and its use in authentication.",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "JWT is a compact token used to securely transmit information between client and server. It ensures authenticity and integrity of the payload, commonly used for stateless authentication.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "JWT is a compact token used to securely transmit information between client and server. It ensures authenticity and integrity of the payload, commonly used for stateless authentication.",
+        "isCorrect": true,
+        "explanation": "JWT is a compact token used to securely transmit information between client and server. It ensures authenticity and integrity of the payload, commonly used for stateless authentication."
+      },
+      {
+        "id": "o2",
+        "text": "This is not correct. Please refer to the explanation.",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o3",
+        "text": "Incorrect. Review web security concepts.",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o4",
+        "text": "This is a common misconception. The correct answer is different.",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o5",
+        "text": "Not quite. Consider security best practices.",
+        "isCorrect": false,
+        "explanation": null
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/Security",
+        "type": "article",
+        "title": "Web Security - MDN",
+        "author": "Mozilla Developer Network",
+        "description": "Web security best practices"
+      },
+      {
+        "url": "https://owasp.org/www-project-top-ten/",
+        "type": "article",
+        "title": "OWASP Top 10",
+        "author": "OWASP",
+        "description": "Top 10 web application security risks"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-20T23:32:46.921072+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "f204a7b1-03a9-4ebe-ae8f-3a16a757f574",
+    "title": "Validate Sudoku Board",
+    "content": "Determine if a 9x9 Sudoku board is valid (no duplicates in rows, columns, or 3x3 boxes).\n\nExample: Valid board returns true",
+    "type": "code",
+    "difficulty": "intermediate",
+    "explanation": "Use hash sets to track seen numbers in each row, column, and 3x3 box. For each cell, check if the number exists in the corresponding row, column, and box sets. Since board is fixed 9x9, complexity is O(1).",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Use three sets of hash maps: one for rows, one for columns, one for boxes. Check each cell against all three. Time: O(1) - fixed 81 cells, Space: O(1)",
+        "isCorrect": true,
+        "explanation": null
+      },
+      {
+        "id": "o2",
+        "text": "Check each row, column, and box separately. Time: O(1), Space: O(1)",
+        "isCorrect": true,
+        "explanation": null
+      },
+      {
+        "id": "o3",
+        "text": "Use nested loops to check all combinations. Time: O(n⁴), Space: O(1)",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o4",
+        "text": "Sort each row, column, and box. Time: O(1), Space: O(1)",
+        "isCorrect": false,
+        "explanation": null
+      }
+    ],
+    "resources": null,
+    "points": 15,
+    "isActive": true,
+    "createdAt": "2025-11-20T23:31:20.409429+00:00",
+    "updatedAt": "2025-11-21T23:53:07.826604+00:00"
+  },
+  {
+    "id": "00e4975d-8e01-4b31-847a-a5b6bc5907ed",
+    "title": "Find Longest Palindromic Substring",
+    "content": "Given a string, find the longest palindromic substring.\n\nExample: \"babad\" → \"bab\" or \"aba\"",
+    "type": "code",
+    "difficulty": "intermediate",
+    "explanation": "Expand around center: for each possible center (considering both odd and even length palindromes), expand outward while characters match. Track the longest palindrome found. More space-efficient than DP.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Expand around center for each possible center (odd and even length). Track longest. Time: O(n²), Space: O(1)",
+        "isCorrect": true,
+        "explanation": null
+      },
+      {
+        "id": "o2",
+        "text": "Check all possible substrings. Time: O(n³), Space: O(1)",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o3",
+        "text": "Use dynamic programming. Time: O(n²), Space: O(n²)",
+        "isCorrect": true,
+        "explanation": null
+      },
+      {
+        "id": "o4",
+        "text": "Reverse string and find longest common substring. Time: O(n²), Space: O(n²)",
+        "isCorrect": false,
+        "explanation": null
+      }
+    ],
+    "resources": null,
+    "points": 15,
+    "isActive": true,
+    "createdAt": "2025-11-20T23:31:20.409429+00:00",
+    "updatedAt": "2025-11-21T23:53:07.826604+00:00"
+  },
+  {
+    "id": "bd60abd4-81bc-4134-91af-21b4769bf05a",
+    "title": "Find Container With Most Water",
+    "content": "Given an array of heights, find two lines that together with x-axis form a container that holds the most water.\n\nExample: [1, 8, 6, 2, 5, 4, 8, 3, 7] → 49",
+    "type": "code",
+    "difficulty": "intermediate",
+    "explanation": "Use two pointers technique: start with pointers at both ends. Calculate area (min(height[left], height[right]) * (right - left)). Move the pointer with smaller height inward, as moving the larger one cannot increase area.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Use two pointers at start and end. Move pointer with smaller height. Calculate area and track max. Time: O(n), Space: O(1)",
+        "isCorrect": true,
+        "explanation": null
+      },
+      {
+        "id": "o2",
+        "text": "Try all pairs of lines. Time: O(n²), Space: O(1)",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o3",
+        "text": "Find two tallest lines. Time: O(n), Space: O(1)",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o4",
+        "text": "Sort heights and use top two. Time: O(n log n), Space: O(n)",
+        "isCorrect": false,
+        "explanation": null
+      }
+    ],
+    "resources": null,
+    "points": 15,
+    "isActive": true,
+    "createdAt": "2025-11-20T23:31:20.409429+00:00",
+    "updatedAt": "2025-11-21T23:53:07.826604+00:00"
+  },
+  {
+    "id": "c6cd1126-c68f-4ed9-9448-bed28f1d118e",
+    "title": "Find Word in 2D Grid",
+    "content": "Given a 2D board and a word, determine if the word exists in the board (can move horizontally or vertically).\n\nExample: board with \"ABCE\", \"SFCS\", \"ADEE\" and word \"ABCCED\" → true",
+    "type": "code",
+    "difficulty": "intermediate",
+    "explanation": "Use backtracking with DFS: for each cell matching first character, recursively search in all 4 directions. Mark cells as visited during recursion, unmark during backtracking. Return true if word found.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Use backtracking with DFS. For each cell, explore all directions, mark visited, backtrack. Time: O(m*n*4^L) where L is word length, Space: O(L)",
+        "isCorrect": true,
+        "explanation": null
+      },
+      {
+        "id": "o2",
+        "text": "Try all possible paths using BFS. Time: O(m*n*4^L), Space: O(m*n)",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o3",
+        "text": "Check each cell independently. Time: O(m*n*L), Space: O(1)",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o4",
+        "text": "Convert board to string and search. Time: O(m*n), Space: O(m*n)",
+        "isCorrect": false,
+        "explanation": null
+      }
+    ],
+    "resources": null,
+    "points": 15,
+    "isActive": true,
+    "createdAt": "2025-11-20T23:31:20.409429+00:00",
+    "updatedAt": "2025-11-21T23:53:07.826604+00:00"
+  },
+  {
+    "id": "0f031582-90f6-49d0-b605-57742dacd7d2",
+    "title": "Find Longest Increasing Subsequence",
+    "content": "Given an array, find the length of the longest strictly increasing subsequence.\n\nExample: [10, 9, 2, 5, 3, 7, 101, 18] → 4 ([2, 3, 7, 101])",
+    "type": "code",
+    "difficulty": "intermediate",
+    "explanation": "Two approaches: 1) DP: for each element, check all previous elements and update LIS length. 2) Binary search: maintain array of smallest tail values, use binary search to find insertion point (more efficient O(n log n)).",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Use dynamic programming: dp[i] = length of LIS ending at i. Time: O(n²), Space: O(n)",
+        "isCorrect": true,
+        "explanation": null
+      },
+      {
+        "id": "o2",
+        "text": "Use binary search with patience sorting. Maintain array of smallest tail of increasing subsequences. Time: O(n log n), Space: O(n)",
+        "isCorrect": true,
+        "explanation": null
+      },
+      {
+        "id": "o3",
+        "text": "Try all possible subsequences. Time: O(2ⁿ), Space: O(n)",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o4",
+        "text": "Sort array and find longest consecutive sequence. Time: O(n log n), Space: O(1)",
+        "isCorrect": false,
+        "explanation": null
+      }
+    ],
+    "resources": null,
+    "points": 15,
+    "isActive": true,
+    "createdAt": "2025-11-20T23:31:20.409429+00:00",
+    "updatedAt": "2025-11-21T23:53:07.826604+00:00"
+  },
+  {
+    "id": "043f7f1d-3701-488e-beb5-a37d73887e7c",
+    "title": "Product of Array Except Self",
+    "content": "Given an array, return an array where each element is the product of all other elements (without using division).\n\nExample: [1, 2, 3, 4] → [24, 12, 8, 6]",
+    "type": "code",
+    "difficulty": "intermediate",
+    "explanation": "Use two passes: first pass calculates left products (product of all elements to the left), second pass multiplies by right products (product of all elements to the right). This avoids division and handles zeros.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Two passes: left products, then right products. Multiply corresponding elements. Time: O(n), Space: O(1) excluding output",
+        "isCorrect": true,
+        "explanation": null
+      },
+      {
+        "id": "o2",
+        "text": "Calculate product of all elements, divide by each element. Time: O(n), Space: O(1)",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o3",
+        "text": "For each element, calculate product of all others. Time: O(n²), Space: O(1)",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o4",
+        "text": "Use nested loops to calculate products. Time: O(n²), Space: O(n)",
+        "isCorrect": false,
+        "explanation": null
+      }
+    ],
+    "resources": null,
+    "points": 15,
+    "isActive": true,
+    "createdAt": "2025-11-20T23:31:20.409429+00:00",
+    "updatedAt": "2025-11-21T23:53:07.826604+00:00"
+  },
+  {
+    "id": "e0433732-3ef5-41b3-855b-e3d9306e51da",
+    "title": "Minimum Coins to Make Amount",
+    "content": "Given coins of different denominations and a total amount, find the minimum number of coins needed.\n\nExample: coins = [1, 2, 5], amount = 11 → 3 (5 + 5 + 1)",
+    "type": "code",
+    "difficulty": "intermediate",
+    "explanation": "Use dynamic programming: create array dp where dp[i] represents minimum coins for amount i. Initialize dp[0] = 0. For each coin, update dp[i + coin] = min(dp[i + coin], dp[i] + 1).",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Use dynamic programming: dp[i] = min coins for amount i. For each coin, update dp[i + coin]. Time: O(amount * coins.length), Space: O(amount)",
+        "isCorrect": true,
+        "explanation": null
+      },
+      {
+        "id": "o2",
+        "text": "Use greedy: always pick largest coin. Time: O(amount), Space: O(1)",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o3",
+        "text": "Try all combinations using recursion. Time: O(2ⁿ), Space: O(n)",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o4",
+        "text": "Sort coins and use largest first. Time: O(n log n), Space: O(1)",
+        "isCorrect": false,
+        "explanation": null
+      }
+    ],
+    "resources": null,
+    "points": 15,
+    "isActive": true,
+    "createdAt": "2025-11-20T23:31:20.409429+00:00",
+    "updatedAt": "2025-11-21T23:53:07.826604+00:00"
+  },
+  {
+    "id": "3378cea2-753b-411a-a9c9-566622114ef0",
+    "title": "Find All Unique Triplets That Sum to Zero",
+    "content": "Given an array, find all unique triplets that sum to zero.\n\nExample: [-1, 0, 1, 2, -1, -4] → [[-1, -1, 2], [-1, 0, 1]]",
+    "type": "code",
+    "difficulty": "intermediate",
+    "explanation": "Sort the array first. For each element, use two pointers (left and right) to find pairs that sum to the negative of the current element. Skip duplicate values to avoid duplicate triplets.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Sort array. For each element, use two pointers to find pairs that sum to negative of current element. Skip duplicates. Time: O(n²), Space: O(1) excluding output",
+        "isCorrect": true,
+        "explanation": null
+      },
+      {
+        "id": "o2",
+        "text": "Use three nested loops. Time: O(n³), Space: O(1)",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o3",
+        "text": "Use hash map for all pairs, then check for third element. Time: O(n²), Space: O(n²)",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o4",
+        "text": "Find all combinations using recursion. Time: O(2ⁿ), Space: O(n)",
+        "isCorrect": false,
+        "explanation": null
+      }
+    ],
+    "resources": null,
+    "points": 15,
+    "isActive": true,
+    "createdAt": "2025-11-20T23:31:20.409429+00:00",
+    "updatedAt": "2025-11-21T23:53:07.826604+00:00"
+  },
+  {
+    "id": "8778878a-ef6d-43d9-bd7c-e67c2b82cf8e",
+    "title": "Group Strings by Anagram",
+    "content": "Given an array of strings, group anagrams together.\n\nExample: [\"eat\", \"tea\", \"tan\", \"ate\", \"nat\", \"bat\"] → [[\"eat\",\"tea\",\"ate\"], [\"tan\",\"nat\"], [\"bat\"]]",
+    "type": "code",
+    "difficulty": "intermediate",
+    "explanation": "Two approaches: 1) Sort each string and use sorted string as key in hash map. 2) Use character frequency count as key (more efficient). Group strings with same key together.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Use sorted string as key in hash map. Group strings with same sorted key. Time: O(n*k log k) where k is avg string length, Space: O(n*k)",
+        "isCorrect": true,
+        "explanation": null
+      },
+      {
+        "id": "o2",
+        "text": "Compare each string with all others. Time: O(n²*k), Space: O(n)",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o3",
+        "text": "Use character frequency as key. Time: O(n*k), Space: O(n*k)",
+        "isCorrect": true,
+        "explanation": null
+      },
+      {
+        "id": "o4",
+        "text": "Sort entire array and group adjacent anagrams. Time: O(n*k log(n*k)), Space: O(n*k)",
+        "isCorrect": false,
+        "explanation": null
+      }
+    ],
+    "resources": null,
+    "points": 15,
+    "isActive": true,
+    "createdAt": "2025-11-20T23:31:20.409429+00:00",
+    "updatedAt": "2025-11-21T23:53:07.826604+00:00"
+  },
+  {
+    "id": "456e6f0b-44ba-438c-b37a-5aadb7bb7231",
+    "title": "Find Longest Substring Without Repeating Characters",
+    "content": "Given a string, find the length of the longest substring without repeating characters.\n\nExample: \"abcabcbb\" → 3 (\"abc\")",
+    "type": "code",
+    "difficulty": "intermediate",
+    "explanation": "Use sliding window technique with a hash map. Expand window by moving right pointer, track characters in current window. When duplicate found, move left pointer past the duplicate. Track maximum window size.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Use sliding window with hash map. Expand window, shrink when duplicate found. Time: O(n), Space: O(min(n, m)) where m is charset size",
+        "isCorrect": true,
+        "explanation": null
+      },
+      {
+        "id": "o2",
+        "text": "Check all possible substrings. Time: O(n³), Space: O(n)",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o3",
+        "text": "Use Set and check each substring. Time: O(n²), Space: O(n)",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o4",
+        "text": "Sort characters and find longest sequence. Time: O(n log n), Space: O(n)",
+        "isCorrect": false,
+        "explanation": null
+      }
+    ],
+    "resources": null,
+    "points": 15,
+    "isActive": true,
+    "createdAt": "2025-11-20T23:31:20.409429+00:00",
+    "updatedAt": "2025-11-21T23:53:07.826604+00:00"
+  },
+  {
+    "id": "4e95eefe-6201-4b28-a623-a581c80b7f5b",
+    "title": "Strict-Transport-Security",
+    "content": "Select the correct header used to prevent clickjacking attacks.",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "X-Frame-Options and CSP frame-ancestors prevent malicious iframe embedding.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "X-Frame-Options",
+        "isCorrect": true,
+        "explanation": null
+      },
+      {
+        "id": "o2",
+        "text": "Content-Security-Policy (frame-ancestors)",
+        "isCorrect": true,
+        "explanation": null
+      },
+      {
+        "id": "o3",
+        "text": "X-Content-Type-Options",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o4",
+        "text": "Strict-Transport-Security",
+        "isCorrect": false,
+        "explanation": null
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/Security",
+        "type": "article",
+        "title": "Web Security - MDN",
+        "author": "Mozilla Developer Network",
+        "description": "Web security best practices"
+      },
+      {
+        "url": "https://owasp.org/www-project-top-ten/",
+        "type": "article",
+        "title": "OWASP Top 10",
+        "author": "OWASP",
+        "description": "Top 10 web application security risks"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-20T23:27:08.796446+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "bc221a74-9721-4c89-8a50-8d4a036e8f1c",
+    "title": "Not quite. Consider security best practices.",
+    "content": "Clickjacking is a type of attack where a user is tricked into clicking elements hidden under legitimate UI elements. Explain how it works and prevention strategies.",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "Clickjacking tricks users into clicking hidden elements using overlays or iframes. Prevention: X-Frame-Options header, CSP frame-ancestors, avoid transparent overlays.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Clickjacking tricks users into clicking hidden elements using overlays or iframes. Prevention: X-Frame-Options header, CSP frame-ancestors, avoid transparent overlays.",
+        "isCorrect": true,
+        "explanation": "Clickjacking tricks users into clicking hidden elements using overlays or iframes. Prevention: X-Frame-Options header, CSP frame-ancestors, avoid transparent overlays."
+      },
+      {
+        "id": "o2",
+        "text": "This is not correct. Please refer to the explanation.",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o3",
+        "text": "Incorrect. Review web security concepts.",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o4",
+        "text": "This is a common misconception. The correct answer is different.",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o5",
+        "text": "Not quite. Consider security best practices.",
+        "isCorrect": false,
+        "explanation": null
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/Security",
+        "type": "article",
+        "title": "Web Security - MDN",
+        "author": "Mozilla Developer Network",
+        "description": "Web security best practices"
+      },
+      {
+        "url": "https://owasp.org/www-project-top-ten/",
+        "type": "article",
+        "title": "OWASP Top 10",
+        "author": "OWASP",
+        "description": "Top 10 web application security risks"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-20T23:27:08.796446+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "b5631761-9ea6-4cf0-97b0-2e2458fd815e",
+    "title": "Not quite. Consider security best practices.",
+    "content": "Explain JWT (JSON Web Token) and its use in authentication.",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "JWT is a compact token used to securely transmit information between client and server. It ensures authenticity and integrity of the payload, commonly used for stateless authentication.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "JWT is a compact token used to securely transmit information between client and server. It ensures authenticity and integrity of the payload, commonly used for stateless authentication.",
+        "isCorrect": true,
+        "explanation": "JWT is a compact token used to securely transmit information between client and server. It ensures authenticity and integrity of the payload, commonly used for stateless authentication."
+      },
+      {
+        "id": "o2",
+        "text": "This is not correct. Please refer to the explanation.",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o3",
+        "text": "Incorrect. Review web security concepts.",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o4",
+        "text": "This is a common misconception. The correct answer is different.",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o5",
+        "text": "Not quite. Consider security best practices.",
+        "isCorrect": false,
+        "explanation": null
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/Security",
+        "type": "article",
+        "title": "Web Security - MDN",
+        "author": "Mozilla Developer Network",
+        "description": "Web security best practices"
+      },
+      {
+        "url": "https://owasp.org/www-project-top-ten/",
+        "type": "article",
+        "title": "OWASP Top 10",
+        "author": "OWASP",
+        "description": "Top 10 web application security risks"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-20T23:27:08.796446+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "959cd8b7-890e-4296-8a81-910ad88a5361",
+    "title": "Not quite. Consider security best practices.",
+    "content": "Explain token expiration in authentication and session management.",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "Token expiration limits how long an authentication token is valid. This reduces risk if a token is leaked or stolen and forces users to re-authenticate after a set period.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Token expiration limits how long an authentication token is valid. This reduces risk if a token is leaked or stolen and forces users to re-authenticate after a set period.",
+        "isCorrect": true,
+        "explanation": "Token expiration limits how long an authentication token is valid. This reduces risk if a token is leaked or stolen and forces users to re-authenticate after a set period."
+      },
+      {
+        "id": "o2",
+        "text": "This is not correct. Please refer to the explanation.",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o3",
+        "text": "Incorrect. Review web security concepts.",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o4",
+        "text": "This is a common misconception. The correct answer is different.",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o5",
+        "text": "Not quite. Consider security best practices.",
+        "isCorrect": false,
+        "explanation": null
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/Security",
+        "type": "article",
+        "title": "Web Security - MDN",
+        "author": "Mozilla Developer Network",
+        "description": "Web security best practices"
+      },
+      {
+        "url": "https://owasp.org/www-project-top-ten/",
+        "type": "article",
+        "title": "OWASP Top 10",
+        "author": "OWASP",
+        "description": "Top 10 web application security risks"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-20T23:27:08.796446+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "258880ec-b9e8-4aed-af2e-9a55e865085c",
+    "title": "Not quite. Consider security best practices.",
+    "content": "Explain OAuth 2.0 and its use in web applications.",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "OAuth 2.0 is an authorization framework that allows third-party applications to access user resources without exposing credentials. It issues tokens with limited scope and duration.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "OAuth 2.0 is an authorization framework that allows third-party applications to access user resources without exposing credentials. It issues tokens with limited scope and duration.",
+        "isCorrect": true,
+        "explanation": "OAuth 2.0 is an authorization framework that allows third-party applications to access user resources without exposing credentials. It issues tokens with limited scope and duration."
+      },
+      {
+        "id": "o2",
+        "text": "This is not correct. Please refer to the explanation.",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o3",
+        "text": "Incorrect. Review web security concepts.",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o4",
+        "text": "This is a common misconception. The correct answer is different.",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o5",
+        "text": "Not quite. Consider security best practices.",
+        "isCorrect": false,
+        "explanation": null
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/Security",
+        "type": "article",
+        "title": "Web Security - MDN",
+        "author": "Mozilla Developer Network",
+        "description": "Web security best practices"
+      },
+      {
+        "url": "https://owasp.org/www-project-top-ten/",
+        "type": "article",
+        "title": "OWASP Top 10",
+        "author": "OWASP",
+        "description": "Top 10 web application security risks"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-20T23:27:08.796446+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "e6b8752f-85ee-42d2-810b-5f8d237ff56a",
+    "title": "Rely only on client-side checks",
+    "content": "Select all correct options.",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "Server-side validation, HTTPS, and token-based authentication are essential. Client-side checks alone cannot ensure security.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Use authentication tokens like JWT",
+        "isCorrect": true,
+        "explanation": null
+      },
+      {
+        "id": "o2",
+        "text": "Enforce HTTPS for all API requests",
+        "isCorrect": true,
+        "explanation": null
+      },
+      {
+        "id": "o3",
+        "text": "Validate all user inputs on the server",
+        "isCorrect": true,
+        "explanation": null
+      },
+      {
+        "id": "o4",
+        "text": "Rely only on client-side checks",
+        "isCorrect": false,
+        "explanation": null
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/Security",
+        "type": "article",
+        "title": "Web Security - MDN",
+        "author": "Mozilla Developer Network",
+        "description": "Web security best practices"
+      },
+      {
+        "url": "https://owasp.org/www-project-top-ten/",
+        "type": "article",
+        "title": "OWASP Top 10",
+        "author": "OWASP",
+        "description": "Top 10 web application security risks"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-20T23:27:08.796446+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "a35f3b4c-8f45-4f5b-bb65-d01d0a09e353",
+    "title": "Not quite. Consider security best practices.",
+    "content": "Explain how rate limiting protects web applications.",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "Rate limiting restricts the number of requests a client can make in a given time period, protecting the server from abuse, brute-force attacks, and denial-of-service attacks.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Rate limiting restricts the number of requests a client can make in a given time period, protecting the server from abuse, brute-force attacks, and denial-of-service attacks.",
+        "isCorrect": true,
+        "explanation": "Rate limiting restricts the number of requests a client can make in a given time period, protecting the server from abuse, brute-force attacks, and denial-of-service attacks."
+      },
+      {
+        "id": "o2",
+        "text": "This is not correct. Please refer to the explanation.",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o3",
+        "text": "Incorrect. Review web security concepts.",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o4",
+        "text": "This is a common misconception. The correct answer is different.",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o5",
+        "text": "Not quite. Consider security best practices.",
+        "isCorrect": false,
+        "explanation": null
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/Security",
+        "type": "article",
+        "title": "Web Security - MDN",
+        "author": "Mozilla Developer Network",
+        "description": "Web security best practices"
+      },
+      {
+        "url": "https://owasp.org/www-project-top-ten/",
+        "type": "article",
+        "title": "OWASP Top 10",
+        "author": "OWASP",
+        "description": "Top 10 web application security risks"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-20T23:27:08.796446+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "b18901db-1908-429d-9cee-fe70f913e4d1",
+    "title": "Not quite. Consider security best practices.",
+    "content": "Explain what clickjacking is and how attackers can exploit it to trick users.",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "Clickjacking tricks a user into clicking on a hidden element or iframe, causing them to perform actions they didn't intend, such as changing settings, liking a page, or submitting forms.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Clickjacking tricks a user into clicking on a hidden element or iframe, causing them to perform actions they didn't intend, such as changing settings, liking a page, or submitting forms.",
+        "isCorrect": true,
+        "explanation": "Clickjacking tricks a user into clicking on a hidden element or iframe, causing them to perform actions they didn't intend, such as changing settings, liking a page, or submitting forms."
+      },
+      {
+        "id": "o2",
+        "text": "This is not correct. Please refer to the explanation.",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o3",
+        "text": "Incorrect. Review web security concepts.",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o4",
+        "text": "This is a common misconception. The correct answer is different.",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o5",
+        "text": "Not quite. Consider security best practices.",
+        "isCorrect": false,
+        "explanation": null
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/Security",
+        "type": "article",
+        "title": "Web Security - MDN",
+        "author": "Mozilla Developer Network",
+        "description": "Web security best practices"
+      },
+      {
+        "url": "https://owasp.org/www-project-top-ten/",
+        "type": "article",
+        "title": "OWASP Top 10",
+        "author": "OWASP",
+        "description": "Top 10 web application security risks"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-20T23:27:08.796446+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "b179877d-3b45-4145-9df4-e98f44db9fac",
+    "title": "Not quite. Consider security best practices.",
+    "content": "Explain how clickjacking works and its impact on users.",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "Clickjacking tricks users into clicking hidden or disguised UI elements, performing unintended actions such as changing settings, submitting forms, or executing transactions.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Clickjacking tricks users into clicking hidden or disguised UI elements, performing unintended actions such as changing settings, submitting forms, or executing transactions.",
+        "isCorrect": true,
+        "explanation": "Clickjacking tricks users into clicking hidden or disguised UI elements, performing unintended actions such as changing settings, submitting forms, or executing transactions."
+      },
+      {
+        "id": "o2",
+        "text": "This is not correct. Please refer to the explanation.",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o3",
+        "text": "Incorrect. Review web security concepts.",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o4",
+        "text": "This is a common misconception. The correct answer is different.",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o5",
+        "text": "Not quite. Consider security best practices.",
+        "isCorrect": false,
+        "explanation": null
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/Security",
+        "type": "article",
+        "title": "Web Security - MDN",
+        "author": "Mozilla Developer Network",
+        "description": "Web security best practices"
+      },
+      {
+        "url": "https://owasp.org/www-project-top-ten/",
+        "type": "article",
+        "title": "OWASP Top 10",
+        "author": "OWASP",
+        "description": "Top 10 web application security risks"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-20T23:27:08.796446+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "d040252e-9433-4260-8d9e-df82486300b7",
+    "title": "Detect and prevent iframes using JS",
+    "content": "Select all correct methods to prevent clickjacking attacks.",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "X-Frame-Options and frame-ancestors protect against embedding. JS detection can add extra protection; disabling JS is impractical.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Use X-Frame-Options: DENY or SAMEORIGIN",
+        "isCorrect": true,
+        "explanation": null
+      },
+      {
+        "id": "o2",
+        "text": "Use Content Security Policy frame-ancestors",
+        "isCorrect": true,
+        "explanation": null
+      },
+      {
+        "id": "o3",
+        "text": "Disable JavaScript entirely",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o4",
+        "text": "Detect and prevent iframes using JS",
+        "isCorrect": true,
+        "explanation": null
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/Security",
+        "type": "article",
+        "title": "Web Security - MDN",
+        "author": "Mozilla Developer Network",
+        "description": "Web security best practices"
+      },
+      {
+        "url": "https://owasp.org/www-project-top-ten/",
+        "type": "article",
+        "title": "OWASP Top 10",
+        "author": "OWASP",
+        "description": "Top 10 web application security risks"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-20T23:27:08.796446+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "9e110cbf-b0a0-4bad-ab6d-7d84e309384a",
+    "title": "Find Longest Substring Without Repeating Characters",
+    "content": "Given a string, find the length of the longest substring without repeating characters.\n\nExample: \"abcabcbb\" → 3 (\"abc\")",
+    "type": "code",
+    "difficulty": "intermediate",
+    "explanation": "Use sliding window technique with a hash map. Expand window by moving right pointer, track characters in current window. When duplicate found, move left pointer past the duplicate. Track maximum window size.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Use sliding window with hash map. Expand window, shrink when duplicate found. Time: O(n), Space: O(min(n, m)) where m is charset size",
+        "isCorrect": true,
+        "explanation": null
+      },
+      {
+        "id": "o2",
+        "text": "Check all possible substrings. Time: O(n³), Space: O(n)",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o3",
+        "text": "Use Set and check each substring. Time: O(n²), Space: O(n)",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o4",
+        "text": "Sort characters and find longest sequence. Time: O(n log n), Space: O(n)",
+        "isCorrect": false,
+        "explanation": null
+      }
+    ],
+    "resources": null,
+    "points": 15,
+    "isActive": true,
+    "createdAt": "2025-11-20T23:25:55.681273+00:00",
+    "updatedAt": "2025-11-21T23:53:07.826604+00:00"
+  },
+  {
+    "id": "efe29674-70f6-40f4-9603-390b283a53f3",
+    "title": "Find Container With Most Water",
+    "content": "Given an array of heights, find two lines that together with x-axis form a container that holds the most water.\n\nExample: [1, 8, 6, 2, 5, 4, 8, 3, 7] → 49",
+    "type": "code",
+    "difficulty": "intermediate",
+    "explanation": "Use two pointers technique: start with pointers at both ends. Calculate area (min(height[left], height[right]) * (right - left)). Move the pointer with smaller height inward, as moving the larger one cannot increase area.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Use two pointers at start and end. Move pointer with smaller height. Calculate area and track max. Time: O(n), Space: O(1)",
+        "isCorrect": true,
+        "explanation": null
+      },
+      {
+        "id": "o2",
+        "text": "Try all pairs of lines. Time: O(n²), Space: O(1)",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o3",
+        "text": "Find two tallest lines. Time: O(n), Space: O(1)",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o4",
+        "text": "Sort heights and use top two. Time: O(n log n), Space: O(n)",
+        "isCorrect": false,
+        "explanation": null
+      }
+    ],
+    "resources": null,
+    "points": 15,
+    "isActive": true,
+    "createdAt": "2025-11-20T23:25:55.681273+00:00",
+    "updatedAt": "2025-11-21T23:53:07.826604+00:00"
+  },
+  {
+    "id": "e652f59b-4891-4588-b9b0-08a39e000264",
+    "title": "Product of Array Except Self",
+    "content": "Given an array, return an array where each element is the product of all other elements (without using division).\n\nExample: [1, 2, 3, 4] → [24, 12, 8, 6]",
+    "type": "code",
+    "difficulty": "intermediate",
+    "explanation": "Use two passes: first pass calculates left products (product of all elements to the left), second pass multiplies by right products (product of all elements to the right). This avoids division and handles zeros.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Two passes: left products, then right products. Multiply corresponding elements. Time: O(n), Space: O(1) excluding output",
+        "isCorrect": true,
+        "explanation": null
+      },
+      {
+        "id": "o2",
+        "text": "Calculate product of all elements, divide by each element. Time: O(n), Space: O(1)",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o3",
+        "text": "For each element, calculate product of all others. Time: O(n²), Space: O(1)",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o4",
+        "text": "Use nested loops to calculate products. Time: O(n²), Space: O(n)",
+        "isCorrect": false,
+        "explanation": null
+      }
+    ],
+    "resources": null,
+    "points": 15,
+    "isActive": true,
+    "createdAt": "2025-11-20T23:25:55.681273+00:00",
+    "updatedAt": "2025-11-21T23:53:07.826604+00:00"
+  },
+  {
+    "id": "e1a3fd26-3314-4e36-9c9b-6b1de34f278d",
+    "title": "Minimum Coins to Make Amount",
+    "content": "Given coins of different denominations and a total amount, find the minimum number of coins needed.\n\nExample: coins = [1, 2, 5], amount = 11 → 3 (5 + 5 + 1)",
+    "type": "code",
+    "difficulty": "intermediate",
+    "explanation": "Use dynamic programming: create array dp where dp[i] represents minimum coins for amount i. Initialize dp[0] = 0. For each coin, update dp[i + coin] = min(dp[i + coin], dp[i] + 1).",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Use dynamic programming: dp[i] = min coins for amount i. For each coin, update dp[i + coin]. Time: O(amount * coins.length), Space: O(amount)",
+        "isCorrect": true,
+        "explanation": null
+      },
+      {
+        "id": "o2",
+        "text": "Use greedy: always pick largest coin. Time: O(amount), Space: O(1)",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o3",
+        "text": "Try all combinations using recursion. Time: O(2ⁿ), Space: O(n)",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o4",
+        "text": "Sort coins and use largest first. Time: O(n log n), Space: O(1)",
+        "isCorrect": false,
+        "explanation": null
+      }
+    ],
+    "resources": null,
+    "points": 15,
+    "isActive": true,
+    "createdAt": "2025-11-20T23:25:55.681273+00:00",
+    "updatedAt": "2025-11-21T23:53:07.826604+00:00"
+  },
+  {
+    "id": "82fdc9f9-1fb2-4c3f-b91a-e8f498957e87",
+    "title": "Find All Unique Triplets That Sum to Zero",
+    "content": "Given an array, find all unique triplets that sum to zero.\n\nExample: [-1, 0, 1, 2, -1, -4] → [[-1, -1, 2], [-1, 0, 1]]",
+    "type": "code",
+    "difficulty": "intermediate",
+    "explanation": "Sort the array first. For each element, use two pointers (left and right) to find pairs that sum to the negative of the current element. Skip duplicate values to avoid duplicate triplets.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Sort array. For each element, use two pointers to find pairs that sum to negative of current element. Skip duplicates. Time: O(n²), Space: O(1) excluding output",
+        "isCorrect": true,
+        "explanation": null
+      },
+      {
+        "id": "o2",
+        "text": "Use three nested loops. Time: O(n³), Space: O(1)",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o3",
+        "text": "Use hash map for all pairs, then check for third element. Time: O(n²), Space: O(n²)",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o4",
+        "text": "Find all combinations using recursion. Time: O(2ⁿ), Space: O(n)",
+        "isCorrect": false,
+        "explanation": null
+      }
+    ],
+    "resources": null,
+    "points": 15,
+    "isActive": true,
+    "createdAt": "2025-11-20T23:25:55.681273+00:00",
+    "updatedAt": "2025-11-21T23:53:07.826604+00:00"
+  },
+  {
+    "id": "f777681d-d154-46d1-97db-500141f00a0a",
+    "title": "Find Longest Increasing Subsequence",
+    "content": "Given an array, find the length of the longest strictly increasing subsequence.\n\nExample: [10, 9, 2, 5, 3, 7, 101, 18] → 4 ([2, 3, 7, 101])",
+    "type": "code",
+    "difficulty": "intermediate",
+    "explanation": "Two approaches: 1) DP: for each element, check all previous elements and update LIS length. 2) Binary search: maintain array of smallest tail values, use binary search to find insertion point (more efficient O(n log n)).",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Use dynamic programming: dp[i] = length of LIS ending at i. Time: O(n²), Space: O(n)",
+        "isCorrect": true,
+        "explanation": null
+      },
+      {
+        "id": "o2",
+        "text": "Use binary search with patience sorting. Maintain array of smallest tail of increasing subsequences. Time: O(n log n), Space: O(n)",
+        "isCorrect": true,
+        "explanation": null
+      },
+      {
+        "id": "o3",
+        "text": "Try all possible subsequences. Time: O(2ⁿ), Space: O(n)",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o4",
+        "text": "Sort array and find longest consecutive sequence. Time: O(n log n), Space: O(1)",
+        "isCorrect": false,
+        "explanation": null
+      }
+    ],
+    "resources": null,
+    "points": 15,
+    "isActive": true,
+    "createdAt": "2025-11-20T23:25:55.681273+00:00",
+    "updatedAt": "2025-11-21T23:53:07.826604+00:00"
+  },
+  {
+    "id": "11d13ce8-9062-42c6-84bf-7f2af6add617",
+    "title": "Validate Sudoku Board",
+    "content": "Determine if a 9x9 Sudoku board is valid (no duplicates in rows, columns, or 3x3 boxes).\n\nExample: Valid board returns true",
+    "type": "code",
+    "difficulty": "intermediate",
+    "explanation": "Use hash sets to track seen numbers in each row, column, and 3x3 box. For each cell, check if the number exists in the corresponding row, column, and box sets. Since board is fixed 9x9, complexity is O(1).",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Use three sets of hash maps: one for rows, one for columns, one for boxes. Check each cell against all three. Time: O(1) - fixed 81 cells, Space: O(1)",
+        "isCorrect": true,
+        "explanation": null
+      },
+      {
+        "id": "o2",
+        "text": "Check each row, column, and box separately. Time: O(1), Space: O(1)",
+        "isCorrect": true,
+        "explanation": null
+      },
+      {
+        "id": "o3",
+        "text": "Use nested loops to check all combinations. Time: O(n⁴), Space: O(1)",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o4",
+        "text": "Sort each row, column, and box. Time: O(1), Space: O(1)",
+        "isCorrect": false,
+        "explanation": null
+      }
+    ],
+    "resources": null,
+    "points": 15,
+    "isActive": true,
+    "createdAt": "2025-11-20T23:25:55.681273+00:00",
+    "updatedAt": "2025-11-21T23:53:07.826604+00:00"
+  },
+  {
+    "id": "2fef0fc9-ede6-4005-9aa2-c5078c2318bc",
+    "title": "Find Word in 2D Grid",
+    "content": "Given a 2D board and a word, determine if the word exists in the board (can move horizontally or vertically).\n\nExample: board with \"ABCE\", \"SFCS\", \"ADEE\" and word \"ABCCED\" → true",
+    "type": "code",
+    "difficulty": "intermediate",
+    "explanation": "Use backtracking with DFS: for each cell matching first character, recursively search in all 4 directions. Mark cells as visited during recursion, unmark during backtracking. Return true if word found.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Use backtracking with DFS. For each cell, explore all directions, mark visited, backtrack. Time: O(m*n*4^L) where L is word length, Space: O(L)",
+        "isCorrect": true,
+        "explanation": null
+      },
+      {
+        "id": "o2",
+        "text": "Try all possible paths using BFS. Time: O(m*n*4^L), Space: O(m*n)",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o3",
+        "text": "Check each cell independently. Time: O(m*n*L), Space: O(1)",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o4",
+        "text": "Convert board to string and search. Time: O(m*n), Space: O(m*n)",
+        "isCorrect": false,
+        "explanation": null
+      }
+    ],
+    "resources": null,
+    "points": 15,
+    "isActive": true,
+    "createdAt": "2025-11-20T23:25:55.681273+00:00",
+    "updatedAt": "2025-11-21T23:53:07.826604+00:00"
+  },
+  {
+    "id": "afd0357f-d436-4e72-8d0c-7a4c8da8dc40",
+    "title": "Group Strings by Anagram",
+    "content": "Given an array of strings, group anagrams together.\n\nExample: [\"eat\", \"tea\", \"tan\", \"ate\", \"nat\", \"bat\"] → [[\"eat\",\"tea\",\"ate\"], [\"tan\",\"nat\"], [\"bat\"]]",
+    "type": "code",
+    "difficulty": "intermediate",
+    "explanation": "Two approaches: 1) Sort each string and use sorted string as key in hash map. 2) Use character frequency count as key (more efficient). Group strings with same key together.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Use sorted string as key in hash map. Group strings with same sorted key. Time: O(n*k log k) where k is avg string length, Space: O(n*k)",
+        "isCorrect": true,
+        "explanation": null
+      },
+      {
+        "id": "o2",
+        "text": "Compare each string with all others. Time: O(n²*k), Space: O(n)",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o3",
+        "text": "Use character frequency as key. Time: O(n*k), Space: O(n*k)",
+        "isCorrect": true,
+        "explanation": null
+      },
+      {
+        "id": "o4",
+        "text": "Sort entire array and group adjacent anagrams. Time: O(n*k log(n*k)), Space: O(n*k)",
+        "isCorrect": false,
+        "explanation": null
+      }
+    ],
+    "resources": null,
+    "points": 15,
+    "isActive": true,
+    "createdAt": "2025-11-20T23:25:55.681273+00:00",
+    "updatedAt": "2025-11-21T23:53:07.826604+00:00"
+  },
+  {
+    "id": "50083614-a046-4e9f-8099-9d89bae8e3ee",
+    "title": "Find Longest Palindromic Substring",
+    "content": "Given a string, find the longest palindromic substring.\n\nExample: \"babad\" → \"bab\" or \"aba\"",
+    "type": "code",
+    "difficulty": "intermediate",
+    "explanation": "Expand around center: for each possible center (considering both odd and even length palindromes), expand outward while characters match. Track the longest palindrome found. More space-efficient than DP.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Expand around center for each possible center (odd and even length). Track longest. Time: O(n²), Space: O(1)",
+        "isCorrect": true,
+        "explanation": null
+      },
+      {
+        "id": "o2",
+        "text": "Check all possible substrings. Time: O(n³), Space: O(1)",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o3",
+        "text": "Use dynamic programming. Time: O(n²), Space: O(n²)",
+        "isCorrect": true,
+        "explanation": null
+      },
+      {
+        "id": "o4",
+        "text": "Reverse string and find longest common substring. Time: O(n²), Space: O(n²)",
+        "isCorrect": false,
+        "explanation": null
+      }
+    ],
+    "resources": null,
+    "points": 15,
+    "isActive": true,
+    "createdAt": "2025-11-20T23:25:55.681273+00:00",
+    "updatedAt": "2025-11-21T23:53:07.826604+00:00"
+  },
+  {
+    "id": "1f87f80d-5e28-45ed-a62c-9dd8b0eb4e3b",
+    "title": "This is incorrect. Please refer to system design best practices.",
+    "content": "Explain the purpose of Lighthouse and its reports for performance and accessibility.",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "Lighthouse audits provide automated reports for performance, accessibility, best practices, SEO, and PWA compliance, helping developers optimize their apps.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Lighthouse audits provide automated reports for performance, accessibility, best practices, SEO, and PWA compliance, helping developers optimize their apps.",
+        "isCorrect": true,
+        "explanation": "Lighthouse audits provide automated reports for performance, accessibility, best practices, SEO, and PWA compliance, helping developers optimize their apps."
+      },
+      {
+        "id": "o2",
+        "text": "Lighthouse audits provide automated reports for performance, accessibility, best practices, SEO, and PWA compliance, helping developers optimize their apps",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o3",
+        "text": "This method prioritizes user experience and maintainability.",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o4",
+        "text": "This is incorrect. Please refer to system design best practices.",
+        "isCorrect": false,
+        "explanation": null
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://github.com/donnemartin/system-design-primer",
+        "type": "article",
+        "title": "System Design Primer",
+        "author": "Donne Martin",
+        "description": "Learn how to design large-scale systems"
+      },
+      {
+        "url": "https://www.educative.io/courses/grokking-the-system-design-interview",
+        "type": "course",
+        "title": "Grokking the System Design Interview",
+        "author": "Educative",
+        "duration": "20 hours",
+        "description": "Master system design interviews"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-20T23:14:06.658367+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "1afb2037-fb3a-4224-8049-c7633a2a1b98",
+    "title": "This is incorrect. Please refer to system design best practices.",
+    "content": "Explain techniques for identifying and fixing slow JS execution.",
+    "type": "multiple-choice",
+    "difficulty": "advanced",
+    "explanation": "Use Chrome DevTools Performance tab to record JS execution, identify long tasks, optimize loops, debounce/throttle events, and memoize expensive calculations.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Use Chrome DevTools Performance tab to record JS execution, identify long tasks, optimize loops, debounce/throttle events, and memoize expensive calculations.",
+        "isCorrect": true,
+        "explanation": "Use Chrome DevTools Performance tab to record JS execution, identify long tasks, optimize loops, debounce/throttle events, and memoize expensive calculations."
+      },
+      {
+        "id": "o2",
+        "text": "Use Chrome DevTools Performance tab to record JS execution, identify long tasks, optimize loops, debounce/throttle events, and memoize expensive calculations",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o3",
+        "text": "This method prioritizes user experience and maintainability.",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o4",
+        "text": "This is incorrect. Please refer to system design best practices.",
+        "isCorrect": false,
+        "explanation": null
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://github.com/donnemartin/system-design-primer",
+        "type": "article",
+        "title": "System Design Primer",
+        "author": "Donne Martin",
+        "description": "Learn how to design large-scale systems"
+      },
+      {
+        "url": "https://www.educative.io/courses/grokking-the-system-design-interview",
+        "type": "course",
+        "title": "Grokking the System Design Interview",
+        "author": "Educative",
+        "duration": "20 hours",
+        "description": "Master system design interviews"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-20T23:14:06.658367+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "415180c5-7214-4bf7-8be5-efe0b86f748a",
+    "title": "This is incorrect. Please refer to system design best practices.",
+    "content": "Explain the structure and normalization strategies for storing related entities in frontend state.",
+    "type": "multiple-choice",
+    "difficulty": "advanced",
+    "explanation": "Normalize entities: store posts in a dictionary keyed by id, store comments separately keyed by id, reference relationships via ids to reduce duplication and simplify updates.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Normalize entities: store posts in a dictionary keyed by id, store comments separately keyed by id, reference relationships via ids to reduce duplication and simplify updates.",
+        "isCorrect": true,
+        "explanation": "Normalize entities: store posts in a dictionary keyed by id, store comments separately keyed by id, reference relationships via ids to reduce duplication and simplify updates."
+      },
+      {
+        "id": "o2",
+        "text": "Normalize entities: store posts in a dictionary keyed by id, store comments separately keyed by id, reference relationships via ids to reduce duplication and simplify updates",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o3",
+        "text": "This method prioritizes user experience and maintainability.",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o4",
+        "text": "This is incorrect. Please refer to system design best practices.",
+        "isCorrect": false,
+        "explanation": null
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://github.com/donnemartin/system-design-primer",
+        "type": "article",
+        "title": "System Design Primer",
+        "author": "Donne Martin",
+        "description": "Learn how to design large-scale systems"
+      },
+      {
+        "url": "https://www.educative.io/courses/grokking-the-system-design-interview",
+        "type": "course",
+        "title": "Grokking the System Design Interview",
+        "author": "Educative",
+        "duration": "20 hours",
+        "description": "Master system design interviews"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-20T23:14:06.658367+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "5bdc5c78-bf9e-487d-b81b-be4d782957a3",
+    "title": "This is incorrect. Please refer to system design best practices.",
+    "content": "Describe tools and methods to detect and fix a11y problems.",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "Use tools like Axe, Lighthouse, WAVE, or browser extensions to audit accessibility, detect color contrast issues, missing ARIA labels, and keyboard navigation problems.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Use tools like Axe, Lighthouse, WAVE, or browser extensions to audit accessibility, detect color contrast issues, missing ARIA labels, and keyboard navigation problems.",
+        "isCorrect": true,
+        "explanation": "Use tools like Axe, Lighthouse, WAVE, or browser extensions to audit accessibility, detect color contrast issues, missing ARIA labels, and keyboard navigation problems."
+      },
+      {
+        "id": "o2",
+        "text": "Use tools like Axe, Lighthouse, WAVE, or browser extensions to audit accessibility, detect color contrast issues, missing ARIA labels, and keyboard navigation problems",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o3",
+        "text": "This method prioritizes user experience and maintainability.",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o4",
+        "text": "This is incorrect. Please refer to system design best practices.",
+        "isCorrect": false,
+        "explanation": null
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://github.com/donnemartin/system-design-primer",
+        "type": "article",
+        "title": "System Design Primer",
+        "author": "Donne Martin",
+        "description": "Learn how to design large-scale systems"
+      },
+      {
+        "url": "https://www.educative.io/courses/grokking-the-system-design-interview",
+        "type": "course",
+        "title": "Grokking the System Design Interview",
+        "author": "Educative",
+        "duration": "20 hours",
+        "description": "Master system design interviews"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-20T23:14:06.658367+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  }
+]

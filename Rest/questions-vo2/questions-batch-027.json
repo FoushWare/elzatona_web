@@ -1,0 +1,2770 @@
+[
+  {
+    "id": "7f52452f-c907-4305-bead-a994bc9928bd",
+    "title": "Only after a user clicks a button",
+    "content": "In Islands Architecture, when are the interactive islands hydrated?",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "After the static HTML has been rendered and the browser is idle",
+    "options": [
+      {
+        "id": "a",
+        "text": "During the initial HTML parsing",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "b",
+        "text": "After the static HTML has been rendered and the browser is idle",
+        "isCorrect": true,
+        "explanation": ""
+      },
+      {
+        "id": "c",
+        "text": "Only after a user clicks a button",
+        "isCorrect": false,
+        "explanation": ""
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.patterns.dev/react/rendering-patterns",
+        "type": "article",
+        "title": "React Rendering Patterns",
+        "author": "Patterns.dev",
+        "description": "Learn React rendering patterns"
+      },
+      {
+        "url": "https://www.youtube.com/watch?v=Y2hgEGPzTZY",
+        "type": "video",
+        "title": "React Rendering Explained",
+        "author": "Web Dev Simplified",
+        "duration": "15:00",
+        "description": "Understanding React rendering"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-19T23:11:04.24323+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "1ae40444-07d6-4520-8c84-1a38adfb7b18",
+    "title": "Remix",
+    "content": "Which of the following frameworks is primarily designed around the Islands Architecture concept?",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "Astro",
+    "options": [
+      {
+        "id": "a",
+        "text": "Next.js",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "b",
+        "text": "Astro",
+        "isCorrect": true,
+        "explanation": ""
+      },
+      {
+        "id": "c",
+        "text": "Nuxt.js",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "d",
+        "text": "Remix",
+        "isCorrect": false,
+        "explanation": ""
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.patterns.dev/react/rendering-patterns",
+        "type": "article",
+        "title": "React Rendering Patterns",
+        "author": "Patterns.dev",
+        "description": "Learn React rendering patterns"
+      },
+      {
+        "url": "https://www.youtube.com/watch?v=Y2hgEGPzTZY",
+        "type": "video",
+        "title": "React Rendering Explained",
+        "author": "Web Dev Simplified",
+        "duration": "15:00",
+        "description": "Understanding React rendering"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-19T23:11:04.24323+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "342689e8-2f78-45e6-9a49-a28aecba2c42",
+    "title": "Not quite. Consider rendering strategy best practices.",
+    "content": "In an Astro project, how could you create a 'Like' button as an island on a static blog page?",
+    "type": "multiple-choice",
+    "difficulty": "advanced",
+    "explanation": "By creating a separate React component for the Like button and importing it using Astro's client directive like client:load or client:idle.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "By creating a separate React component for the Like button and importing it using Astro's client directive like client:load or client:idle.",
+        "isCorrect": true,
+        "explanation": "By creating a separate React component for the Like button and importing it using Astro's client directive like <code>client:load</code> or <code>client:idle</code>."
+      },
+      {
+        "id": "o2",
+        "text": "This is not correct. Please refer to the explanation.",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "o3",
+        "text": "Incorrect. Review rendering pattern concepts.",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "o4",
+        "text": "This is a common misconception. The correct answer is different.",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "o5",
+        "text": "Not quite. Consider rendering strategy best practices.",
+        "isCorrect": false,
+        "explanation": ""
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.patterns.dev/react/rendering-patterns",
+        "type": "article",
+        "title": "React Rendering Patterns",
+        "author": "Patterns.dev",
+        "description": "Learn React rendering patterns"
+      },
+      {
+        "url": "https://www.youtube.com/watch?v=Y2hgEGPzTZY",
+        "type": "video",
+        "title": "React Rendering Explained",
+        "author": "Web Dev Simplified",
+        "duration": "15:00",
+        "description": "Understanding React rendering"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-19T23:11:04.24323+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "df2ef08a-bc8c-49d9-a188-00dd201991db",
+    "title": "CSR is faster than Islands because it's fully client-driven",
+    "content": "How does Islands Architecture differ from traditional Client-Side Rendering (CSR)?",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "CSR loads all JavaScript at once, while Islands only hydrate interactive components",
+    "options": [
+      {
+        "id": "a",
+        "text": "CSR loads all JavaScript at once, while Islands only hydrate interactive components",
+        "isCorrect": true,
+        "explanation": ""
+      },
+      {
+        "id": "b",
+        "text": "Islands Architecture doesn't support user interactions",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "c",
+        "text": "CSR is faster than Islands because it's fully client-driven",
+        "isCorrect": false,
+        "explanation": ""
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.patterns.dev/react/rendering-patterns",
+        "type": "article",
+        "title": "React Rendering Patterns",
+        "author": "Patterns.dev",
+        "description": "Learn React rendering patterns"
+      },
+      {
+        "url": "https://www.youtube.com/watch?v=Y2hgEGPzTZY",
+        "type": "video",
+        "title": "React Rendering Explained",
+        "author": "Web Dev Simplified",
+        "duration": "15:00",
+        "description": "Understanding React rendering"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-19T23:10:00.730218+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "80e291f7-43df-4a2d-b443-51d9c6220f11",
+    "title": "Not quite. Consider rendering strategy best practices.",
+    "content": "What is the core idea behind the Islands Architecture rendering pattern?",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "It divides a web page into small independent interactive sections called islands, while keeping the rest of the page static HTML.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "It divides a web page into small independent interactive sections called islands, while keeping the rest of the page static HTML.",
+        "isCorrect": true,
+        "explanation": "It divides a web page into small independent interactive sections called islands, while keeping the rest of the page static HTML."
+      },
+      {
+        "id": "o2",
+        "text": "This is not correct. Please refer to the explanation.",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "o3",
+        "text": "Incorrect. Review rendering pattern concepts.",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "o4",
+        "text": "This is a common misconception. The correct answer is different.",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "o5",
+        "text": "Not quite. Consider rendering strategy best practices.",
+        "isCorrect": false,
+        "explanation": ""
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.patterns.dev/react/rendering-patterns",
+        "type": "article",
+        "title": "React Rendering Patterns",
+        "author": "Patterns.dev",
+        "description": "Learn React rendering patterns"
+      },
+      {
+        "url": "https://www.youtube.com/watch?v=Y2hgEGPzTZY",
+        "type": "video",
+        "title": "React Rendering Explained",
+        "author": "Web Dev Simplified",
+        "duration": "15:00",
+        "description": "Understanding React rendering"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-19T23:10:00.730218+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "bff30433-433c-48c9-8cbe-354070a20ed8",
+    "title": "Not quite. Consider rendering strategy best practices.",
+    "content": "What does the 'revalidate' field do in Next.js Incremental Static Regeneration?",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "It defines how often a static page should be regenerated in the background.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "It defines how often a static page should be regenerated in the background.",
+        "isCorrect": true,
+        "explanation": "It defines how often a static page should be regenerated in the background."
+      },
+      {
+        "id": "o2",
+        "text": "This is not correct. Please refer to the explanation.",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "o3",
+        "text": "Incorrect. Review rendering pattern concepts.",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "o4",
+        "text": "This is a common misconception. The correct answer is different.",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "o5",
+        "text": "Not quite. Consider rendering strategy best practices.",
+        "isCorrect": false,
+        "explanation": ""
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.patterns.dev/react/rendering-patterns",
+        "type": "article",
+        "title": "React Rendering Patterns",
+        "author": "Patterns.dev",
+        "description": "Learn React rendering patterns"
+      },
+      {
+        "url": "https://www.youtube.com/watch?v=Y2hgEGPzTZY",
+        "type": "video",
+        "title": "React Rendering Explained",
+        "author": "Web Dev Simplified",
+        "duration": "15:00",
+        "description": "Understanding React rendering"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-19T23:10:00.730218+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "2aeccb99-f425-4e04-88c9-0440bf61d6b7",
+    "title": "ISR runs entirely on the client",
+    "content": "Why does ISR improve performance compared to SSR for frequently accessed pages?",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "ISR caches pre-rendered pages at the edge and avoids regenerating on every request",
+    "options": [
+      {
+        "id": "a",
+        "text": "ISR caches pre-rendered pages at the edge and avoids regenerating on every request",
+        "isCorrect": true,
+        "explanation": ""
+      },
+      {
+        "id": "b",
+        "text": "ISR avoids hydration completely",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "c",
+        "text": "ISR runs entirely on the client",
+        "isCorrect": false,
+        "explanation": ""
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.patterns.dev/react/rendering-patterns",
+        "type": "article",
+        "title": "React Rendering Patterns",
+        "author": "Patterns.dev",
+        "description": "Learn React rendering patterns"
+      },
+      {
+        "url": "https://www.youtube.com/watch?v=Y2hgEGPzTZY",
+        "type": "video",
+        "title": "React Rendering Explained",
+        "author": "Web Dev Simplified",
+        "duration": "15:00",
+        "description": "Understanding React rendering"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-19T23:10:00.730218+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "b5f08c90-8d72-4aa1-8d47-493db736d396",
+    "title": "Not quite. Consider rendering strategy best practices.",
+    "content": "How is On-Demand ISR different from regular ISR?",
+    "type": "multiple-choice",
+    "difficulty": "advanced",
+    "explanation": "On-Demand ISR regenerates pages when triggered by specific events like webhook updates instead of fixed time intervals.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "On-Demand ISR regenerates pages when triggered by specific events like webhook updates instead of fixed time intervals.",
+        "isCorrect": true,
+        "explanation": "On-Demand ISR regenerates pages when triggered by specific events like webhook updates instead of fixed time intervals."
+      },
+      {
+        "id": "o2",
+        "text": "This is not correct. Please refer to the explanation.",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "o3",
+        "text": "Incorrect. Review rendering pattern concepts.",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "o4",
+        "text": "This is a common misconception. The correct answer is different.",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "o5",
+        "text": "Not quite. Consider rendering strategy best practices.",
+        "isCorrect": false,
+        "explanation": ""
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.patterns.dev/react/rendering-patterns",
+        "type": "article",
+        "title": "React Rendering Patterns",
+        "author": "Patterns.dev",
+        "description": "Learn React rendering patterns"
+      },
+      {
+        "url": "https://www.youtube.com/watch?v=Y2hgEGPzTZY",
+        "type": "video",
+        "title": "React Rendering Explained",
+        "author": "Web Dev Simplified",
+        "duration": "15:00",
+        "description": "Understanding React rendering"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-19T23:10:00.730218+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "e49afcab-c900-459c-a6f1-2339b21bff72",
+    "title": "When you have no API data",
+    "content": "When should you prefer On-Demand ISR over time-based ISR?",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "When content changes are event-driven, such as CMS updates",
+    "options": [
+      {
+        "id": "a",
+        "text": "When content changes are event-driven, such as CMS updates",
+        "isCorrect": true,
+        "explanation": ""
+      },
+      {
+        "id": "b",
+        "text": "When your website never changes",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "c",
+        "text": "When you have no API data",
+        "isCorrect": false,
+        "explanation": ""
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.patterns.dev/react/rendering-patterns",
+        "type": "article",
+        "title": "React Rendering Patterns",
+        "author": "Patterns.dev",
+        "description": "Learn React rendering patterns"
+      },
+      {
+        "url": "https://www.youtube.com/watch?v=Y2hgEGPzTZY",
+        "type": "video",
+        "title": "React Rendering Explained",
+        "author": "Web Dev Simplified",
+        "duration": "15:00",
+        "description": "Understanding React rendering"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-19T23:10:00.730218+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "a5096377-5a67-4b03-a1ff-99ea4b78188e",
+    "title": "Not quite. Consider rendering strategy best practices.",
+    "content": "What is the main benefit of streaming SSR compared to traditional SSR?",
+    "type": "multiple-choice",
+    "difficulty": "advanced",
+    "explanation": "Streaming SSR allows sending parts of the page to the browser as they are generated, reducing time to first paint.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Streaming SSR allows sending parts of the page to the browser as they are generated, reducing time to first paint.",
+        "isCorrect": true,
+        "explanation": "Streaming SSR allows sending parts of the page to the browser as they are generated, reducing time to first paint."
+      },
+      {
+        "id": "o2",
+        "text": "This is not correct. Please refer to the explanation.",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "o3",
+        "text": "Incorrect. Review rendering pattern concepts.",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "o4",
+        "text": "This is a common misconception. The correct answer is different.",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "o5",
+        "text": "Not quite. Consider rendering strategy best practices.",
+        "isCorrect": false,
+        "explanation": ""
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.patterns.dev/react/rendering-patterns",
+        "type": "article",
+        "title": "React Rendering Patterns",
+        "author": "Patterns.dev",
+        "description": "Learn React rendering patterns"
+      },
+      {
+        "url": "https://www.youtube.com/watch?v=Y2hgEGPzTZY",
+        "type": "video",
+        "title": "React Rendering Explained",
+        "author": "Web Dev Simplified",
+        "duration": "15:00",
+        "description": "Understanding React rendering"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-19T23:10:00.730218+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "bc1cedb0-7bc5-442e-b001-e85b14955162",
+    "title": "Not quite. Consider rendering strategy best practices.",
+    "content": "Why is Edge SSR often faster than traditional serverless SSR?",
+    "type": "multiple-choice",
+    "difficulty": "advanced",
+    "explanation": "Edge SSR runs closer to users, reducing latency and cold boot times.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Edge SSR runs closer to users, reducing latency and cold boot times.",
+        "isCorrect": true,
+        "explanation": "Edge SSR runs closer to users, reducing latency and cold boot times."
+      },
+      {
+        "id": "o2",
+        "text": "This is not correct. Please refer to the explanation.",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "o3",
+        "text": "Incorrect. Review rendering pattern concepts.",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "o4",
+        "text": "This is a common misconception. The correct answer is different.",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "o5",
+        "text": "Not quite. Consider rendering strategy best practices.",
+        "isCorrect": false,
+        "explanation": ""
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.patterns.dev/react/rendering-patterns",
+        "type": "article",
+        "title": "React Rendering Patterns",
+        "author": "Patterns.dev",
+        "description": "Learn React rendering patterns"
+      },
+      {
+        "url": "https://www.youtube.com/watch?v=Y2hgEGPzTZY",
+        "type": "video",
+        "title": "React Rendering Explained",
+        "author": "Web Dev Simplified",
+        "duration": "15:00",
+        "description": "Understanding React rendering"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-19T23:10:00.730218+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "55fa897d-7532-4483-a610-3bbfdba33a32",
+    "title": "When build times are slow",
+    "content": "When should you choose SSR over ISR or Static Generation?",
+    "type": "multiple-choice",
+    "difficulty": "advanced",
+    "explanation": "When your page depends on highly personalized data that changes per user request",
+    "options": [
+      {
+        "id": "a",
+        "text": "When your page depends on highly personalized data that changes per user request",
+        "isCorrect": true,
+        "explanation": ""
+      },
+      {
+        "id": "b",
+        "text": "When the content is static and rarely changes",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "c",
+        "text": "When build times are slow",
+        "isCorrect": false,
+        "explanation": ""
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.patterns.dev/react/rendering-patterns",
+        "type": "article",
+        "title": "React Rendering Patterns",
+        "author": "Patterns.dev",
+        "description": "Learn React rendering patterns"
+      },
+      {
+        "url": "https://www.youtube.com/watch?v=Y2hgEGPzTZY",
+        "type": "video",
+        "title": "React Rendering Explained",
+        "author": "Web Dev Simplified",
+        "duration": "15:00",
+        "description": "Understanding React rendering"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-19T23:10:00.730218+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "3e6b25ea-6182-49b2-bb0b-b2c523beb338",
+    "title": "Not quite. Consider rendering strategy best practices.",
+    "content": "How is Edge Rendering different from traditional CDN caching?",
+    "type": "multiple-choice",
+    "difficulty": "advanced",
+    "explanation": "CDN caching serves static assets, while Edge Rendering runs dynamic server code at the edge.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "CDN caching serves static assets, while Edge Rendering runs dynamic server code at the edge.",
+        "isCorrect": true,
+        "explanation": "CDN caching serves static assets, while Edge Rendering runs dynamic server code at the edge."
+      },
+      {
+        "id": "o2",
+        "text": "This is not correct. Please refer to the explanation.",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "o3",
+        "text": "Incorrect. Review rendering pattern concepts.",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "o4",
+        "text": "This is a common misconception. The correct answer is different.",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "o5",
+        "text": "Not quite. Consider rendering strategy best practices.",
+        "isCorrect": false,
+        "explanation": ""
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.patterns.dev/react/rendering-patterns",
+        "type": "article",
+        "title": "React Rendering Patterns",
+        "author": "Patterns.dev",
+        "description": "Learn React rendering patterns"
+      },
+      {
+        "url": "https://www.youtube.com/watch?v=Y2hgEGPzTZY",
+        "type": "video",
+        "title": "React Rendering Explained",
+        "author": "Web Dev Simplified",
+        "duration": "15:00",
+        "description": "Understanding React rendering"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-19T23:08:21.244197+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "8206d803-4801-4600-806a-148b9fc7f438",
+    "title": "It removes the need for client components entirely",
+    "content": "What benefit do we get when combining React Server Components with streaming rendering?",
+    "type": "multiple-choice",
+    "difficulty": "advanced",
+    "explanation": "Users see parts of the UI sooner while server components load progressively",
+    "options": [
+      {
+        "id": "a",
+        "text": "Users see parts of the UI sooner while server components load progressively",
+        "isCorrect": true,
+        "explanation": ""
+      },
+      {
+        "id": "b",
+        "text": "It delays rendering until all components are ready",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "c",
+        "text": "It removes the need for client components entirely",
+        "isCorrect": false,
+        "explanation": ""
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.patterns.dev/react/rendering-patterns",
+        "type": "article",
+        "title": "React Rendering Patterns",
+        "author": "Patterns.dev",
+        "description": "Learn React rendering patterns"
+      },
+      {
+        "url": "https://www.youtube.com/watch?v=Y2hgEGPzTZY",
+        "type": "video",
+        "title": "React Rendering Explained",
+        "author": "Web Dev Simplified",
+        "duration": "15:00",
+        "description": "Understanding React rendering"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-19T23:08:21.244197+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "6ab68c94-d0d6-4f9b-a95e-9136f0bd068a",
+    "title": "Not quite. Consider rendering strategy best practices.",
+    "content": "How do React Server Components improve rendering performance?",
+    "type": "multiple-choice",
+    "difficulty": "advanced",
+    "explanation": "RSCs allow heavy computation and data fetching to happen on the server, reducing client bundle size.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "RSCs allow heavy computation and data fetching to happen on the server, reducing client bundle size.",
+        "isCorrect": true,
+        "explanation": "RSCs allow heavy computation and data fetching to happen on the server, reducing client bundle size."
+      },
+      {
+        "id": "o2",
+        "text": "This is not correct. Please refer to the explanation.",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "o3",
+        "text": "Incorrect. Review rendering pattern concepts.",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "o4",
+        "text": "This is a common misconception. The correct answer is different.",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "o5",
+        "text": "Not quite. Consider rendering strategy best practices.",
+        "isCorrect": false,
+        "explanation": ""
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.patterns.dev/react/rendering-patterns",
+        "type": "article",
+        "title": "React Rendering Patterns",
+        "author": "Patterns.dev",
+        "description": "Learn React rendering patterns"
+      },
+      {
+        "url": "https://www.youtube.com/watch?v=Y2hgEGPzTZY",
+        "type": "video",
+        "title": "React Rendering Explained",
+        "author": "Web Dev Simplified",
+        "duration": "15:00",
+        "description": "Understanding React rendering"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-19T23:08:21.244197+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "2f50cb4a-13f7-4d2f-901f-e0dcdbef4600",
+    "title": "Not quite. Consider rendering strategy best practices.",
+    "content": "How should a developer decide between SSR, ISR, Edge, and Resumable approaches?",
+    "type": "multiple-choice",
+    "difficulty": "advanced",
+    "explanation": "Use SSR for dynamic personalized content, ISR for semi-static content, Edge Rendering for global low-latency responses, and Resumability for ultra-fast interactivity without full hydration.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Use SSR for dynamic personalized content, ISR for semi-static content, Edge Rendering for global low-latency responses, and Resumability for ultra-fast interactivity without full hydration.",
+        "isCorrect": true,
+        "explanation": "Use SSR for dynamic personalized content, ISR for semi-static content, Edge Rendering for global low-latency responses, and Resumability for ultra-fast interactivity without full hydration."
+      },
+      {
+        "id": "o2",
+        "text": "This is not correct. Please refer to the explanation.",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "o3",
+        "text": "Incorrect. Review rendering pattern concepts.",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "o4",
+        "text": "This is a common misconception. The correct answer is different.",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "o5",
+        "text": "Not quite. Consider rendering strategy best practices.",
+        "isCorrect": false,
+        "explanation": ""
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.patterns.dev/react/rendering-patterns",
+        "type": "article",
+        "title": "React Rendering Patterns",
+        "author": "Patterns.dev",
+        "description": "Learn React rendering patterns"
+      },
+      {
+        "url": "https://www.youtube.com/watch?v=Y2hgEGPzTZY",
+        "type": "video",
+        "title": "React Rendering Explained",
+        "author": "Web Dev Simplified",
+        "duration": "15:00",
+        "description": "Understanding React rendering"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-19T23:08:21.244197+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "67611640-ae9f-4aff-812d-69caf4d9bd28",
+    "title": "They are the same process with different names",
+    "content": "How does Resumability differ from traditional hydration?",
+    "type": "multiple-choice",
+    "difficulty": "advanced",
+    "explanation": "Resumability skips full rehydration by resuming the app state directly from serialized data",
+    "options": [
+      {
+        "id": "a",
+        "text": "Resumability skips full rehydration by resuming the app state directly from serialized data",
+        "isCorrect": true,
+        "explanation": ""
+      },
+      {
+        "id": "b",
+        "text": "Resumability re-renders everything on the server",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "c",
+        "text": "They are the same process with different names",
+        "isCorrect": false,
+        "explanation": ""
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.patterns.dev/react/rendering-patterns",
+        "type": "article",
+        "title": "React Rendering Patterns",
+        "author": "Patterns.dev",
+        "description": "Learn React rendering patterns"
+      },
+      {
+        "url": "https://www.youtube.com/watch?v=Y2hgEGPzTZY",
+        "type": "video",
+        "title": "React Rendering Explained",
+        "author": "Web Dev Simplified",
+        "duration": "15:00",
+        "description": "Understanding React rendering"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-19T23:08:21.244197+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "238687e6-140f-4168-9bcb-6ba8fafecba1",
+    "title": "Not quite. Consider rendering strategy best practices.",
+    "content": "What problem does Incremental Static Regeneration (ISR) solve compared to standard static generation?",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "ISR allows pages to be updated after the initial build without rebuilding the entire site.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "ISR allows pages to be updated after the initial build without rebuilding the entire site.",
+        "isCorrect": true,
+        "explanation": "ISR allows pages to be updated after the initial build without rebuilding the entire site."
+      },
+      {
+        "id": "o2",
+        "text": "This is not correct. Please refer to the explanation.",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "o3",
+        "text": "Incorrect. Review rendering pattern concepts.",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "o4",
+        "text": "This is a common misconception. The correct answer is different.",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "o5",
+        "text": "Not quite. Consider rendering strategy best practices.",
+        "isCorrect": false,
+        "explanation": ""
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.patterns.dev/react/rendering-patterns",
+        "type": "article",
+        "title": "React Rendering Patterns",
+        "author": "Patterns.dev",
+        "description": "Learn React rendering patterns"
+      },
+      {
+        "url": "https://www.youtube.com/watch?v=Y2hgEGPzTZY",
+        "type": "video",
+        "title": "React Rendering Explained",
+        "author": "Web Dev Simplified",
+        "duration": "15:00",
+        "description": "Understanding React rendering"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-19T23:08:21.244197+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "e6056771-3066-4281-a87c-dd0ee49142c8",
+    "title": "Not quite. Consider rendering strategy best practices.",
+    "content": "What is Resumability in frameworks like Qwik?",
+    "type": "multiple-choice",
+    "difficulty": "advanced",
+    "explanation": "Resumability allows the browser to resume application execution without rehydrating all components.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Resumability allows the browser to resume application execution without rehydrating all components.",
+        "isCorrect": true,
+        "explanation": "Resumability allows the browser to resume application execution without rehydrating all components."
+      },
+      {
+        "id": "o2",
+        "text": "This is not correct. Please refer to the explanation.",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "o3",
+        "text": "Incorrect. Review rendering pattern concepts.",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "o4",
+        "text": "This is a common misconception. The correct answer is different.",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "o5",
+        "text": "Not quite. Consider rendering strategy best practices.",
+        "isCorrect": false,
+        "explanation": ""
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.patterns.dev/react/rendering-patterns",
+        "type": "article",
+        "title": "React Rendering Patterns",
+        "author": "Patterns.dev",
+        "description": "Learn React rendering patterns"
+      },
+      {
+        "url": "https://www.youtube.com/watch?v=Y2hgEGPzTZY",
+        "type": "video",
+        "title": "React Rendering Explained",
+        "author": "Web Dev Simplified",
+        "duration": "15:00",
+        "description": "Understanding React rendering"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-19T23:08:21.244197+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "aeb24d3f-20e4-4ed7-93bb-f146066b6075",
+    "title": "It updates pages manually via admin dashboard",
+    "content": "How does ISR update static pages over time?",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "It regenerates pages on-demand when a user visits an outdated page",
+    "options": [
+      {
+        "id": "a",
+        "text": "It regenerates pages on-demand when a user visits an outdated page",
+        "isCorrect": true,
+        "explanation": ""
+      },
+      {
+        "id": "b",
+        "text": "It rebuilds the entire website daily",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "c",
+        "text": "It updates pages manually via admin dashboard",
+        "isCorrect": false,
+        "explanation": ""
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.patterns.dev/react/rendering-patterns",
+        "type": "article",
+        "title": "React Rendering Patterns",
+        "author": "Patterns.dev",
+        "description": "Learn React rendering patterns"
+      },
+      {
+        "url": "https://www.youtube.com/watch?v=Y2hgEGPzTZY",
+        "type": "video",
+        "title": "React Rendering Explained",
+        "author": "Web Dev Simplified",
+        "duration": "15:00",
+        "description": "Understanding React rendering"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-19T23:08:21.244197+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "cc91acd7-6ff8-4174-8939-3f468d96d2d4",
+    "title": "It disables interactivity completely",
+    "content": "What is Progressive Hydration in React or similar frameworks?",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "It hydrates parts of the UI gradually as JavaScript loads or user interacts",
+    "options": [
+      {
+        "id": "a",
+        "text": "It hydrates parts of the UI gradually as JavaScript loads or user interacts",
+        "isCorrect": true,
+        "explanation": ""
+      },
+      {
+        "id": "b",
+        "text": "It waits until all components are fully loaded before rendering anything",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "c",
+        "text": "It disables interactivity completely",
+        "isCorrect": false,
+        "explanation": ""
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.patterns.dev/react/rendering-patterns",
+        "type": "article",
+        "title": "React Rendering Patterns",
+        "author": "Patterns.dev",
+        "description": "Learn React rendering patterns"
+      },
+      {
+        "url": "https://www.youtube.com/watch?v=Y2hgEGPzTZY",
+        "type": "video",
+        "title": "React Rendering Explained",
+        "author": "Web Dev Simplified",
+        "duration": "15:00",
+        "description": "Understanding React rendering"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-19T23:08:21.244197+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "0925ba7a-b97a-4214-8612-8c6805012db6",
+    "title": "Not quite. Consider rendering strategy best practices.",
+    "content": "Why is Progressive Hydration beneficial for large, complex pages?",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "It reduces the blocking time by enabling interaction in critical parts of the page before the entire app hydrates.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "It reduces the blocking time by enabling interaction in critical parts of the page before the entire app hydrates.",
+        "isCorrect": true,
+        "explanation": "It reduces the blocking time by enabling interaction in critical parts of the page before the entire app hydrates."
+      },
+      {
+        "id": "o2",
+        "text": "This is not correct. Please refer to the explanation.",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "o3",
+        "text": "Incorrect. Review rendering pattern concepts.",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "o4",
+        "text": "This is a common misconception. The correct answer is different.",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "o5",
+        "text": "Not quite. Consider rendering strategy best practices.",
+        "isCorrect": false,
+        "explanation": ""
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.patterns.dev/react/rendering-patterns",
+        "type": "article",
+        "title": "React Rendering Patterns",
+        "author": "Patterns.dev",
+        "description": "Learn React rendering patterns"
+      },
+      {
+        "url": "https://www.youtube.com/watch?v=Y2hgEGPzTZY",
+        "type": "video",
+        "title": "React Rendering Explained",
+        "author": "Web Dev Simplified",
+        "duration": "15:00",
+        "description": "Understanding React rendering"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-19T23:08:21.244197+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "3f45a307-1485-4c7a-9798-b5f2628e517d",
+    "title": "Server-rendered navigation bar",
+    "content": "Which of these is an example of a dynamic island on a static page?",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "A social media share widget inside a static blog post",
+    "options": [
+      {
+        "id": "a",
+        "text": "A social media share widget inside a static blog post",
+        "isCorrect": true,
+        "explanation": ""
+      },
+      {
+        "id": "b",
+        "text": "Static article text with no JavaScript",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "c",
+        "text": "Server-rendered navigation bar",
+        "isCorrect": false,
+        "explanation": ""
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.patterns.dev/react/rendering-patterns",
+        "type": "article",
+        "title": "React Rendering Patterns",
+        "author": "Patterns.dev",
+        "description": "Learn React rendering patterns"
+      },
+      {
+        "url": "https://www.youtube.com/watch?v=Y2hgEGPzTZY",
+        "type": "video",
+        "title": "React Rendering Explained",
+        "author": "Web Dev Simplified",
+        "duration": "15:00",
+        "description": "Understanding React rendering"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-19T23:07:18.766711+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "c4ae5a27-8d1a-47e2-ba4c-08f21a42fb7d",
+    "title": "CSR is faster than SSR in all cases",
+    "content": "Which of the following best describes the difference between CSR and SSR?",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "CSR renders pages on the client, SSR renders them on the server before sending HTML",
+    "options": [
+      {
+        "id": "a",
+        "text": "CSR renders pages on the client, SSR renders them on the server before sending HTML",
+        "isCorrect": true,
+        "explanation": ""
+      },
+      {
+        "id": "b",
+        "text": "SSR requires no JavaScript on the client",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "c",
+        "text": "CSR is faster than SSR in all cases",
+        "isCorrect": false,
+        "explanation": ""
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.patterns.dev/react/rendering-patterns",
+        "type": "article",
+        "title": "React Rendering Patterns",
+        "author": "Patterns.dev",
+        "description": "Learn React rendering patterns"
+      },
+      {
+        "url": "https://www.youtube.com/watch?v=Y2hgEGPzTZY",
+        "type": "video",
+        "title": "React Rendering Explained",
+        "author": "Web Dev Simplified",
+        "duration": "15:00",
+        "description": "Understanding React rendering"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-19T23:07:18.766711+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "7132bb22-e54b-40d1-b668-b380505220c3",
+    "title": "Not quite. Consider rendering strategy best practices.",
+    "content": "What are some benefits of adopting the Islands Architecture?",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "Reduces the amount of JavaScript shipped to the client.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Reduces the amount of JavaScript shipped to the client.",
+        "isCorrect": true,
+        "explanation": "Reduces the amount of JavaScript shipped to the client."
+      },
+      {
+        "id": "o2",
+        "text": "This is not correct. Please refer to the explanation.",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "o3",
+        "text": "Incorrect. Review rendering pattern concepts.",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "o4",
+        "text": "This is a common misconception. The correct answer is different.",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "o5",
+        "text": "Not quite. Consider rendering strategy best practices.",
+        "isCorrect": false,
+        "explanation": ""
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.patterns.dev/react/rendering-patterns",
+        "type": "article",
+        "title": "React Rendering Patterns",
+        "author": "Patterns.dev",
+        "description": "Learn React rendering patterns"
+      },
+      {
+        "url": "https://www.youtube.com/watch?v=Y2hgEGPzTZY",
+        "type": "video",
+        "title": "React Rendering Explained",
+        "author": "Web Dev Simplified",
+        "duration": "15:00",
+        "description": "Understanding React rendering"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-19T23:07:18.766711+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "ef8caf73-659c-4960-9fb9-683f328ed930",
+    "title": "Not quite. Consider rendering strategy best practices.",
+    "content": "What is a common technique to improve perceived performance in Client-Side Rendering?",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "Use code-splitting and lazy loading to reduce the initial bundle size.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Use code-splitting and lazy loading to reduce the initial bundle size.",
+        "isCorrect": true,
+        "explanation": "Use code-splitting and lazy loading to reduce the initial bundle size."
+      },
+      {
+        "id": "o2",
+        "text": "This is not correct. Please refer to the explanation.",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "o3",
+        "text": "Incorrect. Review rendering pattern concepts.",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "o4",
+        "text": "This is a common misconception. The correct answer is different.",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "o5",
+        "text": "Not quite. Consider rendering strategy best practices.",
+        "isCorrect": false,
+        "explanation": ""
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.patterns.dev/react/rendering-patterns",
+        "type": "article",
+        "title": "React Rendering Patterns",
+        "author": "Patterns.dev",
+        "description": "Learn React rendering patterns"
+      },
+      {
+        "url": "https://www.youtube.com/watch?v=Y2hgEGPzTZY",
+        "type": "video",
+        "title": "React Rendering Explained",
+        "author": "Web Dev Simplified",
+        "duration": "15:00",
+        "description": "Understanding React rendering"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-19T23:07:18.766711+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "77e7e61b-414b-492e-8013-f57c1d76ad66",
+    "title": "It requires a full backend rewrite",
+    "content": "What is a limitation of the Islands Architecture approach?",
+    "type": "multiple-choice",
+    "difficulty": "advanced",
+    "explanation": "It''s difficult to scale for highly interactive apps like social media feeds",
+    "options": [
+      {
+        "id": "a",
+        "text": "It''s difficult to scale for highly interactive apps like social media feeds",
+        "isCorrect": true,
+        "explanation": ""
+      },
+      {
+        "id": "b",
+        "text": "It cannot be used with React",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "c",
+        "text": "It requires a full backend rewrite",
+        "isCorrect": false,
+        "explanation": ""
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.patterns.dev/react/rendering-patterns",
+        "type": "article",
+        "title": "React Rendering Patterns",
+        "author": "Patterns.dev",
+        "description": "Learn React rendering patterns"
+      },
+      {
+        "url": "https://www.youtube.com/watch?v=Y2hgEGPzTZY",
+        "type": "video",
+        "title": "React Rendering Explained",
+        "author": "Web Dev Simplified",
+        "duration": "15:00",
+        "description": "Understanding React rendering"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-19T23:07:18.766711+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "1e95cd19-9c8b-447a-9663-6a08181663b9",
+    "title": "Not quite. Consider rendering strategy best practices.",
+    "content": "What is Edge Rendering and how does it differ from traditional SSR?",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "Edge Rendering executes server-side logic at CDN edge locations, closer to the user.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Edge Rendering executes server-side logic at CDN edge locations, closer to the user.",
+        "isCorrect": true,
+        "explanation": "Edge Rendering executes server-side logic at CDN edge locations, closer to the user."
+      },
+      {
+        "id": "o2",
+        "text": "This is not correct. Please refer to the explanation.",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "o3",
+        "text": "Incorrect. Review rendering pattern concepts.",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "o4",
+        "text": "This is a common misconception. The correct answer is different.",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "o5",
+        "text": "Not quite. Consider rendering strategy best practices.",
+        "isCorrect": false,
+        "explanation": ""
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.patterns.dev/react/rendering-patterns",
+        "type": "article",
+        "title": "React Rendering Patterns",
+        "author": "Patterns.dev",
+        "description": "Learn React rendering patterns"
+      },
+      {
+        "url": "https://www.youtube.com/watch?v=Y2hgEGPzTZY",
+        "type": "video",
+        "title": "React Rendering Explained",
+        "author": "Web Dev Simplified",
+        "duration": "15:00",
+        "description": "Understanding React rendering"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-19T23:07:18.766711+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "b199206c-0894-45e9-9b0f-a1d2c46bb461",
+    "title": "It always increases server costs",
+    "content": "Which of the following is a main advantage of Edge Rendering?",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "Reduced latency due to geographical proximity to users",
+    "options": [
+      {
+        "id": "a",
+        "text": "Reduced latency due to geographical proximity to users",
+        "isCorrect": true,
+        "explanation": ""
+      },
+      {
+        "id": "b",
+        "text": "It replaces all client-side rendering logic",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "c",
+        "text": "It always increases server costs",
+        "isCorrect": false,
+        "explanation": ""
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.patterns.dev/react/rendering-patterns",
+        "type": "article",
+        "title": "React Rendering Patterns",
+        "author": "Patterns.dev",
+        "description": "Learn React rendering patterns"
+      },
+      {
+        "url": "https://www.youtube.com/watch?v=Y2hgEGPzTZY",
+        "type": "video",
+        "title": "React Rendering Explained",
+        "author": "Web Dev Simplified",
+        "duration": "15:00",
+        "description": "Understanding React rendering"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-19T23:07:18.766711+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "b5fb9bfa-bc15-4a0a-82d9-1f564d303104",
+    "title": "Not quite. Consider rendering strategy best practices.",
+    "content": "How does Partial Hydration improve performance in the Islands Architecture?",
+    "type": "multiple-choice",
+    "difficulty": "advanced",
+    "explanation": "It allows each component to hydrate independently rather than rehydrating the entire page.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "It allows each component to hydrate independently rather than rehydrating the entire page.",
+        "isCorrect": true,
+        "explanation": "It allows each component to hydrate independently rather than rehydrating the entire page."
+      },
+      {
+        "id": "o2",
+        "text": "This is not correct. Please refer to the explanation.",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "o3",
+        "text": "Incorrect. Review rendering pattern concepts.",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "o4",
+        "text": "This is a common misconception. The correct answer is different.",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "o5",
+        "text": "Not quite. Consider rendering strategy best practices.",
+        "isCorrect": false,
+        "explanation": ""
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.patterns.dev/react/rendering-patterns",
+        "type": "article",
+        "title": "React Rendering Patterns",
+        "author": "Patterns.dev",
+        "description": "Learn React rendering patterns"
+      },
+      {
+        "url": "https://www.youtube.com/watch?v=Y2hgEGPzTZY",
+        "type": "video",
+        "title": "React Rendering Explained",
+        "author": "Web Dev Simplified",
+        "duration": "15:00",
+        "description": "Understanding React rendering"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-19T23:07:18.766711+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "727c40d7-f3a6-484e-bc74-1a86fb3ee2d1",
+    "title": "Not quite. Consider rendering strategy best practices.",
+    "content": "What is the core principle of the Islands Architecture pattern?",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "Islands Architecture renders mostly static HTML on the server and hydrates only small interactive 'islands' on the client.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Islands Architecture renders mostly static HTML on the server and hydrates only small interactive 'islands' on the client.",
+        "isCorrect": true,
+        "explanation": "Islands Architecture renders mostly static HTML on the server and hydrates only small interactive 'islands' on the client."
+      },
+      {
+        "id": "o2",
+        "text": "This is not correct. Please refer to the explanation.",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "o3",
+        "text": "Incorrect. Review rendering pattern concepts.",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "o4",
+        "text": "This is a common misconception. The correct answer is different.",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "o5",
+        "text": "Not quite. Consider rendering strategy best practices.",
+        "isCorrect": false,
+        "explanation": ""
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.patterns.dev/react/rendering-patterns",
+        "type": "article",
+        "title": "React Rendering Patterns",
+        "author": "Patterns.dev",
+        "description": "Learn React rendering patterns"
+      },
+      {
+        "url": "https://www.youtube.com/watch?v=Y2hgEGPzTZY",
+        "type": "video",
+        "title": "React Rendering Explained",
+        "author": "Web Dev Simplified",
+        "duration": "15:00",
+        "description": "Understanding React rendering"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-19T23:07:18.766711+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "6635648f-86f6-4772-8ba3-dc77e12b2375",
+    "title": "Create React App",
+    "content": "Which frameworks natively support Islands Architecture?",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "Astro and Marko",
+    "options": [
+      {
+        "id": "a",
+        "text": "Astro and Marko",
+        "isCorrect": true,
+        "explanation": ""
+      },
+      {
+        "id": "b",
+        "text": "Next.js only",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "c",
+        "text": "Create React App",
+        "isCorrect": false,
+        "explanation": ""
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.patterns.dev/react/rendering-patterns",
+        "type": "article",
+        "title": "React Rendering Patterns",
+        "author": "Patterns.dev",
+        "description": "Learn React rendering patterns"
+      },
+      {
+        "url": "https://www.youtube.com/watch?v=Y2hgEGPzTZY",
+        "type": "video",
+        "title": "React Rendering Explained",
+        "author": "Web Dev Simplified",
+        "duration": "15:00",
+        "description": "Understanding React rendering"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-19T23:07:18.766711+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "0ec0ae31-9a52-45fc-9c83-0b386c9b6921",
+    "title": "CSR makes sites slower for all users",
+    "content": "Why can Client-Side Rendering negatively affect SEO?",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "Search engines struggle to index JavaScript-rendered pages",
+    "options": [
+      {
+        "id": "a",
+        "text": "Search engines struggle to index JavaScript-rendered pages",
+        "isCorrect": true,
+        "explanation": ""
+      },
+      {
+        "id": "b",
+        "text": "CSR prevents the use of meta tags",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "c",
+        "text": "CSR makes sites slower for all users",
+        "isCorrect": false,
+        "explanation": ""
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.patterns.dev/react/rendering-patterns",
+        "type": "article",
+        "title": "React Rendering Patterns",
+        "author": "Patterns.dev",
+        "description": "Learn React rendering patterns"
+      },
+      {
+        "url": "https://www.youtube.com/watch?v=Y2hgEGPzTZY",
+        "type": "video",
+        "title": "React Rendering Explained",
+        "author": "Web Dev Simplified",
+        "duration": "15:00",
+        "description": "Understanding React rendering"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-19T23:05:56.125632+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "dfc9a542-a7f2-4bf6-b001-5c1478766d96",
+    "title": "It disables animation hooks",
+    "content": "Because React''s strict mode causes double rendering in development, interfering with the transition flow.",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "Because React''s strict mode causes double rendering in development, interfering with the transition flow.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "It breaks routing",
+        "isCorrect": true,
+        "explanation": ""
+      },
+      {
+        "id": "o2",
+        "text": "It prevents componentDidUpdate from firing",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "o3",
+        "text": "It causes components to render twice and disrupts transitions",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "o4",
+        "text": "It disables animation hooks",
+        "isCorrect": false,
+        "explanation": ""
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.patterns.dev/react/rendering-patterns",
+        "type": "article",
+        "title": "React Rendering Patterns",
+        "author": "Patterns.dev",
+        "description": "Learn React rendering patterns"
+      },
+      {
+        "url": "https://www.youtube.com/watch?v=Y2hgEGPzTZY",
+        "type": "video",
+        "title": "React Rendering Explained",
+        "author": "Web Dev Simplified",
+        "duration": "15:00",
+        "description": "Understanding React rendering"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-19T23:05:56.125632+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "d5813638-0153-4c48-8e34-86d11e21460e",
+    "title": "It caches HTML responses",
+    "content": "Turn handles animating page navigations by adding classes like turn-exit and turn-enter to trigger CSS transitions.",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "Turn handles animating page navigations by adding classes like turn-exit and turn-enter to trigger CSS transitions.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "It performs server rendering",
+        "isCorrect": true,
+        "explanation": ""
+      },
+      {
+        "id": "o2",
+        "text": "It adds routing capabilities",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "o3",
+        "text": "It animates page navigations via CSS classes",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "o4",
+        "text": "It caches HTML responses",
+        "isCorrect": false,
+        "explanation": ""
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.patterns.dev/react/rendering-patterns",
+        "type": "article",
+        "title": "React Rendering Patterns",
+        "author": "Patterns.dev",
+        "description": "Learn React rendering patterns"
+      },
+      {
+        "url": "https://www.youtube.com/watch?v=Y2hgEGPzTZY",
+        "type": "video",
+        "title": "React Rendering Explained",
+        "author": "Web Dev Simplified",
+        "duration": "15:00",
+        "description": "Understanding React rendering"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-19T23:05:56.125632+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "0b235628-23f8-4145-a01b-e872e0e95bd9",
+    "title": "Exit animations require the new HTML before starting",
+    "content": "The View Transitions API can animate shared elements across pages but requires waiting for new content, while exit animations give instant feedback but can''t transition shared elements.",
+    "type": "multiple-choice",
+    "difficulty": "advanced",
+    "explanation": "The View Transitions API can animate shared elements across pages but requires waiting for new content, while exit animations give instant feedback but can''t transition shared elements.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "View transitions are faster in all cases",
+        "isCorrect": true,
+        "explanation": ""
+      },
+      {
+        "id": "o2",
+        "text": "Exit animations support cross-page element morphing",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "o3",
+        "text": "View transitions handle shared elements but may delay feedback",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "o4",
+        "text": "Exit animations require the new HTML before starting",
+        "isCorrect": false,
+        "explanation": ""
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.patterns.dev/react/rendering-patterns",
+        "type": "article",
+        "title": "React Rendering Patterns",
+        "author": "Patterns.dev",
+        "description": "Learn React rendering patterns"
+      },
+      {
+        "url": "https://www.youtube.com/watch?v=Y2hgEGPzTZY",
+        "type": "video",
+        "title": "React Rendering Explained",
+        "author": "Web Dev Simplified",
+        "duration": "15:00",
+        "description": "Understanding React rendering"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-19T23:05:56.125632+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "3fa5f6dd-4ce0-4bbe-9e23-e8b26a0b0874",
+    "title": "Not quite. Consider rendering strategy best practices.",
+    "content": "What happens during the Client-Side Rendering (CSR) process in a React application?",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "In CSR, the browser loads a minimal HTML shell and JavaScript bundles.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "In CSR, the browser loads a minimal HTML shell and JavaScript bundles.",
+        "isCorrect": true,
+        "explanation": "In CSR, the browser loads a minimal HTML shell and JavaScript bundles."
+      },
+      {
+        "id": "o2",
+        "text": "This is not correct. Please refer to the explanation.",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "o3",
+        "text": "Incorrect. Review rendering pattern concepts.",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "o4",
+        "text": "This is a common misconception. The correct answer is different.",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "o5",
+        "text": "Not quite. Consider rendering strategy best practices.",
+        "isCorrect": false,
+        "explanation": ""
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.patterns.dev/react/rendering-patterns",
+        "type": "article",
+        "title": "React Rendering Patterns",
+        "author": "Patterns.dev",
+        "description": "Learn React rendering patterns"
+      },
+      {
+        "url": "https://www.youtube.com/watch?v=Y2hgEGPzTZY",
+        "type": "video",
+        "title": "React Rendering Explained",
+        "author": "Web Dev Simplified",
+        "duration": "15:00",
+        "description": "Understanding React rendering"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-19T23:05:56.125632+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "794d4a6f-10a7-473c-bc87-16d1117636ef",
+    "title": "It blocks network requests",
+    "content": "It requires the new page HTML to be available before animating, potentially delaying feedback for users.",
+    "type": "multiple-choice",
+    "difficulty": "advanced",
+    "explanation": "It requires the new page HTML to be available before animating, potentially delaying feedback for users.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "It only supports inline styles",
+        "isCorrect": true,
+        "explanation": ""
+      },
+      {
+        "id": "o2",
+        "text": "It can''t animate DOM elements",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "o3",
+        "text": "It needs new page HTML before animating",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "o4",
+        "text": "It blocks network requests",
+        "isCorrect": false,
+        "explanation": ""
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.patterns.dev/react/rendering-patterns",
+        "type": "article",
+        "title": "React Rendering Patterns",
+        "author": "Patterns.dev",
+        "description": "Learn React rendering patterns"
+      },
+      {
+        "url": "https://www.youtube.com/watch?v=Y2hgEGPzTZY",
+        "type": "video",
+        "title": "React Rendering Explained",
+        "author": "Web Dev Simplified",
+        "duration": "15:00",
+        "description": "Understanding React rendering"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-19T23:05:56.125632+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "e945cd10-026e-4bd2-969a-8c60ab6ea1f9",
+    "title": "It prevents animation jank",
+    "content": "It provides instant feedback while waiting for the new content to load, improving perceived performance.",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "It provides instant feedback while waiting for the new content to load, improving perceived performance.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "It improves SEO performance",
+        "isCorrect": true,
+        "explanation": ""
+      },
+      {
+        "id": "o2",
+        "text": "It reduces memory usage",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "o3",
+        "text": "It offers immediate visual feedback to the user",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "o4",
+        "text": "It prevents animation jank",
+        "isCorrect": false,
+        "explanation": ""
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.patterns.dev/react/rendering-patterns",
+        "type": "article",
+        "title": "React Rendering Patterns",
+        "author": "Patterns.dev",
+        "description": "Learn React rendering patterns"
+      },
+      {
+        "url": "https://www.youtube.com/watch?v=Y2hgEGPzTZY",
+        "type": "video",
+        "title": "React Rendering Explained",
+        "author": "Web Dev Simplified",
+        "duration": "15:00",
+        "description": "Understanding React rendering"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-19T23:05:56.125632+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "f07084c7-688c-4957-9fb0-e0bc69cc26a6",
+    "title": "It forces server-side rendering",
+    "content": "It activates experimental support for the View Transitions API, falling back to CSS animations when unsupported.",
+    "type": "multiple-choice",
+    "difficulty": "advanced",
+    "explanation": "It activates experimental support for the View Transitions API, falling back to CSS animations when unsupported.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "It disables animations completely",
+        "isCorrect": true,
+        "explanation": ""
+      },
+      {
+        "id": "o2",
+        "text": "It enables experimental view transitions with fallback",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "o3",
+        "text": "It triggers full page reloads",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "o4",
+        "text": "It forces server-side rendering",
+        "isCorrect": false,
+        "explanation": ""
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.patterns.dev/react/rendering-patterns",
+        "type": "article",
+        "title": "React Rendering Patterns",
+        "author": "Patterns.dev",
+        "description": "Learn React rendering patterns"
+      },
+      {
+        "url": "https://www.youtube.com/watch?v=Y2hgEGPzTZY",
+        "type": "video",
+        "title": "React Rendering Explained",
+        "author": "Web Dev Simplified",
+        "duration": "15:00",
+        "description": "Understanding React rendering"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-19T23:05:56.125632+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "b788b7aa-a85c-4cc2-a324-eee2b42a3ed3",
+    "title": "animationstart and animationend",
+    "content": "Turn listens to Turbo events such as turbo:visit, turbo:before-render, and turbo:render to control animations.",
+    "type": "multiple-choice",
+    "difficulty": "advanced",
+    "explanation": "Turn listens to Turbo events such as turbo:visit, turbo:before-render, and turbo:render to control animations.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "turbo:start and turbo:end",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "o2",
+        "text": "turbo:visit, turbo:before-render, turbo:render",
+        "isCorrect": true,
+        "explanation": ""
+      },
+      {
+        "id": "o3",
+        "text": "turbo:click and turbo:load",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "o4",
+        "text": "animationstart and animationend",
+        "isCorrect": false,
+        "explanation": ""
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.patterns.dev/react/rendering-patterns",
+        "type": "article",
+        "title": "React Rendering Patterns",
+        "author": "Patterns.dev",
+        "description": "Learn React rendering patterns"
+      },
+      {
+        "url": "https://www.youtube.com/watch?v=Y2hgEGPzTZY",
+        "type": "video",
+        "title": "React Rendering Explained",
+        "author": "Web Dev Simplified",
+        "duration": "15:00",
+        "description": "Understanding React rendering"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-19T23:05:56.125632+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "2bf760f9-ae62-4c2c-8e36-69d22733e3c4",
+    "title": "Remix",
+    "content": "Turbo, part of the Hotwire suite, enhances MPAs by replacing the page body dynamically using JavaScript.",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "Turbo, part of the Hotwire suite, enhances MPAs by replacing the page body dynamically using JavaScript.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Turn",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "o2",
+        "text": "Turbo",
+        "isCorrect": true,
+        "explanation": ""
+      },
+      {
+        "id": "o3",
+        "text": "Astro",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "o4",
+        "text": "Remix",
+        "isCorrect": false,
+        "explanation": ""
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.patterns.dev/react/rendering-patterns",
+        "type": "article",
+        "title": "React Rendering Patterns",
+        "author": "Patterns.dev",
+        "description": "Learn React rendering patterns"
+      },
+      {
+        "url": "https://www.youtube.com/watch?v=Y2hgEGPzTZY",
+        "type": "video",
+        "title": "React Rendering Explained",
+        "author": "Web Dev Simplified",
+        "duration": "15:00",
+        "description": "Understanding React rendering"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-19T23:05:56.125632+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "fcaf2e44-7d20-42b2-ba51-c38782ba540b",
+    "title": "After component unmount",
+    "content": "After the data request completes to minimize the time the DOM is frozen and improve user experience.",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "After the data request completes to minimize the time the DOM is frozen and improve user experience.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Before sending the data request",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "o2",
+        "text": "Immediately on link click",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "o3",
+        "text": "After the data request completes",
+        "isCorrect": true,
+        "explanation": ""
+      },
+      {
+        "id": "o4",
+        "text": "After component unmount",
+        "isCorrect": false,
+        "explanation": ""
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.patterns.dev/react/rendering-patterns",
+        "type": "article",
+        "title": "React Rendering Patterns",
+        "author": "Patterns.dev",
+        "description": "Learn React rendering patterns"
+      },
+      {
+        "url": "https://www.youtube.com/watch?v=Y2hgEGPzTZY",
+        "type": "video",
+        "title": "React Rendering Explained",
+        "author": "Web Dev Simplified",
+        "duration": "15:00",
+        "description": "Understanding React rendering"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-19T22:59:53.213532+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "300e9e92-3b71-416f-b6c7-d5243f9ff847",
+    "title": "It determines animation duration",
+    "content": "It assigns a unique name to elements so that matching elements across states can be smoothly animated together.",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "It assigns a unique name to elements so that matching elements across states can be smoothly animated together.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "It defines a CSS keyframe",
+        "isCorrect": true,
+        "explanation": ""
+      },
+      {
+        "id": "o2",
+        "text": "It assigns an animation ID for transitions",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "o3",
+        "text": "It uniquely identifies elements for smooth state transitions",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "o4",
+        "text": "It determines animation duration",
+        "isCorrect": false,
+        "explanation": ""
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.patterns.dev/react/rendering-patterns",
+        "type": "article",
+        "title": "React Rendering Patterns",
+        "author": "Patterns.dev",
+        "description": "Learn React rendering patterns"
+      },
+      {
+        "url": "https://www.youtube.com/watch?v=Y2hgEGPzTZY",
+        "type": "video",
+        "title": "React Rendering Explained",
+        "author": "Web Dev Simplified",
+        "duration": "15:00",
+        "description": "Understanding React rendering"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-19T22:59:53.213532+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "7925ddcc-4fec-41e9-b2dc-e7a6ebb1a72d",
+    "title": "Pauses all event listeners",
+    "content": "It takes a screenshot of the current DOM state before applying the callback changes.",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "It takes a screenshot of the current DOM state before applying the callback changes.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Preloads all CSS animations",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "o2",
+        "text": "Takes a screenshot of the current DOM",
+        "isCorrect": true,
+        "explanation": ""
+      },
+      {
+        "id": "o3",
+        "text": "Stores a snapshot of localStorage",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "o4",
+        "text": "Pauses all event listeners",
+        "isCorrect": false,
+        "explanation": ""
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.patterns.dev/react/rendering-patterns",
+        "type": "article",
+        "title": "React Rendering Patterns",
+        "author": "Patterns.dev",
+        "description": "Learn React rendering patterns"
+      },
+      {
+        "url": "https://www.youtube.com/watch?v=Y2hgEGPzTZY",
+        "type": "video",
+        "title": "React Rendering Explained",
+        "author": "Web Dev Simplified",
+        "duration": "15:00",
+        "description": "Understanding React rendering"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-19T22:59:53.213532+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "2f33a739-ac3e-4964-af6f-4bcaa36e2a8e",
+    "title": "window.transitionTo()",
+    "content": "The document.startViewTransition(callback) method initiates a view transition and calls the provided callback to update the DOM.",
+    "type": "code",
+    "difficulty": "intermediate",
+    "explanation": "The document.startViewTransition(callback) method initiates a view transition and calls the provided callback to update the DOM.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "document.animateTransition()",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "o2",
+        "text": "window.beginViewChange()",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "o3",
+        "text": "document.startViewTransition()",
+        "isCorrect": true,
+        "explanation": ""
+      },
+      {
+        "id": "o4",
+        "text": "window.transitionTo()",
+        "isCorrect": false,
+        "explanation": ""
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.patterns.dev/react/rendering-patterns",
+        "type": "article",
+        "title": "React Rendering Patterns",
+        "author": "Patterns.dev",
+        "description": "Learn React rendering patterns"
+      },
+      {
+        "url": "https://www.youtube.com/watch?v=Y2hgEGPzTZY",
+        "type": "video",
+        "title": "React Rendering Explained",
+        "author": "Web Dev Simplified",
+        "duration": "15:00",
+        "description": "Understanding React rendering"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-19T22:59:53.213532+00:00",
+    "updatedAt": "2025-11-24T23:33:46.870735+00:00"
+  },
+  {
+    "id": "2e5afcf4-f4dc-4a3a-8be4-ace3818ee370",
+    "title": "By re-rendering the DOM asynchronously",
+    "content": "By returning a Promise from the callback, which must resolve before the animation completes.",
+    "type": "code",
+    "difficulty": "advanced",
+    "explanation": "By returning a Promise from the callback, which must resolve before the animation completes.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "By using setTimeout inside the callback",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "o2",
+        "text": "By returning a Promise that resolves when the DOM update is complete",
+        "isCorrect": true,
+        "explanation": ""
+      },
+      {
+        "id": "o3",
+        "text": "By pausing the animation manually",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "o4",
+        "text": "By re-rendering the DOM asynchronously",
+        "isCorrect": false,
+        "explanation": ""
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.patterns.dev/react/rendering-patterns",
+        "type": "article",
+        "title": "React Rendering Patterns",
+        "author": "Patterns.dev",
+        "description": "Learn React rendering patterns"
+      },
+      {
+        "url": "https://www.youtube.com/watch?v=Y2hgEGPzTZY",
+        "type": "video",
+        "title": "React Rendering Explained",
+        "author": "Web Dev Simplified",
+        "duration": "15:00",
+        "description": "Understanding React rendering"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-19T22:59:53.213532+00:00",
+    "updatedAt": "2025-11-24T23:33:46.870735+00:00"
+  },
+  {
+    "id": "5581b882-3a2a-4196-8944-21fa5751138b",
+    "title": "getSnapshotBeforeUpdate()",
+    "content": "shouldComponentUpdate() is overridden to return false, delaying rendering until the view transition begins.",
+    "type": "code",
+    "difficulty": "advanced",
+    "explanation": "shouldComponentUpdate() is overridden to return false, delaying rendering until the view transition begins.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "componentDidMount()",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "o2",
+        "text": "componentWillUnmount()",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "o3",
+        "text": "shouldComponentUpdate()",
+        "isCorrect": true,
+        "explanation": ""
+      },
+      {
+        "id": "o4",
+        "text": "getSnapshotBeforeUpdate()",
+        "isCorrect": false,
+        "explanation": ""
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.patterns.dev/react/rendering-patterns",
+        "type": "article",
+        "title": "React Rendering Patterns",
+        "author": "Patterns.dev",
+        "description": "Learn React rendering patterns"
+      },
+      {
+        "url": "https://www.youtube.com/watch?v=Y2hgEGPzTZY",
+        "type": "video",
+        "title": "React Rendering Explained",
+        "author": "Web Dev Simplified",
+        "duration": "15:00",
+        "description": "Understanding React rendering"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-19T22:59:53.213532+00:00",
+    "updatedAt": "2025-11-24T23:33:46.870735+00:00"
+  },
+  {
+    "id": "003989c7-6fe1-4704-8b79-492fd42d529a",
+    "title": "Event listeners are temporarily removed",
+    "content": "The DOM becomes non-interactive (frozen) until the callback and transition animation complete.",
+    "type": "multiple-choice",
+    "difficulty": "advanced",
+    "explanation": "The DOM becomes non-interactive (frozen) until the callback and transition animation complete.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "The DOM remains interactive",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "o2",
+        "text": "The DOM becomes non-interactive until the callback resolves",
+        "isCorrect": true,
+        "explanation": ""
+      },
+      {
+        "id": "o3",
+        "text": "Only CSS changes are blocked",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "o4",
+        "text": "Event listeners are temporarily removed",
+        "isCorrect": false,
+        "explanation": ""
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.patterns.dev/react/rendering-patterns",
+        "type": "article",
+        "title": "React Rendering Patterns",
+        "author": "Patterns.dev",
+        "description": "Learn React rendering patterns"
+      },
+      {
+        "url": "https://www.youtube.com/watch?v=Y2hgEGPzTZY",
+        "type": "video",
+        "title": "React Rendering Explained",
+        "author": "Web Dev Simplified",
+        "duration": "15:00",
+        "description": "Understanding React rendering"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-19T22:59:53.213532+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "bda097dd-46f3-46f2-8ed2-5f737cc24950",
+    "title": "To optimize network requests",
+    "content": "It provides a simple way to animate visual DOM changes between two states, enabling smooth transitions between UI views or pages.",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "It provides a simple way to animate visual DOM changes between two states, enabling smooth transitions between UI views or pages.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "To animate data fetching operations",
+        "isCorrect": true,
+        "explanation": ""
+      },
+      {
+        "id": "o2",
+        "text": "To transition visual changes between DOM states smoothly",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "o3",
+        "text": "To handle form validation errors visually",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "o4",
+        "text": "To optimize network requests",
+        "isCorrect": false,
+        "explanation": ""
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.patterns.dev/react/rendering-patterns",
+        "type": "article",
+        "title": "React Rendering Patterns",
+        "author": "Patterns.dev",
+        "description": "Learn React rendering patterns"
+      },
+      {
+        "url": "https://www.youtube.com/watch?v=Y2hgEGPzTZY",
+        "type": "video",
+        "title": "React Rendering Explained",
+        "author": "Web Dev Simplified",
+        "duration": "15:00",
+        "description": "Understanding React rendering"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-19T22:59:53.213532+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  }
+]
