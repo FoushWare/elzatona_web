@@ -1,0 +1,1902 @@
+[
+  {
+    "id": "a7f7ef32-a42a-400a-af0d-e814180ca747",
+    "title": "What happens if you use useLayoutEffect for non-layout logic?",
+    "content": "<pre><code>e      useLayoutEffect(() => {\n        console.log(\"Tracking analytics\");\n        fetch('/log-page-view');\n      }, []);</code></pre>\n\nUsing `useLayoutEffect` for logic **unrelated to layout or visual DOM changes** (such as logging, data fetching, or analytics) is **not recommended**. It can lead to **performance issues** or even unexpected behavior.\n\n      **Example: Anti-pattern**\n      The above usage delays the paint of the UI just to send a network request, which could (and should) be done after paint using useEffect.",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "Using `useLayoutEffect` for logic **unrelated to layout or visual DOM changes** (such as logging, data fetching, or analytics) is **not recommended**. It can lead to **performance issues** or even unexpected behavior.\n\n      **Example: Anti-pattern**\n      The above usage delays the paint of the UI just to send a network request, which could (and should) be done after paint using useEffect.",
+    "options": null,
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=SqcY0GlETPk",
+        "type": "video",
+        "title": "React Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "8:25:00",
+        "description": "Complete React tutorial from scratch"
+      },
+      {
+        "url": "https://react.dev/learn",
+        "type": "article",
+        "title": "React Documentation",
+        "author": "React Team",
+        "description": "Official React documentation and tutorials"
+      },
+      {
+        "url": "https://www.udemy.com/course/react-the-complete-guide-incl-redux/",
+        "type": "course",
+        "title": "React - The Complete Guide",
+        "author": "Maximilian Schwarzmüller",
+        "duration": "48 hours",
+        "description": "Master React and Redux with hands-on projects"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-21T05:16:49.792046+00:00",
+    "updatedAt": "2025-11-24T22:52:08.102565+00:00"
+  },
+  {
+    "id": "914e9052-7f1c-4dde-8754-4ff84b2a3d91",
+    "title": "What is useImperativeHandle Hook? Give an example.",
+    "content": "<pre><code>e      import React, {\n        useRef,\n        useState,\n        useImperativeHandle,\n        forwardRef,\n      } from 'react';\n      import './Dialog.css'; \n\n      const Dialog = forwardRef((props, ref) => {\n        const [isOpen, setIsOpen] = useState(false);\n        const [formData, setFormData] = useState('');\n\n        useImperativeHandle(ref, () => ({\n          open: () => setIsOpen(true),\n          close: () => setIsOpen(false),\n          reset: () => setFormData(''),\n        }));\n\n        if (!isOpen) return null;\n\n        return (\n            <h2 Dialog</h2\n            <input\n              type=\"text\"\n              value={formData}\n              placeholder=\"Type something...\"\n              onChange={(e) => setFormData(e.target.value)}\n            />\n            <br />\n            <button onClick={() => setIsOpen(false)}>Close</button\n        );\n      });\n\n      function Parent() {\n        const dialogRef = useRef();\n\n        return (\n            <h1 useImperativeHandle Dialog Example</h1\n            <button onClick={() => dialogRef.current.open()}>Open Dialog</button\n            <button onClick={() => dialogRef.current.reset()}>Reset Dialog</button\n            <button onClick={() => dialogRef.current.close()}>Close Dialog</button\n\n            <Dialog ref={dialogRef} />\n        );\n      }\n\n      export default Parent;</code></pre>\n\n`useImperativeHandle` is a React Hook that allows a **child component** to expose **custom functions or properties** to its **parent component**, when using `ref`.\n      It is typically used with `forwardRef` and is very useful in cases like **modals**, **dialogs**, **custom inputs**, etc., where the parent needs to **control behavior imperatively** (e.g., open, close, reset).\n\n      **Example: Dialog component**",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "`useImperativeHandle` is a React Hook that allows a **child component** to expose **custom functions or properties** to its **parent component**, when using `ref`.\n      It is typically used with `forwardRef` and is very useful in cases like **modals**, **dialogs**, **custom inputs**, etc., where the parent needs to **control behavior imperatively** (e.g., open, close, reset).\n\n      **Example: Dialog component**",
+    "options": null,
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=SqcY0GlETPk",
+        "type": "video",
+        "title": "React Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "8:25:00",
+        "description": "Complete React tutorial from scratch"
+      },
+      {
+        "url": "https://react.dev/learn",
+        "type": "article",
+        "title": "React Documentation",
+        "author": "React Team",
+        "description": "Official React documentation and tutorials"
+      },
+      {
+        "url": "https://www.udemy.com/course/react-the-complete-guide-incl-redux/",
+        "type": "course",
+        "title": "React - The Complete Guide",
+        "author": "Maximilian Schwarzmüller",
+        "duration": "48 hours",
+        "description": "Master React and Redux with hands-on projects"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-21T05:16:49.792046+00:00",
+    "updatedAt": "2025-11-24T22:52:08.102565+00:00"
+  },
+  {
+    "id": "2597660c-c928-4de9-9612-209aeca45770",
+    "title": "Is it possible to access a ref in the render method?",
+    "content": "<pre><code>e        const divRef = useRef(null);\n        \n        console.log(divRef.current); // ❌ null on initial render\n        return <div ref={divRef}>Hello</div;</code></pre>\n\nYes, you can access a ref in the render method, but what you get from it depends on how you're using the ref and when in the component lifecycle you're rendering.\n        \n        For example, when using ref to access a DOM node (e.g., divRef.current), it's not immediately available on the first render.",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "Yes, you can access a ref in the render method, but what you get from it depends on how you're using the ref and when in the component lifecycle you're rendering.\n        \n        For example, when using ref to access a DOM node (e.g., divRef.current), it's not immediately available on the first render.",
+    "options": null,
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=SqcY0GlETPk",
+        "type": "video",
+        "title": "React Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "8:25:00",
+        "description": "Complete React tutorial from scratch"
+      },
+      {
+        "url": "https://react.dev/learn",
+        "type": "article",
+        "title": "React Documentation",
+        "author": "React Team",
+        "description": "Official React documentation and tutorials"
+      },
+      {
+        "url": "https://www.udemy.com/course/react-the-complete-guide-incl-redux/",
+        "type": "course",
+        "title": "React - The Complete Guide",
+        "author": "Maximilian Schwarzmüller",
+        "duration": "48 hours",
+        "description": "Master React and Redux with hands-on projects"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-21T05:16:49.792046+00:00",
+    "updatedAt": "2025-11-24T22:52:08.102565+00:00"
+  },
+  {
+    "id": "9f0d611e-831a-482c-bdc7-f586b441eba8",
+    "title": "How Do You Use useRef to Access a DOM Element in React? Give an example.",
+    "content": "<pre><code>e        import React, { useRef } from 'react';\n        \n        function FocusInput() {\n          const inputRef = useRef(null); // create the ref\n        \n          const handleFocus = () => {\n            inputRef.current.focus(); // access DOM element and focus it\n          };\n        \n          return (\n              <input type=\"text\" ref={inputRef} />\n              <button onClick={handleFocus}>Focus the input</button\n          );\n        }</code></pre>\n\nThe `useRef` hook is commonly used in React to directly reference and interact with DOM elements — like focusing an input, scrolling to a section, or controlling media elements.\n        \n        When you assign a ref to a DOM element using useRef, React gives you access to the underlying DOM node via the .current property of the ref object.\n        \n        **Example: Focus an input**\n\n       **Note:** The DOM reference is only available **after the component has mounted** — typically accessed in `useEffect` or event handlers.",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "The `useRef` hook is commonly used in React to directly reference and interact with DOM elements — like focusing an input, scrolling to a section, or controlling media elements.\n        \n        When you assign a ref to a DOM element using useRef, React gives you access to the underlying DOM node via the .current property of the ref object.\n        \n        **Example: Focus an input**\n\n       **Note:** The DOM reference is only available **after the component has mounted** — typically accessed in `useEffect` or event handlers.",
+    "options": null,
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=SqcY0GlETPk",
+        "type": "video",
+        "title": "React Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "8:25:00",
+        "description": "Complete React tutorial from scratch"
+      },
+      {
+        "url": "https://react.dev/learn",
+        "type": "article",
+        "title": "React Documentation",
+        "author": "React Team",
+        "description": "Official React documentation and tutorials"
+      },
+      {
+        "url": "https://www.udemy.com/course/react-the-complete-guide-incl-redux/",
+        "type": "course",
+        "title": "React - The Complete Guide",
+        "author": "Maximilian Schwarzmüller",
+        "duration": "48 hours",
+        "description": "Master React and Redux with hands-on projects"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-21T05:16:49.792046+00:00",
+    "updatedAt": "2025-11-24T22:52:08.102565+00:00"
+  },
+  {
+    "id": "632797c4-830b-43d3-9762-5490f6d867c1",
+    "title": "What are the common usecases of useRef hook?",
+    "content": "Some of the common cases are:\n      *   Automatically focus an input when a component mounts.\n      *   Scroll to a specific element.\n      *   Measure element dimensions (`offsetWidth`, `clientHeight`).\n      *   Control video/audio playback.\n      *   Integrate with non-React libraries (like D3 or jQuery).",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "Some of the common cases are:\n      *   Automatically focus an input when a component mounts.\n      *   Scroll to a specific element.\n      *   Measure element dimensions (`offsetWidth`, `clientHeight`).\n      *   Control video/audio playback.\n      *   Integrate with non-React libraries (like D3 or jQuery).",
+    "options": null,
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=SqcY0GlETPk",
+        "type": "video",
+        "title": "React Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "8:25:00",
+        "description": "Complete React tutorial from scratch"
+      },
+      {
+        "url": "https://react.dev/learn",
+        "type": "article",
+        "title": "React Documentation",
+        "author": "React Team",
+        "description": "Official React documentation and tutorials"
+      },
+      {
+        "url": "https://www.udemy.com/course/react-the-complete-guide-incl-redux/",
+        "type": "course",
+        "title": "React - The Complete Guide",
+        "author": "Maximilian Schwarzmüller",
+        "duration": "48 hours",
+        "description": "Master React and Redux with hands-on projects"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-21T05:16:49.792046+00:00",
+    "updatedAt": "2025-11-24T22:52:08.102565+00:00"
+  },
+  {
+    "id": "d9c4b489-367a-44e5-995b-5b75862ce284",
+    "title": "How does useLayoutEffect work during server-side rendering (SSR)?",
+    "content": "<pre><code>e      const useIsomorphicLayoutEffect =\n        typeof window !== 'undefined' ? useLayoutEffect : useEffect;</code></pre>\n\nThe `useLayoutEffect` hook does **not run on the server**, because there is no DOM. React issues a warning in server environments like Next.js if `useLayoutEffect` is used directly.\n\n     This can be mitigated using a conditional polyfill:\n\n\n      i.e, Use `useIsomorphicLayoutEffect` in components that render both on client and server.",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "The `useLayoutEffect` hook does **not run on the server**, because there is no DOM. React issues a warning in server environments like Next.js if `useLayoutEffect` is used directly.\n\n     This can be mitigated using a conditional polyfill:\n\n\n      i.e, Use `useIsomorphicLayoutEffect` in components that render both on client and server.",
+    "options": null,
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=SqcY0GlETPk",
+        "type": "video",
+        "title": "React Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "8:25:00",
+        "description": "Complete React tutorial from scratch"
+      },
+      {
+        "url": "https://react.dev/learn",
+        "type": "article",
+        "title": "React Documentation",
+        "author": "React Team",
+        "description": "Official React documentation and tutorials"
+      },
+      {
+        "url": "https://www.udemy.com/course/react-the-complete-guide-incl-redux/",
+        "type": "course",
+        "title": "React - The Complete Guide",
+        "author": "Maximilian Schwarzmüller",
+        "duration": "48 hours",
+        "description": "Master React and Redux with hands-on projects"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-21T05:16:49.792046+00:00",
+    "updatedAt": "2025-11-24T22:52:08.102565+00:00"
+  },
+  {
+    "id": "a6b35240-647c-4c15-90e6-73febbd58b7f",
+    "title": "Can Hooks be used in class components?",
+    "content": "No, Hooks cannot be used inside class components. They are specially designed for function components. This is because hooks depend on the sequence in which they are called during a component's render, something that's only guaranteed in functional components. However, both class and function components can coexist in the same application.",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "No, Hooks cannot be used inside class components. They are specially designed for function components. This is because hooks depend on the sequence in which they are called during a component's render, something that's only guaranteed in functional components. However, both class and function components can coexist in the same application.",
+    "options": null,
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=SqcY0GlETPk",
+        "type": "video",
+        "title": "React Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "8:25:00",
+        "description": "Complete React tutorial from scratch"
+      },
+      {
+        "url": "https://react.dev/learn",
+        "type": "article",
+        "title": "React Documentation",
+        "author": "React Team",
+        "description": "Official React documentation and tutorials"
+      },
+      {
+        "url": "https://www.udemy.com/course/react-the-complete-guide-incl-redux/",
+        "type": "course",
+        "title": "React - The Complete Guide",
+        "author": "Maximilian Schwarzmüller",
+        "duration": "48 hours",
+        "description": "Master React and Redux with hands-on projects"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-21T05:14:57.331023+00:00",
+    "updatedAt": "2025-11-24T22:52:08.102565+00:00"
+  },
+  {
+    "id": "4cbeebc7-ac5a-4820-b4ee-b7f5981a02ce",
+    "title": "Is useState Synchronous or Asynchronous?",
+    "content": "<pre><code>e        import React, { useState, useEffect } from 'react';\n\n        function Counter() {\n        const [count, setCount] = useState(0);\n        \n        const handleClick = () => {\n        setCount(count + 1);\n        console.log('Clicked count (old):', count); // Old value\n        };\n        \n        useEffect(() => {\n        console.log('Updated count:', count); // New value\n        }, [count]); // Only runs when `count` changes\n        \n        return <button onClick={handleClick}>Count: {count}</button;\n        }</code></pre>\n\nThe `useState` hook is synchronous, but state updates are asynchronous. When you call `useState()`, it runs synchronously and returns the state variable and setter function as tuple.\n     This happens immediately during rendering.\n     However, the state update function (**setState**) is asynchronous in the sense that it doesn't update the state immediately.\n     React **batches** updates and applies them before the next render. You won't see the updated value immediately after calling `setState`.\n     \n     **Example:**\n     The `console.log(count)` prints the **old value**, because the update hasn't happened yet.\n     \n     To see the updated state value, you can use `useEffect()` hook. It runs **after the component has re-rendered.**  By the time `useEffect` runs:\n\n        *   The component has been updated.\n        *   The **state contains the new value**.",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "The `useState` hook is synchronous, but state updates are asynchronous. When you call `useState()`, it runs synchronously and returns the state variable and setter function as tuple.\n     This happens immediately during rendering.\n     However, the state update function (**setState**) is asynchronous in the sense that it doesn't update the state immediately.\n     React **batches** updates and applies them before the next render. You won't see the updated value immediately after calling `setState`.\n     \n     **Example:**\n     The `console.log(count)` prints the **old value**, because the update hasn't happened yet.\n     \n     To see the updated state value, you can use `useEffect()` hook. It runs **after the component has re-rendered.**  By the time `useEffect` runs:\n\n        *   The component has been updated.\n        *   The **state contains the new value**.",
+    "options": null,
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=SqcY0GlETPk",
+        "type": "video",
+        "title": "React Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "8:25:00",
+        "description": "Complete React tutorial from scratch"
+      },
+      {
+        "url": "https://react.dev/learn",
+        "type": "article",
+        "title": "React Documentation",
+        "author": "React Team",
+        "description": "Official React documentation and tutorials"
+      },
+      {
+        "url": "https://www.udemy.com/course/react-the-complete-guide-incl-redux/",
+        "type": "course",
+        "title": "React - The Complete Guide",
+        "author": "Maximilian Schwarzmüller",
+        "duration": "48 hours",
+        "description": "Master React and Redux with hands-on projects"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-21T05:14:57.331023+00:00",
+    "updatedAt": "2025-11-24T22:52:08.102565+00:00"
+  },
+  {
+    "id": "790983b1-da75-4b69-95f1-63e0c8761ee1",
+    "title": "Can useState take a function as an initial value?",
+    "content": "<pre><code>e     const [count, setCount] = useState(expensiveComputation());</code></pre>\n\nYes, `useState` can take a function as an initial value, and this is a useful feature in React called **lazy initialization**. This function is also known as **initializer function**.\n\n     When you call useState(initialValue), you normally pass in a value directly:\n     \n\n     But if calculating that initial value is expensive or involves logic, you can pass a function that returns the value:\n     \n     This function avoids doing heavy computation on every render. If you don't use this function form and invokes it directly, the function will run everytime the component renders and impact the performance.\n     For example, the below usage is not recommended.",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "Yes, `useState` can take a function as an initial value, and this is a useful feature in React called **lazy initialization**. This function is also known as **initializer function**.\n\n     When you call useState(initialValue), you normally pass in a value directly:\n     \n\n     But if calculating that initial value is expensive or involves logic, you can pass a function that returns the value:\n     \n     This function avoids doing heavy computation on every render. If you don't use this function form and invokes it directly, the function will run everytime the component renders and impact the performance.\n     For example, the below usage is not recommended.",
+    "options": null,
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=SqcY0GlETPk",
+        "type": "video",
+        "title": "React Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "8:25:00",
+        "description": "Complete React tutorial from scratch"
+      },
+      {
+        "url": "https://react.dev/learn",
+        "type": "article",
+        "title": "React Documentation",
+        "author": "React Team",
+        "description": "Official React documentation and tutorials"
+      },
+      {
+        "url": "https://www.udemy.com/course/react-the-complete-guide-incl-redux/",
+        "type": "course",
+        "title": "React - The Complete Guide",
+        "author": "Maximilian Schwarzmüller",
+        "duration": "48 hours",
+        "description": "Master React and Redux with hands-on projects"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-21T05:14:57.331023+00:00",
+    "updatedAt": "2025-11-24T22:52:08.102565+00:00"
+  },
+  {
+    "id": "a25db1ef-91a3-43ab-b16a-2b60c941e2f9",
+    "title": "What is an updater function? Should an updater function be used in all cases?",
+    "content": "<pre><code>e     setName(&#039;Sudheer&#039;);</code></pre>\n\nAn **updater function** is a form of `setState` where you pass a **function** instead of a direct value. This function receives the **previous state** as an argument and returns the **next state**.\n     \n     The updater function expression looks like below,\n     Here, `prevCount => prevCount + 1` is the updater function.\n\n     In the React community, there's often a recommendation to use updater functions when updating state that depends on its previous value. This helps prevent unexpected behaviors that can arise from working with outdated or \"stale\" state.\n\n     While using an updater function is a good habit, it's not always necessary. In most cases, React batches updates and ensures that the state is up-to-date at the beginning of the event handler, so you typically don't run into stale state issues during a single synchronous event.\n     However, if you're doing multiple updates to the same state variable within a single handler, using the updater form ensures that each update correctly uses the latest state value, rather than a potentially outdated one.\n\n     **Example: Multiple Updates in One Handler**\n\n     In this example, `a => a + 1` is an **updater function**. React queues these updater functions and applies them sequentially, each using the most recent state value. As a result, the counter will correctly increment by 3.\n\n     In many cases, such as setting state based on user input or assigning static values, you don't need the updater function:",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "An **updater function** is a form of `setState` where you pass a **function** instead of a direct value. This function receives the **previous state** as an argument and returns the **next state**.\n     \n     The updater function expression looks like below,\n     Here, `prevCount => prevCount + 1` is the updater function.\n\n     In the React community, there's often a recommendation to use updater functions when updating state that depends on its previous value. This helps prevent unexpected behaviors that can arise from working with outdated or \"stale\" state.\n\n     While using an updater function is a good habit, it's not always necessary. In most cases, React batches updates and ensures that the state is up-to-date at the beginning of the event handler, so you typically don't run into stale state issues during a single synchronous event.\n     However, if you're doing multiple updates to the same state variable within a single handler, using the updater form ensures that each update correctly uses the latest state value, rather than a potentially outdated one.\n\n     **Example: Multiple Updates in One Handler**\n\n     In this example, `a => a + 1` is an **updater function**. React queues these updater functions and applies them sequentially, each using the most recent state value. As a result, the counter will correctly increment by 3.\n\n     In many cases, such as setting state based on user input or assigning static values, you don't need the updater function:",
+    "options": null,
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=SqcY0GlETPk",
+        "type": "video",
+        "title": "React Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "8:25:00",
+        "description": "Complete React tutorial from scratch"
+      },
+      {
+        "url": "https://react.dev/learn",
+        "type": "article",
+        "title": "React Documentation",
+        "author": "React Team",
+        "description": "Official React documentation and tutorials"
+      },
+      {
+        "url": "https://www.udemy.com/course/react-the-complete-guide-incl-redux/",
+        "type": "course",
+        "title": "React - The Complete Guide",
+        "author": "Maximilian Schwarzmüller",
+        "duration": "48 hours",
+        "description": "Master React and Redux with hands-on projects"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-21T05:14:57.331023+00:00",
+    "updatedAt": "2025-11-24T22:52:08.102565+00:00"
+  },
+  {
+    "id": "b8b7027a-ad32-40c1-9a1b-e73e26d1f07b",
+    "title": "What is `useReducer`? Why do you use useReducer?",
+    "content": "<pre><code>e        const [state, dispatch] = useReducer(reducer, initialState, initFunction);</code></pre>\n\nThe `useReducer` hook is a React hook used to manage **complex state logic** inside **functional components**. It is conceptually similar to **Redux**. i.e, Instead of directly updating state like with `useState`, you **dispatch an action** to a **reducer function**, and the reducer returns the new state.\n\n     The `useReducer` hook takes three arguments:\n\n\n        *   `**reducer**`: A function `(state, action) => newState` that handles how state should change based on the action.\n        *   `**initialState**`: The starting state.\n        *   `**dispatch**`: A function you call to trigger an update by passing an action.\n\n     The `useReducer` hook is used when:\n\n     *   The **state is complex**, such as nested structures or multiple related values.\n     *   State updates depend on the **previous state** and **logic**.\n     *   You want to **separate state update logic** from UI code to make it cleaner and testable.\n     *   You're managing features like:\n         *   Forms\n         *   Wizards / Multi-step flows\n         *   Undo/Redo functionality\n         *   Shopping cart logic\n         *   Toggle & conditional UI logic",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "The `useReducer` hook is a React hook used to manage **complex state logic** inside **functional components**. It is conceptually similar to **Redux**. i.e, Instead of directly updating state like with `useState`, you **dispatch an action** to a **reducer function**, and the reducer returns the new state.\n\n     The `useReducer` hook takes three arguments:\n\n\n        *   `**reducer**`: A function `(state, action) => newState` that handles how state should change based on the action.\n        *   `**initialState**`: The starting state.\n        *   `**dispatch**`: A function you call to trigger an update by passing an action.\n\n     The `useReducer` hook is used when:\n\n     *   The **state is complex**, such as nested structures or multiple related values.\n     *   State updates depend on the **previous state** and **logic**.\n     *   You want to **separate state update logic** from UI code to make it cleaner and testable.\n     *   You're managing features like:\n         *   Forms\n         *   Wizards / Multi-step flows\n         *   Undo/Redo functionality\n         *   Shopping cart logic\n         *   Toggle & conditional UI logic",
+    "options": null,
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=SqcY0GlETPk",
+        "type": "video",
+        "title": "React Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "8:25:00",
+        "description": "Complete React tutorial from scratch"
+      },
+      {
+        "url": "https://react.dev/learn",
+        "type": "article",
+        "title": "React Documentation",
+        "author": "React Team",
+        "description": "Official React documentation and tutorials"
+      },
+      {
+        "url": "https://www.udemy.com/course/react-the-complete-guide-incl-redux/",
+        "type": "course",
+        "title": "React - The Complete Guide",
+        "author": "Maximilian Schwarzmüller",
+        "duration": "48 hours",
+        "description": "Master React and Redux with hands-on projects"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-21T05:14:57.331023+00:00",
+    "updatedAt": "2025-11-24T22:52:08.102565+00:00"
+  },
+  {
+    "id": "3c9cd56c-09f0-4760-99d7-bd9fa878e564",
+    "title": "How does `useReducer` works? Explain with an example",
+    "content": "<pre><code>e      import React, { useReducer } from 'react';\n\n        function Counter() {\n          const initialState = { count: 0 };\n          const [state, dispatch] = useReducer(counterReducer, initialState);\n\n          return (\n              <h2 Count: {state.count}</h2\n              <button onClick={() => dispatch({ type: 'increment' })}>Increment</button\n              <button onClick={() => dispatch({ type: 'decrement' })}>Decrement</button\n              <button onClick={() => dispatch({ type: 'reset' })}>Reset</button\n          );\n        }\n\n      export default Counter;</code></pre>\n\nThe `useReducer` hooks works similarly to Redux, where:\n\n        *   You define a **reducer function** to handle state transitions.\n        *   You dispatch actions to update the state.\n     \n     **Counter Example with Increment, Decrement, and Reset:**\n     1. Reducer function:\n\n        Define a counter reducer function that takes the current state and an action object with a type, and returns a new state based on that type.\n     \n     2. Using `useReducer`:\n      Invoke `useReducer` with above reducer function along with initial state. Thereafter, you can attach dispatch actions for respective button handlers.\n      Once the new state has been returned, React re-renders the component with the updated `state.count`.",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "The `useReducer` hooks works similarly to Redux, where:\n\n        *   You define a **reducer function** to handle state transitions.\n        *   You dispatch actions to update the state.\n     \n     **Counter Example with Increment, Decrement, and Reset:**\n     1. Reducer function:\n\n        Define a counter reducer function that takes the current state and an action object with a type, and returns a new state based on that type.\n     \n     2. Using `useReducer`:\n      Invoke `useReducer` with above reducer function along with initial state. Thereafter, you can attach dispatch actions for respective button handlers.\n      Once the new state has been returned, React re-renders the component with the updated `state.count`.",
+    "options": null,
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=SqcY0GlETPk",
+        "type": "video",
+        "title": "React Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "8:25:00",
+        "description": "Complete React tutorial from scratch"
+      },
+      {
+        "url": "https://react.dev/learn",
+        "type": "article",
+        "title": "React Documentation",
+        "author": "React Team",
+        "description": "Official React documentation and tutorials"
+      },
+      {
+        "url": "https://www.udemy.com/course/react-the-complete-guide-incl-redux/",
+        "type": "course",
+        "title": "React - The Complete Guide",
+        "author": "Maximilian Schwarzmüller",
+        "duration": "48 hours",
+        "description": "Master React and Redux with hands-on projects"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-21T05:14:57.331023+00:00",
+    "updatedAt": "2025-11-24T22:52:08.102565+00:00"
+  },
+  {
+    "id": "65c88255-9334-422c-98cc-e0ea48863d0a",
+    "title": "What types of values can `useState` hold?",
+    "content": "<pre><code>e     user.name = \"Sudheer\"; //wrong way\n     setUser(prev => ({ ...prev, name: 'Sudheer' })); //correct way</code>>>>e></code></pre>\n\nThe `useState` hook accepts different types of values.\n\n     *   Primitives: `number`, `string`, `boolean`\n     *   Arrays\n     *   Objects\n     *   Functions\n     *   `null` or `undefined`\n\n     But you needs to be cautious with **reference types (objects/arrays)** because React compares old and new values **by reference**, so direct mutations won't trigger a re-render.\n     For example, the correct and wrong ways of state updates as shown below,",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "The `useState` hook accepts different types of values.\n\n     *   Primitives: `number`, `string`, `boolean`\n     *   Arrays\n     *   Objects\n     *   Functions\n     *   `null` or `undefined`\n\n     But you needs to be cautious with **reference types (objects/arrays)** because React compares old and new values **by reference**, so direct mutations won't trigger a re-render.\n     For example, the correct and wrong ways of state updates as shown below,",
+    "options": null,
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=SqcY0GlETPk",
+        "type": "video",
+        "title": "React Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "8:25:00",
+        "description": "Complete React tutorial from scratch"
+      },
+      {
+        "url": "https://react.dev/learn",
+        "type": "article",
+        "title": "React Documentation",
+        "author": "React Team",
+        "description": "Official React documentation and tutorials"
+      },
+      {
+        "url": "https://www.udemy.com/course/react-the-complete-guide-incl-redux/",
+        "type": "course",
+        "title": "React - The Complete Guide",
+        "author": "Maximilian Schwarzmüller",
+        "duration": "48 hours",
+        "description": "Master React and Redux with hands-on projects"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-21T05:14:57.331023+00:00",
+    "updatedAt": "2025-11-24T22:52:08.102565+00:00"
+  },
+  {
+    "id": "a6be5a50-a984-412f-af8d-c18f3edf928f",
+    "title": "What happens if you call `useState` conditionally?",
+    "content": "<pre><code>e     if (someCondition) { \n        const [state, setState] = useState(0); \n     }</code></pre>\n\nAs per rules of React Hooks, hooks must be called unconditionally. For example, if you conditionally call it:\n\n     React will throw a runtime error because it **relies on the order of Hook calls**, and conditional logic breaks that order.",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "As per rules of React Hooks, hooks must be called unconditionally. For example, if you conditionally call it:\n\n     React will throw a runtime error because it **relies on the order of Hook calls**, and conditional logic breaks that order.",
+    "options": null,
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=SqcY0GlETPk",
+        "type": "video",
+        "title": "React Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "8:25:00",
+        "description": "Complete React tutorial from scratch"
+      },
+      {
+        "url": "https://react.dev/learn",
+        "type": "article",
+        "title": "React Documentation",
+        "author": "React Team",
+        "description": "Official React documentation and tutorials"
+      },
+      {
+        "url": "https://www.udemy.com/course/react-the-complete-guide-incl-redux/",
+        "type": "course",
+        "title": "React - The Complete Guide",
+        "author": "Maximilian Schwarzmüller",
+        "duration": "48 hours",
+        "description": "Master React and Redux with hands-on projects"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-21T05:14:57.331023+00:00",
+    "updatedAt": "2025-11-24T22:52:08.102565+00:00"
+  },
+  {
+    "id": "e586c6c1-5a67-4667-b51c-4880089552f1",
+    "title": "Can you combine **useReducer** with **useContext**?",
+    "content": "<pre><code>e      const AppContext = React.createContext();\n\n      function AppProvider({ children }) {\n        const [state, dispatch] = useReducer(reducer, initialState);\n        return (\n          <AppContext.Provider value={{ state, dispatch }}>\n            {children}\n          </AppContext.Provider\n        );\n      }</code></pre>\n\nYes, it's common to combine **useReducer** with **useContext** to build a lightweight state management system similar to Redux:",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "Yes, it's common to combine **useReducer** with **useContext** to build a lightweight state management system similar to Redux:",
+    "options": null,
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=SqcY0GlETPk",
+        "type": "video",
+        "title": "React Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "8:25:00",
+        "description": "Complete React tutorial from scratch"
+      },
+      {
+        "url": "https://react.dev/learn",
+        "type": "article",
+        "title": "React Documentation",
+        "author": "React Team",
+        "description": "Official React documentation and tutorials"
+      },
+      {
+        "url": "https://www.udemy.com/course/react-the-complete-guide-incl-redux/",
+        "type": "course",
+        "title": "React - The Complete Guide",
+        "author": "Maximilian Schwarzmüller",
+        "duration": "48 hours",
+        "description": "Master React and Redux with hands-on projects"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-21T05:14:57.331023+00:00",
+    "updatedAt": "2025-11-24T22:52:08.102565+00:00"
+  },
+  {
+    "id": "b5c4ec11-00b1-472e-abac-612f99821ad1",
+    "title": "Can you explain how useState works internally?",
+    "content": "<pre><code>e        let hookIndex = 0;\n        const hooks = [];\n        \n        function useState(initialValue) {\n            const currentIndex = hookIndex;\n        \n            if (!hooks[currentIndex]) {\n                // First render: initialize state\n                hooks[currentIndex] = {\n                    state: initialValue,\n                    queue: [],\n                };\n            }\n        \n            const hook = hooks[currentIndex];\n        \n            // Process queued updates\n            hook.queue.forEach(update => {\n                hook.state = update(hook.state);\n            });\n            hook.queue = [];\n        \n            // Define updater function\n            function setState(action) {\n                // action can be new state or function(state) => new state\n                hook.queue.push(typeof action === 'function' ? action : () => action);\n                scheduleRender(); // triggers React re-render\n            }\n        \n            hookIndex++;\n            return [hook.state, setState];\n        }</code></pre>\n\nReact's hooks, including `useState`, rely on some internal machinery that keeps track of state **per component** and **per hook call** during rendering. Here's a simplified explanation of the internal mechanics:\n\n      #### 1. **Hook List / Linked List**\n\n      *   React maintains a linked list or array of \"hook states\" for each component.\n      *   When a component renders, React keeps track of which hook it is currently processing via a cursor/index.\n      *   Each call to `useState()` corresponds to one \"slot\" in this list.\n\n      #### 2. **State Storage**\n\n      *   Each slot stores:\n        *   The current state value.\n        *   A queue of pending state updates.\n\n      #### 3. **Initial Render**\n        \n      *   When the component first renders, React:\n         *   Creates a new slot for `useState` with the initial state (e.g., `0`).\n         *   Returns `[state, updaterFunction]`.\n\n      #### 4. **Updater Function**\n    \n      *   The updater function (`setCount`) is a closure that, when called:\n        *   Enqueues a state update to React's internal queue.\n        *   Schedules a re-render of the component.\n    \n      #### 5. **Re-render and State Update**\n    \n      *   On the next render:\n        *   React processes all queued updates for each hook slot.\n        *   Updates the stored state value accordingly.\n        *   Returns the new state to the component.\n\n      #### 6. **Important: Hook Order**\n\n      *   Hooks must be called in the same order on every render so React can match hook calls to their internal slots.\n      *   That's why you can't call hooks conditionally.\n      \n      The pseudocode for internal implementation of `useState` looks like below,",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "React's hooks, including `useState`, rely on some internal machinery that keeps track of state **per component** and **per hook call** during rendering. Here's a simplified explanation of the internal mechanics:\n\n      #### 1. **Hook List / Linked List**\n\n      *   React maintains a linked list or array of \"hook states\" for each component.\n      *   When a component renders, React keeps track of which hook it is currently processing via a cursor/index.\n      *   Each call to `useState()` corresponds to one \"slot\" in this list.\n\n      #### 2. **State Storage**\n\n      *   Each slot stores:\n        *   The current state value.\n        *   A queue of pending state updates.\n\n      #### 3. **Initial Render**\n        \n      *   When the component first renders, React:\n         *   Creates a new slot for `useState` with the initial state (e.g., `0`).\n         *   Returns `[state, updaterFunction]`.\n\n      #### 4. **Updater Function**\n    \n      *   The updater function (`setCount`) is a closure that, when called:\n        *   Enqueues a state update to React's internal queue.\n        *   Schedules a re-render of the component.\n    \n      #### 5. **Re-render and State Update**\n    \n      *   On the next render:\n        *   React processes all queued updates for each hook slot.\n        *   Updates the stored state value accordingly.\n        *   Returns the new state to the component.\n\n      #### 6. **Important: Hook Order**\n\n      *   Hooks must be called in the same order on every render so React can match hook calls to their internal slots.\n      *   That's why you can't call hooks conditionally.\n      \n      The pseudocode for internal implementation of `useState` looks like below,",
+    "options": null,
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=SqcY0GlETPk",
+        "type": "video",
+        "title": "React Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "8:25:00",
+        "description": "Complete React tutorial from scratch"
+      },
+      {
+        "url": "https://react.dev/learn",
+        "type": "article",
+        "title": "React Documentation",
+        "author": "React Team",
+        "description": "Official React documentation and tutorials"
+      },
+      {
+        "url": "https://www.udemy.com/course/react-the-complete-guide-incl-redux/",
+        "type": "course",
+        "title": "React - The Complete Guide",
+        "author": "Maximilian Schwarzmüller",
+        "duration": "48 hours",
+        "description": "Master React and Redux with hands-on projects"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-21T05:14:57.331023+00:00",
+    "updatedAt": "2025-11-24T22:52:08.102565+00:00"
+  },
+  {
+    "id": "a180293f-f20a-4f6c-891b-ed654e32012d",
+    "title": "What are the differences between page router and app router in nextjs?",
+    "content": "What are the differences between page router and app router in nextjs?",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "",
+    "options": null,
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=SqcY0GlETPk",
+        "type": "video",
+        "title": "React Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "8:25:00",
+        "description": "Complete React tutorial from scratch"
+      },
+      {
+        "url": "https://react.dev/learn",
+        "type": "article",
+        "title": "React Documentation",
+        "author": "React Team",
+        "description": "Official React documentation and tutorials"
+      },
+      {
+        "url": "https://www.udemy.com/course/react-the-complete-guide-incl-redux/",
+        "type": "course",
+        "title": "React - The Complete Guide",
+        "author": "Maximilian Schwarzmüller",
+        "duration": "48 hours",
+        "description": "Master React and Redux with hands-on projects"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-21T05:13:17.59969+00:00",
+    "updatedAt": "2025-11-24T22:52:08.102565+00:00"
+  },
+  {
+    "id": "17b3ce0c-220a-4a1f-acb6-4e56f00eedf6",
+    "title": "Can you describe the useMemo() Hook?",
+    "content": "<pre><code>e      import React, { useState, useMemo } from 'react';\n\n      const users = [\n        { id: 1, name: 'Sudheer' },\n        { id: 2, name: 'Brendon' },\n        { id: 3, name: 'Charlie' },\n        { id: 4, name: 'Dary' },\n        { id: 5, name: 'Eden' }\n      ];\n\n      export default function UserSearch({ users }) {\n        const [searchTerm, setSearchTerm] = useState('');\n        const [counter, setCounter] = useState(0);\n\n        // Memoize the filtered user list based on the search term\n        const filteredUsers = useMemo(() => {\n          console.log(\"Filtering users...\");\n          return users.filter(user =>\n            user.name.toLowerCase().includes(searchTerm.toLowerCase())\n          );\n        }, [searchTerm]);\n\n        return (\n            <h2 Counter: {counter}</h2\n            <button onClick={() => setCounter(prev => prev + 1)}>Increment Counter</button\n\n            <h2 Search Users</h2\n            <input\n              type=\"text\"\n              value={searchTerm}\n              onChange={(e) => setSearchTerm(e.target.value)}\n              placeholder=\"Enter name\"\n            />\n\n            <ul\n              {filteredUsers.map(user => (\n                <li key={user.id}>{user.name}</li\n              ))}\n            </ul\n        );\n      }</code></pre>\n\nThe `useMemo()` Hook in React is used to **optimize performance** by **memoizing the result of expensive calculations**. It ensures that a function is **only re-executed when its dependencies change**, preventing unnecessary computations on every re-render.\n\n     #### Syntax\n\n      - **`computeExpensiveValue`**:  \n      A function that returns the computed result.\n\n     - **`dependencies`**:  \n      An array of values that, when changed, will cause the memoized function to re-run.\n\n      If the dependencies haven't changed since the last render, React returns the **cached result** instead of re-running the function.\n\n      Let's exaplain the usage of `useMemo` hook with an example of user search and its respective filtered users list.\n\n      #### Example: Memoizing a Filtered List\n\n      In the above example:\n        - The filteredUsers list is only recomputed when searchTerm changes.\n        - Pressing the \"Increment Counter\" button does not trigger the filtering logic again, as it's not a dependency.\n        - The console will only log \"Filtering users...\" when the search term updates.",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "The `useMemo()` Hook in React is used to **optimize performance** by **memoizing the result of expensive calculations**. It ensures that a function is **only re-executed when its dependencies change**, preventing unnecessary computations on every re-render.\n\n     #### Syntax\n\n      - **`computeExpensiveValue`**:  \n      A function that returns the computed result.\n\n     - **`dependencies`**:  \n      An array of values that, when changed, will cause the memoized function to re-run.\n\n      If the dependencies haven't changed since the last render, React returns the **cached result** instead of re-running the function.\n\n      Let's exaplain the usage of `useMemo` hook with an example of user search and its respective filtered users list.\n\n      #### Example: Memoizing a Filtered List\n\n      In the above example:\n        - The filteredUsers list is only recomputed when searchTerm changes.\n        - Pressing the \"Increment Counter\" button does not trigger the filtering logic again, as it's not a dependency.\n        - The console will only log \"Filtering users...\" when the search term updates.",
+    "options": null,
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=SqcY0GlETPk",
+        "type": "video",
+        "title": "React Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "8:25:00",
+        "description": "Complete React tutorial from scratch"
+      },
+      {
+        "url": "https://react.dev/learn",
+        "type": "article",
+        "title": "React Documentation",
+        "author": "React Team",
+        "description": "Official React documentation and tutorials"
+      },
+      {
+        "url": "https://www.udemy.com/course/react-the-complete-guide-incl-redux/",
+        "type": "course",
+        "title": "React - The Complete Guide",
+        "author": "Maximilian Schwarzmüller",
+        "duration": "48 hours",
+        "description": "Master React and Redux with hands-on projects"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-21T05:13:17.59969+00:00",
+    "updatedAt": "2025-11-24T22:52:08.102565+00:00"
+  },
+  {
+    "id": "1aeb7693-3aba-497e-bd35-11eb808e9343",
+    "title": "When to use client and server components?",
+    "content": "You can efficiently build nextjs application if you are aware about which part of the application needs to use client components and which other parts needs to use server components. The common cases of both client and server components are listed below:\n\n        **Client components:**\n        1. Whenever your need to add interactivity and event listeners such as onClick(), onChange(), etc to the pages\n        2. If you need to use State and Lifecycle Effects like useState(), useReducer(), useEffect() etc.\n        3. If there is a requirement to use browser-only APIs.\n        4. If you need to implement custom hooks that depend on state, effects, or browser-only APIs.\n        5. There are React Class components in the pages.\n\n        **Server components:**\n        1. If the component logic is about data fetching.\n        2. If you need to access backend resources directly.\n        3. When you need to keep sensitive information((access tokens, API keys, etc)\t) on the server.\n        4. If you want reduce client-side JavaScript and placing large dependencies on the server.",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "You can efficiently build nextjs application if you are aware about which part of the application needs to use client components and which other parts needs to use server components. The common cases of both client and server components are listed below:\n\n        **Client components:**\n        1. Whenever your need to add interactivity and event listeners such as onClick(), onChange(), etc to the pages\n        2. If you need to use State and Lifecycle Effects like useState(), useReducer(), useEffect() etc.\n        3. If there is a requirement to use browser-only APIs.\n        4. If you need to implement custom hooks that depend on state, effects, or browser-only APIs.\n        5. There are React Class components in the pages.\n\n        **Server components:**\n        1. If the component logic is about data fetching.\n        2. If you need to access backend resources directly.\n        3. When you need to keep sensitive information((access tokens, API keys, etc)\t) on the server.\n        4. If you want reduce client-side JavaScript and placing large dependencies on the server.",
+    "options": null,
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=SqcY0GlETPk",
+        "type": "video",
+        "title": "React Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "8:25:00",
+        "description": "Complete React tutorial from scratch"
+      },
+      {
+        "url": "https://react.dev/learn",
+        "type": "article",
+        "title": "React Documentation",
+        "author": "React Team",
+        "description": "Official React documentation and tutorials"
+      },
+      {
+        "url": "https://www.udemy.com/course/react-the-complete-guide-incl-redux/",
+        "type": "course",
+        "title": "React - The Complete Guide",
+        "author": "Maximilian Schwarzmüller",
+        "duration": "48 hours",
+        "description": "Master React and Redux with hands-on projects"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-21T05:13:17.59969+00:00",
+    "updatedAt": "2025-11-24T22:52:08.102565+00:00"
+  },
+  {
+    "id": "7157f4e3-5eca-4074-8d98-bb34e3c3308e",
+    "title": "What will happen by defining nested function components?",
+    "content": "Technically it is possible to write nested function components but it is not suggested to write nested function definitions. Because it leads to unexpected bugs and performance issues.",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "Technically it is possible to write nested function components but it is not suggested to write nested function definitions. Because it leads to unexpected bugs and performance issues.",
+    "options": null,
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=SqcY0GlETPk",
+        "type": "video",
+        "title": "React Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "8:25:00",
+        "description": "Complete React tutorial from scratch"
+      },
+      {
+        "url": "https://react.dev/learn",
+        "type": "article",
+        "title": "React Documentation",
+        "author": "React Team",
+        "description": "Official React documentation and tutorials"
+      },
+      {
+        "url": "https://www.udemy.com/course/react-the-complete-guide-incl-redux/",
+        "type": "course",
+        "title": "React - The Complete Guide",
+        "author": "Maximilian Schwarzmüller",
+        "duration": "48 hours",
+        "description": "Master React and Redux with hands-on projects"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-21T05:13:17.59969+00:00",
+    "updatedAt": "2025-11-24T22:52:08.102565+00:00"
+  },
+  {
+    "id": "72edbbc5-add2-4b9b-9c82-7e56a87586e6",
+    "title": "Can I use keys for non-list items?",
+    "content": "Keys are primarily used for rendering list items but they are not just for list items. You can also use them React to distinguish components. By default, React uses order of the components in",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "Keys are primarily used for rendering list items but they are not just for list items. You can also use them React to distinguish components. By default, React uses order of the components in",
+    "options": null,
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=SqcY0GlETPk",
+        "type": "video",
+        "title": "React Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "8:25:00",
+        "description": "Complete React tutorial from scratch"
+      },
+      {
+        "url": "https://react.dev/learn",
+        "type": "article",
+        "title": "React Documentation",
+        "author": "React Team",
+        "description": "Official React documentation and tutorials"
+      },
+      {
+        "url": "https://www.udemy.com/course/react-the-complete-guide-incl-redux/",
+        "type": "course",
+        "title": "React - The Complete Guide",
+        "author": "Maximilian Schwarzmüller",
+        "duration": "48 hours",
+        "description": "Master React and Redux with hands-on projects"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-21T05:13:17.59969+00:00",
+    "updatedAt": "2025-11-24T22:52:08.102565+00:00"
+  },
+  {
+    "id": "b4b10bf4-234d-4bcf-8530-cd6ffca1d1a4",
+    "title": "What are the use cases of useContext hook?",
+    "content": "The `useContext` hook in React is used to share data across components without having to pass props manually through each level. Here are some common and effective use cases:\n\n        1.  **Theme Customization**  \n            `useContext` can be used to manage application-wide themes, such as light and dark modes, ensuring consistent styling and enabling user-driven customization.\n        2.  **Localization and Internationalization**  \n            It supports localization by providing translated strings or locale-specific content to components, adapting the application for users in different regions.\n        3.  **User Authentication and Session Management**  \n            `useContext` allows global access to authentication status and user data. This enables conditional rendering of components and helps manage protected routes or user-specific UI elements.\n        4.  **Shared Modal or Sidebar Visibility**  \n            It's ideal for managing the visibility of shared UI components like modals, drawers, or sidebars, especially when their state needs to be controlled from various parts of the app.\n        5.  **Combining with** `**useReducer**` **for Global State Management**  \n            When combined with `useReducer`, `useContext` becomes a powerful tool for managing more complex global state logic. This pattern helps maintain cleaner, scalable state logic without introducing external libraries like Redux.\n             Some of the common use cases of useContext are listed below,",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "The `useContext` hook in React is used to share data across components without having to pass props manually through each level. Here are some common and effective use cases:\n\n        1.  **Theme Customization**  \n            `useContext` can be used to manage application-wide themes, such as light and dark modes, ensuring consistent styling and enabling user-driven customization.\n        2.  **Localization and Internationalization**  \n            It supports localization by providing translated strings or locale-specific content to components, adapting the application for users in different regions.\n        3.  **User Authentication and Session Management**  \n            `useContext` allows global access to authentication status and user data. This enables conditional rendering of components and helps manage protected routes or user-specific UI elements.\n        4.  **Shared Modal or Sidebar Visibility**  \n            It's ideal for managing the visibility of shared UI components like modals, drawers, or sidebars, especially when their state needs to be controlled from various parts of the app.\n        5.  **Combining with** `**useReducer**` **for Global State Management**  \n            When combined with `useReducer`, `useContext` becomes a powerful tool for managing more complex global state logic. This pattern helps maintain cleaner, scalable state logic without introducing external libraries like Redux.\n             Some of the common use cases of useContext are listed below,",
+    "options": null,
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=SqcY0GlETPk",
+        "type": "video",
+        "title": "React Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "8:25:00",
+        "description": "Complete React tutorial from scratch"
+      },
+      {
+        "url": "https://react.dev/learn",
+        "type": "article",
+        "title": "React Documentation",
+        "author": "React Team",
+        "description": "Official React documentation and tutorials"
+      },
+      {
+        "url": "https://www.udemy.com/course/react-the-complete-guide-incl-redux/",
+        "type": "course",
+        "title": "React - The Complete Guide",
+        "author": "Maximilian Schwarzmüller",
+        "duration": "48 hours",
+        "description": "Master React and Redux with hands-on projects"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-21T05:13:17.59969+00:00",
+    "updatedAt": "2025-11-24T22:52:08.102565+00:00"
+  },
+  {
+    "id": "6bcdbe47-27e1-4197-9ca7-d8dffe4432e5",
+    "title": "How is `useReducer` Different from `useState`?",
+    "content": "There are notable differences between `useState` and `useReducer` hooks.\n           \n        | Feature               | `useState`                           | `useReducer`                          |\n        |-----------------------|--------------------------------------|---------------------------------------|\n        | State complexity      | Simple (one variable or flat object) | Complex, multi-part or deeply nested  |\n        | Update style          | Direct (e.g. `setState(x)`)          | Through actions (e.g. `dispatch({})`) |\n        | Update logic          | In component                         | In reducer function                   |\n        | Reusability & testing | Less reusable                        | Highly reusable & testable            |",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "There are notable differences between `useState` and `useReducer` hooks.\n           \n        | Feature               | `useState`                           | `useReducer`                          |\n        |-----------------------|--------------------------------------|---------------------------------------|\n        | State complexity      | Simple (one variable or flat object) | Complex, multi-part or deeply nested  |\n        | Update style          | Direct (e.g. `setState(x)`)          | Through actions (e.g. `dispatch({})`) |\n        | Update logic          | In component                         | In reducer function                   |\n        | Reusability & testing | Less reusable                        | Highly reusable & testable            |",
+    "options": null,
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=SqcY0GlETPk",
+        "type": "video",
+        "title": "React Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "8:25:00",
+        "description": "Complete React tutorial from scratch"
+      },
+      {
+        "url": "https://react.dev/learn",
+        "type": "article",
+        "title": "React Documentation",
+        "author": "React Team",
+        "description": "Official React documentation and tutorials"
+      },
+      {
+        "url": "https://www.udemy.com/course/react-the-complete-guide-incl-redux/",
+        "type": "course",
+        "title": "React - The Complete Guide",
+        "author": "Maximilian Schwarzmüller",
+        "duration": "48 hours",
+        "description": "Master React and Redux with hands-on projects"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-21T05:13:17.59969+00:00",
+    "updatedAt": "2025-11-24T22:52:08.102565+00:00"
+  },
+  {
+    "id": "0ea830ac-f9f3-45cd-b095-b011c6c42549",
+    "title": "What is useContext? What are the steps to follow for useContext?",
+    "content": "<pre><code>e        import { useContext } from 'react'; \n        function MyComponent() {\n            const theme = useContext(ThemeContext); // theme = \"dark\"\n            return <p Current Theme: {theme}</p; \n        }</code></pre>\n\nThe `useContext` hook is a built-in React Hook that lets you access the value of a context inside a functional component without needing to wrap it in a <Context.Consumer component.\n\n     It helps you **avoid prop drilling** (passing props through multiple levels) by allowing components to access shared data like themes, authentication status, or user preferences.\n\n     The usage of useContext involves three main steps:\n      #### **Step 1 : Create the Context**\n    \n        Use `React.createContext()` to create a context object.\n    \n    \n      You typically export this so other components can import it.\n\n      #### **Step 2: Provide the Context Value**\n    \n        Wrap your component tree (or a part of it) with the `Context.Provider` and pass a `value` prop.\n    \n    \n        Now any component inside `<ThemeContext.Provider` can access the context value.\n\n        #### **Step 3: Consume the Context with** `**useContext**`\n    \n        In any functional component **inside the Provider**, use the `useContext` hook:",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "The `useContext` hook is a built-in React Hook that lets you access the value of a context inside a functional component without needing to wrap it in a <Context.Consumer component.\n\n     It helps you **avoid prop drilling** (passing props through multiple levels) by allowing components to access shared data like themes, authentication status, or user preferences.\n\n     The usage of useContext involves three main steps:\n      #### **Step 1 : Create the Context**\n    \n        Use `React.createContext()` to create a context object.\n    \n    \n      You typically export this so other components can import it.\n\n      #### **Step 2: Provide the Context Value**\n    \n        Wrap your component tree (or a part of it) with the `Context.Provider` and pass a `value` prop.\n    \n    \n        Now any component inside `<ThemeContext.Provider` can access the context value.\n\n        #### **Step 3: Consume the Context with** `**useContext**`\n    \n        In any functional component **inside the Provider**, use the `useContext` hook:",
+    "options": null,
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=SqcY0GlETPk",
+        "type": "video",
+        "title": "React Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "8:25:00",
+        "description": "Complete React tutorial from scratch"
+      },
+      {
+        "url": "https://react.dev/learn",
+        "type": "article",
+        "title": "React Documentation",
+        "author": "React Team",
+        "description": "Official React documentation and tutorials"
+      },
+      {
+        "url": "https://www.udemy.com/course/react-the-complete-guide-incl-redux/",
+        "type": "course",
+        "title": "React - The Complete Guide",
+        "author": "Maximilian Schwarzmüller",
+        "duration": "48 hours",
+        "description": "Master React and Redux with hands-on projects"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-21T05:13:17.59969+00:00",
+    "updatedAt": "2025-11-24T22:52:08.102565+00:00"
+  },
+  {
+    "id": "1790dd79-0ff9-41d0-b56e-bcf03690c264",
+    "title": "How does ReactJS work behind the scenes?",
+    "content": "ReactJS is a powerful JavaScript library for building user interfaces. While it appears simple on the surface, React performs a lot of complex operations behind the scenes to efficiently update the UI. Here's an overview of how it works internally:\n\n     #### **1. Virtual DOM & Component Rendering**\n\n     React doesn't manipulate the real DOM directly. Instead, it uses a **Virtual DOM** — a lightweight JavaScript representation of the UI.\n\n     When a component renders (e.g., `<App />`):\n\n        *   React **executes the component function** (e.g., `App()`).\n        *   Hooks like `useState` are registered and tracked in order.\n        *   React builds a **Virtual DOM tree** from the returned JSX.\n        *   This virtual DOM is a **plain JS object** that describes the desired UI.\n\n     This process ensures fast and efficient rendering before React decides how to update the real DOM.\n\n     #### 2. **React Fiber Architecture**\n\n     React's core engine is called **Fiber**, introduced in React 16. Fiber is a reimplementation of the React reconciliation algorithm with the following capabilities:\n\n        *   Breaks rendering work into **units of work** (fiber nodes).\n        *   Enables **interruptible rendering** (important for responsiveness).\n        *   Supports **priority scheduling** and **concurrent rendering**.\n\n     Each Fiber node represents a component and stores:\n\n        *   The component type (function/class).\n        *   Props, state, and effects.\n        *   Links to parent, child, and sibling fibers.\n\n     #### 3. **Reconciliation (Diffing Algorithm)**\n\n     When state or props change:\n\n        *   React re-executes the component to produce a new virtual DOM.\n        *   It **compares the new virtual DOM to the previous one** using an efficient diffing algorithm.\n        *   React determines the **minimal set of DOM changes** required.\n\n     This process is known as **reconciliation**.\n\n     #### 4. **Commit Phase (Real DOM Updates)**\n\n     Once reconciliation is done:\n\n        *   React enters the **commit phase**.\n        *   It applies calculated changes to the **real DOM**.\n        *   It also runs side effects like `useEffect` or `useLayoutEffect`.\n\n     This is the only time React interacts directly with the browser DOM.\n\n     #### 5. **Hooks and State Management**\n\n     With Hooks (like `useState`, `useEffect`):\n\n        *   React keeps an **internal list of hooks per component**.\n        *   Hooks are identified by their order in the function.\n        *   When state updates occur, React re-renders the component and re-runs the hooks in the same order.\n\n     #### 6. **React Scheduler**\n\n     React uses an internal **Scheduler** to control how updates are prioritized:\n\n        *   Urgent tasks like clicks and inputs are processed immediately.\n        *   Non-urgent tasks (like data fetching) can be delayed or paused.\n        *   This improves responsiveness and allows for **time slicing** in Concurrent Mode.",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "ReactJS is a powerful JavaScript library for building user interfaces. While it appears simple on the surface, React performs a lot of complex operations behind the scenes to efficiently update the UI. Here's an overview of how it works internally:\n\n     #### **1. Virtual DOM & Component Rendering**\n\n     React doesn't manipulate the real DOM directly. Instead, it uses a **Virtual DOM** — a lightweight JavaScript representation of the UI.\n\n     When a component renders (e.g., `<App />`):\n\n        *   React **executes the component function** (e.g., `App()`).\n        *   Hooks like `useState` are registered and tracked in order.\n        *   React builds a **Virtual DOM tree** from the returned JSX.\n        *   This virtual DOM is a **plain JS object** that describes the desired UI.\n\n     This process ensures fast and efficient rendering before React decides how to update the real DOM.\n\n     #### 2. **React Fiber Architecture**\n\n     React's core engine is called **Fiber**, introduced in React 16. Fiber is a reimplementation of the React reconciliation algorithm with the following capabilities:\n\n        *   Breaks rendering work into **units of work** (fiber nodes).\n        *   Enables **interruptible rendering** (important for responsiveness).\n        *   Supports **priority scheduling** and **concurrent rendering**.\n\n     Each Fiber node represents a component and stores:\n\n        *   The component type (function/class).\n        *   Props, state, and effects.\n        *   Links to parent, child, and sibling fibers.\n\n     #### 3. **Reconciliation (Diffing Algorithm)**\n\n     When state or props change:\n\n        *   React re-executes the component to produce a new virtual DOM.\n        *   It **compares the new virtual DOM to the previous one** using an efficient diffing algorithm.\n        *   React determines the **minimal set of DOM changes** required.\n\n     This process is known as **reconciliation**.\n\n     #### 4. **Commit Phase (Real DOM Updates)**\n\n     Once reconciliation is done:\n\n        *   React enters the **commit phase**.\n        *   It applies calculated changes to the **real DOM**.\n        *   It also runs side effects like `useEffect` or `useLayoutEffect`.\n\n     This is the only time React interacts directly with the browser DOM.\n\n     #### 5. **Hooks and State Management**\n\n     With Hooks (like `useState`, `useEffect`):\n\n        *   React keeps an **internal list of hooks per component**.\n        *   Hooks are identified by their order in the function.\n        *   When state updates occur, React re-renders the component and re-runs the hooks in the same order.\n\n     #### 6. **React Scheduler**\n\n     React uses an internal **Scheduler** to control how updates are prioritized:\n\n        *   Urgent tasks like clicks and inputs are processed immediately.\n        *   Non-urgent tasks (like data fetching) can be delayed or paused.\n        *   This improves responsiveness and allows for **time slicing** in Concurrent Mode.",
+    "options": null,
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=SqcY0GlETPk",
+        "type": "video",
+        "title": "React Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "8:25:00",
+        "description": "Complete React tutorial from scratch"
+      },
+      {
+        "url": "https://react.dev/learn",
+        "type": "article",
+        "title": "React Documentation",
+        "author": "React Team",
+        "description": "Official React documentation and tutorials"
+      },
+      {
+        "url": "https://www.udemy.com/course/react-the-complete-guide-incl-redux/",
+        "type": "course",
+        "title": "React - The Complete Guide",
+        "author": "Maximilian Schwarzmüller",
+        "duration": "48 hours",
+        "description": "Master React and Redux with hands-on projects"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-21T05:13:17.59969+00:00",
+    "updatedAt": "2025-11-24T22:52:08.102565+00:00"
+  },
+  {
+    "id": "6d0be732-cd96-4dbb-ad8f-ad9606e7838b",
+    "title": "What are the guidelines to be followed for writing reducers?",
+    "content": "There are two guidelines to be taken care while writing reducers in your code.\n\n     1. Reducers must be pure without mutating the state. That means, same input always returns the same output. These reducers run during rendering time similar to state updater functions. So these functions should not send any requests, schedule time outs and any other side effects.\n\n     2. Each action should describe a single user interaction even though there are multiple changes applied to data. For example, if you \"reset\" registration form which has many user input fields managed by a reducer, it is suggested to send one \"reset\" action instead of creating separate action for each fields. The proper ordering of actions should reflect the user interactions in the browser and it helps a lot for debugging purpose.",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "There are two guidelines to be taken care while writing reducers in your code.\n\n     1. Reducers must be pure without mutating the state. That means, same input always returns the same output. These reducers run during rendering time similar to state updater functions. So these functions should not send any requests, schedule time outs and any other side effects.\n\n     2. Each action should describe a single user interaction even though there are multiple changes applied to data. For example, if you \"reset\" registration form which has many user input fields managed by a reducer, it is suggested to send one \"reset\" action instead of creating separate action for each fields. The proper ordering of actions should reflect the user interactions in the browser and it helps a lot for debugging purpose.",
+    "options": null,
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=SqcY0GlETPk",
+        "type": "video",
+        "title": "React Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "8:25:00",
+        "description": "Complete React tutorial from scratch"
+      },
+      {
+        "url": "https://react.dev/learn",
+        "type": "article",
+        "title": "React Documentation",
+        "author": "React Team",
+        "description": "Official React documentation and tutorials"
+      },
+      {
+        "url": "https://www.udemy.com/course/react-the-complete-guide-incl-redux/",
+        "type": "course",
+        "title": "React - The Complete Guide",
+        "author": "Maximilian Schwarzmüller",
+        "duration": "48 hours",
+        "description": "Master React and Redux with hands-on projects"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-21T05:13:17.59969+00:00",
+    "updatedAt": "2025-11-24T22:52:08.102565+00:00"
+  },
+  {
+    "id": "13f0ccb4-1f5a-4785-a16f-6334766dc9ee",
+    "title": "What are the benefits of preventing the direct state mutations?",
+    "content": "What are the benefits of preventing the direct state mutations?",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "",
+    "options": null,
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=SqcY0GlETPk",
+        "type": "video",
+        "title": "React Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "8:25:00",
+        "description": "Complete React tutorial from scratch"
+      },
+      {
+        "url": "https://react.dev/learn",
+        "type": "article",
+        "title": "React Documentation",
+        "author": "React Team",
+        "description": "Official React documentation and tutorials"
+      },
+      {
+        "url": "https://www.udemy.com/course/react-the-complete-guide-incl-redux/",
+        "type": "course",
+        "title": "React - The Complete Guide",
+        "author": "Maximilian Schwarzmüller",
+        "duration": "48 hours",
+        "description": "Master React and Redux with hands-on projects"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-21T05:10:01.302966+00:00",
+    "updatedAt": "2025-11-24T22:52:08.102565+00:00"
+  },
+  {
+    "id": "ffc9d75c-189f-4048-9239-d997eb9efb71",
+    "title": "What are the preferred and non-preferred array operations for updating the state?",
+    "content": "The below table represent preferred and non-preferred array operations for updating the component state.\n\n      | Action    | Preferred            | Non-preferred              |\n      | --------- | -------------------- | -------------------------- |\n      | Adding    | concat, [...arr]     | push, unshift              |\n      | Removing  | filter, slice        | pop, shift, splice         |\n      | Replacing | map                  | splice, arr[i] = someValue |\n      | sorting   | copying to new array | reverse, sort              |\n\n      If you use Immer library then you can able to use all array methods without any problem.",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "The below table represent preferred and non-preferred array operations for updating the component state.\n\n      | Action    | Preferred            | Non-preferred              |\n      | --------- | -------------------- | -------------------------- |\n      | Adding    | concat, [...arr]     | push, unshift              |\n      | Removing  | filter, slice        | pop, shift, splice         |\n      | Replacing | map                  | splice, arr[i] = someValue |\n      | sorting   | copying to new array | reverse, sort              |\n\n      If you use Immer library then you can able to use all array methods without any problem.",
+    "options": null,
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=SqcY0GlETPk",
+        "type": "video",
+        "title": "React Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "8:25:00",
+        "description": "Complete React tutorial from scratch"
+      },
+      {
+        "url": "https://react.dev/learn",
+        "type": "article",
+        "title": "React Documentation",
+        "author": "React Team",
+        "description": "Official React documentation and tutorials"
+      },
+      {
+        "url": "https://www.udemy.com/course/react-the-complete-guide-incl-redux/",
+        "type": "course",
+        "title": "React - The Complete Guide",
+        "author": "Maximilian Schwarzmüller",
+        "duration": "48 hours",
+        "description": "Master React and Redux with hands-on projects"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-21T05:10:01.302966+00:00",
+    "updatedAt": "2025-11-24T22:52:08.102565+00:00"
+  },
+  {
+    "id": "d1f89104-227a-4b38-b15c-0540ce395fd7",
+    "title": "Is it possible to prevent automatic batching?",
+    "content": "<pre><code>e      import { flushSync } from \"react-dom\";\n\n      const handleClick = () => {\n        flushSync(() => {\n          setClicked(!clicked); //Component will create a re-render here\n        });\n\n        setCount(count + 1); // Component will create a re-render again here\n      };</code></pre>\n\nYes, it is possible to prevent automatic batching default behavior. There might be cases where you need to re-render your component after each state update or updating one state depends on another state variable. Considering this situation, React introduced `flushSync` method from `react-dom` API for the usecases where you need to flush state updates to DOM immediately.\n\n      The usage of `flushSync` method within an `onClick` event handler will be looking like as below,\n\n\n      In the above click handler, React will update DOM at first using flushSync and second time updates DOM because of the counter setter function by avoiding automatic batching.",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "Yes, it is possible to prevent automatic batching default behavior. There might be cases where you need to re-render your component after each state update or updating one state depends on another state variable. Considering this situation, React introduced `flushSync` method from `react-dom` API for the usecases where you need to flush state updates to DOM immediately.\n\n      The usage of `flushSync` method within an `onClick` event handler will be looking like as below,\n\n\n      In the above click handler, React will update DOM at first using flushSync and second time updates DOM because of the counter setter function by avoiding automatic batching.",
+    "options": null,
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=SqcY0GlETPk",
+        "type": "video",
+        "title": "React Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "8:25:00",
+        "description": "Complete React tutorial from scratch"
+      },
+      {
+        "url": "https://react.dev/learn",
+        "type": "article",
+        "title": "React Documentation",
+        "author": "React Team",
+        "description": "Official React documentation and tutorials"
+      },
+      {
+        "url": "https://www.udemy.com/course/react-the-complete-guide-incl-redux/",
+        "type": "course",
+        "title": "React - The Complete Guide",
+        "author": "Maximilian Schwarzmüller",
+        "duration": "48 hours",
+        "description": "Master React and Redux with hands-on projects"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-21T05:10:01.302966+00:00",
+    "updatedAt": "2025-11-24T22:52:08.102565+00:00"
+  },
+  {
+    "id": "1877da67-3a9b-452b-8622-e29dc1e3add0",
+    "title": "How does React batch multiple state updates?",
+    "content": "<pre><code>e      import { useState } from \"react\";\n\n      export default function BatchingState() {\n        const [count, setCount] = useState(0);\n        const [message, setMessage] = useState(\"batching\");\n\n        console.log(\"Application Rendered\");\n\n        const handleUsers = () => {\n          fetch(\"https://jsonplaceholder.typicode.com/users/1\").then(() => {\n            // Automatic Batching re-render only once\n            setCount(count + 1);\n            setMessage(\"users fetched\");\n          });\n        };\n\n        return (\n          <>\n            <h1{count}</h1\n            <button onClick={handleAsyncFetch}>Click Me!</button\n          </>\n        );\n      }</code></pre>\n\nReact prevents component from re-rendering for each and every state update by grouping multiple state updates within an event handler. This strategy improves the application performance and this process known as **batching**. The older version of React only supported batching for browser events whereas React18 supported for asynchronous actions, timeouts and intervals along with native events. This improved version of batching is called **automatic batching**.\n\n      Let's demonstrate this automatic batching feature with a below example.\n\n\n      The preceding code updated two state variables with in an event handler. However, React will perform automatic batching feature and the component will be re-rendered only once for better performance.",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "React prevents component from re-rendering for each and every state update by grouping multiple state updates within an event handler. This strategy improves the application performance and this process known as **batching**. The older version of React only supported batching for browser events whereas React18 supported for asynchronous actions, timeouts and intervals along with native events. This improved version of batching is called **automatic batching**.\n\n      Let's demonstrate this automatic batching feature with a below example.\n\n\n      The preceding code updated two state variables with in an event handler. However, React will perform automatic batching feature and the component will be re-rendered only once for better performance.",
+    "options": null,
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=SqcY0GlETPk",
+        "type": "video",
+        "title": "React Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "8:25:00",
+        "description": "Complete React tutorial from scratch"
+      },
+      {
+        "url": "https://react.dev/learn",
+        "type": "article",
+        "title": "React Documentation",
+        "author": "React Team",
+        "description": "Official React documentation and tutorials"
+      },
+      {
+        "url": "https://www.udemy.com/course/react-the-complete-guide-incl-redux/",
+        "type": "course",
+        "title": "React - The Complete Guide",
+        "author": "Maximilian Schwarzmüller",
+        "duration": "48 hours",
+        "description": "Master React and Redux with hands-on projects"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-21T05:10:01.302966+00:00",
+    "updatedAt": "2025-11-24T22:52:08.102565+00:00"
+  },
+  {
+    "id": "7198a8db-ff7a-4083-a045-d1e1bf94e939",
+    "title": "How do you update objects inside state?",
+    "content": "<pre><code>e      handleProfileChange(e) {\n        setUser({\n        ...user,\n          [e.target.name]: e.target.value\n        });\n      }</code></pre>\n\nYou cannot update the objects which exists in the state directly. Instead, you should create a fresh new object (or copy from the existing object) and update the latest state using the newly created object. Eventhough JavaScript objects are mutable, you need to treat objects inside state as read-only while updating the state.\n\n      Let's see this comparison with an example. The issue with regular object mutation approach can be described by updating the user details fields of `Profile` component. The properties of `Profile` component such as firstName, lastName and age details mutated in an event handler as shown below.\n\n\n      Once you run the application with above user profile component, you can observe that user profile details won't be update upon entering the input fields.\n      This issue can be fixed by creating a new copy of object which includes existing properties through spread syntax(...obj) and add changed values in a single event handler itself as shown below.\n\n\n      The above event handler is concise instead of maintaining separate event handler for each field. Now, UI displays the updated field values as expected without an issue.",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "You cannot update the objects which exists in the state directly. Instead, you should create a fresh new object (or copy from the existing object) and update the latest state using the newly created object. Eventhough JavaScript objects are mutable, you need to treat objects inside state as read-only while updating the state.\n\n      Let's see this comparison with an example. The issue with regular object mutation approach can be described by updating the user details fields of `Profile` component. The properties of `Profile` component such as firstName, lastName and age details mutated in an event handler as shown below.\n\n\n      Once you run the application with above user profile component, you can observe that user profile details won't be update upon entering the input fields.\n      This issue can be fixed by creating a new copy of object which includes existing properties through spread syntax(...obj) and add changed values in a single event handler itself as shown below.\n\n\n      The above event handler is concise instead of maintaining separate event handler for each field. Now, UI displays the updated field values as expected without an issue.",
+    "options": null,
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=SqcY0GlETPk",
+        "type": "video",
+        "title": "React Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "8:25:00",
+        "description": "Complete React tutorial from scratch"
+      },
+      {
+        "url": "https://react.dev/learn",
+        "type": "article",
+        "title": "React Documentation",
+        "author": "React Team",
+        "description": "Official React documentation and tutorials"
+      },
+      {
+        "url": "https://www.udemy.com/course/react-the-complete-guide-incl-redux/",
+        "type": "course",
+        "title": "React - The Complete Guide",
+        "author": "Maximilian Schwarzmüller",
+        "duration": "48 hours",
+        "description": "Master React and Redux with hands-on projects"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-21T05:10:01.302966+00:00",
+    "updatedAt": "2025-11-24T22:52:08.102565+00:00"
+  },
+  {
+    "id": "2954641f-1631-4cad-9994-0c904eea45ea",
+    "title": "What is React hydration?",
+    "content": "<pre><code>e      import { hydrateRoot } from \"react-dom/client\";\n      import App from \"./App.js\";\n\n      hydrateRoot(document.getElementById(\"root\"), <App />);</code></pre>\n\nReact hydration is used to add client-side JavaScript interactivity to pre-rendered static HTML generated by the server. It is used only for server-side rendering(SSR) to enhance the initial rendering time and make it SEO friendly application. This hydration acts as a bridge to reduce the gap between server side and client-side rendering.\n\n      After the page loaded with generated static HTML, React will add application state and interactivity by attaching all event handlers for the respective elements. Let's demonstrate this with an example.\n\n      Consider that React DOM API(using `renderToString`) generated HTML for `<App` component which contains `<button` element to increment the counter.\n\n\n      The above code generates the below HTML with a header text and button component without any interactivity.\n\n\n      At this stage `hydrateRoot` API can be used to perform hydration by attaching `onClick` event handler.\n\n\n      After this step, you are able to run React application on server-side and hydrating the javascript bundle on client-side for smooth user experience and SEO purposes.",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "React hydration is used to add client-side JavaScript interactivity to pre-rendered static HTML generated by the server. It is used only for server-side rendering(SSR) to enhance the initial rendering time and make it SEO friendly application. This hydration acts as a bridge to reduce the gap between server side and client-side rendering.\n\n      After the page loaded with generated static HTML, React will add application state and interactivity by attaching all event handlers for the respective elements. Let's demonstrate this with an example.\n\n      Consider that React DOM API(using `renderToString`) generated HTML for `<App` component which contains `<button` element to increment the counter.\n\n\n      The above code generates the below HTML with a header text and button component without any interactivity.\n\n\n      At this stage `hydrateRoot` API can be used to perform hydration by attaching `onClick` event handler.\n\n\n      After this step, you are able to run React application on server-side and hydrating the javascript bundle on client-side for smooth user experience and SEO purposes.",
+    "options": null,
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=SqcY0GlETPk",
+        "type": "video",
+        "title": "React Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "8:25:00",
+        "description": "Complete React tutorial from scratch"
+      },
+      {
+        "url": "https://react.dev/learn",
+        "type": "article",
+        "title": "React Documentation",
+        "author": "React Team",
+        "description": "Official React documentation and tutorials"
+      },
+      {
+        "url": "https://www.udemy.com/course/react-the-complete-guide-incl-redux/",
+        "type": "course",
+        "title": "React - The Complete Guide",
+        "author": "Maximilian Schwarzmüller",
+        "duration": "48 hours",
+        "description": "Master React and Redux with hands-on projects"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-21T05:10:01.302966+00:00",
+    "updatedAt": "2025-11-24T22:52:08.102565+00:00"
+  },
+  {
+    "id": "8e64a6c1-2608-4c9f-9fd4-bd58131028d2",
+    "title": "How do you update arrays inside state?",
+    "content": "<pre><code>e      onClick = {\n        [\n          ...todos,\n          { id: id+1, name: name }\n        ]\n      }</code></pre>\n\nEventhough arrays in JavaScript are mutable in nature, you need to treat them as immutable while storing them in a state. That means, similar to objects, the arrays cannot be updated directly inside state. Instead, you need to create a copy of the existing array and then set the state to use newly copied array.\n\n      To ensure that arrays are not mutated, the mutation operations like direct direct assignment(arr[1]='one'), push, pop, shift, unshift, splice etc methods should be avoided on original array. Instead, you can create a copy of existing array with help of array operations such as filter, map, slice, spread syntax etc.\n\n      For example, the below push operation doesn't add the new todo to the total todo's list in an event handler.\n\n\n      This issue is fixed by replacing push operation with spread syntax where it will create a new array and the UI updated with new todo.",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "Eventhough arrays in JavaScript are mutable in nature, you need to treat them as immutable while storing them in a state. That means, similar to objects, the arrays cannot be updated directly inside state. Instead, you need to create a copy of the existing array and then set the state to use newly copied array.\n\n      To ensure that arrays are not mutated, the mutation operations like direct direct assignment(arr[1]='one'), push, pop, shift, unshift, splice etc methods should be avoided on original array. Instead, you can create a copy of existing array with help of array operations such as filter, map, slice, spread syntax etc.\n\n      For example, the below push operation doesn't add the new todo to the total todo's list in an event handler.\n\n\n      This issue is fixed by replacing push operation with spread syntax where it will create a new array and the UI updated with new todo.",
+    "options": null,
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=SqcY0GlETPk",
+        "type": "video",
+        "title": "React Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "8:25:00",
+        "description": "Complete React tutorial from scratch"
+      },
+      {
+        "url": "https://react.dev/learn",
+        "type": "article",
+        "title": "React Documentation",
+        "author": "React Team",
+        "description": "Official React documentation and tutorials"
+      },
+      {
+        "url": "https://www.udemy.com/course/react-the-complete-guide-incl-redux/",
+        "type": "course",
+        "title": "React - The Complete Guide",
+        "author": "Maximilian Schwarzmüller",
+        "duration": "48 hours",
+        "description": "Master React and Redux with hands-on projects"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-21T05:10:01.302966+00:00",
+    "updatedAt": "2025-11-24T22:52:08.102565+00:00"
+  },
+  {
+    "id": "e2bf8794-6216-4a5f-b080-c23a615450fd",
+    "title": "How do you update nested objects inside state?",
+    "content": "<pre><code>e      setUser({\n        ...user,\n        address: {\n          ...user.address,\n          country: \"Germany\",\n        },\n      });</code></pre>\n\nYou cannot simply use spread syntax for all kinds of objects inside state. Because spread syntax is shallow and it copies properties for one level deep only. If the object has nested object structure, UI doesn't work as expected with regular JavaScript nested property mutation. Let's demonstrate this behavior with an example of User object which has address nested object inside of it.\n\n\n      If you try to update the country nested field in a regular javascript fashion(as shown below) then user profile screen won't be updated with latest value.\n\n\n      This issue can be fixed by flattening all the fields into a top-level object or create a new object for each nested object and point it to it's parent object. In this example, first you need to create copy of address object and update it with the latest value. Later, the address object should be linked to parent user object something like below.\n\n\n      This approach is bit verbose and not easy for deep hierarchical state updates. But this workaround can be used for few levels of nested objects without much hassle.",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "You cannot simply use spread syntax for all kinds of objects inside state. Because spread syntax is shallow and it copies properties for one level deep only. If the object has nested object structure, UI doesn't work as expected with regular JavaScript nested property mutation. Let's demonstrate this behavior with an example of User object which has address nested object inside of it.\n\n\n      If you try to update the country nested field in a regular javascript fashion(as shown below) then user profile screen won't be updated with latest value.\n\n\n      This issue can be fixed by flattening all the fields into a top-level object or create a new object for each nested object and point it to it's parent object. In this example, first you need to create copy of address object and update it with the latest value. Later, the address object should be linked to parent user object something like below.\n\n\n      This approach is bit verbose and not easy for deep hierarchical state updates. But this workaround can be used for few levels of nested objects without much hassle.",
+    "options": null,
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=SqcY0GlETPk",
+        "type": "video",
+        "title": "React Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "8:25:00",
+        "description": "Complete React tutorial from scratch"
+      },
+      {
+        "url": "https://react.dev/learn",
+        "type": "article",
+        "title": "React Documentation",
+        "author": "React Team",
+        "description": "Official React documentation and tutorials"
+      },
+      {
+        "url": "https://www.udemy.com/course/react-the-complete-guide-incl-redux/",
+        "type": "course",
+        "title": "React - The Complete Guide",
+        "author": "Maximilian Schwarzmüller",
+        "duration": "48 hours",
+        "description": "Master React and Redux with hands-on projects"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-21T05:10:01.302966+00:00",
+    "updatedAt": "2025-11-24T22:52:08.102565+00:00"
+  },
+  {
+    "id": "7500df63-3d15-47f4-895d-67ef24813701",
+    "title": "How does React updates screen in an application?",
+    "content": "<pre><code>e        import { createRoot } from \"react-dom/client\";\n\n        const root = createRoot(document.getElementById(\"root\"));\n        root.render(<App />);</code></pre>\n\nReact updates UI in three steps,\n\n     1. **Triggering or initiating a render:** The component is going to triggered for render in two ways.\n\n        1. **Initial render:** When the app starts, you can trigger the initial render by calling `creatRoot` with the target DOM node followed by invoking component's `render` method. For example, the following code snippet renders `App` component on root DOM node.\n\n\n        2. **Re-render when the state updated:** When you update the component state using the state setter function, the componen't state automatically queues for a render.\n\n     2. **Rendering components:** After triggering a render, React will call your components to display them on the screen. React will call the root component for initial render and call the function component whose state update triggered the render. This is a recursive process for all nested components of the target component.\n\n     3. **Commit changes to DOM:** After calling components, React will modify the DOM for initial render using `appendChild()` DOM API and apply minimal necessary DOM updates for re-renders based on differences between rerenders.",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "React updates UI in three steps,\n\n     1. **Triggering or initiating a render:** The component is going to triggered for render in two ways.\n\n        1. **Initial render:** When the app starts, you can trigger the initial render by calling `creatRoot` with the target DOM node followed by invoking component's `render` method. For example, the following code snippet renders `App` component on root DOM node.\n\n\n        2. **Re-render when the state updated:** When you update the component state using the state setter function, the componen't state automatically queues for a render.\n\n     2. **Rendering components:** After triggering a render, React will call your components to display them on the screen. React will call the root component for initial render and call the function component whose state update triggered the render. This is a recursive process for all nested components of the target component.\n\n     3. **Commit changes to DOM:** After calling components, React will modify the DOM for initial render using `appendChild()` DOM API and apply minimal necessary DOM updates for re-renders based on differences between rerenders.",
+    "options": null,
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=SqcY0GlETPk",
+        "type": "video",
+        "title": "React Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "8:25:00",
+        "description": "Complete React tutorial from scratch"
+      },
+      {
+        "url": "https://react.dev/learn",
+        "type": "article",
+        "title": "React Documentation",
+        "author": "React Team",
+        "description": "Official React documentation and tutorials"
+      },
+      {
+        "url": "https://www.udemy.com/course/react-the-complete-guide-incl-redux/",
+        "type": "course",
+        "title": "React - The Complete Guide",
+        "author": "Maximilian Schwarzmüller",
+        "duration": "48 hours",
+        "description": "Master React and Redux with hands-on projects"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-21T05:10:01.302966+00:00",
+    "updatedAt": "2025-11-24T22:52:08.102565+00:00"
+  },
+  {
+    "id": "3652017d-0f64-4d7e-b981-8bfe585d2491",
+    "title": "How do you use immer library for state updates?",
+    "content": "<pre><code>e      import { useImmer } from \"use-immer\";\n      const [user, setUser] = useImmer({\n        name: \"John\",\n        age: 32,\n        address: {\n          country: \"Singapore\",\n          postalCode: 440004,\n        },\n      });\n\n      //Update user details upon any event\n      setUser((draft) => {\n        draft.address.country = \"Germany\";\n      });</code></pre>\n\nImmer library enforces the immutability of state based on **copy-on-write** mechanism. It uses JavaScript proxy to keep track of updates to immutable states. Immer has 3 main states as below,\n\n      1. **Current state:** It refers to actual state\n      2. **Draft state:** All new changes will be applied to this state. In this state, draft is just a proxy of the current state.\n      3. **Next state:** It is formed after all mutations applied to the draft state\n\n      Immer can be used by following below instructions,\n\n      1. Install the dependency using `npm install use-immer` command\n      2. Replace `useState` hook with `useImmer` hook by importing at the top\n      3. The setter function of `useImmer` hook can be used to update the state.\n\n      For example, the mutation syntax of immer library simplifies the nested address object of user state as follows,\n\n\n      The preceding code enables you to update nested objects with a conceise mutation syntax.",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "Immer library enforces the immutability of state based on **copy-on-write** mechanism. It uses JavaScript proxy to keep track of updates to immutable states. Immer has 3 main states as below,\n\n      1. **Current state:** It refers to actual state\n      2. **Draft state:** All new changes will be applied to this state. In this state, draft is just a proxy of the current state.\n      3. **Next state:** It is formed after all mutations applied to the draft state\n\n      Immer can be used by following below instructions,\n\n      1. Install the dependency using `npm install use-immer` command\n      2. Replace `useState` hook with `useImmer` hook by importing at the top\n      3. The setter function of `useImmer` hook can be used to update the state.\n\n      For example, the mutation syntax of immer library simplifies the nested address object of user state as follows,\n\n\n      The preceding code enables you to update nested objects with a conceise mutation syntax.",
+    "options": null,
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=SqcY0GlETPk",
+        "type": "video",
+        "title": "React Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "8:25:00",
+        "description": "Complete React tutorial from scratch"
+      },
+      {
+        "url": "https://react.dev/learn",
+        "type": "article",
+        "title": "React Documentation",
+        "author": "React Team",
+        "description": "Official React documentation and tutorials"
+      },
+      {
+        "url": "https://www.udemy.com/course/react-the-complete-guide-incl-redux/",
+        "type": "course",
+        "title": "React - The Complete Guide",
+        "author": "Maximilian Schwarzmüller",
+        "duration": "48 hours",
+        "description": "Master React and Redux with hands-on projects"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-21T05:10:01.302966+00:00",
+    "updatedAt": "2025-11-24T22:52:08.102565+00:00"
+  },
+  {
+    "id": "cee5d840-348e-49e1-b01c-d0c56a4358eb",
+    "title": "What are the differences between useEffect and useLayoutEffect hooks?",
+    "content": "useEffect and useLayoutEffect are both React hooks that can be used to synchronize a component with an external system, such as a browser API or a third-party library. However, there are some key differences between the two:\n\n     - Timing: useEffect runs after the browser has finished painting, while useLayoutEffect runs synchronously before the browser paints. This means that useLayoutEffect can be used to measure and update layout in a way that feels more synchronous to the user.\n\n     - Browser Paint: useEffect allows browser to paint the changes before running the effect, hence it may cause some visual flicker. useLayoutEffect synchronously runs the effect before browser paints and hence it will avoid visual flicker.\n\n     - Execution Order: The order in which multiple useEffect hooks are executed is determined by React and may not be predictable. However, the order in which multiple useLayoutEffect hooks are executed is determined by the order in which they were called.\n\n     - Error handling: useEffect has a built-in mechanism for handling errors that occur during the execution of the effect, so that it does not crash the entire application. useLayoutEffect does not have this mechanism, and errors that occur during the execution of the effect will crash the entire application.\n\n     In general, it's recommended to use useEffect as much as possible, because it is more performant and less prone to errors. useLayoutEffect should only be used when you need to measure or update layout, and you can't achieve the same result using useEffect.",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "useEffect and useLayoutEffect are both React hooks that can be used to synchronize a component with an external system, such as a browser API or a third-party library. However, there are some key differences between the two:\n\n     - Timing: useEffect runs after the browser has finished painting, while useLayoutEffect runs synchronously before the browser paints. This means that useLayoutEffect can be used to measure and update layout in a way that feels more synchronous to the user.\n\n     - Browser Paint: useEffect allows browser to paint the changes before running the effect, hence it may cause some visual flicker. useLayoutEffect synchronously runs the effect before browser paints and hence it will avoid visual flicker.\n\n     - Execution Order: The order in which multiple useEffect hooks are executed is determined by React and may not be predictable. However, the order in which multiple useLayoutEffect hooks are executed is determined by the order in which they were called.\n\n     - Error handling: useEffect has a built-in mechanism for handling errors that occur during the execution of the effect, so that it does not crash the entire application. useLayoutEffect does not have this mechanism, and errors that occur during the execution of the effect will crash the entire application.\n\n     In general, it's recommended to use useEffect as much as possible, because it is more performant and less prone to errors. useLayoutEffect should only be used when you need to measure or update layout, and you can't achieve the same result using useEffect.",
+    "options": null,
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=SqcY0GlETPk",
+        "type": "video",
+        "title": "React Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "8:25:00",
+        "description": "Complete React tutorial from scratch"
+      },
+      {
+        "url": "https://react.dev/learn",
+        "type": "article",
+        "title": "React Documentation",
+        "author": "React Team",
+        "description": "Official React documentation and tutorials"
+      },
+      {
+        "url": "https://www.udemy.com/course/react-the-complete-guide-incl-redux/",
+        "type": "course",
+        "title": "React - The Complete Guide",
+        "author": "Maximilian Schwarzmüller",
+        "duration": "48 hours",
+        "description": "Master React and Redux with hands-on projects"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-21T05:08:11.811082+00:00",
+    "updatedAt": "2025-11-24T22:52:08.102565+00:00"
+  },
+  {
+    "id": "f7714c60-b426-4bbe-a860-e5e4ad0a2b7f",
+    "title": "What is strict mode in React?",
+    "content": "<pre><code>e     import { StrictMode } from \"react\";\n\n     function App() {\n       return (\n           <Header />\n           <StrictMod\n               <ComponentOne />\n               <ComponentTwo />\n           </StrictMod\n           <Header />\n       );\n     }</code></pre>\n\n`React.StrictMode` is a useful component for highlighting potential problems in an application. Just like `<Fragment`, `<StrictMod` does not render any extra DOM elements. It activates additional checks and warnings for its descendants. These checks apply for _development mode_ only.\n\n\n     In the example above, the _strict mode_ checks apply to `<ComponentOn` and `<ComponentTwo` components only. i.e., Part of the application only.\n\n     **Note:** Frameworks such as NextJS has this flag enabled by default.",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "`React.StrictMode` is a useful component for highlighting potential problems in an application. Just like `<Fragment`, `<StrictMod` does not render any extra DOM elements. It activates additional checks and warnings for its descendants. These checks apply for _development mode_ only.\n\n\n     In the example above, the _strict mode_ checks apply to `<ComponentOn` and `<ComponentTwo` components only. i.e., Part of the application only.\n\n     **Note:** Frameworks such as NextJS has this flag enabled by default.",
+    "options": null,
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=SqcY0GlETPk",
+        "type": "video",
+        "title": "React Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "8:25:00",
+        "description": "Complete React tutorial from scratch"
+      },
+      {
+        "url": "https://react.dev/learn",
+        "type": "article",
+        "title": "React Documentation",
+        "author": "React Team",
+        "description": "Official React documentation and tutorials"
+      },
+      {
+        "url": "https://www.udemy.com/course/react-the-complete-guide-incl-redux/",
+        "type": "course",
+        "title": "React - The Complete Guide",
+        "author": "Maximilian Schwarzmüller",
+        "duration": "48 hours",
+        "description": "Master React and Redux with hands-on projects"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-21T05:08:11.811082+00:00",
+    "updatedAt": "2025-11-24T22:52:08.102565+00:00"
+  },
+  {
+    "id": "06531fca-7562-4825-8cd1-5683233bb430",
+    "title": "Why does strict mode render twice in React?",
+    "content": "<pre><code>e     const root = createRoot(document.getElementById(\"root\"));\n     root.render(<App />);</code></pre>\n\nStrictMode renders components twice in development mode(not production) in order to detect any problems with your code and warn you about those problems. This is used to detect accidental side effects in the render phase. If you used `create-react-app` development tool then it automatically enables StrictMode by default.\n\n\n     If you want to disable this behavior then you can simply remove `strict` mode.\n\n\n     To detect side effects the following functions are invoked twice:\n\n     1. Function component bodies, excluding the code inside event handlers.\n     2. Functions passed to `useState`, `useMemo`, or `useReducer` (any other Hook)\n     3. Class component's `constructor`, `render`, and `shouldComponentUpdate` methods\n     4. Class component static `getDerivedStateFromProps` method\n     5. State updater functions",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "StrictMode renders components twice in development mode(not production) in order to detect any problems with your code and warn you about those problems. This is used to detect accidental side effects in the render phase. If you used `create-react-app` development tool then it automatically enables StrictMode by default.\n\n\n     If you want to disable this behavior then you can simply remove `strict` mode.\n\n\n     To detect side effects the following functions are invoked twice:\n\n     1. Function component bodies, excluding the code inside event handlers.\n     2. Functions passed to `useState`, `useMemo`, or `useReducer` (any other Hook)\n     3. Class component's `constructor`, `render`, and `shouldComponentUpdate` methods\n     4. Class component static `getDerivedStateFromProps` method\n     5. State updater functions",
+    "options": null,
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=SqcY0GlETPk",
+        "type": "video",
+        "title": "React Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "8:25:00",
+        "description": "Complete React tutorial from scratch"
+      },
+      {
+        "url": "https://react.dev/learn",
+        "type": "article",
+        "title": "React Documentation",
+        "author": "React Team",
+        "description": "Official React documentation and tutorials"
+      },
+      {
+        "url": "https://www.udemy.com/course/react-the-complete-guide-incl-redux/",
+        "type": "course",
+        "title": "React - The Complete Guide",
+        "author": "Maximilian Schwarzmüller",
+        "duration": "48 hours",
+        "description": "Master React and Redux with hands-on projects"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-21T05:08:11.811082+00:00",
+    "updatedAt": "2025-11-24T22:52:08.102565+00:00"
+  },
+  {
+    "id": "d59c906a-38fc-4ed4-a12d-0d13a8040960",
+    "title": "How do you prevent mutating array variables?",
+    "content": "The preexisting variables outside of the function scope including state, props and context leads to a mutation and they result in unpredictable bugs during the rendering stage. The below points should be taken care while working with arrays variables.\n\n      1. You need to take copy of the original array and perform array operations on it for the rendering purpose. This is called local mutation.\n      2. Avoid triggering mutation methods such as push, pop, sort and reverse methods on original array. It is safe to use filter, map and slice method because they create a new array.",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "The preexisting variables outside of the function scope including state, props and context leads to a mutation and they result in unpredictable bugs during the rendering stage. The below points should be taken care while working with arrays variables.\n\n      1. You need to take copy of the original array and perform array operations on it for the rendering purpose. This is called local mutation.\n      2. Avoid triggering mutation methods such as push, pop, sort and reverse methods on original array. It is safe to use filter, map and slice method because they create a new array.",
+    "options": null,
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=SqcY0GlETPk",
+        "type": "video",
+        "title": "React Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "8:25:00",
+        "description": "Complete React tutorial from scratch"
+      },
+      {
+        "url": "https://react.dev/learn",
+        "type": "article",
+        "title": "React Documentation",
+        "author": "React Team",
+        "description": "Official React documentation and tutorials"
+      },
+      {
+        "url": "https://www.udemy.com/course/react-the-complete-guide-incl-redux/",
+        "type": "course",
+        "title": "React - The Complete Guide",
+        "author": "Maximilian Schwarzmüller",
+        "duration": "48 hours",
+        "description": "Master React and Redux with hands-on projects"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-21T05:08:11.811082+00:00",
+    "updatedAt": "2025-11-24T22:52:08.102565+00:00"
+  },
+  {
+    "id": "482f5e52-3eb8-4dd7-af8b-e797eba61ccd",
+    "title": "What is the reason behind multiple JSX tags to be wrapped?",
+    "content": "Behind the scenes, JSX is transformed into plain javascript objects. It is not possible to return two or more objects from a function without wrapping into an array. This is the reason you can't simply return two or more JSX tags from a function without\n      wrapping them into a single parent tag or a Fragment.",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "Behind the scenes, JSX is transformed into plain javascript objects. It is not possible to return two or more objects from a function without wrapping into an array. This is the reason you can't simply return two or more JSX tags from a function without\n      wrapping them into a single parent tag or a Fragment.",
+    "options": null,
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=SqcY0GlETPk",
+        "type": "video",
+        "title": "React Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "8:25:00",
+        "description": "Complete React tutorial from scratch"
+      },
+      {
+        "url": "https://react.dev/learn",
+        "type": "article",
+        "title": "React Documentation",
+        "author": "React Team",
+        "description": "Official React documentation and tutorials"
+      },
+      {
+        "url": "https://www.udemy.com/course/react-the-complete-guide-incl-redux/",
+        "type": "course",
+        "title": "React - The Complete Guide",
+        "author": "Maximilian Schwarzmüller",
+        "duration": "48 hours",
+        "description": "Master React and Redux with hands-on projects"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-21T05:08:11.811082+00:00",
+    "updatedAt": "2025-11-24T22:52:08.102565+00:00"
+  },
+  {
+    "id": "43be51e2-e55b-46a1-a8ae-7951bc270d16",
+    "title": "What are the differences between Functional and Class Components?",
+    "content": "<pre><code>e     function Child(props) {\n       return (\n         <h1\n           This is a child component and the component name is{props.name}\n         </h1\n       );\n     }\n\n     function Parent() {\n       return (\n           <Child name=\"First child component\" />\n           <Child name=\"Second child component\" />\n       );\n     }</code></pre>\n\nThere are two different ways to create components in ReactJS. The main differences are listed down as below,\n\n     ## 1. Syntax:\n\n     The class components uses ES6 classes to create the components. It uses `render` function to display the HTML content in the webpage.\n\n     The syntax for class component looks like as below.\n\n\n     **Note:** The **Pascal Case** is the recommended approach to provide naming to a component.\n\n     Functional component has been improved over the years with some added features like Hooks. Here is a syntax for functional component.\n\n\n     ## 2. State:\n\n     State contains information or data about a component which may change over time.\n\n     In class component, you can update the state when a user interacts with it or server updates the data using the `setState()` method. The initial state is going to be assigned in the `Constructor()` method using the `this.state` object and it is possible to assign different data types such as string, boolean, numbers, etc.\n\n     **A simple example showing how we use the setState() and constructor():**\n\n\n     You didn't use state in functional components because it was only supported in class components. But over the years hooks have been implemented in functional components which enables to use state too.\n\n     The `useState()` hook can used to implement state in functional components. It returns an array with two items: the first item is current state and the next one is a function (setState) that updates the value of the current state.\n\n     Let's see an example to demonstrate the state in functional components,\n\n\n     ## 3. Props:\n\n     Props are referred to as \"properties\". The props are passed into React component just like arguments passed to a function. In other words, they are similar to HTML attributes.\n\n     The props are accessible in child class component using `this.props` as shown in below example,\n\n\n     Props in functional components are similar to that of the class components but the difference is the absence of 'this' keyword.",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "There are two different ways to create components in ReactJS. The main differences are listed down as below,\n\n     ## 1. Syntax:\n\n     The class components uses ES6 classes to create the components. It uses `render` function to display the HTML content in the webpage.\n\n     The syntax for class component looks like as below.\n\n\n     **Note:** The **Pascal Case** is the recommended approach to provide naming to a component.\n\n     Functional component has been improved over the years with some added features like Hooks. Here is a syntax for functional component.\n\n\n     ## 2. State:\n\n     State contains information or data about a component which may change over time.\n\n     In class component, you can update the state when a user interacts with it or server updates the data using the `setState()` method. The initial state is going to be assigned in the `Constructor()` method using the `this.state` object and it is possible to assign different data types such as string, boolean, numbers, etc.\n\n     **A simple example showing how we use the setState() and constructor():**\n\n\n     You didn't use state in functional components because it was only supported in class components. But over the years hooks have been implemented in functional components which enables to use state too.\n\n     The `useState()` hook can used to implement state in functional components. It returns an array with two items: the first item is current state and the next one is a function (setState) that updates the value of the current state.\n\n     Let's see an example to demonstrate the state in functional components,\n\n\n     ## 3. Props:\n\n     Props are referred to as \"properties\". The props are passed into React component just like arguments passed to a function. In other words, they are similar to HTML attributes.\n\n     The props are accessible in child class component using `this.props` as shown in below example,\n\n\n     Props in functional components are similar to that of the class components but the difference is the absence of 'this' keyword.",
+    "options": null,
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=SqcY0GlETPk",
+        "type": "video",
+        "title": "React Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "8:25:00",
+        "description": "Complete React tutorial from scratch"
+      },
+      {
+        "url": "https://react.dev/learn",
+        "type": "article",
+        "title": "React Documentation",
+        "author": "React Team",
+        "description": "Official React documentation and tutorials"
+      },
+      {
+        "url": "https://www.udemy.com/course/react-the-complete-guide-incl-redux/",
+        "type": "course",
+        "title": "React - The Complete Guide",
+        "author": "Maximilian Schwarzmüller",
+        "duration": "48 hours",
+        "description": "Master React and Redux with hands-on projects"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-21T05:08:11.811082+00:00",
+    "updatedAt": "2025-11-24T22:52:08.102565+00:00"
+  },
+  {
+    "id": "48004bde-8f2c-4229-96bb-6be2fbf5bcad",
+    "title": "What is the benefit of strict mode?",
+    "content": "The <StrictMod will be helpful in the below cases,\n\n     1. To find the bugs caused by impure rendering where the components will re-render twice.\n     2. To find the bugs caused by missing cleanup of effects where the components will re-run effects one more extra time.\n     3. Identifying components with **unsafe lifecycle methods**.\n     4. Warning about **legacy string ref** API usage.\n     5. Detecting unexpected **side effects**.\n     6. Detecting **legacy context** API.\n     7. Warning about deprecated **findDOMNode** usage",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "The <StrictMod will be helpful in the below cases,\n\n     1. To find the bugs caused by impure rendering where the components will re-render twice.\n     2. To find the bugs caused by missing cleanup of effects where the components will re-run effects one more extra time.\n     3. Identifying components with **unsafe lifecycle methods**.\n     4. Warning about **legacy string ref** API usage.\n     5. Detecting unexpected **side effects**.\n     6. Detecting **legacy context** API.\n     7. Warning about deprecated **findDOMNode** usage",
+    "options": null,
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=SqcY0GlETPk",
+        "type": "video",
+        "title": "React Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "8:25:00",
+        "description": "Complete React tutorial from scratch"
+      },
+      {
+        "url": "https://react.dev/learn",
+        "type": "article",
+        "title": "React Documentation",
+        "author": "React Team",
+        "description": "Official React documentation and tutorials"
+      },
+      {
+        "url": "https://www.udemy.com/course/react-the-complete-guide-incl-redux/",
+        "type": "course",
+        "title": "React - The Complete Guide",
+        "author": "Maximilian Schwarzmüller",
+        "duration": "48 hours",
+        "description": "Master React and Redux with hands-on projects"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-21T05:08:11.811082+00:00",
+    "updatedAt": "2025-11-24T22:52:08.102565+00:00"
+  },
+  {
+    "id": "693dc917-a348-40de-a397-60a0dd8ef081",
+    "title": "What are capture phase events?",
+    "content": "<pre><code>e         <button onClick={(e) => e.stopPropagation()} />\n         <button onClick={(e) => e.stopPropagation()} /></code></pre>\n\nThe `onClickCapture` React event is helpful to catch all the events of child elements irrespective of event propagation logic or even if the events propagation stopped. This is useful if you need to log every click events for analytics purpose.\n\n     For example, the below code triggers the click event of parent first followed by second level child eventhough leaf child button elements stops the propagation.\n\n\n     The event propagation for the above code snippet happens in the following order:\n\n     1. It travels downwards in the DOM tree by calling all `onClickCapture` event handlers.\n     2. It executes `onClick` event handler on the target element.\n     3. It travels upwards in the DOM tree by call all `onClick` event handlers above to it.",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "The `onClickCapture` React event is helpful to catch all the events of child elements irrespective of event propagation logic or even if the events propagation stopped. This is useful if you need to log every click events for analytics purpose.\n\n     For example, the below code triggers the click event of parent first followed by second level child eventhough leaf child button elements stops the propagation.\n\n\n     The event propagation for the above code snippet happens in the following order:\n\n     1. It travels downwards in the DOM tree by calling all `onClickCapture` event handlers.\n     2. It executes `onClick` event handler on the target element.\n     3. It travels upwards in the DOM tree by call all `onClick` event handlers above to it.",
+    "options": null,
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=SqcY0GlETPk",
+        "type": "video",
+        "title": "React Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "8:25:00",
+        "description": "Complete React tutorial from scratch"
+      },
+      {
+        "url": "https://react.dev/learn",
+        "type": "article",
+        "title": "React Documentation",
+        "author": "React Team",
+        "description": "Official React documentation and tutorials"
+      },
+      {
+        "url": "https://www.udemy.com/course/react-the-complete-guide-incl-redux/",
+        "type": "course",
+        "title": "React - The Complete Guide",
+        "author": "Maximilian Schwarzmüller",
+        "duration": "48 hours",
+        "description": "Master React and Redux with hands-on projects"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-21T05:08:11.811082+00:00",
+    "updatedAt": "2025-11-24T22:52:08.102565+00:00"
+  },
+  {
+    "id": "20509494-fa1f-49d3-bec1-e81108f094ce",
+    "title": "What is a wrapper component?",
+    "content": "<pre><code>e     <MessageWrapperWithTitle title=\"My Message\" text=\"Hello World\" /></code></pre>\n\nA wrapper in React is a component that wraps or surrounds another component or group of components. It can be used for a variety of purposes such as adding additional functionality, styling, or layout to the wrapped components.\n\n     For example, consider a simple component that displays a message:\n\n\n     We can create a wrapper component that will add a border to the message component:\n\n\n     Now we can use the MessageWrapper component instead of the Message component and the message will be displayed with a border:\n\n\n     Wrapper component can also accept its own props and pass them down to the wrapped component, for example, we can create a wrapper component that will add a title to the message component:\n\n\n     Now we can use the MessageWrapperWithTitle component and pass title props:\n\n\n     This way, the wrapper component can add additional functionality, styling, or layout to the wrapped component while keeping the wrapped component simple and reusable.",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "A wrapper in React is a component that wraps or surrounds another component or group of components. It can be used for a variety of purposes such as adding additional functionality, styling, or layout to the wrapped components.\n\n     For example, consider a simple component that displays a message:\n\n\n     We can create a wrapper component that will add a border to the message component:\n\n\n     Now we can use the MessageWrapper component instead of the Message component and the message will be displayed with a border:\n\n\n     Wrapper component can also accept its own props and pass them down to the wrapped component, for example, we can create a wrapper component that will add a title to the message component:\n\n\n     Now we can use the MessageWrapperWithTitle component and pass title props:\n\n\n     This way, the wrapper component can add additional functionality, styling, or layout to the wrapped component while keeping the wrapped component simple and reusable.",
+    "options": null,
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=SqcY0GlETPk",
+        "type": "video",
+        "title": "React Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "8:25:00",
+        "description": "Complete React tutorial from scratch"
+      },
+      {
+        "url": "https://react.dev/learn",
+        "type": "article",
+        "title": "React Documentation",
+        "author": "React Team",
+        "description": "Official React documentation and tutorials"
+      },
+      {
+        "url": "https://www.udemy.com/course/react-the-complete-guide-incl-redux/",
+        "type": "course",
+        "title": "React - The Complete Guide",
+        "author": "Maximilian Schwarzmüller",
+        "duration": "48 hours",
+        "description": "Master React and Redux with hands-on projects"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-21T05:08:11.811082+00:00",
+    "updatedAt": "2025-11-24T22:52:08.102565+00:00"
+  },
+  {
+    "id": "bfd345ba-9b2b-4076-9f14-ac53832f6546",
+    "title": "What are the rules of JSX?",
+    "content": "The below 3 rules needs to be followed while using JSX in a react application.\n\n     1. **Return a single root element**:\n        If you are returning multiple elements from a component, wrap them in a single parent element. Otherwise you will receive the below error in your browser console.\n\n        `html Adjacent JSX elements must be wrapped in an enclosing tag.`\n\n     2. **All the tags needs to be closed:**\n        Unlike HTML, all tags needs to closed explicitly with in JSX. This rule applies for self-closing tags(like hr, br and img tags) as well.\n     3. **Use camelCase naming:**\n        It is suggested to use camelCase naming for attributes in JSX. For example, the common attributes of HTML elements such as `class`, `tabindex` will be used as `className` and `tabIndex`.  \n        **Note:** There is an exception for `aria-*` and `data-*` attributes which should be lower cased all the time.",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "The below 3 rules needs to be followed while using JSX in a react application.\n\n     1. **Return a single root element**:\n        If you are returning multiple elements from a component, wrap them in a single parent element. Otherwise you will receive the below error in your browser console.\n\n        `html Adjacent JSX elements must be wrapped in an enclosing tag.`\n\n     2. **All the tags needs to be closed:**\n        Unlike HTML, all tags needs to closed explicitly with in JSX. This rule applies for self-closing tags(like hr, br and img tags) as well.\n     3. **Use camelCase naming:**\n        It is suggested to use camelCase naming for attributes in JSX. For example, the common attributes of HTML elements such as `class`, `tabindex` will be used as `className` and `tabIndex`.  \n        **Note:** There is an exception for `aria-*` and `data-*` attributes which should be lower cased all the time.",
+    "options": null,
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=SqcY0GlETPk",
+        "type": "video",
+        "title": "React Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "8:25:00",
+        "description": "Complete React tutorial from scratch"
+      },
+      {
+        "url": "https://react.dev/learn",
+        "type": "article",
+        "title": "React Documentation",
+        "author": "React Team",
+        "description": "Official React documentation and tutorials"
+      },
+      {
+        "url": "https://www.udemy.com/course/react-the-complete-guide-incl-redux/",
+        "type": "course",
+        "title": "React - The Complete Guide",
+        "author": "Maximilian Schwarzmüller",
+        "duration": "48 hours",
+        "description": "Master React and Redux with hands-on projects"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-21T05:08:11.811082+00:00",
+    "updatedAt": "2025-11-24T22:52:08.102565+00:00"
+  },
+  {
+    "id": "e764babe-d4c8-42b5-b9f5-d1ef026a88fb",
+    "title": "Can I use javascript urls in react16.9?",
+    "content": "<pre><code>e     const companyProfile = {\n       website: \"javascript: alert(&#039;Your website is hacked&#039;)\",\n     };\n     // It will log a warning\n     <a href={companyProfile.website}>More details</a;</code></pre>\n\nYes, you can use javascript: URLs but it will log a warning in the console. Because URLs starting with javascript: are dangerous by including unsanitized output in a tag like `<a href` and create a security hole.\n\n\n     Remember that the future versions will throw an error for javascript URLs.",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "Yes, you can use javascript: URLs but it will log a warning in the console. Because URLs starting with javascript: are dangerous by including unsanitized output in a tag like `<a href` and create a security hole.\n\n\n     Remember that the future versions will throw an error for javascript URLs.",
+    "options": null,
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=SqcY0GlETPk",
+        "type": "video",
+        "title": "React Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "8:25:00",
+        "description": "Complete React tutorial from scratch"
+      },
+      {
+        "url": "https://react.dev/learn",
+        "type": "article",
+        "title": "React Documentation",
+        "author": "React Team",
+        "description": "Official React documentation and tutorials"
+      },
+      {
+        "url": "https://www.udemy.com/course/react-the-complete-guide-incl-redux/",
+        "type": "course",
+        "title": "React - The Complete Guide",
+        "author": "Maximilian Schwarzmüller",
+        "duration": "48 hours",
+        "description": "Master React and Redux with hands-on projects"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-21T05:07:08.120653+00:00",
+    "updatedAt": "2025-11-24T22:52:08.102565+00:00"
+  },
+  {
+    "id": "ecc289b9-39ff-4b84-8934-2eb1529e1f0a",
+    "title": "What is the purpose of eslint plugin for hooks?",
+    "content": "The ESLint plugin enforces rules of Hooks to avoid bugs. It assumes that any function starting with \"use\" and a capital letter right after it is a Hook. In particular, the rule enforces that,\n\n     1. Calls to Hooks are either inside a PascalCase function (assumed to be a component) or another useSomething function (assumed to be a custom Hook).\n     2. Hooks are called in the same order on every render.",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "The ESLint plugin enforces rules of Hooks to avoid bugs. It assumes that any function starting with \"use\" and a capital letter right after it is a Hook. In particular, the rule enforces that,\n\n     1. Calls to Hooks are either inside a PascalCase function (assumed to be a component) or another useSomething function (assumed to be a custom Hook).\n     2. Hooks are called in the same order on every render.",
+    "options": null,
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=SqcY0GlETPk",
+        "type": "video",
+        "title": "React Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "8:25:00",
+        "description": "Complete React tutorial from scratch"
+      },
+      {
+        "url": "https://react.dev/learn",
+        "type": "article",
+        "title": "React Documentation",
+        "author": "React Team",
+        "description": "Official React documentation and tutorials"
+      },
+      {
+        "url": "https://www.udemy.com/course/react-the-complete-guide-incl-redux/",
+        "type": "course",
+        "title": "React - The Complete Guide",
+        "author": "Maximilian Schwarzmüller",
+        "duration": "48 hours",
+        "description": "Master React and Redux with hands-on projects"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-21T05:07:08.120653+00:00",
+    "updatedAt": "2025-11-24T22:52:08.102565+00:00"
+  },
+  {
+    "id": "1100e0e5-6e96-4ed2-ac71-385316ac0d7b",
+    "title": "How is the new JSX transform different from old transform??",
+    "content": "<pre><code>e     import { jsx as _jsx } from \"react/jsx-runtime\";\n\n     function App() {\n       return _jsx(\"h1\", { children: \"Good morning!!\" });\n     }</code></pre>\n\nThe new JSX transform doesn't require React to be in scope. i.e, You don't need to import React package for simple scenarios.\n\n     Let's take an example to look at the main differences between the old and the new transform,\n\n     **Old Transform:**\n\n\n     Now JSX transform convert the above code into regular JavaScript as below,\n\n\n     **New Transform:**\n\n     The new JSX transform doesn't require any React imports\n\n\n     Under the hood JSX transform compiles to below code\n\n\n     **Note:** You still need to import React to use Hooks.",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "The new JSX transform doesn't require React to be in scope. i.e, You don't need to import React package for simple scenarios.\n\n     Let's take an example to look at the main differences between the old and the new transform,\n\n     **Old Transform:**\n\n\n     Now JSX transform convert the above code into regular JavaScript as below,\n\n\n     **New Transform:**\n\n     The new JSX transform doesn't require any React imports\n\n\n     Under the hood JSX transform compiles to below code\n\n\n     **Note:** You still need to import React to use Hooks.",
+    "options": null,
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=SqcY0GlETPk",
+        "type": "video",
+        "title": "React Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "8:25:00",
+        "description": "Complete React tutorial from scratch"
+      },
+      {
+        "url": "https://react.dev/learn",
+        "type": "article",
+        "title": "React Documentation",
+        "author": "React Team",
+        "description": "Official React documentation and tutorials"
+      },
+      {
+        "url": "https://www.udemy.com/course/react-the-complete-guide-incl-redux/",
+        "type": "course",
+        "title": "React - The Complete Guide",
+        "author": "Maximilian Schwarzmüller",
+        "duration": "48 hours",
+        "description": "Master React and Redux with hands-on projects"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-21T05:07:08.120653+00:00",
+    "updatedAt": "2025-11-24T22:52:08.102565+00:00"
+  },
+  {
+    "id": "9c4c1448-1efe-4395-b581-3cb40b1e772b",
+    "title": "What are the benefits of using TypeScript with ReactJS?",
+    "content": "Below are some of the benefits of using TypeScript with ReactJS,\n\n     1. It is possible to use latest JavaScript features\n     2. Use of interfaces for complex type definitions\n     3. IDEs such as VS Code was made for TypeScript\n     4. Avoid bugs with the ease of readability and Validation",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "Below are some of the benefits of using TypeScript with ReactJS,\n\n     1. It is possible to use latest JavaScript features\n     2. Use of interfaces for complex type definitions\n     3. IDEs such as VS Code was made for TypeScript\n     4. Avoid bugs with the ease of readability and Validation",
+    "options": null,
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=SqcY0GlETPk",
+        "type": "video",
+        "title": "React Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "8:25:00",
+        "description": "Complete React tutorial from scratch"
+      },
+      {
+        "url": "https://react.dev/learn",
+        "type": "article",
+        "title": "React Documentation",
+        "author": "React Team",
+        "description": "Official React documentation and tutorials"
+      },
+      {
+        "url": "https://www.udemy.com/course/react-the-complete-guide-incl-redux/",
+        "type": "course",
+        "title": "React - The Complete Guide",
+        "author": "Maximilian Schwarzmüller",
+        "duration": "48 hours",
+        "description": "Master React and Redux with hands-on projects"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-21T05:07:08.120653+00:00",
+    "updatedAt": "2025-11-24T22:52:08.102565+00:00"
+  }
+]

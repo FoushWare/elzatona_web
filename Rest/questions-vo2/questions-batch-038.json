@@ -1,0 +1,2617 @@
+[
+  {
+    "id": "127e526b-6e1c-4260-8424-5f2c18b9b154",
+    "title": "Sandbox is only for styling purposes, not security",
+    "content": "Senior developers must understand iframe security. Explain sandbox attribute restrictions and when to use it.",
+    "type": "multiple-choice",
+    "difficulty": "advanced",
+    "explanation": "<iframe sandbox applies strict security restrictions: blocks scripts, forms, popups, plugins, and top-level navigation by default. You can selectively allow features with tokens like 'allow-scripts', 'allow-forms', 'allow-same-origin'. Regular <ifram has no such restrictions. Use sandbox for untrusted content (user-generated, third-party widgets).",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Sandbox blocks scripts, forms, popups by default; tokens like 'allow-scripts' can selectively enable features",
+        "isCorrect": true,
+        "explanation": "Correct. Sandbox is a security feature that restricts iframe capabilities, with opt-in tokens for specific features."
+      },
+      {
+        "id": "o2",
+        "text": "Sandbox and regular iframe have identical security properties",
+        "isCorrect": false,
+        "explanation": "Incorrect. Sandbox applies strict restrictions that regular iframes don't have."
+      },
+      {
+        "id": "o3",
+        "text": "Sandbox allows all features by default, you disable them with tokens",
+        "isCorrect": false,
+        "explanation": "Incorrect. Sandbox blocks everything by default and requires explicit tokens to allow features."
+      },
+      {
+        "id": "o4",
+        "text": "Sandbox is only for styling purposes, not security",
+        "isCorrect": false,
+        "explanation": "Incorrect. Sandbox is specifically a security feature to isolate untrusted content."
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=qz0aGYrrlhU",
+        "type": "video",
+        "title": "HTML Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "1:09:30",
+        "description": "Learn HTML from scratch"
+      },
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/HTML",
+        "type": "article",
+        "title": "HTML: HyperText Markup Language - MDN",
+        "author": "Mozilla Developer Network",
+        "description": "Complete HTML reference and guide"
+      }
+    ],
+    "points": 20,
+    "isActive": true,
+    "createdAt": "2025-11-19T18:55:13.41333+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "b5e7a8d3-f315-4dc2-b79a-c74b8d5a189a",
+    "title": "preconnect automatically downloads and executes resources",
+    "content": "Performance optimization for senior developers. Explain these <link resource hints and their impact on page load performance.",
+    "type": "multiple-choice",
+    "difficulty": "advanced",
+    "explanation": "'preload' fetches critical resources early (fonts, critical CSS) for current page. 'prefetch' hints at resources for next navigation (next page assets). 'preconnect' establishes early connection to third-party domains (CDNs, APIs). Use preload for critical current-page resources, prefetch for likely next-page resources, preconnect for external domains you'll request from.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "preload: critical current-page resources; prefetch: next-page resources; preconnect: early connection to external domains",
+        "isCorrect": true,
+        "explanation": "Correct. Each hint serves a different optimization purpose: current page, next page, or connection establishment."
+      },
+      {
+        "id": "o2",
+        "text": "All three hints do the same thing with different syntax",
+        "isCorrect": false,
+        "explanation": "Incorrect. They have distinct purposes: preload for current page, prefetch for next page, preconnect for connections."
+      },
+      {
+        "id": "o3",
+        "text": "prefetch is for critical resources, preload is for optional resources",
+        "isCorrect": false,
+        "explanation": "Incorrect. It's the opposite: preload is for critical current-page resources, prefetch is for likely next-page resources."
+      },
+      {
+        "id": "o4",
+        "text": "preconnect automatically downloads and executes resources",
+        "isCorrect": false,
+        "explanation": "Incorrect. preconnect only establishes the connection (DNS, TCP, TLS), it doesn't download resources."
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=qz0aGYrrlhU",
+        "type": "video",
+        "title": "HTML Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "1:09:30",
+        "description": "Learn HTML from scratch"
+      },
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/HTML",
+        "type": "article",
+        "title": "HTML: HyperText Markup Language - MDN",
+        "author": "Mozilla Developer Network",
+        "description": "Complete HTML reference and guide"
+      }
+    ],
+    "points": 20,
+    "isActive": true,
+    "createdAt": "2025-11-19T18:55:13.41333+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "4887baa2-50ec-4369-b9c4-5be4c87cc82c",
+    "title": "Viewport is optional and only affects desktop browsers",
+    "content": "Senior developers need to understand how meta tags affect browser rendering. Explain these two meta tags and when each is necessary.",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "<meta name='viewport'> controls mobile rendering, setting initial scale and width (e.g., width=device-width, initial-scale=1). <meta http-equiv='X-UA-Compatible'> forces IE/Edge to use a specific rendering engine version (e.g., IE=edge). Viewport is essential for responsive design. X-UA-Compatible is legacy for IE compatibility.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Viewport controls mobile responsive rendering; X-UA-Compatible forces IE/Edge rendering engine version",
+        "isCorrect": true,
+        "explanation": "Correct. Viewport is for responsive design on mobile devices. X-UA-Compatible is for legacy IE compatibility."
+      },
+      {
+        "id": "o2",
+        "text": "Both control the same thing but for different browsers",
+        "isCorrect": false,
+        "explanation": "Incorrect. They serve completely different purposes: viewport for responsive design, X-UA-Compatible for IE compatibility mode."
+      },
+      {
+        "id": "o3",
+        "text": "X-UA-Compatible is required for all modern browsers to render correctly",
+        "isCorrect": false,
+        "explanation": "Incorrect. X-UA-Compatible is only needed for legacy IE/Edge compatibility. Modern browsers don't need it."
+      },
+      {
+        "id": "o4",
+        "text": "Viewport is optional and only affects desktop browsers",
+        "isCorrect": false,
+        "explanation": "Incorrect. Viewport is essential for mobile responsive design and affects how mobile browsers render pages."
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=qz0aGYrrlhU",
+        "type": "video",
+        "title": "HTML Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "1:09:30",
+        "description": "Learn HTML from scratch"
+      },
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/HTML",
+        "type": "article",
+        "title": "HTML: HyperText Markup Language - MDN",
+        "author": "Mozilla Developer Network",
+        "description": "Complete HTML reference and guide"
+      }
+    ],
+    "points": 15,
+    "isActive": true,
+    "createdAt": "2025-11-19T18:55:13.41333+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "f4d92f6c-00f3-4abf-b814-bc98f453b436",
+    "title": "ownKeys and has",
+    "content": "Which two handler methods are most commonly used in JavaScript Proxies?",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "No explanation provided.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "apply and construct",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o2",
+        "text": "get and set",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o3",
+        "text": "deleteProperty and defineProperty",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o4",
+        "text": "ownKeys and has",
+        "isCorrect": false,
+        "explanation": null
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.patterns.dev/",
+        "type": "article",
+        "title": "JavaScript Design Patterns",
+        "author": "Patterns.dev",
+        "description": "Modern JavaScript design patterns"
+      },
+      {
+        "url": "https://www.udemy.com/course/javascript-design-patterns/",
+        "type": "course",
+        "title": "JavaScript Design Patterns",
+        "author": "Pluralsight",
+        "duration": "10 hours",
+        "description": "Master design patterns in JavaScript"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-19T18:41:42.973515+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "05b44317-6669-4dff-b59a-16b15d6e3b74",
+    "title": "Basic Proxy Usage",
+    "content": "You have an object person = { name: 'John', age: 30 }. Create a proxy that logs whenever any property is accessed.",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "No explanation provided.",
+    "options": null,
+    "resources": [
+      {
+        "url": "https://www.patterns.dev/",
+        "type": "article",
+        "title": "JavaScript Design Patterns",
+        "author": "Patterns.dev",
+        "description": "Modern JavaScript design patterns"
+      },
+      {
+        "url": "https://www.udemy.com/course/javascript-design-patterns/",
+        "type": "course",
+        "title": "JavaScript Design Patterns",
+        "author": "Pluralsight",
+        "duration": "10 hours",
+        "description": "Master design patterns in JavaScript"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-19T18:41:42.973515+00:00",
+    "updatedAt": "2025-11-24T22:52:08.102565+00:00"
+  },
+  {
+    "id": "12651fd4-beb3-4053-9e26-e38a52621495",
+    "title": "This is a common misconception. The correct answer is different.",
+    "content": "What is the difference between the classic Module Pattern and the Revealing Module Pattern?",
+    "type": "code",
+    "difficulty": "intermediate",
+    "explanation": "The Revealing Module Pattern maps private functions/variables to a returned object explicitly, improving readability. It makes it clear which functions are public and which remain private.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "The Revealing Module Pattern maps private functions/variables to a returned object explicitly, improving readability.",
+        "isCorrect": true,
+        "explanation": "The Revealing Module Pattern maps private functions/variables to a returned object explicitly, improving readability. It makes it clear which functions are public and which remain private."
+      },
+      {
+        "id": "o2",
+        "text": "This is not correct. Please refer to the explanation.",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o3",
+        "text": "Incorrect. Review the design pattern concepts.",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o4",
+        "text": "This is a common misconception. The correct answer is different.",
+        "isCorrect": false,
+        "explanation": null
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.patterns.dev/",
+        "type": "article",
+        "title": "JavaScript Design Patterns",
+        "author": "Patterns.dev",
+        "description": "Modern JavaScript design patterns"
+      },
+      {
+        "url": "https://www.udemy.com/course/javascript-design-patterns/",
+        "type": "course",
+        "title": "JavaScript Design Patterns",
+        "author": "Pluralsight",
+        "duration": "10 hours",
+        "description": "Master design patterns in JavaScript"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-19T18:41:25.559877+00:00",
+    "updatedAt": "2025-11-24T23:33:46.870735+00:00"
+  },
+  {
+    "id": "80efbc84-4cf2-4dbc-8415-fc5192696a83",
+    "title": "JavaScript throws an error",
+    "content": "If you accidentally overwrite a method from another mixin when using object.assign, what will happen?",
+    "type": "code",
+    "difficulty": "intermediate",
+    "explanation": "The correct answer is: The last assigned method overwrites the previous one",
+    "options": [
+      {
+        "id": "a",
+        "text": "Both methods are preserved",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "b",
+        "text": "The last assigned method overwrites the previous one",
+        "isCorrect": true,
+        "explanation": null
+      },
+      {
+        "id": "c",
+        "text": "JavaScript throws an error",
+        "isCorrect": false,
+        "explanation": null
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.patterns.dev/",
+        "type": "article",
+        "title": "JavaScript Design Patterns",
+        "author": "Patterns.dev",
+        "description": "Modern JavaScript design patterns"
+      },
+      {
+        "url": "https://www.udemy.com/course/javascript-design-patterns/",
+        "type": "course",
+        "title": "JavaScript Design Patterns",
+        "author": "Pluralsight",
+        "duration": "10 hours",
+        "description": "Master design patterns in JavaScript"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-19T18:41:25.559877+00:00",
+    "updatedAt": "2025-11-24T23:25:57.521339+00:00"
+  },
+  {
+    "id": "0872f528-2177-4653-bc92-aa032d230795",
+    "title": "let Module = class { constructor(){ this.x = 10; } }",
+    "content": "Which of the following correctly implements a simple Module Pattern in JavaScript?",
+    "type": "code",
+    "difficulty": "intermediate",
+    "explanation": "The correct answer is: var Module = (function(){ var privateVar = 10; return { get: function(){ return privateVar; } }; })();",
+    "options": [
+      {
+        "id": "a",
+        "text": "function Module() { var x = 10; return x; }",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "b",
+        "text": "var Module = (function(){ var privateVar = 10; return { get: function(){ return privateVar; } }; })();",
+        "isCorrect": true,
+        "explanation": null
+      },
+      {
+        "id": "c",
+        "text": "let Module = class { constructor(){ this.x = 10; } }",
+        "isCorrect": false,
+        "explanation": null
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.patterns.dev/",
+        "type": "article",
+        "title": "JavaScript Design Patterns",
+        "author": "Patterns.dev",
+        "description": "Modern JavaScript design patterns"
+      },
+      {
+        "url": "https://www.udemy.com/course/javascript-design-patterns/",
+        "type": "course",
+        "title": "JavaScript Design Patterns",
+        "author": "Pluralsight",
+        "duration": "10 hours",
+        "description": "Master design patterns in JavaScript"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-19T18:41:25.559877+00:00",
+    "updatedAt": "2025-11-24T23:33:46.870735+00:00"
+  },
+  {
+    "id": "70cb43ba-67cc-4b4f-8885-2591ab772c79",
+    "title": "When you only work with classes",
+    "content": "Which scenario is best suited for the Module Pattern?",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "The correct answer is: When you want to encapsulate private state in legacy JavaScript without ES6 support",
+    "options": [
+      {
+        "id": "a",
+        "text": "When you want to encapsulate private state in legacy JavaScript without ES6 support",
+        "isCorrect": true,
+        "explanation": null
+      },
+      {
+        "id": "b",
+        "text": "When you need dynamic imports and tree-shaking",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "c",
+        "text": "When you only work with classes",
+        "isCorrect": false,
+        "explanation": null
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.patterns.dev/",
+        "type": "article",
+        "title": "JavaScript Design Patterns",
+        "author": "Patterns.dev",
+        "description": "Modern JavaScript design patterns"
+      },
+      {
+        "url": "https://www.udemy.com/course/javascript-design-patterns/",
+        "type": "course",
+        "title": "JavaScript Design Patterns",
+        "author": "Pluralsight",
+        "duration": "10 hours",
+        "description": "Master design patterns in JavaScript"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-19T18:41:25.559877+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "ca877174-c8e8-4d10-96d4-43b0e1110419",
+    "title": "It always requires classes",
+    "content": "Which of the following is a drawback of the Module Pattern?",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "The correct answer is: Private members cannot be accessed or modified without changing the original module",
+    "options": [
+      {
+        "id": "a",
+        "text": "It makes code modular and organized",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "b",
+        "text": "Private members cannot be accessed or modified without changing the original module",
+        "isCorrect": true,
+        "explanation": null
+      },
+      {
+        "id": "c",
+        "text": "It always requires classes",
+        "isCorrect": false,
+        "explanation": null
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.patterns.dev/",
+        "type": "article",
+        "title": "JavaScript Design Patterns",
+        "author": "Patterns.dev",
+        "description": "Modern JavaScript design patterns"
+      },
+      {
+        "url": "https://www.udemy.com/course/javascript-design-patterns/",
+        "type": "course",
+        "title": "JavaScript Design Patterns",
+        "author": "Pluralsight",
+        "duration": "10 hours",
+        "description": "Master design patterns in JavaScript"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-19T18:41:25.559877+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "9097814a-8f00-407c-b6a5-fbe288eb5623",
+    "title": "This is a common misconception. The correct answer is different.",
+    "content": "What is the Proxy Pattern in JavaScript and how does it differ from directly interacting with an object?",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "No explanation provided.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "No explanation provided",
+        "isCorrect": true,
+        "explanation": "No explanation provided."
+      },
+      {
+        "id": "o2",
+        "text": "This is not correct. Please refer to the explanation.",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o3",
+        "text": "Incorrect. Review the design pattern concepts.",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o4",
+        "text": "This is a common misconception. The correct answer is different.",
+        "isCorrect": false,
+        "explanation": null
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.patterns.dev/",
+        "type": "article",
+        "title": "JavaScript Design Patterns",
+        "author": "Patterns.dev",
+        "description": "Modern JavaScript design patterns"
+      },
+      {
+        "url": "https://www.udemy.com/course/javascript-design-patterns/",
+        "type": "course",
+        "title": "JavaScript Design Patterns",
+        "author": "Pluralsight",
+        "duration": "10 hours",
+        "description": "Master design patterns in JavaScript"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-19T18:41:25.559877+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "5466b224-f7e7-4d6b-8a4b-3214a09f388d",
+    "title": "This is a common misconception. The correct answer is different.",
+    "content": "How does the Module Pattern differ from ES6 Modules?",
+    "type": "multiple-choice",
+    "difficulty": "advanced",
+    "explanation": "Module Pattern relies on closures and IIFEs for encapsulation, while ES6 Modules are built-in language features with import and export. ES6 Modules are statically analyzed at compile time, while Module Pattern modules are runtime constructs.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Module Pattern relies on closures and IIFEs for encapsulation, while ES6 Modules are built-in language features with `import` and `export`.",
+        "isCorrect": true,
+        "explanation": "Module Pattern relies on closures and IIFEs for encapsulation, while ES6 Modules are built-in language features with <code>import</code> and <code>export</code>. ES6 Modules are statically analyzed at compile time, while Module Pattern modules are runtime constructs."
+      },
+      {
+        "id": "o2",
+        "text": "This is not correct. Please refer to the explanation.",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o3",
+        "text": "Incorrect. Review the design pattern concepts.",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o4",
+        "text": "This is a common misconception. The correct answer is different.",
+        "isCorrect": false,
+        "explanation": null
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.patterns.dev/",
+        "type": "article",
+        "title": "JavaScript Design Patterns",
+        "author": "Patterns.dev",
+        "description": "Modern JavaScript design patterns"
+      },
+      {
+        "url": "https://www.udemy.com/course/javascript-design-patterns/",
+        "type": "course",
+        "title": "JavaScript Design Patterns",
+        "author": "Pluralsight",
+        "duration": "10 hours",
+        "description": "Master design patterns in JavaScript"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-19T18:41:25.559877+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "dbee2470-2153-4e58-84dd-f17584271aad",
+    "title": "JavaScript throws a syntax error",
+    "content": "If you forget to return a method in your Module Pattern, what will happen?",
+    "type": "code",
+    "difficulty": "intermediate",
+    "explanation": "The correct answer is: The method remains private and cannot be accessed outside",
+    "options": [
+      {
+        "id": "a",
+        "text": "The method is still accessible globally",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "b",
+        "text": "The method remains private and cannot be accessed outside",
+        "isCorrect": true,
+        "explanation": null
+      },
+      {
+        "id": "c",
+        "text": "JavaScript throws a syntax error",
+        "isCorrect": false,
+        "explanation": null
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.patterns.dev/",
+        "type": "article",
+        "title": "JavaScript Design Patterns",
+        "author": "Patterns.dev",
+        "description": "Modern JavaScript design patterns"
+      },
+      {
+        "url": "https://www.udemy.com/course/javascript-design-patterns/",
+        "type": "course",
+        "title": "JavaScript Design Patterns",
+        "author": "Pluralsight",
+        "duration": "10 hours",
+        "description": "Master design patterns in JavaScript"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-19T18:41:25.559877+00:00",
+    "updatedAt": "2025-11-24T23:33:46.870735+00:00"
+  },
+  {
+    "id": "a3d83c59-0453-4019-b755-6d0fd9c714d9",
+    "title": "This is a common misconception. The correct answer is different.",
+    "content": "What is the Module Pattern in JavaScript and why is it used?",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "The Module Pattern is a design pattern that uses closures to create private and public encapsulation. It is used to avoid polluting the global scope and to create reusable, maintainable code structures.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "The Module Pattern is a design pattern that uses closures to create private and public encapsulation.",
+        "isCorrect": true,
+        "explanation": "The Module Pattern is a design pattern that uses closures to create private and public encapsulation. It is used to avoid polluting the global scope and to create reusable, maintainable code structures."
+      },
+      {
+        "id": "o2",
+        "text": "This is not correct. Please refer to the explanation.",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o3",
+        "text": "Incorrect. Review the design pattern concepts.",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o4",
+        "text": "This is a common misconception. The correct answer is different.",
+        "isCorrect": false,
+        "explanation": null
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.patterns.dev/",
+        "type": "article",
+        "title": "JavaScript Design Patterns",
+        "author": "Patterns.dev",
+        "description": "Modern JavaScript design patterns"
+      },
+      {
+        "url": "https://www.udemy.com/course/javascript-design-patterns/",
+        "type": "course",
+        "title": "JavaScript Design Patterns",
+        "author": "Pluralsight",
+        "duration": "10 hours",
+        "description": "Master design patterns in JavaScript"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-19T18:41:25.559877+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "275975ba-33b4-419f-9bfc-152595f76842",
+    "title": "This is a common misconception. The correct answer is different.",
+    "content": "How does the Module Pattern achieve encapsulation?",
+    "type": "code",
+    "difficulty": "intermediate",
+    "explanation": "By using an Immediately Invoked Function Expression (IIFE) to create a private scope. Only the returned object exposes public members, while variables/functions inside the closure remain private.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "By using an Immediately Invoked Function Expression (IIFE) to create a private scope.",
+        "isCorrect": true,
+        "explanation": "By using an Immediately Invoked Function Expression (IIFE) to create a private scope. Only the returned object exposes public members, while variables/functions inside the closure remain private."
+      },
+      {
+        "id": "o2",
+        "text": "This is not correct. Please refer to the explanation.",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o3",
+        "text": "Incorrect. Review the design pattern concepts.",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o4",
+        "text": "This is a common misconception. The correct answer is different.",
+        "isCorrect": false,
+        "explanation": null
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.patterns.dev/",
+        "type": "article",
+        "title": "JavaScript Design Patterns",
+        "author": "Patterns.dev",
+        "description": "Modern JavaScript design patterns"
+      },
+      {
+        "url": "https://www.udemy.com/course/javascript-design-patterns/",
+        "type": "course",
+        "title": "JavaScript Design Patterns",
+        "author": "Pluralsight",
+        "duration": "10 hours",
+        "description": "Master design patterns in JavaScript"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-19T18:41:25.559877+00:00",
+    "updatedAt": "2025-11-24T23:33:46.870735+00:00"
+  },
+  {
+    "id": "a1cc23f7-68a0-4936-a162-994afa590587",
+    "title": "This is a common misconception. The correct answer is different.",
+    "content": "Why is the Flyweight Pattern considered less critical in modern JavaScript applications compared to older times?",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "Because modern devices have large amounts of memory (RAM), so optimizing object count is less often necessary. JavaScript engines also optimize memory allocation internally.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Because modern devices have large amounts of memory (RAM), so optimizing object count is less often necessary.",
+        "isCorrect": true,
+        "explanation": "Because modern devices have large amounts of memory (RAM), so optimizing object count is less often necessary. JavaScript engines also optimize memory allocation internally."
+      },
+      {
+        "id": "o2",
+        "text": "This is not correct. Please refer to the explanation.",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o3",
+        "text": "Incorrect. Review the design pattern concepts.",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o4",
+        "text": "This is a common misconception. The correct answer is different.",
+        "isCorrect": false,
+        "explanation": null
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.patterns.dev/",
+        "type": "article",
+        "title": "JavaScript Design Patterns",
+        "author": "Patterns.dev",
+        "description": "Modern JavaScript design patterns"
+      },
+      {
+        "url": "https://www.udemy.com/course/javascript-design-patterns/",
+        "type": "course",
+        "title": "JavaScript Design Patterns",
+        "author": "Pluralsight",
+        "duration": "10 hours",
+        "description": "Master design patterns in JavaScript"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-19T18:39:45.275955+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "7c60bd91-c315-41fd-9cd5-3bd389bfda2b",
+    "title": "When setting up event delegation in DOM",
+    "content": "In which situation would the Flyweight Pattern be the best choice?",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "The correct answer is: When creating thousands of objects that share common properties",
+    "options": [
+      {
+        "id": "a",
+        "text": "When creating thousands of objects that share common properties",
+        "isCorrect": true,
+        "explanation": null
+      },
+      {
+        "id": "b",
+        "text": "When creating a single instance of a service",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "c",
+        "text": "When caching API responses",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "d",
+        "text": "When setting up event delegation in DOM",
+        "isCorrect": false,
+        "explanation": null
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.patterns.dev/",
+        "type": "article",
+        "title": "JavaScript Design Patterns",
+        "author": "Patterns.dev",
+        "description": "Modern JavaScript design patterns"
+      },
+      {
+        "url": "https://www.udemy.com/course/javascript-design-patterns/",
+        "type": "course",
+        "title": "JavaScript Design Patterns",
+        "author": "Pluralsight",
+        "duration": "10 hours",
+        "description": "Master design patterns in JavaScript"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-19T18:39:45.275955+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "062388da-f2c2-4d27-9c34-17ee8368cdef",
+    "title": "This is a common misconception. The correct answer is different.",
+    "content": "What's wrong with this implementation?\n\n<pre><code>const isbnNumbers = new Set();\n\nconst createBook = (title, author, isbn) => {\n  const book = isbnNumbers.has(isbn);\n  if (book) {\n    return book;\n  } else {\n    const book = new Book(title, author, isbn);\n    isbnNumbers.add(isbn);\n    return book;\n  }\n};</code></pre>",
+    "type": "multiple-choice",
+    "difficulty": "advanced",
+    "explanation": "The code incorrectly treats isbnNumbers.has(isbn) as the book object, but it returns a boolean. A Map or dictionary should be used to store ISBN → Book mappings, not just a Set.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "The code incorrectly treats `isbnNumbers.has(isbn)` as the book object, but it returns a boolean.",
+        "isCorrect": true,
+        "explanation": "The code incorrectly treats <code>isbnNumbers.has(isbn)</code> as the book object, but it returns a boolean. A <code>Map</code> or dictionary should be used to store ISBN → Book mappings, not just a <code>Set</code>."
+      },
+      {
+        "id": "o2",
+        "text": "This is not correct. Please refer to the explanation.",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o3",
+        "text": "Incorrect. Review the design pattern concepts.",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o4",
+        "text": "This is a common misconception. The correct answer is different.",
+        "isCorrect": false,
+        "explanation": null
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.patterns.dev/",
+        "type": "article",
+        "title": "JavaScript Design Patterns",
+        "author": "Patterns.dev",
+        "description": "Modern JavaScript design patterns"
+      },
+      {
+        "url": "https://www.udemy.com/course/javascript-design-patterns/",
+        "type": "course",
+        "title": "JavaScript Design Patterns",
+        "author": "Pluralsight",
+        "duration": "10 hours",
+        "description": "Master design patterns in JavaScript"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-19T18:39:45.275955+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "36fc3af4-1d3f-4f46-a0ee-695c9dfceed5",
+    "title": "This is a common misconception. The correct answer is different.",
+    "content": "Why did React discourage mixins in favor of Higher Order Components (HOCs) and later Hooks?",
+    "type": "multiple-choice",
+    "difficulty": "advanced",
+    "explanation": "Mixins often lead to implicit dependencies and complexity, while HOCs and Hooks are more explicit, composable, and predictable. Hooks allow better reusability and cleaner separation of concerns than mixins.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Mixins often lead to implicit dependencies and complexity, while HOCs and Hooks are more explicit, composable, and predictable.",
+        "isCorrect": true,
+        "explanation": "Mixins often lead to implicit dependencies and complexity, while HOCs and Hooks are more explicit, composable, and predictable. Hooks allow better reusability and cleaner separation of concerns than mixins."
+      },
+      {
+        "id": "o2",
+        "text": "This is not correct. Please refer to the explanation.",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o3",
+        "text": "Incorrect. Review the design pattern concepts.",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o4",
+        "text": "This is a common misconception. The correct answer is different.",
+        "isCorrect": false,
+        "explanation": null
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.patterns.dev/",
+        "type": "article",
+        "title": "JavaScript Design Patterns",
+        "author": "Patterns.dev",
+        "description": "Modern JavaScript design patterns"
+      },
+      {
+        "url": "https://www.udemy.com/course/javascript-design-patterns/",
+        "type": "course",
+        "title": "JavaScript Design Patterns",
+        "author": "Pluralsight",
+        "duration": "10 hours",
+        "description": "Master design patterns in JavaScript"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-19T18:39:45.275955+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "3af2c77f-30d5-40d3-b55c-16c6eb5be2c0",
+    "title": "console.log",
+    "content": "Which of the following are examples of mixins in the browser Window object?",
+    "type": "code",
+    "difficulty": "intermediate",
+    "explanation": "The correct answer is: setTimeout and setInterval (from WindowOrWorkerGlobalScope)",
+    "options": [
+      {
+        "id": "a",
+        "text": "setTimeout and setInterval (from WindowOrWorkerGlobalScope)",
+        "isCorrect": true,
+        "explanation": null
+      },
+      {
+        "id": "b",
+        "text": "onbeforeunload (from WindowEventHandlers)",
+        "isCorrect": true,
+        "explanation": null
+      },
+      {
+        "id": "c",
+        "text": "document.querySelector",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "d",
+        "text": "console.log",
+        "isCorrect": false,
+        "explanation": null
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.patterns.dev/",
+        "type": "article",
+        "title": "JavaScript Design Patterns",
+        "author": "Patterns.dev",
+        "description": "Modern JavaScript design patterns"
+      },
+      {
+        "url": "https://www.udemy.com/course/javascript-design-patterns/",
+        "type": "course",
+        "title": "JavaScript Design Patterns",
+        "author": "Pluralsight",
+        "duration": "10 hours",
+        "description": "Master design patterns in JavaScript"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-19T18:39:45.275955+00:00",
+    "updatedAt": "2025-11-24T23:25:57.521339+00:00"
+  },
+  {
+    "id": "724617ab-a16e-464e-b466-29cb7843d8e3",
+    "title": "This is a common misconception. The correct answer is different.",
+    "content": "In the example with animalFunctionality and DogFunctionality, why does Dog end up with both bark() and walk() methods?",
+    "type": "code",
+    "difficulty": "intermediate",
+    "explanation": "Because object.assign(dogFunctionality, animalFunctionality) merged animal methods into dogFunctionality, then object.assign(Dog.prototype, dogFunctionality) added all methods to Dog's prototype. This effectively chained multiple mixins together.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Because `Object.assign(dogFunctionality, animalFunctionality)` merged animal methods into dogFunctionality, then `Object.assign(Dog.prototype, dogFunctionality)` added all methods to Dog's prototype.",
+        "isCorrect": true,
+        "explanation": "Because <code>Object.assign(dogFunctionality, animalFunctionality)</code> merged animal methods into dogFunctionality, then <code>Object.assign(Dog.prototype, dogFunctionality)</code> added all methods to Dog's prototype. This effectively chained multiple mixins together."
+      },
+      {
+        "id": "o2",
+        "text": "This is not correct. Please refer to the explanation.",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o3",
+        "text": "Incorrect. Review the design pattern concepts.",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o4",
+        "text": "This is a common misconception. The correct answer is different.",
+        "isCorrect": false,
+        "explanation": null
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.patterns.dev/",
+        "type": "article",
+        "title": "JavaScript Design Patterns",
+        "author": "Patterns.dev",
+        "description": "Modern JavaScript design patterns"
+      },
+      {
+        "url": "https://www.udemy.com/course/javascript-design-patterns/",
+        "type": "course",
+        "title": "JavaScript Design Patterns",
+        "author": "Pluralsight",
+        "duration": "10 hours",
+        "description": "Master design patterns in JavaScript"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-19T18:39:45.275955+00:00",
+    "updatedAt": "2025-11-24T23:39:20.943477+00:00"
+  },
+  {
+    "id": "f1f03854-960a-4651-883b-3d394ea89e19",
+    "title": "This is a common misconception. The correct answer is different.",
+    "content": "What is the Mixin Pattern and why is it used?",
+    "type": "code",
+    "difficulty": "intermediate",
+    "explanation": "A mixin is an object containing reusable functionality that can be added to another object or class without inheritance. It allows sharing behavior across classes without forming rigid inheritance hierarchies.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "A mixin is an object containing reusable functionality that can be added to another object or class without inheritance.",
+        "isCorrect": true,
+        "explanation": "A mixin is an object containing reusable functionality that can be added to another object or class without inheritance. It allows sharing behavior across classes without forming rigid inheritance hierarchies."
+      },
+      {
+        "id": "o2",
+        "text": "This is not correct. Please refer to the explanation.",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o3",
+        "text": "Incorrect. Review the design pattern concepts.",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o4",
+        "text": "This is a common misconception. The correct answer is different.",
+        "isCorrect": false,
+        "explanation": null
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.patterns.dev/",
+        "type": "article",
+        "title": "JavaScript Design Patterns",
+        "author": "Patterns.dev",
+        "description": "Modern JavaScript design patterns"
+      },
+      {
+        "url": "https://www.udemy.com/course/javascript-design-patterns/",
+        "type": "course",
+        "title": "JavaScript Design Patterns",
+        "author": "Pluralsight",
+        "duration": "10 hours",
+        "description": "Master design patterns in JavaScript"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-19T18:39:45.275955+00:00",
+    "updatedAt": "2025-11-24T23:33:46.870735+00:00"
+  },
+  {
+    "id": "5e318573-f0ac-4a58-b551-d1c4b261d97c",
+    "title": "This is a common misconception. The correct answer is different.",
+    "content": "How does the Mixin Pattern differ from classical inheritance?",
+    "type": "code",
+    "difficulty": "intermediate",
+    "explanation": "Inheritance creates a parent-child relationship between classes, while mixins simply copy functionality into another class. Mixins allow horizontal code reuse across unrelated classes, inheritance enforces vertical hierarchy.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Inheritance creates a parent-child relationship between classes, while mixins simply copy functionality into another class.",
+        "isCorrect": true,
+        "explanation": "Inheritance creates a parent-child relationship between classes, while mixins simply copy functionality into another class. Mixins allow horizontal code reuse across unrelated classes, inheritance enforces vertical hierarchy."
+      },
+      {
+        "id": "o2",
+        "text": "This is not correct. Please refer to the explanation.",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o3",
+        "text": "Incorrect. Review the design pattern concepts.",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o4",
+        "text": "This is a common misconception. The correct answer is different.",
+        "isCorrect": false,
+        "explanation": null
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.patterns.dev/",
+        "type": "article",
+        "title": "JavaScript Design Patterns",
+        "author": "Patterns.dev",
+        "description": "Modern JavaScript design patterns"
+      },
+      {
+        "url": "https://www.udemy.com/course/javascript-design-patterns/",
+        "type": "course",
+        "title": "JavaScript Design Patterns",
+        "author": "Pluralsight",
+        "duration": "10 hours",
+        "description": "Master design patterns in JavaScript"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-19T18:39:45.275955+00:00",
+    "updatedAt": "2025-11-24T23:33:46.870735+00:00"
+  },
+  {
+    "id": "6d539e08-7f01-4510-8dd5-b29622681c8f",
+    "title": "Error: bark is not a function",
+    "content": "Given the following code:\n\n<pre><code>class Dog {\n  constructor(name) {\n    this.name = name;\n  }\n}\n\nconst dogFunctionality = {\n  bark: () => console.log(\"Woof!\"),\n  wagTail: () => console.log(\"Wagging my tail!\"),\n};\n\nObject.assign(Dog.prototype, dogFunctionality);\n\nconst pet1 = new Dog(\"Daisy\");\npet1.bark();</code></pre>\nWhat will be logged when pet1.bark() is executed?",
+    "type": "code",
+    "difficulty": "intermediate",
+    "explanation": "The correct answer is: Woof!",
+    "options": [
+      {
+        "id": "a",
+        "text": "undefined",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "b",
+        "text": "Woof!",
+        "isCorrect": true,
+        "explanation": null
+      },
+      {
+        "id": "c",
+        "text": "Error: bark is not a function",
+        "isCorrect": false,
+        "explanation": null
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.patterns.dev/",
+        "type": "article",
+        "title": "JavaScript Design Patterns",
+        "author": "Patterns.dev",
+        "description": "Modern JavaScript design patterns"
+      },
+      {
+        "url": "https://www.udemy.com/course/javascript-design-patterns/",
+        "type": "course",
+        "title": "JavaScript Design Patterns",
+        "author": "Pluralsight",
+        "duration": "10 hours",
+        "description": "Master design patterns in JavaScript"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-19T18:39:45.275955+00:00",
+    "updatedAt": "2025-11-24T23:25:57.521339+00:00"
+  },
+  {
+    "id": "f18b2799-be25-443c-bc80-79a4896cfaf3",
+    "title": "This is a common misconception. The correct answer is different.",
+    "content": "What are potential disadvantages of using Mixins?",
+    "type": "code",
+    "difficulty": "intermediate",
+    "explanation": "They can cause prototype pollution, making it unclear where a function originated. They can introduce naming conflicts if two mixins define the same property. In React, they added complexity, leading the team to recommend HOCs and Hooks instead.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "They can cause prototype pollution, making it unclear where a function originated.",
+        "isCorrect": true,
+        "explanation": "They can cause prototype pollution, making it unclear where a function originated. They can introduce naming conflicts if two mixins define the same property. In React, they added complexity, leading the team to recommend HOCs and Hooks instead."
+      },
+      {
+        "id": "o2",
+        "text": "This is not correct. Please refer to the explanation.",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o3",
+        "text": "Incorrect. Review the design pattern concepts.",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o4",
+        "text": "This is a common misconception. The correct answer is different.",
+        "isCorrect": false,
+        "explanation": null
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.patterns.dev/",
+        "type": "article",
+        "title": "JavaScript Design Patterns",
+        "author": "Patterns.dev",
+        "description": "Modern JavaScript design patterns"
+      },
+      {
+        "url": "https://www.udemy.com/course/javascript-design-patterns/",
+        "type": "course",
+        "title": "JavaScript Design Patterns",
+        "author": "Pluralsight",
+        "duration": "10 hours",
+        "description": "Master design patterns in JavaScript"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-19T18:39:45.275955+00:00",
+    "updatedAt": "2025-11-24T23:33:46.870735+00:00"
+  },
+  {
+    "id": "e58e6b8d-2887-4ed0-9abf-41800c5c20ce",
+    "title": "Logging Changes",
+    "content": "Write a proxy that prevents setting age to a non-numeric value and logs attempts with an error message.",
+    "type": "multiple-choice",
+    "difficulty": "advanced",
+    "explanation": "No explanation provided.",
+    "options": null,
+    "resources": [
+      {
+        "url": "https://www.patterns.dev/",
+        "type": "article",
+        "title": "JavaScript Design Patterns",
+        "author": "Patterns.dev",
+        "description": "Modern JavaScript design patterns"
+      },
+      {
+        "url": "https://www.udemy.com/course/javascript-design-patterns/",
+        "type": "course",
+        "title": "JavaScript Design Patterns",
+        "author": "Pluralsight",
+        "duration": "10 hours",
+        "description": "Master design patterns in JavaScript"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-19T18:38:06.869306+00:00",
+    "updatedAt": "2025-11-24T22:52:08.102565+00:00"
+  },
+  {
+    "id": "5953ccde-25f5-40ab-8afb-5bf3c0f357a0",
+    "title": "Refactoring Proxy with Reflect",
+    "content": "Rewrite this Proxy handler to use Reflect.get and Reflect.set instead of direct object manipulation.",
+    "type": "multiple-choice",
+    "difficulty": "advanced",
+    "explanation": "No explanation provided.",
+    "options": null,
+    "resources": [
+      {
+        "url": "https://www.patterns.dev/",
+        "type": "article",
+        "title": "JavaScript Design Patterns",
+        "author": "Patterns.dev",
+        "description": "Modern JavaScript design patterns"
+      },
+      {
+        "url": "https://www.udemy.com/course/javascript-design-patterns/",
+        "type": "course",
+        "title": "JavaScript Design Patterns",
+        "author": "Pluralsight",
+        "duration": "10 hours",
+        "description": "Master design patterns in JavaScript"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-19T18:38:06.869306+00:00",
+    "updatedAt": "2025-11-24T22:52:08.102565+00:00"
+  },
+  {
+    "id": "381c73ff-6e8f-4166-b3bd-97b3e80ac589",
+    "title": "This is a common misconception. The correct answer is different.",
+    "content": "What is the role of the Reflect object when working with Proxies, and why is it preferred over direct object manipulation?",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "No explanation provided.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "No explanation provided",
+        "isCorrect": true,
+        "explanation": "No explanation provided."
+      },
+      {
+        "id": "o2",
+        "text": "This is not correct. Please refer to the explanation.",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o3",
+        "text": "Incorrect. Review the design pattern concepts.",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o4",
+        "text": "This is a common misconception. The correct answer is different.",
+        "isCorrect": false,
+        "explanation": null
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.patterns.dev/",
+        "type": "article",
+        "title": "JavaScript Design Patterns",
+        "author": "Patterns.dev",
+        "description": "Modern JavaScript design patterns"
+      },
+      {
+        "url": "https://www.udemy.com/course/javascript-design-patterns/",
+        "type": "course",
+        "title": "JavaScript Design Patterns",
+        "author": "Pluralsight",
+        "duration": "10 hours",
+        "description": "Master design patterns in JavaScript"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-19T18:38:06.869306+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "4f32ee89-4b68-4670-9876-a36b0551fe2b",
+    "title": "This is a common misconception. The correct answer is different.",
+    "content": "How can the Proxy pattern help with data validation? Give an example.",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "No explanation provided.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "No explanation provided",
+        "isCorrect": true,
+        "explanation": "No explanation provided."
+      },
+      {
+        "id": "o2",
+        "text": "This is not correct. Please refer to the explanation.",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o3",
+        "text": "Incorrect. Review the design pattern concepts.",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o4",
+        "text": "This is a common misconception. The correct answer is different.",
+        "isCorrect": false,
+        "explanation": null
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.patterns.dev/",
+        "type": "article",
+        "title": "JavaScript Design Patterns",
+        "author": "Patterns.dev",
+        "description": "Modern JavaScript design patterns"
+      },
+      {
+        "url": "https://www.udemy.com/course/javascript-design-patterns/",
+        "type": "course",
+        "title": "JavaScript Design Patterns",
+        "author": "Pluralsight",
+        "duration": "10 hours",
+        "description": "Master design patterns in JavaScript"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-19T18:38:06.869306+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "80bce871-cf86-4182-9108-138a0f620422",
+    "title": "This is a common misconception. The correct answer is different.",
+    "content": "How does the Flyweight Pattern differ from the Factory Pattern?",
+    "type": "multiple-choice",
+    "difficulty": "advanced",
+    "explanation": "Factory Pattern abstracts object creation, while Flyweight Pattern focuses on sharing existing objects to save memory. Factory decides *how* to create, Flyweight decides *whether to reuse*.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Factory Pattern abstracts object creation, while Flyweight Pattern focuses on sharing existing objects to save memory.",
+        "isCorrect": true,
+        "explanation": "Factory Pattern abstracts object creation, while Flyweight Pattern focuses on sharing existing objects to save memory. Factory decides *how* to create, Flyweight decides *whether to reuse*."
+      },
+      {
+        "id": "o2",
+        "text": "This is not correct. Please refer to the explanation.",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o3",
+        "text": "Incorrect. Review the design pattern concepts.",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o4",
+        "text": "This is a common misconception. The correct answer is different.",
+        "isCorrect": false,
+        "explanation": null
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.patterns.dev/",
+        "type": "article",
+        "title": "JavaScript Design Patterns",
+        "author": "Patterns.dev",
+        "description": "Modern JavaScript design patterns"
+      },
+      {
+        "url": "https://www.udemy.com/course/javascript-design-patterns/",
+        "type": "course",
+        "title": "JavaScript Design Patterns",
+        "author": "Pluralsight",
+        "duration": "10 hours",
+        "description": "Master design patterns in JavaScript"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-19T18:38:06.869306+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "88d94d55-ea2a-47a9-b8e9-c8e27bd1ef85",
+    "title": "Any of the above, depending on the handler logic",
+    "content": "When trying to access a property that does not exist, how can a Proxy handler respond?",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "No explanation provided.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Throw an error",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o2",
+        "text": "Return undefined",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o3",
+        "text": "Log a custom message",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o4",
+        "text": "Any of the above, depending on the handler logic",
+        "isCorrect": false,
+        "explanation": null
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.patterns.dev/",
+        "type": "article",
+        "title": "JavaScript Design Patterns",
+        "author": "Patterns.dev",
+        "description": "Modern JavaScript design patterns"
+      },
+      {
+        "url": "https://www.udemy.com/course/javascript-design-patterns/",
+        "type": "course",
+        "title": "JavaScript Design Patterns",
+        "author": "Pluralsight",
+        "duration": "10 hours",
+        "description": "Master design patterns in JavaScript"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-19T18:38:06.869306+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "69080ff9-162a-4df1-8cc2-efd0fb38164c",
+    "title": "This is a common misconception. The correct answer is different.",
+    "content": "What is a drawback of using the Flyweight Pattern?",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "It can increase code complexity by adding an extra layer of object management. Modern hardware often has enough memory, so the benefit may be negligible in many applications.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "It can increase code complexity by adding an extra layer of object management.",
+        "isCorrect": true,
+        "explanation": "It can increase code complexity by adding an extra layer of object management. Modern hardware often has enough memory, so the benefit may be negligible in many applications."
+      },
+      {
+        "id": "o2",
+        "text": "This is not correct. Please refer to the explanation.",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o3",
+        "text": "Incorrect. Review the design pattern concepts.",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o4",
+        "text": "This is a common misconception. The correct answer is different.",
+        "isCorrect": false,
+        "explanation": null
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.patterns.dev/",
+        "type": "article",
+        "title": "JavaScript Design Patterns",
+        "author": "Patterns.dev",
+        "description": "Modern JavaScript design patterns"
+      },
+      {
+        "url": "https://www.udemy.com/course/javascript-design-patterns/",
+        "type": "course",
+        "title": "JavaScript Design Patterns",
+        "author": "Pluralsight",
+        "duration": "10 hours",
+        "description": "Master design patterns in JavaScript"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-19T18:38:06.869306+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "259c7026-09ac-4b5c-8496-7c4e177761e7",
+    "title": "Performance optimization in critical code",
+    "content": "Which of the following are valid use cases for the Proxy pattern?",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "No explanation provided.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Validation of object properties",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o2",
+        "text": "Debugging and logging",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o3",
+        "text": "Formatting data before return",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o4",
+        "text": "Performance optimization in critical code",
+        "isCorrect": false,
+        "explanation": null
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.patterns.dev/",
+        "type": "article",
+        "title": "JavaScript Design Patterns",
+        "author": "Patterns.dev",
+        "description": "Modern JavaScript design patterns"
+      },
+      {
+        "url": "https://www.udemy.com/course/javascript-design-patterns/",
+        "type": "course",
+        "title": "JavaScript Design Patterns",
+        "author": "Pluralsight",
+        "duration": "10 hours",
+        "description": "Master design patterns in JavaScript"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-19T18:38:06.869306+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "55910eb5-20ec-44b1-9161-01a4c7685fec",
+    "title": "Reduces network latency",
+    "content": "Which of the following are advantages of the Flyweight Pattern?",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "The correct answer is: Reduced memory usage by reusing objects",
+    "options": [
+      {
+        "id": "a",
+        "text": "Reduced memory usage by reusing objects",
+        "isCorrect": true,
+        "explanation": null
+      },
+      {
+        "id": "b",
+        "text": "Improved performance for large-scale applications",
+        "isCorrect": true,
+        "explanation": null
+      },
+      {
+        "id": "c",
+        "text": "Simplifies debugging",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "d",
+        "text": "Reduces network latency",
+        "isCorrect": false,
+        "explanation": null
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.patterns.dev/",
+        "type": "article",
+        "title": "JavaScript Design Patterns",
+        "author": "Patterns.dev",
+        "description": "Modern JavaScript design patterns"
+      },
+      {
+        "url": "https://www.udemy.com/course/javascript-design-patterns/",
+        "type": "course",
+        "title": "JavaScript Design Patterns",
+        "author": "Pluralsight",
+        "duration": "10 hours",
+        "description": "Master design patterns in JavaScript"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-19T18:38:06.869306+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "01078a83-12b2-40e6-bfbf-df334087ea86",
+    "title": "This is a common misconception. The correct answer is different.",
+    "content": "What are the performance tradeoffs of using Proxy objects in large applications?",
+    "type": "multiple-choice",
+    "difficulty": "advanced",
+    "explanation": "No explanation provided.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "No explanation provided",
+        "isCorrect": true,
+        "explanation": "No explanation provided."
+      },
+      {
+        "id": "o2",
+        "text": "This is not correct. Please refer to the explanation.",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o3",
+        "text": "Incorrect. Review the design pattern concepts.",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o4",
+        "text": "This is a common misconception. The correct answer is different.",
+        "isCorrect": false,
+        "explanation": null
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.patterns.dev/",
+        "type": "article",
+        "title": "JavaScript Design Patterns",
+        "author": "Patterns.dev",
+        "description": "Modern JavaScript design patterns"
+      },
+      {
+        "url": "https://www.udemy.com/course/javascript-design-patterns/",
+        "type": "course",
+        "title": "JavaScript Design Patterns",
+        "author": "Pluralsight",
+        "duration": "10 hours",
+        "description": "Master design patterns in JavaScript"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-19T18:38:06.869306+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "1504e02e-3b7d-4f98-9671-7233195643f1",
+    "title": "It improves runtime performance automatically",
+    "content": "What is the benefit of creating a custom hook like useThemeContext() instead of calling useContext(ThemeContext) directly in every component?",
+    "type": "code",
+    "difficulty": "intermediate",
+    "explanation": "The correct answer is: It enforces correct usage and can throw errors if used outside the provider",
+    "options": [
+      {
+        "id": "a",
+        "text": "It enforces correct usage and can throw errors if used outside the provider",
+        "isCorrect": true,
+        "explanation": null
+      },
+      {
+        "id": "b",
+        "text": "It avoids the need to import useContext at all",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "c",
+        "text": "It improves runtime performance automatically",
+        "isCorrect": false,
+        "explanation": null
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.patterns.dev/",
+        "type": "article",
+        "title": "JavaScript Design Patterns",
+        "author": "Patterns.dev",
+        "description": "Modern JavaScript design patterns"
+      },
+      {
+        "url": "https://www.udemy.com/course/javascript-design-patterns/",
+        "type": "course",
+        "title": "JavaScript Design Patterns",
+        "author": "Pluralsight",
+        "duration": "10 hours",
+        "description": "Master design patterns in JavaScript"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-19T18:36:53.557168+00:00",
+    "updatedAt": "2025-11-24T23:33:46.870735+00:00"
+  },
+  {
+    "id": "b31da03a-73af-47e9-a7c8-537b5b8b0cd1",
+    "title": "This is a common misconception. The correct answer is different.",
+    "content": "In React, how does a component consume values from a Provider?",
+    "type": "code",
+    "difficulty": "intermediate",
+    "explanation": "By using the useContext hook with the context object created via React.createContext(). The component calls useContext(SomeContext) to directly access the value provided by the Provider.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "By using the useContext hook with the context object created via React.createContext().",
+        "isCorrect": true,
+        "explanation": "By using the useContext hook with the context object created via React.createContext(). The component calls useContext(SomeContext) to directly access the value provided by the Provider."
+      },
+      {
+        "id": "o2",
+        "text": "This is not correct. Please refer to the explanation.",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o3",
+        "text": "Incorrect. Review the design pattern concepts.",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o4",
+        "text": "This is a common misconception. The correct answer is different.",
+        "isCorrect": false,
+        "explanation": null
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.patterns.dev/",
+        "type": "article",
+        "title": "JavaScript Design Patterns",
+        "author": "Patterns.dev",
+        "description": "Modern JavaScript design patterns"
+      },
+      {
+        "url": "https://www.udemy.com/course/javascript-design-patterns/",
+        "type": "course",
+        "title": "JavaScript Design Patterns",
+        "author": "Pluralsight",
+        "duration": "10 hours",
+        "description": "Master design patterns in JavaScript"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-19T18:36:53.557168+00:00",
+    "updatedAt": "2025-11-24T23:33:46.870735+00:00"
+  },
+  {
+    "id": "187c87c8-4832-4473-8a14-ab01b2d80d77",
+    "title": "h1 with text 'undefined'",
+    "content": "What will be rendered by the Header component in this example?\n\n<pre><code>const DataContext = React.createContext();\n\nfunction App() {\n  const data = { title: 'Hello Provider' };\n  return (\n    <DataContext.Provider value={data}>\n      <Header />\n    </DataContext.Provider\n  );\n}\n\nfunction Header() {\n  const data = React.useContext(DataContext);\n  return <h1{data.title}</h1;\n}</code></pre>",
+    "type": "code",
+    "difficulty": "intermediate",
+    "explanation": "The correct answer is: h1 with text 'Hello Provider'",
+    "options": [
+      {
+        "id": "a",
+        "text": "Nothing, React throws an error",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "b",
+        "text": "h1 with text 'Hello Provider'",
+        "isCorrect": true,
+        "explanation": null
+      },
+      {
+        "id": "c",
+        "text": "h1 with text 'undefined'",
+        "isCorrect": false,
+        "explanation": null
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.patterns.dev/",
+        "type": "article",
+        "title": "JavaScript Design Patterns",
+        "author": "Patterns.dev",
+        "description": "Modern JavaScript design patterns"
+      },
+      {
+        "url": "https://www.udemy.com/course/javascript-design-patterns/",
+        "type": "course",
+        "title": "JavaScript Design Patterns",
+        "author": "Pluralsight",
+        "duration": "10 hours",
+        "description": "Master design patterns in JavaScript"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-19T18:36:53.557168+00:00",
+    "updatedAt": "2025-11-24T23:25:57.521339+00:00"
+  },
+  {
+    "id": "8fac00d1-585e-4098-9bed-c9a500ef730a",
+    "title": "This is a common misconception. The correct answer is different.",
+    "content": "Why is the Provider Pattern a good fit for managing application themes (dark/light mode)?",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "Because many components need access to the theme, and the Provider allows sharing it globally without prop drilling. It centralizes theme state and makes it easy to toggle or update across the entire app.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Because many components need access to the theme, and the Provider allows sharing it globally without prop drilling.",
+        "isCorrect": true,
+        "explanation": "Because many components need access to the theme, and the Provider allows sharing it globally without prop drilling. It centralizes theme state and makes it easy to toggle or update across the entire app."
+      },
+      {
+        "id": "o2",
+        "text": "This is not correct. Please refer to the explanation.",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o3",
+        "text": "Incorrect. Review the design pattern concepts.",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o4",
+        "text": "This is a common misconception. The correct answer is different.",
+        "isCorrect": false,
+        "explanation": null
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.patterns.dev/",
+        "type": "article",
+        "title": "JavaScript Design Patterns",
+        "author": "Patterns.dev",
+        "description": "Modern JavaScript design patterns"
+      },
+      {
+        "url": "https://www.udemy.com/course/javascript-design-patterns/",
+        "type": "course",
+        "title": "JavaScript Design Patterns",
+        "author": "Pluralsight",
+        "duration": "10 hours",
+        "description": "Master design patterns in JavaScript"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-19T18:36:53.557168+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "1d06eb4c-efce-4469-9145-bf98451520ab",
+    "title": "Total amount of copies: 5, Total amount of books: 3",
+    "content": "What will this code log?\n\n<pre><code>console.log(\"Total amount of copies: \", bookList.length);\nconsole.log(\"Total amount of books: \", isbnNumbers.size);</code></pre>\nAfter adding 5 copies of 3 different books, what is the output?",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "The correct answer is: Total amount of copies: 5, Total amount of books: 3",
+    "options": [
+      {
+        "id": "a",
+        "text": "Total amount of copies: 5, Total amount of books: 5",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "b",
+        "text": "Total amount of copies: 3, Total amount of books: 5",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "c",
+        "text": "Total amount of copies: 5, Total amount of books: 3",
+        "isCorrect": true,
+        "explanation": null
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.patterns.dev/",
+        "type": "article",
+        "title": "JavaScript Design Patterns",
+        "author": "Patterns.dev",
+        "description": "Modern JavaScript design patterns"
+      },
+      {
+        "url": "https://www.udemy.com/course/javascript-design-patterns/",
+        "type": "course",
+        "title": "JavaScript Design Patterns",
+        "author": "Pluralsight",
+        "duration": "10 hours",
+        "description": "Master design patterns in JavaScript"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-19T18:36:53.557168+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "51d16793-5ff0-4ca6-bb45-34a137299ea8",
+    "title": "This is a common misconception. The correct answer is different.",
+    "content": "What is a potential downside of overusing the Provider Pattern?",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "All components consuming the context re-render whenever the value changes, which can hurt performance in large apps. It can cause unnecessary re-renders if too much state is stored in a single provider.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "All components consuming the context re-render whenever the value changes, which can hurt performance in large apps.",
+        "isCorrect": true,
+        "explanation": "All components consuming the context re-render whenever the value changes, which can hurt performance in large apps. It can cause unnecessary re-renders if too much state is stored in a single provider."
+      },
+      {
+        "id": "o2",
+        "text": "This is not correct. Please refer to the explanation.",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o3",
+        "text": "Incorrect. Review the design pattern concepts.",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o4",
+        "text": "This is a common misconception. The correct answer is different.",
+        "isCorrect": false,
+        "explanation": null
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.patterns.dev/",
+        "type": "article",
+        "title": "JavaScript Design Patterns",
+        "author": "Patterns.dev",
+        "description": "Modern JavaScript design patterns"
+      },
+      {
+        "url": "https://www.udemy.com/course/javascript-design-patterns/",
+        "type": "course",
+        "title": "JavaScript Design Patterns",
+        "author": "Pluralsight",
+        "duration": "10 hours",
+        "description": "Master design patterns in JavaScript"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-19T18:36:53.557168+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "9e298531-91be-4603-8b2f-a39955b321d6",
+    "title": "This is a common misconception. The correct answer is different.",
+    "content": "How can you avoid unnecessary re-renders when using Providers for frequently changing values?",
+    "type": "multiple-choice",
+    "difficulty": "advanced",
+    "explanation": "By splitting contexts into multiple smaller providers so that components only re-render when the specific value they consume changes. Using memoization or selective context providers to isolate updates.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "By splitting contexts into multiple smaller providers so that components only re-render when the specific value they consume changes.",
+        "isCorrect": true,
+        "explanation": "By splitting contexts into multiple smaller providers so that components only re-render when the specific value they consume changes. Using memoization or selective context providers to isolate updates."
+      },
+      {
+        "id": "o2",
+        "text": "This is not correct. Please refer to the explanation.",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o3",
+        "text": "Incorrect. Review the design pattern concepts.",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o4",
+        "text": "This is a common misconception. The correct answer is different.",
+        "isCorrect": false,
+        "explanation": null
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.patterns.dev/",
+        "type": "article",
+        "title": "JavaScript Design Patterns",
+        "author": "Patterns.dev",
+        "description": "Modern JavaScript design patterns"
+      },
+      {
+        "url": "https://www.udemy.com/course/javascript-design-patterns/",
+        "type": "course",
+        "title": "JavaScript Design Patterns",
+        "author": "Pluralsight",
+        "duration": "10 hours",
+        "description": "Master design patterns in JavaScript"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-19T18:36:53.557168+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "0ce4caa2-f07a-4f69-bb0e-c34bcca560b8",
+    "title": "This is a common misconception. The correct answer is different.",
+    "content": "How does the Provider Pattern differ from using Redux for global state management?",
+    "type": "multiple-choice",
+    "difficulty": "advanced",
+    "explanation": "Provider Pattern with context is simpler and built into React, but doesn't offer advanced features like middleware, devtools, or predictable reducers. Redux adds structure and tooling, while Context Providers are best for simpler shared state.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Provider Pattern with context is simpler and built into React, but doesn't offer advanced features like middleware, devtools, or predictable reducers.",
+        "isCorrect": true,
+        "explanation": "Provider Pattern with context is simpler and built into React, but doesn't offer advanced features like middleware, devtools, or predictable reducers. Redux adds structure and tooling, while Context Providers are best for simpler shared state."
+      },
+      {
+        "id": "o2",
+        "text": "This is not correct. Please refer to the explanation.",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o3",
+        "text": "Incorrect. Review the design pattern concepts.",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o4",
+        "text": "This is a common misconception. The correct answer is different.",
+        "isCorrect": false,
+        "explanation": null
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.patterns.dev/",
+        "type": "article",
+        "title": "JavaScript Design Patterns",
+        "author": "Patterns.dev",
+        "description": "Modern JavaScript design patterns"
+      },
+      {
+        "url": "https://www.udemy.com/course/javascript-design-patterns/",
+        "type": "course",
+        "title": "JavaScript Design Patterns",
+        "author": "Pluralsight",
+        "duration": "10 hours",
+        "description": "Master design patterns in JavaScript"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-19T18:36:53.557168+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "321ad9bc-a417-46d1-85de-d947140b227c",
+    "title": "This is a common misconception. The correct answer is different.",
+    "content": "What role does the ThemeProvider from styled-components play?",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "It provides a theme object via context so that styled components can access theme values without passing them as props. It applies consistent design tokens (colors, spacing, etc.) across the entire component tree.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "It provides a theme object via context so that styled components can access theme values without passing them as props.",
+        "isCorrect": true,
+        "explanation": "It provides a theme object via context so that styled components can access theme values without passing them as props. It applies consistent design tokens (colors, spacing, etc.) across the entire component tree."
+      },
+      {
+        "id": "o2",
+        "text": "This is not correct. Please refer to the explanation.",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o3",
+        "text": "Incorrect. Review the design pattern concepts.",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o4",
+        "text": "This is a common misconception. The correct answer is different.",
+        "isCorrect": false,
+        "explanation": null
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.patterns.dev/",
+        "type": "article",
+        "title": "JavaScript Design Patterns",
+        "author": "Patterns.dev",
+        "description": "Modern JavaScript design patterns"
+      },
+      {
+        "url": "https://www.udemy.com/course/javascript-design-patterns/",
+        "type": "course",
+        "title": "JavaScript Design Patterns",
+        "author": "Pluralsight",
+        "duration": "10 hours",
+        "description": "Master design patterns in JavaScript"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-19T18:36:53.557168+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "3c25fb07-a734-40e4-a4f5-948de30ddc3b",
+    "title": "This is a common misconception. The correct answer is different.",
+    "content": "What is the Flyweight Pattern, and why is it useful?",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "It's a structural design pattern that minimizes memory usage by sharing common object data instead of creating duplicates. It's useful when creating a large number of similar objects, e.g., books with the same ISBN.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "It's a structural design pattern that minimizes memory usage by sharing common object data instead of creating duplicates.",
+        "isCorrect": true,
+        "explanation": "It's a structural design pattern that minimizes memory usage by sharing common object data instead of creating duplicates. It's useful when creating a large number of similar objects, e.g., books with the same ISBN."
+      },
+      {
+        "id": "o2",
+        "text": "This is not correct. Please refer to the explanation.",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o3",
+        "text": "Incorrect. Review the design pattern concepts.",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o4",
+        "text": "This is a common misconception. The correct answer is different.",
+        "isCorrect": false,
+        "explanation": null
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.patterns.dev/",
+        "type": "article",
+        "title": "JavaScript Design Patterns",
+        "author": "Patterns.dev",
+        "description": "Modern JavaScript design patterns"
+      },
+      {
+        "url": "https://www.udemy.com/course/javascript-design-patterns/",
+        "type": "course",
+        "title": "JavaScript Design Patterns",
+        "author": "Pluralsight",
+        "duration": "10 hours",
+        "description": "Master design patterns in JavaScript"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-19T18:36:53.557168+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "a1a7a0a2-11cc-494f-9cac-e75f4d252e33",
+    "title": "This is a common misconception. The correct answer is different.",
+    "content": "Static import loads all modules upfront at build time, increasing initial bundle size. Dynamic import (import()) loads modules only when needed (e.g., on user interaction), improving load performance but adding runtime overhead.",
+    "type": "code",
+    "difficulty": "advanced",
+    "explanation": "Static imports are eager, dynamic imports are lazy. Static imports bundle everything, dynamic imports support code-splitting. Static imports run immediately, dynamic imports return a promise.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Static imports are eager, dynamic imports are lazy.",
+        "isCorrect": true,
+        "explanation": "Static imports are eager, dynamic imports are lazy. Static imports bundle everything, dynamic imports support code-splitting. Static imports run immediately, dynamic imports return a promise."
+      },
+      {
+        "id": "o2",
+        "text": "This is not correct. Please refer to the explanation.",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o3",
+        "text": "Incorrect. Review the design pattern concepts.",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o4",
+        "text": "This is a common misconception. The correct answer is different.",
+        "isCorrect": false,
+        "explanation": null
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.patterns.dev/",
+        "type": "article",
+        "title": "JavaScript Design Patterns",
+        "author": "Patterns.dev",
+        "description": "Modern JavaScript design patterns"
+      },
+      {
+        "url": "https://www.udemy.com/course/javascript-design-patterns/",
+        "type": "course",
+        "title": "JavaScript Design Patterns",
+        "author": "Pluralsight",
+        "duration": "10 hours",
+        "description": "Master design patterns in JavaScript"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-19T18:35:08.548614+00:00",
+    "updatedAt": "2025-11-24T23:33:46.870735+00:00"
+  },
+  {
+    "id": "1aa9c4f0-88f9-4bb6-8321-aea31bf7f745",
+    "title": "It ignores them unless explicitly configured",
+    "content": "Webpack bundles all statically imported modules into the main bundle file. For example, main.bundle.js might include every statically imported component from the source code.",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "No explanation provided.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "It bundles them only when used at runtime",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o2",
+        "text": "It splits them into separate files automatically",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o3",
+        "text": "It includes all statically imported modules into the main bundle",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o4",
+        "text": "It ignores them unless explicitly configured",
+        "isCorrect": false,
+        "explanation": null
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.patterns.dev/",
+        "type": "article",
+        "title": "JavaScript Design Patterns",
+        "author": "Patterns.dev",
+        "description": "Modern JavaScript design patterns"
+      },
+      {
+        "url": "https://www.udemy.com/course/javascript-design-patterns/",
+        "type": "course",
+        "title": "JavaScript Design Patterns",
+        "author": "Pluralsight",
+        "duration": "10 hours",
+        "description": "Master design patterns in JavaScript"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-19T18:35:08.548614+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "58a00327-6682-4120-aeb0-13997e392e5c",
+    "title": "Code minification",
+    "content": "Instead of statically importing the EmojiPicker, we can dynamically import it when the user opens the emoji panel. This reduces initial bundle size and speeds up app load.",
+    "type": "code",
+    "difficulty": "intermediate",
+    "explanation": "No explanation provided.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Static export",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o2",
+        "text": "Dynamic import (`import()`)",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o3",
+        "text": "Tree shaking",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o4",
+        "text": "Code minification",
+        "isCorrect": false,
+        "explanation": null
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.patterns.dev/",
+        "type": "article",
+        "title": "JavaScript Design Patterns",
+        "author": "Patterns.dev",
+        "description": "Modern JavaScript design patterns"
+      },
+      {
+        "url": "https://www.udemy.com/course/javascript-design-patterns/",
+        "type": "course",
+        "title": "JavaScript Design Patterns",
+        "author": "Pluralsight",
+        "duration": "10 hours",
+        "description": "Master design patterns in JavaScript"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-19T18:35:08.548614+00:00",
+    "updatedAt": "2025-11-24T23:33:46.870735+00:00"
+  },
+  {
+    "id": "4c983142-6112-4c2d-a4a5-d54c28b21a3e",
+    "title": "Creating deeply nested providers",
+    "content": "Which of the following best describes 'prop drilling'?",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "The correct answer is: Passing props through multiple components that don't use them",
+    "options": [
+      {
+        "id": "a",
+        "text": "Passing props through multiple components that don't use them",
+        "isCorrect": true,
+        "explanation": null
+      },
+      {
+        "id": "b",
+        "text": "Drilling into the DOM with refs",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "c",
+        "text": "Creating deeply nested providers",
+        "isCorrect": false,
+        "explanation": null
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.patterns.dev/",
+        "type": "article",
+        "title": "JavaScript Design Patterns",
+        "author": "Patterns.dev",
+        "description": "Modern JavaScript design patterns"
+      },
+      {
+        "url": "https://www.udemy.com/course/javascript-design-patterns/",
+        "type": "course",
+        "title": "JavaScript Design Patterns",
+        "author": "Pluralsight",
+        "duration": "10 hours",
+        "description": "Master design patterns in JavaScript"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-19T18:35:08.548614+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "33df65d3-782a-4a50-9f71-de45f081f04f",
+    "title": "This is a common misconception. The correct answer is different.",
+    "content": "All statically imported modules are bundled into the main JavaScript file (e.g., main.bundle.js in Webpack). Larger bundles can slow down initial page load, since the browser must download, parse, and execute everything before rendering the UI.",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "Static imports increase bundle size since everything is loaded upfront. They can hurt performance by delaying time-to-interactive, especially on slow networks or devices. Using too many static imports for rarely used components leads to wasted resources.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Static imports increase bundle size since everything is loaded upfront.",
+        "isCorrect": true,
+        "explanation": "Static imports increase bundle size since everything is loaded upfront. They can hurt performance by delaying time-to-interactive, especially on slow networks or devices. Using too many static imports for rarely used components leads to wasted resources."
+      },
+      {
+        "id": "o2",
+        "text": "This is not correct. Please refer to the explanation.",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o3",
+        "text": "Incorrect. Review the design pattern concepts.",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o4",
+        "text": "This is a common misconception. The correct answer is different.",
+        "isCorrect": false,
+        "explanation": null
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.patterns.dev/",
+        "type": "article",
+        "title": "JavaScript Design Patterns",
+        "author": "Patterns.dev",
+        "description": "Modern JavaScript design patterns"
+      },
+      {
+        "url": "https://www.udemy.com/course/javascript-design-patterns/",
+        "type": "course",
+        "title": "JavaScript Design Patterns",
+        "author": "Pluralsight",
+        "duration": "10 hours",
+        "description": "Master design patterns in JavaScript"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-19T18:35:08.548614+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  }
+]

@@ -1,0 +1,2106 @@
+[
+  {
+    "id": "16831e8a-3eb2-4fec-8e6f-2a3bb1fa5ef7",
+    "title": "What are the advantages of React?",
+    "content": "What are the advantages of React?",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "Below are the list of main advantages of React,\n\n    1. Increases the application's performance with _Virtual DOM_.\n    2. JSX makes code easy to read and write.\n    3. It renders both on client and server side (_SSR_).\n    4. Easy to integrate with frameworks (Angular, Backbone) since it is only a view library.\n    5. Easy to write unit and integration tests with tools such as Jest.",
+    "options": null,
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=SqcY0GlETPk",
+        "type": "video",
+        "title": "React Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "8:25:00",
+        "description": "Complete React tutorial from scratch"
+      },
+      {
+        "url": "https://react.dev/learn",
+        "type": "article",
+        "title": "React Documentation",
+        "author": "React Team",
+        "description": "Official React documentation and tutorials"
+      },
+      {
+        "url": "https://www.udemy.com/course/react-the-complete-guide-incl-redux/",
+        "type": "course",
+        "title": "React - The Complete Guide",
+        "author": "Maximilian Schwarzmüller",
+        "duration": "48 hours",
+        "description": "Master React and Redux with hands-on projects"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-18T22:51:49.969625+00:00",
+    "updatedAt": "2025-11-24T22:52:08.102565+00:00"
+  },
+  {
+    "id": "0d0a2f0c-2f1f-431a-a277-b6c7b5b0f7f9",
+    "title": "How to apply validation on props in React?",
+    "content": "How to apply validation on props in React?\n\n```javascript\n    import React from \"react\";\n    import PropTypes from \"prop-types\";\n\n    function User({ name, age }) {\n      return (\n        <>\n          <h1{`Welcome, ${name}`}</h1\n          <h2{`Age, ${age}`}</h2\n        </>\n      );\n    }\n\n    User.propTypes = {\n      name: PropTypes.string.isRequired,\n      age: PropTypes.number.isRequired,\n    };\n```",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "When the application is running in _development mode_, React will automatically check all props that we set on components to make sure they have _correct type_. If the type is incorrect, React will generate warning messages in the console. It's disabled in _production mode_ due to performance impact. The mandatory props are defined with `isRequired`.\n\n    The set of predefined prop types:\n\n    1. `PropTypes.number`\n    2. `PropTypes.string`\n    3. `PropTypes.array`\n    4. `PropTypes.object`\n    5. `PropTypes.func`\n    6. `PropTypes.node`\n    7. `PropTypes.element`\n    8. `PropTypes.bool`\n    9. `PropTypes.symbol`\n    10. `PropTypes.any`\n\n    We can define `propTypes` for `User` component as below:\n\n\n    **Note:** In React v15.5 _PropTypes_ were moved from `React.PropTypes` to `prop-types` library.\n\n    _The Equivalent Functional Component_",
+    "options": null,
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=SqcY0GlETPk",
+        "type": "video",
+        "title": "React Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "8:25:00",
+        "description": "Complete React tutorial from scratch"
+      },
+      {
+        "url": "https://react.dev/learn",
+        "type": "article",
+        "title": "React Documentation",
+        "author": "React Team",
+        "description": "Official React documentation and tutorials"
+      },
+      {
+        "url": "https://www.udemy.com/course/react-the-complete-guide-incl-redux/",
+        "type": "course",
+        "title": "React - The Complete Guide",
+        "author": "Maximilian Schwarzmüller",
+        "duration": "48 hours",
+        "description": "Master React and Redux with hands-on projects"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-18T22:51:11.198387+00:00",
+    "updatedAt": "2025-11-24T22:52:08.102565+00:00"
+  },
+  {
+    "id": "bc7bf654-9fa2-4f6f-94cf-684fc3c2673f",
+    "title": "What are stateless components?",
+    "content": "What are stateless components?",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "If the behaviour of a component is independent of its state then it can be a stateless component. You can use either a function or a class for creating stateless components. But unless you need to use a lifecycle hook in your components, you should go for function components. There are a lot of benefits if you decide to use function components here; they are easy to write, understand, and test, a little faster, and you can avoid the `this` keyword altogether.",
+    "options": null,
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=SqcY0GlETPk",
+        "type": "video",
+        "title": "React Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "8:25:00",
+        "description": "Complete React tutorial from scratch"
+      },
+      {
+        "url": "https://react.dev/learn",
+        "type": "article",
+        "title": "React Documentation",
+        "author": "React Team",
+        "description": "Official React documentation and tutorials"
+      },
+      {
+        "url": "https://www.udemy.com/course/react-the-complete-guide-incl-redux/",
+        "type": "course",
+        "title": "React - The Complete Guide",
+        "author": "Maximilian Schwarzmüller",
+        "duration": "48 hours",
+        "description": "Master React and Redux with hands-on projects"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-18T22:51:11.198387+00:00",
+    "updatedAt": "2025-11-24T22:52:08.102565+00:00"
+  },
+  {
+    "id": "9f30200a-0e83-48c9-ac82-6b2986f189bb",
+    "title": "What are stateful components?",
+    "content": "What are stateful components?\n\n```javascript\n    class App extends Component {\n      constructor(props) {\n        super(props);\n        this.state = { count: 0 };\n      }\n\n      handleIncrement() {\n        setState({ count: this.state.count + 1 });\n      }\n\n      render() {\n        <>\n          <button onClick={() => this.handleIncrement}>Increment</button\n          <span Count: {count}</span\n        </>;\n      }\n    }\n```",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "If the behaviour of a component is dependent on the _state_ of the component then it can be termed as stateful component. These _stateful components_ are either function components with hooks or _class components_.\n\n    Let's take an example of function stateful component which update the state based on click event,\n\n\n    <p\n    The equivalent class stateful component with a state that gets initialized in the `constructor`.\n\n\n    </p",
+    "options": null,
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=SqcY0GlETPk",
+        "type": "video",
+        "title": "React Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "8:25:00",
+        "description": "Complete React tutorial from scratch"
+      },
+      {
+        "url": "https://react.dev/learn",
+        "type": "article",
+        "title": "React Documentation",
+        "author": "React Team",
+        "description": "Official React documentation and tutorials"
+      },
+      {
+        "url": "https://www.udemy.com/course/react-the-complete-guide-incl-redux/",
+        "type": "course",
+        "title": "React - The Complete Guide",
+        "author": "Maximilian Schwarzmüller",
+        "duration": "48 hours",
+        "description": "Master React and Redux with hands-on projects"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-18T22:51:11.198387+00:00",
+    "updatedAt": "2025-11-24T22:52:08.102565+00:00"
+  },
+  {
+    "id": "eafd6808-1360-4c87-b128-8e4b562ccc51",
+    "title": "Why React uses `className` over `class` attribute?",
+    "content": "Why React uses `className` over `class` attribute?\n\n```javascript\n        element.className = 'my-class';\n```",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "React uses **className** instead of **class** because of a JavaScript naming conflict with the class keyword.\n\n    1. `class` is a reserved keyword in JavaScript\n        In JavaScript, class is used to define ES6 classes:\n      \n        If you try to use class as a variable or property name, it will throw a syntax error. Since JSX is just JavaScript with XML-like syntax, using class directly in JSX would break the parser.\n\n    2. JSX Is JavaScript\n    \n        When you write JSX like this:\n        It will be compiled to:\n        But `class` is invalid in this object literal context (since it clashes with the JS keyword), hence React instead uses className.\n        which compiles to:\n        React then translates `className` to` class` in the final HTML DOM.\n\n    3. Aligns with DOM APIs\n        In vanilla JavaScript, you interact with element classes using:\n        React follows this convention, staying consistent with the DOM API's property name rather than HTML's attribute.",
+    "options": null,
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=SqcY0GlETPk",
+        "type": "video",
+        "title": "React Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "8:25:00",
+        "description": "Complete React tutorial from scratch"
+      },
+      {
+        "url": "https://react.dev/learn",
+        "type": "article",
+        "title": "React Documentation",
+        "author": "React Team",
+        "description": "Official React documentation and tutorials"
+      },
+      {
+        "url": "https://www.udemy.com/course/react-the-complete-guide-incl-redux/",
+        "type": "course",
+        "title": "React - The Complete Guide",
+        "author": "Maximilian Schwarzmüller",
+        "duration": "48 hours",
+        "description": "Master React and Redux with hands-on projects"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-18T22:50:38.000044+00:00",
+    "updatedAt": "2025-11-24T22:52:08.102565+00:00"
+  },
+  {
+    "id": "36d1df5b-0ccd-49a4-9ffe-88972b41dcfb",
+    "title": "What is children prop?",
+    "content": "What is children prop?\n\n```javascript\n    const MyDiv = React.createClass({\n      render: function () {\n        return <div{this.props.children}</div;\n      },\n    });\n\n    ReactDOM.render(\n      <MyDiv\n        <span{\"Hello\"}</span\n        <span{\"World\"}</span\n      </MyDiv,\n      node\n    );\n```",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "The `children` prop is a special prop in React used to pass elements between the opening and closing tags of a component. It is commonly used in layout and wrapper componnents. \n\n    A simple usage of children prop looks as below,\n\n    Here, everything inside `<MyDiv...</MyDiv` is passed as children to the custom div component.\n\n    The children can be text, JSX elements, fragments, arrays and functions(for advance use case like render props).\n\n    <p\n\n\n    </p\n\n    **Note:** There are several methods available in the legacy React API to work with this prop. These include `React.Children.map`, `React.Children.forEach`, `React.Children.count`, `React.Children.only`, `React.Children.toArray`.",
+    "options": null,
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=SqcY0GlETPk",
+        "type": "video",
+        "title": "React Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "8:25:00",
+        "description": "Complete React tutorial from scratch"
+      },
+      {
+        "url": "https://react.dev/learn",
+        "type": "article",
+        "title": "React Documentation",
+        "author": "React Team",
+        "description": "Official React documentation and tutorials"
+      },
+      {
+        "url": "https://www.udemy.com/course/react-the-complete-guide-incl-redux/",
+        "type": "course",
+        "title": "React - The Complete Guide",
+        "author": "Maximilian Schwarzmüller",
+        "duration": "48 hours",
+        "description": "Master React and Redux with hands-on projects"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-18T22:50:38.000044+00:00",
+    "updatedAt": "2025-11-24T22:52:08.102565+00:00"
+  },
+  {
+    "id": "73b0ea3a-8ae8-4754-ad4c-7b84b15cf16c",
+    "title": "What are uncontrolled components?",
+    "content": "What are uncontrolled components?\n\n```javascript\n    class UserProfile extends React.Component {\n      constructor(props) {\n        super(props);\n        this.handleSubmit = this.handleSubmit.bind(this);\n        this.input = React.createRef();\n      }\n\n      handleSubmit(event) {\n        alert(\"A name was submitted: \" + this.input.current.value);\n        event.preventDefault();\n      }\n\n      render() {\n        return (\n          <form onSubmit={this.handleSubmit}>\n            <label\n              {\"Name:\"}\n              <input type=\"text\" ref={this.input} />\n            </label\n            <input type=\"submit\" value=\"Submit\" />\n          </form\n        );\n      }\n    }\n```",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "The **Uncontrolled components** are form elements (like `<input`, `<textarea`, or `<select`) that **manage their own state internally** via the **DOM**, rather than through React state.\n    You can query the DOM using a `ref` to find its current value when you need it. This is a bit more like traditional HTML.\n\n    The uncontrolled components will be implemented using the below steps,\n\n    1. Create a ref using `useRef` react hook in function component or `React.createRef()` in class based component.\n    2. Attach this `ref` to the form element.\n    3. The form element value can be accessed directly through `ref` in event handlers or `componentDidMount` for class components\n\n    In the below UserProfile component, the `username` input is accessed using ref.\n\n    **Note:** Here, DOM is in charge of the value. React only accesses the value when needed (via `ref`).\n\n    **Benefits:**\n     *   **Less boilerplate** — no need for `useState` and `onChange`.\n     *   Useful for **quick form setups** or when integrating with **non-React code**.\n     *   Slightly better **performance** in very large forms (fewer re-renders).\n\n    In most cases, it's recommend to use controlled components to implement forms. In a controlled component, form data is handled by a React component. The alternative is uncontrolled components, where form data is handled by the DOM itself.\n\n    <p\n\n\n    </p",
+    "options": null,
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=SqcY0GlETPk",
+        "type": "video",
+        "title": "React Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "8:25:00",
+        "description": "Complete React tutorial from scratch"
+      },
+      {
+        "url": "https://react.dev/learn",
+        "type": "article",
+        "title": "React Documentation",
+        "author": "React Team",
+        "description": "Official React documentation and tutorials"
+      },
+      {
+        "url": "https://www.udemy.com/course/react-the-complete-guide-incl-redux/",
+        "type": "course",
+        "title": "React - The Complete Guide",
+        "author": "Maximilian Schwarzmüller",
+        "duration": "48 hours",
+        "description": "Master React and Redux with hands-on projects"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-18T22:50:38.000044+00:00",
+    "updatedAt": "2025-11-24T22:52:08.102565+00:00"
+  },
+  {
+    "id": "7b448dc6-1f47-4ddf-ab19-81571092c5b3",
+    "title": "What are Higher-Order Components?",
+    "content": "What are Higher-Order Components?\n\n```javascript\n    import React from 'react';\n    import withAuth from './withAuth';\n\n    function Dashboard() {\n      return <h1 Welcome to the Dashboard!</h1;\n    }\n\n    // Wrap Dashboard with withAuth HOC\n    export default withAuth(Dashboard);\n```",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "A _higher-order component_ (_HOC_) is a function that takes a component and returns a new enhanced component with additional props, behavior, or data. It's a design pattern based on React's compositional nature, allowing you to reuse logic across multiple components without modifying their internals.\n\n    We consider HOCs **pure components** because they don't mutate or copy behavior from the original component—they simply **wrap it**, enhance it, and pass through the necessary props. The wrapped component remains decoupled and reusable.\n\n    Let's take an example of a `withAuth` higher-order component (HOC) in React. This HOC will check if a user is authenticated and either render the wrapped component if authenticated or redirect (or show a message) if not.\n\n    **withAuth HOC Example:**\n    **Usage**\n\n    HOC can be used for many use cases:\n\n    1. Code reuse, logic and bootstrap abstraction (e.g., fetching data, permissions, theming).\n    2. Render hijacking (e.g., conditional rendering or layout changes).\n    3. State abstraction and manipulation(e.g., handling form logic).\n    4. Props manipulation(e.g., injecting additional props or filtering them).\n    \n    Some of the real-world examples of HOCs in react eco-system:\n    1. connect() from react-redux\n    2. withRouter() from React Router v5\n    3. withTranslation() from react-i18next\n    4. withApollo() from Apollo client\n    5. withFormik from Formik library\n    6. withTheme from styled components",
+    "options": null,
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=SqcY0GlETPk",
+        "type": "video",
+        "title": "React Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "8:25:00",
+        "description": "Complete React tutorial from scratch"
+      },
+      {
+        "url": "https://react.dev/learn",
+        "type": "article",
+        "title": "React Documentation",
+        "author": "React Team",
+        "description": "Official React documentation and tutorials"
+      },
+      {
+        "url": "https://www.udemy.com/course/react-the-complete-guide-incl-redux/",
+        "type": "course",
+        "title": "React - The Complete Guide",
+        "author": "Maximilian Schwarzmüller",
+        "duration": "48 hours",
+        "description": "Master React and Redux with hands-on projects"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-18T22:50:38.000044+00:00",
+    "updatedAt": "2025-11-24T22:52:08.102565+00:00"
+  },
+  {
+    "id": "7424031b-71af-48d3-aab4-6f1398b07a72",
+    "title": "What is the difference between createElement and cloneElement?",
+    "content": "What is the difference between createElement and cloneElement?\n\n```javascript\n    const button = <button className=\"btn\">Click Me</button;\n    const cloned = React.cloneElement(button, { className: 'btn-primary' });\n    // Result: <button className=\"btn-primary\">Click Me</button\n```",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "Both `React.createElement` and `React.cloneElement` are used to work with React elements, but they serve different purposes.\n\n    #### **createElement:** \n    Creates a new React element from scratch. JSX elements will be transpiled to `React.createElement()` functions to create React elements which are going to be used for the object representation of UI.\n    **Syntax:**\n    **Example:**\n    #### **cloneElement:**\n     The `cloneElement` method is used to clone an existing React element and optionally adds or overrides props.\n\n    **Syntax:**\n    **Example:**",
+    "options": null,
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=SqcY0GlETPk",
+        "type": "video",
+        "title": "React Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "8:25:00",
+        "description": "Complete React tutorial from scratch"
+      },
+      {
+        "url": "https://react.dev/learn",
+        "type": "article",
+        "title": "React Documentation",
+        "author": "React Team",
+        "description": "Official React documentation and tutorials"
+      },
+      {
+        "url": "https://www.udemy.com/course/react-the-complete-guide-incl-redux/",
+        "type": "course",
+        "title": "React - The Complete Guide",
+        "author": "Maximilian Schwarzmüller",
+        "duration": "48 hours",
+        "description": "Master React and Redux with hands-on projects"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-18T22:50:38.000044+00:00",
+    "updatedAt": "2025-11-24T22:52:08.102565+00:00"
+  },
+  {
+    "id": "14afe8dc-8a51-4544-9d8e-b892facc3fc9",
+    "title": "Does the lazy function support named exports?",
+    "content": "Does the lazy function support named exports?\n\n```javascript\n    import React, { lazy } from \"react\";\n    const SomeComponent = lazy(() => import(\"./IntermediateComponent.js\"));\n```",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "No, currently `React.lazy` function supports default exports only. If you would like to import modules which are named exports, you can create an intermediate module that reexports it as the default. It also ensures that tree shaking keeps working and don't pull unused components.\n    Let's take a component file which exports multiple named components,\n\n\n    and reexport `MoreComponents.js` components in an intermediate file `IntermediateComponent.js`\n\n\n    Now you can import the module using lazy function as below,",
+    "options": null,
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=SqcY0GlETPk",
+        "type": "video",
+        "title": "React Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "8:25:00",
+        "description": "Complete React tutorial from scratch"
+      },
+      {
+        "url": "https://react.dev/learn",
+        "type": "article",
+        "title": "React Documentation",
+        "author": "React Team",
+        "description": "Official React documentation and tutorials"
+      },
+      {
+        "url": "https://www.udemy.com/course/react-the-complete-guide-incl-redux/",
+        "type": "course",
+        "title": "React - The Complete Guide",
+        "author": "Maximilian Schwarzmüller",
+        "duration": "48 hours",
+        "description": "Master React and Redux with hands-on projects"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-18T22:50:38.000044+00:00",
+    "updatedAt": "2025-11-24T22:52:08.102565+00:00"
+  },
+  {
+    "id": "ca23af9d-eeef-442e-9631-a83fdaa90f64",
+    "title": "What are controlled components?",
+    "content": "What are controlled components?\n\n```javascript\n   import React, { useState } from \"react\";\n\n   function UserProfile() {\n     const [username, setUsername] = useState(\"\");\n\n     const handleChange = (e) => {\n       setUsername(e.target.value);\n     };\n\n     return (\n       <form\n         <label\n           Name:\n           <input type=\"text\" value={username} onChange={handleChange} />\n         </label\n       </form\n     );\n   }\n```",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "A **controlled component** is a React component that **fully manages the form element's state**(e.g, elements like `<input`, `<textarea`, or `<select`))  using React's internal state mechanism. i.e, The component does not manage its own internal state — instead, React acts as the single source of truth for form data.\n\n    The controlled components will be implemented using the below steps,\n\n    1. Initialize the state using `useState` hooks in function components or inside constructor for class components.\n    2. Set the value of the form element to the respective state variable.\n    3. Create an event handler(`onChange`) to handle the user input changes through `useState`'s updater function or `setState` from class component.\n    4. Attach the above event handler to form element's change or click events\n\n    **Note:** React re-renders the component every time the input value changes.\n\n   For example, the name input field updates the username using `handleChange` event handler as below,\n\n   In these components, DOM does not hold the actual data instead React does.\n   \n   **Benefits:**\n\n   *   Easy to implement **validation**, **conditional formatting**, or **live feedback**.\n   *   Full control over form data.\n   *   Easier to test and debug because the data is centralized in the component's state.",
+    "options": null,
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=SqcY0GlETPk",
+        "type": "video",
+        "title": "React Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "8:25:00",
+        "description": "Complete React tutorial from scratch"
+      },
+      {
+        "url": "https://react.dev/learn",
+        "type": "article",
+        "title": "React Documentation",
+        "author": "React Team",
+        "description": "Official React documentation and tutorials"
+      },
+      {
+        "url": "https://www.udemy.com/course/react-the-complete-guide-incl-redux/",
+        "type": "course",
+        "title": "React - The Complete Guide",
+        "author": "Maximilian Schwarzmüller",
+        "duration": "48 hours",
+        "description": "Master React and Redux with hands-on projects"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-18T22:50:38.000044+00:00",
+    "updatedAt": "2025-11-24T22:52:08.102565+00:00"
+  },
+  {
+    "id": "0a6d39c1-5d0a-45fa-86e9-e53bd8c48f6d",
+    "title": "How to write comments in React?",
+    "content": "How to write comments in React?\n\n```javascript\n      {/* Multi-line comments for more than\n       one line */}\n      {`Welcome ${user}, let's play React`}\n```",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "The comments in React/JSX are similar to JavaScript Multiline comments but are wrapped in curly braces.\n\n    **Single-line comments:**\n\n\n    **Multi-line comments:**\n\n\n    You can use `//` and `/* */` in JS logic, hooks, and functions.",
+    "options": null,
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=SqcY0GlETPk",
+        "type": "video",
+        "title": "React Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "8:25:00",
+        "description": "Complete React tutorial from scratch"
+      },
+      {
+        "url": "https://react.dev/learn",
+        "type": "article",
+        "title": "React Documentation",
+        "author": "React Team",
+        "description": "Official React documentation and tutorials"
+      },
+      {
+        "url": "https://www.udemy.com/course/react-the-complete-guide-incl-redux/",
+        "type": "course",
+        "title": "React - The Complete Guide",
+        "author": "Maximilian Schwarzmüller",
+        "duration": "48 hours",
+        "description": "Master React and Redux with hands-on projects"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-18T22:50:38.000044+00:00",
+    "updatedAt": "2025-11-24T22:52:08.102565+00:00"
+  },
+  {
+    "id": "34c2c1f3-7e8e-49a2-a7de-3408a900cf7a",
+    "title": "What is Lifting State Up in React?",
+    "content": "What is Lifting State Up in React?",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "When several components need to share the same changing data then it is recommended to _lift the shared state up_ to their closest common ancestor. That means if two child components share the same data from its parent, then move the state to parent instead of maintaining local state in both of the child components.",
+    "options": null,
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=SqcY0GlETPk",
+        "type": "video",
+        "title": "React Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "8:25:00",
+        "description": "Complete React tutorial from scratch"
+      },
+      {
+        "url": "https://react.dev/learn",
+        "type": "article",
+        "title": "React Documentation",
+        "author": "React Team",
+        "description": "Official React documentation and tutorials"
+      },
+      {
+        "url": "https://www.udemy.com/course/react-the-complete-guide-incl-redux/",
+        "type": "course",
+        "title": "React - The Complete Guide",
+        "author": "Maximilian Schwarzmüller",
+        "duration": "48 hours",
+        "description": "Master React and Redux with hands-on projects"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-18T22:50:38.000044+00:00",
+    "updatedAt": "2025-11-24T22:52:08.102565+00:00"
+  },
+  {
+    "id": "d62be0ee-106b-4fef-97a8-28f5f73dbd33",
+    "title": "What is reconciliation?",
+    "content": "What is reconciliation?",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "`Reconciliation` is the process through which React updates the Browser DOM and makes React work faster. React use a `diffing algorithm` so that component updates are predictable and faster. React would first calculate the difference between the `real DOM` and the copy of DOM `(Virtual DOM)` when there's an update of components.\n    React stores a copy of Browser DOM which is called `Virtual DOM`. When we make changes or add data, React creates a new Virtual DOM and compares it with the previous one. This comparison is done by `Diffing Algorithm`.\n    Now React compares the Virtual DOM with Real DOM. It finds out the changed nodes and updates only the changed nodes in Real DOM leaving the rest nodes as it is. This process is called _Reconciliation_.",
+    "options": null,
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=SqcY0GlETPk",
+        "type": "video",
+        "title": "React Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "8:25:00",
+        "description": "Complete React tutorial from scratch"
+      },
+      {
+        "url": "https://react.dev/learn",
+        "type": "article",
+        "title": "React Documentation",
+        "author": "React Team",
+        "description": "Official React documentation and tutorials"
+      },
+      {
+        "url": "https://www.udemy.com/course/react-the-complete-guide-incl-redux/",
+        "type": "course",
+        "title": "React - The Complete Guide",
+        "author": "Maximilian Schwarzmüller",
+        "duration": "48 hours",
+        "description": "Master React and Redux with hands-on projects"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-18T22:50:38.000044+00:00",
+    "updatedAt": "2025-11-24T22:52:08.102565+00:00"
+  },
+  {
+    "id": "d9ab8d50-1632-450d-adba-274b5db2f1d0",
+    "title": "Why fragments are better than container divs?",
+    "content": "Why fragments are better than container divs?",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "Below are the list of reasons to prefer fragments over container DOM elements,\n\n    1. Fragments are a bit faster and use less memory by not creating an extra DOM node. This only has a real benefit on very large and deep trees.\n    2. Some CSS mechanisms like _Flexbox_ and _CSS Grid_ have a special parent-child relationships, and adding divs in the middle makes it hard to keep the desired layout.\n    3. The DOM Inspector is less cluttered.",
+    "options": null,
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=SqcY0GlETPk",
+        "type": "video",
+        "title": "React Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "8:25:00",
+        "description": "Complete React tutorial from scratch"
+      },
+      {
+        "url": "https://react.dev/learn",
+        "type": "article",
+        "title": "React Documentation",
+        "author": "React Team",
+        "description": "Official React documentation and tutorials"
+      },
+      {
+        "url": "https://www.udemy.com/course/react-the-complete-guide-incl-redux/",
+        "type": "course",
+        "title": "React - The Complete Guide",
+        "author": "Maximilian Schwarzmüller",
+        "duration": "48 hours",
+        "description": "Master React and Redux with hands-on projects"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-18T22:39:09.050323+00:00",
+    "updatedAt": "2025-11-24T22:52:08.102565+00:00"
+  },
+  {
+    "id": "a92b0e61-f5e8-4330-9eb4-facab06c0c5f",
+    "title": "What are portals in React?",
+    "content": "What are portals in React?\n\n```javascript\n    function Modal({ children }) {\n      return ReactDOM.createPortal(\n        document.body)\n      );\n    }\n```",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "A Portal is a React feature that enables rendering children into a DOM node that exists outside the parent component's DOM hierarchy, while still preserving the React component hierarchy. Portals help avoid CSS stacking issues—for example, elements with position: fixed may not behave as expected inside a parent with transform. Portals solve this by rendering content (like modals or tooltips) outside such constrained DOM contexts.\n\n    *   `child`: Any valid React node (e.g., JSX, string, fragment).\n    *   `container`: A real DOM node (e.g., `document.getElementById('modal-root')`).\n\n    Even though the content renders elsewhere in the DOM, it still behaves like a normal child in React. It has access to context, state, and event handling.\n\n    **Example:- Modal:**\n    The above code will render the modal content into the body element in the HTML, not inside the component's usual location.",
+    "options": null,
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=SqcY0GlETPk",
+        "type": "video",
+        "title": "React Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "8:25:00",
+        "description": "Complete React tutorial from scratch"
+      },
+      {
+        "url": "https://react.dev/learn",
+        "type": "article",
+        "title": "React Documentation",
+        "author": "React Team",
+        "description": "Official React documentation and tutorials"
+      },
+      {
+        "url": "https://www.udemy.com/course/react-the-complete-guide-incl-redux/",
+        "type": "course",
+        "title": "React - The Complete Guide",
+        "author": "Maximilian Schwarzmüller",
+        "duration": "48 hours",
+        "description": "Master React and Redux with hands-on projects"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-18T22:39:09.050323+00:00",
+    "updatedAt": "2025-11-24T22:52:08.102565+00:00"
+  },
+  {
+    "id": "fedcd9c5-8437-4569-abec-a1bfc2b0e70e",
+    "title": "What are fragments?",
+    "content": "What are fragments?\n\n```javascript\n    function Story({ title, description, date }) {\n      return (\n        <>\n          <h2{title}</h2\n          <p{description}</p\n          <p{date}</p\n        </>\n      );\n    }\n```",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "It's a common pattern or practice in React for a component to return multiple elements. _Fragments_ let you group a list of children without adding extra nodes to the DOM.\n    You need to use either `<Fragment` or a shorter syntax having empty tag (`<></>`).\n\n    Below is the example of how to use fragment inside _Story_ component.\n\n\n    It is also possible to render list of fragments inside a loop with the mandatory **key** attribute supplied.\n\n\n    Usually, you don't need to use `<Fragment` until there is a need of _key_ attribute. The usage of shorter syntax looks like below.",
+    "options": null,
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=SqcY0GlETPk",
+        "type": "video",
+        "title": "React Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "8:25:00",
+        "description": "Complete React tutorial from scratch"
+      },
+      {
+        "url": "https://react.dev/learn",
+        "type": "article",
+        "title": "React Documentation",
+        "author": "React Team",
+        "description": "Official React documentation and tutorials"
+      },
+      {
+        "url": "https://www.udemy.com/course/react-the-complete-guide-incl-redux/",
+        "type": "course",
+        "title": "React - The Complete Guide",
+        "author": "Maximilian Schwarzmüller",
+        "duration": "48 hours",
+        "description": "Master React and Redux with hands-on projects"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-18T22:39:09.050323+00:00",
+    "updatedAt": "2025-11-24T22:52:08.102565+00:00"
+  },
+  {
+    "id": "8ce89f55-fcf6-40c6-bfca-1957bc43bcc4",
+    "title": "What is the difference between Shadow DOM and Virtual DOM?",
+    "content": "What is the difference between Shadow DOM and Virtual DOM?",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "The _Shadow DOM_ is a browser technology designed primarily for scoping variables and CSS in _web components_. The _Virtual DOM_ is a concept implemented by libraries in JavaScript on top of browser APIs.\n\n    The key differences in a table format shown below:\n\n    | Feature | Shadow DOM | Virtual DOM |\n    | --- | --- | --- |\n    | Purpose | Encapsulation for Web Components | Efficient UI rendering |\n    | Managed by | Browser | JS frameworks (e.g., React) |\n    | DOM Type | Part of real DOM (scoped) | In-memory representation |\n    | Encapsulation | Yes | No |\n    | Use Case | Web Components, scoped styling | UI diffing and minimal DOM updates |",
+    "options": null,
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=SqcY0GlETPk",
+        "type": "video",
+        "title": "React Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "8:25:00",
+        "description": "Complete React tutorial from scratch"
+      },
+      {
+        "url": "https://react.dev/learn",
+        "type": "article",
+        "title": "React Documentation",
+        "author": "React Team",
+        "description": "Official React documentation and tutorials"
+      },
+      {
+        "url": "https://www.udemy.com/course/react-the-complete-guide-incl-redux/",
+        "type": "course",
+        "title": "React - The Complete Guide",
+        "author": "Maximilian Schwarzmüller",
+        "duration": "48 hours",
+        "description": "Master React and Redux with hands-on projects"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-18T22:27:00.366569+00:00",
+    "updatedAt": "2025-11-24T22:52:08.102565+00:00"
+  },
+  {
+    "id": "c9ea669e-b580-4ff9-a705-2697180e8dc3",
+    "title": "What is React Fiber?",
+    "content": "What is React Fiber?",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "**React Fiber** is the **new reconciliation engine** in React, introduced in React 16. It's a complete rewrite of React's core algorithm(old stack-based algorithm) for rendering and updating the UI. Fiber enhances React's ability to handle **asynchronous rendering**, **prioritized updates**(assign priority to different types of updates), and **interruption**(ability to pause, abort, or reuse work) of rendering work, enabling smoother and more responsive user interfaces.",
+    "options": null,
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=SqcY0GlETPk",
+        "type": "video",
+        "title": "React Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "8:25:00",
+        "description": "Complete React tutorial from scratch"
+      },
+      {
+        "url": "https://react.dev/learn",
+        "type": "article",
+        "title": "React Documentation",
+        "author": "React Team",
+        "description": "Official React documentation and tutorials"
+      },
+      {
+        "url": "https://www.udemy.com/course/react-the-complete-guide-incl-redux/",
+        "type": "course",
+        "title": "React - The Complete Guide",
+        "author": "Maximilian Schwarzmüller",
+        "duration": "48 hours",
+        "description": "Master React and Redux with hands-on projects"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-18T22:27:00.366569+00:00",
+    "updatedAt": "2025-11-24T22:52:08.102565+00:00"
+  },
+  {
+    "id": "91922e7a-2c1f-4158-bb72-7c0c98fd976a",
+    "title": "What is the difference between state and props?",
+    "content": "What is the difference between state and props?",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "In React, both **state** and **props** are plain JavaScript objects, but they serve different purposes and have distinct behaviors:\n\n    ### State\n    - **Definition:**  \n      State is a data structure that is managed within a component. It represents information that can change over the lifetime of the component.\n    - **Mutability:**  \n      State is mutable, meaning it can be changed using the setter function (`setState` in class components or the updater function from `useState` in functional components).\n    - **Scope:**  \n      State is local to the component where it is defined. Only that component can modify its own state.\n    - **Usage:**  \n      State is typically used for data that needs to change in response to user actions, network responses, or other dynamic events.\n    - **Re-rendering:**  \n      Updating the state triggers a re-render of the component and its descendants.\n\n    ### Props\n    - **Definition:**  \n      Props (short for \"properties\") are inputs to a component, provided by its parent component.\n    - **Mutability:**  \n      Props are read-only. A component cannot modify its own props; they are immutable from the component's perspective.\n    - **Scope:**  \n      Props are used to pass data and event handlers down the component tree, enabling parent components to configure or communicate with their children.\n    - **Usage:**  \n      Props are commonly used to make components reusable and configurable. They allow the same component to be rendered with different data or behavior.\n    - **Analogy:**  \n      Think of props as arguments to a function, whereas state is like variables declared inside the function.\n\n    ### Summary Table\n\n    | Feature   | State                               | Props                             |\n    |-----------|-------------------------------------|-----------------------------------|\n    | Managed by| The component itself                | Parent component                  |\n    | Mutable   | Yes                                 | No (read-only)                    |\n    | Scope     | Local to the component              | Passed from parent to child       |\n    | Usage     | Manage dynamic data and UI changes  | Configure and customize component |\n    | Update    | Using setState/useState             | Cannot be updated by the component|",
+    "options": null,
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=SqcY0GlETPk",
+        "type": "video",
+        "title": "React Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "8:25:00",
+        "description": "Complete React tutorial from scratch"
+      },
+      {
+        "url": "https://react.dev/learn",
+        "type": "article",
+        "title": "React Documentation",
+        "author": "React Team",
+        "description": "Official React documentation and tutorials"
+      },
+      {
+        "url": "https://www.udemy.com/course/react-the-complete-guide-incl-redux/",
+        "type": "course",
+        "title": "React - The Complete Guide",
+        "author": "Maximilian Schwarzmüller",
+        "duration": "48 hours",
+        "description": "Master React and Redux with hands-on projects"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-18T22:27:00.366569+00:00",
+    "updatedAt": "2025-11-24T22:52:08.102565+00:00"
+  },
+  {
+    "id": "e2631f43-9d6a-442d-a3c7-2dfba7073570",
+    "title": "What is the main goal of React Fiber?",
+    "content": "What is the main goal of React Fiber?",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "The goal of _React Fiber_ is to increase its suitability for areas like animation, layout, and gestures. Its headline feature is **incremental rendering**: the ability to split rendering work into chunks and spread it out over multiple frames.\n\n    Its main goals are:\n\n    *   **Incremental Rendering** – Breaks work into chunks for smoother updates.\n    *   **Interruptible Rendering** – Pauses and resumes rendering to keep the UI responsive.\n    *   **Prioritization** – Handles high-priority updates (e.g. animations) before low-priority ones.\n    *   **Concurrency Support** – Enables working on multiple UI versions simultaneously.\n    *   **Better Error Handling** – Supports component-level error boundaries.\n    *   **Suspense Support** – Allows waiting for async data before rendering.\n    *   **Improved DevTools** – Enables better debugging and performance tracking.",
+    "options": null,
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=SqcY0GlETPk",
+        "type": "video",
+        "title": "React Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "8:25:00",
+        "description": "Complete React tutorial from scratch"
+      },
+      {
+        "url": "https://react.dev/learn",
+        "type": "article",
+        "title": "React Documentation",
+        "author": "React Team",
+        "description": "Official React documentation and tutorials"
+      },
+      {
+        "url": "https://www.udemy.com/course/react-the-complete-guide-incl-redux/",
+        "type": "course",
+        "title": "React - The Complete Guide",
+        "author": "Maximilian Schwarzmüller",
+        "duration": "48 hours",
+        "description": "Master React and Redux with hands-on projects"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-18T22:27:00.366569+00:00",
+    "updatedAt": "2025-11-24T22:52:08.102565+00:00"
+  },
+  {
+    "id": "bcace7ed-5cec-4f15-948e-e078416912bd",
+    "title": "What are inline conditional expressions?",
+    "content": "What are inline conditional expressions?\n\n```javascript\n    <h1 Hello!</h1;\n    {\n      messages.length 0 && !isLogin ? (\n        <h2 You have {messages.length} unread messages.</h2\n      ) : (\n        <h2 You don't have unread messages.</h2\n      );\n    }\n```",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "You can use either _if statements_ or _ternary expressions_ which are available in JS(and JSX in React) to conditionally execute or render expressions. Apart from these approaches, you can also embed any expressions in JSX by wrapping them in curly braces and then followed by JS logical operator `&&`. It is helpful to render elements conditionally within a single line and commonly used for concise logic, especially in JSX rendering.",
+    "options": null,
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=SqcY0GlETPk",
+        "type": "video",
+        "title": "React Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "8:25:00",
+        "description": "Complete React tutorial from scratch"
+      },
+      {
+        "url": "https://react.dev/learn",
+        "type": "article",
+        "title": "React Documentation",
+        "author": "React Team",
+        "description": "Official React documentation and tutorials"
+      },
+      {
+        "url": "https://www.udemy.com/course/react-the-complete-guide-incl-redux/",
+        "type": "course",
+        "title": "React - The Complete Guide",
+        "author": "Maximilian Schwarzmüller",
+        "duration": "48 hours",
+        "description": "Master React and Redux with hands-on projects"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-18T22:27:00.366569+00:00",
+    "updatedAt": "2025-11-24T22:52:08.102565+00:00"
+  },
+  {
+    "id": "9ac8f095-eb17-4ccb-bf9c-42e78b234193",
+    "title": "What are synthetic events in React?",
+    "content": "What are synthetic events in React?\n\n```javascript\n    function BookStore() {\n      function handleTitleChange(e) {\n        console.log(\"The new title is:\", e.target.value);\n        console.log('Synthetic event:', e); // React SyntheticEvent\n        console.log('Native event:', e.nativeEvent); // Browser native event\n        e.stopPropagation();\n        e.preventDefault();\n      }\n\n      return <input name=\"title\" onChange={handleTitleChange} />;\n    }\n```",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "`SyntheticEvent` is a cross-browser wrapper around the browser's native event. Its API is same as the browser's native event, including `stopPropagation()` and `preventDefault()`, except the events work identically across all browsers. The native events can be accessed directly from synthetic events using `nativeEvent` attribute.\n\n    Let's take an example of `BookStore` title search component with the ability to get all native event properties\n\n    \n    List of common synthetic events are:\n\n    *   `onClick`\n    *   `onChange`\n    *   `onSubmit`\n    *   `onKeyDown`, `onKeyUp`\n    *   `onFocus`, `onBlur`\n    *   `onMouseEnter`, `onMouseLeave`\n    *   `onTouchStart`, `onTouchEnd`",
+    "options": null,
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=SqcY0GlETPk",
+        "type": "video",
+        "title": "React Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "8:25:00",
+        "description": "Complete React tutorial from scratch"
+      },
+      {
+        "url": "https://react.dev/learn",
+        "type": "article",
+        "title": "React Documentation",
+        "author": "React Team",
+        "description": "Official React documentation and tutorials"
+      },
+      {
+        "url": "https://www.udemy.com/course/react-the-complete-guide-incl-redux/",
+        "type": "course",
+        "title": "React - The Complete Guide",
+        "author": "Maximilian Schwarzmüller",
+        "duration": "48 hours",
+        "description": "Master React and Redux with hands-on projects"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-18T22:27:00.366569+00:00",
+    "updatedAt": "2025-11-24T22:52:08.102565+00:00"
+  },
+  {
+    "id": "cc9712b7-c921-4d02-a1c3-7daa9977ad43",
+    "title": "What is Virtual DOM?",
+    "content": "What is Virtual DOM?",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "The _Virtual DOM_ (VDOM) is a lightweight, in-memory representation of _Real DOM_ used by libraries like React to optimize UI rendering. The representation of a UI is kept in memory and synced with the \"real\" DOM. It's a step that happens between the render function being called and the displaying of elements on the screen. This entire process is called _reconciliation_.",
+    "options": null,
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=SqcY0GlETPk",
+        "type": "video",
+        "title": "React Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "8:25:00",
+        "description": "Complete React tutorial from scratch"
+      },
+      {
+        "url": "https://react.dev/learn",
+        "type": "article",
+        "title": "React Documentation",
+        "author": "React Team",
+        "description": "Official React documentation and tutorials"
+      },
+      {
+        "url": "https://www.udemy.com/course/react-the-complete-guide-incl-redux/",
+        "type": "course",
+        "title": "React - The Complete Guide",
+        "author": "Maximilian Schwarzmüller",
+        "duration": "48 hours",
+        "description": "Master React and Redux with hands-on projects"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-18T22:27:00.366569+00:00",
+    "updatedAt": "2025-11-24T22:52:08.102565+00:00"
+  },
+  {
+    "id": "5b632722-c3c8-4d3b-b1b1-3b993f369e42",
+    "title": "How Virtual DOM works?",
+    "content": "How Virtual DOM works?",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "The _Virtual DOM_ works in five simple steps.\n\n    **1. Initial Render**  \n        When a UI component renders for the first time, it returns JSX. React uses this structure to create a Virtual DOM tree, which is a lightweight copy of the actual DOM. This Virtual DOM is then used to build and render the Real DOM in the browser.\n\n    **2. State or Props Change**  \n        When the component's state or props change, React creates a new Virtual DOM reflecting the updated UI. However, it doesn't immediately update the Real DOM; instead, it works in memory to prepare for an efficient update.\n               \n      ![vdom](images/vdom1.png)\n\n    **3. Diffing Algorithm**  \n        React then compares the new Virtual DOM with the previous one using a process called diffing. It determines what has changed between the two versions and identifies the minimal set of updates needed.\n       \n       ![vdom2](images/vdom2.png)  \n\n    **4. Reconciliation**  \n        Based on the diffing results, React decides which parts of the Real DOM should be updated. It avoids re-rendering the entire DOM and instead updates only the elements that actually changed.\n        \n       ![vdom3](images/vdom3.png)\n\n    **5. Efficient DOM Updates**  \n        This entire process—working with the Virtual DOM, diffing, and selective updating—makes the UI rendering much faster and more efficient than manipulating the Real DOM directly.",
+    "options": null,
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=SqcY0GlETPk",
+        "type": "video",
+        "title": "React Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "8:25:00",
+        "description": "Complete React tutorial from scratch"
+      },
+      {
+        "url": "https://react.dev/learn",
+        "type": "article",
+        "title": "React Documentation",
+        "author": "React Team",
+        "description": "Official React documentation and tutorials"
+      },
+      {
+        "url": "https://www.udemy.com/course/react-the-complete-guide-incl-redux/",
+        "type": "course",
+        "title": "React - The Complete Guide",
+        "author": "Maximilian Schwarzmüller",
+        "duration": "48 hours",
+        "description": "Master React and Redux with hands-on projects"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-18T22:27:00.366569+00:00",
+    "updatedAt": "2025-11-24T22:52:08.102565+00:00"
+  },
+  {
+    "id": "90f22b12-78ce-4ea3-bd61-cea34e3ba9ef",
+    "title": "What is \"key\" prop and what is the benefit of using it in arrays of elements?",
+    "content": "What is \"key\" prop and what is the benefit of using it in arrays of elements?\n\n```javascript\n    const todoItems = todos.map((todo, index) => (\n      <li key={index}>{todo.text}</li\n    ));\n```",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "A `key` is a special attribute you **should** include when mapping over arrays to render data. _Key_ prop helps React identify which items have changed, are added, or are removed.\n\n    Keys should be unique among its siblings. Most often we use ID from our data as _key_:\n\n\n    When you don't have stable IDs for rendered items, you may use the item _index_ as a _key_ as a last resort:\n\n    **Benefits of key:**\n      *   Enables React to **efficiently update and re-render** components.\n      *   Prevents unnecessary re-renders by **reusing** components when possible.\n      *   Helps **maintain internal state** of list items correctly.\n\n    **Note:**\n\n    1. Using _indexes_ for _keys_ is **not recommended** if the order of items may change. This can negatively impact performance and may cause issues with component state.\n    2. If you extract list item as separate component then apply _keys_ on list component instead of `li` tag.\n    3. There will be a warning message in the console if the `key` prop is not present on list items.\n    4. The key attribute accepts either string or number and internally convert it as string type.\n    5. Don't generate the key on the fly something like `key={Math.random()}`. Because the keys will never match up between re-renders and DOM created everytime.",
+    "options": null,
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=SqcY0GlETPk",
+        "type": "video",
+        "title": "React Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "8:25:00",
+        "description": "Complete React tutorial from scratch"
+      },
+      {
+        "url": "https://react.dev/learn",
+        "type": "article",
+        "title": "React Documentation",
+        "author": "React Team",
+        "description": "Official React documentation and tutorials"
+      },
+      {
+        "url": "https://www.udemy.com/course/react-the-complete-guide-incl-redux/",
+        "type": "course",
+        "title": "React - The Complete Guide",
+        "author": "Maximilian Schwarzmüller",
+        "duration": "48 hours",
+        "description": "Master React and Redux with hands-on projects"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-18T22:27:00.366569+00:00",
+    "updatedAt": "2025-11-24T22:52:08.102565+00:00"
+  },
+  {
+    "id": "85694cf4-7d23-4959-8aad-c9d51a27ceb7",
+    "title": "What is the difference between HTML and React event handling?",
+    "content": "What is the difference between HTML and React event handling?\n\n```javascript\n       function handleClick(event) {\n         event.preventDefault();\n         console.log(\"The link was clicked.\");\n       }\n```",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "Below are some of the main differences between HTML and React event handling,\n\n    1. In HTML, the event name usually represents in _lowercase_ as a convention:\n\n\n       Whereas in React it follows _camelCase_ convention:\n\n\n    2. In HTML, you can return `false` to prevent default behavior:\n\n\n       Whereas in React you must call `preventDefault()` explicitly:\n\n\n    3. In HTML, you need to invoke the function by appending `()`\n       Whereas in react you should not append `()` with the function name. (refer \"activateLasers\" function in the first point for example)",
+    "options": null,
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=SqcY0GlETPk",
+        "type": "video",
+        "title": "React Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "8:25:00",
+        "description": "Complete React tutorial from scratch"
+      },
+      {
+        "url": "https://react.dev/learn",
+        "type": "article",
+        "title": "React Documentation",
+        "author": "React Team",
+        "description": "Official React documentation and tutorials"
+      },
+      {
+        "url": "https://www.udemy.com/course/react-the-complete-guide-incl-redux/",
+        "type": "course",
+        "title": "React - The Complete Guide",
+        "author": "Maximilian Schwarzmüller",
+        "duration": "48 hours",
+        "description": "Master React and Redux with hands-on projects"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-18T22:27:00.366569+00:00",
+    "updatedAt": "2025-11-24T22:52:08.102565+00:00"
+  },
+  {
+    "id": "fdd04b17-2d33-4cc2-a3db-a58cb64d2daf",
+    "title": "What are the major features of React?",
+    "content": "What are the major features of React?",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "React offers a powerful set of features that have made it one of the most popular JavaScript libraries for building user interfaces:\n\n    **Core Features:**\n\n    - **Component-Based Architecture**: React applications are built using components - independent, reusable pieces of code that return HTML via a render function. This modular approach enables better code organization, reusability, and maintenance.\n\n    - **Virtual DOM**: React creates an in-memory data structure cache, computes the resulting differences, and efficiently updates only the changed parts in the browser DOM. This approach significantly improves performance compared to direct DOM manipulation.\n\n    - **JSX (JavaScript XML)**: A syntax extension that allows writing HTML-like code in JavaScript. JSX makes the code more readable and expressive while providing the full power of JavaScript.\n\n    - **Unidirectional Data Flow**: React follows a one-way data binding model where data flows from parent to child components. This makes the code more predictable and easier to debug.\n\n    - **Declarative UI**: React allows you to describe what your UI should look like for a given state, and it handles the DOM updates when the underlying data changes.\n\n    **Advanced Features:**\n\n    - **React Hooks**: Introduced in React 16.8, hooks allow using state and other React features in functional components without writing classes.\n\n    - **Context API**: Provides a way to share values between components without explicitly passing props through every level of the component tree.\n\n    - **Error Boundaries**: Components that catch JavaScript errors anywhere in their child component tree and display fallback UI instead of crashing.\n\n    - **Server-Side Rendering (SSR)**: Enables rendering React components on the server before sending HTML to the client, improving performance and SEO.\n\n    - **Concurrent Mode**: A set of new features (in development) that help React apps stay responsive and gracefully adjust to the user's device capabilities and network speed.\n\n    - **React Server Components**: A new feature that allows components to be rendered entirely on the server, reducing bundle size and improving performance.\n\n    - **Suspense**: A feature that lets your components \"wait\" for something before rendering, supporting code-splitting and data fetching with cleaner code.\n\n    These features collectively make React powerful for building everything from small widgets to complex, large-scale web applications.",
+    "options": null,
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=SqcY0GlETPk",
+        "type": "video",
+        "title": "React Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "8:25:00",
+        "description": "Complete React tutorial from scratch"
+      },
+      {
+        "url": "https://react.dev/learn",
+        "type": "article",
+        "title": "React Documentation",
+        "author": "React Team",
+        "description": "Official React documentation and tutorials"
+      },
+      {
+        "url": "https://www.udemy.com/course/react-the-complete-guide-incl-redux/",
+        "type": "course",
+        "title": "React - The Complete Guide",
+        "author": "Maximilian Schwarzmüller",
+        "duration": "48 hours",
+        "description": "Master React and Redux with hands-on projects"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-18T22:25:59.520436+00:00",
+    "updatedAt": "2025-11-24T22:52:08.102565+00:00"
+  },
+  {
+    "id": "b8ddabf5-77f9-4695-a68c-a0790cd2952a",
+    "title": "When to use a Class Component over a Function Component?",
+    "content": "When to use a Class Component over a Function Component?\n\n```javascript\n    \"use client\";\n\n    import { ErrorBoundary } from \"react-error-boundary\";\n\n    <ErrorBoundary fallback={<div Something went wrong</div}>\n      <ExampleApplication />\n    </ErrorBoundary;\n```",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "After the addition of Hooks(i.e. React 16.8 onwards) it is always recommended to use Function components over Class components in React. Because you could use state, lifecycle methods and other features that were only available in class component present in function component too.\n\n    But even there are two reasons to use Class components over Function components.\n\n    1. If you need a React functionality whose Function component equivalent is not present yet, like Error Boundaries.\n    2. In older versions, If the component needs _state or lifecycle methods_ then you need to use class component.\n\n    So the summary to this question is as follows:\n\n    **Use Function Components:**\n\n    - If you don't need state or lifecycle methods, and your component is purely presentational.\n    - For simplicity, readability, and modern code practices, especially with the use of React Hooks for state and side effects.\n\n    **Use Class Components:**\n\n    - If you need to manage state or use lifecycle methods.\n    - In scenarios where backward compatibility or integration with older code is necessary.\n\n    **Note:** You can also use reusable [react error boundary](https://github.com/bvaughn/react-error-boundary) third-party component without writing any class. i.e, No need to use class components for Error boundaries.\n\n    The usage of Error boundaries from the above library is quite straight forward. **_Note when using react-error-boundary:_** ErrorBoundary is a client component. You can only pass props to it that are serializable or use it in files that have a `\"use client\";` directive.",
+    "options": null,
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=SqcY0GlETPk",
+        "type": "video",
+        "title": "React Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "8:25:00",
+        "description": "Complete React tutorial from scratch"
+      },
+      {
+        "url": "https://react.dev/learn",
+        "type": "article",
+        "title": "React Documentation",
+        "author": "React Team",
+        "description": "Official React documentation and tutorials"
+      },
+      {
+        "url": "https://www.udemy.com/course/react-the-complete-guide-incl-redux/",
+        "type": "course",
+        "title": "React - The Complete Guide",
+        "author": "Maximilian Schwarzmüller",
+        "duration": "48 hours",
+        "description": "Master React and Redux with hands-on projects"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-18T22:25:59.520436+00:00",
+    "updatedAt": "2025-11-24T22:52:08.102565+00:00"
+  },
+  {
+    "id": "0f1f6b04-3a37-4dbc-b8aa-ab34e012ea27",
+    "title": "How to create components in React?",
+    "content": "How to create components in React?\n\n```javascript\n       class Greeting extends React.Component {\n         render() {\n           return <h1{`Hello, ${this.props.message}`}</h1;\n         }\n       }\n```",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "Components are the building blocks of creating User Interfaces(UI) in React. There are two possible ways to create a component.\n\n    1. **Function Components:** This is the simplest way to create a component. Those are pure JavaScript functions that accept props object as the one and only one parameter and return React elements to render the output:\n\n\n    2. **Class Components:** You can also use ES6 class to define a component. The above function component can be written as a class component:",
+    "options": null,
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=SqcY0GlETPk",
+        "type": "video",
+        "title": "React Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "8:25:00",
+        "description": "Complete React tutorial from scratch"
+      },
+      {
+        "url": "https://react.dev/learn",
+        "type": "article",
+        "title": "React Documentation",
+        "author": "React Team",
+        "description": "Official React documentation and tutorials"
+      },
+      {
+        "url": "https://www.udemy.com/course/react-the-complete-guide-incl-redux/",
+        "type": "course",
+        "title": "React - The Complete Guide",
+        "author": "Maximilian Schwarzmüller",
+        "duration": "48 hours",
+        "description": "Master React and Redux with hands-on projects"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-18T22:25:59.520436+00:00",
+    "updatedAt": "2025-11-24T22:52:08.102565+00:00"
+  },
+  {
+    "id": "893ef990-817a-4815-9396-660f381f3f61",
+    "title": "What is the history behind React evolution?",
+    "content": "What is the history behind React evolution?",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "The history of ReactJS started in 2010 with the creation of **XHP**. XHP is a PHP extension which improved the syntax of the language such that XML document fragments become valid PHP expressions and the primary purpose was used to create custom and reusable HTML elements.\n\n       The main principle of this extension was to make front-end code easier to understand and to help avoid cross-site scripting attacks. The project was successful to prevent the malicious content submitted by the scrubbing user.\n\n       But there was a different problem with XHP in which dynamic web applications require many roundtrips to the server, and XHP did not solve this problem. Also, the whole UI was re-rendered for small change in the application. Later, the initial prototype of React is created with the name **FaxJ** by Jordan inspired from XHP. Finally after sometime React has been introduced as a new library into JavaScript world.\n\n           The evolution of React has a fascinating history that spans over a decade:\n    \n       **2010-2011: The Origins**\n       - The journey began with **XHP**, a PHP extension created at Facebook that allowed HTML components to be used in PHP code\n       - XHP improved front-end code readability and helped prevent cross-site scripting (XSS) attacks\n       - However, XHP had limitations with dynamic web applications, requiring frequent server roundtrips and complete UI re-renders for small changes\n\n       **2011-2012: Early Development**\n       - Jordan Walke created the first prototype called **FaxJS** (later renamed to React), inspired by XHP's component model\n       - The key innovation was bringing XHP's component model to JavaScript with performance improvements\n       - React introduced the Virtual DOM concept to solve the performance issues of full page re-renders\n       - First deployed internally on Facebook's News Feed in 2011 and Instagram in 2012\n\n       **2013: Public Release**\n       - React was officially open-sourced at JSConf US in May 2013\n       - Initial public reception was mixed, with some developers skeptical about the JSX syntax and the approach of mixing markup with JavaScript\n\n       **2014-2015: Growing Adoption**\n       - React Native was announced in 2015, extending React's paradigm to mobile app development\n       - The ecosystem began to grow with tools like Redux for state management\n       - Companies beyond Facebook began adopting React for production applications\n\n       **2016-2018: Maturation**\n       - React 16 (\"Fiber\") was released in 2017 with a complete rewrite of the core architecture\n       - Introduction of new features like Error Boundaries, Portals, and improved server-side rendering\n       - React 16.3 introduced the Context API for easier state management\n\n       **2019-Present: Modern React**\n       - React Hooks were introduced in React 16.8 (February 2019), revolutionizing state management in functional components\n       - React 17 (October 2020) focused on making React upgrades easier\n       - React 18 (March 2022) introduced concurrent rendering and automatic batching\n       - React continues to evolve with Server Components, the new React compiler (React Forget), and other performance improvements\n\n       **Note:** JSX, React's syntax extension, was indeed inspired by XHP's approach of embedding XML-like syntax in code.",
+    "options": null,
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=SqcY0GlETPk",
+        "type": "video",
+        "title": "React Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "8:25:00",
+        "description": "Complete React tutorial from scratch"
+      },
+      {
+        "url": "https://react.dev/learn",
+        "type": "article",
+        "title": "React Documentation",
+        "author": "React Team",
+        "description": "Official React documentation and tutorials"
+      },
+      {
+        "url": "https://www.udemy.com/course/react-the-complete-guide-incl-redux/",
+        "type": "course",
+        "title": "React - The Complete Guide",
+        "author": "Maximilian Schwarzmüller",
+        "duration": "48 hours",
+        "description": "Master React and Redux with hands-on projects"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-18T22:25:59.520436+00:00",
+    "updatedAt": "2025-11-24T22:52:08.102565+00:00"
+  },
+  {
+    "id": "eec762eb-0468-4421-ad5b-c591f6b10cff",
+    "title": "What are props in React?",
+    "content": "What are props in React?\n\n```javascript\nimport React from \"react\";\nimport ReactDOM from \"react-dom\";\n\nclass ChildComponent extends React.Component {\n  render() {\n    return (\n        <p{this.props.name}</p\n        <p{this.props.age}</p\n        <p{this.props.gender}</p\n    );\n  }\n}\n\nclass ParentComponent extends React.Component {\n  render() {\n    return (\n        <ChildComponent name=\"John\" age=\"30\" gender=\"male\" />\n        <ChildComponent name=\"Mary\" age=\"25\" gender=\"female\" />\n    );\n  }\n}\n```",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "_Props_ are inputs to components. They are single values or objects containing a set of values that are passed to components on creation similar to HTML-tag attributes. Here, the data is passed down from a parent component to a child component.\n\n    The primary purpose of props in React is to provide following component functionality:\n\n    1. Pass custom data to your component.\n    2. Trigger state changes.\n    3. Use via `this.props.reactProp` inside component's `render()` method.\n\n    For example, let us create an element with `reactProp` property:\n\n\n    This `reactProp` (or whatever you came up with) attribute name then becomes a property attached to React's native props object which originally already exists on all components created using React library.\n\n\n    For example, the usage of props in function component looks like below:\n\n\nThe properties from props object can be accessed directly using destructing feature from ES6 (ECMAScript 2015). It is also possible to fallback to default value when the prop value is not specified. The above child component can be simplified like below.\n\n\n**Note:** The default value won't be used if you pass `null` or `0` value. i.e, default value is only used if the prop value is missed or `undefined` value has been passed.\n\n     The Props accessed in Class Based Component as below",
+    "options": null,
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=SqcY0GlETPk",
+        "type": "video",
+        "title": "React Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "8:25:00",
+        "description": "Complete React tutorial from scratch"
+      },
+      {
+        "url": "https://react.dev/learn",
+        "type": "article",
+        "title": "React Documentation",
+        "author": "React Team",
+        "description": "Official React documentation and tutorials"
+      },
+      {
+        "url": "https://www.udemy.com/course/react-the-complete-guide-incl-redux/",
+        "type": "course",
+        "title": "React - The Complete Guide",
+        "author": "Maximilian Schwarzmüller",
+        "duration": "48 hours",
+        "description": "Master React and Redux with hands-on projects"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-18T22:25:59.520436+00:00",
+    "updatedAt": "2025-11-24T22:52:08.102565+00:00"
+  },
+  {
+    "id": "5da469c8-8784-400a-ae49-0b2dcada5400",
+    "title": "What is React?",
+    "content": "What is React?",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "React (aka React.js or ReactJS) is an **open-source front-end JavaScript library** for building user interfaces based on components. It's used for handling the view layer in web and mobile applications, and allows developers to create reusable UI components and manage the state of those components efficiently.\n\n    React was created by [Jordan Walke](https://github.com/jordwalke), a software engineer at Facebook (now Meta). It was first deployed on Facebook's News Feed in 2011 and on Instagram in 2012. The library was open-sourced in May 2013 and has since become one of the most popular JavaScript libraries for building modern user interfaces.",
+    "options": null,
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=SqcY0GlETPk",
+        "type": "video",
+        "title": "React Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "8:25:00",
+        "description": "Complete React tutorial from scratch"
+      },
+      {
+        "url": "https://react.dev/learn",
+        "type": "article",
+        "title": "React Documentation",
+        "author": "React Team",
+        "description": "Official React documentation and tutorials"
+      },
+      {
+        "url": "https://www.udemy.com/course/react-the-complete-guide-incl-redux/",
+        "type": "course",
+        "title": "React - The Complete Guide",
+        "author": "Maximilian Schwarzmüller",
+        "duration": "48 hours",
+        "description": "Master React and Redux with hands-on projects"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-18T22:25:59.520436+00:00",
+    "updatedAt": "2025-11-24T22:52:08.102565+00:00"
+  },
+  {
+    "id": "7e80131a-ecbe-47ee-9838-8e5216b99057",
+    "title": "What is state in React?",
+    "content": "What is state in React?\n\n```javascript\n    import React from \"react\";\n    class User extends React.Component {\n      constructor(props) {\n        super(props);\n\n        this.state = {\n          message: \"Welcome to React world\",\n        };\n      }\n\n      render() {\n        return (\n            <h1{this.state.message}</h1\n        );\n      }\n    }\n```",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "_State_ of a component is an object that holds some information that may change over the lifetime of the component. The important point is whenever the state object changes, the component re-renders. It is always recommended to make our state as simple as possible and minimize the number of stateful components.\n\n    ![state](images/state.jpg)\n\n    Let's take an example of **User** component with `message` state. Here, **useState** hook has been used to add state to the User component and it returns an array with current state and function to update it.\n\n\n    Whenever React calls your component or access `useState` hook, it gives you a snapshot of the state for that particular render.\n\n    <p\n\n\n    </p\n\n    State is similar to props, but it is private and fully controlled by the component ,i.e., it is not accessible to any other component till the owner component decides to pass it.",
+    "options": null,
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=SqcY0GlETPk",
+        "type": "video",
+        "title": "React Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "8:25:00",
+        "description": "Complete React tutorial from scratch"
+      },
+      {
+        "url": "https://react.dev/learn",
+        "type": "article",
+        "title": "React Documentation",
+        "author": "React Team",
+        "description": "Official React documentation and tutorials"
+      },
+      {
+        "url": "https://www.udemy.com/course/react-the-complete-guide-incl-redux/",
+        "type": "course",
+        "title": "React - The Complete Guide",
+        "author": "Maximilian Schwarzmüller",
+        "duration": "48 hours",
+        "description": "Master React and Redux with hands-on projects"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-18T22:25:59.520436+00:00",
+    "updatedAt": "2025-11-24T22:52:08.102565+00:00"
+  },
+  {
+    "id": "60d08ad8-0857-4dbe-9fed-8ca383c82f6c",
+    "title": "What are Pure Components?",
+    "content": "What are Pure Components?\n\n```javascript\n    import { memo, useState } from \"react\";\n\n    const EmployeeProfile = memo(function EmployeeProfile({ name, email }) {\n      return (\n        <>\n          <p Name:{name}</p\n          <p Email: {email}</p\n        </>\n      );\n    });\n    export default function EmployeeRegForm() {\n      const [name, setName] = useState(\"\");\n      const [email, setEmail] = useState(\"\");\n      return (\n        <>\n          <label\n            Name:{\" \"}\n            <input value={name} onChange={(e) => setName(e.target.value)} />\n          </label\n          <label\n            Email:{\" \"}\n            <input value={email} onChange={(e) => setEmail(e.target.value)} />\n          </label\n          <hr />\n          <EmployeeProfile name={name} />\n        </>\n      );\n    }\n```",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "Pure components are the components which render the same output for the same state and props. In function components, you can achieve these pure components through memoized `React.memo()` API wrapping around the component. This API prevents unnecessary re-renders by comparing the previous props and new props using shallow comparison. So it will be helpful for performance optimizations.\n\n    But at the same time, it won't compare the previous state with the current state because function component itself prevents the unnecessary rendering by default when you set the same state again.\n\n    The syntactic representation of memoized components looks like below,\n\n\n    Below is the example of how child component(i.e., EmployeeProfile) prevents re-renders for the same props passed by parent component(i.e.,EmployeeRegForm).\n\n\n    In the above code, the email prop has not been passed to child component. So there won't be any re-renders for email prop change.\n\n    In class components, the components extending _`React.PureComponent`_ instead of _`React.Component`_ become the pure components. When props or state changes, _PureComponent_ will do a shallow comparison on both props and state by invoking `shouldComponentUpdate()` lifecycle method.\n\n    **Note:** `React.memo()` is a higher-order component.",
+    "options": null,
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=SqcY0GlETPk",
+        "type": "video",
+        "title": "React Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "8:25:00",
+        "description": "Complete React tutorial from scratch"
+      },
+      {
+        "url": "https://react.dev/learn",
+        "type": "article",
+        "title": "React Documentation",
+        "author": "React Team",
+        "description": "Official React documentation and tutorials"
+      },
+      {
+        "url": "https://www.udemy.com/course/react-the-complete-guide-incl-redux/",
+        "type": "course",
+        "title": "React - The Complete Guide",
+        "author": "Maximilian Schwarzmüller",
+        "duration": "48 hours",
+        "description": "Master React and Redux with hands-on projects"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-18T22:25:59.520436+00:00",
+    "updatedAt": "2025-11-24T22:52:08.102565+00:00"
+  },
+  {
+    "id": "1d2904f8-9ac0-483c-b99e-ca0c1891c0d5",
+    "title": "What is JSX?",
+    "content": "What is JSX?\n\n```javascript\n    class App extends React.Component {\n      render() {\n        return <h1 className=\"greeting\">{\"Hello, this is a JSX Code!\"}</h1;\n      }\n    }\n```",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "_JSX_ stands for _JavaScript XML_ and it is an XML-like syntax extension to ECMAScript. Basically it just provides the syntactic sugar for the `React.createElement(type, props, ...children)` function, giving us expressiveness of JavaScript along with HTML like template syntax.\n\n    In the example below, the text inside `<h1` tag is returned as JavaScript function to the render function.\n\n\n    If you don't use JSX syntax then the respective JavaScript code should be written as below,\n\n\n     <p\n\n\n     </p\n\n    **Note:** JSX is stricter than HTML",
+    "options": null,
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=SqcY0GlETPk",
+        "type": "video",
+        "title": "React Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "8:25:00",
+        "description": "Complete React tutorial from scratch"
+      },
+      {
+        "url": "https://react.dev/learn",
+        "type": "article",
+        "title": "React Documentation",
+        "author": "React Team",
+        "description": "Official React documentation and tutorials"
+      },
+      {
+        "url": "https://www.udemy.com/course/react-the-complete-guide-incl-redux/",
+        "type": "course",
+        "title": "React - The Complete Guide",
+        "author": "Maximilian Schwarzmüller",
+        "duration": "48 hours",
+        "description": "Master React and Redux with hands-on projects"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-18T22:25:59.520436+00:00",
+    "updatedAt": "2025-11-24T22:52:08.102565+00:00"
+  },
+  {
+    "id": "8245ec88-1aa6-48ea-8dd3-5d2b884e44ba",
+    "title": "What is the difference between an Element and a Component?",
+    "content": "What is the difference between an Element and a Component?\n\n```javascript\n        const Button = ({ handleLogin }) =>\n          React.createElement(\n            \"button\",\n            { id: \"login-btn\", onClick: handleLogin },\n            \"Login\"\n          );\n```",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "**Element:**\n      - A React **Element** is a plain JavaScript object that describes what you want to see on the UI. It represents a DOM node or a component at a specific point in time. \n      - Elements are immutable: once created, you cannot change their properties. Instead, you create new elements to reflect updates.\n      - Elements can be nested within other elements through their `props`.\n      - Creating an element is a fast, lightweight operation—it does **not** create any actual DOM nodes or render anything to the screen directly.\n\n        **Example (without JSX):**\n\n        **Equivalent JSX syntax:**\n\n        **The object returned by `React.createElement`:**\n        Elements are then passed to the React DOM renderer (e.g., `ReactDOM.render()`), which translates them to actual DOM nodes.\n\n\n      **Component:**\n      - A **Component** is a function or class that returns an element (or a tree of elements) to describe part of the UI. Components can accept inputs (called **props**) and manage their own state (in case of class or function components with hooks).\n      - Components allow you to split the UI into independent, reusable pieces, each isolated and composable.\n      - You can define a component using a function or a class:\n\n        **Example (Function Component with JSX):**\n\n        When JSX is compiled, it's transformed into a tree of `React.createElement` calls:\n\n\n\n      **In summary:**\n      - **Elements** are the smallest building blocks in React—objects that describe what you want to see.\n      - **Components** are functions or classes that return elements and encapsulate logic, structure, and behavior for parts of your UI. Think of **elements** as the instructions for creating UI, and **components** as reusable blueprints that combine logic and structure to generate those instructions.",
+    "options": null,
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=SqcY0GlETPk",
+        "type": "video",
+        "title": "React Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "8:25:00",
+        "description": "Complete React tutorial from scratch"
+      },
+      {
+        "url": "https://react.dev/learn",
+        "type": "article",
+        "title": "React Documentation",
+        "author": "React Team",
+        "description": "Official React documentation and tutorials"
+      },
+      {
+        "url": "https://www.udemy.com/course/react-the-complete-guide-incl-redux/",
+        "type": "course",
+        "title": "React - The Complete Guide",
+        "author": "Maximilian Schwarzmüller",
+        "duration": "48 hours",
+        "description": "Master React and Redux with hands-on projects"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-18T22:25:59.520436+00:00",
+    "updatedAt": "2025-11-24T22:52:08.102565+00:00"
+  },
+  {
+    "id": "8ddace67-8341-4647-8466-9275b436945d",
+    "title": "Test React Question",
+    "content": "Test content",
+    "type": "multiple-choice",
+    "difficulty": "beginner",
+    "explanation": "Simple explanation",
+    "options": null,
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=SqcY0GlETPk",
+        "type": "video",
+        "title": "React Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "8:25:00",
+        "description": "Complete React tutorial from scratch"
+      },
+      {
+        "url": "https://react.dev/learn",
+        "type": "article",
+        "title": "React Documentation",
+        "author": "React Team",
+        "description": "Official React documentation and tutorials"
+      },
+      {
+        "url": "https://www.udemy.com/course/react-the-complete-guide-incl-redux/",
+        "type": "course",
+        "title": "React - The Complete Guide",
+        "author": "Maximilian Schwarzmüller",
+        "duration": "48 hours",
+        "description": "Master React and Redux with hands-on projects"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-18T22:23:27.532201+00:00",
+    "updatedAt": "2025-11-24T22:52:08.102565+00:00"
+  },
+  {
+    "id": "0312d780-b937-470b-9fd4-19f9753fc502",
+    "title": "`forEach`",
+    "content": "What should the value of `method` be to log `{ name: \"Lydia\", age: 22 }`?\n\n```javascript\nconst keys = [\"name\", \"age\"]\nconst values = [\"Lydia\", 22]\n\nconst method = /* ?? */\nObject[method](keys.map((_, i) => {\n\treturn [keys[i], values[i]]\n})) // { name: \"Lydia\", age: 22 }\n```",
+    "type": "code",
+    "difficulty": "intermediate",
+    "explanation": "The `fromEntries` method turns a 2d array into an object. The first element in each subarray will be the key, and the second element in each subarray will be the value. In this case, we're mapping over the `keys` array, which returns an array that the first element is the item on the key array on the current index, and the second element is the item of the values array on the current index. \n\nThis creates an array of subarrays containing the correct keys and values, which results in `{ name: \"Lydia\", age: 22 }`",
+    "options": [
+      {
+        "id": "A",
+        "text": "`entries`",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "B",
+        "text": "`values`",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "C",
+        "text": "`fromEntries`",
+        "isCorrect": true,
+        "explanation": ""
+      },
+      {
+        "id": "D",
+        "text": "`forEach`",
+        "isCorrect": false,
+        "explanation": ""
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=W6NZfCO5SIk",
+        "type": "video",
+        "title": "JavaScript Fundamentals Tutorial",
+        "author": "Programming with Mosh",
+        "duration": "3:26:00",
+        "description": "Learn JavaScript basics from scratch"
+      },
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Learn/Getting_started_with_the_web/JavaScript_basics",
+        "type": "article",
+        "title": "JavaScript Basics - MDN Web Docs",
+        "author": "Mozilla Developer Network",
+        "description": "Official MDN guide to JavaScript fundamentals"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-18T22:14:32.417368+00:00",
+    "updatedAt": "2025-11-24T23:25:57.521339+00:00"
+  },
+  {
+    "id": "c873af74-a0d0-4721-991a-77cf88622c43",
+    "title": "`ReferenceError`",
+    "content": "What's the output?\n\n```javascript\nconst user = {\n\temail: \"my@email.com\",\n\tupdateEmail: email => {\n\t\tthis.email = email\n\t}\n}\n\nuser.updateEmail(\"new@email.com\")\nconsole.log(user.email)\n```",
+    "type": "code",
+    "difficulty": "intermediate",
+    "explanation": "The `updateEmail` function is an arrow function, and is not bound to the `user` object. This means that the `this` keyword is not referring to the `user` object, but refers to  the global scope in this case. The value of `email` within the `user` object does not get updated. When logging the value of `user.email`, the original value of `my@email.com` gets returned.",
+    "options": [
+      {
+        "id": "A",
+        "text": "`my@email.com`",
+        "isCorrect": true,
+        "explanation": ""
+      },
+      {
+        "id": "B",
+        "text": "`new@email.com`",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "C",
+        "text": "`undefined`",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "D",
+        "text": "`ReferenceError`",
+        "isCorrect": false,
+        "explanation": ""
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=W6NZfCO5SIk",
+        "type": "video",
+        "title": "JavaScript Fundamentals Tutorial",
+        "author": "Programming with Mosh",
+        "duration": "3:26:00",
+        "description": "Learn JavaScript basics from scratch"
+      },
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Learn/Getting_started_with_the_web/JavaScript_basics",
+        "type": "article",
+        "title": "JavaScript Basics - MDN Web Docs",
+        "author": "Mozilla Developer Network",
+        "description": "Official MDN guide to JavaScript fundamentals"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-18T22:14:32.417368+00:00",
+    "updatedAt": "2025-11-24T23:25:57.521339+00:00"
+  },
+  {
+    "id": "caf414a1-7ef8-4b04-829c-4087df993ce4",
+    "title": "`'Third'`",
+    "content": "What's the output?\n\n```javascript\nconst promise1 = Promise.resolve('First')\nconst promise2 = Promise.resolve('Second')\nconst promise3 = Promise.reject('Third')\nconst promise4 = Promise.resolve('Fourth')\n\nconst runPromises = async () => {\n\tconst res1 = await Promise.all([promise1, promise2])\n\tconst res2  = await Promise.all([promise3, promise4])\n\treturn [res1, res2]\n}\n\nrunPromises()\n\t.then(res => console.log(res))\n\t.catch(err => console.log(err))\n```",
+    "type": "code",
+    "difficulty": "intermediate",
+    "explanation": "The `Promise.all` method runs the passed promises in parallel. If one promise fails, the `Promise.all` method _rejects_ with the value of the rejected promise. In this case, `promise3` is rejected with the value `\"Third\"`. We're catching the rejected value in the chained `catch` method on the `runPromises` invocation to catch any errors  within the `runPromises` function. Only `\"Third\"` gets logged, since `promise3` is rejected with this value.",
+    "options": [
+      {
+        "id": "A",
+        "text": "`[['First', 'Second'], ['Fourth']]`",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "B",
+        "text": "`[['First', 'Second'], ['Third', 'Fourth']]`",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "C",
+        "text": "`[['First', 'Second']]`",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "D",
+        "text": "`'Third'`",
+        "isCorrect": true,
+        "explanation": ""
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=W6NZfCO5SIk",
+        "type": "video",
+        "title": "JavaScript Fundamentals Tutorial",
+        "author": "Programming with Mosh",
+        "duration": "3:26:00",
+        "description": "Learn JavaScript basics from scratch"
+      },
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Learn/Getting_started_with_the_web/JavaScript_basics",
+        "type": "article",
+        "title": "JavaScript Basics - MDN Web Docs",
+        "author": "Mozilla Developer Network",
+        "description": "Official MDN guide to JavaScript fundamentals"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-18T22:14:32.417368+00:00",
+    "updatedAt": "2025-11-24T23:25:57.521339+00:00"
+  },
+  {
+    "id": "923286ef-47a5-47d3-aed5-ffa67a2cdd35",
+    "title": "`ReferenceError`",
+    "content": "What's the output?\n\n```javascript\nconst animals = {};\nlet dog = { emoji: '🐶' }\nlet cat = { emoji: '🐈' }\n\nanimals[dog] = { ...dog, name: \"Mara\" }\nanimals[cat] = { ...cat, name: \"Sara\" }\n\nconsole.log(animals[dog])\n```",
+    "type": "code",
+    "difficulty": "intermediate",
+    "explanation": "Object keys are converted to strings. \n\nSince the value of  `dog` is an object,  `animals[dog]` actually means that we're creating a new property called `\"[object Object]\"` equal to the new object. `animals[\"[object Object]\"]` is now equal to `{ emoji: \"🐶\", name: \"Mara\"}`.\n\n`cat` is also an object, which means that `animals[cat]` actually means that we're overwriting the value of  `animals[\"[object Object]\"]` with the new cat properties. \n\nLogging `animals[dog]`, or actually `animals[\"[object Object]\"]` since converting the `dog` object to a string results `\"[object Object]\"`, returns the `{ emoji: \"🐈\", name: \"Sara\" }`.",
+    "options": [
+      {
+        "id": "A",
+        "text": "`{ emoji: \"🐶\", name: \"Mara\" }`",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "B",
+        "text": "`{ emoji: \"🐈\", name: \"Sara\" }`",
+        "isCorrect": true,
+        "explanation": ""
+      },
+      {
+        "id": "C",
+        "text": "`undefined`",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "D",
+        "text": "`ReferenceError`",
+        "isCorrect": false,
+        "explanation": ""
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=W6NZfCO5SIk",
+        "type": "video",
+        "title": "JavaScript Fundamentals Tutorial",
+        "author": "Programming with Mosh",
+        "duration": "3:26:00",
+        "description": "Learn JavaScript basics from scratch"
+      },
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Learn/Getting_started_with_the_web/JavaScript_basics",
+        "type": "article",
+        "title": "JavaScript Basics - MDN Web Docs",
+        "author": "Mozilla Developer Network",
+        "description": "Official MDN guide to JavaScript fundamentals"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-18T22:14:32.417368+00:00",
+    "updatedAt": "2025-11-24T23:25:57.521339+00:00"
+  },
+  {
+    "id": "52a7d396-ea14-452a-93a5-569640f6582b",
+    "title": "`{ email: \"my@email.com\", address: undefiundefined }`",
+    "content": "What's the output?\n\n```javascript\nconst createMember = ({ email, address = {}}) => {\n\tconst validEmail = /.+\\@.+\\..+/.test(email)\n\tif (!validEmail) throw new Error(\"Valid email pls\")\n\n\treturn {\n\t\temail,\n\t\taddress: address ? address : null\n\t}\n}\n\nconst member = createMember({ email: \"my@email.com\" })\nconsole.log(member)\n```",
+    "type": "code",
+    "difficulty": "intermediate",
+    "explanation": "The default value of `address` is an empty object `{}`. When we set the variable `member` equal to the object returned by the `createMember` function, we didn't pass a value for the address, which means that the value of the address is the default empty object `{}`. An empty object is a truthy value, which means that the condition of the `address ? address : null` conditional returns `true`. The value of the address is the empty object `{}`.",
+    "options": [
+      {
+        "id": "A",
+        "text": "`{ email: \"my@email.com\", addaddress: null }`",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "B",
+        "text": "`{ email: \"my@email.cemail.com\" }`",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "C",
+        "text": "`{ email: \"my@email.com\", aaddress: {} } }`",
+        "isCorrect": true,
+        "explanation": ""
+      },
+      {
+        "id": "D",
+        "text": "`{ email: \"my@email.com\", address: undefiundefined }`",
+        "isCorrect": false,
+        "explanation": ""
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=W6NZfCO5SIk",
+        "type": "video",
+        "title": "JavaScript Fundamentals Tutorial",
+        "author": "Programming with Mosh",
+        "duration": "3:26:00",
+        "description": "Learn JavaScript basics from scratch"
+      },
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Learn/Getting_started_with_the_web/JavaScript_basics",
+        "type": "article",
+        "title": "JavaScript Basics - MDN Web Docs",
+        "author": "Mozilla Developer Network",
+        "description": "Official MDN guide to JavaScript fundamentals"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-18T22:14:32.417368+00:00",
+    "updatedAt": "2025-11-24T23:25:57.521339+00:00"
+  },
+  {
+    "id": "554a4f75-42ee-4915-847b-4f047f099c19",
+    "title": "`undefined`",
+    "content": "What's the output?\n\n```javascript\nlet randomValue = { name: \"Lydia\" }\nrandomValue = 23\n\nif (!typeof randomValue === \"string\") {\n\tconsole.log(\"It's not a string!\")\n} else {\n\tconsole.log(\"Yay it's a string!\")\n}\n```",
+    "type": "code",
+    "difficulty": "intermediate",
+    "explanation": "The condition within the `if` statement checks whether the value of `!typeof randomValue` is equal to `\"string\"`. The `!` operator converts the value to a boolean value. If the value is truthy, the returned value will be `false`, if the value is falsy, the returned value will be `true`. In this case, the returned value of `typeof randomValue` is the truthy value `\"number\"`, meaning that the value of `!typeof randomValue` is the boolean value `false`.\n\n`!typeof randomValue === \"string\"` always returns false, since we're actually checking `false === \"string\"`. Since the condition returned `false`, the code block of the `else` statement gets run, and `Yay it's a string!` gets logged.",
+    "options": [
+      {
+        "id": "A",
+        "text": "`It's not a string!`",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "B",
+        "text": "`Yay it's a string!`",
+        "isCorrect": true,
+        "explanation": ""
+      },
+      {
+        "id": "C",
+        "text": "`TypeError`",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "D",
+        "text": "`undefined`",
+        "isCorrect": false,
+        "explanation": ""
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=W6NZfCO5SIk",
+        "type": "video",
+        "title": "JavaScript Fundamentals Tutorial",
+        "author": "Programming with Mosh",
+        "duration": "3:26:00",
+        "description": "Learn JavaScript basics from scratch"
+      },
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Learn/Getting_started_with_the_web/JavaScript_basics",
+        "type": "article",
+        "title": "JavaScript Basics - MDN Web Docs",
+        "author": "Mozilla Developer Network",
+        "description": "Official MDN guide to JavaScript fundamentals"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-18T22:14:32.417368+00:00",
+    "updatedAt": "2025-11-24T23:25:57.521339+00:00"
+  },
+  {
+    "id": "b3e8e66e-0634-42b6-a81a-0947744147d9",
+    "title": "Nothing, we didn't call any method",
+    "content": "What's the output?\n\n```javascript\nclass Bird {\n  constructor() {\n    console.log(\"I'm a bird. 🦢\");\n  }\n}\n\nclass Flamingo extends Bird {\n  constructor() {\n    console.log(\"I'm pink. 🌸\");\n    super();\n  }\n}\n\nconst pet = new Flamingo();\n```",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "We create the variable `pet` which is an instance of the `Flamingo` class. When we instantiate this instance, the `constructor` on `Flamingo` gets called. First, `\"I'm pink. 🌸\"` gets logged, after which we call `super()`. `super()` calls the constructor of the parent class, `Bird`. The constructor in `Bird` gets called, and logs `\"I'm a bird. 🦢\"`.",
+    "options": [
+      {
+        "id": "A",
+        "text": "`I'm pink. 🌸`",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "B",
+        "text": "`I'm pink. 🌸` `I'm a bird. 🦢`",
+        "isCorrect": true,
+        "explanation": ""
+      },
+      {
+        "id": "C",
+        "text": "`I'm a bird. 🦢` `I'm pink. 🌸`",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "D",
+        "text": "Nothing, we didn't call any method",
+        "isCorrect": false,
+        "explanation": ""
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=W6NZfCO5SIk",
+        "type": "video",
+        "title": "JavaScript Fundamentals Tutorial",
+        "author": "Programming with Mosh",
+        "duration": "3:26:00",
+        "description": "Learn JavaScript basics from scratch"
+      },
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Learn/Getting_started_with_the_web/JavaScript_basics",
+        "type": "article",
+        "title": "JavaScript Basics - MDN Web Docs",
+        "author": "Mozilla Developer Network",
+        "description": "Official MDN guide to JavaScript fundamentals"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-18T22:13:42.542617+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "8e4adea9-a00a-468e-996c-1347ded4ded9",
+    "title": "4",
+    "content": "What's the output?\n\n```javascript\nlet count = 0;\nconst nums = [0, 1, 2, 3];\n\nnums.forEach(num => {\n\tif (num) count += 1\n})\n\nconsole.log(count)\n```",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "The `if` condition within the `forEach` loop checks whether the value of `num` is truthy or falsy. Since the first number in the `nums` array is `0`, a falsy value, the `if` statement's code block won't be executed. `count` only gets incremented for the other 3 numbers in the `nums` array, `1`, `2` and `3`. Since `count` gets incremented by `1` 3 times, the value of `count` is `3`.",
+    "options": [
+      {
+        "id": "A",
+        "text": "1",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "B",
+        "text": "2",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "C",
+        "text": "3",
+        "isCorrect": true,
+        "explanation": ""
+      },
+      {
+        "id": "D",
+        "text": "4",
+        "isCorrect": false,
+        "explanation": ""
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=W6NZfCO5SIk",
+        "type": "video",
+        "title": "JavaScript Fundamentals Tutorial",
+        "author": "Programming with Mosh",
+        "duration": "3:26:00",
+        "description": "Learn JavaScript basics from scratch"
+      },
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Learn/Getting_started_with_the_web/JavaScript_basics",
+        "type": "article",
+        "title": "JavaScript Basics - MDN Web Docs",
+        "author": "Mozilla Developer Network",
+        "description": "Official MDN guide to JavaScript fundamentals"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-18T22:13:42.542617+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "2bb9c8b0-7499-45a7-aebd-373aa437235b",
+    "title": "`ReferenceError`",
+    "content": "What's the output?\n\n```javascript\nclass Calc {\n\tconstructor() {\n\t\tthis.count = 0 \n\t}\n\n\tincrease() {\n\t\tthis.count++\n\t}\n}\n\nconst calc = new Calc()\nnew Calc().increase()\n\nconsole.log(calc.count)\n```",
+    "type": "code",
+    "difficulty": "intermediate",
+    "explanation": "We set the variable `calc` equal to a new instance of the `Calc` class. Then, we instantiate a new instance of `Calc`, and invoke the `increase` method on this instance. Since the count property is within the constructor of the `Calc` class, the count property is not shared on the prototype of `Calc`. This means that the value of count has not been updated for the instance calc points to, count is still `0`.",
+    "options": [
+      {
+        "id": "A",
+        "text": "`0`",
+        "isCorrect": true,
+        "explanation": ""
+      },
+      {
+        "id": "B",
+        "text": "`1`",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "C",
+        "text": "`undefined`",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "D",
+        "text": "`ReferenceError`",
+        "isCorrect": false,
+        "explanation": ""
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=W6NZfCO5SIk",
+        "type": "video",
+        "title": "JavaScript Fundamentals Tutorial",
+        "author": "Programming with Mosh",
+        "duration": "3:26:00",
+        "description": "Learn JavaScript basics from scratch"
+      },
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Learn/Getting_started_with_the_web/JavaScript_basics",
+        "type": "article",
+        "title": "JavaScript Basics - MDN Web Docs",
+        "author": "Mozilla Developer Network",
+        "description": "Official MDN guide to JavaScript fundamentals"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-18T22:13:42.542617+00:00",
+    "updatedAt": "2025-11-24T23:25:57.521339+00:00"
+  },
+  {
+    "id": "e03bc2c6-c48a-4ef0-9f83-e5dacb56b769",
+    "title": "3",
+    "content": "Which of the options result(s) in an error?\n\n```javascript\nconst emojis = ['🎄', '🎅🏼', '🎁', '⭐'];\n\n/* 1 */ emojis.push('🦌');\n/* 2 */ emojis.splice(0, 2);\n/* 3 */ emojis = [...emojis, '🥂'];\n/* 4 */ emojis.length = 0;\n```",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "The `const` keyword simply means we cannot _redeclare_ the value of that variable, it's _read-only_. However, the value itself isn't immutable. The properties on the `emojis` array can be modified, for example by pushing new values, splicing them, or setting the length of the array to 0.",
+    "options": [
+      {
+        "id": "A",
+        "text": "1",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "B",
+        "text": "1 and 2",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "C",
+        "text": "3 and 4",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "D",
+        "text": "3",
+        "isCorrect": true,
+        "explanation": ""
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=W6NZfCO5SIk",
+        "type": "video",
+        "title": "JavaScript Fundamentals Tutorial",
+        "author": "Programming with Mosh",
+        "duration": "3:26:00",
+        "description": "Learn JavaScript basics from scratch"
+      },
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Learn/Getting_started_with_the_web/JavaScript_basics",
+        "type": "article",
+        "title": "JavaScript Basics - MDN Web Docs",
+        "author": "Mozilla Developer Network",
+        "description": "Official MDN guide to JavaScript fundamentals"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-18T22:13:42.542617+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "d174dbea-f49a-4c25-9288-038eedf1278a",
+    "title": "`undefined`, `undefined`, 🍌",
+    "content": "What's the output?\n\n```javascript\nfunction getFruit(fruits) {\n\tconsole.log(fruits?.[1]?.[1])\n}\n\ngetFruit([['🍊', '🍌'], ['🍍']])\ngetFruit()\ngetFruit([['🍍'], ['🍊', '🍌']])\n```",
+    "type": "code",
+    "difficulty": "intermediate",
+    "explanation": "The `?` allows us to optionally access deeper nested properties within objects. We're trying to log the item on index `1` within the subarray that's on index `1` of the `fruits` array. If the subarray on index `1` in the `fruits` array doesn't exist, it'll simply return `undefined`. If the subarray on index `1` in the `fruits` array exists, but this subarray doesn't have an item on its `1` index, it'll also return `undefined`. \n\nFirst, we're trying to log the second item in the `['🍍']` subarray of `[['🍊', '🍌'], ['🍍']]`. This subarray only contains one item, which means there is no item on index `1`, and returns `undefined`.\n\nThen, we're invoking the `getFruits` function without passing a value as an argument, which means that `fruits` has a value of `undefined` by default. Since we're conditionally chaining the item on index `1` of`fruits`, it returns `undefined` since this item on index `1` does not exist. \n\nLastly, we're trying to log the second item in the `['🍊', '🍌']` subarray of `['🍍'], ['🍊', '🍌']`. The item on index `1` within this subarray is `🍌`, which gets logged.",
+    "options": [
+      {
+        "id": "A",
+        "text": "`null`, `undefined`, 🍌",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "B",
+        "text": "`[]`, `null`, 🍌",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "C",
+        "text": "`[]`, `[]`, 🍌",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "D",
+        "text": "`undefined`, `undefined`, 🍌",
+        "isCorrect": true,
+        "explanation": ""
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=W6NZfCO5SIk",
+        "type": "video",
+        "title": "JavaScript Fundamentals Tutorial",
+        "author": "Programming with Mosh",
+        "duration": "3:26:00",
+        "description": "Learn JavaScript basics from scratch"
+      },
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Learn/Getting_started_with_the_web/JavaScript_basics",
+        "type": "article",
+        "title": "JavaScript Basics - MDN Web Docs",
+        "author": "Mozilla Developer Network",
+        "description": "Official MDN guide to JavaScript fundamentals"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-18T22:13:42.542617+00:00",
+    "updatedAt": "2025-11-24T23:25:57.521339+00:00"
+  },
+  {
+    "id": "8691a451-9362-489b-bf20-1106af5b9e01",
+    "title": "`['🍇', '🍌', '🍊', '🍎']`",
+    "content": "What's the output?\n\n```javascript\nconst fruit = ['🍌', '🍊', '🍎']\n\nfruit.slice(0, 1)\nfruit.splice(0, 1)\nfruit.unshift('🍇')\n\nconsole.log(fruit)\n```",
+    "type": "code",
+    "difficulty": "intermediate",
+    "explanation": "First, we invoke the `slice` method on the fruit array. The slice method does not modify the original array, but returns the value that it sliced off the array: the banana emoji.\nThen, we invoke the `splice` method on the fruit array. The splice method does modify the original array, which means that the fruit array now consists of `['🍊', '🍎']`.\nAt last, we invoke the `unshift` method on the `fruit` array, which modifies the original array by adding the provided value, '🍇' in this case,  as the first element in the array.  The fruit array now consists of `['🍇', '🍊', '🍎']`.",
+    "options": [
+      {
+        "id": "A",
+        "text": "`['🍌', '🍊', '🍎']`",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "B",
+        "text": "`['🍊', '🍎']`",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "C",
+        "text": "`['🍇', '🍊', '🍎']`",
+        "isCorrect": true,
+        "explanation": ""
+      },
+      {
+        "id": "D",
+        "text": "`['🍇', '🍌', '🍊', '🍎']`",
+        "isCorrect": false,
+        "explanation": ""
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=W6NZfCO5SIk",
+        "type": "video",
+        "title": "JavaScript Fundamentals Tutorial",
+        "author": "Programming with Mosh",
+        "duration": "3:26:00",
+        "description": "Learn JavaScript basics from scratch"
+      },
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Learn/Getting_started_with_the_web/JavaScript_basics",
+        "type": "article",
+        "title": "JavaScript Basics - MDN Web Docs",
+        "author": "Mozilla Developer Network",
+        "description": "Official MDN guide to JavaScript fundamentals"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-18T22:13:42.542617+00:00",
+    "updatedAt": "2025-11-24T23:25:57.521339+00:00"
+  }
+]
