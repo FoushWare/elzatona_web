@@ -1,0 +1,2752 @@
+[
+  {
+    "id": "3317c0f0-0612-4168-a2c8-8dd54b2d7ce7",
+    "title": "modulepreload is deprecated",
+    "content": "Module loading has specific optimization techniques. Explain modulepreload vs preload for ES6 modules.",
+    "type": "multiple-choice",
+    "difficulty": "advanced",
+    "explanation": "'preload' loads module file but doesn't execute dependencies. 'modulepreload' loads module and recursively preloads all its dependencies. modulepreload is more comprehensive for module optimization. Use modulepreload for critical module entry points.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "modulepreload recursively preloads module dependencies; preload only loads the file",
+        "isCorrect": true,
+        "explanation": "Correct. modulepreload is more comprehensive."
+      },
+      {
+        "id": "o2",
+        "text": "They are identical",
+        "isCorrect": false,
+        "explanation": "Incorrect. modulepreload handles dependencies."
+      },
+      {
+        "id": "o3",
+        "text": "preload is for modules, modulepreload is for regular scripts",
+        "isCorrect": false,
+        "explanation": "Incorrect. It's the opposite - modulepreload is for modules."
+      },
+      {
+        "id": "o4",
+        "text": "modulepreload is deprecated",
+        "isCorrect": false,
+        "explanation": "Incorrect. modulepreload is the modern approach."
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=qz0aGYrrlhU",
+        "type": "video",
+        "title": "HTML Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "1:09:30",
+        "description": "Learn HTML from scratch"
+      },
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/HTML",
+        "type": "article",
+        "title": "HTML: HyperText Markup Language - MDN",
+        "author": "Mozilla Developer Network",
+        "description": "Complete HTML reference and guide"
+      }
+    ],
+    "points": 20,
+    "isActive": true,
+    "createdAt": "2025-11-19T19:42:31.457931+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "2ca3b953-ce2b-47be-8dc8-56d0f4d7d921",
+    "title": "Reserving space for dynamic content",
+    "content": "Cumulative Layout Shift hurts user experience. Identify techniques that prevent unexpected layout shifts.",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "Setting width and height on images, reserving space for ads/embeds, using aspect-ratio CSS, avoiding inserting content above existing content, and using font-display: swap properly all help prevent CLS.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "width and height attributes on images",
+        "isCorrect": true,
+        "explanation": "Correct. Dimensions reserve space and prevent shift."
+      },
+      {
+        "id": "o2",
+        "text": "aspect-ratio CSS property",
+        "isCorrect": true,
+        "explanation": "Correct. aspect-ratio reserves space."
+      },
+      {
+        "id": "o3",
+        "text": "Loading images without dimensions",
+        "isCorrect": false,
+        "explanation": "Incorrect. This causes layout shift."
+      },
+      {
+        "id": "o4",
+        "text": "Reserving space for dynamic content",
+        "isCorrect": true,
+        "explanation": "Correct. Reserving space prevents shifts."
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=qz0aGYrrlhU",
+        "type": "video",
+        "title": "HTML Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "1:09:30",
+        "description": "Learn HTML from scratch"
+      },
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/HTML",
+        "type": "article",
+        "title": "HTML: HyperText Markup Language - MDN",
+        "author": "Mozilla Developer Network",
+        "description": "Complete HTML reference and guide"
+      }
+    ],
+    "points": 15,
+    "isActive": true,
+    "createdAt": "2025-11-19T19:42:31.457931+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "42d7677d-7d27-4b3c-b531-cf7fb1c309e7",
+    "title": "Subsetting fonts to reduce file size",
+    "content": "Web fonts can block rendering. Identify techniques that optimize font loading and prevent FOIT/FOUT.",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "font-display: swap (shows fallback immediately), preloading font files, using font-display: optional for non-critical fonts, subsetting fonts, and using system fonts as fallbacks all improve font performance.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "font-display: swap (shows fallback immediately)",
+        "isCorrect": true,
+        "explanation": "Correct. swap prevents invisible text."
+      },
+      {
+        "id": "o2",
+        "text": "Preloading critical font files",
+        "isCorrect": true,
+        "explanation": "Correct. Preload reduces font load time."
+      },
+      {
+        "id": "o3",
+        "text": "Using font-display: block (causes FOIT)",
+        "isCorrect": false,
+        "explanation": "Incorrect. block causes Flash of Invisible Text."
+      },
+      {
+        "id": "o4",
+        "text": "Subsetting fonts to reduce file size",
+        "isCorrect": true,
+        "explanation": "Correct. Smaller fonts load faster."
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=qz0aGYrrlhU",
+        "type": "video",
+        "title": "HTML Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "1:09:30",
+        "description": "Learn HTML from scratch"
+      },
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/HTML",
+        "type": "article",
+        "title": "HTML: HyperText Markup Language - MDN",
+        "author": "Mozilla Developer Network",
+        "description": "Complete HTML reference and guide"
+      }
+    ],
+    "points": 15,
+    "isActive": true,
+    "createdAt": "2025-11-19T19:42:31.457931+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "e5f75e8e-6c7b-47fd-aa93-38b74d52a034",
+    "title": "Controls search result ranking",
+    "content": "Multilingual sites need proper language targeting. Explain hreflang tags and their role in international SEO.",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "hreflang tells search engines which language/region version of page to show. Format: <link rel='alternate' hreflang='en' href='...'>. Helps serve correct language to users. Prevents duplicate content issues. Essential for multilingual sites.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Tells search engines which language/region version to show users",
+        "isCorrect": true,
+        "explanation": "Correct. hreflang helps with language targeting."
+      },
+      {
+        "id": "o2",
+        "text": "Specifies the page's primary language",
+        "isCorrect": false,
+        "explanation": "Incorrect. The 'lang' attribute on <html> specifies page language."
+      },
+      {
+        "id": "o3",
+        "text": "Enables automatic translation",
+        "isCorrect": false,
+        "explanation": "Incorrect. hreflang doesn't enable translation, it helps serve the right version."
+      },
+      {
+        "id": "o4",
+        "text": "Controls search result ranking",
+        "isCorrect": false,
+        "explanation": "Incorrect. hreflang helps with targeting, not ranking algorithm."
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=qz0aGYrrlhU",
+        "type": "video",
+        "title": "HTML Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "1:09:30",
+        "description": "Learn HTML from scratch"
+      },
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/HTML",
+        "type": "article",
+        "title": "HTML: HyperText Markup Language - MDN",
+        "author": "Mozilla Developer Network",
+        "description": "Complete HTML reference and guide"
+      }
+    ],
+    "points": 15,
+    "isActive": true,
+    "createdAt": "2025-11-19T19:41:04.878338+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "06685d04-f7dc-43c4-b86d-a06198aeb29a",
+    "title": "src (video source URL)",
+    "content": "Video elements have many playback controls. Identify which attributes affect how videos play.",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "'autoplay' starts automatically. 'controls' shows UI. 'loop' repeats. 'muted' silences (required for autoplay). 'playsinline' prevents fullscreen on mobile. 'preload' controls loading. 'poster' shows thumbnail.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "autoplay (starts automatically)",
+        "isCorrect": true,
+        "explanation": "Correct. autoplay starts video automatically."
+      },
+      {
+        "id": "o2",
+        "text": "loop (repeats video)",
+        "isCorrect": true,
+        "explanation": "Correct. loop makes video repeat."
+      },
+      {
+        "id": "o3",
+        "text": "muted (required for autoplay in most browsers)",
+        "isCorrect": true,
+        "explanation": "Correct. muted is often required for autoplay."
+      },
+      {
+        "id": "o4",
+        "text": "src (video source URL)",
+        "isCorrect": false,
+        "explanation": "Incorrect. src specifies source, doesn't control playback behavior."
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=qz0aGYrrlhU",
+        "type": "video",
+        "title": "HTML Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "1:09:30",
+        "description": "Learn HTML from scratch"
+      },
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/HTML",
+        "type": "article",
+        "title": "HTML: HyperText Markup Language - MDN",
+        "author": "Mozilla Developer Network",
+        "description": "Complete HTML reference and guide"
+      }
+    ],
+    "points": 15,
+    "isActive": true,
+    "createdAt": "2025-11-19T19:41:04.878338+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "59be39f2-6627-4f1c-9f46-74b099059a72",
+    "title": "nofollow is deprecated, use noindex instead",
+    "content": "Controlling search engine behavior requires understanding robots directives. Explain noindex vs nofollow.",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "'noindex' prevents page from appearing in search results (page not indexed). 'nofollow' tells crawlers not to follow links on page (links not crawled, no PageRank passed). Can combine: 'noindex, nofollow'. Use noindex for private pages, nofollow for untrusted links.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "noindex prevents indexing the page; nofollow prevents following links on the page",
+        "isCorrect": true,
+        "explanation": "Correct. They control different aspects of crawling."
+      },
+      {
+        "id": "o2",
+        "text": "They are identical and interchangeable",
+        "isCorrect": false,
+        "explanation": "Incorrect. They serve different purposes."
+      },
+      {
+        "id": "o3",
+        "text": "noindex is for images, nofollow is for text",
+        "isCorrect": false,
+        "explanation": "Incorrect. Both apply to pages, not content types."
+      },
+      {
+        "id": "o4",
+        "text": "nofollow is deprecated, use noindex instead",
+        "isCorrect": false,
+        "explanation": "Incorrect. Both are valid and serve different purposes."
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=qz0aGYrrlhU",
+        "type": "video",
+        "title": "HTML Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "1:09:30",
+        "description": "Learn HTML from scratch"
+      },
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/HTML",
+        "type": "article",
+        "title": "HTML: HyperText Markup Language - MDN",
+        "author": "Mozilla Developer Network",
+        "description": "Complete HTML reference and guide"
+      }
+    ],
+    "points": 15,
+    "isActive": true,
+    "createdAt": "2025-11-19T19:41:04.878338+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "a5bb7465-99ff-48ce-9b76-dc8dce16e3a6",
+    "title": "JPEG",
+    "content": "Image format choice affects capabilities. Identify which formats support transparency (alpha channel).",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "PNG, WebP, SVG, and GIF support transparency. JPEG does not support transparency. PNG-24 and WebP support full alpha channel. GIF supports single-color transparency. SVG supports transparency via CSS or attributes.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "PNG",
+        "isCorrect": true,
+        "explanation": "Correct. PNG supports transparency."
+      },
+      {
+        "id": "o2",
+        "text": "WebP",
+        "isCorrect": true,
+        "explanation": "Correct. WebP supports transparency."
+      },
+      {
+        "id": "o3",
+        "text": "SVG",
+        "isCorrect": true,
+        "explanation": "Correct. SVG supports transparency."
+      },
+      {
+        "id": "o4",
+        "text": "JPEG",
+        "isCorrect": false,
+        "explanation": "Incorrect. JPEG does not support transparency."
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=qz0aGYrrlhU",
+        "type": "video",
+        "title": "HTML Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "1:09:30",
+        "description": "Learn HTML from scratch"
+      },
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/HTML",
+        "type": "article",
+        "title": "HTML: HyperText Markup Language - MDN",
+        "author": "Mozilla Developer Network",
+        "description": "Complete HTML reference and guide"
+      }
+    ],
+    "points": 15,
+    "isActive": true,
+    "createdAt": "2025-11-19T19:41:04.878338+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "daaf3867-0205-4835-a5bb-8b9ba9cc4ed6",
+    "title": "<meta name='keywords'> (largely ignored by search engines)",
+    "content": "SEO requires specific meta tags. Identify which meta tags are most important for search engine optimization.",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "<titl is critical. <meta name='description'> is important for snippets. <meta charset is required. Open Graph tags help social sharing. robots meta can control indexing. keywords meta is largely ignored.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "<titl (critical for SEO)",
+        "isCorrect": true,
+        "explanation": "Correct. Title tag is one of the most important SEO elements."
+      },
+      {
+        "id": "o2",
+        "text": "<meta name='description'> (affects search snippets)",
+        "isCorrect": true,
+        "explanation": "Correct. Description affects click-through rates."
+      },
+      {
+        "id": "o3",
+        "text": "<meta charset (required for proper rendering)",
+        "isCorrect": true,
+        "explanation": "Correct. Charset is essential for proper text rendering."
+      },
+      {
+        "id": "o4",
+        "text": "<meta name='keywords'> (largely ignored by search engines)",
+        "isCorrect": false,
+        "explanation": "Incorrect. Keywords meta tag is deprecated and ignored."
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=qz0aGYrrlhU",
+        "type": "video",
+        "title": "HTML Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "1:09:30",
+        "description": "Learn HTML from scratch"
+      },
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/HTML",
+        "type": "article",
+        "title": "HTML: HyperText Markup Language - MDN",
+        "author": "Mozilla Developer Network",
+        "description": "Complete HTML reference and guide"
+      }
+    ],
+    "points": 15,
+    "isActive": true,
+    "createdAt": "2025-11-19T19:41:04.878338+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "17770105-59b9-45ec-9d41-d27a089034ed",
+    "title": "GenericObject (not a real schema type)",
+    "content": "Structured data enables rich search results. Identify Schema.org types that commonly produce rich snippets.",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "Article, Product, Review, Recipe, Event, Organization, Person, BreadcrumbList, FAQPage, and VideoObject commonly produce rich snippets. Each provides different information (ratings, prices, dates, etc.) in search results.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Product (shows price, rating, availability)",
+        "isCorrect": true,
+        "explanation": "Correct. Product schema enables rich snippets with pricing."
+      },
+      {
+        "id": "o2",
+        "text": "Article (shows publish date, author)",
+        "isCorrect": true,
+        "explanation": "Correct. Article schema shows publication info."
+      },
+      {
+        "id": "o3",
+        "text": "Review (shows star ratings)",
+        "isCorrect": true,
+        "explanation": "Correct. Review schema enables star ratings in results."
+      },
+      {
+        "id": "o4",
+        "text": "GenericObject (not a real schema type)",
+        "isCorrect": false,
+        "explanation": "Incorrect. This is not a valid Schema.org type."
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=qz0aGYrrlhU",
+        "type": "video",
+        "title": "HTML Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "1:09:30",
+        "description": "Learn HTML from scratch"
+      },
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/HTML",
+        "type": "article",
+        "title": "HTML: HyperText Markup Language - MDN",
+        "author": "Mozilla Developer Network",
+        "description": "Complete HTML reference and guide"
+      }
+    ],
+    "points": 15,
+    "isActive": true,
+    "createdAt": "2025-11-19T19:41:04.878338+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "33a7d906-bf09-4204-984b-4b0868634f36",
+    "title": "Specifies which keys are disabled",
+    "content": "Keyboard shortcuts need to be announced. Explain aria-keyshortcuts and its role in keyboard accessibility.",
+    "type": "code",
+    "difficulty": "intermediate",
+    "explanation": "'aria-keyshortcuts' announces keyboard shortcuts to screen reader users. Format: 'Ctrl+K' or 'Alt+Shift+T'. Helps users discover and remember shortcuts. Important for power users and keyboard navigation.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Announces keyboard shortcuts to screen reader users",
+        "isCorrect": true,
+        "explanation": "Correct. aria-keyshortcuts helps users discover shortcuts."
+      },
+      {
+        "id": "o2",
+        "text": "Enables keyboard shortcuts programmatically",
+        "isCorrect": false,
+        "explanation": "Incorrect. Shortcuts are handled via JavaScript, not ARIA."
+      },
+      {
+        "id": "o3",
+        "text": "Prevents keyboard shortcuts from working",
+        "isCorrect": false,
+        "explanation": "Incorrect. It only announces them, doesn't control functionality."
+      },
+      {
+        "id": "o4",
+        "text": "Specifies which keys are disabled",
+        "isCorrect": false,
+        "explanation": "Incorrect. It describes available shortcuts, not disabled keys."
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=qz0aGYrrlhU",
+        "type": "video",
+        "title": "HTML Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "1:09:30",
+        "description": "Learn HTML from scratch"
+      },
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/HTML",
+        "type": "article",
+        "title": "HTML: HyperText Markup Language - MDN",
+        "author": "Mozilla Developer Network",
+        "description": "Complete HTML reference and guide"
+      }
+    ],
+    "points": 15,
+    "isActive": true,
+    "createdAt": "2025-11-19T19:41:04.878338+00:00",
+    "updatedAt": "2025-11-24T23:33:46.870735+00:00"
+  },
+  {
+    "id": "4c4c86d5-a119-4def-ba37-132a9952cad2",
+    "title": "aria-hidden (hides from screen readers)",
+    "content": "Dynamic content needs proper ARIA announcements. Identify attributes that help screen readers understand changes.",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "'aria-live' announces dynamic changes. 'aria-atomic' controls whether entire region or just changes are announced. 'aria-relevant' specifies what changes trigger announcements. 'aria-busy' indicates content is updating.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "aria-live (announces changes)",
+        "isCorrect": true,
+        "explanation": "Correct. aria-live enables dynamic announcements."
+      },
+      {
+        "id": "o2",
+        "text": "aria-atomic (controls announcement scope)",
+        "isCorrect": true,
+        "explanation": "Correct. aria-atomic controls what gets announced."
+      },
+      {
+        "id": "o3",
+        "text": "aria-busy (indicates updating content)",
+        "isCorrect": true,
+        "explanation": "Correct. aria-busy signals content is changing."
+      },
+      {
+        "id": "o4",
+        "text": "aria-hidden (hides from screen readers)",
+        "isCorrect": false,
+        "explanation": "Incorrect. aria-hidden hides content, doesn't describe changes."
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=qz0aGYrrlhU",
+        "type": "video",
+        "title": "HTML Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "1:09:30",
+        "description": "Learn HTML from scratch"
+      },
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/HTML",
+        "type": "article",
+        "title": "HTML: HyperText Markup Language - MDN",
+        "author": "Mozilla Developer Network",
+        "description": "Complete HTML reference and guide"
+      }
+    ],
+    "points": 15,
+    "isActive": true,
+    "createdAt": "2025-11-19T19:41:04.878338+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "4bcde507-a0a2-4989-ba4e-9e23e453a267",
+    "title": "Inline styles (CSS)",
+    "content": "SEO isn't just about meta tags. Identify which HTML elements help search engines understand and rank content.",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "Semantic HTML5 elements (<header, <nav, <main, <articl, <section), heading hierarchy (<h1-<h6), <titl, <meta tags, alt text on images, and proper link structure all contribute to SEO. Search engines use semantic structure to understand content.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Semantic HTML5 elements (<header, <articl, etc.)",
+        "isCorrect": true,
+        "explanation": "Correct. Semantic elements help search engines understand structure."
+      },
+      {
+        "id": "o2",
+        "text": "Heading hierarchy (<h1-<h6)",
+        "isCorrect": true,
+        "explanation": "Correct. Headings indicate content importance."
+      },
+      {
+        "id": "o3",
+        "text": "Alt text on images",
+        "isCorrect": true,
+        "explanation": "Correct. Alt text helps with image SEO."
+      },
+      {
+        "id": "o4",
+        "text": "Inline styles (CSS)",
+        "isCorrect": false,
+        "explanation": "Incorrect. Styles don't directly affect SEO."
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=qz0aGYrrlhU",
+        "type": "video",
+        "title": "HTML Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "1:09:30",
+        "description": "Learn HTML from scratch"
+      },
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/HTML",
+        "type": "article",
+        "title": "HTML: HyperText Markup Language - MDN",
+        "author": "Mozilla Developer Network",
+        "description": "Complete HTML reference and guide"
+      }
+    ],
+    "points": 15,
+    "isActive": true,
+    "createdAt": "2025-11-19T19:41:04.878338+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "9d12e35c-024a-4775-aab0-f6e54eacf0d5",
+    "title": "Enables video streaming",
+    "content": "Media accessibility requires captions and subtitles. Explain the track element and its role in accessible media.",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "<track provides timed text tracks: subtitles, captions, descriptions, chapters, metadata. 'kind' attribute specifies type. 'srclang' specifies language. 'label' provides user-visible label. Essential for accessibility and multilingual content.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Provides timed text tracks (subtitles, captions, descriptions) for accessibility",
+        "isCorrect": true,
+        "explanation": "Correct. track element adds captions and subtitles."
+      },
+      {
+        "id": "o2",
+        "text": "Controls video playback speed",
+        "isCorrect": false,
+        "explanation": "Incorrect. Playback speed is controlled via JavaScript API."
+      },
+      {
+        "id": "o3",
+        "text": "Specifies video codec format",
+        "isCorrect": false,
+        "explanation": "Incorrect. Codec is determined by video file format."
+      },
+      {
+        "id": "o4",
+        "text": "Enables video streaming",
+        "isCorrect": false,
+        "explanation": "Incorrect. Streaming is handled by server and protocol."
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=qz0aGYrrlhU",
+        "type": "video",
+        "title": "HTML Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "1:09:30",
+        "description": "Learn HTML from scratch"
+      },
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/HTML",
+        "type": "article",
+        "title": "HTML: HyperText Markup Language - MDN",
+        "author": "Mozilla Developer Network",
+        "description": "Complete HTML reference and guide"
+      }
+    ],
+    "points": 15,
+    "isActive": true,
+    "createdAt": "2025-11-19T19:41:04.878338+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "3d65dbe7-2818-4346-b740-ab18894ba6d3",
+    "title": "<div",
+    "content": "Understanding self-closing elements is important. Identify which HTML elements are self-closing and don't require closing tags.",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "<img, <br, <hr, <input, <meta, <link, <area, <bas, <col, <embed, <sourc, and <track are self-closing elements. <div, <span, <p require closing tags.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "<img",
+        "isCorrect": true,
+        "explanation": "Correct. <img> is a self-closing element."
+      },
+      {
+        "id": "o2",
+        "text": "<br",
+        "isCorrect": true,
+        "explanation": "Correct. <br> is a self-closing element."
+      },
+      {
+        "id": "o3",
+        "text": "<input",
+        "isCorrect": true,
+        "explanation": "Correct. <input> is a self-closing element."
+      },
+      {
+        "id": "o4",
+        "text": "<div",
+        "isCorrect": false,
+        "explanation": "Incorrect. <div> requires a closing tag."
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=qz0aGYrrlhU",
+        "type": "video",
+        "title": "HTML Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "1:09:30",
+        "description": "Learn HTML from scratch"
+      },
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/HTML",
+        "type": "article",
+        "title": "HTML: HyperText Markup Language - MDN",
+        "author": "Mozilla Developer Network",
+        "description": "Complete HTML reference and guide"
+      }
+    ],
+    "points": 15,
+    "isActive": true,
+    "createdAt": "2025-11-19T19:39:18.744944+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "23447ed0-c46d-4229-933e-6f2ce5507778",
+    "title": "Validates form before submission",
+    "content": "Form submission can be customized per button. Explain the formaction attribute and its use cases.",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "'formaction' overrides form's action attribute for specific submit button. Allows different submit buttons to send form to different URLs. Useful for multi-step forms, different actions (save vs publish), or A/B testing different endpoints.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Overrides the form's action attribute for that specific submit button",
+        "isCorrect": true,
+        "explanation": "Correct. formaction allows different buttons to submit to different URLs."
+      },
+      {
+        "id": "o2",
+        "text": "Specifies the form's default action",
+        "isCorrect": false,
+        "explanation": "Incorrect. That's the form's 'action' attribute."
+      },
+      {
+        "id": "o3",
+        "text": "Prevents form submission",
+        "isCorrect": false,
+        "explanation": "Incorrect. formaction changes where form submits, doesn't prevent it."
+      },
+      {
+        "id": "o4",
+        "text": "Validates form before submission",
+        "isCorrect": false,
+        "explanation": "Incorrect. Validation is handled by other attributes."
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=qz0aGYrrlhU",
+        "type": "video",
+        "title": "HTML Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "1:09:30",
+        "description": "Learn HTML from scratch"
+      },
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/HTML",
+        "type": "article",
+        "title": "HTML: HyperText Markup Language - MDN",
+        "author": "Mozilla Developer Network",
+        "description": "Complete HTML reference and guide"
+      }
+    ],
+    "points": 15,
+    "isActive": true,
+    "createdAt": "2025-11-19T19:39:18.744944+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "7b07f48c-6cdd-42ab-9d43-1d5318fa8a7e",
+    "title": "Controls text direction (LTR/RTL)",
+    "content": "Internationalization requires proper attributes. Explain the translate attribute and its impact on translation tools.",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "'translate' attribute controls whether content should be translated: 'yes' (default, translate), 'no' (don't translate). Useful for proper nouns, code, brand names that shouldn't be translated. Helps translation tools and services.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Controls whether content should be translated by translation tools",
+        "isCorrect": true,
+        "explanation": "Correct. translate='no' prevents translation, translate='yes' allows it."
+      },
+      {
+        "id": "o2",
+        "text": "Specifies the language of the content",
+        "isCorrect": false,
+        "explanation": "Incorrect. The 'lang' attribute specifies language."
+      },
+      {
+        "id": "o3",
+        "text": "Enables automatic translation on page load",
+        "isCorrect": false,
+        "explanation": "Incorrect. It only hints to translation tools, doesn't enable automatic translation."
+      },
+      {
+        "id": "o4",
+        "text": "Controls text direction (LTR/RTL)",
+        "isCorrect": false,
+        "explanation": "Incorrect. The 'dir' attribute controls text direction."
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=qz0aGYrrlhU",
+        "type": "video",
+        "title": "HTML Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "1:09:30",
+        "description": "Learn HTML from scratch"
+      },
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/HTML",
+        "type": "article",
+        "title": "HTML: HyperText Markup Language - MDN",
+        "author": "Mozilla Developer Network",
+        "description": "Complete HTML reference and guide"
+      }
+    ],
+    "points": 15,
+    "isActive": true,
+    "createdAt": "2025-11-19T19:39:18.744944+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "d2c91996-7d12-4ff6-af86-051e3b01a40a",
+    "title": "text",
+    "content": "HTML5 input types include validation. Identify which types provide native browser validation.",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "email, url, number, date, time, tel, and search provide built-in validation. text and password don't have format validation (only required validation).",
+    "options": [
+      {
+        "id": "o1",
+        "text": "email",
+        "isCorrect": true,
+        "explanation": "Correct. email type validates email format."
+      },
+      {
+        "id": "o2",
+        "text": "url",
+        "isCorrect": true,
+        "explanation": "Correct. url type validates URL format."
+      },
+      {
+        "id": "o3",
+        "text": "number",
+        "isCorrect": true,
+        "explanation": "Correct. number type validates numeric input."
+      },
+      {
+        "id": "o4",
+        "text": "text",
+        "isCorrect": false,
+        "explanation": "Incorrect. text type doesn't provide format validation."
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=qz0aGYrrlhU",
+        "type": "video",
+        "title": "HTML Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "1:09:30",
+        "description": "Learn HTML from scratch"
+      },
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/HTML",
+        "type": "article",
+        "title": "HTML: HyperText Markup Language - MDN",
+        "author": "Mozilla Developer Network",
+        "description": "Complete HTML reference and guide"
+      }
+    ],
+    "points": 15,
+    "isActive": true,
+    "createdAt": "2025-11-19T19:39:18.744944+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "b41192b4-34bb-475f-afdf-c48ee527865f",
+    "title": "Determines image display size",
+    "content": "Image decoding affects rendering performance. Explain the decoding attribute and its impact on page rendering.",
+    "type": "code",
+    "difficulty": "intermediate",
+    "explanation": "'decoding' hints how image should be decoded: 'sync' (blocking), 'async' (non-blocking), 'auto' (browser decides). 'async' allows other content to render while image decodes. Improves perceived performance, especially for large images.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Hints whether image decoding should block rendering (sync) or be non-blocking (async)",
+        "isCorrect": true,
+        "explanation": "Correct. decoding controls whether image decoding blocks rendering."
+      },
+      {
+        "id": "o2",
+        "text": "Specifies the image file format",
+        "isCorrect": false,
+        "explanation": "Incorrect. The file extension or type attribute specifies format."
+      },
+      {
+        "id": "o3",
+        "text": "Controls image quality compression",
+        "isCorrect": false,
+        "explanation": "Incorrect. Compression is handled server-side or by format choice."
+      },
+      {
+        "id": "o4",
+        "text": "Determines image display size",
+        "isCorrect": false,
+        "explanation": "Incorrect. width and height attributes control display size."
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=qz0aGYrrlhU",
+        "type": "video",
+        "title": "HTML Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "1:09:30",
+        "description": "Learn HTML from scratch"
+      },
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/HTML",
+        "type": "article",
+        "title": "HTML: HyperText Markup Language - MDN",
+        "author": "Mozilla Developer Network",
+        "description": "Complete HTML reference and guide"
+      }
+    ],
+    "points": 15,
+    "isActive": true,
+    "createdAt": "2025-11-19T19:39:18.744944+00:00",
+    "updatedAt": "2025-11-24T23:33:46.870735+00:00"
+  },
+  {
+    "id": "41633a8d-3508-4b54-8e0a-65e2cc71567f",
+    "title": "autocomplete attribute",
+    "content": "Form security requires multiple strategies. Identify attributes and techniques that help prevent spam and abuse.",
+    "type": "multiple-choice",
+    "difficulty": "advanced",
+    "explanation": "'autocomplete' can help (but not prevent spam). 'name' attributes are required but don't prevent spam. Server-side validation, CAPTCHA, rate limiting, and CSRF tokens are needed. HTML5 validation can be bypassed. No single HTML attribute prevents spam.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "CSRF tokens (server-side)",
+        "isCorrect": true,
+        "explanation": "Correct. CSRF tokens help prevent cross-site request forgery."
+      },
+      {
+        "id": "o2",
+        "text": "HTML5 validation attributes",
+        "isCorrect": false,
+        "explanation": "Incorrect. Client-side validation can be bypassed."
+      },
+      {
+        "id": "o3",
+        "text": "Rate limiting (server-side)",
+        "isCorrect": true,
+        "explanation": "Correct. Rate limiting prevents abuse."
+      },
+      {
+        "id": "o4",
+        "text": "autocomplete attribute",
+        "isCorrect": false,
+        "explanation": "Incorrect. autocomplete doesn't prevent spam."
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=qz0aGYrrlhU",
+        "type": "video",
+        "title": "HTML Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "1:09:30",
+        "description": "Learn HTML from scratch"
+      },
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/HTML",
+        "type": "article",
+        "title": "HTML: HyperText Markup Language - MDN",
+        "author": "Mozilla Developer Network",
+        "description": "Complete HTML reference and guide"
+      }
+    ],
+    "points": 20,
+    "isActive": true,
+    "createdAt": "2025-11-19T19:39:18.744944+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "cc4daa84-81d6-4c7b-aeaa-25ef11ac48c9",
+    "title": "method is deprecated, use formmethod instead",
+    "content": "Form submission methods can be customized. Explain formmethod attribute and how it relates to form's method attribute.",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "'method' on <form sets default HTTP method (GET/POST). 'formmethod' on submit button overrides method for that specific button. Allows different buttons to use different methods (e.g., one button POSTs, another GETs for preview).",
+    "options": [
+      {
+        "id": "o1",
+        "text": "formmethod overrides form's method attribute for that specific submit button",
+        "isCorrect": true,
+        "explanation": "Correct. formmethod allows per-button method override."
+      },
+      {
+        "id": "o2",
+        "text": "They are identical and interchangeable",
+        "isCorrect": false,
+        "explanation": "Incorrect. formmethod is button-specific, method is form-wide."
+      },
+      {
+        "id": "o3",
+        "text": "formmethod is for GET only, method is for POST only",
+        "isCorrect": false,
+        "explanation": "Incorrect. Both can use GET or POST."
+      },
+      {
+        "id": "o4",
+        "text": "method is deprecated, use formmethod instead",
+        "isCorrect": false,
+        "explanation": "Incorrect. Both are valid, method is form-wide default."
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=qz0aGYrrlhU",
+        "type": "video",
+        "title": "HTML Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "1:09:30",
+        "description": "Learn HTML from scratch"
+      },
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/HTML",
+        "type": "article",
+        "title": "HTML: HyperText Markup Language - MDN",
+        "author": "Mozilla Developer Network",
+        "description": "Complete HTML reference and guide"
+      }
+    ],
+    "points": 15,
+    "isActive": true,
+    "createdAt": "2025-11-19T19:39:18.744944+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "9c8cd1ea-75e3-4f1b-8571-6cd897f2e7d1",
+    "title": "style attribute",
+    "content": "Mobile forms require specific considerations. Identify attributes that enhance mobile UX.",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "'inputmode' suggests mobile keyboard type. 'autocomplete' helps with autofill. 'placeholder' provides hints. 'type' (email, tel, number) shows appropriate keyboards. 'required' provides validation feedback.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "inputmode (suggests keyboard type)",
+        "isCorrect": true,
+        "explanation": "Correct. inputmode helps show appropriate mobile keyboard."
+      },
+      {
+        "id": "o2",
+        "text": "type='email' or 'tel' (shows appropriate keyboard)",
+        "isCorrect": true,
+        "explanation": "Correct. Specific input types show specialized keyboards."
+      },
+      {
+        "id": "o3",
+        "text": "autocomplete (helps with autofill)",
+        "isCorrect": true,
+        "explanation": "Correct. autocomplete improves mobile form filling."
+      },
+      {
+        "id": "o4",
+        "text": "style attribute",
+        "isCorrect": false,
+        "explanation": "Incorrect. style doesn't specifically improve mobile UX for forms."
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=qz0aGYrrlhU",
+        "type": "video",
+        "title": "HTML Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "1:09:30",
+        "description": "Learn HTML from scratch"
+      },
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/HTML",
+        "type": "article",
+        "title": "HTML: HyperText Markup Language - MDN",
+        "author": "Mozilla Developer Network",
+        "description": "Complete HTML reference and guide"
+      }
+    ],
+    "points": 15,
+    "isActive": true,
+    "createdAt": "2025-11-19T19:39:18.744944+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "299151ab-6b79-47f9-b5e2-381a56adfeb0",
+    "title": "style (for positioning)",
+    "content": "Images need proper attributes for accessibility and search engines. Identify which attributes are important.",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "'alt' is required for accessibility and SEO. 'title' provides additional context. 'loading' improves performance. 'width' and 'height' prevent layout shift. 'srcset' and 'sizes' enable responsive images.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "alt (required for accessibility)",
+        "isCorrect": true,
+        "explanation": "Correct. alt is essential for screen readers and SEO."
+      },
+      {
+        "id": "o2",
+        "text": "width and height (prevent layout shift)",
+        "isCorrect": true,
+        "explanation": "Correct. Dimensions prevent Cumulative Layout Shift."
+      },
+      {
+        "id": "o3",
+        "text": "loading (improves performance)",
+        "isCorrect": true,
+        "explanation": "Correct. Lazy loading improves page load performance."
+      },
+      {
+        "id": "o4",
+        "text": "style (for positioning)",
+        "isCorrect": false,
+        "explanation": "Incorrect. style doesn't improve accessibility or SEO."
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=qz0aGYrrlhU",
+        "type": "video",
+        "title": "HTML Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "1:09:30",
+        "description": "Learn HTML from scratch"
+      },
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/HTML",
+        "type": "article",
+        "title": "HTML: HyperText Markup Language - MDN",
+        "author": "Mozilla Developer Network",
+        "description": "Complete HTML reference and guide"
+      }
+    ],
+    "points": 15,
+    "isActive": true,
+    "createdAt": "2025-11-19T19:39:18.744944+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "d54b5bd2-595e-4b54-ab18-8aa6f77c42ff",
+    "title": "title",
+    "content": "Anchor tags need specific attributes. Identify which attributes are essential for proper link functionality.",
+    "type": "code",
+    "difficulty": "intermediate",
+    "explanation": "'href' is required for navigation (can be '#' or 'javascript:void(0)' for no-op). 'target' is optional (opens in new window). 'rel' is optional but recommended for security (noopener, noreferrer). 'title' is optional for tooltips.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "href",
+        "isCorrect": true,
+        "explanation": "Correct. href is required for link functionality."
+      },
+      {
+        "id": "o2",
+        "text": "target",
+        "isCorrect": false,
+        "explanation": "Incorrect. target is optional."
+      },
+      {
+        "id": "o3",
+        "text": "rel",
+        "isCorrect": false,
+        "explanation": "Incorrect. rel is optional but recommended for security."
+      },
+      {
+        "id": "o4",
+        "text": "title",
+        "isCorrect": false,
+        "explanation": "Incorrect. title is optional for tooltips."
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=qz0aGYrrlhU",
+        "type": "video",
+        "title": "HTML Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "1:09:30",
+        "description": "Learn HTML from scratch"
+      },
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/HTML",
+        "type": "article",
+        "title": "HTML: HyperText Markup Language - MDN",
+        "author": "Mozilla Developer Network",
+        "description": "Complete HTML reference and guide"
+      }
+    ],
+    "points": 15,
+    "isActive": true,
+    "createdAt": "2025-11-19T19:39:18.744944+00:00",
+    "updatedAt": "2025-11-24T23:33:46.870735+00:00"
+  },
+  {
+    "id": "f1cd362d-8b47-4877-bcfa-54e6b1c37bcd",
+    "title": "Modern browsers handle all cases identically regardless of choice",
+    "content": "Drag and drop interactions enhance UX. Explain the HTML5 Drag and Drop API, events, and dataTransfer for implementing drag operations.",
+    "type": "code",
+    "difficulty": "advanced",
+    "explanation": "Drag and Drop API enables drag operations: dragstart, drag, dragend (draggable element), dragover, drop (drop zone). dataTransfer object stores data (setData/getData), controls drop effect (copy, move, link), provides files. Requires draggable='true' attribute. Complex API with many edge cases, browser differences.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Drag and Drop API enables drag operations: dragstart, drag, dragend (draggable element), dragover, drop (drop zone).",
+        "isCorrect": true,
+        "explanation": "Correct. Drag and Drop API enables drag operations: dragstart, drag, dragend (draggable element), dragover, drop (drop zone). dataTransfer object stores data (setData/getData), controls drop effect (copy, move, link), provides files. Requires draggable='true' attribute. Complex API with many edge cases, browser differences."
+      },
+      {
+        "id": "o2",
+        "text": "All options are equivalent and can be used interchangeably",
+        "isCorrect": false,
+        "explanation": "Incorrect. There are important semantic and functional differences."
+      },
+      {
+        "id": "o3",
+        "text": "The differences are only visual and don't affect functionality",
+        "isCorrect": false,
+        "explanation": "Incorrect. These differences affect semantics, accessibility, and behavior."
+      },
+      {
+        "id": "o4",
+        "text": "Modern browsers handle all cases identically regardless of choice",
+        "isCorrect": false,
+        "explanation": "Incorrect. Browser behavior and accessibility features differ based on element choice."
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=qz0aGYrrlhU",
+        "type": "video",
+        "title": "HTML Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "1:09:30",
+        "description": "Learn HTML from scratch"
+      },
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/HTML",
+        "type": "article",
+        "title": "HTML: HyperText Markup Language - MDN",
+        "author": "Mozilla Developer Network",
+        "description": "Complete HTML reference and guide"
+      }
+    ],
+    "points": 20,
+    "isActive": true,
+    "createdAt": "2025-11-19T19:37:28.146203+00:00",
+    "updatedAt": "2025-11-24T23:33:46.870735+00:00"
+  },
+  {
+    "id": "d250b764-8ca6-4277-b651-fc67b6a56891",
+    "title": "Modern browsers handle all cases identically regardless of choice",
+    "content": "Audio manipulation requires specialized APIs. Explain Web Audio API and its use cases for audio processing.",
+    "type": "code",
+    "difficulty": "advanced",
+    "explanation": "Web Audio API provides low-level audio processing: AudioContext, AudioNodes (source, effects, destination), audio routing/graph. Enables audio synthesis, effects, analysis, visualization. More powerful than <audio element (programmatic control, real-time processing). Use for music apps, games, audio editors. Complex API with learning curve.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Web Audio API provides low-level audio processing: AudioContext, AudioNodes (source, effects, destination), audio routing/graph.",
+        "isCorrect": true,
+        "explanation": "Correct. Web Audio API provides low-level audio processing: AudioContext, AudioNodes (source, effects, destination), audio routing/graph. Enables audio synthesis, effects, analysis, visualization. More powerful than <audio> element (programmatic control, real-time processing). Use for music apps, games, audio editors. Complex API with learning curve."
+      },
+      {
+        "id": "o2",
+        "text": "All options are equivalent and can be used interchangeably",
+        "isCorrect": false,
+        "explanation": "Incorrect. There are important semantic and functional differences."
+      },
+      {
+        "id": "o3",
+        "text": "The differences are only visual and don't affect functionality",
+        "isCorrect": false,
+        "explanation": "Incorrect. These differences affect semantics, accessibility, and behavior."
+      },
+      {
+        "id": "o4",
+        "text": "Modern browsers handle all cases identically regardless of choice",
+        "isCorrect": false,
+        "explanation": "Incorrect. Browser behavior and accessibility features differ based on element choice."
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=qz0aGYrrlhU",
+        "type": "video",
+        "title": "HTML Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "1:09:30",
+        "description": "Learn HTML from scratch"
+      },
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/HTML",
+        "type": "article",
+        "title": "HTML: HyperText Markup Language - MDN",
+        "author": "Mozilla Developer Network",
+        "description": "Complete HTML reference and guide"
+      }
+    ],
+    "points": 20,
+    "isActive": true,
+    "createdAt": "2025-11-19T19:37:28.146203+00:00",
+    "updatedAt": "2025-11-24T23:33:46.870735+00:00"
+  },
+  {
+    "id": "130b183c-84ea-4058-a1be-4724d732bce6",
+    "title": "Modern browsers handle all cases identically regardless of choice",
+    "content": "Performance requires offloading work. Explain Web Workers and how they enable multithreading in JavaScript.",
+    "type": "code",
+    "difficulty": "advanced",
+    "explanation": "Web Workers run JavaScript in background thread, don't block main thread. No DOM access, communicate via postMessage/onmessage. Use for CPU-intensive tasks (image processing, calculations, parsing). Dedicated Workers (single script), Shared Workers (multiple tabs), Service Workers (PWA). Improves responsiveness for heavy computations.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Web Workers run JavaScript in background thread, don't block main thread.",
+        "isCorrect": true,
+        "explanation": "Correct. Web Workers run JavaScript in background thread, don't block main thread. No DOM access, communicate via postMessage/onmessage. Use for CPU-intensive tasks (image processing, calculations, parsing). Dedicated Workers (single script), Shared Workers (multiple tabs), Service Workers (PWA). Improves responsiveness for heavy computations."
+      },
+      {
+        "id": "o2",
+        "text": "All options are equivalent and can be used interchangeably",
+        "isCorrect": false,
+        "explanation": "Incorrect. There are important semantic and functional differences."
+      },
+      {
+        "id": "o3",
+        "text": "The differences are only visual and don't affect functionality",
+        "isCorrect": false,
+        "explanation": "Incorrect. These differences affect semantics, accessibility, and behavior."
+      },
+      {
+        "id": "o4",
+        "text": "Modern browsers handle all cases identically regardless of choice",
+        "isCorrect": false,
+        "explanation": "Incorrect. Browser behavior and accessibility features differ based on element choice."
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=qz0aGYrrlhU",
+        "type": "video",
+        "title": "HTML Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "1:09:30",
+        "description": "Learn HTML from scratch"
+      },
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/HTML",
+        "type": "article",
+        "title": "HTML: HyperText Markup Language - MDN",
+        "author": "Mozilla Developer Network",
+        "description": "Complete HTML reference and guide"
+      }
+    ],
+    "points": 20,
+    "isActive": true,
+    "createdAt": "2025-11-19T19:37:28.146203+00:00",
+    "updatedAt": "2025-11-24T23:33:46.870735+00:00"
+  },
+  {
+    "id": "c13cab41-3d52-4faf-8d6f-16746d11fac2",
+    "title": "Modern browsers handle all cases identically regardless of choice",
+    "content": "Real-time communication requires persistent connections. Explain WebSocket API and how it differs from HTTP polling.",
+    "type": "code",
+    "difficulty": "advanced",
+    "explanation": "WebSocket provides full-duplex communication over single TCP connection. Persistent connection (not request/response like HTTP). Lower latency, less overhead than HTTP polling. Events: onopen, onmessage, onerror, onclose. Methods: send(), close(). Use for chat, live updates, gaming. Requires WebSocket server.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "WebSocket provides full-duplex communication over single TCP connection.",
+        "isCorrect": true,
+        "explanation": "Correct. WebSocket provides full-duplex communication over single TCP connection. Persistent connection (not request/response like HTTP). Lower latency, less overhead than HTTP polling. Events: onopen, onmessage, onerror, onclose. Methods: send(), close(). Use for chat, live updates, gaming. Requires WebSocket server."
+      },
+      {
+        "id": "o2",
+        "text": "All options are equivalent and can be used interchangeably",
+        "isCorrect": false,
+        "explanation": "Incorrect. There are important semantic and functional differences."
+      },
+      {
+        "id": "o3",
+        "text": "The differences are only visual and don't affect functionality",
+        "isCorrect": false,
+        "explanation": "Incorrect. These differences affect semantics, accessibility, and behavior."
+      },
+      {
+        "id": "o4",
+        "text": "Modern browsers handle all cases identically regardless of choice",
+        "isCorrect": false,
+        "explanation": "Incorrect. Browser behavior and accessibility features differ based on element choice."
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=qz0aGYrrlhU",
+        "type": "video",
+        "title": "HTML Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "1:09:30",
+        "description": "Learn HTML from scratch"
+      },
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/HTML",
+        "type": "article",
+        "title": "HTML: HyperText Markup Language - MDN",
+        "author": "Mozilla Developer Network",
+        "description": "Complete HTML reference and guide"
+      }
+    ],
+    "points": 20,
+    "isActive": true,
+    "createdAt": "2025-11-19T19:37:28.146203+00:00",
+    "updatedAt": "2025-11-24T23:33:46.870735+00:00"
+  },
+  {
+    "id": "9df129c5-c176-4939-9e9b-e1adb5480c69",
+    "title": "Modern browsers handle all cases identically regardless of choice",
+    "content": "Graphics rendering has multiple approaches. Explain Canvas API vs SVG and their different use cases.",
+    "type": "code",
+    "difficulty": "intermediate",
+    "explanation": "Canvas is pixel-based, imperative (draw commands), good for games, image manipulation, dynamic graphics. SVG is vector-based, declarative (XML), scalable, accessible, good for icons, illustrations, interactive graphics. Canvas better for performance (many objects), SVG better for scalability and accessibility.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Canvas is pixel-based, imperative (draw commands), good for games, image manipulation, dynamic graphics.",
+        "isCorrect": true,
+        "explanation": "Correct. Canvas is pixel-based, imperative (draw commands), good for games, image manipulation, dynamic graphics. SVG is vector-based, declarative (XML), scalable, accessible, good for icons, illustrations, interactive graphics. Canvas better for performance (many objects), SVG better for scalability and accessibility."
+      },
+      {
+        "id": "o2",
+        "text": "All options are equivalent and can be used interchangeably",
+        "isCorrect": false,
+        "explanation": "Incorrect. There are important semantic and functional differences."
+      },
+      {
+        "id": "o3",
+        "text": "The differences are only visual and don't affect functionality",
+        "isCorrect": false,
+        "explanation": "Incorrect. These differences affect semantics, accessibility, and behavior."
+      },
+      {
+        "id": "o4",
+        "text": "Modern browsers handle all cases identically regardless of choice",
+        "isCorrect": false,
+        "explanation": "Incorrect. Browser behavior and accessibility features differ based on element choice."
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=qz0aGYrrlhU",
+        "type": "video",
+        "title": "HTML Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "1:09:30",
+        "description": "Learn HTML from scratch"
+      },
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/HTML",
+        "type": "article",
+        "title": "HTML: HyperText Markup Language - MDN",
+        "author": "Mozilla Developer Network",
+        "description": "Complete HTML reference and guide"
+      }
+    ],
+    "points": 15,
+    "isActive": true,
+    "createdAt": "2025-11-19T19:37:28.146203+00:00",
+    "updatedAt": "2025-11-24T23:33:46.870735+00:00"
+  },
+  {
+    "id": "02e184bb-a76f-4be2-9ee6-9ee2cc813182",
+    "title": "Modern browsers handle all cases identically regardless of choice",
+    "content": "Client-side file handling enables rich interactions. Explain File API, FileReader, and how to process files before upload.",
+    "type": "code",
+    "difficulty": "intermediate",
+    "explanation": "File API provides access to file objects from <input type='file'>. FileReader reads file contents as text, data URL, array buffer, or binary string. Methods: readAsText(), readAsDataURL(), readAsArrayBuffer(). Enables client-side image preview, file validation, parsing before upload. Asynchronous API with onload/onerror handlers.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "File API provides access to file objects from <input type='file'>.",
+        "isCorrect": true,
+        "explanation": "Correct. File API provides access to file objects from <input type='file'>. FileReader reads file contents as text, data URL, array buffer, or binary string. Methods: readAsText(), readAsDataURL(), readAsArrayBuffer(). Enables client-side image preview, file validation, parsing before upload. Asynchronous API with onload/onerror handlers."
+      },
+      {
+        "id": "o2",
+        "text": "All options are equivalent and can be used interchangeably",
+        "isCorrect": false,
+        "explanation": "Incorrect. There are important semantic and functional differences."
+      },
+      {
+        "id": "o3",
+        "text": "The differences are only visual and don't affect functionality",
+        "isCorrect": false,
+        "explanation": "Incorrect. These differences affect semantics, accessibility, and behavior."
+      },
+      {
+        "id": "o4",
+        "text": "Modern browsers handle all cases identically regardless of choice",
+        "isCorrect": false,
+        "explanation": "Incorrect. Browser behavior and accessibility features differ based on element choice."
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=qz0aGYrrlhU",
+        "type": "video",
+        "title": "HTML Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "1:09:30",
+        "description": "Learn HTML from scratch"
+      },
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/HTML",
+        "type": "article",
+        "title": "HTML: HyperText Markup Language - MDN",
+        "author": "Mozilla Developer Network",
+        "description": "Complete HTML reference and guide"
+      }
+    ],
+    "points": 15,
+    "isActive": true,
+    "createdAt": "2025-11-19T19:37:28.146203+00:00",
+    "updatedAt": "2025-11-24T23:33:46.870735+00:00"
+  },
+  {
+    "id": "7f5d9200-560b-4f35-b17a-a1654583bbd7",
+    "title": "Modern browsers handle all cases identically regardless of choice",
+    "content": "Scroll performance requires efficient observation. Explain Intersection Observer and how it replaces scroll event listeners for better performance.",
+    "type": "code",
+    "difficulty": "intermediate",
+    "explanation": "Intersection Observer efficiently detects when elements enter/leave viewport. Replaces scroll event listeners (more performant, doesn't block main thread). Use for lazy loading images, infinite scroll, scroll animations, analytics. Callback fires when threshold crossed. Better performance than scroll events, especially for many elements.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Intersection Observer efficiently detects when elements enter/leave viewport.",
+        "isCorrect": true,
+        "explanation": "Correct. Intersection Observer efficiently detects when elements enter/leave viewport. Replaces scroll event listeners (more performant, doesn't block main thread). Use for lazy loading images, infinite scroll, scroll animations, analytics. Callback fires when threshold crossed. Better performance than scroll events, especially for many elements."
+      },
+      {
+        "id": "o2",
+        "text": "All options are equivalent and can be used interchangeably",
+        "isCorrect": false,
+        "explanation": "Incorrect. There are important semantic and functional differences."
+      },
+      {
+        "id": "o3",
+        "text": "The differences are only visual and don't affect functionality",
+        "isCorrect": false,
+        "explanation": "Incorrect. These differences affect semantics, accessibility, and behavior."
+      },
+      {
+        "id": "o4",
+        "text": "Modern browsers handle all cases identically regardless of choice",
+        "isCorrect": false,
+        "explanation": "Incorrect. Browser behavior and accessibility features differ based on element choice."
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=qz0aGYrrlhU",
+        "type": "video",
+        "title": "HTML Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "1:09:30",
+        "description": "Learn HTML from scratch"
+      },
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/HTML",
+        "type": "article",
+        "title": "HTML: HyperText Markup Language - MDN",
+        "author": "Mozilla Developer Network",
+        "description": "Complete HTML reference and guide"
+      }
+    ],
+    "points": 15,
+    "isActive": true,
+    "createdAt": "2025-11-19T19:37:28.146203+00:00",
+    "updatedAt": "2025-11-24T23:33:46.870735+00:00"
+  },
+  {
+    "id": "2fe621ce-3628-402e-a0af-b2f36dff1ffd",
+    "title": "Modern browsers handle all cases identically regardless of choice",
+    "content": "SPAs need URL management. Explain the History API and how it enables client-side routing without page reloads.",
+    "type": "code",
+    "difficulty": "intermediate",
+    "explanation": "History API manipulates browser history: pushState() (adds entry, changes URL), replaceState() (replaces current entry), popstate event (fires on back/forward). Enables SPA routing, maintains browser history, allows bookmarking. URL changes without page reload. Must handle popstate for back/forward navigation.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "History API manipulates browser history: pushState() (adds entry, changes URL), replaceState() (replaces current entry), popstate event (fires on back/forward).",
+        "isCorrect": true,
+        "explanation": "Correct. History API manipulates browser history: pushState() (adds entry, changes URL), replaceState() (replaces current entry), popstate event (fires on back/forward). Enables SPA routing, maintains browser history, allows bookmarking. URL changes without page reload. Must handle popstate for back/forward navigation."
+      },
+      {
+        "id": "o2",
+        "text": "All options are equivalent and can be used interchangeably",
+        "isCorrect": false,
+        "explanation": "Incorrect. There are important semantic and functional differences."
+      },
+      {
+        "id": "o3",
+        "text": "The differences are only visual and don't affect functionality",
+        "isCorrect": false,
+        "explanation": "Incorrect. These differences affect semantics, accessibility, and behavior."
+      },
+      {
+        "id": "o4",
+        "text": "Modern browsers handle all cases identically regardless of choice",
+        "isCorrect": false,
+        "explanation": "Incorrect. Browser behavior and accessibility features differ based on element choice."
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=qz0aGYrrlhU",
+        "type": "video",
+        "title": "HTML Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "1:09:30",
+        "description": "Learn HTML from scratch"
+      },
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/HTML",
+        "type": "article",
+        "title": "HTML: HyperText Markup Language - MDN",
+        "author": "Mozilla Developer Network",
+        "description": "Complete HTML reference and guide"
+      }
+    ],
+    "points": 15,
+    "isActive": true,
+    "createdAt": "2025-11-19T19:37:28.146203+00:00",
+    "updatedAt": "2025-11-24T23:33:46.870735+00:00"
+  },
+  {
+    "id": "67d87bbe-fec0-49b6-ba25-5e43147c6180",
+    "title": "<div",
+    "content": "Understanding HTML5 semantic elements is crucial. Identify which elements are valid HTML5 semantic elements.",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "<header, <nav, <main, <articl, <section, <asid, and <footer are all valid HTML5 semantic elements. <div and <span are generic containers, not semantic elements.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "<header",
+        "isCorrect": true,
+        "explanation": "Correct. <header> is a semantic HTML5 element."
+      },
+      {
+        "id": "o2",
+        "text": "<nav",
+        "isCorrect": true,
+        "explanation": "Correct. <nav> is a semantic HTML5 element."
+      },
+      {
+        "id": "o3",
+        "text": "<main",
+        "isCorrect": true,
+        "explanation": "Correct. <main> is a semantic HTML5 element."
+      },
+      {
+        "id": "o4",
+        "text": "<div",
+        "isCorrect": false,
+        "explanation": "Incorrect. <div> is a generic container, not a semantic element."
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=qz0aGYrrlhU",
+        "type": "video",
+        "title": "HTML Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "1:09:30",
+        "description": "Learn HTML from scratch"
+      },
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/HTML",
+        "type": "article",
+        "title": "HTML: HyperText Markup Language - MDN",
+        "author": "Mozilla Developer Network",
+        "description": "Complete HTML reference and guide"
+      }
+    ],
+    "points": 15,
+    "isActive": true,
+    "createdAt": "2025-11-19T19:37:28.146203+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "7f369035-258e-44c2-b8cd-7982cedd77cf",
+    "title": "Numeric values only",
+    "content": "The contenteditable attribute allows users to edit content. Explain its valid values and behavior.",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "contenteditable can be 'true' (editable), 'false' (not editable), or 'inherit' (inherits from parent). Empty string is treated as 'true'. Used for rich text editors, inline editing, and interactive content.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "'true', 'false', or 'inherit'",
+        "isCorrect": true,
+        "explanation": "Correct. These are the valid values for contenteditable."
+      },
+      {
+        "id": "o2",
+        "text": "Only 'true' or 'false'",
+        "isCorrect": false,
+        "explanation": "Incorrect. 'inherit' is also a valid value."
+      },
+      {
+        "id": "o3",
+        "text": "Any string value",
+        "isCorrect": false,
+        "explanation": "Incorrect. Only specific values are recognized."
+      },
+      {
+        "id": "o4",
+        "text": "Numeric values only",
+        "isCorrect": false,
+        "explanation": "Incorrect. contenteditable uses string values."
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=qz0aGYrrlhU",
+        "type": "video",
+        "title": "HTML Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "1:09:30",
+        "description": "Learn HTML from scratch"
+      },
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/HTML",
+        "type": "article",
+        "title": "HTML: HyperText Markup Language - MDN",
+        "author": "Mozilla Developer Network",
+        "description": "Complete HTML reference and guide"
+      }
+    ],
+    "points": 15,
+    "isActive": true,
+    "createdAt": "2025-11-19T19:37:28.146203+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "26fbeaee-0d41-46c7-9c57-a7b7b6996e9c",
+    "title": "Modern browsers handle all cases identically regardless of choice",
+    "content": "Conditional CSS loading optimizes performance. Explain the media attribute and how it defers non-matching stylesheets.",
+    "type": "code",
+    "difficulty": "intermediate",
+    "explanation": "'media' attribute on <link rel='stylesheet'> specifies media query. Browser only loads stylesheet if media matches. Non-matching stylesheets are marked as non-render-blocking. Use for print stylesheets (media='print'), mobile-specific CSS, or conditional feature CSS. Reduces initial CSS payload.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "'media' attribute on <link rel='stylesheet'> specifies media query.",
+        "isCorrect": true,
+        "explanation": "Correct. 'media' attribute on <link rel='stylesheet'> specifies media query. Browser only loads stylesheet if media matches. Non-matching stylesheets are marked as non-render-blocking. Use for print stylesheets (media='print'), mobile-specific CSS, or conditional feature CSS. Reduces initial CSS payload."
+      },
+      {
+        "id": "o2",
+        "text": "All options are equivalent and can be used interchangeably",
+        "isCorrect": false,
+        "explanation": "Incorrect. There are important semantic and functional differences."
+      },
+      {
+        "id": "o3",
+        "text": "The differences are only visual and don't affect functionality",
+        "isCorrect": false,
+        "explanation": "Incorrect. These differences affect semantics, accessibility, and behavior."
+      },
+      {
+        "id": "o4",
+        "text": "Modern browsers handle all cases identically regardless of choice",
+        "isCorrect": false,
+        "explanation": "Incorrect. Browser behavior and accessibility features differ based on element choice."
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=qz0aGYrrlhU",
+        "type": "video",
+        "title": "HTML Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "1:09:30",
+        "description": "Learn HTML from scratch"
+      },
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/HTML",
+        "type": "article",
+        "title": "HTML: HyperText Markup Language - MDN",
+        "author": "Mozilla Developer Network",
+        "description": "Complete HTML reference and guide"
+      }
+    ],
+    "points": 15,
+    "isActive": true,
+    "createdAt": "2025-11-19T19:23:45.154611+00:00",
+    "updatedAt": "2025-11-24T23:33:46.870735+00:00"
+  },
+  {
+    "id": "8b9b351b-bbeb-422b-9e3a-848058b06652",
+    "title": "Modern browsers handle all cases identically regardless of choice",
+    "content": "Modern JavaScript requires fallback strategies. Explain type='module' and nomodule for progressive enhancement and performance.",
+    "type": "code",
+    "difficulty": "intermediate",
+    "explanation": "'type=module' loads ES6 modules (import/export) in modern browsers. 'nomodule' provides fallback for older browsers. Modern browsers load module, ignore nomodule. Old browsers ignore module, load nomodule. Enables modern JS with backward compatibility. Reduces bundle size for modern browsers.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "'type=module' loads ES6 modules (import/export) in modern browsers.",
+        "isCorrect": true,
+        "explanation": "Correct. 'type=module' loads ES6 modules (import/export) in modern browsers. 'nomodule' provides fallback for older browsers. Modern browsers load module, ignore nomodule. Old browsers ignore module, load nomodule. Enables modern JS with backward compatibility. Reduces bundle size for modern browsers."
+      },
+      {
+        "id": "o2",
+        "text": "All options are equivalent and can be used interchangeably",
+        "isCorrect": false,
+        "explanation": "Incorrect. There are important semantic and functional differences."
+      },
+      {
+        "id": "o3",
+        "text": "The differences are only visual and don't affect functionality",
+        "isCorrect": false,
+        "explanation": "Incorrect. These differences affect semantics, accessibility, and behavior."
+      },
+      {
+        "id": "o4",
+        "text": "Modern browsers handle all cases identically regardless of choice",
+        "isCorrect": false,
+        "explanation": "Incorrect. Browser behavior and accessibility features differ based on element choice."
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=qz0aGYrrlhU",
+        "type": "video",
+        "title": "HTML Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "1:09:30",
+        "description": "Learn HTML from scratch"
+      },
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/HTML",
+        "type": "article",
+        "title": "HTML: HyperText Markup Language - MDN",
+        "author": "Mozilla Developer Network",
+        "description": "Complete HTML reference and guide"
+      }
+    ],
+    "points": 15,
+    "isActive": true,
+    "createdAt": "2025-11-19T19:23:45.154611+00:00",
+    "updatedAt": "2025-11-24T23:33:46.870735+00:00"
+  },
+  {
+    "id": "ea98f840-481d-4340-b451-9ad5b4de22ee",
+    "title": "Modern browsers handle all cases identically regardless of choice",
+    "content": "Client-side storage is essential for modern web apps. Explain localStorage vs sessionStorage and when to use each.",
+    "type": "code",
+    "difficulty": "intermediate",
+    "explanation": "localStorage persists across browser sessions (until cleared). sessionStorage persists only for tab session (cleared on tab close). Both store key-value pairs (strings only, ~5-10MB limit). localStorage for user preferences, sessionStorage for temporary data. Both are synchronous, can block main thread.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "localStorage persists across browser sessions (until cleared).",
+        "isCorrect": true,
+        "explanation": "Correct. localStorage persists across browser sessions (until cleared). sessionStorage persists only for tab session (cleared on tab close). Both store key-value pairs (strings only, ~5-10MB limit). localStorage for user preferences, sessionStorage for temporary data. Both are synchronous, can block main thread."
+      },
+      {
+        "id": "o2",
+        "text": "All options are equivalent and can be used interchangeably",
+        "isCorrect": false,
+        "explanation": "Incorrect. There are important semantic and functional differences."
+      },
+      {
+        "id": "o3",
+        "text": "The differences are only visual and don't affect functionality",
+        "isCorrect": false,
+        "explanation": "Incorrect. These differences affect semantics, accessibility, and behavior."
+      },
+      {
+        "id": "o4",
+        "text": "Modern browsers handle all cases identically regardless of choice",
+        "isCorrect": false,
+        "explanation": "Incorrect. Browser behavior and accessibility features differ based on element choice."
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=qz0aGYrrlhU",
+        "type": "video",
+        "title": "HTML Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "1:09:30",
+        "description": "Learn HTML from scratch"
+      },
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/HTML",
+        "type": "article",
+        "title": "HTML: HyperText Markup Language - MDN",
+        "author": "Mozilla Developer Network",
+        "description": "Complete HTML reference and guide"
+      }
+    ],
+    "points": 15,
+    "isActive": true,
+    "createdAt": "2025-11-19T19:23:45.154611+00:00",
+    "updatedAt": "2025-11-24T23:33:46.870735+00:00"
+  },
+  {
+    "id": "32aa4bb6-436f-416c-b804-af048185bd7b",
+    "title": "Modern browsers handle all cases identically regardless of choice",
+    "content": "Cross-origin resources require CORS configuration. Explain crossorigin attribute and its impact on resource loading and error reporting.",
+    "type": "code",
+    "difficulty": "advanced",
+    "explanation": "'crossorigin' enables CORS for cross-origin resources. 'anonymous' (no credentials) or 'use-credentials' (with credentials). Required for proper error reporting in window.onerror, enables stricter CORS checks. Without it, errors are opaque. Use when loading resources from different origin, especially for SRI.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "'crossorigin' enables CORS for cross-origin resources.",
+        "isCorrect": true,
+        "explanation": "Correct. 'crossorigin' enables CORS for cross-origin resources. 'anonymous' (no credentials) or 'use-credentials' (with credentials). Required for proper error reporting in window.onerror, enables stricter CORS checks. Without it, errors are opaque. Use when loading resources from different origin, especially for SRI."
+      },
+      {
+        "id": "o2",
+        "text": "All options are equivalent and can be used interchangeably",
+        "isCorrect": false,
+        "explanation": "Incorrect. There are important semantic and functional differences."
+      },
+      {
+        "id": "o3",
+        "text": "The differences are only visual and don't affect functionality",
+        "isCorrect": false,
+        "explanation": "Incorrect. These differences affect semantics, accessibility, and behavior."
+      },
+      {
+        "id": "o4",
+        "text": "Modern browsers handle all cases identically regardless of choice",
+        "isCorrect": false,
+        "explanation": "Incorrect. Browser behavior and accessibility features differ based on element choice."
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=qz0aGYrrlhU",
+        "type": "video",
+        "title": "HTML Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "1:09:30",
+        "description": "Learn HTML from scratch"
+      },
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/HTML",
+        "type": "article",
+        "title": "HTML: HyperText Markup Language - MDN",
+        "author": "Mozilla Developer Network",
+        "description": "Complete HTML reference and guide"
+      }
+    ],
+    "points": 20,
+    "isActive": true,
+    "createdAt": "2025-11-19T19:23:45.154611+00:00",
+    "updatedAt": "2025-11-24T23:33:46.870735+00:00"
+  },
+  {
+    "id": "863c3166-92bc-4ac1-89e1-049335267741",
+    "title": "Modern browsers handle all cases identically regardless of choice",
+    "content": "Script loading strategy impacts performance. Explain defer vs async and their execution timing implications.",
+    "type": "code",
+    "difficulty": "intermediate",
+    "explanation": "'async' downloads in parallel, executes immediately when ready (order not guaranteed). 'defer' downloads in parallel, executes after HTML parsing in document order. Async for independent scripts (analytics). Defer for DOM-dependent scripts. Both prevent render blocking. Defer maintains execution order.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "'async' downloads in parallel, executes immediately when ready (order not guaranteed).",
+        "isCorrect": true,
+        "explanation": "Correct. 'async' downloads in parallel, executes immediately when ready (order not guaranteed). 'defer' downloads in parallel, executes after HTML parsing in document order. Async for independent scripts (analytics). Defer for DOM-dependent scripts. Both prevent render blocking. Defer maintains execution order."
+      },
+      {
+        "id": "o2",
+        "text": "All options are equivalent and can be used interchangeably",
+        "isCorrect": false,
+        "explanation": "Incorrect. There are important semantic and functional differences."
+      },
+      {
+        "id": "o3",
+        "text": "The differences are only visual and don't affect functionality",
+        "isCorrect": false,
+        "explanation": "Incorrect. These differences affect semantics, accessibility, and behavior."
+      },
+      {
+        "id": "o4",
+        "text": "Modern browsers handle all cases identically regardless of choice",
+        "isCorrect": false,
+        "explanation": "Incorrect. Browser behavior and accessibility features differ based on element choice."
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=qz0aGYrrlhU",
+        "type": "video",
+        "title": "HTML Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "1:09:30",
+        "description": "Learn HTML from scratch"
+      },
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/HTML",
+        "type": "article",
+        "title": "HTML: HyperText Markup Language - MDN",
+        "author": "Mozilla Developer Network",
+        "description": "Complete HTML reference and guide"
+      }
+    ],
+    "points": 15,
+    "isActive": true,
+    "createdAt": "2025-11-19T19:23:45.154611+00:00",
+    "updatedAt": "2025-11-24T23:33:46.870735+00:00"
+  },
+  {
+    "id": "9936de36-8bbb-4ef0-926e-ba560ceca0e8",
+    "title": "Modern browsers handle all cases identically regardless of choice",
+    "content": "Lazy loading defers non-critical resources. Explain the loading attribute and its impact on Core Web Vitals.",
+    "type": "code",
+    "difficulty": "intermediate",
+    "explanation": "'loading=lazy' defers image/iframe loading until near viewport. Reduces initial page load, saves bandwidth, improves LCP and FID. Use 'lazy' for below-fold content, 'eager' for above-fold critical images. Native browser support, no JavaScript required. Significant performance improvement for image-heavy pages.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "'loading=lazy' defers image/iframe loading until near viewport.",
+        "isCorrect": true,
+        "explanation": "Correct. 'loading=lazy' defers image/iframe loading until near viewport. Reduces initial page load, saves bandwidth, improves LCP and FID. Use 'lazy' for below-fold content, 'eager' for above-fold critical images. Native browser support, no JavaScript required. Significant performance improvement for image-heavy pages."
+      },
+      {
+        "id": "o2",
+        "text": "All options are equivalent and can be used interchangeably",
+        "isCorrect": false,
+        "explanation": "Incorrect. There are important semantic and functional differences."
+      },
+      {
+        "id": "o3",
+        "text": "The differences are only visual and don't affect functionality",
+        "isCorrect": false,
+        "explanation": "Incorrect. These differences affect semantics, accessibility, and behavior."
+      },
+      {
+        "id": "o4",
+        "text": "Modern browsers handle all cases identically regardless of choice",
+        "isCorrect": false,
+        "explanation": "Incorrect. Browser behavior and accessibility features differ based on element choice."
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=qz0aGYrrlhU",
+        "type": "video",
+        "title": "HTML Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "1:09:30",
+        "description": "Learn HTML from scratch"
+      },
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/HTML",
+        "type": "article",
+        "title": "HTML: HyperText Markup Language - MDN",
+        "author": "Mozilla Developer Network",
+        "description": "Complete HTML reference and guide"
+      }
+    ],
+    "points": 15,
+    "isActive": true,
+    "createdAt": "2025-11-19T19:23:45.154611+00:00",
+    "updatedAt": "2025-11-24T23:33:46.870735+00:00"
+  },
+  {
+    "id": "04801c7d-925c-44df-8088-e32a30e36d6a",
+    "title": "Modern browsers handle all cases identically regardless of choice",
+    "content": "Connection optimization improves performance. Explain dns-prefetch vs preconnect and their use cases for external resources.",
+    "type": "code",
+    "difficulty": "intermediate",
+    "explanation": "'dns-prefetch' only resolves DNS (fast, lightweight). 'preconnect' resolves DNS, establishes TCP connection, performs TLS handshake (more complete, more resource-intensive). Use dns-prefetch for multiple domains, preconnect for critical third-party resources (CDNs, APIs) you'll definitely use. Preconnect is stronger optimization.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "'dns-prefetch' only resolves DNS (fast, lightweight).",
+        "isCorrect": true,
+        "explanation": "Correct. 'dns-prefetch' only resolves DNS (fast, lightweight). 'preconnect' resolves DNS, establishes TCP connection, performs TLS handshake (more complete, more resource-intensive). Use dns-prefetch for multiple domains, preconnect for critical third-party resources (CDNs, APIs) you'll definitely use. Preconnect is stronger optimization."
+      },
+      {
+        "id": "o2",
+        "text": "All options are equivalent and can be used interchangeably",
+        "isCorrect": false,
+        "explanation": "Incorrect. There are important semantic and functional differences."
+      },
+      {
+        "id": "o3",
+        "text": "The differences are only visual and don't affect functionality",
+        "isCorrect": false,
+        "explanation": "Incorrect. These differences affect semantics, accessibility, and behavior."
+      },
+      {
+        "id": "o4",
+        "text": "Modern browsers handle all cases identically regardless of choice",
+        "isCorrect": false,
+        "explanation": "Incorrect. Browser behavior and accessibility features differ based on element choice."
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=qz0aGYrrlhU",
+        "type": "video",
+        "title": "HTML Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "1:09:30",
+        "description": "Learn HTML from scratch"
+      },
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/HTML",
+        "type": "article",
+        "title": "HTML: HyperText Markup Language - MDN",
+        "author": "Mozilla Developer Network",
+        "description": "Complete HTML reference and guide"
+      }
+    ],
+    "points": 15,
+    "isActive": true,
+    "createdAt": "2025-11-19T19:23:45.154611+00:00",
+    "updatedAt": "2025-11-24T23:33:46.870735+00:00"
+  },
+  {
+    "id": "80ad5cfd-9a5f-45dd-88af-d3a3d594b85e",
+    "title": "Modern browsers handle all cases identically regardless of choice",
+    "content": "Referrer policy controls what information is sent. Explain referrerpolicy and its impact on privacy and performance.",
+    "type": "code",
+    "difficulty": "intermediate",
+    "explanation": "'referrerpolicy' controls Referer header: 'no-referrer' (send nothing), 'same-origin' (only same origin), 'strict-origin-when-cross-origin' (default, full URL same-origin, origin only cross-origin). Reduces data leakage, can improve privacy. Some CDNs use referrer for caching optimization.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "'referrerpolicy' controls Referer header: 'no-referrer' (send nothing), 'same-origin' (only same origin), 'strict-origin-when-cross-origin' (default, full URL same-origin, origin only cross-origin).",
+        "isCorrect": true,
+        "explanation": "Correct. 'referrerpolicy' controls Referer header: 'no-referrer' (send nothing), 'same-origin' (only same origin), 'strict-origin-when-cross-origin' (default, full URL same-origin, origin only cross-origin). Reduces data leakage, can improve privacy. Some CDNs use referrer for caching optimization."
+      },
+      {
+        "id": "o2",
+        "text": "All options are equivalent and can be used interchangeably",
+        "isCorrect": false,
+        "explanation": "Incorrect. There are important semantic and functional differences."
+      },
+      {
+        "id": "o3",
+        "text": "The differences are only visual and don't affect functionality",
+        "isCorrect": false,
+        "explanation": "Incorrect. These differences affect semantics, accessibility, and behavior."
+      },
+      {
+        "id": "o4",
+        "text": "Modern browsers handle all cases identically regardless of choice",
+        "isCorrect": false,
+        "explanation": "Incorrect. Browser behavior and accessibility features differ based on element choice."
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=qz0aGYrrlhU",
+        "type": "video",
+        "title": "HTML Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "1:09:30",
+        "description": "Learn HTML from scratch"
+      },
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/HTML",
+        "type": "article",
+        "title": "HTML: HyperText Markup Language - MDN",
+        "author": "Mozilla Developer Network",
+        "description": "Complete HTML reference and guide"
+      }
+    ],
+    "points": 15,
+    "isActive": true,
+    "createdAt": "2025-11-19T19:23:45.154611+00:00",
+    "updatedAt": "2025-11-24T23:33:46.870735+00:00"
+  },
+  {
+    "id": "5bbe71d6-8631-479e-a0c2-d602275c24b2",
+    "title": "Modern browsers handle all cases identically regardless of choice",
+    "content": "Location services require user permission. Explain the Geolocation API and best practices for requesting and using location data.",
+    "type": "code",
+    "difficulty": "intermediate",
+    "explanation": "Geolocation API (navigator.geolocation) requests user location. Requires user permission (privacy-sensitive). Methods: getCurrentPosition() (one-time), watchPosition() (tracking). Options: enableHighAccuracy, timeout, maximumAge. Always request permission clearly, explain why location is needed, handle errors gracefully.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Geolocation API (navigator.",
+        "isCorrect": true,
+        "explanation": "Correct. Geolocation API (navigator.geolocation) requests user location. Requires user permission (privacy-sensitive). Methods: getCurrentPosition() (one-time), watchPosition() (tracking). Options: enableHighAccuracy, timeout, maximumAge. Always request permission clearly, explain why location is needed, handle errors gracefully."
+      },
+      {
+        "id": "o2",
+        "text": "All options are equivalent and can be used interchangeably",
+        "isCorrect": false,
+        "explanation": "Incorrect. There are important semantic and functional differences."
+      },
+      {
+        "id": "o3",
+        "text": "The differences are only visual and don't affect functionality",
+        "isCorrect": false,
+        "explanation": "Incorrect. These differences affect semantics, accessibility, and behavior."
+      },
+      {
+        "id": "o4",
+        "text": "Modern browsers handle all cases identically regardless of choice",
+        "isCorrect": false,
+        "explanation": "Incorrect. Browser behavior and accessibility features differ based on element choice."
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=qz0aGYrrlhU",
+        "type": "video",
+        "title": "HTML Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "1:09:30",
+        "description": "Learn HTML from scratch"
+      },
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/HTML",
+        "type": "article",
+        "title": "HTML: HyperText Markup Language - MDN",
+        "author": "Mozilla Developer Network",
+        "description": "Complete HTML reference and guide"
+      }
+    ],
+    "points": 15,
+    "isActive": true,
+    "createdAt": "2025-11-19T19:23:45.154611+00:00",
+    "updatedAt": "2025-11-24T23:33:46.870735+00:00"
+  },
+  {
+    "id": "05c6d622-aeba-4b15-ad23-c10411a0af67",
+    "title": "Modern browsers handle all cases identically regardless of choice",
+    "content": "CDN resources need integrity verification. Explain SRI and how the integrity attribute prevents tampering and ensures correct resource loading.",
+    "type": "code",
+    "difficulty": "advanced",
+    "explanation": "'integrity' attribute provides cryptographic hash of resource. Browser verifies hash matches before executing/loading. Prevents CDN compromise attacks, ensures correct version loaded. Format: 'sha384-...' or 'sha512-...'. Improves security and prevents malicious code injection from compromised CDNs.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "'integrity' attribute provides cryptographic hash of resource.",
+        "isCorrect": true,
+        "explanation": "Correct. 'integrity' attribute provides cryptographic hash of resource. Browser verifies hash matches before executing/loading. Prevents CDN compromise attacks, ensures correct version loaded. Format: 'sha384-...' or 'sha512-...'. Improves security and prevents malicious code injection from compromised CDNs."
+      },
+      {
+        "id": "o2",
+        "text": "All options are equivalent and can be used interchangeably",
+        "isCorrect": false,
+        "explanation": "Incorrect. There are important semantic and functional differences."
+      },
+      {
+        "id": "o3",
+        "text": "The differences are only visual and don't affect functionality",
+        "isCorrect": false,
+        "explanation": "Incorrect. These differences affect semantics, accessibility, and behavior."
+      },
+      {
+        "id": "o4",
+        "text": "Modern browsers handle all cases identically regardless of choice",
+        "isCorrect": false,
+        "explanation": "Incorrect. Browser behavior and accessibility features differ based on element choice."
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=qz0aGYrrlhU",
+        "type": "video",
+        "title": "HTML Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "1:09:30",
+        "description": "Learn HTML from scratch"
+      },
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/HTML",
+        "type": "article",
+        "title": "HTML: HyperText Markup Language - MDN",
+        "author": "Mozilla Developer Network",
+        "description": "Complete HTML reference and guide"
+      }
+    ],
+    "points": 20,
+    "isActive": true,
+    "createdAt": "2025-11-19T19:23:45.154611+00:00",
+    "updatedAt": "2025-11-24T23:33:46.870735+00:00"
+  },
+  {
+    "id": "8660fa9c-1a94-477e-8a98-ff3fadad4268",
+    "title": "Modern browsers handle all cases identically regardless of choice",
+    "content": "Dynamic content needs ARIA states. Explain how aria-expanded and aria-controls describe expandable/collapsible sections.",
+    "type": "code",
+    "difficulty": "intermediate",
+    "explanation": "'aria-expanded' indicates if controlled element is expanded (true/false). 'aria-controls' references ID of element being controlled. Together they describe relationship: button controls section, section is expanded/collapsed. Essential for accordions, menus, modals. Update aria-expanded when state changes.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "'aria-expanded' indicates if controlled element is expanded (true/false).",
+        "isCorrect": true,
+        "explanation": "Correct. 'aria-expanded' indicates if controlled element is expanded (true/false). 'aria-controls' references ID of element being controlled. Together they describe relationship: button controls section, section is expanded/collapsed. Essential for accordions, menus, modals. Update aria-expanded when state changes."
+      },
+      {
+        "id": "o2",
+        "text": "All options are equivalent and can be used interchangeably",
+        "isCorrect": false,
+        "explanation": "Incorrect. There are important semantic and functional differences."
+      },
+      {
+        "id": "o3",
+        "text": "The differences are only visual and don't affect functionality",
+        "isCorrect": false,
+        "explanation": "Incorrect. These differences affect semantics, accessibility, and behavior."
+      },
+      {
+        "id": "o4",
+        "text": "Modern browsers handle all cases identically regardless of choice",
+        "isCorrect": false,
+        "explanation": "Incorrect. Browser behavior and accessibility features differ based on element choice."
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=qz0aGYrrlhU",
+        "type": "video",
+        "title": "HTML Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "1:09:30",
+        "description": "Learn HTML from scratch"
+      },
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/HTML",
+        "type": "article",
+        "title": "HTML: HyperText Markup Language - MDN",
+        "author": "Mozilla Developer Network",
+        "description": "Complete HTML reference and guide"
+      }
+    ],
+    "points": 15,
+    "isActive": true,
+    "createdAt": "2025-11-19T19:21:50.84979+00:00",
+    "updatedAt": "2025-11-24T23:33:46.870735+00:00"
+  },
+  {
+    "id": "7b91071a-ff49-43d4-91e7-74c563c30bb7",
+    "title": "Modern browsers handle all cases identically regardless of choice",
+    "content": "Resource prioritization improves performance. Explain fetchpriority and how it helps optimize Critical Rendering Path.",
+    "type": "code",
+    "difficulty": "intermediate",
+    "explanation": "'fetchpriority' hints browser loading priority: 'high' (critical resources, above-fold images), 'low' (below-fold, non-critical), 'auto' (default). Helps browser prioritize LCP images, critical CSS. Use 'high' for hero images, 'low' for below-fold content. Improves Core Web Vitals.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "'fetchpriority' hints browser loading priority: 'high' (critical resources, above-fold images), 'low' (below-fold, non-critical), 'auto' (default).",
+        "isCorrect": true,
+        "explanation": "Correct. 'fetchpriority' hints browser loading priority: 'high' (critical resources, above-fold images), 'low' (below-fold, non-critical), 'auto' (default). Helps browser prioritize LCP images, critical CSS. Use 'high' for hero images, 'low' for below-fold content. Improves Core Web Vitals."
+      },
+      {
+        "id": "o2",
+        "text": "All options are equivalent and can be used interchangeably",
+        "isCorrect": false,
+        "explanation": "Incorrect. There are important semantic and functional differences."
+      },
+      {
+        "id": "o3",
+        "text": "The differences are only visual and don't affect functionality",
+        "isCorrect": false,
+        "explanation": "Incorrect. These differences affect semantics, accessibility, and behavior."
+      },
+      {
+        "id": "o4",
+        "text": "Modern browsers handle all cases identically regardless of choice",
+        "isCorrect": false,
+        "explanation": "Incorrect. Browser behavior and accessibility features differ based on element choice."
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=qz0aGYrrlhU",
+        "type": "video",
+        "title": "HTML Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "1:09:30",
+        "description": "Learn HTML from scratch"
+      },
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/HTML",
+        "type": "article",
+        "title": "HTML: HyperText Markup Language - MDN",
+        "author": "Mozilla Developer Network",
+        "description": "Complete HTML reference and guide"
+      }
+    ],
+    "points": 15,
+    "isActive": true,
+    "createdAt": "2025-11-19T19:21:50.84979+00:00",
+    "updatedAt": "2025-11-24T23:33:46.870735+00:00"
+  },
+  {
+    "id": "ddcacced-e837-4d35-93b4-efba0786989e",
+    "title": "Modern browsers handle all cases identically regardless of choice",
+    "content": "Keyboard navigation requires proper tabindex. Explain how different tabindex values affect focus order and keyboard accessibility.",
+    "type": "code",
+    "difficulty": "intermediate",
+    "explanation": "tabindex='0' includes element in natural tab order. tabindex='-1' makes element focusable programmatically but not via tab. Positive values (1, 2, 3) create custom tab order (anti-pattern, avoid). Use 0 to make custom elements keyboard accessible. Use -1 for programmatic focus (modals, skip links).",
+    "options": [
+      {
+        "id": "o1",
+        "text": "tabindex='0' includes element in natural tab order.",
+        "isCorrect": true,
+        "explanation": "Correct. tabindex='0' includes element in natural tab order. tabindex='-1' makes element focusable programmatically but not via tab. Positive values (1, 2, 3) create custom tab order (anti-pattern, avoid). Use 0 to make custom elements keyboard accessible. Use -1 for programmatic focus (modals, skip links)."
+      },
+      {
+        "id": "o2",
+        "text": "All options are equivalent and can be used interchangeably",
+        "isCorrect": false,
+        "explanation": "Incorrect. There are important semantic and functional differences."
+      },
+      {
+        "id": "o3",
+        "text": "The differences are only visual and don't affect functionality",
+        "isCorrect": false,
+        "explanation": "Incorrect. These differences affect semantics, accessibility, and behavior."
+      },
+      {
+        "id": "o4",
+        "text": "Modern browsers handle all cases identically regardless of choice",
+        "isCorrect": false,
+        "explanation": "Incorrect. Browser behavior and accessibility features differ based on element choice."
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=qz0aGYrrlhU",
+        "type": "video",
+        "title": "HTML Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "1:09:30",
+        "description": "Learn HTML from scratch"
+      },
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/HTML",
+        "type": "article",
+        "title": "HTML: HyperText Markup Language - MDN",
+        "author": "Mozilla Developer Network",
+        "description": "Complete HTML reference and guide"
+      }
+    ],
+    "points": 15,
+    "isActive": true,
+    "createdAt": "2025-11-19T19:21:50.84979+00:00",
+    "updatedAt": "2025-11-24T23:33:46.870735+00:00"
+  },
+  {
+    "id": "5a87d9e5-e0cd-4010-9359-0723c79932f4",
+    "title": "Modern browsers handle all cases identically regardless of choice",
+    "content": "Button functionality can be implemented multiple ways. Explain when to use native button vs ARIA role='button' and the implications.",
+    "type": "code",
+    "difficulty": "advanced",
+    "explanation": "Native <button provides keyboard support (Enter, Space), focus management, and semantic meaning automatically. role='button' on <div requires manual keyboard event handling, focus management, and ARIA states. Always prefer native <button. Use role='button' only when native element cannot achieve design (rare, usually CSS can style button).",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Native <button provides keyboard support (Enter, Space), focus management, and semantic meaning automatically.",
+        "isCorrect": true,
+        "explanation": "Correct. Native <button> provides keyboard support (Enter, Space), focus management, and semantic meaning automatically. role='button' on <div> requires manual keyboard event handling, focus management, and ARIA states. Always prefer native <button>. Use role='button' only when native element cannot achieve design (rare, usually CSS can style button)."
+      },
+      {
+        "id": "o2",
+        "text": "All options are equivalent and can be used interchangeably",
+        "isCorrect": false,
+        "explanation": "Incorrect. There are important semantic and functional differences."
+      },
+      {
+        "id": "o3",
+        "text": "The differences are only visual and don't affect functionality",
+        "isCorrect": false,
+        "explanation": "Incorrect. These differences affect semantics, accessibility, and behavior."
+      },
+      {
+        "id": "o4",
+        "text": "Modern browsers handle all cases identically regardless of choice",
+        "isCorrect": false,
+        "explanation": "Incorrect. Browser behavior and accessibility features differ based on element choice."
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=qz0aGYrrlhU",
+        "type": "video",
+        "title": "HTML Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "1:09:30",
+        "description": "Learn HTML from scratch"
+      },
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/HTML",
+        "type": "article",
+        "title": "HTML: HyperText Markup Language - MDN",
+        "author": "Mozilla Developer Network",
+        "description": "Complete HTML reference and guide"
+      }
+    ],
+    "points": 20,
+    "isActive": true,
+    "createdAt": "2025-11-19T19:21:50.84979+00:00",
+    "updatedAt": "2025-11-24T23:33:46.870735+00:00"
+  },
+  {
+    "id": "9f7d5b9f-82fa-4595-8e6e-11936e373c44",
+    "title": "Modern browsers handle all cases identically regardless of choice",
+    "content": "Current page/item indication is important for navigation. Explain aria-current and how it helps screen reader users understand context.",
+    "type": "code",
+    "difficulty": "intermediate",
+    "explanation": "'aria-current' indicates current item in set: 'page' (current page in nav), 'step' (current step in process), 'date' (current date in calendar), 'time' (current time), 'location' (current location). Screen readers announce 'current' to help users understand where they are. Essential for breadcrumbs, pagination, step indicators.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "'aria-current' indicates current item in set: 'page' (current page in nav), 'step' (current step in process), 'date' (current date in calendar), 'time' (current time), 'location' (current location).",
+        "isCorrect": true,
+        "explanation": "Correct. 'aria-current' indicates current item in set: 'page' (current page in nav), 'step' (current step in process), 'date' (current date in calendar), 'time' (current time), 'location' (current location). Screen readers announce 'current' to help users understand where they are. Essential for breadcrumbs, pagination, step indicators."
+      },
+      {
+        "id": "o2",
+        "text": "All options are equivalent and can be used interchangeably",
+        "isCorrect": false,
+        "explanation": "Incorrect. There are important semantic and functional differences."
+      },
+      {
+        "id": "o3",
+        "text": "The differences are only visual and don't affect functionality",
+        "isCorrect": false,
+        "explanation": "Incorrect. These differences affect semantics, accessibility, and behavior."
+      },
+      {
+        "id": "o4",
+        "text": "Modern browsers handle all cases identically regardless of choice",
+        "isCorrect": false,
+        "explanation": "Incorrect. Browser behavior and accessibility features differ based on element choice."
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=qz0aGYrrlhU",
+        "type": "video",
+        "title": "HTML Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "1:09:30",
+        "description": "Learn HTML from scratch"
+      },
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/HTML",
+        "type": "article",
+        "title": "HTML: HyperText Markup Language - MDN",
+        "author": "Mozilla Developer Network",
+        "description": "Complete HTML reference and guide"
+      }
+    ],
+    "points": 15,
+    "isActive": true,
+    "createdAt": "2025-11-19T19:21:50.84979+00:00",
+    "updatedAt": "2025-11-24T23:33:46.870735+00:00"
+  },
+  {
+    "id": "4c6b8612-d17e-4118-896f-f232b99d54a7",
+    "title": "Modern browsers handle all cases identically regardless of choice",
+    "content": "Resource hints optimize loading. Explain preload vs prefetch and their different use cases for performance optimization.",
+    "type": "code",
+    "difficulty": "intermediate",
+    "explanation": "'preload' fetches critical resources for current page (fonts, critical CSS, hero images). 'prefetch' hints at resources for next navigation (next page assets). Preload is high priority, current page. Prefetch is low priority, future page. Use preload for above-fold critical resources, prefetch for likely next pages.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "'preload' fetches critical resources for current page (fonts, critical CSS, hero images).",
+        "isCorrect": true,
+        "explanation": "Correct. 'preload' fetches critical resources for current page (fonts, critical CSS, hero images). 'prefetch' hints at resources for next navigation (next page assets). Preload is high priority, current page. Prefetch is low priority, future page. Use preload for above-fold critical resources, prefetch for likely next pages."
+      },
+      {
+        "id": "o2",
+        "text": "All options are equivalent and can be used interchangeably",
+        "isCorrect": false,
+        "explanation": "Incorrect. There are important semantic and functional differences."
+      },
+      {
+        "id": "o3",
+        "text": "The differences are only visual and don't affect functionality",
+        "isCorrect": false,
+        "explanation": "Incorrect. These differences affect semantics, accessibility, and behavior."
+      },
+      {
+        "id": "o4",
+        "text": "Modern browsers handle all cases identically regardless of choice",
+        "isCorrect": false,
+        "explanation": "Incorrect. Browser behavior and accessibility features differ based on element choice."
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=qz0aGYrrlhU",
+        "type": "video",
+        "title": "HTML Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "1:09:30",
+        "description": "Learn HTML from scratch"
+      },
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/HTML",
+        "type": "article",
+        "title": "HTML: HyperText Markup Language - MDN",
+        "author": "Mozilla Developer Network",
+        "description": "Complete HTML reference and guide"
+      }
+    ],
+    "points": 15,
+    "isActive": true,
+    "createdAt": "2025-11-19T19:21:50.84979+00:00",
+    "updatedAt": "2025-11-24T23:33:46.870735+00:00"
+  },
+  {
+    "id": "f9c3cc5f-1333-4331-913f-3568a96a9629",
+    "title": "Modern browsers handle all cases identically regardless of choice",
+    "content": "Skip links help keyboard users navigate. Explain skip links and their implementation for accessibility.",
+    "type": "code",
+    "difficulty": "intermediate",
+    "explanation": "Skip links are hidden links (visible on focus) that jump to main content, bypassing navigation. Essential for keyboard users who would otherwise tab through entire navigation. Implement with <a href='#main'>Skip to main content</a and CSS to hide until focused. Improves keyboard navigation efficiency.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Skip links are hidden links (visible on focus) that jump to main content, bypassing navigation.",
+        "isCorrect": true,
+        "explanation": "Correct. Skip links are hidden links (visible on focus) that jump to main content, bypassing navigation. Essential for keyboard users who would otherwise tab through entire navigation. Implement with <a href='#main'>Skip to main content</a> and CSS to hide until focused. Improves keyboard navigation efficiency."
+      },
+      {
+        "id": "o2",
+        "text": "All options are equivalent and can be used interchangeably",
+        "isCorrect": false,
+        "explanation": "Incorrect. There are important semantic and functional differences."
+      },
+      {
+        "id": "o3",
+        "text": "The differences are only visual and don't affect functionality",
+        "isCorrect": false,
+        "explanation": "Incorrect. These differences affect semantics, accessibility, and behavior."
+      },
+      {
+        "id": "o4",
+        "text": "Modern browsers handle all cases identically regardless of choice",
+        "isCorrect": false,
+        "explanation": "Incorrect. Browser behavior and accessibility features differ based on element choice."
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.youtube.com/watch?v=qz0aGYrrlhU",
+        "type": "video",
+        "title": "HTML Tutorial for Beginners",
+        "author": "Programming with Mosh",
+        "duration": "1:09:30",
+        "description": "Learn HTML from scratch"
+      },
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/HTML",
+        "type": "article",
+        "title": "HTML: HyperText Markup Language - MDN",
+        "author": "Mozilla Developer Network",
+        "description": "Complete HTML reference and guide"
+      }
+    ],
+    "points": 15,
+    "isActive": true,
+    "createdAt": "2025-11-19T19:21:50.84979+00:00",
+    "updatedAt": "2025-11-24T23:33:46.870735+00:00"
+  }
+]

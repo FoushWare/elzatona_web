@@ -1,0 +1,2484 @@
+[
+  {
+    "id": "3b69227b-5648-42f1-ab7e-58f8dfaae681",
+    "title": "Product of Array Except Self",
+    "content": "Given an array, return an array where each element is the product of all other elements (without using division).\n\nExample: [1, 2, 3, 4] → [24, 12, 8, 6]",
+    "type": "code",
+    "difficulty": "intermediate",
+    "explanation": "Use two passes: first pass calculates left products (product of all elements to the left), second pass multiplies by right products (product of all elements to the right). This avoids division and handles zeros.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Two passes: left products, then right products. Multiply corresponding elements. Time: O(n), Space: O(1) excluding output",
+        "isCorrect": true,
+        "explanation": null
+      },
+      {
+        "id": "o2",
+        "text": "Calculate product of all elements, divide by each element. Time: O(n), Space: O(1)",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o3",
+        "text": "For each element, calculate product of all others. Time: O(n²), Space: O(1)",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o4",
+        "text": "Use nested loops to calculate products. Time: O(n²), Space: O(n)",
+        "isCorrect": false,
+        "explanation": null
+      }
+    ],
+    "resources": null,
+    "points": 15,
+    "isActive": true,
+    "createdAt": "2025-11-20T06:21:09.165281+00:00",
+    "updatedAt": "2025-11-21T23:53:07.826604+00:00"
+  },
+  {
+    "id": "1217246a-b4d7-4325-ba77-947e3e4447ac",
+    "title": "Find Word in 2D Grid",
+    "content": "Given a 2D board and a word, determine if the word exists in the board (can move horizontally or vertically).\n\nExample: board with \"ABCE\", \"SFCS\", \"ADEE\" and word \"ABCCED\" → true",
+    "type": "code",
+    "difficulty": "intermediate",
+    "explanation": "Use backtracking with DFS: for each cell matching first character, recursively search in all 4 directions. Mark cells as visited during recursion, unmark during backtracking. Return true if word found.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Use backtracking with DFS. For each cell, explore all directions, mark visited, backtrack. Time: O(m*n*4^L) where L is word length, Space: O(L)",
+        "isCorrect": true,
+        "explanation": null
+      },
+      {
+        "id": "o2",
+        "text": "Try all possible paths using BFS. Time: O(m*n*4^L), Space: O(m*n)",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o3",
+        "text": "Check each cell independently. Time: O(m*n*L), Space: O(1)",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o4",
+        "text": "Convert board to string and search. Time: O(m*n), Space: O(m*n)",
+        "isCorrect": false,
+        "explanation": null
+      }
+    ],
+    "resources": null,
+    "points": 15,
+    "isActive": true,
+    "createdAt": "2025-11-20T06:21:09.165281+00:00",
+    "updatedAt": "2025-11-21T23:53:07.826604+00:00"
+  },
+  {
+    "id": "1e8b92c0-98fd-4994-bec0-d57a416dd369",
+    "title": "Minimum Coins to Make Amount",
+    "content": "Given coins of different denominations and a total amount, find the minimum number of coins needed.\n\nExample: coins = [1, 2, 5], amount = 11 → 3 (5 + 5 + 1)",
+    "type": "code",
+    "difficulty": "intermediate",
+    "explanation": "Use dynamic programming: create array dp where dp[i] represents minimum coins for amount i. Initialize dp[0] = 0. For each coin, update dp[i + coin] = min(dp[i + coin], dp[i] + 1).",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Use dynamic programming: dp[i] = min coins for amount i. For each coin, update dp[i + coin]. Time: O(amount * coins.length), Space: O(amount)",
+        "isCorrect": true,
+        "explanation": null
+      },
+      {
+        "id": "o2",
+        "text": "Use greedy: always pick largest coin. Time: O(amount), Space: O(1)",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o3",
+        "text": "Try all combinations using recursion. Time: O(2ⁿ), Space: O(n)",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o4",
+        "text": "Sort coins and use largest first. Time: O(n log n), Space: O(1)",
+        "isCorrect": false,
+        "explanation": null
+      }
+    ],
+    "resources": null,
+    "points": 15,
+    "isActive": true,
+    "createdAt": "2025-11-20T06:21:09.165281+00:00",
+    "updatedAt": "2025-11-21T23:53:07.826604+00:00"
+  },
+  {
+    "id": "17dc36d3-eb68-48c8-acf4-4bfe45468d9f",
+    "title": "Find All Unique Triplets That Sum to Zero",
+    "content": "Given an array, find all unique triplets that sum to zero.\n\nExample: [-1, 0, 1, 2, -1, -4] → [[-1, -1, 2], [-1, 0, 1]]",
+    "type": "code",
+    "difficulty": "intermediate",
+    "explanation": "Sort the array first. For each element, use two pointers (left and right) to find pairs that sum to the negative of the current element. Skip duplicate values to avoid duplicate triplets.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Sort array. For each element, use two pointers to find pairs that sum to negative of current element. Skip duplicates. Time: O(n²), Space: O(1) excluding output",
+        "isCorrect": true,
+        "explanation": null
+      },
+      {
+        "id": "o2",
+        "text": "Use three nested loops. Time: O(n³), Space: O(1)",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o3",
+        "text": "Use hash map for all pairs, then check for third element. Time: O(n²), Space: O(n²)",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o4",
+        "text": "Find all combinations using recursion. Time: O(2ⁿ), Space: O(n)",
+        "isCorrect": false,
+        "explanation": null
+      }
+    ],
+    "resources": null,
+    "points": 15,
+    "isActive": true,
+    "createdAt": "2025-11-20T06:21:09.165281+00:00",
+    "updatedAt": "2025-11-21T23:53:07.826604+00:00"
+  },
+  {
+    "id": "4ea52662-aa2c-4146-b76a-93698dc8169a",
+    "title": "Validate Sudoku Board",
+    "content": "Determine if a 9x9 Sudoku board is valid (no duplicates in rows, columns, or 3x3 boxes).\n\nExample: Valid board returns true",
+    "type": "code",
+    "difficulty": "intermediate",
+    "explanation": "Use hash sets to track seen numbers in each row, column, and 3x3 box. For each cell, check if the number exists in the corresponding row, column, and box sets. Since board is fixed 9x9, complexity is O(1).",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Use three sets of hash maps: one for rows, one for columns, one for boxes. Check each cell against all three. Time: O(1) - fixed 81 cells, Space: O(1)",
+        "isCorrect": true,
+        "explanation": null
+      },
+      {
+        "id": "o2",
+        "text": "Check each row, column, and box separately. Time: O(1), Space: O(1)",
+        "isCorrect": true,
+        "explanation": null
+      },
+      {
+        "id": "o3",
+        "text": "Use nested loops to check all combinations. Time: O(n⁴), Space: O(1)",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o4",
+        "text": "Sort each row, column, and box. Time: O(1), Space: O(1)",
+        "isCorrect": false,
+        "explanation": null
+      }
+    ],
+    "resources": null,
+    "points": 15,
+    "isActive": true,
+    "createdAt": "2025-11-20T06:21:09.165281+00:00",
+    "updatedAt": "2025-11-21T23:53:07.826604+00:00"
+  },
+  {
+    "id": "63031bb9-712e-4d08-97ba-d0a2ccb5b1ea",
+    "title": "Find Longest Increasing Subsequence",
+    "content": "Given an array, find the length of the longest strictly increasing subsequence.\n\nExample: [10, 9, 2, 5, 3, 7, 101, 18] → 4 ([2, 3, 7, 101])",
+    "type": "code",
+    "difficulty": "intermediate",
+    "explanation": "Two approaches: 1) DP: for each element, check all previous elements and update LIS length. 2) Binary search: maintain array of smallest tail values, use binary search to find insertion point (more efficient O(n log n)).",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Use dynamic programming: dp[i] = length of LIS ending at i. Time: O(n²), Space: O(n)",
+        "isCorrect": true,
+        "explanation": null
+      },
+      {
+        "id": "o2",
+        "text": "Use binary search with patience sorting. Maintain array of smallest tail of increasing subsequences. Time: O(n log n), Space: O(n)",
+        "isCorrect": true,
+        "explanation": null
+      },
+      {
+        "id": "o3",
+        "text": "Try all possible subsequences. Time: O(2ⁿ), Space: O(n)",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o4",
+        "text": "Sort array and find longest consecutive sequence. Time: O(n log n), Space: O(1)",
+        "isCorrect": false,
+        "explanation": null
+      }
+    ],
+    "resources": null,
+    "points": 15,
+    "isActive": true,
+    "createdAt": "2025-11-20T06:21:09.165281+00:00",
+    "updatedAt": "2025-11-21T23:53:07.826604+00:00"
+  },
+  {
+    "id": "cc617e97-0c68-4211-9256-36ee28c6a075",
+    "title": "Check if Number is Palindrome",
+    "content": "Determine if an integer is a palindrome (reads same forwards and backwards).\n\nExample: 121 → true, -121 → false",
+    "type": "code",
+    "difficulty": "beginner",
+    "explanation": "Two approaches: 1) Convert to string and compare with reversed version. 2) Reverse half the number mathematically and compare with the other half (more efficient, no string conversion).",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Reverse half of the number and compare with other half. Time: O(log n), Space: O(1)",
+        "isCorrect": true,
+        "explanation": null
+      },
+      {
+        "id": "o2",
+        "text": "Convert to string and check if reversed equals original. Time: O(log n), Space: O(log n)",
+        "isCorrect": true,
+        "explanation": null
+      },
+      {
+        "id": "o3",
+        "text": "Use modulo and division to extract digits. Time: O(log n), Space: O(log n)",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o4",
+        "text": "Compare first and last digit only. Time: O(1), Space: O(1)",
+        "isCorrect": false,
+        "explanation": null
+      }
+    ],
+    "resources": null,
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-20T04:11:05.699699+00:00",
+    "updatedAt": "2025-11-21T23:53:07.826604+00:00"
+  },
+  {
+    "id": "db712b83-4d32-4861-9c4a-e3f4174ae433",
+    "title": "Count Ways to Climb Stairs",
+    "content": "You are climbing a staircase. It takes n steps to reach the top. Each time you can climb 1 or 2 steps. How many distinct ways can you climb?\n\nExample: n = 3 → 3 ways (1+1+1, 1+2, 2+1)",
+    "type": "code",
+    "difficulty": "beginner",
+    "explanation": "This is a Fibonacci sequence problem. Use dynamic programming: ways to reach step i = ways to reach step (i-1) + ways to reach step (i-2). Can optimize space to O(1) by only keeping last two values.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Use dynamic programming: ways[i] = ways[i-1] + ways[i-2]. Time: O(n), Space: O(n) or O(1) with optimization",
+        "isCorrect": true,
+        "explanation": null
+      },
+      {
+        "id": "o2",
+        "text": "Use recursion without memoization. Time: O(2ⁿ), Space: O(n)",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o3",
+        "text": "Try all possible combinations. Time: O(2ⁿ), Space: O(n)",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o4",
+        "text": "Use factorial calculation. Time: O(n), Space: O(1)",
+        "isCorrect": false,
+        "explanation": null
+      }
+    ],
+    "resources": null,
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-20T04:11:05.699699+00:00",
+    "updatedAt": "2025-11-21T23:53:07.826604+00:00"
+  },
+  {
+    "id": "8e0fa374-df93-4fd0-9fa7-5948d9a87d5c",
+    "title": "Find Maximum Profit from Stock Prices",
+    "content": "Given an array of stock prices, find the maximum profit from buying and selling once.\n\nExample: [7, 1, 5, 3, 6, 4] → 5 (buy at 1, sell at 6)",
+    "type": "code",
+    "difficulty": "beginner",
+    "explanation": "Keep track of the minimum price encountered so far. For each day, calculate the profit if selling today (current price - min price) and update the maximum profit seen.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Track minimum price seen so far. For each price, calculate profit and update max profit. Time: O(n), Space: O(1)",
+        "isCorrect": true,
+        "explanation": null
+      },
+      {
+        "id": "o2",
+        "text": "Try all buy-sell pairs using nested loops. Time: O(n²), Space: O(1)",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o3",
+        "text": "Find min and max values. Time: O(n), Space: O(1)",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o4",
+        "text": "Sort prices and find difference. Time: O(n log n), Space: O(n)",
+        "isCorrect": false,
+        "explanation": null
+      }
+    ],
+    "resources": null,
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-20T04:11:05.699699+00:00",
+    "updatedAt": "2025-11-21T23:53:07.826604+00:00"
+  },
+  {
+    "id": "399a2c93-956c-44cf-912b-73ef038c08ca",
+    "title": "Find Maximum Sum Subarray",
+    "content": "Given an array of integers, find the contiguous subarray with the largest sum.\n\nExample: [-2, 1, -3, 4, -1, 2, 1, -5, 4] → 6 ([4, -1, 2, 1])",
+    "type": "code",
+    "difficulty": "beginner",
+    "explanation": "Kadane's algorithm: iterate through array, maintaining current sum. If current sum becomes negative, reset it to 0. Keep track of maximum sum seen so far.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Kadane's algorithm: track current sum and max sum. Reset current sum if negative. Time: O(n), Space: O(1)",
+        "isCorrect": true,
+        "explanation": null
+      },
+      {
+        "id": "o2",
+        "text": "Try all possible subarrays using nested loops. Time: O(n²), Space: O(1)",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o3",
+        "text": "Use divide and conquer approach. Time: O(n log n), Space: O(log n)",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o4",
+        "text": "Find sum of all positive numbers. Time: O(n), Space: O(1)",
+        "isCorrect": false,
+        "explanation": null
+      }
+    ],
+    "resources": null,
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-20T04:11:05.699699+00:00",
+    "updatedAt": "2025-11-21T23:53:07.826604+00:00"
+  },
+  {
+    "id": "e84f1e23-2660-4730-bfb4-88202751a60b",
+    "title": "Check for Duplicate Values",
+    "content": "Given an array, determine if any value appears at least twice.\n\nExample: [1, 2, 3, 1] → true",
+    "type": "code",
+    "difficulty": "beginner",
+    "explanation": "Use a Set data structure. Iterate through the array, adding each element to the Set. If an element already exists in the Set, return true. This is the most efficient approach.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Use a Set to track seen values. If value exists in Set, return true. Time: O(n), Space: O(n)",
+        "isCorrect": true,
+        "explanation": null
+      },
+      {
+        "id": "o2",
+        "text": "Sort array and check adjacent elements. Time: O(n log n), Space: O(1)",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o3",
+        "text": "Use nested loops to compare all pairs. Time: O(n²), Space: O(1)",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o4",
+        "text": "Use filter and length comparison. Time: O(n), Space: O(n)",
+        "isCorrect": false,
+        "explanation": null
+      }
+    ],
+    "resources": null,
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-20T04:11:05.699699+00:00",
+    "updatedAt": "2025-11-21T23:53:07.826604+00:00"
+  },
+  {
+    "id": "8a94a169-a896-42cc-bc51-009275635cfa",
+    "title": "Validate Balanced Parentheses",
+    "content": "Given a string containing only parentheses, brackets, and braces, determine if the string is valid (properly closed).\n\nExample: \"()[]{}\" → true, \"([)]\" → false",
+    "type": "code",
+    "difficulty": "beginner",
+    "explanation": "Use a stack data structure. Push opening brackets onto the stack. When encountering a closing bracket, check if it matches the top of the stack. If stack is empty at the end, the string is valid.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Use a stack. Push opening brackets, pop when matching closing bracket. Check if stack is empty at end. Time: O(n), Space: O(n)",
+        "isCorrect": true,
+        "explanation": null
+      },
+      {
+        "id": "o2",
+        "text": "Count opening and closing brackets. If counts match, it's valid. Time: O(n), Space: O(1)",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o3",
+        "text": "Use regex to remove pairs repeatedly until no more pairs. Time: O(n²), Space: O(n)",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o4",
+        "text": "Check if string length is even. Time: O(1), Space: O(1)",
+        "isCorrect": false,
+        "explanation": null
+      }
+    ],
+    "resources": null,
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-20T04:11:05.699699+00:00",
+    "updatedAt": "2025-11-21T23:53:07.826604+00:00"
+  },
+  {
+    "id": "e3aa18e5-1e06-436a-820c-25994c8c577c",
+    "title": "Check if Two Strings are Anagrams",
+    "content": "Given two strings, determine if they are anagrams (same characters, different order).\n\nExample: \"listen\" and \"silent\" → true",
+    "type": "code",
+    "difficulty": "beginner",
+    "explanation": "Two approaches: 1) Sort both strings and compare (simpler). 2) Count character frequencies using a hash map (more efficient for large strings). Both are valid solutions.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Sort both strings and compare. Time: O(n log n), Space: O(n)",
+        "isCorrect": true,
+        "explanation": null
+      },
+      {
+        "id": "o2",
+        "text": "Count character frequencies using hash map. Compare counts. Time: O(n), Space: O(1) - limited alphabet",
+        "isCorrect": true,
+        "explanation": null
+      },
+      {
+        "id": "o3",
+        "text": "Use nested loops to check each character. Time: O(n²), Space: O(1)",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o4",
+        "text": "Compare string lengths only. Time: O(1), Space: O(1)",
+        "isCorrect": false,
+        "explanation": null
+      }
+    ],
+    "resources": null,
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-20T04:11:05.699699+00:00",
+    "updatedAt": "2025-11-21T23:53:07.826604+00:00"
+  },
+  {
+    "id": "22821875-af72-42a2-be4b-2e6038548545",
+    "title": "Reverse a String",
+    "content": "Given a string, reverse it in-place (if array) or return reversed string.\n\nExample: \"hello\" → \"olleh\"",
+    "type": "code",
+    "difficulty": "beginner",
+    "explanation": "For arrays, use two pointers (start and end) and swap characters while moving pointers towards center. For strings in JavaScript, convert to array first since strings are immutable.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Use two pointers from start and end, swap characters. Time: O(n), Space: O(1) for array, O(n) for string",
+        "isCorrect": true,
+        "explanation": null
+      },
+      {
+        "id": "o2",
+        "text": "Create new string by iterating backwards. Time: O(n), Space: O(n)",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o3",
+        "text": "Use built-in reverse() method. Time: O(n), Space: O(n)",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o4",
+        "text": "Use recursion to swap characters. Time: O(n), Space: O(n)",
+        "isCorrect": false,
+        "explanation": null
+      }
+    ],
+    "resources": null,
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-20T04:11:05.699699+00:00",
+    "updatedAt": "2025-11-21T23:53:07.826604+00:00"
+  },
+  {
+    "id": "7baa2e9d-4c59-4075-9f0e-d06c02b452b5",
+    "title": "Merge Two Sorted Arrays",
+    "content": "Given two sorted arrays, merge them into one sorted array.\n\nExample: [1, 2, 3] and [2, 5, 6] → [1, 2, 2, 3, 5, 6]",
+    "type": "code",
+    "difficulty": "beginner",
+    "explanation": "Use two pointers, one for each array. Compare elements at both pointers, add the smaller one to result, and advance that pointer. Continue until both arrays are processed.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Use two pointers, compare elements and add smaller one. Time: O(n + m), Space: O(n + m)",
+        "isCorrect": true,
+        "explanation": null
+      },
+      {
+        "id": "o2",
+        "text": "Concatenate and sort. Time: O((n+m) log(n+m)), Space: O(n+m)",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o3",
+        "text": "Use nested loops to insert elements. Time: O(n*m), Space: O(n+m)",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o4",
+        "text": "Use Set to remove duplicates then sort. Time: O((n+m) log(n+m)), Space: O(n+m)",
+        "isCorrect": false,
+        "explanation": null
+      }
+    ],
+    "resources": null,
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-20T04:11:05.699699+00:00",
+    "updatedAt": "2025-11-21T23:53:07.826604+00:00"
+  },
+  {
+    "id": "8ffd1624-978e-422f-80ee-f0970e9ea09f",
+    "title": "Find Two Numbers That Add Up to Target",
+    "content": "Given an array of numbers and a target sum, find two numbers that add up to the target. Return their indices.\n\nExample: nums = [2, 7, 11, 15], target = 9\nOutput: [0, 1] (because 2 + 7 = 9)",
+    "type": "code",
+    "difficulty": "beginner",
+    "explanation": "Use a hash map (object) to store each number and its index. For each number, check if the complement (target - current number) exists in the map. This gives O(n) time complexity.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Use a hash map to store complements. Iterate once, checking if complement exists. Time: O(n), Space: O(n)",
+        "isCorrect": true,
+        "explanation": null
+      },
+      {
+        "id": "o2",
+        "text": "Use nested loops to check all pairs. Time: O(n²), Space: O(1)",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o3",
+        "text": "Sort the array first, then use two pointers. Time: O(n log n), Space: O(1)",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o4",
+        "text": "Use recursion to check all combinations. Time: O(2ⁿ), Space: O(n)",
+        "isCorrect": false,
+        "explanation": null
+      }
+    ],
+    "resources": null,
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-20T04:11:05.699699+00:00",
+    "updatedAt": "2025-11-21T23:53:07.826604+00:00"
+  },
+  {
+    "id": "fdaa3d12-afe9-4d27-8656-48a438338c33",
+    "title": "Focus management is not needed",
+    "content": "You have a modal dialog. How do you manage focus for accessibility?",
+    "type": "code",
+    "difficulty": "intermediate",
+    "explanation": "Trap focus within modal (prevent tabbing outside), return focus to trigger element on close, use refs and focus() API.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Trap focus within modal when open, return focus to trigger when closed, use useRef and useEffect for focus management",
+        "isCorrect": true,
+        "explanation": null
+      },
+      {
+        "id": "o2",
+        "text": "Let focus go anywhere",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o3",
+        "text": "Disable focus entirely",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o4",
+        "text": "Focus management is not needed",
+        "isCorrect": false,
+        "explanation": null
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.freecodecamp.org/news/front-end-developer-handbook/",
+        "type": "article",
+        "title": "Frontend Development Best Practices",
+        "author": "freeCodeCamp",
+        "description": "Complete frontend development guide"
+      },
+      {
+        "url": "https://frontendmasters.com/",
+        "type": "course",
+        "title": "Frontend Masters",
+        "author": "Frontend Masters",
+        "duration": "Varies",
+        "description": "Advanced frontend development courses"
+      }
+    ],
+    "points": 15,
+    "isActive": true,
+    "createdAt": "2025-11-20T04:02:54.995583+00:00",
+    "updatedAt": "2025-11-24T23:33:46.870735+00:00"
+  },
+  {
+    "id": "edaf4d79-a2bc-42f6-a028-221e78ea4de9",
+    "title": "Use only setTimeout in tests",
+    "content": "Your component fetches data from an API. How should you test this?",
+    "type": "code",
+    "difficulty": "intermediate",
+    "explanation": "Mock fetch/API calls, use waitFor for async updates, test loading and error states, verify final rendered output.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Mock the API call, use waitFor to wait for async updates, and assert on final rendered state",
+        "isCorrect": true,
+        "explanation": null
+      },
+      {
+        "id": "o2",
+        "text": "Make real API calls in tests",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o3",
+        "text": "Skip testing async operations",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o4",
+        "text": "Use only setTimeout in tests",
+        "isCorrect": false,
+        "explanation": null
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.freecodecamp.org/news/front-end-developer-handbook/",
+        "type": "article",
+        "title": "Frontend Development Best Practices",
+        "author": "freeCodeCamp",
+        "description": "Complete frontend development guide"
+      },
+      {
+        "url": "https://frontendmasters.com/",
+        "type": "course",
+        "title": "Frontend Masters",
+        "author": "Frontend Masters",
+        "duration": "Varies",
+        "description": "Advanced frontend development courses"
+      }
+    ],
+    "points": 15,
+    "isActive": true,
+    "createdAt": "2025-11-20T04:02:54.995583+00:00",
+    "updatedAt": "2025-11-24T23:33:46.870735+00:00"
+  },
+  {
+    "id": "ad7efec5-f048-419c-948a-5fb1716f2e35",
+    "title": "Require users to navigate from home page",
+    "content": "Users should be able to bookmark and share specific product pages. How do you enable this?",
+    "type": "code",
+    "difficulty": "intermediate",
+    "explanation": "React Router enables deep linking. Ensure server returns index.html for all routes (SPA catch-all) so React Router can handle routing.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Use React Router with proper route structure, ensure server supports client-side routing (catch-all route)",
+        "isCorrect": true,
+        "explanation": null
+      },
+      {
+        "id": "o2",
+        "text": "Deep linking is not possible",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o3",
+        "text": "Use only hash routing",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o4",
+        "text": "Require users to navigate from home page",
+        "isCorrect": false,
+        "explanation": null
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.freecodecamp.org/news/front-end-developer-handbook/",
+        "type": "article",
+        "title": "Frontend Development Best Practices",
+        "author": "freeCodeCamp",
+        "description": "Complete frontend development guide"
+      },
+      {
+        "url": "https://frontendmasters.com/",
+        "type": "course",
+        "title": "Frontend Masters",
+        "author": "Frontend Masters",
+        "duration": "Varies",
+        "description": "Advanced frontend development courses"
+      }
+    ],
+    "points": 15,
+    "isActive": true,
+    "createdAt": "2025-11-20T04:02:54.995583+00:00",
+    "updatedAt": "2025-11-24T23:33:46.870735+00:00"
+  },
+  {
+    "id": "dccb18b1-caa4-41c9-92cf-75b3d3593e24",
+    "title": "Use only console.error",
+    "content": "You want to prevent one component error from crashing the entire app. How do you implement this?",
+    "type": "code",
+    "difficulty": "intermediate",
+    "explanation": "Error Boundaries catch errors in component tree. Create class component with componentDidCatch, wrap sections, show fallback UI.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Create ErrorBoundary class component with componentDidCatch, wrap error-prone sections, display fallback UI",
+        "isCorrect": true,
+        "explanation": null
+      },
+      {
+        "id": "o2",
+        "text": "Use try-catch in every component",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o3",
+        "text": "Errors always crash the app",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o4",
+        "text": "Use only console.error",
+        "isCorrect": false,
+        "explanation": null
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.freecodecamp.org/news/front-end-developer-handbook/",
+        "type": "article",
+        "title": "Frontend Development Best Practices",
+        "author": "freeCodeCamp",
+        "description": "Complete frontend development guide"
+      },
+      {
+        "url": "https://frontendmasters.com/",
+        "type": "course",
+        "title": "Frontend Masters",
+        "author": "Frontend Masters",
+        "duration": "Varies",
+        "description": "Advanced frontend development courses"
+      }
+    ],
+    "points": 15,
+    "isActive": true,
+    "createdAt": "2025-11-20T04:02:54.995583+00:00",
+    "updatedAt": "2025-11-24T23:25:57.521339+00:00"
+  },
+  {
+    "id": "90c6f882-c31b-48fa-b5c8-efa5ab15bd0d",
+    "title": "Optimization is automatic",
+    "content": "Your app bundle is too large. What optimization strategies should you use?",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "Code splitting reduces initial load. Tree shaking removes unused code. Analyze bundle, remove unused deps, use dynamic imports, optimize assets.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Use code splitting, tree shaking, analyze bundle, remove unused dependencies, use dynamic imports, and optimize images/assets",
+        "isCorrect": true,
+        "explanation": null
+      },
+      {
+        "id": "o2",
+        "text": "Bundle size doesn't matter",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o3",
+        "text": "Include all libraries",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o4",
+        "text": "Optimization is automatic",
+        "isCorrect": false,
+        "explanation": null
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.freecodecamp.org/news/front-end-developer-handbook/",
+        "type": "article",
+        "title": "Frontend Development Best Practices",
+        "author": "freeCodeCamp",
+        "description": "Complete frontend development guide"
+      },
+      {
+        "url": "https://frontendmasters.com/",
+        "type": "course",
+        "title": "Frontend Masters",
+        "author": "Frontend Masters",
+        "duration": "Varies",
+        "description": "Advanced frontend development courses"
+      }
+    ],
+    "points": 15,
+    "isActive": true,
+    "createdAt": "2025-11-20T04:02:54.995583+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "bbf6f90a-8692-47a6-8c24-c405099d6598",
+    "title": "Forms don't need testing",
+    "content": "You have a registration form. What aspects should be tested?",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "Test user interactions, validation (errors shown correctly), form submission, state updates, and integration with parent components.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Test user interactions (typing, submitting), validation errors, successful submission, and form state changes",
+        "isCorrect": true,
+        "explanation": null
+      },
+      {
+        "id": "o2",
+        "text": "Test only CSS styles",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o3",
+        "text": "Test internal state only",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o4",
+        "text": "Forms don't need testing",
+        "isCorrect": false,
+        "explanation": null
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.freecodecamp.org/news/front-end-developer-handbook/",
+        "type": "article",
+        "title": "Frontend Development Best Practices",
+        "author": "freeCodeCamp",
+        "description": "Complete frontend development guide"
+      },
+      {
+        "url": "https://frontendmasters.com/",
+        "type": "course",
+        "title": "Frontend Masters",
+        "author": "Frontend Masters",
+        "duration": "Varies",
+        "description": "Advanced frontend development courses"
+      }
+    ],
+    "points": 15,
+    "isActive": true,
+    "createdAt": "2025-11-20T04:02:54.995583+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "fe5c26db-95ad-4f6d-9d91-49d41718542d",
+    "title": "Only add alt text to images",
+    "content": "Your dashboard needs to be accessible to screen readers. What should you implement?",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "Use semantic HTML (nav, main, article), ARIA labels for complex widgets, keyboard navigation, focus management, and proper heading hierarchy.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Use semantic HTML, ARIA attributes where needed, keyboard navigation, focus management, and test with screen readers",
+        "isCorrect": true,
+        "explanation": null
+      },
+      {
+        "id": "o2",
+        "text": "Use only div elements",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o3",
+        "text": "Accessibility is automatic in React",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o4",
+        "text": "Only add alt text to images",
+        "isCorrect": false,
+        "explanation": null
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.freecodecamp.org/news/front-end-developer-handbook/",
+        "type": "article",
+        "title": "Frontend Development Best Practices",
+        "author": "freeCodeCamp",
+        "description": "Complete frontend development guide"
+      },
+      {
+        "url": "https://frontendmasters.com/",
+        "type": "course",
+        "title": "Frontend Masters",
+        "author": "Frontend Masters",
+        "duration": "Varies",
+        "description": "Advanced frontend development courses"
+      }
+    ],
+    "points": 15,
+    "isActive": true,
+    "createdAt": "2025-11-20T04:02:54.995583+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "857d5b4e-3de7-4a40-8567-be2e574b1812",
+    "title": "No organization needed",
+    "content": "Your app is growing with many features. How should you organize the codebase?",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "Organize by features (feature-based structure), separate components/hooks/utils/types, use barrel exports, configure path aliases for clean imports.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Organize by features/modules, use barrel exports, separate concerns (components, hooks, utils, types), and use absolute imports",
+        "isCorrect": true,
+        "explanation": null
+      },
+      {
+        "id": "o2",
+        "text": "Put everything in one file",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o3",
+        "text": "Organize only by file type",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o4",
+        "text": "No organization needed",
+        "isCorrect": false,
+        "explanation": null
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.freecodecamp.org/news/front-end-developer-handbook/",
+        "type": "article",
+        "title": "Frontend Development Best Practices",
+        "author": "freeCodeCamp",
+        "description": "Complete frontend development guide"
+      },
+      {
+        "url": "https://frontendmasters.com/",
+        "type": "course",
+        "title": "Frontend Masters",
+        "author": "Frontend Masters",
+        "duration": "Varies",
+        "description": "Advanced frontend development courses"
+      }
+    ],
+    "points": 15,
+    "isActive": true,
+    "createdAt": "2025-11-20T04:02:54.995583+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "95fc5554-14c3-4fee-a923-17f4344665ce",
+    "title": "No testing needed for frontend tasks",
+    "content": "You need to test a ProductCard component. What testing approach is best?",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "React Testing Library tests components from user perspective. Test what users see and interact with, not internal implementation.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Use React Testing Library to test user interactions and rendered output, not implementation details",
+        "isCorrect": true,
+        "explanation": null
+      },
+      {
+        "id": "o2",
+        "text": "Test only internal state",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o3",
+        "text": "Test component implementation details",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o4",
+        "text": "No testing needed for frontend tasks",
+        "isCorrect": false,
+        "explanation": null
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.freecodecamp.org/news/front-end-developer-handbook/",
+        "type": "article",
+        "title": "Frontend Development Best Practices",
+        "author": "freeCodeCamp",
+        "description": "Complete frontend development guide"
+      },
+      {
+        "url": "https://frontendmasters.com/",
+        "type": "course",
+        "title": "Frontend Masters",
+        "author": "Frontend Masters",
+        "duration": "Varies",
+        "description": "Advanced frontend development courses"
+      }
+    ],
+    "points": 15,
+    "isActive": true,
+    "createdAt": "2025-11-20T04:02:54.995583+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "358354b4-780b-45bd-84be-9b4cc40cb731",
+    "title": "Use only HTML5 keyboard attributes",
+    "content": "You want Ctrl+K to open search. How should you implement this?",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "Add keydown listener in useEffect, check event.key and event.ctrlKey/event.metaKey, handle shortcut, cleanup listener on unmount.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Use useEffect with keydown event listener, check for modifier keys (Ctrl/Cmd), cleanup on unmount",
+        "isCorrect": true,
+        "explanation": null
+      },
+      {
+        "id": "o2",
+        "text": "Use only onClick handlers",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o3",
+        "text": "Keyboard shortcuts are not possible",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o4",
+        "text": "Use only HTML5 keyboard attributes",
+        "isCorrect": false,
+        "explanation": null
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.freecodecamp.org/news/front-end-developer-handbook/",
+        "type": "article",
+        "title": "Frontend Development Best Practices",
+        "author": "freeCodeCamp",
+        "description": "Complete frontend development guide"
+      },
+      {
+        "url": "https://frontendmasters.com/",
+        "type": "course",
+        "title": "Frontend Masters",
+        "author": "Frontend Masters",
+        "duration": "Varies",
+        "description": "Advanced frontend development courses"
+      }
+    ],
+    "points": 15,
+    "isActive": true,
+    "createdAt": "2025-11-20T04:02:54.995583+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "7078a640-0fbc-43b1-ad5d-ae7dc05d2b54",
+    "title": "No validation needed",
+    "content": "You need to build a registration form with validation. What approach is best?",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "Controlled components with validation provide better UX. Libraries like React Hook Form handle validation, errors, and performance automatically.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Use controlled components with validation logic, or libraries like React Hook Form or Formik for complex forms",
+        "isCorrect": true,
+        "explanation": null
+      },
+      {
+        "id": "o2",
+        "text": "Use only HTML5 validation attributes",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o3",
+        "text": "Validate only on submit",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o4",
+        "text": "No validation needed",
+        "isCorrect": false,
+        "explanation": null
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.freecodecamp.org/news/front-end-developer-handbook/",
+        "type": "article",
+        "title": "Frontend Development Best Practices",
+        "author": "freeCodeCamp",
+        "description": "Complete frontend development guide"
+      },
+      {
+        "url": "https://frontendmasters.com/",
+        "type": "course",
+        "title": "Frontend Masters",
+        "author": "Frontend Masters",
+        "duration": "Varies",
+        "description": "Advanced frontend development courses"
+      }
+    ],
+    "points": 15,
+    "isActive": true,
+    "createdAt": "2025-11-20T04:01:59.458576+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "fd8d3e75-b9eb-4192-8ad3-e95629e7f60c",
+    "title": "Real-time is not possible in React",
+    "content": "You need to show new messages as they arrive. What technology should you use?",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "WebSockets enable bidirectional real-time communication. Socket.io provides React-friendly API. Update component state when messages arrive.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Use WebSockets (Socket.io) or Server-Sent Events for real-time communication, update state when messages arrive",
+        "isCorrect": true,
+        "explanation": null
+      },
+      {
+        "id": "o2",
+        "text": "Poll API every second",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o3",
+        "text": "Use only HTTP requests",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o4",
+        "text": "Real-time is not possible in React",
+        "isCorrect": false,
+        "explanation": null
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.freecodecamp.org/news/front-end-developer-handbook/",
+        "type": "article",
+        "title": "Frontend Development Best Practices",
+        "author": "freeCodeCamp",
+        "description": "Complete frontend development guide"
+      },
+      {
+        "url": "https://frontendmasters.com/",
+        "type": "course",
+        "title": "Frontend Masters",
+        "author": "Frontend Masters",
+        "duration": "Varies",
+        "description": "Advanced frontend development courses"
+      }
+    ],
+    "points": 15,
+    "isActive": true,
+    "createdAt": "2025-11-20T04:01:59.458576+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "414bf9f1-ee38-4e04-b9e3-c02ef05536b5",
+    "title": "Uncontrolled is always better",
+    "content": "When building a form in a frontend task, which approach should you use?",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "Controlled components give React full control over form state, enabling validation and integration. Uncontrolled uses DOM refs for less React overhead.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Controlled: React controls form state via state. Uncontrolled: DOM handles form state via refs. Use controlled for React integration.",
+        "isCorrect": true,
+        "explanation": null
+      },
+      {
+        "id": "o2",
+        "text": "They are identical",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o3",
+        "text": "Controlled components are deprecated",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o4",
+        "text": "Uncontrolled is always better",
+        "isCorrect": false,
+        "explanation": null
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.freecodecamp.org/news/front-end-developer-handbook/",
+        "type": "article",
+        "title": "Frontend Development Best Practices",
+        "author": "freeCodeCamp",
+        "description": "Complete frontend development guide"
+      },
+      {
+        "url": "https://frontendmasters.com/",
+        "type": "course",
+        "title": "Frontend Masters",
+        "author": "Frontend Masters",
+        "duration": "Varies",
+        "description": "Advanced frontend development courses"
+      }
+    ],
+    "points": 15,
+    "isActive": true,
+    "createdAt": "2025-11-20T04:01:59.458576+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "d2545e1f-9dd3-46a9-a296-908768c8fd47",
+    "title": "File uploads are not possible in React",
+    "content": "You need to allow users to upload profile pictures. How should you implement this?",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "Use file input, File API for preview/validation, FormData for upload. Validate type, size, and show user feedback during upload.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Use input type=\"file\", handle File API, show preview, validate file type/size, and upload via FormData to API",
+        "isCorrect": true,
+        "explanation": null
+      },
+      {
+        "id": "o2",
+        "text": "Use only drag-and-drop",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o3",
+        "text": "Store files in localStorage",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o4",
+        "text": "File uploads are not possible in React",
+        "isCorrect": false,
+        "explanation": null
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.freecodecamp.org/news/front-end-developer-handbook/",
+        "type": "article",
+        "title": "Frontend Development Best Practices",
+        "author": "freeCodeCamp",
+        "description": "Complete frontend development guide"
+      },
+      {
+        "url": "https://frontendmasters.com/",
+        "type": "course",
+        "title": "Frontend Masters",
+        "author": "Frontend Masters",
+        "duration": "Varies",
+        "description": "Advanced frontend development courses"
+      }
+    ],
+    "points": 15,
+    "isActive": true,
+    "createdAt": "2025-11-20T04:01:59.458576+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "ceb4ac75-4276-4785-9625-845f61e3a703",
+    "title": "WebSockets don't need cleanup",
+    "content": "You're building a collaborative editor with real-time updates. How do you manage the WebSocket connection?",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "Create connection in useEffect, store in ref to persist across renders, cleanup on unmount. Implement reconnection logic for reliability.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Create WebSocket connection in useEffect, store in useRef, cleanup on unmount, handle reconnection logic",
+        "isCorrect": true,
+        "explanation": null
+      },
+      {
+        "id": "o2",
+        "text": "Create connection in component body",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o3",
+        "text": "Use only one global connection for entire app",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o4",
+        "text": "WebSockets don't need cleanup",
+        "isCorrect": false,
+        "explanation": null
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.freecodecamp.org/news/front-end-developer-handbook/",
+        "type": "article",
+        "title": "Frontend Development Best Practices",
+        "author": "freeCodeCamp",
+        "description": "Complete frontend development guide"
+      },
+      {
+        "url": "https://frontendmasters.com/",
+        "type": "course",
+        "title": "Frontend Masters",
+        "author": "Frontend Masters",
+        "duration": "Varies",
+        "description": "Advanced frontend development courses"
+      }
+    ],
+    "points": 15,
+    "isActive": true,
+    "createdAt": "2025-11-20T04:01:59.458576+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "6aeec0a5-a922-42fa-af3b-3da57f3bea14",
+    "title": "Routing is not needed in React",
+    "content": "Your app needs multiple pages: home, products, cart, checkout. What routing solution should you use?",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "React Router provides declarative routing. Use BrowserRouter for history API, Routes for route matching, Route for individual routes.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Use React Router with BrowserRouter, Routes, and Route components for declarative routing",
+        "isCorrect": true,
+        "explanation": null
+      },
+      {
+        "id": "o2",
+        "text": "Use only window.location",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o3",
+        "text": "Create separate HTML files",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o4",
+        "text": "Routing is not needed in React",
+        "isCorrect": false,
+        "explanation": null
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.freecodecamp.org/news/front-end-developer-handbook/",
+        "type": "article",
+        "title": "Frontend Development Best Practices",
+        "author": "freeCodeCamp",
+        "description": "Complete frontend development guide"
+      },
+      {
+        "url": "https://frontendmasters.com/",
+        "type": "course",
+        "title": "Frontend Masters",
+        "author": "Frontend Masters",
+        "duration": "Varies",
+        "description": "Advanced frontend development courses"
+      }
+    ],
+    "points": 15,
+    "isActive": true,
+    "createdAt": "2025-11-20T04:01:59.458576+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "e538a606-70b0-41cb-9298-2889d678aa8d",
+    "title": "All routes should be public",
+    "content": "Some pages should only be accessible to logged-in users. How do you implement this?",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "Create ProtectedRoute wrapper component. Check authentication, redirect to login if needed, or render children if authenticated.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Create a ProtectedRoute component that checks auth state and redirects to login if not authenticated",
+        "isCorrect": true,
+        "explanation": null
+      },
+      {
+        "id": "o2",
+        "text": "Check auth in every component",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o3",
+        "text": "Use only server-side protection",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o4",
+        "text": "All routes should be public",
+        "isCorrect": false,
+        "explanation": null
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.freecodecamp.org/news/front-end-developer-handbook/",
+        "type": "article",
+        "title": "Frontend Development Best Practices",
+        "author": "freeCodeCamp",
+        "description": "Complete frontend development guide"
+      },
+      {
+        "url": "https://frontendmasters.com/",
+        "type": "course",
+        "title": "Frontend Masters",
+        "author": "Frontend Masters",
+        "duration": "Varies",
+        "description": "Advanced frontend development courses"
+      }
+    ],
+    "points": 15,
+    "isActive": true,
+    "createdAt": "2025-11-20T04:01:59.458576+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "0458fd5a-614c-49b4-97b1-c1fc3b2a31b8",
+    "title": "Don't optimize - let browser handle it",
+    "content": "Your product catalog has hundreds of product images. How do you optimize loading?",
+    "type": "code",
+    "difficulty": "intermediate",
+    "explanation": "Lazy load images, use responsive srcset, modern formats like WebP, and CDN. Only load images when needed and at appropriate sizes.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Use lazy loading, responsive images with srcset, WebP format, and image CDN with proper sizing",
+        "isCorrect": true,
+        "explanation": null
+      },
+      {
+        "id": "o2",
+        "text": "Load all images at once",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o3",
+        "text": "Use only PNG format",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o4",
+        "text": "Don't optimize - let browser handle it",
+        "isCorrect": false,
+        "explanation": null
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.freecodecamp.org/news/front-end-developer-handbook/",
+        "type": "article",
+        "title": "Frontend Development Best Practices",
+        "author": "freeCodeCamp",
+        "description": "Complete frontend development guide"
+      },
+      {
+        "url": "https://frontendmasters.com/",
+        "type": "course",
+        "title": "Frontend Masters",
+        "author": "Frontend Masters",
+        "duration": "Varies",
+        "description": "Advanced frontend development courses"
+      }
+    ],
+    "points": 15,
+    "isActive": true,
+    "createdAt": "2025-11-20T04:01:59.458576+00:00",
+    "updatedAt": "2025-11-24T23:33:46.870735+00:00"
+  },
+  {
+    "id": "243694ce-2e70-48ae-942a-cdc4a1457733",
+    "title": "Code splitting is not possible in React",
+    "content": "Your app is getting large. How do you reduce initial bundle size?",
+    "type": "code",
+    "difficulty": "intermediate",
+    "explanation": "React.lazy() enables code splitting. Use it with Suspense for route-based splitting. Dynamic imports split heavy components.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Use React.lazy() and Suspense for route-based code splitting, and dynamic imports for heavy components",
+        "isCorrect": true,
+        "explanation": null
+      },
+      {
+        "id": "o2",
+        "text": "Bundle everything into one file",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o3",
+        "text": "Split code manually by copying files",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o4",
+        "text": "Code splitting is not possible in React",
+        "isCorrect": false,
+        "explanation": null
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.freecodecamp.org/news/front-end-developer-handbook/",
+        "type": "article",
+        "title": "Frontend Development Best Practices",
+        "author": "freeCodeCamp",
+        "description": "Complete frontend development guide"
+      },
+      {
+        "url": "https://frontendmasters.com/",
+        "type": "course",
+        "title": "Frontend Masters",
+        "author": "Frontend Masters",
+        "duration": "Varies",
+        "description": "Advanced frontend development courses"
+      }
+    ],
+    "points": 15,
+    "isActive": true,
+    "createdAt": "2025-11-20T04:01:59.458576+00:00",
+    "updatedAt": "2025-11-24T23:33:46.870735+00:00"
+  },
+  {
+    "id": "fa9088e4-557c-4717-b2c9-0f15770aecc5",
+    "title": "Memory leaks don't happen with WebSockets",
+    "content": "Your chat component unmounts but WebSocket listeners remain. How do you fix this?",
+    "type": "code",
+    "difficulty": "intermediate",
+    "explanation": "Always clean up event listeners and close connections in useEffect cleanup. This prevents memory leaks and stale updates.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Remove event listeners in useEffect cleanup function and close WebSocket connection on unmount",
+        "isCorrect": true,
+        "explanation": null
+      },
+      {
+        "id": "o2",
+        "text": "Leave listeners active",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o3",
+        "text": "Use only global listeners",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o4",
+        "text": "Memory leaks don't happen with WebSockets",
+        "isCorrect": false,
+        "explanation": null
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.freecodecamp.org/news/front-end-developer-handbook/",
+        "type": "article",
+        "title": "Frontend Development Best Practices",
+        "author": "freeCodeCamp",
+        "description": "Complete frontend development guide"
+      },
+      {
+        "url": "https://frontendmasters.com/",
+        "type": "course",
+        "title": "Frontend Masters",
+        "author": "Frontend Masters",
+        "duration": "Varies",
+        "description": "Advanced frontend development courses"
+      }
+    ],
+    "points": 15,
+    "isActive": true,
+    "createdAt": "2025-11-20T04:01:59.458576+00:00",
+    "updatedAt": "2025-11-24T23:33:46.870735+00:00"
+  },
+  {
+    "id": "a22efdda-a9fa-42c3-96a8-4c305c922bc4",
+    "title": "No component structure needed",
+    "content": "You need to build a todo list with add, edit, delete, and filter functionality. What component structure is best?",
+    "type": "code",
+    "difficulty": "intermediate",
+    "explanation": "Break down into logical components: container for state, item for display, form for input, filter for UI controls.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "TodoList container, TodoItem component, TodoForm component, FilterBar component",
+        "isCorrect": true,
+        "explanation": null
+      },
+      {
+        "id": "o2",
+        "text": "One component with all functionality",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o3",
+        "text": "Separate components for each todo item only",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o4",
+        "text": "No component structure needed",
+        "isCorrect": false,
+        "explanation": null
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.freecodecamp.org/news/front-end-developer-handbook/",
+        "type": "article",
+        "title": "Frontend Development Best Practices",
+        "author": "freeCodeCamp",
+        "description": "Complete frontend development guide"
+      },
+      {
+        "url": "https://frontendmasters.com/",
+        "type": "course",
+        "title": "Frontend Masters",
+        "author": "Frontend Masters",
+        "duration": "Varies",
+        "description": "Advanced frontend development courses"
+      }
+    ],
+    "points": 15,
+    "isActive": true,
+    "createdAt": "2025-11-20T04:00:03.445509+00:00",
+    "updatedAt": "2025-11-24T23:33:46.870735+00:00"
+  },
+  {
+    "id": "e41a31c5-fa33-4740-b40c-665095d9c3c3",
+    "title": "Only log errors to console",
+    "content": "Your app makes multiple API calls. How should you handle and display errors?",
+    "type": "code",
+    "difficulty": "intermediate",
+    "explanation": "Catch errors, set error state, display user-friendly messages, and provide retry mechanisms. Use Error Boundaries for component tree errors.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Use try-catch blocks, set error state, and display user-friendly error messages with retry options",
+        "isCorrect": true,
+        "explanation": null
+      },
+      {
+        "id": "o2",
+        "text": "Let errors crash the app",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o3",
+        "text": "Hide all errors from users",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o4",
+        "text": "Only log errors to console",
+        "isCorrect": false,
+        "explanation": null
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.freecodecamp.org/news/front-end-developer-handbook/",
+        "type": "article",
+        "title": "Frontend Development Best Practices",
+        "author": "freeCodeCamp",
+        "description": "Complete frontend development guide"
+      },
+      {
+        "url": "https://frontendmasters.com/",
+        "type": "course",
+        "title": "Frontend Masters",
+        "author": "Frontend Masters",
+        "duration": "Varies",
+        "description": "Advanced frontend development courses"
+      }
+    ],
+    "points": 15,
+    "isActive": true,
+    "createdAt": "2025-11-20T04:00:03.445509+00:00",
+    "updatedAt": "2025-11-24T23:25:57.521339+00:00"
+  },
+  {
+    "id": "8edaaeaa-26e4-4a36-bc80-4cabb18c78f4",
+    "title": "Use only class components for all features",
+    "content": "You need to build a social media dashboard with posts, comments, and user profiles. How should you organize your React components?",
+    "type": "code",
+    "difficulty": "intermediate",
+    "explanation": "Break down complex UIs into smaller, reusable components. Use composition to build complex features from simple components.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Create reusable components (PostCard, CommentList, UserProfile) and compose them in a Dashboard container",
+        "isCorrect": true,
+        "explanation": null
+      },
+      {
+        "id": "o2",
+        "text": "Put everything in one large component for simplicity",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o3",
+        "text": "Create separate components for each feature without composition",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o4",
+        "text": "Use only class components for all features",
+        "isCorrect": false,
+        "explanation": null
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.freecodecamp.org/news/front-end-developer-handbook/",
+        "type": "article",
+        "title": "Frontend Development Best Practices",
+        "author": "freeCodeCamp",
+        "description": "Complete frontend development guide"
+      },
+      {
+        "url": "https://frontendmasters.com/",
+        "type": "course",
+        "title": "Frontend Masters",
+        "author": "Frontend Masters",
+        "duration": "Varies",
+        "description": "Advanced frontend development courses"
+      }
+    ],
+    "points": 15,
+    "isActive": true,
+    "createdAt": "2025-11-20T04:00:03.445509+00:00",
+    "updatedAt": "2025-11-24T23:33:46.870735+00:00"
+  },
+  {
+    "id": "6fa1cde6-02d8-44f4-8851-3b8441ddf329",
+    "title": "Use global variables",
+    "content": "You have a ProductList and ShoppingCart component that need to share cart state. What approach should you use?",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "Lift state to common parent or use Context API. Props cannot be passed directly between siblings.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Lift state up to a common parent component or use Context API",
+        "isCorrect": true,
+        "explanation": null
+      },
+      {
+        "id": "o2",
+        "text": "Use props to pass data between siblings directly",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o3",
+        "text": "Store state in localStorage only",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o4",
+        "text": "Use global variables",
+        "isCorrect": false,
+        "explanation": null
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.freecodecamp.org/news/front-end-developer-handbook/",
+        "type": "article",
+        "title": "Frontend Development Best Practices",
+        "author": "freeCodeCamp",
+        "description": "Complete frontend development guide"
+      },
+      {
+        "url": "https://frontendmasters.com/",
+        "type": "course",
+        "title": "Frontend Masters",
+        "author": "Frontend Masters",
+        "duration": "Varies",
+        "description": "Advanced frontend development courses"
+      }
+    ],
+    "points": 15,
+    "isActive": true,
+    "createdAt": "2025-11-20T04:00:03.445509+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "7d04b90d-4636-4f74-9baa-b844c5a448ef",
+    "title": "Avoid state management entirely",
+    "content": "You're building a Netflix-style app with video player, recommendations, and watchlist. What state management approach is best?",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "Use Context API for state shared across multiple components (current video, user). Use useState for component-local state (UI toggles).",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Use Context API for global state (current video, user preferences) and useState for local component state",
+        "isCorrect": true,
+        "explanation": null
+      },
+      {
+        "id": "o2",
+        "text": "Put all state in a single useState hook at the root",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o3",
+        "text": "Use only props drilling for all state",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o4",
+        "text": "Avoid state management entirely",
+        "isCorrect": false,
+        "explanation": null
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.freecodecamp.org/news/front-end-developer-handbook/",
+        "type": "article",
+        "title": "Frontend Development Best Practices",
+        "author": "freeCodeCamp",
+        "description": "Complete frontend development guide"
+      },
+      {
+        "url": "https://frontendmasters.com/",
+        "type": "course",
+        "title": "Frontend Masters",
+        "author": "Frontend Masters",
+        "duration": "Varies",
+        "description": "Advanced frontend development courses"
+      }
+    ],
+    "points": 15,
+    "isActive": true,
+    "createdAt": "2025-11-20T04:00:03.445509+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "99aceeec-7151-4df2-a911-ad6b88cd728b",
+    "title": "useState and useReducer are identical",
+    "content": "You're building a complex form with multiple interdependent fields and validation. Which hook is more appropriate?",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "useReducer is better for complex state logic, multiple related state values, or when state updates depend on previous state.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "useReducer when state logic is complex with multiple sub-values or when next state depends on previous state",
+        "isCorrect": true,
+        "explanation": null
+      },
+      {
+        "id": "o2",
+        "text": "Always use useState - it's simpler",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o3",
+        "text": "useReducer only for arrays",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o4",
+        "text": "useState and useReducer are identical",
+        "isCorrect": false,
+        "explanation": null
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.freecodecamp.org/news/front-end-developer-handbook/",
+        "type": "article",
+        "title": "Frontend Development Best Practices",
+        "author": "freeCodeCamp",
+        "description": "Complete frontend development guide"
+      },
+      {
+        "url": "https://frontendmasters.com/",
+        "type": "course",
+        "title": "Frontend Masters",
+        "author": "Frontend Masters",
+        "duration": "Varies",
+        "description": "Advanced frontend development courses"
+      }
+    ],
+    "points": 15,
+    "isActive": true,
+    "createdAt": "2025-11-20T04:00:03.445509+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "a8f6a028-e3d9-409b-936e-62e586d414fb",
+    "title": "Use setTimeout to simulate loading",
+    "content": "Your dashboard needs to fetch users, posts, and comments. How do you manage loading states?",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "Use separate loading states for each data fetch to show partial content as it loads. Libraries like React Query handle this automatically.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Use separate loading states for each data fetch, or use React Query/SWR for automatic loading state management",
+        "isCorrect": true,
+        "explanation": null
+      },
+      {
+        "id": "o2",
+        "text": "Show a single loading spinner for the entire page",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o3",
+        "text": "Don't show loading states - just render empty data",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o4",
+        "text": "Use setTimeout to simulate loading",
+        "isCorrect": false,
+        "explanation": null
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.freecodecamp.org/news/front-end-developer-handbook/",
+        "type": "article",
+        "title": "Frontend Development Best Practices",
+        "author": "freeCodeCamp",
+        "description": "Complete frontend development guide"
+      },
+      {
+        "url": "https://frontendmasters.com/",
+        "type": "course",
+        "title": "Frontend Masters",
+        "author": "Frontend Masters",
+        "duration": "Varies",
+        "description": "Advanced frontend development courses"
+      }
+    ],
+    "points": 15,
+    "isActive": true,
+    "createdAt": "2025-11-20T04:00:03.445509+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "fa022fdb-e43b-4a0f-8ce8-543a6007fbd7",
+    "title": "Use only localStorage for pagination",
+    "content": "You need to implement infinite scroll for a product list. What approach is best?",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "Use Intersection Observer to detect scroll position. Fetch next page when user nears bottom, append to existing data for seamless infinite scroll.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Use Intersection Observer API to detect when user scrolls near bottom, then fetch next page and append to existing data",
+        "isCorrect": true,
+        "explanation": null
+      },
+      {
+        "id": "o2",
+        "text": "Fetch all data at once and paginate client-side",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o3",
+        "text": "Reload entire page for each page change",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o4",
+        "text": "Use only localStorage for pagination",
+        "isCorrect": false,
+        "explanation": null
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.freecodecamp.org/news/front-end-developer-handbook/",
+        "type": "article",
+        "title": "Frontend Development Best Practices",
+        "author": "freeCodeCamp",
+        "description": "Complete frontend development guide"
+      },
+      {
+        "url": "https://frontendmasters.com/",
+        "type": "course",
+        "title": "Frontend Masters",
+        "author": "Frontend Masters",
+        "duration": "Varies",
+        "description": "Advanced frontend development courses"
+      }
+    ],
+    "points": 15,
+    "isActive": true,
+    "createdAt": "2025-11-20T04:00:03.445509+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "c7de423b-4897-44a4-8a69-edc241067a91",
+    "title": "Use only class components",
+    "content": "Your dashboard has 100+ product cards that re-render when parent state changes. How do you optimize this?",
+    "type": "code",
+    "difficulty": "intermediate",
+    "explanation": "React.memo prevents re-renders when props haven't changed. useMemo/useCallback memoize values and functions to prevent recreation.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Use React.memo for child components and useMemo/useCallback for expensive computations and callbacks",
+        "isCorrect": true,
+        "explanation": null
+      },
+      {
+        "id": "o2",
+        "text": "Disable re-rendering completely",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o3",
+        "text": "Put all components in one file",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o4",
+        "text": "Use only class components",
+        "isCorrect": false,
+        "explanation": null
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.freecodecamp.org/news/front-end-developer-handbook/",
+        "type": "article",
+        "title": "Frontend Development Best Practices",
+        "author": "freeCodeCamp",
+        "description": "Complete frontend development guide"
+      },
+      {
+        "url": "https://frontendmasters.com/",
+        "type": "course",
+        "title": "Frontend Masters",
+        "author": "Frontend Masters",
+        "duration": "Varies",
+        "description": "Advanced frontend development courses"
+      }
+    ],
+    "points": 15,
+    "isActive": true,
+    "createdAt": "2025-11-20T04:00:03.445509+00:00",
+    "updatedAt": "2025-11-24T23:33:46.870735+00:00"
+  },
+  {
+    "id": "a227d597-8d88-45bd-9814-bddaaac4d181",
+    "title": "Split into multiple pages only",
+    "content": "You need to render 1000+ items in a list. What optimization technique should you use?",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "Virtualization renders only visible items in viewport, dramatically improving performance for large lists. Libraries like react-window handle this.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Use virtualization (react-window or react-virtualized) to render only visible items",
+        "isCorrect": true,
+        "explanation": null
+      },
+      {
+        "id": "o2",
+        "text": "Render all items at once",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o3",
+        "text": "Use display: none to hide items",
+        "isCorrect": false,
+        "explanation": null
+      },
+      {
+        "id": "o4",
+        "text": "Split into multiple pages only",
+        "isCorrect": false,
+        "explanation": null
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.freecodecamp.org/news/front-end-developer-handbook/",
+        "type": "article",
+        "title": "Frontend Development Best Practices",
+        "author": "freeCodeCamp",
+        "description": "Complete frontend development guide"
+      },
+      {
+        "url": "https://frontendmasters.com/",
+        "type": "course",
+        "title": "Frontend Masters",
+        "author": "Frontend Masters",
+        "duration": "Varies",
+        "description": "Advanced frontend development courses"
+      }
+    ],
+    "points": 15,
+    "isActive": true,
+    "createdAt": "2025-11-20T04:00:03.445509+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "f3700ad9-aa58-45f2-a101-bf87eec73f27",
+    "title": "Disables revalidation for dynamic pages",
+    "content": "What does the stale-while-revalidate caching strategy do?",
+    "type": "multiple-choice",
+    "difficulty": "advanced",
+    "explanation": "Serves a stale cache immediately and revalidates it in the background",
+    "options": [
+      {
+        "id": "a",
+        "text": "Serves a stale cache immediately and revalidates it in the background",
+        "isCorrect": true,
+        "explanation": ""
+      },
+      {
+        "id": "b",
+        "text": "Deletes old cache entries before fetching new ones",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "c",
+        "text": "Disables revalidation for dynamic pages",
+        "isCorrect": false,
+        "explanation": ""
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.patterns.dev/react/rendering-patterns",
+        "type": "article",
+        "title": "React Rendering Patterns",
+        "author": "Patterns.dev",
+        "description": "Learn React rendering patterns"
+      },
+      {
+        "url": "https://www.youtube.com/watch?v=Y2hgEGPzTZY",
+        "type": "video",
+        "title": "React Rendering Explained",
+        "author": "Web Dev Simplified",
+        "duration": "15:00",
+        "description": "Understanding React rendering"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-19T23:17:24.553372+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "50980537-c253-4843-93f8-c7948fc0d893",
+    "title": "It disables browser caching entirely",
+    "content": "How does CDN edge caching improve rendering performance?",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "It stores static assets closer to the user geographically to reduce latency",
+    "options": [
+      {
+        "id": "a",
+        "text": "It stores static assets closer to the user geographically to reduce latency",
+        "isCorrect": true,
+        "explanation": ""
+      },
+      {
+        "id": "b",
+        "text": "It only caches dynamic content for faster hydration",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "c",
+        "text": "It disables browser caching entirely",
+        "isCorrect": false,
+        "explanation": ""
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.patterns.dev/react/rendering-patterns",
+        "type": "article",
+        "title": "React Rendering Patterns",
+        "author": "Patterns.dev",
+        "description": "Learn React rendering patterns"
+      },
+      {
+        "url": "https://www.youtube.com/watch?v=Y2hgEGPzTZY",
+        "type": "video",
+        "title": "React Rendering Explained",
+        "author": "Web Dev Simplified",
+        "duration": "15:00",
+        "description": "Understanding React rendering"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-19T23:17:24.553372+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "1155d7ee-a52d-47fd-9c78-a9f62e37c05d",
+    "title": "It slows down content delivery",
+    "content": "Why is versioning important for static assets in caching?",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "It ensures browsers fetch updated assets when changes occur",
+    "options": [
+      {
+        "id": "a",
+        "text": "It ensures browsers fetch updated assets when changes occur",
+        "isCorrect": true,
+        "explanation": ""
+      },
+      {
+        "id": "b",
+        "text": "It prevents caching altogether",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "c",
+        "text": "It slows down content delivery",
+        "isCorrect": false,
+        "explanation": ""
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.patterns.dev/react/rendering-patterns",
+        "type": "article",
+        "title": "React Rendering Patterns",
+        "author": "Patterns.dev",
+        "description": "Learn React rendering patterns"
+      },
+      {
+        "url": "https://www.youtube.com/watch?v=Y2hgEGPzTZY",
+        "type": "video",
+        "title": "React Rendering Explained",
+        "author": "Web Dev Simplified",
+        "duration": "15:00",
+        "description": "Understanding React rendering"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-19T23:17:24.553372+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  },
+  {
+    "id": "fb834ffa-33d5-4f70-9a55-1f3f4c35edbf",
+    "title": "Not quite. Consider rendering strategy best practices.",
+    "content": "What is the difference between preconnect and prefetch in web performance optimization?",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "explanation": "Preconnect establishes early network connections (DNS, TCP, TLS) to improve later requests.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Preconnect establishes early network connections (DNS, TCP, TLS) to improve later requests.",
+        "isCorrect": true,
+        "explanation": "Preconnect establishes early network connections (DNS, TCP, TLS) to improve later requests."
+      },
+      {
+        "id": "o2",
+        "text": "This is not correct. Please refer to the explanation.",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "o3",
+        "text": "Incorrect. Review rendering pattern concepts.",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "o4",
+        "text": "This is a common misconception. The correct answer is different.",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "o5",
+        "text": "Not quite. Consider rendering strategy best practices.",
+        "isCorrect": false,
+        "explanation": ""
+      }
+    ],
+    "resources": [
+      {
+        "url": "https://www.patterns.dev/react/rendering-patterns",
+        "type": "article",
+        "title": "React Rendering Patterns",
+        "author": "Patterns.dev",
+        "description": "Learn React rendering patterns"
+      },
+      {
+        "url": "https://www.youtube.com/watch?v=Y2hgEGPzTZY",
+        "type": "video",
+        "title": "React Rendering Explained",
+        "author": "Web Dev Simplified",
+        "duration": "15:00",
+        "description": "Understanding React rendering"
+      }
+    ],
+    "points": 10,
+    "isActive": true,
+    "createdAt": "2025-11-19T23:17:24.553372+00:00",
+    "updatedAt": "2025-11-24T22:43:02.043876+00:00"
+  }
+]
