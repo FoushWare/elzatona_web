@@ -118,9 +118,23 @@ export function sanitizeObjectServer<T extends Record<string, any>>(obj: T): T {
 
   const sanitized = { ...obj };
 
+  // Fields that should preserve newlines and special characters (code, content, etc.)
+  const preserveNewlinesFields = ['code', 'content', 'explanation', 'description', 'starter_code', 'code_template'];
+
   for (const key in sanitized) {
     if (typeof sanitized[key] === 'string') {
-      sanitized[key] = sanitizeInputServer(sanitized[key]) as T[typeof key];
+      // For code and content fields, preserve newlines - don't use sanitizeInputServer
+      if (preserveNewlinesFields.includes(key)) {
+        // Only remove dangerous control characters, but preserve newlines and tabs
+        let content = sanitized[key];
+        content = content
+          .replace(/[\x00-\x08\x0B-\x0C\x0E-\x1F\x7F]/g, '') // Remove control chars except \n (0x0A), \r (0x0D), \t (0x09)
+          .replace(/\x00/g, ''); // Remove null bytes
+        sanitized[key] = content as T[typeof key];
+      } else {
+        // For other string fields, use standard sanitization
+        sanitized[key] = sanitizeInputServer(sanitized[key]) as T[typeof key];
+      }
     } else if (Array.isArray(sanitized[key])) {
       sanitized[key] = sanitized[key].map((item: any) =>
         typeof item === 'string' ? sanitizeInputServer(item) : item

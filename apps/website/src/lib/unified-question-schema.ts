@@ -11,7 +11,7 @@ export interface UnifiedQuestion {
   id: string;
   title: string;
   content: string;
-  type: 'multiple-choice' | 'open-ended' | 'true-false' | 'code';
+  type: 'multiple-choice' | 'true-false' | 'code';
   category?: string; // Made optional
   subcategory?: string;
   difficulty: 'beginner' | 'intermediate' | 'advanced';

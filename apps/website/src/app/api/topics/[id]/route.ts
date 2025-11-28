@@ -79,11 +79,44 @@ export async function PUT(
       );
     }
 
-    // Prepare update data
-    const updateData = {
-      ...body,
+    // Map camelCase fields to snake_case database fields
+    const updateData: any = {
+      name: body.name,
+      description: body.description || null,
+      difficulty: body.difficulty || null,
+      slug: body.slug || null,
       updated_at: new Date().toISOString(),
     };
+
+    // Map categoryId to category_id
+    if (body.categoryId !== undefined) {
+      updateData.category_id = body.categoryId;
+    } else if (body.category_id !== undefined) {
+      updateData.category_id = body.category_id;
+    }
+
+    // Map estimatedQuestions to estimated_questions
+    if (body.estimatedQuestions !== undefined) {
+      updateData.estimated_questions = body.estimatedQuestions;
+    } else if (body.estimated_questions !== undefined) {
+      updateData.estimated_questions = body.estimated_questions;
+    }
+
+    // Map order to order_index
+    if (body.order !== undefined) {
+      updateData.order_index = body.order;
+    } else if (body.order_index !== undefined) {
+      updateData.order_index = body.order_index;
+    }
+
+    // Handle is_active if provided
+    if (body.is_active !== undefined) {
+      updateData.is_active = body.is_active;
+    } else if (body.isActive !== undefined) {
+      updateData.is_active = body.isActive;
+    }
+
+    console.log('📝 Updating topic:', topicId, 'with data:', updateData);
 
     const { data: updatedTopic, error } = await supabase
       .from('topics')
@@ -93,13 +126,22 @@ export async function PUT(
       .single();
 
     if (error) {
+      console.error('❌ Database error updating topic:', error);
       if (error.code === 'PGRST116') {
         return NextResponse.json(
           { success: false, error: 'Topic not found' },
           { status: 404 }
         );
       }
-      throw error;
+      return NextResponse.json(
+        { 
+          success: false, 
+          error: 'Failed to update topic',
+          details: error.message,
+          code: error.code
+        },
+        { status: 500 }
+      );
     }
 
     return NextResponse.json({
@@ -108,9 +150,13 @@ export async function PUT(
       data: updatedTopic,
     });
   } catch (error) {
-    console.error('Error updating topic:', error);
+    console.error('❌ Error updating topic:', error);
     return NextResponse.json(
-      { success: false, error: 'Failed to update topic' },
+      { 
+        success: false, 
+        error: 'Failed to update topic',
+        details: error instanceof Error ? error.message : 'Unknown error'
+      },
       { status: 500 }
     );
   }
