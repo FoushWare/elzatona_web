@@ -50,6 +50,8 @@ export async function GET(request: NextRequest) {
 
     const filters = {
       category: searchParams.get('category') || undefined,
+      topic: searchParams.get('topic') || undefined,
+      type: searchParams.get('type') || undefined,
       subcategory: searchParams.get('subcategory') || undefined,
       difficulty: searchParams.get('difficulty') || undefined,
       learningPath: searchParams.get('learningPath') || undefined,
@@ -83,8 +85,10 @@ export async function GET(request: NextRequest) {
     );
 
     // Build query with all relationships (categories, topics, learning_cards)
+    // Explicitly include 'code' field to ensure it's returned even if PostgREST cache hasn't refreshed
     let query = supabase.from('questions').select(`
       *,
+      code,
       categories (
         id,
         name,
@@ -113,6 +117,12 @@ export async function GET(request: NextRequest) {
     if (cleanFilters.category) {
       query = query.eq('category_id', cleanFilters.category);
     }
+    if (cleanFilters.topic) {
+      query = query.eq('topic_id', cleanFilters.topic);
+    }
+    if (cleanFilters.type) {
+      query = query.eq('type', cleanFilters.type);
+    }
     if (cleanFilters.difficulty) {
       query = query.eq('difficulty', cleanFilters.difficulty);
     }
@@ -129,6 +139,12 @@ export async function GET(request: NextRequest) {
       .select('*', { count: 'exact', head: true });
     if (cleanFilters.category) {
       countQuery = countQuery.eq('category_id', cleanFilters.category);
+    }
+    if (cleanFilters.topic) {
+      countQuery = countQuery.eq('topic_id', cleanFilters.topic);
+    }
+    if (cleanFilters.type) {
+      countQuery = countQuery.eq('type', cleanFilters.type);
     }
     if (cleanFilters.difficulty) {
       countQuery = countQuery.eq('difficulty', cleanFilters.difficulty);
@@ -157,6 +173,17 @@ export async function GET(request: NextRequest) {
     // Supabase returns single objects for foreign keys, but frontend expects arrays for display
     const questions = rawQuestions.map((question: any) => {
       const transformed: any = { ...question };
+      
+      // Ensure code field preserves newlines - convert any \n escape sequences to actual newlines
+      if (transformed.code && typeof transformed.code === 'string') {
+        // Handle cases where newlines might be stored as escape sequences
+        transformed.code = transformed.code
+          .replace(/\\n/g, '\n')      // Replace \n escape sequences with actual newlines
+          .replace(/\\r\\n/g, '\n')   // Replace \r\n escape sequences
+          .replace(/\\r/g, '\n')      // Replace \r escape sequences
+          .replace(/\r\n/g, '\n')     // Normalize Windows line breaks
+          .replace(/\r/g, '\n');      // Normalize Mac line breaks
+      }
       
       // Transform categories: single object -> array for display, also add category name for form
       if (question.categories && typeof question.categories === 'object' && !Array.isArray(question.categories)) {
@@ -275,9 +302,52 @@ export async function POST(request: NextRequest) {
         }
         
         // Validate and sanitize question data
+        console.log('🔍 Validating question:', {
+          index: index + 1,
+          title: normalizedData.title,
+          hasCategory: !!normalizedData.category,
+          hasCategoryId: !!normalizedData.category_id,
+          category: normalizedData.category,
+          category_id: normalizedData.category_id,
+        });
+        
+        // CRITICAL: Process code field BEFORE validation/sanitization to preserve newlines
+        // Extract and preserve code field separately - this ensures newlines are never lost
+        const codeField = normalizedData.code;
+        let processedCode: string | null = null;
+        
+        if (codeField) {
+          // Convert to string and ensure \n escape sequences become actual newlines
+          let codeContent = String(codeField);
+          
+          // Convert literal \n escape sequences to actual newlines
+          codeContent = codeContent.replace(/\\n/g, '\n');
+          codeContent = codeContent.replace(/\\r\\n/g, '\n');
+          codeContent = codeContent.replace(/\\r/g, '\n');
+          
+          // Normalize line breaks
+          codeContent = codeContent.replace(/\r\n/g, '\n');
+          codeContent = codeContent.replace(/\r/g, '\n');
+          
+          // Store processed code separately (will restore after sanitization)
+          processedCode = codeContent;
+          
+          // Also update normalizedData for validation
+          normalizedData.code = codeContent;
+          
+          const newlineCount = (codeContent.match(/\n/g) || []).length;
+          console.log(`📝 Code field pre-processing: ${newlineCount} newlines, length: ${codeContent.length}`);
+        }
+        
         const validationResult = validateAndSanitize(questionSchema, normalizedData);
         
         if (!validationResult.success) {
+          console.error('❌ Validation failed for question:', {
+            index: index + 1,
+            title: questionData.title,
+            error: validationResult.error,
+            normalizedData: normalizedData,
+          });
           errors.push({
             question: questionData,
             error: validationResult.error,
@@ -285,9 +355,28 @@ export async function POST(request: NextRequest) {
           });
           continue; // Continue to next question
         }
+        
+        console.log('✅ Validation passed for question:', {
+          index: index + 1,
+          title: normalizedData.title,
+        });
 
-        // Sanitize the validated data
+        // Sanitize the validated data (but code will be handled separately)
         const sanitizedQuestion = sanitizeObjectServer(validationResult.data as any);
+        
+        // CRITICAL: Restore code field AFTER sanitization to ensure newlines are preserved
+        // We bypass sanitizeObjectServer for code field by restoring it from our processed version
+        if (processedCode !== null) {
+          sanitizedQuestion.code = processedCode;
+          
+          const newlineCount = (sanitizedQuestion.code.match(/\n/g) || []).length;
+          console.log(`✅ Code field restored: ${newlineCount} newlines preserved, length: ${sanitizedQuestion.code.length}`);
+          
+          if (newlineCount === 0 && sanitizedQuestion.code.length > 50) {
+            console.error(`❌ CRITICAL: Code field has no newlines after restoration!`);
+            console.error(`   Code preview: ${sanitizedQuestion.code.substring(0, 150)}`);
+          }
+        }
         
         // Ensure is_active is set (use isActive if is_active is not set)
         if (sanitizedQuestion.is_active === undefined && sanitizedQuestion.isActive !== undefined) {
@@ -301,9 +390,40 @@ export async function POST(request: NextRequest) {
           hasLearningCardId: !!(sanitizedQuestion.learningCardId || sanitizedQuestion.learning_card_id),
         });
         
-        // Sanitize rich content fields (explanation, etc.)
+        // Sanitize rich content fields (explanation, code, etc.)
         if (sanitizedQuestion.explanation) {
           sanitizedQuestion.explanation = sanitizeRichContent(sanitizedQuestion.explanation);
+        }
+        
+        // Final code field processing - ensure newlines are definitely preserved
+        // This is a final safety check after all sanitization
+        if (sanitizedQuestion.code) {
+          let codeContent = String(sanitizedQuestion.code);
+          
+          // Convert any remaining \n escape sequences to actual newlines
+          codeContent = codeContent.replace(/\\n/g, '\n');
+          codeContent = codeContent.replace(/\\r\\n/g, '\n');
+          codeContent = codeContent.replace(/\\r/g, '\n');
+          
+          // Normalize line breaks
+          codeContent = codeContent.replace(/\r\n/g, '\n');
+          codeContent = codeContent.replace(/\r/g, '\n');
+          
+          // Only remove dangerous control characters, PRESERVE newlines and tabs
+          codeContent = codeContent
+            .replace(/[\x00-\x08\x0B-\x0C\x0E-\x1F\x7F]/g, '') // Remove control chars except \n (0x0A), \r (0x0D), \t (0x09)
+            .replace(/\x00/g, ''); // Remove null bytes
+          
+          // Final verification
+          const newlineCount = (codeContent.match(/\n/g) || []).length;
+          console.log(`✅ Final code processing: ${newlineCount} newlines, length: ${codeContent.length}`);
+          
+          if (newlineCount === 0 && codeContent.length > 50) {
+            console.error(`❌ ERROR: Code has no newlines! This should not happen.`);
+            console.error(`   Code preview: ${codeContent.substring(0, 150)}`);
+          }
+          
+          sanitizedQuestion.code = codeContent;
         }
 
         // Sanitize options if present
@@ -545,6 +665,18 @@ export async function POST(request: NextRequest) {
         if (resources !== null) {
           questionWithTimestamps.resources = resources;
         }
+        // Add code field if present (always include it, even if null/undefined, to ensure it's saved)
+        // CRITICAL: Ensure newlines are preserved when storing in database
+        if (sanitizedQuestion.code !== undefined && sanitizedQuestion.code !== null && sanitizedQuestion.code !== '') {
+          // Verify newlines are present before storing
+          const codeToStore = String(sanitizedQuestion.code);
+          const newlineCount = (codeToStore.match(/\n/g) || []).length;
+          console.log(`💾 Storing code with ${newlineCount} newlines, length: ${codeToStore.length}`);
+          questionWithTimestamps.code = codeToStore;
+        } else {
+          // Explicitly set to null if not provided (to ensure the field is included in the insert)
+          questionWithTimestamps.code = null;
+        }
         
         // Handle options - only add if present and is an array with items
         // For open-ended questions, options might be undefined or empty
@@ -565,18 +697,30 @@ export async function POST(request: NextRequest) {
           hasOptions: !!(questionWithTimestamps.options && Array.isArray(questionWithTimestamps.options) && questionWithTimestamps.options.length > 0),
         });
 
+        // Insert question with code field
+        // Explicitly select code field in the response to ensure it's returned
         const { data, error } = await supabase
           .from('questions')
           .insert(questionWithTimestamps)
-          .select()
+          .select('*, code') // Explicitly include code in the response
           .single();
 
         if (error) {
           console.error('Supabase insert error:', error);
+          // If error is about code column not found (PGRST204), it means PostgREST cache hasn't refreshed
+          if (error.code === 'PGRST204') {
+            console.warn('⚠️ Code column not found in PostgREST schema cache. Cache may need to refresh (1-5 minutes).');
+            throw new Error(`Database error: Code column not available yet. PostgREST schema cache needs to refresh. Please wait 1-5 minutes and try again. (Code: ${error.code})`);
+          }
           throw new Error(`Database error: ${error.message} (Code: ${error.code})`);
         }
 
-        results.push({ id: data.id, ...sanitizedQuestion });
+        // Include code in the result - ensure it's returned from the database response
+        results.push({ 
+          id: data.id, 
+          ...sanitizedQuestion,
+          code: data.code || sanitizedQuestion.code || null // Ensure code is included in response
+        });
       } catch (error) {
         console.error(`Error creating question ${index + 1}:`, error);
         const errorMessage = error instanceof Error 
@@ -642,6 +786,26 @@ export async function PUT(request: NextRequest) {
     // Sanitize rich content fields
     if (sanitizedUpdate.explanation) {
       sanitizedUpdate.explanation = sanitizeRichContent(sanitizedUpdate.explanation);
+    }
+    
+    // Sanitize code field if present - preserve newlines and format
+    // Code should be treated as plain text, not HTML
+    if (sanitizedUpdate.code !== undefined && sanitizedUpdate.code !== null && sanitizedUpdate.code !== '') {
+      // Convert \n escape sequences to actual newlines (in case they're stored as strings)
+      let codeContent = String(sanitizedUpdate.code)
+        .replace(/\\n/g, '\n')  // Replace \n escape sequences
+        .replace(/\r\n/g, '\n') // Normalize Windows line breaks
+        .replace(/\r/g, '\n');  // Normalize Mac line breaks
+      
+      // Basic sanitization - remove null bytes and control characters (except newlines and tabs)
+      codeContent = codeContent
+        .replace(/[\x00-\x08\x0B-\x0C\x0E-\x1F\x7F]/g, '') // Remove control chars except \n, \r, \t
+        .replace(/\x00/g, ''); // Remove null bytes
+      
+      sanitizedUpdate.code = codeContent;
+    } else if (sanitizedUpdate.code === '' || sanitizedUpdate.code === null) {
+      // Explicitly set to null if empty string or null is provided
+      sanitizedUpdate.code = null;
     }
 
     // Sanitize options if present

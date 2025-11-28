@@ -185,12 +185,18 @@ export const NavbarSimple: React.FC = () => {
       setLearningType('free-style');
     }
 
-    // Navigate to the appropriate page
+    // Navigate directly to the appropriate page (no intermediate pages)
     if (newMode === 'guided') {
-      // Redirect to guided learning if not already there
+      // Navigate directly to guided learning
       if (!pathname?.startsWith('/features/guided-learning')) {
         try {
-          await router.push('/features/guided-learning');
+          // Use replace to avoid adding to history and ensure direct navigation
+          router.replace('/features/guided-learning');
+          // Clear loading state after navigation
+          setTimeout(() => {
+            setIsModeSwitching(false);
+            setSwitchingToMode(null);
+          }, 100);
         } catch (error) {
           console.error('Navigation error:', error);
           setIsModeSwitching(false);
@@ -202,10 +208,16 @@ export const NavbarSimple: React.FC = () => {
         setSwitchingToMode(null);
       }
     } else {
-      // Redirect to browse practice questions for free style
+      // Navigate directly to browse practice questions for free style
       if (!pathname?.startsWith('/browse-practice-questions')) {
         try {
-          await router.push('/browse-practice-questions');
+          // Use replace to avoid adding to history and ensure direct navigation
+          router.replace('/browse-practice-questions');
+          // Clear loading state after navigation
+          setTimeout(() => {
+            setIsModeSwitching(false);
+            setSwitchingToMode(null);
+          }, 100);
         } catch (error) {
           console.error('Navigation error:', error);
           setIsModeSwitching(false);

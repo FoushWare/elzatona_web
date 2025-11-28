@@ -56,3 +56,7 @@ export {
   DialogTrigger,
   DialogFooter,
 } from './lib/ui/dialog';
+export { QuestionContent, isValidCode, formatCodeContent } from './lib/QuestionContent';
+export { FormModal, type FormModalProps } from './lib/common/FormModal';
+export { Separator } from './lib/ui/separator';
+export { Collapsible, CollapsibleTrigger, CollapsibleContent } from './lib/ui/collapsible';

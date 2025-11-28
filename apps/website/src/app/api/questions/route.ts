@@ -246,6 +246,7 @@ export async function GET(request: NextRequest) {
               id: question.id,
               question: questionText,
               question_text: questionText, // Also include raw field for backward compatibility
+              content: question.content || '', // Include content field
               answer: question.correct_answer,
               explanation: question.explanation || '',
               topicId: question.topic_id,

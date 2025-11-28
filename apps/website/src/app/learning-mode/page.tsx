@@ -5,9 +5,13 @@ import React from 'react';
 
 import { useRouter } from 'next/navigation';
 import { ArrowLeft, BookOpen, Target, Users } from 'lucide-react';
+import { useUserType } from '@elzatona/shared-contexts';
+import { useLearningType } from '../../context/LearningTypeContext';
 
 export default function LearningModePage() {
   const router = useRouter();
+  const { setUserType } = useUserType();
+  const { setLearningType } = useLearningType();
 
   const learningModes = [
     {
@@ -24,7 +28,7 @@ export default function LearningModePage() {
         'Card-based learning structure',
       ],
       color: 'blue',
-      href: '/get-started',
+      href: '/features/guided-learning',
     },
     {
       id: 'self-directed',
@@ -47,6 +51,16 @@ export default function LearningModePage() {
   const handleModeSelect = (modeId: string, href: string) => {
     // Store the selected mode in localStorage for future reference
     localStorage.setItem('selectedLearningMode', modeId);
+    
+    // Set user type and learning type based on selection
+    if (modeId === 'guided') {
+      setUserType('guided');
+      setLearningType('guided');
+    } else {
+      setUserType('self-directed');
+      setLearningType('free-style');
+    }
+    
     router.push(href);
   };
 

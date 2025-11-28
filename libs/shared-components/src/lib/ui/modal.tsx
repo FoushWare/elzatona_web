@@ -45,10 +45,10 @@ export const Modal: React.FC<ModalProps> = ({
 
       {/* Modal */}
       <Card
-        className={`relative w-full ${sizeClasses[size]} max-h-[90vh] overflow-hidden`}
+        className={`relative w-full ${sizeClasses[size]} max-h-[90vh] overflow-hidden bg-white dark:bg-gray-800`}
       >
-        <CardHeader className='flex flex-row items-center justify-between space-y-0 pb-4'>
-          <CardTitle className='text-lg font-semibold'>{title}</CardTitle>
+        <CardHeader className='flex flex-row items-center justify-between space-y-0 pb-4 bg-white dark:bg-gray-800'>
+          <CardTitle className='text-lg font-semibold text-gray-900 dark:text-gray-100'>{title}</CardTitle>
           <Button
             variant='ghost'
             size='sm'
@@ -59,7 +59,7 @@ export const Modal: React.FC<ModalProps> = ({
           </Button>
         </CardHeader>
 
-        <CardContent className='overflow-y-auto max-h-[calc(90vh-80px)]'>
+        <CardContent className='overflow-y-auto max-h-[calc(90vh-80px)] bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100'>
           {children}
         </CardContent>
       </Card>

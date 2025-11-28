@@ -30,6 +30,8 @@ import { useNotifications } from '@/components/NotificationSystem';
 import { useLearningType } from '../../context/LearningTypeContext';
 import ProblemSolvingQuestion from '@/components/ProblemSolvingQuestion';
 import CodeEditor from '@/components/CodeEditor';
+import { QuestionContent, isValidCode } from '@elzatona/shared-components';
+import { createHighlighter, type Highlighter } from 'shiki';
 
 interface Resource {
   type: 'video' | 'course' | 'article';
@@ -374,7 +376,7 @@ const OptionText = ({ text }: { text: string }) => {
   }
 
   // Use the cleaned text
-  let processedText = cleanedText;
+  const processedText = cleanedText;
 
   // Parse inline code snippets (backticks)
   const parts: Array<{ type: 'text' | 'code'; content: string }> = [];
@@ -434,227 +436,12 @@ const OptionText = ({ text }: { text: string }) => {
   );
 };
 
-// Utility function to clean question titles (converts <code> tags to backticks)
+// Utility function to clean question titles
+// Since database is clean, we just need minimal processing
 const cleanQuestionTitle = (title: string): string => {
   if (!title || typeof title !== 'string') return title || '';
-  
-  // Helper function to decode HTML entities
-  const decodeHtmlEntities = (text: string): string => {
-    if (!text) return '';
-    const entityMap: Record<string, string> = {
-      '&lt;': '<', '&gt;': '>', '&amp;': '&', '&quot;': '"',
-      '&#39;': "'", '&#x27;': "'", '&#x2F;': '/', '&nbsp;': ' ',
-      '&#160;': ' ', '&apos;': "'",
-    };
-    let decoded = text;
-    for (const [entity, char] of Object.entries(entityMap)) {
-      decoded = decoded.replace(new RegExp(entity, 'gi'), char);
-    }
-    decoded = decoded.replace(/&#(\d+);/g, (_, dec) => String.fromCharCode(parseInt(dec, 10)));
-    decoded = decoded.replace(/&#x([0-9a-fA-F]+);/gi, (_, hex) => String.fromCharCode(parseInt(hex, 16)));
-    if (typeof window !== 'undefined') {
-      try {
-        const textarea = document.createElement('textarea');
-        textarea.innerHTML = decoded;
-        decoded = textarea.value;
-      } catch (e) {}
-    }
-    return decoded;
-  };
-  
-  let cleaned = decodeHtmlEntities(title);
-  
-  // Convert inline <code> tags to backticks
-  cleaned = cleaned.replace(/<code[^>]*>([^<]+)<\/code>/gi, (_, codeContent) => {
-    return `\`${decodeHtmlEntities(codeContent).trim()}\``;
-  });
-  
-  // Remove any remaining HTML tags
-  cleaned = cleaned.replace(/<[^>]+>/g, '');
-  
-  // Clean up artifacts
-  cleaned = cleaned
-    .replace(/e>e>e>/g, '')
-    .replace(/e>e>/g, '')
-    .replace(/^e>+/g, '')
-    .replace(/e>+$/g, '')
-    .replace(/(\w+)e>/g, '$1')
-    .replace(/e>(\w+)/g, '$1')
-    .replace(/\s*e>\s*/g, ' ')
-    .trim();
-  
-  return cleaned;
-};
-
-// Helper function to determine if content is valid code or should be rendered as text
-// Uses a scoring system to make intelligent decisions
-const isValidCode = (content: string): { isValid: boolean; score: number; reasons: string[] } => {
-  if (!content || typeof content !== 'string' || content.trim().length === 0) {
-    return { isValid: false, score: 0, reasons: ['Empty or invalid content'] };
-  }
-
-  let score = 0;
-  const reasons: string[] = [];
-  const trimmed = content.trim();
-
-  // ============================================
-  // CODE INDICATORS (Positive Points)
-  // ============================================
-  
-  // Strong code keywords (high weight)
-  const strongKeywords = [
-    /\b(class|function|const|let|var|import|export|return|async|await)\b/,
-    /\b(if|else|for|while|switch|case|break|continue|try|catch|finally|throw)\b/,
-    /\b(console\.(log|error|warn|info|debug|trace))\b/,
-    /\b(setTimeout|setInterval|Promise|async|await)\b/,
-    /\b(this\.|Math\.|Array\.|Object\.|String\.|Number\.)\b/,
-    /\b(=>|=>|\.then\(|\.catch\(|\.finally\()/,
-  ];
-  
-  strongKeywords.forEach((pattern) => {
-    if (pattern.test(trimmed)) {
-      score += 3;
-      reasons.push(`Strong code keyword found`);
-    }
-  });
-
-  // Code structure patterns (medium weight)
-  const structurePatterns = [
-    /\{\s*[\s\S]*\s*\}/, // Object/block with braces
-    /\[\s*[\s\S]*\s*\]/, // Array brackets
-    /\(\s*[\s\S]*\s*\)\s*\{/, // Function call with block
-    /=\s*\{/, // Object assignment
-    /=\s*\[/, // Array assignment
-    /:\s*function/, // Method definition
-    /:\s*\(/, // Arrow function
-  ];
-  
-  structurePatterns.forEach(() => {
-    score += 2;
-    reasons.push('Code structure pattern found');
-  });
-
-  // Code operators and syntax (medium weight)
-  const operatorPatterns = [
-    /[=<>!]+/, // Assignment/comparison operators
-    /[+\-*/%]/, // Arithmetic operators
-    /&&|\|\||!/, // Logical operators
-    /\.\w+\(/, // Method calls
-    /\.\w+\s*=/, // Property assignment
-    /;\s*$/, // Semicolon at end of line
-  ];
-  
-  const operatorMatches = operatorPatterns.filter(p => p.test(trimmed)).length;
-  if (operatorMatches > 0) {
-    score += operatorMatches;
-    reasons.push(`${operatorMatches} code operator(s) found`);
-  }
-
-  // Multiple lines with indentation (strong indicator)
-  const lines = trimmed.split('\n');
-  const hasMultipleLines = lines.length > 1;
-  const hasIndentation = lines.some(line => /^\s{2,}/.test(line));
-  const hasConsistentIndentation = lines.filter(line => line.trim().length > 0).length > 2 && 
-                                   lines.filter(line => /^\s{2,}/.test(line)).length > 1;
-  
-  if (hasMultipleLines) {
-    score += 2;
-    reasons.push('Multiple lines detected');
-  }
-  if (hasIndentation) {
-    score += 3;
-    reasons.push('Indentation detected');
-  }
-  if (hasConsistentIndentation) {
-    score += 2;
-    reasons.push('Consistent indentation pattern');
-  }
-
-  // Code-specific patterns (high weight)
-  if (/for\s*\(/.test(trimmed) || /while\s*\(/.test(trimmed) || /if\s*\(/.test(trimmed)) {
-    score += 4;
-    reasons.push('Control flow statement found');
-  }
-  
-  if (/function\s+\w+/.test(trimmed) || /const\s+\w+\s*=\s*\(/.test(trimmed) || /let\s+\w+\s*=\s*\(/.test(trimmed)) {
-    score += 4;
-    reasons.push('Function definition found');
-  }
-  
-  if (/class\s+\w+/.test(trimmed)) {
-    score += 5;
-    reasons.push('Class definition found');
-  }
-
-  // ============================================
-  // TEXT INDICATORS (Negative Points)
-  // ============================================
-  
-  // Common text patterns (reduce score) - IMPROVED to catch more text patterns
-  const textPatterns = [
-    /^[A-Z][^.!?]*[.!?]\s*$/, // Sentence structure
-    /\b(the|a|an|is|are|was|were|be|been|being)\b/i, // Common words
-    /\b(explain|describe|what|when|where|why|how|requires|enables|creates|scales)\b/i, // Question/explanation words
-    /[.!?]\s+[A-Z]/, // Multiple sentences
-    /\b(should|would|could|might|may)\b/i, // Modal verbs
-    /\b(requires|enables|allows|provides|offers|supports)\b/i, // Descriptive verbs
-    /\b(typography|responsive|viewport|fluid|sizing|scaling|purpose)\b/i, // Common CSS/text terms
-  ];
-  
-  const textMatches = textPatterns.filter(p => p.test(trimmed)).length;
-  if (textMatches > 2) {
-    score -= textMatches * 2; // Increased penalty for text patterns
-    reasons.push(`${textMatches} text pattern(s) found (reducing score)`);
-  }
-  
-  // Strong text indicators - if content contains explanation/question language, heavily penalize
-  const strongTextIndicators = [
-    /\b(explain|describe|what|how|why|when|where)\b/i,
-    /\b(requires|enables|allows|provides|offers|supports|creates)\b/i,
-    /\b(typography|responsive|viewport|fluid|sizing|scaling|purpose)\b/i,
-  ];
-  
-  const strongTextMatches = strongTextIndicators.filter(p => p.test(trimmed)).length;
-  if (strongTextMatches >= 2) {
-    score -= 5; // Heavy penalty for explanation/question text
-    reasons.push(`${strongTextMatches} strong text indicators found (heavy penalty)`);
-  }
-
-  // Very long sentences without code structure (likely text)
-  const avgLineLength = lines.reduce((sum, line) => sum + line.length, 0) / lines.length;
-  const hasCodeStructure = (
-    (trimmed.includes('{') && trimmed.includes('}')) ||
-    (trimmed.includes('(') && trimmed.includes(')')) ||
-    (trimmed.includes('[') && trimmed.includes(']')) ||
-    /function|class|const|let|var/.test(trimmed)
-  );
-  
-  if (avgLineLength > 80 && !hasCodeStructure) {
-    score -= 2;
-    reasons.push('Long lines without code structure (likely text)');
-  }
-
-  // High word-to-symbol ratio (likely text)
-  const wordCount = trimmed.split(/\s+/).length;
-  const symbolCount = (trimmed.match(/[{}();=<>[\]]/g) || []).length;
-  if (wordCount > 0 && symbolCount / wordCount < 0.1 && wordCount > 10) {
-    score -= 3;
-    reasons.push('High word-to-symbol ratio (likely text)');
-  }
-
-  // ============================================
-  // FINAL DECISION
-  // ============================================
-  
-  // Minimum score threshold for code
-  const MIN_CODE_SCORE = 5;
-  const isValid = score >= MIN_CODE_SCORE;
-
-  return {
-    isValid,
-    score,
-    reasons,
-  };
+  // Database is clean, so just trim and return
+  return title.trim();
 };
 
 // Helper function to format and normalize code content
@@ -807,824 +594,8 @@ const formatCodeContent = (code: string): string => {
   return formatted;
 };
 
-// Component to render question content with code blocks
-const QuestionContent = ({ content }: { content: string }) => {
-  if (!content) return null;
-
-  // Step 0: IMMEDIATELY fix malformed HTML patterns before any processing
-  // This must be the first thing we do
-  let fixedContent = content;
-  for (let i = 0; i < 3; i++) {
-    fixedContent = fixedContent
-      // Fix malformed opening tags
-      .replace(/<pr<cod<cod/gi, '<pre><code>')
-      .replace(/<pr<code<code/gi, '<pre><code>')
-      .replace(/<pr<codee<code/gi, '<pre><code>')
-      .replace(/<pr<codee<cod/gi, '<pre><code>')
-      .replace(/<pr<code<cod/gi, '<pre><code>')
-      .replace(/<pr<codee/gi, '<pre><code>')
-      .replace(/<pr<code/gi, '<pre><code>')
-      .replace(/<pr<cod/gi, '<pre><code>')
-      .replace(/<pr<co/gi, '<pre><code>')
-      .replace(/<pr</gi, '<pre>')
-      // Fix malformed closing tags
-      .replace(/<\/cod<\/cod<\/pr/gi, '</code></pre>')
-      .replace(/<\/code<\/code<\/pr/gi, '</code></pre>')
-      .replace(/<\/codee<\/codee<\/pree/gi, '</code></pre>')
-      .replace(/<\/cod<\/cod<\/pree/gi, '</code></pre>')
-      .replace(/<\/code<\/code<\/pree/gi, '</code></pre>')
-      .replace(/<\/codee<\/pree/gi, '</code></pre>')
-      .replace(/<\/cod<\/pree/gi, '</code></pre>')
-      .replace(/<\/code<\/pree/gi, '</code></pre>')
-      .replace(/<\/code><\/pre>e>/gi, '</code></pre>')
-      .replace(/<\/code><\/pre>\s*e>/gi, '</code></pre>')
-      .replace(/<\/pree/gi, '</pre>')
-      .replace(/<\/codee/gi, '</code>')
-      .replace(/<\/cod/gi, '</code>')
-      // Fix efor -> for
-      .replace(/efor\s*\(/gi, 'for (')
-      .replace(/efor\s+/gi, 'for ')
-      // Fix econsole -> console
-      .replace(/econsole\./gi, 'console.')
-      .replace(/econsole\.log/gi, 'console.log')
-      // Fix patterns where code tags are merged with content
-      .replace(/<cod([a-zA-Z])/gi, '<code>$1')
-      .replace(/<code([a-zA-Z])/gi, '<code>$1')
-      // Fix patterns where closing tags are merged
-      .replace(/([a-zA-Z])<\/cod/gi, '$1</code>')
-      .replace(/([a-zA-Z])<\/code/gi, '$1</code>')
-      // Fix malformed <cod patterns with numbers/units (e.g., <cod1rem -> <code>1rem</code>)
-      .replace(/<cod(\d+[a-zA-Z]+)/gi, '<code>$1</code>')
-      .replace(/<cod(\d+)/gi, '<code>$1</code>');
-  }
-
-  // Parse content to extract code blocks and text
-  const parts: Array<{ type: 'text' | 'code'; content: string; language?: string }> = [];
-  
-  // Helper function to decode HTML entities (works in both server and client)
-  const decodeHtmlEntities = (text: string): string => {
-    if (!text) return '';
-    
-    // Comprehensive HTML entity decoding
-    const entityMap: Record<string, string> = {
-      '&lt;': '<',
-      '&gt;': '>',
-      '&amp;': '&',
-      '&quot;': '"',
-      '&#39;': "'",
-      '&#x27;': "'",
-      '&#x2F;': '/',
-      '&nbsp;': ' ',
-      '&#160;': ' ',
-      '&apos;': "'",
-      '&#x60;': '`',
-      '&#96;': '`',
-    };
-    
-    // Replace named entities
-    let decoded = text;
-    for (const [entity, char] of Object.entries(entityMap)) {
-      decoded = decoded.replace(new RegExp(entity, 'gi'), char);
-    }
-    
-    // Replace numeric entities (decimal)
-    decoded = decoded.replace(/&#(\d+);/g, (match, dec) => {
-      return String.fromCharCode(parseInt(dec, 10));
-    });
-    
-    // Replace numeric entities (hexadecimal)
-    decoded = decoded.replace(/&#x([0-9a-fA-F]+);/g, (match, hex) => {
-      return String.fromCharCode(parseInt(hex, 16));
-    });
-    
-    // If client-side, use DOM API as fallback for any remaining entities
-    if (typeof window !== 'undefined') {
-      try {
-        const textarea = document.createElement('textarea');
-        textarea.innerHTML = decoded;
-        decoded = textarea.value;
-      } catch (e) {
-        // Fallback to string replacement if DOM API fails
-      }
-    }
-    
-    return decoded;
-  };
-
-  // Helper function to clean HTML and extract text
-  const cleanHtml = (html: string): string => {
-    // First decode HTML entities
-    let cleaned = decodeHtmlEntities(html);
-    // Remove all HTML tags
-    cleaned = cleaned.replace(/<[^>]+>/g, '');
-    // Clean up whitespace
-    cleaned = cleaned.replace(/\s+/g, ' ').trim();
-    return cleaned;
-  };
-
-  // Helper function to extract and format code from HTML code blocks (handles nested tags)
-  // Updated to handle both cleaned database content and raw HTML
-  const extractCodeFromHtml = (html: string): string => {
-    if (!html) return '';
-    
-    let code = html;
-    
-    // Step 1: Check if content is already cleaned (starts with code, not HTML tags)
-    // If it's already clean code, just normalize it
-    if (!html.includes('<pre') && !html.includes('<code') && !html.includes('&lt;')) {
-      // Already clean code - just normalize
-      code = decodeHtmlEntities(html);
-      code = formatCodeContent(code);
-      return code;
-    }
-    
-    // Step 2: Find the outermost <pre><code> or <code> block using proper tag matching
-    // This handles nested tags correctly by finding the matching closing tag
-    const findMatchingCloseTag = (html: string, openTag: string, closeTag: string, startIndex: number): number => {
-      let depth = 0;
-      let i = startIndex;
-      
-      while (i < html.length) {
-        const openMatch = html.indexOf(openTag, i);
-        const closeMatch = html.indexOf(closeTag, i);
-        
-        if (closeMatch === -1) return -1; // No closing tag found
-        
-        if (openMatch !== -1 && openMatch < closeMatch) {
-          // Found an opening tag before the closing tag
-          depth++;
-          i = openMatch + openTag.length;
-        } else {
-          // Found a closing tag
-          if (depth === 0) {
-            return closeMatch; // This is the matching closing tag
-          }
-          depth--;
-          i = closeMatch + closeTag.length;
-        }
-      }
-      
-      return -1; // No matching closing tag found
-    };
-    
-    // Step 1: Fix malformed HTML patterns BEFORE trying to extract
-    // Handle patterns like <pr<cod<cod, </cod</cod</pr, etc.
-    let fixedHtml = html
-      // Fix malformed opening tags
-      .replace(/<pr<cod<cod/gi, '<pre><code>')
-      .replace(/<pr<code<code/gi, '<pre><code>')
-      .replace(/<pr<codee<code/gi, '<pre><code>')
-      .replace(/<pr<codee<cod/gi, '<pre><code>')
-      .replace(/<pr<code<cod/gi, '<pre><code>')
-      .replace(/<pr<codee/gi, '<pre><code>')
-      .replace(/<pr<code/gi, '<pre><code>')
-      .replace(/<pr<cod/gi, '<pre><code>')
-      .replace(/<pr<co/gi, '<pre><code>')
-      .replace(/<pr</gi, '<pre>')
-      // Fix malformed closing tags
-      .replace(/<\/cod<\/cod<\/pr/gi, '</code></pre>')
-      .replace(/<\/code<\/code<\/pr/gi, '</code></pre>')
-      .replace(/<\/codee<\/codee<\/pree/gi, '</code></pre>')
-      .replace(/<\/cod<\/cod<\/pree/gi, '</code></pre>')
-      .replace(/<\/code<\/code<\/pree/gi, '</code></pre>')
-      .replace(/<\/codee<\/pree/gi, '</code></pre>')
-      .replace(/<\/cod<\/pree/gi, '</code></pre>')
-      .replace(/<\/code<\/pree/gi, '</code></pre>')
-      .replace(/<\/pree/gi, '</pre>')
-      .replace(/<\/codee/gi, '</code>')
-      .replace(/<\/cod/gi, '</code>')
-      // Fix patterns where code tags are merged with content
-      .replace(/<cod([a-zA-Z])/gi, '<code>$1')
-      .replace(/<code([a-zA-Z])/gi, '<code>$1')
-      // Fix patterns where closing tags are merged
-      .replace(/([a-zA-Z])<\/cod/gi, '$1</code>')
-      .replace(/([a-zA-Z])<\/code/gi, '$1</code>')
-      // Fix malformed <cod patterns with numbers/units (e.g., <cod1rem -> <code>1rem</code>)
-      .replace(/<cod(\d+[a-zA-Z]+)/gi, '<code>$1</code>')
-      .replace(/<cod(\d+)/gi, '<code>$1</code>');
-
-    // Try <pre><code> first (most common format from database)
-    const preStart = fixedHtml.indexOf('<pre');
-    if (preStart !== -1) {
-      const codeStart = fixedHtml.indexOf('<code', preStart);
-      if (codeStart !== -1) {
-        const contentStart = fixedHtml.indexOf('>', codeStart) + 1;
-        // Find the matching </code> tag (handles nested tags)
-        const codeEnd = findMatchingCloseTag(fixedHtml, '<code', '</code>', codeStart + '<code'.length);
-        if (codeEnd > contentStart) {
-          code = fixedHtml.substring(contentStart, codeEnd);
-        }
-      }
-    } else {
-      // Try just <code>
-      const codeStart = fixedHtml.indexOf('<code');
-      if (codeStart !== -1) {
-        const contentStart = fixedHtml.indexOf('>', codeStart) + 1;
-        // Find the matching </code> tag (handles nested tags)
-        const codeEnd = findMatchingCloseTag(fixedHtml, '<code', '</code>', codeStart + '<code'.length);
-        if (codeEnd > contentStart) {
-          code = fixedHtml.substring(contentStart, codeEnd);
-        }
-      }
-    }
-    
-    // Step 3: Decode HTML entities FIRST (before removing tags)
-    // This is critical because entities like &lt; and &gt; need to be decoded
-    // before we remove tags, otherwise we might lose content
-    code = decodeHtmlEntities(code);
-    
-    // Step 4: Recursively remove ALL HTML tags (including nested code tags)
-    // IMPORTANT: We need to be careful not to remove content that looks like tags
-    // Do this in a loop to handle deeply nested tags
-    let previousCode = '';
-    let iterations = 0;
-    const maxIterations = 20;
-    
-    while (code !== previousCode && iterations < maxIterations) {
-      previousCode = code;
-      // Decode entities first in each iteration
-      code = decodeHtmlEntities(code);
-      // Then remove all HTML tags, but use a more precise pattern
-      // Only match actual HTML tags: <tag>, </tag>, or <tag attr="value">
-      // Does NOT match: i < 3 (because there's no tag name after <)
-      // The pattern: < or </, followed by a letter (tag name), then optional attributes, then >
-      code = code.replace(/<\/?[a-zA-Z][a-zA-Z0-9]*(?:\s+[^>]*)?>/gi, '');
-      iterations++;
-    }
-    
-    // Step 5: Final entity decode pass to ensure everything is decoded
-    code = decodeHtmlEntities(code);
-    
-    // Step 6: Clean up common HTML artifacts and malformed patterns
-    // Fix console.log artifacts from HTML encoding issues
-    // Multiple passes to catch all variations
-    for (let pass = 0; pass < 3; pass++) {
-      code = code
-        // Remove e> artifacts FIRST (most aggressive - handles e>e>, e>e>e>, etc.)
-        .replace(/e>e>e>/g, '') // Remove triple e>
-        .replace(/e>e>/g, '') // Remove double e>
-        .replace(/^e>+/g, '') // Remove e> at start (one or more)
-        .replace(/e>+$/g, '') // Remove e> at end (one or more)
-        .replace(/(\w+)e>/g, '$1') // Remove e> after words
-        .replace(/e>(\w+)/g, '$1') // Remove e> before words
-        .replace(/\s*e>\s*/g, ' ') // Remove standalone e> with spaces
-        // Fix malformed console.log patterns (order matters - most specific first)
-        .replace(/consoleonsole\.loge>\.log/g, 'console.log')
-        .replace(/consoleonsole\.log/g, 'console.log')
-        .replace(/console\.loge>\.log/g, 'console.log')
-        .replace(/console\.loge>/g, 'console.log')
-        .replace(/console\.log>/g, 'console.log')
-        .replace(/console\.loge\.log/g, 'console.log')
-        .replace(/console\.log\.log/g, 'console.log')
-        .replace(/(\w+)onsole\.log/g, 'console.log')
-        .replace(/console\.log([^a-zA-Z])/g, 'console.log$1')
-        // Fix method name patterns (diameterameter, perimeterimeter, etc.)
-        .replace(/diameterameter/g, 'diameter')
-        .replace(/perimeterimeter/g, 'perimeter')
-        .replace(/newColorwColor/g, 'newColor')
-        .replace(/(\w+)ameter/g, '$1') // Fix patterns like "somethingameter"
-        .replace(/(\w+)imeter/g, '$1') // Fix patterns like "somethingimeter"
-        // Fix NaN patterns
-        .replace(/NaNe>NaN/g, 'NaN')
-        .replace(/NaNe>/g, 'NaN')
-        .replace(/NaN>/g, 'NaN')
-        // Fix any remaining entity issues (double-check after decoding)
-        .replace(/&lt;/g, '<')
-        .replace(/&gt;/g, '>')
-        .replace(/&amp;/g, '&')
-        .replace(/&quot;/g, '"')
-        .replace(/&#39;/g, "'")
-        .replace(/&apos;/g, "'")
-        .replace(/&nbsp;/g, ' ')
-        // Fix common patterns where entities break code structure
-        .replace(/(\w+)\s*&lt;\s*(\d+)\s*&gt;/g, '$1 < $2 >') // Fix "i &lt; 3 &gt;"
-        .replace(/(\w+)\s*&lt;\s*(\d+)/g, '$1 < $2') // Fix "i &lt; 3"
-        .replace(/(\d+)\s*&gt;/g, '$1 >') // Fix "3 &gt;"
-        // Remove any remaining HTML-like artifacts (but be careful not to remove code)
-        // Only remove if it looks like an actual HTML tag (starts with a letter after <)
-        .replace(/<\/?[a-zA-Z][a-zA-Z0-9]*(?:\s+[^>]*)?>/gi, '')
-        // Remove standalone > characters that are clearly artifacts
-        .replace(/^>\s*/g, '')
-        .replace(/\s*>$/g, '')
-        .replace(/\s+>\s+/g, ' ');
-    }
-    
-    // Step 7: Final aggressive cleanup pass for any remaining artifacts
-    for (let i = 0; i < 2; i++) {
-      code = code
-        // Remove any remaining e> artifacts
-        .replace(/e>e>e>/g, '')
-        .replace(/e>e>/g, '')
-        .replace(/^e>+/g, '')
-        .replace(/e>+$/g, '')
-        .replace(/(\w+)e>/g, '$1')
-        .replace(/e>(\w+)/g, '$1')
-        .replace(/\s*e>\s*/g, ' ')
-        // Remove malformed closing tags that might have leaked through
-        .replace(/<\/cod<\/pr/gi, '')
-        .replace(/<\/code<\/pr/gi, '')
-        .replace(/<\/pr/gi, '')
-        .replace(/<\/cod/gi, '')
-        // Remove standalone > characters
-        .replace(/^>\s*/g, '')
-        .replace(/\s*>$/g, '')
-        .replace(/\s+>\s+/g, ' ');
-    }
-    
-    // Step 8: Normalize and format the code
-    code = formatCodeContent(code);
-    
-    return code;
-  };
-
-  // First, replace ALL inline <code> tags (single words/short phrases) with backticks
-  // This prevents them from being treated as code blocks
-  // We'll do this by processing the content and replacing short <code> tags
-  let processedContent = fixedContent;
-  
-  // Replace short inline <code> tags with backticks (not inside <pre>)
-  // Pattern: <code>content</code> where content is 1-50 characters and not inside <pre>
-  processedContent = processedContent.replace(/<code[^>]*>([^<]{1,50})<\/code>/gi, (match, codeContent, offset) => {
-    // Check if this is inside a <pre> tag
-    const beforeMatch = fixedContent.substring(0, offset);
-    const lastPreOpen = beforeMatch.lastIndexOf('<pre');
-    const lastPreClose = beforeMatch.lastIndexOf('</pre>');
-    
-    // If there's an open <pre> without a closing </pre> before this match, it's inside <pre>
-    if (lastPreOpen > lastPreClose) {
-      return match; // Keep as is, will be handled by code block extraction
-    }
-    
-    // Replace with backtick format for inline code
-    return `\`${codeContent.trim()}\``;
-  });
-  
-  // Now parse HTML code blocks - also match malformed patterns
-  // Match both proper <pre><code> blocks and malformed patterns like <pr<cod
-  // Use a more flexible regex that catches malformed patterns
-  const htmlCodeBlockRegex = /<pre[^>]*><code[^>]*>[\s\S]*?<\/code><\/pre>|<pr<cod[^>]*>[\s\S]*?<\/cod<\/pr|<pr<code[^>]*>[\s\S]*?<\/code<\/pr|<code[^>]*>[\s\S]{20,}?<\/code>/gi;
-  let htmlMatches: Array<{ index: number; content: string; fullMatch: string }> = [];
-  let htmlMatch;
-  
-  // Reset regex lastIndex
-  htmlCodeBlockRegex.lastIndex = 0;
-  
-  // Use fixed content for matching to get correct indices
-  while ((htmlMatch = htmlCodeBlockRegex.exec(fixedContent)) !== null) {
-    // Fix the match if it's malformed before extracting
-    let matchContent = htmlMatch[0];
-    // Fix any remaining malformed patterns in the match
-    matchContent = matchContent
-      .replace(/<pr<cod/gi, '<pre><code>')
-      .replace(/<pr<code/gi, '<pre><code>')
-      .replace(/<\/cod<\/pr/gi, '</code></pre>')
-      .replace(/<\/code<\/pr/gi, '</code></pre>');
-    
-    const extractedCode = extractCodeFromHtml(matchContent);
-    if (extractedCode) {
-      htmlMatches.push({
-        index: htmlMatch.index,
-        content: extractedCode,
-        fullMatch: htmlMatch[0],
-      });
-    }
-  }
-  
-  // Also try to match malformed patterns that might not have been caught
-  // Look for patterns like <pr<cod...content... without proper closing
-  const malformedPattern = /<pr<cod[^>]*>([\s\S]*?)(?:<\/cod<\/pr|$)/gi;
-  let malformedMatch;
-  malformedPattern.lastIndex = 0;
-  
-  while ((malformedMatch = malformedPattern.exec(fixedContent)) !== null) {
-    // Check if this match was already captured by the previous regex
-    const alreadyCaptured = htmlMatches.some(m => 
-      Math.abs(m.index - malformedMatch.index) < 10
-    );
-    
-    if (!alreadyCaptured && malformedMatch[1]) {
-      // Extract code from malformed pattern
-      let code = malformedMatch[1];
-      // Clean up the code
-      code = decodeHtmlEntities(code);
-      code = code.replace(/<[^>]+>/g, '');
-      // Clean malformed patterns
-      for (let i = 0; i < 3; i++) {
-        code = code
-          .replace(/e>e>e>/g, '')
-          .replace(/e>e>/g, '')
-          .replace(/^e>+/g, '')
-          .replace(/e>+$/g, '')
-          .replace(/(\w+)e>/g, '$1')
-          .replace(/consoleonsole\.log/g, 'console.log')
-          .replace(/console\.loge>/g, 'console.log')
-          .replace(/diameterameter/g, 'diameter')
-          .replace(/perimeterimeter/g, 'perimeter')
-          .replace(/newColorwColor/g, 'newColor')
-          .replace(/NaNe>/g, 'NaN');
-      }
-      code = formatCodeContent(code);
-      
-      if (code.trim()) {
-        htmlMatches.push({
-          index: malformedMatch.index,
-          content: code,
-          fullMatch: malformedMatch[0],
-        });
-      }
-    }
-  }
-  
-  // Sort matches by index
-  htmlMatches.sort((a, b) => a.index - b.index);
-
-  // Then, try to parse markdown code blocks (```)
-  const markdownCodeBlockRegex = /```(\w+)?\n?([\s\S]*?)```/g;
-  let markdownMatches: Array<{ index: number; content: string; language?: string; fullMatch: string }> = [];
-  let mdMatch;
-  
-  // Reset regex lastIndex
-  markdownCodeBlockRegex.lastIndex = 0;
-  
-  while ((mdMatch = markdownCodeBlockRegex.exec(fixedContent)) !== null) {
-    markdownMatches.push({
-      index: mdMatch.index,
-      content: mdMatch[2].trim(),
-      language: mdMatch[1] || 'javascript',
-      fullMatch: mdMatch[0],
-    });
-  }
-
-  // Combine and sort all matches by index
-  const allMatches = [
-    ...htmlMatches.map(m => ({ ...m, type: 'html' as const, language: 'javascript' as string })),
-    ...markdownMatches.map(m => ({ ...m, type: 'markdown' as const })),
-  ].sort((a, b) => a.index - b.index);
-
-  let lastIndex = 0;
-
-  // Process all matches - use fixed content for indices, but process text with inline code conversion
-  for (const match of allMatches) {
-    // Add text before code block
-    if (match.index > lastIndex) {
-      const textContent = fixedContent.substring(lastIndex, match.index);
-      if (textContent.trim()) {
-        // Clean up HTML in text content
-        let cleanText = decodeHtmlEntities(textContent);
-        // Replace inline <code> tags with backticks (for short inline code)
-        cleanText = cleanText.replace(/<code[^>]*>([^<]{1,30})<\/code>/gi, '`$1`');
-        // Remove remaining HTML tags (including any malformed ones)
-        cleanText = cleanText.replace(/<[^>]+>/g, '');
-        // Aggressively remove any remaining malformed patterns
-        for (let i = 0; i < 3; i++) {
-          cleanText = cleanText
-            // Remove malformed opening patterns
-            .replace(/<pr<cod?/gi, '')
-            .replace(/<pr</gi, '')
-            .replace(/<pr/gi, '')
-            // Remove malformed closing patterns
-            .replace(/<\/cod?<\/pr/gi, '')
-            .replace(/<\/cod?/gi, '')
-            .replace(/<\/pr/gi, '')
-            .replace(/<\/cod/gi, '')
-            // Remove e> artifacts
-            .replace(/e>e>e>/g, '')
-            .replace(/e>e>/g, '')
-            .replace(/^e>+/g, '')
-            .replace(/e>+$/g, '')
-            .replace(/(\w+)e>/g, '$1')
-            .replace(/e>(\w+)/g, '$1')
-            .replace(/\s*e>\s*/g, ' ')
-            // Remove standalone > characters
-            .replace(/^>\s*/g, '')
-            .replace(/\s*>$/g, '')
-            .replace(/\s+>\s+/g, ' ');
-        }
-        // Clean up whitespace but preserve line breaks
-        cleanText = cleanText.replace(/[ \t]+/g, ' ').replace(/\n\s*\n/g, '\n\n').trim();
-        if (cleanText) {
-          parts.push({ type: 'text', content: cleanText });
-        }
-      }
-    }
-
-    // Add code block - format and normalize
-    if (match.content) {
-      // Final cleanup pass on code content before formatting
-      let cleanCode = match.content;
-      for (let i = 0; i < 2; i++) {
-        cleanCode = cleanCode
-          // Remove any remaining e> artifacts
-          .replace(/e>e>e>/g, '')
-          .replace(/e>e>/g, '')
-          .replace(/^e>+/g, '')
-          .replace(/e>+$/g, '')
-          .replace(/(\w+)e>/g, '$1')
-          .replace(/e>(\w+)/g, '$1')
-          .replace(/\s*e>\s*/g, ' ')
-          // Remove malformed closing tags
-          .replace(/<\/cod<\/pr/gi, '')
-          .replace(/<\/code<\/pr/gi, '')
-          .replace(/<\/pr/gi, '')
-          .replace(/<\/cod/gi, '')
-          // Remove standalone > characters
-          .replace(/^>\s*/g, '')
-          .replace(/\s*>$/g, '')
-          .replace(/\s+>\s+/g, ' ');
-      }
-      const formattedCode = formatCodeContent(cleanCode);
-      parts.push({ type: 'code', content: formattedCode, language: match.language || 'javascript' });
-    }
-
-    lastIndex = match.index + match.fullMatch.length;
-  }
-
-  // Add remaining text
-  if (lastIndex < fixedContent.length) {
-    const textContent = fixedContent.substring(lastIndex);
-    if (textContent.trim()) {
-      // Clean up HTML in remaining text
-      let cleanText = decodeHtmlEntities(textContent);
-      // Replace inline <code> tags with backticks (for short inline code)
-      cleanText = cleanText.replace(/<code[^>]*>([^<]{1,30})<\/code>/gi, '`$1`');
-      // Remove remaining HTML tags (including any malformed ones)
-      cleanText = cleanText.replace(/<[^>]+>/g, '');
-      // Aggressively remove any remaining malformed patterns
-      for (let i = 0; i < 3; i++) {
-        cleanText = cleanText
-          // Remove malformed opening patterns
-          .replace(/<pr<cod?/gi, '')
-          .replace(/<pr</gi, '')
-          .replace(/<pr/gi, '')
-          // Remove malformed closing patterns
-          .replace(/<\/cod?<\/pr/gi, '')
-          .replace(/<\/cod?/gi, '')
-          .replace(/<\/pr/gi, '')
-          .replace(/<\/cod/gi, '')
-          // Remove e> artifacts
-          .replace(/e>e>e>/g, '')
-          .replace(/e>e>/g, '')
-          .replace(/^e>+/g, '')
-          .replace(/e>+$/g, '')
-          .replace(/(\w+)e>/g, '$1')
-          .replace(/e>(\w+)/g, '$1')
-          .replace(/\s*e>\s*/g, ' ')
-          // Remove standalone > characters
-          .replace(/^>\s*/g, '')
-          .replace(/\s*>$/g, '')
-          .replace(/\s+>\s+/g, ' ');
-      }
-      // Clean up whitespace but preserve line breaks
-      cleanText = cleanText.replace(/[ \t]+/g, ' ').replace(/\n\s*\n/g, '\n\n').trim();
-      if (cleanText) {
-        parts.push({ type: 'text', content: cleanText });
-      }
-    }
-  }
-
-  // If no code blocks found, check if the entire content is code
-  if (parts.length === 0) {
-    // Clean the content thoroughly before rendering
-    let cleanContent = fixedContent;
-    
-    // Multiple passes for aggressive cleaning
-    for (let i = 0; i < 3; i++) {
-      cleanContent = cleanContent
-        // Fix malformed patterns first
-        .replace(/<pr<cod/gi, '')
-        .replace(/<\/cod<\/pr/gi, '')
-        .replace(/<pr</gi, '')
-        .replace(/<\/cod/gi, '')
-        .replace(/<\/pr/gi, '')
-        .replace(/<pr/gi, '')
-        // Remove all HTML tags
-        .replace(/<[^>]+>/g, '')
-        // Remove e> artifacts
-        .replace(/e>e>e>/g, '')
-        .replace(/e>e>/g, '')
-        .replace(/^e>+/g, '')
-        .replace(/e>+$/g, '')
-        .replace(/(\w+)e>/g, '$1')
-        .replace(/e>(\w+)/g, '$1')
-        .replace(/\s*e>\s*/g, ' ')
-        // Remove standalone > characters
-        .replace(/^>\s*/g, '')
-        .replace(/\s*>$/g, '')
-        .replace(/\s+>\s+/g, ' ');
-    }
-    
-    // Decode entities
-    cleanContent = cleanContent
-      .replace(/&nbsp;/g, ' ')
-      .replace(/&lt;/g, '<')
-      .replace(/&gt;/g, '>')
-      .replace(/&amp;/g, '&')
-      .trim();
-    
-    // Use the intelligent code detection algorithm
-    const codeValidation = isValidCode(cleanContent);
-    
-    // If it's valid code, render it as a code block
-    if (codeValidation.isValid && cleanContent.length > 10) {
-      const formattedCode = formatCodeContent(cleanContent);
-      return (
-        <div className='relative group' style={{ backgroundColor: '#111827' }}>
-          {/* Code block header */}
-          <div className='flex items-center justify-end px-4 py-2.5 rounded-t-xl border-b-2 shadow-sm' style={{ background: 'linear-gradient(to right, #1f2937, #111827)', borderColor: '#374151' }}>
-            <span className='text-xs font-semibold uppercase tracking-wider px-2 py-1 rounded-md' style={{ color: '#e5e7eb', backgroundColor: 'rgba(55, 65, 81, 0.5)' }}>
-              javascript
-            </span>
-          </div>
-          {/* Code block content - Always dark background for readability */}
-          <div className='relative overflow-hidden rounded-b-xl border-x-2 border-b-2 shadow-lg' style={{ backgroundColor: '#111827', borderColor: '#374151' }}>
-            <pre 
-              className='overflow-x-auto relative z-10' 
-              style={{ 
-                backgroundColor: '#111827', 
-                margin: 0, 
-                padding: '1.5rem 1.75rem',
-                color: '#f3f4f6',
-                fontSize: '0.875rem',
-                lineHeight: '1.8',
-                fontFamily: '"JetBrains Mono", "Fira Code", "SF Mono", "Consolas", "Monaco", "Courier New", monospace',
-                overflowX: 'auto',
-                whiteSpace: 'pre',
-                tabSize: 2,
-                WebkitTabSize: 2,
-                MozTabSize: 2,
-                WebkitFontSmoothing: 'antialiased',
-                MozOsxFontSmoothing: 'grayscale',
-                letterSpacing: '0.01em'
-              }}
-            >
-              <code 
-                style={{ 
-                  color: '#f3f4f6', 
-                  display: 'block', 
-                  backgroundColor: 'transparent',
-                  fontFamily: 'inherit',
-                  whiteSpace: 'pre',
-                  margin: 0,
-                  padding: 0,
-                  fontSize: 'inherit',
-                  lineHeight: 'inherit',
-                  tabSize: 2,
-                  WebkitTabSize: 2,
-                  MozTabSize: 2,
-                  wordBreak: 'normal',
-                  overflowWrap: 'normal',
-                  letterSpacing: '0.01em'
-                }}
-              >
-                {formattedCode}
-              </code>
-            </pre>
-            {/* Subtle gradient overlay for depth */}
-            <div className='absolute inset-0 pointer-events-none rounded-b-xl z-0' style={{ background: 'linear-gradient(to bottom, transparent, transparent, rgba(17, 24, 39, 0.2))' }}></div>
-          </div>
-        </div>
-      );
-    }
-    
-    // Otherwise render as plain text
-    return (
-      <p 
-        className='text-sm sm:text-base lg:text-lg text-gray-700 dark:text-gray-300 leading-relaxed whitespace-pre-wrap mb-4 sm:mb-5'
-        style={{ 
-          lineHeight: '1.75',
-          wordSpacing: '0.05em',
-          letterSpacing: '0.01em'
-        }}
-      >
-        {cleanContent}
-      </p>
-    );
-  }
-
-  return (
-    <div className='space-y-5 sm:space-y-6'>
-      {parts.map((part, index) => {
-        if (part.type === 'code') {
-          return (
-            <div key={index} className='relative group my-4 sm:my-6' style={{ backgroundColor: '#111827' }}>
-              {/* Code block header */}
-              <div className='flex items-center justify-end px-4 py-2.5 rounded-t-xl border-b-2 shadow-sm' style={{ background: 'linear-gradient(to right, #1f2937, #111827)', borderColor: '#374151' }}>
-                <span className='text-xs font-semibold uppercase tracking-wider px-2 py-1 rounded-md' style={{ color: '#e5e7eb', backgroundColor: 'rgba(55, 65, 81, 0.5)' }}>
-                  {part.language || 'code'}
-                </span>
-              </div>
-              {/* Code block content - Always dark background for readability */}
-              <div className='relative overflow-hidden rounded-b-xl border-x-2 border-b-2 shadow-lg' style={{ backgroundColor: '#111827', borderColor: '#374151' }}>
-                <pre 
-                  className='overflow-x-auto relative z-10' 
-                  style={{ 
-                    backgroundColor: '#111827', 
-                    margin: 0, 
-                    padding: '1.5rem 1.75rem',
-                    color: '#f3f4f6',
-                    fontSize: '0.875rem',
-                    lineHeight: '1.8',
-                    fontFamily: '"JetBrains Mono", "Fira Code", "SF Mono", "Consolas", "Monaco", "Courier New", monospace',
-                    overflowX: 'auto',
-                    whiteSpace: 'pre',
-                    tabSize: 2,
-                    WebkitTabSize: 2,
-                    MozTabSize: 2,
-                    WebkitFontSmoothing: 'antialiased',
-                    MozOsxFontSmoothing: 'grayscale',
-                    letterSpacing: '0.01em'
-                  }}
-                >
-                  <code 
-                    style={{ 
-                      color: '#f3f4f6', 
-                      display: 'block', 
-                      backgroundColor: 'transparent',
-                      fontFamily: 'inherit',
-                      whiteSpace: 'pre',
-                      margin: 0,
-                      padding: 0,
-                      fontSize: 'inherit',
-                      lineHeight: 'inherit',
-                      tabSize: 2,
-                      WebkitTabSize: 2,
-                      MozTabSize: 2,
-                      wordBreak: 'normal',
-                      overflowWrap: 'normal',
-                      letterSpacing: '0.01em'
-                    }}
-                  >
-                    {part.content}
-                  </code>
-                </pre>
-                {/* Subtle gradient overlay for depth - moved behind content */}
-                <div className='absolute inset-0 pointer-events-none rounded-b-xl z-0' style={{ background: 'linear-gradient(to bottom, transparent, transparent, rgba(17, 24, 39, 0.2))' }}></div>
-              </div>
-            </div>
-          );
-        } else {
-          // Process text to handle inline code (backticks)
-          const textParts: Array<{ type: 'text' | 'code'; content: string }> = [];
-          const inlineCodeRegex = /`([^`]+)`/g;
-          let lastIndex = 0;
-          let match;
-          
-          while ((match = inlineCodeRegex.exec(part.content)) !== null) {
-            // Add text before inline code
-            if (match.index > lastIndex) {
-              const textBefore = part.content.substring(lastIndex, match.index);
-              if (textBefore) {
-                textParts.push({ type: 'text', content: textBefore });
-              }
-            }
-            // Add inline code
-            textParts.push({ type: 'code', content: match[1] });
-            lastIndex = match.index + match[0].length;
-          }
-          
-          // Add remaining text
-          if (lastIndex < part.content.length) {
-            const remainingText = part.content.substring(lastIndex);
-            if (remainingText) {
-              textParts.push({ type: 'text', content: remainingText });
-            }
-          }
-          
-          // If no inline code found, just use the original text
-          if (textParts.length === 0) {
-            textParts.push({ type: 'text', content: part.content });
-          }
-          
-          return (
-            <p
-              key={index}
-              className='text-sm sm:text-base lg:text-lg text-gray-700 dark:text-gray-300 leading-relaxed whitespace-pre-wrap mb-4 sm:mb-5'
-              style={{ 
-                lineHeight: '1.75',
-                wordSpacing: '0.05em',
-                letterSpacing: '0.01em'
-              }}
-            >
-              {textParts.map((textPart, textIndex) => {
-                if (textPart.type === 'code') {
-                  return (
-                    <code
-                      key={textIndex}
-                      className='px-1.5 py-0.5 bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-gray-100 rounded text-sm font-mono'
-                    >
-                      {textPart.content}
-                    </code>
-                  );
-                }
-                return <span key={textIndex}>{decodeHtmlEntities(textPart.content)}</span>;
-              })}
-            </p>
-          );
-        }
-      })}
-    </div>
-  );
-};
+// Note: QuestionContent is imported from @elzatona/shared-components
+// Since database is clean, we use the shared component directly
 
 function GuidedPracticePageContent() {
   const searchParams = useSearchParams();
@@ -1661,6 +632,304 @@ function GuidedPracticePageContent() {
     total: number;
     percentage: number;
   } | null>(null);
+
+  // Shiki syntax highlighting
+  const [shikiHighlighter, setShikiHighlighter] = useState<Highlighter | null>(null);
+  const [isLoadingShiki, setIsLoadingShiki] = useState(true);
+  const [codeHighlightedHtml, setCodeHighlightedHtml] = useState<string>('');
+
+  // Initialize Shiki highlighter with dual themes for automatic light/dark switching
+  useEffect(() => {
+    let mounted = true;
+    
+    const initShiki = async () => {
+      try {
+        const highlighter = await createHighlighter({
+          themes: ['github-light', 'github-dark'],
+          langs: ['javascript', 'typescript', 'python', 'java', 'jsx', 'tsx', 'json', 'html', 'css'],
+        });
+        
+        if (mounted) {
+          setShikiHighlighter(highlighter);
+          setIsLoadingShiki(false);
+        }
+      } catch (error) {
+        console.error('Error initializing Shiki:', error);
+        setIsLoadingShiki(false);
+      }
+    };
+
+    initShiki();
+
+    return () => {
+      mounted = false;
+    };
+  }, []);
+
+  // Highlight code when it changes or highlighter is ready
+  useEffect(() => {
+    if (!shikiHighlighter || !currentQuestion?.code) {
+      setCodeHighlightedHtml('');
+      return;
+    }
+
+    try {
+      const rawCode = String(currentQuestion.code || '');
+      let codeWithNewlines = rawCode
+        .replace(/\\n/g, '\n')
+        .replace(/\\r\\n/g, '\n')
+        .replace(/\\r/g, '\n')
+        .replace(/\r\n/g, '\n')
+        .replace(/\r/g, '\n')
+        .trim();
+      
+      // Remove empty lines at the start
+      while (codeWithNewlines.startsWith('\n')) {
+        codeWithNewlines = codeWithNewlines.substring(1);
+      }
+      
+      // Remove empty lines at the end
+      while (codeWithNewlines.endsWith('\n')) {
+        codeWithNewlines = codeWithNewlines.slice(0, -1);
+      }
+      
+      // Remove ALL blank lines - split by newlines, filter out empty lines, rejoin
+      // This ensures no blank lines appear in the code
+      const lines = codeWithNewlines.split('\n');
+      const nonEmptyLines = lines.filter(line => {
+        const trimmed = line.trim();
+        return trimmed.length > 0; // Only keep lines with actual content
+      });
+      codeWithNewlines = nonEmptyLines.join('\n');
+      
+      // Final check: ensure no consecutive newlines remain
+      if (codeWithNewlines.includes('\n\n')) {
+        codeWithNewlines = codeWithNewlines.replace(/\n{2,}/g, '\n');
+      }
+      
+      // Debug: verify blank lines are removed
+      console.log('Code after blank line removal:', JSON.stringify(codeWithNewlines));
+
+      // Detect language
+      let lang = 'javascript';
+      const codeText = codeWithNewlines.toLowerCase();
+      if (codeText.includes('def ') || (codeText.includes('import ') && codeText.includes('print'))) {
+        lang = 'python';
+      } else if (codeText.includes('public class') || codeText.includes('public static')) {
+        lang = 'java';
+      } else if (codeText.includes('interface ') || codeText.includes('type ') || codeText.includes(': string')) {
+        lang = 'typescript';
+      }
+
+      // Detect theme based on system preference
+      const prefersDark = typeof window !== 'undefined' && window.matchMedia('(prefers-color-scheme: dark)').matches;
+      const themeName = prefersDark ? 'github-dark' : 'github-light';
+      
+      // Use single theme instead of dual themes for better control
+      // This ensures proper colors are applied without CSS variable issues
+      let html = shikiHighlighter.codeToHtml(codeWithNewlines, {
+        lang: lang === 'typescript' ? 'ts' : lang === 'javascript' ? 'js' : lang,
+        theme: themeName, // Use single theme based on current mode
+      });
+      
+      // Post-process HTML for light mode: Replace dark colors with light theme colors
+      // Shiki uses CSS variables, but inline styles might have dark colors
+      if (typeof window !== 'undefined') {
+        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        if (!prefersDark) {
+          // In light mode, ensure background is light and text is dark
+          // Replace any dark background colors that might be in inline styles
+          html = html.replace(/background-color:\s*#[0-9a-fA-F]{6}/g, (match) => {
+            // If it's a dark color (low brightness), replace with white
+            const color = match.match(/#([0-9a-fA-F]{6})/i)?.[1];
+            if (color) {
+              const r = parseInt(color.substr(0, 2), 16);
+              const g = parseInt(color.substr(2, 2), 16);
+              const b = parseInt(color.substr(4, 2), 16);
+              const brightness = (r * 299 + g * 587 + b * 114) / 1000;
+              if (brightness < 128) {
+                return 'background-color: #ffffff';
+              }
+            }
+            return match;
+          });
+          
+          // Replace any light text colors (that would be invisible on white) with darker versions
+          html = html.replace(/color:\s*#[0-9a-fA-F]{6}/g, (match) => {
+            const color = match.match(/#([0-9a-fA-F]{6})/i)?.[1];
+            if (color) {
+              const r = parseInt(color.substr(0, 2), 16);
+              const g = parseInt(color.substr(2, 2), 16);
+              const b = parseInt(color.substr(4, 2), 16);
+              const brightness = (r * 299 + g * 587 + b * 114) / 1000;
+              // If it's a light color (brightness > 180), darken it while preserving hue
+              if (brightness > 180) {
+                const factor = brightness > 220 ? 0.3 : 0.5;
+                const newR = Math.max(0, Math.min(255, Math.round(r * factor)));
+                const newG = Math.max(0, Math.min(255, Math.round(g * factor)));
+                const newB = Math.max(0, Math.min(255, Math.round(b * factor)));
+                const newColor = `#${newR.toString(16).padStart(2, '0')}${newG.toString(16).padStart(2, '0')}${newB.toString(16).padStart(2, '0')}`;
+                return `color: ${newColor}`;
+              }
+            }
+            return match;
+          });
+        }
+      }
+
+      // Post-process Shiki HTML to remove empty line elements and fix light mode colors
+      // First, if in light mode, remove ALL inline styles and add explicit dark text colors
+      if (typeof window !== 'undefined') {
+        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        if (!prefersDark) {
+          // More aggressive: Remove ALL inline styles from all elements in light mode
+          // This ensures CSS can fully control the colors
+          html = html.replace(/style="[^"]*"/gi, '');
+          
+          // Then add explicit dark text color to all text-containing spans
+          // This ensures text is always visible in light mode
+          html = html.replace(/<span([^>]*class="[^"]*"[^>]*)>/gi, (match, attrs) => {
+            // Add inline style with dark text color
+            return `<span${attrs} style="color: #24292e;">`;
+          });
+        }
+      }
+      
+      // Shiki creates <span class="line"></span> for blank lines - remove them completely
+      // Use comprehensive regex patterns to catch all variations
+      // Pattern 1: Simple empty lines (most common)
+      html = html.replace(/<span class="line">[\s\u00A0\u200B]*<\/span>/g, '');
+      // Pattern 2: Lines with attributes but empty content
+      html = html.replace(/<span[^>]*class="[^"]*line[^"]*">[\s\u00A0\u200B]*<\/span>/g, '');
+      // Pattern 3: Lines that might have nested empty spans or just whitespace
+      html = html.replace(/<span class="line"><\/span>/g, '');
+      html = html.replace(/<span class="line">\s+<\/span>/g, '');
+      // Pattern 4: Handle any whitespace-only lines (spaces, tabs, non-breaking spaces, newlines)
+      html = html.replace(/<span class="line">[ \t\u00A0\u200B\n\r]+<\/span>/g, '');
+      
+      // Additional cleanup: Remove any remaining empty line elements and fix colors for light mode
+      if (typeof window !== 'undefined') {
+        try {
+          const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+          const tempDiv = document.createElement('div');
+          tempDiv.innerHTML = html;
+          const preElement = tempDiv.querySelector('pre');
+          if (preElement) {
+            const codeElement = preElement.querySelector('code');
+            if (codeElement) {
+              // Remove empty lines
+              const lines = Array.from(codeElement.querySelectorAll('.line'));
+              let removedCount = 0;
+              lines.forEach((line) => {
+                const text = (line.textContent || '').trim();
+                if (text.length === 0) {
+                  line.remove();
+                  removedCount++;
+                }
+              });
+              
+              // In light mode, ensure ALL syntax highlighting colors are visible
+              // Darken any colors that are too light to be visible on white background
+              if (!prefersDark) {
+                // Process ALL spans (not just those with color styles) to ensure visibility
+                const allSpans = codeElement.querySelectorAll('span');
+                allSpans.forEach((el) => {
+                  const style = (el as HTMLElement).getAttribute('style') || '';
+                  const colorMatch = style.match(/color:\s*(#[0-9a-fA-F]{6}|rgb\([^)]+\))/i);
+                  
+                  if (colorMatch) {
+                    const colorValue = colorMatch[1];
+                    let shouldReplace = false;
+                    let newColor = colorValue;
+                    
+                    if (colorValue.startsWith('#')) {
+                      // Hex color
+                      const hex = colorValue.substring(1);
+                      const r = parseInt(hex.substr(0, 2), 16);
+                      const g = parseInt(hex.substr(2, 2), 16);
+                      const b = parseInt(hex.substr(4, 2), 16);
+                      const brightness = (r * 299 + g * 587 + b * 114) / 1000;
+                      
+                      // If color is too light (brightness > 180), make it darker but preserve hue
+                      // Lowered threshold to catch more light colors
+                      if (brightness > 180) {
+                        // Darken the color while preserving the hue
+                        // Use a more aggressive darkening factor for very light colors
+                        const factor = brightness > 220 ? 0.3 : 0.5; // More aggressive for very light colors
+                        const newR = Math.max(0, Math.min(255, Math.round(r * factor)));
+                        const newG = Math.max(0, Math.min(255, Math.round(g * factor)));
+                        const newB = Math.max(0, Math.min(255, Math.round(b * factor)));
+                        newColor = `#${newR.toString(16).padStart(2, '0')}${newG.toString(16).padStart(2, '0')}${newB.toString(16).padStart(2, '0')}`;
+                        shouldReplace = true;
+                      }
+                    } else if (colorValue.startsWith('rgb')) {
+                      // RGB color - parse and check brightness
+                      const rgbMatch = colorValue.match(/rgb\((\d+),\s*(\d+),\s*(\d+)\)/);
+                      if (rgbMatch) {
+                        const r = parseInt(rgbMatch[1]);
+                        const g = parseInt(rgbMatch[2]);
+                        const b = parseInt(rgbMatch[3]);
+                        const brightness = (r * 299 + g * 587 + b * 114) / 1000;
+                        
+                        if (brightness > 180) {
+                          const factor = brightness > 220 ? 0.3 : 0.5;
+                          const newR = Math.max(0, Math.min(255, Math.round(r * factor)));
+                          const newG = Math.max(0, Math.min(255, Math.round(g * factor)));
+                          const newB = Math.max(0, Math.min(255, Math.round(b * factor)));
+                          newColor = `rgb(${newR}, ${newG}, ${newB})`;
+                          shouldReplace = true;
+                        }
+                      }
+                    }
+                    
+                    if (shouldReplace) {
+                      const newStyle = style.replace(/color:\s*(#[0-9a-fA-F]{6}|rgb\([^)]+\))/i, `color: ${newColor}`);
+                      (el as HTMLElement).setAttribute('style', newStyle);
+                    }
+                  } else if (style && !style.includes('color')) {
+                    // If span has style but no color, check if it needs a default dark color
+                    const text = (el as HTMLElement).textContent || '';
+                    if (text.trim().length > 0) {
+                      // Add default dark color for text without explicit color
+                      (el as HTMLElement).setAttribute('style', `${style}; color: #24292e;`);
+                    }
+                  } else if (!style) {
+                    // If no style at all, add default dark color
+                    const text = (el as HTMLElement).textContent || '';
+                    if (text.trim().length > 0) {
+                      (el as HTMLElement).setAttribute('style', 'color: #24292e;');
+                    }
+                  }
+                });
+                
+                // Ensure background is white
+                const preStyle = preElement.getAttribute('style') || '';
+                if (!preStyle.includes('background')) {
+                  preElement.setAttribute('style', `${preStyle ? preStyle + '; ' : ''}background-color: #ffffff;`);
+                }
+              }
+              
+              // Get the cleaned HTML - reconstruct the full structure
+              const cleanedCode = codeElement.innerHTML;
+              html = `<pre><code>${cleanedCode}</code></pre>`;
+              console.log(`Removed ${removedCount} empty lines from Shiki HTML`);
+              if (!prefersDark) {
+                console.log('Removed inline color styles for light mode');
+              }
+            }
+          }
+        } catch (e) {
+          // If DOM parsing fails, continue with regex-cleaned HTML
+          console.warn('DOM parsing for empty line removal failed:', e);
+        }
+      }
+
+      setCodeHighlightedHtml(html);
+    } catch (error) {
+      console.error('Error highlighting code:', error);
+      setCodeHighlightedHtml('');
+    }
+  }, [shikiHighlighter, currentQuestion?.code]);
 
   // Progress management functions
   const getProgressKey = () => `guided-practice-progress-${planId}`;
@@ -3019,267 +2288,30 @@ function GuidedPracticePageContent() {
     }
   }, [showExplanation]);
 
-  // Helper function to extract code from HTML for code editor preview
-  const extractCodeForEditor = (html: string): string => {
-    if (!html || typeof html !== 'string') return '';
+  // Helper function to extract code for code editor preview
+  // Since database is clean (no HTML tags), we just normalize the code
+  const extractCodeForEditor = (content: string): string => {
+    if (!content || typeof content !== 'string') return '';
     
     try {
-      // First, fix malformed opening tags like <pr<cod -> <pre><code>
-      // Handle case where <pr<cod is immediately followed by code (no space)
-      // Pattern: <pr<codfor -> <pre><code>for
-      // Also handle: <pr<codfor -> <pre><code>for (with word boundary)
-      let fixedHtml = html
-        .replace(/<pr<cod([a-zA-Z])/gi, '<pre><code>$1') // <pr<codfor -> <pre><code>for
-        .replace(/<pr<cod([a-zA-Z])/gi, '<pre><code>$1') // Handle again for edge cases
-        .replace(/<pr<cod\s/gi, '<pre><code>') // <pr<cod followed by space
-        .replace(/<pr<cod/gi, '<pre><code>')
-        .replace(/<pr<code/gi, '<pre><code>')
-        .replace(/<pr<co/gi, '<pre><code>')
-        .replace(/<pr</gi, '<pre>');
+      let code = content;
       
-      // Fix malformed closing tags like </cod</pr -> </code></pre>
-      fixedHtml = fixedHtml
-        .replace(/<\/cod<\/pr/gi, '</code></pre>')
-        .replace(/<\/code<\/pr/gi, '</code></pre>')
-        .replace(/<\/cod<\/pre/gi, '</code></pre>')
-        .replace(/<\/cod</gi, '</code>');
+      // Since database is clean, we just need to:
+      // 1. Normalize line endings
+      code = code.replace(/\r\n/g, '\n').replace(/\r/g, '\n');
       
-      console.log('🔍 Fixed HTML:', fixedHtml.substring(0, 200));
+      // 2. Handle escaped newlines (if any)
+      code = code.replace(/\\\\n/g, '\n');
+      code = code.replace(/\\n/g, '\n');
       
-      // Try extracting from <pre><code> blocks first
-      // Handle both proper closing tags and malformed ones like </cod</pr
-      const preCodeRegex = /<pre[^>]*><code[^>]*>([\s\S]*?)<\/code><\/pre>/i;
-      const preCodeMatch = fixedHtml.match(preCodeRegex);
-      if (preCodeMatch && preCodeMatch[1]) {
-        let code = preCodeMatch[1];
-        console.log('🔍 Raw code before processing:', {
-          raw: code.substring(0, 200),
-          hasLt: code.includes('<'),
-          hasGt: code.includes('>'),
-          hasLtEntity: code.includes('&lt;'),
-          hasGtEntity: code.includes('&gt;')
-        });
-        
-        // Decode HTML entities FIRST - this is critical!
-        // If the content has &lt; and &gt;, decode them to < and >
-        code = code.replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&').replace(/&quot;/g, '"').replace(/&#39;/g, "'").replace(/&nbsp;/g, ' ');
-        // Decode numeric entities
-        code = code.replace(/&#(\d+);/g, (_, dec) => String.fromCharCode(parseInt(dec, 10)));
-        code = code.replace(/&#x([0-9a-fA-F]+);/gi, (_, hex) => String.fromCharCode(parseInt(hex, 16)));
-        
-        // CRITICAL: Don't remove < and > characters - they're part of the code!
-        // The previous regex /<[^>]+>/g was removing code like "i < 3" because it matched "< 3"
-        // We should NOT remove any HTML tags here because the code is already extracted from <pre><code>
-        // If there are any remaining HTML tags, they're likely artifacts, but we need to be careful
-        // Only remove obvious HTML tag patterns that couldn't be code
-        // But preserve all < and > that are likely code operators or comparisons
-        // Actually, since we're extracting from <pre><code>, there shouldn't be HTML tags in the code
-        // So we can skip this step entirely or be very conservative
-        // CRITICAL: Convert escaped newlines to actual newlines
-        // The database stores \n as literal backslash + n, so we need to convert it
-        // Handle \\\\n first (if double-escaped in the string)
-        code = code.replace(/\\\\n/g, '\n');
-        // Then handle \n (single backslash + n) - this is what's in the database
-        code = code.replace(/\\n/g, '\n');
-        // Handle HTML entity newlines
-        code = code.replace(/&#10;/g, '\n');
-        code = code.replace(/&#x0a;/gi, '\n');
-        // Handle literal \r\n
-        code = code.replace(/\\r\\n/g, '\n');
-        code = code.replace(/\\r/g, '\n');
-        
-        // Remove any trailing closing tag artifacts
-        code = code.replace(/<\/code><\/pre>.*$/i, '');
-        code = code.replace(/<\/cod.*$/i, '');
-        
-        console.log('🔍 Extracted code from <pre><code>:', {
-          length: code.length,
-          preview: code.substring(0, 200),
-          hasNewlines: code.includes('\n'),
-          newlineCount: code.split('\n').length,
-          rawPreview: preCodeMatch[1].substring(0, 100),
-          lines: code.split('\n').slice(0, 10)
-        });
-        return code.trim();
-      }
+      // 3. Format the code
+      code = formatCodeContent(code);
       
-      // Also try to extract from <pre><code> with malformed closing tags like </cod</pr
-      const preCodeMalformedRegex = /<pre[^>]*><code[^>]*>([\s\S]*?)<\/cod/i;
-      const preCodeMalformedMatch = fixedHtml.match(preCodeMalformedRegex);
-      if (preCodeMalformedMatch && preCodeMalformedMatch[1]) {
-        let code = preCodeMalformedMatch[1];
-        console.log('🔍 Raw extracted from malformed <pre><code>:', {
-          rawLength: code.length,
-          rawPreview: code.substring(0, 200),
-          hasBackslashN: code.includes('\\n')
-        });
-        
-        // Same cleaning as above
-        code = code.replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&').replace(/&quot;/g, '"').replace(/&#39;/g, "'").replace(/&nbsp;/g, ' ');
-        code = code.replace(/&#(\d+);/g, (_, dec) => String.fromCharCode(parseInt(dec, 10)));
-        code = code.replace(/&#x([0-9a-fA-F]+);/gi, (_, hex) => String.fromCharCode(parseInt(hex, 16)));
-        // CRITICAL: DO NOT use /<[^>]+>/g - it removes code like "i < 3"!
-        // Only remove obvious HTML tags, preserve all < and > for code operators
-        code = code.replace(/<\/?(?:div|span|p|br|hr|img|a|strong|em|b|i|u|h[1-6]|ul|ol|li|table|tr|td|th|thead|tbody|tfoot)[^>]*>/gi, '');
-        
-        // CRITICAL: Convert escaped newlines to actual newlines
-        // Handle \\n (double backslash + n) first
-        code = code.replace(/\\\\n/g, '\n');
-        // Handle \n (single backslash + n)
-        code = code.replace(/\\n/g, '\n');
-        code = code.replace(/&#10;/g, '\n');
-        code = code.replace(/&#x0a;/gi, '\n');
-        code = code.replace(/\\r\\n/g, '\n');
-        code = code.replace(/\\r/g, '\n');
-        
-        // Remove any trailing closing tag artifacts
-        code = code.replace(/<\/cod.*$/i, '');
-        
-        console.log('🔍 Processed code from malformed <pre><code>:', {
-          length: code.length,
-          preview: code.substring(0, 200),
-          hasNewlines: code.includes('\n'),
-          newlineCount: code.split('\n').length,
-          lines: code.split('\n').slice(0, 10)
-        });
-        return code.trim();
-      }
-      
-      // Try extracting from markdown code blocks (handle both ```javascript and ```)
-      // Use matchAll to find all code blocks and get the largest one
-      const markdownCodeRegex = /```(?:javascript|js|typescript|ts|python|py|java)?\s*\n?([\s\S]*?)```/gi;
-      const markdownMatches = Array.from(fixedHtml.matchAll(markdownCodeRegex));
-      if (markdownMatches && markdownMatches.length > 0) {
-        // Find the largest code block (most likely the main code)
-        let largestCode = '';
-        for (const match of markdownMatches) {
-          if (match[1] && match[1].length > largestCode.length) {
-            largestCode = match[1];
-          }
-        }
-        if (largestCode) {
-          let code = largestCode;
-          // Decode HTML entities first
-          code = code.replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&').replace(/&quot;/g, '"').replace(/&#39;/g, "'").replace(/&nbsp;/g, ' ');
-          code = code.replace(/&#(\d+);/g, (_, dec) => String.fromCharCode(parseInt(dec, 10)));
-          code = code.replace(/&#x([0-9a-fA-F]+);/gi, (_, hex) => String.fromCharCode(parseInt(hex, 16)));
-          // Remove any HTML tags
-          code = code.replace(/<[^>]+>/g, '');
-          // Fix escaped newlines
-          code = code.replace(/\\n/g, '\n');
-          code = code.replace(/\\\\n/g, '\n');
-          code = code.replace(/&#10;/g, '\n');
-          code = code.replace(/&#x0a;/gi, '\n');
-          console.log('🔍 Extracted code from markdown:', {
-            length: code.length,
-            preview: code.substring(0, 150),
-            hasNewlines: code.includes('\n'),
-            blockCount: markdownMatches.length
-          });
-          return code.trim();
-        }
-      }
-      
-      // Try extracting from <code> blocks
-      const codeRegex = /<code[^>]*>([\s\S]*?)<\/code>/i;
-      const codeMatch = fixedHtml.match(codeRegex);
-      if (codeMatch && codeMatch[1]) {
-        let code = codeMatch[1];
-        // Decode HTML entities
-        code = code.replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&').replace(/&quot;/g, '"').replace(/&#39;/g, "'").replace(/&nbsp;/g, ' ');
-        code = code.replace(/&#(\d+);/g, (_, dec) => String.fromCharCode(parseInt(dec, 10)));
-        code = code.replace(/&#x([0-9a-fA-F]+);/gi, (_, hex) => String.fromCharCode(parseInt(hex, 16)));
-        code = code.replace(/<[^>]+>/g, '');
-        // Fix escaped newlines
-        code = code.replace(/\\n/g, '\n');
-        code = code.replace(/\\\\n/g, '\n');
-        console.log('🔍 Extracted code from <code>:', code.substring(0, 100));
-        return code.trim();
-      }
+      return code.trim();
     } catch (error) {
       console.error('Error extracting code:', error);
       return '';
     }
-    
-    // If no code tags found, check if the entire content or a large portion is code-like
-    // Use fixedHtml if it was created, otherwise use original html
-    const htmlToProcess = typeof fixedHtml !== 'undefined' ? fixedHtml : html;
-    
-    // Also try to extract from content that has markdown code blocks mixed with text
-    // Look for markdown code blocks even if they're not at the start
-    const allMarkdownBlocks = htmlToProcess.match(/```[\s\S]*?```/gi);
-    if (allMarkdownBlocks && allMarkdownBlocks.length > 0) {
-      // Get the largest code block
-      let largestBlock = '';
-      for (const block of allMarkdownBlocks) {
-        const codeMatch = block.match(/```(?:javascript|js|typescript|ts|python|py|java)?\s*\n?([\s\S]*?)```/i);
-        if (codeMatch && codeMatch[1] && codeMatch[1].length > largestBlock.length) {
-          largestBlock = codeMatch[1];
-        }
-      }
-      if (largestBlock) {
-        let code = largestBlock;
-        // Decode and clean
-        code = code.replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&');
-        code = code.replace(/&#(\d+);/g, (_, dec) => String.fromCharCode(parseInt(dec, 10)));
-        code = code.replace(/&#x([0-9a-fA-F]+);/gi, (_, hex) => String.fromCharCode(parseInt(hex, 16)));
-        code = code.replace(/<[^>]+>/g, '');
-        code = code.replace(/\\n/g, '\n');
-        code = code.replace(/\\\\n/g, '\n');
-        console.log('🔍 Extracted code from markdown block in content:', {
-          length: code.length,
-          preview: code.substring(0, 150)
-        });
-        if (code.trim().length > 10) {
-          return code.trim();
-        }
-      }
-    }
-    
-    // Remove HTML tags first to get plain text
-    let plainText = htmlToProcess.replace(/<[^>]+>/g, ' ');
-    // Decode HTML entities
-    plainText = plainText.replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&').replace(/&quot;/g, '"').replace(/&#39;/g, "'").replace(/&nbsp;/g, ' ');
-    plainText = plainText.replace(/&#(\d+);/g, (_, dec) => String.fromCharCode(parseInt(dec, 10)));
-    plainText = plainText.replace(/&#x([0-9a-fA-F]+);/gi, (_, hex) => String.fromCharCode(parseInt(hex, 16)));
-    // Fix escaped newlines
-    plainText = plainText.replace(/\\n/g, '\n');
-    plainText = plainText.replace(/\\\\n/g, '\n');
-    plainText = plainText.trim();
-    
-    // Check if plain text looks like code (has code patterns and multiple lines)
-    const codePatterns = [
-      /console\.log/,
-      /setTimeout/,
-      /setInterval/,
-      /for\s*\(/,
-      /while\s*\(/,
-      /if\s*\(/,
-      /this\.\w+/,
-      /Math\.\w+/,
-      /\w+\(\)/,
-      /return\s+/,
-      /const\s+\w+\s*=/,
-      /let\s+\w+\s*=/,
-      /var\s+\w+\s*=/,
-      /function\s+\w+/,
-      /class\s+\w+/,
-      /\{\s*[\s\S]*\s*\}/,
-      /\[\s*[\s\S]*\s*\]/,
-    ];
-    
-    const hasCodePattern = codePatterns.some(pattern => pattern.test(plainText));
-    const hasMultipleLines = plainText.split('\n').length > 1;
-    const hasCodeStructure = (plainText.includes('{') && plainText.includes('}')) || 
-                            (plainText.includes('(') && plainText.includes(')')) ||
-                            (plainText.includes('[') && plainText.includes(']'));
-    
-    // If it looks like code, return it (lowered threshold to catch shorter code blocks)
-    if (hasCodePattern && (hasMultipleLines || hasCodeStructure) && plainText.length > 10) {
-      return plainText;
-    }
-    
-    return '';
   };
 
   const isCorrectAnswer = (option: string) => {
@@ -3961,139 +2993,288 @@ function GuidedPracticePageContent() {
               </button>
             </div>
 
-                <h2 className='text-2xl sm:text-3xl lg:text-4xl xl:text-5xl font-bold text-gray-900 dark:text-white mb-4 sm:mb-6 leading-tight'>
-                  <QuestionContent content={cleanQuestionTitle(currentQuestion.title)} />
-                </h2>
+                {/* Question Content - Display content first, then code if available (matching admin view) */}
+                <div className="space-y-4 mb-6 sm:mb-8">
+                  {/* Question Content */}
+                  {currentQuestion.content && (
+                    <div className="text-lg sm:text-xl lg:text-2xl font-mono text-gray-900 dark:text-white leading-relaxed">
+                      <QuestionContent content={currentQuestion.content} />
+                    </div>
+                  )}
 
-                {/* Check if content has significant code - if so, show in editor instead of QuestionContent */}
-                {currentQuestion?.content ? (() => {
-                  // Extract code from content (this function tries multiple methods)
-                  let extractedCode = '';
-                  try {
-                    if (currentQuestion.content) {
-                      extractedCode = extractCodeForEditor(currentQuestion.content);
-                      console.log('🔍 Code extraction result:', {
-                        hasCode: !!extractedCode,
-                        codeLength: extractedCode.length,
-                        preview: extractedCode.substring(0, 100),
-                        fullContent: currentQuestion.content.substring(0, 200)
+                  {/* Question Code - Display after content if code exists */}
+                  {currentQuestion.code && (() => {
+                    // Format code function - removes all blank lines
+                    const formatCodeForDisplay = (code: string): string => {
+                      if (!code) return '';
+                      
+                      const codeStr = String(code);
+                      
+                      // Convert \n escape sequences to actual newlines FIRST
+                      let formatted = codeStr.replace(/\\n/g, '\n');
+                      formatted = formatted.replace(/\\r\\n/g, '\n');
+                      formatted = formatted.replace(/\\r/g, '\n');
+                      
+                      // Normalize actual line breaks
+                      formatted = formatted.replace(/\r\n/g, '\n');
+                      formatted = formatted.replace(/\r/g, '\n');
+                      
+                      // Remove only leading/trailing whitespace (not newlines)
+                      formatted = formatted.trim();
+                      
+                      // Remove empty lines at the start
+                      while (formatted.startsWith('\n')) {
+                        formatted = formatted.substring(1);
+                      }
+                      
+                      // Remove empty lines at the end
+                      while (formatted.endsWith('\n')) {
+                        formatted = formatted.slice(0, -1);
+                      }
+                      
+                      // Remove ALL blank lines - split by newlines, filter out empty lines, rejoin
+                      const lines = formatted.split('\n');
+                      const nonEmptyLines = lines.filter(line => {
+                        const trimmed = line.trim();
+                        return trimmed.length > 0; // Only keep lines with actual content
                       });
-                    }
-                  } catch (error) {
-                    console.error('Error extracting code for editor:', error);
-                    extractedCode = '';
-                  }
-                  
-                  // Use the intelligent code detection algorithm
-                  const codeValidation = isValidCode(extractedCode);
-                  
-                  console.log('🔍 Code validation result:', {
-                    isValid: codeValidation.isValid,
-                    score: codeValidation.score,
-                    reasons: codeValidation.reasons,
-                    extractedCodeLength: extractedCode.length,
-                    extractedCodePreview: extractedCode.substring(0, 150),
-                  });
-                  
-                  // Decision: Show editor if code is valid AND has minimum length
-                  const shouldShowEditor = codeValidation.isValid && extractedCode.length > 10;
-                  
-                  console.log('🔍 Final decision - shouldShowEditor:', {
-                    shouldShowEditor,
-                    isValid: codeValidation.isValid,
-                    score: codeValidation.score,
-                    extractedCodeLength: extractedCode.length,
-                    extractedCodePreview: extractedCode.substring(0, 100),
-                    reasons: codeValidation.reasons
-                  });
-                  
-                  if (shouldShowEditor) {
+                      formatted = nonEmptyLines.join('\n');
+                      
+                      // Final check: ensure no blank lines remain
+                      if (formatted.includes('\n\n')) {
+                        formatted = formatted.replace(/\n{2,}/g, '\n');
+                      }
+                      
+                      return formatted;
+                    };
+
+                    const rawCode = String(currentQuestion.code || '');
+                    const codeWithNewlines = rawCode
+                      .replace(/\\n/g, '\n')
+                      .replace(/\\r\\n/g, '\n')
+                      .replace(/\\r/g, '\n')
+                      .replace(/\r\n/g, '\n')
+                      .replace(/\r/g, '\n');
+                    
+                    const formattedCode = formatCodeForDisplay(codeWithNewlines);
+                    // Split and filter again to ensure no empty lines in codeLines array
+                    const codeLines = formattedCode.split('\n').filter(line => line.trim().length > 0);
+
                     // Detect language from code
                     let detectedLanguage = 'javascript';
-                    if (extractedCode.includes('class ') && (extractedCode.includes('constructor') || extractedCode.includes('static '))) {
-                      detectedLanguage = 'javascript';
-                    } else if (extractedCode.includes('def ') || (extractedCode.includes('import ') && extractedCode.includes('print'))) {
+                    const codeText = formattedCode.toLowerCase();
+                    if (codeText.includes('def ') || codeText.includes('import ') && codeText.includes('print')) {
                       detectedLanguage = 'python';
-                    } else if (extractedCode.includes('public class') || extractedCode.includes('public static')) {
+                    } else if (codeText.includes('public class') || codeText.includes('public static')) {
                       detectedLanguage = 'java';
-                    } else if (extractedCode.includes('interface ') || extractedCode.includes('type ') || extractedCode.includes(': string')) {
+                    } else if (codeText.includes('interface ') || codeText.includes('type ') || codeText.includes(': string')) {
                       detectedLanguage = 'typescript';
+                    } else if (codeText.includes('function ') || codeText.includes('const ') || codeText.includes('let ')) {
+                      detectedLanguage = 'javascript';
                     }
-                    
-                    // Show formatted code in a simple, scrollable code block
-                    // Format the code with proper indentation
-                    const formattedCode = formatCodeContent(extractedCode);
-                    
+
+                    // Detect theme based on system preference
+                    const prefersDark = typeof window !== 'undefined' && window.matchMedia('(prefers-color-scheme: dark)').matches;
+                    const codeTheme = prefersDark ? 'dark' : 'light';
+
                     return (
-                      <div className='mb-6 sm:mb-8'>
-                        <div className='relative group my-4 sm:my-6' style={{ backgroundColor: '#111827' }}>
-                          {/* Code block header */}
-                          <div className='flex items-center justify-between px-4 py-2.5 rounded-t-xl border-b-2 shadow-sm' style={{ background: 'linear-gradient(to right, #1f2937, #111827)', borderColor: '#374151' }}>
-                            <span className='text-xs font-semibold uppercase tracking-wider px-2 py-1 rounded-md' style={{ color: '#e5e7eb', backgroundColor: 'rgba(55, 65, 81, 0.5)' }}>
-                              {detectedLanguage}
-                            </span>
-            </div>
-                          {/* Code block content - Simple pre/code that doesn't interfere with page scrolling */}
-                          <div className='relative overflow-visible rounded-b-xl border-x-2 border-b-2 shadow-lg' style={{ backgroundColor: '#111827', borderColor: '#374151' }}>
-                            <pre 
-                              className='overflow-x-auto overflow-y-visible' 
-                              style={{ 
-                                backgroundColor: '#111827', 
-                                margin: 0, 
-                                padding: '1.5rem 1.75rem',
-                                color: '#f3f4f6',
-                                fontSize: '0.875rem',
-                                lineHeight: '1.8',
-                                fontFamily: '"JetBrains Mono", "Fira Code", "SF Mono", "Consolas", "Monaco", "Courier New", monospace',
-                                overflowX: 'auto',
-                                overflowY: 'visible',
-                                whiteSpace: 'pre',
-                                tabSize: 2,
-                                WebkitTabSize: 2,
-                                MozTabSize: 2,
-                                WebkitFontSmoothing: 'antialiased',
-                                MozOsxFontSmoothing: 'grayscale',
-                                letterSpacing: '0.01em',
-                                maxHeight: 'none',
-                                position: 'relative',
-                                zIndex: 1,
-                              }}
-                            >
-                              <code 
-                                style={{ 
-                                  color: '#f3f4f6', 
-                                  display: 'block', 
-                                  backgroundColor: 'transparent',
-                                  fontFamily: 'inherit',
-                                  whiteSpace: 'pre',
-                                  margin: 0,
-                                  padding: 0,
-                                  fontSize: 'inherit',
-                                  lineHeight: 'inherit',
-                                  tabSize: 2,
-                                  WebkitTabSize: 2,
-                                  MozTabSize: 2,
-                                  wordBreak: 'normal',
-                                  overflowWrap: 'normal',
-                                  letterSpacing: '0.01em'
-                                }}
-                              >
-                                {formattedCode}
-                              </code>
-                            </pre>
+                      <>
+                        {/* Compact Code display with Shiki syntax highlighting - Light/Dark mode support */}
+                        <div className={`relative rounded-lg overflow-hidden shadow-lg border ${
+                          codeTheme === 'dark' 
+                            ? 'border-gray-700 bg-gray-900' 
+                            : 'border-gray-300 bg-white'
+                        }`}>
+                          {/* Compact Code editor header bar */}
+                          <div className={`flex items-center justify-between px-2 py-1.5 border-b ${
+                            codeTheme === 'dark'
+                              ? 'bg-gray-800 border-gray-700'
+                              : 'bg-gray-100 border-gray-200'
+                          }`}>
+                            <div className="flex items-center gap-2">
+                              {/* Window controls - smaller */}
+                              <div className="flex gap-1">
+                                <div className="w-2 h-2 rounded-full bg-red-500"></div>
+                                <div className="w-2 h-2 rounded-full bg-yellow-500"></div>
+                                <div className="w-2 h-2 rounded-full bg-green-500"></div>
+                              </div>
+                              {/* File name - compact */}
+                              <div className={`flex items-center gap-1.5 ml-1 px-2 py-0.5 rounded border ${
+                                codeTheme === 'dark'
+                                  ? 'bg-gray-700/50 border-gray-600'
+                                  : 'bg-gray-200 border-gray-300'
+                              }`}>
+                                <div className={`w-1.5 h-1.5 rounded-full ${codeTheme === 'dark' ? 'bg-blue-400' : 'bg-blue-500'}`}></div>
+                                <span className={`text-xs font-medium font-mono ${
+                                  codeTheme === 'dark' ? 'text-gray-300' : 'text-gray-700'
+                                }`}>
+                                  code.{detectedLanguage === 'python' ? 'py' : detectedLanguage === 'java' ? 'java' : detectedLanguage === 'typescript' ? 'ts' : 'js'}
+                                </span>
+                              </div>
+                            </div>
+                            {/* Language badge - compact */}
+                            <div className={`px-2 py-0.5 rounded border ${
+                              codeTheme === 'dark'
+                                ? 'bg-gray-700/50 border-gray-600'
+                                : 'bg-gray-200 border-gray-300'
+                            }`}>
+                              <span className={`text-xs font-medium uppercase ${
+                                codeTheme === 'dark' ? 'text-gray-300' : 'text-gray-700'
+                              }`}>
+                                {detectedLanguage}
+                              </span>
+                            </div>
+                          </div>
+                          
+                          {/* Code content with Shiki highlighting - compact */}
+                          <div className={`overflow-x-auto ${codeTheme === 'dark' ? 'bg-gray-900' : 'bg-white border border-gray-200'}`}>
+                            {isLoadingShiki ? (
+                              <div className="p-2 text-center text-xs text-gray-500">Loading...</div>
+                            ) : codeHighlightedHtml ? (
+                              <div className="relative">
+                                {/* Line numbers background - narrower */}
+                                <div className={`absolute left-0 top-0 bottom-0 w-10 border-r ${
+                                  codeTheme === 'dark' ? 'bg-gray-800/50 border-gray-700' : 'bg-gray-100 border-gray-200'
+                                }`}></div>
+                                
+                                {/* Shiki highlighted code with line numbers */}
+                                <div className="relative">
+                                  {/* Shiki highlighted code */}
+                                  <div 
+                                    className={`shiki-wrapper pl-10 ${codeTheme === 'light' ? 'shiki-light-mode' : 'shiki-dark-mode'}`}
+                                    dangerouslySetInnerHTML={{ __html: codeHighlightedHtml }}
+                                  />
+                                  
+                                  {/* Custom styles for Shiki output - compact with better light mode support */}
+                                  <style dangerouslySetInnerHTML={{
+                                    __html: `
+                                      .shiki-wrapper pre {
+                                        margin: 0 !important;
+                                        padding: 0.375rem 0 0.375rem 0 !important;
+                                        background: transparent !important;
+                                        overflow: visible !important;
+                                        font-size: 0.875rem !important;
+                                        line-height: 1.25 !important;
+                                        font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace !important;
+                                        font-weight: 500 !important;
+                                      }
+                                      .shiki-wrapper pre code {
+                                        display: block !important;
+                                        background: transparent !important;
+                                      }
+                                      .shiki-wrapper pre code .line {
+                                        display: block !important;
+                                        padding: 0 !important;
+                                        margin: 0 !important;
+                                        line-height: 1.25 !important;
+                                      }
+                                      /* Remove min-height to prevent spacing from empty lines */
+                                      .shiki-wrapper pre code .line:empty {
+                                        display: none !important;
+                                        height: 0 !important;
+                                        min-height: 0 !important;
+                                        margin: 0 !important;
+                                        padding: 0 !important;
+                                      }
+                                      /* Also hide lines that only contain whitespace */
+                                      .shiki-wrapper pre code .line:has(> :empty) {
+                                        display: none !important;
+                                      }
+                                      /* Shiki theme support - preserve syntax highlighting colors */
+                                      /* Dark mode */
+                                      @media (prefers-color-scheme: dark) {
+                                        .shiki-wrapper,
+                                        .shiki-wrapper pre,
+                                        .shiki-wrapper pre code {
+                                          background-color: #0d1117 !important;
+                                        }
+                                        .shiki-wrapper pre code .line {
+                                          color: inherit !important;
+                                        }
+                                      }
+                                      /* Light mode - preserve syntax colors but ensure visibility */
+                                      .shiki-light-mode .shiki-wrapper,
+                                      .shiki-light-mode .shiki-wrapper pre,
+                                      .shiki-light-mode .shiki-wrapper pre code {
+                                        background-color: #ffffff !important;
+                                      }
+                                      .shiki-light-mode .shiki-wrapper pre code .line {
+                                        background-color: transparent !important;
+                                      }
+                                      /* In light mode, only override very light colors (invisible on white) */
+                                      /* Let Shiki's syntax highlighting colors show through */
+                                      .shiki-light-mode .shiki-wrapper pre code .line span[style*="color"] {
+                                        /* Only override if color is too light - preserve syntax highlighting */
+                                      }
+                                      /* Media query for light mode (fallback) */
+                                      @media (prefers-color-scheme: light), (prefers-color-scheme: no-preference) {
+                                        .shiki-wrapper:not(.shiki-dark-mode) {
+                                          background-color: #ffffff !important;
+                                        }
+                                        .shiki-wrapper:not(.shiki-dark-mode) pre,
+                                        .shiki-wrapper:not(.shiki-dark-mode) pre code {
+                                          background-color: #ffffff !important;
+                                        }
+                                      }
+                                      /* Preserve syntax highlighting - don't override colors */
+                                      .shiki-wrapper pre code .line {
+                                        color: inherit !important;
+                                      }
+                                    `
+                                  }} />
+                                  
+                                  {/* Line numbers - compact - only for non-empty lines */}
+                                  <div className="absolute left-0 top-0 flex flex-col" style={{ paddingTop: '0.375rem' }}>
+                                    {codeLines.map((_, index) => (
+                                      <span 
+                                        key={index}
+                                        className={`select-none pr-2 pl-2 text-right min-w-[2.5rem] text-xs font-medium ${
+                                          codeTheme === 'dark' ? 'text-gray-400' : 'text-gray-500'
+                                        }`}
+                                        style={{ 
+                                          lineHeight: '1.25',
+                                          minHeight: '1.25rem',
+                                          display: 'block',
+                                        }}
+                                      >
+                                        {index + 1}
+                                      </span>
+                                    ))}
+                                  </div>
+                                </div>
+                              </div>
+                            ) : (
+                              // Fallback: plain code display - compact
+                              <div className="relative">
+                                <div className={`absolute left-0 top-0 bottom-0 w-10 border-r ${
+                                  codeTheme === 'dark' ? 'bg-gray-800/50 border-gray-700' : 'bg-gray-100 border-gray-200'
+                                }`}></div>
+                                <pre className="m-0 p-2 pl-10 text-sm font-mono font-medium leading-relaxed">
+                                  <code className="block">
+                                    {codeLines.map((line, index) => (
+                                      <div key={index} className="flex items-start">
+                                        <span className={`select-none pr-2 text-right min-w-[2.5rem] text-xs font-medium ${
+                                          codeTheme === 'dark' ? 'text-gray-400' : 'text-gray-500'
+                                        }`}>
+                                          {index + 1}
+                                        </span>
+                                        <span className={`flex-1 whitespace-pre pl-2 pr-2 py-0.5 text-sm ${
+                                          codeTheme === 'dark' ? 'text-gray-100' : 'text-gray-900'
+                                        }`}>
+                                          {line || ' '}
+                                        </span>
+                                      </div>
+                                    ))}
+                                  </code>
+                                </pre>
+                              </div>
+                            )}
                           </div>
                         </div>
-                      </div>
+                      </>
                     );
-                  } else {
-                    // No significant code, show content normally
-                    return (
-                      <div className='prose dark:prose-invert max-w-none prose-sm sm:prose-base lg:prose-lg'>
-                        <QuestionContent content={currentQuestion.content} />
-                      </div>
-                    );
-                  }
-                })() : null}
+                  })()}
+                </div>
           </div>
 
           {/* Answer Options */}
