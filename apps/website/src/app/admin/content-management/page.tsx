@@ -33,7 +33,6 @@ import {
 } from '@elzatona/shared-hooks';
 import { useQueryClient } from '@tanstack/react-query';
 import { useNotificationActions } from '@elzatona/shared-hooks';
-import { BulkOperations } from '@elzatona/shared-components';
 import { LearningCard } from '@elzatona/shared-types';
 import { UnifiedQuestion } from '@elzatona/shared-types';
 import { useToast, ToastContainer } from '@elzatona/shared-components';
@@ -131,6 +130,21 @@ const SelectValue = React.lazy(() =>
     default: module.SelectValue,
   }))
 );
+const Collapsible = React.lazy(() =>
+  import('@elzatona/shared-components').then(module => ({
+    default: module.Collapsible,
+  }))
+);
+const CollapsibleTrigger = React.lazy(() =>
+  import('@elzatona/shared-components').then(module => ({
+    default: module.CollapsibleTrigger,
+  }))
+);
+const CollapsibleContent = React.lazy(() =>
+  import('@elzatona/shared-components').then(module => ({
+    default: module.CollapsibleContent,
+  }))
+);
 import { Modal } from '@elzatona/shared-components';
 
 // Import icons with tree shaking
@@ -148,6 +162,8 @@ import {
   Users,
   Calendar,
   Target,
+  Search,
+  X,
 } from 'lucide-react';
 
 // Lazy load forms to reduce initial bundle size
@@ -500,15 +516,66 @@ export default function UnifiedAdminPage() {
     >
   >({});
 
-  // Bulk operations state
-  const [selectedCards, setSelectedCards] = useState<string[]>([]);
-  const [selectedPlans, setSelectedPlans] = useState<string[]>([]);
-  const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
-  const [selectedTopics, setSelectedTopics] = useState<string[]>([]);
-  const [selectedQuestions, setSelectedQuestions] = useState<string[]>([]);
-  const [activeBulkSection, setActiveBulkSection] = useState<
-    'cards' | 'plans' | 'categories' | 'topics' | 'questions'
-  >('cards');
+  // Search and filter state for categories and topics
+  const [categorySearch, setCategorySearch] = useState('');
+  const [topicSearch, setTopicSearch] = useState('');
+  const [selectedCategoryFilter, setSelectedCategoryFilter] = useState<string | null>(null);
+
+  // Collapsible state for categories and topics (closed by default)
+  const [isCategoriesOpen, setIsCategoriesOpen] = useState(false);
+  const [isTopicsOpen, setIsTopicsOpen] = useState(false);
+
+  // Plan hierarchy state
+  const [planHierarchy, setPlanHierarchy] = useState<Record<string, any>>({});
+  const [loadingPlanHierarchy, setLoadingPlanHierarchy] = useState<Record<string, boolean>>({});
+  const [expandedPlanCards, setExpandedPlanCards] = useState<Set<string>>(new Set());
+  const [expandedPlanCategories, setExpandedPlanCategories] = useState<Set<string>>(new Set());
+  const [expandedPlanTopics, setExpandedPlanTopics] = useState<Set<string>>(new Set());
+  
+  // Add item modals state - step-by-step selection
+  const [addItemContext, setAddItemContext] = useState<{
+    planId: string;
+    type: 'card' | 'category' | 'topic' | 'question';
+    parentId?: string; // card_id for category, category_id for topic, topic_id for question
+  } | null>(null);
+  
+  // Step-by-step selection state
+  const [selectionStep, setSelectionStep] = useState<'card' | 'category' | 'topic' | 'question'>('card');
+  const [selectedCardId, setSelectedCardId] = useState<string | null>(null);
+  const [selectedCategoryId, setSelectedCategoryId] = useState<string | null>(null);
+  const [selectedTopicId, setSelectedTopicId] = useState<string | null>(null);
+
+  // Filtered categories and topics
+  const filteredCategories = useMemo(() => {
+    if (!categorySearch.trim()) return categories;
+    const searchLower = categorySearch.toLowerCase();
+    return categories.filter(
+      category =>
+        (category.name || '').toLowerCase().includes(searchLower) ||
+        (category.description || '').toLowerCase().includes(searchLower)
+    );
+  }, [categories, categorySearch]);
+
+  const filteredTopics = useMemo(() => {
+    let filtered = topics;
+
+    // Filter by category
+    if (selectedCategoryFilter) {
+      filtered = filtered.filter(topic => topic.category_id === selectedCategoryFilter);
+    }
+
+    // Filter by search term
+    if (topicSearch.trim()) {
+      const searchLower = topicSearch.toLowerCase();
+      filtered = filtered.filter(
+        topic =>
+          (topic.name || '').toLowerCase().includes(searchLower) ||
+          (topic.description || '').toLowerCase().includes(searchLower)
+      );
+    }
+
+    return filtered;
+  }, [topics, topicSearch, selectedCategoryFilter]);
 
   // CRUD handlers using TanStack Query mutations
   const handleCreateCard = async (cardData: Partial<LearningCard>) => {
@@ -633,6 +700,287 @@ export default function UnifiedAdminPage() {
       setIsDeletePlanModalOpen(true);
     }
   };
+
+  // Fetch plan hierarchy
+  const fetchPlanHierarchy = async (planId: string) => {
+    try {
+      // Set loading state
+      setLoadingPlanHierarchy(prev => ({ ...prev, [planId]: true }));
+      
+      const response = await fetch(`/api/plans/${planId}/hierarchy`);
+      const result = await response.json();
+      if (result.success) {
+        setPlanHierarchy(prev => ({ ...prev, [planId]: result.data || [] }));
+      }
+    } catch (error) {
+      console.error('Error fetching plan hierarchy:', error);
+    } finally {
+      // Clear loading state
+      setLoadingPlanHierarchy(prev => ({ ...prev, [planId]: false }));
+    }
+  };
+
+  // Toggle expand for plan cards
+  const togglePlanCard = useCallback((cardId: string) => {
+    setExpandedPlanCards(prev => {
+      const newExpanded = new Set(prev);
+      if (newExpanded.has(cardId)) {
+        newExpanded.delete(cardId);
+      } else {
+        newExpanded.add(cardId);
+      }
+      return newExpanded;
+    });
+  }, []);
+
+  // Toggle expand for plan categories
+  const togglePlanCategory = useCallback((categoryId: string) => {
+    setExpandedPlanCategories(prev => {
+      const newExpanded = new Set(prev);
+      if (newExpanded.has(categoryId)) {
+        newExpanded.delete(categoryId);
+      } else {
+        newExpanded.add(categoryId);
+      }
+      return newExpanded;
+    });
+  }, []);
+
+  // Toggle expand for plan topics
+  const togglePlanTopic = useCallback((topicId: string) => {
+    setExpandedPlanTopics(prev => {
+      const newExpanded = new Set(prev);
+      if (newExpanded.has(topicId)) {
+        newExpanded.delete(topicId);
+      } else {
+        newExpanded.add(topicId);
+      }
+      return newExpanded;
+    });
+  }, []);
+
+  // Add items to hierarchy
+  const addCardToPlan = async (planId: string, cardId: string) => {
+    try {
+      const response = await fetch(`/api/plans/${planId}/cards`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ card_id: cardId }),
+      });
+      const result = await response.json();
+      if (result.success) {
+        showSuccess('Card Added', 'Card added to plan successfully');
+        await fetchPlanHierarchy(planId);
+        queryClient.invalidateQueries();
+      } else {
+        showError('Failed to Add', result.error || 'Failed to add card to plan');
+      }
+    } catch (error) {
+      console.error('Error adding card to plan:', error);
+      showError('Failed to Add', 'Failed to add card to plan');
+    }
+  };
+
+  const addCategoryToCard = async (cardId: string, categoryId: string) => {
+    try {
+      const response = await fetch(`/api/cards/${cardId}/categories`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ category_id: categoryId }),
+      });
+      const result = await response.json();
+      if (result.success) {
+        showSuccess('Category Added', 'Category added to card successfully');
+        // Find which plan contains this card and refresh
+        const plan = plans.find(p => {
+          const hierarchy = planHierarchy[p.id] || [];
+          return hierarchy.some((c: any) => c.id === cardId);
+        });
+        if (plan) {
+          await fetchPlanHierarchy(plan.id);
+        }
+        queryClient.invalidateQueries();
+      } else {
+        showError('Failed to Add', result.error || 'Failed to add category to card');
+      }
+    } catch (error) {
+      console.error('Error adding category to card:', error);
+      showError('Failed to Add', 'Failed to add category to card');
+    }
+  };
+
+  const addTopicToCategory = async (categoryId: string, topicId: string) => {
+    try {
+      const response = await fetch(`/api/categories/${categoryId}/topics`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ topic_id: topicId }),
+      });
+      const result = await response.json();
+      if (result.success) {
+        showSuccess('Topic Added', 'Topic added to category successfully');
+        // Find which plan contains this category and refresh
+        const plan = plans.find(p => {
+          const hierarchy = planHierarchy[p.id] || [];
+          return hierarchy.some((c: any) => 
+            c.categories?.some((cat: any) => cat.id === categoryId)
+          );
+        });
+        if (plan) {
+          await fetchPlanHierarchy(plan.id);
+        }
+        queryClient.invalidateQueries();
+      } else {
+        showError('Failed to Add', result.error || 'Failed to add topic to category');
+      }
+    } catch (error) {
+      console.error('Error adding topic to category:', error);
+      showError('Failed to Add', 'Failed to add topic to category');
+    }
+  };
+
+  const addQuestionToTopic = async (topicId: string, questionId: string) => {
+    try {
+      const response = await fetch(`/api/topics/${topicId}/questions`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ question_id: questionId }),
+      });
+      const result = await response.json();
+      if (result.success) {
+        showSuccess('Question Added', 'Question added to topic successfully');
+        // Find which plan contains this topic and refresh
+        const plan = plans.find(p => {
+          const hierarchy = planHierarchy[p.id] || [];
+          return hierarchy.some((c: any) => 
+            c.categories?.some((cat: any) => 
+              cat.topics?.some((t: any) => t.id === topicId)
+            )
+          );
+        });
+        if (plan) {
+          await fetchPlanHierarchy(plan.id);
+        }
+        queryClient.invalidateQueries();
+      } else {
+        showError('Failed to Add', result.error || 'Failed to add question to topic');
+      }
+    } catch (error) {
+      console.error('Error adding question to topic:', error);
+      showError('Failed to Add', 'Failed to add question to topic');
+    }
+  };
+
+  // Remove items from hierarchy
+  const removeCardFromPlan = async (planId: string, cardId: string) => {
+    try {
+      const response = await fetch(`/api/plans/${planId}/cards?card_id=${cardId}`, {
+        method: 'DELETE',
+      });
+      const result = await response.json();
+      if (result.success) {
+        showSuccess('Card Removed', 'Card removed from plan successfully');
+        await fetchPlanHierarchy(planId);
+        queryClient.invalidateQueries();
+      } else {
+        showError('Failed to Remove', result.error || 'Failed to remove card from plan');
+      }
+    } catch (error) {
+      console.error('Error removing card from plan:', error);
+      showError('Failed to Remove', 'Failed to remove card from plan');
+    }
+  };
+
+  const removeCategoryFromCard = async (cardId: string, categoryId: string) => {
+    try {
+      const response = await fetch(`/api/cards/${cardId}/categories?category_id=${categoryId}`, {
+        method: 'DELETE',
+      });
+      const result = await response.json();
+      if (result.success) {
+        showSuccess('Category Removed', 'Category removed from card successfully');
+        const plan = plans.find(p => {
+          const hierarchy = planHierarchy[p.id] || [];
+          return hierarchy.some((c: any) => c.id === cardId);
+        });
+        if (plan) {
+          await fetchPlanHierarchy(plan.id);
+        }
+        queryClient.invalidateQueries();
+      } else {
+        showError('Failed to Remove', result.error || 'Failed to remove category from card');
+      }
+    } catch (error) {
+      console.error('Error removing category from card:', error);
+      showError('Failed to Remove', 'Failed to remove category from card');
+    }
+  };
+
+  const removeTopicFromCategory = async (categoryId: string, topicId: string) => {
+    try {
+      const response = await fetch(`/api/categories/${categoryId}/topics?topic_id=${topicId}`, {
+        method: 'DELETE',
+      });
+      const result = await response.json();
+      if (result.success) {
+        showSuccess('Topic Removed', 'Topic removed from category successfully');
+        const plan = plans.find(p => {
+          const hierarchy = planHierarchy[p.id] || [];
+          return hierarchy.some((c: any) => 
+            c.categories?.some((cat: any) => cat.id === categoryId)
+          );
+        });
+        if (plan) {
+          await fetchPlanHierarchy(plan.id);
+        }
+        queryClient.invalidateQueries();
+      } else {
+        showError('Failed to Remove', result.error || 'Failed to remove topic from category');
+      }
+    } catch (error) {
+      console.error('Error removing topic from category:', error);
+      showError('Failed to Remove', 'Failed to remove topic from category');
+    }
+  };
+
+  const removeQuestionFromTopic = async (topicId: string, questionId: string) => {
+    try {
+      const response = await fetch(`/api/topics/${topicId}/questions?question_id=${questionId}`, {
+        method: 'DELETE',
+      });
+      const result = await response.json();
+      if (result.success) {
+        showSuccess('Question Removed', 'Question removed from topic successfully');
+        const plan = plans.find(p => {
+          const hierarchy = planHierarchy[p.id] || [];
+          return hierarchy.some((c: any) => 
+            c.categories?.some((cat: any) => 
+              cat.topics?.some((t: any) => t.id === topicId)
+            )
+          );
+        });
+        if (plan) {
+          await fetchPlanHierarchy(plan.id);
+        }
+        queryClient.invalidateQueries();
+      } else {
+        showError('Failed to Remove', result.error || 'Failed to remove question from topic');
+      }
+    } catch (error) {
+      console.error('Error removing question from topic:', error);
+      showError('Failed to Remove', 'Failed to remove question from topic');
+    }
+  };
+
+  // Fetch hierarchy when plan is expanded
+  useEffect(() => {
+    plans.forEach(plan => {
+      if (expandedPlans.has(plan.id) && !planHierarchy[plan.id]) {
+        fetchPlanHierarchy(plan.id);
+      }
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [expandedPlans, plans]);
 
   const confirmDeleteCard = async () => {
     if (!cardToDelete) return;
@@ -962,34 +1310,256 @@ export default function UnifiedAdminPage() {
         />
       </div>
 
-      {/* Bulk Operations */}
-      <div className='mb-8'>
-        <BulkOperations
-          targetType={activeBulkSection}
-          selectedItems={
-            activeBulkSection === 'cards'
-              ? selectedCards
-              : activeBulkSection === 'plans'
-                ? selectedPlans
-                : activeBulkSection === 'categories'
-                  ? selectedCategories
-                  : activeBulkSection === 'topics'
-                    ? selectedTopics
-                    : selectedQuestions
-          }
-          onSelectionChange={items => {
-            if (activeBulkSection === 'cards') setSelectedCards(items);
-            else if (activeBulkSection === 'plans') setSelectedPlans(items);
-            else if (activeBulkSection === 'categories')
-              setSelectedCategories(items);
-            else if (activeBulkSection === 'topics') setSelectedTopics(items);
-            else setSelectedQuestions(items);
-          }}
-          onOperationComplete={() => {
-            // Refresh data after bulk operation
-            queryClient.invalidateQueries();
-          }}
-        />
+      {/* Topics and Categories Lists */}
+      <div className='grid grid-cols-1 md:grid-cols-2 gap-6 mb-8'>
+        {/* Categories List */}
+        <Suspense fallback={<LoadingSkeleton />}>
+          <Card className='bg-white dark:bg-gray-800'>
+            <Collapsible open={isCategoriesOpen} onOpenChange={setIsCategoriesOpen}>
+              <CollapsibleTrigger asChild>
+                <CardHeader className='cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors'>
+                  <div className='flex items-center justify-between mb-4'>
+                    <CardTitle className='text-xl font-semibold text-gray-900 dark:text-gray-100 flex items-center gap-2'>
+                      {isCategoriesOpen ? (
+                        <ChevronDown className='h-5 w-5 text-gray-500 dark:text-gray-400' />
+                      ) : (
+                        <ChevronRight className='h-5 w-5 text-gray-500 dark:text-gray-400' />
+                      )}
+                      <BookOpen className='h-5 w-5 text-purple-600 dark:text-purple-400' />
+                      Categories ({filteredCategories.length}{categorySearch && ` / ${categories.length}`})
+                    </CardTitle>
+                    <Button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setEditingCategory(null);
+                        setIsCategoryModalOpen(true);
+                      }}
+                      size='sm'
+                      className='bg-purple-600 hover:bg-purple-700'
+                    >
+                      <Plus className='h-4 w-4 mr-1' />
+                      Add
+                    </Button>
+                  </div>
+                  {/* Search Input */}
+                  <div className='relative' onClick={(e) => e.stopPropagation()}>
+                    <Search className='absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400' />
+                    <Input
+                      placeholder='Search categories...'
+                      value={categorySearch}
+                      onChange={e => setCategorySearch(e.target.value)}
+                      className='pl-10 pr-10'
+                    />
+                    {categorySearch && (
+                      <button
+                        onClick={() => setCategorySearch('')}
+                        className='absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300'
+                      >
+                        <X className='h-4 w-4' />
+                      </button>
+                    )}
+                  </div>
+                </CardHeader>
+              </CollapsibleTrigger>
+              <CollapsibleContent>
+                <CardContent>
+              {categoriesLoading ? (
+                <div className='text-center py-4'>
+                  <div className='animate-spin rounded-full h-6 w-6 border-b-2 border-purple-600 mx-auto'></div>
+                </div>
+              ) : filteredCategories.length === 0 ? (
+                <div className='text-center py-8 text-gray-500 dark:text-gray-400'>
+                  <BookOpen className='h-12 w-12 mx-auto mb-2 opacity-50' />
+                  <p>{categorySearch ? 'No categories found' : 'No categories yet'}</p>
+                </div>
+              ) : (
+                <div className='space-y-2 max-h-96 overflow-y-auto'>
+                  {filteredCategories.map(category => (
+                    <div
+                      key={category.id}
+                      className='flex items-center justify-between p-3 rounded-lg border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors'
+                    >
+                      <div className='flex-1 min-w-0'>
+                        <p className='font-medium text-gray-900 dark:text-gray-100 truncate'>
+                          {category.name || 'Unnamed Category'}
+                        </p>
+                        {category.description && (
+                          <p className='text-sm text-gray-500 dark:text-gray-400 truncate mt-1'>
+                            {category.description}
+                          </p>
+                        )}
+                      </div>
+                      <div className='flex items-center gap-2 ml-4'>
+                        <Button
+                          variant='ghost'
+                          size='sm'
+                          onClick={() => {
+                            setEditingCategory(category);
+                            setIsCategoryModalOpen(true);
+                          }}
+                          className='h-8 w-8 p-0'
+                        >
+                          <Edit className='h-4 w-4' />
+                        </Button>
+                        <Button
+                          variant='ghost'
+                          size='sm'
+                          onClick={() => handleDeleteCategory(category)}
+                          className='h-8 w-8 p-0 text-red-600 hover:text-red-700 hover:bg-red-50 dark:hover:bg-red-900/20'
+                        >
+                          <Trash2 className='h-4 w-4' />
+                        </Button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+                </CardContent>
+              </CollapsibleContent>
+            </Collapsible>
+          </Card>
+        </Suspense>
+
+        {/* Topics List */}
+        <Suspense fallback={<LoadingSkeleton />}>
+          <Card className='bg-white dark:bg-gray-800'>
+            <Collapsible open={isTopicsOpen} onOpenChange={setIsTopicsOpen}>
+              <CollapsibleTrigger asChild>
+                <CardHeader className='cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors'>
+                  <div className='flex items-center justify-between mb-4'>
+                    <CardTitle className='text-xl font-semibold text-gray-900 dark:text-gray-100 flex items-center gap-2'>
+                      {isTopicsOpen ? (
+                        <ChevronDown className='h-5 w-5 text-gray-500 dark:text-gray-400' />
+                      ) : (
+                        <ChevronRight className='h-5 w-5 text-gray-500 dark:text-gray-400' />
+                      )}
+                      <Target className='h-5 w-5 text-orange-600 dark:text-orange-400' />
+                      Topics ({filteredTopics.length}{(topicSearch || selectedCategoryFilter) && ` / ${topics.length}`})
+                    </CardTitle>
+                    <Button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setEditingTopic(null);
+                        setIsTopicModalOpen(true);
+                      }}
+                      size='sm'
+                      className='bg-orange-600 hover:bg-orange-700'
+                    >
+                      <Plus className='h-4 w-4 mr-1' />
+                      Add
+                    </Button>
+                  </div>
+                  {/* Category Filter */}
+                  <div className='mb-3' onClick={(e) => e.stopPropagation()}>
+                    <Suspense fallback={<LoadingSkeleton />}>
+                      <Select
+                        value={selectedCategoryFilter || 'all'}
+                        onValueChange={value => setSelectedCategoryFilter(value === 'all' ? null : value)}
+                      >
+                        <SelectTrigger className='w-full'>
+                          <SelectValue placeholder='Filter by category...' />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value='all'>All Categories</SelectItem>
+                          {categories.map(category => (
+                            <SelectItem key={category.id} value={category.id}>
+                              {category.name || 'Unnamed Category'}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </Suspense>
+                  </div>
+                  {/* Search Input */}
+                  <div className='relative' onClick={(e) => e.stopPropagation()}>
+                    <Search className='absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400' />
+                    <Input
+                      placeholder='Search topics...'
+                      value={topicSearch}
+                      onChange={e => setTopicSearch(e.target.value)}
+                      className='pl-10 pr-10'
+                    />
+                    {topicSearch && (
+                      <button
+                        onClick={() => setTopicSearch('')}
+                        className='absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300'
+                      >
+                        <X className='h-4 w-4' />
+                      </button>
+                    )}
+                  </div>
+                </CardHeader>
+              </CollapsibleTrigger>
+              <CollapsibleContent>
+                <CardContent>
+              {topicsLoading ? (
+                <div className='text-center py-4'>
+                  <div className='animate-spin rounded-full h-6 w-6 border-b-2 border-orange-600 mx-auto'></div>
+                </div>
+              ) : filteredTopics.length === 0 ? (
+                <div className='text-center py-8 text-gray-500 dark:text-gray-400'>
+                  <Target className='h-12 w-12 mx-auto mb-2 opacity-50' />
+                  <p>
+                    {topicSearch || selectedCategoryFilter
+                      ? 'No topics found'
+                      : 'No topics yet'}
+                  </p>
+                </div>
+              ) : (
+                <div className='space-y-2 max-h-96 overflow-y-auto'>
+                  {filteredTopics.map(topic => (
+                    <div
+                      key={topic.id}
+                      className='flex items-center justify-between p-3 rounded-lg border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors'
+                    >
+                      <div className='flex-1 min-w-0'>
+                        <p className='font-medium text-gray-900 dark:text-gray-100 truncate'>
+                          {topic.name || 'Unnamed Topic'}
+                        </p>
+                        {topic.description && (
+                          <p className='text-sm text-gray-500 dark:text-gray-400 truncate mt-1'>
+                            {topic.description}
+                          </p>
+                        )}
+                        {topic.category_id && (
+                          <Badge
+                            variant='secondary'
+                            className='mt-1 text-xs'
+                          >
+                            Category: {categories.find(c => c.id === topic.category_id)?.name || 'Unknown'}
+                          </Badge>
+                        )}
+                      </div>
+                      <div className='flex items-center gap-2 ml-4'>
+                        <Button
+                          variant='ghost'
+                          size='sm'
+                          onClick={() => {
+                            setEditingTopic(topic);
+                            setIsTopicModalOpen(true);
+                          }}
+                          className='h-8 w-8 p-0'
+                        >
+                          <Edit className='h-4 w-4' />
+                        </Button>
+                        <Button
+                          variant='ghost'
+                          size='sm'
+                          onClick={() => handleDeleteTopic(topic)}
+                          className='h-8 w-8 p-0 text-red-600 hover:text-red-700 hover:bg-red-50 dark:hover:bg-red-900/20'
+                        >
+                          <Trash2 className='h-4 w-4' />
+                        </Button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+                </CardContent>
+              </CollapsibleContent>
+            </Collapsible>
+          </Card>
+        </Suspense>
       </div>
 
       {/* Search and Filters */}
@@ -1516,16 +2086,256 @@ export default function UnifiedAdminPage() {
 
                 {expandedPlans.has(plan.id) && (
                   <CardContent className='pt-0'>
-                    <div className='text-sm text-gray-600 dark:text-gray-400'>
-                      <p>
-                        <strong>Duration:</strong> {plan.duration}
-                      </p>
-                      <p>
-                        <strong>Difficulty:</strong> {plan.difficulty}
-                      </p>
-                      <p>
-                        <strong>Estimated Hours:</strong> {plan.estimatedHours}
-                      </p>
+                    <div className='space-y-4'>
+                      <div className='text-sm text-gray-600 dark:text-gray-400 mb-4'>
+                        <p>
+                          <strong>Duration:</strong> {plan.duration}
+                        </p>
+                        <p>
+                          <strong>Difficulty:</strong> {plan.difficulty}
+                        </p>
+                        <p>
+                          <strong>Estimated Hours:</strong> {plan.estimatedHours}
+                        </p>
+                      </div>
+                      
+                      {/* Hierarchical Tree: Cards → Categories → Topics → Questions */}
+                      <div className='border-t border-gray-200 dark:border-gray-700 pt-4'>
+                        <div className='flex items-center justify-between mb-3'>
+                          <h3 className='text-sm font-semibold text-gray-900 dark:text-gray-100'>
+                            Plan Structure
+                          </h3>
+                          <Suspense fallback={<LoadingSkeleton />}>
+                            <Button
+                              onClick={() => setAddItemContext({ planId: plan.id, type: 'card' })}
+                              size='sm'
+                              variant='outline'
+                              className='text-blue-600 border-blue-600 hover:bg-blue-50 dark:hover:bg-blue-900/20'
+                            >
+                              <Plus className='h-4 w-4 mr-1' />
+                              Add Card
+                            </Button>
+                          </Suspense>
+                        </div>
+                        
+                        {loadingPlanHierarchy[plan.id] ? (
+                          <div className='space-y-2'>
+                            {/* Loading skeleton for cards */}
+                            {[1, 2].map((i) => (
+                              <div
+                                key={i}
+                                className='border border-gray-200 dark:border-gray-700 rounded-lg p-3 bg-gray-50 dark:bg-gray-800/50 animate-pulse'
+                              >
+                                <div className='flex items-center justify-between'>
+                                  <div className='flex items-center space-x-2 flex-1'>
+                                    <div className='h-4 w-4 bg-gray-300 dark:bg-gray-600 rounded' />
+                                    <div className='h-4 w-4 bg-gray-300 dark:bg-gray-600 rounded' />
+                                    <div className='h-4 w-32 bg-gray-300 dark:bg-gray-600 rounded' />
+                                  </div>
+                                  <div className='flex items-center space-x-2'>
+                                    <div className='h-7 w-20 bg-gray-300 dark:bg-gray-600 rounded' />
+                                    <div className='h-7 w-7 bg-gray-300 dark:bg-gray-600 rounded' />
+                                  </div>
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+                        ) : planHierarchy[plan.id] && planHierarchy[plan.id].length > 0 ? (
+                          <div className='space-y-2'>
+                            {planHierarchy[plan.id].map((card: any) => (
+                              <div
+                                key={card.id}
+                                className='border border-gray-200 dark:border-gray-700 rounded-lg p-3 bg-gray-50 dark:bg-gray-800/50'
+                              >
+                                {/* Card Level */}
+                                <div className='flex items-center justify-between'>
+                                  <div className='flex items-center space-x-2 flex-1'>
+                                    <button
+                                      onClick={() => togglePlanCard(card.id)}
+                                      className='p-1 hover:bg-gray-200 dark:hover:bg-gray-700 rounded'
+                                    >
+                                      {expandedPlanCards.has(card.id) ? (
+                                        <ChevronDown className='h-4 w-4' />
+                                      ) : (
+                                        <ChevronRight className='h-4 w-4' />
+                                      )}
+                                    </button>
+                                    <Layers className='h-4 w-4 text-blue-600' />
+                                    <span className='font-medium text-gray-900 dark:text-gray-100'>
+                                      {card.title}
+                                    </span>
+                                  </div>
+                                  <div className='flex items-center space-x-2'>
+                                    <Suspense fallback={<LoadingSkeleton />}>
+                                      <Button
+                                        onClick={() => setAddItemContext({ planId: plan.id, type: 'category', parentId: card.id })}
+                                        size='sm'
+                                        variant='ghost'
+                                        className='h-7 px-2 text-purple-600 hover:bg-purple-50 dark:hover:bg-purple-900/20'
+                                      >
+                                        <Plus className='h-3 w-3 mr-1' />
+                                        Add Category
+                                      </Button>
+                                    </Suspense>
+                                    <Button
+                                      variant='ghost'
+                                      size='sm'
+                                      onClick={() => removeCardFromPlan(plan.id, card.id)}
+                                      className='h-7 w-7 p-0 text-red-600 hover:text-red-700 hover:bg-red-50 dark:hover:bg-red-900/20'
+                                    >
+                                      <Trash2 className='h-4 w-4' />
+                                    </Button>
+                                  </div>
+                                </div>
+
+                                {/* Categories Level */}
+                                {expandedPlanCards.has(card.id) && card.categories && card.categories.length > 0 && (
+                                  <div className='mt-2 ml-6 space-y-2'>
+                                    {card.categories.map((category: any) => (
+                                      <div
+                                        key={category.id}
+                                        className='border border-gray-200 dark:border-gray-700 rounded p-2 bg-white dark:bg-gray-900'
+                                      >
+                                        <div className='flex items-center justify-between'>
+                                          <div className='flex items-center space-x-2 flex-1'>
+                                            <button
+                                              onClick={() => togglePlanCategory(category.id)}
+                                              className='p-1 hover:bg-gray-100 dark:hover:bg-gray-800 rounded'
+                                            >
+                                              {expandedPlanCategories.has(category.id) ? (
+                                                <ChevronDown className='h-3 w-3' />
+                                              ) : (
+                                                <ChevronRight className='h-3 w-3' />
+                                              )}
+                                            </button>
+                                            <BookOpen className='h-3 w-3 text-purple-600' />
+                                            <span className='text-sm font-medium text-gray-900 dark:text-gray-100'>
+                                              {category.name || category.title}
+                                            </span>
+                                          </div>
+                                          <div className='flex items-center space-x-2'>
+                                            <Suspense fallback={<LoadingSkeleton />}>
+                                              <Button
+                                                onClick={() => setAddItemContext({ planId: plan.id, type: 'topic', parentId: category.id })}
+                                                size='sm'
+                                                variant='ghost'
+                                                className='h-6 px-2 text-orange-600 hover:bg-orange-50 dark:hover:bg-orange-900/20 text-xs'
+                                              >
+                                                <Plus className='h-3 w-3 mr-1' />
+                                                Add Topic
+                                              </Button>
+                                            </Suspense>
+                                            <Button
+                                              variant='ghost'
+                                              size='sm'
+                                              onClick={() => removeCategoryFromCard(card.id, category.id)}
+                                              className='h-6 w-6 p-0 text-red-600 hover:text-red-700 hover:bg-red-50 dark:hover:bg-red-900/20'
+                                            >
+                                              <Trash2 className='h-3 w-3' />
+                                            </Button>
+                                          </div>
+                                        </div>
+
+                                        {/* Topics Level */}
+                                        {expandedPlanCategories.has(category.id) && category.topics && category.topics.length > 0 && (
+                                          <div className='mt-2 ml-6 space-y-2'>
+                                            {category.topics.map((topic: any) => (
+                                              <div
+                                                key={topic.id}
+                                                className='border border-gray-200 dark:border-gray-700 rounded p-2 bg-gray-50 dark:bg-gray-800/50'
+                                              >
+                                                <div className='flex items-center justify-between'>
+                                                  <div className='flex items-center space-x-2 flex-1'>
+                                                    <button
+                                                      onClick={() => togglePlanTopic(topic.id)}
+                                                      className='p-1 hover:bg-gray-200 dark:hover:bg-gray-700 rounded'
+                                                    >
+                                                      {expandedPlanTopics.has(topic.id) ? (
+                                                        <ChevronDown className='h-3 w-3' />
+                                                      ) : (
+                                                        <ChevronRight className='h-3 w-3' />
+                                                      )}
+                                                    </button>
+                                                    <Target className='h-3 w-3 text-orange-600' />
+                                                    <div className='flex items-center space-x-2 flex-1'>
+                                                      <span className='text-sm text-gray-900 dark:text-gray-100'>
+                                                        {topic.name || topic.title}
+                                                      </span>
+                                                      {topic.questions && topic.questions.length > 0 && (
+                                                        <Badge variant='outline' className='text-xs'>
+                                                          {topic.questions.length} {topic.questions.length === 1 ? 'question' : 'questions'}
+                                                        </Badge>
+                                                      )}
+                                                    </div>
+                                                  </div>
+                                                  <div className='flex items-center space-x-2'>
+                                                    <Suspense fallback={<LoadingSkeleton />}>
+                                                      <Button
+                                                        onClick={() => setAddItemContext({ planId: plan.id, type: 'question', parentId: topic.id })}
+                                                        size='sm'
+                                                        variant='ghost'
+                                                        className='h-6 px-2 text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 text-xs'
+                                                      >
+                                                        <Plus className='h-3 w-3 mr-1' />
+                                                        Add Question
+                                                      </Button>
+                                                    </Suspense>
+                                                    <Button
+                                                      variant='ghost'
+                                                      size='sm'
+                                                      onClick={() => removeTopicFromCategory(category.id, topic.id)}
+                                                      className='h-6 w-6 p-0 text-red-600 hover:text-red-700 hover:bg-red-50 dark:hover:bg-red-900/20'
+                                                    >
+                                                      <Trash2 className='h-3 w-3' />
+                                                    </Button>
+                                                  </div>
+                                                </div>
+
+                                                {/* Questions Level */}
+                                                {expandedPlanTopics.has(topic.id) && topic.questions && topic.questions.length > 0 && (
+                                                  <div className='mt-2 ml-6 space-y-1'>
+                                                    {topic.questions.map((question: any) => (
+                                                      <div
+                                                        key={question.id}
+                                                        className='flex items-center justify-between py-1 px-2 rounded bg-white dark:bg-gray-900'
+                                                      >
+                                                        <div className='flex items-center space-x-2 flex-1'>
+                                                          <MessageSquare className='h-3 w-3 text-red-600' />
+                                                          <span className='text-xs text-gray-900 dark:text-gray-100 truncate'>
+                                                            {question.title || 'Untitled Question'}
+                                                          </span>
+                                                        </div>
+                                                        <Button
+                                                          variant='ghost'
+                                                          size='sm'
+                                                          onClick={() => removeQuestionFromTopic(topic.id, question.id)}
+                                                          className='h-5 w-5 p-0 text-red-600 hover:text-red-700 hover:bg-red-50 dark:hover:bg-red-900/20'
+                                                        >
+                                                          <Trash2 className='h-3 w-3' />
+                                                        </Button>
+                                                      </div>
+                                                    ))}
+                                                  </div>
+                                                )}
+                                              </div>
+                                            ))}
+                                          </div>
+                                        )}
+                                      </div>
+                                    ))}
+                                  </div>
+                                )}
+                              </div>
+                            ))}
+                          </div>
+                        ) : planHierarchy[plan.id] !== undefined ? (
+                          <div className='text-center py-8 text-gray-500 dark:text-gray-400'>
+                            <Layers className='h-12 w-12 mx-auto mb-2 opacity-50' />
+                            <p>No cards in this plan yet</p>
+                            <p className='text-xs mt-1'>Click "Add Card" to get started</p>
+                          </div>
+                        ) : null}
+                      </div>
                     </div>
                   </CardContent>
                 )}
@@ -1710,6 +2520,290 @@ export default function UnifiedAdminPage() {
               {deletePlanMutation.isPending ? 'Deleting...' : 'Delete'}
             </Button>
           </div>
+        </div>
+      </Modal>
+
+      {/* Add Items Modal - Step by Step Selection */}
+      <Modal
+        isOpen={!!addItemContext}
+        onClose={() => {
+          setAddItemContext(null);
+          setSelectionStep('card');
+          setSelectedCardId(null);
+          setSelectedCategoryId(null);
+          setSelectedTopicId(null);
+        }}
+        title={
+          addItemContext?.type === 'card'
+            ? `Step 1: Select Card`
+            : addItemContext?.type === 'category'
+            ? `Step 2: Select Category from Card`
+            : addItemContext?.type === 'topic'
+            ? `Step 3: Select Topic from Category`
+            : `Step 4: Select Question from Topic`
+        }
+        size='xl'
+      >
+        <div className='space-y-4'>
+          {/* Step 1: Select Card */}
+          {addItemContext?.type === 'card' && (
+            <div>
+              <h4 className='text-sm font-semibold text-gray-900 dark:text-gray-100 mb-2'>
+                Available Cards
+              </h4>
+              <div className='max-h-96 overflow-y-auto space-y-2 border rounded-lg p-2'>
+                {cards.map(card => {
+                  const hierarchy = planHierarchy[addItemContext.planId] || [];
+                  const isInPlan = hierarchy.some((c: any) => c.id === card.id);
+                  return (
+                    <div
+                      key={card.id}
+                      className='flex items-center justify-between p-3 rounded border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors'
+                    >
+                      <div className='flex items-center space-x-3 flex-1'>
+                        <Layers className='h-5 w-5 text-blue-600' />
+                        <div>
+                          <span className='text-sm font-medium text-gray-900 dark:text-gray-100'>{card.title}</span>
+                          {card.description && (
+                            <p className='text-xs text-gray-500 dark:text-gray-400 mt-1'>{card.description}</p>
+                          )}
+                        </div>
+                      </div>
+                      {isInPlan ? (
+                        <Badge variant='secondary'>Already in plan</Badge>
+                      ) : (
+                        <Button
+                          size='sm'
+                          variant='outline'
+                          onClick={async () => {
+                            await addCardToPlan(addItemContext.planId, card.id);
+                            await fetchPlanHierarchy(addItemContext.planId);
+                            setAddItemContext(null);
+                          }}
+                        >
+                          <Plus className='h-4 w-4 mr-1' />
+                          Add
+                        </Button>
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          )}
+
+          {/* Step 2: Select Category from Card */}
+          {addItemContext?.type === 'category' && addItemContext.parentId && (
+            <div>
+              <div className='mb-3 p-2 bg-blue-50 dark:bg-blue-900/20 rounded-lg'>
+                <p className='text-xs text-gray-600 dark:text-gray-400'>
+                  Selected Card: <span className='font-medium'>{cards.find(c => c.id === addItemContext.parentId)?.title}</span>
+                </p>
+              </div>
+              <h4 className='text-sm font-semibold text-gray-900 dark:text-gray-100 mb-2'>
+                Categories in this Card
+              </h4>
+              <div className='max-h-96 overflow-y-auto space-y-2 border rounded-lg p-2'>
+                {categories
+                  .filter(cat => {
+                    // Filter categories that belong to this card (via card_categories or direct learning_card_id)
+                    return cat.learning_card_id === addItemContext.parentId || 
+                           (cat as any).card_id === addItemContext.parentId;
+                  })
+                  .map(category => {
+                    const hierarchy = planHierarchy[addItemContext.planId] || [];
+                    const card = hierarchy.find((c: any) => c.id === addItemContext.parentId);
+                    const isInCard = card?.categories?.some((cat: any) => cat.id === category.id);
+                    return (
+                      <div
+                        key={category.id}
+                        className='flex items-center justify-between p-3 rounded border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors'
+                      >
+                        <div className='flex items-center space-x-3 flex-1'>
+                          <BookOpen className='h-5 w-5 text-purple-600' />
+                          <div>
+                            <span className='text-sm font-medium text-gray-900 dark:text-gray-100'>{category.name || category.title}</span>
+                            {category.description && (
+                              <p className='text-xs text-gray-500 dark:text-gray-400 mt-1'>{category.description}</p>
+                            )}
+                          </div>
+                        </div>
+                        {isInCard ? (
+                          <Badge variant='secondary'>Already in card</Badge>
+                        ) : (
+                          <Button
+                            size='sm'
+                            variant='outline'
+                            onClick={async () => {
+                              await addCategoryToCard(addItemContext.parentId!, category.id);
+                              await fetchPlanHierarchy(addItemContext.planId);
+                              setAddItemContext(null);
+                            }}
+                          >
+                            <Plus className='h-4 w-4 mr-1' />
+                            Add
+                          </Button>
+                        )}
+                      </div>
+                    );
+                  })}
+                {categories.filter(cat => 
+                  cat.learning_card_id === addItemContext.parentId || 
+                  (cat as any).card_id === addItemContext.parentId
+                ).length === 0 && (
+                  <div className='text-center py-8 text-gray-500 dark:text-gray-400'>
+                    <BookOpen className='h-12 w-12 mx-auto mb-2 opacity-50' />
+                    <p>No categories available for this card</p>
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
+
+          {/* Step 3: Select Topic from Category */}
+          {addItemContext?.type === 'topic' && addItemContext.parentId && (
+            <div>
+              <div className='mb-3 p-2 bg-purple-50 dark:bg-purple-900/20 rounded-lg'>
+                <p className='text-xs text-gray-600 dark:text-gray-400'>
+                  Selected Category: <span className='font-medium'>{categories.find(c => c.id === addItemContext.parentId)?.name || categories.find(c => c.id === addItemContext.parentId)?.title}</span>
+                </p>
+              </div>
+              <h4 className='text-sm font-semibold text-gray-900 dark:text-gray-100 mb-2'>
+                Topics in this Category
+              </h4>
+              <div className='max-h-96 overflow-y-auto space-y-2 border rounded-lg p-2'>
+                {topics
+                  .filter(topic => topic.category_id === addItemContext.parentId)
+                  .map(topic => {
+                    const hierarchy = planHierarchy[addItemContext.planId] || [];
+                    const card = hierarchy.find((c: any) => 
+                      c.categories?.some((cat: any) => cat.id === addItemContext.parentId)
+                    );
+                    const category = card?.categories?.find((cat: any) => cat.id === addItemContext.parentId);
+                    const isInCategory = category?.topics?.some((t: any) => t.id === topic.id);
+                    return (
+                      <div
+                        key={topic.id}
+                        className='flex items-center justify-between p-3 rounded border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors'
+                      >
+                        <div className='flex items-center space-x-3 flex-1'>
+                          <Target className='h-5 w-5 text-orange-600' />
+                          <div>
+                            <span className='text-sm font-medium text-gray-900 dark:text-gray-100'>{topic.name || topic.title}</span>
+                            {topic.description && (
+                              <p className='text-xs text-gray-500 dark:text-gray-400 mt-1'>{topic.description}</p>
+                            )}
+                          </div>
+                        </div>
+                        {isInCategory ? (
+                          <Badge variant='secondary'>Already in category</Badge>
+                        ) : (
+                          <Button
+                            size='sm'
+                            variant='outline'
+                            onClick={async () => {
+                              await addTopicToCategory(addItemContext.parentId!, topic.id);
+                              await fetchPlanHierarchy(addItemContext.planId);
+                              setAddItemContext(null);
+                            }}
+                          >
+                            <Plus className='h-4 w-4 mr-1' />
+                            Add
+                          </Button>
+                        )}
+                      </div>
+                    );
+                  })}
+                {topics.filter(topic => topic.category_id === addItemContext.parentId).length === 0 && (
+                  <div className='text-center py-8 text-gray-500 dark:text-gray-400'>
+                    <Target className='h-12 w-12 mx-auto mb-2 opacity-50' />
+                    <p>No topics available for this category</p>
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
+
+          {/* Step 4: Select Question from Topic */}
+          {addItemContext?.type === 'question' && addItemContext.parentId && (
+            <div>
+              <div className='mb-3 p-2 bg-orange-50 dark:bg-orange-900/20 rounded-lg'>
+                <p className='text-xs text-gray-600 dark:text-gray-400'>
+                  Selected Topic: <span className='font-medium'>{topics.find(t => t.id === addItemContext.parentId)?.name || topics.find(t => t.id === addItemContext.parentId)?.title}</span>
+                </p>
+              </div>
+              <h4 className='text-sm font-semibold text-gray-900 dark:text-gray-100 mb-2'>
+                Questions in this Topic
+              </h4>
+              <div className='max-h-96 overflow-y-auto space-y-2 border rounded-lg p-2'>
+                {questions
+                  .filter(q => q.topic_id === addItemContext.parentId)
+                  .slice(0, 100)
+                  .map(question => {
+                    const hierarchy = planHierarchy[addItemContext.planId] || [];
+                    const card = hierarchy.find((c: any) => 
+                      c.categories?.some((cat: any) => 
+                        cat.topics?.some((t: any) => t.id === addItemContext.parentId)
+                      )
+                    );
+                    const category = card?.categories?.find((cat: any) => 
+                      cat.topics?.some((t: any) => t.id === addItemContext.parentId)
+                    );
+                    const topic = category?.topics?.find((t: any) => t.id === addItemContext.parentId);
+                    const isInTopic = topic?.questions?.some((q: any) => q.id === question.id);
+                    return (
+                      <div
+                        key={question.id}
+                        className='flex items-center justify-between p-3 rounded border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors'
+                      >
+                        <div className='flex items-center space-x-3 flex-1'>
+                          <MessageSquare className='h-5 w-5 text-red-600' />
+                          <div className='flex-1 min-w-0'>
+                            <span className='text-sm font-medium text-gray-900 dark:text-gray-100 block truncate'>
+                              {question.title || 'Untitled Question'}
+                            </span>
+                            <div className='flex items-center space-x-2 mt-1'>
+                              {question.difficulty && (
+                                <Badge variant='outline' className='text-xs'>
+                                  {question.difficulty}
+                                </Badge>
+                              )}
+                              {question.type && (
+                                <Badge variant='outline' className='text-xs'>
+                                  {question.type}
+                                </Badge>
+                              )}
+                            </div>
+                          </div>
+                        </div>
+                        {isInTopic ? (
+                          <Badge variant='secondary'>Already in topic</Badge>
+                        ) : (
+                          <Button
+                            size='sm'
+                            variant='outline'
+                            onClick={async () => {
+                              await addQuestionToTopic(addItemContext.parentId!, question.id);
+                              await fetchPlanHierarchy(addItemContext.planId);
+                              setAddItemContext(null);
+                            }}
+                          >
+                            <Plus className='h-4 w-4 mr-1' />
+                            Add
+                          </Button>
+                        )}
+                      </div>
+                    );
+                  })}
+                {questions.filter(q => q.topic_id === addItemContext.parentId).length === 0 && (
+                  <div className='text-center py-8 text-gray-500 dark:text-gray-400'>
+                    <MessageSquare className='h-12 w-12 mx-auto mb-2 opacity-50' />
+                    <p>No questions available for this topic</p>
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
         </div>
       </Modal>
 
