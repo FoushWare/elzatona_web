@@ -233,6 +233,55 @@ export default function PlanDetailPage() {
     }
   };
 
+  // Check if all questions are completed
+  const isAllCompleted = () => {
+    if (!plan || !progress) return false;
+    
+    let totalQuestions = 0;
+    let completedQuestions = 0;
+    
+    for (const card of plan.cards) {
+      for (const category of card.categories) {
+        for (const topic of category.topics) {
+          for (const question of topic.questions) {
+            // Only count questions that have options (valid for practice)
+            if (
+              question.options &&
+              Array.isArray(question.options) &&
+              question.options.length > 0
+            ) {
+              totalQuestions++;
+              if (progress.completedQuestions.includes(question.id)) {
+                completedQuestions++;
+              }
+            }
+          }
+        }
+      }
+    }
+    
+    return totalQuestions > 0 && completedQuestions === totalQuestions;
+  };
+
+  // Handle start button click - reset if all completed
+  const handleStart = () => {
+    if (isAllCompleted()) {
+      // Reset progress without reloading
+      if (planId) {
+        try {
+          localStorage.removeItem(`guided-practice-progress-${planId}`);
+          setProgress(null);
+        } catch (error) {
+          console.error('Error resetting progress:', error);
+        }
+      }
+      // Navigate to start fresh
+      router.push(`/guided-practice?plan=${planId}`);
+    } else {
+      router.push(`/guided-practice?plan=${planId}`);
+    }
+  };
+
   const getCardOrder = () => {
     if (!plan) return [];
 
@@ -366,14 +415,14 @@ export default function PlanDetailPage() {
 
             {/* Start Button */}
             <div className='flex flex-col sm:flex-row gap-4 justify-center items-center'>
-              <Link
-                href={`/guided-practice?plan=${planId}`}
+              <button
+                onClick={handleStart}
                 className='inline-flex items-center space-x-3 px-8 py-4 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white rounded-2xl font-bold text-lg shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-105'
               >
                 <Play className='w-6 h-6' />
-                <span>Start 1-Day Interview Prep</span>
+                <span>{isAllCompleted() ? 'Start Over' : 'Start 1-Day Interview Prep'}</span>
                 <ArrowRight className='w-6 h-6' />
-              </Link>
+              </button>
 
               {progress && (
                 <button

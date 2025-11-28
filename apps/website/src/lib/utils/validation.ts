@@ -62,21 +62,45 @@ export const idSchema = z
   .transform((val) => sanitizeInputServer(val));
 
 // Question validation schema
+// Based on actual database schema: category_id and topic_id are nullable (optional)
 export const questionSchema = z.object({
-  title: titleSchema,
-  content: z.string().max(10000, 'Content must be less than 10000 characters').optional().transform((val) => val ? sanitizeInputServer(val) : undefined),
-  type: z.enum(['multiple-choice', 'open-ended', 'true-false', 'code', 'multiple-select']).optional(),
-  category: z.string().min(1, 'Category is required'),
-  topic: z.string().optional(),
-  difficulty: z.enum(['beginner', 'intermediate', 'advanced', 'difficult']).transform((val) => {
-    // Map "difficult" to "advanced" to match database constraint
+  title: titleSchema, // Required in DB (NOT NULL)
+  content: contentSchema, // Required in DB (NOT NULL) - using contentSchema which requires min 1 char
+  code: z.string().max(50000, 'Code must be less than 50000 characters').optional().nullable().transform((val) => {
+    if (!val || val === null || val === '') return undefined;
+    return sanitizeInputServer(val);
+  }), // Optional code field for formatted display
+  type: z.union([
+    z.enum(['multiple-choice', 'true-false', 'code', 'mcq']),
+    z.undefined(),
+  ]).optional().default('multiple-choice'), // Required in DB, default to 'multiple-choice'
+  category: z.string().min(1).optional(), // Optional - used for lookup if category_id not provided
+  category_id: z.union([
+    z.string().uuid('Invalid category ID format'),
+    z.literal(''),
+    z.undefined(),
+    z.null(),
+  ]).optional(), // Optional in DB (nullable)
+  topic: z.string().optional(), // Optional - used for lookup if topic_id not provided
+  topic_id: z.union([
+    z.string().uuid('Invalid topic ID format'),
+    z.literal(''),
+    z.undefined(),
+    z.null(),
+  ]).optional(), // Optional in DB (nullable)
+  difficulty: z.enum(['beginner', 'intermediate', 'advanced']).optional().transform((val) => {
+    // DB constraint: 'beginner', 'intermediate', 'advanced' (nullable)
+    // Map "difficult" to "advanced" if somehow it gets through
     if (val === 'difficult') {
       return 'advanced';
     }
     return val;
   }),
-  explanation: z.string().max(5000, 'Explanation must be less than 5000 characters').optional().transform((val) => val ? sanitizeInputServer(val) : undefined),
-  points: z.number().int().min(1).max(100).optional().default(10),
+  explanation: z.string().max(5000, 'Explanation must be less than 5000 characters').optional().nullable().transform((val) => {
+    if (!val || val === null || val === '') return undefined;
+    return sanitizeInputServer(val);
+  }),
+  points: z.number().int().min(1).max(100).optional().default(1), // DB default is 1
   is_active: z.boolean().optional().default(true),
   isActive: z.boolean().optional().default(true), // Accept both camelCase and snake_case
   timeLimit: z.number().int().min(0).max(3600).optional(), // Accept camelCase (in seconds, max 1 hour)
@@ -97,7 +121,7 @@ export const questionSchema = z.object({
   ]).optional(),
   tags: z.array(z.string()).optional(),
   hints: z.array(z.string()).optional(),
-  metadata: z.record(z.unknown()).optional(),
+  metadata: z.any().optional().nullable(), // Accept any object structure for metadata
   options: z
     .union([
       z.array(
@@ -128,6 +152,8 @@ export const questionSchema = z.object({
       }
     }),
 }).passthrough(); // Allow extra fields that we'll filter out later
+// Note: category_id and topic_id are optional in the database schema (nullable)
+// No refinement needed - both can be null/undefined
 
 // User registration schema
 export const registerSchema = z.object({
@@ -182,6 +208,12 @@ export function validateAndSanitize<T>(
   data: unknown
 ): { success: true; data: T } | { success: false; error: string } {
   try {
+    // Validate schema is a valid Zod schema
+    if (!schema || typeof schema !== 'object' || !('_def' in schema)) {
+      console.error('❌ Invalid schema provided to validateAndSanitize');
+      return { success: false, error: 'Validation error: Invalid schema' };
+    }
+    
     // Pre-validate data structure to prevent "Cannot read properties of undefined" errors
     if (data && typeof data === 'object' && !Array.isArray(data)) {
       const dataObj = data as any;
@@ -217,29 +249,58 @@ export function validateAndSanitize<T>(
         }
         delete dataObj.topics; // Remove array, use topic name instead
       }
+      
+      // Ensure metadata is an object or null/undefined
+      if (dataObj.metadata !== undefined && dataObj.metadata !== null) {
+        if (typeof dataObj.metadata !== 'object' || Array.isArray(dataObj.metadata)) {
+          // Invalid metadata format, remove it
+          delete dataObj.metadata;
+        }
+      }
     }
     
     const result = schema.parse(data);
     return { success: true, data: result };
-  } catch (error) {
+  } catch (error: any) {
+    // Log the error type and details for debugging
+    console.error('🔴 Validation catch block - Error type:', error?.constructor?.name);
+    console.error('🔴 Validation catch block - Error:', error);
+    console.error('🔴 Validation catch block - Error message:', error?.message);
+    console.error('🔴 Validation catch block - Error stack:', error?.stack);
+    console.error('🔴 Input data being validated:', JSON.stringify(data, null, 2));
+    
     if (error instanceof z.ZodError) {
-      // Safely access error.errors array
-      const errors = error.errors || [];
-      if (errors.length === 0) {
-        return { success: false, error: 'Validation failed: Unknown error' };
-      }
-      
-      const firstError = errors[0];
-      const errorPath = firstError?.path && firstError.path.length > 0 
-        ? firstError.path.join('.') 
-        : 'root';
-      const errorMessage = firstError?.message || 'Validation failed';
+      // Zod stores errors in error.issues, not error.errors
+      const issues = error.issues || [];
       
       // Log all errors for debugging
-      if (errors.length > 1) {
-        console.warn(`⚠️ Multiple validation errors for question:`, errors.map(e => ({
+      console.error('🔴 ZodError.issues array:', JSON.stringify(issues, null, 2));
+      console.error('🔴 ZodError.issues length:', issues.length);
+      
+      if (issues.length === 0) {
+        console.error('⚠️ ZodError with no issues - this should not happen');
+        console.error('⚠️ Full ZodError object:', {
+          name: error.name,
+          message: error.message,
+          stack: error.stack,
+          issues: error.issues,
+          errors: (error as any).errors,
+        });
+        return { success: false, error: 'Validation failed: Unknown error (no error details available)' };
+      }
+      
+      const firstIssue = issues[0];
+      const errorPath = firstIssue?.path && firstIssue.path.length > 0 
+        ? firstIssue.path.join('.') 
+        : 'root';
+      const errorMessage = firstIssue?.message || 'Validation failed';
+      
+      // Log all errors for debugging
+      if (issues.length > 1) {
+        console.warn(`⚠️ Multiple validation errors for question:`, issues.map((e: any) => ({
           path: e.path?.join('.') || 'root',
           message: e.message,
+          code: e.code,
         })));
       }
       
@@ -251,12 +312,18 @@ export function validateAndSanitize<T>(
     // Handle non-Zod errors (like "Cannot read properties of undefined")
     if (error instanceof Error) {
       console.error('Validation error (non-Zod):', error);
+      console.error('Validation error stack:', error.stack);
       return {
         success: false,
         error: `Validation error: ${error.message}`,
       };
     }
-    return { success: false, error: 'Validation failed: Unknown error' };
+    // Handle any other error type
+    console.error('Validation error (unknown type):', error);
+    return { 
+      success: false, 
+      error: `Validation failed: ${error?.message || 'Unknown error'}` 
+    };
   }
 }
 
