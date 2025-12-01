@@ -146,6 +146,7 @@ const CollapsibleContent = React.lazy(() =>
   }))
 );
 import { Modal } from '@elzatona/shared-components';
+import { ViewQuestionModal } from '../content/questions/components/ViewQuestionModal';
 
 // Import icons with tree shaking
 import {
@@ -164,6 +165,9 @@ import {
   Target,
   Search,
   X,
+  Eye,
+  CheckSquare,
+  Square,
 } from 'lucide-react';
 
 // Lazy load forms to reduce initial bundle size
@@ -544,6 +548,11 @@ export default function UnifiedAdminPage() {
   const [selectedCardId, setSelectedCardId] = useState<string | null>(null);
   const [selectedCategoryId, setSelectedCategoryId] = useState<string | null>(null);
   const [selectedTopicId, setSelectedTopicId] = useState<string | null>(null);
+  
+  // Question view and selection state
+  const [viewingQuestion, setViewingQuestion] = useState<UnifiedQuestion | null>(null);
+  const [isViewQuestionModalOpen, setIsViewQuestionModalOpen] = useState(false);
+  const [selectedQuestionIds, setSelectedQuestionIds] = useState<Set<string>>(new Set());
 
   // Filtered categories and topics
   const filteredCategories = useMemo(() => {
@@ -647,9 +656,17 @@ export default function UnifiedAdminPage() {
 
   const handleTopicFormSubmit = async (data: any) => {
     if (editingTopic?.id) {
+      // Editing mode - single topic only
       await handleUpdateTopic(editingTopic.id, data);
     } else {
-      await handleCreateTopic(data);
+      // Creating mode - can be single or bulk
+      if (Array.isArray(data)) {
+        // Bulk creation
+        await handleBulkCreateTopics(data);
+      } else {
+        // Single creation
+        await handleCreateTopic(data);
+      }
     }
   };
 
@@ -707,13 +724,22 @@ export default function UnifiedAdminPage() {
       // Set loading state
       setLoadingPlanHierarchy(prev => ({ ...prev, [planId]: true }));
       
+      console.log('🔄 Fetching plan hierarchy for plan:', planId);
       const response = await fetch(`/api/plans/${planId}/hierarchy`);
       const result = await response.json();
+      
       if (result.success) {
-        setPlanHierarchy(prev => ({ ...prev, [planId]: result.data || [] }));
+        console.log('✅ Plan hierarchy fetched successfully:', result.data);
+        setPlanHierarchy(prev => {
+          const updated = { ...prev, [planId]: result.data || [] };
+          console.log('📊 Updated plan hierarchy state:', updated);
+          return updated;
+        });
+      } else {
+        console.error('❌ Failed to fetch plan hierarchy:', result.error);
       }
     } catch (error) {
-      console.error('Error fetching plan hierarchy:', error);
+      console.error('❌ Error fetching plan hierarchy:', error);
     } finally {
       // Clear loading state
       setLoadingPlanHierarchy(prev => ({ ...prev, [planId]: false }));
@@ -972,6 +998,60 @@ export default function UnifiedAdminPage() {
     }
   };
 
+  // Remove question from both topic and plan
+  const removeQuestionFromPlan = async (planId: string, topicId: string, questionId: string) => {
+    try {
+      console.log('🗑️ Removing question from plan:', { planId, topicId, questionId });
+      
+      // Remove from topic
+      const topicResponse = await fetch(`/api/topics/${topicId}/questions?question_id=${questionId}`, {
+        method: 'DELETE',
+      });
+      const topicResult = await topicResponse.json();
+      console.log('📋 Topic removal result:', topicResult);
+
+      // Remove from plan
+      const planResponse = await fetch(`/api/plans/${planId}/questions?question_id=${questionId}`, {
+        method: 'DELETE',
+      });
+      const planResult = await planResponse.json();
+      console.log('📋 Plan removal result:', planResult);
+
+      if (topicResult.success && planResult.success) {
+        showSuccess('Question Removed', 'Question removed from plan and topic successfully');
+        // Force refresh the hierarchy
+        await fetchPlanHierarchy(planId);
+        // Invalidate all related queries
+        queryClient.invalidateQueries({ queryKey: ['plan-hierarchy', planId] });
+        queryClient.invalidateQueries({ queryKey: ['plans'] });
+        queryClient.invalidateQueries({ queryKey: ['questions'] });
+        queryClient.invalidateQueries({ queryKey: ['topics'] });
+        console.log('✅ Question removed successfully, hierarchy refreshed');
+      } else if (topicResult.success) {
+        // If topic removal succeeded but plan removal failed, still show success
+        showSuccess('Question Removed', 'Question removed from topic successfully');
+        await fetchPlanHierarchy(planId);
+        queryClient.invalidateQueries({ queryKey: ['plan-hierarchy', planId] });
+        queryClient.invalidateQueries({ queryKey: ['plans'] });
+        console.log('⚠️ Topic removed but plan removal may have failed');
+      } else if (planResult.success) {
+        // If plan removal succeeded but topic removal failed, still show success
+        showSuccess('Question Removed', 'Question removed from plan successfully');
+        await fetchPlanHierarchy(planId);
+        queryClient.invalidateQueries({ queryKey: ['plan-hierarchy', planId] });
+        queryClient.invalidateQueries({ queryKey: ['plans'] });
+        console.log('⚠️ Plan removed but topic removal may have failed');
+      } else {
+        const errorMsg = topicResult.error || planResult.error || 'Failed to remove question';
+        console.error('❌ Failed to remove question:', { topicResult, planResult });
+        showError('Failed to Remove', errorMsg);
+      }
+    } catch (error) {
+      console.error('❌ Error removing question from plan:', error);
+      showError('Failed to Remove', 'Failed to remove question from plan');
+    }
+  };
+
   // Fetch hierarchy when plan is expanded
   useEffect(() => {
     plans.forEach(plan => {
@@ -1059,6 +1139,50 @@ export default function UnifiedAdminPage() {
       await createTopicMutation.mutateAsync(topicData);
     } catch (error) {
       console.error('Failed to create topic:', error);
+    }
+  };
+
+  const handleBulkCreateTopics = async (topicsData: any[]) => {
+    try {
+      let successCount = 0;
+      let failedCount = 0;
+      const errors: string[] = [];
+
+      for (let i = 0; i < topicsData.length; i++) {
+        const topicData = topicsData[i];
+        try {
+          await createTopicMutation.mutateAsync(topicData);
+          successCount++;
+        } catch (error) {
+          failedCount++;
+          const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+          errors.push(`Topic ${i + 1} (${topicData.name || 'unnamed'}): ${errorMessage}`);
+          console.error(`Failed to create topic ${i + 1}:`, error);
+        }
+      }
+
+      if (successCount > 0) {
+        showSuccess(
+          'Topics Created',
+          `Successfully created ${successCount} topic${successCount !== 1 ? 's' : ''}${failedCount > 0 ? `, ${failedCount} failed` : ''}`
+        );
+      }
+
+      if (failedCount > 0 && errors.length > 0) {
+        console.error('Bulk topic creation errors:', errors);
+        showError(
+          'Some Topics Failed',
+          `${failedCount} topic${failedCount !== 1 ? 's' : ''} failed to create. Check console for details.`
+        );
+      }
+
+      // Close modal after bulk creation
+      if (successCount > 0) {
+        setIsTopicModalOpen(false);
+      }
+    } catch (error) {
+      console.error('Error in bulk topic creation:', error);
+      showError('Bulk Creation Failed', 'Failed to create topics. Please try again.');
     }
   };
 
@@ -2150,6 +2274,16 @@ export default function UnifiedAdminPage() {
                                 {/* Card Level */}
                                 <div className='flex items-center justify-between'>
                                   <div className='flex items-center space-x-2 flex-1'>
+                                    {/* Checkbox to toggle card inclusion */}
+                                    <button
+                                      onClick={async () => {
+                                        await removeCardFromPlan(plan.id, card.id);
+                                      }}
+                                      className='flex-shrink-0 p-1 hover:bg-gray-200 dark:hover:bg-gray-700 rounded'
+                                      title='Remove from plan'
+                                    >
+                                      <CheckSquare className='h-4 w-4 text-green-600 dark:text-green-400' />
+                                    </button>
                                     <button
                                       onClick={() => togglePlanCard(card.id)}
                                       className='p-1 hover:bg-gray-200 dark:hover:bg-gray-700 rounded'
@@ -2177,14 +2311,6 @@ export default function UnifiedAdminPage() {
                                         Add Category
                                       </Button>
                                     </Suspense>
-                                    <Button
-                                      variant='ghost'
-                                      size='sm'
-                                      onClick={() => removeCardFromPlan(plan.id, card.id)}
-                                      className='h-7 w-7 p-0 text-red-600 hover:text-red-700 hover:bg-red-50 dark:hover:bg-red-900/20'
-                                    >
-                                      <Trash2 className='h-4 w-4' />
-                                    </Button>
                                   </div>
                                 </div>
 
@@ -2198,6 +2324,16 @@ export default function UnifiedAdminPage() {
                                       >
                                         <div className='flex items-center justify-between'>
                                           <div className='flex items-center space-x-2 flex-1'>
+                                            {/* Checkbox to toggle category inclusion */}
+                                            <button
+                                              onClick={async () => {
+                                                await removeCategoryFromCard(card.id, category.id);
+                                              }}
+                                              className='flex-shrink-0 p-1 hover:bg-gray-100 dark:hover:bg-gray-800 rounded'
+                                              title='Remove from plan'
+                                            >
+                                              <CheckSquare className='h-3 w-3 text-green-600 dark:text-green-400' />
+                                            </button>
                                             <button
                                               onClick={() => togglePlanCategory(category.id)}
                                               className='p-1 hover:bg-gray-100 dark:hover:bg-gray-800 rounded'
@@ -2225,14 +2361,6 @@ export default function UnifiedAdminPage() {
                                                 Add Topic
                                               </Button>
                                             </Suspense>
-                                            <Button
-                                              variant='ghost'
-                                              size='sm'
-                                              onClick={() => removeCategoryFromCard(card.id, category.id)}
-                                              className='h-6 w-6 p-0 text-red-600 hover:text-red-700 hover:bg-red-50 dark:hover:bg-red-900/20'
-                                            >
-                                              <Trash2 className='h-3 w-3' />
-                                            </Button>
                                           </div>
                                         </div>
 
@@ -2246,6 +2374,16 @@ export default function UnifiedAdminPage() {
                                               >
                                                 <div className='flex items-center justify-between'>
                                                   <div className='flex items-center space-x-2 flex-1'>
+                                                    {/* Checkbox to toggle topic inclusion */}
+                                                    <button
+                                                      onClick={async () => {
+                                                        await removeTopicFromCategory(category.id, topic.id);
+                                                      }}
+                                                      className='flex-shrink-0 p-1 hover:bg-gray-200 dark:hover:bg-gray-700 rounded'
+                                                      title='Remove from plan'
+                                                    >
+                                                      <CheckSquare className='h-3 w-3 text-green-600 dark:text-green-400' />
+                                                    </button>
                                                     <button
                                                       onClick={() => togglePlanTopic(topic.id)}
                                                       className='p-1 hover:bg-gray-200 dark:hover:bg-gray-700 rounded'
@@ -2258,14 +2396,38 @@ export default function UnifiedAdminPage() {
                                                     </button>
                                                     <Target className='h-3 w-3 text-orange-600' />
                                                     <div className='flex items-center space-x-2 flex-1'>
-                                                      <span className='text-sm text-gray-900 dark:text-gray-100'>
+                                                      <span className='text-sm font-medium text-gray-900 dark:text-gray-100'>
                                                         {topic.name || topic.title}
                                                       </span>
-                                                      {topic.questions && topic.questions.length > 0 && (
-                                                        <Badge variant='outline' className='text-xs'>
-                                                          {topic.questions.length} {topic.questions.length === 1 ? 'question' : 'questions'}
-                                                        </Badge>
-                                                      )}
+                                                      {/* Show question counts with styled badges */}
+                                                      <div className='flex items-center gap-2'>
+                                                        {/* Total questions in topic badge */}
+                                                        {topic.totalQuestionCount !== undefined && (
+                                                          <Badge 
+                                                            variant='outline' 
+                                                            className='text-xs font-semibold bg-purple-50 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300 border-purple-200 dark:border-purple-700 px-2 py-0.5'
+                                                            title={`Total questions in this topic`}
+                                                          >
+                                                            <MessageSquare className='h-3 w-3 mr-1 inline' />
+                                                            {topic.totalQuestionCount} in topic
+                                                          </Badge>
+                                                        )}
+                                                        {/* Questions in plan badge */}
+                                                        {topic.planQuestionCount !== undefined && (
+                                                          <Badge 
+                                                            variant='outline' 
+                                                            className={`text-xs font-semibold px-2 py-0.5 ${
+                                                              topic.planQuestionCount > 0
+                                                                ? 'bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 border-blue-200 dark:border-blue-700'
+                                                                : 'bg-gray-50 dark:bg-gray-800 text-gray-500 dark:text-gray-400 border-gray-200 dark:border-gray-700'
+                                                            }`}
+                                                            title={`Questions included in this plan`}
+                                                          >
+                                                            <CheckSquare className='h-3 w-3 mr-1 inline' />
+                                                            {topic.planQuestionCount} in plan
+                                                          </Badge>
+                                                        )}
+                                                      </div>
                                                     </div>
                                                   </div>
                                                   <div className='flex items-center space-x-2'>
@@ -2280,14 +2442,6 @@ export default function UnifiedAdminPage() {
                                                         Add Question
                                                       </Button>
                                                     </Suspense>
-                                                    <Button
-                                                      variant='ghost'
-                                                      size='sm'
-                                                      onClick={() => removeTopicFromCategory(category.id, topic.id)}
-                                                      className='h-6 w-6 p-0 text-red-600 hover:text-red-700 hover:bg-red-50 dark:hover:bg-red-900/20'
-                                                    >
-                                                      <Trash2 className='h-3 w-3' />
-                                                    </Button>
                                                   </div>
                                                 </div>
 
@@ -2300,19 +2454,70 @@ export default function UnifiedAdminPage() {
                                                         className='flex items-center justify-between py-1 px-2 rounded bg-white dark:bg-gray-900'
                                                       >
                                                         <div className='flex items-center space-x-2 flex-1'>
+                                                          {/* Checkbox to toggle question inclusion - removes from both topic and plan */}
+                                                          <button
+                                                            onClick={async () => {
+                                                              await removeQuestionFromPlan(plan.id, topic.id, question.id);
+                                                            }}
+                                                            className='flex-shrink-0 p-0.5 hover:bg-gray-100 dark:hover:bg-gray-800 rounded'
+                                                            title='Remove from plan'
+                                                          >
+                                                            <CheckSquare className='h-3 w-3 text-green-600 dark:text-green-400' />
+                                                          </button>
                                                           <MessageSquare className='h-3 w-3 text-red-600' />
                                                           <span className='text-xs text-gray-900 dark:text-gray-100 truncate'>
                                                             {question.title || 'Untitled Question'}
                                                           </span>
                                                         </div>
-                                                        <Button
-                                                          variant='ghost'
-                                                          size='sm'
-                                                          onClick={() => removeQuestionFromTopic(topic.id, question.id)}
-                                                          className='h-5 w-5 p-0 text-red-600 hover:text-red-700 hover:bg-red-50 dark:hover:bg-red-900/20'
-                                                        >
-                                                          <Trash2 className='h-3 w-3' />
-                                                        </Button>
+                                                        <div className='flex items-center space-x-1'>
+                                                          {/* View Question Button */}
+                                                          <Suspense fallback={<LoadingSkeleton />}>
+                                                            <Button
+                                                              size='sm'
+                                                              variant='ghost'
+                                                              onClick={async () => {
+                                                                // Fetch full question data including code field
+                                                                try {
+                                                                  const response = await fetch(`/api/questions/unified/${question.id}`);
+                                                                  if (response.ok) {
+                                                                    const result = await response.json();
+                                                                    if (result.success && result.data) {
+                                                                      // Process code field to ensure newlines are preserved
+                                                                      const fullQuestion = result.data;
+                                                                      if (fullQuestion.code && typeof fullQuestion.code === 'string') {
+                                                                        fullQuestion.code = fullQuestion.code
+                                                                          .replace(/\\n/g, '\n')
+                                                                          .replace(/\\r\\n/g, '\n')
+                                                                          .replace(/\\r/g, '\n')
+                                                                          .replace(/\r\n/g, '\n')
+                                                                          .replace(/\r/g, '\n');
+                                                                      }
+                                                                      setViewingQuestion(fullQuestion);
+                                                                      setIsViewQuestionModalOpen(true);
+                                                                    } else {
+                                                                      // Fallback to question from list
+                                                                      setViewingQuestion(question);
+                                                                      setIsViewQuestionModalOpen(true);
+                                                                    }
+                                                                  } else {
+                                                                    // Fallback to question from list
+                                                                    setViewingQuestion(question);
+                                                                    setIsViewQuestionModalOpen(true);
+                                                                  }
+                                                                } catch (error) {
+                                                                  console.error('Error fetching question:', error);
+                                                                  // Fallback to question from list
+                                                                  setViewingQuestion(question);
+                                                                  setIsViewQuestionModalOpen(true);
+                                                                }
+                                                              }}
+                                                              className='h-6 w-6 p-0 hover:bg-blue-50 dark:hover:bg-blue-900/20'
+                                                              title='View question details'
+                                                            >
+                                                              <Eye className='h-3 w-3 text-blue-600 dark:text-blue-400' />
+                                                            </Button>
+                                                          </Suspense>
+                                                        </div>
                                                       </div>
                                                     ))}
                                                   </div>
@@ -2532,6 +2737,7 @@ export default function UnifiedAdminPage() {
           setSelectedCardId(null);
           setSelectedCategoryId(null);
           setSelectedTopicId(null);
+          setSelectedQuestionIds(new Set());
         }}
         title={
           addItemContext?.type === 'card'
@@ -2732,9 +2938,31 @@ export default function UnifiedAdminPage() {
                   Selected Topic: <span className='font-medium'>{topics.find(t => t.id === addItemContext.parentId)?.name || topics.find(t => t.id === addItemContext.parentId)?.title}</span>
                 </p>
               </div>
-              <h4 className='text-sm font-semibold text-gray-900 dark:text-gray-100 mb-2'>
-                Questions in this Topic
-              </h4>
+              <div className='flex items-center justify-between mb-3'>
+                <h4 className='text-sm font-semibold text-gray-900 dark:text-gray-100'>
+                  Questions in this Topic
+                </h4>
+                {selectedQuestionIds.size > 0 && (
+                  <Button
+                    size='sm'
+                    variant='default'
+                    onClick={async () => {
+                      // Add all selected questions
+                      const addPromises = Array.from(selectedQuestionIds).map(questionId =>
+                        addQuestionToTopic(addItemContext.parentId!, questionId)
+                      );
+                      await Promise.all(addPromises);
+                      await fetchPlanHierarchy(addItemContext.planId);
+                      setSelectedQuestionIds(new Set());
+                      setAddItemContext(null);
+                    }}
+                    className='bg-green-600 hover:bg-green-700'
+                  >
+                    <Plus className='h-4 w-4 mr-1' />
+                    Add Selected ({selectedQuestionIds.size})
+                  </Button>
+                )}
+              </div>
               <div className='max-h-96 overflow-y-auto space-y-2 border rounded-lg p-2'>
                 {questions
                   .filter(q => q.topic_id === addItemContext.parentId)
@@ -2751,12 +2979,37 @@ export default function UnifiedAdminPage() {
                     );
                     const topic = category?.topics?.find((t: any) => t.id === addItemContext.parentId);
                     const isInTopic = topic?.questions?.some((q: any) => q.id === question.id);
+                    const isSelected = selectedQuestionIds.has(question.id);
+                    
                     return (
                       <div
                         key={question.id}
                         className='flex items-center justify-between p-3 rounded border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors'
                       >
                         <div className='flex items-center space-x-3 flex-1'>
+                          {/* Checkbox for multi-select */}
+                          <button
+                            onClick={() => {
+                              if (isInTopic) return; // Don't allow selection if already in topic
+                              setSelectedQuestionIds(prev => {
+                                const newSet = new Set(prev);
+                                if (newSet.has(question.id)) {
+                                  newSet.delete(question.id);
+                                } else {
+                                  newSet.add(question.id);
+                                }
+                                return newSet;
+                              });
+                            }}
+                            disabled={isInTopic}
+                            className={`flex-shrink-0 ${isInTopic ? 'cursor-not-allowed opacity-50' : 'cursor-pointer'}`}
+                          >
+                            {isSelected ? (
+                              <CheckSquare className='h-5 w-5 text-blue-600 dark:text-blue-400' />
+                            ) : (
+                              <Square className='h-5 w-5 text-gray-400' />
+                            )}
+                          </button>
                           <MessageSquare className='h-5 w-5 text-red-600' />
                           <div className='flex-1 min-w-0'>
                             <span className='text-sm font-medium text-gray-900 dark:text-gray-100 block truncate'>
@@ -2776,22 +3029,69 @@ export default function UnifiedAdminPage() {
                             </div>
                           </div>
                         </div>
-                        {isInTopic ? (
-                          <Badge variant='secondary'>Already in topic</Badge>
-                        ) : (
+                        <div className='flex items-center gap-2'>
+                          {/* View button */}
                           <Button
                             size='sm'
-                            variant='outline'
+                            variant='ghost'
                             onClick={async () => {
+                              // Fetch full question data including code field
+                              try {
+                                const response = await fetch(`/api/questions/unified/${question.id}`);
+                                if (response.ok) {
+                                  const result = await response.json();
+                                  if (result.success && result.data) {
+                                    // Process code field to ensure newlines are preserved
+                                    const fullQuestion = result.data;
+                                    if (fullQuestion.code && typeof fullQuestion.code === 'string') {
+                                      fullQuestion.code = fullQuestion.code
+                                        .replace(/\\n/g, '\n')
+                                        .replace(/\\r\\n/g, '\n')
+                                        .replace(/\\r/g, '\n')
+                                        .replace(/\r\n/g, '\n')
+                                        .replace(/\r/g, '\n');
+                                    }
+                                    setViewingQuestion(fullQuestion);
+                                    setIsViewQuestionModalOpen(true);
+                                  } else {
+                                    // Fallback to question from list
+                                    setViewingQuestion(question);
+                                    setIsViewQuestionModalOpen(true);
+                                  }
+                                } else {
+                                  // Fallback to question from list
+                                  setViewingQuestion(question);
+                                  setIsViewQuestionModalOpen(true);
+                                }
+                              } catch (error) {
+                                console.error('Error fetching question:', error);
+                                // Fallback to question from list
+                                setViewingQuestion(question);
+                                setIsViewQuestionModalOpen(true);
+                              }
+                            }}
+                            className='h-8 w-8 p-0'
+                          >
+                            <Eye className='h-4 w-4' />
+                          </Button>
+                          {isInTopic ? (
+                            <Badge variant='secondary'>Already in topic</Badge>
+                          ) : (
+                            <Button
+                              size='sm'
+                              variant='outline'
+                              onClick={async () => {
                               await addQuestionToTopic(addItemContext.parentId!, question.id);
                               await fetchPlanHierarchy(addItemContext.planId);
+                              setSelectedQuestionIds(new Set());
                               setAddItemContext(null);
-                            }}
-                          >
-                            <Plus className='h-4 w-4 mr-1' />
-                            Add
-                          </Button>
-                        )}
+                              }}
+                            >
+                              <Plus className='h-4 w-4 mr-1' />
+                              Add
+                            </Button>
+                          )}
+                        </div>
                       </div>
                     );
                   })}
@@ -2806,6 +3106,20 @@ export default function UnifiedAdminPage() {
           )}
         </div>
       </Modal>
+
+      {/* View Question Modal */}
+      <ViewQuestionModal
+        isOpen={isViewQuestionModalOpen}
+        onClose={() => {
+          setIsViewQuestionModalOpen(false);
+          setViewingQuestion(null);
+        }}
+        question={viewingQuestion}
+        cards={cardsData?.data || []}
+        allCategories={categories.map(c => c.name || c.title).filter(Boolean)}
+        categoriesData={categories}
+        topicsData={topics}
+      />
 
       {/* Toast Notifications */}
       <ToastContainer toasts={toasts} onRemove={removeToast} />

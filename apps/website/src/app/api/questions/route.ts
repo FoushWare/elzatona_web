@@ -331,6 +331,53 @@ export async function POST(request: NextRequest) {
       is_active: questionData.isActive !== false,
     };
 
+    // Check for duplicate questions before creating
+    // A question is considered duplicate if it has the same title/content AND (same content OR same code)
+    // Note: The database uses 'title' field, but this route maps 'question' to 'question_text'
+    // We'll check both title and content to catch duplicates
+    if (!supabase) {
+      throw new Error('Supabase client not initialized');
+    }
+
+    // Use the question text as title for duplicate checking (since question_text maps to title in DB)
+    const questionTitle = questionData.title || questionData.question || supabaseQuestionData.question_text;
+    
+    let duplicateQuery = supabase
+      .from('questions')
+      .select('id, title, content, code')
+      .ilike('title', questionTitle) // Case-insensitive match
+      .limit(1);
+    
+    // If code exists in questionData, also check for same code
+    if (questionData.code) {
+      duplicateQuery = duplicateQuery.eq('code', questionData.code);
+    } else if (questionData.content || questionData.question) {
+      // If no code, check for same content
+      const questionContent = questionData.content || questionData.question || '';
+      duplicateQuery = duplicateQuery.eq('content', questionContent);
+    }
+    
+    const { data: existingQuestion, error: duplicateCheckError } = await duplicateQuery.maybeSingle();
+    
+    if (duplicateCheckError && duplicateCheckError.code !== 'PGRST116') {
+      // PGRST116 means no rows found, which is fine
+      console.warn('⚠️ Error checking for duplicates:', duplicateCheckError);
+    }
+    
+    if (existingQuestion) {
+      console.log('⚠️ Duplicate question found:', {
+        existingId: existingQuestion.id,
+        title: questionTitle,
+      });
+      return NextResponse.json(
+        { 
+          success: false, 
+          error: `Duplicate question: A question with the same title${questionData.code ? ' and code' : questionData.content || questionData.question ? ' and content' : ''} already exists (ID: ${existingQuestion.id})` 
+        },
+        { status: 409 } // 409 Conflict
+      );
+    }
+
     const { data: newQuestion, error } =
       await supabaseOperations.createQuestion(supabaseQuestionData);
 

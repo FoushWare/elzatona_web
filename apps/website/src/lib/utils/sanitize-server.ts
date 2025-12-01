@@ -119,12 +119,23 @@ export function sanitizeObjectServer<T extends Record<string, any>>(obj: T): T {
   const sanitized = { ...obj };
 
   // Fields that should preserve newlines and special characters (code, content, etc.)
-  const preserveNewlinesFields = ['code', 'content', 'explanation', 'description', 'starter_code', 'code_template'];
+  const preserveNewlinesFields = ['content', 'explanation', 'description', 'starter_code', 'code_template'];
+  
+  // Fields that should be completely skipped from sanitization (will use CSP protection instead)
+  // These fields are preserved exactly as-is without any modification
+  const skipSanitizationFields = ['code'];
 
   for (const key in sanitized) {
     if (typeof sanitized[key] === 'string') {
-      // For code and content fields, preserve newlines - don't use sanitizeInputServer
-      if (preserveNewlinesFields.includes(key)) {
+      // For code field, skip sanitization entirely - we'll use CSP protection instead
+      if (skipSanitizationFields.includes(key)) {
+        // Don't sanitize code field at all - preserve it exactly as-is
+        // CSP (Content Security Policy) will protect against XSS attacks
+        // The field is already in sanitized object, just don't modify it
+        continue; // Skip processing this field - leave it as-is
+      }
+      // For content and other rich text fields, preserve newlines - don't use sanitizeInputServer
+      else if (preserveNewlinesFields.includes(key)) {
         // Only remove dangerous control characters, but preserve newlines and tabs
         let content = sanitized[key];
         content = content
