@@ -56,6 +56,9 @@ export function QuestionForm({
   // State for JSON mode toggle
   const [isJsonMode, setIsJsonMode] = useState(false);
   const [jsonText, setJsonText] = useState('');
+  
+  // State for resources JSON mode toggle
+  const [isResourcesJsonMode, setIsResourcesJsonMode] = useState(false);
 
   // Search state for dropdowns
   const [categorySearch, setCategorySearch] = useState('');
@@ -116,6 +119,26 @@ export function QuestionForm({
         initialData,
       });
 
+      // Normalize resources to ensure it's always an array or null
+      let normalizedResources = null;
+      const resourcesValue = (initialData as any).resources;
+      if (resourcesValue !== null && resourcesValue !== undefined) {
+        if (Array.isArray(resourcesValue)) {
+          normalizedResources = resourcesValue;
+        } else if (typeof resourcesValue === 'string') {
+          // Try to parse if it's a string
+          try {
+            const parsed = JSON.parse(resourcesValue);
+            normalizedResources = Array.isArray(parsed) ? parsed : null;
+          } catch {
+            normalizedResources = null;
+          }
+        } else {
+          // If it's an object but not an array, wrap it in an array
+          normalizedResources = [resourcesValue];
+        }
+      }
+
       const updatedFormData = {
         ...initialData,
         options: initialData.options || [],
@@ -123,7 +146,7 @@ export function QuestionForm({
         tags: initialData.tags || [],
         explanation: initialData.explanation || '',
         code: (initialData as any).code || '',
-        resources: (initialData as any).resources || null,
+        resources: normalizedResources,
         category: categoryName,
         topic: topicName,
         learningCardId: learningCardId,
@@ -259,6 +282,39 @@ export function QuestionForm({
   const handleSelectChange = (name: keyof Question, value: string) => {
     if (disabled) return;
     setFormData((prev: any) => ({ ...prev, [name]: value }));
+  };
+
+  // Resource management functions
+  const handleResourceChange = (index: number, field: string, value: string) => {
+    if (disabled) return;
+    const updatedResources = [...(formData.resources || [])];
+    if (!updatedResources[index]) {
+      updatedResources[index] = { type: 'video', title: '', url: '' };
+    }
+    updatedResources[index] = {
+      ...updatedResources[index],
+      [field]: value,
+    };
+    setFormData((prev: any) => ({ ...prev, resources: updatedResources }));
+  };
+
+  const handleAddResource = () => {
+    if (disabled) return;
+    const newResource = { type: 'video', title: '', url: '' };
+    setFormData((prev: any) => ({
+      ...prev,
+      resources: [...(prev.resources || []), newResource],
+    }));
+  };
+
+  const handleRemoveResource = (index: number) => {
+    if (disabled) return;
+    const updatedResources = [...(formData.resources || [])];
+    updatedResources.splice(index, 1);
+    setFormData((prev: any) => ({
+      ...prev,
+      resources: updatedResources.length > 0 ? updatedResources : null,
+    }));
   };
 
   // Handle JSON mode toggle
@@ -875,46 +931,217 @@ export function QuestionForm({
             </Label>
           </div>
           <span className='text-sm text-gray-500 dark:text-gray-400'>
-            {isResourcesOpen ? 'Click to collapse' : 'Click to expand'}
+            {formData.resources && Array.isArray(formData.resources) 
+              ? `${formData.resources.length} resource${formData.resources.length !== 1 ? 's' : ''}`
+              : isResourcesOpen ? 'Click to collapse' : 'Click to expand'}
           </span>
         </CollapsibleTrigger>
-        <CollapsibleContent className='pt-2 space-y-2'>
-          <Textarea
-            id='resources'
-            name='resources'
-            value={
-              formData.resources
-                ? JSON.stringify(formData.resources, null, 2)
-                : ''
-            }
-            onChange={e => {
-              if (disabled) return;
-              try {
-                const value = e.target.value.trim();
-                if (!value) {
-                  setFormData((prev: any) => ({ ...prev, resources: null }));
-                  return;
+        <CollapsibleContent className='pt-4 space-y-4'>
+          {/* Toggle between Form and JSON Mode */}
+          <div className='flex items-center justify-between p-3 rounded-lg border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800/50'>
+            <div className='flex items-center gap-3'>
+              <Label htmlFor='resources-json-mode' className='text-sm font-semibold cursor-pointer'>
+                Use JSON Format
+              </Label>
+              <span className='text-xs text-gray-500 dark:text-gray-400'>
+                Switch to JSON mode to paste resources directly
+              </span>
+            </div>
+            <label className='inline-flex items-center cursor-pointer'>
+              <input
+                type='checkbox'
+                id='resources-json-mode'
+                checked={isResourcesJsonMode}
+                onChange={(e) => setIsResourcesJsonMode(e.target.checked)}
+                disabled={disabled}
+                className='sr-only peer'
+              />
+              <div className="relative w-9 h-5 bg-gray-300 dark:bg-gray-600 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-200 dark:peer-focus:ring-blue-900 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-blue-600 dark:peer-checked:bg-blue-700"></div>
+            </label>
+          </div>
+
+          {/* JSON Mode */}
+          {isResourcesJsonMode ? (
+            <div className='space-y-2'>
+              <Textarea
+                id='resources-json'
+                name='resources-json'
+                value={
+                  formData.resources
+                    ? JSON.stringify(formData.resources, null, 2)
+                    : ''
                 }
-                const parsed = JSON.parse(value);
-                if (Array.isArray(parsed)) {
-                  setFormData((prev: any) => ({ ...prev, resources: parsed }));
-                } else {
-                  console.error('Resources must be an array');
-                }
-              } catch (err) {
-                console.error('Invalid JSON for resources:', err);
-              }
-            }}
-            rows={8}
-            disabled={disabled}
-            placeholder={`[\n  {\n    "type": "video",\n    "title": "CSS clamp() Tutorial",\n    "url": "https://youtube.com/watch?v=...",\n    "description": "Learn clamp() in 10 minutes",\n    "duration": "10:30",\n    "author": "Web Dev Simplified"\n  }\n]`}
-            className='border-gray-300 dark:border-gray-600 font-mono text-sm'
-          />
-          <p className='text-xs text-gray-500 dark:text-gray-400'>
-            Enter a JSON array of resource objects. Each resource should have: type
-            (video/course/article), title, url, and optionally description, duration,
-            author.
-          </p>
+                onChange={e => {
+                  if (disabled) return;
+                  try {
+                    const value = e.target.value.trim();
+                    if (!value) {
+                      setFormData((prev: any) => ({ ...prev, resources: null }));
+                      return;
+                    }
+                    const parsed = JSON.parse(value);
+                    if (Array.isArray(parsed)) {
+                      setFormData((prev: any) => ({ ...prev, resources: parsed }));
+                    } else if (parsed && typeof parsed === 'object') {
+                      setFormData((prev: any) => ({ ...prev, resources: [parsed] }));
+                    } else {
+                      console.warn('Resources must be an array or object. Got:', typeof parsed);
+                    }
+                  } catch (err) {
+                    console.warn('Invalid JSON for resources (still typing?):', err);
+                  }
+                }}
+                rows={12}
+                disabled={disabled}
+                placeholder={`[\n  {\n    "type": "video",\n    "title": "CSS clamp() Tutorial",\n    "url": "https://youtube.com/watch?v=...",\n    "description": "Learn clamp() in 10 minutes",\n    "duration": "10:30",\n    "author": "Web Dev Simplified"\n  },\n  {\n    "type": "article",\n    "title": "CSS clamp() Guide",\n    "url": "https://css-tricks.com/clamp/",\n    "description": "Complete guide to clamp()"\n  }\n]`}
+                className='border-gray-300 dark:border-gray-600 font-mono text-sm'
+              />
+              <p className='text-xs text-gray-500 dark:text-gray-400'>
+                Enter a JSON array of resource objects. Each resource should have: type
+                (video/course/article), title, url, and optionally description, duration,
+                author.
+              </p>
+            </div>
+          ) : (
+            /* Form Mode */
+            <div className='space-y-4'>
+              {formData.resources && Array.isArray(formData.resources) && formData.resources.length > 0 ? (
+                formData.resources.map((resource: any, index: number) => (
+                  <div
+                    key={index}
+                    className='p-4 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 space-y-3'
+                  >
+                    <div className='flex items-center justify-between mb-3'>
+                      <h4 className='text-sm font-semibold text-gray-700 dark:text-gray-300'>
+                        Resource {index + 1}
+                      </h4>
+                      <Button
+                        type='button'
+                        variant='outline'
+                        size='sm'
+                        onClick={() => handleRemoveResource(index)}
+                        disabled={disabled}
+                        className='text-red-600 hover:text-red-700 hover:bg-red-50 dark:hover:bg-red-900/20'
+                      >
+                        <Trash2 className='h-4 w-4' />
+                      </Button>
+                    </div>
+
+                    <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
+                      {/* Type */}
+                      <div className='space-y-2'>
+                        <Label htmlFor={`resource-type-${index}`}>
+                          Type <span className='text-red-500'>*</span>
+                        </Label>
+                        <Select
+                          value={resource.type || 'video'}
+                          onValueChange={(value) => handleResourceChange(index, 'type', value)}
+                          disabled={disabled}
+                        >
+                          <SelectTrigger>
+                            <SelectValue placeholder='Select type' />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value='video'>Video</SelectItem>
+                            <SelectItem value='course'>Course</SelectItem>
+                            <SelectItem value='article'>Article</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </div>
+
+                      {/* Title */}
+                      <div className='space-y-2'>
+                        <Label htmlFor={`resource-title-${index}`}>
+                          Title <span className='text-red-500'>*</span>
+                        </Label>
+                        <Input
+                          id={`resource-title-${index}`}
+                          value={resource.title || ''}
+                          onChange={(e) => handleResourceChange(index, 'title', e.target.value)}
+                          placeholder='Resource title'
+                          disabled={disabled}
+                          className='border-gray-300 dark:border-gray-600'
+                        />
+                      </div>
+
+                      {/* URL */}
+                      <div className='space-y-2 md:col-span-2'>
+                        <Label htmlFor={`resource-url-${index}`}>
+                          URL <span className='text-red-500'>*</span>
+                        </Label>
+                        <Input
+                          id={`resource-url-${index}`}
+                          type='url'
+                          value={resource.url || ''}
+                          onChange={(e) => handleResourceChange(index, 'url', e.target.value)}
+                          placeholder='https://example.com/resource'
+                          disabled={disabled}
+                          className='border-gray-300 dark:border-gray-600'
+                        />
+                      </div>
+
+                      {/* Description */}
+                      <div className='space-y-2 md:col-span-2'>
+                        <Label htmlFor={`resource-description-${index}`}>Description</Label>
+                        <Textarea
+                          id={`resource-description-${index}`}
+                          value={resource.description || ''}
+                          onChange={(e) => handleResourceChange(index, 'description', e.target.value)}
+                          placeholder='Optional description'
+                          rows={2}
+                          disabled={disabled}
+                          className='border-gray-300 dark:border-gray-600'
+                        />
+                      </div>
+
+                      {/* Duration */}
+                      <div className='space-y-2'>
+                        <Label htmlFor={`resource-duration-${index}`}>Duration</Label>
+                        <Input
+                          id={`resource-duration-${index}`}
+                          value={resource.duration || ''}
+                          onChange={(e) => handleResourceChange(index, 'duration', e.target.value)}
+                          placeholder='e.g., 10:30 or 5 hours'
+                          disabled={disabled}
+                          className='border-gray-300 dark:border-gray-600'
+                        />
+                      </div>
+
+                      {/* Author */}
+                      <div className='space-y-2'>
+                        <Label htmlFor={`resource-author-${index}`}>Author</Label>
+                        <Input
+                          id={`resource-author-${index}`}
+                          value={resource.author || ''}
+                          onChange={(e) => handleResourceChange(index, 'author', e.target.value)}
+                          placeholder='Author name'
+                          disabled={disabled}
+                          className='border-gray-300 dark:border-gray-600'
+                        />
+                      </div>
+                    </div>
+                  </div>
+                ))
+              ) : (
+                <div className='text-center py-8 text-gray-500 dark:text-gray-400'>
+                  <p className='text-sm'>No resources added yet.</p>
+                  <p className='text-xs mt-1'>Click "Add Resource" to get started.</p>
+                </div>
+              )}
+
+              {/* Add Resource Button */}
+              <Button
+                type='button'
+                variant='outline'
+                onClick={handleAddResource}
+                disabled={disabled}
+                className='w-full'
+              >
+                <Plus className='h-4 w-4 mr-2' />
+                Add Resource
+              </Button>
+            </div>
+          )}
         </CollapsibleContent>
       </Collapsible>
 
