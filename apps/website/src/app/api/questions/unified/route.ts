@@ -286,6 +286,10 @@ export async function POST(request: NextRequest) {
         // Normalize field names: convert camelCase to snake_case for database fields
         const normalizedData: any = { ...questionData };
         
+        // CRITICAL: Extract code field FIRST, before any processing, to ensure it's never lost
+        // Store the original code value from the input data
+        const originalCode = questionData.code !== undefined ? questionData.code : normalizedData.code;
+        
         // Handle isActive -> is_active
         if ('isActive' in normalizedData && !('is_active' in normalizedData)) {
           normalizedData.is_active = normalizedData.isActive;
@@ -309,14 +313,26 @@ export async function POST(request: NextRequest) {
           hasCategoryId: !!normalizedData.category_id,
           category: normalizedData.category,
           category_id: normalizedData.category_id,
+          hasOriginalCode: originalCode !== undefined && originalCode !== null && originalCode !== '',
+          originalCodeType: typeof originalCode,
+          originalCodeLength: originalCode ? String(originalCode).length : 0,
         });
         
         // CRITICAL: Process code field BEFORE validation/sanitization to preserve newlines
         // Extract and preserve code field separately - this ensures newlines are never lost
-        const codeField = normalizedData.code;
+        const codeField = originalCode !== undefined ? originalCode : normalizedData.code;
         let processedCode: string | null = null;
         
-        if (codeField) {
+        console.log('🔍 Code field extraction:', {
+          hasOriginalCode: originalCode !== undefined,
+          originalCodeType: typeof originalCode,
+          originalCodeValue: originalCode ? String(originalCode).substring(0, 100) : null,
+          hasNormalizedCode: normalizedData.code !== undefined,
+          normalizedCodeType: typeof normalizedData.code,
+          codeFieldValue: codeField ? String(codeField).substring(0, 100) : null,
+        });
+        
+        if (codeField !== undefined && codeField !== null && codeField !== '') {
           // Convert to string and ensure \n escape sequences become actual newlines
           let codeContent = String(codeField);
           
@@ -336,8 +352,35 @@ export async function POST(request: NextRequest) {
           normalizedData.code = codeContent;
           
           const newlineCount = (codeContent.match(/\n/g) || []).length;
-          console.log(`📝 Code field pre-processing: ${newlineCount} newlines, length: ${codeContent.length}`);
+          console.log(`📝 Code field pre-processing: ${newlineCount} newlines, length: ${codeContent.length}`, {
+            codePreview: codeContent.substring(0, 150),
+          });
+        } else {
+          console.log(`⚠️ Code field is missing or empty:`, {
+            codeField: codeField,
+            codeFieldType: typeof codeField,
+            originalCode: originalCode,
+            normalizedCode: normalizedData.code,
+          });
         }
+        
+        // CRITICAL: Ensure code is in normalizedData before validation
+        // If we have processedCode, use it; otherwise use originalCode
+        if (processedCode !== null && processedCode !== '') {
+          normalizedData.code = processedCode;
+        } else if (originalCode !== undefined && originalCode !== null && originalCode !== '') {
+          normalizedData.code = String(originalCode);
+        } else {
+          // Explicitly set to null (not undefined) so validation knows it exists
+          normalizedData.code = null;
+        }
+        
+        console.log('🔍 Before validation - normalizedData.code:', {
+          hasCode: 'code' in normalizedData,
+          codeValue: normalizedData.code,
+          codeType: typeof normalizedData.code,
+          codeLength: normalizedData.code ? String(normalizedData.code).length : 0,
+        });
         
         const validationResult = validateAndSanitize(questionSchema, normalizedData);
         
@@ -359,22 +402,85 @@ export async function POST(request: NextRequest) {
         console.log('✅ Validation passed for question:', {
           index: index + 1,
           title: normalizedData.title,
+          validatedCode: validationResult.data?.code,
+          validatedCodeType: typeof validationResult.data?.code,
         });
 
-        // Sanitize the validated data (but code will be handled separately)
+        // Extract code field BEFORE sanitization to completely bypass it
+        // Code field will NOT be sanitized - we'll use CSP protection instead
+        // Priority: processedCode > originalCode > validatedData.code
+        const codeBeforeSanitization = processedCode !== null && processedCode !== '' ? processedCode : 
+                                      (originalCode !== undefined && originalCode !== null && originalCode !== '') ? String(originalCode) :
+                                      (validationResult.data?.code !== undefined && validationResult.data?.code !== null && validationResult.data?.code !== '') ? String(validationResult.data.code) :
+                                      null;
+        
+        console.log('🔍 Code before sanitization:', {
+          hasProcessedCode: processedCode !== null && processedCode !== '',
+          hasOriginalCode: originalCode !== undefined && originalCode !== null && originalCode !== '',
+          hasValidatedCode: validationResult.data?.code !== undefined && validationResult.data?.code !== null && validationResult.data?.code !== '',
+          codeBeforeSanitization: codeBeforeSanitization ? String(codeBeforeSanitization).substring(0, 100) : null,
+          codeBeforeSanitizationLength: codeBeforeSanitization ? String(codeBeforeSanitization).length : 0,
+        });
+        
+        // Sanitize the validated data (code field is now excluded from sanitization)
         const sanitizedQuestion = sanitizeObjectServer(validationResult.data as any);
         
-        // CRITICAL: Restore code field AFTER sanitization to ensure newlines are preserved
-        // We bypass sanitizeObjectServer for code field by restoring it from our processed version
-        if (processedCode !== null) {
-          sanitizedQuestion.code = processedCode;
+        // CRITICAL: Restore code field AFTER sanitization (it was skipped during sanitization)
+        // Code field is NOT sanitized - we rely on CSP protection for XSS prevention
+        // ALWAYS set the code field, even if it's null
+        if (codeBeforeSanitization !== null && codeBeforeSanitization !== '') {
+          // Process the code to convert \n escape sequences to actual newlines
+          let codeContent = String(codeBeforeSanitization);
           
-          const newlineCount = (sanitizedQuestion.code.match(/\n/g) || []).length;
-          console.log(`✅ Code field restored: ${newlineCount} newlines preserved, length: ${sanitizedQuestion.code.length}`);
+          // Only process if not already processed
+          if (!processedCode || processedCode === '') {
+            codeContent = codeContent.replace(/\\n/g, '\n');
+            codeContent = codeContent.replace(/\\r\\n/g, '\n');
+            codeContent = codeContent.replace(/\\r/g, '\n');
+            codeContent = codeContent.replace(/\r\n/g, '\n');
+            codeContent = codeContent.replace(/\r/g, '\n');
+            processedCode = codeContent;
+          } else {
+            codeContent = processedCode;
+          }
           
-          if (newlineCount === 0 && sanitizedQuestion.code.length > 50) {
+          sanitizedQuestion.code = codeContent;
+          
+          const newlineCount = (codeContent.match(/\n/g) || []).length;
+          console.log(`✅ Code field restored (NOT sanitized, using CSP protection): ${newlineCount} newlines preserved, length: ${codeContent.length}`, {
+            codePreview: codeContent.substring(0, 150),
+          });
+          
+          if (newlineCount === 0 && codeContent.length > 50) {
             console.error(`❌ CRITICAL: Code field has no newlines after restoration!`);
-            console.error(`   Code preview: ${sanitizedQuestion.code.substring(0, 150)}`);
+            console.error(`   Code preview: ${codeContent.substring(0, 150)}`);
+          }
+        } else {
+          // Explicitly set to null (not undefined) so it's included in the database insert
+          sanitizedQuestion.code = null;
+          console.log(`ℹ️ No code field to restore for question: ${normalizedData.title}`, {
+            codeBeforeSanitization: codeBeforeSanitization,
+            processedCode: processedCode,
+            originalCode: originalCode,
+          });
+        }
+        
+        // CRITICAL: Ensure code field is ALWAYS present in sanitizedQuestion
+        if (!('code' in sanitizedQuestion)) {
+          console.error(`❌ CRITICAL: Code field missing from sanitizedQuestion! Restoring from originalCode...`);
+          if (originalCode !== undefined && originalCode !== null && originalCode !== '') {
+            let codeContent = String(originalCode);
+            codeContent = codeContent.replace(/\\n/g, '\n');
+            codeContent = codeContent.replace(/\\r\\n/g, '\n');
+            codeContent = codeContent.replace(/\\r/g, '\n');
+            codeContent = codeContent.replace(/\r\n/g, '\n');
+            codeContent = codeContent.replace(/\r/g, '\n');
+            sanitizedQuestion.code = codeContent;
+            processedCode = codeContent;
+            console.log(`✅ Code field recovered from originalCode: ${codeContent.length} chars`);
+          } else {
+            sanitizedQuestion.code = null;
+            console.log(`⚠️ Code field set to null (no source available)`);
           }
         }
         
@@ -390,41 +496,16 @@ export async function POST(request: NextRequest) {
           hasLearningCardId: !!(sanitizedQuestion.learningCardId || sanitizedQuestion.learning_card_id),
         });
         
-        // Sanitize rich content fields (explanation, code, etc.)
+        // Sanitize rich content fields (explanation, etc.)
+        // NOTE: Code field is NOT sanitized - we use CSP protection instead
         if (sanitizedQuestion.explanation) {
           sanitizedQuestion.explanation = sanitizeRichContent(sanitizedQuestion.explanation);
         }
         
-        // Final code field processing - ensure newlines are definitely preserved
-        // This is a final safety check after all sanitization
-        if (sanitizedQuestion.code) {
-          let codeContent = String(sanitizedQuestion.code);
-          
-          // Convert any remaining \n escape sequences to actual newlines
-          codeContent = codeContent.replace(/\\n/g, '\n');
-          codeContent = codeContent.replace(/\\r\\n/g, '\n');
-          codeContent = codeContent.replace(/\\r/g, '\n');
-          
-          // Normalize line breaks
-          codeContent = codeContent.replace(/\r\n/g, '\n');
-          codeContent = codeContent.replace(/\r/g, '\n');
-          
-          // Only remove dangerous control characters, PRESERVE newlines and tabs
-          codeContent = codeContent
-            .replace(/[\x00-\x08\x0B-\x0C\x0E-\x1F\x7F]/g, '') // Remove control chars except \n (0x0A), \r (0x0D), \t (0x09)
-            .replace(/\x00/g, ''); // Remove null bytes
-          
-          // Final verification
-          const newlineCount = (codeContent.match(/\n/g) || []).length;
-          console.log(`✅ Final code processing: ${newlineCount} newlines, length: ${codeContent.length}`);
-          
-          if (newlineCount === 0 && codeContent.length > 50) {
-            console.error(`❌ ERROR: Code has no newlines! This should not happen.`);
-            console.error(`   Code preview: ${codeContent.substring(0, 150)}`);
-          }
-          
-          sanitizedQuestion.code = codeContent;
-        }
+        // Code field is NOT processed here - it was already processed and restored above
+        // Code field is NOT sanitized - we rely on CSP (Content Security Policy) for XSS protection
+        // The code field should already be set from the restoration step above
+        // No additional processing needed - code is preserved exactly as provided
 
         // Sanitize options if present
         // Handle cases where options might be a string (invalid data) or not an array
@@ -564,6 +645,10 @@ export async function POST(request: NextRequest) {
 
         // Prepare question data for database
         // Remove fields that don't exist in the database or are frontend-only
+        // CRITICAL: Preserve code field - extract it before destructuring to ensure it's not lost
+        // Use processedCode if available (from earlier processing), otherwise use sanitizedQuestion.code
+        const codeForDb = processedCode !== null ? processedCode : sanitizedQuestion.code;
+        
         const {
           category,
           topic,
@@ -585,8 +670,15 @@ export async function POST(request: NextRequest) {
           correct_answer: _correct_answer, // Frontend-only field
           sampleAnswers: _sampleAnswers, // Frontend-only field (doesn't exist in database)
           metadata: _metadata, // Keep metadata if it exists, but we'll handle it separately
+          code: _code, // Extract code separately to ensure it's preserved
           ...dbQuestion
         } = sanitizedQuestion;
+        
+        // Restore code field to dbQuestion if it exists
+        if (codeForDb !== undefined && codeForDb !== null && codeForDb !== '') {
+          dbQuestion.code = codeForDb;
+          console.log(`✅ Code field preserved in dbQuestion: ${String(codeForDb).length} chars`);
+        }
 
         // Ensure content field exists (required by database)
         if (!dbQuestion.content && dbQuestion.title) {
@@ -667,14 +759,81 @@ export async function POST(request: NextRequest) {
         }
         // Add code field if present (always include it, even if null/undefined, to ensure it's saved)
         // CRITICAL: Ensure newlines are preserved when storing in database
-        if (sanitizedQuestion.code !== undefined && sanitizedQuestion.code !== null && sanitizedQuestion.code !== '') {
-          // Verify newlines are present before storing
-          const codeToStore = String(sanitizedQuestion.code);
-          const newlineCount = (codeToStore.match(/\n/g) || []).length;
-          console.log(`💾 Storing code with ${newlineCount} newlines, length: ${codeToStore.length}`);
-          questionWithTimestamps.code = codeToStore;
+        // Priority order: processedCode > codeForDb > dbQuestion.code > sanitizedQuestion.code > originalCode
+        let codeToStore: string | null | undefined = null;
+        
+        if (processedCode !== null && processedCode !== '') {
+          codeToStore = processedCode;
+        } else if (codeForDb !== undefined && codeForDb !== null && codeForDb !== '') {
+          codeToStore = codeForDb;
+        } else if (dbQuestion.code !== undefined && dbQuestion.code !== null && dbQuestion.code !== '') {
+          codeToStore = dbQuestion.code;
+        } else if (sanitizedQuestion.code !== undefined && sanitizedQuestion.code !== null && sanitizedQuestion.code !== '') {
+          codeToStore = sanitizedQuestion.code;
+        } else if (originalCode !== undefined && originalCode !== null && originalCode !== '') {
+          // Last resort: process originalCode now
+          let codeContent = String(originalCode);
+          codeContent = codeContent.replace(/\\n/g, '\n');
+          codeContent = codeContent.replace(/\\r\\n/g, '\n');
+          codeContent = codeContent.replace(/\\r/g, '\n');
+          codeContent = codeContent.replace(/\r\n/g, '\n');
+          codeContent = codeContent.replace(/\r/g, '\n');
+          codeToStore = codeContent;
+          console.log(`⚠️ Using originalCode as fallback: ${codeContent.length} chars`);
+        }
+        
+        // ALWAYS explicitly set the code field, even if it's null
+        // This ensures the field is always included in the database insert
+        // CRITICAL: Use processedCode as the primary source since it's already processed
+        if (processedCode !== null && processedCode !== '') {
+          // processedCode is already processed with newlines
+          questionWithTimestamps.code = processedCode;
+          const newlineCount = (processedCode.match(/\n/g) || []).length;
+          console.log(`💾 Storing code from processedCode: ${newlineCount} newlines, length: ${processedCode.length}`, {
+            codePreview: processedCode.substring(0, 150),
+          });
+        } else if (codeToStore !== undefined && codeToStore !== null && codeToStore !== '') {
+          // Fallback to codeToStore if processedCode is not available
+          const codeString = String(codeToStore);
+          const newlineCount = (codeString.match(/\n/g) || []).length;
+          console.log(`💾 Storing code from codeToStore: ${newlineCount} newlines, length: ${codeString.length}`, {
+            codeSource: codeForDb !== undefined && codeForDb !== null && codeForDb !== '' ? 'codeForDb' :
+                        (dbQuestion.code !== undefined && dbQuestion.code !== null && dbQuestion.code !== '') ? 'dbQuestion.code' :
+                        (sanitizedQuestion.code !== undefined && sanitizedQuestion.code !== null && sanitizedQuestion.code !== '') ? 'sanitizedQuestion.code' :
+                        'originalCode',
+            codePreview: codeString.substring(0, 150),
+          });
+          questionWithTimestamps.code = codeString;
+        } else if (originalCode !== undefined && originalCode !== null && originalCode !== '') {
+          // Last resort: process originalCode now
+          let codeContent = String(originalCode);
+          codeContent = codeContent.replace(/\\n/g, '\n');
+          codeContent = codeContent.replace(/\\r\\n/g, '\n');
+          codeContent = codeContent.replace(/\\r/g, '\n');
+          codeContent = codeContent.replace(/\r\n/g, '\n');
+          codeContent = codeContent.replace(/\r/g, '\n');
+          questionWithTimestamps.code = codeContent;
+          processedCode = codeContent; // Update for consistency
+          const newlineCount = (codeContent.match(/\n/g) || []).length;
+          console.log(`💾 Storing code from originalCode (last resort): ${newlineCount} newlines, length: ${codeContent.length}`, {
+            codePreview: codeContent.substring(0, 150),
+          });
         } else {
           // Explicitly set to null if not provided (to ensure the field is included in the insert)
+          questionWithTimestamps.code = null;
+          console.log(`ℹ️ No code field provided for question: ${questionWithTimestamps.title}`, {
+            hasProcessedCode: processedCode !== null && processedCode !== '',
+            hasCodeForDb: codeForDb !== undefined && codeForDb !== null && codeForDb !== '',
+            hasDbQuestionCode: dbQuestion.code !== undefined && dbQuestion.code !== null && dbQuestion.code !== '',
+            hasSanitizedCode: sanitizedQuestion.code !== undefined && sanitizedQuestion.code !== null && sanitizedQuestion.code !== '',
+            hasOriginalCode: originalCode !== undefined && originalCode !== null && originalCode !== '',
+          });
+        }
+        
+        // CRITICAL: Ensure code field is ALWAYS present in questionWithTimestamps
+        // Even if it's null, we need to explicitly set it so Supabase includes it in the insert
+        if (!('code' in questionWithTimestamps)) {
+          console.error(`❌ CRITICAL: Code field missing from questionWithTimestamps! Setting to null as fallback.`);
           questionWithTimestamps.code = null;
         }
         
@@ -695,15 +854,143 @@ export async function POST(request: NextRequest) {
           topic_id: questionWithTimestamps.topic_id,
           learning_card_id: questionWithTimestamps.learning_card_id,
           hasOptions: !!(questionWithTimestamps.options && Array.isArray(questionWithTimestamps.options) && questionWithTimestamps.options.length > 0),
+          hasCode: !!questionWithTimestamps.code,
+          codeLength: questionWithTimestamps.code ? String(questionWithTimestamps.code).length : 0,
+          codePreview: questionWithTimestamps.code ? String(questionWithTimestamps.code).substring(0, 100) : null,
         });
 
+        // Check for duplicate questions before inserting
+        // A question is considered duplicate if it has the same title (case-insensitive) AND (same content OR same code)
+        let duplicateQuery = supabase
+          .from('questions')
+          .select('id, title, content, code')
+          .ilike('title', questionWithTimestamps.title) // Case-insensitive match
+          .limit(1);
+        
+        // If code exists, also check for same code
+        if (questionWithTimestamps.code) {
+          duplicateQuery = duplicateQuery.eq('code', questionWithTimestamps.code);
+        } else {
+          // If no code, check for same content
+          if (questionWithTimestamps.content) {
+            duplicateQuery = duplicateQuery.eq('content', questionWithTimestamps.content);
+          }
+        }
+        
+        const { data: existingQuestion, error: duplicateCheckError } = await duplicateQuery.maybeSingle();
+        
+        if (duplicateCheckError && duplicateCheckError.code !== 'PGRST116') {
+          // PGRST116 means no rows found, which is fine
+          console.warn('⚠️ Error checking for duplicates:', duplicateCheckError);
+        }
+        
+        if (existingQuestion) {
+          console.log('⚠️ Duplicate question found:', {
+            existingId: existingQuestion.id,
+            title: questionWithTimestamps.title,
+          });
+          errors.push({
+            question: questionData,
+            error: `Duplicate question: A question with the same title${questionWithTimestamps.code ? ' and code' : questionWithTimestamps.content ? ' and content' : ''} already exists (ID: ${existingQuestion.id})`,
+            index: index + 1,
+          });
+          continue; // Skip this question and move to next
+        }
+
+        // FINAL SAFETY CHECK: Ensure code field is in questionWithTimestamps before insert
+        // This is a last resort to catch any code that might have been lost
+        // Priority order: processedCode > originalCode > sanitizedQuestion.code > null
+        if (!('code' in questionWithTimestamps) || questionWithTimestamps.code === undefined) {
+          console.error(`❌ CRITICAL: Code field missing from questionWithTimestamps! Attempting recovery...`);
+          
+          // Try to recover code from any available source
+          if (processedCode !== null && processedCode !== '') {
+            questionWithTimestamps.code = processedCode;
+            console.log(`✅ Code field recovered from processedCode: ${processedCode.length} chars`);
+          } else if (originalCode !== undefined && originalCode !== null && originalCode !== '') {
+            // Process originalCode as last resort
+            let codeContent = String(originalCode);
+            codeContent = codeContent.replace(/\\n/g, '\n');
+            codeContent = codeContent.replace(/\\r\\n/g, '\n');
+            codeContent = codeContent.replace(/\\r/g, '\n');
+            codeContent = codeContent.replace(/\r\n/g, '\n');
+            codeContent = codeContent.replace(/\r/g, '\n');
+            questionWithTimestamps.code = codeContent;
+            processedCode = codeContent; // Update for consistency
+            console.log(`✅ Code field recovered from originalCode: ${codeContent.length} chars`);
+          } else if (sanitizedQuestion.code !== undefined && sanitizedQuestion.code !== null && sanitizedQuestion.code !== '') {
+            questionWithTimestamps.code = sanitizedQuestion.code;
+            console.log(`✅ Code field recovered from sanitizedQuestion: ${String(sanitizedQuestion.code).length} chars`);
+          } else {
+            questionWithTimestamps.code = null;
+            console.log(`⚠️ Code field not found in any source, setting to null`);
+          }
+        } else {
+          // Code field exists, but verify it's not empty when it should have content
+          if (questionWithTimestamps.code === null || questionWithTimestamps.code === '') {
+            // If we have code from other sources, use it
+            if (processedCode !== null && processedCode !== '') {
+              questionWithTimestamps.code = processedCode;
+              console.log(`⚠️ Code field was null/empty, restored from processedCode: ${processedCode.length} chars`);
+            } else if (originalCode !== undefined && originalCode !== null && originalCode !== '') {
+              let codeContent = String(originalCode);
+              codeContent = codeContent.replace(/\\n/g, '\n');
+              codeContent = codeContent.replace(/\\r\\n/g, '\n');
+              codeContent = codeContent.replace(/\\r/g, '\n');
+              codeContent = codeContent.replace(/\r\n/g, '\n');
+              codeContent = codeContent.replace(/\r/g, '\n');
+              questionWithTimestamps.code = codeContent;
+              processedCode = codeContent;
+              console.log(`⚠️ Code field was null/empty, restored from originalCode: ${codeContent.length} chars`);
+            }
+          }
+        }
+        
+        // ABSOLUTE FINAL CHECK: Log the final state before insert
+        console.log('🔍 ABSOLUTE FINAL CHECK - questionWithTimestamps.code:', {
+          hasCode: 'code' in questionWithTimestamps,
+          codeValue: questionWithTimestamps.code,
+          codeType: typeof questionWithTimestamps.code,
+          codeIsNull: questionWithTimestamps.code === null,
+          codeIsUndefined: questionWithTimestamps.code === undefined,
+          codeIsEmpty: questionWithTimestamps.code === '',
+          codeLength: questionWithTimestamps.code ? String(questionWithTimestamps.code).length : 0,
+          codePreview: questionWithTimestamps.code ? String(questionWithTimestamps.code).substring(0, 100) : null,
+          processedCode: processedCode ? String(processedCode).substring(0, 50) : null,
+          originalCode: originalCode ? String(originalCode).substring(0, 50) : null,
+        });
+        
         // Insert question with code field
+        // CRITICAL: Log the exact data being inserted to debug code field issues
+        console.log('🔍 FINAL INSERT DATA - questionWithTimestamps:', {
+          title: questionWithTimestamps.title,
+          hasCode: 'code' in questionWithTimestamps,
+          codeValue: questionWithTimestamps.code,
+          codeType: typeof questionWithTimestamps.code,
+          codeLength: questionWithTimestamps.code ? String(questionWithTimestamps.code).length : 0,
+          codePreview: questionWithTimestamps.code ? String(questionWithTimestamps.code).substring(0, 150) : null,
+          allKeys: Object.keys(questionWithTimestamps),
+        });
+        
         // Explicitly select code field in the response to ensure it's returned
         const { data, error } = await supabase
           .from('questions')
           .insert(questionWithTimestamps)
           .select('*, code') // Explicitly include code in the response
           .single();
+        
+        // Log what was actually inserted
+        if (data) {
+          console.log('✅ INSERT SUCCESS - Data returned from database:', {
+            id: data.id,
+            title: data.title,
+            hasCode: 'code' in data,
+            codeValue: data.code,
+            codeType: typeof data.code,
+            codeLength: data.code ? String(data.code).length : 0,
+            codePreview: data.code ? String(data.code).substring(0, 100) : null,
+          });
+        }
 
         if (error) {
           console.error('Supabase insert error:', error);
