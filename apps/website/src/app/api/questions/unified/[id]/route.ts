@@ -37,9 +37,21 @@ export async function GET(
       );
     }
 
+    // Process code field to ensure newlines are preserved
+    const processedQuestion = { ...question };
+    if (processedQuestion.code && typeof processedQuestion.code === 'string') {
+      // Convert \n escape sequences to actual newlines
+      processedQuestion.code = processedQuestion.code
+        .replace(/\\n/g, '\n')
+        .replace(/\\r\\n/g, '\n')
+        .replace(/\\r/g, '\n')
+        .replace(/\r\n/g, '\n')
+        .replace(/\r/g, '\n');
+    }
+
     return NextResponse.json({
       success: true,
-      data: question,
+      data: processedQuestion,
     });
   } catch (error) {
     console.error('Error fetching question:', error);

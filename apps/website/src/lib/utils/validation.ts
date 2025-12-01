@@ -66,9 +66,17 @@ export const idSchema = z
 export const questionSchema = z.object({
   title: titleSchema, // Required in DB (NOT NULL)
   content: contentSchema, // Required in DB (NOT NULL) - using contentSchema which requires min 1 char
-  code: z.string().max(50000, 'Code must be less than 50000 characters').optional().nullable().transform((val) => {
-    if (!val || val === null || val === '') return undefined;
-    return sanitizeInputServer(val);
+  code: z.union([
+    z.string().max(50000, 'Code must be less than 50000 characters'),
+    z.null(),
+    z.undefined(),
+    z.literal(''),
+  ]).optional().nullable().transform((val) => {
+    // CRITICAL: Always preserve the code field value, even if it's empty/null
+    // Don't sanitize code field here - it will be handled separately in the API route
+    // to preserve newlines and formatting
+    // Return the value as-is (including null/empty string) - don't convert to undefined
+    return val === undefined ? null : val;
   }), // Optional code field for formatted display
   type: z.union([
     z.enum(['multiple-choice', 'true-false', 'code', 'mcq']),

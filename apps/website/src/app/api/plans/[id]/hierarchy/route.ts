@@ -168,6 +168,68 @@ export async function GET(
       questions = Array.from(questionsMap.values());
     }
 
+    // 5. Get total question counts for each topic (all questions, not filtered by plan)
+    const topicQuestionCounts = new Map<string, number>();
+    if (topicIds.length > 0) {
+      try {
+        // First, try to get counts from questions_topics junction table (preferred method)
+        const { data: questionTopicCounts, error: qtcError } = await supabase
+          .from('questions_topics')
+          .select('topic_id')
+          .in('topic_id', topicIds);
+        
+        if (!qtcError && questionTopicCounts && questionTopicCounts.length > 0) {
+          // Count questions per topic from junction table
+          questionTopicCounts.forEach(qt => {
+            const currentCount = topicQuestionCounts.get(qt.topic_id) || 0;
+            topicQuestionCounts.set(qt.topic_id, currentCount + 1);
+          });
+        } else {
+          // Fallback: count from direct topic_id relationships if junction table doesn't exist or is empty
+          const { data: directQuestionCounts, error: dqcError } = await supabase
+            .from('questions')
+            .select('topic_id')
+            .in('topic_id', topicIds)
+            .not('topic_id', 'is', null);
+          
+          if (!dqcError && directQuestionCounts) {
+            directQuestionCounts.forEach(q => {
+              if (q.topic_id) {
+                const currentCount = topicQuestionCounts.get(q.topic_id) || 0;
+                topicQuestionCounts.set(q.topic_id, currentCount + 1);
+              }
+            });
+          }
+        }
+        
+        console.log(`📊 Total question counts per topic:`, Object.fromEntries(topicQuestionCounts));
+      } catch (error) {
+        console.warn('⚠️ Could not get total question counts:', error);
+      }
+    }
+
+    // 6. Filter questions to only include those in the plan (via plan_questions)
+    if (questions.length > 0) {
+      const questionIds = questions.map(q => q.id);
+      
+      // Get questions that are actually in this plan
+      const { data: planQuestions, error: pqError } = await supabase
+        .from('plan_questions')
+        .select('question_id')
+        .eq('plan_id', planId)
+        .in('question_id', questionIds);
+      
+      if (!pqError && planQuestions) {
+        const planQuestionIds = new Set(planQuestions.map(pq => pq.question_id));
+        // Filter questions to only include those in the plan
+        questions = questions.filter(q => planQuestionIds.has(q.id));
+        console.log(`📋 Filtered questions: ${questions.length} out of ${questionIds.length} are in plan ${planId}`);
+      } else if (pqError) {
+        console.warn('⚠️ Could not filter questions by plan_questions:', pqError.message);
+        // If plan_questions table doesn't exist or query fails, continue with all questions
+      }
+    }
+
     // Build hierarchical structure
     const hierarchy = planCards.map(pc => {
       const card = pc.learning_cards;
@@ -186,14 +248,19 @@ export async function GET(
         );
 
         const topics = catTopics.map(topic => {
-          // Get questions for this topic
+          // Get questions for this topic (filtered by plan)
           const topicQuestions = questions.filter(
             (q: any) => q.topic_id === topic.id
           );
 
+          // Get total question count for this topic (all questions, not just in plan)
+          const totalQuestionCount = topicQuestionCounts.get(topic.id) || 0;
+
           return {
             ...topic,
             questions: topicQuestions,
+            totalQuestionCount: totalQuestionCount,
+            planQuestionCount: topicQuestions.length,
           };
         });
 

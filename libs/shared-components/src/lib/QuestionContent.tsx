@@ -842,7 +842,7 @@ export const QuestionContent = ({ content }: { content: string }) => {
                   language={part.language?.toLowerCase() || 'javascript'}
                   style={vscDarkPlus}
                   customStyle={{
-                    margin: 0,
+                    margin: 0, 
                     padding: '1.5rem 1.75rem',
                     backgroundColor: '#1e1e1e',
                     fontSize: '0.875rem',
@@ -870,8 +870,8 @@ export const QuestionContent = ({ content }: { content: string }) => {
                   showLineNumbers={false}
                   wrapLines={true}
                   wrapLongLines={true}
-                >
-                  {part.content}
+                  >
+                    {part.content}
                 </SyntaxHighlighter>
                 <div className='absolute inset-0 pointer-events-none rounded-b-xl z-0' style={{ background: 'linear-gradient(to bottom, transparent, transparent, rgba(30, 30, 30, 0.2))' }}></div>
               </div>

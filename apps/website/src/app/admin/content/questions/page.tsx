@@ -637,12 +637,42 @@ export default function AdminContentQuestionsPage() {
       const mappedQuestions = rawQuestions
         .filter(q => q.title && q.content) // Validate required fields
         .map((q: any) => {
+          // Normalize difficulty to lowercase and validate
+          let normalizedDifficulty = 'beginner'; // default
+          if (q.difficulty) {
+            const difficultyLower = String(q.difficulty).toLowerCase().trim();
+            // Map common variations to valid values
+            if (difficultyLower === 'beginner' || difficultyLower === 'easy' || difficultyLower === 'basic') {
+              normalizedDifficulty = 'beginner';
+            } else if (difficultyLower === 'intermediate' || difficultyLower === 'medium' || difficultyLower === 'moderate') {
+              normalizedDifficulty = 'intermediate';
+            } else if (difficultyLower === 'advanced' || difficultyLower === 'hard' || difficultyLower === 'expert' || difficultyLower === 'difficult') {
+              normalizedDifficulty = 'advanced';
+            } else {
+              // If it doesn't match, use default
+              console.warn(`Invalid difficulty value "${q.difficulty}", defaulting to "beginner"`);
+              normalizedDifficulty = 'beginner';
+            }
+          }
+          
+          // CRITICAL: Preserve code field - check both camelCase and snake_case
+          const codeValue = q.code !== undefined ? q.code : (q.code_field !== undefined ? q.code_field : undefined);
+          
+          // Log code field presence for debugging
+          if (codeValue !== undefined && codeValue !== null && codeValue !== '') {
+            console.log(`📝 Question "${q.title}" has code field:`, {
+              codeLength: String(codeValue).length,
+              codePreview: String(codeValue).substring(0, 100),
+            });
+          }
+          
           // Map camelCase fields to snake_case
           const mapped: any = {
             title: q.title,
             content: q.content,
+            code: codeValue, // CRITICAL: Include code field (preserve null/empty if present)
             type: q.type || 'multiple-choice',
-            difficulty: q.difficulty || 'beginner',
+            difficulty: normalizedDifficulty,
             is_active: q.isActive !== undefined ? q.isActive : (q.is_active !== undefined ? q.is_active : true),
             // Map optional fields
             category: q.category || undefined,
@@ -667,12 +697,24 @@ export default function AdminContentQuestionsPage() {
             learningCardId: undefined,
           };
           
-          // Remove undefined values
+          // Remove undefined values (but preserve null and empty string for code)
           Object.keys(mapped).forEach(key => {
             if (mapped[key] === undefined) {
               delete mapped[key];
             }
           });
+          
+          // Log final mapped question to verify code is included
+          if (mapped.code !== undefined) {
+            console.log(`✅ Mapped question "${mapped.title}" includes code field:`, {
+              hasCode: 'code' in mapped,
+              codeType: typeof mapped.code,
+              codeIsNull: mapped.code === null,
+              codeLength: mapped.code ? String(mapped.code).length : 0,
+            });
+          } else {
+            console.log(`⚠️ Mapped question "${mapped.title}" does NOT include code field`);
+          }
           
           return mapped;
         });
@@ -839,26 +881,63 @@ export default function AdminContentQuestionsPage() {
       setBulkUploadProgress(null);
 
       // Refresh questions list without page reload
-      const fetchQuestions = async () => {
+      const refreshQuestions = async () => {
+        // Create AbortController for timeout
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 15000); // 15 second timeout
+        
         try {
+          const filterParams = buildFilterParams();
+          console.log('🔄 Refreshing questions after bulk upload...', { currentPage, pageSize, filterParams });
           setLoading(true);
+          setError(null);
+
           const response = await fetch(
-            `/api/questions/unified?page=${currentPage}&pageSize=${pageSize}`
+            `/api/questions/unified?${filterParams}`,
+            {
+              method: 'GET',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              signal: controller.signal,
+            }
           );
-          const data = await response.json();
-          if (data.success) {
-            setQuestions(data.data || []);
-            setTotalCount(data.pagination?.totalCount || 0);
+
+          clearTimeout(timeoutId);
+          console.log('📡 Refresh response:', response.status, response.ok);
+
+          if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
           }
-        } catch (err) {
-          console.error('Error refreshing questions:', err);
-        } finally {
+
+          const result = await response.json();
+          console.log('📊 Refresh result:', result);
+
+          setQuestions(result.data || []);
+          setTotalCount(result.pagination?.totalCount || 0);
+          setLoading(false);
+          console.log('✅ Questions refreshed:', result.data?.length || 0);
+        } catch (err: any) {
+          clearTimeout(timeoutId);
+          console.error('❌ Error refreshing questions:', err);
+          
+          // Provide more specific error messages
+          let errorMessage = 'Unknown error';
+          if (err.name === 'AbortError') {
+            errorMessage = 'Request timeout - please try again';
+          } else if (err.message?.includes('Failed to fetch') || err.message?.includes('NetworkError')) {
+            errorMessage = 'Network error - please check your connection and ensure the server is running';
+          } else if (err instanceof Error) {
+            errorMessage = err.message;
+          }
+          
+          setError(errorMessage);
           setLoading(false);
         }
       };
 
       // Refresh questions list
-      await fetchQuestions();
+      await refreshQuestions();
 
       // Show results
       if (totalFailedCount > 0) {
