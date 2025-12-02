@@ -50,6 +50,8 @@ jobs:
         uses: SonarSource/sonarqube-scan-action@v6
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          # Explicitly exclude node_modules via environment variables
+          SONAR_EXCLUSIONS: "**/node_modules/**,**/dist/**,**/.next/**,**/build/**,**/coverage/**"
         continue-on-error: false
 
       - name: Upload coverage reports
