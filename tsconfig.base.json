@@ -45,6 +45,7 @@
     "scripts-backup/**/*",
     "apps/admin/Utils/scripts/**/*",
     "apps/website/src/scripts/**/*",
-    "apps/admin/Utils/scripts/firebase/**/*"
+    "apps/admin/Utils/scripts/firebase/**/*",
+    "Rest/**/*"
   ]
 }

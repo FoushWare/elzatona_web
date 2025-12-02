@@ -18,7 +18,10 @@ export interface UnifiedQuestion {
   learningPath?: string; // Already optional
   sectionId?: string; // Already optional
   topic?: string; // Added topic field
+  topic_id?: string; // Added topic_id field for direct database reference
+  category_id?: string; // Added category_id field for direct database reference
   learningCardId?: string; // Added learning card ID
+  learning_card_id?: string; // Added learning_card_id for direct database reference
   is_active: boolean;
   created_at: string;
   updated_at: string;

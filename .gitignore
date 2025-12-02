@@ -98,6 +98,11 @@ out/
 .DS_Store
 .DS_Store?
 ._*
+
+# SonarQube
+.scannerwork/
+.sonar/
+sonar-project.properties.bak
 .Spotlight-V100
 .Trashes
 ehthumbs.db
@@ -159,3 +164,4 @@ temp/
 
 # Jest cache
 **/.jest-cache/
+.env.local

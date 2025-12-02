@@ -37,21 +37,48 @@ jobs:
           npm run test:unit -- --coverage --coverageReporters=lcov --coverageDirectory=coverage || true
         continue-on-error: true
         env:
+          # Force test environment
+          APP_ENV: 'test'
+          NEXT_PUBLIC_APP_ENV: 'test'
+          NODE_ENV: 'test'
+          # Memory settings
           NODE_OPTIONS: '--max-old-space-size=1536'
           JEST_MAX_WORKERS: '1'
+          # Admin credentials (from GitHub Secrets)
+          ADMIN_EMAIL: ${{ secrets.ADMIN_EMAIL }}
+          ADMIN_PASSWORD: ${{ secrets.ADMIN_PASSWORD }}
+          # Supabase test environment (from GitHub Secrets)
+          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.TEST_SUPABASE_URL }}
+          NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.TEST_SUPABASE_ANON_KEY }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.TEST_SUPABASE_SERVICE_ROLE_KEY }}
+          # JWT secret for admin auth
+          JWT_SECRET: ${{ secrets.JWT_SECRET }}
+          # CI flag
+          CI: 'true'
+          GITHUB_ACTIONS: 'true'
 
       - name: Build project
         run: npm run build
         env:
+          # Force test environment for build
+          APP_ENV: 'test'
+          NEXT_PUBLIC_APP_ENV: 'test'
+          NODE_ENV: 'test'
+          # Memory settings
           NODE_OPTIONS: '--max-old-space-size=1536'
+          # Supabase test environment (from GitHub Secrets)
+          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.TEST_SUPABASE_URL }}
+          NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.TEST_SUPABASE_ANON_KEY }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.TEST_SUPABASE_SERVICE_ROLE_KEY }}
+          # CI flag
+          CI: 'true'
+          GITHUB_ACTIONS: 'true'
         continue-on-error: true
 
       - name: SonarQube Scan
         uses: SonarSource/sonarqube-scan-action@v6
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-          # Explicitly exclude node_modules via environment variables
-          SONAR_EXCLUSIONS: "**/node_modules/**,**/dist/**,**/.next/**,**/build/**,**/coverage/**"
         continue-on-error: false
 
       - name: Upload coverage reports

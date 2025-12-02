@@ -3,27 +3,11 @@
  * Task: A-002 - Admin Login
  */
 
-// Load environment variables from .env.local
-import { config } from 'dotenv';
-import { resolve } from 'path';
-config({ path: resolve(process.cwd(), '.env.local'), override: true });
-
-// Map existing env vars to ADMIN_EMAIL/ADMIN_PASSWORD if they don't exist
-// Priority: ADMIN_EMAIL > ADMAIN_EMAIL (typo fallback) > INITIAL_ADMIN_EMAIL > TEST_ADMIN_EMAIL
-if (!process.env.ADMIN_EMAIL) {
-  process.env.ADMIN_EMAIL = process.env.ADMAIN_EMAIL || process.env.INITIAL_ADMIN_EMAIL || process.env.TEST_ADMIN_EMAIL || '';
-}
-if (!process.env.ADMIN_PASSWORD) {
-  process.env.ADMIN_PASSWORD = process.env.INITIAL_ADMIN_PASSWORD || process.env.TEST_ADMIN_PASSWORD || '';
-}
-
-// Trim whitespace from environment variables (important for .env.local files)
-if (process.env.ADMIN_EMAIL) {
-  process.env.ADMIN_EMAIL = process.env.ADMIN_EMAIL.trim();
-}
-if (process.env.ADMIN_PASSWORD) {
-  process.env.ADMIN_PASSWORD = process.env.ADMIN_PASSWORD.trim();
-}
+// Load environment variables automatically (detects test vs production)
+// Priority: .env.test.local > .env.test > .env.local
+// In CI: Uses GitHub Secrets automatically
+import { loadTestEnvironment, getAdminCredentials } from '@/lib/utils/test-env-loader';
+loadTestEnvironment();
 
 import React from 'react';
 import { render, screen, fireEvent, waitFor, act } from '@testing-library/react';
@@ -31,9 +15,16 @@ import '@testing-library/jest-dom';
 import AdminLoginPage from './page';
 import { useAdminAuth } from '@elzatona/shared-contexts';
 
-// Get credentials from environment variables (no hardcoded fallbacks)
-const ADMIN_EMAIL = process.env.ADMIN_EMAIL || '';
-const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || '';
+// Get credentials from environment variables (with validation)
+let ADMIN_EMAIL = '';
+let ADMIN_PASSWORD = '';
+try {
+  const credentials = getAdminCredentials();
+  ADMIN_EMAIL = credentials.email;
+  ADMIN_PASSWORD = credentials.password;
+} catch (error) {
+  console.warn('Admin credentials not found - some tests may fail:', error);
+}
 
 // Mock shared contexts
 jest.mock('@elzatona/shared-contexts', () => {

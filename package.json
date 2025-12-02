@@ -33,6 +33,7 @@
     "type-check": "npx tsc --noEmit",
     "check:schema": "node Rest/scripts/scripts/check-supabase-schema.js",
     "configure:sonarqube-mcp": "bash Rest/scripts/scripts/configure-sonarqube-mcp.sh",
+    "setup:github-test-secrets": "bash Rest/scripts/scripts/setup-github-test-secrets.sh",
     "sonar": "NODE_OPTIONS=--max-old-space-size=1536 node Rest/scripts/scripts/run-sonarqube-local.js",
     "sonar:light": "NODE_OPTIONS=--max-old-space-size=1024 SONAR_MEMORY_LIMIT=1024 node Rest/scripts/scripts/run-sonarqube-local.js",
     "sonar:skip-tests": "NODE_OPTIONS=--max-old-space-size=1536 node Rest/scripts/scripts/run-sonarqube-local.js --skip-tests",

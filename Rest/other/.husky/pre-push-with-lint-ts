@@ -41,7 +41,7 @@ if [[ "$current_branch" == "release/v1.0.0-main-website" ]] || [[ "$current_bran
   echo "   ⏳ Checking for remaining linting issues..."
   echo ""
   
-  npm run lint || true  # Allow warnings to pass
+  npm run lint
   LINT_EXIT_CODE=$?
   
   echo ""
@@ -57,11 +57,11 @@ if [[ "$current_branch" == "release/v1.0.0-main-website" ]] || [[ "$current_bran
   
   # Step 3: TypeScript type checking
   echo "📘 STEP 3: Running TypeScript type checking..."
-  echo "   📝 Executing: npm run type-check"
+  echo "   📝 Executing: npx tsc --noEmit"
   echo "   ⏳ Checking for TypeScript errors..."
   echo ""
   
-  npm run type-check
+  npx tsc --noEmit
   TS_EXIT_CODE=$?
   
   echo ""
@@ -85,7 +85,6 @@ if [[ "$current_branch" == "release/v1.0.0-main-website" ]] || [[ "$current_bran
   echo "   ⏳ This may take a moment..."
   echo ""
   
-  # Run build with detailed output
   npm run build
   BUILD_EXIT_CODE=$?
   
@@ -180,3 +179,4 @@ else
   echo "════════════════════════════════════════════════════════════════"
   echo ""
 fi
+
