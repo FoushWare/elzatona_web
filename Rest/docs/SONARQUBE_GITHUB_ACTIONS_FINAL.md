@@ -38,7 +38,7 @@ Your GitHub Actions workflow has been updated according to SonarCloud's official
 2. **Add Secret**:
    - Click **"New repository secret"**
    - **Name**: `SONAR_TOKEN`
-   - **Value**: `d9b64b95424980fdae326ab8d909f45c9cad4a9f`
+   - **Value**: `[YOUR_SONAR_TOKEN]` (get from https://sonarcloud.io/account/security)
    - Click **"Add secret"**
 
 3. **Remove Old Secret** (if exists):
@@ -109,7 +109,7 @@ Should show:
 
 **Check:**
 - `SONAR_TOKEN` secret is set in GitHub
-- Token value is correct: `d9b64b95424980fdae326ab8d909f45c9cad4a9f`
+- Token value is correct (get from https://sonarcloud.io/account/security)
 - Token has read/write permissions
 
 ### Workflow Not Triggering
@@ -126,7 +126,7 @@ Should show:
 | **Project Key** | `FoushWare_GreatFrontendHub` |
 | **Organization** | `foushware` (lowercase) |
 | **GitHub Secret** | `SONAR_TOKEN` |
-| **Token Value** | `d9b64b95424980fdae326ab8d909f45c9cad4a9f` |
+| **Token Value** | `[Get from SonarCloud → My Account → Security]` |
 | **Workflow Action** | `SonarSource/sonarqube-scan-action@v6` |
 | **Config File** | `sonar-project.properties` |
 | **Dashboard** | https://sonarcloud.io/dashboard?id=FoushWare_GreatFrontendHub |
@@ -134,7 +134,7 @@ Should show:
 ## 📝 Next Steps
 
 1. ✅ **Disable Automatic Analysis** in SonarCloud (required!)
-2. ✅ **Add GitHub Secret**: `SONAR_TOKEN` = `d9b64b95424980fdae326ab8d909f45c9cad4a9f`
+2. ✅ **Add GitHub Secret**: `SONAR_TOKEN` = `[Get from SonarCloud → My Account → Security]`
 3. ✅ **Test Workflow**: Push a commit or create a PR
 4. ✅ **View Results**: https://sonarcloud.io/dashboard?id=FoushWare_GreatFrontendHub
 
