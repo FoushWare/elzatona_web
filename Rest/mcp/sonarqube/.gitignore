@@ -1,0 +1,5 @@
+# SonarQube MCP Server
+storage/
+*.log
+*.tmp
+
