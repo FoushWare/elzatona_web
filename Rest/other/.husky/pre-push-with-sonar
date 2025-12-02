@@ -75,7 +75,7 @@ if [[ "$current_branch" == "release/v1.0.0-main-website" ]] || [[ "$current_bran
     
     if [ $SONAR_EXIT_CODE -ne 0 ]; then
       echo "   ⚠️  SonarQube found issues (non-blocking)"
-      echo "   💡 Review results at: https://sonarcloud.io/dashboard?id=zatona-web"
+      echo "   💡 Review results at: https://sonarcloud.io/dashboard?id=FoushWare_GreatFrontendHub"
     else
       echo "   ✅ Quick SonarQube check passed!"
     fi

@@ -14,7 +14,7 @@ Your GitHub Actions workflow has been updated with the correct SonarCloud projec
 
 **After:**
 - Project Key: `FoushWare_GreatFrontendHub` ✅
-- Organization: `FoushWare` ✅ (hardcoded - no secret needed)
+- Organization: `foushware` ✅ (read from `sonar-project.properties`)
 
 ### 2. Sonar Project Properties (`sonar-project.properties`)
 
@@ -24,7 +24,7 @@ Your GitHub Actions workflow has been updated with the correct SonarCloud projec
 
 **After:**
 - Project Key: `FoushWare_GreatFrontendHub` ✅
-- Organization: `FoushWare` ✅
+- Organization: `foushware` ✅ (lowercase, as per SonarCloud)
 - Project Name: `GreatFrontendHub` ✅
 
 ## 🔑 Required GitHub Secrets
@@ -40,7 +40,7 @@ You only need **ONE** secret now:
 2. **Add Secret**:
    - Click **"New repository secret"**
    - Name: `SONAR_TOKEN`
-   - Value: `9de5734cbe531c754630587e4beea08a63abe503` (your token)
+   - Value: `[YOUR_SONAR_TOKEN]` (get from https://sonarcloud.io/account/security)
    - Click **"Add secret"**
 
 3. **Remove Old Secret** (if exists):
@@ -55,8 +55,7 @@ After adding the secret:
    cat .github/workflows/sonarcloud.yml | grep -A 5 "SonarCloud Scan"
    ```
    Should show:
-   - `projectKey: FoushWare_GreatFrontendHub`
-   - `organization: FoushWare`
+   - Project configuration read from `sonar-project.properties`
 
 2. **Check Project Properties**:
    ```bash
@@ -64,7 +63,7 @@ After adding the secret:
    ```
    Should show:
    - `sonar.projectKey=FoushWare_GreatFrontendHub`
-   - `sonar.organization=FoushWare`
+   - `sonar.organization=foushware` (lowercase)
 
 3. **Test Workflow**:
    - Push to `main`, `develop`, or create a PR
@@ -86,7 +85,7 @@ The workflow will:
 ### Workflow Fails with "Project not found"
 
 - **Check Project Key**: Must be exactly `FoushWare_GreatFrontendHub`
-- **Check Organization**: Must be exactly `FoushWare`
+- **Check Organization**: Must be exactly `foushware` (lowercase, case-sensitive)
 - **Verify Token**: Ensure `SONAR_TOKEN` secret is set correctly
 
 ### Workflow Fails with "Not authorized"
@@ -106,9 +105,9 @@ The workflow will:
 | Item | Value |
 |------|-------|
 | **Project Key** | `FoushWare_GreatFrontendHub` |
-| **Organization** | `FoushWare` |
+| **Organization** | `foushware` (lowercase, case-sensitive) |
 | **GitHub Secret** | `SONAR_TOKEN` |
-| **Token Value** | `9de5734cbe531c754630587e4beea08a63abe503` |
+| **Token Value** | `[Get from SonarCloud → My Account → Security]` |
 | **Workflow File** | `.github/workflows/sonarcloud.yml` |
 | **Config File** | `sonar-project.properties` |
 
@@ -116,7 +115,7 @@ The workflow will:
 
 1. ✅ **Add GitHub Secret**:
    - Go to: https://github.com/FoushWare/GreatFrontendHub/settings/secrets/actions
-   - Add: `SONAR_TOKEN` = `9de5734cbe531c754630587e4beea08a63abe503`
+   - Add: `SONAR_TOKEN` = `[Get from SonarCloud → My Account → Security]`
 
 2. ✅ **Test Workflow**:
    - Push a commit or create a PR
