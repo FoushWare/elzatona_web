@@ -2965,7 +2965,7 @@ export default function UnifiedAdminPage() {
               </div>
               <div className='max-h-96 overflow-y-auto space-y-2 border rounded-lg p-2'>
                 {questions
-                  .filter(q => q.topic_id === addItemContext.parentId)
+                  .filter(q => q.topic_id === addItemContext.parentId || q.topics?.some(t => t.id === addItemContext.parentId))
                   .slice(0, 100)
                   .map(question => {
                     const hierarchy = planHierarchy[addItemContext.planId] || [];
@@ -3095,7 +3095,7 @@ export default function UnifiedAdminPage() {
                       </div>
                     );
                   })}
-                {questions.filter(q => q.topic_id === addItemContext.parentId).length === 0 && (
+                {questions.filter(q => q.topic_id === addItemContext.parentId || q.topics?.some(t => t.id === addItemContext.parentId)).length === 0 && (
                   <div className='text-center py-8 text-gray-500 dark:text-gray-400'>
                     <MessageSquare className='h-12 w-12 mx-auto mb-2 opacity-50' />
                     <p>No questions available for this topic</p>
