@@ -11,7 +11,7 @@ export interface UnifiedQuestion {
   id: string;
   title: string;
   content: string;
-  type: 'multiple-choice' | 'true-false' | 'code';
+  type: 'multiple-choice' | 'true-false' | 'code' | 'mcq';
   category?: string; // Made optional
   subcategory?: string;
   difficulty: 'beginner' | 'intermediate' | 'advanced';
@@ -208,9 +208,9 @@ export type QuestionSubcategory = string;
 // Constants
 export const QUESTION_TYPES: QuestionType[] = [
   'multiple-choice',
-  'open-ended',
   'true-false',
   'code',
+  'mcq',
 ];
 
 export const QUESTION_DIFFICULTIES: QuestionDifficulty[] = [

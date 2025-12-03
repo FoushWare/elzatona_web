@@ -64,7 +64,9 @@ jest.mock('lucide-react', () => ({
 
 // Helper function to setup localStorage mock
 const setupLocalStorage = (data: Record<string, string | null> = {}) => {
-  const storage: Record<string, string> = { ...data };
+  const storage: Record<string, string> = Object.fromEntries(
+    Object.entries(data).map(([k, v]) => [k, v ?? ''])
+  );
   Storage.prototype.getItem = jest.fn((key: string) => {
     return storage[key] || null;
   });

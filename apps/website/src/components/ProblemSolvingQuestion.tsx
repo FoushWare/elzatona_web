@@ -204,6 +204,7 @@ export default function ProblemSolvingQuestion({
       passed: boolean;
       actualOutput?: any;
       error?: string;
+      consoleOutput?: string;
     }>
   >([]);
   const [isRunningTests, setIsRunningTests] = useState(false);
@@ -941,7 +942,7 @@ export default function ProblemSolvingQuestion({
             <CodeEditor
               code={code}
               language={currentLanguage}
-              onChange={setCode}
+              onChange={(value) => setCode(value || '')}
               height='100%'
               readOnly={false}
               showThemeSelector={true}

@@ -41,28 +41,44 @@ describe('Environment Utility', () => {
     });
 
     it('should detect test environment from NODE_ENV', () => {
-      process.env.NODE_ENV = 'test';
+      Object.defineProperty(process.env, 'NODE_ENV', {
+        value: 'test',
+        writable: true,
+        configurable: true,
+      });
       delete process.env.NEXT_PUBLIC_APP_ENV;
       expect(getEnvironment()).toBe('test');
     });
 
     it('should detect test environment from Supabase URL', () => {
       delete process.env.NEXT_PUBLIC_APP_ENV;
-      delete process.env.NODE_ENV;
+      Object.defineProperty(process.env, 'NODE_ENV', {
+        value: undefined,
+        writable: true,
+        configurable: true,
+      });
       process.env.NEXT_PUBLIC_SUPABASE_URL = 'https://vopfdukvdhnmzzjkxpnj.supabase.co';
       expect(getEnvironment()).toBe('test');
     });
 
     it('should detect production environment from Supabase URL', () => {
       delete process.env.NEXT_PUBLIC_APP_ENV;
-      delete process.env.NODE_ENV;
+      Object.defineProperty(process.env, 'NODE_ENV', {
+        value: undefined,
+        writable: true,
+        configurable: true,
+      });
       process.env.NEXT_PUBLIC_SUPABASE_URL = 'https://hpnewqkvpnthpohvxcmq.supabase.co';
       expect(getEnvironment()).toBe('production');
     });
 
     it('should default to development if no indicators found', () => {
       delete process.env.NEXT_PUBLIC_APP_ENV;
-      delete process.env.NODE_ENV;
+      Object.defineProperty(process.env, 'NODE_ENV', {
+        value: undefined,
+        writable: true,
+        configurable: true,
+      });
       delete process.env.NEXT_PUBLIC_SUPABASE_URL;
       expect(getEnvironment()).toBe('development');
     });

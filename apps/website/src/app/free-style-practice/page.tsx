@@ -22,7 +22,7 @@ import {
   BarChart3,
 } from 'lucide-react';
 import { useUserType, useAuth } from '@elzatona/shared-contexts';
-import { QuestionContent } from '@elzatona/shared-components';
+import { QuestionContent as SharedQuestionContent } from '@elzatona/shared-components';
 import {
   addFlashcard,
   isInFlashcards,
@@ -508,7 +508,7 @@ const QuestionContent = ({ content }: { content: string }) => {
       return code;
     }
     
-    let fixedHtml = html
+    const fixedHtml = html
       .replace(/<pr<cod<cod/gi, '<pre><code>')
       .replace(/<pr<code<code/gi, '<pre><code>')
       .replace(/<pr<codee<code/gi, '<pre><code>')
@@ -678,7 +678,7 @@ const QuestionContent = ({ content }: { content: string }) => {
   });
   
   const htmlCodeBlockRegex = /<pre[^>]*><code[^>]*>[\s\S]*?<\/code><\/pre>|<pr<cod[^>]*>[\s\S]*?<\/cod<\/pr|<pr<code[^>]*>[\s\S]*?<\/code<\/pr|<code[^>]*>[\s\S]{20,}?<\/code>/gi;
-  let htmlMatches: Array<{ index: number; content: string; fullMatch: string }> = [];
+  const htmlMatches: Array<{ index: number; content: string; fullMatch: string }> = [];
   let htmlMatch;
   
   htmlCodeBlockRegex.lastIndex = 0;
@@ -702,7 +702,7 @@ const QuestionContent = ({ content }: { content: string }) => {
   }
   
   const markdownCodeBlockRegex = /```(\w+)?\n?([\s\S]*?)```/g;
-  let markdownMatches: Array<{ index: number; content: string; language?: string; fullMatch: string }> = [];
+  const markdownMatches: Array<{ index: number; content: string; language?: string; fullMatch: string }> = [];
   let mdMatch;
   
   markdownCodeBlockRegex.lastIndex = 0;
@@ -872,10 +872,10 @@ const QuestionContent = ({ content }: { content: string }) => {
                 overflowX: 'auto',
                 whiteSpace: 'pre',
                 tabSize: 2,
-                WebkitTabSize: 2,
-                MozTabSize: 2,
                 WebkitFontSmoothing: 'antialiased',
                 MozOsxFontSmoothing: 'grayscale',
+                // @ts-ignore - Vendor prefixes not in types
+                ...({ WebkitTabSize: 2, MozTabSize: 2 } as any),
                 letterSpacing: '0.01em'
               }}
             >
@@ -891,9 +891,11 @@ const QuestionContent = ({ content }: { content: string }) => {
                   fontSize: 'inherit',
                   lineHeight: 'inherit',
                   tabSize: 2,
-                  WebkitTabSize: 2,
-                  MozTabSize: 2,
                   wordBreak: 'normal',
+                  // @ts-ignore - Vendor prefixes not in types
+                  WebkitTabSize: 2 as any,
+                  // @ts-ignore - Vendor prefixes not in types
+                  MozTabSize: 2,
                   overflowWrap: 'normal',
                   letterSpacing: '0.01em'
                 }}
@@ -946,10 +948,12 @@ const QuestionContent = ({ content }: { content: string }) => {
                     overflowX: 'auto',
                     whiteSpace: 'pre',
                     tabSize: 2,
-                    WebkitTabSize: 2,
-                    MozTabSize: 2,
                     WebkitFontSmoothing: 'antialiased',
                     MozOsxFontSmoothing: 'grayscale',
+                    // @ts-ignore - Vendor prefixes not in types
+                    WebkitTabSize: 2 as any,
+                    // @ts-ignore - Vendor prefixes not in types
+                    MozTabSize: 2,
                     letterSpacing: '0.01em'
                   }}
                 >
@@ -965,10 +969,12 @@ const QuestionContent = ({ content }: { content: string }) => {
                       fontSize: 'inherit',
                       lineHeight: 'inherit',
                       tabSize: 2,
-                      WebkitTabSize: 2,
-                      MozTabSize: 2,
                       wordBreak: 'normal',
                       overflowWrap: 'normal',
+                      // @ts-ignore - Vendor prefixes not in types
+                      WebkitTabSize: 2 as any,
+                      // @ts-ignore - Vendor prefixes not in types
+                      MozTabSize: 2,
                       letterSpacing: '0.01em'
                     }}
                   >

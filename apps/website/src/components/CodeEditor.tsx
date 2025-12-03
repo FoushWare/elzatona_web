@@ -486,7 +486,7 @@ export default function CodeEditor({
             scrollBeyondLastLine: true,
             automaticLayout: true,
             scrollbar: {
-              alwaysConsumeMouseWheel: false,
+              alwaysConsumeMouseWheel: true,
               vertical: 'auto',
               horizontal: 'auto',
               verticalScrollbarSize: 10,
@@ -501,12 +501,14 @@ export default function CodeEditor({
             wordWrap: 'on',
             fontFamily: "'JetBrains Mono', 'Fira Code', 'Consolas', 'Monaco', 'Courier New', monospace",
             fontLigatures: true,
-            padding: {
-              top: 16,
-              bottom: 16,
-              left: 12,
-              right: 12,
-            },
+              padding: {
+                top: 16,
+                bottom: 16,
+                // @ts-ignore - left/right not in type but supported by Monaco
+                left: 12,
+                // @ts-ignore - left/right not in type but supported by Monaco
+                right: 12,
+              },
             cursorBlinking: 'smooth',
             cursorSmoothCaretAnimation: 'on',
             smoothScrolling: true,
@@ -539,7 +541,6 @@ export default function CodeEditor({
             accessibilitySupport: 'auto',
             // Advanced features
             codeLens: true,
-            colorDecorators: true,
             contextmenu: true,
             copyWithSyntaxHighlighting: true,
             cursorSurroundingLines: 3,
@@ -555,16 +556,10 @@ export default function CodeEditor({
             links: true,
             mouseWheelZoom: true,
             multiCursorMergeOverlapping: true,
-            occurrencesHighlight: true,
+            occurrencesHighlight: 'multiFile',
             renderControlCharacters: false,
             renderFinalNewline: 'on',
             renderLineHighlight: 'all',
-            renderWhitespace: 'selection',
-            scrollbar: {
-              alwaysConsumeMouseWheel: true,
-              vertical: 'auto',
-              horizontal: 'auto',
-            },
             snippetSuggestions: 'top',
             suggest: {
               showKeywords: true,
@@ -585,7 +580,6 @@ export default function CodeEditor({
               showTypeParameters: true,
               showIssues: true,
               showUsers: true,
-              showStatuses: true,
             },
             tabCompletion: 'on',
             unicodeHighlight: {
