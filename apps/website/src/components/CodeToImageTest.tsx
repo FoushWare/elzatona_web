@@ -87,9 +87,9 @@ export function CodeToImageTest({ code, language = 'javascript', theme: initialT
     // String literals (light green)
     const strings = /(["'`])(?:(?=(\\?))\2.)*?\1/g;
     
-    let parts: Array<{ text: string; type: 'keyword' | 'builtin' | 'string' | 'normal' }> = [];
+    const parts: Array<{ text: string; type: 'keyword' | 'builtin' | 'string' | 'normal' }> = [];
     let lastIndex = 0;
-    let text = line;
+    const text = line;
     
     // Find all matches
     const matches: Array<{ start: number; end: number; type: 'keyword' | 'builtin' | 'string' }> = [];

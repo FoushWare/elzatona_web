@@ -39,13 +39,15 @@
     "libs/**/*.tsx",
     ".next/types/**/*.ts"
   ],
-  "exclude": [
-    "node_modules",
-    "tests/**/*",
-    "scripts-backup/**/*",
-    "apps/admin/Utils/scripts/**/*",
-    "apps/website/src/scripts/**/*",
-    "apps/admin/Utils/scripts/firebase/**/*",
-    "Rest/**/*"
-  ]
+      "exclude": [
+        "node_modules",
+        "tests/**/*",
+        "scripts-backup/**/*",
+        "apps/admin/Utils/scripts/**/*",
+        "apps/website/src/scripts/**/*",
+        "apps/admin/Utils/scripts/firebase/**/*",
+        "Rest/**/*",
+        "**/*.stories.tsx",
+        "**/*.stories.ts"
+      ]
 }

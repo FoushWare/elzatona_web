@@ -59,7 +59,7 @@ export class UserAuthService {
     email: string,
     password: string,
     name: string,
-    role: 'user' | 'premium_user' = 'user'
+    role: 'user' | 'premium_user' | 'admin' = 'user'
   ): Promise<UserCreationResult> {
     try {
       // Check if user already exists
