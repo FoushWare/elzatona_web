@@ -15,6 +15,7 @@ import NavbarSimple from '../components/NavbarSimple';
 import { NotificationProvider } from '@/components/NotificationSystem';
 import AuthSessionSync from '@/components/AuthSessionSync';
 import { LearningTypeProvider } from '../context/LearningTypeContext';
+import { SentryErrorBoundary } from '../components/SentryErrorBoundary';
 
 // Force dynamic rendering to prevent static generation issues with auth context
 export const dynamic = 'force-dynamic';
@@ -74,11 +75,13 @@ export default function RootLayout({
                       <OnboardingProvider>
                         <NotificationProvider>
                           <LearningTypeProvider>
-                            {/* Ensure auth snapshot sync runs before navbar to avoid flicker */}
-                            <AuthSessionSync />
-                            <NavbarSimple />
-                            {children}
-                            <SpeedInsights />
+                            <SentryErrorBoundary>
+                              {/* Ensure auth snapshot sync runs before navbar to avoid flicker */}
+                              <AuthSessionSync />
+                              <NavbarSimple />
+                              {children}
+                              <SpeedInsights />
+                            </SentryErrorBoundary>
                           </LearningTypeProvider>
                         </NotificationProvider>
                       </OnboardingProvider>

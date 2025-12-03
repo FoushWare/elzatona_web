@@ -69,7 +69,6 @@ export function QuestionForm({
     initialData || {
       title: '',
       content: '',
-      code: '',
       type: 'multiple-choice',
       difficulty: 'beginner',
       is_active: true,
@@ -79,7 +78,6 @@ export function QuestionForm({
       points: 1,
       timeLimit: 60,
       explanation: '',
-      resources: null,
     }
   );
 
@@ -145,8 +143,7 @@ export function QuestionForm({
         sampleAnswers: initialData.sampleAnswers || [],
         tags: initialData.tags || [],
         explanation: initialData.explanation || '',
-        code: (initialData as any).code || '',
-        resources: normalizedResources,
+        codeTemplate: initialData.codeTemplate || '',
         category: categoryName,
         topic: topicName,
         learningCardId: learningCardId,
@@ -878,16 +875,16 @@ export function QuestionForm({
 
       {/* Code Field */}
       <div>
-        <Label htmlFor='code'>
-          Code{' '}
+        <Label htmlFor='codeTemplate'>
+          Code Template{' '}
           <span className='text-gray-500 dark:text-gray-400 text-xs font-normal'>
             (Optional - Displayed as formatted code block)
           </span>
         </Label>
         <Textarea
-          id='code'
-          name='code'
-          value={formData.code || ''}
+          id='codeTemplate'
+          name='codeTemplate'
+          value={formData.codeTemplate || ''}
           onChange={handleChange}
           rows={10}
           disabled={disabled}

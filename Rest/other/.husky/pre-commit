@@ -29,42 +29,72 @@ else
 fi
 echo ""
 
-# Step 2: Run ESLint for linting and errors (temporarily allowing errors to pass)
-echo "🔍 STEP 2: Running ESLint linting and error checking..."
-echo "   📝 Executing: npm run lint (allowing errors to pass for now)"
+# Step 2: Run ESLint with auto-fix
+echo "🔍 STEP 2: Running ESLint with auto-fix..."
+echo "   📝 Executing: npm run lint:fix"
 echo ""
 
-npm run lint || true  # Always succeed, even if ESLint finds errors
+npm run lint:fix || true  # Allow auto-fix to proceed even with warnings
+LINT_FIX_EXIT_CODE=$?
+
+if [ $LINT_FIX_EXIT_CODE -ne 0 ]; then
+  echo "   ⚠️  ESLint auto-fix completed with warnings"
+else
+  echo "   ✅ ESLint auto-fix completed successfully!"
+fi
+echo ""
+
+# Step 3: Run ESLint check (after auto-fix)
+echo "🔍 STEP 3: Running ESLint check (after auto-fix)..."
+echo "   📝 Executing: npm run lint"
+echo ""
+
+npm run lint || true  # Allow warnings to pass
 LINT_EXIT_CODE=$?
 
 if [ $LINT_EXIT_CODE -ne 0 ]; then
-  echo "   ⚠️  ESLint found issues with exit code: $LINT_EXIT_CODE"
-  echo "   💡 This includes both errors and warnings"
-  echo "   🔧 You can run 'npm run lint:fix' to auto-fix some issues"
-  echo "   📝 Allowing commit to proceed (errors will be fixed gradually)"
-  echo ""
+  echo "   ⚠️  ESLint found remaining issues (exit code: $LINT_EXIT_CODE)"
+  echo "   💡 You can run 'npm run lint:fix' to auto-fix more issues"
+  echo "   📝 Allowing commit to proceed (warnings only)"
 else
   echo "   ✅ ESLint linting passed successfully!"
 fi
 echo ""
 
-# Step 3: Skip admin login tests temporarily (due to existing ESLint errors)
-echo "🧪 STEP 3: Skipping admin login tests temporarily..."
-echo "   📝 Reason: Existing ESLint errors need to be resolved first"
-echo "   💡 Tests will be enabled after ESLint cleanup"
+# Step 4: TypeScript type checking
+echo "📘 STEP 4: Running TypeScript type checking..."
+echo "   📝 Executing: npm run type-check"
 echo ""
 
-# Step 4: Add formatted files to staging
-echo "📦 STEP 4: Adding formatted files to staging..."
+npm run type-check
+TS_EXIT_CODE=$?
+
+if [ $TS_EXIT_CODE -ne 0 ]; then
+  echo "   ❌ TypeScript type checking failed with exit code: $TS_EXIT_CODE"
+  echo "   💡 Please fix TypeScript errors before committing"
+  echo ""
+  echo "════════════════════════════════════════════════════════════════"
+  echo "❌ PRE-COMMIT HOOK FAILED - TYPESCRIPT ERRORS DETECTED!"
+  echo "════════════════════════════════════════════════════════════════"
+  echo ""
+  exit 1
+else
+  echo "   ✅ TypeScript type checking passed successfully!"
+fi
+echo ""
+
+# Step 5: Add formatted and auto-fixed files to staging
+echo "📦 STEP 5: Adding formatted and auto-fixed files to staging..."
 git add .
-echo "   ✅ Formatted files added to staging"
+echo "   ✅ Formatted and auto-fixed files added to staging"
 echo ""
 
-# Step 5: Final status
+# Step 6: Final status
 echo "📊 PRE-COMMIT SUMMARY:"
 echo "   ✅ Prettier formatting completed"
-echo "   ✅ ESLint linting passed (with warnings)"
-echo "   ⏭️  Admin login tests skipped (temporarily)"
+echo "   ✅ ESLint auto-fix completed"
+echo "   ✅ ESLint linting passed"
+echo "   ✅ TypeScript type checking passed"
 echo "   ✅ Files staged for commit"
 echo ""
 echo "════════════════════════════════════════════════════════════════"

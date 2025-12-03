@@ -84,7 +84,10 @@ export function loadTestEnvironment(): {
   if (isTest) {
     process.env.APP_ENV = 'test';
     process.env.NEXT_PUBLIC_APP_ENV = 'test';
-    process.env.NODE_ENV = process.env.NODE_ENV || 'test';
+    // NODE_ENV is read-only in some environments, only set if not already set
+    if (!process.env.NODE_ENV) {
+      (process.env as any).NODE_ENV = 'test';
+    }
   }
   
   // Log environment info (for debugging)

@@ -50,7 +50,7 @@ export async function GET() {
       method: 'POST',
       body: {
         html: '<div>Your HTML code here</div>',
-        format: 'png' | 'jpeg',
+        format: 'png' as const,
         options: {
           backgroundColor: '#1e1e1e',
           width: 800,

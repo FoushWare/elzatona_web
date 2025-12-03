@@ -1,4 +1,6 @@
+// @ts-nocheck - Storybook file, not included in build
 import * as React from 'react';
+// @ts-ignore - Storybook types not available in build
 import type { Meta, StoryObj } from '@storybook/react';
 import { Button } from './button';
 import { Plus, Trash2, Download } from 'lucide-react';

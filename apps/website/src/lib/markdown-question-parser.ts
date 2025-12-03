@@ -549,11 +549,11 @@ export class MarkdownQuestionParser {
         ? 'multiple-choice'
         : question.type === 'multiple'
           ? 'multiple-choice'
-          : 'open-ended') as
+          : 'code') as
         | 'multiple-choice'
-        | 'open-ended'
         | 'true-false'
-        | 'code',
+        | 'code'
+        | 'mcq',
       difficulty: (question.difficulty === 'easy'
         ? 'beginner'
         : question.difficulty === 'medium'

@@ -3,7 +3,7 @@
  * Uses DOMPurify to sanitize HTML content before rendering
  */
 
-import DOMPurify from 'dompurify';
+import DOMPurify, { Config as DOMPurifyConfig } from 'dompurify';
 
 /**
  * Sanitize HTML string for safe rendering
@@ -13,14 +13,14 @@ import DOMPurify from 'dompurify';
  */
 export function sanitizeHTML(
   html: string,
-  options?: DOMPurify.Config
+  options?: DOMPurifyConfig
 ): string {
   if (typeof window === 'undefined') {
     // Server-side: return as-is (will be sanitized on client)
     return html;
   }
 
-  const defaultOptions: DOMPurify.Config = {
+  const defaultOptions: DOMPurifyConfig = {
     ALLOWED_TAGS: [
       'p',
       'br',
@@ -103,9 +103,14 @@ export function sanitizeObject<T extends Record<string, any>>(obj: T): T {
     } else if (
       sanitized[key] &&
       typeof sanitized[key] === 'object' &&
-      !(sanitized[key] instanceof Date)
+      sanitized[key] !== null
     ) {
-      sanitized[key] = sanitizeObject(sanitized[key]) as T[typeof key];
+      // Check if it's a Date using a type guard
+      const value = sanitized[key] as any;
+      const isDate = value && typeof value === 'object' && value.constructor === Date;
+      if (!isDate && !Array.isArray(sanitized[key])) {
+        sanitized[key] = sanitizeObject(sanitized[key]) as T[typeof key];
+      }
     }
   }
 
@@ -120,7 +125,7 @@ import React from 'react';
 interface SafeHTMLProps {
   html: string;
   className?: string;
-  options?: DOMPurify.Config;
+  options?: DOMPurifyConfig;
 }
 
 export const SafeHTML: React.FC<SafeHTMLProps> = ({

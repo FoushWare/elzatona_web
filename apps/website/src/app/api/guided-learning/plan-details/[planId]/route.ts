@@ -1152,7 +1152,7 @@ export async function GET(
         let cleanedHints = null;
         if (q.hints) {
           if (Array.isArray(q.hints)) {
-            cleanedHints = q.hints.map(hint => cleanOptionText(hint));
+            cleanedHints = q.hints.map((hint: string) => cleanOptionText(hint));
           } else {
             cleanedHints = [cleanOptionText(q.hints)];
           }

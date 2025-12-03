@@ -37,7 +37,7 @@ async function getQuestionIdsForTopics(
 
   if (!topicsData || topicsData.length === 0) return [];
 
-  const topicIds = topicsData.map(t => t.id);
+  const topicIds = topicsData.map((t: { id: string }) => t.id);
 
   // Get question IDs that have any of these topics
   const { data: questionTopicData } = await supabase
@@ -47,7 +47,7 @@ async function getQuestionIdsForTopics(
 
   if (!questionTopicData || questionTopicData.length === 0) return [];
 
-  return questionTopicData.map(qt => qt.question_id);
+  return questionTopicData.map((qt: { question_id: string }) => qt.question_id);
 }
 
 export async function GET(request: NextRequest) {
@@ -135,13 +135,19 @@ export async function GET(request: NextRequest) {
     // Apply topic filtering using junction table
     let topicQuestionIds: string[] = [];
     if (topic && topic !== 'all') {
-      topicQuestionIds = await getQuestionIdsForTopics(supabase, [topic]);
+      topicQuestionIds = await getQuestionIdsForTopics(
+        supabase as ReturnType<typeof createClient>,
+        [topic]
+      );
     } else if (topics) {
       const topicNames = topics
         .split(',')
         .map(t => t.trim())
         .filter(t => t);
-      topicQuestionIds = await getQuestionIdsForTopics(supabase, topicNames);
+      topicQuestionIds = await getQuestionIdsForTopics(
+        supabase as ReturnType<typeof createClient>,
+        topicNames
+      );
     }
 
     if (topicQuestionIds.length > 0) {
@@ -382,6 +388,9 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
   try {
+    // Get Supabase client
+    const supabase = getSupabaseClient();
+
     const body = await request.json();
 
     const {

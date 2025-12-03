@@ -1,4 +1,5 @@
 import type { NextConfig } from 'next';
+import { withSentryConfig } from '@sentry/nextjs';
 import { config } from 'dotenv';
 import { resolve } from 'path';
 import { existsSync } from 'fs';
@@ -111,6 +112,13 @@ const nextConfig: NextConfig = {
 
   // Bundle optimization
   webpack: (config, { dev, isServer }) => {
+    // Ignore storybook files
+    config.module = config.module || {};
+    config.module.rules = config.module.rules || [];
+    config.module.rules.push({
+      test: /\.stories\.(tsx?|jsx?)$/,
+      use: 'null-loader',
+    });
     // Exclude scripts directory from build
     config.module.rules.push({
       test: /\.ts$/,
@@ -217,4 +225,30 @@ const nextConfig: NextConfig = {
   },
 };
 
-export default nextConfig;
+// Wrap Next.js config with Sentry
+const sentryNextConfig = withSentryConfig(
+  nextConfig,
+  {
+    // For all available options, see:
+    // https://github.com/getsentry/sentry-webpack-plugin#options
+
+    // Suppresses source file uploading in dev mode
+    silent: !process.env.SENTRY_DEBUG,
+    org: process.env.SENTRY_ORG,
+    project: process.env.SENTRY_PROJECT,
+    
+    // Only upload source maps in production
+    widenClientFileUpload: true,
+    sourcemaps: {
+      // Delete source maps after upload for security
+      deleteSourcemapsAfterUpload: true,
+    },
+    disableLogger: true,
+    automaticVercelMonitors: true,
+    
+    // Route browser requests to Sentry through a Next.js rewrite to circumvent ad-blockers.
+    tunnelRoute: '/monitoring',
+  }
+);
+
+export default sentryNextConfig;

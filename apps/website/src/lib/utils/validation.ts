@@ -99,7 +99,7 @@ export const questionSchema = z.object({
   difficulty: z.enum(['beginner', 'intermediate', 'advanced']).optional().transform((val) => {
     // DB constraint: 'beginner', 'intermediate', 'advanced' (nullable)
     // Map "difficult" to "advanced" if somehow it gets through
-    if (val === 'difficult') {
+    if (val && (val as string) === 'difficult') {
       return 'advanced';
     }
     return val;

@@ -27,9 +27,7 @@ export default defineConfig({
     ],
   },
   plugins: [
-    nxViteTsPaths({
-      root: path.resolve(__dirname, '../..'),
-    }),
+    nxViteTsPaths(),
     {
       name: 'resolve-alias',
       enforce: 'pre',

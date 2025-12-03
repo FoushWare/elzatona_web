@@ -32,11 +32,7 @@ export interface ApiConfig {
   supabaseServiceRoleKey: string;
   
   // API headers
-  headers: {
-    'Content-Type': string;
-    'X-Environment': string;
-    'X-Project-Ref': string;
-  };
+  headers: Record<string, string>;
   
   // Admin credentials
   adminEmail: string;
@@ -106,7 +102,7 @@ export function getApiConfig(): ApiConfig {
     : (process.env.INITIAL_ADMIN_PASSWORD || '');
   
   // Environment-specific headers
-  const headers: ApiConfig['headers'] = {
+  const headers: Record<string, string> = {
     'Content-Type': 'application/json',
     'X-Environment': env,
     'X-Project-Ref': projectRef,
