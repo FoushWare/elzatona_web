@@ -3,21 +3,8 @@
 import React, { useState, useRef } from 'react';
 import { FormModal, Switch, Label } from '@elzatona/shared-components';
 import { QuestionPracticeView } from './QuestionPracticeView';
-import { QuestionForm } from '../app/admin/content/questions/page';
+import { QuestionForm, type UnifiedQuestion } from '../app/admin/content/questions/components/QuestionForm';
 import { Edit, Eye } from 'lucide-react';
-
-interface UnifiedQuestion {
-  id: string;
-  title: string;
-  content?: string;
-  type?: 'multiple-choice' | 'open-ended' | 'true-false' | 'code';
-  difficulty?: 'beginner' | 'intermediate' | 'advanced';
-  explanation?: string;
-  options?: any;
-  correct_answer?: string | number;
-  resources?: any;
-  [key: string]: any;
-}
 
 interface ViewQuestionModalProps {
   isOpen: boolean;
@@ -85,8 +72,7 @@ export const ViewQuestionModal: React.FC<ViewQuestionModalProps> = ({
       }}
       title={isEditMode ? 'Edit Question' : 'View Question'}
       maxWidth="max-w-6xl"
-      cancelText="Close"
-      saveText={isEditMode ? 'Update Question' : ''}
+      saveLabel={isEditMode ? 'Update Question' : undefined}
       onSave={handleSave}
       saveDisabled={isSaving}
       saveLoading={isSaving}

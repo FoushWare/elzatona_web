@@ -3,12 +3,12 @@
  * Uses xss library to sanitize user inputs in API routes
  */
 
-import xss from 'xss';
+import { FilterXSS, IFilterXSSOptions } from 'xss';
 
 /**
  * XSS filter options - strict configuration
  */
-const xssOptions: xss.IFilterXSSOptions = {
+const xssOptions: IFilterXSSOptions = {
   whiteList: {
     // Allow only safe HTML tags
     p: [],
@@ -37,7 +37,14 @@ const xssOptions: xss.IFilterXSSOptions = {
     if (name === 'href' && tag === 'a') {
       // Validate URLs
       if (value.startsWith('http://') || value.startsWith('https://')) {
-        return `${name}="${xss.escapeAttrValue(value)}"`;
+        // Escape attribute value manually
+        const escaped = value
+          .replace(/&/g, '&amp;')
+          .replace(/"/g, '&quot;')
+          .replace(/'/g, '&#x27;')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;');
+        return `${name}="${escaped}"`;
       }
       return '';
     }
@@ -61,7 +68,7 @@ export function sanitizeHTMLServer(html: string): string {
     return '';
   }
 
-  const filter = new xss.FilterXSS(xssOptions);
+  const filter = new FilterXSS(xssOptions);
   return filter.process(html);
 }
 
@@ -75,7 +82,7 @@ export function sanitizeTextServer(text: string): string {
     return '';
   }
 
-  const filter = new xss.FilterXSS({
+  const filter = new FilterXSS({
     whiteList: {},
     stripIgnoreTag: true,
   });
@@ -153,10 +160,15 @@ export function sanitizeObjectServer<T extends Record<string, any>>(obj: T): T {
     } else if (
       sanitized[key] &&
       typeof sanitized[key] === 'object' &&
-      !(sanitized[key] instanceof Date) &&
+      sanitized[key] !== null &&
       !Array.isArray(sanitized[key])
     ) {
-      sanitized[key] = sanitizeObjectServer(sanitized[key]) as T[typeof key];
+      // Check if it's a Date using a type guard
+      const value = sanitized[key] as any;
+      const isDate = value && typeof value === 'object' && value.constructor === Date;
+      if (!isDate) {
+        sanitized[key] = sanitizeObjectServer(sanitized[key]) as T[typeof key];
+      }
     }
   }
 

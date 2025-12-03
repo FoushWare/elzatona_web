@@ -12,7 +12,7 @@ const envFiles = [
   resolve(projectRoot, '.env.local'),       // Fallback to dev (for backwards compatibility)
 ];
 
-let loadedFiles: string[] = [];
+const loadedFiles: string[] = [];
 for (const envFile of envFiles) {
   try {
     const result = config({ path: envFile, override: false }); // Don't override, respect priority

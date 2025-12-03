@@ -32,7 +32,7 @@ export interface UnifiedQuestion {
   id: string;
   title: string;
   content: string;
-  type: 'multiple-choice' | 'open-ended' | 'true-false' | 'code';
+  type: 'multiple-choice' | 'true-false' | 'code' | 'mcq';
   category?: string;
   subcategory?: string;
   difficulty: 'beginner' | 'intermediate' | 'advanced';
@@ -230,7 +230,7 @@ export const QuestionForm = React.forwardRef<
     }
   };
 
-  const questionTypes = ['multiple-choice', 'open-ended', 'true-false', 'code'];
+  const questionTypes = ['multiple-choice', 'true-false', 'code', 'mcq'];
   const difficulties = ['beginner', 'intermediate', 'advanced'];
 
   return (

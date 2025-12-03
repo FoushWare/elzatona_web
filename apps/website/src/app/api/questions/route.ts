@@ -365,14 +365,15 @@ export async function POST(request: NextRequest) {
     }
     
     if (existingQuestion) {
+      const existing = existingQuestion as { id: string; [key: string]: unknown };
       console.log('⚠️ Duplicate question found:', {
-        existingId: existingQuestion.id,
+        existingId: existing.id,
         title: questionTitle,
       });
       return NextResponse.json(
         { 
           success: false, 
-          error: `Duplicate question: A question with the same title${questionData.code ? ' and code' : questionData.content || questionData.question ? ' and content' : ''} already exists (ID: ${existingQuestion.id})` 
+          error: `Duplicate question: A question with the same title${questionData.code ? ' and code' : questionData.content || questionData.question ? ' and content' : ''} already exists (ID: ${existing.id})` 
         },
         { status: 409 } // 409 Conflict
       );

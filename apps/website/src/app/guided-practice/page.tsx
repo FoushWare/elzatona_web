@@ -75,6 +75,7 @@ interface Question {
 interface Topic {
   id: string;
   name: string;
+  description?: string;
   questions: Question[];
   questionCount: number;
 }
@@ -668,13 +669,13 @@ function GuidedPracticePageContent() {
 
   // Highlight code when it changes or highlighter is ready
   useEffect(() => {
-    if (!shikiHighlighter || !currentQuestion?.code) {
+    if (!shikiHighlighter || !currentQuestion?.code_template) {
       setCodeHighlightedHtml('');
       return;
     }
 
     try {
-      const rawCode = String(currentQuestion.code || '');
+      const rawCode = String(currentQuestion.code_template || '');
       let codeWithNewlines = rawCode
         .replace(/\\n/g, '\n')
         .replace(/\\r\\n/g, '\n')
@@ -929,7 +930,7 @@ function GuidedPracticePageContent() {
       console.error('Error highlighting code:', error);
       setCodeHighlightedHtml('');
     }
-  }, [shikiHighlighter, currentQuestion?.code]);
+  }, [shikiHighlighter, currentQuestion?.code_template]);
 
   // Progress management functions
   const getProgressKey = () => `guided-practice-progress-${planId}`;
@@ -2173,8 +2174,8 @@ function GuidedPracticePageContent() {
     }
 
     // If we reach here, all questions are completed
-    const completedCount = progress.completedQuestions.length;
-    const correctCount = progress.correctAnswers.length;
+    const completedCount = progress?.completedQuestions?.length || 0;
+    const correctCount = progress?.correctAnswers?.length || 0;
     const percentage =
       completedCount > 0
         ? Math.round((correctCount / completedCount) * 100)
@@ -2920,7 +2921,7 @@ function GuidedPracticePageContent() {
                 topic: currentTopic?.name,
                 topic_id: currentTopic?.id,
                 topic_name: currentTopic?.name,
-                topic_description: currentTopic?.description,
+                topic_description: (currentTopic as any)?.description || currentQuestion.topic_description,
                 hints: currentQuestion.hints || null,
                 constraints: currentQuestion.constraints || null,
                 tags: currentQuestion.tags || null,
@@ -3003,7 +3004,7 @@ function GuidedPracticePageContent() {
                   )}
 
                   {/* Question Code - Display after content if code exists */}
-                  {currentQuestion.code && (() => {
+                  {currentQuestion.code_template && (() => {
                     // Format code function - removes all blank lines
                     const formatCodeForDisplay = (code: string): string => {
                       if (!code) return '';
@@ -3048,7 +3049,7 @@ function GuidedPracticePageContent() {
                       return formatted;
                     };
 
-                    const rawCode = String(currentQuestion.code || '');
+                    const rawCode = String(currentQuestion.code_template || '');
                     const codeWithNewlines = rawCode
                       .replace(/\\n/g, '\n')
                       .replace(/\\r\\n/g, '\n')

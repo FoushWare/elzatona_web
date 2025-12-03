@@ -18,7 +18,10 @@ export interface UnifiedQuestion {
   learningPath?: string; // Already optional
   sectionId?: string; // Already optional
   topic?: string; // Added topic field
+  topic_id?: string; // Added topic_id field for direct database reference
+  category_id?: string; // Added category_id field for direct database reference
   learningCardId?: string; // Added learning card ID
+  learning_card_id?: string; // Added learning_card_id for direct database reference
   is_active: boolean;
   created_at: string;
   updated_at: string;
@@ -59,6 +62,37 @@ export interface UnifiedQuestion {
     averageTime: number;
     difficultyRating: number;
   };
+  // New fields with junction table data
+  topics?: Array<{
+    id: string;
+    name: string;
+    slug: string;
+    difficulty: string;
+    is_primary: boolean;
+    order_index: number;
+  }>;
+  categories?: Array<{
+    id: string;
+    name: string;
+    slug: string;
+    card_type: string;
+    is_primary: boolean;
+    order_index: number;
+  }>;
+  learning_card?: {
+    id: string;
+    title: string;
+    type: string;
+    color: string;
+    icon: string;
+  };
+  // Resources for questions (optional)
+  resources?: Array<{
+    type: string;
+    title: string;
+    url: string;
+    [key: string]: unknown;
+  }> | null;
 }
 
 export interface BulkQuestionData {

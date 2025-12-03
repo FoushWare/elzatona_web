@@ -11,7 +11,7 @@ const formatCodeForDisplay = (code: string): string => {
   if (!code) return '';
   
   // Convert code to string if it's not already
-  let codeStr = String(code);
+  const codeStr = String(code);
   
   // CRITICAL: Convert \n escape sequences to actual newlines FIRST
   // The code might come from database as a string with literal "\n" characters
@@ -123,7 +123,7 @@ const formatCodeForDisplay = (code: string): string => {
   const formattedLines: string[] = [];
   
   for (let i = 0; i < codeLines.length; i++) {
-    let line = codeLines[i].trim();
+    const line = codeLines[i].trim();
     if (!line) {
       // Only add empty line if previous line wasn't empty
       if (formattedLines.length > 0 && formattedLines[formattedLines.length - 1] !== '') {
@@ -225,18 +225,18 @@ export function ViewQuestionModal({
 
   // Highlight code when it changes or highlighter is ready
   useEffect(() => {
-    if (!shikiHighlighter || !question?.code) {
+    if (!shikiHighlighter || !question?.codeTemplate) {
       setCodeHighlightedHtml('');
       console.log('ViewQuestionModal - Shiki highlighting skipped:', {
         hasHighlighter: !!shikiHighlighter,
-        hasCode: !!question?.code,
-        codeValue: question?.code ? String(question.code).substring(0, 50) : null,
+        hasCode: !!question?.codeTemplate,
+        codeValue: question?.codeTemplate ? String(question.codeTemplate).substring(0, 50) : null,
       });
       return;
     }
 
     try {
-      const rawCode = String(question.code || '');
+      const rawCode = String(question.codeTemplate || '');
       console.log('ViewQuestionModal - Processing code for highlighting:', {
         rawCodeLength: rawCode.length,
         rawCodePreview: rawCode.substring(0, 100),
@@ -389,7 +389,7 @@ export function ViewQuestionModal({
       console.error('ViewQuestionModal - Error highlighting code:', error);
       setCodeHighlightedHtml('');
     }
-  }, [shikiHighlighter, question?.code]);
+  }, [shikiHighlighter, question?.codeTemplate]);
 
   // Reset state when question changes
   useEffect(() => {
@@ -404,9 +404,9 @@ export function ViewQuestionModal({
     if (question) {
       console.log('ViewQuestionModal - Question data:', {
         id: question.id,
-        hasCode: !!question.code,
-        codeType: typeof question.code,
-        codeValue: question.code ? String(question.code).substring(0, 100) : null,
+        hasCode: !!question.codeTemplate,
+        codeType: typeof question.codeTemplate,
+        codeValue: question.codeTemplate ? String(question.codeTemplate).substring(0, 100) : null,
       });
     }
   }, [question?.id]);
@@ -467,9 +467,9 @@ export function ViewQuestionModal({
           )}
 
           {/* Question Code - Display after content if code exists */}
-          {question.code && (() => {
+          {question.codeTemplate && (() => {
             // Check if code exists and is not empty
-            const codeStr = String(question.code || '').trim();
+            const codeStr = String(question.codeTemplate || '').trim();
             if (!codeStr) return null;
             const rawCode = codeStr;
             let codeWithNewlines = rawCode
