@@ -7,7 +7,7 @@ const supabaseUrl =
   'https://hpnewqkvpnthpohvxcmq.supabase.co';
 const supabaseKey =
   process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ||
-  'SUPABASE_SERVICE_ROLE_KEY_REDACTED';
+  process.env.SUPABASE_SERVICE_ROLE_KEY;
 const supabase = createClient(supabaseUrl, supabaseKey);
 
 const planId = 'b0c508f5-8279-4bb4-be74-ad0a65f2dd95';

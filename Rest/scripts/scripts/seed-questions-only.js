@@ -12,7 +12,7 @@ const supabaseUrl =
   'https://hpnewqkvpnthpohvxcmq.supabase.co';
 const supabaseServiceRoleKey =
   process.env.SUPABASE_SERVICE_ROLE_KEY ||
-  'SUPABASE_SERVICE_ROLE_KEY_REDACTED';
+  process.env.SUPABASE_SERVICE_ROLE_KEY;
 
 // Create Supabase client with service role key for admin operations
 const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);

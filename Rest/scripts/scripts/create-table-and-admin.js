@@ -7,7 +7,7 @@ console.log('🛡️ Creating Admins Table via SQL\n');
 // Supabase configuration
 const supabaseUrl = 'https://hpnewqkvpnthpohvxcmq.supabase.co';
 const supabaseServiceRoleKey =
-  'SUPABASE_SERVICE_ROLE_KEY_REDACTED';
+  process.env.SUPABASE_SERVICE_ROLE_KEY;
 
 // Create Supabase client with service role key for admin operations
 const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);

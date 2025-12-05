@@ -8,7 +8,7 @@ const sqlContent = fs.readFileSync(sqlFile, 'utf8');
 // Supabase configuration
 const supabaseUrl = 'https://qjqjqjqjqjqjqjqj.supabase.co';
 const supabaseKey =
-  'SUPABASE_SERVICE_ROLE_KEY_REDACTED';
+  process.env.SUPABASE_SERVICE_ROLE_KEY;
 
 async function executeSQL() {
   try {

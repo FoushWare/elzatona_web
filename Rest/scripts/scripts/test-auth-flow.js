@@ -10,7 +10,7 @@ const supabaseUrl =
   'https://hpnewqkvpnthpohvxcmq.supabase.co';
 const supabaseAnonKey =
   process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ||
-  'SUPABASE_SERVICE_ROLE_KEY_REDACTED';
+  process.env.SUPABASE_SERVICE_ROLE_KEY;
 
 // Create Supabase client with anon key for client-side testing
 const supabase = createClient(supabaseUrl, supabaseAnonKey);
