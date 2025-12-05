@@ -8,6 +8,13 @@ import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import FlashcardsPage from './page';
 
+// Mock Next.js Link component
+jest.mock('next/link', () => {
+  return function MockLink({ children, href }: { children: React.ReactNode; href: string }) {
+    return <a href={href}>{children}</a>;
+  };
+});
+
 // Mock flashcards library
 jest.mock('../../lib/flashcards', () => ({
   loadFlashcards: jest.fn(() => [
@@ -22,7 +29,12 @@ jest.mock('../../lib/flashcards', () => ({
   removeFlashcard: jest.fn(),
 }));
 
-global.fetch = jest.fn();
+global.fetch = jest.fn(() =>
+  Promise.resolve({
+    ok: true,
+    json: () => Promise.resolve({ success: true, data: null }),
+  } as Response)
+);
 
 // Mock lucide-react using the shared mock
 jest.mock('lucide-react', () => require('../../test-utils/mocks/lucide-react.tsx'));
