@@ -41,6 +41,7 @@ const eslintConfig = [
       'Rest/scripts-backup/**', // Backup scripts use CommonJS
       'Rest/scripts/setup/**', // Setup scripts use CommonJS
       'Rest/scripts/frontend-task-batches/**', // Frontend task batch scripts use CommonJS
+      'Rest/seeders/**', // Seeder scripts use CommonJS
       'Rest/fix-imports.js', // Utility script uses CommonJS
       'Rest/markdown/docs/api/**', // API documentation scripts use CommonJS
       '.cursor/**', // Cursor IDE scripts use CommonJS
