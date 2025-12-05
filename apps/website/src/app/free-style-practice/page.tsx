@@ -729,7 +729,12 @@ const QuestionContent = ({ content }: { content: string }) => {
       if (textContent.trim()) {
         let cleanText = decodeHtmlEntities(textContent);
         cleanText = cleanText.replace(/<code[^>]*>([^<]{1,30})<\/code>/gi, '`$1`');
-        cleanText = cleanText.replace(/<[^>]+>/g, '');
+        // Repeated tag removal to prevent incomplete sanitization
+        let prev;
+        do {
+          prev = cleanText;
+          cleanText = cleanText.replace(/<[^>]+>/g, '');
+        } while (cleanText !== prev);
         for (let i = 0; i < 3; i++) {
           cleanText = cleanText
             .replace(/<pr<cod?/gi, '')
