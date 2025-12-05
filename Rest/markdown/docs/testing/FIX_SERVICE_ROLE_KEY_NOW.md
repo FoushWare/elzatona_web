@@ -24,7 +24,7 @@ Open `.env.test.local` in your project root and update this line:
 
 ```bash
 # OLD (wrong project):
-SUPABASE_SERVICE_ROLE_KEY=SUPABASE_SERVICE_ROLE_KEY_REDACTED
+SUPABASE_SERVICE_ROLE_KEY=YOUR_SUPABASE_KEY_HERE
 
 # NEW (correct project - kiycimlsatwfqxtfprlr):
 SUPABASE_SERVICE_ROLE_KEY=YOUR_NEW_KEY_FROM_STEP_1

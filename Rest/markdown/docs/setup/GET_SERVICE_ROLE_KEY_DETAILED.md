@@ -42,7 +42,7 @@ your-supabase-anon-key-here
 1. Click the **"Copy"** button next to the **service_role** key
 2. It will look something like:
    ```
-   SUPABASE_SERVICE_ROLE_KEY_REDACTED
+   YOUR_SUPABASE_KEY_HERE
    ```
 
 ### **Step 5: Add to Your .env.local**

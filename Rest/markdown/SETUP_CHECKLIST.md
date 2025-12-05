@@ -15,7 +15,7 @@ Create a `.env.local` file in the project root with the following content:
 ```env
 # Supabase Configuration - Get these from your Supabase dashboard
 NEXT_PUBLIC_SUPABASE_URL=https://hpnewqkvpnthpohvxcmq.supabase.co
-NEXT_PUBLIC_SUPABASE_ANON_KEY=SUPABASE_SERVICE_ROLE_KEY_REDACTED
+NEXT_PUBLIC_SUPABASE_ANON_KEY=YOUR_SUPABASE_KEY_HERE
 SUPABASE_SERVICE_ROLE_KEY=your_service_role_key_here
 
 # Next.js Configuration
