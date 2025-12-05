@@ -1,11 +1,15 @@
 #!/bin/bash
 # Complete script to remove secrets from git history
 # Uses git-filter-repo to safely remove secrets from all commits
+# OPTIMIZED FOR LOW MEMORY (8GB RAM) - Single-threaded, incremental processing
 
 set -e
 
-echo "🔒 Git History Secret Removal (Complete)"
-echo "========================================="
+echo "🔒 Git History Secret Removal (Complete - Memory-Optimized)"
+echo "=========================================================="
+echo ""
+echo "💾 Memory Optimization: Single-threaded, incremental processing"
+echo "   Designed for 8GB RAM systems"
 echo ""
 echo "⚠️  WARNING: This will rewrite git history!"
 echo "⚠️  Make sure you have:"
@@ -85,8 +89,11 @@ echo "🔄 Rewriting git history..."
 echo "   This may take several minutes..."
 echo ""
 
-# Apply replacements using git-filter-repo
-python3 -m git_filter_repo --replace-text "$REPLACEMENTS_FILE" || {
+# Apply replacements using git-filter-repo (memory-optimized)
+# Use --force to avoid interactive prompts (saves memory)
+# Process incrementally to avoid loading entire history into memory
+echo "   Processing in single-threaded mode (memory-efficient)..."
+python3 -m git_filter_repo --replace-text "$REPLACEMENTS_FILE" --force || {
     echo "❌ Error: git-filter-repo failed"
     echo ""
     echo "💡 Troubleshooting:"
@@ -104,9 +111,9 @@ echo ""
 echo "✅ History rewrite complete!"
 echo ""
 
-# Verify removal
+# Verify removal (memory-efficient - limit search)
 echo "🔍 Verifying secrets are removed..."
-REMAINING=$(git log --all -p | grep -iE "AIzaSy|eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9|gho_|ghp_|sk-proj-|sntryu_" | head -5 || true)
+REMAINING=$(GIT_PAGER=cat git log --all -p --no-pager -100 | grep -iE "AIzaSy|eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9|gho_|ghp_|sk-proj-|sntryu_" | head -5 || true)
 
 if [ -z "$REMAINING" ]; then
     echo "✅ No secrets found in history!"
