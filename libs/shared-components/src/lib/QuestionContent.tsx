@@ -3,6 +3,7 @@
 import React from 'react';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism';
+import sanitizeHtml from 'sanitize-html';
 
 // Helper function to determine if content is valid code or should be rendered as text
 // Uses a scoring system to make intelligent decisions
@@ -578,7 +579,7 @@ export const QuestionContent = ({ content }: { content: string }) => {
     if (!alreadyCaptured && malformedMatch[1]) {
       let code = malformedMatch[1];
       code = decodeHtmlEntities(code);
-      code = code.replace(/<[^>]+>/g, '');
+      code = sanitizeHtml(code, { allowedTags: [], allowedAttributes: {} });
       for (let i = 0; i < 3; i++) {
         code = code
           .replace(/e>e>e>/g, '')
