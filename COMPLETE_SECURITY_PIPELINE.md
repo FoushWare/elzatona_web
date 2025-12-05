@@ -18,7 +18,7 @@ This guide shows you how to use **ALL** security tools and pipelines together, t
 │         │                     │                    │        │
 │         ▼                     ▼                    ▼        │
 │  • Formatting         • Linting            • Secret Scan   │
-│  • Secret Scan        • Type Check         • Build Check   │
+│                       • Type Check         • Build Check   │
 │                       • Build Check        • Cleanup       │
 │                       • Secret Scan                         │
 │                                                             │
