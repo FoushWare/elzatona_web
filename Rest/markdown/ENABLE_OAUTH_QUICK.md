@@ -14,7 +14,7 @@ Your OAuth credentials are already in `.env.local`. Now you just need to enable 
    - Click "Enable"
    - Enter:
      - **Client ID:** `655799372296-vd44sjnvf427est82dsa9nj029iis4b7.apps.googleusercontent.com`
-     - **Client Secret:** `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`
+     - **Client Secret:** `YOUR_GOOGLE_OAUTH_SECRET_HERE
    - Click "Save"
 
 3. **Enable GitHub OAuth:**
