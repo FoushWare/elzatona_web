@@ -5,7 +5,7 @@ const { initializeApp } = require('firebase/app');
 const { getFirestore, collection, addDoc } = require('firebase/firestore');
 
 const firebaseConfig = {
-  apiKey: 'AIzaSyBXlcfcdyIqoeJOb2gXcxpRSmQO7lEP82Y',
+  apiKey: process.env.GOOGLE_API_KEY,
   authDomain: 'fir-demo-project-adffb.firebaseapp.com',
   projectId: 'fir-demo-project-adffb',
   storageBucket: 'fir-demo-project-adffb.firebasestorage.app',
