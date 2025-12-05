@@ -42,22 +42,12 @@ if (process.env.APP_ENV === 'development' || process.env.NEXT_PUBLIC_APP_ENV ===
 }
 
 const nextConfig: NextConfig = {
-  // ESLint configuration - temporarily disable during builds
-  eslint: {
-    ignoreDuringBuilds: true,
-  },
-
   // Performance optimizations
   experimental: {
     optimizeCss: true,
     optimizePackageImports: ['@heroicons/react', 'lucide-react'],
-    // Enable Turbopack for faster, more memory-efficient builds
-    turbo: {
-      // Reduce memory usage by limiting cache size
-      resolveAlias: {
-        // Optimize imports
-      },
-    },
+    // Note: Turbopack is enabled via command line flag (--turbopack), not config
+    // Removing turbo config as it's not valid in Next.js 16
   },
 
   // Transpile Firebase packages for better compatibility
