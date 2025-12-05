@@ -93,7 +93,7 @@ paths:
                     example: true
                   token:
                     type: string
-                    example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+                    example: YOUR_SUPABASE_KEY_HERE
                   user:
                     $ref: '#/components/schemas/User'
         '401':

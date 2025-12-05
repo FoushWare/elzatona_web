@@ -22,7 +22,7 @@ Open `.env.test.local` in your project root and update:
 
 ```bash
 # Update this line with the service role key from Step 1
-SUPABASE_SERVICE_ROLE_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtpeWNpbWxzYXR3ZnF4dGZwcmxyIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc2MzIzNzc4NCwiZXhwIjoyMDc4ODEzNzg0fQ.YOUR_SERVICE_ROLE_KEY_HERE
+SUPABASE_SERVICE_ROLE_KEY=YOUR_SUPABASE_KEY_HERE
 ```
 
 **Important**: The service role key should start with `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9` and contain `"ref":"kiycimlsatwfqxtfprlr"` when decoded.

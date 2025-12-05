@@ -111,7 +111,7 @@ If you see "✅ Admin user created successfully!", the key is working correctly.
 
 The service_role key will be a long JWT token that looks like:
 ```
-eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZvcGZkdWt2ZGhubXp6amt4cG5qIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc2MzIyOTM4OCwiZXhwIjoyMDc4ODA1Mzg4fQ.XXXXX...
+YOUR_SUPABASE_KEY_HERE
 ```
 
 It's similar to the anon key but will have `"role":"service_role"` in the payload (you can decode it at jwt.io to verify, but don't share the decoded content).
