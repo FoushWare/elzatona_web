@@ -1,0 +1,50 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+echo ""
+echo "════════════════════════════════════════════════════════════════"
+echo "🔍 PRE-COMMIT HOOK (Fastest Checks)"
+echo "════════════════════════════════════════════════════════════════"
+echo ""
+
+# Step 1: Run Prettier formatting
+echo "🎨 STEP 1: Running Prettier formatting..."
+echo "   📝 Executing: npm run format"
+echo ""
+
+npm run format
+PRETTIER_EXIT_CODE=$?
+
+if [ $PRETTIER_EXIT_CODE -ne 0 ]; then
+  echo "   ❌ Prettier formatting failed with exit code: $PRETTIER_EXIT_CODE"
+  echo "   💡 Please fix formatting issues before committing"
+  echo ""
+  echo "════════════════════════════════════════════════════════════════"
+  echo "❌ PRE-COMMIT HOOK FAILED - FORMATTING ERRORS DETECTED!"
+  echo "════════════════════════════════════════════════════════════════"
+  echo ""
+  exit 1
+else
+  echo "   ✅ Prettier formatting completed successfully!"
+fi
+echo ""
+
+# Step 2: Add formatted files to staging
+echo "📦 STEP 2: Adding formatted files to staging..."
+git add .
+echo "   ✅ Formatted files added to staging"
+echo ""
+
+# Final status
+echo "📊 PRE-COMMIT SUMMARY:"
+echo "   ✅ Prettier formatting completed"
+echo "   ✅ Files staged for commit"
+echo ""
+echo "════════════════════════════════════════════════════════════════"
+echo "✅ PRE-COMMIT CHECKS COMPLETED SUCCESSFULLY!"
+echo "🚀 READY TO COMMIT!"
+echo ""
+echo "💡 Note: Linting, type checking, build validation, and secret scanning"
+echo "   will run on push (before code reaches GitHub)"
+echo "════════════════════════════════════════════════════════════════"
+echo ""
