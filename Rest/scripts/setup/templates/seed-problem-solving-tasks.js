@@ -10,7 +10,7 @@ const { getFirestore, collection, addDoc } = require('firebase/firestore');
 const firebaseConfig = {
   apiKey:
     process.env.NEXT_PUBLIC_FIREBASE_API_KEY ||
-    'AIzaSyBXlcfcdyIqoeJOb2gXcxpRSmQO7lEP82Y',
+    process.env.GOOGLE_API_KEY,
   authDomain:
     process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN ||
     'fir-demo-project-adffb.firebaseapp.com',
