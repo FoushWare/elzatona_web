@@ -353,7 +353,9 @@ describe('A-IT-018: AdminNavbar Theme Integration', () => {
   });
 
   it('should toggle between light and dark mode', () => {
-    const { useTheme } = require('@elzatona/shared-contexts');
+    // Import useTheme for dynamic mocking
+    const sharedContexts = jest.requireMock('@elzatona/shared-contexts');
+    const { useTheme } = sharedContexts;
     
     // Start in light mode
     useTheme.mockReturnValue({
