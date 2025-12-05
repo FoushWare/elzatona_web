@@ -78,7 +78,7 @@ This guide shows you how to use **ALL** security tools and pipelines together, t
 - ✅ **ESLint auto-fix** - Auto-fixes linting issues
 - ✅ **ESLint check** - Validates linting
 - ✅ **TypeScript type checking** - **BLOCKS push if errors**
-- ✅ **Build validation** - **BLOCKS push if build fails**
+- ✅ **Build validation** - **BLOCKS push if build fails** (ONLY local build check - no duplication)
 - ✅ **Secret scanning** - **BLOCKS push if secrets found** (ONLY local secret scan - no duplication)
 - ✅ **Auto-stage** - Adds auto-fixed files
 - ✅ **Cleanup** - Removes build artifacts
@@ -88,10 +88,10 @@ This guide shows you how to use **ALL** security tools and pipelines together, t
 - Build fails
 - Secrets detected in changed files
 
-**Secret Scanning Strategy:**
-- Pre-push: Only local secret scan (prevents secrets from reaching GitHub)
-- GitHub: Automatic backup scan (catches anything that slips through)
-- No duplication: Removed from pre-commit to avoid running 3 times
+**Optimization Strategy:**
+- **Build Check:** Pre-push only (removed from GitHub Actions to avoid duplication)
+- **Secret Scanning:** Pre-push + GitHub (2 layers, no duplication in pre-commit)
+- **No duplication:** Each check runs in optimal location
 
 **Runs on:**
 - `main`, `develop`, `release/**` branches only
@@ -208,7 +208,7 @@ This guide shows you how to use **ALL** security tools and pipelines together, t
    ├─► Pre-Push Hook (Comprehensive - ~2-5min):
    │   ├─► Linting ✅ (auto-fix + check)
    │   ├─► Type Check ✅ (BLOCKS if errors)
-   │   ├─► Build Check ✅ (BLOCKS if fails)
+   │   ├─► Build Check ✅ (ONLY local - BLOCKS if fails, removed from GitHub Actions)
    │   ├─► Secret Scan ✅ (ONLY local scan - prevents secrets from reaching GitHub)
    │   └─► Cleanup ✅
    │
@@ -342,6 +342,7 @@ git push
 - **Prevents:** TypeScript errors, build failures, **secrets in changed files**
 - **Action:** Blocks push if issues found
 - **Auto-fixes:** Linting
+- **Build Check:** Only local (removed from GitHub Actions to avoid duplication)
 
 #### ✅ Secret Scanning (Local - Pre-Push Only)
 - **Prevents:** Hardcoded secrets from reaching GitHub
@@ -371,10 +372,10 @@ git push
 | Tool | When | What It Does | Blocks? | Auto-Fix? |
 |------|------|--------------|---------|-----------|
 | **Pre-Commit Hook** | Before commit | Format only (fastest) | ✅ Yes | ✅ Formatting |
-| **Pre-Push Hook** | Before push | Lint, type check, build, **secret scan** (comprehensive) | ✅ Yes | ✅ Linting |
+| **Pre-Push Hook** | Before push | Lint, type check, **build**, **secret scan** (comprehensive) | ✅ Yes | ✅ Linting |
 | **GitHub Secret Scanning** | After push | Detect secrets | ❌ No | ❌ No (use workflow) |
 | **CodeQL** | After push | Detect vulnerabilities | ❌ No | ❌ No |
-| **SonarQube** | After push | Code quality analysis | ❌ No | ❌ No |
+| **SonarQube** | After push | Code quality analysis (no build - removed duplicate) | ❌ No | ❌ No |
 | **Fix Secrets Workflow** | Manual/Weekly | Fix secrets in code | ❌ No | ✅ Yes |
 | **Resolve Alerts Workflow** | Manual/Daily | Mark alerts resolved | ❌ No | ❌ No |
 
