@@ -154,7 +154,7 @@ CREATE POLICY "Service role can manage admins" ON admins FOR ALL USING (
     console.log('You can now login at:');
     console.log('   URL: http://localhost:3001/admin/login');
     console.log(`   Email: ${adminEmail}`);
-    console.log(`   Password: ${adminPassword}\n`);
+    console.log('   Password: [hidden - use the value set in INITIAL_ADMIN_PASSWORD]\n');
   } catch (error) {
     console.error('❌ Error setting up admin:', error.message);
   }
