@@ -51,23 +51,22 @@ This guide shows you how to use **ALL** security tools and pipelines together, t
 
 ### 🔒 **Local Prevention (Before Push)**
 
-#### 1. Pre-Commit Hook (Fast Checks - ~10-30s)
+#### 1. Pre-Commit Hook (Fast Checks - ~10s)
 **Location:** `.git/hooks/pre-commit`  
 **Source:** `Rest/other/.husky/pre-commit`
 
 **What it does:**
 - ✅ **Prettier formatting** - Auto-formats code (fast)
-- ✅ **Secret scanning** - **BLOCKS commit if secrets found** (critical)
 - ✅ **Auto-stage** - Adds formatted files
 
 **Blocks commit if:**
 - Formatting fails
-- Secrets detected in staged files
 
 **Why this structure:**
-- Fast checks only (formatting + secret scan)
+- Fast checks only (formatting)
+- Secret scanning moved to pre-push (avoids duplication)
 - Linting and type checking moved to pre-push (slower operations)
-- Secret scanning is critical and must run early
+- Fastest possible commits
 
 ---
 
@@ -80,7 +79,7 @@ This guide shows you how to use **ALL** security tools and pipelines together, t
 - ✅ **ESLint check** - Validates linting
 - ✅ **TypeScript type checking** - **BLOCKS push if errors**
 - ✅ **Build validation** - **BLOCKS push if build fails**
-- ✅ **Secret scanning** - **BLOCKS push if secrets found** (final safety check)
+- ✅ **Secret scanning** - **BLOCKS push if secrets found** (ONLY local secret scan - no duplication)
 - ✅ **Auto-stage** - Adds auto-fixed files
 - ✅ **Cleanup** - Removes build artifacts
 
@@ -88,6 +87,11 @@ This guide shows you how to use **ALL** security tools and pipelines together, t
 - TypeScript errors found
 - Build fails
 - Secrets detected in changed files
+
+**Secret Scanning Strategy:**
+- Pre-push: Only local secret scan (prevents secrets from reaching GitHub)
+- GitHub: Automatic backup scan (catches anything that slips through)
+- No duplication: Removed from pre-commit to avoid running 3 times
 
 **Runs on:**
 - `main`, `develop`, `release/**` branches only
@@ -195,9 +199,8 @@ This guide shows you how to use **ALL** security tools and pipelines together, t
    ▼
 3. git commit
    │
-   ├─► Pre-Commit Hook (Fast - ~10-30s):
-   │   ├─► Formatting ✅ (quick)
-   │   └─► Secret Scan ✅ (BLOCKS if secrets found)
+   ├─► Pre-Commit Hook (Fast - ~10s):
+   │   └─► Formatting ✅ (quick)
    │
    ▼
 4. git push
@@ -206,7 +209,7 @@ This guide shows you how to use **ALL** security tools and pipelines together, t
    │   ├─► Linting ✅ (auto-fix + check)
    │   ├─► Type Check ✅ (BLOCKS if errors)
    │   ├─► Build Check ✅ (BLOCKS if fails)
-   │   ├─► Secret Scan ✅ (final safety check)
+   │   ├─► Secret Scan ✅ (ONLY local scan - prevents secrets from reaching GitHub)
    │   └─► Cleanup ✅
    │
    ▼
@@ -274,8 +277,7 @@ git add .
 # 3. Commit (Pre-Commit Hook runs automatically)
 git commit -m "feat: Add new feature"
 # ✅ Formatting applied
-# ✅ Secret scanning passed
-# ⏱️  ~10-30 seconds
+# ⏱️  ~10 seconds (very fast!)
 
 # 4. Push (Pre-Push Hook runs automatically)
 git push
@@ -331,20 +333,21 @@ git push
 ### What Prevents Issues Before Push?
 
 #### ✅ Pre-Commit Hook
-- **Prevents:** Formatting issues, **secrets in staged files**
-- **Action:** Blocks commit if issues found
+- **Prevents:** Formatting issues
+- **Action:** Blocks commit if formatting fails
 - **Auto-fixes:** Formatting
-- **Time:** ~10-30 seconds (fast checks only)
+- **Time:** ~10 seconds (fastest possible)
 
 #### ✅ Pre-Push Hook
 - **Prevents:** TypeScript errors, build failures, **secrets in changed files**
 - **Action:** Blocks push if issues found
 - **Auto-fixes:** Linting
 
-#### ✅ Secret Scanning (Local)
+#### ✅ Secret Scanning (Local - Pre-Push Only)
 - **Prevents:** Hardcoded secrets from reaching GitHub
-- **Action:** Blocks commit/push if secrets found
-- **Scans:** Staged files (pre-commit) and changed files (pre-push)
+- **Action:** Blocks push if secrets found
+- **Scans:** Changed files (pre-push hook only)
+- **Why only pre-push:** Avoids duplication (GitHub also scans automatically)
 
 ### What Happens After Push?
 
@@ -367,7 +370,7 @@ git push
 
 | Tool | When | What It Does | Blocks? | Auto-Fix? |
 |------|------|--------------|---------|-----------|
-| **Pre-Commit Hook** | Before commit | Format, **secret scan** (fast checks) | ✅ Yes | ✅ Formatting |
+| **Pre-Commit Hook** | Before commit | Format only (fastest) | ✅ Yes | ✅ Formatting |
 | **Pre-Push Hook** | Before push | Lint, type check, build, **secret scan** (comprehensive) | ✅ Yes | ✅ Linting |
 | **GitHub Secret Scanning** | After push | Detect secrets | ❌ No | ❌ No (use workflow) |
 | **CodeQL** | After push | Detect vulnerabilities | ❌ No | ❌ No |
@@ -451,7 +454,7 @@ gh api repos/FoushWare/elzatona_web/secret-scanning/alerts --jq 'length'
 ## ✅ Checklist: Complete Security Setup
 
 - [ ] Git hooks installed (`npm run prepare`)
-- [ ] Pre-commit hook active (checks formatting, secrets - fast ~10-30s)
+- [ ] Pre-commit hook active (checks formatting only - fast ~10s)
 - [ ] Pre-push hook active (checks linting, types, build, secrets - comprehensive ~2-5min)
 - [ ] GitHub Secret Scanning enabled (automatic)
 - [ ] CodeQL workflow configured (`.github/workflows/codeql-analysis.yml`)
