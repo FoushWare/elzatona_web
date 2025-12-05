@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from 'react';
 import CodeEditor from './CodeEditor';
 import { CheckCircle, XCircle, AlertCircle, Play, Loader2, Code2, Trophy, ChevronRight, Maximize2, Minimize2, Copy, Plus, Lightbulb, BookOpen } from 'lucide-react';
 import { addFlashcard, isInFlashcards, removeFlashcard } from '../lib/flashcards';
+import sanitizeHtml from 'sanitize-html';
 
 interface TestCase {
   input: any | any[];
@@ -146,7 +147,7 @@ export default function ProblemSolvingQuestion({
     if (codeMatch && codeMatch[1]) {
       let code = codeMatch[1];
       code = decodeHtmlEntities(code);
-      code = code.replace(/<[^>]+>/g, '');
+      code = sanitizeHtml(code, { allowedTags: [] }); // Strips all HTML tags
       // Clean up malformed patterns - multiple passes for thorough cleaning
       for (let i = 0; i < 3; i++) {
         code = code
