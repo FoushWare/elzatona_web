@@ -8,13 +8,19 @@ export async function GET(
 ) {
   let planId: string | undefined;
   try {
-    // Use environment variables for Supabase credentials with fallback
-    const supabaseUrl =
-      process.env.NEXT_PUBLIC_SUPABASE_URL ||
-      'https://kiycimlsatwfqxtfprlr.supabase.co';
-    const supabaseAnonKey =
-      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ||
-      'SUPABASE_SERVICE_ROLE_KEY_REDACTED';
+    // Use environment variables for Supabase credentials (required)
+    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+    const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+
+    if (!supabaseUrl || !supabaseAnonKey) {
+      return NextResponse.json(
+        {
+          success: false,
+          error: 'Missing required Supabase environment variables',
+        },
+        { status: 500 }
+      );
+    }
 
     console.log('🔍 Plan Details API Debug: Using Supabase URL:', supabaseUrl);
     console.log(

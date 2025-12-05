@@ -13,11 +13,16 @@ const { createClient } = require('@supabase/supabase-js');
 const fs = require('fs');
 const path = require('path');
 
-// Configuration
-const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://kiycimlsatwfqxtfprlr.supabase.co';
+// Configuration (environment variables required)
+const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL;
 const SUPABASE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY || 
-                     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 
-                     'SUPABASE_SERVICE_ROLE_KEY_REDACTED';
+                     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+
+if (!SUPABASE_URL || !SUPABASE_KEY) {
+  console.error('❌ Error: Missing required Supabase environment variables');
+  console.error('   NEXT_PUBLIC_SUPABASE_URL and (SUPABASE_SERVICE_ROLE_KEY or NEXT_PUBLIC_SUPABASE_ANON_KEY) must be set');
+  process.exit(1);
+}
 
 const OUTPUT_DIR = path.join(__dirname, '..', 'Rest', 'questions-vo2');
 const DEFAULT_BATCH_SIZE = 50;

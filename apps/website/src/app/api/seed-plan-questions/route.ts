@@ -3,12 +3,18 @@ import { createClient } from '@supabase/supabase-js';
 
 export async function POST(request: NextRequest) {
   try {
-    const supabaseUrl =
-      process.env.NEXT_PUBLIC_SUPABASE_URL ||
-      'https://hpnewqkvpnthpohvxcmq.supabase.co';
-    const supabaseServiceRoleKey =
-      process.env.SUPABASE_SERVICE_ROLE_KEY ||
-      'SUPABASE_SERVICE_ROLE_KEY_REDACTED';
+    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+    const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+
+    if (!supabaseUrl || !supabaseServiceRoleKey) {
+      return NextResponse.json(
+        {
+          success: false,
+          error: 'Missing required Supabase environment variables: NEXT_PUBLIC_SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY must be set',
+        },
+        { status: 500 }
+      );
+    }
 
     const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
 

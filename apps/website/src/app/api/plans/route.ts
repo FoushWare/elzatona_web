@@ -3,15 +3,13 @@ import { createClient } from '@supabase/supabase-js';
 
 // Helper function to create Supabase client
 function createSupabaseClient() {
-  const supabaseUrl =
-    process.env.NEXT_PUBLIC_SUPABASE_URL ||
-    'https://kiycimlsatwfqxtfprlr.supabase.co';
-  const supabaseAnonKey =
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ||
-    'SUPABASE_SERVICE_ROLE_KEY_REDACTED';
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
   if (!supabaseUrl || !supabaseAnonKey) {
-    throw new Error('Supabase credentials are missing');
+    throw new Error(
+      'Missing required Supabase environment variables: NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY must be set'
+    );
   }
 
   return createClient(supabaseUrl, supabaseAnonKey);
