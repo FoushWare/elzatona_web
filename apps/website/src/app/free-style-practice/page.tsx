@@ -788,7 +788,12 @@ const QuestionContent = ({ content }: { content: string }) => {
     if (textContent.trim()) {
       let cleanText = decodeHtmlEntities(textContent);
       cleanText = cleanText.replace(/<code[^>]*>([^<]{1,30})<\/code>/gi, '`$1`');
-      cleanText = cleanText.replace(/<[^>]+>/g, '');
+      // Apply the HTML tag removal until no tags remain
+      let previousCleanText;
+      do {
+        previousCleanText = cleanText;
+        cleanText = cleanText.replace(/<[^>]+>/g, '');
+      } while (cleanText !== previousCleanText);
       for (let i = 0; i < 3; i++) {
         cleanText = cleanText
           .replace(/<pr<cod?/gi, '')
