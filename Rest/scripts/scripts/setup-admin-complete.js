@@ -127,7 +127,7 @@ async function setupCompleteAdmin() {
         console.log('You can now login at:');
         console.log('   URL: http://localhost:3001/admin/login');
         console.log(`   Email: ${adminEmail}`);
-        console.log(`   Password: ${adminPassword}\n`);
+        console.log(`   Password: [REDACTED]\n`);
         return;
       } else {
         // Create admin record for existing user
@@ -185,7 +185,7 @@ async function setupCompleteAdmin() {
     console.log('You can now login at:');
     console.log('   URL: http://localhost:3001/admin/login');
     console.log(`   Email: ${adminEmail}`);
-    console.log(`   Password: ${adminPassword}\n`);
+    console.log(`   Password: [REDACTED]\n`);
   } catch (error) {
     console.error('❌ Error setting up admin:', error.message);
   }
