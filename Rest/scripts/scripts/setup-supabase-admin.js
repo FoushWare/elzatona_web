@@ -31,7 +31,7 @@ async function setupAdminAccount() {
     }
 
     console.log(`   Email: ${adminEmail}`);
-    console.log(`   Password: ${adminPassword}`);
+    console.log(`   Password: [REDACTED]`);
     console.log(`   Name: ${adminName}`);
     console.log(`   Role: ${adminRole}\n`);
 
