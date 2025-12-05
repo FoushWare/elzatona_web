@@ -725,8 +725,16 @@ export const QuestionContent = ({ content }: { content: string }) => {
   if (parts.length === 0) {
     let cleanContent = fixedContent;
     
-    for (let i = 0; i < 3; i++) {
+    // Repeat sanitation until no further changes occur
+    let prevContent;
+    do {
+      prevContent = cleanContent;
       cleanContent = cleanContent
+        // Remove script tags and their content (fragmented and obfuscated variations)
+        .replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '')
+        .replace(/<script[^>]*>/gi, '')
+        .replace(/<\/script>/gi, '')
+        // Remove other risky fragments
         .replace(/<pr<cod/gi, '')
         .replace(/<\/cod<\/pr/gi, '')
         .replace(/<pr</gi, '')
@@ -744,7 +752,7 @@ export const QuestionContent = ({ content }: { content: string }) => {
         .replace(/^>\s*/g, '')
         .replace(/\s*>$/g, '')
         .replace(/\s+>\s+/g, ' ');
-    }
+    } while (cleanContent !== prevContent);
     
     cleanContent = cleanContent
       .replace(/&nbsp;/g, ' ')
