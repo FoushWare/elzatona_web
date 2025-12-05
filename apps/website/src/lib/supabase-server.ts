@@ -3,15 +3,18 @@
 // This file uses 'any' types for Supabase query builder operations
 import { createClient } from '@supabase/supabase-js';
 
-// Supabase configuration
-const supabaseUrl =
-  process.env['NEXT_PUBLIC_SUPABASE_URL'] ||
-  'https://kiycimlsatwfqxtfprlr.supabase.co';
-// Use anon key as fallback if service role key is not available
+// Supabase configuration (environment variables required)
+const supabaseUrl = process.env['NEXT_PUBLIC_SUPABASE_URL'];
+// Use service role key if available, otherwise fallback to anon key (but both must be set)
 const supabaseServiceRoleKey =
   process.env['SUPABASE_SERVICE_ROLE_KEY'] ||
-  process.env['NEXT_PUBLIC_SUPABASE_ANON_KEY'] ||
-  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtpeWNpbWxzYXR3ZnF4dGZwcmxyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjMyMzc3ODQsImV4cCI6MjA3ODgxMzc4NH0.bDQhRHzNH09BE8w9qdRXjtl7bGdGO3JslrmkffhqXAc';
+  process.env['NEXT_PUBLIC_SUPABASE_ANON_KEY'];
+
+if (!supabaseUrl || !supabaseServiceRoleKey) {
+  throw new Error(
+    'Missing required Supabase environment variables: NEXT_PUBLIC_SUPABASE_URL and (SUPABASE_SERVICE_ROLE_KEY or NEXT_PUBLIC_SUPABASE_ANON_KEY) must be set'
+  );
+}
 
 // Initialize Supabase client (server-side with service role key)
 let supabase: ReturnType<typeof createClient> | null = null;
