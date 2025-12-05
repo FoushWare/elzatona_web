@@ -53,6 +53,7 @@ export const CreditCard = () => <span data-testid="credit-card-icon">💳</span>
 export const FileText = () => <span data-testid="file-icon">📄</span>;
 export const Settings = () => <span data-testid="settings-icon">⚙️</span>;
 export const Brain = () => <span data-testid="brain-icon">🧠</span>;
+export const LayoutDashboard = () => <span data-testid="layout-dashboard-icon">📊</span>;
 
 // Default export for any other icons
 export default {
@@ -103,5 +104,6 @@ export default {
   FileText,
   Settings,
   Brain,
+  LayoutDashboard,
 };
 
