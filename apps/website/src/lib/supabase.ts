@@ -1,12 +1,14 @@
 // Frontend Supabase client configuration
 import { createClient } from '@supabase/supabase-js';
 
-const supabaseUrl =
-  process.env['NEXT_PUBLIC_SUPABASE_URL'] ||
-  'https://kiycimlsatwfqxtfprlr.supabase.co';
-const supabaseAnonKey =
-  process.env['NEXT_PUBLIC_SUPABASE_ANON_KEY'] ||
-  'YOUR_SUPABASE_KEY_HERE.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtpeWNpbWxzYXR3ZnF4dGZwcmxyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjMyMzc3ODQsImV4cCI6MjA3ODgxMzc4NH0.bDQhRHzNH09BE8w9qdRXjtl7bGdGO3JslrmkffhqXAc';
+const supabaseUrl = process.env['NEXT_PUBLIC_SUPABASE_URL'];
+const supabaseAnonKey = process.env['NEXT_PUBLIC_SUPABASE_ANON_KEY'];
+
+if (!supabaseUrl || !supabaseAnonKey) {
+  throw new Error(
+    'Missing required Supabase environment variables: NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY must be set'
+  );
+}
 
 // Create Supabase client
 export const supabase = createClient(supabaseUrl, supabaseAnonKey);
