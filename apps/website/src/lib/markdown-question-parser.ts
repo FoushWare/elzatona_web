@@ -2,6 +2,7 @@
 // Parses markdown content to extract questions in various formats
 
 import { BulkQuestionData } from './unified-question-schema';
+import sanitizeHtml from 'sanitize-html';
 
 export interface MarkdownQuestion {
   title: string;
@@ -431,8 +432,7 @@ export class MarkdownQuestionParser {
       // Extract content between <p> tags, removing HTML tags
       const pMatch = detailsMatch[0].match(/<p>([\s\S]*?)<\/p>/i);
       if (pMatch) {
-        return pMatch[1]
-          .replace(/<[^>]*>/g, '') // Remove HTML tags
+        return sanitizeHtml(pMatch[1], { allowedTags: [], allowedAttributes: {} }) // Remove all HTML tags and attributes safely
           .replace(/\n\s*\n/g, '\n') // Clean up extra whitespace
           .trim();
       }
