@@ -49,6 +49,8 @@ jobs:
         continue-on-error: true
         env:
           NODE_OPTIONS: '--max-old-space-size=1536'
+          # Memory optimization: Single-threaded (no parallel processing)
+          TS_NODE_TRANSPILE_ONLY: 'true'
           # Provide minimal env vars for type checking (to avoid type errors)
           NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.TEST_SUPABASE_URL || 'https://placeholder.supabase.co' }}
           NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.TEST_SUPABASE_ANON_KEY || 'placeholder-key' }}

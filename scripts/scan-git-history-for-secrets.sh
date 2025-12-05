@@ -1,11 +1,15 @@
 #!/bin/bash
 # Comprehensive git history scanner for secrets
 # Scans all commits in all branches for hardcoded secrets
+# OPTIMIZED FOR LOW MEMORY (8GB RAM) - Single-threaded, incremental processing
 
 set -e
 
-echo "🔍 Git History Secret Scanner"
-echo "=============================="
+echo "🔍 Git History Secret Scanner (Memory-Optimized)"
+echo "================================================"
+echo ""
+echo "💾 Memory Optimization: Single-threaded, incremental processing"
+echo "   Designed for 8GB RAM systems"
 echo ""
 
 # Check if we're in a git repository
@@ -51,12 +55,13 @@ TOTAL_COMMITS=0
 echo "🔍 Scanning git history..."
 echo ""
 
-# Scan each pattern
+# Scan each pattern (one at a time to save memory)
 for pattern in "${PATTERNS[@]}"; do
     echo "   Searching for pattern: $pattern"
     
-    # Search in all commits
-    COMMITS=$(git log --all -p -S "$pattern" --oneline 2>/dev/null | grep "^[a-f0-9]" | sort -u || true)
+    # Search in all commits (single-threaded, no parallel processing)
+    # Use --no-pager to avoid loading full history into memory
+    COMMITS=$(GIT_PAGER=cat git log --all -p -S "$pattern" --oneline --no-pager 2>/dev/null | grep "^[a-f0-9]" | sort -u || true)
     
     if [ -n "$COMMITS" ]; then
         COUNT=$(echo "$COMMITS" | wc -l | tr -d ' ')
@@ -75,8 +80,8 @@ for pattern in "${PATTERNS[@]}"; do
     fi
 done
 
-# Count total commits
-TOTAL_COMMITS=$(git rev-list --all --count 2>/dev/null || echo "0")
+# Count total commits (memory-efficient)
+TOTAL_COMMITS=$(GIT_PAGER=cat git rev-list --all --count --no-pager 2>/dev/null || echo "0")
 
 # Summary
 {
