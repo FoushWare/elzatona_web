@@ -41,6 +41,10 @@ const config = {
     '^lucide-react$': '<rootDir>/src/test-utils/mocks/lucide-react.tsx',
     // Mock nuqs to avoid ESM issues in tests
     '^nuqs$': '<rootDir>/src/test-utils/mocks/nuqs.ts',
+    // Mock shiki ESM module
+    '^shiki$': '<rootDir>/src/test-utils/mocks/shiki.ts',
+    // Mock refractor ESM module (used by react-syntax-highlighter)
+    '^refractor$': '<rootDir>/src/test-utils/mocks/refractor.ts',
   },
   // Include tests from root tests directory, but exclude e2e tests (Playwright)
   // Note: testPathIgnorePatterns handles the exclusion, so we keep testMatch simple
@@ -65,6 +69,7 @@ const config = {
   roots: ['<rootDir>', '<rootDir>/../../tests', '<rootDir>/../../libs'],
   // Transform ESM modules - allow nuqs and other ESM packages
   // Need to include the full path for nuqs submodules
+  // Note: shiki and refractor are mocked via moduleNameMapper, so we don't need to transform them
   transformIgnorePatterns: [
     'node_modules/(?!(nuqs|@supabase/supabase-js|@tanstack|@react-hook-form|lucide-react|@radix-ui|@radix-ui/react-select)/)',
   ],
