@@ -18,9 +18,9 @@ This guide shows you how to use **ALL** security tools and pipelines together, t
 │         │                     │                    │        │
 │         ▼                     ▼                    ▼        │
 │  • Formatting         • Linting            • Secret Scan   │
-│  • Linting            • Type Check         • Build Check   │
-│  • Type Check         • Build Check        • Tests         │
-│  • Secret Scan        • Secret Scan                        │
+│  • Secret Scan        • Type Check         • Build Check   │
+│                       • Build Check        • Cleanup       │
+│                       • Secret Scan                         │
 │                                                             │
 └─────────────────────────────────────────────────────────────┘
                             │
@@ -274,9 +274,8 @@ git add .
 # 3. Commit (Pre-Commit Hook runs automatically)
 git commit -m "feat: Add new feature"
 # ✅ Formatting applied
-# ✅ Linting fixed
-# ✅ Type checking passed
 # ✅ Secret scanning passed
+# ⏱️  ~10-30 seconds
 
 # 4. Push (Pre-Push Hook runs automatically)
 git push
@@ -332,9 +331,10 @@ git push
 ### What Prevents Issues Before Push?
 
 #### ✅ Pre-Commit Hook
-- **Prevents:** Formatting issues, linting errors, TypeScript errors, **secrets in staged files**
+- **Prevents:** Formatting issues, **secrets in staged files**
 - **Action:** Blocks commit if issues found
-- **Auto-fixes:** Formatting, linting
+- **Auto-fixes:** Formatting
+- **Time:** ~10-30 seconds (fast checks only)
 
 #### ✅ Pre-Push Hook
 - **Prevents:** TypeScript errors, build failures, **secrets in changed files**
@@ -451,8 +451,8 @@ gh api repos/FoushWare/elzatona_web/secret-scanning/alerts --jq 'length'
 ## ✅ Checklist: Complete Security Setup
 
 - [ ] Git hooks installed (`npm run prepare`)
-- [ ] Pre-commit hook active (checks formatting, linting, types, secrets)
-- [ ] Pre-push hook active (checks linting, types, build, secrets)
+- [ ] Pre-commit hook active (checks formatting, secrets - fast ~10-30s)
+- [ ] Pre-push hook active (checks linting, types, build, secrets - comprehensive ~2-5min)
 - [ ] GitHub Secret Scanning enabled (automatic)
 - [ ] CodeQL workflow configured (`.github/workflows/codeql-analysis.yml`)
 - [ ] SonarQube workflow configured (`.github/workflows/sonarcloud.yml`)
