@@ -6,7 +6,22 @@ This repository includes automation to help resolve GitHub secret scanning alert
 
 ## Available Automation
 
-### 1. GitHub Actions Workflow
+### 1. Fix and Resolve Workflow (RECOMMENDED) ⭐
+
+**File:** `.github/workflows/fix-and-resolve-secrets.yml`
+
+**Features:**
+- ✅ **Actually fixes the code** - removes/replaces hardcoded secrets
+- ✅ Replaces secrets with `process.env` in code files
+- ✅ Replaces secrets with placeholders in documentation
+- ✅ Automatically commits fixes (optional)
+- ✅ Creates PR with fixes (optional)
+- ✅ Resolves secret scanning alerts after fixing
+- Runs on schedule (weekly) or manual trigger
+
+**This is the recommended workflow** as it actually fixes the security issues, not just marks them as resolved.
+
+### 2. Auto-Resolve Workflow (Mark as Resolved Only)
 
 **File:** `.github/workflows/auto-resolve-secret-scanning.yml`
 
@@ -16,6 +31,8 @@ This repository includes automation to help resolve GitHub secret scanning alert
 - Can filter by secret type
 - Runs on schedule (daily) or manual trigger
 - Provides summary of resolved alerts
+
+**Note:** This workflow only marks alerts as resolved. It does NOT fix the code. Use the "Fix and Resolve" workflow instead.
 
 **Usage:**
 
@@ -105,6 +122,30 @@ As of the last check, there are **28 open alerts**:
 
 ## Recommended Workflow
 
+### Option A: Automated Fix (RECOMMENDED) ⭐
+
+**Use the "Fix and Resolve Secrets" workflow:**
+
+1. Go to: https://github.com/FoushWare/elzatona_web/actions/workflows/fix-and-resolve-secrets.yml
+2. Click "Run workflow"
+3. Configure:
+   - **Auto commit**: `true` (to commit fixes)
+   - **Create PR**: `true` (to create PR for review)
+   - **Resolution**: `revoked` (after rotation)
+4. Click "Run workflow"
+5. Review the PR and merge
+6. Rotate secrets (see Step 1 below)
+
+**This workflow will:**
+- ✅ Find all files with hardcoded secrets
+- ✅ Replace secrets with `process.env` in code
+- ✅ Replace secrets with placeholders in docs
+- ✅ Commit the fixes
+- ✅ Create a PR for review
+- ✅ Resolve the alerts
+
+### Option B: Manual Fix
+
 ### Step 1: Rotate Secrets (CRITICAL - Do First!)
 
 **⚠️ IMPORTANT:** Always rotate secrets BEFORE resolving alerts!
@@ -125,20 +166,34 @@ See `SECRET_ROTATION_GUIDE.md` for detailed instructions.
 3. Update `.gitignore` to exclude config files with secrets
 4. Remove secrets from git history (if needed)
 
-### Step 3: Resolve Alerts
+### Step 3: Fix the Code
 
 **Option A: Use GitHub Actions (Recommended)**
 
-1. Go to Actions → "Auto-Resolve Secret Scanning Alerts"
+1. Go to Actions → "Fix and Resolve Secret Scanning Issues"
 2. Click "Run workflow"
-3. Select resolution: `revoked`
-4. Add comment: "Secrets rotated and removed from codebase"
-5. Run workflow
+3. Configure:
+   - Auto commit: `true`
+   - Create PR: `true`
+   - Resolution: `revoked`
+4. Run workflow
+5. Review and merge the PR
 
 **Option B: Use Local Script**
 
 ```bash
-./scripts/resolve-secret-scanning-alerts.sh revoked "Secrets rotated and removed"
+# Fix secrets in files
+./scripts/fix-secrets-from-alerts.sh
+
+# Review changes
+git diff
+
+# Commit fixes
+git add .
+git commit -m "security: Remove hardcoded secrets"
+
+# Resolve alerts
+./scripts/resolve-secret-scanning-alerts.sh revoked "Secrets removed from code"
 ```
 
 ### Step 4: Verify
