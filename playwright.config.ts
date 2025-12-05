@@ -79,8 +79,8 @@ export default defineConfig({
     /* Take screenshot on failure */
     screenshot: 'only-on-failure',
 
-    /* Record video on failure - DISABLED for 8GB RAM to save memory */
-    video: 'off', // Disabled for 8GB RAM - use 'retain-on-failure' if needed
+    /* Record video on failure - kept only for failed tests, auto-removed on success */
+    video: 'retain-on-failure', // Record videos for failed tests only, auto-cleanup on success
   },
 
 

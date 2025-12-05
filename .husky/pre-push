@@ -137,51 +137,53 @@ if [[ "$current_branch" == "release/v1.0.0-main-website" ]] || [[ "$current_bran
   echo "   ✅ Auto-fixed files added to staging"
   echo ""
   
-  # Step 7: Clean up build files after successful build
-  echo "🧹 STEP 7: Cleaning build files..."
-  
-  echo "   🗑️  Removing .next directory..."
-  if [ -d ".next" ]; then
-    rm -rf .next
-    echo "   ✅ .next directory removed"
-  else
-    echo "   ℹ️  .next directory not found (already clean)"
-  fi
-  
-  echo "   🗑️  Removing build directory..."
-  if [ -d "build" ]; then
-    rm -rf build
-    echo "   ✅ build directory removed"
-  else
-    echo "   ℹ️  build directory not found (already clean)"
-  fi
-  
-  echo "   🗑️  Removing storybook-static directory..."
-  if [ -d "storybook-static" ]; then
-    rm -rf storybook-static
-    echo "   ✅ storybook-static directory removed"
-  else
-    echo "   ℹ️  storybook-static directory not found (already clean)"
-  fi
-  
-  echo "   🗑️  Removing test-results directory..."
-  if [ -d "test-results" ]; then
-    rm -rf test-results
-    echo "   ✅ test-results directory removed"
-  else
-    echo "   ℹ️  test-results directory not found (already clean)"
-  fi
-  
-  echo "   🗑️  Removing coverage directory..."
-  if [ -d "coverage" ]; then
-    rm -rf coverage
-    echo "   ✅ coverage directory removed"
-  else
-    echo "   ℹ️  coverage directory not found (already clean)"
-  fi
-  
-  echo "   ℹ️  Keeping tsconfig.tsbuildinfo (helps with incremental builds)"
-  echo ""
+    # Step 7: Clean up build files after successful build
+    echo "🧹 STEP 7: Cleaning build files..."
+    
+    echo "   🗑️  Removing .next directory..."
+    if [ -d ".next" ]; then
+      rm -rf .next
+      echo "   ✅ .next directory removed"
+    else
+      echo "   ℹ️  .next directory not found (already clean)"
+    fi
+    
+    echo "   🗑️  Removing build directory..."
+    if [ -d "build" ]; then
+      rm -rf build
+      echo "   ✅ build directory removed"
+    else
+      echo "   ℹ️  build directory not found (already clean)"
+    fi
+    
+    echo "   🗑️  Removing storybook-static directory..."
+    if [ -d "storybook-static" ]; then
+      rm -rf storybook-static
+      echo "   ✅ storybook-static directory removed"
+    else
+      echo "   ℹ️  storybook-static directory not found (already clean)"
+    fi
+    
+    echo "   🗑️  Removing coverage directory..."
+    if [ -d "coverage" ]; then
+      rm -rf coverage
+      echo "   ✅ coverage directory removed"
+    else
+      echo "   ℹ️  coverage directory not found (already clean)"
+    fi
+    
+    # Step 7.5: Clean up Playwright videos (save space - videos can be 22GB+)
+    echo "   📹 Cleaning up Playwright test videos..."
+    if [ -f "scripts/cleanup-playwright-videos.sh" ]; then
+      bash scripts/cleanup-playwright-videos.sh
+      echo "   ✅ Playwright videos cleaned up"
+    else
+      echo "   ℹ️  Cleanup script not found (non-critical)"
+    fi
+    
+    echo "   ℹ️  Keeping tsconfig.tsbuildinfo (helps with incremental builds)"
+    echo "   ℹ️  Keeping test-results/ (JSON/XML reports, videos removed)"
+    echo ""
   
   # Final status
   echo "📊 PRE-PUSH SUMMARY:"

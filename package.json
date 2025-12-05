@@ -41,6 +41,7 @@
     "sonar:skip-build": "NODE_OPTIONS=--max-old-space-size=1536 node Rest/scripts/scripts/run-sonarqube-local.js --skip-build",
     "sonar:quick": "NODE_OPTIONS=--max-old-space-size=1024 SONAR_MEMORY_LIMIT=1024 node Rest/scripts/scripts/run-sonarqube-local.js --skip-tests --skip-build",
     "format": "prettier --write .",
+    "cleanup:playwright-videos": "bash scripts/cleanup-playwright-videos.sh",
     "prepare": "husky",
     "pre-commit:switch": "bash Rest/scripts/scripts/switch-pre-commit.sh",
     "pre-push:switch": "bash Rest/scripts/scripts/switch-pre-push.sh",
