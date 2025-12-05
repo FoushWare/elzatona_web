@@ -162,6 +162,22 @@ temp/
 # MCP server configuration (contains sensitive tokens)
 .cursor/mcp.json
 
+# Cursor cache and logs (regenerated files)
+.cursor/cache/
+.cursor/logs/
+.cursor/*.log
+
+# Taskmaster state (personal/local state)
+.taskmaster/state.json
+Rest/other/.taskmaster/state.json
+.taskmaster/reports/
+.taskmaster/cache/
+
+# Database backups (NEVER commit - large files, sensitive data)
+database-backup/
+*.backup.sql
+*.sql.backup
+
 # Jest cache
 **/.jest-cache/
 .env.local
