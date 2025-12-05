@@ -181,3 +181,7 @@ database-backup/
 # Jest cache
 **/.jest-cache/
 .env.local
+
+# Playwright test reports (large video/image files)
+playwright-report/
+Rest/other/playwright-report/
