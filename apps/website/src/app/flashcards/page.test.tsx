@@ -24,10 +24,8 @@ jest.mock('../../lib/flashcards', () => ({
 
 global.fetch = jest.fn();
 
-jest.mock('lucide-react', () => ({
-  BookOpen: () => <span>📖</span>,
-  Trash2: () => <span>🗑️</span>,
-  Play: () => <span>▶️</span>,
+// Mock lucide-react using the shared mock
+jest.mock('lucide-react', () => require('../../test-utils/mocks/lucide-react.tsx'));
   RotateCcw: () => <span>↻</span>,
   ArrowLeft: () => <span>←</span>,
   ArrowRight: () => <span>→</span>,
