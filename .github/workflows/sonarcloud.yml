@@ -78,7 +78,7 @@ jobs:
           CI: 'true'
           GITHUB_ACTIONS: 'true'
 
-      - name: SonarCloud Code Analysis project
+      - name: Build project
         run: npm run build
         env:
           # Force test environment for build
