@@ -789,8 +789,12 @@ const QuestionContent = ({ content }: { content: string }) => {
       let cleanText = decodeHtmlEntities(textContent);
       cleanText = cleanText.replace(/<code[^>]*>([^<]{1,30})<\/code>/gi, '`$1`');
       cleanText = cleanText.replace(/<[^>]+>/g, '');
-      for (let i = 0; i < 3; i++) {
+      // Repeat sanitization until no further changes
+      let prevText;
+      do {
+        prevText = cleanText;
         cleanText = cleanText
+          .replace(/<script[\s\S]*?<\/script>/gi, '')
           .replace(/<pr<cod?/gi, '')
           .replace(/<pr</gi, '')
           .replace(/<pr/gi, '')
@@ -807,8 +811,9 @@ const QuestionContent = ({ content }: { content: string }) => {
           .replace(/\s*e>\s*/g, ' ')
           .replace(/^>\s*/g, '')
           .replace(/\s*>$/g, '')
-          .replace(/\s+>\s+/g, ' ');
-      }
+          .replace(/\s+>\s+/g, ' ')
+          .replace(/<[^>]+>/g, ''); // remove any remaining tags
+      } while (cleanText !== prevText);
       cleanText = cleanText.replace(/[ \t]+/g, ' ').replace(/\n\s*\n/g, '\n\n').trim();
       if (cleanText) {
         parts.push({ type: 'text', content: cleanText });
@@ -819,7 +824,11 @@ const QuestionContent = ({ content }: { content: string }) => {
   if (parts.length === 0) {
     let cleanContent = fixedContent;
     
-    for (let i = 0; i < 3; i++) {
+    // Repeat sanitization until no further changes
+    let prevContent;
+    do {
+      prevContent = cleanContent;
+        .replace(/<script[\s\S]*?<\/script>/gi, '')
       cleanContent = cleanContent
         .replace(/<pr<cod/gi, '')
         .replace(/<\/cod<\/pr/gi, '')
@@ -838,7 +847,7 @@ const QuestionContent = ({ content }: { content: string }) => {
         .replace(/^>\s*/g, '')
         .replace(/\s*>$/g, '')
         .replace(/\s+>\s+/g, ' ');
-    }
+    } while (cleanContent !== prevContent);
     
     cleanContent = cleanContent
       .replace(/&nbsp;/g, ' ')
