@@ -4,6 +4,11 @@
   "framework": "nextjs",
   "installCommand": "npm install",
   "devCommand": "npx nx serve website",
+  "functions": {
+    "apps/website/src/app/api/**/*.ts": {
+      "runtime": "nodejs24.x"
+    }
+  },
   "rewrites": [
     {
       "source": "/api/(.*)",
