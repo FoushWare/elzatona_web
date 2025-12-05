@@ -52,7 +52,8 @@ describe('A-IT-018: Problem Solving CRUD Integration', () => {
     render(<ProblemSolvingAdminPage />);
     
     await waitFor(() => {
-      const { useProblemSolvingTasks } = require('@elzatona/shared-hooks');
+      const sharedHooks = jest.requireMock('@elzatona/shared-hooks');
+      const { useProblemSolvingTasks } = sharedHooks;
       expect(useProblemSolvingTasks).toHaveBeenCalled();
     });
   });
