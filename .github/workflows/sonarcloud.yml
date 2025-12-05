@@ -79,26 +79,6 @@ jobs:
           CI: 'true'
           GITHUB_ACTIONS: 'true'
 
-      - name: Build project
-        run: npm run build
-        env:
-          # Force test environment for build
-          APP_ENV: 'test'
-          NEXT_PUBLIC_APP_ENV: 'test'
-          NODE_ENV: 'test'
-          # Memory settings
-          NODE_OPTIONS: '--max-old-space-size=1536'
-          # Supabase test environment (from GitHub Secrets - required after removing hardcoded secrets)
-          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.TEST_SUPABASE_URL }}
-          NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.TEST_SUPABASE_ANON_KEY }}
-          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.TEST_SUPABASE_SERVICE_ROLE_KEY }}
-          # JWT secret (required for build)
-          JWT_SECRET: ${{ secrets.JWT_SECRET }}
-          # CI flag
-          CI: 'true'
-          GITHUB_ACTIONS: 'true'
-        continue-on-error: true
-
       - name: SonarQube Scan
         uses: SonarSource/sonarqube-scan-action@v6
         env:
