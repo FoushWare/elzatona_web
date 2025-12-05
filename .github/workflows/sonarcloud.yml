@@ -104,6 +104,7 @@ jobs:
         with:
           projectBaseDir: .
         continue-on-error: false
+        timeout-minutes: 15
 
       - name: Upload coverage reports
         uses: codecov/codecov-action@v4
