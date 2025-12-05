@@ -3,7 +3,7 @@
 import React from 'react';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism';
-
+import sanitizeHtml from 'sanitize-html';
 // Helper function to determine if content is valid code or should be rendered as text
 // Uses a scoring system to make intelligent decisions
 export const isValidCode = (content: string): { isValid: boolean; score: number; reasons: string[] } => {
@@ -456,7 +456,7 @@ export const QuestionContent = ({ content }: { content: string }) => {
     while (code !== previousCode && iterations < maxIterations) {
       previousCode = code;
       code = decodeHtmlEntities(code);
-      code = code.replace(/<\/?[a-zA-Z][a-zA-Z0-9]*(?:\s+[^>]*)?>/gi, '');
+      code = sanitizeHtml(code, { allowedTags: [], allowedAttributes: {} });
       iterations++;
     }
     
@@ -498,7 +498,7 @@ export const QuestionContent = ({ content }: { content: string }) => {
         .replace(/(\w+)\s*&lt;\s*(\d+)\s*&gt;/g, '$1 < $2 >')
         .replace(/(\w+)\s*&lt;\s*(\d+)/g, '$1 < $2')
         .replace(/(\d+)\s*&gt;/g, '$1 >')
-        .replace(/<\/?[a-zA-Z][a-zA-Z0-9]*(?:\s+[^>]*)?>/gi, '')
+        // HTML tag stripping now handled by sanitizeHtml above
         .replace(/^>\s*/g, '')
         .replace(/\s*>$/g, '')
         .replace(/\s+>\s+/g, ' ');
