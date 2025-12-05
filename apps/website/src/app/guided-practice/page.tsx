@@ -216,7 +216,12 @@ const cleanOptionText = (text: string): string => {
   });
   
   // Step 5: Remove any remaining HTML tags (but preserve backtick-wrapped content)
-  cleaned = cleaned.replace(/<[^>]+>/g, '');
+  // Remove all HTML tags by repeatedly applying the regex until none remain
+  let prevCleaned;
+  do {
+    prevCleaned = cleaned;
+    cleaned = cleaned.replace(/<[^>]+>/g, '');
+  } while (cleaned !== prevCleaned);
   
   // Step 4: Fix common malformed patterns from HTML parsing issues
   // First, handle the specific e> artifact pattern (from </code> tags)
