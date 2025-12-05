@@ -1,41 +1,75 @@
 #!/bin/bash
 # Configure SonarCloud main branch via API
-# This script sets the main branch in SonarCloud project settings
+# This script helps configure the main branch in SonarCloud project settings
+# Repository: https://github.com/FoushWare/elzatona_web
 
 set -e
 
-PROJECT_KEY="FoushWare_GreatFrontendHub"
+PROJECT_KEY="FoushWare_elzatona_web"
 ORGANIZATION="foushware"
 MAIN_BRANCH="main"
+REPO_URL="https://github.com/FoushWare/elzatona_web"
 
-# Check if SONAR_TOKEN is set
-if [ -z "$SONAR_TOKEN" ]; then
-  echo "❌ Error: SONAR_TOKEN environment variable is not set"
-  echo "   Get your token from: https://sonarcloud.io/account/security"
-  exit 1
-fi
-
-echo "🔧 Configuring main branch in SonarCloud..."
-echo "   Project: $PROJECT_KEY"
+echo "🔧 SonarCloud Main Branch Configuration Helper"
+echo "   Repository: $REPO_URL"
+echo "   Project Key: $PROJECT_KEY"
 echo "   Organization: $ORGANIZATION"
 echo "   Main Branch: $MAIN_BRANCH"
 echo ""
 
-# Note: SonarCloud API doesn't have a direct endpoint to set main branch
-# The main branch is typically set via UI or automatically detected
-# However, we can verify the project exists and check its status
+# Check if SONAR_TOKEN is set (optional - only needed for API verification)
+if [ -z "$SONAR_TOKEN" ]; then
+  echo "ℹ️  Note: SONAR_TOKEN not set (optional for this script)"
+  echo "   Get your token from: https://sonarcloud.io/account/security"
+  echo ""
+fi
 
-echo "📋 Checking project status..."
-curl -s -u "${SONAR_TOKEN}:" \
-  "https://sonarcloud.io/api/project_branches/list?project=${PROJECT_KEY}" \
-  | jq '.' || echo "⚠️  Could not fetch branch information"
+echo "📋 Step-by-Step Instructions:"
+echo ""
+echo "1️⃣  Go to SonarCloud Project Settings:"
+echo "   👉 https://sonarcloud.io/project/settings?project=${PROJECT_KEY}"
+echo ""
+echo "2️⃣  Navigate to Branches:"
+echo "   - Click on 'General Settings' (left sidebar)"
+echo "   - Click on 'Branches'"
+echo ""
+echo "3️⃣  Set Main Branch:"
+echo "   - Find the 'Main Branch' setting"
+echo "   - Set it to: ${MAIN_BRANCH}"
+echo "   - Click 'Save' or 'Update'"
+echo ""
+echo "4️⃣  Verify Configuration:"
+echo "   - Go to: https://sonarcloud.io/project/overview?id=${PROJECT_KEY}"
+echo "   - The warning about main branch should disappear after next analysis"
+echo ""
 
+# Optional: Try to verify project exists via API if token is available
+if [ -n "$SONAR_TOKEN" ]; then
+  echo "🔍 Verifying project status via API..."
+  if command -v jq &> /dev/null; then
+    BRANCH_INFO=$(curl -s -u "${SONAR_TOKEN}:" \
+      "https://sonarcloud.io/api/project_branches/list?project=${PROJECT_KEY}" 2>/dev/null)
+    
+    if [ $? -eq 0 ] && [ -n "$BRANCH_INFO" ]; then
+      echo "✅ Project found in SonarCloud"
+      echo "$BRANCH_INFO" | jq '.' 2>/dev/null || echo "$BRANCH_INFO"
+    else
+      echo "⚠️  Could not verify project (check PROJECT_KEY and SONAR_TOKEN)"
+    fi
+  else
+    echo "ℹ️  Install 'jq' for better API response formatting"
+    curl -s -u "${SONAR_TOKEN}:" \
+      "https://sonarcloud.io/api/project_branches/list?project=${PROJECT_KEY}" || true
+  fi
+  echo ""
+fi
+
+echo "📚 Additional Resources:"
+echo "   - Project Overview: https://sonarcloud.io/project/overview?id=${PROJECT_KEY}"
+echo "   - Project Settings: https://sonarcloud.io/project/settings?project=${PROJECT_KEY}"
+echo "   - GitHub Repository: $REPO_URL"
 echo ""
-echo "✅ To configure main branch:"
-echo "   1. Go to: https://sonarcloud.io/project/settings?project=${PROJECT_KEY}"
-echo "   2. Navigate to: General Settings → Branches"
-echo "   3. Set Main Branch to: ${MAIN_BRANCH}"
-echo "   4. Save changes"
-echo ""
-echo "   Or use the SonarCloud UI directly:"
-echo "   https://sonarcloud.io/project/overview?id=${PROJECT_KEY}"
+echo "✅ After configuring, the next workflow run will:"
+echo "   - Complete successfully (not cancel early)"
+echo "   - Recognize main branch correctly"
+echo "   - Show analysis results properly"
