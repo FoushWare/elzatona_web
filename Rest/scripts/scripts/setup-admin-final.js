@@ -4,10 +4,16 @@ import { createClient } from '@supabase/supabase-js';
 
 console.log('🛡️ Creating Admins Table and User\n');
 
-// Supabase configuration
-const supabaseUrl = 'https://hpnewqkvpnthpohvxcmq.supabase.co';
-const supabaseServiceRoleKey =
-  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhwbmV3cWt2cG50aHBvaHZ4Y21xIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc2MDY2MDQxOCwiZXhwIjoyMDc2MjM2NDE4fQ.BH3xSC7yk5DqX5bTgyedOyC45fNg1_vBcV04X_tkYLQ';
+// Supabase configuration - REQUIRES environment variables
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+
+if (!supabaseUrl || !supabaseServiceRoleKey) {
+  console.error('❌ Missing Supabase environment variables');
+  console.error('Required: NEXT_PUBLIC_SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY');
+  console.error('Please set these in your .env.local file');
+  process.exit(1);
+}
 
 // Create Supabase client with service role key for admin operations
 const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
