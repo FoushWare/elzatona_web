@@ -79,6 +79,8 @@ console.log('');
 const loadedFiles: string[] = [];
 for (const envFile of envFiles) {
   try {
+    // Dynamic import for Node.js fs module (only used in Node.js environment)
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
     const fs = require('fs');
     if (fs.existsSync(envFile)) {
       loadedFiles.push(envFile);
