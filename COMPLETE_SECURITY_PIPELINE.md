@@ -478,6 +478,7 @@ gh api repos/FoushWare/elzatona_web/secret-scanning/alerts --jq 'length'
 - `SECURITY_FIX_TOOLS_GUIDE.md` - All available tools
 - `SECRET_SCANNING_AUTOMATION.md` - Secret scanning automation
 - `SECRET_ROTATION_GUIDE.md` - How to rotate secrets
+- `GIT_HISTORY_REMEDIATION.md` - **Remove secrets from git history** ⚠️
 - `SECURITY.md` - Security policy
 
 ---
