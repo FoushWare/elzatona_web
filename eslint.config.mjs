@@ -36,6 +36,14 @@ const eslintConfig = [
       '**/.next/**', // All generated Next.js files
       '**/.next/types/**', // Generated Next.js type definitions
       '**/.next/types/routes.d.ts', // Generated Next.js route types
+      // Legacy Node.js scripts in Rest/ directory (use require() - valid for Node.js)
+      'Rest/scripts/**', // All scripts in Rest/scripts/ use CommonJS
+      'Rest/scripts-backup/**', // Backup scripts use CommonJS
+      'Rest/scripts/setup/**', // Setup scripts use CommonJS
+      'Rest/scripts/frontend-task-batches/**', // Frontend task batch scripts use CommonJS
+      'Rest/fix-imports.js', // Utility script uses CommonJS
+      'Rest/markdown/docs/api/**', // API documentation scripts use CommonJS
+      '.cursor/**', // Cursor IDE scripts use CommonJS
     ],
   },
   {
