@@ -5,7 +5,15 @@ echo "🔒 GitGuardian Incident Resolution Helper"
 echo "=========================================="
 echo ""
 
-export GITGUARDIAN_API_KEY="${GITGUARDIAN_API_KEY:-GITGUARDIAN_API_KEY}"
+# Load API key from environment or .env.local
+if [ -z "$GITGUARDIAN_API_KEY" ]; then
+  if [ -f .env.local ]; then
+    export $(grep GITGUARDIAN_API_KEY .env.local | xargs)
+  fi
+fi
+
+# Note: This script doesn't require the API key - it's just for dashboard access
+# If you need to use the API, set GITGUARDIAN_API_KEY environment variable
 
 INCIDENT_IDS=(
   "23145079"
