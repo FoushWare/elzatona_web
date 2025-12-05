@@ -1,4 +1,4 @@
-name: Build
+name: SonarCloud Code Analysis
 
 on:
   push:
@@ -78,7 +78,7 @@ jobs:
           CI: 'true'
           GITHUB_ACTIONS: 'true'
 
-      - name: Build project
+      - name: SonarCloud Code Analysis project
         run: npm run build
         env:
           # Force test environment for build
