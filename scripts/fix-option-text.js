@@ -39,7 +39,12 @@ const cleanOptionText = (text) => {
   cleaned = cleaned.replace(/<code[^>]*>([^<]+)<\/code>/gi, (_, codeContent) => {
     return `\`${decodeHtmlEntities(codeContent).trim()}\``;
   });
-  cleaned = cleaned.replace(/<[^>]+>/g, '');
+  // Remove all HTML tags reliably by repeatedly applying regex
+  let prev;
+  do {
+    prev = cleaned;
+    cleaned = cleaned.replace(/<[^>]+>/g, '');
+  } while (cleaned !== prev);
   
   // First, handle the specific e> artifact pattern
   cleaned = cleaned.replace(/(\w+)e>/g, '$1');
