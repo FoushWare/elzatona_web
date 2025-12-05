@@ -138,7 +138,9 @@ async function setupAdminAccount() {
     console.log('You can now login at:');
     console.log('   URL: http://localhost:3001/admin/login');
     console.log(`   Email: ${adminEmail}`);
-    console.log(`   Password: ${adminPassword}\n`);
+    // Password will not be logged for security reasons.
+    console.log("   Password: [REDACTED - not logged for security]");
+    // If you need the password, please refer to the value you provided during setup, or set/reset it securely.
   } catch (error) {
     console.error('❌ Error setting up admin account:', error.message);
   }
