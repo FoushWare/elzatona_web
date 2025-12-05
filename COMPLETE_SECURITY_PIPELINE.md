@@ -51,25 +51,27 @@ This guide shows you how to use **ALL** security tools and pipelines together, t
 
 ### 🔒 **Local Prevention (Before Push)**
 
-#### 1. Pre-Commit Hook
+#### 1. Pre-Commit Hook (Fast Checks - ~10-30s)
 **Location:** `.git/hooks/pre-commit`  
 **Source:** `Rest/other/.husky/pre-commit`
 
 **What it does:**
-- ✅ **Prettier formatting** - Auto-formats code
-- ✅ **ESLint auto-fix** - Auto-fixes linting issues
-- ✅ **ESLint check** - Validates linting
-- ✅ **TypeScript type checking** - **BLOCKS commit if errors**
-- ✅ **Secret scanning** - **BLOCKS commit if secrets found** (NEW)
-- ✅ **Auto-stage** - Adds formatted/fixed files
+- ✅ **Prettier formatting** - Auto-formats code (fast)
+- ✅ **Secret scanning** - **BLOCKS commit if secrets found** (critical)
+- ✅ **Auto-stage** - Adds formatted files
 
 **Blocks commit if:**
-- TypeScript errors found
+- Formatting fails
 - Secrets detected in staged files
+
+**Why this structure:**
+- Fast checks only (formatting + secret scan)
+- Linting and type checking moved to pre-push (slower operations)
+- Secret scanning is critical and must run early
 
 ---
 
-#### 2. Pre-Push Hook
+#### 2. Pre-Push Hook (Comprehensive Checks - ~2-5min)
 **Location:** `.git/hooks/pre-push`  
 **Source:** `Rest/other/.husky/pre-push`
 
@@ -78,7 +80,7 @@ This guide shows you how to use **ALL** security tools and pipelines together, t
 - ✅ **ESLint check** - Validates linting
 - ✅ **TypeScript type checking** - **BLOCKS push if errors**
 - ✅ **Build validation** - **BLOCKS push if build fails**
-- ✅ **Secret scanning** - **BLOCKS push if secrets found** (NEW)
+- ✅ **Secret scanning** - **BLOCKS push if secrets found** (final safety check)
 - ✅ **Auto-stage** - Adds auto-fixed files
 - ✅ **Cleanup** - Removes build artifacts
 
@@ -86,7 +88,15 @@ This guide shows you how to use **ALL** security tools and pipelines together, t
 - TypeScript errors found
 - Build fails
 - Secrets detected in changed files
-- Only runs on: `main`, `develop`, `release/**` branches
+
+**Runs on:**
+- `main`, `develop`, `release/**` branches only
+
+**Why this structure:**
+- Comprehensive checks before code reaches GitHub
+- Linting and type checking run here (slower operations)
+- Secret scanning as final safety check
+- Build validation ensures code compiles
 
 ---
 
@@ -174,7 +184,7 @@ This guide shows you how to use **ALL** security tools and pipelines together, t
 
 ## 🔗 Dependencies & Order
 
-### Local Development Flow
+### Local Development Flow (Optimized)
 
 ```
 1. You write code
@@ -185,20 +195,19 @@ This guide shows you how to use **ALL** security tools and pipelines together, t
    ▼
 3. git commit
    │
-   ├─► Pre-Commit Hook runs:
-   │   ├─► Formatting ✅
-   │   ├─► Linting ✅
-   │   ├─► Type Check ✅
+   ├─► Pre-Commit Hook (Fast - ~10-30s):
+   │   ├─► Formatting ✅ (quick)
    │   └─► Secret Scan ✅ (BLOCKS if secrets found)
    │
    ▼
 4. git push
    │
-   ├─► Pre-Push Hook runs:
-   │   ├─► Linting ✅
+   ├─► Pre-Push Hook (Comprehensive - ~2-5min):
+   │   ├─► Linting ✅ (auto-fix + check)
    │   ├─► Type Check ✅ (BLOCKS if errors)
    │   ├─► Build Check ✅ (BLOCKS if fails)
-   │   └─► Secret Scan ✅ (BLOCKS if secrets found)
+   │   ├─► Secret Scan ✅ (final safety check)
+   │   └─► Cleanup ✅
    │
    ▼
 5. Code pushed to GitHub
@@ -358,8 +367,8 @@ git push
 
 | Tool | When | What It Does | Blocks? | Auto-Fix? |
 |------|------|--------------|---------|-----------|
-| **Pre-Commit Hook** | Before commit | Format, lint, type check, **secret scan** | ✅ Yes | ✅ Formatting, linting |
-| **Pre-Push Hook** | Before push | Lint, type check, build, **secret scan** | ✅ Yes | ✅ Linting |
+| **Pre-Commit Hook** | Before commit | Format, **secret scan** (fast checks) | ✅ Yes | ✅ Formatting |
+| **Pre-Push Hook** | Before push | Lint, type check, build, **secret scan** (comprehensive) | ✅ Yes | ✅ Linting |
 | **GitHub Secret Scanning** | After push | Detect secrets | ❌ No | ❌ No (use workflow) |
 | **CodeQL** | After push | Detect vulnerabilities | ❌ No | ❌ No |
 | **SonarQube** | After push | Code quality analysis | ❌ No | ❌ No |
