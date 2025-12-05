@@ -1,0 +1,216 @@
+---
+description: Security pipeline rules for secret management, git hooks, scanning, and history remediation
+globs: **/*
+alwaysApply: true
+---
+
+# Security Pipeline Rules
+
+## 🔒 **Secret Management**
+
+### **Never Hardcode Secrets**
+- ❌ **DON'T:** Hardcode API keys, tokens, or passwords in code
+- ✅ **DO:** Always use environment variables (`process.env.VARIABLE_NAME`)
+- ✅ **DO:** Add secrets to `.env.local` (never commit this file)
+- ✅ **DO:** Use `.env.example` for documentation (with placeholders)
+
+### **Secret Detection**
+- ✅ **Pre-push hook** automatically scans for secrets before push
+- ✅ **GitHub** automatically scans all commits after push
+- ✅ **Never skip secret scanning** unless it's a known false positive
+- ✅ **If secrets found:** Fix immediately, don't push
+
+### **Secret Patterns to Avoid**
+```typescript
+// ❌ DON'T: Hardcode secrets
+const apiKey = "AIzaSyBXlcfcdyIqoeJOb2gXcxpRSmQO7lEP82Y";
+const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...";
+
+// ✅ DO: Use environment variables
+const apiKey = process.env.GOOGLE_API_KEY;
+const token = process.env.SUPABASE_SERVICE_ROLE_KEY;
+
+// ✅ DO: Add error handling
+if (!apiKey) {
+  throw new Error("GOOGLE_API_KEY is required");
+}
+```
+
+## 🛡️ **Git Hooks (Local Security)**
+
+### **Pre-Commit Hook**
+- ✅ **Runs automatically** on `git commit`
+- ✅ **What it does:** Formatting (Prettier) only
+- ✅ **Time:** ~10 seconds, ~100MB memory
+- ✅ **Blocks commit if:** Formatting fails
+
+### **Pre-Push Hook**
+- ✅ **Runs automatically** on `git push`
+- ✅ **What it does:**
+  - Linting (ESLint auto-fix + check)
+  - TypeScript type checking (2GB memory limit)
+  - Build validation (2GB memory limit)
+  - **Secret scanning** (CRITICAL - blocks push if secrets found)
+  - Cleanup build artifacts
+- ✅ **Time:** ~2-5 minutes, ~2GB peak memory
+- ✅ **Blocks push if:** Type errors, build fails, **secrets found**
+- ✅ **Memory optimized** for 8GB RAM systems
+
+### **Never Skip Hooks**
+- ❌ **DON'T:** Use `--no-verify` to skip hooks
+- ❌ **DON'T:** Use `SKIP_SECRET_SCAN=true` unless emergency
+- ✅ **DO:** Let hooks run - they protect the repository
+- ✅ **DO:** Fix issues before pushing
+
+## 🔍 **Security Scanning**
+
+### **Local Scanning (Before Push)**
+- ✅ **Pre-push hook** scans changed files automatically
+- ✅ **Scans for:** Supabase keys, Google API keys, GitHub tokens, OpenAI keys, Sentry tokens, etc.
+- ✅ **Blocks push** if secrets found
+
+### **GitHub Scanning (After Push)**
+- ✅ **Automatic** secret scanning on all commits
+- ✅ **CodeQL** analysis for security vulnerabilities
+- ✅ **SonarQube** analysis for code quality and security
+- ✅ **Creates alerts** in Security tab
+
+### **Git History Scanning**
+- ✅ **Use:** `./scripts/scan-git-history-for-secrets.sh`
+- ✅ **When:** If GitHub alerts show secrets in history
+- ✅ **Memory:** ~500MB-1GB (single-threaded, optimized for 8GB RAM)
+- ✅ **Output:** Generates report with all findings
+
+## 🧹 **Git History Remediation**
+
+### **When Secrets Are in History**
+Even after fixing code, secrets remain in git history. Follow this process:
+
+1. **Scan History:**
+   ```bash
+   ./scripts/scan-git-history-for-secrets.sh
+   ```
+
+2. **Rotate ALL Exposed Keys:**
+   - Supabase: Regenerate service_role key
+   - Google: Delete/restrict API keys
+   - GitHub: Revoke tokens
+   - Update all `.env` files
+   - Update GitHub Secrets
+
+3. **Remove from History:**
+   ```bash
+   ./scripts/remove-secrets-from-history-complete.sh
+   ```
+   - Creates backup branch automatically
+   - Uses git-filter-repo (single-threaded, memory-optimized)
+   - Replaces secrets with placeholders
+
+4. **Force Push:**
+   ```bash
+   git push origin --force --all
+   ```
+   - ⚠️ **Only after rotating keys!**
+   - ⚠️ **Notify team members first!**
+
+### **History Remediation Rules**
+- ✅ **Always rotate keys FIRST** before removing from history
+- ✅ **Always create backup** (script does this automatically)
+- ✅ **Always verify removal** after cleanup
+- ✅ **Always notify team** before force pushing
+
+## 💾 **Memory Optimization (8GB RAM)**
+
+### **All Operations Are Memory-Optimized**
+- ✅ **Single-threaded:** No parallel processing
+- ✅ **Memory limits:** Node.js capped at 2GB
+- ✅ **Incremental processing:** Avoids loading full history
+- ✅ **Safe for 8GB RAM systems**
+
+### **Memory Usage Guidelines**
+- ✅ **Pre-commit:** ~100MB (safe anytime)
+- ✅ **Pre-push (linting):** ~200MB (safe anytime)
+- ✅ **Pre-push (type check):** ~500MB-1GB (safe anytime)
+- ⚠️ **Pre-push (build):** ~2GB (close other apps)
+- ⚠️ **History removal:** ~1-2GB (close everything)
+
+### **When Running Heavy Operations**
+- ⚠️ **Close other applications** before build or history operations
+- ⚠️ **Monitor memory usage** if system becomes slow
+- ✅ **Take breaks** between heavy operations
+
+## 🔄 **Auto-Fix Workflows**
+
+### **Fix and Resolve Secrets Workflow**
+- ✅ **Location:** `.github/workflows/fix-and-resolve-secrets.yml`
+- ✅ **What it does:**
+  - Finds files with secrets
+  - Fixes code (replaces with `process.env`)
+  - Creates PR with fixes
+  - Resolves alerts
+- ✅ **When:** Manual trigger or weekly schedule
+- ✅ **Use when:** Secrets detected in current code
+
+### **Auto-Resolve Secret Scanning Workflow**
+- ✅ **Location:** `.github/workflows/auto-resolve-secret-scanning.yml`
+- ✅ **What it does:**
+  - Marks alerts as resolved
+  - Does NOT fix code (use fix-and-resolve-secrets.yml instead)
+- ✅ **When:** Manual trigger or daily schedule
+- ✅ **Use when:** Keys already rotated, just need to mark alerts resolved
+
+## 📋 **Security Checklist**
+
+Before pushing code, ensure:
+- [ ] No hardcoded secrets in code
+- [ ] All secrets use `process.env`
+- [ ] `.env.local` is in `.gitignore`
+- [ ] Pre-push hook will run (don't skip)
+- [ ] TypeScript types are correct
+- [ ] Build passes locally
+- [ ] No secrets in git history (if previously exposed)
+
+## 🚨 **Emergency Procedures**
+
+### **If Secrets Found in Code**
+1. **Don't push!** Fix locally first
+2. Replace with `process.env` variables
+3. Add to `.env.local`
+4. Test locally
+5. Then push
+
+### **If Secrets Found in History**
+1. **Rotate keys immediately** in service dashboards
+2. Update all `.env` files
+3. Update GitHub Secrets
+4. Run history remediation script
+5. Force push after team notification
+
+### **If Pre-Push Hook Blocks Push**
+1. **Don't skip the hook!**
+2. Fix the issue (secrets, type errors, build failures)
+3. Run the hook again
+4. Only skip in true emergencies (and document why)
+
+## 🔗 **Related Documentation**
+
+- `COMPLETE_SECURITY_PIPELINE.md` - Complete pipeline guide
+- `COMPLETE_INTEGRATION_DIAGRAM.md` - Visual integration diagram
+- `GIT_HISTORY_REMEDIATION.md` - History cleanup guide
+- `MEMORY_OPTIMIZATION_GUIDE.md` - Memory optimization guide
+- `SECRET_SCANNING_AUTOMATION.md` - Secret scanning automation
+
+## ✅ **Best Practices**
+
+1. **Always use environment variables** for secrets
+2. **Never commit `.env.local`** or any file with real secrets
+3. **Let hooks run** - they protect the repository
+4. **Rotate keys immediately** if exposed
+5. **Scan history regularly** if repository was previously public
+6. **Monitor GitHub Security tab** for alerts
+7. **Use auto-fix workflows** when available
+8. **Document false positives** if you must skip scanning
+
+---
+
+**Remember:** Security is a continuous process. These rules help prevent secrets from entering the repository and provide tools to remediate if they do.
