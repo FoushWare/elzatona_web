@@ -101,7 +101,12 @@ export default function ProblemSolvingQuestion({
       let code = preCodeMatch[1];
       // Decode entities and remove HTML tags
       code = decodeHtmlEntities(code);
-      code = code.replace(/<[^>]+>/g, '');
+      // Remove HTML tags robustly: repeatedly until none remain
+      let previousCode;
+      do {
+        previousCode = code;
+        code = code.replace(/<[^>]+>/g, '');
+      } while (code !== previousCode);
       // Clean up malformed patterns - multiple passes for thorough cleaning
       for (let i = 0; i < 3; i++) {
         code = code
