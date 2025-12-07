@@ -5,10 +5,12 @@
   "sourceRoot": "apps/website/src",
   "projectType": "application",
   "implicitDependencies": [
-    "shared-contexts",
-    "shared-hooks",
+    "contexts",
+    "hooks",
     "shared-atoms",
-    "shared-types"
+    "types",
+    "components",
+    "utilities"
   ],
   "targets": {
     "build": {
