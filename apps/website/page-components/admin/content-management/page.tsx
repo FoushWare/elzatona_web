@@ -143,6 +143,11 @@ const CollapsibleContent = React.lazy(() =>
 );
 import { Modal } from "@elzatona/components";
 import { ViewQuestionModal } from "../content/questions/components/ViewQuestionModal";
+import { StatsSection } from "./components/StatsSection";
+import { CategoriesList } from "./components/CategoriesList";
+import { TopicsList } from "./components/TopicsList";
+import { SearchAndFilters } from "./components/SearchAndFilters";
+import { ActionButtons } from "./components/ActionButtons";
 
 // Import icons with tree shaking
 import {
@@ -1924,88 +1929,32 @@ export default function UnifiedAdminPage() {
       </div>
 
       {/* Search and Filters */}
-      <div className="flex flex-col md:flex-row gap-4 mb-6">
-        <div className="flex-1">
-          <Suspense fallback={<LoadingSkeleton />}>
-            <Input
-              placeholder="Search cards, plans, categories, topics..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full"
-            />
-          </Suspense>
-        </div>
-        <Suspense fallback={<LoadingSkeleton />}>
-          <Select value={filterCardType} onValueChange={setFilterCardType}>
-            <SelectTrigger className="w-full md:w-48">
-              <SelectValue placeholder="Filter by card type" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">All Card Types</SelectItem>
-              <SelectItem value="Core Technologies">
-                Core Technologies
-              </SelectItem>
-              <SelectItem value="Framework Questions">
-                Framework Questions
-              </SelectItem>
-              <SelectItem value="Problem Solving">Problem Solving</SelectItem>
-              <SelectItem value="System Design">System Design</SelectItem>
-            </SelectContent>
-          </Select>
-        </Suspense>
-      </div>
+      <SearchAndFilters
+        searchTerm={searchTerm}
+        onSearchChange={setSearchTerm}
+        filterCardType={filterCardType}
+        onFilterChange={setFilterCardType}
+      />
 
       {/* Action Buttons */}
-      <div className="flex flex-wrap gap-2 mb-6">
-        <Suspense fallback={<LoadingSkeleton />}>
-          <Button
-            onClick={() => {
-              setEditingCard(null);
-              setIsCardModalOpen(true);
-            }}
-            className="bg-blue-600 hover:bg-blue-700"
-          >
-            <Plus className="h-4 w-4 mr-2" />
-            Add Card
-          </Button>
-        </Suspense>
-        <Suspense fallback={<LoadingSkeleton />}>
-          <Button
-            onClick={() => {
-              setEditingPlan(null);
-              setIsPlanModalOpen(true);
-            }}
-            className="bg-green-600 hover:bg-green-700"
-          >
-            <Plus className="h-4 w-4 mr-2" />
-            Add Plan
-          </Button>
-        </Suspense>
-        <Suspense fallback={<LoadingSkeleton />}>
-          <Button
-            onClick={() => {
-              setEditingCategory(null);
-              setIsCategoryModalOpen(true);
-            }}
-            className="bg-purple-600 hover:bg-purple-700"
-          >
-            <Plus className="h-4 w-4 mr-2" />
-            Add Category
-          </Button>
-        </Suspense>
-        <Suspense fallback={<LoadingSkeleton />}>
-          <Button
-            onClick={() => {
-              setEditingTopic(null);
-              setIsTopicModalOpen(true);
-            }}
-            className="bg-orange-600 hover:bg-orange-700"
-          >
-            <Plus className="h-4 w-4 mr-2" />
-            Add Topic
-          </Button>
-        </Suspense>
-      </div>
+      <ActionButtons
+        onAddCard={() => {
+          setEditingCard(null);
+          setIsCardModalOpen(true);
+        }}
+        onAddPlan={() => {
+          setEditingPlan(null);
+          setIsPlanModalOpen(true);
+        }}
+        onAddCategory={() => {
+          setEditingCategory(null);
+          setIsCategoryModalOpen(true);
+        }}
+        onAddTopic={() => {
+          setEditingTopic(null);
+          setIsTopicModalOpen(true);
+        }}
+      />
 
       {/* Cards Section */}
       <div className="mb-8">
