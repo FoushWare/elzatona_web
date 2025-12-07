@@ -3,12 +3,12 @@
  * Task: A-006 - Admin Problem Solving
  */
 
-import React from 'react';
-import { render, screen, waitFor } from '@testing-library/react';
-import '@testing-library/jest-dom';
-import ProblemSolvingAdminPage from './page';
+import React from "react";
+import { render, screen, waitFor } from "@testing-library/react";
+import "@testing-library/jest-dom";
+import ProblemSolvingAdminPage from "./page";
 
-jest.mock('@elzatona/shared-hooks', () => ({
+jest.mock("@elzatona/hooks", () => ({
   useProblemSolvingTasks: jest.fn(() => ({
     data: { data: [] },
     isLoading: false,
@@ -28,12 +28,12 @@ jest.mock('@elzatona/shared-hooks', () => ({
   })),
 }));
 
-jest.mock('@elzatona/shared-components', () => ({
+jest.mock("@elzatona/components", () => ({
   ProblemSolvingEditor: () => <div>Editor</div>,
   ClientCodeRunner: () => <div>Code Runner</div>,
 }));
 
-jest.mock('lucide-react', () => ({
+jest.mock("lucide-react", () => ({
   Plus: () => <span>+</span>,
   Edit: () => <span>✏️</span>,
   Trash2: () => <span>🗑️</span>,
@@ -43,16 +43,16 @@ jest.mock('lucide-react', () => ({
   Code: () => <span>💻</span>,
 }));
 
-describe('A-IT-018: Problem Solving CRUD Integration', () => {
+describe("A-IT-018: Problem Solving CRUD Integration", () => {
   beforeEach(() => {
     jest.clearAllMocks();
   });
 
-  it('should integrate with problem solving hooks', async () => {
+  it("should integrate with problem solving hooks", async () => {
     render(<ProblemSolvingAdminPage />);
-    
+
     await waitFor(() => {
-      const sharedHooks = jest.requireMock('@elzatona/shared-hooks');
+      const sharedHooks = jest.requireMock("@elzatona/hooks");
       const { useProblemSolvingTasks } = sharedHooks;
       expect(useProblemSolvingTasks).toHaveBeenCalled();
     });

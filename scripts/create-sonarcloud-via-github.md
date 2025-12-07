@@ -3,6 +3,7 @@
 ## Why Manual Creation Might Not Work
 
 If you can't create the project manually, it's usually because:
+
 1. **GitHub integration not authorized** - SonarCloud needs permission to access your GitHub repos
 2. **Organization permissions** - You might not have permission to create projects in the organization
 3. **Repository not visible** - The repository might not be accessible to SonarCloud
@@ -70,13 +71,16 @@ Get your token from: https://sonarcloud.io/account/security
 ## Troubleshooting
 
 ### "Repository not found"
+
 - Ensure the repository is public or you've granted SonarCloud access
 - Check GitHub App permissions
 
 ### "Organization permission denied"
+
 - Contact your organization admin
 - Or create the project in your personal organization
 
 ### "Project already exists"
+
 - The project might exist with a different key
 - Check: https://sonarcloud.io/projects

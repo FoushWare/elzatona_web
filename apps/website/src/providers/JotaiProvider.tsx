@@ -1,6 +1,6 @@
-'use client';
+"use client";
 
-import { ReactNode, createContext, useContext } from 'react';
+import { ReactNode, createContext, useContext } from "react";
 
 // Temporary fallback until Jotai is properly installed
 const JotaiContext = createContext({});

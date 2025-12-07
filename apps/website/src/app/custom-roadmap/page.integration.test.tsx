@@ -3,14 +3,14 @@
  * Task: F-001 - Custom Roadmap Creation
  */
 
-import React from 'react';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
-import '@testing-library/jest-dom';
-import CustomRoadmapPage from './page';
-import * as sharedContexts from '@elzatona/shared-contexts';
+import React from "react";
+import { render, screen, fireEvent, waitFor } from "@testing-library/react";
+import "@testing-library/jest-dom";
+import CustomRoadmapPage from "./page";
+import * as sharedContexts from "@elzatona/contexts";
 
-jest.mock('@elzatona/shared-contexts', () => {
-  const actual = jest.requireActual('../../test-utils/mocks/shared-contexts');
+jest.mock("@elzatona/contexts", () => {
+  const actual = jest.requireActual("../../test-utils/mocks/shared-contexts");
   return {
     ...actual,
     useAuth: jest.fn(),
@@ -18,7 +18,7 @@ jest.mock('@elzatona/shared-contexts', () => {
   };
 });
 
-jest.mock('../../context/LearningTypeContext', () => ({
+jest.mock("../../context/LearningTypeContext", () => ({
   useLearningType: jest.fn(() => ({
     learningType: null,
     setLearningType: jest.fn(),
@@ -26,7 +26,7 @@ jest.mock('../../context/LearningTypeContext', () => ({
 }));
 
 const mockPush = jest.fn();
-jest.mock('next/navigation', () => ({
+jest.mock("next/navigation", () => ({
   useRouter: () => ({
     push: mockPush,
     replace: jest.fn(),
@@ -37,7 +37,7 @@ jest.mock('next/navigation', () => ({
 global.fetch = jest.fn();
 Storage.prototype.setItem = jest.fn();
 
-jest.mock('lucide-react', () => ({
+jest.mock("lucide-react", () => ({
   Plus: () => <span>+</span>,
   Minus: () => <span>-</span>,
   Check: () => <span>✓</span>,
@@ -57,61 +57,63 @@ jest.mock('lucide-react', () => ({
   BookOpen: () => <span>📖</span>,
 }));
 
-describe('F-IT-001: Roadmap Creation Flow', () => {
+describe("F-IT-001: Roadmap Creation Flow", () => {
   beforeEach(() => {
     jest.clearAllMocks();
-    
+
     (sharedContexts.useAuth as jest.Mock).mockReturnValue({
       isAuthenticated: true,
-      user: { id: '1' },
+      user: { id: "1" },
       isLoading: false,
     });
-    
+
     (sharedContexts.useUserType as jest.Mock).mockReturnValue({
-      userType: 'self-directed',
+      userType: "self-directed",
       setUserType: jest.fn(),
     });
-    
+
     (global.fetch as jest.Mock).mockResolvedValue({
       ok: true,
       json: async () => ({ data: [] }),
     });
   });
 
-  it('should integrate plan creation flow', async () => {
+  it("should integrate plan creation flow", async () => {
     render(<CustomRoadmapPage />);
     await waitFor(() => {
-      expect(screen.getByText(/Create Your Custom Roadmap/i)).toBeInTheDocument();
+      expect(
+        screen.getByText(/Create Your Custom Roadmap/i),
+      ).toBeInTheDocument();
     });
   });
 });
 
-describe('F-IT-002: Card and Category Selection', () => {
+describe("F-IT-002: Card and Category Selection", () => {
   beforeEach(() => {
     jest.clearAllMocks();
-    
+
     (sharedContexts.useAuth as jest.Mock).mockReturnValue({
       isAuthenticated: true,
-      user: { id: '1' },
+      user: { id: "1" },
       isLoading: false,
     });
-    
+
     (sharedContexts.useUserType as jest.Mock).mockReturnValue({
-      userType: 'self-directed',
+      userType: "self-directed",
       setUserType: jest.fn(),
     });
-    
+
     (global.fetch as jest.Mock).mockResolvedValue({
       ok: true,
       json: async () => ({
         data: [
           {
-            id: '1',
-            title: 'Test Card',
+            id: "1",
+            title: "Test Card",
             categories: [
               {
-                id: '1',
-                name: 'Test Category',
+                id: "1",
+                name: "Test Category",
                 topics: [],
               },
             ],
@@ -121,7 +123,7 @@ describe('F-IT-002: Card and Category Selection', () => {
     });
   });
 
-  it('should integrate card loading and selection', async () => {
+  it("should integrate card loading and selection", async () => {
     render(<CustomRoadmapPage />);
     await waitFor(() => {
       expect(global.fetch).toHaveBeenCalled();
@@ -129,23 +131,23 @@ describe('F-IT-002: Card and Category Selection', () => {
   });
 });
 
-describe('F-IT-003: Plan Saving Integration', () => {
+describe("F-IT-003: Plan Saving Integration", () => {
   beforeEach(() => {
     jest.clearAllMocks();
-    
+
     (sharedContexts.useAuth as jest.Mock).mockReturnValue({
       isAuthenticated: true,
-      user: { id: '1' },
+      user: { id: "1" },
       isLoading: false,
     });
-    
+
     (sharedContexts.useUserType as jest.Mock).mockReturnValue({
-      userType: 'self-directed',
+      userType: "self-directed",
       setUserType: jest.fn(),
     });
   });
 
-  it('should save plan to localStorage', async () => {
+  it("should save plan to localStorage", async () => {
     render(<CustomRoadmapPage />);
     await waitFor(() => {
       // Plan saving should integrate with localStorage

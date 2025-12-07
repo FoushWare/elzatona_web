@@ -7,11 +7,13 @@ The easiest way to add all required GitHub Secrets for the test environment is u
 ### Prerequisites
 
 1. **GitHub CLI installed**:
+
    ```bash
    brew install gh
    ```
 
 2. **Authenticated with GitHub**:
+
    ```bash
    gh auth login
    ```
@@ -25,6 +27,7 @@ npm run setup:github-test-secrets
 ```
 
 The script will:
+
 - ✅ Check if GitHub CLI is installed and authenticated
 - ✅ Read values from `.env.test.local`
 - ✅ Generate JWT_SECRET if needed
@@ -35,14 +38,14 @@ The script will:
 
 The script adds these secrets to your GitHub repository:
 
-| Secret Name | Source | Description |
-|------------|--------|-------------|
-| `ADMIN_EMAIL` | `.env.test.local` | Test admin email |
-| `ADMIN_PASSWORD` | `.env.test.local` | Test admin password |
-| `TEST_SUPABASE_URL` | `.env.test.local` | Test Supabase URL |
-| `TEST_SUPABASE_ANON_KEY` | `.env.test.local` | Test Supabase anon key |
-| `TEST_SUPABASE_SERVICE_ROLE_KEY` | `.env.test.local` | Test Supabase service role key |
-| `JWT_SECRET` | `.env.test.local` or generated | JWT secret for admin auth |
+| Secret Name                      | Source                         | Description                    |
+| -------------------------------- | ------------------------------ | ------------------------------ |
+| `ADMIN_EMAIL`                    | `.env.test.local`              | Test admin email               |
+| `ADMIN_PASSWORD`                 | `.env.test.local`              | Test admin password            |
+| `TEST_SUPABASE_URL`              | `.env.test.local`              | Test Supabase URL              |
+| `TEST_SUPABASE_ANON_KEY`         | `.env.test.local`              | Test Supabase anon key         |
+| `TEST_SUPABASE_SERVICE_ROLE_KEY` | `.env.test.local`              | Test Supabase service role key |
+| `JWT_SECRET`                     | `.env.test.local` or generated | JWT secret for admin auth      |
 
 ### Manual Setup (Alternative)
 
@@ -65,6 +68,7 @@ gh secret list --repo FoushWare/GreatFrontendHub
 ```
 
 You should see:
+
 - ✅ ADMIN_EMAIL
 - ✅ ADMIN_PASSWORD
 - ✅ TEST_SUPABASE_URL
@@ -75,15 +79,18 @@ You should see:
 ### Troubleshooting
 
 **Script fails with "Not authenticated"**:
+
 ```bash
 gh auth login
 ```
 
 **Script fails with "Permission denied"**:
+
 - Ensure you have admin access to the repository
 - Check repository name is correct: `FoushWare/GreatFrontendHub`
 
 **Missing values in .env.test.local**:
+
 - Edit `.env.test.local` with your test credentials
 - Run the script again
 
@@ -97,7 +104,7 @@ gh auth login
 ---
 
 **Quick Command:**
+
 ```bash
 npm run setup:github-test-secrets
 ```
-

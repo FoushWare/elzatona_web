@@ -3,40 +3,43 @@
 ## Table: `questions`
 
 ### Overview
+
 The `questions` table stores all question data for the platform, including multiple-choice, code, and open-ended questions.
 
 ### Columns
 
-| Column Name | Data Type | Nullable | Default | Description |
-|------------|-----------|----------|---------|-------------|
-| `id` | `uuid` | NO | `gen_random_uuid()` | Primary key |
-| `title` | `varchar(500)` | NO | - | Question title/heading |
-| `content` | `text` | NO | - | Question content/body |
-| `type` | `varchar(50)` | NO | - | Question type (see allowed values below) |
-| `difficulty` | `varchar(20)` | YES | - | Difficulty level (see allowed values below) |
-| `points` | `integer` | YES | `1` | Points awarded for correct answer |
-| `options` | `jsonb` | YES | - | Answer options (for multiple-choice questions) |
-| `correct_answer` | `text` | YES | - | Correct answer text |
-| `explanation` | `text` | YES | - | Explanation of the answer |
-| `test_cases` | `jsonb` | YES | - | Test cases (for code questions) |
-| `hints` | `text[]` | YES | - | Array of hint strings |
-| `tags` | `text[]` | YES | - | Array of tag strings |
-| `stats` | `jsonb` | YES | `{"avgTime": 0, "correct": 0, "attempts": 0}` | Question statistics |
-| `metadata` | `jsonb` | YES | - | Additional metadata |
-| `category_id` | `uuid` | YES | - | Foreign key to `categories.id` |
-| `learning_card_id` | `uuid` | YES | - | Foreign key to `learning_cards.id` |
-| `topic_id` | `uuid` | YES | - | Foreign key to `topics.id` |
-| `is_active` | `boolean` | YES | `true` | Whether the question is active |
-| `created_at` | `timestamptz` | YES | `now()` | Creation timestamp |
-| `updated_at` | `timestamptz` | YES | `now()` | Last update timestamp |
-| `resources` | `jsonb` | YES | - | Learning resources (see structure below) |
+| Column Name        | Data Type      | Nullable | Default                                       | Description                                    |
+| ------------------ | -------------- | -------- | --------------------------------------------- | ---------------------------------------------- |
+| `id`               | `uuid`         | NO       | `gen_random_uuid()`                           | Primary key                                    |
+| `title`            | `varchar(500)` | NO       | -                                             | Question title/heading                         |
+| `content`          | `text`         | NO       | -                                             | Question content/body                          |
+| `type`             | `varchar(50)`  | NO       | -                                             | Question type (see allowed values below)       |
+| `difficulty`       | `varchar(20)`  | YES      | -                                             | Difficulty level (see allowed values below)    |
+| `points`           | `integer`      | YES      | `1`                                           | Points awarded for correct answer              |
+| `options`          | `jsonb`        | YES      | -                                             | Answer options (for multiple-choice questions) |
+| `correct_answer`   | `text`         | YES      | -                                             | Correct answer text                            |
+| `explanation`      | `text`         | YES      | -                                             | Explanation of the answer                      |
+| `test_cases`       | `jsonb`        | YES      | -                                             | Test cases (for code questions)                |
+| `hints`            | `text[]`       | YES      | -                                             | Array of hint strings                          |
+| `tags`             | `text[]`       | YES      | -                                             | Array of tag strings                           |
+| `stats`            | `jsonb`        | YES      | `{"avgTime": 0, "correct": 0, "attempts": 0}` | Question statistics                            |
+| `metadata`         | `jsonb`        | YES      | -                                             | Additional metadata                            |
+| `category_id`      | `uuid`         | YES      | -                                             | Foreign key to `categories.id`                 |
+| `learning_card_id` | `uuid`         | YES      | -                                             | Foreign key to `learning_cards.id`             |
+| `topic_id`         | `uuid`         | YES      | -                                             | Foreign key to `topics.id`                     |
+| `is_active`        | `boolean`      | YES      | `true`                                        | Whether the question is active                 |
+| `created_at`       | `timestamptz`  | YES      | `now()`                                       | Creation timestamp                             |
+| `updated_at`       | `timestamptz`  | YES      | `now()`                                       | Last update timestamp                          |
+| `resources`        | `jsonb`        | YES      | -                                             | Learning resources (see structure below)       |
 
 ### Constraints
 
 #### Primary Key
+
 - `questions_pkey` on `id`
 
 #### Foreign Keys
+
 - `questions_category_id_fkey`: `category_id` → `categories.id`
 - `questions_learning_card_id_fkey`: `learning_card_id` → `learning_cards.id`
 - `questions_topic_id_fkey`: `topic_id` → `topics.id`
@@ -44,11 +47,13 @@ The `questions` table stores all question data for the platform, including multi
 #### Check Constraints
 
 **`type`** - Allowed values:
+
 - `'multiple-choice'` (or `'mcq'` - same thing)
 - `'true-false'`
 - `'code'`
 
 **`difficulty`** - Allowed values:
+
 - `'beginner'`
 - `'intermediate'`
 - `'advanced'`
@@ -56,6 +61,7 @@ The `questions` table stores all question data for the platform, including multi
 ### JSONB Field Structures
 
 #### `options` (for multiple-choice and true-false questions)
+
 ```json
 [
   {
@@ -74,6 +80,7 @@ The `questions` table stores all question data for the platform, including multi
 ```
 
 #### `stats`
+
 ```json
 {
   "avgTime": 0,
@@ -83,6 +90,7 @@ The `questions` table stores all question data for the platform, including multi
 ```
 
 #### `resources` (Learning Resources)
+
 ```json
 [
   {
@@ -97,6 +105,7 @@ The `questions` table stores all question data for the platform, including multi
 ```
 
 #### `test_cases` (for code questions)
+
 ```json
 [
   {
@@ -108,6 +117,7 @@ The `questions` table stores all question data for the platform, including multi
 ```
 
 #### `metadata`
+
 ```json
 {
   // Any additional metadata
@@ -117,20 +127,24 @@ The `questions` table stores all question data for the platform, including multi
 ### Array Fields
 
 #### `hints`
+
 ```sql
 -- Example: ['Hint 1', 'Hint 2', 'Hint 3']
 ```
 
 #### `tags`
+
 ```sql
 -- Example: ['react', 'hooks', 'state-management']
 ```
 
 ### Indexes
+
 - Primary key index on `id`
 - Foreign key indexes on `category_id`, `learning_card_id`, `topic_id`
 
 ### Row Level Security (RLS)
+
 - **Enabled**: Yes
 - Policies control access based on user permissions
 
@@ -192,4 +206,3 @@ The `questions` table stores all question data for the platform, including multi
 4. **Stats Field**: Automatically initialized with default values if not provided
 5. **Resources Field**: Contains learning resources related to the question (videos, articles, courses)
 6. **Removed Types**: `open-ended`, `scenario`, and `concept` types have been removed as they were not being used
-

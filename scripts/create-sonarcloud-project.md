@@ -1,6 +1,7 @@
 # Create SonarCloud Project for elzatona_web
 
 ## Issue
+
 The project `FoushWare_elzatona_web` doesn't exist in SonarCloud yet, which is why the settings page shows only loading.
 
 ## Solution: Create New Project
@@ -28,6 +29,7 @@ The project `FoushWare_elzatona_web` doesn't exist in SonarCloud yet, which is w
 If you want to use the existing project temporarily:
 
 1. **Revert project key** in `sonar-project.properties`:
+
    ```
    sonar.projectKey=FoushWare_GreatFrontendHub
    sonar.projectName=GreatFrontendHub
@@ -51,6 +53,7 @@ If you want to use the existing project temporarily:
 ## After Creating Project
 
 Once the project is created:
+
 - The settings page will load: https://sonarcloud.io/project/settings?project=FoushWare_elzatona_web
 - Configure main branch: General Settings → Branches → Set to `main`
 - The next workflow run will analyze correctly

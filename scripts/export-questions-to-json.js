@@ -5,15 +5,15 @@
  * Usage: node scripts/export-questions-to-json.js
  */
 
-const fs = require('fs');
-const path = require('path');
+const fs = require("fs");
+const path = require("path");
 
 // This script will be run via MCP, so we'll use a different approach
 // We'll query the database directly via MCP and write the results
 
-console.log('📦 Exporting questions from database...');
-console.log('⚠️  This script requires MCP Supabase connection.');
-console.log('💡 Run the export via MCP execute_sql tool instead.');
+console.log("📦 Exporting questions from database...");
+console.log("⚠️  This script requires MCP Supabase connection.");
+console.log("💡 Run the export via MCP execute_sql tool instead.");
 
 // Instructions for manual export
 const instructions = `# Export Questions to JSON
@@ -78,14 +78,10 @@ pg_dump -h <host> -U postgres -d postgres \\
 `;
 
 fs.writeFileSync(
-  path.join(__dirname, '..', 'Rest', 'questions-v02', 'EXPORT_INSTRUCTIONS.md'),
-  instructions
+  path.join(__dirname, "..", "Rest", "questions-v02", "EXPORT_INSTRUCTIONS.md"),
+  instructions,
 );
 
-console.log('✅ Created export instructions at: Rest/questions-v02/EXPORT_INSTRUCTIONS.md');
-
-
-
-
-
-
+console.log(
+  "✅ Created export instructions at: Rest/questions-v02/EXPORT_INSTRUCTIONS.md",
+);

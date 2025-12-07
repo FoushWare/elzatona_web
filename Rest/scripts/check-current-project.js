@@ -2,7 +2,7 @@
 
 /**
  * Check Current Supabase Project
- * 
+ *
  * Verifies which Supabase project is currently being used
  * based on environment variables and configuration
  */
@@ -19,7 +19,7 @@ const envFiles = [
 ];
 
 console.log('\n🔍 Checking Current Supabase Project Configuration\n');
-console.log('=' .repeat(60));
+console.log('='.repeat(60));
 
 // Load environment files
 const loadedFiles = [];
@@ -37,11 +37,14 @@ for (const envFile of envFiles) {
 // Get environment variables
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
 const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
-const appEnv = process.env.APP_ENV || process.env.NEXT_PUBLIC_APP_ENV || 'not set';
+const appEnv =
+  process.env.APP_ENV || process.env.NEXT_PUBLIC_APP_ENV || 'not set';
 const nodeEnv = process.env.NODE_ENV || 'not set';
 
 // Extract project reference from URL
-const urlProjectRef = supabaseUrl ? supabaseUrl.match(/https?:\/\/([^.]+)\.supabase\.co/)?.[1] : null;
+const urlProjectRef = supabaseUrl
+  ? supabaseUrl.match(/https?:\/\/([^.]+)\.supabase\.co/)?.[1]
+  : null;
 
 // Decode service role key to get project reference
 let keyProjectRef = null;
@@ -61,37 +64,43 @@ if (serviceRoleKey) {
 
 // Project mappings
 const projects = {
-  'kiycimlsatwfqxtfprlr': {
+  kiycimlsatwfqxtfprlr: {
     name: 'zatona-web-testing',
     type: 'TEST',
-    emoji: '🧪'
+    emoji: '🧪',
   },
-  'hpnewqkvpnthpohvxcmq': {
+  hpnewqkvpnthpohvxcmq: {
     name: 'zatona-web',
     type: 'PRODUCTION',
-    emoji: '🚀'
+    emoji: '🚀',
   },
-  'slfyltsmcivmqfloxpmq': {
+  slfyltsmcivmqfloxpmq: {
     name: 'zatona-web-testing (old)',
     type: 'TEST (OLD)',
-    emoji: '⚠️'
+    emoji: '⚠️',
   },
-  'vopfdukvdhnmzzjkxpnj': {
+  vopfdukvdhnmzzjkxpnj: {
     name: 'zatona-web-testing (old)',
     type: 'TEST (OLD)',
-    emoji: '⚠️'
-  }
+    emoji: '⚠️',
+  },
 };
 
 // Display results
 console.log('\n📋 Environment Configuration:');
 console.log(`   APP_ENV: ${appEnv}`);
 console.log(`   NODE_ENV: ${nodeEnv}`);
-console.log(`   Loaded files: ${loadedFiles.length > 0 ? loadedFiles.map(f => f.split('/').pop()).join(', ') : 'none'}`);
+console.log(
+  `   Loaded files: ${loadedFiles.length > 0 ? loadedFiles.map(f => f.split('/').pop()).join(', ') : 'none'}`
+);
 
 console.log('\n🌐 Supabase URL Configuration:');
 if (supabaseUrl) {
-  const urlProject = projects[urlProjectRef] || { name: 'unknown', type: 'UNKNOWN', emoji: '❓' };
+  const urlProject = projects[urlProjectRef] || {
+    name: 'unknown',
+    type: 'UNKNOWN',
+    emoji: '❓',
+  };
   console.log(`   URL: ${supabaseUrl}`);
   console.log(`   Project Ref: ${urlProjectRef || 'not found'}`);
   console.log(`   Project Name: ${urlProject.emoji} ${urlProject.name}`);
@@ -102,7 +111,11 @@ if (supabaseUrl) {
 
 console.log('\n🔑 Service Role Key Configuration:');
 if (serviceRoleKey) {
-  const keyProject = projects[keyProjectRef] || { name: 'unknown', type: 'UNKNOWN', emoji: '❓' };
+  const keyProject = projects[keyProjectRef] || {
+    name: 'unknown',
+    type: 'UNKNOWN',
+    emoji: '❓',
+  };
   console.log(`   Key Project Ref: ${keyProjectRef || 'not found'}`);
   console.log(`   Key Project Name: ${keyProject.emoji} ${keyProject.name}`);
   console.log(`   Key Project Type: ${keyProject.type}`);
@@ -117,12 +130,20 @@ if (urlProjectRef && keyProjectRef) {
     console.log('   ✅ URL and Service Role Key match!');
     const project = projects[urlProjectRef];
     if (project) {
-      console.log(`   ${project.emoji} Currently using: ${project.name} (${project.type})`);
+      console.log(
+        `   ${project.emoji} Currently using: ${project.name} (${project.type})`
+      );
     }
   } else {
-    console.log('   ❌ MISMATCH: URL and Service Role Key point to different projects!');
-    console.log(`      URL points to: ${urlProjectRef} (${projects[urlProjectRef]?.name || 'unknown'})`);
-    console.log(`      Key points to: ${keyProjectRef} (${projects[keyProjectRef]?.name || 'unknown'})`);
+    console.log(
+      '   ❌ MISMATCH: URL and Service Role Key point to different projects!'
+    );
+    console.log(
+      `      URL points to: ${urlProjectRef} (${projects[urlProjectRef]?.name || 'unknown'})`
+    );
+    console.log(
+      `      Key points to: ${keyProjectRef} (${projects[keyProjectRef]?.name || 'unknown'})`
+    );
   }
 } else {
   console.log('   ⚠️  Cannot verify - missing URL or Service Role Key');
@@ -148,14 +169,26 @@ console.log('\n' + '='.repeat(60));
 console.log('');
 
 // Summary
-if (urlProjectRef === 'kiycimlsatwfqxtfprlr' && keyProjectRef === 'kiycimlsatwfqxtfprlr' && (appEnv === 'test' || nodeEnv === 'test')) {
-  console.log('✅ All checks passed! Using zatona-web-testing (TEST) project correctly.');
+if (
+  urlProjectRef === 'kiycimlsatwfqxtfprlr' &&
+  keyProjectRef === 'kiycimlsatwfqxtfprlr' &&
+  (appEnv === 'test' || nodeEnv === 'test')
+) {
+  console.log(
+    '✅ All checks passed! Using zatona-web-testing (TEST) project correctly.'
+  );
   process.exit(0);
-} else if (urlProjectRef === 'hpnewqkvpnthpohvxcmq' && keyProjectRef === 'hpnewqkvpnthpohvxcmq') {
-  console.log('⚠️  Using PRODUCTION project (zatona-web). Make sure this is intentional!');
+} else if (
+  urlProjectRef === 'hpnewqkvpnthpohvxcmq' &&
+  keyProjectRef === 'hpnewqkvpnthpohvxcmq'
+) {
+  console.log(
+    '⚠️  Using PRODUCTION project (zatona-web). Make sure this is intentional!'
+  );
   process.exit(0);
 } else {
-  console.log('❌ Configuration mismatch detected. Please check your .env.test.local file.');
+  console.log(
+    '❌ Configuration mismatch detected. Please check your .env.test.local file.'
+  );
   process.exit(1);
 }
-

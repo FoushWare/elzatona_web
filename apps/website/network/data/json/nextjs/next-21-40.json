@@ -1,0 +1,580 @@
+[
+  {
+    "id": "next-21-40-nextjs-q21",
+    "title": "What is the App Router in Next.js?",
+    "content": "The App Router is a new routing system in Next.js 13+ based on the `app/` directory, React Server Components, and nested layouts.",
+    "type": "open-ended",
+    "category": "Next.js",
+    "topic": "App Router",
+    "difficulty": "advanced",
+    "learningCardId": "framework-questions",
+    "isActive": true,
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "createdBy": "admin",
+    "updatedBy": "admin",
+    "tags": ["nextjs", "app-router", "advanced"],
+    "explanation": "It replaces the Pages Router with a more powerful, server-first architecture that supports streaming, partial rendering, and built-in data fetching.",
+    "points": 8,
+    "sampleAnswers": [
+      "The App Router uses the `app/` directory with file-based routing, React Server Components by default, and supports nested layouts via `layout.js` files.",
+      "It enables features like streaming with Suspense, automatic code splitting, and colocation of components, data, and styles."
+    ],
+    "hints": [],
+    "metadata": {}
+  },
+  {
+    "id": "next-21-40-nextjs-q22",
+    "title": "How do you handle loading states in the App Router?",
+    "content": "Use the `loading.js` file in a route segment to show a loading UI while data is being fetched. It works with React Suspense.",
+    "type": "open-ended",
+    "category": "Next.js",
+    "topic": "Loading States",
+    "difficulty": "intermediate",
+    "learningCardId": "framework-questions",
+    "isActive": true,
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "createdBy": "admin",
+    "updatedBy": "admin",
+    "tags": ["nextjs", "loading-states", "intermediate"],
+    "explanation": "`loading.js` provides an instant loading UI without client-side JavaScript, improving perceived performance.",
+    "points": 7,
+    "sampleAnswers": [
+      "Create `app/dashboard/loading.js` that exports a component. Next.js shows it immediately while the `page.js` data loads.",
+      "This is built on React Suspense—no need for `useState` or `useEffect` to manage loading states manually."
+    ],
+    "hints": [],
+    "metadata": {}
+  },
+  {
+    "id": "next-21-40-nextjs-q23",
+    "title": "What is the purpose of error.js in the App Router?",
+    "content": "The `error.js` file defines an error boundary for a route segment, catching errors in Server and Client Components and displaying a fallback UI.",
+    "type": "open-ended",
+    "category": "Next.js",
+    "topic": "Error Handling",
+    "difficulty": "intermediate",
+    "learningCardId": "framework-questions",
+    "isActive": true,
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "createdBy": "admin",
+    "updatedBy": "admin",
+    "tags": ["nextjs", "error-handling", "intermediate"],
+    "explanation": "It uses React error boundaries under the hood and can be reset with the `error.reset()` function.",
+    "points": 7,
+    "sampleAnswers": [
+      "`error.js` exports a Client Component that receives `error` and `reset` props. It catches errors in the route segment and lets users retry.",
+      "Unlike Pages Router, error boundaries are file-based and automatically scoped to the route."
+    ],
+    "hints": [],
+    "metadata": {}
+  },
+  {
+    "id": "next-21-40-nextjs-q24",
+    "title": "How do you implement nested layouts in Next.js App Router?",
+    "content": "Create `layout.js` files in nested folders. Each layout wraps its child routes, enabling persistent UI like headers and sidebars.",
+    "type": "open-ended",
+    "category": "Next.js",
+    "topic": "Layouts",
+    "difficulty": "intermediate",
+    "learningCardId": "framework-questions",
+    "isActive": true,
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "createdBy": "admin",
+    "updatedBy": "admin",
+    "tags": ["nextjs", "layouts", "intermediate"],
+    "explanation": "Layouts are Server Components by default and can fetch data. They persist across route changes, improving performance.",
+    "points": 7,
+    "sampleAnswers": [
+      "In `app/dashboard/layout.js`, return a layout with a sidebar. All pages in `app/dashboard/` will be wrapped by it.",
+      "Layouts can be nested: `app/layout.js` → `app/dashboard/layout.js` → `app/dashboard/settings/page.js`."
+    ],
+    "hints": [],
+    "metadata": {}
+  },
+  {
+    "id": "next-21-40-nextjs-q25",
+    "title": "What is the difference between `generateStaticParams` and `getStaticPaths`?",
+    "content": "`generateStaticParams` is used in App Router for dynamic routes with SSG. `getStaticPaths` is the Pages Router equivalent.",
+    "type": "multiple-choice",
+    "category": "Next.js",
+    "topic": "Static Site Generation (SSG)",
+    "difficulty": "intermediate",
+    "learningCardId": "framework-questions",
+    "isActive": true,
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "createdBy": "admin",
+    "updatedBy": "admin",
+    "tags": ["nextjs", "static-site-generation-(ssg)", "intermediate"],
+    "explanation": "Both define which dynamic routes to pre-render at build time.",
+    "points": 7,
+    "options": [
+      {
+        "id": "a",
+        "text": "`generateStaticParams`: App Router; `getStaticPaths`: Pages Router",
+        "isCorrect": true,
+        "explanation": ""
+      },
+      {
+        "id": "b",
+        "text": "They are the same function",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "c",
+        "text": "`getStaticPaths` works in App Router",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "d",
+        "text": "`generateStaticParams` is for SSR",
+        "isCorrect": false,
+        "explanation": ""
+      }
+    ],
+    "hints": [],
+    "metadata": {}
+  },
+  {
+    "id": "next-21-40-nextjs-q26",
+    "title": "How do you handle dynamic routes in the App Router?",
+    "content": "Use dynamic segments like `app/users/[id]/page.js`. Fetch data using `params.id` in the Server Component.",
+    "type": "open-ended",
+    "category": "Next.js",
+    "topic": "Dynamic Routes",
+    "difficulty": "intermediate",
+    "learningCardId": "framework-questions",
+    "isActive": true,
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "createdBy": "admin",
+    "updatedBy": "admin",
+    "tags": ["nextjs", "dynamic-routes", "intermediate"],
+    "explanation": "The `params` object is passed to `page.js`, `layout.js`, and other route handlers automatically.",
+    "points": 7,
+    "sampleAnswers": [
+      "Create `app/blog/[slug]/page.js`. The `slug` is available via `params.slug` in the component: `export default async function Page({ params }) { ... }`",
+      "Use `generateStaticParams` to pre-render dynamic routes at build time for SSG."
+    ],
+    "hints": [],
+    "metadata": {}
+  },
+  {
+    "id": "next-21-40-nextjs-q27",
+    "title": "What is the purpose of the `not-found.js` file?",
+    "content": "`not-found.js` defines a custom 404 page for a route segment when `notFound()` is thrown or a route doesn’t exist.",
+    "type": "open-ended",
+    "category": "Next.js",
+    "topic": "Error Handling",
+    "difficulty": "intermediate",
+    "learningCardId": "framework-questions",
+    "isActive": true,
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "createdBy": "admin",
+    "updatedBy": "admin",
+    "tags": ["nextjs", "error-handling", "intermediate"],
+    "explanation": "It’s the App Router equivalent of `pages/404.js` but scoped to route segments.",
+    "points": 6,
+    "sampleAnswers": [
+      "Create `app/not-found.js` for a global 404, or `app/blog/not-found.js` for blog-specific 404s.",
+      "Call `notFound()` from `next/navigation` in a Server Component to trigger it programmatically."
+    ],
+    "hints": [],
+    "metadata": {}
+  },
+  {
+    "id": "next-21-40-nextjs-q28",
+    "title": "How do you redirect in Next.js App Router?",
+    "content": "Use `redirect()` from `next/navigation` in Server Components, or `useRouter().push()` in Client Components.",
+    "type": "open-ended",
+    "category": "Next.js",
+    "topic": "Redirects",
+    "difficulty": "intermediate",
+    "learningCardId": "framework-questions",
+    "isActive": true,
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "createdBy": "admin",
+    "updatedBy": "admin",
+    "tags": ["nextjs", "redirects", "intermediate"],
+    "explanation": "`redirect()` is for server-side redirects (e.g., auth checks); `useRouter` is for client-side navigation.",
+    "points": 7,
+    "sampleAnswers": [
+      "In a Server Component: `import { redirect } from 'next/navigation'; if (!user) redirect('/login');`",
+      "In a Client Component: `const router = useRouter(); router.push('/dashboard');`"
+    ],
+    "hints": [],
+    "metadata": {}
+  },
+  {
+    "id": "next-21-40-nextjs-q29",
+    "title": "What is the `useRouter` hook used for?",
+    "content": "`useRouter` provides client-side navigation methods like `push`, `replace`, and `refresh` in Client Components.",
+    "type": "multiple-choice",
+    "category": "Next.js",
+    "topic": "Client-Side Navigation",
+    "difficulty": "intermediate",
+    "learningCardId": "framework-questions",
+    "isActive": true,
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "createdBy": "admin",
+    "updatedBy": "admin",
+    "tags": ["nextjs", "client-side-navigation", "intermediate"],
+    "explanation": "It’s the App Router equivalent of `next/router` but with the same API.",
+    "points": 6,
+    "options": [
+      {
+        "id": "a",
+        "text": "Client-side navigation in Client Components",
+        "isCorrect": true,
+        "explanation": ""
+      },
+      {
+        "id": "b",
+        "text": "Data fetching in Server Components",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "c",
+        "text": "Server-side redirects",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "d",
+        "text": "Only works in Pages Router",
+        "isCorrect": false,
+        "explanation": ""
+      }
+    ],
+    "hints": [],
+    "metadata": {}
+  },
+  {
+    "id": "next-21-40-nextjs-q30",
+    "title": "How do you handle environment variables in Next.js?",
+    "content": "Prefix with `NEXT_PUBLIC_` to expose to the browser; others are server-only. Load from `.env.local`.",
+    "type": "open-ended",
+    "category": "Next.js",
+    "topic": "Environment Variables",
+    "difficulty": "intermediate",
+    "learningCardId": "framework-questions",
+    "isActive": true,
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "createdBy": "admin",
+    "updatedBy": "admin",
+    "tags": ["nextjs", "environment-variables", "intermediate"],
+    "explanation": "Non-prefixed variables are only available in Server Components and API routes—never exposed to client.",
+    "points": 6,
+    "sampleAnswers": [
+      "`NEXT_PUBLIC_API_URL` is available in the browser; `DATABASE_URL` is only in server code—keeping secrets safe.",
+      "Use `.env.local` for local development; Vercel lets you set env vars in the project dashboard."
+    ],
+    "hints": [],
+    "metadata": {}
+  },
+  {
+    "id": "next-21-40-nextjs-q31",
+    "title": "What is the difference between `resolving` and `fetching` in Next.js?",
+    "content": "Resolving is determining which route to render. Fetching is retrieving data for that route.",
+    "type": "open-ended",
+    "category": "Next.js",
+    "topic": "App Router Internals",
+    "difficulty": "advanced",
+    "learningCardId": "framework-questions",
+    "isActive": true,
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "createdBy": "admin",
+    "updatedBy": "admin",
+    "tags": ["nextjs", "app-router-internals", "advanced"],
+    "explanation": "Next.js first resolves the route (e.g., `/blog/[slug]`), then fetches data for it using Server Components.",
+    "points": 8,
+    "sampleAnswers": [
+      "Resolving matches the URL to a file in `app/`. Fetching runs the Server Component to get data and render HTML.",
+      "These phases enable streaming: the shell renders while data fetches in parallel."
+    ],
+    "hints": [],
+    "metadata": {}
+  },
+  {
+    "id": "next-21-40-nextjs-q32",
+    "title": "How does Next.js handle caching?",
+    "content": "Next.js extends `fetch()` with automatic caching, revalidation, and deduping. Use `cache`, `next.revalidate`, and `next.tags` options.",
+    "type": "open-ended",
+    "category": "Next.js",
+    "topic": "Caching",
+    "difficulty": "advanced",
+    "learningCardId": "framework-questions",
+    "isActive": true,
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "createdBy": "admin",
+    "updatedBy": "admin",
+    "tags": ["nextjs", "caching", "advanced"],
+    "explanation": "Caching is opt-in via `fetch` options, replacing `getStaticProps`/`getServerSideProps`.",
+    "points": 9,
+    "sampleAnswers": [
+      "`fetch(url, { next: { revalidate: 60 } })` caches for 60 seconds. `fetch(url, { cache: 'no-store' })` disables caching for SSR.",
+      "Use `tags` for on-demand revalidation: `fetch(url, { next: { tags: ['posts'] } })` then `revalidateTag('posts')` in an API route."
+    ],
+    "hints": [],
+    "metadata": {}
+  },
+  {
+    "id": "next-21-40-nextjs-q33",
+    "title": "What is on-demand revalidation in Next.js?",
+    "content": "On-demand revalidation allows you to purge cached data and regenerate pages after build time using `revalidateTag` or `revalidatePath`.",
+    "type": "open-ended",
+    "category": "Next.js",
+    "topic": "Incremental Static Regeneration",
+    "difficulty": "advanced",
+    "learningCardId": "framework-questions",
+    "isActive": true,
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "createdBy": "admin",
+    "updatedBy": "admin",
+    "tags": ["nextjs", "incremental-static-regeneration", "advanced"],
+    "explanation": "It’s the App Router equivalent of ISR but triggered manually via API routes or webhooks.",
+    "points": 8,
+    "sampleAnswers": [
+      "Tag a `fetch` with `next: { tags: ['product-123'] }`. Later, call `revalidateTag('product-123')` in an API route to update the page.",
+      "Useful for CMS webhooks, e-commerce inventory updates, or admin actions that require immediate content refresh."
+    ],
+    "hints": [],
+    "metadata": {}
+  },
+  {
+    "id": "next-21-40-nextjs-q34",
+    "title": "How do you implement middleware in Next.js?",
+    "content": "Create a `middleware.js` file in the root or route segment. It runs before requests and can rewrite, redirect, or add headers.",
+    "type": "open-ended",
+    "category": "Next.js",
+    "topic": "Middleware",
+    "difficulty": "intermediate",
+    "learningCardId": "framework-questions",
+    "isActive": true,
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "createdBy": "admin",
+    "updatedBy": "admin",
+    "tags": ["nextjs", "middleware", "intermediate"],
+    "explanation": "Middleware is ideal for authentication, A/B testing, i18n, and bot protection.",
+    "points": 7,
+    "sampleAnswers": [
+      "```js\nexport { default } from 'next-auth/middleware';\nexport const config = { matcher: ['/dashboard/:path*'] };\n```",
+      "Use `NextRequest` to inspect cookies, headers, or URL, then `NextResponse.rewrite()` or `redirect()` as needed."
+    ],
+    "hints": [],
+    "metadata": {}
+  },
+  {
+    "id": "next-21-40-nextjs-q35",
+    "title": "What is the purpose of `next.config.js`?",
+    "content": "`next.config.js` customizes Next.js build settings like Webpack, Babel, environment variables, and experimental features.",
+    "type": "multiple-choice",
+    "category": "Next.js",
+    "topic": "Next.js Configuration",
+    "difficulty": "intermediate",
+    "learningCardId": "framework-questions",
+    "isActive": true,
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "createdBy": "admin",
+    "updatedBy": "admin",
+    "tags": ["nextjs", "next.js-configuration", "intermediate"],
+    "explanation": "It’s optional but powerful for advanced customization without ejecting.",
+    "points": 6,
+    "options": [
+      {
+        "id": "a",
+        "text": "Customize Webpack, Babel, env vars, and experimental features",
+        "isCorrect": true,
+        "explanation": ""
+      },
+      {
+        "id": "b",
+        "text": "Required for every Next.js app",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "c",
+        "text": "Only for CSS configuration",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "d",
+        "text": "Replaces package.json",
+        "isCorrect": false,
+        "explanation": ""
+      }
+    ],
+    "hints": [],
+    "metadata": {}
+  },
+  {
+    "id": "next-21-40-nextjs-q36",
+    "title": "How does Next.js optimize images?",
+    "content": "Next.js uses the `next/image` component to automatically optimize images (resize, compress, modern formats) and lazy-load them.",
+    "type": "open-ended",
+    "category": "Next.js",
+    "topic": "Image Optimization",
+    "difficulty": "intermediate",
+    "learningCardId": "framework-questions",
+    "isActive": true,
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "createdBy": "admin",
+    "updatedBy": "admin",
+    "tags": ["nextjs", "image-optimization", "intermediate"],
+    "explanation": "It reduces bandwidth, improves LCP, and prevents layout shift with automatic sizing.",
+    "points": 7,
+    "sampleAnswers": [
+      "`next/image` serves optimized WebP/AVIF, resizes based on device, and lazy-loads offscreen images—no config needed.",
+      "It integrates with CDNs and local file storage, and supports blur-up placeholders."
+    ],
+    "hints": [],
+    "metadata": {}
+  },
+  {
+    "id": "next-21-40-nextjs-q37",
+    "title": "What is the difference between `next/image` and `next/future/image`?",
+    "content": "`next/future/image` was an experimental version in Next.js 12. It’s now stable and available as `next/image` in Next.js 13+.",
+    "type": "true-false",
+    "category": "Next.js",
+    "topic": "Image Optimization",
+    "difficulty": "intermediate",
+    "learningCardId": "framework-questions",
+    "isActive": true,
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "createdBy": "admin",
+    "updatedBy": "admin",
+    "tags": ["nextjs", "image-optimization", "intermediate"],
+    "explanation": "As of Next.js 13, `next/image` is the stable, recommended component.",
+    "points": 5,
+    "options": [
+      {
+        "id": "a",
+        "text": "False",
+        "isCorrect": true,
+        "explanation": ""
+      },
+      {
+        "id": "b",
+        "text": "True",
+        "isCorrect": false,
+        "explanation": ""
+      }
+    ],
+    "hints": [],
+    "metadata": {}
+  },
+  {
+    "id": "next-21-40-nextjs-q38",
+    "title": "How do you deploy a Next.js app?",
+    "content": "Deploy to Vercel (official platform), Netlify, AWS, or any Node.js-compatible host. Vercel provides automatic SSR/SSG, edge functions, and preview deployments.",
+    "type": "open-ended",
+    "category": "Next.js",
+    "topic": "Deployment on Vercel",
+    "difficulty": "intermediate",
+    "learningCardId": "framework-questions",
+    "isActive": true,
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "createdBy": "admin",
+    "updatedBy": "admin",
+    "tags": ["nextjs", "deployment-on-vercel", "intermediate"],
+    "explanation": "Vercel is optimized for Next.js with zero-config deployments and Git integration.",
+    "points": 6,
+    "sampleAnswers": [
+      "Push to GitHub and deploy on Vercel for automatic builds, preview URLs, and edge network caching.",
+      "For self-hosting, run `next build` and `next start` on a Node.js server—but you lose edge functions and ISR."
+    ],
+    "hints": [],
+    "metadata": {}
+  },
+  {
+    "id": "next-21-40-nextjs-q39",
+    "title": "What is EAS in the context of Expo?",
+    "content": "EAS (Expo Application Services) is a cloud platform for building, submitting, and updating Expo apps without local Xcode/Android Studio.",
+    "type": "open-ended",
+    "category": "Next.js",
+    "topic": "Expo",
+    "difficulty": "intermediate",
+    "learningCardId": "framework-questions",
+    "isActive": true,
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "createdBy": "admin",
+    "updatedBy": "admin",
+    "tags": ["nextjs", "expo", "intermediate"],
+    "explanation": "EAS Build compiles apps in the cloud; EAS Submit sends them to app stores; EAS Update pushes JS updates over the air.",
+    "points": 7,
+    "sampleAnswers": [
+      "EAS replaces `expo build` with cloud-based builds, enabling custom native code without local setup.",
+      "It offers services like build automation, app store submission, and OTA updates with rollback."
+    ],
+    "hints": [],
+    "metadata": {}
+  },
+  {
+    "id": "next-21-40-nextjs-q40",
+    "title": "How does Expo differ from standard React Native?",
+    "content": "Expo is a framework and platform built on React Native that provides a managed workflow with prebuilt native modules and cloud services.",
+    "type": "multiple-choice",
+    "category": "Next.js",
+    "topic": "Expo",
+    "difficulty": "intermediate",
+    "learningCardId": "framework-questions",
+    "isActive": true,
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "createdBy": "admin",
+    "updatedBy": "admin",
+    "tags": ["nextjs", "expo", "intermediate"],
+    "explanation": "Expo simplifies development with a curated set of APIs; EAS enables custom native code when needed.",
+    "points": 7,
+    "options": [
+      {
+        "id": "a",
+        "text": "Expo: managed workflow, prebuilt modules, cloud services; React Native: bare workflow, full native control",
+        "isCorrect": true,
+        "explanation": ""
+      },
+      {
+        "id": "b",
+        "text": "Expo doesn’t support custom native code",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "c",
+        "text": "React Native is only for iOS",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "d",
+        "text": "Expo is deprecated",
+        "isCorrect": false,
+        "explanation": ""
+      }
+    ],
+    "hints": [],
+    "metadata": {}
+  }
+]

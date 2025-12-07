@@ -54,6 +54,7 @@ npm run dev:memory-check
 ### 3. Test Scripts
 
 All test scripts now use:
+
 - Fixed worker count: `--maxWorkers=2` (instead of 50% of CPU cores)
 - Memory limit: `--max-old-space-size=1024` (1GB per worker)
 
@@ -70,6 +71,7 @@ We've optimized `next.config.ts` for memory efficiency:
 ### 5. Jest Configuration
 
 Updated `jest.config.js`:
+
 - Fixed `maxWorkers` to 2 (instead of percentage-based)
 - Applies to both CI and local development
 
@@ -78,21 +80,27 @@ Updated `jest.config.js`:
 ### During Development
 
 1. **Use Light Mode When Needed**
+
    ```bash
    npm run dev:light
    ```
+
    Use this if you notice system slowdowns or high swap usage.
 
 2. **Prefer Turbopack**
+
    ```bash
    npm run dev:turbo
    ```
+
    Turbopack is faster and more memory-efficient than Webpack.
 
 3. **Monitor Memory Usage**
+
    ```bash
    npm run dev:memory-check
    ```
+
    Run this periodically to check if Node processes are using too much memory.
 
 4. **Close Unnecessary Applications**
@@ -107,10 +115,11 @@ Updated `jest.config.js`:
 ### When Running Tests
 
 1. **Run Tests Selectively**
+
    ```bash
    # Run only unit tests
    npm run test:unit
-   
+
    # Run only specific test suite
    npm run test:unit:admin
    ```
@@ -127,10 +136,11 @@ Updated `jest.config.js`:
 ### System-Level Optimizations
 
 1. **Check Swap Usage**
+
    ```bash
    # macOS
    sysctl vm.swapusage
-   
+
    # If swap usage is high (>500MB), consider:
    # - Using dev:light mode
    # - Closing other applications
@@ -138,10 +148,11 @@ Updated `jest.config.js`:
    ```
 
 2. **Monitor System Memory**
+
    ```bash
    # macOS Activity Monitor
    open -a "Activity Monitor"
-   
+
    # Or use the memory check script
    npm run dev:memory-check
    ```
@@ -157,11 +168,13 @@ Updated `jest.config.js`:
 ### System is Still Slow
 
 1. Check current memory usage:
+
    ```bash
    npm run dev:memory-check
    ```
 
 2. Switch to light mode:
+
    ```bash
    npm run dev:light
    ```
@@ -186,15 +199,17 @@ If swap usage is consistently high (>500MB):
 ### Node Process Using Too Much Memory
 
 1. Check which processes are using memory:
+
    ```bash
    npm run dev:memory-check
    ```
 
 2. Kill specific processes if needed:
+
    ```bash
    # Find process ID
    ps aux | grep node
-   
+
    # Kill specific process (replace PID)
    kill -9 <PID>
    ```
@@ -204,6 +219,7 @@ If swap usage is consistently high (>500MB):
 ### Tests Failing Due to Memory
 
 1. Reduce test concurrency:
+
    ```bash
    # Tests already use maxWorkers=2, but you can run in band:
    JEST_RUN_IN_BAND=true npm run test:unit
@@ -218,13 +234,13 @@ If swap usage is consistently high (>500MB):
 
 ## Memory Limits Reference
 
-| Script | Memory Limit | Workers | Use Case |
-|--------|-------------|---------|----------|
-| `dev` | 2GB | N/A | Standard development |
-| `dev:light` | 1.5GB | N/A | Low memory systems |
-| `dev:turbo` | 2GB | N/A | Faster builds (recommended) |
-| `test:unit` | 1GB | 2 | Unit tests |
-| `test:integration` | 1GB | 2 | Integration tests |
+| Script             | Memory Limit | Workers | Use Case                    |
+| ------------------ | ------------ | ------- | --------------------------- |
+| `dev`              | 2GB          | N/A     | Standard development        |
+| `dev:light`        | 1.5GB        | N/A     | Low memory systems          |
+| `dev:turbo`        | 2GB          | N/A     | Faster builds (recommended) |
+| `test:unit`        | 1GB          | 2       | Unit tests                  |
+| `test:integration` | 1GB          | 2       | Integration tests           |
 
 ## Additional Resources
 
@@ -244,12 +260,3 @@ The key optimizations implemented:
 6. ✅ Light mode for constrained systems
 
 These changes should significantly reduce memory usage and prevent system slowdowns during development.
-
-
-
-
-
-
-
-
-

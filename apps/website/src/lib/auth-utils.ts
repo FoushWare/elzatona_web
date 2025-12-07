@@ -2,10 +2,10 @@
  * Authentication utilities for enhanced security and persistence
  */
 
-import { createClient } from '@supabase/supabase-js';
+import { createClient } from "@supabase/supabase-js";
 
-const supabaseUrl = process.env['NEXT_PUBLIC_SUPABASE_URL']!;
-const supabaseKey = process.env['NEXT_PUBLIC_SUPABASE_ANON_KEY']!;
+const supabaseUrl = process.env["NEXT_PUBLIC_SUPABASE_URL"]!;
+const supabaseKey = process.env["NEXT_PUBLIC_SUPABASE_ANON_KEY"]!;
 
 const supabase = createClient(supabaseUrl, supabaseKey);
 
@@ -28,7 +28,7 @@ export const isSessionValid = async (): Promise<boolean> => {
 
     return true;
   } catch (error) {
-    console.error('Session validation error:', error);
+    console.error("Session validation error:", error);
     return false;
   }
 };
@@ -51,7 +51,7 @@ export const getAuthStatus = async () => {
 
     return { isAuthenticated: true, user };
   } catch (error) {
-    console.error('Auth status error:', error);
+    console.error("Auth status error:", error);
     return { isAuthenticated: false, user: null };
   }
 };
@@ -59,28 +59,28 @@ export const getAuthStatus = async () => {
 // Set HTTP-only cookie for authentication
 export const setAuthCookie = async (token: string): Promise<void> => {
   try {
-    await fetch('/api/auth/set-cookie', {
-      method: 'POST',
+    await fetch("/api/auth/set-cookie", {
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
       body: JSON.stringify({ token }),
-      credentials: 'include',
+      credentials: "include",
     });
   } catch (error) {
-    console.error('Error setting auth cookie:', error);
+    console.error("Error setting auth cookie:", error);
   }
 };
 
 // Clear HTTP-only cookie
 export const clearAuthCookie = async (): Promise<void> => {
   try {
-    await fetch('/api/auth/clear-cookie', {
-      method: 'POST',
-      credentials: 'include',
+    await fetch("/api/auth/clear-cookie", {
+      method: "POST",
+      credentials: "include",
     });
   } catch (error) {
-    console.error('Error clearing auth cookie:', error);
+    console.error("Error clearing auth cookie:", error);
   }
 };
 
@@ -90,14 +90,14 @@ export const clearAuthData = async () => {
     // Sign out from Supabase
     await supabase.auth.signOut();
 
-    if (typeof window !== 'undefined') {
+    if (typeof window !== "undefined") {
       // Clear localStorage
-      Object.keys(localStorage).forEach(key => {
+      Object.keys(localStorage).forEach((key) => {
         if (
-          key.startsWith('supabase:') ||
-          key.startsWith('auth_') ||
-          key.includes('user') ||
-          key.startsWith('progress_')
+          key.startsWith("supabase:") ||
+          key.startsWith("auth_") ||
+          key.includes("user") ||
+          key.startsWith("progress_")
         ) {
           localStorage.removeItem(key);
         }
@@ -107,34 +107,34 @@ export const clearAuthData = async () => {
       sessionStorage.clear();
 
       // Clear any cookies (if any)
-      document.cookie.split(';').forEach(cookie => {
-        const eqPos = cookie.indexOf('=');
+      document.cookie.split(";").forEach((cookie) => {
+        const eqPos = cookie.indexOf("=");
         const name = eqPos > -1 ? cookie.substr(0, eqPos) : cookie;
-        if (name.includes('auth') || name.includes('supabase')) {
+        if (name.includes("auth") || name.includes("supabase")) {
           document.cookie =
-            name + '=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/';
+            name + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/";
         }
       });
     }
   } catch (error) {
-    console.error('Error clearing auth data:', error);
+    console.error("Error clearing auth data:", error);
   }
 };
 
 // Set up automatic token refresh
 export const setupTokenRefresh = () => {
-  if (typeof window === 'undefined') return;
+  if (typeof window === "undefined") return;
 
   // Supabase handles token refresh automatically
   // We just need to listen for auth state changes
   const {
     data: { subscription },
   } = supabase.auth.onAuthStateChange(async (event, session) => {
-    if (event === 'SIGNED_OUT' || !session) {
-      console.log('User signed out or session expired');
+    if (event === "SIGNED_OUT" || !session) {
+      console.log("User signed out or session expired");
       await clearAuthData();
-    } else if (event === 'TOKEN_REFRESHED') {
-      console.log('Token refreshed successfully');
+    } else if (event === "TOKEN_REFRESHED") {
+      console.log("Token refreshed successfully");
     }
   });
 
@@ -153,7 +153,7 @@ export const getCurrentUser = async () => {
     }
     return user;
   } catch (error) {
-    console.error('Error getting current user:', error);
+    console.error("Error getting current user:", error);
     return null;
   }
 };
@@ -167,7 +167,7 @@ export const refreshUserToken = async () => {
     }
     return { success: true, session: data.session };
   } catch (error) {
-    console.error('Token refresh failed:', error);
-    return { success: false, error: 'Token refresh failed' };
+    console.error("Token refresh failed:", error);
+    return { success: false, error: "Token refresh failed" };
   }
 };

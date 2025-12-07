@@ -10,7 +10,9 @@ const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
 if (!supabaseUrl || !supabaseServiceRoleKey) {
   console.error('❌ Missing Supabase environment variables');
-  console.error('Required: NEXT_PUBLIC_SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY');
+  console.error(
+    'Required: NEXT_PUBLIC_SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY'
+  );
   console.error('Please set these in your .env.local file');
   process.exit(1);
 }
@@ -69,8 +71,12 @@ CREATE POLICY "Service role can manage admins" ON admins FOR ALL USING (
     const adminRole = 'super_admin';
 
     if (!adminPassword) {
-      console.error('❌ Missing INITIAL_ADMIN_PASSWORD in environment variables');
-      console.error('Please set INITIAL_ADMIN_PASSWORD in your .env.local file');
+      console.error(
+        '❌ Missing INITIAL_ADMIN_PASSWORD in environment variables'
+      );
+      console.error(
+        'Please set INITIAL_ADMIN_PASSWORD in your .env.local file'
+      );
       return;
     }
 

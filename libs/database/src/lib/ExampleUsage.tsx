@@ -3,9 +3,9 @@
 // v1.0 - Demonstrates how to use the multi-database support
 // This file uses 'any' types for example database operations
 
-import React from 'react';
-import { DatabaseProvider, useDatabase } from 'database';
-import { DatabaseResult } from './IDatabaseService';
+import React from "react";
+import { DatabaseProvider, useDatabase } from "database";
+import { DatabaseResult } from "./IDatabaseService";
 
 // Example component using the database abstraction
 export const ExampleComponent: React.FC = () => {
@@ -13,37 +13,37 @@ export const ExampleComponent: React.FC = () => {
 
   const handleCreateUser = async () => {
     try {
-      const result: DatabaseResult<any> = await database.add('users', {
-        email: 'user@example.com',
-        name: 'John Doe',
-        role: 'user',
+      const result: DatabaseResult<any> = await database.add("users", {
+        email: "user@example.com",
+        name: "John Doe",
+        role: "user",
         created_at: new Date().toISOString(),
         updated_at: new Date().toISOString(),
       } as any);
 
       if (result.error) {
-        console.error('Error creating user:', result.error);
+        console.error("Error creating user:", result.error);
       } else {
-        console.log('User created:', result.data);
+        console.log("User created:", result.data);
       }
     } catch (error) {
-      console.error('Error creating user:', error);
+      console.error("Error creating user:", error);
     }
   };
 
   const handleGetQuestions = async () => {
     try {
-      const result = (await database.getAll('questions', {
+      const result = (await database.getAll("questions", {
         filters: { is_active: true },
       })) as unknown as DatabaseResult<any[]>;
 
       if (result.error) {
-        console.error('Error fetching questions:', result.error);
+        console.error("Error fetching questions:", result.error);
       } else {
-        console.log('Active questions:', result.data);
+        console.log("Active questions:", result.data);
       }
     } catch (error) {
-      console.error('Error fetching questions:', error);
+      console.error("Error fetching questions:", error);
     }
   };
 
@@ -72,8 +72,8 @@ export const DatabaseSwitcher: React.FC = () => {
   return (
     <div>
       <h2>Current Database:</h2>
-      <p>Firebase: {isFirebase ? '✅' : '❌'}</p>
-      <p>Supabase: {isSupabase ? '✅' : '❌'}</p>
+      <p>Firebase: {isFirebase ? "✅" : "❌"}</p>
+      <p>Supabase: {isSupabase ? "✅" : "❌"}</p>
     </div>
   );
 };
@@ -87,19 +87,19 @@ export const ServiceFactoryExample: React.FC = () => {
       // Create multiple questions at once
       const questions = [
         {
-          title: 'Question 1',
-          content: 'What is React?',
-          type: 'multiple-choice',
-          difficulty: 'beginner',
+          title: "Question 1",
+          content: "What is React?",
+          type: "multiple-choice",
+          difficulty: "beginner",
           is_active: true,
           created_at: new Date().toISOString(),
           updated_at: new Date().toISOString(),
         },
         {
-          title: 'Question 2',
-          content: 'What is TypeScript?',
-          type: 'open-ended',
-          difficulty: 'intermediate',
+          title: "Question 2",
+          content: "What is TypeScript?",
+          type: "open-ended",
+          difficulty: "intermediate",
           is_active: true,
           created_at: new Date().toISOString(),
           updated_at: new Date().toISOString(),
@@ -109,17 +109,17 @@ export const ServiceFactoryExample: React.FC = () => {
       // Add each question individually (batch operations would need to be implemented)
       for (const question of questions) {
         const result: DatabaseResult<any> = await database.add(
-          'questions',
-          question as any
+          "questions",
+          question as any,
         );
         if (result.error) {
-          console.error('Error creating question:', result.error);
+          console.error("Error creating question:", result.error);
         } else {
-          console.log('Question created:', result.data);
+          console.log("Question created:", result.data);
         }
       }
     } catch (error) {
-      console.error('Error in batch operations:', error);
+      console.error("Error in batch operations:", error);
     }
   };
 

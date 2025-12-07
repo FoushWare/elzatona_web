@@ -6,7 +6,10 @@ const path = require('path');
  * Wraps code snippets in <code> tags and ensures proper formatting
  */
 
-const questionsFile = path.join(__dirname, '../final-questions-v01/css-questions.json');
+const questionsFile = path.join(
+  __dirname,
+  '../final-questions-v01/css-questions.json'
+);
 let questions = JSON.parse(fs.readFileSync(questionsFile, 'utf8'));
 
 // Patterns to identify code snippets
@@ -38,41 +41,47 @@ const codePatterns = [
 // Function to wrap code snippets in <code> tags
 function formatCodeInText(text) {
   if (!text || typeof text !== 'string') return text;
-  
+
   // Skip if already contains code tags (to avoid double processing)
   if (text.includes('<code>')) return text;
-  
+
   let formatted = text;
   const codeSnippets = new Set();
-  
+
   // Find all code snippets
   codePatterns.forEach(pattern => {
     const matches = text.matchAll(pattern);
     for (const match of matches) {
       const snippet = match[0];
       // Skip if already in code tags or backticks
-      if (!snippet.includes('<code>') && !snippet.includes('`') && snippet.length > 0) {
+      if (
+        !snippet.includes('<code>') &&
+        !snippet.includes('`') &&
+        snippet.length > 0
+      ) {
         codeSnippets.add(snippet);
       }
     }
   });
-  
+
   // Sort by length (longest first) to avoid partial replacements
-  const sortedSnippets = Array.from(codeSnippets).sort((a, b) => b.length - a.length);
-  
+  const sortedSnippets = Array.from(codeSnippets).sort(
+    (a, b) => b.length - a.length
+  );
+
   // Track positions to avoid overlapping replacements
   const replacements = [];
-  
+
   sortedSnippets.forEach(snippet => {
     // Escape HTML in the snippet
     const escaped = snippet
       .replace(/&/g, '&amp;')
       .replace(/</g, '&lt;')
       .replace(/>/g, '&gt;');
-    
+
     // Wrap in code tag
     const wrapped = `<code>${escaped}</code>`;
-    
+
     // Find all occurrences
     const regex = new RegExp(
       snippet.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'),
@@ -84,62 +93,67 @@ function formatCodeInText(text) {
       const beforeMatch = formatted.substring(0, match.index);
       const openTags = (beforeMatch.match(/<code>/g) || []).length;
       const closeTags = (beforeMatch.match(/<\/code>/g) || []).length;
-      
+
       // Only replace if not already inside a code tag
       if (openTags === closeTags) {
         replacements.push({
           index: match.index,
           length: match[0].length,
-          replacement: wrapped
+          replacement: wrapped,
         });
       }
     }
   });
-  
+
   // Sort replacements by index (descending) to replace from end to start
   replacements.sort((a, b) => b.index - a.index);
-  
+
   // Apply replacements
   replacements.forEach(({ index, length, replacement }) => {
-    formatted = formatted.substring(0, index) + replacement + formatted.substring(index + length);
+    formatted =
+      formatted.substring(0, index) +
+      replacement +
+      formatted.substring(index + length);
   });
-  
+
   return formatted;
 }
 
 // Function to format a question object
 function formatQuestion(question) {
   const formatted = { ...question };
-  
+
   // Format title
   if (formatted.title) {
     formatted.title = formatCodeInText(formatted.title);
   }
-  
+
   // Format content
   if (formatted.content) {
     formatted.content = formatCodeInText(formatted.content);
   }
-  
+
   // Format explanation
   if (formatted.explanation) {
     formatted.explanation = formatCodeInText(formatted.explanation);
   }
-  
+
   // Format options
   if (formatted.options && Array.isArray(formatted.options)) {
     formatted.options = formatted.options.map(option => ({
       ...option,
       text: formatCodeInText(option.text),
-      explanation: option.explanation ? formatCodeInText(option.explanation) : option.explanation
+      explanation: option.explanation
+        ? formatCodeInText(option.explanation)
+        : option.explanation,
     }));
   }
-  
+
   // Format hints
   if (formatted.hints && Array.isArray(formatted.hints)) {
     formatted.hints = formatted.hints.map(hint => formatCodeInText(hint));
   }
-  
+
   return formatted;
 }
 
@@ -152,14 +166,14 @@ questions = questions.map((question, index) => {
   const original = JSON.stringify(question);
   const formatted = formatQuestion(question);
   const changed = JSON.stringify(formatted) !== original;
-  
+
   if (changed) {
     formattedCount++;
     if (formattedCount <= 5) {
       console.log(`✅ Formatted question ${question.id}`);
     }
   }
-  
+
   return formatted;
 });
 
@@ -173,5 +187,6 @@ fs.writeFileSync(questionsFile, JSON.stringify(questions, null, 2));
 console.log(`\n✅ Formatting complete!`);
 console.log(`   Total questions: ${totalQuestions}`);
 console.log(`   Questions with code formatting: ${formattedCount}`);
-console.log(`   Code snippets are now wrapped in <code> tags for better frontend display`);
-
+console.log(
+  `   Code snippets are now wrapped in <code> tags for better frontend display`
+);

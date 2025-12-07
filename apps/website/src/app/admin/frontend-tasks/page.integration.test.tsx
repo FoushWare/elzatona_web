@@ -3,12 +3,12 @@
  * Task: A-005 - Admin Frontend Tasks
  */
 
-import React from 'react';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
-import '@testing-library/jest-dom';
-import FrontendTasksAdminPage from './page';
+import React from "react";
+import { render, screen, fireEvent, waitFor } from "@testing-library/react";
+import "@testing-library/jest-dom";
+import FrontendTasksAdminPage from "./page";
 
-jest.mock('@elzatona/shared-hooks', () => ({
+jest.mock("@elzatona/hooks", () => ({
   useFrontendTasks: jest.fn(() => ({
     data: { data: [] },
     isLoading: false,
@@ -28,7 +28,7 @@ jest.mock('@elzatona/shared-hooks', () => ({
   })),
 }));
 
-jest.mock('@elzatona/shared-components', () => ({
+jest.mock("@elzatona/components", () => ({
   FrontendTaskEditor: ({ onSave, onCancel }: any) => (
     <div>
       <button onClick={() => onSave({})}>Save</button>
@@ -37,7 +37,7 @@ jest.mock('@elzatona/shared-components', () => ({
   ),
 }));
 
-jest.mock('lucide-react', () => ({
+jest.mock("lucide-react", () => ({
   Plus: () => <span>+</span>,
   Edit: () => <span>✏️</span>,
   Trash2: () => <span>🗑️</span>,
@@ -49,16 +49,16 @@ jest.mock('lucide-react', () => ({
 
 window.confirm = jest.fn(() => true);
 
-describe('A-IT-017: Frontend Tasks CRUD Integration', () => {
+describe("A-IT-017: Frontend Tasks CRUD Integration", () => {
   beforeEach(() => {
     jest.clearAllMocks();
   });
 
-  it('should integrate task creation', async () => {
+  it("should integrate task creation", async () => {
     render(<FrontendTasksAdminPage />);
-    
+
     await waitFor(() => {
-      const { useFrontendTasks } = require('@elzatona/shared-hooks');
+      const { useFrontendTasks } = require("@elzatona/hooks");
       expect(useFrontendTasks).toHaveBeenCalled();
     });
   });

@@ -1,7 +1,7 @@
 /**
  * Integration Tests for Guided Practice Page (G-IT-015 through G-IT-022)
  * Task G-006: Guided Practice Page (localStorage Dependent - Not Logged In)
- * 
+ *
  * Tests cover:
  * - Plan data fetch and progress initialization
  * - Question navigation with localStorage persistence
@@ -11,26 +11,26 @@
  * - Completion flow and score calculation
  * - Filter parameters (cardId, categoryId)
  * - Resources display and interaction
- * 
+ *
  * IMPORTANT: These tests verify integration between components and localStorage
  */
 
-import React from 'react';
-import { render, screen, waitFor, fireEvent } from '@testing-library/react';
-import '@testing-library/jest-dom';
-import GuidedPracticePage from './page';
+import React from "react";
+import { render, screen, waitFor, fireEvent } from "@testing-library/react";
+import "@testing-library/jest-dom";
+import GuidedPracticePage from "./page";
 
 // Mock Next.js modules
 const mockPush = jest.fn();
 const mockReplace = jest.fn();
 const mockGet = jest.fn((key: string) => {
-  if (key === 'plan') return 'test-plan-id';
-  if (key === 'card') return null;
-  if (key === 'category') return null;
+  if (key === "plan") return "test-plan-id";
+  if (key === "card") return null;
+  if (key === "category") return null;
   return null;
 });
 
-jest.mock('next/navigation', () => ({
+jest.mock("next/navigation", () => ({
   useSearchParams: jest.fn(() => ({
     get: mockGet,
   })),
@@ -44,7 +44,7 @@ jest.mock('next/navigation', () => ({
 global.fetch = jest.fn();
 
 // Mock lucide-react icons
-jest.mock('lucide-react', () => ({
+jest.mock("lucide-react", () => ({
   ArrowLeft: () => <span data-testid="arrow-left-icon">←</span>,
   ArrowRight: () => <span data-testid="arrow-right-icon">→</span>,
   CheckCircle: () => <span data-testid="check-icon">✓</span>,
@@ -65,7 +65,7 @@ jest.mock('lucide-react', () => ({
 // Helper function to setup localStorage mock
 const setupLocalStorage = (data: Record<string, string | null> = {}) => {
   const storage: Record<string, string> = Object.fromEntries(
-    Object.entries(data).map(([k, v]) => [k, v ?? ''])
+    Object.entries(data).map(([k, v]) => [k, v ?? ""]),
   );
   Storage.prototype.getItem = jest.fn((key: string) => {
     return storage[key] || null;
@@ -77,7 +77,7 @@ const setupLocalStorage = (data: Record<string, string | null> = {}) => {
     delete storage[key];
   });
   Storage.prototype.clear = jest.fn(() => {
-    Object.keys(storage).forEach(key => delete storage[key]);
+    Object.keys(storage).forEach((key) => delete storage[key]);
   });
   return storage;
 };
@@ -89,52 +89,52 @@ const clearLocalStorage = () => {
 
 // Mock plan data with resources
 const mockPlanDataWithResources = {
-  id: 'test-plan-id',
-  name: 'Test Plan',
+  id: "test-plan-id",
+  name: "Test Plan",
   cards: [
     {
-      id: 'card-1',
-      title: 'Test Card',
+      id: "card-1",
+      title: "Test Card",
       categories: [
         {
-          id: 'cat-1',
-          name: 'Test Category',
+          id: "cat-1",
+          name: "Test Category",
           topics: [
             {
-              id: 'topic-1',
-              name: 'Test Topic',
+              id: "topic-1",
+              name: "Test Topic",
               questions: [
                 {
-                  id: 'q-1',
-                  title: 'Test Question',
-                  content: 'What is the answer?',
-                  type: 'multiple-choice',
-                  difficulty: 'intermediate',
+                  id: "q-1",
+                  title: "Test Question",
+                  content: "What is the answer?",
+                  type: "multiple-choice",
+                  difficulty: "intermediate",
                   options: [
-                    { id: 'opt-1', text: 'Option 1', isCorrect: true },
-                    { id: 'opt-2', text: 'Option 2', isCorrect: false },
+                    { id: "opt-1", text: "Option 1", isCorrect: true },
+                    { id: "opt-2", text: "Option 2", isCorrect: false },
                   ],
-                  explanation: 'This is the explanation',
+                  explanation: "This is the explanation",
                   resources: [
                     {
-                      type: 'video',
-                      title: 'Video Tutorial',
-                      url: 'https://example.com/video',
-                      description: 'Learn more about this topic',
-                      duration: '10:30',
-                      author: 'John Doe',
+                      type: "video",
+                      title: "Video Tutorial",
+                      url: "https://example.com/video",
+                      description: "Learn more about this topic",
+                      duration: "10:30",
+                      author: "John Doe",
                     },
                     {
-                      type: 'course',
-                      title: 'Course Guide',
-                      url: 'https://example.com/course',
-                      description: 'Take this course',
+                      type: "course",
+                      title: "Course Guide",
+                      url: "https://example.com/course",
+                      description: "Take this course",
                     },
                     {
-                      type: 'article',
-                      title: 'Article Guide',
-                      url: 'https://example.com/article',
-                      description: 'Read this article',
+                      type: "article",
+                      title: "Article Guide",
+                      url: "https://example.com/article",
+                      description: "Read this article",
                     },
                   ],
                 },
@@ -147,14 +147,14 @@ const mockPlanDataWithResources = {
   ],
 };
 
-describe('G-IT-022: Resources Display and Interaction', () => {
+describe("G-IT-022: Resources Display and Interaction", () => {
   beforeEach(() => {
     jest.clearAllMocks();
     clearLocalStorage();
     mockGet.mockImplementation((key: string) => {
-      if (key === 'plan') return 'test-plan-id';
-      if (key === 'card') return null;
-      if (key === 'category') return null;
+      if (key === "plan") return "test-plan-id";
+      if (key === "card") return null;
+      if (key === "category") return null;
       return null;
     });
     (global.fetch as jest.Mock).mockResolvedValue({
@@ -168,37 +168,37 @@ describe('G-IT-022: Resources Display and Interaction', () => {
     clearLocalStorage();
   });
 
-  test('should display resources section after explanation when resources exist', async () => {
+  test("should display resources section after explanation when resources exist", async () => {
     setupLocalStorage({});
-    
+
     render(<GuidedPracticePage />);
-    
+
     // Wait for page to load
     await waitFor(() => {
-      expect(screen.getByText('Test Question')).toBeInTheDocument();
+      expect(screen.getByText("Test Question")).toBeInTheDocument();
     });
 
     // Select an answer to show explanation
-    const option1 = screen.getByText('Option 1');
+    const option1 = screen.getByText("Option 1");
     fireEvent.click(option1);
 
     // Wait for explanation to appear
     await waitFor(() => {
-      expect(screen.getByText('Explanation')).toBeInTheDocument();
+      expect(screen.getByText("Explanation")).toBeInTheDocument();
     });
 
     // Verify resources section appears after explanation
     await waitFor(() => {
-      expect(screen.getByText('Learning Resources')).toBeInTheDocument();
+      expect(screen.getByText("Learning Resources")).toBeInTheDocument();
     });
 
     // Verify all resources are displayed
-    expect(screen.getByText('Video Tutorial')).toBeInTheDocument();
-    expect(screen.getByText('Course Guide')).toBeInTheDocument();
-    expect(screen.getByText('Article Guide')).toBeInTheDocument();
+    expect(screen.getByText("Video Tutorial")).toBeInTheDocument();
+    expect(screen.getByText("Course Guide")).toBeInTheDocument();
+    expect(screen.getByText("Article Guide")).toBeInTheDocument();
   });
 
-  test('should NOT display resources section when resources is null', async () => {
+  test("should NOT display resources section when resources is null", async () => {
     const planDataWithoutResources = {
       ...mockPlanDataWithResources,
       cards: [
@@ -212,7 +212,8 @@ describe('G-IT-022: Resources Display and Interaction', () => {
                   ...mockPlanDataWithResources.cards[0].categories[0].topics[0],
                   questions: [
                     {
-                      ...mockPlanDataWithResources.cards[0].categories[0].topics[0].questions[0],
+                      ...mockPlanDataWithResources.cards[0].categories[0]
+                        .topics[0].questions[0],
                       resources: null,
                     },
                   ],
@@ -230,27 +231,27 @@ describe('G-IT-022: Resources Display and Interaction', () => {
     });
 
     setupLocalStorage({});
-    
+
     render(<GuidedPracticePage />);
-    
+
     await waitFor(() => {
-      expect(screen.getByText('Test Question')).toBeInTheDocument();
+      expect(screen.getByText("Test Question")).toBeInTheDocument();
     });
 
     // Select an answer
-    const option1 = screen.getByText('Option 1');
+    const option1 = screen.getByText("Option 1");
     fireEvent.click(option1);
 
     // Wait for explanation
     await waitFor(() => {
-      expect(screen.getByText('Explanation')).toBeInTheDocument();
+      expect(screen.getByText("Explanation")).toBeInTheDocument();
     });
 
     // Verify resources section does NOT appear
-    expect(screen.queryByText('Learning Resources')).not.toBeInTheDocument();
+    expect(screen.queryByText("Learning Resources")).not.toBeInTheDocument();
   });
 
-  test('should NOT display resources section when resources array is empty', async () => {
+  test("should NOT display resources section when resources array is empty", async () => {
     const planDataWithEmptyResources = {
       ...mockPlanDataWithResources,
       cards: [
@@ -264,7 +265,8 @@ describe('G-IT-022: Resources Display and Interaction', () => {
                   ...mockPlanDataWithResources.cards[0].categories[0].topics[0],
                   questions: [
                     {
-                      ...mockPlanDataWithResources.cards[0].categories[0].topics[0].questions[0],
+                      ...mockPlanDataWithResources.cards[0].categories[0]
+                        .topics[0].questions[0],
                       resources: [],
                     },
                   ],
@@ -282,27 +284,27 @@ describe('G-IT-022: Resources Display and Interaction', () => {
     });
 
     setupLocalStorage({});
-    
+
     render(<GuidedPracticePage />);
-    
+
     await waitFor(() => {
-      expect(screen.getByText('Test Question')).toBeInTheDocument();
+      expect(screen.getByText("Test Question")).toBeInTheDocument();
     });
 
     // Select an answer
-    const option1 = screen.getByText('Option 1');
+    const option1 = screen.getByText("Option 1");
     fireEvent.click(option1);
 
     // Wait for explanation
     await waitFor(() => {
-      expect(screen.getByText('Explanation')).toBeInTheDocument();
+      expect(screen.getByText("Explanation")).toBeInTheDocument();
     });
 
     // Verify resources section does NOT appear
-    expect(screen.queryByText('Learning Resources')).not.toBeInTheDocument();
+    expect(screen.queryByText("Learning Resources")).not.toBeInTheDocument();
   });
 
-  test('should NOT display resources section for code questions', async () => {
+  test("should NOT display resources section for code questions", async () => {
     const planDataWithCodeQuestion = {
       ...mockPlanDataWithResources,
       cards: [
@@ -316,13 +318,14 @@ describe('G-IT-022: Resources Display and Interaction', () => {
                   ...mockPlanDataWithResources.cards[0].categories[0].topics[0],
                   questions: [
                     {
-                      ...mockPlanDataWithResources.cards[0].categories[0].topics[0].questions[0],
-                      type: 'code',
+                      ...mockPlanDataWithResources.cards[0].categories[0]
+                        .topics[0].questions[0],
+                      type: "code",
                       resources: [
                         {
-                          type: 'video',
-                          title: 'Video Tutorial',
-                          url: 'https://example.com/video',
+                          type: "video",
+                          title: "Video Tutorial",
+                          url: "https://example.com/video",
                         },
                       ],
                     },
@@ -341,144 +344,143 @@ describe('G-IT-022: Resources Display and Interaction', () => {
     });
 
     setupLocalStorage({});
-    
+
     render(<GuidedPracticePage />);
-    
+
     await waitFor(() => {
-      expect(screen.getByText('Test Question')).toBeInTheDocument();
+      expect(screen.getByText("Test Question")).toBeInTheDocument();
     });
 
     // Verify resources section does NOT appear for code questions
-    expect(screen.queryByText('Learning Resources')).not.toBeInTheDocument();
+    expect(screen.queryByText("Learning Resources")).not.toBeInTheDocument();
   });
 
-  test('should NOT display resources section before explanation is shown', async () => {
+  test("should NOT display resources section before explanation is shown", async () => {
     setupLocalStorage({});
-    
+
     render(<GuidedPracticePage />);
-    
+
     await waitFor(() => {
-      expect(screen.getByText('Test Question')).toBeInTheDocument();
+      expect(screen.getByText("Test Question")).toBeInTheDocument();
     });
 
     // Verify resources section does NOT appear before answer is selected
-    expect(screen.queryByText('Learning Resources')).not.toBeInTheDocument();
+    expect(screen.queryByText("Learning Resources")).not.toBeInTheDocument();
   });
 
-  test('should display correct resource types with correct icons', async () => {
+  test("should display correct resource types with correct icons", async () => {
     setupLocalStorage({});
-    
+
     render(<GuidedPracticePage />);
-    
+
     await waitFor(() => {
-      expect(screen.getByText('Test Question')).toBeInTheDocument();
+      expect(screen.getByText("Test Question")).toBeInTheDocument();
     });
 
     // Select an answer
-    const option1 = screen.getByText('Option 1');
+    const option1 = screen.getByText("Option 1");
     fireEvent.click(option1);
 
     // Wait for resources to appear
     await waitFor(() => {
-      expect(screen.getByText('Learning Resources')).toBeInTheDocument();
+      expect(screen.getByText("Learning Resources")).toBeInTheDocument();
     });
 
     // Verify resource types are displayed
-    expect(screen.getByText('VIDEO')).toBeInTheDocument();
-    expect(screen.getByText('COURSE')).toBeInTheDocument();
-    expect(screen.getByText('ARTICLE')).toBeInTheDocument();
+    expect(screen.getByText("VIDEO")).toBeInTheDocument();
+    expect(screen.getByText("COURSE")).toBeInTheDocument();
+    expect(screen.getByText("ARTICLE")).toBeInTheDocument();
 
     // Verify icons are displayed (mocked as testids)
-    expect(screen.getByTestId('video-icon')).toBeInTheDocument();
-    expect(screen.getByTestId('graduation-icon')).toBeInTheDocument();
-    expect(screen.getByTestId('file-icon')).toBeInTheDocument();
+    expect(screen.getByTestId("video-icon")).toBeInTheDocument();
+    expect(screen.getByTestId("graduation-icon")).toBeInTheDocument();
+    expect(screen.getByTestId("file-icon")).toBeInTheDocument();
   });
 
-  test('should render resource links with correct URL and attributes', async () => {
+  test("should render resource links with correct URL and attributes", async () => {
     setupLocalStorage({});
-    
+
     render(<GuidedPracticePage />);
-    
+
     await waitFor(() => {
-      expect(screen.getByText('Test Question')).toBeInTheDocument();
+      expect(screen.getByText("Test Question")).toBeInTheDocument();
     });
 
     // Select an answer
-    const option1 = screen.getByText('Option 1');
+    const option1 = screen.getByText("Option 1");
     fireEvent.click(option1);
 
     // Wait for resources to appear
     await waitFor(() => {
-      expect(screen.getByText('Learning Resources')).toBeInTheDocument();
+      expect(screen.getByText("Learning Resources")).toBeInTheDocument();
     });
 
     // Find resource links
-    const videoLink = screen.getByText('Video Tutorial').closest('a');
-    const courseLink = screen.getByText('Course Guide').closest('a');
-    const articleLink = screen.getByText('Article Guide').closest('a');
+    const videoLink = screen.getByText("Video Tutorial").closest("a");
+    const courseLink = screen.getByText("Course Guide").closest("a");
+    const articleLink = screen.getByText("Article Guide").closest("a");
 
     // Verify links have correct attributes
-    expect(videoLink).toHaveAttribute('href', 'https://example.com/video');
-    expect(videoLink).toHaveAttribute('target', '_blank');
-    expect(videoLink).toHaveAttribute('rel', 'noopener noreferrer');
+    expect(videoLink).toHaveAttribute("href", "https://example.com/video");
+    expect(videoLink).toHaveAttribute("target", "_blank");
+    expect(videoLink).toHaveAttribute("rel", "noopener noreferrer");
 
-    expect(courseLink).toHaveAttribute('href', 'https://example.com/course');
-    expect(courseLink).toHaveAttribute('target', '_blank');
-    expect(courseLink).toHaveAttribute('rel', 'noopener noreferrer');
+    expect(courseLink).toHaveAttribute("href", "https://example.com/course");
+    expect(courseLink).toHaveAttribute("target", "_blank");
+    expect(courseLink).toHaveAttribute("rel", "noopener noreferrer");
 
-    expect(articleLink).toHaveAttribute('href', 'https://example.com/article');
-    expect(articleLink).toHaveAttribute('target', '_blank');
-    expect(articleLink).toHaveAttribute('rel', 'noopener noreferrer');
+    expect(articleLink).toHaveAttribute("href", "https://example.com/article");
+    expect(articleLink).toHaveAttribute("target", "_blank");
+    expect(articleLink).toHaveAttribute("rel", "noopener noreferrer");
   });
 
-  test('should display resource metadata (description, duration, author)', async () => {
+  test("should display resource metadata (description, duration, author)", async () => {
     setupLocalStorage({});
-    
+
     render(<GuidedPracticePage />);
-    
+
     await waitFor(() => {
-      expect(screen.getByText('Test Question')).toBeInTheDocument();
+      expect(screen.getByText("Test Question")).toBeInTheDocument();
     });
 
     // Select an answer
-    const option1 = screen.getByText('Option 1');
+    const option1 = screen.getByText("Option 1");
     fireEvent.click(option1);
 
     // Wait for resources to appear
     await waitFor(() => {
-      expect(screen.getByText('Learning Resources')).toBeInTheDocument();
+      expect(screen.getByText("Learning Resources")).toBeInTheDocument();
     });
 
     // Verify resource metadata
-    expect(screen.getByText('Learn more about this topic')).toBeInTheDocument();
-    expect(screen.getByText('10:30')).toBeInTheDocument();
-    expect(screen.getByText('John Doe')).toBeInTheDocument();
-    expect(screen.getByText('Take this course')).toBeInTheDocument();
-    expect(screen.getByText('Read this article')).toBeInTheDocument();
+    expect(screen.getByText("Learn more about this topic")).toBeInTheDocument();
+    expect(screen.getByText("10:30")).toBeInTheDocument();
+    expect(screen.getByText("John Doe")).toBeInTheDocument();
+    expect(screen.getByText("Take this course")).toBeInTheDocument();
+    expect(screen.getByText("Read this article")).toBeInTheDocument();
   });
 
-  test('should display multiple resources in list format', async () => {
+  test("should display multiple resources in list format", async () => {
     setupLocalStorage({});
-    
+
     render(<GuidedPracticePage />);
-    
+
     await waitFor(() => {
-      expect(screen.getByText('Test Question')).toBeInTheDocument();
+      expect(screen.getByText("Test Question")).toBeInTheDocument();
     });
 
     // Select an answer
-    const option1 = screen.getByText('Option 1');
+    const option1 = screen.getByText("Option 1");
     fireEvent.click(option1);
 
     // Wait for resources to appear
     await waitFor(() => {
-      expect(screen.getByText('Learning Resources')).toBeInTheDocument();
+      expect(screen.getByText("Learning Resources")).toBeInTheDocument();
     });
 
     // Verify all three resources are displayed
-    expect(screen.getByText('Video Tutorial')).toBeInTheDocument();
-    expect(screen.getByText('Course Guide')).toBeInTheDocument();
-    expect(screen.getByText('Article Guide')).toBeInTheDocument();
+    expect(screen.getByText("Video Tutorial")).toBeInTheDocument();
+    expect(screen.getByText("Course Guide")).toBeInTheDocument();
+    expect(screen.getByText("Article Guide")).toBeInTheDocument();
   });
 });
-

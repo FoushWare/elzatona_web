@@ -1,8 +1,13 @@
 # Task ID: A-004
+
 # Title: Admin Content Management (Unified)
+
 # Status: pending
-# Dependencies: 
+
+# Dependencies:
+
 # Priority: high
+
 # Description: Test the unified content management page including CRUD operations for cards, plans, categories, topics, and questions, plus bulk operations.
 
 # Details:
@@ -10,6 +15,7 @@
 ## Time Estimation
 
 ### Manual Testing
+
 - **Estimated Time**: 60-90 minutes
 - **Breakdown**:
   - Navigate and verify access: 2 minutes
@@ -24,6 +30,7 @@
 - **Dependencies**: Admin authentication, database access, API endpoints
 
 ### Automated Testing
+
 - **Estimated Time**: 25-40 minutes (first run), 4-7 minutes (subsequent runs)
 - **Breakdown**:
   - Unit tests setup and execution: 8-12 minutes
@@ -33,6 +40,7 @@
 - **Dependencies**: API mocks, database mocks, test data fixtures
 
 ### Total Time
+
 - **Manual Only**: 60-90 minutes
 - **Automated Only**: 25-40 minutes (first run), 4-7 minutes (subsequent)
 - **Both Manual + Automated**: 85-130 minutes (first run), 64-97 minutes (subsequent)
@@ -40,6 +48,7 @@
 ---
 
 ## Overview
+
 Test the unified content management page including CRUD operations for cards, plans, categories, topics, and questions, plus bulk operations.
 
 ## Manual Testing Steps

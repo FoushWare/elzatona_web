@@ -3,7 +3,7 @@
  * Prevents ESM import issues in Jest tests
  */
 
-import React from 'react';
+import React from "react";
 
 // Export all commonly used icons as simple span elements
 export const ArrowRight = () => <span data-testid="arrow-right-icon">→</span>;
@@ -23,8 +23,12 @@ export const ExternalLink = () => <span data-testid="external-icon">🔗</span>;
 export const Filter = () => <span data-testid="filter-icon">🔽</span>;
 export const X = () => <span data-testid="x-icon">✕</span>;
 export const ChevronDown = () => <span data-testid="chevron-down-icon">▼</span>;
-export const ChevronLeft = () => <span data-testid="chevron-left-icon">◀</span>;
-export const ChevronRight = () => <span data-testid="chevron-right-icon">▶</span>;
+export const ChevronLeft = () => (
+  <span data-testid="chevron-left-icon">◀</span>
+);
+export const ChevronRight = () => (
+  <span data-testid="chevron-right-icon">▶</span>
+);
 export const Loader2 = () => <span data-testid="loader-icon">⏳</span>;
 export const Plus = () => <span data-testid="plus-icon">+</span>;
 export const Edit = () => <span data-testid="edit-icon">✏️</span>;
@@ -53,7 +57,9 @@ export const CreditCard = () => <span data-testid="credit-card-icon">💳</span>
 export const FileText = () => <span data-testid="file-icon">📄</span>;
 export const Settings = () => <span data-testid="settings-icon">⚙️</span>;
 export const Brain = () => <span data-testid="brain-icon">🧠</span>;
-export const LayoutDashboard = () => <span data-testid="layout-dashboard-icon">📊</span>;
+export const LayoutDashboard = () => (
+  <span data-testid="layout-dashboard-icon">📊</span>
+);
 
 // Default export for any other icons
 export default {
@@ -106,4 +112,3 @@ export default {
   Brain,
   LayoutDashboard,
 };
-

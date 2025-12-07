@@ -4,11 +4,11 @@
 
 ### ✅ What You Have Now
 
-| Stage | Checks | Time | Blocks? | Status |
-|-------|--------|------|---------|--------|
-| **Pre-commit** | Prettier + ESLint + TypeScript | ~10-30s | ✅ TypeScript errors | ⚠️ Could be faster |
-| **Pre-push** | ESLint + TypeScript + Build | ~1-2min | ✅ TS/Build errors | ✅ Optimal |
-| **GitHub Actions** | Lint + TS + Tests + Build + SonarQube | ~5-15min | ✅ TS errors | ✅ Optimal |
+| Stage              | Checks                                | Time     | Blocks?              | Status             |
+| ------------------ | ------------------------------------- | -------- | -------------------- | ------------------ |
+| **Pre-commit**     | Prettier + ESLint + TypeScript        | ~10-30s  | ✅ TypeScript errors | ⚠️ Could be faster |
+| **Pre-push**       | ESLint + TypeScript + Build           | ~1-2min  | ✅ TS/Build errors   | ✅ Optimal         |
+| **GitHub Actions** | Lint + TS + Tests + Build + SonarQube | ~5-15min | ✅ TS errors         | ✅ Optimal         |
 
 ---
 
@@ -26,15 +26,15 @@ CI/CD:       Any time      (SLOW - Background analysis)
 
 ### 2. **What Should Block vs Warn**
 
-| Check | Pre-commit | Pre-push | CI/CD |
-|-------|-----------|----------|-------|
-| **Formatting** | ✅ Block | ⚠️ Warn | ⚠️ Warn |
-| **Linting (Errors)** | ✅ Block | ✅ Block | ✅ Block |
-| **Linting (Warnings)** | ⚠️ Warn | ⚠️ Warn | ⚠️ Warn |
-| **TypeScript** | ⚠️ Optional | ✅ Block | ✅ Block |
-| **Build** | ❌ No | ✅ Block | ✅ Block |
-| **Tests** | ❌ No | ⚠️ Optional | ✅ Block |
-| **SonarQube** | ❌ No | ❌ No | ✅ Block |
+| Check                  | Pre-commit  | Pre-push    | CI/CD    |
+| ---------------------- | ----------- | ----------- | -------- |
+| **Formatting**         | ✅ Block    | ⚠️ Warn     | ⚠️ Warn  |
+| **Linting (Errors)**   | ✅ Block    | ✅ Block    | ✅ Block |
+| **Linting (Warnings)** | ⚠️ Warn     | ⚠️ Warn     | ⚠️ Warn  |
+| **TypeScript**         | ⚠️ Optional | ✅ Block    | ✅ Block |
+| **Build**              | ❌ No       | ✅ Block    | ✅ Block |
+| **Tests**              | ❌ No       | ⚠️ Optional | ✅ Block |
+| **SonarQube**          | ❌ No       | ❌ No       | ✅ Block |
 
 ---
 
@@ -43,6 +43,7 @@ CI/CD:       Any time      (SLOW - Background analysis)
 ### Option 1: **Fast Development (Recommended for Most Teams)**
 
 **Pre-commit:**
+
 ```bash
 ✅ Prettier formatting (auto-fix)
 ✅ ESLint linting (warnings allowed)
@@ -51,6 +52,7 @@ CI/CD:       Any time      (SLOW - Background analysis)
 ```
 
 **Pre-push:**
+
 ```bash
 ✅ ESLint auto-fix
 ✅ ESLint check
@@ -60,6 +62,7 @@ CI/CD:       Any time      (SLOW - Background analysis)
 ```
 
 **GitHub Actions:**
+
 ```bash
 ✅ Linting + TypeScript + Tests + Build
 ✅ SonarQube analysis
@@ -74,6 +77,7 @@ CI/CD:       Any time      (SLOW - Background analysis)
 ### Option 2: **Strict Quality (Current Setup)**
 
 **Pre-commit:**
+
 ```bash
 ✅ Prettier formatting
 ✅ ESLint auto-fix
@@ -83,12 +87,14 @@ CI/CD:       Any time      (SLOW - Background analysis)
 ```
 
 **Pre-push:**
+
 ```bash
 ✅ ESLint + TypeScript + Build
 ⏱️ Time: 1-2 minutes
 ```
 
 **GitHub Actions:**
+
 ```bash
 ✅ Full analysis + SonarQube
 ⏱️ Time: 5-15 minutes
@@ -103,18 +109,21 @@ CI/CD:       Any time      (SLOW - Background analysis)
 ### Option 3: **Ultra Fast (For Rapid Development)**
 
 **Pre-commit:**
+
 ```bash
 ✅ Prettier formatting only
 ⏱️ Time: 2-5 seconds
 ```
 
 **Pre-push:**
+
 ```bash
 ✅ ESLint + TypeScript
 ⏱️ Time: 30-60 seconds
 ```
 
 **GitHub Actions:**
+
 ```bash
 ✅ Full analysis + SonarQube
 ⏱️ Time: 5-15 minutes
@@ -129,21 +138,25 @@ CI/CD:       Any time      (SLOW - Background analysis)
 ### Pre-Commit Hook Best Practices
 
 #### ✅ **DO Include:**
+
 - **Formatting** (Prettier) - Auto-fixes, fast
 - **Linting** (ESLint) - Catches syntax errors, fast
 - **Auto-fix** - Automatically fixes issues
 
 #### ⚠️ **Consider Including (Optional):**
+
 - **TypeScript** - Only if your project is small or team agrees to slower commits
 - **Quick linting** - Fast checks only
 
 #### ❌ **DON'T Include:**
+
 - **Build** - Too slow, belongs in pre-push
 - **Tests** - Too slow, belongs in pre-push or CI
 - **SonarQube** - Way too slow (5-15 minutes)
 - **E2E tests** - Way too slow
 
 #### 🎯 **Performance Targets:**
+
 - **Target**: < 10 seconds
 - **Maximum**: < 30 seconds
 - **If slower**: Developers will disable hooks
@@ -153,21 +166,25 @@ CI/CD:       Any time      (SLOW - Background analysis)
 ### Pre-Push Hook Best Practices
 
 #### ✅ **DO Include:**
+
 - **Linting** - Auto-fix + check
 - **TypeScript** - Catches type errors before sharing
 - **Build** - Ensures code compiles
 - **Quick tests** (optional) - Unit tests only
 
 #### ⚠️ **Consider Including (Optional):**
+
 - **Integration tests** - Only if fast (< 1 minute)
 - **Quick SonarQube** - Only if team agrees (adds 2-3 minutes)
 
 #### ❌ **DON'T Include:**
+
 - **Full SonarQube** - Too slow (5-15 minutes)
 - **E2E tests** - Too slow, belongs in CI
 - **Full test suite** - Too slow, belongs in CI
 
 #### 🎯 **Performance Targets:**
+
 - **Target**: 1-2 minutes
 - **Maximum**: 3-5 minutes
 - **If slower**: Developers will skip hooks
@@ -177,6 +194,7 @@ CI/CD:       Any time      (SLOW - Background analysis)
 ### GitHub Actions / CI/CD Best Practices
 
 #### ✅ **DO Include:**
+
 - **All checks** - Linting, TypeScript, Build
 - **Full test suite** - Unit, Integration, E2E
 - **SonarQube** - Full analysis
@@ -184,6 +202,7 @@ CI/CD:       Any time      (SLOW - Background analysis)
 - **Security scanning** - Dependency vulnerabilities
 
 #### 🎯 **Performance Targets:**
+
 - **Target**: 5-15 minutes
 - **Maximum**: 30 minutes
 - **No blocking**: Runs in background, doesn't block developers
@@ -193,6 +212,7 @@ CI/CD:       Any time      (SLOW - Background analysis)
 ## 🔒 Security Best Practices
 
 ### 1. **Environment Variables**
+
 ```bash
 ✅ Use GitHub Secrets for sensitive data
 ✅ Never commit secrets to repository
@@ -201,6 +221,7 @@ CI/CD:       Any time      (SLOW - Background analysis)
 ```
 
 ### 2. **Test Environment**
+
 ```bash
 ✅ Always use TEST database in CI/CD
 ✅ Use TEST admin credentials
@@ -209,6 +230,7 @@ CI/CD:       Any time      (SLOW - Background analysis)
 ```
 
 ### 3. **Dependencies**
+
 ```bash
 ✅ Scan dependencies for vulnerabilities
 ✅ Update dependencies regularly
@@ -221,6 +243,7 @@ CI/CD:       Any time      (SLOW - Background analysis)
 ## ⚡ Performance Best Practices
 
 ### 1. **Caching**
+
 ```bash
 ✅ Cache node_modules in CI/CD
 ✅ Cache build artifacts
@@ -229,6 +252,7 @@ CI/CD:       Any time      (SLOW - Background analysis)
 ```
 
 ### 2. **Optimization**
+
 ```bash
 ✅ Run only affected tests (if possible)
 ✅ Use test sharding
@@ -237,6 +261,7 @@ CI/CD:       Any time      (SLOW - Background analysis)
 ```
 
 ### 3. **Memory Management**
+
 ```bash
 ✅ Set memory limits (NODE_OPTIONS)
 ✅ Use appropriate worker counts
@@ -249,6 +274,7 @@ CI/CD:       Any time      (SLOW - Background analysis)
 ## 🎓 Team Workflow Best Practices
 
 ### 1. **Make It Optional**
+
 ```bash
 ✅ Allow skipping hooks when needed (--no-verify)
 ✅ Provide fast alternatives
@@ -257,6 +283,7 @@ CI/CD:       Any time      (SLOW - Background analysis)
 ```
 
 ### 2. **Clear Communication**
+
 ```bash
 ✅ Document what each hook does
 ✅ Explain why checks are needed
@@ -265,6 +292,7 @@ CI/CD:       Any time      (SLOW - Background analysis)
 ```
 
 ### 3. **Gradual Adoption**
+
 ```bash
 ✅ Start with fast checks
 ✅ Add more checks gradually
@@ -279,12 +307,15 @@ CI/CD:       Any time      (SLOW - Background analysis)
 ### For Your Current Setup
 
 #### Option A: **Keep Current (Strict Quality)**
+
 **Pros:**
+
 - ✅ Catches issues early
 - ✅ High code quality
 - ✅ TypeScript errors caught before commit
 
 **Cons:**
+
 - ⚠️ Slower commits (10-30 seconds)
 - ⚠️ May frustrate some developers
 
@@ -293,17 +324,21 @@ CI/CD:       Any time      (SLOW - Background analysis)
 ---
 
 #### Option B: **Optimize for Speed (Recommended)**
+
 **Changes:**
+
 1. Remove TypeScript from pre-commit
 2. Keep TypeScript in pre-push
 3. Keep everything else as-is
 
 **Pros:**
+
 - ✅ Fast commits (< 10 seconds)
 - ✅ Still catches issues in pre-push
 - ✅ Better developer experience
 
 **Cons:**
+
 - ⚠️ TypeScript errors caught later (in pre-push)
 
 **Best for**: Most teams, balanced approach
@@ -315,6 +350,7 @@ CI/CD:       Any time      (SLOW - Background analysis)
 ### **Recommended Setup (Optimized)**
 
 **Pre-commit:**
+
 ```bash
 ✅ Prettier formatting
 ✅ ESLint auto-fix
@@ -323,6 +359,7 @@ CI/CD:       Any time      (SLOW - Background analysis)
 ```
 
 **Pre-push:**
+
 ```bash
 ✅ ESLint auto-fix
 ✅ ESLint check
@@ -332,6 +369,7 @@ CI/CD:       Any time      (SLOW - Background analysis)
 ```
 
 **GitHub Actions:**
+
 ```bash
 ✅ Linting + TypeScript + Tests + Build
 ✅ SonarQube analysis
@@ -364,6 +402,7 @@ If you want to optimize your current setup:
 4. **Step 4**: Adjust based on needs
 
 **Command to remove TypeScript from pre-commit:**
+
 ```bash
 # Edit Rest/other/.husky/pre-commit
 # Remove the TypeScript checking step
@@ -381,4 +420,3 @@ If you want to optimize your current setup:
 - ⚠️ **Pre-commit**: Could be faster (remove TypeScript)
 
 **Recommendation**: Remove TypeScript from pre-commit for faster commits, keep it in pre-push for quality assurance.
-

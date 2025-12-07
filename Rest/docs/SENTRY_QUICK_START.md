@@ -21,6 +21,7 @@ SENTRY_PROJECT=your-project-slug
 ### 3. That's It! 🎉
 
 Sentry is now automatically tracking:
+
 - ✅ Client-side errors (React components, browser errors)
 - ✅ Server-side errors (API routes, SSR)
 - ✅ Edge runtime errors (middleware)
@@ -49,22 +50,19 @@ export const GET = withSentryErrorHandling(
 import { NextRequest, NextResponse } from 'next/server';
 import { withSentryErrorTracking } from '@/lib/utils/sentry-api-wrapper';
 
-export const GET = withSentryErrorTracking(
-  async (request: NextRequest) => {
-    try {
-      const data = await fetchData();
-      return NextResponse.json({ success: true, data });
-    } catch (error) {
-      // Error is automatically sent to Sentry
-      // You handle the response
-      return NextResponse.json(
-        { error: 'Custom error message' },
-        { status: 500 }
-      );
-    }
-  },
-  'GET /api/my-route'
-);
+export const GET = withSentryErrorTracking(async (request: NextRequest) => {
+  try {
+    const data = await fetchData();
+    return NextResponse.json({ success: true, data });
+  } catch (error) {
+    // Error is automatically sent to Sentry
+    // You handle the response
+    return NextResponse.json(
+      { error: 'Custom error message' },
+      { status: 500 }
+    );
+  }
+}, 'GET /api/my-route');
 ```
 
 ## 🎯 Common Use Cases
@@ -118,6 +116,7 @@ try {
 ## ⚙️ Configuration
 
 All configuration is in:
+
 - `apps/website/sentry.client.config.ts` - Client-side
 - `apps/website/sentry.server.config.ts` - Server-side
 - `apps/website/sentry.edge.config.ts` - Edge runtime
@@ -125,4 +124,3 @@ All configuration is in:
 ## 📚 Full Documentation
 
 See [SENTRY_SETUP.md](./SENTRY_SETUP.md) for complete documentation.
-

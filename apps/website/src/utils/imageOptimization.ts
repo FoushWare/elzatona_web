@@ -7,11 +7,11 @@
 
 export interface ImageOptimizationConfig {
   quality: number;
-  format: 'webp' | 'jpeg' | 'png' | 'auto';
+  format: "webp" | "jpeg" | "png" | "auto";
   width: number;
   height: number;
-  fit: 'cover' | 'contain' | 'fill' | 'inside' | 'outside';
-  placeholder: 'blur' | 'empty';
+  fit: "cover" | "contain" | "fill" | "inside" | "outside";
+  placeholder: "blur" | "empty";
 }
 
 /**
@@ -22,15 +22,15 @@ export interface ImageOptimizationConfig {
  */
 export const generateOptimizedImageUrl = (
   src: string,
-  config: Partial<ImageOptimizationConfig> = {}
+  config: Partial<ImageOptimizationConfig> = {},
 ): string => {
   const params = new URLSearchParams();
 
-  if (config.quality) params.append('q', config.quality.toString());
-  if (config.format) params.append('f', config.format);
-  if (config.width) params.append('w', config.width.toString());
-  if (config.height) params.append('h', config.height.toString());
-  if (config.fit) params.append('fit', config.fit);
+  if (config.quality) params.append("q", config.quality.toString());
+  if (config.format) params.append("f", config.format);
+  if (config.width) params.append("w", config.width.toString());
+  if (config.height) params.append("h", config.height.toString());
+  if (config.fit) params.append("fit", config.fit);
 
   return params.toString() ? `${src}?${params.toString()}` : src;
 };
@@ -45,15 +45,15 @@ export const generateOptimizedImageUrl = (
 export const generateResponsiveSrcSet = (
   src: string,
   baseWidth: number,
-  breakpoints: number[] = [0.5, 1, 1.5, 2, 3]
+  breakpoints: number[] = [0.5, 1, 1.5, 2, 3],
 ): string => {
   return breakpoints
-    .map(multiplier => {
+    .map((multiplier) => {
       const size = Math.round(baseWidth * multiplier);
       const optimizedUrl = generateOptimizedImageUrl(src, { width: size });
       return `${optimizedUrl} ${size}w`;
     })
-    .join(', ');
+    .join(", ");
 };
 
 /**
@@ -63,14 +63,14 @@ export const generateResponsiveSrcSet = (
  */
 export const generateSizesAttribute = (
   breakpoints: Array<{ maxWidth: number; size: string }> = [
-    { maxWidth: 640, size: '100vw' },
-    { maxWidth: 1024, size: '50vw' },
-    { maxWidth: 1280, size: '33vw' },
-  ]
+    { maxWidth: 640, size: "100vw" },
+    { maxWidth: 1024, size: "50vw" },
+    { maxWidth: 1280, size: "33vw" },
+  ],
 ): string => {
   return breakpoints
     .map(({ maxWidth, size }) => `(max-width: ${maxWidth}px) ${size}`)
-    .join(', ');
+    .join(", ");
 };
 
 /**
@@ -83,7 +83,7 @@ export const generateSizesAttribute = (
 export const shouldPrioritizeImage = (
   isAboveTheFold: boolean = false,
   isHero: boolean = false,
-  isLogo: boolean = false
+  isLogo: boolean = false,
 ): boolean => {
   return isAboveTheFold || isHero || isLogo;
 };
@@ -93,7 +93,7 @@ export const shouldPrioritizeImage = (
  * @returns Base64 encoded blur placeholder
  */
 export const generateBlurPlaceholder = (): string => {
-  return 'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAABAAEDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAhEAACAQMDBQAAAAAAAAAAAAABAgMABAUGIWGRkqGx0f/EABUBAQEAAAAAAAAAAAAAAAAAAAMF/8QAGhEAAgIDAAAAAAAAAAAAAAAAAAECEgMRkf/aAAwDAQACEQMRAD8AltJagyeH0AthI5xdrLcNM91BF5pX2HaH9bcfaSXWGaRmknyJckliyjqTzSlT54b6bk+h0R//2Q==';
+  return "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAABAAEDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAhEAACAQMDBQAAAAAAAAAAAAABAgMABAUGIWGRkqGx0f/EABUBAQEAAAAAAAAAAAAAAAAAAAMF/8QAGhEAAgIDAAAAAAAAAAAAAAAAAAECEgMRkf/aAAwDAQACEQMRAD8AltJagyeH0AthI5xdrLcNM91BF5pX2HaH9bcfaSXWGaRmknyJckliyjqTzSlT54b6bk+h0R//2Q==";
 };
 
 /**
@@ -106,7 +106,7 @@ export const generateBlurPlaceholder = (): string => {
 export const calculateOptimalDimensions = (
   containerWidth: number,
   containerHeight: number,
-  aspectRatio: number
+  aspectRatio: number,
 ): { width: number; height: number } => {
   let width = containerWidth;
   let height = containerWidth / aspectRatio;
@@ -127,10 +127,10 @@ export const calculateOptimalDimensions = (
  * @param imageUrls - Array of image URLs to preload
  */
 export const preloadImages = (imageUrls: string[]): void => {
-  imageUrls.forEach(url => {
-    const link = document.createElement('link');
-    link.rel = 'preload';
-    link.as = 'image';
+  imageUrls.forEach((url) => {
+    const link = document.createElement("link");
+    link.rel = "preload";
+    link.as = "image";
     link.href = url;
     document.head.appendChild(link);
   });
@@ -144,49 +144,49 @@ export const preloadImages = (imageUrls: string[]): void => {
 export const lazyLoadImages = (
   imageElements: HTMLImageElement[],
   options: IntersectionObserverInit = {
-    rootMargin: '50px 0px',
+    rootMargin: "50px 0px",
     threshold: 0.1,
-  }
+  },
 ): void => {
-  if (!('IntersectionObserver' in window)) {
+  if (!("IntersectionObserver" in window)) {
     // Fallback for browsers without Intersection Observer
-    imageElements.forEach(img => {
+    imageElements.forEach((img) => {
       if (img.dataset.src) {
         img.src = img.dataset.src;
-        img.classList.remove('lazy');
+        img.classList.remove("lazy");
       }
     });
     return;
   }
 
-  const imageObserver = new IntersectionObserver(entries => {
-    entries.forEach(entry => {
+  const imageObserver = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
       if (entry.isIntersecting) {
         const img = entry.target as HTMLImageElement;
         if (img.dataset.src) {
           img.src = img.dataset.src;
-          img.classList.remove('lazy');
+          img.classList.remove("lazy");
           imageObserver.unobserve(img);
         }
       }
     });
   }, options);
 
-  imageElements.forEach(img => imageObserver.observe(img));
+  imageElements.forEach((img) => imageObserver.observe(img));
 };
 
 /**
  * Get image format based on browser support
  * @returns Preferred image format
  */
-export const getPreferredImageFormat = (): 'webp' | 'jpeg' => {
+export const getPreferredImageFormat = (): "webp" | "jpeg" => {
   // Check if WebP is supported
-  const canvas = document.createElement('canvas');
+  const canvas = document.createElement("canvas");
   canvas.width = 1;
   canvas.height = 1;
-  return canvas.toDataURL('image/webp').indexOf('data:image/webp') === 0
-    ? 'webp'
-    : 'jpeg';
+  return canvas.toDataURL("image/webp").indexOf("data:image/webp") === 0
+    ? "webp"
+    : "jpeg";
 };
 
 /**
@@ -194,9 +194,9 @@ export const getPreferredImageFormat = (): 'webp' | 'jpeg' => {
  * @param element - DOM element to check
  * @returns Loading strategy ('eager' | 'lazy')
  */
-export const getLoadingStrategy = (element: Element): 'eager' | 'lazy' => {
+export const getLoadingStrategy = (element: Element): "eager" | "lazy" => {
   const rect = element.getBoundingClientRect();
   const isAboveTheFold = rect.top < window.innerHeight;
 
-  return isAboveTheFold ? 'eager' : 'lazy';
+  return isAboveTheFold ? "eager" : "lazy";
 };

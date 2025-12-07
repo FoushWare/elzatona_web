@@ -3,6 +3,7 @@
 ## 🔗 Your SonarCloud Project
 
 Based on your project URL, here's what we know:
+
 - **Organization**: `FoushWare`
 - **Project Key**: `FoushWare_GreatFrontendHub`
 - **Project URL**: https://sonarcloud.io/project/configuration?id=FoushWare_GreatFrontendHub
@@ -10,6 +11,7 @@ Based on your project URL, here's what we know:
 ## ✅ What's Already Configured
 
 The SonarQube MCP server has been added to `.cursor/mcp.json` with:
+
 - ✅ Java path: `/opt/homebrew/opt/openjdk@21/bin/java`
 - ✅ JAR file: `Rest/mcp/sonarqube/sonarqube-mcp-server.jar`
 - ✅ Storage path: `Rest/mcp/sonarqube/storage`
@@ -20,6 +22,7 @@ The SonarQube MCP server has been added to `.cursor/mcp.json` with:
 ### 1. SonarCloud Personal Access Token
 
 **Steps:**
+
 1. Go to https://sonarcloud.io/
 2. Sign in with your GitHub account
 3. Click on your profile (top right) → **My Account**
@@ -30,6 +33,7 @@ The SonarQube MCP server has been added to `.cursor/mcp.json` with:
 8. **Copy the token immediately** (you won't see it again!)
 
 **Token Permissions Needed:**
+
 - Read access to your projects
 - Read access to your organization
 
@@ -52,6 +56,7 @@ SONARQUBE_ORG=FoushWare
 ```
 
 **Important Notes:**
+
 - Replace `your_personal_access_token_here` with the actual token you generated
 - The organization key `FoushWare` is already correct based on your project URL
 
@@ -64,10 +69,7 @@ If you want to use the actual values directly in `mcp.json` instead of environme
   "mcpServers": {
     "sonarqube": {
       "command": "/opt/homebrew/opt/openjdk@21/bin/java",
-      "args": [
-        "-jar",
-        "Rest/mcp/sonarqube/sonarqube-mcp-server.jar"
-      ],
+      "args": ["-jar", "Rest/mcp/sonarqube/sonarqube-mcp-server.jar"],
       "env": {
         "STORAGE_PATH": "Rest/mcp/sonarqube/storage",
         "SONARQUBE_TOKEN": "your_actual_token_here",
@@ -108,15 +110,19 @@ After restarting Cursor, verify the connection:
 ### MCP Server Not Starting
 
 1. **Check Java**:
+
    ```bash
    /opt/homebrew/opt/openjdk@21/bin/java -version
    ```
+
    Should show: `openjdk version "21.x.x"`
 
 2. **Check JAR File**:
+
    ```bash
    ls -lh Rest/mcp/sonarqube/sonarqube-mcp-server.jar
    ```
+
    Should be ~45MB
 
 3. **Check Environment Variables**:
@@ -140,13 +146,13 @@ After restarting Cursor, verify the connection:
 
 ## 📚 Quick Reference
 
-| Item | Value |
-|------|-------|
-| **Organization** | `FoushWare` |
-| **Project Key** | `FoushWare_GreatFrontendHub` |
-| **Token Location** | SonarCloud → My Account → Security |
-| **Config File** | `.cursor/mcp.json` |
-| **Environment File** | `.env.local` |
+| Item                 | Value                              |
+| -------------------- | ---------------------------------- |
+| **Organization**     | `FoushWare`                        |
+| **Project Key**      | `FoushWare_GreatFrontendHub`       |
+| **Token Location**   | SonarCloud → My Account → Security |
+| **Config File**      | `.cursor/mcp.json`                 |
+| **Environment File** | `.env.local`                       |
 
 ## 🎯 Next Steps
 
@@ -160,4 +166,3 @@ After restarting Cursor, verify the connection:
 **Status**: ⏳ Waiting for authentication token
 
 **Action Required**: Generate token and add to `.env.local`
-

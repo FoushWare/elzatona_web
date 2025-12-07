@@ -13,12 +13,7 @@
     "updatedAt": "2025-11-11T19:01:36.833Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "security",
-      "api-security",
-      "rate limiting",
-      "intermediate"
-    ],
+    "tags": ["security", "api-security", "rate limiting", "intermediate"],
     "explanation": "Rate limiting restricts the number of requests a client can make in a given time period, protecting the server from abuse, brute-force attacks, and denial-of-service attacks.",
     "points": 10,
     "sampleAnswers": [
@@ -74,12 +69,7 @@
     "updatedAt": "2025-11-11T19:01:36.833Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "security",
-      "api-security",
-      "api security",
-      "intermediate"
-    ],
+    "tags": ["security", "api-security", "api security", "intermediate"],
     "explanation": "Server-side validation, HTTPS, and token-based authentication are essential. Client-side checks alone cannot ensure security.",
     "points": 10,
     "options": [
@@ -309,12 +299,7 @@
     "updatedAt": "2025-11-11T19:01:36.827Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "security",
-      "clickjacking",
-      "clickjacking",
-      "intermediate"
-    ],
+    "tags": ["security", "clickjacking", "clickjacking", "intermediate"],
     "explanation": "Clickjacking tricks users into clicking hidden elements using overlays or iframes. Prevention: X-Frame-Options header, CSP frame-ancestors, avoid transparent overlays.",
     "points": 10,
     "sampleAnswers": [
@@ -423,12 +408,7 @@
     "updatedAt": "2025-11-11T19:01:36.830Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "security",
-      "clickjacking",
-      "clickjacking",
-      "intermediate"
-    ],
+    "tags": ["security", "clickjacking", "clickjacking", "intermediate"],
     "explanation": "Clickjacking tricks a user into clicking on a hidden element or iframe, causing them to perform actions they didn’t intend, such as changing settings, liking a page, or submitting forms.",
     "points": 10,
     "sampleAnswers": [
@@ -484,12 +464,7 @@
     "updatedAt": "2025-11-11T19:01:36.830Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "security",
-      "clickjacking",
-      "clickjacking",
-      "intermediate"
-    ],
+    "tags": ["security", "clickjacking", "clickjacking", "intermediate"],
     "explanation": "X-Frame-Options and frame-ancestors protect against embedding. JS detection can add extra protection; disabling JS is impractical.",
     "points": 10,
     "options": [
@@ -536,12 +511,7 @@
     "updatedAt": "2025-11-11T19:01:36.831Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "security",
-      "clickjacking",
-      "clickjacking",
-      "intermediate"
-    ],
+    "tags": ["security", "clickjacking", "clickjacking", "intermediate"],
     "explanation": "Clickjacking tricks users into clicking hidden or disguised UI elements, performing unintended actions such as changing settings, submitting forms, or executing transactions.",
     "points": 10,
     "sampleAnswers": [
@@ -597,12 +567,7 @@
     "updatedAt": "2025-11-11T19:01:36.831Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "security",
-      "clickjacking",
-      "clickjacking",
-      "intermediate"
-    ],
+    "tags": ["security", "clickjacking", "clickjacking", "intermediate"],
     "explanation": "X-Frame-Options and CSP frame-ancestors prevent your site from being framed; additional user confirmation mitigates risk. CSS obfuscation is not a reliable defense.",
     "points": 10,
     "options": [
@@ -702,12 +667,7 @@
     "updatedAt": "2025-11-11T19:01:36.833Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "security",
-      "clickjacking",
-      "clickjacking",
-      "intermediate"
-    ],
+    "tags": ["security", "clickjacking", "clickjacking", "intermediate"],
     "explanation": "Clickjacking occurs when attackers overlay a transparent or disguised element over a legitimate UI element, tricking users into clicking it and performing unintended actions like submitting forms or changing settings.",
     "points": 10,
     "sampleAnswers": [
@@ -763,12 +723,7 @@
     "updatedAt": "2025-11-11T19:01:36.833Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "security",
-      "clickjacking",
-      "clickjacking",
-      "intermediate"
-    ],
+    "tags": ["security", "clickjacking", "clickjacking", "intermediate"],
     "explanation": "X-Frame-Options and CSP frame-ancestors prevent your site from being embedded in iframes, mitigating clickjacking attacks.",
     "points": 10,
     "options": [
@@ -815,12 +770,7 @@
     "updatedAt": "2025-11-11T19:01:36.833Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "security",
-      "clickjacking",
-      "clickjacking",
-      "intermediate"
-    ],
+    "tags": ["security", "clickjacking", "clickjacking", "intermediate"],
     "explanation": "Clickjacking tricks a user into clicking on invisible or disguised elements on a page, performing actions without their knowledge, such as changing settings or authorizing payments.",
     "points": 10,
     "sampleAnswers": [
@@ -876,12 +826,7 @@
     "updatedAt": "2025-11-11T19:01:36.833Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "security",
-      "clickjacking",
-      "clickjacking",
-      "intermediate"
-    ],
+    "tags": ["security", "clickjacking", "clickjacking", "intermediate"],
     "explanation": "X-Frame-Options and CSP frame-ancestors prevent a site from being embedded in iframes, mitigating clickjacking attacks.",
     "points": 10,
     "options": [
@@ -928,12 +873,7 @@
     "updatedAt": "2025-11-11T19:01:36.834Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "security",
-      "clickjacking",
-      "ui redressing",
-      "intermediate"
-    ],
+    "tags": ["security", "clickjacking", "ui redressing", "intermediate"],
     "explanation": "Clickjacking tricks users into clicking invisible or disguised elements, causing unintended actions like approving transactions, changing settings, or enabling permissions.",
     "points": 10,
     "sampleAnswers": [
@@ -1042,12 +982,7 @@
     "updatedAt": "2025-11-11T19:01:36.829Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "security",
-      "content-security-policy-csp",
-      "csp",
-      "intermediate"
-    ],
+    "tags": ["security", "content-security-policy-csp", "csp", "intermediate"],
     "explanation": "CSP restricts which sources are allowed for scripts, styles, and media. It reduces XSS, clickjacking, and data injection risks.",
     "points": 10,
     "sampleAnswers": [
@@ -1103,12 +1038,7 @@
     "updatedAt": "2025-11-11T19:01:36.831Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "security",
-      "content-security-policy-csp",
-      "csp",
-      "intermediate"
-    ],
+    "tags": ["security", "content-security-policy-csp", "csp", "intermediate"],
     "explanation": "CSP defines allowed sources for scripts, styles, images, and other resources, mitigating XSS, clickjacking, and data injection by restricting what can be loaded or executed.",
     "points": 10,
     "sampleAnswers": [
@@ -1164,12 +1094,7 @@
     "updatedAt": "2025-11-11T19:01:36.831Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "security",
-      "content-security-policy-csp",
-      "csp",
-      "intermediate"
-    ],
+    "tags": ["security", "content-security-policy-csp", "csp", "intermediate"],
     "explanation": "CSP works via meta tags or headers, and whitelisting trusted sources restricts malicious content.",
     "points": 10,
     "options": [
@@ -1216,12 +1141,7 @@
     "updatedAt": "2025-11-11T19:01:36.832Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "security",
-      "content-security-policy-csp",
-      "csp",
-      "intermediate"
-    ],
+    "tags": ["security", "content-security-policy-csp", "csp", "intermediate"],
     "explanation": "CSP allows developers to define which sources of scripts, images, and other resources are trusted. It blocks inline scripts and unauthorized domains, reducing the risk of XSS, clickjacking, and data injection attacks.",
     "points": 10,
     "sampleAnswers": [
@@ -1277,12 +1197,7 @@
     "updatedAt": "2025-11-11T19:01:36.833Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "security",
-      "content-security-policy-csp",
-      "csp",
-      "intermediate"
-    ],
+    "tags": ["security", "content-security-policy-csp", "csp", "intermediate"],
     "explanation": "CSP controls which sources are allowed for scripts and styles, blocks inline scripts, and helps mitigate XSS attacks. It does not encrypt cookies.",
     "points": 10,
     "options": [
@@ -2217,12 +2132,7 @@
     "updatedAt": "2025-11-11T19:01:36.833Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "security",
-      "https-&-ssl/tls",
-      "tls",
-      "intermediate"
-    ],
+    "tags": ["security", "https-&-ssl/tls", "tls", "intermediate"],
     "explanation": "HTTPS/TLS encrypts data, ensures integrity, and authenticates servers. It does not sanitize inputs.",
     "points": 10,
     "options": [
@@ -2330,12 +2240,7 @@
     "updatedAt": "2025-11-11T19:01:36.833Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "security",
-      "security-auditing",
-      "audit",
-      "intermediate"
-    ],
+    "tags": ["security", "security-auditing", "audit", "intermediate"],
     "explanation": "A security audit identifies vulnerabilities in frontend code, including XSS, CSRF, insecure storage, misconfigured headers, and third-party libraries, and provides recommendations to fix them.",
     "points": 10,
     "sampleAnswers": [
@@ -2444,12 +2349,7 @@
     "updatedAt": "2025-11-11T19:01:36.832Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "security",
-      "security-headers",
-      "headers",
-      "intermediate"
-    ],
+    "tags": ["security", "security-headers", "headers", "intermediate"],
     "explanation": "Security headers protect users from XSS, clickjacking, and other attacks. Examples include Content-Security-Policy, X-Frame-Options, X-XSS-Protection, and Strict-Transport-Security.",
     "points": 10,
     "sampleAnswers": [
@@ -2567,12 +2467,7 @@
     "updatedAt": "2025-11-11T19:01:36.827Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "security",
-      "session-management",
-      "cookies",
-      "intermediate"
-    ],
+    "tags": ["security", "session-management", "cookies", "intermediate"],
     "explanation": "HttpOnly prevents JavaScript from reading cookies (protects against XSS). Secure ensures cookies are only sent over HTTPS.",
     "points": 10,
     "sampleAnswers": [
@@ -2628,12 +2523,7 @@
     "updatedAt": "2025-11-11T19:01:36.829Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "security",
-      "session-management",
-      "cookies",
-      "intermediate"
-    ],
+    "tags": ["security", "session-management", "cookies", "intermediate"],
     "explanation": "HttpOnly prevents JS access, Secure restricts to HTTPS, and SameSite limits cross-site requests. LocalStorage is accessible by JS and vulnerable to XSS.",
     "points": 10,
     "options": [
@@ -2680,12 +2570,7 @@
     "updatedAt": "2025-11-11T19:01:36.831Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "security",
-      "session-management",
-      "cookies",
-      "intermediate"
-    ],
+    "tags": ["security", "session-management", "cookies", "intermediate"],
     "explanation": "HttpOnly, Secure, and SameSite protect cookies from XSS, MITM, and CSRF. Storing passwords in cookies is insecure.",
     "points": 10,
     "options": [
@@ -2732,12 +2617,7 @@
     "updatedAt": "2025-11-11T19:01:36.832Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "security",
-      "session-management",
-      "cookies",
-      "intermediate"
-    ],
+    "tags": ["security", "session-management", "cookies", "intermediate"],
     "explanation": "The correct answer is: True",
     "points": 10,
     "options": [
@@ -2784,12 +2664,7 @@
     "updatedAt": "2025-11-11T19:01:36.833Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "security",
-      "session-management",
-      "cookies",
-      "intermediate"
-    ],
+    "tags": ["security", "session-management", "cookies", "intermediate"],
     "explanation": "The SameSite attribute restricts how cookies are sent with cross-site requests. 'Strict' blocks all cross-site cookie usage, 'Lax' allows certain safe methods, helping prevent CSRF attacks.",
     "points": 10,
     "sampleAnswers": [
@@ -2845,12 +2720,7 @@
     "updatedAt": "2025-11-11T19:01:36.833Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "security",
-      "session-management",
-      "cookies",
-      "intermediate"
-    ],
+    "tags": ["security", "session-management", "cookies", "intermediate"],
     "explanation": "HttpOnly cookies cannot be accessed via JavaScript in the browser, reducing the risk of session theft through XSS attacks.",
     "points": 10,
     "sampleAnswers": [
@@ -2958,12 +2828,7 @@
     "updatedAt": "2025-11-11T19:01:36.834Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "security",
-      "session-management",
-      "cookies",
-      "intermediate"
-    ],
+    "tags": ["security", "session-management", "cookies", "intermediate"],
     "explanation": "SameSite restricts cross-site sending of cookies to reduce CSRF risks. It does not encrypt cookies or make them HttpOnly.",
     "points": 10,
     "options": [
@@ -3010,12 +2875,7 @@
     "updatedAt": "2025-11-11T19:01:36.834Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "security",
-      "session-management",
-      "cookies",
-      "intermediate"
-    ],
+    "tags": ["security", "session-management", "cookies", "intermediate"],
     "explanation": "HttpOnly, Secure, and SameSite attributes protect cookies from XSS and CSRF attacks. Sensitive tokens should not be stored in localStorage.",
     "points": 10,
     "options": [
@@ -3115,12 +2975,7 @@
     "updatedAt": "2025-11-11T19:01:36.827Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "security",
-      "web-security-fundamentals",
-      "mitm",
-      "intermediate"
-    ],
+    "tags": ["security", "web-security-fundamentals", "mitm", "intermediate"],
     "explanation": "The correct answer is: False",
     "points": 10,
     "options": [
@@ -3167,12 +3022,7 @@
     "updatedAt": "2025-11-11T19:01:36.829Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "security",
-      "web-security-fundamentals",
-      "mitm",
-      "intermediate"
-    ],
+    "tags": ["security", "web-security-fundamentals", "mitm", "intermediate"],
     "explanation": "The correct answer is: True",
     "points": 10,
     "options": [
@@ -3271,12 +3121,7 @@
     "updatedAt": "2025-11-11T19:01:36.830Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "security",
-      "web-security-fundamentals",
-      "mitm",
-      "intermediate"
-    ],
+    "tags": ["security", "web-security-fundamentals", "mitm", "intermediate"],
     "explanation": "A MITM attack occurs when an attacker intercepts communication between the client and server, potentially reading, modifying, or injecting data without either party noticing.",
     "points": 10,
     "sampleAnswers": [
@@ -3332,12 +3177,7 @@
     "updatedAt": "2025-11-11T19:01:36.830Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "security",
-      "web-security-fundamentals",
-      "mitm",
-      "intermediate"
-    ],
+    "tags": ["security", "web-security-fundamentals", "mitm", "intermediate"],
     "explanation": "The correct answer is: False",
     "points": 10,
     "options": [
@@ -3384,12 +3224,7 @@
     "updatedAt": "2025-11-11T19:01:36.830Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "security",
-      "web-security-fundamentals",
-      "mitm",
-      "intermediate"
-    ],
+    "tags": ["security", "web-security-fundamentals", "mitm", "intermediate"],
     "explanation": "Proper HTTPS, certificate validation, and strong crypto protect against MITM; client-side validation alone is not sufficient.",
     "points": 10,
     "options": [
@@ -3488,12 +3323,7 @@
     "updatedAt": "2025-11-11T19:01:36.831Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "security",
-      "web-security-fundamentals",
-      "sop",
-      "intermediate"
-    ],
+    "tags": ["security", "web-security-fundamentals", "sop", "intermediate"],
     "explanation": "SOP is a browser security feature that restricts scripts on one origin from accessing data from another origin, protecting sensitive data from unauthorized access.",
     "points": 10,
     "sampleAnswers": [
@@ -3549,12 +3379,7 @@
     "updatedAt": "2025-11-11T19:01:36.831Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "security",
-      "web-security-fundamentals",
-      "mitm",
-      "intermediate"
-    ],
+    "tags": ["security", "web-security-fundamentals", "mitm", "intermediate"],
     "explanation": "MITM attacks intercept communication between a client and server, potentially stealing sensitive data like passwords, session tokens, or credit card info. It often occurs on unsecured networks or via malicious proxies.",
     "points": 10,
     "sampleAnswers": [
@@ -3610,12 +3435,7 @@
     "updatedAt": "2025-11-11T19:01:36.831Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "security",
-      "web-security-fundamentals",
-      "mitm",
-      "intermediate"
-    ],
+    "tags": ["security", "web-security-fundamentals", "mitm", "intermediate"],
     "explanation": "HTTPS (TLS) encrypts data, ensures integrity, and authenticates the server. It does not automatically detect phishing sites.",
     "points": 10,
     "options": [
@@ -3662,12 +3482,7 @@
     "updatedAt": "2025-11-11T19:01:36.833Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "security",
-      "web-security-fundamentals",
-      "mitm",
-      "intermediate"
-    ],
+    "tags": ["security", "web-security-fundamentals", "mitm", "intermediate"],
     "explanation": "In a MITM attack, an attacker intercepts communication between a client and server, potentially stealing sensitive data like passwords, cookies, or session tokens, or modifying the communication without the user's knowledge.",
     "points": 10,
     "sampleAnswers": [
@@ -3829,12 +3644,7 @@
     "updatedAt": "2025-11-11T19:01:36.833Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "security",
-      "web-security-fundamentals",
-      "mitm",
-      "intermediate"
-    ],
+    "tags": ["security", "web-security-fundamentals", "mitm", "intermediate"],
     "explanation": "MITM attacks occur when an attacker intercepts communication between a client and server to eavesdrop, steal credentials, or manipulate data in transit.",
     "points": 10,
     "sampleAnswers": [
@@ -3890,12 +3700,7 @@
     "updatedAt": "2025-11-11T19:01:36.833Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "security",
-      "web-security-fundamentals",
-      "mitm",
-      "intermediate"
-    ],
+    "tags": ["security", "web-security-fundamentals", "mitm", "intermediate"],
     "explanation": "HTTPS, certificate validation, and HSTS protect against MITM attacks. Network-level security alone is insufficient.",
     "points": 10,
     "options": [
@@ -4351,12 +4156,7 @@
     "updatedAt": "2025-11-11T19:01:36.834Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "security",
-      "web-security-fundamentals",
-      "tokens",
-      "intermediate"
-    ],
+    "tags": ["security", "web-security-fundamentals", "tokens", "intermediate"],
     "explanation": "JWT tokens in localStorage are accessible via JavaScript, making them vulnerable to XSS attacks. If stolen, attackers can impersonate users.",
     "points": 10,
     "sampleAnswers": [
@@ -4474,12 +4274,7 @@
     "updatedAt": "2025-11-11T19:01:36.818Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "security",
-      "cross-site-scripting-xss",
-      "xss",
-      "intermediate"
-    ],
+    "tags": ["security", "cross-site-scripting-xss", "xss", "intermediate"],
     "explanation": "XSS is when an attacker injects scripts into a page to steal cookies, hijack sessions, or manipulate the DOM. Examples: stored XSS in comments, reflected XSS in search forms, DOM-based XSS via URL parameters.",
     "points": 10,
     "sampleAnswers": [
@@ -4535,12 +4330,7 @@
     "updatedAt": "2025-11-11T19:01:36.827Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "security",
-      "cross-site-scripting-xss",
-      "xss",
-      "intermediate"
-    ],
+    "tags": ["security", "cross-site-scripting-xss", "xss", "intermediate"],
     "explanation": "DOM-based, Reflected, and Stored are the three main XSS types. SQL Injection is a server-side attack.",
     "points": 10,
     "options": [
@@ -4587,12 +4377,7 @@
     "updatedAt": "2025-11-11T19:01:36.827Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "security",
-      "cross-site-scripting-xss",
-      "xss",
-      "intermediate"
-    ],
+    "tags": ["security", "cross-site-scripting-xss", "xss", "intermediate"],
     "explanation": "Avoid unsafe HTML, sanitize inputs, and validate server-side to prevent XSS.",
     "points": 10,
     "options": [
@@ -4692,12 +4477,7 @@
     "updatedAt": "2025-11-11T19:01:36.829Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "security",
-      "cross-site-scripting-xss",
-      "xss",
-      "advanced"
-    ],
+    "tags": ["security", "cross-site-scripting-xss", "xss", "advanced"],
     "explanation": "Avoid setting innerHTML with untrusted input, sanitize inputs with libraries like DOMPurify, use textContent instead of innerHTML, and avoid inline event handlers.",
     "points": 10,
     "sampleAnswers": [
@@ -4753,12 +4533,7 @@
     "updatedAt": "2025-11-11T19:01:36.830Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "security",
-      "cross-site-scripting-xss",
-      "xss",
-      "intermediate"
-    ],
+    "tags": ["security", "cross-site-scripting-xss", "xss", "intermediate"],
     "explanation": "The correct answer is: False",
     "points": 10,
     "options": [
@@ -4805,12 +4580,7 @@
     "updatedAt": "2025-11-11T19:01:36.830Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "security",
-      "cross-site-scripting-xss",
-      "xss",
-      "intermediate"
-    ],
+    "tags": ["security", "cross-site-scripting-xss", "xss", "intermediate"],
     "explanation": "React escapes content by default. Using DOMPurify for dangerouslySetInnerHTML and avoiding inline JS reduces XSS risk. LocalStorage is vulnerable to XSS.",
     "points": 10,
     "options": [
@@ -4857,12 +4627,7 @@
     "updatedAt": "2025-11-11T19:01:36.830Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "security",
-      "cross-site-scripting-xss",
-      "xss",
-      "intermediate"
-    ],
+    "tags": ["security", "cross-site-scripting-xss", "xss", "intermediate"],
     "explanation": "Stored XSS saves the malicious script on the server/database and executes when users visit the page. Reflected XSS occurs when the server reflects user input immediately without storing it, often via URL parameters.",
     "points": 10,
     "sampleAnswers": [
@@ -4918,12 +4683,7 @@
     "updatedAt": "2025-11-11T19:01:36.831Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "security",
-      "cross-site-scripting-xss",
-      "xss",
-      "intermediate"
-    ],
+    "tags": ["security", "cross-site-scripting-xss", "xss", "intermediate"],
     "explanation": "Reflected XSS: Malicious input is reflected immediately in a response. Stored XSS: Malicious input is stored in the server (DB) and executed for all users. DOM-based XSS: Payload executes by manipulating the DOM on the client side.",
     "points": 10,
     "sampleAnswers": [
@@ -4979,12 +4739,7 @@
     "updatedAt": "2025-11-11T19:01:36.831Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "security",
-      "cross-site-scripting-xss",
-      "xss",
-      "intermediate"
-    ],
+    "tags": ["security", "cross-site-scripting-xss", "xss", "intermediate"],
     "explanation": "Stored XSS is persistent and can affect all users who visit the page, making it the most dangerous.",
     "points": 10,
     "options": [
@@ -5031,12 +4786,7 @@
     "updatedAt": "2025-11-11T19:01:36.831Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "security",
-      "cross-site-scripting-xss",
-      "xss",
-      "intermediate"
-    ],
+    "tags": ["security", "cross-site-scripting-xss", "xss", "intermediate"],
     "explanation": "Validating/sanitizing inputs, HttpOnly cookies, and avoiding inline scripts help prevent XSS. Using eval() is unsafe.",
     "points": 10,
     "options": [
@@ -5083,12 +4833,7 @@
     "updatedAt": "2025-11-11T19:01:36.831Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "security",
-      "cross-site-scripting-xss",
-      "xss",
-      "intermediate"
-    ],
+    "tags": ["security", "cross-site-scripting-xss", "xss", "intermediate"],
     "explanation": "The correct answer is: False",
     "points": 10,
     "options": [
@@ -5135,12 +4880,7 @@
     "updatedAt": "2025-11-11T19:01:36.833Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "security",
-      "cross-site-scripting-xss",
-      "xss",
-      "intermediate"
-    ],
+    "tags": ["security", "cross-site-scripting-xss", "xss", "intermediate"],
     "explanation": "Escape and sanitize user content, and enforce CSP. Avoid unsanitized dangerouslySetInnerHTML as it introduces XSS vulnerabilities.",
     "points": 10,
     "options": [
@@ -5187,12 +4927,7 @@
     "updatedAt": "2025-11-11T19:01:36.833Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "security",
-      "cross-site-scripting-xss",
-      "xss",
-      "intermediate"
-    ],
+    "tags": ["security", "cross-site-scripting-xss", "xss", "intermediate"],
     "explanation": "Stored XSS is persistent and affects all users viewing the content; reflected XSS is immediate, targeting a single user through crafted requests.",
     "points": 10,
     "options": [
@@ -5239,12 +4974,7 @@
     "updatedAt": "2025-11-11T19:01:36.834Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "security",
-      "cross-site-scripting-xss",
-      "xss",
-      "intermediate"
-    ],
+    "tags": ["security", "cross-site-scripting-xss", "xss", "intermediate"],
     "explanation": "DOM-based XSS runs in the browser, while Stored XSS is saved in server-side storage and executed when other users access it.",
     "points": 10,
     "options": [
@@ -5291,12 +5021,7 @@
     "updatedAt": "2025-11-11T19:01:36.834Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "security",
-      "cross-site-scripting-xss",
-      "xss",
-      "intermediate"
-    ],
+    "tags": ["security", "cross-site-scripting-xss", "xss", "intermediate"],
     "explanation": "Inline scripts can easily be exploited by attackers in XSS attacks. Using external scripts and event bindings reduces the risk of executing malicious code.",
     "points": 10,
     "sampleAnswers": [
@@ -5352,12 +5077,7 @@
     "updatedAt": "2025-11-11T19:01:36.834Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "security",
-      "cross-site-scripting-xss",
-      "xss",
-      "intermediate"
-    ],
+    "tags": ["security", "cross-site-scripting-xss", "xss", "intermediate"],
     "explanation": "Unsanitized input can contain scripts or HTML that execute in the user's browser, leading to XSS attacks, data theft, or session hijacking.",
     "points": 10,
     "sampleAnswers": [
@@ -5413,12 +5133,7 @@
     "updatedAt": "2025-11-11T19:01:36.834Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "security",
-      "cross-site-scripting-xss",
-      "xss",
-      "intermediate"
-    ],
+    "tags": ["security", "cross-site-scripting-xss", "xss", "intermediate"],
     "explanation": "eval() executes arbitrary strings as code, which can lead to remote code execution if user input is passed, making applications vulnerable to XSS and other attacks.",
     "points": 10,
     "sampleAnswers": [
@@ -5474,12 +5189,7 @@
     "updatedAt": "2025-11-11T19:01:36.834Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "security",
-      "cross-site-scripting-xss",
-      "xss",
-      "intermediate"
-    ],
+    "tags": ["security", "cross-site-scripting-xss", "xss", "intermediate"],
     "explanation": "React automatically escapes content in JSX. Any HTML inserted via dangerouslySetInnerHTML must be sanitized. Avoid storing sensitive tokens insecurely.",
     "points": 10,
     "options": [

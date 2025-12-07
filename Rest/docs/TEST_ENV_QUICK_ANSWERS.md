@@ -7,11 +7,13 @@
 **Answer: YES** - Tests automatically detect and use `.env.test.local` when available.
 
 **How it works:**
+
 - Tests automatically detect if running in test or production
 - Priority: `.env.test.local` > `.env.test` > `.env.local`
 - In CI: Uses GitHub Secrets (no file needed)
 
 **What you need to do:**
+
 - Create `.env.test.local` with test credentials (for local testing)
 - Add GitHub Secrets (for CI/GitHub Actions)
 
@@ -23,16 +25,17 @@
 
 **Required GitHub Secrets:**
 
-| Secret Name | Purpose | Example |
-|------------|---------|---------|
-| `ADMIN_EMAIL` | Admin email for tests | `test-admin@example.com` |
-| `ADMIN_PASSWORD` | Admin password for tests | `test-password-123` |
-| `TEST_SUPABASE_URL` | Test Supabase project URL | `https://xxx.supabase.co` |
-| `TEST_SUPABASE_ANON_KEY` | Test Supabase anon key | `eyJhbGc...` |
-| `TEST_SUPABASE_SERVICE_ROLE_KEY` | Test Supabase service key | `eyJhbGc...` |
-| `JWT_SECRET` | JWT secret for admin auth | (generate with `openssl rand -base64 32`) |
+| Secret Name                      | Purpose                   | Example                                   |
+| -------------------------------- | ------------------------- | ----------------------------------------- |
+| `ADMIN_EMAIL`                    | Admin email for tests     | `test-admin@example.com`                  |
+| `ADMIN_PASSWORD`                 | Admin password for tests  | `test-password-123`                       |
+| `TEST_SUPABASE_URL`              | Test Supabase project URL | `https://xxx.supabase.co`                 |
+| `TEST_SUPABASE_ANON_KEY`         | Test Supabase anon key    | `eyJhbGc...`                              |
+| `TEST_SUPABASE_SERVICE_ROLE_KEY` | Test Supabase service key | `eyJhbGc...`                              |
+| `JWT_SECRET`                     | JWT secret for admin auth | (generate with `openssl rand -base64 32`) |
 
 **How to add:**
+
 1. Go to GitHub repository → Settings → Secrets and variables → Actions
 2. Click "New repository secret"
 3. Add each secret with name and value
@@ -47,27 +50,31 @@
 **Answer: TEST ENVIRONMENT** - Always use test environment in GitHub Actions.
 
 **Why?**
+
 - ✅ Tests should never touch production data
 - ✅ Tests need isolated environment
 - ✅ Tests can be run safely on every push
 - ✅ Tests don't affect real users
 
 **What the workflow does:**
+
 ```yaml
 env:
-  APP_ENV: 'test'              # Forces test environment
-  NEXT_PUBLIC_APP_ENV: 'test'  # Next.js test mode
-  NODE_ENV: 'test'             # Node.js test mode
+  APP_ENV: 'test' # Forces test environment
+  NEXT_PUBLIC_APP_ENV: 'test' # Next.js test mode
+  NODE_ENV: 'test' # Node.js test mode
   # Uses TEST Supabase credentials (not production)
   NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.TEST_SUPABASE_URL }}
 ```
 
 **What to use:**
+
 - ✅ Test Supabase project credentials
 - ✅ Test admin credentials
 - ✅ Test database
 
 **What NOT to use:**
+
 - ❌ Production Supabase credentials
 - ❌ Production admin credentials
 - ❌ Production database
@@ -79,6 +86,7 @@ env:
 ### For Local Testing
 
 1. **Create `.env.test.local`** in project root:
+
 ```bash
 APP_ENV=test
 NEXT_PUBLIC_APP_ENV=test
@@ -97,6 +105,7 @@ JWT_SECRET=your-jwt-secret
 ```
 
 2. **Run tests** - they automatically use test environment:
+
 ```bash
 npm run test:unit
 npm run test:integration
@@ -126,7 +135,10 @@ The system automatically:
 
 ```typescript
 // In test files - automatic detection
-import { loadTestEnvironment, getAdminCredentials } from '@/lib/utils/test-env-loader';
+import {
+  loadTestEnvironment,
+  getAdminCredentials,
+} from '@/lib/utils/test-env-loader';
 
 // Automatically detects and loads environment
 loadTestEnvironment();
@@ -139,13 +151,14 @@ const { email, password } = getAdminCredentials();
 
 ## Summary
 
-| Question | Answer |
-|----------|--------|
-| **Tests depend on `.env.test.local`?** | ✅ YES - Automatically detected |
-| **Need GitHub Secrets?** | ✅ YES - Required for CI |
-| **Use test or production in CI?** | ✅ TEST - Always use test environment |
+| Question                               | Answer                                |
+| -------------------------------------- | ------------------------------------- |
+| **Tests depend on `.env.test.local`?** | ✅ YES - Automatically detected       |
+| **Need GitHub Secrets?**               | ✅ YES - Required for CI              |
+| **Use test or production in CI?**      | ✅ TEST - Always use test environment |
 
 **Key Points:**
+
 - ✅ Tests automatically detect environment
 - ✅ Local: Uses `.env.test.local`
 - ✅ CI: Uses GitHub Secrets
@@ -161,6 +174,6 @@ const { email, password } = getAdminCredentials();
 3. **Run tests** - they'll automatically use the right environment
 
 **Documentation:**
+
 - [GITHUB_ACTIONS_TEST_ENV_SETUP.md](./GITHUB_ACTIONS_TEST_ENV_SETUP.md) - Complete GitHub Actions setup
 - [TEST_ENVIRONMENT_DETECTION.md](./TEST_ENVIRONMENT_DETECTION.md) - How environment detection works
-

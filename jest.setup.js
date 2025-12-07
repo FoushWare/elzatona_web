@@ -1,8 +1,8 @@
-import '@testing-library/jest-dom';
-import React from 'react';
+import "@testing-library/jest-dom";
+import React from "react";
 
 // Mock Next.js router
-jest.mock('next/navigation', () => ({
+jest.mock("next/navigation", () => ({
   useRouter() {
     return {
       push: jest.fn(),
@@ -17,20 +17,20 @@ jest.mock('next/navigation', () => ({
     return new URLSearchParams();
   },
   usePathname() {
-    return '/';
+    return "/";
   },
 }));
 
 // Mock Next.js Image component
-jest.mock('next/image', () => ({
+jest.mock("next/image", () => ({
   __esModule: true,
-  default: props => {
-    return React.createElement('img', props);
+  default: (props) => {
+    return React.createElement("img", props);
   },
 }));
 
 // Mock Firebase
-jest.mock('@/lib/firebase', () => ({
+jest.mock("@/lib/firebase", () => ({
   db: {
     collection: jest.fn(() => ({
       doc: jest.fn(() => ({
@@ -57,7 +57,7 @@ jest.mock('@/lib/firebase', () => ({
 }));
 
 // Mock Firebase Admin
-jest.mock('firebase-admin', () => ({
+jest.mock("firebase-admin", () => ({
   initializeApp: jest.fn(),
   credential: {
     cert: jest.fn(),
@@ -91,9 +91,9 @@ const localStorageMock = {
 global.localStorage = localStorageMock;
 
 // Mock window.matchMedia
-Object.defineProperty(window, 'matchMedia', {
+Object.defineProperty(window, "matchMedia", {
   writable: true,
-  value: jest.fn().mockImplementation(query => ({
+  value: jest.fn().mockImplementation((query) => ({
     matches: false,
     media: query,
     onchange: null,
@@ -122,7 +122,7 @@ global.ResizeObserver = class ResizeObserver {
 };
 
 // Mock window.scrollTo (not implemented in jsdom)
-Object.defineProperty(window, 'scrollTo', {
+Object.defineProperty(window, "scrollTo", {
   writable: true,
   value: jest.fn(),
 });
@@ -134,8 +134,8 @@ const originalError = console.error;
 beforeAll(() => {
   console.warn = (...args) => {
     if (
-      typeof args[0] === 'string' &&
-      args[0].includes('Warning: ReactDOM.render is no longer supported')
+      typeof args[0] === "string" &&
+      args[0].includes("Warning: ReactDOM.render is no longer supported")
     ) {
       return;
     }
@@ -144,9 +144,9 @@ beforeAll(() => {
 
   console.error = (...args) => {
     if (
-      typeof args[0] === 'string' &&
-      (args[0].includes('Warning:') ||
-        args[0].includes('Error: Could not parse CSS'))
+      typeof args[0] === "string" &&
+      (args[0].includes("Warning:") ||
+        args[0].includes("Error: Could not parse CSS"))
     ) {
       return;
     }

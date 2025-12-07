@@ -6,50 +6,50 @@ const path = require('path');
 // Define the mapping of old imports to new imports
 const importMappings = [
   // Contexts
-  { from: '@/contexts/AdminAuthContext', to: '@elzatona/shared-contexts' },
-  { from: '@/contexts/AuthContext', to: '@elzatona/shared-contexts' },
-  { from: '@/contexts/CookieAuthContext', to: '@elzatona/shared-contexts' },
-  { from: '@/contexts/LanguageContext', to: '@elzatona/shared-contexts' },
-  { from: '@/contexts/MobileMenuContext', to: '@elzatona/shared-contexts' },
-  { from: '@/contexts/NotificationContext', to: '@elzatona/shared-contexts' },
-  { from: '@/contexts/OnboardingContext', to: '@elzatona/shared-contexts' },
-  { from: '@/contexts/ThemeContext', to: '@elzatona/shared-contexts' },
+  { from: '@/contexts/AdminAuthContext', to: '@elzatona/contexts' },
+  { from: '@/contexts/AuthContext', to: '@elzatona/contexts' },
+  { from: '@/contexts/CookieAuthContext', to: '@elzatona/contexts' },
+  { from: '@/contexts/LanguageContext', to: '@elzatona/contexts' },
+  { from: '@/contexts/MobileMenuContext', to: '@elzatona/contexts' },
+  { from: '@/contexts/NotificationContext', to: '@elzatona/contexts' },
+  { from: '@/contexts/OnboardingContext', to: '@elzatona/contexts' },
+  { from: '@/contexts/ThemeContext', to: '@elzatona/contexts' },
   {
     from: '@/contexts/UserPreferencesContext',
-    to: '@elzatona/shared-contexts',
+    to: '@elzatona/contexts',
   },
-  { from: '@/contexts/UserTypeContext', to: '@elzatona/shared-contexts' },
-  { from: '@/contexts/UserTypeContextSafe', to: '@elzatona/shared-contexts' },
+  { from: '@/contexts/UserTypeContext', to: '@elzatona/contexts' },
+  { from: '@/contexts/UserTypeContextSafe', to: '@elzatona/contexts' },
 
   // Hooks
-  { from: '@/hooks/useAdminAuth', to: '@elzatona/shared-hooks' },
-  { from: '@/hooks/useAudioCollection', to: '@elzatona/shared-hooks' },
-  { from: '@/hooks/useAuth', to: '@elzatona/shared-hooks' },
-  { from: '@/hooks/useDarkMode', to: '@elzatona/shared-hooks' },
-  { from: '@/hooks/useFirebaseQuestions', to: '@elzatona/shared-hooks' },
-  { from: '@/hooks/useFlashcardSession', to: '@elzatona/shared-hooks' },
-  { from: '@/hooks/useImageOptimization', to: '@elzatona/shared-hooks' },
-  { from: '@/hooks/useLanguage', to: '@elzatona/shared-hooks' },
-  { from: '@/hooks/useLearningPaths', to: '@elzatona/shared-hooks' },
-  { from: '@/hooks/useLearningPathStats', to: '@elzatona/shared-hooks' },
-  { from: '@/hooks/useLearningPathStatsDebug', to: '@elzatona/shared-hooks' },
-  { from: '@/hooks/useLearningPathStatsSimple', to: '@elzatona/shared-hooks' },
-  { from: '@/hooks/useLearningPlans', to: '@elzatona/shared-hooks' },
-  { from: '@/hooks/useMobileMenu', to: '@elzatona/shared-hooks' },
-  { from: '@/hooks/useNotificationActions', to: '@elzatona/shared-hooks' },
-  { from: '@/hooks/useOnboarding', to: '@elzatona/shared-hooks' },
-  { from: '@/hooks/usePerformanceMonitoring', to: '@elzatona/shared-hooks' },
-  { from: '@/hooks/useProgressTracking', to: '@elzatona/shared-hooks' },
-  { from: '@/hooks/useQuestions', to: '@elzatona/shared-hooks' },
-  { from: '@/hooks/useRoleBasedAccess', to: '@elzatona/shared-hooks' },
-  { from: '@/hooks/useSectorProgress', to: '@elzatona/shared-hooks' },
-  { from: '@/hooks/useSecureProgress', to: '@elzatona/shared-hooks' },
-  { from: '@/hooks/useTanStackQuery', to: '@elzatona/shared-hooks' },
-  { from: '@/hooks/useTranslation', to: '@elzatona/shared-hooks' },
-  { from: '@/hooks/useUnifiedQuestions', to: '@elzatona/shared-hooks' },
-  { from: '@/hooks/useUserPreferences', to: '@elzatona/shared-hooks' },
-  { from: '@/hooks/useUserProgress', to: '@elzatona/shared-hooks' },
-  { from: '@/hooks/useUserType', to: '@elzatona/shared-hooks' },
+  { from: '@/hooks/useAdminAuth', to: '@elzatona/hooks' },
+  { from: '@/hooks/useAudioCollection', to: '@elzatona/hooks' },
+  { from: '@/hooks/useAuth', to: '@elzatona/hooks' },
+  { from: '@/hooks/useDarkMode', to: '@elzatona/hooks' },
+  { from: '@/hooks/useFirebaseQuestions', to: '@elzatona/hooks' },
+  { from: '@/hooks/useFlashcardSession', to: '@elzatona/hooks' },
+  { from: '@/hooks/useImageOptimization', to: '@elzatona/hooks' },
+  { from: '@/hooks/useLanguage', to: '@elzatona/hooks' },
+  { from: '@/hooks/useLearningPaths', to: '@elzatona/hooks' },
+  { from: '@/hooks/useLearningPathStats', to: '@elzatona/hooks' },
+  { from: '@/hooks/useLearningPathStatsDebug', to: '@elzatona/hooks' },
+  { from: '@/hooks/useLearningPathStatsSimple', to: '@elzatona/hooks' },
+  { from: '@/hooks/useLearningPlans', to: '@elzatona/hooks' },
+  { from: '@/hooks/useMobileMenu', to: '@elzatona/hooks' },
+  { from: '@/hooks/useNotificationActions', to: '@elzatona/hooks' },
+  { from: '@/hooks/useOnboarding', to: '@elzatona/hooks' },
+  { from: '@/hooks/usePerformanceMonitoring', to: '@elzatona/hooks' },
+  { from: '@/hooks/useProgressTracking', to: '@elzatona/hooks' },
+  { from: '@/hooks/useQuestions', to: '@elzatona/hooks' },
+  { from: '@/hooks/useRoleBasedAccess', to: '@elzatona/hooks' },
+  { from: '@/hooks/useSectorProgress', to: '@elzatona/hooks' },
+  { from: '@/hooks/useSecureProgress', to: '@elzatona/hooks' },
+  { from: '@/hooks/useTanStackQuery', to: '@elzatona/hooks' },
+  { from: '@/hooks/useTranslation', to: '@elzatona/hooks' },
+  { from: '@/hooks/useUnifiedQuestions', to: '@elzatona/hooks' },
+  { from: '@/hooks/useUserPreferences', to: '@elzatona/hooks' },
+  { from: '@/hooks/useUserProgress', to: '@elzatona/hooks' },
+  { from: '@/hooks/useUserType', to: '@elzatona/hooks' },
 
   // Atoms
   { from: '@/atoms/auth', to: '@elzatona/shared-atoms' },
@@ -62,7 +62,7 @@ const importMappings = [
   { from: '@/atoms/index', to: '@elzatona/shared-atoms' },
 
   // Components - we'll handle these with a pattern
-  { from: '@/shared/components', to: '@elzatona/shared-components' },
+  { from: '@/shared/components', to: '@elzatona/components' },
 ];
 
 function updateImportsInFile(filePath) {
@@ -87,7 +87,7 @@ function updateImportsInFile(filePath) {
       /from ['"]@\/shared\/components\/([^'"]+)['"]/g;
     content = content.replace(sharedComponentsRegex, (match, componentPath) => {
       modified = true;
-      return `from '@elzatona/shared-components'`;
+      return `from '@elzatona/components'`;
     });
 
     if (modified) {

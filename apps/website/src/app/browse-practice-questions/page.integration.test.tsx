@@ -3,14 +3,14 @@
  * Task: F-003 - Browse Practice Questions
  */
 
-import React from 'react';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
-import '@testing-library/jest-dom';
-import BrowsePracticeQuestionsPage from './page';
-import * as sharedContexts from '@elzatona/shared-contexts';
+import React from "react";
+import { render, screen, fireEvent, waitFor } from "@testing-library/react";
+import "@testing-library/jest-dom";
+import BrowsePracticeQuestionsPage from "./page";
+import * as sharedContexts from "@elzatona/contexts";
 
-jest.mock('@elzatona/shared-contexts', () => {
-  const actual = jest.requireActual('../../test-utils/mocks/shared-contexts');
+jest.mock("@elzatona/contexts", () => {
+  const actual = jest.requireActual("../../test-utils/mocks/shared-contexts");
   return {
     ...actual,
     useAuth: jest.fn(),
@@ -18,7 +18,7 @@ jest.mock('@elzatona/shared-contexts', () => {
 });
 
 const mockPush = jest.fn();
-jest.mock('next/navigation', () => ({
+jest.mock("next/navigation", () => ({
   useRouter: () => ({
     push: mockPush,
     replace: jest.fn(),
@@ -28,7 +28,7 @@ jest.mock('next/navigation', () => ({
 
 Storage.prototype.getItem = jest.fn(() => JSON.stringify([]));
 
-jest.mock('lucide-react', () => ({
+jest.mock("lucide-react", () => ({
   Code: () => <span>💻</span>,
   Target: () => <span>🎯</span>,
   Brain: () => <span>🧠</span>,
@@ -47,18 +47,18 @@ jest.mock('lucide-react', () => ({
   Loader2: () => <span>⏳</span>,
 }));
 
-describe('F-IT-006: Practice Navigation Integration', () => {
+describe("F-IT-006: Practice Navigation Integration", () => {
   beforeEach(() => {
     jest.clearAllMocks();
-    
+
     (sharedContexts.useAuth as jest.Mock).mockReturnValue({
       isAuthenticated: true,
-      user: { id: '1' },
+      user: { id: "1" },
       isLoading: false,
     });
   });
 
-  it('should integrate with practice routes', async () => {
+  it("should integrate with practice routes", async () => {
     render(<BrowsePracticeQuestionsPage />);
     await waitFor(() => {
       expect(screen.getByText(/Interview Questions/i)).toBeInTheDocument();

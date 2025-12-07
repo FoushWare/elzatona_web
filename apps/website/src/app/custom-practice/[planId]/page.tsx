@@ -1,8 +1,8 @@
-'use client';
+"use client";
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import React, { useState, useEffect } from 'react';
-import { useRouter, useParams } from 'next/navigation';
+import React, { useState, useEffect } from "react";
+import { useRouter, useParams } from "next/navigation";
 import {
   ArrowLeft,
   ArrowRight,
@@ -16,9 +16,9 @@ import {
   BookmarkCheck,
   Trophy,
   BarChart3,
-} from 'lucide-react';
-import Link from 'next/link';
-import { addFlashcard, isInFlashcards } from '../../../lib/flashcards';
+} from "lucide-react";
+import Link from "next/link";
+import { addFlashcard, isInFlashcards } from "../../../lib/flashcards";
 
 interface Question {
   id: string;
@@ -63,7 +63,7 @@ export default function CustomPracticePage() {
   const [isCorrect, setIsCorrect] = useState<boolean | null>(null);
   const [inFlashcards, setInFlashcards] = useState(false);
   const [answeredQuestions, setAnsweredQuestions] = useState<Set<string>>(
-    new Set()
+    new Set(),
   );
   const [sessionStats, setSessionStats] = useState({
     correct: 0,
@@ -79,7 +79,7 @@ export default function CustomPracticePage() {
   // Load plan and questions
   useEffect(() => {
     if (!planId) {
-      router.push('/browse-practice-questions');
+      router.push("/browse-practice-questions");
       return;
     }
 
@@ -90,14 +90,14 @@ export default function CustomPracticePage() {
     setIsLoading(true);
     try {
       // Load plan from localStorage
-      const savedPlans = localStorage.getItem('userPlans');
+      const savedPlans = localStorage.getItem("userPlans");
       if (savedPlans) {
         const parsedPlans: CustomPlan[] = JSON.parse(savedPlans);
-        const foundPlan = parsedPlans.find(p => p.id === planId);
+        const foundPlan = parsedPlans.find((p) => p.id === planId);
 
         if (!foundPlan) {
-          alert('Plan not found');
-          router.push('/browse-practice-questions');
+          alert("Plan not found");
+          router.push("/browse-practice-questions");
           return;
         }
 
@@ -110,25 +110,25 @@ export default function CustomPracticePage() {
           setProgress(JSON.parse(savedProgress));
           const parsedProgress = JSON.parse(savedProgress);
           setAnsweredQuestions(
-            new Set(parsedProgress.completedQuestions || [])
+            new Set(parsedProgress.completedQuestions || []),
           );
         }
 
         // Fetch questions from API based on selected question IDs
         const questionIds = foundPlan.sections.flatMap(
-          section => section.selectedQuestions
+          (section) => section.selectedQuestions,
         );
         if (questionIds.length > 0) {
           await fetchQuestionsByIds(questionIds);
         }
       } else {
-        alert('No plans found');
-        router.push('/browse-practice-questions');
+        alert("No plans found");
+        router.push("/browse-practice-questions");
       }
     } catch (error) {
-      console.error('Error loading plan:', error);
-      alert('Error loading plan');
-      router.push('/browse-practice-questions');
+      console.error("Error loading plan:", error);
+      alert("Error loading plan");
+      router.push("/browse-practice-questions");
     } finally {
       setIsLoading(false);
     }
@@ -144,12 +144,12 @@ export default function CustomPracticePage() {
       if (data.success && data.questions) {
         // Filter questions by IDs and transform
         const filteredQuestions = data.questions.filter((q: any) =>
-          questionIds.includes(q.id)
+          questionIds.includes(q.id),
         );
 
         // Maintain order based on questionIds array
         const orderedQuestions = questionIds
-          .map(id => filteredQuestions.find((q: any) => q.id === id))
+          .map((id) => filteredQuestions.find((q: any) => q.id === id))
           .filter(Boolean);
 
         // Transform questions to match our Question interface
@@ -158,14 +158,14 @@ export default function CustomPracticePage() {
             let options: string[] = [];
             if (Array.isArray(q.options)) {
               options = q.options.map((opt: any) =>
-                typeof opt === 'string' ? opt : opt.text || opt
+                typeof opt === "string" ? opt : opt.text || opt,
               );
-            } else if (typeof q.options === 'string') {
+            } else if (typeof q.options === "string") {
               try {
                 const parsed = JSON.parse(q.options);
                 if (Array.isArray(parsed)) {
                   options = parsed.map((opt: any) =>
-                    typeof opt === 'string' ? opt : opt.text || opt
+                    typeof opt === "string" ? opt : opt.text || opt,
                   );
                 }
               } catch {
@@ -175,12 +175,12 @@ export default function CustomPracticePage() {
 
             // Determine correct answer index
             let correctAnswerIndex = 0;
-            if (typeof q.correct_answer === 'number') {
+            if (typeof q.correct_answer === "number") {
               correctAnswerIndex = q.correct_answer;
-            } else if (typeof q.correct_answer === 'string') {
+            } else if (typeof q.correct_answer === "string") {
               // Check if it's a letter (a, b, c, d)
               const letter = q.correct_answer.toLowerCase().trim();
-              if (letter.length === 1 && letter >= 'a' && letter <= 'z') {
+              if (letter.length === 1 && letter >= "a" && letter <= "z") {
                 correctAnswerIndex = letter.charCodeAt(0) - 97; // a=0, b=1, c=2, etc.
               } else {
                 // Try to parse as number
@@ -191,7 +191,7 @@ export default function CustomPracticePage() {
                   // Try to find by option id if options are objects
                   if (Array.isArray(q.options) && q.options[0]?.id) {
                     const correctIndex = q.options.findIndex(
-                      (opt: any) => opt.id?.toLowerCase() === letter
+                      (opt: any) => opt.id?.toLowerCase() === letter,
                     );
                     if (correctIndex >= 0) {
                       correctAnswerIndex = correctIndex;
@@ -204,15 +204,15 @@ export default function CustomPracticePage() {
             return {
               id: q.id,
               question:
-                q.question || q.question_text || q.title || q.content || '',
+                q.question || q.question_text || q.title || q.content || "",
               options,
               correctAnswer:
                 correctAnswerIndex >= 0 && correctAnswerIndex < options.length
                   ? correctAnswerIndex
                   : 0,
               explanation: q.explanation,
-              section: q.section || '',
-              difficulty: q.difficulty || 'medium',
+              section: q.section || "",
+              difficulty: q.difficulty || "medium",
             };
           })
           .filter((q: Question) => q.options.length > 0);
@@ -221,8 +221,8 @@ export default function CustomPracticePage() {
 
         // Load current question based on progress
         if (progress && progress.completedQuestions.length > 0) {
-          const lastCompletedIndex = transformedQuestions.findIndex(q =>
-            progress.completedQuestions.includes(q.id)
+          const lastCompletedIndex = transformedQuestions.findIndex((q) =>
+            progress.completedQuestions.includes(q.id),
           );
           if (
             lastCompletedIndex >= 0 &&
@@ -233,7 +233,7 @@ export default function CustomPracticePage() {
         }
       }
     } catch (error) {
-      console.error('Error fetching questions:', error);
+      console.error("Error fetching questions:", error);
     }
   };
 
@@ -264,7 +264,7 @@ export default function CustomPracticePage() {
     setShowExplanation(true);
 
     // Update stats
-    setSessionStats(prev => ({
+    setSessionStats((prev) => ({
       ...prev,
       correct: prev.correct + (correct ? 1 : 0),
       total: prev.total + 1,
@@ -280,8 +280,8 @@ export default function CustomPracticePage() {
       addFlashcard({
         id: currentQuestion.id,
         question: currentQuestion.question,
-        section: currentQuestion.section || '',
-        difficulty: currentQuestion.difficulty || 'medium',
+        section: currentQuestion.section || "",
+        difficulty: currentQuestion.difficulty || "medium",
         addedAt: Date.now(),
       });
       setInFlashcards(true);
@@ -302,13 +302,13 @@ export default function CustomPracticePage() {
 
   const handleNext = () => {
     if (currentQuestionIndex < questions.length - 1) {
-      setCurrentQuestionIndex(prev => prev + 1);
+      setCurrentQuestionIndex((prev) => prev + 1);
     }
   };
 
   const handlePrevious = () => {
     if (currentQuestionIndex > 0) {
-      setCurrentQuestionIndex(prev => prev - 1);
+      setCurrentQuestionIndex((prev) => prev - 1);
     }
   };
 
@@ -318,10 +318,10 @@ export default function CustomPracticePage() {
 
   if (isLoading) {
     return (
-      <div className='min-h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 flex items-center justify-center'>
-        <div className='text-center'>
-          <Loader2 className='w-8 h-8 animate-spin text-indigo-600 mx-auto mb-4' />
-          <p className='text-gray-600 dark:text-gray-300'>
+      <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 flex items-center justify-center">
+        <div className="text-center">
+          <Loader2 className="w-8 h-8 animate-spin text-indigo-600 mx-auto mb-4" />
+          <p className="text-gray-600 dark:text-gray-300">
             Loading your custom plan...
           </p>
         </div>
@@ -331,20 +331,20 @@ export default function CustomPracticePage() {
 
   if (!plan || questions.length === 0) {
     return (
-      <div className='min-h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 flex items-center justify-center px-4'>
-        <div className='text-center max-w-md'>
-          <BookOpen className='w-16 h-16 text-gray-400 mx-auto mb-4' />
-          <h2 className='text-2xl font-bold text-gray-900 dark:text-white mb-2'>
+      <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 flex items-center justify-center px-4">
+        <div className="text-center max-w-md">
+          <BookOpen className="w-16 h-16 text-gray-400 mx-auto mb-4" />
+          <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
             No questions available
           </h2>
-          <p className='text-gray-600 dark:text-gray-300 mb-6'>
+          <p className="text-gray-600 dark:text-gray-300 mb-6">
             This plan doesn't have any questions yet.
           </p>
           <Link
-            href='/browse-practice-questions'
-            className='inline-flex items-center space-x-2 px-6 py-3 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg font-semibold transition-colors'
+            href="/browse-practice-questions"
+            className="inline-flex items-center space-x-2 px-6 py-3 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg font-semibold transition-colors"
           >
-            <ArrowLeft className='w-5 h-5' />
+            <ArrowLeft className="w-5 h-5" />
             <span>Back to Browse</span>
           </Link>
         </div>
@@ -353,35 +353,35 @@ export default function CustomPracticePage() {
   }
 
   return (
-    <div className='min-h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 py-8 px-4'>
-      <div className='max-w-4xl mx-auto'>
+    <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 py-8 px-4">
+      <div className="max-w-4xl mx-auto">
         {/* Header */}
-        <div className='mb-6'>
+        <div className="mb-6">
           <Link
-            href='/browse-practice-questions'
-            className='inline-flex items-center space-x-2 text-gray-600 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 mb-4'
+            href="/browse-practice-questions"
+            className="inline-flex items-center space-x-2 text-gray-600 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 mb-4"
           >
-            <ArrowLeft className='w-5 h-5' />
+            <ArrowLeft className="w-5 h-5" />
             <span>Back to Browse</span>
           </Link>
-          <div className='bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6'>
-            <h1 className='text-2xl font-bold text-gray-900 dark:text-white mb-2'>
+          <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6">
+            <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
               {plan.name}
             </h1>
-            <p className='text-gray-600 dark:text-gray-300 mb-4'>
+            <p className="text-gray-600 dark:text-gray-300 mb-4">
               {plan.description}
             </p>
-            <div className='flex items-center space-x-6 text-sm text-gray-600 dark:text-gray-400'>
-              <div className='flex items-center space-x-2'>
-                <Target className='w-4 h-4' />
+            <div className="flex items-center space-x-6 text-sm text-gray-600 dark:text-gray-400">
+              <div className="flex items-center space-x-2">
+                <Target className="w-4 h-4" />
                 <span>{questions.length} questions</span>
               </div>
-              <div className='flex items-center space-x-2'>
-                <Clock className='w-4 h-4' />
+              <div className="flex items-center space-x-2">
+                <Clock className="w-4 h-4" />
                 <span>{plan.duration} days</span>
               </div>
-              <div className='flex items-center space-x-2'>
-                <Trophy className='w-4 h-4' />
+              <div className="flex items-center space-x-2">
+                <Trophy className="w-4 h-4" />
                 <span>
                   {sessionStats.correct}/{sessionStats.total} correct
                 </span>
@@ -392,22 +392,22 @@ export default function CustomPracticePage() {
 
         {/* Completion Banner */}
         {allQuestionsAnswered && isLastQuestion && (
-          <div className='bg-gradient-to-r from-green-500 to-emerald-600 rounded-xl shadow-lg p-6 mb-6 text-white'>
-            <div className='flex items-center justify-between'>
+          <div className="bg-gradient-to-r from-green-500 to-emerald-600 rounded-xl shadow-lg p-6 mb-6 text-white">
+            <div className="flex items-center justify-between">
               <div>
-                <h3 className='text-xl font-bold mb-2 flex items-center space-x-2'>
-                  <Trophy className='w-6 h-6' />
+                <h3 className="text-xl font-bold mb-2 flex items-center space-x-2">
+                  <Trophy className="w-6 h-6" />
                   <span>Congratulations!</span>
                 </h3>
-                <p className='text-green-100'>
+                <p className="text-green-100">
                   You've completed all questions in this plan!
                 </p>
               </div>
               <Link
-                href='/dashboard'
-                className='inline-flex items-center space-x-2 px-6 py-3 bg-white hover:bg-green-50 text-green-600 rounded-lg font-semibold transition-colors'
+                href="/dashboard"
+                className="inline-flex items-center space-x-2 px-6 py-3 bg-white hover:bg-green-50 text-green-600 rounded-lg font-semibold transition-colors"
               >
-                <BarChart3 className='w-4 h-4' />
+                <BarChart3 className="w-4 h-4" />
                 <span>Go to Dashboard</span>
               </Link>
             </div>
@@ -416,34 +416,34 @@ export default function CustomPracticePage() {
 
         {/* Question Card */}
         {currentQuestion && (
-          <div className='bg-white dark:bg-gray-800 rounded-xl shadow-lg p-8 mb-6'>
-            <div className='flex items-start justify-between gap-3 mb-4'>
-              <h2 className='text-xl font-semibold text-gray-900 dark:text-white flex-1'>
+          <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-8 mb-6">
+            <div className="flex items-start justify-between gap-3 mb-4">
+              <h2 className="text-xl font-semibold text-gray-900 dark:text-white flex-1">
                 {currentQuestion.question}
               </h2>
               {inFlashcards && (
-                <BookmarkCheck className='w-5 h-5 text-indigo-600 flex-shrink-0' />
+                <BookmarkCheck className="w-5 h-5 text-indigo-600 flex-shrink-0" />
               )}
             </div>
 
-            <div className='space-y-3 mb-6'>
+            <div className="space-y-3 mb-6">
               {currentQuestion.options.map((option, index) => {
                 const isSelected = selectedAnswer === index;
                 const isCorrectOption = index === currentQuestion.correctAnswer;
-                let bgColor = 'bg-gray-50 dark:bg-gray-700';
-                let borderColor = 'border-gray-200 dark:border-gray-600';
-                const textColor = 'text-gray-900 dark:text-white';
+                let bgColor = "bg-gray-50 dark:bg-gray-700";
+                let borderColor = "border-gray-200 dark:border-gray-600";
+                const textColor = "text-gray-900 dark:text-white";
 
                 if (showExplanation && isSelected) {
                   bgColor = isCorrect
-                    ? 'bg-green-50 dark:bg-green-900/20'
-                    : 'bg-red-50 dark:bg-red-900/20';
+                    ? "bg-green-50 dark:bg-green-900/20"
+                    : "bg-red-50 dark:bg-red-900/20";
                   borderColor = isCorrect
-                    ? 'border-green-500'
-                    : 'border-red-500';
+                    ? "border-green-500"
+                    : "border-red-500";
                 } else if (showExplanation && isCorrectOption) {
-                  bgColor = 'bg-green-50 dark:bg-green-900/20';
-                  borderColor = 'border-green-500';
+                  bgColor = "bg-green-50 dark:bg-green-900/20";
+                  borderColor = "border-green-500";
                 }
 
                 return (
@@ -453,20 +453,20 @@ export default function CustomPracticePage() {
                     disabled={selectedAnswer !== null}
                     className={`w-full text-left p-4 rounded-lg border-2 transition-all ${bgColor} ${borderColor} ${textColor} ${
                       selectedAnswer === null
-                        ? 'hover:border-indigo-400 hover:bg-indigo-50 dark:hover:bg-indigo-900/20 cursor-pointer'
-                        : 'cursor-not-allowed'
+                        ? "hover:border-indigo-400 hover:bg-indigo-50 dark:hover:bg-indigo-900/20 cursor-pointer"
+                        : "cursor-not-allowed"
                     }`}
                   >
-                    <div className='flex items-center space-x-3'>
+                    <div className="flex items-center space-x-3">
                       <div
                         className={`w-8 h-8 rounded-full flex items-center justify-center font-semibold ${
                           showExplanation && isSelected
                             ? isCorrect
-                              ? 'bg-green-500 text-white'
-                              : 'bg-red-500 text-white'
+                              ? "bg-green-500 text-white"
+                              : "bg-red-500 text-white"
                             : showExplanation && isCorrectOption
-                              ? 'bg-green-500 text-white'
-                              : 'bg-gray-200 dark:bg-gray-600 text-gray-700 dark:text-gray-300'
+                              ? "bg-green-500 text-white"
+                              : "bg-gray-200 dark:bg-gray-600 text-gray-700 dark:text-gray-300"
                         }`}
                       >
                         {String.fromCharCode(65 + index)}
@@ -479,35 +479,35 @@ export default function CustomPracticePage() {
             </div>
 
             {showExplanation && (
-              <div className='bg-gray-50 dark:bg-gray-700 rounded-lg p-4 mb-6'>
-                <div className='mb-3'>
-                  <h4 className='font-semibold text-gray-900 dark:text-white mb-2'>
+              <div className="bg-gray-50 dark:bg-gray-700 rounded-lg p-4 mb-6">
+                <div className="mb-3">
+                  <h4 className="font-semibold text-gray-900 dark:text-white mb-2">
                     {isCorrect ? (
-                      <span className='text-green-600 dark:text-green-400 flex items-center gap-2'>
-                        <CheckCircle className='w-5 h-5' />
+                      <span className="text-green-600 dark:text-green-400 flex items-center gap-2">
+                        <CheckCircle className="w-5 h-5" />
                         Correct Answer!
                       </span>
                     ) : (
-                      <span className='text-red-600 dark:text-red-400 flex items-center gap-2'>
-                        <XCircle className='w-5 h-5' />
+                      <span className="text-red-600 dark:text-red-400 flex items-center gap-2">
+                        <XCircle className="w-5 h-5" />
                         Incorrect
                       </span>
                     )}
                   </h4>
-                  <p className='text-sm text-gray-600 dark:text-gray-400'>
-                    The correct answer is{' '}
-                    <span className='font-semibold text-gray-900 dark:text-white'>
-                      {String.fromCharCode(65 + currentQuestion.correctAnswer)}:{' '}
+                  <p className="text-sm text-gray-600 dark:text-gray-400">
+                    The correct answer is{" "}
+                    <span className="font-semibold text-gray-900 dark:text-white">
+                      {String.fromCharCode(65 + currentQuestion.correctAnswer)}:{" "}
                       {currentQuestion.options[currentQuestion.correctAnswer]}
                     </span>
                   </p>
                 </div>
                 {currentQuestion.explanation && (
                   <>
-                    <h4 className='font-semibold text-gray-900 dark:text-white mb-2'>
+                    <h4 className="font-semibold text-gray-900 dark:text-white mb-2">
                       Explanation:
                     </h4>
-                    <p className='text-gray-700 dark:text-gray-300'>
+                    <p className="text-gray-700 dark:text-gray-300">
                       {currentQuestion.explanation}
                     </p>
                   </>
@@ -516,64 +516,64 @@ export default function CustomPracticePage() {
             )}
 
             {/* Navigation */}
-            <div className='flex items-center justify-between pt-4 border-t border-gray-200 dark:border-gray-700'>
+            <div className="flex items-center justify-between pt-4 border-t border-gray-200 dark:border-gray-700">
               <button
                 onClick={handlePrevious}
                 disabled={currentQuestionIndex === 0}
-                className='flex items-center space-x-2 px-4 py-2 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-lg font-medium disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors'
+                className="flex items-center space-x-2 px-4 py-2 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-lg font-medium disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
               >
-                <ArrowLeft className='w-4 h-4' />
+                <ArrowLeft className="w-4 h-4" />
                 <span>Previous Question</span>
               </button>
 
-              <div className='text-sm text-gray-600 dark:text-gray-400'>
+              <div className="text-sm text-gray-600 dark:text-gray-400">
                 {currentQuestionIndex + 1} of {questions.length}
               </div>
 
               <button
                 onClick={handleNext}
                 disabled={!showExplanation || isLastQuestion}
-                className='flex items-center space-x-2 px-4 py-2 bg-indigo-600 text-white rounded-lg font-medium disabled:opacity-50 disabled:cursor-not-allowed hover:bg-indigo-700 transition-colors'
+                className="flex items-center space-x-2 px-4 py-2 bg-indigo-600 text-white rounded-lg font-medium disabled:opacity-50 disabled:cursor-not-allowed hover:bg-indigo-700 transition-colors"
               >
                 <span>Next Question</span>
-                <ArrowRight className='w-4 h-4' />
+                <ArrowRight className="w-4 h-4" />
               </button>
             </div>
           </div>
         )}
 
         {/* Session Statistics */}
-        <div className='bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6'>
-          <h3 className='text-lg font-semibold text-gray-900 dark:text-white mb-4'>
+        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6">
+          <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
             Session Statistics
           </h3>
-          <div className='grid grid-cols-3 gap-4'>
-            <div className='text-center'>
-              <div className='text-2xl font-bold text-indigo-600 dark:text-indigo-400'>
+          <div className="grid grid-cols-3 gap-4">
+            <div className="text-center">
+              <div className="text-2xl font-bold text-indigo-600 dark:text-indigo-400">
                 {sessionStats.total}
               </div>
-              <div className='text-sm text-gray-600 dark:text-gray-400'>
+              <div className="text-sm text-gray-600 dark:text-gray-400">
                 Questions Answered
               </div>
             </div>
-            <div className='text-center'>
-              <div className='text-2xl font-bold text-green-600 dark:text-green-400'>
+            <div className="text-center">
+              <div className="text-2xl font-bold text-green-600 dark:text-green-400">
                 {sessionStats.total > 0
                   ? Math.round(
-                      (sessionStats.correct / sessionStats.total) * 100
+                      (sessionStats.correct / sessionStats.total) * 100,
                     )
                   : 0}
                 %
               </div>
-              <div className='text-sm text-gray-600 dark:text-gray-400'>
+              <div className="text-sm text-gray-600 dark:text-gray-400">
                 Accuracy Rate
               </div>
             </div>
-            <div className='text-center'>
-              <div className='text-2xl font-bold text-purple-600 dark:text-purple-400'>
+            <div className="text-center">
+              <div className="text-2xl font-bold text-purple-600 dark:text-purple-400">
                 {questions.length - answeredQuestions.size}
               </div>
-              <div className='text-sm text-gray-600 dark:text-gray-400'>
+              <div className="text-sm text-gray-600 dark:text-gray-400">
                 Remaining
               </div>
             </div>

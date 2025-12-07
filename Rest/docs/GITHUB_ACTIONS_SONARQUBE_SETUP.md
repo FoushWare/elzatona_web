@@ -9,20 +9,24 @@ Your GitHub Actions workflow has been updated with the correct SonarCloud projec
 ### 1. GitHub Actions Workflow (`.github/workflows/sonarcloud.yml`)
 
 **Before:**
+
 - Project Key: `zatona-web` ❌
 - Organization: `${{ secrets.SONAR_ORG }}` (required secret)
 
 **After:**
+
 - Project Key: `FoushWare_GreatFrontendHub` ✅
 - Organization: `foushware` ✅ (read from `sonar-project.properties`)
 
 ### 2. Sonar Project Properties (`sonar-project.properties`)
 
 **Before:**
+
 - Project Key: `zatona-web` ❌
 - No organization specified
 
 **After:**
+
 - Project Key: `FoushWare_GreatFrontendHub` ✅
 - Organization: `foushware` ✅ (lowercase, as per SonarCloud)
 - Project Name: `GreatFrontendHub` ✅
@@ -51,16 +55,20 @@ You only need **ONE** secret now:
 After adding the secret:
 
 1. **Check Workflow File**:
+
    ```bash
    cat .github/workflows/sonarcloud.yml | grep -A 5 "SonarCloud Scan"
    ```
+
    Should show:
    - Project configuration read from `sonar-project.properties`
 
 2. **Check Project Properties**:
+
    ```bash
    head -8 sonar-project.properties
    ```
+
    Should show:
    - `sonar.projectKey=FoushWare_GreatFrontendHub`
    - `sonar.organization=foushware` (lowercase)
@@ -72,6 +80,7 @@ After adding the secret:
 ## 📊 Workflow Details
 
 The workflow will:
+
 1. ✅ Checkout code
 2. ✅ Setup Node.js 20
 3. ✅ Install dependencies
@@ -102,14 +111,14 @@ The workflow will:
 
 ## 🎯 Quick Reference
 
-| Item | Value |
-|------|-------|
-| **Project Key** | `FoushWare_GreatFrontendHub` |
-| **Organization** | `foushware` (lowercase, case-sensitive) |
-| **GitHub Secret** | `SONAR_TOKEN` |
-| **Token Value** | `[Get from SonarCloud → My Account → Security]` |
-| **Workflow File** | `.github/workflows/sonarcloud.yml` |
-| **Config File** | `sonar-project.properties` |
+| Item              | Value                                           |
+| ----------------- | ----------------------------------------------- |
+| **Project Key**   | `FoushWare_GreatFrontendHub`                    |
+| **Organization**  | `foushware` (lowercase, case-sensitive)         |
+| **GitHub Secret** | `SONAR_TOKEN`                                   |
+| **Token Value**   | `[Get from SonarCloud → My Account → Security]` |
+| **Workflow File** | `.github/workflows/sonarcloud.yml`              |
+| **Config File**   | `sonar-project.properties`                      |
 
 ## 📝 Next Steps
 
@@ -146,4 +155,3 @@ Once you restart Cursor and the MCP server connects, you can:
 **Status**: ✅ **Configuration Updated - Add GitHub Secret to Complete**
 
 **Action**: Add `SONAR_TOKEN` secret to GitHub repository
-

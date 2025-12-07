@@ -1,445 +1,445 @@
 // Simple Swagger configuration for browser environment
 export const swaggerSpec = {
-  openapi: '3.0.0',
+  openapi: "3.0.0",
   info: {
-    title: 'Elzatona Learning Platform API',
-    version: '1.0.0',
+    title: "Elzatona Learning Platform API",
+    version: "1.0.0",
     description:
-      'Comprehensive API documentation for the Elzatona Learning Platform',
+      "Comprehensive API documentation for the Elzatona Learning Platform",
     contact: {
-      name: 'Elzatona Team',
-      email: 'support@elzatona.com',
+      name: "Elzatona Team",
+      email: "support@elzatona.com",
     },
     license: {
-      name: 'MIT',
-      url: 'https://opensource.org/licenses/MIT',
+      name: "MIT",
+      url: "https://opensource.org/licenses/MIT",
     },
   },
   servers: [
     {
-      url: 'http://localhost:3000',
-      description: 'Development server',
+      url: "http://localhost:3000",
+      description: "Development server",
     },
     {
-      url: 'https://api.elzatona.com',
-      description: 'Production server',
+      url: "https://api.elzatona.com",
+      description: "Production server",
     },
   ],
   components: {
     securitySchemes: {
       BearerAuth: {
-        type: 'http',
-        scheme: 'bearer',
-        bearerFormat: 'JWT',
-        description: 'JWT token for authentication',
+        type: "http",
+        scheme: "bearer",
+        bearerFormat: "JWT",
+        description: "JWT token for authentication",
       },
       AdminAuth: {
-        type: 'http',
-        scheme: 'bearer',
-        bearerFormat: 'JWT',
-        description: 'Admin JWT token for admin operations',
+        type: "http",
+        scheme: "bearer",
+        bearerFormat: "JWT",
+        description: "Admin JWT token for admin operations",
       },
     },
     schemas: {
       Error: {
-        type: 'object',
+        type: "object",
         properties: {
           success: {
-            type: 'boolean',
+            type: "boolean",
             example: false,
           },
           error: {
-            type: 'string',
-            example: 'Error message',
+            type: "string",
+            example: "Error message",
           },
         },
       },
       Success: {
-        type: 'object',
+        type: "object",
         properties: {
           success: {
-            type: 'boolean',
+            type: "boolean",
             example: true,
           },
           message: {
-            type: 'string',
-            example: 'Operation successful',
+            type: "string",
+            example: "Operation successful",
           },
         },
       },
       LearningCard: {
-        type: 'object',
+        type: "object",
         properties: {
           id: {
-            type: 'string',
-            example: 'card_123',
+            type: "string",
+            example: "card_123",
           },
           name: {
-            type: 'string',
-            example: 'Core Technologies',
+            type: "string",
+            example: "Core Technologies",
           },
           description: {
-            type: 'string',
-            example: 'Fundamental web technologies',
+            type: "string",
+            example: "Fundamental web technologies",
           },
           type: {
-            type: 'string',
+            type: "string",
             enum: [
-              'core-technologies',
-              'framework-questions',
-              'problem-solving',
-              'system-design',
-              'frontend-tasks',
+              "core-technologies",
+              "framework-questions",
+              "problem-solving",
+              "system-design",
+              "frontend-tasks",
             ],
-            example: 'core-technologies',
+            example: "core-technologies",
           },
           color: {
-            type: 'string',
-            example: '#3B82F6',
+            type: "string",
+            example: "#3B82F6",
           },
           icon: {
-            type: 'string',
-            example: 'Code',
+            type: "string",
+            example: "Code",
           },
           created_at: {
-            type: 'string',
-            format: 'date-time',
+            type: "string",
+            format: "date-time",
           },
           updated_at: {
-            type: 'string',
-            format: 'date-time',
+            type: "string",
+            format: "date-time",
           },
         },
       },
       LearningPlan: {
-        type: 'object',
+        type: "object",
         properties: {
           id: {
-            type: 'string',
-            example: 'plan_123',
+            type: "string",
+            example: "plan_123",
           },
           name: {
-            type: 'string',
-            example: '1 Day Plan',
+            type: "string",
+            example: "1 Day Plan",
           },
           description: {
-            type: 'string',
-            example: 'Quick learning plan for 1 day',
+            type: "string",
+            example: "Quick learning plan for 1 day",
           },
           duration: {
-            type: 'number',
+            type: "number",
             example: 1,
           },
           difficulty: {
-            type: 'string',
-            enum: ['beginner', 'intermediate', 'advanced'],
-            example: 'beginner',
+            type: "string",
+            enum: ["beginner", "intermediate", "advanced"],
+            example: "beginner",
           },
           topics: {
-            type: 'array',
+            type: "array",
             items: {
-              type: 'string',
+              type: "string",
             },
-            example: ['javascript', 'react', 'css'],
+            example: ["javascript", "react", "css"],
           },
           created_at: {
-            type: 'string',
-            format: 'date-time',
+            type: "string",
+            format: "date-time",
           },
           updated_at: {
-            type: 'string',
-            format: 'date-time',
+            type: "string",
+            format: "date-time",
           },
         },
       },
       Category: {
-        type: 'object',
+        type: "object",
         properties: {
           id: {
-            type: 'string',
-            example: 'cat_123',
+            type: "string",
+            example: "cat_123",
           },
           name: {
-            type: 'string',
-            example: 'JavaScript Fundamentals',
+            type: "string",
+            example: "JavaScript Fundamentals",
           },
           description: {
-            type: 'string',
-            example: 'Core JavaScript concepts',
+            type: "string",
+            example: "Core JavaScript concepts",
           },
           cardType: {
-            type: 'string',
-            example: 'core-technologies',
+            type: "string",
+            example: "core-technologies",
           },
           topics: {
-            type: 'array',
+            type: "array",
             items: {
-              type: 'string',
+              type: "string",
             },
-            example: ['topic_1', 'topic_2'],
+            example: ["topic_1", "topic_2"],
           },
           created_at: {
-            type: 'string',
-            format: 'date-time',
+            type: "string",
+            format: "date-time",
           },
           updated_at: {
-            type: 'string',
-            format: 'date-time',
+            type: "string",
+            format: "date-time",
           },
         },
       },
       Topic: {
-        type: 'object',
+        type: "object",
         properties: {
           id: {
-            type: 'string',
-            example: 'topic_123',
+            type: "string",
+            example: "topic_123",
           },
           name: {
-            type: 'string',
-            example: 'Variables and Data Types',
+            type: "string",
+            example: "Variables and Data Types",
           },
           description: {
-            type: 'string',
-            example: 'Understanding JavaScript variables',
+            type: "string",
+            example: "Understanding JavaScript variables",
           },
           categoryId: {
-            type: 'string',
-            example: 'cat_123',
+            type: "string",
+            example: "cat_123",
           },
           questions: {
-            type: 'array',
+            type: "array",
             items: {
-              type: 'string',
+              type: "string",
             },
-            example: ['q_1', 'q_2'],
+            example: ["q_1", "q_2"],
           },
           created_at: {
-            type: 'string',
-            format: 'date-time',
+            type: "string",
+            format: "date-time",
           },
           updated_at: {
-            type: 'string',
-            format: 'date-time',
+            type: "string",
+            format: "date-time",
           },
         },
       },
       Question: {
-        type: 'object',
+        type: "object",
         properties: {
           id: {
-            type: 'string',
-            example: 'q_123',
+            type: "string",
+            example: "q_123",
           },
           question: {
-            type: 'string',
-            example: 'What is a variable in JavaScript?',
+            type: "string",
+            example: "What is a variable in JavaScript?",
           },
           answer: {
-            type: 'string',
-            example: 'A variable is a container for storing data values.',
+            type: "string",
+            example: "A variable is a container for storing data values.",
           },
           explanation: {
-            type: 'string',
-            example: 'Variables are fundamental to programming...',
+            type: "string",
+            example: "Variables are fundamental to programming...",
           },
           difficulty: {
-            type: 'string',
-            enum: ['easy', 'medium', 'hard'],
-            example: 'easy',
+            type: "string",
+            enum: ["easy", "medium", "hard"],
+            example: "easy",
           },
           category: {
-            type: 'string',
-            example: 'cat_123',
+            type: "string",
+            example: "cat_123",
           },
           topic: {
-            type: 'string',
-            example: 'topic_123',
+            type: "string",
+            example: "topic_123",
           },
           tags: {
-            type: 'array',
+            type: "array",
             items: {
-              type: 'string',
+              type: "string",
             },
-            example: ['javascript', 'variables'],
+            example: ["javascript", "variables"],
           },
           created_at: {
-            type: 'string',
-            format: 'date-time',
+            type: "string",
+            format: "date-time",
           },
           updated_at: {
-            type: 'string',
-            format: 'date-time',
+            type: "string",
+            format: "date-time",
           },
         },
       },
       User: {
-        type: 'object',
+        type: "object",
         properties: {
           id: {
-            type: 'string',
-            example: 'user_123',
+            type: "string",
+            example: "user_123",
           },
           name: {
-            type: 'string',
-            example: 'John Doe',
+            type: "string",
+            example: "John Doe",
           },
           email: {
-            type: 'string',
-            format: 'email',
-            example: 'john@example.com',
+            type: "string",
+            format: "email",
+            example: "john@example.com",
           },
           role: {
-            type: 'string',
-            enum: ['user', 'premium_user', 'admin', 'super_admin'],
-            example: 'user',
+            type: "string",
+            enum: ["user", "premium_user", "admin", "super_admin"],
+            example: "user",
           },
           is_active: {
-            type: 'boolean',
+            type: "boolean",
             example: true,
           },
           created_at: {
-            type: 'string',
-            format: 'date-time',
+            type: "string",
+            format: "date-time",
           },
           lastLogin: {
-            type: 'string',
-            format: 'date-time',
+            type: "string",
+            format: "date-time",
           },
         },
       },
       AdminStats: {
-        type: 'object',
+        type: "object",
         properties: {
           questions: {
-            type: 'number',
+            type: "number",
             example: 150,
           },
           categories: {
-            type: 'number',
+            type: "number",
             example: 25,
           },
           topics: {
-            type: 'number',
+            type: "number",
             example: 75,
           },
           learningCards: {
-            type: 'number',
+            type: "number",
             example: 5,
           },
           learningPlans: {
-            type: 'number',
+            type: "number",
             example: 7,
           },
           frontendTasks: {
-            type: 'number',
+            type: "number",
             example: 30,
           },
           problemSolvingTasks: {
-            type: 'number',
+            type: "number",
             example: 20,
           },
           totalContent: {
-            type: 'number',
+            type: "number",
             example: 312,
           },
           recentActivity: {
-            type: 'array',
+            type: "array",
             items: {
-              type: 'object',
+              type: "object",
               properties: {
-                id: { type: 'string' },
-                action: { type: 'string' },
-                timestamp: { type: 'string', format: 'date-time' },
-                user: { type: 'string' },
-                details: { type: 'string' },
+                id: { type: "string" },
+                action: { type: "string" },
+                timestamp: { type: "string", format: "date-time" },
+                user: { type: "string" },
+                details: { type: "string" },
               },
             },
           },
           systemHealth: {
-            type: 'object',
+            type: "object",
             properties: {
-              databaseConnected: { type: 'boolean' },
-              lastUpdated: { type: 'string', format: 'date-time' },
-              apiResponseTime: { type: 'number' },
+              databaseConnected: { type: "boolean" },
+              lastUpdated: { type: "string", format: "date-time" },
+              apiResponseTime: { type: "number" },
             },
           },
         },
       },
       BackupData: {
-        type: 'object',
+        type: "object",
         properties: {
           id: {
-            type: 'string',
-            example: 'backup_123',
+            type: "string",
+            example: "backup_123",
           },
           name: {
-            type: 'string',
-            example: 'Daily Backup',
+            type: "string",
+            example: "Daily Backup",
           },
           description: {
-            type: 'string',
-            example: 'Automated daily backup',
+            type: "string",
+            example: "Automated daily backup",
           },
           collections: {
-            type: 'object',
+            type: "object",
             additionalProperties: {
-              type: 'array',
-              items: { type: 'object' },
+              type: "array",
+              items: { type: "object" },
             },
           },
           metadata: {
-            type: 'object',
+            type: "object",
             properties: {
-              created_at: { type: 'string', format: 'date-time' },
-              createdBy: { type: 'string' },
-              version: { type: 'string' },
-              totalDocuments: { type: 'number' },
-              collectionsCount: { type: 'number' },
+              created_at: { type: "string", format: "date-time" },
+              createdBy: { type: "string" },
+              version: { type: "string" },
+              totalDocuments: { type: "number" },
+              collectionsCount: { type: "number" },
             },
           },
           status: {
-            type: 'string',
-            enum: ['completed', 'failed', 'in_progress'],
-            example: 'completed',
+            type: "string",
+            enum: ["completed", "failed", "in_progress"],
+            example: "completed",
           },
           error: {
-            type: 'string',
-            example: 'Error message if failed',
+            type: "string",
+            example: "Error message if failed",
           },
         },
       },
       Notification: {
-        type: 'object',
+        type: "object",
         properties: {
           id: {
-            type: 'string',
-            example: 'notif_123',
+            type: "string",
+            example: "notif_123",
           },
           type: {
-            type: 'string',
-            enum: ['info', 'success', 'warning', 'error'],
-            example: 'success',
+            type: "string",
+            enum: ["info", "success", "warning", "error"],
+            example: "success",
           },
           title: {
-            type: 'string',
-            example: 'Backup Completed',
+            type: "string",
+            example: "Backup Completed",
           },
           message: {
-            type: 'string',
-            example: 'Daily backup has been completed successfully',
+            type: "string",
+            example: "Daily backup has been completed successfully",
           },
           userId: {
-            type: 'string',
-            example: 'user_123',
+            type: "string",
+            example: "user_123",
           },
           read: {
-            type: 'boolean',
+            type: "boolean",
             example: false,
           },
           created_at: {
-            type: 'string',
-            format: 'date-time',
+            type: "string",
+            format: "date-time",
           },
         },
       },
@@ -447,88 +447,88 @@ export const swaggerSpec = {
   },
   tags: [
     {
-      name: 'Authentication',
-      description: 'User and admin authentication endpoints',
+      name: "Authentication",
+      description: "User and admin authentication endpoints",
     },
     {
-      name: 'Learning Cards',
-      description: 'Manage learning cards and their configurations',
+      name: "Learning Cards",
+      description: "Manage learning cards and their configurations",
     },
     {
-      name: 'Learning Plans',
-      description: 'Manage learning plans and schedules',
+      name: "Learning Plans",
+      description: "Manage learning plans and schedules",
     },
     {
-      name: 'Categories',
-      description: 'Manage question categories',
+      name: "Categories",
+      description: "Manage question categories",
     },
     {
-      name: 'Topics',
-      description: 'Manage topics within categories',
+      name: "Topics",
+      description: "Manage topics within categories",
     },
     {
-      name: 'Questions',
-      description: 'Manage learning questions and content',
+      name: "Questions",
+      description: "Manage learning questions and content",
     },
     {
-      name: 'Frontend Tasks',
-      description: 'Manage frontend coding challenges',
+      name: "Frontend Tasks",
+      description: "Manage frontend coding challenges",
     },
     {
-      name: 'Problem Solving',
-      description: 'Manage algorithmic problem-solving tasks',
+      name: "Problem Solving",
+      description: "Manage algorithmic problem-solving tasks",
     },
     {
-      name: 'Learning Paths',
-      description: 'Manage learning paths and roadmaps',
+      name: "Learning Paths",
+      description: "Manage learning paths and roadmaps",
     },
     {
-      name: 'Admin',
-      description: 'Admin-only operations and statistics',
+      name: "Admin",
+      description: "Admin-only operations and statistics",
     },
     {
-      name: 'Users',
-      description: 'User management and profiles',
+      name: "Users",
+      description: "User management and profiles",
     },
     {
-      name: 'Notifications',
-      description: 'System notifications and alerts',
+      name: "Notifications",
+      description: "System notifications and alerts",
     },
     {
-      name: 'Backup',
-      description: 'Data backup and recovery operations',
+      name: "Backup",
+      description: "Data backup and recovery operations",
     },
     {
-      name: 'Logs',
-      description: 'System logs and monitoring',
+      name: "Logs",
+      description: "System logs and monitoring",
     },
   ],
   paths: {
-    '/api/cards': {
+    "/api/cards": {
       get: {
-        summary: 'Get all learning cards',
-        description: 'Retrieve all learning cards ordered by their order field',
-        tags: ['Learning Cards'],
+        summary: "Get all learning cards",
+        description: "Retrieve all learning cards ordered by their order field",
+        tags: ["Learning Cards"],
         responses: {
-          '200': {
-            description: 'Successfully retrieved learning cards',
+          "200": {
+            description: "Successfully retrieved learning cards",
             content: {
-              'application/json': {
+              "application/json": {
                 schema: {
-                  type: 'object',
+                  type: "object",
                   properties: {
                     success: {
-                      type: 'boolean',
+                      type: "boolean",
                       example: true,
                     },
                     data: {
-                      type: 'array',
+                      type: "array",
                       items: {
-                        $ref: '#/components/schemas/LearningCard',
+                        $ref: "#/components/schemas/LearningCard",
                       },
                     },
                     count: {
-                      type: 'number',
+                      type: "number",
                       example: 5,
                     },
                   },
@@ -536,12 +536,12 @@ export const swaggerSpec = {
               },
             },
           },
-          '500': {
-            description: 'Internal server error',
+          "500": {
+            description: "Internal server error",
             content: {
-              'application/json': {
+              "application/json": {
                 schema: {
-                  $ref: '#/components/schemas/Error',
+                  $ref: "#/components/schemas/Error",
                 },
               },
             },
@@ -549,46 +549,46 @@ export const swaggerSpec = {
         },
       },
       post: {
-        summary: 'Create a new learning card',
-        description: 'Create a new learning card with the provided data',
-        tags: ['Learning Cards'],
+        summary: "Create a new learning card",
+        description: "Create a new learning card with the provided data",
+        tags: ["Learning Cards"],
         requestBody: {
           required: true,
           content: {
-            'application/json': {
+            "application/json": {
               schema: {
-                type: 'object',
-                required: ['name', 'description', 'type'],
+                type: "object",
+                required: ["name", "description", "type"],
                 properties: {
                   name: {
-                    type: 'string',
-                    example: 'Core Technologies',
+                    type: "string",
+                    example: "Core Technologies",
                   },
                   description: {
-                    type: 'string',
-                    example: 'Fundamental web technologies',
+                    type: "string",
+                    example: "Fundamental web technologies",
                   },
                   type: {
-                    type: 'string',
+                    type: "string",
                     enum: [
-                      'core-technologies',
-                      'framework-questions',
-                      'problem-solving',
-                      'system-design',
-                      'frontend-tasks',
+                      "core-technologies",
+                      "framework-questions",
+                      "problem-solving",
+                      "system-design",
+                      "frontend-tasks",
                     ],
-                    example: 'core-technologies',
+                    example: "core-technologies",
                   },
                   color: {
-                    type: 'string',
-                    example: '#3B82F6',
+                    type: "string",
+                    example: "#3B82F6",
                   },
                   icon: {
-                    type: 'string',
-                    example: 'Code',
+                    type: "string",
+                    example: "Code",
                   },
                   order: {
-                    type: 'number',
+                    type: "number",
                     example: 1,
                   },
                 },
@@ -597,35 +597,35 @@ export const swaggerSpec = {
           },
         },
         responses: {
-          '200': {
-            description: 'Learning card created successfully',
+          "200": {
+            description: "Learning card created successfully",
             content: {
-              'application/json': {
+              "application/json": {
                 schema: {
-                  type: 'object',
+                  type: "object",
                   properties: {
                     success: {
-                      type: 'boolean',
+                      type: "boolean",
                       example: true,
                     },
                     data: {
-                      $ref: '#/components/schemas/LearningCard',
+                      $ref: "#/components/schemas/LearningCard",
                     },
                     message: {
-                      type: 'string',
-                      example: 'Card created successfully',
+                      type: "string",
+                      example: "Card created successfully",
                     },
                   },
                 },
               },
             },
           },
-          '500': {
-            description: 'Internal server error',
+          "500": {
+            description: "Internal server error",
             content: {
-              'application/json': {
+              "application/json": {
                 schema: {
-                  $ref: '#/components/schemas/Error',
+                  $ref: "#/components/schemas/Error",
                 },
               },
             },
@@ -633,40 +633,40 @@ export const swaggerSpec = {
         },
       },
     },
-    '/api/admin/stats': {
+    "/api/admin/stats": {
       get: {
-        summary: 'Get admin statistics',
+        summary: "Get admin statistics",
         description:
-          'Retrieve comprehensive statistics for the admin dashboard',
-        tags: ['Admin'],
+          "Retrieve comprehensive statistics for the admin dashboard",
+        tags: ["Admin"],
         security: [
           {
             AdminAuth: [],
           },
         ],
         responses: {
-          '200': {
-            description: 'Successfully retrieved admin statistics',
+          "200": {
+            description: "Successfully retrieved admin statistics",
             content: {
-              'application/json': {
+              "application/json": {
                 schema: {
-                  $ref: '#/components/schemas/AdminStats',
+                  $ref: "#/components/schemas/AdminStats",
                 },
               },
             },
           },
-          '500': {
-            description: 'Internal server error',
+          "500": {
+            description: "Internal server error",
             content: {
-              'application/json': {
+              "application/json": {
                 schema: {
-                  type: 'object',
+                  type: "object",
                   properties: {
                     error: {
-                      type: 'string',
+                      type: "string",
                     },
                     details: {
-                      type: 'string',
+                      type: "string",
                     },
                   },
                 },

@@ -5,7 +5,10 @@
 const fs = require('fs');
 const path = require('path');
 
-const questionsFile = path.join(__dirname, '../../../final-questions-v01/javascript-questions.json');
+const questionsFile = path.join(
+  __dirname,
+  '../../../final-questions-v01/javascript-questions.json'
+);
 
 // Placeholder - actual questions would be generated here
 const newQuestions = [];
@@ -22,5 +25,7 @@ existingQuestions.push(...newQuestions);
 // Write back
 fs.writeFileSync(questionsFile, JSON.stringify(existingQuestions, null, 2));
 
-console.log(`✅ Batch 10 for JavaScript: ${newQuestions.length} questions added`);
+console.log(
+  `✅ Batch 10 for JavaScript: ${newQuestions.length} questions added`
+);
 console.log(`📝 Total JavaScript questions: ${existingQuestions.length}`);

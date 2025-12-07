@@ -58,6 +58,7 @@ node Rest/scripts/update-topics.js
 ```
 
 This script will:
+
 - Read all questions from `html-questions.json` (and future question files)
 - Automatically detect new categories and topics
 - Update counts, difficulty distributions, and question type distributions
@@ -76,6 +77,7 @@ Categories are automatically created when you add questions with a new `category
 ```
 
 This will automatically create:
+
 - Category: "CSS"
 - Topic: "Layout" under CSS
 
@@ -86,6 +88,7 @@ Topics are automatically created when you add questions with a new `topic` field
 ### Manual Category/Topic Management
 
 You can manually edit `topics.json` to:
+
 - Add descriptions for categories and topics
 - Update metadata
 - Organize topics
@@ -107,6 +110,7 @@ You can manually edit `topics.json` to:
 ## Future Categories
 
 As you add questions for other technologies, new categories will be automatically created:
+
 - CSS
 - JavaScript
 - React
@@ -124,5 +128,3 @@ As you add questions for other technologies, new categories will be automaticall
 ## Scripts
 
 - `Rest/scripts/update-topics.js` - Updates topics.json from question files
-
-

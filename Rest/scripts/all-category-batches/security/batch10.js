@@ -5,7 +5,10 @@
 const fs = require('fs');
 const path = require('path');
 
-const questionsFile = path.join(__dirname, '../../../final-questions-v01/security-questions.json');
+const questionsFile = path.join(
+  __dirname,
+  '../../../final-questions-v01/security-questions.json'
+);
 
 // Placeholder - actual questions would be generated here
 const newQuestions = [];

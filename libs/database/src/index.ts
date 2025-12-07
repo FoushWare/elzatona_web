@@ -8,10 +8,10 @@ export type {
   QueryOptions,
   DatabaseResult,
   BatchResult,
-} from './lib/IDatabaseService';
+} from "./lib/IDatabaseService";
 
 // Database service implementations
-export { SupabaseDatabaseService } from './lib/SupabaseDatabaseService';
+export { SupabaseDatabaseService } from "./lib/SupabaseDatabaseService";
 
 // Context and hooks
 export {
@@ -20,14 +20,14 @@ export {
   useDatabaseService,
   createDatabaseService,
   DatabaseServiceFactory,
-} from './lib/DatabaseContext';
+} from "./lib/DatabaseContext";
 
 // Configuration
 export {
   getDatabaseConfig,
   getAppConfig,
   createDatabaseServiceFromEnv,
-} from './lib/appConfig';
+} from "./lib/appConfig";
 
 // Legacy exports for backward compatibility
-export * from './lib/database';
+export * from "./lib/database";

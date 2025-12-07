@@ -1,10 +1,10 @@
-'use client';
+"use client";
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
 // Note: This page uses hooks/API routes, not direct supabase client
 
-import { useParams, useRouter } from 'next/navigation';
-import { Editor } from '@monaco-editor/react';
+import { useParams, useRouter } from "next/navigation";
+import { Editor } from "@monaco-editor/react";
 import {
   ArrowLeft,
   Play,
@@ -16,9 +16,9 @@ import {
   Lightbulb,
   Eye,
   EyeOff,
-} from 'lucide-react';
-import { ProblemSolvingTask } from '../../../types/admin';
-import { ClientCodeRunner } from '@elzatona/shared-components';
+} from "lucide-react";
+import { ProblemSolvingTask } from "../../../types/admin";
+import { ClientCodeRunner } from "@elzatona/components";
 
 export default function ProblemSolvingTaskPage() {
   const params = useParams();
@@ -26,21 +26,21 @@ export default function ProblemSolvingTaskPage() {
   const [task, setTask] = useState<ProblemSolvingTask | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [userCode, setUserCode] = useState('');
+  const [userCode, setUserCode] = useState("");
   const [showSolution, setShowSolution] = useState(false);
-  const [activeTab, setActiveTab] = useState<'problem' | 'solution'>('problem');
+  const [activeTab, setActiveTab] = useState<"problem" | "solution">("problem");
   const [isDark, setIsDark] = useState(false);
 
   // Theme detection
   useEffect(() => {
-    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+    const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
     const updateTheme = () => {
       setIsDark(mediaQuery.matches);
     };
 
     updateTheme();
-    mediaQuery.addEventListener('change', updateTheme);
-    return () => mediaQuery.removeEventListener('change', updateTheme);
+    mediaQuery.addEventListener("change", updateTheme);
+    return () => mediaQuery.removeEventListener("change", updateTheme);
   }, []);
 
   // Fetch task data
@@ -58,11 +58,11 @@ export default function ProblemSolvingTaskPage() {
           setUserCode(data.data.starterCode);
           setError(null);
         } else {
-          setError(data.error || 'Failed to fetch task');
+          setError(data.error || "Failed to fetch task");
         }
       } catch (err) {
-        setError('Failed to fetch task');
-        console.error('Error fetching task:', err);
+        setError("Failed to fetch task");
+        console.error("Error fetching task:", err);
       } finally {
         setLoading(false);
       }
@@ -75,36 +75,36 @@ export default function ProblemSolvingTaskPage() {
 
   const getDifficultyColor = (difficulty: string) => {
     switch (difficulty) {
-      case 'easy':
-        return 'bg-green-600';
-      case 'medium':
-        return 'bg-yellow-600';
-      case 'hard':
-        return 'bg-red-600';
+      case "easy":
+        return "bg-green-600";
+      case "medium":
+        return "bg-yellow-600";
+      case "hard":
+        return "bg-red-600";
       default:
-        return 'bg-gray-600';
+        return "bg-gray-600";
     }
   };
 
   const getDifficultyIcon = (difficulty: string) => {
     switch (difficulty) {
-      case 'easy':
-        return '🟢';
-      case 'medium':
-        return '🟡';
-      case 'hard':
-        return '🔴';
+      case "easy":
+        return "🟢";
+      case "medium":
+        return "🟡";
+      case "hard":
+        return "🔴";
       default:
-        return '⚪';
+        return "⚪";
     }
   };
 
   if (loading) {
     return (
-      <div className='min-h-screen bg-gray-50 flex items-center justify-center'>
-        <div className='text-center'>
-          <div className='animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4'></div>
-          <p className='text-gray-600'>Loading problem...</p>
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+          <p className="text-gray-600">Loading problem...</p>
         </div>
       </div>
     );
@@ -112,18 +112,18 @@ export default function ProblemSolvingTaskPage() {
 
   if (error || !task) {
     return (
-      <div className='min-h-screen bg-gray-50 flex items-center justify-center'>
-        <div className='text-center'>
-          <div className='text-red-500 text-6xl mb-4'>⚠️</div>
-          <h2 className='text-2xl font-bold text-gray-900 mb-2'>
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="text-red-500 text-6xl mb-4">⚠️</div>
+          <h2 className="text-2xl font-bold text-gray-900 mb-2">
             Problem Not Found
           </h2>
-          <p className='text-gray-600 mb-4'>
-            {error || 'The requested problem could not be found.'}
+          <p className="text-gray-600 mb-4">
+            {error || "The requested problem could not be found."}
           </p>
           <button
-            onClick={() => router.push('/problem-solving')}
-            className='px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors'
+            onClick={() => router.push("/problem-solving")}
+            className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
           >
             Back to Problems
           </button>
@@ -135,43 +135,43 @@ export default function ProblemSolvingTaskPage() {
   return (
     <div
       className={`min-h-screen transition-colors duration-300 ${
-        isDark ? 'bg-gray-900' : 'bg-gray-50'
+        isDark ? "bg-gray-900" : "bg-gray-50"
       }`}
     >
       {/* Header */}
       <div
         className={`border-b transition-colors duration-300 ${
-          isDark ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'
+          isDark ? "bg-gray-800 border-gray-700" : "bg-white border-gray-200"
         }`}
       >
-        <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4'>
-          <div className='flex items-center justify-between'>
-            <div className='flex items-center gap-4'>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-4">
               <button
-                onClick={() => router.push('/problem-solving')}
+                onClick={() => router.push("/problem-solving")}
                 className={`flex items-center gap-2 px-3 py-2 rounded-lg transition-colors duration-200 ${
                   isDark
-                    ? 'text-gray-300 hover:text-white hover:bg-gray-700'
-                    : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'
+                    ? "text-gray-300 hover:text-white hover:bg-gray-700"
+                    : "text-gray-600 hover:text-gray-900 hover:bg-gray-100"
                 }`}
               >
-                <ArrowLeft className='w-4 h-4' />
+                <ArrowLeft className="w-4 h-4" />
                 Back to Problems
               </button>
-              <div className='h-6 w-px bg-gray-300 dark:bg-gray-600' />
-              <div className='flex items-center gap-3'>
-                <span className='text-2xl'>
+              <div className="h-6 w-px bg-gray-300 dark:bg-gray-600" />
+              <div className="flex items-center gap-3">
+                <span className="text-2xl">
                   {getDifficultyIcon(task.difficulty)}
                 </span>
                 <div>
                   <h1
                     className={`text-xl font-semibold ${
-                      isDark ? 'text-white' : 'text-gray-900'
+                      isDark ? "text-white" : "text-gray-900"
                     }`}
                   >
                     {task.title}
                   </h1>
-                  <div className='flex items-center gap-2 mt-1'>
+                  <div className="flex items-center gap-2 mt-1">
                     <span
                       className={`px-2 py-1 text-xs font-medium rounded-full text-white ${getDifficultyColor(task.difficulty)}`}
                     >
@@ -181,8 +181,8 @@ export default function ProblemSolvingTaskPage() {
                     <span
                       className={`px-2 py-1 text-xs font-medium rounded-full ${
                         isDark
-                          ? 'bg-blue-600 text-white'
-                          : 'bg-blue-100 text-blue-800'
+                          ? "bg-blue-600 text-white"
+                          : "bg-blue-100 text-blue-800"
                       }`}
                     >
                       {task.category}
@@ -192,16 +192,16 @@ export default function ProblemSolvingTaskPage() {
               </div>
             </div>
 
-            <div className='flex items-center gap-3'>
+            <div className="flex items-center gap-3">
               <button
                 onClick={() => setUserCode(task.starterCode)}
                 className={`flex items-center gap-2 px-3 py-2 rounded-lg transition-colors duration-200 ${
                   isDark
-                    ? 'text-gray-300 hover:text-white hover:bg-gray-700'
-                    : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'
+                    ? "text-gray-300 hover:text-white hover:bg-gray-700"
+                    : "text-gray-600 hover:text-gray-900 hover:bg-gray-100"
                 }`}
               >
-                <RotateCcw className='w-4 h-4' />
+                <RotateCcw className="w-4 h-4" />
                 Reset Code
               </button>
               <button
@@ -209,41 +209,41 @@ export default function ProblemSolvingTaskPage() {
                 className={`flex items-center gap-2 px-3 py-2 rounded-lg transition-colors duration-200 ${
                   showSolution
                     ? isDark
-                      ? 'bg-red-600 hover:bg-red-700 text-white'
-                      : 'bg-red-500 hover:bg-red-600 text-white'
+                      ? "bg-red-600 hover:bg-red-700 text-white"
+                      : "bg-red-500 hover:bg-red-600 text-white"
                     : isDark
-                      ? 'text-gray-300 hover:text-white hover:bg-gray-700'
-                      : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'
+                      ? "text-gray-300 hover:text-white hover:bg-gray-700"
+                      : "text-gray-600 hover:text-gray-900 hover:bg-gray-100"
                 }`}
               >
                 {showSolution ? (
-                  <EyeOff className='w-4 h-4' />
+                  <EyeOff className="w-4 h-4" />
                 ) : (
-                  <Eye className='w-4 h-4' />
+                  <Eye className="w-4 h-4" />
                 )}
-                {showSolution ? 'Hide Solution' : 'Show Solution'}
+                {showSolution ? "Hide Solution" : "Show Solution"}
               </button>
             </div>
           </div>
         </div>
       </div>
 
-      <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6'>
-        <div className='grid grid-cols-1 lg:grid-cols-2 gap-6'>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {/* Left Panel - Problem Description */}
           <div
             className={`rounded-lg border transition-colors duration-300 ${
               isDark
-                ? 'bg-gray-800 border-gray-700'
-                : 'bg-white border-gray-200'
+                ? "bg-gray-800 border-gray-700"
+                : "bg-white border-gray-200"
             }`}
           >
-            <div className='p-6'>
-              <div className='flex items-center gap-2 mb-4'>
-                <Code className='w-5 h-5 text-blue-600' />
+            <div className="p-6">
+              <div className="flex items-center gap-2 mb-4">
+                <Code className="w-5 h-5 text-blue-600" />
                 <h2
                   className={`text-lg font-semibold ${
-                    isDark ? 'text-white' : 'text-gray-900'
+                    isDark ? "text-white" : "text-gray-900"
                   }`}
                 >
                   Problem Description
@@ -252,12 +252,12 @@ export default function ProblemSolvingTaskPage() {
 
               <div
                 className={`prose prose-sm max-w-none ${
-                  isDark ? 'prose-invert' : ''
+                  isDark ? "prose-invert" : ""
                 }`}
               >
                 <p
                   className={`mb-4 ${
-                    isDark ? 'text-gray-300' : 'text-gray-700'
+                    isDark ? "text-gray-300" : "text-gray-700"
                   }`}
                 >
                   {task.description}
@@ -266,61 +266,61 @@ export default function ProblemSolvingTaskPage() {
 
               {/* Examples */}
               {task.examples && task.examples.length > 0 && (
-                <div className='mt-6'>
+                <div className="mt-6">
                   <h3
                     className={`text-md font-semibold mb-3 ${
-                      isDark ? 'text-white' : 'text-gray-900'
+                      isDark ? "text-white" : "text-gray-900"
                     }`}
                   >
                     Examples
                   </h3>
-                  <div className='space-y-3'>
+                  <div className="space-y-3">
                     {task.examples.map((example, index) => (
                       <div
                         key={index}
                         className={`p-4 rounded-lg border ${
                           isDark
-                            ? 'bg-gray-700 border-gray-600'
-                            : 'bg-gray-50 border-gray-200'
+                            ? "bg-gray-700 border-gray-600"
+                            : "bg-gray-50 border-gray-200"
                         }`}
                       >
-                        <div className='text-sm'>
-                          <div className='mb-2'>
+                        <div className="text-sm">
+                          <div className="mb-2">
                             <span
                               className={`font-medium ${
-                                isDark ? 'text-gray-300' : 'text-gray-600'
+                                isDark ? "text-gray-300" : "text-gray-600"
                               }`}
                             >
                               Example {index + 1}:
                             </span>
                           </div>
-                          <div className='mb-1'>
+                          <div className="mb-1">
                             <span
                               className={`font-medium ${
-                                isDark ? 'text-gray-300' : 'text-gray-600'
+                                isDark ? "text-gray-300" : "text-gray-600"
                               }`}
                             >
-                              Input:{' '}
+                              Input:{" "}
                             </span>
                             <span
                               className={`font-mono ${
-                                isDark ? 'text-gray-200' : 'text-gray-800'
+                                isDark ? "text-gray-200" : "text-gray-800"
                               }`}
                             >
                               {example.input}
                             </span>
                           </div>
-                          <div className='mb-1'>
+                          <div className="mb-1">
                             <span
                               className={`font-medium ${
-                                isDark ? 'text-gray-300' : 'text-gray-600'
+                                isDark ? "text-gray-300" : "text-gray-600"
                               }`}
                             >
-                              Output:{' '}
+                              Output:{" "}
                             </span>
                             <span
                               className={`font-mono ${
-                                isDark ? 'text-gray-200' : 'text-gray-800'
+                                isDark ? "text-gray-200" : "text-gray-800"
                               }`}
                             >
                               {example.output}
@@ -330,14 +330,14 @@ export default function ProblemSolvingTaskPage() {
                             <div>
                               <span
                                 className={`font-medium ${
-                                  isDark ? 'text-gray-300' : 'text-gray-600'
+                                  isDark ? "text-gray-300" : "text-gray-600"
                                 }`}
                               >
-                                Explanation:{' '}
+                                Explanation:{" "}
                               </span>
                               <span
                                 className={`${
-                                  isDark ? 'text-gray-200' : 'text-gray-800'
+                                  isDark ? "text-gray-200" : "text-gray-800"
                                 }`}
                               >
                                 {example.explanation}
@@ -353,23 +353,23 @@ export default function ProblemSolvingTaskPage() {
 
               {/* Constraints */}
               {task.constraints && task.constraints.length > 0 && (
-                <div className='mt-6'>
+                <div className="mt-6">
                   <h3
                     className={`text-md font-semibold mb-3 ${
-                      isDark ? 'text-white' : 'text-gray-900'
+                      isDark ? "text-white" : "text-gray-900"
                     }`}
                   >
                     Constraints
                   </h3>
                   <ul
                     className={`space-y-1 ${
-                      isDark ? 'text-gray-300' : 'text-gray-700'
+                      isDark ? "text-gray-300" : "text-gray-700"
                     }`}
                   >
                     {task.constraints.map((constraint, index) => (
-                      <li key={index} className='flex items-start gap-2'>
-                        <span className='text-gray-500 mt-1'>•</span>
-                        <span className='text-sm'>{constraint}</span>
+                      <li key={index} className="flex items-start gap-2">
+                        <span className="text-gray-500 mt-1">•</span>
+                        <span className="text-sm">{constraint}</span>
                       </li>
                     ))}
                   </ul>
@@ -378,22 +378,22 @@ export default function ProblemSolvingTaskPage() {
 
               {/* Tags */}
               {task.tags && task.tags.length > 0 && (
-                <div className='mt-6'>
+                <div className="mt-6">
                   <h3
                     className={`text-md font-semibold mb-3 ${
-                      isDark ? 'text-white' : 'text-gray-900'
+                      isDark ? "text-white" : "text-gray-900"
                     }`}
                   >
                     Tags
                   </h3>
-                  <div className='flex flex-wrap gap-2'>
+                  <div className="flex flex-wrap gap-2">
                     {task.tags.map((tag, index) => (
                       <span
                         key={index}
                         className={`px-2 py-1 text-xs rounded-full ${
                           isDark
-                            ? 'bg-blue-600 text-white'
-                            : 'bg-blue-100 text-blue-800'
+                            ? "bg-blue-600 text-white"
+                            : "bg-blue-100 text-blue-800"
                         }`}
                       >
                         {tag}
@@ -409,49 +409,49 @@ export default function ProblemSolvingTaskPage() {
           <div
             className={`rounded-lg border transition-colors duration-300 ${
               isDark
-                ? 'bg-gray-800 border-gray-700'
-                : 'bg-white border-gray-200'
+                ? "bg-gray-800 border-gray-700"
+                : "bg-white border-gray-200"
             }`}
           >
-            <div className='p-6'>
-              <div className='flex items-center justify-between mb-4'>
-                <div className='flex items-center gap-2'>
-                  <Play className='w-5 h-5 text-green-600' />
+            <div className="p-6">
+              <div className="flex items-center justify-between mb-4">
+                <div className="flex items-center gap-2">
+                  <Play className="w-5 h-5 text-green-600" />
                   <h2
                     className={`text-lg font-semibold ${
-                      isDark ? 'text-white' : 'text-gray-900'
+                      isDark ? "text-white" : "text-gray-900"
                     }`}
                   >
                     Code Editor
                   </h2>
                 </div>
-                <div className='flex items-center gap-2 text-sm text-gray-500'>
+                <div className="flex items-center gap-2 text-sm text-gray-500">
                   <span>Function: {task.functionName}</span>
                 </div>
               </div>
 
               {/* Code Editor */}
-              <div className='mb-6'>
+              <div className="mb-6">
                 <Editor
-                  height='400px'
-                  language='javascript'
-                  theme={isDark ? 'vs-dark' : 'vs-light'}
+                  height="400px"
+                  language="javascript"
+                  theme={isDark ? "vs-dark" : "vs-light"}
                   value={showSolution ? task.solution : userCode}
-                  onChange={value => {
+                  onChange={(value) => {
                     if (!showSolution) {
-                      setUserCode(value || '');
+                      setUserCode(value || "");
                     }
                   }}
                   options={{
                     minimap: { enabled: false },
                     fontSize: 14,
-                    lineNumbers: 'on',
+                    lineNumbers: "on",
                     roundedSelection: false,
                     scrollBeyondLastLine: false,
                     automaticLayout: true,
                     tabSize: 2,
                     insertSpaces: true,
-                    wordWrap: 'on',
+                    wordWrap: "on",
                     readOnly: showSolution,
                   }}
                 />
@@ -461,7 +461,7 @@ export default function ProblemSolvingTaskPage() {
               <div>
                 <h3
                   className={`text-md font-semibold mb-3 ${
-                    isDark ? 'text-white' : 'text-gray-900'
+                    isDark ? "text-white" : "text-gray-900"
                   }`}
                 >
                   Test Runner
@@ -474,13 +474,13 @@ export default function ProblemSolvingTaskPage() {
               </div>
 
               {/* Hints */}
-              {task.tags && task.tags.includes('hint') && (
-                <div className='mt-6'>
-                  <div className='flex items-center gap-2 mb-3'>
-                    <Lightbulb className='w-4 h-4 text-yellow-500' />
+              {task.tags && task.tags.includes("hint") && (
+                <div className="mt-6">
+                  <div className="flex items-center gap-2 mb-3">
+                    <Lightbulb className="w-4 h-4 text-yellow-500" />
                     <h3
                       className={`text-md font-semibold ${
-                        isDark ? 'text-white' : 'text-gray-900'
+                        isDark ? "text-white" : "text-gray-900"
                       }`}
                     >
                       Hints
@@ -489,13 +489,13 @@ export default function ProblemSolvingTaskPage() {
                   <div
                     className={`p-4 rounded-lg border ${
                       isDark
-                        ? 'bg-yellow-900/20 border-yellow-700'
-                        : 'bg-yellow-50 border-yellow-200'
+                        ? "bg-yellow-900/20 border-yellow-700"
+                        : "bg-yellow-50 border-yellow-200"
                     }`}
                   >
                     <p
                       className={`text-sm ${
-                        isDark ? 'text-yellow-200' : 'text-yellow-800'
+                        isDark ? "text-yellow-200" : "text-yellow-800"
                       }`}
                     >
                       💡 Think about the problem constraints and try to optimize

@@ -1,8 +1,13 @@
 # Task ID: S-001
+
 # Title: Navigation Component
+
 # Status: pending
-# Dependencies: 
+
+# Dependencies:
+
 # Priority: medium
+
 # Description: Test the Navigation component used across the application, including navigation links, dark mode toggle, responsive design, and authentication state handling.
 
 # Details:
@@ -10,6 +15,7 @@
 ## Time Estimation
 
 ### Manual Testing
+
 - **Estimated Time**: 20-30 minutes
 - **Breakdown**:
   - Test component rendering: 3-5 minutes
@@ -21,6 +27,7 @@
 - **Dependencies**: Router, authentication context
 
 ### Automated Testing
+
 - **Estimated Time**: 10-15 minutes (first run), 1-2 minutes (subsequent runs)
 - **Breakdown**:
   - Unit tests setup and execution: 4-6 minutes
@@ -30,6 +37,7 @@
 - **Dependencies**: Router mocks, auth mocks
 
 ### Total Time
+
 - **Manual Only**: 20-30 minutes
 - **Automated Only**: 10-15 minutes (first run), 1-2 minutes (subsequent)
 - **Both Manual + Automated**: 30-45 minutes (first run), 21-32 minutes (subsequent)
@@ -37,6 +45,7 @@
 ---
 
 ## Overview
+
 Test the Navigation component used across the application, including navigation links, dark mode toggle, responsive design, and authentication state handling.
 
 ## Manual Testing Steps

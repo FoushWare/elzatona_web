@@ -9,10 +9,10 @@ export interface CartItem {
   addedAt: number;
 }
 
-const STORAGE_KEY = 'question-cart:v1';
+const STORAGE_KEY = "question-cart:v1";
 
 export function loadCart(): CartItem[] {
-  if (typeof window === 'undefined') return [];
+  if (typeof window === "undefined") return [];
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
     return raw ? (JSON.parse(raw) as CartItem[]) : [];
@@ -22,7 +22,7 @@ export function loadCart(): CartItem[] {
 }
 
 export function saveCart(items: CartItem[]) {
-  if (typeof window === 'undefined') return;
+  if (typeof window === "undefined") return;
   try {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(items));
   } catch (_) {}
@@ -30,13 +30,13 @@ export function saveCart(items: CartItem[]) {
 
 export function addToCart(item: CartItem) {
   const items = loadCart();
-  if (items.some(i => i.id === item.id)) return;
+  if (items.some((i) => i.id === item.id)) return;
   items.unshift(item);
   saveCart(items);
 }
 
 export function removeFromCart(questionId: string) {
-  saveCart(loadCart().filter(i => i.id !== questionId));
+  saveCart(loadCart().filter((i) => i.id !== questionId));
 }
 
 export function clearCart() {

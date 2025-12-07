@@ -5,12 +5,15 @@
 ### 📋 Test Files Included
 
 **Unit Tests:**
+
 - `apps/website/src/app/admin/login/page.test.tsx`
 
 **Integration Tests:**
+
 - `apps/website/src/app/admin/login/page.integration.test.tsx`
 
 **E2E Tests:**
+
 - `tests/e2e/admin/admin-login.spec.ts`
 - `tests/e2e/admin/admin-login.basic.spec.ts`
 - `tests/e2e/admin/admin-login.validation.spec.ts`
@@ -203,12 +206,12 @@ npx jest apps/website/src/app/admin/login/page.test.tsx \
 
 ## 📝 Quick Reference
 
-| Test Type | Command | Coverage |
-|-----------|---------|----------|
-| **Unit** | `npx jest apps/website/src/app/admin/login/page.test.tsx --config=apps/website/jest.config.js` | Add `--coverage` |
-| **Integration** | `npx jest apps/website/src/app/admin/login/page.integration.test.tsx --config=apps/website/jest.config.js` | Add `--coverage` |
-| **E2E** | `npm run test:e2e:admin:login:split` | N/A |
-| **All** | `npm run test:admin-login` | `npm run test:admin-login:coverage` |
+| Test Type       | Command                                                                                                    | Coverage                            |
+| --------------- | ---------------------------------------------------------------------------------------------------------- | ----------------------------------- |
+| **Unit**        | `npx jest apps/website/src/app/admin/login/page.test.tsx --config=apps/website/jest.config.js`             | Add `--coverage`                    |
+| **Integration** | `npx jest apps/website/src/app/admin/login/page.integration.test.tsx --config=apps/website/jest.config.js` | Add `--coverage`                    |
+| **E2E**         | `npm run test:e2e:admin:login:split`                                                                       | N/A                                 |
+| **All**         | `npm run test:admin-login`                                                                                 | `npm run test:admin-login:coverage` |
 
 ---
 
@@ -237,4 +240,3 @@ ls -lh coverage/lcov.info
 ---
 
 **Note**: SonarQube will automatically run these tests in GitHub Actions, but it's recommended to run them locally first to catch issues early.
-

@@ -1,8 +1,13 @@
 # Task ID: S-002
+
 # Title: Question Card Component
+
 # Status: pending
-# Dependencies: 
+
+# Dependencies:
+
 # Priority: medium
+
 # Description: Test the Question Card component used to display questions across the application, including question text, answer options, interactions, and different question types.
 
 # Details:
@@ -10,6 +15,7 @@
 ## Time Estimation
 
 ### Manual Testing
+
 - **Estimated Time**: 25-35 minutes
 - **Breakdown**:
   - Test component rendering: 3-5 minutes
@@ -22,6 +28,7 @@
 - **Dependencies**: Question data, answer handling
 
 ### Automated Testing
+
 - **Estimated Time**: 12-18 minutes (first run), 2-3 minutes (subsequent runs)
 - **Breakdown**:
   - Unit tests setup and execution: 5-8 minutes
@@ -31,6 +38,7 @@
 - **Dependencies**: Question data mocks
 
 ### Total Time
+
 - **Manual Only**: 25-35 minutes
 - **Automated Only**: 12-18 minutes (first run), 2-3 minutes (subsequent)
 - **Both Manual + Automated**: 37-53 minutes (first run), 27-38 minutes (subsequent)
@@ -38,6 +46,7 @@
 ---
 
 ## Overview
+
 Test the Question Card component used to display questions across the application, including question text, answer options, interactions, and different question types.
 
 ## Manual Testing Steps

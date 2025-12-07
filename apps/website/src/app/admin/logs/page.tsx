@@ -3,9 +3,9 @@
 import React, { useState, useEffect } from 'react';
 // Note: This page uses API routes, not direct supabase client
 
-import { useAdminAuth } from '@elzatona/shared-contexts';
+import { useAdminAuth } from '@elzatona/contexts';
 // useRoleBasedAccess is not available - removed for now
-// import { useRoleBasedAccess } from '@elzatona/shared-hooks';
+// import { useRoleBasedAccess } from '@elzatona/hooks';
 import {
   Bug,
   AlertTriangle,
