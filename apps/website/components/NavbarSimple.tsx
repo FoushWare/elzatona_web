@@ -25,7 +25,7 @@ import {
   isSupabaseAvailable,
 } from '@/lib/supabase-client';
 import { clearSession } from '@/lib/auth-session';
-import { useLearningType } from "../context/LearningTypeContext";
+import { useLearningType } from "@/context/LearningTypeContext";
 
 export const NavbarSimple: React.FC = () => {
   const [isScrolled, setIsScrolled] = useState(false);
