@@ -36,24 +36,7 @@ global.fetch = jest.fn(() =>
 );
 
 // Mock lucide-react using the shared mock
-jest.mock('lucide-react', () => require('../../test-utils/mocks/lucide-react.tsx')); () => ({
-  BookOpen: () => <span>📖</span>,
-  Trash2: () => <span>🗑️</span>,
-  Play: () => <span>▶️</span>,
-  RotateCcw: () => <span>↻</span>,
-  ArrowLeft: () => <span>←</span>,
-  ArrowRight: () => <span>→</span>,
-  FlipHorizontal: () => <span>⇄</span>,
-  CheckCircle: () => <span>✅</span>,
-  XCircle: () => <span>❌</span>,
-  Shuffle: () => <span>🔀</span>,
-  Filter: () => <span>🔽</span>,
-  Target: () => <span>🎯</span>,
-  X: () => <span>✕</span>,
-  Eye: () => <span>👁️</span>,
-  EyeOff: () => <span>👁️‍🗨️</span>,
-  Loader2: () => <span>⏳</span>,
-}));
+jest.mock('lucide-react', () => require('../../test-utils/mocks/lucide-react.tsx'));
 
 describe('F-IT-010: Filtering Integration', () => {
   beforeEach(() => {
