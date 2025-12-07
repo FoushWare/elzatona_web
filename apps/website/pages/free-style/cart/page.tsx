@@ -7,7 +7,7 @@ import {
   removeFromCart,
   clearCart,
   CartItem,
-} from "../../../lib/cart";
+} from '@/lib/cart';
 import { ShoppingCart, Trash2, CheckCircle2, BookOpen } from "lucide-react";
 import { useLearningType } from "../../../context/LearningTypeContext";
 

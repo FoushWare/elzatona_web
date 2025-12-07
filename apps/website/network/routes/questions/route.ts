@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { supabaseOperations, supabase } from "../../../src/lib/supabase-server";
+import { supabaseOperations, supabase } from '@/lib/supabase-server';
 
 // GET /api/questions - Get all questions with optional filtering
 export async function GET(request: NextRequest) {

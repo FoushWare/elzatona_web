@@ -18,7 +18,7 @@ import {
   BookOpen,
   Loader2,
 } from "lucide-react";
-import { SupabaseLearningCardsService } from "../../../lib/supabase-learning-cards-service";
+import { SupabaseLearningCardsService } from '@/lib/supabase-learning-cards-service';
 import { CARD_TYPES } from "../../../types/learning-cards";
 import type {
   LearningCard,

@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from "react";
 import { supabaseClient as supabase } from "@/lib/supabase-client";
 
-import { SupabaseLearningCardsService } from "../../lib/supabase-learning-cards-service";
+import { SupabaseLearningCardsService } from '@/lib/supabase-learning-cards-service';
 import { LearningCard } from "../../types/learning-cards";
 
 export default function TestSupabasePage() {
