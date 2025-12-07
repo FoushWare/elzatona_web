@@ -3,36 +3,36 @@
 /**
  * Database Backup Export Script
  * Exports all tables from Supabase to SQL files for local backup and seeding
- * 
+ *
  * Usage: node scripts/export-database-backup.js
  */
 
-const fs = require('fs');
-const path = require('path');
+const fs = require("fs");
+const path = require("path");
 
 // Table export order (respecting foreign key dependencies)
 const TABLE_ORDER = [
   // Foundation tables (no dependencies)
-  'learning_cards',
-  'categories',
-  'topics',
-  'admin_users',
-  'admins',
-  
+  "learning_cards",
+  "categories",
+  "topics",
+  "admin_users",
+  "admins",
+
   // Dependent tables
-  'card_categories',
-  'plan_categories',
-  'learning_plans',
-  'plan_cards',
-  'questions',
-  'plan_questions',
-  'questions_topics',
-  
+  "card_categories",
+  "plan_categories",
+  "learning_plans",
+  "plan_cards",
+  "questions",
+  "plan_questions",
+  "questions_topics",
+
   // User data tables (can be empty for seeding)
-  'user_progress',
-  'question_attempts',
-  'problem_solving_tasks',
-  'frontend_tasks',
+  "user_progress",
+  "question_attempts",
+  "problem_solving_tasks",
+  "frontend_tasks",
 ];
 
 // SQL template for INSERT statements
@@ -43,64 +43,67 @@ function generateInsertSQL(tableName, rows) {
 
   // Get column names from first row
   const columns = Object.keys(rows[0]);
-  const columnList = columns.map(col => `"${col}"`).join(', ');
-  
+  const columnList = columns.map((col) => `"${col}"`).join(", ");
+
   let sql = `-- Table: ${tableName}\n-- Rows: ${rows.length}\n\n`;
-  
+
   // Generate INSERT statements in batches of 100
   const batchSize = 100;
   for (let i = 0; i < rows.length; i += batchSize) {
     const batch = rows.slice(i, i + batchSize);
     sql += `INSERT INTO "${tableName}" (${columnList}) VALUES\n`;
-    
+
     const values = batch.map((row, idx) => {
-      const rowValues = columns.map(col => {
+      const rowValues = columns.map((col) => {
         const value = row[col];
         if (value === null || value === undefined) {
-          return 'NULL';
+          return "NULL";
         }
-        if (typeof value === 'boolean') {
-          return value ? 'true' : 'false';
+        if (typeof value === "boolean") {
+          return value ? "true" : "false";
         }
-        if (typeof value === 'number') {
+        if (typeof value === "number") {
           return value.toString();
         }
-        if (typeof value === 'object') {
+        if (typeof value === "object") {
           // JSON/JSONB or arrays
           return `'${JSON.stringify(value).replace(/'/g, "''")}'::jsonb`;
         }
         // String - escape single quotes
         return `'${String(value).replace(/'/g, "''")}'`;
       });
-      return `  (${rowValues.join(', ')})`;
+      return `  (${rowValues.join(", ")})`;
     });
-    
-    sql += values.join(',\n') + ';\n\n';
+
+    sql += values.join(",\n") + ";\n\n";
   }
-  
+
   return sql;
 }
 
 // Main export function
 async function exportDatabase() {
-  console.log('📦 Starting database export...\n');
-  
-  const outputDir = path.join(__dirname, '..', 'database-backup');
+  console.log("📦 Starting database export...\n");
+
+  const outputDir = path.join(__dirname, "..", "database-backup");
   if (!fs.existsSync(outputDir)) {
     fs.mkdirSync(outputDir, { recursive: true });
   }
-  
-  const timestamp = new Date().toISOString().replace(/[:.]/g, '-').split('T')[0];
+
+  const timestamp = new Date()
+    .toISOString()
+    .replace(/[:.]/g, "-")
+    .split("T")[0];
   const schemaFile = path.join(outputDir, `schema-${timestamp}.sql`);
   const dataFile = path.join(outputDir, `data-${timestamp}.sql`);
   const combinedFile = path.join(outputDir, `full-backup-${timestamp}.sql`);
-  
+
   let schemaSQL = `-- Database Schema Export\n`;
   schemaSQL += `-- Generated: ${new Date().toISOString()}\n`;
   schemaSQL += `-- Project: Elzatona Web\n\n`;
   schemaSQL += `-- This file contains the database schema (table structures)\n`;
   schemaSQL += `-- Use this to recreate tables before importing data\n\n`;
-  
+
   let dataSQL = `-- Database Data Export\n`;
   dataSQL += `-- Generated: ${new Date().toISOString()}\n`;
   dataSQL += `-- Project: Elzatona Web\n\n`;
@@ -108,13 +111,13 @@ async function exportDatabase() {
   dataSQL += `-- Run this after creating tables from schema-*.sql\n\n`;
   dataSQL += `-- Disable foreign key checks temporarily (if needed)\n`;
   dataSQL += `-- SET session_replication_role = 'replica';\n\n`;
-  
-  console.log('⚠️  Note: This script generates a template.\n');
-  console.log('📝 To export actual data, you need to:');
-  console.log('   1. Use Supabase CLI: supabase db dump');
-  console.log('   2. Or use pg_dump directly');
-  console.log('   3. Or run SQL queries via MCP to export data\n');
-  
+
+  console.log("⚠️  Note: This script generates a template.\n");
+  console.log("📝 To export actual data, you need to:");
+  console.log("   1. Use Supabase CLI: supabase db dump");
+  console.log("   2. Or use pg_dump directly");
+  console.log("   3. Or run SQL queries via MCP to export data\n");
+
   // Generate instructions file
   const instructions = `# Database Backup Instructions
 
@@ -184,7 +187,7 @@ psql <connection-string> < database-backup/data-export.sql
 \`\`\`
 
 ## Table Export Order (for manual export)
-${TABLE_ORDER.map((t, i) => `${i + 1}. ${t}`).join('\n')}
+${TABLE_ORDER.map((t, i) => `${i + 1}. ${t}`).join("\n")}
 
 ## Important Notes
 - Always export schema before data
@@ -195,24 +198,18 @@ ${TABLE_ORDER.map((t, i) => `${i + 1}. ${t}`).join('\n')}
 `;
 
   fs.writeFileSync(
-    path.join(outputDir, 'EXPORT_INSTRUCTIONS.md'),
-    instructions
+    path.join(outputDir, "EXPORT_INSTRUCTIONS.md"),
+    instructions,
   );
-  
-  console.log('✅ Created export instructions:');
-  console.log(`   ${path.join(outputDir, 'EXPORT_INSTRUCTIONS.md')}\n`);
-  console.log('📋 Next steps:');
-  console.log('   1. Review EXPORT_INSTRUCTIONS.md');
-  console.log('   2. Choose an export method');
-  console.log('   3. Run the export commands');
-  console.log('   4. Verify the backup files\n');
+
+  console.log("✅ Created export instructions:");
+  console.log(`   ${path.join(outputDir, "EXPORT_INSTRUCTIONS.md")}\n`);
+  console.log("📋 Next steps:");
+  console.log("   1. Review EXPORT_INSTRUCTIONS.md");
+  console.log("   2. Choose an export method");
+  console.log("   3. Run the export commands");
+  console.log("   4. Verify the backup files\n");
 }
 
 // Run export
 exportDatabase().catch(console.error);
-
-
-
-
-
-

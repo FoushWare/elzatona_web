@@ -1,0 +1,636 @@
+[
+  {
+    "id": "next1-20-nextjs-q1",
+    "title": "What is Next.js?",
+    "content": "Next.js is a React framework for building full-stack web applications with features like server-side rendering (SSR), static site generation (SSG), file-based routing, and API routes.",
+    "type": "open-ended",
+    "category": "Next.js",
+    "topic": "Next.js Basics",
+    "difficulty": "beginner",
+    "learningCardId": "framework-questions",
+    "isActive": true,
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "createdBy": "admin",
+    "updatedBy": "admin",
+    "tags": ["nextjs", "next.js-basics", "beginner"],
+    "explanation": "Next.js simplifies React app development by providing built-in solutions for routing, data fetching, optimization, and deployment.",
+    "points": 4,
+    "sampleAnswers": [
+      "Next.js is a React framework that enables server-rendered, statically generated, and hybrid applications with zero config.",
+      "It provides features like file-based routing, API routes, image optimization, and middleware out of the box."
+    ],
+    "hints": [],
+    "metadata": {}
+  },
+  {
+    "id": "next1-20-nextjs-q2",
+    "title": "What are the main features of Next.js?",
+    "content": "Key features include: file-based routing, server-side rendering (SSR), static site generation (SSG), API routes, image optimization, automatic code splitting, and middleware.",
+    "type": "multiple-choice",
+    "category": "Next.js",
+    "topic": "Next.js Basics",
+    "difficulty": "intermediate",
+    "learningCardId": "framework-questions",
+    "isActive": true,
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "createdBy": "admin",
+    "updatedBy": "admin",
+    "tags": ["nextjs", "next.js-basics", "intermediate"],
+    "explanation": "These features enable full-stack development with optimized performance and SEO.",
+    "points": 6,
+    "options": [
+      {
+        "id": "a",
+        "text": "File-based routing, SSR/SSG, API routes, image optimization, middleware",
+        "isCorrect": true,
+        "explanation": ""
+      },
+      {
+        "id": "b",
+        "text": "Only client-side rendering",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "c",
+        "text": "No built-in routing",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "d",
+        "text": "Requires manual Webpack configuration",
+        "isCorrect": false,
+        "explanation": ""
+      }
+    ],
+    "hints": [],
+    "metadata": {}
+  },
+  {
+    "id": "next1-20-nextjs-q3",
+    "title": "What is the difference between Pages Router and App Router in Next.js?",
+    "content": "Pages Router uses the `pages/` directory with client-side navigation. App Router uses the `app/` directory with React Server Components, nested layouts, and streaming.",
+    "type": "open-ended",
+    "category": "Next.js",
+    "topic": "App Router vs Pages Router",
+    "difficulty": "advanced",
+    "learningCardId": "framework-questions",
+    "isActive": true,
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "createdBy": "admin",
+    "updatedBy": "admin",
+    "tags": ["nextjs", "app-router-vs-pages-router", "advanced"],
+    "explanation": "App Router is the modern architecture with server-first rendering, layouts, and better data fetching.",
+    "points": 8,
+    "sampleAnswers": [
+      "Pages Router: `pages/` directory, client-side navigation, no layouts. App Router: `app/` directory, React Server Components, nested layouts, and streaming support.",
+      "App Router enables partial rendering with Suspense and automatic code splitting by route."
+    ],
+    "hints": [],
+    "metadata": {}
+  },
+  {
+    "id": "next1-20-nextjs-q4",
+    "title": "What are React Server Components in Next.js?",
+    "content": "React Server Components (RSC) run only on the server, can access databases directly, and send only JSON to the client—reducing JavaScript bundle size.",
+    "type": "open-ended",
+    "category": "Next.js",
+    "topic": "React Server Components",
+    "difficulty": "advanced",
+    "learningCardId": "framework-questions",
+    "isActive": true,
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "createdBy": "admin",
+    "updatedBy": "admin",
+    "tags": ["nextjs", "react-server-components", "advanced"],
+    "explanation": "RSCs enable zero-bundle-size components and direct backend access without API layers.",
+    "points": 9,
+    "sampleAnswers": [
+      "Server Components run on the server, fetch data directly, and send serialized output to the client—no hydration needed.",
+      "They’re a core part of Next.js App Router, enabling highly optimized full-stack applications."
+    ],
+    "hints": [],
+    "metadata": {}
+  },
+  {
+    "id": "next1-20-nextjs-q5",
+    "title": "How does Next.js handle routing?",
+    "content": "Next.js uses file-based routing: files in `pages/` or `app/` automatically become routes based on their path.",
+    "type": "multiple-choice",
+    "category": "Next.js",
+    "topic": "Next.js Routing",
+    "difficulty": "intermediate",
+    "learningCardId": "framework-questions",
+    "isActive": true,
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "createdBy": "admin",
+    "updatedBy": "admin",
+    "tags": ["nextjs", "next.js-routing", "intermediate"],
+    "explanation": "No manual route configuration is needed—just create files in the correct directory structure.",
+    "points": 6,
+    "options": [
+      {
+        "id": "a",
+        "text": "File-based routing in pages/ or app/ directories",
+        "isCorrect": true,
+        "explanation": ""
+      },
+      {
+        "id": "b",
+        "text": "Manual route configuration with React Router",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "c",
+        "text": "Only hash-based routing",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "d",
+        "text": "Routing requires server setup",
+        "isCorrect": false,
+        "explanation": ""
+      }
+    ],
+    "hints": [],
+    "metadata": {}
+  },
+  {
+    "id": "next1-20-nextjs-q6",
+    "title": "What is getStaticProps in Next.js?",
+    "content": "`getStaticProps` is a Pages Router function that fetches data at build time for static generation (SSG).",
+    "type": "open-ended",
+    "category": "Next.js",
+    "topic": "Static Site Generation (SSG)",
+    "difficulty": "intermediate",
+    "learningCardId": "framework-questions",
+    "isActive": true,
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "createdBy": "admin",
+    "updatedBy": "admin",
+    "tags": ["nextjs", "static-site-generation-(ssg)", "intermediate"],
+    "explanation": "It runs only at build time and returns props to the page component.",
+    "points": 7,
+    "sampleAnswers": [
+      "`getStaticProps` fetches data during build and generates static HTML. It’s ideal for content that doesn’t change often, like blogs or docs.",
+      "It only works in the `pages/` directory and cannot be used in the App Router."
+    ],
+    "hints": [],
+    "metadata": {}
+  },
+  {
+    "id": "next1-20-nextjs-q7",
+    "title": "What is getServerSideProps in Next.js?",
+    "content": "`getServerSideProps` fetches data on every request for server-side rendering (SSR).",
+    "type": "open-ended",
+    "category": "Next.js",
+    "topic": "Server-Side Rendering (SSR)",
+    "difficulty": "intermediate",
+    "learningCardId": "framework-questions",
+    "isActive": true,
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "createdBy": "admin",
+    "updatedBy": "admin",
+    "tags": ["nextjs", "server-side-rendering-(ssr)", "intermediate"],
+    "explanation": "It runs on the server for every request, making it suitable for frequently changing or user-specific data.",
+    "points": 7,
+    "sampleAnswers": [
+      "`getServerSideProps` renders pages on the server per request—ideal for dashboards, real-time data, or authenticated views.",
+      "Like `getStaticProps`, it’s only available in the Pages Router (`pages/` directory)."
+    ],
+    "hints": [],
+    "metadata": {}
+  },
+  {
+    "id": "next1-20-nextjs-q8",
+    "title": "How do you fetch data in the App Router?",
+    "content": "In App Router, fetch data directly in Server Components using `async` components and the native `fetch()` API with automatic deduping and streaming.",
+    "type": "open-ended",
+    "category": "Next.js",
+    "topic": "App Router Data Fetching",
+    "difficulty": "advanced",
+    "learningCardId": "framework-questions",
+    "isActive": true,
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "createdBy": "admin",
+    "updatedBy": "admin",
+    "tags": ["nextjs", "app-router-data-fetching", "advanced"],
+    "explanation": "Next.js extends `fetch()` with caching, revalidation, and deduping—no need for `getStaticProps` or `getServerSideProps`.",
+    "points": 8,
+    "sampleAnswers": [
+      "Write async Server Components that call `fetch()` directly. Next.js handles caching and deduping automatically.",
+      "Example: `async function Page() { const res = await fetch('...'); const data = await res.json(); return <div>{data.title}</div>; }`"
+    ],
+    "hints": [],
+    "metadata": {}
+  },
+  {
+    "id": "next1-20-nextjs-q9",
+    "title": "What are API routes in Next.js?",
+    "content": "API routes allow you to create serverless API endpoints inside the `pages/api` directory (Pages Router) or `app/api` (App Router).",
+    "type": "multiple-choice",
+    "category": "Next.js",
+    "topic": "API Routes",
+    "difficulty": "intermediate",
+    "learningCardId": "framework-questions",
+    "isActive": true,
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "createdBy": "admin",
+    "updatedBy": "admin",
+    "tags": ["nextjs", "api-routes", "intermediate"],
+    "explanation": "Each file becomes an API endpoint, enabling full-stack apps without a separate backend.",
+    "points": 6,
+    "options": [
+      {
+        "id": "a",
+        "text": "Serverless functions in pages/api or app/api that handle HTTP requests",
+        "isCorrect": true,
+        "explanation": ""
+      },
+      {
+        "id": "b",
+        "text": "Only for client-side logic",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "c",
+        "text": "Require Express.js",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "d",
+        "text": "Not supported in Next.js",
+        "isCorrect": false,
+        "explanation": ""
+      }
+    ],
+    "hints": [],
+    "metadata": {}
+  },
+  {
+    "id": "next1-20-nextjs-q10",
+    "title": "What is ISR (Incremental Static Regeneration)?",
+    "content": "ISR allows you to update static content after build time by revalidating pages at a specified interval.",
+    "type": "open-ended",
+    "category": "Next.js",
+    "topic": "Incremental Static Regeneration",
+    "difficulty": "advanced",
+    "learningCardId": "framework-questions",
+    "isActive": true,
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "createdBy": "admin",
+    "updatedBy": "admin",
+    "tags": ["nextjs", "incremental-static-regeneration", "advanced"],
+    "explanation": "With `revalidate`, Next.js regenerates pages in the background when traffic hits them.",
+    "points": 8,
+    "sampleAnswers": [
+      "ISR combines the speed of SSG with the freshness of SSR. Use `revalidate: 60` in `getStaticProps` to update every 60 seconds.",
+      "It’s perfect for blogs, e-commerce, or dashboards where content changes periodically but doesn’t need real-time updates."
+    ],
+    "hints": [],
+    "metadata": {}
+  },
+  {
+    "id": "next1-20-nextjs-q11",
+    "title": "How do you handle authentication in Next.js?",
+    "content": "Use NextAuth.js (Auth.js) for built-in providers, or implement custom auth with cookies, JWT, and middleware in API routes or Server Components.",
+    "type": "open-ended",
+    "category": "Next.js",
+    "topic": "Authentication",
+    "difficulty": "advanced",
+    "learningCardId": "framework-questions",
+    "isActive": true,
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "createdBy": "admin",
+    "updatedBy": "admin",
+    "tags": ["nextjs", "authentication", "advanced"],
+    "explanation": "NextAuth.js integrates seamlessly with Next.js and supports OAuth, email, and credentials providers.",
+    "points": 8,
+    "sampleAnswers": [
+      "Use NextAuth.js for quick setup with providers like Google, GitHub, or custom credentials. Store sessions in cookies for SSR compatibility.",
+      "In App Router, protect routes using middleware that checks for valid session cookies before rendering Server Components."
+    ],
+    "hints": [],
+    "metadata": {}
+  },
+  {
+    "id": "next1-20-nextjs-q12",
+    "title": "What is middleware in Next.js?",
+    "content": "Middleware runs before a request is completed and can modify the request/response, rewrite URLs, or add headers.",
+    "type": "multiple-choice",
+    "category": "Next.js",
+    "topic": "Middleware",
+    "difficulty": "intermediate",
+    "learningCardId": "framework-questions",
+    "isActive": true,
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "createdBy": "admin",
+    "updatedBy": "admin",
+    "tags": ["nextjs", "middleware", "intermediate"],
+    "explanation": "It’s ideal for authentication, A/B testing, i18n, and bot protection.",
+    "points": 7,
+    "options": [
+      {
+        "id": "a",
+        "text": "Runs before request completion; can rewrite, redirect, or modify headers",
+        "isCorrect": true,
+        "explanation": ""
+      },
+      {
+        "id": "b",
+        "text": "Only for client-side logic",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "c",
+        "text": "Replaces API routes",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "d",
+        "text": "Not supported in App Router",
+        "isCorrect": false,
+        "explanation": ""
+      }
+    ],
+    "hints": [],
+    "metadata": {}
+  },
+  {
+    "id": "next1-20-nextjs-q13",
+    "title": "How does Next.js optimize images?",
+    "content": "Next.js uses the `next/image` component to automatically optimize images (resize, compress, modern formats) and lazy-load them.",
+    "type": "open-ended",
+    "category": "Next.js",
+    "topic": "Image Optimization",
+    "difficulty": "intermediate",
+    "learningCardId": "framework-questions",
+    "isActive": true,
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "createdBy": "admin",
+    "updatedBy": "admin",
+    "tags": ["nextjs", "image-optimization", "intermediate"],
+    "explanation": "It reduces bandwidth, improves LCP, and prevents layout shift with automatic sizing.",
+    "points": 7,
+    "sampleAnswers": [
+      "`next/image` serves optimized WebP/AVIF, resizes based on device, and lazy-loads offscreen images—no config needed.",
+      "It integrates with CDNs and local file storage, and supports blur-up placeholders."
+    ],
+    "hints": [],
+    "metadata": {}
+  },
+  {
+    "id": "next1-20-nextjs-q14",
+    "title": "What is the purpose of next.config.js?",
+    "content": "`next.config.js` is used to customize Next.js build settings, like Webpack, Babel, environment variables, and experimental features.",
+    "type": "multiple-choice",
+    "category": "Next.js",
+    "topic": "Next.js Configuration",
+    "difficulty": "intermediate",
+    "learningCardId": "framework-questions",
+    "isActive": true,
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "createdBy": "admin",
+    "updatedBy": "admin",
+    "tags": ["nextjs", "next.js-configuration", "intermediate"],
+    "explanation": "It’s optional but powerful for advanced customization without ejecting.",
+    "points": 6,
+    "options": [
+      {
+        "id": "a",
+        "text": "Customize Webpack, Babel, env vars, and experimental features",
+        "isCorrect": true,
+        "explanation": ""
+      },
+      {
+        "id": "b",
+        "text": "Required for every Next.js app",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "c",
+        "text": "Only for CSS configuration",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "d",
+        "text": "Replaces package.json",
+        "isCorrect": false,
+        "explanation": ""
+      }
+    ],
+    "hints": [],
+    "metadata": {}
+  },
+  {
+    "id": "next1-20-nextjs-q15",
+    "title": "How do you deploy a Next.js app?",
+    "content": "Deploy to Vercel (official platform), Netlify, AWS, or any Node.js-compatible host. Vercel provides automatic SSR/SSG, edge functions, and preview deployments.",
+    "type": "open-ended",
+    "category": "Next.js",
+    "topic": "Deployment on Vercel",
+    "difficulty": "intermediate",
+    "learningCardId": "framework-questions",
+    "isActive": true,
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "createdBy": "admin",
+    "updatedBy": "admin",
+    "tags": ["nextjs", "deployment-on-vercel", "intermediate"],
+    "explanation": "Vercel is optimized for Next.js with zero-config deployments and Git integration.",
+    "points": 6,
+    "sampleAnswers": [
+      "Push to GitHub and deploy on Vercel for automatic builds, preview URLs, and edge network caching.",
+      "For self-hosting, run `next build` and `next start` on a Node.js server—but you lose edge functions and ISR."
+    ],
+    "hints": [],
+    "metadata": {}
+  },
+  {
+    "id": "next1-20-nextjs-q16",
+    "title": "What are dynamic routes in Next.js?",
+    "content": "Dynamic routes use bracket syntax (`[id].js`) to create pages for dynamic data, like `/posts/1` or `/users/john`.",
+    "type": "multiple-choice",
+    "category": "Next.js",
+    "topic": "Dynamic Routes",
+    "difficulty": "intermediate",
+    "learningCardId": "framework-questions",
+    "isActive": true,
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "createdBy": "admin",
+    "updatedBy": "admin",
+    "tags": ["nextjs", "dynamic-routes", "intermediate"],
+    "explanation": "In Pages Router, use `getStaticPaths` for SSG; in App Router, use dynamic segments like `app/posts/[id]/page.js`.",
+    "points": 7,
+    "options": [
+      {
+        "id": "a",
+        "text": "Bracket-based routes like [id].js for dynamic data",
+        "isCorrect": true,
+        "explanation": ""
+      },
+      {
+        "id": "b",
+        "text": "Only static routes are supported",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "c",
+        "text": "Require manual React Router setup",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "d",
+        "text": "Not compatible with SSR",
+        "isCorrect": false,
+        "explanation": ""
+      }
+    ],
+    "hints": [],
+    "metadata": {}
+  },
+  {
+    "id": "next1-20-nextjs-q17",
+    "title": "How do you handle environment variables in Next.js?",
+    "content": "Prefix with `NEXT_PUBLIC_` to expose to the browser; others are server-only. Load from `.env.local`.",
+    "type": "open-ended",
+    "category": "Next.js",
+    "topic": "Environment Variables",
+    "difficulty": "intermediate",
+    "learningCardId": "framework-questions",
+    "isActive": true,
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "createdBy": "admin",
+    "updatedBy": "admin",
+    "tags": ["nextjs", "environment-variables", "intermediate"],
+    "explanation": "Non-prefixed variables are only available in Server Components and API routes—never exposed to client.",
+    "points": 6,
+    "sampleAnswers": [
+      "`NEXT_PUBLIC_API_URL` is available in the browser; `DATABASE_URL` is only in server code—keeping secrets safe.",
+      "Use `.env.local` for local development; Vercel lets you set env vars in the project dashboard."
+    ],
+    "hints": [],
+    "metadata": {}
+  },
+  {
+    "id": "next1-20-nextjs-q18",
+    "title": "What is the difference between SSG and SSR in Next.js?",
+    "content": "SSG (Static Site Generation) renders pages at build time. SSR (Server-Side Rendering) renders on every request.",
+    "type": "multiple-choice",
+    "category": "Next.js",
+    "topic": "SSG vs SSR",
+    "difficulty": "intermediate",
+    "learningCardId": "framework-questions",
+    "isActive": true,
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "createdBy": "admin",
+    "updatedBy": "admin",
+    "tags": ["nextjs", "ssg-vs-ssr", "intermediate"],
+    "explanation": "SSG is faster and cacheable; SSR is for dynamic, user-specific content.",
+    "points": 7,
+    "options": [
+      {
+        "id": "a",
+        "text": "SSG: build-time render; SSR: per-request render",
+        "isCorrect": true,
+        "explanation": ""
+      },
+      {
+        "id": "b",
+        "text": "SSR is always faster than SSG",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "c",
+        "text": "SSG doesn’t support dynamic data",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "d",
+        "text": "They are the same",
+        "isCorrect": false,
+        "explanation": ""
+      }
+    ],
+    "hints": [],
+    "metadata": {}
+  },
+  {
+    "id": "next1-20-nextjs-q19",
+    "title": "How do you implement layouts in Next.js?",
+    "content": "In App Router, use `layout.js` files for nested, persistent layouts. In Pages Router, use higher-order components or custom wrappers.",
+    "type": "open-ended",
+    "category": "Next.js",
+    "topic": "Layouts",
+    "difficulty": "intermediate",
+    "learningCardId": "framework-questions",
+    "isActive": true,
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "createdBy": "admin",
+    "updatedBy": "admin",
+    "tags": ["nextjs", "layouts", "intermediate"],
+    "explanation": "App Router’s `layout.js` is the modern, built-in way to share UI across routes.",
+    "points": 7,
+    "sampleAnswers": [
+      "In App Router, create `app/layout.js` to wrap all pages with a shared header/footer. Nested layouts are possible with folder structure.",
+      "Pages Router requires manual layout composition via component wrappers or context."
+    ],
+    "hints": [],
+    "metadata": {}
+  },
+  {
+    "id": "next1-20-nextjs-q20",
+    "title": "What is the purpose of the 'use client' directive?",
+    "content": "`'use client'` marks a file as a Client Component, enabling interactivity, hooks, and event handlers in the App Router.",
+    "type": "open-ended",
+    "category": "Next.js",
+    "topic": "Client Components",
+    "difficulty": "intermediate",
+    "learningCardId": "framework-questions",
+    "isActive": true,
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "createdBy": "admin",
+    "updatedBy": "admin",
+    "tags": ["nextjs", "client-components", "intermediate"],
+    "explanation": "By default, all components in App Router are Server Components. Use `'use client'` only when needed for interactivity.",
+    "points": 7,
+    "sampleAnswers": [
+      "`'use client'` at the top of a file enables useState, useEffect, and event handlers—turning it into a Client Component.",
+      "It should be used sparingly to keep bundles small and leverage Server Components for data fetching."
+    ],
+    "hints": [],
+    "metadata": {}
+  }
+]

@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 /**
  * Verify Test Admin User Setup
- * 
+ *
  * Verifies that:
  * 1. .env.test.local is configured correctly
  * 2. Admin user exists in the test database
@@ -48,7 +48,9 @@ if (!supabaseServiceKey) {
   console.error('❌ SUPABASE_SERVICE_ROLE_KEY not found in .env.test.local');
   console.error('\n📝 To get the service role key:');
   console.error('   1. Go to: https://supabase.com/dashboard');
-  console.error(`   2. Select project: ${supabaseUrl.match(/https:\/\/([^.]+)\.supabase\.co/)?.[1] || 'your-test-project'}`);
+  console.error(
+    `   2. Select project: ${supabaseUrl.match(/https:\/\/([^.]+)\.supabase\.co/)?.[1] || 'your-test-project'}`
+  );
   console.error('   3. Go to: Settings → API');
   console.error('   4. Scroll to "Project API keys"');
   console.error('   5. Click 👁️ next to "service_role"');
@@ -57,14 +59,18 @@ if (!supabaseServiceKey) {
 }
 
 if (!adminEmail || !adminPassword) {
-  console.error('❌ ADMIN_EMAIL or ADMIN_PASSWORD not found in .env.test.local');
+  console.error(
+    '❌ ADMIN_EMAIL or ADMIN_PASSWORD not found in .env.test.local'
+  );
   process.exit(1);
 }
 
 console.log('✅ Environment variables loaded:');
 console.log(`   📊 Supabase URL: ${supabaseUrl.substring(0, 40)}...`);
 console.log(`   📧 Admin Email: ${adminEmail}`);
-console.log(`   🔑 Service Role Key: ${supabaseServiceKey.substring(0, 20)}...\n`);
+console.log(
+  `   🔑 Service Role Key: ${supabaseServiceKey.substring(0, 20)}...\n`
+);
 
 // Create Supabase client
 const supabase = createClient(supabaseUrl, supabaseServiceKey, {
@@ -82,11 +88,18 @@ async function verifyAdmin() {
       .select('id')
       .limit(1);
 
-    if (tableError && (tableError.code === 'PGRST116' || tableError.code === '42P01')) {
+    if (
+      tableError &&
+      (tableError.code === 'PGRST116' || tableError.code === '42P01')
+    ) {
       console.error('❌ admin_users table does not exist!');
       console.error('\n📝 Please run the SQL schema first:');
-      console.error('   1. Go to: https://supabase.com/dashboard → Your Test Project → SQL Editor');
-      console.error('   2. Copy and paste the contents of: Rest/scripts/test-database-schema.sql');
+      console.error(
+        '   1. Go to: https://supabase.com/dashboard → Your Test Project → SQL Editor'
+      );
+      console.error(
+        '   2. Copy and paste the contents of: Rest/scripts/test-database-schema.sql'
+      );
       console.error('   3. Click "Run" to execute\n');
       process.exit(1);
     }
@@ -123,7 +136,9 @@ async function verifyAdmin() {
       process.exit(1);
     }
 
-    const isValidHash = adminData.password_hash.startsWith('$2b$') || adminData.password_hash.startsWith('$2a$');
+    const isValidHash =
+      adminData.password_hash.startsWith('$2b$') ||
+      adminData.password_hash.startsWith('$2a$');
     if (!isValidHash) {
       console.error('❌ Password hash is not bcrypt format!');
       console.error(`   Hash: ${adminData.password_hash.substring(0, 20)}...`);
@@ -133,13 +148,22 @@ async function verifyAdmin() {
     }
 
     // Test password verification
-    const passwordMatch = await bcrypt.compare(adminPassword, adminData.password_hash);
+    const passwordMatch = await bcrypt.compare(
+      adminPassword,
+      adminData.password_hash
+    );
     if (!passwordMatch) {
       console.error('❌ Password verification failed!');
-      console.error('   The password in .env.test.local does not match the stored hash.');
+      console.error(
+        '   The password in .env.test.local does not match the stored hash.'
+      );
       console.error('\n📝 To fix:');
-      console.error('   1. Verify ADMIN_PASSWORD in .env.test.local is correct');
-      console.error('   2. Or update the admin password: node Rest/scripts/create-test-admin.js\n');
+      console.error(
+        '   1. Verify ADMIN_PASSWORD in .env.test.local is correct'
+      );
+      console.error(
+        '   2. Or update the admin password: node Rest/scripts/create-test-admin.js\n'
+      );
       process.exit(1);
     }
 
@@ -153,7 +177,6 @@ async function verifyAdmin() {
     console.log('\n🔗 Test Login: http://localhost:3000/admin/login');
     console.log('\n🚀 You can now run E2E tests:');
     console.log('   npm run test:e2e\n');
-
   } catch (error) {
     console.error('❌ Error verifying admin:', error.message);
     console.error(error.stack);
@@ -163,5 +186,3 @@ async function verifyAdmin() {
 
 // Run verification
 verifyAdmin();
-
-

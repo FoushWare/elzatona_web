@@ -33,6 +33,7 @@ Or update `.cursor/mcp.json` directly with the token value.
 ## Token Permissions
 
 The token needs:
+
 - ✅ Read access to your projects
 - ✅ Read access to your organization (`FoushWare`)
 
@@ -51,4 +52,3 @@ SonarCloud Dashboard
 ---
 
 **Next Step**: Generate token and add to `.env.local` or `.cursor/mcp.json`
-

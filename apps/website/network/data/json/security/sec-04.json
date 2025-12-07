@@ -1,0 +1,305 @@
+[
+  {
+    "id": "sec-04-sec27",
+    "title": "What is CSRF (Cross-Site Request Forgery)?",
+    "content": "Explain what CSRF attacks are and how they affect web applications.",
+    "type": "open-ended",
+    "category": "Security",
+    "topic": "Cross-Site Request Forgery (CSRF)",
+    "difficulty": "intermediate",
+    "learningCardId": "system-design",
+    "isActive": true,
+    "createdAt": "2025-10-11T00:27:00.000Z",
+    "updatedAt": "2025-10-11T00:27:00.000Z",
+    "createdBy": "admin",
+    "updatedBy": "admin",
+    "tags": [
+      "security",
+      "cross-site-request-forgery-csrf",
+      "csrf",
+      "intermediate"
+    ],
+    "explanation": "CSRF occurs when an attacker tricks a logged-in user into submitting requests on a web application without their knowledge, performing actions like changing passwords or making transactions.",
+    "points": 10,
+    "sampleAnswers": [
+      "CSRF occurs when an attacker tricks a logged-in user into submitting requests on a web application without their knowledge, performing actions like changing passwords or making transactions."
+    ],
+    "subcategory": "CSRF",
+    "hints": [],
+    "metadata": {}
+  },
+  {
+    "id": "sec-04-sec28",
+    "title": "How can you prevent CSRF attacks?",
+    "content": "Select all correct methods to prevent CSRF.",
+    "type": "multiple-choice",
+    "category": "Security",
+    "topic": "Cross-Site Request Forgery (CSRF)",
+    "difficulty": "intermediate",
+    "learningCardId": "system-design",
+    "isActive": true,
+    "createdAt": "2025-10-11T00:28:00.000Z",
+    "updatedAt": "2025-10-11T00:28:00.000Z",
+    "createdBy": "admin",
+    "updatedBy": "admin",
+    "tags": [
+      "security",
+      "cross-site-request-forgery-csrf",
+      "csrf",
+      "intermediate"
+    ],
+    "explanation": "Anti-CSRF tokens, SameSite cookies, and validating headers are standard defenses; disabling HTTPS weakens security.",
+    "points": 10,
+    "options": [
+      {
+        "id": "o1",
+        "text": "Use anti-CSRF tokens in forms",
+        "isCorrect": true,
+        "explanation": ""
+      },
+      {
+        "id": "o2",
+        "text": "Use SameSite cookie attributes",
+        "isCorrect": true,
+        "explanation": ""
+      },
+      {
+        "id": "o3",
+        "text": "Disable HTTPS",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "o4",
+        "text": "Validate origin and referer headers",
+        "isCorrect": true,
+        "explanation": ""
+      }
+    ],
+    "subcategory": "CSRF",
+    "hints": [],
+    "metadata": {}
+  },
+  {
+    "id": "sec-04-sec29",
+    "title": "True or False: XSS attacks can be used to bypass CSRF protections.",
+    "content": "Evaluate the statement.",
+    "type": "true-false",
+    "category": "Security",
+    "topic": "Web Security Fundamentals",
+    "difficulty": "intermediate",
+    "learningCardId": "system-design",
+    "isActive": true,
+    "createdAt": "2025-10-11T00:29:00.000Z",
+    "updatedAt": "2025-10-11T00:29:00.000Z",
+    "createdBy": "admin",
+    "updatedBy": "admin",
+    "tags": [
+      "security",
+      "web-security-fundamentals",
+      "xss & csrf",
+      "intermediate"
+    ],
+    "explanation": "The correct answer is: True",
+    "points": 10,
+    "options": [
+      {
+        "id": "t1",
+        "text": "True",
+        "isCorrect": true,
+        "explanation": "An XSS vulnerability can allow an attacker to execute scripts that perform CSRF-like actions using the victim’s credentials."
+      },
+      {
+        "id": "t2",
+        "text": "False",
+        "isCorrect": false,
+        "explanation": ""
+      }
+    ],
+    "subcategory": "XSS & CSRF",
+    "hints": [],
+    "metadata": {}
+  },
+  {
+    "id": "sec-04-sec30",
+    "title": "What is the role of Content Security Policy (CSP) in web security?",
+    "content": "Explain how CSP helps protect frontend applications.",
+    "type": "open-ended",
+    "category": "Security",
+    "topic": "Content Security Policy (CSP)",
+    "difficulty": "intermediate",
+    "learningCardId": "system-design",
+    "isActive": true,
+    "createdAt": "2025-10-11T00:30:00.000Z",
+    "updatedAt": "2025-10-11T00:30:00.000Z",
+    "createdBy": "admin",
+    "updatedBy": "admin",
+    "tags": ["security", "content-security-policy-csp", "csp", "intermediate"],
+    "explanation": "CSP defines allowed sources for scripts, styles, images, and other resources, mitigating XSS, clickjacking, and data injection by restricting what can be loaded or executed.",
+    "points": 10,
+    "sampleAnswers": [
+      "CSP defines allowed sources for scripts, styles, images, and other resources, mitigating XSS, clickjacking, and data injection by restricting what can be loaded or executed."
+    ],
+    "subcategory": "CSP",
+    "hints": [],
+    "metadata": {}
+  },
+  {
+    "id": "sec-04-sec31",
+    "title": "Select the correct ways to implement CSP.",
+    "content": "Choose all that apply.",
+    "type": "multiple-choice",
+    "category": "Security",
+    "topic": "Content Security Policy (CSP)",
+    "difficulty": "intermediate",
+    "learningCardId": "system-design",
+    "isActive": true,
+    "createdAt": "2025-10-11T00:31:00.000Z",
+    "updatedAt": "2025-10-11T00:31:00.000Z",
+    "createdBy": "admin",
+    "updatedBy": "admin",
+    "tags": ["security", "content-security-policy-csp", "csp", "intermediate"],
+    "explanation": "CSP works via meta tags or headers, and whitelisting trusted sources restricts malicious content.",
+    "points": 10,
+    "options": [
+      {
+        "id": "o1",
+        "text": "Use meta tag in HTML",
+        "isCorrect": true,
+        "explanation": ""
+      },
+      {
+        "id": "o2",
+        "text": "Set HTTP response headers",
+        "isCorrect": true,
+        "explanation": ""
+      },
+      {
+        "id": "o3",
+        "text": "Rely solely on HTTPS",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "o4",
+        "text": "Whitelist only trusted sources",
+        "isCorrect": true,
+        "explanation": ""
+      }
+    ],
+    "subcategory": "CSP",
+    "hints": [],
+    "metadata": {}
+  },
+  {
+    "id": "sec-04-sec32",
+    "title": "What is the Same-Origin Policy (SOP) and why is it important?",
+    "content": "Explain SOP and its significance in web security.",
+    "type": "open-ended",
+    "category": "Security",
+    "topic": "Web Security Fundamentals",
+    "difficulty": "intermediate",
+    "learningCardId": "system-design",
+    "isActive": true,
+    "createdAt": "2025-10-11T00:32:00.000Z",
+    "updatedAt": "2025-10-11T00:32:00.000Z",
+    "createdBy": "admin",
+    "updatedBy": "admin",
+    "tags": ["security", "web-security-fundamentals", "sop", "intermediate"],
+    "explanation": "SOP is a browser security feature that restricts scripts on one origin from accessing data from another origin, protecting sensitive data from unauthorized access.",
+    "points": 10,
+    "sampleAnswers": [
+      "SOP is a browser security feature that restricts scripts on one origin from accessing data from another origin, protecting sensitive data from unauthorized access."
+    ],
+    "subcategory": "SOP",
+    "hints": [],
+    "metadata": {}
+  },
+  {
+    "id": "sec-04-sec33",
+    "title": "True or False: Cross-Origin Resource Sharing (CORS) overrides the Same-Origin Policy.",
+    "content": "Evaluate this statement.",
+    "type": "true-false",
+    "category": "Security",
+    "topic": "Cross-Origin Resource Sharing (CORS)",
+    "difficulty": "intermediate",
+    "learningCardId": "system-design",
+    "isActive": true,
+    "createdAt": "2025-10-11T00:33:00.000Z",
+    "updatedAt": "2025-10-11T00:33:00.000Z",
+    "createdBy": "admin",
+    "updatedBy": "admin",
+    "tags": [
+      "security",
+      "cross-origin-resource-sharing-cors",
+      "cors",
+      "intermediate"
+    ],
+    "explanation": "The correct answer is: True",
+    "points": 10,
+    "options": [
+      {
+        "id": "t1",
+        "text": "True",
+        "isCorrect": true,
+        "explanation": "CORS allows controlled access to resources from different origins, effectively relaxing SOP for approved domains."
+      },
+      {
+        "id": "t2",
+        "text": "False",
+        "isCorrect": false,
+        "explanation": ""
+      }
+    ],
+    "subcategory": "CORS",
+    "hints": [],
+    "metadata": {}
+  },
+  {
+    "id": "sec-04-sec34",
+    "title": "Which practices improve frontend security regarding cookies?",
+    "content": "Select all correct options.",
+    "type": "multiple-choice",
+    "category": "Security",
+    "topic": "Session Management",
+    "difficulty": "intermediate",
+    "learningCardId": "system-design",
+    "isActive": true,
+    "createdAt": "2025-10-11T00:34:00.000Z",
+    "updatedAt": "2025-10-11T00:34:00.000Z",
+    "createdBy": "admin",
+    "updatedBy": "admin",
+    "tags": ["security", "session-management", "cookies", "intermediate"],
+    "explanation": "HttpOnly, Secure, and SameSite protect cookies from XSS, MITM, and CSRF. Storing passwords in cookies is insecure.",
+    "points": 10,
+    "options": [
+      {
+        "id": "o1",
+        "text": "Set HttpOnly flag",
+        "isCorrect": true,
+        "explanation": ""
+      },
+      {
+        "id": "o2",
+        "text": "Set Secure flag for HTTPS",
+        "isCorrect": true,
+        "explanation": ""
+      },
+      {
+        "id": "o3",
+        "text": "Use SameSite attribute",
+        "isCorrect": true,
+        "explanation": ""
+      },
+      {
+        "id": "o4",
+        "text": "Store passwords directly in cookies",
+        "isCorrect": false,
+        "explanation": ""
+      }
+    ],
+    "subcategory": "Cookies",
+    "hints": [],
+    "metadata": {}
+  }
+]

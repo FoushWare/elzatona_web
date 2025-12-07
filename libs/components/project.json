@@ -1,0 +1,53 @@
+{
+  "name": "shared-components",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/components/src",
+  "projectType": "library",
+  "targets": {
+    "build": {
+      "executor": "@nx/vite:build",
+      "outputs": ["{options.outputPath}"],
+      "dependsOn": [],
+      "options": {
+        "outputPath": "dist/libs/components"
+      }
+    },
+    "test": {
+      "executor": "@nx/vite:test",
+      "outputs": ["{options.reportsDirectory}"],
+      "options": {
+        "passWithNoTests": true,
+        "reportsDirectory": "../../coverage/libs/components"
+      }
+    },
+    "storybook": {
+      "executor": "@storybook/react-vite:start",
+      "options": {
+        "port": 4400,
+        "configDir": ".storybook"
+      },
+      "configurations": {
+        "ci": {
+          "quiet": true
+        }
+      }
+    },
+    "build-storybook": {
+      "executor": "@storybook/react-vite:build",
+      "options": {
+        "configDir": ".storybook",
+        "outputDir": "dist/storybook/shared-components"
+      },
+      "configurations": {
+        "ci": {
+          "quiet": true
+        }
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint",
+      "outputs": ["{options.outputFile}"]
+    }
+  },
+  "tags": []
+}

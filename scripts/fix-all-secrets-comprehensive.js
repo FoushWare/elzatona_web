@@ -4,74 +4,74 @@
  * Replaces them with environment variable requirements
  */
 
-const fs = require('fs');
-const path = require('path');
-const { execSync } = require('child_process');
+const fs = require("fs");
+const path = require("path");
+const { execSync } = require("child_process");
 
 // Patterns to find and replace
 const SECRET_PATTERNS = [
   {
-    name: 'Supabase Service Role Key',
+    name: "Supabase Service Role Key",
     pattern: /YOUR_SUPABASE_KEY_HERE\.[^'"]*/g,
-    envVar: 'SUPABASE_SERVICE_ROLE_KEY',
-    replacement: 'process.env.SUPABASE_SERVICE_ROLE_KEY',
+    envVar: "SUPABASE_SERVICE_ROLE_KEY",
+    replacement: "process.env.SUPABASE_SERVICE_ROLE_KEY",
   },
   {
-    name: 'Supabase Anon Key',
+    name: "Supabase Anon Key",
     pattern: /YOUR_SUPABASE_KEY_HERE\.[^'"]*/g,
-    envVar: 'NEXT_PUBLIC_SUPABASE_ANON_KEY',
-    replacement: 'process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY',
+    envVar: "NEXT_PUBLIC_SUPABASE_ANON_KEY",
+    replacement: "process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY",
   },
   {
-    name: 'Google API Key',
+    name: "Google API Key",
     pattern: /AIzaSy[^'"]*/g,
-    envVar: 'GOOGLE_API_KEY',
-    replacement: 'process.env.GOOGLE_API_KEY',
+    envVar: "GOOGLE_API_KEY",
+    replacement: "process.env.GOOGLE_API_KEY",
   },
   {
-    name: 'GitHub Token',
+    name: "GitHub Token",
     pattern: /gho_[^'"]*/g,
-    envVar: 'GITHUB_TOKEN',
-    replacement: 'process.env.GITHUB_TOKEN',
+    envVar: "GITHUB_TOKEN",
+    replacement: "process.env.GITHUB_TOKEN",
   },
   {
-    name: 'OpenAI Key',
+    name: "OpenAI Key",
     pattern: /sk-proj-[^'"]*/g,
-    envVar: 'OPENAI_API_KEY',
-    replacement: 'process.env.OPENAI_API_KEY',
+    envVar: "OPENAI_API_KEY",
+    replacement: "process.env.OPENAI_API_KEY",
   },
   {
-    name: 'Sentry Token',
+    name: "Sentry Token",
     pattern: /sntryu_[^'"]*/g,
-    envVar: 'SENTRY_AUTH_TOKEN',
-    replacement: 'process.env.SENTRY_AUTH_TOKEN',
+    envVar: "SENTRY_AUTH_TOKEN",
+    replacement: "process.env.SENTRY_AUTH_TOKEN",
   },
   {
-    name: 'Google OAuth Secret',
+    name: "Google OAuth Secret",
     pattern: /GOCSPX-[^'"]*/g,
-    envVar: 'GOOGLE_OAUTH_CLIENT_SECRET',
-    replacement: 'process.env.GOOGLE_OAUTH_CLIENT_SECRET',
+    envVar: "GOOGLE_OAUTH_CLIENT_SECRET",
+    replacement: "process.env.GOOGLE_OAUTH_CLIENT_SECRET",
   },
 ];
 
 // Directories to process
 const DIRECTORIES_TO_PROCESS = [
-  'scripts',
-  'Rest/scripts/scripts',
-  'Rest/scripts/setup',
+  "scripts",
+  "Rest/scripts/scripts",
+  "Rest/scripts/setup",
 ];
 
 // File extensions to process
-const FILE_EXTENSIONS = ['.js', '.mjs', '.ts'];
+const FILE_EXTENSIONS = [".js", ".mjs", ".ts"];
 
 // Directories to exclude
 const EXCLUDE_DIRS = [
-  'node_modules',
-  '.git',
-  '.next',
-  'dist',
-  'build',
-  '.cursor',
+  "node_modules",
+  ".git",
+  ".next",
+  "dist",
+  "build",
+  ".cursor",
 ];
 
 function shouldProcessFile(filePath) {
@@ -81,7 +81,7 @@ function shouldProcessFile(filePath) {
       return false;
     }
   }
-  
+
   // Check file extension
   const ext = path.extname(filePath);
   return FILE_EXTENSIONS.includes(ext);
@@ -89,7 +89,7 @@ function shouldProcessFile(filePath) {
 
 function fixFile(filePath) {
   try {
-    let content = fs.readFileSync(filePath, 'utf8');
+    let content = fs.readFileSync(filePath, "utf8");
     let modified = false;
     const fixes = [];
 
@@ -100,11 +100,11 @@ function fixFile(filePath) {
         // Replace hardcoded values with env var references
         // Pattern: 'hardcoded-value' or "hardcoded-value" or hardcoded-value
         const patterns = [
-          new RegExp(`'${secret.pattern.source}'`, 'g'),
-          new RegExp(`"${secret.pattern.source}"`, 'g'),
-          new RegExp(`\`${secret.pattern.source}\``, 'g'),
-          new RegExp(`= ${secret.pattern.source}`, 'g'),
-          new RegExp(`: ${secret.pattern.source}`, 'g'),
+          new RegExp(`'${secret.pattern.source}'`, "g"),
+          new RegExp(`"${secret.pattern.source}"`, "g"),
+          new RegExp(`\`${secret.pattern.source}\``, "g"),
+          new RegExp(`= ${secret.pattern.source}`, "g"),
+          new RegExp(`: ${secret.pattern.source}`, "g"),
         ];
 
         for (const pattern of patterns) {
@@ -118,7 +118,7 @@ function fixFile(filePath) {
         // Also handle || fallback patterns
         const fallbackPattern = new RegExp(
           `process\\.env\\.${secret.envVar}\\s*\\|\\|\\s*['"\`]${secret.pattern.source}['"\`]`,
-          'g'
+          "g",
         );
         if (fallbackPattern.test(content)) {
           content = content.replace(fallbackPattern, secret.replacement);
@@ -129,7 +129,7 @@ function fixFile(filePath) {
     }
 
     if (modified) {
-      fs.writeFileSync(filePath, content, 'utf8');
+      fs.writeFileSync(filePath, content, "utf8");
       return { fixed: true, fixes };
     }
     return { fixed: false, fixes: [] };
@@ -140,8 +140,8 @@ function fixFile(filePath) {
 }
 
 function main() {
-  console.log('🔒 Comprehensive Secret Removal Script\n');
-  console.log('📋 Processing files...\n');
+  console.log("🔒 Comprehensive Secret Removal Script\n");
+  console.log("📋 Processing files...\n");
 
   let totalFiles = 0;
   let fixedFiles = 0;
@@ -164,7 +164,7 @@ function main() {
         const stat = fs.statSync(filePath);
 
         if (stat.isDirectory()) {
-          if (!EXCLUDE_DIRS.some(exclude => filePath.includes(exclude))) {
+          if (!EXCLUDE_DIRS.some((exclude) => filePath.includes(exclude))) {
             walkDir(filePath);
           }
         } else if (shouldProcessFile(filePath)) {
@@ -173,9 +173,11 @@ function main() {
           if (result.fixed) {
             fixedFiles++;
             results.push({ file: filePath, fixes: result.fixes });
-            console.log(`  ✅ Fixed: ${path.relative(process.cwd(), filePath)}`);
+            console.log(
+              `  ✅ Fixed: ${path.relative(process.cwd(), filePath)}`,
+            );
             if (result.fixes.length > 0) {
-              console.log(`     Removed: ${result.fixes.join(', ')}`);
+              console.log(`     Removed: ${result.fixes.join(", ")}`);
             }
           }
         }
@@ -188,9 +190,12 @@ function main() {
   console.log(`\n✅ Complete!`);
   console.log(`   Total files processed: ${totalFiles}`);
   console.log(`   Files fixed: ${fixedFiles}`);
-  console.log(`\n⚠️  Note: You may need to add validation code to require these environment variables`);
-  console.log(`   Example: if (!process.env.SUPABASE_SERVICE_ROLE_KEY) { process.exit(1); }`);
+  console.log(
+    `\n⚠️  Note: You may need to add validation code to require these environment variables`,
+  );
+  console.log(
+    `   Example: if (!process.env.SUPABASE_SERVICE_ROLE_KEY) { process.exit(1); }`,
+  );
 }
 
 main();
-

@@ -1,189 +1,186 @@
 const fs = require('fs');
 const path = require('path');
 
-const questionsFile = path.join(__dirname, '../../final-questions-v01/react-questions.json');
+const questionsFile = path.join(
+  __dirname,
+  '../../final-questions-v01/react-questions.json'
+);
 
 const newQuestions = [
   {
-    "id": "react-ref-229",
-    "title": "Is it possible to prevent automatic batching?",
-    "content": "Is it possible to prevent automatic batching?",
-    "type": "multiple-choice",
-    "category": "React",
-    "topic": "Miscellaneous",
-    "difficulty": "intermediate",
-    "learningCardId": "framework-questions",
-    "isActive": true,
-    "createdAt": "2025-11-11T19:25:10.703Z",
-    "updatedAt": "2025-11-11T19:25:10.703Z",
-    "createdBy": "admin",
-    "updatedBy": "admin",
-    "tags": [
-      "react",
-      "miscellaneous",
-      "intermediate"
+    id: 'react-ref-229',
+    title: 'Is it possible to prevent automatic batching?',
+    content: 'Is it possible to prevent automatic batching?',
+    type: 'multiple-choice',
+    category: 'React',
+    topic: 'Miscellaneous',
+    difficulty: 'intermediate',
+    learningCardId: 'framework-questions',
+    isActive: true,
+    createdAt: '2025-11-11T19:25:10.703Z',
+    updatedAt: '2025-11-11T19:25:10.703Z',
+    createdBy: 'admin',
+    updatedBy: 'admin',
+    tags: ['react', 'miscellaneous', 'intermediate'],
+    explanation:
+      'Yes, it is possible to prevent automatic batching default behavior. There might be cases where you need to re-render your component after each state update or updating one state depends on another state variable. Considering this situation, React introduced <code>flushSync</code> method from <code>react-dom</code> API for the usecases where you need to flush state updates to DOM immediately.',
+    points: 15,
+    options: [
+      {
+        id: 'o1',
+        text: 'Yes, it is possible to prevent automatic batching default behavior',
+        isCorrect: true,
+        explanation:
+          'Yes, it is possible to prevent automatic batching default behavior. There might be cases where you need to re-render your component after each state update or updating one state depends on another state variable. Considering this situation, React introduced `flushSync` method from `react-dom` API for the usecases where you need to flush state updates to DOM immediately.',
+      },
+      {
+        id: 'o2',
+        text: 'This is incorrect. Please refer to React documentation.',
+        isCorrect: false,
+        explanation: '',
+      },
+      {
+        id: 'o3',
+        text: 'This is not accurate. Review React best practices.',
+        isCorrect: false,
+        explanation: '',
+      },
+      {
+        id: 'o4',
+        text: 'This is a common misconception. The correct answer differs.',
+        isCorrect: false,
+        explanation: '',
+      },
+      {
+        id: 'o5',
+        text: "Not quite. Consider React's architecture and design principles.",
+        isCorrect: false,
+        explanation: '',
+      },
     ],
-    "explanation": "Yes, it is possible to prevent automatic batching default behavior. There might be cases where you need to re-render your component after each state update or updating one state depends on another state variable. Considering this situation, React introduced <code>flushSync</code> method from <code>react-dom</code> API for the usecases where you need to flush state updates to DOM immediately.",
-    "points": 15,
-    "options": [
-      {
-        "id": "o1",
-        "text": "Yes, it is possible to prevent automatic batching default behavior",
-        "isCorrect": true,
-        "explanation": "Yes, it is possible to prevent automatic batching default behavior. There might be cases where you need to re-render your component after each state update or updating one state depends on another state variable. Considering this situation, React introduced `flushSync` method from `react-dom` API for the usecases where you need to flush state updates to DOM immediately."
-      },
-      {
-        "id": "o2",
-        "text": "This is incorrect. Please refer to React documentation.",
-        "isCorrect": false,
-        "explanation": ""
-      },
-      {
-        "id": "o3",
-        "text": "This is not accurate. Review React best practices.",
-        "isCorrect": false,
-        "explanation": ""
-      },
-      {
-        "id": "o4",
-        "text": "This is a common misconception. The correct answer differs.",
-        "isCorrect": false,
-        "explanation": ""
-      },
-      {
-        "id": "o5",
-        "text": "Not quite. Consider React's architecture and design principles.",
-        "isCorrect": false,
-        "explanation": ""
-      }
-    ],
-    "hints": [
-      "Review React documentation and best practices",
+    hints: [
+      'Review React documentation and best practices',
       "Consider React's component architecture and patterns",
-      "Think about React's rendering and state management"
+      "Think about React's rendering and state management",
     ],
-    "metadata": {}
+    metadata: {},
   },
   {
-    "id": "react-ref-230",
-    "title": "What is React hydration?",
-    "content": "What is React hydration?",
-    "type": "multiple-choice",
-    "category": "React",
-    "topic": "Miscellaneous",
-    "difficulty": "intermediate",
-    "learningCardId": "framework-questions",
-    "isActive": true,
-    "createdAt": "2025-11-11T19:25:10.703Z",
-    "updatedAt": "2025-11-11T19:25:10.703Z",
-    "createdBy": "admin",
-    "updatedBy": "admin",
-    "tags": [
-      "react",
-      "miscellaneous",
-      "intermediate"
+    id: 'react-ref-230',
+    title: 'What is React hydration?',
+    content: 'What is React hydration?',
+    type: 'multiple-choice',
+    category: 'React',
+    topic: 'Miscellaneous',
+    difficulty: 'intermediate',
+    learningCardId: 'framework-questions',
+    isActive: true,
+    createdAt: '2025-11-11T19:25:10.703Z',
+    updatedAt: '2025-11-11T19:25:10.703Z',
+    createdBy: 'admin',
+    updatedBy: 'admin',
+    tags: ['react', 'miscellaneous', 'intermediate'],
+    explanation:
+      'React hydration is used to add client-side JavaScript interactivity to pre-rendered static HTML generated by the server. It is used only for server-side rendering(SSR) to enhance the initial rendering time and make it SEO friendly application. This hydration acts as a bridge to reduce the gap between server side and client-side rendering.',
+    points: 15,
+    options: [
+      {
+        id: 'o1',
+        text: 'React hydration is used to add client-side JavaScript interactivity to pre-rendered static HTML generated by the server',
+        isCorrect: true,
+        explanation:
+          'React hydration is used to add client-side JavaScript interactivity to pre-rendered static HTML generated by the server. It is used only for server-side rendering(SSR) to enhance the initial rendering time and make it SEO friendly application. This hydration acts as a bridge to reduce the gap between server side and client-side rendering.',
+      },
+      {
+        id: 'o2',
+        text: 'This is incorrect. Please refer to React documentation.',
+        isCorrect: false,
+        explanation: '',
+      },
+      {
+        id: 'o3',
+        text: 'This is not accurate. Review React best practices.',
+        isCorrect: false,
+        explanation: '',
+      },
+      {
+        id: 'o4',
+        text: 'This is a common misconception. The correct answer differs.',
+        isCorrect: false,
+        explanation: '',
+      },
+      {
+        id: 'o5',
+        text: "Not quite. Consider React's architecture and design principles.",
+        isCorrect: false,
+        explanation: '',
+      },
     ],
-    "explanation": "React hydration is used to add client-side JavaScript interactivity to pre-rendered static HTML generated by the server. It is used only for server-side rendering(SSR) to enhance the initial rendering time and make it SEO friendly application. This hydration acts as a bridge to reduce the gap between server side and client-side rendering.",
-    "points": 15,
-    "options": [
-      {
-        "id": "o1",
-        "text": "React hydration is used to add client-side JavaScript interactivity to pre-rendered static HTML generated by the server",
-        "isCorrect": true,
-        "explanation": "React hydration is used to add client-side JavaScript interactivity to pre-rendered static HTML generated by the server. It is used only for server-side rendering(SSR) to enhance the initial rendering time and make it SEO friendly application. This hydration acts as a bridge to reduce the gap between server side and client-side rendering."
-      },
-      {
-        "id": "o2",
-        "text": "This is incorrect. Please refer to React documentation.",
-        "isCorrect": false,
-        "explanation": ""
-      },
-      {
-        "id": "o3",
-        "text": "This is not accurate. Review React best practices.",
-        "isCorrect": false,
-        "explanation": ""
-      },
-      {
-        "id": "o4",
-        "text": "This is a common misconception. The correct answer differs.",
-        "isCorrect": false,
-        "explanation": ""
-      },
-      {
-        "id": "o5",
-        "text": "Not quite. Consider React's architecture and design principles.",
-        "isCorrect": false,
-        "explanation": ""
-      }
-    ],
-    "hints": [
-      "Review React documentation and best practices",
+    hints: [
+      'Review React documentation and best practices',
       "Consider React's component architecture and patterns",
-      "Think about React's rendering and state management"
+      "Think about React's rendering and state management",
     ],
-    "metadata": {}
+    metadata: {},
   },
   {
-    "id": "react-ref-231",
-    "title": "How do you update objects inside state?",
-    "content": "How do you update objects inside state?",
-    "type": "multiple-choice",
-    "category": "React",
-    "topic": "Miscellaneous",
-    "difficulty": "intermediate",
-    "learningCardId": "framework-questions",
-    "isActive": true,
-    "createdAt": "2025-11-11T19:25:10.703Z",
-    "updatedAt": "2025-11-11T19:25:10.703Z",
-    "createdBy": "admin",
-    "updatedBy": "admin",
-    "tags": [
-      "react",
-      "miscellaneous",
-      "intermediate"
+    id: 'react-ref-231',
+    title: 'How do you update objects inside state?',
+    content: 'How do you update objects inside state?',
+    type: 'multiple-choice',
+    category: 'React',
+    topic: 'Miscellaneous',
+    difficulty: 'intermediate',
+    learningCardId: 'framework-questions',
+    isActive: true,
+    createdAt: '2025-11-11T19:25:10.703Z',
+    updatedAt: '2025-11-11T19:25:10.703Z',
+    createdBy: 'admin',
+    updatedBy: 'admin',
+    tags: ['react', 'miscellaneous', 'intermediate'],
+    explanation:
+      'You cannot update the objects which exists in the state directly. Instead, you should create a fresh new object (or copy from the existing object) and update the latest state using the newly created object. Eventhough JavaScript objects are mutable, you need to treat objects inside state as read-only while updating the state.',
+    points: 15,
+    options: [
+      {
+        id: 'o1',
+        text: 'You cannot update the objects which exists in the state directly',
+        isCorrect: true,
+        explanation:
+          'You cannot update the objects which exists in the state directly. Instead, you should create a fresh new object (or copy from the existing object) and update the latest state using the newly created object. Eventhough JavaScript objects are mutable, you need to treat objects inside state as read-only while updating the state.',
+      },
+      {
+        id: 'o2',
+        text: 'This is incorrect. Please refer to React documentation.',
+        isCorrect: false,
+        explanation: '',
+      },
+      {
+        id: 'o3',
+        text: 'This is not accurate. Review React best practices.',
+        isCorrect: false,
+        explanation: '',
+      },
+      {
+        id: 'o4',
+        text: 'This is a common misconception. The correct answer differs.',
+        isCorrect: false,
+        explanation: '',
+      },
+      {
+        id: 'o5',
+        text: "Not quite. Consider React's architecture and design principles.",
+        isCorrect: false,
+        explanation: '',
+      },
     ],
-    "explanation": "You cannot update the objects which exists in the state directly. Instead, you should create a fresh new object (or copy from the existing object) and update the latest state using the newly created object. Eventhough JavaScript objects are mutable, you need to treat objects inside state as read-only while updating the state.",
-    "points": 15,
-    "options": [
-      {
-        "id": "o1",
-        "text": "You cannot update the objects which exists in the state directly",
-        "isCorrect": true,
-        "explanation": "You cannot update the objects which exists in the state directly. Instead, you should create a fresh new object (or copy from the existing object) and update the latest state using the newly created object. Eventhough JavaScript objects are mutable, you need to treat objects inside state as read-only while updating the state."
-      },
-      {
-        "id": "o2",
-        "text": "This is incorrect. Please refer to React documentation.",
-        "isCorrect": false,
-        "explanation": ""
-      },
-      {
-        "id": "o3",
-        "text": "This is not accurate. Review React best practices.",
-        "isCorrect": false,
-        "explanation": ""
-      },
-      {
-        "id": "o4",
-        "text": "This is a common misconception. The correct answer differs.",
-        "isCorrect": false,
-        "explanation": ""
-      },
-      {
-        "id": "o5",
-        "text": "Not quite. Consider React's architecture and design principles.",
-        "isCorrect": false,
-        "explanation": ""
-      }
-    ],
-    "hints": [
-      "Review React documentation and best practices",
+    hints: [
+      'Review React documentation and best practices',
       "Consider React's component architecture and patterns",
-      "Think about React's rendering and state management"
+      "Think about React's rendering and state management",
     ],
-    "metadata": {}
-  }
+    metadata: {},
+  },
 ];
 
 // Read existing questions
@@ -198,5 +195,7 @@ existingQuestions.push(...newQuestions);
 // Write back
 fs.writeFileSync(questionsFile, JSON.stringify(existingQuestions, null, 2));
 
-console.log(`✅ Added ${newQuestions.length} questions for Miscellaneous (Batch 28)`);
+console.log(
+  `✅ Added ${newQuestions.length} questions for Miscellaneous (Batch 28)`
+);
 console.log(`📝 Total questions: ${existingQuestions.length}`);

@@ -5,7 +5,10 @@ const path = require('path');
  * Fix React questions file by reading it, deduplicating, and writing back
  */
 
-const reactQuestionsFile = path.join(__dirname, '../final-questions-v01/react-questions.json');
+const reactQuestionsFile = path.join(
+  __dirname,
+  '../final-questions-v01/react-questions.json'
+);
 
 console.log('🔧 Fixing React questions file...\n');
 
@@ -25,7 +28,9 @@ questions.forEach(q => {
 const uniqueQuestions = Array.from(uniqueMap.values());
 
 console.log(`✅ Found ${uniqueQuestions.length} unique questions`);
-console.log(`   Removed ${questions.length - uniqueQuestions.length} duplicates\n`);
+console.log(
+  `   Removed ${questions.length - uniqueQuestions.length} duplicates\n`
+);
 
 // Sort: react-ref-* first, then react-ft-*
 uniqueQuestions.sort((a, b) => {
@@ -37,8 +42,12 @@ uniqueQuestions.sort((a, b) => {
 });
 
 // Count by type
-const refCount = uniqueQuestions.filter(q => q.id.startsWith('react-ref-')).length;
-const ftCount = uniqueQuestions.filter(q => q.id.startsWith('react-ft-')).length;
+const refCount = uniqueQuestions.filter(q =>
+  q.id.startsWith('react-ref-')
+).length;
+const ftCount = uniqueQuestions.filter(q =>
+  q.id.startsWith('react-ft-')
+).length;
 
 console.log(`📊 Breakdown:`);
 console.log(`   react-ref-*: ${refCount} questions`);
@@ -56,5 +65,6 @@ const verifyIds = new Set(verify.map(q => q.id));
 console.log(`\n✅ Verification:`);
 console.log(`   File entries: ${verify.length}`);
 console.log(`   Unique IDs: ${verifyIds.size}`);
-console.log(`   Status: ${verify.length === verifyIds.size ? 'CLEAN ✅' : 'HAS DUPLICATES ⚠️'}`);
-
+console.log(
+  `   Status: ${verify.length === verifyIds.size ? 'CLEAN ✅' : 'HAS DUPLICATES ⚠️'}`
+);

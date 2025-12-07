@@ -13,11 +13,7 @@
     "updatedAt": "2025-11-11T18:59:32.539Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "rendering-patterns",
-      "advanced-patterns",
-      "intermediate"
-    ],
+    "tags": ["rendering-patterns", "advanced-patterns", "intermediate"],
     "explanation": "It provides a simple way to animate visual DOM changes between two states, enabling smooth transitions between UI views or pages.",
     "points": 10,
     "options": [
@@ -66,11 +62,7 @@
     "updatedAt": "2025-11-11T18:59:32.539Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "rendering-patterns",
-      "advanced-patterns",
-      "intermediate"
-    ],
+    "tags": ["rendering-patterns", "advanced-patterns", "intermediate"],
     "explanation": "The document.startViewTransition(callback) method initiates a view transition and calls the provided callback to update the DOM.",
     "points": 10,
     "options": [
@@ -119,11 +111,7 @@
     "updatedAt": "2025-11-11T18:59:32.539Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "rendering-patterns",
-      "advanced-patterns",
-      "intermediate"
-    ],
+    "tags": ["rendering-patterns", "advanced-patterns", "intermediate"],
     "explanation": "It takes a screenshot of the current DOM state before applying the callback changes.",
     "points": 10,
     "options": [
@@ -172,11 +160,7 @@
     "updatedAt": "2025-11-11T18:59:32.539Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "rendering-patterns",
-      "advanced-patterns",
-      "intermediate"
-    ],
+    "tags": ["rendering-patterns", "advanced-patterns", "intermediate"],
     "explanation": "Developers can use ::view-transition-old(root) and ::view-transition-new(root) to style the old and new DOM states during a transition.",
     "points": 10,
     "options": [
@@ -225,11 +209,7 @@
     "updatedAt": "2025-11-11T18:59:32.539Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "rendering-patterns",
-      "advanced-patterns",
-      "intermediate"
-    ],
+    "tags": ["rendering-patterns", "advanced-patterns", "intermediate"],
     "explanation": "It assigns a unique name to elements so that matching elements across states can be smoothly animated together.",
     "points": 10,
     "options": [
@@ -278,11 +258,7 @@
     "updatedAt": "2025-11-11T18:59:32.539Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "rendering-patterns",
-      "advanced-patterns",
-      "advanced"
-    ],
+    "tags": ["rendering-patterns", "advanced-patterns", "advanced"],
     "explanation": "The DOM becomes non-interactive (frozen) until the callback and transition animation complete.",
     "points": 10,
     "options": [
@@ -331,11 +307,7 @@
     "updatedAt": "2025-11-11T18:59:32.539Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "rendering-patterns",
-      "advanced-patterns",
-      "intermediate"
-    ],
+    "tags": ["rendering-patterns", "advanced-patterns", "intermediate"],
     "explanation": "After the data request completes to minimize the time the DOM is frozen and improve user experience.",
     "points": 10,
     "options": [
@@ -384,11 +356,7 @@
     "updatedAt": "2025-11-11T18:59:32.539Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "rendering-patterns",
-      "advanced-patterns",
-      "advanced"
-    ],
+    "tags": ["rendering-patterns", "advanced-patterns", "advanced"],
     "explanation": "By returning a Promise from the callback, which must resolve before the animation completes.",
     "points": 10,
     "options": [
@@ -437,11 +405,7 @@
     "updatedAt": "2025-11-11T18:59:32.539Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "rendering-patterns",
-      "advanced-patterns",
-      "advanced"
-    ],
+    "tags": ["rendering-patterns", "advanced-patterns", "advanced"],
     "explanation": "shouldComponentUpdate() is overridden to return false, delaying rendering until the view transition begins.",
     "points": 10,
     "options": [
@@ -490,11 +454,7 @@
     "updatedAt": "2025-11-11T18:59:32.539Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "rendering-patterns",
-      "advanced-patterns",
-      "advanced"
-    ],
+    "tags": ["rendering-patterns", "advanced-patterns", "advanced"],
     "explanation": "It resolves the promise returned during the DOM update, notifying the View Transition API that the DOM has been updated.",
     "points": 10,
     "options": [
@@ -543,11 +503,7 @@
     "updatedAt": "2025-11-11T18:59:32.539Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "rendering-patterns",
-      "advanced-patterns",
-      "intermediate"
-    ],
+    "tags": ["rendering-patterns", "advanced-patterns", "intermediate"],
     "explanation": "Because React’s strict mode causes double rendering in development, interfering with the transition flow.",
     "points": 10,
     "options": [
@@ -596,11 +552,7 @@
     "updatedAt": "2025-11-11T18:59:32.539Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "rendering-patterns",
-      "advanced-patterns",
-      "advanced"
-    ],
+    "tags": ["rendering-patterns", "advanced-patterns", "advanced"],
     "explanation": "It requires the new page HTML to be available before animating, potentially delaying feedback for users.",
     "points": 10,
     "options": [
@@ -649,11 +601,7 @@
     "updatedAt": "2025-11-11T18:59:32.539Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "rendering-patterns",
-      "advanced-patterns",
-      "intermediate"
-    ],
+    "tags": ["rendering-patterns", "advanced-patterns", "intermediate"],
     "explanation": "It provides instant feedback while waiting for the new content to load, improving perceived performance.",
     "points": 10,
     "options": [
@@ -702,11 +650,7 @@
     "updatedAt": "2025-11-11T18:59:32.539Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "rendering-patterns",
-      "advanced-patterns",
-      "intermediate"
-    ],
+    "tags": ["rendering-patterns", "advanced-patterns", "intermediate"],
     "explanation": "Turbo, part of the Hotwire suite, enhances MPAs by replacing the page body dynamically using JavaScript.",
     "points": 10,
     "options": [
@@ -755,11 +699,7 @@
     "updatedAt": "2025-11-11T18:59:32.539Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "rendering-patterns",
-      "advanced-patterns",
-      "intermediate"
-    ],
+    "tags": ["rendering-patterns", "advanced-patterns", "intermediate"],
     "explanation": "Turn handles animating page navigations by adding classes like turn-exit and turn-enter to trigger CSS transitions.",
     "points": 10,
     "options": [
@@ -808,11 +748,7 @@
     "updatedAt": "2025-11-11T18:59:32.539Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "rendering-patterns",
-      "advanced-patterns",
-      "advanced"
-    ],
+    "tags": ["rendering-patterns", "advanced-patterns", "advanced"],
     "explanation": "Turn listens to Turbo events such as turbo:visit, turbo:before-render, and turbo:render to control animations.",
     "points": 10,
     "options": [
@@ -861,11 +797,7 @@
     "updatedAt": "2025-11-11T18:59:32.539Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "rendering-patterns",
-      "advanced-patterns",
-      "advanced"
-    ],
+    "tags": ["rendering-patterns", "advanced-patterns", "advanced"],
     "explanation": "It activates experimental support for the View Transitions API, falling back to CSS animations when unsupported.",
     "points": 10,
     "options": [
@@ -914,11 +846,7 @@
     "updatedAt": "2025-11-11T18:59:32.539Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "rendering-patterns",
-      "advanced-patterns",
-      "advanced"
-    ],
+    "tags": ["rendering-patterns", "advanced-patterns", "advanced"],
     "explanation": "The View Transitions API can animate shared elements across pages but requires waiting for new content, while exit animations give instant feedback but can’t transition shared elements.",
     "points": 10,
     "options": [
@@ -967,11 +895,7 @@
     "updatedAt": "2025-11-11T18:59:32.540Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "rendering-patterns",
-      "client-side-rendering",
-      "intermediate"
-    ],
+    "tags": ["rendering-patterns", "client-side-rendering", "intermediate"],
     "explanation": "In CSR, the browser loads a minimal HTML shell and JavaScript bundles.",
     "points": 10,
     "sampleAnswers": [
@@ -1030,11 +954,7 @@
     "updatedAt": "2025-11-11T18:59:32.540Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "rendering-patterns",
-      "client-side-rendering",
-      "intermediate"
-    ],
+    "tags": ["rendering-patterns", "client-side-rendering", "intermediate"],
     "explanation": "Search engines struggle to index JavaScript-rendered pages",
     "points": 10,
     "options": [
@@ -1077,11 +997,7 @@
     "updatedAt": "2025-11-11T18:59:32.540Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "rendering-patterns",
-      "client-side-rendering",
-      "intermediate"
-    ],
+    "tags": ["rendering-patterns", "client-side-rendering", "intermediate"],
     "explanation": "Use code-splitting and lazy loading to reduce the initial bundle size.",
     "points": 10,
     "sampleAnswers": [
@@ -1140,11 +1056,7 @@
     "updatedAt": "2025-11-11T18:59:32.540Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "rendering-patterns",
-      "client-side-rendering",
-      "intermediate"
-    ],
+    "tags": ["rendering-patterns", "client-side-rendering", "intermediate"],
     "explanation": "CSR renders pages on the client, SSR renders them on the server before sending HTML",
     "points": 10,
     "options": [
@@ -1187,11 +1099,7 @@
     "updatedAt": "2025-11-11T18:59:32.540Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "rendering-patterns",
-      "client-side-rendering",
-      "intermediate"
-    ],
+    "tags": ["rendering-patterns", "client-side-rendering", "intermediate"],
     "explanation": "Islands Architecture renders mostly static HTML on the server and hydrates only small interactive 'islands' on the client.",
     "points": 10,
     "sampleAnswers": [
@@ -1250,11 +1158,7 @@
     "updatedAt": "2025-11-11T18:59:32.540Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "rendering-patterns",
-      "client-side-rendering",
-      "intermediate"
-    ],
+    "tags": ["rendering-patterns", "client-side-rendering", "intermediate"],
     "explanation": "A social media share widget inside a static blog post",
     "points": 10,
     "options": [
@@ -1297,11 +1201,7 @@
     "updatedAt": "2025-11-11T18:59:32.540Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "rendering-patterns",
-      "client-side-rendering",
-      "advanced"
-    ],
+    "tags": ["rendering-patterns", "client-side-rendering", "advanced"],
     "explanation": "It allows each component to hydrate independently rather than rehydrating the entire page.",
     "points": 10,
     "sampleAnswers": [
@@ -1360,11 +1260,7 @@
     "updatedAt": "2025-11-11T18:59:32.540Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "rendering-patterns",
-      "client-side-rendering",
-      "intermediate"
-    ],
+    "tags": ["rendering-patterns", "client-side-rendering", "intermediate"],
     "explanation": "Astro and Marko",
     "points": 10,
     "options": [
@@ -1407,11 +1303,7 @@
     "updatedAt": "2025-11-11T18:59:32.540Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "rendering-patterns",
-      "client-side-rendering",
-      "intermediate"
-    ],
+    "tags": ["rendering-patterns", "client-side-rendering", "intermediate"],
     "explanation": "Reduces the amount of JavaScript shipped to the client.",
     "points": 10,
     "sampleAnswers": [
@@ -1471,11 +1363,7 @@
     "updatedAt": "2025-11-11T18:59:32.540Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "rendering-patterns",
-      "client-side-rendering",
-      "advanced"
-    ],
+    "tags": ["rendering-patterns", "client-side-rendering", "advanced"],
     "explanation": "It’s difficult to scale for highly interactive apps like social media feeds",
     "points": 10,
     "options": [
@@ -1518,11 +1406,7 @@
     "updatedAt": "2025-11-11T18:59:32.537Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "rendering-patterns",
-      "edge-rendering",
-      "intermediate"
-    ],
+    "tags": ["rendering-patterns", "edge-rendering", "intermediate"],
     "explanation": "Edge Rendering executes server-side logic at CDN edge locations, closer to the user.",
     "points": 10,
     "sampleAnswers": [
@@ -1581,11 +1465,7 @@
     "updatedAt": "2025-11-11T18:59:32.537Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "rendering-patterns",
-      "edge-rendering",
-      "intermediate"
-    ],
+    "tags": ["rendering-patterns", "edge-rendering", "intermediate"],
     "explanation": "Reduced latency due to geographical proximity to users",
     "points": 10,
     "options": [
@@ -1628,11 +1508,7 @@
     "updatedAt": "2025-11-11T18:59:32.537Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "rendering-patterns",
-      "edge-rendering",
-      "advanced"
-    ],
+    "tags": ["rendering-patterns", "edge-rendering", "advanced"],
     "explanation": "CDN caching serves static assets, while Edge Rendering runs dynamic server code at the edge.",
     "points": 10,
     "sampleAnswers": [
@@ -1691,11 +1567,7 @@
     "updatedAt": "2025-11-11T18:59:32.537Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "rendering-patterns",
-      "edge-rendering",
-      "intermediate"
-    ],
+    "tags": ["rendering-patterns", "edge-rendering", "intermediate"],
     "explanation": "It hydrates parts of the UI gradually as JavaScript loads or user interacts",
     "points": 10,
     "options": [
@@ -1738,11 +1610,7 @@
     "updatedAt": "2025-11-11T18:59:32.537Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "rendering-patterns",
-      "edge-rendering",
-      "intermediate"
-    ],
+    "tags": ["rendering-patterns", "edge-rendering", "intermediate"],
     "explanation": "It reduces the blocking time by enabling interaction in critical parts of the page before the entire app hydrates.",
     "points": 10,
     "sampleAnswers": [
@@ -1801,11 +1669,7 @@
     "updatedAt": "2025-11-11T18:59:32.537Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "rendering-patterns",
-      "edge-rendering",
-      "advanced"
-    ],
+    "tags": ["rendering-patterns", "edge-rendering", "advanced"],
     "explanation": "Resumability allows the browser to resume application execution without rehydrating all components.",
     "points": 10,
     "sampleAnswers": [
@@ -1864,11 +1728,7 @@
     "updatedAt": "2025-11-11T18:59:32.537Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "rendering-patterns",
-      "edge-rendering",
-      "advanced"
-    ],
+    "tags": ["rendering-patterns", "edge-rendering", "advanced"],
     "explanation": "Resumability skips full rehydration by resuming the app state directly from serialized data",
     "points": 10,
     "options": [
@@ -1911,11 +1771,7 @@
     "updatedAt": "2025-11-11T18:59:32.537Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "rendering-patterns",
-      "edge-rendering",
-      "advanced"
-    ],
+    "tags": ["rendering-patterns", "edge-rendering", "advanced"],
     "explanation": "RSCs allow heavy computation and data fetching to happen on the server, reducing client bundle size.",
     "points": 10,
     "sampleAnswers": [
@@ -1974,11 +1830,7 @@
     "updatedAt": "2025-11-11T18:59:32.537Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "rendering-patterns",
-      "edge-rendering",
-      "advanced"
-    ],
+    "tags": ["rendering-patterns", "edge-rendering", "advanced"],
     "explanation": "Users see parts of the UI sooner while server components load progressively",
     "points": 10,
     "options": [
@@ -2021,11 +1873,7 @@
     "updatedAt": "2025-11-11T18:59:32.537Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "rendering-patterns",
-      "edge-rendering",
-      "advanced"
-    ],
+    "tags": ["rendering-patterns", "edge-rendering", "advanced"],
     "explanation": "Use SSR for dynamic personalized content, ISR for semi-static content, Edge Rendering for global low-latency responses, and Resumability for ultra-fast interactivity without full hydration.",
     "points": 10,
     "sampleAnswers": [
@@ -2084,11 +1932,7 @@
     "updatedAt": "2025-11-11T18:59:32.540Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "rendering-patterns",
-      "hybrid-rendering",
-      "intermediate"
-    ],
+    "tags": ["rendering-patterns", "hybrid-rendering", "intermediate"],
     "explanation": "ISR allows pages to be updated after the initial build without rebuilding the entire site.",
     "points": 10,
     "sampleAnswers": [
@@ -2147,11 +1991,7 @@
     "updatedAt": "2025-11-11T18:59:32.540Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "rendering-patterns",
-      "hybrid-rendering",
-      "intermediate"
-    ],
+    "tags": ["rendering-patterns", "hybrid-rendering", "intermediate"],
     "explanation": "It regenerates pages on-demand when a user visits an outdated page",
     "points": 10,
     "options": [
@@ -2194,11 +2034,7 @@
     "updatedAt": "2025-11-11T18:59:32.540Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "rendering-patterns",
-      "hybrid-rendering",
-      "intermediate"
-    ],
+    "tags": ["rendering-patterns", "hybrid-rendering", "intermediate"],
     "explanation": "It defines how often a static page should be regenerated in the background.",
     "points": 10,
     "sampleAnswers": [
@@ -2257,11 +2093,7 @@
     "updatedAt": "2025-11-11T18:59:32.540Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "rendering-patterns",
-      "hybrid-rendering",
-      "intermediate"
-    ],
+    "tags": ["rendering-patterns", "hybrid-rendering", "intermediate"],
     "explanation": "ISR caches pre-rendered pages at the edge and avoids regenerating on every request",
     "points": 10,
     "options": [
@@ -2304,11 +2136,7 @@
     "updatedAt": "2025-11-11T18:59:32.540Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "rendering-patterns",
-      "hybrid-rendering",
-      "advanced"
-    ],
+    "tags": ["rendering-patterns", "hybrid-rendering", "advanced"],
     "explanation": "On-Demand ISR regenerates pages when triggered by specific events like webhook updates instead of fixed time intervals.",
     "points": 10,
     "sampleAnswers": [
@@ -2367,11 +2195,7 @@
     "updatedAt": "2025-11-11T18:59:32.540Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "rendering-patterns",
-      "hybrid-rendering",
-      "intermediate"
-    ],
+    "tags": ["rendering-patterns", "hybrid-rendering", "intermediate"],
     "explanation": "When content changes are event-driven, such as CMS updates",
     "points": 10,
     "options": [
@@ -2414,11 +2238,7 @@
     "updatedAt": "2025-11-11T18:59:32.540Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "rendering-patterns",
-      "hybrid-rendering",
-      "advanced"
-    ],
+    "tags": ["rendering-patterns", "hybrid-rendering", "advanced"],
     "explanation": "Streaming SSR allows sending parts of the page to the browser as they are generated, reducing time to first paint.",
     "points": 10,
     "sampleAnswers": [
@@ -2477,11 +2297,7 @@
     "updatedAt": "2025-11-11T18:59:32.540Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "rendering-patterns",
-      "hybrid-rendering",
-      "advanced"
-    ],
+    "tags": ["rendering-patterns", "hybrid-rendering", "advanced"],
     "explanation": "They allow parts of React components to render on the server without sending unnecessary JavaScript to the client",
     "points": 10,
     "options": [
@@ -2524,11 +2340,7 @@
     "updatedAt": "2025-11-11T18:59:32.540Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "rendering-patterns",
-      "hybrid-rendering",
-      "advanced"
-    ],
+    "tags": ["rendering-patterns", "hybrid-rendering", "advanced"],
     "explanation": "Edge SSR runs closer to users, reducing latency and cold boot times.",
     "points": 10,
     "sampleAnswers": [
@@ -2587,11 +2399,7 @@
     "updatedAt": "2025-11-11T18:59:32.540Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "rendering-patterns",
-      "hybrid-rendering",
-      "advanced"
-    ],
+    "tags": ["rendering-patterns", "hybrid-rendering", "advanced"],
     "explanation": "When your page depends on highly personalized data that changes per user request",
     "points": 10,
     "options": [
@@ -2634,11 +2442,7 @@
     "updatedAt": "2025-11-11T18:59:32.524Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "rendering-patterns",
-      "islands-architecture",
-      "intermediate"
-    ],
+    "tags": ["rendering-patterns", "islands-architecture", "intermediate"],
     "explanation": "It divides a web page into small independent interactive sections called islands, while keeping the rest of the page static HTML.",
     "points": 10,
     "sampleAnswers": [
@@ -2697,11 +2501,7 @@
     "updatedAt": "2025-11-11T18:59:32.536Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "rendering-patterns",
-      "islands-architecture",
-      "intermediate"
-    ],
+    "tags": ["rendering-patterns", "islands-architecture", "intermediate"],
     "explanation": "CSR loads all JavaScript at once, while Islands only hydrate interactive components",
     "points": 10,
     "options": [
@@ -2744,11 +2544,7 @@
     "updatedAt": "2025-11-11T18:59:32.536Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "rendering-patterns",
-      "islands-architecture",
-      "intermediate"
-    ],
+    "tags": ["rendering-patterns", "islands-architecture", "intermediate"],
     "explanation": "Because it ships less JavaScript and hydrates only necessary interactive components.",
     "points": 10,
     "sampleAnswers": [
@@ -2807,11 +2603,7 @@
     "updatedAt": "2025-11-11T18:59:32.536Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "rendering-patterns",
-      "islands-architecture",
-      "intermediate"
-    ],
+    "tags": ["rendering-patterns", "islands-architecture", "intermediate"],
     "explanation": "Astro",
     "points": 10,
     "options": [
@@ -2860,11 +2652,7 @@
     "updatedAt": "2025-11-11T18:59:32.536Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "rendering-patterns",
-      "islands-architecture",
-      "intermediate"
-    ],
+    "tags": ["rendering-patterns", "islands-architecture", "intermediate"],
     "explanation": "After the static HTML has been rendered and the browser is idle",
     "points": 10,
     "options": [
@@ -2907,11 +2695,7 @@
     "updatedAt": "2025-11-11T18:59:32.536Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "rendering-patterns",
-      "islands-architecture",
-      "advanced"
-    ],
+    "tags": ["rendering-patterns", "islands-architecture", "advanced"],
     "explanation": "Progressive Hydration hydrates components in sequence across the page, while Islands Architecture hydrates independent islands in isolation.",
     "points": 10,
     "sampleAnswers": [
@@ -2970,11 +2754,7 @@
     "updatedAt": "2025-11-11T18:59:32.536Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "rendering-patterns",
-      "islands-architecture",
-      "intermediate"
-    ],
+    "tags": ["rendering-patterns", "islands-architecture", "intermediate"],
     "explanation": "Content-heavy websites like blogs or marketing pages",
     "points": 10,
     "options": [
@@ -3017,11 +2797,7 @@
     "updatedAt": "2025-11-11T18:59:32.536Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "rendering-patterns",
-      "islands-architecture",
-      "intermediate"
-    ],
+    "tags": ["rendering-patterns", "islands-architecture", "intermediate"],
     "explanation": "Limited framework support outside of Astro and Marko.",
     "points": 10,
     "sampleAnswers": [
@@ -3080,11 +2856,7 @@
     "updatedAt": "2025-11-11T18:59:32.536Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "rendering-patterns",
-      "islands-architecture",
-      "intermediate"
-    ],
+    "tags": ["rendering-patterns", "islands-architecture", "intermediate"],
     "explanation": "It serves fully rendered HTML to crawlers before hydration",
     "points": 10,
     "options": [
@@ -3127,11 +2899,7 @@
     "updatedAt": "2025-11-11T18:59:32.536Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "rendering-patterns",
-      "islands-architecture",
-      "advanced"
-    ],
+    "tags": ["rendering-patterns", "islands-architecture", "advanced"],
     "explanation": "By creating a separate React component for the Like button and importing it using Astro’s client directive like <code>client:load</code> or <code>client:idle</code>.",
     "points": 10,
     "sampleAnswers": [
@@ -3190,11 +2958,7 @@
     "updatedAt": "2025-11-11T18:59:32.538Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "rendering-patterns",
-      "progressive-hydration",
-      "advanced"
-    ],
+    "tags": ["rendering-patterns", "progressive-hydration", "advanced"],
     "explanation": "Partial Hydration means hydrating only parts of a statically rendered page that require interactivity.",
     "points": 10,
     "sampleAnswers": [
@@ -3253,11 +3017,7 @@
     "updatedAt": "2025-11-11T18:59:32.538Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "rendering-patterns",
-      "progressive-hydration",
-      "advanced"
-    ],
+    "tags": ["rendering-patterns", "progressive-hydration", "advanced"],
     "explanation": "Partial Hydration only hydrates selected components, Progressive Hydration hydrates sequentially over time",
     "points": 10,
     "options": [
@@ -3300,11 +3060,7 @@
     "updatedAt": "2025-11-11T18:59:32.538Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "rendering-patterns",
-      "progressive-hydration",
-      "intermediate"
-    ],
+    "tags": ["rendering-patterns", "progressive-hydration", "intermediate"],
     "explanation": "Selective Prefetching fetches data or resources only for components likely to be used soon, based on user behavior.",
     "points": 10,
     "sampleAnswers": [
@@ -3363,11 +3119,7 @@
     "updatedAt": "2025-11-11T18:59:32.538Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "rendering-patterns",
-      "progressive-hydration",
-      "intermediate"
-    ],
+    "tags": ["rendering-patterns", "progressive-hydration", "intermediate"],
     "explanation": "On pages with many navigation routes where user intent can be predicted",
     "points": 10,
     "options": [
@@ -3410,11 +3162,7 @@
     "updatedAt": "2025-11-11T18:59:32.538Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "rendering-patterns",
-      "progressive-hydration",
-      "advanced"
-    ],
+    "tags": ["rendering-patterns", "progressive-hydration", "advanced"],
     "explanation": "Lazy Streaming defers rendering of non-critical content until it’s needed, reducing initial TTFB.",
     "points": 10,
     "sampleAnswers": [
@@ -3473,11 +3221,7 @@
     "updatedAt": "2025-11-11T18:59:32.538Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "rendering-patterns",
-      "progressive-hydration",
-      "advanced"
-    ],
+    "tags": ["rendering-patterns", "progressive-hydration", "advanced"],
     "explanation": "It allows components to wait for data before rendering while showing fallback UI",
     "points": 10,
     "options": [
@@ -3520,11 +3264,7 @@
     "updatedAt": "2025-11-11T18:59:32.538Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "rendering-patterns",
-      "progressive-hydration",
-      "advanced"
-    ],
+    "tags": ["rendering-patterns", "progressive-hydration", "advanced"],
     "explanation": "Concurrent Rendering enables React to interrupt non-urgent renders to prioritize important updates, improving responsiveness.",
     "points": 10,
     "sampleAnswers": [
@@ -3583,11 +3323,7 @@
     "updatedAt": "2025-11-11T18:59:32.538Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "rendering-patterns",
-      "progressive-hydration",
-      "intermediate"
-    ],
+    "tags": ["rendering-patterns", "progressive-hydration", "intermediate"],
     "explanation": "Concurrent rendering can pause and resume renders, synchronous rendering blocks until completion",
     "points": 10,
     "options": [
@@ -3630,11 +3366,7 @@
     "updatedAt": "2025-11-11T18:59:32.538Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "rendering-patterns",
-      "progressive-hydration",
-      "intermediate"
-    ],
+    "tags": ["rendering-patterns", "progressive-hydration", "intermediate"],
     "explanation": "Idle Time Rendering defers rendering of non-critical UI parts until the main thread is idle.",
     "points": 10,
     "sampleAnswers": [
@@ -3693,11 +3425,7 @@
     "updatedAt": "2025-11-11T18:59:32.538Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "rendering-patterns",
-      "progressive-hydration",
-      "advanced"
-    ],
+    "tags": ["rendering-patterns", "progressive-hydration", "advanced"],
     "explanation": "They improve initial load but can serve outdated content until revalidated",
     "points": 10,
     "options": [
@@ -3740,11 +3468,7 @@
     "updatedAt": "2025-11-11T18:59:32.541Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "rendering-patterns",
-      "resumability",
-      "intermediate"
-    ],
+    "tags": ["rendering-patterns", "resumability", "intermediate"],
     "explanation": "Core Web Vitals are a set of metrics—Largest Contentful Paint (LCP), First Input Delay (FID), and Cumulative Layout Shift (CLS)—that measure real-world user experience.",
     "points": 10,
     "sampleAnswers": [
@@ -3803,11 +3527,7 @@
     "updatedAt": "2025-11-11T18:59:32.541Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "rendering-patterns",
-      "resumability",
-      "intermediate"
-    ],
+    "tags": ["rendering-patterns", "resumability", "intermediate"],
     "explanation": "Time until the largest visible element (image or text block) renders",
     "points": 10,
     "options": [
@@ -3850,11 +3570,7 @@
     "updatedAt": "2025-11-11T18:59:32.541Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "rendering-patterns",
-      "resumability",
-      "intermediate"
-    ],
+    "tags": ["rendering-patterns", "resumability", "intermediate"],
     "explanation": "FID measures the delay between a user’s first interaction (e.g., clicking a button) and the browser’s ability to respond to that interaction.",
     "points": 10,
     "sampleAnswers": [
@@ -3913,11 +3629,7 @@
     "updatedAt": "2025-11-11T18:59:32.541Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "rendering-patterns",
-      "resumability",
-      "intermediate"
-    ],
+    "tags": ["rendering-patterns", "resumability", "intermediate"],
     "explanation": "Visual instability caused by unexpected layout movements",
     "points": 10,
     "options": [
@@ -3960,11 +3672,7 @@
     "updatedAt": "2025-11-11T18:59:32.541Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "rendering-patterns",
-      "resumability",
-      "intermediate"
-    ],
+    "tags": ["rendering-patterns", "resumability", "intermediate"],
     "explanation": "FCP measures when the browser first renders any content from the DOM.",
     "points": 10,
     "sampleAnswers": [
@@ -4023,11 +3731,7 @@
     "updatedAt": "2025-11-11T18:59:32.541Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "rendering-patterns",
-      "resumability",
-      "intermediate"
-    ],
+    "tags": ["rendering-patterns", "resumability", "intermediate"],
     "explanation": "TTFB represents the time it takes for the server to start sending a response.",
     "points": 10,
     "sampleAnswers": [
@@ -4086,11 +3790,7 @@
     "updatedAt": "2025-11-11T18:59:32.541Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "rendering-patterns",
-      "resumability",
-      "advanced"
-    ],
+    "tags": ["rendering-patterns", "resumability", "advanced"],
     "explanation": "RUM collects performance data from actual users in the wild, giving real-world insights.",
     "points": 10,
     "sampleAnswers": [
@@ -4149,11 +3849,7 @@
     "updatedAt": "2025-11-11T18:59:32.541Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "rendering-patterns",
-      "resumability",
-      "intermediate"
-    ],
+    "tags": ["rendering-patterns", "resumability", "intermediate"],
     "explanation": "They define quantitative limits (like max JS size or LCP time) to prevent regressions",
     "points": 10,
     "options": [
@@ -4196,11 +3892,7 @@
     "updatedAt": "2025-11-11T18:59:32.541Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "rendering-patterns",
-      "resumability",
-      "advanced"
-    ],
+    "tags": ["rendering-patterns", "resumability", "advanced"],
     "explanation": "First Input Delay (FID)",
     "points": 10,
     "options": [
@@ -4243,11 +3935,7 @@
     "updatedAt": "2025-11-11T18:59:32.541Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "rendering-patterns",
-      "resumability",
-      "advanced"
-    ],
+    "tags": ["rendering-patterns", "resumability", "advanced"],
     "explanation": "Integrate Lighthouse CI or WebPageTest in the pipeline to measure metrics like LCP and CLS on each deployment.",
     "points": 10,
     "sampleAnswers": [
@@ -4306,11 +3994,7 @@
     "updatedAt": "2025-11-11T18:59:32.539Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "rendering-patterns",
-      "server-side-rendering",
-      "intermediate"
-    ],
+    "tags": ["rendering-patterns", "server-side-rendering", "intermediate"],
     "explanation": "The server executes React components to generate HTML on each request and sends it to the client.",
     "points": 10,
     "sampleAnswers": [
@@ -4369,11 +4053,7 @@
     "updatedAt": "2025-11-11T18:59:32.539Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "rendering-patterns",
-      "server-side-rendering",
-      "intermediate"
-    ],
+    "tags": ["rendering-patterns", "server-side-rendering", "intermediate"],
     "explanation": "Higher server load and slower TTFB compared to static rendering",
     "points": 10,
     "options": [
@@ -4416,11 +4096,7 @@
     "updatedAt": "2025-11-11T18:59:32.539Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "rendering-patterns",
-      "server-side-rendering",
-      "intermediate"
-    ],
+    "tags": ["rendering-patterns", "server-side-rendering", "intermediate"],
     "explanation": "A dashboard showing real-time user data",
     "points": 10,
     "options": [
@@ -4463,11 +4139,7 @@
     "updatedAt": "2025-11-11T18:59:32.539Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "rendering-patterns",
-      "server-side-rendering",
-      "intermediate"
-    ],
+    "tags": ["rendering-patterns", "server-side-rendering", "intermediate"],
     "explanation": "Hydration is the process where React attaches event listeners and reuses server-rendered HTML to make the page interactive.",
     "points": 10,
     "sampleAnswers": [
@@ -4526,11 +4198,7 @@
     "updatedAt": "2025-11-11T18:59:32.539Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "rendering-patterns",
-      "server-side-rendering",
-      "advanced"
-    ],
+    "tags": ["rendering-patterns", "server-side-rendering", "advanced"],
     "explanation": "Streaming SSR sends HTML to the browser in chunks as components are rendered, instead of waiting for the full page to be ready.",
     "points": 10,
     "sampleAnswers": [
@@ -4589,11 +4257,7 @@
     "updatedAt": "2025-11-11T18:59:32.539Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "rendering-patterns",
-      "server-side-rendering",
-      "intermediate"
-    ],
+    "tags": ["rendering-patterns", "server-side-rendering", "intermediate"],
     "explanation": "React Suspense for data fetching",
     "points": 10,
     "options": [
@@ -4636,11 +4300,7 @@
     "updatedAt": "2025-11-11T18:59:32.539Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "rendering-patterns",
-      "server-side-rendering",
-      "advanced"
-    ],
+    "tags": ["rendering-patterns", "server-side-rendering", "advanced"],
     "explanation": "Edge Rendering runs SSR logic on edge servers close to the user, reducing latency and improving global performance.",
     "points": 10,
     "sampleAnswers": [
@@ -4699,11 +4359,7 @@
     "updatedAt": "2025-11-11T18:59:32.539Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "rendering-patterns",
-      "server-side-rendering",
-      "advanced"
-    ],
+    "tags": ["rendering-patterns", "server-side-rendering", "advanced"],
     "explanation": "Edge Rendering happens on globally distributed edge nodes rather than a central server",
     "points": 10,
     "options": [
@@ -4746,11 +4402,7 @@
     "updatedAt": "2025-11-11T18:59:32.539Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "rendering-patterns",
-      "server-side-rendering",
-      "advanced"
-    ],
+    "tags": ["rendering-patterns", "server-side-rendering", "advanced"],
     "explanation": "RSC allow parts of the React tree to render on the server without sending extra JavaScript to the client.",
     "points": 10,
     "sampleAnswers": [
@@ -4809,11 +4461,7 @@
     "updatedAt": "2025-11-11T18:59:32.539Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "rendering-patterns",
-      "server-side-rendering",
-      "intermediate"
-    ],
+    "tags": ["rendering-patterns", "server-side-rendering", "intermediate"],
     "explanation": "Hybrid Rendering — mixing SSG, SSR, and ISR depending on route needs",
     "points": 10,
     "options": [
@@ -4856,11 +4504,7 @@
     "updatedAt": "2025-11-11T18:59:32.541Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "rendering-patterns",
-      "static-rendering",
-      "intermediate"
-    ],
+    "tags": ["rendering-patterns", "static-rendering", "intermediate"],
     "explanation": "Static Rendering generates HTML at build time and serves pre-rendered pages from a CDN or edge cache.",
     "points": 10,
     "sampleAnswers": [
@@ -4919,11 +4563,7 @@
     "updatedAt": "2025-11-11T18:59:32.541Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "rendering-patterns",
-      "static-rendering",
-      "intermediate"
-    ],
+    "tags": ["rendering-patterns", "static-rendering", "intermediate"],
     "explanation": "HTML is pre-generated and can be cached for near-instant TTFB",
     "points": 10,
     "options": [
@@ -4966,11 +4606,7 @@
     "updatedAt": "2025-11-11T18:59:32.541Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "rendering-patterns",
-      "static-rendering",
-      "intermediate"
-    ],
+    "tags": ["rendering-patterns", "static-rendering", "intermediate"],
     "explanation": "Delayed Largest Contentful Paint (LCP) since main content loads after client fetch",
     "points": 10,
     "options": [
@@ -5013,11 +4649,7 @@
     "updatedAt": "2025-11-11T18:59:32.541Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "rendering-patterns",
-      "static-rendering",
-      "intermediate"
-    ],
+    "tags": ["rendering-patterns", "static-rendering", "intermediate"],
     "explanation": "It allows fetching data at build time to generate static HTML with data baked in, avoiding client-side API calls.",
     "points": 10,
     "sampleAnswers": [
@@ -5076,11 +4708,7 @@
     "updatedAt": "2025-11-11T18:59:32.541Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "rendering-patterns",
-      "static-rendering",
-      "intermediate"
-    ],
+    "tags": ["rendering-patterns", "static-rendering", "intermediate"],
     "explanation": "Long build times and hitting API request limits",
     "points": 10,
     "options": [
@@ -5123,11 +4751,7 @@
     "updatedAt": "2025-11-11T18:59:32.541Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "rendering-patterns",
-      "static-rendering",
-      "advanced"
-    ],
+    "tags": ["rendering-patterns", "static-rendering", "advanced"],
     "explanation": "ISR allows selective regeneration of pages after deployment without rebuilding the whole site.",
     "points": 10,
     "sampleAnswers": [
@@ -5186,11 +4810,7 @@
     "updatedAt": "2025-11-11T18:59:32.541Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "rendering-patterns",
-      "static-rendering",
-      "intermediate"
-    ],
+    "tags": ["rendering-patterns", "static-rendering", "intermediate"],
     "explanation": "The page is generated on-demand and cached for future requests",
     "points": 10,
     "options": [
@@ -5233,11 +4853,7 @@
     "updatedAt": "2025-11-11T18:59:32.541Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "rendering-patterns",
-      "static-rendering",
-      "advanced"
-    ],
+    "tags": ["rendering-patterns", "static-rendering", "advanced"],
     "explanation": "Instead of regenerating pages at fixed intervals, On-Demand ISR regenerates pages in response to specific events like webhooks or data updates.",
     "points": 10,
     "sampleAnswers": [
@@ -5296,11 +4912,7 @@
     "updatedAt": "2025-11-11T18:59:32.541Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "rendering-patterns",
-      "static-rendering",
-      "intermediate"
-    ],
+    "tags": ["rendering-patterns", "static-rendering", "intermediate"],
     "explanation": "Largest Contentful Paint (LCP)",
     "points": 10,
     "options": [
@@ -5343,11 +4955,7 @@
     "updatedAt": "2025-11-11T18:59:32.541Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "rendering-patterns",
-      "static-rendering",
-      "intermediate"
-    ],
+    "tags": ["rendering-patterns", "static-rendering", "intermediate"],
     "explanation": "For highly personalized pages or data that changes per user request",
     "points": 10,
     "options": [
@@ -5390,11 +4998,7 @@
     "updatedAt": "2025-11-11T18:59:32.541Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "rendering-patterns",
-      "streaming-rendering",
-      "intermediate"
-    ],
+    "tags": ["rendering-patterns", "streaming-rendering", "intermediate"],
     "explanation": "To store responses locally or on a CDN to reduce server load and speed up subsequent requests.",
     "points": 10,
     "sampleAnswers": [
@@ -5453,11 +5057,7 @@
     "updatedAt": "2025-11-11T18:59:32.541Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "rendering-patterns",
-      "streaming-rendering",
-      "intermediate"
-    ],
+    "tags": ["rendering-patterns", "streaming-rendering", "intermediate"],
     "explanation": "Cache-Control: must-revalidate",
     "points": 10,
     "options": [
@@ -5500,11 +5100,7 @@
     "updatedAt": "2025-11-11T18:59:32.541Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "rendering-patterns",
-      "streaming-rendering",
-      "intermediate"
-    ],
+    "tags": ["rendering-patterns", "streaming-rendering", "intermediate"],
     "explanation": "ETag is a unique identifier for a resource version that helps browsers validate if content has changed.",
     "points": 10,
     "sampleAnswers": [
@@ -5563,11 +5159,7 @@
     "updatedAt": "2025-11-11T18:59:32.541Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "rendering-patterns",
-      "streaming-rendering",
-      "intermediate"
-    ],
+    "tags": ["rendering-patterns", "streaming-rendering", "intermediate"],
     "explanation": "It stores static assets closer to the user geographically to reduce latency",
     "points": 10,
     "options": [
@@ -5610,11 +5202,7 @@
     "updatedAt": "2025-11-11T18:59:32.541Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "rendering-patterns",
-      "streaming-rendering",
-      "intermediate"
-    ],
+    "tags": ["rendering-patterns", "streaming-rendering", "intermediate"],
     "explanation": "Preconnect establishes early network connections (DNS, TCP, TLS) to improve later requests.",
     "points": 10,
     "sampleAnswers": [
@@ -5673,11 +5261,7 @@
     "updatedAt": "2025-11-11T18:59:32.541Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "rendering-patterns",
-      "streaming-rendering",
-      "intermediate"
-    ],
+    "tags": ["rendering-patterns", "streaming-rendering", "intermediate"],
     "explanation": "It ensures browsers fetch updated assets when changes occur",
     "points": 10,
     "options": [
@@ -5720,11 +5304,7 @@
     "updatedAt": "2025-11-11T18:59:32.541Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "rendering-patterns",
-      "streaming-rendering",
-      "advanced"
-    ],
+    "tags": ["rendering-patterns", "streaming-rendering", "advanced"],
     "explanation": "By updating the asset version hash or using service worker cache management APIs.",
     "points": 10,
     "sampleAnswers": [
@@ -5783,11 +5363,7 @@
     "updatedAt": "2025-11-11T18:59:32.541Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "rendering-patterns",
-      "streaming-rendering",
-      "advanced"
-    ],
+    "tags": ["rendering-patterns", "streaming-rendering", "advanced"],
     "explanation": "ETag and If-None-Match",
     "points": 10,
     "options": [
@@ -5830,11 +5406,7 @@
     "updatedAt": "2025-11-11T18:59:32.541Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "rendering-patterns",
-      "streaming-rendering",
-      "advanced"
-    ],
+    "tags": ["rendering-patterns", "streaming-rendering", "advanced"],
     "explanation": "ISR allows static pages to be regenerated in the background at runtime while serving cached versions to users.",
     "points": 10,
     "sampleAnswers": [
@@ -5893,11 +5465,7 @@
     "updatedAt": "2025-11-11T18:59:32.541Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "rendering-patterns",
-      "streaming-rendering",
-      "advanced"
-    ],
+    "tags": ["rendering-patterns", "streaming-rendering", "advanced"],
     "explanation": "Serves a stale cache immediately and revalidates it in the background",
     "points": 10,
     "options": [

@@ -1,10 +1,10 @@
-import { NextAuthOptions } from 'next-auth';
-import GoogleProvider from 'next-auth/providers/google';
-import GitHubProvider from 'next-auth/providers/github';
-import CredentialsProvider from 'next-auth/providers/credentials';
+import { NextAuthOptions } from "next-auth";
+import GoogleProvider from "next-auth/providers/google";
+import GitHubProvider from "next-auth/providers/github";
+import CredentialsProvider from "next-auth/providers/credentials";
 
 // Extend the default session and user types
-declare module 'next-auth' {
+declare module "next-auth" {
   interface Session {
     user: {
       id: string;
@@ -21,7 +21,7 @@ declare module 'next-auth' {
   }
 }
 
-declare module 'next-auth/jwt' {
+declare module "next-auth/jwt" {
   interface JWT {
     id: string;
     provider?: string;
@@ -39,10 +39,10 @@ export const authOptions: NextAuthOptions = {
       clientSecret: process.env.GITHUB_CLIENT_SECRET!,
     }),
     CredentialsProvider({
-      name: 'credentials',
+      name: "credentials",
       credentials: {
-        email: { label: 'Email', type: 'email' },
-        password: { label: 'Password', type: 'password' },
+        email: { label: "Email", type: "email" },
+        password: { label: "Password", type: "password" },
       },
       async authorize(credentials) {
         if (!credentials?.email || !credentials?.password) {
@@ -56,7 +56,7 @@ export const authOptions: NextAuthOptions = {
     }),
   ],
   session: {
-    strategy: 'jwt',
+    strategy: "jwt",
     maxAge: 7 * 24 * 60 * 60, // 7 days
   },
   callbacks: {
@@ -76,8 +76,8 @@ export const authOptions: NextAuthOptions = {
     },
   },
   pages: {
-    signIn: '/auth',
-    error: '/auth',
+    signIn: "/auth",
+    error: "/auth",
   },
   secret: process.env.NEXTAUTH_SECRET,
 };

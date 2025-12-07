@@ -1,8 +1,13 @@
 # Task ID: F-004
+
 # Title: Learning Paths Practice
+
 # Status: pending
-# Dependencies: 
+
+# Dependencies:
+
 # Priority: high
+
 # Description: Test the Learning Paths page which displays available learning paths (categories → topics → questions) for practice, including search, filtering, and path selection.
 
 # Details:
@@ -10,6 +15,7 @@
 ## Time Estimation
 
 ### Manual Testing
+
 - **Estimated Time**: 40-50 minutes
 - **Breakdown**:
   - Navigate to page: 2 minutes
@@ -24,6 +30,7 @@
 - **Dependencies**: Learning paths data from API
 
 ### Automated Testing
+
 - **Estimated Time**: 15-22 minutes (first run), 3-4 minutes (subsequent runs)
 - **Breakdown**:
   - Unit tests setup and execution: 5-8 minutes
@@ -33,6 +40,7 @@
 - **Dependencies**: API mocks, test data
 
 ### Total Time
+
 - **Manual Only**: 40-50 minutes
 - **Automated Only**: 15-22 minutes (first run), 3-4 minutes (subsequent)
 - **Both Manual + Automated**: 55-72 minutes (first run), 43-54 minutes (subsequent)
@@ -40,6 +48,7 @@
 ---
 
 ## Overview
+
 Test the Learning Paths page which displays available learning paths (categories → topics → questions) for practice, including search, filtering, and path selection.
 
 ## Manual Testing Steps

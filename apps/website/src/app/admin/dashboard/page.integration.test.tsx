@@ -3,24 +3,28 @@
  * Task: A-003 - Admin Dashboard
  */
 
-import React from 'react';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
-import '@testing-library/jest-dom';
-import AdminDashboard from './page';
-import { useAdminAuth } from '@elzatona/shared-contexts';
+import React from "react";
+import { render, screen, fireEvent, waitFor } from "@testing-library/react";
+import "@testing-library/jest-dom";
+import AdminDashboard from "./page";
+import { useAdminAuth } from "@elzatona/contexts";
 
-jest.mock('@elzatona/shared-contexts', () => {
-  const actual = jest.requireActual('@elzatona/shared-contexts');
+jest.mock("@elzatona/contexts", () => {
+  const actual = jest.requireActual("@elzatona/contexts");
   return {
     ...actual,
     useAdminAuth: jest.fn(),
-    AdminAuthProvider: ({ children }: { children: React.ReactNode }) => <>{children}</>,
-    NotificationProvider: ({ children }: { children: React.ReactNode }) => <>{children}</>,
+    AdminAuthProvider: ({ children }: { children: React.ReactNode }) => (
+      <>{children}</>
+    ),
+    NotificationProvider: ({ children }: { children: React.ReactNode }) => (
+      <>{children}</>
+    ),
   };
 });
 
 const mockRefetch = jest.fn();
-jest.mock('@elzatona/shared-hooks', () => ({
+jest.mock("@elzatona/hooks", () => ({
   useAdminStats: jest.fn(() => ({
     data: {
       questions: 100,
@@ -40,7 +44,7 @@ jest.mock('@elzatona/shared-hooks', () => ({
   })),
 }));
 
-jest.mock('lucide-react', () => ({
+jest.mock("lucide-react", () => ({
   BookOpen: () => <span>📖</span>,
   HelpCircle: () => <span>❓</span>,
   CreditCard: () => <span>💳</span>,
@@ -73,7 +77,7 @@ jest.mock('lucide-react', () => ({
 }));
 
 const mockPush = jest.fn();
-jest.mock('next/navigation', () => ({
+jest.mock("next/navigation", () => ({
   useRouter: () => ({
     push: mockPush,
     replace: jest.fn(),
@@ -81,60 +85,60 @@ jest.mock('next/navigation', () => ({
   }),
 }));
 
-describe('A-IT-013: Dashboard Navigation', () => {
+describe("A-IT-013: Dashboard Navigation", () => {
   beforeEach(() => {
     jest.clearAllMocks();
-    
+
     (useAdminAuth as jest.Mock).mockReturnValue({
       user: {
-        id: '1',
-        email: 'admin@example.com',
-        role: 'super_admin',
-        name: 'Admin User',
+        id: "1",
+        email: "admin@example.com",
+        role: "super_admin",
+        name: "Admin User",
       },
     });
   });
 
-  it('should display all admin menu items', () => {
+  it("should display all admin menu items", () => {
     render(<AdminDashboard />);
-    
+
     // Check for quick actions that are actually displayed
     expect(screen.getByText(/Add New Question/i)).toBeInTheDocument();
     expect(screen.getByText(/Create Frontend Task/i)).toBeInTheDocument();
     expect(screen.getByText(/Add Problem Solving/i)).toBeInTheDocument();
   });
 
-  it('should display quick actions', () => {
+  it("should display quick actions", () => {
     render(<AdminDashboard />);
-    
+
     expect(screen.getByText(/Add New Question/i)).toBeInTheDocument();
     expect(screen.getByText(/Manage Learning Cards/i)).toBeInTheDocument();
   });
 });
 
-describe('A-IT-014: Stats Integration', () => {
+describe("A-IT-014: Stats Integration", () => {
   beforeEach(() => {
     jest.clearAllMocks();
-    
+
     (useAdminAuth as jest.Mock).mockReturnValue({
       user: {
-        id: '1',
-        email: 'admin@example.com',
-        role: 'super_admin',
-        name: 'Admin User',
+        id: "1",
+        email: "admin@example.com",
+        role: "super_admin",
+        name: "Admin User",
       },
     });
   });
 
-  it('should display stats from useAdminStats hook', () => {
+  it("should display stats from useAdminStats hook", () => {
     render(<AdminDashboard />);
-    
+
     // Stats should be displayed
     expect(screen.getByText(/100/)).toBeInTheDocument(); // questions count
   });
 
-  it('should handle loading state', () => {
-    const { useAdminStats } = require('@elzatona/shared-hooks');
+  it("should handle loading state", () => {
+    const { useAdminStats } = require("@elzatona/hooks");
     useAdminStats.mockReturnValue({
       data: null,
       isLoading: true,
@@ -142,10 +146,10 @@ describe('A-IT-014: Stats Integration', () => {
       refetch: mockRefetch,
       isRefetching: false,
     });
-    
+
     const { rerender } = render(<AdminDashboard />);
     rerender(<AdminDashboard />);
-    
+
     // Should show loading state
     expect(screen.queryByText(/100/)).not.toBeInTheDocument();
   });

@@ -1,18 +1,18 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 // Server-side Supabase configuration for Next.js 15 compatibility
 // This file uses 'any' types for Supabase query builder operations
-import { createClient } from '@supabase/supabase-js';
+import { createClient } from "@supabase/supabase-js";
 
 // Supabase configuration (environment variables required)
-const supabaseUrl = process.env['NEXT_PUBLIC_SUPABASE_URL'];
+const supabaseUrl = process.env["NEXT_PUBLIC_SUPABASE_URL"];
 // Use service role key if available, otherwise fallback to anon key (but both must be set)
 const supabaseServiceRoleKey =
-  process.env['SUPABASE_SERVICE_ROLE_KEY'] ||
-  process.env['NEXT_PUBLIC_SUPABASE_ANON_KEY'];
+  process.env["SUPABASE_SERVICE_ROLE_KEY"] ||
+  process.env["NEXT_PUBLIC_SUPABASE_ANON_KEY"];
 
 if (!supabaseUrl || !supabaseServiceRoleKey) {
   throw new Error(
-    'Missing required Supabase environment variables: NEXT_PUBLIC_SUPABASE_URL and (SUPABASE_SERVICE_ROLE_KEY or NEXT_PUBLIC_SUPABASE_ANON_KEY) must be set'
+    "Missing required Supabase environment variables: NEXT_PUBLIC_SUPABASE_URL and (SUPABASE_SERVICE_ROLE_KEY or NEXT_PUBLIC_SUPABASE_ANON_KEY) must be set",
   );
 }
 
@@ -27,10 +27,10 @@ try {
     },
   });
   console.log(
-    '✅ Supabase server initialized successfully with service role key!'
+    "✅ Supabase server initialized successfully with service role key!",
   );
 } catch (error) {
-  console.error('❌ Supabase server initialization failed:', error);
+  console.error("❌ Supabase server initialization failed:", error);
 }
 
 // Export Supabase client for server-side use
@@ -44,21 +44,21 @@ export const supabaseOperations = {
     isActive?: boolean;
     limit?: number;
     orderBy?: string;
-    orderDirection?: 'asc' | 'desc';
+    orderDirection?: "asc" | "desc";
   }) {
-    if (!supabase) throw new Error('Supabase not initialized');
+    if (!supabase) throw new Error("Supabase not initialized");
 
-    let query = (supabase as any).from('learning_cards').select('*');
+    let query = (supabase as any).from("learning_cards").select("*");
 
     if (filters?.type) {
-      query = query.eq('type', filters.type);
+      query = query.eq("type", filters.type);
     }
     if (filters?.isActive !== undefined) {
-      query = query.eq('is_active', filters.isActive);
+      query = query.eq("is_active", filters.isActive);
     }
     if (filters?.orderBy) {
       query = query.order(filters.orderBy, {
-        ascending: filters.orderDirection === 'asc',
+        ascending: filters.orderDirection === "asc",
       });
     }
     if (filters?.limit) {
@@ -77,7 +77,7 @@ export const supabaseOperations = {
     order_index?: number;
     is_active?: boolean;
   }) {
-    if (!supabase) throw new Error('Supabase not initialized');
+    if (!supabase) throw new Error("Supabase not initialized");
 
     const data = {
       ...cardData,
@@ -87,7 +87,7 @@ export const supabaseOperations = {
     };
 
     return await (supabase as any)
-      .from('learning_cards')
+      .from("learning_cards")
       .insert(data)
       .select()
       .single();
@@ -103,9 +103,9 @@ export const supabaseOperations = {
       icon: string;
       order_index: number;
       is_active: boolean;
-    }>
+    }>,
   ) {
-    if (!supabase) throw new Error('Supabase not initialized');
+    if (!supabase) throw new Error("Supabase not initialized");
 
     const data = {
       ...updates,
@@ -113,34 +113,34 @@ export const supabaseOperations = {
     };
 
     return await (supabase as any)
-      .from('learning_cards')
+      .from("learning_cards")
       .update(data)
-      .eq('id', id)
+      .eq("id", id)
       .select()
       .single();
   },
 
   async deleteLearningCard(id: string) {
-    if (!supabase) throw new Error('Supabase not initialized');
-    return await (supabase as any).from('learning_cards').delete().eq('id', id);
+    if (!supabase) throw new Error("Supabase not initialized");
+    return await (supabase as any).from("learning_cards").delete().eq("id", id);
   },
 
   // Categories
   async getCategories(filters?: {
     isActive?: boolean;
     orderBy?: string;
-    orderDirection?: 'asc' | 'desc';
+    orderDirection?: "asc" | "desc";
   }) {
-    if (!supabase) throw new Error('Supabase not initialized');
+    if (!supabase) throw new Error("Supabase not initialized");
 
-    let query = (supabase as any).from('categories').select('*');
+    let query = (supabase as any).from("categories").select("*");
 
     if (filters?.isActive !== undefined) {
-      query = query.eq('is_active', filters.isActive);
+      query = query.eq("is_active", filters.isActive);
     }
     if (filters?.orderBy) {
       query = query.order(filters.orderBy, {
-        ascending: filters.orderDirection === 'asc',
+        ascending: filters.orderDirection === "asc",
       });
     }
 
@@ -157,24 +157,24 @@ export const supabaseOperations = {
     order_index?: number;
     is_active?: boolean;
   }) {
-    if (!supabase) throw new Error('Supabase not initialized');
+    if (!supabase) throw new Error("Supabase not initialized");
 
     const data = {
       ...categoryData,
       slug:
         categoryData.slug ||
-        categoryData.name.toLowerCase().replace(/\s+/g, '-'),
+        categoryData.name.toLowerCase().replace(/\s+/g, "-"),
       card_type:
         categoryData.card_type ||
         categoryData.slug ||
-        categoryData.name.toLowerCase().replace(/\s+/g, '-'),
+        categoryData.name.toLowerCase().replace(/\s+/g, "-"),
       created_at: new Date().toISOString(),
       updated_at: new Date().toISOString(),
       is_active: categoryData.is_active !== false,
     };
 
     return await (supabase as any)
-      .from('categories')
+      .from("categories")
       .insert(data)
       .select()
       .single();
@@ -185,21 +185,21 @@ export const supabaseOperations = {
     categoryId?: string;
     isActive?: boolean;
     orderBy?: string;
-    orderDirection?: 'asc' | 'desc';
+    orderDirection?: "asc" | "desc";
   }) {
-    if (!supabase) throw new Error('Supabase not initialized');
+    if (!supabase) throw new Error("Supabase not initialized");
 
-    let query = (supabase as any).from('topics').select('*');
+    let query = (supabase as any).from("topics").select("*");
 
     if (filters?.categoryId) {
-      query = query.eq('category_id', filters.categoryId);
+      query = query.eq("category_id", filters.categoryId);
     }
     if (filters?.isActive !== undefined) {
-      query = query.eq('is_active', filters.isActive);
+      query = query.eq("is_active", filters.isActive);
     }
     if (filters?.orderBy) {
       query = query.order(filters.orderBy, {
-        ascending: filters.orderDirection === 'asc',
+        ascending: filters.orderDirection === "asc",
       });
     }
 
@@ -214,18 +214,18 @@ export const supabaseOperations = {
     order_index?: number;
     is_active?: boolean;
   }) {
-    if (!supabase) throw new Error('Supabase not initialized');
+    if (!supabase) throw new Error("Supabase not initialized");
 
     const data = {
       ...topicData,
-      slug: topicData.slug || topicData.name.toLowerCase().replace(/\s+/g, '-'),
+      slug: topicData.slug || topicData.name.toLowerCase().replace(/\s+/g, "-"),
       created_at: new Date().toISOString(),
       updated_at: new Date().toISOString(),
       is_active: topicData.is_active !== false,
     };
 
     return await (supabase as any)
-      .from('topics')
+      .from("topics")
       .insert(data)
       .select()
       .single();
@@ -240,41 +240,41 @@ export const supabaseOperations = {
     isActive?: boolean;
     limit?: number;
     orderBy?: string;
-    orderDirection?: 'asc' | 'desc';
+    orderDirection?: "asc" | "desc";
   }) {
-    if (!supabase) throw new Error('Supabase not initialized');
+    if (!supabase) throw new Error("Supabase not initialized");
 
-    let query = (supabase as any).from('questions').select('*');
+    let query = (supabase as any).from("questions").select("*");
 
     if (filters?.topicId) {
       console.log(
-        `🔍 getQuestions - Applying topic_id filter: ${filters.topicId}`
+        `🔍 getQuestions - Applying topic_id filter: ${filters.topicId}`,
       );
-      query = query.eq('topic_id', filters.topicId);
+      query = query.eq("topic_id", filters.topicId);
     } else {
-      console.log('⚠️ getQuestions - No topic_id filter provided');
+      console.log("⚠️ getQuestions - No topic_id filter provided");
     }
     if (filters?.categoryId) {
       if (Array.isArray(filters.categoryId)) {
         // Filter by multiple category IDs
-        query = query.in('category_id', filters.categoryId);
+        query = query.in("category_id", filters.categoryId);
       } else {
         // Filter by single category ID
-        query = query.eq('category_id', filters.categoryId);
+        query = query.eq("category_id", filters.categoryId);
       }
     }
     if (filters?.difficulty) {
-      query = query.eq('difficulty', filters.difficulty);
+      query = query.eq("difficulty", filters.difficulty);
     }
     if (filters?.questionType) {
-      query = query.eq('question_type', filters.questionType);
+      query = query.eq("question_type", filters.questionType);
     }
     if (filters?.isActive !== undefined) {
-      query = query.eq('is_active', filters.isActive);
+      query = query.eq("is_active", filters.isActive);
     }
     if (filters?.orderBy) {
       query = query.order(filters.orderBy, {
-        ascending: filters.orderDirection === 'asc',
+        ascending: filters.orderDirection === "asc",
       });
     }
     if (filters?.limit) {
@@ -295,7 +295,7 @@ export const supabaseOperations = {
     tags?: string;
     is_active?: boolean;
   }) {
-    if (!supabase) throw new Error('Supabase not initialized');
+    if (!supabase) throw new Error("Supabase not initialized");
 
     const data = {
       ...questionData,
@@ -305,7 +305,7 @@ export const supabaseOperations = {
     };
 
     return await (supabase as any)
-      .from('questions')
+      .from("questions")
       .insert(data)
       .select()
       .single();
@@ -316,21 +316,21 @@ export const supabaseOperations = {
     difficulty?: string;
     isActive?: boolean;
     orderBy?: string;
-    orderDirection?: 'asc' | 'desc';
+    orderDirection?: "asc" | "desc";
   }) {
-    if (!supabase) throw new Error('Supabase not initialized');
+    if (!supabase) throw new Error("Supabase not initialized");
 
-    let query = (supabase as any).from('learning_plans').select('*');
+    let query = (supabase as any).from("learning_plans").select("*");
 
     if (filters?.difficulty) {
-      query = query.eq('difficulty', filters.difficulty);
+      query = query.eq("difficulty", filters.difficulty);
     }
     if (filters?.isActive !== undefined) {
-      query = query.eq('is_active', filters.isActive);
+      query = query.eq("is_active", filters.isActive);
     }
     if (filters?.orderBy) {
       query = query.order(filters.orderBy, {
-        ascending: filters.orderDirection === 'asc',
+        ascending: filters.orderDirection === "asc",
       });
     }
 
@@ -344,7 +344,7 @@ export const supabaseOperations = {
     estimated_time?: number;
     is_active?: boolean;
   }) {
-    if (!supabase) throw new Error('Supabase not initialized');
+    if (!supabase) throw new Error("Supabase not initialized");
 
     const data = {
       ...planData,
@@ -354,7 +354,7 @@ export const supabaseOperations = {
     };
 
     return await (supabase as any)
-      .from('learning_plans')
+      .from("learning_plans")
       .insert(data)
       .select()
       .single();

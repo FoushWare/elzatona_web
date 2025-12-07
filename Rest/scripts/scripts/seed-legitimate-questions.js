@@ -4,8 +4,7 @@ const { createClient } = require('@supabase/supabase-js');
 
 // Supabase configuration
 const supabaseUrl = 'https://hpnewqkvpnthpohvxcmq.supabase.co';
-const supabaseKey =
-  process.env.SUPABASE_SERVICE_ROLE_KEY;
+const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
 const supabase = createClient(supabaseUrl, supabaseKey);
 
 // Category mappings

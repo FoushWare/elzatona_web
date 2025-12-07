@@ -6,17 +6,13 @@
         "cwd": "apps/admin",
         "tty": false
       },
-      "dependsOn": [
-        "^build"
-      ],
+      "dependsOn": ["^build"],
       "cache": true,
       "inputs": [
         "default",
         "^production",
         {
-          "externalDependencies": [
-            "next"
-          ]
+          "externalDependencies": ["next"]
         }
       ],
       "outputs": [
@@ -37,9 +33,7 @@
       "options": {
         "cwd": "apps/admin"
       },
-      "dependsOn": [
-        "build"
-      ]
+      "dependsOn": ["build"]
     },
     "serve-static": {
       "continuous": true,
@@ -47,20 +41,14 @@
       "options": {
         "cwd": "apps/admin"
       },
-      "dependsOn": [
-        "build"
-      ]
+      "dependsOn": ["build"]
     },
     "build-deps": {
-      "dependsOn": [
-        "^build"
-      ]
+      "dependsOn": ["^build"]
     },
     "watch-deps": {
       "continuous": true,
-      "dependsOn": [
-        "build-deps"
-      ],
+      "dependsOn": ["build-deps"],
       "command": "npx nx watch --projects admin --includeDependentProjects -- npx nx build-deps admin"
     }
   },
@@ -71,17 +59,13 @@
         "cwd": "apps/website",
         "tty": false
       },
-      "dependsOn": [
-        "^build"
-      ],
+      "dependsOn": ["^build"],
       "cache": true,
       "inputs": [
         "default",
         "^production",
         {
-          "externalDependencies": [
-            "next"
-          ]
+          "externalDependencies": ["next"]
         }
       ],
       "outputs": [
@@ -102,9 +86,7 @@
       "options": {
         "cwd": "apps/website"
       },
-      "dependsOn": [
-        "build"
-      ]
+      "dependsOn": ["build"]
     },
     "serve-static": {
       "continuous": true,
@@ -112,20 +94,14 @@
       "options": {
         "cwd": "apps/website"
       },
-      "dependsOn": [
-        "build"
-      ]
+      "dependsOn": ["build"]
     },
     "build-deps": {
-      "dependsOn": [
-        "^build"
-      ]
+      "dependsOn": ["^build"]
     },
     "watch-deps": {
       "continuous": true,
-      "dependsOn": [
-        "build-deps"
-      ],
+      "dependsOn": ["build-deps"],
       "command": "npx nx watch --projects website --includeDependentProjects -- npx nx build-deps website"
     }
   },
@@ -136,17 +112,13 @@
         "cwd": "apps/website",
         "tty": false
       },
-      "dependsOn": [
-        "^build"
-      ],
+      "dependsOn": ["^build"],
       "cache": true,
       "inputs": [
         "default",
         "^production",
         {
-          "externalDependencies": [
-            "next"
-          ]
+          "externalDependencies": ["next"]
         }
       ],
       "outputs": [
@@ -167,9 +139,7 @@
       "options": {
         "cwd": "apps/website"
       },
-      "dependsOn": [
-        "build"
-      ]
+      "dependsOn": ["build"]
     },
     "serve-static": {
       "continuous": true,
@@ -177,20 +147,14 @@
       "options": {
         "cwd": "apps/website"
       },
-      "dependsOn": [
-        "build"
-      ]
+      "dependsOn": ["build"]
     },
     "build-deps": {
-      "dependsOn": [
-        "^build"
-      ]
+      "dependsOn": ["^build"]
     },
     "watch-deps": {
       "continuous": true,
-      "dependsOn": [
-        "build-deps"
-      ],
+      "dependsOn": ["build-deps"],
       "command": "npx nx watch --projects website --includeDependentProjects -- npx nx build-deps website"
     }
   },
@@ -201,17 +165,13 @@
         "cwd": "tools/templates/next-app",
         "tty": false
       },
-      "dependsOn": [
-        "^build"
-      ],
+      "dependsOn": ["^build"],
       "cache": true,
       "inputs": [
         "default",
         "^production",
         {
-          "externalDependencies": [
-            "next"
-          ]
+          "externalDependencies": ["next"]
         }
       ],
       "outputs": [
@@ -232,9 +192,7 @@
       "options": {
         "cwd": "tools/templates/next-app"
       },
-      "dependsOn": [
-        "build"
-      ]
+      "dependsOn": ["build"]
     },
     "serve-static": {
       "continuous": true,
@@ -242,20 +200,14 @@
       "options": {
         "cwd": "tools/templates/next-app"
       },
-      "dependsOn": [
-        "build"
-      ]
+      "dependsOn": ["build"]
     },
     "build-deps": {
-      "dependsOn": [
-        "^build"
-      ]
+      "dependsOn": ["^build"]
     },
     "watch-deps": {
       "continuous": true,
-      "dependsOn": [
-        "build-deps"
-      ],
+      "dependsOn": ["build-deps"],
       "command": "npx nx watch --projects {{app-name}} --includeDependentProjects -- npx nx build-deps {{app-name}}"
     }
   },
@@ -266,17 +218,13 @@
         "cwd": "apps/website",
         "tty": false
       },
-      "dependsOn": [
-        "^build"
-      ],
+      "dependsOn": ["^build"],
       "cache": true,
       "inputs": [
         "default",
         "^production",
         {
-          "externalDependencies": [
-            "next"
-          ]
+          "externalDependencies": ["next"]
         }
       ],
       "outputs": [
@@ -297,9 +245,7 @@
       "options": {
         "cwd": "apps/website"
       },
-      "dependsOn": [
-        "build"
-      ]
+      "dependsOn": ["build"]
     },
     "serve-static": {
       "continuous": true,
@@ -307,20 +253,14 @@
       "options": {
         "cwd": "apps/website"
       },
-      "dependsOn": [
-        "build"
-      ]
+      "dependsOn": ["build"]
     },
     "build-deps": {
-      "dependsOn": [
-        "^build"
-      ]
+      "dependsOn": ["^build"]
     },
     "watch-deps": {
       "continuous": true,
-      "dependsOn": [
-        "build-deps"
-      ],
+      "dependsOn": ["build-deps"],
       "command": "npx nx watch --projects website --includeDependentProjects -- npx nx build-deps website"
     }
   },
@@ -331,17 +271,13 @@
         "cwd": "apps/website",
         "tty": false
       },
-      "dependsOn": [
-        "^build"
-      ],
+      "dependsOn": ["^build"],
       "cache": true,
       "inputs": [
         "default",
         "^production",
         {
-          "externalDependencies": [
-            "next"
-          ]
+          "externalDependencies": ["next"]
         }
       ],
       "outputs": [
@@ -362,9 +298,7 @@
       "options": {
         "cwd": "apps/website"
       },
-      "dependsOn": [
-        "build"
-      ]
+      "dependsOn": ["build"]
     },
     "serve-static": {
       "continuous": true,
@@ -372,20 +306,14 @@
       "options": {
         "cwd": "apps/website"
       },
-      "dependsOn": [
-        "build"
-      ]
+      "dependsOn": ["build"]
     },
     "build-deps": {
-      "dependsOn": [
-        "^build"
-      ]
+      "dependsOn": ["^build"]
     },
     "watch-deps": {
       "continuous": true,
-      "dependsOn": [
-        "build-deps"
-      ],
+      "dependsOn": ["build-deps"],
       "command": "npx nx watch --projects website --includeDependentProjects -- npx nx build-deps website"
     }
   },
@@ -396,17 +324,13 @@
         "cwd": "apps/admin",
         "tty": false
       },
-      "dependsOn": [
-        "^build"
-      ],
+      "dependsOn": ["^build"],
       "cache": true,
       "inputs": [
         "default",
         "^production",
         {
-          "externalDependencies": [
-            "next"
-          ]
+          "externalDependencies": ["next"]
         }
       ],
       "outputs": [
@@ -427,9 +351,7 @@
       "options": {
         "cwd": "apps/admin"
       },
-      "dependsOn": [
-        "build"
-      ]
+      "dependsOn": ["build"]
     },
     "serve-static": {
       "continuous": true,
@@ -437,20 +359,14 @@
       "options": {
         "cwd": "apps/admin"
       },
-      "dependsOn": [
-        "build"
-      ]
+      "dependsOn": ["build"]
     },
     "build-deps": {
-      "dependsOn": [
-        "^build"
-      ]
+      "dependsOn": ["^build"]
     },
     "watch-deps": {
       "continuous": true,
-      "dependsOn": [
-        "build-deps"
-      ],
+      "dependsOn": ["build-deps"],
       "command": "npx nx watch --projects admin --includeDependentProjects -- npx nx build-deps admin"
     }
   },
@@ -461,17 +377,13 @@
         "cwd": "apps/website",
         "tty": false
       },
-      "dependsOn": [
-        "^build"
-      ],
+      "dependsOn": ["^build"],
       "cache": true,
       "inputs": [
         "default",
         "^production",
         {
-          "externalDependencies": [
-            "next"
-          ]
+          "externalDependencies": ["next"]
         }
       ],
       "outputs": [
@@ -492,9 +404,7 @@
       "options": {
         "cwd": "apps/website"
       },
-      "dependsOn": [
-        "build"
-      ]
+      "dependsOn": ["build"]
     },
     "serve-static": {
       "continuous": true,
@@ -502,20 +412,14 @@
       "options": {
         "cwd": "apps/website"
       },
-      "dependsOn": [
-        "build"
-      ]
+      "dependsOn": ["build"]
     },
     "build-deps": {
-      "dependsOn": [
-        "^build"
-      ]
+      "dependsOn": ["^build"]
     },
     "watch-deps": {
       "continuous": true,
-      "dependsOn": [
-        "build-deps"
-      ],
+      "dependsOn": ["build-deps"],
       "command": "npx nx watch --projects website --includeDependentProjects -- npx nx build-deps website"
     }
   },
@@ -526,17 +430,13 @@
         "cwd": "apps/website",
         "tty": false
       },
-      "dependsOn": [
-        "^build"
-      ],
+      "dependsOn": ["^build"],
       "cache": true,
       "inputs": [
         "default",
         "^production",
         {
-          "externalDependencies": [
-            "next"
-          ]
+          "externalDependencies": ["next"]
         }
       ],
       "outputs": [
@@ -557,9 +457,7 @@
       "options": {
         "cwd": "apps/website"
       },
-      "dependsOn": [
-        "build"
-      ]
+      "dependsOn": ["build"]
     },
     "serve-static": {
       "continuous": true,
@@ -567,20 +465,14 @@
       "options": {
         "cwd": "apps/website"
       },
-      "dependsOn": [
-        "build"
-      ]
+      "dependsOn": ["build"]
     },
     "build-deps": {
-      "dependsOn": [
-        "^build"
-      ]
+      "dependsOn": ["^build"]
     },
     "watch-deps": {
       "continuous": true,
-      "dependsOn": [
-        "build-deps"
-      ],
+      "dependsOn": ["build-deps"],
       "command": "npx nx watch --projects website --includeDependentProjects -- npx nx build-deps website"
     }
   },
@@ -591,17 +483,13 @@
         "cwd": "apps/website",
         "tty": false
       },
-      "dependsOn": [
-        "^build"
-      ],
+      "dependsOn": ["^build"],
       "cache": true,
       "inputs": [
         "default",
         "^production",
         {
-          "externalDependencies": [
-            "next"
-          ]
+          "externalDependencies": ["next"]
         }
       ],
       "outputs": [
@@ -622,9 +510,7 @@
       "options": {
         "cwd": "apps/website"
       },
-      "dependsOn": [
-        "build"
-      ]
+      "dependsOn": ["build"]
     },
     "serve-static": {
       "continuous": true,
@@ -632,20 +518,14 @@
       "options": {
         "cwd": "apps/website"
       },
-      "dependsOn": [
-        "build"
-      ]
+      "dependsOn": ["build"]
     },
     "build-deps": {
-      "dependsOn": [
-        "^build"
-      ]
+      "dependsOn": ["^build"]
     },
     "watch-deps": {
       "continuous": true,
-      "dependsOn": [
-        "build-deps"
-      ],
+      "dependsOn": ["build-deps"],
       "command": "npx nx watch --projects website --includeDependentProjects -- npx nx build-deps website"
     }
   },
@@ -656,17 +536,13 @@
         "cwd": "apps/admin",
         "tty": false
       },
-      "dependsOn": [
-        "^build"
-      ],
+      "dependsOn": ["^build"],
       "cache": true,
       "inputs": [
         "default",
         "^production",
         {
-          "externalDependencies": [
-            "next"
-          ]
+          "externalDependencies": ["next"]
         }
       ],
       "outputs": [
@@ -687,9 +563,7 @@
       "options": {
         "cwd": "apps/admin"
       },
-      "dependsOn": [
-        "build"
-      ]
+      "dependsOn": ["build"]
     },
     "serve-static": {
       "continuous": true,
@@ -697,20 +571,14 @@
       "options": {
         "cwd": "apps/admin"
       },
-      "dependsOn": [
-        "build"
-      ]
+      "dependsOn": ["build"]
     },
     "build-deps": {
-      "dependsOn": [
-        "^build"
-      ]
+      "dependsOn": ["^build"]
     },
     "watch-deps": {
       "continuous": true,
-      "dependsOn": [
-        "build-deps"
-      ],
+      "dependsOn": ["build-deps"],
       "command": "npx nx watch --projects admin --includeDependentProjects -- npx nx build-deps admin"
     }
   },
@@ -721,17 +589,13 @@
         "cwd": "apps/website",
         "tty": false
       },
-      "dependsOn": [
-        "^build"
-      ],
+      "dependsOn": ["^build"],
       "cache": true,
       "inputs": [
         "default",
         "^production",
         {
-          "externalDependencies": [
-            "next"
-          ]
+          "externalDependencies": ["next"]
         }
       ],
       "outputs": [
@@ -752,9 +616,7 @@
       "options": {
         "cwd": "apps/website"
       },
-      "dependsOn": [
-        "build"
-      ]
+      "dependsOn": ["build"]
     },
     "serve-static": {
       "continuous": true,
@@ -762,20 +624,14 @@
       "options": {
         "cwd": "apps/website"
       },
-      "dependsOn": [
-        "build"
-      ]
+      "dependsOn": ["build"]
     },
     "build-deps": {
-      "dependsOn": [
-        "^build"
-      ]
+      "dependsOn": ["^build"]
     },
     "watch-deps": {
       "continuous": true,
-      "dependsOn": [
-        "build-deps"
-      ],
+      "dependsOn": ["build-deps"],
       "command": "npx nx watch --projects website --includeDependentProjects -- npx nx build-deps website"
     }
   },
@@ -786,17 +642,13 @@
         "cwd": "apps/website",
         "tty": false
       },
-      "dependsOn": [
-        "^build"
-      ],
+      "dependsOn": ["^build"],
       "cache": true,
       "inputs": [
         "default",
         "^production",
         {
-          "externalDependencies": [
-            "next"
-          ]
+          "externalDependencies": ["next"]
         }
       ],
       "outputs": [
@@ -817,9 +669,7 @@
       "options": {
         "cwd": "apps/website"
       },
-      "dependsOn": [
-        "build"
-      ]
+      "dependsOn": ["build"]
     },
     "serve-static": {
       "continuous": true,
@@ -827,20 +677,14 @@
       "options": {
         "cwd": "apps/website"
       },
-      "dependsOn": [
-        "build"
-      ]
+      "dependsOn": ["build"]
     },
     "build-deps": {
-      "dependsOn": [
-        "^build"
-      ]
+      "dependsOn": ["^build"]
     },
     "watch-deps": {
       "continuous": true,
-      "dependsOn": [
-        "build-deps"
-      ],
+      "dependsOn": ["build-deps"],
       "command": "npx nx watch --projects website --includeDependentProjects -- npx nx build-deps website"
     }
   },
@@ -851,17 +695,13 @@
         "cwd": "apps/website",
         "tty": false
       },
-      "dependsOn": [
-        "^build"
-      ],
+      "dependsOn": ["^build"],
       "cache": true,
       "inputs": [
         "default",
         "^production",
         {
-          "externalDependencies": [
-            "next"
-          ]
+          "externalDependencies": ["next"]
         }
       ],
       "outputs": [
@@ -882,9 +722,7 @@
       "options": {
         "cwd": "apps/website"
       },
-      "dependsOn": [
-        "build"
-      ]
+      "dependsOn": ["build"]
     },
     "serve-static": {
       "continuous": true,
@@ -892,20 +730,14 @@
       "options": {
         "cwd": "apps/website"
       },
-      "dependsOn": [
-        "build"
-      ]
+      "dependsOn": ["build"]
     },
     "build-deps": {
-      "dependsOn": [
-        "^build"
-      ]
+      "dependsOn": ["^build"]
     },
     "watch-deps": {
       "continuous": true,
-      "dependsOn": [
-        "build-deps"
-      ],
+      "dependsOn": ["build-deps"],
       "command": "npx nx watch --projects website --includeDependentProjects -- npx nx build-deps website"
     }
   },
@@ -916,17 +748,13 @@
         "cwd": "apps/website",
         "tty": false
       },
-      "dependsOn": [
-        "^build"
-      ],
+      "dependsOn": ["^build"],
       "cache": true,
       "inputs": [
         "default",
         "^production",
         {
-          "externalDependencies": [
-            "next"
-          ]
+          "externalDependencies": ["next"]
         }
       ],
       "outputs": [
@@ -947,9 +775,7 @@
       "options": {
         "cwd": "apps/website"
       },
-      "dependsOn": [
-        "build"
-      ]
+      "dependsOn": ["build"]
     },
     "serve-static": {
       "continuous": true,
@@ -957,20 +783,14 @@
       "options": {
         "cwd": "apps/website"
       },
-      "dependsOn": [
-        "build"
-      ]
+      "dependsOn": ["build"]
     },
     "build-deps": {
-      "dependsOn": [
-        "^build"
-      ]
+      "dependsOn": ["^build"]
     },
     "watch-deps": {
       "continuous": true,
-      "dependsOn": [
-        "build-deps"
-      ],
+      "dependsOn": ["build-deps"],
       "command": "npx nx watch --projects website --includeDependentProjects -- npx nx build-deps website"
     }
   }

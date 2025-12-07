@@ -3,6 +3,7 @@
 ## Overview
 
 Sentry provides an MCP (Model Context Protocol) server that enables AI assistants like Cursor to interact with your Sentry projects. This allows you to:
+
 - View and analyze errors from your Sentry projects
 - Monitor application performance metrics
 - Manage issues and events
@@ -64,6 +65,7 @@ Restart Cursor to load the new MCP configuration.
 ### Remote MCP Server
 
 Sentry provides a hosted MCP server at `https://mcp.sentry.dev/sse`. This is the recommended approach as it:
+
 - Requires no local setup
 - Is always up-to-date
 - Handles authentication via OAuth/Bearer tokens
@@ -71,42 +73,47 @@ Sentry provides a hosted MCP server at `https://mcp.sentry.dev/sse`. This is the
 
 ### Environment Variables
 
-| Variable | Description | Required |
-|----------|-------------|----------|
-| `SENTRY_MCP_TOKEN` | Sentry authentication token | ✅ Yes |
+| Variable                 | Description                   | Required                       |
+| ------------------------ | ----------------------------- | ------------------------------ |
+| `SENTRY_MCP_TOKEN`       | Sentry authentication token   | ✅ Yes                         |
 | `NEXT_PUBLIC_SENTRY_DSN` | Sentry DSN for error tracking | Optional (for app integration) |
-| `SENTRY_ORG` | Sentry organization slug | Optional |
-| `SENTRY_PROJECT` | Sentry project slug | Optional |
+| `SENTRY_ORG`             | Sentry organization slug      | Optional                       |
+| `SENTRY_PROJECT`         | Sentry project slug           | Optional                       |
 
 ## Available MCP Tools
 
 Once configured, the Sentry MCP server provides tools for:
 
 ### Issue Management
+
 - View issues and errors
 - Get issue details and context
 - Search issues by criteria
 - Update issue status
 
 ### Performance Monitoring
+
 - View performance metrics
 - Analyze transaction traces
 - Monitor API performance
 - Track user experience metrics
 
 ### Event Analysis
+
 - Analyze error events
 - View event details and stack traces
 - Get event context and breadcrumbs
 - Filter events by criteria
 
 ### Project Management
+
 - List all projects
 - Get project details
 - View project health
 - Monitor project releases
 
 ### Release Tracking
+
 - View release information
 - Monitor release health
 - Track release adoption
@@ -117,26 +124,31 @@ Once configured, the Sentry MCP server provides tools for:
 Once configured, you can interact with Sentry through the MCP interface:
 
 ### View Recent Errors
+
 ```
 "What are the top 10 errors in my Sentry project in the last 24 hours?"
 ```
 
 ### Analyze Performance
+
 ```
 "Show me performance metrics for the last 7 days"
 ```
 
 ### Get Issue Details
+
 ```
 "What's the status of issue ABC123? Show me the stack trace and affected users."
 ```
 
 ### Monitor Releases
+
 ```
 "How is release v1.0.0 performing? Are there any new errors?"
 ```
 
 ### Search Issues
+
 ```
 "Find all issues related to authentication in the last week"
 ```
@@ -148,6 +160,7 @@ Once configured, you can interact with Sentry through the MCP interface:
 **Problem**: MCP server not connecting
 
 **Solutions**:
+
 1. Verify `SENTRY_MCP_TOKEN` is set correctly in `.env.local`
 2. Check that the token hasn't expired
 3. Ensure token has required scopes (`org:read`, `project:read`, `event:read`)
@@ -158,6 +171,7 @@ Once configured, you can interact with Sentry through the MCP interface:
 **Problem**: "Unauthorized" or "Invalid token" errors
 
 **Solutions**:
+
 1. Regenerate your token in Sentry settings
 2. Verify token format (should start with `sntrys_`)
 3. Check token permissions match required scopes
@@ -168,6 +182,7 @@ Once configured, you can interact with Sentry through the MCP interface:
 **Problem**: Can't see any projects
 
 **Solutions**:
+
 1. Verify your Sentry account has access to projects
 2. Check organization permissions
 3. Ensure token has `org:read` scope
@@ -189,6 +204,7 @@ The Sentry MCP server is separate from your application's Sentry integration:
 - **Sentry MCP**: Allows AI to query and analyze Sentry data
 
 Both can use the same Sentry account, but serve different purposes:
+
 - Application Sentry → Sends errors to Sentry
 - Sentry MCP → Reads data from Sentry
 
@@ -208,4 +224,3 @@ Both can use the same Sentry account, but serve different purposes:
 5. ✅ Start asking questions about your Sentry data!
 
 Example: "What are the most critical errors in my application right now?"
-

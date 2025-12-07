@@ -1,6 +1,6 @@
 /**
  * Script to seed categories and topics from production (zatona-web) to test (zatona-web-testing)
- * 
+ *
  * Usage: node Rest/scripts/seed-categories-topics-from-prod.js
  */
 
@@ -12,14 +12,18 @@ const path = require('path');
 config({ path: path.resolve(__dirname, '../../.env.test.local') });
 
 const PROD_PROJECT_URL = 'https://hpnewqkvpnthpohvxcmq.supabase.co';
-const PROD_SERVICE_KEY = process.env.PROD_SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_SERVICE_ROLE_KEY; // Use prod key if available, otherwise fallback
+const PROD_SERVICE_KEY =
+  process.env.PROD_SUPABASE_SERVICE_ROLE_KEY ||
+  process.env.SUPABASE_SERVICE_ROLE_KEY; // Use prod key if available, otherwise fallback
 
 const TEST_PROJECT_URL = process.env.NEXT_PUBLIC_SUPABASE_URL;
 const TEST_SERVICE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
 if (!PROD_SERVICE_KEY) {
   console.error('❌ PROD_SUPABASE_SERVICE_ROLE_KEY not found in environment');
-  console.log('💡 You may need to set PROD_SUPABASE_SERVICE_ROLE_KEY in .env.test.local');
+  console.log(
+    '💡 You may need to set PROD_SUPABASE_SERVICE_ROLE_KEY in .env.test.local'
+  );
   process.exit(1);
 }
 
@@ -68,7 +72,9 @@ async function seedCategoriesAndTopics() {
       .select('id, slug');
 
     const existingSlugs = new Set(existingCategories?.map(c => c.slug) || []);
-    console.log(`📊 Found ${existingCategories?.length || 0} existing categories in test project`);
+    console.log(
+      `📊 Found ${existingCategories?.length || 0} existing categories in test project`
+    );
 
     // Insert categories (without learning_card_id since test has no learning_cards)
     const categoryIdMap = new Map(); // old_id -> new_id
@@ -77,7 +83,9 @@ async function seedCategoriesAndTopics() {
 
     for (const category of categories) {
       if (existingSlugs.has(category.slug)) {
-        console.log(`⏭️  Skipping category "${category.name}" (slug already exists)`);
+        console.log(
+          `⏭️  Skipping category "${category.name}" (slug already exists)`
+        );
         skippedCategories++;
         // Get the existing category ID for mapping
         const existing = existingCategories.find(c => c.slug === category.slug);
@@ -106,7 +114,9 @@ async function seedCategoriesAndTopics() {
         .single();
 
       if (insertError) {
-        console.error(`❌ Failed to insert category "${category.name}": ${insertError.message}`);
+        console.error(
+          `❌ Failed to insert category "${category.name}": ${insertError.message}`
+        );
         continue;
       }
 
@@ -115,7 +125,9 @@ async function seedCategoriesAndTopics() {
       console.log(`✅ Inserted category: ${category.name} (${newCategory.id})`);
     }
 
-    console.log(`\n📊 Categories: ${insertedCategories} inserted, ${skippedCategories} skipped`);
+    console.log(
+      `\n📊 Categories: ${insertedCategories} inserted, ${skippedCategories} skipped`
+    );
 
     // Check existing topics in test
     const { data: existingTopics } = await testClient
@@ -123,7 +135,9 @@ async function seedCategoriesAndTopics() {
       .select('id, slug');
 
     const existingTopicSlugs = new Set(existingTopics?.map(t => t.slug) || []);
-    console.log(`📊 Found ${existingTopics?.length || 0} existing topics in test project`);
+    console.log(
+      `📊 Found ${existingTopics?.length || 0} existing topics in test project`
+    );
 
     // Insert topics with mapped category_ids
     let insertedTopics = 0;
@@ -138,29 +152,33 @@ async function seedCategoriesAndTopics() {
       }
 
       // Map category_id
-      const newCategoryId = topic.category_id ? categoryIdMap.get(topic.category_id) : null;
-      
+      const newCategoryId = topic.category_id
+        ? categoryIdMap.get(topic.category_id)
+        : null;
+
       if (topic.category_id && !newCategoryId) {
-        console.warn(`⚠️  Topic "${topic.name}" has category_id ${topic.category_id} but category not found in mapping. Setting to null.`);
+        console.warn(
+          `⚠️  Topic "${topic.name}" has category_id ${topic.category_id} but category not found in mapping. Setting to null.`
+        );
       }
 
-      const { error: insertError } = await testClient
-        .from('topics')
-        .insert({
-          name: topic.name,
-          slug: topic.slug,
-          description: topic.description,
-          difficulty: topic.difficulty,
-          estimated_questions: topic.estimated_questions,
-          order_index: topic.order_index,
-          category_id: newCategoryId,
-          is_active: topic.is_active,
-          created_at: topic.created_at,
-          updated_at: topic.updated_at,
-        });
+      const { error: insertError } = await testClient.from('topics').insert({
+        name: topic.name,
+        slug: topic.slug,
+        description: topic.description,
+        difficulty: topic.difficulty,
+        estimated_questions: topic.estimated_questions,
+        order_index: topic.order_index,
+        category_id: newCategoryId,
+        is_active: topic.is_active,
+        created_at: topic.created_at,
+        updated_at: topic.updated_at,
+      });
 
       if (insertError) {
-        console.error(`❌ Failed to insert topic "${topic.name}": ${insertError.message}`);
+        console.error(
+          `❌ Failed to insert topic "${topic.name}": ${insertError.message}`
+        );
         failedTopics++;
         continue;
       }
@@ -171,11 +189,16 @@ async function seedCategoriesAndTopics() {
       }
     }
 
-    console.log(`\n📊 Topics: ${insertedTopics} inserted, ${skippedTopics} skipped, ${failedTopics} failed`);
+    console.log(
+      `\n📊 Topics: ${insertedTopics} inserted, ${skippedTopics} skipped, ${failedTopics} failed`
+    );
     console.log(`\n✅ Seeding complete!`);
-    console.log(`   - Categories: ${insertedCategories} new, ${skippedCategories} existing`);
-    console.log(`   - Topics: ${insertedTopics} new, ${skippedTopics} existing, ${failedTopics} failed`);
-
+    console.log(
+      `   - Categories: ${insertedCategories} new, ${skippedCategories} existing`
+    );
+    console.log(
+      `   - Topics: ${insertedTopics} new, ${skippedTopics} existing, ${failedTopics} failed`
+    );
   } catch (error) {
     console.error('❌ Error seeding categories and topics:', error);
     process.exit(1);
@@ -183,4 +206,3 @@ async function seedCategoriesAndTopics() {
 }
 
 seedCategoriesAndTopics();
-

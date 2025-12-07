@@ -13,12 +13,7 @@
     "updatedAt": "2025-11-11T20:16:30.713Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "problem-solving",
-      "algorithms",
-      "javascript",
-      "easy"
-    ],
+    "tags": ["problem-solving", "algorithms", "javascript", "easy"],
     "explanation": "Use a hash map (object) to store each number and its index. For each number, check if the complement (target - current number) exists in the map. This gives O(n) time complexity.",
     "points": 10,
     "options": [
@@ -68,12 +63,7 @@
     "updatedAt": "2025-11-11T20:16:30.714Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "problem-solving",
-      "algorithms",
-      "javascript",
-      "easy"
-    ],
+    "tags": ["problem-solving", "algorithms", "javascript", "easy"],
     "explanation": "Use a stack data structure. Push opening brackets onto the stack. When encountering a closing bracket, check if it matches the top of the stack. If stack is empty at the end, the string is valid.",
     "points": 10,
     "options": [
@@ -123,12 +113,7 @@
     "updatedAt": "2025-11-11T20:16:30.714Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "problem-solving",
-      "algorithms",
-      "javascript",
-      "easy"
-    ],
+    "tags": ["problem-solving", "algorithms", "javascript", "easy"],
     "explanation": "For arrays, use two pointers (start and end) and swap characters while moving pointers towards center. For strings in JavaScript, convert to array first since strings are immutable.",
     "points": 10,
     "options": [
@@ -178,12 +163,7 @@
     "updatedAt": "2025-11-11T20:16:30.714Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "problem-solving",
-      "algorithms",
-      "javascript",
-      "easy"
-    ],
+    "tags": ["problem-solving", "algorithms", "javascript", "easy"],
     "explanation": "Use a Set data structure. Iterate through the array, adding each element to the Set. If an element already exists in the Set, return true. This is the most efficient approach.",
     "points": 10,
     "options": [
@@ -233,12 +213,7 @@
     "updatedAt": "2025-11-11T20:16:30.714Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "problem-solving",
-      "algorithms",
-      "javascript",
-      "easy"
-    ],
+    "tags": ["problem-solving", "algorithms", "javascript", "easy"],
     "explanation": "Keep track of the minimum price encountered so far. For each day, calculate the profit if selling today (current price - min price) and update the maximum profit seen.",
     "points": 10,
     "options": [
@@ -288,12 +263,7 @@
     "updatedAt": "2025-11-11T20:16:30.714Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "problem-solving",
-      "algorithms",
-      "javascript",
-      "easy"
-    ],
+    "tags": ["problem-solving", "algorithms", "javascript", "easy"],
     "explanation": "Two approaches: 1) Sort both strings and compare (simpler). 2) Count character frequencies using a hash map (more efficient for large strings). Both are valid solutions.",
     "points": 10,
     "options": [
@@ -343,12 +313,7 @@
     "updatedAt": "2025-11-11T20:16:30.714Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "problem-solving",
-      "algorithms",
-      "javascript",
-      "easy"
-    ],
+    "tags": ["problem-solving", "algorithms", "javascript", "easy"],
     "explanation": "Kadane's algorithm: iterate through array, maintaining current sum. If current sum becomes negative, reset it to 0. Keep track of maximum sum seen so far.",
     "points": 10,
     "options": [
@@ -398,12 +363,7 @@
     "updatedAt": "2025-11-11T20:16:30.714Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "problem-solving",
-      "algorithms",
-      "javascript",
-      "easy"
-    ],
+    "tags": ["problem-solving", "algorithms", "javascript", "easy"],
     "explanation": "Use two pointers, one for each array. Compare elements at both pointers, add the smaller one to result, and advance that pointer. Continue until both arrays are processed.",
     "points": 10,
     "options": [
@@ -453,12 +413,7 @@
     "updatedAt": "2025-11-11T20:16:30.714Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "problem-solving",
-      "algorithms",
-      "javascript",
-      "easy"
-    ],
+    "tags": ["problem-solving", "algorithms", "javascript", "easy"],
     "explanation": "This is a Fibonacci sequence problem. Use dynamic programming: ways to reach step i = ways to reach step (i-1) + ways to reach step (i-2). Can optimize space to O(1) by only keeping last two values.",
     "points": 10,
     "options": [
@@ -508,12 +463,7 @@
     "updatedAt": "2025-11-11T20:16:30.714Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "problem-solving",
-      "algorithms",
-      "javascript",
-      "easy"
-    ],
+    "tags": ["problem-solving", "algorithms", "javascript", "easy"],
     "explanation": "Two approaches: 1) Convert to string and compare with reversed version. 2) Reverse half the number mathematically and compare with the other half (more efficient, no string conversion).",
     "points": 10,
     "options": [
@@ -563,12 +513,7 @@
     "updatedAt": "2025-11-11T20:16:30.714Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "problem-solving",
-      "algorithms",
-      "javascript",
-      "medium"
-    ],
+    "tags": ["problem-solving", "algorithms", "javascript", "medium"],
     "explanation": "Use sliding window technique with a hash map. Expand window by moving right pointer, track characters in current window. When duplicate found, move left pointer past the duplicate. Track maximum window size.",
     "points": 15,
     "options": [
@@ -618,12 +563,7 @@
     "updatedAt": "2025-11-11T20:16:30.714Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "problem-solving",
-      "algorithms",
-      "javascript",
-      "medium"
-    ],
+    "tags": ["problem-solving", "algorithms", "javascript", "medium"],
     "explanation": "Use two pointers technique: start with pointers at both ends. Calculate area (min(height[left], height[right]) * (right - left)). Move the pointer with smaller height inward, as moving the larger one cannot increase area.",
     "points": 15,
     "options": [
@@ -673,12 +613,7 @@
     "updatedAt": "2025-11-11T20:16:30.714Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "problem-solving",
-      "algorithms",
-      "javascript",
-      "medium"
-    ],
+    "tags": ["problem-solving", "algorithms", "javascript", "medium"],
     "explanation": "Sort the array first. For each element, use two pointers (left and right) to find pairs that sum to the negative of the current element. Skip duplicate values to avoid duplicate triplets.",
     "points": 15,
     "options": [
@@ -728,12 +663,7 @@
     "updatedAt": "2025-11-11T20:16:30.714Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "problem-solving",
-      "algorithms",
-      "javascript",
-      "medium"
-    ],
+    "tags": ["problem-solving", "algorithms", "javascript", "medium"],
     "explanation": "Two approaches: 1) Sort each string and use sorted string as key in hash map. 2) Use character frequency count as key (more efficient). Group strings with same key together.",
     "points": 15,
     "options": [
@@ -783,12 +713,7 @@
     "updatedAt": "2025-11-11T20:16:30.714Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "problem-solving",
-      "algorithms",
-      "javascript",
-      "medium"
-    ],
+    "tags": ["problem-solving", "algorithms", "javascript", "medium"],
     "explanation": "Expand around center: for each possible center (considering both odd and even length palindromes), expand outward while characters match. Track the longest palindrome found. More space-efficient than DP.",
     "points": 15,
     "options": [
@@ -838,12 +763,7 @@
     "updatedAt": "2025-11-11T20:16:30.714Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "problem-solving",
-      "algorithms",
-      "javascript",
-      "medium"
-    ],
+    "tags": ["problem-solving", "algorithms", "javascript", "medium"],
     "explanation": "Use two passes: first pass calculates left products (product of all elements to the left), second pass multiplies by right products (product of all elements to the right). This avoids division and handles zeros.",
     "points": 15,
     "options": [
@@ -893,12 +813,7 @@
     "updatedAt": "2025-11-11T20:16:30.714Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "problem-solving",
-      "algorithms",
-      "javascript",
-      "medium"
-    ],
+    "tags": ["problem-solving", "algorithms", "javascript", "medium"],
     "explanation": "Use hash sets to track seen numbers in each row, column, and 3x3 box. For each cell, check if the number exists in the corresponding row, column, and box sets. Since board is fixed 9x9, complexity is O(1).",
     "points": 15,
     "options": [
@@ -948,12 +863,7 @@
     "updatedAt": "2025-11-11T20:16:30.714Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "problem-solving",
-      "algorithms",
-      "javascript",
-      "medium"
-    ],
+    "tags": ["problem-solving", "algorithms", "javascript", "medium"],
     "explanation": "Two approaches: 1) DP: for each element, check all previous elements and update LIS length. 2) Binary search: maintain array of smallest tail values, use binary search to find insertion point (more efficient O(n log n)).",
     "points": 15,
     "options": [
@@ -1003,12 +913,7 @@
     "updatedAt": "2025-11-11T20:16:30.714Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "problem-solving",
-      "algorithms",
-      "javascript",
-      "medium"
-    ],
+    "tags": ["problem-solving", "algorithms", "javascript", "medium"],
     "explanation": "Use dynamic programming: create array dp where dp[i] represents minimum coins for amount i. Initialize dp[0] = 0. For each coin, update dp[i + coin] = min(dp[i + coin], dp[i] + 1).",
     "points": 15,
     "options": [
@@ -1058,12 +963,7 @@
     "updatedAt": "2025-11-11T20:16:30.714Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "problem-solving",
-      "algorithms",
-      "javascript",
-      "medium"
-    ],
+    "tags": ["problem-solving", "algorithms", "javascript", "medium"],
     "explanation": "Use backtracking with DFS: for each cell matching first character, recursively search in all 4 directions. Mark cells as visited during recursion, unmark during backtracking. Return true if word found.",
     "points": 15,
     "options": [

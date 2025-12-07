@@ -2,7 +2,7 @@
 
 /**
  * Generate SQL Schema from Production Project
- * 
+ *
  * This script generates CREATE TABLE statements based on the production schema
  * and creates a SQL file that can be applied to the test project.
  */
@@ -14,15 +14,15 @@ const schema = {
       columns: [
         'id UUID PRIMARY KEY DEFAULT gen_random_uuid()',
         'title VARCHAR(255) NOT NULL',
-        'type VARCHAR(50) NOT NULL CHECK (type IN (\'core-technologies\', \'framework-questions\', \'problem-solving\', \'system-design\'))',
+        "type VARCHAR(50) NOT NULL CHECK (type IN ('core-technologies', 'framework-questions', 'problem-solving', 'system-design'))",
         'description TEXT',
         'color VARCHAR(7)',
         'icon VARCHAR(10)',
         'order_index INTEGER DEFAULT 0',
         'is_active BOOLEAN DEFAULT true',
         'created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()',
-        'updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()'
-      ]
+        'updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()',
+      ],
     },
     {
       name: 'categories',
@@ -38,8 +38,8 @@ const schema = {
         'learning_card_id UUID REFERENCES learning_cards(id) ON DELETE CASCADE',
         'is_active BOOLEAN DEFAULT true',
         'created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()',
-        'updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()'
-      ]
+        'updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()',
+      ],
     },
     {
       name: 'topics',
@@ -48,14 +48,14 @@ const schema = {
         'name VARCHAR(255) NOT NULL',
         'slug VARCHAR(255) UNIQUE NOT NULL',
         'description TEXT',
-        'difficulty VARCHAR(20) CHECK (difficulty IN (\'beginner\', \'intermediate\', \'advanced\'))',
+        "difficulty VARCHAR(20) CHECK (difficulty IN ('beginner', 'intermediate', 'advanced'))",
         'estimated_questions INTEGER DEFAULT 0',
         'order_index INTEGER DEFAULT 0',
         'category_id UUID REFERENCES categories(id) ON DELETE CASCADE',
         'is_active BOOLEAN DEFAULT true',
         'created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()',
-        'updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()'
-      ]
+        'updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()',
+      ],
     },
     {
       name: 'questions',
@@ -63,8 +63,8 @@ const schema = {
         'id UUID PRIMARY KEY DEFAULT gen_random_uuid()',
         'title VARCHAR(500) NOT NULL',
         'content TEXT NOT NULL',
-        'type VARCHAR(50) NOT NULL CHECK (type IN (\'multiple-choice\', \'open-ended\', \'true-false\', \'code\', \'mcq\', \'concept\', \'scenario\'))',
-        'difficulty VARCHAR(20) CHECK (difficulty IN (\'beginner\', \'intermediate\', \'advanced\'))',
+        "type VARCHAR(50) NOT NULL CHECK (type IN ('multiple-choice', 'open-ended', 'true-false', 'code', 'mcq', 'concept', 'scenario'))",
+        "difficulty VARCHAR(20) CHECK (difficulty IN ('beginner', 'intermediate', 'advanced'))",
         'points INTEGER DEFAULT 1',
         'options JSONB',
         'correct_answer TEXT',
@@ -79,8 +79,8 @@ const schema = {
         'is_active BOOLEAN DEFAULT true',
         'created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()',
         'updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()',
-        'topic_id UUID REFERENCES topics(id) ON DELETE SET NULL'
-      ]
+        'topic_id UUID REFERENCES topics(id) ON DELETE SET NULL',
+      ],
     },
     {
       name: 'learning_plans',
@@ -88,13 +88,13 @@ const schema = {
         'id UUID PRIMARY KEY DEFAULT gen_random_uuid()',
         'name VARCHAR(255) NOT NULL',
         'description TEXT',
-        'difficulty VARCHAR(20) CHECK (difficulty IN (\'beginner\', \'intermediate\', \'advanced\'))',
+        "difficulty VARCHAR(20) CHECK (difficulty IN ('beginner', 'intermediate', 'advanced'))",
         'estimated_duration INTEGER',
         'is_public BOOLEAN DEFAULT false',
         'is_active BOOLEAN DEFAULT true',
         'created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()',
-        'updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()'
-      ]
+        'updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()',
+      ],
     },
     {
       name: 'plan_cards',
@@ -105,8 +105,8 @@ const schema = {
         'order_index INTEGER DEFAULT 0',
         'is_active BOOLEAN DEFAULT true',
         'created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()',
-        'updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()'
-      ]
+        'updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()',
+      ],
     },
     {
       name: 'user_progress',
@@ -116,16 +116,16 @@ const schema = {
         'plan_id UUID REFERENCES learning_plans(id) ON DELETE CASCADE',
         'card_id UUID REFERENCES learning_cards(id) ON DELETE CASCADE',
         'question_id UUID REFERENCES questions(id) ON DELETE CASCADE',
-        'status VARCHAR(20) CHECK (status IN (\'not-started\', \'in-progress\', \'completed\', \'skipped\'))',
+        "status VARCHAR(20) CHECK (status IN ('not-started', 'in-progress', 'completed', 'skipped'))",
         'score INTEGER DEFAULT 0',
         'time_spent INTEGER DEFAULT 0',
         'last_attempted_at TIMESTAMP WITH TIME ZONE',
         'completed_at TIMESTAMP WITH TIME ZONE',
         'created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()',
         'updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()',
-        'progress_data JSONB DEFAULT \'{}\'::jsonb',
-        'last_updated TIMESTAMP WITH TIME ZONE DEFAULT NOW()'
-      ]
+        "progress_data JSONB DEFAULT '{}'::jsonb",
+        'last_updated TIMESTAMP WITH TIME ZONE DEFAULT NOW()',
+      ],
     },
     {
       name: 'question_attempts',
@@ -136,8 +136,8 @@ const schema = {
         'answer TEXT',
         'is_correct BOOLEAN',
         'time_spent INTEGER',
-        'created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()'
-      ]
+        'created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()',
+      ],
     },
     {
       name: 'admins',
@@ -146,13 +146,13 @@ const schema = {
         'user_id UUID REFERENCES auth.users(id) ON DELETE SET NULL',
         'email VARCHAR(255) UNIQUE NOT NULL',
         'name VARCHAR(255)',
-        'role VARCHAR(50) DEFAULT \'admin\'',
-        'permissions JSONB DEFAULT \'{}\'::jsonb',
+        "role VARCHAR(50) DEFAULT 'admin'",
+        "permissions JSONB DEFAULT '{}'::jsonb",
         'is_active BOOLEAN DEFAULT true',
         'last_login TIMESTAMP WITH TIME ZONE',
         'created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()',
-        'updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()'
-      ]
+        'updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()',
+      ],
     },
     {
       name: 'frontend_tasks',
@@ -160,22 +160,22 @@ const schema = {
         'id UUID PRIMARY KEY DEFAULT gen_random_uuid()',
         'title VARCHAR(255) NOT NULL',
         'description TEXT NOT NULL',
-        'difficulty VARCHAR(20) NOT NULL CHECK (difficulty IN (\'easy\', \'medium\', \'hard\'))',
+        "difficulty VARCHAR(20) NOT NULL CHECK (difficulty IN ('easy', 'medium', 'hard'))",
         'category VARCHAR(255) NOT NULL',
         'estimated_time INTEGER DEFAULT 30',
-        'author VARCHAR(255) DEFAULT \'Elzatona Team\'',
+        "author VARCHAR(255) DEFAULT 'Elzatona Team'",
         'company VARCHAR(255)',
         'requirements TEXT NOT NULL',
-        'hints TEXT[] DEFAULT \'{}\'::text[]',
+        "hints TEXT[] DEFAULT '{}'::text[]",
         'solution TEXT',
         'starter_code TEXT',
-        'files JSONB DEFAULT \'[]\'::jsonb',
-        'test_cases JSONB DEFAULT \'[]\'::jsonb',
-        'tags TEXT[] DEFAULT \'{}\'::text[]',
+        "files JSONB DEFAULT '[]'::jsonb",
+        "test_cases JSONB DEFAULT '[]'::jsonb",
+        "tags TEXT[] DEFAULT '{}'::text[]",
         'is_active BOOLEAN DEFAULT true',
         'created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()',
-        'updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()'
-      ]
+        'updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()',
+      ],
     },
     {
       name: 'problem_solving_tasks',
@@ -183,19 +183,19 @@ const schema = {
         'id UUID PRIMARY KEY DEFAULT gen_random_uuid()',
         'title VARCHAR(255) NOT NULL',
         'description TEXT NOT NULL',
-        'difficulty VARCHAR(20) NOT NULL CHECK (difficulty IN (\'easy\', \'medium\', \'hard\'))',
+        "difficulty VARCHAR(20) NOT NULL CHECK (difficulty IN ('easy', 'medium', 'hard'))",
         'category VARCHAR(255) NOT NULL',
         'function_name VARCHAR(255)',
         'starter_code TEXT',
         'solution TEXT',
-        'test_cases JSONB DEFAULT \'[]\'::jsonb',
-        'constraints TEXT[] DEFAULT \'{}\'::text[]',
-        'examples JSONB DEFAULT \'[]\'::jsonb',
-        'tags TEXT[] DEFAULT \'{}\'::text[]',
+        "test_cases JSONB DEFAULT '[]'::jsonb",
+        "constraints TEXT[] DEFAULT '{}'::text[]",
+        "examples JSONB DEFAULT '[]'::jsonb",
+        "tags TEXT[] DEFAULT '{}'::text[]",
         'is_active BOOLEAN DEFAULT true',
         'created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()',
-        'updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()'
-      ]
+        'updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()',
+      ],
     },
     {
       name: 'questions_topics',
@@ -206,8 +206,8 @@ const schema = {
         'order_index INTEGER DEFAULT 0',
         'is_primary BOOLEAN DEFAULT false',
         'created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()',
-        'updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()'
-      ]
+        'updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()',
+      ],
     },
     {
       name: 'category_topics',
@@ -218,8 +218,8 @@ const schema = {
         'order_index INTEGER DEFAULT 0',
         'is_primary BOOLEAN DEFAULT false',
         'created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()',
-        'updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()'
-      ]
+        'updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()',
+      ],
     },
     {
       name: 'card_categories',
@@ -230,8 +230,8 @@ const schema = {
         'order_index INTEGER DEFAULT 0',
         'is_primary BOOLEAN DEFAULT false',
         'created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()',
-        'updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()'
-      ]
+        'updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()',
+      ],
     },
     {
       name: 'plan_categories',
@@ -242,8 +242,8 @@ const schema = {
         'order_index INTEGER DEFAULT 0',
         'is_primary BOOLEAN DEFAULT false',
         'created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()',
-        'updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()'
-      ]
+        'updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()',
+      ],
     },
     {
       name: 'plan_questions',
@@ -255,8 +255,8 @@ const schema = {
         'order_index INTEGER DEFAULT 0',
         'is_active BOOLEAN DEFAULT true',
         'created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()',
-        'updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()'
-      ]
+        'updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()',
+      ],
     },
     {
       name: 'admin_users',
@@ -265,14 +265,14 @@ const schema = {
         'email TEXT UNIQUE NOT NULL',
         'password_hash TEXT NOT NULL',
         'name TEXT',
-        'role TEXT NOT NULL DEFAULT \'admin\'',
+        "role TEXT NOT NULL DEFAULT 'admin'",
         'is_active BOOLEAN DEFAULT true',
-        'permissions JSONB DEFAULT \'[]\'::jsonb',
+        "permissions JSONB DEFAULT '[]'::jsonb",
         'created_at TIMESTAMPTZ DEFAULT NOW()',
-        'updated_at TIMESTAMPTZ DEFAULT NOW()'
-      ]
-    }
-  ]
+        'updated_at TIMESTAMPTZ DEFAULT NOW()',
+      ],
+    },
+  ],
 };
 
 // Generate SQL
@@ -333,7 +333,24 @@ $$ LANGUAGE plpgsql;
 
 `;
 
-const tablesWithUpdatedAt = ['learning_cards', 'categories', 'topics', 'questions', 'learning_plans', 'plan_cards', 'user_progress', 'questions_topics', 'category_topics', 'card_categories', 'plan_categories', 'plan_questions', 'admin_users', 'admins', 'frontend_tasks', 'problem_solving_tasks'];
+const tablesWithUpdatedAt = [
+  'learning_cards',
+  'categories',
+  'topics',
+  'questions',
+  'learning_plans',
+  'plan_cards',
+  'user_progress',
+  'questions_topics',
+  'category_topics',
+  'card_categories',
+  'plan_categories',
+  'plan_questions',
+  'admin_users',
+  'admins',
+  'frontend_tasks',
+  'problem_solving_tasks',
+];
 
 tablesWithUpdatedAt.forEach(table => {
   sql += `DROP TRIGGER IF EXISTS update_${table}_updated_at ON ${table};\n`;
@@ -361,5 +378,3 @@ ALTER TABLE admin_users ENABLE ROW LEVEL SECURITY;
 `;
 
 console.log(sql);
-
-

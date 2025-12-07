@@ -3,6 +3,7 @@
 ## Overview
 
 GitHub Actions runs tests in a **TEST environment** (not production) to ensure:
+
 - Tests don't affect production data
 - Tests use a separate test database
 - Tests are isolated and safe to run automatically
@@ -14,30 +15,31 @@ Add these secrets to your GitHub repository:
 
 ### 1. Admin Credentials (Required for Admin Login Tests)
 
-| Secret Name | Description | Example |
-|------------|-------------|---------|
-| `ADMIN_EMAIL` | Admin email for test environment | `test-admin@example.com` |
-| `ADMIN_PASSWORD` | Admin password for test environment | `test-password-123` |
+| Secret Name      | Description                         | Example                  |
+| ---------------- | ----------------------------------- | ------------------------ |
+| `ADMIN_EMAIL`    | Admin email for test environment    | `test-admin@example.com` |
+| `ADMIN_PASSWORD` | Admin password for test environment | `test-password-123`      |
 
 **⚠️ Important**: Use **test environment credentials**, NOT production credentials!
 
 ### 2. Supabase Test Environment (Required)
 
-| Secret Name | Description | Where to Find |
-|------------|-------------|---------------|
-| `TEST_SUPABASE_URL` | Test Supabase project URL | Supabase Dashboard → Test Project → Settings → API |
-| `TEST_SUPABASE_ANON_KEY` | Test Supabase anonymous key | Supabase Dashboard → Test Project → Settings → API |
+| Secret Name                      | Description                    | Where to Find                                      |
+| -------------------------------- | ------------------------------ | -------------------------------------------------- |
+| `TEST_SUPABASE_URL`              | Test Supabase project URL      | Supabase Dashboard → Test Project → Settings → API |
+| `TEST_SUPABASE_ANON_KEY`         | Test Supabase anonymous key    | Supabase Dashboard → Test Project → Settings → API |
 | `TEST_SUPABASE_SERVICE_ROLE_KEY` | Test Supabase service role key | Supabase Dashboard → Test Project → Settings → API |
 
 **⚠️ Important**: Use your **test Supabase project** credentials, NOT production!
 
 ### 3. JWT Secret (Required for Admin Auth)
 
-| Secret Name | Description | Example |
-|------------|-------------|---------|
+| Secret Name  | Description                         | Example                         |
+| ------------ | ----------------------------------- | ------------------------------- |
 | `JWT_SECRET` | Secret key for JWT token generation | Generate a secure random string |
 
 **How to generate:**
+
 ```bash
 # Generate a secure JWT secret
 openssl rand -base64 32
@@ -45,8 +47,8 @@ openssl rand -base64 32
 
 ### 4. SonarQube Token (Already Configured)
 
-| Secret Name | Description | Status |
-|------------|-------------|--------|
+| Secret Name   | Description                     | Status                |
+| ------------- | ------------------------------- | --------------------- |
 | `SONAR_TOKEN` | SonarCloud authentication token | ✅ Already configured |
 
 ---
@@ -62,12 +64,14 @@ npm run setup:github-test-secrets
 ```
 
 This script will:
+
 - ✅ Read values from `.env.test.local`
 - ✅ Add all secrets automatically
 - ✅ Generate JWT_SECRET if needed
 - ✅ Show summary of what was added
 
 **Prerequisites:**
+
 - GitHub CLI installed: `brew install gh`
 - Authenticated: `gh auth login`
 - `.env.test.local` file exists with test credentials
@@ -105,6 +109,7 @@ After adding all secrets, you should have:
 ```
 
 **Or verify via CLI:**
+
 ```bash
 gh secret list --repo FoushWare/GreatFrontendHub
 ```
@@ -143,12 +148,14 @@ env:
 ### ✅ Use TEST Environment in GitHub Actions
 
 **Why?**
+
 - Tests should never touch production data
 - Tests need isolated environment
 - Tests can be run safely on every push
 - Tests don't affect real users
 
 **What to use:**
+
 - Test Supabase project credentials
 - Test admin credentials
 - Test database
@@ -156,6 +163,7 @@ env:
 ### ❌ Do NOT Use Production in GitHub Actions
 
 **Why not?**
+
 - Risk of affecting real users
 - Risk of modifying production data
 - Security concerns
@@ -184,21 +192,24 @@ env:
 
 ### Tests Fail with "Supabase connection error"
 
-**Solution**: 
+**Solution**:
+
 1. Verify `TEST_SUPABASE_URL` is correct
 2. Verify `TEST_SUPABASE_ANON_KEY` is correct
 3. Ensure you're using **test project** credentials, not production
 
 ### Tests Use Production Database
 
-**Solution**: 
+**Solution**:
+
 1. Verify `APP_ENV=test` is set in workflow
 2. Verify test Supabase credentials are used
 3. Check environment detection in test files
 
 ### Build Fails
 
-**Solution**: 
+**Solution**:
+
 1. Verify all required secrets are added
 2. Check workflow logs for missing environment variables
 3. Ensure test environment variables are set correctly
@@ -243,7 +254,6 @@ openssl rand -base64 32
 ✅ **Use TEST environment** in GitHub Actions  
 ✅ **Add required secrets** for test credentials  
 ✅ **Never use production** credentials in CI  
-✅ **Tests are isolated** and safe to run automatically  
+✅ **Tests are isolated** and safe to run automatically
 
 The workflow automatically detects CI environment and uses test configuration. Just add the secrets and you're good to go! 🚀
-

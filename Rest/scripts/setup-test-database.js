@@ -2,14 +2,14 @@
 
 /**
  * Setup Test Database Script
- * 
+ *
  * This script:
  * 1. Creates all database tables from the schema
  * 2. Creates a test admin user with email and password
- * 
+ *
  * Usage:
  *   node Rest/scripts/setup-test-database.js
- * 
+ *
  * Environment Variables Required (from .env.test.local):
  *   - NEXT_PUBLIC_SUPABASE_URL
  *   - SUPABASE_SERVICE_ROLE_KEY
@@ -47,7 +47,9 @@ const adminPassword = process.env.ADMIN_PASSWORD || 'test-admin-password-123';
 
 if (!supabaseUrl || !supabaseServiceKey) {
   console.error('❌ Missing Supabase environment variables');
-  console.error('Required: NEXT_PUBLIC_SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY');
+  console.error(
+    'Required: NEXT_PUBLIC_SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY'
+  );
   console.error('Please set these in .env.test.local');
   process.exit(1);
 }
@@ -76,14 +78,14 @@ async function setupTestDatabase() {
     // Step 1: Read and execute schema SQL
     console.log('📋 Step 1: Creating database schema...');
     const schemaPath = resolve(projectRoot, 'Rest/supabase-schema.sql');
-    
+
     if (!fs.existsSync(schemaPath)) {
       console.error(`❌ Schema file not found: ${schemaPath}`);
       process.exit(1);
     }
 
     const schemaSQL = fs.readFileSync(schemaPath, 'utf8');
-    
+
     // Split SQL into individual statements (semicolon-separated)
     // Remove comments and empty lines
     const statements = schemaSQL
@@ -97,18 +99,23 @@ async function setupTestDatabase() {
 
     for (const statement of statements) {
       if (statement.trim().length === 0) continue;
-      
+
       try {
         // Use Supabase RPC if available, otherwise direct query
-        const { error } = await supabase.rpc('exec_sql', { sql: statement + ';' }).catch(async () => {
-          // Fallback: Try direct execution via REST API
-          // Note: This is a simplified approach - in production, you'd use migrations
-          return { error: null };
-        });
+        const { error } = await supabase
+          .rpc('exec_sql', { sql: statement + ';' })
+          .catch(async () => {
+            // Fallback: Try direct execution via REST API
+            // Note: This is a simplified approach - in production, you'd use migrations
+            return { error: null };
+          });
 
         if (error) {
           // Some errors are expected (e.g., table already exists, extension already exists)
-          if (error.message.includes('already exists') || error.message.includes('duplicate')) {
+          if (
+            error.message.includes('already exists') ||
+            error.message.includes('duplicate')
+          ) {
             // Ignore "already exists" errors
             successCount++;
           } else {
@@ -124,7 +131,9 @@ async function setupTestDatabase() {
       }
     }
 
-    console.log(`✅ Schema execution completed (${successCount} statements, ${errorCount} warnings)\n`);
+    console.log(
+      `✅ Schema execution completed (${successCount} statements, ${errorCount} warnings)\n`
+    );
 
     // Step 2: Verify tables exist
     console.log('🔍 Step 2: Verifying tables...');
@@ -141,10 +150,7 @@ async function setupTestDatabase() {
 
     const existingTables = [];
     for (const table of requiredTables) {
-      const { data, error } = await supabase
-        .from(table)
-        .select('*')
-        .limit(1);
+      const { data, error } = await supabase.from(table).select('*').limit(1);
 
       if (!error) {
         existingTables.push(table);
@@ -155,14 +161,20 @@ async function setupTestDatabase() {
     }
 
     if (existingTables.length < requiredTables.length) {
-      console.log('\n⚠️  Some tables may not exist. You may need to run the schema SQL manually in Supabase SQL Editor.');
-      console.log('   Go to: https://supabase.com/dashboard → Your Project → SQL Editor');
-      console.log('   Copy and paste the contents of: Rest/supabase-schema.sql\n');
+      console.log(
+        '\n⚠️  Some tables may not exist. You may need to run the schema SQL manually in Supabase SQL Editor.'
+      );
+      console.log(
+        '   Go to: https://supabase.com/dashboard → Your Project → SQL Editor'
+      );
+      console.log(
+        '   Copy and paste the contents of: Rest/supabase-schema.sql\n'
+      );
     }
 
     // Step 3: Create admin_users table if it doesn't exist
     console.log('👤 Step 3: Setting up admin_users table...');
-    
+
     const createAdminTableSQL = `
       CREATE TABLE IF NOT EXISTS admin_users (
         id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -191,7 +203,9 @@ async function setupTestDatabase() {
 
     // Try to execute via SQL editor (manual step)
     console.log('  ℹ️  Admin table creation SQL prepared');
-    console.log('  ℹ️  If table doesn\'t exist, run this in Supabase SQL Editor:\n');
+    console.log(
+      "  ℹ️  If table doesn't exist, run this in Supabase SQL Editor:\n"
+    );
     console.log(createAdminTableSQL);
     console.log('');
 
@@ -207,14 +221,18 @@ async function setupTestDatabase() {
 
     if (checkError && checkError.code === 'PGRST204') {
       console.log('  ⚠️  admin_users table does not exist yet.');
-      console.log('  📝 Please run the admin_users table creation SQL in Supabase SQL Editor first.');
-      console.log('  📝 Then run this script again to create the admin user.\n');
+      console.log(
+        '  📝 Please run the admin_users table creation SQL in Supabase SQL Editor first.'
+      );
+      console.log(
+        '  📝 Then run this script again to create the admin user.\n'
+      );
       return;
     }
 
     if (existingAdmin) {
       console.log('  ⚠️  Admin user already exists. Updating password...');
-      
+
       // Hash the new password
       const saltRounds = 10;
       const passwordHash = await bcrypt.hash(adminPassword, saltRounds);
@@ -230,7 +248,10 @@ async function setupTestDatabase() {
         .eq('email', adminEmail);
 
       if (updateError) {
-        console.error('  ❌ Error updating admin password:', updateError.message);
+        console.error(
+          '  ❌ Error updating admin password:',
+          updateError.message
+        );
         return;
       }
 
@@ -263,7 +284,9 @@ async function setupTestDatabase() {
 
       if (insertError) {
         console.error('  ❌ Error creating admin user:', insertError.message);
-        console.error('  💡 Make sure the admin_users table exists. Run the SQL from Step 3 first.');
+        console.error(
+          '  💡 Make sure the admin_users table exists. Run the SQL from Step 3 first.'
+        );
         return;
       }
 
@@ -275,7 +298,9 @@ async function setupTestDatabase() {
 
     console.log('\n🎉 Test database setup complete!');
     console.log('\n📋 Summary:');
-    console.log(`   ✅ Database schema: ${existingTables.length}/${requiredTables.length} tables verified`);
+    console.log(
+      `   ✅ Database schema: ${existingTables.length}/${requiredTables.length} tables verified`
+    );
     console.log(`   ✅ Admin user: ${adminEmail}`);
     console.log(`   ✅ Admin password: ${adminPassword}`);
     console.log('\n🚀 You can now run tests with:');
@@ -285,7 +310,6 @@ async function setupTestDatabase() {
     console.log('\n🔗 Login at: http://localhost:3000/admin/login');
     console.log(`   Email: ${adminEmail}`);
     console.log(`   Password: ${adminPassword}\n`);
-
   } catch (error) {
     console.error('❌ Error setting up test database:', error.message);
     console.error(error.stack);
@@ -295,5 +319,3 @@ async function setupTestDatabase() {
 
 // Run the setup
 setupTestDatabase();
-
-

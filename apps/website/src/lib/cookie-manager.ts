@@ -2,7 +2,7 @@
  * Cookie management utilities for authentication
  */
 
-import { setAuthCookie } from './auth-utils';
+import { setAuthCookie } from "./auth-utils";
 
 interface UserWithIdToken {
   getIdToken(): Promise<string>;
@@ -22,7 +22,7 @@ export class CookieManager {
   async ensureAuthCookie(user: UserWithIdToken): Promise<boolean> {
     if (this.isSettingCookie) {
       // Wait for the current cookie setting to complete
-      return new Promise(resolve => {
+      return new Promise((resolve) => {
         const checkInterval = setInterval(() => {
           if (!this.isSettingCookie) {
             clearInterval(checkInterval);
@@ -37,10 +37,10 @@ export class CookieManager {
     try {
       const token = await user.getIdToken();
       await setAuthCookie(token);
-      console.log('✅ Auth cookie ensured successfully');
+      console.log("✅ Auth cookie ensured successfully");
       return true;
     } catch (error) {
-      console.error('Failed to ensure auth cookie:', error);
+      console.error("Failed to ensure auth cookie:", error);
       return false;
     } finally {
       this.isSettingCookie = false;
@@ -49,7 +49,7 @@ export class CookieManager {
 
   async retryAuthCookie(
     user: UserWithIdToken,
-    maxRetries: number = 3
+    maxRetries: number = 3,
   ): Promise<boolean> {
     for (let i = 0; i < maxRetries; i++) {
       try {
@@ -61,7 +61,7 @@ export class CookieManager {
         console.warn(`Auth cookie retry ${i + 1} failed:`, error);
         if (i < maxRetries - 1) {
           // Wait before retrying
-          await new Promise(resolve => setTimeout(resolve, 1000 * (i + 1)));
+          await new Promise((resolve) => setTimeout(resolve, 1000 * (i + 1)));
         }
       }
     }

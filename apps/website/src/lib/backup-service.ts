@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 // This file uses 'any' types for backup data structures which can contain various document types
-import { createClient } from '@supabase/supabase-js';
+import { createClient } from "@supabase/supabase-js";
 
-const supabaseUrl = process.env['NEXT_PUBLIC_SUPABASE_URL']!;
-const supabaseServiceRoleKey = process.env['SUPABASE_SERVICE_ROLE_KEY']!;
+const supabaseUrl = process.env["NEXT_PUBLIC_SUPABASE_URL"]!;
+const supabaseServiceRoleKey = process.env["SUPABASE_SERVICE_ROLE_KEY"]!;
 
 const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
 
@@ -21,7 +21,7 @@ export interface BackupData {
     totalDocuments: number;
     collectionsCount: number;
   };
-  status: 'completed' | 'failed' | 'in_progress';
+  status: "completed" | "failed" | "in_progress";
   error?: string;
 }
 
@@ -32,21 +32,21 @@ export interface RestoreOptions {
 }
 
 export class BackupService {
-  private static readonly BACKUP_COLLECTION = 'backups';
+  private static readonly BACKUP_COLLECTION = "backups";
   private static readonly COLLECTIONS_TO_BACKUP = [
-    'questions',
-    'categories',
-    'topics',
-    'learning_cards',
-    'learning_plans',
-    'frontend_tasks',
-    'problem_solving_tasks',
-    'learning_paths',
-    'audit_logs',
-    'admin_credentials',
-    'users',
-    'notifications',
-    'error_logs',
+    "questions",
+    "categories",
+    "topics",
+    "learning_cards",
+    "learning_plans",
+    "frontend_tasks",
+    "problem_solving_tasks",
+    "learning_paths",
+    "audit_logs",
+    "admin_credentials",
+    "users",
+    "notifications",
+    "error_logs",
   ];
 
   /**
@@ -55,27 +55,27 @@ export class BackupService {
   static async createBackup(
     name: string,
     description: string,
-    createdBy: string
+    createdBy: string,
   ): Promise<{ success: boolean; backupId?: string; error?: string }> {
     try {
       const backupId = `backup_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
 
       // Create backup record
-      const backupData: Omit<BackupData, 'id'> = {
+      const backupData: Omit<BackupData, "id"> = {
         name,
         description,
         collections: {},
         metadata: {
           created_at: new Date(),
           createdBy,
-          version: '1.0',
+          version: "1.0",
           totalDocuments: 0,
           collectionsCount: 0,
         },
-        status: 'in_progress',
+        status: "in_progress",
       };
 
-      await supabase.from('backups').insert({
+      await supabase.from("backups").insert({
         id: backupId,
         ...backupData,
         metadata: {
@@ -92,7 +92,7 @@ export class BackupService {
         try {
           const { data: documents, error } = await supabase
             .from(collectionName)
-            .select('*');
+            .select("*");
 
           if (error) {
             throw error;
@@ -102,12 +102,12 @@ export class BackupService {
           totalDocuments += (documents || []).length;
 
           console.log(
-            `✅ Backed up ${(documents || []).length} documents from ${collectionName}`
+            `✅ Backed up ${(documents || []).length} documents from ${collectionName}`,
           );
         } catch (error) {
           console.error(
             `❌ Failed to backup collection ${collectionName}:`,
-            error
+            error,
           );
           collections[collectionName] = [];
         }
@@ -115,7 +115,7 @@ export class BackupService {
 
       // Update backup record with final data
       await supabase
-        .from('backups')
+        .from("backups")
         .update({
           collections,
           metadata: {
@@ -124,17 +124,17 @@ export class BackupService {
             collectionsCount: Object.keys(collections).length,
             created_at: new Date().toISOString(),
           },
-          status: 'completed',
+          status: "completed",
         })
-        .eq('id', backupId);
+        .eq("id", backupId);
 
       console.log(`✅ Backup completed: ${backupId}`);
       return { success: true, backupId };
     } catch (error) {
-      console.error('❌ Backup failed:', error);
+      console.error("❌ Backup failed:", error);
       return {
         success: false,
-        error: error instanceof Error ? error.message : 'Backup failed',
+        error: error instanceof Error ? error.message : "Backup failed",
       };
     }
   }
@@ -144,23 +144,23 @@ export class BackupService {
    */
   static async restoreBackup(
     backupId: string,
-    options: RestoreOptions = { overwriteExisting: false, dryRun: false }
+    options: RestoreOptions = { overwriteExisting: false, dryRun: false },
   ): Promise<{ success: boolean; error?: string; summary?: any }> {
     try {
       // Get backup data
       const { data: backupDoc, error: backupError } = await supabase
-        .from('backups')
-        .select('*')
-        .eq('id', backupId)
+        .from("backups")
+        .select("*")
+        .eq("id", backupId)
         .single();
 
       if (backupError || !backupDoc) {
-        return { success: false, error: 'Backup not found' };
+        return { success: false, error: "Backup not found" };
       }
 
       const backupData = backupDoc as BackupData;
-      if (backupData.status !== 'completed') {
-        return { success: false, error: 'Backup is not completed' };
+      if (backupData.status !== "completed") {
+        return { success: false, error: "Backup is not completed" };
       }
 
       const summary = {
@@ -175,7 +175,7 @@ export class BackupService {
 
       // Restore each collection
       for (const [collectionName, documents] of Object.entries(
-        backupData.collections
+        backupData.collections,
       )) {
         if (
           options.collections &&
@@ -187,7 +187,7 @@ export class BackupService {
         try {
           if (options.dryRun) {
             console.log(
-              `🔍 Dry run: Would restore ${documents.length} documents to ${collectionName}`
+              `🔍 Dry run: Would restore ${documents.length} documents to ${collectionName}`,
             );
             summary.documentsRestored += documents.length;
             summary.collectionsRestored++;
@@ -203,8 +203,8 @@ export class BackupService {
               // Check if document exists
               const { data: existingDoc } = await supabase
                 .from(collectionName)
-                .select('id')
-                .eq('id', docId)
+                .select("id")
+                .eq("id", docId)
                 .single();
 
               if (!existingDoc) {
@@ -227,7 +227,7 @@ export class BackupService {
 
           summary.collectionsRestored++;
           console.log(
-            `✅ Restored ${documents.length} documents to ${collectionName}`
+            `✅ Restored ${documents.length} documents to ${collectionName}`,
           );
         } catch (error) {
           const errorMsg = `Failed to restore collection ${collectionName}: ${error}`;
@@ -242,14 +242,14 @@ export class BackupService {
       }
 
       console.log(
-        `✅ Restore completed: ${summary.documentsRestored} documents restored`
+        `✅ Restore completed: ${summary.documentsRestored} documents restored`,
       );
       return { success: true, summary };
     } catch (error) {
-      console.error('❌ Restore failed:', error);
+      console.error("❌ Restore failed:", error);
       return {
         success: false,
-        error: error instanceof Error ? error.message : 'Restore failed',
+        error: error instanceof Error ? error.message : "Restore failed",
       };
     }
   }
@@ -260,17 +260,17 @@ export class BackupService {
   static async listBackups(): Promise<BackupData[]> {
     try {
       const { data: backups, error } = await supabase
-        .from('backups')
-        .select('*')
-        .order('metadata.created_at', { ascending: false });
+        .from("backups")
+        .select("*")
+        .order("metadata.created_at", { ascending: false });
 
       if (error) {
         throw error;
       }
 
-      return (backups || []).map(backup => ({ id: backup.id, ...backup }));
+      return (backups || []).map((backup) => ({ id: backup.id, ...backup }));
     } catch (error) {
-      console.error('❌ Failed to list backups:', error);
+      console.error("❌ Failed to list backups:", error);
       return [];
     }
   }
@@ -279,13 +279,13 @@ export class BackupService {
    * Delete a backup
    */
   static async deleteBackup(
-    backupId: string
+    backupId: string,
   ): Promise<{ success: boolean; error?: string }> {
     try {
       const { error } = await supabase
-        .from('backups')
+        .from("backups")
         .delete()
-        .eq('id', backupId);
+        .eq("id", backupId);
 
       if (error) {
         throw error;
@@ -294,10 +294,10 @@ export class BackupService {
       console.log(`✅ Backup deleted: ${backupId}`);
       return { success: true };
     } catch (error) {
-      console.error('❌ Failed to delete backup:', error);
+      console.error("❌ Failed to delete backup:", error);
       return {
         success: false,
-        error: error instanceof Error ? error.message : 'Delete failed',
+        error: error instanceof Error ? error.message : "Delete failed",
       };
     }
   }
@@ -312,8 +312,8 @@ export class BackupService {
   }> {
     try {
       const { data: backups, error } = await supabase
-        .from('backups')
-        .select('*');
+        .from("backups")
+        .select("*");
 
       if (error) {
         throw error;
@@ -327,7 +327,7 @@ export class BackupService {
       const lastBackup = (backups || []).sort(
         (a, b) =>
           new Date(b.metadata.created_at).getTime() -
-          new Date(a.metadata.created_at).getTime()
+          new Date(a.metadata.created_at).getTime(),
       )[0];
 
       return {
@@ -336,7 +336,7 @@ export class BackupService {
         lastBackupDate: lastBackup?.metadata.created_at,
       };
     } catch (error) {
-      console.error('❌ Failed to get backup stats:', error);
+      console.error("❌ Failed to get backup stats:", error);
       return {
         totalBackups: 0,
         totalSize: 0,

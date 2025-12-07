@@ -8,6 +8,7 @@
 ## 📊 Implementation Summary
 
 ### **Total Tasks**: 21
+
 ### **Snapshot Tests Added**: 21/21 (100%)
 
 ---
@@ -15,15 +16,18 @@
 ## ✅ Completed Tasks
 
 ### **Guided Flow (2 tasks)**
+
 - ✅ **G-001**: Homepage Rendering - 3 snapshot tests
 - ✅ **G-002**: Get Started Page - 2 snapshot tests
 
 ### **Shared Components (3 tasks)**
+
 - ✅ **S-001**: Navigation Component - 2 snapshot tests
 - ✅ **S-002**: Question Card Component - 4 snapshot tests
 - ✅ **S-003**: Progress Tracker Component - 3 snapshot tests
 
 ### **Admin Tasks (7 tasks)**
+
 - ✅ **A-001**: Admin Bulk Question Addition - 4 snapshot tests
 - ✅ **A-002**: Admin Login - 3 snapshot tests
 - ✅ **A-003**: Admin Dashboard - 1 snapshot test
@@ -33,6 +37,7 @@
 - ✅ **A-007**: Admin User Management - 2 snapshot tests
 
 ### **Freestyle Flow (9 tasks)**
+
 - ✅ **F-001**: Custom Roadmap Creation - 2 snapshot tests
 - ✅ **F-002**: My Plans Page - 2 snapshot tests
 - ✅ **F-003**: Browse Practice Questions - 2 snapshot tests
@@ -48,6 +53,7 @@
 ### **Total Snapshot Tests**: ~50+ snapshot assertions
 
 ### **Snapshot Test Types**:
+
 1. **Default State Snapshots** - Component in default/initial state
 2. **Loading State Snapshots** - Component during data loading
 3. **Error State Snapshots** - Component with error messages
@@ -112,21 +118,25 @@ apps/website/src/app/
 ## 🚀 Running Snapshot Tests
 
 ### **Run All Snapshot Tests**:
+
 ```bash
 npm run test:unit
 ```
 
 ### **Update Snapshots**:
+
 ```bash
 npm run test:unit -- --updateSnapshot
 ```
 
 ### **Update Specific Test Snapshots**:
+
 ```bash
 npm run test:unit -- apps/website/src/app/page.test.tsx --updateSnapshot
 ```
 
 ### **Run Tests Without Updating Snapshots**:
+
 ```bash
 npm run test:unit -- --no-updateSnapshot
 ```
@@ -146,6 +156,7 @@ describe('{TASK-ID}-SNAPSHOT: {Component Name} Snapshot Tests', () => {
 ```
 
 **Examples**:
+
 - `G-UT-SNAPSHOT: Homepage Snapshot Tests`
 - `A-UT-SNAPSHOT: Admin Login Page Snapshot Tests`
 - `F-UT-SNAPSHOT: Custom Roadmap Creation Snapshot Tests`
@@ -172,4 +183,3 @@ describe('{TASK-ID}-SNAPSHOT: {Component Name} Snapshot Tests', () => {
 
 **Last Updated**: 2025-11-09  
 **Status**: ✅ Complete - All snapshot tests implemented
-

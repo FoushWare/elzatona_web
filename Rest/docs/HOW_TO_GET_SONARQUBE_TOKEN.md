@@ -3,6 +3,7 @@
 ## 📋 What's Missing
 
 Based on your current setup:
+
 - ✅ **SONARQUBE_ORG**: `FoushWare` (already configured)
 - ✅ **STORAGE_PATH**: `Rest/mcp/sonarqube/storage` (already configured)
 - ❌ **SONARQUBE_TOKEN**: **MISSING** - You need to generate this
@@ -10,16 +11,19 @@ Based on your current setup:
 ## 🎯 Step-by-Step: Get Your SonarQube Token
 
 ### Step 1: Go to SonarCloud
+
 1. Open your browser
 2. Go to: **https://sonarcloud.io/**
 3. **Sign in** with your GitHub account (if not already signed in)
 
 ### Step 2: Navigate to Security Settings
+
 1. Click on your **profile picture/icon** (top right corner)
 2. Click **"My Account"** from the dropdown menu
 3. Click on the **"Security"** tab (in the left sidebar)
 
 ### Step 3: Generate Token
+
 1. Scroll down to the **"Generate Tokens"** section
 2. You'll see a form with:
    - **Name**: Enter a name (e.g., "MCP Server Token" or "Cursor MCP")
@@ -28,6 +32,7 @@ Based on your current setup:
 3. Click the **"Generate"** button
 
 ### Step 4: Copy Token
+
 1. **⚠️ IMPORTANT**: Copy the token **immediately**
    - The token will be displayed only once
    - It looks like: `squ_1234567890abcdefghijklmnopqrstuvwxyz...`
@@ -53,6 +58,7 @@ SonarCloud Website
 ### Option 1: Add to `.env.local` (Recommended)
 
 1. Open or create `.env.local` in your project root:
+
    ```bash
    cd /Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web
    nano .env.local
@@ -61,6 +67,7 @@ SonarCloud Website
    ```
 
 2. Add these lines:
+
    ```bash
    # SonarQube MCP Configuration
    SONARQUBE_TOKEN=your_actual_token_here
@@ -85,10 +92,13 @@ SonarCloud Website
 After adding the token:
 
 1. **Check `.env.local`**:
+
    ```bash
    grep SONARQUBE .env.local
    ```
+
    Should show:
+
    ```
    SONARQUBE_TOKEN=your_token
    SONARQUBE_ORG=FoushWare
@@ -174,4 +184,3 @@ After adding the token:
 ---
 
 **Next Step**: Generate token at https://sonarcloud.io/ → My Account → Security → Generate Tokens
-

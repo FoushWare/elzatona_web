@@ -1,9 +1,9 @@
-'use client';
+"use client";
 
-import React, { useState } from 'react';
-import { FormModal } from '@elzatona/shared-components';
-import { UnifiedQuestion } from '@elzatona/shared-types';
-import { QuestionForm } from './QuestionForm';
+import React, { useState } from "react";
+import { FormModal } from "@elzatona/components";
+import { UnifiedQuestion } from "@elzatona/types";
+import { QuestionForm } from "./QuestionForm";
 
 interface EditQuestionModalProps {
   isOpen: boolean;
@@ -30,7 +30,7 @@ export function EditQuestionModal({
 
   const handleSave = () => {
     // Trigger form submission by incrementing the trigger
-    setSubmitTrigger(prev => prev + 1);
+    setSubmitTrigger((prev) => prev + 1);
   };
 
   // Reset trigger when modal closes
@@ -67,4 +67,3 @@ export function EditQuestionModal({
     </FormModal>
   );
 }
-

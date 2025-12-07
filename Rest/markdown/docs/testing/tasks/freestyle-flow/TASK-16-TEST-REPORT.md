@@ -12,12 +12,15 @@
 ### ✅ Tests Created
 
 #### Unit Tests
+
 - ✅ Created: `apps/website/src/app/flashcards/page.test.tsx`
 
 #### Integration Tests
+
 - ✅ Created: `apps/website/src/app/flashcards/page.integration.test.tsx`
 
 #### E2E Tests
+
 - ✅ Created: `tests/e2e/freestyle-flow/flashcards-crud.spec.ts`
 
 ---

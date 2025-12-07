@@ -1,8 +1,13 @@
 # Task ID: F-006
+
 # Title: Problem Solving Practice
+
 # Status: pending
-# Dependencies: 
+
+# Dependencies:
+
 # Priority: high
+
 # Description: Test the Problem Solving practice page which displays algorithm and logic problems for practice, including search, filtering, problem selection, and code editor functionality.
 
 # Details:
@@ -10,6 +15,7 @@
 ## Time Estimation
 
 ### Manual Testing
+
 - **Estimated Time**: 45-60 minutes
 - **Breakdown**:
   - Navigate to page: 2 minutes
@@ -25,6 +31,7 @@
 - **Dependencies**: Problem solving tasks data from API
 
 ### Automated Testing
+
 - **Estimated Time**: 18-25 minutes (first run), 3-5 minutes (subsequent runs)
 - **Breakdown**:
   - Unit tests setup and execution: 6-9 minutes
@@ -34,6 +41,7 @@
 - **Dependencies**: API mocks, test data, code editor mocks
 
 ### Total Time
+
 - **Manual Only**: 45-60 minutes
 - **Automated Only**: 18-25 minutes (first run), 3-5 minutes (subsequent)
 - **Both Manual + Automated**: 63-85 minutes (first run), 48-65 minutes (subsequent)
@@ -41,6 +49,7 @@
 ---
 
 ## Overview
+
 Test the Problem Solving practice page which displays algorithm and logic problems for practice, including search, filtering, problem selection, and code editor functionality.
 
 ## Manual Testing Steps

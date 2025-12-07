@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import React, {
   useEffect,
@@ -6,7 +6,7 @@ import React, {
   useState,
   useCallback,
   Suspense,
-} from 'react';
+} from "react";
 // Note: This page uses hooks, not direct supabase client
 
 import {
@@ -30,123 +30,119 @@ import {
   useCreateQuestion,
   useUpdateQuestion,
   useDeleteQuestion,
-} from '@elzatona/shared-hooks';
-import { useQueryClient } from '@tanstack/react-query';
-import { useNotificationActions } from '@elzatona/shared-hooks';
-import { LearningCard } from '@elzatona/shared-types';
-import { UnifiedQuestion } from '@elzatona/shared-types';
-import { useToast, ToastContainer } from '@elzatona/shared-components';
+} from "@elzatona/hooks";
+import { useQueryClient } from "@tanstack/react-query";
+import { useNotificationActions } from "@elzatona/hooks";
+import { LearningCard } from "@elzatona/types";
+import { UnifiedQuestion } from "@elzatona/types";
+import { useToast, ToastContainer } from "@elzatona/components";
 
 // Define types for other entities (these should be moved to proper type files)
-type LearningPlan = any;
-type Category = any;
-type Topic = any;
-
-// Types for API responses
-interface ApiResponse<T> {
-  success: boolean;
-  data: T;
-  count?: number;
-  error?: string;
-}
-
-interface BasicCard {
+interface LearningPlan {
   id: string;
   name: string;
-  description: string;
-  color: string;
-  icon: string;
-  order: number;
+  description?: string;
+  duration?: string;
+  difficulty?: string;
+  color?: string;
+  estimatedHours?: number;
+  [key: string]: unknown;
 }
 
-interface BasicPlan {
+interface Category {
   id: string;
   name: string;
-  description: string;
-  duration: string;
-  difficulty: string;
-  color: string;
-  estimatedHours: number;
+  description?: string;
+  card_id?: string;
+  [key: string]: unknown;
+}
+
+interface Topic {
+  id: string;
+  name: string;
+  description?: string;
+  category_id?: string;
+  [key: string]: unknown;
 }
 
 // Lazy load UI components to improve initial bundle size
 const Button = React.lazy(() =>
-  import('@elzatona/shared-components').then(module => ({
+  import("@elzatona/components").then((module) => ({
     default: module.Button,
-  }))
+  })),
 );
 const Input = React.lazy(() =>
-  import('@elzatona/shared-components').then(module => ({
+  import("@elzatona/components").then((module) => ({
     default: module.Input,
-  }))
+  })),
 );
 const Badge = React.lazy(() =>
-  import('@elzatona/shared-components').then(module => ({
+  import("@elzatona/components").then((module) => ({
     default: module.Badge,
-  }))
+  })),
 );
 const Card = React.lazy(() =>
-  import('@elzatona/shared-components').then(module => ({
+  import("@elzatona/components").then((module) => ({
     default: module.Card,
-  }))
+  })),
 );
 const CardContent = React.lazy(() =>
-  import('@elzatona/shared-components').then(module => ({
+  import("@elzatona/components").then((module) => ({
     default: module.CardContent,
-  }))
+  })),
 );
 const CardHeader = React.lazy(() =>
-  import('@elzatona/shared-components').then(module => ({
+  import("@elzatona/components").then((module) => ({
     default: module.CardHeader,
-  }))
+  })),
 );
 const CardTitle = React.lazy(() =>
-  import('@elzatona/shared-components').then(module => ({
+  import("@elzatona/components").then((module) => ({
     default: module.CardTitle,
-  }))
+  })),
 );
 const Select = React.lazy(() =>
-  import('@elzatona/shared-components').then(module => ({
+  import("@elzatona/components").then((module) => ({
     default: module.Select,
-  }))
+  })),
 );
 const SelectContent = React.lazy(() =>
-  import('@elzatona/shared-components').then(module => ({
+  import("@elzatona/components").then((module) => ({
     default: module.SelectContent,
-  }))
+  })),
 );
 const SelectItem = React.lazy(() =>
-  import('@elzatona/shared-components').then(module => ({
+  import("@elzatona/components").then((module) => ({
     default: module.SelectItem,
-  }))
+  })),
 );
 const SelectTrigger = React.lazy(() =>
-  import('@elzatona/shared-components').then(module => ({
+  import("@elzatona/components").then((module) => ({
     default: module.SelectTrigger,
-  }))
+  })),
 );
 const SelectValue = React.lazy(() =>
-  import('@elzatona/shared-components').then(module => ({
+  import("@elzatona/components").then((module) => ({
     default: module.SelectValue,
-  }))
+  })),
 );
 const Collapsible = React.lazy(() =>
-  import('@elzatona/shared-components').then(module => ({
+  import("@elzatona/components").then((module) => ({
     default: module.Collapsible,
-  }))
+  })),
 );
 const CollapsibleTrigger = React.lazy(() =>
-  import('@elzatona/shared-components').then(module => ({
+  import("@elzatona/components").then((module) => ({
     default: module.CollapsibleTrigger,
-  }))
+  })),
 );
 const CollapsibleContent = React.lazy(() =>
-  import('@elzatona/shared-components').then(module => ({
+  import("@elzatona/components").then((module) => ({
     default: module.CollapsibleContent,
-  }))
+  })),
 );
-import { Modal } from '@elzatona/shared-components';
-import { ViewQuestionModal } from '../content/questions/components/ViewQuestionModal';
+import { Modal } from "@elzatona/components";
+import { ViewQuestionModal } from "../content/questions/components/ViewQuestionModal";
 
 // Import icons with tree shaking
 import {
@@ -168,40 +164,42 @@ import {
   Eye,
   CheckSquare,
   Square,
-} from 'lucide-react';
+} from "lucide-react";
 
 // Lazy load forms to reduce initial bundle size
 const CategoryForm = React.lazy(() =>
-  import('@elzatona/shared-components').then(module => ({
+  import("@elzatona/components").then((module) => ({
     default: module.CategoryForm,
-  }))
+  })),
 );
 const TopicForm = React.lazy(() =>
-  import('@elzatona/shared-components').then(module => ({
+  import("@elzatona/components").then((module) => ({
     default: module.TopicForm,
-  }))
+  })),
 );
 const QuestionForm = React.lazy(() =>
-  import('@elzatona/shared-components').then(module => ({
+  import("@elzatona/components").then((module) => ({
     default: module.QuestionForm,
-  }))
+  })),
 );
 const CardForm = React.lazy(() =>
-  import('@elzatona/shared-components').then(module => ({
+  import("@elzatona/components").then((module) => ({
     default: module.CardForm,
-  }))
+  })),
 );
 const PlanForm = React.lazy(() =>
-  import('@elzatona/shared-components').then(module => ({
+  import("@elzatona/components").then((module) => ({
     default: module.PlanForm,
-  }))
+  })),
 );
 const EmptyState = React.lazy(() =>
-  import('@elzatona/shared-components').then(module => ({
+  import("@elzatona/components").then((module) => ({
     default: module.EmptyState,
-  }))
+  })),
 );
 
+// Stats interface - kept for potential future use
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 interface Stats {
   totalCards: number;
   totalPlans: number;
@@ -212,17 +210,17 @@ interface Stats {
 
 // Memoized constants to prevent recreation on each render
 const CARD_ICONS = {
-  'Core Technologies': { icon: BookOpen, color: '#3B82F6' },
-  'Framework Questions': { icon: Layers, color: '#10B981' },
-  'Problem Solving': { icon: Puzzle, color: '#F59E0B' },
-  'System Design': { icon: Network, color: '#EF4444' },
+  "Core Technologies": { icon: BookOpen, color: "#3B82F6" },
+  "Framework Questions": { icon: Layers, color: "#10B981" },
+  "Problem Solving": { icon: Puzzle, color: "#F59E0B" },
+  "System Design": { icon: Network, color: "#EF4444" },
 } as const;
 
 // Loading skeleton component for better UX
 const LoadingSkeleton = () => (
-  <div className='animate-pulse'>
-    <div className='h-4 bg-gray-200 rounded w-3/4 mb-2'></div>
-    <div className='h-3 bg-gray-200 rounded w-1/2'></div>
+  <div className="animate-pulse">
+    <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-3/4 mb-2"></div>
+    <div className="h-3 bg-gray-200 dark:bg-gray-700 rounded w-1/2"></div>
   </div>
 );
 
@@ -242,25 +240,25 @@ const StatsCard = React.memo(
     value: number;
     color: string;
   }) => (
-    <Card>
-      <CardContent className='p-4'>
-        <div className='flex items-center'>
-          <Icon className='h-8 w-8 mr-3' style={{ color }} />
+    <Card className="bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700 shadow-sm hover:shadow-md transition-shadow">
+      <CardContent className="p-4">
+        <div className="flex items-center">
+          <Icon className="h-8 w-8 mr-3" style={{ color }} />
           <div>
-            <p className='text-sm font-medium text-gray-600 dark:text-gray-400'>
+            <p className="text-sm font-medium text-gray-600 dark:text-gray-300">
               {label}
             </p>
-            <p className='text-2xl font-bold text-gray-900 dark:text-white'>
+            <p className="text-2xl font-bold text-gray-900 dark:text-white">
               {value}
             </p>
           </div>
         </div>
       </CardContent>
     </Card>
-  )
+  ),
 );
 
-StatsCard.displayName = 'StatsCard';
+StatsCard.displayName = "StatsCard";
 
 export default function UnifiedAdminPage() {
   // Use TanStack Query hooks for data fetching
@@ -312,7 +310,7 @@ export default function UnifiedAdminPage() {
   const deleteQuestionMutation = useDeleteQuestion();
 
   // Notification actions
-  const { notifyContentUpdate, notifyAdminAction } = useNotificationActions();
+  const { notifyContentUpdate } = useNotificationActions();
 
   // Query client for manual invalidation
   const queryClient = useQueryClient();
@@ -321,7 +319,7 @@ export default function UnifiedAdminPage() {
   const { showSuccess, showError, toasts, removeToast } = useToast();
 
   // Debug logging for TanStack Query
-  console.log('TanStack Query Status:', {
+  console.log("TanStack Query Status:", {
     cardsLoading,
     cardsError,
     cardsData: cardsData
@@ -352,60 +350,65 @@ export default function UnifiedAdminPage() {
       : null,
   });
 
-  // Derived data
-  const cards = cardsData?.data || [];
-  const plans = plansData?.data || [];
-  const categories = categoriesData?.data || [];
-  const topics = topicsData?.data || [];
+  // Extract data from query results - these are stable references from React Query
+  const cards = useMemo(() => cardsData?.data || [], [cardsData?.data]);
+  const plans = useMemo(() => plansData?.data || [], [plansData?.data]);
+  const categories = useMemo(
+    () => categoriesData?.data || [],
+    [categoriesData?.data],
+  );
+  const topics = useMemo(() => topicsData?.data || [], [topicsData?.data]);
   const questions = questionsData?.data || [];
 
   // Force fresh data on mount
   useEffect(() => {
-    console.log('🔄 Force refreshing all queries on mount...');
-    queryClient.invalidateQueries({ queryKey: ['cards'] });
-    queryClient.invalidateQueries({ queryKey: ['plans'] });
-    queryClient.invalidateQueries({ queryKey: ['categories'] });
-    queryClient.invalidateQueries({ queryKey: ['topics'] });
-    queryClient.invalidateQueries({ queryKey: ['questionsUnified'] });
+    console.log("🔄 Force refreshing all queries on mount...");
+    queryClient.invalidateQueries({ queryKey: ["cards"] });
+    queryClient.invalidateQueries({ queryKey: ["plans"] });
+    queryClient.invalidateQueries({ queryKey: ["categories"] });
+    queryClient.invalidateQueries({ queryKey: ["topics"] });
+    queryClient.invalidateQueries({ queryKey: ["questionsUnified"] });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []); // Only run on mount
 
   // Immediate retry on mount if no data
   useEffect(() => {
-    console.log('🚀 Component mounted, checking initial data...');
+    console.log("🚀 Component mounted, checking initial data...");
 
     // If we have loading states but no data after a short delay, retry immediately
     const immediateTimer = setTimeout(() => {
       if (cardsLoading && !cardsData) {
-        console.log('🔄 Immediate retry for cards');
-        queryClient.invalidateQueries({ queryKey: ['cards'] });
+        console.log("🔄 Immediate retry for cards");
+        queryClient.invalidateQueries({ queryKey: ["cards"] });
       }
       if (plansLoading && !plansData) {
-        console.log('🔄 Immediate retry for plans');
-        queryClient.invalidateQueries({ queryKey: ['plans'] });
+        console.log("🔄 Immediate retry for plans");
+        queryClient.invalidateQueries({ queryKey: ["plans"] });
       }
     }, 500); // Very short delay for immediate retry
 
     return () => clearTimeout(immediateTimer);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []); // Only run on mount
 
   // Fallback mechanism - refetch if no data after initial load
   useEffect(() => {
     const timer = setTimeout(() => {
-      console.log('🔍 Checking data availability after 2 seconds...');
+      console.log("🔍 Checking data availability after 2 seconds...");
 
       if (
         !cardsLoading &&
         (!cardsData || !cardsData.data || cardsData.data.length === 0)
       ) {
-        console.log('🔄 Refetching cards due to empty data');
-        queryClient.invalidateQueries({ queryKey: ['cards'] });
+        console.log("🔄 Refetching cards due to empty data");
+        queryClient.invalidateQueries({ queryKey: ["cards"] });
       }
       if (
         !plansLoading &&
         (!plansData || !plansData.data || plansData.data.length === 0)
       ) {
-        console.log('🔄 Refetching plans due to empty data');
-        queryClient.invalidateQueries({ queryKey: ['plans'] });
+        console.log("🔄 Refetching plans due to empty data");
+        queryClient.invalidateQueries({ queryKey: ["plans"] });
       }
       if (
         !categoriesLoading &&
@@ -413,15 +416,15 @@ export default function UnifiedAdminPage() {
           !categoriesData.data ||
           categoriesData.data.length === 0)
       ) {
-        console.log('🔄 Refetching categories due to empty data');
-        queryClient.invalidateQueries({ queryKey: ['categories'] });
+        console.log("🔄 Refetching categories due to empty data");
+        queryClient.invalidateQueries({ queryKey: ["categories"] });
       }
       if (
         !topicsLoading &&
         (!topicsData || !topicsData.data || topicsData.data.length === 0)
       ) {
-        console.log('🔄 Refetching topics due to empty data');
-        queryClient.invalidateQueries({ queryKey: ['topics'] });
+        console.log("🔄 Refetching topics due to empty data");
+        queryClient.invalidateQueries({ queryKey: ["topics"] });
       }
       if (
         !questionsLoading &&
@@ -429,8 +432,8 @@ export default function UnifiedAdminPage() {
           !questionsData.data ||
           questionsData.data.length === 0)
       ) {
-        console.log('🔄 Refetching questions due to empty data');
-        queryClient.invalidateQueries({ queryKey: ['questionsUnified'] });
+        console.log("🔄 Refetching questions due to empty data");
+        queryClient.invalidateQueries({ queryKey: ["questionsUnified"] });
       }
     }, 2000); // Wait 2 seconds after component mount
 
@@ -466,15 +469,15 @@ export default function UnifiedAdminPage() {
       totalTopics: topicsData?.count || 0,
       totalQuestions: questionsData?.pagination?.totalCount || 0,
     }),
-    [cardsData, plansData, categoriesData, topicsData, questionsData]
+    [cardsData, plansData, categoriesData, topicsData, questionsData],
   );
 
   // UI state
-  const [searchTerm, setSearchTerm] = useState('');
-  const [filterCardType, setFilterCardType] = useState('all');
+  const [searchTerm, setSearchTerm] = useState("");
+  const [filterCardType, setFilterCardType] = useState("all");
   const [expandedCards, setExpandedCards] = useState<Set<string>>(new Set());
   const [expandedCategories, setExpandedCategories] = useState<Set<string>>(
-    new Set()
+    new Set(),
   );
   const [expandedTopics, setExpandedTopics] = useState<Set<string>>(new Set());
   const [expandedPlans, setExpandedPlans] = useState<Set<string>>(new Set());
@@ -489,19 +492,27 @@ export default function UnifiedAdminPage() {
   // Confirmation modal states
   const [isDeleteCardModalOpen, setIsDeleteCardModalOpen] = useState(false);
   const [isDeletePlanModalOpen, setIsDeletePlanModalOpen] = useState(false);
+  // Unused delete modal states - kept for potential future use
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [isDeleteCategoryModalOpen, setIsDeleteCategoryModalOpen] =
     useState(false);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [isDeleteTopicModalOpen, setIsDeleteTopicModalOpen] = useState(false);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [isDeleteQuestionModalOpen, setIsDeleteQuestionModalOpen] =
     useState(false);
 
   // Item to delete states
   const [cardToDelete, setCardToDelete] = useState<LearningCard | null>(null);
   const [planToDelete, setPlanToDelete] = useState<LearningPlan | null>(null);
+  // Unused delete states - kept for potential future use
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [categoryToDelete, setCategoryToDelete] = useState<Category | null>(
-    null
+    null,
   );
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [topicToDelete, setTopicToDelete] = useState<Topic | null>(null);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [questionToDelete, setQuestionToDelete] =
     useState<UnifiedQuestion | null>(null);
 
@@ -513,6 +524,7 @@ export default function UnifiedAdminPage() {
     useState<UnifiedQuestion | null>(null);
 
   // Questions state
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [questionsByTopic, setQuestionsByTopic] = useState<
     Record<
       string,
@@ -521,47 +533,96 @@ export default function UnifiedAdminPage() {
   >({});
 
   // Search and filter state for categories and topics
-  const [categorySearch, setCategorySearch] = useState('');
-  const [topicSearch, setTopicSearch] = useState('');
-  const [selectedCategoryFilter, setSelectedCategoryFilter] = useState<string | null>(null);
+  const [categorySearch, setCategorySearch] = useState("");
+  const [topicSearch, setTopicSearch] = useState("");
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [selectedCategoryFilter, setSelectedCategoryFilter] = useState<
+    string | null
+  >(null);
 
   // Collapsible state for categories and topics (closed by default)
+  // Independent states so they can be opened/closed separately
   const [isCategoriesOpen, setIsCategoriesOpen] = useState(false);
   const [isTopicsOpen, setIsTopicsOpen] = useState(false);
 
-  // Plan hierarchy state
-  const [planHierarchy, setPlanHierarchy] = useState<Record<string, any>>({});
-  const [loadingPlanHierarchy, setLoadingPlanHierarchy] = useState<Record<string, boolean>>({});
-  const [expandedPlanCards, setExpandedPlanCards] = useState<Set<string>>(new Set());
-  const [expandedPlanCategories, setExpandedPlanCategories] = useState<Set<string>>(new Set());
-  const [expandedPlanTopics, setExpandedPlanTopics] = useState<Set<string>>(new Set());
-  
+  // Plan hierarchy state - array of cards with nested structure
+  type PlanHierarchyCard = {
+    id: string;
+    name?: string;
+    title?: string;
+    categories?: Array<{
+      id: string;
+      name?: string;
+      title?: string;
+      topics?: Array<{
+        id: string;
+        name?: string;
+        title?: string;
+        totalQuestionCount?: number;
+        planQuestionCount?: number;
+        questions?: Array<{ id: string; title?: string }>;
+      }>;
+    }>;
+    [key: string]: unknown;
+  };
+  const [planHierarchy, setPlanHierarchy] = useState<
+    Record<string, PlanHierarchyCard[]>
+  >({});
+  const [loadingPlanHierarchy, setLoadingPlanHierarchy] = useState<
+    Record<string, boolean>
+  >({});
+  const [expandedPlanCards, setExpandedPlanCards] = useState<Set<string>>(
+    new Set(),
+  );
+  const [expandedPlanCategories, setExpandedPlanCategories] = useState<
+    Set<string>
+  >(new Set());
+  const [expandedPlanTopics, setExpandedPlanTopics] = useState<Set<string>>(
+    new Set(),
+  );
+
   // Add item modals state - step-by-step selection
   const [addItemContext, setAddItemContext] = useState<{
     planId: string;
-    type: 'card' | 'category' | 'topic' | 'question';
+    type: "card" | "category" | "topic" | "question";
     parentId?: string; // card_id for category, category_id for topic, topic_id for question
   } | null>(null);
-  
-  // Step-by-step selection state
-  const [selectionStep, setSelectionStep] = useState<'card' | 'category' | 'topic' | 'question'>('card');
+
+  // Step-by-step selection state - kept for potential future use
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [selectionStep, setSelectionStep] = useState<
+    "card" | "category" | "topic" | "question"
+  >("card");
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [selectedCardId, setSelectedCardId] = useState<string | null>(null);
-  const [selectedCategoryId, setSelectedCategoryId] = useState<string | null>(null);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [selectedCategoryId, setSelectedCategoryId] = useState<string | null>(
+    null,
+  );
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [selectedTopicId, setSelectedTopicId] = useState<string | null>(null);
-  
+
   // Question view and selection state
-  const [viewingQuestion, setViewingQuestion] = useState<UnifiedQuestion | null>(null);
+  const [viewingQuestion, setViewingQuestion] =
+    useState<UnifiedQuestion | null>(null);
   const [isViewQuestionModalOpen, setIsViewQuestionModalOpen] = useState(false);
-  const [selectedQuestionIds, setSelectedQuestionIds] = useState<Set<string>>(new Set());
+  const [selectedQuestionIds, setSelectedQuestionIds] = useState<Set<string>>(
+    new Set(),
+  );
+
+  // Loading state for adding questions
+  const [addingQuestionToTopic, setAddingQuestionToTopic] = useState<
+    Record<string, boolean>
+  >({});
 
   // Filtered categories and topics
   const filteredCategories = useMemo(() => {
     if (!categorySearch.trim()) return categories;
     const searchLower = categorySearch.toLowerCase();
     return categories.filter(
-      category =>
-        (category.name || '').toLowerCase().includes(searchLower) ||
-        (category.description || '').toLowerCase().includes(searchLower)
+      (category) =>
+        (category.name || "").toLowerCase().includes(searchLower) ||
+        (category.description || "").toLowerCase().includes(searchLower),
     );
   }, [categories, categorySearch]);
 
@@ -570,16 +631,18 @@ export default function UnifiedAdminPage() {
 
     // Filter by category
     if (selectedCategoryFilter) {
-      filtered = filtered.filter(topic => topic.category_id === selectedCategoryFilter);
+      filtered = filtered.filter(
+        (topic) => topic.category_id === selectedCategoryFilter,
+      );
     }
 
     // Filter by search term
     if (topicSearch.trim()) {
       const searchLower = topicSearch.toLowerCase();
       filtered = filtered.filter(
-        topic =>
-          (topic.name || '').toLowerCase().includes(searchLower) ||
-          (topic.description || '').toLowerCase().includes(searchLower)
+        (topic) =>
+          (topic.name || "").toLowerCase().includes(searchLower) ||
+          (topic.description || "").toLowerCase().includes(searchLower),
       );
     }
 
@@ -590,46 +653,47 @@ export default function UnifiedAdminPage() {
   const handleCreateCard = async (cardData: Partial<LearningCard>) => {
     try {
       await createCardMutation.mutateAsync(cardData);
-      await notifyContentUpdate('Learning Card', 'created');
+      await notifyContentUpdate("Learning Card", "created");
       showSuccess(
-        'Card Created Successfully',
-        `"${cardData.title}" has been created successfully.`
+        "Card Created Successfully",
+        `"${cardData.title}" has been created successfully.`,
       );
       // Close modal on successful creation
       setIsCardModalOpen(false);
     } catch (error) {
-      console.error('Failed to create card:', error);
+      console.error("Failed to create card:", error);
       showError(
-        'Failed to Create Card',
-        'There was an error creating the card. Please try again.'
+        "Failed to Create Card",
+        "There was an error creating the card. Please try again.",
       );
     }
   };
 
   const handleUpdateCard = async (
     card_id: string,
-    cardData: Partial<LearningCard>
+    cardData: Partial<LearningCard>,
   ) => {
     try {
       await updateCardMutation.mutateAsync({ id: card_id, data: cardData });
-      await notifyContentUpdate('Learning Card', 'updated');
+      await notifyContentUpdate("Learning Card", "updated");
       showSuccess(
-        'Card Updated Successfully',
-        `"${cardData.title}" has been updated successfully.`
+        "Card Updated Successfully",
+        `"${cardData.title}" has been updated successfully.`,
       );
       // Close modal on successful update
       setIsCardModalOpen(false);
       setEditingCard(null);
     } catch (error) {
-      console.error('Failed to update card:', error);
+      console.error("Failed to update card:", error);
       showError(
-        'Failed to Update Card',
-        'There was an error updating the card. Please try again.'
+        "Failed to Update Card",
+        "There was an error updating the card. Please try again.",
       );
     }
   };
 
-  // Form submission wrappers
+  // Form submission wrappers - forms use their own data types
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleCardFormSubmit = (data: any) => {
     if (editingCard?.id) {
       handleUpdateCard(editingCard.id, data);
@@ -638,6 +702,7 @@ export default function UnifiedAdminPage() {
     }
   };
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handlePlanFormSubmit = (data: any) => {
     if (editingPlan?.id) {
       handleUpdatePlan(editingPlan.id, data);
@@ -646,6 +711,7 @@ export default function UnifiedAdminPage() {
     }
   };
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleCategoryFormSubmit = async (data: any) => {
     if (editingCategory?.id) {
       await handleUpdateCategory(editingCategory.id, data);
@@ -654,6 +720,7 @@ export default function UnifiedAdminPage() {
     }
   };
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleTopicFormSubmit = async (data: any) => {
     if (editingTopic?.id) {
       // Editing mode - single topic only
@@ -670,6 +737,7 @@ export default function UnifiedAdminPage() {
     }
   };
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleQuestionFormSubmit = async (data: any) => {
     if (editingQuestion?.id) {
       await handleUpdateQuestion(editingQuestion.id, data);
@@ -679,7 +747,7 @@ export default function UnifiedAdminPage() {
   };
 
   const handleDeleteCard = async (card_id: string) => {
-    const card = cards.find(c => c.id === card_id);
+    const card = cards.find((c) => c.id === card_id);
     if (card) {
       setCardToDelete(card);
       setIsDeleteCardModalOpen(true);
@@ -689,29 +757,29 @@ export default function UnifiedAdminPage() {
   const handleCreatePlan = async (planData: Partial<LearningPlan>) => {
     try {
       await createPlanMutation.mutateAsync(planData);
-      await notifyContentUpdate('Learning Plan', 'created');
+      await notifyContentUpdate("Learning Plan", "created");
     } catch (error) {
-      console.error('Failed to create plan:', error);
+      console.error("Failed to create plan:", error);
     }
   };
 
   const handleUpdatePlan = async (
     plan_id: string,
-    planData: Partial<LearningPlan>
+    planData: Partial<LearningPlan>,
   ) => {
     try {
       await updatePlanMutation.mutateAsync({ id: plan_id, data: planData });
-      await notifyContentUpdate('Learning Plan', 'updated');
+      await notifyContentUpdate("Learning Plan", "updated");
       // Close modal on successful update
       setIsPlanModalOpen(false);
       setEditingPlan(null);
     } catch (error) {
-      console.error('Failed to update plan:', error);
+      console.error("Failed to update plan:", error);
     }
   };
 
   const handleDeletePlan = async (plan_id: string) => {
-    const plan = plans.find(p => p.id === plan_id);
+    const plan = plans.find((p) => p.id === plan_id);
     if (plan) {
       setPlanToDelete(plan);
       setIsDeletePlanModalOpen(true);
@@ -722,33 +790,33 @@ export default function UnifiedAdminPage() {
   const fetchPlanHierarchy = async (planId: string) => {
     try {
       // Set loading state
-      setLoadingPlanHierarchy(prev => ({ ...prev, [planId]: true }));
-      
-      console.log('🔄 Fetching plan hierarchy for plan:', planId);
+      setLoadingPlanHierarchy((prev) => ({ ...prev, [planId]: true }));
+
+      console.log("🔄 Fetching plan hierarchy for plan:", planId);
       const response = await fetch(`/api/plans/${planId}/hierarchy`);
       const result = await response.json();
-      
+
       if (result.success) {
-        console.log('✅ Plan hierarchy fetched successfully:', result.data);
-        setPlanHierarchy(prev => {
+        console.log("✅ Plan hierarchy fetched successfully:", result.data);
+        setPlanHierarchy((prev) => {
           const updated = { ...prev, [planId]: result.data || [] };
-          console.log('📊 Updated plan hierarchy state:', updated);
+          console.log("📊 Updated plan hierarchy state:", updated);
           return updated;
         });
       } else {
-        console.error('❌ Failed to fetch plan hierarchy:', result.error);
+        console.error("❌ Failed to fetch plan hierarchy:", result.error);
       }
     } catch (error) {
-      console.error('❌ Error fetching plan hierarchy:', error);
+      console.error("❌ Error fetching plan hierarchy:", error);
     } finally {
       // Clear loading state
-      setLoadingPlanHierarchy(prev => ({ ...prev, [planId]: false }));
+      setLoadingPlanHierarchy((prev) => ({ ...prev, [planId]: false }));
     }
   };
 
   // Toggle expand for plan cards
   const togglePlanCard = useCallback((cardId: string) => {
-    setExpandedPlanCards(prev => {
+    setExpandedPlanCards((prev) => {
       const newExpanded = new Set(prev);
       if (newExpanded.has(cardId)) {
         newExpanded.delete(cardId);
@@ -761,7 +829,7 @@ export default function UnifiedAdminPage() {
 
   // Toggle expand for plan categories
   const togglePlanCategory = useCallback((categoryId: string) => {
-    setExpandedPlanCategories(prev => {
+    setExpandedPlanCategories((prev) => {
       const newExpanded = new Set(prev);
       if (newExpanded.has(categoryId)) {
         newExpanded.delete(categoryId);
@@ -774,7 +842,7 @@ export default function UnifiedAdminPage() {
 
   // Toggle expand for plan topics
   const togglePlanTopic = useCallback((topicId: string) => {
-    setExpandedPlanTopics(prev => {
+    setExpandedPlanTopics((prev) => {
       const newExpanded = new Set(prev);
       if (newExpanded.has(topicId)) {
         newExpanded.delete(topicId);
@@ -789,67 +857,73 @@ export default function UnifiedAdminPage() {
   const addCardToPlan = async (planId: string, cardId: string) => {
     try {
       const response = await fetch(`/api/plans/${planId}/cards`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ card_id: cardId }),
       });
       const result = await response.json();
       if (result.success) {
-        showSuccess('Card Added', 'Card added to plan successfully');
+        showSuccess("Card Added", "Card added to plan successfully");
         await fetchPlanHierarchy(planId);
         queryClient.invalidateQueries();
       } else {
-        showError('Failed to Add', result.error || 'Failed to add card to plan');
+        showError(
+          "Failed to Add",
+          result.error || "Failed to add card to plan",
+        );
       }
     } catch (error) {
-      console.error('Error adding card to plan:', error);
-      showError('Failed to Add', 'Failed to add card to plan');
+      console.error("Error adding card to plan:", error);
+      showError("Failed to Add", "Failed to add card to plan");
     }
   };
 
   const addCategoryToCard = async (cardId: string, categoryId: string) => {
     try {
       const response = await fetch(`/api/cards/${cardId}/categories`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ category_id: categoryId }),
       });
       const result = await response.json();
       if (result.success) {
-        showSuccess('Category Added', 'Category added to card successfully');
+        showSuccess("Category Added", "Category added to card successfully");
         // Find which plan contains this card and refresh
-        const plan = plans.find(p => {
-          const hierarchy = planHierarchy[p.id] || [];
-          return hierarchy.some((c: any) => c.id === cardId);
+        const plan = plans.find((p) => {
+          const hierarchy: PlanHierarchyCard[] = planHierarchy[p.id] || [];
+          return hierarchy.some((c) => c.id === cardId);
         });
         if (plan) {
           await fetchPlanHierarchy(plan.id);
         }
         queryClient.invalidateQueries();
       } else {
-        showError('Failed to Add', result.error || 'Failed to add category to card');
+        showError(
+          "Failed to Add",
+          result.error || "Failed to add category to card",
+        );
       }
     } catch (error) {
-      console.error('Error adding category to card:', error);
-      showError('Failed to Add', 'Failed to add category to card');
+      console.error("Error adding category to card:", error);
+      showError("Failed to Add", "Failed to add category to card");
     }
   };
 
   const addTopicToCategory = async (categoryId: string, topicId: string) => {
     try {
       const response = await fetch(`/api/categories/${categoryId}/topics`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ topic_id: topicId }),
       });
       const result = await response.json();
       if (result.success) {
-        showSuccess('Topic Added', 'Topic added to category successfully');
+        showSuccess("Topic Added", "Topic added to category successfully");
         // Find which plan contains this category and refresh
-        const plan = plans.find(p => {
-          const hierarchy = planHierarchy[p.id] || [];
-          return hierarchy.some((c: any) => 
-            c.categories?.some((cat: any) => cat.id === categoryId)
+        const plan = plans.find((p) => {
+          const hierarchy: PlanHierarchyCard[] = planHierarchy[p.id] || [];
+          return hierarchy.some((c) =>
+            c.categories?.some((cat) => cat.id === categoryId),
           );
         });
         if (plan) {
@@ -857,103 +931,181 @@ export default function UnifiedAdminPage() {
         }
         queryClient.invalidateQueries();
       } else {
-        showError('Failed to Add', result.error || 'Failed to add topic to category');
+        showError(
+          "Failed to Add",
+          result.error || "Failed to add topic to category",
+        );
       }
     } catch (error) {
-      console.error('Error adding topic to category:', error);
-      showError('Failed to Add', 'Failed to add topic to category');
+      console.error("Error adding topic to category:", error);
+      showError("Failed to Add", "Failed to add topic to category");
     }
   };
 
-  const addQuestionToTopic = async (topicId: string, questionId: string) => {
+  const addQuestionToTopic = async (
+    topicId: string,
+    questionId: string,
+    planId?: string,
+  ) => {
+    const loadingKey = `${topicId}-${questionId}`;
     try {
-      const response = await fetch(`/api/topics/${topicId}/questions`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+      setAddingQuestionToTopic((prev) => ({ ...prev, [loadingKey]: true }));
+
+      // Step 1: Add question to topic
+      const topicResponse = await fetch(`/api/topics/${topicId}/questions`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ question_id: questionId }),
       });
-      const result = await response.json();
-      if (result.success) {
-        showSuccess('Question Added', 'Question added to topic successfully');
-        // Find which plan contains this topic and refresh
-        const plan = plans.find(p => {
-          const hierarchy = planHierarchy[p.id] || [];
-          return hierarchy.some((c: any) => 
-            c.categories?.some((cat: any) => 
-              cat.topics?.some((t: any) => t.id === topicId)
-            )
-          );
-        });
-        if (plan) {
-          await fetchPlanHierarchy(plan.id);
-        }
-        queryClient.invalidateQueries();
-      } else {
-        showError('Failed to Add', result.error || 'Failed to add question to topic');
+      const topicResult = await topicResponse.json();
+
+      if (!topicResult.success) {
+        throw new Error(topicResult.error || "Failed to add question to topic");
       }
+
+      // Step 2: If planId is provided, also add question to plan
+      if (planId) {
+        const planResponse = await fetch(`/api/plans/${planId}/questions`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            question_id: questionId,
+            topic_id: topicId,
+          }),
+        });
+        const planResult = await planResponse.json();
+
+        if (
+          !planResult.success &&
+          planResult.error !== "Question is already in this plan"
+        ) {
+          console.warn(
+            "Question added to topic but failed to add to plan:",
+            planResult.error,
+          );
+          // Don't throw - question is still added to topic
+        }
+      }
+
+      showSuccess(
+        "Question Added",
+        "Question added to topic and plan successfully",
+      );
+
+      // Find which plan contains this topic and refresh
+      const plan = planId
+        ? plans.find((p) => p.id === planId)
+        : plans.find((p) => {
+            const hierarchy: PlanHierarchyCard[] = planHierarchy[p.id] || [];
+            return hierarchy.some((c) =>
+              c.categories?.some((cat) =>
+                cat.topics?.some((t) => t.id === topicId),
+              ),
+            );
+          });
+
+      if (plan) {
+        await fetchPlanHierarchy(plan.id);
+      }
+      queryClient.invalidateQueries();
     } catch (error) {
-      console.error('Error adding question to topic:', error);
-      showError('Failed to Add', 'Failed to add question to topic');
+      console.error("Error adding question to topic:", error);
+      showError(
+        "Failed to Add",
+        error instanceof Error
+          ? error.message
+          : "Failed to add question to topic",
+      );
+    } finally {
+      setAddingQuestionToTopic((prev) => {
+        const newState = { ...prev };
+        delete newState[loadingKey];
+        return newState;
+      });
     }
   };
 
   // Remove items from hierarchy
   const removeCardFromPlan = async (planId: string, cardId: string) => {
     try {
-      const response = await fetch(`/api/plans/${planId}/cards?card_id=${cardId}`, {
-        method: 'DELETE',
-      });
+      const response = await fetch(
+        `/api/plans/${planId}/cards?card_id=${cardId}`,
+        {
+          method: "DELETE",
+        },
+      );
       const result = await response.json();
       if (result.success) {
-        showSuccess('Card Removed', 'Card removed from plan successfully');
+        showSuccess("Card Removed", "Card removed from plan successfully");
         await fetchPlanHierarchy(planId);
         queryClient.invalidateQueries();
       } else {
-        showError('Failed to Remove', result.error || 'Failed to remove card from plan');
+        showError(
+          "Failed to Remove",
+          result.error || "Failed to remove card from plan",
+        );
       }
     } catch (error) {
-      console.error('Error removing card from plan:', error);
-      showError('Failed to Remove', 'Failed to remove card from plan');
+      console.error("Error removing card from plan:", error);
+      showError("Failed to Remove", "Failed to remove card from plan");
     }
   };
 
   const removeCategoryFromCard = async (cardId: string, categoryId: string) => {
     try {
-      const response = await fetch(`/api/cards/${cardId}/categories?category_id=${categoryId}`, {
-        method: 'DELETE',
-      });
+      const response = await fetch(
+        `/api/cards/${cardId}/categories?category_id=${categoryId}`,
+        {
+          method: "DELETE",
+        },
+      );
       const result = await response.json();
       if (result.success) {
-        showSuccess('Category Removed', 'Category removed from card successfully');
-        const plan = plans.find(p => {
+        showSuccess(
+          "Category Removed",
+          "Category removed from card successfully",
+        );
+        const plan = plans.find((p) => {
           const hierarchy = planHierarchy[p.id] || [];
-          return hierarchy.some((c: any) => c.id === cardId);
+          return hierarchy.some((c: { id?: string }) => c.id === cardId);
         });
         if (plan) {
           await fetchPlanHierarchy(plan.id);
         }
         queryClient.invalidateQueries();
       } else {
-        showError('Failed to Remove', result.error || 'Failed to remove category from card');
+        showError(
+          "Failed to Remove",
+          result.error || "Failed to remove category from card",
+        );
       }
     } catch (error) {
-      console.error('Error removing category from card:', error);
-      showError('Failed to Remove', 'Failed to remove category from card');
+      console.error("Error removing category from card:", error);
+      showError("Failed to Remove", "Failed to remove category from card");
     }
   };
 
-  const removeTopicFromCategory = async (categoryId: string, topicId: string) => {
+  const removeTopicFromCategory = async (
+    categoryId: string,
+    topicId: string,
+  ) => {
     try {
-      const response = await fetch(`/api/categories/${categoryId}/topics?topic_id=${topicId}`, {
-        method: 'DELETE',
-      });
+      const response = await fetch(
+        `/api/categories/${categoryId}/topics?topic_id=${topicId}`,
+        {
+          method: "DELETE",
+        },
+      );
       const result = await response.json();
       if (result.success) {
-        showSuccess('Topic Removed', 'Topic removed from category successfully');
-        const plan = plans.find(p => {
-          const hierarchy = planHierarchy[p.id] || [];
-          return hierarchy.some((c: any) => 
-            c.categories?.some((cat: any) => cat.id === categoryId)
+        showSuccess(
+          "Topic Removed",
+          "Topic removed from category successfully",
+        );
+        const plan = plans.find((p) => {
+          const hierarchy: PlanHierarchyCard[] = planHierarchy[p.id] || [];
+          return hierarchy.some((c) =>
+            c.categories?.some((cat) => cat.id === categoryId),
           );
         });
         if (plan) {
@@ -961,28 +1113,41 @@ export default function UnifiedAdminPage() {
         }
         queryClient.invalidateQueries();
       } else {
-        showError('Failed to Remove', result.error || 'Failed to remove topic from category');
+        showError(
+          "Failed to Remove",
+          result.error || "Failed to remove topic from category",
+        );
       }
     } catch (error) {
-      console.error('Error removing topic from category:', error);
-      showError('Failed to Remove', 'Failed to remove topic from category');
+      console.error("Error removing topic from category:", error);
+      showError("Failed to Remove", "Failed to remove topic from category");
     }
   };
 
-  const removeQuestionFromTopic = async (topicId: string, questionId: string) => {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const removeQuestionFromTopic = async (
+    topicId: string,
+    questionId: string,
+  ) => {
     try {
-      const response = await fetch(`/api/topics/${topicId}/questions?question_id=${questionId}`, {
-        method: 'DELETE',
-      });
+      const response = await fetch(
+        `/api/topics/${topicId}/questions?question_id=${questionId}`,
+        {
+          method: "DELETE",
+        },
+      );
       const result = await response.json();
       if (result.success) {
-        showSuccess('Question Removed', 'Question removed from topic successfully');
-        const plan = plans.find(p => {
-          const hierarchy = planHierarchy[p.id] || [];
-          return hierarchy.some((c: any) => 
-            c.categories?.some((cat: any) => 
-              cat.topics?.some((t: any) => t.id === topicId)
-            )
+        showSuccess(
+          "Question Removed",
+          "Question removed from topic successfully",
+        );
+        const plan = plans.find((p) => {
+          const hierarchy: PlanHierarchyCard[] = planHierarchy[p.id] || [];
+          return hierarchy.some((c) =>
+            c.categories?.some((cat) =>
+              cat.topics?.some((t) => t.id === topicId),
+            ),
           );
         });
         if (plan) {
@@ -990,71 +1155,101 @@ export default function UnifiedAdminPage() {
         }
         queryClient.invalidateQueries();
       } else {
-        showError('Failed to Remove', result.error || 'Failed to remove question from topic');
+        showError(
+          "Failed to Remove",
+          result.error || "Failed to remove question from topic",
+        );
       }
     } catch (error) {
-      console.error('Error removing question from topic:', error);
-      showError('Failed to Remove', 'Failed to remove question from topic');
+      console.error("Error removing question from topic:", error);
+      showError("Failed to Remove", "Failed to remove question from topic");
     }
   };
 
   // Remove question from both topic and plan
-  const removeQuestionFromPlan = async (planId: string, topicId: string, questionId: string) => {
+  const removeQuestionFromPlan = async (
+    planId: string,
+    topicId: string,
+    questionId: string,
+  ) => {
     try {
-      console.log('🗑️ Removing question from plan:', { planId, topicId, questionId });
-      
-      // Remove from topic
-      const topicResponse = await fetch(`/api/topics/${topicId}/questions?question_id=${questionId}`, {
-        method: 'DELETE',
+      console.log("🗑️ Removing question from plan:", {
+        planId,
+        topicId,
+        questionId,
       });
+
+      // Remove from topic
+      const topicResponse = await fetch(
+        `/api/topics/${topicId}/questions?question_id=${questionId}`,
+        {
+          method: "DELETE",
+        },
+      );
       const topicResult = await topicResponse.json();
-      console.log('📋 Topic removal result:', topicResult);
+      console.log("📋 Topic removal result:", topicResult);
 
       // Remove from plan
-      const planResponse = await fetch(`/api/plans/${planId}/questions?question_id=${questionId}`, {
-        method: 'DELETE',
-      });
+      const planResponse = await fetch(
+        `/api/plans/${planId}/questions?question_id=${questionId}`,
+        {
+          method: "DELETE",
+        },
+      );
       const planResult = await planResponse.json();
-      console.log('📋 Plan removal result:', planResult);
+      console.log("📋 Plan removal result:", planResult);
 
       if (topicResult.success && planResult.success) {
-        showSuccess('Question Removed', 'Question removed from plan and topic successfully');
+        showSuccess(
+          "Question Removed",
+          "Question removed from plan and topic successfully",
+        );
         // Force refresh the hierarchy
         await fetchPlanHierarchy(planId);
         // Invalidate all related queries
-        queryClient.invalidateQueries({ queryKey: ['plan-hierarchy', planId] });
-        queryClient.invalidateQueries({ queryKey: ['plans'] });
-        queryClient.invalidateQueries({ queryKey: ['questions'] });
-        queryClient.invalidateQueries({ queryKey: ['topics'] });
-        console.log('✅ Question removed successfully, hierarchy refreshed');
+        queryClient.invalidateQueries({ queryKey: ["plan-hierarchy", planId] });
+        queryClient.invalidateQueries({ queryKey: ["plans"] });
+        queryClient.invalidateQueries({ queryKey: ["questions"] });
+        queryClient.invalidateQueries({ queryKey: ["topics"] });
+        console.log("✅ Question removed successfully, hierarchy refreshed");
       } else if (topicResult.success) {
         // If topic removal succeeded but plan removal failed, still show success
-        showSuccess('Question Removed', 'Question removed from topic successfully');
+        showSuccess(
+          "Question Removed",
+          "Question removed from topic successfully",
+        );
         await fetchPlanHierarchy(planId);
-        queryClient.invalidateQueries({ queryKey: ['plan-hierarchy', planId] });
-        queryClient.invalidateQueries({ queryKey: ['plans'] });
-        console.log('⚠️ Topic removed but plan removal may have failed');
+        queryClient.invalidateQueries({ queryKey: ["plan-hierarchy", planId] });
+        queryClient.invalidateQueries({ queryKey: ["plans"] });
+        console.log("⚠️ Topic removed but plan removal may have failed");
       } else if (planResult.success) {
         // If plan removal succeeded but topic removal failed, still show success
-        showSuccess('Question Removed', 'Question removed from plan successfully');
+        showSuccess(
+          "Question Removed",
+          "Question removed from plan successfully",
+        );
         await fetchPlanHierarchy(planId);
-        queryClient.invalidateQueries({ queryKey: ['plan-hierarchy', planId] });
-        queryClient.invalidateQueries({ queryKey: ['plans'] });
-        console.log('⚠️ Plan removed but topic removal may have failed');
+        queryClient.invalidateQueries({ queryKey: ["plan-hierarchy", planId] });
+        queryClient.invalidateQueries({ queryKey: ["plans"] });
+        console.log("⚠️ Plan removed but topic removal may have failed");
       } else {
-        const errorMsg = topicResult.error || planResult.error || 'Failed to remove question';
-        console.error('❌ Failed to remove question:', { topicResult, planResult });
-        showError('Failed to Remove', errorMsg);
+        const errorMsg =
+          topicResult.error || planResult.error || "Failed to remove question";
+        console.error("❌ Failed to remove question:", {
+          topicResult,
+          planResult,
+        });
+        showError("Failed to Remove", errorMsg);
       }
     } catch (error) {
-      console.error('❌ Error removing question from plan:', error);
-      showError('Failed to Remove', 'Failed to remove question from plan');
+      console.error("❌ Error removing question from plan:", error);
+      showError("Failed to Remove", "Failed to remove question from plan");
     }
   };
 
   // Fetch hierarchy when plan is expanded
   useEffect(() => {
-    plans.forEach(plan => {
+    plans.forEach((plan) => {
       if (expandedPlans.has(plan.id) && !planHierarchy[plan.id]) {
         fetchPlanHierarchy(plan.id);
       }
@@ -1067,18 +1262,18 @@ export default function UnifiedAdminPage() {
 
     try {
       await deleteCardMutation.mutateAsync(cardToDelete.id);
-      await notifyContentUpdate('Learning Card', 'deleted');
+      await notifyContentUpdate("Learning Card", "deleted");
       showSuccess(
-        'Card Deleted Successfully',
-        `"${cardToDelete.title}" has been deleted successfully.`
+        "Card Deleted Successfully",
+        `"${cardToDelete.title}" has been deleted successfully.`,
       );
       setIsDeleteCardModalOpen(false);
       setCardToDelete(null);
     } catch (error) {
-      console.error('Failed to delete card:', error);
+      console.error("Failed to delete card:", error);
       showError(
-        'Failed to Delete Card',
-        'There was an error deleting the card. Please try again.'
+        "Failed to Delete Card",
+        "There was an error deleting the card. Please try again.",
       );
     }
   };
@@ -1088,18 +1283,18 @@ export default function UnifiedAdminPage() {
 
     try {
       await deletePlanMutation.mutateAsync(planToDelete.id);
-      await notifyContentUpdate('Learning Plan', 'deleted');
+      await notifyContentUpdate("Learning Plan", "deleted");
       showSuccess(
-        'Plan Deleted Successfully',
-        `"${planToDelete.title}" has been deleted successfully.`
+        "Plan Deleted Successfully",
+        `"${planToDelete.title}" has been deleted successfully.`,
       );
       setIsDeletePlanModalOpen(false);
       setPlanToDelete(null);
     } catch (error) {
-      console.error('Failed to delete plan:', error);
+      console.error("Failed to delete plan:", error);
       showError(
-        'Failed to Delete Plan',
-        'There was an error deleting the plan. Please try again.'
+        "Failed to Delete Plan",
+        "There was an error deleting the plan. Please try again.",
       );
     }
   };
@@ -1108,13 +1303,13 @@ export default function UnifiedAdminPage() {
     try {
       await createCategoryMutation.mutateAsync(categoryData);
     } catch (error) {
-      console.error('Failed to create category:', error);
+      console.error("Failed to create category:", error);
     }
   };
 
   const handleUpdateCategory = async (
     categoryId: string,
-    categoryData: Partial<Category>
+    categoryData: Partial<Category>,
   ) => {
     try {
       await updateCategoryMutation.mutateAsync({
@@ -1122,7 +1317,7 @@ export default function UnifiedAdminPage() {
         data: categoryData,
       });
     } catch (error) {
-      console.error('Failed to update category:', error);
+      console.error("Failed to update category:", error);
     }
   };
 
@@ -1130,7 +1325,7 @@ export default function UnifiedAdminPage() {
     try {
       await deleteCategoryMutation.mutateAsync(categoryId);
     } catch (error) {
-      console.error('Failed to delete category:', error);
+      console.error("Failed to delete category:", error);
     }
   };
 
@@ -1138,10 +1333,11 @@ export default function UnifiedAdminPage() {
     try {
       await createTopicMutation.mutateAsync(topicData);
     } catch (error) {
-      console.error('Failed to create topic:', error);
+      console.error("Failed to create topic:", error);
     }
   };
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleBulkCreateTopics = async (topicsData: any[]) => {
     try {
       let successCount = 0;
@@ -1155,24 +1351,27 @@ export default function UnifiedAdminPage() {
           successCount++;
         } catch (error) {
           failedCount++;
-          const errorMessage = error instanceof Error ? error.message : 'Unknown error';
-          errors.push(`Topic ${i + 1} (${topicData.name || 'unnamed'}): ${errorMessage}`);
+          const errorMessage =
+            error instanceof Error ? error.message : "Unknown error";
+          errors.push(
+            `Topic ${i + 1} (${topicData.name || "unnamed"}): ${errorMessage}`,
+          );
           console.error(`Failed to create topic ${i + 1}:`, error);
         }
       }
 
       if (successCount > 0) {
         showSuccess(
-          'Topics Created',
-          `Successfully created ${successCount} topic${successCount !== 1 ? 's' : ''}${failedCount > 0 ? `, ${failedCount} failed` : ''}`
+          "Topics Created",
+          `Successfully created ${successCount} topic${successCount !== 1 ? "s" : ""}${failedCount > 0 ? `, ${failedCount} failed` : ""}`,
         );
       }
 
       if (failedCount > 0 && errors.length > 0) {
-        console.error('Bulk topic creation errors:', errors);
+        console.error("Bulk topic creation errors:", errors);
         showError(
-          'Some Topics Failed',
-          `${failedCount} topic${failedCount !== 1 ? 's' : ''} failed to create. Check console for details.`
+          "Some Topics Failed",
+          `${failedCount} topic${failedCount !== 1 ? "s" : ""} failed to create. Check console for details.`,
         );
       }
 
@@ -1181,19 +1380,22 @@ export default function UnifiedAdminPage() {
         setIsTopicModalOpen(false);
       }
     } catch (error) {
-      console.error('Error in bulk topic creation:', error);
-      showError('Bulk Creation Failed', 'Failed to create topics. Please try again.');
+      console.error("Error in bulk topic creation:", error);
+      showError(
+        "Bulk Creation Failed",
+        "Failed to create topics. Please try again.",
+      );
     }
   };
 
   const handleUpdateTopic = async (
     topicId: string,
-    topicData: Partial<Topic>
+    topicData: Partial<Topic>,
   ) => {
     try {
       await updateTopicMutation.mutateAsync({ id: topicId, data: topicData });
     } catch (error) {
-      console.error('Failed to update topic:', error);
+      console.error("Failed to update topic:", error);
     }
   };
 
@@ -1201,23 +1403,23 @@ export default function UnifiedAdminPage() {
     try {
       await deleteTopicMutation.mutateAsync(topicId);
     } catch (error) {
-      console.error('Failed to delete topic:', error);
+      console.error("Failed to delete topic:", error);
     }
   };
 
   const handleCreateQuestion = async (
-    questionData: Partial<UnifiedQuestion>
+    questionData: Partial<UnifiedQuestion>,
   ) => {
     try {
       await createQuestionMutation.mutateAsync(questionData);
     } catch (error) {
-      console.error('Failed to create question:', error);
+      console.error("Failed to create question:", error);
     }
   };
 
   const handleUpdateQuestion = async (
     question_id: string,
-    questionData: Partial<UnifiedQuestion>
+    questionData: Partial<UnifiedQuestion>,
   ) => {
     try {
       await updateQuestionMutation.mutateAsync({
@@ -1225,7 +1427,7 @@ export default function UnifiedAdminPage() {
         data: questionData,
       });
     } catch (error) {
-      console.error('Failed to update question:', error);
+      console.error("Failed to update question:", error);
     }
   };
 
@@ -1233,12 +1435,12 @@ export default function UnifiedAdminPage() {
     try {
       await deleteQuestionMutation.mutateAsync(question_id);
     } catch (error) {
-      console.error('Failed to delete question:', error);
+      console.error("Failed to delete question:", error);
     }
   };
 
   // Debounced search to improve performance
-  const [debouncedSearchTerm, setDebouncedSearchTerm] = useState('');
+  const [debouncedSearchTerm, setDebouncedSearchTerm] = useState("");
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -1249,7 +1451,7 @@ export default function UnifiedAdminPage() {
 
   // Memoized filtered data to prevent unnecessary recalculations
   const filteredCards = useMemo(() => {
-    return cards.filter(card => {
+    return cards.filter((card) => {
       // Add null checks to prevent runtime errors
       if (!card || !card.title || !card.description) {
         return false;
@@ -1261,13 +1463,13 @@ export default function UnifiedAdminPage() {
           .toLowerCase()
           .includes(debouncedSearchTerm.toLowerCase());
       const matchesCardType =
-        filterCardType === 'all' || card.title === filterCardType;
+        filterCardType === "all" || card.title === filterCardType;
       return matchesSearch && matchesCardType;
     });
   }, [cards, debouncedSearchTerm, filterCardType]);
 
   const filteredPlans = useMemo(() => {
-    return plans.filter(plan => {
+    return plans.filter((plan) => {
       // Add null checks to prevent runtime errors
       if (!plan || !plan.name || !plan.description) {
         return false;
@@ -1284,7 +1486,7 @@ export default function UnifiedAdminPage() {
 
   // Helper functions for UI interactions
   const toggleCard = useCallback((card_id: string) => {
-    setExpandedCards(prev => {
+    setExpandedCards((prev) => {
       const newExpanded = new Set(prev);
       if (newExpanded.has(card_id)) {
         newExpanded.delete(card_id);
@@ -1296,7 +1498,7 @@ export default function UnifiedAdminPage() {
   }, []);
 
   const toggleCategory = useCallback((categoryId: string) => {
-    setExpandedCategories(prev => {
+    setExpandedCategories((prev) => {
       const newExpanded = new Set(prev);
       if (newExpanded.has(categoryId)) {
         newExpanded.delete(categoryId);
@@ -1308,7 +1510,7 @@ export default function UnifiedAdminPage() {
   }, []);
 
   const toggleTopic = useCallback((topicId: string) => {
-    setExpandedTopics(prev => {
+    setExpandedTopics((prev) => {
       const newExpanded = new Set(prev);
       if (newExpanded.has(topicId)) {
         newExpanded.delete(topicId);
@@ -1320,7 +1522,7 @@ export default function UnifiedAdminPage() {
   }, []);
 
   const togglePlan = useCallback((plan_id: string) => {
-    setExpandedPlans(prev => {
+    setExpandedPlans((prev) => {
       const newExpanded = new Set(prev);
       if (newExpanded.has(plan_id)) {
         newExpanded.delete(plan_id);
@@ -1333,11 +1535,11 @@ export default function UnifiedAdminPage() {
 
   if (loading) {
     return (
-      <div className='container mx-auto p-6'>
-        <div className='flex items-center justify-center h-64'>
-          <div className='text-center'>
-            <div className='animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto mb-4'></div>
-            <p className='text-gray-600'>Loading unified admin data...</p>
+      <div className="container mx-auto p-6">
+        <div className="flex items-center justify-center h-64">
+          <div className="text-center">
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto mb-4"></div>
+            <p className="text-gray-600">Loading unified admin data...</p>
           </div>
         </div>
       </div>
@@ -1353,24 +1555,24 @@ export default function UnifiedAdminPage() {
     questionsError
   ) {
     return (
-      <div className='container mx-auto p-6'>
-        <div className='flex items-center justify-center h-64'>
-          <div className='text-center'>
-            <div className='text-red-500 text-6xl mb-4'>⚠️</div>
-            <h2 className='text-xl font-semibold text-gray-900 dark:text-white mb-2'>
+      <div className="container mx-auto p-6">
+        <div className="flex items-center justify-center h-64">
+          <div className="text-center">
+            <div className="text-red-500 text-6xl mb-4">⚠️</div>
+            <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">
               Error Loading Data
             </h2>
-            <p className='text-gray-600 dark:text-gray-400 mb-4'>
+            <p className="text-gray-600 dark:text-gray-400 mb-4">
               There was an error loading the admin data. Please try refreshing
               the page.
             </p>
             <button
               onClick={() => window.location.reload()}
-              className='px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700'
+              className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
             >
               Refresh Page
             </button>
-            <div className='mt-4 text-sm text-gray-500'>
+            <div className="mt-4 text-sm text-gray-500">
               {cardsError && <p>Cards Error: {cardsError.message}</p>}
               {plansError && <p>Plans Error: {plansError.message}</p>}
               {categoriesError && (
@@ -1388,347 +1590,382 @@ export default function UnifiedAdminPage() {
   }
 
   return (
-    <div className='container mx-auto p-6'>
+    <div className="container mx-auto p-6">
       {/* Header */}
-      <div className='mb-8'>
-        <h1 className='text-3xl font-bold text-gray-900 dark:text-white mb-2'>
+      <div className="mb-8">
+        <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
           🎯 Unified Learning Management
         </h1>
-        <p className='text-gray-600 dark:text-gray-400'>
+        <p className="text-gray-600 dark:text-gray-400">
           Comprehensive admin interface for managing learning cards, plans,
           categories, topics, and questions
         </p>
       </div>
 
       {/* Stats */}
-      <div className='grid grid-cols-2 md:grid-cols-5 gap-4 mb-8'>
+      <div className="grid grid-cols-2 md:grid-cols-5 gap-4 mb-8">
         <StatsCard
           icon={Layers}
-          label='Cards'
+          label="Cards"
           value={stats.totalCards}
-          color='#3B82F6'
+          color="#3B82F6"
         />
         <StatsCard
           icon={Users}
-          label='Plans'
+          label="Plans"
           value={stats.totalPlans}
-          color='#10B981'
+          color="#10B981"
         />
         <StatsCard
           icon={BookOpen}
-          label='Categories'
+          label="Categories"
           value={stats.totalCategories}
-          color='#8B5CF6'
+          color="#8B5CF6"
         />
         <StatsCard
           icon={Target}
-          label='Topics'
+          label="Topics"
           value={stats.totalTopics}
-          color='#F59E0B'
+          color="#F59E0B"
         />
         <StatsCard
           icon={MessageSquare}
-          label='Questions'
+          label="Questions"
           value={stats.totalQuestions}
-          color='#EF4444'
+          color="#EF4444"
         />
       </div>
 
       {/* Topics and Categories Lists */}
-      <div className='grid grid-cols-1 md:grid-cols-2 gap-6 mb-8'>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
         {/* Categories List */}
         <Suspense fallback={<LoadingSkeleton />}>
-          <Card className='bg-white dark:bg-gray-800'>
-            <Collapsible open={isCategoriesOpen} onOpenChange={setIsCategoriesOpen}>
+          <Card className="bg-white dark:bg-gray-800 border-2 border-purple-200 dark:border-purple-800 shadow-lg">
+            <Collapsible
+              open={isCategoriesOpen}
+              onOpenChange={setIsCategoriesOpen}
+            >
               <CollapsibleTrigger asChild>
-                <CardHeader className='cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors'>
-                  <div className='flex items-center justify-between mb-4'>
-                    <CardTitle className='text-xl font-semibold text-gray-900 dark:text-gray-100 flex items-center gap-2'>
-                      {isCategoriesOpen ? (
-                        <ChevronDown className='h-5 w-5 text-gray-500 dark:text-gray-400' />
-                      ) : (
-                        <ChevronRight className='h-5 w-5 text-gray-500 dark:text-gray-400' />
-                      )}
-                      <BookOpen className='h-5 w-5 text-purple-600 dark:text-purple-400' />
-                      Categories ({filteredCategories.length}{categorySearch && ` / ${categories.length}`})
-                    </CardTitle>
-                    <Button
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        setEditingCategory(null);
-                        setIsCategoryModalOpen(true);
-                      }}
-                      size='sm'
-                      className='bg-purple-600 hover:bg-purple-700'
-                    >
-                      <Plus className='h-4 w-4 mr-1' />
-                      Add
-                    </Button>
-                  </div>
-                  {/* Search Input */}
-                  <div className='relative' onClick={(e) => e.stopPropagation()}>
-                    <Search className='absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400' />
-                    <Input
-                      placeholder='Search categories...'
-                      value={categorySearch}
-                      onChange={e => setCategorySearch(e.target.value)}
-                      className='pl-10 pr-10'
-                    />
-                    {categorySearch && (
-                      <button
-                        onClick={() => setCategorySearch('')}
-                        className='absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300'
-                      >
-                        <X className='h-4 w-4' />
-                      </button>
+                <CardHeader className="cursor-pointer hover:bg-purple-50 dark:hover:bg-purple-900/20 transition-colors border-b border-purple-100 dark:border-purple-800">
+                  <CardTitle className="text-xl font-semibold text-gray-900 dark:text-gray-100 flex items-center gap-2">
+                    {isCategoriesOpen ? (
+                      <ChevronDown className="h-5 w-5 text-purple-600 dark:text-purple-400" />
+                    ) : (
+                      <ChevronRight className="h-5 w-5 text-purple-600 dark:text-purple-400" />
                     )}
-                  </div>
+                    <BookOpen className="h-5 w-5 text-purple-600 dark:text-purple-400" />
+                    Categories ({categories.length})
+                  </CardTitle>
                 </CardHeader>
               </CollapsibleTrigger>
-              <CollapsibleContent>
-                <CardContent>
-              {categoriesLoading ? (
-                <div className='text-center py-4'>
-                  <div className='animate-spin rounded-full h-6 w-6 border-b-2 border-purple-600 mx-auto'></div>
-                </div>
-              ) : filteredCategories.length === 0 ? (
-                <div className='text-center py-8 text-gray-500 dark:text-gray-400'>
-                  <BookOpen className='h-12 w-12 mx-auto mb-2 opacity-50' />
-                  <p>{categorySearch ? 'No categories found' : 'No categories yet'}</p>
-                </div>
-              ) : (
-                <div className='space-y-2 max-h-96 overflow-y-auto'>
-                  {filteredCategories.map(category => (
-                    <div
-                      key={category.id}
-                      className='flex items-center justify-between p-3 rounded-lg border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors'
-                    >
-                      <div className='flex-1 min-w-0'>
-                        <p className='font-medium text-gray-900 dark:text-gray-100 truncate'>
-                          {category.name || 'Unnamed Category'}
-                        </p>
-                        {category.description && (
-                          <p className='text-sm text-gray-500 dark:text-gray-400 truncate mt-1'>
-                            {category.description}
-                          </p>
+              {isCategoriesOpen && (
+                <CollapsibleContent
+                  className="data-[state=open]:animate-collapsible-down data-[state=closed]:animate-collapsible-up"
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  <CardContent
+                    className="pt-4 bg-purple-50/30 dark:bg-gray-800"
+                    onClick={(e) => e.stopPropagation()}
+                  >
+                    {/* Search and Add button */}
+                    <div className="mb-4 space-y-3">
+                      {/* Search Input */}
+                      <div
+                        className="relative"
+                        onClick={(e) => e.stopPropagation()}
+                      >
+                        <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400 dark:text-gray-500" />
+                        <Input
+                          placeholder="Search categories..."
+                          value={categorySearch}
+                          onChange={(e) => setCategorySearch(e.target.value)}
+                          className="pl-10 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 border-gray-300 dark:border-gray-600 placeholder:text-gray-400 dark:placeholder:text-gray-500"
+                        />
+                        {categorySearch && (
+                          <button
+                            onClick={() => setCategorySearch("")}
+                            className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
+                          >
+                            <X className="h-4 w-4" />
+                          </button>
                         )}
                       </div>
-                      <div className='flex items-center gap-2 ml-4'>
+
+                      {/* Add button */}
+                      <div className="flex justify-end">
                         <Button
-                          variant='ghost'
-                          size='sm'
-                          onClick={() => {
-                            setEditingCategory(category);
+                          variant="outline"
+                          size="sm"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setEditingCategory(null);
                             setIsCategoryModalOpen(true);
                           }}
-                          className='h-8 w-8 p-0'
+                          className="bg-purple-50 dark:bg-purple-900/20 text-purple-600 dark:text-purple-400 hover:bg-purple-100 dark:hover:bg-purple-900/40 border-purple-200 dark:border-purple-700"
                         >
-                          <Edit className='h-4 w-4' />
-                        </Button>
-                        <Button
-                          variant='ghost'
-                          size='sm'
-                          onClick={() => handleDeleteCategory(category)}
-                          className='h-8 w-8 p-0 text-red-600 hover:text-red-700 hover:bg-red-50 dark:hover:bg-red-900/20'
-                        >
-                          <Trash2 className='h-4 w-4' />
+                          <Plus className="h-4 w-4 mr-2" />
+                          Add Category
                         </Button>
                       </div>
                     </div>
-                  ))}
-                </div>
+
+                    {categoriesLoading ? (
+                      <div className="text-center py-4">
+                        <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-purple-600 mx-auto"></div>
+                      </div>
+                    ) : filteredCategories.length === 0 ? (
+                      <div className="text-center py-8 text-gray-500 dark:text-gray-400">
+                        <BookOpen className="h-12 w-12 mx-auto mb-2 opacity-50" />
+                        <p>
+                          {categorySearch
+                            ? "No categories found"
+                            : "No categories yet"}
+                        </p>
+                      </div>
+                    ) : (
+                      <div className="space-y-2 max-h-96 overflow-y-auto">
+                        {filteredCategories.map((category) => (
+                          <div
+                            key={category.id}
+                            className="flex items-center justify-between p-3 rounded-lg border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+                          >
+                            <div className="flex-1 min-w-0">
+                              <p className="font-medium text-gray-900 dark:text-gray-100 truncate">
+                                {category.name || "Unnamed Category"}
+                              </p>
+                              {category.description && (
+                                <p className="text-sm text-gray-500 dark:text-gray-400 truncate mt-1">
+                                  {category.description}
+                                </p>
+                              )}
+                            </div>
+                            <div className="flex items-center gap-2 ml-4">
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  setEditingCategory(category);
+                                  setIsCategoryModalOpen(true);
+                                }}
+                                className="h-8 w-8 p-0"
+                                title="Edit category"
+                              >
+                                <Edit className="h-4 w-4" />
+                              </Button>
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  handleDeleteCategory(category);
+                                }}
+                                className="h-8 w-8 p-0 text-red-600 hover:text-red-700 hover:bg-red-50 dark:hover:bg-red-900/20"
+                                title="Delete category"
+                              >
+                                <Trash2 className="h-4 w-4" />
+                              </Button>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </CardContent>
+                </CollapsibleContent>
               )}
-                </CardContent>
-              </CollapsibleContent>
             </Collapsible>
           </Card>
         </Suspense>
 
         {/* Topics List */}
         <Suspense fallback={<LoadingSkeleton />}>
-          <Card className='bg-white dark:bg-gray-800'>
+          <Card className="bg-white dark:bg-gray-800 border-2 border-orange-200 dark:border-orange-800 shadow-lg">
             <Collapsible open={isTopicsOpen} onOpenChange={setIsTopicsOpen}>
               <CollapsibleTrigger asChild>
-                <CardHeader className='cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors'>
-                  <div className='flex items-center justify-between mb-4'>
-                    <CardTitle className='text-xl font-semibold text-gray-900 dark:text-gray-100 flex items-center gap-2'>
-                      {isTopicsOpen ? (
-                        <ChevronDown className='h-5 w-5 text-gray-500 dark:text-gray-400' />
-                      ) : (
-                        <ChevronRight className='h-5 w-5 text-gray-500 dark:text-gray-400' />
-                      )}
-                      <Target className='h-5 w-5 text-orange-600 dark:text-orange-400' />
-                      Topics ({filteredTopics.length}{(topicSearch || selectedCategoryFilter) && ` / ${topics.length}`})
-                    </CardTitle>
-                    <Button
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        setEditingTopic(null);
-                        setIsTopicModalOpen(true);
-                      }}
-                      size='sm'
-                      className='bg-orange-600 hover:bg-orange-700'
-                    >
-                      <Plus className='h-4 w-4 mr-1' />
-                      Add
-                    </Button>
-                  </div>
-                  {/* Category Filter */}
-                  <div className='mb-3' onClick={(e) => e.stopPropagation()}>
-                    <Suspense fallback={<LoadingSkeleton />}>
-                      <Select
-                        value={selectedCategoryFilter || 'all'}
-                        onValueChange={value => setSelectedCategoryFilter(value === 'all' ? null : value)}
-                      >
-                        <SelectTrigger className='w-full'>
-                          <SelectValue placeholder='Filter by category...' />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value='all'>All Categories</SelectItem>
-                          {categories.map(category => (
-                            <SelectItem key={category.id} value={category.id}>
-                              {category.name || 'Unnamed Category'}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                    </Suspense>
-                  </div>
-                  {/* Search Input */}
-                  <div className='relative' onClick={(e) => e.stopPropagation()}>
-                    <Search className='absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400' />
-                    <Input
-                      placeholder='Search topics...'
-                      value={topicSearch}
-                      onChange={e => setTopicSearch(e.target.value)}
-                      className='pl-10 pr-10'
-                    />
-                    {topicSearch && (
-                      <button
-                        onClick={() => setTopicSearch('')}
-                        className='absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300'
-                      >
-                        <X className='h-4 w-4' />
-                      </button>
+                <CardHeader className="cursor-pointer hover:bg-orange-50 dark:hover:bg-orange-900/20 transition-colors border-b border-orange-100 dark:border-orange-800">
+                  <CardTitle className="text-xl font-semibold text-gray-900 dark:text-gray-100 flex items-center gap-2">
+                    {isTopicsOpen ? (
+                      <ChevronDown className="h-5 w-5 text-orange-600 dark:text-orange-400" />
+                    ) : (
+                      <ChevronRight className="h-5 w-5 text-orange-600 dark:text-orange-400" />
                     )}
-                  </div>
+                    <Target className="h-5 w-5 text-orange-600 dark:text-orange-400" />
+                    Topics ({topics.length})
+                  </CardTitle>
                 </CardHeader>
               </CollapsibleTrigger>
-              <CollapsibleContent>
-                <CardContent>
-              {topicsLoading ? (
-                <div className='text-center py-4'>
-                  <div className='animate-spin rounded-full h-6 w-6 border-b-2 border-orange-600 mx-auto'></div>
-                </div>
-              ) : filteredTopics.length === 0 ? (
-                <div className='text-center py-8 text-gray-500 dark:text-gray-400'>
-                  <Target className='h-12 w-12 mx-auto mb-2 opacity-50' />
-                  <p>
-                    {topicSearch || selectedCategoryFilter
-                      ? 'No topics found'
-                      : 'No topics yet'}
-                  </p>
-                </div>
-              ) : (
-                <div className='space-y-2 max-h-96 overflow-y-auto'>
-                  {filteredTopics.map(topic => (
-                    <div
-                      key={topic.id}
-                      className='flex items-center justify-between p-3 rounded-lg border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors'
-                    >
-                      <div className='flex-1 min-w-0'>
-                        <p className='font-medium text-gray-900 dark:text-gray-100 truncate'>
-                          {topic.name || 'Unnamed Topic'}
-                        </p>
-                        {topic.description && (
-                          <p className='text-sm text-gray-500 dark:text-gray-400 truncate mt-1'>
-                            {topic.description}
-                          </p>
-                        )}
-                        {topic.category_id && (
-                          <Badge
-                            variant='secondary'
-                            className='mt-1 text-xs'
+              {isTopicsOpen && (
+                <CollapsibleContent
+                  className="data-[state=open]:animate-collapsible-down data-[state=closed]:animate-collapsible-up"
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  <CardContent
+                    className="pt-4 bg-orange-50/30 dark:bg-gray-800"
+                    onClick={(e) => e.stopPropagation()}
+                  >
+                    {/* Search and Add button */}
+                    <div className="mb-4 space-y-3">
+                      {/* Search Input */}
+                      <div
+                        className="relative"
+                        onClick={(e) => e.stopPropagation()}
+                      >
+                        <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400 dark:text-gray-500" />
+                        <Input
+                          placeholder="Search topics..."
+                          value={topicSearch}
+                          onChange={(e) => setTopicSearch(e.target.value)}
+                          className="pl-10 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 border-gray-300 dark:border-gray-600 placeholder:text-gray-400 dark:placeholder:text-gray-500"
+                        />
+                        {topicSearch && (
+                          <button
+                            onClick={() => setTopicSearch("")}
+                            className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
                           >
-                            Category: {categories.find(c => c.id === topic.category_id)?.name || 'Unknown'}
-                          </Badge>
+                            <X className="h-4 w-4" />
+                          </button>
                         )}
                       </div>
-                      <div className='flex items-center gap-2 ml-4'>
+
+                      {/* Add button */}
+                      <div className="flex justify-end">
                         <Button
-                          variant='ghost'
-                          size='sm'
-                          onClick={() => {
-                            setEditingTopic(topic);
+                          variant="outline"
+                          size="sm"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setEditingTopic(null);
                             setIsTopicModalOpen(true);
                           }}
-                          className='h-8 w-8 p-0'
+                          className="bg-orange-50 dark:bg-orange-900/20 text-orange-600 dark:text-orange-400 hover:bg-orange-100 dark:hover:bg-orange-900/40 border-orange-200 dark:border-orange-700"
                         >
-                          <Edit className='h-4 w-4' />
-                        </Button>
-                        <Button
-                          variant='ghost'
-                          size='sm'
-                          onClick={() => handleDeleteTopic(topic)}
-                          className='h-8 w-8 p-0 text-red-600 hover:text-red-700 hover:bg-red-50 dark:hover:bg-red-900/20'
-                        >
-                          <Trash2 className='h-4 w-4' />
+                          <Plus className="h-4 w-4 mr-2" />
+                          Add Topic
                         </Button>
                       </div>
                     </div>
-                  ))}
-                </div>
+
+                    {topicsLoading ? (
+                      <div className="text-center py-4">
+                        <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-orange-600 mx-auto"></div>
+                      </div>
+                    ) : filteredTopics.length === 0 ? (
+                      <div className="text-center py-8 text-gray-500 dark:text-gray-400">
+                        <Target className="h-12 w-12 mx-auto mb-2 opacity-50" />
+                        <p>
+                          {topicSearch ? "No topics found" : "No topics yet"}
+                        </p>
+                      </div>
+                    ) : (
+                      <div className="space-y-2 max-h-96 overflow-y-auto">
+                        {filteredTopics.map((topic) => (
+                          <div
+                            key={topic.id}
+                            className="flex items-center justify-between p-3 rounded-lg border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+                          >
+                            <div className="flex-1 min-w-0">
+                              <p className="font-medium text-gray-900 dark:text-gray-100 truncate">
+                                {topic.name || "Unnamed Topic"}
+                              </p>
+                              {topic.description && (
+                                <p className="text-sm text-gray-500 dark:text-gray-400 truncate mt-1">
+                                  {topic.description}
+                                </p>
+                              )}
+                              {topic.category_id && (
+                                <Badge
+                                  variant="secondary"
+                                  className="mt-1 text-xs"
+                                >
+                                  Category:{" "}
+                                  {categories.find(
+                                    (c) => c.id === topic.category_id,
+                                  )?.name || "Unknown"}
+                                </Badge>
+                              )}
+                            </div>
+                            <div className="flex items-center gap-2 ml-4">
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  setEditingTopic(topic);
+                                  setIsTopicModalOpen(true);
+                                }}
+                                className="h-8 w-8 p-0"
+                                title="Edit topic"
+                              >
+                                <Edit className="h-4 w-4" />
+                              </Button>
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  handleDeleteTopic(topic);
+                                }}
+                                className="h-8 w-8 p-0 text-red-600 hover:text-red-700 hover:bg-red-50 dark:hover:bg-red-900/20"
+                                title="Delete topic"
+                              >
+                                <Trash2 className="h-4 w-4" />
+                              </Button>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </CardContent>
+                </CollapsibleContent>
               )}
-                </CardContent>
-              </CollapsibleContent>
             </Collapsible>
           </Card>
         </Suspense>
       </div>
 
       {/* Search and Filters */}
-      <div className='flex flex-col md:flex-row gap-4 mb-6'>
-        <div className='flex-1'>
+      <div className="flex flex-col md:flex-row gap-4 mb-6">
+        <div className="flex-1">
           <Suspense fallback={<LoadingSkeleton />}>
             <Input
-              placeholder='Search cards, plans, categories, topics...'
+              placeholder="Search cards, plans, categories, topics..."
               value={searchTerm}
-              onChange={e => setSearchTerm(e.target.value)}
-              className='w-full'
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="w-full"
             />
           </Suspense>
         </div>
         <Suspense fallback={<LoadingSkeleton />}>
           <Select value={filterCardType} onValueChange={setFilterCardType}>
-            <SelectTrigger className='w-full md:w-48'>
-              <SelectValue placeholder='Filter by card type' />
+            <SelectTrigger className="w-full md:w-48">
+              <SelectValue placeholder="Filter by card type" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value='all'>All Card Types</SelectItem>
-              <SelectItem value='Core Technologies'>
+              <SelectItem value="all">All Card Types</SelectItem>
+              <SelectItem value="Core Technologies">
                 Core Technologies
               </SelectItem>
-              <SelectItem value='Framework Questions'>
+              <SelectItem value="Framework Questions">
                 Framework Questions
               </SelectItem>
-              <SelectItem value='Problem Solving'>Problem Solving</SelectItem>
-              <SelectItem value='System Design'>System Design</SelectItem>
+              <SelectItem value="Problem Solving">Problem Solving</SelectItem>
+              <SelectItem value="System Design">System Design</SelectItem>
             </SelectContent>
           </Select>
         </Suspense>
       </div>
 
       {/* Action Buttons */}
-      <div className='flex flex-wrap gap-2 mb-6'>
+      <div className="flex flex-wrap gap-2 mb-6">
         <Suspense fallback={<LoadingSkeleton />}>
           <Button
             onClick={() => {
               setEditingCard(null);
               setIsCardModalOpen(true);
             }}
-            className='bg-blue-600 hover:bg-blue-700'
+            className="bg-blue-600 hover:bg-blue-700"
           >
-            <Plus className='h-4 w-4 mr-2' />
+            <Plus className="h-4 w-4 mr-2" />
             Add Card
           </Button>
         </Suspense>
@@ -1738,9 +1975,9 @@ export default function UnifiedAdminPage() {
               setEditingPlan(null);
               setIsPlanModalOpen(true);
             }}
-            className='bg-green-600 hover:bg-green-700'
+            className="bg-green-600 hover:bg-green-700"
           >
-            <Plus className='h-4 w-4 mr-2' />
+            <Plus className="h-4 w-4 mr-2" />
             Add Plan
           </Button>
         </Suspense>
@@ -1750,9 +1987,9 @@ export default function UnifiedAdminPage() {
               setEditingCategory(null);
               setIsCategoryModalOpen(true);
             }}
-            className='bg-purple-600 hover:bg-purple-700'
+            className="bg-purple-600 hover:bg-purple-700"
           >
-            <Plus className='h-4 w-4 mr-2' />
+            <Plus className="h-4 w-4 mr-2" />
             Add Category
           </Button>
         </Suspense>
@@ -1762,44 +1999,44 @@ export default function UnifiedAdminPage() {
               setEditingTopic(null);
               setIsTopicModalOpen(true);
             }}
-            className='bg-orange-600 hover:bg-orange-700'
+            className="bg-orange-600 hover:bg-orange-700"
           >
-            <Plus className='h-4 w-4 mr-2' />
+            <Plus className="h-4 w-4 mr-2" />
             Add Topic
           </Button>
         </Suspense>
       </div>
 
       {/* Cards Section */}
-      <div className='mb-8'>
-        <div className='flex items-center justify-between mb-4'>
-          <h2 className='text-xl font-semibold text-gray-900 dark:text-white flex items-center'>
-            <Layers className='h-5 w-5 mr-2 text-blue-600' />
+      <div className="mb-8">
+        <div className="flex items-center justify-between mb-4">
+          <h2 className="text-xl font-semibold text-gray-900 dark:text-white flex items-center">
+            <Layers className="h-5 w-5 mr-2 text-blue-600" />
             Learning Cards ({stats.totalCards})
           </h2>
         </div>
 
-        <div className='space-y-4'>
+        <div className="space-y-4">
           {filteredCards.length === 0 ? (
             <Suspense fallback={<LoadingSkeleton />}>
               <EmptyState
                 icon={Layers}
-                title='No Learning Cards'
-                description='Create your first learning card to organize categories and topics for structured learning.'
+                title="No Learning Cards"
+                description="Create your first learning card to organize categories and topics for structured learning."
                 action={{
-                  label: 'Create First Card',
+                  label: "Create First Card",
                   onClick: () => {
                     setEditingCard(null);
                     setIsCardModalOpen(true);
                   },
                 }}
-                className='border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg'
+                className="border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg"
               />
             </Suspense>
           ) : (
-            filteredCards.map(card => {
+            filteredCards.map((card) => {
               const cardCategories = categories.filter(
-                cat => cat.cardType === card.title
+                (cat) => cat.cardType === card.title,
               );
               const IconComponent =
                 CARD_ICONS[card.title as keyof typeof CARD_ICONS]?.icon ||
@@ -1808,61 +2045,61 @@ export default function UnifiedAdminPage() {
               return (
                 <Card
                   key={card.id}
-                  className='border-l-4'
+                  className="border-l-4 bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700 shadow-sm hover:shadow-md transition-shadow"
                   style={{ borderLeftColor: card.color }}
                 >
-                  <CardHeader className='pb-3'>
-                    <div className='flex items-center justify-between'>
-                      <div className='flex items-center space-x-3'>
+                  <CardHeader className="pb-3">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center space-x-3">
                         <button
                           onClick={() => toggleCard(card.id)}
-                          className='p-1 hover:bg-gray-100 rounded'
+                          className="p-1 hover:bg-gray-100 dark:hover:bg-gray-700 rounded transition-colors"
                         >
                           {expandedCards.has(card.id) ? (
-                            <ChevronDown className='h-4 w-4' />
+                            <ChevronDown className="h-4 w-4 text-gray-700 dark:text-gray-300" />
                           ) : (
-                            <ChevronRight className='h-4 w-4' />
+                            <ChevronRight className="h-4 w-4 text-gray-700 dark:text-gray-300" />
                           )}
                         </button>
                         <IconComponent
-                          className='h-5 w-5'
+                          className="h-5 w-5"
                           style={{ color: card.color }}
                         />
                         <div>
-                          <CardTitle className='text-lg'>
+                          <CardTitle className="text-lg text-gray-900 dark:text-white">
                             {card.title}
                           </CardTitle>
-                          <p className='text-sm text-gray-600 dark:text-gray-400'>
+                          <p className="text-sm text-gray-600 dark:text-gray-300">
                             {card.description}
                           </p>
                         </div>
                       </div>
-                      <div className='flex items-center space-x-2'>
+                      <div className="flex items-center space-x-2">
                         <Badge
-                          variant='outline'
-                          className='bg-blue-50 text-blue-700 dark:bg-blue-900 dark:text-blue-300'
+                          variant="outline"
+                          className="bg-blue-50 text-blue-700 dark:bg-blue-900 dark:text-blue-300"
                         >
                           {cardCategories.length} Categories
                         </Badge>
                         <Badge
-                          variant='outline'
-                          className='bg-purple-50 text-purple-700 dark:bg-purple-900 dark:text-purple-300'
+                          variant="outline"
+                          className="bg-purple-50 text-purple-700 dark:bg-purple-900 dark:text-purple-300"
                         >
                           {cardCategories.reduce((total, cat) => {
                             const categoryTopics = topics.filter(
-                              topic => topic.categoryId === cat.id
+                              (topic) => topic.categoryId === cat.id,
                             );
                             return total + categoryTopics.length;
-                          }, 0)}{' '}
+                          }, 0)}{" "}
                           Topics
                         </Badge>
                         <Badge
-                          variant='outline'
-                          className='bg-green-50 text-green-700 dark:bg-green-900 dark:text-green-300'
+                          variant="outline"
+                          className="bg-green-50 text-green-700 dark:bg-green-900 dark:text-green-300"
                         >
                           {cardCategories.reduce((total, cat) => {
                             const categoryTopics = topics.filter(
-                              topic => topic.categoryId === cat.id
+                              (topic) => topic.categoryId === cat.id,
                             );
                             return (
                               total +
@@ -1872,163 +2109,163 @@ export default function UnifiedAdminPage() {
                                 return topicTotal + topicQuestions.length;
                               }, 0)
                             );
-                          }, 0)}{' '}
+                          }, 0)}{" "}
                           Questions
                         </Badge>
                         <Button
-                          variant='ghost'
-                          size='sm'
+                          variant="ghost"
+                          size="sm"
                           onClick={() => {
                             setEditingCard(card);
                             setIsCardModalOpen(true);
                           }}
                         >
-                          <Edit className='h-4 w-4' />
+                          <Edit className="h-4 w-4" />
                         </Button>
                         <Button
-                          variant='ghost'
-                          size='sm'
+                          variant="ghost"
+                          size="sm"
                           onClick={() => handleDeleteCard(card.id)}
                           disabled={deleteCardMutation?.isPending}
                         >
-                          <Trash2 className='h-4 w-4' />
+                          <Trash2 className="h-4 w-4" />
                         </Button>
                       </div>
                     </div>
                   </CardHeader>
 
                   {expandedCards.has(card.id) && (
-                    <CardContent className='pt-0'>
-                      <div className='space-y-4'>
+                    <CardContent className="pt-0">
+                      <div className="space-y-4">
                         {/* Categories under this card */}
-                        {cardCategories.map(category => {
+                        {cardCategories.map((category) => {
                           const categoryTopics = topics.filter(
-                            topic => topic.categoryId === category.id
+                            (topic) => topic.categoryId === category.id,
                           );
 
                           return (
                             <div
                               key={category.id}
-                              className='ml-6 border-l-2 border-gray-200 pl-4'
+                              className="ml-6 border-l-2 border-gray-200 dark:border-gray-700 pl-4"
                             >
-                              <div className='flex items-center justify-between py-2'>
-                                <div className='flex items-center space-x-2'>
+                              <div className="flex items-center justify-between py-2">
+                                <div className="flex items-center space-x-2">
                                   <button
                                     onClick={() => toggleCategory(category.id)}
-                                    className='p-1 hover:bg-gray-100 rounded'
+                                    className="p-1 hover:bg-gray-100 dark:hover:bg-gray-700 rounded transition-colors"
                                   >
                                     {expandedCategories.has(category.id) ? (
-                                      <ChevronDown className='h-4 w-4' />
+                                      <ChevronDown className="h-4 w-4 text-gray-700 dark:text-gray-300" />
                                     ) : (
-                                      <ChevronRight className='h-4 w-4' />
+                                      <ChevronRight className="h-4 w-4 text-gray-700 dark:text-gray-300" />
                                     )}
                                   </button>
-                                  <BookOpen className='h-4 w-4 text-purple-600' />
+                                  <BookOpen className="h-4 w-4 text-purple-600 dark:text-purple-400" />
                                   <div>
-                                    <h4 className='font-medium'>
+                                    <h4 className="font-medium text-gray-900 dark:text-white">
                                       {category.name}
                                     </h4>
-                                    <p className='text-sm text-gray-600 dark:text-gray-400'>
+                                    <p className="text-sm text-gray-600 dark:text-gray-300">
                                       {category.description}
                                     </p>
                                   </div>
                                 </div>
-                                <div className='flex items-center space-x-2'>
+                                <div className="flex items-center space-x-2">
                                   <Badge
-                                    variant='outline'
-                                    className='bg-purple-50 text-purple-700 dark:bg-purple-900 dark:text-purple-300'
+                                    variant="outline"
+                                    className="bg-purple-50 text-purple-700 dark:bg-purple-900 dark:text-purple-300"
                                   >
                                     {categoryTopics.length} Topics
                                   </Badge>
                                   <Badge
-                                    variant='outline'
-                                    className='bg-green-50 text-green-700 dark:bg-green-900 dark:text-green-300'
+                                    variant="outline"
+                                    className="bg-green-50 text-green-700 dark:bg-green-900 dark:text-green-300"
                                   >
                                     {categoryTopics.reduce((total, topic) => {
                                       const topicQuestions =
                                         questionsByTopic[topic.id] || [];
                                       return total + topicQuestions.length;
-                                    }, 0)}{' '}
+                                    }, 0)}{" "}
                                     Questions
                                   </Badge>
                                   <Button
-                                    variant='ghost'
-                                    size='sm'
+                                    variant="ghost"
+                                    size="sm"
                                     onClick={() => {
                                       setEditingCategory(category);
                                       setIsCategoryModalOpen(true);
                                     }}
                                   >
-                                    <Edit className='h-4 w-4' />
+                                    <Edit className="h-4 w-4" />
                                   </Button>
                                   <Button
-                                    variant='ghost'
-                                    size='sm'
+                                    variant="ghost"
+                                    size="sm"
                                     onClick={() =>
                                       handleDeleteCategory(category.id)
                                     }
                                     disabled={deleteCategoryMutation?.isPending}
                                   >
-                                    <Trash2 className='h-4 w-4' />
+                                    <Trash2 className="h-4 w-4" />
                                   </Button>
                                 </div>
                               </div>
 
                               {expandedCategories.has(category.id) && (
-                                <div className='ml-6 space-y-2'>
-                                  {categoryTopics.map(topic => {
+                                <div className="ml-6 space-y-2">
+                                  {categoryTopics.map((topic) => {
                                     const topicQuestions =
                                       questionsByTopic[topic.id] || [];
 
                                     return (
                                       <div
                                         key={topic.id}
-                                        className='border-l-2 border-gray-100 pl-4 py-2'
+                                        className="border-l-2 border-gray-100 dark:border-gray-700 pl-4 py-2"
                                       >
-                                        <div className='flex items-center justify-between'>
-                                          <div className='flex items-center space-x-2'>
+                                        <div className="flex items-center justify-between">
+                                          <div className="flex items-center space-x-2">
                                             <button
                                               onClick={() =>
                                                 toggleTopic(topic.id)
                                               }
-                                              className='p-1 hover:bg-gray-100 rounded'
+                                              className="p-1 hover:bg-gray-100 dark:hover:bg-gray-700 rounded transition-colors"
                                             >
                                               {expandedTopics.has(topic.id) ? (
-                                                <ChevronDown className='h-4 w-4' />
+                                                <ChevronDown className="h-4 w-4 text-gray-700 dark:text-gray-300" />
                                               ) : (
-                                                <ChevronRight className='h-4 w-4' />
+                                                <ChevronRight className="h-4 w-4 text-gray-700 dark:text-gray-300" />
                                               )}
                                             </button>
-                                            <Target className='h-4 w-4 text-orange-600' />
+                                            <Target className="h-4 w-4 text-orange-600 dark:text-orange-400" />
                                             <div>
-                                              <h5 className='font-medium'>
+                                              <h5 className="font-medium text-gray-900 dark:text-white">
                                                 {topic.name}
                                               </h5>
-                                              <p className='text-sm text-gray-600 dark:text-gray-400'>
+                                              <p className="text-sm text-gray-600 dark:text-gray-300">
                                                 {topic.description}
                                               </p>
                                             </div>
                                           </div>
-                                          <div className='flex items-center space-x-2'>
+                                          <div className="flex items-center space-x-2">
                                             <Badge
-                                              variant='outline'
-                                              className='bg-green-50 text-green-700 dark:bg-green-900 dark:text-green-300'
+                                              variant="outline"
+                                              className="bg-green-50 text-green-700 dark:bg-green-900 dark:text-green-300"
                                             >
                                               {topicQuestions.length} Questions
                                             </Badge>
                                             <Button
-                                              variant='ghost'
-                                              size='sm'
+                                              variant="ghost"
+                                              size="sm"
                                               onClick={() => {
                                                 setEditingTopic(topic);
                                                 setIsTopicModalOpen(true);
                                               }}
                                             >
-                                              <Edit className='h-4 w-4' />
+                                              <Edit className="h-4 w-4" />
                                             </Button>
                                             <Button
-                                              variant='ghost'
-                                              size='sm'
+                                              variant="ghost"
+                                              size="sm"
                                               onClick={() =>
                                                 handleDeleteTopic(topic.id)
                                               }
@@ -2036,58 +2273,58 @@ export default function UnifiedAdminPage() {
                                                 deleteTopicMutation?.isPending
                                               }
                                             >
-                                              <Trash2 className='h-4 w-4' />
+                                              <Trash2 className="h-4 w-4" />
                                             </Button>
                                           </div>
                                         </div>
 
                                         {expandedTopics.has(topic.id) && (
-                                          <div className='ml-6 space-y-2'>
-                                            {topicQuestions.map(question => (
+                                          <div className="ml-6 space-y-2">
+                                            {topicQuestions.map((question) => (
                                               <div
                                                 key={question.id}
-                                                className='flex items-center justify-between py-2 px-3 bg-gray-50 dark:bg-gray-800 rounded'
+                                                className="flex items-center justify-between py-2 px-3 bg-gray-50 dark:bg-gray-800/50 rounded border border-gray-200 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-700/50 transition-colors"
                                               >
-                                                <div className='flex items-center space-x-2'>
-                                                  <MessageSquare className='h-4 w-4 text-red-600' />
+                                                <div className="flex items-center space-x-2">
+                                                  <MessageSquare className="h-4 w-4 text-red-600 dark:text-red-400" />
                                                   <div>
-                                                    <h6 className='font-medium text-sm'>
+                                                    <h6 className="font-medium text-sm text-gray-900 dark:text-white">
                                                       {question.title}
                                                     </h6>
-                                                    <p className='text-xs text-gray-600 dark:text-gray-400'>
-                                                      {question.difficulty} •{' '}
+                                                    <p className="text-xs text-gray-600 dark:text-gray-300">
+                                                      {question.difficulty} •{" "}
                                                       {question.type}
                                                     </p>
                                                   </div>
                                                 </div>
-                                                <div className='flex items-center space-x-1'>
+                                                <div className="flex items-center space-x-1">
                                                   <Button
-                                                    variant='ghost'
-                                                    size='sm'
+                                                    variant="ghost"
+                                                    size="sm"
                                                     onClick={() => {
                                                       setEditingQuestion(
-                                                        question as UnifiedQuestion
+                                                        question as UnifiedQuestion,
                                                       );
                                                       setIsQuestionModalOpen(
-                                                        true
+                                                        true,
                                                       );
                                                     }}
                                                   >
-                                                    <Edit className='h-3 w-3' />
+                                                    <Edit className="h-3 w-3" />
                                                   </Button>
                                                   <Button
-                                                    variant='ghost'
-                                                    size='sm'
+                                                    variant="ghost"
+                                                    size="sm"
                                                     onClick={() =>
                                                       handleDeleteQuestion(
-                                                        question.id
+                                                        question.id,
                                                       )
                                                     }
                                                     disabled={
                                                       deleteQuestionMutation?.isPending
                                                     }
                                                   >
-                                                    <Trash2 className='h-3 w-3' />
+                                                    <Trash2 className="h-3 w-3" />
                                                   </Button>
                                                 </div>
                                               </div>
@@ -2097,11 +2334,11 @@ export default function UnifiedAdminPage() {
                                                 setEditingQuestion(null);
                                                 setIsQuestionModalOpen(true);
                                               }}
-                                              variant='outline'
-                                              size='sm'
-                                              className='ml-6'
+                                              variant="outline"
+                                              size="sm"
+                                              className="ml-6"
                                             >
-                                              <Plus className='h-3 w-3 mr-1' />
+                                              <Plus className="h-3 w-3 mr-1" />
                                               Add Question
                                             </Button>
                                           </div>
@@ -2125,419 +2362,670 @@ export default function UnifiedAdminPage() {
       </div>
 
       {/* Plans Section */}
-      <div className='mb-8'>
-        <div className='flex items-center justify-between mb-4'>
-          <h2 className='text-xl font-semibold text-gray-900 dark:text-white flex items-center'>
-            <Users className='h-5 w-5 mr-2 text-green-600' />
+      <div className="mb-8">
+        <div className="flex items-center justify-between mb-4">
+          <h2 className="text-xl font-semibold text-gray-900 dark:text-white flex items-center">
+            <Users className="h-5 w-5 mr-2 text-green-600" />
             Learning Plans ({stats.totalPlans})
           </h2>
         </div>
 
-        <div className='space-y-4'>
+        <div className="space-y-4">
           {filteredPlans.length === 0 ? (
             <Suspense fallback={<LoadingSkeleton />}>
               <EmptyState
                 icon={Calendar}
-                title='No Learning Plans'
-                description='Create your first learning plan to provide structured learning paths for users.'
+                title="No Learning Plans"
+                description="Create your first learning plan to provide structured learning paths for users."
                 action={{
-                  label: 'Create First Plan',
+                  label: "Create First Plan",
                   onClick: () => {
                     setEditingPlan(null);
                     setIsPlanModalOpen(true);
                   },
                 }}
-                className='border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg'
+                className="border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg"
               />
             </Suspense>
           ) : (
-            filteredPlans.map(plan => (
+            filteredPlans.map((plan) => (
               <Card
                 key={plan.id}
-                className='border-l-4'
+                className="border-l-4 bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700 shadow-sm hover:shadow-md transition-shadow"
                 style={{ borderLeftColor: plan.color }}
               >
-                <CardHeader className='pb-3'>
-                  <div className='flex items-center justify-between'>
-                    <div className='flex items-center space-x-3'>
+                <CardHeader className="pb-3">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center space-x-3">
                       <button
                         onClick={() => togglePlan(plan.id)}
-                        className='p-1 hover:bg-gray-100 rounded'
+                        className="p-1 hover:bg-gray-100 dark:hover:bg-gray-700 rounded transition-colors"
                       >
                         {expandedPlans.has(plan.id) ? (
-                          <ChevronDown className='h-4 w-4' />
+                          <ChevronDown className="h-4 w-4 text-gray-700 dark:text-gray-300" />
                         ) : (
-                          <ChevronRight className='h-4 w-4' />
+                          <ChevronRight className="h-4 w-4 text-gray-700 dark:text-gray-300" />
                         )}
                       </button>
                       <Calendar
-                        className='h-5 w-5'
+                        className="h-5 w-5"
                         style={{ color: plan.color }}
                       />
                       <div>
-                        <CardTitle className='text-lg'>{plan.name}</CardTitle>
-                        <p className='text-sm text-gray-600 dark:text-gray-400'>
+                        <CardTitle className="text-lg text-gray-900 dark:text-white">
+                          {plan.name}
+                        </CardTitle>
+                        <p className="text-sm text-gray-600 dark:text-gray-300">
                           {plan.description}
                         </p>
                       </div>
                     </div>
-                    <div className='flex items-center space-x-2'>
-                      <Badge variant='outline'>
+                    <div className="flex items-center space-x-2">
+                      <Badge variant="outline">
                         {plan.duration} • {plan.difficulty}
                       </Badge>
-                      <Badge variant='outline'>{plan.estimatedHours}h</Badge>
+                      <Badge variant="outline">{plan.estimatedHours}h</Badge>
                       <Button
-                        variant='ghost'
-                        size='sm'
+                        variant="ghost"
+                        size="sm"
                         onClick={() => {
                           setEditingPlan(plan);
                           setIsPlanModalOpen(true);
                         }}
                       >
-                        <Edit className='h-4 w-4' />
+                        <Edit className="h-4 w-4" />
                       </Button>
                       <Button
-                        variant='ghost'
-                        size='sm'
+                        variant="ghost"
+                        size="sm"
                         onClick={() => handleDeletePlan(plan.id)}
                         disabled={deletePlanMutation?.isPending}
                       >
-                        <Trash2 className='h-4 w-4' />
+                        <Trash2 className="h-4 w-4" />
                       </Button>
                     </div>
                   </div>
                 </CardHeader>
 
                 {expandedPlans.has(plan.id) && (
-                  <CardContent className='pt-0'>
-                    <div className='space-y-4'>
-                      <div className='text-sm text-gray-600 dark:text-gray-400 mb-4'>
+                  <CardContent className="pt-0">
+                    <div className="space-y-4">
+                      <div className="text-sm text-gray-600 dark:text-gray-300 mb-4">
                         <p>
-                          <strong>Duration:</strong> {plan.duration}
+                          <strong className="text-gray-900 dark:text-white">
+                            Duration:
+                          </strong>{" "}
+                          {plan.duration}
                         </p>
                         <p>
-                          <strong>Difficulty:</strong> {plan.difficulty}
+                          <strong className="text-gray-900 dark:text-white">
+                            Difficulty:
+                          </strong>{" "}
+                          {plan.difficulty}
                         </p>
                         <p>
-                          <strong>Estimated Hours:</strong> {plan.estimatedHours}
+                          <strong className="text-gray-900 dark:text-white">
+                            Estimated Hours:
+                          </strong>{" "}
+                          {plan.estimatedHours}
                         </p>
                       </div>
-                      
+
                       {/* Hierarchical Tree: Cards → Categories → Topics → Questions */}
-                      <div className='border-t border-gray-200 dark:border-gray-700 pt-4'>
-                        <div className='flex items-center justify-between mb-3'>
-                          <h3 className='text-sm font-semibold text-gray-900 dark:text-gray-100'>
+                      <div className="border-t border-gray-200 dark:border-gray-700 pt-4">
+                        <div className="flex items-center justify-between mb-3">
+                          <h3 className="text-sm font-semibold text-gray-900 dark:text-gray-100">
                             Plan Structure
                           </h3>
                           <Suspense fallback={<LoadingSkeleton />}>
                             <Button
-                              onClick={() => setAddItemContext({ planId: plan.id, type: 'card' })}
-                              size='sm'
-                              variant='outline'
-                              className='text-blue-600 border-blue-600 hover:bg-blue-50 dark:hover:bg-blue-900/20'
+                              onClick={() =>
+                                setAddItemContext({
+                                  planId: plan.id,
+                                  type: "card",
+                                })
+                              }
+                              size="sm"
+                              variant="outline"
+                              className="text-blue-600 border-blue-600 hover:bg-blue-50 dark:hover:bg-blue-900/20"
                             >
-                              <Plus className='h-4 w-4 mr-1' />
+                              <Plus className="h-4 w-4 mr-1" />
                               Add Card
                             </Button>
                           </Suspense>
                         </div>
-                        
+
                         {loadingPlanHierarchy[plan.id] ? (
-                          <div className='space-y-2'>
+                          <div className="space-y-2">
                             {/* Loading skeleton for cards */}
                             {[1, 2].map((i) => (
                               <div
                                 key={i}
-                                className='border border-gray-200 dark:border-gray-700 rounded-lg p-3 bg-gray-50 dark:bg-gray-800/50 animate-pulse'
+                                className="border border-gray-200 dark:border-gray-700 rounded-lg p-3 bg-gray-50 dark:bg-gray-800/50 animate-pulse"
                               >
-                                <div className='flex items-center justify-between'>
-                                  <div className='flex items-center space-x-2 flex-1'>
-                                    <div className='h-4 w-4 bg-gray-300 dark:bg-gray-600 rounded' />
-                                    <div className='h-4 w-4 bg-gray-300 dark:bg-gray-600 rounded' />
-                                    <div className='h-4 w-32 bg-gray-300 dark:bg-gray-600 rounded' />
+                                <div className="flex items-center justify-between">
+                                  <div className="flex items-center space-x-2 flex-1">
+                                    <div className="h-4 w-4 bg-gray-300 dark:bg-gray-600 rounded" />
+                                    <div className="h-4 w-4 bg-gray-300 dark:bg-gray-600 rounded" />
+                                    <div className="h-4 w-32 bg-gray-300 dark:bg-gray-600 rounded" />
                                   </div>
-                                  <div className='flex items-center space-x-2'>
-                                    <div className='h-7 w-20 bg-gray-300 dark:bg-gray-600 rounded' />
-                                    <div className='h-7 w-7 bg-gray-300 dark:bg-gray-600 rounded' />
+                                  <div className="flex items-center space-x-2">
+                                    <div className="h-7 w-20 bg-gray-300 dark:bg-gray-600 rounded" />
+                                    <div className="h-7 w-7 bg-gray-300 dark:bg-gray-600 rounded" />
                                   </div>
                                 </div>
                               </div>
                             ))}
                           </div>
-                        ) : planHierarchy[plan.id] && planHierarchy[plan.id].length > 0 ? (
-                          <div className='space-y-2'>
-                            {planHierarchy[plan.id].map((card: any) => (
-                              <div
-                                key={card.id}
-                                className='border border-gray-200 dark:border-gray-700 rounded-lg p-3 bg-gray-50 dark:bg-gray-800/50'
-                              >
-                                {/* Card Level */}
-                                <div className='flex items-center justify-between'>
-                                  <div className='flex items-center space-x-2 flex-1'>
-                                    {/* Checkbox to toggle card inclusion */}
-                                    <button
-                                      onClick={async () => {
-                                        await removeCardFromPlan(plan.id, card.id);
-                                      }}
-                                      className='flex-shrink-0 p-1 hover:bg-gray-200 dark:hover:bg-gray-700 rounded'
-                                      title='Remove from plan'
-                                    >
-                                      <CheckSquare className='h-4 w-4 text-green-600 dark:text-green-400' />
-                                    </button>
-                                    <button
-                                      onClick={() => togglePlanCard(card.id)}
-                                      className='p-1 hover:bg-gray-200 dark:hover:bg-gray-700 rounded'
-                                    >
-                                      {expandedPlanCards.has(card.id) ? (
-                                        <ChevronDown className='h-4 w-4' />
-                                      ) : (
-                                        <ChevronRight className='h-4 w-4' />
-                                      )}
-                                    </button>
-                                    <Layers className='h-4 w-4 text-blue-600' />
-                                    <span className='font-medium text-gray-900 dark:text-gray-100'>
-                                      {card.title}
-                                    </span>
-                                  </div>
-                                  <div className='flex items-center space-x-2'>
-                                    <Suspense fallback={<LoadingSkeleton />}>
-                                      <Button
-                                        onClick={() => setAddItemContext({ planId: plan.id, type: 'category', parentId: card.id })}
-                                        size='sm'
-                                        variant='ghost'
-                                        className='h-7 px-2 text-purple-600 hover:bg-purple-50 dark:hover:bg-purple-900/20'
+                        ) : planHierarchy[plan.id] &&
+                          planHierarchy[plan.id].length > 0 ? (
+                          <div className="space-y-2">
+                            {planHierarchy[plan.id].map(
+                              (card: PlanHierarchyCard) => (
+                                <div
+                                  key={card.id}
+                                  className="border border-gray-200 dark:border-gray-700 rounded-lg p-3 bg-gray-50 dark:bg-gray-800/50"
+                                >
+                                  {/* Card Level */}
+                                  <div className="flex items-center justify-between">
+                                    <div className="flex items-center space-x-2 flex-1">
+                                      {/* Checkbox to toggle card inclusion */}
+                                      <button
+                                        onClick={async () => {
+                                          await removeCardFromPlan(
+                                            plan.id,
+                                            card.id,
+                                          );
+                                        }}
+                                        className="flex-shrink-0 p-1 hover:bg-gray-200 dark:hover:bg-gray-700 rounded"
+                                        title="Remove from plan"
                                       >
-                                        <Plus className='h-3 w-3 mr-1' />
-                                        Add Category
-                                      </Button>
-                                    </Suspense>
-                                  </div>
-                                </div>
-
-                                {/* Categories Level */}
-                                {expandedPlanCards.has(card.id) && card.categories && card.categories.length > 0 && (
-                                  <div className='mt-2 ml-6 space-y-2'>
-                                    {card.categories.map((category: any) => (
-                                      <div
-                                        key={category.id}
-                                        className='border border-gray-200 dark:border-gray-700 rounded p-2 bg-white dark:bg-gray-900'
+                                        <CheckSquare className="h-4 w-4 text-green-600 dark:text-green-400" />
+                                      </button>
+                                      <button
+                                        onClick={() => togglePlanCard(card.id)}
+                                        className="p-1 hover:bg-gray-200 dark:hover:bg-gray-700 rounded transition-colors"
                                       >
-                                        <div className='flex items-center justify-between'>
-                                          <div className='flex items-center space-x-2 flex-1'>
-                                            {/* Checkbox to toggle category inclusion */}
-                                            <button
-                                              onClick={async () => {
-                                                await removeCategoryFromCard(card.id, category.id);
-                                              }}
-                                              className='flex-shrink-0 p-1 hover:bg-gray-100 dark:hover:bg-gray-800 rounded'
-                                              title='Remove from plan'
-                                            >
-                                              <CheckSquare className='h-3 w-3 text-green-600 dark:text-green-400' />
-                                            </button>
-                                            <button
-                                              onClick={() => togglePlanCategory(category.id)}
-                                              className='p-1 hover:bg-gray-100 dark:hover:bg-gray-800 rounded'
-                                            >
-                                              {expandedPlanCategories.has(category.id) ? (
-                                                <ChevronDown className='h-3 w-3' />
-                                              ) : (
-                                                <ChevronRight className='h-3 w-3' />
-                                              )}
-                                            </button>
-                                            <BookOpen className='h-3 w-3 text-purple-600' />
-                                            <span className='text-sm font-medium text-gray-900 dark:text-gray-100'>
-                                              {category.name || category.title}
-                                            </span>
-                                          </div>
-                                          <div className='flex items-center space-x-2'>
-                                            <Suspense fallback={<LoadingSkeleton />}>
-                                              <Button
-                                                onClick={() => setAddItemContext({ planId: plan.id, type: 'topic', parentId: category.id })}
-                                                size='sm'
-                                                variant='ghost'
-                                                className='h-6 px-2 text-orange-600 hover:bg-orange-50 dark:hover:bg-orange-900/20 text-xs'
-                                              >
-                                                <Plus className='h-3 w-3 mr-1' />
-                                                Add Topic
-                                              </Button>
-                                            </Suspense>
-                                          </div>
-                                        </div>
+                                        {expandedPlanCards.has(card.id) ? (
+                                          <ChevronDown className="h-4 w-4 text-gray-700 dark:text-gray-300" />
+                                        ) : (
+                                          <ChevronRight className="h-4 w-4 text-gray-700 dark:text-gray-300" />
+                                        )}
+                                      </button>
+                                      <Layers className="h-4 w-4 text-blue-600 dark:text-blue-400" />
+                                      <span className="font-medium text-gray-900 dark:text-gray-100">
+                                        {card.title}
+                                      </span>
+                                    </div>
+                                    <div className="flex items-center space-x-2">
+                                      <Suspense fallback={<LoadingSkeleton />}>
+                                        <Button
+                                          onClick={() =>
+                                            setAddItemContext({
+                                              planId: plan.id,
+                                              type: "category",
+                                              parentId: card.id,
+                                            })
+                                          }
+                                          size="sm"
+                                          variant="ghost"
+                                          className="h-7 px-2 text-purple-600 hover:bg-purple-50 dark:hover:bg-purple-900/20"
+                                        >
+                                          <Plus className="h-3 w-3 mr-1" />
+                                          Add Category
+                                        </Button>
+                                      </Suspense>
+                                    </div>
+                                  </div>
 
-                                        {/* Topics Level */}
-                                        {expandedPlanCategories.has(category.id) && category.topics && category.topics.length > 0 && (
-                                          <div className='mt-2 ml-6 space-y-2'>
-                                            {category.topics.map((topic: any) => (
-                                              <div
-                                                key={topic.id}
-                                                className='border border-gray-200 dark:border-gray-700 rounded p-2 bg-gray-50 dark:bg-gray-800/50'
-                                              >
-                                                <div className='flex items-center justify-between'>
-                                                  <div className='flex items-center space-x-2 flex-1'>
-                                                    {/* Checkbox to toggle topic inclusion */}
-                                                    <button
-                                                      onClick={async () => {
-                                                        await removeTopicFromCategory(category.id, topic.id);
-                                                      }}
-                                                      className='flex-shrink-0 p-1 hover:bg-gray-200 dark:hover:bg-gray-700 rounded'
-                                                      title='Remove from plan'
-                                                    >
-                                                      <CheckSquare className='h-3 w-3 text-green-600 dark:text-green-400' />
-                                                    </button>
-                                                    <button
-                                                      onClick={() => togglePlanTopic(topic.id)}
-                                                      className='p-1 hover:bg-gray-200 dark:hover:bg-gray-700 rounded'
-                                                    >
-                                                      {expandedPlanTopics.has(topic.id) ? (
-                                                        <ChevronDown className='h-3 w-3' />
-                                                      ) : (
-                                                        <ChevronRight className='h-3 w-3' />
-                                                      )}
-                                                    </button>
-                                                    <Target className='h-3 w-3 text-orange-600' />
-                                                    <div className='flex items-center space-x-2 flex-1'>
-                                                      <span className='text-sm font-medium text-gray-900 dark:text-gray-100'>
-                                                        {topic.name || topic.title}
-                                                      </span>
-                                                      {/* Show question counts with styled badges */}
-                                                      <div className='flex items-center gap-2'>
-                                                        {/* Total questions in topic badge */}
-                                                        {topic.totalQuestionCount !== undefined && (
-                                                          <Badge 
-                                                            variant='outline' 
-                                                            className='text-xs font-semibold bg-purple-50 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300 border-purple-200 dark:border-purple-700 px-2 py-0.5'
-                                                            title={`Total questions in this topic`}
-                                                          >
-                                                            <MessageSquare className='h-3 w-3 mr-1 inline' />
-                                                            {topic.totalQuestionCount} in topic
-                                                          </Badge>
-                                                        )}
-                                                        {/* Questions in plan badge */}
-                                                        {topic.planQuestionCount !== undefined && (
-                                                          <Badge 
-                                                            variant='outline' 
-                                                            className={`text-xs font-semibold px-2 py-0.5 ${
-                                                              topic.planQuestionCount > 0
-                                                                ? 'bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 border-blue-200 dark:border-blue-700'
-                                                                : 'bg-gray-50 dark:bg-gray-800 text-gray-500 dark:text-gray-400 border-gray-200 dark:border-gray-700'
-                                                            }`}
-                                                            title={`Questions included in this plan`}
-                                                          >
-                                                            <CheckSquare className='h-3 w-3 mr-1 inline' />
-                                                            {topic.planQuestionCount} in plan
-                                                          </Badge>
-                                                        )}
-                                                      </div>
-                                                    </div>
-                                                  </div>
-                                                  <div className='flex items-center space-x-2'>
-                                                    <Suspense fallback={<LoadingSkeleton />}>
-                                                      <Button
-                                                        onClick={() => setAddItemContext({ planId: plan.id, type: 'question', parentId: topic.id })}
-                                                        size='sm'
-                                                        variant='ghost'
-                                                        className='h-6 px-2 text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 text-xs'
-                                                      >
-                                                        <Plus className='h-3 w-3 mr-1' />
-                                                        Add Question
-                                                      </Button>
-                                                    </Suspense>
-                                                  </div>
+                                  {/* Categories Level */}
+                                  {expandedPlanCards.has(card.id) &&
+                                    card.categories &&
+                                    card.categories.length > 0 && (
+                                      <div className="mt-2 ml-6 space-y-2">
+                                        {card.categories.map(
+                                          (category: {
+                                            id: string;
+                                            name?: string;
+                                            title?: string;
+                                            topics?: Array<{
+                                              id: string;
+                                              name?: string;
+                                              title?: string;
+                                              totalQuestionCount?: number;
+                                              planQuestionCount?: number;
+                                              questions?: Array<{
+                                                id: string;
+                                                title?: string;
+                                              }>;
+                                            }>;
+                                          }) => (
+                                            <div
+                                              key={category.id}
+                                              className="border border-gray-200 dark:border-gray-700 rounded p-2 bg-white dark:bg-gray-900"
+                                            >
+                                              <div className="flex items-center justify-between">
+                                                <div className="flex items-center space-x-2 flex-1">
+                                                  {/* Checkbox to toggle category inclusion */}
+                                                  <button
+                                                    onClick={async () => {
+                                                      await removeCategoryFromCard(
+                                                        card.id,
+                                                        category.id,
+                                                      );
+                                                    }}
+                                                    className="flex-shrink-0 p-1 hover:bg-gray-100 dark:hover:bg-gray-800 rounded"
+                                                    title="Remove from plan"
+                                                  >
+                                                    <CheckSquare className="h-3 w-3 text-green-600 dark:text-green-400" />
+                                                  </button>
+                                                  <button
+                                                    onClick={() =>
+                                                      togglePlanCategory(
+                                                        category.id,
+                                                      )
+                                                    }
+                                                    className="p-1 hover:bg-gray-100 dark:hover:bg-gray-800 rounded transition-colors"
+                                                  >
+                                                    {expandedPlanCategories.has(
+                                                      category.id,
+                                                    ) ? (
+                                                      <ChevronDown className="h-3 w-3 text-gray-700 dark:text-gray-300" />
+                                                    ) : (
+                                                      <ChevronRight className="h-3 w-3 text-gray-700 dark:text-gray-300" />
+                                                    )}
+                                                  </button>
+                                                  <BookOpen className="h-3 w-3 text-purple-600 dark:text-purple-400" />
+                                                  <span className="text-sm font-medium text-gray-900 dark:text-gray-100">
+                                                    {category.name ||
+                                                      category.title}
+                                                  </span>
                                                 </div>
+                                                <div className="flex items-center space-x-2">
+                                                  <Suspense
+                                                    fallback={
+                                                      <LoadingSkeleton />
+                                                    }
+                                                  >
+                                                    <Button
+                                                      onClick={() =>
+                                                        setAddItemContext({
+                                                          planId: plan.id,
+                                                          type: "topic",
+                                                          parentId: category.id,
+                                                        })
+                                                      }
+                                                      size="sm"
+                                                      variant="ghost"
+                                                      className="h-6 px-2 text-orange-600 hover:bg-orange-50 dark:hover:bg-orange-900/20 text-xs"
+                                                    >
+                                                      <Plus className="h-3 w-3 mr-1" />
+                                                      Add Topic
+                                                    </Button>
+                                                  </Suspense>
+                                                </div>
+                                              </div>
 
-                                                {/* Questions Level */}
-                                                {expandedPlanTopics.has(topic.id) && topic.questions && topic.questions.length > 0 && (
-                                                  <div className='mt-2 ml-6 space-y-1'>
-                                                    {topic.questions.map((question: any) => (
-                                                      <div
-                                                        key={question.id}
-                                                        className='flex items-center justify-between py-1 px-2 rounded bg-white dark:bg-gray-900'
-                                                      >
-                                                        <div className='flex items-center space-x-2 flex-1'>
-                                                          {/* Checkbox to toggle question inclusion - removes from both topic and plan */}
-                                                          <button
-                                                            onClick={async () => {
-                                                              await removeQuestionFromPlan(plan.id, topic.id, question.id);
-                                                            }}
-                                                            className='flex-shrink-0 p-0.5 hover:bg-gray-100 dark:hover:bg-gray-800 rounded'
-                                                            title='Remove from plan'
-                                                          >
-                                                            <CheckSquare className='h-3 w-3 text-green-600 dark:text-green-400' />
-                                                          </button>
-                                                          <MessageSquare className='h-3 w-3 text-red-600' />
-                                                          <span className='text-xs text-gray-900 dark:text-gray-100 truncate'>
-                                                            {question.title || 'Untitled Question'}
-                                                          </span>
-                                                        </div>
-                                                        <div className='flex items-center space-x-1'>
-                                                          {/* View Question Button */}
-                                                          <Suspense fallback={<LoadingSkeleton />}>
-                                                            <Button
-                                                              size='sm'
-                                                              variant='ghost'
-                                                              onClick={async () => {
-                                                                // Fetch full question data including code field
-                                                                try {
-                                                                  const response = await fetch(`/api/questions/unified/${question.id}`);
-                                                                  if (response.ok) {
-                                                                    const result = await response.json();
-                                                                    if (result.success && result.data) {
-                                                                      // Process code field to ensure newlines are preserved
-                                                                      const fullQuestion = result.data;
-                                                                      if (fullQuestion.code && typeof fullQuestion.code === 'string') {
-                                                                        fullQuestion.code = fullQuestion.code
-                                                                          .replace(/\\n/g, '\n')
-                                                                          .replace(/\\r\\n/g, '\n')
-                                                                          .replace(/\\r/g, '\n')
-                                                                          .replace(/\r\n/g, '\n')
-                                                                          .replace(/\r/g, '\n');
-                                                                      }
-                                                                      setViewingQuestion(fullQuestion);
-                                                                      setIsViewQuestionModalOpen(true);
-                                                                    } else {
-                                                                      // Fallback to question from list
-                                                                      setViewingQuestion(question);
-                                                                      setIsViewQuestionModalOpen(true);
-                                                                    }
-                                                                  } else {
-                                                                    // Fallback to question from list
-                                                                    setViewingQuestion(question);
-                                                                    setIsViewQuestionModalOpen(true);
-                                                                  }
-                                                                } catch (error) {
-                                                                  console.error('Error fetching question:', error);
-                                                                  // Fallback to question from list
-                                                                  setViewingQuestion(question);
-                                                                  setIsViewQuestionModalOpen(true);
+                                              {/* Topics Level */}
+                                              {expandedPlanCategories.has(
+                                                category.id,
+                                              ) &&
+                                                category.topics &&
+                                                category.topics.length > 0 && (
+                                                  <div className="mt-2 ml-6 space-y-2">
+                                                    {category.topics.map(
+                                                      (topic: {
+                                                        id: string;
+                                                        name?: string;
+                                                        title?: string;
+                                                        totalQuestionCount?: number;
+                                                        planQuestionCount?: number;
+                                                        questions?: Array<{
+                                                          id: string;
+                                                          title?: string;
+                                                        }>;
+                                                      }) => (
+                                                        <div
+                                                          key={topic.id}
+                                                          className="border border-gray-200 dark:border-gray-700 rounded p-2 bg-gray-50 dark:bg-gray-800/50"
+                                                        >
+                                                          <div className="flex items-center justify-between">
+                                                            <div className="flex items-center space-x-2 flex-1">
+                                                              {/* Checkbox to toggle topic inclusion */}
+                                                              <button
+                                                                onClick={async () => {
+                                                                  await removeTopicFromCategory(
+                                                                    category.id,
+                                                                    topic.id,
+                                                                  );
+                                                                }}
+                                                                className="flex-shrink-0 p-1 hover:bg-gray-200 dark:hover:bg-gray-700 rounded"
+                                                                title="Remove from plan"
+                                                              >
+                                                                <CheckSquare className="h-3 w-3 text-green-600 dark:text-green-400" />
+                                                              </button>
+                                                              <button
+                                                                onClick={(
+                                                                  e,
+                                                                ) => {
+                                                                  e.stopPropagation();
+                                                                  console.log(
+                                                                    "🔍 Toggling topic:",
+                                                                    topic.id,
+                                                                    "Current expanded:",
+                                                                    Array.from(
+                                                                      expandedPlanTopics,
+                                                                    ),
+                                                                  );
+                                                                  togglePlanTopic(
+                                                                    topic.id,
+                                                                  );
+                                                                }}
+                                                                className="p-1 hover:bg-gray-200 dark:hover:bg-gray-700 rounded transition-colors"
+                                                                title={
+                                                                  expandedPlanTopics.has(
+                                                                    topic.id,
+                                                                  )
+                                                                    ? "Collapse questions"
+                                                                    : "Expand questions"
                                                                 }
-                                                              }}
-                                                              className='h-6 w-6 p-0 hover:bg-blue-50 dark:hover:bg-blue-900/20'
-                                                              title='View question details'
-                                                            >
-                                                              <Eye className='h-3 w-3 text-blue-600 dark:text-blue-400' />
-                                                            </Button>
-                                                          </Suspense>
+                                                              >
+                                                                {expandedPlanTopics.has(
+                                                                  topic.id,
+                                                                ) ? (
+                                                                  <ChevronDown className="h-3 w-3 text-gray-700 dark:text-gray-300" />
+                                                                ) : (
+                                                                  <ChevronRight className="h-3 w-3 text-gray-700 dark:text-gray-300" />
+                                                                )}
+                                                              </button>
+                                                              <Target className="h-3 w-3 text-orange-600 dark:text-orange-400" />
+                                                              <div className="flex items-center space-x-2 flex-1">
+                                                                <span className="text-sm font-medium text-gray-900 dark:text-gray-100">
+                                                                  {topic.name ||
+                                                                    topic.title}
+                                                                </span>
+                                                                {/* Show question counts with styled badges */}
+                                                                <div className="flex items-center gap-2">
+                                                                  {/* Total questions in topic badge */}
+                                                                  {topic.totalQuestionCount !==
+                                                                    undefined && (
+                                                                    <Badge
+                                                                      variant="outline"
+                                                                      className="text-xs font-semibold bg-purple-50 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300 border-purple-200 dark:border-purple-700 px-2 py-0.5"
+                                                                      title={`Total questions in this topic`}
+                                                                    >
+                                                                      <MessageSquare className="h-3 w-3 mr-1 inline text-purple-600 dark:text-purple-400" />
+                                                                      {
+                                                                        topic.totalQuestionCount
+                                                                      }{" "}
+                                                                      in topic
+                                                                    </Badge>
+                                                                  )}
+                                                                  {/* Questions in plan badge */}
+                                                                  {topic.planQuestionCount !==
+                                                                    undefined && (
+                                                                    <Badge
+                                                                      variant="outline"
+                                                                      className={`text-xs font-semibold px-2 py-0.5 ${
+                                                                        topic.planQuestionCount >
+                                                                        0
+                                                                          ? "bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 border-blue-200 dark:border-blue-700"
+                                                                          : "bg-gray-50 dark:bg-gray-800 text-gray-500 dark:text-gray-400 border-gray-200 dark:border-gray-700"
+                                                                      }`}
+                                                                      title={`Questions included in this plan`}
+                                                                    >
+                                                                      <CheckSquare className="h-3 w-3 mr-1 inline text-blue-600 dark:text-blue-400" />
+                                                                      {
+                                                                        topic.planQuestionCount
+                                                                      }{" "}
+                                                                      in plan
+                                                                    </Badge>
+                                                                  )}
+                                                                </div>
+                                                              </div>
+                                                            </div>
+                                                            <div className="flex items-center space-x-2">
+                                                              <Suspense
+                                                                fallback={
+                                                                  <LoadingSkeleton />
+                                                                }
+                                                              >
+                                                                <Button
+                                                                  onClick={() =>
+                                                                    setAddItemContext(
+                                                                      {
+                                                                        planId:
+                                                                          plan.id,
+                                                                        type: "question",
+                                                                        parentId:
+                                                                          topic.id,
+                                                                      },
+                                                                    )
+                                                                  }
+                                                                  size="sm"
+                                                                  variant="ghost"
+                                                                  className="h-6 px-2 text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 text-xs"
+                                                                >
+                                                                  <Plus className="h-3 w-3 mr-1" />
+                                                                  Add Question
+                                                                </Button>
+                                                              </Suspense>
+                                                            </div>
+                                                          </div>
+
+                                                          {/* Questions Level */}
+                                                          {expandedPlanTopics.has(
+                                                            topic.id,
+                                                          ) && (
+                                                            <div className="mt-2 ml-6 space-y-1">
+                                                              {topic.questions &&
+                                                              topic.questions
+                                                                .length > 0 ? (
+                                                                topic.questions.map(
+                                                                  (question: {
+                                                                    id: string;
+                                                                    title?: string;
+                                                                  }) => (
+                                                                    <div
+                                                                      key={
+                                                                        question.id
+                                                                      }
+                                                                      className="flex items-center justify-between py-1 px-2 rounded bg-white dark:bg-gray-900"
+                                                                    >
+                                                                      <div className="flex items-center space-x-2 flex-1">
+                                                                        {/* Checkbox to toggle question inclusion - removes from both topic and plan */}
+                                                                        <button
+                                                                          onClick={async () => {
+                                                                            await removeQuestionFromPlan(
+                                                                              plan.id,
+                                                                              topic.id,
+                                                                              question.id,
+                                                                            );
+                                                                          }}
+                                                                          className="flex-shrink-0 p-0.5 hover:bg-gray-100 dark:hover:bg-gray-800 rounded"
+                                                                          title="Remove from plan"
+                                                                        >
+                                                                          <CheckSquare className="h-3 w-3 text-green-600 dark:text-green-400" />
+                                                                        </button>
+                                                                        <MessageSquare className="h-3 w-3 text-red-600 dark:text-red-400" />
+                                                                        <span className="text-xs text-gray-900 dark:text-gray-100 truncate">
+                                                                          {question.title ||
+                                                                            "Untitled Question"}
+                                                                        </span>
+                                                                      </div>
+                                                                      <div className="flex items-center space-x-1">
+                                                                        {/* View Question Button */}
+                                                                        <Suspense
+                                                                          fallback={
+                                                                            <LoadingSkeleton />
+                                                                          }
+                                                                        >
+                                                                          <Button
+                                                                            size="sm"
+                                                                            variant="ghost"
+                                                                            onClick={async () => {
+                                                                              // Fetch full question data including code field
+                                                                              try {
+                                                                                const response =
+                                                                                  await fetch(
+                                                                                    `/api/questions/unified/${question.id}`,
+                                                                                  );
+                                                                                if (
+                                                                                  response.ok
+                                                                                ) {
+                                                                                  const result =
+                                                                                    await response.json();
+                                                                                  if (
+                                                                                    result.success &&
+                                                                                    result.data
+                                                                                  ) {
+                                                                                    // Process code field to ensure newlines are preserved
+                                                                                    const fullQuestion =
+                                                                                      result.data;
+                                                                                    if (
+                                                                                      fullQuestion.code &&
+                                                                                      typeof fullQuestion.code ===
+                                                                                        "string"
+                                                                                    ) {
+                                                                                      fullQuestion.code =
+                                                                                        fullQuestion.code
+                                                                                          .replace(
+                                                                                            /\\n/g,
+                                                                                            "\n",
+                                                                                          )
+                                                                                          .replace(
+                                                                                            /\\r\\n/g,
+                                                                                            "\n",
+                                                                                          )
+                                                                                          .replace(
+                                                                                            /\\r/g,
+                                                                                            "\n",
+                                                                                          )
+                                                                                          .replace(
+                                                                                            /\r\n/g,
+                                                                                            "\n",
+                                                                                          )
+                                                                                          .replace(
+                                                                                            /\r/g,
+                                                                                            "\n",
+                                                                                          );
+                                                                                    }
+                                                                                    setViewingQuestion(
+                                                                                      fullQuestion,
+                                                                                    );
+                                                                                    setIsViewQuestionModalOpen(
+                                                                                      true,
+                                                                                    );
+                                                                                  } else {
+                                                                                    // Fallback to question from list - fetch full question
+                                                                                    try {
+                                                                                      const fallbackResponse =
+                                                                                        await fetch(
+                                                                                          `/api/questions/unified/${question.id}`,
+                                                                                        );
+                                                                                      if (
+                                                                                        fallbackResponse.ok
+                                                                                      ) {
+                                                                                        const fallbackResult =
+                                                                                          await fallbackResponse.json();
+                                                                                        if (
+                                                                                          fallbackResult.success &&
+                                                                                          fallbackResult.data
+                                                                                        ) {
+                                                                                          setViewingQuestion(
+                                                                                            fallbackResult.data,
+                                                                                          );
+                                                                                          setIsViewQuestionModalOpen(
+                                                                                            true,
+                                                                                          );
+                                                                                        }
+                                                                                      }
+                                                                                    } catch {
+                                                                                      // If fetch fails, skip setting question
+                                                                                    }
+                                                                                  }
+                                                                                } else {
+                                                                                  // Fallback to question from list - fetch full question
+                                                                                  try {
+                                                                                    const fallbackResponse =
+                                                                                      await fetch(
+                                                                                        `/api/questions/unified/${question.id}`,
+                                                                                      );
+                                                                                    if (
+                                                                                      fallbackResponse.ok
+                                                                                    ) {
+                                                                                      const fallbackResult =
+                                                                                        await fallbackResponse.json();
+                                                                                      if (
+                                                                                        fallbackResult.success &&
+                                                                                        fallbackResult.data
+                                                                                      ) {
+                                                                                        setViewingQuestion(
+                                                                                          fallbackResult.data,
+                                                                                        );
+                                                                                        setIsViewQuestionModalOpen(
+                                                                                          true,
+                                                                                        );
+                                                                                      }
+                                                                                    }
+                                                                                  } catch {
+                                                                                    // If fetch fails, skip setting question
+                                                                                  }
+                                                                                  setIsViewQuestionModalOpen(
+                                                                                    true,
+                                                                                  );
+                                                                                }
+                                                                              } catch (error) {
+                                                                                console.error(
+                                                                                  "Error fetching question:",
+                                                                                  error,
+                                                                                );
+                                                                                // Fallback - question from hierarchy is incomplete, skip viewing
+                                                                                showError(
+                                                                                  "Failed to Load",
+                                                                                  "Could not load question details",
+                                                                                );
+                                                                              }
+                                                                            }}
+                                                                            className="h-6 w-6 p-0 hover:bg-blue-50 dark:hover:bg-blue-900/20"
+                                                                            title="View question details"
+                                                                          >
+                                                                            <Eye className="h-3 w-3 text-blue-600 dark:text-blue-400" />
+                                                                          </Button>
+                                                                        </Suspense>
+                                                                      </div>
+                                                                    </div>
+                                                                  ),
+                                                                )
+                                                              ) : (
+                                                                <div className="text-xs text-gray-500 dark:text-gray-400 py-2 px-3 bg-gray-50 dark:bg-gray-800/50 rounded border border-gray-200 dark:border-gray-700">
+                                                                  No questions
+                                                                  in this topic
+                                                                </div>
+                                                              )}
+                                                            </div>
+                                                          )}
                                                         </div>
-                                                      </div>
-                                                    ))}
+                                                      ),
+                                                    )}
                                                   </div>
                                                 )}
-                                              </div>
-                                            ))}
-                                          </div>
+                                            </div>
+                                          ),
                                         )}
                                       </div>
-                                    ))}
-                                  </div>
-                                )}
-                              </div>
-                            ))}
+                                    )}
+                                </div>
+                              ),
+                            )}
                           </div>
                         ) : planHierarchy[plan.id] !== undefined ? (
-                          <div className='text-center py-8 text-gray-500 dark:text-gray-400'>
-                            <Layers className='h-12 w-12 mx-auto mb-2 opacity-50' />
+                          <div className="text-center py-8 text-gray-500 dark:text-gray-400">
+                            <Layers className="h-12 w-12 mx-auto mb-2 opacity-50" />
                             <p>No cards in this plan yet</p>
-                            <p className='text-xs mt-1'>Click "Add Card" to get started</p>
+                            <p className="text-xs mt-1">
+                              Click &quot;Add Card&quot; to get started
+                            </p>
                           </div>
                         ) : null}
                       </div>
@@ -2557,7 +3045,7 @@ export default function UnifiedAdminPage() {
           setIsCardModalOpen(false);
           setEditingCard(null);
         }}
-        title={editingCard ? 'Edit Card' : 'Create New Card'}
+        title={editingCard ? "Edit Card" : "Create New Card"}
       >
         <CardForm
           card={editingCard}
@@ -2578,10 +3066,10 @@ export default function UnifiedAdminPage() {
           setIsPlanModalOpen(false);
           setEditingPlan(null);
         }}
-        title={editingPlan ? 'Edit Plan' : 'Create New Plan'}
+        title={editingPlan ? "Edit Plan" : "Create New Plan"}
       >
         <PlanForm
-          plan={editingPlan}
+          plan={editingPlan as unknown}
           onSubmit={handlePlanFormSubmit}
           onCancel={() => {
             setIsPlanModalOpen(false);
@@ -2599,10 +3087,11 @@ export default function UnifiedAdminPage() {
           setIsCategoryModalOpen(false);
           setEditingCategory(null);
         }}
-        title={editingCategory ? 'Edit Category' : 'Create New Category'}
+        title={editingCategory ? "Edit Category" : "Create New Category"}
       >
         <CategoryForm
-          category={editingCategory}
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          category={editingCategory as any}
           onSubmit={handleCategoryFormSubmit}
           onCancel={() => {
             setIsCategoryModalOpen(false);
@@ -2620,10 +3109,11 @@ export default function UnifiedAdminPage() {
           setIsTopicModalOpen(false);
           setEditingTopic(null);
         }}
-        title={editingTopic ? 'Edit Topic' : 'Create New Topic'}
+        title={editingTopic ? "Edit Topic" : "Create New Topic"}
       >
         <TopicForm
-          topic={editingTopic}
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          topic={editingTopic as any}
           categories={categories}
           onSubmit={handleTopicFormSubmit}
           onCancel={() => {
@@ -2642,9 +3132,10 @@ export default function UnifiedAdminPage() {
           setIsQuestionModalOpen(false);
           setEditingQuestion(null);
         }}
-        title={editingQuestion ? 'Edit Question' : 'Create New Question'}
+        title={editingQuestion ? "Edit Question" : "Create New Question"}
       >
         <QuestionForm
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
           question={editingQuestion as any}
           topics={topics}
           categories={categories}
@@ -2666,16 +3157,16 @@ export default function UnifiedAdminPage() {
           setIsDeleteCardModalOpen(false);
           setCardToDelete(null);
         }}
-        title='Delete Card'
+        title="Delete Card"
       >
-        <div className='space-y-4'>
-          <p className='text-sm text-muted-foreground'>
-            Are you sure you want to delete the card "{cardToDelete?.title}"?
-            This action cannot be undone.
+        <div className="space-y-4">
+          <p className="text-sm text-muted-foreground">
+            Are you sure you want to delete the card &quot;{cardToDelete?.title}
+            &quot;? This action cannot be undone.
           </p>
-          <div className='flex justify-end space-x-2'>
+          <div className="flex justify-end space-x-2">
             <Button
-              variant='outline'
+              variant="outline"
               onClick={() => {
                 setIsDeleteCardModalOpen(false);
                 setCardToDelete(null);
@@ -2684,11 +3175,11 @@ export default function UnifiedAdminPage() {
               Cancel
             </Button>
             <Button
-              variant='destructive'
+              variant="destructive"
               onClick={confirmDeleteCard}
               disabled={deleteCardMutation.isPending}
             >
-              {deleteCardMutation.isPending ? 'Deleting...' : 'Delete'}
+              {deleteCardMutation.isPending ? "Deleting..." : "Delete"}
             </Button>
           </div>
         </div>
@@ -2700,16 +3191,18 @@ export default function UnifiedAdminPage() {
           setIsDeletePlanModalOpen(false);
           setPlanToDelete(null);
         }}
-        title='Delete Plan'
+        title="Delete Plan"
       >
-        <div className='space-y-4'>
-          <p className='text-sm text-muted-foreground'>
-            Are you sure you want to delete the plan "{planToDelete?.title}"?
-            This action cannot be undone.
+        <div className="space-y-4">
+          <p className="text-sm text-muted-foreground">
+            Are you sure you want to delete the plan &quot;
+            {planToDelete?.name ||
+              String((planToDelete as { title?: string })?.title || "")}
+            &quot;? This action cannot be undone.
           </p>
-          <div className='flex justify-end space-x-2'>
+          <div className="flex justify-end space-x-2">
             <Button
-              variant='outline'
+              variant="outline"
               onClick={() => {
                 setIsDeletePlanModalOpen(false);
                 setPlanToDelete(null);
@@ -2718,11 +3211,11 @@ export default function UnifiedAdminPage() {
               Cancel
             </Button>
             <Button
-              variant='destructive'
+              variant="destructive"
               onClick={confirmDeletePlan}
               disabled={deletePlanMutation.isPending}
             >
-              {deletePlanMutation.isPending ? 'Deleting...' : 'Delete'}
+              {deletePlanMutation.isPending ? "Deleting..." : "Delete"}
             </Button>
           </div>
         </div>
@@ -2733,61 +3226,66 @@ export default function UnifiedAdminPage() {
         isOpen={!!addItemContext}
         onClose={() => {
           setAddItemContext(null);
-          setSelectionStep('card');
+          setSelectionStep("card");
           setSelectedCardId(null);
           setSelectedCategoryId(null);
           setSelectedTopicId(null);
           setSelectedQuestionIds(new Set());
         }}
         title={
-          addItemContext?.type === 'card'
+          addItemContext?.type === "card"
             ? `Step 1: Select Card`
-            : addItemContext?.type === 'category'
-            ? `Step 2: Select Category from Card`
-            : addItemContext?.type === 'topic'
-            ? `Step 3: Select Topic from Category`
-            : `Step 4: Select Question from Topic`
+            : addItemContext?.type === "category"
+              ? `Step 2: Select Category from Card`
+              : addItemContext?.type === "topic"
+                ? `Step 3: Select Topic from Category`
+                : `Step 4: Select Question from Topic`
         }
-        size='xl'
+        size="xl"
       >
-        <div className='space-y-4'>
+        <div className="space-y-4">
           {/* Step 1: Select Card */}
-          {addItemContext?.type === 'card' && (
+          {addItemContext?.type === "card" && (
             <div>
-              <h4 className='text-sm font-semibold text-gray-900 dark:text-gray-100 mb-2'>
+              <h4 className="text-sm font-semibold text-gray-900 dark:text-gray-100 mb-2">
                 Available Cards
               </h4>
-              <div className='max-h-96 overflow-y-auto space-y-2 border rounded-lg p-2'>
-                {cards.map(card => {
-                  const hierarchy = planHierarchy[addItemContext.planId] || [];
-                  const isInPlan = hierarchy.some((c: any) => c.id === card.id);
+              <div className="max-h-96 overflow-y-auto space-y-2 border rounded-lg p-2">
+                {cards.map((card) => {
+                  const hierarchy: PlanHierarchyCard[] =
+                    planHierarchy[addItemContext.planId] || [];
+                  const isInPlan = hierarchy.some((c) => c.id === card.id);
                   return (
                     <div
                       key={card.id}
-                      className='flex items-center justify-between p-3 rounded border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors'
+                      className="flex items-center justify-between p-3 rounded border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
                     >
-                      <div className='flex items-center space-x-3 flex-1'>
-                        <Layers className='h-5 w-5 text-blue-600' />
+                      <div className="flex items-center space-x-3 flex-1">
+                        <Layers className="h-5 w-5 text-blue-600" />
                         <div>
-                          <span className='text-sm font-medium text-gray-900 dark:text-gray-100'>{card.title}</span>
+                          <span className="text-sm font-medium text-gray-900 dark:text-gray-100">
+                            {card.title}
+                          </span>
                           {card.description && (
-                            <p className='text-xs text-gray-500 dark:text-gray-400 mt-1'>{card.description}</p>
+                            <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                              {card.description}
+                            </p>
                           )}
                         </div>
                       </div>
                       {isInPlan ? (
-                        <Badge variant='secondary'>Already in plan</Badge>
+                        <Badge variant="secondary">Already in plan</Badge>
                       ) : (
                         <Button
-                          size='sm'
-                          variant='outline'
+                          size="sm"
+                          variant="outline"
                           onClick={async () => {
                             await addCardToPlan(addItemContext.planId, card.id);
                             await fetchPlanHierarchy(addItemContext.planId);
                             setAddItemContext(null);
                           }}
                         >
-                          <Plus className='h-4 w-4 mr-1' />
+                          <Plus className="h-4 w-4 mr-1" />
                           Add
                         </Button>
                       )}
@@ -2799,66 +3297,86 @@ export default function UnifiedAdminPage() {
           )}
 
           {/* Step 2: Select Category from Card */}
-          {addItemContext?.type === 'category' && addItemContext.parentId && (
+          {addItemContext?.type === "category" && addItemContext.parentId && (
             <div>
-              <div className='mb-3 p-2 bg-blue-50 dark:bg-blue-900/20 rounded-lg'>
-                <p className='text-xs text-gray-600 dark:text-gray-400'>
-                  Selected Card: <span className='font-medium'>{cards.find(c => c.id === addItemContext.parentId)?.title}</span>
+              <div className="mb-3 p-2 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
+                <p className="text-xs text-gray-600 dark:text-gray-400">
+                  Selected Card:{" "}
+                  <span className="font-medium">
+                    {cards.find((c) => c.id === addItemContext.parentId)?.title}
+                  </span>
                 </p>
               </div>
-              <h4 className='text-sm font-semibold text-gray-900 dark:text-gray-100 mb-2'>
+              <h4 className="text-sm font-semibold text-gray-900 dark:text-gray-100 mb-2">
                 Categories in this Card
               </h4>
-              <div className='max-h-96 overflow-y-auto space-y-2 border rounded-lg p-2'>
+              <div className="max-h-96 overflow-y-auto space-y-2 border rounded-lg p-2">
                 {categories
-                  .filter(cat => {
+                  .filter((cat) => {
                     // Filter categories that belong to this card (via card_categories or direct learning_card_id)
-                    return cat.learning_card_id === addItemContext.parentId || 
-                           (cat as any).card_id === addItemContext.parentId;
+                    return (
+                      cat.learning_card_id === addItemContext.parentId ||
+                      (cat as Category & { card_id?: string }).card_id ===
+                        addItemContext.parentId
+                    );
                   })
-                  .map(category => {
-                    const hierarchy = planHierarchy[addItemContext.planId] || [];
-                    const card = hierarchy.find((c: any) => c.id === addItemContext.parentId);
-                    const isInCard = card?.categories?.some((cat: any) => cat.id === category.id);
+                  .map((category) => {
+                    const hierarchy: PlanHierarchyCard[] =
+                      planHierarchy[addItemContext.planId] || [];
+                    const card = hierarchy.find(
+                      (c) => c.id === addItemContext.parentId,
+                    );
+                    const isInCard = card?.categories?.some(
+                      (cat) => cat.id === category.id,
+                    );
                     return (
                       <div
                         key={category.id}
-                        className='flex items-center justify-between p-3 rounded border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors'
+                        className="flex items-center justify-between p-3 rounded border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
                       >
-                        <div className='flex items-center space-x-3 flex-1'>
-                          <BookOpen className='h-5 w-5 text-purple-600' />
+                        <div className="flex items-center space-x-3 flex-1">
+                          <BookOpen className="h-5 w-5 text-purple-600" />
                           <div>
-                            <span className='text-sm font-medium text-gray-900 dark:text-gray-100'>{category.name || category.title}</span>
+                            <span className="text-sm font-medium text-gray-900 dark:text-gray-100">
+                              {category.name || category.title}
+                            </span>
                             {category.description && (
-                              <p className='text-xs text-gray-500 dark:text-gray-400 mt-1'>{category.description}</p>
+                              <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                                {category.description}
+                              </p>
                             )}
                           </div>
                         </div>
                         {isInCard ? (
-                          <Badge variant='secondary'>Already in card</Badge>
+                          <Badge variant="secondary">Already in card</Badge>
                         ) : (
                           <Button
-                            size='sm'
-                            variant='outline'
+                            size="sm"
+                            variant="outline"
                             onClick={async () => {
-                              await addCategoryToCard(addItemContext.parentId!, category.id);
+                              await addCategoryToCard(
+                                addItemContext.parentId!,
+                                category.id,
+                              );
                               await fetchPlanHierarchy(addItemContext.planId);
                               setAddItemContext(null);
                             }}
                           >
-                            <Plus className='h-4 w-4 mr-1' />
+                            <Plus className="h-4 w-4 mr-1" />
                             Add
                           </Button>
                         )}
                       </div>
                     );
                   })}
-                {categories.filter(cat => 
-                  cat.learning_card_id === addItemContext.parentId || 
-                  (cat as any).card_id === addItemContext.parentId
+                {categories.filter(
+                  (cat) =>
+                    cat.learning_card_id === addItemContext.parentId ||
+                    (cat as Category & { card_id?: string }).card_id ===
+                      addItemContext.parentId,
                 ).length === 0 && (
-                  <div className='text-center py-8 text-gray-500 dark:text-gray-400'>
-                    <BookOpen className='h-12 w-12 mx-auto mb-2 opacity-50' />
+                  <div className="text-center py-8 text-gray-500 dark:text-gray-400">
+                    <BookOpen className="h-12 w-12 mx-auto mb-2 opacity-50" />
                     <p>No categories available for this card</p>
                   </div>
                 )}
@@ -2867,62 +3385,86 @@ export default function UnifiedAdminPage() {
           )}
 
           {/* Step 3: Select Topic from Category */}
-          {addItemContext?.type === 'topic' && addItemContext.parentId && (
+          {addItemContext?.type === "topic" && addItemContext.parentId && (
             <div>
-              <div className='mb-3 p-2 bg-purple-50 dark:bg-purple-900/20 rounded-lg'>
-                <p className='text-xs text-gray-600 dark:text-gray-400'>
-                  Selected Category: <span className='font-medium'>{categories.find(c => c.id === addItemContext.parentId)?.name || categories.find(c => c.id === addItemContext.parentId)?.title}</span>
+              <div className="mb-3 p-2 bg-purple-50 dark:bg-purple-900/20 rounded-lg">
+                <p className="text-xs text-gray-600 dark:text-gray-400">
+                  Selected Category:{" "}
+                  <span className="font-medium">
+                    {categories.find((c) => c.id === addItemContext.parentId)
+                      ?.name ||
+                      categories.find((c) => c.id === addItemContext.parentId)
+                        ?.title}
+                  </span>
                 </p>
               </div>
-              <h4 className='text-sm font-semibold text-gray-900 dark:text-gray-100 mb-2'>
+              <h4 className="text-sm font-semibold text-gray-900 dark:text-gray-100 mb-2">
                 Topics in this Category
               </h4>
-              <div className='max-h-96 overflow-y-auto space-y-2 border rounded-lg p-2'>
+              <div className="max-h-96 overflow-y-auto space-y-2 border rounded-lg p-2">
                 {topics
-                  .filter(topic => topic.category_id === addItemContext.parentId)
-                  .map(topic => {
-                    const hierarchy = planHierarchy[addItemContext.planId] || [];
-                    const card = hierarchy.find((c: any) => 
-                      c.categories?.some((cat: any) => cat.id === addItemContext.parentId)
+                  .filter(
+                    (topic) => topic.category_id === addItemContext.parentId,
+                  )
+                  .map((topic) => {
+                    const hierarchy: PlanHierarchyCard[] =
+                      planHierarchy[addItemContext.planId] || [];
+                    const card = hierarchy.find((c) =>
+                      c.categories?.some(
+                        (cat) => cat.id === addItemContext.parentId,
+                      ),
                     );
-                    const category = card?.categories?.find((cat: any) => cat.id === addItemContext.parentId);
-                    const isInCategory = category?.topics?.some((t: any) => t.id === topic.id);
+                    const category = card?.categories?.find(
+                      (cat) => cat.id === addItemContext.parentId,
+                    );
+                    const isInCategory = category?.topics?.some(
+                      (t) => t.id === topic.id,
+                    );
                     return (
                       <div
                         key={topic.id}
-                        className='flex items-center justify-between p-3 rounded border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors'
+                        className="flex items-center justify-between p-3 rounded border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
                       >
-                        <div className='flex items-center space-x-3 flex-1'>
-                          <Target className='h-5 w-5 text-orange-600' />
+                        <div className="flex items-center space-x-3 flex-1">
+                          <Target className="h-5 w-5 text-orange-600" />
                           <div>
-                            <span className='text-sm font-medium text-gray-900 dark:text-gray-100'>{topic.name || topic.title}</span>
+                            <span className="text-sm font-medium text-gray-900 dark:text-gray-100">
+                              {topic.name || topic.title}
+                            </span>
                             {topic.description && (
-                              <p className='text-xs text-gray-500 dark:text-gray-400 mt-1'>{topic.description}</p>
+                              <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                                {topic.description}
+                              </p>
                             )}
                           </div>
                         </div>
                         {isInCategory ? (
-                          <Badge variant='secondary'>Already in category</Badge>
+                          <Badge variant="secondary">Already in category</Badge>
                         ) : (
                           <Button
-                            size='sm'
-                            variant='outline'
+                            size="sm"
+                            variant="outline"
                             onClick={async () => {
-                              await addTopicToCategory(addItemContext.parentId!, topic.id);
+                              await addTopicToCategory(
+                                addItemContext.parentId!,
+                                topic.id,
+                              );
                               await fetchPlanHierarchy(addItemContext.planId);
                               setAddItemContext(null);
                             }}
                           >
-                            <Plus className='h-4 w-4 mr-1' />
+                            <Plus className="h-4 w-4 mr-1" />
                             Add
                           </Button>
                         )}
                       </div>
                     );
                   })}
-                {topics.filter(topic => topic.category_id === addItemContext.parentId).length === 0 && (
-                  <div className='text-center py-8 text-gray-500 dark:text-gray-400'>
-                    <Target className='h-12 w-12 mx-auto mb-2 opacity-50' />
+                {topics.filter(
+                  (topic) => topic.category_id === addItemContext.parentId,
+                ).length === 0 && (
+                  <div className="text-center py-8 text-gray-500 dark:text-gray-400">
+                    <Target className="h-12 w-12 mx-auto mb-2 opacity-50" />
                     <p>No topics available for this category</p>
                   </div>
                 )}
@@ -2931,67 +3473,109 @@ export default function UnifiedAdminPage() {
           )}
 
           {/* Step 4: Select Question from Topic */}
-          {addItemContext?.type === 'question' && addItemContext.parentId && (
+          {addItemContext?.type === "question" && addItemContext.parentId && (
             <div>
-              <div className='mb-3 p-2 bg-orange-50 dark:bg-orange-900/20 rounded-lg'>
-                <p className='text-xs text-gray-600 dark:text-gray-400'>
-                  Selected Topic: <span className='font-medium'>{topics.find(t => t.id === addItemContext.parentId)?.name || topics.find(t => t.id === addItemContext.parentId)?.title}</span>
+              <div className="mb-3 p-2 bg-orange-50 dark:bg-orange-900/20 rounded-lg">
+                <p className="text-xs text-gray-600 dark:text-gray-400">
+                  Selected Topic:{" "}
+                  <span className="font-medium">
+                    {topics.find((t) => t.id === addItemContext.parentId)
+                      ?.name ||
+                      topics.find((t) => t.id === addItemContext.parentId)
+                        ?.title}
+                  </span>
                 </p>
               </div>
-              <div className='flex items-center justify-between mb-3'>
-                <h4 className='text-sm font-semibold text-gray-900 dark:text-gray-100'>
+              <div className="flex items-center justify-between mb-3">
+                <h4 className="text-sm font-semibold text-gray-900 dark:text-gray-100">
                   Questions in this Topic
                 </h4>
                 {selectedQuestionIds.size > 0 && (
                   <Button
-                    size='sm'
-                    variant='default'
+                    size="sm"
+                    variant="default"
                     onClick={async () => {
                       // Add all selected questions
-                      const addPromises = Array.from(selectedQuestionIds).map(questionId =>
-                        addQuestionToTopic(addItemContext.parentId!, questionId)
+                      const addPromises = Array.from(selectedQuestionIds).map(
+                        (questionId) =>
+                          addQuestionToTopic(
+                            addItemContext.parentId!,
+                            questionId,
+                            addItemContext.planId,
+                          ),
                       );
                       await Promise.all(addPromises);
                       await fetchPlanHierarchy(addItemContext.planId);
                       setSelectedQuestionIds(new Set());
                       setAddItemContext(null);
                     }}
-                    className='bg-green-600 hover:bg-green-700'
+                    className="bg-green-600 hover:bg-green-700"
+                    disabled={Array.from(selectedQuestionIds).some(
+                      (qId) =>
+                        addingQuestionToTopic[
+                          `${addItemContext.parentId}-${qId}`
+                        ],
+                    )}
                   >
-                    <Plus className='h-4 w-4 mr-1' />
-                    Add Selected ({selectedQuestionIds.size})
+                    {Array.from(selectedQuestionIds).some(
+                      (qId) =>
+                        addingQuestionToTopic[
+                          `${addItemContext.parentId}-${qId}`
+                        ],
+                    ) ? (
+                      <>
+                        <div className="animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent mr-1" />
+                        Adding...
+                      </>
+                    ) : (
+                      <>
+                        <Plus className="h-4 w-4 mr-1" />
+                        Add Selected ({selectedQuestionIds.size})
+                      </>
+                    )}
                   </Button>
                 )}
               </div>
-              <div className='max-h-96 overflow-y-auto space-y-2 border rounded-lg p-2'>
+              <div className="max-h-96 overflow-y-auto space-y-2 border rounded-lg p-2">
                 {questions
-                  .filter(q => q.topic_id === addItemContext.parentId || q.topics?.some(t => t.id === addItemContext.parentId))
+                  .filter(
+                    (q) =>
+                      q.topic_id === addItemContext.parentId ||
+                      q.topics?.some((t) => t.id === addItemContext.parentId),
+                  )
                   .slice(0, 100)
-                  .map(question => {
-                    const hierarchy = planHierarchy[addItemContext.planId] || [];
-                    const card = hierarchy.find((c: any) => 
-                      c.categories?.some((cat: any) => 
-                        cat.topics?.some((t: any) => t.id === addItemContext.parentId)
-                      )
+                  .map((question) => {
+                    const hierarchy: PlanHierarchyCard[] =
+                      planHierarchy[addItemContext.planId] || [];
+                    const card = hierarchy.find((c) =>
+                      c.categories?.some((cat) =>
+                        cat.topics?.some(
+                          (t) => t.id === addItemContext.parentId,
+                        ),
+                      ),
                     );
-                    const category = card?.categories?.find((cat: any) => 
-                      cat.topics?.some((t: any) => t.id === addItemContext.parentId)
+                    const category = card?.categories?.find((cat) =>
+                      cat.topics?.some((t) => t.id === addItemContext.parentId),
                     );
-                    const topic = category?.topics?.find((t: any) => t.id === addItemContext.parentId);
-                    const isInTopic = topic?.questions?.some((q: any) => q.id === question.id);
+                    const topic = category?.topics?.find(
+                      (t) => t.id === addItemContext.parentId,
+                    );
+                    const isInTopic = topic?.questions?.some(
+                      (q) => q.id === question.id,
+                    );
                     const isSelected = selectedQuestionIds.has(question.id);
-                    
+
                     return (
                       <div
                         key={question.id}
-                        className='flex items-center justify-between p-3 rounded border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors'
+                        className="flex items-center justify-between p-3 rounded border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
                       >
-                        <div className='flex items-center space-x-3 flex-1'>
+                        <div className="flex items-center space-x-3 flex-1">
                           {/* Checkbox for multi-select */}
                           <button
                             onClick={() => {
                               if (isInTopic) return; // Don't allow selection if already in topic
-                              setSelectedQuestionIds(prev => {
+                              setSelectedQuestionIds((prev) => {
                                 const newSet = new Set(prev);
                                 if (newSet.has(question.id)) {
                                   newSet.delete(question.id);
@@ -3002,102 +3586,144 @@ export default function UnifiedAdminPage() {
                               });
                             }}
                             disabled={isInTopic}
-                            className={`flex-shrink-0 ${isInTopic ? 'cursor-not-allowed opacity-50' : 'cursor-pointer'}`}
+                            className={`flex-shrink-0 ${isInTopic ? "cursor-not-allowed opacity-50" : "cursor-pointer"}`}
                           >
                             {isSelected ? (
-                              <CheckSquare className='h-5 w-5 text-blue-600 dark:text-blue-400' />
+                              <CheckSquare className="h-5 w-5 text-blue-600 dark:text-blue-400" />
                             ) : (
-                              <Square className='h-5 w-5 text-gray-400' />
+                              <Square className="h-5 w-5 text-gray-400" />
                             )}
                           </button>
-                          <MessageSquare className='h-5 w-5 text-red-600' />
-                          <div className='flex-1 min-w-0'>
-                            <span className='text-sm font-medium text-gray-900 dark:text-gray-100 block truncate'>
-                              {question.title || 'Untitled Question'}
+                          <MessageSquare className="h-5 w-5 text-red-600" />
+                          <div className="flex-1 min-w-0">
+                            <span className="text-sm font-medium text-gray-900 dark:text-gray-100 block truncate">
+                              {question.title || "Untitled Question"}
                             </span>
-                            <div className='flex items-center space-x-2 mt-1'>
+                            <div className="flex items-center space-x-2 mt-1">
                               {question.difficulty && (
-                                <Badge variant='outline' className='text-xs'>
+                                <Badge variant="outline" className="text-xs">
                                   {question.difficulty}
                                 </Badge>
                               )}
                               {question.type && (
-                                <Badge variant='outline' className='text-xs'>
+                                <Badge variant="outline" className="text-xs">
                                   {question.type}
                                 </Badge>
                               )}
                             </div>
                           </div>
                         </div>
-                        <div className='flex items-center gap-2'>
+                        <div className="flex items-center gap-2">
                           {/* View button */}
                           <Button
-                            size='sm'
-                            variant='ghost'
+                            size="sm"
+                            variant="ghost"
                             onClick={async () => {
                               // Fetch full question data including code field
                               try {
-                                const response = await fetch(`/api/questions/unified/${question.id}`);
+                                const response = await fetch(
+                                  `/api/questions/unified/${question.id}`,
+                                );
                                 if (response.ok) {
                                   const result = await response.json();
                                   if (result.success && result.data) {
                                     // Process code field to ensure newlines are preserved
                                     const fullQuestion = result.data;
-                                    if (fullQuestion.code && typeof fullQuestion.code === 'string') {
+                                    if (
+                                      fullQuestion.code &&
+                                      typeof fullQuestion.code === "string"
+                                    ) {
                                       fullQuestion.code = fullQuestion.code
-                                        .replace(/\\n/g, '\n')
-                                        .replace(/\\r\\n/g, '\n')
-                                        .replace(/\\r/g, '\n')
-                                        .replace(/\r\n/g, '\n')
-                                        .replace(/\r/g, '\n');
+                                        .replace(/\\n/g, "\n")
+                                        .replace(/\\r\\n/g, "\n")
+                                        .replace(/\\r/g, "\n")
+                                        .replace(/\r\n/g, "\n")
+                                        .replace(/\r/g, "\n");
                                     }
                                     setViewingQuestion(fullQuestion);
                                     setIsViewQuestionModalOpen(true);
                                   } else {
-                                    // Fallback to question from list
-                                    setViewingQuestion(question);
-                                    setIsViewQuestionModalOpen(true);
+                                    // Fallback - question from hierarchy is incomplete, skip viewing
+                                    showError(
+                                      "Failed to Load",
+                                      "Could not load question details",
+                                    );
                                   }
                                 } else {
-                                  // Fallback to question from list
-                                  setViewingQuestion(question);
-                                  setIsViewQuestionModalOpen(true);
+                                  // Fallback - question from hierarchy is incomplete, skip viewing
+                                  showError(
+                                    "Failed to Load",
+                                    "Could not load question details",
+                                  );
                                 }
                               } catch (error) {
-                                console.error('Error fetching question:', error);
-                                // Fallback to question from list
-                                setViewingQuestion(question);
-                                setIsViewQuestionModalOpen(true);
+                                console.error(
+                                  "Error fetching question:",
+                                  error,
+                                );
+                                // Fallback - question from hierarchy is incomplete, skip viewing
+                                showError(
+                                  "Failed to Load",
+                                  "Could not load question details",
+                                );
                               }
                             }}
-                            className='h-8 w-8 p-0'
+                            className="h-8 w-8 p-0"
                           >
-                            <Eye className='h-4 w-4' />
+                            <Eye className="h-4 w-4" />
                           </Button>
                           {isInTopic ? (
-                            <Badge variant='secondary'>Already in topic</Badge>
+                            <Badge variant="secondary">Already in topic</Badge>
                           ) : (
                             <Button
-                              size='sm'
-                              variant='outline'
+                              size="sm"
+                              variant="outline"
                               onClick={async () => {
-                              await addQuestionToTopic(addItemContext.parentId!, question.id);
-                              await fetchPlanHierarchy(addItemContext.planId);
-                              setSelectedQuestionIds(new Set());
-                              setAddItemContext(null);
+                                await addQuestionToTopic(
+                                  addItemContext.parentId!,
+                                  question.id,
+                                  addItemContext.planId,
+                                );
+                                await fetchPlanHierarchy(addItemContext.planId);
+                                setSelectedQuestionIds((prev) => {
+                                  const newSet = new Set(prev);
+                                  newSet.delete(question.id);
+                                  return newSet;
+                                });
+                                // Don't close modal - allow adding more questions
                               }}
+                              disabled={
+                                addingQuestionToTopic[
+                                  `${addItemContext.parentId}-${question.id}`
+                                ]
+                              }
                             >
-                              <Plus className='h-4 w-4 mr-1' />
-                              Add
+                              {addingQuestionToTopic[
+                                `${addItemContext.parentId}-${question.id}`
+                              ] ? (
+                                <>
+                                  <div className="animate-spin rounded-full h-4 w-4 border-2 border-current border-t-transparent mr-1" />
+                                  Adding...
+                                </>
+                              ) : (
+                                <>
+                                  <Plus className="h-4 w-4 mr-1" />
+                                  Add
+                                </>
+                              )}
                             </Button>
                           )}
                         </div>
                       </div>
                     );
                   })}
-                {questions.filter(q => q.topic_id === addItemContext.parentId || q.topics?.some(t => t.id === addItemContext.parentId)).length === 0 && (
-                  <div className='text-center py-8 text-gray-500 dark:text-gray-400'>
-                    <MessageSquare className='h-12 w-12 mx-auto mb-2 opacity-50' />
+                {questions.filter(
+                  (q) =>
+                    q.topic_id === addItemContext.parentId ||
+                    q.topics?.some((t) => t.id === addItemContext.parentId),
+                ).length === 0 && (
+                  <div className="text-center py-8 text-gray-500 dark:text-gray-400">
+                    <MessageSquare className="h-12 w-12 mx-auto mb-2 opacity-50" />
                     <p>No questions available for this topic</p>
                   </div>
                 )}
@@ -3116,7 +3742,7 @@ export default function UnifiedAdminPage() {
         }}
         question={viewingQuestion}
         cards={cardsData?.data || []}
-        allCategories={categories.map(c => c.name || c.title).filter(Boolean)}
+        allCategories={categories.map((c) => c.name || c.title).filter(Boolean)}
         categoriesData={categories}
         topicsData={topics}
       />

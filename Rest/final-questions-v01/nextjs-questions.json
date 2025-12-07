@@ -13,11 +13,7 @@
     "updatedAt": "2025-11-11T18:48:30.797Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "nextjs",
-      "api-routes",
-      "intermediate"
-    ],
+    "tags": ["nextjs", "api-routes", "intermediate"],
     "explanation": "Each file becomes an API endpoint, enabling full-stack apps without a separate backend.",
     "points": 6,
     "options": [
@@ -63,11 +59,7 @@
     "updatedAt": "2025-11-11T18:48:30.797Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "nextjs",
-      "app-router-data-fetching",
-      "advanced"
-    ],
+    "tags": ["nextjs", "app-router-data-fetching", "advanced"],
     "explanation": "Next.js extends <code>fetch()</code> with caching, revalidation, and deduping—no need for <code>getStaticProps</code> or <code>getServerSideProps</code>.",
     "points": 8,
     "sampleAnswers": [
@@ -123,11 +115,7 @@
     "updatedAt": "2025-11-11T18:48:30.794Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "nextjs",
-      "app-router-internals",
-      "advanced"
-    ],
+    "tags": ["nextjs", "app-router-internals", "advanced"],
     "explanation": "Next.js first resolves the route (e.g., <code>/blog/[slug]</code>), then fetches data for it using Server Components.",
     "points": 8,
     "sampleAnswers": [
@@ -183,11 +171,7 @@
     "updatedAt": "2025-11-11T18:48:30.797Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "nextjs",
-      "authentication",
-      "advanced"
-    ],
+    "tags": ["nextjs", "authentication", "advanced"],
     "explanation": "NextAuth.js integrates seamlessly with Next.js and supports OAuth, email, and credentials providers.",
     "points": 8,
     "sampleAnswers": [
@@ -243,12 +227,7 @@
     "updatedAt": "2025-11-11T18:48:30.797Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "nextjs",
-      "next.js-basics",
-      "beginner",
-      "intermediate"
-    ],
+    "tags": ["nextjs", "next.js-basics", "beginner", "intermediate"],
     "explanation": "Next.js simplifies React app development by providing built-in solutions for routing, data fetching, optimization, and deployment.",
     "points": 4,
     "sampleAnswers": [
@@ -304,11 +283,7 @@
     "updatedAt": "2025-11-11T18:48:30.797Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "nextjs",
-      "next.js-basics",
-      "intermediate"
-    ],
+    "tags": ["nextjs", "next.js-basics", "intermediate"],
     "explanation": "These features enable full-stack development with optimized performance and SEO.",
     "points": 6,
     "options": [
@@ -354,11 +329,7 @@
     "updatedAt": "2025-11-11T18:48:30.794Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "nextjs",
-      "caching",
-      "advanced"
-    ],
+    "tags": ["nextjs", "caching", "advanced"],
     "explanation": "Caching is opt-in via <code>fetch</code> options, replacing <code>getStaticProps</code>/<code>getServerSideProps</code>.",
     "points": 9,
     "sampleAnswers": [
@@ -414,11 +385,7 @@
     "updatedAt": "2025-11-11T18:48:30.796Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "nextjs",
-      "caching",
-      "advanced"
-    ],
+    "tags": ["nextjs", "caching", "advanced"],
     "explanation": "Caching is opt-in via <code>fetch</code> options, replacing <code>getStaticProps</code>/<code>getServerSideProps</code>.",
     "points": 9,
     "sampleAnswers": [
@@ -474,11 +441,7 @@
     "updatedAt": "2025-11-11T18:48:30.798Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "nextjs",
-      "caching",
-      "advanced"
-    ],
+    "tags": ["nextjs", "caching", "advanced"],
     "explanation": "Caching is opt-in via <code>fetch</code> options, replacing <code>getStaticProps</code>/<code>getServerSideProps</code>.",
     "points": 9,
     "sampleAnswers": [
@@ -534,11 +497,7 @@
     "updatedAt": "2025-11-11T18:48:30.794Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "nextjs",
-      "client-side-navigation",
-      "intermediate"
-    ],
+    "tags": ["nextjs", "client-side-navigation", "intermediate"],
     "explanation": "It’s the App Router equivalent of <code>next/router</code> but with the same API.",
     "points": 6,
     "options": [
@@ -584,11 +543,7 @@
     "updatedAt": "2025-11-11T18:48:30.796Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "nextjs",
-      "client-side-navigation",
-      "intermediate"
-    ],
+    "tags": ["nextjs", "client-side-navigation", "intermediate"],
     "explanation": "It’s the App Router equivalent of <code>next/router</code> but with the same API.",
     "points": 6,
     "options": [
@@ -634,11 +589,7 @@
     "updatedAt": "2025-11-11T18:48:30.798Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "nextjs",
-      "client-side-navigation",
-      "intermediate"
-    ],
+    "tags": ["nextjs", "client-side-navigation", "intermediate"],
     "explanation": "It’s the App Router equivalent of <code>next/router</code> but with the same API.",
     "points": 6,
     "options": [
@@ -684,11 +635,7 @@
     "updatedAt": "2025-11-11T18:48:30.796Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "nextjs",
-      "client-components",
-      "intermediate"
-    ],
+    "tags": ["nextjs", "client-components", "intermediate"],
     "explanation": "By default, all components in App Router are Server Components. Use <code>'use client'</code> only when needed for interactivity.",
     "points": 7,
     "sampleAnswers": [
@@ -744,11 +691,7 @@
     "updatedAt": "2025-11-11T18:48:30.797Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "nextjs",
-      "client-components",
-      "intermediate"
-    ],
+    "tags": ["nextjs", "client-components", "intermediate"],
     "explanation": "By default, all components in App Router are Server Components. Use <code>'use client'</code> only when needed for interactivity.",
     "points": 7,
     "sampleAnswers": [
@@ -804,11 +747,7 @@
     "updatedAt": "2025-11-11T18:48:30.798Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "nextjs",
-      "client-components",
-      "intermediate"
-    ],
+    "tags": ["nextjs", "client-components", "intermediate"],
     "explanation": "By default, all components in App Router are Server Components. Use <code>'use client'</code> only when needed for interactivity.",
     "points": 7,
     "sampleAnswers": [
@@ -864,11 +803,7 @@
     "updatedAt": "2025-11-11T18:48:30.794Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "nextjs",
-      "loading-states",
-      "intermediate"
-    ],
+    "tags": ["nextjs", "loading-states", "intermediate"],
     "explanation": "<code>loading.js</code> provides an instant loading UI without client-side JavaScript, improving perceived performance.",
     "points": 7,
     "sampleAnswers": [
@@ -924,11 +859,7 @@
     "updatedAt": "2025-11-11T18:48:30.796Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "nextjs",
-      "loading-states",
-      "intermediate"
-    ],
+    "tags": ["nextjs", "loading-states", "intermediate"],
     "explanation": "<code>loading.js</code> provides an instant loading UI without client-side JavaScript, improving perceived performance.",
     "points": 7,
     "sampleAnswers": [
@@ -984,11 +915,7 @@
     "updatedAt": "2025-11-11T18:48:30.798Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "nextjs",
-      "loading-states",
-      "intermediate"
-    ],
+    "tags": ["nextjs", "loading-states", "intermediate"],
     "explanation": "<code>loading.js</code> provides an instant loading UI without client-side JavaScript, improving perceived performance.",
     "points": 7,
     "sampleAnswers": [
@@ -1044,11 +971,7 @@
     "updatedAt": "2025-11-11T18:48:30.794Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "nextjs",
-      "deployment-on-vercel",
-      "intermediate"
-    ],
+    "tags": ["nextjs", "deployment-on-vercel", "intermediate"],
     "explanation": "Vercel is optimized for Next.js with zero-config deployments and Git integration.",
     "points": 6,
     "sampleAnswers": [
@@ -1104,11 +1027,7 @@
     "updatedAt": "2025-11-11T18:48:30.797Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "nextjs",
-      "deployment-on-vercel",
-      "intermediate"
-    ],
+    "tags": ["nextjs", "deployment-on-vercel", "intermediate"],
     "explanation": "Vercel is optimized for Next.js with zero-config deployments and Git integration.",
     "points": 6,
     "sampleAnswers": [
@@ -1164,11 +1083,7 @@
     "updatedAt": "2025-11-11T18:48:30.794Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "nextjs",
-      "dynamic-routes",
-      "intermediate"
-    ],
+    "tags": ["nextjs", "dynamic-routes", "intermediate"],
     "explanation": "The <code>params</code> object is passed to <code>page.js</code>, <code>layout.js</code>, and other route handlers automatically.",
     "points": 7,
     "sampleAnswers": [
@@ -1224,11 +1139,7 @@
     "updatedAt": "2025-11-11T18:48:30.796Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "nextjs",
-      "dynamic-routes",
-      "intermediate"
-    ],
+    "tags": ["nextjs", "dynamic-routes", "intermediate"],
     "explanation": "The <code>params</code> object is passed to <code>page.js</code>, <code>layout.js</code>, and other route handlers automatically.",
     "points": 7,
     "sampleAnswers": [
@@ -1284,11 +1195,7 @@
     "updatedAt": "2025-11-11T18:48:30.797Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "nextjs",
-      "dynamic-routes",
-      "intermediate"
-    ],
+    "tags": ["nextjs", "dynamic-routes", "intermediate"],
     "explanation": "In Pages Router, use <code>getStaticPaths</code> for SSG; in App Router, use dynamic segments like <code>app/posts/[id]/page.js</code>.",
     "points": 7,
     "options": [
@@ -1334,11 +1241,7 @@
     "updatedAt": "2025-11-11T18:48:30.798Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "nextjs",
-      "dynamic-routes",
-      "intermediate"
-    ],
+    "tags": ["nextjs", "dynamic-routes", "intermediate"],
     "explanation": "The <code>params</code> object is passed to <code>page.js</code>, <code>layout.js</code>, and other route handlers automatically.",
     "points": 7,
     "sampleAnswers": [
@@ -1394,11 +1297,7 @@
     "updatedAt": "2025-11-11T18:48:30.794Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "nextjs",
-      "environment-variables",
-      "intermediate"
-    ],
+    "tags": ["nextjs", "environment-variables", "intermediate"],
     "explanation": "Non-prefixed variables are only available in Server Components and API routes—never exposed to client.",
     "points": 6,
     "sampleAnswers": [
@@ -1454,11 +1353,7 @@
     "updatedAt": "2025-11-11T18:48:30.796Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "nextjs",
-      "environment-variables",
-      "intermediate"
-    ],
+    "tags": ["nextjs", "environment-variables", "intermediate"],
     "explanation": "Non-prefixed variables are only available in Server Components and API routes—never exposed to client.",
     "points": 6,
     "sampleAnswers": [
@@ -1514,11 +1409,7 @@
     "updatedAt": "2025-11-11T18:48:30.797Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "nextjs",
-      "environment-variables",
-      "intermediate"
-    ],
+    "tags": ["nextjs", "environment-variables", "intermediate"],
     "explanation": "Non-prefixed variables are only available in Server Components and API routes—never exposed to client.",
     "points": 6,
     "sampleAnswers": [
@@ -1574,11 +1465,7 @@
     "updatedAt": "2025-11-11T18:48:30.798Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "nextjs",
-      "environment-variables",
-      "intermediate"
-    ],
+    "tags": ["nextjs", "environment-variables", "intermediate"],
     "explanation": "Non-prefixed variables are only available in Server Components and API routes—never exposed to client.",
     "points": 6,
     "sampleAnswers": [
@@ -1634,11 +1521,7 @@
     "updatedAt": "2025-11-11T18:48:30.794Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "nextjs",
-      "error-handling",
-      "intermediate"
-    ],
+    "tags": ["nextjs", "error-handling", "intermediate"],
     "explanation": "It uses React error boundaries under the hood and can be reset with the <code>error.reset()</code> function.",
     "points": 7,
     "sampleAnswers": [
@@ -1694,11 +1577,7 @@
     "updatedAt": "2025-11-11T18:48:30.794Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "nextjs",
-      "error-handling",
-      "intermediate"
-    ],
+    "tags": ["nextjs", "error-handling", "intermediate"],
     "explanation": "It’s the App Router equivalent of <code>pages/404.js</code> but scoped to route segments.",
     "points": 6,
     "sampleAnswers": [
@@ -1754,11 +1633,7 @@
     "updatedAt": "2025-11-11T18:48:30.796Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "nextjs",
-      "error-handling",
-      "intermediate"
-    ],
+    "tags": ["nextjs", "error-handling", "intermediate"],
     "explanation": "It uses React error boundaries under the hood and can be reset with the <code>error.reset()</code> function.",
     "points": 7,
     "sampleAnswers": [
@@ -1814,11 +1689,7 @@
     "updatedAt": "2025-11-11T18:48:30.796Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "nextjs",
-      "error-handling",
-      "intermediate"
-    ],
+    "tags": ["nextjs", "error-handling", "intermediate"],
     "explanation": "It’s the App Router equivalent of <code>pages/404.js</code> but scoped to route segments.",
     "points": 6,
     "sampleAnswers": [
@@ -1874,11 +1745,7 @@
     "updatedAt": "2025-11-11T18:48:30.798Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "nextjs",
-      "error-handling",
-      "intermediate"
-    ],
+    "tags": ["nextjs", "error-handling", "intermediate"],
     "explanation": "It uses React error boundaries under the hood and can be reset with the <code>error.reset()</code> function.",
     "points": 7,
     "sampleAnswers": [
@@ -1934,11 +1801,7 @@
     "updatedAt": "2025-11-11T18:48:30.798Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "nextjs",
-      "error-handling",
-      "intermediate"
-    ],
+    "tags": ["nextjs", "error-handling", "intermediate"],
     "explanation": "It’s the App Router equivalent of <code>pages/404.js</code> but scoped to route segments.",
     "points": 6,
     "sampleAnswers": [
@@ -1994,11 +1857,7 @@
     "updatedAt": "2025-11-11T18:48:30.794Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "nextjs",
-      "expo",
-      "intermediate"
-    ],
+    "tags": ["nextjs", "expo", "intermediate"],
     "explanation": "EAS Build compiles apps in the cloud; EAS Submit sends them to app stores; EAS Update pushes JS updates over the air.",
     "points": 7,
     "sampleAnswers": [
@@ -2054,11 +1913,7 @@
     "updatedAt": "2025-11-11T18:48:30.794Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "nextjs",
-      "expo",
-      "intermediate"
-    ],
+    "tags": ["nextjs", "expo", "intermediate"],
     "explanation": "Expo simplifies development with a curated set of APIs; EAS enables custom native code when needed.",
     "points": 7,
     "options": [
@@ -2104,11 +1959,7 @@
     "updatedAt": "2025-11-11T18:48:30.794Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "nextjs",
-      "incremental-static-regeneration",
-      "advanced"
-    ],
+    "tags": ["nextjs", "incremental-static-regeneration", "advanced"],
     "explanation": "It’s the App Router equivalent of ISR but triggered manually via API routes or webhooks.",
     "points": 8,
     "sampleAnswers": [
@@ -2164,11 +2015,7 @@
     "updatedAt": "2025-11-11T18:48:30.796Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "nextjs",
-      "incremental-static-regeneration",
-      "advanced"
-    ],
+    "tags": ["nextjs", "incremental-static-regeneration", "advanced"],
     "explanation": "With <code>revalidate</code>, Next.js regenerates pages in the background when traffic hits them.",
     "points": 8,
     "sampleAnswers": [
@@ -2224,11 +2071,7 @@
     "updatedAt": "2025-11-11T18:48:30.796Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "nextjs",
-      "incremental-static-regeneration",
-      "advanced"
-    ],
+    "tags": ["nextjs", "incremental-static-regeneration", "advanced"],
     "explanation": "It’s the App Router equivalent of ISR but triggered manually via API routes or webhooks.",
     "points": 8,
     "sampleAnswers": [
@@ -2284,11 +2127,7 @@
     "updatedAt": "2025-11-11T18:48:30.797Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "nextjs",
-      "incremental-static-regeneration",
-      "advanced"
-    ],
+    "tags": ["nextjs", "incremental-static-regeneration", "advanced"],
     "explanation": "With <code>revalidate</code>, Next.js regenerates pages in the background when traffic hits them.",
     "points": 8,
     "sampleAnswers": [
@@ -2344,11 +2183,7 @@
     "updatedAt": "2025-11-11T18:48:30.798Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "nextjs",
-      "incremental-static-regeneration",
-      "advanced"
-    ],
+    "tags": ["nextjs", "incremental-static-regeneration", "advanced"],
     "explanation": "With <code>revalidate</code>, Next.js regenerates pages in the background when traffic hits them.",
     "points": 8,
     "sampleAnswers": [
@@ -2404,11 +2239,7 @@
     "updatedAt": "2025-11-11T18:48:30.798Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "nextjs",
-      "incremental-static-regeneration",
-      "advanced"
-    ],
+    "tags": ["nextjs", "incremental-static-regeneration", "advanced"],
     "explanation": "It’s the App Router equivalent of ISR but triggered manually via API routes or webhooks.",
     "points": 8,
     "sampleAnswers": [
@@ -2464,11 +2295,7 @@
     "updatedAt": "2025-11-11T18:48:30.794Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "nextjs",
-      "layouts",
-      "intermediate"
-    ],
+    "tags": ["nextjs", "layouts", "intermediate"],
     "explanation": "Layouts are Server Components by default and can fetch data. They persist across route changes, improving performance.",
     "points": 7,
     "sampleAnswers": [
@@ -2524,11 +2351,7 @@
     "updatedAt": "2025-11-11T18:48:30.796Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "nextjs",
-      "layouts",
-      "intermediate"
-    ],
+    "tags": ["nextjs", "layouts", "intermediate"],
     "explanation": "App Router’s <code>layout.js</code> is the modern, built-in way to share UI across routes.",
     "points": 7,
     "sampleAnswers": [
@@ -2584,11 +2407,7 @@
     "updatedAt": "2025-11-11T18:48:30.796Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "nextjs",
-      "layouts",
-      "intermediate"
-    ],
+    "tags": ["nextjs", "layouts", "intermediate"],
     "explanation": "Layouts are Server Components by default and can fetch data. They persist across route changes, improving performance.",
     "points": 7,
     "sampleAnswers": [
@@ -2644,11 +2463,7 @@
     "updatedAt": "2025-11-11T18:48:30.797Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "nextjs",
-      "layouts",
-      "intermediate"
-    ],
+    "tags": ["nextjs", "layouts", "intermediate"],
     "explanation": "App Router’s <code>layout.js</code> is the modern, built-in way to share UI across routes.",
     "points": 7,
     "sampleAnswers": [
@@ -2704,11 +2519,7 @@
     "updatedAt": "2025-11-11T18:48:30.798Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "nextjs",
-      "layouts",
-      "intermediate"
-    ],
+    "tags": ["nextjs", "layouts", "intermediate"],
     "explanation": "App Router’s <code>layout.js</code> is the modern, built-in way to share UI across routes.",
     "points": 7,
     "sampleAnswers": [
@@ -2764,11 +2575,7 @@
     "updatedAt": "2025-11-11T18:48:30.798Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "nextjs",
-      "layouts",
-      "intermediate"
-    ],
+    "tags": ["nextjs", "layouts", "intermediate"],
     "explanation": "Layouts are Server Components by default and can fetch data. They persist across route changes, improving performance.",
     "points": 7,
     "sampleAnswers": [
@@ -2824,11 +2631,7 @@
     "updatedAt": "2025-11-11T18:48:30.794Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "nextjs",
-      "middleware",
-      "intermediate"
-    ],
+    "tags": ["nextjs", "middleware", "intermediate"],
     "explanation": "Middleware is ideal for authentication, A/B testing, i18n, and bot protection.",
     "points": 7,
     "sampleAnswers": [
@@ -2884,11 +2687,7 @@
     "updatedAt": "2025-11-11T18:48:30.796Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "nextjs",
-      "middleware",
-      "intermediate"
-    ],
+    "tags": ["nextjs", "middleware", "intermediate"],
     "explanation": "Middleware is ideal for authentication, A/B testing, i18n, and bot protection.",
     "points": 7,
     "sampleAnswers": [
@@ -2944,11 +2743,7 @@
     "updatedAt": "2025-11-11T18:48:30.797Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "nextjs",
-      "middleware",
-      "intermediate"
-    ],
+    "tags": ["nextjs", "middleware", "intermediate"],
     "explanation": "It’s ideal for authentication, A/B testing, i18n, and bot protection.",
     "points": 7,
     "options": [
@@ -2994,11 +2789,7 @@
     "updatedAt": "2025-11-11T18:48:30.798Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "nextjs",
-      "middleware",
-      "intermediate"
-    ],
+    "tags": ["nextjs", "middleware", "intermediate"],
     "explanation": "Middleware is ideal for authentication, A/B testing, i18n, and bot protection.",
     "points": 7,
     "sampleAnswers": [
@@ -3054,11 +2845,7 @@
     "updatedAt": "2025-11-11T18:48:30.794Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "nextjs",
-      "next.js-configuration",
-      "intermediate"
-    ],
+    "tags": ["nextjs", "next.js-configuration", "intermediate"],
     "explanation": "It’s optional but powerful for advanced customization without ejecting.",
     "points": 6,
     "options": [
@@ -3104,11 +2891,7 @@
     "updatedAt": "2025-11-11T18:48:30.796Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "nextjs",
-      "next.js-configuration",
-      "intermediate"
-    ],
+    "tags": ["nextjs", "next.js-configuration", "intermediate"],
     "explanation": "It’s optional but powerful for advanced customization without ejecting.",
     "points": 6,
     "options": [
@@ -3154,11 +2937,7 @@
     "updatedAt": "2025-11-11T18:48:30.797Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "nextjs",
-      "next.js-configuration",
-      "intermediate"
-    ],
+    "tags": ["nextjs", "next.js-configuration", "intermediate"],
     "explanation": "It’s optional but powerful for advanced customization without ejecting.",
     "points": 6,
     "options": [
@@ -3204,11 +2983,7 @@
     "updatedAt": "2025-11-11T18:48:30.798Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "nextjs",
-      "next.js-configuration",
-      "intermediate"
-    ],
+    "tags": ["nextjs", "next.js-configuration", "intermediate"],
     "explanation": "It’s optional but powerful for advanced customization without ejecting.",
     "points": 6,
     "options": [
@@ -3254,11 +3029,7 @@
     "updatedAt": "2025-11-11T18:48:30.797Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "nextjs",
-      "next.js-routing",
-      "intermediate"
-    ],
+    "tags": ["nextjs", "next.js-routing", "intermediate"],
     "explanation": "No manual route configuration is needed—just create files in the correct directory structure.",
     "points": 6,
     "options": [
@@ -3304,11 +3075,7 @@
     "updatedAt": "2025-11-11T18:48:30.794Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "nextjs",
-      "image-optimization",
-      "intermediate"
-    ],
+    "tags": ["nextjs", "image-optimization", "intermediate"],
     "explanation": "It reduces bandwidth, improves LCP, and prevents layout shift with automatic sizing.",
     "points": 7,
     "sampleAnswers": [
@@ -3364,11 +3131,7 @@
     "updatedAt": "2025-11-11T18:48:30.794Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "nextjs",
-      "image-optimization",
-      "intermediate"
-    ],
+    "tags": ["nextjs", "image-optimization", "intermediate"],
     "explanation": "As of Next.js 13, <code>next/image</code> is the stable, recommended component.",
     "points": 5,
     "options": [
@@ -3402,11 +3165,7 @@
     "updatedAt": "2025-11-11T18:48:30.796Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "nextjs",
-      "image-optimization",
-      "intermediate"
-    ],
+    "tags": ["nextjs", "image-optimization", "intermediate"],
     "explanation": "It reduces bandwidth, improves LCP, prevents layout shift, and integrates with CDNs like Vercel or Imgix.",
     "points": 7,
     "sampleAnswers": [
@@ -3462,11 +3221,7 @@
     "updatedAt": "2025-11-11T18:48:30.796Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "nextjs",
-      "image-optimization",
-      "intermediate"
-    ],
+    "tags": ["nextjs", "image-optimization", "intermediate"],
     "explanation": "It reduces bandwidth, improves LCP, and prevents layout shift with automatic sizing.",
     "points": 7,
     "sampleAnswers": [
@@ -3522,11 +3277,7 @@
     "updatedAt": "2025-11-11T18:48:30.796Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "nextjs",
-      "image-optimization",
-      "intermediate"
-    ],
+    "tags": ["nextjs", "image-optimization", "intermediate"],
     "explanation": "As of Next.js 13, <code>next/image</code> is the stable, recommended component.",
     "points": 5,
     "options": [
@@ -3560,11 +3311,7 @@
     "updatedAt": "2025-11-11T18:48:30.797Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "nextjs",
-      "image-optimization",
-      "intermediate"
-    ],
+    "tags": ["nextjs", "image-optimization", "intermediate"],
     "explanation": "It reduces bandwidth, improves LCP, and prevents layout shift with automatic sizing.",
     "points": 7,
     "sampleAnswers": [
@@ -3620,11 +3367,7 @@
     "updatedAt": "2025-11-11T18:48:30.798Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "nextjs",
-      "image-optimization",
-      "intermediate"
-    ],
+    "tags": ["nextjs", "image-optimization", "intermediate"],
     "explanation": "It reduces bandwidth, improves LCP, prevents layout shift, and integrates with CDNs like Vercel or Imgix.",
     "points": 7,
     "sampleAnswers": [
@@ -3680,11 +3423,7 @@
     "updatedAt": "2025-11-11T18:48:30.798Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "nextjs",
-      "image-optimization",
-      "intermediate"
-    ],
+    "tags": ["nextjs", "image-optimization", "intermediate"],
     "explanation": "It reduces bandwidth, improves LCP, and prevents layout shift with automatic sizing.",
     "points": 7,
     "sampleAnswers": [
@@ -3740,11 +3479,7 @@
     "updatedAt": "2025-11-11T18:48:30.798Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "nextjs",
-      "image-optimization",
-      "intermediate"
-    ],
+    "tags": ["nextjs", "image-optimization", "intermediate"],
     "explanation": "As of Next.js 13, <code>next/image</code> is the stable, recommended component.",
     "points": 5,
     "options": [
@@ -3778,11 +3513,7 @@
     "updatedAt": "2025-11-11T18:48:30.797Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "nextjs",
-      "react-server-components",
-      "advanced"
-    ],
+    "tags": ["nextjs", "react-server-components", "advanced"],
     "explanation": "RSCs enable zero-bundle-size components and direct backend access without API layers.",
     "points": 9,
     "sampleAnswers": [
@@ -3838,11 +3569,7 @@
     "updatedAt": "2025-11-11T18:48:30.794Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "nextjs",
-      "redirects",
-      "intermediate"
-    ],
+    "tags": ["nextjs", "redirects", "intermediate"],
     "explanation": "<code>redirect()</code> is for server-side redirects (e.g., auth checks); <code>useRouter</code> is for client-side navigation.",
     "points": 7,
     "sampleAnswers": [
@@ -3898,11 +3625,7 @@
     "updatedAt": "2025-11-11T18:48:30.796Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "nextjs",
-      "redirects",
-      "intermediate"
-    ],
+    "tags": ["nextjs", "redirects", "intermediate"],
     "explanation": "<code>redirect()</code> is for server-side redirects (e.g., auth checks); <code>useRouter</code> is for client-side navigation.",
     "points": 7,
     "sampleAnswers": [
@@ -3958,11 +3681,7 @@
     "updatedAt": "2025-11-11T18:48:30.798Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "nextjs",
-      "redirects",
-      "intermediate"
-    ],
+    "tags": ["nextjs", "redirects", "intermediate"],
     "explanation": "<code>redirect()</code> is for server-side redirects (e.g., auth checks); <code>useRouter</code> is for client-side navigation.",
     "points": 7,
     "sampleAnswers": [
@@ -4018,11 +3737,7 @@
     "updatedAt": "2025-11-11T18:48:30.782Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "nextjs",
-      "app-router",
-      "advanced"
-    ],
+    "tags": ["nextjs", "app-router", "advanced"],
     "explanation": "It replaces the Pages Router with a more powerful, server-first architecture that supports streaming, partial rendering, and built-in data fetching.",
     "points": 8,
     "sampleAnswers": [
@@ -4078,11 +3793,7 @@
     "updatedAt": "2025-11-11T18:48:30.797Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "nextjs",
-      "app-router-vs-pages-router",
-      "advanced"
-    ],
+    "tags": ["nextjs", "app-router-vs-pages-router", "advanced"],
     "explanation": "App Router is the modern architecture with server-first rendering, layouts, and better data fetching.",
     "points": 8,
     "sampleAnswers": [
@@ -4138,11 +3849,7 @@
     "updatedAt": "2025-11-11T18:48:30.797Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "nextjs",
-      "server-side-rendering-(ssr)",
-      "intermediate"
-    ],
+    "tags": ["nextjs", "server-side-rendering-(ssr)", "intermediate"],
     "explanation": "It runs on the server for every request, making it suitable for frequently changing or user-specific data.",
     "points": 7,
     "sampleAnswers": [
@@ -4198,11 +3905,7 @@
     "updatedAt": "2025-11-11T18:48:30.796Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "nextjs",
-      "ssg-vs-ssr",
-      "intermediate"
-    ],
+    "tags": ["nextjs", "ssg-vs-ssr", "intermediate"],
     "explanation": "SSG is faster and cacheable; SSR is for dynamic, user-specific content.",
     "points": 7,
     "options": [
@@ -4248,11 +3951,7 @@
     "updatedAt": "2025-11-11T18:48:30.797Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "nextjs",
-      "ssg-vs-ssr",
-      "intermediate"
-    ],
+    "tags": ["nextjs", "ssg-vs-ssr", "intermediate"],
     "explanation": "SSG is faster and cacheable; SSR is for dynamic, user-specific content.",
     "points": 7,
     "options": [
@@ -4298,11 +3997,7 @@
     "updatedAt": "2025-11-11T18:48:30.798Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "nextjs",
-      "ssg-vs-ssr",
-      "intermediate"
-    ],
+    "tags": ["nextjs", "ssg-vs-ssr", "intermediate"],
     "explanation": "SSG is faster and cacheable; SSR is for dynamic, user-specific content.",
     "points": 7,
     "options": [
@@ -4348,11 +4043,7 @@
     "updatedAt": "2025-11-11T18:48:30.794Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "nextjs",
-      "static-site-generation-(ssg)",
-      "intermediate"
-    ],
+    "tags": ["nextjs", "static-site-generation-(ssg)", "intermediate"],
     "explanation": "Both define which dynamic routes to pre-render at build time.",
     "points": 7,
     "options": [
@@ -4398,11 +4089,7 @@
     "updatedAt": "2025-11-11T18:48:30.796Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "nextjs",
-      "static-site-generation-(ssg)",
-      "intermediate"
-    ],
+    "tags": ["nextjs", "static-site-generation-(ssg)", "intermediate"],
     "explanation": "Both define which dynamic routes to pre-render at build time.",
     "points": 7,
     "options": [
@@ -4448,11 +4135,7 @@
     "updatedAt": "2025-11-11T18:48:30.797Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "nextjs",
-      "static-site-generation-(ssg)",
-      "intermediate"
-    ],
+    "tags": ["nextjs", "static-site-generation-(ssg)", "intermediate"],
     "explanation": "It runs only at build time and returns props to the page component.",
     "points": 7,
     "sampleAnswers": [
@@ -4508,11 +4191,7 @@
     "updatedAt": "2025-11-11T18:48:30.798Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "nextjs",
-      "static-site-generation-(ssg)",
-      "intermediate"
-    ],
+    "tags": ["nextjs", "static-site-generation-(ssg)", "intermediate"],
     "explanation": "Both define which dynamic routes to pre-render at build time.",
     "points": 7,
     "options": [
@@ -4558,11 +4237,7 @@
     "updatedAt": "2025-11-11T19:14:57.098Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "nextjs",
-      "server-components",
-      "intermediate"
-    ],
+    "tags": ["nextjs", "server-components", "intermediate"],
     "explanation": "RSC send component trees as JSON, enabling zero-JS components and selective hydration, unlike SSR which sends full HTML.",
     "points": 15,
     "options": [
@@ -4612,11 +4287,7 @@
     "updatedAt": "2025-11-11T19:14:57.098Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "nextjs",
-      "server-components",
-      "intermediate"
-    ],
+    "tags": ["nextjs", "server-components", "intermediate"],
     "explanation": "Server Components cannot use hooks, state, or browser APIs. They run only on the server.",
     "points": 15,
     "options": [
@@ -4666,11 +4337,7 @@
     "updatedAt": "2025-11-11T19:14:57.098Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "nextjs",
-      "server-components",
-      "intermediate"
-    ],
+    "tags": ["nextjs", "server-components", "intermediate"],
     "explanation": "Server Components can render Client Components and pass serializable props (JSON-serializable data).",
     "points": 15,
     "options": [
@@ -4720,11 +4387,7 @@
     "updatedAt": "2025-11-11T19:14:57.098Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "nextjs",
-      "server-components",
-      "intermediate"
-    ],
+    "tags": ["nextjs", "server-components", "intermediate"],
     "explanation": "Async Server Components can directly await promises, making data fetching simpler without useEffect.",
     "points": 15,
     "options": [
@@ -4774,11 +4437,7 @@
     "updatedAt": "2025-11-11T19:14:57.098Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "nextjs",
-      "server-components",
-      "intermediate"
-    ],
+    "tags": ["nextjs", "server-components", "intermediate"],
     "explanation": "Server Components can import and render Client Components. The reverse is not allowed - Client Components cannot import Server Components.",
     "points": 15,
     "options": [
@@ -4828,11 +4487,7 @@
     "updatedAt": "2025-11-11T19:14:57.098Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "nextjs",
-      "server-components",
-      "intermediate"
-    ],
+    "tags": ["nextjs", "server-components", "intermediate"],
     "explanation": "Server Components cannot have event handlers. Use Client Components (with \"use client\") for interactivity.",
     "points": 15,
     "options": [
@@ -4882,11 +4537,7 @@
     "updatedAt": "2025-11-11T19:14:57.098Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "nextjs",
-      "server-components",
-      "intermediate"
-    ],
+    "tags": ["nextjs", "server-components", "intermediate"],
     "explanation": "Server Components re-render on the server when their data changes, and Next.js streams the updates to the client.",
     "points": 15,
     "options": [
@@ -4936,11 +4587,7 @@
     "updatedAt": "2025-11-11T19:14:57.098Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "nextjs",
-      "server-components",
-      "intermediate"
-    ],
+    "tags": ["nextjs", "server-components", "intermediate"],
     "explanation": "Server Components reduce JavaScript bundle size because they never ship to the client - only their rendered output is sent.",
     "points": 15,
     "options": [
@@ -4990,11 +4637,7 @@
     "updatedAt": "2025-11-11T19:14:57.098Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "nextjs",
-      "server-components",
-      "intermediate"
-    ],
+    "tags": ["nextjs", "server-components", "intermediate"],
     "explanation": "Server Components run on the server, so they can access all environment variables, including server-only secrets.",
     "points": 15,
     "options": [
@@ -5044,11 +4687,7 @@
     "updatedAt": "2025-11-11T19:14:57.098Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "nextjs",
-      "rendering",
-      "intermediate"
-    ],
+    "tags": ["nextjs", "rendering", "intermediate"],
     "explanation": "SSG generates pages at build time. ISR allows re-generating pages on-demand after build, enabling updates without full rebuilds.",
     "points": 15,
     "options": [
@@ -5098,11 +4737,7 @@
     "updatedAt": "2025-11-11T19:14:57.098Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "nextjs",
-      "rendering",
-      "intermediate"
-    ],
+    "tags": ["nextjs", "rendering", "intermediate"],
     "explanation": "Use SSG for content that changes infrequently (blogs, docs). Use SSR for content that must be fresh on every request (dashboards, user data).",
     "points": 15,
     "options": [
@@ -5152,11 +4787,7 @@
     "updatedAt": "2025-11-11T19:14:57.098Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "nextjs",
-      "rendering",
-      "intermediate"
-    ],
+    "tags": ["nextjs", "rendering", "intermediate"],
     "explanation": "Next.js supports per-page rendering strategies. You can use SSG for some pages, SSR for others, and CSR for interactive components.",
     "points": 15,
     "options": [
@@ -5206,11 +4837,7 @@
     "updatedAt": "2025-11-11T19:14:57.098Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "nextjs",
-      "rendering",
-      "intermediate"
-    ],
+    "tags": ["nextjs", "rendering", "intermediate"],
     "explanation": "The revalidate option enables ISR, allowing pages to be regenerated at most once per specified number of seconds.",
     "points": 15,
     "options": [
@@ -5260,11 +4887,7 @@
     "updatedAt": "2025-11-11T19:14:57.098Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "nextjs",
-      "rendering",
-      "intermediate"
-    ],
+    "tags": ["nextjs", "rendering", "intermediate"],
     "explanation": "Next.js automatically splits code by route and component, ensuring only necessary code is loaded for each page.",
     "points": 15,
     "options": [
@@ -5314,11 +4937,7 @@
     "updatedAt": "2025-11-11T19:14:57.098Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "nextjs",
-      "rendering",
-      "intermediate"
-    ],
+    "tags": ["nextjs", "rendering", "intermediate"],
     "explanation": "getStaticProps runs at build time for SSG. getServerSideProps runs on every request for SSR.",
     "points": 15,
     "options": [
@@ -5368,11 +4987,7 @@
     "updatedAt": "2025-11-11T19:14:57.098Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "nextjs",
-      "rendering",
-      "intermediate"
-    ],
+    "tags": ["nextjs", "rendering", "intermediate"],
     "explanation": "Next.js streams HTML as it renders, enabling progressive page loading. Suspense boundaries allow streaming parts of the page independently.",
     "points": 15,
     "options": [
@@ -5422,11 +5037,7 @@
     "updatedAt": "2025-11-11T19:14:57.098Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "nextjs",
-      "rendering",
-      "intermediate"
-    ],
+    "tags": ["nextjs", "rendering", "intermediate"],
     "explanation": "generateStaticParams returns an array of params to pre-render at build time, enabling SSG for dynamic routes.",
     "points": 15,
     "options": [
@@ -5476,11 +5087,7 @@
     "updatedAt": "2025-11-11T19:14:57.098Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "nextjs",
-      "rendering",
-      "intermediate"
-    ],
+    "tags": ["nextjs", "rendering", "intermediate"],
     "explanation": "Partial prerendering combines static and dynamic content, prerendering the static shell and streaming dynamic parts for optimal performance.",
     "points": 15,
     "options": [
@@ -5530,11 +5137,7 @@
     "updatedAt": "2025-11-11T19:14:57.098Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "nextjs",
-      "configuration",
-      "intermediate"
-    ],
+    "tags": ["nextjs", "configuration", "intermediate"],
     "explanation": "Use the webpack function in next.config.js to customize webpack configuration. Example: webpack: (config) => { /* modify config */ return config; }",
     "points": 15,
     "options": [
@@ -5584,11 +5187,7 @@
     "updatedAt": "2025-11-11T19:14:57.098Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "nextjs",
-      "configuration",
-      "intermediate"
-    ],
+    "tags": ["nextjs", "configuration", "intermediate"],
     "explanation": "The experimental section in next.config.js enables experimental features. These features are opt-in and may change in future versions.",
     "points": 15,
     "options": [
@@ -5638,11 +5237,7 @@
     "updatedAt": "2025-11-11T19:14:57.098Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "nextjs",
-      "configuration",
-      "intermediate"
-    ],
+    "tags": ["nextjs", "configuration", "intermediate"],
     "explanation": "Add domains to images.domains array in next.config.js. Example: images: { domains: [\"example.com\"] }",
     "points": 15,
     "options": [
@@ -5692,11 +5287,7 @@
     "updatedAt": "2025-11-11T19:14:57.098Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "nextjs",
-      "configuration",
-      "intermediate"
-    ],
+    "tags": ["nextjs", "configuration", "intermediate"],
     "explanation": "The output option controls build output format. \"standalone\" creates a minimal server, \"export\" creates static HTML files.",
     "points": 15,
     "options": [
@@ -5746,11 +5337,7 @@
     "updatedAt": "2025-11-11T19:14:57.098Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "nextjs",
-      "configuration",
-      "intermediate"
-    ],
+    "tags": ["nextjs", "configuration", "intermediate"],
     "explanation": "Use the headers function in next.config.js to add custom HTTP headers. It returns an array of header objects with source and headers properties.",
     "points": 15,
     "options": [
@@ -5800,11 +5387,7 @@
     "updatedAt": "2025-11-11T19:14:57.098Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "nextjs",
-      "configuration",
-      "intermediate"
-    ],
+    "tags": ["nextjs", "configuration", "intermediate"],
     "explanation": "transpilePackages allows you to specify which node_modules packages should be transpiled, useful for packages that are not ES5 compatible.",
     "points": 15,
     "options": [
@@ -5854,11 +5437,7 @@
     "updatedAt": "2025-11-11T19:14:57.098Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "nextjs",
-      "deployment",
-      "intermediate"
-    ],
+    "tags": ["nextjs", "deployment", "intermediate"],
     "explanation": "\"next start\" runs a Node.js server supporting SSR and API routes. \"next export\" creates static HTML files for static hosting.",
     "points": 15,
     "options": [
@@ -5908,11 +5487,7 @@
     "updatedAt": "2025-11-11T19:14:57.098Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "nextjs",
-      "deployment",
-      "intermediate"
-    ],
+    "tags": ["nextjs", "deployment", "intermediate"],
     "explanation": "Connect your Git repository to Vercel. It automatically detects Next.js and handles deployment, including environment variables and build settings.",
     "points": 15,
     "options": [
@@ -5962,11 +5537,7 @@
     "updatedAt": "2025-11-11T19:14:57.098Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "nextjs",
-      "deployment",
-      "intermediate"
-    ],
+    "tags": ["nextjs", "deployment", "intermediate"],
     "explanation": "NEXT_PUBLIC_ prefixed variables are exposed to the browser. Regular environment variables are server-only and not exposed to client code.",
     "points": 15,
     "options": [
@@ -6016,11 +5587,7 @@
     "updatedAt": "2025-11-11T19:14:57.098Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "nextjs",
-      "deployment",
-      "intermediate"
-    ],
+    "tags": ["nextjs", "deployment", "intermediate"],
     "explanation": "Create a custom server.js file that imports Next.js and uses next() to handle requests. Run it with \"node server.js\" instead of \"next start\".",
     "points": 15,
     "options": [
@@ -6070,11 +5637,7 @@
     "updatedAt": "2025-11-11T19:14:57.098Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "nextjs",
-      "deployment",
-      "intermediate"
-    ],
+    "tags": ["nextjs", "deployment", "intermediate"],
     "explanation": "Standalone mode creates a minimal server with only necessary files, reducing deployment size. Useful for Docker and self-hosted deployments.",
     "points": 15,
     "options": [
@@ -6124,11 +5687,7 @@
     "updatedAt": "2025-11-11T19:14:57.098Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "nextjs",
-      "deployment",
-      "intermediate"
-    ],
+    "tags": ["nextjs", "deployment", "intermediate"],
     "explanation": "Use .env files (.env.local, .env.development, .env.production) and set environment variables in your deployment platform. Next.js loads the appropriate file based on NODE_ENV.",
     "points": 15,
     "options": [
@@ -6178,11 +5737,7 @@
     "updatedAt": "2025-11-11T19:14:57.098Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "nextjs",
-      "api-routes",
-      "intermediate"
-    ],
+    "tags": ["nextjs", "api-routes", "intermediate"],
     "explanation": "Set CORS headers manually in your API route handler. Example: res.setHeader(\"Access-Control-Allow-Origin\", \"*\")",
     "points": 15,
     "options": [
@@ -6232,11 +5787,7 @@
     "updatedAt": "2025-11-11T19:14:57.098Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "nextjs",
-      "api-routes",
-      "intermediate"
-    ],
+    "tags": ["nextjs", "api-routes", "intermediate"],
     "explanation": "Pages Router uses pages/api with default export functions. App Router uses app/api with route handlers (GET, POST, etc. as named exports).",
     "points": 15,
     "options": [
@@ -6286,11 +5837,7 @@
     "updatedAt": "2025-11-11T19:14:57.098Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "nextjs",
-      "api-routes",
-      "intermediate"
-    ],
+    "tags": ["nextjs", "api-routes", "intermediate"],
     "explanation": "Use libraries like formidable or multer to parse multipart/form-data. In App Router, you can also use the FormData API.",
     "points": 15,
     "options": [
@@ -6340,11 +5887,7 @@
     "updatedAt": "2025-11-11T19:14:57.098Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "nextjs",
-      "api-routes",
-      "intermediate"
-    ],
+    "tags": ["nextjs", "api-routes", "intermediate"],
     "explanation": "Yes, API routes are automatically deployed as serverless functions on platforms like Vercel. Each route becomes a separate function.",
     "points": 15,
     "options": [
@@ -6394,11 +5937,7 @@
     "updatedAt": "2025-11-11T19:14:57.098Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "nextjs",
-      "api-routes",
-      "intermediate"
-    ],
+    "tags": ["nextjs", "api-routes", "intermediate"],
     "explanation": "In App Router, use ReadableStream or Response with streaming body. In Pages Router, use res.write() to stream chunks.",
     "points": 15,
     "options": [
@@ -6448,11 +5987,7 @@
     "updatedAt": "2025-11-11T19:14:57.098Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "nextjs",
-      "authentication",
-      "intermediate"
-    ],
+    "tags": ["nextjs", "authentication", "intermediate"],
     "explanation": "Use middleware to protect routes and check authentication. Libraries like NextAuth.js provide complete auth solutions for Next.js.",
     "points": 15,
     "options": [
@@ -6502,11 +6037,7 @@
     "updatedAt": "2025-11-11T19:14:57.098Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "nextjs",
-      "authentication",
-      "intermediate"
-    ],
+    "tags": ["nextjs", "authentication", "intermediate"],
     "explanation": "Check authentication in the API route handler by verifying tokens or sessions. You can also use middleware to protect /api routes.",
     "points": 15,
     "options": [
@@ -6556,11 +6087,7 @@
     "updatedAt": "2025-11-11T19:14:57.098Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "nextjs",
-      "authentication",
-      "intermediate"
-    ],
+    "tags": ["nextjs", "authentication", "intermediate"],
     "explanation": "Server Components can read cookies and headers. Verify JWT tokens server-side using libraries like jsonwebtoken.",
     "points": 15,
     "options": [
@@ -6610,11 +6137,7 @@
     "updatedAt": "2025-11-11T19:14:57.098Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "nextjs",
-      "authentication",
-      "intermediate"
-    ],
+    "tags": ["nextjs", "authentication", "intermediate"],
     "explanation": "Store auth tokens in httpOnly cookies for security. They are accessible server-side and protected from XSS attacks.",
     "points": 15,
     "options": [
@@ -6664,11 +6187,7 @@
     "updatedAt": "2025-11-11T19:14:57.098Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "nextjs",
-      "authentication",
-      "intermediate"
-    ],
+    "tags": ["nextjs", "authentication", "intermediate"],
     "explanation": "Check user roles in middleware or Server Components. Verify roles server-side and redirect or show errors for unauthorized access.",
     "points": 15,
     "options": [

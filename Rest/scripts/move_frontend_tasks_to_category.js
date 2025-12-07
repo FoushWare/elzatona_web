@@ -5,8 +5,14 @@ const path = require('path');
  * Move frontend task questions from React category to Frontend Tasks category
  */
 
-const reactQuestionsFile = path.join(__dirname, '../final-questions-v01/react-questions.json');
-const frontendTasksFile = path.join(__dirname, '../final-questions-v01/frontend-tasks-questions.json');
+const reactQuestionsFile = path.join(
+  __dirname,
+  '../final-questions-v01/react-questions.json'
+);
+const frontendTasksFile = path.join(
+  __dirname,
+  '../final-questions-v01/frontend-tasks-questions.json'
+);
 
 console.log('🔄 Moving frontend task questions to separate category...\n');
 
@@ -25,8 +31,10 @@ reactQuestions.forEach(q => {
       id: q.id.replace('react-ft-', 'frontend-task-'), // Change ID prefix
       category: 'Frontend Tasks',
       topic: q.topic || 'Frontend Tasks', // Keep topic or set default
-      tags: q.tags ? q.tags.map(tag => tag === 'react' ? 'frontend-tasks' : tag) : ['frontend-tasks'],
-      updatedAt: new Date().toISOString()
+      tags: q.tags
+        ? q.tags.map(tag => (tag === 'react' ? 'frontend-tasks' : tag))
+        : ['frontend-tasks'],
+      updatedAt: new Date().toISOString(),
     };
     frontendTaskQuestions.push(updated);
   } else {
@@ -35,15 +43,25 @@ reactQuestions.forEach(q => {
 });
 
 console.log(`📊 Found ${frontendTaskQuestions.length} frontend task questions`);
-console.log(`📊 Remaining React questions: ${remainingReactQuestions.length}\n`);
+console.log(
+  `📊 Remaining React questions: ${remainingReactQuestions.length}\n`
+);
 
 // Write updated React questions (without frontend tasks)
-fs.writeFileSync(reactQuestionsFile, JSON.stringify(remainingReactQuestions, null, 2));
+fs.writeFileSync(
+  reactQuestionsFile,
+  JSON.stringify(remainingReactQuestions, null, 2)
+);
 console.log(`✅ Updated React questions file (removed frontend tasks)\n`);
 
 // Write frontend tasks questions to new file
-fs.writeFileSync(frontendTasksFile, JSON.stringify(frontendTaskQuestions, null, 2));
-console.log(`✅ Created frontend-tasks-questions.json with ${frontendTaskQuestions.length} questions\n`);
+fs.writeFileSync(
+  frontendTasksFile,
+  JSON.stringify(frontendTaskQuestions, null, 2)
+);
+console.log(
+  `✅ Created frontend-tasks-questions.json with ${frontendTaskQuestions.length} questions\n`
+);
 
 // Verify
 const verifyReact = JSON.parse(fs.readFileSync(reactQuestionsFile, 'utf8'));
@@ -61,9 +79,10 @@ verifyFT.forEach(q => {
 });
 
 console.log('\n📋 Frontend Tasks questions by topic:');
-Object.entries(topics).sort().forEach(([topic, count]) => {
-  console.log(`  ${topic}: ${count} questions`);
-});
+Object.entries(topics)
+  .sort()
+  .forEach(([topic, count]) => {
+    console.log(`  ${topic}: ${count} questions`);
+  });
 
 console.log('\n✅ Frontend task questions moved successfully!');
-

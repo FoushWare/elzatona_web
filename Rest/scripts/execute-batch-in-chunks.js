@@ -10,7 +10,9 @@ const BATCH_FILE = process.argv[2];
 const CHUNK_SIZE = parseInt(process.argv[3]) || 10; // Default: 10 questions per chunk
 
 if (!BATCH_FILE) {
-  console.error('Usage: node execute-batch-in-chunks.js <batch-file> [chunk-size]');
+  console.error(
+    'Usage: node execute-batch-in-chunks.js <batch-file> [chunk-size]'
+  );
   process.exit(1);
 }
 
@@ -39,7 +41,9 @@ const questionValues = valuesSection.split(/\),\s*\(/).map((val, idx, arr) => {
 console.log(`📦 Splitting ${BATCH_FILE}`);
 console.log(`   Total questions: ${questionValues.length}`);
 console.log(`   Chunk size: ${CHUNK_SIZE} questions`);
-console.log(`   Number of chunks: ${Math.ceil(questionValues.length / CHUNK_SIZE)}\n`);
+console.log(
+  `   Number of chunks: ${Math.ceil(questionValues.length / CHUNK_SIZE)}\n`
+);
 
 // Create chunks
 const chunks = [];
@@ -60,27 +64,33 @@ if (!fs.existsSync(outputDir)) {
 chunks.forEach((chunk, idx) => {
   // Each value should be wrapped in parentheses and separated by commas
   // Normalize: remove any existing parentheses, then wrap consistently
-  const valuesSQL = chunk.map((val) => {
-    let cleanVal = val.trim();
-    // Remove leading ( if present
-    if (cleanVal.startsWith('(')) {
-      cleanVal = cleanVal.substring(1);
-    }
-    // Remove trailing ) if present
-    if (cleanVal.endsWith(')')) {
-      cleanVal = cleanVal.slice(0, -1);
-    }
-    // Wrap in parentheses
-    return `(${cleanVal})`;
-  }).join(',\n    ');
-  
+  const valuesSQL = chunk
+    .map(val => {
+      let cleanVal = val.trim();
+      // Remove leading ( if present
+      if (cleanVal.startsWith('(')) {
+        cleanVal = cleanVal.substring(1);
+      }
+      // Remove trailing ) if present
+      if (cleanVal.endsWith(')')) {
+        cleanVal = cleanVal.slice(0, -1);
+      }
+      // Wrap in parentheses
+      return `(${cleanVal})`;
+    })
+    .join(',\n    ');
+
   const chunkSQL = header + '(' + valuesSQL + ');'; // Add opening ( after VALUES
-  
-  const chunkFile = path.join(outputDir, `chunk-${String(idx + 1).padStart(2, '0')}.sql`);
+
+  const chunkFile = path.join(
+    outputDir,
+    `chunk-${String(idx + 1).padStart(2, '0')}.sql`
+  );
   fs.writeFileSync(chunkFile, chunkSQL);
-  console.log(`   ✅ Created: ${path.basename(chunkFile)} (${chunk.length} questions)`);
+  console.log(
+    `   ✅ Created: ${path.basename(chunkFile)} (${chunk.length} questions)`
+  );
 });
 
 console.log(`\n💡 Execute each chunk file using: mcp_supabase_execute_sql`);
 console.log(`   Chunk files are in: ${outputDir}`);
-

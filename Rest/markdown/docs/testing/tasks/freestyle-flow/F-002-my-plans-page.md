@@ -1,8 +1,13 @@
 # Task ID: F-002
+
 # Title: My Plans Page
+
 # Status: pending
-# Dependencies: 
+
+# Dependencies:
+
 # Priority: high
+
 # Description: Test the "My Plans" page where users can view, edit, start, and delete their custom plans.
 
 # Details:
@@ -10,6 +15,7 @@
 ## Time Estimation
 
 ### Manual Testing
+
 - **Estimated Time**: 25-35 minutes
 - **Breakdown**:
   - Navigate and authenticate: 2 minutes
@@ -21,6 +27,7 @@
 - **Dependencies**: Authentication, existing custom plans, progress data
 
 ### Automated Testing
+
 - **Estimated Time**: 10-15 minutes (first run), 1.5-3 minutes (subsequent runs)
 - **Breakdown**:
   - Unit tests setup and execution: 3-4 minutes
@@ -30,6 +37,7 @@
 - **Dependencies**: API mocks, test plan data, authentication setup
 
 ### Total Time
+
 - **Manual Only**: 25-35 minutes
 - **Automated Only**: 10-15 minutes (first run), 1.5-3 minutes (subsequent)
 - **Both Manual + Automated**: 35-50 minutes (first run), 26.5-38 minutes (subsequent)
@@ -37,6 +45,7 @@
 ---
 
 ## Overview
+
 Test the "My Plans" page where users can view, edit, start, and delete their custom plans.
 
 ## Manual Testing Steps

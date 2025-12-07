@@ -18,6 +18,7 @@ This guide explains how to seed data from `zatona-web-testing` to `zatona-web` (
 The script reads from both `.env.local` and `.env.test.local`:
 
 1. **Add to `.env.local`** (for main database):
+
    ```bash
    # Main database (zatona-web) - should already exist
    NEXT_PUBLIC_SUPABASE_URL=https://hpnewqkvpnthpohvxcmq.supabase.co
@@ -25,6 +26,7 @@ The script reads from both `.env.local` and `.env.test.local`:
    ```
 
 2. **Add to `.env.test.local`** (for testing database):
+
    ```bash
    # Testing database (zatona-web-testing)
    TESTING_SUPABASE_SERVICE_ROLE_KEY=your_testing_service_role_key_here
@@ -85,6 +87,7 @@ The script uses the following strategies to map foreign keys:
 ## Important Notes
 
 ⚠️ **Warning**: This script will:
+
 - Insert new records (doesn't delete existing data)
 - Use `upsert` with conflict resolution (won't duplicate if title/name matches)
 - Create new UUIDs for all inserted records
@@ -95,20 +98,27 @@ The script uses the following strategies to map foreign keys:
 ## Troubleshooting
 
 ### Missing Service Role Keys
+
 ```
 ❌ Error: Missing TESTING_SUPABASE_SERVICE_ROLE_KEY
 ```
+
 **Solution**: Add `TESTING_SUPABASE_SERVICE_ROLE_KEY` to `.env.test.local` (or `.env.local` as fallback)
 
 ### Foreign Key Mapping Issues
+
 If you see warnings like:
+
 ```
 ⚠️  Category not found in main: Category Name
 ```
+
 **Solution**: Ensure categories, topics, and learning_cards exist in both databases with matching slugs/names.
 
 ### Duplicate Key Errors
+
 If you see duplicate key errors:
+
 - The script uses `upsert` which should handle this
 - Check if data already exists in main database
 - The script will skip duplicates automatically
@@ -129,7 +139,7 @@ SELECT COUNT(*) FROM plan_questions;
 ```
 
 Expected counts:
+
 - Questions: ~2,596
 - Learning Plans: 7
 - Plan Questions: ~3,968
-

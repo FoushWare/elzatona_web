@@ -2,36 +2,16 @@
   "version": "6.0",
   "nxVersion": "21.6.5",
   "pathMappings": {
-    "@/*": [
-      "./apps/website/src/*"
-    ],
-    "ui": [
-      "./libs/ui/src/index.ts"
-    ],
-    "auth": [
-      "./libs/auth/src/index.ts"
-    ],
-    "database": [
-      "./libs/database/src/index.ts"
-    ],
-    "utils": [
-      "./libs/utils/src/index.ts"
-    ],
-    "@elzatona/shared-components": [
-      "./libs/shared-components/src/index.ts"
-    ],
-    "@elzatona/shared-contexts": [
-      "./libs/shared-contexts/src/index.ts"
-    ],
-    "@elzatona/shared-hooks": [
-      "./libs/shared-hooks/src/index.ts"
-    ],
-    "@elzatona/shared-atoms": [
-      "./libs/shared-atoms/src/index.ts"
-    ],
-    "@elzatona/shared-types": [
-      "./libs/shared-types/src/index.ts"
-    ]
+    "@/*": ["./apps/website/src/*"],
+    "ui": ["./libs/ui/src/index.ts"],
+    "auth": ["./libs/auth/src/index.ts"],
+    "database": ["./libs/database/src/index.ts"],
+    "utils": ["./libs/utilities/src/index.ts"],
+    "@elzatona/components": ["./libs/components/src/index.ts"],
+    "@elzatona/contexts": ["./libs/contexts/src/index.ts"],
+    "@elzatona/hooks": ["./libs/hooks/src/index.ts"],
+    "@elzatona/shared-atoms": ["./libs/shared-atoms/src/index.ts"],
+    "@elzatona/types": ["./libs/types/src/index.ts"]
   },
   "nxJsonPlugins": [
     {
@@ -50,9 +30,7 @@
         {
           "file": "libs/ui/jest.config.ts",
           "hash": "15197818279688491",
-          "deps": [
-            "npm:jest"
-          ]
+          "deps": ["npm:jest"]
         },
         {
           "file": "libs/ui/project.json",
@@ -69,9 +47,7 @@
         {
           "file": "libs/ui/src/test-setup.ts",
           "hash": "4941352530169676329",
-          "deps": [
-            "npm:@testing-library/jest-dom"
-          ]
+          "deps": ["npm:@testing-library/jest-dom"]
         },
         {
           "file": "libs/ui/tsconfig.json",
@@ -88,10 +64,7 @@
         {
           "file": "libs/ui/vite.config.ts",
           "hash": "1227749664799560434",
-          "deps": [
-            "npm:vite",
-            "npm:@nx/vite"
-          ]
+          "deps": ["npm:vite", "npm:@nx/vite"]
         }
       ],
       "website": [
@@ -3490,23 +3463,17 @@
         {
           "file": "apps/website/jest.config.js",
           "hash": "14796300726467152851",
-          "deps": [
-            "npm:next"
-          ]
+          "deps": ["npm:next"]
         },
         {
           "file": "apps/website/jest.setup.js",
           "hash": "4154546086625197865",
-          "deps": [
-            "npm:@testing-library/jest-dom"
-          ]
+          "deps": ["npm:@testing-library/jest-dom"]
         },
         {
           "file": "apps/website/next.config.ts",
           "hash": "12364398126872901185",
-          "deps": [
-            "npm:next"
-          ]
+          "deps": ["npm:next"]
         },
         {
           "file": "apps/website/postcss.config.js",
@@ -3655,16 +3622,12 @@
         {
           "file": "apps/website/src/__tests__/cart-utils.test.ts",
           "hash": "266651523564240401",
-          "deps": [
-            "npm:@testing-library/jest-dom"
-          ]
+          "deps": ["npm:@testing-library/jest-dom"]
         },
         {
           "file": "apps/website/src/__tests__/flashcards-utils.test.ts",
           "hash": "6390934101352327841",
-          "deps": [
-            "npm:@testing-library/jest-dom"
-          ]
+          "deps": ["npm:@testing-library/jest-dom"]
         },
         {
           "file": "apps/website/src/__tests__/learning-type-context.test.tsx",
@@ -3699,10 +3662,7 @@
             "shared-components",
             "shared-types",
             "npm:lucide-react",
-            [
-              "shared-components",
-              "dynamic"
-            ]
+            ["shared-components", "dynamic"]
           ]
         },
         {
@@ -3729,19 +3689,12 @@
         {
           "file": "apps/website/src/app/admin/content/questions/static-test.tsx",
           "hash": "9332881261017726423",
-          "deps": [
-            "npm:react",
-            "npm:@supabase/supabase-js"
-          ]
+          "deps": ["npm:react", "npm:@supabase/supabase-js"]
         },
         {
           "file": "apps/website/src/app/admin/dashboard/page.tsx",
           "hash": "3200153592360933186",
-          "deps": [
-            "shared-contexts",
-            "npm:lucide-react",
-            "shared-hooks"
-          ]
+          "deps": ["shared-contexts", "npm:lucide-react", "shared-hooks"]
         },
         {
           "file": "apps/website/src/app/admin/frontend-tasks/page.tsx",
@@ -3811,16 +3764,12 @@
         {
           "file": "apps/website/src/app/admin/questions/page.tsx",
           "hash": "8110646949156288464",
-          "deps": [
-            "shared-contexts"
-          ]
+          "deps": ["shared-contexts"]
         },
         {
           "file": "apps/website/src/app/admin/questions/unified/page.tsx",
           "hash": "5513812746853608558",
-          "deps": [
-            "npm:next"
-          ]
+          "deps": ["npm:next"]
         },
         {
           "file": "apps/website/src/app/admin/test/page.tsx",
@@ -3849,526 +3798,337 @@
         {
           "file": "apps/website/src/app/api/admin/categories/route.ts",
           "hash": "11911720191102804373",
-          "deps": [
-            "npm:next",
-            "npm:@supabase/supabase-js"
-          ]
+          "deps": ["npm:next", "npm:@supabase/supabase-js"]
         },
         {
           "file": "apps/website/src/app/api/admin/clear-questions/route.ts",
           "hash": "4528260426688464436",
-          "deps": [
-            "npm:next",
-            "npm:@supabase/supabase-js"
-          ]
+          "deps": ["npm:next", "npm:@supabase/supabase-js"]
         },
         {
           "file": "apps/website/src/app/api/admin/create-missing-plans/route.ts",
           "hash": "9723552037278989707",
-          "deps": [
-            "npm:next",
-            "npm:@supabase/supabase-js"
-          ]
+          "deps": ["npm:next", "npm:@supabase/supabase-js"]
         },
         {
           "file": "apps/website/src/app/api/admin/frontend-tasks/[id]/route.ts",
           "hash": "17986064449251706842",
-          "deps": [
-            "npm:next",
-            "npm:@supabase/supabase-js"
-          ]
+          "deps": ["npm:next", "npm:@supabase/supabase-js"]
         },
         {
           "file": "apps/website/src/app/api/admin/frontend-tasks/route.ts",
           "hash": "5131807751148381347",
-          "deps": [
-            "npm:next",
-            "npm:@supabase/supabase-js"
-          ]
+          "deps": ["npm:next", "npm:@supabase/supabase-js"]
         },
         {
           "file": "apps/website/src/app/api/admin/learning-cards/[id]/route.ts",
           "hash": "2675795100121417953",
-          "deps": [
-            "npm:next",
-            "npm:@supabase/supabase-js"
-          ]
+          "deps": ["npm:next", "npm:@supabase/supabase-js"]
         },
         {
           "file": "apps/website/src/app/api/admin/learning-cards/route.ts",
           "hash": "7011981976272061627",
-          "deps": [
-            "npm:next",
-            "npm:@supabase/supabase-js"
-          ]
+          "deps": ["npm:next", "npm:@supabase/supabase-js"]
         },
         {
           "file": "apps/website/src/app/api/admin/learning-paths/cleanup-duplicates/route.ts",
           "hash": "6602457908142476449",
-          "deps": [
-            "npm:next"
-          ]
+          "deps": ["npm:next"]
         },
         {
           "file": "apps/website/src/app/api/admin/plan-questions/route.ts",
           "hash": "14035140960382597958",
-          "deps": [
-            "npm:next",
-            "npm:@supabase/supabase-js"
-          ]
+          "deps": ["npm:next", "npm:@supabase/supabase-js"]
         },
         {
           "file": "apps/website/src/app/api/admin/problem-solving/[id]/route.ts",
           "hash": "18324552828911601957",
-          "deps": [
-            "npm:next",
-            "npm:@supabase/supabase-js"
-          ]
+          "deps": ["npm:next", "npm:@supabase/supabase-js"]
         },
         {
           "file": "apps/website/src/app/api/admin/problem-solving/route.ts",
           "hash": "6998973395612882877",
-          "deps": [
-            "npm:next",
-            "npm:@supabase/supabase-js"
-          ]
+          "deps": ["npm:next", "npm:@supabase/supabase-js"]
         },
         {
           "file": "apps/website/src/app/api/admin/stats/route.ts",
           "hash": "9233264507411512821",
-          "deps": [
-            "npm:next",
-            "npm:@supabase/supabase-js"
-          ]
+          "deps": ["npm:next", "npm:@supabase/supabase-js"]
         },
         {
           "file": "apps/website/src/app/api/admin/topics/[topicId]/route.ts",
           "hash": "2735606159648881259",
-          "deps": [
-            "npm:next",
-            "npm:@supabase/supabase-js"
-          ]
+          "deps": ["npm:next", "npm:@supabase/supabase-js"]
         },
         {
           "file": "apps/website/src/app/api/admin/topics/initialize/route.ts",
           "hash": "13188715109240283216",
-          "deps": [
-            "npm:next",
-            "npm:@supabase/supabase-js"
-          ]
+          "deps": ["npm:next", "npm:@supabase/supabase-js"]
         },
         {
           "file": "apps/website/src/app/api/admin/topics/route.ts",
           "hash": "9406347673101565346",
-          "deps": [
-            "npm:next",
-            "npm:@supabase/supabase-js"
-          ]
+          "deps": ["npm:next", "npm:@supabase/supabase-js"]
         },
         {
           "file": "apps/website/src/app/api/admin/update-learning-paths/route.ts",
           "hash": "559362834707962593",
-          "deps": [
-            "npm:next",
-            "npm:@supabase/supabase-js"
-          ]
+          "deps": ["npm:next", "npm:@supabase/supabase-js"]
         },
         {
           "file": "apps/website/src/app/api/auth/[...nextauth]/route.ts",
           "hash": "15680206966427877542",
-          "deps": [
-            "npm:next-auth"
-          ]
+          "deps": ["npm:next-auth"]
         },
         {
           "file": "apps/website/src/app/api/auth/clear-cookie/route.ts",
           "hash": "1815980071432126180",
-          "deps": [
-            "npm:next"
-          ]
+          "deps": ["npm:next"]
         },
         {
           "file": "apps/website/src/app/api/auth/route.ts",
           "hash": "14984882674152394659",
-          "deps": [
-            "npm:next"
-          ]
+          "deps": ["npm:next"]
         },
         {
           "file": "apps/website/src/app/api/auth/session/route.ts",
           "hash": "67459966223756234",
-          "deps": [
-            "npm:next",
-            "npm:next-auth"
-          ]
+          "deps": ["npm:next", "npm:next-auth"]
         },
         {
           "file": "apps/website/src/app/api/auth/set-cookie/route.ts",
           "hash": "14732936292946792237",
-          "deps": [
-            "npm:next"
-          ]
+          "deps": ["npm:next"]
         },
         {
           "file": "apps/website/src/app/api/cards/[id]/route.ts",
           "hash": "16194503766571483110",
-          "deps": [
-            "npm:next",
-            "npm:@supabase/supabase-js"
-          ]
+          "deps": ["npm:next", "npm:@supabase/supabase-js"]
         },
         {
           "file": "apps/website/src/app/api/cards/route.ts",
           "hash": "5966490239588841522",
-          "deps": [
-            "npm:next",
-            "npm:@supabase/supabase-js"
-          ]
+          "deps": ["npm:next", "npm:@supabase/supabase-js"]
         },
         {
           "file": "apps/website/src/app/api/categories/[id]/route.ts",
           "hash": "2207856573279161677",
-          "deps": [
-            "npm:next",
-            "npm:@supabase/supabase-js"
-          ]
+          "deps": ["npm:next", "npm:@supabase/supabase-js"]
         },
         {
           "file": "apps/website/src/app/api/categories/route.ts",
           "hash": "4206341383122689107",
-          "deps": [
-            "npm:next",
-            "npm:@supabase/supabase-js"
-          ]
+          "deps": ["npm:next", "npm:@supabase/supabase-js"]
         },
         {
           "file": "apps/website/src/app/api/dashboard/stats/route.ts",
           "hash": "8645264269434142137",
-          "deps": [
-            "npm:next",
-            "npm:@supabase/supabase-js"
-          ]
+          "deps": ["npm:next", "npm:@supabase/supabase-js"]
         },
         {
           "file": "apps/website/src/app/api/flashcards/[id]/route.ts",
           "hash": "9407670896447748049",
-          "deps": [
-            "npm:next",
-            "npm:@supabase/supabase-js"
-          ]
+          "deps": ["npm:next", "npm:@supabase/supabase-js"]
         },
         {
           "file": "apps/website/src/app/api/flashcards/add/route.ts",
           "hash": "10357606815153484533",
-          "deps": [
-            "npm:next"
-          ]
+          "deps": ["npm:next"]
         },
         {
           "file": "apps/website/src/app/api/flashcards/route.ts",
           "hash": "10408746268645022694",
-          "deps": [
-            "npm:next",
-            "npm:@supabase/supabase-js"
-          ]
+          "deps": ["npm:next", "npm:@supabase/supabase-js"]
         },
         {
           "file": "apps/website/src/app/api/guided-learning/plan-details/[planId]/route.ts",
           "hash": "5009201045193069904",
-          "deps": [
-            "npm:next",
-            "npm:@supabase/supabase-js"
-          ]
+          "deps": ["npm:next", "npm:@supabase/supabase-js"]
         },
         {
           "file": "apps/website/src/app/api/guided-learning/plans/[planId]/route.ts",
           "hash": "1047377230540080607",
-          "deps": [
-            "npm:next",
-            "npm:@supabase/supabase-js"
-          ]
+          "deps": ["npm:next", "npm:@supabase/supabase-js"]
         },
         {
           "file": "apps/website/src/app/api/guided-learning/plans/[planId]/sections/[sectionId]/route.ts",
           "hash": "10464398551065762585",
-          "deps": [
-            "npm:next",
-            "npm:@supabase/supabase-js"
-          ]
+          "deps": ["npm:next", "npm:@supabase/supabase-js"]
         },
         {
           "file": "apps/website/src/app/api/guided-learning/plans/[planId]/sections/route.ts",
           "hash": "17274910058274207054",
-          "deps": [
-            "npm:next",
-            "npm:@supabase/supabase-js"
-          ]
+          "deps": ["npm:next", "npm:@supabase/supabase-js"]
         },
         {
           "file": "apps/website/src/app/api/guided-learning/plans/route.ts",
           "hash": "5117940719341962107",
-          "deps": [
-            "npm:next",
-            "npm:@supabase/supabase-js"
-          ]
+          "deps": ["npm:next", "npm:@supabase/supabase-js"]
         },
         {
           "file": "apps/website/src/app/api/learning-paths/[id]/resources/route.ts",
           "hash": "16428546480405740808",
-          "deps": [
-            "npm:next"
-          ]
+          "deps": ["npm:next"]
         },
         {
           "file": "apps/website/src/app/api/learning-paths/[id]/route.ts",
           "hash": "13458326582494089499",
-          "deps": [
-            "npm:next",
-            "npm:@supabase/supabase-js"
-          ]
+          "deps": ["npm:next", "npm:@supabase/supabase-js"]
         },
         {
           "file": "apps/website/src/app/api/learning-paths/route.ts",
           "hash": "15095255624958489670",
-          "deps": [
-            "npm:next",
-            "npm:@supabase/supabase-js"
-          ]
+          "deps": ["npm:next", "npm:@supabase/supabase-js"]
         },
         {
           "file": "apps/website/src/app/api/plans/[id]/route.ts",
           "hash": "228812280829310254",
-          "deps": [
-            "npm:next",
-            "npm:@supabase/supabase-js"
-          ]
+          "deps": ["npm:next", "npm:@supabase/supabase-js"]
         },
         {
           "file": "apps/website/src/app/api/plans/route.ts",
           "hash": "8752616548092915480",
-          "deps": [
-            "npm:next",
-            "npm:@supabase/supabase-js"
-          ]
+          "deps": ["npm:next", "npm:@supabase/supabase-js"]
         },
         {
           "file": "apps/website/src/app/api/progress/free-style/sync/route.ts",
           "hash": "5938526885390284917",
-          "deps": [
-            "npm:next",
-            "npm:@supabase/supabase-js"
-          ]
+          "deps": ["npm:next", "npm:@supabase/supabase-js"]
         },
         {
           "file": "apps/website/src/app/api/progress/get/route.ts",
           "hash": "3135668166101234617",
-          "deps": [
-            "npm:next",
-            "npm:@supabase/supabase-js"
-          ]
+          "deps": ["npm:next", "npm:@supabase/supabase-js"]
         },
         {
           "file": "apps/website/src/app/api/progress/guided-learning/load/route.ts",
           "hash": "15185894164771433408",
-          "deps": [
-            "npm:next",
-            "npm:@supabase/supabase-js"
-          ]
+          "deps": ["npm:next", "npm:@supabase/supabase-js"]
         },
         {
           "file": "apps/website/src/app/api/progress/guided-learning/sync/route.ts",
           "hash": "7747509965136095469",
-          "deps": [
-            "npm:next",
-            "npm:@supabase/supabase-js"
-          ]
+          "deps": ["npm:next", "npm:@supabase/supabase-js"]
         },
         {
           "file": "apps/website/src/app/api/progress/save/route.ts",
           "hash": "10313156756568499277",
-          "deps": [
-            "npm:next",
-            "npm:@supabase/supabase-js"
-          ]
+          "deps": ["npm:next", "npm:@supabase/supabase-js"]
         },
         {
           "file": "apps/website/src/app/api/questions/[id]/route.ts",
           "hash": "7865168678990212937",
-          "deps": [
-            "npm:next",
-            "npm:@supabase/supabase-js"
-          ]
+          "deps": ["npm:next", "npm:@supabase/supabase-js"]
         },
         {
           "file": "apps/website/src/app/api/questions/add/route.ts",
           "hash": "16867466926010673389",
-          "deps": [
-            "npm:next",
-            "npm:@supabase/supabase-js"
-          ]
+          "deps": ["npm:next", "npm:@supabase/supabase-js"]
         },
         {
           "file": "apps/website/src/app/api/questions/bulk-topics/route.ts",
           "hash": "9874226453888282380",
-          "deps": [
-            "npm:next",
-            "npm:@supabase/supabase-js"
-          ]
+          "deps": ["npm:next", "npm:@supabase/supabase-js"]
         },
         {
           "file": "apps/website/src/app/api/questions/by-learning-path/[learningPath]/route.ts",
           "hash": "4304494268920342905",
-          "deps": [
-            "npm:next",
-            "npm:@supabase/supabase-js"
-          ]
+          "deps": ["npm:next", "npm:@supabase/supabase-js"]
         },
         {
           "file": "apps/website/src/app/api/questions/by-topic/[topicId]/route.ts",
           "hash": "5839912524910848967",
-          "deps": [
-            "npm:next",
-            "npm:@supabase/supabase-js"
-          ]
+          "deps": ["npm:next", "npm:@supabase/supabase-js"]
         },
         {
           "file": "apps/website/src/app/api/questions/count/route.ts",
           "hash": "7398797721292535433",
-          "deps": [
-            "npm:next",
-            "npm:@supabase/supabase-js"
-          ]
+          "deps": ["npm:next", "npm:@supabase/supabase-js"]
         },
         {
           "file": "apps/website/src/app/api/questions/learning-paths/route.ts",
           "hash": "14548135419405776895",
-          "deps": [
-            "npm:next"
-          ]
+          "deps": ["npm:next"]
         },
         {
           "file": "apps/website/src/app/api/questions/question-topics/[questionId]/route.ts",
           "hash": "12575835703406832375",
-          "deps": [
-            "npm:next",
-            "npm:@supabase/supabase-js"
-          ]
+          "deps": ["npm:next", "npm:@supabase/supabase-js"]
         },
         {
           "file": "apps/website/src/app/api/questions/route.ts",
           "hash": "2941550786222363593",
-          "deps": [
-            "npm:next"
-          ]
+          "deps": ["npm:next"]
         },
         {
           "file": "apps/website/src/app/api/questions/stats/route.ts",
           "hash": "7451188484174403638",
-          "deps": [
-            "npm:next",
-            "npm:@supabase/supabase-js"
-          ]
+          "deps": ["npm:next", "npm:@supabase/supabase-js"]
         },
         {
           "file": "apps/website/src/app/api/questions/unified/[id]/route.ts",
           "hash": "12453364642025378846",
-          "deps": [
-            "npm:next",
-            "npm:@supabase/supabase-js"
-          ]
+          "deps": ["npm:next", "npm:@supabase/supabase-js"]
         },
         {
           "file": "apps/website/src/app/api/questions/unified/route.ts",
           "hash": "17605483580595972523",
-          "deps": [
-            "npm:next",
-            "npm:@supabase/supabase-js"
-          ]
+          "deps": ["npm:next", "npm:@supabase/supabase-js"]
         },
         {
           "file": "apps/website/src/app/api/questions/update-counts/route.ts",
           "hash": "13261185614705564883",
-          "deps": [
-            "npm:next",
-            "npm:@supabase/supabase-js"
-          ]
+          "deps": ["npm:next", "npm:@supabase/supabase-js"]
         },
         {
           "file": "apps/website/src/app/api/questions/validate-answer/route.ts",
           "hash": "8857214685554935534",
-          "deps": [
-            "npm:next"
-          ]
+          "deps": ["npm:next"]
         },
         {
           "file": "apps/website/src/app/api/sections/auto-assign/route.ts",
           "hash": "14033745259316815575",
-          "deps": [
-            "npm:next",
-            "npm:@supabase/supabase-js"
-          ]
+          "deps": ["npm:next", "npm:@supabase/supabase-js"]
         },
         {
           "file": "apps/website/src/app/api/sections/route.ts",
           "hash": "40152952435499263",
-          "deps": [
-            "npm:next",
-            "npm:@supabase/supabase-js"
-          ]
+          "deps": ["npm:next", "npm:@supabase/supabase-js"]
         },
         {
           "file": "apps/website/src/app/api/seed-plan-questions/route.ts",
           "hash": "13417081398982378585",
-          "deps": [
-            "npm:next",
-            "npm:@supabase/supabase-js"
-          ]
+          "deps": ["npm:next", "npm:@supabase/supabase-js"]
         },
         {
           "file": "apps/website/src/app/api/topics/[id]/route.ts",
           "hash": "5996004414733044138",
-          "deps": [
-            "npm:next",
-            "npm:@supabase/supabase-js"
-          ]
+          "deps": ["npm:next", "npm:@supabase/supabase-js"]
         },
         {
           "file": "apps/website/src/app/api/topics/route.ts",
           "hash": "10569431665977003556",
-          "deps": [
-            "npm:next"
-          ]
+          "deps": ["npm:next"]
         },
         {
           "file": "apps/website/src/app/api/user/learning-plans/route.ts",
           "hash": "7516506934036060864",
-          "deps": [
-            "npm:next",
-            "npm:@supabase/supabase-js"
-          ]
+          "deps": ["npm:next", "npm:@supabase/supabase-js"]
         },
         {
           "file": "apps/website/src/app/api/user/preferences/route.ts",
           "hash": "15256599008494195871",
-          "deps": [
-            "npm:next",
-            "npm:@supabase/supabase-js"
-          ]
+          "deps": ["npm:next", "npm:@supabase/supabase-js"]
         },
         {
           "file": "apps/website/src/app/api/users/route.ts",
           "hash": "7419936782416553662",
-          "deps": [
-            "npm:next"
-          ]
+          "deps": ["npm:next"]
         },
         {
           "file": "apps/website/src/app/auth/callback/page.tsx",
           "hash": "5858899714104438427",
-          "deps": [
-            "npm:react",
-            "npm:next"
-          ]
+          "deps": ["npm:react", "npm:next"]
         },
         {
           "file": "apps/website/src/app/auth/page.tsx",
@@ -4397,11 +4157,7 @@
         {
           "file": "apps/website/src/app/custom-practice/[planId]/page.tsx",
           "hash": "754943030292673724",
-          "deps": [
-            "npm:react",
-            "npm:next",
-            "npm:lucide-react"
-          ]
+          "deps": ["npm:react", "npm:next", "npm:lucide-react"]
         },
         {
           "file": "apps/website/src/app/custom-roadmap/page.tsx",
@@ -4416,9 +4172,7 @@
         {
           "file": "apps/website/src/app/dashboard/page.tsx",
           "hash": "12341272170921688458",
-          "deps": [
-            "shared-components"
-          ]
+          "deps": ["shared-components"]
         },
         {
           "file": "apps/website/src/app/favicon.ico",
@@ -4427,11 +4181,7 @@
         {
           "file": "apps/website/src/app/features/guided-learning/[planId]/page.tsx",
           "hash": "5647971434557450598",
-          "deps": [
-            "npm:react",
-            "npm:next",
-            "npm:lucide-react"
-          ]
+          "deps": ["npm:react", "npm:next", "npm:lucide-react"]
         },
         {
           "file": "apps/website/src/app/features/guided-learning/page.tsx",
@@ -4441,19 +4191,13 @@
             "shared-contexts",
             "npm:next",
             "npm:lucide-react",
-            [
-              "npm:@supabase/supabase-js",
-              "dynamic"
-            ]
+            ["npm:@supabase/supabase-js", "dynamic"]
           ]
         },
         {
           "file": "apps/website/src/app/flashcards/page.tsx",
           "hash": "13023885107674320727",
-          "deps": [
-            "npm:react",
-            "npm:lucide-react"
-          ]
+          "deps": ["npm:react", "npm:lucide-react"]
         },
         {
           "file": "apps/website/src/app/free-style-practice/page.tsx",
@@ -4468,29 +4212,17 @@
         {
           "file": "apps/website/src/app/free-style/cart/page.tsx",
           "hash": "16038387569987872918",
-          "deps": [
-            "npm:react",
-            "npm:next",
-            "npm:lucide-react"
-          ]
+          "deps": ["npm:react", "npm:next", "npm:lucide-react"]
         },
         {
           "file": "apps/website/src/app/free-style/page.tsx",
           "hash": "12722054935638705744",
-          "deps": [
-            "npm:react",
-            "npm:next",
-            "npm:lucide-react"
-          ]
+          "deps": ["npm:react", "npm:next", "npm:lucide-react"]
         },
         {
           "file": "apps/website/src/app/free-style/path/[pathId]/page.tsx",
           "hash": "1938642211595737133",
-          "deps": [
-            "npm:react",
-            "npm:next",
-            "npm:lucide-react"
-          ]
+          "deps": ["npm:react", "npm:next", "npm:lucide-react"]
         },
         {
           "file": "apps/website/src/app/frontend-tasks/[id]/page.tsx",
@@ -4532,45 +4264,27 @@
         {
           "file": "apps/website/src/app/guided-practice-minimal/page.tsx",
           "hash": "17406844199139864289",
-          "deps": [
-            "npm:react",
-            "npm:next"
-          ]
+          "deps": ["npm:react", "npm:next"]
         },
         {
           "file": "apps/website/src/app/guided-practice-simple/page.tsx",
           "hash": "10404870016172580522",
-          "deps": [
-            "npm:react",
-            "npm:next"
-          ]
+          "deps": ["npm:react", "npm:next"]
         },
         {
           "file": "apps/website/src/app/guided-practice/page.tsx",
           "hash": "10204836682473506110",
-          "deps": [
-            "npm:react",
-            "npm:next",
-            "npm:lucide-react"
-          ]
+          "deps": ["npm:react", "npm:next", "npm:lucide-react"]
         },
         {
           "file": "apps/website/src/app/layout.tsx",
           "hash": "13166541796705470698",
-          "deps": [
-            "npm:next",
-            "npm:@vercel/speed-insights",
-            "shared-contexts"
-          ]
+          "deps": ["npm:next", "npm:@vercel/speed-insights", "shared-contexts"]
         },
         {
           "file": "apps/website/src/app/learning-mode/page.tsx",
           "hash": "4336501723145617844",
-          "deps": [
-            "npm:react",
-            "npm:next",
-            "npm:lucide-react"
-          ]
+          "deps": ["npm:react", "npm:next", "npm:lucide-react"]
         },
         {
           "file": "apps/website/src/app/learning-paths/[id]/page.tsx",
@@ -4595,11 +4309,7 @@
         {
           "file": "apps/website/src/app/learning-paths/page.tsx",
           "hash": "5103520633305871268",
-          "deps": [
-            "npm:react",
-            "npm:next",
-            "npm:lucide-react"
-          ]
+          "deps": ["npm:react", "npm:next", "npm:lucide-react"]
         },
         {
           "file": "apps/website/src/app/my-plans/page.tsx",
@@ -4614,9 +4324,7 @@
         {
           "file": "apps/website/src/app/not-found.tsx",
           "hash": "13182418297569414604",
-          "deps": [
-            "npm:next"
-          ]
+          "deps": ["npm:next"]
         },
         {
           "file": "apps/website/src/app/page-simple.tsx",
@@ -4631,10 +4339,7 @@
         {
           "file": "apps/website/src/app/page-test.tsx",
           "hash": "13485344105213367044",
-          "deps": [
-            "npm:react",
-            "shared-contexts"
-          ]
+          "deps": ["npm:react", "shared-contexts"]
         },
         {
           "file": "apps/website/src/app/page.tsx",
@@ -4645,10 +4350,7 @@
             "npm:lucide-react",
             "shared-contexts",
             "shared-components",
-            [
-              "npm:@supabase/supabase-js",
-              "dynamic"
-            ]
+            ["npm:@supabase/supabase-js", "dynamic"]
           ]
         },
         {
@@ -4687,51 +4389,32 @@
         {
           "file": "apps/website/src/app/questions/page.tsx",
           "hash": "15758850210910883493",
-          "deps": [
-            "npm:react",
-            "npm:next",
-            "npm:lucide-react"
-          ]
+          "deps": ["npm:react", "npm:next", "npm:lucide-react"]
         },
         {
           "file": "apps/website/src/app/settings/page.tsx",
           "hash": "2627225463081312961",
-          "deps": [
-            "npm:react"
-          ]
+          "deps": ["npm:react"]
         },
         {
           "file": "apps/website/src/app/test-notifications/page.tsx",
           "hash": "13241328098268160789",
-          "deps": [
-            "npm:react",
-            "shared-contexts",
-            "npm:lucide-react"
-          ]
+          "deps": ["npm:react", "shared-contexts", "npm:lucide-react"]
         },
         {
           "file": "apps/website/src/app/test-supabase/page.tsx",
           "hash": "6512905310331086145",
-          "deps": [
-            "npm:react",
-            "npm:@supabase/supabase-js"
-          ]
+          "deps": ["npm:react", "npm:@supabase/supabase-js"]
         },
         {
           "file": "apps/website/src/components/AlzatonaLogo.tsx",
           "hash": "18164558704379343632",
-          "deps": [
-            "npm:react",
-            "npm:next",
-            "shared-contexts"
-          ]
+          "deps": ["npm:react", "npm:next", "shared-contexts"]
         },
         {
           "file": "apps/website/src/components/AuthSessionSync.tsx",
           "hash": "8237545507577169322",
-          "deps": [
-            "npm:react"
-          ]
+          "deps": ["npm:react"]
         },
         {
           "file": "apps/website/src/components/NavbarSimple.tsx",
@@ -4746,17 +4429,12 @@
         {
           "file": "apps/website/src/components/Navigation.tsx",
           "hash": "7922236341759038435",
-          "deps": [
-            "npm:next"
-          ]
+          "deps": ["npm:next"]
         },
         {
           "file": "apps/website/src/components/NotificationSystem.tsx",
           "hash": "7754951228679698682",
-          "deps": [
-            "npm:react",
-            "npm:lucide-react"
-          ]
+          "deps": ["npm:react", "npm:lucide-react"]
         },
         {
           "file": "apps/website/src/components/TanStackContentManagement.tsx",
@@ -4796,17 +4474,12 @@
         {
           "file": "apps/website/src/context/LearningTypeContext.tsx",
           "hash": "16114141357940444320",
-          "deps": [
-            "npm:react"
-          ]
+          "deps": ["npm:react"]
         },
         {
           "file": "apps/website/src/lib/admin-auth.ts",
           "hash": "8531217191421070872",
-          "deps": [
-            "npm:bcryptjs",
-            "npm:@supabase/supabase-js"
-          ]
+          "deps": ["npm:bcryptjs", "npm:@supabase/supabase-js"]
         },
         {
           "file": "apps/website/src/lib/ai-validation-service.ts",
@@ -4823,9 +4496,7 @@
         {
           "file": "apps/website/src/lib/audio-collection-service.ts",
           "hash": "17115653253705724004",
-          "deps": [
-            "npm:@supabase/supabase-js"
-          ]
+          "deps": ["npm:@supabase/supabase-js"]
         },
         {
           "file": "apps/website/src/lib/audio-upload-client.ts",
@@ -4834,9 +4505,7 @@
         {
           "file": "apps/website/src/lib/audio-upload.ts",
           "hash": "1466995835836148029",
-          "deps": [
-            "npm:@supabase/supabase-js"
-          ]
+          "deps": ["npm:@supabase/supabase-js"]
         },
         {
           "file": "apps/website/src/lib/audio-utils.ts",
@@ -4845,44 +4514,32 @@
         {
           "file": "apps/website/src/lib/auth-config.ts",
           "hash": "1874564171554473954",
-          "deps": [
-            "npm:next-auth"
-          ]
+          "deps": ["npm:next-auth"]
         },
         {
           "file": "apps/website/src/lib/auth-middleware.ts",
           "hash": "17964274250015146774",
-          "deps": [
-            "npm:next"
-          ]
+          "deps": ["npm:next"]
         },
         {
           "file": "apps/website/src/lib/auth-session.ts",
           "hash": "12231132886102743398",
-          "deps": [
-            "npm:@supabase/supabase-js"
-          ]
+          "deps": ["npm:@supabase/supabase-js"]
         },
         {
           "file": "apps/website/src/lib/auth-utils.ts",
           "hash": "16311733670752347556",
-          "deps": [
-            "npm:@supabase/supabase-js"
-          ]
+          "deps": ["npm:@supabase/supabase-js"]
         },
         {
           "file": "apps/website/src/lib/auto-linking-service.ts",
           "hash": "4163105898155776306",
-          "deps": [
-            "npm:@supabase/supabase-js"
-          ]
+          "deps": ["npm:@supabase/supabase-js"]
         },
         {
           "file": "apps/website/src/lib/backup-service.ts",
           "hash": "75054106099254049",
-          "deps": [
-            "npm:@supabase/supabase-js"
-          ]
+          "deps": ["npm:@supabase/supabase-js"]
         },
         {
           "file": "apps/website/src/lib/behaviorQuestions.ts",
@@ -4891,9 +4548,7 @@
         {
           "file": "apps/website/src/lib/bulk-operations-service.ts",
           "hash": "4575821949176896950",
-          "deps": [
-            "npm:@supabase/supabase-js"
-          ]
+          "deps": ["npm:@supabase/supabase-js"]
         },
         {
           "file": "apps/website/src/lib/cart.ts",
@@ -4902,16 +4557,12 @@
         {
           "file": "apps/website/src/lib/challenges.ts",
           "hash": "369650079471634285",
-          "deps": [
-            "shared-types"
-          ]
+          "deps": ["shared-types"]
         },
         {
           "file": "apps/website/src/lib/cloudinary-audio-storage.ts",
           "hash": "3085244064641818517",
-          "deps": [
-            "npm:cloudinary"
-          ]
+          "deps": ["npm:cloudinary"]
         },
         {
           "file": "apps/website/src/lib/codingChallenges.ts",
@@ -4924,9 +4575,7 @@
         {
           "file": "apps/website/src/lib/content-versioning-service.ts",
           "hash": "16717023886420524556",
-          "deps": [
-            "npm:@supabase/supabase-js"
-          ]
+          "deps": ["npm:@supabase/supabase-js"]
         },
         {
           "file": "apps/website/src/lib/cookie-manager.ts",
@@ -4943,9 +4592,7 @@
         {
           "file": "apps/website/src/lib/error-logging-service.ts",
           "hash": "469843003427004492",
-          "deps": [
-            "npm:@supabase/supabase-js"
-          ]
+          "deps": ["npm:@supabase/supabase-js"]
         },
         {
           "file": "apps/website/src/lib/flashcards.ts",
@@ -4970,9 +4617,7 @@
         {
           "file": "apps/website/src/lib/learning-cards-service.ts",
           "hash": "4167782705840434353",
-          "deps": [
-            "npm:@supabase/supabase-js"
-          ]
+          "deps": ["npm:@supabase/supabase-js"]
         },
         {
           "file": "apps/website/src/lib/learning-path-mapping.ts",
@@ -4997,9 +4642,7 @@
         {
           "file": "apps/website/src/lib/plan-questions-service.ts",
           "hash": "6917364664068245213",
-          "deps": [
-            "npm:@supabase/supabase-js"
-          ]
+          "deps": ["npm:@supabase/supabase-js"]
         },
         {
           "file": "apps/website/src/lib/preparationGuides.ts",
@@ -5008,9 +4651,7 @@
         {
           "file": "apps/website/src/lib/progress.ts",
           "hash": "1007263114682842718",
-          "deps": [
-            "shared-types"
-          ]
+          "deps": ["shared-types"]
         },
         {
           "file": "apps/website/src/lib/reactQuestions.ts",
@@ -5023,9 +4664,7 @@
         {
           "file": "apps/website/src/lib/resources.ts",
           "hash": "3919754746991282802",
-          "deps": [
-            "shared-types"
-          ]
+          "deps": ["shared-types"]
         },
         {
           "file": "apps/website/src/lib/section-service.ts",
@@ -5038,31 +4677,22 @@
         {
           "file": "apps/website/src/lib/server-auth.ts",
           "hash": "1443248232691968572",
-          "deps": [
-            "npm:@supabase/supabase-js",
-            "npm:jsonwebtoken"
-          ]
+          "deps": ["npm:@supabase/supabase-js", "npm:jsonwebtoken"]
         },
         {
           "file": "apps/website/src/lib/studyPlans.ts",
           "hash": "2878910216913278783",
-          "deps": [
-            "shared-types"
-          ]
+          "deps": ["shared-types"]
         },
         {
           "file": "apps/website/src/lib/supabase-client.ts",
           "hash": "17881617310489629143",
-          "deps": [
-            "npm:@supabase/supabase-js"
-          ]
+          "deps": ["npm:@supabase/supabase-js"]
         },
         {
           "file": "apps/website/src/lib/supabase-flashcards.ts",
           "hash": "1074025939356695314",
-          "deps": [
-            "npm:@supabase/supabase-js"
-          ]
+          "deps": ["npm:@supabase/supabase-js"]
         },
         {
           "file": "apps/website/src/lib/supabase-learning-cards-service.ts",
@@ -5071,30 +4701,22 @@
         {
           "file": "apps/website/src/lib/supabase-progress.ts",
           "hash": "2651203489088956473",
-          "deps": [
-            "npm:@supabase/supabase-js"
-          ]
+          "deps": ["npm:@supabase/supabase-js"]
         },
         {
           "file": "apps/website/src/lib/supabase-questions.ts",
           "hash": "17457724257713726674",
-          "deps": [
-            "npm:@supabase/supabase-js"
-          ]
+          "deps": ["npm:@supabase/supabase-js"]
         },
         {
           "file": "apps/website/src/lib/supabase-server.ts",
           "hash": "3089489612398772889",
-          "deps": [
-            "npm:@supabase/supabase-js"
-          ]
+          "deps": ["npm:@supabase/supabase-js"]
         },
         {
           "file": "apps/website/src/lib/supabase.ts",
           "hash": "18027443786361106013",
-          "deps": [
-            "npm:@supabase/supabase-js"
-          ]
+          "deps": ["npm:@supabase/supabase-js"]
         },
         {
           "file": "apps/website/src/lib/swagger-config.ts",
@@ -5107,55 +4729,37 @@
         {
           "file": "apps/website/src/lib/unified-question-schema.ts",
           "hash": "12659756911892134121",
-          "deps": [
-            "npm:@supabase/supabase-js"
-          ]
+          "deps": ["npm:@supabase/supabase-js"]
         },
         {
           "file": "apps/website/src/lib/user-auth.ts",
           "hash": "10490143811406112719",
-          "deps": [
-            "npm:bcryptjs",
-            "npm:@supabase/supabase-js"
-          ]
+          "deps": ["npm:bcryptjs", "npm:@supabase/supabase-js"]
         },
         {
           "file": "apps/website/src/lib/utils.ts",
           "hash": "15456290709904554663",
-          "deps": [
-            "npm:clsx",
-            "npm:tailwind-merge"
-          ]
+          "deps": ["npm:clsx", "npm:tailwind-merge"]
         },
         {
           "file": "apps/website/src/lib/website-features.ts",
           "hash": "15251280746039573862",
-          "deps": [
-            "npm:react",
-            "npm:@supabase/supabase-js",
-            "npm:lucide-react"
-          ]
+          "deps": ["npm:react", "npm:@supabase/supabase-js", "npm:lucide-react"]
         },
         {
           "file": "apps/website/src/middleware.ts",
           "hash": "16361421637170011362",
-          "deps": [
-            "npm:next"
-          ]
+          "deps": ["npm:next"]
         },
         {
           "file": "apps/website/src/pages/_error.tsx",
           "hash": "4015564672200137888",
-          "deps": [
-            "npm:next"
-          ]
+          "deps": ["npm:next"]
         },
         {
           "file": "apps/website/src/providers/JotaiProvider.tsx",
           "hash": "13093683026095352980",
-          "deps": [
-            "npm:react"
-          ]
+          "deps": ["npm:react"]
         },
         {
           "file": "apps/website/src/providers/QueryProvider.tsx",
@@ -5169,9 +4773,7 @@
         {
           "file": "apps/website/src/test-utils/mocks/shared-contexts.ts",
           "hash": "13998339291394065522",
-          "deps": [
-            "npm:react"
-          ]
+          "deps": ["npm:react"]
         },
         {
           "file": "apps/website/src/translations/ar.json",
@@ -5228,10 +4830,7 @@
         {
           "file": "apps/website/tailwind.config.ts",
           "hash": "13208718485928658312",
-          "deps": [
-            "npm:tailwindcss",
-            "npm:tailwindcss-animate"
-          ]
+          "deps": ["npm:tailwindcss", "npm:tailwindcss-animate"]
         },
         {
           "file": "apps/website/tsconfig.json",
@@ -5242,9 +4841,7 @@
         {
           "file": "libs/database/jest.config.ts",
           "hash": "14903793376523626015",
-          "deps": [
-            "npm:jest"
-          ]
+          "deps": ["npm:jest"]
         },
         {
           "file": "libs/database/project.json",
@@ -5257,9 +4854,7 @@
         {
           "file": "libs/database/src/lib/DatabaseContext.tsx",
           "hash": "3386065027616449809",
-          "deps": [
-            "npm:react"
-          ]
+          "deps": ["npm:react"]
         },
         {
           "file": "libs/database/src/lib/ExampleServices.ts",
@@ -5268,9 +4863,7 @@
         {
           "file": "libs/database/src/lib/ExampleUsage.tsx",
           "hash": "17177740128070189314",
-          "deps": [
-            "npm:react"
-          ]
+          "deps": ["npm:react"]
         },
         {
           "file": "libs/database/src/lib/IDatabaseService.ts",
@@ -5279,9 +4872,7 @@
         {
           "file": "libs/database/src/lib/SupabaseDatabaseService.ts",
           "hash": "1003347809234413220",
-          "deps": [
-            "npm:@supabase/supabase-js"
-          ]
+          "deps": ["npm:@supabase/supabase-js"]
         },
         {
           "file": "libs/database/src/lib/__tests__/database-switching.test.ts",
@@ -5294,9 +4885,7 @@
         {
           "file": "libs/database/src/lib/database.ts",
           "hash": "8933911729609573982",
-          "deps": [
-            "npm:@supabase/supabase-js"
-          ]
+          "deps": ["npm:@supabase/supabase-js"]
         },
         {
           "file": "libs/database/tsconfig.json",
@@ -5313,51 +4902,43 @@
         {
           "file": "libs/database/vite.config.ts",
           "hash": "14491188210531193528",
-          "deps": [
-            "npm:vite",
-            "npm:@nx/vite"
-          ]
+          "deps": ["npm:vite", "npm:@nx/vite"]
         }
       ],
       "utils": [
         {
-          "file": "libs/utils/jest.config.ts",
+          "file": "libs/utilities/jest.config.ts",
           "hash": "5551166372180116266",
-          "deps": [
-            "npm:jest"
-          ]
+          "deps": ["npm:jest"]
         },
         {
-          "file": "libs/utils/project.json",
+          "file": "libs/utilities/project.json",
           "hash": "6882613947214964544"
         },
         {
-          "file": "libs/utils/src/index.ts",
+          "file": "libs/utilities/src/index.ts",
           "hash": "5679720557803443103"
         },
         {
-          "file": "libs/utils/src/lib/utils.ts",
+          "file": "libs/utilities/src/lib/utils.ts",
           "hash": "12494324561515668638"
         },
         {
-          "file": "libs/utils/tsconfig.json",
+          "file": "libs/utilities/tsconfig.json",
           "hash": "14994595962478723103"
         },
         {
-          "file": "libs/utils/tsconfig.lib.json",
+          "file": "libs/utilities/tsconfig.lib.json",
           "hash": "2407687948951285838"
         },
         {
-          "file": "libs/utils/tsconfig.spec.json",
+          "file": "libs/utilities/tsconfig.spec.json",
           "hash": "6218745960847744644"
         },
         {
-          "file": "libs/utils/vite.config.ts",
+          "file": "libs/utilities/vite.config.ts",
           "hash": "3535794432024782649",
-          "deps": [
-            "npm:vite",
-            "npm:@nx/vite"
-          ]
+          "deps": ["npm:vite", "npm:@nx/vite"]
         }
       ],
       "zatona-web": [
@@ -6092,9 +5673,7 @@
         {
           "file": "docs/api/serve-api-docs.js",
           "hash": "12159343000760348968",
-          "deps": [
-            "npm:express"
-          ]
+          "deps": ["npm:express"]
         },
         {
           "file": "docs/api/swagger.yaml",
@@ -6491,9 +6070,7 @@
         {
           "file": "eslint.config.mjs",
           "hash": "10995239374591950874",
-          "deps": [
-            "npm:@eslint/eslintrc"
-          ]
+          "deps": ["npm:@eslint/eslintrc"]
         },
         {
           "file": "firestore.rules",
@@ -6514,24 +6091,17 @@
         {
           "file": "jest.config.js",
           "hash": "8576677689413069794",
-          "deps": [
-            "npm:next"
-          ]
+          "deps": ["npm:next"]
         },
         {
           "file": "jest.preset.js",
           "hash": "18185425094101638709",
-          "deps": [
-            "npm:@nx/jest"
-          ]
+          "deps": ["npm:@nx/jest"]
         },
         {
           "file": "jest.setup.js",
           "hash": "12346415941665917438",
-          "deps": [
-            "npm:@testing-library/jest-dom",
-            "npm:react"
-          ]
+          "deps": ["npm:@testing-library/jest-dom", "npm:react"]
         },
         {
           "file": "nx.json",
@@ -8292,9 +7862,7 @@
         {
           "file": "playwright.config.ts",
           "hash": "15772075655177651581",
-          "deps": [
-            "npm:@playwright/test"
-          ]
+          "deps": ["npm:@playwright/test"]
         },
         {
           "file": "postcss.config.js",
@@ -8359,9 +7927,7 @@
         {
           "file": "scripts/complete-react-setup.js",
           "hash": "10237818845325381162",
-          "deps": [
-            "npm:@supabase/supabase-js"
-          ]
+          "deps": ["npm:@supabase/supabase-js"]
         },
         {
           "file": "scripts/continue-react-seeding.js",
@@ -8370,23 +7936,17 @@
         {
           "file": "scripts/create-admin-record.js",
           "hash": "11410667597589965514",
-          "deps": [
-            "npm:@supabase/supabase-js"
-          ]
+          "deps": ["npm:@supabase/supabase-js"]
         },
         {
           "file": "scripts/create-admin-user.js",
           "hash": "10565621938594435443",
-          "deps": [
-            "npm:@supabase/supabase-js"
-          ]
+          "deps": ["npm:@supabase/supabase-js"]
         },
         {
           "file": "scripts/create-admins-table.js",
           "hash": "14804793168166004591",
-          "deps": [
-            "npm:@supabase/supabase-js"
-          ]
+          "deps": ["npm:@supabase/supabase-js"]
         },
         {
           "file": "scripts/create-options-batches.js",
@@ -8399,16 +7959,12 @@
         {
           "file": "scripts/create-table-and-admin.js",
           "hash": "16148877483175966992",
-          "deps": [
-            "npm:@supabase/supabase-js"
-          ]
+          "deps": ["npm:@supabase/supabase-js"]
         },
         {
           "file": "scripts/create-table-mcp-alternative.js",
           "hash": "4616459162450571483",
-          "deps": [
-            "npm:@supabase/supabase-js"
-          ]
+          "deps": ["npm:@supabase/supabase-js"]
         },
         {
           "file": "scripts/create-types-batches.js",
@@ -8509,16 +8065,12 @@
         {
           "file": "scripts/final-questions-seeding.js",
           "hash": "1617386710613969938",
-          "deps": [
-            "npm:@supabase/supabase-js"
-          ]
+          "deps": ["npm:@supabase/supabase-js"]
         },
         {
           "file": "scripts/final-react-setup.js",
           "hash": "7793954814217232797",
-          "deps": [
-            "npm:@supabase/supabase-js"
-          ]
+          "deps": ["npm:@supabase/supabase-js"]
         },
         {
           "file": "scripts/fix-categories-sql-v2.js",
@@ -9699,9 +9251,7 @@
         {
           "file": "scripts/reset-admin-password.js",
           "hash": "14434357006898704188",
-          "deps": [
-            "npm:@supabase/supabase-js"
-          ]
+          "deps": ["npm:@supabase/supabase-js"]
         },
         {
           "file": "scripts/run-admin-login-tests.js",
@@ -9718,16 +9268,12 @@
         {
           "file": "scripts/seed-all-html-questions.js",
           "hash": "13061722889325705093",
-          "deps": [
-            "npm:uuid"
-          ]
+          "deps": ["npm:uuid"]
         },
         {
           "file": "scripts/seed-all-questions-comprehensive.js",
           "hash": "6591255154889626312",
-          "deps": [
-            "npm:@supabase/supabase-js"
-          ]
+          "deps": ["npm:@supabase/supabase-js"]
         },
         {
           "file": "scripts/seed-categories-batch-1.sql",
@@ -9836,9 +9382,7 @@
         {
           "file": "scripts/seed-css-questions.js",
           "hash": "7878081568784501901",
-          "deps": [
-            "npm:uuid"
-          ]
+          "deps": ["npm:uuid"]
         },
         {
           "file": "scripts/seed-css-questions.sql",
@@ -9847,16 +9391,12 @@
         {
           "file": "scripts/seed-data-only.js",
           "hash": "2667729145855515471",
-          "deps": [
-            "npm:@supabase/supabase-js"
-          ]
+          "deps": ["npm:@supabase/supabase-js"]
         },
         {
           "file": "scripts/seed-design-patterns-questions.js",
           "hash": "964193244457499436",
-          "deps": [
-            "npm:uuid"
-          ]
+          "deps": ["npm:uuid"]
         },
         {
           "file": "scripts/seed-design-patterns-questions.sql",
@@ -9865,23 +9405,17 @@
         {
           "file": "scripts/seed-frontend-tasks.js",
           "hash": "15819159920820127495",
-          "deps": [
-            "npm:@supabase/supabase-js"
-          ]
+          "deps": ["npm:@supabase/supabase-js"]
         },
         {
           "file": "scripts/seed-html-questions.js",
           "hash": "17758873453614385350",
-          "deps": [
-            "npm:uuid"
-          ]
+          "deps": ["npm:uuid"]
         },
         {
           "file": "scripts/seed-javascript-questions.js",
           "hash": "7983090349858797673",
-          "deps": [
-            "npm:uuid"
-          ]
+          "deps": ["npm:uuid"]
         },
         {
           "file": "scripts/seed-javascript-questions.sql",
@@ -9890,23 +9424,17 @@
         {
           "file": "scripts/seed-legitimate-questions.js",
           "hash": "17651223857679802922",
-          "deps": [
-            "npm:@supabase/supabase-js"
-          ]
+          "deps": ["npm:@supabase/supabase-js"]
         },
         {
           "file": "scripts/seed-nextjs-questions-direct.js",
           "hash": "7942030241952043179",
-          "deps": [
-            "npm:@supabase/supabase-js"
-          ]
+          "deps": ["npm:@supabase/supabase-js"]
         },
         {
           "file": "scripts/seed-nextjs-questions.js",
           "hash": "11149482382838823468",
-          "deps": [
-            "npm:uuid"
-          ]
+          "deps": ["npm:uuid"]
         },
         {
           "file": "scripts/seed-nextjs-questions.sql",
@@ -9915,137 +9443,97 @@
         {
           "file": "scripts/seed-one-question-per-category.js",
           "hash": "336190276874388650",
-          "deps": [
-            "npm:@supabase/supabase-js",
-            "npm:dotenv"
-          ]
+          "deps": ["npm:@supabase/supabase-js", "npm:dotenv"]
         },
         {
           "file": "scripts/seed-performance-patterns-questions-direct.js",
           "hash": "3243073928141631857",
-          "deps": [
-            "npm:@supabase/supabase-js"
-          ]
+          "deps": ["npm:@supabase/supabase-js"]
         },
         {
           "file": "scripts/seed-plan-questions.js",
           "hash": "3173138869686261175",
-          "deps": [
-            "npm:@supabase/supabase-js"
-          ]
+          "deps": ["npm:@supabase/supabase-js"]
         },
         {
           "file": "scripts/seed-problem-solving-tasks.js",
           "hash": "561466030422526325",
-          "deps": [
-            "npm:@supabase/supabase-js"
-          ]
+          "deps": ["npm:@supabase/supabase-js"]
         },
         {
           "file": "scripts/seed-questions-data-only.js",
           "hash": "3725857086494800618",
-          "deps": [
-            "npm:@supabase/supabase-js"
-          ]
+          "deps": ["npm:@supabase/supabase-js"]
         },
         {
           "file": "scripts/seed-questions-existing-schema.js",
           "hash": "665932687550267560",
-          "deps": [
-            "npm:@supabase/supabase-js"
-          ]
+          "deps": ["npm:@supabase/supabase-js"]
         },
         {
           "file": "scripts/seed-questions-mcp-direct.js",
           "hash": "18434227204500683911",
-          "deps": [
-            "npm:uuid"
-          ]
+          "deps": ["npm:uuid"]
         },
         {
           "file": "scripts/seed-questions-only.js",
           "hash": "9497340247462538468",
-          "deps": [
-            "npm:@supabase/supabase-js"
-          ]
+          "deps": ["npm:@supabase/supabase-js"]
         },
         {
           "file": "scripts/seed-react-questions-direct.js",
           "hash": "6919970065417365172",
-          "deps": [
-            "npm:@supabase/supabase-js"
-          ]
+          "deps": ["npm:@supabase/supabase-js"]
         },
         {
           "file": "scripts/seed-react-questions-mcp.js",
           "hash": "10075478887206672924",
-          "deps": [
-            "npm:@supabase/supabase-js"
-          ]
+          "deps": ["npm:@supabase/supabase-js"]
         },
         {
           "file": "scripts/seed-react-questions.js",
           "hash": "10180960734951848791",
-          "deps": [
-            "npm:@supabase/supabase-js"
-          ]
+          "deps": ["npm:@supabase/supabase-js"]
         },
         {
           "file": "scripts/seed-rendering-patterns-questions-direct.js",
           "hash": "12636056198082883954",
-          "deps": [
-            "npm:@supabase/supabase-js"
-          ]
+          "deps": ["npm:@supabase/supabase-js"]
         },
         {
           "file": "scripts/seed-security-questions-direct.js",
           "hash": "1144992031870375432",
-          "deps": [
-            "npm:@supabase/supabase-js"
-          ]
+          "deps": ["npm:@supabase/supabase-js"]
         },
         {
           "file": "scripts/seed-supabase-data.js",
           "hash": "1234508563376628763",
-          "deps": [
-            "npm:@supabase/supabase-js"
-          ]
+          "deps": ["npm:@supabase/supabase-js"]
         },
         {
           "file": "scripts/seed-system-design-questions-direct.js",
           "hash": "16441361573550613509",
-          "deps": [
-            "npm:@supabase/supabase-js"
-          ]
+          "deps": ["npm:@supabase/supabase-js"]
         },
         {
           "file": "scripts/setup-admin-complete.js",
           "hash": "5427017660095573748",
-          "deps": [
-            "npm:@supabase/supabase-js"
-          ]
+          "deps": ["npm:@supabase/supabase-js"]
         },
         {
           "file": "scripts/setup-admin-final.js",
           "hash": "6654640081893430785",
-          "deps": [
-            "npm:@supabase/supabase-js"
-          ]
+          "deps": ["npm:@supabase/supabase-js"]
         },
         {
           "file": "scripts/setup-supabase-admin.js",
           "hash": "2446532206934514232",
-          "deps": [
-            "npm:@supabase/supabase-js",
-            "npm:bcryptjs"
-          ]
+          "deps": ["npm:@supabase/supabase-js", "npm:bcryptjs"]
         },
         {
           "file": "scripts/simplified-react-setup.js",
           "hash": "10974908259838924744",
-          "deps": [
-            "npm:@supabase/supabase-js"
-          ]
+          "deps": ["npm:@supabase/supabase-js"]
         },
         {
           "file": "scripts/split-html-questions.js",
@@ -10074,9 +9562,7 @@
         {
           "file": "scripts/test-auth-flow.js",
           "hash": "9544740103943892863",
-          "deps": [
-            "npm:@supabase/supabase-js"
-          ]
+          "deps": ["npm:@supabase/supabase-js"]
         },
         {
           "file": "scripts/test-batch-execution.js",
@@ -10089,9 +9575,7 @@
         {
           "file": "scripts/test-question-seeding.js",
           "hash": "7779897090791838985",
-          "deps": [
-            "npm:uuid"
-          ]
+          "deps": ["npm:uuid"]
         },
         {
           "file": "scripts/test-questions.sql",
@@ -10100,9 +9584,7 @@
         {
           "file": "scripts/ultimate-questions-seeding.js",
           "hash": "3707449307047128060",
-          "deps": [
-            "npm:@supabase/supabase-js"
-          ]
+          "deps": ["npm:@supabase/supabase-js"]
         },
         {
           "file": "scripts/update-imports.js",
@@ -10115,10 +9597,7 @@
         {
           "file": "setup/configuration/disable-rls-mcp.js",
           "hash": "17699321652980992951",
-          "deps": [
-            "npm:@supabase/supabase-js",
-            "npm:dotenv"
-          ]
+          "deps": ["npm:@supabase/supabase-js", "npm:dotenv"]
         },
         {
           "file": "setup/configuration/final-validation.js",
@@ -10147,25 +9626,17 @@
         {
           "file": "setup/configuration/manage-admin-accounts.js",
           "hash": "596574164658791546",
-          "deps": [
-            "npm:dotenv",
-            "npm:bcryptjs"
-          ]
+          "deps": ["npm:dotenv", "npm:bcryptjs"]
         },
         {
           "file": "setup/configuration/manage-admin-mcp.js",
           "hash": "8757758298003346443",
-          "deps": [
-            "npm:dotenv",
-            "npm:bcryptjs"
-          ]
+          "deps": ["npm:dotenv", "npm:bcryptjs"]
         },
         {
           "file": "setup/configuration/setup-admin-account.js",
           "hash": "13009633084835143613",
-          "deps": [
-            "npm:dotenv"
-          ]
+          "deps": ["npm:dotenv"]
         },
         {
           "file": "setup/configuration/setup-authentication-config.js",
@@ -10178,9 +9649,7 @@
         {
           "file": "setup/configuration/setup-oauth-automated.js",
           "hash": "17153817968222079496",
-          "deps": [
-            "npm:dotenv"
-          ]
+          "deps": ["npm:dotenv"]
         },
         {
           "file": "setup/configuration/vercel-main.json",
@@ -10193,10 +9662,7 @@
         {
           "file": "setup/configuration/verify-schema.js",
           "hash": "10303332106151559767",
-          "deps": [
-            "npm:@supabase/supabase-js",
-            "npm:dotenv"
-          ]
+          "deps": ["npm:@supabase/supabase-js", "npm:dotenv"]
         },
         {
           "file": "setup/environment/env.example",
@@ -10209,84 +9675,57 @@
         {
           "file": "setup/migration/migrate-complete.js",
           "hash": "8924929329908868475",
-          "deps": [
-            "npm:@supabase/supabase-js"
-          ]
+          "deps": ["npm:@supabase/supabase-js"]
         },
         {
           "file": "setup/migration/migrate-comprehensive.js",
           "hash": "3638283161786719593",
-          "deps": [
-            "npm:@supabase/supabase-js"
-          ]
+          "deps": ["npm:@supabase/supabase-js"]
         },
         {
           "file": "setup/migration/migrate-corrected.js",
           "hash": "7209645428103196441",
-          "deps": [
-            "npm:@supabase/supabase-js"
-          ]
+          "deps": ["npm:@supabase/supabase-js"]
         },
         {
           "file": "setup/migration/migrate-direct.js",
           "hash": "6362399164250921360",
-          "deps": [
-            "npm:@supabase/supabase-js",
-            "npm:dotenv"
-          ]
+          "deps": ["npm:@supabase/supabase-js", "npm:dotenv"]
         },
         {
           "file": "setup/migration/migrate-firebase-fixed.js",
           "hash": "11000629496976295685",
-          "deps": [
-            "npm:@supabase/supabase-js"
-          ]
+          "deps": ["npm:@supabase/supabase-js"]
         },
         {
           "file": "setup/migration/migrate-real-data.js",
           "hash": "16654750027767849274",
-          "deps": [
-            "npm:@supabase/supabase-js"
-          ]
+          "deps": ["npm:@supabase/supabase-js"]
         },
         {
           "file": "setup/migration/migrate-real-firebase-data.js",
           "hash": "11680960198479369229",
-          "deps": [
-            "npm:@supabase/supabase-js"
-          ]
+          "deps": ["npm:@supabase/supabase-js"]
         },
         {
           "file": "setup/migration/migrate-sample-data.js",
           "hash": "14055778597337423529",
-          "deps": [
-            "npm:@supabase/supabase-js"
-          ]
+          "deps": ["npm:@supabase/supabase-js"]
         },
         {
           "file": "setup/migration/migrate-to-supabase.js",
           "hash": "12629837960921462135",
-          "deps": [
-            "npm:@supabase/supabase-js",
-            "npm:firebase",
-            "npm:dotenv"
-          ]
+          "deps": ["npm:@supabase/supabase-js", "npm:firebase", "npm:dotenv"]
         },
         {
           "file": "setup/migration/migrate-via-mcp.js",
           "hash": "7265684855625249122",
-          "deps": [
-            "npm:@supabase/supabase-js",
-            "npm:dotenv"
-          ]
+          "deps": ["npm:@supabase/supabase-js", "npm:dotenv"]
         },
         {
           "file": "setup/migration/migrate-with-service-role.js",
           "hash": "3158776264042601196",
-          "deps": [
-            "npm:@supabase/supabase-js",
-            "npm:dotenv"
-          ]
+          "deps": ["npm:@supabase/supabase-js", "npm:dotenv"]
         },
         {
           "file": "setup/templates/questions-json-template.json",
@@ -10299,16 +9738,12 @@
         {
           "file": "setup/templates/seed-problem-solving-simple.js",
           "hash": "6630431567417008946",
-          "deps": [
-            "npm:firebase"
-          ]
+          "deps": ["npm:firebase"]
         },
         {
           "file": "setup/templates/seed-problem-solving-tasks.js",
           "hash": "13168629210531012279",
-          "deps": [
-            "npm:firebase"
-          ]
+          "deps": ["npm:firebase"]
         },
         {
           "file": "supabase-schema-simple.sql",
@@ -10321,10 +9756,7 @@
         {
           "file": "tailwind.config.ts",
           "hash": "11347127521356567598",
-          "deps": [
-            "npm:tailwindcss",
-            "npm:tailwindcss-animate"
-          ]
+          "deps": ["npm:tailwindcss", "npm:tailwindcss-animate"]
         },
         {
           "file": "tests/admin/COMPREHENSIVE_TESTING_GUIDE.md",
@@ -10341,14 +9773,8 @@
             "npm:next",
             "website",
             "npm:jsonwebtoken",
-            [
-              "npm:bcryptjs",
-              "dynamic"
-            ],
-            [
-              "npm:@supabase/supabase-js",
-              "dynamic"
-            ]
+            ["npm:bcryptjs", "dynamic"],
+            ["npm:@supabase/supabase-js", "dynamic"]
           ]
         },
         {
@@ -10362,10 +9788,7 @@
             "shared-contexts",
             "npm:@tanstack/react-query",
             "website",
-            [
-              "npm:react",
-              "dynamic"
-            ]
+            ["npm:react", "dynamic"]
           ]
         },
         {
@@ -10375,18 +9798,9 @@
             "npm:react",
             "npm:@testing-library/react",
             "npm:@testing-library/user-event",
-            [
-              "npm:react",
-              "dynamic"
-            ],
-            [
-              "npm:@tanstack/react-query",
-              "dynamic"
-            ],
-            [
-              "website",
-              "dynamic"
-            ]
+            ["npm:react", "dynamic"],
+            ["npm:@tanstack/react-query", "dynamic"],
+            ["website", "dynamic"]
           ]
         },
         {
@@ -10395,14 +9809,8 @@
           "deps": [
             "npm:next",
             "website",
-            [
-              "npm:bcryptjs",
-              "dynamic"
-            ],
-            [
-              "npm:@supabase/supabase-js",
-              "dynamic"
-            ]
+            ["npm:bcryptjs", "dynamic"],
+            ["npm:@supabase/supabase-js", "dynamic"]
           ]
         },
         {
@@ -10415,10 +9823,7 @@
             "shared-contexts",
             "npm:@tanstack/react-query",
             "website",
-            [
-              "npm:react",
-              "dynamic"
-            ]
+            ["npm:react", "dynamic"]
           ]
         },
         {
@@ -10431,10 +9836,7 @@
             "shared-contexts",
             "npm:@tanstack/react-query",
             "website",
-            [
-              "npm:react",
-              "dynamic"
-            ]
+            ["npm:react", "dynamic"]
           ]
         },
         {
@@ -10447,10 +9849,7 @@
             "npm:next",
             "website",
             "shared-contexts",
-            [
-              "npm:react",
-              "dynamic"
-            ]
+            ["npm:react", "dynamic"]
           ]
         },
         {
@@ -10460,18 +9859,9 @@
             "npm:react",
             "npm:@testing-library/react",
             "npm:@testing-library/user-event",
-            [
-              "npm:react",
-              "dynamic"
-            ],
-            [
-              "npm:@tanstack/react-query",
-              "dynamic"
-            ],
-            [
-              "website",
-              "dynamic"
-            ]
+            ["npm:react", "dynamic"],
+            ["npm:@tanstack/react-query", "dynamic"],
+            ["website", "dynamic"]
           ]
         },
         {
@@ -10479,14 +9869,8 @@
           "hash": "17024940151048459423",
           "deps": [
             "npm:next",
-            [
-              "npm:@supabase/supabase-js",
-              "dynamic"
-            ],
-            [
-              "website",
-              "dynamic"
-            ]
+            ["npm:@supabase/supabase-js", "dynamic"],
+            ["website", "dynamic"]
           ]
         },
         {
@@ -10494,14 +9878,8 @@
           "hash": "1974821013359170680",
           "deps": [
             "npm:next",
-            [
-              "npm:@supabase/supabase-js",
-              "dynamic"
-            ],
-            [
-              "website",
-              "dynamic"
-            ]
+            ["npm:@supabase/supabase-js", "dynamic"],
+            ["website", "dynamic"]
           ]
         },
         {
@@ -10514,29 +9892,19 @@
             "website",
             "shared-contexts",
             "npm:@tanstack/react-query",
-            [
-              "npm:next",
-              "dynamic"
-            ],
-            [
-              "shared-components",
-              "dynamic"
-            ]
+            ["npm:next", "dynamic"],
+            ["shared-components", "dynamic"]
           ]
         },
         {
           "file": "tests/api/test-admin-accounts.js",
           "hash": "2122224185044118803",
-          "deps": [
-            "npm:dotenv"
-          ]
+          "deps": ["npm:dotenv"]
         },
         {
           "file": "tests/api/test-admin-auth.ts",
           "hash": "6791834280670733521",
-          "deps": [
-            "website"
-          ]
+          "deps": ["website"]
         },
         {
           "file": "tests/api/test-api-endpoints.js",
@@ -10545,24 +9913,17 @@
         {
           "file": "tests/api/test-auth-systems.js",
           "hash": "8874706409026314312",
-          "deps": [
-            "npm:dotenv"
-          ]
+          "deps": ["npm:dotenv"]
         },
         {
           "file": "tests/api/test-authentication-systems.js",
           "hash": "14919353598075912703",
-          "deps": [
-            "npm:dotenv"
-          ]
+          "deps": ["npm:dotenv"]
         },
         {
           "file": "tests/api/test-complete-questions-schema.js",
           "hash": "7978960796693525472",
-          "deps": [
-            "npm:dotenv",
-            "npm:@supabase/supabase-js"
-          ]
+          "deps": ["npm:dotenv", "npm:@supabase/supabase-js"]
         },
         {
           "file": "tests/api/test-complete-system.js",
@@ -10587,55 +9948,37 @@
         {
           "file": "tests/api/test-questions-schema.js",
           "hash": "9297421563834330984",
-          "deps": [
-            "npm:dotenv",
-            "npm:@supabase/supabase-js"
-          ]
+          "deps": ["npm:dotenv", "npm:@supabase/supabase-js"]
         },
         {
           "file": "tests/api/test-small-records-correct-schema.js",
           "hash": "10898625849463554739",
-          "deps": [
-            "npm:dotenv",
-            "npm:@supabase/supabase-js"
-          ]
+          "deps": ["npm:dotenv", "npm:@supabase/supabase-js"]
         },
         {
           "file": "tests/api/test-small-records-fixed.js",
           "hash": "7762066370659780854",
-          "deps": [
-            "npm:dotenv",
-            "npm:@supabase/supabase-js"
-          ]
+          "deps": ["npm:dotenv", "npm:@supabase/supabase-js"]
         },
         {
           "file": "tests/api/test-small-records.js",
           "hash": "4391727347546832180",
-          "deps": [
-            "npm:dotenv"
-          ]
+          "deps": ["npm:dotenv"]
         },
         {
           "file": "tests/api/test-supabase-api.js",
           "hash": "11474701135102046723",
-          "deps": [
-            "npm:@supabase/supabase-js"
-          ]
+          "deps": ["npm:@supabase/supabase-js"]
         },
         {
           "file": "tests/api/test-supabase-comprehensive.js",
           "hash": "18157760703543220697",
-          "deps": [
-            "npm:@supabase/supabase-js",
-            "npm:dotenv"
-          ]
+          "deps": ["npm:@supabase/supabase-js", "npm:dotenv"]
         },
         {
           "file": "tests/api/test-supabase-connection.js",
           "hash": "8189144168125556537",
-          "deps": [
-            "npm:@supabase/supabase-js"
-          ]
+          "deps": ["npm:@supabase/supabase-js"]
         },
         {
           "file": "tests/e2e/README.md",
@@ -10644,206 +9987,147 @@
         {
           "file": "tests/e2e/admin-login.spec.ts",
           "hash": "2051524458868190598",
-          "deps": [
-            "npm:@playwright/test"
-          ]
+          "deps": ["npm:@playwright/test"]
         },
         {
           "file": "tests/e2e/ai-interviewer-integration.spec.ts",
           "hash": "8966033066413290502",
-          "deps": [
-            "npm:@playwright/test"
-          ]
+          "deps": ["npm:@playwright/test"]
         },
         {
           "file": "tests/e2e/api-plans.spec.ts",
           "hash": "18277322985432902787",
-          "deps": [
-            "npm:@playwright/test"
-          ]
+          "deps": ["npm:@playwright/test"]
         },
         {
           "file": "tests/e2e/custom-plan-flow.spec.ts",
           "hash": "13065447950520544494",
-          "deps": [
-            "npm:@playwright/test"
-          ]
+          "deps": ["npm:@playwright/test"]
         },
         {
           "file": "tests/e2e/dashboard-navbar.spec.ts",
           "hash": "15835832498030179221",
-          "deps": [
-            "npm:@playwright/test"
-          ]
+          "deps": ["npm:@playwright/test"]
         },
         {
           "file": "tests/e2e/dashboard-page-logout.spec.ts",
           "hash": "1228249058237673066",
-          "deps": [
-            "npm:@playwright/test"
-          ]
+          "deps": ["npm:@playwright/test"]
         },
         {
           "file": "tests/e2e/free-style-flow.spec.ts",
           "hash": "9804371957421564792",
-          "deps": [
-            "npm:@playwright/test"
-          ]
+          "deps": ["npm:@playwright/test"]
         },
         {
           "file": "tests/e2e/global-setup.ts",
           "hash": "13360198509141395297",
-          "deps": [
-            "npm:@playwright/test"
-          ]
+          "deps": ["npm:@playwright/test"]
         },
         {
           "file": "tests/e2e/global-teardown.ts",
           "hash": "8671020293819885718",
-          "deps": [
-            "npm:@playwright/test"
-          ]
+          "deps": ["npm:@playwright/test"]
         },
         {
           "file": "tests/e2e/guided-banner-responsive.spec.ts",
           "hash": "7472843507436910033",
-          "deps": [
-            "npm:@playwright/test"
-          ]
+          "deps": ["npm:@playwright/test"]
         },
         {
           "file": "tests/e2e/guided-flow.spec.ts",
           "hash": "9639202309067992370",
-          "deps": [
-            "npm:@playwright/test"
-          ]
+          "deps": ["npm:@playwright/test"]
         },
         {
           "file": "tests/e2e/guided-learning-page.spec.ts",
           "hash": "7704982275682916844",
-          "deps": [
-            "npm:@playwright/test"
-          ]
+          "deps": ["npm:@playwright/test"]
         },
         {
           "file": "tests/e2e/guided-plan-details.spec.ts",
           "hash": "17733461413302292214",
-          "deps": [
-            "npm:@playwright/test"
-          ]
+          "deps": ["npm:@playwright/test"]
         },
         {
           "file": "tests/e2e/home-free-style-cta.spec.ts",
           "hash": "10407569752239568778",
-          "deps": [
-            "npm:@playwright/test"
-          ]
+          "deps": ["npm:@playwright/test"]
         },
         {
           "file": "tests/e2e/home-guided-cta.spec.ts",
           "hash": "10087674800797421598",
-          "deps": [
-            "npm:@playwright/test"
-          ]
+          "deps": ["npm:@playwright/test"]
         },
         {
           "file": "tests/e2e/home-sections.spec.ts",
           "hash": "2864686971988388166",
-          "deps": [
-            "npm:@playwright/test"
-          ]
+          "deps": ["npm:@playwright/test"]
         },
         {
           "file": "tests/e2e/navbar-guided-switch.spec.ts",
           "hash": "16465283818027171683",
-          "deps": [
-            "npm:@playwright/test"
-          ]
+          "deps": ["npm:@playwright/test"]
         },
         {
           "file": "tests/e2e/navbar-logout.spec.ts",
           "hash": "11427064671308240853",
-          "deps": [
-            "npm:@playwright/test"
-          ]
+          "deps": ["npm:@playwright/test"]
         },
         {
           "file": "tests/e2e/navbar-mobile.spec.ts",
           "hash": "9179542081966286724",
-          "deps": [
-            "npm:@playwright/test"
-          ]
+          "deps": ["npm:@playwright/test"]
         },
         {
           "file": "tests/e2e/not-found.spec.ts",
           "hash": "11579807137987606120",
-          "deps": [
-            "npm:@playwright/test"
-          ]
+          "deps": ["npm:@playwright/test"]
         },
         {
           "file": "tests/e2e/oauth-callback.spec.ts",
           "hash": "3560416094823565953",
-          "deps": [
-            "npm:@playwright/test"
-          ]
+          "deps": ["npm:@playwright/test"]
         },
         {
           "file": "tests/e2e/progress-tracking-analytics.spec.ts",
           "hash": "9071093527255471848",
-          "deps": [
-            "npm:@playwright/test"
-          ]
+          "deps": ["npm:@playwright/test"]
         },
         {
           "file": "tests/e2e/responsive-smoke.spec.ts",
           "hash": "7610212995346101382",
-          "deps": [
-            "npm:@playwright/test"
-          ]
+          "deps": ["npm:@playwright/test"]
         },
         {
           "file": "tests/e2e/social-login.spec.ts",
           "hash": "9493135681694013350",
-          "deps": [
-            "npm:@playwright/test"
-          ]
+          "deps": ["npm:@playwright/test"]
         },
         {
           "file": "tests/e2e/social-redirect-dashboard-navbar.spec.ts",
           "hash": "5398213679410120812",
-          "deps": [
-            "npm:@playwright/test"
-          ]
+          "deps": ["npm:@playwright/test"]
         },
         {
           "file": "tests/e2e/transfer-history.spec.ts",
           "hash": "11587990479184036617",
-          "deps": [
-            "npm:@playwright/test"
-          ]
+          "deps": ["npm:@playwright/test"]
         },
         {
           "file": "tests/e2e/user-learning-paths.spec.ts",
           "hash": "15843155369509082191",
-          "deps": [
-            "npm:@playwright/test"
-          ]
+          "deps": ["npm:@playwright/test"]
         },
         {
           "file": "tests/e2e/website-smoke.spec.ts",
           "hash": "3270294398357994308",
-          "deps": [
-            "npm:@playwright/test"
-          ]
+          "deps": ["npm:@playwright/test"]
         },
         {
           "file": "tests/integration/test-page.tsx",
           "hash": "5200529375182485680",
-          "deps": [
-            "npm:react",
-            "npm:@supabase/supabase-js"
-          ]
+          "deps": ["npm:react", "npm:@supabase/supabase-js"]
         },
         {
           "file": "tests/public/content-management-test.png",
@@ -10876,9 +10160,7 @@
         {
           "file": "tests/scripts/test-admin-page-loading.js",
           "hash": "8832413304465742155",
-          "deps": [
-            "npm:node-fetch"
-          ]
+          "deps": ["npm:node-fetch"]
         },
         {
           "file": "tests/scripts/test-app.mjs",
@@ -10887,23 +10169,17 @@
         {
           "file": "tests/scripts/test-card-statistics.js",
           "hash": "10433176922737008235",
-          "deps": [
-            "npm:node-fetch"
-          ]
+          "deps": ["npm:node-fetch"]
         },
         {
           "file": "tests/scripts/test-cards-plans-data.js",
           "hash": "4982133844928350985",
-          "deps": [
-            "npm:node-fetch"
-          ]
+          "deps": ["npm:node-fetch"]
         },
         {
           "file": "tests/scripts/test-content-management-loading.js",
           "hash": "2827591682511373098",
-          "deps": [
-            "npm:puppeteer"
-          ]
+          "deps": ["npm:puppeteer"]
         },
         {
           "file": "tests/scripts/test-crud-operations.js",
@@ -10912,9 +10188,7 @@
         {
           "file": "tests/scripts/test-direct-loading.js",
           "hash": "11015849243462708032",
-          "deps": [
-            "npm:puppeteer"
-          ]
+          "deps": ["npm:puppeteer"]
         },
         {
           "file": "tests/scripts/test-enhanced-questions-page.js",
@@ -10927,30 +10201,22 @@
         {
           "file": "tests/scripts/test-page-loading-fixed.js",
           "hash": "13121956115959691753",
-          "deps": [
-            "npm:puppeteer"
-          ]
+          "deps": ["npm:puppeteer"]
         },
         {
           "file": "tests/scripts/test-page-loading.js",
           "hash": "6248975593204386279",
-          "deps": [
-            "npm:puppeteer"
-          ]
+          "deps": ["npm:puppeteer"]
         },
         {
           "file": "tests/scripts/test-performance-optimizations.js",
           "hash": "14244629468317952828",
-          "deps": [
-            "npm:puppeteer"
-          ]
+          "deps": ["npm:puppeteer"]
         },
         {
           "file": "tests/scripts/test-questions-display.js",
           "hash": "4382699206012606405",
-          "deps": [
-            "npm:dotenv"
-          ]
+          "deps": ["npm:dotenv"]
         },
         {
           "file": "tests/scripts/test-simple-performance.js",
@@ -10959,9 +10225,7 @@
         {
           "file": "tests/scripts/test-tabbed-interface.mjs",
           "hash": "9945095796427960762",
-          "deps": [
-            "npm:node-fetch"
-          ]
+          "deps": ["npm:node-fetch"]
         },
         {
           "file": "tests/simple.test.js",
@@ -10980,9 +10244,7 @@
         {
           "file": "tests/unit/test-jotai.tsx",
           "hash": "12245824738594914379",
-          "deps": [
-            "website"
-          ]
+          "deps": ["website"]
         },
         {
           "file": "tsconfig.base.json",
@@ -11003,339 +10265,264 @@
       ],
       "shared-hooks": [
         {
-          "file": "libs/shared-hooks/package.json",
+          "file": "libs/hooks/package.json",
           "hash": "3914393333858262936"
         },
         {
-          "file": "libs/shared-hooks/project.json",
+          "file": "libs/hooks/project.json",
           "hash": "16026582639236300180"
         },
         {
-          "file": "libs/shared-hooks/src/index.ts",
+          "file": "libs/hooks/src/index.ts",
           "hash": "11510562962386712727"
         },
         {
-          "file": "libs/shared-hooks/src/lib/hooks/useDashboardStats.ts",
+          "file": "libs/hooks/src/lib/hooks/useDashboardStats.ts",
           "hash": "3368516194179035920",
-          "deps": [
-            "npm:react"
-          ]
+          "deps": ["npm:react"]
         },
         {
-          "file": "libs/shared-hooks/src/lib/index.ts",
+          "file": "libs/hooks/src/lib/index.ts",
           "hash": "17091235437413446510"
         },
         {
-          "file": "libs/shared-hooks/src/lib/shared-hooks.ts",
+          "file": "libs/hooks/src/lib/shared-hooks.ts",
           "hash": "17454979416989015159"
         },
         {
-          "file": "libs/shared-hooks/src/lib/types/admin-auth.ts",
+          "file": "libs/hooks/src/lib/types/admin-auth.ts",
           "hash": "9070708967950779278"
         },
         {
-          "file": "libs/shared-hooks/src/lib/types/audio-collection-schema.ts",
+          "file": "libs/hooks/src/lib/types/audio-collection-schema.ts",
           "hash": "14288901974118811516"
         },
         {
-          "file": "libs/shared-hooks/src/lib/types/audio-collection-service.ts",
+          "file": "libs/hooks/src/lib/types/audio-collection-service.ts",
           "hash": "15023718444342802393"
         },
         {
-          "file": "libs/shared-hooks/src/lib/types/cookie-manager.ts",
+          "file": "libs/hooks/src/lib/types/cookie-manager.ts",
           "hash": "14651171560577704176"
         },
         {
-          "file": "libs/shared-hooks/src/lib/types/error-logging-service.ts",
+          "file": "libs/hooks/src/lib/types/error-logging-service.ts",
           "hash": "8994756877486715951"
         },
         {
-          "file": "libs/shared-hooks/src/lib/types/firestore.ts",
+          "file": "libs/hooks/src/lib/types/firestore.ts",
           "hash": "13700374670383574501"
         },
         {
-          "file": "libs/shared-hooks/src/lib/types/resources.ts",
+          "file": "libs/hooks/src/lib/types/resources.ts",
           "hash": "18355983359524937607"
         },
         {
-          "file": "libs/shared-hooks/src/lib/types/supabase-flashcards.ts",
+          "file": "libs/hooks/src/lib/types/supabase-flashcards.ts",
           "hash": "12748590506177079600"
         },
         {
-          "file": "libs/shared-hooks/src/lib/types/supabase-progress.ts",
+          "file": "libs/hooks/src/lib/types/supabase-progress.ts",
           "hash": "1122267735028557642"
         },
         {
-          "file": "libs/shared-hooks/src/lib/types/supabase-questions.ts",
+          "file": "libs/hooks/src/lib/types/supabase-questions.ts",
           "hash": "12239378734680023642"
         },
         {
-          "file": "libs/shared-hooks/src/lib/types/translations.ts",
+          "file": "libs/hooks/src/lib/types/translations.ts",
           "hash": "9703871720195956430"
         },
         {
-          "file": "libs/shared-hooks/src/lib/types/user-auth.ts",
+          "file": "libs/hooks/src/lib/types/user-auth.ts",
           "hash": "5814759423833071410"
         },
         {
-          "file": "libs/shared-hooks/src/lib/useAdminAuth.ts",
+          "file": "libs/hooks/src/lib/useAdminAuth.ts",
           "hash": "12383624976879739315",
-          "deps": [
-            "npm:react"
-          ]
+          "deps": ["npm:react"]
         },
         {
-          "file": "libs/shared-hooks/src/lib/useAudioCollection.ts",
+          "file": "libs/hooks/src/lib/useAudioCollection.ts",
           "hash": "4172559788525463914",
-          "deps": [
-            "npm:react"
-          ]
+          "deps": ["npm:react"]
         },
         {
-          "file": "libs/shared-hooks/src/lib/useAuth.ts",
+          "file": "libs/hooks/src/lib/useAuth.ts",
           "hash": "9280152597879948435",
-          "deps": [
-            "npm:jotai",
-            "shared-atoms"
-          ]
+          "deps": ["npm:jotai", "shared-atoms"]
         },
         {
-          "file": "libs/shared-hooks/src/lib/useDarkMode.ts",
+          "file": "libs/hooks/src/lib/useDarkMode.ts",
           "hash": "9182531112194035143",
-          "deps": [
-            "shared-contexts"
-          ]
+          "deps": ["shared-contexts"]
         },
         {
-          "file": "libs/shared-hooks/src/lib/useFirebaseQuestions.ts",
+          "file": "libs/hooks/src/lib/useFirebaseQuestions.ts",
           "hash": "8442657117396319517"
         },
         {
-          "file": "libs/shared-hooks/src/lib/useFlashcardSession.ts",
+          "file": "libs/hooks/src/lib/useFlashcardSession.ts",
           "hash": "12699499778759280473",
-          "deps": [
-            "npm:react"
-          ]
+          "deps": ["npm:react"]
         },
         {
-          "file": "libs/shared-hooks/src/lib/useImageOptimization.ts",
+          "file": "libs/hooks/src/lib/useImageOptimization.ts",
           "hash": "10387069802295832978",
-          "deps": [
-            "npm:react"
-          ]
+          "deps": ["npm:react"]
         },
         {
-          "file": "libs/shared-hooks/src/lib/useLanguage.ts",
+          "file": "libs/hooks/src/lib/useLanguage.ts",
           "hash": "14270213815159741476",
-          "deps": [
-            "npm:jotai",
-            "shared-atoms"
-          ]
+          "deps": ["npm:jotai", "shared-atoms"]
         },
         {
-          "file": "libs/shared-hooks/src/lib/useLearningPathStats.ts",
+          "file": "libs/hooks/src/lib/useLearningPathStats.ts",
           "hash": "3914506673687396130",
-          "deps": [
-            "npm:react"
-          ]
+          "deps": ["npm:react"]
         },
         {
-          "file": "libs/shared-hooks/src/lib/useLearningPathStatsDebug.ts",
+          "file": "libs/hooks/src/lib/useLearningPathStatsDebug.ts",
           "hash": "13306011192389682630",
-          "deps": [
-            "npm:react"
-          ]
+          "deps": ["npm:react"]
         },
         {
-          "file": "libs/shared-hooks/src/lib/useLearningPathStatsSimple.ts",
+          "file": "libs/hooks/src/lib/useLearningPathStatsSimple.ts",
           "hash": "7363378013374743837",
-          "deps": [
-            "npm:react"
-          ]
+          "deps": ["npm:react"]
         },
         {
-          "file": "libs/shared-hooks/src/lib/useLearningPaths.ts",
+          "file": "libs/hooks/src/lib/useLearningPaths.ts",
           "hash": "14383669306406832180",
-          "deps": [
-            "npm:react"
-          ]
+          "deps": ["npm:react"]
         },
         {
-          "file": "libs/shared-hooks/src/lib/useLearningPlans.ts",
+          "file": "libs/hooks/src/lib/useLearningPlans.ts",
           "hash": "14936498555830134084",
-          "deps": [
-            "npm:react"
-          ]
+          "deps": ["npm:react"]
         },
         {
-          "file": "libs/shared-hooks/src/lib/useMobileMenu.ts",
+          "file": "libs/hooks/src/lib/useMobileMenu.ts",
           "hash": "17231268911787731240",
-          "deps": [
-            "npm:jotai",
-            "shared-atoms"
-          ]
+          "deps": ["npm:jotai", "shared-atoms"]
         },
         {
-          "file": "libs/shared-hooks/src/lib/useNotificationActions.ts",
+          "file": "libs/hooks/src/lib/useNotificationActions.ts",
           "hash": "5208012114332924526",
-          "deps": [
-            "npm:react"
-          ]
+          "deps": ["npm:react"]
         },
         {
-          "file": "libs/shared-hooks/src/lib/useOnboarding.ts",
+          "file": "libs/hooks/src/lib/useOnboarding.ts",
           "hash": "18315841089288172362",
-          "deps": [
-            "npm:jotai",
-            "shared-atoms"
-          ]
+          "deps": ["npm:jotai", "shared-atoms"]
         },
         {
-          "file": "libs/shared-hooks/src/lib/usePerformanceMonitoring.ts",
+          "file": "libs/hooks/src/lib/usePerformanceMonitoring.ts",
           "hash": "1545855165715468525",
-          "deps": [
-            "npm:react"
-          ]
+          "deps": ["npm:react"]
         },
         {
-          "file": "libs/shared-hooks/src/lib/useProgressTracking.ts",
+          "file": "libs/hooks/src/lib/useProgressTracking.ts",
           "hash": "13214839148596851962",
-          "deps": [
-            "npm:react"
-          ]
+          "deps": ["npm:react"]
         },
         {
-          "file": "libs/shared-hooks/src/lib/useQuestions.ts",
+          "file": "libs/hooks/src/lib/useQuestions.ts",
           "hash": "14517966906082134138",
-          "deps": [
-            "npm:react",
-            "shared-types"
-          ]
+          "deps": ["npm:react", "shared-types"]
         },
         {
-          "file": "libs/shared-hooks/src/lib/useRoleBasedAccess.ts",
+          "file": "libs/hooks/src/lib/useRoleBasedAccess.ts",
           "hash": "4957549615379327758",
-          "deps": [
-            "shared-contexts"
-          ]
+          "deps": ["shared-contexts"]
         },
         {
-          "file": "libs/shared-hooks/src/lib/useSectorProgress.ts",
+          "file": "libs/hooks/src/lib/useSectorProgress.ts",
           "hash": "10234020394781390381",
-          "deps": [
-            "npm:react"
-          ]
+          "deps": ["npm:react"]
         },
         {
-          "file": "libs/shared-hooks/src/lib/useSecureProgress.ts",
+          "file": "libs/hooks/src/lib/useSecureProgress.ts",
           "hash": "4011453606969372596",
-          "deps": [
-            "npm:react"
-          ]
+          "deps": ["npm:react"]
         },
         {
-          "file": "libs/shared-hooks/src/lib/useTanStackQuery.ts",
+          "file": "libs/hooks/src/lib/useTanStackQuery.ts",
           "hash": "16970397150147198038",
-          "deps": [
-            "npm:@tanstack/react-query",
-            "shared-types"
-          ]
+          "deps": ["npm:@tanstack/react-query", "shared-types"]
         },
         {
-          "file": "libs/shared-hooks/src/lib/useTranslation.ts",
+          "file": "libs/hooks/src/lib/useTranslation.ts",
           "hash": "6448149381091266555",
-          "deps": [
-            "npm:next",
-            "npm:react"
-          ]
+          "deps": ["npm:next", "npm:react"]
         },
         {
-          "file": "libs/shared-hooks/src/lib/useUnifiedQuestions.ts",
+          "file": "libs/hooks/src/lib/useUnifiedQuestions.ts",
           "hash": "7816861900840326644",
-          "deps": [
-            "npm:react",
-            "shared-types"
-          ]
+          "deps": ["npm:react", "shared-types"]
         },
         {
-          "file": "libs/shared-hooks/src/lib/useUserPreferences.ts",
+          "file": "libs/hooks/src/lib/useUserPreferences.ts",
           "hash": "17138231571958799082",
-          "deps": [
-            "npm:jotai",
-            "shared-atoms"
-          ]
+          "deps": ["npm:jotai", "shared-atoms"]
         },
         {
-          "file": "libs/shared-hooks/src/lib/useUserProgress.ts",
+          "file": "libs/hooks/src/lib/useUserProgress.ts",
           "hash": "10572734699168399183",
-          "deps": [
-            "npm:react"
-          ]
+          "deps": ["npm:react"]
         },
         {
-          "file": "libs/shared-hooks/src/lib/useUserType.ts",
+          "file": "libs/hooks/src/lib/useUserType.ts",
           "hash": "11031709359851026303",
-          "deps": [
-            "npm:jotai",
-            "shared-atoms"
-          ]
+          "deps": ["npm:jotai", "shared-atoms"]
         },
         {
-          "file": "libs/shared-hooks/src/lib/utils/imageOptimization.ts",
+          "file": "libs/hooks/src/lib/utils/imageOptimization.ts",
           "hash": "15301122754607736709"
         },
         {
-          "file": "libs/shared-hooks/tsconfig.json",
+          "file": "libs/hooks/tsconfig.json",
           "hash": "14994595962478723103"
         },
         {
-          "file": "libs/shared-hooks/tsconfig.lib.json",
+          "file": "libs/hooks/tsconfig.lib.json",
           "hash": "2407687948951285838"
         },
         {
-          "file": "libs/shared-hooks/tsconfig.spec.json",
+          "file": "libs/hooks/tsconfig.spec.json",
           "hash": "6218745960847744644"
         },
         {
-          "file": "libs/shared-hooks/vite.config.ts",
+          "file": "libs/hooks/vite.config.ts",
           "hash": "6707071477397058964",
-          "deps": [
-            "npm:vite",
-            "npm:@nx/vite"
-          ]
+          "deps": ["npm:vite", "npm:@nx/vite"]
         }
       ],
       "shared-components": [
         {
-          "file": "libs/shared-components/package.json",
+          "file": "libs/components/package.json",
           "hash": "9504379229676127485"
         },
         {
-          "file": "libs/shared-components/project.json",
+          "file": "libs/components/project.json",
           "hash": "17129259141814003867"
         },
         {
-          "file": "libs/shared-components/src/index.ts",
+          "file": "libs/components/src/index.ts",
           "hash": "7142149635728714430"
         },
         {
-          "file": "libs/shared-components/src/lib/admin/BulkOperations.tsx",
+          "file": "libs/components/src/lib/admin/BulkOperations.tsx",
           "hash": "7258779741322432291",
-          "deps": [
-            "npm:react",
-            "npm:lucide-react",
-            "shared-hooks"
-          ]
+          "deps": ["npm:react", "npm:lucide-react", "shared-hooks"]
         },
         {
-          "file": "libs/shared-components/src/lib/admin/ClientCodeRunner.tsx",
+          "file": "libs/components/src/lib/admin/ClientCodeRunner.tsx",
           "hash": "16528787274600608161",
-          "deps": [
-            "npm:react"
-          ]
+          "deps": ["npm:react"]
         },
         {
-          "file": "libs/shared-components/src/lib/admin/FrontendTaskEditor.tsx",
+          "file": "libs/components/src/lib/admin/FrontendTaskEditor.tsx",
           "hash": "13029003700124081875",
           "deps": [
             "npm:react",
@@ -11345,7 +10532,7 @@
           ]
         },
         {
-          "file": "libs/shared-components/src/lib/admin/ProblemSolvingEditor.tsx",
+          "file": "libs/components/src/lib/admin/ProblemSolvingEditor.tsx",
           "hash": "5647664150684642206",
           "deps": [
             "npm:react",
@@ -11355,34 +10542,22 @@
           ]
         },
         {
-          "file": "libs/shared-components/src/lib/auth/AdminLayout.tsx",
+          "file": "libs/components/src/lib/auth/AdminLayout.tsx",
           "hash": "9483621861612991673",
-          "deps": [
-            "npm:react",
-            "shared-contexts",
-            "npm:next"
-          ]
+          "deps": ["npm:react", "shared-contexts", "npm:next"]
         },
         {
-          "file": "libs/shared-components/src/lib/auth/AdminLoginNavbar.tsx",
+          "file": "libs/components/src/lib/auth/AdminLoginNavbar.tsx",
           "hash": "12583910385715686561",
-          "deps": [
-            "npm:react",
-            "npm:next",
-            "shared-contexts"
-          ]
+          "deps": ["npm:react", "npm:next", "shared-contexts"]
         },
         {
-          "file": "libs/shared-components/src/lib/auth/AdminManagement.tsx",
+          "file": "libs/components/src/lib/auth/AdminManagement.tsx",
           "hash": "17722853162599335278",
-          "deps": [
-            "npm:react",
-            "npm:@supabase/supabase-js",
-            "website"
-          ]
+          "deps": ["npm:react", "npm:@supabase/supabase-js", "website"]
         },
         {
-          "file": "libs/shared-components/src/lib/auth/AdminNavbar.tsx",
+          "file": "libs/components/src/lib/auth/AdminNavbar.tsx",
           "hash": "11125091026333532996",
           "deps": [
             "npm:react",
@@ -11392,7 +10567,7 @@
           ]
         },
         {
-          "file": "libs/shared-components/src/lib/auth/ProtectedRoute.tsx",
+          "file": "libs/components/src/lib/auth/ProtectedRoute.tsx",
           "hash": "3567683967107501711",
           "deps": [
             "npm:next",
@@ -11402,34 +10577,22 @@
           ]
         },
         {
-          "file": "libs/shared-components/src/lib/auth/SignInGuidance.tsx",
+          "file": "libs/components/src/lib/auth/SignInGuidance.tsx",
           "hash": "16265338958484183628",
-          "deps": [
-            "npm:react",
-            "npm:lucide-react",
-            "npm:next"
-          ]
+          "deps": ["npm:react", "npm:lucide-react", "npm:next"]
         },
         {
-          "file": "libs/shared-components/src/lib/auth/SignInGuidanceDetector.tsx",
+          "file": "libs/components/src/lib/auth/SignInGuidanceDetector.tsx",
           "hash": "14633793110649491134",
-          "deps": [
-            "npm:react",
-            "npm:@supabase/supabase-js",
-            "npm:next"
-          ]
+          "deps": ["npm:react", "npm:@supabase/supabase-js", "npm:next"]
         },
         {
-          "file": "libs/shared-components/src/lib/auth/SignInPopup.tsx",
+          "file": "libs/components/src/lib/auth/SignInPopup.tsx",
           "hash": "3305679144831762570",
-          "deps": [
-            "npm:react",
-            "npm:@supabase/supabase-js",
-            "npm:lucide-react"
-          ]
+          "deps": ["npm:react", "npm:@supabase/supabase-js", "npm:lucide-react"]
         },
         {
-          "file": "libs/shared-components/src/lib/common/AddToFlashcard.tsx",
+          "file": "libs/components/src/lib/common/AddToFlashcard.tsx",
           "hash": "17213724086752086334",
           "deps": [
             "npm:react",
@@ -11440,16 +10603,12 @@
           ]
         },
         {
-          "file": "libs/shared-components/src/lib/common/AlzatonaLogo.tsx",
+          "file": "libs/components/src/lib/common/AlzatonaLogo.tsx",
           "hash": "18164558704379343632",
-          "deps": [
-            "npm:react",
-            "npm:next",
-            "shared-contexts"
-          ]
+          "deps": ["npm:react", "npm:next", "shared-contexts"]
         },
         {
-          "file": "libs/shared-components/src/lib/common/BulkQuestionUploader.tsx",
+          "file": "libs/components/src/lib/common/BulkQuestionUploader.tsx",
           "hash": "11099757404063393335",
           "deps": [
             "npm:react",
@@ -11459,37 +10618,27 @@
           ]
         },
         {
-          "file": "libs/shared-components/src/lib/common/CallToAction.tsx",
+          "file": "libs/components/src/lib/common/CallToAction.tsx",
           "hash": "12638852860053437008",
-          "deps": [
-            "npm:next"
-          ]
+          "deps": ["npm:next"]
         },
         {
-          "file": "libs/shared-components/src/lib/common/CategoryCard.tsx",
+          "file": "libs/components/src/lib/common/CategoryCard.tsx",
           "hash": "16089411338493182352",
-          "deps": [
-            "shared-types"
-          ]
+          "deps": ["shared-types"]
         },
         {
-          "file": "libs/shared-components/src/lib/common/ChallengeCard.tsx",
+          "file": "libs/components/src/lib/common/ChallengeCard.tsx",
           "hash": "13894915976292963776",
-          "deps": [
-            "shared-types"
-          ]
+          "deps": ["shared-types"]
         },
         {
-          "file": "libs/shared-components/src/lib/common/CodeEditor.tsx",
+          "file": "libs/components/src/lib/common/CodeEditor.tsx",
           "hash": "164726761113905078",
-          "deps": [
-            "npm:react",
-            "npm:@monaco-editor/react",
-            "shared-types"
-          ]
+          "deps": ["npm:react", "npm:@monaco-editor/react", "shared-types"]
         },
         {
-          "file": "libs/shared-components/src/lib/common/ComprehensiveGuidanceDetector.tsx",
+          "file": "libs/components/src/lib/common/ComprehensiveGuidanceDetector.tsx",
           "hash": "11286292272731531174",
           "deps": [
             "npm:react",
@@ -11499,30 +10648,22 @@
           ]
         },
         {
-          "file": "libs/shared-components/src/lib/common/ConditionalLayout.tsx",
+          "file": "libs/components/src/lib/common/ConditionalLayout.tsx",
           "hash": "686536532780835693",
-          "deps": [
-            "npm:next",
-            "npm:react"
-          ]
+          "deps": ["npm:next", "npm:react"]
         },
         {
-          "file": "libs/shared-components/src/lib/common/DarkModeToggle.tsx",
+          "file": "libs/components/src/lib/common/DarkModeToggle.tsx",
           "hash": "16072702027294360214",
-          "deps": [
-            "shared-contexts",
-            "npm:lucide-react"
-          ]
+          "deps": ["shared-contexts", "npm:lucide-react"]
         },
         {
-          "file": "libs/shared-components/src/lib/common/EmptyState.tsx",
+          "file": "libs/components/src/lib/common/EmptyState.tsx",
           "hash": "15378097676099592647",
-          "deps": [
-            "npm:next"
-          ]
+          "deps": ["npm:next"]
         },
         {
-          "file": "libs/shared-components/src/lib/common/EnhancedDashboard.tsx",
+          "file": "libs/components/src/lib/common/EnhancedDashboard.tsx",
           "hash": "7970053352847040928",
           "deps": [
             "npm:react",
@@ -11533,63 +10674,45 @@
           ]
         },
         {
-          "file": "libs/shared-components/src/lib/common/EnhancedUserDashboard.tsx",
+          "file": "libs/components/src/lib/common/EnhancedUserDashboard.tsx",
           "hash": "1331540289492200117",
-          "deps": [
-            "npm:react",
-            "npm:next",
-            "npm:lucide-react"
-          ]
+          "deps": ["npm:react", "npm:next", "npm:lucide-react"]
         },
         {
-          "file": "libs/shared-components/src/lib/common/ErrorBoundary.tsx",
+          "file": "libs/components/src/lib/common/ErrorBoundary.tsx",
           "hash": "1303691314289722845",
           "deps": [
             "npm:react",
             "npm:lucide-react",
-            [
-              "npm:@supabase/supabase-js",
-              "dynamic"
-            ]
+            ["npm:@supabase/supabase-js", "dynamic"]
           ]
         },
         {
-          "file": "libs/shared-components/src/lib/common/ExpandableText.tsx",
+          "file": "libs/components/src/lib/common/ExpandableText.tsx",
           "hash": "5402011045054567581",
-          "deps": [
-            "npm:react"
-          ]
+          "deps": ["npm:react"]
         },
         {
-          "file": "libs/shared-components/src/lib/common/FeatureDetailsModal.tsx",
+          "file": "libs/components/src/lib/common/FeatureDetailsModal.tsx",
           "hash": "17428622380196230078",
-          "deps": [
-            "npm:react",
-            "npm:@supabase/supabase-js",
-            "npm:lucide-react"
-          ]
+          "deps": ["npm:react", "npm:@supabase/supabase-js", "npm:lucide-react"]
         },
         {
-          "file": "libs/shared-components/src/lib/common/FilterButton.tsx",
+          "file": "libs/components/src/lib/common/FilterButton.tsx",
           "hash": "2666740670934904721",
-          "deps": [
-            "npm:react",
-            "npm:@supabase/supabase-js"
-          ]
+          "deps": ["npm:react", "npm:@supabase/supabase-js"]
         },
         {
-          "file": "libs/shared-components/src/lib/common/FilterButtons.tsx",
+          "file": "libs/components/src/lib/common/FilterButtons.tsx",
           "hash": "10665041853127788617"
         },
         {
-          "file": "libs/shared-components/src/lib/common/FirestoreErrorBoundary.tsx",
+          "file": "libs/components/src/lib/common/FirestoreErrorBoundary.tsx",
           "hash": "3185762670533816360",
-          "deps": [
-            "npm:react"
-          ]
+          "deps": ["npm:react"]
         },
         {
-          "file": "libs/shared-components/src/lib/common/FirstTimeVisitorDetector.tsx",
+          "file": "libs/components/src/lib/common/FirstTimeVisitorDetector.tsx",
           "hash": "1046455688532656979",
           "deps": [
             "npm:react",
@@ -11599,16 +10722,12 @@
           ]
         },
         {
-          "file": "libs/shared-components/src/lib/common/FirstVisitDetector.tsx",
+          "file": "libs/components/src/lib/common/FirstVisitDetector.tsx",
           "hash": "10648660406136967324",
-          "deps": [
-            "npm:react",
-            "npm:@supabase/supabase-js",
-            "shared-contexts"
-          ]
+          "deps": ["npm:react", "npm:@supabase/supabase-js", "shared-contexts"]
         },
         {
-          "file": "libs/shared-components/src/lib/common/FirstVisitModal.tsx",
+          "file": "libs/components/src/lib/common/FirstVisitModal.tsx",
           "hash": "5746090409117877618",
           "deps": [
             "npm:react",
@@ -11618,16 +10737,12 @@
           ]
         },
         {
-          "file": "libs/shared-components/src/lib/common/GitHubIssuesCard.tsx",
+          "file": "libs/components/src/lib/common/GitHubIssuesCard.tsx",
           "hash": "13201302031549234841",
-          "deps": [
-            "npm:react",
-            "npm:@supabase/supabase-js",
-            "npm:lucide-react"
-          ]
+          "deps": ["npm:react", "npm:@supabase/supabase-js", "npm:lucide-react"]
         },
         {
-          "file": "libs/shared-components/src/lib/common/GuidedTour.tsx",
+          "file": "libs/components/src/lib/common/GuidedTour.tsx",
           "hash": "9601223143195089097",
           "deps": [
             "npm:react",
@@ -11637,15 +10752,12 @@
           ]
         },
         {
-          "file": "libs/shared-components/src/lib/common/InternalResourceCard.tsx",
+          "file": "libs/components/src/lib/common/InternalResourceCard.tsx",
           "hash": "217167310343680009",
-          "deps": [
-            "npm:react",
-            "npm:next"
-          ]
+          "deps": ["npm:react", "npm:next"]
         },
         {
-          "file": "libs/shared-components/src/lib/common/LanguageSwitcher.tsx",
+          "file": "libs/components/src/lib/common/LanguageSwitcher.tsx",
           "hash": "1143364374698605986",
           "deps": [
             "npm:react",
@@ -11655,28 +10767,22 @@
           ]
         },
         {
-          "file": "libs/shared-components/src/lib/common/LayoutWrapper.tsx",
+          "file": "libs/components/src/lib/common/LayoutWrapper.tsx",
           "hash": "1089098872036224466",
-          "deps": [
-            "npm:react"
-          ]
+          "deps": ["npm:react"]
         },
         {
-          "file": "libs/shared-components/src/lib/common/LoadingTransition.tsx",
+          "file": "libs/components/src/lib/common/LoadingTransition.tsx",
           "hash": "8019662564688274344",
-          "deps": [
-            "npm:react"
-          ]
+          "deps": ["npm:react"]
         },
         {
-          "file": "libs/shared-components/src/lib/common/MobilePagination.tsx",
+          "file": "libs/components/src/lib/common/MobilePagination.tsx",
           "hash": "17321013883056729310",
-          "deps": [
-            "npm:react"
-          ]
+          "deps": ["npm:react"]
         },
         {
-          "file": "libs/shared-components/src/lib/common/ModeSpecificOnboarding.tsx",
+          "file": "libs/components/src/lib/common/ModeSpecificOnboarding.tsx",
           "hash": "2252325366206727278",
           "deps": [
             "npm:react",
@@ -11687,7 +10793,7 @@
           ]
         },
         {
-          "file": "libs/shared-components/src/lib/common/Navbar.tsx",
+          "file": "libs/components/src/lib/common/Navbar.tsx",
           "hash": "9839383623131388551",
           "deps": [
             "npm:react",
@@ -11697,7 +10803,7 @@
           ]
         },
         {
-          "file": "libs/shared-components/src/lib/common/NavbarSimple.tsx",
+          "file": "libs/components/src/lib/common/NavbarSimple.tsx",
           "hash": "9651544992036597342",
           "deps": [
             "npm:react",
@@ -11708,41 +10814,27 @@
           ]
         },
         {
-          "file": "libs/shared-components/src/lib/common/Navigation.tsx",
+          "file": "libs/components/src/lib/common/Navigation.tsx",
           "hash": "7922236341759038435",
-          "deps": [
-            "npm:next"
-          ]
+          "deps": ["npm:next"]
         },
         {
-          "file": "libs/shared-components/src/lib/common/NotificationDropdown.tsx",
+          "file": "libs/components/src/lib/common/NotificationDropdown.tsx",
           "hash": "13400210181208724927",
-          "deps": [
-            "npm:react",
-            "shared-contexts",
-            "npm:lucide-react"
-          ]
+          "deps": ["npm:react", "shared-contexts", "npm:lucide-react"]
         },
         {
-          "file": "libs/shared-components/src/lib/common/OnboardingSystem.tsx",
+          "file": "libs/components/src/lib/common/OnboardingSystem.tsx",
           "hash": "6193353873764872237",
-          "deps": [
-            "npm:react",
-            "npm:@supabase/supabase-js",
-            "npm:lucide-react"
-          ]
+          "deps": ["npm:react", "npm:@supabase/supabase-js", "npm:lucide-react"]
         },
         {
-          "file": "libs/shared-components/src/lib/common/OnboardingTour.tsx",
+          "file": "libs/components/src/lib/common/OnboardingTour.tsx",
           "hash": "13557727328342289780",
-          "deps": [
-            "npm:react",
-            "npm:@supabase/supabase-js",
-            "npm:lucide-react"
-          ]
+          "deps": ["npm:react", "npm:@supabase/supabase-js", "npm:lucide-react"]
         },
         {
-          "file": "libs/shared-components/src/lib/common/OnboardingTrigger.tsx",
+          "file": "libs/components/src/lib/common/OnboardingTrigger.tsx",
           "hash": "9007819219368302676",
           "deps": [
             "npm:react",
@@ -11752,40 +10844,27 @@
           ]
         },
         {
-          "file": "libs/shared-components/src/lib/common/OptimizedImage.tsx",
+          "file": "libs/components/src/lib/common/OptimizedImage.tsx",
           "hash": "12805966990031591908",
-          "deps": [
-            "npm:react",
-            "npm:next"
-          ]
+          "deps": ["npm:react", "npm:next"]
         },
         {
-          "file": "libs/shared-components/src/lib/common/PageHeader.tsx",
+          "file": "libs/components/src/lib/common/PageHeader.tsx",
           "hash": "15856423586998644798",
-          "deps": [
-            "npm:next",
-            "npm:react",
-            "npm:lucide-react"
-          ]
+          "deps": ["npm:next", "npm:react", "npm:lucide-react"]
         },
         {
-          "file": "libs/shared-components/src/lib/common/PerformanceMonitor.tsx",
+          "file": "libs/components/src/lib/common/PerformanceMonitor.tsx",
           "hash": "4660834406881726114",
-          "deps": [
-            "npm:react",
-            "npm:@supabase/supabase-js"
-          ]
+          "deps": ["npm:react", "npm:@supabase/supabase-js"]
         },
         {
-          "file": "libs/shared-components/src/lib/common/ProgressAnalytics.tsx",
+          "file": "libs/components/src/lib/common/ProgressAnalytics.tsx",
           "hash": "16657538628471055950",
-          "deps": [
-            "npm:react",
-            "npm:lucide-react"
-          ]
+          "deps": ["npm:react", "npm:lucide-react"]
         },
         {
-          "file": "libs/shared-components/src/lib/common/ProgressIndicator.tsx",
+          "file": "libs/components/src/lib/common/ProgressIndicator.tsx",
           "hash": "15536160422644838575",
           "deps": [
             "npm:react",
@@ -11795,40 +10874,27 @@
           ]
         },
         {
-          "file": "libs/shared-components/src/lib/common/ProgressTracker.tsx",
+          "file": "libs/components/src/lib/common/ProgressTracker.tsx",
           "hash": "10326122448741936912",
-          "deps": [
-            "npm:react"
-          ]
+          "deps": ["npm:react"]
         },
         {
-          "file": "libs/shared-components/src/lib/common/QuestionSectionAssigner.tsx",
+          "file": "libs/components/src/lib/common/QuestionSectionAssigner.tsx",
           "hash": "2748652373812694113",
-          "deps": [
-            "npm:react",
-            "npm:@supabase/supabase-js",
-            "npm:lucide-react"
-          ]
+          "deps": ["npm:react", "npm:@supabase/supabase-js", "npm:lucide-react"]
         },
         {
-          "file": "libs/shared-components/src/lib/common/ResourceCard.tsx",
+          "file": "libs/components/src/lib/common/ResourceCard.tsx",
           "hash": "16670436053948745237",
-          "deps": [
-            "npm:react",
-            "shared-types"
-          ]
+          "deps": ["npm:react", "shared-types"]
         },
         {
-          "file": "libs/shared-components/src/lib/common/SectionConfigManager.tsx",
+          "file": "libs/components/src/lib/common/SectionConfigManager.tsx",
           "hash": "8206458172955637328",
-          "deps": [
-            "npm:react",
-            "npm:@supabase/supabase-js",
-            "npm:lucide-react"
-          ]
+          "deps": ["npm:react", "npm:@supabase/supabase-js", "npm:lucide-react"]
         },
         {
-          "file": "libs/shared-components/src/lib/common/SectionQuestionCountManager.tsx",
+          "file": "libs/components/src/lib/common/SectionQuestionCountManager.tsx",
           "hash": "8344162782601831357",
           "deps": [
             "npm:react",
@@ -11838,36 +10904,26 @@
           ]
         },
         {
-          "file": "libs/shared-components/src/lib/common/SectionQuestionManager.tsx",
+          "file": "libs/components/src/lib/common/SectionQuestionManager.tsx",
           "hash": "4793286831464231422",
-          "deps": [
-            "npm:react",
-            "npm:@supabase/supabase-js",
-            "npm:lucide-react"
-          ]
+          "deps": ["npm:react", "npm:@supabase/supabase-js", "npm:lucide-react"]
         },
         {
-          "file": "libs/shared-components/src/lib/common/StatisticsCard.tsx",
+          "file": "libs/components/src/lib/common/StatisticsCard.tsx",
           "hash": "4149240780291063288",
-          "deps": [
-            "npm:react",
-            "npm:@supabase/supabase-js"
-          ]
+          "deps": ["npm:react", "npm:@supabase/supabase-js"]
         },
         {
-          "file": "libs/shared-components/src/lib/common/StatisticsSection.tsx",
+          "file": "libs/components/src/lib/common/StatisticsSection.tsx",
           "hash": "12386999403587245210"
         },
         {
-          "file": "libs/shared-components/src/lib/common/Toast.tsx",
+          "file": "libs/components/src/lib/common/Toast.tsx",
           "hash": "4506384645681614738",
-          "deps": [
-            "npm:react",
-            "npm:lucide-react"
-          ]
+          "deps": ["npm:react", "npm:lucide-react"]
         },
         {
-          "file": "libs/shared-components/src/lib/common/TopicManager.tsx",
+          "file": "libs/components/src/lib/common/TopicManager.tsx",
           "hash": "16248110440665657818",
           "deps": [
             "npm:react",
@@ -11877,53 +10933,37 @@
           ]
         },
         {
-          "file": "libs/shared-components/src/lib/common/UserGuidanceSystem.tsx",
+          "file": "libs/components/src/lib/common/UserGuidanceSystem.tsx",
           "hash": "17280194222330742162",
-          "deps": [
-            "npm:react",
-            "npm:@supabase/supabase-js",
-            "npm:lucide-react"
-          ]
+          "deps": ["npm:react", "npm:@supabase/supabase-js", "npm:lucide-react"]
         },
         {
-          "file": "libs/shared-components/src/lib/common/UserStatistics.tsx",
+          "file": "libs/components/src/lib/common/UserStatistics.tsx",
           "hash": "1190696254672449935",
           "deps": [
             "npm:react",
             "shared-hooks",
             "npm:lucide-react",
-            [
-              "npm:@supabase/supabase-js",
-              "dynamic"
-            ]
+            ["npm:@supabase/supabase-js", "dynamic"]
           ]
         },
         {
-          "file": "libs/shared-components/src/lib/common/UserStatisticsSafe.tsx",
+          "file": "libs/components/src/lib/common/UserStatisticsSafe.tsx",
           "hash": "387654178681091287",
-          "deps": [
-            "npm:react",
-            "npm:@supabase/supabase-js",
-            "npm:lucide-react"
-          ]
+          "deps": ["npm:react", "npm:@supabase/supabase-js", "npm:lucide-react"]
         },
         {
-          "file": "libs/shared-components/src/lib/common/UserTypeSelector.tsx",
+          "file": "libs/components/src/lib/common/UserTypeSelector.tsx",
           "hash": "15847361835663957903",
-          "deps": [
-            "npm:react",
-            "npm:lucide-react"
-          ]
+          "deps": ["npm:react", "npm:lucide-react"]
         },
         {
-          "file": "libs/shared-components/src/lib/common/VideoEmbed.tsx",
+          "file": "libs/components/src/lib/common/VideoEmbed.tsx",
           "hash": "3206959075762726",
-          "deps": [
-            "npm:react"
-          ]
+          "deps": ["npm:react"]
         },
         {
-          "file": "libs/shared-components/src/lib/common/WelcomeBanner.tsx",
+          "file": "libs/components/src/lib/common/WelcomeBanner.tsx",
           "hash": "6924530997115833118",
           "deps": [
             "npm:react",
@@ -11933,11 +10973,11 @@
           ]
         },
         {
-          "file": "libs/shared-components/src/lib/common/index.ts",
+          "file": "libs/components/src/lib/common/index.ts",
           "hash": "12080398658389783959"
         },
         {
-          "file": "libs/shared-components/src/lib/components/admin/AdminDashboard.tsx",
+          "file": "libs/components/src/lib/components/admin/AdminDashboard.tsx",
           "hash": "14418699825486189766",
           "deps": [
             "shared-contexts",
@@ -11947,16 +10987,12 @@
           ]
         },
         {
-          "file": "libs/shared-components/src/lib/components/admin/AdminLoginForm.tsx",
+          "file": "libs/components/src/lib/components/admin/AdminLoginForm.tsx",
           "hash": "10491285791871699900",
-          "deps": [
-            "npm:react",
-            "shared-contexts",
-            "npm:lucide-react"
-          ]
+          "deps": ["npm:react", "shared-contexts", "npm:lucide-react"]
         },
         {
-          "file": "libs/shared-components/src/lib/components/admin/AdminNavbar.tsx",
+          "file": "libs/components/src/lib/components/admin/AdminNavbar.tsx",
           "hash": "2319990566386394776",
           "deps": [
             "npm:react",
@@ -11966,36 +11002,26 @@
           ]
         },
         {
-          "file": "libs/shared-components/src/lib/components/admin/SimpleAdminNavbar.tsx",
+          "file": "libs/components/src/lib/components/admin/SimpleAdminNavbar.tsx",
           "hash": "11930211379288756062",
-          "deps": [
-            "npm:react",
-            "npm:next"
-          ]
+          "deps": ["npm:react", "npm:next"]
         },
         {
-          "file": "libs/shared-components/src/lib/components/admin/index.ts",
+          "file": "libs/components/src/lib/components/admin/index.ts",
           "hash": "13364543135170488977"
         },
         {
-          "file": "libs/shared-components/src/lib/components/common/AdvancedSearch.tsx",
+          "file": "libs/components/src/lib/components/common/AdvancedSearch.tsx",
           "hash": "5259920186095430415",
-          "deps": [
-            "npm:react",
-            "npm:nuqs",
-            "npm:lucide-react"
-          ]
+          "deps": ["npm:react", "npm:nuqs", "npm:lucide-react"]
         },
         {
-          "file": "libs/shared-components/src/lib/components/ui/badge.tsx",
+          "file": "libs/components/src/lib/components/ui/badge.tsx",
           "hash": "10705112625948099347",
-          "deps": [
-            "npm:react",
-            "npm:class-variance-authority"
-          ]
+          "deps": ["npm:react", "npm:class-variance-authority"]
         },
         {
-          "file": "libs/shared-components/src/lib/components/ui/button.tsx",
+          "file": "libs/components/src/lib/components/ui/button.tsx",
           "hash": "11650192891353980405",
           "deps": [
             "npm:react",
@@ -12004,165 +11030,118 @@
           ]
         },
         {
-          "file": "libs/shared-components/src/lib/components/ui/card.tsx",
+          "file": "libs/components/src/lib/components/ui/card.tsx",
           "hash": "5377111551433930171",
-          "deps": [
-            "npm:react"
-          ]
+          "deps": ["npm:react"]
         },
         {
-          "file": "libs/shared-components/src/lib/components/ui/checkbox.tsx",
+          "file": "libs/components/src/lib/components/ui/checkbox.tsx",
           "hash": "1566320813484997891",
-          "deps": [
-            "npm:react",
-            "npm:lucide-react"
-          ]
+          "deps": ["npm:react", "npm:lucide-react"]
         },
         {
-          "file": "libs/shared-components/src/lib/components/ui/collapsible.tsx",
+          "file": "libs/components/src/lib/components/ui/collapsible.tsx",
           "hash": "11588285379568554974",
-          "deps": [
-            "npm:react"
-          ]
+          "deps": ["npm:react"]
         },
         {
-          "file": "libs/shared-components/src/lib/components/ui/dialog.tsx",
+          "file": "libs/components/src/lib/components/ui/dialog.tsx",
           "hash": "4255159307310427070",
-          "deps": [
-            "npm:react"
-          ]
+          "deps": ["npm:react"]
         },
         {
-          "file": "libs/shared-components/src/lib/components/ui/index.ts",
+          "file": "libs/components/src/lib/components/ui/index.ts",
           "hash": "7912919795574190908"
         },
         {
-          "file": "libs/shared-components/src/lib/components/ui/input.tsx",
+          "file": "libs/components/src/lib/components/ui/input.tsx",
           "hash": "9416164767799721185",
-          "deps": [
-            "npm:react"
-          ]
+          "deps": ["npm:react"]
         },
         {
-          "file": "libs/shared-components/src/lib/components/ui/label.tsx",
+          "file": "libs/components/src/lib/components/ui/label.tsx",
           "hash": "16115992243634102432",
-          "deps": [
-            "npm:react"
-          ]
+          "deps": ["npm:react"]
         },
         {
-          "file": "libs/shared-components/src/lib/components/ui/select.tsx",
+          "file": "libs/components/src/lib/components/ui/select.tsx",
           "hash": "14979367430987204383",
-          "deps": [
-            "npm:react",
-            "npm:lucide-react"
-          ]
+          "deps": ["npm:react", "npm:lucide-react"]
         },
         {
-          "file": "libs/shared-components/src/lib/components/ui/textarea.tsx",
+          "file": "libs/components/src/lib/components/ui/textarea.tsx",
           "hash": "3886657379105780818",
-          "deps": [
-            "npm:react"
-          ]
+          "deps": ["npm:react"]
         },
         {
-          "file": "libs/shared-components/src/lib/forms/CardForm.tsx",
+          "file": "libs/components/src/lib/forms/CardForm.tsx",
           "hash": "14857569620269012702",
-          "deps": [
-            "npm:react"
-          ]
+          "deps": ["npm:react"]
         },
         {
-          "file": "libs/shared-components/src/lib/forms/CategoryForm.tsx",
+          "file": "libs/components/src/lib/forms/CategoryForm.tsx",
           "hash": "16136207807909868881",
-          "deps": [
-            "npm:react",
-            "shared-types"
-          ]
+          "deps": ["npm:react", "shared-types"]
         },
         {
-          "file": "libs/shared-components/src/lib/forms/PlanForm.tsx",
+          "file": "libs/components/src/lib/forms/PlanForm.tsx",
           "hash": "11009860266465107154",
-          "deps": [
-            "npm:react"
-          ]
+          "deps": ["npm:react"]
         },
         {
-          "file": "libs/shared-components/src/lib/forms/QuestionForm.tsx",
+          "file": "libs/components/src/lib/forms/QuestionForm.tsx",
           "hash": "7234800433586944157",
-          "deps": [
-            "npm:react",
-            "shared-types"
-          ]
+          "deps": ["npm:react", "shared-types"]
         },
         {
-          "file": "libs/shared-components/src/lib/forms/TopicForm.tsx",
+          "file": "libs/components/src/lib/forms/TopicForm.tsx",
           "hash": "12746564386565893026",
-          "deps": [
-            "npm:react"
-          ]
+          "deps": ["npm:react"]
         },
         {
-          "file": "libs/shared-components/src/lib/index.ts",
+          "file": "libs/components/src/lib/index.ts",
           "hash": "16136556550206981962"
         },
         {
-          "file": "libs/shared-components/src/lib/shared-components.ts",
+          "file": "libs/components/src/lib/shared-components.ts",
           "hash": "13023157500687826041"
         },
         {
-          "file": "libs/shared-components/src/lib/types/github-issues.ts",
+          "file": "libs/components/src/lib/types/github-issues.ts",
           "hash": "12683419149690066286"
         },
         {
-          "file": "libs/shared-components/src/lib/types/website-features.ts",
+          "file": "libs/components/src/lib/types/website-features.ts",
           "hash": "16049796988579674524",
-          "deps": [
-            "npm:react"
-          ]
+          "deps": ["npm:react"]
         },
         {
-          "file": "libs/shared-components/src/lib/ui/CelebrationModal.tsx",
+          "file": "libs/components/src/lib/ui/CelebrationModal.tsx",
           "hash": "9322989316200158469",
-          "deps": [
-            "npm:react",
-            "npm:lucide-react"
-          ]
+          "deps": ["npm:react", "npm:lucide-react"]
         },
         {
-          "file": "libs/shared-components/src/lib/ui/ConfirmationDialog.tsx",
+          "file": "libs/components/src/lib/ui/ConfirmationDialog.tsx",
           "hash": "2277683024197634554",
-          "deps": [
-            "npm:react",
-            "npm:lucide-react"
-          ]
+          "deps": ["npm:react", "npm:lucide-react"]
         },
         {
-          "file": "libs/shared-components/src/lib/ui/Notification.tsx",
+          "file": "libs/components/src/lib/ui/Notification.tsx",
           "hash": "5539021440493442312",
-          "deps": [
-            "npm:react",
-            "npm:lucide-react"
-          ]
+          "deps": ["npm:react", "npm:lucide-react"]
         },
         {
-          "file": "libs/shared-components/src/lib/ui/alert.tsx",
+          "file": "libs/components/src/lib/ui/alert.tsx",
           "hash": "14256803513397574822",
-          "deps": [
-            "npm:react",
-            "npm:class-variance-authority"
-          ]
+          "deps": ["npm:react", "npm:class-variance-authority"]
         },
         {
-          "file": "libs/shared-components/src/lib/ui/badge.tsx",
+          "file": "libs/components/src/lib/ui/badge.tsx",
           "hash": "6324301050021309625",
-          "deps": [
-            "npm:react",
-            "npm:class-variance-authority"
-          ]
+          "deps": ["npm:react", "npm:class-variance-authority"]
         },
         {
-          "file": "libs/shared-components/src/lib/ui/button.tsx",
+          "file": "libs/components/src/lib/ui/button.tsx",
           "hash": "12591489663194709961",
           "deps": [
             "npm:react",
@@ -12171,23 +11150,17 @@
           ]
         },
         {
-          "file": "libs/shared-components/src/lib/ui/calendar.tsx",
+          "file": "libs/components/src/lib/ui/calendar.tsx",
           "hash": "3578006437507907002",
-          "deps": [
-            "npm:react",
-            "npm:lucide-react",
-            "npm:react-day-picker"
-          ]
+          "deps": ["npm:react", "npm:lucide-react", "npm:react-day-picker"]
         },
         {
-          "file": "libs/shared-components/src/lib/ui/card.tsx",
+          "file": "libs/components/src/lib/ui/card.tsx",
           "hash": "6403798089383652505",
-          "deps": [
-            "npm:react"
-          ]
+          "deps": ["npm:react"]
         },
         {
-          "file": "libs/shared-components/src/lib/ui/checkbox.tsx",
+          "file": "libs/components/src/lib/ui/checkbox.tsx",
           "hash": "1295726440171398306",
           "deps": [
             "npm:react",
@@ -12196,15 +11169,12 @@
           ]
         },
         {
-          "file": "libs/shared-components/src/lib/ui/collapsible.tsx",
+          "file": "libs/components/src/lib/ui/collapsible.tsx",
           "hash": "13381007205046017850",
-          "deps": [
-            "npm:react",
-            "npm:@radix-ui/react-collapsible"
-          ]
+          "deps": ["npm:react", "npm:@radix-ui/react-collapsible"]
         },
         {
-          "file": "libs/shared-components/src/lib/ui/dialog.tsx",
+          "file": "libs/components/src/lib/ui/dialog.tsx",
           "hash": "8827760553383155986",
           "deps": [
             "npm:react",
@@ -12213,22 +11183,17 @@
           ]
         },
         {
-          "file": "libs/shared-components/src/lib/ui/empty-state.tsx",
+          "file": "libs/components/src/lib/ui/empty-state.tsx",
           "hash": "3864905537426470446",
-          "deps": [
-            "npm:react",
-            "npm:lucide-react"
-          ]
+          "deps": ["npm:react", "npm:lucide-react"]
         },
         {
-          "file": "libs/shared-components/src/lib/ui/input.tsx",
+          "file": "libs/components/src/lib/ui/input.tsx",
           "hash": "4457593646826166441",
-          "deps": [
-            "npm:react"
-          ]
+          "deps": ["npm:react"]
         },
         {
-          "file": "libs/shared-components/src/lib/ui/label.tsx",
+          "file": "libs/components/src/lib/ui/label.tsx",
           "hash": "2445666943123837666",
           "deps": [
             "npm:react",
@@ -12237,31 +11202,22 @@
           ]
         },
         {
-          "file": "libs/shared-components/src/lib/ui/modal.tsx",
+          "file": "libs/components/src/lib/ui/modal.tsx",
           "hash": "17794306051905549358",
-          "deps": [
-            "npm:react",
-            "npm:lucide-react"
-          ]
+          "deps": ["npm:react", "npm:lucide-react"]
         },
         {
-          "file": "libs/shared-components/src/lib/ui/popover.tsx",
+          "file": "libs/components/src/lib/ui/popover.tsx",
           "hash": "7953926607005645280",
-          "deps": [
-            "npm:react",
-            "npm:@radix-ui/react-popover"
-          ]
+          "deps": ["npm:react", "npm:@radix-ui/react-popover"]
         },
         {
-          "file": "libs/shared-components/src/lib/ui/progress.tsx",
+          "file": "libs/components/src/lib/ui/progress.tsx",
           "hash": "2401791779133102518",
-          "deps": [
-            "npm:react",
-            "npm:@radix-ui/react-progress"
-          ]
+          "deps": ["npm:react", "npm:@radix-ui/react-progress"]
         },
         {
-          "file": "libs/shared-components/src/lib/ui/select.tsx",
+          "file": "libs/components/src/lib/ui/select.tsx",
           "hash": "4338303130421476467",
           "deps": [
             "npm:react",
@@ -12270,163 +11226,138 @@
           ]
         },
         {
-          "file": "libs/shared-components/src/lib/ui/skeleton.tsx",
+          "file": "libs/components/src/lib/ui/skeleton.tsx",
           "hash": "12520792776392283129",
-          "deps": [
-            "npm:react"
-          ]
+          "deps": ["npm:react"]
         },
         {
-          "file": "libs/shared-components/src/lib/ui/switch.tsx",
+          "file": "libs/components/src/lib/ui/switch.tsx",
           "hash": "3033992530745370623",
-          "deps": [
-            "npm:react",
-            "npm:@radix-ui/react-switch"
-          ]
+          "deps": ["npm:react", "npm:@radix-ui/react-switch"]
         },
         {
-          "file": "libs/shared-components/src/lib/ui/tabs.tsx",
+          "file": "libs/components/src/lib/ui/tabs.tsx",
           "hash": "9084478389353075912",
-          "deps": [
-            "npm:react",
-            "npm:@radix-ui/react-tabs"
-          ]
+          "deps": ["npm:react", "npm:@radix-ui/react-tabs"]
         },
         {
-          "file": "libs/shared-components/src/lib/ui/textarea.tsx",
+          "file": "libs/components/src/lib/ui/textarea.tsx",
           "hash": "9299533896885206341",
-          "deps": [
-            "npm:react"
-          ]
+          "deps": ["npm:react"]
         },
         {
-          "file": "libs/shared-components/src/lib/utils.ts",
+          "file": "libs/components/src/lib/utils.ts",
           "hash": "4398841608861978635",
-          "deps": [
-            "npm:clsx",
-            "npm:tailwind-merge"
-          ]
+          "deps": ["npm:clsx", "npm:tailwind-merge"]
         },
         {
-          "file": "libs/shared-components/tsconfig.json",
+          "file": "libs/components/tsconfig.json",
           "hash": "13896684044388436279"
         },
         {
-          "file": "libs/shared-components/tsconfig.lib.json",
+          "file": "libs/components/tsconfig.lib.json",
           "hash": "4762922382600917233"
         },
         {
-          "file": "libs/shared-components/tsconfig.spec.json",
+          "file": "libs/components/tsconfig.spec.json",
           "hash": "7180735435295291920"
         },
         {
-          "file": "libs/shared-components/vite.config.ts",
+          "file": "libs/components/vite.config.ts",
           "hash": "11704186674472989923",
-          "deps": [
-            "npm:vite",
-            "npm:@nx/vite"
-          ]
+          "deps": ["npm:vite", "npm:@nx/vite"]
         }
       ],
       "shared-types": [
         {
-          "file": "libs/shared-types/package.json",
+          "file": "libs/types/package.json",
           "hash": "4984343584638812525"
         },
         {
-          "file": "libs/shared-types/project.json",
+          "file": "libs/types/project.json",
           "hash": "16316056744330620613"
         },
         {
-          "file": "libs/shared-types/src/index.ts",
+          "file": "libs/types/src/index.ts",
           "hash": "17477233218007285873"
         },
         {
-          "file": "libs/shared-types/src/lib/admin.ts",
+          "file": "libs/types/src/lib/admin.ts",
           "hash": "13350472351840598113"
         },
         {
-          "file": "libs/shared-types/src/lib/challenge.ts",
+          "file": "libs/types/src/lib/challenge.ts",
           "hash": "9281439607393081319"
         },
         {
-          "file": "libs/shared-types/src/lib/firestore.ts",
+          "file": "libs/types/src/lib/firestore.ts",
           "hash": "14055582759943680125"
         },
         {
-          "file": "libs/shared-types/src/lib/learning-cards.ts",
+          "file": "libs/types/src/lib/learning-cards.ts",
           "hash": "13002642210368270810"
         },
         {
-          "file": "libs/shared-types/src/lib/learningPathQuestion.ts",
+          "file": "libs/types/src/lib/learningPathQuestion.ts",
           "hash": "3244421341483603138"
         },
         {
-          "file": "libs/shared-types/src/lib/preparationGuide.ts",
+          "file": "libs/types/src/lib/preparationGuide.ts",
           "hash": "13528703830174405679"
         },
         {
-          "file": "libs/shared-types/src/lib/progress.ts",
+          "file": "libs/types/src/lib/progress.ts",
           "hash": "7293129726351550724"
         },
         {
-          "file": "libs/shared-types/src/lib/resource.ts",
+          "file": "libs/types/src/lib/resource.ts",
           "hash": "15145276282322586431"
         },
         {
-          "file": "libs/shared-types/src/lib/shared-types.ts",
+          "file": "libs/types/src/lib/shared-types.ts",
           "hash": "8022718553858661158"
         },
         {
-          "file": "libs/shared-types/src/lib/speech-api.ts",
+          "file": "libs/types/src/lib/speech-api.ts",
           "hash": "7892937215119500604"
         },
         {
-          "file": "libs/shared-types/src/lib/studyPlans.ts",
+          "file": "libs/types/src/lib/studyPlans.ts",
           "hash": "10120215530296814710"
         },
         {
-          "file": "libs/shared-types/src/lib/unified-question-schema.ts",
+          "file": "libs/types/src/lib/unified-question-schema.ts",
           "hash": "935596895414381807",
-          "deps": [
-            "npm:@supabase/supabase-js"
-          ]
+          "deps": ["npm:@supabase/supabase-js"]
         },
         {
-          "file": "libs/shared-types/tsconfig.json",
+          "file": "libs/types/tsconfig.json",
           "hash": "14994595962478723103"
         },
         {
-          "file": "libs/shared-types/tsconfig.lib.json",
+          "file": "libs/types/tsconfig.lib.json",
           "hash": "2407687948951285838"
         },
         {
-          "file": "libs/shared-types/tsconfig.spec.json",
+          "file": "libs/types/tsconfig.spec.json",
           "hash": "6218745960847744644"
         },
         {
-          "file": "libs/shared-types/vite.config.ts",
+          "file": "libs/types/vite.config.ts",
           "hash": "6392698659054140837",
-          "deps": [
-            "npm:vite",
-            "npm:@nx/vite"
-          ]
+          "deps": ["npm:vite", "npm:@nx/vite"]
         }
       ],
       "admin": [
         {
           "file": "apps/admin/jest.config.js",
           "hash": "7575215190279734782",
-          "deps": [
-            "npm:next"
-          ]
+          "deps": ["npm:next"]
         },
         {
           "file": "apps/admin/jest.setup.js",
           "hash": "8494672574259127005",
-          "deps": [
-            "npm:@testing-library/jest-dom"
-          ]
+          "deps": ["npm:@testing-library/jest-dom"]
         },
         {
           "file": "apps/admin/network/data/ideas/ADDING_NEW_FEATURES.md",
@@ -13308,25 +12239,17 @@
         {
           "file": "apps/admin/src/app/admin/content/layout.tsx",
           "hash": "14640864491028152310",
-          "deps": [
-            "npm:react"
-          ]
+          "deps": ["npm:react"]
         },
         {
           "file": "apps/admin/src/app/admin/content/questions/page.tsx",
           "hash": "5686072937117977223",
-          "deps": [
-            "npm:react",
-            "shared-components",
-            "npm:lucide-react"
-          ]
+          "deps": ["npm:react", "shared-components", "npm:lucide-react"]
         },
         {
           "file": "apps/admin/src/app/admin/dashboard/page.tsx",
           "hash": "12118743827981385480",
-          "deps": [
-            "shared-components"
-          ]
+          "deps": ["shared-components"]
         },
         {
           "file": "apps/admin/src/app/admin/frontend-tasks/page.tsx",
@@ -13341,27 +12264,17 @@
         {
           "file": "apps/admin/src/app/admin/layout.tsx",
           "hash": "5483828854700895223",
-          "deps": [
-            "npm:react"
-          ]
+          "deps": ["npm:react"]
         },
         {
           "file": "apps/admin/src/app/admin/login/page.tsx",
           "hash": "17218847123009297718",
-          "deps": [
-            "npm:react",
-            "npm:next",
-            "shared-contexts"
-          ]
+          "deps": ["npm:react", "npm:next", "shared-contexts"]
         },
         {
           "file": "apps/admin/src/app/admin/page.tsx",
           "hash": "4914472728689847326",
-          "deps": [
-            "npm:react",
-            "npm:next",
-            "shared-contexts"
-          ]
+          "deps": ["npm:react", "npm:next", "shared-contexts"]
         },
         {
           "file": "apps/admin/src/app/admin/problem-solving/page.tsx",
@@ -13380,90 +12293,57 @@
         {
           "file": "apps/admin/src/app/api/admin/dashboard-stats/route.ts",
           "hash": "17886076947849350411",
-          "deps": [
-            "npm:next",
-            "npm:@supabase/supabase-js"
-          ]
+          "deps": ["npm:next", "npm:@supabase/supabase-js"]
         },
         {
           "file": "apps/admin/src/app/api/cards/route.ts",
           "hash": "8476379366981799476",
-          "deps": [
-            "npm:next",
-            "npm:@supabase/supabase-js"
-          ]
+          "deps": ["npm:next", "npm:@supabase/supabase-js"]
         },
         {
           "file": "apps/admin/src/app/api/categories/question-counts/route.ts",
           "hash": "4757079689506834891",
-          "deps": [
-            "npm:next",
-            "npm:@supabase/supabase-js"
-          ]
+          "deps": ["npm:next", "npm:@supabase/supabase-js"]
         },
         {
           "file": "apps/admin/src/app/api/categories/route.ts",
           "hash": "10845937578258927064",
-          "deps": [
-            "npm:next",
-            "npm:@supabase/supabase-js"
-          ]
+          "deps": ["npm:next", "npm:@supabase/supabase-js"]
         },
         {
           "file": "apps/admin/src/app/api/frontend-tasks/route.ts",
           "hash": "10806168820390096939",
-          "deps": [
-            "npm:next",
-            "npm:@supabase/supabase-js"
-          ]
+          "deps": ["npm:next", "npm:@supabase/supabase-js"]
         },
         {
           "file": "apps/admin/src/app/api/problem-solving/route.ts",
           "hash": "14433035695854975557",
-          "deps": [
-            "npm:next",
-            "npm:@supabase/supabase-js"
-          ]
+          "deps": ["npm:next", "npm:@supabase/supabase-js"]
         },
         {
           "file": "apps/admin/src/app/api/questions/route.ts",
           "hash": "8218456754314521226",
-          "deps": [
-            "npm:next",
-            "npm:@supabase/supabase-js"
-          ]
+          "deps": ["npm:next", "npm:@supabase/supabase-js"]
         },
         {
           "file": "apps/admin/src/app/api/questions/unified/[id]/route.ts",
           "hash": "8953318482089529343",
-          "deps": [
-            "npm:next",
-            "npm:@supabase/supabase-js"
-          ]
+          "deps": ["npm:next", "npm:@supabase/supabase-js"]
         },
         {
           "file": "apps/admin/src/app/api/questions/unified/route.ts",
           "hash": "15406978627866527265",
-          "deps": [
-            "npm:next",
-            "npm:@supabase/supabase-js"
-          ]
+          "deps": ["npm:next", "npm:@supabase/supabase-js"]
         },
         {
           "file": "apps/admin/src/app/api/topics/route.ts",
           "hash": "15962965142961320258",
-          "deps": [
-            "npm:next",
-            "npm:@supabase/supabase-js"
-          ]
+          "deps": ["npm:next", "npm:@supabase/supabase-js"]
         },
         {
           "file": "apps/admin/src/app/components/NavbarWrapper.tsx",
           "hash": "5373228777122368378",
-          "deps": [
-            "npm:next",
-            "shared-components"
-          ]
+          "deps": ["npm:next", "shared-components"]
         },
         {
           "file": "apps/admin/src/app/content-management/page.tsx",
@@ -13491,9 +12371,7 @@
         {
           "file": "apps/admin/src/app/page.tsx",
           "hash": "17562495524800718286",
-          "deps": [
-            "shared-components"
-          ]
+          "deps": ["shared-components"]
         },
         {
           "file": "apps/admin/src/app/test.css",
@@ -13502,32 +12380,22 @@
         {
           "file": "apps/admin/src/app/test/page.tsx",
           "hash": "11696301726544425582",
-          "deps": [
-            "shared-contexts"
-          ]
+          "deps": ["shared-contexts"]
         },
         {
           "file": "apps/admin/src/lib/supabase-client.ts",
           "hash": "15116486534684814954",
-          "deps": [
-            "npm:@supabase/supabase-js"
-          ]
+          "deps": ["npm:@supabase/supabase-js"]
         },
         {
           "file": "apps/admin/src/lib/utils.ts",
           "hash": "15456290709904554663",
-          "deps": [
-            "npm:clsx",
-            "npm:tailwind-merge"
-          ]
+          "deps": ["npm:clsx", "npm:tailwind-merge"]
         },
         {
           "file": "apps/admin/tailwind.config.ts",
           "hash": "11347127521356567598",
-          "deps": [
-            "npm:tailwindcss",
-            "npm:tailwindcss-animate"
-          ]
+          "deps": ["npm:tailwindcss", "npm:tailwindcss-animate"]
         },
         {
           "file": "apps/admin/tsconfig.json",
@@ -13536,133 +12404,98 @@
       ],
       "shared-contexts": [
         {
-          "file": "libs/shared-contexts/package.json",
+          "file": "libs/contexts/package.json",
           "hash": "9205728782103505821"
         },
         {
-          "file": "libs/shared-contexts/project.json",
+          "file": "libs/contexts/project.json",
           "hash": "14051757519408719847"
         },
         {
-          "file": "libs/shared-contexts/src/index.ts",
+          "file": "libs/contexts/src/index.ts",
           "hash": "6799768037627120614"
         },
         {
-          "file": "libs/shared-contexts/src/lib/AdminAuthContext.tsx",
+          "file": "libs/contexts/src/lib/AdminAuthContext.tsx",
           "hash": "5305493797969739609",
-          "deps": [
-            "npm:react",
-            "npm:next",
-            "npm:@supabase/supabase-js"
-          ]
+          "deps": ["npm:react", "npm:next", "npm:@supabase/supabase-js"]
         },
         {
-          "file": "libs/shared-contexts/src/lib/AuthContext.tsx",
+          "file": "libs/contexts/src/lib/AuthContext.tsx",
           "hash": "18338730787336787773",
-          "deps": [
-            "npm:react",
-            "npm:lucide-react"
-          ]
+          "deps": ["npm:react", "npm:lucide-react"]
         },
         {
-          "file": "libs/shared-contexts/src/lib/CookieAuthContext.tsx",
+          "file": "libs/contexts/src/lib/CookieAuthContext.tsx",
           "hash": "2075796810687181933",
-          "deps": [
-            "npm:react"
-          ]
+          "deps": ["npm:react"]
         },
         {
-          "file": "libs/shared-contexts/src/lib/LanguageContext.tsx",
+          "file": "libs/contexts/src/lib/LanguageContext.tsx",
           "hash": "10679708473519134233",
-          "deps": [
-            "npm:react",
-            "npm:@supabase/supabase-js"
-          ]
+          "deps": ["npm:react", "npm:@supabase/supabase-js"]
         },
         {
-          "file": "libs/shared-contexts/src/lib/MobileMenuContext.tsx",
+          "file": "libs/contexts/src/lib/MobileMenuContext.tsx",
           "hash": "1056832085160852806",
-          "deps": [
-            "npm:react",
-            "npm:@supabase/supabase-js"
-          ]
+          "deps": ["npm:react", "npm:@supabase/supabase-js"]
         },
         {
-          "file": "libs/shared-contexts/src/lib/NotificationContext.tsx",
+          "file": "libs/contexts/src/lib/NotificationContext.tsx",
           "hash": "9858972659411673696",
-          "deps": [
-            "npm:@supabase/supabase-js",
-            "npm:react"
-          ]
+          "deps": ["npm:@supabase/supabase-js", "npm:react"]
         },
         {
-          "file": "libs/shared-contexts/src/lib/OnboardingContext.tsx",
+          "file": "libs/contexts/src/lib/OnboardingContext.tsx",
           "hash": "2058533388314625333",
-          "deps": [
-            "npm:@supabase/supabase-js",
-            "npm:react"
-          ]
+          "deps": ["npm:@supabase/supabase-js", "npm:react"]
         },
         {
-          "file": "libs/shared-contexts/src/lib/ThemeContext.tsx",
+          "file": "libs/contexts/src/lib/ThemeContext.tsx",
           "hash": "3647332598880699420",
-          "deps": [
-            "npm:react",
-            "npm:@supabase/supabase-js"
-          ]
+          "deps": ["npm:react", "npm:@supabase/supabase-js"]
         },
         {
-          "file": "libs/shared-contexts/src/lib/UserPreferencesContext.tsx",
+          "file": "libs/contexts/src/lib/UserPreferencesContext.tsx",
           "hash": "7052103964078102270",
           "deps": [
             "npm:react",
             "npm:@supabase/supabase-js",
-            [
-              "npm:@supabase/supabase-js",
-              "dynamic"
-            ]
+            ["npm:@supabase/supabase-js", "dynamic"]
           ]
         },
         {
-          "file": "libs/shared-contexts/src/lib/UserTypeContextSafe.tsx",
+          "file": "libs/contexts/src/lib/UserTypeContextSafe.tsx",
           "hash": "2389365402737955128",
-          "deps": [
-            "npm:@supabase/supabase-js",
-            "npm:react"
-          ]
+          "deps": ["npm:@supabase/supabase-js", "npm:react"]
         },
         {
-          "file": "libs/shared-contexts/src/lib/shared-contexts.ts",
+          "file": "libs/contexts/src/lib/shared-contexts.ts",
           "hash": "9556419331056395282"
         },
         {
-          "file": "libs/shared-contexts/tsconfig.json",
+          "file": "libs/contexts/tsconfig.json",
           "hash": "14994595962478723103"
         },
         {
-          "file": "libs/shared-contexts/tsconfig.lib.json",
+          "file": "libs/contexts/tsconfig.lib.json",
           "hash": "2407687948951285838"
         },
         {
-          "file": "libs/shared-contexts/tsconfig.spec.json",
+          "file": "libs/contexts/tsconfig.spec.json",
           "hash": "6218745960847744644"
         },
         {
-          "file": "libs/shared-contexts/vite.config.ts",
+          "file": "libs/contexts/vite.config.ts",
           "hash": "353321723370208265",
-          "deps": [
-            "npm:vite",
-            "npm:@nx/vite"
-          ]
+          "deps": ["npm:vite", "npm:@nx/vite"]
         }
       ],
       "auth": [
         {
           "file": "libs/auth/jest.config.ts",
           "hash": "11892233091021346961",
-          "deps": [
-            "npm:jest"
-          ]
+          "deps": ["npm:jest"]
         },
         {
           "file": "libs/auth/project.json",
@@ -13675,16 +12508,12 @@
         {
           "file": "libs/auth/src/lib/auth.tsx",
           "hash": "11421294761791549990",
-          "deps": [
-            "npm:react"
-          ]
+          "deps": ["npm:react"]
         },
         {
           "file": "libs/auth/src/test-setup.ts",
           "hash": "4941352530169676329",
-          "deps": [
-            "npm:@testing-library/jest-dom"
-          ]
+          "deps": ["npm:@testing-library/jest-dom"]
         },
         {
           "file": "libs/auth/tsconfig.json",
@@ -13701,10 +12530,7 @@
         {
           "file": "libs/auth/vite.config.ts",
           "hash": "9781690425299228457",
-          "deps": [
-            "npm:vite",
-            "npm:@nx/vite"
-          ]
+          "deps": ["npm:vite", "npm:@nx/vite"]
         }
       ],
       "shared-atoms": [
@@ -13723,9 +12549,7 @@
         {
           "file": "libs/shared-atoms/src/lib/auth.ts",
           "hash": "12262194691668982496",
-          "deps": [
-            "npm:jotai"
-          ]
+          "deps": ["npm:jotai"]
         },
         {
           "file": "libs/shared-atoms/src/lib/index.ts",
@@ -13734,23 +12558,17 @@
         {
           "file": "libs/shared-atoms/src/lib/language.ts",
           "hash": "17874521798347471922",
-          "deps": [
-            "npm:jotai"
-          ]
+          "deps": ["npm:jotai"]
         },
         {
           "file": "libs/shared-atoms/src/lib/mobileMenu.ts",
           "hash": "17471925580616828471",
-          "deps": [
-            "npm:jotai"
-          ]
+          "deps": ["npm:jotai"]
         },
         {
           "file": "libs/shared-atoms/src/lib/onboarding.ts",
           "hash": "3499481401672200815",
-          "deps": [
-            "npm:jotai"
-          ]
+          "deps": ["npm:jotai"]
         },
         {
           "file": "libs/shared-atoms/src/lib/shared-atoms.ts",
@@ -13759,23 +12577,17 @@
         {
           "file": "libs/shared-atoms/src/lib/theme.ts",
           "hash": "10889544873661325888",
-          "deps": [
-            "npm:jotai"
-          ]
+          "deps": ["npm:jotai"]
         },
         {
           "file": "libs/shared-atoms/src/lib/userPreferences.ts",
           "hash": "14976915664215030498",
-          "deps": [
-            "npm:jotai"
-          ]
+          "deps": ["npm:jotai"]
         },
         {
           "file": "libs/shared-atoms/src/lib/userType.ts",
           "hash": "6314023660891382612",
-          "deps": [
-            "npm:jotai"
-          ]
+          "deps": ["npm:jotai"]
         },
         {
           "file": "libs/shared-atoms/tsconfig.json",
@@ -13792,10 +12604,7 @@
         {
           "file": "libs/shared-atoms/vite.config.ts",
           "hash": "17851912007281026940",
-          "deps": [
-            "npm:vite",
-            "npm:@nx/vite"
-          ]
+          "deps": ["npm:vite", "npm:@nx/vite"]
         }
       ]
     },

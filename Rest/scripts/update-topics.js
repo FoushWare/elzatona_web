@@ -6,76 +6,193 @@ const path = require('path');
  * This script should be run whenever questions are added or modified
  */
 function updateTopics() {
-  const htmlQuestionsPath = path.join(__dirname, '../final-questions-v01/html-questions.json');
-  const cssQuestionsPath = path.join(__dirname, '../final-questions-v01/css-questions.json');
-  const jsQuestionsPath = path.join(__dirname, '../final-questions-v01/javascript-questions.json');
-  const reactQuestionsPath = path.join(__dirname, '../final-questions-v01/react-questions.json');
-  const designPatternsQuestionsPath = path.join(__dirname, '../final-questions-v01/design-patterns-questions.json');
-  const topicsPath = path.join(__dirname, '../final-questions-v01/topics/topics.json');
+  const htmlQuestionsPath = path.join(
+    __dirname,
+    '../final-questions-v01/html-questions.json'
+  );
+  const cssQuestionsPath = path.join(
+    __dirname,
+    '../final-questions-v01/css-questions.json'
+  );
+  const jsQuestionsPath = path.join(
+    __dirname,
+    '../final-questions-v01/javascript-questions.json'
+  );
+  const reactQuestionsPath = path.join(
+    __dirname,
+    '../final-questions-v01/react-questions.json'
+  );
+  const designPatternsQuestionsPath = path.join(
+    __dirname,
+    '../final-questions-v01/design-patterns-questions.json'
+  );
+  const topicsPath = path.join(
+    __dirname,
+    '../final-questions-v01/topics/topics.json'
+  );
 
   // Read all question files
   const questions = [];
-  
+
   if (fs.existsSync(htmlQuestionsPath)) {
-    const htmlQuestions = JSON.parse(fs.readFileSync(htmlQuestionsPath, 'utf8'));
+    const htmlQuestions = JSON.parse(
+      fs.readFileSync(htmlQuestionsPath, 'utf8')
+    );
     questions.push(...htmlQuestions);
   }
-  
+
   if (fs.existsSync(cssQuestionsPath)) {
     const cssQuestions = JSON.parse(fs.readFileSync(cssQuestionsPath, 'utf8'));
     questions.push(...cssQuestions);
   }
-  
+
   if (fs.existsSync(jsQuestionsPath)) {
     const jsQuestions = JSON.parse(fs.readFileSync(jsQuestionsPath, 'utf8'));
     questions.push(...jsQuestions);
   }
-  
+
   if (fs.existsSync(reactQuestionsPath)) {
-    const reactQuestions = JSON.parse(fs.readFileSync(reactQuestionsPath, 'utf8'));
+    const reactQuestions = JSON.parse(
+      fs.readFileSync(reactQuestionsPath, 'utf8')
+    );
     questions.push(...reactQuestions);
   }
-  
+
   if (fs.existsSync(designPatternsQuestionsPath)) {
-    const designPatternsQuestions = JSON.parse(fs.readFileSync(designPatternsQuestionsPath, 'utf8'));
+    const designPatternsQuestions = JSON.parse(
+      fs.readFileSync(designPatternsQuestionsPath, 'utf8')
+    );
     questions.push(...designPatternsQuestions);
   }
-  
-  if (fs.existsSync(path.join(__dirname, '../final-questions-v01/nextjs-questions.json'))) {
-    const nextjsQuestions = JSON.parse(fs.readFileSync(path.join(__dirname, '../final-questions-v01/nextjs-questions.json'), 'utf8'));
+
+  if (
+    fs.existsSync(
+      path.join(__dirname, '../final-questions-v01/nextjs-questions.json')
+    )
+  ) {
+    const nextjsQuestions = JSON.parse(
+      fs.readFileSync(
+        path.join(__dirname, '../final-questions-v01/nextjs-questions.json'),
+        'utf8'
+      )
+    );
     questions.push(...nextjsQuestions);
   }
-  
-  if (fs.existsSync(path.join(__dirname, '../final-questions-v01/performance-patterns-questions.json'))) {
-    const performancePatternsQuestions = JSON.parse(fs.readFileSync(path.join(__dirname, '../final-questions-v01/performance-patterns-questions.json'), 'utf8'));
+
+  if (
+    fs.existsSync(
+      path.join(
+        __dirname,
+        '../final-questions-v01/performance-patterns-questions.json'
+      )
+    )
+  ) {
+    const performancePatternsQuestions = JSON.parse(
+      fs.readFileSync(
+        path.join(
+          __dirname,
+          '../final-questions-v01/performance-patterns-questions.json'
+        ),
+        'utf8'
+      )
+    );
     questions.push(...performancePatternsQuestions);
   }
-  
-  if (fs.existsSync(path.join(__dirname, '../final-questions-v01/rendering-patterns-questions.json'))) {
-    const renderingPatternsQuestions = JSON.parse(fs.readFileSync(path.join(__dirname, '../final-questions-v01/rendering-patterns-questions.json'), 'utf8'));
+
+  if (
+    fs.existsSync(
+      path.join(
+        __dirname,
+        '../final-questions-v01/rendering-patterns-questions.json'
+      )
+    )
+  ) {
+    const renderingPatternsQuestions = JSON.parse(
+      fs.readFileSync(
+        path.join(
+          __dirname,
+          '../final-questions-v01/rendering-patterns-questions.json'
+        ),
+        'utf8'
+      )
+    );
     questions.push(...renderingPatternsQuestions);
   }
-  
-  if (fs.existsSync(path.join(__dirname, '../final-questions-v01/security-questions.json'))) {
-    const securityQuestions = JSON.parse(fs.readFileSync(path.join(__dirname, '../final-questions-v01/security-questions.json'), 'utf8'));
+
+  if (
+    fs.existsSync(
+      path.join(__dirname, '../final-questions-v01/security-questions.json')
+    )
+  ) {
+    const securityQuestions = JSON.parse(
+      fs.readFileSync(
+        path.join(__dirname, '../final-questions-v01/security-questions.json'),
+        'utf8'
+      )
+    );
     questions.push(...securityQuestions);
   }
-  
-  if (fs.existsSync(path.join(__dirname, '../final-questions-v01/system-design-questions.json'))) {
-    const systemDesignQuestions = JSON.parse(fs.readFileSync(path.join(__dirname, '../final-questions-v01/system-design-questions.json'), 'utf8'));
+
+  if (
+    fs.existsSync(
+      path.join(
+        __dirname,
+        '../final-questions-v01/system-design-questions.json'
+      )
+    )
+  ) {
+    const systemDesignQuestions = JSON.parse(
+      fs.readFileSync(
+        path.join(
+          __dirname,
+          '../final-questions-v01/system-design-questions.json'
+        ),
+        'utf8'
+      )
+    );
     questions.push(...systemDesignQuestions);
   }
-  
-  if (fs.existsSync(path.join(__dirname, '../final-questions-v01/frontend-tasks-questions.json'))) {
-    const frontendTasksQuestions = JSON.parse(fs.readFileSync(path.join(__dirname, '../final-questions-v01/frontend-tasks-questions.json'), 'utf8'));
+
+  if (
+    fs.existsSync(
+      path.join(
+        __dirname,
+        '../final-questions-v01/frontend-tasks-questions.json'
+      )
+    )
+  ) {
+    const frontendTasksQuestions = JSON.parse(
+      fs.readFileSync(
+        path.join(
+          __dirname,
+          '../final-questions-v01/frontend-tasks-questions.json'
+        ),
+        'utf8'
+      )
+    );
     questions.push(...frontendTasksQuestions);
   }
-  
-  if (fs.existsSync(path.join(__dirname, '../final-questions-v01/problem-solving-questions.json'))) {
-    const problemSolvingQuestions = JSON.parse(fs.readFileSync(path.join(__dirname, '../final-questions-v01/problem-solving-questions.json'), 'utf8'));
+
+  if (
+    fs.existsSync(
+      path.join(
+        __dirname,
+        '../final-questions-v01/problem-solving-questions.json'
+      )
+    )
+  ) {
+    const problemSolvingQuestions = JSON.parse(
+      fs.readFileSync(
+        path.join(
+          __dirname,
+          '../final-questions-v01/problem-solving-questions.json'
+        ),
+        'utf8'
+      )
+    );
     questions.push(...problemSolvingQuestions);
   }
-  
+
   if (questions.length === 0) {
     console.error(`❌ No question files found`);
     process.exit(1);
@@ -85,12 +202,12 @@ function updateTopics() {
   let topics = {
     categories: {},
     metadata: {
-      version: "1.0.0",
+      version: '1.0.0',
       lastUpdated: new Date().toISOString(),
       totalCategories: 0,
       totalTopics: 0,
-      totalQuestions: 0
-    }
+      totalQuestions: 0,
+    },
   };
 
   if (fs.existsSync(topicsPath)) {
@@ -104,7 +221,7 @@ function updateTopics() {
           description: cat.description || `${catName} questions and concepts`,
           topics: {},
           totalQuestions: 0,
-          lastUpdated: new Date().toISOString()
+          lastUpdated: new Date().toISOString(),
         };
       }
       // Preserve topic descriptions but reset counts
@@ -116,7 +233,7 @@ function updateTopics() {
             description: topic.description || `${topicName} related questions`,
             count: 0,
             difficulties: {},
-            questionTypes: {} // Always reset to empty object
+            questionTypes: {}, // Always reset to empty object
           };
         } else {
           // Reset counts and questionTypes even if topic exists
@@ -153,7 +270,7 @@ function updateTopics() {
         description: `${category} questions and concepts`,
         topics: {},
         totalQuestions: 0,
-        lastUpdated: new Date().toISOString()
+        lastUpdated: new Date().toISOString(),
       };
     }
 
@@ -164,7 +281,7 @@ function updateTopics() {
         description: `${topicName} related questions`,
         count: 0,
         difficulties: {},
-        questionTypes: {}
+        questionTypes: {},
       };
     }
 
@@ -209,10 +326,11 @@ function updateTopics() {
   console.log(`   Total Questions: ${topics.metadata.totalQuestions}`);
   console.log(`\n📊 Categories:`);
   Object.entries(topics.categories).forEach(([catName, cat]) => {
-    console.log(`   ${catName}: ${cat.totalQuestions} questions, ${Object.keys(cat.topics).length} topics`);
+    console.log(
+      `   ${catName}: ${cat.totalQuestions} questions, ${Object.keys(cat.topics).length} topics`
+    );
   });
 }
 
 // Run the update
 updateTopics();
-

@@ -1,8 +1,13 @@
 # Task ID: A-007
+
 # Title: Admin User Management
+
 # Status: pending
-# Dependencies: 
+
+# Dependencies:
+
 # Priority: high
+
 # Description: Test the admin user management page including user CRUD operations, role management, and user search/filter functionality.
 
 # Details:
@@ -10,6 +15,7 @@
 ## Time Estimation
 
 ### Manual Testing
+
 - **Estimated Time**: 30-45 minutes
 - **Breakdown**:
   - Navigate and verify access: 2 minutes
@@ -23,6 +29,7 @@
 - **Dependencies**: Admin authentication, API endpoints, user data
 
 ### Automated Testing
+
 - **Estimated Time**: 12-20 minutes (first run), 2-4 minutes (subsequent runs)
 - **Breakdown**:
   - Unit tests setup and execution: 4-6 minutes
@@ -32,6 +39,7 @@
 - **Dependencies**: API mocks, test user data, authentication setup
 
 ### Total Time
+
 - **Manual Only**: 30-45 minutes
 - **Automated Only**: 12-20 minutes (first run), 2-4 minutes (subsequent)
 - **Both Manual + Automated**: 42-65 minutes (first run), 32-49 minutes (subsequent)
@@ -39,6 +47,7 @@
 ---
 
 ## Overview
+
 Test the admin user management page including user CRUD operations, role management, and user search/filter functionality.
 
 ## Manual Testing Steps

@@ -15,6 +15,7 @@ npx task-master-ai use-tag testing
 ```
 
 Or in Cursor AI chat:
+
 ```
 Switch to the testing tag
 ```
@@ -28,6 +29,7 @@ npx task-master-ai list --tag testing
 ```
 
 Or in Cursor AI chat:
+
 ```
 Show me all testing tasks
 ```
@@ -41,6 +43,7 @@ npx task-master-ai next --tag testing
 ```
 
 Or in Cursor AI chat:
+
 ```
 What's the next testing task I should work on?
 ```
@@ -54,6 +57,7 @@ npx task-master-ai show <task-id> --tag testing
 ```
 
 Or in Cursor AI chat:
+
 ```
 Show me task 1 from the testing tag
 ```
@@ -136,6 +140,7 @@ Each task includes:
 ## Commands Reference
 
 ### View Tasks
+
 ```bash
 # List all tasks
 npx task-master-ai list --tag testing
@@ -148,6 +153,7 @@ npx task-master-ai show <id> --tag testing
 ```
 
 ### Update Tasks
+
 ```bash
 # Mark task as in-progress
 npx task-master-ai set-status --id=<id> --status=in-progress --tag testing
@@ -160,6 +166,7 @@ npx task-master-ai update-subtask --id=<id> --prompt="<findings>" --tag testing
 ```
 
 ### Expand Tasks
+
 ```bash
 # Break down complex task into subtasks
 npx task-master-ai expand --id=<id> --tag testing
@@ -169,15 +176,15 @@ npx task-master-ai expand --id=<id> --tag testing
 
 When implementing tests, create them in:
 
-- **Unit Tests**: 
+- **Unit Tests**:
   - `apps/website/src/**/*.test.tsx`
   - `libs/**/*.test.tsx`
 
-- **Integration Tests**: 
+- **Integration Tests**:
   - `apps/website/src/**/*.integration.test.tsx`
   - `libs/**/*.integration.test.tsx`
 
-- **E2E Tests**: 
+- **E2E Tests**:
   - `tests/e2e/**/*.spec.ts`
 
 ## Running Tests
@@ -211,4 +218,3 @@ npm run test:unit -- path/to/test.file
 4. Update task status as you progress
 
 Good luck with your test implementation! 🚀
-

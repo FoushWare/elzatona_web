@@ -4,7 +4,7 @@ export interface GitHubIssue {
   number: number;
   title: string;
   body: string;
-  state: 'open' | 'closed';
+  state: "open" | "closed";
   created_at: string;
   updated_at: string;
   closed_at?: string;
@@ -33,7 +33,7 @@ export class GitHubIssuesService {
   static async getIssues(): Promise<GitHubIssue[]> {
     // Placeholder implementation
     console.log(
-      'GitHubIssuesService.getIssues called - placeholder implementation'
+      "GitHubIssuesService.getIssues called - placeholder implementation",
     );
     return [];
   }
@@ -41,7 +41,7 @@ export class GitHubIssuesService {
   static async getStats(): Promise<GitHubIssuesStats> {
     // Placeholder implementation
     console.log(
-      'GitHubIssuesService.getStats called - placeholder implementation'
+      "GitHubIssuesService.getStats called - placeholder implementation",
     );
     return {
       total: 0,
@@ -57,7 +57,7 @@ export class GitHubIssuesService {
   static async getIssuesStats(): Promise<GitHubIssuesStats> {
     // Placeholder implementation
     console.log(
-      'GitHubIssuesService.getIssuesStats called - placeholder implementation'
+      "GitHubIssuesService.getIssuesStats called - placeholder implementation",
     );
     return {
       total: 0,
@@ -71,19 +71,19 @@ export class GitHubIssuesService {
   }
 
   static getIssuePriority(
-    issue: GitHubIssue
-  ): 'Critical' | 'High' | 'Medium' | 'Low' {
+    issue: GitHubIssue,
+  ): "Critical" | "High" | "Medium" | "Low" {
     // Placeholder implementation
     console.log(
-      'GitHubIssuesService.getIssuePriority called - placeholder implementation'
+      "GitHubIssuesService.getIssuePriority called - placeholder implementation",
     );
-    return 'Medium';
+    return "Medium";
   }
 
   static formatIssueDate(dateString: string): string {
     // Placeholder implementation
     console.log(
-      'GitHubIssuesService.formatIssueDate called - placeholder implementation'
+      "GitHubIssuesService.formatIssueDate called - placeholder implementation",
     );
     return new Date(dateString).toLocaleDateString();
   }

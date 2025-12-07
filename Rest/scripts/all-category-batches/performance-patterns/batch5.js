@@ -5,7 +5,10 @@
 const fs = require('fs');
 const path = require('path');
 
-const questionsFile = path.join(__dirname, '../../../final-questions-v01/performance-patterns-questions.json');
+const questionsFile = path.join(
+  __dirname,
+  '../../../final-questions-v01/performance-patterns-questions.json'
+);
 
 // Placeholder - actual questions would be generated here
 const newQuestions = [];
@@ -22,5 +25,9 @@ existingQuestions.push(...newQuestions);
 // Write back
 fs.writeFileSync(questionsFile, JSON.stringify(existingQuestions, null, 2));
 
-console.log(`✅ Batch 5 for Performance Patterns: ${newQuestions.length} questions added`);
-console.log(`📝 Total Performance Patterns questions: ${existingQuestions.length}`);
+console.log(
+  `✅ Batch 5 for Performance Patterns: ${newQuestions.length} questions added`
+);
+console.log(
+  `📝 Total Performance Patterns questions: ${existingQuestions.length}`
+);

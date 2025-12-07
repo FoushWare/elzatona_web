@@ -20,13 +20,18 @@ if (!supabaseUrl || !supabaseKey) {
 const supabase = createClient(supabaseUrl, supabaseKey);
 
 // Read categories and topics from the categories-topics-cards-plans.json file
-const categoriesDataPath = path.join(__dirname, '../../apps/admin/network/data/json/categories-topics-cards-plans/categories-topics-cards-plans.json');
+const categoriesDataPath = path.join(
+  __dirname,
+  '../../apps/admin/network/data/json/categories-topics-cards-plans/categories-topics-cards-plans.json'
+);
 
 async function seedTopics() {
   console.log('🔄 Seeding Topics...\n');
 
   // Read categories data
-  const categoriesData = JSON.parse(fs.readFileSync(categoriesDataPath, 'utf8'));
+  const categoriesData = JSON.parse(
+    fs.readFileSync(categoriesDataPath, 'utf8')
+  );
   const categories = categoriesData.categories || [];
 
   // Get all categories to map slug to category_id
@@ -46,15 +51,17 @@ async function seedTopics() {
 
   for (const category of categories) {
     const categoryId = categoryMap[category.slug];
-    
+
     if (!categoryId) {
-      console.log(`  ⚠️  Skipping topics for ${category.name}: Category not found`);
+      console.log(
+        `  ⚠️  Skipping topics for ${category.name}: Category not found`
+      );
       skipped++;
       continue;
     }
 
     const topics = category.topics || [];
-    
+
     for (const topic of topics) {
       try {
         // Check if topic exists by slug and category_id
@@ -74,7 +81,7 @@ async function seedTopics() {
           order_index: topic.order || 0,
           category_id: categoryId,
           is_active: true,
-          updated_at: new Date().toISOString()
+          updated_at: new Date().toISOString(),
         };
 
         if (existing) {
@@ -89,19 +96,21 @@ async function seedTopics() {
           updated++;
         } else {
           // Create new topic
-          const { error } = await supabase
-            .from('topics')
-            .insert({
-              ...topicData,
-              created_at: new Date().toISOString()
-            });
+          const { error } = await supabase.from('topics').insert({
+            ...topicData,
+            created_at: new Date().toISOString(),
+          });
 
           if (error) throw error;
           created++;
         }
       } catch (error) {
-        if (error.code !== 'PGRST116') { // PGRST116 = not found (expected for new topics)
-          console.error(`  ❌ Error with ${category.name} → ${topic.name}:`, error.message);
+        if (error.code !== 'PGRST116') {
+          // PGRST116 = not found (expected for new topics)
+          console.error(
+            `  ❌ Error with ${category.name} → ${topic.name}:`,
+            error.message
+          );
           errors++;
         }
       }
@@ -119,8 +128,7 @@ async function seedTopics() {
 // Run seeder
 seedTopics()
   .then(() => process.exit(0))
-  .catch((error) => {
+  .catch(error => {
     console.error('❌ Seeding failed:', error);
     process.exit(1);
   });
-

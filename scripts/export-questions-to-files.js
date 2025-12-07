@@ -3,11 +3,11 @@
  * Splits questions into multiple files for easier review
  */
 
-const fs = require('fs');
-const path = require('path');
+const fs = require("fs");
+const path = require("path");
 
 // Configuration
-const OUTPUT_DIR = path.join(__dirname, '..', 'Rest', 'questions-vo2');
+const OUTPUT_DIR = path.join(__dirname, "..", "Rest", "questions-vo2");
 const QUESTIONS_PER_FILE = 100; // Number of questions per file
 
 // Create output directory if it doesn't exist
@@ -19,11 +19,11 @@ if (!fs.existsSync(OUTPUT_DIR)) {
 // The actual fetching will be done through MCP Supabase
 
 async function exportQuestions() {
-  console.log('📦 Starting question export...');
-  
+  console.log("📦 Starting question export...");
+
   // The questions will be fetched via MCP and passed to this script
   // For now, we'll create the structure and the script will be called with data
-  
+
   console.log(`✅ Output directory created: ${OUTPUT_DIR}`);
   console.log(`📝 Ready to export questions (${QUESTIONS_PER_FILE} per file)`);
 }
@@ -34,4 +34,3 @@ if (require.main === module) {
 }
 
 module.exports = { OUTPUT_DIR, QUESTIONS_PER_FILE };
-

@@ -27,12 +27,20 @@ function formatArray(arr) {
 }
 
 function normalizeQuestionType(type) {
-  const validTypes = ['multiple-choice', 'open-ended', 'true-false', 'code', 'mcq', 'concept', 'scenario'];
+  const validTypes = [
+    'multiple-choice',
+    'open-ended',
+    'true-false',
+    'code',
+    'mcq',
+    'concept',
+    'scenario',
+  ];
   if (validTypes.includes(type)) return type;
-  
+
   const typeMap = {
     'code-completion': 'code',
-    'debugging': 'code'
+    debugging: 'code',
   };
   return typeMap[type] || 'open-ended';
 }
@@ -40,23 +48,24 @@ function normalizeQuestionType(type) {
 function normalizeDifficulty(difficulty) {
   const valid = ['beginner', 'intermediate', 'advanced'];
   if (valid.includes(difficulty)) return difficulty;
-  
+
   const map = {
-    'easy': 'beginner',
-    'medium': 'intermediate',
-    'hard': 'advanced'
+    easy: 'beginner',
+    medium: 'intermediate',
+    hard: 'advanced',
   };
   return map[difficulty] || 'intermediate';
 }
 
 function generateBatchSQL(questions, categoryId, topicId) {
   const now = new Date().toISOString();
-  
-  const values = questions.map(q => {
-    const questionType = normalizeQuestionType(q.type);
-    const difficulty = normalizeDifficulty(q.difficulty);
-    
-    return `(
+
+  const values = questions
+    .map(q => {
+      const questionType = normalizeQuestionType(q.type);
+      const difficulty = normalizeDifficulty(q.difficulty);
+
+      return `(
     gen_random_uuid(),
     ${escapeSql(q.title)},
     ${escapeSql(q.content || q.title)},
@@ -79,8 +88,9 @@ function generateBatchSQL(questions, categoryId, topicId) {
     '${topicId}',
     ${q.timeLimit || q.time_limit || 300}
   )`;
-  }).join(',\n    ');
-  
+    })
+    .join(',\n    ');
+
   return `INSERT INTO questions (
   id, title, content, type, difficulty, points, options, correct_answer, 
   explanation, test_cases, hints, tags, metadata, stats, category_id, 
@@ -90,58 +100,73 @@ function generateBatchSQL(questions, categoryId, topicId) {
 
 async function main() {
   console.log('🌱 Seeding All React Questions to Supabase\n');
-  
+
   // Load questions
-  const questionsPath = path.join(__dirname, '../final-questions-v01/react-questions.json');
+  const questionsPath = path.join(
+    __dirname,
+    '../final-questions-v01/react-questions.json'
+  );
   console.log(`📖 Loading questions from: ${questionsPath}\n`);
-  
+
   if (!fs.existsSync(questionsPath)) {
     console.error(`❌ Questions file not found: ${questionsPath}`);
     process.exit(1);
   }
-  
+
   const questions = JSON.parse(fs.readFileSync(questionsPath, 'utf8'));
   console.log(`✅ Loaded ${questions.length} questions\n`);
-  
+
   // Process in batches
   const batches = [];
   for (let i = 0; i < questions.length; i += BATCH_SIZE) {
     const batch = questions.slice(i, i + BATCH_SIZE);
     const sql = generateBatchSQL(batch, REACT_CATEGORY_ID, TOPIC_ID);
-    
+
     batches.push({
       batchNum: Math.floor(i / BATCH_SIZE) + 1,
       startIndex: i + 1,
       endIndex: Math.min(i + BATCH_SIZE, questions.length),
       count: batch.length,
-      sql
+      sql,
     });
   }
-  
-  console.log(`📊 Generated ${batches.length} batches of ${BATCH_SIZE} questions each\n`);
-  
+
+  console.log(
+    `📊 Generated ${batches.length} batches of ${BATCH_SIZE} questions each\n`
+  );
+
   // Save each batch to a separate file
   const outputDir = path.join(__dirname, '../seed-batches');
   if (!fs.existsSync(outputDir)) {
     fs.mkdirSync(outputDir, { recursive: true });
   }
-  
+
   console.log('💾 Saving batch files...\n');
   batches.forEach(batch => {
-    const filename = path.join(outputDir, `batch-${String(batch.batchNum).padStart(3, '0')}.sql`);
-    fs.writeFileSync(filename, `-- Batch ${batch.batchNum}: Questions ${batch.startIndex}-${batch.endIndex} (${batch.count} questions)\n${batch.sql}\n`, 'utf8');
+    const filename = path.join(
+      outputDir,
+      `batch-${String(batch.batchNum).padStart(3, '0')}.sql`
+    );
+    fs.writeFileSync(
+      filename,
+      `-- Batch ${batch.batchNum}: Questions ${batch.startIndex}-${batch.endIndex} (${batch.count} questions)\n${batch.sql}\n`,
+      'utf8'
+    );
     console.log(`   ✅ Saved ${filename}`);
   });
-  
+
   // Also create a combined file with all batches
-  const combinedSQL = batches.map(b => 
-    `-- Batch ${b.batchNum}: Questions ${b.startIndex}-${b.endIndex} (${b.count} questions)\n${b.sql}\n`
-  ).join('\n');
-  
+  const combinedSQL = batches
+    .map(
+      b =>
+        `-- Batch ${b.batchNum}: Questions ${b.startIndex}-${b.endIndex} (${b.count} questions)\n${b.sql}\n`
+    )
+    .join('\n');
+
   const combinedFile = path.join(__dirname, '../seed-all-react-questions.sql');
   fs.writeFileSync(combinedFile, combinedSQL, 'utf8');
   console.log(`\n💾 Combined SQL saved to: ${combinedFile}`);
-  
+
   console.log(`\n✅ Done! Generated ${batches.length} batches`);
   console.log(`\n📝 Next steps:`);
   console.log(`   1. Review the SQL batches in: ${outputDir}`);
@@ -150,6 +175,3 @@ async function main() {
 }
 
 main().catch(console.error);
-
-
-

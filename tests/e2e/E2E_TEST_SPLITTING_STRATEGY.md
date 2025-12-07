@@ -5,6 +5,7 @@ This document outlines the strategy for splitting large E2E test files into smal
 ## Why Split E2E Tests?
 
 Large E2E test files (500+ lines) can be difficult to:
+
 - **Debug**: Hard to find the specific test that's failing
 - **Maintain**: Changes affect many tests at once
 - **Run efficiently**: Serial mode causes cascading skips when one test fails
@@ -13,6 +14,7 @@ Large E2E test files (500+ lines) can be difficult to:
 ## When to Split
 
 Consider splitting when a test file:
+
 - Has **500+ lines** of code
 - Contains **8+ tests** with different concerns
 - Has **multiple logical groupings** (e.g., CRUD, validation, navigation)
@@ -24,6 +26,7 @@ Consider splitting when a test file:
 ### 1. Identify Logical Groupings
 
 Group tests by:
+
 - **Feature area**: CRUD operations, search, pagination
 - **User flow**: Login flow, navigation flow, guided flow
 - **Test type**: Validation, error handling, success cases
@@ -32,6 +35,7 @@ Group tests by:
 ### 2. Create Shared Setup File
 
 Extract common code into a setup file:
+
 - `beforeEach` hooks
 - Helper functions
 - Environment variable loading
@@ -42,6 +46,7 @@ Extract common code into a setup file:
 ### 3. Split into Focused Files
 
 Create separate files for each logical group:
+
 - `feature-name.basic.spec.ts` - Basic page loading
 - `feature-name.crud.spec.ts` - CRUD operations
 - `feature-name.validation.spec.ts` - Form validation
@@ -50,6 +55,7 @@ Create separate files for each logical group:
 ### 4. Update Package.json Scripts
 
 Add scripts for each split file:
+
 ```json
 {
   "test:e2e:admin:basic": "playwright test tests/e2e/admin/admin-bulk-question-addition.basic.spec.ts",
@@ -61,6 +67,7 @@ Add scripts for each split file:
 ### 5. Keep Original File (Optional)
 
 Keep the original file for reference:
+
 - Mark as "kept for reference" in comments
 - Don't modify it after splitting
 - Can be removed after confirming split files work
@@ -68,6 +75,7 @@ Keep the original file for reference:
 ## File Naming Convention
 
 Use descriptive suffixes:
+
 - `.basic.spec.ts` - Basic page loading and UI elements
 - `.crud.spec.ts` - Create, Read, Update, Delete operations
 - `.validation.spec.ts` - Form validation and error handling
@@ -83,6 +91,7 @@ Use descriptive suffixes:
 ## Example: Admin Login Splitting
 
 ### Before (469 lines, 9 tests)
+
 ```
 admin-login.spec.ts
 ├── Page loading test
@@ -97,6 +106,7 @@ admin-login.spec.ts
 ```
 
 ### After (Split into 3 files)
+
 ```
 admin-login.setup.ts (shared setup)
 admin-login.basic.spec.ts (page loading, form display)
@@ -107,6 +117,7 @@ admin-login.flow.spec.ts (login flow, redirects, loading states)
 ## Example: Admin Dashboard Splitting
 
 ### Before (434 lines, 9 tests)
+
 ```
 admin-dashboard.spec.ts
 ├── Page load test
@@ -121,6 +132,7 @@ admin-dashboard.spec.ts
 ```
 
 ### After (Split into 3 files)
+
 ```
 admin-dashboard.setup.ts (shared setup)
 admin-dashboard.display.spec.ts (page load, stats, menu)
@@ -174,7 +186,3 @@ Based on current file sizes and test counts:
 4. Split tests into focused files
 5. Update scripts and documentation
 6. Test and verify all tests pass
-
-
-
-

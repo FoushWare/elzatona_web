@@ -1,6 +1,6 @@
 /**
  * Script to seed topics from production to test with proper category ID mapping
- * 
+ *
  * Usage: node Rest/scripts/seed-topics-with-mapping.js
  */
 
@@ -25,16 +25,16 @@ const testClient = createClient(TEST_PROJECT_URL, TEST_SERVICE_KEY, {
 
 // Production category ID -> Test category ID mapping (by slug)
 const categorySlugToId = {
-  'react': null,
-  'javascript': null,
-  'nextjs': null,
-  'css': null,
-  'html': null,
+  react: null,
+  javascript: null,
+  nextjs: null,
+  css: null,
+  html: null,
   'system-design': null,
   'design-patterns': null,
   'performance-patterns': null,
   'rendering-patterns': null,
-  'security': null,
+  security: null,
   'frontend-tasks': null,
   'problem-solving': null,
 };
@@ -86,10 +86,10 @@ async function seedTopics() {
     // Topics data from production (from the file we read earlier)
     // We'll need to parse the topics from the production query
     // For now, let's use MCP to get them directly
-    
+
     console.log('📥 Topics will be inserted via MCP migration...');
     console.log('💡 Please use the MCP apply_migration tool to insert topics');
-    
+
     // The topics are too many to insert via script, so we'll create a migration
     console.log('\n✅ Category mapping complete!');
     console.log('📋 Category ID Mapping:');
@@ -97,7 +97,6 @@ async function seedTopics() {
       const slug = prodCategoryMap[prodId];
       console.log(`   ${slug}: ${prodId} -> ${testId}`);
     }
-
   } catch (error) {
     console.error('❌ Error:', error);
     process.exit(1);
@@ -105,4 +104,3 @@ async function seedTopics() {
 }
 
 seedTopics();
-

@@ -1,8 +1,8 @@
-'use client';
+"use client";
 
-import React, { ReactNode } from 'react';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
+import React, { ReactNode } from "react";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 
 // Create a client
 const queryClient = new QueryClient({
@@ -43,7 +43,7 @@ export const QueryProvider: React.FC<QueryProviderProps> = ({ children }) => {
     <QueryClientProvider client={queryClient}>
       {children}
       {/* Only show devtools in development */}
-      {process.env['NODE_ENV'] === 'development' && (
+      {process.env["NODE_ENV"] === "development" && (
         <ReactQueryDevtools initialIsOpen={false} />
       )}
     </QueryClientProvider>

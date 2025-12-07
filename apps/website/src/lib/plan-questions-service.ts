@@ -1,7 +1,7 @@
-import { createClient } from '@supabase/supabase-js';
+import { createClient } from "@supabase/supabase-js";
 
-const supabaseUrl = process.env['NEXT_PUBLIC_SUPABASE_URL']!;
-const supabaseServiceRoleKey = process.env['SUPABASE_SERVICE_ROLE_KEY']!;
+const supabaseUrl = process.env["NEXT_PUBLIC_SUPABASE_URL"]!;
+const supabaseServiceRoleKey = process.env["SUPABASE_SERVICE_ROLE_KEY"]!;
 const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
 
 export interface PlanQuestion {
@@ -25,7 +25,7 @@ export interface PlanQuestionFormData {
   order?: number;
 }
 
-const PLAN_QUESTIONS_COLLECTION = 'plan_questions';
+const PLAN_QUESTIONS_COLLECTION = "plan_questions";
 
 export class PlanQuestionsService {
   // Get all plan questions for a specific plan
@@ -33,15 +33,15 @@ export class PlanQuestionsService {
     try {
       const { data: planQuestions, error } = await supabase
         .from(PLAN_QUESTIONS_COLLECTION)
-        .select('*')
-        .eq('plan_id', plan_id)
-        .order('order', { ascending: true });
+        .select("*")
+        .eq("plan_id", plan_id)
+        .order("order", { ascending: true });
 
       if (error) throw error;
 
       return planQuestions || [];
     } catch (error) {
-      console.error('Error fetching plan questions:', error);
+      console.error("Error fetching plan questions:", error);
       throw error;
     }
   }
@@ -51,21 +51,21 @@ export class PlanQuestionsService {
     try {
       const { data: planQuestion, error } = await supabase
         .from(PLAN_QUESTIONS_COLLECTION)
-        .select('*')
-        .eq('id', id)
+        .select("*")
+        .eq("id", id)
         .single();
 
       if (error) throw error;
       return planQuestion;
     } catch (error) {
-      console.error('Error fetching plan question:', error);
+      console.error("Error fetching plan question:", error);
       throw error;
     }
   }
 
   // Create a new plan question
   static async createPlanQuestion(
-    planQuestionData: PlanQuestionFormData
+    planQuestionData: PlanQuestionFormData,
   ): Promise<string> {
     try {
       const { data, error } = await supabase
@@ -81,7 +81,7 @@ export class PlanQuestionsService {
       if (error) throw error;
       return data.id;
     } catch (error) {
-      console.error('Error creating plan question:', error);
+      console.error("Error creating plan question:", error);
       throw error;
     }
   }
@@ -89,7 +89,7 @@ export class PlanQuestionsService {
   // Update a plan question
   static async updatePlanQuestion(
     id: string,
-    planQuestionData: Partial<PlanQuestionFormData>
+    planQuestionData: Partial<PlanQuestionFormData>,
   ): Promise<void> {
     try {
       const { error } = await supabase
@@ -98,11 +98,11 @@ export class PlanQuestionsService {
           ...planQuestionData,
           updated_at: new Date().toISOString(),
         })
-        .eq('id', id);
+        .eq("id", id);
 
       if (error) throw error;
     } catch (error) {
-      console.error('Error updating plan question:', error);
+      console.error("Error updating plan question:", error);
       throw error;
     }
   }
@@ -113,68 +113,68 @@ export class PlanQuestionsService {
       const { error } = await supabase
         .from(PLAN_QUESTIONS_COLLECTION)
         .delete()
-        .eq('id', id);
+        .eq("id", id);
 
       if (error) throw error;
     } catch (error) {
-      console.error('Error deleting plan question:', error);
+      console.error("Error deleting plan question:", error);
       throw error;
     }
   }
 
   // Get plan questions by card
   static async getPlanQuestionsByCard(
-    card_id: string
+    card_id: string,
   ): Promise<PlanQuestion[]> {
     try {
       const { data: planQuestions, error } = await supabase
         .from(PLAN_QUESTIONS_COLLECTION)
-        .select('*')
-        .eq('card_id', card_id)
-        .order('order', { ascending: true });
+        .select("*")
+        .eq("card_id", card_id)
+        .order("order", { ascending: true });
 
       if (error) throw error;
       return planQuestions || [];
     } catch (error) {
-      console.error('Error fetching plan questions by card:', error);
+      console.error("Error fetching plan questions by card:", error);
       throw error;
     }
   }
 
   // Get plan questions by category
   static async getPlanQuestionsByCategory(
-    categoryId: string
+    categoryId: string,
   ): Promise<PlanQuestion[]> {
     try {
       const { data: planQuestions, error } = await supabase
         .from(PLAN_QUESTIONS_COLLECTION)
-        .select('*')
-        .eq('categoryId', categoryId)
-        .order('order', { ascending: true });
+        .select("*")
+        .eq("categoryId", categoryId)
+        .order("order", { ascending: true });
 
       if (error) throw error;
       return planQuestions || [];
     } catch (error) {
-      console.error('Error fetching plan questions by category:', error);
+      console.error("Error fetching plan questions by category:", error);
       throw error;
     }
   }
 
   // Get plan questions by topic
   static async getPlanQuestionsByTopic(
-    topicId: string
+    topicId: string,
   ): Promise<PlanQuestion[]> {
     try {
       const { data: planQuestions, error } = await supabase
         .from(PLAN_QUESTIONS_COLLECTION)
-        .select('*')
-        .eq('topicId', topicId)
-        .order('order', { ascending: true });
+        .select("*")
+        .eq("topicId", topicId)
+        .order("order", { ascending: true });
 
       if (error) throw error;
       return planQuestions || [];
     } catch (error) {
-      console.error('Error fetching plan questions by topic:', error);
+      console.error("Error fetching plan questions by topic:", error);
       throw error;
     }
   }
@@ -182,7 +182,7 @@ export class PlanQuestionsService {
   // Reorder plan questions
   static async reorderPlanQuestions(
     plan_id: string,
-    questionIds: string[]
+    questionIds: string[],
   ): Promise<void> {
     try {
       const updates = questionIds.map((questionId, index) => ({
@@ -198,23 +198,23 @@ export class PlanQuestionsService {
             order: update.order,
             updated_at: update.updated_at,
           })
-          .eq('id', update.id)
-          .eq('plan_id', plan_id);
+          .eq("id", update.id)
+          .eq("plan_id", plan_id);
 
         if (error) throw error;
       }
     } catch (error) {
-      console.error('Error reordering plan questions:', error);
+      console.error("Error reordering plan questions:", error);
       throw error;
     }
   }
 
   // Bulk create plan questions
   static async bulkCreatePlanQuestions(
-    planQuestionsData: PlanQuestionFormData[]
+    planQuestionsData: PlanQuestionFormData[],
   ): Promise<string[]> {
     try {
-      const insertData = planQuestionsData.map(data => ({
+      const insertData = planQuestionsData.map((data) => ({
         ...data,
         created_at: new Date().toISOString(),
         updated_at: new Date().toISOString(),
@@ -226,9 +226,9 @@ export class PlanQuestionsService {
         .select();
 
       if (error) throw error;
-      return data.map(item => item.id);
+      return data.map((item) => item.id);
     } catch (error) {
-      console.error('Error bulk creating plan questions:', error);
+      console.error("Error bulk creating plan questions:", error);
       throw error;
     }
   }
@@ -239,11 +239,11 @@ export class PlanQuestionsService {
       const { error } = await supabase
         .from(PLAN_QUESTIONS_COLLECTION)
         .delete()
-        .in('id', ids);
+        .in("id", ids);
 
       if (error) throw error;
     } catch (error) {
-      console.error('Error bulk deleting plan questions:', error);
+      console.error("Error bulk deleting plan questions:", error);
       throw error;
     }
   }
@@ -253,13 +253,13 @@ export class PlanQuestionsService {
     try {
       const { count, error } = await supabase
         .from(PLAN_QUESTIONS_COLLECTION)
-        .select('*', { count: 'exact', head: true })
-        .eq('plan_id', plan_id);
+        .select("*", { count: "exact", head: true })
+        .eq("plan_id", plan_id);
 
       if (error) throw error;
       return count || 0;
     } catch (error) {
-      console.error('Error getting plan questions count:', error);
+      console.error("Error getting plan questions count:", error);
       throw error;
     }
   }

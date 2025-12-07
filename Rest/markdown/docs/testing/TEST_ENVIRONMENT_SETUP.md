@@ -5,6 +5,7 @@ This guide explains how to set up separate Supabase databases for unit, integrat
 ## Overview
 
 The test suite now supports separate environment configurations:
+
 - **Unit Tests**: Use `.env.test.local` or `.env.test` (mocked by default)
 - **Integration Tests**: Use `.env.test.local` or `.env.test` (can use real test database)
 - **E2E Tests**: Use `.env.test.local` or `.env.test` (requires real test database)
@@ -12,6 +13,7 @@ The test suite now supports separate environment configurations:
 ## Priority Order
 
 Environment variables are loaded in the following priority order:
+
 1. `.env.test.local` (highest priority - for local test overrides)
 2. `.env.test` (test-specific defaults)
 3. `.env.local` (fallback to dev - for backwards compatibility)
@@ -136,6 +138,7 @@ project-root/
 **Problem**: Tests are using your main Supabase database instead of test database.
 
 **Solution**:
+
 1. Verify `.env.test.local` exists and has correct test database URL
 2. Check that `NEXT_PUBLIC_SUPABASE_URL` in `.env.test.local` points to your test project
 3. Run with `DEBUG_TEST_ENV=true` to see which files are loaded
@@ -146,6 +149,7 @@ project-root/
 **Problem**: Tests fail because test database credentials are missing.
 
 **Solution**:
+
 1. Create `.env.test.local` from `Rest/env.test.example`
 2. Fill in your test Supabase project credentials
 3. Verify the test project exists and is accessible
@@ -155,6 +159,7 @@ project-root/
 **Problem**: Test environment variables aren't being loaded.
 
 **Solution**:
+
 1. Check file paths - ensure `.env.test.local` is in the project root
 2. Verify file permissions
 3. Check for syntax errors in `.env.test.local` (no spaces around `=`)
@@ -200,5 +205,3 @@ DEBUG_TEST_ENV=true npm run test:unit
 - [Supabase Documentation](https://supabase.com/docs)
 - [Jest Environment Variables](https://jestjs.io/docs/environment-variables)
 - [Playwright Environment Variables](https://playwright.dev/docs/test-use-options#use-environment-variables)
-
-

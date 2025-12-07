@@ -1,8 +1,13 @@
 # Task ID: G-001
+
 # Title: Homepage Rendering
+
 # Status: pending
-# Dependencies: 
+
+# Dependencies:
+
 # Priority: low
+
 # Description: Test that the homepage renders correctly and navigation elements work properly.
 
 # Details:
@@ -10,6 +15,7 @@
 ## Time Estimation
 
 ### Manual Testing
+
 - **Estimated Time**: 10-15 minutes
 - **Breakdown**:
   - Navigate and verify page load: 2 minutes
@@ -20,6 +26,7 @@
 - **Dependencies**: None
 
 ### Automated Testing
+
 - **Estimated Time**: 5-8 minutes (first run), 30-60 seconds (subsequent runs)
 - **Breakdown**:
   - Unit tests setup and execution: 2-3 minutes
@@ -29,6 +36,7 @@
 - **Dependencies**: Test environment setup
 
 ### Total Time
+
 - **Manual Only**: 10-15 minutes
 - **Automated Only**: 5-8 minutes (first run), 30-60 seconds (subsequent)
 - **Both Manual + Automated**: 15-23 minutes (first run), 10-16 minutes (subsequent)

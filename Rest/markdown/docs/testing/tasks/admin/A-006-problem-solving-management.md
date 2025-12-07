@@ -1,8 +1,13 @@
 # Task ID: A-006
+
 # Title: Admin Problem Solving Management
+
 # Status: pending
-# Dependencies: 
+
+# Dependencies:
+
 # Priority: high
+
 # Description: Test the admin problem solving management page including CRUD operations, test cases management, and validation.
 
 # Details:
@@ -10,6 +15,7 @@
 ## Time Estimation
 
 ### Manual Testing
+
 - **Estimated Time**: 40-55 minutes
 - **Breakdown**:
   - Navigate and verify access: 2 minutes
@@ -24,6 +30,7 @@
 - **Dependencies**: Admin authentication, API endpoints, test problem data
 
 ### Automated Testing
+
 - **Estimated Time**: 15-25 minutes (first run), 3-5 minutes (subsequent runs)
 - **Breakdown**:
   - Unit tests setup and execution: 5-8 minutes
@@ -33,6 +40,7 @@
 - **Dependencies**: API mocks, test problem data, authentication setup
 
 ### Total Time
+
 - **Manual Only**: 40-55 minutes
 - **Automated Only**: 15-25 minutes (first run), 3-5 minutes (subsequent)
 - **Both Manual + Automated**: 55-80 minutes (first run), 43-60 minutes (subsequent)
@@ -40,6 +48,7 @@
 ---
 
 ## Overview
+
 Test the admin problem solving management page including CRUD operations, test cases management, and validation.
 
 ## Manual Testing Steps

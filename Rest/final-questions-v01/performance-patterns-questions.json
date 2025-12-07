@@ -13,11 +13,7 @@
     "updatedAt": "2025-11-11T18:50:32.209Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "performance-patterns",
-      "browser-apis",
-      "intermediate"
-    ],
+    "tags": ["performance-patterns", "browser-apis", "intermediate"],
     "explanation": "IntersectionObserver efficiently tracks element visibility changes without heavy scroll listeners.",
     "points": 10,
     "options": [
@@ -46,9 +42,7 @@
         "explanation": ""
       }
     ],
-    "sampleAnswers": [
-      "IntersectionObserver"
-    ],
+    "sampleAnswers": ["IntersectionObserver"],
     "hints": [],
     "metadata": {}
   },
@@ -66,11 +60,7 @@
     "updatedAt": "2025-11-11T18:50:32.218Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "performance-patterns",
-      "browser-optimization",
-      "intermediate"
-    ],
+    "tags": ["performance-patterns", "browser-optimization", "intermediate"],
     "explanation": "Overusing preload can cause browsers to fetch unnecessary resources too early, increasing network congestion and reducing performance.",
     "points": 10,
     "options": [
@@ -119,11 +109,7 @@
     "updatedAt": "2025-11-11T18:50:32.240Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "performance-patterns",
-      "browser-optimization",
-      "intermediate"
-    ],
+    "tags": ["performance-patterns", "browser-optimization", "intermediate"],
     "explanation": "Chrome 95+ fixed queue-jumping behavior, making preload order more predictable relative to other resources.",
     "points": 10,
     "options": [
@@ -178,11 +164,7 @@
     "updatedAt": "2025-11-11T18:50:32.188Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "performance-patterns",
-      "bundle-optimization",
-      "intermediate"
-    ],
+    "tags": ["performance-patterns", "bundle-optimization", "intermediate"],
     "explanation": "The example reduced the main bundle from 1.5 MiB to 1.33 MiB by deferring the loading of EmojiPicker.",
     "points": 10,
     "options": [
@@ -211,9 +193,7 @@
         "explanation": ""
       }
     ],
-    "sampleAnswers": [
-      "From 1.5 MiB to 1.33 MiB"
-    ],
+    "sampleAnswers": ["From 1.5 MiB to 1.33 MiB"],
     "hints": [],
     "metadata": {}
   },
@@ -231,11 +211,7 @@
     "updatedAt": "2025-11-11T18:50:32.225Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "performance-patterns",
-      "bundle-splitting-tools",
-      "advanced"
-    ],
+    "tags": ["performance-patterns", "bundle-splitting-tools", "advanced"],
     "explanation": "Tools like Webpack’s SplitChunksPlugin, Rollup, and modern bundlers like Vite handle automatic code-splitting and lazy loading integration.",
     "points": 10,
     "options": [
@@ -426,9 +402,7 @@
         "explanation": ""
       }
     ],
-    "sampleAnswers": [
-      "It avoids unnecessary loading of non-critical modules"
-    ],
+    "sampleAnswers": ["It avoids unnecessary loading of non-critical modules"],
     "hints": [],
     "metadata": {}
   },
@@ -446,11 +420,7 @@
     "updatedAt": "2025-11-11T18:50:32.133Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "performance-patterns",
-      "bundle-splitting",
-      "intermediate"
-    ],
+    "tags": ["performance-patterns", "bundle-splitting", "intermediate"],
     "explanation": "Bundle Splitting divides a large JavaScript file into smaller bundles so the browser loads only necessary code for the current route or view, improving load performance.",
     "points": 10,
     "sampleAnswers": [
@@ -607,11 +577,7 @@
     "updatedAt": "2025-11-11T18:50:32.164Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "performance-patterns",
-      "bundle-splitting",
-      "intermediate"
-    ],
+    "tags": ["performance-patterns", "bundle-splitting", "intermediate"],
     "explanation": "FCP, LCP, and TTI improve as less code needs to be parsed and executed before meaningful content appears.",
     "points": 10,
     "options": [
@@ -657,11 +623,7 @@
     "updatedAt": "2025-11-11T18:50:32.164Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "performance-patterns",
-      "bundle-splitting",
-      "intermediate"
-    ],
+    "tags": ["performance-patterns", "bundle-splitting", "intermediate"],
     "explanation": "Bundle splitting addresses slow load times caused by downloading and parsing large monolithic bundles that contain code not needed on initial render.",
     "points": 10,
     "sampleAnswers": [
@@ -716,11 +678,7 @@
     "updatedAt": "2025-11-11T18:50:32.225Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "performance-patterns",
-      "dynamic-import",
-      "advanced"
-    ],
+    "tags": ["performance-patterns", "dynamic-import", "advanced"],
     "explanation": "Dynamic imports allow JavaScript modules to be fetched on demand, automatically creating separate bundles for lazy-loaded components and reducing initial load size.",
     "points": 10,
     "sampleAnswers": [
@@ -775,11 +733,7 @@
     "updatedAt": "2025-11-11T18:50:32.225Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "performance-patterns",
-      "dynamic-import",
-      "intermediate"
-    ],
+    "tags": ["performance-patterns", "dynamic-import", "intermediate"],
     "explanation": "Dynamic imports are asynchronous and allow bundlers like Webpack to split code into separate chunks that load only when needed, improving perceived performance.",
     "points": 10,
     "options": [
@@ -825,11 +779,7 @@
     "updatedAt": "2025-11-11T18:50:32.225Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "performance-patterns",
-      "bundle-splitting",
-      "advanced"
-    ],
+    "tags": ["performance-patterns", "bundle-splitting", "advanced"],
     "explanation": "Excessive splitting can cause too many small network requests, increase latency, and make caching more complex.",
     "points": 10,
     "sampleAnswers": [
@@ -918,9 +868,7 @@
         "explanation": ""
       }
     ],
-    "sampleAnswers": [
-      "Gzip and Brotli"
-    ],
+    "sampleAnswers": ["Gzip and Brotli"],
     "hints": [],
     "metadata": {}
   },
@@ -972,9 +920,7 @@
         "explanation": ""
       }
     ],
-    "sampleAnswers": [
-      "Lossless compression"
-    ],
+    "sampleAnswers": ["Lossless compression"],
     "hints": [],
     "metadata": {}
   },
@@ -992,11 +938,7 @@
     "updatedAt": "2025-11-11T18:50:32.172Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "performance-patterns",
-      "compression-comparison",
-      "intermediate"
-    ],
+    "tags": ["performance-patterns", "compression-comparison", "intermediate"],
     "explanation": "Brotli achieves denser compression through context modeling and larger dictionary windows, reducing file size effectively.",
     "points": 10,
     "options": [
@@ -1045,11 +987,7 @@
     "updatedAt": "2025-11-11T18:50:32.172Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "performance-patterns",
-      "compression-types",
-      "intermediate"
-    ],
+    "tags": ["performance-patterns", "compression-types", "intermediate"],
     "explanation": "JavaScript requires lossless compression to preserve code integrity during compression and decompression.",
     "points": 10,
     "options": [
@@ -1098,11 +1036,7 @@
     "updatedAt": "2025-11-11T18:50:32.172Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "performance-patterns",
-      "compression-types",
-      "intermediate"
-    ],
+    "tags": ["performance-patterns", "compression-types", "intermediate"],
     "explanation": "Static compression is ideal for files that rarely change, improving transfer speeds without runtime cost.",
     "points": 10,
     "options": [
@@ -1131,9 +1065,7 @@
         "explanation": ""
       }
     ],
-    "sampleAnswers": [
-      "Pre-compressing files during build time"
-    ],
+    "sampleAnswers": ["Pre-compressing files during build time"],
     "hints": [],
     "metadata": {}
   },
@@ -1185,9 +1117,7 @@
         "explanation": ""
       }
     ],
-    "sampleAnswers": [
-      "Inline critical CSS and preload if external"
-    ],
+    "sampleAnswers": ["Inline critical CSS and preload if external"],
     "hints": [],
     "metadata": {}
   },
@@ -1239,9 +1169,7 @@
         "explanation": ""
       }
     ],
-    "sampleAnswers": [
-      "dynamic import()"
-    ],
+    "sampleAnswers": ["dynamic import()"],
     "hints": [],
     "metadata": {}
   },
@@ -1293,9 +1221,7 @@
         "explanation": ""
       }
     ],
-    "sampleAnswers": [
-      "It loads when visible."
-    ],
+    "sampleAnswers": ["It loads when visible."],
     "hints": [],
     "metadata": {}
   },
@@ -1346,9 +1272,7 @@
         "explanation": ""
       }
     ],
-    "sampleAnswers": [
-      "A placeholder element shown before real content loads"
-    ],
+    "sampleAnswers": ["A placeholder element shown before real content loads"],
     "hints": [],
     "metadata": {}
   },
@@ -1366,11 +1290,7 @@
     "updatedAt": "2025-11-11T18:50:32.218Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "performance-patterns",
-      "fonts-and-preconnect",
-      "intermediate"
-    ],
+    "tags": ["performance-patterns", "fonts-and-preconnect", "intermediate"],
     "explanation": "Using preconnect allows browsers to establish connections early, reducing delay in fetching critical font resources.",
     "points": 10,
     "options": [
@@ -1399,9 +1319,7 @@
         "explanation": ""
       }
     ],
-    "sampleAnswers": [
-      "Use font preconnect for external domains"
-    ],
+    "sampleAnswers": ["Use font preconnect for external domains"],
     "hints": [],
     "metadata": {}
   },
@@ -1419,11 +1337,7 @@
     "updatedAt": "2025-11-11T18:50:32.172Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "performance-patterns",
-      "granularity-trade-off",
-      "intermediate"
-    ],
+    "tags": ["performance-patterns", "granularity-trade-off", "intermediate"],
     "explanation": "This is the granularity trade-off: compression efficiency and caching benefits often compete in bundle optimization.",
     "points": 10,
     "options": [
@@ -1452,9 +1366,7 @@
         "explanation": ""
       }
     ],
-    "sampleAnswers": [
-      "Smaller chunks cache better, larger compress better"
-    ],
+    "sampleAnswers": ["Smaller chunks cache better, larger compress better"],
     "hints": [],
     "metadata": {}
   },
@@ -1472,11 +1384,7 @@
     "updatedAt": "2025-11-11T18:50:32.172Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "performance-patterns",
-      "http-compression",
-      "intermediate"
-    ],
+    "tags": ["performance-patterns", "http-compression", "intermediate"],
     "explanation": "Dynamic compression is used for frequently changing content, balancing CPU time with real-time optimization.",
     "points": 10,
     "options": [
@@ -1505,9 +1413,7 @@
         "explanation": ""
       }
     ],
-    "sampleAnswers": [
-      "Compression applied during runtime on request"
-    ],
+    "sampleAnswers": ["Compression applied during runtime on request"],
     "hints": [],
     "metadata": {}
   },
@@ -1559,9 +1465,7 @@
         "explanation": ""
       }
     ],
-    "sampleAnswers": [
-      "Above the fold images including the hero image"
-    ],
+    "sampleAnswers": ["Above the fold images including the hero image"],
     "hints": [],
     "metadata": {}
   },
@@ -1579,17 +1483,11 @@
     "updatedAt": "2025-11-11T18:50:32.209Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "performance-patterns",
-      "import-strategies",
-      "intermediate"
-    ],
+    "tags": ["performance-patterns", "import-strategies", "intermediate"],
     "explanation": "Import-on-visibility uses viewport detection rather than explicit user events to trigger the import.",
     "points": 10,
     "options": [],
-    "sampleAnswers": [
-      "It loads on visibility, not just user click."
-    ],
+    "sampleAnswers": ["It loads on visibility, not just user click."],
     "hints": [],
     "metadata": {}
   },
@@ -1641,9 +1539,7 @@
         "explanation": ""
       }
     ],
-    "sampleAnswers": [
-      "To lazy-load non-critical resources when needed"
-    ],
+    "sampleAnswers": ["To lazy-load non-critical resources when needed"],
     "hints": [],
     "metadata": {}
   },
@@ -1661,11 +1557,7 @@
     "updatedAt": "2025-11-11T18:50:32.225Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "performance-patterns",
-      "lazy-loading",
-      "intermediate"
-    ],
+    "tags": ["performance-patterns", "lazy-loading", "intermediate"],
     "explanation": "Lazy loading delays loading of non-critical components. Combined with bundle splitting, it ensures smaller initial bundles and faster interactive experiences.",
     "points": 10,
     "sampleAnswers": [
@@ -1720,11 +1612,7 @@
     "updatedAt": "2025-11-11T18:50:32.188Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "performance-patterns",
-      "lazy-loading-behavior",
-      "intermediate"
-    ],
+    "tags": ["performance-patterns", "lazy-loading-behavior", "intermediate"],
     "explanation": "The lazy import ensures that the module is fetched and executed only upon user interaction with the emoji button.",
     "points": 10,
     "options": [
@@ -1753,9 +1641,7 @@
         "explanation": ""
       }
     ],
-    "sampleAnswers": [
-      "Only when the emoji button is clicked"
-    ],
+    "sampleAnswers": ["Only when the emoji button is clicked"],
     "hints": [],
     "metadata": {}
   },
@@ -1802,11 +1688,7 @@
     "updatedAt": "2025-11-11T18:50:32.217Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "performance-patterns",
-      "loading-challenges",
-      "intermediate"
-    ],
+    "tags": ["performance-patterns", "loading-challenges", "intermediate"],
     "explanation": "Developers often expect browsers to prioritize resources in a specific order, but browsers handle requests differently, leading to suboptimal performance.",
     "points": 10,
     "options": [
@@ -1855,11 +1737,7 @@
     "updatedAt": "2025-11-11T18:50:32.172Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "performance-patterns",
-      "minification",
-      "intermediate"
-    ],
+    "tags": ["performance-patterns", "minification", "intermediate"],
     "explanation": "Minification optimizes code before compression, enabling smaller payloads without changing functionality.",
     "points": 10,
     "options": [
@@ -1888,9 +1766,7 @@
         "explanation": ""
       }
     ],
-    "sampleAnswers": [
-      "Removes unnecessary syntax to shrink file size"
-    ],
+    "sampleAnswers": ["Removes unnecessary syntax to shrink file size"],
     "hints": [],
     "metadata": {}
   },
@@ -1908,11 +1784,7 @@
     "updatedAt": "2025-11-11T18:50:32.217Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "performance-patterns",
-      "network-optimization",
-      "intermediate"
-    ],
+    "tags": ["performance-patterns", "network-optimization", "intermediate"],
     "explanation": "Improper pipelining can lead to idle CPU or network times, where one waits for the other, decreasing efficiency.",
     "points": 10,
     "options": [
@@ -1994,9 +1866,7 @@
         "explanation": ""
       }
     ],
-    "sampleAnswers": [
-      "For social widgets and feedback scripts"
-    ],
+    "sampleAnswers": ["For social widgets and feedback scripts"],
     "hints": [],
     "metadata": {}
   },
@@ -2064,11 +1934,7 @@
     "updatedAt": "2025-11-11T18:50:32.240Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "performance-patterns",
-      "optimization-guidelines",
-      "intermediate"
-    ],
+    "tags": ["performance-patterns", "optimization-guidelines", "intermediate"],
     "explanation": "Preload should only be used for critical resources and its performance impact should be measured carefully.",
     "points": 10,
     "options": [
@@ -2111,11 +1977,7 @@
     "updatedAt": "2025-11-11T18:50:32.241Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "performance-patterns",
-      "optimization-scenarios",
-      "intermediate"
-    ],
+    "tags": ["performance-patterns", "optimization-scenarios", "intermediate"],
     "explanation": "Prefetching should be used for predictable user paths to balance performance and bandwidth usage.",
     "points": 10,
     "options": [
@@ -2217,11 +2079,7 @@
     "updatedAt": "2025-11-11T18:50:32.232Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "performance-patterns",
-      "performance-comparison",
-      "intermediate"
-    ],
+    "tags": ["performance-patterns", "performance-comparison", "intermediate"],
     "explanation": "Preload prioritizes resources needed right away; prefetch prepares resources for potential future use.",
     "points": 10,
     "options": [
@@ -2264,11 +2122,7 @@
     "updatedAt": "2025-11-11T18:50:32.201Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "performance-patterns",
-      "performance-trade-offs",
-      "intermediate"
-    ],
+    "tags": ["performance-patterns", "performance-trade-offs", "intermediate"],
     "explanation": "While the page loads faster initially, there might be a small delay when the resource is fetched on demand.",
     "points": 10,
     "options": [
@@ -2297,9 +2151,7 @@
         "explanation": ""
       }
     ],
-    "sampleAnswers": [
-      "Possible delay after user interaction"
-    ],
+    "sampleAnswers": ["Possible delay after user interaction"],
     "hints": [],
     "metadata": {}
   },
@@ -2317,11 +2169,7 @@
     "updatedAt": "2025-11-11T18:50:32.232Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "performance-patterns",
-      "performance-trade-offs",
-      "intermediate"
-    ],
+    "tags": ["performance-patterns", "performance-trade-offs", "intermediate"],
     "explanation": "Preloading too many assets can block more important ones, increasing First Contentful Paint time.",
     "points": 10,
     "options": [
@@ -2364,11 +2212,7 @@
     "updatedAt": "2025-11-11T18:50:32.188Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "performance-patterns",
-      "performance-ux",
-      "intermediate"
-    ],
+    "tags": ["performance-patterns", "performance-ux", "intermediate"],
     "explanation": "By deferring low-priority code, dynamic imports shorten Time to Interactive (TTI) and improve perceived performance.",
     "points": 10,
     "options": [
@@ -2465,11 +2309,7 @@
     "updatedAt": "2025-11-11T18:50:32.241Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "performance-patterns",
-      "prefetch-optimization",
-      "intermediate"
-    ],
+    "tags": ["performance-patterns", "prefetch-optimization", "intermediate"],
     "explanation": "Prefetch loads resources before they are needed (proactively), while lazy loading loads them only when required (reactively).",
     "points": 10,
     "options": [
@@ -2620,11 +2460,7 @@
     "updatedAt": "2025-11-11T18:50:32.257Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "performance-patterns",
-      "prpl-pattern",
-      "intermediate"
-    ],
+    "tags": ["performance-patterns", "prpl-pattern", "intermediate"],
     "explanation": "A web performance pattern that optimizes loading by pushing critical resources, rendering fast, pre-caching assets, and lazy-loading the rest.",
     "points": 10,
     "sampleAnswers": [
@@ -2781,11 +2617,7 @@
     "updatedAt": "2025-11-11T18:50:32.257Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "performance-patterns",
-      "prpl-pattern",
-      "intermediate"
-    ],
+    "tags": ["performance-patterns", "prpl-pattern", "intermediate"],
     "explanation": "PRPL commonly uses HTTP/2 server push, service workers for caching, and an app shell for faster rendering.",
     "points": 10,
     "options": [
@@ -2831,11 +2663,7 @@
     "updatedAt": "2025-11-11T18:50:32.257Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "performance-patterns",
-      "prpl-pattern",
-      "intermediate"
-    ],
+    "tags": ["performance-patterns", "prpl-pattern", "intermediate"],
     "explanation": "It ensures only the necessary parts of the app are loaded, improving performance and caching efficiency.",
     "points": 10,
     "sampleAnswers": [
@@ -2941,11 +2769,7 @@
     "updatedAt": "2025-11-11T18:50:32.257Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "performance-patterns",
-      "prpl-pattern",
-      "intermediate"
-    ],
+    "tags": ["performance-patterns", "prpl-pattern", "intermediate"],
     "explanation": "Pushing unnecessary files wastes bandwidth and fills the browser cache, reducing overall performance.",
     "points": 10,
     "options": [
@@ -2991,11 +2815,7 @@
     "updatedAt": "2025-11-11T18:50:32.257Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "performance-patterns",
-      "prpl-pattern",
-      "advanced"
-    ],
+    "tags": ["performance-patterns", "prpl-pattern", "advanced"],
     "explanation": "HTTP/2 allows multiple requests in one TCP connection, reducing latency and supporting PRPL’s goal of faster initial route rendering.",
     "points": 10,
     "sampleAnswers": [
@@ -3050,11 +2870,7 @@
     "updatedAt": "2025-11-11T18:50:32.257Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "performance-patterns",
-      "prpl-pattern",
-      "intermediate"
-    ],
+    "tags": ["performance-patterns", "prpl-pattern", "intermediate"],
     "explanation": "The App Shell delivers the minimal UI structure immediately, allowing PRPL to render the first route quickly and cache other assets later.",
     "points": 10,
     "options": [
@@ -3100,11 +2916,7 @@
     "updatedAt": "2025-11-11T18:50:32.257Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "performance-patterns",
-      "prpl-pattern",
-      "intermediate"
-    ],
+    "tags": ["performance-patterns", "prpl-pattern", "intermediate"],
     "explanation": "The correct answer is: True",
     "points": 10,
     "options": [
@@ -3150,11 +2962,7 @@
     "updatedAt": "2025-11-11T18:50:32.257Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "performance-patterns",
-      "prpl-pattern",
-      "advanced"
-    ],
+    "tags": ["performance-patterns", "prpl-pattern", "advanced"],
     "explanation": "It can delay critical rendering assets like CSS and images, worsening user-perceived performance metrics.",
     "points": 10,
     "sampleAnswers": [
@@ -3209,11 +3017,7 @@
     "updatedAt": "2025-11-11T18:50:32.257Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "performance-patterns",
-      "prpl-pattern",
-      "intermediate"
-    ],
+    "tags": ["performance-patterns", "prpl-pattern", "intermediate"],
     "explanation": "Rendering the initial route early reduces the time before a user can interact, improving TTI.",
     "points": 10,
     "options": [
@@ -3259,11 +3063,7 @@
     "updatedAt": "2025-11-11T18:50:32.257Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "performance-patterns",
-      "prpl-pattern",
-      "intermediate"
-    ],
+    "tags": ["performance-patterns", "prpl-pattern", "intermediate"],
     "explanation": "By using Service Workers to pre-cache frequently visited routes and assets, so they can load from cache when offline.",
     "points": 10,
     "sampleAnswers": [
@@ -3318,11 +3118,7 @@
     "updatedAt": "2025-11-11T18:50:32.257Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "performance-patterns",
-      "prpl-pattern",
-      "intermediate"
-    ],
+    "tags": ["performance-patterns", "prpl-pattern", "intermediate"],
     "explanation": "HTTP/2 server push accelerates the 'Push' step by sending critical resources before the browser requests them.",
     "points": 10,
     "options": [
@@ -3453,9 +3249,7 @@
         "explanation": ""
       }
     ],
-    "sampleAnswers": [
-      "React.lazy"
-    ],
+    "sampleAnswers": ["React.lazy"],
     "hints": [],
     "metadata": {}
   },
@@ -3473,11 +3267,7 @@
     "updatedAt": "2025-11-11T18:50:32.201Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "performance-patterns",
-      "react-lazy-loading",
-      "intermediate"
-    ],
+    "tags": ["performance-patterns", "react-lazy-loading", "intermediate"],
     "explanation": "React’s <code>lazy()</code> and <code>Suspense</code> make it easy to defer loading non-critical components until interaction occurs.",
     "points": 10,
     "options": [
@@ -3560,9 +3350,7 @@
         "explanation": ""
       }
     ],
-    "sampleAnswers": [
-      "It renders a fallback while a lazy component loads"
-    ],
+    "sampleAnswers": ["It renders a fallback while a lazy component loads"],
     "hints": [],
     "metadata": {}
   },
@@ -3614,9 +3402,7 @@
         "explanation": ""
       }
     ],
-    "sampleAnswers": [
-      "Displays content while waiting for lazy component"
-    ],
+    "sampleAnswers": ["Displays content while waiting for lazy component"],
     "hints": [],
     "metadata": {}
   },
@@ -3642,9 +3428,7 @@
     "explanation": "Instead of pre-loading all lazy components, it waits until the user scrolls to them, saving bandwidth and improving UX.",
     "points": 10,
     "options": [],
-    "sampleAnswers": [
-      "It lazy loads components only when visible."
-    ],
+    "sampleAnswers": ["It lazy loads components only when visible."],
     "hints": [],
     "metadata": {}
   },
@@ -3662,11 +3446,7 @@
     "updatedAt": "2025-11-11T18:50:32.271Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "performance-patterns",
-      "react-window-components",
-      "intermediate"
-    ],
+    "tags": ["performance-patterns", "react-window-components", "intermediate"],
     "explanation": "react-window provides FixedSizeList/VariableSizeList for virtualized lists and FixedSizeGrid/VariableSizeGrid for virtualized grids.",
     "points": 10,
     "options": [
@@ -3734,9 +3514,7 @@
         "explanation": ""
       }
     ],
-    "sampleAnswers": [
-      "It loads the share feature dynamically on click"
-    ],
+    "sampleAnswers": ["It loads the share feature dynamically on click"],
     "hints": [],
     "metadata": {}
   },
@@ -3754,11 +3532,7 @@
     "updatedAt": "2025-11-11T18:50:32.218Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "performance-patterns",
-      "script-loading",
-      "intermediate"
-    ],
+    "tags": ["performance-patterns", "script-loading", "intermediate"],
     "explanation": "Scripts like analytics should use 'After-Interactive' so they load after hydration without blocking critical rendering.",
     "points": 10,
     "options": [
@@ -3787,9 +3561,7 @@
         "explanation": ""
       }
     ],
-    "sampleAnswers": [
-      "After-Interactive"
-    ],
+    "sampleAnswers": ["After-Interactive"],
     "hints": [],
     "metadata": {}
   },
@@ -3807,11 +3579,7 @@
     "updatedAt": "2025-11-11T18:50:32.240Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "performance-patterns",
-      "script-optimization",
-      "advanced"
-    ],
+    "tags": ["performance-patterns", "script-optimization", "advanced"],
     "explanation": "This technique downloads the script as a high-priority resource but doesn’t block parsing while it loads.",
     "points": 10,
     "options": [
@@ -3854,17 +3622,11 @@
     "updatedAt": "2025-11-11T18:50:32.209Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "performance-patterns",
-      "spa-optimization",
-      "intermediate"
-    ],
+    "tags": ["performance-patterns", "spa-optimization", "intermediate"],
     "explanation": "Users experience faster initial render and smoother scrolling as code loads progressively.",
     "points": 10,
     "options": [],
-    "sampleAnswers": [
-      "Smaller bundles and faster initial render."
-    ],
+    "sampleAnswers": ["Smaller bundles and faster initial render."],
     "hints": [],
     "metadata": {}
   },
@@ -3882,11 +3644,7 @@
     "updatedAt": "2025-11-11T18:50:32.240Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "performance-patterns",
-      "spa-optimization",
-      "intermediate"
-    ],
+    "tags": ["performance-patterns", "spa-optimization", "intermediate"],
     "explanation": "Preloading helps ensure components needed immediately after page load are ready without waiting for network fetches.",
     "points": 10,
     "options": [
@@ -3941,11 +3699,7 @@
     "updatedAt": "2025-11-11T18:50:32.188Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "performance-patterns",
-      "ssr-alternatives",
-      "intermediate"
-    ],
+    "tags": ["performance-patterns", "ssr-alternatives", "intermediate"],
     "explanation": "The <code>@loadable/component</code> library provides a Suspense-like API compatible with both SSR and CSR environments.",
     "points": 10,
     "options": [
@@ -3974,9 +3728,7 @@
         "explanation": ""
       }
     ],
-    "sampleAnswers": [
-      "@loadable/component"
-    ],
+    "sampleAnswers": ["@loadable/component"],
     "hints": [],
     "metadata": {}
   },
@@ -3994,11 +3746,7 @@
     "updatedAt": "2025-11-11T18:50:32.188Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "performance-patterns",
-      "ssr-limitation",
-      "intermediate"
-    ],
+    "tags": ["performance-patterns", "ssr-limitation", "intermediate"],
     "explanation": "Suspense currently only supports client-side rendering; SSR requires libraries like <code>@loadable/component</code> to manage lazy imports.",
     "points": 10,
     "options": [
@@ -4047,11 +3795,7 @@
     "updatedAt": "2025-11-11T18:50:32.264Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "performance-patterns",
-      "third-party-loading",
-      "intermediate"
-    ],
+    "tags": ["performance-patterns", "third-party-loading", "intermediate"],
     "explanation": "Use defer to fetch scripts in parallel and execute after DOM parsing, or async to execute as soon as available without blocking the parser, for scripts that are not critical to initial rendering.",
     "points": 10,
     "sampleAnswers": [
@@ -4106,11 +3850,7 @@
     "updatedAt": "2025-11-11T18:50:32.264Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "performance-patterns",
-      "third-party-loading",
-      "intermediate"
-    ],
+    "tags": ["performance-patterns", "third-party-loading", "intermediate"],
     "explanation": "The correct answer is: True",
     "points": 10,
     "options": [
@@ -4156,11 +3896,7 @@
     "updatedAt": "2025-11-11T18:50:32.264Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "performance-patterns",
-      "third-party-loading",
-      "intermediate"
-    ],
+    "tags": ["performance-patterns", "third-party-loading", "intermediate"],
     "explanation": "Embeds not visible on page load are delayed until needed, reducing initial load times and blocking of critical rendering.",
     "points": 10,
     "sampleAnswers": [
@@ -4215,11 +3951,7 @@
     "updatedAt": "2025-11-11T18:50:32.264Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "performance-patterns",
-      "third-party-loading",
-      "advanced"
-    ],
+    "tags": ["performance-patterns", "third-party-loading", "advanced"],
     "explanation": "Reduces DNS lookups, allows better caching control, and can use HTTP/2 push, but scripts must be updated regularly to stay current.",
     "points": 10,
     "sampleAnswers": [
@@ -4307,9 +4039,7 @@
         "explanation": ""
       }
     ],
-    "sampleAnswers": [
-      "Lazy-loading non-critical third-party widgets"
-    ],
+    "sampleAnswers": ["Lazy-loading non-critical third-party widgets"],
     "hints": [],
     "metadata": {}
   },
@@ -4327,11 +4057,7 @@
     "updatedAt": "2025-11-11T18:50:32.217Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "performance-patterns",
-      "third-party-performance",
-      "intermediate"
-    ],
+    "tags": ["performance-patterns", "third-party-performance", "intermediate"],
     "explanation": "Third-party scripts like ads or analytics often block rendering or delay other resources, harming metrics like FID and LCP.",
     "points": 10,
     "options": [
@@ -4594,11 +4320,7 @@
     "updatedAt": "2025-11-11T18:50:32.264Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "performance-patterns",
-      "tree-shaking-example",
-      "intermediate"
-    ],
+    "tags": ["performance-patterns", "tree-shaking-example", "intermediate"],
     "explanation": "Only read() is used in index.js, so nap() is considered dead code and excluded from the bundle.",
     "points": 10,
     "options": [
@@ -4632,11 +4354,7 @@
     "updatedAt": "2025-11-11T18:50:32.264Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "performance-patterns",
-      "tree-shaking-mechanism",
-      "advanced"
-    ],
+    "tags": ["performance-patterns", "tree-shaking-mechanism", "advanced"],
     "explanation": "Tree shaking starts at the entry point and traverses the dependency graph, marking only the code paths that are used. Unused paths are excluded from the final bundle.",
     "points": 10,
     "sampleAnswers": [
@@ -4784,9 +4502,7 @@
         "explanation": ""
       }
     ],
-    "sampleAnswers": [
-      "The fallback component displays temporarily"
-    ],
+    "sampleAnswers": ["The fallback component displays temporarily"],
     "hints": [],
     "metadata": {}
   },
@@ -4804,11 +4520,7 @@
     "updatedAt": "2025-11-11T18:50:32.201Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "performance-patterns",
-      "user-interaction-events",
-      "intermediate"
-    ],
+    "tags": ["performance-patterns", "user-interaction-events", "intermediate"],
     "explanation": "The pattern optimizes performance by waiting for direct user interactions or idle time before loading heavy resources.",
     "points": 10,
     "options": [
@@ -4837,9 +4549,7 @@
         "explanation": ""
       }
     ],
-    "sampleAnswers": [
-      "On user click, scroll, or idle time"
-    ],
+    "sampleAnswers": ["On user click, scroll, or idle time"],
     "hints": [],
     "metadata": {}
   },
@@ -4866,9 +4576,7 @@
     "explanation": "The fallback reassures users that loading is in progress, preventing perceived freezes.",
     "points": 10,
     "options": [],
-    "sampleAnswers": [
-      "It shows a loading indicator during module load."
-    ],
+    "sampleAnswers": ["It shows a loading indicator during module load."],
     "hints": [],
     "metadata": {}
   },
@@ -4946,11 +4654,7 @@
     "updatedAt": "2025-11-11T18:50:32.271Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "performance-patterns",
-      "virtual-lists-libraries",
-      "intermediate"
-    ],
+    "tags": ["performance-patterns", "virtual-lists-libraries", "intermediate"],
     "explanation": "React-window is smaller, faster, and more tree-shakeable than react-virtualized. It provides simpler APIs for most virtualization use cases and reduces bundle size significantly.",
     "points": 10,
     "sampleAnswers": [
@@ -5005,11 +4709,7 @@
     "updatedAt": "2025-11-11T18:50:32.271Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "performance-patterns",
-      "virtual-lists-limitations",
-      "advanced"
-    ],
+    "tags": ["performance-patterns", "virtual-lists-limitations", "advanced"],
     "explanation": "React-window does not include WindowScroller, AutoSizer, or CellMeasurer by default. These need to be implemented separately if needed.",
     "points": 10,
     "sampleAnswers": [
@@ -5174,11 +4874,7 @@
     "updatedAt": "2025-11-11T18:50:32.271Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "performance-patterns",
-      "virtual-lists-windowing",
-      "intermediate"
-    ],
+    "tags": ["performance-patterns", "virtual-lists-windowing", "intermediate"],
     "explanation": "The 'window' refers to the subset of list items that are currently visible and rendered in the DOM. As the user scrolls, the window moves along the list, rendering new items and removing old ones.",
     "points": 10,
     "sampleAnswers": [
@@ -5241,9 +4937,7 @@
     "explanation": "Balancing performance and perceived speed requires good fallback UIs and caching strategies.",
     "points": 10,
     "options": [],
-    "sampleAnswers": [
-      "Visible delay if network is slow."
-    ],
+    "sampleAnswers": ["Visible delay if network is slow."],
     "hints": [],
     "metadata": {}
   },
@@ -5349,9 +5043,7 @@
         "explanation": ""
       }
     ],
-    "sampleAnswers": [
-      "To reduce file size and improve loading performance"
-    ],
+    "sampleAnswers": ["To reduce file size and improve loading performance"],
     "hints": [],
     "metadata": {}
   },
@@ -5369,11 +5061,7 @@
     "updatedAt": "2025-11-11T18:50:32.201Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "performance-patterns",
-      "web-vitals",
-      "intermediate"
-    ],
+    "tags": ["performance-patterns", "web-vitals", "intermediate"],
     "explanation": "Deferring heavy scripts helps the browser respond to user input faster, improving FID, TBT, and TTI metrics.",
     "points": 10,
     "options": [
@@ -5422,11 +5110,7 @@
     "updatedAt": "2025-11-11T18:50:32.172Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "performance-patterns",
-      "webpack-configuration",
-      "intermediate"
-    ],
+    "tags": ["performance-patterns", "webpack-configuration", "intermediate"],
     "explanation": "Webpack supports Brotli through BrotliWebpackPlugin, enabling efficient compression of assets for production builds.",
     "points": 10,
     "options": [
@@ -5455,9 +5139,7 @@
         "explanation": ""
       }
     ],
-    "sampleAnswers": [
-      "BrotliWebpackPlugin"
-    ],
+    "sampleAnswers": ["BrotliWebpackPlugin"],
     "hints": [],
     "metadata": {}
   },
@@ -5475,11 +5157,7 @@
     "updatedAt": "2025-11-11T18:50:32.225Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "performance-patterns",
-      "webpack-configuration",
-      "intermediate"
-    ],
+    "tags": ["performance-patterns", "webpack-configuration", "intermediate"],
     "explanation": "The correct answer is: True",
     "points": 10,
     "options": [
@@ -5525,11 +5203,7 @@
     "updatedAt": "2025-11-11T18:50:32.232Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "performance-patterns",
-      "webpack-optimization",
-      "intermediate"
-    ],
+    "tags": ["performance-patterns", "webpack-optimization", "intermediate"],
     "explanation": "The magic comment tells Webpack to emit a preload link for that resource, so the browser fetches it immediately.",
     "points": 10,
     "options": [
@@ -5572,11 +5246,7 @@
     "updatedAt": "2025-11-11T18:50:32.241Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "performance-patterns",
-      "webpack-optimization",
-      "intermediate"
-    ],
+    "tags": ["performance-patterns", "webpack-optimization", "intermediate"],
     "explanation": "The magic comment tells Webpack to include a <code>&lt;link rel='prefetch'&gt;</code> for the specified chunk, allowing the browser to load it in advance.",
     "points": 10,
     "options": [

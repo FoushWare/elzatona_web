@@ -30,8 +30,12 @@ async function createAdminUserInTable() {
 
     if (!email || !password) {
       console.error('❌ Missing admin credentials');
-      console.error('Usage: node create-admin-user-in-table.js <email> <password>');
-      console.error('Or set ADMIN_EMAIL and ADMIN_PASSWORD in environment variables');
+      console.error(
+        'Usage: node create-admin-user-in-table.js <email> <password>'
+      );
+      console.error(
+        'Or set ADMIN_EMAIL and ADMIN_PASSWORD in environment variables'
+      );
       process.exit(1);
     }
 
@@ -45,7 +49,9 @@ async function createAdminUserInTable() {
       console.error('❌ admin_users table does not exist!');
       console.error('Please run the SQL script to create the table:');
       console.error('   Rest/scripts/scripts/create-admin-users-table.sql');
-      console.error('\nOr create it manually in Supabase dashboard SQL editor.');
+      console.error(
+        '\nOr create it manually in Supabase dashboard SQL editor.'
+      );
       console.error('\nThe table structure is:');
       console.error('  - id (UUID, primary key)');
       console.error('  - email (TEXT, unique)');
@@ -67,7 +73,7 @@ async function createAdminUserInTable() {
 
     if (existingAdmin) {
       console.log('⚠️  Admin user already exists. Updating password...');
-      
+
       // Hash the new password
       const saltRounds = 10;
       const passwordHash = await bcrypt.hash(password, saltRounds);
@@ -133,4 +139,3 @@ async function createAdminUserInTable() {
 }
 
 createAdminUserInTable();
-

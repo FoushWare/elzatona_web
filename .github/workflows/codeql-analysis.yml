@@ -7,7 +7,7 @@ on:
     branches: [main]
   schedule:
     # Run weekly on Monday at 00:00 UTC
-    - cron: '0 0 * * 1'
+    - cron: "0 0 * * 1"
   workflow_dispatch:
 
 # Cancel in-progress runs on the same branch
@@ -28,7 +28,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        language: ['javascript', 'typescript']
+        language: ["javascript", "typescript"]
 
     steps:
       - name: Checkout repository
@@ -46,8 +46,8 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
-          cache: 'npm'
+          node-version: "20"
+          cache: "npm"
 
       - name: Install dependencies
         run: npm ci
@@ -55,5 +55,4 @@ jobs:
       - name: Perform CodeQL Analysis
         uses: github/codeql-action/analyze@v3
         with:
-          category: '/language:${{ matrix.language }}'
-
+          category: "/language:${{ matrix.language }}"

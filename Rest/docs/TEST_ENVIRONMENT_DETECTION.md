@@ -56,7 +56,10 @@ if (!process.env.ADMIN_EMAIL) {
 
 ```typescript
 // ✅ New way - automatic detection
-import { loadTestEnvironment, getAdminCredentials } from '@/lib/utils/test-env-loader';
+import {
+  loadTestEnvironment,
+  getAdminCredentials,
+} from '@/lib/utils/test-env-loader';
 
 // Automatically detects environment and loads config
 loadTestEnvironment();
@@ -71,18 +74,19 @@ const { email, password } = getAdminCredentials();
 
 ### Required Variables
 
-| Variable | Test Environment | Production Environment | CI/GitHub Actions |
-|----------|-----------------|----------------------|-------------------|
-| `ADMIN_EMAIL` | `.env.test.local` | `.env.local` | GitHub Secret |
-| `ADMIN_PASSWORD` | `.env.test.local` | `.env.local` | GitHub Secret |
-| `NEXT_PUBLIC_SUPABASE_URL` | Test project URL | Production URL | GitHub Secret |
-| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Test anon key | Production anon key | GitHub Secret |
-| `SUPABASE_SERVICE_ROLE_KEY` | Test service key | Production service key | GitHub Secret |
-| `JWT_SECRET` | Test JWT secret | Production JWT secret | GitHub Secret |
+| Variable                        | Test Environment  | Production Environment | CI/GitHub Actions |
+| ------------------------------- | ----------------- | ---------------------- | ----------------- |
+| `ADMIN_EMAIL`                   | `.env.test.local` | `.env.local`           | GitHub Secret     |
+| `ADMIN_PASSWORD`                | `.env.test.local` | `.env.local`           | GitHub Secret     |
+| `NEXT_PUBLIC_SUPABASE_URL`      | Test project URL  | Production URL         | GitHub Secret     |
+| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Test anon key     | Production anon key    | GitHub Secret     |
+| `SUPABASE_SERVICE_ROLE_KEY`     | Test service key  | Production service key | GitHub Secret     |
+| `JWT_SECRET`                    | Test JWT secret   | Production JWT secret  | GitHub Secret     |
 
 ### Fallback Priority
 
 For `ADMIN_EMAIL` and `ADMIN_PASSWORD`:
+
 1. `ADMIN_EMAIL` / `ADMIN_PASSWORD` (primary)
 2. `ADMAIN_EMAIL` (typo fallback)
 3. `INITIAL_ADMIN_EMAIL` / `INITIAL_ADMIN_PASSWORD`
@@ -95,6 +99,7 @@ For `ADMIN_EMAIL` and `ADMIN_PASSWORD`:
 ### Setup Test Environment
 
 1. **Create `.env.test.local`** in project root:
+
 ```bash
 # Test environment configuration
 APP_ENV=test
@@ -114,6 +119,7 @@ JWT_SECRET=test-jwt-secret-key
 ```
 
 2. **Run tests** - they automatically use test environment:
+
 ```bash
 npm run test:unit
 npm run test:integration
@@ -138,6 +144,7 @@ console.log('Loaded files:', loadedFiles); // Array of loaded .env files
 ### Automatic Detection
 
 The workflow automatically:
+
 1. Sets `APP_ENV=test` - Forces test environment
 2. Sets `CI=true` - Detects CI environment
 3. Uses GitHub Secrets - No file loading needed
@@ -147,6 +154,7 @@ The workflow automatically:
 See [GITHUB_ACTIONS_TEST_ENV_SETUP.md](./GITHUB_ACTIONS_TEST_ENV_SETUP.md) for complete setup.
 
 **Quick list:**
+
 - `ADMIN_EMAIL`
 - `ADMIN_PASSWORD`
 - `TEST_SUPABASE_URL`
@@ -197,21 +205,25 @@ try {
 ## Benefits
 
 ### ✅ Automatic Environment Detection
+
 - No manual configuration needed
 - Works in local and CI
 - Handles test vs production automatically
 
 ### ✅ Secure Credential Handling
+
 - Uses GitHub Secrets in CI
 - Never commits secrets
 - Validates credentials exist
 
 ### ✅ Consistent Behavior
+
 - Same code works locally and in CI
 - Automatic fallbacks
 - Clear error messages
 
 ### ✅ Easy Migration
+
 - Simple import and function call
 - Backward compatible
 - No breaking changes
@@ -223,11 +235,13 @@ try {
 ### "ADMIN_EMAIL not found" Error
 
 **Local:**
+
 - Create `.env.test.local` with `ADMIN_EMAIL` and `ADMIN_PASSWORD`
 - Verify file is in project root
 - Check file has no syntax errors
 
 **CI:**
+
 - Add `ADMIN_EMAIL` and `ADMIN_PASSWORD` as GitHub Secrets
 - Verify secrets are spelled correctly
 - Check workflow uses `${{ secrets.ADMIN_EMAIL }}`
@@ -235,12 +249,14 @@ try {
 ### Tests Use Wrong Environment
 
 **Check:**
+
 1. `APP_ENV` is set correctly
 2. `.env.test.local` exists (for local)
 3. GitHub Secrets are set (for CI)
 4. Environment detection is working
 
 **Debug:**
+
 ```typescript
 import { loadTestEnvironment } from '@/lib/utils/test-env-loader';
 const { environment, isCI, loadedFiles } = loadTestEnvironment();
@@ -252,12 +268,14 @@ console.log('Loaded files:', loadedFiles);
 ### Credentials Not Loading
 
 **Check:**
+
 1. File exists and is readable
 2. Variables are spelled correctly
 3. No extra spaces or quotes
 4. File is in project root
 
 **Test:**
+
 ```bash
 # Check if file is loaded
 DEBUG_TEST_ENV=true npm run test:unit
@@ -271,7 +289,6 @@ DEBUG_TEST_ENV=true npm run test:unit
 ✅ **Works everywhere** - Local and CI  
 ✅ **Secure** - Uses GitHub Secrets in CI  
 ✅ **Easy to use** - Simple import and function call  
-✅ **Backward compatible** - Existing tests still work  
+✅ **Backward compatible** - Existing tests still work
 
 Just import and use - the environment is detected automatically! 🚀
-

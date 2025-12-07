@@ -3,13 +3,13 @@
 // v1.0 - React context for database service injection
 // This file uses 'any' types for environment variable access and window/process objects
 
-import React, { createContext, useContext, ReactNode } from 'react';
-import { IDatabaseService, DatabaseConfig } from './IDatabaseService';
-import { SupabaseDatabaseService } from './SupabaseDatabaseService';
+import React, { createContext, useContext, ReactNode } from "react";
+import { IDatabaseService, DatabaseConfig } from "./IDatabaseService";
+import { SupabaseDatabaseService } from "./SupabaseDatabaseService";
 
 // Type-safe environment variable access
-const getEnvVar = (key: string, defaultValue: string = ''): string => {
-  if (typeof window !== 'undefined') {
+const getEnvVar = (key: string, defaultValue: string = ""): string => {
+  if (typeof window !== "undefined") {
     return (window as any).env?.[key] || defaultValue;
   }
   return (process as any).env?.[key] || defaultValue;
@@ -41,20 +41,20 @@ export const DatabaseProvider: React.FC<DatabaseProviderProps> = ({
 }) => {
   // Default configuration
   const defaultConfig: DatabaseConfig = config || {
-    url: getEnvVar('NEXT_PUBLIC_SUPABASE_URL'),
-    key: getEnvVar('NEXT_PUBLIC_SUPABASE_ANON_KEY'),
-    serviceRoleKey: getEnvVar('SUPABASE_SERVICE_ROLE_KEY'),
+    url: getEnvVar("NEXT_PUBLIC_SUPABASE_URL"),
+    key: getEnvVar("NEXT_PUBLIC_SUPABASE_ANON_KEY"),
+    serviceRoleKey: getEnvVar("SUPABASE_SERVICE_ROLE_KEY"),
   };
 
   // Determine which database to use
   const shouldUseFirebase =
-    useFirebase || getEnvVar('NEXT_PUBLIC_USE_FIREBASE') === 'true';
+    useFirebase || getEnvVar("NEXT_PUBLIC_USE_FIREBASE") === "true";
 
   // Create the appropriate database service
   // For now, we'll use Supabase as fallback since Firebase isn't installed
   const database: IDatabaseService = shouldUseFirebase
     ? (() => {
-        console.warn('Firebase not available, using Supabase instead');
+        console.warn("Firebase not available, using Supabase instead");
         return new SupabaseDatabaseService(defaultConfig);
       })()
     : new SupabaseDatabaseService(defaultConfig);
@@ -78,7 +78,7 @@ export const useDatabase = (): DatabaseContextType => {
   const context = useContext(DatabaseContext);
 
   if (!context) {
-    throw new Error('useDatabase must be used within a DatabaseProvider');
+    throw new Error("useDatabase must be used within a DatabaseProvider");
   }
 
   return context;
@@ -93,10 +93,10 @@ export const useDatabaseService = (): IDatabaseService => {
 // Utility function to create database service directly
 export const createDatabaseService = (
   config: DatabaseConfig,
-  useFirebase = false
+  useFirebase = false,
 ): IDatabaseService => {
   if (useFirebase) {
-    console.warn('Firebase not available, using Supabase instead');
+    console.warn("Firebase not available, using Supabase instead");
     return new SupabaseDatabaseService(config);
   }
   return new SupabaseDatabaseService(config);
@@ -106,18 +106,18 @@ export const createDatabaseService = (
 export class DatabaseServiceFactory {
   static create(
     config?: DatabaseConfig,
-    useFirebase = false
+    useFirebase = false,
   ): IDatabaseService {
     const defaultConfig: DatabaseConfig = config || {
-      url: getEnvVar('NEXT_PUBLIC_SUPABASE_URL'),
-      key: getEnvVar('NEXT_PUBLIC_SUPABASE_ANON_KEY'),
-      serviceRoleKey: getEnvVar('SUPABASE_SERVICE_ROLE_KEY'),
+      url: getEnvVar("NEXT_PUBLIC_SUPABASE_URL"),
+      key: getEnvVar("NEXT_PUBLIC_SUPABASE_ANON_KEY"),
+      serviceRoleKey: getEnvVar("SUPABASE_SERVICE_ROLE_KEY"),
     };
     return createDatabaseService(defaultConfig, useFirebase);
   }
 
   static createFirebase(config: DatabaseConfig): IDatabaseService {
-    console.warn('Firebase not available, using Supabase instead');
+    console.warn("Firebase not available, using Supabase instead");
     return new SupabaseDatabaseService(config);
   }
 

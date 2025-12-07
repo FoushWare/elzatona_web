@@ -1,21 +1,21 @@
-import type { Config } from 'jest';
+import type { Config } from "jest";
 
 const config: Config = {
-  displayName: 'auth',
-  preset: '../../jest.preset.js',
+  displayName: "auth",
+  preset: "../../jest.preset.js",
   // Performance optimizations for 8GB RAM Mac M2
-  maxWorkers: process.env.JEST_MAX_WORKERS 
-    ? parseInt(process.env.JEST_MAX_WORKERS) 
+  maxWorkers: process.env.JEST_MAX_WORKERS
+    ? parseInt(process.env.JEST_MAX_WORKERS)
     : 1, // Default to 1 worker for 8GB RAM
-  workerIdleMemoryLimit: '512MB', // Kill workers that exceed this memory
-  cache: process.env.JEST_NO_CACHE !== 'true',
+  workerIdleMemoryLimit: "512MB", // Kill workers that exceed this memory
+  cache: process.env.JEST_NO_CACHE !== "true",
   transform: {
-    '^.+\\.[tj]sx?$': ['ts-jest', { tsconfig: '<rootDir>/tsconfig.spec.json' }],
+    "^.+\\.[tj]sx?$": ["ts-jest", { tsconfig: "<rootDir>/tsconfig.spec.json" }],
   },
-  moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx'],
-  coverageDirectory: '../../coverage/libs/auth',
-  testEnvironment: 'jsdom',
-  setupFilesAfterEnv: ['<rootDir>/src/test-setup.ts'],
+  moduleFileExtensions: ["ts", "tsx", "js", "jsx"],
+  coverageDirectory: "../../coverage/libs/auth",
+  testEnvironment: "jsdom",
+  setupFilesAfterEnv: ["<rootDir>/src/test-setup.ts"],
 };
 
 export default config;

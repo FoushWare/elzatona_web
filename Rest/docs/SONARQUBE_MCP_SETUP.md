@@ -14,9 +14,10 @@ The SonarQube MCP server has been successfully installed and configured.
 
 ### Step 1: Configure MCP in Cursor
 
-The MCP configuration needs to be added to `.cursor/mcp.json`. 
+The MCP configuration needs to be added to `.cursor/mcp.json`.
 
 **Option A: Automatic (if jq is installed)**
+
 ```bash
 npm run configure:sonarqube-mcp
 # or
@@ -32,10 +33,7 @@ Add the following to `.cursor/mcp.json`:
   "mcpServers": {
     "sonarqube": {
       "command": "/opt/homebrew/opt/openjdk@21/bin/java",
-      "args": [
-        "-jar",
-        "Rest/mcp/sonarqube/sonarqube-mcp-server.jar"
-      ],
+      "args": ["-jar", "Rest/mcp/sonarqube/sonarqube-mcp-server.jar"],
       "env": {
         "STORAGE_PATH": "Rest/mcp/sonarqube/storage",
         "SONARQUBE_TOKEN": "${SONARQUBE_TOKEN}",
@@ -72,13 +70,15 @@ SONARQUBE_TOKEN=your_token_here
 SONARQUBE_ORG=your_organization_key
 ```
 
-**Important**: 
+**Important**:
+
 - For Cursor MCP, these variables should also be set in your shell environment
 - Or use the actual values directly in `mcp.json` (less secure)
 
 ### Step 4: Restart Cursor
 
 After configuring:
+
 1. Save all files
 2. **Restart Cursor completely** (Quit and reopen)
 3. The MCP server will start automatically
@@ -86,6 +86,7 @@ After configuring:
 ## ✅ Verification
 
 After restarting Cursor, you should see:
+
 - SonarQube MCP server in the MCP status
 - No errors in the MCP logs
 - Ability to use SonarQube tools in AI conversations
@@ -111,15 +112,19 @@ Once configured, you can use these SonarQube tools:
 ### MCP Server Not Starting
 
 1. **Check Java Version**:
+
    ```bash
    /opt/homebrew/opt/openjdk@21/bin/java -version
    ```
+
    Should show: `openjdk version "21.x.x"`
 
 2. **Check JAR File**:
+
    ```bash
    ls -lh Rest/mcp/sonarqube/sonarqube-mcp-server.jar
    ```
+
    Should be ~45MB
 
 3. **Check Logs**:
@@ -165,4 +170,3 @@ tail -f Rest/mcp/sonarqube/storage/logs/mcp.log
 ---
 
 **Status**: ✅ Installation Complete - Configuration Required
-

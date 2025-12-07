@@ -1,8 +1,13 @@
 # Task ID: F-007
+
 # Title: Flashcards Theme and Difficulty Filtering
+
 # Status: pending
-# Dependencies: 
+
+# Dependencies:
+
 # Priority: medium
+
 # Description: Test the flashcards filtering functionality by theme (section) and difficulty level, including filter combinations, reset, and persistence.
 
 # Details:
@@ -10,6 +15,7 @@
 ## Time Estimation
 
 ### Manual Testing
+
 - **Estimated Time**: 30-40 minutes
 - **Breakdown**:
   - Navigate to flashcards page: 2 minutes
@@ -23,6 +29,7 @@
 - **Dependencies**: Flashcards with different sections/themes and difficulty levels
 
 ### Automated Testing
+
 - **Estimated Time**: 10-15 minutes (first run), 2-3 minutes (subsequent runs)
 - **Breakdown**:
   - Unit tests setup and execution: 3-5 minutes
@@ -32,6 +39,7 @@
 - **Dependencies**: Test flashcard data with various sections and difficulties
 
 ### Total Time
+
 - **Manual Only**: 30-40 minutes
 - **Automated Only**: 10-15 minutes (first run), 2-3 minutes (subsequent)
 - **Both Manual + Automated**: 40-55 minutes (first run), 32-43 minutes (subsequent)
@@ -39,6 +47,7 @@
 ---
 
 ## Overview
+
 Test the flashcards filtering functionality by theme (section) and difficulty level, including filter combinations, reset, and persistence.
 
 ## Manual Testing Steps

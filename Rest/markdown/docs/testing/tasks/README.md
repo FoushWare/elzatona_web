@@ -1,6 +1,7 @@
 # Testing Tasks Directory
 
 This directory contains individual test task files, each representing a specific test scenario broken down into:
+
 - **Manual Testing Steps**: Step-by-step instructions for manual testing
 - **Automated Test Checks**: Unit, Integration, and E2E test specifications
 
@@ -22,24 +23,29 @@ Each task file follows this structure:
 # Task: [Task Name]
 
 ## Overview
+
 Brief description of what this task tests
 
 ## Manual Testing Steps
+
 1. Step 1
 2. Step 2
-...
+   ...
 
 ## Automated Tests
 
 ### Unit Tests
+
 - Test ID: Description
   - Assertions: ...
 
 ### Integration Tests
+
 - Test ID: Description
   - Assertions: ...
 
 ### E2E Tests
+
 - Test ID: Description
   - Steps: ...
 ```
@@ -55,4 +61,3 @@ Tests are designed to run in parallel for GitHub Actions. Each task file can be 
 - 🔄 In Progress
 - ❌ Failing
 - ⏸️ Skipped
-

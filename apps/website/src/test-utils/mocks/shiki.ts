@@ -18,7 +18,7 @@ export const codeToTokensWithThemes = jest.fn((code: string, options?: any) => {
 });
 
 export const codeToHast = jest.fn((code: string, options?: any) => {
-  return { type: 'element', tagName: 'pre', children: [] };
+  return { type: "element", tagName: "pre", children: [] };
 });
 
 export const createHighlighter = jest.fn(async (options?: any) => {
@@ -53,4 +53,3 @@ export default {
   getSingletonHighlighter,
   getLastGrammarState,
 };
-

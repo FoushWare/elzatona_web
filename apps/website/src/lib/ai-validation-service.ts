@@ -18,23 +18,23 @@ export interface ValidationRequest {
 
 export class AIValidationService {
   private static readonly FREE_AI_ENDPOINTS = [
-    'https://api.openai.com/v1/chat/completions', // OpenAI (requires API key)
-    'https://api.anthropic.com/v1/messages', // Anthropic (requires API key)
-    'https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent', // Google Gemini (free tier)
+    "https://api.openai.com/v1/chat/completions", // OpenAI (requires API key)
+    "https://api.anthropic.com/v1/messages", // Anthropic (requires API key)
+    "https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent", // Google Gemini (free tier)
   ];
 
   /**
    * Validate user answer using free AI service
    */
   static async validateAnswer(
-    request: ValidationRequest
+    request: ValidationRequest,
   ): Promise<ValidationResult> {
     try {
       // Try Google Gemini first (free tier)
       const result = await this.validateWithGemini(request);
       return result;
     } catch (error) {
-      console.error('AI validation error:', error);
+      console.error("AI validation error:", error);
 
       // Fallback to simple keyword matching
       return this.fallbackValidation(request);
@@ -45,16 +45,16 @@ export class AIValidationService {
    * Validate using Google Gemini (free tier)
    */
   private static async validateWithGemini(
-    request: ValidationRequest
+    request: ValidationRequest,
   ): Promise<ValidationResult> {
     const prompt = this.buildValidationPrompt(request);
 
     const response = await fetch(
-      'https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=YOUR_API_KEY',
+      "https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=YOUR_API_KEY",
       {
-        method: 'POST',
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({
           contents: [
@@ -71,7 +71,7 @@ export class AIValidationService {
             maxOutputTokens: 500,
           },
         }),
-      }
+      },
     );
 
     if (!response.ok) {
@@ -79,7 +79,7 @@ export class AIValidationService {
     }
 
     const data = await response.json();
-    const aiResponse = data.candidates?.[0]?.content?.parts?.[0]?.text || '';
+    const aiResponse = data.candidates?.[0]?.content?.parts?.[0]?.text || "";
 
     return this.parseAIResponse(aiResponse);
   }
@@ -102,9 +102,9 @@ Question: "${question}"
 
 Student Answer: "${userAnswer}"
 
-${expectedAnswer ? `Expected Answer: "${expectedAnswer}"` : ''}
+${expectedAnswer ? `Expected Answer: "${expectedAnswer}"` : ""}
 
-${customPrompt ? `Additional Instructions: ${customPrompt}` : ''}
+${customPrompt ? `Additional Instructions: ${customPrompt}` : ""}
 
 Please provide your evaluation in the following JSON format:
 {
@@ -114,7 +114,7 @@ Please provide your evaluation in the following JSON format:
   "suggestions": ["suggestion1", "suggestion2"]
 }
 
-${acceptPartialCredit ? 'Accept partial credit for partially correct answers.' : 'Only mark as correct if the answer is completely accurate.'}
+${acceptPartialCredit ? "Accept partial credit for partially correct answers." : "Only mark as correct if the answer is completely accurate."}
 
 Consider:
 - Technical accuracy
@@ -137,12 +137,12 @@ Consider:
         return {
           isCorrect: parsed.isCorrect || false,
           score: Math.max(0, Math.min(100, parsed.score || 0)),
-          feedback: parsed.feedback || 'No feedback provided',
+          feedback: parsed.feedback || "No feedback provided",
           suggestions: parsed.suggestions || [],
         };
       }
     } catch (error) {
-      console.error('Error parsing AI response:', error);
+      console.error("Error parsing AI response:", error);
     }
 
     // Fallback parsing
@@ -154,7 +154,7 @@ Consider:
       isCorrect,
       score,
       feedback:
-        aiResponse.substring(0, 200) + (aiResponse.length > 200 ? '...' : ''),
+        aiResponse.substring(0, 200) + (aiResponse.length > 200 ? "..." : ""),
       suggestions: [],
     };
   }
@@ -163,7 +163,7 @@ Consider:
    * Fallback validation using simple keyword matching
    */
   private static fallbackValidation(
-    request: ValidationRequest
+    request: ValidationRequest,
   ): ValidationResult {
     const { question, userAnswer, expectedAnswer } = request;
 
@@ -171,8 +171,8 @@ Consider:
       return {
         isCorrect: false,
         score: 0,
-        feedback: 'No expected answer provided for validation',
-        suggestions: ['Please provide an expected answer for this question'],
+        feedback: "No expected answer provided for validation",
+        suggestions: ["Please provide an expected answer for this question"],
       };
     }
 
@@ -180,11 +180,11 @@ Consider:
     const userWords = userAnswer.toLowerCase().split(/\s+/);
     const expectedWords = expectedAnswer.toLowerCase().split(/\s+/);
 
-    const matchingWords = userWords.filter(word =>
+    const matchingWords = userWords.filter((word) =>
       expectedWords.some(
-        expectedWord =>
-          word.includes(expectedWord) || expectedWord.includes(word)
-      )
+        (expectedWord) =>
+          word.includes(expectedWord) || expectedWord.includes(word),
+      ),
     );
 
     const similarity =
@@ -196,11 +196,11 @@ Consider:
       isCorrect,
       score,
       feedback: isCorrect
-        ? 'Good answer! You covered the key points.'
-        : 'Your answer is partially correct. Try to include more specific details.',
+        ? "Good answer! You covered the key points."
+        : "Your answer is partially correct. Try to include more specific details.",
       suggestions: isCorrect
         ? []
-        : ['Review the question and provide more detailed explanations'],
+        : ["Review the question and provide more detailed explanations"],
     };
   }
 
@@ -208,26 +208,26 @@ Consider:
    * Validate using OpenAI (requires API key)
    */
   private static async validateWithOpenAI(
-    request: ValidationRequest
+    request: ValidationRequest,
   ): Promise<ValidationResult> {
     const prompt = this.buildValidationPrompt(request);
 
-    const response = await fetch('https://api.openai.com/v1/chat/completions', {
-      method: 'POST',
+    const response = await fetch("https://api.openai.com/v1/chat/completions", {
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
         Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
       },
       body: JSON.stringify({
-        model: 'gpt-3.5-turbo',
+        model: "gpt-3.5-turbo",
         messages: [
           {
-            role: 'system',
+            role: "system",
             content:
-              'You are an expert teacher evaluating student answers. Provide detailed feedback in JSON format.',
+              "You are an expert teacher evaluating student answers. Provide detailed feedback in JSON format.",
           },
           {
-            role: 'user',
+            role: "user",
             content: prompt,
           },
         ],
@@ -241,7 +241,7 @@ Consider:
     }
 
     const data = await response.json();
-    const aiResponse = data.choices?.[0]?.message?.content || '';
+    const aiResponse = data.choices?.[0]?.message?.content || "";
 
     return this.parseAIResponse(aiResponse);
   }

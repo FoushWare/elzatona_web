@@ -16,13 +16,13 @@ let failCount = 0;
 
 for (let i = 1; i <= totalBatches; i++) {
   const scriptPath = path.join(scriptsDir, `add_js_questions_batch${i}.js`);
-  
+
   if (!fs.existsSync(scriptPath)) {
     console.log(`⚠️  Batch ${i} script not found, skipping...`);
     failCount++;
     continue;
   }
-  
+
   try {
     console.log(`📝 Running batch ${i}...`);
     execSync(`node "${scriptPath}"`, { stdio: 'inherit', cwd: __dirname });
@@ -39,5 +39,3 @@ console.log('\n📊 Summary:');
 console.log(`   ✅ Successful: ${successCount}`);
 console.log(`   ❌ Failed: ${failCount}`);
 console.log(`   📝 Total batches: ${totalBatches}`);
-
-

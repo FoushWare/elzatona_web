@@ -12,12 +12,15 @@
 ### ✅ Tests Created
 
 #### Unit Tests
+
 - ✅ Created: `apps/website/src/app/learning-paths/page.test.tsx`
 
 #### Integration Tests
+
 - ✅ Created: `apps/website/src/app/learning-paths/page.integration.test.tsx`
 
 #### E2E Tests
+
 - ✅ Created: `tests/e2e/freestyle-flow/learning-paths-practice.spec.ts`
 
 ---

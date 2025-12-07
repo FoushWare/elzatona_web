@@ -3,6 +3,7 @@
 ## Overview
 
 Sentry has been integrated into the Next.js application for comprehensive error tracking and monitoring across:
+
 - **Client-side** (browser errors, React component errors)
 - **Server-side** (API routes, SSR errors)
 - **Edge runtime** (middleware, edge API routes)
@@ -43,16 +44,19 @@ SENTRY_DEBUG=false
 ## Configuration Files
 
 ### Client Configuration (`sentry.client.config.ts`)
+
 - Tracks browser errors, React component errors
 - Includes Session Replay for better error context
 - Filters sensitive data (cookies, tokens, etc.)
 
 ### Server Configuration (`sentry.server.config.ts`)
+
 - Tracks API route errors, SSR errors
 - Includes Node.js profiling
 - Filters sensitive data from requests
 
 ### Edge Configuration (`sentry.edge.config.ts`)
+
 - Tracks middleware and edge API route errors
 - Lightweight configuration for edge runtime
 
@@ -77,6 +81,7 @@ export const GET = withSentryErrorHandling(
 ```
 
 **Benefits:**
+
 - Automatic error capture
 - Request/response context included
 - Performance monitoring
@@ -126,7 +131,7 @@ try {
       },
     },
   });
-  
+
   // Re-throw or handle error
   throw error;
 }
@@ -153,26 +158,31 @@ Sentry.setUser(null);
 ## Features
 
 ### ✅ Automatic Error Tracking
+
 - All unhandled errors are automatically captured
 - React component errors via error boundaries
 - API route errors via wrapper functions
 
 ### ✅ Performance Monitoring
+
 - Automatic transaction tracking for API routes
 - Performance metrics for page loads
 - Database query performance (if configured)
 
 ### ✅ Session Replay
+
 - Automatic session replay for errors
 - Helps debug user interactions leading to errors
 - Configurable sampling rate
 
 ### ✅ Source Maps
+
 - Automatic source map upload during build
 - Better stack traces in production
 - Hidden from client bundles for security
 
 ### ✅ Sensitive Data Filtering
+
 - Automatic filtering of:
   - Authorization headers
   - Cookies
@@ -181,6 +191,7 @@ Sentry.setUser(null);
   - Tokens
 
 ### ✅ Environment Detection
+
 - Automatically detects and tags errors by environment
 - Test environment errors are filtered out
 - Production vs development error handling
@@ -190,6 +201,7 @@ Sentry.setUser(null);
 ### Test Error Tracking
 
 1. **Client-side error:**
+
 ```typescript
 // In a React component
 <button onClick={() => {
@@ -200,6 +212,7 @@ Sentry.setUser(null);
 ```
 
 2. **API route error:**
+
 ```typescript
 // In an API route
 export const GET = withSentryErrorHandling(async () => {
@@ -208,6 +221,7 @@ export const GET = withSentryErrorHandling(async () => {
 ```
 
 3. **Check Sentry Dashboard:**
+
 - Go to your Sentry project dashboard
 - Navigate to "Issues"
 - You should see the test errors appear
@@ -247,4 +261,3 @@ export const GET = withSentryErrorHandling(async () => {
 - [Sentry Next.js Documentation](https://docs.sentry.io/platforms/javascript/guides/nextjs/)
 - [Sentry Dashboard](https://sentry.io)
 - [Session Replay Documentation](https://docs.sentry.io/platforms/javascript/session-replay/)
-

@@ -1,6 +1,6 @@
 /**
  * Verify Admin Setup Using MCP Supabase
- * 
+ *
  * This script uses MCP to verify:
  * 1. Admin user exists in the database
  * 2. Admin user is active
@@ -28,7 +28,9 @@ if (!supabaseUrl || !serviceRoleKey) {
 }
 
 // Extract project reference from URL
-const urlProjectRef = supabaseUrl.match(/https?:\/\/([^.]+)\.supabase\.co/)?.[1];
+const urlProjectRef = supabaseUrl.match(
+  /https?:\/\/([^.]+)\.supabase\.co/
+)?.[1];
 
 console.log('\n🔍 Admin Setup Verification (Using MCP)\n');
 console.log('📋 Project:', urlProjectRef);
@@ -41,7 +43,7 @@ try {
   const payload = JSON.parse(Buffer.from(jwtParts[1], 'base64').toString());
   const keyProjectRef = payload.ref;
   const keyRole = payload.role;
-  
+
   if (keyProjectRef !== urlProjectRef || keyRole !== 'service_role') {
     console.error('❌ Service role key mismatch!');
     console.error('   URL project:', urlProjectRef);
@@ -49,10 +51,12 @@ try {
     console.error('   Key role:', keyRole);
     console.error('');
     console.error('📝 Get the correct service_role key from:');
-    console.error(`   https://supabase.com/dashboard/project/${urlProjectRef}/settings/api`);
+    console.error(
+      `   https://supabase.com/dashboard/project/${urlProjectRef}/settings/api`
+    );
     process.exit(1);
   }
-  
+
   console.log('✅ Service role key matches project');
 } catch (error) {
   console.error('❌ Invalid service role key:', error.message);
@@ -76,13 +80,13 @@ const supabase = createClient(supabaseUrl, serviceRoleKey, {
       .select('*')
       .eq('email', adminEmail)
       .single();
-    
+
     if (queryError) {
       console.error('❌ Database query failed:', queryError.message);
       console.error('   Code:', queryError.code);
       process.exit(1);
     }
-    
+
     if (!adminData) {
       console.error(`❌ Admin user not found: ${adminEmail}`);
       console.error('');
@@ -90,42 +94,50 @@ const supabase = createClient(supabaseUrl, serviceRoleKey, {
       console.error('   node Rest/scripts/create-test-admin.js');
       process.exit(1);
     }
-    
+
     console.log('✅ Admin user found in database');
     console.log('   ID:', adminData.id);
     console.log('   Email:', adminData.email);
     console.log('   Role:', adminData.role);
     console.log('   Active:', adminData.is_active ? '✅' : '❌');
-    console.log('   Password Hash:', adminData.password_hash ? '✅ Present' : '❌ Missing');
-    
+    console.log(
+      '   Password Hash:',
+      adminData.password_hash ? '✅ Present' : '❌ Missing'
+    );
+
     if (!adminData.is_active) {
       console.error('');
       console.error('❌ Admin user is not active!');
       process.exit(1);
     }
-    
+
     if (!adminData.password_hash) {
       console.error('');
       console.error('❌ Admin user has no password hash!');
       process.exit(1);
     }
-    
+
     // Verify password
     console.log('');
     console.log('🔐 Verifying password...');
-    const isValidPassword = await bcrypt.compare(adminPassword, adminData.password_hash);
-    
+    const isValidPassword = await bcrypt.compare(
+      adminPassword,
+      adminData.password_hash
+    );
+
     if (isValidPassword) {
       console.log('✅ Password verification successful!');
     } else {
       console.error('❌ Password verification failed!');
-      console.error('   The password in .env.test.local does not match the hash in the database.');
+      console.error(
+        '   The password in .env.test.local does not match the hash in the database.'
+      );
       console.error('');
       console.error('📝 To fix this, update the admin user password:');
       console.error('   node Rest/scripts/create-test-admin.js');
       process.exit(1);
     }
-    
+
     console.log('');
     console.log('🎉 All checks passed! Admin setup is correct.');
     console.log('');
@@ -137,11 +149,11 @@ const supabase = createClient(supabaseUrl, serviceRoleKey, {
     console.log('🚀 You can now test the API:');
     console.log(`   curl 'http://localhost:3000/api/admin/auth' \\`);
     console.log(`     -H 'Content-Type: application/json' \\`);
-    console.log(`     --data-raw '{"email":"${adminEmail}","password":"${adminPassword}"}'`);
-    
+    console.log(
+      `     --data-raw '{"email":"${adminEmail}","password":"${adminPassword}"}'`
+    );
   } catch (error) {
     console.error('❌ Verification error:', error.message);
     process.exit(1);
   }
 })();
-

@@ -1,7 +1,7 @@
-'use client';
+"use client";
 
-import React, { useState } from 'react';
-import { CodeToImageTest } from '@/components/CodeToImageTest';
+import React, { useState } from "react";
+import { CodeToImageTest } from "@/components/CodeToImageTest";
 
 export default function CodeToImageTestPage() {
   const [code, setCode] = useState(`function guessMyNumber() {
@@ -23,7 +23,7 @@ console.log(guessMyNumber());`);
         <h1 className="text-3xl font-bold mb-6 text-gray-900 dark:text-white">
           Code to Image Test
         </h1>
-        
+
         <div className="mb-6">
           <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
             Code Input:
@@ -41,4 +41,3 @@ console.log(guessMyNumber());`);
     </div>
   );
 }
-

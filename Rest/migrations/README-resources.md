@@ -1,30 +1,35 @@
 # Resources Feature for Questions
 
 ## Overview
+
 Added support for learning resources (videos, courses, articles) to be associated with questions. Resources are displayed after the explanation to help users learn more about the topic.
 
 ## Database Migration
 
 ### Step 1: Run the Migration
+
 Execute the SQL migration file to add the `resources` column to the `questions` table:
 
 ```sql
 -- Run this in your Supabase SQL Editor
-ALTER TABLE questions 
+ALTER TABLE questions
 ADD COLUMN IF NOT EXISTS resources JSONB DEFAULT NULL;
 ```
 
 Or use the migration file:
+
 ```bash
 # Copy the SQL from Rest/migrations/add-resources-to-questions.sql
 # and run it in your Supabase SQL Editor
 ```
 
 ### Step 2: Verify the Migration
+
 Check that the column was added:
+
 ```sql
-SELECT column_name, data_type, is_nullable 
-FROM information_schema.columns 
+SELECT column_name, data_type, is_nullable
+FROM information_schema.columns
 WHERE table_name = 'questions' AND column_name = 'resources';
 ```
 
@@ -90,12 +95,13 @@ To add resources from the admin panel:
 ## Frontend Display
 
 Resources are automatically displayed:
+
 - **Location**: After the explanation section
 - **Visibility**: Only shown when:
   - Question type is not 'code'
   - Explanation is visible (after answer is selected)
   - Resources array exists and has items
-- **Styling**: 
+- **Styling**:
   - Each resource type has a distinct color and icon
   - Videos: Red/Pink gradient with video icon
   - Courses: Blue/Indigo gradient with graduation cap icon
@@ -105,6 +111,7 @@ Resources are automatically displayed:
 ## API Changes
 
 The API route `/api/guided-learning/plan-details/[planId]` now includes:
+
 - `resources`: Array of resource objects or `null` if not set
 
 ## Testing
@@ -121,4 +128,3 @@ The API route `/api/guided-learning/plan-details/[planId]` now includes:
 - Resources are optional - questions work fine without them
 - The field accepts any valid JSONB array structure, but the frontend expects the structure above
 - Resources are displayed in the order they appear in the array
-

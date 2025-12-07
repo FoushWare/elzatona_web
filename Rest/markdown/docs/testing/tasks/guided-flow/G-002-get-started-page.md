@@ -1,8 +1,13 @@
 # Task ID: G-002
+
 # Title: Get Started Page
+
 # Status: pending
-# Dependencies: 
+
+# Dependencies:
+
 # Priority: medium
+
 # Description: Test the get-started page flow selection and authentication integration.
 
 # Details:
@@ -10,6 +15,7 @@
 ## Time Estimation
 
 ### Manual Testing
+
 - **Estimated Time**: 20-30 minutes
 - **Breakdown**:
   - Navigate to page and verify: 2 minutes
@@ -22,6 +28,7 @@
 - **Dependencies**: Authentication system, test user accounts
 
 ### Automated Testing
+
 - **Estimated Time**: 8-12 minutes (first run), 1-2 minutes (subsequent runs)
 - **Breakdown**:
   - Unit tests setup and execution: 3-4 minutes
@@ -31,6 +38,7 @@
 - **Dependencies**: Authentication mocks, test data setup
 
 ### Total Time
+
 - **Manual Only**: 20-30 minutes
 - **Automated Only**: 8-12 minutes (first run), 1-2 minutes (subsequent)
 - **Both Manual + Automated**: 28-42 minutes (first run), 21-32 minutes (subsequent)

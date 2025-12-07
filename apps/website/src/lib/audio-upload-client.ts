@@ -13,13 +13,13 @@ export interface AudioDeleteResult {
 export class ClientAudioUploadService {
   private static readonly MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB
   private static readonly ALLOWED_TYPES = [
-    'audio/mpeg',
-    'audio/mp3',
-    'audio/wav',
-    'audio/ogg',
-    'audio/m4a',
-    'audio/aac',
-    'audio/webm',
+    "audio/mpeg",
+    "audio/mp3",
+    "audio/wav",
+    "audio/ogg",
+    "audio/m4a",
+    "audio/aac",
+    "audio/webm",
   ];
 
   private questionId?: string;
@@ -33,27 +33,27 @@ export class ClientAudioUploadService {
    */
   async uploadAudio(
     file: File,
-    type: 'question' | 'answer' = 'question'
+    type: "question" | "answer" = "question",
   ): Promise<string> {
     if (!this.questionId) {
-      throw new Error('Question ID is required for audio upload');
+      throw new Error("Question ID is required for audio upload");
     }
 
     const result =
-      type === 'question'
+      type === "question"
         ? await ClientAudioUploadService.uploadQuestionAudio(
             this.questionId,
-            file
+            file,
           )
         : await ClientAudioUploadService.uploadAnswerAudio(
             this.questionId,
-            file
+            file,
           );
 
     if (result.success && result.url) {
       return result.url;
     } else {
-      throw new Error(result.error || 'Failed to upload audio');
+      throw new Error(result.error || "Failed to upload audio");
     }
   }
 
@@ -62,7 +62,7 @@ export class ClientAudioUploadService {
    */
   static async uploadQuestionAudio(
     question_id: string,
-    file: File
+    file: File,
   ): Promise<AudioUploadResult> {
     try {
       const validation = this.validateAudioFile(file);
@@ -71,12 +71,12 @@ export class ClientAudioUploadService {
       }
 
       const formData = new FormData();
-      formData.append('file', file);
-      formData.append('questionId', question_id);
-      formData.append('type', 'question');
+      formData.append("file", file);
+      formData.append("questionId", question_id);
+      formData.append("type", "question");
 
-      const response = await fetch('/api/audio/upload', {
-        method: 'POST',
+      const response = await fetch("/api/audio/upload", {
+        method: "POST",
         body: formData,
       });
 
@@ -89,8 +89,8 @@ export class ClientAudioUploadService {
         return { success: false, error: data.error };
       }
     } catch (error) {
-      console.error('Error uploading question audio:', error);
-      return { success: false, error: 'Failed to upload question audio' };
+      console.error("Error uploading question audio:", error);
+      return { success: false, error: "Failed to upload question audio" };
     }
   }
 
@@ -99,7 +99,7 @@ export class ClientAudioUploadService {
    */
   static async uploadAnswerAudio(
     question_id: string,
-    file: File
+    file: File,
   ): Promise<AudioUploadResult> {
     try {
       const validation = this.validateAudioFile(file);
@@ -108,12 +108,12 @@ export class ClientAudioUploadService {
       }
 
       const formData = new FormData();
-      formData.append('file', file);
-      formData.append('questionId', question_id);
-      formData.append('type', 'answer');
+      formData.append("file", file);
+      formData.append("questionId", question_id);
+      formData.append("type", "answer");
 
-      const response = await fetch('/api/audio/upload', {
-        method: 'POST',
+      const response = await fetch("/api/audio/upload", {
+        method: "POST",
         body: formData,
       });
 
@@ -126,8 +126,8 @@ export class ClientAudioUploadService {
         return { success: false, error: data.error };
       }
     } catch (error) {
-      console.error('Error uploading answer audio:', error);
-      return { success: false, error: 'Failed to upload answer audio' };
+      console.error("Error uploading answer audio:", error);
+      return { success: false, error: "Failed to upload answer audio" };
     }
   }
 
@@ -136,10 +136,10 @@ export class ClientAudioUploadService {
    */
   static async deleteAudio(audioUrl: string): Promise<AudioDeleteResult> {
     try {
-      const response = await fetch('/api/audio/upload', {
-        method: 'DELETE',
+      const response = await fetch("/api/audio/upload", {
+        method: "DELETE",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({ audioUrl }),
       });
@@ -148,16 +148,16 @@ export class ClientAudioUploadService {
 
       if (data.success) {
         console.log(`✅ Audio file deleted: ${audioUrl}`);
-        return { success: true, message: 'Audio file deleted successfully' };
+        return { success: true, message: "Audio file deleted successfully" };
       } else {
         return {
           success: false,
-          error: data.error || 'Failed to delete audio file',
+          error: data.error || "Failed to delete audio file",
         };
       }
     } catch (error) {
-      console.error('Error deleting audio file:', error);
-      return { success: false, error: 'Failed to delete audio file' };
+      console.error("Error deleting audio file:", error);
+      return { success: false, error: "Failed to delete audio file" };
     }
   }
 
@@ -178,7 +178,7 @@ export class ClientAudioUploadService {
     if (!this.ALLOWED_TYPES.includes(file.type)) {
       return {
         isValid: false,
-        error: 'Invalid file type. Only audio files are allowed.',
+        error: "Invalid file type. Only audio files are allowed.",
       };
     }
 
@@ -196,12 +196,12 @@ export class ClientAudioUploadService {
    * Format file size for display
    */
   static formatFileSize(bytes: number): string {
-    if (bytes === 0) return '0 Bytes';
+    if (bytes === 0) return "0 Bytes";
 
     const k = 1024;
-    const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+    const sizes = ["Bytes", "KB", "MB", "GB"];
     const i = Math.floor(Math.log(bytes) / Math.log(k));
 
-    return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+    return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + " " + sizes[i];
   }
 }

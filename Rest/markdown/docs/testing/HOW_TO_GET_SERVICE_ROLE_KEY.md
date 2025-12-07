@@ -60,9 +60,9 @@ Supabase Dashboard
 
 ### 🔑 Key Differences
 
-| Key Type | Visibility | Use Case | Security |
-|----------|-----------|----------|----------|
-| **anon** (public) | Public, safe to expose | Client-side code, browser | Respects RLS policies |
+| Key Type                  | Visibility                | Use Case                           | Security                  |
+| ------------------------- | ------------------------- | ---------------------------------- | ------------------------- |
+| **anon** (public)         | Public, safe to expose    | Client-side code, browser          | Respects RLS policies     |
 | **service_role** (secret) | **SECRET** - never expose | Server-side only, admin operations | Bypasses RLS, full access |
 
 ### ✅ Where to Use Service Role Key
@@ -110,6 +110,7 @@ If you see "✅ Admin user created successfully!", the key is working correctly.
 ### Key looks different than expected
 
 The service_role key will be a long JWT token that looks like:
+
 ```
 YOUR_SUPABASE_KEY_HERE
 ```
@@ -129,5 +130,3 @@ Once you have the service_role key:
 2. ✅ Run the schema SQL: `Rest/scripts/test-database-schema.sql`
 3. ✅ Create admin user: `node Rest/scripts/create-test-admin.js`
 4. ✅ Run tests: `npm run test:unit`
-
-

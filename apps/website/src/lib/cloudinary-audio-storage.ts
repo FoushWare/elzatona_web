@@ -1,4 +1,4 @@
-import { v2 as cloudinary } from 'cloudinary';
+import { v2 as cloudinary } from "cloudinary";
 
 export interface AudioFile {
   id: string;
@@ -25,9 +25,9 @@ export class CloudinaryAudioStorage {
       });
 
       this.initialized = true;
-      console.log('✅ Cloudinary audio storage initialized');
+      console.log("✅ Cloudinary audio storage initialized");
     } catch (error) {
-      console.error('❌ Failed to initialize Cloudinary:', error);
+      console.error("❌ Failed to initialize Cloudinary:", error);
       throw error;
     }
   }
@@ -35,8 +35,8 @@ export class CloudinaryAudioStorage {
   static async uploadAudio(
     file: Buffer,
     filename: string,
-    type: 'question' | 'answer',
-    question_id: string
+    type: "question" | "answer",
+    question_id: string,
   ): Promise<AudioFile> {
     try {
       await this.initialize();
@@ -45,21 +45,21 @@ export class CloudinaryAudioStorage {
       const publicId = `audio/${type}s/${fileId}`;
 
       const result = await cloudinary.uploader.upload(
-        `data:audio/mpeg;base64,${file.toString('base64')}`,
+        `data:audio/mpeg;base64,${file.toString("base64")}`,
         {
           public_id: publicId,
-          resource_type: 'video', // Cloudinary treats audio as video
+          resource_type: "video", // Cloudinary treats audio as video
           folder: `audio/${type}s`,
           use_filename: false,
           unique_filename: true,
-        }
+        },
       );
 
       const audioFile: AudioFile = {
         id: fileId,
         filename: filename,
         originalName: filename,
-        mimeType: 'audio/mpeg',
+        mimeType: "audio/mpeg",
         size: result.bytes,
         uploadedAt: new Date(),
         url: result.secure_url,
@@ -69,7 +69,7 @@ export class CloudinaryAudioStorage {
       console.log(`✅ Audio uploaded to Cloudinary: ${audioFile.url}`);
       return audioFile;
     } catch (error) {
-      console.error('❌ Failed to upload audio to Cloudinary:', error);
+      console.error("❌ Failed to upload audio to Cloudinary:", error);
       throw error;
     }
   }
@@ -84,7 +84,7 @@ export class CloudinaryAudioStorage {
       await cloudinary.uploader.destroy(audioFile.publicId);
       console.log(`✅ Audio deleted from Cloudinary: ${audioFile.publicId}`);
     } catch (error) {
-      console.error('❌ Failed to delete audio from Cloudinary:', error);
+      console.error("❌ Failed to delete audio from Cloudinary:", error);
       throw error;
     }
   }

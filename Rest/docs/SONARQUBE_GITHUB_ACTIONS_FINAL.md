@@ -9,12 +9,14 @@ Your GitHub Actions workflow has been updated according to SonarCloud's official
 ### 1. GitHub Actions Workflow (`.github/workflows/sonarcloud.yml`)
 
 **Changes:**
+
 - ✅ Updated to use `SonarSource/sonarqube-scan-action@v6` (latest version)
 - ✅ Simplified workflow structure (as per SonarCloud instructions)
 - ✅ Project configuration now reads from `sonar-project.properties`
 - ✅ Still includes test coverage and build steps
 
 **Key Features:**
+
 - Runs on push to `main`, `develop`, `release/**`
 - Runs on pull requests
 - Manual trigger available
@@ -23,6 +25,7 @@ Your GitHub Actions workflow has been updated according to SonarCloud's official
 ### 2. Sonar Project Properties (`sonar-project.properties`)
 
 **Updated:**
+
 - ✅ Project Key: `FoushWare_GreatFrontendHub`
 - ✅ Organization: `foushware` (lowercase, as per SonarCloud)
 - ✅ Project Name: `GreatFrontendHub`
@@ -59,22 +62,29 @@ Before the workflow will work, you need to **disable Automatic Analysis** in Son
 ## ✅ Verification Steps
 
 ### 1. Check Workflow File
+
 ```bash
 cat .github/workflows/sonarcloud.yml | grep -A 3 "SonarQube Scan"
 ```
+
 Should show:
+
 - `uses: SonarSource/sonarqube-scan-action@v6`
 - `SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}`
 
 ### 2. Check Project Properties
+
 ```bash
 head -5 sonar-project.properties
 ```
+
 Should show:
+
 - `sonar.projectKey=FoushWare_GreatFrontendHub`
 - `sonar.organization=foushware`
 
 ### 3. Test Workflow
+
 - Push a commit to `main`, `develop`, or create a PR
 - Or manually trigger: GitHub → Actions → Build → Run workflow
 - Check workflow logs for SonarQube analysis
@@ -94,6 +104,7 @@ Should show:
 ### "Automatic Analysis is enabled"
 
 **Solution**: Disable Automatic Analysis in SonarCloud:
+
 - Go to project settings
 - Switch off Automatic Analysis
 - Then run the workflow again
@@ -101,6 +112,7 @@ Should show:
 ### "Project not found"
 
 **Check:**
+
 - Project Key in `sonar-project.properties`: `FoushWare_GreatFrontendHub`
 - Organization in `sonar-project.properties`: `foushware` (lowercase)
 - Token secret is set correctly in GitHub
@@ -108,6 +120,7 @@ Should show:
 ### "Not authorized"
 
 **Check:**
+
 - `SONAR_TOKEN` secret is set in GitHub
 - Token value is correct (get from https://sonarcloud.io/account/security)
 - Token has read/write permissions
@@ -115,21 +128,22 @@ Should show:
 ### Workflow Not Triggering
 
 **Check:**
+
 - Branch name matches: `main`, `develop`, or `release/**`
 - For PRs: PR is to `main`, `develop`, or `release/**`
 - Or use manual trigger: Actions → Build → Run workflow
 
 ## 🎯 Quick Reference
 
-| Item | Value |
-|------|-------|
-| **Project Key** | `FoushWare_GreatFrontendHub` |
-| **Organization** | `foushware` (lowercase) |
-| **GitHub Secret** | `SONAR_TOKEN` |
-| **Token Value** | `[Get from SonarCloud → My Account → Security]` |
-| **Workflow Action** | `SonarSource/sonarqube-scan-action@v6` |
-| **Config File** | `sonar-project.properties` |
-| **Dashboard** | https://sonarcloud.io/dashboard?id=FoushWare_GreatFrontendHub |
+| Item                | Value                                                         |
+| ------------------- | ------------------------------------------------------------- |
+| **Project Key**     | `FoushWare_GreatFrontendHub`                                  |
+| **Organization**    | `foushware` (lowercase)                                       |
+| **GitHub Secret**   | `SONAR_TOKEN`                                                 |
+| **Token Value**     | `[Get from SonarCloud → My Account → Security]`               |
+| **Workflow Action** | `SonarSource/sonarqube-scan-action@v6`                        |
+| **Config File**     | `sonar-project.properties`                                    |
+| **Dashboard**       | https://sonarcloud.io/dashboard?id=FoushWare_GreatFrontendHub |
 
 ## 📝 Next Steps
 
@@ -151,4 +165,3 @@ Once you restart Cursor and MCP connects, you can:
 **Status**: ✅ **Configuration Updated - Follow Next Steps**
 
 **Critical**: Disable Automatic Analysis in SonarCloud before workflow will work!
-

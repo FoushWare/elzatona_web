@@ -68,8 +68,12 @@ async function manageAdminAccounts() {
     const adminRole = 'super_admin';
 
     if (!adminPassword) {
-      console.error('❌ Missing INITIAL_ADMIN_PASSWORD in environment variables');
-      console.error('Please set INITIAL_ADMIN_PASSWORD in your .env.local file');
+      console.error(
+        '❌ Missing INITIAL_ADMIN_PASSWORD in environment variables'
+      );
+      console.error(
+        'Please set INITIAL_ADMIN_PASSWORD in your .env.local file'
+      );
       return;
     }
 

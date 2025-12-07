@@ -6,8 +6,7 @@ console.log('🛡️ Creating Admins Table via SQL\n');
 
 // Supabase configuration
 const supabaseUrl = 'https://hpnewqkvpnthpohvxcmq.supabase.co';
-const supabaseServiceRoleKey =
-  process.env.SUPABASE_SERVICE_ROLE_KEY;
+const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
 // Create Supabase client with service role key for admin operations
 const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
@@ -90,8 +89,12 @@ async function createAdminsTable() {
     const adminRole = 'super_admin';
 
     if (!adminPassword) {
-      console.error('❌ Missing INITIAL_ADMIN_PASSWORD in environment variables');
-      console.error('Please set INITIAL_ADMIN_PASSWORD in your .env.local file');
+      console.error(
+        '❌ Missing INITIAL_ADMIN_PASSWORD in environment variables'
+      );
+      console.error(
+        'Please set INITIAL_ADMIN_PASSWORD in your .env.local file'
+      );
       return;
     }
 

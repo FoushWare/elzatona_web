@@ -1,20 +1,20 @@
 // v1.0 - Unified Question Schema
 // Centralized type definitions for the unified question system
 
-import { createClient } from '@supabase/supabase-js';
+import { createClient } from "@supabase/supabase-js";
 
-const supabaseUrl = process.env['NEXT_PUBLIC_SUPABASE_URL']!;
-const supabaseServiceRoleKey = process.env['SUPABASE_SERVICE_ROLE_KEY']!;
+const supabaseUrl = process.env["NEXT_PUBLIC_SUPABASE_URL"]!;
+const supabaseServiceRoleKey = process.env["SUPABASE_SERVICE_ROLE_KEY"]!;
 const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
 
 export interface UnifiedQuestion {
   id: string;
   title: string;
   content: string;
-  type: 'multiple-choice' | 'true-false' | 'code' | 'mcq';
+  type: "multiple-choice" | "true-false" | "code" | "mcq";
   category?: string; // Made optional
   subcategory?: string;
-  difficulty: 'beginner' | 'intermediate' | 'advanced';
+  difficulty: "beginner" | "intermediate" | "advanced";
   learningPath?: string; // Already optional
   sectionId?: string; // Already optional
   topic?: string; // Added topic field
@@ -132,7 +132,7 @@ export interface LearningPath {
   id: string;
   title: string;
   description: string;
-  difficulty: 'beginner' | 'intermediate' | 'advanced';
+  difficulty: "beginner" | "intermediate" | "advanced";
   estimatedTime: number; // in hours
   prerequisites?: string[];
   targetSkills: string[];
@@ -189,7 +189,7 @@ export interface QuestionValidationError {
   message: string;
   code?: string;
   value?: unknown;
-  severity?: 'error' | 'warning';
+  severity?: "error" | "warning";
 }
 
 export interface QuestionValidationResult {
@@ -200,28 +200,28 @@ export interface QuestionValidationResult {
 }
 
 // Utility types
-export type QuestionType = UnifiedQuestion['type'];
-export type QuestionDifficulty = UnifiedQuestion['difficulty'];
+export type QuestionType = UnifiedQuestion["type"];
+export type QuestionDifficulty = UnifiedQuestion["difficulty"];
 export type QuestionCategory = string;
 export type QuestionSubcategory = string;
 
 // Constants
 export const QUESTION_TYPES: QuestionType[] = [
-  'multiple-choice',
-  'true-false',
-  'code',
-  'mcq',
+  "multiple-choice",
+  "true-false",
+  "code",
+  "mcq",
 ];
 
 export const QUESTION_DIFFICULTIES: QuestionDifficulty[] = [
-  'beginner',
-  'intermediate',
-  'advanced',
+  "beginner",
+  "intermediate",
+  "advanced",
 ];
 
 export const DEFAULT_QUESTION_METADATA = {
-  source: 'manual',
-  version: '1.0.0',
+  source: "manual",
+  version: "1.0.0",
   references: [],
 };
 
@@ -239,7 +239,7 @@ export const QUESTION_VALIDATION_RULES = {
   options: {
     minCount: 2,
     maxCount: 6,
-    requiredFor: ['multiple-choice'],
+    requiredFor: ["multiple-choice"],
   },
   timeLimit: {
     min: 30, // 30 seconds
@@ -261,27 +261,27 @@ export class UnifiedQuestionService {
 
   // Get all questions with optional filters
   async getQuestions(filters?: QuestionFilter): Promise<UnifiedQuestion[]> {
-    if (!supabase) throw new Error('any not initialized');
+    if (!supabase) throw new Error("any not initialized");
 
-    let q = supabase.from('questions').select('*');
+    let q = supabase.from("questions").select("*");
 
     if (filters?.category) {
-      q = q.eq('category', filters.category);
+      q = q.eq("category", filters.category);
     }
     if (filters?.difficulty) {
-      q = q.eq('difficulty', filters.difficulty);
+      q = q.eq("difficulty", filters.difficulty);
     }
     if (filters?.learningPath) {
-      q = q.eq('learningPath', filters.learningPath);
+      q = q.eq("learningPath", filters.learningPath);
     }
     if (filters?.sectionId) {
-      q = q.eq('sectionId', filters.sectionId);
+      q = q.eq("sectionId", filters.sectionId);
     }
     if (filters?.isActive !== undefined) {
-      q = q.eq('isActive', filters.isActive);
+      q = q.eq("isActive", filters.isActive);
     }
 
-    q = q.order('created_at', { ascending: true });
+    q = q.order("created_at", { ascending: true });
 
     if (filters?.limit) {
       q = q.limit(filters.limit);
@@ -294,12 +294,12 @@ export class UnifiedQuestionService {
 
   // Get a single question by ID
   async getQuestion(id: string): Promise<UnifiedQuestion | null> {
-    if (!supabase) throw new Error('any not initialized');
+    if (!supabase) throw new Error("any not initialized");
 
     const { data: docSnap, error } = await supabase
-      .from('questions')
-      .select('*')
-      .eq('id', id)
+      .from("questions")
+      .select("*")
+      .eq("id", id)
       .single();
     if (error) throw error;
     if (docSnap) {
@@ -310,9 +310,9 @@ export class UnifiedQuestionService {
 
   // Create a new question
   async createQuestion(
-    question: Omit<UnifiedQuestion, 'id' | 'createdAt' | 'updatedAt'>
+    question: Omit<UnifiedQuestion, "id" | "createdAt" | "updatedAt">,
   ): Promise<UnifiedQuestion> {
-    if (!supabase) throw new Error('any not initialized');
+    if (!supabase) throw new Error("any not initialized");
 
     const questionWithTimestamps = {
       ...question,
@@ -321,7 +321,7 @@ export class UnifiedQuestionService {
     };
 
     const { data: docRef, error } = await supabase
-      .from('questions')
+      .from("questions")
       .insert(questionWithTimestamps)
       .select()
       .single();
@@ -332,9 +332,9 @@ export class UnifiedQuestionService {
   // Update an existing question
   async updateQuestion(
     id: string,
-    updates: Partial<UnifiedQuestion>
+    updates: Partial<UnifiedQuestion>,
   ): Promise<UnifiedQuestion> {
-    if (!supabase) throw new Error('any not initialized');
+    if (!supabase) throw new Error("any not initialized");
 
     const updateWithTimestamps = {
       ...updates,
@@ -342,9 +342,9 @@ export class UnifiedQuestionService {
     };
 
     const { data: updatedDoc, error } = await supabase
-      .from('questions')
+      .from("questions")
       .update(updateWithTimestamps)
-      .eq('id', id)
+      .eq("id", id)
       .select()
       .single();
     if (error) throw error;
@@ -353,26 +353,26 @@ export class UnifiedQuestionService {
 
   // Delete a question
   async deleteQuestion(id: string): Promise<boolean> {
-    if (!supabase) throw new Error('any not initialized');
+    if (!supabase) throw new Error("any not initialized");
 
     try {
-      const { error } = await supabase.from('questions').delete().eq('id', id);
+      const { error } = await supabase.from("questions").delete().eq("id", id);
       if (error) throw error;
       return true;
     } catch (error) {
-      console.error('Error deleting question:', error);
+      console.error("Error deleting question:", error);
       return false;
     }
   }
 
   // Get question statistics
   async getQuestionStats(): Promise<QuestionStats> {
-    if (!supabase) throw new Error('any not initialized');
+    if (!supabase) throw new Error("any not initialized");
 
     // For small datasets, get all questions at once (more efficient than multiple queries)
     const { data: questions, error } = await supabase
-      .from('questions')
-      .select('*');
+      .from("questions")
+      .select("*");
     if (error) throw error;
 
     const stats: QuestionStats = {
@@ -390,7 +390,7 @@ export class UnifiedQuestionService {
     };
 
     // Process each question
-    questions.forEach(question => {
+    questions.forEach((question) => {
       // Count by category
       if (question.category) {
         stats.questionsByCategory[question.category] =
@@ -429,7 +429,7 @@ export class UnifiedQuestionService {
       (sum, q) =>
         sum +
         (difficultyValues[q.difficulty as keyof typeof difficultyValues] || 0),
-      0
+      0,
     );
     stats.averageDifficulty =
       questions.length > 0 ? totalDifficulty / questions.length : 0;
@@ -455,25 +455,25 @@ export class UnifiedQuestionService {
       }
     > = {};
 
-    questions.forEach(q => {
+    questions.forEach((q) => {
       // Handle both string and any timestamp formats
       let date: string;
-      if (typeof q.created_at === 'string') {
+      if (typeof q.created_at === "string") {
         const parsedDate = new Date(q.created_at);
         date = isNaN(parsedDate.getTime())
-          ? new Date().toISOString().split('T')[0]
-          : parsedDate.toISOString().split('T')[0];
+          ? new Date().toISOString().split("T")[0]
+          : parsedDate.toISOString().split("T")[0];
       } else if (
         q.created_at &&
-        typeof q.created_at === 'object' &&
-        'toDate' in q.created_at
+        typeof q.created_at === "object" &&
+        "toDate" in q.created_at
       ) {
         const parsedDate = new Date(q.created_at);
         date = isNaN(parsedDate.getTime())
-          ? new Date().toISOString().split('T')[0]
-          : parsedDate.toISOString().split('T')[0];
+          ? new Date().toISOString().split("T")[0]
+          : parsedDate.toISOString().split("T")[0];
       } else {
-        date = new Date().toISOString().split('T')[0];
+        date = new Date().toISOString().split("T")[0];
       }
 
       if (!activityByDate[date]) {
@@ -497,29 +497,29 @@ export class UnifiedQuestionService {
   // Search questions
   async searchQuestions(
     searchTerm: string,
-    filters?: QuestionFilter
+    filters?: QuestionFilter,
   ): Promise<QuestionSearchResult> {
-    if (!supabase) throw new Error('any not initialized');
+    if (!supabase) throw new Error("any not initialized");
 
     const startTime = Date.now();
 
     // Get all questions first (any doesn't support full-text search)
-    let q = supabase.from('questions').select('*');
+    let q = supabase.from("questions").select("*");
 
     if (filters?.category) {
-      q = q.eq('category', filters.category);
+      q = q.eq("category", filters.category);
     }
     if (filters?.difficulty) {
-      q = q.eq('difficulty', filters.difficulty);
+      q = q.eq("difficulty", filters.difficulty);
     }
     if (filters?.learningPath) {
-      q = q.eq('learningPath', filters.learningPath);
+      q = q.eq("learningPath", filters.learningPath);
     }
     if (filters?.sectionId) {
-      q = q.eq('sectionId', filters.sectionId);
+      q = q.eq("sectionId", filters.sectionId);
     }
     if (filters?.isActive !== undefined) {
-      q = q.eq('isActive', filters.isActive);
+      q = q.eq("isActive", filters.isActive);
     }
 
     const { data, error } = await q;
@@ -530,15 +530,15 @@ export class UnifiedQuestionService {
     if (searchTerm) {
       const searchLower = searchTerm.toLowerCase();
       questions = questions.filter(
-        q =>
+        (q) =>
           q.title.toLowerCase().includes(searchLower) ||
           q.content.toLowerCase().includes(searchLower) ||
           (q.explanation &&
             q.explanation.toLowerCase().includes(searchLower)) ||
           (q.tags &&
             q.tags.some((tag: string) =>
-              tag.toLowerCase().includes(searchLower)
-            ))
+              tag.toLowerCase().includes(searchLower),
+            )),
       );
     }
 
@@ -560,7 +560,7 @@ export class UnifiedQuestionService {
 
   // Validate a question
   validateQuestion(
-    question: Partial<UnifiedQuestion>
+    question: Partial<UnifiedQuestion>,
   ): QuestionValidationResult {
     const errors: QuestionValidationError[] = [];
     const warnings: QuestionValidationError[] = [];
@@ -568,80 +568,80 @@ export class UnifiedQuestionService {
     // Validate title
     if (!question.title || question.title.trim().length === 0) {
       errors.push({
-        field: 'title',
-        message: 'Title is required',
-        severity: 'error',
+        field: "title",
+        message: "Title is required",
+        severity: "error",
       });
     } else if (
       question.title.length < QUESTION_VALIDATION_RULES.title.minLength
     ) {
       errors.push({
-        field: 'title',
+        field: "title",
         message: `Title must be at least ${QUESTION_VALIDATION_RULES.title.minLength} characters`,
-        severity: 'error',
+        severity: "error",
       });
     } else if (
       question.title.length > QUESTION_VALIDATION_RULES.title.maxLength
     ) {
       warnings.push({
-        field: 'title',
+        field: "title",
         message: `Title is very long (${question.title.length} characters)`,
-        severity: 'warning',
+        severity: "warning",
       });
     }
 
     // Validate content
     if (!question.content || question.content.trim().length === 0) {
       errors.push({
-        field: 'content',
-        message: 'Content is required',
-        severity: 'error',
+        field: "content",
+        message: "Content is required",
+        severity: "error",
       });
     } else if (
       question.content.length < QUESTION_VALIDATION_RULES.content.minLength
     ) {
       errors.push({
-        field: 'content',
+        field: "content",
         message: `Content must be at least ${QUESTION_VALIDATION_RULES.content.minLength} characters`,
-        severity: 'error',
+        severity: "error",
       });
     } else if (
       question.content.length > QUESTION_VALIDATION_RULES.content.maxLength
     ) {
       warnings.push({
-        field: 'content',
+        field: "content",
         message: `Content is very long (${question.content.length} characters)`,
-        severity: 'warning',
+        severity: "warning",
       });
     }
 
     // Validate options for multiple choice questions
-    if (question.type === 'multiple-choice' && question.options) {
+    if (question.type === "multiple-choice" && question.options) {
       if (
         question.options.length < QUESTION_VALIDATION_RULES.options.minCount
       ) {
         errors.push({
-          field: 'options',
+          field: "options",
           message: `At least ${QUESTION_VALIDATION_RULES.options.minCount} options are required`,
-          severity: 'error',
+          severity: "error",
         });
       } else if (
         question.options.length > QUESTION_VALIDATION_RULES.options.maxCount
       ) {
         warnings.push({
-          field: 'options',
+          field: "options",
           message: `Too many options (${question.options.length}), consider reducing`,
-          severity: 'warning',
+          severity: "warning",
         });
       }
 
       // Check if at least one option is correct
-      const hasCorrectOption = question.options.some(opt => opt.isCorrect);
+      const hasCorrectOption = question.options.some((opt) => opt.isCorrect);
       if (!hasCorrectOption) {
         errors.push({
-          field: 'options',
-          message: 'At least one option must be marked as correct',
-          severity: 'error',
+          field: "options",
+          message: "At least one option must be marked as correct",
+          severity: "error",
         });
       }
     }
@@ -650,15 +650,15 @@ export class UnifiedQuestionService {
     if (question.timeLimit !== undefined) {
       if (question.timeLimit < QUESTION_VALIDATION_RULES.timeLimit.min) {
         errors.push({
-          field: 'timeLimit',
+          field: "timeLimit",
           message: `Time limit must be at least ${QUESTION_VALIDATION_RULES.timeLimit.min} seconds`,
-          severity: 'error',
+          severity: "error",
         });
       } else if (question.timeLimit > QUESTION_VALIDATION_RULES.timeLimit.max) {
         warnings.push({
-          field: 'timeLimit',
+          field: "timeLimit",
           message: `Time limit is very long (${question.timeLimit} seconds)`,
-          severity: 'warning',
+          severity: "warning",
         });
       }
     }
@@ -667,15 +667,15 @@ export class UnifiedQuestionService {
     if (question.points !== undefined) {
       if (question.points < QUESTION_VALIDATION_RULES.points.min) {
         errors.push({
-          field: 'points',
+          field: "points",
           message: `Points must be at least ${QUESTION_VALIDATION_RULES.points.min}`,
-          severity: 'error',
+          severity: "error",
         });
       } else if (question.points > QUESTION_VALIDATION_RULES.points.max) {
         warnings.push({
-          field: 'points',
+          field: "points",
           message: `Points are very high (${question.points})`,
-          severity: 'warning',
+          severity: "warning",
         });
       }
     }
@@ -696,7 +696,7 @@ export class UnifiedQuestionService {
     // 3. Merge or remove duplicates
     // 4. Update questions that reference the removed paths
     console.log(
-      'removeDuplicateLearningPaths called - placeholder implementation'
+      "removeDuplicateLearningPaths called - placeholder implementation",
     );
   }
 
@@ -704,7 +704,7 @@ export class UnifiedQuestionService {
   static async getLearningPaths(): Promise<LearningPath[]> {
     // This is a placeholder implementation
     // In a real implementation, this would query the database for learning paths
-    console.log('getLearningPaths called - placeholder implementation');
+    console.log("getLearningPaths called - placeholder implementation");
     return [];
   }
 
@@ -713,17 +713,17 @@ export class UnifiedQuestionService {
     // This is a placeholder implementation
     // In a real implementation, this would create default learning paths in the database
     console.log(
-      'initializeDefaultLearningPaths called - placeholder implementation'
+      "initializeDefaultLearningPaths called - placeholder implementation",
     );
   }
 
   // Get questions by IDs (placeholder implementation)
   static async getQuestionsByIds(
-    questionIds: string[]
+    questionIds: string[],
   ): Promise<{ success: boolean; data?: UnifiedQuestion[]; error?: string }> {
     // This is a placeholder implementation
     // In a real implementation, this would query the database for questions by their IDs
-    console.log('getQuestionsByIds called with IDs:', questionIds);
+    console.log("getQuestionsByIds called with IDs:", questionIds);
     return { success: true, data: [] };
   }
 }

@@ -5,6 +5,7 @@ This directory contains configuration for the Sentry MCP (Model Context Protocol
 ## Overview
 
 Sentry provides an MCP server that enables AI agents to interact with Sentry's monitoring and error-tracking capabilities. This allows you to:
+
 - View and analyze errors from your Sentry projects
 - Monitor application performance
 - Manage issues and events
@@ -107,4 +108,3 @@ After configuration, you can interact with Sentry through the MCP interface:
 - Store tokens in `.env.local` (already in `.gitignore`)
 - Rotate tokens regularly for security
 - Use the minimum required scopes for your use case
-

@@ -1,9 +1,9 @@
-import bcrypt from 'bcryptjs';
-import { adminConfig, getAdminApiUrl } from '@/admin.config';
-import { createClient } from '@supabase/supabase-js';
+import bcrypt from "bcryptjs";
+import { adminConfig, getAdminApiUrl } from "@/admin.config";
+import { createClient } from "@supabase/supabase-js";
 
-const supabaseUrl = process.env['NEXT_PUBLIC_SUPABASE_URL']!;
-const supabaseServiceRoleKey = process.env['SUPABASE_SERVICE_ROLE_KEY']!;
+const supabaseUrl = process.env["NEXT_PUBLIC_SUPABASE_URL"]!;
+const supabaseServiceRoleKey = process.env["SUPABASE_SERVICE_ROLE_KEY"]!;
 
 const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
 
@@ -13,7 +13,7 @@ export interface AdminCredential {
   email: string;
   password_hash: string;
   name: string;
-  role: 'super_admin' | 'admin';
+  role: "super_admin" | "admin";
   is_active: boolean;
   created_at: string;
   last_login?: string;
@@ -23,7 +23,7 @@ export interface AdminSession {
   id: string;
   email: string;
   name: string;
-  role: 'super_admin' | 'admin';
+  role: "super_admin" | "admin";
   token: string;
   expiresAt: Date;
 }
@@ -46,7 +46,7 @@ export interface AdminDeactivationResult {
 }
 
 export class AdminAuthService {
-  private static readonly TABLE_NAME = 'admin_users';
+  private static readonly TABLE_NAME = "admin_users";
 
   /**
    * Initialize admin credentials (one-time setup)
@@ -55,7 +55,7 @@ export class AdminAuthService {
     email: string,
     password: string,
     name: string,
-    role: 'super_admin' | 'admin' = 'super_admin'
+    role: "super_admin" | "admin" = "super_admin",
   ): Promise<AdminCreationResult> {
     try {
       // Check if admin already exists
@@ -63,14 +63,14 @@ export class AdminAuthService {
       if (existingAdmin) {
         return {
           success: false,
-          error: 'Admin with this email already exists',
+          error: "Admin with this email already exists",
         };
       }
 
       // Hash password
       const passwordHash = await bcrypt.hash(
         password,
-        adminConfig.security.saltRounds
+        adminConfig.security.saltRounds,
       );
 
       // Create admin document
@@ -88,15 +88,15 @@ export class AdminAuthService {
       const { error } = await supabase.from(this.TABLE_NAME).insert(adminData);
 
       if (error) {
-        console.error('Error creating admin:', error);
-        return { success: false, error: 'Failed to create admin account' };
+        console.error("Error creating admin:", error);
+        return { success: false, error: "Failed to create admin account" };
       }
 
       console.log(`✅ Admin account created: ${email} (${role})`);
       return { success: true, adminId };
     } catch (error) {
-      console.error('Error initializing admin credentials:', error);
-      return { success: false, error: 'Failed to create admin account' };
+      console.error("Error initializing admin credentials:", error);
+      return { success: false, error: "Failed to create admin account" };
     }
   }
 
@@ -105,13 +105,13 @@ export class AdminAuthService {
    */
   static async authenticateAdmin(
     email: string,
-    password: string
+    password: string,
   ): Promise<AuthResult> {
     try {
-      const response = await fetch(getAdminApiUrl('/admin/auth'), {
-        method: 'POST',
+      const response = await fetch(getAdminApiUrl("/admin/auth"), {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({ email, password }),
       });
@@ -125,8 +125,8 @@ export class AdminAuthService {
         return { success: false, error: data.error };
       }
     } catch (error) {
-      console.error('Error authenticating admin:', error);
-      return { success: false, error: 'Authentication failed' };
+      console.error("Error authenticating admin:", error);
+      return { success: false, error: "Authentication failed" };
     }
   }
 
@@ -137,7 +137,7 @@ export class AdminAuthService {
     email: string,
     password: string,
     name: string,
-    role: 'super_admin' | 'admin' = 'admin'
+    role: "super_admin" | "admin" = "admin",
   ): Promise<AdminCreationResult> {
     try {
       // Check if admin already exists
@@ -145,14 +145,14 @@ export class AdminAuthService {
       if (existingAdmin) {
         return {
           success: false,
-          error: 'Admin with this email already exists',
+          error: "Admin with this email already exists",
         };
       }
 
       // Hash password
       const passwordHash = await bcrypt.hash(
         password,
-        adminConfig.security.saltRounds
+        adminConfig.security.saltRounds,
       );
 
       // Create admin document
@@ -170,15 +170,15 @@ export class AdminAuthService {
       const { error } = await supabase.from(this.TABLE_NAME).insert(adminData);
 
       if (error) {
-        console.error('Error creating admin:', error);
-        return { success: false, error: 'Failed to create admin account' };
+        console.error("Error creating admin:", error);
+        return { success: false, error: "Failed to create admin account" };
       }
 
       console.log(`✅ Admin account created: ${email} (${role})`);
       return { success: true, adminId };
     } catch (error) {
-      console.error('Error creating admin:', error);
-      return { success: false, error: 'Failed to create admin account' };
+      console.error("Error creating admin:", error);
+      return { success: false, error: "Failed to create admin account" };
     }
   }
 
@@ -186,24 +186,24 @@ export class AdminAuthService {
    * Deactivate admin account
    */
   static async deactivateAdmin(
-    adminId: string
+    adminId: string,
   ): Promise<AdminDeactivationResult> {
     try {
       const { error } = await supabase
         .from(this.TABLE_NAME)
         .update({ is_active: false })
-        .eq('id', adminId);
+        .eq("id", adminId);
 
       if (error) {
-        console.error('Error deactivating admin:', error);
-        return { success: false, error: 'Failed to deactivate admin' };
+        console.error("Error deactivating admin:", error);
+        return { success: false, error: "Failed to deactivate admin" };
       }
 
       console.log(`✅ Admin deactivated: ${adminId}`);
       return { success: true };
     } catch (error) {
-      console.error('Error deactivating admin:', error);
-      return { success: false, error: 'Failed to deactivate admin' };
+      console.error("Error deactivating admin:", error);
+      return { success: false, error: "Failed to deactivate admin" };
     }
   }
 
@@ -214,17 +214,17 @@ export class AdminAuthService {
     try {
       const { data, error } = await supabase
         .from(this.TABLE_NAME)
-        .select('*')
-        .order('created_at', { ascending: false });
+        .select("*")
+        .order("created_at", { ascending: false });
 
       if (error) {
-        console.error('Error getting all admins:', error);
+        console.error("Error getting all admins:", error);
         return [];
       }
 
       return data || [];
     } catch (error) {
-      console.error('Error getting all admins:', error);
+      console.error("Error getting all admins:", error);
       return [];
     }
   }
@@ -240,8 +240,8 @@ export class AdminAuthService {
       }
 
       // Verify JWT token via API
-      const response = await fetch(getAdminApiUrl('/admin/auth'), {
-        method: 'GET',
+      const response = await fetch(getAdminApiUrl("/admin/auth"), {
+        method: "GET",
         headers: {
           Authorization: `Bearer ${session.token}`,
         },
@@ -250,7 +250,7 @@ export class AdminAuthService {
       const data = await response.json();
       return data.success;
     } catch (error) {
-      console.error('Session validation failed:', error);
+      console.error("Session validation failed:", error);
       return false;
     }
   }
@@ -259,13 +259,13 @@ export class AdminAuthService {
    * Get admin by email
    */
   private static async getAdminByEmail(
-    email: string
+    email: string,
   ): Promise<AdminCredential | null> {
     try {
       const { data, error } = await supabase
         .from(this.TABLE_NAME)
-        .select('*')
-        .eq('email', email)
+        .select("*")
+        .eq("email", email)
         .single();
 
       if (error || !data) {
@@ -274,7 +274,7 @@ export class AdminAuthService {
 
       return data;
     } catch (error) {
-      console.error('Error getting admin by email:', error);
+      console.error("Error getting admin by email:", error);
       return null;
     }
   }
@@ -287,9 +287,9 @@ export class AdminAuthService {
       await supabase
         .from(this.TABLE_NAME)
         .update({ last_login: new Date().toISOString() })
-        .eq('id', adminId);
+        .eq("id", adminId);
     } catch (error) {
-      console.error('Error updating last login:', error);
+      console.error("Error updating last login:", error);
     }
   }
 

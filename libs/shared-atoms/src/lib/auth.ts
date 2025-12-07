@@ -1,4 +1,4 @@
-import { atom } from 'jotai';
+import { atom } from "jotai";
 
 // Supabase user atom
 export const supabaseUserAtom = atom<any | null>(null);
@@ -19,8 +19,8 @@ type UserProfile = {
   createdAt?: Date;
   lastLoginAt?: Date;
   preferences?: {
-    theme: 'light' | 'dark';
-    language: 'en' | 'ar';
+    theme: "light" | "dark";
+    language: "en" | "ar";
     notifications: boolean;
   };
 };
@@ -29,7 +29,7 @@ type UserProfile = {
 export const userProfileAtom = atom<UserProfile | null>(null);
 
 // Auth status atom
-export const isAuthenticatedAtom = atom(get => {
+export const isAuthenticatedAtom = atom((get) => {
   const user = get(supabaseUserAtom);
   return user !== null;
 });
@@ -40,7 +40,7 @@ export const signInAtom = atom(
   async (
     get,
     set,
-    { email, password }: { email: string; password: string }
+    { email, password }: { email: string; password: string },
   ) => {
     set(authLoadingAtom, true);
     set(authErrorAtom, null);
@@ -48,16 +48,16 @@ export const signInAtom = atom(
     try {
       // This will be implemented with actual Firebase auth
       // For now, just a placeholder
-      console.log('Sign in with:', { email, password });
+      console.log("Sign in with:", { email, password });
     } catch (error) {
       set(
         authErrorAtom,
-        error instanceof Error ? error.message : 'Sign in failed'
+        error instanceof Error ? error.message : "Sign in failed",
       );
     } finally {
       set(authLoadingAtom, false);
     }
-  }
+  },
 );
 
 // Sign out atom
@@ -68,13 +68,13 @@ export const signOutAtom = atom(null, async (get, set) => {
   try {
     // This will be implemented with actual Firebase auth
     // For now, just a placeholder
-    console.log('Sign out');
+    console.log("Sign out");
     set(supabaseUserAtom, null);
     set(userProfileAtom, null);
   } catch (error) {
     set(
       authErrorAtom,
-      error instanceof Error ? error.message : 'Sign out failed'
+      error instanceof Error ? error.message : "Sign out failed",
     );
   } finally {
     set(authLoadingAtom, false);
@@ -89,5 +89,5 @@ export const updateUserProfileAtom = atom(
     if (currentProfile) {
       set(userProfileAtom, { ...currentProfile, ...updates });
     }
-  }
+  },
 );

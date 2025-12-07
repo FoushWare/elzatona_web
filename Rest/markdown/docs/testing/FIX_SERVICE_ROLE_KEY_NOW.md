@@ -5,6 +5,7 @@
 The E2E tests are failing because `SUPABASE_SERVICE_ROLE_KEY` in `.env.test.local` is for the **wrong Supabase project**.
 
 **Current Status:**
+
 - ✅ `.env.test.local` URL: `https://kiycimlsatwfqxtfprlr.supabase.co` (correct)
 - ❌ `SUPABASE_SERVICE_ROLE_KEY`: Points to a different project (wrong)
 
@@ -41,6 +42,7 @@ node Rest/scripts/verify-test-admin.js
 ```
 
 You should see:
+
 ```
 ✅ Admin user found
 ✅ Password hash verified (bcrypt)
@@ -75,5 +77,3 @@ npm run test:e2e -- tests/e2e/admin/admin-login.spec.ts
 - **Get Service Role Key**: https://supabase.com/dashboard/project/kiycimlsatwfqxtfprlr/settings/api
 - **Verify Setup**: `node Rest/scripts/verify-test-admin.js`
 - **Test Login**: `npm run test:e2e -- tests/e2e/admin/admin-login.spec.ts`
-
-

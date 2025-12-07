@@ -3,13 +3,13 @@
 
 export const highlight = jest.fn((code: string, language?: string) => {
   return {
-    type: 'root',
+    type: "root",
     children: [
       {
-        type: 'element',
-        tagName: 'code',
-        properties: { className: [`language-${language || 'text'}`] },
-        children: [{ type: 'text', value: code }],
+        type: "element",
+        tagName: "code",
+        properties: { className: [`language-${language || "text"}`] },
+        children: [{ type: "text", value: code }],
       },
     ],
   };
@@ -29,4 +29,3 @@ export default {
   listLanguages,
   listPlugins,
 };
-

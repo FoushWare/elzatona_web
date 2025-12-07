@@ -1,6 +1,6 @@
-'use client';
+"use client";
 
-import React from 'react';
+import React from "react";
 import {
   Card,
   CardContent,
@@ -13,8 +13,8 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@elzatona/shared-components';
-import { Filter, X } from 'lucide-react';
+} from "@elzatona/components";
+import { Filter, X } from "lucide-react";
 
 interface FiltersCardProps {
   selectedCategory: string;
@@ -51,18 +51,18 @@ export const FiltersCard: React.FC<FiltersCardProps> = ({
 }) => {
   // Filter topics by selected category
   const filteredTopics = React.useMemo(() => {
-    if (!selectedCategory || selectedCategory === 'all') return topicsData;
+    if (!selectedCategory || selectedCategory === "all") return topicsData;
     return topicsData.filter(
-      (topic: any) => topic.category_id === selectedCategory
+      (topic: any) => topic.category_id === selectedCategory,
     );
   }, [topicsData, selectedCategory]);
 
   const hasActiveFilters =
-    (selectedCategory && selectedCategory !== 'all') ||
-    (selectedTopic && selectedTopic !== 'all') ||
-    (selectedType && selectedType !== 'all') ||
-    (selectedDifficulty && selectedDifficulty !== 'all') ||
-    (selectedStatus && selectedStatus !== 'all');
+    (selectedCategory && selectedCategory !== "all") ||
+    (selectedTopic && selectedTopic !== "all") ||
+    (selectedType && selectedType !== "all") ||
+    (selectedDifficulty && selectedDifficulty !== "all") ||
+    (selectedStatus && selectedStatus !== "all");
 
   return (
     <Card className="mb-6">
@@ -76,7 +76,10 @@ export const FiltersCard: React.FC<FiltersCardProps> = ({
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 items-end">
           {/* Category Filter */}
           <div className="flex-1">
-            <Label htmlFor="category-filter" className="text-sm font-medium mb-2 block">
+            <Label
+              htmlFor="category-filter"
+              className="text-sm font-medium mb-2 block"
+            >
               Category
             </Label>
             {categoriesData && categoriesData.length > 0 ? (
@@ -104,7 +107,10 @@ export const FiltersCard: React.FC<FiltersCardProps> = ({
 
           {/* Topic Filter */}
           <div className="flex-1">
-            <Label htmlFor="topic-filter" className="text-sm font-medium mb-2 block">
+            <Label
+              htmlFor="topic-filter"
+              className="text-sm font-medium mb-2 block"
+            >
               Topic
             </Label>
             {filteredTopics && filteredTopics.length > 0 ? (
@@ -126,7 +132,9 @@ export const FiltersCard: React.FC<FiltersCardProps> = ({
                 <SelectTrigger id="topic-filter" className="w-full">
                   <SelectValue
                     placeholder={
-                      selectedCategory ? 'No topics found' : 'Select category first'
+                      selectedCategory
+                        ? "No topics found"
+                        : "Select category first"
                     }
                   />
                 </SelectTrigger>
@@ -136,7 +144,10 @@ export const FiltersCard: React.FC<FiltersCardProps> = ({
 
           {/* Type Filter */}
           <div className="flex-1">
-            <Label htmlFor="type-filter" className="text-sm font-medium mb-2 block">
+            <Label
+              htmlFor="type-filter"
+              className="text-sm font-medium mb-2 block"
+            >
               Type
             </Label>
             {allTypes && allTypes.length > 0 ? (
@@ -149,9 +160,12 @@ export const FiltersCard: React.FC<FiltersCardProps> = ({
                   {allTypes.map((type: string) => (
                     <SelectItem key={type} value={type}>
                       {type
-                        .split('-')
-                        .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-                        .join(' ')}
+                        .split("-")
+                        .map(
+                          (word) =>
+                            word.charAt(0).toUpperCase() + word.slice(1),
+                        )
+                        .join(" ")}
                     </SelectItem>
                   ))}
                 </SelectContent>
@@ -167,10 +181,16 @@ export const FiltersCard: React.FC<FiltersCardProps> = ({
 
           {/* Difficulty Filter */}
           <div className="flex-1">
-            <Label htmlFor="difficulty-filter" className="text-sm font-medium mb-2 block">
+            <Label
+              htmlFor="difficulty-filter"
+              className="text-sm font-medium mb-2 block"
+            >
               Difficulty
             </Label>
-            <Select value={selectedDifficulty} onValueChange={onDifficultyChange}>
+            <Select
+              value={selectedDifficulty}
+              onValueChange={onDifficultyChange}
+            >
               <SelectTrigger id="difficulty-filter" className="w-full">
                 <SelectValue placeholder="All Difficulties" />
               </SelectTrigger>
@@ -185,7 +205,10 @@ export const FiltersCard: React.FC<FiltersCardProps> = ({
 
           {/* Status Filter */}
           <div className="flex-1">
-            <Label htmlFor="status-filter" className="text-sm font-medium mb-2 block">
+            <Label
+              htmlFor="status-filter"
+              className="text-sm font-medium mb-2 block"
+            >
               Status
             </Label>
             <Select value={selectedStatus} onValueChange={onStatusChange}>
@@ -218,4 +241,3 @@ export const FiltersCard: React.FC<FiltersCardProps> = ({
     </Card>
   );
 };
-

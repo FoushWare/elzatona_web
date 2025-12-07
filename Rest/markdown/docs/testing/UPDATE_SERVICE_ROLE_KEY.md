@@ -36,6 +36,7 @@ node Rest/scripts/verify-test-admin.js
 ```
 
 This will verify:
+
 - ✅ Environment variables are loaded
 - ✅ Admin user exists in the database
 - ✅ Password hash is correct (bcrypt)
@@ -66,5 +67,3 @@ npm run test:e2e -- tests/e2e/admin/admin-login.spec.ts
 ## Security Note
 
 ⚠️ **Never commit the service role key to Git!** It has full database access. The `.env.test.local` file is already in `.gitignore`.
-
-

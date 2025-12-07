@@ -9,4 +9,6 @@ console.log('📝 To generate 30 questions per category (270 total):');
 console.log('   1. Each category needs 10 batch scripts (3 questions each)');
 console.log('   2. Questions should cover advanced/senior-level topics');
 console.log('   3. Use the existing question generation patterns');
-console.log('\n💡 Recommendation: Generate questions incrementally per category');
+console.log(
+  '\n💡 Recommendation: Generate questions incrementally per category'
+);

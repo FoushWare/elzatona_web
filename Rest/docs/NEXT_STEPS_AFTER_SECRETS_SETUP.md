@@ -9,11 +9,13 @@ npm run setup:github-test-secrets
 ```
 
 **What it does:**
+
 - Reads TEST credentials from `.env.test.local`
 - Adds all secrets to GitHub automatically
 - Shows summary of what was added
 
 **Expected output:**
+
 - ✅ All TEST secrets added successfully
 - Summary showing all secrets were added
 
@@ -22,11 +24,13 @@ npm run setup:github-test-secrets
 ### Step 2: Verify Secrets Were Added
 
 **Option 1: Using GitHub CLI**
+
 ```bash
 gh secret list --repo FoushWare/GreatFrontendHub
 ```
 
 **Expected secrets:**
+
 - ✅ `ADMIN_EMAIL`
 - ✅ `ADMIN_PASSWORD`
 - ✅ `TEST_SUPABASE_URL`
@@ -36,6 +40,7 @@ gh secret list --repo FoushWare/GreatFrontendHub
 - ✅ `SONAR_TOKEN` (should already exist)
 
 **Option 2: Check GitHub UI**
+
 - Go to: https://github.com/FoushWare/GreatFrontendHub/settings/secrets/actions
 - Verify all secrets are listed
 
@@ -89,6 +94,7 @@ git push
 **In GitHub Actions logs, check:**
 
 1. **Environment variables:**
+
    ```
    APP_ENV=test
    NEXT_PUBLIC_APP_ENV=test
@@ -123,11 +129,13 @@ git push
 ### If Secrets Are Missing
 
 **Check:**
+
 ```bash
 gh secret list --repo FoushWare/GreatFrontendHub
 ```
 
 **Re-run script:**
+
 ```bash
 npm run setup:github-test-secrets
 ```
@@ -135,11 +143,13 @@ npm run setup:github-test-secrets
 ### If Tests Fail in GitHub Actions
 
 **Check workflow logs for:**
+
 - Missing environment variables
 - Wrong Supabase URL (should be TEST project)
 - Authentication errors
 
 **Verify:**
+
 - All secrets are added correctly
 - Secrets use TEST credentials (NOT production)
 - `.env.test.local` has correct values
@@ -147,6 +157,7 @@ npm run setup:github-test-secrets
 ### If Wrong Environment is Used
 
 **Check workflow file:**
+
 - `.github/workflows/sonarcloud.yml`
 - Should have `APP_ENV: 'test'`
 - Should use `TEST_SUPABASE_URL` (not production URL)
@@ -203,4 +214,3 @@ After completing all steps, you should have:
 5. ✅ Verify: Tests use TEST environment in CI
 
 **That's it!** Your CI/CD pipeline is now configured to use TEST environment automatically. 🚀
-

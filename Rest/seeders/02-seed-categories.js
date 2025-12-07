@@ -20,20 +20,25 @@ if (!supabaseUrl || !supabaseKey) {
 const supabase = createClient(supabaseUrl, supabaseKey);
 
 // Read categories from the categories-topics-cards-plans.json file
-const categoriesDataPath = path.join(__dirname, '../../apps/admin/network/data/json/categories-topics-cards-plans/categories-topics-cards-plans.json');
+const categoriesDataPath = path.join(
+  __dirname,
+  '../../apps/admin/network/data/json/categories-topics-cards-plans/categories-topics-cards-plans.json'
+);
 
 async function seedCategories() {
   console.log('🔄 Seeding Categories...\n');
 
   // Read categories data
-  const categoriesData = JSON.parse(fs.readFileSync(categoriesDataPath, 'utf8'));
+  const categoriesData = JSON.parse(
+    fs.readFileSync(categoriesDataPath, 'utf8')
+  );
   const categories = categoriesData.categories || [];
 
   // Map cardType to learning_card type
   const cardTypeMapping = {
     'Core Technologies': 'core-technologies',
     'Framework Questions': 'framework-questions',
-    'System Design': 'system-design'
+    'System Design': 'system-design',
   };
 
   // Get learning cards to map cardType to learning_card_id
@@ -68,11 +73,15 @@ async function seedCategories() {
 
   for (const category of categories) {
     try {
-      const cardType = cardTypeMapping[category.cardType] || category.cardType.toLowerCase().replace(/\s+/g, '-');
+      const cardType =
+        cardTypeMapping[category.cardType] ||
+        category.cardType.toLowerCase().replace(/\s+/g, '-');
       const learningCardId = cardMap[cardType];
 
       if (!learningCardId) {
-        console.log(`  ⚠️  Skipping ${category.name}: Learning card not found for type "${category.cardType}"`);
+        console.log(
+          `  ⚠️  Skipping ${category.name}: Learning card not found for type "${category.cardType}"`
+        );
         continue;
       }
 
@@ -93,7 +102,7 @@ async function seedCategories() {
         order_index: category.order || 0,
         learning_card_id: learningCardId,
         is_active: true,
-        updated_at: new Date().toISOString()
+        updated_at: new Date().toISOString(),
       };
 
       if (existing) {
@@ -108,12 +117,10 @@ async function seedCategories() {
         updated++;
       } else {
         // Create new category
-        const { error } = await supabase
-          .from('categories')
-          .insert({
-            ...categoryData,
-            created_at: new Date().toISOString()
-          });
+        const { error } = await supabase.from('categories').insert({
+          ...categoryData,
+          created_at: new Date().toISOString(),
+        });
 
         if (error) throw error;
         console.log(`  ✅ Created: ${category.name} (${category.slug})`);
@@ -135,18 +142,19 @@ async function seedCategories() {
       icon: '🎯',
       color: '#E67E22',
       order: 0,
-      learningCardType: 'frontend-tasks'
+      learningCardType: 'frontend-tasks',
     },
     {
       name: 'Problem Solving',
       slug: 'problem-solving',
-      description: 'Algorithm and data structure problems for frontend developers',
+      description:
+        'Algorithm and data structure problems for frontend developers',
       cardType: 'Problem Solving',
       icon: '🧩',
       color: '#1ABC9C',
       order: 0,
-      learningCardType: 'problem-solving'
-    }
+      learningCardType: 'problem-solving',
+    },
   ];
 
   for (const category of additionalCategories) {
@@ -170,7 +178,7 @@ async function seedCategories() {
         order_index: category.order,
         learning_card_id: learningCardId,
         is_active: true,
-        updated_at: new Date().toISOString()
+        updated_at: new Date().toISOString(),
       };
 
       if (existing) {
@@ -182,12 +190,10 @@ async function seedCategories() {
         console.log(`  ✅ Updated: ${category.name}`);
         updated++;
       } else {
-        const { error } = await supabase
-          .from('categories')
-          .insert({
-            ...categoryData,
-            created_at: new Date().toISOString()
-          });
+        const { error } = await supabase.from('categories').insert({
+          ...categoryData,
+          created_at: new Date().toISOString(),
+        });
         if (error) throw error;
         console.log(`  ✅ Created: ${category.name}`);
         created++;
@@ -208,8 +214,7 @@ async function seedCategories() {
 // Run seeder
 seedCategories()
   .then(() => process.exit(0))
-  .catch((error) => {
+  .catch(error => {
     console.error('❌ Seeding failed:', error);
     process.exit(1);
   });
-

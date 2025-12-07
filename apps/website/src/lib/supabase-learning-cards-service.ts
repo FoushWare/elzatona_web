@@ -1,25 +1,25 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 // This file uses 'any' types for Supabase data transformations
-import { supabaseClient } from '@/lib/supabase';
+import { supabaseClient } from "@/lib/supabase";
 import type {
   LearningCard,
   LearningCardFormData,
   LearningPlanCard,
   CardProgress,
   CardType,
-} from '../types/learning-cards';
+} from "../types/learning-cards";
 
 export class SupabaseLearningCardsService {
   // Learning Cards CRUD operations
   static async getAllCards(): Promise<LearningCard[]> {
     try {
       if (!supabaseClient) {
-        throw new Error('Supabase client is not available');
+        throw new Error("Supabase client is not available");
       }
       const { data: cards, error } = await supabaseClient.getLearningCards({
         isActive: true,
-        orderBy: 'order_index',
-        orderDirection: 'asc',
+        orderBy: "order_index",
+        orderDirection: "asc",
       });
 
       if (error) {
@@ -41,15 +41,15 @@ export class SupabaseLearningCardsService {
           updated_at: new Date(card.updated_at),
           metadata: {
             question_count: 0, // This would need to be calculated from questions
-            estimatedTime: '30 minutes',
-            difficulty: 'beginner',
+            estimatedTime: "30 minutes",
+            difficulty: "beginner",
             topics: [],
             categories: [],
           },
         })) || []
       );
     } catch (error) {
-      console.error('Error fetching learning cards:', error);
+      console.error("Error fetching learning cards:", error);
       throw error;
     }
   }
@@ -57,7 +57,7 @@ export class SupabaseLearningCardsService {
   static async getCardById(card_id: string): Promise<LearningCard | null> {
     try {
       if (!supabaseClient) {
-        throw new Error('Supabase client is not available');
+        throw new Error("Supabase client is not available");
       }
       const { data: card, error } = await supabaseClient.getLearningCards({
         isActive: true,
@@ -86,14 +86,14 @@ export class SupabaseLearningCardsService {
         updated_at: new Date(foundCard.updated_at),
         metadata: {
           question_count: 0, // This would need to be calculated from questions
-          estimatedTime: '30 minutes',
-          difficulty: 'beginner',
+          estimatedTime: "30 minutes",
+          difficulty: "beginner",
           topics: [],
           categories: [],
         },
       };
     } catch (error) {
-      console.error('Error fetching learning card:', error);
+      console.error("Error fetching learning card:", error);
       throw error;
     }
   }
@@ -101,15 +101,15 @@ export class SupabaseLearningCardsService {
   static async createCard(cardData: LearningCardFormData): Promise<string> {
     try {
       if (!supabaseClient) {
-        throw new Error('Supabase client is not available');
+        throw new Error("Supabase client is not available");
       }
       // Transform form data to Supabase format
       const supabaseCardData = {
         title: cardData.title,
         type: cardData.type,
         description: cardData.description,
-        color: cardData.color || '#3B82F6',
-        icon: cardData.icon || 'code',
+        color: cardData.color || "#3B82F6",
+        icon: cardData.icon || "code",
         order_index: cardData.order || 0,
         isActive: cardData.is_active !== false,
       };
@@ -123,18 +123,18 @@ export class SupabaseLearningCardsService {
 
       return newCard.id;
     } catch (error) {
-      console.error('Error creating learning card:', error);
+      console.error("Error creating learning card:", error);
       throw error;
     }
   }
 
   static async updateCard(
     card_id: string,
-    cardData: Partial<LearningCardFormData>
+    cardData: Partial<LearningCardFormData>,
   ): Promise<void> {
     try {
       if (!supabaseClient) {
-        throw new Error('Supabase client is not available');
+        throw new Error("Supabase client is not available");
       }
       // Transform form data to Supabase format
       const supabaseCardData: any = {};
@@ -152,14 +152,14 @@ export class SupabaseLearningCardsService {
 
       const { error } = await supabaseClient.updateLearningCard(
         card_id,
-        supabaseCardData
+        supabaseCardData,
       );
 
       if (error) {
         throw new Error(error.message);
       }
     } catch (error) {
-      console.error('Error updating learning card:', error);
+      console.error("Error updating learning card:", error);
       throw error;
     }
   }
@@ -167,7 +167,7 @@ export class SupabaseLearningCardsService {
   static async deleteCard(card_id: string): Promise<void> {
     try {
       if (!supabaseClient) {
-        throw new Error('Supabase client is not available');
+        throw new Error("Supabase client is not available");
       }
       const { error } = await supabaseClient.deleteLearningCard(card_id);
 
@@ -175,21 +175,21 @@ export class SupabaseLearningCardsService {
         throw new Error(error.message);
       }
     } catch (error) {
-      console.error('Error deleting learning card:', error);
+      console.error("Error deleting learning card:", error);
       throw error;
     }
   }
 
   // Learning Plan Cards operations
   static async getLearningPlanCards(
-    plan_id: string
+    plan_id: string,
   ): Promise<LearningPlanCard[]> {
     try {
       // This would need to be implemented based on your learning plan structure
       // For now, return empty array
       return [];
     } catch (error) {
-      console.error('Error fetching learning plan cards:', error);
+      console.error("Error fetching learning plan cards:", error);
       throw error;
     }
   }
@@ -199,20 +199,20 @@ export class SupabaseLearningCardsService {
       // This would need to be implemented based on your learning plan structure
       console.log(`Adding card ${card_id} to plan ${plan_id}`);
     } catch (error) {
-      console.error('Error adding card to plan:', error);
+      console.error("Error adding card to plan:", error);
       throw error;
     }
   }
 
   static async removeCardFromPlan(
     plan_id: string,
-    card_id: string
+    card_id: string,
   ): Promise<void> {
     try {
       // This would need to be implemented based on your learning plan structure
       console.log(`Removing card ${card_id} from plan ${plan_id}`);
     } catch (error) {
-      console.error('Error removing card from plan:', error);
+      console.error("Error removing card from plan:", error);
       throw error;
     }
   }
@@ -220,14 +220,14 @@ export class SupabaseLearningCardsService {
   // Card Progress operations
   static async getCardProgress(
     userId: string,
-    card_id: string
+    card_id: string,
   ): Promise<CardProgress | null> {
     try {
       // This would need to be implemented based on your progress tracking structure
       // For now, return null
       return null;
     } catch (error) {
-      console.error('Error fetching card progress:', error);
+      console.error("Error fetching card progress:", error);
       throw error;
     }
   }
@@ -235,16 +235,16 @@ export class SupabaseLearningCardsService {
   static async updateCardProgress(
     userId: string,
     card_id: string,
-    progress: Partial<CardProgress>
+    progress: Partial<CardProgress>,
   ): Promise<void> {
     try {
       // This would need to be implemented based on your progress tracking structure
       console.log(
         `Updating progress for user ${userId}, card ${card_id}:`,
-        progress
+        progress,
       );
     } catch (error) {
-      console.error('Error updating card progress:', error);
+      console.error("Error updating card progress:", error);
       throw error;
     }
   }
@@ -253,13 +253,13 @@ export class SupabaseLearningCardsService {
   static async getCardsByType(type: CardType): Promise<LearningCard[]> {
     try {
       if (!supabaseClient) {
-        throw new Error('Supabase client is not available');
+        throw new Error("Supabase client is not available");
       }
       const { data: cards, error } = await supabaseClient.getLearningCards({
         type,
         isActive: true,
-        orderBy: 'order_index',
-        orderDirection: 'asc',
+        orderBy: "order_index",
+        orderDirection: "asc",
       });
 
       if (error) {
@@ -281,15 +281,15 @@ export class SupabaseLearningCardsService {
           updated_at: new Date(card.updated_at),
           metadata: {
             question_count: 0, // This would need to be calculated from questions
-            estimatedTime: '30 minutes',
-            difficulty: 'beginner',
+            estimatedTime: "30 minutes",
+            difficulty: "beginner",
             topics: [],
             categories: [],
           },
         })) || []
       );
     } catch (error) {
-      console.error('Error fetching cards by type:', error);
+      console.error("Error fetching cards by type:", error);
       throw error;
     }
   }
@@ -297,7 +297,7 @@ export class SupabaseLearningCardsService {
   static async getActiveCardsCount(): Promise<number> {
     try {
       if (!supabaseClient) {
-        throw new Error('Supabase client is not available');
+        throw new Error("Supabase client is not available");
       }
       const { data: cards, error } = await supabaseClient.getLearningCards({
         isActive: true,
@@ -309,7 +309,7 @@ export class SupabaseLearningCardsService {
 
       return cards?.length || 0;
     } catch (error) {
-      console.error('Error fetching active cards count:', error);
+      console.error("Error fetching active cards count:", error);
       throw error;
     }
   }

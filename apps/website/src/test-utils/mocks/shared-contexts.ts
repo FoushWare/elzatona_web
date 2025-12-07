@@ -1,8 +1,8 @@
 // v1.0 test mock
-import React from 'react';
+import React from "react";
 
 export const useUserType = () => ({
-  userType: 'guided',
+  userType: "guided",
   setUserType: () => {},
 });
 export const useMobileMenu = () => ({ setIsMobileMenuOpen: () => {} });
@@ -29,10 +29,16 @@ const defaultAdminAuth = {
   user: null,
 };
 
-export const useAdminAuth = jest.fn(() => defaultAdminAuth) as jest.MockedFunction<() => typeof defaultAdminAuth>;
+export const useAdminAuth = jest.fn(
+  () => defaultAdminAuth,
+) as jest.MockedFunction<() => typeof defaultAdminAuth>;
 
 // Notification context mocks
-export const NotificationProvider = ({ children }: { children: React.ReactNode }) => children;
+export const NotificationProvider = ({
+  children,
+}: {
+  children: React.ReactNode;
+}) => children;
 export const useNotifications = jest.fn(() => ({
   notifications: [],
   unreadCount: 0,

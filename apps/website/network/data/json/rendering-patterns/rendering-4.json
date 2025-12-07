@@ -1,0 +1,288 @@
+[
+  {
+    "id": "rendering-patterns-rendering4-1",
+    "title": "Client-Side Rendering (CSR) Fundamentals",
+    "content": "What happens during the Client-Side Rendering (CSR) process in a React application?",
+    "type": "open-ended",
+    "category": "Rendering Patterns",
+    "topic": "Client-Side Rendering",
+    "difficulty": "beginner",
+    "learningCardId": "system-design",
+    "isActive": true,
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "createdBy": "admin",
+    "updatedBy": "admin",
+    "tags": ["rendering-patterns", "client-side-rendering"],
+    "explanation": "In CSR, the browser loads a minimal HTML shell and JavaScript bundles.",
+    "points": 10,
+    "sampleAnswers": [
+      "In CSR, the browser loads a minimal HTML shell and JavaScript bundles.",
+      "React builds and renders the entire UI in the client’s browser."
+    ]
+  },
+  {
+    "id": "rendering-patterns-rendering4-2",
+    "title": "CSR and SEO Challenges",
+    "content": "Why can Client-Side Rendering negatively affect SEO?",
+    "type": "multiple-choice",
+    "category": "Rendering Patterns",
+    "topic": "Client-Side Rendering",
+    "difficulty": "intermediate",
+    "learningCardId": "system-design",
+    "isActive": true,
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "createdBy": "admin",
+    "updatedBy": "admin",
+    "tags": ["rendering-patterns", "client-side-rendering"],
+    "explanation": "Search engines struggle to index JavaScript-rendered pages",
+    "points": 10,
+    "options": [
+      {
+        "id": "a",
+        "text": "Search engines struggle to index JavaScript-rendered pages",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "CSR prevents the use of meta tags",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "CSR makes sites slower for all users",
+        "isCorrect": false
+      }
+    ]
+  },
+  {
+    "id": "rendering-patterns-rendering4-3",
+    "title": "Improving CSR Performance",
+    "content": "What is a common technique to improve perceived performance in Client-Side Rendering?",
+    "type": "open-ended",
+    "category": "Rendering Patterns",
+    "topic": "Client-Side Rendering",
+    "difficulty": "intermediate",
+    "learningCardId": "system-design",
+    "isActive": true,
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "createdBy": "admin",
+    "updatedBy": "admin",
+    "tags": ["rendering-patterns", "client-side-rendering"],
+    "explanation": "Use code-splitting and lazy loading to reduce the initial bundle size.",
+    "points": 10,
+    "sampleAnswers": [
+      "Use code-splitting and lazy loading to reduce the initial bundle size.",
+      "Show loading skeletons while data is being fetched."
+    ]
+  },
+  {
+    "id": "rendering-patterns-rendering4-4",
+    "title": "CSR vs SSR Trade-offs",
+    "content": "Which of the following best describes the difference between CSR and SSR?",
+    "type": "multiple-choice",
+    "category": "Rendering Patterns",
+    "topic": "Client-Side Rendering",
+    "difficulty": "intermediate",
+    "learningCardId": "system-design",
+    "isActive": true,
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "createdBy": "admin",
+    "updatedBy": "admin",
+    "tags": ["rendering-patterns", "client-side-rendering"],
+    "explanation": "CSR renders pages on the client, SSR renders them on the server before sending HTML",
+    "points": 10,
+    "options": [
+      {
+        "id": "a",
+        "text": "CSR renders pages on the client, SSR renders them on the server before sending HTML",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "SSR requires no JavaScript on the client",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "CSR is faster than SSR in all cases",
+        "isCorrect": false
+      }
+    ]
+  },
+  {
+    "id": "rendering-patterns-rendering4-5",
+    "title": "Islands Architecture Concept",
+    "content": "What is the core principle of the Islands Architecture pattern?",
+    "type": "open-ended",
+    "category": "Rendering Patterns",
+    "topic": "Client-Side Rendering",
+    "difficulty": "intermediate",
+    "learningCardId": "system-design",
+    "isActive": true,
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "createdBy": "admin",
+    "updatedBy": "admin",
+    "tags": ["rendering-patterns", "client-side-rendering"],
+    "explanation": "Islands Architecture renders mostly static HTML on the server and hydrates only small interactive 'islands' on the client.",
+    "points": 10,
+    "sampleAnswers": [
+      "Islands Architecture renders mostly static HTML on the server and hydrates only small interactive 'islands' on the client.",
+      "It helps reduce the amount of JavaScript shipped to the user."
+    ]
+  },
+  {
+    "id": "rendering-patterns-rendering4-6",
+    "title": "Dynamic Islands Example",
+    "content": "Which of these is an example of a dynamic island on a static page?",
+    "type": "multiple-choice",
+    "category": "Rendering Patterns",
+    "topic": "Client-Side Rendering",
+    "difficulty": "beginner",
+    "learningCardId": "system-design",
+    "isActive": true,
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "createdBy": "admin",
+    "updatedBy": "admin",
+    "tags": ["rendering-patterns", "client-side-rendering"],
+    "explanation": "A social media share widget inside a static blog post",
+    "points": 10,
+    "options": [
+      {
+        "id": "a",
+        "text": "A social media share widget inside a static blog post",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "Static article text with no JavaScript",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "Server-rendered navigation bar",
+        "isCorrect": false
+      }
+    ]
+  },
+  {
+    "id": "rendering-patterns-rendering4-7",
+    "title": "Partial Hydration",
+    "content": "How does Partial Hydration improve performance in the Islands Architecture?",
+    "type": "open-ended",
+    "category": "Rendering Patterns",
+    "topic": "Client-Side Rendering",
+    "difficulty": "advanced",
+    "learningCardId": "system-design",
+    "isActive": true,
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "createdBy": "admin",
+    "updatedBy": "admin",
+    "tags": ["rendering-patterns", "client-side-rendering"],
+    "explanation": "It allows each component to hydrate independently rather than rehydrating the entire page.",
+    "points": 10,
+    "sampleAnswers": [
+      "It allows each component to hydrate independently rather than rehydrating the entire page.",
+      "This reduces JavaScript execution time and memory usage."
+    ]
+  },
+  {
+    "id": "rendering-patterns-rendering4-8",
+    "title": "Frameworks Supporting Islands",
+    "content": "Which frameworks natively support Islands Architecture?",
+    "type": "multiple-choice",
+    "category": "Rendering Patterns",
+    "topic": "Client-Side Rendering",
+    "difficulty": "intermediate",
+    "learningCardId": "system-design",
+    "isActive": true,
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "createdBy": "admin",
+    "updatedBy": "admin",
+    "tags": ["rendering-patterns", "client-side-rendering"],
+    "explanation": "Astro and Marko",
+    "points": 10,
+    "options": [
+      {
+        "id": "a",
+        "text": "Astro and Marko",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "Next.js only",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "Create React App",
+        "isCorrect": false
+      }
+    ]
+  },
+  {
+    "id": "rendering-patterns-rendering4-9",
+    "title": "Advantages of Islands Architecture",
+    "content": "What are some benefits of adopting the Islands Architecture?",
+    "type": "open-ended",
+    "category": "Rendering Patterns",
+    "topic": "Client-Side Rendering",
+    "difficulty": "intermediate",
+    "learningCardId": "system-design",
+    "isActive": true,
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "createdBy": "admin",
+    "updatedBy": "admin",
+    "tags": ["rendering-patterns", "client-side-rendering"],
+    "explanation": "Reduces the amount of JavaScript shipped to the client.",
+    "points": 10,
+    "sampleAnswers": [
+      "Reduces the amount of JavaScript shipped to the client.",
+      "Improves SEO and accessibility due to static HTML.",
+      "Allows independent hydration of interactive components."
+    ]
+  },
+  {
+    "id": "rendering-patterns-rendering4-10",
+    "title": "Limitations of Islands Architecture",
+    "content": "What is a limitation of the Islands Architecture approach?",
+    "type": "multiple-choice",
+    "category": "Rendering Patterns",
+    "topic": "Client-Side Rendering",
+    "difficulty": "advanced",
+    "learningCardId": "system-design",
+    "isActive": true,
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "createdBy": "admin",
+    "updatedBy": "admin",
+    "tags": ["rendering-patterns", "client-side-rendering"],
+    "explanation": "It’s difficult to scale for highly interactive apps like social media feeds",
+    "points": 10,
+    "options": [
+      {
+        "id": "a",
+        "text": "It’s difficult to scale for highly interactive apps like social media feeds",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "It cannot be used with React",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "It requires a full backend rewrite",
+        "isCorrect": false
+      }
+    ]
+  }
+]

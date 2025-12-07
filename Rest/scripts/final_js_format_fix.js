@@ -5,13 +5,16 @@ const path = require('path');
  * Final comprehensive fix for JavaScript questions formatting
  */
 
-const questionsFile = path.join(__dirname, '../final-questions-v01/javascript-questions.json');
+const questionsFile = path.join(
+  __dirname,
+  '../final-questions-v01/javascript-questions.json'
+);
 let questions = JSON.parse(fs.readFileSync(questionsFile, 'utf8'));
 
 // Clean all HTML tags and malformed patterns
 function deepClean(text) {
   if (!text || typeof text !== 'string') return text;
-  
+
   // Remove all HTML tags completely
   let cleaned = text
     .replace(/<pre[^>]*>/gi, '')
@@ -39,107 +42,139 @@ function deepClean(text) {
     .replace(/<code>/g, '')
     .replace(/<\/code>/g, '')
     .trim();
-  
+
   return cleaned;
 }
 
 // Format code snippets
 function formatCodeSnippets(text) {
   if (!text || typeof text !== 'string') return text;
-  
+
   const patterns = [
-    { regex: /\b(var|let|const|function|class|extends|super|this|new|typeof|instanceof|async|await|yield|return|if|else|for|while|do|switch|case|default|break|continue|try|catch|finally|throw|import|export|from|as|in|of)\b/gi, replacement: '<code>$1</code>' },
-    { regex: /\b(Promise|Set|Map|Symbol|Object|Array|String|Number|Boolean|Date|RegExp|Error|console|window|global|document|Math)\b/gi, replacement: '<code>$1</code>' },
-    { regex: /\b(console\.log|console\.error|setTimeout|setInterval|clearTimeout|clearInterval|JSON\.parse|JSON\.stringify|Object\.keys|Object\.values|Object\.entries|Object\.assign|Object\.freeze|Object\.seal|Object\.defineProperty|Array\.from|Array\.isArray|Array\.prototype|Array\.map|Array\.filter|Array\.reduce|Array\.forEach|Array\.push|Array\.pop|Array\.slice|Array\.splice)\b/gi, replacement: '<code>$1</code>' },
-    { regex: /\b(===|!==|==|!=|&&|\|\||\.\.\.|=>)\b/g, replacement: '<code>$1</code>' },
-    { regex: /\b(undefined|null|NaN|Infinity|true|false)\b/gi, replacement: '<code>$1</code>' },
-    { regex: /\b(ReferenceError|TypeError|SyntaxError)\b/gi, replacement: '<code>$1</code>' },
+    {
+      regex:
+        /\b(var|let|const|function|class|extends|super|this|new|typeof|instanceof|async|await|yield|return|if|else|for|while|do|switch|case|default|break|continue|try|catch|finally|throw|import|export|from|as|in|of)\b/gi,
+      replacement: '<code>$1</code>',
+    },
+    {
+      regex:
+        /\b(Promise|Set|Map|Symbol|Object|Array|String|Number|Boolean|Date|RegExp|Error|console|window|global|document|Math)\b/gi,
+      replacement: '<code>$1</code>',
+    },
+    {
+      regex:
+        /\b(console\.log|console\.error|setTimeout|setInterval|clearTimeout|clearInterval|JSON\.parse|JSON\.stringify|Object\.keys|Object\.values|Object\.entries|Object\.assign|Object\.freeze|Object\.seal|Object\.defineProperty|Array\.from|Array\.isArray|Array\.prototype|Array\.map|Array\.filter|Array\.reduce|Array\.forEach|Array\.push|Array\.pop|Array\.slice|Array\.splice)\b/gi,
+      replacement: '<code>$1</code>',
+    },
+    {
+      regex: /\b(===|!==|==|!=|&&|\|\||\.\.\.|=>)\b/g,
+      replacement: '<code>$1</code>',
+    },
+    {
+      regex: /\b(undefined|null|NaN|Infinity|true|false)\b/gi,
+      replacement: '<code>$1</code>',
+    },
+    {
+      regex: /\b(ReferenceError|TypeError|SyntaxError)\b/gi,
+      replacement: '<code>$1</code>',
+    },
   ];
-  
+
   let formatted = text;
-  
+
   patterns.forEach(({ regex, replacement }) => {
     formatted = formatted.replace(regex, replacement);
   });
-  
+
   // Fix nested code tags
   let previous = '';
   let iterations = 0;
   while (previous !== formatted && iterations < 5) {
     previous = formatted;
     iterations++;
-    formatted = formatted.replace(/<code>([^<]*)<code>([^<]*)<\/code>([^<]*)<\/code>/g, 
+    formatted = formatted.replace(
+      /<code>([^<]*)<code>([^<]*)<\/code>([^<]*)<\/code>/g,
       '<code>$1$2$3</code>'
     );
   }
-  
+
   return formatted;
 }
 
 // Format content (code blocks)
 function formatContent(text) {
   if (!text) return text;
-  
+
   let cleaned = deepClean(text);
-  
+
   // Remove "javascript" label if present
   cleaned = cleaned.replace(/^javascript\n?/i, '');
-  
+
   // If it looks like a code block, wrap in <pre><code>
-  if (cleaned.includes('\n') && (cleaned.includes('function') || cleaned.includes('const') || cleaned.includes('let') || cleaned.includes('var') || cleaned.includes('console') || cleaned.includes('class'))) {
+  if (
+    cleaned.includes('\n') &&
+    (cleaned.includes('function') ||
+      cleaned.includes('const') ||
+      cleaned.includes('let') ||
+      cleaned.includes('var') ||
+      cleaned.includes('console') ||
+      cleaned.includes('class'))
+  ) {
     cleaned = formatCodeSnippets(cleaned);
     return `<pre><code>${cleaned}</code></pre>`;
   }
-  
+
   return formatCodeSnippets(cleaned);
 }
 
 // Format text (explanations, options)
 function formatText(text) {
   if (!text) return text;
-  
+
   let cleaned = deepClean(text);
   return formatCodeSnippets(cleaned);
 }
 
 function formatQuestion(question) {
   const formatted = { ...question };
-  
+
   if (formatted.content) {
     formatted.content = formatContent(formatted.content);
   }
-  
+
   if (formatted.title) {
     formatted.title = formatText(formatted.title);
   }
-  
+
   if (formatted.explanation) {
     formatted.explanation = formatText(formatted.explanation);
   }
-  
+
   if (formatted.options && Array.isArray(formatted.options)) {
     formatted.options = formatted.options.map(option => ({
       ...option,
       text: formatText(option.text),
-      explanation: option.explanation ? formatText(option.explanation) : option.explanation
+      explanation: option.explanation
+        ? formatText(option.explanation)
+        : option.explanation,
     }));
   }
-  
+
   return formatted;
 }
 
 console.log('🔧 Final comprehensive formatting fix...\n');
 
 let fixedCount = 0;
-questions = questions.map((question) => {
+questions = questions.map(question => {
   const original = JSON.stringify(question);
   const formatted = formatQuestion(question);
   const changed = JSON.stringify(formatted) !== original;
-  
+
   if (changed) {
     fixedCount++;
   }
-  
+
   return formatted;
 });
 
@@ -166,5 +201,3 @@ if (hasNested > 0) {
 } else {
   console.log(`   ✅ No nested code tags`);
 }
-
-

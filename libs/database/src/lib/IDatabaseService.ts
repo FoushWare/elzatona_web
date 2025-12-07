@@ -7,7 +7,7 @@ export interface IDatabaseService {
   // Basic CRUD operations
   get<T>(collection: string, id: string): Promise<T | null>;
   getAll<T>(collection: string, filters?: Record<string, any>): Promise<T[]>;
-  add<T>(collection: string, data: Omit<T, 'id'>): Promise<T>;
+  add<T>(collection: string, data: Omit<T, "id">): Promise<T>;
   update<T>(collection: string, id: string, data: Partial<T>): Promise<T>;
   delete(collection: string, id: string): Promise<void>;
 
@@ -15,14 +15,14 @@ export interface IDatabaseService {
   query<T>(collection: string, filters: Record<string, any>): Promise<T[]>;
   querySingle<T>(
     collection: string,
-    filters: Record<string, any>
+    filters: Record<string, any>,
   ): Promise<T | null>;
 
   // Batch operations
-  batchAdd<T>(collection: string, data: Omit<T, 'id'>[]): Promise<T[]>;
+  batchAdd<T>(collection: string, data: Omit<T, "id">[]): Promise<T[]>;
   batchUpdate<T>(
     collection: string,
-    updates: Array<{ id: string; data: Partial<T> }>
+    updates: Array<{ id: string; data: Partial<T> }>,
   ): Promise<T[]>;
   batchDelete(collection: string, ids: string[]): Promise<void>;
 
@@ -32,7 +32,7 @@ export interface IDatabaseService {
 
   // Transaction support (if available)
   transaction?<T>(
-    callback: (service: IDatabaseService) => Promise<T>
+    callback: (service: IDatabaseService) => Promise<T>,
   ): Promise<T>;
 }
 
@@ -48,7 +48,7 @@ export interface QueryOptions {
   limit?: number;
   offset?: number;
   orderBy?: string;
-  orderDirection?: 'asc' | 'desc';
+  orderDirection?: "asc" | "desc";
   filters?: Record<string, any>;
 }
 

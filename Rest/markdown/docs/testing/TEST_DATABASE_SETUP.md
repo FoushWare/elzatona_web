@@ -18,7 +18,8 @@ This guide explains how to set up your test Supabase database with all tables an
    SUPABASE_SERVICE_ROLE_KEY=your_copied_key_here
    ```
 
-**⚠️ Important**: 
+**⚠️ Important**:
+
 - The service_role key is **different** from the anon key
 - The service_role key has **full database access** - keep it secret!
 - Never commit it to git or share it publicly
@@ -36,6 +37,7 @@ This guide explains how to set up your test Supabase database with all tables an
 7. Click **Run** (or press `Cmd+Enter` / `Ctrl+Enter`)
 
 This will create:
+
 - All database tables (learning_cards, categories, topics, questions, etc.)
 - All indexes for performance
 - All triggers for updated_at timestamps
@@ -52,12 +54,14 @@ node Rest/scripts/create-test-admin.js
 ```
 
 This script will:
+
 - Read credentials from `.env.test.local`
 - Create a test admin user in the `admin_users` table
 - Hash the password securely
 - Set up admin permissions
 
 **Note**: Make sure you have:
+
 - `NEXT_PUBLIC_SUPABASE_URL` set to your test database URL
 - `SUPABASE_SERVICE_ROLE_KEY` set to your test database service role key
 - `ADMIN_EMAIL` and `ADMIN_PASSWORD` set in `.env.test.local`
@@ -79,6 +83,7 @@ This script will:
 ### Sample Data
 
 The schema includes sample data:
+
 - 4 learning cards (Core Technologies, Framework Questions, Problem Solving, System Design)
 - 4 categories (React, JavaScript, CSS, HTML)
 - 3 topics (React Basics, React Hooks, JavaScript Fundamentals)
@@ -86,6 +91,7 @@ The schema includes sample data:
 ### Admin User
 
 A test admin user is created with:
+
 - Email: From `ADMIN_EMAIL` in `.env.test.local`
 - Password: From `ADMIN_PASSWORD` in `.env.test.local`
 - Role: `super_admin`
@@ -98,14 +104,14 @@ After setup, verify everything works:
 ```bash
 # Check that tables exist
 # (You can do this in Supabase SQL Editor)
-SELECT table_name 
-FROM information_schema.tables 
-WHERE table_schema = 'public' 
+SELECT table_name
+FROM information_schema.tables
+WHERE table_schema = 'public'
 ORDER BY table_name;
 
 # Check admin user exists
-SELECT email, role, is_active 
-FROM admin_users 
+SELECT email, role, is_active
+FROM admin_users
 WHERE email = 'your-test-admin@example.com';
 ```
 
@@ -118,6 +124,7 @@ WHERE email = 'your-test-admin@example.com';
 ### "Missing Supabase environment variables"
 
 **Solution**: Make sure `.env.test.local` exists and contains:
+
 - `NEXT_PUBLIC_SUPABASE_URL`
 - `SUPABASE_SERVICE_ROLE_KEY`
 - `ADMIN_EMAIL`
@@ -126,6 +133,7 @@ WHERE email = 'your-test-admin@example.com';
 ### "Error creating admin user"
 
 **Possible causes**:
+
 1. Table doesn't exist - Run schema SQL first
 2. Service role key is incorrect - Check `.env.test.local`
 3. Database connection issue - Verify Supabase URL and key
@@ -133,6 +141,7 @@ WHERE email = 'your-test-admin@example.com';
 ### Schema SQL fails with errors
 
 **Common issues**:
+
 - "relation already exists" - This is OK, tables already exist
 - "extension already exists" - This is OK, extensions are already installed
 - Other errors - Check the error message and fix the SQL
@@ -142,6 +151,7 @@ WHERE email = 'your-test-admin@example.com';
 ## Next Steps
 
 After setup:
+
 1. ✅ Verify admin login works: http://localhost:3000/admin/login
 2. ✅ Run unit tests: `npm run test:unit`
 3. ✅ Run integration tests: `npm run test:integration`
@@ -152,10 +162,11 @@ After setup:
 If the automated script doesn't work, you can manually:
 
 1. **Create admin user via SQL**:
+
    ```sql
    -- First, hash your password (use bcrypt with 10 rounds)
    -- You can use: node -e "const bcrypt=require('bcryptjs');bcrypt.hash('your-password',10).then(h=>console.log(h))"
-   
+
    INSERT INTO admin_users (email, password_hash, name, role, is_active, permissions)
    VALUES (
      'test-admin@example.com',
@@ -181,6 +192,5 @@ If the automated script doesn't work, you can manually:
 - ✅ `.env.test.local` is in `.gitignore` - never commit it
 - ✅ Test database is separate from production
 - ✅ Test admin credentials are only for testing
-- ⚠️  Never use test credentials in production
-- ⚠️  Rotate test credentials periodically
-
+- ⚠️ Never use test credentials in production
+- ⚠️ Rotate test credentials periodically

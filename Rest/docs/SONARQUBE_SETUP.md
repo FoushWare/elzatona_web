@@ -61,26 +61,31 @@ SONAR_ORG=your-org-key
 ### Local Analysis (Recommended for Development)
 
 #### Standard Analysis (1536MB memory)
+
 ```bash
 npm run sonar
 ```
 
 #### Light Mode (1024MB memory)
+
 ```bash
 npm run sonar:light
 ```
 
 #### Quick Analysis (Skip tests and build)
+
 ```bash
 npm run sonar:quick
 ```
 
 #### Skip Tests Only
+
 ```bash
 npm run sonar:skip-tests
 ```
 
 #### Skip Build Only
+
 ```bash
 npm run sonar:skip-build
 ```
@@ -88,6 +93,7 @@ npm run sonar:skip-build
 ### GitHub Actions (Automatic)
 
 The analysis runs automatically on:
+
 - Push to `main`, `develop`, or `release/**` branches
 - Pull requests to `main`, `develop`, or `release/**` branches
 - Manual trigger via GitHub Actions UI
@@ -97,6 +103,7 @@ The analysis runs automatically on:
 ### `sonar-project.properties`
 
 Main configuration file that defines:
+
 - Project identification
 - Source code locations
 - Exclusions (node_modules, tests, etc.)
@@ -106,6 +113,7 @@ Main configuration file that defines:
 ### `.github/workflows/sonarcloud.yml`
 
 GitHub Actions workflow that:
+
 - Runs tests with coverage
 - Builds the project
 - Executes SonarCloud analysis
@@ -130,6 +138,7 @@ SONAR_MEMORY_LIMIT=2048 npm run sonar
 ### Quality Gate
 
 The **Quality Gate** determines if your code meets quality standards:
+
 - ✅ **Pass**: Code meets all quality standards
 - ❌ **Fail**: Code has issues that need to be addressed
 
@@ -153,6 +162,7 @@ The **Quality Gate** determines if your code meets quality standards:
 ## Best Practices
 
 1. **Run Local Analysis Before Pushing**
+
    ```bash
    npm run sonar:quick  # Fast check before commit
    ```
@@ -176,24 +186,29 @@ The **Quality Gate** determines if your code meets quality standards:
 ## Troubleshooting
 
 ### "SONAR_TOKEN not set"
+
 - Add `SONAR_TOKEN` to `.env.local` or export it
 - For GitHub Actions, add it as a secret
 
 ### "SONAR_ORG not set"
+
 - Add `SONAR_ORG` to `.env.local` or export it
 - For GitHub Actions, add it as a secret
 
 ### "Out of memory" errors
+
 - Use light mode: `npm run sonar:light`
 - Use quick mode: `npm run sonar:quick`
 - Increase memory: `SONAR_MEMORY_LIMIT=2048 npm run sonar`
 
 ### "Project not found"
+
 - Ensure project exists in SonarCloud
 - Check project key matches `sonar-project.properties`
 - Verify organization key is correct
 
 ### Analysis takes too long
+
 - Use `--skip-tests` to skip test execution
 - Use `--skip-build` to skip build step
 - Use quick mode: `npm run sonar:quick`
@@ -216,7 +231,7 @@ The pre-push hook can optionally run SonarQube analysis. To enable:
 ## Support
 
 For issues or questions:
+
 1. Check SonarCloud dashboard for detailed error messages
 2. Review [SonarCloud documentation](https://docs.sonarcloud.io/)
 3. Check GitHub Actions logs for workflow issues
-

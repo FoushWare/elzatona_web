@@ -1,12 +1,12 @@
 // Frontend Supabase client configuration
-import { createClient } from '@supabase/supabase-js';
+import { createClient } from "@supabase/supabase-js";
 
-const supabaseUrl = process.env['NEXT_PUBLIC_SUPABASE_URL'];
-const supabaseAnonKey = process.env['NEXT_PUBLIC_SUPABASE_ANON_KEY'];
+const supabaseUrl = process.env["NEXT_PUBLIC_SUPABASE_URL"];
+const supabaseAnonKey = process.env["NEXT_PUBLIC_SUPABASE_ANON_KEY"];
 
 if (!supabaseUrl || !supabaseAnonKey) {
   throw new Error(
-    'Missing required Supabase environment variables: NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY must be set'
+    "Missing required Supabase environment variables: NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY must be set",
   );
 }
 
@@ -21,19 +21,19 @@ export const supabaseClient = {
     isActive?: boolean;
     limit?: number;
     orderBy?: string;
-    orderDirection?: 'asc' | 'desc';
+    orderDirection?: "asc" | "desc";
   }) {
-    let query = supabase.from('learning_cards').select('*');
+    let query = supabase.from("learning_cards").select("*");
 
     if (filters?.type) {
-      query = query.eq('type', filters.type);
+      query = query.eq("type", filters.type);
     }
     if (filters?.isActive !== undefined) {
-      query = query.eq('is_active', filters.isActive);
+      query = query.eq("is_active", filters.isActive);
     }
     if (filters?.orderBy) {
       query = query.order(filters.orderBy, {
-        ascending: filters.orderDirection === 'asc',
+        ascending: filters.orderDirection === "asc",
       });
     }
     if (filters?.limit) {
@@ -59,7 +59,7 @@ export const supabaseClient = {
       is_active: cardData.is_active !== false,
     };
 
-    return await supabase.from('learning_cards').insert(data).select().single();
+    return await supabase.from("learning_cards").insert(data).select().single();
   },
 
   async updateLearningCard(
@@ -72,7 +72,7 @@ export const supabaseClient = {
       icon: string;
       order_index: number;
       is_active: boolean;
-    }>
+    }>,
   ) {
     const data = {
       ...updates,
@@ -80,31 +80,31 @@ export const supabaseClient = {
     };
 
     return await supabase
-      .from('learning_cards')
+      .from("learning_cards")
       .update(data)
-      .eq('id', id)
+      .eq("id", id)
       .select()
       .single();
   },
 
   async deleteLearningCard(id: string) {
-    return await supabase.from('learning_cards').delete().eq('id', id);
+    return await supabase.from("learning_cards").delete().eq("id", id);
   },
 
   // Categories
   async getCategories(filters?: {
     isActive?: boolean;
     orderBy?: string;
-    orderDirection?: 'asc' | 'desc';
+    orderDirection?: "asc" | "desc";
   }) {
-    let query = supabase.from('categories').select('*');
+    let query = supabase.from("categories").select("*");
 
     if (filters?.isActive !== undefined) {
-      query = query.eq('is_active', filters.isActive);
+      query = query.eq("is_active", filters.isActive);
     }
     if (filters?.orderBy) {
       query = query.order(filters.orderBy, {
-        ascending: filters.orderDirection === 'asc',
+        ascending: filters.orderDirection === "asc",
       });
     }
 
@@ -126,7 +126,7 @@ export const supabaseClient = {
       is_active: categoryData.is_active !== false,
     };
 
-    return await supabase.from('categories').insert(data).select().single();
+    return await supabase.from("categories").insert(data).select().single();
   },
 
   // Topics
@@ -134,19 +134,19 @@ export const supabaseClient = {
     categoryId?: string;
     isActive?: boolean;
     orderBy?: string;
-    orderDirection?: 'asc' | 'desc';
+    orderDirection?: "asc" | "desc";
   }) {
-    let query = supabase.from('topics').select('*');
+    let query = supabase.from("topics").select("*");
 
     if (filters?.categoryId) {
-      query = query.eq('category_id', filters.categoryId);
+      query = query.eq("category_id", filters.categoryId);
     }
     if (filters?.isActive !== undefined) {
-      query = query.eq('is_active', filters.isActive);
+      query = query.eq("is_active", filters.isActive);
     }
     if (filters?.orderBy) {
       query = query.order(filters.orderBy, {
-        ascending: filters.orderDirection === 'asc',
+        ascending: filters.orderDirection === "asc",
       });
     }
 
@@ -167,7 +167,7 @@ export const supabaseClient = {
       is_active: topicData.is_active !== false,
     };
 
-    return await supabase.from('topics').insert(data).select().single();
+    return await supabase.from("topics").insert(data).select().single();
   },
 
   // Questions
@@ -178,25 +178,25 @@ export const supabaseClient = {
     isActive?: boolean;
     limit?: number;
     orderBy?: string;
-    orderDirection?: 'asc' | 'desc';
+    orderDirection?: "asc" | "desc";
   }) {
-    let query = supabase.from('questions').select('*');
+    let query = supabase.from("questions").select("*");
 
     if (filters?.topicId) {
-      query = query.eq('topic_id', filters.topicId);
+      query = query.eq("topic_id", filters.topicId);
     }
     if (filters?.difficulty) {
-      query = query.eq('difficulty', filters.difficulty);
+      query = query.eq("difficulty", filters.difficulty);
     }
     if (filters?.questionType) {
-      query = query.eq('question_type', filters.questionType);
+      query = query.eq("question_type", filters.questionType);
     }
     if (filters?.isActive !== undefined) {
-      query = query.eq('is_active', filters.isActive);
+      query = query.eq("is_active", filters.isActive);
     }
     if (filters?.orderBy) {
       query = query.order(filters.orderBy, {
-        ascending: filters.orderDirection === 'asc',
+        ascending: filters.orderDirection === "asc",
       });
     }
     if (filters?.limit) {
@@ -224,7 +224,7 @@ export const supabaseClient = {
       is_active: questionData.is_active !== false,
     };
 
-    return await supabase.from('questions').insert(data).select().single();
+    return await supabase.from("questions").insert(data).select().single();
   },
 
   // Learning Plans
@@ -232,19 +232,19 @@ export const supabaseClient = {
     difficulty?: string;
     isActive?: boolean;
     orderBy?: string;
-    orderDirection?: 'asc' | 'desc';
+    orderDirection?: "asc" | "desc";
   }) {
-    let query = supabase.from('learning_plans').select('*');
+    let query = supabase.from("learning_plans").select("*");
 
     if (filters?.difficulty) {
-      query = query.eq('difficulty', filters.difficulty);
+      query = query.eq("difficulty", filters.difficulty);
     }
     if (filters?.isActive !== undefined) {
-      query = query.eq('is_active', filters.isActive);
+      query = query.eq("is_active", filters.isActive);
     }
     if (filters?.orderBy) {
       query = query.order(filters.orderBy, {
-        ascending: filters.orderDirection === 'asc',
+        ascending: filters.orderDirection === "asc",
       });
     }
 
@@ -265,6 +265,6 @@ export const supabaseClient = {
       is_active: planData.is_active !== false,
     };
 
-    return await supabase.from('learning_plans').insert(data).select().single();
+    return await supabase.from("learning_plans").insert(data).select().single();
   },
 };

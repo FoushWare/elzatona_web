@@ -7,7 +7,8 @@ const { execSync } = require('child_process');
  */
 
 const batchesDir = path.join(__dirname, 'design-patterns-batches');
-const batches = fs.readdirSync(batchesDir)
+const batches = fs
+  .readdirSync(batchesDir)
   .filter(f => f.endsWith('.js'))
   .sort(); // Sort to run in order
 
@@ -24,22 +25,23 @@ batches.forEach((batchFile, index) => {
 });
 
 // Verify final count
-const questionsFile = path.join(__dirname, '../final-questions-v01/design-patterns-questions.json');
+const questionsFile = path.join(
+  __dirname,
+  '../final-questions-v01/design-patterns-questions.json'
+);
 if (fs.existsSync(questionsFile)) {
   const questions = JSON.parse(fs.readFileSync(questionsFile, 'utf8'));
   console.log(`\n✅ All batches completed!`);
   console.log(`📝 Total questions: ${questions.length}`);
-  
+
   // Show breakdown by topic
   const topics = {};
   questions.forEach(q => {
     topics[q.topic] = (topics[q.topic] || 0) + 1;
   });
-  
+
   console.log('\n📊 Questions by topic:');
   Object.entries(topics).forEach(([topic, count]) => {
     console.log(`  ${topic}: ${count} questions`);
   });
 }
-
-

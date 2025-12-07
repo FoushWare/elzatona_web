@@ -13,12 +13,7 @@
     "updatedAt": "2025-01-15T03:53:54.816Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "html",
-      "html5-semantics",
-      "intermediate",
-      "accessibility"
-    ],
+    "tags": ["html", "html5-semantics", "intermediate", "accessibility"],
     "explanation": "<article> represents independent, self-contained content that could be distributed (like blog posts, news articles). <section> represents a thematic grouping of content, typically with a heading. Articles can contain sections, and sections can contain articles. Use <article> for standalone content, <section> for organizing related content.",
     "points": 15,
     "options": [
@@ -68,12 +63,7 @@
     "updatedAt": "2025-01-15T03:53:54.816Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "html",
-      "performance",
-      "intermediate",
-      "javascript"
-    ],
+    "tags": ["html", "performance", "intermediate", "javascript"],
     "explanation": "Without attributes: script blocks HTML parsing. 'async': downloads in parallel, executes immediately when ready (order not guaranteed). 'defer': downloads in parallel, executes after HTML parsing completes, in document order. Use 'async' for independent scripts (analytics). Use 'defer' for scripts that depend on DOM or need execution order.",
     "points": 15,
     "options": [
@@ -123,13 +113,7 @@
     "updatedAt": "2025-01-15T03:53:54.816Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "html",
-      "accessibility",
-      "aria",
-      "difficult",
-      "semantic-html"
-    ],
+    "tags": ["html", "accessibility", "aria", "difficult", "semantic-html"],
     "explanation": "Always prefer native semantic HTML elements (<button>, <nav>, <main>) over ARIA roles because native elements provide built-in keyboard support, focus management, and browser behavior. Use ARIA roles only when native elements cannot achieve the desired interaction pattern (e.g., complex widgets, custom components). ARIA should enhance, not replace, semantic HTML.",
     "points": 20,
     "options": [
@@ -235,13 +219,7 @@
     "updatedAt": "2025-01-15T03:53:54.816Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "html",
-      "security",
-      "csp",
-      "xss",
-      "difficult"
-    ],
+    "tags": ["html", "security", "csp", "xss", "difficult"],
     "explanation": "CSP restricts which resources (scripts, styles, images) can be loaded and executed, preventing XSS by blocking inline scripts and unauthorized sources. Key directives: default-src (fallback), script-src (JavaScript sources), style-src (CSS sources), img-src (images), connect-src (AJAX/fetch). 'unsafe-inline' and 'unsafe-eval' should be avoided when possible.",
     "points": 20,
     "options": [
@@ -291,13 +269,7 @@
     "updatedAt": "2025-01-15T03:53:54.816Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "html",
-      "security",
-      "iframe",
-      "sandbox",
-      "difficult"
-    ],
+    "tags": ["html", "security", "iframe", "sandbox", "difficult"],
     "explanation": "<iframe sandbox> applies strict security restrictions: blocks scripts, forms, popups, plugins, and top-level navigation by default. You can selectively allow features with tokens like 'allow-scripts', 'allow-forms', 'allow-same-origin'. Regular <iframe> has no such restrictions. Use sandbox for untrusted content (user-generated, third-party widgets).",
     "points": 20,
     "options": [
@@ -347,13 +319,7 @@
     "updatedAt": "2025-01-15T03:53:54.816Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "html",
-      "html5",
-      "template",
-      "performance",
-      "intermediate"
-    ],
+    "tags": ["html", "html5", "template", "performance", "intermediate"],
     "explanation": "<template> content is inert (not rendered, scripts don't run, images don't load) until cloned via JavaScript. Hidden <div> elements are still parsed, can trigger resource loading, and are part of the DOM. Use <template> for client-side templating, reusable component structures, or when you need truly inert content that won't affect page load.",
     "points": 15,
     "options": [
@@ -459,12 +425,7 @@
     "updatedAt": "2025-01-15T03:53:54.816Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "html",
-      "basics",
-      "box-model",
-      "intermediate"
-    ],
+    "tags": ["html", "basics", "box-model", "intermediate"],
     "explanation": "Block elements take full width, start on new line, respect width/height. Inline elements flow within text, ignore width/height, only respect horizontal margins. Inline-block combines both: flows inline but respects width/height like block elements.",
     "points": 15,
     "options": [
@@ -514,12 +475,7 @@
     "updatedAt": "2025-01-15T03:53:54.816Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "html",
-      "basics",
-      "character-encoding",
-      "intermediate"
-    ],
+    "tags": ["html", "basics", "character-encoding", "intermediate"],
     "explanation": "Named entities (&amp;, &lt;) are readable and common. Numeric references (&#65; decimal, &#x41; hex) work for any Unicode character. Use entities for special characters (<, >, &, quotes). Use numeric for rare Unicode or when entity names aren't available.",
     "points": 15,
     "options": [
@@ -625,12 +581,7 @@
     "updatedAt": "2025-01-15T03:53:54.816Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "html",
-      "basics",
-      "semantic-html",
-      "intermediate"
-    ],
+    "tags": ["html", "basics", "semantic-html", "intermediate"],
     "explanation": "<div> is block-level generic container. <span> is inline generic container. Both are non-semantic. Prefer semantic elements (<header>, <nav>, <main>, <article>, <section>, <footer>) when they match content meaning. Use <div>/<span> only when no semantic element fits.",
     "points": 15,
     "options": [
@@ -680,12 +631,7 @@
     "updatedAt": "2025-01-15T03:53:54.816Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "html",
-      "basics",
-      "attributes",
-      "intermediate"
-    ],
+    "tags": ["html", "basics", "attributes", "intermediate"],
     "explanation": "'id' is unique identifier for single element (CSS, JS targeting, anchors). 'name' is for form controls, groups radio buttons, used in form submission. 'id' must be unique per page. 'name' can be shared (radio groups). Use 'id' for targeting, 'name' for form data.",
     "points": 15,
     "options": [
@@ -735,13 +681,7 @@
     "updatedAt": "2025-01-15T03:53:54.816Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "html",
-      "basics",
-      "urls",
-      "security",
-      "intermediate"
-    ],
+    "tags": ["html", "basics", "urls", "security", "intermediate"],
     "explanation": "Absolute URLs include protocol and domain (https://example.com/page). Relative URLs are resolved from current page location (/page, ../page). Absolute URLs prevent protocol-relative issues but are verbose. Relative URLs are shorter but can break with base tag changes. Use absolute for external, relative for internal.",
     "points": 15,
     "options": [
@@ -791,12 +731,7 @@
     "updatedAt": "2025-01-15T03:53:54.816Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "html",
-      "basics",
-      "base-tag",
-      "difficult"
-    ],
+    "tags": ["html", "basics", "base-tag", "difficult"],
     "explanation": "<base> sets base URL for all relative URLs on page. Affects href, src, form actions. Pitfalls: breaks anchors (#section), affects all relative URLs (can't override), can cause security issues if user-controlled. Use sparingly, prefer absolute URLs for external resources.",
     "points": 20,
     "options": [
@@ -902,13 +837,7 @@
     "updatedAt": "2025-01-15T03:53:54.816Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "html",
-      "basics",
-      "lists",
-      "semantic-html",
-      "intermediate"
-    ],
+    "tags": ["html", "basics", "lists", "semantic-html", "intermediate"],
     "explanation": "<dl> is definition list container. <dt> is term/name. <dd> is definition/description. Use for key-value pairs, glossaries, metadata, FAQ structures. More semantic than <ul> for term-definition relationships. Screen readers announce relationships between terms and definitions.",
     "points": 15,
     "options": [
@@ -958,12 +887,7 @@
     "updatedAt": "2025-01-15T03:53:54.816Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "html",
-      "basics",
-      "code-display",
-      "intermediate"
-    ],
+    "tags": ["html", "basics", "code-display", "intermediate"],
     "explanation": "<code> is inline element for code snippets (variable names, functions). <pre> is block element preserving whitespace and line breaks. Use <pre><code> together for code blocks. <code> alone for inline code. <pre> alone for formatted text (ASCII art, poetry).",
     "points": 15,
     "options": [
@@ -1013,13 +937,7 @@
     "updatedAt": "2025-01-15T03:53:54.816Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "html",
-      "forms",
-      "http-methods",
-      "intermediate",
-      "security"
-    ],
+    "tags": ["html", "forms", "http-methods", "intermediate", "security"],
     "explanation": "GET sends data in URL (visible, bookmarkable, cached). POST sends data in body (hidden, not cached, no length limit). Use GET for idempotent operations (search, filters). Use POST for state changes (create, update, delete). GET is less secure for sensitive data.",
     "points": 15,
     "options": [
@@ -1069,13 +987,7 @@
     "updatedAt": "2025-01-15T03:53:54.816Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "html",
-      "forms",
-      "validation",
-      "html5",
-      "intermediate"
-    ],
+    "tags": ["html", "forms", "validation", "html5", "intermediate"],
     "explanation": "'required' makes field mandatory. 'pattern' validates against regex. 'min'/'max' set numeric/date ranges. 'type' (email, url, number) provides built-in validation. Browser shows native error messages. Still need server-side validation (client-side can be bypassed).",
     "points": 15,
     "options": [
@@ -1125,12 +1037,7 @@
     "updatedAt": "2025-01-15T03:53:54.816Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "html",
-      "forms",
-      "validation",
-      "intermediate"
-    ],
+    "tags": ["html", "forms", "validation", "intermediate"],
     "explanation": "'novalidate' disables browser's native HTML5 validation. Use when implementing custom validation logic, progressive enhancement, or when native messages don't match design. Still validate on server. Useful for complex validation rules or custom error UI.",
     "points": 15,
     "options": [
@@ -1180,13 +1087,7 @@
     "updatedAt": "2025-01-15T03:53:54.816Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "html",
-      "forms",
-      "input-types",
-      "accessibility",
-      "intermediate"
-    ],
+    "tags": ["html", "forms", "input-types", "accessibility", "intermediate"],
     "explanation": "type='email' provides native validation, mobile keyboard (@ symbol), and semantic meaning. pattern on text requires manual regex. Email type is more accessible (screen readers announce as email field). Use email type for email addresses, pattern for custom formats.",
     "points": 15,
     "options": [
@@ -1236,13 +1137,7 @@
     "updatedAt": "2025-01-15T03:53:54.816Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "html",
-      "forms",
-      "accessibility",
-      "fieldset",
-      "intermediate"
-    ],
+    "tags": ["html", "forms", "accessibility", "fieldset", "intermediate"],
     "explanation": "<fieldset> groups related form controls. <legend> provides label for the group. Screen readers announce legend before each field in group. Improves form comprehension, especially for complex forms. Required for radio button groups. Helps keyboard navigation.",
     "points": 15,
     "options": [
@@ -1292,13 +1187,7 @@
     "updatedAt": "2025-01-15T03:53:54.816Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "html",
-      "forms",
-      "autocomplete",
-      "ux",
-      "intermediate"
-    ],
+    "tags": ["html", "forms", "autocomplete", "ux", "intermediate"],
     "explanation": "'autocomplete' hints browser what data to suggest (name, email, address, etc.). Values like 'name', 'email', 'tel', 'address-line1', 'cc-number', 'current-password'. Improves UX, reduces errors, speeds up form completion. Use 'off' to disable, 'new-password' for password managers.",
     "points": 15,
     "options": [
@@ -1348,13 +1237,7 @@
     "updatedAt": "2025-01-15T03:53:54.816Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "html",
-      "forms",
-      "buttons",
-      "accessibility",
-      "intermediate"
-    ],
+    "tags": ["html", "forms", "buttons", "accessibility", "intermediate"],
     "explanation": "<input type='submit'> only allows text content. <button type='submit'> allows HTML content (icons, formatting). Button is more flexible for styling and content. Both submit forms identically. Button is generally preferred for modern development due to flexibility.",
     "points": 15,
     "options": [
@@ -1404,13 +1287,7 @@
     "updatedAt": "2025-01-15T03:53:54.816Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "html",
-      "forms",
-      "security",
-      "csrf",
-      "difficult"
-    ],
+    "tags": ["html", "forms", "security", "csrf", "difficult"],
     "explanation": "CSRF tricks users into submitting forms to attacker's site. Protection: hidden CSRF tokens (server validates), SameSite cookie attribute (Strict/Lax prevents cross-site sends), referrer checking. HTML alone can't fully prevent CSRF; need server-side validation. SameSite='Strict' is strongest protection.",
     "points": 20,
     "options": [
@@ -1460,12 +1337,7 @@
     "updatedAt": "2025-01-15T03:53:54.816Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "html",
-      "forms",
-      "html5",
-      "intermediate"
-    ],
+    "tags": ["html", "forms", "html5", "intermediate"],
     "explanation": "'form' attribute links input to form by form's id, even if input is outside <form> tag. Enables flexible layouts (inputs in different DOM locations), multiple forms sharing inputs, or inputs in modals/dialogs. Input participates in form validation and submission.",
     "points": 15,
     "options": [
@@ -1515,12 +1387,7 @@
     "updatedAt": "2025-01-15T03:53:54.816Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "html",
-      "forms",
-      "input-types",
-      "intermediate"
-    ],
+    "tags": ["html", "forms", "input-types", "intermediate"],
     "explanation": "Radio buttons: single selection per group (same name), mutually exclusive. Checkboxes: multiple selections allowed, independent. Radio groups share 'name' attribute. Checkboxes can share name (array values) or be independent. Use radio for mutually exclusive options, checkbox for multiple selections.",
     "points": 15,
     "options": [
@@ -1626,13 +1493,7 @@
     "updatedAt": "2025-01-15T03:53:54.816Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "html",
-      "media",
-      "performance",
-      "lazy-loading",
-      "intermediate"
-    ],
+    "tags": ["html", "media", "performance", "lazy-loading", "intermediate"],
     "explanation": "'loading' attribute controls when image loads: 'lazy' defers loading until near viewport, 'eager' loads immediately. Lazy loading reduces initial page load, saves bandwidth, improves LCP. Use 'lazy' for below-fold images, 'eager' for above-fold critical images. Browser support is good in modern browsers.",
     "points": 15,
     "options": [
@@ -1682,13 +1543,7 @@
     "updatedAt": "2025-01-15T03:53:54.816Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "html",
-      "media",
-      "responsive-images",
-      "difficult",
-      "performance"
-    ],
+    "tags": ["html", "media", "responsive-images", "difficult", "performance"],
     "explanation": "'srcset' provides multiple image sources with descriptors (width: 800w, pixel density: 2x). 'sizes' tells browser viewport width for image (e.g., '(max-width: 600px) 100vw, 50vw'). Browser selects best image based on device pixel ratio and viewport. Essential for responsive design performance.",
     "points": 20,
     "options": [
@@ -1738,13 +1593,7 @@
     "updatedAt": "2025-01-15T03:53:54.816Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "html",
-      "media",
-      "video",
-      "performance",
-      "intermediate"
-    ],
+    "tags": ["html", "media", "video", "performance", "intermediate"],
     "explanation": "'autoplay' starts video automatically (requires 'muted' in most browsers). 'preload' hints how much to download: 'none' (don't preload), 'metadata' (dimensions, duration), 'auto' (entire video). Autoplay can annoy users and waste bandwidth. Preload='metadata' is good balance. Use autoplay sparingly with muted videos.",
     "points": 15,
     "options": [
@@ -1794,12 +1643,7 @@
     "updatedAt": "2025-01-15T03:53:54.816Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "html",
-      "media",
-      "audio",
-      "intermediate"
-    ],
+    "tags": ["html", "media", "audio", "intermediate"],
     "explanation": "'controls' shows play/pause/volume UI. 'autoplay' starts automatically (often blocked by browsers). 'loop' repeats audio. 'preload' controls download behavior. Always include 'controls' for accessibility. Avoid autoplay (annoying, blocked). Provide text alternative for audio content.",
     "points": 15,
     "options": [
@@ -1849,14 +1693,7 @@
     "updatedAt": "2025-01-15T03:53:54.816Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "html",
-      "media",
-      "video",
-      "audio",
-      "codecs",
-      "intermediate"
-    ],
+    "tags": ["html", "media", "video", "audio", "codecs", "intermediate"],
     "explanation": "<source> provides alternative media files within <video>/<audio>. Browser tries sources in order until one is supported. Enables format fallbacks (WebM, MP4, OGG) and codec selection. Use 'type' attribute to specify MIME type and codecs. Essential for cross-browser compatibility.",
     "points": 15,
     "options": [
@@ -1906,13 +1743,7 @@
     "updatedAt": "2025-01-15T03:53:54.816Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "html",
-      "media",
-      "video",
-      "ux",
-      "intermediate"
-    ],
+    "tags": ["html", "media", "video", "ux", "intermediate"],
     "explanation": "'poster' attribute specifies image URL shown before video plays. Provides visual preview, improves perceived performance, gives context. Should be representative frame from video. Falls back to first frame if not provided. Important for video galleries and previews.",
     "points": 15,
     "options": [
@@ -1962,13 +1793,7 @@
     "updatedAt": "2025-01-15T03:53:54.816Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "html",
-      "media",
-      "iframe",
-      "video",
-      "intermediate"
-    ],
+    "tags": ["html", "media", "iframe", "video", "intermediate"],
     "explanation": "<iframe> embeds external player (YouTube, Vimeo) - provides features, handles hosting, but less control. <video>/<audio> are native HTML5 players - full control, better performance, but you host files. Use iframe for third-party services. Use native elements for self-hosted media with custom controls.",
     "points": 15,
     "options": [
@@ -2018,13 +1843,7 @@
     "updatedAt": "2025-01-15T03:53:54.816Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "html",
-      "media",
-      "video",
-      "mobile",
-      "intermediate"
-    ],
+    "tags": ["html", "media", "video", "mobile", "intermediate"],
     "explanation": "'playsinline' prevents iOS Safari from entering fullscreen when video plays. Without it, video opens in fullscreen player. Essential for inline video playback in web pages on iOS. Also affects Android browsers. Use with autoplay for seamless mobile video experience.",
     "points": 15,
     "options": [
@@ -2074,13 +1893,7 @@
     "updatedAt": "2025-01-15T03:53:54.816Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "html",
-      "media",
-      "accessibility",
-      "images",
-      "intermediate"
-    ],
+    "tags": ["html", "media", "accessibility", "images", "intermediate"],
     "explanation": "'alt' provides text alternative for screen readers and when image fails to load. Required for accessibility. 'title' provides tooltip on hover (not read by screen readers). Use 'alt' for meaningful images (describe content), empty alt='' for decorative images. Use 'title' sparingly for additional context.",
     "points": 15,
     "options": [
@@ -2130,12 +1943,7 @@
     "updatedAt": "2025-01-15T03:53:54.816Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "html",
-      "seo",
-      "meta-tags",
-      "intermediate"
-    ],
+    "tags": ["html", "seo", "meta-tags", "intermediate"],
     "explanation": "'description' provides snippet for search results (still important for CTR). 'keywords' is largely ignored by modern search engines (spam-prone). Description should be 150-160 characters, unique per page. Keywords meta tag is deprecated. Focus on description, title, and semantic HTML.",
     "points": 15,
     "options": [
@@ -2185,13 +1993,7 @@
     "updatedAt": "2025-01-15T03:53:54.816Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "html",
-      "seo",
-      "open-graph",
-      "social-media",
-      "intermediate"
-    ],
+    "tags": ["html", "seo", "open-graph", "social-media", "intermediate"],
     "explanation": "Open Graph tags (og:title, og:description, og:image, og:url) control how links appear when shared on social media (Facebook, Twitter, LinkedIn). Provides rich previews with images and descriptions. Improves click-through rates. Essential for content marketing and social sharing.",
     "points": 15,
     "options": [
@@ -2241,13 +2043,7 @@
     "updatedAt": "2025-01-15T03:53:54.816Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "html",
-      "seo",
-      "structured-data",
-      "schema",
-      "difficult"
-    ],
+    "tags": ["html", "seo", "structured-data", "schema", "difficult"],
     "explanation": "Structured data (Schema.org) helps search engines understand content type (Article, Product, Review, etc.). Formats: JSON-LD (recommended, in <script>), Microdata (attributes), RDFa (attributes). Enables rich snippets (ratings, prices, dates). JSON-LD is cleanest, doesn't mix with HTML. Improves search visibility.",
     "points": 20,
     "options": [
@@ -2297,12 +2093,7 @@
     "updatedAt": "2025-01-15T03:53:54.816Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "html",
-      "seo",
-      "title-tag",
-      "intermediate"
-    ],
+    "tags": ["html", "seo", "title-tag", "intermediate"],
     "explanation": "<title> appears in browser tab and search results (50-60 chars optimal). <h1> is main page heading (visible on page). Both should be relevant but can differ. Title is for SEO and browser tab. H1 is for page structure and accessibility. Both important but serve different purposes.",
     "points": 15,
     "options": [
@@ -2352,12 +2143,7 @@
     "updatedAt": "2025-01-15T03:53:54.816Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "html",
-      "seo",
-      "canonical",
-      "intermediate"
-    ],
+    "tags": ["html", "seo", "canonical", "intermediate"],
     "explanation": "Canonical tag specifies preferred URL when multiple URLs show same content (www vs non-www, HTTP vs HTTPS, parameters). Prevents duplicate content penalties, consolidates ranking signals. Use absolute URLs. Important for e-commerce (filtered product pages) and multi-domain setups.",
     "points": 15,
     "options": [
@@ -2407,13 +2193,7 @@
     "updatedAt": "2025-01-15T03:53:54.816Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "html",
-      "seo",
-      "robots",
-      "meta-tags",
-      "intermediate"
-    ],
+    "tags": ["html", "seo", "robots", "meta-tags", "intermediate"],
     "explanation": "'noindex' prevents page from appearing in search results. 'nofollow' tells crawlers not to follow links on page. 'noindex, nofollow' for private/admin pages. Use on duplicate content, staging sites, or pages you don't want indexed. Can also use X-Robots-Tag HTTP header.",
     "points": 15,
     "options": [
@@ -2463,13 +2243,7 @@
     "updatedAt": "2025-01-15T03:53:54.816Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "html",
-      "seo",
-      "headings",
-      "semantic-html",
-      "intermediate"
-    ],
+    "tags": ["html", "seo", "headings", "semantic-html", "intermediate"],
     "explanation": "Headings create document outline: <h1> is main title (one per page), <h2> sections, <h3> subsections, etc. Proper hierarchy helps search engines understand content structure. Improves SEO and accessibility. Don't skip levels (h1 to h3). Use headings semantically, not for styling.",
     "points": 15,
     "options": [
@@ -2519,13 +2293,7 @@
     "updatedAt": "2025-01-15T03:53:54.816Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "html",
-      "seo",
-      "robots",
-      "snippets",
-      "intermediate"
-    ],
+    "tags": ["html", "seo", "robots", "snippets", "intermediate"],
     "explanation": "Snippet controls limit how search engines display your content: 'max-snippet' (character limit), 'max-image-preview' (image size), 'max-video-preview' (video length). Helps control how your content appears in search results. Useful for protecting content or optimizing CTR.",
     "points": 15,
     "options": [
@@ -2575,13 +2343,7 @@
     "updatedAt": "2025-01-15T03:53:54.816Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "html",
-      "seo",
-      "i18n",
-      "accessibility",
-      "intermediate"
-    ],
+    "tags": ["html", "seo", "i18n", "accessibility", "intermediate"],
     "explanation": "'lang' attribute declares page language (e.g., 'en', 'es', 'fr'). Helps search engines serve content to right audience, improves accessibility (screen reader pronunciation), enables translation tools. Use on <html> for page language, on elements for language changes. Essential for multilingual sites.",
     "points": 15,
     "options": [
@@ -2631,13 +2393,7 @@
     "updatedAt": "2025-01-15T03:53:54.816Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "html",
-      "seo",
-      "structured-data",
-      "author",
-      "intermediate"
-    ],
+    "tags": ["html", "seo", "structured-data", "author", "intermediate"],
     "explanation": "Meta author tag is simple but limited. Structured data (Person/Author schema) provides rich information (name, image, social profiles) and enables author rich snippets in search results. Structured data is preferred for SEO as it provides more context to search engines and better search result appearance.",
     "points": 15,
     "options": [
@@ -2687,13 +2443,7 @@
     "updatedAt": "2025-01-15T03:53:54.816Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "html",
-      "accessibility",
-      "aria",
-      "landmarks",
-      "intermediate"
-    ],
+    "tags": ["html", "accessibility", "aria", "landmarks", "intermediate"],
     "explanation": "ARIA landmarks define page regions: 'banner' (header), 'main' (main content), 'navigation' (nav), 'complementary' (aside), 'contentinfo' (footer), 'search' (search area). Screen readers can jump between landmarks. Prefer semantic HTML (<header>, <main>, <nav>) but use ARIA when semantic elements aren't available.",
     "points": 15,
     "options": [
@@ -2743,12 +2493,7 @@
     "updatedAt": "2025-01-15T03:53:54.816Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "html",
-      "accessibility",
-      "aria",
-      "intermediate"
-    ],
+    "tags": ["html", "accessibility", "aria", "intermediate"],
     "explanation": "'aria-label' provides direct text label. 'aria-labelledby' references ID of element containing label text. Use 'aria-label' for simple labels when visible text isn't sufficient. Use 'aria-labelledby' when label text exists elsewhere in DOM (reuses existing text, maintains single source of truth).",
     "points": 15,
     "options": [
@@ -2798,13 +2543,7 @@
     "updatedAt": "2025-01-15T03:53:54.816Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "html",
-      "accessibility",
-      "aria",
-      "screen-readers",
-      "intermediate"
-    ],
+    "tags": ["html", "accessibility", "aria", "screen-readers", "intermediate"],
     "explanation": "'aria-hidden=true' hides element from screen readers (decorative content). 'aria-live' announces dynamic content changes ('polite' waits, 'assertive' interrupts). Use aria-hidden for icons, decorative images. Use aria-live for dynamic updates (form errors, notifications). Be careful not to hide important content.",
     "points": 15,
     "options": [
@@ -2910,13 +2649,7 @@
     "updatedAt": "2025-01-15T03:53:54.816Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "html",
-      "accessibility",
-      "aria",
-      "forms",
-      "intermediate"
-    ],
+    "tags": ["html", "accessibility", "aria", "forms", "intermediate"],
     "explanation": "'aria-labelledby' provides primary label (what is this field). 'aria-describedby' provides additional description (help text, error messages, hints). Label is announced first, description after. Use labelledby for field name, describedby for instructions or errors. Both can reference multiple IDs.",
     "points": 15,
     "options": [
@@ -3078,13 +2811,7 @@
     "updatedAt": "2025-01-15T03:53:54.816Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "html",
-      "accessibility",
-      "aria",
-      "buttons",
-      "difficult"
-    ],
+    "tags": ["html", "accessibility", "aria", "buttons", "difficult"],
     "explanation": "Native <button> provides keyboard support (Enter, Space), focus management, and semantic meaning automatically. role='button' on <div> requires manual keyboard event handling, focus management, and ARIA states. Always prefer native <button>. Use role='button' only when native element cannot achieve design (rare, usually CSS can style button).",
     "points": 20,
     "options": [
@@ -3191,13 +2918,7 @@
     "updatedAt": "2025-01-15T03:53:54.816Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "html",
-      "accessibility",
-      "aria",
-      "navigation",
-      "intermediate"
-    ],
+    "tags": ["html", "accessibility", "aria", "navigation", "intermediate"],
     "explanation": "'aria-current' indicates current item in set: 'page' (current page in nav), 'step' (current step in process), 'date' (current date in calendar), 'time' (current time), 'location' (current location). Screen readers announce 'current' to help users understand where they are. Essential for breadcrumbs, pagination, step indicators.",
     "points": 15,
     "options": [
@@ -3247,12 +2968,7 @@
     "updatedAt": "2025-01-15T03:53:54.816Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "html",
-      "performance",
-      "resource-priority",
-      "intermediate"
-    ],
+    "tags": ["html", "performance", "resource-priority", "intermediate"],
     "explanation": "'fetchpriority' hints browser loading priority: 'high' (critical resources, above-fold images), 'low' (below-fold, non-critical), 'auto' (default). Helps browser prioritize LCP images, critical CSS. Use 'high' for hero images, 'low' for below-fold content. Improves Core Web Vitals.",
     "points": 15,
     "options": [
@@ -3302,12 +3018,7 @@
     "updatedAt": "2025-01-15T03:53:54.816Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "html",
-      "performance",
-      "resource-hints",
-      "intermediate"
-    ],
+    "tags": ["html", "performance", "resource-hints", "intermediate"],
     "explanation": "'preload' fetches critical resources for current page (fonts, critical CSS, hero images). 'prefetch' hints at resources for next navigation (next page assets). Preload is high priority, current page. Prefetch is low priority, future page. Use preload for above-fold critical resources, prefetch for likely next pages.",
     "points": 15,
     "options": [
@@ -3413,13 +3124,7 @@
     "updatedAt": "2025-01-15T03:53:54.816Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "html",
-      "performance",
-      "security",
-      "sri",
-      "difficult"
-    ],
+    "tags": ["html", "performance", "security", "sri", "difficult"],
     "explanation": "'integrity' attribute provides cryptographic hash of resource. Browser verifies hash matches before executing/loading. Prevents CDN compromise attacks, ensures correct version loaded. Format: 'sha384-...' or 'sha512-...'. Improves security and prevents malicious code injection from compromised CDNs.",
     "points": 20,
     "options": [
@@ -3469,12 +3174,7 @@
     "updatedAt": "2025-01-15T03:53:54.816Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "html",
-      "performance",
-      "lazy-loading",
-      "intermediate"
-    ],
+    "tags": ["html", "performance", "lazy-loading", "intermediate"],
     "explanation": "'loading=lazy' defers image/iframe loading until near viewport. Reduces initial page load, saves bandwidth, improves LCP and FID. Use 'lazy' for below-fold content, 'eager' for above-fold critical images. Native browser support, no JavaScript required. Significant performance improvement for image-heavy pages.",
     "points": 15,
     "options": [
@@ -3524,12 +3224,7 @@
     "updatedAt": "2025-01-15T03:53:54.816Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "html",
-      "performance",
-      "resource-hints",
-      "intermediate"
-    ],
+    "tags": ["html", "performance", "resource-hints", "intermediate"],
     "explanation": "'dns-prefetch' only resolves DNS (fast, lightweight). 'preconnect' resolves DNS, establishes TCP connection, performs TLS handshake (more complete, more resource-intensive). Use dns-prefetch for multiple domains, preconnect for critical third-party resources (CDNs, APIs) you'll definitely use. Preconnect is stronger optimization.",
     "points": 15,
     "options": [
@@ -3579,13 +3274,7 @@
     "updatedAt": "2025-01-15T03:53:54.816Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "html",
-      "performance",
-      "css",
-      "media-queries",
-      "intermediate"
-    ],
+    "tags": ["html", "performance", "css", "media-queries", "intermediate"],
     "explanation": "'media' attribute on <link rel='stylesheet'> specifies media query. Browser only loads stylesheet if media matches. Non-matching stylesheets are marked as non-render-blocking. Use for print stylesheets (media='print'), mobile-specific CSS, or conditional feature CSS. Reduces initial CSS payload.",
     "points": 15,
     "options": [
@@ -3635,13 +3324,7 @@
     "updatedAt": "2025-01-15T03:53:54.816Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "html",
-      "performance",
-      "security",
-      "cors",
-      "difficult"
-    ],
+    "tags": ["html", "performance", "security", "cors", "difficult"],
     "explanation": "'crossorigin' enables CORS for cross-origin resources. 'anonymous' (no credentials) or 'use-credentials' (with credentials). Required for proper error reporting in window.onerror, enables stricter CORS checks. Without it, errors are opaque. Use when loading resources from different origin, especially for SRI.",
     "points": 20,
     "options": [
@@ -3691,13 +3374,7 @@
     "updatedAt": "2025-01-15T03:53:54.816Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "html",
-      "performance",
-      "privacy",
-      "referrer",
-      "intermediate"
-    ],
+    "tags": ["html", "performance", "privacy", "referrer", "intermediate"],
     "explanation": "'referrerpolicy' controls Referer header: 'no-referrer' (send nothing), 'same-origin' (only same origin), 'strict-origin-when-cross-origin' (default, full URL same-origin, origin only cross-origin). Reduces data leakage, can improve privacy. Some CDNs use referrer for caching optimization.",
     "points": 15,
     "options": [
@@ -3859,13 +3536,7 @@
     "updatedAt": "2025-01-15T03:53:54.816Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "html",
-      "html5-apis",
-      "geolocation",
-      "privacy",
-      "intermediate"
-    ],
+    "tags": ["html", "html5-apis", "geolocation", "privacy", "intermediate"],
     "explanation": "Geolocation API (navigator.geolocation) requests user location. Requires user permission (privacy-sensitive). Methods: getCurrentPosition() (one-time), watchPosition() (tracking). Options: enableHighAccuracy, timeout, maximumAge. Always request permission clearly, explain why location is needed, handle errors gracefully.",
     "points": 15,
     "options": [
@@ -3915,13 +3586,7 @@
     "updatedAt": "2025-01-15T03:53:54.816Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "html",
-      "html5-apis",
-      "file-api",
-      "filereader",
-      "intermediate"
-    ],
+    "tags": ["html", "html5-apis", "file-api", "filereader", "intermediate"],
     "explanation": "File API provides access to file objects from <input type='file'>. FileReader reads file contents as text, data URL, array buffer, or binary string. Methods: readAsText(), readAsDataURL(), readAsArrayBuffer(). Enables client-side image preview, file validation, parsing before upload. Asynchronous API with onload/onerror handlers.",
     "points": 15,
     "options": [
@@ -3971,12 +3636,7 @@
     "updatedAt": "2025-01-15T03:53:54.816Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "html",
-      "html5-apis",
-      "drag-drop",
-      "difficult"
-    ],
+    "tags": ["html", "html5-apis", "drag-drop", "difficult"],
     "explanation": "Drag and Drop API enables drag operations: dragstart, drag, dragend (draggable element), dragover, drop (drop zone). dataTransfer object stores data (setData/getData), controls drop effect (copy, move, link), provides files. Requires draggable='true' attribute. Complex API with many edge cases, browser differences.",
     "points": 20,
     "options": [
@@ -4026,13 +3686,7 @@
     "updatedAt": "2025-01-15T03:53:54.816Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "html",
-      "html5-apis",
-      "web-workers",
-      "performance",
-      "difficult"
-    ],
+    "tags": ["html", "html5-apis", "web-workers", "performance", "difficult"],
     "explanation": "Web Workers run JavaScript in background thread, don't block main thread. No DOM access, communicate via postMessage/onmessage. Use for CPU-intensive tasks (image processing, calculations, parsing). Dedicated Workers (single script), Shared Workers (multiple tabs), Service Workers (PWA). Improves responsiveness for heavy computations.",
     "points": 20,
     "options": [
@@ -4082,13 +3736,7 @@
     "updatedAt": "2025-01-15T03:53:54.816Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "html",
-      "html5-apis",
-      "history-api",
-      "spa",
-      "intermediate"
-    ],
+    "tags": ["html", "html5-apis", "history-api", "spa", "intermediate"],
     "explanation": "History API manipulates browser history: pushState() (adds entry, changes URL), replaceState() (replaces current entry), popstate event (fires on back/forward). Enables SPA routing, maintains browser history, allows bookmarking. URL changes without page reload. Must handle popstate for back/forward navigation.",
     "points": 15,
     "options": [
@@ -4138,13 +3786,7 @@
     "updatedAt": "2025-01-15T03:53:54.816Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "html",
-      "html5-apis",
-      "canvas",
-      "svg",
-      "intermediate"
-    ],
+    "tags": ["html", "html5-apis", "canvas", "svg", "intermediate"],
     "explanation": "Canvas is pixel-based, imperative (draw commands), good for games, image manipulation, dynamic graphics. SVG is vector-based, declarative (XML), scalable, accessible, good for icons, illustrations, interactive graphics. Canvas better for performance (many objects), SVG better for scalability and accessibility.",
     "points": 15,
     "options": [
@@ -4194,13 +3836,7 @@
     "updatedAt": "2025-01-15T03:53:54.816Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "html",
-      "html5-apis",
-      "websocket",
-      "real-time",
-      "difficult"
-    ],
+    "tags": ["html", "html5-apis", "websocket", "real-time", "difficult"],
     "explanation": "WebSocket provides full-duplex communication over single TCP connection. Persistent connection (not request/response like HTTP). Lower latency, less overhead than HTTP polling. Events: onopen, onmessage, onerror, onclose. Methods: send(), close(). Use for chat, live updates, gaming. Requires WebSocket server.",
     "points": 20,
     "options": [
@@ -4362,13 +3998,7 @@
     "updatedAt": "2025-01-15T03:53:54.816Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "html",
-      "basics",
-      "html5",
-      "semantic-html",
-      "intermediate"
-    ],
+    "tags": ["html", "basics", "html5", "semantic-html", "intermediate"],
     "explanation": "<header>, <nav>, <main>, <article>, <section>, <aside>, and <footer> are all valid HTML5 semantic elements. <div> and <span> are generic containers, not semantic elements.",
     "points": 15,
     "options": [
@@ -4418,12 +4048,7 @@
     "updatedAt": "2025-01-15T03:53:54.816Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "html",
-      "basics",
-      "contenteditable",
-      "intermediate"
-    ],
+    "tags": ["html", "basics", "contenteditable", "intermediate"],
     "explanation": "contenteditable can be 'true' (editable), 'false' (not editable), or 'inherit' (inherits from parent). Empty string is treated as 'true'. Used for rich text editors, inline editing, and interactive content.",
     "points": 15,
     "options": [
@@ -4473,12 +4098,7 @@
     "updatedAt": "2025-01-15T03:53:54.816Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "html",
-      "basics",
-      "links",
-      "intermediate"
-    ],
+    "tags": ["html", "basics", "links", "intermediate"],
     "explanation": "'href' is required for navigation (can be '#' or 'javascript:void(0)' for no-op). 'target' is optional (opens in new window). 'rel' is optional but recommended for security (noopener, noreferrer). 'title' is optional for tooltips.",
     "points": 15,
     "options": [
@@ -4528,13 +4148,7 @@
     "updatedAt": "2025-01-15T03:53:54.816Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "html",
-      "basics",
-      "i18n",
-      "translate",
-      "intermediate"
-    ],
+    "tags": ["html", "basics", "i18n", "translate", "intermediate"],
     "explanation": "'translate' attribute controls whether content should be translated: 'yes' (default, translate), 'no' (don't translate). Useful for proper nouns, code, brand names that shouldn't be translated. Helps translation tools and services.",
     "points": 15,
     "options": [
@@ -4584,12 +4198,7 @@
     "updatedAt": "2025-01-15T03:53:54.816Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "html",
-      "basics",
-      "syntax",
-      "intermediate"
-    ],
+    "tags": ["html", "basics", "syntax", "intermediate"],
     "explanation": "<img>, <br>, <hr>, <input>, <meta>, <link>, <area>, <base>, <col>, <embed>, <source>, and <track> are self-closing elements. <div>, <span>, <p> require closing tags.",
     "points": 15,
     "options": [
@@ -4639,13 +4248,7 @@
     "updatedAt": "2025-01-15T03:53:54.816Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "html",
-      "forms",
-      "validation",
-      "html5",
-      "intermediate"
-    ],
+    "tags": ["html", "forms", "validation", "html5", "intermediate"],
     "explanation": "email, url, number, date, time, tel, and search provide built-in validation. text and password don't have format validation (only required validation).",
     "points": 15,
     "options": [
@@ -4695,12 +4298,7 @@
     "updatedAt": "2025-01-15T03:53:54.816Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "html",
-      "forms",
-      "buttons",
-      "intermediate"
-    ],
+    "tags": ["html", "forms", "buttons", "intermediate"],
     "explanation": "'formaction' overrides form's action attribute for specific submit button. Allows different submit buttons to send form to different URLs. Useful for multi-step forms, different actions (save vs publish), or A/B testing different endpoints.",
     "points": 15,
     "options": [
@@ -4750,13 +4348,7 @@
     "updatedAt": "2025-01-15T03:53:54.816Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "html",
-      "forms",
-      "security",
-      "spam-prevention",
-      "difficult"
-    ],
+    "tags": ["html", "forms", "security", "spam-prevention", "difficult"],
     "explanation": "'autocomplete' can help (but not prevent spam). 'name' attributes are required but don't prevent spam. Server-side validation, CAPTCHA, rate limiting, and CSRF tokens are needed. HTML5 validation can be bypassed. No single HTML attribute prevents spam.",
     "points": 20,
     "options": [
@@ -4806,12 +4398,7 @@
     "updatedAt": "2025-01-15T03:53:54.816Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "html",
-      "forms",
-      "http-methods",
-      "intermediate"
-    ],
+    "tags": ["html", "forms", "http-methods", "intermediate"],
     "explanation": "'method' on <form> sets default HTTP method (GET/POST). 'formmethod' on submit button overrides method for that specific button. Allows different buttons to use different methods (e.g., one button POSTs, another GETs for preview).",
     "points": 15,
     "options": [
@@ -4861,13 +4448,7 @@
     "updatedAt": "2025-01-15T03:53:54.816Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "html",
-      "forms",
-      "mobile",
-      "ux",
-      "intermediate"
-    ],
+    "tags": ["html", "forms", "mobile", "ux", "intermediate"],
     "explanation": "'inputmode' suggests mobile keyboard type. 'autocomplete' helps with autofill. 'placeholder' provides hints. 'type' (email, tel, number) shows appropriate keyboards. 'required' provides validation feedback.",
     "points": 15,
     "options": [
@@ -4917,13 +4498,7 @@
     "updatedAt": "2025-01-15T03:53:54.816Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "html",
-      "media",
-      "accessibility",
-      "seo",
-      "intermediate"
-    ],
+    "tags": ["html", "media", "accessibility", "seo", "intermediate"],
     "explanation": "'alt' is required for accessibility and SEO. 'title' provides additional context. 'loading' improves performance. 'width' and 'height' prevent layout shift. 'srcset' and 'sizes' enable responsive images.",
     "points": 15,
     "options": [
@@ -4973,13 +4548,7 @@
     "updatedAt": "2025-01-15T03:53:54.816Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "html",
-      "media",
-      "performance",
-      "images",
-      "intermediate"
-    ],
+    "tags": ["html", "media", "performance", "images", "intermediate"],
     "explanation": "'decoding' hints how image should be decoded: 'sync' (blocking), 'async' (non-blocking), 'auto' (browser decides). 'async' allows other content to render while image decodes. Improves perceived performance, especially for large images.",
     "points": 15,
     "options": [
@@ -5029,12 +4598,7 @@
     "updatedAt": "2025-01-15T03:53:54.816Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "html",
-      "media",
-      "video",
-      "intermediate"
-    ],
+    "tags": ["html", "media", "video", "intermediate"],
     "explanation": "'autoplay' starts automatically. 'controls' shows UI. 'loop' repeats. 'muted' silences (required for autoplay). 'playsinline' prevents fullscreen on mobile. 'preload' controls loading. 'poster' shows thumbnail.",
     "points": 15,
     "options": [
@@ -5084,13 +4648,7 @@
     "updatedAt": "2025-01-15T03:53:54.816Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "html",
-      "media",
-      "accessibility",
-      "captions",
-      "intermediate"
-    ],
+    "tags": ["html", "media", "accessibility", "captions", "intermediate"],
     "explanation": "<track> provides timed text tracks: subtitles, captions, descriptions, chapters, metadata. 'kind' attribute specifies type. 'srclang' specifies language. 'label' provides user-visible label. Essential for accessibility and multilingual content.",
     "points": 15,
     "options": [
@@ -5140,13 +4698,7 @@
     "updatedAt": "2025-01-15T03:53:54.816Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "html",
-      "media",
-      "images",
-      "formats",
-      "intermediate"
-    ],
+    "tags": ["html", "media", "images", "formats", "intermediate"],
     "explanation": "PNG, WebP, SVG, and GIF support transparency. JPEG does not support transparency. PNG-24 and WebP support full alpha channel. GIF supports single-color transparency. SVG supports transparency via CSS or attributes.",
     "points": 15,
     "options": [
@@ -5196,12 +4748,7 @@
     "updatedAt": "2025-01-15T03:53:54.816Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "html",
-      "seo",
-      "meta-tags",
-      "intermediate"
-    ],
+    "tags": ["html", "seo", "meta-tags", "intermediate"],
     "explanation": "<title> is critical. <meta name='description'> is important for snippets. <meta charset> is required. Open Graph tags help social sharing. robots meta can control indexing. keywords meta is largely ignored.",
     "points": 15,
     "options": [
@@ -5251,13 +4798,7 @@
     "updatedAt": "2025-01-15T03:53:54.816Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "html",
-      "seo",
-      "i18n",
-      "hreflang",
-      "intermediate"
-    ],
+    "tags": ["html", "seo", "i18n", "hreflang", "intermediate"],
     "explanation": "hreflang tells search engines which language/region version of page to show. Format: <link rel='alternate' hreflang='en' href='...'>. Helps serve correct language to users. Prevents duplicate content issues. Essential for multilingual sites.",
     "points": 15,
     "options": [
@@ -5307,13 +4848,7 @@
     "updatedAt": "2025-01-15T03:53:54.816Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "html",
-      "seo",
-      "structured-data",
-      "rich-snippets",
-      "intermediate"
-    ],
+    "tags": ["html", "seo", "structured-data", "rich-snippets", "intermediate"],
     "explanation": "Article, Product, Review, Recipe, Event, Organization, Person, BreadcrumbList, FAQPage, and VideoObject commonly produce rich snippets. Each provides different information (ratings, prices, dates, etc.) in search results.",
     "points": 15,
     "options": [
@@ -5363,13 +4898,7 @@
     "updatedAt": "2025-01-15T03:53:54.816Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "html",
-      "seo",
-      "robots",
-      "meta-tags",
-      "intermediate"
-    ],
+    "tags": ["html", "seo", "robots", "meta-tags", "intermediate"],
     "explanation": "'noindex' prevents page from appearing in search results (page not indexed). 'nofollow' tells crawlers not to follow links on page (links not crawled, no PageRank passed). Can combine: 'noindex, nofollow'. Use noindex for private pages, nofollow for untrusted links.",
     "points": 15,
     "options": [
@@ -5419,12 +4948,7 @@
     "updatedAt": "2025-01-15T03:53:54.816Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "html",
-      "seo",
-      "semantic-html",
-      "intermediate"
-    ],
+    "tags": ["html", "seo", "semantic-html", "intermediate"],
     "explanation": "Semantic HTML5 elements (<header>, <nav>, <main>, <article>, <section>), heading hierarchy (<h1>-<h6>), <title>, <meta> tags, alt text on images, and proper link structure all contribute to SEO. Search engines use semantic structure to understand content.",
     "points": 15,
     "options": [
@@ -5530,13 +5054,7 @@
     "updatedAt": "2025-01-15T03:53:54.816Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "html",
-      "accessibility",
-      "aria",
-      "keyboard",
-      "intermediate"
-    ],
+    "tags": ["html", "accessibility", "aria", "keyboard", "intermediate"],
     "explanation": "'aria-keyshortcuts' announces keyboard shortcuts to screen reader users. Format: 'Ctrl+K' or 'Alt+Shift+T'. Helps users discover and remember shortcuts. Important for power users and keyboard navigation.",
     "points": 15,
     "options": [
@@ -5642,13 +5160,7 @@
     "updatedAt": "2025-01-15T03:53:54.816Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "html",
-      "accessibility",
-      "aria",
-      "orientation",
-      "intermediate"
-    ],
+    "tags": ["html", "accessibility", "aria", "orientation", "intermediate"],
     "explanation": "'aria-orientation' specifies component orientation: 'horizontal' (sliders, tabs) or 'vertical' (menus, lists). Helps screen readers understand layout and navigation direction. Important for custom components like sliders and tab panels.",
     "points": 15,
     "options": [
@@ -5698,12 +5210,7 @@
     "updatedAt": "2025-01-15T03:53:54.816Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "html",
-      "accessibility",
-      "forms",
-      "intermediate"
-    ],
+    "tags": ["html", "accessibility", "forms", "intermediate"],
     "explanation": "Proper <label> association (for/id), <fieldset>/<legend> for grouping, error messages with aria-describedby, required indicators, clear instructions, and logical tab order all improve form accessibility.",
     "points": 15,
     "options": [
@@ -5753,12 +5260,7 @@
     "updatedAt": "2025-01-15T03:53:54.816Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "html",
-      "performance",
-      "page-load",
-      "intermediate"
-    ],
+    "tags": ["html", "performance", "page-load", "intermediate"],
     "explanation": "Lazy loading images, deferring non-critical scripts, inlining critical CSS, using resource hints (preload, preconnect), minimizing render-blocking resources, and code splitting all reduce initial load time.",
     "points": 15,
     "options": [
@@ -5808,12 +5310,7 @@
     "updatedAt": "2025-01-15T03:53:54.816Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "html",
-      "performance",
-      "resource-priority",
-      "intermediate"
-    ],
+    "tags": ["html", "performance", "resource-priority", "intermediate"],
     "explanation": "'importance' hint (or 'fetchpriority') suggests resource priority: 'high' (critical, above-fold), 'low' (non-critical, below-fold), 'auto' (default). Helps browser prioritize resource loading. Improves Core Web Vitals, especially LCP.",
     "points": 15,
     "options": [
@@ -5863,13 +5360,7 @@
     "updatedAt": "2025-01-15T03:53:54.816Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "html",
-      "performance",
-      "cls",
-      "layout-shift",
-      "intermediate"
-    ],
+    "tags": ["html", "performance", "cls", "layout-shift", "intermediate"],
     "explanation": "Setting width and height on images, reserving space for ads/embeds, using aspect-ratio CSS, avoiding inserting content above existing content, and using font-display: swap properly all help prevent CLS.",
     "points": 15,
     "options": [
@@ -5919,12 +5410,7 @@
     "updatedAt": "2025-01-15T03:53:54.816Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "html",
-      "performance",
-      "javascript-modules",
-      "difficult"
-    ],
+    "tags": ["html", "performance", "javascript-modules", "difficult"],
     "explanation": "'preload' loads module file but doesn't execute dependencies. 'modulepreload' loads module and recursively preloads all its dependencies. modulepreload is more comprehensive for module optimization. Use modulepreload for critical module entry points.",
     "points": 20,
     "options": [
@@ -5974,12 +5460,7 @@
     "updatedAt": "2025-01-15T03:53:54.816Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "html",
-      "performance",
-      "fonts",
-      "intermediate"
-    ],
+    "tags": ["html", "performance", "fonts", "intermediate"],
     "explanation": "font-display: swap (shows fallback immediately), preloading font files, using font-display: optional for non-critical fonts, subsetting fonts, and using system fonts as fallbacks all improve font performance.",
     "points": 15,
     "options": [
@@ -6029,12 +5510,7 @@
     "updatedAt": "2025-01-15T03:53:54.816Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "html",
-      "html5-apis",
-      "web-storage",
-      "intermediate"
-    ],
+    "tags": ["html", "html5-apis", "web-storage", "intermediate"],
     "explanation": "setItem(key, value), getItem(key), removeItem(key), clear(), and length property are available. All methods are synchronous. Keys and values are strings. Storage is limited to ~5-10MB per origin.",
     "points": 15,
     "options": [
@@ -6084,13 +5560,7 @@
     "updatedAt": "2025-01-15T03:53:54.816Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "html",
-      "html5-apis",
-      "indexeddb",
-      "web-storage",
-      "difficult"
-    ],
+    "tags": ["html", "html5-apis", "indexeddb", "web-storage", "difficult"],
     "explanation": "Web Storage (localStorage/sessionStorage) is simple key-value store, synchronous, ~5-10MB limit, strings only. IndexedDB is object database, asynchronous, larger storage (~50% of disk), supports complex queries, indexes, transactions. Use Web Storage for simple data, IndexedDB for complex structured data.",
     "points": 20,
     "options": [
@@ -6140,12 +5610,7 @@
     "updatedAt": "2025-01-15T03:53:54.816Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "html",
-      "html5-apis",
-      "drag-drop",
-      "intermediate"
-    ],
+    "tags": ["html", "html5-apis", "drag-drop", "intermediate"],
     "explanation": "dragstart (dragging begins), drag (during drag), dragend (drag ends), dragover (over drop zone), dragenter (enters drop zone), dragleave (leaves drop zone), drop (dropped). dragover must preventDefault() to allow drop.",
     "points": 15,
     "options": [
@@ -6195,12 +5660,7 @@
     "updatedAt": "2025-01-15T03:53:54.816Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "html",
-      "html5-apis",
-      "notifications",
-      "intermediate"
-    ],
+    "tags": ["html", "html5-apis", "notifications", "intermediate"],
     "explanation": "Notification API shows system notifications outside browser. Requires user permission (Notification.requestPermission()). Use for alerts, reminders, updates when page is not active. Part of Progressive Web App (PWA) features. Requires secure context (HTTPS).",
     "points": 15,
     "options": [
@@ -6250,12 +5710,7 @@
     "updatedAt": "2025-01-15T03:53:54.816Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "html",
-      "html5-apis",
-      "geolocation",
-      "intermediate"
-    ],
+    "tags": ["html", "html5-apis", "geolocation", "intermediate"],
     "explanation": "getCurrentPosition() gets location once, watchPosition() tracks location continuously, clearWatch() stops tracking. All require user permission. Options include enableHighAccuracy, timeout, maximumAge.",
     "points": 15,
     "options": [

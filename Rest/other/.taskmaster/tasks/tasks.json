@@ -21,9 +21,7 @@
         "testStrategy": "Test responsive design on different screen sizes, verify all links work, check accessibility",
         "status": "done",
         "priority": "high",
-        "dependencies": [
-          1
-        ],
+        "dependencies": [1],
         "sprint": "Sprint 1",
         "epic": "UI/UX & Navigation"
       },
@@ -35,9 +33,7 @@
         "testStrategy": "Validate JSON schema, test data loading, ensure all required fields are present",
         "status": "done",
         "priority": "high",
-        "dependencies": [
-          1
-        ],
+        "dependencies": [1],
         "sprint": "Sprint 1",
         "epic": "Challenge Library"
       },
@@ -49,9 +45,7 @@
         "testStrategy": "Test filtering works correctly, search finds relevant challenges, pagination handles large datasets",
         "status": "done",
         "priority": "high",
-        "dependencies": [
-          3
-        ],
+        "dependencies": [3],
         "sprint": "Sprint 1",
         "epic": "Challenge Library"
       },
@@ -63,9 +57,7 @@
         "testStrategy": "Verify all challenge details display correctly, starter code is properly formatted, navigation works",
         "status": "done",
         "priority": "high",
-        "dependencies": [
-          3
-        ],
+        "dependencies": [3],
         "sprint": "Sprint 1",
         "epic": "Challenge Library"
       },
@@ -77,9 +69,7 @@
         "testStrategy": "Test CRUD operations, validate form inputs, ensure data persistence",
         "status": "done",
         "priority": "medium",
-        "dependencies": [
-          3
-        ],
+        "dependencies": [3],
         "sprint": "Sprint 1",
         "epic": "Challenge Library"
       },
@@ -91,9 +81,7 @@
         "testStrategy": "Test syntax highlighting, autocomplete, error detection, and editor performance",
         "status": "done",
         "priority": "high",
-        "dependencies": [
-          1
-        ],
+        "dependencies": [1],
         "sprint": "Sprint 2",
         "epic": "In-Browser Code Editor"
       },
@@ -105,9 +93,7 @@
         "testStrategy": "Test live updates, verify code execution safety, check performance with large code blocks",
         "status": "done",
         "priority": "high",
-        "dependencies": [
-          7
-        ],
+        "dependencies": [7],
         "sprint": "Sprint 2",
         "epic": "In-Browser Code Editor"
       },
@@ -119,9 +105,7 @@
         "testStrategy": "Test various code scenarios, error handling, timeout management, and result validation",
         "status": "done",
         "priority": "high",
-        "dependencies": [
-          8
-        ],
+        "dependencies": [8],
         "sprint": "Sprint 2",
         "epic": "In-Browser Code Editor"
       },
@@ -133,9 +117,7 @@
         "testStrategy": "Test reset functionality, verify original code is restored, check user confirmation if needed",
         "status": "done",
         "priority": "medium",
-        "dependencies": [
-          7
-        ],
+        "dependencies": [7],
         "sprint": "Sprint 2",
         "epic": "In-Browser Code Editor"
       },
@@ -147,10 +129,7 @@
         "testStrategy": "Verify templates load properly, test different challenge types, check code formatting",
         "status": "done",
         "priority": "medium",
-        "dependencies": [
-          3,
-          7
-        ],
+        "dependencies": [3, 7],
         "sprint": "Sprint 2",
         "epic": "In-Browser Code Editor"
       },
@@ -162,9 +141,7 @@
         "testStrategy": "Test search accuracy, performance with large datasets, handle special characters and edge cases",
         "status": "done",
         "priority": "medium",
-        "dependencies": [
-          4
-        ],
+        "dependencies": [4],
         "sprint": "Sprint 2",
         "epic": "UI/UX & Navigation"
       },
@@ -176,9 +153,7 @@
         "testStrategy": "Test solution display timing, formatting, and user experience flow",
         "status": "done",
         "priority": "high",
-        "dependencies": [
-          9
-        ],
+        "dependencies": [9],
         "sprint": "Sprint 3",
         "epic": "Solutions & Explanations"
       },
@@ -190,9 +165,7 @@
         "testStrategy": "Review explanation quality, test readability, verify technical accuracy",
         "status": "done",
         "priority": "high",
-        "dependencies": [
-          3
-        ],
+        "dependencies": [3],
         "sprint": "Sprint 3",
         "epic": "Solutions & Explanations"
       },
@@ -204,9 +177,7 @@
         "testStrategy": "Test comparison accuracy, UI responsiveness, and user experience",
         "status": "done",
         "priority": "medium",
-        "dependencies": [
-          13
-        ],
+        "dependencies": [13],
         "sprint": "Sprint 3",
         "epic": "Solutions & Explanations"
       },
@@ -218,11 +189,7 @@
         "testStrategy": "Test on multiple devices and screen sizes, verify touch interactions, check performance",
         "status": "done",
         "priority": "high",
-        "dependencies": [
-          2,
-          4,
-          5
-        ],
+        "dependencies": [2, 4, 5],
         "sprint": "Sprint 3",
         "epic": "UI/UX & Navigation"
       },
@@ -234,9 +201,7 @@
         "testStrategy": "Test theme switching, persistence across sessions, verify all components adapt properly",
         "status": "done",
         "priority": "medium",
-        "dependencies": [
-          2
-        ],
+        "dependencies": [2],
         "sprint": "Sprint 3",
         "epic": "UI/UX & Navigation"
       },
@@ -248,9 +213,7 @@
         "testStrategy": "Verify deployment success, test all functionality in production environment",
         "status": "done",
         "priority": "high",
-        "dependencies": [
-          16
-        ],
+        "dependencies": [16],
         "sprint": "Sprint 3",
         "epic": "Deployment & Monitoring"
       },
@@ -262,9 +225,7 @@
         "testStrategy": "Test CI/CD pipeline, verify automated deployments work correctly",
         "status": "pending",
         "priority": "medium",
-        "dependencies": [
-          18
-        ],
+        "dependencies": [18],
         "sprint": "Sprint 3",
         "epic": "Deployment & Monitoring"
       },
@@ -276,9 +237,7 @@
         "testStrategy": "Test error reporting, verify alerts work, check dashboard functionality",
         "status": "pending",
         "priority": "medium",
-        "dependencies": [
-          18
-        ],
+        "dependencies": [18],
         "sprint": "Sprint 3",
         "epic": "Deployment & Monitoring"
       },
@@ -290,9 +249,7 @@
         "testStrategy": "Verify analytics data collection, test privacy compliance, check data accuracy",
         "status": "pending",
         "priority": "low",
-        "dependencies": [
-          18
-        ],
+        "dependencies": [18],
         "sprint": "Sprint 3",
         "epic": "Open Access"
       },
@@ -304,9 +261,7 @@
         "testStrategy": "Measure performance metrics, test loading times, verify optimization improvements",
         "status": "done",
         "priority": "medium",
-        "dependencies": [
-          16
-        ],
+        "dependencies": [16],
         "sprint": "Sprint 3",
         "epic": "UI/UX & Navigation"
       },
@@ -318,9 +273,7 @@
         "testStrategy": "Test with screen readers, keyboard navigation, and accessibility tools",
         "status": "pending",
         "priority": "medium",
-        "dependencies": [
-          16
-        ],
+        "dependencies": [16],
         "sprint": "Sprint 3",
         "epic": "UI/UX & Navigation"
       },
@@ -332,9 +285,7 @@
         "testStrategy": "Run security scans, test input validation, verify code execution safety",
         "status": "pending",
         "priority": "high",
-        "dependencies": [
-          8
-        ],
+        "dependencies": [8],
         "sprint": "Sprint 3",
         "epic": "Deployment & Monitoring"
       },
@@ -346,9 +297,7 @@
         "testStrategy": "Verify documentation accuracy, test setup instructions, check completeness",
         "status": "pending",
         "priority": "medium",
-        "dependencies": [
-          18
-        ],
+        "dependencies": [18],
         "sprint": "Sprint 3",
         "epic": "Project Foundation"
       },
@@ -360,10 +309,7 @@
         "testStrategy": "Test resource categorization, search functionality, filtering, bookmarking, and integration with challenges. Verify content accuracy and user experience.",
         "status": "done",
         "priority": "high",
-        "dependencies": [
-          4,
-          5
-        ],
+        "dependencies": [4, 5],
         "sprint": "Sprint 3",
         "epic": "Learning Resources"
       },
@@ -399,9 +345,7 @@
         "testStrategy": "Test checklist creation and management, verify progress tracking accuracy, test filtering and sorting, ensure data persistence, validate progress calculations and recommendations",
         "status": "pending",
         "priority": "high",
-        "dependencies": [
-          2
-        ],
+        "dependencies": [2],
         "sprint": "Sprint 3",
         "epic": "Learning Management"
       },
@@ -413,9 +357,7 @@
         "testStrategy": "Test plan generation, verify milestone tracking, ensure progress calculation accuracy, test multilingual support, validate time estimates and difficulty progression",
         "status": "todo",
         "priority": "high",
-        "dependencies": [
-          28
-        ],
+        "dependencies": [28],
         "sprint": "Sprint 4",
         "epic": "Learning Management"
       },
@@ -427,9 +369,7 @@
         "testStrategy": "Test guide accessibility, verify content accuracy, ensure multilingual support, validate strategy effectiveness, test integration with study plans",
         "status": "todo",
         "priority": "high",
-        "dependencies": [
-          30
-        ],
+        "dependencies": [30],
         "sprint": "Sprint 4",
         "epic": "Content Creation"
       },
@@ -441,9 +381,7 @@
         "testStrategy": "Verify data extraction accuracy, test categorization system, ensure search functionality, validate multilingual support, test question filtering and sorting",
         "status": "todo",
         "priority": "high",
-        "dependencies": [
-          27
-        ],
+        "dependencies": [27],
         "sprint": "Sprint 4",
         "epic": "Content Creation"
       }
@@ -639,7 +577,7 @@
       {
         "title": "Implement Tests: Navigation Component",
         "description": "Implement manual testing and automated tests for Navigation Component. Test the Navigation component used across the application, including navigation links, dark mode toggle, responsive design, and authentication state handling.",
-        "details": "## Time Estimation\n\n### Manual Testing\n- **Estimated Time**: 20-30 minutes\n- **Breakdown**:\n  - Test component rendering: 3-5 minutes\n  - Test navigation links: 5-7 minutes\n  - Test dark mode toggle: 3-5 minutes\n  - Test responsive design: 5-7 minutes\n  - Test authentication state: 4-6 minutes\n- **Complexity**: Low-Medium\n- **Dependencies**: Router, authentication context\n\n### Automated Testing\n- **Estimated Time**: 10-15 minutes (first run), 1-2 minutes (subsequent runs)\n- **Breakdown**:\n  - Unit tests setup and execution: 4-6 minutes\n  - Integration tests setup and execution: 4-7 minutes\n  - E2E tests execution: 2-2 minutes\n- **Complexity**: Low-Medium\n- **Dependencies**: Router mocks, auth mocks\n\n### Total Time\n- **Manual Only**: 20-30 minutes\n- **Automated Only**: 10-15 minutes (first run), 1-2 minutes (subsequent)\n- **Both Manual + Automated**: 30-45 minutes (first run), 21-32 minutes (subsequent)\n\n---\n\n## Overview\nTest the Navigation component used across the application, including navigation links, dark mode toggle, responsive design, and authentication state handling.\n\n## Manual Testing Steps\n\n1. **Test component rendering**\n   - Verify navigation bar renders\n   - Verify logo/brand visible\n   - Verify navigation links visible\n   - Verify dark mode toggle visible (if applicable)\n   - Verify user menu visible (if authenticated)\n\n2. **Test navigation links**\n   - Click on each navigation link\n   - Verify correct page navigated\n   - Verify active link highlighted\n   - Verify links work on all pages\n   - Test external links (if any)\n\n3. **Test dark mode toggle**\n   - Click dark mode toggle\n   - Verify theme changes\n   - Verify preference persisted\n   - Refresh page\n   - Verify theme maintained\n   - Toggle back to light mode\n   - Verify theme changes\n\n4. **Test responsive design**\n   - Test on mobile viewport\n   - Verify hamburger menu (if applicable)\n   - Verify menu expands/collapses\n   - Test on tablet viewport\n   - Verify layout adapts\n   - Test on desktop viewport\n   - Verify full navigation visible\n\n5. **Test authentication state**\n   - Test as unauthenticated user\n   - Verify sign-in link visible\n   - Test as authenticated user\n   - Verify user menu visible\n   - Verify logout option works\n   - Verify profile link works (if applicable)\n\n6. **Test navigation on different pages**\n   - Test navigation on homepage\n   - Test navigation on practice pages\n   - Test navigation on admin pages\n   - Verify consistent behavior\n   - Verify active state correct\n\n## Test Strategy:\n## Automated Tests\n\n### Unit Tests\n\n- **S-UT-001**: Test component renders\n  - **File**: `libs/shared-components/src/lib/common/Navigation.test.tsx`\n  - **Assertions**:\n    - Component renders\n    - Navigation links present\n    - Logo visible\n  - **Status**: \u23f3 Pending\n  - **Can Run Parallel**: \u2705 Yes\n\n- **S-UT-002**: Test navigation links\n  - **File**: `libs/shared-components/src/lib/common/Navigation.test.tsx`\n  - **Assertions**:\n    - All links rendered\n    - Links have correct hrefs\n    - Active link highlighted\n  - **Status**: \u23f3 Pending\n  - **Can Run Parallel**: \u2705 Yes\n\n- **S-UT-003**: Test dark mode toggle\n  - **File**: `libs/shared-components/src/lib/common/Navigation.test.tsx`\n  - **Assertions**:\n    - Toggle button present\n    - Click handler attached\n    - Theme state updates\n  - **Status**: \u23f3 Pending\n  - **Can Run Parallel**: \u2705 Yes\n\n- **S-UT-004**: Test authentication state\n  - **File**: `libs/shared-components/src/lib/common/Navigation.test.tsx`\n  - **Assertions**:\n    - Sign-in link shown when unauthenticated\n    - User menu shown when authenticated\n    - Logout handler works\n  - **Status**: \u23f3 Pending\n  - **Can Run Parallel**: \u2705 Yes\n\n### Integration Tests\n\n- **S-IT-001**: Test navigation routing\n  - **File**: `libs/shared-components/src/lib/common/Navigation.integration.test.tsx`\n  - **Assertions**:\n    - Clicking link navigates correctly\n    - Router.push called with correct path\n    - Active state updates\n  - **Status**: \u23f3 Pending\n  - **Can Run Parallel**: \u2705 Yes\n\n- **S-IT-002**: Test dark mode persistence\n  - **File**: `libs/shared-components/src/lib/common/Navigation.integration.test.tsx`\n  - **Assertions**:\n    - Theme preference saved\n    - Theme persists on refresh\n    - Theme applied correctly\n  - **Status**: \u23f3 Pending\n  - **Can Run Parallel**: \u2705 Yes\n\n- **S-IT-003**: Test responsive menu\n  - **File**: `libs/shared-components/src/lib/common/Navigation.integration.test.tsx`\n  - **Assertions**:\n    - Menu collapses on mobile\n    - Menu expands on click\n    - Links work in mobile menu\n  - **Status**: \u23f3 Pending\n  - **Can Run Parallel**: \u2705 Yes\n\n### E2E Tests\n\n- **S-E2E-001**: Complete navigation flow\n  - **File**: `tests/e2e/shared-components/navigation.spec.ts`\n  - **Steps**:\n    1. Navigate to homepage\n    2. Verify navigation visible\n    3. Click on navigation link\n    4. Verify page navigated\n    5. Toggle dark mode\n    6. Verify theme changes\n    7. Test mobile menu (if applicable)\n  - **Status**: \u23f3 Pending\n  - **Can Run Parallel**: \u2705 Yes",
+        "details": "## Time Estimation\n\n### Manual Testing\n- **Estimated Time**: 20-30 minutes\n- **Breakdown**:\n  - Test component rendering: 3-5 minutes\n  - Test navigation links: 5-7 minutes\n  - Test dark mode toggle: 3-5 minutes\n  - Test responsive design: 5-7 minutes\n  - Test authentication state: 4-6 minutes\n- **Complexity**: Low-Medium\n- **Dependencies**: Router, authentication context\n\n### Automated Testing\n- **Estimated Time**: 10-15 minutes (first run), 1-2 minutes (subsequent runs)\n- **Breakdown**:\n  - Unit tests setup and execution: 4-6 minutes\n  - Integration tests setup and execution: 4-7 minutes\n  - E2E tests execution: 2-2 minutes\n- **Complexity**: Low-Medium\n- **Dependencies**: Router mocks, auth mocks\n\n### Total Time\n- **Manual Only**: 20-30 minutes\n- **Automated Only**: 10-15 minutes (first run), 1-2 minutes (subsequent)\n- **Both Manual + Automated**: 30-45 minutes (first run), 21-32 minutes (subsequent)\n\n---\n\n## Overview\nTest the Navigation component used across the application, including navigation links, dark mode toggle, responsive design, and authentication state handling.\n\n## Manual Testing Steps\n\n1. **Test component rendering**\n   - Verify navigation bar renders\n   - Verify logo/brand visible\n   - Verify navigation links visible\n   - Verify dark mode toggle visible (if applicable)\n   - Verify user menu visible (if authenticated)\n\n2. **Test navigation links**\n   - Click on each navigation link\n   - Verify correct page navigated\n   - Verify active link highlighted\n   - Verify links work on all pages\n   - Test external links (if any)\n\n3. **Test dark mode toggle**\n   - Click dark mode toggle\n   - Verify theme changes\n   - Verify preference persisted\n   - Refresh page\n   - Verify theme maintained\n   - Toggle back to light mode\n   - Verify theme changes\n\n4. **Test responsive design**\n   - Test on mobile viewport\n   - Verify hamburger menu (if applicable)\n   - Verify menu expands/collapses\n   - Test on tablet viewport\n   - Verify layout adapts\n   - Test on desktop viewport\n   - Verify full navigation visible\n\n5. **Test authentication state**\n   - Test as unauthenticated user\n   - Verify sign-in link visible\n   - Test as authenticated user\n   - Verify user menu visible\n   - Verify logout option works\n   - Verify profile link works (if applicable)\n\n6. **Test navigation on different pages**\n   - Test navigation on homepage\n   - Test navigation on practice pages\n   - Test navigation on admin pages\n   - Verify consistent behavior\n   - Verify active state correct\n\n## Test Strategy:\n## Automated Tests\n\n### Unit Tests\n\n- **S-UT-001**: Test component renders\n  - **File**: `libs/components/src/lib/common/Navigation.test.tsx`\n  - **Assertions**:\n    - Component renders\n    - Navigation links present\n    - Logo visible\n  - **Status**: \u23f3 Pending\n  - **Can Run Parallel**: \u2705 Yes\n\n- **S-UT-002**: Test navigation links\n  - **File**: `libs/components/src/lib/common/Navigation.test.tsx`\n  - **Assertions**:\n    - All links rendered\n    - Links have correct hrefs\n    - Active link highlighted\n  - **Status**: \u23f3 Pending\n  - **Can Run Parallel**: \u2705 Yes\n\n- **S-UT-003**: Test dark mode toggle\n  - **File**: `libs/components/src/lib/common/Navigation.test.tsx`\n  - **Assertions**:\n    - Toggle button present\n    - Click handler attached\n    - Theme state updates\n  - **Status**: \u23f3 Pending\n  - **Can Run Parallel**: \u2705 Yes\n\n- **S-UT-004**: Test authentication state\n  - **File**: `libs/components/src/lib/common/Navigation.test.tsx`\n  - **Assertions**:\n    - Sign-in link shown when unauthenticated\n    - User menu shown when authenticated\n    - Logout handler works\n  - **Status**: \u23f3 Pending\n  - **Can Run Parallel**: \u2705 Yes\n\n### Integration Tests\n\n- **S-IT-001**: Test navigation routing\n  - **File**: `libs/components/src/lib/common/Navigation.integration.test.tsx`\n  - **Assertions**:\n    - Clicking link navigates correctly\n    - Router.push called with correct path\n    - Active state updates\n  - **Status**: \u23f3 Pending\n  - **Can Run Parallel**: \u2705 Yes\n\n- **S-IT-002**: Test dark mode persistence\n  - **File**: `libs/components/src/lib/common/Navigation.integration.test.tsx`\n  - **Assertions**:\n    - Theme preference saved\n    - Theme persists on refresh\n    - Theme applied correctly\n  - **Status**: \u23f3 Pending\n  - **Can Run Parallel**: \u2705 Yes\n\n- **S-IT-003**: Test responsive menu\n  - **File**: `libs/components/src/lib/common/Navigation.integration.test.tsx`\n  - **Assertions**:\n    - Menu collapses on mobile\n    - Menu expands on click\n    - Links work in mobile menu\n  - **Status**: \u23f3 Pending\n  - **Can Run Parallel**: \u2705 Yes\n\n### E2E Tests\n\n- **S-E2E-001**: Complete navigation flow\n  - **File**: `tests/e2e/shared-components/navigation.spec.ts`\n  - **Steps**:\n    1. Navigate to homepage\n    2. Verify navigation visible\n    3. Click on navigation link\n    4. Verify page navigated\n    5. Toggle dark mode\n    6. Verify theme changes\n    7. Test mobile menu (if applicable)\n  - **Status**: \u23f3 Pending\n  - **Can Run Parallel**: \u2705 Yes",
         "testStrategy": "Follow the test specifications in the test task file: Rest/markdown/docs/testing/tasks/shared-components/S-001-navigation-component.md. Implement all unit, integration, and E2E tests as specified. Update test task status when complete.",
         "status": "pending",
         "priority": "medium",
@@ -649,7 +587,7 @@
       {
         "title": "Implement Tests: Question Card Component",
         "description": "Implement manual testing and automated tests for Question Card Component. Test the Question Card component used to display questions across the application, including question text, answer options, interactions, and different question types.",
-        "details": "## Time Estimation\n\n### Manual Testing\n- **Estimated Time**: 25-35 minutes\n- **Breakdown**:\n  - Test component rendering: 3-5 minutes\n  - Test question display: 5-7 minutes\n  - Test answer options: 5-7 minutes\n  - Test interactions: 5-7 minutes\n  - Test different question types: 4-6 minutes\n  - Test responsive design: 3-3 minutes\n- **Complexity**: Medium\n- **Dependencies**: Question data, answer handling\n\n### Automated Testing\n- **Estimated Time**: 12-18 minutes (first run), 2-3 minutes (subsequent runs)\n- **Breakdown**:\n  - Unit tests setup and execution: 5-8 minutes\n  - Integration tests setup and execution: 5-8 minutes\n  - E2E tests execution: 2-2 minutes\n- **Complexity**: Medium\n- **Dependencies**: Question data mocks\n\n### Total Time\n- **Manual Only**: 25-35 minutes\n- **Automated Only**: 12-18 minutes (first run), 2-3 minutes (subsequent)\n- **Both Manual + Automated**: 37-53 minutes (first run), 27-38 minutes (subsequent)\n\n---\n\n## Overview\nTest the Question Card component used to display questions across the application, including question text, answer options, interactions, and different question types.\n\n## Manual Testing Steps\n\n1. **Test component rendering**\n   - Verify question card renders\n   - Verify question text displayed\n   - Verify answer options displayed (if applicable)\n   - Verify question metadata (difficulty, category) shown\n   - Verify question number/ID shown\n\n2. **Test question display**\n   - Verify question text formatted correctly\n   - Verify code blocks rendered (if applicable)\n   - Verify images rendered (if applicable)\n   - Verify markdown formatted correctly\n   - Verify long questions truncated/scrollable\n\n3. **Test answer options (multiple choice)**\n   - Verify all options displayed\n   - Verify options clickable\n   - Click on an option\n   - Verify option selected\n   - Verify other options disabled (if single choice)\n   - Verify multiple selections (if multiple choice)\n\n4. **Test answer submission**\n   - Select an answer\n   - Click submit button\n   - Verify answer submitted\n   - Verify feedback shown (correct/incorrect)\n   - Verify explanation shown (if applicable)\n   - Verify next button enabled\n\n5. **Test different question types**\n   - Test multiple choice\n   - Test true/false\n   - Test code completion (if applicable)\n   - Test fill-in-the-blank (if applicable)\n   - Verify each type renders correctly\n\n6. **Test interactions**\n   - Test hover states\n   - Test focus states\n   - Test disabled states\n   - Test loading states\n   - Test error states\n\n7. **Test responsive design**\n   - Test on mobile viewport\n   - Verify card adapts\n   - Test on tablet viewport\n   - Verify layout correct\n   - Test on desktop viewport\n   - Verify optimal layout\n\n8. **Test accessibility**\n   - Test keyboard navigation\n   - Test screen reader compatibility\n   - Test ARIA labels\n   - Test focus management\n\n## Test Strategy:\n## Automated Tests\n\n### Unit Tests\n\n- **S-UT-005**: Test component renders\n  - **File**: `libs/shared-components/src/lib/common/QuestionCard.test.tsx`\n  - **Assertions**:\n    - Component renders\n    - Question text displayed\n    - Answer options rendered\n  - **Status**: \u23f3 Pending\n  - **Can Run Parallel**: \u2705 Yes\n\n- **S-UT-006**: Test question text display\n  - **File**: `libs/shared-components/src/lib/common/QuestionCard.test.tsx`\n  - **Assertions**:\n    - Question text formatted\n    - Markdown rendered\n    - Code blocks rendered (if applicable)\n  - **Status**: \u23f3 Pending\n  - **Can Run Parallel**: \u2705 Yes\n\n- **S-UT-007**: Test answer options\n  - **File**: `libs/shared-components/src/lib/common/QuestionCard.test.tsx`\n  - **Assertions**:\n    - Options rendered\n    - Options clickable\n    - Selection state updates\n  - **Status**: \u23f3 Pending\n  - **Can Run Parallel**: \u2705 Yes\n\n- **S-UT-008**: Test answer submission\n  - **File**: `libs/shared-components/src/lib/common/QuestionCard.test.tsx`\n  - **Assertions**:\n    - Submit handler called\n    - Feedback shown\n    - Explanation displayed\n  - **Status**: \u23f3 Pending\n  - **Can Run Parallel**: \u2705 Yes\n\n- **S-UT-009**: Test different question types\n  - **File**: `libs/shared-components/src/lib/common/QuestionCard.test.tsx`\n  - **Assertions**:\n    - Multiple choice renders\n    - True/false renders\n    - Other types render correctly\n  - **Status**: \u23f3 Pending\n  - **Can Run Parallel**: \u2705 Yes\n\n### Integration Tests\n\n- **S-IT-004**: Test answer selection flow\n  - **File**: `libs/shared-components/src/lib/common/QuestionCard.integration.test.tsx`\n  - **Assertions**:\n    - Answer selected\n    - State updates\n    - Submit works\n    - Feedback shown\n  - **Status**: \u23f3 Pending\n  - **Can Run Parallel**: \u2705 Yes\n\n- **S-IT-005**: Test question data handling\n  - **File**: `libs/shared-components/src/lib/common/QuestionCard.integration.test.tsx`\n  - **Assertions**:\n    - Question data loaded\n    - Options populated\n    - Metadata displayed\n  - **Status**: \u23f3 Pending\n  - **Can Run Parallel**: \u2705 Yes\n\n- **S-IT-006**: Test callback handlers\n  - **File**: `libs/shared-components/src/lib/common/QuestionCard.integration.test.tsx`\n  - **Assertions**:\n    - onAnswer callback called\n    - onNext callback called\n    - onSkip callback called (if applicable)\n  - **Status**: \u23f3 Pending\n  - **Can Run Parallel**: \u2705 Yes\n\n### E2E Tests\n\n- **S-E2E-002**: Complete question card interaction\n  - **File**: `tests/e2e/shared-components/question-card.spec.ts`\n  - **Steps**:\n    1. Render question card\n    2. Verify question displayed\n    3. Select an answer\n    4. Submit answer\n    5. Verify feedback shown\n    6. Click next\n    7. Verify next question loaded\n  - **Status**: \u23f3 Pending\n  - **Can Run Parallel**: \u2705 Yes",
+        "details": "## Time Estimation\n\n### Manual Testing\n- **Estimated Time**: 25-35 minutes\n- **Breakdown**:\n  - Test component rendering: 3-5 minutes\n  - Test question display: 5-7 minutes\n  - Test answer options: 5-7 minutes\n  - Test interactions: 5-7 minutes\n  - Test different question types: 4-6 minutes\n  - Test responsive design: 3-3 minutes\n- **Complexity**: Medium\n- **Dependencies**: Question data, answer handling\n\n### Automated Testing\n- **Estimated Time**: 12-18 minutes (first run), 2-3 minutes (subsequent runs)\n- **Breakdown**:\n  - Unit tests setup and execution: 5-8 minutes\n  - Integration tests setup and execution: 5-8 minutes\n  - E2E tests execution: 2-2 minutes\n- **Complexity**: Medium\n- **Dependencies**: Question data mocks\n\n### Total Time\n- **Manual Only**: 25-35 minutes\n- **Automated Only**: 12-18 minutes (first run), 2-3 minutes (subsequent)\n- **Both Manual + Automated**: 37-53 minutes (first run), 27-38 minutes (subsequent)\n\n---\n\n## Overview\nTest the Question Card component used to display questions across the application, including question text, answer options, interactions, and different question types.\n\n## Manual Testing Steps\n\n1. **Test component rendering**\n   - Verify question card renders\n   - Verify question text displayed\n   - Verify answer options displayed (if applicable)\n   - Verify question metadata (difficulty, category) shown\n   - Verify question number/ID shown\n\n2. **Test question display**\n   - Verify question text formatted correctly\n   - Verify code blocks rendered (if applicable)\n   - Verify images rendered (if applicable)\n   - Verify markdown formatted correctly\n   - Verify long questions truncated/scrollable\n\n3. **Test answer options (multiple choice)**\n   - Verify all options displayed\n   - Verify options clickable\n   - Click on an option\n   - Verify option selected\n   - Verify other options disabled (if single choice)\n   - Verify multiple selections (if multiple choice)\n\n4. **Test answer submission**\n   - Select an answer\n   - Click submit button\n   - Verify answer submitted\n   - Verify feedback shown (correct/incorrect)\n   - Verify explanation shown (if applicable)\n   - Verify next button enabled\n\n5. **Test different question types**\n   - Test multiple choice\n   - Test true/false\n   - Test code completion (if applicable)\n   - Test fill-in-the-blank (if applicable)\n   - Verify each type renders correctly\n\n6. **Test interactions**\n   - Test hover states\n   - Test focus states\n   - Test disabled states\n   - Test loading states\n   - Test error states\n\n7. **Test responsive design**\n   - Test on mobile viewport\n   - Verify card adapts\n   - Test on tablet viewport\n   - Verify layout correct\n   - Test on desktop viewport\n   - Verify optimal layout\n\n8. **Test accessibility**\n   - Test keyboard navigation\n   - Test screen reader compatibility\n   - Test ARIA labels\n   - Test focus management\n\n## Test Strategy:\n## Automated Tests\n\n### Unit Tests\n\n- **S-UT-005**: Test component renders\n  - **File**: `libs/components/src/lib/common/QuestionCard.test.tsx`\n  - **Assertions**:\n    - Component renders\n    - Question text displayed\n    - Answer options rendered\n  - **Status**: \u23f3 Pending\n  - **Can Run Parallel**: \u2705 Yes\n\n- **S-UT-006**: Test question text display\n  - **File**: `libs/components/src/lib/common/QuestionCard.test.tsx`\n  - **Assertions**:\n    - Question text formatted\n    - Markdown rendered\n    - Code blocks rendered (if applicable)\n  - **Status**: \u23f3 Pending\n  - **Can Run Parallel**: \u2705 Yes\n\n- **S-UT-007**: Test answer options\n  - **File**: `libs/components/src/lib/common/QuestionCard.test.tsx`\n  - **Assertions**:\n    - Options rendered\n    - Options clickable\n    - Selection state updates\n  - **Status**: \u23f3 Pending\n  - **Can Run Parallel**: \u2705 Yes\n\n- **S-UT-008**: Test answer submission\n  - **File**: `libs/components/src/lib/common/QuestionCard.test.tsx`\n  - **Assertions**:\n    - Submit handler called\n    - Feedback shown\n    - Explanation displayed\n  - **Status**: \u23f3 Pending\n  - **Can Run Parallel**: \u2705 Yes\n\n- **S-UT-009**: Test different question types\n  - **File**: `libs/components/src/lib/common/QuestionCard.test.tsx`\n  - **Assertions**:\n    - Multiple choice renders\n    - True/false renders\n    - Other types render correctly\n  - **Status**: \u23f3 Pending\n  - **Can Run Parallel**: \u2705 Yes\n\n### Integration Tests\n\n- **S-IT-004**: Test answer selection flow\n  - **File**: `libs/components/src/lib/common/QuestionCard.integration.test.tsx`\n  - **Assertions**:\n    - Answer selected\n    - State updates\n    - Submit works\n    - Feedback shown\n  - **Status**: \u23f3 Pending\n  - **Can Run Parallel**: \u2705 Yes\n\n- **S-IT-005**: Test question data handling\n  - **File**: `libs/components/src/lib/common/QuestionCard.integration.test.tsx`\n  - **Assertions**:\n    - Question data loaded\n    - Options populated\n    - Metadata displayed\n  - **Status**: \u23f3 Pending\n  - **Can Run Parallel**: \u2705 Yes\n\n- **S-IT-006**: Test callback handlers\n  - **File**: `libs/components/src/lib/common/QuestionCard.integration.test.tsx`\n  - **Assertions**:\n    - onAnswer callback called\n    - onNext callback called\n    - onSkip callback called (if applicable)\n  - **Status**: \u23f3 Pending\n  - **Can Run Parallel**: \u2705 Yes\n\n### E2E Tests\n\n- **S-E2E-002**: Complete question card interaction\n  - **File**: `tests/e2e/shared-components/question-card.spec.ts`\n  - **Steps**:\n    1. Render question card\n    2. Verify question displayed\n    3. Select an answer\n    4. Submit answer\n    5. Verify feedback shown\n    6. Click next\n    7. Verify next question loaded\n  - **Status**: \u23f3 Pending\n  - **Can Run Parallel**: \u2705 Yes",
         "testStrategy": "Follow the test specifications in the test task file: Rest/markdown/docs/testing/tasks/shared-components/S-002-question-card-component.md. Implement all unit, integration, and E2E tests as specified. Update test task status when complete.",
         "status": "pending",
         "priority": "medium",
@@ -659,7 +597,7 @@
       {
         "title": "Implement Tests: Progress Tracker Component",
         "description": "Implement manual testing and automated tests for Progress Tracker Component. Test the Progress Tracker component used to display and track user progress across questions, challenges, learning paths, and sections.",
-        "details": "## Time Estimation\n\n### Manual Testing\n- **Estimated Time**: 25-35 minutes\n- **Breakdown**:\n  - Test component rendering: 3-5 minutes\n  - Test progress display: 5-7 minutes\n  - Test progress updates: 5-7 minutes\n  - Test different progress types: 5-7 minutes\n  - Test visual indicators: 4-6 minutes\n  - Test responsive design: 3-3 minutes\n- **Complexity**: Medium\n- **Dependencies**: Progress data, tracking logic\n\n### Automated Testing\n- **Estimated Time**: 12-18 minutes (first run), 2-3 minutes (subsequent runs)\n- **Breakdown**:\n  - Unit tests setup and execution: 5-8 minutes\n  - Integration tests setup and execution: 5-8 minutes\n  - E2E tests execution: 2-2 minutes\n- **Complexity**: Medium\n- **Dependencies**: Progress data mocks, tracking mocks\n\n### Total Time\n- **Manual Only**: 25-35 minutes\n- **Automated Only**: 12-18 minutes (first run), 2-3 minutes (subsequent)\n- **Both Manual + Automated**: 37-53 minutes (first run), 27-38 minutes (subsequent)\n\n---\n\n## Overview\nTest the Progress Tracker component used to display and track user progress across questions, challenges, learning paths, and sections.\n\n## Manual Testing Steps\n\n1. **Test component rendering**\n   - Verify progress tracker renders\n   - Verify progress bar visible\n   - Verify percentage displayed\n   - Verify progress text shown\n   - Verify completion indicator (if applicable)\n\n2. **Test progress display**\n   - Verify current progress shown\n   - Verify total items shown\n   - Verify percentage calculated correctly\n   - Verify progress bar fills correctly\n   - Verify progress text formatted correctly\n\n3. **Test progress updates**\n   - Complete an item\n   - Verify progress updates\n   - Verify progress bar animates\n   - Verify percentage updates\n   - Verify completion state (if applicable)\n\n4. **Test different progress types**\n   - Test question progress\n   - Test challenge progress\n   - Test learning path progress\n   - Test section progress\n   - Verify each type displays correctly\n\n5. **Test visual indicators**\n   - Test progress bar colors\n   - Test completion animation\n   - Test milestone indicators (if applicable)\n   - Test progress milestones (25%, 50%, 75%, 100%)\n   - Verify visual feedback\n\n6. **Test edge cases**\n   - Test 0% progress\n   - Test 100% progress\n   - Test negative progress (should not happen)\n   - Test progress > 100% (should cap at 100%)\n   - Test missing data handling\n\n7. **Test responsive design**\n   - Test on mobile viewport\n   - Verify progress bar adapts\n   - Test on tablet viewport\n   - Verify layout correct\n   - Test on desktop viewport\n   - Verify optimal layout\n\n8. **Test accessibility**\n   - Test screen reader compatibility\n   - Test ARIA labels\n   - Test progress announced correctly\n   - Test keyboard navigation (if applicable)\n\n## Test Strategy:\n## Automated Tests\n\n### Unit Tests\n\n- **S-UT-010**: Test component renders\n  - **File**: `libs/shared-components/src/lib/common/ProgressTracker.test.tsx`\n  - **Assertions**:\n    - Component renders\n    - Progress bar visible\n    - Percentage displayed\n  - **Status**: \u23f3 Pending\n  - **Can Run Parallel**: \u2705 Yes\n\n- **S-UT-011**: Test progress calculation\n  - **File**: `libs/shared-components/src/lib/common/ProgressTracker.test.tsx`\n  - **Assertions**:\n    - Percentage calculated correctly\n    - Progress bar width correct\n    - Edge cases handled (0%, 100%)\n  - **Status**: \u23f3 Pending\n  - **Can Run Parallel**: \u2705 Yes\n\n- **S-UT-012**: Test progress updates\n  - **File**: `libs/shared-components/src/lib/common/ProgressTracker.test.tsx`\n  - **Assertions**:\n    - Progress updates on prop change\n    - Animation triggered\n    - State updates correctly\n  - **Status**: \u23f3 Pending\n  - **Can Run Parallel**: \u2705 Yes\n\n- **S-UT-013**: Test different progress types\n  - **File**: `libs/shared-components/src/lib/common/ProgressTracker.test.tsx`\n  - **Assertions**:\n    - Question progress works\n    - Challenge progress works\n    - Learning path progress works\n    - Section progress works\n  - **Status**: \u23f3 Pending\n  - **Can Run Parallel**: \u2705 Yes\n\n- **S-UT-014**: Test visual indicators\n  - **File**: `libs/shared-components/src/lib/common/ProgressTracker.test.tsx`\n  - **Assertions**:\n    - Colors change based on progress\n    - Completion animation works\n    - Milestones displayed correctly\n  - **Status**: \u23f3 Pending\n  - **Can Run Parallel**: \u2705 Yes\n\n### Integration Tests\n\n- **S-IT-007**: Test progress tracking flow\n  - **File**: `libs/shared-components/src/lib/common/ProgressTracker.integration.test.tsx`\n  - **Assertions**:\n    - Progress tracked correctly\n    - Updates persisted\n    - Callbacks called\n  - **Status**: \u23f3 Pending\n  - **Can Run Parallel**: \u2705 Yes\n\n- **S-IT-008**: Test progress data integration\n  - **File**: `libs/shared-components/src/lib/common/ProgressTracker.integration.test.tsx`\n  - **Assertions**:\n    - Progress data loaded\n    - Progress calculated from data\n    - Updates saved correctly\n  - **Status**: \u23f3 Pending\n  - **Can Run Parallel**: \u2705 Yes\n\n- **S-IT-009**: Test callback handlers\n  - **File**: `libs/shared-components/src/lib/common/ProgressTracker.integration.test.tsx`\n  - **Assertions**:\n    - onProgressUpdate called\n    - Correct data passed\n    - Handlers work correctly\n  - **Status**: \u23f3 Pending\n  - **Can Run Parallel**: \u2705 Yes\n\n### E2E Tests\n\n- **S-E2E-003**: Complete progress tracking flow\n  - **File**: `tests/e2e/shared-components/progress-tracker.spec.ts`\n  - **Steps**:\n    1. Render progress tracker\n    2. Verify initial progress shown\n    3. Complete an item\n    4. Verify progress updates\n    5. Verify progress bar animates\n    6. Complete all items\n    7. Verify 100% progress shown\n  - **Status**: \u23f3 Pending\n  - **Can Run Parallel**: \u2705 Yes",
+        "details": "## Time Estimation\n\n### Manual Testing\n- **Estimated Time**: 25-35 minutes\n- **Breakdown**:\n  - Test component rendering: 3-5 minutes\n  - Test progress display: 5-7 minutes\n  - Test progress updates: 5-7 minutes\n  - Test different progress types: 5-7 minutes\n  - Test visual indicators: 4-6 minutes\n  - Test responsive design: 3-3 minutes\n- **Complexity**: Medium\n- **Dependencies**: Progress data, tracking logic\n\n### Automated Testing\n- **Estimated Time**: 12-18 minutes (first run), 2-3 minutes (subsequent runs)\n- **Breakdown**:\n  - Unit tests setup and execution: 5-8 minutes\n  - Integration tests setup and execution: 5-8 minutes\n  - E2E tests execution: 2-2 minutes\n- **Complexity**: Medium\n- **Dependencies**: Progress data mocks, tracking mocks\n\n### Total Time\n- **Manual Only**: 25-35 minutes\n- **Automated Only**: 12-18 minutes (first run), 2-3 minutes (subsequent)\n- **Both Manual + Automated**: 37-53 minutes (first run), 27-38 minutes (subsequent)\n\n---\n\n## Overview\nTest the Progress Tracker component used to display and track user progress across questions, challenges, learning paths, and sections.\n\n## Manual Testing Steps\n\n1. **Test component rendering**\n   - Verify progress tracker renders\n   - Verify progress bar visible\n   - Verify percentage displayed\n   - Verify progress text shown\n   - Verify completion indicator (if applicable)\n\n2. **Test progress display**\n   - Verify current progress shown\n   - Verify total items shown\n   - Verify percentage calculated correctly\n   - Verify progress bar fills correctly\n   - Verify progress text formatted correctly\n\n3. **Test progress updates**\n   - Complete an item\n   - Verify progress updates\n   - Verify progress bar animates\n   - Verify percentage updates\n   - Verify completion state (if applicable)\n\n4. **Test different progress types**\n   - Test question progress\n   - Test challenge progress\n   - Test learning path progress\n   - Test section progress\n   - Verify each type displays correctly\n\n5. **Test visual indicators**\n   - Test progress bar colors\n   - Test completion animation\n   - Test milestone indicators (if applicable)\n   - Test progress milestones (25%, 50%, 75%, 100%)\n   - Verify visual feedback\n\n6. **Test edge cases**\n   - Test 0% progress\n   - Test 100% progress\n   - Test negative progress (should not happen)\n   - Test progress > 100% (should cap at 100%)\n   - Test missing data handling\n\n7. **Test responsive design**\n   - Test on mobile viewport\n   - Verify progress bar adapts\n   - Test on tablet viewport\n   - Verify layout correct\n   - Test on desktop viewport\n   - Verify optimal layout\n\n8. **Test accessibility**\n   - Test screen reader compatibility\n   - Test ARIA labels\n   - Test progress announced correctly\n   - Test keyboard navigation (if applicable)\n\n## Test Strategy:\n## Automated Tests\n\n### Unit Tests\n\n- **S-UT-010**: Test component renders\n  - **File**: `libs/components/src/lib/common/ProgressTracker.test.tsx`\n  - **Assertions**:\n    - Component renders\n    - Progress bar visible\n    - Percentage displayed\n  - **Status**: \u23f3 Pending\n  - **Can Run Parallel**: \u2705 Yes\n\n- **S-UT-011**: Test progress calculation\n  - **File**: `libs/components/src/lib/common/ProgressTracker.test.tsx`\n  - **Assertions**:\n    - Percentage calculated correctly\n    - Progress bar width correct\n    - Edge cases handled (0%, 100%)\n  - **Status**: \u23f3 Pending\n  - **Can Run Parallel**: \u2705 Yes\n\n- **S-UT-012**: Test progress updates\n  - **File**: `libs/components/src/lib/common/ProgressTracker.test.tsx`\n  - **Assertions**:\n    - Progress updates on prop change\n    - Animation triggered\n    - State updates correctly\n  - **Status**: \u23f3 Pending\n  - **Can Run Parallel**: \u2705 Yes\n\n- **S-UT-013**: Test different progress types\n  - **File**: `libs/components/src/lib/common/ProgressTracker.test.tsx`\n  - **Assertions**:\n    - Question progress works\n    - Challenge progress works\n    - Learning path progress works\n    - Section progress works\n  - **Status**: \u23f3 Pending\n  - **Can Run Parallel**: \u2705 Yes\n\n- **S-UT-014**: Test visual indicators\n  - **File**: `libs/components/src/lib/common/ProgressTracker.test.tsx`\n  - **Assertions**:\n    - Colors change based on progress\n    - Completion animation works\n    - Milestones displayed correctly\n  - **Status**: \u23f3 Pending\n  - **Can Run Parallel**: \u2705 Yes\n\n### Integration Tests\n\n- **S-IT-007**: Test progress tracking flow\n  - **File**: `libs/components/src/lib/common/ProgressTracker.integration.test.tsx`\n  - **Assertions**:\n    - Progress tracked correctly\n    - Updates persisted\n    - Callbacks called\n  - **Status**: \u23f3 Pending\n  - **Can Run Parallel**: \u2705 Yes\n\n- **S-IT-008**: Test progress data integration\n  - **File**: `libs/components/src/lib/common/ProgressTracker.integration.test.tsx`\n  - **Assertions**:\n    - Progress data loaded\n    - Progress calculated from data\n    - Updates saved correctly\n  - **Status**: \u23f3 Pending\n  - **Can Run Parallel**: \u2705 Yes\n\n- **S-IT-009**: Test callback handlers\n  - **File**: `libs/components/src/lib/common/ProgressTracker.integration.test.tsx`\n  - **Assertions**:\n    - onProgressUpdate called\n    - Correct data passed\n    - Handlers work correctly\n  - **Status**: \u23f3 Pending\n  - **Can Run Parallel**: \u2705 Yes\n\n### E2E Tests\n\n- **S-E2E-003**: Complete progress tracking flow\n  - **File**: `tests/e2e/shared-components/progress-tracker.spec.ts`\n  - **Steps**:\n    1. Render progress tracker\n    2. Verify initial progress shown\n    3. Complete an item\n    4. Verify progress updates\n    5. Verify progress bar animates\n    6. Complete all items\n    7. Verify 100% progress shown\n  - **Status**: \u23f3 Pending\n  - **Can Run Parallel**: \u2705 Yes",
         "testStrategy": "Follow the test specifications in the test task file: Rest/markdown/docs/testing/tasks/shared-components/S-003-progress-tracker-component.md. Implement all unit, integration, and E2E tests as specified. Update test task status when complete.",
         "status": "pending",
         "priority": "medium",

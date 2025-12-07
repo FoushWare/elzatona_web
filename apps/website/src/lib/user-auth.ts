@@ -1,8 +1,8 @@
-import bcrypt from 'bcryptjs';
-import { createClient } from '@supabase/supabase-js';
+import bcrypt from "bcryptjs";
+import { createClient } from "@supabase/supabase-js";
 
-const supabaseUrl = process.env['NEXT_PUBLIC_SUPABASE_URL']!;
-const supabaseServiceRoleKey = process.env['SUPABASE_SERVICE_ROLE_KEY']!;
+const supabaseUrl = process.env["NEXT_PUBLIC_SUPABASE_URL"]!;
+const supabaseServiceRoleKey = process.env["SUPABASE_SERVICE_ROLE_KEY"]!;
 const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
 
 // Enhanced user types with roles
@@ -11,12 +11,12 @@ export interface User {
   email: string;
   name: string;
   avatar?: string;
-  role: 'user' | 'premium_user' | 'admin' | 'super_admin';
+  role: "user" | "premium_user" | "admin" | "super_admin";
   is_active: boolean;
   created_at: Date;
   lastLogin?: Date;
   preferences?: {
-    theme: 'light' | 'dark' | 'system';
+    theme: "light" | "dark" | "system";
     notifications: boolean;
     emailUpdates: boolean;
   };
@@ -32,7 +32,7 @@ export interface UserSession {
   id: string;
   email: string;
   name: string;
-  role: 'user' | 'premium_user' | 'admin' | 'super_admin';
+  role: "user" | "premium_user" | "admin" | "super_admin";
   token: string;
   expiresAt: Date;
 }
@@ -50,7 +50,7 @@ export interface UserCreationResult {
 }
 
 export class UserAuthService {
-  private static readonly COLLECTION_NAME = 'users';
+  private static readonly COLLECTION_NAME = "users";
 
   /**
    * Register a new user
@@ -59,7 +59,7 @@ export class UserAuthService {
     email: string,
     password: string,
     name: string,
-    role: 'user' | 'premium_user' | 'admin' = 'user'
+    role: "user" | "premium_user" | "admin" = "user",
   ): Promise<UserCreationResult> {
     try {
       // Check if user already exists
@@ -67,7 +67,7 @@ export class UserAuthService {
       if (existingUser) {
         return {
           success: false,
-          error: 'User with this email already exists',
+          error: "User with this email already exists",
         };
       }
 
@@ -76,14 +76,14 @@ export class UserAuthService {
 
       // Create user document
       const userId = this.generateUserId();
-      const userData: Omit<User, 'id'> = {
+      const userData: Omit<User, "id"> = {
         email,
         name,
         role,
         is_active: true,
         created_at: new Date(),
         preferences: {
-          theme: 'system',
+          theme: "system",
           notifications: true,
           emailUpdates: true,
         },
@@ -95,7 +95,7 @@ export class UserAuthService {
         },
       };
 
-      await supabase.from('users').insert({
+      await supabase.from("users").insert({
         id: userId,
         ...userData,
         passwordHash,
@@ -105,8 +105,8 @@ export class UserAuthService {
       console.log(`✅ User account created: ${email} (${role})`);
       return { success: true, userId };
     } catch (error) {
-      console.error('Error creating user:', error);
-      return { success: false, error: 'Failed to create user account' };
+      console.error("Error creating user:", error);
+      return { success: false, error: "Failed to create user account" };
     }
   }
 
@@ -115,22 +115,22 @@ export class UserAuthService {
    */
   static async authenticateUser(
     email: string,
-    password: string
+    password: string,
   ): Promise<AuthResult> {
     try {
       const user = await this.getUserByEmail(email);
       if (!user) {
-        return { success: false, error: 'User not found' };
+        return { success: false, error: "User not found" };
       }
 
       if (!user.is_active) {
-        return { success: false, error: 'Account is deactivated' };
+        return { success: false, error: "Account is deactivated" };
       }
 
       // Verify password
       const isValidPassword = await bcrypt.compare(password, user.passwordHash);
       if (!isValidPassword) {
-        return { success: false, error: 'Invalid password' };
+        return { success: false, error: "Invalid password" };
       }
 
       // Update last login
@@ -149,8 +149,8 @@ export class UserAuthService {
       console.log(`✅ User authenticated: ${email} (${user.role})`);
       return { success: true, user: session };
     } catch (error) {
-      console.error('Error authenticating user:', error);
-      return { success: false, error: 'Authentication failed' };
+      console.error("Error authenticating user:", error);
+      return { success: false, error: "Authentication failed" };
     }
   }
 
@@ -158,13 +158,13 @@ export class UserAuthService {
    * Get user by email
    */
   static async getUserByEmail(
-    email: string
+    email: string,
   ): Promise<(User & { passwordHash: string }) | null> {
     try {
       const { data, error } = await supabase
-        .from('users')
-        .select('*')
-        .eq('email', email)
+        .from("users")
+        .select("*")
+        .eq("email", email)
         .single();
 
       if (error || !data) {
@@ -173,7 +173,7 @@ export class UserAuthService {
 
       return data as User & { passwordHash: string };
     } catch (error) {
-      console.error('Error getting user by email:', error);
+      console.error("Error getting user by email:", error);
       return null;
     }
   }
@@ -184,9 +184,9 @@ export class UserAuthService {
   static async getUserById(userId: string): Promise<User | null> {
     try {
       const { data, error } = await supabase
-        .from('users')
-        .select('*')
-        .eq('id', userId)
+        .from("users")
+        .select("*")
+        .eq("id", userId)
         .single();
 
       if (error || !data) {
@@ -195,7 +195,7 @@ export class UserAuthService {
 
       return data as User;
     } catch (error) {
-      console.error('Error getting user by ID:', error);
+      console.error("Error getting user by ID:", error);
       return null;
     }
   }
@@ -205,19 +205,19 @@ export class UserAuthService {
    */
   static async updateUserPreferences(
     userId: string,
-    preferences: Partial<User['preferences']>
+    preferences: Partial<User["preferences"]>,
   ): Promise<boolean> {
     try {
       await supabase
-        .from('users')
+        .from("users")
         .update({
           preferences: preferences,
         })
-        .eq('id', userId);
+        .eq("id", userId);
 
       return true;
     } catch (error) {
-      console.error('Error updating user preferences:', error);
+      console.error("Error updating user preferences:", error);
       return false;
     }
   }
@@ -227,19 +227,19 @@ export class UserAuthService {
    */
   static async updateUserProgress(
     userId: string,
-    progress: Partial<User['progress']>
+    progress: Partial<User["progress"]>,
   ): Promise<boolean> {
     try {
       await supabase
-        .from('users')
+        .from("users")
         .update({
           progress: progress,
         })
-        .eq('id', userId);
+        .eq("id", userId);
 
       return true;
     } catch (error) {
-      console.error('Error updating user progress:', error);
+      console.error("Error updating user progress:", error);
       return false;
     }
   }
@@ -248,8 +248,8 @@ export class UserAuthService {
    * Check if user has permission for a specific action
    */
   static hasPermission(
-    userRole: User['role'],
-    requiredRole: User['role']
+    userRole: User["role"],
+    requiredRole: User["role"],
   ): boolean {
     const roleHierarchy = {
       user: 0,
@@ -266,7 +266,7 @@ export class UserAuthService {
    */
   static async getAllUsers(): Promise<User[]> {
     try {
-      const { data, error } = await supabase.from('users').select('*');
+      const { data, error } = await supabase.from("users").select("*");
 
       if (error || !data) {
         return [];
@@ -274,7 +274,7 @@ export class UserAuthService {
 
       return data as User[];
     } catch (error) {
-      console.error('Error getting all users:', error);
+      console.error("Error getting all users:", error);
       return [];
     }
   }
@@ -285,13 +285,13 @@ export class UserAuthService {
   private static async updateLastLogin(userId: string): Promise<void> {
     try {
       await supabase
-        .from('users')
+        .from("users")
         .update({
           lastLogin: new Date().toISOString(),
         })
-        .eq('id', userId);
+        .eq("id", userId);
     } catch (error) {
-      console.error('Error updating last login:', error);
+      console.error("Error updating last login:", error);
     }
   }
 

@@ -1,8 +1,13 @@
 # Task ID: F-003
+
 # Title: Browse Practice Questions Page
+
 # Status: pending
-# Dependencies: 
+
+# Dependencies:
+
 # Priority: medium
+
 # Description: Test the Browse Practice Questions page which serves as the main entry point for freestyle learning, offering three practice options: Interview Questions, Frontend Tasks, and Problem Solving.
 
 # Details:
@@ -10,6 +15,7 @@
 ## Time Estimation
 
 ### Manual Testing
+
 - **Estimated Time**: 30-40 minutes
 - **Breakdown**:
   - Navigate to page: 2 minutes
@@ -23,6 +29,7 @@
 - **Dependencies**: None
 
 ### Automated Testing
+
 - **Estimated Time**: 12-18 minutes (first run), 2-3 minutes (subsequent runs)
 - **Breakdown**:
   - Unit tests setup and execution: 4-6 minutes
@@ -32,6 +39,7 @@
 - **Dependencies**: Test data, API mocks
 
 ### Total Time
+
 - **Manual Only**: 30-40 minutes
 - **Automated Only**: 12-18 minutes (first run), 2-3 minutes (subsequent)
 - **Both Manual + Automated**: 42-58 minutes (first run), 32-43 minutes (subsequent)
@@ -39,6 +47,7 @@
 ---
 
 ## Overview
+
 Test the Browse Practice Questions page which serves as the main entry point for freestyle learning, offering three practice options: Interview Questions, Frontend Tasks, and Problem Solving.
 
 ## Manual Testing Steps

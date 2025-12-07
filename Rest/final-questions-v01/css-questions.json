@@ -13,12 +13,7 @@
     "updatedAt": "2025-11-11T16:43:21.640Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "css",
-      "basics",
-      "specificity",
-      "intermediate"
-    ],
+    "tags": ["css", "basics", "specificity", "intermediate"],
     "explanation": "Specificity order: inline styles (1000) > IDs (100) > classes/attributes/pseudo-classes (10) > elements/pseudo-elements (1). !important overrides all but is not part of specificity calculation. More specific selectors win.",
     "points": 15,
     "options": [
@@ -68,12 +63,7 @@
     "updatedAt": "2025-11-11T16:43:21.640Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "css",
-      "basics",
-      "inheritance",
-      "intermediate"
-    ],
+    "tags": ["css", "basics", "inheritance", "intermediate"],
     "explanation": "Inherited properties include: color, font-family, font-size, line-height, text-align, visibility, and most text-related properties. Non-inherited: margin, padding, border, width, height, background, display, position.",
     "points": 15,
     "options": [
@@ -123,13 +113,7 @@
     "updatedAt": "2025-11-11T16:43:21.640Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "css",
-      "basics",
-      "units",
-      "responsive",
-      "intermediate"
-    ],
+    "tags": ["css", "basics", "units", "responsive", "intermediate"],
     "explanation": "'em' is relative to parent element's font-size (compounds with nesting). 'rem' is relative to root element's font-size (consistent regardless of nesting). Use 'rem' for predictable sizing, 'em' for component-relative sizing.",
     "points": 15,
     "options": [
@@ -179,12 +163,7 @@
     "updatedAt": "2025-11-11T16:43:21.640Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "css",
-      "basics",
-      "box-model",
-      "intermediate"
-    ],
+    "tags": ["css", "basics", "box-model", "intermediate"],
     "explanation": "content-box: width/height = content only (padding/border add to total). border-box: width/height = content + padding + border (total size matches specified). border-box is more intuitive and commonly used in modern CSS.",
     "points": 15,
     "options": [
@@ -234,13 +213,7 @@
     "updatedAt": "2025-11-11T16:43:21.640Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "css",
-      "basics",
-      "selectors",
-      "specificity",
-      "intermediate"
-    ],
+    "tags": ["css", "basics", "selectors", "specificity", "intermediate"],
     "explanation": "Inline styles (style='...') have highest specificity (1000). IDs (<code>#id</code>) have 100. Classes (<code>.class</code>), attributes (<code>[attr]</code>), and pseudo-classes (<code>:hover</code>) have 10. Elements (div) and pseudo-elements (<code>::before</code>) have 1.",
     "points": 15,
     "options": [
@@ -290,13 +263,7 @@
     "updatedAt": "2025-11-11T16:43:21.640Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "css",
-      "basics",
-      "important",
-      "specificity",
-      "intermediate"
-    ],
+    "tags": ["css", "basics", "important", "specificity", "intermediate"],
     "explanation": "!important overrides all other declarations regardless of specificity. Should be used sparingly: for utility classes, framework overrides, or critical styles. Overuse makes CSS hard to maintain and debug. Consider refactoring instead.",
     "points": 15,
     "options": [
@@ -346,13 +313,7 @@
     "updatedAt": "2025-11-11T16:43:21.640Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "css",
-      "basics",
-      "display",
-      "visibility",
-      "intermediate"
-    ],
+    "tags": ["css", "basics", "display", "visibility", "intermediate"],
     "explanation": "<code>display:</code> none removes element from layout flow (takes no space, not accessible). visibility: hidden keeps element in layout (takes space, not visible, not accessible). opacity: 0 keeps element visible to screen readers but invisible.",
     "points": 15,
     "options": [
@@ -402,12 +363,7 @@
     "updatedAt": "2025-11-11T16:43:21.640Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "css",
-      "basics",
-      "units",
-      "intermediate"
-    ],
+    "tags": ["css", "basics", "units", "intermediate"],
     "explanation": "Absolute units: px (pixels), pt (points), pc (picas), in (inches), cm (centimeters), mm (millimeters). Relative units: em, rem, %, vw, vh, vmin, vmax, ch, ex. Absolute units don't scale with user preferences.",
     "points": 15,
     "options": [
@@ -457,12 +413,7 @@
     "updatedAt": "2025-11-11T16:43:21.640Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "css",
-      "basics",
-      "cascade",
-      "intermediate"
-    ],
+    "tags": ["css", "basics", "cascade", "intermediate"],
     "explanation": "Cascade order: 1) Importance (!important), 2) Specificity (higher wins), 3) Source order (later wins if equal). Stylesheet order matters when specificity is equal. User agent styles < author styles < user styles (with !important).",
     "points": 15,
     "options": [
@@ -512,12 +463,7 @@
     "updatedAt": "2025-11-11T16:43:21.640Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "css",
-      "basics",
-      "positioning",
-      "intermediate"
-    ],
+    "tags": ["css", "basics", "positioning", "intermediate"],
     "explanation": "relative: element stays in normal flow, offset from its original position. absolute: element removed from flow, positioned relative to nearest positioned ancestor (or viewport). relative doesn't affect siblings, absolute does. Use relative for offsetting, absolute for overlays/tooltips.",
     "points": 15,
     "options": [
@@ -567,12 +513,7 @@
     "updatedAt": "2025-11-11T16:44:24.462Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "css",
-      "layout",
-      "flexbox",
-      "intermediate"
-    ],
+    "tags": ["css", "layout", "flexbox", "intermediate"],
     "explanation": "justify-content aligns items along main axis (row: horizontal, column: vertical). align-items aligns items along cross axis (row: vertical, column: horizontal). Use justify-content for main axis spacing, align-items for cross-axis alignment.",
     "points": 15,
     "options": [
@@ -622,12 +563,7 @@
     "updatedAt": "2025-11-11T16:44:24.462Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "css",
-      "layout",
-      "grid",
-      "intermediate"
-    ],
+    "tags": ["css", "layout", "grid", "intermediate"],
     "explanation": "grid-column, grid-row, grid-area, and grid-template-areas control item placement. grid-gap controls spacing. grid-template-columns/rows define the grid structure.",
     "points": 15,
     "options": [
@@ -677,12 +613,7 @@
     "updatedAt": "2025-11-11T16:44:24.462Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "css",
-      "layout",
-      "flexbox",
-      "difficult"
-    ],
+    "tags": ["css", "layout", "flexbox", "difficult"],
     "explanation": "<code>flex-basis:</code> initial size before growing/shrinking. <code>flex-grow:</code> how much item grows relative to others (0 = no grow). <code>flex-shrink:</code> how much item shrinks relative to others (0 = no shrink). <code>flex:</code> shorthand for grow shrink basis.",
     "points": 20,
     "options": [
@@ -732,13 +663,7 @@
     "updatedAt": "2025-11-11T16:44:24.462Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "css",
-      "layout",
-      "grid",
-      "units",
-      "intermediate"
-    ],
+    "tags": ["css", "layout", "grid", "units", "intermediate"],
     "explanation": "'fr' (fraction) distributes available space proportionally. <code>1fr</code> <code>2fr</code> means second column gets twice the space. Percentages are fixed relative to container. 'fr' is more flexible for responsive grids. Use 'fr' for flexible columns, % for fixed proportions.",
     "points": 15,
     "options": [
@@ -788,12 +713,7 @@
     "updatedAt": "2025-11-11T16:44:24.462Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "css",
-      "layout",
-      "positioning",
-      "intermediate"
-    ],
+    "tags": ["css", "layout", "positioning", "intermediate"],
     "explanation": "absolute and fixed remove from flow. relative and sticky stay in flow (sticky can overlap but starts in flow). static is default (in flow). Elements removed from flow don't affect sibling positioning.",
     "points": 15,
     "options": [
@@ -843,12 +763,7 @@
     "updatedAt": "2025-11-11T16:44:24.462Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "css",
-      "layout",
-      "flexbox",
-      "intermediate"
-    ],
+    "tags": ["css", "layout", "flexbox", "intermediate"],
     "explanation": "align-items sets alignment for all flex items (container property). align-self overrides align-items for individual items (item property). Use align-items for uniform alignment, align-self for exceptions.",
     "points": 15,
     "options": [
@@ -898,13 +813,7 @@
     "updatedAt": "2025-11-11T16:44:24.462Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "css",
-      "layout",
-      "grid",
-      "subgrid",
-      "difficult"
-    ],
+    "tags": ["css", "layout", "grid", "subgrid", "difficult"],
     "explanation": "subgrid allows nested grid to inherit parent grid tracks. Solves alignment issues in nested grids. Without subgrid, nested grids are independent. With subgrid, child grid aligns with parent tracks. Limited browser support (Firefox, Safari).",
     "points": 20,
     "options": [
@@ -954,12 +863,7 @@
     "updatedAt": "2025-11-11T16:44:24.462Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "css",
-      "layout",
-      "flexbox",
-      "intermediate"
-    ],
+    "tags": ["css", "layout", "flexbox", "intermediate"],
     "explanation": "flex-wrap controls wrapping (nowrap, wrap, wrap-reverse). flex-direction affects wrap direction. align-content aligns wrapped lines. flex-basis affects when items wrap (if too large).",
     "points": 15,
     "options": [
@@ -1009,12 +913,7 @@
     "updatedAt": "2025-11-11T16:44:24.462Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "css",
-      "layout",
-      "grid",
-      "intermediate"
-    ],
+    "tags": ["css", "layout", "grid", "intermediate"],
     "explanation": "grid-template-areas: visual/declarative layout with named areas (easier to read, maintain). grid-template-columns/rows: explicit track sizing (more control, less readable). Can combine both. Areas are better for semantic layouts, explicit tracks for precise control.",
     "points": 15,
     "options": [
@@ -1064,13 +963,7 @@
     "updatedAt": "2025-11-11T16:44:24.462Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "css",
-      "layout",
-      "positioning",
-      "sticky",
-      "intermediate"
-    ],
+    "tags": ["css", "layout", "positioning", "sticky", "intermediate"],
     "explanation": "sticky: element sticks when scrolling reaches threshold (within container). fixed: always positioned relative to viewport. sticky stays in flow until threshold, then sticks. fixed is always removed from flow. Use sticky for headers in scrollable content, fixed for always-visible nav.",
     "points": 15,
     "options": [
@@ -1120,12 +1013,7 @@
     "updatedAt": "2025-11-11T16:45:25.610Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "css",
-      "responsive",
-      "mobile-first",
-      "intermediate"
-    ],
+    "tags": ["css", "responsive", "mobile-first", "intermediate"],
     "explanation": "Mobile-first: start with mobile styles, add larger screen styles with min-width media queries. Desktop-first: start with desktop, override with max-width. Mobile-first advantages: progressive enhancement, smaller initial CSS, better performance, aligns with mobile usage.",
     "points": 15,
     "options": [
@@ -1175,12 +1063,7 @@
     "updatedAt": "2025-11-11T16:45:25.610Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "css",
-      "responsive",
-      "viewport",
-      "intermediate"
-    ],
+    "tags": ["css", "responsive", "viewport", "intermediate"],
     "explanation": "width=device-width (sets viewport width), initial-scale=1 (prevents zoom on load), user-scalable (controls zoom). maximum-scale can prevent accessibility. Essential: width=device-width, initial-scale=1.",
     "points": 15,
     "options": [
@@ -1230,12 +1113,7 @@
     "updatedAt": "2025-11-11T16:45:25.610Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "css",
-      "responsive",
-      "container-queries",
-      "difficult"
-    ],
+    "tags": ["css", "responsive", "container-queries", "difficult"],
     "explanation": "Media queries: based on viewport size. Container queries: based on container size. Container queries enable component-level responsiveness (not just page-level). More flexible, better for component libraries. Limited browser support (Chrome 105+, Safari 16+).",
     "points": 20,
     "options": [
@@ -1285,13 +1163,7 @@
     "updatedAt": "2025-11-11T16:45:25.610Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "css",
-      "responsive",
-      "typography",
-      "clamp",
-      "intermediate"
-    ],
+    "tags": ["css", "responsive", "typography", "clamp", "intermediate"],
     "explanation": "<code>clamp(min, preferred, max)</code> sets value between min and max, with preferred scaling. Enables fluid typography that scales with viewport. Preferred value typically uses vw units. Example: <code>clamp(1rem, 4vw, 2rem)</code> scales between <code>1rem</code> and <code>2rem</code> based on viewport.",
     "points": 15,
     "options": [
@@ -1341,12 +1213,7 @@
     "updatedAt": "2025-11-11T16:45:25.610Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "css",
-      "responsive",
-      "units",
-      "intermediate"
-    ],
+    "tags": ["css", "responsive", "units", "intermediate"],
     "explanation": "Relative units are best: rem (root-relative), em (parent-relative), % (container-relative), vw/vh (viewport-relative), vmin/vmax (viewport min/max). Absolute units (px) are less flexible but sometimes needed for precise control.",
     "points": 15,
     "options": [
@@ -1396,12 +1263,7 @@
     "updatedAt": "2025-11-11T16:45:25.610Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "css",
-      "responsive",
-      "media-queries",
-      "intermediate"
-    ],
+    "tags": ["css", "responsive", "media-queries", "intermediate"],
     "explanation": "min-width: applies styles when viewport is at least X wide (mobile-first). max-width: applies when viewport is at most X wide (desktop-first). Use min-width for mobile-first, max-width for desktop-first. Mobile-first (min-width) is preferred.",
     "points": 15,
     "options": [
@@ -1451,12 +1313,7 @@
     "updatedAt": "2025-11-11T16:45:25.610Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "css",
-      "responsive",
-      "aspect-ratio",
-      "intermediate"
-    ],
+    "tags": ["css", "responsive", "aspect-ratio", "intermediate"],
     "explanation": "aspect-ratio maintains width<code>:height</code> ratio when one dimension changes. Prevents layout shift, maintains design integrity. Useful for images, videos, cards. Format: <code>aspect-ratio:</code> 16/9 or <code>aspect-ratio:</code> 1 (square). Works with width or height.",
     "points": 15,
     "options": [
@@ -1506,12 +1363,7 @@
     "updatedAt": "2025-11-11T16:45:25.610Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "css",
-      "responsive",
-      "media-queries",
-      "intermediate"
-    ],
+    "tags": ["css", "responsive", "media-queries", "intermediate"],
     "explanation": "width/height: viewport size. orientation: portrait/landscape. resolution: pixel density. prefers-color-scheme: dark/light mode. prefers-reduced-motion: accessibility. hover: pointer capability. pointer: fine/coarse/none.",
     "points": 15,
     "options": [
@@ -1561,13 +1413,7 @@
     "updatedAt": "2025-11-11T16:45:25.610Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "css",
-      "responsive",
-      "images",
-      "object-fit",
-      "intermediate"
-    ],
+    "tags": ["css", "responsive", "images", "object-fit", "intermediate"],
     "explanation": "object-fit controls how replaced content (img, video) fits container: fill (stretch), contain (fit entire, may have gaps), cover (fill, may crop), none (original size), scale-down (smaller of contain/none). Essential for responsive images in fixed containers.",
     "points": 15,
     "options": [
@@ -1617,12 +1463,7 @@
     "updatedAt": "2025-11-11T16:45:25.610Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "css",
-      "responsive",
-      "functions",
-      "difficult"
-    ],
+    "tags": ["css", "responsive", "functions", "difficult"],
     "explanation": "<code>min(a, b)</code>: returns smaller value. <code>max(a, b)</code>: returns larger value. <code>clamp(min, val, max)</code>: constrains value between min and max. Use min() for maximum limits, max() for minimum limits, clamp() for both (most common for responsive sizing).",
     "points": 20,
     "options": [
@@ -1672,12 +1513,7 @@
     "updatedAt": "2025-11-11T16:46:49.561Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "css",
-      "animations",
-      "transitions",
-      "intermediate"
-    ],
+    "tags": ["css", "animations", "transitions", "intermediate"],
     "explanation": "<code>transition:</code> simple state changes (hover, focus), single property changes, triggered by state. <code>animation:</code> complex multi-step animations, keyframe-based, can loop/reverse, more control. Use transition for simple changes, animation for complex sequences.",
     "points": 15,
     "options": [
@@ -1727,12 +1563,7 @@
     "updatedAt": "2025-11-11T16:46:49.561Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "css",
-      "animations",
-      "properties",
-      "intermediate"
-    ],
+    "tags": ["css", "animations", "properties", "intermediate"],
     "explanation": "Animatable: transform, opacity, color, background-color, width, height, margin, padding, border-radius, etc. Non-animatable: display, position (static/relative/absolute), font-family, z-index (discrete). Transform and opacity are most performant (GPU-accelerated).",
     "points": 15,
     "options": [
@@ -1782,13 +1613,7 @@
     "updatedAt": "2025-11-11T16:46:49.561Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "css",
-      "animations",
-      "performance",
-      "will-change",
-      "difficult"
-    ],
+    "tags": ["css", "animations", "performance", "will-change", "difficult"],
     "explanation": "will-change hints browser about upcoming changes, enables optimization (GPU layer promotion). Use sparingly: only when animation is about to start, remove after. Overuse causes memory issues. Better to use only when needed, not preemptively.",
     "points": 20,
     "options": [
@@ -1838,12 +1663,7 @@
     "updatedAt": "2025-11-11T16:46:49.561Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "css",
-      "animations",
-      "fill-mode",
-      "intermediate"
-    ],
+    "tags": ["css", "animations", "fill-mode", "intermediate"],
     "explanation": "none: no styles before/after. forwards: keeps final keyframe styles after animation. backwards: applies first keyframe styles before delay. both: forwards + backwards. Useful for maintaining animation end state or starting state during delay.",
     "points": 15,
     "options": [
@@ -1893,12 +1713,7 @@
     "updatedAt": "2025-11-11T16:46:49.561Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "css",
-      "animations",
-      "performance",
-      "intermediate"
-    ],
+    "tags": ["css", "animations", "performance", "intermediate"],
     "explanation": "Properties: transform and opacity are GPU-accelerated (best). width, height, margin, padding trigger layout (slow). background-color triggers paint (medium). Use transform/opacity when possible. Avoid animating layout-triggering properties.",
     "points": 15,
     "options": [
@@ -1948,13 +1763,7 @@
     "updatedAt": "2025-11-11T16:46:49.561Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "css",
-      "animations",
-      "transform",
-      "performance",
-      "intermediate"
-    ],
+    "tags": ["css", "animations", "transform", "performance", "intermediate"],
     "explanation": "<code>transform:</code> <code>translate()</code> uses GPU, doesn't trigger layout, smoother. left/top: triggers layout recalculation, repaint, slower. Transform is composited on GPU layer. Position properties cause reflow. Always prefer transform for animations.",
     "points": 15,
     "options": [
@@ -2060,12 +1869,7 @@
     "updatedAt": "2025-11-11T16:46:49.561Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "css",
-      "animations",
-      "timing-function",
-      "intermediate"
-    ],
+    "tags": ["css", "animations", "timing-function", "intermediate"],
     "explanation": "Timing function controls speed curve: ease (slow-fast-slow, default), linear (constant speed), ease-in (slow start), ease-out (slow end), ease-in-out (slow both ends), cubic-bezier() (custom curve). Creates natural-feeling motion.",
     "points": 15,
     "options": [
@@ -2115,12 +1919,7 @@
     "updatedAt": "2025-11-11T16:46:49.561Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "css",
-      "animations",
-      "performance",
-      "intermediate"
-    ],
+    "tags": ["css", "animations", "performance", "intermediate"],
     "explanation": "Group GPU-accelerated properties (transform, opacity) together. Avoid mixing layout properties (width, margin) with transform. Animate transform properties together (translate, rotate, scale). Keep animations on same composite layer.",
     "points": 15,
     "options": [
@@ -2170,12 +1969,7 @@
     "updatedAt": "2025-11-11T16:46:49.561Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "css",
-      "animations",
-      "transform",
-      "intermediate"
-    ],
+    "tags": ["css", "animations", "transform", "intermediate"],
     "explanation": "transform-origin sets the point for transform operations (rotate, scale, skew). Default: center (50% 50%). Can be keywords (top, left, center) or coordinates. Affects where element rotates/scales from. Essential for natural-looking animations.",
     "points": 15,
     "options": [
@@ -2225,12 +2019,7 @@
     "updatedAt": "2025-11-11T16:56:10.413Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "css",
-      "animations",
-      "transitions",
-      "intermediate"
-    ],
+    "tags": ["css", "animations", "transitions", "intermediate"],
     "explanation": "<code>transition:</code> simple state changes (hover, focus), single property changes, triggered by state. <code>animation:</code> complex multi-step animations, keyframe-based, can loop/reverse, more control. Use transition for simple changes, animation for complex sequences.",
     "points": 15,
     "options": [
@@ -2280,12 +2069,7 @@
     "updatedAt": "2025-11-11T16:56:10.413Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "css",
-      "animations",
-      "properties",
-      "intermediate"
-    ],
+    "tags": ["css", "animations", "properties", "intermediate"],
     "explanation": "Animatable: transform, opacity, color, background-color, width, height, margin, padding, border-radius, etc. Non-animatable: display, position (static/relative/absolute), font-family, z-index (discrete). Transform and opacity are most performant (GPU-accelerated).",
     "points": 15,
     "options": [
@@ -2335,13 +2119,7 @@
     "updatedAt": "2025-11-11T16:56:10.413Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "css",
-      "animations",
-      "performance",
-      "will-change",
-      "difficult"
-    ],
+    "tags": ["css", "animations", "performance", "will-change", "difficult"],
     "explanation": "will-change hints browser about upcoming changes, enables optimization (GPU layer promotion). Use sparingly: only when animation is about to start, remove after. Overuse causes memory issues. Better to use only when needed, not preemptively.",
     "points": 20,
     "options": [
@@ -2391,12 +2169,7 @@
     "updatedAt": "2025-11-11T16:56:10.413Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "css",
-      "animations",
-      "fill-mode",
-      "intermediate"
-    ],
+    "tags": ["css", "animations", "fill-mode", "intermediate"],
     "explanation": "none: no styles before/after. forwards: keeps final keyframe styles after animation. backwards: applies first keyframe styles before delay. both: forwards + backwards. Useful for maintaining animation end state or starting state during delay.",
     "points": 15,
     "options": [
@@ -2446,12 +2219,7 @@
     "updatedAt": "2025-11-11T16:56:10.413Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "css",
-      "animations",
-      "performance",
-      "intermediate"
-    ],
+    "tags": ["css", "animations", "performance", "intermediate"],
     "explanation": "Properties: transform and opacity are GPU-accelerated (best). width, height, margin, padding trigger layout (slow). background-color triggers paint (medium). Use transform/opacity when possible. Avoid animating layout-triggering properties.",
     "points": 15,
     "options": [
@@ -2501,13 +2269,7 @@
     "updatedAt": "2025-11-11T16:56:10.413Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "css",
-      "animations",
-      "transform",
-      "performance",
-      "intermediate"
-    ],
+    "tags": ["css", "animations", "transform", "performance", "intermediate"],
     "explanation": "<code>transform:</code> <code>translate()</code> uses GPU, doesn't trigger layout, smoother. left/top: triggers layout recalculation, repaint, slower. Transform is composited on GPU layer. Position properties cause reflow. Always prefer transform for animations.",
     "points": 15,
     "options": [
@@ -2613,12 +2375,7 @@
     "updatedAt": "2025-11-11T16:56:10.413Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "css",
-      "animations",
-      "timing-function",
-      "intermediate"
-    ],
+    "tags": ["css", "animations", "timing-function", "intermediate"],
     "explanation": "Timing function controls speed curve: ease (slow-fast-slow, default), linear (constant speed), ease-in (slow start), ease-out (slow end), ease-in-out (slow both ends), cubic-bezier() (custom curve). Creates natural-feeling motion.",
     "points": 15,
     "options": [
@@ -2668,12 +2425,7 @@
     "updatedAt": "2025-11-11T16:56:10.413Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "css",
-      "animations",
-      "performance",
-      "intermediate"
-    ],
+    "tags": ["css", "animations", "performance", "intermediate"],
     "explanation": "Group GPU-accelerated properties (transform, opacity) together. Avoid mixing layout properties (width, margin) with transform. Animate transform properties together (translate, rotate, scale). Keep animations on same composite layer.",
     "points": 15,
     "options": [
@@ -2723,12 +2475,7 @@
     "updatedAt": "2025-11-11T16:56:10.413Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "css",
-      "animations",
-      "transform",
-      "intermediate"
-    ],
+    "tags": ["css", "animations", "transform", "intermediate"],
     "explanation": "transform-origin sets the point for transform operations (rotate, scale, skew). Default: center (50% 50%). Can be keywords (top, left, center) or coordinates. Affects where element rotates/scales from. Essential for natural-looking animations.",
     "points": 15,
     "options": [
@@ -2778,12 +2525,7 @@
     "updatedAt": "2025-11-11T16:56:10.413Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "css",
-      "preprocessors",
-      "sass",
-      "intermediate"
-    ],
+    "tags": ["css", "preprocessors", "sass", "intermediate"],
     "explanation": "SASS advantages: variables, nesting, mixins, functions, partials/modularity, inheritance (<code>@extend</code>), operators. Enables DRY code, better organization, maintainability. Compiles to CSS.",
     "points": 15,
     "options": [
@@ -2833,13 +2575,7 @@
     "updatedAt": "2025-11-11T16:56:10.413Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "css",
-      "preprocessors",
-      "sass",
-      "scss",
-      "intermediate"
-    ],
+    "tags": ["css", "preprocessors", "sass", "scss", "intermediate"],
     "explanation": "SCSS: CSS-like syntax, uses braces and semicolons, easier migration from CSS. SASS: indented syntax, no braces/semicolons, more concise. SCSS is more popular, easier for teams. SASS is more concise but less familiar.",
     "points": 15,
     "options": [
@@ -2889,12 +2625,7 @@
     "updatedAt": "2025-11-11T16:56:10.413Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "css",
-      "preprocessors",
-      "postcss",
-      "difficult"
-    ],
+    "tags": ["css", "preprocessors", "postcss", "difficult"],
     "explanation": "PostCSS: CSS transformer (not preprocessor), plugin-based, processes CSS with JavaScript. SASS/LESS: preprocessors, compile to CSS. PostCSS can add features (autoprefixer, nesting), optimize, lint. More flexible, modern approach. Often used with preprocessors.",
     "points": 20,
     "options": [
@@ -2944,13 +2675,7 @@
     "updatedAt": "2025-11-11T16:56:10.413Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "css",
-      "preprocessors",
-      "sass",
-      "organization",
-      "intermediate"
-    ],
+    "tags": ["css", "preprocessors", "sass", "organization", "intermediate"],
     "explanation": "Partials (<code>@import</code>/_file<code>.scss</code>): modular files. <code>@use</code>/<code>@forward</code>: modern module system. Nesting: hierarchical structure. Mixins: reusable blocks. Functions: reusable logic. All help organize and maintain CSS.",
     "points": 15,
     "options": [
@@ -3000,14 +2725,7 @@
     "updatedAt": "2025-11-11T16:56:10.413Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "css",
-      "preprocessors",
-      "sass",
-      "extend",
-      "mixin",
-      "intermediate"
-    ],
+    "tags": ["css", "preprocessors", "sass", "extend", "mixin", "intermediate"],
     "explanation": "<code>@extend</code>: shares selector (groups selectors), less CSS output, but can create specificity issues, less flexible. <code>@mixin</code>: duplicates code (more output), more flexible with parameters, clearer intent. Prefer <code>@mixin</code> for flexibility, <code>@extend</code> for simple sharing.",
     "points": 15,
     "options": [
@@ -3057,13 +2775,7 @@
     "updatedAt": "2025-11-11T16:56:10.413Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "css",
-      "preprocessors",
-      "postcss",
-      "autoprefixer",
-      "intermediate"
-    ],
+    "tags": ["css", "preprocessors", "postcss", "autoprefixer", "intermediate"],
     "explanation": "autoprefixer: PostCSS plugin that automatically adds vendor prefixes (-webkit-, -moz-, -ms-) based on browser support data. Write modern CSS, autoprefixer adds needed prefixes. Keeps CSS clean, ensures compatibility, uses Can I Use data.",
     "points": 15,
     "options": [
@@ -3113,12 +2825,7 @@
     "updatedAt": "2025-11-11T16:56:10.413Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "css",
-      "preprocessors",
-      "less",
-      "intermediate"
-    ],
+    "tags": ["css", "preprocessors", "less", "intermediate"],
     "explanation": "Both LESS and SASS provide: variables, nesting, mixins, functions, imports. SASS has more features (extend, advanced functions). LESS can run in browser (JavaScript), SASS requires compilation. Both compile to CSS.",
     "points": 15,
     "options": [
@@ -3338,12 +3045,7 @@
     "updatedAt": "2025-11-11T16:56:10.414Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "css",
-      "performance",
-      "critical-css",
-      "intermediate"
-    ],
+    "tags": ["css", "performance", "critical-css", "intermediate"],
     "explanation": "Critical CSS: above-the-fold styles needed for initial render. Inline in <head> to avoid render-blocking. Remaining CSS loads asynchronously. Improves First Contentful Paint (FCP), reduces render-blocking. Essential for performance.",
     "points": 15,
     "options": [
@@ -3393,12 +3095,7 @@
     "updatedAt": "2025-11-11T16:56:10.414Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "css",
-      "performance",
-      "optimization",
-      "intermediate"
-    ],
+    "tags": ["css", "performance", "optimization", "intermediate"],
     "explanation": "Minification (remove whitespace, comments), unused CSS removal (PurgeCSS), compression (gzip/brotli), code splitting, removing duplicate rules, using shorthand properties, avoiding !important overuse.",
     "points": 15,
     "options": [
@@ -3448,12 +3145,7 @@
     "updatedAt": "2025-11-11T16:56:10.414Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "css",
-      "performance",
-      "loading",
-      "intermediate"
-    ],
+    "tags": ["css", "performance", "loading", "intermediate"],
     "explanation": "Render-blocking: CSS in <head> blocks HTML parsing until loaded (default). Non-blocking: load asynchronously (media='print' then switch, or load via JS). Critical CSS inline, non-critical async. Improves Time to First Byte, FCP.",
     "points": 15,
     "options": [
@@ -3503,12 +3195,7 @@
     "updatedAt": "2025-11-11T16:56:10.414Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "css",
-      "performance",
-      "content-visibility",
-      "difficult"
-    ],
+    "tags": ["css", "performance", "content-visibility", "difficult"],
     "explanation": "<code>content-visibility:</code> auto skips rendering off-screen content until needed. Significantly improves initial render for long pages. Similar to lazy loading but for rendering. Use on sections that are initially off-screen. Limited browser support.",
     "points": 20,
     "options": [
@@ -3558,13 +3245,7 @@
     "updatedAt": "2025-11-11T16:56:10.414Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "css",
-      "performance",
-      "layout",
-      "reflow",
-      "intermediate"
-    ],
+    "tags": ["css", "performance", "layout", "reflow", "intermediate"],
     "explanation": "Layout-triggering properties: width, height, margin, padding, border, display, position (static/relative), top/left/right/bottom, font-size, line-height. These cause reflow (expensive). Use transform/opacity for animations instead.",
     "points": 15,
     "options": [
@@ -3614,12 +3295,7 @@
     "updatedAt": "2025-11-11T16:56:10.414Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "css",
-      "performance",
-      "containment",
-      "difficult"
-    ],
+    "tags": ["css", "performance", "containment", "difficult"],
     "explanation": "<code>contain:</code> isolates element's rendering (layout, style, paint, size). Prevents changes from affecting outside. Optimizes: layout (<code>contain:</code> layout), paint (<code>contain:</code> paint), style recalculation. Use on isolated components. Improves performance for complex pages.",
     "points": 20,
     "options": [
@@ -3669,13 +3345,7 @@
     "updatedAt": "2025-11-11T16:56:10.414Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "css",
-      "performance",
-      "will-change",
-      "contain",
-      "difficult"
-    ],
+    "tags": ["css", "performance", "will-change", "contain", "difficult"],
     "explanation": "<code>will-change:</code> hints about upcoming changes, promotes to GPU layer, use for animations about to start. <code>contain:</code> isolates rendering scope, prevents cascade effects, use for isolated components. Different purposes: will-change for animations, contain for isolation.",
     "points": 20,
     "options": [
@@ -3725,12 +3395,7 @@
     "updatedAt": "2025-11-11T16:56:10.414Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "css",
-      "performance",
-      "delivery",
-      "intermediate"
-    ],
+    "tags": ["css", "performance", "delivery", "intermediate"],
     "explanation": "Critical CSS inline, non-critical async, HTTP/2 server push, preload for critical CSS, code splitting, CDN delivery, compression (gzip/brotli), remove unused CSS, minification.",
     "points": 15,
     "options": [
@@ -3780,13 +3445,7 @@
     "updatedAt": "2025-11-11T16:56:10.414Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "css",
-      "performance",
-      "fonts",
-      "font-display",
-      "intermediate"
-    ],
+    "tags": ["css", "performance", "fonts", "font-display", "intermediate"],
     "explanation": "font-display controls font rendering: block (invisible until loaded, FOIT), swap (show fallback immediately, FOUT), fallback (short block then swap), optional (only if cached). swap is best for performance, prevents invisible text.",
     "points": 15,
     "options": [
@@ -3836,13 +3495,7 @@
     "updatedAt": "2025-11-11T16:56:10.414Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "css",
-      "performance",
-      "containment",
-      "layout",
-      "intermediate"
-    ],
+    "tags": ["css", "performance", "containment", "layout", "intermediate"],
     "explanation": "<code>contain:</code> layout isolates element's layout calculations. Changes inside don't affect outside layout. Browser can skip layout calculations for outside elements. Use on isolated components. Improves performance for complex layouts.",
     "points": 15,
     "options": [
@@ -3892,13 +3545,7 @@
     "updatedAt": "2025-11-11T16:56:10.414Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "css",
-      "architecture",
-      "bem",
-      "methodology",
-      "intermediate"
-    ],
+    "tags": ["css", "architecture", "bem", "methodology", "intermediate"],
     "explanation": "BEM: Block__Element<code>--Modifier</code>. Block: standalone component (button). Element: part of block (button__icon). Modifier: variation (button<code>--primary</code>). Naming: <code>.block__element--modifier</code>. Benefits: clear structure, avoids specificity issues, self-documenting.",
     "points": 15,
     "options": [
@@ -3948,12 +3595,7 @@
     "updatedAt": "2025-11-11T16:56:10.414Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "css",
-      "architecture",
-      "methodologies",
-      "intermediate"
-    ],
+    "tags": ["css", "architecture", "methodologies", "intermediate"],
     "explanation": "BEM (Block Element Modifier), OOCSS (Object-Oriented), SMACSS (Scalable and Modular), ITCSS (Inverted Triangle), Atomic CSS, Utility-first (Tailwind approach). Each has different organization principles.",
     "points": 15,
     "options": [
@@ -4003,12 +3645,7 @@
     "updatedAt": "2025-11-11T16:56:10.414Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "css",
-      "architecture",
-      "itcss",
-      "difficult"
-    ],
+    "tags": ["css", "architecture", "itcss", "difficult"],
     "explanation": "ITCSS: Inverted Triangle CSS. Layers (bottom to top): Settings (variables), Tools (mixins), Generic (resets), Elements (base styles), Objects (layout), Components (UI), Utilities (helpers). Specificity increases upward. Prevents specificity conflicts.",
     "points": 20,
     "options": [
@@ -4058,12 +3695,7 @@
     "updatedAt": "2025-11-11T16:56:10.414Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "css",
-      "architecture",
-      "oocss",
-      "intermediate"
-    ],
+    "tags": ["css", "architecture", "oocss", "intermediate"],
     "explanation": "OOCSS: Object-Oriented CSS. Principles: 1) Separate structure (layout) from skin (visual), 2) Separate container from content. Reusable objects, avoid location-dependent styles. Enables code reuse, maintainability. Example: <code>.button</code> (structure) + <code>.button-primary</code> (skin).",
     "points": 15,
     "options": [
@@ -4113,12 +3745,7 @@
     "updatedAt": "2025-11-11T16:56:10.414Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "css",
-      "architecture",
-      "organization",
-      "intermediate"
-    ],
+    "tags": ["css", "architecture", "organization", "intermediate"],
     "explanation": "Modular files (partials), naming conventions (BEM), component-based organization, utility classes, CSS-in-JS (for component frameworks), design tokens, style guides, documentation. All help maintain large codebases.",
     "points": 15,
     "options": [
@@ -4168,13 +3795,7 @@
     "updatedAt": "2025-11-11T16:56:10.414Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "css",
-      "architecture",
-      "utility-first",
-      "tailwind",
-      "difficult"
-    ],
+    "tags": ["css", "architecture", "utility-first", "tailwind", "difficult"],
     "explanation": "Utility-first: small utility classes (flex, p-4, text-center), compose in HTML, less custom CSS, faster development, larger HTML. Component-based: semantic classes, styles in CSS, more maintainable CSS, cleaner HTML. Tailwind is utility-first, BEM is component-based.",
     "points": 20,
     "options": [
@@ -4224,13 +3845,7 @@
     "updatedAt": "2025-11-11T16:56:10.414Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "css",
-      "architecture",
-      "theming",
-      "css-variables",
-      "intermediate"
-    ],
+    "tags": ["css", "architecture", "theming", "css-variables", "intermediate"],
     "explanation": "CSS custom properties (<code>--variable</code>) enable runtime theming. Define theme variables at <code>:root</code>, override in themes. Change with JavaScript (setProperty). Enables dark mode, user preferences, dynamic themes. More flexible than SASS variables (compile-time).",
     "points": 15,
     "options": [
@@ -4280,12 +3895,7 @@
     "updatedAt": "2025-11-11T16:56:10.414Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "css",
-      "architecture",
-      "organization",
-      "intermediate"
-    ],
+    "tags": ["css", "architecture", "organization", "intermediate"],
     "explanation": "Component-based (one file per component), feature-based (grouped by feature), layer-based (ITCSS), utility files (separate utilities), vendor files (third-party), main file (imports all). Choose based on project size and team preference.",
     "points": 15,
     "options": [
@@ -4335,12 +3945,7 @@
     "updatedAt": "2025-11-11T16:56:10.414Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "css",
-      "architecture",
-      "design-tokens",
-      "intermediate"
-    ],
+    "tags": ["css", "architecture", "design-tokens", "intermediate"],
     "explanation": "Design tokens: named values (colors, spacing, typography) stored as CSS variables. Single source of truth, ensures consistency, easy theming, maintainable. Example: <code>--color-primary</code>: #007bff. Used throughout codebase, changed in one place.",
     "points": 15,
     "options": [
@@ -4446,13 +4051,7 @@
     "updatedAt": "2025-11-11T17:12:57.750Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "css",
-      "basics",
-      "selectors",
-      "nth-child",
-      "intermediate"
-    ],
+    "tags": ["css", "basics", "selectors", "nth-child", "intermediate"],
     "explanation": "<code>:nth-child</code>(n) selects nth child element regardless of type. <code>:nth-of-type</code>(n) selects nth element of specific type. <code>:nth-child</code>(2) = 2nd child (any type). <code>:nth-of-type</code>(2) = 2nd <p> if selector is p<code>:nth-of-type</code>(2). Use nth-child for position-based, nth-of-type for type-based selection.",
     "points": 15,
     "options": [
@@ -4502,12 +4101,7 @@
     "updatedAt": "2025-11-11T17:12:57.750Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "css",
-      "basics",
-      "pseudo-elements",
-      "intermediate"
-    ],
+    "tags": ["css", "basics", "pseudo-elements", "intermediate"],
     "explanation": "Valid pseudo-elements: <code>::before</code>, <code>::after</code>, <code>::first-line</code>, <code>::first-letter</code>, <code>::selection</code>, <code>::placeholder</code>, <code>::backdrop</code>. Double colon (::) is modern syntax, single colon (:) works for backward compatibility. <code>::before</code> and <code>::after</code> require content property.",
     "points": 15,
     "options": [
@@ -4557,13 +4151,7 @@
     "updatedAt": "2025-11-11T17:12:57.750Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "css",
-      "basics",
-      "cascade",
-      "specificity",
-      "intermediate"
-    ],
+    "tags": ["css", "basics", "cascade", "specificity", "intermediate"],
     "explanation": "When specificity is equal, later rules win (source order). Stylesheet order matters: earlier < later. Inline styles (highest specificity) > embedded < external. Within same specificity, last declared wins. This is why order matters in CSS.",
     "points": 15,
     "options": [
@@ -4613,13 +4201,7 @@
     "updatedAt": "2025-11-11T17:12:57.750Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "css",
-      "basics",
-      "selectors",
-      "attributes",
-      "intermediate"
-    ],
+    "tags": ["css", "basics", "selectors", "attributes", "intermediate"],
     "explanation": "<code>[attr]</code>: element has attribute. <code>[attr=value]: exact match. [attr~=value]: value in space-separated list. [attr|=value]: value or value- prefix. [attr^=value]: starts with. [attr$=value]: ends with. [attr*=value]</code>: contains substring.",
     "points": 15,
     "options": [
@@ -4669,13 +4251,7 @@
     "updatedAt": "2025-11-11T17:12:57.750Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "css",
-      "basics",
-      "units",
-      "viewport",
-      "intermediate"
-    ],
+    "tags": ["css", "basics", "units", "viewport", "intermediate"],
     "explanation": "Viewport units: vw (viewport width 1%), vh (viewport height 1%), vmin (smaller of vw/vh), vmax (larger of vw/vh). These are relative to viewport size, not parent elements. Useful for full-screen layouts, hero sections.",
     "points": 15,
     "options": [
@@ -4725,14 +4301,7 @@
     "updatedAt": "2025-11-11T17:12:57.750Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "css",
-      "basics",
-      "selectors",
-      "is",
-      "where",
-      "difficult"
-    ],
+    "tags": ["css", "basics", "selectors", "is", "where", "difficult"],
     "explanation": "<code>:is</code>(selector1, selector2) groups selectors, specificity = most specific in group. <code>:where</code>(selector1, selector2) groups selectors, specificity = 0 (always). <code>:is</code>() maintains specificity, <code>:where</code>() resets it. Use <code>:where</code>() to avoid specificity conflicts, <code>:is</code>() when you need specificity.",
     "points": 20,
     "options": [
@@ -4838,12 +4407,7 @@
     "updatedAt": "2025-11-11T17:12:57.750Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "css",
-      "basics",
-      "inheritance",
-      "intermediate"
-    ],
+    "tags": ["css", "basics", "inheritance", "intermediate"],
     "explanation": "Non-inherited: margin, padding, border, width, height, display, position, float, clear, background, z-index, overflow, text-decoration (some values), vertical-align. These must be set on each element or use 'inherit' keyword.",
     "points": 15,
     "options": [
@@ -4893,13 +4457,7 @@
     "updatedAt": "2025-11-11T17:12:57.750Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "css",
-      "basics",
-      "pseudo-elements",
-      "typography",
-      "intermediate"
-    ],
+    "tags": ["css", "basics", "pseudo-elements", "typography", "intermediate"],
     "explanation": "<code>::first-line</code> styles first line of block element (wraps based on width). <code>::first-letter</code> styles first letter (drop caps, styling). <code>::first-line</code> can style multiple words, <code>::first-letter</code> is single character. Both only work on block-level elements.",
     "points": 15,
     "options": [
@@ -4949,13 +4507,7 @@
     "updatedAt": "2025-11-11T17:12:57.750Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "css",
-      "basics",
-      "selectors",
-      "has",
-      "difficult"
-    ],
+    "tags": ["css", "basics", "selectors", "has", "difficult"],
     "explanation": "<code>:has</code>() is parent selector - selects parent based on child. Example: div<code>:has</code>(> img) selects divs containing img. Solves 'parent selector problem'. Limited browser support (Safari 15<code>.4</code>+, Chrome 105+). Enables conditional styling based on content.",
     "points": 20,
     "options": [
@@ -5005,13 +4557,7 @@
     "updatedAt": "2025-11-11T17:12:57.750Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "css",
-      "layout",
-      "grid",
-      "subgrid",
-      "difficult"
-    ],
+    "tags": ["css", "layout", "grid", "subgrid", "difficult"],
     "explanation": "subgrid allows nested grid to inherit parent's grid tracks. Solves alignment in nested grids. Without subgrid, nested grids are independent. With subgrid, child aligns with parent. Limited support: Firefox 71+, Safari 16+. Use for card layouts, complex nested structures.",
     "points": 20,
     "options": [
@@ -5061,13 +4607,7 @@
     "updatedAt": "2025-11-11T17:12:57.750Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "css",
-      "layout",
-      "flexbox",
-      "alignment",
-      "intermediate"
-    ],
+    "tags": ["css", "layout", "flexbox", "alignment", "intermediate"],
     "explanation": "Cross-axis alignment: align-items (all items), align-self (individual item), align-content (wrapped lines). These work on cross axis (perpendicular to main axis). justify-content works on main axis.",
     "points": 15,
     "options": [
@@ -5117,12 +4657,7 @@
     "updatedAt": "2025-11-11T17:12:57.750Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "css",
-      "layout",
-      "grid",
-      "intermediate"
-    ],
+    "tags": ["css", "layout", "grid", "intermediate"],
     "explanation": "grid-template-rows: defines explicit rows (named or sized). grid-auto-rows: defines size for implicit rows (created automatically when items exceed explicit rows). Use template for known structure, auto for dynamic content. Can combine both.",
     "points": 15,
     "options": [
@@ -5172,13 +4707,7 @@
     "updatedAt": "2025-11-11T17:12:57.750Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "css",
-      "layout",
-      "positioning",
-      "sticky",
-      "intermediate"
-    ],
+    "tags": ["css", "layout", "positioning", "sticky", "intermediate"],
     "explanation": "Requirements: top/left/right/bottom must be set (defines stick point). Parent container must have space (can't overflow). Works within containing block. If parent has overflow: hidden/scroll, sticky may not work. Needs scrollable ancestor.",
     "points": 15,
     "options": [
@@ -5228,13 +4757,7 @@
     "updatedAt": "2025-11-11T17:12:57.750Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "css",
-      "layout",
-      "grid",
-      "responsive",
-      "intermediate"
-    ],
+    "tags": ["css", "layout", "grid", "responsive", "intermediate"],
     "explanation": "auto-fit/auto-fill with minmax() create responsive columns. fr units distribute space flexibly. min-content, max-content adapt to content. repeat(auto-fit, minmax(<code>200px</code>, <code>1fr</code>)) creates responsive grid. No media queries needed.",
     "points": 15,
     "options": [
@@ -5284,14 +4807,7 @@
     "updatedAt": "2025-11-11T17:12:57.750Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "css",
-      "layout",
-      "flexbox",
-      "grid",
-      "gap",
-      "intermediate"
-    ],
+    "tags": ["css", "layout", "flexbox", "grid", "gap", "intermediate"],
     "explanation": "<code>gap:</code> spacing between flex/grid items (row-gap, column-gap). Only works in Flexbox/Grid. Margins: spacing around any element, works everywhere. gap is simpler (no negative margins, no first/last child exceptions), margins more flexible but more complex.",
     "points": 15,
     "options": [
@@ -5341,13 +4857,7 @@
     "updatedAt": "2025-11-11T17:12:57.750Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "css",
-      "layout",
-      "grid",
-      "masonry",
-      "difficult"
-    ],
+    "tags": ["css", "layout", "grid", "masonry", "difficult"],
     "explanation": "Masonry: Pinterest-style layout where items flow into shortest column. Proposed for CSS Grid but not yet standardized. Firefox has experimental support behind flag. Workaround: use JavaScript libraries or column-based approaches. Not production-ready yet.",
     "points": 20,
     "options": [
@@ -5397,13 +4907,7 @@
     "updatedAt": "2025-11-11T17:12:57.750Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "css",
-      "layout",
-      "flexbox",
-      "sizing",
-      "intermediate"
-    ],
+    "tags": ["css", "layout", "flexbox", "sizing", "intermediate"],
     "explanation": "<code>flex-grow:</code> growth factor (how much item grows). <code>flex-shrink:</code> shrink factor (how much item shrinks). <code>flex-basis:</code> initial size. <code>flex:</code> shorthand (grow shrink basis). min-width/max-width also affect sizing. These control how items use available space.",
     "points": 15,
     "options": [
@@ -5453,13 +4957,7 @@
     "updatedAt": "2025-11-11T17:12:57.750Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "css",
-      "layout",
-      "flexbox",
-      "alignment",
-      "intermediate"
-    ],
+    "tags": ["css", "layout", "flexbox", "alignment", "intermediate"],
     "explanation": "<code>align-items:</code> aligns items within each line (single-line or multi-line). <code>align-content:</code> aligns lines when content wraps (only works with flex-wrap: wrap). <code>align-items:</code> per-line alignment. <code>align-content:</code> between-lines spacing. Use align-items for item alignment, align-content for line spacing.",
     "points": 15,
     "options": [
@@ -5509,13 +5007,7 @@
     "updatedAt": "2025-11-11T17:12:57.750Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "css",
-      "layout",
-      "grid",
-      "auto-placement",
-      "difficult"
-    ],
+    "tags": ["css", "layout", "grid", "auto-placement", "difficult"],
     "explanation": "Auto-placement: items flow row by row, left to right. grid-auto-flow controls direction: row (default, left-right), column (top-bottom), dense (fills gaps). Items without explicit placement use auto-placement. Can specify grid-auto-flow: dense to fill gaps.",
     "points": 20,
     "options": [
@@ -5565,12 +5057,7 @@
     "updatedAt": "2025-11-11T17:12:57.751Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "css",
-      "responsive",
-      "container-queries",
-      "difficult"
-    ],
+    "tags": ["css", "responsive", "container-queries", "difficult"],
     "explanation": "Media queries: viewport-based (page-level). Container queries: container-based (component-level). Use container queries for reusable components that need to adapt to container size, not viewport. Better for component libraries, cards, widgets. Limited support (Chrome 105+, Safari 16+).",
     "points": 20,
     "options": [
@@ -5620,13 +5107,7 @@
     "updatedAt": "2025-11-11T17:12:57.751Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "css",
-      "responsive",
-      "typography",
-      "fluid",
-      "intermediate"
-    ],
+    "tags": ["css", "responsive", "typography", "fluid", "intermediate"],
     "explanation": "clamp() function (min, preferred, max), calc() with viewport units, vw/vh units, fluid typography formulas. clamp() is most common: <code>clamp(1rem, 4vw, 2rem)</code>. Enables text that scales smoothly between breakpoints.",
     "points": 15,
     "options": [
@@ -5676,13 +5157,7 @@
     "updatedAt": "2025-11-11T17:12:57.751Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "css",
-      "responsive",
-      "aspect-ratio",
-      "cls",
-      "intermediate"
-    ],
+    "tags": ["css", "responsive", "aspect-ratio", "cls", "intermediate"],
     "explanation": "aspect-ratio maintains width<code>:height</code> ratio. Prevents layout shift when images/media load. Set aspect-ratio on container, image loads and fills. No height jump = no CLS. Essential for Core Web Vitals. Works with width or height, maintains ratio.",
     "points": 15,
     "options": [
@@ -5732,12 +5207,7 @@
     "updatedAt": "2025-11-11T17:12:57.751Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "css",
-      "responsive",
-      "functions",
-      "intermediate"
-    ],
+    "tags": ["css", "responsive", "functions", "intermediate"],
     "explanation": "<code>min(a, b)</code>: returns smaller value (sets maximum). <code>max(a, b)</code>: returns larger value (sets minimum). <code>clamp(min, val, max)</code>: constrains between min and max. Enable responsive sizing without media queries. clamp() is most useful for fluid typography.",
     "points": 15,
     "options": [
@@ -5899,13 +5369,7 @@
     "updatedAt": "2025-11-11T17:12:57.751Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "css",
-      "responsive",
-      "images",
-      "object-fit",
-      "intermediate"
-    ],
+    "tags": ["css", "responsive", "images", "object-fit", "intermediate"],
     "explanation": "<code>object-fit:</code> how content fits (fill, contain, cover, none, scale-down). <code>object-position:</code> where content is positioned (like background-position). Essential for responsive images in fixed containers. Prevents distortion, enables cropping/centering.",
     "points": 15,
     "options": [
@@ -5955,12 +5419,7 @@
     "updatedAt": "2025-11-11T17:12:57.751Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "css",
-      "responsive",
-      "images",
-      "intermediate"
-    ],
+    "tags": ["css", "responsive", "images", "intermediate"],
     "explanation": "<picture> element with <source> and media queries, <img srcset sizes>, CSS object-fit, max-width: 100%, aspect-ratio. All enable responsive images without JavaScript. Modern approach: use srcset/sizes or picture element.",
     "points": 15,
     "options": [
@@ -6010,12 +5469,7 @@
     "updatedAt": "2025-11-11T17:12:57.751Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "css",
-      "responsive",
-      "viewport-units",
-      "difficult"
-    ],
+    "tags": ["css", "responsive", "viewport-units", "difficult"],
     "explanation": "vw/vh: viewport size (can change with browser UI). dvw/dvh: dynamic viewport (accounts for browser UI changes). svw/svh: small viewport (minimum size, ignores browser UI). lvw/lvh: large viewport (maximum size). Use dvw/dvh for mobile where browser UI shows/hides.",
     "points": 20,
     "options": [
@@ -6065,12 +5519,7 @@
     "updatedAt": "2025-11-11T17:12:57.751Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "css",
-      "responsive",
-      "container-queries",
-      "difficult"
-    ],
+    "tags": ["css", "responsive", "container-queries", "difficult"],
     "explanation": "container-type: inline-size (queries width), size (queries width and height), normal (not a container). container-name: names container for <code>@container queries. Must set container-type to enable container queries. Use @container (name) size queries.</code>",
     "points": 20,
     "options": [
@@ -6120,12 +5569,7 @@
     "updatedAt": "2025-11-11T17:52:39.379Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "css",
-      "animations",
-      "fill-mode",
-      "intermediate"
-    ],
+    "tags": ["css", "animations", "fill-mode", "intermediate"],
     "explanation": "animation-fill-mode: none (default, no styles before/after), forwards (keeps final keyframe), backwards (applies first keyframe before start), both (forwards + backwards). Controls element appearance outside animation duration.",
     "points": 15,
     "options": [
@@ -6206,13 +5650,7 @@
     "updatedAt": "2025-11-11T17:52:39.379Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "css",
-      "animations",
-      "performance",
-      "will-change",
-      "difficult"
-    ],
+    "tags": ["css", "animations", "performance", "will-change", "difficult"],
     "explanation": "<code>will-change:</code> hints browser to optimize for property changes. Use sparingly: only when animation is about to start, remove after. Overuse causes memory issues. Don't use preemptively. Remove when animation ends.",
     "points": 20,
     "options": [
@@ -6262,12 +5700,7 @@
     "updatedAt": "2025-11-11T17:52:39.415Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "css",
-      "animations",
-      "play-state",
-      "intermediate"
-    ],
+    "tags": ["css", "animations", "play-state", "intermediate"],
     "explanation": "animation-play-state: running (default, plays), paused (pauses animation). Can be toggled with <code>:hover</code>, JavaScript, or media queries. Useful for interactive controls, accessibility (prefers-reduced-motion).",
     "points": 15,
     "options": [
@@ -6317,12 +5750,7 @@
     "updatedAt": "2025-11-11T17:52:39.415Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "css",
-      "animations",
-      "transitions",
-      "intermediate"
-    ],
+    "tags": ["css", "animations", "transitions", "intermediate"],
     "explanation": "<code>transition:</code> simple state changes (hover, focus), single property changes, automatic trigger. <code>animation:</code> complex sequences, multiple keyframes, programmatic control, loops. Use transition for simple changes, animation for complex sequences.",
     "points": 15,
     "options": [
@@ -6485,13 +5913,7 @@
     "updatedAt": "2025-11-11T17:52:39.451Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "css",
-      "preprocessors",
-      "postcss",
-      "plugins",
-      "intermediate"
-    ],
+    "tags": ["css", "preprocessors", "postcss", "plugins", "intermediate"],
     "explanation": "Common plugins: autoprefixer (adds vendor prefixes), cssnano (minification), postcss-preset-env (modern CSS), postcss-nested (nesting), postcss-import (imports). Essential for modern CSS workflows.",
     "points": 15,
     "options": "multiple-select",
@@ -6516,13 +5938,7 @@
     "updatedAt": "2025-11-11T17:52:39.451Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "css",
-      "preprocessors",
-      "sass",
-      "extend",
-      "difficult"
-    ],
+    "tags": ["css", "preprocessors", "sass", "extend", "difficult"],
     "explanation": "<code>@extend</code>: shares styles between selectors, creates selector groups. Advantages: DRY, maintains relationships. Issues: can create large selector groups, specificity issues, harder to debug. Use mixins for better control.",
     "points": 20,
     "options": [
@@ -6572,13 +5988,7 @@
     "updatedAt": "2025-11-11T17:52:39.488Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "css",
-      "performance",
-      "contain",
-      "rendering",
-      "intermediate"
-    ],
+    "tags": ["css", "performance", "contain", "rendering", "intermediate"],
     "explanation": "<code>contain:</code> layout (isolates layout), paint (isolates paint), size (size depends only on self), style (isolates counters). Enables browser optimizations: skip layout/paint for contained elements, improves performance.",
     "points": 15,
     "options": [
@@ -6628,13 +6038,7 @@
     "updatedAt": "2025-11-11T17:52:39.488Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "css",
-      "performance",
-      "reflow",
-      "layout",
-      "intermediate"
-    ],
+    "tags": ["css", "performance", "reflow", "layout", "intermediate"],
     "explanation": "Properties that trigger reflow: width, height, top, left, margin, padding, border, display, position, float. These cause layout recalculation. Use transform/opacity for animations instead.",
     "points": 15,
     "options": "multiple-select",
@@ -6715,13 +6119,7 @@
     "updatedAt": "2025-11-11T17:52:39.524Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "css",
-      "architecture",
-      "itcss",
-      "methodology",
-      "intermediate"
-    ],
+    "tags": ["css", "architecture", "itcss", "methodology", "intermediate"],
     "explanation": "ITCSS layers (bottom to top): Settings (variables), Tools (mixins), Generic (resets), Elements (base styles), Objects (layout), Components (UI), Utilities (helpers). Organizes CSS by specificity and reach. Prevents specificity conflicts.",
     "points": 15,
     "options": [
@@ -6858,12 +6256,7 @@
     "updatedAt": "2025-11-11T17:54:14.785Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "css",
-      "animations",
-      "direction",
-      "intermediate"
-    ],
+    "tags": ["css", "animations", "direction", "intermediate"],
     "explanation": "animation-direction: normal (forward), reverse (backward), alternate (forward then reverse), alternate-reverse (reverse then forward). Controls keyframe sequence playback direction.",
     "points": 15,
     "options": [
@@ -6913,13 +6306,7 @@
     "updatedAt": "2025-11-11T17:54:14.785Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "css",
-      "animations",
-      "timing-function",
-      "easing",
-      "intermediate"
-    ],
+    "tags": ["css", "animations", "timing-function", "easing", "intermediate"],
     "explanation": "Timing functions: ease (default), linear (constant), ease-in (slow start), ease-out (slow end), ease-in-out (slow start/end), cubic-bezier (custom curve), steps (discrete steps). Controls acceleration/deceleration.",
     "points": 15,
     "options": [
@@ -6969,13 +6356,7 @@
     "updatedAt": "2025-11-11T17:54:14.785Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "css",
-      "animations",
-      "javascript",
-      "api",
-      "difficult"
-    ],
+    "tags": ["css", "animations", "javascript", "api", "difficult"],
     "explanation": "Use animation events: animationstart, animationend, animationiteration. Access via element<code>.ontransitionend</code> or addEventListener. Can pause/resume with animation-play-state. Use requestAnimationFrame for synchronization.",
     "points": 20,
     "options": [
@@ -7082,14 +6463,7 @@
     "updatedAt": "2025-11-11T17:54:14.822Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "css",
-      "preprocessors",
-      "sass",
-      "use",
-      "import",
-      "difficult"
-    ],
+    "tags": ["css", "preprocessors", "sass", "use", "import", "difficult"],
     "explanation": "<code>@use</code>: modern module system, namespaced, loaded once. <code>@import</code>: legacy, global scope, can cause duplicates. <code>@use</code> prevents conflicts, better performance. Migrate from <code>@import</code> to <code>@use</code> for new code.",
     "points": 20,
     "options": [
@@ -7139,13 +6513,7 @@
     "updatedAt": "2025-11-11T17:54:14.822Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "css",
-      "preprocessors",
-      "postcss",
-      "transforms",
-      "intermediate"
-    ],
+    "tags": ["css", "preprocessors", "postcss", "transforms", "intermediate"],
     "explanation": "postcss-preset-env: enables modern CSS (custom properties, nesting, etc.). autoprefixer: adds vendor prefixes. cssnano: minifies. These enable modern syntax with fallbacks.",
     "points": 15,
     "options": "multiple-select",
@@ -7170,13 +6538,7 @@
     "updatedAt": "2025-11-11T17:54:14.859Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "css",
-      "performance",
-      "critical-css",
-      "fcp",
-      "intermediate"
-    ],
+    "tags": ["css", "performance", "critical-css", "fcp", "intermediate"],
     "explanation": "Critical CSS: styles needed for above-the-fold content. Inline in <head>, load rest asynchronously. Improves FCP by reducing render-blocking CSS. Extract with tools, inline manually, or use loadCSS.",
     "points": 15,
     "options": [
@@ -7226,13 +6588,7 @@
     "updatedAt": "2025-11-11T17:54:14.859Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "css",
-      "performance",
-      "loading",
-      "strategies",
-      "intermediate"
-    ],
+    "tags": ["css", "performance", "loading", "strategies", "intermediate"],
     "explanation": "Strategies: media attribute (load conditionally), preload (hint browser), async loading, critical CSS inline, split CSS files, remove unused CSS. All improve performance.",
     "points": 15,
     "options": "multiple-select",
@@ -7257,13 +6613,7 @@
     "updatedAt": "2025-11-11T17:54:14.859Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "css",
-      "performance",
-      "font-display",
-      "typography",
-      "difficult"
-    ],
+    "tags": ["css", "performance", "font-display", "typography", "difficult"],
     "explanation": "<code>font-display:</code> auto (browser default), block (<code>3s</code> block, infinite swap), swap (immediate swap), fallback (<code>100ms</code> block, <code>3s</code> swap), optional (<code>100ms</code> block, no swap). Controls FOIT/FOUT, affects CLS.",
     "points": 20,
     "options": [
@@ -7313,13 +6663,7 @@
     "updatedAt": "2025-11-11T17:54:14.897Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "css",
-      "architecture",
-      "bem",
-      "naming",
-      "intermediate"
-    ],
+    "tags": ["css", "architecture", "bem", "naming", "intermediate"],
     "explanation": "BEM: Block (component), Element (part of block), Modifier (variant). Syntax: <code>.block__element--modifier</code>. Benefits: prevents conflicts, clear structure, no nesting needed, self-documenting.",
     "points": 15,
     "options": [
@@ -7369,13 +6713,7 @@
     "updatedAt": "2025-11-11T17:54:14.897Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "css",
-      "architecture",
-      "css-modules",
-      "scoping",
-      "intermediate"
-    ],
+    "tags": ["css", "architecture", "css-modules", "scoping", "intermediate"],
     "explanation": "CSS Modules: locally scoped classes, generated unique class names, imported as objects. Solves global scope pollution, enables component-scoped styles. Works with build tools (Webpack, Vite).",
     "points": 15,
     "options": [
@@ -7425,13 +6763,7 @@
     "updatedAt": "2025-11-11T17:54:14.897Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "css",
-      "architecture",
-      "utility-first",
-      "tailwind",
-      "difficult"
-    ],
+    "tags": ["css", "architecture", "utility-first", "tailwind", "difficult"],
     "explanation": "Utility-first: small utility classes (e<code>.g</code>., <code>.text-center</code>, <code>.p-4</code>). Advantages: rapid development, consistent design, small bundle (with purging). Trade-offs: HTML verbosity, learning curve, less semantic.",
     "points": 20,
     "options": [

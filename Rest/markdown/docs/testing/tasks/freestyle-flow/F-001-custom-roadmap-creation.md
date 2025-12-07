@@ -1,8 +1,13 @@
 # Task ID: F-001
+
 # Title: Custom Roadmap Creation
+
 # Status: pending
-# Dependencies: 
+
+# Dependencies:
+
 # Priority: high
+
 # Description: Test the complete custom roadmap creation flow including card selection, category selection, topic selection, question selection, and plan saving.
 
 # Details:
@@ -10,6 +15,7 @@
 ## Time Estimation
 
 ### Manual Testing
+
 - **Estimated Time**: 45-60 minutes
 - **Breakdown**:
   - Navigate and authenticate: 2 minutes
@@ -24,6 +30,7 @@
 - **Dependencies**: Authentication, API endpoints, test data (cards, categories, topics, questions)
 
 ### Automated Testing
+
 - **Estimated Time**: 15-25 minutes (first run), 2-4 minutes (subsequent runs)
 - **Breakdown**:
   - Unit tests setup and execution: 5-7 minutes
@@ -33,6 +40,7 @@
 - **Dependencies**: API mocks, test data fixtures, authentication setup
 
 ### Total Time
+
 - **Manual Only**: 45-60 minutes
 - **Automated Only**: 15-25 minutes (first run), 2-4 minutes (subsequent)
 - **Both Manual + Automated**: 60-85 minutes (first run), 47-64 minutes (subsequent)

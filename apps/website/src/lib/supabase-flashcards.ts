@@ -1,7 +1,7 @@
-import { createClient } from '@supabase/supabase-js';
+import { createClient } from "@supabase/supabase-js";
 
-const supabaseUrl = process.env['NEXT_PUBLIC_SUPABASE_URL']!;
-const supabaseServiceRoleKey = process.env['SUPABASE_SERVICE_ROLE_KEY']!;
+const supabaseUrl = process.env["NEXT_PUBLIC_SUPABASE_URL"]!;
+const supabaseServiceRoleKey = process.env["SUPABASE_SERVICE_ROLE_KEY"]!;
 const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
 
 export interface Flashcard {
@@ -12,8 +12,8 @@ export interface Flashcard {
   answer: string;
   explanation: string;
   category: string;
-  difficulty: 'easy' | 'medium' | 'hard';
-  status: 'new' | 'learning' | 'review' | 'mastered';
+  difficulty: "easy" | "medium" | "hard";
+  status: "new" | "learning" | "review" | "mastered";
   interval: number; // days until next review
   repetitions: number;
   easeFactor: number; // SM-2 algorithm
@@ -22,7 +22,7 @@ export interface Flashcard {
   created_at: string;
   updated_at: string;
   tags: string[];
-  source: 'wrong_answer' | 'manual' | 'bookmark';
+  source: "wrong_answer" | "manual" | "bookmark";
 }
 
 export interface FlashcardProgress {
@@ -30,7 +30,7 @@ export interface FlashcardProgress {
   flashcardId: string;
   userId: string;
   sessionId: string;
-  response: 'correct' | 'incorrect';
+  response: "correct" | "incorrect";
   responseTime: number; // milliseconds
   timestamp: string;
 }
@@ -44,17 +44,17 @@ export interface FlashcardSession {
   correctAnswers: number;
   incorrectAnswers: number;
   totalTime: number; // milliseconds
-  status: 'active' | 'completed' | 'abandoned';
+  status: "active" | "completed" | "abandoned";
 }
 
 // Flashcard Service
 export const flashcardService = {
   async createFlashcard(
-    flashcard: Omit<Flashcard, 'id' | 'created_at' | 'updated_at'>
+    flashcard: Omit<Flashcard, "id" | "created_at" | "updated_at">,
   ) {
     const now = new Date().toISOString();
     const { data, error } = await supabase
-      .from('flashcards')
+      .from("flashcards")
       .insert({
         ...flashcard,
         created_at: now,
@@ -73,22 +73,22 @@ export const flashcardService = {
       status?: string;
       category?: string;
       due?: boolean;
-    }
+    },
   ) {
-    let query = supabase.from('flashcards').select('*').eq('userId', userId);
+    let query = supabase.from("flashcards").select("*").eq("userId", userId);
 
     if (filters?.status) {
-      query = query.eq('status', filters.status);
+      query = query.eq("status", filters.status);
     }
     if (filters?.category) {
-      query = query.eq('category', filters.category);
+      query = query.eq("category", filters.category);
     }
     if (filters?.due) {
       const now = new Date().toISOString();
-      query = query.lte('nextReview', now);
+      query = query.lte("nextReview", now);
     }
 
-    query = query.order('nextReview', { ascending: true });
+    query = query.order("nextReview", { ascending: true });
 
     const { data, error } = await query;
     if (error) throw error;
@@ -97,12 +97,12 @@ export const flashcardService = {
 
   async updateFlashcard(id: string, updates: Partial<Flashcard>) {
     const { data, error } = await supabase
-      .from('flashcards')
+      .from("flashcards")
       .update({
         ...updates,
         updated_at: new Date().toISOString(),
       })
-      .eq('id', id)
+      .eq("id", id)
       .select()
       .single();
 
@@ -111,7 +111,7 @@ export const flashcardService = {
   },
 
   async deleteFlashcard(id: string) {
-    const { error } = await supabase.from('flashcards').delete().eq('id', id);
+    const { error } = await supabase.from("flashcards").delete().eq("id", id);
 
     if (error) throw error;
     return true;
@@ -119,9 +119,9 @@ export const flashcardService = {
 
   async getFlashcard(id: string) {
     const { data, error } = await supabase
-      .from('flashcards')
-      .select('*')
-      .eq('id', id)
+      .from("flashcards")
+      .select("*")
+      .eq("id", id)
       .single();
 
     if (error) throw error;
@@ -131,9 +131,9 @@ export const flashcardService = {
 
 // Progress Service
 export const progressService = {
-  async recordProgress(progress: Omit<FlashcardProgress, 'id' | 'timestamp'>) {
+  async recordProgress(progress: Omit<FlashcardProgress, "id" | "timestamp">) {
     const { data, error } = await supabase
-      .from('flashcard_progress')
+      .from("flashcard_progress")
       .insert({
         ...progress,
         timestamp: new Date().toISOString(),
@@ -147,10 +147,10 @@ export const progressService = {
 
   async getProgressBySession(sessionId: string) {
     const { data, error } = await supabase
-      .from('flashcard_progress')
-      .select('*')
-      .eq('sessionId', sessionId)
-      .order('timestamp', { ascending: true });
+      .from("flashcard_progress")
+      .select("*")
+      .eq("sessionId", sessionId)
+      .order("timestamp", { ascending: true });
 
     if (error) throw error;
     return data || [];
@@ -159,11 +159,11 @@ export const progressService = {
   async getCardsDueForReview(userId: string) {
     const now = new Date().toISOString();
     const { data, error } = await supabase
-      .from('flashcards')
-      .select('*')
-      .eq('userId', userId)
-      .lte('nextReview', now)
-      .order('nextReview', { ascending: true });
+      .from("flashcards")
+      .select("*")
+      .eq("userId", userId)
+      .lte("nextReview", now)
+      .order("nextReview", { ascending: true });
 
     if (error) throw error;
     return data || [];
@@ -171,11 +171,11 @@ export const progressService = {
 
   async getNewCards(userId: string, limit: number = 20) {
     const { data, error } = await supabase
-      .from('flashcards')
-      .select('*')
-      .eq('userId', userId)
-      .eq('status', 'new')
-      .order('created_at', { ascending: true })
+      .from("flashcards")
+      .select("*")
+      .eq("userId", userId)
+      .eq("status", "new")
+      .order("created_at", { ascending: true })
       .limit(limit);
 
     if (error) throw error;
@@ -184,10 +184,10 @@ export const progressService = {
 
   async getUserProgress(userId: string) {
     const { data, error } = await supabase
-      .from('flashcard_progress')
-      .select('*')
-      .eq('userId', userId)
-      .order('timestamp', { ascending: false });
+      .from("flashcard_progress")
+      .select("*")
+      .eq("userId", userId)
+      .order("timestamp", { ascending: false });
 
     if (error) throw error;
     return data || [];
@@ -195,15 +195,15 @@ export const progressService = {
 
   async updateProgress(
     flashcardId: string,
-    response: 'correct' | 'incorrect',
+    response: "correct" | "incorrect",
     responseTime: number,
-    sessionId: string
+    sessionId: string,
   ) {
     const { data, error } = await supabase
-      .from('flashcard_progress')
+      .from("flashcard_progress")
       .insert({
         flashcardId,
-        userId: '', // This should be passed from the hook
+        userId: "", // This should be passed from the hook
         sessionId,
         response,
         responseTime,
@@ -220,14 +220,14 @@ export const progressService = {
 // Session Service
 export const sessionService = {
   async createSession(
-    session: Omit<FlashcardSession, 'id' | 'startTime' | 'endTime' | 'status'>
+    session: Omit<FlashcardSession, "id" | "startTime" | "endTime" | "status">,
   ) {
     const { data, error } = await supabase
-      .from('flashcard_sessions')
+      .from("flashcard_sessions")
       .insert({
         ...session,
         startTime: new Date().toISOString(),
-        status: 'active',
+        status: "active",
       })
       .select()
       .single();
@@ -238,12 +238,12 @@ export const sessionService = {
 
   async updateSession(id: string, updates: Partial<FlashcardSession>) {
     const { data, error } = await supabase
-      .from('flashcard_sessions')
+      .from("flashcard_sessions")
       .update({
         ...updates,
         updated_at: new Date().toISOString(),
       })
-      .eq('id', id)
+      .eq("id", id)
       .select()
       .single();
 
@@ -253,19 +253,19 @@ export const sessionService = {
 
   async getActiveSession(userId: string) {
     const { data, error } = await supabase
-      .from('flashcard_sessions')
-      .select('*')
-      .eq('userId', userId)
-      .eq('status', 'active')
+      .from("flashcard_sessions")
+      .select("*")
+      .eq("userId", userId)
+      .eq("status", "active")
       .single();
 
-    if (error && error.code !== 'PGRST116') throw error;
+    if (error && error.code !== "PGRST116") throw error;
     return data;
   },
 
   async startSession(userId: string, type: string) {
     const { data, error } = await supabase
-      .from('flashcard_sessions')
+      .from("flashcard_sessions")
       .insert({
         userId,
         startTime: new Date().toISOString(),
@@ -273,7 +273,7 @@ export const sessionService = {
         correctAnswers: 0,
         incorrectAnswers: 0,
         totalTime: 0,
-        status: 'active',
+        status: "active",
       })
       .select()
       .single();
@@ -284,14 +284,14 @@ export const sessionService = {
 
   async endSession(sessionId: string, duration: number) {
     const { data, error } = await supabase
-      .from('flashcard_sessions')
+      .from("flashcard_sessions")
       .update({
         endTime: new Date().toISOString(),
         totalTime: duration,
-        status: 'completed',
+        status: "completed",
         updated_at: new Date().toISOString(),
       })
-      .eq('id', sessionId)
+      .eq("id", sessionId)
       .select()
       .single();
 
@@ -302,18 +302,18 @@ export const sessionService = {
   async updateSessionStats(sessionId: string, isCorrect: boolean) {
     // First, get the current session data
     const { data: currentSession, error: fetchError } = await supabase
-      .from('flashcard_sessions')
-      .select('cardsReviewed, correctAnswers, incorrectAnswers')
-      .eq('id', sessionId)
+      .from("flashcard_sessions")
+      .select("cardsReviewed, correctAnswers, incorrectAnswers")
+      .eq("id", sessionId)
       .single();
 
     if (fetchError || !currentSession) {
-      throw new Error('Session not found');
+      throw new Error("Session not found");
     }
 
     // Update with incremented values
     const { data, error } = await supabase
-      .from('flashcard_sessions')
+      .from("flashcard_sessions")
       .update({
         cardsReviewed: currentSession.cardsReviewed + 1,
         correctAnswers: isCorrect
@@ -324,7 +324,7 @@ export const sessionService = {
           : currentSession.incorrectAnswers + 1,
         updated_at: new Date().toISOString(),
       })
-      .eq('id', sessionId)
+      .eq("id", sessionId)
       .select()
       .single();
 

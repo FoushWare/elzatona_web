@@ -17,10 +17,7 @@ Add to `.cursor/mcp.json`:
   "mcpServers": {
     "sonarqube": {
       "command": "java",
-      "args": [
-        "-jar",
-        "Rest/mcp/sonarqube/sonarqube-mcp-server.jar"
-      ],
+      "args": ["-jar", "Rest/mcp/sonarqube/sonarqube-mcp-server.jar"],
       "env": {
         "STORAGE_PATH": "Rest/mcp/sonarqube/storage",
         "SONARQUBE_TOKEN": "your_sonarcloud_token",
@@ -38,10 +35,7 @@ Add to `.cursor/mcp.json`:
   "mcpServers": {
     "sonarqube": {
       "command": "java",
-      "args": [
-        "-jar",
-        "Rest/mcp/sonarqube/sonarqube-mcp-server.jar"
-      ],
+      "args": ["-jar", "Rest/mcp/sonarqube/sonarqube-mcp-server.jar"],
       "env": {
         "STORAGE_PATH": "Rest/mcp/sonarqube/storage",
         "SONARQUBE_TOKEN": "your_sonar_token",
@@ -61,12 +55,14 @@ Add to `.cursor/mcp.json`:
 ## Getting Your Token
 
 ### SonarCloud
+
 1. Go to https://sonarcloud.io/
 2. My Account → Security
 3. Generate a new token
 4. Copy your organization key
 
 ### SonarQube Server
+
 1. Go to your SonarQube instance
 2. My Account → Security
 3. Generate a new token
@@ -74,6 +70,7 @@ Add to `.cursor/mcp.json`:
 ## Environment Variables
 
 Add to `.env.local`:
+
 ```bash
 SONARQUBE_TOKEN=your_token_here
 SONARQUBE_ORG=your_org_key  # For SonarCloud
@@ -84,6 +81,7 @@ SONARQUBE_URL=https://your-server.com  # For SonarQube Server
 ## Usage
 
 Once configured, the MCP server provides tools for:
+
 - Searching issues
 - Getting quality gate status
 - Retrieving measures and metrics
@@ -91,4 +89,3 @@ Once configured, the MCP server provides tools for:
 - And more!
 
 See the [official documentation](https://github.com/SonarSource/sonarqube-mcp-server) for full details.
-

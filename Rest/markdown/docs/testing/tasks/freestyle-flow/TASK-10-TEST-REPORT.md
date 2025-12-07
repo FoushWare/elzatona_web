@@ -12,12 +12,15 @@
 ### ✅ Tests Created
 
 #### Unit Tests
+
 - ✅ Created: `apps/website/src/app/browse-practice-questions/page.test.tsx`
 
 #### Integration Tests
+
 - ✅ Created: `apps/website/src/app/browse-practice-questions/page.integration.test.tsx`
 
 #### E2E Tests
+
 - ✅ Created: `tests/e2e/freestyle-flow/browse-practice-questions.spec.ts`
 
 ---

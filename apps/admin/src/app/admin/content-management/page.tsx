@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import React, {
   useEffect,
@@ -6,9 +6,9 @@ import React, {
   useState,
   useCallback,
   Suspense,
-} from 'react';
-import { createClient } from '@supabase/supabase-js';
-import { toast } from 'sonner';
+} from "react";
+import { createClient } from "@supabase/supabase-js";
+import { toast } from "sonner";
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
 const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
@@ -34,7 +34,7 @@ import {
   DialogDescription,
   DialogFooter,
   Checkbox,
-} from '@elzatona/shared-components';
+} from "@elzatona/components";
 
 // Import icons with tree shaking
 import {
@@ -52,7 +52,7 @@ import {
   Calendar,
   Target,
   Loader2,
-} from 'lucide-react';
+} from "lucide-react";
 
 // Types for API responses (commented out - not currently used)
 // interface ApiResponse<T> {
@@ -140,18 +140,18 @@ interface Stats {
 
 // Memoized constants to prevent recreation on each render
 const CARD_ICONS = {
-  'Core Technologies': { icon: BookOpen, color: '#3B82F6' },
-  'Framework Questions': { icon: Layers, color: '#10B981' },
-  'Problem Solving': { icon: Puzzle, color: '#F59E0B' },
-  'System Design': { icon: Network, color: '#EF4444' },
-  'Frontend Tasks': { icon: Target, color: '#8B5CF6' },
+  "Core Technologies": { icon: BookOpen, color: "#3B82F6" },
+  "Framework Questions": { icon: Layers, color: "#10B981" },
+  "Problem Solving": { icon: Puzzle, color: "#F59E0B" },
+  "System Design": { icon: Network, color: "#EF4444" },
+  "Frontend Tasks": { icon: Target, color: "#8B5CF6" },
 } as const;
 
 // Loading skeleton component for better UX
 const LoadingSkeleton = () => (
-  <div className='animate-pulse'>
-    <div className='h-4 bg-gray-200 rounded w-3/4 mb-2'></div>
-    <div className='h-3 bg-gray-200 rounded w-1/2'></div>
+  <div className="animate-pulse">
+    <div className="h-4 bg-gray-200 rounded w-3/4 mb-2"></div>
+    <div className="h-3 bg-gray-200 rounded w-1/2"></div>
   </div>
 );
 
@@ -172,24 +172,24 @@ const StatsCard = React.memo(
     color: string;
   }) => (
     <Card>
-      <CardContent className='p-4'>
-        <div className='flex items-center'>
-          <Icon className='h-8 w-8 mr-3' style={{ color }} />
+      <CardContent className="p-4">
+        <div className="flex items-center">
+          <Icon className="h-8 w-8 mr-3" style={{ color }} />
           <div>
-            <p className='text-sm font-medium text-gray-600 dark:text-gray-400'>
+            <p className="text-sm font-medium text-gray-600 dark:text-gray-400">
               {label}
             </p>
-            <p className='text-2xl font-bold text-gray-900 dark:text-white'>
+            <p className="text-2xl font-bold text-gray-900 dark:text-white">
               {value}
             </p>
           </div>
         </div>
       </CardContent>
     </Card>
-  )
+  ),
 );
 
-StatsCard.displayName = 'StatsCard';
+StatsCard.displayName = "StatsCard";
 
 export default function ContentManagementPage() {
   // State for data
@@ -204,24 +204,24 @@ export default function ContentManagementPage() {
   const [error, setError] = useState<string | null>(null);
 
   // UI state
-  const [searchTerm, setSearchTerm] = useState('');
-  const [filterCardType, setFilterCardType] = useState('all');
+  const [searchTerm, setSearchTerm] = useState("");
+  const [filterCardType, setFilterCardType] = useState("all");
   const [expandedCards, setExpandedCards] = useState<Set<string>>(new Set());
   const [expandedCategories, setExpandedCategories] = useState<Set<string>>(
-    new Set()
+    new Set(),
   );
   const [expandedTopics, setExpandedTopics] = useState<Set<string>>(new Set());
   const [expandedPlans, setExpandedPlans] = useState<Set<string>>(new Set());
 
   // Plan structure collapsible states
   const [expandedPlanCards, setExpandedPlanCards] = useState<Set<string>>(
-    new Set()
+    new Set(),
   );
   const [expandedPlanCategories, setExpandedPlanCategories] = useState<
     Set<string>
   >(new Set());
   const [expandedPlanTopics, setExpandedPlanTopics] = useState<Set<string>>(
-    new Set()
+    new Set(),
   );
 
   // Modal states
@@ -230,7 +230,7 @@ export default function ContentManagementPage() {
   const [selectedTopic, setSelectedTopic] = useState<Topic | null>(null);
   const [selectedPlan, setSelectedPlan] = useState<LearningPlan | null>(null);
   const [selectedQuestions, setSelectedQuestions] = useState<Set<string>>(
-    new Set()
+    new Set(),
   );
 
   // Delete modal states
@@ -267,15 +267,15 @@ export default function ContentManagementPage() {
         questionsResult,
         planQuestionsResult,
       ] = await Promise.all([
-        supabase.from('learning_cards').select('*').order('order_index'),
-        supabase.from('learning_plans').select('*').order('created_at'),
-        supabase.from('categories').select('*').order('created_at'),
-        supabase.from('topics').select('*').order('order_index'),
-        supabase.from('questions').select('*').order('created_at').limit(1000), // Limit to prevent performance issues
+        supabase.from("learning_cards").select("*").order("order_index"),
+        supabase.from("learning_plans").select("*").order("created_at"),
+        supabase.from("categories").select("*").order("created_at"),
+        supabase.from("topics").select("*").order("order_index"),
+        supabase.from("questions").select("*").order("created_at").limit(1000), // Limit to prevent performance issues
         supabase
-          .from('plan_questions')
-          .select('plan_id, question_id')
-          .eq('is_active', true),
+          .from("plan_questions")
+          .select("plan_id, question_id")
+          .eq("is_active", true),
       ]);
 
       if (cardsResult.error) throw cardsResult.error;
@@ -294,12 +294,12 @@ export default function ContentManagementPage() {
       // Convert plan questions to Set for efficient lookup
       const planQuestionsSet = new Set(
         planQuestionsResult.data?.map(
-          pq => `${pq.plan_id}-${pq.question_id}`
-        ) || []
+          (pq) => `${pq.plan_id}-${pq.question_id}`,
+        ) || [],
       );
       setPlanQuestions(planQuestionsSet);
 
-      console.log('📊 Data loaded:', {
+      console.log("📊 Data loaded:", {
         cards: cardsResult.data?.length || 0,
         plans: plansResult.data?.length || 0,
         categories: categoriesResult.data?.length || 0,
@@ -308,8 +308,8 @@ export default function ContentManagementPage() {
         planQuestions: planQuestionsResult.data?.length || 0,
       });
     } catch (err) {
-      console.error('❌ Error fetching data:', err);
-      setError(err instanceof Error ? err.message : 'Failed to fetch data');
+      console.error("❌ Error fetching data:", err);
+      setError(err instanceof Error ? err.message : "Failed to fetch data");
     } finally {
       setLoading(false);
     }
@@ -329,11 +329,11 @@ export default function ContentManagementPage() {
       totalTopics: topics.length,
       totalQuestions: questions.length,
     }),
-    [cards, plans, categories, topics, questions]
+    [cards, plans, categories, topics, questions],
   );
 
   // Debounced search to improve performance
-  const [debouncedSearchTerm, setDebouncedSearchTerm] = useState('');
+  const [debouncedSearchTerm, setDebouncedSearchTerm] = useState("");
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -344,7 +344,7 @@ export default function ContentManagementPage() {
 
   // Memoized filtered data to prevent unnecessary recalculations
   const filteredCards = useMemo(() => {
-    return cards.filter(card => {
+    return cards.filter((card) => {
       // Add null checks to prevent runtime errors
       if (!card || !card.title || !card.description) {
         return false;
@@ -356,13 +356,13 @@ export default function ContentManagementPage() {
           .toLowerCase()
           .includes(debouncedSearchTerm.toLowerCase());
       const matchesCardType =
-        filterCardType === 'all' || card.title === filterCardType;
+        filterCardType === "all" || card.title === filterCardType;
       return matchesSearch && matchesCardType;
     });
   }, [cards, debouncedSearchTerm, filterCardType]);
 
   const filteredPlans = useMemo(() => {
-    return plans.filter(plan => {
+    return plans.filter((plan) => {
       // Add null checks to prevent runtime errors
       if (!plan || !plan.name || !plan.description) {
         return false;
@@ -379,7 +379,7 @@ export default function ContentManagementPage() {
 
   // Helper functions for UI interactions
   const toggleCard = useCallback((card_id: string) => {
-    setExpandedCards(prev => {
+    setExpandedCards((prev) => {
       const newExpanded = new Set(prev);
       if (newExpanded.has(card_id)) {
         newExpanded.delete(card_id);
@@ -391,7 +391,7 @@ export default function ContentManagementPage() {
   }, []);
 
   const toggleCategory = useCallback((categoryId: string) => {
-    setExpandedCategories(prev => {
+    setExpandedCategories((prev) => {
       const newExpanded = new Set(prev);
       if (newExpanded.has(categoryId)) {
         newExpanded.delete(categoryId);
@@ -403,7 +403,7 @@ export default function ContentManagementPage() {
   }, []);
 
   const toggleTopic = useCallback((topicId: string) => {
-    setExpandedTopics(prev => {
+    setExpandedTopics((prev) => {
       const newExpanded = new Set(prev);
       if (newExpanded.has(topicId)) {
         newExpanded.delete(topicId);
@@ -415,7 +415,7 @@ export default function ContentManagementPage() {
   }, []);
 
   const togglePlan = useCallback((plan_id: string) => {
-    setExpandedPlans(prev => {
+    setExpandedPlans((prev) => {
       const newExpanded = new Set(prev);
       if (newExpanded.has(plan_id)) {
         newExpanded.delete(plan_id);
@@ -428,7 +428,7 @@ export default function ContentManagementPage() {
 
   // Plan structure toggle functions
   const togglePlanCard = useCallback((cardId: string) => {
-    setExpandedPlanCards(prev => {
+    setExpandedPlanCards((prev) => {
       const newExpanded = new Set(prev);
       if (newExpanded.has(cardId)) {
         newExpanded.delete(cardId);
@@ -440,7 +440,7 @@ export default function ContentManagementPage() {
   }, []);
 
   const togglePlanCategory = useCallback((categoryId: string) => {
-    setExpandedPlanCategories(prev => {
+    setExpandedPlanCategories((prev) => {
       const newExpanded = new Set(prev);
       if (newExpanded.has(categoryId)) {
         newExpanded.delete(categoryId);
@@ -452,7 +452,7 @@ export default function ContentManagementPage() {
   }, []);
 
   const togglePlanTopic = useCallback((topicId: string) => {
-    setExpandedPlanTopics(prev => {
+    setExpandedPlanTopics((prev) => {
       const newExpanded = new Set(prev);
       if (newExpanded.has(topicId)) {
         newExpanded.delete(topicId);
@@ -471,7 +471,7 @@ export default function ContentManagementPage() {
       setSelectedQuestions(new Set());
       setIsTopicQuestionsModalOpen(true);
     },
-    []
+    [],
   );
 
   const closeTopicQuestionsModal = useCallback(() => {
@@ -482,7 +482,7 @@ export default function ContentManagementPage() {
   }, []);
 
   const toggleQuestionSelection = useCallback((questionId: string) => {
-    setSelectedQuestions(prev => {
+    setSelectedQuestions((prev) => {
       const newSelected = new Set(prev);
       if (newSelected.has(questionId)) {
         newSelected.delete(questionId);
@@ -496,9 +496,9 @@ export default function ContentManagementPage() {
   const selectAllQuestions = useCallback(() => {
     if (!selectedTopic) return;
     const topicQuestions = questions.filter(
-      q => q.topic_id === selectedTopic.id
+      (q) => q.topic_id === selectedTopic.id,
     );
-    setSelectedQuestions(new Set(topicQuestions.map(q => q.id)));
+    setSelectedQuestions(new Set(topicQuestions.map((q) => q.id)));
   }, [selectedTopic, questions]);
 
   const deselectAllQuestions = useCallback(() => {
@@ -511,34 +511,34 @@ export default function ContentManagementPage() {
     try {
       // Add questions to plan_questions table
       const planQuestionInserts = Array.from(selectedQuestions).map(
-        questionId => ({
+        (questionId) => ({
           plan_id: selectedPlan.id,
           question_id: questionId,
           topic_id: selectedTopic.id,
           is_active: true,
-        })
+        }),
       );
 
       const { error } = await supabase
-        .from('plan_questions')
+        .from("plan_questions")
         .insert(planQuestionInserts);
 
       if (error) throw error;
 
       // Update local state
       const newPlanQuestions = new Set(planQuestions);
-      selectedQuestions.forEach(questionId => {
+      selectedQuestions.forEach((questionId) => {
         newPlanQuestions.add(`${selectedPlan.id}-${questionId}`);
       });
       setPlanQuestions(newPlanQuestions);
 
       toast.success(
-        `Successfully added ${selectedQuestions.size} questions to plan "${selectedPlan.name}"`
+        `Successfully added ${selectedQuestions.size} questions to plan "${selectedPlan.name}"`,
       );
       closeTopicQuestionsModal();
     } catch (error) {
-      console.error('Error adding questions to plan:', error);
-      toast.error('Failed to add questions to plan');
+      console.error("Error adding questions to plan:", error);
+      toast.error("Failed to add questions to plan");
     }
   }, [
     selectedPlan,
@@ -554,30 +554,30 @@ export default function ContentManagementPage() {
       questionId: string,
       planId: string,
       topicId: string,
-      isInPlan: boolean
+      isInPlan: boolean,
     ) => {
       try {
         if (isInPlan) {
           // Remove question from plan
           const { error } = await supabase
-            .from('plan_questions')
+            .from("plan_questions")
             .delete()
-            .eq('plan_id', planId)
-            .eq('question_id', questionId);
+            .eq("plan_id", planId)
+            .eq("question_id", questionId);
 
           if (error) throw error;
 
           // Update local state
-          setPlanQuestions(prev => {
+          setPlanQuestions((prev) => {
             const newSet = new Set(prev);
             newSet.delete(`${planId}-${questionId}`);
             return newSet;
           });
 
-          toast.success('Question removed from plan');
+          toast.success("Question removed from plan");
         } else {
           // Add question to plan
-          const { error } = await supabase.from('plan_questions').insert({
+          const { error } = await supabase.from("plan_questions").insert({
             plan_id: planId,
             question_id: questionId,
             topic_id: topicId,
@@ -587,20 +587,20 @@ export default function ContentManagementPage() {
           if (error) throw error;
 
           // Update local state
-          setPlanQuestions(prev => {
+          setPlanQuestions((prev) => {
             const newSet = new Set(prev);
             newSet.add(`${planId}-${questionId}`);
             return newSet;
           });
 
-          toast.success('Question added to plan');
+          toast.success("Question added to plan");
         }
       } catch (error) {
-        console.error('Error toggling question in plan:', error);
-        toast.error('Failed to update question in plan');
+        console.error("Error toggling question in plan:", error);
+        toast.error("Failed to update question in plan");
       }
     },
-    []
+    [],
   );
 
   // Delete card helper functions
@@ -622,9 +622,9 @@ export default function ContentManagementPage() {
     try {
       // Delete the card from Supabase
       const { error } = await supabase
-        .from('learning_cards')
+        .from("learning_cards")
         .delete()
-        .eq('id', cardToDelete.id);
+        .eq("id", cardToDelete.id);
 
       if (error) {
         throw error;
@@ -637,8 +637,8 @@ export default function ContentManagementPage() {
       await fetchData();
       closeDeleteCardModal();
     } catch (error) {
-      console.error('Error deleting card:', error);
-      toast.error('Failed to delete card. Please try again.');
+      console.error("Error deleting card:", error);
+      toast.error("Failed to delete card. Please try again.");
       setIsDeleting(false);
     }
   }, [cardToDelete, fetchData, closeDeleteCardModal]);
@@ -652,10 +652,10 @@ export default function ContentManagementPage() {
     try {
       // Fetch current cards in this plan
       const { data: currentPlanCards, error: planCardsError } = await supabase
-        .from('plan_cards')
-        .select('card_id, order_index, is_active')
-        .eq('plan_id', plan.id)
-        .order('order_index');
+        .from("plan_cards")
+        .select("card_id, order_index, is_active")
+        .eq("plan_id", plan.id)
+        .order("order_index");
 
       if (planCardsError) throw planCardsError;
 
@@ -663,17 +663,17 @@ export default function ContentManagementPage() {
 
       // Get all available cards
       const { data: allCards, error: cardsError } = await supabase
-        .from('learning_cards')
-        .select('*')
-        .eq('is_active', true)
-        .order('title');
+        .from("learning_cards")
+        .select("*")
+        .eq("is_active", true)
+        .order("title");
 
       if (cardsError) throw cardsError;
 
       setAvailableCards(allCards || []);
     } catch (error) {
-      console.error('Error fetching plan cards:', error);
-      toast.error('Failed to load plan cards');
+      console.error("Error fetching plan cards:", error);
+      toast.error("Failed to load plan cards");
     } finally {
       setIsManagingCards(false);
     }
@@ -693,21 +693,21 @@ export default function ContentManagementPage() {
 
       try {
         // Check if card is already in plan
-        const existingCard = planCards.find(pc => pc.card_id === cardId);
+        const existingCard = planCards.find((pc) => pc.card_id === cardId);
         if (existingCard) {
-          toast.error('This card is already in the plan');
+          toast.error("This card is already in the plan");
           return;
         }
 
         // Get the next order index
         const maxOrderIndex = Math.max(
-          ...planCards.map(pc => pc.order_index),
-          0
+          ...planCards.map((pc) => pc.order_index),
+          0,
         );
         const nextOrderIndex = maxOrderIndex + 1;
 
         // Add card to plan
-        const { error } = await supabase.from('plan_cards').insert({
+        const { error } = await supabase.from("plan_cards").insert({
           plan_id: selectedPlanForCards.id,
           card_id: cardId,
           order_index: nextOrderIndex,
@@ -717,18 +717,18 @@ export default function ContentManagementPage() {
         if (error) throw error;
 
         // Update local state
-        setPlanCards(prev => [
+        setPlanCards((prev) => [
           ...prev,
           { card_id: cardId, order_index: nextOrderIndex, is_active: true },
         ]);
 
-        toast.success('Card added to plan successfully');
+        toast.success("Card added to plan successfully");
       } catch (error) {
-        console.error('Error adding card to plan:', error);
-        toast.error('Failed to add card to plan');
+        console.error("Error adding card to plan:", error);
+        toast.error("Failed to add card to plan");
       }
     },
-    [selectedPlanForCards, planCards]
+    [selectedPlanForCards, planCards],
   );
 
   const removeCardFromPlan = useCallback(
@@ -738,23 +738,23 @@ export default function ContentManagementPage() {
       try {
         // Remove card from plan
         const { error } = await supabase
-          .from('plan_cards')
+          .from("plan_cards")
           .delete()
-          .eq('plan_id', selectedPlanForCards.id)
-          .eq('card_id', cardId);
+          .eq("plan_id", selectedPlanForCards.id)
+          .eq("card_id", cardId);
 
         if (error) throw error;
 
         // Update local state
-        setPlanCards(prev => prev.filter(pc => pc.card_id !== cardId));
+        setPlanCards((prev) => prev.filter((pc) => pc.card_id !== cardId));
 
-        toast.success('Card removed from plan successfully');
+        toast.success("Card removed from plan successfully");
       } catch (error) {
-        console.error('Error removing card from plan:', error);
-        toast.error('Failed to remove card from plan');
+        console.error("Error removing card from plan:", error);
+        toast.error("Failed to remove card from plan");
       }
     },
-    [selectedPlanForCards]
+    [selectedPlanForCards],
   );
 
   const toggleCardActiveStatus = useCallback(
@@ -764,39 +764,39 @@ export default function ContentManagementPage() {
       try {
         // Update card status in plan
         const { error } = await supabase
-          .from('plan_cards')
+          .from("plan_cards")
           .update({ is_active: !isActive })
-          .eq('plan_id', selectedPlanForCards.id)
-          .eq('card_id', cardId);
+          .eq("plan_id", selectedPlanForCards.id)
+          .eq("card_id", cardId);
 
         if (error) throw error;
 
         // Update local state
-        setPlanCards(prev =>
-          prev.map(pc =>
-            pc.card_id === cardId ? { ...pc, is_active: !isActive } : pc
-          )
+        setPlanCards((prev) =>
+          prev.map((pc) =>
+            pc.card_id === cardId ? { ...pc, is_active: !isActive } : pc,
+          ),
         );
 
         toast.success(
-          `Card ${!isActive ? 'activated' : 'deactivated'} in plan`
+          `Card ${!isActive ? "activated" : "deactivated"} in plan`,
         );
       } catch (error) {
-        console.error('Error updating card status:', error);
-        toast.error('Failed to update card status');
+        console.error("Error updating card status:", error);
+        toast.error("Failed to update card status");
       }
     },
-    [selectedPlanForCards]
+    [selectedPlanForCards],
   );
 
   if (loading) {
     return (
-      <div className='min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800'>
-        <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8'>
-          <div className='flex items-center justify-center h-64'>
-            <div className='text-center'>
-              <Loader2 className='w-8 h-8 animate-spin mx-auto mb-4 text-blue-600' />
-              <p className='text-gray-600 dark:text-gray-400'>
+      <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+          <div className="flex items-center justify-center h-64">
+            <div className="text-center">
+              <Loader2 className="w-8 h-8 animate-spin mx-auto mb-4 text-blue-600" />
+              <p className="text-gray-600 dark:text-gray-400">
                 Loading content management data...
               </p>
             </div>
@@ -809,25 +809,25 @@ export default function ContentManagementPage() {
   // Error handling
   if (error) {
     return (
-      <div className='min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800'>
-        <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8'>
-          <div className='flex items-center justify-center h-64'>
-            <div className='text-center'>
-              <div className='text-red-500 text-6xl mb-4'>⚠️</div>
-              <h2 className='text-xl font-semibold text-gray-900 dark:text-white mb-2'>
+      <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+          <div className="flex items-center justify-center h-64">
+            <div className="text-center">
+              <div className="text-red-500 text-6xl mb-4">⚠️</div>
+              <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">
                 Error Loading Data
               </h2>
-              <p className='text-gray-600 dark:text-gray-400 mb-4'>
+              <p className="text-gray-600 dark:text-gray-400 mb-4">
                 There was an error loading the content management data. Please
                 try refreshing the page.
               </p>
               <Button
                 onClick={() => window.location.reload()}
-                className='bg-blue-600 hover:bg-blue-700 text-white'
+                className="bg-blue-600 hover:bg-blue-700 text-white"
               >
                 Refresh Page
               </Button>
-              <div className='mt-4 text-sm text-gray-500'>
+              <div className="mt-4 text-sm text-gray-500">
                 <p>Error: {error}</p>
               </div>
             </div>
@@ -838,139 +838,139 @@ export default function ContentManagementPage() {
   }
 
   return (
-    <div className='min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800'>
-      <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8'>
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Header */}
-        <div className='mb-8'>
-          <h1 className='text-4xl font-bold text-gray-900 dark:text-white mb-2'>
+        <div className="mb-8">
+          <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-2">
             🎯 Unified Learning Management
           </h1>
-          <p className='text-gray-600 dark:text-gray-400'>
+          <p className="text-gray-600 dark:text-gray-400">
             Comprehensive admin interface for managing learning cards, plans,
             categories, topics, and questions
           </p>
         </div>
 
         {/* Stats */}
-        <div className='grid grid-cols-2 md:grid-cols-5 gap-4 mb-8'>
+        <div className="grid grid-cols-2 md:grid-cols-5 gap-4 mb-8">
           <StatsCard
             icon={Layers}
-            label='Cards'
+            label="Cards"
             value={stats.totalCards}
-            color='#3B82F6'
+            color="#3B82F6"
           />
           <StatsCard
             icon={Users}
-            label='Plans'
+            label="Plans"
             value={stats.totalPlans}
-            color='#10B981'
+            color="#10B981"
           />
           <StatsCard
             icon={BookOpen}
-            label='Categories'
+            label="Categories"
             value={stats.totalCategories}
-            color='#8B5CF6'
+            color="#8B5CF6"
           />
           <StatsCard
             icon={Target}
-            label='Topics'
+            label="Topics"
             value={stats.totalTopics}
-            color='#F59E0B'
+            color="#F59E0B"
           />
           <StatsCard
             icon={MessageSquare}
-            label='Questions'
+            label="Questions"
             value={stats.totalQuestions}
-            color='#EF4444'
+            color="#EF4444"
           />
         </div>
 
         {/* Search and Filters */}
-        <div className='flex flex-col md:flex-row gap-4 mb-6'>
-          <div className='flex-1'>
+        <div className="flex flex-col md:flex-row gap-4 mb-6">
+          <div className="flex-1">
             <Suspense fallback={<LoadingSkeleton />}>
               <Input
-                placeholder='Search cards, plans, categories, topics...'
+                placeholder="Search cards, plans, categories, topics..."
                 value={searchTerm}
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                   setSearchTerm(e.target.value)
                 }
-                className='w-full'
+                className="w-full"
               />
             </Suspense>
           </div>
           <Suspense fallback={<LoadingSkeleton />}>
             <Select value={filterCardType} onValueChange={setFilterCardType}>
-              <SelectTrigger className='w-full md:w-48'>
-                <SelectValue placeholder='Filter by card type' />
+              <SelectTrigger className="w-full md:w-48">
+                <SelectValue placeholder="Filter by card type" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value='all'>All Card Types</SelectItem>
-                <SelectItem value='Core Technologies'>
+                <SelectItem value="all">All Card Types</SelectItem>
+                <SelectItem value="Core Technologies">
                   Core Technologies
                 </SelectItem>
-                <SelectItem value='Framework Questions'>
+                <SelectItem value="Framework Questions">
                   Framework Questions
                 </SelectItem>
-                <SelectItem value='Problem Solving'>Problem Solving</SelectItem>
-                <SelectItem value='System Design'>System Design</SelectItem>
+                <SelectItem value="Problem Solving">Problem Solving</SelectItem>
+                <SelectItem value="System Design">System Design</SelectItem>
               </SelectContent>
             </Select>
           </Suspense>
         </div>
 
         {/* Cards Section */}
-        <div className='mb-8'>
-          <div className='flex items-center justify-between mb-4'>
-            <h2 className='text-xl font-semibold text-gray-900 dark:text-white flex items-center'>
-              <Layers className='h-5 w-5 mr-2 text-blue-600' />
+        <div className="mb-8">
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="text-xl font-semibold text-gray-900 dark:text-white flex items-center">
+              <Layers className="h-5 w-5 mr-2 text-blue-600" />
               Learning Cards ({stats.totalCards})
             </h2>
-            <div className='flex items-center space-x-2'>
+            <div className="flex items-center space-x-2">
               <Button
-                variant='outline'
-                size='sm'
+                variant="outline"
+                size="sm"
                 onClick={() => {
                   // TODO: Implement edit cards functionality
-                  console.log('Edit cards clicked');
+                  console.log("Edit cards clicked");
                 }}
-                className='flex items-center space-x-1'
+                className="flex items-center space-x-1"
               >
-                <Edit className='h-4 w-4' />
+                <Edit className="h-4 w-4" />
                 <span>Edit Cards</span>
               </Button>
               <Button
-                size='sm'
+                size="sm"
                 onClick={() => {
                   // TODO: Implement create card functionality
-                  console.log('Create card clicked');
+                  console.log("Create card clicked");
                 }}
-                className='flex items-center space-x-1 bg-blue-600 hover:bg-blue-700'
+                className="flex items-center space-x-1 bg-blue-600 hover:bg-blue-700"
               >
-                <Plus className='h-4 w-4' />
+                <Plus className="h-4 w-4" />
                 <span>Create Card</span>
               </Button>
             </div>
           </div>
 
-          <div className='space-y-4'>
+          <div className="space-y-4">
             {filteredCards.length === 0 ? (
-              <Card className='border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg'>
-                <CardContent className='p-8 text-center'>
-                  <Layers className='w-12 h-12 text-gray-400 mx-auto mb-4' />
-                  <h3 className='text-lg font-medium text-gray-900 dark:text-white mb-2'>
+              <Card className="border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg">
+                <CardContent className="p-8 text-center">
+                  <Layers className="w-12 h-12 text-gray-400 mx-auto mb-4" />
+                  <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">
                     No Learning Cards
                   </h3>
-                  <p className='text-gray-600 dark:text-gray-400'>
+                  <p className="text-gray-600 dark:text-gray-400">
                     Create your first learning card to organize categories and
                     topics for structured learning.
                   </p>
                 </CardContent>
               </Card>
             ) : (
-              filteredCards.map(card => {
+              filteredCards.map((card) => {
                 const cardCategories = categories.filter(
-                  cat => cat.learning_card_id === card.id
+                  (cat) => cat.learning_card_id === card.id,
                 );
                 const IconComponent =
                   CARD_ICONS[card.title as keyof typeof CARD_ICONS]?.icon ||
@@ -979,95 +979,95 @@ export default function ContentManagementPage() {
                 return (
                   <Card
                     key={card.id}
-                    className='border-l-4'
+                    className="border-l-4"
                     style={{ borderLeftColor: card.color }}
                   >
-                    <CardHeader className='pb-3'>
-                      <div className='flex items-center justify-between'>
-                        <div className='flex items-center space-x-3'>
+                    <CardHeader className="pb-3">
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center space-x-3">
                           <button
                             onClick={() => toggleCard(card.id)}
-                            className='p-1 hover:bg-gray-100 rounded'
+                            className="p-1 hover:bg-gray-100 rounded"
                           >
                             {expandedCards.has(card.id) ? (
-                              <ChevronDown className='h-4 w-4' />
+                              <ChevronDown className="h-4 w-4" />
                             ) : (
-                              <ChevronRight className='h-4 w-4' />
+                              <ChevronRight className="h-4 w-4" />
                             )}
                           </button>
                           <IconComponent
-                            className='h-5 w-5'
+                            className="h-5 w-5"
                             style={{ color: card.color }}
                           />
                           <div>
-                            <CardTitle className='text-lg'>
+                            <CardTitle className="text-lg">
                               {card.title}
                             </CardTitle>
-                            <p className='text-sm text-gray-600 dark:text-gray-400'>
+                            <p className="text-sm text-gray-600 dark:text-gray-400">
                               {card.description}
                             </p>
                           </div>
                         </div>
-                        <div className='flex items-center space-x-2'>
+                        <div className="flex items-center space-x-2">
                           <Badge
-                            variant='outline'
-                            className='bg-blue-50 text-blue-700 dark:bg-blue-900 dark:text-blue-300'
+                            variant="outline"
+                            className="bg-blue-50 text-blue-700 dark:bg-blue-900 dark:text-blue-300"
                           >
                             {cardCategories.length} Categories
                           </Badge>
                           <Badge
-                            variant='outline'
-                            className='bg-purple-50 text-purple-700 dark:bg-purple-900 dark:text-purple-300'
+                            variant="outline"
+                            className="bg-purple-50 text-purple-700 dark:bg-purple-900 dark:text-purple-300"
                           >
                             {cardCategories.reduce((total, cat) => {
                               const categoryTopics = topics.filter(
-                                topic => topic.category_id === cat.id
+                                (topic) => topic.category_id === cat.id,
                               );
                               return total + categoryTopics.length;
-                            }, 0)}{' '}
+                            }, 0)}{" "}
                             Topics
                           </Badge>
                           <Badge
-                            variant='outline'
-                            className='bg-green-50 text-green-700 dark:bg-green-900 dark:text-green-300'
+                            variant="outline"
+                            className="bg-green-50 text-green-700 dark:bg-green-900 dark:text-green-300"
                           >
                             {cardCategories.reduce((total, cat) => {
                               const categoryTopics = topics.filter(
-                                topic => topic.category_id === cat.id
+                                (topic) => topic.category_id === cat.id,
                               );
                               return (
                                 total +
                                 categoryTopics.reduce((topicTotal, topic) => {
                                   const topicQuestions = questions.filter(
-                                    q => q.category_id === cat.id
+                                    (q) => q.category_id === cat.id,
                                   );
                                   return topicTotal + topicQuestions.length;
                                 }, 0)
                               );
-                            }, 0)}{' '}
+                            }, 0)}{" "}
                             Questions
                           </Badge>
-                          <div className='flex items-center space-x-1 ml-2'>
+                          <div className="flex items-center space-x-1 ml-2">
                             <Button
-                              variant='ghost'
-                              size='sm'
+                              variant="ghost"
+                              size="sm"
                               onClick={() => {
                                 // TODO: Implement edit card functionality
-                                console.log('Edit card clicked:', card.id);
+                                console.log("Edit card clicked:", card.id);
                               }}
-                              className='h-8 w-8 p-0 hover:bg-blue-100'
+                              className="h-8 w-8 p-0 hover:bg-blue-100"
                             >
-                              <Edit className='h-4 w-4 text-blue-600' />
+                              <Edit className="h-4 w-4 text-blue-600" />
                             </Button>
                             <Button
-                              variant='ghost'
-                              size='sm'
+                              variant="ghost"
+                              size="sm"
                               onClick={() => {
                                 openDeleteCardModal(card);
                               }}
-                              className='h-8 w-8 p-0 hover:bg-red-100'
+                              className="h-8 w-8 p-0 hover:bg-red-100"
                             >
-                              <Trash2 className='h-4 w-4 text-red-600' />
+                              <Trash2 className="h-4 w-4 text-red-600" />
                             </Button>
                           </div>
                         </div>
@@ -1075,130 +1075,130 @@ export default function ContentManagementPage() {
                     </CardHeader>
 
                     {expandedCards.has(card.id) && (
-                      <CardContent className='pt-0'>
-                        <div className='space-y-4'>
+                      <CardContent className="pt-0">
+                        <div className="space-y-4">
                           {/* Categories under this card */}
-                          {cardCategories.map(category => {
+                          {cardCategories.map((category) => {
                             const categoryTopics = topics.filter(
-                              topic => topic.category_id === category.id
+                              (topic) => topic.category_id === category.id,
                             );
 
                             return (
                               <div
                                 key={category.id}
-                                className='ml-6 border-l-2 border-gray-200 pl-4'
+                                className="ml-6 border-l-2 border-gray-200 pl-4"
                               >
-                                <div className='flex items-center justify-between py-2'>
-                                  <div className='flex items-center space-x-2'>
+                                <div className="flex items-center justify-between py-2">
+                                  <div className="flex items-center space-x-2">
                                     <button
                                       onClick={() =>
                                         toggleCategory(category.id)
                                       }
-                                      className='p-1 hover:bg-gray-100 rounded'
+                                      className="p-1 hover:bg-gray-100 rounded"
                                     >
                                       {expandedCategories.has(category.id) ? (
-                                        <ChevronDown className='h-4 w-4' />
+                                        <ChevronDown className="h-4 w-4" />
                                       ) : (
-                                        <ChevronRight className='h-4 w-4' />
+                                        <ChevronRight className="h-4 w-4" />
                                       )}
                                     </button>
-                                    <BookOpen className='h-4 w-4 text-purple-600' />
+                                    <BookOpen className="h-4 w-4 text-purple-600" />
                                     <div>
-                                      <h4 className='font-medium'>
+                                      <h4 className="font-medium">
                                         {category.name}
                                       </h4>
-                                      <p className='text-sm text-gray-600 dark:text-gray-400'>
+                                      <p className="text-sm text-gray-600 dark:text-gray-400">
                                         {category.description}
                                       </p>
                                     </div>
                                   </div>
-                                  <div className='flex items-center space-x-2'>
+                                  <div className="flex items-center space-x-2">
                                     <Badge
-                                      variant='outline'
-                                      className='bg-purple-50 text-purple-700 dark:bg-purple-900 dark:text-purple-300'
+                                      variant="outline"
+                                      className="bg-purple-50 text-purple-700 dark:bg-purple-900 dark:text-purple-300"
                                     >
                                       {categoryTopics.length} Topics
                                     </Badge>
                                     <Badge
-                                      variant='outline'
-                                      className='bg-green-50 text-green-700 dark:bg-green-900 dark:text-green-300'
+                                      variant="outline"
+                                      className="bg-green-50 text-green-700 dark:bg-green-900 dark:text-green-300"
                                     >
                                       {
                                         questions.filter(
-                                          q => q.category_id === category.id
+                                          (q) => q.category_id === category.id,
                                         ).length
-                                      }{' '}
+                                      }{" "}
                                       Questions
                                     </Badge>
                                   </div>
                                 </div>
 
                                 {expandedCategories.has(category.id) && (
-                                  <div className='ml-6 space-y-2'>
-                                    {categoryTopics.map(topic => {
+                                  <div className="ml-6 space-y-2">
+                                    {categoryTopics.map((topic) => {
                                       const topicQuestions = questions.filter(
-                                        q => q.category_id === category.id
+                                        (q) => q.category_id === category.id,
                                       );
 
                                       return (
                                         <div
                                           key={topic.id}
-                                          className='border-l-2 border-gray-100 pl-4 py-2'
+                                          className="border-l-2 border-gray-100 pl-4 py-2"
                                         >
-                                          <div className='flex items-center justify-between'>
-                                            <div className='flex items-center space-x-2'>
+                                          <div className="flex items-center justify-between">
+                                            <div className="flex items-center space-x-2">
                                               <button
                                                 onClick={() =>
                                                   toggleTopic(topic.id)
                                                 }
-                                                className='p-1 hover:bg-gray-100 rounded'
+                                                className="p-1 hover:bg-gray-100 rounded"
                                               >
                                                 {expandedTopics.has(
-                                                  topic.id
+                                                  topic.id,
                                                 ) ? (
-                                                  <ChevronDown className='h-4 w-4' />
+                                                  <ChevronDown className="h-4 w-4" />
                                                 ) : (
-                                                  <ChevronRight className='h-4 w-4' />
+                                                  <ChevronRight className="h-4 w-4" />
                                                 )}
                                               </button>
-                                              <Target className='h-4 w-4 text-orange-600' />
+                                              <Target className="h-4 w-4 text-orange-600" />
                                               <div>
-                                                <h5 className='font-medium'>
+                                                <h5 className="font-medium">
                                                   {topic.name}
                                                 </h5>
-                                                <p className='text-sm text-gray-600 dark:text-gray-400'>
+                                                <p className="text-sm text-gray-600 dark:text-gray-400">
                                                   {topic.description}
                                                 </p>
                                               </div>
                                             </div>
-                                            <div className='flex items-center space-x-2'>
+                                            <div className="flex items-center space-x-2">
                                               <Badge
-                                                variant='outline'
-                                                className='bg-green-50 text-green-700 dark:bg-green-900 dark:text-green-300'
+                                                variant="outline"
+                                                className="bg-green-50 text-green-700 dark:bg-green-900 dark:text-green-300"
                                               >
-                                                {topicQuestions.length}{' '}
+                                                {topicQuestions.length}{" "}
                                                 Questions
                                               </Badge>
                                             </div>
                                           </div>
 
                                           {expandedTopics.has(topic.id) && (
-                                            <div className='ml-6 space-y-2'>
+                                            <div className="ml-6 space-y-2">
                                               {topicQuestions
                                                 .slice(0, 5)
-                                                .map(question => (
+                                                .map((question) => (
                                                   <div
                                                     key={question.id}
-                                                    className='flex items-center justify-between py-2 px-3 bg-gray-50 dark:bg-gray-800 rounded'
+                                                    className="flex items-center justify-between py-2 px-3 bg-gray-50 dark:bg-gray-800 rounded"
                                                   >
-                                                    <div className='flex items-center space-x-2'>
-                                                      <MessageSquare className='h-4 w-4 text-red-600' />
+                                                    <div className="flex items-center space-x-2">
+                                                      <MessageSquare className="h-4 w-4 text-red-600" />
                                                       <div>
-                                                        <h6 className='font-medium text-sm'>
+                                                        <h6 className="font-medium text-sm">
                                                           {question.title}
                                                         </h6>
-                                                        <p className='text-xs text-gray-600 dark:text-gray-400'>
-                                                          {question.difficulty}{' '}
+                                                        <p className="text-xs text-gray-600 dark:text-gray-400">
+                                                          {question.difficulty}{" "}
                                                           • {question.type}
                                                         </p>
                                                       </div>
@@ -1206,9 +1206,9 @@ export default function ContentManagementPage() {
                                                   </div>
                                                 ))}
                                               {topicQuestions.length > 5 && (
-                                                <p className='text-xs text-gray-500 ml-6'>
-                                                  ... and{' '}
-                                                  {topicQuestions.length - 5}{' '}
+                                                <p className="text-xs text-gray-500 ml-6">
+                                                  ... and{" "}
+                                                  {topicQuestions.length - 5}{" "}
                                                   more questions
                                                 </p>
                                               )}
@@ -1233,106 +1233,106 @@ export default function ContentManagementPage() {
         </div>
 
         {/* Plans Section */}
-        <div className='mb-8'>
-          <div className='flex items-center justify-between mb-4'>
-            <h2 className='text-xl font-semibold text-gray-900 dark:text-white flex items-center'>
-              <Users className='h-5 w-5 mr-2 text-green-600' />
+        <div className="mb-8">
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="text-xl font-semibold text-gray-900 dark:text-white flex items-center">
+              <Users className="h-5 w-5 mr-2 text-green-600" />
               Learning Plans ({stats.totalPlans})
             </h2>
-            <div className='flex items-center space-x-2'>
+            <div className="flex items-center space-x-2">
               <Button
-                variant='outline'
-                size='sm'
+                variant="outline"
+                size="sm"
                 onClick={() => {
                   // TODO: Implement edit plans functionality
-                  console.log('Edit plans clicked');
+                  console.log("Edit plans clicked");
                 }}
-                className='flex items-center space-x-1'
+                className="flex items-center space-x-1"
               >
-                <Edit className='h-4 w-4' />
+                <Edit className="h-4 w-4" />
                 <span>Edit Plans</span>
               </Button>
               <Button
-                size='sm'
+                size="sm"
                 onClick={() => {
                   // TODO: Implement create plan functionality
-                  console.log('Create plan clicked');
+                  console.log("Create plan clicked");
                 }}
-                className='flex items-center space-x-1 bg-green-600 hover:bg-green-700'
+                className="flex items-center space-x-1 bg-green-600 hover:bg-green-700"
               >
-                <Plus className='h-4 w-4' />
+                <Plus className="h-4 w-4" />
                 <span>Create Plan</span>
               </Button>
             </div>
           </div>
 
-          <div className='space-y-4'>
+          <div className="space-y-4">
             {filteredPlans.length === 0 ? (
-              <Card className='border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg'>
-                <CardContent className='p-8 text-center'>
-                  <Calendar className='w-12 h-12 text-gray-400 mx-auto mb-4' />
-                  <h3 className='text-lg font-medium text-gray-900 dark:text-white mb-2'>
+              <Card className="border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg">
+                <CardContent className="p-8 text-center">
+                  <Calendar className="w-12 h-12 text-gray-400 mx-auto mb-4" />
+                  <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">
                     No Learning Plans
                   </h3>
-                  <p className='text-gray-600 dark:text-gray-400'>
+                  <p className="text-gray-600 dark:text-gray-400">
                     Create your first learning plan to provide structured
                     learning paths for users.
                   </p>
                 </CardContent>
               </Card>
             ) : (
-              filteredPlans.map(plan => (
-                <Card key={plan.id} className='border-l-4 border-l-green-500'>
-                  <CardHeader className='pb-3'>
-                    <div className='flex items-center justify-between'>
-                      <div className='flex items-center space-x-3'>
+              filteredPlans.map((plan) => (
+                <Card key={plan.id} className="border-l-4 border-l-green-500">
+                  <CardHeader className="pb-3">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center space-x-3">
                         <button
                           onClick={() => togglePlan(plan.id)}
-                          className='p-1 hover:bg-gray-100 rounded'
+                          className="p-1 hover:bg-gray-100 rounded"
                         >
                           {expandedPlans.has(plan.id) ? (
-                            <ChevronDown className='h-4 w-4' />
+                            <ChevronDown className="h-4 w-4" />
                           ) : (
-                            <ChevronRight className='h-4 w-4' />
+                            <ChevronRight className="h-4 w-4" />
                           )}
                         </button>
-                        <Calendar className='h-5 w-5 text-green-600' />
+                        <Calendar className="h-5 w-5 text-green-600" />
                         <div>
-                          <CardTitle className='text-lg'>{plan.name}</CardTitle>
-                          <p className='text-sm text-gray-600 dark:text-gray-400'>
+                          <CardTitle className="text-lg">{plan.name}</CardTitle>
+                          <p className="text-sm text-gray-600 dark:text-gray-400">
                             {plan.description}
                           </p>
                         </div>
                       </div>
-                      <div className='flex items-center space-x-2'>
-                        <Badge variant='outline'>
+                      <div className="flex items-center space-x-2">
+                        <Badge variant="outline">
                           {plan.estimated_duration} days
                         </Badge>
-                        <Badge variant='outline'>
-                          {plan.is_public ? 'Public' : 'Private'}
+                        <Badge variant="outline">
+                          {plan.is_public ? "Public" : "Private"}
                         </Badge>
-                        <div className='flex items-center space-x-1 ml-2'>
+                        <div className="flex items-center space-x-1 ml-2">
                           <Button
-                            variant='ghost'
-                            size='sm'
+                            variant="ghost"
+                            size="sm"
                             onClick={() => {
                               // TODO: Implement edit plan functionality
-                              console.log('Edit plan clicked:', plan.id);
+                              console.log("Edit plan clicked:", plan.id);
                             }}
-                            className='h-8 w-8 p-0 hover:bg-green-100'
+                            className="h-8 w-8 p-0 hover:bg-green-100"
                           >
-                            <Edit className='h-4 w-4 text-green-600' />
+                            <Edit className="h-4 w-4 text-green-600" />
                           </Button>
                           <Button
-                            variant='ghost'
-                            size='sm'
+                            variant="ghost"
+                            size="sm"
                             onClick={() => {
                               // TODO: Implement delete plan functionality
-                              console.log('Delete plan clicked:', plan.id);
+                              console.log("Delete plan clicked:", plan.id);
                             }}
-                            className='h-8 w-8 p-0 hover:bg-red-100'
+                            className="h-8 w-8 p-0 hover:bg-red-100"
                           >
-                            <Trash2 className='h-4 w-4 text-red-600' />
+                            <Trash2 className="h-4 w-4 text-red-600" />
                           </Button>
                         </div>
                       </div>
@@ -1340,99 +1340,99 @@ export default function ContentManagementPage() {
                   </CardHeader>
 
                   {expandedPlans.has(plan.id) && (
-                    <CardContent className='pt-0'>
-                      <div className='space-y-6'>
+                    <CardContent className="pt-0">
+                      <div className="space-y-6">
                         {/* Plan Details */}
-                        <div className='grid grid-cols-1 md:grid-cols-3 gap-4 p-4 bg-gray-50 dark:bg-gray-800 rounded-lg'>
-                          <div className='text-sm'>
-                            <strong className='text-gray-900 dark:text-white'>
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 p-4 bg-gray-50 dark:bg-gray-800 rounded-lg">
+                          <div className="text-sm">
+                            <strong className="text-gray-900 dark:text-white">
                               Duration:
-                            </strong>{' '}
-                            <span className='text-gray-600 dark:text-gray-400'>
+                            </strong>{" "}
+                            <span className="text-gray-600 dark:text-gray-400">
                               {plan.estimated_duration} days
                             </span>
                           </div>
-                          <div className='text-sm'>
-                            <strong className='text-gray-900 dark:text-white'>
+                          <div className="text-sm">
+                            <strong className="text-gray-900 dark:text-white">
                               Status:
-                            </strong>{' '}
+                            </strong>{" "}
                             <Badge
-                              variant={plan.is_active ? 'default' : 'secondary'}
+                              variant={plan.is_active ? "default" : "secondary"}
                             >
-                              {plan.is_active ? 'Active' : 'Inactive'}
+                              {plan.is_active ? "Active" : "Inactive"}
                             </Badge>
                           </div>
-                          <div className='text-sm'>
-                            <strong className='text-gray-900 dark:text-white'>
+                          <div className="text-sm">
+                            <strong className="text-gray-900 dark:text-white">
                               Visibility:
-                            </strong>{' '}
+                            </strong>{" "}
                             <Badge
-                              variant={plan.is_public ? 'default' : 'outline'}
+                              variant={plan.is_public ? "default" : "outline"}
                             >
-                              {plan.is_public ? 'Public' : 'Private'}
+                              {plan.is_public ? "Public" : "Private"}
                             </Badge>
                           </div>
                         </div>
 
                         {/* Plan Management Actions */}
-                        <div className='flex flex-wrap gap-2 p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg'>
+                        <div className="flex flex-wrap gap-2 p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
                           <Button
-                            size='sm'
+                            size="sm"
                             onClick={() => openCardManagementModal(plan)}
-                            className='flex items-center space-x-1 bg-blue-600 hover:bg-blue-700'
+                            className="flex items-center space-x-1 bg-blue-600 hover:bg-blue-700"
                           >
-                            <Layers className='h-4 w-4' />
+                            <Layers className="h-4 w-4" />
                             <span>Manage Cards</span>
                           </Button>
                           <Button
-                            variant='outline'
-                            size='sm'
+                            variant="outline"
+                            size="sm"
                             onClick={() => {
                               // TODO: Implement add questions to plan functionality
-                              console.log('Add questions to plan:', plan.id);
+                              console.log("Add questions to plan:", plan.id);
                             }}
-                            className='flex items-center space-x-1'
+                            className="flex items-center space-x-1"
                           >
-                            <MessageSquare className='h-4 w-4' />
+                            <MessageSquare className="h-4 w-4" />
                             <span>Add Questions</span>
                           </Button>
                           <Button
-                            variant='outline'
-                            size='sm'
+                            variant="outline"
+                            size="sm"
                             onClick={() => {
                               // TODO: Implement copy from another plan functionality
-                              console.log('Copy from another plan:', plan.id);
+                              console.log("Copy from another plan:", plan.id);
                             }}
-                            className='flex items-center space-x-1'
+                            className="flex items-center space-x-1"
                           >
-                            <Target className='h-4 w-4' />
+                            <Target className="h-4 w-4" />
                             <span>Copy from Plan</span>
                           </Button>
                           <Button
-                            variant='outline'
-                            size='sm'
+                            variant="outline"
+                            size="sm"
                             onClick={() => {
                               // TODO: Implement plan structure management functionality
-                              console.log('Manage plan structure:', plan.id);
+                              console.log("Manage plan structure:", plan.id);
                             }}
-                            className='flex items-center space-x-1'
+                            className="flex items-center space-x-1"
                           >
-                            <Network className='h-4 w-4' />
+                            <Network className="h-4 w-4" />
                             <span>Manage Structure</span>
                           </Button>
                         </div>
 
                         {/* Plan Structure: Cards -> Categories -> Topics -> Questions */}
-                        <div className='space-y-4'>
-                          <h4 className='text-lg font-semibold text-gray-900 dark:text-white flex items-center'>
-                            <Layers className='h-5 w-5 mr-2 text-blue-600' />
+                        <div className="space-y-4">
+                          <h4 className="text-lg font-semibold text-gray-900 dark:text-white flex items-center">
+                            <Layers className="h-5 w-5 mr-2 text-blue-600" />
                             Plan Structure
                           </h4>
 
                           {/* Cards in this plan */}
-                          {cards.map(card => {
+                          {cards.map((card) => {
                             const cardCategories = categories.filter(
-                              cat => cat.learning_card_id === card.id
+                              (cat) => cat.learning_card_id === card.id,
                             );
                             const IconComponent =
                               CARD_ICONS[card.title as keyof typeof CARD_ICONS]
@@ -1441,55 +1441,55 @@ export default function ContentManagementPage() {
                             return (
                               <div
                                 key={card.id}
-                                className='ml-4 border-l-2 border-blue-200 pl-4'
+                                className="ml-4 border-l-2 border-blue-200 pl-4"
                               >
-                                <div className='flex items-center justify-between py-2'>
-                                  <div className='flex items-center space-x-2'>
+                                <div className="flex items-center justify-between py-2">
+                                  <div className="flex items-center space-x-2">
                                     <button
                                       onClick={() => togglePlanCard(card.id)}
-                                      className='p-1 hover:bg-gray-100 rounded'
+                                      className="p-1 hover:bg-gray-100 rounded"
                                     >
                                       {expandedPlanCards.has(card.id) ? (
-                                        <ChevronDown className='h-4 w-4' />
+                                        <ChevronDown className="h-4 w-4" />
                                       ) : (
-                                        <ChevronRight className='h-4 w-4' />
+                                        <ChevronRight className="h-4 w-4" />
                                       )}
                                     </button>
                                     <IconComponent
-                                      className='h-4 w-4'
+                                      className="h-4 w-4"
                                       style={{ color: card.color }}
                                     />
                                     <div>
-                                      <h5 className='font-medium text-gray-900 dark:text-white'>
+                                      <h5 className="font-medium text-gray-900 dark:text-white">
                                         {card.title}
                                       </h5>
-                                      <p className='text-sm text-gray-600 dark:text-gray-400'>
+                                      <p className="text-sm text-gray-600 dark:text-gray-400">
                                         {card.description}
                                       </p>
                                     </div>
                                   </div>
-                                  <div className='flex items-center space-x-2'>
+                                  <div className="flex items-center space-x-2">
                                     <Badge
-                                      variant='outline'
-                                      className='bg-blue-50 text-blue-700 dark:bg-blue-900 dark:text-blue-300'
+                                      variant="outline"
+                                      className="bg-blue-50 text-blue-700 dark:bg-blue-900 dark:text-blue-300"
                                     >
                                       {cardCategories.length} Categories
                                     </Badge>
-                                    <div className='flex items-center space-x-1'>
+                                    <div className="flex items-center space-x-1">
                                       <Button
-                                        variant='ghost'
-                                        size='sm'
+                                        variant="ghost"
+                                        size="sm"
                                         onClick={() => {
                                           // TODO: Implement add card to plan functionality
                                           console.log(
-                                            'Add card to plan:',
+                                            "Add card to plan:",
                                             card.id,
-                                            plan.id
+                                            plan.id,
                                           );
                                         }}
-                                        className='h-6 px-2 text-blue-600 hover:bg-blue-100'
+                                        className="h-6 px-2 text-blue-600 hover:bg-blue-100"
                                       >
-                                        <Plus className='h-3 w-3' />
+                                        <Plus className="h-3 w-3" />
                                       </Button>
                                     </div>
                                   </div>
@@ -1497,64 +1497,65 @@ export default function ContentManagementPage() {
 
                                 {/* Categories under this card */}
                                 {expandedPlanCards.has(card.id) &&
-                                  cardCategories.map(category => {
+                                  cardCategories.map((category) => {
                                     const categoryTopics = topics.filter(
-                                      topic => topic.category_id === category.id
+                                      (topic) =>
+                                        topic.category_id === category.id,
                                     );
 
                                     return (
                                       <div
                                         key={category.id}
-                                        className='ml-6 border-l-2 border-purple-200 pl-4 mt-2'
+                                        className="ml-6 border-l-2 border-purple-200 pl-4 mt-2"
                                       >
-                                        <div className='flex items-center justify-between py-2'>
-                                          <div className='flex items-center space-x-2'>
+                                        <div className="flex items-center justify-between py-2">
+                                          <div className="flex items-center space-x-2">
                                             <button
                                               onClick={() =>
                                                 togglePlanCategory(category.id)
                                               }
-                                              className='p-1 hover:bg-gray-100 rounded'
+                                              className="p-1 hover:bg-gray-100 rounded"
                                             >
                                               {expandedPlanCategories.has(
-                                                category.id
+                                                category.id,
                                               ) ? (
-                                                <ChevronDown className='h-4 w-4' />
+                                                <ChevronDown className="h-4 w-4" />
                                               ) : (
-                                                <ChevronRight className='h-4 w-4' />
+                                                <ChevronRight className="h-4 w-4" />
                                               )}
                                             </button>
-                                            <BookOpen className='h-4 w-4 text-purple-600' />
+                                            <BookOpen className="h-4 w-4 text-purple-600" />
                                             <div>
-                                              <h6 className='font-medium text-gray-900 dark:text-white'>
+                                              <h6 className="font-medium text-gray-900 dark:text-white">
                                                 {category.name}
                                               </h6>
-                                              <p className='text-sm text-gray-600 dark:text-gray-400'>
+                                              <p className="text-sm text-gray-600 dark:text-gray-400">
                                                 {category.description}
                                               </p>
                                             </div>
                                           </div>
-                                          <div className='flex items-center space-x-2'>
+                                          <div className="flex items-center space-x-2">
                                             <Badge
-                                              variant='outline'
-                                              className='bg-purple-50 text-purple-700 dark:bg-purple-900 dark:text-purple-300'
+                                              variant="outline"
+                                              className="bg-purple-50 text-purple-700 dark:bg-purple-900 dark:text-purple-300"
                                             >
                                               {categoryTopics.length} Topics
                                             </Badge>
-                                            <div className='flex items-center space-x-1'>
+                                            <div className="flex items-center space-x-1">
                                               <Button
-                                                variant='ghost'
-                                                size='sm'
+                                                variant="ghost"
+                                                size="sm"
                                                 onClick={() => {
                                                   // TODO: Implement add category to plan functionality
                                                   console.log(
-                                                    'Add category to plan:',
+                                                    "Add category to plan:",
                                                     category.id,
-                                                    plan.id
+                                                    plan.id,
                                                   );
                                                 }}
-                                                className='h-6 px-2 text-purple-600 hover:bg-purple-100'
+                                                className="h-6 px-2 text-purple-600 hover:bg-purple-100"
                                               >
-                                                <Plus className='h-3 w-3' />
+                                                <Plus className="h-3 w-3" />
                                               </Button>
                                             </div>
                                           </div>
@@ -1562,114 +1563,115 @@ export default function ContentManagementPage() {
 
                                         {/* Topics under this category */}
                                         {expandedPlanCategories.has(
-                                          category.id
+                                          category.id,
                                         ) &&
-                                          categoryTopics.map(topic => {
+                                          categoryTopics.map((topic) => {
                                             const topicQuestions =
                                               questions.filter(
-                                                q => q.topic_id === topic.id
+                                                (q) => q.topic_id === topic.id,
                                               );
 
                                             return (
                                               <div
                                                 key={topic.id}
-                                                className='ml-6 border-l-2 border-orange-200 pl-4 mt-2'
+                                                className="ml-6 border-l-2 border-orange-200 pl-4 mt-2"
                                               >
                                                 <div
                                                   className={`flex items-center justify-between py-2 px-3 rounded-lg transition-colors ${
-                                                    topicQuestions.some(q =>
+                                                    topicQuestions.some((q) =>
                                                       planQuestions.has(
-                                                        `${plan.id}-${q.id}`
-                                                      )
+                                                        `${plan.id}-${q.id}`,
+                                                      ),
                                                     )
-                                                      ? 'bg-orange-50 dark:bg-orange-900/20 border border-orange-200 dark:border-orange-800'
-                                                      : 'hover:bg-gray-50 dark:hover:bg-gray-800'
+                                                      ? "bg-orange-50 dark:bg-orange-900/20 border border-orange-200 dark:border-orange-800"
+                                                      : "hover:bg-gray-50 dark:hover:bg-gray-800"
                                                   }`}
                                                 >
-                                                  <div className='flex items-center space-x-2'>
+                                                  <div className="flex items-center space-x-2">
                                                     <button
                                                       onClick={() =>
                                                         togglePlanTopic(
-                                                          topic.id
+                                                          topic.id,
                                                         )
                                                       }
-                                                      className='p-1 hover:bg-gray-100 rounded'
+                                                      className="p-1 hover:bg-gray-100 rounded"
                                                     >
                                                       {expandedPlanTopics.has(
-                                                        topic.id
+                                                        topic.id,
                                                       ) ? (
-                                                        <ChevronDown className='h-4 w-4' />
+                                                        <ChevronDown className="h-4 w-4" />
                                                       ) : (
-                                                        <ChevronRight className='h-4 w-4' />
+                                                        <ChevronRight className="h-4 w-4" />
                                                       )}
                                                     </button>
-                                                    <div className='flex items-center space-x-2'>
+                                                    <div className="flex items-center space-x-2">
                                                       <Target
                                                         className={`h-4 w-4 ${
                                                           topicQuestions.some(
-                                                            q =>
+                                                            (q) =>
                                                               planQuestions.has(
-                                                                `${plan.id}-${q.id}`
-                                                              )
+                                                                `${plan.id}-${q.id}`,
+                                                              ),
                                                           )
-                                                            ? 'text-orange-600'
-                                                            : 'text-gray-400'
+                                                            ? "text-orange-600"
+                                                            : "text-gray-400"
                                                         }`}
                                                       />
-                                                      {topicQuestions.some(q =>
-                                                        planQuestions.has(
-                                                          `${plan.id}-${q.id}`
-                                                        )
+                                                      {topicQuestions.some(
+                                                        (q) =>
+                                                          planQuestions.has(
+                                                            `${plan.id}-${q.id}`,
+                                                          ),
                                                       ) && (
-                                                        <div className='w-2 h-2 bg-orange-500 rounded-full'></div>
+                                                        <div className="w-2 h-2 bg-orange-500 rounded-full"></div>
                                                       )}
                                                     </div>
                                                     <div>
                                                       <h6
                                                         className={`font-medium ${
                                                           topicQuestions.some(
-                                                            q =>
+                                                            (q) =>
                                                               planQuestions.has(
-                                                                `${plan.id}-${q.id}`
-                                                              )
+                                                                `${plan.id}-${q.id}`,
+                                                              ),
                                                           )
-                                                            ? 'text-orange-900 dark:text-orange-100'
-                                                            : 'text-gray-900 dark:text-white'
+                                                            ? "text-orange-900 dark:text-orange-100"
+                                                            : "text-gray-900 dark:text-white"
                                                         }`}
                                                       >
                                                         {topic.name}
                                                       </h6>
-                                                      <p className='text-sm text-gray-600 dark:text-gray-400'>
+                                                      <p className="text-sm text-gray-600 dark:text-gray-400">
                                                         {topic.description}
                                                       </p>
                                                     </div>
                                                   </div>
-                                                  <div className='flex items-center space-x-2'>
+                                                  <div className="flex items-center space-x-2">
                                                     <Badge
-                                                      variant='outline'
-                                                      className='bg-orange-50 text-orange-700 dark:bg-orange-900 dark:text-orange-300'
+                                                      variant="outline"
+                                                      className="bg-orange-50 text-orange-700 dark:bg-orange-900 dark:text-orange-300"
                                                     >
-                                                      {topicQuestions.length}{' '}
+                                                      {topicQuestions.length}{" "}
                                                       Questions
                                                     </Badge>
-                                                    <div className='flex items-center space-x-2'>
-                                                      <div className='flex items-center space-x-2'>
-                                                        <div className='relative'>
+                                                    <div className="flex items-center space-x-2">
+                                                      <div className="flex items-center space-x-2">
+                                                        <div className="relative">
                                                           <input
-                                                            type='checkbox'
+                                                            type="checkbox"
                                                             checked={topicQuestions.some(
-                                                              q =>
+                                                              (q) =>
                                                                 planQuestions.has(
-                                                                  `${plan.id}-${q.id}`
-                                                                )
+                                                                  `${plan.id}-${q.id}`,
+                                                                ),
                                                             )}
                                                             onChange={() => {
                                                               const hasQuestionsInPlan =
                                                                 topicQuestions.some(
-                                                                  q =>
+                                                                  (q) =>
                                                                     planQuestions.has(
-                                                                      `${plan.id}-${q.id}`
-                                                                    )
+                                                                      `${plan.id}-${q.id}`,
+                                                                    ),
                                                                 );
 
                                                               if (
@@ -1677,96 +1679,100 @@ export default function ContentManagementPage() {
                                                               ) {
                                                                 // Remove all questions from this topic in the plan
                                                                 topicQuestions.forEach(
-                                                                  question => {
+                                                                  (
+                                                                    question,
+                                                                  ) => {
                                                                     if (
                                                                       planQuestions.has(
-                                                                        `${plan.id}-${question.id}`
+                                                                        `${plan.id}-${question.id}`,
                                                                       )
                                                                     ) {
                                                                       toggleQuestionInPlan(
                                                                         question.id,
                                                                         plan.id,
                                                                         topic.id,
-                                                                        true
+                                                                        true,
                                                                       );
                                                                     }
-                                                                  }
+                                                                  },
                                                                 );
                                                               } else {
                                                                 // Add all questions from this topic to the plan
                                                                 topicQuestions.forEach(
-                                                                  question => {
+                                                                  (
+                                                                    question,
+                                                                  ) => {
                                                                     if (
                                                                       !planQuestions.has(
-                                                                        `${plan.id}-${question.id}`
+                                                                        `${plan.id}-${question.id}`,
                                                                       )
                                                                     ) {
                                                                       toggleQuestionInPlan(
                                                                         question.id,
                                                                         plan.id,
                                                                         topic.id,
-                                                                        false
+                                                                        false,
                                                                       );
                                                                     }
-                                                                  }
+                                                                  },
                                                                 );
                                                               }
                                                             }}
-                                                            className='sr-only'
+                                                            className="sr-only"
                                                             id={`topic-${topic.id}-${plan.id}`}
                                                           />
                                                           <label
                                                             htmlFor={`topic-${topic.id}-${plan.id}`}
                                                             className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors cursor-pointer ${
                                                               topicQuestions.some(
-                                                                q =>
+                                                                (q) =>
                                                                   planQuestions.has(
-                                                                    `${plan.id}-${q.id}`
-                                                                  )
+                                                                    `${plan.id}-${q.id}`,
+                                                                  ),
                                                               )
-                                                                ? 'bg-orange-500'
-                                                                : 'bg-gray-300 dark:bg-gray-600'
+                                                                ? "bg-orange-500"
+                                                                : "bg-gray-300 dark:bg-gray-600"
                                                             }`}
                                                           >
                                                             <span
                                                               className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
                                                                 topicQuestions.some(
-                                                                  q =>
+                                                                  (q) =>
                                                                     planQuestions.has(
-                                                                      `${plan.id}-${q.id}`
-                                                                    )
+                                                                      `${plan.id}-${q.id}`,
+                                                                    ),
                                                                 )
-                                                                  ? 'translate-x-6'
-                                                                  : 'translate-x-1'
+                                                                  ? "translate-x-6"
+                                                                  : "translate-x-1"
                                                               }`}
                                                             />
                                                           </label>
                                                         </div>
-                                                        <span className='text-xs font-medium text-gray-700 dark:text-gray-300'>
+                                                        <span className="text-xs font-medium text-gray-700 dark:text-gray-300">
                                                           {topicQuestions.some(
-                                                            q =>
+                                                            (q) =>
                                                               planQuestions.has(
-                                                                `${plan.id}-${q.id}`
-                                                              )
+                                                                `${plan.id}-${q.id}`,
+                                                              ),
                                                           )
-                                                            ? 'Included'
-                                                            : 'Include Topic'}
+                                                            ? "Included"
+                                                            : "Include Topic"}
                                                         </span>
                                                       </div>
                                                       <Button
-                                                        variant='outline'
-                                                        size='sm'
+                                                        variant="outline"
+                                                        size="sm"
                                                         onClick={() => {
                                                           openTopicQuestionsModal(
                                                             topic,
-                                                            plan
+                                                            plan,
                                                           );
                                                         }}
-                                                        className='h-7 px-3 text-orange-600 border-orange-200 hover:bg-orange-50 hover:border-orange-300'
-                                                        title='Manage individual questions'
+                                                        className="h-7 px-3 text-orange-600 border-orange-200 hover:bg-orange-50 hover:border-orange-300"
+                                                        title="Manage individual questions"
                                                       >
-                                                        <Plus className='h-3 w-3 mr-1' />
-                                                        <span className='text-xs'>
+                                                        <Plus className="h-3 w-3 mr-1" />
+                                                        <span className="text-xs">
                                                           Manage
                                                         </span>
                                                       </Button>
@@ -1776,112 +1782,112 @@ export default function ContentManagementPage() {
 
                                                 {/* Questions under this topic */}
                                                 {expandedPlanTopics.has(
-                                                  topic.id
+                                                  topic.id,
                                                 ) &&
                                                   topicQuestions
                                                     .slice(0, 3)
-                                                    .map(question => (
+                                                    .map((question) => (
                                                       <div
                                                         key={question.id}
-                                                        className='ml-6 border-l-2 border-green-200 pl-4 mt-2'
+                                                        className="ml-6 border-l-2 border-green-200 pl-4 mt-2"
                                                       >
                                                         <div
                                                           className={`flex items-center justify-between py-2 px-3 rounded-lg transition-colors ${
                                                             planQuestions.has(
-                                                              `${plan.id}-${question.id}`
+                                                              `${plan.id}-${question.id}`,
                                                             )
-                                                              ? 'bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800'
-                                                              : 'hover:bg-gray-50 dark:hover:bg-gray-800'
+                                                              ? "bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800"
+                                                              : "hover:bg-gray-50 dark:hover:bg-gray-800"
                                                           }`}
                                                         >
-                                                          <div className='flex items-center space-x-2'>
-                                                            <div className='flex items-center space-x-2'>
+                                                          <div className="flex items-center space-x-2">
+                                                            <div className="flex items-center space-x-2">
                                                               <MessageSquare
                                                                 className={`h-4 w-4 ${
                                                                   planQuestions.has(
-                                                                    `${plan.id}-${question.id}`
+                                                                    `${plan.id}-${question.id}`,
                                                                   )
-                                                                    ? 'text-green-600'
-                                                                    : 'text-gray-400'
+                                                                    ? "text-green-600"
+                                                                    : "text-gray-400"
                                                                 }`}
                                                               />
                                                               {planQuestions.has(
-                                                                `${plan.id}-${question.id}`
+                                                                `${plan.id}-${question.id}`,
                                                               ) && (
-                                                                <div className='w-2 h-2 bg-green-500 rounded-full'></div>
+                                                                <div className="w-2 h-2 bg-green-500 rounded-full"></div>
                                                               )}
                                                             </div>
                                                             <div>
                                                               <h6
                                                                 className={`font-medium text-sm ${
                                                                   planQuestions.has(
-                                                                    `${plan.id}-${question.id}`
+                                                                    `${plan.id}-${question.id}`,
                                                                   )
-                                                                    ? 'text-green-900 dark:text-green-100'
-                                                                    : 'text-gray-900 dark:text-white'
+                                                                    ? "text-green-900 dark:text-green-100"
+                                                                    : "text-gray-900 dark:text-white"
                                                                 }`}
                                                               >
                                                                 {question.title}
                                                               </h6>
-                                                              <p className='text-xs text-gray-600 dark:text-gray-400'>
+                                                              <p className="text-xs text-gray-600 dark:text-gray-400">
                                                                 {
                                                                   question.difficulty
-                                                                }{' '}
-                                                                •{' '}
+                                                                }{" "}
+                                                                •{" "}
                                                                 {question.type}
                                                               </p>
                                                             </div>
                                                           </div>
-                                                          <div className='flex items-center space-x-2'>
-                                                            <div className='flex items-center space-x-2'>
-                                                              <div className='relative'>
+                                                          <div className="flex items-center space-x-2">
+                                                            <div className="flex items-center space-x-2">
+                                                              <div className="relative">
                                                                 <input
-                                                                  type='checkbox'
+                                                                  type="checkbox"
                                                                   checked={planQuestions.has(
-                                                                    `${plan.id}-${question.id}`
+                                                                    `${plan.id}-${question.id}`,
                                                                   )}
                                                                   onChange={() => {
                                                                     const isInPlan =
                                                                       planQuestions.has(
-                                                                        `${plan.id}-${question.id}`
+                                                                        `${plan.id}-${question.id}`,
                                                                       );
                                                                     toggleQuestionInPlan(
                                                                       question.id,
                                                                       plan.id,
                                                                       topic.id,
-                                                                      isInPlan
+                                                                      isInPlan,
                                                                     );
                                                                   }}
-                                                                  className='sr-only'
+                                                                  className="sr-only"
                                                                   id={`question-${question.id}-${plan.id}`}
                                                                 />
                                                                 <label
                                                                   htmlFor={`question-${question.id}-${plan.id}`}
                                                                   className={`relative inline-flex h-5 w-9 items-center rounded-full transition-colors cursor-pointer ${
                                                                     planQuestions.has(
-                                                                      `${plan.id}-${question.id}`
+                                                                      `${plan.id}-${question.id}`,
                                                                     )
-                                                                      ? 'bg-green-500'
-                                                                      : 'bg-gray-300 dark:bg-gray-600'
+                                                                      ? "bg-green-500"
+                                                                      : "bg-gray-300 dark:bg-gray-600"
                                                                   }`}
                                                                 >
                                                                   <span
                                                                     className={`inline-block h-3 w-3 transform rounded-full bg-white transition-transform ${
                                                                       planQuestions.has(
-                                                                        `${plan.id}-${question.id}`
+                                                                        `${plan.id}-${question.id}`,
                                                                       )
-                                                                        ? 'translate-x-5'
-                                                                        : 'translate-x-1'
+                                                                        ? "translate-x-5"
+                                                                        : "translate-x-1"
                                                                     }`}
                                                                   />
                                                                 </label>
                                                               </div>
-                                                              <span className='text-xs font-medium text-gray-700 dark:text-gray-300'>
+                                                              <span className="text-xs font-medium text-gray-700 dark:text-gray-300">
                                                                 {planQuestions.has(
-                                                                  `${plan.id}-${question.id}`
+                                                                  `${plan.id}-${question.id}`,
                                                                 )
-                                                                  ? 'Included'
-                                                                  : 'Include'}
+                                                                  ? "Included"
+                                                                  : "Include"}
                                                               </span>
                                                             </div>
                                                           </div>
@@ -1889,14 +1895,14 @@ export default function ContentManagementPage() {
                                                       </div>
                                                     ))}
                                                 {expandedPlanTopics.has(
-                                                  topic.id
+                                                  topic.id,
                                                 ) &&
                                                   topicQuestions.length > 3 && (
-                                                    <div className='ml-6 pl-4 mt-2'>
-                                                      <p className='text-xs text-gray-500'>
-                                                        ... and{' '}
+                                                    <div className="ml-6 pl-4 mt-2">
+                                                      <p className="text-xs text-gray-500">
+                                                        ... and{" "}
                                                         {topicQuestions.length -
-                                                          3}{' '}
+                                                          3}{" "}
                                                         more questions
                                                       </p>
                                                     </div>
@@ -1926,10 +1932,10 @@ export default function ContentManagementPage() {
         open={isTopicQuestionsModalOpen}
         onOpenChange={setIsTopicQuestionsModalOpen}
       >
-        <DialogContent className='max-w-4xl max-h-[80vh] overflow-hidden flex flex-col mx-auto my-auto'>
+        <DialogContent className="max-w-4xl max-h-[80vh] overflow-hidden flex flex-col mx-auto my-auto">
           <DialogHeader>
-            <DialogTitle className='flex items-center space-x-2'>
-              <Target className='h-5 w-5 text-orange-600' />
+            <DialogTitle className="flex items-center space-x-2">
+              <Target className="h-5 w-5 text-orange-600" />
               <span>Add Questions to Plan</span>
             </DialogTitle>
             <DialogDescription>
@@ -1939,52 +1945,55 @@ export default function ContentManagementPage() {
             </DialogDescription>
           </DialogHeader>
 
-          <div className='flex-1 overflow-hidden flex flex-col'>
+          <div className="flex-1 overflow-hidden flex flex-col">
             {/* Selection Controls */}
-            <div className='flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-800 rounded-lg mb-4'>
-              <div className='flex items-center space-x-2'>
+            <div className="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-800 rounded-lg mb-4">
+              <div className="flex items-center space-x-2">
                 <Button
-                  variant='outline'
-                  size='sm'
+                  variant="outline"
+                  size="sm"
                   onClick={selectAllQuestions}
-                  className='flex items-center space-x-1'
+                  className="flex items-center space-x-1"
                 >
-                  <Checkbox className='h-4 w-4' />
+                  <Checkbox className="h-4 w-4" />
                   <span>Select All</span>
                 </Button>
                 <Button
-                  variant='outline'
-                  size='sm'
+                  variant="outline"
+                  size="sm"
                   onClick={deselectAllQuestions}
-                  className='flex items-center space-x-1'
+                  className="flex items-center space-x-1"
                 >
                   <span>Deselect All</span>
                 </Button>
               </div>
-              <div className='text-sm text-gray-600 dark:text-gray-400'>
-                {selectedQuestions.size} of{' '}
-                {questions.filter(q => q.topic_id === selectedTopic?.id).length}{' '}
+              <div className="text-sm text-gray-600 dark:text-gray-400">
+                {selectedQuestions.size} of{" "}
+                {
+                  questions.filter((q) => q.topic_id === selectedTopic?.id)
+                    .length
+                }{" "}
                 selected
               </div>
             </div>
 
             {/* Questions List */}
-            <div className='flex-1 overflow-y-auto space-y-2'>
+            <div className="flex-1 overflow-y-auto space-y-2">
               {selectedTopic &&
                 questions
-                  .filter(q => q.topic_id === selectedTopic.id)
-                  .map(question => (
+                  .filter((q) => q.topic_id === selectedTopic.id)
+                  .map((question) => (
                     <div
                       key={question.id}
                       className={`p-4 border rounded-lg cursor-pointer transition-colors ${
                         selectedQuestions.has(question.id)
-                          ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20'
-                          : 'border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800'
+                          ? "border-blue-500 bg-blue-50 dark:bg-blue-900/20"
+                          : "border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800"
                       }`}
                       onClick={() => toggleQuestionSelection(question.id)}
                     >
-                      <div className='flex items-start space-x-3'>
-                        <div className='mt-1'>
+                      <div className="flex items-start space-x-3">
+                        <div className="mt-1">
                           <Checkbox
                             checked={selectedQuestions.has(question.id)}
                             onChange={() =>
@@ -1992,31 +2001,31 @@ export default function ContentManagementPage() {
                             }
                           />
                         </div>
-                        <div className='flex-1'>
-                          <div className='flex items-center justify-between'>
-                            <h4 className='font-medium text-gray-900 dark:text-white'>
+                        <div className="flex-1">
+                          <div className="flex items-center justify-between">
+                            <h4 className="font-medium text-gray-900 dark:text-white">
                               {question.title}
                             </h4>
-                            <div className='flex items-center space-x-2'>
+                            <div className="flex items-center space-x-2">
                               <Badge
-                                variant='outline'
+                                variant="outline"
                                 className={`text-xs ${
-                                  question.difficulty === 'beginner'
-                                    ? 'bg-green-50 text-green-700 dark:bg-green-900 dark:text-green-300'
-                                    : question.difficulty === 'intermediate'
-                                      ? 'bg-yellow-50 text-yellow-700 dark:bg-yellow-900 dark:text-yellow-300'
-                                      : 'bg-red-50 text-red-700 dark:bg-red-900 dark:text-red-300'
+                                  question.difficulty === "beginner"
+                                    ? "bg-green-50 text-green-700 dark:bg-green-900 dark:text-green-300"
+                                    : question.difficulty === "intermediate"
+                                      ? "bg-yellow-50 text-yellow-700 dark:bg-yellow-900 dark:text-yellow-300"
+                                      : "bg-red-50 text-red-700 dark:bg-red-900 dark:text-red-300"
                                 }`}
                               >
                                 {question.difficulty}
                               </Badge>
-                              <Badge variant='outline' className='text-xs'>
+                              <Badge variant="outline" className="text-xs">
                                 {question.type}
                               </Badge>
                             </div>
                           </div>
                           {question.explanation && (
-                            <p className='text-sm text-gray-600 dark:text-gray-400 mt-2'>
+                            <p className="text-sm text-gray-600 dark:text-gray-400 mt-2">
                               {question.explanation}
                             </p>
                           )}
@@ -2027,16 +2036,16 @@ export default function ContentManagementPage() {
             </div>
           </div>
 
-          <DialogFooter className='flex items-center justify-between'>
-            <Button variant='outline' onClick={closeTopicQuestionsModal}>
+          <DialogFooter className="flex items-center justify-between">
+            <Button variant="outline" onClick={closeTopicQuestionsModal}>
               Cancel
             </Button>
             <Button
               onClick={addSelectedQuestionsToPlan}
               disabled={selectedQuestions.size === 0}
-              className='flex items-center space-x-2'
+              className="flex items-center space-x-2"
             >
-              <Plus className='h-4 w-4' />
+              <Plus className="h-4 w-4" />
               <span>Add {selectedQuestions.size} Questions to Plan</span>
             </Button>
           </DialogFooter>
@@ -2048,10 +2057,10 @@ export default function ContentManagementPage() {
         open={isDeleteCardModalOpen}
         onOpenChange={setIsDeleteCardModalOpen}
       >
-        <DialogContent className='max-w-md mx-auto my-auto'>
+        <DialogContent className="max-w-md mx-auto my-auto">
           <DialogHeader>
-            <DialogTitle className='flex items-center space-x-2'>
-              <Trash2 className='h-5 w-5 text-red-600' />
+            <DialogTitle className="flex items-center space-x-2">
+              <Trash2 className="h-5 w-5 text-red-600" />
               <span>Delete Learning Card</span>
             </DialogTitle>
             <DialogDescription>
@@ -2060,19 +2069,19 @@ export default function ContentManagementPage() {
             </DialogDescription>
           </DialogHeader>
 
-          <div className='py-4'>
-            <div className='bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-4'>
-              <div className='flex items-start space-x-3'>
-                <div className='flex-shrink-0'>
-                  <div className='w-8 h-8 bg-red-100 dark:bg-red-900 rounded-full flex items-center justify-center'>
-                    <Trash2 className='h-4 w-4 text-red-600' />
+          <div className="py-4">
+            <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-4">
+              <div className="flex items-start space-x-3">
+                <div className="flex-shrink-0">
+                  <div className="w-8 h-8 bg-red-100 dark:bg-red-900 rounded-full flex items-center justify-center">
+                    <Trash2 className="h-4 w-4 text-red-600" />
                   </div>
                 </div>
-                <div className='flex-1'>
-                  <h4 className='text-sm font-medium text-red-800 dark:text-red-200'>
+                <div className="flex-1">
+                  <h4 className="text-sm font-medium text-red-800 dark:text-red-200">
                     Warning: This will permanently delete the card
                   </h4>
-                  <p className='text-sm text-red-700 dark:text-red-300 mt-1'>
+                  <p className="text-sm text-red-700 dark:text-red-300 mt-1">
                     All associated categories, topics, and questions will be
                     affected. This action cannot be undone.
                   </p>
@@ -2081,28 +2090,28 @@ export default function ContentManagementPage() {
             </div>
           </div>
 
-          <DialogFooter className='flex items-center justify-between'>
+          <DialogFooter className="flex items-center justify-between">
             <Button
-              variant='outline'
+              variant="outline"
               onClick={closeDeleteCardModal}
               disabled={isDeleting}
             >
               Cancel
             </Button>
             <Button
-              variant='destructive'
+              variant="destructive"
               onClick={deleteCard}
               disabled={isDeleting}
-              className='flex items-center space-x-2'
+              className="flex items-center space-x-2"
             >
               {isDeleting ? (
                 <>
-                  <div className='w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin' />
+                  <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
                   <span>Deleting...</span>
                 </>
               ) : (
                 <>
-                  <Trash2 className='h-4 w-4' />
+                  <Trash2 className="h-4 w-4" />
                   <span>Delete Card</span>
                 </>
               )}
@@ -2116,10 +2125,10 @@ export default function ContentManagementPage() {
         open={isCardManagementModalOpen}
         onOpenChange={setIsCardManagementModalOpen}
       >
-        <DialogContent className='max-w-4xl max-h-[80vh] overflow-hidden flex flex-col mx-auto my-auto'>
+        <DialogContent className="max-w-4xl max-h-[80vh] overflow-hidden flex flex-col mx-auto my-auto">
           <DialogHeader>
-            <DialogTitle className='flex items-center space-x-2'>
-              <Layers className='h-5 w-5 text-blue-600' />
+            <DialogTitle className="flex items-center space-x-2">
+              <Layers className="h-5 w-5 text-blue-600" />
               <span>
                 Manage Cards for &quot;{selectedPlanForCards?.name}&quot;
               </span>
@@ -2130,31 +2139,31 @@ export default function ContentManagementPage() {
             </DialogDescription>
           </DialogHeader>
 
-          <div className='flex-1 overflow-hidden flex flex-col'>
+          <div className="flex-1 overflow-hidden flex flex-col">
             {isManagingCards ? (
-              <div className='flex items-center justify-center py-8'>
-                <Loader2 className='h-8 w-8 animate-spin text-blue-600' />
-                <span className='ml-2 text-gray-600'>Loading cards...</span>
+              <div className="flex items-center justify-center py-8">
+                <Loader2 className="h-8 w-8 animate-spin text-blue-600" />
+                <span className="ml-2 text-gray-600">Loading cards...</span>
               </div>
             ) : (
-              <div className='grid grid-cols-1 lg:grid-cols-2 gap-6'>
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 {/* Current Cards in Plan */}
-                <div className='space-y-4'>
-                  <h3 className='text-lg font-semibold text-gray-900 dark:text-white flex items-center'>
-                    <Layers className='h-5 w-5 mr-2 text-green-600' />
+                <div className="space-y-4">
+                  <h3 className="text-lg font-semibold text-gray-900 dark:text-white flex items-center">
+                    <Layers className="h-5 w-5 mr-2 text-green-600" />
                     Cards in Plan ({planCards.length})
                   </h3>
 
-                  <div className='max-h-96 overflow-y-auto space-y-2'>
+                  <div className="max-h-96 overflow-y-auto space-y-2">
                     {planCards.length === 0 ? (
-                      <div className='text-center py-8 text-gray-500'>
-                        <Layers className='h-12 w-12 mx-auto mb-2 text-gray-400' />
+                      <div className="text-center py-8 text-gray-500">
+                        <Layers className="h-12 w-12 mx-auto mb-2 text-gray-400" />
                         <p>No cards in this plan</p>
                       </div>
                     ) : (
-                      planCards.map(planCard => {
+                      planCards.map((planCard) => {
                         const card = availableCards.find(
-                          c => c.id === planCard.card_id
+                          (c) => c.id === planCard.card_id,
                         );
                         if (!card) return null;
 
@@ -2167,52 +2176,52 @@ export default function ContentManagementPage() {
                             key={planCard.card_id}
                             className={`p-4 border rounded-lg transition-colors ${
                               planCard.is_active
-                                ? 'border-green-200 bg-green-50 dark:bg-green-900/20'
-                                : 'border-gray-200 bg-gray-50 dark:bg-gray-800'
+                                ? "border-green-200 bg-green-50 dark:bg-green-900/20"
+                                : "border-gray-200 bg-gray-50 dark:bg-gray-800"
                             }`}
                           >
-                            <div className='flex items-center justify-between'>
-                              <div className='flex items-center space-x-3'>
+                            <div className="flex items-center justify-between">
+                              <div className="flex items-center space-x-3">
                                 <IconComponent
-                                  className='h-5 w-5'
+                                  className="h-5 w-5"
                                   style={{ color: card.color }}
                                 />
                                 <div>
-                                  <h4 className='font-medium text-gray-900 dark:text-white'>
+                                  <h4 className="font-medium text-gray-900 dark:text-white">
                                     {card.title}
                                   </h4>
-                                  <p className='text-sm text-gray-600 dark:text-gray-400'>
+                                  <p className="text-sm text-gray-600 dark:text-gray-400">
                                     {card.description}
                                   </p>
                                 </div>
                               </div>
-                              <div className='flex items-center space-x-2'>
+                              <div className="flex items-center space-x-2">
                                 <Button
-                                  variant='ghost'
-                                  size='sm'
+                                  variant="ghost"
+                                  size="sm"
                                   onClick={() =>
                                     toggleCardActiveStatus(
                                       planCard.card_id,
-                                      planCard.is_active
+                                      planCard.is_active,
                                     )
                                   }
                                   className={`h-8 px-2 ${
                                     planCard.is_active
-                                      ? 'text-green-600 hover:bg-green-100'
-                                      : 'text-gray-400 hover:bg-gray-100'
+                                      ? "text-green-600 hover:bg-green-100"
+                                      : "text-gray-400 hover:bg-gray-100"
                                   }`}
                                 >
-                                  {planCard.is_active ? 'Active' : 'Inactive'}
+                                  {planCard.is_active ? "Active" : "Inactive"}
                                 </Button>
                                 <Button
-                                  variant='ghost'
-                                  size='sm'
+                                  variant="ghost"
+                                  size="sm"
                                   onClick={() =>
                                     removeCardFromPlan(planCard.card_id)
                                   }
-                                  className='h-8 w-8 p-0 hover:bg-red-100'
+                                  className="h-8 w-8 p-0 hover:bg-red-100"
                                 >
-                                  <Trash2 className='h-4 w-4 text-red-600' />
+                                  <Trash2 className="h-4 w-4 text-red-600" />
                                 </Button>
                               </div>
                             </div>
@@ -2224,24 +2233,26 @@ export default function ContentManagementPage() {
                 </div>
 
                 {/* Available Cards to Add */}
-                <div className='space-y-4'>
-                  <h3 className='text-lg font-semibold text-gray-900 dark:text-white flex items-center'>
-                    <Plus className='h-5 w-5 mr-2 text-blue-600' />
+                <div className="space-y-4">
+                  <h3 className="text-lg font-semibold text-gray-900 dark:text-white flex items-center">
+                    <Plus className="h-5 w-5 mr-2 text-blue-600" />
                     Available Cards (
                     {
                       availableCards.filter(
-                        card => !planCards.find(pc => pc.card_id === card.id)
+                        (card) =>
+                          !planCards.find((pc) => pc.card_id === card.id),
                       ).length
                     }
                     )
                   </h3>
 
-                  <div className='max-h-96 overflow-y-auto space-y-2'>
+                  <div className="max-h-96 overflow-y-auto space-y-2">
                     {availableCards
                       .filter(
-                        card => !planCards.find(pc => pc.card_id === card.id)
+                        (card) =>
+                          !planCards.find((pc) => pc.card_id === card.id),
                       )
-                      .map(card => {
+                      .map((card) => {
                         const IconComponent =
                           CARD_ICONS[card.title as keyof typeof CARD_ICONS]
                             ?.icon || Layers;
@@ -2249,29 +2260,29 @@ export default function ContentManagementPage() {
                         return (
                           <div
                             key={card.id}
-                            className='p-4 border border-gray-200 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors'
+                            className="p-4 border border-gray-200 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
                           >
-                            <div className='flex items-center justify-between'>
-                              <div className='flex items-center space-x-3'>
+                            <div className="flex items-center justify-between">
+                              <div className="flex items-center space-x-3">
                                 <IconComponent
-                                  className='h-5 w-5'
+                                  className="h-5 w-5"
                                   style={{ color: card.color }}
                                 />
                                 <div>
-                                  <h4 className='font-medium text-gray-900 dark:text-white'>
+                                  <h4 className="font-medium text-gray-900 dark:text-white">
                                     {card.title}
                                   </h4>
-                                  <p className='text-sm text-gray-600 dark:text-gray-400'>
+                                  <p className="text-sm text-gray-600 dark:text-gray-400">
                                     {card.description}
                                   </p>
                                 </div>
                               </div>
                               <Button
-                                size='sm'
+                                size="sm"
                                 onClick={() => addCardToPlan(card.id)}
-                                className='flex items-center space-x-1 bg-blue-600 hover:bg-blue-700'
+                                className="flex items-center space-x-1 bg-blue-600 hover:bg-blue-700"
                               >
-                                <Plus className='h-4 w-4' />
+                                <Plus className="h-4 w-4" />
                                 <span>Add</span>
                               </Button>
                             </div>
@@ -2284,11 +2295,11 @@ export default function ContentManagementPage() {
             )}
           </div>
 
-          <DialogFooter className='flex items-center justify-between'>
-            <Button variant='outline' onClick={closeCardManagementModal}>
+          <DialogFooter className="flex items-center justify-between">
+            <Button variant="outline" onClick={closeCardManagementModal}>
               Close
             </Button>
-            <div className='text-sm text-gray-600 dark:text-gray-400'>
+            <div className="text-sm text-gray-600 dark:text-gray-400">
               {planCards.length} cards in plan
             </div>
           </DialogFooter>

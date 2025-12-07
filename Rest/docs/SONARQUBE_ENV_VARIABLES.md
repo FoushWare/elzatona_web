@@ -5,8 +5,9 @@
 For the SonarQube MCP server to work, you need these environment variables:
 
 ### 1. **SONARQUBE_TOKEN** (Required)
+
 - **Description**: Your SonarCloud personal access token
-- **How to get**: 
+- **How to get**:
   - Go to https://sonarcloud.io/ → My Account → Security
   - Click "Generate Tokens" → Generate
   - Copy the token immediately
@@ -14,14 +15,16 @@ For the SonarQube MCP server to work, you need these environment variables:
 - **Format**: Long alphanumeric string
 
 ### 2. **SONARQUBE_ORG** (Required for SonarCloud)
+
 - **Description**: Your SonarCloud organization key
 - **Your value**: `FoushWare` (already configured)
-- **How to find**: 
+- **How to find**:
   - Visible in your project URL: `https://sonarcloud.io/project/configuration?id=FoushWare_GreatFrontendHub`
   - Or in SonarCloud → Your Organization → Settings
 - **Format**: Organization name (case-sensitive)
 
 ### 3. **STORAGE_PATH** (Optional - Auto-configured)
+
 - **Description**: Path where MCP server stores data
 - **Current value**: `Rest/mcp/sonarqube/storage`
 - **Note**: Already configured in `.cursor/mcp.json`
@@ -72,6 +75,7 @@ Then restart Cursor.
 ## 📝 Complete Example
 
 ### `.env.local` File:
+
 ```bash
 # SonarQube MCP Configuration
 SONARQUBE_TOKEN=squ_1234567890abcdefghijklmnopqrstuvwxyz
@@ -79,15 +83,13 @@ SONARQUBE_ORG=FoushWare
 ```
 
 ### `.cursor/mcp.json` (Current):
+
 ```json
 {
   "mcpServers": {
     "sonarqube": {
       "command": "/opt/homebrew/opt/openjdk@21/bin/java",
-      "args": [
-        "-jar",
-        "Rest/mcp/sonarqube/sonarqube-mcp-server.jar"
-      ],
+      "args": ["-jar", "Rest/mcp/sonarqube/sonarqube-mcp-server.jar"],
       "env": {
         "STORAGE_PATH": "Rest/mcp/sonarqube/storage",
         "SONARQUBE_TOKEN": "${SONARQUBE_TOKEN}",
@@ -100,11 +102,11 @@ SONARQUBE_ORG=FoushWare
 
 ## ✅ Current Status
 
-| Variable | Status | Value |
-|----------|--------|-------|
-| `STORAGE_PATH` | ✅ Configured | `Rest/mcp/sonarqube/storage` |
-| `SONARQUBE_ORG` | ✅ Configured | `FoushWare` |
-| `SONARQUBE_TOKEN` | ⏳ **NEEDED** | Generate from SonarCloud |
+| Variable          | Status        | Value                        |
+| ----------------- | ------------- | ---------------------------- |
+| `STORAGE_PATH`    | ✅ Configured | `Rest/mcp/sonarqube/storage` |
+| `SONARQUBE_ORG`   | ✅ Configured | `FoushWare`                  |
+| `SONARQUBE_TOKEN` | ⏳ **NEEDED** | Generate from SonarCloud     |
 
 ## 🎯 What You Need to Do
 
@@ -114,6 +116,7 @@ SONARQUBE_ORG=FoushWare
    - Copy the token
 
 2. **Add to `.env.local`**:
+
    ```bash
    SONARQUBE_TOKEN=your_token_here
    SONARQUBE_ORG=FoushWare
@@ -147,4 +150,3 @@ cat .cursor/mcp.json | jq '.mcpServers.sonarqube.env'
 ---
 
 **Summary**: You only need to provide `SONARQUBE_TOKEN`. Everything else is already configured!
-
