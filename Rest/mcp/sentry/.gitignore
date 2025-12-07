@@ -1,5 +1,0 @@
-# Sentry MCP Server
-*.log
-*.tmp
-storage/
-
