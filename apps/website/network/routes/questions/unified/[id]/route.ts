@@ -3,10 +3,10 @@ import { createClient } from "@supabase/supabase-js";
 import {
   sanitizeObjectServer,
   sanitizeRichContent,
-} from "../../../src/lib/utils/sanitize-server";
+} from '@/lib/utils/sanitize-server';
 
 // Helper function to create Supabase client using centralized config
-import { getSupabaseConfig } from "../../../src/lib/utils/api-config";
+import { getSupabaseConfig } from '@/lib/utils/api-config';
 
 function getSupabaseClient() {
   const config = getSupabaseConfig();

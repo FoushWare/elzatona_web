@@ -22,7 +22,7 @@ import {
   addFlashcard,
   isInFlashcards,
   removeFlashcard,
-} from "../lib/flashcards";
+} from "@/lib/flashcards";
 
 interface TestCase {
   input: any | any[];

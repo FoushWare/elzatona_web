@@ -27,7 +27,7 @@ import {
   addFlashcard,
   isInFlashcards,
   FlashcardItem,
-} from "../../lib/flashcards";
+} from '@/lib/flashcards';
 
 interface Question {
   id: string;
