@@ -1,7 +1,0 @@
-{
-  "hooks": {
-    "pre-commit": "npm run lint",
-    "pre-push": ".husky/pre-push",
-    "post-commit": ".husky/post-commit"
-  }
-}
