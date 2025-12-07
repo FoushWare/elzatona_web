@@ -7,7 +7,7 @@ const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://kiycimlsatw
 const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'SUPABASE_SERVICE_ROLE_KEY_REDACTED';
 const supabase = createClient(supabaseUrl, supabaseKey);
 
-import { AutoLinkingService } from @/lib/auto-linking-service';
+import { AutoLinkingService } from '@/lib/auto-linking-service';
 
 // GET /api/guided-learning/plans - Get all learning plans or filtered content
 export async function GET(request: NextRequest) {
