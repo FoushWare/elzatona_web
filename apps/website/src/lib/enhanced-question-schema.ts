@@ -28,8 +28,8 @@ export interface EnhancedQuestion {
   id: string;
   title: string;
   content: string;
-  type: 'multiple-choice' | 'open-ended' | 'true-false' | 'code';
-  difficulty: 'beginner' | 'intermediate' | 'advanced';
+  type: "multiple-choice" | "open-ended" | "true-false" | "code";
+  difficulty: "beginner" | "intermediate" | "advanced";
   sectionId: string;
   topicId?: string;
   is_active: boolean;

@@ -1,4 +1,4 @@
-import { atom } from 'jotai';
+import { atom } from "jotai";
 
 // Mobile menu state atom
 export const isMobileMenuOpenAtom = atom(false);

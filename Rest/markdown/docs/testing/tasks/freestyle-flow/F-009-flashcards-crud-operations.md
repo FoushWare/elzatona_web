@@ -1,8 +1,13 @@
 # Task ID: F-009
+
 # Title: Flashcards CRUD Operations
+
 # Status: pending
-# Dependencies: 
+
+# Dependencies:
+
 # Priority: medium
+
 # Description: Test the CRUD (Create, Read, Update, Delete) operations for flashcards including adding, viewing, removing, and persistence.
 
 # Details:
@@ -10,6 +15,7 @@
 ## Time Estimation
 
 ### Manual Testing
+
 - **Estimated Time**: 25-35 minutes
 - **Breakdown**:
   - Navigate to flashcards page: 2 minutes
@@ -23,6 +29,7 @@
 - **Dependencies**: Questions API, localStorage/backend storage
 
 ### Automated Testing
+
 - **Estimated Time**: 12-18 minutes (first run), 2-3 minutes (subsequent runs)
 - **Breakdown**:
   - Unit tests setup and execution: 4-6 minutes
@@ -32,6 +39,7 @@
 - **Dependencies**: API mocks, localStorage mocks, test data
 
 ### Total Time
+
 - **Manual Only**: 25-35 minutes
 - **Automated Only**: 12-18 minutes (first run), 2-3 minutes (subsequent)
 - **Both Manual + Automated**: 37-53 minutes (first run), 27-38 minutes (subsequent)
@@ -39,6 +47,7 @@
 ---
 
 ## Overview
+
 Test the CRUD (Create, Read, Update, Delete) operations for flashcards including adding, viewing, removing, and persistence.
 
 ## Manual Testing Steps

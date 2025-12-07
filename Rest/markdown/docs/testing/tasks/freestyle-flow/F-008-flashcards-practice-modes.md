@@ -1,8 +1,13 @@
 # Task ID: F-008
+
 # Title: Flashcards Practice Modes (List, Flip, Quiz)
+
 # Status: pending
-# Dependencies: 
+
+# Dependencies:
+
 # Priority: high
+
 # Description: Test the three practice modes (List, Flip, Quiz) for flashcards including mode switching, card navigation, shuffle, and progress tracking.
 
 # Details:
@@ -10,6 +15,7 @@
 ## Time Estimation
 
 ### Manual Testing
+
 - **Estimated Time**: 40-50 minutes
 - **Breakdown**:
   - Navigate to flashcards page: 2 minutes
@@ -23,6 +29,7 @@
 - **Dependencies**: Flashcards data, practice modes implementation
 
 ### Automated Testing
+
 - **Estimated Time**: 15-20 minutes (first run), 3-4 minutes (subsequent runs)
 - **Breakdown**:
   - Unit tests setup and execution: 5-7 minutes
@@ -32,6 +39,7 @@
 - **Dependencies**: Test flashcard data, practice mode components
 
 ### Total Time
+
 - **Manual Only**: 40-50 minutes
 - **Automated Only**: 15-20 minutes (first run), 3-4 minutes (subsequent)
 - **Both Manual + Automated**: 55-70 minutes (first run), 43-54 minutes (subsequent)
@@ -39,6 +47,7 @@
 ---
 
 ## Overview
+
 Test the three practice modes (List, Flip, Quiz) for flashcards including mode switching, card navigation, shuffle, and progress tracking.
 
 ## Manual Testing Steps

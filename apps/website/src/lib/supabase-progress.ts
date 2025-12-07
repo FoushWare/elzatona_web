@@ -1,10 +1,10 @@
 // v1.0 - Supabase Progress Service
-'use client';
+"use client";
 
-import { createClient } from '@supabase/supabase-js';
+import { createClient } from "@supabase/supabase-js";
 
-const supabaseUrl = process.env['NEXT_PUBLIC_SUPABASE_URL']!;
-const supabaseKey = process.env['NEXT_PUBLIC_SUPABASE_ANON_KEY']!;
+const supabaseUrl = process.env["NEXT_PUBLIC_SUPABASE_URL"]!;
+const supabaseKey = process.env["NEXT_PUBLIC_SUPABASE_ANON_KEY"]!;
 
 const supabase = createClient(supabaseUrl, supabaseKey);
 
@@ -23,10 +23,10 @@ export interface UserProgress {
   badges: string[];
   achievements: string[];
   preferences: {
-    difficulty: 'beginner' | 'intermediate' | 'advanced';
+    difficulty: "beginner" | "intermediate" | "advanced";
     topics: string[];
     notifications: boolean;
-    theme: 'light' | 'dark' | 'auto';
+    theme: "light" | "dark" | "auto";
     language: string;
   };
   created_at: string;
@@ -88,36 +88,36 @@ export interface ContinueData {
 
 // Service functions
 export const getUserProgress = async (
-  userId: string
+  userId: string,
 ): Promise<UserProgress | null> => {
   try {
     const { data, error } = await supabase
-      .from('user_progress')
-      .select('*')
-      .eq('user_id', userId)
+      .from("user_progress")
+      .select("*")
+      .eq("user_id", userId)
       .single();
 
     if (error) {
-      console.error('Error fetching user progress:', error);
+      console.error("Error fetching user progress:", error);
       return null;
     }
 
     return data;
   } catch (error) {
-    console.error('Error fetching user progress:', error);
+    console.error("Error fetching user progress:", error);
     return null;
   }
 };
 
 export const updateQuestionProgress = async (
   userId: string,
-  attempt: Omit<QuestionAttempt, 'timestamp' | 'points'>
+  attempt: Omit<QuestionAttempt, "timestamp" | "points">,
 ): Promise<void> => {
   try {
     const points = attempt.is_correct ? 10 : 0;
 
     // Insert question attempt
-    await supabase.from('question_attempts').insert({
+    await supabase.from("question_attempts").insert({
       user_id: userId,
       question_id: attempt.question_id,
       answer: attempt.answer,
@@ -128,14 +128,14 @@ export const updateQuestionProgress = async (
 
     // Update user progress
     const { data: currentProgress } = await supabase
-      .from('user_progress')
-      .select('*')
-      .eq('user_id', userId)
+      .from("user_progress")
+      .select("*")
+      .eq("user_id", userId)
       .single();
 
     if (currentProgress) {
       await supabase
-        .from('user_progress')
+        .from("user_progress")
         .update({
           total_points: currentProgress.total_points + points,
           total_questions_answered:
@@ -148,23 +148,23 @@ export const updateQuestionProgress = async (
           experience_points: currentProgress.experience_points + points,
           updated_at: new Date().toISOString(),
         })
-        .eq('user_id', userId);
+        .eq("user_id", userId);
     }
   } catch (error) {
-    console.error('Error updating question progress:', error);
+    console.error("Error updating question progress:", error);
     throw error;
   }
 };
 
 export const updateChallengeProgress = async (
   userId: string,
-  attempt: Omit<ChallengeAttempt, 'timestamp' | 'points'>
+  attempt: Omit<ChallengeAttempt, "timestamp" | "points">,
 ): Promise<void> => {
   try {
     const points = Math.floor(attempt.score * 2); // Convert score to points
 
     // Insert challenge attempt
-    await supabase.from('challenge_attempts').insert({
+    await supabase.from("challenge_attempts").insert({
       user_id: userId,
       challenge_id: attempt.challenge_id,
       score: attempt.score,
@@ -174,23 +174,23 @@ export const updateChallengeProgress = async (
 
     // Update user progress
     const { data: currentProgress } = await supabase
-      .from('user_progress')
-      .select('*')
-      .eq('user_id', userId)
+      .from("user_progress")
+      .select("*")
+      .eq("user_id", userId)
       .single();
 
     if (currentProgress) {
       await supabase
-        .from('user_progress')
+        .from("user_progress")
         .update({
           total_points: currentProgress.total_points + points,
           experience_points: currentProgress.experience_points + points,
           updated_at: new Date().toISOString(),
         })
-        .eq('user_id', userId);
+        .eq("user_id", userId);
     }
   } catch (error) {
-    console.error('Error updating challenge progress:', error);
+    console.error("Error updating challenge progress:", error);
     throw error;
   }
 };
@@ -201,13 +201,13 @@ export const updateLearningPathProgress = async (
   pathName: string,
   sectionId: string,
   completed: boolean,
-  timeSpent: number
+  timeSpent: number,
 ): Promise<void> => {
   try {
     const points = completed ? 25 : 5; // Points for completing section vs attempting
 
     // Insert or update learning path progress
-    await supabase.from('learning_path_progress').upsert({
+    await supabase.from("learning_path_progress").upsert({
       user_id: userId,
       path_id: pathId,
       path_name: pathName,
@@ -219,24 +219,24 @@ export const updateLearningPathProgress = async (
 
     // Update user progress
     const { data: currentProgress } = await supabase
-      .from('user_progress')
-      .select('*')
-      .eq('user_id', userId)
+      .from("user_progress")
+      .select("*")
+      .eq("user_id", userId)
       .single();
 
     if (currentProgress) {
       await supabase
-        .from('user_progress')
+        .from("user_progress")
         .update({
           total_points: currentProgress.total_points + points,
           total_time_spent: currentProgress.total_time_spent + timeSpent,
           experience_points: currentProgress.experience_points + points,
           updated_at: new Date().toISOString(),
         })
-        .eq('user_id', userId);
+        .eq("user_id", userId);
     }
   } catch (error) {
-    console.error('Error updating learning path progress:', error);
+    console.error("Error updating learning path progress:", error);
     throw error;
   }
 };
@@ -244,9 +244,9 @@ export const updateLearningPathProgress = async (
 export const updateUserStreak = async (userId: string): Promise<void> => {
   try {
     const { data: currentProgress } = await supabase
-      .from('user_progress')
-      .select('*')
-      .eq('user_id', userId)
+      .from("user_progress")
+      .select("*")
+      .eq("user_id", userId)
       .single();
 
     if (currentProgress) {
@@ -276,28 +276,28 @@ export const updateUserStreak = async (userId: string): Promise<void> => {
       const longestStreak = Math.max(newStreak, currentProgress.longest_streak);
 
       await supabase
-        .from('user_progress')
+        .from("user_progress")
         .update({
           current_streak: newStreak,
           longest_streak: longestStreak,
           updated_at: new Date().toISOString(),
         })
-        .eq('user_id', userId);
+        .eq("user_id", userId);
     }
   } catch (error) {
-    console.error('Error updating user streak:', error);
+    console.error("Error updating user streak:", error);
     throw error;
   }
 };
 
 export const getDashboardStats = async (
-  userId: string
+  userId: string,
 ): Promise<DashboardStats | null> => {
   try {
     const { data: progress } = await supabase
-      .from('user_progress')
-      .select('*')
-      .eq('user_id', userId)
+      .from("user_progress")
+      .select("*")
+      .eq("user_id", userId)
       .single();
 
     if (!progress) return null;
@@ -310,10 +310,10 @@ export const getDashboardStats = async (
 
     // Get recent activity
     const { data: recentActivity } = await supabase
-      .from('question_attempts')
-      .select('*')
-      .eq('user_id', userId)
-      .order('timestamp', { ascending: false })
+      .from("question_attempts")
+      .select("*")
+      .eq("user_id", userId)
+      .order("timestamp", { ascending: false })
       .limit(10);
 
     return {
@@ -327,46 +327,46 @@ export const getDashboardStats = async (
       experiencePoints: progress.experience_points,
       badges: progress.badges || [],
       recentActivity:
-        recentActivity?.map(attempt => ({
-          type: 'question',
-          description: `Answered ${attempt.is_correct ? 'correctly' : 'incorrectly'}`,
+        recentActivity?.map((attempt) => ({
+          type: "question",
+          description: `Answered ${attempt.is_correct ? "correctly" : "incorrectly"}`,
           timestamp: attempt.timestamp,
           points: attempt.points,
         })) || [],
     };
   } catch (error) {
-    console.error('Error fetching dashboard stats:', error);
+    console.error("Error fetching dashboard stats:", error);
     return null;
   }
 };
 
 export const getContinueWhereLeftOff = async (
-  userId: string
+  userId: string,
 ): Promise<ContinueData | null> => {
   try {
     // Get recent learning path progress
     const { data: recentPath } = await supabase
-      .from('learning_path_progress')
-      .select('*')
-      .eq('user_id', userId)
-      .order('last_accessed', { ascending: false })
+      .from("learning_path_progress")
+      .select("*")
+      .eq("user_id", userId)
+      .order("last_accessed", { ascending: false })
       .limit(1)
       .single();
 
     // Get recent questions
     const { data: recentQuestions } = await supabase
-      .from('question_attempts')
-      .select('*')
-      .eq('user_id', userId)
-      .order('timestamp', { ascending: false })
+      .from("question_attempts")
+      .select("*")
+      .eq("user_id", userId)
+      .order("timestamp", { ascending: false })
       .limit(5);
 
     // Get recent challenges
     const { data: recentChallenges } = await supabase
-      .from('challenge_attempts')
-      .select('*')
-      .eq('user_id', userId)
-      .order('timestamp', { ascending: false })
+      .from("challenge_attempts")
+      .select("*")
+      .eq("user_id", userId)
+      .order("timestamp", { ascending: false })
       .limit(5);
 
     return {
@@ -385,20 +385,20 @@ export const getContinueWhereLeftOff = async (
       lastActivity: recentPath?.last_accessed || new Date().toISOString(),
     };
   } catch (error) {
-    console.error('Error fetching continue data:', error);
+    console.error("Error fetching continue data:", error);
     return null;
   }
 };
 
 export const updateUserPreferences = async (
   userId: string,
-  preferences: Partial<UserProgress['preferences']>
+  preferences: Partial<UserProgress["preferences"]>,
 ): Promise<void> => {
   try {
     const { data: currentProgress } = await supabase
-      .from('user_progress')
-      .select('preferences')
-      .eq('user_id', userId)
+      .from("user_progress")
+      .select("preferences")
+      .eq("user_id", userId)
       .single();
 
     if (currentProgress) {
@@ -408,15 +408,15 @@ export const updateUserPreferences = async (
       };
 
       await supabase
-        .from('user_progress')
+        .from("user_progress")
         .update({
           preferences: updatedPreferences,
           updated_at: new Date().toISOString(),
         })
-        .eq('user_id', userId);
+        .eq("user_id", userId);
     }
   } catch (error) {
-    console.error('Error updating user preferences:', error);
+    console.error("Error updating user preferences:", error);
     throw error;
   }
 };

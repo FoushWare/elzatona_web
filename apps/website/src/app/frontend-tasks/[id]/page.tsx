@@ -1,13 +1,13 @@
-'use client';
+"use client";
 
-import React, { useState, useEffect, useMemo, ReactNode } from 'react';
+import React, { useState, useEffect, useMemo, ReactNode } from "react";
 
 // Force dynamic rendering to prevent static generation issues with auth context
-export const dynamic = 'force-dynamic';
+export const dynamic = "force-dynamic";
 // Note: This page uses hooks/API routes, not direct supabase client
 
-import { useRouter, useParams } from 'next/navigation';
-import Editor from '@monaco-editor/react';
+import { useRouter, useParams } from "next/navigation";
+import Editor from "@monaco-editor/react";
 import {
   Code,
   ArrowRight,
@@ -29,8 +29,8 @@ import {
   FolderOpen,
   Plus,
   X,
-} from 'lucide-react';
-import { useAuth } from '@elzatona/shared-hooks';
+} from "lucide-react";
+import { useAuth } from "@elzatona/hooks";
 import {
   Dialog,
   DialogContent,
@@ -38,13 +38,13 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from '@elzatona/shared-components';
-import { Button } from '@elzatona/shared-components';
+} from "@elzatona/components";
+import { Button } from "@elzatona/components";
 
 interface FrontendTaskFile {
   id: string;
   name: string;
-  type: 'tsx' | 'ts' | 'css' | 'html' | 'json' | 'js';
+  type: "tsx" | "ts" | "css" | "html" | "json" | "js";
   content: string;
   isEntryPoint?: boolean;
 }
@@ -77,85 +77,85 @@ export default function FrontendTaskPage() {
   const { isAuthenticated, user } = useAuth();
 
   const [task, setTask] = useState<FrontendTask | null>(null);
-  const [code, setCode] = useState('');
-  const [css, setCss] = useState('');
+  const [code, setCode] = useState("");
+  const [css, setCss] = useState("");
   const [isCompleted, setIsCompleted] = useState(false);
   const [showPreview, setShowPreview] = useState(true);
   const [copied, setCopied] = useState(false);
-  const [activeTab, setActiveTab] = useState<'description' | 'solution'>(
-    'description'
+  const [activeTab, setActiveTab] = useState<"description" | "solution">(
+    "description",
   );
-  const [editorTab, setEditorTab] = useState<'code' | 'css'>('code');
+  const [editorTab, setEditorTab] = useState<"code" | "css">("code");
   const [showFileExplorer, setShowFileExplorer] = useState(true);
   const [openFiles, setOpenFiles] = useState<
     Array<{
       id: string;
       name: string;
-      type: 'tsx' | 'css' | 'html' | 'js' | 'json';
+      type: "tsx" | "css" | "html" | "js" | "json";
       content: string;
     }>
   >([
-    { id: 'app', name: 'App.tsx', type: 'tsx', content: '' },
-    { id: 'styles', name: 'styles.css', type: 'css', content: '' },
+    { id: "app", name: "App.tsx", type: "tsx", content: "" },
+    { id: "styles", name: "styles.css", type: "css", content: "" },
     {
-      id: 'index',
-      name: 'index.html',
-      type: 'html',
+      id: "index",
+      name: "index.html",
+      type: "html",
       content:
         '<!doctype html>\n<html lang="en">\n  <head>\n    <meta charset="UTF-8" />\n    <meta\n      name="viewport"\n      content="width=device-width, initial-scale=1.0" />\n  </head>\n  <body>\n    <div id="root"></div>\n  </body>\n</html>',
     },
     {
-      id: 'package',
-      name: 'package.json',
-      type: 'json',
+      id: "package",
+      name: "package.json",
+      type: "json",
       content: JSON.stringify(
         {
-          name: '@gfe-questions/counter-react-skeleton',
-          author: 'yangshun',
-          version: '0.0.1',
+          name: "@gfe-questions/counter-react-skeleton",
+          author: "yangshun",
+          version: "0.0.1",
           private: true,
           dependencies: {
-            react: '18.2.0',
-            'react-dom': '18.2.0',
-            'react-scripts': '5.0.1',
+            react: "18.2.0",
+            "react-dom": "18.2.0",
+            "react-scripts": "5.0.1",
           },
           devDependencies: {
-            '@types/react': '18.2.0',
-            '@types/react-dom': '18.2.0',
-            typescript: '5.0.2',
+            "@types/react": "18.2.0",
+            "@types/react-dom": "18.2.0",
+            typescript: "5.0.2",
           },
           scripts: {
-            start: 'react-scripts start',
-            build: 'react-scripts build',
-            test: 'react-scripts test',
-            eject: 'react-scripts eject',
+            start: "react-scripts start",
+            build: "react-scripts build",
+            test: "react-scripts test",
+            eject: "react-scripts eject",
           },
         },
         null,
-        2
+        2,
       ),
     },
     {
-      id: 'tsconfig',
-      name: 'tsconfig.json',
-      type: 'json',
+      id: "tsconfig",
+      name: "tsconfig.json",
+      type: "json",
       content: JSON.stringify(
         {
-          include: ['./**/*'],
+          include: ["./**/*"],
           compilerOptions: {
             strict: true,
             esModuleInterop: true,
-            lib: ['dom', 'dom.iterable', 'esnext'],
-            jsx: 'react-jsx',
-            target: 'es2020',
+            lib: ["dom", "dom.iterable", "esnext"],
+            jsx: "react-jsx",
+            target: "es2020",
           },
         },
         null,
-        2
+        2,
       ),
     },
   ]);
-  const [activeFile, setActiveFile] = useState('app');
+  const [activeFile, setActiveFile] = useState("app");
   const [fileContents, setFileContents] = useState<Record<string, string>>({});
   const [consoleOutput, setConsoleOutput] = useState<string[]>([]);
   const [errors, setErrors] = useState<string[]>([]);
@@ -165,28 +165,28 @@ export default function FrontendTaskPage() {
   const [rightPanelWidth, setRightPanelWidth] = useState(25); // percentage
   const [showLoginDialog, setShowLoginDialog] = useState(false);
   const [expandedFolders, setExpandedFolders] = useState<Set<string>>(
-    new Set(['src'])
+    new Set(["src"]),
   );
 
   useEffect(() => {
     // Listen for console messages from iframe
     const handleMessage = (event: MessageEvent) => {
-      if (event.data && event.data.type === 'console') {
-        setConsoleOutput(prev => [...prev.slice(-19), event.data.message]);
+      if (event.data && event.data.type === "console") {
+        setConsoleOutput((prev) => [...prev.slice(-19), event.data.message]);
       }
     };
 
-    window.addEventListener('message', handleMessage);
+    window.addEventListener("message", handleMessage);
 
     // Add initial console messages
     const initialMessages = [
-      '[12:00:00] [INFO] Console ready',
-      '[12:00:00] [INFO] Start coding to see console output...',
+      "[12:00:00] [INFO] Console ready",
+      "[12:00:00] [INFO] Start coding to see console output...",
     ];
     setConsoleOutput(initialMessages);
 
     return () => {
-      window.removeEventListener('message', handleMessage);
+      window.removeEventListener("message", handleMessage);
     };
   }, []);
 
@@ -194,24 +194,24 @@ export default function FrontendTaskPage() {
     // Mock task data - replace with actual API call
     const mockTask: FrontendTask = {
       id: taskId,
-      title: 'Counter Component',
+      title: "Counter Component",
       description:
-        'Make the text within the button display the number of times the button has been clicked.',
-      category: 'React',
-      difficulty: 'Easy',
-      estimatedTime: '5-10 minutes',
+        "Make the text within the button display the number of times the button has been clicked.",
+      category: "React",
+      difficulty: "Easy",
+      estimatedTime: "5-10 minutes",
       completionCount: 1250,
-      author: 'yangshun',
-      company: 'GFE Questions',
+      author: "yangshun",
+      company: "GFE Questions",
       requirements: [
-        'Fix the bug in the onClick handler',
-        'Make the button increment the count instead of decrementing',
-        'Display the current count in the button text',
+        "Fix the bug in the onClick handler",
+        "Make the button increment the count instead of decrementing",
+        "Display the current count in the button text",
       ],
       hints: [
-        'Look at the onClick handler - it should increment, not decrement',
-        'The count state is already set up correctly',
-        'The button text is already displaying the count',
+        "Look at the onClick handler - it should increment, not decrement",
+        "The count state is already set up correctly",
+        "The button text is already displaying the count",
       ],
       solution: `import { useState } from 'react';
 
@@ -236,9 +236,9 @@ export default function App() {
 }`,
       files: [
         {
-          id: 'app',
-          name: 'App.tsx',
-          type: 'tsx',
+          id: "app",
+          name: "App.tsx",
+          type: "tsx",
           content: `import { useState } from 'react';
 
 // This is a warm up question to help you
@@ -263,16 +263,16 @@ export default function App() {
           isEntryPoint: true,
         },
         {
-          id: 'styles',
-          name: 'styles.css',
-          type: 'css',
-          content: 'body {\n  font-family: sans-serif;\n}',
+          id: "styles",
+          name: "styles.css",
+          type: "css",
+          content: "body {\n  font-family: sans-serif;\n}",
           isEntryPoint: false,
         },
         {
-          id: 'index',
-          name: 'index.html',
-          type: 'html',
+          id: "index",
+          name: "index.html",
+          type: "html",
           content:
             '<!doctype html>\n<html lang="en">\n  <head>\n    <meta charset="UTF-8" />\n    <meta\n      name="viewport"\n      content="width=device-width, initial-scale=1.0" />\n  </head>\n  <body>\n    <div id="root"></div>\n  </body>\n</html>',
           isEntryPoint: false,
@@ -281,7 +281,7 @@ export default function App() {
       // Legacy starterCode for backward compatibility
       starterCode: {
         html: '<!doctype html>\n<html lang="en">\n  <head>\n    <meta charset="UTF-8" />\n    <meta\n      name="viewport"\n      content="width=device-width, initial-scale=1.0" />\n  </head>\n  <body>\n    <div id="root"></div>\n  </body>\n</html>',
-        css: 'body {\n  font-family: sans-serif;\n}',
+        css: "body {\n  font-family: sans-serif;\n}",
         react: `import { useState } from 'react';
 
 // This is a warm up question to help you
@@ -312,57 +312,57 @@ export default function App() {
     if (mockTask.files && mockTask.files.length > 0) {
       // Find the entry point file (usually App.tsx)
       const entryPointFile =
-        mockTask.files.find(f => f.isEntryPoint) || mockTask.files[0];
+        mockTask.files.find((f) => f.isEntryPoint) || mockTask.files[0];
       setCode(entryPointFile.content);
 
       // Find CSS file
-      const cssFile = mockTask.files.find(f => f.type === 'css');
-      setCss(cssFile?.content || '');
+      const cssFile = mockTask.files.find((f) => f.type === "css");
+      setCss(cssFile?.content || "");
 
       // Update openFiles with the files content
-      setOpenFiles(prev =>
-        prev.map(file => {
-          const taskFile = mockTask.files?.find(f => f.id === file.id);
+      setOpenFiles((prev) =>
+        prev.map((file) => {
+          const taskFile = mockTask.files?.find((f) => f.id === file.id);
           if (taskFile) {
             return { ...file, content: taskFile.content };
           }
           return file;
-        })
+        }),
       );
     } else {
       // Fallback to legacy starterCode
-      setCode(mockTask.starterCode?.react || '');
-      setCss(mockTask.starterCode?.css || '');
+      setCode(mockTask.starterCode?.react || "");
+      setCss(mockTask.starterCode?.css || "");
 
       // Update openFiles with the starter code content
-      setOpenFiles(prev =>
-        prev.map(file => {
-          if (file.id === 'app') {
-            return { ...file, content: mockTask.starterCode?.react || '' };
-          } else if (file.id === 'styles') {
-            return { ...file, content: mockTask.starterCode?.css || '' };
-          } else if (file.id === 'index') {
+      setOpenFiles((prev) =>
+        prev.map((file) => {
+          if (file.id === "app") {
+            return { ...file, content: mockTask.starterCode?.react || "" };
+          } else if (file.id === "styles") {
+            return { ...file, content: mockTask.starterCode?.css || "" };
+          } else if (file.id === "index") {
             return {
               ...file,
               content: mockTask.starterCode?.html || file.content,
             };
           }
           return file;
-        })
+        }),
       );
     }
   }, [taskId]);
 
   const getCategoryIcon = (category: string) => {
     switch (category.toLowerCase()) {
-      case 'react':
-        return <Code className='w-4 h-4' />;
-      case 'javascript':
-        return <Code className='w-4 h-4' />;
-      case 'css':
-        return <Code className='w-4 h-4' />;
+      case "react":
+        return <Code className="w-4 h-4" />;
+      case "javascript":
+        return <Code className="w-4 h-4" />;
+      case "css":
+        return <Code className="w-4 h-4" />;
       default:
-        return <Code className='w-4 h-4' />;
+        return <Code className="w-4 h-4" />;
     }
   };
 
@@ -376,11 +376,11 @@ export default function App() {
       return;
     }
     // Here you would save to cloud for authenticated users
-    console.log('Saving to cloud...');
+    console.log("Saving to cloud...");
   };
 
   const toggleFolder = (folderId: string) => {
-    setExpandedFolders(prev => {
+    setExpandedFolders((prev) => {
       const newSet = new Set(prev);
       if (newSet.has(folderId)) {
         newSet.delete(folderId);
@@ -397,23 +397,23 @@ export default function App() {
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
     } catch (err) {
-      console.error('Failed to copy code:', err);
+      console.error("Failed to copy code:", err);
     }
   };
 
   const handleReset = () => {
-    setCode(task?.starterCode?.react || '');
-    setCss(task?.starterCode?.css || '');
+    setCode(task?.starterCode?.react || "");
+    setCss(task?.starterCode?.css || "");
   };
 
   const handleCloseFile = (fileId: string) => {
     if (openFiles.length <= 1) return; // Don't close the last file
 
-    setOpenFiles(prev => prev.filter(file => file.id !== fileId));
+    setOpenFiles((prev) => prev.filter((file) => file.id !== fileId));
 
     // If we're closing the active file, switch to another file
     if (activeFile === fileId) {
-      const remainingFiles = openFiles.filter(file => file.id !== fileId);
+      const remainingFiles = openFiles.filter((file) => file.id !== fileId);
       if (remainingFiles.length > 0) {
         setActiveFile(remainingFiles[0].id);
       }
@@ -421,7 +421,7 @@ export default function App() {
   };
 
   // Resize handlers
-  const handleMouseDown = (e: React.MouseEvent, panel: 'left' | 'right') => {
+  const handleMouseDown = (e: React.MouseEvent, panel: "left" | "right") => {
     e.preventDefault();
     setIsResizing(true);
     setResizeStartX(e.clientX);
@@ -435,11 +435,11 @@ export default function App() {
     const deltaPercent = (deltaX / containerWidth) * 100;
 
     if (deltaPercent !== 0) {
-      setLeftPanelWidth(prev =>
-        Math.max(20, Math.min(60, prev + deltaPercent))
+      setLeftPanelWidth((prev) =>
+        Math.max(20, Math.min(60, prev + deltaPercent)),
       );
-      setRightPanelWidth(prev =>
-        Math.max(20, Math.min(60, prev - deltaPercent))
+      setRightPanelWidth((prev) =>
+        Math.max(20, Math.min(60, prev - deltaPercent)),
       );
       setResizeStartX(e.clientX);
     }
@@ -451,22 +451,22 @@ export default function App() {
 
   useEffect(() => {
     if (isResizing) {
-      document.addEventListener('mousemove', handleMouseMove);
-      document.addEventListener('mouseup', handleMouseUp);
-      document.body.style.cursor = 'col-resize';
-      document.body.style.userSelect = 'none';
+      document.addEventListener("mousemove", handleMouseMove);
+      document.addEventListener("mouseup", handleMouseUp);
+      document.body.style.cursor = "col-resize";
+      document.body.style.userSelect = "none";
     } else {
-      document.removeEventListener('mousemove', handleMouseMove);
-      document.removeEventListener('mouseup', handleMouseUp);
-      document.body.style.cursor = '';
-      document.body.style.userSelect = '';
+      document.removeEventListener("mousemove", handleMouseMove);
+      document.removeEventListener("mouseup", handleMouseUp);
+      document.body.style.cursor = "";
+      document.body.style.userSelect = "";
     }
 
     return () => {
-      document.removeEventListener('mousemove', handleMouseMove);
-      document.removeEventListener('mouseup', handleMouseUp);
-      document.body.style.cursor = '';
-      document.body.style.userSelect = '';
+      document.removeEventListener("mousemove", handleMouseMove);
+      document.removeEventListener("mouseup", handleMouseUp);
+      document.body.style.cursor = "";
+      document.body.style.userSelect = "";
     };
   }, [isResizing, resizeStartX]);
 
@@ -474,72 +474,72 @@ export default function App() {
 
   const getFileIcon = (type: string) => {
     switch (type) {
-      case 'tsx':
+      case "tsx":
         return (
-          <div className='w-4 h-4 bg-blue-500 rounded text-white text-xs flex items-center justify-center font-bold'>
+          <div className="w-4 h-4 bg-blue-500 rounded text-white text-xs flex items-center justify-center font-bold">
             TS
           </div>
         );
-      case 'css':
-        return <div className='w-4 h-4 text-gray-400'>#</div>;
-      case 'html':
-        return <div className='w-4 h-4 text-orange-500'>H</div>;
-      case 'js':
+      case "css":
+        return <div className="w-4 h-4 text-gray-400">#</div>;
+      case "html":
+        return <div className="w-4 h-4 text-orange-500">H</div>;
+      case "js":
         return (
-          <div className='w-4 h-4 bg-yellow-500 rounded text-white text-xs flex items-center justify-center font-bold'>
+          <div className="w-4 h-4 bg-yellow-500 rounded text-white text-xs flex items-center justify-center font-bold">
             JS
           </div>
         );
       default:
-        return <FileText className='w-4 h-4 text-gray-400' />;
+        return <FileText className="w-4 h-4 text-gray-400" />;
     }
   };
 
   const getCurrentFileContent = () => {
-    const file = openFiles.find(f => f.id === activeFile);
-    return file?.content || '';
+    const file = openFiles.find((f) => f.id === activeFile);
+    return file?.content || "";
   };
 
   const setCurrentFileContent = (value: string) => {
-    setOpenFiles(prev =>
-      prev.map(file =>
-        file.id === activeFile ? { ...file, content: value } : file
-      )
+    setOpenFiles((prev) =>
+      prev.map((file) =>
+        file.id === activeFile ? { ...file, content: value } : file,
+      ),
     );
 
     // Also update the legacy state for backward compatibility
-    if (activeFile === 'app') {
+    if (activeFile === "app") {
       setCode(value);
-    } else if (activeFile === 'styles') {
+    } else if (activeFile === "styles") {
       setCss(value);
     }
   };
 
   const getCurrentLanguage = () => {
-    const file = openFiles.find(f => f.id === activeFile);
+    const file = openFiles.find((f) => f.id === activeFile);
     switch (file?.type) {
-      case 'tsx':
-        return 'typescript';
-      case 'css':
-        return 'css';
-      case 'html':
-        return 'html';
-      case 'js':
-        return 'javascript';
-      case 'json':
-        return 'json';
+      case "tsx":
+        return "typescript";
+      case "css":
+        return "css";
+      case "html":
+        return "html";
+      case "js":
+        return "javascript";
+      case "json":
+        return "json";
       default:
-        return 'typescript';
+        return "typescript";
     }
   };
 
   const previewSrcDoc = useMemo(() => {
-    const appFile = openFiles.find(f => f.id === 'app');
-    const stylesFile = openFiles.find(f => f.id === 'styles');
-    const indexFile = openFiles.find(f => f.id === 'index');
+    const appFile = openFiles.find((f) => f.id === "app");
+    const stylesFile = openFiles.find((f) => f.id === "styles");
+    const indexFile = openFiles.find((f) => f.id === "index");
 
-    const reactCode = appFile?.content || code || '';
-    const cssCode = stylesFile?.content || css || '';
+    const reactCode = appFile?.content || code || "";
+    const cssCode = stylesFile?.content || css || "";
     const htmlCode = indexFile?.content || '<div id="root"></div>';
 
     // Enhanced CSS with CodeSandbox-like styling
@@ -589,18 +589,18 @@ export default function App() {
     `;
 
     if (
-      reactCode.includes('import') ||
-      reactCode.includes('export default') ||
-      reactCode.includes('React')
+      reactCode.includes("import") ||
+      reactCode.includes("export default") ||
+      reactCode.includes("React")
     ) {
       // Enhanced React runtime with better error handling
       const cleanReactCode = reactCode
-        .replace(/import\s+.*?from\s+['"][^'"]*['"];?\s*/g, '')
-        .replace(/import\s+\{.*?\}\s+from\s+['"][^'"]*['"];?\s*/g, '')
-        .replace(/import\s+\*\s+as\s+\w+\s+from\s+['"][^'"]*['"];?\s*/g, '')
-        .replace(/export\s+default\s+/g, '')
-        .replace(/export\s+\{.*?\};?\s*/g, '')
-        .replace(/export\s+.*?;?\s*/g, '');
+        .replace(/import\s+.*?from\s+['"][^'"]*['"];?\s*/g, "")
+        .replace(/import\s+\{.*?\}\s+from\s+['"][^'"]*['"];?\s*/g, "")
+        .replace(/import\s+\*\s+as\s+\w+\s+from\s+['"][^'"]*['"];?\s*/g, "")
+        .replace(/export\s+default\s+/g, "")
+        .replace(/export\s+\{.*?\};?\s*/g, "")
+        .replace(/export\s+.*?;?\s*/g, "");
 
       const jsText = `
         <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
@@ -695,7 +695,7 @@ export default function App() {
               delete window.App;
             }
             
-            const cleanCode = \`${cleanReactCode.replace(/`/g, '\\`').replace(/\$/g, '\\$')}\`;
+            const cleanCode = \`${cleanReactCode.replace(/`/g, "\\`").replace(/\$/g, "\\$")}\`;
             const transpiledCode = Babel.transform(cleanCode, { 
               presets: ['react'],
               plugins: ['transform-class-properties']
@@ -741,125 +741,125 @@ export default function App() {
       `;
 
       return (
-        '<!DOCTYPE html>' +
-        '<html>' +
-        '<head>' +
+        "<!DOCTYPE html>" +
+        "<html>" +
+        "<head>" +
         '<meta charset="utf-8">' +
         '<meta name="viewport" content="width=device-width, initial-scale=1">' +
-        '<title>Live Preview</title>' +
+        "<title>Live Preview</title>" +
         cssText +
-        '</head>' +
-        '<body>' +
+        "</head>" +
+        "<body>" +
         htmlCode +
         jsText +
         '<div id="console-output" class="console-output" style="display: none;"></div>' +
-        '<script>' +
+        "<script>" +
         'document.addEventListener("keydown", (e) => {' +
         'if (e.ctrlKey && e.key === "Backquote") {' +
         'const console = document.getElementById("console-output");' +
         'console.style.display = console.style.display === "none" ? "block" : "none";' +
-        '}' +
-        '});' +
-        '</script>' +
-        '</body>' +
-        '</html>'
+        "}" +
+        "});" +
+        "</script>" +
+        "</body>" +
+        "</html>"
       );
     } else {
       // Regular JavaScript/HTML
-      const jsText = '<script>' + reactCode + '</script>';
+      const jsText = "<script>" + reactCode + "</script>";
       return (
-        '<!DOCTYPE html>' +
-        '<html>' +
-        '<head>' +
+        "<!DOCTYPE html>" +
+        "<html>" +
+        "<head>" +
         '<meta charset="utf-8">' +
         '<meta name="viewport" content="width=device-width, initial-scale=1">' +
-        '<title>Live Preview</title>' +
+        "<title>Live Preview</title>" +
         cssText +
-        '</head>' +
-        '<body>' +
+        "</head>" +
+        "<body>" +
         htmlCode +
         jsText +
-        '</body>' +
-        '</html>'
+        "</body>" +
+        "</html>"
       );
     }
   }, [openFiles, code, css, task?.starterCode]);
 
   if (!task) {
     return (
-      <div className='min-h-screen bg-gray-900 flex items-center justify-center'>
-        <div className='text-center'>
-          <div className='w-16 h-16 border-4 border-indigo-200 border-t-indigo-600 rounded-full animate-spin mx-auto mb-4'></div>
-          <p className='text-gray-400 text-lg'>Loading task...</p>
+      <div className="min-h-screen bg-gray-900 flex items-center justify-center">
+        <div className="text-center">
+          <div className="w-16 h-16 border-4 border-indigo-200 border-t-indigo-600 rounded-full animate-spin mx-auto mb-4"></div>
+          <p className="text-gray-400 text-lg">Loading task...</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className='min-h-screen bg-gray-900 text-white'>
+    <div className="min-h-screen bg-gray-900 text-white">
       {/* Header */}
-      <div className='bg-gray-800 border-b border-gray-700 px-6 py-4'>
-        <div className='flex items-center justify-between'>
-          <div className='flex items-center gap-4'>
+      <div className="bg-gray-800 border-b border-gray-700 px-6 py-4">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-4">
             <button
-              onClick={() => router.push('/frontend-tasks')}
-              className='p-2 text-gray-400 hover:text-white transition-colors'
+              onClick={() => router.push("/frontend-tasks")}
+              className="p-2 text-gray-400 hover:text-white transition-colors"
             >
-              <ArrowRight className='w-5 h-5 rotate-180' />
+              <ArrowRight className="w-5 h-5 rotate-180" />
             </button>
-            <div className='flex items-center gap-3'>
-              <div className='w-8 h-8 bg-gradient-to-r from-purple-500 to-indigo-500 rounded-lg flex items-center justify-center'>
+            <div className="flex items-center gap-3">
+              <div className="w-8 h-8 bg-gradient-to-r from-purple-500 to-indigo-500 rounded-lg flex items-center justify-center">
                 {getCategoryIcon(task.category)}
               </div>
               <div>
-                <h1 className='text-xl font-bold'>{task.title}</h1>
-                <div className='flex items-center gap-2 text-sm text-gray-400'>
-                  <span className='flex items-center gap-1'>
-                    <Code className='w-3 h-3' />
+                <h1 className="text-xl font-bold">{task.title}</h1>
+                <div className="flex items-center gap-2 text-sm text-gray-400">
+                  <span className="flex items-center gap-1">
+                    <Code className="w-3 h-3" />
                     {task.category}
                   </span>
-                  <span className='flex items-center gap-1'>
-                    <Flame className='w-3 h-3' />
+                  <span className="flex items-center gap-1">
+                    <Flame className="w-3 h-3" />
                     {task.difficulty}
                   </span>
-                  <span className='flex items-center gap-1'>
-                    <Clock className='w-3 h-3' />
+                  <span className="flex items-center gap-1">
+                    <Clock className="w-3 h-3" />
                     {task.estimatedTime}
                   </span>
                 </div>
               </div>
             </div>
           </div>
-          <div className='flex items-center gap-3'>
+          <div className="flex items-center gap-3">
             <button
               onClick={handleMarkComplete}
               className={`px-4 py-2 rounded-lg transition-colors flex items-center gap-2 ${
                 isCompleted
-                  ? 'bg-green-600 hover:bg-green-700 text-white'
-                  : 'bg-gray-600 hover:bg-gray-700 text-white'
+                  ? "bg-green-600 hover:bg-green-700 text-white"
+                  : "bg-gray-600 hover:bg-gray-700 text-white"
               }`}
             >
-              <CheckCircle className='w-4 h-4' />
-              {isCompleted ? 'Completed' : 'Mark Complete'}
+              <CheckCircle className="w-4 h-4" />
+              {isCompleted ? "Completed" : "Mark Complete"}
             </button>
             {!isAuthenticated && (
               <button
                 onClick={handleSaveToCloud}
-                className='px-4 py-2 bg-yellow-600 hover:bg-yellow-700 text-white rounded-lg transition-colors flex items-center gap-2'
+                className="px-4 py-2 bg-yellow-600 hover:bg-yellow-700 text-white rounded-lg transition-colors flex items-center gap-2"
               >
-                <Save className='w-4 h-4' />
+                <Save className="w-4 h-4" />
                 Save to Cloud
               </button>
             )}
             <button
               onClick={() => setShowPreview(!showPreview)}
-              className='p-2 text-gray-400 hover:text-white transition-colors'
+              className="p-2 text-gray-400 hover:text-white transition-colors"
             >
               {showPreview ? (
-                <EyeOff className='w-5 h-5' />
+                <EyeOff className="w-5 h-5" />
               ) : (
-                <Eye className='w-5 h-5' />
+                <Eye className="w-5 h-5" />
               )}
             </button>
           </div>
@@ -867,39 +867,39 @@ export default function App() {
       </div>
 
       {/* Main Content */}
-      <div className='flex h-[calc(100vh-80px)]'>
+      <div className="flex h-[calc(100vh-80px)]">
         {/* Left Panel - Description */}
         <div
-          className='bg-gray-800 border-r border-gray-700 flex flex-col overflow-hidden relative group'
+          className="bg-gray-800 border-r border-gray-700 flex flex-col overflow-hidden relative group"
           style={{
             width: `${leftPanelWidth}%`,
-            minWidth: '300px',
-            maxWidth: '60%',
+            minWidth: "300px",
+            maxWidth: "60%",
           }}
         >
           {/* Resize Handle */}
           <div
-            className='absolute right-0 top-0 bottom-0 w-1 bg-transparent hover:bg-blue-500 cursor-col-resize z-30 transition-colors select-none'
-            onMouseDown={e => handleMouseDown(e, 'left')}
+            className="absolute right-0 top-0 bottom-0 w-1 bg-transparent hover:bg-blue-500 cursor-col-resize z-30 transition-colors select-none"
+            onMouseDown={(e) => handleMouseDown(e, "left")}
           ></div>
           {/* Tabs */}
-          <div className='flex border-b border-gray-700'>
+          <div className="flex border-b border-gray-700">
             <button
-              onClick={() => setActiveTab('description')}
+              onClick={() => setActiveTab("description")}
               className={`px-4 py-3 text-sm font-medium transition-colors ${
-                activeTab === 'description'
-                  ? 'text-white border-b-2 border-blue-500'
-                  : 'text-gray-400 hover:text-white'
+                activeTab === "description"
+                  ? "text-white border-b-2 border-blue-500"
+                  : "text-gray-400 hover:text-white"
               }`}
             >
               Description
             </button>
             <button
-              onClick={() => setActiveTab('solution')}
+              onClick={() => setActiveTab("solution")}
               className={`px-4 py-3 text-sm font-medium transition-colors ${
-                activeTab === 'solution'
-                  ? 'text-white border-b-2 border-blue-500'
-                  : 'text-gray-400 hover:text-white'
+                activeTab === "solution"
+                  ? "text-white border-b-2 border-blue-500"
+                  : "text-gray-400 hover:text-white"
               }`}
             >
               Solution
@@ -908,32 +908,32 @@ export default function App() {
           </div>
 
           {/* Content */}
-          <div className='flex-1 overflow-y-auto p-6'>
-            {activeTab === 'description' && (
-              <div className='space-y-6'>
+          <div className="flex-1 overflow-y-auto p-6">
+            {activeTab === "description" && (
+              <div className="space-y-6">
                 {/* Task Info */}
                 <div>
-                  <h2 className='text-2xl font-bold mb-2'>{task.title}</h2>
+                  <h2 className="text-2xl font-bold mb-2">{task.title}</h2>
                   {task.author && (
-                    <p className='text-gray-400 mb-4'>
+                    <p className="text-gray-400 mb-4">
                       {task.author} in {task.company}
                     </p>
                   )}
-                  <div className='flex items-center gap-4 text-sm text-gray-400 mb-4'>
-                    <span className='flex items-center gap-1'>
-                      <Code className='w-4 h-4' />
+                  <div className="flex items-center gap-4 text-sm text-gray-400 mb-4">
+                    <span className="flex items-center gap-1">
+                      <Code className="w-4 h-4" />
                       {task.category}
                     </span>
-                    <span className='flex items-center gap-1'>
-                      <Flame className='w-4 h-4' />
+                    <span className="flex items-center gap-1">
+                      <Flame className="w-4 h-4" />
                       {task.difficulty}
                     </span>
-                    <span className='flex items-center gap-1'>
-                      <Clock className='w-4 h-4' />
+                    <span className="flex items-center gap-1">
+                      <Clock className="w-4 h-4" />
                       {task.estimatedTime}
                     </span>
-                    <span className='flex items-center gap-1'>
-                      <CheckCircle className='w-4 h-4' />
+                    <span className="flex items-center gap-1">
+                      <CheckCircle className="w-4 h-4" />
                       {(task.completionCount / 1000).toFixed(1)}k done
                     </span>
                   </div>
@@ -941,7 +941,7 @@ export default function App() {
 
                 {/* Description */}
                 <div>
-                  <p className='text-gray-300 leading-relaxed'>
+                  <p className="text-gray-300 leading-relaxed">
                     {task.description}
                   </p>
                 </div>
@@ -949,14 +949,14 @@ export default function App() {
                 {/* Requirements */}
                 {task.requirements && (
                   <div>
-                    <h3 className='text-lg font-semibold mb-3'>Requirements</h3>
-                    <ul className='space-y-2'>
+                    <h3 className="text-lg font-semibold mb-3">Requirements</h3>
+                    <ul className="space-y-2">
                       {task.requirements.map((req, index) => (
                         <li
                           key={index}
-                          className='flex items-start gap-2 text-gray-300'
+                          className="flex items-start gap-2 text-gray-300"
                         >
-                          <Circle className='w-4 h-4 mt-1 flex-shrink-0' />
+                          <Circle className="w-4 h-4 mt-1 flex-shrink-0" />
                           <span>{req}</span>
                         </li>
                       ))}
@@ -965,25 +965,25 @@ export default function App() {
                 )}
 
                 {/* Preview Button */}
-                <div className='bg-yellow-900/20 border border-yellow-500/30 rounded-lg p-4'>
-                  <button className='w-full flex items-center justify-center gap-2 px-4 py-2 bg-yellow-600 hover:bg-yellow-700 rounded-lg transition-colors'>
-                    <Eye className='w-4 h-4' />
+                <div className="bg-yellow-900/20 border border-yellow-500/30 rounded-lg p-4">
+                  <button className="w-full flex items-center justify-center gap-2 px-4 py-2 bg-yellow-600 hover:bg-yellow-700 rounded-lg transition-colors">
+                    <Eye className="w-4 h-4" />
                     Preview what you need to build
-                    <ArrowRight className='w-4 h-4' />
+                    <ArrowRight className="w-4 h-4" />
                   </button>
                 </div>
 
                 {/* Hints */}
                 {task.hints && (
                   <div>
-                    <h3 className='text-lg font-semibold mb-3'>Hints</h3>
-                    <ul className='space-y-2'>
+                    <h3 className="text-lg font-semibold mb-3">Hints</h3>
+                    <ul className="space-y-2">
                       {task.hints.map((hint, index) => (
                         <li
                           key={index}
-                          className='flex items-start gap-2 text-gray-300'
+                          className="flex items-start gap-2 text-gray-300"
                         >
-                          <AlertCircle className='w-4 h-4 mt-1 flex-shrink-0 text-blue-400' />
+                          <AlertCircle className="w-4 h-4 mt-1 flex-shrink-0 text-blue-400" />
                           <span>{hint}</span>
                         </li>
                       ))}
@@ -993,11 +993,11 @@ export default function App() {
               </div>
             )}
 
-            {activeTab === 'solution' && (
+            {activeTab === "solution" && (
               <div>
-                <h3 className='text-lg font-semibold mb-4'>Solution</h3>
-                <div className='bg-gray-900 rounded-lg p-4'>
-                  <pre className='text-sm text-gray-300 overflow-x-auto'>
+                <h3 className="text-lg font-semibold mb-4">Solution</h3>
+                <div className="bg-gray-900 rounded-lg p-4">
+                  <pre className="text-sm text-gray-300 overflow-x-auto">
                     <code>{task.solution}</code>
                   </pre>
                 </div>
@@ -1010,70 +1010,70 @@ export default function App() {
 
         {/* Main Editor Panel */}
         <div
-          className='bg-gray-900 flex flex-col overflow-hidden relative group'
+          className="bg-gray-900 flex flex-col overflow-hidden relative group"
           style={{
             width: `${100 - leftPanelWidth - rightPanelWidth}%`,
-            minWidth: '400px',
+            minWidth: "400px",
           }}
         >
           {/* Resize Handle */}
           <div
-            className='absolute right-0 top-0 bottom-0 w-1 bg-transparent hover:bg-blue-500 cursor-col-resize z-30 transition-colors select-none'
-            onMouseDown={e => handleMouseDown(e, 'right')}
+            className="absolute right-0 top-0 bottom-0 w-1 bg-transparent hover:bg-blue-500 cursor-col-resize z-30 transition-colors select-none"
+            onMouseDown={(e) => handleMouseDown(e, "right")}
           ></div>
 
           {/* Editor Layout */}
-          <div className='flex h-full'>
+          <div className="flex h-full">
             {/* File Explorer Sidebar */}
             <div
-              className={`bg-gray-800 border-r border-gray-700 transition-all duration-300 ${showFileExplorer ? 'w-64' : 'w-0 overflow-hidden'}`}
+              className={`bg-gray-800 border-r border-gray-700 transition-all duration-300 ${showFileExplorer ? "w-64" : "w-0 overflow-hidden"}`}
             >
               {showFileExplorer && (
-                <div className='h-full flex flex-col'>
+                <div className="h-full flex flex-col">
                   {/* File Explorer Header */}
-                  <div className='bg-gray-700 px-3 py-2 border-b border-gray-700 flex items-center justify-between'>
-                    <div className='flex items-center gap-2'>
-                      <div className='w-4 h-4 bg-gray-500 rounded flex items-center justify-center'>
-                        <Plus className='w-3 h-3 text-white' />
+                  <div className="bg-gray-700 px-3 py-2 border-b border-gray-700 flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <div className="w-4 h-4 bg-gray-500 rounded flex items-center justify-center">
+                        <Plus className="w-3 h-3 text-white" />
                       </div>
-                      <span className='text-sm font-medium text-gray-300'>
+                      <span className="text-sm font-medium text-gray-300">
                         Explorer
                       </span>
                     </div>
                     <button
                       onClick={() => setShowFileExplorer(false)}
-                      className='p-1 text-gray-400 hover:text-white'
+                      className="p-1 text-gray-400 hover:text-white"
                     >
-                      <X className='w-3 h-3' />
+                      <X className="w-3 h-3" />
                     </button>
                   </div>
 
                   {/* File Tree */}
-                  <div className='flex-1 p-2 text-sm overflow-y-auto'>
-                    <div className='space-y-1'>
+                  <div className="flex-1 p-2 text-sm overflow-y-auto">
+                    <div className="space-y-1">
                       {/* Project root */}
                       <div
-                        className='flex items-center gap-2 py-1 px-2 text-gray-300 cursor-pointer hover:bg-gray-700 rounded'
-                        onClick={() => toggleFolder('src')}
+                        className="flex items-center gap-2 py-1 px-2 text-gray-300 cursor-pointer hover:bg-gray-700 rounded"
+                        onClick={() => toggleFolder("src")}
                       >
-                        {expandedFolders.has('src') ? (
-                          <FolderOpen className='w-4 h-4' />
+                        {expandedFolders.has("src") ? (
+                          <FolderOpen className="w-4 h-4" />
                         ) : (
-                          <Folder className='w-4 h-4' />
+                          <Folder className="w-4 h-4" />
                         )}
                         <span>src</span>
                       </div>
 
                       {/* Files in src */}
-                      {expandedFolders.has('src') && (
-                        <div className='ml-6 space-y-1'>
-                          {openFiles.map(file => (
+                      {expandedFolders.has("src") && (
+                        <div className="ml-6 space-y-1">
+                          {openFiles.map((file) => (
                             <div
                               key={file.id}
                               className={`flex items-center gap-2 py-1 px-2 rounded cursor-pointer ${
                                 activeFile === file.id
-                                  ? 'bg-blue-600 text-white'
-                                  : 'text-gray-300 hover:bg-gray-700'
+                                  ? "bg-blue-600 text-white"
+                                  : "text-gray-300 hover:bg-gray-700"
                               }`}
                               onClick={() => setActiveFile(file.id)}
                             >
@@ -1086,29 +1086,29 @@ export default function App() {
 
                       {/* Public folder */}
                       <div
-                        className='flex items-center gap-2 py-1 px-2 text-gray-300 mt-4 cursor-pointer hover:bg-gray-700 rounded'
-                        onClick={() => toggleFolder('public')}
+                        className="flex items-center gap-2 py-1 px-2 text-gray-300 mt-4 cursor-pointer hover:bg-gray-700 rounded"
+                        onClick={() => toggleFolder("public")}
                       >
-                        {expandedFolders.has('public') ? (
-                          <FolderOpen className='w-4 h-4' />
+                        {expandedFolders.has("public") ? (
+                          <FolderOpen className="w-4 h-4" />
                         ) : (
-                          <Folder className='w-4 h-4' />
+                          <Folder className="w-4 h-4" />
                         )}
                         <span>public</span>
                       </div>
 
                       {/* Files in public */}
-                      {expandedFolders.has('public') && (
-                        <div className='ml-6 space-y-1'>
+                      {expandedFolders.has("public") && (
+                        <div className="ml-6 space-y-1">
                           <div
                             className={`flex items-center gap-2 py-1 px-2 rounded cursor-pointer ${
-                              activeFile === 'index'
-                                ? 'bg-blue-600 text-white'
-                                : 'text-gray-300 hover:bg-gray-700'
+                              activeFile === "index"
+                                ? "bg-blue-600 text-white"
+                                : "text-gray-300 hover:bg-gray-700"
                             }`}
-                            onClick={() => setActiveFile('index')}
+                            onClick={() => setActiveFile("index")}
                           >
-                            <div className='w-4 h-4 text-orange-500'>H</div>
+                            <div className="w-4 h-4 text-orange-500">H</div>
                             <span>index.html</span>
                           </div>
                         </div>
@@ -1116,40 +1116,40 @@ export default function App() {
 
                       {/* Package files */}
                       <div
-                        className='flex items-center gap-2 py-1 px-2 text-gray-300 mt-4 cursor-pointer hover:bg-gray-700 rounded'
-                        onClick={() => toggleFolder('root')}
+                        className="flex items-center gap-2 py-1 px-2 text-gray-300 mt-4 cursor-pointer hover:bg-gray-700 rounded"
+                        onClick={() => toggleFolder("root")}
                       >
-                        {expandedFolders.has('root') ? (
-                          <FolderOpen className='w-4 h-4' />
+                        {expandedFolders.has("root") ? (
+                          <FolderOpen className="w-4 h-4" />
                         ) : (
-                          <Folder className='w-4 h-4' />
+                          <Folder className="w-4 h-4" />
                         )}
                         <span>Root</span>
                       </div>
 
                       {/* Files in root */}
-                      {expandedFolders.has('root') && (
-                        <div className='ml-6 space-y-1'>
+                      {expandedFolders.has("root") && (
+                        <div className="ml-6 space-y-1">
                           <div
                             className={`flex items-center gap-2 py-1 px-2 rounded cursor-pointer ${
-                              activeFile === 'package'
-                                ? 'bg-blue-600 text-white'
-                                : 'text-gray-300 hover:bg-gray-700'
+                              activeFile === "package"
+                                ? "bg-blue-600 text-white"
+                                : "text-gray-300 hover:bg-gray-700"
                             }`}
-                            onClick={() => setActiveFile('package')}
+                            onClick={() => setActiveFile("package")}
                           >
-                            <div className='w-4 h-4 text-gray-400'>📄</div>
+                            <div className="w-4 h-4 text-gray-400">📄</div>
                             <span>package.json</span>
                           </div>
                           <div
                             className={`flex items-center gap-2 py-1 px-2 rounded cursor-pointer ${
-                              activeFile === 'tsconfig'
-                                ? 'bg-blue-600 text-white'
-                                : 'text-gray-300 hover:bg-gray-700'
+                              activeFile === "tsconfig"
+                                ? "bg-blue-600 text-white"
+                                : "text-gray-300 hover:bg-gray-700"
                             }`}
-                            onClick={() => setActiveFile('tsconfig')}
+                            onClick={() => setActiveFile("tsconfig")}
                           >
-                            <div className='w-4 h-4 bg-blue-500 rounded text-white text-xs flex items-center justify-center font-bold'>
+                            <div className="w-4 h-4 bg-blue-500 rounded text-white text-xs flex items-center justify-center font-bold">
                               TS
                             </div>
                             <span>tsconfig.json</span>
@@ -1163,104 +1163,104 @@ export default function App() {
             </div>
 
             {/* Editor Content */}
-            <div className='flex-1 flex flex-col'>
+            <div className="flex-1 flex flex-col">
               {/* Editor Header with File Tabs */}
-              <div className='bg-gray-800 border-b border-gray-700 flex items-center'>
+              <div className="bg-gray-800 border-b border-gray-700 flex items-center">
                 {/* File Explorer Toggle */}
                 {!showFileExplorer && (
                   <button
                     onClick={() => setShowFileExplorer(true)}
-                    className='p-2 text-gray-400 hover:text-white border-r border-gray-700'
+                    className="p-2 text-gray-400 hover:text-white border-r border-gray-700"
                   >
-                    <Folder className='w-4 h-4' />
+                    <Folder className="w-4 h-4" />
                   </button>
                 )}
 
                 {/* Debug: Always show toggle button */}
                 <button
                   onClick={() => setShowFileExplorer(!showFileExplorer)}
-                  className='p-2 text-gray-400 hover:text-white border-r border-gray-700'
-                  title={`File Explorer: ${showFileExplorer ? 'Open' : 'Closed'}`}
+                  className="p-2 text-gray-400 hover:text-white border-r border-gray-700"
+                  title={`File Explorer: ${showFileExplorer ? "Open" : "Closed"}`}
                 >
-                  <Folder className='w-4 h-4' />
+                  <Folder className="w-4 h-4" />
                 </button>
 
                 {/* File Tabs */}
-                <div className='flex items-center'>
-                  {openFiles.map(file => (
+                <div className="flex items-center">
+                  {openFiles.map((file) => (
                     <div
                       key={file.id}
                       className={`flex items-center gap-2 px-3 py-2 border-r border-gray-700 cursor-pointer ${
                         activeFile === file.id
-                          ? 'bg-gray-900 text-white'
-                          : 'bg-gray-800 text-gray-300 hover:bg-gray-750'
+                          ? "bg-gray-900 text-white"
+                          : "bg-gray-800 text-gray-300 hover:bg-gray-750"
                       }`}
                       onClick={() => setActiveFile(file.id)}
                     >
                       {getFileIcon(file.type)}
-                      <span className='text-sm'>{file.name}</span>
+                      <span className="text-sm">{file.name}</span>
                       <button
-                        className='p-1 hover:bg-gray-600 rounded ml-1'
-                        onClick={e => {
+                        className="p-1 hover:bg-gray-600 rounded ml-1"
+                        onClick={(e) => {
                           e.stopPropagation();
                           handleCloseFile(file.id);
                         }}
                       >
-                        <X className='w-3 h-3' />
+                        <X className="w-3 h-3" />
                       </button>
                     </div>
                   ))}
                 </div>
 
                 {/* Editor Actions */}
-                <div className='ml-auto flex items-center gap-2 px-4'>
+                <div className="ml-auto flex items-center gap-2 px-4">
                   <button
                     onClick={handleCopyCode}
-                    className='p-1 text-gray-400 hover:text-white transition-colors'
+                    className="p-1 text-gray-400 hover:text-white transition-colors"
                   >
                     {copied ? (
-                      <Check className='w-4 h-4' />
+                      <Check className="w-4 h-4" />
                     ) : (
-                      <Copy className='w-4 h-4' />
+                      <Copy className="w-4 h-4" />
                     )}
                   </button>
                   <button
                     onClick={handleReset}
-                    className='p-1 text-gray-400 hover:text-white transition-colors'
+                    className="p-1 text-gray-400 hover:text-white transition-colors"
                   >
-                    <RotateCcw className='w-4 h-4' />
+                    <RotateCcw className="w-4 h-4" />
                   </button>
-                  <button className='p-1 text-gray-400 hover:text-white'>
-                    <MoreVertical className='w-4 h-4' />
+                  <button className="p-1 text-gray-400 hover:text-white">
+                    <MoreVertical className="w-4 h-4" />
                   </button>
                 </div>
               </div>
 
               {/* Monaco Editor */}
-              <div className='flex-1'>
+              <div className="flex-1">
                 <Editor
-                  height='100%'
+                  height="100%"
                   language={getCurrentLanguage()}
                   value={getCurrentFileContent()}
-                  onChange={value => setCurrentFileContent(value || '')}
-                  theme='vs-dark'
+                  onChange={(value) => setCurrentFileContent(value || "")}
+                  theme="vs-dark"
                   options={{
                     fontSize: 14,
-                    lineNumbers: 'on',
+                    lineNumbers: "on",
                     roundedSelection: false,
                     scrollBeyondLastLine: false,
                     automaticLayout: true,
                     minimap: { enabled: false },
-                    wordWrap: 'on',
+                    wordWrap: "on",
                     tabSize: 2,
                     insertSpaces: true,
-                    renderWhitespace: 'selection',
-                    cursorBlinking: 'blink',
-                    cursorStyle: 'line',
+                    renderWhitespace: "selection",
+                    cursorBlinking: "blink",
+                    cursorStyle: "line",
                     selectOnLineNumbers: true,
                     folding: true,
-                    foldingStrategy: 'indentation',
-                    showFoldingControls: 'always',
+                    foldingStrategy: "indentation",
+                    showFoldingControls: "always",
                     bracketPairColorization: { enabled: true },
                     guides: {
                       bracketPairs: true,
@@ -1278,7 +1278,7 @@ export default function App() {
                     //   },
                     // },
                   }}
-                  beforeMount={monaco => {
+                  beforeMount={(monaco) => {
                     // Configure TypeScript compiler options
                     monaco.languages.typescript.typescriptDefaults.setCompilerOptions(
                       {
@@ -1291,10 +1291,10 @@ export default function App() {
                         noEmit: true,
                         esModuleInterop: true,
                         jsx: monaco.languages.typescript.JsxEmit.React,
-                        reactNamespace: 'React',
+                        reactNamespace: "React",
                         allowJs: true,
-                        typeRoots: ['node_modules/@types'],
-                      }
+                        typeRoots: ["node_modules/@types"],
+                      },
                     );
 
                     // Disable module resolution for React
@@ -1303,7 +1303,7 @@ export default function App() {
                         noSemanticValidation: true,
                         noSyntaxValidation: false,
                         noSuggestionDiagnostics: true,
-                      }
+                      },
                     );
 
                     // Add React types
@@ -1321,7 +1321,7 @@ export default function App() {
                           function useMemo<T>(factory: () => T, deps?: any[]): T;
                         }
                       }`,
-                      'file:///node_modules/@types/react/index.d.ts'
+                      "file:///node_modules/@types/react/index.d.ts",
                     );
                   }}
                 />
@@ -1332,85 +1332,85 @@ export default function App() {
 
         {/* Right Panel - Browser Preview */}
         <div
-          className='bg-gray-800 border-l border-gray-700 flex flex-col overflow-hidden relative group'
+          className="bg-gray-800 border-l border-gray-700 flex flex-col overflow-hidden relative group"
           style={{
             width: `${rightPanelWidth}%`,
-            minWidth: '300px',
-            maxWidth: '60%',
+            minWidth: "300px",
+            maxWidth: "60%",
           }}
         >
           {/* Browser Header */}
-          <div className='bg-gray-700 px-4 py-2 flex items-center justify-between'>
-            <div className='flex items-center gap-2'>
-              <button className='p-1 text-gray-400 hover:text-white'>
-                <ArrowRight className='w-3 h-3 rotate-180' />
+          <div className="bg-gray-700 px-4 py-2 flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <button className="p-1 text-gray-400 hover:text-white">
+                <ArrowRight className="w-3 h-3 rotate-180" />
               </button>
-              <button className='p-1 text-gray-400 hover:text-white'>
-                <ArrowRight className='w-3 h-3' />
+              <button className="p-1 text-gray-400 hover:text-white">
+                <ArrowRight className="w-3 h-3" />
               </button>
-              <button className='p-1 text-gray-400 hover:text-white'>
-                <RotateCcw className='w-3 h-3' />
+              <button className="p-1 text-gray-400 hover:text-white">
+                <RotateCcw className="w-3 h-3" />
               </button>
-              <div className='bg-gray-600 rounded px-2 py-1 text-xs text-gray-300'>
+              <div className="bg-gray-600 rounded px-2 py-1 text-xs text-gray-300">
                 localhost:3000
               </div>
             </div>
             <button
               onClick={() => setShowPreview(!showPreview)}
-              className='p-1 text-gray-400 hover:text-white'
+              className="p-1 text-gray-400 hover:text-white"
             >
               {showPreview ? (
-                <EyeOff className='w-4 h-4' />
+                <EyeOff className="w-4 h-4" />
               ) : (
-                <Eye className='w-4 h-4' />
+                <Eye className="w-4 h-4" />
               )}
             </button>
           </div>
 
           {/* Preview Content */}
-          <div className='flex-1 bg-white relative flex flex-col'>
+          <div className="flex-1 bg-white relative flex flex-col">
             {showPreview ? (
               <>
                 <iframe
-                  title='live-preview'
-                  className='flex-1 bg-white border-0'
+                  title="live-preview"
+                  className="flex-1 bg-white border-0"
                   srcDoc={previewSrcDoc}
-                  sandbox='allow-scripts allow-same-origin'
-                  onLoad={() => console.log('Preview loaded successfully')}
-                  onError={e => console.error('Preview error:', e)}
+                  sandbox="allow-scripts allow-same-origin"
+                  onLoad={() => console.log("Preview loaded successfully")}
+                  onError={(e) => console.error("Preview error:", e)}
                 />
                 {/* Console Panel */}
-                <div className='bg-gray-900 border-t border-gray-700 max-h-32 overflow-y-auto'>
-                  <div className='px-3 py-2 border-b border-gray-700 flex items-center justify-between'>
-                    <div className='flex items-center gap-2'>
-                      <div className='w-2 h-2 bg-green-500 rounded-full'></div>
-                      <span className='text-xs text-gray-300'>Console</span>
+                <div className="bg-gray-900 border-t border-gray-700 max-h-32 overflow-y-auto">
+                  <div className="px-3 py-2 border-b border-gray-700 flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                      <span className="text-xs text-gray-300">Console</span>
                     </div>
                     <button
                       onClick={() => setConsoleOutput([])}
-                      className='text-xs text-gray-400 hover:text-white'
+                      className="text-xs text-gray-400 hover:text-white"
                     >
                       Clear
                     </button>
                   </div>
-                  <div className='px-3 py-2 text-xs text-gray-300 font-mono'>
+                  <div className="px-3 py-2 text-xs text-gray-300 font-mono">
                     {consoleOutput.length > 0 ? (
                       consoleOutput.map((line, index) => {
-                        const isError = line.includes('[ERROR]');
-                        const isWarning = line.includes('[WARN]');
-                        const isInfo = line.includes('[INFO]');
+                        const isError = line.includes("[ERROR]");
+                        const isWarning = line.includes("[WARN]");
+                        const isInfo = line.includes("[INFO]");
 
                         return (
                           <div
                             key={index}
                             className={`mb-1 ${
                               isError
-                                ? 'text-red-400'
+                                ? "text-red-400"
                                 : isWarning
-                                  ? 'text-yellow-400'
+                                  ? "text-yellow-400"
                                   : isInfo
-                                    ? 'text-blue-400'
-                                    : 'text-gray-300'
+                                    ? "text-blue-400"
+                                    : "text-gray-300"
                             }`}
                           >
                             {line}
@@ -1418,17 +1418,17 @@ export default function App() {
                         );
                       })
                     ) : (
-                      <div className='text-gray-500'>No console output</div>
+                      <div className="text-gray-500">No console output</div>
                     )}
                   </div>
                 </div>
               </>
             ) : (
-              <div className='h-full bg-gray-900 flex items-center justify-center'>
-                <div className='text-center'>
-                  <EyeOff className='w-12 h-12 mx-auto mb-2 text-gray-400' />
-                  <p className='text-gray-400'>Preview hidden</p>
-                  <p className='text-sm text-gray-500'>
+              <div className="h-full bg-gray-900 flex items-center justify-center">
+                <div className="text-center">
+                  <EyeOff className="w-12 h-12 mx-auto mb-2 text-gray-400" />
+                  <p className="text-gray-400">Preview hidden</p>
+                  <p className="text-sm text-gray-500">
                     Click the eye icon to show preview
                   </p>
                 </div>
@@ -1439,79 +1439,79 @@ export default function App() {
       </div>
 
       {/* Bottom Navigation */}
-      <div className='bg-gray-800 border-t border-gray-700 px-6 py-3 flex items-center justify-between'>
-        <div className='flex items-center gap-4 text-sm text-gray-400'>
+      <div className="bg-gray-800 border-t border-gray-700 px-6 py-3 flex items-center justify-between">
+        <div className="flex items-center gap-4 text-sm text-gray-400">
           <span>All practice questions (1/291)</span>
         </div>
-        <div className='flex items-center gap-2 -translate-x-2'>
+        <div className="flex items-center gap-2 -translate-x-2">
           {/* Action buttons moved to top header */}
         </div>
       </div>
 
       {/* Login Dialog */}
       <Dialog open={showLoginDialog} onOpenChange={setShowLoginDialog}>
-        <DialogContent className='max-w-md'>
+        <DialogContent className="max-w-md">
           <DialogHeader>
-            <DialogTitle className='text-xl font-bold text-center'>
+            <DialogTitle className="text-xl font-bold text-center">
               Save Your Progress
             </DialogTitle>
-            <DialogDescription className='text-center text-gray-600'>
+            <DialogDescription className="text-center text-gray-600">
               Sign in to save your code to the cloud and never lose your
               progress!
             </DialogDescription>
           </DialogHeader>
 
-          <div className='space-y-4 py-4'>
-            <div className='text-center'>
-              <div className='w-16 h-16 bg-yellow-100 rounded-full flex items-center justify-center mx-auto mb-4'>
-                <Save className='w-8 h-8 text-yellow-600' />
+          <div className="space-y-4 py-4">
+            <div className="text-center">
+              <div className="w-16 h-16 bg-yellow-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <Save className="w-8 h-8 text-yellow-600" />
               </div>
-              <h3 className='text-lg font-semibold mb-2'>Why Sign In?</h3>
-              <ul className='text-sm text-gray-600 space-y-2 text-left'>
-                <li className='flex items-center gap-2'>
-                  <CheckCircle className='w-4 h-4 text-green-500' />
+              <h3 className="text-lg font-semibold mb-2">Why Sign In?</h3>
+              <ul className="text-sm text-gray-600 space-y-2 text-left">
+                <li className="flex items-center gap-2">
+                  <CheckCircle className="w-4 h-4 text-green-500" />
                   Save your code to the cloud
                 </li>
-                <li className='flex items-center gap-2'>
-                  <CheckCircle className='w-4 h-4 text-green-500' />
+                <li className="flex items-center gap-2">
+                  <CheckCircle className="w-4 h-4 text-green-500" />
                   Access your projects from anywhere
                 </li>
-                <li className='flex items-center gap-2'>
-                  <CheckCircle className='w-4 h-4 text-green-500' />
+                <li className="flex items-center gap-2">
+                  <CheckCircle className="w-4 h-4 text-green-500" />
                   Track your learning progress
                 </li>
-                <li className='flex items-center gap-2'>
-                  <CheckCircle className='w-4 h-4 text-green-500' />
+                <li className="flex items-center gap-2">
+                  <CheckCircle className="w-4 h-4 text-green-500" />
                   Never lose your work again
                 </li>
               </ul>
             </div>
           </div>
 
-          <DialogFooter className='flex-col gap-2'>
+          <DialogFooter className="flex-col gap-2">
             <Button
               onClick={() => {
                 setShowLoginDialog(false);
-                router.push('/auth/login');
+                router.push("/auth/login");
               }}
-              className='w-full bg-blue-600 hover:bg-blue-700 text-white'
+              className="w-full bg-blue-600 hover:bg-blue-700 text-white"
             >
               Sign In
             </Button>
             <Button
               onClick={() => {
                 setShowLoginDialog(false);
-                router.push('/auth/register');
+                router.push("/auth/register");
               }}
-              variant='outline'
-              className='w-full border-gray-300 hover:bg-gray-50'
+              variant="outline"
+              className="w-full border-gray-300 hover:bg-gray-50"
             >
               Create Account
             </Button>
             <Button
               onClick={() => setShowLoginDialog(false)}
-              variant='ghost'
-              className='w-full text-gray-500 hover:text-gray-700'
+              variant="ghost"
+              className="w-full text-gray-500 hover:text-gray-700"
             >
               Maybe Later
             </Button>

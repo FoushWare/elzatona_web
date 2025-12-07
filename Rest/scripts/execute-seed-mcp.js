@@ -13,11 +13,15 @@ const SQL_FILE = path.join(__dirname, '../seed-questions-mcp.sql');
 
 // Get Supabase credentials
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+const supabaseKey =
+  process.env.SUPABASE_SERVICE_ROLE_KEY ||
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
 if (!supabaseUrl || !supabaseKey) {
   console.error('❌ Missing Supabase credentials');
-  console.error('   Required: NEXT_PUBLIC_SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY');
+  console.error(
+    '   Required: NEXT_PUBLIC_SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY'
+  );
   process.exit(1);
 }
 
@@ -30,7 +34,9 @@ async function executeSQLBatch(sql) {
       // Try direct query execution
       const response = await supabase.from('questions').select('id').limit(1);
       // If that works, try executing via raw SQL
-      const { error: execError } = await supabase.rpc('exec_sql', { query: sql });
+      const { error: execError } = await supabase.rpc('exec_sql', {
+        query: sql,
+      });
       if (execError) {
         throw execError;
       }
@@ -46,7 +52,7 @@ async function executeSQLBatch(sql) {
 async function main() {
   console.log('📖 Reading SQL file...');
   const sqlContent = fs.readFileSync(SQL_FILE, 'utf8');
-  
+
   // Split by batch comments
   const batches = sqlContent.split(/^-- .*? - Batch \d+ \(\d+ questions\)$/m);
   const validBatches = batches
@@ -58,32 +64,37 @@ async function main() {
       return null;
     })
     .filter(Boolean);
-  
+
   console.log(`\n🔍 Found ${validBatches.length} SQL batches\n`);
-  
+
   console.log('⚠️  Note: This script requires MCP tools to execute SQL.');
-  console.log('   Please use mcp_supabase_execute_sql tool to execute each batch.\n');
-  
+  console.log(
+    '   Please use mcp_supabase_execute_sql tool to execute each batch.\n'
+  );
+
   // Save batches to individual files for easier execution
   const batchesDir = path.join(__dirname, '../seed-batches');
   if (!fs.existsSync(batchesDir)) {
     fs.mkdirSync(batchesDir, { recursive: true });
   }
-  
+
   validBatches.forEach((batch, idx) => {
-    const batchFile = path.join(batchesDir, `batch-${String(idx + 1).padStart(2, '0')}.sql`);
+    const batchFile = path.join(
+      batchesDir,
+      `batch-${String(idx + 1).padStart(2, '0')}.sql`
+    );
     fs.writeFileSync(batchFile, batch.sql, 'utf8');
-    console.log(`  ✅ Saved batch ${idx + 1} to ${path.relative(process.cwd(), batchFile)}`);
+    console.log(
+      `  ✅ Saved batch ${idx + 1} to ${path.relative(process.cwd(), batchFile)}`
+    );
   });
-  
+
   console.log(`\n📊 Total batches: ${validBatches.length}`);
   console.log(`\n💡 To execute via MCP, use:`);
   console.log(`   mcp_supabase_execute_sql with project_id: ${PROJECT_ID}`);
-  console.log(`   and read each batch file from ${path.relative(process.cwd(), batchesDir)}`);
+  console.log(
+    `   and read each batch file from ${path.relative(process.cwd(), batchesDir)}`
+  );
 }
 
 main().catch(console.error);
-
-
-
-

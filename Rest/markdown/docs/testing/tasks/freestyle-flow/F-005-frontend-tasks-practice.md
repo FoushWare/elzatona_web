@@ -1,8 +1,13 @@
 # Task ID: F-005
+
 # Title: Frontend Tasks Practice
+
 # Status: pending
-# Dependencies: 
+
+# Dependencies:
+
 # Priority: high
+
 # Description: Test the Frontend Tasks practice page which displays coding challenges/tasks for frontend development practice, including search, filtering, task selection, and code editor functionality.
 
 # Details:
@@ -10,6 +15,7 @@
 ## Time Estimation
 
 ### Manual Testing
+
 - **Estimated Time**: 45-60 minutes
 - **Breakdown**:
   - Navigate to page: 2 minutes
@@ -25,6 +31,7 @@
 - **Dependencies**: Frontend tasks data from API
 
 ### Automated Testing
+
 - **Estimated Time**: 18-25 minutes (first run), 3-5 minutes (subsequent runs)
 - **Breakdown**:
   - Unit tests setup and execution: 6-9 minutes
@@ -34,6 +41,7 @@
 - **Dependencies**: API mocks, test data, code editor mocks
 
 ### Total Time
+
 - **Manual Only**: 45-60 minutes
 - **Automated Only**: 18-25 minutes (first run), 3-5 minutes (subsequent)
 - **Both Manual + Automated**: 63-85 minutes (first run), 48-65 minutes (subsequent)
@@ -41,6 +49,7 @@
 ---
 
 ## Overview
+
 Test the Frontend Tasks practice page which displays coding challenges/tasks for frontend development practice, including search, filtering, task selection, and code editor functionality.
 
 ## Manual Testing Steps

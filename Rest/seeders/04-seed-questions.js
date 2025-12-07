@@ -35,7 +35,7 @@ const categoryNameMap = {
   'security-questions.json': 'Security',
   'system-design-questions.json': 'System Design',
   'frontend-tasks-questions.json': 'Frontend Tasks',
-  'problem-solving-questions.json': 'Problem Solving'
+  'problem-solving-questions.json': 'Problem Solving',
 };
 
 /**
@@ -44,18 +44,20 @@ const categoryNameMap = {
 function discoverQuestionFiles() {
   const questionsDir = path.join(__dirname, '../final-questions-v01');
   const questionFiles = [];
-  
+
   // Files to exclude
   const excludeFiles = ['topics.json', 'reference.md'];
   const excludeDirs = ['topics', 'javascript', 'react']; // Exclude nested dirs for now
-  
+
   function scanDirectory(dir, relativePath = '') {
     const entries = fs.readdirSync(dir, { withFileTypes: true });
-    
+
     for (const entry of entries) {
       const fullPath = path.join(dir, entry.name);
-      const relativeFilePath = relativePath ? path.join(relativePath, entry.name) : entry.name;
-      
+      const relativeFilePath = relativePath
+        ? path.join(relativePath, entry.name)
+        : entry.name;
+
       if (entry.isDirectory()) {
         // Skip excluded directories
         if (!excludeDirs.includes(entry.name)) {
@@ -63,21 +65,26 @@ function discoverQuestionFiles() {
         }
       } else if (entry.isFile()) {
         // Look for *-questions.json files
-        if (entry.name.endsWith('-questions.json') && !excludeFiles.includes(entry.name)) {
-          const categoryName = categoryNameMap[entry.name] || extractCategoryFromFilename(entry.name);
+        if (
+          entry.name.endsWith('-questions.json') &&
+          !excludeFiles.includes(entry.name)
+        ) {
+          const categoryName =
+            categoryNameMap[entry.name] ||
+            extractCategoryFromFilename(entry.name);
           questionFiles.push({
             categoryName,
             fileName: entry.name,
             filePath: fullPath,
-            relativePath: relativeFilePath
+            relativePath: relativeFilePath,
           });
         }
       }
     }
   }
-  
+
   scanDirectory(questionsDir);
-  
+
   return questionFiles;
 }
 
@@ -88,13 +95,13 @@ function discoverQuestionFiles() {
 function extractCategoryFromFilename(filename) {
   // Remove -questions.json suffix
   let category = filename.replace(/-questions\.json$/, '');
-  
+
   // Convert kebab-case to Title Case
   category = category
     .split('-')
     .map(word => word.charAt(0).toUpperCase() + word.slice(1))
     .join(' ');
-  
+
   return category;
 }
 
@@ -103,22 +110,35 @@ function extractCategoryFromFilename(filename) {
  */
 function normalizeQuestion(question, index, categoryName) {
   // Check if it's already in standard format (has id, title, content, type, category)
-  if (question.id && question.title && question.content !== undefined && question.type) {
+  if (
+    question.id &&
+    question.title &&
+    question.content !== undefined &&
+    question.type
+  ) {
     return question; // Already in standard format
   }
-  
+
   // Check if it's in parsed format (has num, title, code, options, correctAnswer, explanation)
-  if (question.num !== undefined && question.title && (question.code !== undefined || question.explanation !== undefined)) {
+  if (
+    question.num !== undefined &&
+    question.title &&
+    (question.code !== undefined || question.explanation !== undefined)
+  ) {
     // Convert parsed format to standard format
-    const id = question.id || `${categoryName.toLowerCase().replace(/\s+/g, '-')}-${String(index + 1).padStart(3, '0')}-${question.num || index + 1}`;
-    
+    const id =
+      question.id ||
+      `${categoryName.toLowerCase().replace(/\s+/g, '-')}-${String(index + 1).padStart(3, '0')}-${question.num || index + 1}`;
+
     // Format content with code examples
     let content = question.explanation || question.title;
     if (question.code) {
       const codeHtml = `<pre><code>${escapeHtml(question.code)}</code></pre>`;
-      content = question.explanation ? `${codeHtml}\n\n${question.explanation}` : codeHtml;
+      content = question.explanation
+        ? `${codeHtml}\n\n${question.explanation}`
+        : codeHtml;
     }
-    
+
     // Convert options format if present
     let options = null;
     if (question.options && typeof question.options === 'object') {
@@ -128,14 +148,14 @@ function normalizeQuestion(question, index, categoryName) {
           id: `o${idx + 1}`,
           text: String(text),
           isCorrect: key === question.correctAnswer,
-          explanation: ''
+          explanation: '',
         }));
       } else if (Array.isArray(question.options)) {
         // Already in array format
         options = question.options;
       }
     }
-    
+
     return {
       id,
       title: question.title,
@@ -154,18 +174,23 @@ function normalizeQuestion(question, index, categoryName) {
       metadata: {
         ...(question.metadata || {}),
         source: question.metadata?.source || 'parsed',
-        originalNum: question.num || index + 1
-      }
+        originalNum: question.num || index + 1,
+      },
     };
   }
-  
+
   // Unknown format - try to create minimal standard format
-  console.warn(`  ⚠️  Unknown question format at index ${index}, attempting to normalize...`);
+  console.warn(
+    `  ⚠️  Unknown question format at index ${index}, attempting to normalize...`
+  );
   return {
-    id: question.id || `${categoryName.toLowerCase().replace(/\s+/g, '-')}-${String(index + 1).padStart(3, '0')}`,
+    id:
+      question.id ||
+      `${categoryName.toLowerCase().replace(/\s+/g, '-')}-${String(index + 1).padStart(3, '0')}`,
     title: question.title || `Question ${index + 1}`,
     content: question.content || question.explanation || question.title || '',
-    type: question.type || (question.options ? 'multiple-choice' : 'open-ended'),
+    type:
+      question.type || (question.options ? 'multiple-choice' : 'open-ended'),
     category: categoryName,
     topic: question.topic || null,
     difficulty: question.difficulty || 'intermediate',
@@ -176,7 +201,7 @@ function normalizeQuestion(question, index, categoryName) {
     options: question.options || null,
     hints: question.hints || [],
     tags: question.tags || [categoryName.toLowerCase()],
-    metadata: question.metadata || {}
+    metadata: question.metadata || {},
   };
 }
 
@@ -239,35 +264,39 @@ async function seedQuestions() {
 
   for (const fileInfo of questionFiles) {
     const { categoryName, fileName, filePath } = fileInfo;
-    
+
     if (!fs.existsSync(filePath)) {
       console.log(`\n  ⚠️  File not found: ${fileName}`);
       continue;
     }
 
     console.log(`\n📖 Processing ${categoryName} (${fileName})...`);
-    
+
     try {
       let questions = JSON.parse(fs.readFileSync(filePath, 'utf8'));
-      
+
       // Handle empty files
       if (!questions || (Array.isArray(questions) && questions.length === 0)) {
         console.log(`  ⚠️  File is empty, skipping...`);
         continue;
       }
-      
+
       // Ensure questions is an array
       if (!Array.isArray(questions)) {
         console.log(`  ⚠️  File does not contain an array, skipping...`);
         continue;
       }
-      
+
       // Normalize questions to standard format
       console.log(`  🔄 Normalizing ${questions.length} questions...`);
-      questions = questions.map((q, index) => normalizeQuestion(q, index, categoryName));
-      
+      questions = questions.map((q, index) =>
+        normalizeQuestion(q, index, categoryName)
+      );
+
       const categoryId = categoryMap[categoryName];
-      const learningCardId = questions[0]?.learningCardId ? cardMap[questions[0].learningCardId] : null;
+      const learningCardId = questions[0]?.learningCardId
+        ? cardMap[questions[0].learningCardId]
+        : null;
 
       if (!categoryId) {
         console.log(`  ⚠️  Category not found: ${categoryName}`);
@@ -281,7 +310,7 @@ async function seedQuestions() {
       // Process questions in batches
       for (let i = 0; i < questions.length; i += BATCH_SIZE) {
         const batch = questions.slice(i, i + BATCH_SIZE);
-        
+
         for (const question of batch) {
           try {
             // Find topic_id by matching topic name
@@ -289,10 +318,12 @@ async function seedQuestions() {
             if (question.topic) {
               const topicKey = `${categoryId}_${question.topic}`;
               topicId = topicMap[topicKey];
-              
+
               // If exact match not found, try to find by category only
               if (!topicId) {
-                const categoryTopics = topics?.filter(t => t.category_id === categoryId);
+                const categoryTopics = topics?.filter(
+                  t => t.category_id === categoryId
+                );
                 if (categoryTopics && categoryTopics.length > 0) {
                   // Use first topic as fallback
                   topicId = categoryTopics[0].id;
@@ -303,7 +334,7 @@ async function seedQuestions() {
             // Check if question exists by title+category (since we use UUID IDs)
             // Also check metadata for original_id if it exists
             let existing = null;
-            
+
             // First try to find by metadata.original_id if it exists
             if (question.id) {
               const { data: byMetadata } = await supabase
@@ -312,12 +343,12 @@ async function seedQuestions() {
                 .eq('metadata->>original_id', question.id)
                 .limit(1)
                 .maybeSingle();
-              
+
               if (byMetadata) {
                 existing = byMetadata;
               }
             }
-            
+
             // If not found by metadata, try by title+category
             if (!existing) {
               const { data: byTitle } = await supabase
@@ -327,7 +358,7 @@ async function seedQuestions() {
                 .eq('category_id', categoryId)
                 .limit(1)
                 .maybeSingle();
-              
+
               if (byTitle) {
                 existing = byTitle;
               }
@@ -338,17 +369,21 @@ async function seedQuestions() {
               ...(question.metadata || {}),
               original_id: question.id || null,
               source_file: fileName,
-              category: categoryName
+              category: categoryName,
             };
 
             const questionData = {
               title: question.title,
               content: question.content || question.title,
               type: question.type || 'multiple-choice',
-              difficulty: question.difficulty === 'easy' ? 'beginner' : 
-                         question.difficulty === 'medium' ? 'intermediate' :
-                         question.difficulty === 'hard' ? 'advanced' :
-                         question.difficulty || 'intermediate',
+              difficulty:
+                question.difficulty === 'easy'
+                  ? 'beginner'
+                  : question.difficulty === 'medium'
+                    ? 'intermediate'
+                    : question.difficulty === 'hard'
+                      ? 'advanced'
+                      : question.difficulty || 'intermediate',
               answer: question.explanation || '',
               explanation: question.explanation || '',
               hints: question.hints || [],
@@ -364,7 +399,7 @@ async function seedQuestions() {
               category_id: categoryId,
               learning_card_id: learningCardId,
               is_active: question.isActive !== false,
-              updated_at: new Date().toISOString()
+              updated_at: new Date().toISOString(),
             };
 
             if (existing) {
@@ -378,32 +413,41 @@ async function seedQuestions() {
               categoryUpdated++;
             } else {
               // Create new question
-              const { error } = await supabase
-                .from('questions')
-                .insert({
-                  ...questionData,
-                  created_at: new Date().toISOString()
-                });
+              const { error } = await supabase.from('questions').insert({
+                ...questionData,
+                created_at: new Date().toISOString(),
+              });
 
               if (error) throw error;
               categoryCreated++;
             }
           } catch (error) {
-            if (error.code !== 'PGRST116') { // PGRST116 = not found (expected)
-              console.error(`    ❌ Error with question "${question.title?.substring(0, 50)}":`, error.message);
+            if (error.code !== 'PGRST116') {
+              // PGRST116 = not found (expected)
+              console.error(
+                `    ❌ Error with question "${question.title?.substring(0, 50)}":`,
+                error.message
+              );
               categoryErrors++;
             }
           }
         }
 
         // Progress indicator
-        if ((i + BATCH_SIZE) % (BATCH_SIZE * 5) === 0 || i + BATCH_SIZE >= questions.length) {
-          process.stdout.write(`  Progress: ${Math.min(i + BATCH_SIZE, questions.length)}/${questions.length} questions processed\r`);
+        if (
+          (i + BATCH_SIZE) % (BATCH_SIZE * 5) === 0 ||
+          i + BATCH_SIZE >= questions.length
+        ) {
+          process.stdout.write(
+            `  Progress: ${Math.min(i + BATCH_SIZE, questions.length)}/${questions.length} questions processed\r`
+          );
         }
       }
 
-      console.log(`\n  ✅ ${categoryName}: ${categoryCreated} created, ${categoryUpdated} updated, ${categoryErrors} errors`);
-      
+      console.log(
+        `\n  ✅ ${categoryName}: ${categoryCreated} created, ${categoryUpdated} updated, ${categoryErrors} errors`
+      );
+
       totalCreated += categoryCreated;
       totalUpdated += categoryUpdated;
       totalErrors += categoryErrors;
@@ -423,8 +467,7 @@ async function seedQuestions() {
 // Run seeder
 seedQuestions()
   .then(() => process.exit(0))
-  .catch((error) => {
+  .catch(error => {
     console.error('❌ Seeding failed:', error);
     process.exit(1);
   });
-

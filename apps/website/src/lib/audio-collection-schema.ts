@@ -46,8 +46,8 @@ export interface QuestionAudioMapping {
  * Default audio file paths
  */
 export const DEFAULT_AUDIO_PATHS = {
-  QUESTION: '/audio/defaults/question.mp3',
-  ANSWER: '/audio/defaults/answer.mp3',
+  QUESTION: "/audio/defaults/question.mp3",
+  ANSWER: "/audio/defaults/answer.mp3",
 } as const;
 
 /**
@@ -56,7 +56,7 @@ export const DEFAULT_AUDIO_PATHS = {
 export function generateAudioPaths(
   learningPath: string,
   sectionId: string,
-  questionNumber: number
+  questionNumber: number,
 ): {
   questionAudio: string;
   answerAudio: string;
@@ -76,7 +76,7 @@ export function createDefaultAudioInfo(path: string): AudioFileInfo {
   return {
     localPath: path,
     isDefault: true,
-    mimeType: 'audio/mpeg',
+    mimeType: "audio/mpeg",
   };
 }
 
@@ -87,7 +87,7 @@ export function createCustomAudioInfo(
   path: string,
   fileSize?: number,
   duration?: number,
-  mimeType: string = 'audio/mpeg'
+  mimeType: string = "audio/mpeg",
 ): AudioFileInfo {
   return {
     localPath: path,

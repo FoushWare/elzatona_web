@@ -1,0 +1,1458 @@
+[
+  {
+    "id": "q201",
+    "title": "What is the purpose of default value in context?",
+    "content": "The `defaultValue` argument in `React.createContext(defaultValue)` is only used when a component does not have a matching Provider above it in the tree. This is helpful for testing components in isolation.",
+    "type": "open-ended",
+    "category": "React",
+    "subcategory": "Context API",
+    "difficulty": "intermediate",
+    "learningCardId": "framework-questions",
+    "topic": "Context API",
+    "isActive": true,
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "createdBy": "admin",
+    "tags": ["react", "context", "defaultvalue", "testing"],
+    "explanation": "The default value allows components to work without a Provider, which is useful in unit tests or when the Provider is conditionally rendered.",
+    "points": 5,
+    "sampleAnswers": [
+      "The default value in `createContext()` is used only when no Provider is present in the ancestry—ideal for testing or fallback behavior.",
+      "Example: `const ThemeContext = React.createContext('light');` ensures components render with 'light' theme if no Provider wraps them."
+    ]
+  },
+  {
+    "id": "q202",
+    "title": "What is diffing algorithm?",
+    "content": "React uses a heuristic O(n) diffing algorithm to efficiently update the UI by minimizing DOM operations, based on two assumptions: (1) different element types produce different trees, (2) keys help identify stable children.",
+    "type": "open-ended",
+    "category": "React",
+    "subcategory": "Virtual DOM",
+    "difficulty": "advanced",
+    "learningCardId": "framework-questions",
+    "topic": "Diffing Algorithm",
+    "isActive": true,
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "createdBy": "admin",
+    "tags": ["react", "diffing", "reconciliation", "virtual-dom"],
+    "explanation": "Instead of O(n³) tree comparison, React assumes stable identity via keys and type changes imply full subtree replacement.",
+    "points": 8,
+    "sampleAnswers": [
+      "React’s diffing algorithm is an O(n) heuristic that avoids expensive full-tree comparisons by assuming element type changes mean new subtrees and using keys to track child identity.",
+      "This optimization enables fast UI updates even with large component trees."
+    ]
+  },
+  {
+    "id": "q203",
+    "title": "What are the rules covered by diffing algorithm?",
+    "content": "Rules: (1) Different root types → full rebuild, (2) Same DOM type → update attributes only, (3) Same component type → update props and recurse, (4) Children diffed by index unless keys are used.",
+    "type": "multiple-choice",
+    "category": "React",
+    "subcategory": "Virtual DOM",
+    "difficulty": "advanced",
+    "learningCardId": "framework-questions",
+    "topic": "Diffing Algorithm",
+    "isActive": true,
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "createdBy": "admin",
+    "tags": ["react", "reconciliation", "diffing", "keys"],
+    "explanation": "These rules ensure minimal DOM mutations while maintaining correctness through key-based child reconciliation.",
+    "points": 9,
+    "options": [
+      {
+        "id": "a",
+        "text": "React compares every possible node pair in O(n³) time",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "Different types rebuild tree; same DOM updates attrs; same component updates props; keys optimize children diffing",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "Keys are optional and have no performance impact",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Component instances are recreated on every render",
+        "isCorrect": false
+      }
+    ]
+  },
+  {
+    "id": "q204",
+    "title": "When do you need to use refs?",
+    "content": "Use refs for: (1) managing focus/text selection/media playback, (2) triggering imperative animations, (3) integrating with third-party DOM libraries.",
+    "type": "multiple-choice",
+    "category": "React",
+    "subcategory": "React Basics",
+    "difficulty": "intermediate",
+    "learningCardId": "framework-questions",
+    "topic": "Refs",
+    "isActive": true,
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "createdBy": "admin",
+    "tags": ["react", "refs", "imperative", "dom"],
+    "explanation": "Refs provide a way to access DOM nodes or React elements created in the render method, bypassing typical data flow.",
+    "points": 6,
+    "options": [
+      {
+        "id": "a",
+        "text": "For all state management",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "For focus, animations, and third-party DOM integrations",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "To replace useState",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Only in class components",
+        "isCorrect": false
+      }
+    ]
+  },
+  {
+    "id": "q205",
+    "title": "Must prop be named as render for render props?",
+    "content": "No. Any prop that is a function used to determine what to render is a render prop—including the `children` prop.",
+    "type": "true-false",
+    "category": "React",
+    "subcategory": "React Basics",
+    "difficulty": "intermediate",
+    "learningCardId": "framework-questions",
+    "topic": "Render Props",
+    "isActive": true,
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "createdBy": "admin",
+    "tags": ["react", "render-props", "children", "patterns"],
+    "explanation": "The pattern is defined by behavior (a function that returns JSX), not the prop name. `children` as a function is common.",
+    "points": 5,
+    "options": [
+      {
+        "id": "a",
+        "text": "True",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "False",
+        "isCorrect": true
+      }
+    ]
+  },
+  {
+    "id": "q206",
+    "title": "What are the problems of using render props with pure components?",
+    "content": "Creating a new function inside render negates PureComponent’s shallow comparison, causing unnecessary re-renders.",
+    "type": "open-ended",
+    "category": "React",
+    "subcategory": "Performance Optimization",
+    "difficulty": "advanced",
+    "learningCardId": "framework-questions",
+    "topic": "Render Props",
+    "isActive": true,
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "createdBy": "admin",
+    "tags": ["react", "purecomponent", "render-props", "performance"],
+    "explanation": "Each render creates a new function instance, so shallow prop comparison fails, and the component re-renders every time.",
+    "points": 7,
+    "sampleAnswers": [
+      "Defining the render function inline in render creates a new reference each time, breaking PureComponent’s optimization. Define it as an instance method or use useCallback.",
+      "Solution: Move the render function outside render or memoize it to preserve referential identity."
+    ]
+  },
+  {
+    "id": "q207",
+    "title": "What is windowing technique?",
+    "content": "Windowing renders only the visible subset of a large list, reducing DOM nodes and improving performance. Libraries: react-window, react-virtualized.",
+    "type": "open-ended",
+    "category": "Performance & Monitoring",
+    "subcategory": "Performance Optimization",
+    "difficulty": "intermediate",
+    "learningPath": "Performance Optimization Specialist",
+    "topic": "Windowing",
+    "isActive": true,
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "createdBy": "admin",
+    "tags": ["react", "windowing", "virtualization", "performance", "lists"],
+    "explanation": "Instead of rendering 10,000 list items, windowing renders only the 20 currently visible, drastically improving memory and speed.",
+    "points": 7,
+    "sampleAnswers": [
+      "Windowing (or virtualization) renders only the items in the viewport, recycling DOM nodes as the user scrolls—ideal for long lists or tables.",
+      "Libraries like `react-window` provide `FixedSizeList` and `VariableSizeList` components to implement this pattern easily."
+    ]
+  },
+  {
+    "id": "q208",
+    "title": "How do you print falsy values in JSX?",
+    "content": "Falsy values (false, null, undefined) don’t render in JSX. Convert them to strings using `String()` or template literals.",
+    "type": "open-ended",
+    "category": "React",
+    "subcategory": "JSX",
+    "difficulty": "beginner",
+    "learningCardId": "framework-questions",
+    "topic": "JSX",
+    "isActive": true,
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "createdBy": "admin",
+    "tags": ["react", "jsx", "falsy", "rendering"],
+    "explanation": "React ignores falsy children for convenience (e.g., `{condition && <Component />}`), but explicit conversion shows the value.",
+    "points": 4,
+    "sampleAnswers": [
+      "Use `{String(myVar)}` or `{`${myVar}`}` to display falsy values like `null` or `undefined` in JSX.",
+      "Example: `<div>Value: {String(user.age)}</div>` will show 'Value: null' if age is null."
+    ]
+  },
+  {
+    "id": "q209",
+    "title": "What is the typical use case of portals?",
+    "content": "Portals render modals, tooltips, dropdowns, and notifications outside the parent DOM tree to avoid CSS issues like `overflow: hidden` or `z-index` stacking contexts.",
+    "type": "multiple-choice",
+    "category": "React",
+    "subcategory": "React Basics",
+    "difficulty": "intermediate",
+    "learningCardId": "framework-questions",
+    "topic": "React Portals",
+    "isActive": true,
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "createdBy": "admin",
+    "tags": ["react", "portals", "modals", "tooltips", "css"],
+    "explanation": "By rendering into a separate DOM node (e.g., `document.body`), portals escape parent styling constraints.",
+    "points": 6,
+    "options": [
+      {
+        "id": "a",
+        "text": "To improve component reusability",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "To render modals/tooltips outside parent DOM to avoid CSS clipping and z-index issues",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "To replace Redux",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Only for server-side rendering",
+        "isCorrect": false
+      }
+    ]
+  },
+  {
+    "id": "q210",
+    "title": "How do you set default value for uncontrolled component?",
+    "content": "Use `defaultValue` for text inputs and `defaultChecked` for checkboxes/radios to set initial values without controlling subsequent updates.",
+    "type": "open-ended",
+    "category": "React",
+    "subcategory": "Forms",
+    "difficulty": "beginner",
+    "learningCardId": "framework-questions",
+    "topic": "Uncontrolled Components",
+    "isActive": true,
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "createdBy": "admin",
+    "tags": ["react", "forms", "uncontrolled", "defaultvalue"],
+    "explanation": "`defaultValue` sets the initial DOM value but doesn’t override user changes, unlike `value` which fully controls the input.",
+    "points": 5,
+    "sampleAnswers": [
+      "Use `<input defaultValue=\"John\" />` to set the initial value of an uncontrolled input. For checkboxes, use `defaultChecked={true}`.",
+      "This is useful when you need to initialize a form but don’t want to manage every keystroke with state."
+    ]
+  },
+  {
+    "id": "q211",
+    "title": "What is your favorite React stack?",
+    "content": "A popular stack includes Redux/redux-saga for state, react-router for routing, styled-components for styling, axios for API calls, and webpack/Babel for tooling.",
+    "type": "open-ended",
+    "category": "React",
+    "subcategory": "React Ecosystem",
+    "difficulty": "intermediate",
+    "learningCardId": "framework-questions",
+    "topic": "React Ecosystem",
+    "isActive": true,
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "createdBy": "admin",
+    "tags": ["react", "boilerplate", "redux", "saga", "tooling"],
+    "explanation": "This stack balances maturity, performance, and developer experience for large-scale applications.",
+    "points": 6,
+    "sampleAnswers": [
+      "A robust React stack: Redux + redux-saga for state and side effects, React Router for navigation, styled-components for styling, axios for HTTP, and Webpack/Babel for builds.",
+      "Projects like react-boilerplate provide this setup out of the box for production-ready apps."
+    ]
+  },
+  {
+    "id": "q212",
+    "title": "What is the difference between Real DOM and Virtual DOM?",
+    "content": "Real DOM updates are slow and expensive; Virtual DOM is a lightweight JS representation that enables fast diffing and minimal real DOM mutations.",
+    "type": "multiple-choice",
+    "category": "React",
+    "subcategory": "Virtual DOM",
+    "difficulty": "beginner",
+    "learningCardId": "framework-questions",
+    "topic": "Virtual DOM",
+    "isActive": true,
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "createdBy": "admin",
+    "tags": ["react", "virtual-dom", "real-dom", "performance"],
+    "explanation": "Virtual DOM allows React to compute the minimal set of changes before touching the real DOM, optimizing performance.",
+    "points": 5,
+    "options": [
+      {
+        "id": "a",
+        "text": "Real DOM is faster than Virtual DOM",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "Real DOM updates are slow/expensive; Virtual DOM enables fast, minimal updates",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "Virtual DOM directly manipulates HTML",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "They are the same",
+        "isCorrect": false
+      }
+    ]
+  },
+  {
+    "id": "q213",
+    "title": "How to add Bootstrap to a React application?",
+    "content": "Three ways: (1) CDN, (2) npm install bootstrap + import CSS, (3) React-specific libraries like react-bootstrap or reactstrap.",
+    "type": "multiple-choice",
+    "category": "React",
+    "subcategory": "Styling",
+    "difficulty": "beginner",
+    "learningCardId": "framework-questions",
+    "topic": "Third-Party Libraries",
+    "isActive": true,
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "createdBy": "admin",
+    "tags": ["react", "bootstrap", "styling", "css"],
+    "explanation": "React-specific libraries (react-bootstrap) wrap Bootstrap components as React components, avoiding jQuery dependency.",
+    "points": 5,
+    "options": [
+      {
+        "id": "a",
+        "text": "Only via CDN",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "CDN, npm install, or React wrappers like react-bootstrap",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "Bootstrap is built into React",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Only with Sass",
+        "isCorrect": false
+      }
+    ]
+  },
+  {
+    "id": "q214",
+    "title": "Can you list top websites using React?",
+    "content": "Top sites: Facebook, Instagram, WhatsApp, Uber, Airbnb, Netflix, PayPal, Khan Academy, Dropbox, Flipboard.",
+    "type": "open-ended",
+    "category": "React",
+    "subcategory": "React Ecosystem",
+    "difficulty": "beginner",
+    "learningPath": "Frontend Development Fundamentals",
+    "topic": "React Adoption",
+    "isActive": true,
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "createdBy": "admin",
+    "tags": ["react", "companies", "adoption", "real-world"],
+    "explanation": "React’s component model and performance make it ideal for large, dynamic user interfaces.",
+    "points": 4,
+    "sampleAnswers": [
+      "Major companies using React include Facebook (creator), Instagram, WhatsApp, Airbnb, Netflix, Uber, and PayPal.",
+      "These companies rely on React for its declarative UI, performance, and rich ecosystem."
+    ]
+  },
+  {
+    "id": "q215",
+    "title": "Is it recommended to use CSS In JS in React?",
+    "content": "React has no opinion, but beginners should start with CSS files and className. CSS-in-JS (e.g., styled-components) is a valid alternative for scoped styles.",
+    "type": "true-false",
+    "category": "CSS & Styling",
+    "subcategory": "CSS-in-JS",
+    "difficulty": "beginner",
+    "learningPath": "Modern CSS Mastery",
+    "topic": "CSS-in-JS",
+    "isActive": true,
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "createdBy": "admin",
+    "tags": ["react", "css-in-js", "styled-components", "styling"],
+    "explanation": "CSS-in-JS offers benefits like dynamic styling and scoping, but traditional CSS is simpler for beginners.",
+    "points": 4,
+    "options": [
+      {
+        "id": "a",
+        "text": "True",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "False",
+        "isCorrect": true
+      }
+    ]
+  },
+  {
+    "id": "q216",
+    "title": "Do I need to rewrite all my class components with hooks?",
+    "content": "No. Hooks are additive; you can use them in new components without rewriting existing class components.",
+    "type": "true-false",
+    "category": "React",
+    "subcategory": "React Hooks",
+    "difficulty": "beginner",
+    "learningCardId": "framework-questions",
+    "topic": "React Hooks",
+    "isActive": true,
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "createdBy": "admin",
+    "tags": ["react", "hooks", "class-components", "migration"],
+    "explanation": "React has no plans to remove class components. Hooks and classes can coexist in the same app.",
+    "points": 3,
+    "options": [
+      {
+        "id": "a",
+        "text": "True",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "False",
+        "isCorrect": true
+      }
+    ]
+  },
+  {
+    "id": "q217",
+    "title": "What is useEffect hook? How to fetch data with React Hooks?",
+    "content": "`useEffect` handles side effects in function components. Use it with `useState` to fetch data on mount by passing an empty dependency array.",
+    "type": "open-ended",
+    "category": "React",
+    "subcategory": "React Hooks",
+    "difficulty": "intermediate",
+    "learningCardId": "framework-questions",
+    "topic": "useEffect",
+    "isActive": true,
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "createdBy": "admin",
+    "tags": ["react", "useeffect", "data-fetching", "hooks"],
+    "explanation": "It replaces componentDidMount, componentDidUpdate, and componentWillUnmount with a unified API.",
+    "points": 7,
+    "sampleAnswers": [
+      "`useEffect(() => { fetch(url).then(setData); }, []);` fetches data once on mount. The empty array ensures it doesn’t re-run on updates.",
+      "Always include cleanup for subscriptions or async operations to avoid memory leaks or state updates on unmounted components."
+    ]
+  },
+  {
+    "id": "q218",
+    "title": "Is Hooks cover all use cases for classes?",
+    "content": "Not yet. Hooks don’t cover `getSnapshotBeforeUpdate` and `componentDidCatch` (error boundaries).",
+    "type": "true-false",
+    "category": "React",
+    "subcategory": "React Hooks",
+    "difficulty": "intermediate",
+    "learningCardId": "framework-questions",
+    "topic": "React Hooks",
+    "isActive": true,
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "createdBy": "admin",
+    "tags": ["react", "hooks", "class-lifecycle", "limitations"],
+    "explanation": "Error boundaries and snapshot reading are still class-only features, though the React team plans to add Hook equivalents.",
+    "points": 6,
+    "options": [
+      {
+        "id": "a",
+        "text": "True",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "False",
+        "isCorrect": true
+      }
+    ]
+  },
+  {
+    "id": "q219",
+    "title": "What is the stable release for hooks support?",
+    "content": "React 16.8 introduced stable Hooks support for React DOM, React DOM Server, React Test Renderer, and React Shallow Renderer.",
+    "type": "open-ended",
+    "category": "React",
+    "subcategory": "React Hooks",
+    "difficulty": "beginner",
+    "learningCardId": "framework-questions",
+    "topic": "React Hooks",
+    "isActive": true,
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "createdBy": "admin",
+    "tags": ["react", "hooks", "16.8", "release"],
+    "explanation": "React 16.8 (February 2019) was the first version to include Hooks as a stable feature.",
+    "points": 4,
+    "sampleAnswers": [
+      "React 16.8, released in February 2019, was the first stable version to include Hooks across all official React packages.",
+      "This allowed function components to use state and side effects without classes."
+    ]
+  },
+  {
+    "id": "q220",
+    "title": "Why do we use array destructuring in `useState`?",
+    "content": "`useState` returns an array `[value, setValue]`. Destructuring makes it clear and concise: `const [count, setCount] = useState(0)`.",
+    "type": "open-ended",
+    "category": "React",
+    "subcategory": "React Hooks",
+    "difficulty": "beginner",
+    "learningCardId": "framework-questions",
+    "topic": "useState",
+    "isActive": true,
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "createdBy": "admin",
+    "tags": ["react", "hooks", "destructuring", "useState"],
+    "explanation": "Array destructuring provides semantic names for the state value and updater function, improving readability.",
+    "points": 4,
+    "sampleAnswers": [
+      "Instead of `const state = useState(0); const count = state[0]; const setCount = state[1];`, we write `const [count, setCount] = useState(0);` for clarity.",
+      "This pattern is idiomatic in React and makes state usage self-documenting."
+    ]
+  },
+  {
+    "id": "q221",
+    "title": "What are the sources used for introducing hooks?",
+    "content": "Hooks drew inspiration from: react-future experiments, render props (Reactions Component), DisplayScript state cells, Rx subscriptions, and ReasonReact reducer components.",
+    "type": "multiple-choice",
+    "category": "React",
+    "subcategory": "React Hooks",
+    "difficulty": "advanced",
+    "learningCardId": "framework-questions",
+    "topic": "React Hooks",
+    "isActive": true,
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "createdBy": "admin",
+    "tags": ["react", "hooks", "history", "design"],
+    "explanation": "Hooks unified patterns from the React ecosystem into a single, composable API.",
+    "points": 7,
+    "options": [
+      {
+        "id": "a",
+        "text": "Only from Angular",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "From react-future, render props, DisplayScript, Rx, and ReasonReact",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "Invented from scratch with no prior art",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Based on Vue composition API",
+        "isCorrect": false
+      }
+    ]
+  },
+  {
+    "id": "q222",
+    "title": "How do you access imperative API of web components?",
+    "content": "Use a `ref` to get the DOM node and call its methods directly, or wrap the web component in a React component for better integration.",
+    "type": "open-ended",
+    "category": "React",
+    "subcategory": "Integration",
+    "difficulty": "intermediate",
+    "learningCardId": "framework-questions",
+    "topic": "Web Components",
+    "isActive": true,
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "createdBy": "admin",
+    "tags": ["react", "web-components", "imperative", "refs"],
+    "explanation": "Web components often expose methods like `focus()` or `play()` that must be called imperatively via refs.",
+    "points": 6,
+    "sampleAnswers": [
+      "Use `const wcRef = useRef();` and `<my-element ref={wcRef} />`, then call `wcRef.current.myMethod()`.",
+      "For better React integration, create a wrapper component that manages the web component’s state and props."
+    ]
+  },
+  {
+    "id": "q223",
+    "title": "What is Formik?",
+    "content": "Formik is a small React form library that handles form state, validation, and submission.",
+    "type": "open-ended",
+    "category": "React",
+    "subcategory": "Form Libraries",
+    "difficulty": "beginner",
+    "learningCardId": "framework-questions",
+    "topic": "Formik",
+    "isActive": true,
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "createdBy": "admin",
+    "tags": ["formik", "forms", "react", "validation"],
+    "explanation": "It solves the three main form problems: getting values in/out of state, validation, and submission handling.",
+    "points": 5,
+    "sampleAnswers": [
+      "Formik provides a minimal API to manage form state, validate inputs, and handle submission without Redux.",
+      "It uses render props or hooks to give you access to values, errors, and helpers like `handleChange` and `handleSubmit`."
+    ]
+  },
+  {
+    "id": "q224",
+    "title": "What are typical middleware choices for async calls in Redux?",
+    "content": "Popular choices: Redux Thunk, Redux Saga, and Redux Promise.",
+    "type": "multiple-choice",
+    "category": "React",
+    "subcategory": "State Management",
+    "difficulty": "intermediate",
+    "learningCardId": "framework-questions",
+    "topic": "Redux Middleware",
+    "isActive": true,
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "createdBy": "admin",
+    "tags": ["redux", "middleware", "thunk", "saga", "async"],
+    "explanation": "These middleware enable side effects like API calls in Redux’s otherwise pure action-reducer flow.",
+    "points": 6,
+    "options": [
+      {
+        "id": "a",
+        "text": "Only Redux Thunk",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "Redux Thunk, Redux Saga, Redux Promise",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "Middleware is not needed for async",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Only Redux Saga",
+        "isCorrect": false
+      }
+    ]
+  },
+  {
+    "id": "q225",
+    "title": "Do browsers understand JSX code?",
+    "content": "No. JSX must be transpiled to `React.createElement()` calls using Babel or similar tools.",
+    "type": "true-false",
+    "category": "React",
+    "subcategory": "JSX",
+    "difficulty": "beginner",
+    "learningCardId": "framework-questions",
+    "topic": "JSX",
+    "isActive": true,
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "createdBy": "admin",
+    "tags": ["react", "jsx", "babel", "transpilation"],
+    "explanation": "Browsers only understand standard JavaScript; JSX is syntactic sugar transformed at build time.",
+    "points": 3,
+    "options": [
+      {
+        "id": "a",
+        "text": "True",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "False",
+        "isCorrect": true
+      }
+    ]
+  },
+  {
+    "id": "q226",
+    "title": "Describe data flow in React?",
+    "content": "React uses one-way data flow: data flows down from parent to child via props, making the data flow predictable and easier to debug.",
+    "type": "open-ended",
+    "category": "React",
+    "subcategory": "React Basics",
+    "difficulty": "beginner",
+    "learningCardId": "framework-questions",
+    "topic": "Data Flow",
+    "isActive": true,
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "createdBy": "admin",
+    "tags": ["react", "props", "one-way-data-flow", "architecture"],
+    "explanation": "Parents pass data to children via props; children communicate back via callback functions.",
+    "points": 4,
+    "sampleAnswers": [
+      "Data flows unidirectionally: parent components pass data to children via props, and children trigger updates by calling parent-provided callbacks.",
+      "This contrasts with two-way binding (e.g., AngularJS), where child changes automatically update parent state."
+    ]
+  },
+  {
+    "id": "q227",
+    "title": "What is MobX?",
+    "content": "MobX is a state management library that uses observable state and reactive programming to automatically update UI when state changes.",
+    "type": "open-ended",
+    "category": "React",
+    "subcategory": "State Management",
+    "difficulty": "intermediate",
+    "learningCardId": "framework-questions",
+    "topic": "MobX",
+    "isActive": true,
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "createdBy": "admin",
+    "tags": ["mobx", "state-management", "react", "observable"],
+    "explanation": "It tracks which components depend on which state and re-renders them automatically when that state changes.",
+    "points": 6,
+    "sampleAnswers": [
+      "MobX makes state observable and automatically re-renders components that use that state—no need for explicit selectors or reducers.",
+      "It’s often described as 'transparent reactivity'—you mutate state directly, and the UI updates magically."
+    ]
+  },
+  {
+    "id": "q228",
+    "title": "What are the differences between Redux and MobX?",
+    "content": "Redux: single store, immutable, explicit updates. MobX: multiple stores, mutable, automatic updates via observables.",
+    "type": "multiple-choice",
+    "category": "React",
+    "subcategory": "State Management",
+    "difficulty": "advanced",
+    "learningCardId": "framework-questions",
+    "topic": "Redux vs MobX",
+    "isActive": true,
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "createdBy": "admin",
+    "tags": ["redux", "mobx", "comparison", "state-management"],
+    "explanation": "Redux is explicit and predictable; MobX is implicit and automatic. Redux scales better for large teams; MobX is simpler for small apps.",
+    "points": 8,
+    "options": [
+      {
+        "id": "a",
+        "text": "Redux uses observables; MobX uses reducers",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "Redux: single immutable store, explicit; MobX: multiple mutable stores, automatic",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "They are identical",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "MobX requires more boilerplate",
+        "isCorrect": false
+      }
+    ]
+  },
+  {
+    "id": "q229",
+    "title": "Should I learn ES6 before learning ReactJS?",
+    "content": "Not required, but helpful. React ecosystem heavily uses ES6 features like destructuring, spread operator, and arrow functions.",
+    "type": "true-false",
+    "category": "React",
+    "subcategory": "React Basics",
+    "difficulty": "beginner",
+    "learningPath": "Frontend Development Fundamentals",
+    "topic": "JavaScript Fundamentals",
+    "isActive": true,
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "createdBy": "admin",
+    "tags": ["react", "es6", "javascript", "learning"],
+    "explanation": "You can learn React without ES6, but most tutorials and codebases assume ES6 knowledge.",
+    "points": 4,
+    "options": [
+      {
+        "id": "a",
+        "text": "True",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "False",
+        "isCorrect": true
+      }
+    ]
+  },
+  {
+    "id": "q230",
+    "title": "What is Concurrent Rendering?",
+    "content": "Concurrent Rendering allows React to interrupt long renders to handle high-priority updates (e.g., user input), improving responsiveness.",
+    "type": "open-ended",
+    "category": "React",
+    "subcategory": "Concurrent React",
+    "difficulty": "advanced",
+    "learningPath": "Advanced JavaScript Concepts",
+    "topic": "Concurrent Rendering",
+    "isActive": true,
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "createdBy": "admin",
+    "tags": ["react", "concurrent", "rendering", "suspense"],
+    "explanation": "It enables interruptible rendering, so the UI stays responsive during heavy updates.",
+    "points": 8,
+    "sampleAnswers": [
+      "Concurrent Rendering lets React pause and resume work based on priority—e.g., user clicks are handled before finishing a low-priority background render.",
+      "It’s the foundation for features like Suspense and automatic batching."
+    ]
+  },
+  {
+    "id": "q231",
+    "title": "What is the difference between async mode and concurrent mode?",
+    "content": "They are the same. 'Async Mode' was the old name; 'Concurrent Mode' is the current name to emphasize priority-based rendering.",
+    "type": "true-false",
+    "category": "React",
+    "subcategory": "Concurrent React",
+    "difficulty": "intermediate",
+    "learningPath": "Advanced JavaScript Concepts",
+    "topic": "Concurrent Rendering",
+    "isActive": true,
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "createdBy": "admin",
+    "tags": ["react", "concurrent-mode", "async-mode", "history"],
+    "explanation": "The name changed to avoid confusion with other async patterns and to highlight the priority-based scheduling.",
+    "points": 5,
+    "options": [
+      {
+        "id": "a",
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "False",
+        "isCorrect": false
+      }
+    ]
+  },
+  {
+    "id": "q232",
+    "title": "Can I use javascript URLs in React 16.9?",
+    "content": "Yes, but it logs a warning because `javascript:` URLs are a security risk (XSS). Future versions will throw an error.",
+    "type": "true-false",
+    "category": "Security",
+    "subcategory": "XSS (Cross-Site Scripting)",
+    "difficulty": "intermediate",
+    "learningPath": "Web Security Specialist",
+    "topic": "XSS Prevention",
+    "isActive": true,
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "createdBy": "admin",
+    "tags": ["react", "security", "xss", "javascript-urls"],
+    "explanation": "React warns against `javascript:` URLs to prevent accidental injection of malicious code.",
+    "points": 5,
+    "options": [
+      {
+        "id": "a",
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "False",
+        "isCorrect": false
+      }
+    ]
+  },
+  {
+    "id": "q233",
+    "title": "What is the purpose of ESLint plugin for hooks?",
+    "content": "It enforces the Rules of Hooks: (1) call hooks at top level, (2) call hooks only from React functions.",
+    "type": "open-ended",
+    "category": "React",
+    "subcategory": "React Hooks",
+    "difficulty": "intermediate",
+    "learningCardId": "framework-questions",
+    "topic": "Rules of Hooks",
+    "isActive": true,
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "createdBy": "admin",
+    "tags": ["react", "hooks", "eslint", "linting"],
+    "explanation": "The plugin prevents bugs by ensuring hooks are called consistently across renders.",
+    "points": 6,
+    "sampleAnswers": [
+      "The `eslint-plugin-react-hooks` enforces that hooks are called in the same order every render and only from function components or custom hooks.",
+      "It also includes `exhaustive-deps` to validate effect dependencies."
+    ]
+  },
+  {
+    "id": "q234",
+    "title": "What is the difference between Imperative and Declarative in React?",
+    "content": "Imperative: how to do it (step-by-step DOM manipulation). Declarative: what the UI should look like (describe state, React handles updates).",
+    "type": "open-ended",
+    "category": "React",
+    "subcategory": "React Basics",
+    "difficulty": "beginner",
+    "learningCardId": "framework-questions",
+    "topic": "Declarative UI",
+    "isActive": true,
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "createdBy": "admin",
+    "tags": ["react", "declarative", "imperative", "paradigm"],
+    "explanation": "React is declarative: you describe the UI for a given state, and React handles the DOM updates.",
+    "points": 5,
+    "sampleAnswers": [
+      "Imperative: 'If liked, remove grey class and add blue class.' Declarative: 'If liked, render <BlueLike />; else render <GreyLike />.'",
+      "Declarative code is easier to reason about because it separates 'what' from 'how'."
+    ]
+  },
+  {
+    "id": "q235",
+    "title": "What are the benefits of using TypeScript with ReactJS?",
+    "content": "Benefits: type safety, better IDE support, easier refactoring, interfaces for props/state, and fewer runtime errors.",
+    "type": "multiple-choice",
+    "category": "TypeScript",
+    "subcategory": "TypeScript with React",
+    "difficulty": "intermediate",
+    "learningPath": "TypeScript Mastery",
+    "topic": "TypeScript with React",
+    "isActive": true,
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "createdBy": "admin",
+    "tags": ["typescript", "react", "types", "ide"],
+    "explanation": "TypeScript catches errors at compile time and provides excellent autocomplete and navigation in editors like VS Code.",
+    "points": 6,
+    "options": [
+      {
+        "id": "a",
+        "text": "Slower development",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "Type safety, IDE support, fewer bugs, better refactoring",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "Only for backend",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Increases bundle size significantly",
+        "isCorrect": false
+      }
+    ]
+  },
+  {
+    "id": "q236",
+    "title": "How to keep user authenticated on page refresh with Context API?",
+    "content": "Call `loadUser()` in `useEffect` in App.js, ensuring the AuthProvider wraps the entire app in index.js to persist auth state across refreshes.",
+    "type": "open-ended",
+    "category": "React",
+    "subcategory": "Authentication",
+    "difficulty": "advanced",
+    "learningCardId": "framework-questions",
+    "topic": "Context API",
+    "isActive": true,
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "createdBy": "admin",
+    "tags": ["react", "context-api", "authentication", "persistence"],
+    "explanation": "On page load, check for a token in storage and validate it to restore the user session.",
+    "points": 8,
+    "sampleAnswers": [
+      "Wrap your app in an AuthProvider in index.js. In App.js, use `useEffect` to call `loadUser()`, which checks localStorage/sessionStorage for a token and validates it with the backend.",
+      "This ensures the user remains logged in after refresh, similar to how Redux would handle it with a root-level dispatch."
+    ]
+  },
+  {
+    "id": "q237",
+    "title": "What are the benefits of new JSX transform?",
+    "content": "Benefits: (1) no need to import React, (2) slightly smaller bundles, (3) simpler mental model for beginners.",
+    "type": "multiple-choice",
+    "category": "React",
+    "subcategory": "JSX",
+    "difficulty": "intermediate",
+    "learningCardId": "framework-questions",
+    "topic": "JSX",
+    "isActive": true,
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "createdBy": "admin",
+    "tags": ["react", "jsx", "transform", "babel"],
+    "explanation": "The new transform compiles JSX to `_jsx()` calls from `react/jsx-runtime`, removing the need for React in scope.",
+    "points": 6,
+    "options": [
+      {
+        "id": "a",
+        "text": "Requires explicit React import",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "No React import needed, smaller bundles, simpler learning",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "Only works with class components",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Increases bundle size",
+        "isCorrect": false
+      }
+    ]
+  },
+  {
+    "id": "q238",
+    "title": "How is the new JSX transform different from old transform?",
+    "content": "Old: compiles to `React.createElement()`, requires `import React`. New: compiles to `_jsx()` from `react/jsx-runtime`, no React import needed.",
+    "type": "open-ended",
+    "category": "React",
+    "subcategory": "JSX",
+    "difficulty": "intermediate",
+    "learningCardId": "framework-questions",
+    "topic": "JSX",
+    "isActive": true,
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "createdBy": "admin",
+    "tags": ["react", "jsx", "babel", "compilation"],
+    "explanation": "The new transform reduces boilerplate and bundle size by using a dedicated runtime.",
+    "points": 7,
+    "sampleAnswers": [
+      "Old: `import React from 'react';` and `<div />` → `React.createElement('div')`. New: no import needed; `<div />` → `_jsx('div', {})`.",
+      "You still need to import React to use Hooks, but not for JSX alone."
+    ]
+  },
+  {
+    "id": "q239",
+    "title": "What are React Server Components?",
+    "content": "React Server Components render on the server, allowing direct data fetching and reducing client bundle size. Still experimental.",
+    "type": "open-ended",
+    "category": "Next.js & Frameworks",
+    "subcategory": "React Server Components",
+    "difficulty": "advanced",
+    "learningPath": "Next.js & Frameworks",
+    "topic": "React Server Components",
+    "isActive": true,
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "createdBy": "admin",
+    "tags": ["react", "server-components", "rsc", "nextjs"],
+    "explanation": "They enable zero-bundle-size components that run only on the server, with automatic client hydration for interactivity.",
+    "points": 9,
+    "sampleAnswers": [
+      "React Server Components run on the server, can access databases directly, and send only JSON to the client—reducing JavaScript bundle size.",
+      "They’re a key part of Next.js App Router and the future of React full-stack architecture."
+    ]
+  },
+  {
+    "id": "q240",
+    "title": "What is prop drilling?",
+    "content": "Prop drilling is passing data through multiple levels of components that don’t need it, just to get it to a deeply nested child.",
+    "type": "open-ended",
+    "category": "React",
+    "subcategory": "React Basics",
+    "difficulty": "beginner",
+    "learningCardId": "framework-questions",
+    "topic": "Props",
+    "isActive": true,
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "createdBy": "admin",
+    "tags": ["react", "prop-drilling", "context", "anti-pattern"],
+    "explanation": "It makes components tightly coupled and hard to refactor. Solutions: Context API or state management libraries.",
+    "points": 5,
+    "sampleAnswers": [
+      "Prop drilling occurs when you pass a prop through many intermediate components that don’t use it, just to reach a deep child.",
+      "This creates unnecessary dependencies. Use Context or Redux to avoid it."
+    ]
+  },
+  {
+    "id": "q241",
+    "title": "What is the difference between useState and useRef hook?",
+    "content": "`useState` triggers re-renders on update; `useRef` holds a mutable value without causing re-renders.",
+    "type": "multiple-choice",
+    "category": "React",
+    "subcategory": "React Hooks",
+    "difficulty": "intermediate",
+    "learningCardId": "framework-questions",
+    "topic": "useState vs useRef",
+    "isActive": true,
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "createdBy": "admin",
+    "tags": ["react", "hooks", "usestate", "useref"],
+    "explanation": "`useRef` is for persisting values across renders without triggering updates—ideal for timers, intervals, or DOM references.",
+    "points": 6,
+    "options": [
+      {
+        "id": "a",
+        "text": "Both cause re-renders",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "useState causes re-renders; useRef does not",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "useRef is only for DOM elements",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "useState cannot hold objects",
+        "isCorrect": false
+      }
+    ]
+  },
+  {
+    "id": "q242",
+    "title": "What is a wrapper component?",
+    "content": "A wrapper component surrounds other components to add functionality, styling, or layout without modifying the wrapped components.",
+    "type": "open-ended",
+    "category": "React",
+    "subcategory": "React Basics",
+    "difficulty": "beginner",
+    "learningCardId": "framework-questions",
+    "topic": "Component Composition",
+    "isActive": true,
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "createdBy": "admin",
+    "tags": ["react", "wrapper", "hoc", "composition"],
+    "explanation": "It’s a form of composition that promotes reuse and separation of concerns.",
+    "points": 5,
+    "sampleAnswers": [
+      "A wrapper component adds behavior or UI around children—e.g., a `Card` component that adds padding and a border.",
+      "Example: `<AuthWrapper><Profile /></AuthWrapper>` could check authentication before rendering the child."
+    ]
+  },
+  {
+    "id": "q243",
+    "title": "What are the differences between useEffect and useLayoutEffect?",
+    "content": "`useEffect` runs after browser paint; `useLayoutEffect` runs synchronously before paint, avoiding visual flicker for layout measurements.",
+    "type": "multiple-choice",
+    "category": "React",
+    "subcategory": "React Hooks",
+    "difficulty": "advanced",
+    "learningCardId": "framework-questions",
+    "topic": "useLayoutEffect",
+    "isActive": true,
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "createdBy": "admin",
+    "tags": ["react", "useeffect", "uselayouteffect", "performance"],
+    "explanation": "Use `useLayoutEffect` only when you need to measure or adjust layout before the user sees it.",
+    "points": 8,
+    "options": [
+      {
+        "id": "a",
+        "text": "useEffect runs before paint; useLayoutEffect after",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "useEffect runs after paint; useLayoutEffect runs before paint synchronously",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "They are identical",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "useLayoutEffect is deprecated",
+        "isCorrect": false
+      }
+    ]
+  },
+  {
+    "id": "q244",
+    "title": "What are the differences between Functional and Class Components?",
+    "content": "Functional: simpler syntax, use Hooks for state/effects. Class: use lifecycle methods, `this.state`, and `this.props`. Both can use state and props now.",
+    "type": "multiple-choice",
+    "category": "React",
+    "subcategory": "React Basics",
+    "difficulty": "intermediate",
+    "learningCardId": "framework-questions",
+    "topic": "Component Types",
+    "isActive": true,
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "createdBy": "admin",
+    "tags": ["react", "functional-components", "class-components", "hooks"],
+    "explanation": "With Hooks, functional components can do everything class components can, with less boilerplate.",
+    "points": 7,
+    "options": [
+      {
+        "id": "a",
+        "text": "Functional components can't use state",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "Functional use Hooks; Class use lifecycle methods and this",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "Class components are faster",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Functional components can't receive props",
+        "isCorrect": false
+      }
+    ]
+  },
+  {
+    "id": "q245",
+    "title": "What is strict mode in React?",
+    "content": "`React.StrictMode` enables additional development-only checks for potential problems like unsafe lifecycles, legacy APIs, and side effects.",
+    "type": "open-ended",
+    "category": "React",
+    "subcategory": "React Basics",
+    "difficulty": "intermediate",
+    "learningCardId": "framework-questions",
+    "topic": "Strict Mode",
+    "isActive": true,
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "createdBy": "admin",
+    "tags": ["react", "strict-mode", "development", "warnings"],
+    "explanation": "It helps catch bugs early by identifying unsafe patterns and legacy code.",
+    "points": 6,
+    "sampleAnswers": [
+      "`StrictMode` is a development tool that warns about deprecated APIs, unsafe lifecycle methods, and side effects in render.",
+      "It only runs in development and has no effect in production builds."
+    ]
+  },
+  {
+    "id": "q246",
+    "title": "What is the benefit of strict mode?",
+    "content": "Benefits: detects impure renders, missing effect cleanup, unsafe lifecycles, legacy refs/context, and findDOMNode usage.",
+    "type": "multiple-choice",
+    "category": "React",
+    "subcategory": "React Basics",
+    "difficulty": "intermediate",
+    "learningCardId": "framework-questions",
+    "topic": "Strict Mode",
+    "isActive": true,
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "createdBy": "admin",
+    "tags": ["react", "strict-mode", "debugging", "best-practices"],
+    "explanation": "It prepares your code for future React features like concurrent rendering by enforcing purity.",
+    "points": 7,
+    "options": [
+      {
+        "id": "a",
+        "text": "Improves production performance",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "Detects side effects, unsafe lifecycles, legacy APIs, and missing cleanup",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "Reduces bundle size",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Only for class components",
+        "isCorrect": false
+      }
+    ]
+  },
+  {
+    "id": "q247",
+    "title": "Why does strict mode render twice in React?",
+    "content": "In development, StrictMode renders components twice to detect accidental side effects in the render phase by exposing non-idempotent code.",
+    "type": "open-ended",
+    "category": "React",
+    "subcategory": "React Basics",
+    "difficulty": "advanced",
+    "learningCardId": "framework-questions",
+    "topic": "Strict Mode",
+    "isActive": true,
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "createdBy": "admin",
+    "tags": ["react", "strict-mode", "side-effects", "development"],
+    "explanation": "This double-invocation helps ensure components are pure and safe for concurrent features.",
+    "points": 8,
+    "sampleAnswers": [
+      "StrictMode calls render and effect functions twice in development to reveal side effects that rely on single execution.",
+      "This prepares apps for concurrent rendering, where React may interrupt or re-run renders."
+    ]
+  },
+  {
+    "id": "q248",
+    "title": "What are the rules of JSX?",
+    "content": "Rules: (1) return single root element, (2) all tags must be closed, (3) use camelCase for attributes (e.g., `className`).",
+    "type": "multiple-choice",
+    "category": "React",
+    "subcategory": "JSX",
+    "difficulty": "beginner",
+    "learningCardId": "framework-questions",
+    "topic": "JSX",
+    "isActive": true,
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "createdBy": "admin",
+    "tags": ["react", "jsx", "syntax", "rules"],
+    "explanation": "These rules ensure JSX can be reliably transformed to JavaScript function calls.",
+    "points": 5,
+    "options": [
+      {
+        "id": "a",
+        "text": "Tags don't need to be closed",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "Single root, closed tags, camelCase attributes",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "Use class instead of className",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Multiple roots are allowed",
+        "isCorrect": false
+      }
+    ]
+  },
+  {
+    "id": "q249",
+    "title": "What is the reason behind multiple JSX tags to be wrapped?",
+    "content": "JSX compiles to JavaScript function calls, and a function can only return one value—so multiple elements must be wrapped in a parent or Fragment.",
+    "type": "open-ended",
+    "category": "React",
+    "subcategory": "JSX",
+    "difficulty": "beginner",
+    "learningCardId": "framework-questions",
+    "topic": "JSX",
+    "isActive": true,
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "createdBy": "admin",
+    "tags": ["react", "jsx", "fragments", "compilation"],
+    "explanation": "Without a wrapper, the transpiler would produce invalid JavaScript (multiple return values).",
+    "points": 4,
+    "sampleAnswers": [
+      "JSX is compiled to `React.createElement()` calls, and a function can only return one value—so multiple elements need a common parent.",
+      "React 16+ introduced Fragments (`<>...</>`) to avoid unnecessary DOM wrappers."
+    ]
+  },
+  {
+    "id": "q250",
+    "title": "How do you prevent mutating array variables?",
+    "content": "Avoid mutation methods (`push`, `pop`, `sort`, `reverse`). Use non-mutating methods (`map`, `filter`, `slice`) or spread syntax to create new arrays.",
+    "type": "open-ended",
+    "category": "JavaScript Core",
+    "subcategory": "Shallow vs Deep Copy",
+    "difficulty": "intermediate",
+    "learningPath": "Advanced JavaScript Concepts",
+    "topic": "Immutable Data Structures",
+    "isActive": true,
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "createdBy": "admin",
+    "tags": ["javascript", "immutability", "arrays", "react"],
+    "explanation": "React and Redux rely on immutability to detect changes via reference comparison.",
+    "points": 6,
+    "sampleAnswers": [
+      "Instead of `arr.push(item)`, use `[...arr, item]`. Instead of `arr.sort()`, use `[...arr].sort()`.",
+      "Non-mutating methods like `map` and `filter` return new arrays, preserving immutability for state updates."
+    ]
+  },
+  {
+    "id": "q251",
+    "title": "What are capture phase events?",
+    "content": "Capture phase events (e.g., `onClickCapture`) fire during the downward phase of event propagation, before the target and bubbling phases.",
+    "type": "open-ended",
+    "category": "React",
+    "subcategory": "DOM Events",
+    "difficulty": "advanced",
+    "learningCardId": "framework-questions",
+    "topic": "Event Bubbling & Capturing",
+    "isActive": true,
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "createdBy": "admin",
+    "tags": ["react", "events", "capture-phase", "dom"],
+    "explanation": "They’re useful for analytics or global handlers that need to run before child event handlers.",
+    "points": 7,
+    "sampleAnswers": [
+      "`onClickCapture` fires from root to target during the capture phase, even if child events call `stopPropagation()`.",
+      "Order: capture handlers (top-down) → target handler → bubble handlers (bottom-up)."
+    ]
+  }
+]

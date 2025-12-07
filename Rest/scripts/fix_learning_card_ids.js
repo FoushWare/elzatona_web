@@ -11,18 +11,18 @@ const path = require('path');
  */
 
 const cardMapping = {
-  'HTML': 'core-technologies',
-  'CSS': 'core-technologies',
-  'JavaScript': 'core-technologies',
-  'React': 'framework-questions',
+  HTML: 'core-technologies',
+  CSS: 'core-technologies',
+  JavaScript: 'core-technologies',
+  React: 'framework-questions',
   'Next.js': 'framework-questions',
   'Design Patterns': 'framework-questions', // Based on cardType in categories file
   'Performance Patterns': 'system-design',
   'Rendering Patterns': 'system-design',
-  'Security': 'system-design',
+  Security: 'system-design',
   'System Design': 'system-design',
   'Frontend Tasks': 'frontend-tasks', // New card type
-  'Problem Solving': 'problem-solving'
+  'Problem Solving': 'problem-solving',
 };
 
 const fileMapping = {
@@ -37,7 +37,7 @@ const fileMapping = {
   'security-questions.json': 'Security',
   'system-design-questions.json': 'System Design',
   'frontend-tasks-questions.json': 'Frontend Tasks',
-  'problem-solving-questions.json': 'Problem Solving'
+  'problem-solving-questions.json': 'Problem Solving',
 };
 
 console.log('🔄 Fixing learningCardId values...\n');
@@ -47,16 +47,16 @@ let totalUpdated = 0;
 Object.entries(fileMapping).forEach(([fileName, category]) => {
   const filePath = path.join(__dirname, '../final-questions-v01', fileName);
   const expectedCardId = cardMapping[category];
-  
+
   if (!fs.existsSync(filePath)) {
     console.log(`⚠️  File not found: ${fileName}`);
     return;
   }
-  
+
   try {
     const questions = JSON.parse(fs.readFileSync(filePath, 'utf8'));
     let updated = 0;
-    
+
     questions.forEach(q => {
       if (q.learningCardId !== expectedCardId) {
         q.learningCardId = expectedCardId;
@@ -64,13 +64,17 @@ Object.entries(fileMapping).forEach(([fileName, category]) => {
         updated++;
       }
     });
-    
+
     if (updated > 0) {
       fs.writeFileSync(filePath, JSON.stringify(questions, null, 2));
-      console.log(`✅ ${category.padEnd(25)} → ${expectedCardId.padEnd(25)} (${updated} questions updated)`);
+      console.log(
+        `✅ ${category.padEnd(25)} → ${expectedCardId.padEnd(25)} (${updated} questions updated)`
+      );
       totalUpdated += updated;
     } else {
-      console.log(`✓  ${category.padEnd(25)} → ${expectedCardId.padEnd(25)} (already correct)`);
+      console.log(
+        `✓  ${category.padEnd(25)} → ${expectedCardId.padEnd(25)} (already correct)`
+      );
     }
   } catch (error) {
     console.log(`❌ Error processing ${fileName}: ${error.message}`);
@@ -81,7 +85,8 @@ console.log(`\n✅ Total questions updated: ${totalUpdated}`);
 console.log('\n📋 Card Structure Summary:');
 console.log('  core-technologies: HTML, CSS, JavaScript');
 console.log('  framework-questions: React, Next.js, Design Patterns');
-console.log('  system-design: System Design, Performance Patterns, Rendering Patterns, Security');
+console.log(
+  '  system-design: System Design, Performance Patterns, Rendering Patterns, Security'
+);
 console.log('  frontend-tasks: Frontend Tasks');
 console.log('  problem-solving: Problem Solving');
-

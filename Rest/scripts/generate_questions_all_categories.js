@@ -7,15 +7,116 @@ const path = require('path');
  */
 
 const categories = [
-  { name: 'HTML', file: 'html-questions.json', topics: ['HTML5 Semantics', 'Performance', 'HTML5 APIs', 'Accessibility', 'SEO', 'Forms', 'Media'] },
-  { name: 'CSS', file: 'css-questions.json', topics: ['Performance', 'Layout', 'Animations', 'Responsive', 'Architecture', 'Preprocessors', 'Basics'] },
-  { name: 'JavaScript', file: 'javascript-questions.json', topics: ['Async/Await', 'ES6+ Features', 'Data Structures', 'This Binding', 'Classes', 'Prototypes', 'Generators', 'Modules'] },
-  { name: 'React', file: 'react-questions.json', topics: ['Core React', 'React Router', 'React Testing', 'React Redux', 'Libraries & Integration', 'Miscellaneous'] },
-  { name: 'Next.js', file: 'nextjs-questions.json', topics: ['Optimization', 'Rendering', 'Server Components', 'Middleware', 'Configuration', 'Deployment', 'Caching'] },
-  { name: 'Design Patterns', file: 'design-patterns-questions.json', topics: ['Creational Patterns', 'Structural Patterns', 'Behavioral Patterns', 'React Patterns', 'Core Patterns'] },
-  { name: 'Performance Patterns', file: 'performance-patterns-questions.json', topics: ['PRPL Pattern', 'Code Splitting', 'Lazy Loading', 'Code Optimization', 'Resource Hints'] },
-  { name: 'Rendering Patterns', file: 'rendering-patterns-questions.json', topics: ['Static Rendering', 'Server-Side Rendering', 'Client-Side Rendering', 'Streaming Rendering', 'Progressive Hydration'] },
-  { name: 'Security', file: 'security-questions.json', topics: ['XSS', 'CSRF', 'Web Security Fundamentals', 'Content Security Policy (CSP)', 'Session Management', 'Authentication & Authorization'] }
+  {
+    name: 'HTML',
+    file: 'html-questions.json',
+    topics: [
+      'HTML5 Semantics',
+      'Performance',
+      'HTML5 APIs',
+      'Accessibility',
+      'SEO',
+      'Forms',
+      'Media',
+    ],
+  },
+  {
+    name: 'CSS',
+    file: 'css-questions.json',
+    topics: [
+      'Performance',
+      'Layout',
+      'Animations',
+      'Responsive',
+      'Architecture',
+      'Preprocessors',
+      'Basics',
+    ],
+  },
+  {
+    name: 'JavaScript',
+    file: 'javascript-questions.json',
+    topics: [
+      'Async/Await',
+      'ES6+ Features',
+      'Data Structures',
+      'This Binding',
+      'Classes',
+      'Prototypes',
+      'Generators',
+      'Modules',
+    ],
+  },
+  {
+    name: 'React',
+    file: 'react-questions.json',
+    topics: [
+      'Core React',
+      'React Router',
+      'React Testing',
+      'React Redux',
+      'Libraries & Integration',
+      'Miscellaneous',
+    ],
+  },
+  {
+    name: 'Next.js',
+    file: 'nextjs-questions.json',
+    topics: [
+      'Optimization',
+      'Rendering',
+      'Server Components',
+      'Middleware',
+      'Configuration',
+      'Deployment',
+      'Caching',
+    ],
+  },
+  {
+    name: 'Design Patterns',
+    file: 'design-patterns-questions.json',
+    topics: [
+      'Creational Patterns',
+      'Structural Patterns',
+      'Behavioral Patterns',
+      'React Patterns',
+      'Core Patterns',
+    ],
+  },
+  {
+    name: 'Performance Patterns',
+    file: 'performance-patterns-questions.json',
+    topics: [
+      'PRPL Pattern',
+      'Code Splitting',
+      'Lazy Loading',
+      'Code Optimization',
+      'Resource Hints',
+    ],
+  },
+  {
+    name: 'Rendering Patterns',
+    file: 'rendering-patterns-questions.json',
+    topics: [
+      'Static Rendering',
+      'Server-Side Rendering',
+      'Client-Side Rendering',
+      'Streaming Rendering',
+      'Progressive Hydration',
+    ],
+  },
+  {
+    name: 'Security',
+    file: 'security-questions.json',
+    topics: [
+      'XSS',
+      'CSRF',
+      'Web Security Fundamentals',
+      'Content Security Policy (CSP)',
+      'Session Management',
+      'Authentication & Authorization',
+    ],
+  },
 ];
 
 const questionsDir = path.join(__dirname, '../final-questions-v01');
@@ -27,19 +128,38 @@ if (!fs.existsSync(batchesDir)) {
 
 function formatCode(content) {
   if (!content) return '';
-  content = content.replace(/```(\w+)?\n([\s\S]*?)```/g, (match, lang, code) => {
-    code = code.trim().replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-    return `<pre><code>${code}</code></pre>`;
-  });
+  content = content.replace(
+    /```(\w+)?\n([\s\S]*?)```/g,
+    (match, lang, code) => {
+      code = code
+        .trim()
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;');
+      return `<pre><code>${code}</code></pre>`;
+    }
+  );
   content = content.replace(/`([^`\n]+)`/g, (match, code) => {
     if (match.includes('<pre>') || match.includes('<code>')) return match;
-    code = code.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    code = code
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;');
     return `<code>${code}</code>`;
   });
   return content;
 }
 
-function generateQuestion(id, title, content, category, topic, options, explanation, difficulty = 'intermediate') {
+function generateQuestion(
+  id,
+  title,
+  content,
+  category,
+  topic,
+  options,
+  explanation,
+  difficulty = 'intermediate'
+) {
   return {
     id: `${category.toLowerCase().replace(/\s+/g, '-')}-add-${id}`,
     title: title,
@@ -48,27 +168,32 @@ function generateQuestion(id, title, content, category, topic, options, explanat
     category: category,
     topic: topic,
     difficulty: difficulty,
-    learningCardId: category === 'Security' ? 'system-design' : 'framework-questions',
+    learningCardId:
+      category === 'Security' ? 'system-design' : 'framework-questions',
     isActive: true,
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
     createdBy: 'admin',
     updatedBy: 'admin',
-    tags: [category.toLowerCase().replace(/\s+/g, '-'), topic.toLowerCase().replace(/\s+/g, '-'), difficulty],
+    tags: [
+      category.toLowerCase().replace(/\s+/g, '-'),
+      topic.toLowerCase().replace(/\s+/g, '-'),
+      difficulty,
+    ],
     explanation: formatCode(explanation),
     points: 15,
     options: options.map((opt, idx) => ({
       id: `o${idx + 1}`,
       text: formatCode(opt.text),
       isCorrect: opt.isCorrect,
-      explanation: opt.explanation ? formatCode(opt.explanation) : ''
+      explanation: opt.explanation ? formatCode(opt.explanation) : '',
     })),
     hints: [
       `Review ${category} best practices and advanced patterns`,
       `Consider performance and optimization implications`,
-      `Think about edge cases and real-world scenarios`
+      `Think about edge cases and real-world scenarios`,
     ],
-    metadata: {}
+    metadata: {},
   };
 }
 
@@ -92,18 +217,21 @@ const questionGenerators = {
 let totalBatchesCreated = 0;
 
 categories.forEach((category, catIndex) => {
-  const categoryBatchesDir = path.join(batchesDir, category.name.toLowerCase().replace(/\s+/g, '-'));
+  const categoryBatchesDir = path.join(
+    batchesDir,
+    category.name.toLowerCase().replace(/\s+/g, '-')
+  );
   if (!fs.existsSync(categoryBatchesDir)) {
     fs.mkdirSync(categoryBatchesDir, { recursive: true });
   }
-  
+
   // Generate 10 batches (30 questions total) for this category
   // Each batch has 3 questions
   for (let batchNum = 1; batchNum <= 10; batchNum++) {
     // For now, create placeholder batch scripts
     // In a real implementation, these would contain actual questions
     const batchFileName = path.join(categoryBatchesDir, `batch${batchNum}.js`);
-    
+
     // Create a template batch script
     // Note: Actual questions would be generated here
     const scriptContent = `// Batch ${batchNum} for ${category.name}
@@ -133,18 +261,20 @@ fs.writeFileSync(questionsFile, JSON.stringify(existingQuestions, null, 2));
 console.log(\`✅ Batch ${batchNum} for ${category.name}: \${newQuestions.length} questions added\`);
 console.log(\`📝 Total ${category.name} questions: \${existingQuestions.length}\`);
 `;
-    
+
     fs.writeFileSync(batchFileName, scriptContent);
     totalBatchesCreated++;
   }
-  
+
   console.log(`✅ Created 10 batches for ${category.name}`);
 });
 
 console.log(`\n✅ Total batches created: ${totalBatchesCreated}`);
 console.log('\n📝 Next steps:');
 console.log('   1. Populate each batch script with 3 actual questions');
-console.log('   2. Run batches using: node Rest/scripts/all-category-batches/[category]/batch[N].js');
+console.log(
+  '   2. Run batches using: node Rest/scripts/all-category-batches/[category]/batch[N].js'
+);
 console.log('   3. Or create a master runner script to execute all batches');
 
 // Create a master runner script
@@ -191,6 +321,6 @@ console.log(\`\\n\\n📊 Summary: \${totalSuccess} successful, \${totalErrors} e
 `;
 
 fs.writeFileSync(path.join(batchesDir, 'run_all_batches.js'), masterRunner);
-console.log(`\n✅ Created master runner: ${path.join(batchesDir, 'run_all_batches.js')}`);
-
-
+console.log(
+  `\n✅ Created master runner: ${path.join(batchesDir, 'run_all_batches.js')}`
+);

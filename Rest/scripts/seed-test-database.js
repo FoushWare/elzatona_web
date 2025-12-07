@@ -2,13 +2,13 @@
 
 /**
  * Seed Test Database Schema
- * 
+ *
  * This script uses the Supabase client to execute the SQL schema
  * directly in your test database.
- * 
+ *
  * Usage:
  *   node Rest/scripts/seed-test-database.js
- * 
+ *
  * Required Environment Variables (from .env.test.local):
  *   - NEXT_PUBLIC_SUPABASE_URL
  *   - SUPABASE_SERVICE_ROLE_KEY
@@ -40,7 +40,9 @@ const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
 if (!supabaseUrl || !supabaseServiceKey) {
   console.error('❌ Missing Supabase environment variables');
-  console.error('Required: NEXT_PUBLIC_SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY');
+  console.error(
+    'Required: NEXT_PUBLIC_SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY'
+  );
   console.error('Please set these in .env.test.local');
   process.exit(1);
 }
@@ -56,10 +58,15 @@ const supabase = createClient(supabaseUrl, supabaseServiceKey, {
 async function seedDatabase() {
   try {
     console.log('🌱 Seeding test database schema...\n');
-    console.log(`📊 Project: ${supabaseUrl.match(/https?:\/\/([^.]+)\.supabase\.co/)?.[1] || 'unknown'}\n`);
+    console.log(
+      `📊 Project: ${supabaseUrl.match(/https?:\/\/([^.]+)\.supabase\.co/)?.[1] || 'unknown'}\n`
+    );
 
     // Read the SQL schema file
-    const schemaPath = resolve(projectRoot, 'Rest/scripts/test-database-schema.sql');
+    const schemaPath = resolve(
+      projectRoot,
+      'Rest/scripts/test-database-schema.sql'
+    );
     const sql = readFileSync(schemaPath, 'utf-8');
 
     // Split SQL into individual statements (semicolon-separated)
@@ -77,7 +84,7 @@ async function seedDatabase() {
     // Execute each statement
     for (let i = 0; i < statements.length; i++) {
       const statement = statements[i];
-      
+
       // Skip empty statements
       if (!statement || statement.length < 10) continue;
 
@@ -86,17 +93,19 @@ async function seedDatabase() {
         // Note: Supabase doesn't have a direct SQL execution endpoint via JS client
         // We need to use the REST API or execute via SQL Editor
         // For now, we'll use the REST API approach
-        
-        const { data, error } = await supabase.rpc('exec_sql', { sql_query: statement });
-        
+
+        const { data, error } = await supabase.rpc('exec_sql', {
+          sql_query: statement,
+        });
+
         if (error) {
           // If RPC doesn't exist, try direct REST API call
           const response = await fetch(`${supabaseUrl}/rest/v1/rpc/exec_sql`, {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
-              'apikey': supabaseServiceKey,
-              'Authorization': `Bearer ${supabaseServiceKey}`,
+              apikey: supabaseServiceKey,
+              Authorization: `Bearer ${supabaseServiceKey}`,
             },
             body: JSON.stringify({ sql_query: statement }),
           });
@@ -104,7 +113,9 @@ async function seedDatabase() {
           if (!response.ok) {
             // Try alternative: execute via PostgREST
             // Some statements might fail if they're DDL, that's okay
-            console.log(`⚠️  Statement ${i + 1} may need manual execution (DDL statement)`);
+            console.log(
+              `⚠️  Statement ${i + 1} may need manual execution (DDL statement)`
+            );
             errorCount++;
             continue;
           }
@@ -112,13 +123,17 @@ async function seedDatabase() {
 
         successCount++;
         if ((i + 1) % 10 === 0) {
-          console.log(`✅ Executed ${i + 1}/${statements.length} statements...`);
+          console.log(
+            `✅ Executed ${i + 1}/${statements.length} statements...`
+          );
         }
       } catch (err) {
         // DDL statements (CREATE TABLE, etc.) can't be executed via REST API
         // They need to be run in SQL Editor
         if (statement.match(/^(CREATE|ALTER|DROP|INSERT)/i)) {
-          console.log(`⚠️  Statement ${i + 1} is DDL - needs manual execution in SQL Editor`);
+          console.log(
+            `⚠️  Statement ${i + 1} is DDL - needs manual execution in SQL Editor`
+          );
           errorCount++;
         } else {
           console.error(`❌ Error executing statement ${i + 1}:`, err.message);
@@ -130,13 +145,20 @@ async function seedDatabase() {
     console.log(`\n📊 Results:`);
     console.log(`   ✅ Successful: ${successCount}`);
     console.log(`   ⚠️  DDL/Manual: ${errorCount}`);
-    console.log(`\n⚠️  IMPORTANT: DDL statements (CREATE TABLE, etc.) must be run in Supabase SQL Editor!`);
+    console.log(
+      `\n⚠️  IMPORTANT: DDL statements (CREATE TABLE, etc.) must be run in Supabase SQL Editor!`
+    );
     console.log(`\n📝 Next Steps:`);
-    console.log(`   1. Go to: https://supabase.com/dashboard/project/${supabaseUrl.match(/https?:\/\/([^.]+)\.supabase\.co/)?.[1]}/sql/new`);
-    console.log(`   2. Copy and paste the entire contents of: Rest/scripts/test-database-schema.sql`);
+    console.log(
+      `   1. Go to: https://supabase.com/dashboard/project/${supabaseUrl.match(/https?:\/\/([^.]+)\.supabase\.co/)?.[1]}/sql/new`
+    );
+    console.log(
+      `   2. Copy and paste the entire contents of: Rest/scripts/test-database-schema.sql`
+    );
     console.log(`   3. Click "Run"`);
-    console.log(`   4. Then run: ADMIN_EMAIL=elzatonafoushware@gmail.com ADMIN_PASSWORD='ZatonaFoushware$12' node Rest/scripts/create-test-admin.js`);
-
+    console.log(
+      `   4. Then run: ADMIN_EMAIL=elzatonafoushware@gmail.com ADMIN_PASSWORD='ZatonaFoushware$12' node Rest/scripts/create-test-admin.js`
+    );
   } catch (error) {
     console.error('❌ Error seeding database:', error.message);
     console.error(error.stack);
@@ -146,5 +168,3 @@ async function seedDatabase() {
 
 // Run the script
 seedDatabase();
-
-

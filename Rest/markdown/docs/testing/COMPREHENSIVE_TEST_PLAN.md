@@ -9,6 +9,7 @@ This document serves as the master test plan for the Elzatona Web application. I
 **Last Updated**: 2025-11-09
 
 **Important Notes:**
+
 - ✅ All 21 tasks are fully implemented with unit, integration, and E2E tests
 - ✅ 113+ additional edge case tests added for comprehensive coverage
 - ✅ 200+ total test cases covering all scenarios
@@ -57,14 +58,17 @@ This document serves as the master test plan for the Elzatona Web application. I
 ## Guided Flow Tests
 
 ### Overview
+
 The Guided Flow provides structured learning paths with predefined plans and progress tracking.
 
 ### Flow Entry Points
 
 #### 1. Homepage (`/`)
+
 **Status**: ⏳ Pending
 
 ##### Unit Tests
+
 - **G-UT-001**: Test homepage renders correctly
   - Status: ⏳ Pending
   - Description: Verify homepage component renders without errors
@@ -81,6 +85,7 @@ The Guided Flow provides structured learning paths with predefined plans and pro
   - Assertions: Links visible, correct hrefs
 
 ##### Integration Tests
+
 - **G-IT-001**: Test "Get Started" button navigates to `/get-started`
   - Status: ⏳ Pending
   - Description: Verify navigation works correctly
@@ -92,6 +97,7 @@ The Guided Flow provides structured learning paths with predefined plans and pro
   - Assertions: Conditional rendering based on auth state
 
 ##### E2E Tests
+
 - **G-E2E-001**: Complete flow from homepage to guided learning
   - Status: ⏳ Pending
   - Description: User clicks "Get Started" → selects "I need guidance" → signs in → reaches guided learning
@@ -104,9 +110,11 @@ The Guided Flow provides structured learning paths with predefined plans and pro
     6. Verify redirect to guided learning page
 
 #### 2. Get Started Page (`/get-started`)
+
 **Status**: ⏳ Pending
 
 ##### Unit Tests
+
 - **G-UT-004**: Test "I need guidance" option renders
   - Status: ⏳ Pending
   - Description: Verify guided learning option is displayed
@@ -128,6 +136,7 @@ The Guided Flow provides structured learning paths with predefined plans and pro
   - Assertions: Error messages show for invalid input
 
 ##### Integration Tests
+
 - **G-IT-003**: Test successful sign-in redirects correctly
   - Status: ⏳ Pending
   - Description: After sign-in, user stays on get-started page
@@ -144,6 +153,7 @@ The Guided Flow provides structured learning paths with predefined plans and pro
   - Assertions: Router.push called with `/browse-practice-questions`
 
 ##### E2E Tests
+
 - **G-E2E-002**: Complete guided flow entry (unauthenticated user)
   - Status: ⏳ Pending
   - Description: New user selects guidance, signs up, reaches guided learning
@@ -164,9 +174,11 @@ The Guided Flow provides structured learning paths with predefined plans and pro
     4. Verify immediate redirect to `/features/guided-learning` (no popup)
 
 #### 3. Guided Learning Plans Page (`/features/guided-learning`)
+
 **Status**: ⏳ Pending
 
 ##### Unit Tests
+
 - **G-UT-008**: Test plans list renders correctly
   - Status: ⏳ Pending
   - Description: Verify plan cards are displayed
@@ -198,6 +210,7 @@ The Guided Flow provides structured learning paths with predefined plans and pro
   - Assertions: Error message visible, retry button present
 
 ##### Integration Tests
+
 - **G-IT-006**: Test plans are fetched from Firebase on mount
   - Status: ⏳ Pending
   - Description: Verify API call is made
@@ -219,6 +232,7 @@ The Guided Flow provides structured learning paths with predefined plans and pro
   - Assertions: Redirect to sign-in if not authenticated
 
 ##### E2E Tests
+
 - **G-E2E-004**: Complete plan selection flow
   - Status: ⏳ Pending
   - Description: User views plans, selects one, reaches plan details
@@ -242,9 +256,11 @@ The Guided Flow provides structured learning paths with predefined plans and pro
     7. Verify plans load again
 
 #### 4. Individual Plan Page (`/features/guided-learning/[planId]`)
+
 **Status**: ⏳ Pending
 
 ##### Unit Tests
+
 - **G-UT-014**: Test plan details header renders
   - Status: ⏳ Pending
   - Description: Verify plan name and metadata display
@@ -276,6 +292,7 @@ The Guided Flow provides structured learning paths with predefined plans and pro
   - Assertions: Button visible, enabled
 
 ##### Integration Tests
+
 - **G-IT-010**: Test plan details fetched from Firebase
   - Status: ⏳ Pending
   - Description: Verify API call for plan data
@@ -297,6 +314,7 @@ The Guided Flow provides structured learning paths with predefined plans and pro
   - Assertions: Questions API called per section
 
 ##### E2E Tests
+
 - **G-E2E-006**: Complete section selection flow
   - Status: ⏳ Pending
   - Description: User views plan, selects section, starts practice
@@ -317,9 +335,11 @@ The Guided Flow provides structured learning paths with predefined plans and pro
     4. Verify completed sections marked
 
 #### 5. Guided Learning Cards Page (`/features/guided-learning/[planId]/cards`)
+
 **Status**: ⏳ Pending
 
 ##### Unit Tests
+
 - **G-UT-020**: Test question card renders
   - Status: ⏳ Pending
   - Description: Verify question card component displays
@@ -351,6 +371,7 @@ The Guided Flow provides structured learning paths with predefined plans and pro
   - Assertions: Animation triggers, smooth transition
 
 ##### Integration Tests
+
 - **G-IT-014**: Test questions loaded for selected section
   - Status: ⏳ Pending
   - Description: Verify questions API called with sectionId
@@ -377,6 +398,7 @@ The Guided Flow provides structured learning paths with predefined plans and pro
   - Assertions: Completion message shown, navigation occurs
 
 ##### E2E Tests
+
 - **G-E2E-008**: Complete question answering flow
   - Status: ⏳ Pending
   - Description: User answers all questions in a section
@@ -413,6 +435,7 @@ The Guided Flow provides structured learning paths with predefined plans and pro
 ## Freestyle Flow Tests
 
 ### Overview
+
 The Freestyle Flow allows users to practice questions without a structured plan.
 
 ### Custom Roadmap Flow
@@ -420,10 +443,12 @@ The Freestyle Flow allows users to practice questions without a structured plan.
 The custom roadmap flow is a key part of the freestyle learning experience. Users can create personalized learning paths by selecting cards, categories, topics, and specific questions.
 
 **Task Files:**
+
 - [F-001: Custom Roadmap Creation](../tasks/freestyle-flow/F-001-custom-roadmap-creation.md)
 - [F-002: My Plans Page](../tasks/freestyle-flow/F-002-my-plans-page.md)
 
 **Key Features Tested:**
+
 - Card selection (Core Tech, Framework, etc.)
 - Category selection (HTML, CSS, JavaScript, React, etc.)
 - Topic selection within categories
@@ -437,6 +462,7 @@ The custom roadmap flow is a key part of the freestyle learning experience. User
 ## Shared Components Tests
 
 ### Overview
+
 Components and utilities used across both flows.
 
 ---
@@ -514,6 +540,7 @@ Components and utilities used across both flows.
 ## Changelog
 
 ### 2025-11-09 - Final Completion
+
 - ✅ **ALL 21 TASKS COMPLETE** - 100% implementation
 - ✅ **110+ test files** created (Unit, Integration, E2E)
 - ✅ **113+ edge case tests** added for comprehensive coverage
@@ -528,6 +555,7 @@ Components and utilities used across both flows.
 - ✅ Production-ready test coverage
 
 ### 2024-11-09 - Initial Setup
+
 - Initial test plan structure created
 - Set up organization framework for Guided and Freestyle flows
 - Established testing rules and maintenance guidelines
@@ -542,4 +570,3 @@ Components and utilities used across both flows.
 
 **Last Updated**: 2025-11-09
 **Status**: ✅ **100% COMPLETE** - All tests implemented with comprehensive edge case coverage
-

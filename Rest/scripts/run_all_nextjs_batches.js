@@ -7,7 +7,8 @@ const { execSync } = require('child_process');
  */
 
 const batchesDir = path.join(__dirname, 'nextjs-batches');
-const batches = fs.readdirSync(batchesDir)
+const batches = fs
+  .readdirSync(batchesDir)
   .filter(f => f.endsWith('.js'))
   .sort(); // Sort to run in order
 
@@ -24,22 +25,25 @@ batches.forEach((batchFile, index) => {
 });
 
 // Verify final count
-const questionsFile = path.join(__dirname, '../final-questions-v01/nextjs-questions.json');
+const questionsFile = path.join(
+  __dirname,
+  '../final-questions-v01/nextjs-questions.json'
+);
 if (fs.existsSync(questionsFile)) {
   const questions = JSON.parse(fs.readFileSync(questionsFile, 'utf8'));
   console.log(`\n✅ All batches completed!`);
   console.log(`📝 Total questions: ${questions.length}`);
-  
+
   // Show breakdown by topic
   const topics = {};
   questions.forEach(q => {
     topics[q.topic] = (topics[q.topic] || 0) + 1;
   });
-  
+
   console.log('\n📊 Questions by topic:');
-  Object.entries(topics).sort().forEach(([topic, count]) => {
-    console.log(`  ${topic}: ${count} questions`);
-  });
+  Object.entries(topics)
+    .sort()
+    .forEach(([topic, count]) => {
+      console.log(`  ${topic}: ${count} questions`);
+    });
 }
-
-

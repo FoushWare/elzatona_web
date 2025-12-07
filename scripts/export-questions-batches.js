@@ -1,30 +1,33 @@
 /**
  * Export questions from Supabase database to local JSON files in batches
- * 
- * Usage: 
+ *
+ * Usage:
  *   node scripts/export-questions-batches.js [batchSize] [startBatch] [startOffset]
- * 
+ *
  * Examples:
  *   node scripts/export-questions-batches.js 50 1 10    // Export 50 questions per batch, start from batch 1, offset 10
  *   node scripts/export-questions-batches.js 100        // Export 100 questions per batch, start from batch 1, offset 0
  */
 
-const { createClient } = require('@supabase/supabase-js');
-const fs = require('fs');
-const path = require('path');
+const { createClient } = require("@supabase/supabase-js");
+const fs = require("fs");
+const path = require("path");
 
 // Configuration (environment variables required)
 const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL;
-const SUPABASE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY || 
-                     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+const SUPABASE_KEY =
+  process.env.SUPABASE_SERVICE_ROLE_KEY ||
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
 if (!SUPABASE_URL || !SUPABASE_KEY) {
-  console.error('❌ Error: Missing required Supabase environment variables');
-  console.error('   NEXT_PUBLIC_SUPABASE_URL and (SUPABASE_SERVICE_ROLE_KEY or NEXT_PUBLIC_SUPABASE_ANON_KEY) must be set');
+  console.error("❌ Error: Missing required Supabase environment variables");
+  console.error(
+    "   NEXT_PUBLIC_SUPABASE_URL and (SUPABASE_SERVICE_ROLE_KEY or NEXT_PUBLIC_SUPABASE_ANON_KEY) must be set",
+  );
   process.exit(1);
 }
 
-const OUTPUT_DIR = path.join(__dirname, '..', 'Rest', 'questions-vo2');
+const OUTPUT_DIR = path.join(__dirname, "..", "Rest", "questions-vo2");
 const DEFAULT_BATCH_SIZE = 50;
 
 // Get command line arguments
@@ -52,7 +55,7 @@ if (!fs.existsSync(OUTPUT_DIR)) {
 async function fetchQuestionsBatch(offset, limit) {
   try {
     const { data, error, count } = await supabase
-      .from('questions')
+      .from("questions")
       .select(
         `
         id,
@@ -68,9 +71,9 @@ async function fetchQuestionsBatch(offset, limit) {
         created_at,
         updated_at
         `,
-        { count: 'exact' }
+        { count: "exact" },
       )
-      .order('created_at', { ascending: false })
+      .order("created_at", { ascending: false })
       .range(offset, offset + limit - 1);
 
     if (error) {
@@ -78,7 +81,7 @@ async function fetchQuestionsBatch(offset, limit) {
     }
 
     // Transform data to match expected format
-    const transformedData = (data || []).map(q => ({
+    const transformedData = (data || []).map((q) => ({
       id: q.id,
       title: q.title,
       content: q.content,
@@ -107,12 +110,12 @@ async function fetchQuestionsBatch(offset, limit) {
  * Save batch to JSON file
  */
 function saveBatchToFile(batchNumber, questions) {
-  const filename = `questions-batch-${String(batchNumber).padStart(3, '0')}.json`;
+  const filename = `questions-batch-${String(batchNumber).padStart(3, "0")}.json`;
   const filepath = path.join(OUTPUT_DIR, filename);
-  
+
   const jsonContent = JSON.stringify(questions, null, 2);
-  fs.writeFileSync(filepath, jsonContent, 'utf8');
-  
+  fs.writeFileSync(filepath, jsonContent, "utf8");
+
   return filepath;
 }
 
@@ -122,8 +125,8 @@ function saveBatchToFile(batchNumber, questions) {
 async function getTotalQuestionCount() {
   try {
     const { count, error } = await supabase
-      .from('questions')
-      .select('*', { count: 'exact', head: true });
+      .from("questions")
+      .select("*", { count: "exact", head: true });
 
     if (error) {
       throw new Error(`Supabase error: ${error.message}`);
@@ -167,14 +170,19 @@ async function exportQuestions() {
 
     while (currentOffset < totalQuestions) {
       const limit = Math.min(batchSize, totalQuestions - currentOffset);
-      
+
       console.log(`\n📦 Processing batch ${currentBatch}...`);
-      console.log(`   Fetching questions ${currentOffset + 1} to ${currentOffset + limit} of ${totalQuestions}...`);
-      
+      console.log(
+        `   Fetching questions ${currentOffset + 1} to ${currentOffset + limit} of ${totalQuestions}...`,
+      );
+
       try {
         // Fetch questions for this batch
-        const { questions, totalCount } = await fetchQuestionsBatch(currentOffset, limit);
-        
+        const { questions, totalCount } = await fetchQuestionsBatch(
+          currentOffset,
+          limit,
+        );
+
         if (!questions || questions.length === 0) {
           console.log(`⚠️  No more questions found. Stopping export.`);
           break;
@@ -182,25 +190,31 @@ async function exportQuestions() {
 
         // Save to file
         const filepath = saveBatchToFile(currentBatch, questions);
-        
+
         totalExported += questions.length;
-        console.log(`   ✅ Saved ${questions.length} questions → ${path.basename(filepath)}`);
-        console.log(`   📊 Progress: ${totalExported}/${totalQuestions} (${Math.round((totalExported / totalQuestions) * 100)}%)`);
-        
+        console.log(
+          `   ✅ Saved ${questions.length} questions → ${path.basename(filepath)}`,
+        );
+        console.log(
+          `   📊 Progress: ${totalExported}/${totalQuestions} (${Math.round((totalExported / totalQuestions) * 100)}%)`,
+        );
+
         // If we got fewer questions than the batch size, we've reached the end
         if (questions.length < limit) {
           console.log(`\n✅ Reached end of questions. Export complete!`);
           break;
         }
-        
+
         currentBatch++;
         currentOffset += batchSize;
-        
+
         // Add a small delay to avoid overwhelming the database
-        await new Promise(resolve => setTimeout(resolve, 500));
-        
+        await new Promise((resolve) => setTimeout(resolve, 500));
       } catch (error) {
-        console.error(`❌ Error processing batch ${currentBatch}:`, error.message);
+        console.error(
+          `❌ Error processing batch ${currentBatch}:`,
+          error.message,
+        );
         console.error(`   Skipping to next batch...\n`);
         currentBatch++;
         currentOffset += batchSize;
@@ -214,7 +228,7 @@ async function exportQuestions() {
     console.log(`   Files saved to: ${OUTPUT_DIR}\n`);
 
     // Create/update README
-    const readmePath = path.join(OUTPUT_DIR, 'README.md');
+    const readmePath = path.join(OUTPUT_DIR, "README.md");
     const readmeContent = `# Questions Export - Version 2
 
 This directory contains exported questions from the Supabase database, organized in batches.
@@ -258,22 +272,20 @@ These files can be used for:
 - Last updated: ${new Date().toISOString()}
 `;
 
-    fs.writeFileSync(readmePath, readmeContent, 'utf8');
+    fs.writeFileSync(readmePath, readmeContent, "utf8");
     console.log(`📝 Updated README.md\n`);
-
   } catch (error) {
-    console.error('❌ Fatal error:', error);
+    console.error("❌ Fatal error:", error);
     process.exit(1);
   }
 }
 
 // Run the export
 if (require.main === module) {
-  exportQuestions().catch(error => {
-    console.error('❌ Fatal error:', error);
+  exportQuestions().catch((error) => {
+    console.error("❌ Fatal error:", error);
     process.exit(1);
   });
 }
 
 module.exports = { exportQuestions, fetchQuestionsBatch, saveBatchToFile };
-

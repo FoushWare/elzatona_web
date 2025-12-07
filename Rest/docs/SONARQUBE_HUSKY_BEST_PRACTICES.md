@@ -3,6 +3,7 @@
 ## 🎯 Core Principles
 
 ### 1. **Speed Hierarchy**
+
 ```
 Pre-commit:  < 10 seconds  (FAST - Developer workflow)
 Pre-push:    < 2 minutes   (MODERATE - Before sharing code)
@@ -12,21 +13,22 @@ Local:       On-demand     (MANUAL - When needed)
 
 ### 2. **What Goes Where**
 
-| Check | Pre-commit | Pre-push | GitHub Actions | Local |
-|-------|-----------|----------|----------------|-------|
-| Formatting | ✅ | ✅ | ✅ | ✅ |
-| Linting | ✅ | ✅ | ✅ | ✅ |
-| TypeScript | ❌ | ✅ | ✅ | ✅ |
-| Build | ❌ | ✅ | ✅ | ✅ |
-| Unit Tests | ⚠️ Optional | ✅ | ✅ | ✅ |
-| Integration Tests | ❌ | ⚠️ Optional | ✅ | ✅ |
-| E2E Tests | ❌ | ❌ | ✅ | ✅ |
-| **SonarQube Quick** | ❌ | ⚠️ Optional | ❌ | ✅ |
-| **SonarQube Full** | ❌ | ❌ | ✅ | ✅ |
+| Check               | Pre-commit  | Pre-push    | GitHub Actions | Local |
+| ------------------- | ----------- | ----------- | -------------- | ----- |
+| Formatting          | ✅          | ✅          | ✅             | ✅    |
+| Linting             | ✅          | ✅          | ✅             | ✅    |
+| TypeScript          | ❌          | ✅          | ✅             | ✅    |
+| Build               | ❌          | ✅          | ✅             | ✅    |
+| Unit Tests          | ⚠️ Optional | ✅          | ✅             | ✅    |
+| Integration Tests   | ❌          | ⚠️ Optional | ✅             | ✅    |
+| E2E Tests           | ❌          | ❌          | ✅             | ✅    |
+| **SonarQube Quick** | ❌          | ⚠️ Optional | ❌             | ✅    |
+| **SonarQube Full**  | ❌          | ❌          | ✅             | ✅    |
 
 ## 📋 Recommended Setup
 
 ### ✅ **Pre-commit Hook** (Current - Keep As Is)
+
 **Purpose**: Fast feedback, catch issues early
 **Time**: < 10 seconds
 
@@ -41,6 +43,7 @@ Local:       On-demand     (MANUAL - When needed)
 **Why**: Developers commit frequently. Slow hooks = frustration.
 
 ### ✅ **Pre-push Hook** (Current - Keep As Is)
+
 **Purpose**: Ensure code quality before sharing
 **Time**: 1-2 minutes
 
@@ -55,6 +58,7 @@ Local:       On-demand     (MANUAL - When needed)
 **Why**: Pre-push should be comprehensive but not block workflow.
 
 ### ✅ **GitHub Actions** (Recommended for SonarQube)
+
 **Purpose**: Full analysis in background
 **Time**: 5-15 minutes (doesn't block developer)
 
@@ -68,6 +72,7 @@ Local:       On-demand     (MANUAL - When needed)
 **Why**: Runs automatically, doesn't block developer workflow.
 
 ### ✅ **Local SonarQube** (On-Demand)
+
 **Purpose**: Manual quality checks when needed
 **Time**: 5-15 minutes (developer controls)
 
@@ -84,16 +89,19 @@ npm run sonar
 ## 🚫 What NOT to Do
 
 ### ❌ **Don't Put SonarQube in Pre-commit**
+
 - **Reason**: Too slow (5-15 minutes)
 - **Impact**: Developers will disable hooks
 - **Result**: No quality checks at all
 
 ### ❌ **Don't Put Full SonarQube in Pre-push**
+
 - **Reason**: Blocks push for 5-15 minutes
 - **Impact**: Frustrating developer experience
 - **Result**: Developers skip hooks or bypass checks
 
 ### ✅ **DO Put SonarQube in GitHub Actions**
+
 - **Reason**: Runs in background
 - **Impact**: No developer workflow interruption
 - **Result**: Continuous quality monitoring
@@ -101,6 +109,7 @@ npm run sonar
 ## 🎯 Optimal Configuration
 
 ### Option 1: **Recommended (Current Setup)**
+
 ```
 Pre-commit:  Formatting + Linting (fast)
 Pre-push:    Linting + TypeScript + Build (moderate)
@@ -111,6 +120,7 @@ Local:       SonarQube on-demand (manual)
 **Best for**: Most teams, balanced approach
 
 ### Option 2: **Strict Quality (Optional)**
+
 ```
 Pre-commit:  Formatting + Linting (fast)
 Pre-push:    Linting + TypeScript + Build + Quick SonarQube (2-3 min)
@@ -121,6 +131,7 @@ Local:       SonarQube on-demand (manual)
 **Best for**: Teams prioritizing quality over speed
 
 ### Option 3: **Fast Development (Optional)**
+
 ```
 Pre-commit:  Formatting only (very fast)
 Pre-push:    Linting + TypeScript (fast)
@@ -135,11 +146,13 @@ Local:       SonarQube on-demand (manual)
 ### Current Setup (Recommended)
 
 **Pre-commit Hook:**
+
 - ✅ Formatting (Prettier)
 - ✅ Linting (ESLint)
 - ⏱️ Time: ~5-10 seconds
 
 **Pre-push Hook:**
+
 - ✅ ESLint auto-fix
 - ✅ ESLint check
 - ✅ TypeScript check
@@ -147,12 +160,14 @@ Local:       SonarQube on-demand (manual)
 - ⏱️ Time: ~1-2 minutes
 
 **GitHub Actions:**
+
 - ✅ Full SonarQube analysis
 - ✅ Test coverage
 - ✅ Quality gates
 - ⏱️ Time: ~5-15 minutes (background)
 
 **Local:**
+
 - ✅ On-demand SonarQube
 - ✅ `npm run sonar:quick` for fast checks
 - ✅ `npm run sonar` for full analysis
@@ -170,36 +185,41 @@ npm run sonar:quick  # Fast check only (2-3 minutes)
 
 ## 📊 Performance Comparison
 
-| Configuration | Pre-commit | Pre-push | Developer Impact |
-|--------------|-----------|----------|------------------|
-| **Current (Recommended)** | 5-10s | 1-2min | ✅ Good |
-| **With Quick SonarQube** | 5-10s | 3-5min | ⚠️ Slower |
-| **With Full SonarQube** | 5-10s | 10-20min | ❌ Too Slow |
+| Configuration             | Pre-commit | Pre-push | Developer Impact |
+| ------------------------- | ---------- | -------- | ---------------- |
+| **Current (Recommended)** | 5-10s      | 1-2min   | ✅ Good          |
+| **With Quick SonarQube**  | 5-10s      | 3-5min   | ⚠️ Slower        |
+| **With Full SonarQube**   | 5-10s      | 10-20min | ❌ Too Slow      |
 
 ## 🎓 Best Practices Summary
 
 ### 1. **Keep Pre-commit Fast**
+
 - ✅ Formatting and linting only
 - ❌ No SonarQube
 - ❌ No TypeScript (unless very fast)
 - ❌ No build
 
 ### 2. **Keep Pre-push Moderate**
+
 - ✅ TypeScript and build checks
 - ✅ Optional: Quick SonarQube (if team agrees)
 - ❌ No full SonarQube
 
 ### 3. **Use GitHub Actions for SonarQube**
+
 - ✅ Full analysis
 - ✅ Doesn't block developers
 - ✅ Automatic on every push/PR
 
 ### 4. **Local SonarQube for Control**
+
 - ✅ On-demand when needed
 - ✅ Before important commits
 - ✅ Before releases
 
 ### 5. **Make It Optional**
+
 - ✅ Allow developers to skip if needed
 - ✅ Provide fast alternatives
 - ✅ Don't force slow checks
@@ -207,6 +227,7 @@ npm run sonar:quick  # Fast check only (2-3 minutes)
 ## 🔄 Workflow Examples
 
 ### Daily Development
+
 ```bash
 # 1. Make changes
 git add .
@@ -219,6 +240,7 @@ git push    # Pre-push runs (1-2min) ✅
 ```
 
 ### Before Important Commit
+
 ```bash
 # 1. Quick quality check
 npm run sonar:quick  # 2-3 minutes
@@ -232,6 +254,7 @@ git push    # Pre-push runs ✅
 ```
 
 ### Before Release
+
 ```bash
 # 1. Full quality analysis
 npm run sonar  # 5-15 minutes
@@ -258,4 +281,3 @@ git push
 **Don't add SonarQube to hooks** - it's too slow and will frustrate developers.
 
 **Use GitHub Actions** - it's the perfect place for comprehensive analysis.
-

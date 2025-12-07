@@ -11,6 +11,7 @@
 ### **Snapshot Testing: Not Implemented**
 
 Current tests use **React Testing Library assertions**:
+
 - `toBeInTheDocument()`
 - `toHaveTextContent()`
 - `toHaveClass()`
@@ -26,12 +27,14 @@ Current tests use **React Testing Library assertions**:
 Snapshot testing captures the rendered output of a component and saves it to a file. On subsequent test runs, Jest compares the rendered output against the saved snapshot.
 
 ### **Benefits:**
+
 - ✅ Catches unintended UI changes
 - ✅ Quick to write (one line)
 - ✅ Good for regression testing
 - ✅ Documents component output
 
 ### **Drawbacks:**
+
 - ⚠️ Snapshots can be large and hard to review
 - ⚠️ Can break easily with intentional changes
 - ⚠️ May not catch logic errors
@@ -90,6 +93,7 @@ it('should match inline snapshot', () => {
 ### **What to Snapshot:**
 
 ✅ **Good Candidates:**
+
 - Static components (headers, footers, navigation)
 - Form layouts
 - Card components
@@ -98,6 +102,7 @@ it('should match inline snapshot', () => {
 - Empty states
 
 ❌ **Avoid Snapshot Testing:**
+
 - Components with timestamps
 - Components with random data
 - Components with dates
@@ -113,6 +118,7 @@ it('should match inline snapshot', () => {
 Add snapshots to shared components first:
 
 1. **Navigation Component** (`libs/shared-components/src/lib/common/Navigation.test.tsx`)
+
    ```typescript
    it('should match navigation snapshot', () => {
      const { container } = render(<Navigation />);
@@ -121,6 +127,7 @@ Add snapshots to shared components first:
    ```
 
 2. **Question Card Component** (`apps/website/src/components/QuestionDisplay.test.tsx`)
+
    ```typescript
    it('should match question card snapshot', () => {
      const { container } = render(<QuestionDisplay question={mockQuestion} />);
@@ -150,6 +157,7 @@ Add snapshots to key pages:
 Add snapshots for different states:
 
 1. **Loading States**
+
    ```typescript
    it('should match loading state snapshot', () => {
      const { container } = render(<Component isLoading={true} />);
@@ -158,6 +166,7 @@ Add snapshots for different states:
    ```
 
 2. **Error States**
+
    ```typescript
    it('should match error state snapshot', () => {
      const { container } = render(<Component error="Error message" />);
@@ -370,11 +379,13 @@ If you want to add snapshot testing:
 ### **When to Update Snapshots:**
 
 ✅ **Update when:**
+
 - UI changes are intentional
 - Component refactoring changes output
 - Design updates are applied
 
 ❌ **Don't update when:**
+
 - Tests are failing due to bugs
 - Logic errors are causing failures
 - Random data is causing differences
@@ -393,12 +404,14 @@ If you want to add snapshot testing:
 
 **Current Status**: Snapshot testing is **NOT implemented**
 
-**Recommendation**: 
+**Recommendation**:
+
 - **For MVP/Production**: Current assertion-based tests are **sufficient**
 - **For Comprehensive Coverage**: Add snapshot tests to **shared components** first
 - **For Complete Coverage**: Add snapshots to **all components** (requires maintenance)
 
 **Decision**: Would you like me to:
+
 1. ✅ Add snapshot tests to shared components (3 components)
 2. ✅ Add snapshot tests to all 21 tasks
 3. ✅ Keep current assertion-based tests (recommended for now)
@@ -408,4 +421,3 @@ If you want to add snapshot testing:
 **Last Updated**: 2025-11-09  
 **Status**: Guide Created - Awaiting Decision  
 **Ready for**: Implementation if requested
-

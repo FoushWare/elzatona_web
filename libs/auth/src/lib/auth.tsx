@@ -1,12 +1,12 @@
-'use client';
+"use client";
 
 // Auth library exports
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useContext, useState, useEffect } from "react";
 
 export interface User {
   id: string;
   email: string;
-  role: 'user' | 'premium_user' | 'admin' | 'super_admin';
+  role: "user" | "premium_user" | "admin" | "super_admin";
   created_at: string;
   updated_at: string;
 }
@@ -29,7 +29,7 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export const useAuth = (): AuthContextType => {
   const context = useContext(AuthContext);
   if (context === undefined) {
-    throw new Error('useAuth must be used within an AuthProvider');
+    throw new Error("useAuth must be used within an AuthProvider");
   }
   return context;
 };
@@ -53,20 +53,20 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     setIsLoading(true);
     try {
       // Simulate login - in real implementation, this would call Supabase
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      await new Promise((resolve) => setTimeout(resolve, 1000));
 
       // Mock user for admin
       const mockUser: User = {
-        id: 'admin-1',
+        id: "admin-1",
         email: email,
-        role: 'admin',
+        role: "admin",
         created_at: new Date().toISOString(),
         updated_at: new Date().toISOString(),
       };
 
       setUser(mockUser);
     } catch (error) {
-      console.error('Login failed:', error);
+      console.error("Login failed:", error);
       throw error;
     } finally {
       setIsLoading(false);
@@ -77,10 +77,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     setIsLoading(true);
     try {
       // Simulate logout
-      await new Promise(resolve => setTimeout(resolve, 500));
+      await new Promise((resolve) => setTimeout(resolve, 500));
       setUser(null);
     } catch (error) {
-      console.error('Logout failed:', error);
+      console.error("Logout failed:", error);
     } finally {
       setIsLoading(false);
     }
@@ -90,10 +90,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     setIsLoading(true);
     try {
       // Simulate signup
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      await new Promise((resolve) => setTimeout(resolve, 1000));
       // In real implementation, this would create a new user
     } catch (error) {
-      console.error('Signup failed:', error);
+      console.error("Signup failed:", error);
       throw error;
     } finally {
       setIsLoading(false);
@@ -106,10 +106,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     setIsLoading(true);
     try {
       // Simulate profile update
-      await new Promise(resolve => setTimeout(resolve, 500));
+      await new Promise((resolve) => setTimeout(resolve, 500));
       setUser({ ...user, ...updates });
     } catch (error) {
-      console.error('Profile update failed:', error);
+      console.error("Profile update failed:", error);
       throw error;
     } finally {
       setIsLoading(false);

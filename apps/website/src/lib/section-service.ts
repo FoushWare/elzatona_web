@@ -1,5 +1,5 @@
-import { promises as fs } from 'fs';
-import path from 'path';
+import { promises as fs } from "fs";
+import path from "path";
 
 // Types
 export interface LearningSection {
@@ -7,13 +7,13 @@ export interface LearningSection {
   name: string;
   description: string;
   category?:
-    | 'foundation'
-    | 'frontend'
-    | 'advanced'
-    | 'specialized'
-    | 'career'
-    | 'emerging';
-  difficulty?: 'beginner' | 'intermediate' | 'advanced';
+    | "foundation"
+    | "frontend"
+    | "advanced"
+    | "specialized"
+    | "career"
+    | "emerging";
+  difficulty?: "beginner" | "intermediate" | "advanced";
   estimatedTime?: string;
   order: number;
   is_active: boolean;
@@ -26,8 +26,8 @@ export interface SectionQuestion {
   id: string;
   title: string;
   content: string;
-  type: 'single' | 'multiple';
-  difficulty: 'easy' | 'medium' | 'hard';
+  type: "single" | "multiple";
+  difficulty: "easy" | "medium" | "hard";
   sectionId: string;
   options: QuestionOption[];
   correctAnswers: string[];
@@ -49,8 +49,8 @@ export interface QuestionOption {
 export interface BulkQuestionData {
   title: string;
   content: string;
-  type: 'single' | 'multiple';
-  difficulty: 'easy' | 'medium' | 'hard';
+  type: "single" | "multiple";
+  difficulty: "easy" | "medium" | "hard";
   options: QuestionOption[];
   correctAnswers: string[];
   explanation: string;
@@ -66,13 +66,13 @@ export interface SectionResult {
 export class SectionService {
   private static readonly SECTIONS_DIR = path.join(
     process.cwd(),
-    'data',
-    'sections'
+    "data",
+    "sections",
   );
   private static readonly QUESTIONS_DIR = path.join(
     process.cwd(),
-    'data',
-    'questions'
+    "data",
+    "questions",
   );
 
   /**
@@ -83,8 +83,8 @@ export class SectionService {
       await fs.mkdir(this.SECTIONS_DIR, { recursive: true });
       await fs.mkdir(this.QUESTIONS_DIR, { recursive: true });
     } catch (error) {
-      console.error('Failed to create data directories:', error);
-      throw new Error('Failed to create data directories');
+      console.error("Failed to create data directories:", error);
+      throw new Error("Failed to create data directories");
     }
   }
 
@@ -92,7 +92,7 @@ export class SectionService {
    * Get sections file path
    */
   private static getSectionsPath(): string {
-    return path.join(this.SECTIONS_DIR, 'sections.json');
+    return path.join(this.SECTIONS_DIR, "sections.json");
   }
 
   /**
@@ -113,7 +113,7 @@ export class SectionService {
       let sections: LearningSection[] = [];
 
       try {
-        const fileContent = await fs.readFile(sectionsPath, 'utf-8');
+        const fileContent = await fs.readFile(sectionsPath, "utf-8");
         sections = JSON.parse(fileContent);
       } catch (error) {
         // File doesn't exist, return default sections
@@ -123,15 +123,15 @@ export class SectionService {
 
       return {
         success: true,
-        message: 'Sections retrieved successfully',
+        message: "Sections retrieved successfully",
         data: sections,
       };
     } catch (error) {
-      console.error('Failed to get sections:', error);
+      console.error("Failed to get sections:", error);
       return {
         success: false,
-        message: 'Failed to retrieve sections',
-        error: error instanceof Error ? error.message : 'Unknown error',
+        message: "Failed to retrieve sections",
+        error: error instanceof Error ? error.message : "Unknown error",
       };
     }
   }
@@ -151,7 +151,7 @@ export class SectionService {
         // File exists, don't overwrite
         return {
           success: true,
-          message: 'Sections file already exists',
+          message: "Sections file already exists",
           data: null,
         };
       } catch (error) {
@@ -161,16 +161,16 @@ export class SectionService {
 
         return {
           success: true,
-          message: 'Default sections initialized successfully',
+          message: "Default sections initialized successfully",
           data: defaultSections,
         };
       }
     } catch (error) {
-      console.error('Failed to initialize default sections:', error);
+      console.error("Failed to initialize default sections:", error);
       return {
         success: false,
-        message: 'Failed to initialize default sections',
-        error: error instanceof Error ? error.message : 'Unknown error',
+        message: "Failed to initialize default sections",
+        error: error instanceof Error ? error.message : "Unknown error",
       };
     }
   }
@@ -182,255 +182,255 @@ export class SectionService {
     const comprehensiveSections = [
       // Foundation Level (Beginner)
       {
-        id: 'html-fundamentals',
-        name: 'HTML Fundamentals',
+        id: "html-fundamentals",
+        name: "HTML Fundamentals",
         description:
-          'Master HTML semantics, structure, accessibility, and modern HTML5 features',
-        category: 'foundation',
-        difficulty: 'beginner',
-        estimatedTime: '2-3 weeks',
+          "Master HTML semantics, structure, accessibility, and modern HTML5 features",
+        category: "foundation",
+        difficulty: "beginner",
+        estimatedTime: "2-3 weeks",
         question_count: 0,
         order: 1,
       },
       {
-        id: 'css-fundamentals',
-        name: 'CSS Fundamentals',
+        id: "css-fundamentals",
+        name: "CSS Fundamentals",
         description:
-          'Learn CSS basics, selectors, layouts, and responsive design principles',
-        category: 'foundation',
-        difficulty: 'beginner',
-        estimatedTime: '3-4 weeks',
+          "Learn CSS basics, selectors, layouts, and responsive design principles",
+        category: "foundation",
+        difficulty: "beginner",
+        estimatedTime: "3-4 weeks",
         question_count: 0,
         order: 2,
       },
       {
-        id: 'javascript-fundamentals',
-        name: 'JavaScript Fundamentals',
+        id: "javascript-fundamentals",
+        name: "JavaScript Fundamentals",
         description:
-          'Master JavaScript basics, ES6+, and core programming concepts',
-        category: 'foundation',
-        difficulty: 'beginner',
-        estimatedTime: '4-5 weeks',
+          "Master JavaScript basics, ES6+, and core programming concepts",
+        category: "foundation",
+        difficulty: "beginner",
+        estimatedTime: "4-5 weeks",
         question_count: 0,
         order: 3,
       },
 
       // Intermediate Level
       {
-        id: 'advanced-css-mastery',
-        name: 'Advanced CSS Mastery',
+        id: "advanced-css-mastery",
+        name: "Advanced CSS Mastery",
         description:
-          'Deep dive into advanced CSS techniques and modern layouts',
-        category: 'frontend',
-        difficulty: 'intermediate',
-        estimatedTime: '3-4 weeks',
+          "Deep dive into advanced CSS techniques and modern layouts",
+        category: "frontend",
+        difficulty: "intermediate",
+        estimatedTime: "3-4 weeks",
         question_count: 0,
         order: 4,
       },
       {
-        id: 'javascript-deep-dive',
-        name: 'JavaScript Deep Dive',
+        id: "javascript-deep-dive",
+        name: "JavaScript Deep Dive",
         description:
-          'Advanced JavaScript concepts and modern development patterns',
-        category: 'frontend',
-        difficulty: 'intermediate',
-        estimatedTime: '4-5 weeks',
+          "Advanced JavaScript concepts and modern development patterns",
+        category: "frontend",
+        difficulty: "intermediate",
+        estimatedTime: "4-5 weeks",
         question_count: 0,
         order: 5,
       },
       {
-        id: 'typescript-essentials',
-        name: 'TypeScript Essentials',
-        description: 'Learn TypeScript for type-safe JavaScript development',
-        category: 'frontend',
-        difficulty: 'intermediate',
-        estimatedTime: '3-4 weeks',
+        id: "typescript-essentials",
+        name: "TypeScript Essentials",
+        description: "Learn TypeScript for type-safe JavaScript development",
+        category: "frontend",
+        difficulty: "intermediate",
+        estimatedTime: "3-4 weeks",
         question_count: 0,
         order: 6,
       },
       {
-        id: 'react-fundamentals',
-        name: 'React Fundamentals',
+        id: "react-fundamentals",
+        name: "React Fundamentals",
         description:
-          'Master React core concepts and modern development patterns',
-        category: 'frontend',
-        difficulty: 'intermediate',
-        estimatedTime: '4-5 weeks',
+          "Master React core concepts and modern development patterns",
+        category: "frontend",
+        difficulty: "intermediate",
+        estimatedTime: "4-5 weeks",
         question_count: 0,
         order: 7,
       },
 
       // Advanced Level
       {
-        id: 'advanced-react-patterns',
-        name: 'Advanced React Patterns',
-        description: 'Advanced React concepts and enterprise-level patterns',
-        category: 'advanced',
-        difficulty: 'advanced',
-        estimatedTime: '3-4 weeks',
+        id: "advanced-react-patterns",
+        name: "Advanced React Patterns",
+        description: "Advanced React concepts and enterprise-level patterns",
+        category: "advanced",
+        difficulty: "advanced",
+        estimatedTime: "3-4 weeks",
         question_count: 0,
         order: 8,
       },
       {
-        id: 'nextjs-mastery',
-        name: 'Next.js Mastery',
-        description: 'Full-stack React development with Next.js',
-        category: 'advanced',
-        difficulty: 'advanced',
-        estimatedTime: '3-4 weeks',
+        id: "nextjs-mastery",
+        name: "Next.js Mastery",
+        description: "Full-stack React development with Next.js",
+        category: "advanced",
+        difficulty: "advanced",
+        estimatedTime: "3-4 weeks",
         question_count: 0,
         order: 9,
       },
       {
-        id: 'design-patterns-architecture',
-        name: 'Design Patterns & Architecture',
+        id: "design-patterns-architecture",
+        name: "Design Patterns & Architecture",
         description:
-          'Software design patterns and frontend architecture principles',
-        category: 'advanced',
-        difficulty: 'advanced',
-        estimatedTime: '3-4 weeks',
+          "Software design patterns and frontend architecture principles",
+        category: "advanced",
+        difficulty: "advanced",
+        estimatedTime: "3-4 weeks",
         question_count: 0,
         order: 10,
       },
       {
-        id: 'problem-solving-javascript',
-        name: 'Problem Solving with JavaScript',
-        description: 'Algorithmic thinking and problem-solving skills',
-        category: 'advanced',
-        difficulty: 'advanced',
-        estimatedTime: '4-5 weeks',
+        id: "problem-solving-javascript",
+        name: "Problem Solving with JavaScript",
+        description: "Algorithmic thinking and problem-solving skills",
+        category: "advanced",
+        difficulty: "advanced",
+        estimatedTime: "4-5 weeks",
         question_count: 0,
         order: 11,
       },
 
       // Specialized Topics
       {
-        id: 'frontend-security',
-        name: 'Frontend Security',
+        id: "frontend-security",
+        name: "Frontend Security",
         description:
-          'Security best practices and vulnerabilities in frontend development',
-        category: 'specialized',
-        difficulty: 'intermediate',
-        estimatedTime: '2-3 weeks',
+          "Security best practices and vulnerabilities in frontend development",
+        category: "specialized",
+        difficulty: "intermediate",
+        estimatedTime: "2-3 weeks",
         question_count: 0,
         order: 12,
       },
       {
-        id: 'performance-optimization',
-        name: 'Performance Optimization',
-        description: 'Frontend performance optimization techniques and tools',
-        category: 'specialized',
-        difficulty: 'intermediate',
-        estimatedTime: '3-4 weeks',
+        id: "performance-optimization",
+        name: "Performance Optimization",
+        description: "Frontend performance optimization techniques and tools",
+        category: "specialized",
+        difficulty: "intermediate",
+        estimatedTime: "3-4 weeks",
         question_count: 0,
         order: 13,
       },
       {
-        id: 'testing-strategies',
-        name: 'Testing Strategies',
+        id: "testing-strategies",
+        name: "Testing Strategies",
         description:
-          'Comprehensive testing approaches for frontend applications',
-        category: 'specialized',
-        difficulty: 'intermediate',
-        estimatedTime: '3-4 weeks',
+          "Comprehensive testing approaches for frontend applications",
+        category: "specialized",
+        difficulty: "intermediate",
+        estimatedTime: "3-4 weeks",
         question_count: 0,
         order: 14,
       },
       {
-        id: 'build-tools-devops',
-        name: 'Build Tools & DevOps',
-        description: 'Modern build tools and deployment strategies',
-        category: 'specialized',
-        difficulty: 'intermediate',
-        estimatedTime: '3-4 weeks',
+        id: "build-tools-devops",
+        name: "Build Tools & DevOps",
+        description: "Modern build tools and deployment strategies",
+        category: "specialized",
+        difficulty: "intermediate",
+        estimatedTime: "3-4 weeks",
         question_count: 0,
         order: 15,
       },
       {
-        id: 'api-integration-communication',
-        name: 'API Integration & Communication',
-        description: 'Working with APIs and data communication',
-        category: 'specialized',
-        difficulty: 'intermediate',
-        estimatedTime: '2-3 weeks',
+        id: "api-integration-communication",
+        name: "API Integration & Communication",
+        description: "Working with APIs and data communication",
+        category: "specialized",
+        difficulty: "intermediate",
+        estimatedTime: "2-3 weeks",
         question_count: 0,
         order: 16,
       },
 
       // Interview & Career Preparation
       {
-        id: 'system-design-frontend',
-        name: 'System Design for Frontend',
-        description: 'Frontend system design and architecture decisions',
-        category: 'career',
-        difficulty: 'advanced',
-        estimatedTime: '3-4 weeks',
+        id: "system-design-frontend",
+        name: "System Design for Frontend",
+        description: "Frontend system design and architecture decisions",
+        category: "career",
+        difficulty: "advanced",
+        estimatedTime: "3-4 weeks",
         question_count: 0,
         order: 17,
       },
       {
-        id: 'frontend-interview-prep',
-        name: 'Frontend Interview Preparation',
+        id: "frontend-interview-prep",
+        name: "Frontend Interview Preparation",
         description:
-          'Comprehensive preparation for frontend technical interviews',
-        category: 'career',
-        difficulty: 'intermediate',
-        estimatedTime: '4-5 weeks',
+          "Comprehensive preparation for frontend technical interviews",
+        category: "career",
+        difficulty: "intermediate",
+        estimatedTime: "4-5 weeks",
         question_count: 0,
         order: 18,
       },
       {
-        id: 'behavioral-soft-skills',
-        name: 'Behavioral & Soft Skills',
-        description: 'Non-technical skills essential for frontend developers',
-        category: 'career',
-        difficulty: 'beginner',
-        estimatedTime: '2-3 weeks',
+        id: "behavioral-soft-skills",
+        name: "Behavioral & Soft Skills",
+        description: "Non-technical skills essential for frontend developers",
+        category: "career",
+        difficulty: "beginner",
+        estimatedTime: "2-3 weeks",
         question_count: 0,
         order: 19,
       },
 
       // Emerging Technologies
       {
-        id: 'ai-tools-frontend',
-        name: 'AI Tools for Frontend',
+        id: "ai-tools-frontend",
+        name: "AI Tools for Frontend",
         description:
-          'Leveraging AI tools and technologies in frontend development',
-        category: 'emerging',
-        difficulty: 'intermediate',
-        estimatedTime: '2-3 weeks',
+          "Leveraging AI tools and technologies in frontend development",
+        category: "emerging",
+        difficulty: "intermediate",
+        estimatedTime: "2-3 weeks",
         question_count: 0,
         order: 20,
       },
       {
-        id: 'web3-blockchain-frontend',
-        name: 'Web3 & Blockchain Frontend',
+        id: "web3-blockchain-frontend",
+        name: "Web3 & Blockchain Frontend",
         description:
-          'Frontend development for Web3 and blockchain applications',
-        category: 'emerging',
-        difficulty: 'advanced',
-        estimatedTime: '3-4 weeks',
+          "Frontend development for Web3 and blockchain applications",
+        category: "emerging",
+        difficulty: "advanced",
+        estimatedTime: "3-4 weeks",
         question_count: 0,
         order: 21,
       },
     ];
 
-    return comprehensiveSections.map(section => ({
+    return comprehensiveSections.map((section) => ({
       id: section.id,
       name: section.name,
       description: section.description,
       category: section.category as
-        | 'frontend'
-        | 'advanced'
-        | 'foundation'
-        | 'specialized'
-        | 'career'
-        | 'emerging'
+        | "frontend"
+        | "advanced"
+        | "foundation"
+        | "specialized"
+        | "career"
+        | "emerging"
         | undefined,
       difficulty: section.difficulty as
-        | 'beginner'
-        | 'intermediate'
-        | 'advanced'
+        | "beginner"
+        | "intermediate"
+        | "advanced"
         | undefined,
       estimatedTime: section.estimatedTime,
       order: section.order,
@@ -445,7 +445,7 @@ export class SectionService {
    * Save sections to file
    */
   private static async saveSections(
-    sections: LearningSection[]
+    sections: LearningSection[],
   ): Promise<void> {
     const sectionsPath = this.getSectionsPath();
     await fs.writeFile(sectionsPath, JSON.stringify(sections, null, 2));
@@ -456,7 +456,7 @@ export class SectionService {
    */
   static async addSection(
     name: string,
-    description?: string
+    description?: string,
   ): Promise<SectionResult> {
     try {
       await this.ensureDirectories();
@@ -470,13 +470,13 @@ export class SectionService {
 
       // Check if section name already exists
       const existingSection = sections.find(
-        s => s.name.toLowerCase() === name.toLowerCase()
+        (s) => s.name.toLowerCase() === name.toLowerCase(),
       );
       if (existingSection) {
         return {
           success: false,
-          message: 'Section with this name already exists',
-          error: 'Duplicate section name',
+          message: "Section with this name already exists",
+          error: "Duplicate section name",
         };
       }
 
@@ -498,15 +498,15 @@ export class SectionService {
 
       return {
         success: true,
-        message: 'Section added successfully',
+        message: "Section added successfully",
         data: newSection,
       };
     } catch (error) {
-      console.error('Failed to add section:', error);
+      console.error("Failed to add section:", error);
       return {
         success: false,
-        message: 'Failed to add section',
-        error: error instanceof Error ? error.message : 'Unknown error',
+        message: "Failed to add section",
+        error: error instanceof Error ? error.message : "Unknown error",
       };
     }
   }
@@ -516,7 +516,7 @@ export class SectionService {
    */
   static async updateSection(
     sectionId: string,
-    updates: Partial<LearningSection>
+    updates: Partial<LearningSection>,
   ): Promise<SectionResult> {
     try {
       await this.ensureDirectories();
@@ -527,28 +527,28 @@ export class SectionService {
       }
 
       const sections: LearningSection[] = result.data as LearningSection[];
-      const sectionIndex = sections.findIndex(s => s.id === sectionId);
+      const sectionIndex = sections.findIndex((s) => s.id === sectionId);
 
       if (sectionIndex === -1) {
         return {
           success: false,
-          message: 'Section not found',
-          error: 'Invalid section ID',
+          message: "Section not found",
+          error: "Invalid section ID",
         };
       }
 
       // Check for duplicate name if name is being updated
       if (updates.name) {
         const existingSection = sections.find(
-          s =>
+          (s) =>
             s.id !== sectionId &&
-            s.name.toLowerCase() === updates.name?.toLowerCase()
+            s.name.toLowerCase() === updates.name?.toLowerCase(),
         );
         if (existingSection) {
           return {
             success: false,
-            message: 'Section with this name already exists',
-            error: 'Duplicate section name',
+            message: "Section with this name already exists",
+            error: "Duplicate section name",
           };
         }
       }
@@ -564,15 +564,15 @@ export class SectionService {
 
       return {
         success: true,
-        message: 'Section updated successfully',
+        message: "Section updated successfully",
         data: sections[sectionIndex],
       };
     } catch (error) {
-      console.error('Failed to update section:', error);
+      console.error("Failed to update section:", error);
       return {
         success: false,
-        message: 'Failed to update section',
-        error: error instanceof Error ? error.message : 'Unknown error',
+        message: "Failed to update section",
+        error: error instanceof Error ? error.message : "Unknown error",
       };
     }
   }
@@ -590,13 +590,13 @@ export class SectionService {
       }
 
       const sections: LearningSection[] = result.data as LearningSection[];
-      const sectionIndex = sections.findIndex(s => s.id === sectionId);
+      const sectionIndex = sections.findIndex((s) => s.id === sectionId);
 
       if (sectionIndex === -1) {
         return {
           success: false,
-          message: 'Section not found',
-          error: 'Invalid section ID',
+          message: "Section not found",
+          error: "Invalid section ID",
         };
       }
 
@@ -615,20 +615,20 @@ export class SectionService {
         const questionsPath = this.getSectionQuestionsPath(sectionId);
         await fs.unlink(questionsPath);
       } catch (error) {
-        console.log('No questions file found for section:', sectionId);
+        console.log("No questions file found for section:", sectionId);
       }
 
       return {
         success: true,
-        message: 'Section deleted successfully',
+        message: "Section deleted successfully",
         data: deletedSection,
       };
     } catch (error) {
-      console.error('Failed to delete section:', error);
+      console.error("Failed to delete section:", error);
       return {
         success: false,
-        message: 'Failed to delete section',
-        error: error instanceof Error ? error.message : 'Unknown error',
+        message: "Failed to delete section",
+        error: error instanceof Error ? error.message : "Unknown error",
       };
     }
   }
@@ -654,7 +654,7 @@ export class SectionService {
       });
 
       // Update section orders
-      sections.forEach(section => {
+      sections.forEach((section) => {
         const newOrder = newOrderMap.get(section.id);
         if (newOrder !== undefined) {
           section.order = newOrder;
@@ -669,15 +669,15 @@ export class SectionService {
 
       return {
         success: true,
-        message: 'Sections reordered successfully',
+        message: "Sections reordered successfully",
         data: sections,
       };
     } catch (error) {
-      console.error('Failed to reorder sections:', error);
+      console.error("Failed to reorder sections:", error);
       return {
         success: false,
-        message: 'Failed to reorder sections',
-        error: error instanceof Error ? error.message : 'Unknown error',
+        message: "Failed to reorder sections",
+        error: error instanceof Error ? error.message : "Unknown error",
       };
     }
   }
@@ -693,7 +693,7 @@ export class SectionService {
       let questions: SectionQuestion[] = [];
 
       try {
-        const fileContent = await fs.readFile(questionsPath, 'utf-8');
+        const fileContent = await fs.readFile(questionsPath, "utf-8");
         questions = JSON.parse(fileContent);
       } catch (error) {
         // File doesn't exist, return empty array
@@ -702,15 +702,15 @@ export class SectionService {
 
       return {
         success: true,
-        message: 'Questions retrieved successfully',
+        message: "Questions retrieved successfully",
         data: questions,
       };
     } catch (error) {
-      console.error('Failed to get section questions:', error);
+      console.error("Failed to get section questions:", error);
       return {
         success: false,
-        message: 'Failed to retrieve questions',
-        error: error instanceof Error ? error.message : 'Unknown error',
+        message: "Failed to retrieve questions",
+        error: error instanceof Error ? error.message : "Unknown error",
       };
     }
   }
@@ -720,7 +720,7 @@ export class SectionService {
    */
   static async addQuestion(
     sectionId: string,
-    questionData: Partial<SectionQuestion>
+    questionData: Partial<SectionQuestion>,
   ): Promise<SectionResult> {
     try {
       await this.ensureDirectories();
@@ -735,30 +735,30 @@ export class SectionService {
       // Create new question with incomplete structure handling
       const newQuestion: SectionQuestion = {
         id: `question_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
-        title: questionData.title || '',
-        content: questionData.content || '',
-        type: questionData.type || 'single',
-        difficulty: questionData.difficulty || 'easy',
+        title: questionData.title || "",
+        content: questionData.content || "",
+        type: questionData.type || "single",
+        difficulty: questionData.difficulty || "easy",
         sectionId,
         options: questionData.options || [
-          { id: 'a', text: '', isCorrect: false },
-          { id: 'b', text: '', isCorrect: false },
-          { id: 'c', text: '', isCorrect: false },
-          { id: 'd', text: '', isCorrect: false },
+          { id: "a", text: "", isCorrect: false },
+          { id: "b", text: "", isCorrect: false },
+          { id: "c", text: "", isCorrect: false },
+          { id: "d", text: "", isCorrect: false },
         ],
         correctAnswers: questionData.correctAnswers || [],
-        explanation: questionData.explanation || '',
-        audioQuestion: questionData.audioQuestion || '',
-        audioAnswer: questionData.audioAnswer || '',
+        explanation: questionData.explanation || "",
+        audioQuestion: questionData.audioQuestion || "",
+        audioAnswer: questionData.audioAnswer || "",
         created_at: new Date().toISOString(),
         updated_at: new Date().toISOString(),
         is_active: true,
         isComplete: this.checkQuestionCompleteness({
-          title: questionData.title || '',
-          content: questionData.content || '',
+          title: questionData.title || "",
+          content: questionData.content || "",
           options: questionData.options || [],
           correctAnswers: questionData.correctAnswers || [],
-          explanation: questionData.explanation || '',
+          explanation: questionData.explanation || "",
         }),
       };
 
@@ -773,15 +773,15 @@ export class SectionService {
 
       return {
         success: true,
-        message: 'Question added successfully',
+        message: "Question added successfully",
         data: newQuestion,
       };
     } catch (error) {
-      console.error('Failed to add question:', error);
+      console.error("Failed to add question:", error);
       return {
         success: false,
-        message: 'Failed to add question',
-        error: error instanceof Error ? error.message : 'Unknown error',
+        message: "Failed to add question",
+        error: error instanceof Error ? error.message : "Unknown error",
       };
     }
   }
@@ -791,7 +791,7 @@ export class SectionService {
    */
   static async addBulkQuestions(
     sectionId: string,
-    questionsData: BulkQuestionData[]
+    questionsData: BulkQuestionData[],
   ): Promise<SectionResult> {
     try {
       await this.ensureDirectories();
@@ -809,20 +809,20 @@ export class SectionService {
         const newQuestion: SectionQuestion = {
           id: `question_${Date.now()}_${index}_${Math.random().toString(36).substr(2, 9)}`,
           title: questionData.title || `Question ${index + 1}`,
-          content: questionData.content || '',
-          type: questionData.type || 'single',
-          difficulty: questionData.difficulty || 'easy',
+          content: questionData.content || "",
+          type: questionData.type || "single",
+          difficulty: questionData.difficulty || "easy",
           sectionId,
           options: questionData.options || [
-            { id: 'a', text: '', isCorrect: false },
-            { id: 'b', text: '', isCorrect: false },
-            { id: 'c', text: '', isCorrect: false },
-            { id: 'd', text: '', isCorrect: false },
+            { id: "a", text: "", isCorrect: false },
+            { id: "b", text: "", isCorrect: false },
+            { id: "c", text: "", isCorrect: false },
+            { id: "d", text: "", isCorrect: false },
           ],
           correctAnswers: questionData.correctAnswers || [],
-          explanation: questionData.explanation || '',
-          audioQuestion: '', // Empty for later editing
-          audioAnswer: '', // Empty for later editing
+          explanation: questionData.explanation || "",
+          audioQuestion: "", // Empty for later editing
+          audioAnswer: "", // Empty for later editing
           created_at: new Date().toISOString(),
           updated_at: new Date().toISOString(),
           is_active: true,
@@ -847,11 +847,11 @@ export class SectionService {
         data: newQuestions,
       };
     } catch (error) {
-      console.error('Failed to add bulk questions:', error);
+      console.error("Failed to add bulk questions:", error);
       return {
         success: false,
-        message: 'Failed to add bulk questions',
-        error: error instanceof Error ? error.message : 'Unknown error',
+        message: "Failed to add bulk questions",
+        error: error instanceof Error ? error.message : "Unknown error",
       };
     }
   }
@@ -860,22 +860,22 @@ export class SectionService {
    * Check if question structure is complete
    */
   private static checkQuestionCompleteness(
-    questionData: Partial<BulkQuestionData>
+    questionData: Partial<BulkQuestionData>,
   ): boolean {
     const hasTitle = Boolean(
-      questionData.title && questionData.title.trim() !== ''
+      questionData.title && questionData.title.trim() !== "",
     );
     const hasContent = Boolean(
-      questionData.content && questionData.content.trim() !== ''
+      questionData.content && questionData.content.trim() !== "",
     );
     const hasOptions = Boolean(
-      questionData.options && questionData.options.length > 0
+      questionData.options && questionData.options.length > 0,
     );
     const hasCorrectAnswers = Boolean(
-      questionData.correctAnswers && questionData.correctAnswers.length > 0
+      questionData.correctAnswers && questionData.correctAnswers.length > 0,
     );
     const hasExplanation = Boolean(
-      questionData.explanation && questionData.explanation.trim() !== ''
+      questionData.explanation && questionData.explanation.trim() !== "",
     );
 
     return (
@@ -892,13 +892,13 @@ export class SectionService {
    */
   private static async updateSectionQuestionCount(
     sectionId: string,
-    count: number
+    count: number,
   ): Promise<void> {
     try {
       const result = await this.getSections();
       if (result.success) {
         const sections: LearningSection[] = result.data as LearningSection[];
-        const sectionIndex = sections.findIndex(s => s.id === sectionId);
+        const sectionIndex = sections.findIndex((s) => s.id === sectionId);
 
         if (sectionIndex !== -1) {
           sections[sectionIndex].question_count = count;
@@ -907,7 +907,7 @@ export class SectionService {
         }
       }
     } catch (error) {
-      console.error('Failed to update section question count:', error);
+      console.error("Failed to update section question count:", error);
     }
   }
 }

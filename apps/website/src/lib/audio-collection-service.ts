@@ -7,16 +7,16 @@ import {
   createDefaultAudioInfo,
   createCustomAudioInfo,
   DEFAULT_AUDIO_PATHS,
-} from './audio-collection-schema';
-import { createClient } from '@supabase/supabase-js';
+} from "./audio-collection-schema";
+import { createClient } from "@supabase/supabase-js";
 
-const supabaseUrl = process.env['NEXT_PUBLIC_SUPABASE_URL']!;
-const supabaseServiceRoleKey = process.env['SUPABASE_SERVICE_ROLE_KEY']!;
+const supabaseUrl = process.env["NEXT_PUBLIC_SUPABASE_URL"]!;
+const supabaseServiceRoleKey = process.env["SUPABASE_SERVICE_ROLE_KEY"]!;
 
 const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
 
 export class AudioCollectionService {
-  private static readonly TABLE_NAME = 'question_audio';
+  private static readonly TABLE_NAME = "question_audio";
 
   /**
    * Create or update audio mapping for a question
@@ -27,14 +27,14 @@ export class AudioCollectionService {
     sectionId: string,
     questionNumber: number,
     questionAudioPath?: string,
-    answerAudioPath?: string
+    answerAudioPath?: string,
   ): Promise<{ success: boolean; error?: string; mappingId?: string }> {
     try {
       const mappingId = `${learningPath}_${sectionId}_${questionNumber}`;
       const audioPaths = generateAudioPaths(
         learningPath,
         sectionId,
-        questionNumber
+        questionNumber,
       );
 
       // Create audio file info objects
@@ -63,7 +63,7 @@ export class AudioCollectionService {
         .upsert(audioMapping);
 
       if (error) {
-        console.error('Error creating/updating audio mapping:', error);
+        console.error("Error creating/updating audio mapping:", error);
         return {
           success: false,
           error: error.message,
@@ -72,10 +72,10 @@ export class AudioCollectionService {
 
       return { success: true, mappingId };
     } catch (error) {
-      console.error('Error creating/updating audio mapping:', error);
+      console.error("Error creating/updating audio mapping:", error);
       return {
         success: false,
-        error: error instanceof Error ? error.message : 'Unknown error',
+        error: error instanceof Error ? error.message : "Unknown error",
       };
     }
   }
@@ -91,8 +91,8 @@ export class AudioCollectionService {
     try {
       const { data, error } = await supabase
         .from(this.TABLE_NAME)
-        .select('*')
-        .eq('question_id', question_id)
+        .select("*")
+        .eq("question_id", question_id)
         .limit(1)
         .single();
 
@@ -114,10 +114,10 @@ export class AudioCollectionService {
 
       return { success: true, mapping };
     } catch (error) {
-      console.error('Error getting audio mapping:', error);
+      console.error("Error getting audio mapping:", error);
       return {
         success: false,
-        error: error instanceof Error ? error.message : 'Unknown error',
+        error: error instanceof Error ? error.message : "Unknown error",
       };
     }
   }
@@ -133,19 +133,19 @@ export class AudioCollectionService {
     try {
       const { data, error } = await supabase
         .from(this.TABLE_NAME)
-        .select('*')
-        .eq('learning_path', learningPath)
-        .order('question_number', { ascending: true });
+        .select("*")
+        .eq("learning_path", learningPath)
+        .order("question_number", { ascending: true });
 
       if (error) {
-        console.error('Error getting audio mappings for learning path:', error);
+        console.error("Error getting audio mappings for learning path:", error);
         return {
           success: false,
           error: error.message,
         };
       }
 
-      const mappings: QuestionAudioMapping[] = (data || []).map(item => ({
+      const mappings: QuestionAudioMapping[] = (data || []).map((item) => ({
         id: item.id,
         question_id: item.question_id,
         learningPath: item.learning_path,
@@ -159,10 +159,10 @@ export class AudioCollectionService {
 
       return { success: true, mappings };
     } catch (error) {
-      console.error('Error getting audio mappings for learning path:', error);
+      console.error("Error getting audio mappings for learning path:", error);
       return {
         success: false,
-        error: error instanceof Error ? error.message : 'Unknown error',
+        error: error instanceof Error ? error.message : "Unknown error",
       };
     }
   }
@@ -172,7 +172,7 @@ export class AudioCollectionService {
    */
   static async getAudioMappingsForSection(
     learningPath: string,
-    sectionId: string
+    sectionId: string,
   ): Promise<{
     success: boolean;
     mappings?: QuestionAudioMapping[];
@@ -181,20 +181,20 @@ export class AudioCollectionService {
     try {
       const { data, error } = await supabase
         .from(this.TABLE_NAME)
-        .select('*')
-        .eq('learning_path', learningPath)
-        .eq('section_id', sectionId)
-        .order('question_number', { ascending: true });
+        .select("*")
+        .eq("learning_path", learningPath)
+        .eq("section_id", sectionId)
+        .order("question_number", { ascending: true });
 
       if (error) {
-        console.error('Error getting audio mappings for section:', error);
+        console.error("Error getting audio mappings for section:", error);
         return {
           success: false,
           error: error.message,
         };
       }
 
-      const mappings: QuestionAudioMapping[] = (data || []).map(item => ({
+      const mappings: QuestionAudioMapping[] = (data || []).map((item) => ({
         id: item.id,
         question_id: item.question_id,
         learningPath: item.learning_path,
@@ -208,10 +208,10 @@ export class AudioCollectionService {
 
       return { success: true, mappings };
     } catch (error) {
-      console.error('Error getting audio mappings for section:', error);
+      console.error("Error getting audio mappings for section:", error);
       return {
         success: false,
-        error: error instanceof Error ? error.message : 'Unknown error',
+        error: error instanceof Error ? error.message : "Unknown error",
       };
     }
   }
@@ -221,8 +221,8 @@ export class AudioCollectionService {
    */
   static async updateAudioFile(
     question_id: string,
-    audioType: 'questionAudio' | 'answerAudio',
-    audioInfo: AudioFileInfo
+    audioType: "questionAudio" | "answerAudio",
+    audioInfo: AudioFileInfo,
   ): Promise<{ success: boolean; error?: string }> {
     try {
       const mappingResult = await this.getAudioMapping(question_id);
@@ -230,7 +230,7 @@ export class AudioCollectionService {
       if (!mappingResult.success || !mappingResult.mapping) {
         return {
           success: false,
-          error: 'Audio mapping not found',
+          error: "Audio mapping not found",
         };
       }
 
@@ -241,7 +241,7 @@ export class AudioCollectionService {
         updated_at: new Date().toISOString(),
       };
 
-      if (audioType === 'questionAudio') {
+      if (audioType === "questionAudio") {
         updateData.question_audio = audioInfo;
       } else {
         updateData.answer_audio = audioInfo;
@@ -250,10 +250,10 @@ export class AudioCollectionService {
       const { error } = await supabase
         .from(this.TABLE_NAME)
         .update(updateData)
-        .eq('id', mappingId);
+        .eq("id", mappingId);
 
       if (error) {
-        console.error('Error updating audio file:', error);
+        console.error("Error updating audio file:", error);
         return {
           success: false,
           error: error.message,
@@ -262,10 +262,10 @@ export class AudioCollectionService {
 
       return { success: true };
     } catch (error) {
-      console.error('Error updating audio file:', error);
+      console.error("Error updating audio file:", error);
       return {
         success: false,
-        error: error instanceof Error ? error.message : 'Unknown error',
+        error: error instanceof Error ? error.message : "Unknown error",
       };
     }
   }
@@ -274,7 +274,7 @@ export class AudioCollectionService {
    * Delete audio mapping for a question
    */
   static async deleteAudioMapping(
-    question_id: string
+    question_id: string,
   ): Promise<{ success: boolean; error?: string }> {
     try {
       const mappingResult = await this.getAudioMapping(question_id);
@@ -287,10 +287,10 @@ export class AudioCollectionService {
       const { error } = await supabase
         .from(this.TABLE_NAME)
         .delete()
-        .eq('id', mappingId);
+        .eq("id", mappingId);
 
       if (error) {
-        console.error('Error deleting audio mapping:', error);
+        console.error("Error deleting audio mapping:", error);
         return {
           success: false,
           error: error.message,
@@ -299,10 +299,10 @@ export class AudioCollectionService {
 
       return { success: true };
     } catch (error) {
-      console.error('Error deleting audio mapping:', error);
+      console.error("Error deleting audio mapping:", error);
       return {
         success: false,
-        error: error instanceof Error ? error.message : 'Unknown error',
+        error: error instanceof Error ? error.message : "Unknown error",
       };
     }
   }
@@ -312,15 +312,15 @@ export class AudioCollectionService {
    */
   static async getNextQuestionNumber(
     learningPath: string,
-    sectionId: string
+    sectionId: string,
   ): Promise<{ success: boolean; nextNumber?: number; error?: string }> {
     try {
       const { data, error } = await supabase
         .from(this.TABLE_NAME)
-        .select('question_number')
-        .eq('learning_path', learningPath)
-        .eq('section_id', sectionId)
-        .order('question_number', { ascending: false })
+        .select("question_number")
+        .eq("learning_path", learningPath)
+        .eq("section_id", sectionId)
+        .order("question_number", { ascending: false })
         .limit(1)
         .single();
 
@@ -331,10 +331,10 @@ export class AudioCollectionService {
       const nextNumber = data.question_number + 1;
       return { success: true, nextNumber };
     } catch (error) {
-      console.error('Error getting next question number:', error);
+      console.error("Error getting next question number:", error);
       return {
         success: false,
-        error: error instanceof Error ? error.message : 'Unknown error',
+        error: error instanceof Error ? error.message : "Unknown error",
       };
     }
   }

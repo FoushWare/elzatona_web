@@ -32,6 +32,7 @@ Then **restart Cursor**.
 ## ✅ Done!
 
 Now you can ask questions like:
+
 - "What are the top errors in my Sentry project?"
 - "Show me performance metrics for the last 24 hours"
 - "What's the status of issue ABC123?"
@@ -39,4 +40,3 @@ Now you can ask questions like:
 ## 📚 Full Documentation
 
 See [SENTRY_MCP_SETUP.md](./SENTRY_MCP_SETUP.md) for complete details.
-

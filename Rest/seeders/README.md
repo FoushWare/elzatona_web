@@ -17,13 +17,16 @@ Rest/seeders/
 ## How It Works
 
 ### Update-Only Approach
+
 - **Learning Cards**: Updates existing cards by `type`, creates new ones if missing
 - **Categories**: Updates existing categories by `slug`, creates new ones if missing
 - **Topics**: Updates existing topics by `slug` + `category_id`, creates new ones if missing
 - **Questions**: Updates existing questions by `title` + `category_id`, creates new ones if missing
 
 ### Dependencies
+
 Seeders must be run in order due to foreign key relationships:
+
 1. Learning Cards (no dependencies)
 2. Categories (depends on Learning Cards)
 3. Topics (depends on Categories)
@@ -32,11 +35,13 @@ Seeders must be run in order due to foreign key relationships:
 ## Usage
 
 ### Run All Seeders
+
 ```bash
 node Rest/seeders/00-run-all-seeders.js
 ```
 
 ### Run Individual Seeders
+
 ```bash
 # Seed learning cards only
 node Rest/seeders/01-seed-learning-cards.js
@@ -54,6 +59,7 @@ node Rest/seeders/04-seed-questions.js
 ## Environment Variables
 
 Required environment variables (in `.env` file):
+
 ```env
 NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
 SUPABASE_SERVICE_ROLE_KEY=your_service_role_key
@@ -104,4 +110,3 @@ Cards (Learning Cards)
 - If a topic doesn't exist for a question, it will still be created but may not have a topic link
 - The seeder uses Supabase's upsert pattern (check existence, then update or insert)
 - All timestamps are set automatically (`created_at` for new records, `updated_at` for all)
-

@@ -1,8 +1,13 @@
 # Task ID: G-006
+
 # Title: Guided Practice Page (Not Logged In - localStorage Dependent)
+
 # Status: pending
+
 # Dependencies: G-002, G-003
+
 # Priority: high
+
 # Description: Test the guided practice page flow when user is not logged in, relying on localStorage for progress tracking, question navigation, and state persistence.
 
 # Details:
@@ -10,6 +15,7 @@
 ## Time Estimation
 
 ### Manual Testing
+
 - **Estimated Time**: 35-50 minutes
 - **Breakdown**:
   - Navigate to page and verify: 3 minutes
@@ -24,6 +30,7 @@
 - **Dependencies**: Test plan data, localStorage access, questions with resources
 
 ### Automated Testing
+
 - **Estimated Time**: 18-25 minutes (first run), 4-6 minutes (subsequent runs)
 - **Breakdown**:
   - Unit tests setup and execution: 6-7 minutes (includes resources tests) ⭐ UPDATED
@@ -33,6 +40,7 @@
 - **Dependencies**: localStorage mocks, test plan data, question data, questions with resources
 
 ### Total Time
+
 - **Manual Only**: 35-50 minutes ⭐ UPDATED
 - **Automated Only**: 18-25 minutes (first run), 4-6 minutes (subsequent) ⭐ UPDATED
 - **Both Manual + Automated**: 53-75 minutes (first run), 39-56 minutes (subsequent) ⭐ UPDATED
@@ -264,7 +272,7 @@ npm run test:e2e -- tests/e2e/guided-flow/guided-practice-localStorage.spec.ts
     - Resources component does NOT render before explanation is shown
     - Each resource type displays correct icon (Video, GraduationCap, FileText)
     - Resource title, URL, description, duration, and author are displayed correctly
-    - Resource links have target="_blank" and rel="noopener noreferrer"
+    - Resource links have target="\_blank" and rel="noopener noreferrer"
   - **Status**: ⏳ Pending
   - **Can Run Parallel**: ✅ Yes
 
@@ -462,4 +470,3 @@ npm run test:e2e -- tests/e2e/guided-flow/guided-practice-localStorage.spec.ts
     10. Verify multiple resources display correctly
   - **Status**: ⏳ Pending
   - **Can Run Parallel**: ✅ Yes
-

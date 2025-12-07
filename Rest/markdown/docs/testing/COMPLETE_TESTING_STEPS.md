@@ -38,21 +38,23 @@
 
 1. **Create `.env.local` file** in project root (if not exists)
 2. **Add required environment variables**:
+
    ```bash
    # Admin Test Credentials (for E2E tests)
    ADMIN_EMAIL=your-admin-email@example.com
    ADMIN_PASSWORD=your-admin-password
-   
+
    # Invalid Test Credentials (for testing error handling)
    TEST_INVALID_EMAIL=invalid@test.com
    TEST_INVALID_PASSWORD=invalid-password
-   
+
    # Fallback Credentials (optional)
    INITIAL_ADMIN_EMAIL=admin@example.com
    INITIAL_ADMIN_PASSWORD=admin-password
    TEST_ADMIN_EMAIL=test@example.com
    TEST_ADMIN_PASSWORD=test-password
    ```
+
 3. **Verify** `.env.local` file exists
 4. **Verify** `ADMIN_EMAIL` is set
 5. **Verify** `ADMIN_PASSWORD` is set
@@ -107,39 +109,39 @@
 
 ### Verify Stats Cards Display
 
-1. **Total Questions Card**: 
+1. **Total Questions Card**:
    - [ ] Card is visible
    - [ ] Shows correct count (matches actual questions in database)
    - [ ] Number is displayed correctly
-2. **Categories Card**: 
+2. **Categories Card**:
    - [ ] Card is visible
    - [ ] Shows number of unique categories
    - [ ] Number is displayed correctly
-3. **Active Questions Card**: 
+3. **Active Questions Card**:
    - [ ] Card is visible
    - [ ] Shows count of active questions (`is_active: true`)
    - [ ] Number is displayed correctly
-4. **Filtered Results Card**: 
+4. **Filtered Results Card**:
    - [ ] Card is visible
    - [ ] Shows count of currently displayed questions
    - [ ] Number is displayed correctly
-5. **Verify all stats cards**: 
+5. **Verify all stats cards**:
    - [ ] All cards are visible
    - [ ] All cards are styled correctly
    - [ ] Stats update after CRUD operations
 
 ### Verify Loading State
 
-1. **If questions are loading**: 
+1. **If questions are loading**:
    - [ ] Spinner should appear
    - [ ] Loading message "Loading questions..." should be visible
-2. **After loading**: 
+2. **After loading**:
    - [ ] Questions list should appear
    - [ ] Loading spinner disappears
 
 ### Verify Error State (if applicable)
 
-1. **If API fails**: 
+1. **If API fails**:
    - [ ] Error message should display
    - [ ] "Retry" button should be visible and functional
    - [ ] Error message is clear and helpful
@@ -156,16 +158,16 @@
 
 ### Search Functionality - Edge Cases
 
-1. **Search for non-existent term**: 
+1. **Search for non-existent term**:
    - [ ] Type "NONEXISTENTSEARCHTERM12345"
    - [ ] Verify "No questions found" message appears
-2. **Search with special characters**: 
+2. **Search with special characters**:
    - [ ] Type "test@#$%"
    - [ ] Verify no errors occur
-3. **Search with very long string**: 
+3. **Search with very long string**:
    - [ ] Type a very long string (100+ characters)
    - [ ] Verify no performance issues
-4. **Search is case-insensitive**: 
+4. **Search is case-insensitive**:
    - [ ] Search for "html" (lowercase)
    - [ ] Verify results match "HTML" (uppercase)
    - [ ] Search for "HTML" (uppercase)
@@ -182,38 +184,38 @@
 
 #### Fill Question Form
 
-1. **Title Field**: 
+1. **Title Field**:
    - [ ] Enter question title (e.g., "What is HTML?")
    - [ ] Verify field accepts input
    - [ ] Try leaving empty → Verify validation error (if required)
-2. **Content Field**: 
+2. **Content Field**:
    - [ ] Enter question content/description
    - [ ] Verify textarea accepts multi-line text
    - [ ] Try leaving empty → Verify validation error (if required)
-3. **Answer Field**: 
+3. **Answer Field**:
    - [ ] Enter answer/explanation
    - [ ] Verify field accepts input
-4. **Category Selection**: 
+4. **Category Selection**:
    - [ ] Find category dropdown
    - [ ] Verify dropdown shows available categories
    - [ ] Select a category (e.g., "HTML")
    - [ ] Verify selection is saved
-5. **Difficulty Selection**: 
+5. **Difficulty Selection**:
    - [ ] Find difficulty dropdown
    - [ ] Options should be: beginner, intermediate, advanced
    - [ ] Select a difficulty level
    - [ ] Verify selection works
-6. **Type Selection**: 
+6. **Type Selection**:
    - [ ] Find type dropdown
    - [ ] Verify dropdown shows available types
    - [ ] Select a type
    - [ ] Verify selection works
-7. **Learning Card Selection**: 
+7. **Learning Card Selection**:
    - [ ] Find learning card dropdown (if available)
    - [ ] Verify dropdown shows available cards
    - [ ] Select a card (optional)
    - [ ] Verify selection works
-8. **Tags/Topics**: 
+8. **Tags/Topics**:
    - [ ] Find tag input field (if available)
    - [ ] Verify tag input works
    - [ ] Add multiple tags
@@ -232,18 +234,18 @@
 
 #### Form Validation
 
-1. **Try submitting empty form**: 
+1. **Try submitting empty form**:
    - [ ] Click "Create Question" without filling any fields
    - [ ] Verify validation errors appear
-2. **Try submitting with only title**: 
+2. **Try submitting with only title**:
    - [ ] Fill only title field
    - [ ] Click "Create Question"
    - [ ] Verify content required error appears
-3. **Try submitting with invalid data**: 
+3. **Try submitting with invalid data**:
    - [ ] Fill form with invalid data
    - [ ] Click "Create Question"
    - [ ] Verify appropriate error messages appear
-4. **Verify all required fields**: 
+4. **Verify all required fields**:
    - [ ] Check if required fields are marked (visual indicators)
    - [ ] Verify required field indicators are visible
 
@@ -316,10 +318,10 @@
 2. **Find "Delete" button**: Look for button with Trash icon
 3. **Click "Delete" button**
 4. **Verify confirmation dialog appears**: "Are you sure you want to delete this question?" should appear
-5. **Click "Cancel"**: 
+5. **Click "Cancel"**:
    - [ ] Verify question NOT deleted
    - [ ] Verify question still in list
-6. **Click "Delete" again**: 
+6. **Click "Delete" again**:
    - [ ] Click "Delete" button again
    - [ ] Click "OK" in confirmation dialog
 7. **Verify success message**: "Question deleted successfully" should appear
@@ -329,10 +331,10 @@
 
 #### Delete Edge Cases
 
-1. **Try deleting last question**: 
+1. **Try deleting last question**:
    - [ ] If only one question exists, try deleting it
    - [ ] Verify appropriate handling
-2. **Try deleting question that's in use**: 
+2. **Try deleting question that's in use**:
    - [ ] If question is referenced elsewhere, try deleting
    - [ ] Verify appropriate error (if applicable)
 
@@ -348,45 +350,45 @@
 
 1. **Find "Show:" dropdown**: Look for dropdown with page size options
 2. **Verify options available**: Options should be: 5, 10, 20, 50, 100
-3. **Select "20"**: 
+3. **Select "20"**:
    - [ ] Select 20 from dropdown
    - [ ] Verify 20 questions per page displayed
-4. **Select "50"**: 
+4. **Select "50"**:
    - [ ] Select 50 from dropdown
    - [ ] Verify 50 questions per page displayed
 5. **Verify page count updates**: Page count should update correctly
 
 #### Navigation
 
-1. **Click "Previous" button (←)**: 
+1. **Click "Previous" button (←)**:
    - [ ] Click previous button
    - [ ] Verify goes to previous page
-2. **Verify "Previous" button disabled on page 1**: 
+2. **Verify "Previous" button disabled on page 1**:
    - [ ] Navigate to page 1
    - [ ] Verify previous button is disabled
-3. **Click "Next" button (→)**: 
+3. **Click "Next" button (→)**:
    - [ ] Click next button
    - [ ] Verify goes to next page
-4. **Verify "Next" button disabled on last page**: 
+4. **Verify "Next" button disabled on last page**:
    - [ ] Navigate to last page
    - [ ] Verify next button is disabled
-5. **Navigate to middle page**: 
+5. **Navigate to middle page**:
    - [ ] Navigate to a middle page (e.g., page 3)
    - [ ] Verify correct questions displayed
 6. **Verify URL updates**: If applicable, URL should update with page number
 
 #### Pagination Edge Cases
 
-1. **Test with exactly 10 questions**: 
+1. **Test with exactly 10 questions**:
    - [ ] If exactly 10 questions exist
    - [ ] Verify pagination appears correctly
-2. **Test with 0 questions**: 
+2. **Test with 0 questions**:
    - [ ] If no questions exist
    - [ ] Verify "No questions found" message appears
-3. **Test pagination after creating question**: 
+3. **Test pagination after creating question**:
    - [ ] Create a new question
    - [ ] Verify pagination updates correctly
-4. **Test pagination after deleting question**: 
+4. **Test pagination after deleting question**:
    - [ ] Delete a question
    - [ ] Verify pagination updates correctly
 
@@ -394,43 +396,43 @@
 
 #### Question List Items
 
-1. **Each question displays**: 
+1. **Each question displays**:
    - [ ] Title (large, bold)
    - [ ] Content preview (truncated with "line-clamp-2")
    - [ ] Action buttons (View, Edit, Delete)
 
 #### Badges Display
 
-1. **Topic Badges**: 
+1. **Topic Badges**:
    - [ ] Display topic names
    - [ ] Show "⭐" for primary topic
    - [ ] Verify badges are visible
-2. **Category Badges**: 
+2. **Category Badges**:
    - [ ] Display category names
    - [ ] Show "⭐" for primary category
    - [ ] Verify badges are visible
-3. **Card Badge**: 
+3. **Card Badge**:
    - [ ] Display learning card title (if associated)
    - [ ] Verify badge is visible
-4. **Difficulty Badge**: 
+4. **Difficulty Badge**:
    - [ ] Display difficulty level (beginner/intermediate/advanced)
    - [ ] Verify badge is visible
-5. **Type Badge**: 
+5. **Type Badge**:
    - [ ] Display question type
    - [ ] Verify badge is visible
-6. **"No Topic" badge**: 
+6. **"No Topic" badge**:
    - [ ] If no topic assigned, verify "No Topic" badge appears
-7. **"No Category" badge**: 
+7. **"No Category" badge**:
    - [ ] If no category assigned, verify "No Category" badge appears
-8. **"No Card" badge**: 
+8. **"No Card" badge**:
    - [ ] If no card assigned, verify "No Card" badge appears
 
 #### Visual States
 
-1. **Hover over question item**: 
+1. **Hover over question item**:
    - [ ] Hover over a question
    - [ ] Verify background color changes
-2. **Verify badge colors**: 
+2. **Verify badge colors**:
    - [ ] Primary topic: Purple background
    - [ ] Primary category: Green background
    - [ ] Card: Blue background
@@ -439,13 +441,13 @@
 ### Theme Testing
 
 1. **Toggle theme**: Use navbar theme toggle button
-2. **Verify all elements adapt**: 
+2. **Verify all elements adapt**:
    - [ ] Background colors change
    - [ ] Text colors change
    - [ ] Cards adapt to theme
    - [ ] Badges adapt to theme
    - [ ] Modals adapt to theme
-3. **Verify theme persists**: 
+3. **Verify theme persists**:
    - [ ] Reload page (F5)
    - [ ] Verify theme persists after page reload
 
@@ -453,40 +455,40 @@
 
 #### API Calls Verification (Check Network Tab)
 
-1. **GET `/api/questions/unified?page=X&pageSize=Y`**: 
+1. **GET `/api/questions/unified?page=X&pageSize=Y`**:
    - [ ] Called on page load
    - [ ] Verify request succeeds (200 status)
    - [ ] Verify response contains `data` array
    - [ ] Verify response contains `pagination` object with `totalCount`
-2. **GET `/api/cards`**: 
+2. **GET `/api/cards`**:
    - [ ] Called to fetch learning cards
    - [ ] Verify request succeeds
-3. **POST `/api/questions/unified`**: 
+3. **POST `/api/questions/unified`**:
    - [ ] Called when creating question
    - [ ] Verify request body contains question data
    - [ ] Verify response is successful
-4. **PUT `/api/questions/unified/{id}`**: 
+4. **PUT `/api/questions/unified/{id}`**:
    - [ ] Called when updating question
    - [ ] Verify request body contains updated data
    - [ ] Verify response is successful
-5. **DELETE `/api/questions/unified/{id}`**: 
+5. **DELETE `/api/questions/unified/{id}`**:
    - [ ] Called when deleting question
    - [ ] Verify request succeeds
    - [ ] Verify question is removed from database
 
 #### Error Handling
 
-1. **Simulate network error**: 
+1. **Simulate network error**:
    - [ ] Disable network in DevTools (Network tab → Offline)
    - [ ] Try to create question
    - [ ] Verify error message displays
-2. **Try to update question**: 
+2. **Try to update question**:
    - [ ] With network disabled, try to update question
    - [ ] Verify error message displays
-3. **Try to delete question**: 
+3. **Try to delete question**:
    - [ ] With network disabled, try to delete question
    - [ ] Verify error message displays
-4. **Re-enable network**: 
+4. **Re-enable network**:
    - [ ] Re-enable network
    - [ ] Verify operations work again
 
@@ -502,11 +504,11 @@
 
 #### Application Tab
 
-1. **Check localStorage**: 
+1. **Check localStorage**:
    - [ ] Open Application tab → Local Storage
    - [ ] Check if theme preference stored
    - [ ] Verify no unexpected data stored
-2. **Check sessionStorage**: 
+2. **Check sessionStorage**:
    - [ ] Open Application tab → Session Storage
    - [ ] Check if any session data stored
    - [ ] Verify no unexpected data stored
@@ -517,19 +519,19 @@
 
 1. **Look for "Bulk Upload" or "Import Questions" button**
 2. **Click button**: Verify upload interface appears
-3. **Test CSV file upload**: 
+3. **Test CSV file upload**:
    - [ ] Prepare valid CSV file with questions
    - [ ] Upload CSV file
    - [ ] Verify file parsing
    - [ ] Verify questions imported successfully
-4. **Test JSON file upload**: 
+4. **Test JSON file upload**:
    - [ ] Prepare valid JSON file with questions
    - [ ] Upload JSON file
    - [ ] Verify questions imported successfully
-5. **Test invalid file**: 
+5. **Test invalid file**:
    - [ ] Upload invalid file format
    - [ ] Verify error message displays
-6. **Test file with missing required fields**: 
+6. **Test file with missing required fields**:
    - [ ] Upload file with incomplete data
    - [ ] Verify validation errors
 
@@ -627,15 +629,15 @@
 
 ### Test Form Validation
 
-1. **Leave email empty**: 
+1. **Leave email empty**:
    - [ ] Clear email field
    - [ ] Click "Sign In"
    - [ ] Verify validation error appears
-2. **Enter invalid email format**: 
+2. **Enter invalid email format**:
    - [ ] Enter "invalid-email" (no @ symbol)
    - [ ] Click "Sign In"
    - [ ] Verify validation error appears
-3. **Leave password empty**: 
+3. **Leave password empty**:
    - [ ] Clear password field
    - [ ] Click "Sign In"
    - [ ] Verify validation error appears
@@ -644,10 +646,10 @@
 ### Check Network Tab
 
 1. **Open Network tab** in DevTools
-2. **Login API call succeeds**: 
+2. **Login API call succeeds**:
    - [ ] With valid credentials, API call should succeed
    - [ ] Status should be 200
-3. **Login API call fails**: 
+3. **Login API call fails**:
    - [ ] With invalid credentials, API call should fail
    - [ ] Status should be 401 or 400
 4. **Error responses handled**: Error responses should be handled correctly
@@ -672,7 +674,7 @@
 3. **Enter credentials**: Fill in email and password
 4. **Click "Sign In"**: Submit login form
 5. **Wait for redirect**: Should redirect to `/admin/dashboard`
-6. **Wait for dashboard to fully load**: 
+6. **Wait for dashboard to fully load**:
    - [ ] Look for "Admin Dashboard" heading
    - [ ] Wait for all menu cards to appear
    - [ ] Wait for stats to load (may show "..." initially)
@@ -729,15 +731,15 @@
 
 #### Theme Visual Verification
 
-1. **In light mode**: 
+1. **In light mode**:
    - [ ] Verify light colors
    - [ ] Verify white backgrounds
    - [ ] Verify text is readable
-2. **In dark mode**: 
+2. **In dark mode**:
    - [ ] Verify dark colors
    - [ ] Verify dark backgrounds
    - [ ] Verify text is readable
-3. **Verify all UI elements adapt**: 
+3. **Verify all UI elements adapt**:
    - [ ] Navbar colors change appropriately
    - [ ] Dashboard cards adapt to theme
    - [ ] All text is readable in both modes
@@ -748,11 +750,11 @@
 2. **Statistics display correctly**: Total Questions, Categories, Topics, etc.
 3. **Menu cards are visible**: All menu cards should be visible
 4. **Menu cards are clickable**: All menu cards should be clickable
-5. **Quick actions work**: 
+5. **Quick actions work**:
    - [ ] "Add New Question" quick action
    - [ ] "Manage Learning Cards" quick action
    - [ ] All quick action buttons work
-6. **Refresh button works**: 
+6. **Refresh button works**:
    - [ ] Click refresh button
    - [ ] Verify stats reload
 7. **All navigation links work**: All links should navigate correctly
@@ -768,7 +770,7 @@
 ### Test Admin Menu Dropdown
 
 1. **Click "Admin Menu" button**: Dropdown should open
-2. **Verify all menu items visible**: 
+2. **Verify all menu items visible**:
    - [ ] Dashboard
    - [ ] Questions
    - [ ] Content Management
@@ -806,7 +808,7 @@
 
 1. **Find "Add New Card" button**: Look for button to create new card
 2. **Click button**: Modal should open
-3. **Fill form**: 
+3. **Fill form**:
    - [ ] Enter card title
    - [ ] Enter card description
    - [ ] Select category
@@ -923,7 +925,7 @@
 #### Create Task
 
 1. **Click "Add New Task" button**: Modal should open
-2. **Fill all fields**: 
+2. **Fill all fields**:
    - [ ] Title
    - [ ] Description
    - [ ] Difficulty
@@ -1043,7 +1045,7 @@
 #### Create User
 
 1. **Click "Add New User" button**: Modal should open
-2. **Fill form**: 
+2. **Fill form**:
    - [ ] Email
    - [ ] Name
    - [ ] Password
@@ -1707,9 +1709,3 @@ npm run test:e2e:headed
 **Last Updated**: 2025-01-27  
 **Status**: Complete step-by-step testing guide  
 **Total Steps**: 500+ individual testing steps across 21 tasks
-
-
-
-
-
-

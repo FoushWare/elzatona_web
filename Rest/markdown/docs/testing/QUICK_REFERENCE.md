@@ -10,27 +10,32 @@
 ### Terminal Setup (4 Terminals)
 
 **Terminal 1: Dev Server**
+
 ```bash
 npm run dev
 # Server: http://localhost:3000
 ```
 
 **Terminal 2: Unit Tests (Watch)**
+
 ```bash
 npm run test:unit -- --watch
 ```
 
 **Terminal 3: Integration Tests**
+
 ```bash
 npm run test:integration -- [test-file]
 ```
 
 **Terminal 4: E2E Tests (Headed)**
+
 ```bash
 npm run test:e2e:headed -- [test-file]
 ```
 
 **Browser: Manual Testing**
+
 - Open: `http://localhost:3000`
 - Test features manually
 - Compare with automated results
@@ -40,6 +45,7 @@ npm run test:e2e:headed -- [test-file]
 ## 📋 Commands by Test Type
 
 ### Unit Tests
+
 ```bash
 # All unit tests
 npm run test:unit
@@ -57,6 +63,7 @@ npm run test:unit:shared-components
 ```
 
 ### Integration Tests
+
 ```bash
 # All integration tests
 npm run test:integration
@@ -73,6 +80,7 @@ npm run test:integration:freestyle-flow
 ```
 
 ### E2E Tests
+
 ```bash
 # All E2E tests
 npm run test:e2e
@@ -102,6 +110,7 @@ npm run test:e2e:guided-flow
 ### Admin Tasks
 
 **Task 1: Bulk Question Addition**
+
 ```bash
 npm run test:unit -- apps/website/src/app/admin/content/questions/page.test.tsx
 npm run test:integration -- apps/website/src/app/admin/content/questions/page.integration.test.tsx
@@ -109,6 +118,7 @@ npm run test:e2e:headed -- tests/e2e/admin/admin-bulk-question-addition.spec.ts
 ```
 
 **Task 2: Admin Login**
+
 ```bash
 npm run test:unit -- apps/website/src/app/admin/login/page.test.tsx
 npm run test:integration -- apps/website/src/app/admin/login/page.integration.test.tsx
@@ -116,6 +126,7 @@ npm run test:e2e:headed -- tests/e2e/admin/admin-login.spec.ts
 ```
 
 **Task 3: Admin Dashboard**
+
 ```bash
 npm run test:unit -- apps/website/src/app/admin/dashboard/page.test.tsx
 npm run test:integration -- apps/website/src/app/admin/dashboard/page.integration.test.tsx
@@ -123,6 +134,7 @@ npm run test:e2e:headed -- tests/e2e/admin/admin-dashboard.spec.ts
 ```
 
 **Task 4: Content Management**
+
 ```bash
 npm run test:unit -- apps/website/src/app/admin/content-management/page.test.tsx
 npm run test:integration -- apps/website/src/app/admin/content-management/page.integration.test.tsx
@@ -130,6 +142,7 @@ npm run test:e2e:headed -- tests/e2e/admin/admin-content-management.spec.ts
 ```
 
 **Task 5: Frontend Tasks**
+
 ```bash
 npm run test:unit -- apps/website/src/app/admin/frontend-tasks/page.test.tsx
 npm run test:integration -- apps/website/src/app/admin/frontend-tasks/page.integration.test.tsx
@@ -137,6 +150,7 @@ npm run test:e2e:headed -- tests/e2e/admin/admin-frontend-tasks.spec.ts
 ```
 
 **Task 6: Problem Solving**
+
 ```bash
 npm run test:unit -- apps/website/src/app/admin/problem-solving/page.test.tsx
 npm run test:integration -- apps/website/src/app/admin/problem-solving/page.integration.test.tsx
@@ -144,6 +158,7 @@ npm run test:e2e:headed -- tests/e2e/admin/admin-problem-solving.spec.ts
 ```
 
 **Task 7: User Management**
+
 ```bash
 npm run test:unit -- apps/website/src/app/admin/users/page.test.tsx
 npm run test:integration -- apps/website/src/app/admin/users/page.integration.test.tsx
@@ -153,6 +168,7 @@ npm run test:e2e:headed -- tests/e2e/admin/admin-user-management.spec.ts
 ### Guided Flow Tasks
 
 **Task 17: Homepage**
+
 ```bash
 npm run test:unit -- apps/website/src/app/page.test.tsx
 npm run test:integration -- apps/website/src/app/page.integration.test.tsx
@@ -160,6 +176,7 @@ npm run test:e2e:headed -- tests/e2e/guided-flow/homepage-to-guided.spec.ts
 ```
 
 **Task 18: Get Started**
+
 ```bash
 npm run test:unit -- apps/website/src/app/get-started/page.test.tsx
 npm run test:integration -- apps/website/src/app/get-started/page.integration.test.tsx
@@ -170,6 +187,7 @@ npm run test:e2e:headed -- tests/e2e/guided-flow/get-started-authenticated.spec.
 ### Freestyle Flow Tasks
 
 **Task 8: Custom Roadmap**
+
 ```bash
 npm run test:unit -- apps/website/src/app/custom-roadmap/page.test.tsx
 npm run test:integration -- apps/website/src/app/custom-roadmap/page.integration.test.tsx
@@ -177,6 +195,7 @@ npm run test:e2e:headed -- tests/e2e/freestyle-flow/custom-roadmap-creation.spec
 ```
 
 **Task 9: My Plans**
+
 ```bash
 npm run test:unit -- apps/website/src/app/my-plans/page.test.tsx
 npm run test:integration -- apps/website/src/app/my-plans/page.integration.test.tsx
@@ -184,6 +203,7 @@ npm run test:e2e:headed -- tests/e2e/freestyle-flow/my-plans.spec.ts
 ```
 
 **Task 10: Browse Practice Questions**
+
 ```bash
 npm run test:unit -- apps/website/src/app/browse-practice-questions/page.test.tsx
 npm run test:integration -- apps/website/src/app/browse-practice-questions/page.integration.test.tsx
@@ -191,6 +211,7 @@ npm run test:e2e:headed -- tests/e2e/freestyle-flow/browse-practice-questions.sp
 ```
 
 **Task 11: Learning Paths**
+
 ```bash
 npm run test:unit -- apps/website/src/app/learning-paths/page.test.tsx
 npm run test:integration -- apps/website/src/app/learning-paths/page.integration.test.tsx
@@ -198,6 +219,7 @@ npm run test:e2e:headed -- tests/e2e/freestyle-flow/learning-paths-practice.spec
 ```
 
 **Task 12: Frontend Tasks**
+
 ```bash
 npm run test:unit -- apps/website/src/app/frontend-tasks/page.test.tsx
 npm run test:integration -- apps/website/src/app/frontend-tasks/page.integration.test.tsx
@@ -205,6 +227,7 @@ npm run test:e2e:headed -- tests/e2e/freestyle-flow/frontend-tasks-practice.spec
 ```
 
 **Task 13: Problem Solving**
+
 ```bash
 npm run test:unit -- apps/website/src/app/problem-solving/page.test.tsx
 npm run test:integration -- apps/website/src/app/problem-solving/page.integration.test.tsx
@@ -212,6 +235,7 @@ npm run test:e2e:headed -- tests/e2e/freestyle-flow/problem-solving-practice.spe
 ```
 
 **Task 14-16: Flashcards**
+
 ```bash
 npm run test:unit -- apps/website/src/app/flashcards/page.test.tsx
 npm run test:integration -- apps/website/src/app/flashcards/page.integration.test.tsx
@@ -221,6 +245,7 @@ npm run test:e2e:headed -- tests/e2e/freestyle-flow/flashcards.spec.ts
 ### Shared Components
 
 **Task 19: Navigation**
+
 ```bash
 npm run test:unit -- libs/shared-components/src/lib/common/Navigation.test.tsx
 npm run test:integration -- libs/shared-components/src/lib/common/Navigation.integration.test.tsx
@@ -228,6 +253,7 @@ npm run test:e2e:headed -- tests/e2e/shared-components/navigation.spec.ts
 ```
 
 **Task 20: Question Card**
+
 ```bash
 npm run test:unit -- apps/website/src/components/QuestionDisplay.test.tsx
 npm run test:integration -- apps/website/src/components/QuestionDisplay.integration.test.tsx
@@ -235,6 +261,7 @@ npm run test:e2e:headed -- tests/e2e/shared-components/question-card.spec.ts
 ```
 
 **Task 21: Progress Tracker**
+
 ```bash
 npm run test:unit -- libs/shared-components/src/lib/common/ProgressTracker.test.tsx
 npm run test:integration -- libs/shared-components/src/lib/common/ProgressTracker.integration.test.tsx
@@ -244,6 +271,7 @@ npm run test:e2e:headed -- tests/e2e/shared-components/progress-tracker.spec.ts
 ### UI Components Library (New - Vitest)
 
 **All UI Component Tests**
+
 ```bash
 # Run all shared components tests
 nx test shared-components
@@ -256,6 +284,7 @@ nx test shared-components --coverage
 ```
 
 **Specific Component Tests**
+
 ```bash
 # Button component
 nx test shared-components -- button.test.tsx
@@ -268,6 +297,7 @@ nx test shared-components -- select.test.tsx
 ```
 
 **Storybook**
+
 ```bash
 # Start Storybook (port 4400)
 nx storybook shared-components
@@ -281,6 +311,7 @@ nx build-storybook shared-components
 ## 🔧 Useful Options
 
 ### Jest Options
+
 ```bash
 # Watch mode
 --watch
@@ -299,6 +330,7 @@ nx build-storybook shared-components
 ```
 
 ### Playwright Options
+
 ```bash
 # Headed mode (see browser)
 --headed
@@ -331,4 +363,3 @@ nx build-storybook shared-components
 
 **Last Updated**: 2025-11-09  
 **Quick Reference**: Keep this open while testing!
-

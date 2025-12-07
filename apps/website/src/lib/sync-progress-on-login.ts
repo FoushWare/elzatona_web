@@ -35,7 +35,7 @@ interface FreeStyleProgressData {
  */
 export async function syncAllGuidedProgress(
   authToken: string,
-  userId?: string
+  userId?: string,
 ): Promise<{ success: boolean; synced: number; errors: string[] }> {
   const synced: string[] = [];
   const errors: string[] = [];
@@ -45,13 +45,13 @@ export async function syncAllGuidedProgress(
     const guidedKeys: string[] = [];
     for (let i = 0; i < localStorage.length; i++) {
       const key = localStorage.key(i);
-      if (key && key.startsWith('guided-practice-progress-')) {
+      if (key && key.startsWith("guided-practice-progress-")) {
         guidedKeys.push(key);
       }
     }
 
     console.log(
-      `📦 Found ${guidedKeys.length} guided learning progress entries to sync`
+      `📦 Found ${guidedKeys.length} guided learning progress entries to sync`,
     );
 
     // Sync each guided progress
@@ -61,12 +61,12 @@ export async function syncAllGuidedProgress(
         if (!progressData) continue;
 
         const progress: GuidedProgressData = JSON.parse(progressData);
-        const planId = key.replace('guided-practice-progress-', '');
+        const planId = key.replace("guided-practice-progress-", "");
 
-        const response = await fetch('/api/progress/guided-learning/sync', {
-          method: 'POST',
+        const response = await fetch("/api/progress/guided-learning/sync", {
+          method: "POST",
           headers: {
-            'Content-Type': 'application/json',
+            "Content-Type": "application/json",
             Authorization: `Bearer ${authToken}`, // Pass auth token in header
           },
           body: JSON.stringify({
@@ -93,32 +93,32 @@ export async function syncAllGuidedProgress(
           } catch (removeError) {
             console.warn(
               `⚠️ Failed to remove ${key} from localStorage:`,
-              removeError
+              removeError,
             );
           }
         } else {
           const errorData = await response
             .json()
-            .catch(() => ({ error: 'Unknown error' }));
-          errors.push(`Plan ${planId}: ${errorData.error || 'Sync failed'}`);
+            .catch(() => ({ error: "Unknown error" }));
+          errors.push(`Plan ${planId}: ${errorData.error || "Sync failed"}`);
           console.error(
             `❌ Failed to sync guided progress for plan ${planId}:`,
-            errorData
+            errorData,
           );
         }
       } catch (error) {
-        const planId = key.replace('guided-practice-progress-', '');
+        const planId = key.replace("guided-practice-progress-", "");
         errors.push(
-          `Plan ${planId}: ${error instanceof Error ? error.message : 'Parse error'}`
+          `Plan ${planId}: ${error instanceof Error ? error.message : "Parse error"}`,
         );
         console.error(`❌ Error syncing guided progress for ${key}:`, error);
       }
     }
   } catch (error) {
     errors.push(
-      `Guided progress scan: ${error instanceof Error ? error.message : 'Unknown error'}`
+      `Guided progress scan: ${error instanceof Error ? error.message : "Unknown error"}`,
     );
-    console.error('❌ Error scanning guided progress:', error);
+    console.error("❌ Error scanning guided progress:", error);
   }
 
   return {
@@ -135,21 +135,21 @@ export async function syncAllGuidedProgress(
  */
 export async function syncFreeStyleProgress(
   authToken: string,
-  userId?: string
+  userId?: string,
 ): Promise<{ success: boolean; error?: string }> {
   try {
-    const progressData = localStorage.getItem('free-style-practice-progress');
+    const progressData = localStorage.getItem("free-style-practice-progress");
     if (!progressData) {
-      console.log('📭 No free-style progress found in localStorage');
+      console.log("📭 No free-style progress found in localStorage");
       return { success: true };
     }
 
     const progress: FreeStyleProgressData = JSON.parse(progressData);
 
-    const response = await fetch('/api/progress/free-style/sync', {
-      method: 'POST',
+    const response = await fetch("/api/progress/free-style/sync", {
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
         Authorization: `Bearer ${authToken}`,
       },
       body: JSON.stringify({
@@ -165,16 +165,16 @@ export async function syncFreeStyleProgress(
     });
 
     if (response.ok) {
-      console.log('✅ Synced free-style practice progress');
+      console.log("✅ Synced free-style practice progress");
 
       // Remove from localStorage after successful sync
       try {
-        localStorage.removeItem('free-style-practice-progress');
-        console.log('🗑️ Removed free-style progress from localStorage');
+        localStorage.removeItem("free-style-practice-progress");
+        console.log("🗑️ Removed free-style progress from localStorage");
       } catch (removeError) {
         console.warn(
-          '⚠️ Failed to remove free-style progress from localStorage:',
-          removeError
+          "⚠️ Failed to remove free-style progress from localStorage:",
+          removeError,
         );
       }
 
@@ -182,15 +182,15 @@ export async function syncFreeStyleProgress(
     } else {
       const errorData = await response
         .json()
-        .catch(() => ({ error: 'Unknown error' }));
-      console.error('❌ Failed to sync free-style progress:', errorData);
-      return { success: false, error: errorData.error || 'Sync failed' };
+        .catch(() => ({ error: "Unknown error" }));
+      console.error("❌ Failed to sync free-style progress:", errorData);
+      return { success: false, error: errorData.error || "Sync failed" };
     }
   } catch (error) {
-    console.error('❌ Error syncing free-style progress:', error);
+    console.error("❌ Error syncing free-style progress:", error);
     return {
       success: false,
-      error: error instanceof Error ? error.message : 'Unknown error',
+      error: error instanceof Error ? error.message : "Unknown error",
     };
   }
 }
@@ -203,13 +203,13 @@ export async function syncFreeStyleProgress(
  */
 export async function syncAllProgressOnLogin(
   authToken: string,
-  userId?: string
+  userId?: string,
 ): Promise<{
   success: boolean;
   guided: { synced: number; errors: string[] };
   freeStyle: { success: boolean; error?: string };
 }> {
-  console.log('🔄 Starting progress sync on login...', { userId });
+  console.log("🔄 Starting progress sync on login...", { userId });
 
   const [guidedResult, freeStyleResult] = await Promise.allSettled([
     syncAllGuidedProgress(authToken, userId),
@@ -217,25 +217,25 @@ export async function syncAllProgressOnLogin(
   ]);
 
   const guided =
-    guidedResult.status === 'fulfilled'
+    guidedResult.status === "fulfilled"
       ? guidedResult.value
       : {
           success: false,
           synced: 0,
-          errors: [guidedResult.reason?.message || 'Unknown error'],
+          errors: [guidedResult.reason?.message || "Unknown error"],
         };
 
   const freeStyle =
-    freeStyleResult.status === 'fulfilled'
+    freeStyleResult.status === "fulfilled"
       ? freeStyleResult.value
       : {
           success: false,
-          error: freeStyleResult.reason?.message || 'Unknown error',
+          error: freeStyleResult.reason?.message || "Unknown error",
         };
 
   const overallSuccess = guided.success && freeStyle.success;
 
-  console.log('📊 Progress sync summary:', {
+  console.log("📊 Progress sync summary:", {
     guided: {
       synced: guided.synced,
       errors: guided.errors.length,

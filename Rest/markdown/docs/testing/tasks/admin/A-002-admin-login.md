@@ -1,8 +1,13 @@
 # Task ID: A-002
+
 # Title: Admin Login
+
 # Status: pending
-# Dependencies: 
+
+# Dependencies:
+
 # Priority: medium
+
 # Description: Test the admin login flow including authentication, form validation, error handling, and redirect functionality.
 
 # Details:
@@ -10,6 +15,7 @@
 ## Time Estimation
 
 ### Manual Testing
+
 - **Estimated Time**: 15-20 minutes
 - **Breakdown**:
   - Navigate to login page: 1 minute
@@ -23,6 +29,7 @@
 - **Dependencies**: Admin credentials, authentication system
 
 ### Automated Testing
+
 - **Estimated Time**: 6-10 minutes (first run), 1-2 minutes (subsequent runs)
 - **Breakdown**:
   - Unit tests setup and execution: 2-3 minutes
@@ -32,6 +39,7 @@
 - **Dependencies**: Authentication mocks, test admin credentials
 
 ### Total Time
+
 - **Manual Only**: 15-20 minutes
 - **Automated Only**: 6-10 minutes (first run), 1-2 minutes (subsequent)
 - **Both Manual + Automated**: 21-30 minutes (first run), 16-22 minutes (subsequent)
@@ -39,6 +47,7 @@
 ---
 
 ## Overview
+
 Test the admin login flow including authentication, form validation, error handling, and redirect functionality.
 
 ## Manual Testing Steps
