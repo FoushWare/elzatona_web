@@ -537,9 +537,7 @@ export default function UnifiedAdminPage() {
     >
   >({});
 
-  // Search and filter state for categories and topics
-  const [categorySearch, setCategorySearch] = useState("");
-  const [topicSearch, setTopicSearch] = useState("");
+  // Search and filter state for categories and topics (now handled by components)
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [selectedCategoryFilter, setSelectedCategoryFilter] = useState<
     string | null
@@ -620,39 +618,7 @@ export default function UnifiedAdminPage() {
     Record<string, boolean>
   >({});
 
-  // Filtered categories and topics
-  const filteredCategories = useMemo(() => {
-    if (!categorySearch.trim()) return categories;
-    const searchLower = categorySearch.toLowerCase();
-    return categories.filter(
-      (category) =>
-        (category.name || "").toLowerCase().includes(searchLower) ||
-        (category.description || "").toLowerCase().includes(searchLower),
-    );
-  }, [categories, categorySearch]);
-
-  const filteredTopics = useMemo(() => {
-    let filtered = topics;
-
-    // Filter by category
-    if (selectedCategoryFilter) {
-      filtered = filtered.filter(
-        (topic) => topic.category_id === selectedCategoryFilter,
-      );
-    }
-
-    // Filter by search term
-    if (topicSearch.trim()) {
-      const searchLower = topicSearch.toLowerCase();
-      filtered = filtered.filter(
-        (topic) =>
-          (topic.name || "").toLowerCase().includes(searchLower) ||
-          (topic.description || "").toLowerCase().includes(searchLower),
-      );
-    }
-
-    return filtered;
-  }, [topics, topicSearch, selectedCategoryFilter]);
+  // Filtered categories and topics are now handled by their respective components
 
   // CRUD handlers using TanStack Query mutations
   const handleCreateCard = async (cardData: Partial<LearningCard>) => {
@@ -1643,289 +1609,37 @@ export default function UnifiedAdminPage() {
 
       {/* Topics and Categories Lists */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-        {/* Categories List */}
-        <Suspense fallback={<LoadingSkeleton />}>
-          <Card className="bg-white dark:bg-gray-800 border-2 border-purple-200 dark:border-purple-800 shadow-lg">
-            <Collapsible
-              open={isCategoriesOpen}
-              onOpenChange={setIsCategoriesOpen}
-            >
-              <CollapsibleTrigger asChild>
-                <CardHeader className="cursor-pointer hover:bg-purple-50 dark:hover:bg-purple-900/20 transition-colors border-b border-purple-100 dark:border-purple-800">
-                  <CardTitle className="text-xl font-semibold text-gray-900 dark:text-gray-100 flex items-center gap-2">
-                    {isCategoriesOpen ? (
-                      <ChevronDown className="h-5 w-5 text-purple-600 dark:text-purple-400" />
-                    ) : (
-                      <ChevronRight className="h-5 w-5 text-purple-600 dark:text-purple-400" />
-                    )}
-                    <BookOpen className="h-5 w-5 text-purple-600 dark:text-purple-400" />
-                    Categories ({categories.length})
-                  </CardTitle>
-                </CardHeader>
-              </CollapsibleTrigger>
-              {isCategoriesOpen && (
-                <CollapsibleContent
-                  className="data-[state=open]:animate-collapsible-down data-[state=closed]:animate-collapsible-up"
-                  onClick={(e) => e.stopPropagation()}
-                >
-                  <CardContent
-                    className="pt-4 bg-purple-50/30 dark:bg-gray-800"
-                    onClick={(e) => e.stopPropagation()}
-                  >
-                    {/* Search and Add button */}
-                    <div className="mb-4 space-y-3">
-                      {/* Search Input */}
-                      <div
-                        className="relative"
-                        onClick={(e) => e.stopPropagation()}
-                      >
-                        <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400 dark:text-gray-500" />
-                        <Input
-                          placeholder="Search categories..."
-                          value={categorySearch}
-                          onChange={(e) => setCategorySearch(e.target.value)}
-                          className="pl-10 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 border-gray-300 dark:border-gray-600 placeholder:text-gray-400 dark:placeholder:text-gray-500"
-                        />
-                        {categorySearch && (
-                          <button
-                            onClick={() => setCategorySearch("")}
-                            className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
-                          >
-                            <X className="h-4 w-4" />
-                          </button>
-                        )}
-                      </div>
-
-                      {/* Add button */}
-                      <div className="flex justify-end">
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            setEditingCategory(null);
-                            setIsCategoryModalOpen(true);
-                          }}
-                          className="bg-purple-50 dark:bg-purple-900/20 text-purple-600 dark:text-purple-400 hover:bg-purple-100 dark:hover:bg-purple-900/40 border-purple-200 dark:border-purple-700"
-                        >
-                          <Plus className="h-4 w-4 mr-2" />
-                          Add Category
-                        </Button>
-                      </div>
-                    </div>
-
-                    {categoriesLoading ? (
-                      <div className="text-center py-4">
-                        <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-purple-600 mx-auto"></div>
-                      </div>
-                    ) : filteredCategories.length === 0 ? (
-                      <div className="text-center py-8 text-gray-500 dark:text-gray-400">
-                        <BookOpen className="h-12 w-12 mx-auto mb-2 opacity-50" />
-                        <p>
-                          {categorySearch
-                            ? "No categories found"
-                            : "No categories yet"}
-                        </p>
-                      </div>
-                    ) : (
-                      <div className="space-y-2 max-h-96 overflow-y-auto">
-                        {filteredCategories.map((category) => (
-                          <div
-                            key={category.id}
-                            className="flex items-center justify-between p-3 rounded-lg border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
-                          >
-                            <div className="flex-1 min-w-0">
-                              <p className="font-medium text-gray-900 dark:text-gray-100 truncate">
-                                {category.name || "Unnamed Category"}
-                              </p>
-                              {category.description && (
-                                <p className="text-sm text-gray-500 dark:text-gray-400 truncate mt-1">
-                                  {category.description}
-                                </p>
-                              )}
-                            </div>
-                            <div className="flex items-center gap-2 ml-4">
-                              <Button
-                                variant="ghost"
-                                size="sm"
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                  setEditingCategory(category);
-                                  setIsCategoryModalOpen(true);
-                                }}
-                                className="h-8 w-8 p-0"
-                                title="Edit category"
-                              >
-                                <Edit className="h-4 w-4" />
-                              </Button>
-                              <Button
-                                variant="ghost"
-                                size="sm"
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                  handleDeleteCategory(category);
-                                }}
-                                className="h-8 w-8 p-0 text-red-600 hover:text-red-700 hover:bg-red-50 dark:hover:bg-red-900/20"
-                                title="Delete category"
-                              >
-                                <Trash2 className="h-4 w-4" />
-                              </Button>
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-                    )}
-                  </CardContent>
-                </CollapsibleContent>
-              )}
-            </Collapsible>
-          </Card>
-        </Suspense>
-
-        {/* Topics List */}
-        <Suspense fallback={<LoadingSkeleton />}>
-          <Card className="bg-white dark:bg-gray-800 border-2 border-orange-200 dark:border-orange-800 shadow-lg">
-            <Collapsible open={isTopicsOpen} onOpenChange={setIsTopicsOpen}>
-              <CollapsibleTrigger asChild>
-                <CardHeader className="cursor-pointer hover:bg-orange-50 dark:hover:bg-orange-900/20 transition-colors border-b border-orange-100 dark:border-orange-800">
-                  <CardTitle className="text-xl font-semibold text-gray-900 dark:text-gray-100 flex items-center gap-2">
-                    {isTopicsOpen ? (
-                      <ChevronDown className="h-5 w-5 text-orange-600 dark:text-orange-400" />
-                    ) : (
-                      <ChevronRight className="h-5 w-5 text-orange-600 dark:text-orange-400" />
-                    )}
-                    <Target className="h-5 w-5 text-orange-600 dark:text-orange-400" />
-                    Topics ({topics.length})
-                  </CardTitle>
-                </CardHeader>
-              </CollapsibleTrigger>
-              {isTopicsOpen && (
-                <CollapsibleContent
-                  className="data-[state=open]:animate-collapsible-down data-[state=closed]:animate-collapsible-up"
-                  onClick={(e) => e.stopPropagation()}
-                >
-                  <CardContent
-                    className="pt-4 bg-orange-50/30 dark:bg-gray-800"
-                    onClick={(e) => e.stopPropagation()}
-                  >
-                    {/* Search and Add button */}
-                    <div className="mb-4 space-y-3">
-                      {/* Search Input */}
-                      <div
-                        className="relative"
-                        onClick={(e) => e.stopPropagation()}
-                      >
-                        <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400 dark:text-gray-500" />
-                        <Input
-                          placeholder="Search topics..."
-                          value={topicSearch}
-                          onChange={(e) => setTopicSearch(e.target.value)}
-                          className="pl-10 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 border-gray-300 dark:border-gray-600 placeholder:text-gray-400 dark:placeholder:text-gray-500"
-                        />
-                        {topicSearch && (
-                          <button
-                            onClick={() => setTopicSearch("")}
-                            className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
-                          >
-                            <X className="h-4 w-4" />
-                          </button>
-                        )}
-                      </div>
-
-                      {/* Add button */}
-                      <div className="flex justify-end">
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            setEditingTopic(null);
-                            setIsTopicModalOpen(true);
-                          }}
-                          className="bg-orange-50 dark:bg-orange-900/20 text-orange-600 dark:text-orange-400 hover:bg-orange-100 dark:hover:bg-orange-900/40 border-orange-200 dark:border-orange-700"
-                        >
-                          <Plus className="h-4 w-4 mr-2" />
-                          Add Topic
-                        </Button>
-                      </div>
-                    </div>
-
-                    {topicsLoading ? (
-                      <div className="text-center py-4">
-                        <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-orange-600 mx-auto"></div>
-                      </div>
-                    ) : filteredTopics.length === 0 ? (
-                      <div className="text-center py-8 text-gray-500 dark:text-gray-400">
-                        <Target className="h-12 w-12 mx-auto mb-2 opacity-50" />
-                        <p>
-                          {topicSearch ? "No topics found" : "No topics yet"}
-                        </p>
-                      </div>
-                    ) : (
-                      <div className="space-y-2 max-h-96 overflow-y-auto">
-                        {filteredTopics.map((topic) => (
-                          <div
-                            key={topic.id}
-                            className="flex items-center justify-between p-3 rounded-lg border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
-                          >
-                            <div className="flex-1 min-w-0">
-                              <p className="font-medium text-gray-900 dark:text-gray-100 truncate">
-                                {topic.name || "Unnamed Topic"}
-                              </p>
-                              {topic.description && (
-                                <p className="text-sm text-gray-500 dark:text-gray-400 truncate mt-1">
-                                  {topic.description}
-                                </p>
-                              )}
-                              {topic.category_id && (
-                                <Badge
-                                  variant="secondary"
-                                  className="mt-1 text-xs"
-                                >
-                                  Category:{" "}
-                                  {categories.find(
-                                    (c) => c.id === topic.category_id,
-                                  )?.name || "Unknown"}
-                                </Badge>
-                              )}
-                            </div>
-                            <div className="flex items-center gap-2 ml-4">
-                              <Button
-                                variant="ghost"
-                                size="sm"
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                  setEditingTopic(topic);
-                                  setIsTopicModalOpen(true);
-                                }}
-                                className="h-8 w-8 p-0"
-                                title="Edit topic"
-                              >
-                                <Edit className="h-4 w-4" />
-                              </Button>
-                              <Button
-                                variant="ghost"
-                                size="sm"
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                  handleDeleteTopic(topic);
-                                }}
-                                className="h-8 w-8 p-0 text-red-600 hover:text-red-700 hover:bg-red-50 dark:hover:bg-red-900/20"
-                                title="Delete topic"
-                              >
-                                <Trash2 className="h-4 w-4" />
-                              </Button>
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-                    )}
-                  </CardContent>
-                </CollapsibleContent>
-              )}
-            </Collapsible>
-          </Card>
-        </Suspense>
+        <CategoriesList
+          categories={categories}
+          isLoading={categoriesLoading}
+          isOpen={isCategoriesOpen}
+          onOpenChange={setIsCategoriesOpen}
+          onAdd={() => {
+            setEditingCategory(null);
+            setIsCategoryModalOpen(true);
+          }}
+          onEdit={(category) => {
+            setEditingCategory(category);
+            setIsCategoryModalOpen(true);
+          }}
+          onDelete={handleDeleteCategory}
+        />
+        <TopicsList
+          topics={topics}
+          categories={categories}
+          isLoading={topicsLoading}
+          isOpen={isTopicsOpen}
+          onOpenChange={setIsTopicsOpen}
+          onAdd={() => {
+            setEditingTopic(null);
+            setIsTopicModalOpen(true);
+          }}
+          onEdit={(topic) => {
+            setEditingTopic(topic);
+            setIsTopicModalOpen(true);
+          }}
+          onDelete={handleDeleteTopic}
+        />
       </div>
 
       {/* Search and Filters */}
