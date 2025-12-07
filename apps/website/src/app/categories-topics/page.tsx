@@ -1,5 +1,5 @@
 // Next.js page wrapper - imports from pages/ directory
 // This file maintains Next.js routing structure
-// Source: /Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/apps/website/pages/categories-topics/page.tsx
+// Source: /Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/apps/website/page-components/categories-topics/page.tsx
 
-export { default } from "../../../pages/categories-topics/page";
+export { default } from "../../../page-components/categories-topics/page";
