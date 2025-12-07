@@ -3,15 +3,18 @@
 The large `admin-bulk-question-addition.spec.ts` file (3560 lines) has been split into smaller, focused test files for better maintainability and easier debugging.
 
 **Note**: Files have been renamed to better reflect that they test the questions page:
+
 - Old naming: `admin-bulk-question-addition.*`
 - New naming: `admin-questions-page.*`
 
 ## File Structure
 
 ### Shared Setup
+
 - **`admin-questions-page.setup.ts`** - Shared beforeEach hook, helper functions, and environment setup
 
 ### Test Files
+
 - **`admin-questions-page.basic.spec.ts`** - Basic page loading and UI element tests
 - **`admin-questions-page.crud.spec.ts`** - CRUD operations (Create, Read, Update, Delete)
 - **`admin-questions-page.search.spec.ts`** - Search functionality tests
@@ -23,6 +26,7 @@ The large `admin-bulk-question-addition.spec.ts` file (3560 lines) has been spli
 ## Running Tests
 
 ### Run All Tests
+
 ```bash
 # Run all admin tests (including original file)
 npm run test:e2e:admin
@@ -32,6 +36,7 @@ npm run test:e2e:admin:questions
 ```
 
 ### Run Specific Test Suite
+
 ```bash
 # Basic page tests
 npm run test:e2e:admin:questions:basic
@@ -83,7 +88,7 @@ npm run test:e2e:admin:questions:validation
 ## Troubleshooting
 
 If you see "skipped" tests:
+
 - In the original file: This is due to serial mode - if one test fails, subsequent tests are skipped
 - In split files: Each file runs independently, so failures in one file don't affect others
 - To fix: Run the specific failing test suite to isolate the issue
-

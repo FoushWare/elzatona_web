@@ -13,12 +13,7 @@
     "updatedAt": "2025-11-11T19:33:22.944Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "react",
-      "frontend-tasks",
-      "core-react",
-      "intermediate"
-    ],
+    "tags": ["react", "frontend-tasks", "core-react", "intermediate"],
     "explanation": "Break down complex UIs into smaller, reusable components. Use composition to build complex features from simple components.",
     "points": 15,
     "options": [
@@ -68,12 +63,7 @@
     "updatedAt": "2025-11-11T19:33:22.944Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "react",
-      "frontend-tasks",
-      "core-react",
-      "intermediate"
-    ],
+    "tags": ["react", "frontend-tasks", "core-react", "intermediate"],
     "explanation": "Break down into logical components: container for state, item for display, form for input, filter for UI controls.",
     "points": 15,
     "options": [
@@ -123,12 +113,7 @@
     "updatedAt": "2025-11-11T19:33:22.944Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "react",
-      "frontend-tasks",
-      "core-react",
-      "intermediate"
-    ],
+    "tags": ["react", "frontend-tasks", "core-react", "intermediate"],
     "explanation": "Lift state to common parent or use Context API. Props cannot be passed directly between siblings.",
     "points": 15,
     "options": [
@@ -178,12 +163,7 @@
     "updatedAt": "2025-11-11T19:33:22.944Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "react",
-      "frontend-tasks",
-      "core-react",
-      "intermediate"
-    ],
+    "tags": ["react", "frontend-tasks", "core-react", "intermediate"],
     "explanation": "Use Context API for state shared across multiple components (current video, user). Use useState for component-local state (UI toggles).",
     "points": 15,
     "options": [
@@ -233,12 +213,7 @@
     "updatedAt": "2025-11-11T19:33:22.944Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "react",
-      "frontend-tasks",
-      "core-react",
-      "intermediate"
-    ],
+    "tags": ["react", "frontend-tasks", "core-react", "intermediate"],
     "explanation": "useReducer is better for complex state logic, multiple related state values, or when state updates depend on previous state.",
     "points": 15,
     "options": [
@@ -288,12 +263,7 @@
     "updatedAt": "2025-11-11T19:33:22.944Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "react",
-      "frontend-tasks",
-      "core-react",
-      "intermediate"
-    ],
+    "tags": ["react", "frontend-tasks", "core-react", "intermediate"],
     "explanation": "React.memo prevents re-renders when props haven't changed. useMemo/useCallback memoize values and functions to prevent recreation.",
     "points": 15,
     "options": [
@@ -343,12 +313,7 @@
     "updatedAt": "2025-11-11T19:33:22.944Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "react",
-      "frontend-tasks",
-      "core-react",
-      "intermediate"
-    ],
+    "tags": ["react", "frontend-tasks", "core-react", "intermediate"],
     "explanation": "Use separate loading states for each data fetch to show partial content as it loads. Libraries like React Query handle this automatically.",
     "points": 15,
     "options": [
@@ -398,12 +363,7 @@
     "updatedAt": "2025-11-11T19:33:22.944Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "react",
-      "frontend-tasks",
-      "core-react",
-      "intermediate"
-    ],
+    "tags": ["react", "frontend-tasks", "core-react", "intermediate"],
     "explanation": "Use Intersection Observer to detect scroll position. Fetch next page when user nears bottom, append to existing data for seamless infinite scroll.",
     "points": 15,
     "options": [
@@ -453,12 +413,7 @@
     "updatedAt": "2025-11-11T19:33:22.944Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "react",
-      "frontend-tasks",
-      "core-react",
-      "intermediate"
-    ],
+    "tags": ["react", "frontend-tasks", "core-react", "intermediate"],
     "explanation": "Catch errors, set error state, display user-friendly messages, and provide retry mechanisms. Use Error Boundaries for component tree errors.",
     "points": 15,
     "options": [
@@ -508,12 +463,7 @@
     "updatedAt": "2025-11-11T19:33:22.944Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "react",
-      "frontend-tasks",
-      "core-react",
-      "intermediate"
-    ],
+    "tags": ["react", "frontend-tasks", "core-react", "intermediate"],
     "explanation": "Virtualization renders only visible items in viewport, dramatically improving performance for large lists. Libraries like react-window handle this.",
     "points": 15,
     "options": [
@@ -563,12 +513,7 @@
     "updatedAt": "2025-11-11T19:33:22.944Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "react",
-      "frontend-tasks",
-      "core-react",
-      "intermediate"
-    ],
+    "tags": ["react", "frontend-tasks", "core-react", "intermediate"],
     "explanation": "Lazy load images, use responsive srcset, modern formats like WebP, and CDN. Only load images when needed and at appropriate sizes.",
     "points": 15,
     "options": [
@@ -618,12 +563,7 @@
     "updatedAt": "2025-11-11T19:33:22.944Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "react",
-      "frontend-tasks",
-      "core-react",
-      "intermediate"
-    ],
+    "tags": ["react", "frontend-tasks", "core-react", "intermediate"],
     "explanation": "React.lazy() enables code splitting. Use it with Suspense for route-based splitting. Dynamic imports split heavy components.",
     "points": 15,
     "options": [
@@ -673,12 +613,7 @@
     "updatedAt": "2025-11-11T19:33:22.944Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "react",
-      "frontend-tasks",
-      "core-react",
-      "intermediate"
-    ],
+    "tags": ["react", "frontend-tasks", "core-react", "intermediate"],
     "explanation": "Controlled components with validation provide better UX. Libraries like React Hook Form handle validation, errors, and performance automatically.",
     "points": 15,
     "options": [
@@ -728,12 +663,7 @@
     "updatedAt": "2025-11-11T19:33:22.944Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "react",
-      "frontend-tasks",
-      "core-react",
-      "intermediate"
-    ],
+    "tags": ["react", "frontend-tasks", "core-react", "intermediate"],
     "explanation": "Controlled components give React full control over form state, enabling validation and integration. Uncontrolled uses DOM refs for less React overhead.",
     "points": 15,
     "options": [
@@ -783,12 +713,7 @@
     "updatedAt": "2025-11-11T19:33:22.944Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "react",
-      "frontend-tasks",
-      "core-react",
-      "intermediate"
-    ],
+    "tags": ["react", "frontend-tasks", "core-react", "intermediate"],
     "explanation": "Use file input, File API for preview/validation, FormData for upload. Validate type, size, and show user feedback during upload.",
     "points": 15,
     "options": [
@@ -838,12 +763,7 @@
     "updatedAt": "2025-11-11T19:33:22.944Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "react",
-      "frontend-tasks",
-      "core-react",
-      "intermediate"
-    ],
+    "tags": ["react", "frontend-tasks", "core-react", "intermediate"],
     "explanation": "WebSockets enable bidirectional real-time communication. Socket.io provides React-friendly API. Update component state when messages arrive.",
     "points": 15,
     "options": [
@@ -893,12 +813,7 @@
     "updatedAt": "2025-11-11T19:33:22.944Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "react",
-      "frontend-tasks",
-      "core-react",
-      "intermediate"
-    ],
+    "tags": ["react", "frontend-tasks", "core-react", "intermediate"],
     "explanation": "Create connection in useEffect, store in ref to persist across renders, cleanup on unmount. Implement reconnection logic for reliability.",
     "points": 15,
     "options": [
@@ -948,12 +863,7 @@
     "updatedAt": "2025-11-11T19:33:22.944Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "react",
-      "frontend-tasks",
-      "core-react",
-      "intermediate"
-    ],
+    "tags": ["react", "frontend-tasks", "core-react", "intermediate"],
     "explanation": "Always clean up event listeners and close connections in useEffect cleanup. This prevents memory leaks and stale updates.",
     "points": 15,
     "options": [
@@ -1003,12 +913,7 @@
     "updatedAt": "2025-11-11T19:33:22.944Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "react",
-      "frontend-tasks",
-      "react-router",
-      "intermediate"
-    ],
+    "tags": ["react", "frontend-tasks", "react-router", "intermediate"],
     "explanation": "React Router provides declarative routing. Use BrowserRouter for history API, Routes for route matching, Route for individual routes.",
     "points": 15,
     "options": [
@@ -1058,12 +963,7 @@
     "updatedAt": "2025-11-11T19:33:22.944Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "react",
-      "frontend-tasks",
-      "react-router",
-      "intermediate"
-    ],
+    "tags": ["react", "frontend-tasks", "react-router", "intermediate"],
     "explanation": "Create ProtectedRoute wrapper component. Check authentication, redirect to login if needed, or render children if authenticated.",
     "points": 15,
     "options": [
@@ -1113,12 +1013,7 @@
     "updatedAt": "2025-11-11T19:33:22.944Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "react",
-      "frontend-tasks",
-      "react-router",
-      "intermediate"
-    ],
+    "tags": ["react", "frontend-tasks", "react-router", "intermediate"],
     "explanation": "React Router enables deep linking. Ensure server returns index.html for all routes (SPA catch-all) so React Router can handle routing.",
     "points": 15,
     "options": [
@@ -1168,12 +1063,7 @@
     "updatedAt": "2025-11-11T19:33:22.944Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "react",
-      "frontend-tasks",
-      "react-testing",
-      "intermediate"
-    ],
+    "tags": ["react", "frontend-tasks", "react-testing", "intermediate"],
     "explanation": "React Testing Library tests components from user perspective. Test what users see and interact with, not internal implementation.",
     "points": 15,
     "options": [
@@ -1223,12 +1113,7 @@
     "updatedAt": "2025-11-11T19:33:22.944Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "react",
-      "frontend-tasks",
-      "react-testing",
-      "intermediate"
-    ],
+    "tags": ["react", "frontend-tasks", "react-testing", "intermediate"],
     "explanation": "Mock fetch/API calls, use waitFor for async updates, test loading and error states, verify final rendered output.",
     "points": 15,
     "options": [
@@ -1278,12 +1163,7 @@
     "updatedAt": "2025-11-11T19:33:22.944Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "react",
-      "frontend-tasks",
-      "react-testing",
-      "intermediate"
-    ],
+    "tags": ["react", "frontend-tasks", "react-testing", "intermediate"],
     "explanation": "Test user interactions, validation (errors shown correctly), form submission, state updates, and integration with parent components.",
     "points": 15,
     "options": [
@@ -1333,12 +1213,7 @@
     "updatedAt": "2025-11-11T19:33:22.944Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "react",
-      "frontend-tasks",
-      "core-react",
-      "intermediate"
-    ],
+    "tags": ["react", "frontend-tasks", "core-react", "intermediate"],
     "explanation": "Use semantic HTML (nav, main, article), ARIA labels for complex widgets, keyboard navigation, focus management, and proper heading hierarchy.",
     "points": 15,
     "options": [
@@ -1388,12 +1263,7 @@
     "updatedAt": "2025-11-11T19:33:22.944Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "react",
-      "frontend-tasks",
-      "core-react",
-      "intermediate"
-    ],
+    "tags": ["react", "frontend-tasks", "core-react", "intermediate"],
     "explanation": "Trap focus within modal (prevent tabbing outside), return focus to trigger element on close, use refs and focus() API.",
     "points": 15,
     "options": [
@@ -1443,12 +1313,7 @@
     "updatedAt": "2025-11-11T19:33:22.944Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "react",
-      "frontend-tasks",
-      "core-react",
-      "intermediate"
-    ],
+    "tags": ["react", "frontend-tasks", "core-react", "intermediate"],
     "explanation": "Add keydown listener in useEffect, check event.key and event.ctrlKey/event.metaKey, handle shortcut, cleanup listener on unmount.",
     "points": 15,
     "options": [
@@ -1498,12 +1363,7 @@
     "updatedAt": "2025-11-11T19:33:22.944Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "react",
-      "frontend-tasks",
-      "core-react",
-      "intermediate"
-    ],
+    "tags": ["react", "frontend-tasks", "core-react", "intermediate"],
     "explanation": "Organize by features (feature-based structure), separate components/hooks/utils/types, use barrel exports, configure path aliases for clean imports.",
     "points": 15,
     "options": [
@@ -1553,12 +1413,7 @@
     "updatedAt": "2025-11-11T19:33:22.944Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "react",
-      "frontend-tasks",
-      "core-react",
-      "intermediate"
-    ],
+    "tags": ["react", "frontend-tasks", "core-react", "intermediate"],
     "explanation": "Error Boundaries catch errors in component tree. Create class component with componentDidCatch, wrap sections, show fallback UI.",
     "points": 15,
     "options": [
@@ -1608,12 +1463,7 @@
     "updatedAt": "2025-11-11T19:33:22.944Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "react",
-      "frontend-tasks",
-      "core-react",
-      "intermediate"
-    ],
+    "tags": ["react", "frontend-tasks", "core-react", "intermediate"],
     "explanation": "Code splitting reduces initial load. Tree shaking removes unused code. Analyze bundle, remove unused deps, use dynamic imports, optimize assets.",
     "points": 15,
     "options": [

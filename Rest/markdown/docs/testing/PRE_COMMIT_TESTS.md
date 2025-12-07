@@ -7,6 +7,7 @@ Tests now run automatically on every commit to catch issues early. The pre-commi
 ## Current Configuration
 
 **Default Hook**: `pre-commit-with-tests`
+
 - ✅ Prettier formatting
 - ✅ ESLint linting
 - ✅ Unit tests
@@ -16,9 +17,11 @@ Tests now run automatically on every commit to catch issues early. The pre-commi
 ## Available Hook Modes
 
 ### 1. Fast Mode with Tests (Recommended for daily use)
+
 ```bash
 npm run pre-commit:fast-tests
 ```
+
 - ✅ Prettier formatting
 - ✅ ESLint linting (warnings allowed)
 - ✅ Unit tests only (fast)
@@ -28,9 +31,11 @@ npm run pre-commit:fast-tests
 **Best for**: Quick commits, frequent development
 
 ### 2. Full Mode with Tests (Current default)
+
 ```bash
 npm run pre-commit:with-tests
 ```
+
 - ✅ Prettier formatting
 - ✅ ESLint linting (strict)
 - ✅ Unit tests
@@ -40,9 +45,11 @@ npm run pre-commit:with-tests
 **Best for**: Before pushing to remote, important commits
 
 ### 3. Fast Mode (No Tests)
+
 ```bash
 npm run pre-commit:fast
 ```
+
 - ✅ Prettier formatting
 - ✅ ESLint linting
 - ⏭️ All tests skipped
@@ -50,9 +57,11 @@ npm run pre-commit:fast
 **Best for**: Formatting-only commits, documentation updates
 
 ### 4. Full Mode (Includes E2E)
+
 ```bash
 npm run pre-commit:full
 ```
+
 - ✅ Prettier formatting
 - ✅ ESLint linting
 - ✅ Unit tests
@@ -78,6 +87,7 @@ If tests fail during pre-commit:
 ```
 
 **Options:**
+
 1. Fix the failing tests
 2. Run tests manually: `npm run test:unit`
 3. Skip the hook (not recommended): `git commit --no-verify`
@@ -85,16 +95,19 @@ If tests fail during pre-commit:
 ## Test Execution Details
 
 ### Unit Tests
+
 - Runs all unit tests
 - Uses `--maxWorkers=50%` for parallel execution
 - Uses `--passWithNoTests` to allow commits if no tests exist yet
 
 ### Integration Tests
+
 - Runs all integration tests
 - Uses `--maxWorkers=50%` for parallel execution
 - Uses `--passWithNoTests` to allow commits if no tests exist yet
 
 ### E2E Tests
+
 - **Skipped in pre-commit** (too slow)
 - Run manually: `npm run test:e2e`
 - Run in CI/CD: GitHub Actions handles E2E tests
@@ -120,21 +133,26 @@ npm run pre-commit:full
 ## Troubleshooting
 
 ### Tests are too slow
+
 - Switch to fast mode: `npm run pre-commit:fast-tests`
 - Only runs unit tests (much faster)
 
 ### Tests fail but code is correct
+
 - Run tests manually to see full output: `npm run test:unit`
 - Check if test setup is correct
 - Verify environment variables are set
 
 ### Want to skip tests for this commit
+
 ```bash
 git commit --no-verify -m "your message"
 ```
+
 ⚠️ **Warning**: Only use this if absolutely necessary. Tests exist to catch bugs early!
 
 ### Hook not running
+
 ```bash
 # Reinstall the hook
 npm run pre-commit:with-tests
@@ -178,4 +196,3 @@ chmod +x .git/hooks/pre-commit
 - [Comprehensive Test Plan](./COMPREHENSIVE_TEST_PLAN.md)
 - [Test Tasks](./tasks/README.md)
 - [GitHub Actions Tests](../.github/workflows/tests-parallel.yml)
-

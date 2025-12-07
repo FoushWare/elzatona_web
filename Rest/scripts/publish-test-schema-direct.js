@@ -1,10 +1,10 @@
 #!/usr/bin/env node
 /**
  * Publish Test Database Schema (Direct SQL Execution)
- * 
+ *
  * This script executes the test database schema SQL directly using PostgreSQL connection
  * via Supabase's service_role key.
- * 
+ *
  * Usage:
  *   node Rest/scripts/publish-test-schema-direct.js
  */
@@ -35,7 +35,9 @@ const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
 if (!supabaseUrl || !supabaseServiceKey) {
   console.error('❌ Missing Supabase environment variables');
-  console.error('Required: NEXT_PUBLIC_SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY');
+  console.error(
+    'Required: NEXT_PUBLIC_SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY'
+  );
   process.exit(1);
 }
 
@@ -49,7 +51,10 @@ async function publishSchemaDirect() {
   console.log('');
 
   // Read SQL file
-  const sqlFilePath = path.resolve(projectRoot, 'Rest/scripts/test-database-schema.sql');
+  const sqlFilePath = path.resolve(
+    projectRoot,
+    'Rest/scripts/test-database-schema.sql'
+  );
   if (!fs.existsSync(sqlFilePath)) {
     console.error(`❌ SQL file not found: ${sqlFilePath}`);
     process.exit(1);
@@ -62,7 +67,7 @@ async function publishSchemaDirect() {
   console.log('📝 Publishing Test Database Schema');
   console.log('===================================');
   console.log('');
-  console.log('Since Supabase API doesn\'t support direct SQL execution,');
+  console.log("Since Supabase API doesn't support direct SQL execution,");
   console.log('please run the SQL in the Supabase Dashboard SQL Editor.');
   console.log('');
   console.log('🚀 Quick Steps:');
@@ -74,26 +79,32 @@ async function publishSchemaDirect() {
   console.log('2. Copy the SQL file content:');
   console.log(`   ${sqlFilePath}`);
   console.log('');
-  console.log('3. Paste into SQL Editor and click "Run" (or press Cmd+Enter / Ctrl+Enter)');
+  console.log(
+    '3. Paste into SQL Editor and click "Run" (or press Cmd+Enter / Ctrl+Enter)'
+  );
   console.log('');
-  console.log('4. Wait for success message: "✅ Test database schema created successfully!"');
+  console.log(
+    '4. Wait for success message: "✅ Test database schema created successfully!"'
+  );
   console.log('');
   console.log('5. After successful execution, create admin user:');
   console.log('   node Rest/scripts/create-test-admin.js');
   console.log('');
-  
+
   // Open browser to SQL Editor
   console.log('🌐 Opening Supabase SQL Editor in your browser...');
-  exec(`open "${sqlEditorUrl}"`, (error) => {
+  exec(`open "${sqlEditorUrl}"`, error => {
     if (error) {
       console.log('⚠️  Could not open browser automatically.');
       console.log(`   Please open manually: ${sqlEditorUrl}`);
     } else {
       console.log('✅ Opened SQL Editor!');
-      console.log('   Copy the SQL from the file and paste it into the editor.');
+      console.log(
+        '   Copy the SQL from the file and paste it into the editor.'
+      );
     }
   });
-  
+
   // Also display the SQL file location
   console.log('');
   console.log(`📄 SQL File: ${sqlFilePath}`);
@@ -105,4 +116,3 @@ async function publishSchemaDirect() {
 }
 
 publishSchemaDirect();
-

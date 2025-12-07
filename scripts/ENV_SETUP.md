@@ -22,6 +22,7 @@ TESTING_SUPABASE_SERVICE_ROLE_KEY=your_testing_service_role_key_here
 ## Where to Get the Keys
 
 ### Testing Database (zatona-web-testing)
+
 1. Go to: https://supabase.com/dashboard/project/kiycimlsatwfqxtfprlr/settings/api
 2. Scroll to "Project API keys"
 3. Find "service_role" (secret)
@@ -30,6 +31,7 @@ TESTING_SUPABASE_SERVICE_ROLE_KEY=your_testing_service_role_key_here
 6. Add to `.env.test.local` as `TESTING_SUPABASE_SERVICE_ROLE_KEY` (or `.env.local` as fallback)
 
 ### Main Database (zatona-web)
+
 1. Go to: https://supabase.com/dashboard/project/hpnewqkvpnthpohvxcmq/settings/api
 2. Scroll to "Project API keys"
 3. Find "service_role" (secret)
@@ -40,6 +42,7 @@ TESTING_SUPABASE_SERVICE_ROLE_KEY=your_testing_service_role_key_here
 ## Example Configuration
 
 ### `.env.local`
+
 ```bash
 # Main Database (zatona-web)
 NEXT_PUBLIC_SUPABASE_URL=https://hpnewqkvpnthpohvxcmq.supabase.co
@@ -48,6 +51,7 @@ SUPABASE_SERVICE_ROLE_KEY=your_main_service_role_key_here
 ```
 
 ### `.env.test.local`
+
 ```bash
 # Testing Database (zatona-web-testing)
 TESTING_SUPABASE_SERVICE_ROLE_KEY=your_testing_service_role_key_here
@@ -62,4 +66,3 @@ npm run seed:testing-to-main
 ```
 
 The script will verify that both keys are present before starting.
-

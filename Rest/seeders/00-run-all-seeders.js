@@ -14,7 +14,7 @@ const seeders = [
   '01-seed-learning-cards.js',
   '02-seed-categories.js',
   '03-seed-topics.js',
-  '04-seed-questions.js'
+  '04-seed-questions.js',
 ];
 
 console.log('🚀 Starting database seeding process...\n');
@@ -32,11 +32,11 @@ seeders.forEach((seeder, index) => {
   console.log(`\n${'='.repeat(60)}`);
   console.log(`[${index + 1}/${seeders.length}] Running ${seeder}...`);
   console.log('='.repeat(60));
-  
+
   try {
-    execSync(`node "${seederPath}"`, { 
+    execSync(`node "${seederPath}"`, {
       stdio: 'inherit',
-      cwd: __dirname 
+      cwd: __dirname,
     });
     successCount++;
     console.log(`✅ ${seeder} completed successfully\n`);
@@ -59,4 +59,3 @@ if (errorCount === 0) {
   console.log('\n⚠️  Some seeders failed. Please check the errors above.');
   process.exit(1);
 }
-

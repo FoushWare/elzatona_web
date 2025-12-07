@@ -1,15 +1,15 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 // This file uses 'any' types for error metadata which can contain various dynamic properties
-import { createClient } from '@supabase/supabase-js';
+import { createClient } from "@supabase/supabase-js";
 
-const supabaseUrl = process.env['NEXT_PUBLIC_SUPABASE_URL']!;
-const supabaseServiceRoleKey = process.env['SUPABASE_SERVICE_ROLE_KEY']!;
+const supabaseUrl = process.env["NEXT_PUBLIC_SUPABASE_URL"]!;
+const supabaseServiceRoleKey = process.env["SUPABASE_SERVICE_ROLE_KEY"]!;
 
 const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
 
 export interface ErrorLog {
   id: string;
-  level: 'error' | 'warning' | 'info' | 'debug';
+  level: "error" | "warning" | "info" | "debug";
   message: string;
   stack?: string;
   context: {
@@ -56,18 +56,18 @@ export interface PerformanceLog {
 }
 
 export class ErrorLoggingService {
-  private static readonly ERROR_COLLECTION = 'error_logs';
-  private static readonly PERFORMANCE_COLLECTION = 'performance_logs';
+  private static readonly ERROR_COLLECTION = "error_logs";
+  private static readonly PERFORMANCE_COLLECTION = "performance_logs";
 
   /**
    * Log an error
    */
   static async logError(
-    level: ErrorLog['level'],
+    level: ErrorLog["level"],
     message: string,
     error?: Error,
-    context: Partial<ErrorLog['context']> = {},
-    metadata: ErrorLog['metadata'] = {}
+    context: Partial<ErrorLog["context"]> = {},
+    metadata: ErrorLog["metadata"] = {},
   ): Promise<string> {
     try {
       const errorData = {
@@ -93,14 +93,14 @@ export class ErrorLoggingService {
       }
 
       // Also log to console for development
-      if (process.env['NODE_ENV'] === 'development') {
+      if (process.env["NODE_ENV"] === "development") {
         console.error(`[${level.toUpperCase()}] ${message}`, error);
       }
 
       return data.id;
     } catch (logError) {
-      console.error('Failed to log error:', logError);
-      return '';
+      console.error("Failed to log error:", logError);
+      return "";
     }
   }
 
@@ -111,8 +111,8 @@ export class ErrorLoggingService {
     operation: string,
     duration: number,
     success: boolean,
-    context: Partial<PerformanceLog['context']> = {},
-    metadata: PerformanceLog['metadata'] = {}
+    context: Partial<PerformanceLog["context"]> = {},
+    metadata: PerformanceLog["metadata"] = {},
   ): Promise<string> {
     try {
       const performanceData = {
@@ -138,8 +138,8 @@ export class ErrorLoggingService {
 
       return data.id;
     } catch (logError) {
-      console.error('Failed to log performance:', logError);
-      return '';
+      console.error("Failed to log performance:", logError);
+      return "";
     }
   }
 
@@ -148,44 +148,44 @@ export class ErrorLoggingService {
    */
   static async getErrorLogs(
     filters: {
-      level?: ErrorLog['level'];
+      level?: ErrorLog["level"];
       resolved?: boolean;
       userId?: string;
       adminId?: string;
       startDate?: Date;
       endDate?: Date;
     } = {},
-    limitCount: number = 100
+    limitCount: number = 100,
   ): Promise<ErrorLog[]> {
     try {
-      let query = supabase.from(this.ERROR_COLLECTION).select('*');
+      let query = supabase.from(this.ERROR_COLLECTION).select("*");
 
       if (filters.level) {
-        query = query.eq('level', filters.level);
+        query = query.eq("level", filters.level);
       }
 
       if (filters.resolved !== undefined) {
-        query = query.eq('resolved', filters.resolved);
+        query = query.eq("resolved", filters.resolved);
       }
 
       if (filters.userId) {
-        query = query.eq('context.userId', filters.userId);
+        query = query.eq("context.userId", filters.userId);
       }
 
       if (filters.adminId) {
-        query = query.eq('context.adminId', filters.adminId);
+        query = query.eq("context.adminId", filters.adminId);
       }
 
       if (filters.startDate) {
-        query = query.gte('context.timestamp', filters.startDate.toISOString());
+        query = query.gte("context.timestamp", filters.startDate.toISOString());
       }
 
       if (filters.endDate) {
-        query = query.lte('context.timestamp', filters.endDate.toISOString());
+        query = query.lte("context.timestamp", filters.endDate.toISOString());
       }
 
       const { data: logs, error } = await query
-        .order('context.timestamp', { ascending: false })
+        .order("context.timestamp", { ascending: false })
         .limit(limitCount);
 
       if (error) {
@@ -194,7 +194,7 @@ export class ErrorLoggingService {
 
       return logs || [];
     } catch (error) {
-      console.error('❌ Failed to get error logs:', error);
+      console.error("❌ Failed to get error logs:", error);
       return [];
     }
   }
@@ -211,37 +211,37 @@ export class ErrorLoggingService {
       startDate?: Date;
       endDate?: Date;
     } = {},
-    limitCount: number = 100
+    limitCount: number = 100,
   ): Promise<PerformanceLog[]> {
     try {
-      let query = supabase.from(this.PERFORMANCE_COLLECTION).select('*');
+      let query = supabase.from(this.PERFORMANCE_COLLECTION).select("*");
 
       if (filters.operation) {
-        query = query.eq('operation', filters.operation);
+        query = query.eq("operation", filters.operation);
       }
 
       if (filters.success !== undefined) {
-        query = query.eq('success', filters.success);
+        query = query.eq("success", filters.success);
       }
 
       if (filters.userId) {
-        query = query.eq('context.userId', filters.userId);
+        query = query.eq("context.userId", filters.userId);
       }
 
       if (filters.adminId) {
-        query = query.eq('context.adminId', filters.adminId);
+        query = query.eq("context.adminId", filters.adminId);
       }
 
       if (filters.startDate) {
-        query = query.gte('context.timestamp', filters.startDate.toISOString());
+        query = query.gte("context.timestamp", filters.startDate.toISOString());
       }
 
       if (filters.endDate) {
-        query = query.lte('context.timestamp', filters.endDate.toISOString());
+        query = query.lte("context.timestamp", filters.endDate.toISOString());
       }
 
       const { data: logs, error } = await query
-        .order('context.timestamp', { ascending: false })
+        .order("context.timestamp", { ascending: false })
         .limit(limitCount);
 
       if (error) {
@@ -250,7 +250,7 @@ export class ErrorLoggingService {
 
       return logs || [];
     } catch (error) {
-      console.error('❌ Failed to get performance logs:', error);
+      console.error("❌ Failed to get performance logs:", error);
       return [];
     }
   }
@@ -260,7 +260,7 @@ export class ErrorLoggingService {
    */
   static async resolveError(
     errorId: string,
-    resolvedBy: string
+    resolvedBy: string,
   ): Promise<boolean> {
     try {
       const { error } = await supabase
@@ -270,7 +270,7 @@ export class ErrorLoggingService {
           resolvedAt: new Date().toISOString(),
           resolvedBy,
         })
-        .eq('id', errorId);
+        .eq("id", errorId);
 
       if (error) {
         throw error;
@@ -278,7 +278,7 @@ export class ErrorLoggingService {
 
       return true;
     } catch (error) {
-      console.error('❌ Failed to resolve error:', error);
+      console.error("❌ Failed to resolve error:", error);
       return false;
     }
   }
@@ -288,7 +288,7 @@ export class ErrorLoggingService {
    */
   static async deleteOldLogs(
     olderThanDays: number = 30,
-    logType: 'error' | 'performance' | 'both' = 'both'
+    logType: "error" | "performance" | "both" = "both",
   ): Promise<number> {
     try {
       const cutoffDate = new Date();
@@ -296,21 +296,21 @@ export class ErrorLoggingService {
 
       let deletedCount = 0;
 
-      if (logType === 'error' || logType === 'both') {
+      if (logType === "error" || logType === "both") {
         const { data: deletedErrors } = await supabase
           .from(this.ERROR_COLLECTION)
           .delete()
-          .lt('context.timestamp', cutoffDate.toISOString())
+          .lt("context.timestamp", cutoffDate.toISOString())
           .select();
 
         deletedCount += (deletedErrors || []).length;
       }
 
-      if (logType === 'performance' || logType === 'both') {
+      if (logType === "performance" || logType === "both") {
         const { data: deletedPerformance } = await supabase
           .from(this.PERFORMANCE_COLLECTION)
           .delete()
-          .lt('context.timestamp', cutoffDate.toISOString())
+          .lt("context.timestamp", cutoffDate.toISOString())
           .select();
 
         deletedCount += (deletedPerformance || []).length;
@@ -319,7 +319,7 @@ export class ErrorLoggingService {
       console.log(`✅ Deleted ${deletedCount} old log entries`);
       return deletedCount;
     } catch (error) {
-      console.error('❌ Failed to delete old logs:', error);
+      console.error("❌ Failed to delete old logs:", error);
       return 0;
     }
   }
@@ -336,7 +336,7 @@ export class ErrorLoggingService {
     try {
       const { data: errors, error } = await supabase
         .from(this.ERROR_COLLECTION)
-        .select('*');
+        .select("*");
 
       if (error) {
         throw error;
@@ -351,20 +351,20 @@ export class ErrorLoggingService {
           acc[error.level] = (acc[error.level] || 0) + 1;
           return acc;
         },
-        {} as Record<string, number>
+        {} as Record<string, number>,
       );
 
       // Count unresolved
       const unresolvedErrors = allErrors.filter(
-        error => !error.resolved
+        (error) => !error.resolved,
       ).length;
 
       // Count recent (last 24 hours)
       const oneDayAgo = new Date(
-        Date.now() - 24 * 60 * 60 * 1000
+        Date.now() - 24 * 60 * 60 * 1000,
       ).toISOString();
       const recentErrors = allErrors.filter(
-        error => error.context.timestamp >= oneDayAgo
+        (error) => error.context.timestamp >= oneDayAgo,
       ).length;
 
       return {
@@ -374,7 +374,7 @@ export class ErrorLoggingService {
         recentErrors,
       };
     } catch (error) {
-      console.error('❌ Failed to get error stats:', error);
+      console.error("❌ Failed to get error stats:", error);
       return {
         totalErrors: 0,
         errorsByLevel: {},
@@ -400,7 +400,7 @@ export class ErrorLoggingService {
     try {
       const { data: logs, error } = await supabase
         .from(this.PERFORMANCE_COLLECTION)
-        .select('*');
+        .select("*");
 
       if (error) {
         throw error;
@@ -421,12 +421,12 @@ export class ErrorLoggingService {
       const averageDuration =
         allLogs.reduce((sum, log) => sum + log.duration, 0) / totalOperations;
       const successRate =
-        (allLogs.filter(log => log.success).length / totalOperations) * 100;
+        (allLogs.filter((log) => log.success).length / totalOperations) * 100;
 
       const slowestOperations = allLogs
         .sort((a, b) => b.duration - a.duration)
         .slice(0, 10)
-        .map(log => ({
+        .map((log) => ({
           operation: log.operation,
           duration: log.duration,
           timestamp: log.context.timestamp,
@@ -439,7 +439,7 @@ export class ErrorLoggingService {
         slowestOperations,
       };
     } catch (error) {
-      console.error('❌ Failed to get performance stats:', error);
+      console.error("❌ Failed to get performance stats:", error);
       return {
         totalOperations: 0,
         averageDuration: 0,

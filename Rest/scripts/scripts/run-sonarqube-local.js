@@ -31,7 +31,7 @@ if (!fs.existsSync(sonarConfigPath)) {
 function parseSonarProperties(filePath) {
   const content = fs.readFileSync(filePath, 'utf-8');
   const properties = {};
-  
+
   content.split('\n').forEach(line => {
     line = line.trim();
     // Skip comments and empty lines
@@ -44,7 +44,7 @@ function parseSonarProperties(filePath) {
       }
     }
   });
-  
+
   return properties;
 }
 
@@ -61,7 +61,9 @@ if (!sonarProjectKey) {
 
 // Validate organization (from properties file or env var)
 if (!sonarOrg) {
-  console.error('❌ sonar.organization not found in sonar-project.properties and SONAR_ORG not set!');
+  console.error(
+    '❌ sonar.organization not found in sonar-project.properties and SONAR_ORG not set!'
+  );
   console.error('');
   console.error('   Add to sonar-project.properties:');
   console.error('   sonar.organization=your-org-key');
@@ -109,7 +111,7 @@ try {
 } catch (error) {
   console.log('   ⚠️  SonarScanner not found');
   console.log('   💡 Attempting to use npx (no installation needed)...');
-  
+
   // Try using npx instead (no global installation needed)
   try {
     execSync('npx sonarqube-scanner --version', { stdio: 'ignore' });
@@ -127,7 +129,9 @@ try {
     console.log('   The script will try to use npx automatically');
     console.log('');
     console.log('   Option 3: Use Docker');
-    console.log('   docker run --rm -v $(pwd):/usr/src sonarsource/sonar-scanner-cli');
+    console.log(
+      '   docker run --rm -v $(pwd):/usr/src sonarsource/sonar-scanner-cli'
+    );
     console.log('');
     console.log('   Continuing with npx attempt...');
   }
@@ -140,16 +144,19 @@ if (!skipTests) {
   console.log('🧪 STEP 2: Running tests with coverage...');
   console.log('   ⏳ This may take a moment...');
   console.log('');
-  
+
   try {
-    execSync('npm run test:unit -- --coverage --coverageReporters=lcov --coverageDirectory=coverage', {
-      stdio: 'inherit',
-      env: {
-        ...process.env,
-        NODE_OPTIONS: `--max-old-space-size=${MEMORY_LIMIT}`,
-        JEST_MAX_WORKERS: '1',
-      },
-    });
+    execSync(
+      'npm run test:unit -- --coverage --coverageReporters=lcov --coverageDirectory=coverage',
+      {
+        stdio: 'inherit',
+        env: {
+          ...process.env,
+          NODE_OPTIONS: `--max-old-space-size=${MEMORY_LIMIT}`,
+          JEST_MAX_WORKERS: '1',
+        },
+      }
+    );
     console.log('');
     console.log('   ✅ Tests completed with coverage');
   } catch (error) {
@@ -169,7 +176,7 @@ if (!skipBuild) {
   console.log('🏗️  STEP 3: Building project...');
   console.log('   ⏳ This may take a moment...');
   console.log('');
-  
+
   try {
     execSync('npm run build', {
       stdio: 'inherit',
@@ -213,11 +220,13 @@ try {
   }
 
   // Use npx if sonar-scanner is not globally available
-  const scannerCommand = sonarScannerAvailable ? 'sonar-scanner' : 'npx sonarqube-scanner';
-  
+  const scannerCommand = sonarScannerAvailable
+    ? 'sonar-scanner'
+    : 'npx sonarqube-scanner';
+
   // Set memory limit for SonarScanner
   const sonarCommand = `NODE_OPTIONS="--max-old-space-size=${MEMORY_LIMIT}" ${scannerCommand} ${sonarArgs.join(' ')}`;
-  
+
   execSync(sonarCommand, {
     stdio: 'inherit',
     env: {
@@ -229,11 +238,17 @@ try {
   });
 
   console.log('');
-  console.log('════════════════════════════════════════════════════════════════');
+  console.log(
+    '════════════════════════════════════════════════════════════════'
+  );
   console.log('✅ SonarQube Analysis Completed Successfully!');
-  console.log('════════════════════════════════════════════════════════════════');
+  console.log(
+    '════════════════════════════════════════════════════════════════'
+  );
   console.log('');
-  console.log(`📊 View results at: https://sonarcloud.io/dashboard?id=${sonarProjectKey}`);
+  console.log(
+    `📊 View results at: https://sonarcloud.io/dashboard?id=${sonarProjectKey}`
+  );
   console.log('');
 } catch (error) {
   console.log('');
@@ -241,11 +256,14 @@ try {
   console.error('');
   console.error('Common issues:');
   console.error('  1. Check SONAR_TOKEN is correct (from .env.local)');
-  console.error(`  2. Check organization in sonar-project.properties: ${sonarOrg}`);
-  console.error(`  3. Check project key in sonar-project.properties: ${sonarProjectKey}`);
+  console.error(
+    `  2. Check organization in sonar-project.properties: ${sonarOrg}`
+  );
+  console.error(
+    `  3. Check project key in sonar-project.properties: ${sonarProjectKey}`
+  );
   console.error('  4. Ensure project exists in SonarCloud');
   console.error('  5. Check network connection');
   console.error('');
   process.exit(1);
 }
-

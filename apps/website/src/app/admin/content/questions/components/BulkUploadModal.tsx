@@ -1,14 +1,14 @@
-'use client';
+"use client";
 
-import React from 'react';
+import React from "react";
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
   DialogDescription,
-} from '@elzatona/shared-components';
-import { BulkUploadForm } from './BulkUploadForm';
+} from "@elzatona/components";
+import { BulkUploadForm } from "./BulkUploadForm";
 
 interface BulkUploadModalProps {
   isOpen: boolean;
@@ -38,7 +38,7 @@ export function BulkUploadModal({
 
   return (
     <Dialog open={isOpen} onOpenChange={handleClose}>
-      <DialogContent className='max-w-4xl max-h-[90vh] overflow-y-auto'>
+      <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle>Bulk Upload Questions</DialogTitle>
           <DialogDescription>
@@ -58,4 +58,3 @@ export function BulkUploadModal({
     </Dialog>
   );
 }
-

@@ -3,27 +3,49 @@
  * Task: A-004 - Admin Content Management
  */
 
-import React, { Suspense } from 'react';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
-import '@testing-library/jest-dom';
+import React, { Suspense } from "react";
+import { render, screen, fireEvent, waitFor } from "@testing-library/react";
+import "@testing-library/jest-dom";
 
 // Mock shared-components before importing the page to handle React.lazy imports
 // Don't use requireActual to avoid circular dependency issues
-jest.mock('@elzatona/shared-components', () => ({
-  Button: ({ children, onClick, ...props }: any) => <button onClick={onClick} {...props}>{children}</button>,
+jest.mock("@elzatona/components", () => ({
+  Button: ({ children, onClick, ...props }: any) => (
+    <button onClick={onClick} {...props}>
+      {children}
+    </button>
+  ),
   Card: ({ children }: { children: React.ReactNode }) => <div>{children}</div>,
-  CardContent: ({ children }: { children: React.ReactNode }) => <div>{children}</div>,
-  CardHeader: ({ children }: { children: React.ReactNode }) => <div>{children}</div>,
-  CardTitle: ({ children }: { children: React.ReactNode }) => <h2>{children}</h2>,
-  Input: ({ onChange, value }: any) => <input onChange={onChange} value={value} />,
-  Select: ({ children }: { children: React.ReactNode }) => <select>{children}</select>,
-  SelectContent: ({ children }: { children: React.ReactNode }) => <div>{children}</div>,
+  CardContent: ({ children }: { children: React.ReactNode }) => (
+    <div>{children}</div>
+  ),
+  CardHeader: ({ children }: { children: React.ReactNode }) => (
+    <div>{children}</div>
+  ),
+  CardTitle: ({ children }: { children: React.ReactNode }) => (
+    <h2>{children}</h2>
+  ),
+  Input: ({ onChange, value }: any) => (
+    <input onChange={onChange} value={value} />
+  ),
+  Select: ({ children }: { children: React.ReactNode }) => (
+    <select>{children}</select>
+  ),
+  SelectContent: ({ children }: { children: React.ReactNode }) => (
+    <div>{children}</div>
+  ),
   SelectItem: ({ children }: any) => <option>{children}</option>,
-  SelectTrigger: ({ children }: { children: React.ReactNode }) => <div>{children}</div>,
+  SelectTrigger: ({ children }: { children: React.ReactNode }) => (
+    <div>{children}</div>
+  ),
   SelectValue: () => <span>Select...</span>,
-  Badge: ({ children }: { children: React.ReactNode }) => <span>{children}</span>,
-  Modal: ({ children, open }: any) => open ? <div>{children}</div> : null,
-  BulkOperations: () => <div data-testid="bulk-operations">Bulk Operations</div>,
+  Badge: ({ children }: { children: React.ReactNode }) => (
+    <span>{children}</span>
+  ),
+  Modal: ({ children, open }: any) => (open ? <div>{children}</div> : null),
+  BulkOperations: () => (
+    <div data-testid="bulk-operations">Bulk Operations</div>
+  ),
   useToast: () => ({
     showSuccess: jest.fn(),
     showError: jest.fn(),
@@ -40,10 +62,10 @@ jest.mock('@elzatona/shared-components', () => ({
   EmptyState: () => <div>Empty State</div>,
 }));
 
-import UnifiedAdminPage from './page';
+import UnifiedAdminPage from "./page";
 
 // Same mocks as unit tests
-jest.mock('@elzatona/shared-hooks', () => ({
+jest.mock("@elzatona/hooks", () => ({
   useCards: jest.fn(() => ({
     data: { data: [], count: 0 },
     isLoading: false,
@@ -135,7 +157,7 @@ jest.mock('@elzatona/shared-hooks', () => ({
   })),
 }));
 
-jest.mock('@tanstack/react-query', () => ({
+jest.mock("@tanstack/react-query", () => ({
   useQueryClient: () => ({
     invalidateQueries: jest.fn(),
   }),
@@ -143,7 +165,7 @@ jest.mock('@tanstack/react-query', () => ({
 
 // Shared components are mocked above before import
 
-jest.mock('lucide-react', () => ({
+jest.mock("lucide-react", () => ({
   ChevronDown: () => <span>▼</span>,
   ChevronRight: () => <span>▶</span>,
   Plus: () => <span>+</span>,
@@ -159,16 +181,22 @@ jest.mock('lucide-react', () => ({
   Target: () => <span>🎯</span>,
 }));
 
-describe('A-IT-015: Content Management Integration', () => {
+describe("A-IT-015: Content Management Integration", () => {
   beforeEach(() => {
     jest.clearAllMocks();
   });
 
-  it('should handle data fetching from multiple hooks', async () => {
+  it("should handle data fetching from multiple hooks", async () => {
     render(<UnifiedAdminPage />);
-    
+
     await waitFor(() => {
-      const { useCards, usePlans, useCategories, useTopics, useQuestionsUnified } = require('@elzatona/shared-hooks');
+      const {
+        useCards,
+        usePlans,
+        useCategories,
+        useTopics,
+        useQuestionsUnified,
+      } = require("@elzatona/hooks");
       expect(useCards).toHaveBeenCalled();
       expect(usePlans).toHaveBeenCalled();
       expect(useCategories).toHaveBeenCalled();
@@ -178,18 +206,17 @@ describe('A-IT-015: Content Management Integration', () => {
   });
 });
 
-describe('A-IT-016: CRUD Operations Integration', () => {
+describe("A-IT-016: CRUD Operations Integration", () => {
   beforeEach(() => {
     jest.clearAllMocks();
   });
 
-  it('should integrate with mutation hooks', async () => {
+  it("should integrate with mutation hooks", async () => {
     render(<UnifiedAdminPage />);
-    
+
     // Component should be ready for CRUD operations
     await waitFor(() => {
       expect(document.body).toBeTruthy();
     });
   });
 });
-

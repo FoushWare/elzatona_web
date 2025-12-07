@@ -1,8 +1,13 @@
 # Task ID: A-001
+
 # Title: Admin Bulk Question Addition by Category
+
 # Status: pending
-# Dependencies: 
+
+# Dependencies:
+
 # Priority: high
+
 # Description: Test the admin functionality to add questions in bulk, organized by category (HTML, CSS, JavaScript, React, etc.). This includes clearing existing questions and starting fresh.
 
 # Details:
@@ -10,6 +15,7 @@
 ## Time Estimation
 
 ### Manual Testing
+
 - **Estimated Time**: 60-90 minutes
 - **Breakdown**:
   - Clear existing questions: 5-7 minutes
@@ -26,6 +32,7 @@
 - **Dependencies**: Admin authentication, database access, test question data, file uploads
 
 ### Automated Testing
+
 - **Estimated Time**: 20-35 minutes (first run), 3-6 minutes (subsequent runs)
 - **Breakdown**:
   - Unit tests setup and execution: 5-8 minutes
@@ -35,6 +42,7 @@
 - **Dependencies**: Admin auth mocks, database mocks, test files (CSV/JSON), API setup
 
 ### Total Time
+
 - **Manual Only**: 60-90 minutes
 - **Automated Only**: 20-35 minutes (first run), 3-6 minutes (subsequent)
 - **Both Manual + Automated**: 80-125 minutes (first run), 63-96 minutes (subsequent)
@@ -42,6 +50,7 @@
 ---
 
 ## Overview
+
 Test the admin functionality to add questions in bulk, organized by category (HTML, CSS, JavaScript, React, etc.). This includes clearing existing questions and starting fresh.
 
 ## Manual Testing Steps

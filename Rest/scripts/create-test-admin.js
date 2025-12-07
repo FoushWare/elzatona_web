@@ -2,12 +2,12 @@
 
 /**
  * Create Test Admin User Script
- * 
+ *
  * Creates a test admin user in the admin_users table
- * 
+ *
  * Usage:
  *   node Rest/scripts/create-test-admin.js
- * 
+ *
  * Environment Variables Required (from .env.test.local):
  *   - NEXT_PUBLIC_SUPABASE_URL
  *   - SUPABASE_SERVICE_ROLE_KEY
@@ -44,7 +44,9 @@ const adminPassword = process.env.ADMIN_PASSWORD || 'test-admin-password-123';
 
 if (!supabaseUrl || !supabaseServiceKey) {
   console.error('❌ Missing Supabase environment variables');
-  console.error('Required: NEXT_PUBLIC_SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY');
+  console.error(
+    'Required: NEXT_PUBLIC_SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY'
+  );
   console.error('Please set these in .env.test.local');
   process.exit(1);
 }
@@ -76,11 +78,18 @@ async function createTestAdmin() {
       .select('id')
       .limit(1);
 
-    if (tableError && (tableError.code === 'PGRST116' || tableError.code === '42P01')) {
+    if (
+      tableError &&
+      (tableError.code === 'PGRST116' || tableError.code === '42P01')
+    ) {
       console.error('❌ admin_users table does not exist!');
       console.error('\n📝 Please run the SQL schema first:');
-      console.error('   1. Go to: https://supabase.com/dashboard → Your Test Project → SQL Editor');
-      console.error('   2. Copy and paste the contents of: Rest/scripts/test-database-schema.sql');
+      console.error(
+        '   1. Go to: https://supabase.com/dashboard → Your Test Project → SQL Editor'
+      );
+      console.error(
+        '   2. Copy and paste the contents of: Rest/scripts/test-database-schema.sql'
+      );
       console.error('   3. Click "Run" to execute');
       console.error('   4. Then run this script again\n');
       process.exit(1);
@@ -94,13 +103,16 @@ async function createTestAdmin() {
       .maybeSingle();
 
     if (checkError && checkError.code !== 'PGRST116') {
-      console.error('❌ Error checking for existing admin:', checkError.message);
+      console.error(
+        '❌ Error checking for existing admin:',
+        checkError.message
+      );
       process.exit(1);
     }
 
     if (existingAdmin) {
       console.log('⚠️  Admin user already exists. Updating password...');
-      
+
       // Hash the new password
       const saltRounds = 10;
       const passwordHash = await bcrypt.hash(adminPassword, saltRounds);
@@ -149,7 +161,9 @@ async function createTestAdmin() {
 
       if (insertError) {
         console.error('❌ Error creating admin user:', insertError.message);
-        console.error('💡 Make sure the admin_users table exists. Run the SQL schema first.');
+        console.error(
+          '💡 Make sure the admin_users table exists. Run the SQL schema first.'
+        );
         process.exit(1);
       }
 
@@ -168,7 +182,6 @@ async function createTestAdmin() {
     console.log('   npm run test:unit');
     console.log('   npm run test:integration');
     console.log('   npm run test:e2e\n');
-
   } catch (error) {
     console.error('❌ Error creating test admin:', error.message);
     console.error(error.stack);
@@ -178,5 +191,3 @@ async function createTestAdmin() {
 
 // Run the script
 createTestAdmin();
-
-

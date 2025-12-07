@@ -13,11 +13,7 @@
     "updatedAt": "2025-01-08T00:00:00Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "system-design",
-      "frontend-system-design",
-      "intermediate"
-    ],
+    "tags": ["system-design", "frontend-system-design", "intermediate"],
     "explanation": "Offset pagination is simple but slow at scale. Cursor pagination is efficient and consistent. Infinite scroll provides seamless UX but is harder for bookmarking and SEO.",
     "points": 10,
     "options": [
@@ -63,11 +59,7 @@
     "updatedAt": "2025-01-08T00:00:00Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "system-design",
-      "frontend-system-design",
-      "beginner"
-    ],
+    "tags": ["system-design", "frontend-system-design", "beginner"],
     "explanation": "A signed URL is a temporary, cryptographically signed link that allows secure access to a file. It improves performance because the frontend can fetch directly from CDN/storage instead of proxying through the backend.",
     "points": 10,
     "options": [
@@ -113,11 +105,7 @@
     "updatedAt": "2025-01-08T00:00:00Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "system-design",
-      "frontend-system-design",
-      "intermediate"
-    ],
+    "tags": ["system-design", "frontend-system-design", "intermediate"],
     "explanation": "Critical CSS means extracting the styles needed for above-the-fold content and inlining them in the HTML. This reduces render-blocking requests and improves time-to-first-paint.",
     "points": 10,
     "options": [
@@ -163,11 +151,7 @@
     "updatedAt": "2025-01-08T00:00:00Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "system-design",
-      "frontend-system-design",
-      "intermediate"
-    ],
+    "tags": ["system-design", "frontend-system-design", "intermediate"],
     "explanation": "SSR improves SEO and first load but increases server cost. CSR shifts load to client but may hurt SEO. SSG is fast but static.",
     "points": 10,
     "options": [
@@ -213,11 +197,7 @@
     "updatedAt": "2025-01-08T00:00:00Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "system-design",
-      "frontend-system-design",
-      "intermediate"
-    ],
+    "tags": ["system-design", "frontend-system-design", "intermediate"],
     "explanation": "Context API is simple for small to medium apps with minimal boilerplate, but can cause re-renders. Redux provides structured state management and debugging tools, better for complex apps.",
     "points": 10,
     "options": [
@@ -263,11 +243,7 @@
     "updatedAt": "2025-01-08T00:00:00Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "system-design",
-      "frontend-system-design",
-      "beginner"
-    ],
+    "tags": ["system-design", "frontend-system-design", "beginner"],
     "explanation": "Using optimized formats, lazy loading, and CDNs reduces bandwidth and improves load times.",
     "points": 10,
     "options": [
@@ -313,11 +289,7 @@
     "updatedAt": "2025-01-08T00:00:00Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "system-design",
-      "frontend-system-design",
-      "intermediate"
-    ],
+    "tags": ["system-design", "frontend-system-design", "intermediate"],
     "explanation": "Start with high-level layout containers, identify reusable UI elements (buttons, cards, forms), then map parent-child relationships. Use a dependency graph to track composition and shared props.",
     "points": 10,
     "options": [
@@ -363,11 +335,7 @@
     "updatedAt": "2025-01-08T00:00:00Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "system-design",
-      "frontend-system-design",
-      "advanced"
-    ],
+    "tags": ["system-design", "frontend-system-design", "advanced"],
     "explanation": "Long polling repeatedly requests updates. WebSockets provide bi-directional communication. SSE streams updates one way from server to client.",
     "points": 10,
     "options": [
@@ -413,11 +381,7 @@
     "updatedAt": "2025-01-08T00:00:00Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "system-design",
-      "frontend-system-design",
-      "intermediate"
-    ],
+    "tags": ["system-design", "frontend-system-design", "intermediate"],
     "explanation": "Code splitting breaks the app into chunks. Lazy loading ensures chunks load only when needed.",
     "points": 10,
     "options": [
@@ -457,11 +421,7 @@
     "updatedAt": "2025-01-08T00:00:00Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "system-design",
-      "frontend-system-design",
-      "intermediate"
-    ],
+    "tags": ["system-design", "frontend-system-design", "intermediate"],
     "explanation": "Tree-shaking is the process of removing unused code from bundles during build time. It reduces bundle size and improves performance.",
     "points": 10,
     "options": [
@@ -507,11 +467,7 @@
     "updatedAt": "2025-01-08T00:00:00Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "system-design",
-      "frontend-system-design",
-      "beginner"
-    ],
+    "tags": ["system-design", "frontend-system-design", "beginner"],
     "explanation": "Accessibility guidelines are based on POUR principles.",
     "points": 10,
     "options": [
@@ -563,11 +519,7 @@
     "updatedAt": "2025-01-08T00:00:00Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "system-design",
-      "frontend-system-design",
-      "intermediate"
-    ],
+    "tags": ["system-design", "frontend-system-design", "intermediate"],
     "explanation": "Ensure focusable elements use tabindex correctly, use semantic HTML elements, and manage focus state when modals or dialogs open.",
     "points": 10,
     "options": [
@@ -613,11 +565,7 @@
     "updatedAt": "2025-01-08T00:00:00Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "system-design",
-      "frontend-system-design",
-      "advanced"
-    ],
+    "tags": ["system-design", "frontend-system-design", "advanced"],
     "explanation": "Optimistic updates update UI immediately before server confirmation. Pessimistic updates wait for server response.",
     "points": 10,
     "options": [
@@ -657,11 +605,7 @@
     "updatedAt": "2025-01-08T00:00:00Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "system-design",
-      "frontend-system-design",
-      "advanced"
-    ],
+    "tags": ["system-design", "frontend-system-design", "advanced"],
     "explanation": "Idempotent APIs produce the same result no matter how many times they are called. They prevent duplicate state changes if frontend retries requests due to network issues.",
     "points": 10,
     "options": [
@@ -707,11 +651,7 @@
     "updatedAt": "2025-01-08T00:00:00Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "system-design",
-      "frontend-system-design",
-      "beginner"
-    ],
+    "tags": ["system-design", "frontend-system-design", "beginner"],
     "explanation": "The virtual DOM is an in-memory representation of the UI. Instead of updating the real DOM directly, frameworks update the virtual DOM and compute the minimal changes, which are then applied to the real DOM.",
     "points": 10,
     "options": [
@@ -757,11 +697,7 @@
     "updatedAt": "2025-01-08T00:00:00Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "system-design",
-      "frontend-system-design",
-      "advanced"
-    ],
+    "tags": ["system-design", "frontend-system-design", "advanced"],
     "explanation": "Micro-frontends split the UI into smaller, independently deployable apps. They improve scalability but increase complexity.",
     "points": 10,
     "options": [
@@ -801,11 +737,7 @@
     "updatedAt": "2025-10-08T00:00:00Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "system-design",
-      "rendering-strategies",
-      "intermediate"
-    ],
+    "tags": ["system-design", "rendering-strategies", "intermediate"],
     "explanation": "CSR is good for highly interactive apps, SSR helps SEO-driven apps like e-commerce, and SSG is ideal for blogs, docs, and marketing sites.",
     "points": 10,
     "options": [
@@ -845,11 +777,7 @@
     "updatedAt": "2025-10-08T00:00:00Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "system-design",
-      "caching",
-      "intermediate"
-    ],
+    "tags": ["system-design", "caching", "intermediate"],
     "explanation": "Caching reduces redundant network requests and speeds up page loads. Browser caching handles static assets, CDN caching distributes content closer to users, and service workers enable offline support.",
     "points": 10,
     "options": [
@@ -897,11 +825,7 @@
     "updatedAt": "2025-10-08T00:00:00Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "system-design",
-      "lazy-loading",
-      "beginner"
-    ],
+    "tags": ["system-design", "lazy-loading", "beginner"],
     "explanation": "Lazy loading is especially useful for images, videos, and code-splitting in large applications.",
     "points": 10,
     "options": [
@@ -941,11 +865,7 @@
     "updatedAt": "2025-01-08T00:00:00Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "system-design",
-      "frontend-system-design",
-      "intermediate"
-    ],
+    "tags": ["system-design", "frontend-system-design", "intermediate"],
     "explanation": "Tree-shaking removes unused code from bundles. It works best with ES6 module imports.",
     "points": 10,
     "options": [
@@ -991,11 +911,7 @@
     "updatedAt": "2025-01-08T00:00:00Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "system-design",
-      "frontend-system-design",
-      "intermediate"
-    ],
+    "tags": ["system-design", "frontend-system-design", "intermediate"],
     "explanation": "Web Workers run scripts in background threads separate from the main UI thread. They are useful for CPU-intensive tasks like parsing large JSON, image processing, or data transformations without blocking the UI.",
     "points": 10,
     "options": [
@@ -1041,11 +957,7 @@
     "updatedAt": "2025-01-08T00:00:00Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "system-design",
-      "frontend-system-design",
-      "advanced"
-    ],
+    "tags": ["system-design", "frontend-system-design", "advanced"],
     "explanation": "Prefetch loads resources for future navigation, while preload ensures critical resources are fetched earlier for the current page.",
     "points": 10,
     "options": [
@@ -1091,11 +1003,7 @@
     "updatedAt": "2025-01-08T00:00:00Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "system-design",
-      "frontend-system-design",
-      "beginner"
-    ],
+    "tags": ["system-design", "frontend-system-design", "beginner"],
     "explanation": "ARIA roles provide semantic information about elements to assistive technologies, improving accessibility for screen readers and keyboard navigation.",
     "points": 10,
     "options": [
@@ -1141,11 +1049,7 @@
     "updatedAt": "2025-01-08T00:00:00Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "system-design",
-      "frontend-system-design",
-      "beginner"
-    ],
+    "tags": ["system-design", "frontend-system-design", "beginner"],
     "explanation": "Semantic elements like <code>&lt;header&gt;</code>, <code>&lt;nav&gt;</code>, <code>&lt;main&gt;</code> provide meaning, improving navigation for assistive technologies.",
     "points": 10,
     "options": [
@@ -1191,11 +1095,7 @@
     "updatedAt": "2025-01-08T00:00:00Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "system-design",
-      "frontend-system-design",
-      "intermediate"
-    ],
+    "tags": ["system-design", "frontend-system-design", "intermediate"],
     "explanation": "Color contrast ensures that text and UI elements are distinguishable for users with visual impairments. WCAG recommends a minimum contrast ratio of 4.5:1 for normal text.",
     "points": 10,
     "options": [
@@ -1241,11 +1141,7 @@
     "updatedAt": "2025-01-08T00:00:00Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "system-design",
-      "frontend-system-design",
-      "intermediate"
-    ],
+    "tags": ["system-design", "frontend-system-design", "intermediate"],
     "explanation": "Ensure focusable elements have <code>tabindex</code>, use <code>aria</code> attributes correctly, manage focus order for dialogs/modals, and provide keyboard shortcuts where necessary.",
     "points": 10,
     "options": [
@@ -1291,11 +1187,7 @@
     "updatedAt": "2025-01-08T00:00:00Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "system-design",
-      "frontend-system-design",
-      "intermediate"
-    ],
+    "tags": ["system-design", "frontend-system-design", "intermediate"],
     "explanation": "Optimistic updates immediately update the UI assuming the server request will succeed. If the request fails, the UI is reverted. It improves perceived responsiveness.",
     "points": 10,
     "options": [
@@ -1341,11 +1233,7 @@
     "updatedAt": "2025-01-08T00:00:00Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "system-design",
-      "frontend-system-design",
-      "intermediate"
-    ],
+    "tags": ["system-design", "frontend-system-design", "intermediate"],
     "explanation": "Pessimistic updates wait for server confirmation before updating the UI. This ensures consistency but may feel slower to the user.",
     "points": 10,
     "options": [
@@ -1391,11 +1279,7 @@
     "updatedAt": "2025-01-08T00:00:00Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "system-design",
-      "frontend-system-design",
-      "intermediate"
-    ],
+    "tags": ["system-design", "frontend-system-design", "intermediate"],
     "explanation": "Long-polling keeps an HTTP request open until the server has data, then immediately sends a new request for the next update.",
     "points": 10,
     "options": [
@@ -1435,11 +1319,7 @@
     "updatedAt": "2025-01-08T00:00:00Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "system-design",
-      "frontend-system-design",
-      "intermediate"
-    ],
+    "tags": ["system-design", "frontend-system-design", "intermediate"],
     "explanation": "WebSocket establishes a persistent bidirectional connection between client and server, allowing real-time updates with lower overhead compared to HTTP polling.",
     "points": 10,
     "options": [
@@ -1485,11 +1365,7 @@
     "updatedAt": "2025-01-08T00:00:00Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "system-design",
-      "frontend-system-design",
-      "intermediate"
-    ],
+    "tags": ["system-design", "frontend-system-design", "intermediate"],
     "explanation": "SSE provides a unidirectional stream of updates from server to client over HTTP.",
     "points": 10,
     "options": [
@@ -1529,11 +1405,7 @@
     "updatedAt": "2025-01-08T00:00:00Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "system-design",
-      "frontend-system-design",
-      "intermediate"
-    ],
+    "tags": ["system-design", "frontend-system-design", "intermediate"],
     "explanation": "Normalize entities: store posts in a dictionary keyed by id, store comments separately keyed by id, reference relationships via ids to reduce duplication and simplify updates.",
     "points": 10,
     "options": [
@@ -1579,11 +1451,7 @@
     "updatedAt": "2025-01-08T00:00:00Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "system-design",
-      "frontend-system-design",
-      "intermediate"
-    ],
+    "tags": ["system-design", "frontend-system-design", "intermediate"],
     "explanation": "The correct answer is: REST returns fixed data structures per endpoint",
     "points": 10,
     "options": [
@@ -1629,11 +1497,7 @@
     "updatedAt": "2025-01-08T00:00:00Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "system-design",
-      "frontend-system-design",
-      "advanced"
-    ],
+    "tags": ["system-design", "frontend-system-design", "advanced"],
     "explanation": "Use WebSockets or SSE to push updates, update frontend state optimistically, maintain a local cache, and optionally batch updates to reduce re-renders.",
     "points": 10,
     "options": [
@@ -1679,11 +1543,7 @@
     "updatedAt": "2025-01-08T00:00:00Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "system-design",
-      "frontend-system-design",
-      "intermediate"
-    ],
+    "tags": ["system-design", "frontend-system-design", "intermediate"],
     "explanation": "Critical CSS is the CSS required to render above-the-fold content. Load it inline in the HTML to reduce render-blocking, while deferring non-critical CSS.",
     "points": 10,
     "options": [
@@ -1729,11 +1589,7 @@
     "updatedAt": "2025-01-08T00:00:00Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "system-design",
-      "frontend-system-design",
-      "intermediate"
-    ],
+    "tags": ["system-design", "frontend-system-design", "intermediate"],
     "explanation": "Signed URLs provide temporary, time-limited access to private resources (like images) on CDNs. They ensure secure access while allowing caching and CDN optimization.",
     "points": 10,
     "options": [
@@ -1779,11 +1635,7 @@
     "updatedAt": "2025-01-08T00:00:00Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "system-design",
-      "frontend-system-design",
-      "intermediate"
-    ],
+    "tags": ["system-design", "frontend-system-design", "intermediate"],
     "explanation": "Offset-based pagination is simple but can have duplicates on fast-changing data. Cursor-based is more reliable for real-time feeds. Infinite scroll is UX dependent.",
     "points": 10,
     "options": [
@@ -1829,11 +1681,7 @@
     "updatedAt": "2025-01-08T00:00:00Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "system-design",
-      "frontend-system-design",
-      "intermediate"
-    ],
+    "tags": ["system-design", "frontend-system-design", "intermediate"],
     "explanation": "Use modern formats like WebP, serve different resolutions with <code>srcset</code>, lazy load offscreen images, compress images, and cache via CDN.",
     "points": 10,
     "options": [
@@ -1879,11 +1727,7 @@
     "updatedAt": "2025-01-08T00:00:00Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "system-design",
-      "frontend-system-design",
-      "advanced"
-    ],
+    "tags": ["system-design", "frontend-system-design", "advanced"],
     "explanation": "Use libraries like react-window or react-virtualized to render only visible items, memoize list items to avoid unnecessary re-renders, and paginate data if possible.",
     "points": 10,
     "options": [
@@ -1929,11 +1773,7 @@
     "updatedAt": "2025-01-08T00:00:00Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "system-design",
-      "frontend-system-design",
-      "intermediate"
-    ],
+    "tags": ["system-design", "frontend-system-design", "intermediate"],
     "explanation": "The correct answer is: Reflow recalculates layout and can trigger repaint",
     "points": 10,
     "options": [
@@ -1973,11 +1813,7 @@
     "updatedAt": "2025-01-08T00:00:00Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "system-design",
-      "frontend-system-design",
-      "beginner"
-    ],
+    "tags": ["system-design", "frontend-system-design", "beginner"],
     "explanation": "HTTPS enables HTTP/2 or HTTP/3 which supports multiplexing, header compression, and better caching, improving load performance.",
     "points": 10,
     "options": [
@@ -2023,11 +1859,7 @@
     "updatedAt": "2025-01-08T00:00:00Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "system-design",
-      "frontend-system-design",
-      "intermediate"
-    ],
+    "tags": ["system-design", "frontend-system-design", "intermediate"],
     "explanation": "Bundle splitting breaks the app into smaller chunks, allowing the browser to load only necessary code on demand, reducing initial load time.",
     "points": 10,
     "options": [
@@ -2073,11 +1905,7 @@
     "updatedAt": "2025-01-08T00:00:00Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "system-design",
-      "frontend-system-design",
-      "intermediate"
-    ],
+    "tags": ["system-design", "frontend-system-design", "intermediate"],
     "explanation": "Memoization (using React.memo, useMemo, or useCallback) avoids unnecessary re-rendering of components or expensive calculations when props/state haven’t changed.",
     "points": 10,
     "options": [
@@ -2123,11 +1951,7 @@
     "updatedAt": "2025-01-08T00:00:00Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "system-design",
-      "frontend-system-design",
-      "intermediate"
-    ],
+    "tags": ["system-design", "frontend-system-design", "intermediate"],
     "explanation": "The correct answer is: Infinite scroll automatically loads more content as user scrolls",
     "points": 10,
     "options": [
@@ -2173,11 +1997,7 @@
     "updatedAt": "2025-01-08T00:00:00Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "system-design",
-      "frontend-system-design",
-      "intermediate"
-    ],
+    "tags": ["system-design", "frontend-system-design", "intermediate"],
     "explanation": "Break components when parts are reusable, have independent state, or to improve readability and maintainability. Follow Single Responsibility Principle and avoid deep prop drilling.",
     "points": 10,
     "options": [
@@ -2223,11 +2043,7 @@
     "updatedAt": "2025-01-08T00:00:00Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "system-design",
-      "frontend-system-design",
-      "beginner"
-    ],
+    "tags": ["system-design", "frontend-system-design", "beginner"],
     "explanation": "The correct answer is: Controlled components have state managed by React via props",
     "points": 10,
     "options": [
@@ -2267,11 +2083,7 @@
     "updatedAt": "2025-01-08T00:00:00Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "system-design",
-      "frontend-system-design",
-      "intermediate"
-    ],
+    "tags": ["system-design", "frontend-system-design", "intermediate"],
     "explanation": "Redux is a predictable state container for JavaScript apps, useful for managing global state shared across multiple components, especially in large or complex apps.",
     "points": 10,
     "options": [
@@ -2317,11 +2129,7 @@
     "updatedAt": "2025-01-08T00:00:00Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "system-design",
-      "frontend-system-design",
-      "intermediate"
-    ],
+    "tags": ["system-design", "frontend-system-design", "intermediate"],
     "explanation": "The correct answer is: Local state is component-specific",
     "points": 10,
     "options": [
@@ -2367,11 +2175,7 @@
     "updatedAt": "2025-01-08T00:00:00Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "system-design",
-      "frontend-system-design",
-      "advanced"
-    ],
+    "tags": ["system-design", "frontend-system-design", "advanced"],
     "explanation": "Analyze the design, identify repeated patterns, break down UI into smallest reusable components, map dependencies, and visualize parent-child relationships in a graph.",
     "points": 10,
     "options": [
@@ -2417,11 +2221,7 @@
     "updatedAt": "2025-01-08T00:00:00Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "system-design",
-      "frontend-system-design",
-      "intermediate"
-    ],
+    "tags": ["system-design", "frontend-system-design", "intermediate"],
     "explanation": "Keep components focused on a single responsibility, accept props for configuration, avoid hardcoding styles or behavior, and make them testable and composable.",
     "points": 10,
     "options": [
@@ -2467,11 +2267,7 @@
     "updatedAt": "2025-01-08T00:00:00Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "system-design",
-      "frontend-system-design",
-      "intermediate"
-    ],
+    "tags": ["system-design", "frontend-system-design", "intermediate"],
     "explanation": "The correct answer is: REST endpoints return fixed data structures",
     "points": 10,
     "options": [
@@ -2511,11 +2307,7 @@
     "updatedAt": "2025-01-08T00:00:00Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "system-design",
-      "frontend-system-design",
-      "advanced"
-    ],
+    "tags": ["system-design", "frontend-system-design", "advanced"],
     "explanation": "Normalize entities: store posts in a dictionary keyed by id, store comments separately keyed by id, reference relationships via ids to reduce duplication and simplify updates.",
     "points": 10,
     "options": [
@@ -2561,11 +2353,7 @@
     "updatedAt": "2025-01-08T00:00:00Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "system-design",
-      "frontend-system-design",
-      "intermediate"
-    ],
+    "tags": ["system-design", "frontend-system-design", "intermediate"],
     "explanation": "Use in-memory stores, IndexedDB, or libraries like React Query / SWR to cache API responses, invalidate stale data, and optionally persist cache across sessions.",
     "points": 10,
     "options": [
@@ -2611,11 +2399,7 @@
     "updatedAt": "2025-01-08T00:00:00Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "system-design",
-      "frontend-system-design",
-      "beginner"
-    ],
+    "tags": ["system-design", "frontend-system-design", "beginner"],
     "explanation": "The correct answer is: localStorage persists data indefinitely across sessions",
     "points": 10,
     "options": [
@@ -2661,11 +2445,7 @@
     "updatedAt": "2025-01-08T00:00:00Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "system-design",
-      "frontend-system-design",
-      "intermediate"
-    ],
+    "tags": ["system-design", "frontend-system-design", "intermediate"],
     "explanation": "Use browser dev tools, Lighthouse, or WebPageTest to measure TTFB, total request size, request count, and loading time for critical assets.",
     "points": 10,
     "options": [
@@ -2711,11 +2491,7 @@
     "updatedAt": "2025-01-08T00:00:00Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "system-design",
-      "frontend-system-design",
-      "intermediate"
-    ],
+    "tags": ["system-design", "frontend-system-design", "intermediate"],
     "explanation": "A performance budget sets limits on page weight, script size, or request counts to prevent regressions and maintain fast load times.",
     "points": 10,
     "options": [
@@ -2761,11 +2537,7 @@
     "updatedAt": "2025-01-08T00:00:00Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "system-design",
-      "frontend-system-design",
-      "advanced"
-    ],
+    "tags": ["system-design", "frontend-system-design", "advanced"],
     "explanation": "Use Chrome DevTools Performance tab to record JS execution, identify long tasks, optimize loops, debounce/throttle events, and memoize expensive calculations.",
     "points": 10,
     "options": [
@@ -2811,11 +2583,7 @@
     "updatedAt": "2025-01-08T00:00:00Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "system-design",
-      "frontend-system-design",
-      "advanced"
-    ],
+    "tags": ["system-design", "frontend-system-design", "advanced"],
     "explanation": "Use React DevTools Profiler to measure component render times, identify unnecessary renders, optimize with memoization, lazy loading, and virtualization.",
     "points": 10,
     "options": [
@@ -2861,11 +2629,7 @@
     "updatedAt": "2025-01-08T00:00:00Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "system-design",
-      "frontend-system-design",
-      "intermediate"
-    ],
+    "tags": ["system-design", "frontend-system-design", "intermediate"],
     "explanation": "Lighthouse audits provide automated reports for performance, accessibility, best practices, SEO, and PWA compliance, helping developers optimize their apps.",
     "points": 10,
     "options": [
@@ -2911,11 +2675,7 @@
     "updatedAt": "2025-01-08T00:00:00Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "system-design",
-      "frontend-system-design",
-      "intermediate"
-    ],
+    "tags": ["system-design", "frontend-system-design", "intermediate"],
     "explanation": "Use tools like Axe, Lighthouse, WAVE, or browser extensions to audit accessibility, detect color contrast issues, missing ARIA labels, and keyboard navigation problems.",
     "points": 10,
     "options": [
@@ -2961,11 +2721,7 @@
     "updatedAt": "2025-01-08T00:00:00Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "system-design",
-      "frontend-system-design",
-      "intermediate"
-    ],
+    "tags": ["system-design", "frontend-system-design", "intermediate"],
     "explanation": "TTI measures the time until the page becomes fully interactive for users. Lower TTI improves perceived performance and UX.",
     "points": 10,
     "options": [
@@ -3011,11 +2767,7 @@
     "updatedAt": "2025-01-08T00:00:00Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "system-design",
-      "frontend-system-design",
-      "intermediate"
-    ],
+    "tags": ["system-design", "frontend-system-design", "intermediate"],
     "explanation": "LCP measures time for the largest visible element to load. Optimize by lazy loading images, compressing resources, using critical CSS, and serving assets via CDN.",
     "points": 10,
     "options": [
@@ -3061,11 +2813,7 @@
     "updatedAt": "2025-01-08T00:00:00Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "system-design",
-      "frontend-system-design",
-      "advanced"
-    ],
+    "tags": ["system-design", "frontend-system-design", "advanced"],
     "explanation": "Use Chrome DevTools Memory tab, take heap snapshots, look for detached DOM nodes, and clean up event listeners or intervals to prevent leaks.",
     "points": 10,
     "options": [
@@ -3111,11 +2859,7 @@
     "updatedAt": "2025-01-08T00:00:00Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "system-design",
-      "frontend-system-design",
-      "intermediate"
-    ],
+    "tags": ["system-design", "frontend-system-design", "intermediate"],
     "explanation": "Use services like Sentry, LogRocket, or Rollbar to capture uncaught errors, promise rejections, and user sessions. Include context and stack traces for debugging.",
     "points": 10,
     "options": [
@@ -3161,11 +2905,7 @@
     "updatedAt": "2025-01-08T00:00:00Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "system-design",
-      "frontend-system-design",
-      "intermediate"
-    ],
+    "tags": ["system-design", "frontend-system-design", "intermediate"],
     "explanation": "Signed URLs provide temporary, time-limited access to private resources on a server or CDN. They prevent unauthorized access and allow caching while maintaining security.",
     "points": 10,
     "options": [
@@ -3211,11 +2951,7 @@
     "updatedAt": "2025-01-08T00:00:00Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "system-design",
-      "frontend-system-design",
-      "intermediate"
-    ],
+    "tags": ["system-design", "frontend-system-design", "intermediate"],
     "explanation": "Use anti-CSRF tokens in requests, ensure same-site cookies, validate origin headers, and use secure HTTP methods for state-changing requests.",
     "points": 10,
     "options": [
@@ -3261,11 +2997,7 @@
     "updatedAt": "2025-01-08T00:00:00Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "system-design",
-      "frontend-system-design",
-      "intermediate"
-    ],
+    "tags": ["system-design", "frontend-system-design", "intermediate"],
     "explanation": "Escape or sanitize user-generated content, use Content Security Policy (CSP), avoid <code>innerHTML</code>, and validate input on both frontend and backend.",
     "points": 10,
     "options": [
@@ -3311,11 +3043,7 @@
     "updatedAt": "2025-01-08T00:00:00Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "system-design",
-      "frontend-system-design",
-      "intermediate"
-    ],
+    "tags": ["system-design", "frontend-system-design", "intermediate"],
     "explanation": "HTTP-only cookies cannot be accessed by JavaScript, reducing the risk of XSS attacks stealing session data.",
     "points": 10,
     "options": [
@@ -3361,11 +3089,7 @@
     "updatedAt": "2025-01-08T00:00:00Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "system-design",
-      "frontend-system-design",
-      "intermediate"
-    ],
+    "tags": ["system-design", "frontend-system-design", "intermediate"],
     "explanation": "Use tokens (JWT or opaque), store securely in HTTP-only cookies or local storage, handle token refresh, and validate session on API requests.",
     "points": 10,
     "options": [
@@ -3411,11 +3135,7 @@
     "updatedAt": "2025-01-08T00:00:00Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "system-design",
-      "frontend-system-design",
-      "intermediate"
-    ],
+    "tags": ["system-design", "frontend-system-design", "intermediate"],
     "explanation": "The correct answer is: JWT is self-contained, includes claims, can be verified without server",
     "points": 10,
     "options": [
@@ -3455,11 +3175,7 @@
     "updatedAt": "2025-01-08T00:00:00Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "system-design",
-      "frontend-system-design",
-      "beginner"
-    ],
+    "tags": ["system-design", "frontend-system-design", "beginner"],
     "explanation": "CORS is a browser security mechanism that controls which origins can access resources. It prevents unauthorized cross-origin requests.",
     "points": 10,
     "options": [
@@ -3505,11 +3221,7 @@
     "updatedAt": "2025-01-08T00:00:00Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "system-design",
-      "frontend-system-design",
-      "intermediate"
-    ],
+    "tags": ["system-design", "frontend-system-design", "intermediate"],
     "explanation": "Store tokens in HTTP-only cookies or in-memory storage, avoid localStorage for sensitive tokens, use short-lived tokens with refresh, and send via Authorization header.",
     "points": 10,
     "options": [
@@ -3555,11 +3267,7 @@
     "updatedAt": "2025-01-08T00:00:00Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "system-design",
-      "frontend-system-design",
-      "beginner"
-    ],
+    "tags": ["system-design", "frontend-system-design", "beginner"],
     "explanation": "The correct answer is: Authentication verifies user identity",
     "points": 10,
     "options": [
@@ -3599,11 +3307,7 @@
     "updatedAt": "2025-01-08T00:00:00Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "system-design",
-      "frontend-system-design",
-      "intermediate"
-    ],
+    "tags": ["system-design", "frontend-system-design", "intermediate"],
     "explanation": "Signed URLs allow CDNs to cache private resources efficiently, reducing server load and latency, while ensuring secure time-limited access to assets.",
     "points": 10,
     "options": [
@@ -3649,11 +3353,7 @@
     "updatedAt": "2025-01-08T00:00:00Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "system-design",
-      "frontend-system-design",
-      "beginner"
-    ],
+    "tags": ["system-design", "frontend-system-design", "beginner"],
     "explanation": "Web accessibility ensures that websites are usable by people with disabilities, providing equal access to content and functionality. It improves usability and inclusivity.",
     "points": 10,
     "options": [
@@ -3699,11 +3399,7 @@
     "updatedAt": "2025-01-08T00:00:00Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "system-design",
-      "frontend-system-design",
-      "intermediate"
-    ],
+    "tags": ["system-design", "frontend-system-design", "intermediate"],
     "explanation": "ARIA roles and attributes provide semantic information for assistive technologies. Use roles like <code>button</code>, <code>dialog</code>, and states like <code>aria-expanded</code> to convey meaning.",
     "points": 10,
     "options": [
@@ -3749,11 +3445,7 @@
     "updatedAt": "2025-01-08T00:00:00Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "system-design",
-      "frontend-system-design",
-      "intermediate"
-    ],
+    "tags": ["system-design", "frontend-system-design", "intermediate"],
     "explanation": "Use browser extensions like Axe or WAVE, automated tools like Lighthouse, and manual testing with keyboard navigation and screen readers to ensure accessibility compliance.",
     "points": 10,
     "options": [
@@ -3799,11 +3491,7 @@
     "updatedAt": "2025-01-08T00:00:00Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "system-design",
-      "frontend-system-design",
-      "intermediate"
-    ],
+    "tags": ["system-design", "frontend-system-design", "intermediate"],
     "explanation": "The correct answer is: Missing alt text on images",
     "points": 10,
     "options": [
@@ -3849,11 +3537,7 @@
     "updatedAt": "2025-01-08T00:00:00Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "system-design",
-      "frontend-system-design",
-      "beginner"
-    ],
+    "tags": ["system-design", "frontend-system-design", "beginner"],
     "explanation": "Internationalization (i18n) is the process of designing a frontend app to support multiple languages, locales, and cultural conventions without changing code.",
     "points": 10,
     "options": [
@@ -3899,11 +3583,7 @@
     "updatedAt": "2025-01-08T00:00:00Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "system-design",
-      "frontend-system-design",
-      "beginner"
-    ],
+    "tags": ["system-design", "frontend-system-design", "beginner"],
     "explanation": "The correct answer is: i18n is the process of designing for multiple languages",
     "points": 10,
     "options": [
@@ -3943,11 +3623,7 @@
     "updatedAt": "2025-01-08T00:00:00Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "system-design",
-      "frontend-system-design",
-      "intermediate"
-    ],
+    "tags": ["system-design", "frontend-system-design", "intermediate"],
     "explanation": "Use CSS logical properties (<code>margin-inline-start</code>), direction attributes (<code>dir='rtl'</code>), mirrored layout components, and test with RTL content to ensure proper alignment.",
     "points": 10,
     "options": [
@@ -3993,11 +3669,7 @@
     "updatedAt": "2025-01-08T00:00:00Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "system-design",
-      "frontend-system-design",
-      "intermediate"
-    ],
+    "tags": ["system-design", "frontend-system-design", "intermediate"],
     "explanation": "Use skeleton loaders, progressive rendering, lazy load images and components, provide feedback for user actions, and prioritize above-the-fold content.",
     "points": 10,
     "options": [
@@ -4043,11 +3715,7 @@
     "updatedAt": "2025-01-08T00:00:00Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "system-design",
-      "frontend-system-design",
-      "intermediate"
-    ],
+    "tags": ["system-design", "frontend-system-design", "intermediate"],
     "explanation": "The correct answer is: Progressive enhancement starts with basic functionality and adds features for modern browsers",
     "points": 10,
     "options": [
@@ -4087,11 +3755,7 @@
     "updatedAt": "2025-01-08T00:00:00Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "system-design",
-      "frontend-system-design",
-      "advanced"
-    ],
+    "tags": ["system-design", "frontend-system-design", "advanced"],
     "explanation": "Follow WCAG guidelines, use semantic HTML, ARIA roles, keyboard navigable interfaces, screen reader testing, color contrast compliance, and responsive layouts.",
     "points": 10,
     "options": [
@@ -4137,11 +3801,7 @@
     "updatedAt": "2025-01-08T00:00:00Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "system-design",
-      "frontend-system-design",
-      "intermediate"
-    ],
+    "tags": ["system-design", "frontend-system-design", "intermediate"],
     "explanation": "WebSocket is a full-duplex, persistent connection between client and server for real-time communication. Use it for chat apps, notifications, and live feeds.",
     "points": 10,
     "options": [
@@ -4187,11 +3847,7 @@
     "updatedAt": "2025-01-08T00:00:00Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "system-design",
-      "frontend-system-design",
-      "intermediate"
-    ],
+    "tags": ["system-design", "frontend-system-design", "intermediate"],
     "explanation": "SSE is a unidirectional protocol where server pushes updates to the client over HTTP. Use SSE for live feeds or notifications where the client doesn't need to send frequent data.",
     "points": 10,
     "options": [
@@ -4237,11 +3893,7 @@
     "updatedAt": "2025-01-08T00:00:00Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "system-design",
-      "frontend-system-design",
-      "intermediate"
-    ],
+    "tags": ["system-design", "frontend-system-design", "intermediate"],
     "explanation": "Long polling is a technique where the client sends a request and the server holds it until data is available. Use it when WebSocket or SSE is not possible.",
     "points": 10,
     "options": [
@@ -4287,11 +3939,7 @@
     "updatedAt": "2025-01-08T00:00:00Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "system-design",
-      "frontend-system-design",
-      "advanced"
-    ],
+    "tags": ["system-design", "frontend-system-design", "advanced"],
     "explanation": "WebSocket: low latency, bidirectional, more complex, heavier on server.\nSSE: simple, unidirectional, uses HTTP, auto-reconnect, limited to text/event-stream.\nLong Polling: compatible with HTTP, higher latency, server holds connections, less efficient.",
     "points": 10,
     "options": [
@@ -4337,11 +3985,7 @@
     "updatedAt": "2025-01-08T00:00:00Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "system-design",
-      "frontend-system-design",
-      "intermediate"
-    ],
+    "tags": ["system-design", "frontend-system-design", "intermediate"],
     "explanation": "Implement exponential backoff retry, detect disconnections, optionally queue messages during downtime, and re-subscribe to channels after reconnect.",
     "points": 10,
     "options": [
@@ -4387,11 +4031,7 @@
     "updatedAt": "2025-01-08T00:00:00Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "system-design",
-      "frontend-system-design",
-      "advanced"
-    ],
+    "tags": ["system-design", "frontend-system-design", "advanced"],
     "explanation": "Throttle or debounce updates, batch multiple events into a single render, use virtualization for lists, and avoid unnecessary state updates.",
     "points": 10,
     "options": [
@@ -4437,11 +4077,7 @@
     "updatedAt": "2025-01-08T00:00:00Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "system-design",
-      "frontend-system-design",
-      "intermediate"
-    ],
+    "tags": ["system-design", "frontend-system-design", "intermediate"],
     "explanation": "Use WSS (WebSocket over TLS), validate tokens or cookies on handshake, limit origin access, and avoid exposing sensitive data over the connection.",
     "points": 10,
     "options": [
@@ -4487,11 +4123,7 @@
     "updatedAt": "2025-01-08T00:00:00Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "system-design",
-      "frontend-system-design",
-      "advanced"
-    ],
+    "tags": ["system-design", "frontend-system-design", "advanced"],
     "explanation": "Use a central subscription manager, reuse connections, dynamically subscribe/unsubscribe as needed, and debounce updates from high-frequency channels.",
     "points": 10,
     "options": [
@@ -4537,11 +4169,7 @@
     "updatedAt": "2025-01-08T00:00:00Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "system-design",
-      "frontend-system-design",
-      "intermediate"
-    ],
+    "tags": ["system-design", "frontend-system-design", "intermediate"],
     "explanation": "Use long polling as a fallback, retry WebSocket connections periodically, or display stale cached data with visual indication until connection restores.",
     "points": 10,
     "options": [
@@ -4587,11 +4215,7 @@
     "updatedAt": "2025-01-08T00:00:00Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "system-design",
-      "frontend-system-design",
-      "intermediate"
-    ],
+    "tags": ["system-design", "frontend-system-design", "intermediate"],
     "explanation": "Use SSE for unidirectional updates like live feeds, notifications, or stock tickers where client doesn't send frequent data and simplicity is preferred over bidirectional communication.",
     "points": 10,
     "options": [
@@ -4637,11 +4261,7 @@
     "updatedAt": "2025-01-08T00:00:00Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "system-design",
-      "frontend-system-design",
-      "beginner"
-    ],
+    "tags": ["system-design", "frontend-system-design", "beginner"],
     "explanation": "Browser cache stores assets locally on the client device. CDN cache stores assets on edge servers closer to the user. CDN reduces network latency while browser cache reduces repeated downloads.",
     "points": 10,
     "options": [
@@ -4687,11 +4307,7 @@
     "updatedAt": "2025-01-08T00:00:00Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "system-design",
-      "frontend-system-design",
-      "intermediate"
-    ],
+    "tags": ["system-design", "frontend-system-design", "intermediate"],
     "explanation": "Cache-control headers define how long and where a resource can be cached. Examples: <code>max-age</code>, <code>no-store</code>, <code>must-revalidate</code>. They help control freshness and prevent stale content.",
     "points": 10,
     "options": [
@@ -4737,11 +4353,7 @@
     "updatedAt": "2025-01-08T00:00:00Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "system-design",
-      "frontend-system-design",
-      "intermediate"
-    ],
+    "tags": ["system-design", "frontend-system-design", "intermediate"],
     "explanation": "A service worker is a script running in the background that intercepts network requests. It can cache assets, serve offline content, and enable push notifications for PWAs.",
     "points": 10,
     "options": [
@@ -4787,11 +4399,7 @@
     "updatedAt": "2025-01-08T00:00:00Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "system-design",
-      "frontend-system-design",
-      "beginner"
-    ],
+    "tags": ["system-design", "frontend-system-design", "beginner"],
     "explanation": "The correct answer is: AppCache was limited and inflexible",
     "points": 10,
     "options": [
@@ -4831,11 +4439,7 @@
     "updatedAt": "2025-01-08T00:00:00Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "system-design",
-      "frontend-system-design",
-      "intermediate"
-    ],
+    "tags": ["system-design", "frontend-system-design", "intermediate"],
     "explanation": "Stale-while-revalidate serves cached content immediately while fetching a fresh version in the background. The user sees fast responses while data stays up-to-date.",
     "points": 10,
     "options": [
@@ -4881,11 +4485,7 @@
     "updatedAt": "2025-01-08T00:00:00Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "system-design",
-      "frontend-system-design",
-      "intermediate"
-    ],
+    "tags": ["system-design", "frontend-system-design", "intermediate"],
     "explanation": "IndexedDB is a low-level NoSQL database in the browser. It stores structured data, useful for offline applications where data must persist across sessions.",
     "points": 10,
     "options": [
@@ -4931,11 +4531,7 @@
     "updatedAt": "2025-01-08T00:00:00Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "system-design",
-      "frontend-system-design",
-      "advanced"
-    ],
+    "tags": ["system-design", "frontend-system-design", "advanced"],
     "explanation": "Use service workers for caching, IndexedDB for persistent storage, queue requests for background sync, and gracefully degrade UI when offline.",
     "points": 10,
     "options": [
@@ -4981,11 +4577,7 @@
     "updatedAt": "2025-01-08T00:00:00Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "system-design",
-      "frontend-system-design",
-      "intermediate"
-    ],
+    "tags": ["system-design", "frontend-system-design", "intermediate"],
     "explanation": "Background sync allows deferred actions like sending requests once connectivity is restored. Service workers handle queued tasks even when the app is closed.",
     "points": 10,
     "options": [
@@ -5031,11 +4623,7 @@
     "updatedAt": "2025-01-08T00:00:00Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "system-design",
-      "frontend-system-design",
-      "advanced"
-    ],
+    "tags": ["system-design", "frontend-system-design", "advanced"],
     "explanation": "Use IndexedDB or in-memory caching, implement SWR/React Query strategies, leverage service workers for offline API responses, and use ETag headers to revalidate.",
     "points": 10,
     "options": [
@@ -5081,11 +4669,7 @@
     "updatedAt": "2025-01-08T00:00:00Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "system-design",
-      "frontend-system-design",
-      "beginner"
-    ],
+    "tags": ["system-design", "frontend-system-design", "beginner"],
     "explanation": "A CDN caches static assets at edge servers near users, reducing latency and improving load times for global audiences.",
     "points": 10,
     "options": [
@@ -5131,11 +4715,7 @@
     "updatedAt": "2025-01-08T00:00:00Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "system-design",
-      "frontend-system-design",
-      "beginner"
-    ],
+    "tags": ["system-design", "frontend-system-design", "beginner"],
     "explanation": "The correct answer is: Authentication verifies who the user is",
     "points": 10,
     "options": [
@@ -5175,11 +4755,7 @@
     "updatedAt": "2025-01-08T00:00:00Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "system-design",
-      "frontend-system-design",
-      "intermediate"
-    ],
+    "tags": ["system-design", "frontend-system-design", "intermediate"],
     "explanation": "OAuth2 is an authorization framework allowing apps to access resources on behalf of users. Frontend apps use it for social logins and delegated access with access tokens.",
     "points": 10,
     "options": [
@@ -5225,11 +4801,7 @@
     "updatedAt": "2025-01-08T00:00:00Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "system-design",
-      "frontend-system-design",
-      "intermediate"
-    ],
+    "tags": ["system-design", "frontend-system-design", "intermediate"],
     "explanation": "JWTs are self-contained tokens with claims, verifiable by signature, no DB lookup needed. Opaque tokens are random strings requiring server lookup. JWTs scale better but must be handled securely.",
     "points": 10,
     "options": [
@@ -5275,11 +4847,7 @@
     "updatedAt": "2025-01-08T00:00:00Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "system-design",
-      "frontend-system-design",
-      "beginner"
-    ],
+    "tags": ["system-design", "frontend-system-design", "beginner"],
     "explanation": "HttpOnly cookies cannot be accessed via JavaScript, preventing XSS attacks from stealing tokens. They are useful for securely storing session tokens.",
     "points": 10,
     "options": [
@@ -5325,11 +4893,7 @@
     "updatedAt": "2025-01-08T00:00:00Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "system-design",
-      "frontend-system-design",
-      "intermediate"
-    ],
+    "tags": ["system-design", "frontend-system-design", "intermediate"],
     "explanation": "CSRF tricks users into executing actions unknowingly. Prevent it using SameSite cookies, CSRF tokens in forms, and double-submit cookie patterns.",
     "points": 10,
     "options": [
@@ -5375,11 +4939,7 @@
     "updatedAt": "2025-01-08T00:00:00Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "system-design",
-      "frontend-system-design",
-      "advanced"
-    ],
+    "tags": ["system-design", "frontend-system-design", "advanced"],
     "explanation": "XSS injects malicious scripts into webpages. Defenses include escaping user input, using CSP (Content Security Policy), sanitizing HTML, and avoiding <code>eval</code>.",
     "points": 10,
     "options": [
@@ -5425,11 +4985,7 @@
     "updatedAt": "2025-01-08T00:00:00Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "system-design",
-      "frontend-system-design",
-      "beginner"
-    ],
+    "tags": ["system-design", "frontend-system-design", "beginner"],
     "explanation": "CORS defines which domains can access APIs from a frontend app. It prevents malicious websites from making unauthorized requests on behalf of users.",
     "points": 10,
     "options": [
@@ -5475,11 +5031,7 @@
     "updatedAt": "2025-01-08T00:00:00Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "system-design",
-      "frontend-system-design",
-      "intermediate"
-    ],
+    "tags": ["system-design", "frontend-system-design", "intermediate"],
     "explanation": "The correct answer is: Strict: cookie only sent for same-site requests",
     "points": 10,
     "options": [
@@ -5519,11 +5071,7 @@
     "updatedAt": "2025-01-08T00:00:00Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "system-design",
-      "frontend-system-design",
-      "intermediate"
-    ],
+    "tags": ["system-design", "frontend-system-design", "intermediate"],
     "explanation": "Signed URLs include a token or signature allowing temporary access to private assets like images or videos. They protect resources without exposing them publicly.",
     "points": 10,
     "options": [
@@ -5569,11 +5117,7 @@
     "updatedAt": "2025-01-08T00:00:00Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "system-design",
-      "frontend-system-design",
-      "beginner"
-    ],
+    "tags": ["system-design", "frontend-system-design", "beginner"],
     "explanation": "On logout, clear tokens from memory/storage, invalidate session cookies, revoke refresh tokens server-side, and redirect users to a safe page.",
     "points": 10,
     "options": [
@@ -5619,11 +5163,7 @@
     "updatedAt": "2025-01-08T00:00:00Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "system-design",
-      "frontend-system-design",
-      "beginner"
-    ],
+    "tags": ["system-design", "frontend-system-design", "beginner"],
     "explanation": "Vertical scaling means adding more power (CPU/RAM) to a single server. Horizontal scaling means adding more servers and distributing traffic using load balancers or CDNs.",
     "points": 10,
     "options": [
@@ -5669,11 +5209,7 @@
     "updatedAt": "2025-01-08T00:00:00Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "system-design",
-      "frontend-system-design",
-      "beginner"
-    ],
+    "tags": ["system-design", "frontend-system-design", "beginner"],
     "explanation": "CDNs distribute static assets across global edge servers. This reduces latency, improves performance, and reduces load on origin servers.",
     "points": 10,
     "options": [
@@ -5719,11 +5255,7 @@
     "updatedAt": "2025-01-08T00:00:00Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "system-design",
-      "frontend-system-design",
-      "intermediate"
-    ],
+    "tags": ["system-design", "frontend-system-design", "intermediate"],
     "explanation": "Edge computing runs code closer to users, reducing latency. Frontend apps benefit from edge functions for caching, authentication, and A/B testing.",
     "points": 10,
     "options": [
@@ -5769,11 +5301,7 @@
     "updatedAt": "2025-01-08T00:00:00Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "system-design",
-      "frontend-system-design",
-      "beginner"
-    ],
+    "tags": ["system-design", "frontend-system-design", "beginner"],
     "explanation": "Serverless hosting platforms automatically scale static sites and serverless functions, handling SSL, CDN, and caching without manual infrastructure setup.",
     "points": 10,
     "options": [
@@ -5819,11 +5347,7 @@
     "updatedAt": "2025-01-08T00:00:00Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "system-design",
-      "frontend-system-design",
-      "intermediate"
-    ],
+    "tags": ["system-design", "frontend-system-design", "intermediate"],
     "explanation": "Blue-green deployment maintains two environments: blue (current) and green (new). After testing the green environment, traffic is switched with zero downtime.",
     "points": 10,
     "options": [
@@ -5869,11 +5393,7 @@
     "updatedAt": "2025-01-08T00:00:00Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "system-design",
-      "frontend-system-design",
-      "intermediate"
-    ],
+    "tags": ["system-design", "frontend-system-design", "intermediate"],
     "explanation": "Canary releases gradually roll out a new version to a small subset of users. If no issues arise, it expands to all users. Useful for catching bugs early.",
     "points": 10,
     "options": [
@@ -5919,11 +5439,7 @@
     "updatedAt": "2025-01-08T00:00:00Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "system-design",
-      "frontend-system-design",
-      "advanced"
-    ],
+    "tags": ["system-design", "frontend-system-design", "advanced"],
     "explanation": "Micro-frontends split a large frontend into smaller, independently deployable apps. They improve scalability and team autonomy but add complexity in integration and shared state.",
     "points": 10,
     "options": [
@@ -5969,11 +5485,7 @@
     "updatedAt": "2025-01-08T00:00:00Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "system-design",
-      "frontend-system-design",
-      "advanced"
-    ],
+    "tags": ["system-design", "frontend-system-design", "advanced"],
     "explanation": "SSR caching stores rendered HTML from server-side rendering, reducing repeated computations. It improves response times and scales Next.js apps under high traffic.",
     "points": 10,
     "options": [
@@ -6019,11 +5531,7 @@
     "updatedAt": "2025-01-08T00:00:00Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "system-design",
-      "frontend-system-design",
-      "intermediate"
-    ],
+    "tags": ["system-design", "frontend-system-design", "intermediate"],
     "explanation": "Load balancers distribute traffic across multiple servers. Strategies include round-robin, least connections, and geo-based routing. This improves reliability and scalability.",
     "points": 10,
     "options": [
@@ -6069,11 +5577,7 @@
     "updatedAt": "2025-01-08T00:00:00Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "system-design",
-      "frontend-system-design",
-      "intermediate"
-    ],
+    "tags": ["system-design", "frontend-system-design", "intermediate"],
     "explanation": "Progressive rollout gradually releases new features to specific user groups, regions, or percentages of traffic. It minimizes risk and enables monitoring of issues before full release.",
     "points": 10,
     "options": [
@@ -6119,11 +5623,7 @@
     "updatedAt": "2025-01-08T00:00:00Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "system-design",
-      "frontend-system-design",
-      "beginner"
-    ],
+    "tags": ["system-design", "frontend-system-design", "beginner"],
     "explanation": "Frontend observability provides insights into client-side performance, errors, and user interactions. It's important for detecting issues that backend monitoring cannot catch, like slow rendering or script errors in browsers.",
     "points": 10,
     "options": [
@@ -6169,11 +5669,7 @@
     "updatedAt": "2025-01-08T00:00:00Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "system-design",
-      "frontend-system-design",
-      "beginner"
-    ],
+    "tags": ["system-design", "frontend-system-design", "beginner"],
     "explanation": "RUM tools capture real user interactions, measuring page load time, errors, and responsiveness directly from user devices, giving true performance insights.",
     "points": 10,
     "options": [
@@ -6219,11 +5715,7 @@
     "updatedAt": "2025-01-08T00:00:00Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "system-design",
-      "frontend-system-design",
-      "intermediate"
-    ],
+    "tags": ["system-design", "frontend-system-design", "intermediate"],
     "explanation": "The correct answer is: Synthetic monitoring simulates user interactions with scripts",
     "points": 10,
     "options": [
@@ -6269,11 +5761,7 @@
     "updatedAt": "2025-01-08T00:00:00Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "system-design",
-      "frontend-system-design",
-      "beginner"
-    ],
+    "tags": ["system-design", "frontend-system-design", "beginner"],
     "explanation": "Core Web Vitals (LCP, FID, CLS) are user-focused performance metrics. They measure load speed, interactivity, and visual stability. They directly affect SEO rankings and user experience.",
     "points": 10,
     "options": [
@@ -6319,11 +5807,7 @@
     "updatedAt": "2025-01-08T00:00:00Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "system-design",
-      "frontend-system-design",
-      "intermediate"
-    ],
+    "tags": ["system-design", "frontend-system-design", "intermediate"],
     "explanation": "Use <code>window.onerror</code> and <code>unhandledrejection</code> to capture errors, then send them to monitoring tools like Sentry, Datadog, or custom APIs for logging and alerting.",
     "points": 10,
     "options": [
@@ -6369,11 +5853,7 @@
     "updatedAt": "2025-01-08T00:00:00Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "system-design",
-      "frontend-system-design",
-      "advanced"
-    ],
+    "tags": ["system-design", "frontend-system-design", "advanced"],
     "explanation": "Distributed tracing follows a request across multiple services. Frontend apps can pass trace IDs in headers, enabling correlation between frontend interactions and backend service performance.",
     "points": 10,
     "options": [
@@ -6419,11 +5899,7 @@
     "updatedAt": "2025-01-08T00:00:00Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "system-design",
-      "frontend-system-design",
-      "intermediate"
-    ],
+    "tags": ["system-design", "frontend-system-design", "intermediate"],
     "explanation": "You can wrap fetch/axios calls to log response times, status codes, and errors. Monitoring tools can capture API latency and availability directly from the client side.",
     "points": 10,
     "options": [
@@ -6469,11 +5945,7 @@
     "updatedAt": "2025-01-08T00:00:00Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "system-design",
-      "frontend-system-design",
-      "beginner"
-    ],
+    "tags": ["system-design", "frontend-system-design", "beginner"],
     "explanation": "Sentry, LogRocket, Datadog, New Relic, Elastic APM, and OpenTelemetry are commonly used for frontend monitoring, logging, and observability.",
     "points": 10,
     "options": [
@@ -6519,11 +5991,7 @@
     "updatedAt": "2025-01-08T00:00:00Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "system-design",
-      "frontend-system-design",
-      "intermediate"
-    ],
+    "tags": ["system-design", "frontend-system-design", "intermediate"],
     "explanation": "Log aggregation collects logs from multiple users and sessions into a central system. It helps identify patterns, diagnose errors, and analyze performance at scale.",
     "points": 10,
     "options": [
@@ -6569,11 +6037,7 @@
     "updatedAt": "2025-01-08T00:00:00Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "system-design",
-      "frontend-system-design",
-      "intermediate"
-    ],
+    "tags": ["system-design", "frontend-system-design", "intermediate"],
     "explanation": "The correct answer is: Proactive monitoring aims to detect issues before users are impacted",
     "points": 10,
     "options": [
@@ -6619,11 +6083,7 @@
     "updatedAt": "2025-01-08T00:00:00Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "system-design",
-      "frontend-system-design",
-      "intermediate"
-    ],
+    "tags": ["system-design", "frontend-system-design", "intermediate"],
     "explanation": "XSS allows attackers to inject malicious scripts. Prevention includes escaping user input, using Content Security Policy (CSP), and avoiding dangerous APIs like innerHTML.",
     "points": 10,
     "options": [
@@ -6669,11 +6129,7 @@
     "updatedAt": "2025-01-08T00:00:00Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "system-design",
-      "frontend-system-design",
-      "intermediate"
-    ],
+    "tags": ["system-design", "frontend-system-design", "intermediate"],
     "explanation": "CSRF tricks users into submitting malicious requests. Mitigation includes anti-CSRF tokens, SameSite cookies, and requiring re-authentication for sensitive actions.",
     "points": 10,
     "options": [
@@ -6719,11 +6175,7 @@
     "updatedAt": "2025-01-08T00:00:00Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "system-design",
-      "frontend-system-design",
-      "beginner"
-    ],
+    "tags": ["system-design", "frontend-system-design", "beginner"],
     "explanation": "CORS (Cross-Origin Resource Sharing) controls how browsers allow cross-domain requests. It's important to configure properly to prevent unauthorized access while enabling required integrations.",
     "points": 10,
     "options": [
@@ -6769,11 +6221,7 @@
     "updatedAt": "2025-01-08T00:00:00Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "system-design",
-      "frontend-system-design",
-      "intermediate"
-    ],
+    "tags": ["system-design", "frontend-system-design", "intermediate"],
     "explanation": "JWTs are stateless tokens used for authentication. The frontend stores and sends JWTs in headers or cookies to prove user identity when making API requests.",
     "points": 10,
     "options": [
@@ -6819,11 +6267,7 @@
     "updatedAt": "2025-01-08T00:00:00Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "system-design",
-      "frontend-system-design",
-      "beginner"
-    ],
+    "tags": ["system-design", "frontend-system-design", "beginner"],
     "explanation": "HttpOnly cookies cannot be accessed via JavaScript, protecting tokens from XSS attacks. They are recommended for storing session tokens securely.",
     "points": 10,
     "options": [
@@ -6869,11 +6313,7 @@
     "updatedAt": "2025-01-08T00:00:00Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "system-design",
-      "frontend-system-design",
-      "advanced"
-    ],
+    "tags": ["system-design", "frontend-system-design", "advanced"],
     "explanation": "OAuth 2.0 is an authorization framework. Frontend apps use flows like Authorization Code with PKCE to securely authenticate users and obtain tokens.",
     "points": 10,
     "options": [
@@ -6919,11 +6359,7 @@
     "updatedAt": "2025-01-08T00:00:00Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "system-design",
-      "frontend-system-design",
-      "intermediate"
-    ],
+    "tags": ["system-design", "frontend-system-design", "intermediate"],
     "explanation": "MFA requires multiple verification factors (e.g., password + SMS code). Frontend apps can support MFA by integrating with APIs for OTPs, push notifications, or authenticator apps.",
     "points": 10,
     "options": [
@@ -6969,11 +6405,7 @@
     "updatedAt": "2025-01-08T00:00:00Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "system-design",
-      "frontend-system-design",
-      "intermediate"
-    ],
+    "tags": ["system-design", "frontend-system-design", "intermediate"],
     "explanation": "Signed URLs provide temporary, secure access to protected resources like images or files. They include a signature and expiration time, preventing unauthorized access.",
     "points": 10,
     "options": [
@@ -7019,11 +6451,7 @@
     "updatedAt": "2025-01-08T00:00:00Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "system-design",
-      "frontend-system-design",
-      "intermediate"
-    ],
+    "tags": ["system-design", "frontend-system-design", "intermediate"],
     "explanation": "Rate limiting restricts the number of API calls per user or IP within a time window. It prevents abuse, brute-force attacks, and protects backend resources.",
     "points": 10,
     "options": [
@@ -7069,11 +6497,7 @@
     "updatedAt": "2025-10-08T11:00:00Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "system-design",
-      "frontend-system-design",
-      "beginner"
-    ],
+    "tags": ["system-design", "frontend-system-design", "beginner"],
     "explanation": "Unit tests verify small units in isolation; integration tests verify interactions between modules; E2E tests verify full flows in a real browser environment.",
     "points": 10,
     "options": [
@@ -7119,11 +6543,7 @@
     "updatedAt": "2025-10-08T11:01:00Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "system-design",
-      "frontend-system-design",
-      "intermediate"
-    ],
+    "tags": ["system-design", "frontend-system-design", "intermediate"],
     "explanation": "The test pyramid recommends many fast unit tests at the bottom, fewer integration tests in the middle, and even fewer E2E tests at the top. This balances speed, reliability, and coverage.",
     "points": 10,
     "options": [
@@ -7169,11 +6589,7 @@
     "updatedAt": "2025-10-08T11:02:00Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "system-design",
-      "frontend-system-design",
-      "intermediate"
-    ],
+    "tags": ["system-design", "frontend-system-design", "intermediate"],
     "explanation": "Use React Testing Library + Jest to test rendered output and user interactions, mock network calls, test accessibility using axe, avoid implementation-detail assertions, and use snapshots sparingly.",
     "points": 10,
     "options": [
@@ -7219,11 +6635,7 @@
     "updatedAt": "2025-10-08T11:03:00Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "system-design",
-      "frontend-system-design",
-      "beginner"
-    ],
+    "tags": ["system-design", "frontend-system-design", "beginner"],
     "explanation": "Cypress and Playwright are popular for modern apps; Selenium is older and broad but more complex.",
     "points": 10,
     "options": [
@@ -7269,11 +6681,7 @@
     "updatedAt": "2025-10-08T11:04:00Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "system-design",
-      "frontend-system-design",
-      "advanced"
-    ],
+    "tags": ["system-design", "frontend-system-design", "advanced"],
     "explanation": "Flakiness can be caused by race conditions, unstable selectors, reliance on real network, or shared state. Fix by using stable selectors, mock network calls, add deterministic waits or better synchronization, isolate tests, and reset environment between runs.",
     "points": 10,
     "options": [
@@ -7319,11 +6727,7 @@
     "updatedAt": "2025-10-08T11:05:00Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "system-design",
-      "frontend-system-design",
-      "intermediate"
-    ],
+    "tags": ["system-design", "frontend-system-design", "intermediate"],
     "explanation": "Developers should run fast checks locally; heavier/integration/E2E tests and release builds should run in CI.",
     "points": 10,
     "options": [
@@ -7369,11 +6773,7 @@
     "updatedAt": "2025-10-08T11:06:00Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "system-design",
-      "frontend-system-design",
-      "intermediate"
-    ],
+    "tags": ["system-design", "frontend-system-design", "intermediate"],
     "explanation": "Typical pipeline: checkout -> install deps -> lint -> unit tests -> build -> static analysis/security scan -> run integration/E2E in parallel -> publish artifacts -> deploy to staging -> run smoke tests -> promote to production with deployment strategy (canary/blue-green).",
     "points": 10,
     "options": [
@@ -7419,11 +6819,7 @@
     "updatedAt": "2025-10-08T11:07:00Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "system-design",
-      "frontend-system-design",
-      "advanced"
-    ],
+    "tags": ["system-design", "frontend-system-design", "advanced"],
     "explanation": "Speedups: enable CI caching for dependencies, run tests in parallel across workers, shard E2E tests by test suites, run only affected tests using changed-file detection, and use lightweight mocked E2E for quick smoke.",
     "points": 10,
     "options": [
@@ -7469,11 +6865,7 @@
     "updatedAt": "2025-10-08T11:08:00Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "system-design",
-      "frontend-system-design",
-      "intermediate"
-    ],
+    "tags": ["system-design", "frontend-system-design", "intermediate"],
     "explanation": "Visual regression testing captures UI screenshots and compares diffs to detect unintended UI changes. Use for design-critical components, theming changes, or when CSS changes might break layouts.",
     "points": 10,
     "options": [
@@ -7519,11 +6911,7 @@
     "updatedAt": "2025-10-08T11:09:00Z",
     "createdBy": "admin",
     "updatedBy": "admin",
-    "tags": [
-      "system-design",
-      "frontend-system-design",
-      "intermediate"
-    ],
+    "tags": ["system-design", "frontend-system-design", "intermediate"],
     "explanation": "Quality gates ensure that only PRs meeting minimum quality metrics are merged; surface results in PRs for reviewer context.",
     "points": 10,
     "options": [

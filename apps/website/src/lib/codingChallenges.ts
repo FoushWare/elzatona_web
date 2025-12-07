@@ -2,9 +2,9 @@ export interface CodingChallenge {
   id: string;
   title: string;
   description: string;
-  category: 'frontend' | 'problem-solving';
+  category: "frontend" | "problem-solving";
   subcategory: string;
-  difficulty: 'easy' | 'medium' | 'hard';
+  difficulty: "easy" | "medium" | "hard";
   estimatedTime: number;
   tags: string[];
   problem: {
@@ -40,15 +40,15 @@ export interface CodingChallenge {
 
 export const codingChallenges: CodingChallenge[] = [
   {
-    id: 'ps-1',
-    title: 'Two Sum',
+    id: "ps-1",
+    title: "Two Sum",
     description:
-      'Given an array of integers and a target sum, find two numbers that add up to the target.',
-    category: 'problem-solving',
-    subcategory: 'Arrays',
-    difficulty: 'easy',
+      "Given an array of integers and a target sum, find two numbers that add up to the target.",
+    category: "problem-solving",
+    subcategory: "Arrays",
+    difficulty: "easy",
     estimatedTime: 20,
-    tags: ['Arrays', 'Hash Map', 'Algorithms', 'JavaScript'],
+    tags: ["Arrays", "Hash Map", "Algorithms", "JavaScript"],
     problem: {
       statement: `Given an array of integers nums and an integer target, return indices of the two numbers such that they add up to target.
 
@@ -57,29 +57,29 @@ You may assume that each input would have exactly one solution, and you may not 
 You can return the answer in any order.`,
       examples: [
         {
-          input: 'nums = [2, 7, 11, 15], target = 9',
-          output: '[0, 1]',
-          explanation: 'Because nums[0] + nums[1] == 9, we return [0, 1].',
+          input: "nums = [2, 7, 11, 15], target = 9",
+          output: "[0, 1]",
+          explanation: "Because nums[0] + nums[1] == 9, we return [0, 1].",
         },
         {
-          input: 'nums = [3, 2, 4], target = 6',
-          output: '[1, 2]',
-          explanation: 'Because nums[1] + nums[2] == 6, we return [1, 2].',
+          input: "nums = [3, 2, 4], target = 6",
+          output: "[1, 2]",
+          explanation: "Because nums[1] + nums[2] == 6, we return [1, 2].",
         },
         {
-          input: 'nums = [3, 3], target = 6',
-          output: '[0, 1]',
-          explanation: 'Because nums[0] + nums[1] == 6, we return [0, 1].',
+          input: "nums = [3, 3], target = 6",
+          output: "[0, 1]",
+          explanation: "Because nums[0] + nums[1] == 6, we return [0, 1].",
         },
       ],
       constraints: [
-        '2 <= nums.length <= 10^4',
-        '-10^9 <= nums[i] <= 10^9',
-        '-10^9 <= target <= 10^9',
-        'Only one valid answer exists',
+        "2 <= nums.length <= 10^4",
+        "-10^9 <= nums[i] <= 10^9",
+        "-10^9 <= target <= 10^9",
+        "Only one valid answer exists",
       ],
       notes:
-        'Try to solve this in O(n) time complexity using a hash map approach.',
+        "Try to solve this in O(n) time complexity using a hash map approach.",
     },
     starterCode: {
       javascript: `/**
@@ -153,59 +153,59 @@ console.log(twoSum([2, 7, 11, 15], 9)); // Expected: [0, 1]
 console.log(twoSum([3, 2, 4], 6)); // Expected: [1, 2]
 console.log(twoSum([3, 3], 6)); // Expected: [0, 1]`,
       explanation:
-        'This solution uses a hash map to store numbers and their indices. For each number, we check if its complement (target - current number) exists in the map. If found, we return the indices. Time complexity: O(n), Space complexity: O(n).',
+        "This solution uses a hash map to store numbers and their indices. For each number, we check if its complement (target - current number) exists in the map. If found, we return the indices. Time complexity: O(n), Space complexity: O(n).",
     },
     testCases: [
       {
         input: { nums: [2, 7, 11, 15], target: 9 },
         expectedOutput: [0, 1],
-        description: 'Basic case with two numbers that sum to target',
+        description: "Basic case with two numbers that sum to target",
       },
       {
         input: { nums: [3, 2, 4], target: 6 },
         expectedOutput: [1, 2],
-        description: 'Case where target is sum of middle and last elements',
+        description: "Case where target is sum of middle and last elements",
       },
       {
         input: { nums: [3, 3], target: 6 },
         expectedOutput: [0, 1],
-        description: 'Case with duplicate numbers',
+        description: "Case with duplicate numbers",
       },
       {
         input: { nums: [1, 5, 8, 10, 13, 15], target: 23 },
         expectedOutput: [4, 5],
-        description: 'Larger array with target sum of last two elements',
+        description: "Larger array with target sum of last two elements",
       },
     ],
     hints: [
-      'Use a hash map to store numbers and their indices',
-      'For each number, check if its complement (target - num) exists in the map',
-      'Time complexity: O(n), Space complexity: O(n)',
-      'The hash map approach is more efficient than nested loops',
-      'Remember to return the indices, not the values',
+      "Use a hash map to store numbers and their indices",
+      "For each number, check if its complement (target - num) exists in the map",
+      "Time complexity: O(n), Space complexity: O(n)",
+      "The hash map approach is more efficient than nested loops",
+      "Remember to return the indices, not the values",
     ],
     relatedTopics: [
-      'Hash Maps',
-      'Arrays',
-      'Time Complexity',
-      'Space Complexity',
-      'JavaScript Maps',
+      "Hash Maps",
+      "Arrays",
+      "Time Complexity",
+      "Space Complexity",
+      "JavaScript Maps",
     ],
     completionRate: 92,
     frontendRelevance:
-      'This problem is relevant for frontend developers as it involves array manipulation and is commonly asked in technical interviews, especially for JavaScript/TypeScript roles.',
-    interviewFrequency: 'Very High',
+      "This problem is relevant for frontend developers as it involves array manipulation and is commonly asked in technical interviews, especially for JavaScript/TypeScript roles.",
+    interviewFrequency: "Very High",
   },
   {
-    id: 'fe-1',
-    title: 'Valid Parentheses',
+    id: "fe-1",
+    title: "Valid Parentheses",
     description:
-      'Check if a string of parentheses is valid using a stack-based approach.',
-    category: 'frontend',
-    subcategory: 'Stack',
-    difficulty: 'easy',
+      "Check if a string of parentheses is valid using a stack-based approach.",
+    category: "frontend",
+    subcategory: "Stack",
+    difficulty: "easy",
     estimatedTime: 15,
-    tags: ['Stack', 'String', 'Validation', 'JavaScript'],
+    tags: ["Stack", "String", "Validation", "JavaScript"],
     problem: {
       statement: `Given a string s containing just the characters '(', ')', '{', '}', '[' and ']', determine if the input string is valid.
 
@@ -216,33 +216,33 @@ An input string is valid if:
       examples: [
         {
           input: 's = "()"',
-          output: 'true',
+          output: "true",
           explanation:
-            'The string contains a pair of open and close parentheses, which are valid.',
+            "The string contains a pair of open and close parentheses, which are valid.",
         },
         {
           input: 's = "()[]{}"',
-          output: 'true',
+          output: "true",
           explanation:
-            'The string contains multiple valid pairs of parentheses.',
+            "The string contains multiple valid pairs of parentheses.",
         },
         {
           input: 's = "(]"',
-          output: 'false',
-          explanation: 'The string contains mismatched parentheses.',
+          output: "false",
+          explanation: "The string contains mismatched parentheses.",
         },
         {
           input: 's = "([)]"',
-          output: 'false',
-          explanation: 'The string contains mismatched nested parentheses.',
+          output: "false",
+          explanation: "The string contains mismatched nested parentheses.",
         },
       ],
       constraints: [
-        '1 <= s.length <= 10^4',
+        "1 <= s.length <= 10^4",
         "s consists of parentheses only '()[]{}'",
       ],
       notes:
-        'Use a stack to keep track of opening brackets and match them with closing brackets.',
+        "Use a stack to keep track of opening brackets and match them with closing brackets.",
     },
     starterCode: {
       javascript: `/**
@@ -328,59 +328,59 @@ console.log(isValid("()[]{}")); // Expected: true
 console.log(isValid("(]")); // Expected: false
 console.log(isValid("([)]")); // Expected: false`,
       explanation:
-        'This solution uses a stack to keep track of opening brackets. When we encounter a closing bracket, we check if it matches the most recent opening bracket. Time complexity: O(n), Space complexity: O(n).',
+        "This solution uses a stack to keep track of opening brackets. When we encounter a closing bracket, we check if it matches the most recent opening bracket. Time complexity: O(n), Space complexity: O(n).",
     },
     testCases: [
       {
-        input: { s: '()' },
+        input: { s: "()" },
         expectedOutput: true,
-        description: 'Simple valid parentheses',
+        description: "Simple valid parentheses",
       },
       {
-        input: { s: '()[]{}' },
+        input: { s: "()[]{}" },
         expectedOutput: true,
-        description: 'Multiple valid bracket types',
+        description: "Multiple valid bracket types",
       },
       {
-        input: { s: '(]' },
+        input: { s: "(]" },
         expectedOutput: false,
-        description: 'Mismatched brackets',
+        description: "Mismatched brackets",
       },
       {
-        input: { s: '([)]' },
+        input: { s: "([)]" },
         expectedOutput: false,
-        description: 'Incorrectly nested brackets',
+        description: "Incorrectly nested brackets",
       },
     ],
     hints: [
-      'Use a stack data structure',
-      'Push opening brackets onto the stack',
-      'When you see a closing bracket, pop from stack and check if it matches',
-      'Consider edge cases like empty string and unmatched brackets',
-      'Make sure the stack is empty at the end',
+      "Use a stack data structure",
+      "Push opening brackets onto the stack",
+      "When you see a closing bracket, pop from stack and check if it matches",
+      "Consider edge cases like empty string and unmatched brackets",
+      "Make sure the stack is empty at the end",
     ],
     relatedTopics: [
-      'Stack',
-      'String Manipulation',
-      'Validation',
-      'Data Structures',
-      'JavaScript Arrays',
+      "Stack",
+      "String Manipulation",
+      "Validation",
+      "Data Structures",
+      "JavaScript Arrays",
     ],
     completionRate: 88,
     frontendRelevance:
-      'This problem is highly relevant for frontend developers as it involves string validation, which is common in form validation, JSON parsing, and template processing.',
-    interviewFrequency: 'High',
+      "This problem is highly relevant for frontend developers as it involves string validation, which is common in form validation, JSON parsing, and template processing.",
+    interviewFrequency: "High",
   },
   {
-    id: 'fe-2',
-    title: 'Remove Duplicates from Sorted Array',
+    id: "fe-2",
+    title: "Remove Duplicates from Sorted Array",
     description:
-      'Remove duplicates from a sorted array in-place and return the new length.',
-    category: 'frontend',
-    subcategory: 'Arrays',
-    difficulty: 'easy',
+      "Remove duplicates from a sorted array in-place and return the new length.",
+    category: "frontend",
+    subcategory: "Arrays",
+    difficulty: "easy",
     estimatedTime: 15,
-    tags: ['Arrays', 'Two Pointers', 'In-place', 'JavaScript'],
+    tags: ["Arrays", "Two Pointers", "In-place", "JavaScript"],
     problem: {
       statement: `Given an integer array nums sorted in non-decreasing order, remove the duplicates in-place such that each unique element appears only once. The relative order of the elements should be kept the same. Then return the number of unique elements in nums.
 
@@ -390,25 +390,25 @@ Consider the number of unique elements of nums to be k, to get accepted, you nee
 2. Return k.`,
       examples: [
         {
-          input: 'nums = [1,1,2]',
-          output: '2, nums = [1,2,_]',
+          input: "nums = [1,1,2]",
+          output: "2, nums = [1,2,_]",
           explanation:
-            'Your function should return k = 2, with the first two elements of nums being 1 and 2 respectively. It does not matter what you leave beyond the returned k.',
+            "Your function should return k = 2, with the first two elements of nums being 1 and 2 respectively. It does not matter what you leave beyond the returned k.",
         },
         {
-          input: 'nums = [0,0,1,1,1,2,2,3,3,4]',
-          output: '5, nums = [0,1,2,3,4,_,_,_,_,_]',
+          input: "nums = [0,0,1,1,1,2,2,3,3,4]",
+          output: "5, nums = [0,1,2,3,4,_,_,_,_,_]",
           explanation:
-            'Your function should return k = 5, with the first five elements of nums being 0, 1, 2, 3, and 4 respectively. It does not matter what you leave beyond the returned k.',
+            "Your function should return k = 5, with the first five elements of nums being 0, 1, 2, 3, and 4 respectively. It does not matter what you leave beyond the returned k.",
         },
       ],
       constraints: [
-        '1 <= nums.length <= 3 * 10^4',
-        '-100 <= nums[i] <= 100',
-        'nums is sorted in non-decreasing order',
+        "1 <= nums.length <= 3 * 10^4",
+        "-100 <= nums[i] <= 100",
+        "nums is sorted in non-decreasing order",
       ],
       notes:
-        'Use the two-pointer technique to solve this efficiently in-place.',
+        "Use the two-pointer technique to solve this efficiently in-place.",
     },
     starterCode: {
       javascript: `/**
@@ -474,59 +474,59 @@ console.log(removeDuplicates([0,0,1,1,1,2,2,3,3,4])); // Expected: 5`,
 console.log(removeDuplicates([1,1,2])); // Expected: 2
 console.log(removeDuplicates([0,0,1,1,1,2,2,3,3,4])); // Expected: 5`,
       explanation:
-        'This solution uses the two-pointer technique. We keep track of the position where the next unique element should be placed. When we find a new unique element, we place it at that position and increment the counter. Time complexity: O(n), Space complexity: O(1).',
+        "This solution uses the two-pointer technique. We keep track of the position where the next unique element should be placed. When we find a new unique element, we place it at that position and increment the counter. Time complexity: O(n), Space complexity: O(1).",
     },
     testCases: [
       {
         input: { nums: [1, 1, 2] },
         expectedOutput: 2,
-        description: 'Basic case with duplicates',
+        description: "Basic case with duplicates",
       },
       {
         input: { nums: [0, 0, 1, 1, 1, 2, 2, 3, 3, 4] },
         expectedOutput: 5,
-        description: 'Multiple duplicates',
+        description: "Multiple duplicates",
       },
       {
         input: { nums: [1, 2, 3] },
         expectedOutput: 3,
-        description: 'No duplicates',
+        description: "No duplicates",
       },
       {
         input: { nums: [1, 1, 1, 1] },
         expectedOutput: 1,
-        description: 'All elements are duplicates',
+        description: "All elements are duplicates",
       },
     ],
     hints: [
-      'Use two pointers: one to iterate through the array, another to track where to place unique elements',
-      'Since the array is sorted, duplicates will be adjacent',
-      'Compare current element with the previous one',
-      'Only increment the placement pointer when you find a new unique element',
-      'The array should be modified in-place',
+      "Use two pointers: one to iterate through the array, another to track where to place unique elements",
+      "Since the array is sorted, duplicates will be adjacent",
+      "Compare current element with the previous one",
+      "Only increment the placement pointer when you find a new unique element",
+      "The array should be modified in-place",
     ],
     relatedTopics: [
-      'Two Pointers',
-      'Arrays',
-      'In-place Algorithms',
-      'JavaScript Arrays',
-      'Optimization',
+      "Two Pointers",
+      "Arrays",
+      "In-place Algorithms",
+      "JavaScript Arrays",
+      "Optimization",
     ],
     completionRate: 85,
     frontendRelevance:
-      'This problem is relevant for frontend developers as it involves array manipulation, which is common in data processing, state management, and UI rendering optimization.',
-    interviewFrequency: 'High',
+      "This problem is relevant for frontend developers as it involves array manipulation, which is common in data processing, state management, and UI rendering optimization.",
+    interviewFrequency: "High",
   },
   {
-    id: 'fe-3',
-    title: 'Reverse String',
+    id: "fe-3",
+    title: "Reverse String",
     description:
-      'Write a function that reverses a string by modifying the input array in-place.',
-    category: 'frontend',
-    subcategory: 'Strings',
-    difficulty: 'easy',
+      "Write a function that reverses a string by modifying the input array in-place.",
+    category: "frontend",
+    subcategory: "Strings",
+    difficulty: "easy",
     estimatedTime: 10,
-    tags: ['Strings', 'Two Pointers', 'In-place', 'JavaScript'],
+    tags: ["Strings", "Two Pointers", "In-place", "JavaScript"],
     problem: {
       statement: `Write a function that reverses a string. The input string is given as an array of characters s. You must do this by modifying the input array in-place with O(1) extra memory.`,
       examples: [
@@ -542,11 +542,11 @@ console.log(removeDuplicates([0,0,1,1,1,2,2,3,3,4])); // Expected: 5`,
         },
       ],
       constraints: [
-        '1 <= s.length <= 10^5',
-        's[i] is a printable ascii character.',
+        "1 <= s.length <= 10^5",
+        "s[i] is a printable ascii character.",
       ],
       notes:
-        'Use the two-pointer technique to swap characters from both ends until you reach the middle.',
+        "Use the two-pointer technique to swap characters from both ends until you reach the middle.",
     },
     starterCode: {
       javascript: `/**
@@ -626,65 +626,67 @@ const test2: string[] = ["H","a","n","n","a","h"];
 reverseString(test2);
 console.log(test2); // Expected: ["h","a","n","n","a","H"]`,
       explanation:
-        'This solution uses the two-pointer technique. We start with pointers at both ends of the array and swap characters, moving the pointers toward the center until they meet. Time complexity: O(n), Space complexity: O(1).',
+        "This solution uses the two-pointer technique. We start with pointers at both ends of the array and swap characters, moving the pointers toward the center until they meet. Time complexity: O(n), Space complexity: O(1).",
     },
     testCases: [
       {
-        input: { s: ['h', 'e', 'l', 'l', 'o'] },
-        expectedOutput: ['o', 'l', 'l', 'e', 'h'],
-        description: 'Basic string reversal',
+        input: { s: ["h", "e", "l", "l", "o"] },
+        expectedOutput: ["o", "l", "l", "e", "h"],
+        description: "Basic string reversal",
       },
       {
-        input: { s: ['H', 'a', 'n', 'n', 'a', 'h'] },
-        expectedOutput: ['h', 'a', 'n', 'n', 'a', 'H'],
-        description: 'String with capital letters',
+        input: { s: ["H", "a", "n", "n", "a", "h"] },
+        expectedOutput: ["h", "a", "n", "n", "a", "H"],
+        description: "String with capital letters",
       },
       {
-        input: { s: ['a', 'b'] },
-        expectedOutput: ['b', 'a'],
-        description: 'Two character string',
+        input: { s: ["a", "b"] },
+        expectedOutput: ["b", "a"],
+        description: "Two character string",
       },
       {
-        input: { s: ['a'] },
-        expectedOutput: ['a'],
-        description: 'Single character string',
+        input: { s: ["a"] },
+        expectedOutput: ["a"],
+        description: "Single character string",
       },
     ],
     hints: [
-      'Use two pointers: one at the beginning and one at the end',
-      'Swap characters at both pointers',
-      'Move the pointers toward the center',
-      'Continue until the pointers meet or cross',
-      'This is an in-place algorithm with O(1) space complexity',
+      "Use two pointers: one at the beginning and one at the end",
+      "Swap characters at both pointers",
+      "Move the pointers toward the center",
+      "Continue until the pointers meet or cross",
+      "This is an in-place algorithm with O(1) space complexity",
     ],
     relatedTopics: [
-      'Two Pointers',
-      'Strings',
-      'In-place Algorithms',
-      'JavaScript Arrays',
-      'String Manipulation',
+      "Two Pointers",
+      "Strings",
+      "In-place Algorithms",
+      "JavaScript Arrays",
+      "String Manipulation",
     ],
     completionRate: 90,
     frontendRelevance:
-      'This problem is relevant for frontend developers as it involves string processing, which is essential for tasks like form validation, text manipulation, and data transformation in web applications.',
-    interviewFrequency: 'High',
+      "This problem is relevant for frontend developers as it involves string processing, which is essential for tasks like form validation, text manipulation, and data transformation in web applications.",
+    interviewFrequency: "High",
   },
 ];
 
 export function getChallengeById(id: string): CodingChallenge | undefined {
-  return codingChallenges.find(challenge => challenge.id === id);
+  return codingChallenges.find((challenge) => challenge.id === id);
 }
 
 export function getChallengesByCategory(
-  category: 'frontend' | 'problem-solving'
+  category: "frontend" | "problem-solving",
 ): CodingChallenge[] {
-  return codingChallenges.filter(challenge => challenge.category === category);
+  return codingChallenges.filter(
+    (challenge) => challenge.category === category,
+  );
 }
 
 export function getChallengesByDifficulty(
-  difficulty: 'easy' | 'medium' | 'hard'
+  difficulty: "easy" | "medium" | "hard",
 ): CodingChallenge[] {
   return codingChallenges.filter(
-    challenge => challenge.difficulty === difficulty
+    (challenge) => challenge.difficulty === difficulty,
   );
 }

@@ -4,13 +4,13 @@
  * Test IDs: A-IT-015, A-IT-016
  */
 
-import React from 'react';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
-import '@testing-library/jest-dom';
-import UnifiedAdminPage from './questions/page';
+import React from "react";
+import { render, screen, fireEvent, waitFor } from "@testing-library/react";
+import "@testing-library/jest-dom";
+import UnifiedAdminPage from "./questions/page";
 
 // Mock dependencies
-jest.mock('next/navigation', () => ({
+jest.mock("next/navigation", () => ({
   useRouter: () => ({
     push: jest.fn(),
     replace: jest.fn(),
@@ -21,7 +21,7 @@ jest.mock('next/navigation', () => ({
 // Mock fetch
 global.fetch = jest.fn();
 
-describe('4: Integration Tests', () => {
+describe("4: Integration Tests", () => {
   beforeEach(() => {
     jest.clearAllMocks();
     (global.fetch as jest.Mock).mockResolvedValue({
@@ -30,11 +30,12 @@ describe('4: Integration Tests', () => {
     });
   });
 
-  it('should handle user interactions', async () => {
+  it("should handle user interactions", async () => {
     render(<UnifiedAdminPage />);
     await waitFor(() => {
       // Check for any visible text content instead of matching everything
-      const heading = screen.queryByRole('heading') || screen.queryByText(/questions/i);
+      const heading =
+        screen.queryByRole("heading") || screen.queryByText(/questions/i);
       expect(heading || document.body).toBeTruthy();
     });
   });

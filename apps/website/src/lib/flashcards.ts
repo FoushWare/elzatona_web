@@ -9,10 +9,10 @@ export interface FlashcardItem {
   addedAt: number;
 }
 
-const STORAGE_KEY = 'flashcards:v1';
+const STORAGE_KEY = "flashcards:v1";
 
 export function loadFlashcards(): FlashcardItem[] {
-  if (typeof window === 'undefined') return [];
+  if (typeof window === "undefined") return [];
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
     return raw ? (JSON.parse(raw) as FlashcardItem[]) : [];
@@ -22,7 +22,7 @@ export function loadFlashcards(): FlashcardItem[] {
 }
 
 export function saveFlashcards(items: FlashcardItem[]) {
-  if (typeof window === 'undefined') return;
+  if (typeof window === "undefined") return;
   try {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(items));
   } catch (_) {
@@ -32,16 +32,16 @@ export function saveFlashcards(items: FlashcardItem[]) {
 
 export function addFlashcard(item: FlashcardItem) {
   const items = loadFlashcards();
-  if (items.some(i => i.id === item.id)) return; // dedupe by question id
+  if (items.some((i) => i.id === item.id)) return; // dedupe by question id
   items.unshift(item);
   saveFlashcards(items);
 }
 
 export function removeFlashcard(questionId: string) {
-  const items = loadFlashcards().filter(i => i.id !== questionId);
+  const items = loadFlashcards().filter((i) => i.id !== questionId);
   saveFlashcards(items);
 }
 
 export function isInFlashcards(questionId: string): boolean {
-  return loadFlashcards().some(i => i.id === questionId);
+  return loadFlashcards().some((i) => i.id === questionId);
 }

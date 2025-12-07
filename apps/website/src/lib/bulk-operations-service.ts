@@ -1,18 +1,18 @@
-import { createClient } from '@supabase/supabase-js';
+import { createClient } from "@supabase/supabase-js";
 
-const supabaseUrl = process.env['NEXT_PUBLIC_SUPABASE_URL']!;
-const supabaseServiceRoleKey = process.env['SUPABASE_SERVICE_ROLE_KEY']!;
+const supabaseUrl = process.env["NEXT_PUBLIC_SUPABASE_URL"]!;
+const supabaseServiceRoleKey = process.env["SUPABASE_SERVICE_ROLE_KEY"]!;
 
 const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
 
 export interface BulkOperation {
   id: string;
-  type: 'delete' | 'edit' | 'activate' | 'deactivate';
-  targetType: 'questions' | 'categories' | 'topics' | 'cards' | 'plans';
+  type: "delete" | "edit" | "activate" | "deactivate";
+  targetType: "questions" | "categories" | "topics" | "cards" | "plans";
   targetIds: string[];
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   operationData?: Record<string, any>;
-  status: 'pending' | 'running' | 'completed' | 'failed';
+  status: "pending" | "running" | "completed" | "failed";
   progress: number;
   totalItems: number;
   processedItems: number;
@@ -24,7 +24,7 @@ export interface BulkOperation {
 
 export interface BulkOperationProgress {
   operationId: string;
-  status: 'pending' | 'running' | 'completed' | 'failed';
+  status: "pending" | "running" | "completed" | "failed";
   progress: number;
   totalItems: number;
   processedItems: number;
@@ -34,44 +34,44 @@ export interface BulkOperationProgress {
 
 export class BulkOperationsService {
   private static readonly BATCH_SIZE = 500; // Supabase batch limit
-  private static readonly COLLECTION_NAME = 'bulk_operations';
+  private static readonly COLLECTION_NAME = "bulk_operations";
 
   /**
    * Validate bulk operation parameters
    */
   static validateBulkOperation(
-    type: BulkOperation['type'],
-    targetType: BulkOperation['targetType'],
+    type: BulkOperation["type"],
+    targetType: BulkOperation["targetType"],
     targetIds: string[],
-    operationData?: Record<string, any>
+    operationData?: Record<string, any>,
   ): { isValid: boolean; errors: string[] } {
     const errors: string[] = [];
 
     // Validate type
-    if (!['delete', 'edit', 'activate', 'deactivate'].includes(type)) {
-      errors.push('Invalid operation type');
+    if (!["delete", "edit", "activate", "deactivate"].includes(type)) {
+      errors.push("Invalid operation type");
     }
 
     // Validate target type
     if (
-      !['questions', 'categories', 'topics', 'cards', 'plans'].includes(
-        targetType
+      !["questions", "categories", "topics", "cards", "plans"].includes(
+        targetType,
       )
     ) {
-      errors.push('Invalid target type');
+      errors.push("Invalid target type");
     }
 
     // Validate target IDs
     if (!Array.isArray(targetIds) || targetIds.length === 0) {
-      errors.push('Target IDs must be a non-empty array');
+      errors.push("Target IDs must be a non-empty array");
     }
 
     // Validate operation data for edit operations
     if (
-      type === 'edit' &&
+      type === "edit" &&
       (!operationData || Object.keys(operationData).length === 0)
     ) {
-      errors.push('Operation data is required for edit operations');
+      errors.push("Operation data is required for edit operations");
     }
 
     return {
@@ -84,11 +84,11 @@ export class BulkOperationsService {
    * Create a new bulk operation
    */
   static async createBulkOperation(
-    type: BulkOperation['type'],
-    targetType: BulkOperation['targetType'],
+    type: BulkOperation["type"],
+    targetType: BulkOperation["targetType"],
     targetIds: string[],
     operationData?: Record<string, any>,
-    createdBy: string = 'admin'
+    createdBy: string = "admin",
   ): Promise<BulkOperation> {
     const operationId = `bulk_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
 
@@ -98,7 +98,7 @@ export class BulkOperationsService {
       targetType,
       targetIds,
       operationData,
-      status: 'pending',
+      status: "pending",
       progress: 0,
       totalItems: targetIds.length,
       processedItems: 0,
@@ -120,27 +120,27 @@ export class BulkOperationsService {
    * Process a bulk operation
    */
   private static async processBulkOperation(
-    operationId: string
+    operationId: string,
   ): Promise<void> {
     try {
       // Update status to running
       await supabase
         .from(this.COLLECTION_NAME)
         .update({
-          status: 'running',
+          status: "running",
           progress: 0,
         })
-        .eq('id', operationId);
+        .eq("id", operationId);
 
       // Get operation details
       const { data: operationData, error } = await supabase
         .from(this.COLLECTION_NAME)
-        .select('*')
-        .eq('id', operationId)
+        .select("*")
+        .eq("id", operationId)
         .single();
 
       if (error || !operationData) {
-        throw new Error('Operation not found');
+        throw new Error("Operation not found");
       }
 
       const operation = operationData as BulkOperation;
@@ -156,7 +156,7 @@ export class BulkOperationsService {
 
           // Update progress
           const progress = Math.round(
-            (processedItems / operation.totalItems) * 100
+            (processedItems / operation.totalItems) * 100,
           );
           await supabase
             .from(this.COLLECTION_NAME)
@@ -164,7 +164,7 @@ export class BulkOperationsService {
               progress,
               processedItems,
             })
-            .eq('id', operationId);
+            .eq("id", operationId);
         } catch (error) {
           console.error(`❌ Batch processing failed:`, error);
           await supabase
@@ -172,7 +172,7 @@ export class BulkOperationsService {
             .update({
               errors: [...operation.errors, `Batch failed: ${error}`],
             })
-            .eq('id', operationId);
+            .eq("id", operationId);
         }
       }
 
@@ -180,11 +180,11 @@ export class BulkOperationsService {
       await supabase
         .from(this.COLLECTION_NAME)
         .update({
-          status: 'completed',
+          status: "completed",
           progress: 100,
           completedAt: new Date().toISOString(),
         })
-        .eq('id', operationId);
+        .eq("id", operationId);
 
       console.log(`✅ Bulk operation completed: ${operationId}`);
     } catch (error) {
@@ -192,10 +192,10 @@ export class BulkOperationsService {
       await supabase
         .from(this.COLLECTION_NAME)
         .update({
-          status: 'failed',
-          errors: [error instanceof Error ? error.message : 'Unknown error'],
+          status: "failed",
+          errors: [error instanceof Error ? error.message : "Unknown error"],
         })
-        .eq('id', operationId);
+        .eq("id", operationId);
     }
   }
 
@@ -204,36 +204,36 @@ export class BulkOperationsService {
    */
   private static async processBatch(
     operation: BulkOperation,
-    batch: string[]
+    batch: string[],
   ): Promise<void> {
     const tableName = this.getTableName(operation.targetType);
 
     switch (operation.type) {
-      case 'delete':
-        await supabase.from(tableName).delete().in('id', batch);
+      case "delete":
+        await supabase.from(tableName).delete().in("id", batch);
         break;
 
-      case 'edit':
+      case "edit":
         if (operation.operationData) {
           await supabase
             .from(tableName)
             .update(operation.operationData)
-            .in('id', batch);
+            .in("id", batch);
         }
         break;
 
-      case 'activate':
+      case "activate":
         await supabase
           .from(tableName)
           .update({ is_active: true })
-          .in('id', batch);
+          .in("id", batch);
         break;
 
-      case 'deactivate':
+      case "deactivate":
         await supabase
           .from(tableName)
           .update({ is_active: false })
-          .in('id', batch);
+          .in("id", batch);
         break;
 
       default:
@@ -244,13 +244,13 @@ export class BulkOperationsService {
   /**
    * Get table name for target type
    */
-  private static getTableName(targetType: BulkOperation['targetType']): string {
+  private static getTableName(targetType: BulkOperation["targetType"]): string {
     const tableMap = {
-      questions: 'questions',
-      categories: 'categories',
-      topics: 'topics',
-      cards: 'learning_cards',
-      plans: 'learning_plans',
+      questions: "questions",
+      categories: "categories",
+      topics: "topics",
+      cards: "learning_cards",
+      plans: "learning_plans",
     };
     return tableMap[targetType];
   }
@@ -270,13 +270,13 @@ export class BulkOperationsService {
    * Get a specific operation by ID
    */
   static async getBulkOperation(
-    operationId: string
+    operationId: string,
   ): Promise<BulkOperation | null> {
     try {
       const { data: operation, error } = await supabase
         .from(this.COLLECTION_NAME)
-        .select('*')
-        .eq('id', operationId)
+        .select("*")
+        .eq("id", operationId)
         .single();
 
       if (error || !operation) {
@@ -285,7 +285,7 @@ export class BulkOperationsService {
 
       return operation as BulkOperation;
     } catch (error) {
-      console.error('❌ Failed to get bulk operation:', error);
+      console.error("❌ Failed to get bulk operation:", error);
       return null;
     }
   }
@@ -294,13 +294,13 @@ export class BulkOperationsService {
    * Get operation progress
    */
   static async getOperationProgress(
-    operationId: string
+    operationId: string,
   ): Promise<BulkOperationProgress | null> {
     try {
       const { data: operation, error } = await supabase
         .from(this.COLLECTION_NAME)
-        .select('*')
-        .eq('id', operationId)
+        .select("*")
+        .eq("id", operationId)
         .single();
 
       if (error || !operation) {
@@ -310,7 +310,7 @@ export class BulkOperationsService {
       const estimatedTimeRemaining = this.calculateEstimatedTime(
         operation.processedItems,
         operation.totalItems,
-        operation.created_at
+        operation.created_at,
       );
 
       return {
@@ -323,7 +323,7 @@ export class BulkOperationsService {
         estimatedTimeRemaining,
       };
     } catch (error) {
-      console.error('❌ Failed to get operation progress:', error);
+      console.error("❌ Failed to get operation progress:", error);
       return null;
     }
   }
@@ -334,7 +334,7 @@ export class BulkOperationsService {
   private static calculateEstimatedTime(
     processedItems: number,
     totalItems: number,
-    startTime: string
+    startTime: string,
   ): number | undefined {
     if (processedItems === 0) return undefined;
 
@@ -360,7 +360,7 @@ export class BulkOperationsService {
     try {
       const { data: operations, error } = await supabase
         .from(this.COLLECTION_NAME)
-        .select('*');
+        .select("*");
 
       if (error) {
         throw error;
@@ -369,24 +369,26 @@ export class BulkOperationsService {
       const ops = operations || [];
       const totalOperations = ops.length;
       const completedOperations = ops.filter(
-        op => op.status === 'completed'
+        (op) => op.status === "completed",
       ).length;
-      const failedOperations = ops.filter(op => op.status === 'failed').length;
+      const failedOperations = ops.filter(
+        (op) => op.status === "failed",
+      ).length;
       const pendingOperations = ops.filter(
-        op => op.status === 'pending'
+        (op) => op.status === "pending",
       ).length;
       const runningOperations = ops.filter(
-        op => op.status === 'running'
+        (op) => op.status === "running",
       ).length;
 
       const totalItemsProcessed = ops.reduce(
         (sum, op) => sum + (op.processedItems || 0),
-        0
+        0,
       );
 
       // Calculate average processing time for completed operations
       const completedOps = ops.filter(
-        op => op.status === 'completed' && op.completedAt
+        (op) => op.status === "completed" && op.completedAt,
       );
       const averageProcessingTime =
         completedOps.length > 0
@@ -407,7 +409,7 @@ export class BulkOperationsService {
         totalItemsProcessed,
       };
     } catch (error) {
-      console.error('❌ Failed to get bulk operation stats:', error);
+      console.error("❌ Failed to get bulk operation stats:", error);
       return {
         totalOperations: 0,
         completedOperations: 0,
@@ -424,13 +426,13 @@ export class BulkOperationsService {
    * Get all operations with limit
    */
   static async getAllBulkOperations(
-    limit: number = 50
+    limit: number = 50,
   ): Promise<BulkOperation[]> {
     try {
       const { data: operations, error } = await supabase
         .from(this.COLLECTION_NAME)
-        .select('*')
-        .order('created_at', { ascending: false })
+        .select("*")
+        .order("created_at", { ascending: false })
         .limit(limit);
 
       if (error) {
@@ -439,7 +441,7 @@ export class BulkOperationsService {
 
       return operations || [];
     } catch (error) {
-      console.error('❌ Failed to get all bulk operations:', error);
+      console.error("❌ Failed to get all bulk operations:", error);
       return [];
     }
   }
@@ -451,8 +453,8 @@ export class BulkOperationsService {
     try {
       const { data: operations, error } = await supabase
         .from(this.COLLECTION_NAME)
-        .select('*')
-        .order('created_at', { ascending: false });
+        .select("*")
+        .order("created_at", { ascending: false });
 
       if (error) {
         throw error;
@@ -460,7 +462,7 @@ export class BulkOperationsService {
 
       return operations || [];
     } catch (error) {
-      console.error('❌ Failed to list operations:', error);
+      console.error("❌ Failed to list operations:", error);
       return [];
     }
   }
@@ -479,8 +481,8 @@ export class BulkOperationsService {
     try {
       const { error } = await supabase
         .from(this.COLLECTION_NAME)
-        .update({ status: 'failed' })
-        .eq('id', operationId);
+        .update({ status: "failed" })
+        .eq("id", operationId);
 
       if (error) {
         throw error;
@@ -488,7 +490,7 @@ export class BulkOperationsService {
 
       return true;
     } catch (error) {
-      console.error('❌ Failed to cancel operation:', error);
+      console.error("❌ Failed to cancel operation:", error);
       return false;
     }
   }
@@ -501,7 +503,7 @@ export class BulkOperationsService {
       const { error } = await supabase
         .from(this.COLLECTION_NAME)
         .delete()
-        .eq('id', operationId);
+        .eq("id", operationId);
 
       if (error) {
         throw error;
@@ -509,7 +511,7 @@ export class BulkOperationsService {
 
       return true;
     } catch (error) {
-      console.error('❌ Failed to delete operation:', error);
+      console.error("❌ Failed to delete operation:", error);
       return false;
     }
   }

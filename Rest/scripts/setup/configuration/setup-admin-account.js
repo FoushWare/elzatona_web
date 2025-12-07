@@ -11,10 +11,14 @@ console.log('🛡️ Initializing Admin Account...\n');
 
 async function initializeAdmin() {
   try {
-   const adminPassword = process.env.INITIAL_ADMIN_PASSWORD;
+    const adminPassword = process.env.INITIAL_ADMIN_PASSWORD;
     if (!adminPassword) {
-      console.error('❌ Missing INITIAL_ADMIN_PASSWORD in environment variables');
-      console.error('Please set INITIAL_ADMIN_PASSWORD in your .env.local file');
+      console.error(
+        '❌ Missing INITIAL_ADMIN_PASSWORD in environment variables'
+      );
+      console.error(
+        'Please set INITIAL_ADMIN_PASSWORD in your .env.local file'
+      );
       process.exit(1);
     }
 
@@ -77,7 +81,9 @@ async function testAdminLogin() {
 
     const adminPassword = process.env.INITIAL_ADMIN_PASSWORD;
     if (!adminPassword) {
-      console.error('❌ Missing INITIAL_ADMIN_PASSWORD in environment variables');
+      console.error(
+        '❌ Missing INITIAL_ADMIN_PASSWORD in environment variables'
+      );
       return;
     }
 

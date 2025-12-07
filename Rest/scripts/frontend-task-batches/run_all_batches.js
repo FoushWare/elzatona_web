@@ -3,7 +3,8 @@ const path = require('path');
 const { execSync } = require('child_process');
 
 const batchesDir = __dirname;
-const batches = fs.readdirSync(batchesDir)
+const batches = fs
+  .readdirSync(batchesDir)
   .filter(f => f.endsWith('.js'))
   .sort();
 
@@ -23,10 +24,12 @@ batches.forEach((batchFile, index) => {
     process.stdout.write('❌\n');
     errorCount++;
   }
-  
+
   if ((index + 1) % 5 === 0) {
     console.log(`\n📊 Progress: ${index + 1}/${batches.length} batches\n`);
   }
 });
 
-console.log(`\n✅ All batches completed! ${successCount} success, ${errorCount} errors`);
+console.log(
+  `\n✅ All batches completed! ${successCount} success, ${errorCount} errors`
+);

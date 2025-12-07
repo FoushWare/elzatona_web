@@ -7,7 +7,7 @@ export interface TestCase {
   description: string;
   input: any;
   expectedOutput: any;
-  type: 'function' | 'component' | 'css' | 'html';
+  type: "function" | "component" | "css" | "html";
   timeout?: number; // in milliseconds
 }
 
@@ -41,7 +41,7 @@ export class FrontendTaskValidator {
    */
   async validateReactComponent(
     userCode: string,
-    testCases: TestCase[]
+    testCases: TestCase[],
   ): Promise<SolutionValidation> {
     const results: ValidationResult[] = [];
     const startTime = Date.now();
@@ -65,9 +65,9 @@ export class FrontendTaskValidator {
       // Cleanup
       document.body.removeChild(iframe);
     } catch (error) {
-      console.error('Validation error:', error);
+      console.error("Validation error:", error);
       // Add error result for all test cases
-      testCases.forEach(testCase => {
+      testCases.forEach((testCase) => {
         results.push({
           testCaseId: testCase.id,
           passed: false,
@@ -79,7 +79,7 @@ export class FrontendTaskValidator {
     }
 
     const executionTime = Date.now() - startTime;
-    const passedTests = results.filter(r => r.passed).length;
+    const passedTests = results.filter((r) => r.passed).length;
 
     return {
       overallPassed: passedTests === testCases.length,
@@ -97,7 +97,7 @@ export class FrontendTaskValidator {
   async validateJavaScriptFunction(
     userCode: string,
     testCases: TestCase[],
-    functionName: string
+    functionName: string,
   ): Promise<SolutionValidation> {
     const results: ValidationResult[] = [];
     const startTime = Date.now();
@@ -114,7 +114,7 @@ export class FrontendTaskValidator {
         const result = await this.runJavaScriptTestCase(
           iframe,
           testCase,
-          functionName
+          functionName,
         );
         results.push(result);
       }
@@ -122,8 +122,8 @@ export class FrontendTaskValidator {
       // Cleanup
       document.body.removeChild(iframe);
     } catch (error) {
-      console.error('Validation error:', error);
-      testCases.forEach(testCase => {
+      console.error("Validation error:", error);
+      testCases.forEach((testCase) => {
         results.push({
           testCaseId: testCase.id,
           passed: false,
@@ -135,7 +135,7 @@ export class FrontendTaskValidator {
     }
 
     const executionTime = Date.now() - startTime;
-    const passedTests = results.filter(r => r.passed).length;
+    const passedTests = results.filter((r) => r.passed).length;
 
     return {
       overallPassed: passedTests === testCases.length,
@@ -152,7 +152,7 @@ export class FrontendTaskValidator {
    */
   async validateCSSHTML(
     userCode: string,
-    testCases: TestCase[]
+    testCases: TestCase[],
   ): Promise<SolutionValidation> {
     const results: ValidationResult[] = [];
     const startTime = Date.now();
@@ -166,7 +166,7 @@ export class FrontendTaskValidator {
       iframe.contentDocument!.close();
 
       // Wait for content to load
-      await new Promise(resolve => {
+      await new Promise((resolve) => {
         iframe.onload = resolve;
         setTimeout(resolve, 1000); // Fallback timeout
       });
@@ -180,8 +180,8 @@ export class FrontendTaskValidator {
       // Cleanup
       document.body.removeChild(iframe);
     } catch (error) {
-      console.error('Validation error:', error);
-      testCases.forEach(testCase => {
+      console.error("Validation error:", error);
+      testCases.forEach((testCase) => {
         results.push({
           testCaseId: testCase.id,
           passed: false,
@@ -193,7 +193,7 @@ export class FrontendTaskValidator {
     }
 
     const executionTime = Date.now() - startTime;
-    const passedTests = results.filter(r => r.passed).length;
+    const passedTests = results.filter((r) => r.passed).length;
 
     return {
       overallPassed: passedTests === testCases.length,
@@ -206,11 +206,11 @@ export class FrontendTaskValidator {
   }
 
   private createTestIframe(): HTMLIFrameElement {
-    const iframe = document.createElement('iframe');
-    iframe.style.display = 'none';
-    iframe.style.width = '0';
-    iframe.style.height = '0';
-    iframe.style.border = 'none';
+    const iframe = document.createElement("iframe");
+    iframe.style.display = "none";
+    iframe.style.width = "0";
+    iframe.style.height = "0";
+    iframe.style.border = "none";
     document.body.appendChild(iframe);
     return iframe;
   }
@@ -238,52 +238,52 @@ export class FrontendTaskValidator {
 
       iframe.onload = () => resolve();
       iframe.onerror = () =>
-        reject(new Error('Failed to load React libraries'));
+        reject(new Error("Failed to load React libraries"));
 
       setTimeout(
-        () => reject(new Error('Timeout loading React libraries')),
-        10000
+        () => reject(new Error("Timeout loading React libraries")),
+        10000,
       );
     });
   }
 
   private async injectUserCode(
     iframe: HTMLIFrameElement,
-    userCode: string
+    userCode: string,
   ): Promise<void> {
     const doc = iframe.contentDocument!;
-    const script = doc.createElement('script');
-    script.type = 'text/babel';
+    const script = doc.createElement("script");
+    script.type = "text/babel";
     script.text = userCode;
     doc.head.appendChild(script);
 
     // Wait for Babel to transpile
-    await new Promise(resolve => setTimeout(resolve, 1000));
+    await new Promise((resolve) => setTimeout(resolve, 1000));
   }
 
   private async runReactTestCase(
     iframe: HTMLIFrameElement,
-    testCase: TestCase
+    testCase: TestCase,
   ): Promise<ValidationResult> {
     const startTime = Date.now();
 
     try {
       const doc = iframe.contentDocument!;
-      const root = doc.getElementById('root');
+      const root = doc.getElementById("root");
 
       if (!root) {
-        throw new Error('Root element not found');
+        throw new Error("Root element not found");
       }
 
       // Clear previous content
-      root.innerHTML = '';
+      root.innerHTML = "";
 
       // Render the component
       const React = (iframe.contentWindow as any).React;
       const ReactDOM = (iframe.contentWindow as any).ReactDOM;
 
       if (!React || !ReactDOM) {
-        throw new Error('React libraries not loaded');
+        throw new Error("React libraries not loaded");
       }
 
       // Get the component from the global scope
@@ -292,7 +292,7 @@ export class FrontendTaskValidator {
         (iframe.contentWindow as any).TodoList;
 
       if (!Component) {
-        throw new Error('Component not found in user code');
+        throw new Error("Component not found in user code");
       }
 
       // Render component
@@ -301,71 +301,71 @@ export class FrontendTaskValidator {
       ReactDOM.render(element, root);
 
       // Wait for render
-      await new Promise(resolve => setTimeout(resolve, 100));
+      await new Promise((resolve) => setTimeout(resolve, 100));
 
       // Execute test case
 
       let actualOutput: any;
 
       switch (testCase.input) {
-        case 'initial':
+        case "initial":
           // Check initial state
-          const initialText = root.textContent || '';
-          actualOutput = initialText.includes('0') ? '0' : initialText;
+          const initialText = root.textContent || "";
+          actualOutput = initialText.includes("0") ? "0" : initialText;
           break;
 
-        case 'increment':
+        case "increment":
           // Find and click increment button
-          const incrementBtn = Array.from(root.querySelectorAll('button')).find(
-            btn =>
-              btn.textContent?.includes('+1') || btn.textContent?.includes('+')
+          const incrementBtn = Array.from(root.querySelectorAll("button")).find(
+            (btn) =>
+              btn.textContent?.includes("+1") || btn.textContent?.includes("+"),
           );
 
           if (incrementBtn) {
             (incrementBtn as HTMLButtonElement).click();
-            await new Promise(resolve => setTimeout(resolve, 100));
-            const text = root.textContent || '';
-            actualOutput = text.includes('1') ? '1' : text;
+            await new Promise((resolve) => setTimeout(resolve, 100));
+            const text = root.textContent || "";
+            actualOutput = text.includes("1") ? "1" : text;
           } else {
-            throw new Error('Increment button not found');
+            throw new Error("Increment button not found");
           }
           break;
 
-        case 'decrement':
+        case "decrement":
           // Find and click decrement button
-          const decrementBtn = Array.from(root.querySelectorAll('button')).find(
-            btn =>
-              btn.textContent?.includes('-1') || btn.textContent?.includes('-')
+          const decrementBtn = Array.from(root.querySelectorAll("button")).find(
+            (btn) =>
+              btn.textContent?.includes("-1") || btn.textContent?.includes("-"),
           );
 
           if (decrementBtn) {
             (decrementBtn as HTMLButtonElement).click();
-            await new Promise(resolve => setTimeout(resolve, 100));
-            const text = root.textContent || '';
-            actualOutput = text.includes('-1') ? '-1' : text;
+            await new Promise((resolve) => setTimeout(resolve, 100));
+            const text = root.textContent || "";
+            actualOutput = text.includes("-1") ? "-1" : text;
           } else {
-            throw new Error('Decrement button not found');
+            throw new Error("Decrement button not found");
           }
           break;
 
-        case 'reset':
+        case "reset":
           // Find and click reset button
-          const resetBtn = Array.from(root.querySelectorAll('button')).find(
-            btn => btn.textContent?.toLowerCase().includes('reset')
+          const resetBtn = Array.from(root.querySelectorAll("button")).find(
+            (btn) => btn.textContent?.toLowerCase().includes("reset"),
           );
 
           if (resetBtn) {
             (resetBtn as HTMLButtonElement).click();
-            await new Promise(resolve => setTimeout(resolve, 100));
-            const text = root.textContent || '';
-            actualOutput = text.includes('0') ? '0' : text;
+            await new Promise((resolve) => setTimeout(resolve, 100));
+            const text = root.textContent || "";
+            actualOutput = text.includes("0") ? "0" : text;
           } else {
-            throw new Error('Reset button not found');
+            throw new Error("Reset button not found");
           }
           break;
 
         default:
-          actualOutput = root.textContent || '';
+          actualOutput = root.textContent || "";
       }
 
       const executionTime = Date.now() - startTime;
@@ -392,7 +392,7 @@ export class FrontendTaskValidator {
   private async runJavaScriptTestCase(
     iframe: HTMLIFrameElement,
     testCase: TestCase,
-    functionName: string
+    functionName: string,
   ): Promise<ValidationResult> {
     const startTime = Date.now();
 
@@ -430,7 +430,7 @@ export class FrontendTaskValidator {
 
   private async runCSSHTMLTestCase(
     iframe: HTMLIFrameElement,
-    testCase: TestCase
+    testCase: TestCase,
   ): Promise<ValidationResult> {
     const startTime = Date.now();
 
@@ -442,22 +442,22 @@ export class FrontendTaskValidator {
       let actualOutput: any;
 
       switch (testCase.input) {
-        case 'check-grid':
-          const gridElement = doc.querySelector('.card-container');
+        case "check-grid":
+          const gridElement = doc.querySelector(".card-container");
           actualOutput = gridElement
             ? window.getComputedStyle(gridElement).display
-            : 'none';
+            : "none";
           break;
 
-        case 'check-responsive':
+        case "check-responsive":
           // Check if responsive classes exist
           const responsiveElements = doc.querySelectorAll('[class*="grid"]');
           actualOutput =
-            responsiveElements.length > 0 ? 'responsive' : 'not-responsive';
+            responsiveElements.length > 0 ? "responsive" : "not-responsive";
           break;
 
         default:
-          actualOutput = doc.body.textContent || '';
+          actualOutput = doc.body.textContent || "";
       }
 
       const executionTime = Date.now() - startTime;
@@ -483,12 +483,12 @@ export class FrontendTaskValidator {
 
   private compareOutputs(actual: any, expected: any): boolean {
     // Deep comparison for objects and arrays
-    if (typeof actual === 'object' && typeof expected === 'object') {
+    if (typeof actual === "object" && typeof expected === "object") {
       return JSON.stringify(actual) === JSON.stringify(expected);
     }
 
     // String comparison with normalization
-    if (typeof actual === 'string' && typeof expected === 'string') {
+    if (typeof actual === "string" && typeof expected === "string") {
       return actual.trim().toLowerCase() === expected.trim().toLowerCase();
     }
 

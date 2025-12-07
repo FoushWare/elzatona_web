@@ -9,7 +9,7 @@
       "ui": ["../../libs/ui/src/index.ts"],
       "auth": ["../../libs/auth/src/index.ts"],
       "database": ["../../libs/database/src/index.ts"],
-      "utils": ["../../libs/utils/src/index.ts"]
+      "utils": ["../../libs/utilities/src/index.ts"]
     }
   },
   "include": [
