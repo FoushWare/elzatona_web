@@ -142,7 +142,7 @@ const CollapsibleContent = React.lazy(() =>
   })),
 );
 import { Modal } from "@elzatona/components";
-import { ViewQuestionModal } from "@/app/admin/content/questions/components/ViewQuestionModal";
+import { ViewQuestionModal } from "../content/questions/components/ViewQuestionModal";
 
 // Import icons with tree shaking
 import {

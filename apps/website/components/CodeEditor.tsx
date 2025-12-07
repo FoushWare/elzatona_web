@@ -826,7 +826,10 @@ export default function CodeEditor({
                   monaco.languages.registerDocumentFormattingEditProvider(
                     "javascript",
                     {
-                      async provideDocumentFormattingEdits(model) {
+                      async provideDocumentFormattingEdits(
+                        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                        model: any,
+                      ) {
                         try {
                           const text = model.getValue();
                           const formatted = await prettier.format(text, {
@@ -856,7 +859,10 @@ export default function CodeEditor({
                   monaco.languages.registerDocumentFormattingEditProvider(
                     "typescript",
                     {
-                      async provideDocumentFormattingEdits(model) {
+                      async provideDocumentFormattingEdits(
+                        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                        model: any,
+                      ) {
                         try {
                           const text = model.getValue();
                           const formatted = await prettier.format(text, {
