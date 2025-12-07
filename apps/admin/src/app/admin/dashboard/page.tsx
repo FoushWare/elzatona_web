@@ -1,7 +1,5 @@
-"use client";
+// Next.js page wrapper - imports from pages/ directory
+// This file maintains Next.js routing structure
+// Source: /Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/apps/admin/pages/admin/dashboard/page.tsx
 
-import { AdminDashboard } from "@elzatona/components";
-
-export default function DashboardPage() {
-  return <AdminDashboard />;
-}
+export { default } from "../../../../pages/admin/dashboard/page";

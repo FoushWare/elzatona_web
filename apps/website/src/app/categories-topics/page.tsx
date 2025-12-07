@@ -1,3 +1,5 @@
-export default function CategoriesTopicsPage() {
-  return <div>Categories & Topics Management - Direct Route</div>;
-}
+// Next.js page wrapper - imports from pages/ directory
+// This file maintains Next.js routing structure
+// Source: /Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/apps/website/pages/categories-topics/page.tsx
+
+export { default } from "../../../pages/categories-topics/page";

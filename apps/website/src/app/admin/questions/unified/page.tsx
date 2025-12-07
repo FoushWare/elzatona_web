@@ -1,19 +1,5 @@
-// v1.0 - Unified Questions Management Page
-// Admin page for managing all questions from a single source
+// Next.js page wrapper - imports from pages/ directory
+// This file maintains Next.js routing structure
+// Source: /Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/apps/website/pages/admin/questions/unified/page.tsx
 
-import { Metadata } from "next";
-
-// import UnifiedQuestionManager from '@elzatona/components';
-
-export const metadata: Metadata = {
-  title: "Unified Questions | Admin Panel",
-  description: "Manage all questions from a single source of truth",
-};
-
-export default function UnifiedQuestionsPage() {
-  return (
-    <div className="container mx-auto py-6">
-      {/* <UnifiedQuestionManager /> */}
-    </div>
-  );
-}
+export { default } from "../../../../../pages/admin/questions/unified/page";
