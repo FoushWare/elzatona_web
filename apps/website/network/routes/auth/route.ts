@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { UserAuthService } from @/lib/user-auth';
-import { sanitizeInputServer } from @/lib/utils/sanitize-server';
-import { validateAndSanitize, registerSchema, loginSchema } from @/lib/utils/validation';
+import { UserAuthService } from '@/lib/user-auth';
+import { sanitizeInputServer } from '@/lib/utils/sanitize-server';
+import { validateAndSanitize, registerSchema, loginSchema } from '@/lib/utils/validation';
 
 export async function POST(request: NextRequest) {
   try {
