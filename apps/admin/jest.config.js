@@ -19,6 +19,12 @@ const config = {
   ...(process.env.JEST_RUN_IN_BAND === "true" ? { runInBand: true } : {}),
   // Add more setup options before each test is run
   setupFilesAfterEnv: ["<rootDir>/jest.setup.js"],
+  testMatch: [
+    "<rootDir>/**/*.{test,spec}.{js,jsx,ts,tsx}",
+    "<rootDir>/../pages/**/*.{test,spec}.{js,jsx,ts,tsx}",
+    "<rootDir>/../components/**/*.{test,spec}.{js,jsx,ts,tsx}",
+    "<rootDir>/../../libs/**/*.{test,spec}.{js,jsx,ts,tsx}",
+  ],
 };
 
 // createJestConfig is exported this way to ensure that next/jest can load the Next.js config which is async
