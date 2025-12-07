@@ -9,7 +9,7 @@ const fs = require("fs");
 const path = require("path");
 
 const WEBSITE_APP = path.join(__dirname, "../../../apps/website/src/app");
-const WEBSITE_PAGES = path.join(__dirname, "../../../apps/website/pages");
+const WEBSITE_PAGES = path.join(__dirname, "../../../apps/website/page-components");
 const ADMIN_APP = path.join(__dirname, "../../../apps/admin/src/app");
 const ADMIN_PAGES = path.join(__dirname, "../../../apps/admin/pages");
 
