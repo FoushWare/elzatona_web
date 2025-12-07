@@ -49,6 +49,8 @@ const config = {
   // Note: testPathIgnorePatterns handles the exclusion, so we keep testMatch simple
   testMatch: [
     "<rootDir>/**/*.{test,spec}.{js,jsx,ts,tsx}",
+    "<rootDir>/../pages/**/*.{test,spec}.{js,jsx,ts,tsx}",
+    "<rootDir>/../components/**/*.{test,spec}.{js,jsx,ts,tsx}",
     "<rootDir>/../../tests/**/*.{test,spec}.{js,jsx,ts,tsx}",
     "<rootDir>/../../libs/**/*.{test,spec}.{js,jsx,ts,tsx}",
   ],

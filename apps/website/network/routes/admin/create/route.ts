@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
-import { getSupabaseConfig } from "@/lib/utils/api-config";
+import { getSupabaseConfig } from "../../../src/lib/utils/api-config";
 
 /**
  * Protected Admin Creation API
