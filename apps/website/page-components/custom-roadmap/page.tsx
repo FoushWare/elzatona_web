@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 
 // import { SignInPopup } from '@elzatona/components'; // Temporarily disabled due to import issues
 import { useAuth, useUserType } from "@elzatona/contexts";
-import { useLearningType } from "../../context/LearningTypeContext";
+import { useLearningType } from '@/context/LearningTypeContext';
 import {
   Plus,
   Minus,
