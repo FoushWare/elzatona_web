@@ -4,7 +4,7 @@ import { cookies } from 'next/headers';
 import {
   verifySupabaseToken,
   getUserFromRequest,
-} from @/lib/server-auth';
+} from '@/lib/server-auth';
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
 const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;

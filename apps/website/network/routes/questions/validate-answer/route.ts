@@ -4,7 +4,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import {
   AIValidationService,
   ValidationRequest,
-} from @/lib/ai-validation-service';
+} from '@/lib/ai-validation-service';
 
 export async function POST(request: NextRequest) {
   try {

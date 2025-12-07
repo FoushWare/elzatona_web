@@ -1,5 +1,5 @@
 {
-  "name": "shared-contexts",
+  "name": "contexts",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "libs/contexts/src",
   "projectType": "library",
