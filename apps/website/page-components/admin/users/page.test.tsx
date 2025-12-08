@@ -12,7 +12,7 @@ import * as sharedContexts from "@elzatona/contexts";
 // Mock shared contexts
 jest.mock("@elzatona/contexts", () => {
   const actual = jest.requireActual(
-    "../../../test-utils/mocks/shared-contexts",
+    "../../../test-utils/mocks/shared-contexts.ts",
   );
   return {
     ...actual,

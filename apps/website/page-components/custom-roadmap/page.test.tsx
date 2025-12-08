@@ -10,7 +10,7 @@ import CustomRoadmapPage from "./page";
 import * as sharedContexts from "@elzatona/contexts";
 
 jest.mock("@elzatona/contexts", () => {
-  const actual = jest.requireActual("../../test-utils/mocks/shared-contexts");
+  const actual = jest.requireActual("../../test-utils/mocks/shared-contexts.ts");
   return {
     ...actual,
     useAuth: jest.fn(),
@@ -18,7 +18,7 @@ jest.mock("@elzatona/contexts", () => {
   };
 });
 
-jest.mock("../../context/LearningTypeContext", () => ({
+jest.mock("../../src/context/LearningTypeContext", () => ({
   useLearningType: jest.fn(() => ({
     learningType: null,
     setLearningType: jest.fn(),

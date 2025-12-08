@@ -139,8 +139,8 @@ This is the single source of truth combining all cursor rules with STRICT enforc
 - ❌ **NEVER:** Create documentation files during code changes
 - ❌ **NEVER:** Generate README files, guides, or docs without explicit instruction
 - ✅ **ONLY:** Create markdown files when user explicitly requests
-- ✅ **USE:** `Markdown/` directory for any necessary documentation
-- ✅ **REFERENCE:** Existing documentation in `Markdown/` instead of creating new
+- ✅ **USE:** `docs/` directory for any necessary documentation
+- ✅ **REFERENCE:** Existing documentation in `docs/` instead of creating new
 
 **Exception:** Cursor rule files (`.cursor/rules/*.mdc`) can be created when explicitly requested.
 
@@ -204,7 +204,7 @@ This is the single source of truth combining all cursor rules with STRICT enforc
 - ✅ **Tests:** Next to components/files they test
   - `Component.tsx` → `Component.test.tsx` (same directory)
 
-- ✅ **Documentation:** `Markdown/` directory (root level)
+- ✅ **Documentation:** `docs/` directory (root level)
 
 ---
 
@@ -249,7 +249,7 @@ For detailed information, refer to specific rule files:
 - **Security:** [security.mdc](mdc:.cursor/rules/security.mdc)
 - **Testing:** [testing-automatic-updates.mdc](mdc:.cursor/rules/testing-automatic-updates.mdc)
 - **Code Standards:** [cursor_rules.mdc](mdc:.cursor/rules/cursor_rules.mdc), [enhanced_cursor_rules.mdc](mdc:.cursor/rules/enhanced_cursor_rules.mdc)
-- **Documentation:** [no-markdown-creation.mdc](mdc:.cursor/rules/no-markdown-creation.mdc)
+- **Documentation:** [no-markdown-creation.mdc](mdc:.cursor/rules/no-markdown-creation.mdc) - Use `docs/` directory for documentation
 - **Workflow:** [taskmaster/dev_workflow.mdc](mdc:.cursor/rules/taskmaster/dev_workflow.mdc)
 - **Self-Improvement:** [self_improve.mdc](mdc:.cursor/rules/self_improve.mdc)
 
