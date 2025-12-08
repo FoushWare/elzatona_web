@@ -10,7 +10,7 @@ const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
 import {
   AdminAuthService,
   AdminCredential,
-} from "../../../../../apps/website/src/lib/admin-auth";
+} from "../../../../../apps/website/lib/admin-auth";
 
 interface AdminManagementProps {
   currentUser: {

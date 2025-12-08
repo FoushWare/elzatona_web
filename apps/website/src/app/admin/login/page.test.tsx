@@ -9,7 +9,7 @@
 import {
   loadTestEnvironment,
   getAdminCredentials,
-} from "@/lib/utils/test-env-loader";
+} from '@/lib/utils/test-env-loader';
 loadTestEnvironment();
 
 import React from "react";

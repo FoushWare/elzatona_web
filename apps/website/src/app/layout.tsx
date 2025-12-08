@@ -11,13 +11,13 @@ import { ThemeProvider } from "@elzatona/contexts";
 import { LanguageProvider } from "@elzatona/contexts";
 import { OnboardingProvider } from "@elzatona/contexts";
 import { AuthProvider } from "@elzatona/contexts";
-import NavbarSimple from "../components/NavbarSimple";
+import NavbarSimple from "@/components/NavbarSimple";
 import { NotificationProvider } from "@/components/NotificationSystem";
 import AuthSessionSync from "@/components/AuthSessionSync";
-import { LearningTypeProvider } from "../context/LearningTypeContext";
-import { SentryErrorBoundary } from "../components/SentryErrorBoundary";
-import { NavigationProgress } from "../components/NavigationProgress";
-import { NavigationProvider } from "../context/NavigationContext";
+import { LearningTypeProvider } from "@/context/LearningTypeContext";
+import { SentryErrorBoundary } from "@/components/SentryErrorBoundary";
+import { NavigationProgress } from "@/components/NavigationProgress";
+import { NavigationProvider } from "@/context/NavigationContext";
 
 // Force dynamic rendering to prevent static generation issues with auth context
 export const dynamic = "force-dynamic";

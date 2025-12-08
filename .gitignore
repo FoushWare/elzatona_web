@@ -32,6 +32,9 @@ yarn-error.log*
 
 # env files (can opt-in for committing if needed)
 .env*
+!.env.example
+!.env*.example
+!.env*.local.example
 
 # vercel
 .vercel
@@ -182,6 +185,10 @@ database-backup/
 **/.jest-cache/
 .env.local
 
-# Playwright test reports (large video/image files)
+# Playwright test reports and results (large video/image files)
 playwright-report/
-Rest/other/playwright-report/
+playwright-reports/
+test-results/
+.playwright/
+**/playwright-report/
+**/test-results/

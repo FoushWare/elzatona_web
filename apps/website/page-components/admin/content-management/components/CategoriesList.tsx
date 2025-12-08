@@ -11,6 +11,7 @@ import {
   Search,
   X,
 } from "lucide-react";
+import { Category } from "../page";
 
 const Card = React.lazy(() =>
   import("@elzatona/components").then((module) => ({
@@ -65,13 +66,6 @@ const LoadingSkeleton = () => (
   </div>
 );
 
-interface Category {
-  id: string;
-  name?: string;
-  description?: string;
-  [key: string]: unknown;
-}
-
 interface CategoriesListProps {
   categories: Category[];
   isLoading: boolean;
@@ -79,7 +73,7 @@ interface CategoriesListProps {
   onOpenChange: (open: boolean) => void;
   onAdd: () => void;
   onEdit: (category: Category) => void;
-  onDelete: (category: Category) => void;
+  onDelete: (categoryId: string) => void;
 }
 
 export const CategoriesList: React.FC<CategoriesListProps> = ({
@@ -213,7 +207,7 @@ export const CategoriesList: React.FC<CategoriesListProps> = ({
                             size="sm"
                             onClick={(e) => {
                               e.stopPropagation();
-                              onDelete(category);
+                              onDelete(category.id);
                             }}
                             className="h-8 w-8 p-0 text-red-600 hover:text-red-700 hover:bg-red-50 dark:hover:bg-red-900/20"
                             title="Delete category"

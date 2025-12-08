@@ -588,9 +588,9 @@ export default function CodeEditor({
             padding: {
               top: 16,
               bottom: 16,
-              // @ts-ignore - left/right not in type but supported by Monaco
+              // @ts-ignore - Monaco Editor type issue - left/right not in type but supported by Monaco
               left: 12,
-              // @ts-ignore - left/right not in type but supported by Monaco
+              // @ts-ignore - Monaco Editor type issue - left/right not in type but supported by Monaco
               right: 12,
             },
             cursorBlinking: "smooth",

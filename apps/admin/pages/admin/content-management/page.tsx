@@ -54,89 +54,17 @@ import {
   Loader2,
 } from "lucide-react";
 
-// Types for API responses (commented out - not currently used)
-// interface ApiResponse<T> {
-//   success: boolean;
-//   data: T;
-//   count?: number;
-//   error?: string;
-// }
-
-interface LearningCard {
-  id: string;
-  title: string;
-  description: string;
-  color: string;
-  icon: string;
-  order_index: number;
-  is_active: boolean;
-  created_at: string;
-  updated_at: string;
-}
-
-interface LearningPlan {
-  id: string;
-  name: string;
-  description: string;
-  estimated_duration: number;
-  is_public: boolean;
-  is_active: boolean;
-  created_at: string;
-  updated_at: string;
-}
-
-interface Category {
-  id: string;
-  name: string;
-  slug: string;
-  description: string;
-  learning_card_id: string;
-  is_active: boolean;
-  created_at: string;
-  updated_at: string;
-}
-
-interface Topic {
-  id: string;
-  name: string;
-  slug: string;
-  description: string;
-  difficulty: string;
-  estimated_questions: number;
-  order_index: number;
-  category_id: string;
-  is_active: boolean;
-  created_at: string;
-  updated_at: string;
-}
-
-interface Question {
-  id: string;
-  title: string;
-  content: string;
-  type: string;
-  difficulty: string;
-  category_id: string;
-  topic_id: string;
-  learning_card_id: string;
-  options: string[];
-  correct_answer: string;
-  explanation: string;
-  hints: string[];
-  tags: string[];
-  is_active: boolean;
-  created_at: string;
-  updated_at: string;
-}
-
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-interface Stats {
-  totalCards: number;
-  totalPlans: number;
-  totalCategories: number;
-  totalTopics: number;
-  totalQuestions: number;
-}
+// Import types and components
+import type {
+  LearningCard,
+  LearningPlan,
+  Category,
+  Topic,
+  Question,
+  Stats,
+} from "./components/types";
+import { StatsSection } from "./components/StatsSection";
+import { SearchAndFilters } from "./components/SearchAndFilters";
 
 // Memoized constants to prevent recreation on each render
 const CARD_ICONS = {
@@ -150,46 +78,10 @@ const CARD_ICONS = {
 // Loading skeleton component for better UX
 const LoadingSkeleton = () => (
   <div className="animate-pulse">
-    <div className="h-4 bg-gray-200 rounded w-3/4 mb-2"></div>
-    <div className="h-3 bg-gray-200 rounded w-1/2"></div>
+    <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-3/4 mb-2"></div>
+    <div className="h-3 bg-gray-200 dark:bg-gray-700 rounded w-1/2"></div>
   </div>
 );
-
-// Memoized stats card component
-const StatsCard = React.memo(
-  ({
-    icon: Icon,
-    label,
-    value,
-    color,
-  }: {
-    icon: React.ComponentType<{
-      className?: string;
-      style?: React.CSSProperties;
-    }>;
-    label: string;
-    value: number;
-    color: string;
-  }) => (
-    <Card>
-      <CardContent className="p-4">
-        <div className="flex items-center">
-          <Icon className="h-8 w-8 mr-3" style={{ color }} />
-          <div>
-            <p className="text-sm font-medium text-gray-600 dark:text-gray-400">
-              {label}
-            </p>
-            <p className="text-2xl font-bold text-gray-900 dark:text-white">
-              {value}
-            </p>
-          </div>
-        </div>
-      </CardContent>
-    </Card>
-  ),
-);
-
-StatsCard.displayName = "StatsCard";
 
 export default function ContentManagementPage() {
   // State for data
@@ -852,72 +744,15 @@ export default function ContentManagementPage() {
         </div>
 
         {/* Stats */}
-        <div className="grid grid-cols-2 md:grid-cols-5 gap-4 mb-8">
-          <StatsCard
-            icon={Layers}
-            label="Cards"
-            value={stats.totalCards}
-            color="#3B82F6"
-          />
-          <StatsCard
-            icon={Users}
-            label="Plans"
-            value={stats.totalPlans}
-            color="#10B981"
-          />
-          <StatsCard
-            icon={BookOpen}
-            label="Categories"
-            value={stats.totalCategories}
-            color="#8B5CF6"
-          />
-          <StatsCard
-            icon={Target}
-            label="Topics"
-            value={stats.totalTopics}
-            color="#F59E0B"
-          />
-          <StatsCard
-            icon={MessageSquare}
-            label="Questions"
-            value={stats.totalQuestions}
-            color="#EF4444"
-          />
-        </div>
+        <StatsSection stats={stats} />
 
         {/* Search and Filters */}
-        <div className="flex flex-col md:flex-row gap-4 mb-6">
-          <div className="flex-1">
-            <Suspense fallback={<LoadingSkeleton />}>
-              <Input
-                placeholder="Search cards, plans, categories, topics..."
-                value={searchTerm}
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                  setSearchTerm(e.target.value)
-                }
-                className="w-full"
-              />
-            </Suspense>
-          </div>
-          <Suspense fallback={<LoadingSkeleton />}>
-            <Select value={filterCardType} onValueChange={setFilterCardType}>
-              <SelectTrigger className="w-full md:w-48">
-                <SelectValue placeholder="Filter by card type" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">All Card Types</SelectItem>
-                <SelectItem value="Core Technologies">
-                  Core Technologies
-                </SelectItem>
-                <SelectItem value="Framework Questions">
-                  Framework Questions
-                </SelectItem>
-                <SelectItem value="Problem Solving">Problem Solving</SelectItem>
-                <SelectItem value="System Design">System Design</SelectItem>
-              </SelectContent>
-            </Select>
-          </Suspense>
-        </div>
+        <SearchAndFilters
+          searchTerm={searchTerm}
+          onSearchChange={setSearchTerm}
+          filterCardType={filterCardType}
+          onFilterChange={setFilterCardType}
+        />
 
         {/* Cards Section */}
         <div className="mb-8">

@@ -1,0 +1,509 @@
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+
+exports[`F-UT-SNAPSHOT: Frontend Tasks Practice Snapshot Tests should match frontend tasks page snapshot 1`] = `
+<div
+  class="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900"
+>
+  <div
+    class="container mx-auto px-4 py-12"
+  >
+    <div
+      class="text-center mb-12"
+    >
+      <div
+        class="relative mb-8"
+      >
+        <div
+          class="absolute inset-0 bg-gradient-to-r from-purple-400 via-indigo-500 to-blue-500 rounded-3xl blur-3xl opacity-30 scale-110"
+        />
+        <div
+          class="relative w-24 h-24 bg-gradient-to-r from-purple-500 via-indigo-600 to-blue-500 rounded-3xl flex items-center justify-center mx-auto shadow-2xl"
+        >
+          <span>
+            💻
+          </span>
+        </div>
+      </div>
+      <h1
+        class="text-5xl font-bold bg-gradient-to-r from-purple-600 via-indigo-600 to-blue-600 bg-clip-text text-transparent mb-6"
+      >
+        Frontend Tasks
+      </h1>
+      <p
+        class="text-xl text-gray-600 dark:text-gray-400 max-w-3xl mx-auto leading-relaxed"
+      >
+        Practice building real-world frontend components and applications. Each task includes a live coding environment with instant preview.
+      </p>
+      <div
+        class="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-2xl mx-auto mt-8"
+      >
+        <div
+          class="bg-white/70 dark:bg-gray-800/70 backdrop-blur-sm rounded-2xl p-6 shadow-lg"
+        >
+          <div
+            class="text-3xl font-bold text-purple-600 dark:text-purple-400 mb-2"
+          >
+            2
+          </div>
+          <div
+            class="text-gray-600 dark:text-gray-400 font-medium"
+          >
+            Tasks
+          </div>
+        </div>
+        <div
+          class="bg-white/70 dark:bg-gray-800/70 backdrop-blur-sm rounded-2xl p-6 shadow-lg"
+        >
+          <div
+            class="text-3xl font-bold text-indigo-600 dark:text-indigo-400 mb-2"
+          >
+            1
+            h
+          </div>
+          <div
+            class="text-gray-600 dark:text-gray-400 font-medium"
+          >
+            Total Time
+          </div>
+        </div>
+        <div
+          class="bg-white/70 dark:bg-gray-800/70 backdrop-blur-sm rounded-2xl p-6 shadow-lg"
+        >
+          <div
+            class="text-3xl font-bold text-blue-600 dark:text-blue-400 mb-2"
+          >
+            100%
+          </div>
+          <div
+            class="text-gray-600 dark:text-gray-400 font-medium"
+          >
+            Free Access
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+      class="mb-8 max-w-6xl mx-auto"
+    >
+      <div
+        class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6"
+      >
+        <div
+          class="flex flex-col lg:flex-row gap-4 items-center justify-between"
+        >
+          <div
+            class="relative flex-1"
+          >
+            <span>
+              🔍
+            </span>
+            <input
+              class="w-full pl-10 pr-4 py-3 border border-gray-200 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+              placeholder="Search frontend tasks..."
+              type="text"
+              value=""
+            />
+          </div>
+          <div
+            class="flex items-center gap-4"
+          >
+            <select
+              class="px-4 py-3 border border-gray-200 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+            >
+              <option
+                value="all"
+              >
+                All Difficulties
+              </option>
+              <option
+                value="easy"
+              >
+                Easy
+              </option>
+              <option
+                value="medium"
+              >
+                Medium
+              </option>
+              <option
+                value="hard"
+              >
+                Hard
+              </option>
+            </select>
+            <select
+              class="px-4 py-3 border border-gray-200 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+            >
+              <option
+                value="all"
+              >
+                All Categories
+              </option>
+              <option
+                value="UI coding"
+              >
+                UI Coding
+              </option>
+              <option
+                value="JS functions"
+              >
+                JS Functions
+              </option>
+              <option
+                value="API integration"
+              >
+                API Integration
+              </option>
+            </select>
+            <div
+              class="flex items-center gap-2"
+            >
+              <button
+                class="p-2 rounded-lg transition-colors bg-purple-100 text-purple-600 dark:bg-purple-900/30 dark:text-purple-400"
+              >
+                <span>
+                  ⊞
+                </span>
+              </button>
+              <button
+                class="p-2 rounded-lg transition-colors text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
+              >
+                <span>
+                  ☰
+                </span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+      class="grid gap-6 max-w-7xl mx-auto grid-cols-1 md:grid-cols-2 lg:grid-cols-3"
+    >
+      <div
+        class="relative bg-white dark:bg-gray-800 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 cursor-pointer overflow-hidden border border-gray-100 dark:border-gray-700 hover:border-transparent hover:-translate-y-1 p-6"
+      >
+        <div
+          class="absolute inset-0 bg-gradient-to-br from-purple-500 to-indigo-500 opacity-5 pointer-events-none"
+        />
+        <div
+          class="relative"
+        >
+          <div
+            class="flex items-start justify-between mb-4"
+          >
+            <div
+              class="flex items-center gap-3"
+            >
+              <div
+                class="w-12 h-12 bg-gradient-to-br from-purple-500 to-indigo-500 rounded-xl flex items-center justify-center text-white shadow-lg"
+              >
+                <span>
+                  💻
+                </span>
+              </div>
+              <div>
+                <h3
+                  class="text-xl font-bold text-gray-900 dark:text-white mb-1"
+                >
+                  Counter Component
+                </h3>
+                <span
+                  class="px-2 py-1 bg-orange-100 dark:bg-orange-900/30 text-orange-700 dark:text-orange-300 rounded-full text-xs font-medium"
+                >
+                  Beginner friendly
+                </span>
+              </div>
+            </div>
+            <div
+              class="flex items-center gap-1 text-gray-500 dark:text-gray-400"
+            >
+              <span>
+                ✅
+              </span>
+              <span
+                class="text-sm"
+              >
+                AI Assistant
+              </span>
+            </div>
+          </div>
+          <p
+            class="text-gray-600 dark:text-gray-300 mb-4 leading-relaxed"
+          >
+            Create a React counter component with increment, decrement, and reset functionality. The component should display the current count and have three buttons.
+          </p>
+          <div
+            class="flex items-center gap-4 mb-4 text-sm text-gray-600 dark:text-gray-400"
+          >
+            <div
+              class="flex items-center gap-1"
+            >
+              <span>
+                💻
+              </span>
+              <span>
+                React
+              </span>
+            </div>
+            <div
+              class="flex items-center gap-1"
+            >
+              <span>
+                🔥
+              </span>
+              <span
+                class="capitalize"
+              >
+                easy
+              </span>
+            </div>
+            <div
+              class="flex items-center gap-1"
+            >
+              <span>
+                ⏰
+              </span>
+              <span>
+                15
+                 mins
+              </span>
+            </div>
+          </div>
+          <div
+            class="mb-4"
+          >
+            <div
+              class="flex flex-wrap gap-2"
+            >
+              <div
+                class="flex items-center gap-1 px-2 py-1 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded text-xs"
+              >
+                <span>
+                  💻
+                </span>
+                <span>
+                  react
+                </span>
+              </div>
+              <div
+                class="flex items-center gap-1 px-2 py-1 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded text-xs"
+              >
+                <span>
+                  💻
+                </span>
+                <span>
+                  hooks
+                </span>
+              </div>
+              <div
+                class="flex items-center gap-1 px-2 py-1 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded text-xs"
+              >
+                <span>
+                  💻
+                </span>
+                <span>
+                  state
+                </span>
+              </div>
+              <div
+                class="flex items-center gap-1 px-2 py-1 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded text-xs"
+              >
+                <span>
+                  💻
+                </span>
+                <span>
+                  beginner
+                </span>
+              </div>
+            </div>
+          </div>
+          <div
+            class="flex items-center justify-between"
+          >
+            <button
+              class="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-purple-600 to-indigo-600 text-white rounded-lg hover:from-purple-700 hover:to-indigo-700 transition-all duration-300 shadow-lg hover:shadow-xl"
+            >
+              <span>
+                ▶️
+              </span>
+              <span>
+                Start Task
+              </span>
+            </button>
+            <span>
+              ▶
+            </span>
+          </div>
+        </div>
+      </div>
+      <div
+        class="relative bg-white dark:bg-gray-800 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 cursor-pointer overflow-hidden border border-gray-100 dark:border-gray-700 hover:border-transparent hover:-translate-y-1 p-6"
+      >
+        <div
+          class="absolute inset-0 bg-gradient-to-br from-purple-500 to-indigo-500 opacity-5 pointer-events-none"
+        />
+        <div
+          class="relative"
+        >
+          <div
+            class="flex items-start justify-between mb-4"
+          >
+            <div
+              class="flex items-center gap-3"
+            >
+              <div
+                class="w-12 h-12 bg-gradient-to-br from-purple-500 to-indigo-500 rounded-xl flex items-center justify-center text-white shadow-lg"
+              >
+                <span>
+                  💻
+                </span>
+              </div>
+              <div>
+                <h3
+                  class="text-xl font-bold text-gray-900 dark:text-white mb-1"
+                >
+                  Todo List
+                </h3>
+              </div>
+            </div>
+            <div
+              class="flex items-center gap-1 text-gray-500 dark:text-gray-400"
+            >
+              <span>
+                ✅
+              </span>
+              <span
+                class="text-sm"
+              >
+                AI Assistant
+              </span>
+            </div>
+          </div>
+          <p
+            class="text-gray-600 dark:text-gray-300 mb-4 leading-relaxed"
+          >
+            Build a todo list application with add, edit, delete, and mark complete functionality
+          </p>
+          <div
+            class="flex items-center gap-4 mb-4 text-sm text-gray-600 dark:text-gray-400"
+          >
+            <div
+              class="flex items-center gap-1"
+            >
+              <span>
+                💻
+              </span>
+              <span>
+                React
+              </span>
+            </div>
+            <div
+              class="flex items-center gap-1"
+            >
+              <span>
+                🔥
+              </span>
+              <span
+                class="capitalize"
+              >
+                medium
+              </span>
+            </div>
+            <div
+              class="flex items-center gap-1"
+            >
+              <span>
+                ⏰
+              </span>
+              <span>
+                30
+                 mins
+              </span>
+            </div>
+          </div>
+          <div
+            class="mb-4"
+          >
+            <div
+              class="flex flex-wrap gap-2"
+            >
+              <div
+                class="flex items-center gap-1 px-2 py-1 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded text-xs"
+              >
+                <span>
+                  💻
+                </span>
+                <span>
+                  react
+                </span>
+              </div>
+              <div
+                class="flex items-center gap-1 px-2 py-1 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded text-xs"
+              >
+                <span>
+                  💻
+                </span>
+                <span>
+                  forms
+                </span>
+              </div>
+              <div
+                class="flex items-center gap-1 px-2 py-1 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded text-xs"
+              >
+                <span>
+                  💻
+                </span>
+                <span>
+                  state
+                </span>
+              </div>
+              <div
+                class="flex items-center gap-1 px-2 py-1 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded text-xs"
+              >
+                <span>
+                  💻
+                </span>
+                <span>
+                  intermediate
+                </span>
+              </div>
+            </div>
+          </div>
+          <div
+            class="flex items-center justify-between"
+          >
+            <button
+              class="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-purple-600 to-indigo-600 text-white rounded-lg hover:from-purple-700 hover:to-indigo-700 transition-all duration-300 shadow-lg hover:shadow-xl"
+            >
+              <span>
+                ▶️
+              </span>
+              <span>
+                Start Task
+              </span>
+            </button>
+            <span>
+              ▶
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+      class="text-center mt-12"
+    >
+      <button
+        class="inline-flex items-center space-x-2 px-6 py-3 text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors bg-white dark:bg-gray-800 rounded-xl shadow-sm hover:shadow-md"
+      >
+        <span>
+          →
+        </span>
+        <span>
+          Go Back
+        </span>
+      </button>
+    </div>
+  </div>
+</div>
+`;

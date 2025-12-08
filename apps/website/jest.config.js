@@ -37,13 +37,13 @@ const config = {
     "^@elzatona/contexts$": "<rootDir>/../../libs/contexts/src/index.ts",
     "^@elzatona/components$": "<rootDir>/../../libs/components/src/index.ts",
     "^@elzatona/hooks$": "<rootDir>/../../libs/hooks/src/index.ts",
-    "^lucide-react$": "<rootDir>/src/test-utils/mocks/lucide-react.tsx",
+    "^lucide-react$": "<rootDir>/test-utils/mocks/lucide-react.tsx",
     // Mock nuqs to avoid ESM issues in tests
-    "^nuqs$": "<rootDir>/src/test-utils/mocks/nuqs.ts",
+    "^nuqs$": "<rootDir>/test-utils/mocks/nuqs.ts",
     // Mock shiki ESM module
-    "^shiki$": "<rootDir>/src/test-utils/mocks/shiki.ts",
+    "^shiki$": "<rootDir>/test-utils/mocks/shiki.ts",
     // Mock refractor ESM module (used by react-syntax-highlighter)
-    "^refractor$": "<rootDir>/src/test-utils/mocks/refractor.ts",
+    "^refractor$": "<rootDir>/test-utils/mocks/refractor.ts",
   },
   // Include tests from root tests directory, but exclude e2e tests (Playwright)
   // Note: testPathIgnorePatterns handles the exclusion, so we keep testMatch simple
