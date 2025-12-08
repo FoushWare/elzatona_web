@@ -11,7 +11,7 @@ import { Bookmark, BookmarkCheck, X } from "lucide-react";
 
 // Note: This import path assumes this component is used in apps/website
 // For proper architecture, flashcardService should be injected or moved to shared location
-import { flashcardService } from "../../../../../apps/website/src/lib/supabase-flashcards";
+import { flashcardService } from "../../../../../apps/website/lib/supabase-flashcards";
 import { useAuth } from "@elzatona/contexts";
 
 interface AddToFlashcardProps {

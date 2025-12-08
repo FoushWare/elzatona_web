@@ -26,10 +26,10 @@ import {
 } from "lucide-react";
 import { addFlashcard, isInFlashcards } from '@/lib/flashcards';
 import { addToCart } from '@/lib/cart';
-import { useNotifications } from "@/components/NotificationSystem";
-import { useLearningType } from '@/context/LearningTypeContext';
-import ProblemSolvingQuestion from "@/components/ProblemSolvingQuestion";
-import CodeEditor from "@/components/CodeEditor";
+import { useNotifications } from "../../components/NotificationSystem";
+import { useLearningType } from '../../context/LearningTypeContext';
+import ProblemSolvingQuestion from "../../components/ProblemSolvingQuestion";
+import CodeEditor from "../../components/CodeEditor";
 import { QuestionContent, isValidCode } from "@elzatona/components";
 import { createHighlighter, type Highlighter } from "shiki";
 
