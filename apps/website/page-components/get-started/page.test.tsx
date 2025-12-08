@@ -19,7 +19,7 @@ jest.mock("@elzatona/contexts", () => {
 });
 
 // Mock LearningTypeContext
-jest.mock("../../context/LearningTypeContext", () => ({
+jest.mock("../../src/context/LearningTypeContext", () => ({
   useLearningType: jest.fn(() => ({
     learningType: null,
     setLearningType: jest.fn(),
