@@ -67,7 +67,7 @@ export interface UseQuestionsReturn {
 }
 
 export const useQuestions = (): UseQuestionsReturn => {
-  const [user, setUser] = useState({ uid: "placeholder-user" });
+  const [user] = useState({ uid: "placeholder-user" });
   const [questions, setQuestions] = useState<Question[]>([]);
   const [categories, setCategories] = useState<QuestionCategory[]>([]);
   const [stats, setStats] = useState<QuestionStats | null>(null);
