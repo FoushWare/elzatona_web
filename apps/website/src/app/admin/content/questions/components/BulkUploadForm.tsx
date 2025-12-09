@@ -7,7 +7,7 @@ import {
   DialogFooter,
   Label,
   Textarea,
-} from '@elzatona/shared-components';
+} from '@elzatona/components';
 import { Upload, FileText, AlertTriangle, Loader2 } from 'lucide-react';
 import { createHighlighter, type Highlighter } from 'shiki';
 

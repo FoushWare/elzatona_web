@@ -9,7 +9,7 @@ import {
   DialogDescription,
   DialogFooter,
   Button,
-} from '@elzatona/shared-components';
+} from '@elzatona/components';
 import { AlertTriangle, Trash2, Loader2, BookOpen } from 'lucide-react';
 import { UnifiedQuestion } from '@elzatona/shared-types';
 

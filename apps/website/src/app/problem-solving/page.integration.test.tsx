@@ -7,9 +7,9 @@ import React from 'react';
 import { render, screen, waitFor } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import ProblemSolvingPage from './page';
-import * as sharedContexts from '@elzatona/shared-contexts';
+import * as sharedContexts from '@elzatona/contexts';
 
-jest.mock('@elzatona/shared-contexts', () => {
+jest.mock('@elzatona/contexts', () => {
   const actual = jest.requireActual('../../test-utils/mocks/shared-contexts');
   return {
     ...actual,

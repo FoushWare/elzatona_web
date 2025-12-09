@@ -13,7 +13,7 @@ import React from 'react';
 import { render, screen, fireEvent, waitFor, act } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import AdminLoginPage from './page';
-import { useAdminAuth } from '@elzatona/shared-contexts';
+import { useAdminAuth } from '@elzatona/contexts';
 
 // Get credentials from environment variables (with validation)
 let ADMIN_EMAIL = '';
@@ -27,8 +27,8 @@ try {
 }
 
 // Mock shared contexts
-jest.mock('@elzatona/shared-contexts', () => {
-  const actual = jest.requireActual('@elzatona/shared-contexts');
+jest.mock('@elzatona/contexts', () => {
+  const actual = jest.requireActual('@elzatona/contexts');
   return {
     ...actual,
     useAdminAuth: jest.fn(),
@@ -38,7 +38,7 @@ jest.mock('@elzatona/shared-contexts', () => {
 });
 
 // Mock shared components
-jest.mock('@elzatona/shared-components', () => ({
+jest.mock('@elzatona/components', () => ({
   AdminLoginNavbar: () => <nav data-testid="admin-login-navbar">Admin Navbar</nav>,
 }));
 

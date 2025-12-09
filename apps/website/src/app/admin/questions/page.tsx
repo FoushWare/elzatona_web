@@ -1,8 +1,8 @@
 'use client';
 
-import { useAdminAuth } from '@elzatona/shared-contexts';
+import { useAdminAuth } from '@elzatona/contexts';
 
-// import QuestionAudioManager from '@elzatona/shared-components';
+// import QuestionAudioManager from '@elzatona/components';
 
 export default function AdminQuestionsPage() {
   const { user } = useAdminAuth();

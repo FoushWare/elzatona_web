@@ -10,7 +10,7 @@ import {
   ClientCodeRunner,
   TestCase,
   ProblemSolvingEditor,
-} from '@elzatona/shared-components';
+} from '@elzatona/components';
 import {
   ProblemSolvingTask,
   ProblemSolvingTaskFormData,
@@ -20,7 +20,7 @@ import {
   useCreateProblemSolvingTask,
   useUpdateProblemSolvingTask,
   useDeleteProblemSolvingTask,
-} from '@elzatona/shared-hooks';
+} from '@elzatona/hooks';
 
 export default function ProblemSolvingAdminPage() {
   // TanStack Query hooks

@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { useAdminAuth } from '@elzatona/shared-contexts';
+import { useAdminAuth } from '@elzatona/contexts';
 
 export default function AdminLoginPage() {
   const [email, setEmail] = useState('');

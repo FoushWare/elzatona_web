@@ -5,12 +5,12 @@ import {
   AdminAuthProvider,
   useAdminAuth,
   NotificationProvider,
-} from '@elzatona/shared-contexts';
+} from '@elzatona/contexts';
 import {
   AdminNavbar,
   NotificationContainer,
   FirestoreErrorBoundary,
-} from '@elzatona/shared-components';
+} from '@elzatona/components';
 import { usePathname } from 'next/navigation';
 // ThemeProvider is already provided by root layout
 import '../globals.css';

@@ -15,7 +15,7 @@ import {
   Collapsible,
   CollapsibleTrigger,
   CollapsibleContent,
-} from '@elzatona/shared-components';
+} from '@elzatona/components';
 import {
   BookOpen,
   BarChart3,

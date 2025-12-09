@@ -14,10 +14,10 @@ import {
   CardContent,
   CardHeader,
   CardTitle,
-} from '@elzatona/shared-components';
-import { Button } from '@elzatona/shared-components';
-import { Badge } from '@elzatona/shared-components';
-import { Skeleton } from '@elzatona/shared-components';
+} from '@elzatona/components';
+import { Button } from '@elzatona/components';
+import { Badge } from '@elzatona/components';
+import { Skeleton } from '@elzatona/components';
 import {
   useCards,
   usePlans,
@@ -39,7 +39,7 @@ import {
   useDeleteCategory,
   useDeleteTopic,
   useDeleteQuestion,
-} from '@elzatona/shared-hooks';
+} from '@elzatona/hooks';
 import {
   ChevronDown,
   ChevronRight,

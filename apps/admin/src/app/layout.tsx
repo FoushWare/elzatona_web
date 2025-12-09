@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
-import { AdminAuthProvider, ThemeProvider } from '@elzatona/shared-contexts';
-import { AdminNavbar } from '@elzatona/shared-components';
+import { AdminAuthProvider, ThemeProvider } from '@elzatona/contexts';
+import { AdminNavbar } from '@elzatona/components';
 import { NuqsAdapter } from 'nuqs/adapters/next/app';
 import { Toaster } from 'sonner';
 import './globals.css';

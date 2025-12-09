@@ -3,8 +3,8 @@
 import React, { useState, useEffect } from 'react';
 // Note: This page uses API routes, not direct supabase client
 
-import { useAuth } from '@elzatona/shared-contexts';
-import { useAdminAuth } from '@elzatona/shared-contexts';
+import { useAuth } from '@elzatona/contexts';
+import { useAdminAuth } from '@elzatona/contexts';
 import {
   Users,
   UserPlus,

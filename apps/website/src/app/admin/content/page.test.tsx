@@ -20,7 +20,7 @@ jest.mock('next/navigation', () => ({
 }));
 
 // Mock shared contexts
-jest.mock('@elzatona/shared-contexts', () => {
+jest.mock('@elzatona/contexts', () => {
   const actual = jest.requireActual('../../../test-utils/mocks/shared-contexts');
   return {
     ...actual,

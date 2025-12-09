@@ -9,9 +9,9 @@ import {
   CardContent,
   CardHeader,
   CardTitle,
-} from '@elzatona/shared-components';
-import { Badge } from '@elzatona/shared-components';
-import { Button } from '@elzatona/shared-components';
+} from '@elzatona/components';
+import { Badge } from '@elzatona/components';
+import { Button } from '@elzatona/components';
 import {
   Plus,
   Edit,

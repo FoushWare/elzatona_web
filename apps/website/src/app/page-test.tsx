@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { useUserType } from '@elzatona/shared-contexts';
+import { useUserType } from '@elzatona/contexts';
 
 function TestPage() {
   const { userType } = useUserType();

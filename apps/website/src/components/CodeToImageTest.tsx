@@ -2,7 +2,7 @@
 
 import React, { useRef, useState, useEffect } from 'react';
 import { toPng, toJpeg, toBlob } from 'html-to-image';
-import { Button } from '@elzatona/shared-components';
+import { Button } from '@elzatona/components';
 import { Download, Image as ImageIcon } from 'lucide-react';
 import { createHighlighter, type Highlighter } from 'shiki';
 

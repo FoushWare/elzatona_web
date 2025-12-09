@@ -2,7 +2,7 @@
 
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { useAdminAuth } from '@elzatona/shared-contexts';
+import { useAdminAuth } from '@elzatona/contexts';
 
 export default function AdminRootPage() {
   const { isAuthenticated, isLoading } = useAdminAuth();

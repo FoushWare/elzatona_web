@@ -1,6 +1,6 @@
 'use client';
 
-import { useAdminAuth } from '@elzatona/shared-contexts';
+import { useAdminAuth } from '@elzatona/contexts';
 
 export default function TestPage() {
   const { isAuthenticated, isLoading, user } = useAdminAuth();

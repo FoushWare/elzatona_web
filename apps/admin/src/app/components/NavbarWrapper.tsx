@@ -1,7 +1,7 @@
 'use client';
 
 import { usePathname } from 'next/navigation';
-import { AdminNavbar, SimpleAdminNavbar } from '@elzatona/shared-components';
+import { AdminNavbar, SimpleAdminNavbar } from '@elzatona/components';
 
 export default function NavbarWrapper() {
   const pathname = usePathname();

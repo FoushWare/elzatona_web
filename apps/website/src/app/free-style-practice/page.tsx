@@ -21,8 +21,8 @@ import {
   Trophy,
   BarChart3,
 } from 'lucide-react';
-import { useUserType, useAuth } from '@elzatona/shared-contexts';
-import { QuestionContent as SharedQuestionContent } from '@elzatona/shared-components';
+import { useUserType, useAuth } from '@elzatona/contexts';
+import { QuestionContent as SharedQuestionContent } from '@elzatona/components';
 import {
   addFlashcard,
   isInFlashcards,

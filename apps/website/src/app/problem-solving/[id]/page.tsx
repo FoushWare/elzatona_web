@@ -18,7 +18,7 @@ import {
   EyeOff,
 } from 'lucide-react';
 import { ProblemSolvingTask } from '../../../types/admin';
-import { ClientCodeRunner } from '@elzatona/shared-components';
+import { ClientCodeRunner } from '@elzatona/components';
 
 export default function ProblemSolvingTaskPage() {
   const params = useParams();

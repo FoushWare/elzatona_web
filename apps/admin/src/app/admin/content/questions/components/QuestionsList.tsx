@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { Card, CardContent, CardHeader, CardTitle, Button } from '@elzatona/shared-components';
+import { Card, CardContent, CardHeader, CardTitle, Button } from '@elzatona/components';
 import { Plus, BookOpen } from 'lucide-react';
 import { QuestionItem } from './QuestionItem';
 import { PaginationControls } from './PaginationControls';

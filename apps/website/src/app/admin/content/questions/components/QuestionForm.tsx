@@ -16,7 +16,7 @@ import {
   Collapsible,
   CollapsibleTrigger,
   CollapsibleContent,
-} from '@elzatona/shared-components';
+} from '@elzatona/components';
 import { Plus, Trash2, ChevronDown, ChevronRight, Search, X } from 'lucide-react';
 import { UnifiedQuestion } from '@elzatona/shared-types';
 

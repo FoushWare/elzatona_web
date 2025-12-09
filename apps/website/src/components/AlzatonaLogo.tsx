@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
-import { useTheme } from '@elzatona/shared-contexts';
+import { useTheme } from '@elzatona/contexts';
 
 interface AlzatonaLogoProps {
   size?: 'xs' | 'sm' | 'md' | 'lg';

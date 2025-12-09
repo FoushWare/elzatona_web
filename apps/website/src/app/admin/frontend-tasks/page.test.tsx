@@ -11,7 +11,7 @@ import FrontendTasksAdminPage from './page';
 // Mock TanStack Query hooks
 const mockTasksData = { data: [] };
 
-jest.mock('@elzatona/shared-hooks', () => ({
+jest.mock('@elzatona/hooks', () => ({
   useFrontendTasks: jest.fn(() => ({
     data: mockTasksData,
     isLoading: false,
@@ -31,7 +31,7 @@ jest.mock('@elzatona/shared-hooks', () => ({
   })),
 }));
 
-jest.mock('@elzatona/shared-components', () => ({
+jest.mock('@elzatona/components', () => ({
   FrontendTaskEditor: ({ onSave, onCancel }: any) => (
     <div data-testid="frontend-task-editor">
       <button onClick={() => onSave({})}>Save</button>
@@ -83,7 +83,7 @@ describe('A-UT-SNAPSHOT: Admin Frontend Tasks Snapshot Tests', () => {
   });
 
   it('should match admin frontend tasks page snapshot (loading state)', () => {
-    const { useFrontendTasks } = require('@elzatona/shared-hooks');
+    const { useFrontendTasks } = require('@elzatona/hooks');
     useFrontendTasks.mockReturnValue({
       data: null,
       isLoading: true,

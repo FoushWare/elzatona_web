@@ -8,7 +8,7 @@ import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import FrontendTasksAdminPage from './page';
 
-jest.mock('@elzatona/shared-hooks', () => ({
+jest.mock('@elzatona/hooks', () => ({
   useFrontendTasks: jest.fn(() => ({
     data: { data: [] },
     isLoading: false,
@@ -28,7 +28,7 @@ jest.mock('@elzatona/shared-hooks', () => ({
   })),
 }));
 
-jest.mock('@elzatona/shared-components', () => ({
+jest.mock('@elzatona/components', () => ({
   FrontendTaskEditor: ({ onSave, onCancel }: any) => (
     <div>
       <button onClick={() => onSave({})}>Save</button>
@@ -58,7 +58,7 @@ describe('A-IT-017: Frontend Tasks CRUD Integration', () => {
     render(<FrontendTasksAdminPage />);
     
     await waitFor(() => {
-      const { useFrontendTasks } = require('@elzatona/shared-hooks');
+      const { useFrontendTasks } = require('@elzatona/hooks');
       expect(useFrontendTasks).toHaveBeenCalled();
     });
   });

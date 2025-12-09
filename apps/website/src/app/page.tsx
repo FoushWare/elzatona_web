@@ -15,10 +15,10 @@ import {
   Sparkles,
   Zap,
 } from 'lucide-react';
-import { useUserType } from '@elzatona/shared-contexts';
-import { useAuth } from '@elzatona/shared-contexts';
-import { UserStatistics } from '@elzatona/shared-components';
-import { ErrorBoundary } from '@elzatona/shared-components';
+import { useUserType } from '@elzatona/contexts';
+import { useAuth } from '@elzatona/contexts';
+import { UserStatistics } from '@elzatona/components';
+import { ErrorBoundary } from '@elzatona/components';
 import { useRouter } from 'next/navigation';
 import { useLearningType } from '../context/LearningTypeContext';
 

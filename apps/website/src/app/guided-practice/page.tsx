@@ -30,7 +30,7 @@ import { useNotifications } from '@/components/NotificationSystem';
 import { useLearningType } from '../../context/LearningTypeContext';
 import ProblemSolvingQuestion from '@/components/ProblemSolvingQuestion';
 import CodeEditor from '@/components/CodeEditor';
-import { QuestionContent, isValidCode } from '@elzatona/shared-components';
+import { QuestionContent, isValidCode } from '@elzatona/components';
 import { createHighlighter, type Highlighter } from 'shiki';
 
 interface Resource {
@@ -595,7 +595,7 @@ const formatCodeContent = (code: string): string => {
   return formatted;
 };
 
-// Note: QuestionContent is imported from @elzatona/shared-components
+// Note: QuestionContent is imported from @elzatona/components
 // Since database is clean, we use the shared component directly
 
 function GuidedPracticePageContent() {

@@ -27,7 +27,7 @@ jest.mock('next/navigation', () => ({
 }));
 
 // Mock shared components (same as unit tests)
-jest.mock('@elzatona/shared-components', () => ({
+jest.mock('@elzatona/components', () => ({
   Card: ({ children }: { children: React.ReactNode }) => <div>{children}</div>,
   CardContent: ({ children }: { children: React.ReactNode }) => <div>{children}</div>,
   CardHeader: ({ children }: { children: React.ReactNode }) => <div>{children}</div>,

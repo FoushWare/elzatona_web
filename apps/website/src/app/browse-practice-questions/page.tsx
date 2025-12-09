@@ -3,9 +3,9 @@
 import React, { useState, useEffect } from 'react';
 
 import { useRouter } from 'next/navigation';
-import { useAuth } from '@elzatona/shared-contexts';
+import { useAuth } from '@elzatona/contexts';
 
-// import { SignInPopup } from '@elzatona/shared-components'; // Temporarily disabled due to import issues
+// import { SignInPopup } from '@elzatona/components'; // Temporarily disabled due to import issues
 import {
   Code,
   Target,

@@ -11,7 +11,7 @@ import {
   SelectValue,
   SelectContent,
   SelectItem,
-} from '@elzatona/shared-components';
+} from '@elzatona/components';
 import {
   Plus,
   Search,

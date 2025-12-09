@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { Button, Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@elzatona/shared-components';
+import { Button, Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@elzatona/components';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 interface PaginationControlsProps {

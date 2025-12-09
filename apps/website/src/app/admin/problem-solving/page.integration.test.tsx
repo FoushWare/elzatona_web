@@ -8,7 +8,7 @@ import { render, screen, waitFor } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import ProblemSolvingAdminPage from './page';
 
-jest.mock('@elzatona/shared-hooks', () => ({
+jest.mock('@elzatona/hooks', () => ({
   useProblemSolvingTasks: jest.fn(() => ({
     data: { data: [] },
     isLoading: false,
@@ -28,7 +28,7 @@ jest.mock('@elzatona/shared-hooks', () => ({
   })),
 }));
 
-jest.mock('@elzatona/shared-components', () => ({
+jest.mock('@elzatona/components', () => ({
   ProblemSolvingEditor: () => <div>Editor</div>,
   ClientCodeRunner: () => <div>Code Runner</div>,
 }));
@@ -52,7 +52,7 @@ describe('A-IT-018: Problem Solving CRUD Integration', () => {
     render(<ProblemSolvingAdminPage />);
     
     await waitFor(() => {
-      const sharedHooks = jest.requireMock('@elzatona/shared-hooks');
+      const sharedHooks = jest.requireMock('@elzatona/hooks');
       const { useProblemSolvingTasks } = sharedHooks;
       expect(useProblemSolvingTasks).toHaveBeenCalled();
     });

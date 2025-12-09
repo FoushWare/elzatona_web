@@ -9,7 +9,7 @@ import '@testing-library/jest-dom';
 
 // Mock shared-components before importing the page to handle React.lazy imports
 // Don't use requireActual to avoid circular dependency issues
-jest.mock('@elzatona/shared-components', () => ({
+jest.mock('@elzatona/components', () => ({
   Button: ({ children, onClick, ...props }: any) => <button onClick={onClick} {...props}>{children}</button>,
   Card: ({ children }: { children: React.ReactNode }) => <div>{children}</div>,
   CardContent: ({ children }: { children: React.ReactNode }) => <div>{children}</div>,
@@ -43,7 +43,7 @@ jest.mock('@elzatona/shared-components', () => ({
 import UnifiedAdminPage from './page';
 
 // Same mocks as unit tests
-jest.mock('@elzatona/shared-hooks', () => ({
+jest.mock('@elzatona/hooks', () => ({
   useCards: jest.fn(() => ({
     data: { data: [], count: 0 },
     isLoading: false,
@@ -168,7 +168,7 @@ describe('A-IT-015: Content Management Integration', () => {
     render(<UnifiedAdminPage />);
     
     await waitFor(() => {
-      const { useCards, usePlans, useCategories, useTopics, useQuestionsUnified } = require('@elzatona/shared-hooks');
+      const { useCards, usePlans, useCategories, useTopics, useQuestionsUnified } = require('@elzatona/hooks');
       expect(useCards).toHaveBeenCalled();
       expect(usePlans).toHaveBeenCalled();
       expect(useCategories).toHaveBeenCalled();

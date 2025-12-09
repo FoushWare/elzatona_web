@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 
-import { useAuth } from '@elzatona/shared-contexts';
+import { useAuth } from '@elzatona/contexts';
 import {
   Play,
   Edit,

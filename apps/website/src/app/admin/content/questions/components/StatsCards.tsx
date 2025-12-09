@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { Card, CardContent } from '@elzatona/shared-components';
+import { Card, CardContent } from '@elzatona/components';
 
 interface StatsCardsProps {
   totalCount: number;

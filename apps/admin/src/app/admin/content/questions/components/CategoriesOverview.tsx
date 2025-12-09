@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { Card, CardContent, CardHeader, CardTitle, Badge, Button } from '@elzatona/shared-components';
+import { Card, CardContent, CardHeader, CardTitle, Badge, Button } from '@elzatona/components';
 import { BookOpen, Eye, Edit } from 'lucide-react';
 
 interface Category {

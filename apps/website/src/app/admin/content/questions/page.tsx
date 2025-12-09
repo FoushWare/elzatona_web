@@ -1,9 +1,9 @@
 'use client';
 
 import React, { useState, useEffect, useMemo } from 'react';
-import { Button } from '@elzatona/shared-components';
+import { Button } from '@elzatona/components';
 import { Loader2 } from 'lucide-react';
-import { useToast, ToastContainer } from '@elzatona/shared-components';
+import { useToast, ToastContainer } from '@elzatona/components';
 import { UnifiedQuestion } from '@elzatona/shared-types';
 import { StatsCards } from './components/StatsCards';
 import { SearchBar } from './components/SearchBar';

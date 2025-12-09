@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { Button } from '@elzatona/shared-components';
+import { Button } from '@elzatona/components';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 interface BottomPaginationProps {

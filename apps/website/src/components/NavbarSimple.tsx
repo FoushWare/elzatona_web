@@ -16,10 +16,10 @@ import {
   Loader2,
 } from 'lucide-react';
 import AlzatonaLogo from './AlzatonaLogo';
-import { useUserType } from '@elzatona/shared-contexts';
-import { useMobileMenu } from '@elzatona/shared-contexts';
-import { useTheme } from '@elzatona/shared-contexts';
-import { useAuth } from '@elzatona/shared-contexts';
+import { useUserType } from '@elzatona/contexts';
+import { useMobileMenu } from '@elzatona/contexts';
+import { useTheme } from '@elzatona/contexts';
+import { useAuth } from '@elzatona/contexts';
 import {
   supabaseClient as supabase,
   isSupabaseAvailable,

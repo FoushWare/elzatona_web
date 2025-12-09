@@ -7,11 +7,11 @@ import React from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import AdminDashboard from './page';
-import { useAdminAuth } from '@elzatona/shared-contexts';
+import { useAdminAuth } from '@elzatona/contexts';
 
 // Mock shared contexts
-jest.mock('@elzatona/shared-contexts', () => {
-  const actual = jest.requireActual('@elzatona/shared-contexts');
+jest.mock('@elzatona/contexts', () => {
+  const actual = jest.requireActual('@elzatona/contexts');
   return {
     ...actual,
     useAdminAuth: jest.fn(),
@@ -22,7 +22,7 @@ jest.mock('@elzatona/shared-contexts', () => {
 
 // Mock shared hooks
 const mockRefetch = jest.fn();
-jest.mock('@elzatona/shared-hooks', () => ({
+jest.mock('@elzatona/hooks', () => ({
   useAdminStats: jest.fn(() => ({
     data: {
       questions: 100,

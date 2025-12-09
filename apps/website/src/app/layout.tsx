@@ -5,12 +5,12 @@ import { JotaiProvider } from '@/providers/JotaiProvider';
 import { QueryProvider } from '@/providers/QueryProvider';
 import { SpeedInsights } from '@vercel/speed-insights/next';
 
-import { UserTypeProvider } from '@elzatona/shared-contexts';
-import { MobileMenuProvider } from '@elzatona/shared-contexts';
-import { ThemeProvider } from '@elzatona/shared-contexts';
-import { LanguageProvider } from '@elzatona/shared-contexts';
-import { OnboardingProvider } from '@elzatona/shared-contexts';
-import { AuthProvider } from '@elzatona/shared-contexts';
+import { UserTypeProvider } from '@elzatona/contexts';
+import { MobileMenuProvider } from '@elzatona/contexts';
+import { ThemeProvider } from '@elzatona/contexts';
+import { LanguageProvider } from '@elzatona/contexts';
+import { OnboardingProvider } from '@elzatona/contexts';
+import { AuthProvider } from '@elzatona/contexts';
 import NavbarSimple from '../components/NavbarSimple';
 import { NotificationProvider } from '@/components/NotificationSystem';
 import AuthSessionSync from '@/components/AuthSessionSync';

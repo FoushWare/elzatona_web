@@ -7,9 +7,9 @@ import React from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import ProblemSolvingPage from './page';
-import * as sharedContexts from '@elzatona/shared-contexts';
+import * as sharedContexts from '@elzatona/contexts';
 
-jest.mock('@elzatona/shared-contexts', () => {
+jest.mock('@elzatona/contexts', () => {
   const actual = jest.requireActual('../../test-utils/mocks/shared-contexts');
   return {
     ...actual,
@@ -26,7 +26,7 @@ jest.mock('next/navigation', () => ({
   }),
 }));
 
-jest.mock('@elzatona/shared-hooks', () => ({
+jest.mock('@elzatona/hooks', () => ({
   useProblemSolvingTasks: jest.fn(() => ({
     data: { data: [] },
     isLoading: false,

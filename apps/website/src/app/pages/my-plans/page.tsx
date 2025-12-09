@@ -5,7 +5,7 @@ import React, { useState, useEffect } from 'react';
 
 import { useRouter } from 'next/navigation';
 
-import { SignInPopup } from '@elzatona/shared-components';
+import { SignInPopup } from '@elzatona/components';
 import {
   Play,
   Edit,

@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useRef } from 'react';
-import { FormModal, Switch, Label } from '@elzatona/shared-components';
+import { FormModal, Switch, Label } from '@elzatona/components';
 import { QuestionPracticeView } from './QuestionPracticeView';
 import { QuestionForm, type UnifiedQuestion } from '../app/admin/content/questions/components/QuestionForm';
 import { Edit, Eye } from 'lucide-react';

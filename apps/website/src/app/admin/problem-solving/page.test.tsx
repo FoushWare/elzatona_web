@@ -11,7 +11,7 @@ import ProblemSolvingAdminPage from './page';
 // Mock TanStack Query hooks
 const mockTasksData = { data: [] };
 
-jest.mock('@elzatona/shared-hooks', () => ({
+jest.mock('@elzatona/hooks', () => ({
   useProblemSolvingTasks: jest.fn(() => ({
     data: mockTasksData,
     isLoading: false,
@@ -31,7 +31,7 @@ jest.mock('@elzatona/shared-hooks', () => ({
   })),
 }));
 
-jest.mock('@elzatona/shared-components', () => ({
+jest.mock('@elzatona/components', () => ({
   ProblemSolvingEditor: ({ onSave, onCancel }: any) => (
     <div data-testid="problem-solving-editor">
       <button onClick={() => onSave({})}>Save</button>
@@ -77,7 +77,7 @@ describe('A-UT-SNAPSHOT: Admin Problem Solving Snapshot Tests', () => {
   });
 
   it('should match admin problem solving page snapshot (loading state)', () => {
-    const { useProblemSolvingTasks } = require('@elzatona/shared-hooks');
+    const { useProblemSolvingTasks } = require('@elzatona/hooks');
     useProblemSolvingTasks.mockReturnValue({
       data: null,
       isLoading: true,

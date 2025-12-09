@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { FormModal } from '@elzatona/shared-components';
+import { FormModal } from '@elzatona/components';
 import { UnifiedQuestion } from '@elzatona/shared-types';
 import { QuestionForm } from './QuestionForm';
 

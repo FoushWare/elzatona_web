@@ -15,19 +15,19 @@ import {
   CardContent,
   CardHeader,
   CardTitle,
-} from '@elzatona/shared-components';
-import { Button } from '@elzatona/shared-components';
-import { Input } from '@elzatona/shared-components';
-import { Label } from '@elzatona/shared-components';
-import { Textarea } from '@elzatona/shared-components';
-import { Badge } from '@elzatona/shared-components';
+} from '@elzatona/components';
+import { Button } from '@elzatona/components';
+import { Input } from '@elzatona/components';
+import { Label } from '@elzatona/components';
+import { Textarea } from '@elzatona/components';
+import { Badge } from '@elzatona/components';
 import {
   useCards,
   useCreateCard,
   useUpdateCard,
   useDeleteCard,
   queryKeys,
-} from '@elzatona/shared-hooks';
+} from '@elzatona/hooks';
 import {
   Plus,
   Edit,

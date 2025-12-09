@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { FormModal, QuestionContent } from '@elzatona/shared-components';
+import { FormModal, QuestionContent } from '@elzatona/components';
 import { UnifiedQuestion } from '@elzatona/shared-types';
 import { Target, Info, BookOpen, Video, FileText, GraduationCap, CheckCircle, XCircle } from 'lucide-react';
 import { createHighlighter, type Highlighter } from 'shiki';

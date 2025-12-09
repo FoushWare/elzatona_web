@@ -34,7 +34,7 @@ import {
   DialogDescription,
   DialogFooter,
   Checkbox,
-} from '@elzatona/shared-components';
+} from '@elzatona/components';
 
 // Import icons with tree shaking
 import {

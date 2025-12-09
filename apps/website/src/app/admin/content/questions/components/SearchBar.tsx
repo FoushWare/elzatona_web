@@ -1,8 +1,8 @@
 'use client';
 
 import React from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@elzatona/shared-components';
-import { Input } from '@elzatona/shared-components';
+import { Card, CardContent, CardHeader, CardTitle } from '@elzatona/components';
+import { Input } from '@elzatona/components';
 
 interface SearchBarProps {
   searchTerm: string;

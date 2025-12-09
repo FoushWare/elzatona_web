@@ -7,7 +7,7 @@ import {
   isSupabaseAvailable,
 } from '../../lib/supabase-client';
 
-import { useAuth } from '@elzatona/shared-contexts';
+import { useAuth } from '@elzatona/contexts';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { Eye, EyeOff, Mail, Lock, User, ArrowRight } from 'lucide-react';
 

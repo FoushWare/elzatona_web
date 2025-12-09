@@ -15,7 +15,7 @@ const mockCategoriesData = { data: [], count: 0 };
 const mockTopicsData = { data: [], count: 0 };
 const mockQuestionsData = { data: [], pagination: { totalCount: 0 } };
 
-jest.mock('@elzatona/shared-hooks', () => ({
+jest.mock('@elzatona/hooks', () => ({
   useCards: jest.fn(() => ({
     data: mockCardsData,
     isLoading: false,
@@ -113,7 +113,7 @@ jest.mock('@tanstack/react-query', () => ({
   }),
 }));
 
-jest.mock('@elzatona/shared-components', () => ({
+jest.mock('@elzatona/components', () => ({
   BulkOperations: () => <div data-testid="bulk-operations">Bulk Operations</div>,
   useToast: () => ({
     showSuccess: jest.fn(),
@@ -196,7 +196,7 @@ describe('A-UT-015: Content Sections', () => {
   });
 
   it('should handle loading states', () => {
-    const { useCards } = require('@elzatona/shared-hooks');
+    const { useCards } = require('@elzatona/hooks');
     useCards.mockReturnValue({
       data: null,
       isLoading: true,
@@ -218,7 +218,7 @@ describe('A-UT-SNAPSHOT: Admin Content Management Snapshot Tests', () => {
   });
 
   it('should match content management page snapshot (loading state)', () => {
-    const { useCards } = require('@elzatona/shared-hooks');
+    const { useCards } = require('@elzatona/hooks');
     useCards.mockReturnValue({
       data: null,
       isLoading: true,

@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { Card, CardContent, CardHeader, CardTitle, Button, Label, Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@elzatona/shared-components';
+import { Card, CardContent, CardHeader, CardTitle, Button, Label, Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@elzatona/components';
 import { Filter, X } from 'lucide-react';
 
 interface FiltersCardProps {

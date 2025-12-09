@@ -4,8 +4,8 @@ import React, { useState, useEffect, useCallback, useRef } from 'react';
 
 import { useRouter } from 'next/navigation';
 
-// import { SignInPopup } from '@elzatona/shared-components'; // Temporarily disabled due to import issues
-import { useAuth, useUserType } from '@elzatona/shared-contexts';
+// import { SignInPopup } from '@elzatona/components'; // Temporarily disabled due to import issues
+import { useAuth, useUserType } from '@elzatona/contexts';
 import { useLearningType } from '../../context/LearningTypeContext';
 import {
   Plus,
