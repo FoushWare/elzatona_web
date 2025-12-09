@@ -1813,20 +1813,17 @@ export default function FrontendTaskEditor({
                       const isWarning = line.includes("[WARN]");
                       const isInfo = line.includes("[INFO]");
 
+                      const getLineColor = () => {
+                        if (isError) return "text-red-400";
+                        if (isWarning) return "text-yellow-400";
+                        if (isInfo) return "text-blue-400";
+                        return isDark ? "text-gray-300" : "text-gray-700";
+                      };
+
                       return (
                         <div
-                          key={index}
-                          className={`mb-1 ${
-                            isError
-                              ? "text-red-400"
-                              : isWarning
-                                ? "text-yellow-400"
-                                : isInfo
-                                  ? "text-blue-400"
-                                  : isDark
-                                    ? "text-gray-300"
-                                    : "text-gray-700"
-                          }`}
+                          key={`console-line-${index}-${line.substring(0, 20)}`}
+                          className={`mb-1 ${getLineColor()}`}
                         >
                           {line}
                         </div>
