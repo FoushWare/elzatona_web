@@ -368,7 +368,6 @@ export default function TopicManager() {
   const handleDeleteCategory = async (categoryId: string) => {
     // Find the category to get its name for logging
     const category = categories.find((c) => c.id === categoryId);
-    const categoryName = category?.name || "Unknown";
 
     if (
       !confirm(

@@ -336,7 +336,7 @@ const decodeHtmlEntities = (text: string): string => {
     return String.fromCharCode(parseInt(hex, 16));
   });
 
-  if (typeof window !== "undefined") {
+  if (typeof globalThis.window !== "undefined") {
     try {
       const textarea = document.createElement("textarea");
       textarea.innerHTML = decoded;

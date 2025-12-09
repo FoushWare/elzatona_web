@@ -99,7 +99,7 @@ export default function CelebrationModal({
           <div className="relative mb-8">
             {/* Confetti Effect */}
             <div className="absolute inset-0 overflow-hidden pointer-events-none">
-              {[...Array(20)].map((_, i) => (
+              {[...new Array(20)].map((_, i) => (
                 <div
                   key={i}
                   className={`absolute w-2 h-2 rounded-full animate-bounce ${

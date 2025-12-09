@@ -4,11 +4,11 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { Button } from "@elzatona/components";
-import { Input } from "@elzatona/components";
-import { Label } from "@elzatona/components";
-import { Textarea } from "@elzatona/components";
 import {
+  Button,
+  Input,
+  Label,
+  Textarea,
   Select,
   SelectContent,
   SelectItem,

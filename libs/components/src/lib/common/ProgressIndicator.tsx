@@ -48,10 +48,10 @@ export const ProgressIndicator: React.FC<ProgressIndicatorProps> = ({
 
   const handleSignInClick = () => {
     if (
-      typeof window !== "undefined" &&
-      (window as WindowWithGuidance).triggerSignInGuidance
+      typeof globalThis.window !== "undefined" &&
+      (globalThis.window as WindowWithGuidance).triggerSignInGuidance
     ) {
-      (window as WindowWithGuidance).triggerSignInGuidance?.("manual", {
+      (globalThis.window as WindowWithGuidance).triggerSignInGuidance?.("manual", {
         progressCount: progress.completedQuestions,
         roadmapSections: progress.roadmapSections.length,
       });

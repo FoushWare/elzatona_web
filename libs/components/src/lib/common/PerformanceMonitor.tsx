@@ -53,7 +53,7 @@ export const PerformanceMonitor: React.FC<PerformanceMonitorProps> = ({
 
   // Measure FCP (First Contentful Paint)
   useEffect(() => {
-    if ("PerformanceObserver" in window) {
+    if ("PerformanceObserver" in globalThis.window) {
       const fcpObserver = new PerformanceObserver((list) => {
         const entries = list.getEntries();
         const fcpEntry = entries.find(
@@ -76,7 +76,7 @@ export const PerformanceMonitor: React.FC<PerformanceMonitorProps> = ({
 
   // Measure LCP (Largest Contentful Paint)
   useEffect(() => {
-    if ("PerformanceObserver" in window) {
+    if ("PerformanceObserver" in globalThis.window) {
       const lcpObserver = new PerformanceObserver((list) => {
         const entries = list.getEntries();
         const lastEntry = entries[entries.length - 1];
@@ -97,7 +97,7 @@ export const PerformanceMonitor: React.FC<PerformanceMonitorProps> = ({
 
   // Measure CLS (Cumulative Layout Shift)
   useEffect(() => {
-    if ("PerformanceObserver" in window) {
+    if ("PerformanceObserver" in globalThis.window) {
       let clsValue = 0;
       const clsObserver = new PerformanceObserver((list) => {
         for (const entry of list.getEntries()) {
@@ -125,7 +125,7 @@ export const PerformanceMonitor: React.FC<PerformanceMonitorProps> = ({
 
   // Measure FID (First Input Delay)
   useEffect(() => {
-    if ("PerformanceObserver" in window) {
+    if ("PerformanceObserver" in globalThis.window) {
       const fidObserver = new PerformanceObserver((list) => {
         const entries = list.getEntries();
         const firstEntry = entries[0];
@@ -153,7 +153,7 @@ export const PerformanceMonitor: React.FC<PerformanceMonitorProps> = ({
 
   // Measure TTFB (Time to First Byte)
   useEffect(() => {
-    if ("PerformanceObserver" in window) {
+    if ("PerformanceObserver" in globalThis.window) {
       const navigationObserver = new PerformanceObserver((list) => {
         const entries = list.getEntries();
         const navigationEntry = entries.find(

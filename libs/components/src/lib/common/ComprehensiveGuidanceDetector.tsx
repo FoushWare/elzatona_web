@@ -35,15 +35,15 @@ export const ComprehensiveGuidanceDetector: React.FC = () => {
 
     // Don't show guidance during testing
     if (
-      typeof window !== "undefined" &&
-      ((window as WindowWithTestFlags).__DISABLE_GUIDANCE_MODALS__ ||
-        (window as WindowWithTestFlags).__TEST_MODE__)
+      typeof globalThis.window !== "undefined" &&
+      ((globalThis.window as WindowWithTestFlags).__DISABLE_GUIDANCE_MODALS__ ||
+        (globalThis.window as WindowWithTestFlags).__TEST_MODE__)
     ) {
       return;
     }
 
     // Check if this is truly a first visit
-    if (typeof window !== "undefined") {
+    if (typeof globalThis.window !== "undefined") {
       const hasVisitedBefore = localStorage.getItem("hasVisitedBefore");
 
       if (!hasVisitedBefore && !userType) {

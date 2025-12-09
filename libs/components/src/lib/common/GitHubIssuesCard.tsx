@@ -25,7 +25,6 @@ import {
   ExternalLink,
   AlertCircle,
   CheckCircle,
-  Clock,
   TrendingUp,
 } from "lucide-react";
 

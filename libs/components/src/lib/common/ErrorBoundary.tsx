@@ -88,8 +88,8 @@ export class ErrorBoundary extends Component<Props, State> {
   };
 
   private handleGoHome = () => {
-    if (typeof window !== "undefined") {
-      window.location.href = "/";
+    if (typeof globalThis.window !== "undefined") {
+      globalThis.window.location.href = "/";
     }
   };
 
