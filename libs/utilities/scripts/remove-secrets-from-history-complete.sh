@@ -49,24 +49,37 @@ REPLACEMENTS_FILE=$(mktemp)
 echo "📝 Creating replacements file..."
 
 # Add common secret patterns
+# ⚠️ WARNING: This section contains placeholders for secret replacement patterns
+# ⚠️ Replace the actual secret values (left side of ==>) with the real secrets you want to remove
+# ⚠️ Format: actual_secret==>replacement_placeholder
+# 
+# Example usage:
+# 1. Identify secrets in your git history using: git log --all -p -S "secret_pattern"
+# 2. Add them to this file in the format: actual_secret==>YOUR_PLACEHOLDER_HERE
+# 3. Run git-filter-repo with this replacement file
+#
+# ⚠️ DO NOT commit actual secrets to this file!
 cat > "$REPLACEMENTS_FILE" << 'EOF'
-# Supabase Service Role Keys (replace with placeholder)
-YOUR_SUPABASE_KEY_HERE.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhwbmV3cWt2cG50aHBvaHZ4Y21xIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc2MDY2MDQxOCwiZXhwIjoyMDc2MjM2NDE4fQ.process.env.SUPABASE_SERVICE_ROLE_KEY==>YOUR_SUPABASE_SERVICE_ROLE_KEY_HERE
-YOUR_SUPABASE_KEY_HERE.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtpeWNpbWxzYXR3ZnF4dGZwcmxyIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc2MzIzNzc4NCwiZXhwIjoyMDc4ODEzNzg0fQ==>YOUR_SUPABASE_SERVICE_ROLE_KEY_HERE
-YOUR_SUPABASE_KEY_HERE.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNsZnlsdHNtY2l2bXFmbG94cG1xIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc2MzIyODc1MywiZXhwIjoyMDc4ODA0NzUzfQ==>YOUR_SUPABASE_SERVICE_ROLE_KEY_HERE
+# ⚠️ WARNING: Replace placeholders below with your actual secrets before running
+# ⚠️ This file should NOT be committed with real secrets!
 
-# Google API Keys (replace with placeholder)
-AIzaSyBXlcfcdyIqoeJOb2gXcxpRSmQO7lEP82Y==>YOUR_GOOGLE_API_KEY_HERE
+# Supabase Service Role Keys (examples - replace with your actual keys)
+# YOUR_ACTUAL_SUPABASE_KEY_1==>YOUR_SUPABASE_SERVICE_ROLE_KEY_HERE
+# YOUR_ACTUAL_SUPABASE_KEY_2==>YOUR_SUPABASE_SERVICE_ROLE_KEY_HERE
+# YOUR_ACTUAL_SUPABASE_KEY_3==>YOUR_SUPABASE_SERVICE_ROLE_KEY_HERE
 
-# GitHub Tokens (replace with placeholder)
-gho_==>YOUR_GITHUB_TOKEN_HERE
-ghp_==>YOUR_GITHUB_TOKEN_HERE
+# Google API Keys (examples - replace with your actual keys)
+# YOUR_ACTUAL_GOOGLE_KEY==>YOUR_GOOGLE_API_KEY_HERE
 
-# OpenAI Keys (replace with placeholder)
-sk-proj-==>YOUR_OPENAI_API_KEY_HERE
+# GitHub Tokens (examples - replace with your actual tokens)
+# YOUR_ACTUAL_GITHUB_TOKEN_GHO==>YOUR_GITHUB_TOKEN_HERE
+# YOUR_ACTUAL_GITHUB_TOKEN_GHP==>YOUR_GITHUB_TOKEN_HERE
 
-# Sentry Tokens (replace with placeholder)
-sntryu_==>YOUR_SENTRY_TOKEN_HERE
+# OpenAI Keys (examples - replace with your actual keys)
+# YOUR_ACTUAL_OPENAI_KEY==>YOUR_OPENAI_API_KEY_HERE
+
+# Sentry Tokens (examples - replace with your actual tokens)
+# YOUR_ACTUAL_SENTRY_TOKEN==>YOUR_SENTRY_TOKEN_HERE
 EOF
 
 echo "✅ Replacements file created: $REPLACEMENTS_FILE"

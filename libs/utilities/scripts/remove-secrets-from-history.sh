@@ -30,35 +30,51 @@ echo ""
 # List of secret patterns to remove (based on GitHub secret scanning alerts)
 # Format: "secret_value" -> "replacement"
 
+# ⚠️ WARNING: This script should NOT contain actual secrets!
+# ⚠️ Replace the placeholders below with actual secrets ONLY when running the script locally
+# ⚠️ DO NOT commit this file with real secrets!
+
 # Supabase Service Keys
-SUPABASE_KEY_1="YOUR_SUPABASE_KEY_HERE.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhwbmV3cWt2cG50aHBvaHZ4Y21xIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc2MDY2MDQxOCwiZXhwIjoyMDc2MjM2NDE4fQ.process.env.SUPABASE_SERVICE_ROLE_KEY"
-SUPABASE_KEY_2="YOUR_SUPABASE_KEY_HERE.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtpeWNpbWxzYXR3ZnF4dGZwcmxyIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc2MzIzNzc4NCwiZXhwIjoyMDc4ODEzNzg0fQ.YOUR_SERVICE_ROLE_KEY_HERE"
-SUPABASE_KEY_3="YOUR_SUPABASE_KEY_HERE.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNsZnlsdHNtY2l2bXFmbG94cG1xIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc2MzIyODc1MywiZXhwIjoyMDc4ODA0NzUzfQ.xkENH2kmw3LaFHR9Xd0a3JIhbBWIPcd0HjVPwR-AnMw"
-SUPABASE_KEY_4="YOUR_SUPABASE_KEY_HERE.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhwbmV3cWt2cG50aHBvaHZ4Y21xIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTczMjE0NzQzMCwiZXhwIjoyMDQ3NzIzNDMwfQ.8K8v8K8v8K8v8K8v8K8v8K8v8K8v8K8v8K8v8K8v8K8"
+# ⚠️ WARNING: These are placeholders. Replace with actual keys from your Supabase dashboard
+# ⚠️ These keys should be rotated immediately if they were ever committed to git history
+SUPABASE_KEY_1="YOUR_SUPABASE_SERVICE_ROLE_KEY_HERE"
+SUPABASE_KEY_2="YOUR_SUPABASE_SERVICE_ROLE_KEY_HERE"
+SUPABASE_KEY_3="YOUR_SUPABASE_SERVICE_ROLE_KEY_HERE"
+SUPABASE_KEY_4="YOUR_SUPABASE_SERVICE_ROLE_KEY_HERE"
 
 # Google API Keys
-GOOGLE_KEY_1="AIzaSyC4QzQzQzQzQzQzQzQzQzQzQzQzQzQzQzQzQzQ"
-GOOGLE_KEY_2="AIzaSyBvJ8Q9Q9Q9Q9Q9Q9Q9Q9Q9Q9Q9Q9Q9Q9Q"
-GOOGLE_KEY_3="AIzaSyBvQvQvQvQvQvQvQvQvQvQvQvQvQvQvQvQ"
-GOOGLE_KEY_4="AIzaSyBvQZQZQZQZQZQZQZQZQZQZQZQZQZQZQZQ"
-GOOGLE_KEY_5="AIzaSyBXlcfcdyIqoeJOb2gXcxpRSmQO7lEP82Y"
-GOOGLE_KEY_6="AIzaSyBvOkBw0lBp4t4j8K9vL2mN3oP5qR6sT7u"
-GOOGLE_KEY_7="AIzaSyBvOkBwJ1T3uygE1qgqQqQqQqQqQqQqQqQ"
-GOOGLE_KEY_8="AIzaSyBvOkBwJ1T3cTToj4XqHn8YqHn8YqHn8Yq"
-GOOGLE_KEY_9="AIzaSyBvOkBwJ1B5Q5Q5Q5Q5Q5Q5Q5Q5Q5Q5Q5Q"
+# ⚠️ WARNING: These are placeholders. Replace with actual keys from Google Cloud Console
+# ⚠️ These keys should be rotated immediately if they were ever committed to git history
+GOOGLE_KEY_1="YOUR_GOOGLE_API_KEY_HERE"
+GOOGLE_KEY_2="YOUR_GOOGLE_API_KEY_HERE"
+GOOGLE_KEY_3="YOUR_GOOGLE_API_KEY_HERE"
+GOOGLE_KEY_4="YOUR_GOOGLE_API_KEY_HERE"
+GOOGLE_KEY_5="YOUR_GOOGLE_API_KEY_HERE"
+GOOGLE_KEY_6="YOUR_GOOGLE_API_KEY_HERE"
+GOOGLE_KEY_7="YOUR_GOOGLE_API_KEY_HERE"
+GOOGLE_KEY_8="YOUR_GOOGLE_API_KEY_HERE"
+GOOGLE_KEY_9="YOUR_GOOGLE_API_KEY_HERE"
 
 # GitHub OAuth Token
-GITHUB_TOKEN="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"
+# ⚠️ WARNING: This is a placeholder. Replace with actual token from GitHub Settings
+# ⚠️ This token should be revoked and regenerated if it was ever committed to git history
+GITHUB_TOKEN="YOUR_GITHUB_OAUTH_TOKEN_HERE"
 
 # OpenAI API Key
-OPENAI_KEY="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"
+# ⚠️ WARNING: This is a placeholder. Replace with actual key from OpenAI dashboard
+# ⚠️ This key should be rotated immediately if it was ever committed to git history
+OPENAI_KEY="YOUR_OPENAI_API_KEY_HERE"
 
 # Sentry Token
-SENTRY_TOKEN="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"
+# ⚠️ WARNING: This is a placeholder. Replace with actual token from Sentry dashboard
+# ⚠️ This token should be rotated immediately if it was ever committed to git history
+SENTRY_TOKEN="YOUR_SENTRY_TOKEN_HERE"
 
 # Google OAuth
-GOOGLE_OAUTH_ID="655799372296-vd44sjnvf427est82dsa9nj029iis4b7.apps.googleusercontent.com"
-GOOGLE_OAUTH_SECRET="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"
+# ⚠️ WARNING: These are placeholders. Replace with actual credentials from Google Cloud Console
+# ⚠️ These credentials should be rotated immediately if they were ever committed to git history
+GOOGLE_OAUTH_ID="YOUR_GOOGLE_OAUTH_CLIENT_ID_HERE"
+GOOGLE_OAUTH_SECRET="YOUR_GOOGLE_OAUTH_CLIENT_SECRET_HERE"
 
 echo "📋 Secrets to remove:"
 echo "  - 4 Supabase Service Keys"
@@ -73,38 +89,41 @@ echo ""
 # Create replacement file
 REPLACEMENT_FILE=$(mktemp)
 cat > "$REPLACEMENT_FILE" << 'EOFREPLACE'
-# Secret replacements
-# Format: old_secret==>new_placeholder
+# ⚠️ WARNING: This section contains placeholders for secret replacement patterns
+# ⚠️ Replace the actual secret values (left side of ==>) with the real secrets you want to remove
+# ⚠️ Format: actual_secret==>replacement_placeholder
+# 
+# Example usage:
+# 1. Identify secrets in your git history using: git log --all -p -S "secret_pattern"
+# 2. Add them to this file in the format: actual_secret==>YOUR_PLACEHOLDER_HERE
+# 3. Run git-filter-repo with this replacement file
+#
+# ⚠️ DO NOT commit actual secrets to this file!
+# ⚠️ This file should only contain placeholders and examples
 
-# Supabase keys
-YOUR_SUPABASE_KEY_HERE.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhwbmV3cWt2cG50aHBvaHZ4Y21xIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc2MDY2MDQxOCwiZXhwIjoyMDc2MjM2NDE4fQ.process.env.SUPABASE_SERVICE_ROLE_KEY==>YOUR_SUPABASE_SERVICE_ROLE_KEY_HERE
-YOUR_SUPABASE_KEY_HERE.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtpeWNpbWxzYXR3ZnF4dGZwcmxyIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc2MzIzNzc4NCwiZXhwIjoyMDc4ODEzNzg0fQ.YOUR_SERVICE_ROLE_KEY_HERE==>YOUR_SUPABASE_SERVICE_ROLE_KEY_HERE
-YOUR_SUPABASE_KEY_HERE.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNsZnlsdHNtY2l2bXFmbG94cG1xIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc2MzIyODc1MywiZXhwIjoyMDc4ODA0NzUzfQ.xkENH2kmw3LaFHR9Xd0a3JIhbBWIPcd0HjVPwR-AnMw==>YOUR_SUPABASE_SERVICE_ROLE_KEY_HERE
-YOUR_SUPABASE_KEY_HERE.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhwbmV3cWt2cG50aHBvaHZ4Y21xIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTczMjE0NzQzMCwiZXhwIjoyMDQ3NzIzNDMwfQ.8K8v8K8v8K8v8K8v8K8v8K8v8K8v8K8v8K8v8K8v8K8==>YOUR_SUPABASE_SERVICE_ROLE_KEY_HERE
+# Supabase keys (examples - replace with your actual keys if needed)
+# YOUR_ACTUAL_SUPABASE_KEY_1==>YOUR_SUPABASE_SERVICE_ROLE_KEY_HERE
+# YOUR_ACTUAL_SUPABASE_KEY_2==>YOUR_SUPABASE_SERVICE_ROLE_KEY_HERE
+# YOUR_ACTUAL_SUPABASE_KEY_3==>YOUR_SUPABASE_SERVICE_ROLE_KEY_HERE
+# YOUR_ACTUAL_SUPABASE_KEY_4==>YOUR_SUPABASE_SERVICE_ROLE_KEY_HERE
 
-# Google API Keys
-AIzaSyC4QzQzQzQzQzQzQzQzQzQzQzQzQzQzQzQzQzQ==>YOUR_GOOGLE_API_KEY_HERE
-AIzaSyBvJ8Q9Q9Q9Q9Q9Q9Q9Q9Q9Q9Q9Q9Q9Q9Q==>YOUR_GOOGLE_API_KEY_HERE
-AIzaSyBvQvQvQvQvQvQvQvQvQvQvQvQvQvQvQvQ==>YOUR_GOOGLE_API_KEY_HERE
-AIzaSyBvQZQZQZQZQZQZQZQZQZQZQZQZQZQZQZQ==>YOUR_GOOGLE_API_KEY_HERE
-AIzaSyBXlcfcdyIqoeJOb2gXcxpRSmQO7lEP82Y==>YOUR_GOOGLE_API_KEY_HERE
-AIzaSyBvOkBw0lBp4t4j8K9vL2mN3oP5qR6sT7u==>YOUR_GOOGLE_API_KEY_HERE
-AIzaSyBvOkBwJ1T3uygE1qgqQqQqQqQqQqQqQqQ==>YOUR_GOOGLE_API_KEY_HERE
-AIzaSyBvOkBwJ1T3cTToj4XqHn8YqHn8YqHn8Yq==>YOUR_GOOGLE_API_KEY_HERE
-AIzaSyBvOkBwJ1B5Q5Q5Q5Q5Q5Q5Q5Q5Q5Q5Q5Q==>YOUR_GOOGLE_API_KEY_HERE
+# Google API Keys (examples - replace with your actual keys if needed)
+# YOUR_ACTUAL_GOOGLE_KEY_1==>YOUR_GOOGLE_API_KEY_HERE
+# YOUR_ACTUAL_GOOGLE_KEY_2==>YOUR_GOOGLE_API_KEY_HERE
+# ... (add more as needed)
 
-# GitHub OAuth
-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==>YOUR_GITHUB_OAUTH_TOKEN_HERE
+# GitHub OAuth (example - replace with your actual token if needed)
+# YOUR_ACTUAL_GITHUB_TOKEN==>YOUR_GITHUB_OAUTH_TOKEN_HERE
 
-# OpenAI
-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==>YOUR_OPENAI_API_KEY_HERE
+# OpenAI (example - replace with your actual key if needed)
+# YOUR_ACTUAL_OPENAI_KEY==>YOUR_OPENAI_API_KEY_HERE
 
-# Sentry
-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==>YOUR_SENTRY_TOKEN_HERE
+# Sentry (example - replace with your actual token if needed)
+# YOUR_ACTUAL_SENTRY_TOKEN==>YOUR_SENTRY_TOKEN_HERE
 
-# Google OAuth
-655799372296-vd44sjnvf427est82dsa9nj029iis4b7.apps.googleusercontent.com==>YOUR_GOOGLE_OAUTH_CLIENT_ID_HERE
-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==>YOUR_GOOGLE_OAUTH_CLIENT_SECRET_HERE
+# Google OAuth (examples - replace with your actual credentials if needed)
+# YOUR_ACTUAL_GOOGLE_OAUTH_ID==>YOUR_GOOGLE_OAUTH_CLIENT_ID_HERE
+# YOUR_ACTUAL_GOOGLE_OAUTH_SECRET==>YOUR_GOOGLE_OAUTH_CLIENT_SECRET_HERE
 EOFREPLACE
 
 echo "✅ Replacement file created: $REPLACEMENT_FILE"

@@ -17,14 +17,32 @@ const { createClient } = require("@supabase/supabase-js");
 const bcrypt = require("bcryptjs");
 require("dotenv").config({ path: ".env.local" });
 
-// Production Supabase credentials (from user's previous messages)
-const PRODUCTION_SUPABASE_URL = "https://hpnewqkvpnthpohvxcmq.supabase.co";
-const PRODUCTION_SERVICE_ROLE_KEY =
-  "YOUR_SUPABASE_KEY_HERE.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhwbmV3cWt2cG50aHBvaHZ4Y21xIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc2MDY2MDQxOCwiZXhwIjoyMDc2MjM2NDE4fQ.process.env.SUPABASE_SERVICE_ROLE_KEY";
+// Production Supabase credentials
+// ⚠️ WARNING: Never hardcode API keys. Always use environment variables.
+// ⚠️ This script should read from environment variables or prompt the user
+const PRODUCTION_SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL || process.env.SUPABASE_URL;
+const PRODUCTION_SERVICE_ROLE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
-// Admin credentials (from user's previous messages)
-const ADMIN_EMAIL = "afouadsoftwareengineer@gmail.com";
-const ADMIN_PASSWORD = "ZatonaFoushware$12";
+if (!PRODUCTION_SUPABASE_URL || !PRODUCTION_SERVICE_ROLE_KEY) {
+  console.error("❌ Error: Missing required environment variables:");
+  console.error("   - NEXT_PUBLIC_SUPABASE_URL or SUPABASE_URL");
+  console.error("   - SUPABASE_SERVICE_ROLE_KEY");
+  console.error("\n💡 Please set these in your .env.local file");
+  process.exit(1);
+}
+
+// Admin credentials
+// ⚠️ WARNING: Never hardcode passwords. Always use environment variables or prompt the user.
+const ADMIN_EMAIL = process.env.ADMIN_EMAIL;
+const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD;
+
+if (!ADMIN_EMAIL || !ADMIN_PASSWORD) {
+  console.error("❌ Error: Missing required environment variables:");
+  console.error("   - ADMIN_EMAIL");
+  console.error("   - ADMIN_PASSWORD");
+  console.error("\n💡 Please set these in your .env.local file");
+  process.exit(1);
+}
 
 const envLocalPath = path.join(process.cwd(), ".env.local");
 

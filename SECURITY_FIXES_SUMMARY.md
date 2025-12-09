@@ -9,7 +9,7 @@
 ### ✅ Fixed Files
 
 1. **`docs/SECRET_ROTATION_GUIDE.md`**
-   - **Issue:** Hardcoded Sentry token `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`
+   - **Issue:** Hardcoded Sentry token (⚠️ Rotated - token was exposed in git history)
    - **Fix:** Replaced with placeholder `YOUR_SENTRY_TOKEN_HERE` with warning about rotation
    - **Status:** ✅ Fixed and committed
 
@@ -69,7 +69,7 @@ The following files contain secrets but are properly gitignored:
 ### Immediate Actions
 
 1. **Rotate Exposed Secrets** (if still active):
-   - [ ] Sentry Token: `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`
+   - [ ] Sentry Token: `YOUR_SENTRY_TOKEN_HERE` (⚠️ Rotate immediately - token was exposed in git history)
    - [ ] SonarCloud Token: `d9b64b95424980fdae326ab8d909f45c9cad4a9f`
    - See `docs/SECRET_ROTATION_GUIDE.md` for detailed instructions
 
