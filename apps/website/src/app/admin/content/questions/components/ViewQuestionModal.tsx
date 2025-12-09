@@ -584,8 +584,8 @@ export function ViewQuestionModal({
 
               // Detect theme
               const prefersDark =
-                typeof window !== "undefined" &&
-                window.matchMedia("(prefers-color-scheme: dark)").matches;
+                typeof globalThis.window !== "undefined" &&
+                globalThis.window.matchMedia("(prefers-color-scheme: dark)").matches;
               const codeTheme = prefersDark ? "dark" : "light";
 
               return (
