@@ -22,9 +22,17 @@
     "baseUrl": ".",
     "paths": {
       "@/*": ["./src/*"],
-      "@elzatona/components": ["../../libs/components/src/index.ts"],
-      "@elzatona/contexts": ["../../libs/contexts/src/index.ts"],
-      "@elzatona/hooks": ["../../libs/hooks/src/index.ts"],
+      "@elzatona/components": ["../../libs/shared-components/src/index.ts"],
+      "@elzatona/contexts": ["../../libs/shared-contexts/src/index.ts"],
+      "@elzatona/hooks": ["../../libs/shared-hooks/src/index.ts"],
+      "@elzatona/types": ["../../libs/shared-types/src/index.ts"],
+      "@elzatona/shared-components": ["../../libs/shared-components/src"],
+      "@elzatona/shared-contexts": [
+        "../../libs/shared-contexts/src/lib/shared-contexts"
+      ],
+      "@elzatona/shared-hooks": [
+        "../../libs/shared-hooks/src/lib/shared-hooks"
+      ],
       "@elzatona/shared-atoms": [
         "../../libs/shared-atoms/src/lib/shared-atoms"
       ],
