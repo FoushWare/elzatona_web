@@ -6,7 +6,7 @@
   "devCommand": "npx nx serve website",
   "functions": {
     "apps/website/src/app/api/**/*.ts": {
-      "runtime": "nodejs24.x"
+      "runtime": "nodejs20.x"
     }
   },
   "rewrites": [
