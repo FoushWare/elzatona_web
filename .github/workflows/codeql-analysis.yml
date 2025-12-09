@@ -50,7 +50,8 @@ jobs:
           # Note: cache disabled because project uses bun.lock, not package-lock.json
 
       - name: Install dependencies
-        run: npm ci
+        run: npm install
+        # Note: Using npm install instead of npm install because project uses bun.lock, not package-lock.json
 
       - name: Perform CodeQL Analysis
         uses: github/codeql-action/analyze@v3
