@@ -51,7 +51,7 @@ jobs:
 
       - name: Install dependencies
         run: npm install
-        # Note: Using npm install instead of npm install because project uses bun.lock, not package-lock.json
+        # Note: Using npm install instead of npm ci because project uses bun.lock, not package-lock.json
 
       - name: Perform CodeQL Analysis
         uses: github/codeql-action/analyze@v3
