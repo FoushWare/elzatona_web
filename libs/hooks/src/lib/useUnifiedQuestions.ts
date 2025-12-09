@@ -201,7 +201,8 @@ export function useUnifiedQuestions(
           });
         }
 
-        const url = `/api/questions/unified${queryParams.toString() ? `?${queryParams.toString()}` : ""}`;
+        const queryString = queryParams.toString();
+        const url = `/api/questions/unified${queryString ? `?${queryString}` : ""}`;
         console.log("🔄 useUnifiedQuestions: Making API call to:", url);
         const response = await apiCall(url);
         console.log("🔄 useUnifiedQuestions: API response received:", response);

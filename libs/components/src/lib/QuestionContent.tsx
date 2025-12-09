@@ -1050,7 +1050,7 @@ export const QuestionContent = ({ content }: { content: string }) => {
 
           return (
             <p
-              key={index}
+              key={`text-part-${index}-${part.content?.substring(0, 30) || ""}`}
               className="text-sm sm:text-base lg:text-lg text-gray-700 dark:text-gray-300 leading-relaxed whitespace-pre-wrap mb-4 sm:mb-5"
               style={{
                 lineHeight: "1.75",

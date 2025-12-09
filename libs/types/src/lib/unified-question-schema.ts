@@ -210,7 +210,6 @@ export interface QuestionValidationResult {
 export type QuestionType = UnifiedQuestion["type"];
 export type QuestionDifficulty = UnifiedQuestion["difficulty"];
 export type QuestionCategory = string;
-export type QuestionSubcategory = string;
 
 // Constants
 export const QUESTION_TYPES: QuestionType[] = [
