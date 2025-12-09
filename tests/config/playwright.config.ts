@@ -57,7 +57,7 @@ if (loadedFiles.length > 0 && process.env.DEBUG_TEST_ENV === "true") {
  * @see https://playwright.dev/docs/test-configuration
  */
 export default defineConfig({
-  testDir: "./tests/e2e",
+  testDir: "../e2e",
   /* Run tests in files in parallel - DISABLED for 8GB RAM */
   fullyParallel: false, // Disabled for 8GB RAM Mac
   /* Fail the build on CI if you accidentally left test.only in the source code. */
@@ -137,8 +137,8 @@ export default defineConfig({
   },
 
   /* Global setup and teardown */
-  globalSetup: require.resolve("./tests/e2e/global-setup.ts"),
-  globalTeardown: require.resolve("./tests/e2e/global-teardown.ts"),
+  globalSetup: require.resolve("../e2e/global-setup.ts"),
+  globalTeardown: require.resolve("../e2e/global-teardown.ts"),
 
   /* Test timeout - increased for E2E tests that may need more time */
   timeout: 60 * 1000, // 60 seconds
