@@ -382,13 +382,12 @@ export default function Navbar() {
               }
               return true;
             }).length >
-              (screenSize === "desktop"
-                ? 4
-                : screenSize === "laptop"
-                  ? 3
-                  : screenSize === "tablet"
-                    ? 2
-                    : 1) ||
+              (() => {
+                if (screenSize === "desktop") return 4;
+                if (screenSize === "laptop") return 3;
+                if (screenSize === "tablet") return 2;
+                return 1;
+              })() ||
               screenSize !== "desktop" ||
               (!isAuthenticated && !isLoading)) && (
               <div className="relative">

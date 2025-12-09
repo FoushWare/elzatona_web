@@ -492,13 +492,16 @@ export default function ProblemSolvingEditor({
               <button
                 onClick={() => setTheme("light")}
                 className={`p-2 rounded-lg transition-colors duration-200 ${
-                  theme === "light"
-                    ? isDark
-                      ? "bg-blue-600 text-white"
-                      : "bg-blue-100 text-blue-800"
-                    : isDark
+                  (() => {
+                    if (theme === "light") {
+                      return isDark
+                        ? "bg-blue-600 text-white"
+                        : "bg-blue-100 text-blue-800";
+                    }
+                    return isDark
                       ? "bg-gray-700 text-gray-300"
-                      : "bg-gray-100 text-gray-600"
+                      : "bg-gray-100 text-gray-600";
+                  })()
                 }`}
                 title="Light theme"
               >
@@ -522,13 +525,16 @@ export default function ProblemSolvingEditor({
               <button
                 onClick={() => setTheme("system")}
                 className={`p-2 rounded-lg transition-colors duration-200 ${
-                  theme === "system"
-                    ? isDark
-                      ? "bg-blue-600 text-white"
-                      : "bg-blue-100 text-blue-800"
-                    : isDark
+                  (() => {
+                    if (theme === "system") {
+                      return isDark
+                        ? "bg-blue-600 text-white"
+                        : "bg-blue-100 text-blue-800";
+                    }
+                    return isDark
                       ? "bg-gray-700 text-gray-300"
-                      : "bg-gray-100 text-gray-600"
+                      : "bg-gray-100 text-gray-600";
+                  })()
                 }`}
                 title="System theme"
               >
