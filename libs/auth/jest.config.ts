@@ -2,7 +2,7 @@ import type { Config } from "jest";
 
 const config: Config = {
   displayName: "auth",
-  preset: "../../jest.preset.js",
+  preset: "../../tests/config/jest.preset.js",
   // Performance optimizations for 8GB RAM Mac M2
   maxWorkers: process.env.JEST_MAX_WORKERS
     ? parseInt(process.env.JEST_MAX_WORKERS)
