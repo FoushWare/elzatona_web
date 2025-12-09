@@ -18,9 +18,14 @@ import {
   Settings,
   Play,
 } from "lucide-react";
-import { Card, CardContent, CardHeader, CardTitle } from "@elzatona/components";
-import { Badge } from "@elzatona/components";
-import { Button } from "@elzatona/components";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+  Badge,
+  Button,
+} from "@elzatona/components";
 import { Progress } from "@elzatona/components";
 
 interface UserActivity {

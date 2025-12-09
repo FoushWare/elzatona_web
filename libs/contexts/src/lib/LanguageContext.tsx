@@ -77,11 +77,14 @@ export const LanguageProvider: React.FC<LanguageProviderProps> = ({
 
   const isRTL = language === "ar";
 
-  const value = {
-    language,
-    setLanguage,
-    isRTL,
-  };
+  const value = React.useMemo(
+    () => ({
+      language,
+      setLanguage,
+      isRTL,
+    }),
+    [language, setLanguage, isRTL]
+  );
 
   return (
     <LanguageContext.Provider value={value}>

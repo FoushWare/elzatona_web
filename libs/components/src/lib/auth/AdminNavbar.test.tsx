@@ -325,7 +325,7 @@ describe("A-UT-014: AdminNavbar Mobile Menu", () => {
     // Menu should be closed
     await waitFor(() => {
       // After closing, the mobile menu close button should not be in the mobile menu
-      const remainingCloseButtons = screen.queryAllByLabelText("Close menu");
+      screen.queryAllByLabelText("Close menu");
       // There might still be a close button in the navbar, but the mobile menu should be closed
       expect(
         screen.queryByText("Sign out of your account"),
