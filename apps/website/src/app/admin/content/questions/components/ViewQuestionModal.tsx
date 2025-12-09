@@ -15,6 +15,95 @@ import {
 } from "lucide-react";
 import { createHighlighter, type Highlighter } from "shiki";
 
+// Helper function to detect programming language from code (reduces cognitive complexity)
+const detectLanguage = (code: string): string => {
+  const codeText = code.toLowerCase();
+  if (
+    codeText.includes("def ") ||
+    (codeText.includes("import ") && codeText.includes("print"))
+  ) {
+    return "python";
+  }
+  if (
+    codeText.includes("public class") ||
+    codeText.includes("public static")
+  ) {
+    return "java";
+  }
+  if (
+    codeText.includes("interface ") ||
+    codeText.includes("type ") ||
+    codeText.includes(": string")
+  ) {
+    return "typescript";
+  }
+  return "javascript";
+};
+
+// Helper function to process color for light mode visibility (reduces cognitive complexity)
+const processColorForLightMode = (
+  colorValue: string,
+): { shouldReplace: boolean; newColor: string } => {
+  let shouldReplace = false;
+  let newColor = colorValue;
+
+  if (colorValue.startsWith("#")) {
+    const hex = colorValue.substring(1);
+    const r = Number.parseInt(hex.substr(0, 2), 16);
+    const g = Number.parseInt(hex.substr(2, 2), 16);
+    const b = Number.parseInt(hex.substr(4, 2), 16);
+    const brightness = (r * 299 + g * 587 + b * 114) / 1000;
+
+    if (brightness > 180) {
+      const factor = brightness > 220 ? 0.3 : 0.5;
+      const newR = Math.max(
+        0,
+        Math.min(255, Math.round(r * factor)),
+      );
+      const newG = Math.max(
+        0,
+        Math.min(255, Math.round(g * factor)),
+      );
+      const newB = Math.max(
+        0,
+        Math.min(255, Math.round(b * factor)),
+      );
+      newColor = `#${newR.toString(16).padStart(2, "0")}${newG.toString(16).padStart(2, "0")}${newB.toString(16).padStart(2, "0")}`;
+      shouldReplace = true;
+    }
+  } else if (colorValue.startsWith("rgb")) {
+    const rgbMatch = colorValue.match(
+      /rgb\((\d+),\s*(\d+),\s*(\d+)\)/,
+    );
+    if (rgbMatch) {
+      const r = Number.parseInt(rgbMatch[1], 10);
+      const g = Number.parseInt(rgbMatch[2], 10);
+      const b = Number.parseInt(rgbMatch[3], 10);
+      const brightness = (r * 299 + g * 587 + b * 114) / 1000;
+
+      if (brightness > 180) {
+        const factor = brightness > 220 ? 0.3 : 0.5;
+        const newR = Math.max(
+          0,
+          Math.min(255, Math.round(r * factor)),
+        );
+        const newG = Math.max(
+          0,
+          Math.min(255, Math.round(g * factor)),
+        );
+        const newB = Math.max(
+          0,
+          Math.min(255, Math.round(b * factor)),
+        );
+        newColor = `rgb(${newR}, ${newG}, ${newB})`;
+        shouldReplace = true;
+      }
+    }
+  }
+
+  return { shouldReplace, newColor };
+};
+
 // Helper function to format code with proper line breaks and indentation
 const formatCodeForDisplay = (code: string): string => {
   if (!code) return "";
@@ -272,11 +361,11 @@ export function ViewQuestionModal({
         rawCodePreview: rawCode.substring(0, 100),
       });
       let codeWithNewlines = rawCode
-        .replace(/\\n/g, "\n")
-        .replace(/\\r\\n/g, "\n")
-        .replace(/\\r/g, "\n")
-        .replace(/\r\n/g, "\n")
-        .replace(/\r/g, "\n")
+        .replaceAll("\\n", "\n")
+        .replaceAll("\\r\\n", "\n")
+        .replaceAll("\\r", "\n")
+        .replaceAll("\r\n", "\n")
+        .replaceAll("\r", "\n")
         .trim();
 
       // Remove empty lines at the start
@@ -303,30 +392,12 @@ export function ViewQuestionModal({
       }
 
       // Detect language
-      let lang = "javascript";
-      const codeText = codeWithNewlines.toLowerCase();
-      if (
-        codeText.includes("def ") ||
-        (codeText.includes("import ") && codeText.includes("print"))
-      ) {
-        lang = "python";
-      } else if (
-        codeText.includes("public class") ||
-        codeText.includes("public static")
-      ) {
-        lang = "java";
-      } else if (
-        codeText.includes("interface ") ||
-        codeText.includes("type ") ||
-        codeText.includes(": string")
-      ) {
-        lang = "typescript";
-      }
+      const lang = detectLanguage(codeWithNewlines);
 
       // Detect theme based on system preference
       const prefersDark =
-        typeof window !== "undefined" &&
-        window.matchMedia("(prefers-color-scheme: dark)").matches;
+        typeof globalThis.window !== "undefined" &&
+        globalThis.window.matchMedia("(prefers-color-scheme: dark)").matches;
       const themeName = prefersDark ? "github-dark" : "github-light";
 
       let html = shikiHighlighter.codeToHtml(codeWithNewlines, {
@@ -336,8 +407,8 @@ export function ViewQuestionModal({
       });
 
       // Post-process HTML for light mode color adjustments
-      if (typeof window !== "undefined") {
-        const prefersDark = window.matchMedia(
+      if (typeof globalThis.window !== "undefined") {
+        const prefersDark = globalThis.window.matchMedia(
           "(prefers-color-scheme: dark)",
         ).matches;
         if (!prefersDark) {
@@ -368,62 +439,8 @@ export function ViewQuestionModal({
 
                   if (colorMatch) {
                     const colorValue = colorMatch[1];
-                    let shouldReplace = false;
-                    let newColor = colorValue;
-
-                    if (colorValue.startsWith("#")) {
-                      const hex = colorValue.substring(1);
-                      const r = parseInt(hex.substr(0, 2), 16);
-                      const g = parseInt(hex.substr(2, 2), 16);
-                      const b = parseInt(hex.substr(4, 2), 16);
-                      const brightness = (r * 299 + g * 587 + b * 114) / 1000;
-
-                      if (brightness > 180) {
-                        const factor = brightness > 220 ? 0.3 : 0.5;
-                        const newR = Math.max(
-                          0,
-                          Math.min(255, Math.round(r * factor)),
-                        );
-                        const newG = Math.max(
-                          0,
-                          Math.min(255, Math.round(g * factor)),
-                        );
-                        const newB = Math.max(
-                          0,
-                          Math.min(255, Math.round(b * factor)),
-                        );
-                        newColor = `#${newR.toString(16).padStart(2, "0")}${newG.toString(16).padStart(2, "0")}${newB.toString(16).padStart(2, "0")}`;
-                        shouldReplace = true;
-                      }
-                    } else if (colorValue.startsWith("rgb")) {
-                      const rgbMatch = colorValue.match(
-                        /rgb\((\d+),\s*(\d+),\s*(\d+)\)/,
-                      );
-                      if (rgbMatch) {
-                        const r = parseInt(rgbMatch[1]);
-                        const g = parseInt(rgbMatch[2]);
-                        const b = parseInt(rgbMatch[3]);
-                        const brightness = (r * 299 + g * 587 + b * 114) / 1000;
-
-                        if (brightness > 180) {
-                          const factor = brightness > 220 ? 0.3 : 0.5;
-                          const newR = Math.max(
-                            0,
-                            Math.min(255, Math.round(r * factor)),
-                          );
-                          const newG = Math.max(
-                            0,
-                            Math.min(255, Math.round(g * factor)),
-                          );
-                          const newB = Math.max(
-                            0,
-                            Math.min(255, Math.round(b * factor)),
-                          );
-                          newColor = `rgb(${newR}, ${newG}, ${newB})`;
-                          shouldReplace = true;
-                        }
-                      }
-                    }
+                    const { shouldReplace, newColor } =
+                      processColorForLightMode(colorValue);
 
                     if (shouldReplace) {
                       const newStyle = style.replace(
@@ -490,7 +507,7 @@ export function ViewQuestionModal({
 
   const cleanQuestionTitle = (title: string) => {
     if (!title) return "";
-    return title.replace(/"/g, "").replace(/'/g, "").trim();
+    return title.replaceAll('"', "").replaceAll("'", "").trim();
   };
 
   const handleAnswerSelect = (optionText: string) => {
@@ -548,11 +565,11 @@ export function ViewQuestionModal({
               if (!codeStr) return null;
               const rawCode = codeStr;
               let codeWithNewlines = rawCode
-                .replace(/\\n/g, "\n")
-                .replace(/\\r\\n/g, "\n")
-                .replace(/\\r/g, "\n")
-                .replace(/\r\n/g, "\n")
-                .replace(/\r/g, "\n")
+                .replaceAll("\\n", "\n")
+                .replaceAll("\\r\\n", "\n")
+                .replaceAll("\\r", "\n")
+                .replaceAll("\r\n", "\n")
+                .replaceAll("\r", "\n")
                 .trim();
 
               // Remove empty lines
@@ -563,25 +580,7 @@ export function ViewQuestionModal({
               codeWithNewlines = nonEmptyLines.join("\n");
 
               // Detect language
-              let detectedLanguage = "javascript";
-              const codeText = codeWithNewlines.toLowerCase();
-              if (
-                codeText.includes("def ") ||
-                (codeText.includes("import ") && codeText.includes("print"))
-              ) {
-                detectedLanguage = "python";
-              } else if (
-                codeText.includes("public class") ||
-                codeText.includes("public static")
-              ) {
-                detectedLanguage = "java";
-              } else if (
-                codeText.includes("interface ") ||
-                codeText.includes("type ") ||
-                codeText.includes(": string")
-              ) {
-                detectedLanguage = "typescript";
-              }
+              const detectedLanguage = detectLanguage(codeWithNewlines);
 
               // Detect theme
               const prefersDark =

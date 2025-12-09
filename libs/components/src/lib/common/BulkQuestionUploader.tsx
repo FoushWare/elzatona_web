@@ -105,14 +105,14 @@ export default function BulkQuestionUploader({
     index: number,
     field: keyof UnifiedQuestion,
     value:
-      | string
       | "multiple-choice"
       | "open-ended"
       | "true-false"
       | "code"
       | "beginner"
       | "intermediate"
-      | "advanced",
+      | "advanced"
+      | string, // string must come last to avoid overriding literal types
   ) => {
     const newQuestions = [...questions];
     newQuestions[index] = { ...newQuestions[index], [field]: value };
