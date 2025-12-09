@@ -349,6 +349,64 @@ const decodeHtmlEntities = (text: string): string => {
   return decoded;
 };
 
+// Helper function to clean text content (reduces cognitive complexity)
+const cleanTextContent = (text: string): string => {
+  let cleanText = decodeHtmlEntities(text);
+  cleanText = cleanText.replace(
+    /<code[^>]*>([^<]{1,30})<\/code>/gi,
+    "`$1`",
+  );
+  cleanText = cleanText.replace(/<[^>]+>/g, "");
+  for (let i = 0; i < 3; i++) {
+    cleanText = cleanText
+      .replace(/<pr<cod?/gi, "")
+      .replace(/<pr</gi, "")
+      .replace(/<pr/gi, "")
+      .replace(/<\/cod?<\/pr/gi, "")
+      .replace(/<\/cod?/gi, "")
+      .replace(/<\/pr/gi, "")
+      .replace(/<\/cod/gi, "")
+      .replace(/e>e>e>/g, "")
+      .replace(/e>e>/g, "")
+      .replace(/^e>+/g, "")
+      .replace(/e>+$/g, "")
+      .replace(/(\w+)e>/g, "$1")
+      .replace(/e>(\w+)/g, "$1")
+      .replace(/\s*e>\s*/g, " ")
+      .replace(/^>\s*/g, "")
+      .replace(/\s*>$/g, "")
+      .replace(/\s+>\s+/g, " ");
+  }
+  cleanText = cleanText
+    .replace(/[ \t]+/g, " ")
+    .replace(/\n\s*\n/g, "\n\n")
+    .trim();
+  return cleanText;
+};
+
+// Helper function to clean code content (reduces cognitive complexity)
+const cleanCodeContent = (code: string): string => {
+  let cleanCode = code;
+  for (let i = 0; i < 2; i++) {
+    cleanCode = cleanCode
+      .replace(/e>e>e>/g, "")
+      .replace(/e>e>/g, "")
+      .replace(/^e>+/g, "")
+      .replace(/e>+$/g, "")
+      .replace(/(\w+)e>/g, "$1")
+      .replace(/e>(\w+)/g, "$1")
+      .replace(/\s*e>\s*/g, " ")
+      .replace(/<\/cod<\/pr/gi, "")
+      .replace(/<\/code<\/pr/gi, "")
+      .replace(/<\/pr/gi, "")
+      .replace(/<\/cod/gi, "")
+      .replace(/^>\s*/g, "")
+      .replace(/\s*>$/g, "")
+      .replace(/\s+>\s+/g, " ");
+  }
+  return cleanCode;
+};
+
 // Component to render question content with code blocks
 export const QuestionContent = ({ content }: { content: string }) => {
   if (!content) return null;
@@ -706,36 +764,7 @@ export const QuestionContent = ({ content }: { content: string }) => {
     if (match.index > lastIndex) {
       const textContent = fixedContent.substring(lastIndex, match.index);
       if (textContent.trim()) {
-        let cleanText = decodeHtmlEntities(textContent);
-        cleanText = cleanText.replace(
-          /<code[^>]*>([^<]{1,30})<\/code>/gi,
-          "`$1`",
-        );
-        cleanText = cleanText.replace(/<[^>]+>/g, "");
-        for (let i = 0; i < 3; i++) {
-          cleanText = cleanText
-            .replace(/<pr<cod?/gi, "")
-            .replace(/<pr</gi, "")
-            .replace(/<pr/gi, "")
-            .replace(/<\/cod?<\/pr/gi, "")
-            .replace(/<\/cod?/gi, "")
-            .replace(/<\/pr/gi, "")
-            .replace(/<\/cod/gi, "")
-            .replace(/e>e>e>/g, "")
-            .replace(/e>e>/g, "")
-            .replace(/^e>+/g, "")
-            .replace(/e>+$/g, "")
-            .replace(/(\w+)e>/g, "$1")
-            .replace(/e>(\w+)/g, "$1")
-            .replace(/\s*e>\s*/g, " ")
-            .replace(/^>\s*/g, "")
-            .replace(/\s*>$/g, "")
-            .replace(/\s+>\s+/g, " ");
-        }
-        cleanText = cleanText
-          .replace(/[ \t]+/g, " ")
-          .replace(/\n\s*\n/g, "\n\n")
-          .trim();
+        const cleanText = cleanTextContent(textContent);
         if (cleanText) {
           parts.push({ type: "text", content: cleanText });
         }
@@ -743,24 +772,7 @@ export const QuestionContent = ({ content }: { content: string }) => {
     }
 
     if (match.content) {
-      let cleanCode = match.content;
-      for (let i = 0; i < 2; i++) {
-        cleanCode = cleanCode
-          .replace(/e>e>e>/g, "")
-          .replace(/e>e>/g, "")
-          .replace(/^e>+/g, "")
-          .replace(/e>+$/g, "")
-          .replace(/(\w+)e>/g, "$1")
-          .replace(/e>(\w+)/g, "$1")
-          .replace(/\s*e>\s*/g, " ")
-          .replace(/<\/cod<\/pr/gi, "")
-          .replace(/<\/code<\/pr/gi, "")
-          .replace(/<\/pr/gi, "")
-          .replace(/<\/cod/gi, "")
-          .replace(/^>\s*/g, "")
-          .replace(/\s*>$/g, "")
-          .replace(/\s+>\s+/g, " ");
-      }
+      const cleanCode = cleanCodeContent(match.content);
       const formattedCode = formatCodeContent(cleanCode);
       parts.push({
         type: "code",
@@ -775,36 +787,7 @@ export const QuestionContent = ({ content }: { content: string }) => {
   if (lastIndex < fixedContent.length) {
     const textContent = fixedContent.substring(lastIndex);
     if (textContent.trim()) {
-      let cleanText = decodeHtmlEntities(textContent);
-      cleanText = cleanText.replace(
-        /<code[^>]*>([^<]{1,30})<\/code>/gi,
-        "`$1`",
-      );
-      cleanText = cleanText.replace(/<[^>]+>/g, "");
-      for (let i = 0; i < 3; i++) {
-        cleanText = cleanText
-          .replace(/<pr<cod?/gi, "")
-          .replace(/<pr</gi, "")
-          .replace(/<pr/gi, "")
-          .replace(/<\/cod?<\/pr/gi, "")
-          .replace(/<\/cod?/gi, "")
-          .replace(/<\/pr/gi, "")
-          .replace(/<\/cod/gi, "")
-          .replace(/e>e>e>/g, "")
-          .replace(/e>e>/g, "")
-          .replace(/^e>+/g, "")
-          .replace(/e>+$/g, "")
-          .replace(/(\w+)e>/g, "$1")
-          .replace(/e>(\w+)/g, "$1")
-          .replace(/\s*e>\s*/g, " ")
-          .replace(/^>\s*/g, "")
-          .replace(/\s*>$/g, "")
-          .replace(/\s+>\s+/g, " ");
-      }
-      cleanText = cleanText
-        .replace(/[ \t]+/g, " ")
-        .replace(/\n\s*\n/g, "\n\n")
-        .trim();
+      const cleanText = cleanTextContent(textContent);
       if (cleanText) {
         parts.push({ type: "text", content: cleanText });
       }
@@ -836,10 +819,10 @@ export const QuestionContent = ({ content }: { content: string }) => {
     }
 
     cleanContent = cleanContent
-      .replace(/&nbsp;/g, " ")
-      .replace(/&lt;/g, "<")
-      .replace(/&gt;/g, ">")
-      .replace(/&amp;/g, "&")
+      .replaceAll("&nbsp;", " ")
+      .replaceAll("&lt;", "<")
+      .replaceAll("&gt;", ">")
+      .replaceAll("&amp;", "&")
       .trim();
 
     const codeValidation = isValidCode(cleanContent);
