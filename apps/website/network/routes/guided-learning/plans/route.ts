@@ -2,9 +2,14 @@ import { NextRequest, NextResponse } from 'next/server';
 
 import { createClient } from '@supabase/supabase-js';
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://kiycimlsatwfqxtfprlr.supabase.co';
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
 // For service role operations, use anon key as fallback if service role key is not available
-const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtpeWNpbWxzYXR3ZnF4dGZwcmxyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjMyMzc3ODQsImV4cCI6MjA3ODgxMzc4NH0.bDQhRHzNH09BE8w9qdRXjtl7bGdGO3JslrmkffhqXAc';
+// ⚠️ WARNING: Never hardcode API keys. Always use environment variables.
+const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+
+if (!supabaseUrl || !supabaseKey) {
+  throw new Error('Missing required Supabase environment variables: NEXT_PUBLIC_SUPABASE_URL and (SUPABASE_SERVICE_ROLE_KEY or NEXT_PUBLIC_SUPABASE_ANON_KEY) must be set');
+}
 const supabase = createClient(supabaseUrl, supabaseKey);
 
 import { AutoLinkingService } from '@/lib/auto-linking-service';
