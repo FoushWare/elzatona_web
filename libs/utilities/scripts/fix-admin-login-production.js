@@ -262,7 +262,13 @@ async function fixAdminLogin() {
     console.log("   1. Restart your dev server: npm run dev");
     console.log("   2. Try logging in at: http://localhost:3000/admin/login");
     console.log(`   Email: ${ADMIN_EMAIL}`);
-    console.log(`   Password: ${ADMIN_PASSWORD}\n`);
+    // ⚠️ SECURITY: Never log passwords in production
+    // Only show password in development/test environments
+    if (process.env.NODE_ENV !== 'production' && (process.env.APP_ENV === 'test' || process.env.APP_ENV === 'development')) {
+      console.log(`   Password: ${ADMIN_PASSWORD}\n`);
+    } else {
+      console.log(`   Password: [REDACTED - Check .env.local]\n`);
+    }
   } catch (error) {
     console.error("❌ Error:", error.message);
     console.error(error.stack);
