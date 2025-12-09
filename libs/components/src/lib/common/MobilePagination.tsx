@@ -301,11 +301,15 @@ export default function MobilePagination({
                                   }
                                   disabled={isNavigating}
                                   className={`w-10 h-10 rounded-lg text-sm font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed ${
-                                    isCurrentQuestion
-                                      ? "bg-blue-600 text-white"
-                                      : isAnswered
-                                        ? "bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 border border-green-300 dark:border-green-700"
-                                        : "bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600"
+                                    (() => {
+                                      if (isCurrentQuestion) {
+                                        return "bg-blue-600 text-white";
+                                      }
+                                      if (isAnswered) {
+                                        return "bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 border border-green-300 dark:border-green-700";
+                                      }
+                                      return "bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600";
+                                    })()
                                   }`}
                                 >
                                   {questionIndex + 1}

@@ -223,13 +223,16 @@ export const NavbarSimple: React.FC = () => {
               <Link
                 href="/my-plans"
                 className={`font-medium transition-colors duration-200 ${
-                  isActiveLink("/my-plans")
-                    ? isScrolled
-                      ? "text-indigo-600 dark:text-indigo-400 font-semibold border-b-2 border-indigo-600 dark:border-indigo-400 pb-1"
-                      : "text-indigo-100 font-semibold border-b-2 border-indigo-100 pb-1"
-                    : isScrolled
+                  (() => {
+                    if (isActiveLink("/my-plans")) {
+                      return isScrolled
+                        ? "text-indigo-600 dark:text-indigo-400 font-semibold border-b-2 border-indigo-600 dark:border-indigo-400 pb-1"
+                        : "text-indigo-100 font-semibold border-b-2 border-indigo-100 pb-1";
+                    }
+                    return isScrolled
                       ? "text-gray-700 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400"
-                      : "text-white hover:text-indigo-100"
+                      : "text-white hover:text-indigo-100";
+                  })()
                 }`}
               >
                 My Plans

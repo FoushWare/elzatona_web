@@ -942,7 +942,7 @@ export const QuestionContent = ({ content }: { content: string }) => {
         if (part.type === "code") {
           return (
             <div
-              key={index}
+              key={`code-part-${index}-${part.content?.substring(0, 20) || ""}`}
               className="relative group my-4 sm:my-6"
               style={{ backgroundColor: "#1e1e1e" }}
             >
