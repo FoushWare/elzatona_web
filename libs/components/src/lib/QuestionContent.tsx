@@ -336,7 +336,7 @@ const decodeHtmlEntities = (text: string): string => {
     return String.fromCharCode(parseInt(hex, 16));
   });
 
-  if (typeof globalThis.window !== "undefined") {
+  if (typeof window !== "undefined") {
     try {
       const textarea = document.createElement("textarea");
       textarea.innerHTML = decoded;
@@ -347,64 +347,6 @@ const decodeHtmlEntities = (text: string): string => {
   }
 
   return decoded;
-};
-
-// Helper function to clean text content (reduces cognitive complexity)
-const cleanTextContent = (text: string): string => {
-  let cleanText = decodeHtmlEntities(text);
-  cleanText = cleanText.replace(
-    /<code[^>]*>([^<]{1,30})<\/code>/gi,
-    "`$1`",
-  );
-  cleanText = cleanText.replace(/<[^>]+>/g, "");
-  for (let i = 0; i < 3; i++) {
-    cleanText = cleanText
-      .replace(/<pr<cod?/gi, "")
-      .replace(/<pr</gi, "")
-      .replace(/<pr/gi, "")
-      .replace(/<\/cod?<\/pr/gi, "")
-      .replace(/<\/cod?/gi, "")
-      .replace(/<\/pr/gi, "")
-      .replace(/<\/cod/gi, "")
-      .replace(/e>e>e>/g, "")
-      .replace(/e>e>/g, "")
-      .replace(/^e>+/g, "")
-      .replace(/e>+$/g, "")
-      .replace(/(\w+)e>/g, "$1")
-      .replace(/e>(\w+)/g, "$1")
-      .replace(/\s*e>\s*/g, " ")
-      .replace(/^>\s*/g, "")
-      .replace(/\s*>$/g, "")
-      .replace(/\s+>\s+/g, " ");
-  }
-  cleanText = cleanText
-    .replace(/[ \t]+/g, " ")
-    .replace(/\n\s*\n/g, "\n\n")
-    .trim();
-  return cleanText;
-};
-
-// Helper function to clean code content (reduces cognitive complexity)
-const cleanCodeContent = (code: string): string => {
-  let cleanCode = code;
-  for (let i = 0; i < 2; i++) {
-    cleanCode = cleanCode
-      .replace(/e>e>e>/g, "")
-      .replace(/e>e>/g, "")
-      .replace(/^e>+/g, "")
-      .replace(/e>+$/g, "")
-      .replace(/(\w+)e>/g, "$1")
-      .replace(/e>(\w+)/g, "$1")
-      .replace(/\s*e>\s*/g, " ")
-      .replace(/<\/cod<\/pr/gi, "")
-      .replace(/<\/code<\/pr/gi, "")
-      .replace(/<\/pr/gi, "")
-      .replace(/<\/cod/gi, "")
-      .replace(/^>\s*/g, "")
-      .replace(/\s*>$/g, "")
-      .replace(/\s+>\s+/g, " ");
-  }
-  return cleanCode;
 };
 
 // Component to render question content with code blocks
@@ -609,9 +551,11 @@ export const QuestionContent = ({ content }: { content: string }) => {
         .replace(/&#39;/g, "'")
         .replace(/&apos;/g, "'")
         .replace(/&nbsp;/g, " ")
-        .replace(/(\w+)\s*&lt;\s*(\d+)\s*&gt;/g, "$1 < $2 >")
-        .replace(/(\w+)\s*&lt;\s*(\d+)/g, "$1 < $2")
-        .replace(/(\d+)\s*&gt;/g, "$1 >")
+        // ⚠️ SECURITY: Simplified regex patterns to prevent ReDoS
+        // Limit quantifiers and avoid nested quantifiers
+        .replace(/(\w{1,50})\s*&lt;\s*(\d{1,10})\s*&gt;/g, "$1 < $2 >")
+        .replace(/(\w{1,50})\s*&lt;\s*(\d{1,10})/g, "$1 < $2")
+        .replace(/(\d{1,10})\s*&gt;/g, "$1 >")
         .replace(/<\/?[a-zA-Z][a-zA-Z0-9]*(?:\s+[^>]*)?>/gi, "")
         .replace(/^>\s*/g, "")
         .replace(/\s*>$/g, "")
@@ -658,40 +602,75 @@ export const QuestionContent = ({ content }: { content: string }) => {
     },
   );
 
-  const htmlCodeBlockRegex =
-    /<pre[^>]*><code[^>]*>[\s\S]*?<\/code><\/pre>|<pr<cod[^>]*>[\s\S]*?<\/cod<\/pr|<pr<code[^>]*>[\s\S]*?<\/code<\/pr|<code[^>]*>[\s\S]{20,}?<\/code>/gi;
+  // ⚠️ SECURITY: Limit input size to prevent ReDoS attacks
+  // Polynomial regex patterns can be exploited with malicious input
+  const MAX_CONTENT_LENGTH = 100000; // 100KB limit
+  if (fixedContent.length > MAX_CONTENT_LENGTH) {
+    console.warn('Content too large for safe processing, truncating');
+    fixedContent = fixedContent.substring(0, MAX_CONTENT_LENGTH);
+  }
+
+  // Split complex regex into simpler patterns to reduce ReDoS risk
+  // Instead of one complex alternation, use multiple simpler patterns
+  const htmlCodeBlockPatterns = [
+    /<pre[^>]*><code[^>]*>[\s\S]{0,50000}?<\/code><\/pre>/gi,
+    /<pr<cod[^>]*>[\s\S]{0,50000}?<\/cod<\/pr/gi,
+    /<pr<code[^>]*>[\s\S]{0,50000}?<\/code<\/pr/gi,
+    /<code[^>]*>[\s\S]{20,50000}?<\/code>/gi,
+  ];
+  
   const htmlMatches: Array<{
     index: number;
     content: string;
     fullMatch: string;
   }> = [];
-  let htmlMatch;
+  const processedIndices = new Set<number>();
+  const MAX_ITERATIONS = 1000; // Prevent infinite loops
+  let iterationCount = 0;
 
-  htmlCodeBlockRegex.lastIndex = 0;
+  // Process each pattern separately with iteration limits
+  for (const pattern of htmlCodeBlockPatterns) {
+    if (iterationCount >= MAX_ITERATIONS) break;
+    pattern.lastIndex = 0;
+    let htmlMatch: RegExpExecArray | null;
+    
+    while ((htmlMatch = pattern.exec(fixedContent)) !== null && iterationCount < MAX_ITERATIONS) {
+      iterationCount++;
+      // Skip if we've already processed this index (within 10 chars)
+      const isDuplicate = Array.from(processedIndices).some(
+        (idx) => Math.abs(idx - htmlMatch.index) < 10
+      );
+      if (isDuplicate) continue;
+      
+      processedIndices.add(htmlMatch.index);
+      let matchContent = htmlMatch[0];
+      matchContent = matchContent
+        .replace(/<pr<cod/gi, "<pre><code>")
+        .replace(/<pr<code/gi, "<pre><code>")
+        .replace(/<\/cod<\/pr/gi, "</code></pre>")
+        .replace(/<\/code<\/pr/gi, "</code></pre>");
 
-  while ((htmlMatch = htmlCodeBlockRegex.exec(fixedContent)) !== null) {
-    let matchContent = htmlMatch[0];
-    matchContent = matchContent
-      .replace(/<pr<cod/gi, "<pre><code>")
-      .replace(/<pr<code/gi, "<pre><code>")
-      .replace(/<\/cod<\/pr/gi, "</code></pre>")
-      .replace(/<\/code<\/pr/gi, "</code></pre>");
-
-    const extractedCode = extractCodeFromHtml(matchContent);
-    if (extractedCode) {
-      htmlMatches.push({
-        index: htmlMatch.index,
-        content: extractedCode,
-        fullMatch: htmlMatch[0],
-      });
+      const extractedCode = extractCodeFromHtml(matchContent);
+      if (extractedCode) {
+        htmlMatches.push({
+          index: htmlMatch.index,
+          content: extractedCode,
+          fullMatch: htmlMatch[0],
+        });
+      }
     }
   }
 
-  const malformedPattern = /<pr<cod[^>]*>([\s\S]*?)(?:<\/cod<\/pr|$)/gi;
+  // ⚠️ SECURITY: Limit regex complexity and add iteration limits
+  // Use simpler pattern with length limit to prevent ReDoS
+  const malformedPattern = /<pr<cod[^>]*>([\s\S]{0,50000}?)(?:<\/cod<\/pr|$)/gi;
   let malformedMatch: RegExpExecArray | null;
   malformedPattern.lastIndex = 0;
+  let malformedIterations = 0;
+  const MAX_MALFORMED_ITERATIONS = 100;
 
-  while ((malformedMatch = malformedPattern.exec(fixedContent)) !== null) {
+  while ((malformedMatch = malformedPattern.exec(fixedContent)) !== null && malformedIterations < MAX_MALFORMED_ITERATIONS) {
+    malformedIterations++;
     if (!malformedMatch) break;
     const alreadyCaptured = htmlMatches.some(
       (m) => Math.abs(m.index - malformedMatch!.index) < 10,
@@ -764,7 +743,36 @@ export const QuestionContent = ({ content }: { content: string }) => {
     if (match.index > lastIndex) {
       const textContent = fixedContent.substring(lastIndex, match.index);
       if (textContent.trim()) {
-        const cleanText = cleanTextContent(textContent);
+        let cleanText = decodeHtmlEntities(textContent);
+        cleanText = cleanText.replace(
+          /<code[^>]*>([^<]{1,30})<\/code>/gi,
+          "`$1`",
+        );
+        cleanText = cleanText.replace(/<[^>]+>/g, "");
+        for (let i = 0; i < 3; i++) {
+          cleanText = cleanText
+            .replace(/<pr<cod?/gi, "")
+            .replace(/<pr</gi, "")
+            .replace(/<pr/gi, "")
+            .replace(/<\/cod?<\/pr/gi, "")
+            .replace(/<\/cod?/gi, "")
+            .replace(/<\/pr/gi, "")
+            .replace(/<\/cod/gi, "")
+            .replace(/e>e>e>/g, "")
+            .replace(/e>e>/g, "")
+            .replace(/^e>+/g, "")
+            .replace(/e>+$/g, "")
+            .replace(/(\w+)e>/g, "$1")
+            .replace(/e>(\w+)/g, "$1")
+            .replace(/\s*e>\s*/g, " ")
+            .replace(/^>\s*/g, "")
+            .replace(/\s*>$/g, "")
+            .replace(/\s+>\s+/g, " ");
+        }
+        cleanText = cleanText
+          .replace(/[ \t]+/g, " ")
+          .replace(/\n\s*\n/g, "\n\n")
+          .trim();
         if (cleanText) {
           parts.push({ type: "text", content: cleanText });
         }
@@ -772,7 +780,24 @@ export const QuestionContent = ({ content }: { content: string }) => {
     }
 
     if (match.content) {
-      const cleanCode = cleanCodeContent(match.content);
+      let cleanCode = match.content;
+      for (let i = 0; i < 2; i++) {
+        cleanCode = cleanCode
+          .replace(/e>e>e>/g, "")
+          .replace(/e>e>/g, "")
+          .replace(/^e>+/g, "")
+          .replace(/e>+$/g, "")
+          .replace(/(\w+)e>/g, "$1")
+          .replace(/e>(\w+)/g, "$1")
+          .replace(/\s*e>\s*/g, " ")
+          .replace(/<\/cod<\/pr/gi, "")
+          .replace(/<\/code<\/pr/gi, "")
+          .replace(/<\/pr/gi, "")
+          .replace(/<\/cod/gi, "")
+          .replace(/^>\s*/g, "")
+          .replace(/\s*>$/g, "")
+          .replace(/\s+>\s+/g, " ");
+      }
       const formattedCode = formatCodeContent(cleanCode);
       parts.push({
         type: "code",
@@ -787,7 +812,36 @@ export const QuestionContent = ({ content }: { content: string }) => {
   if (lastIndex < fixedContent.length) {
     const textContent = fixedContent.substring(lastIndex);
     if (textContent.trim()) {
-      const cleanText = cleanTextContent(textContent);
+      let cleanText = decodeHtmlEntities(textContent);
+      cleanText = cleanText.replace(
+        /<code[^>]*>([^<]{1,30})<\/code>/gi,
+        "`$1`",
+      );
+      cleanText = cleanText.replace(/<[^>]+>/g, "");
+      for (let i = 0; i < 3; i++) {
+        cleanText = cleanText
+          .replace(/<pr<cod?/gi, "")
+          .replace(/<pr</gi, "")
+          .replace(/<pr/gi, "")
+          .replace(/<\/cod?<\/pr/gi, "")
+          .replace(/<\/cod?/gi, "")
+          .replace(/<\/pr/gi, "")
+          .replace(/<\/cod/gi, "")
+          .replace(/e>e>e>/g, "")
+          .replace(/e>e>/g, "")
+          .replace(/^e>+/g, "")
+          .replace(/e>+$/g, "")
+          .replace(/(\w+)e>/g, "$1")
+          .replace(/e>(\w+)/g, "$1")
+          .replace(/\s*e>\s*/g, " ")
+          .replace(/^>\s*/g, "")
+          .replace(/\s*>$/g, "")
+          .replace(/\s+>\s+/g, " ");
+      }
+      cleanText = cleanText
+        .replace(/[ \t]+/g, " ")
+        .replace(/\n\s*\n/g, "\n\n")
+        .trim();
       if (cleanText) {
         parts.push({ type: "text", content: cleanText });
       }
@@ -819,10 +873,10 @@ export const QuestionContent = ({ content }: { content: string }) => {
     }
 
     cleanContent = cleanContent
-      .replaceAll("&nbsp;", " ")
-      .replaceAll("&lt;", "<")
-      .replaceAll("&gt;", ">")
-      .replaceAll("&amp;", "&")
+      .replace(/&nbsp;/g, " ")
+      .replace(/&lt;/g, "<")
+      .replace(/&gt;/g, ">")
+      .replace(/&amp;/g, "&")
       .trim();
 
     const codeValidation = isValidCode(cleanContent);
@@ -925,7 +979,7 @@ export const QuestionContent = ({ content }: { content: string }) => {
         if (part.type === "code") {
           return (
             <div
-              key={`code-part-${index}-${part.content?.substring(0, 20) || ""}`}
+              key={index}
               className="relative group my-4 sm:my-6"
               style={{ backgroundColor: "#1e1e1e" }}
             >
@@ -1033,7 +1087,7 @@ export const QuestionContent = ({ content }: { content: string }) => {
 
           return (
             <p
-              key={`text-part-${index}-${part.content?.substring(0, 30) || ""}`}
+              key={index}
               className="text-sm sm:text-base lg:text-lg text-gray-700 dark:text-gray-300 leading-relaxed whitespace-pre-wrap mb-4 sm:mb-5"
               style={{
                 lineHeight: "1.75",
