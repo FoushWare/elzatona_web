@@ -86,6 +86,7 @@ export function useSecureProgress(): UseSecureProgressReturn {
         const progressData: ProgressData = {
           ...data,
           userId: user.uid,
+          sessionId: `session_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
         };
 
         // Save to server
