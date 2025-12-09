@@ -63,7 +63,7 @@ This guide documents all secrets that were exposed in the git repository history
 
 - `.cursor/mcp.json`
 
-**Token:** `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`
+**Token:** `YOUR_GITHUB_TOKEN_HERE` (⚠️ Rotate immediately - token was exposed in git history)
 
 **Action Required:**
 
@@ -80,7 +80,7 @@ This guide documents all secrets that were exposed in the git repository history
 
 - `.cursor/mcp.json`
 
-**Key:** `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`
+**Key:** `YOUR_OPENAI_API_KEY_HERE` (⚠️ Rotate immediately - key was exposed in git history)
 
 **Action Required:**
 
@@ -97,7 +97,7 @@ This guide documents all secrets that were exposed in the git repository history
 
 - `Rest/docs/SENTRY_MCP_SETUP_COMPLETE.md`
 
-**Token:** `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`
+**Token:** `YOUR_SENTRY_TOKEN_HERE` (⚠️ This token was exposed and should be rotated)
 
 **Action Required:**
 
@@ -115,7 +115,7 @@ This guide documents all secrets that were exposed in the git repository history
 - `docs/authentication/AUTHENTICATION_COMPLETE_SUCCESS.md`
 
 **Client ID:** `655799372296-vd44sjnvf427est82dsa9nj029iis4b7.apps.googleusercontent.com`
-**Client Secret:** `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`
+**Client Secret:** `YOUR_GOOGLE_OAUTH_SECRET_HERE` (⚠️ Rotate immediately - secret was exposed in git history)
 
 **Action Required:**
 
