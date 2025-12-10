@@ -639,10 +639,6 @@ export const QuestionContent = ({ content }: { content: string }) => {
       // TypeScript: htmlMatch is guaranteed non-null by while condition
       // Use non-null assertion since we've already checked in the while condition
       const match = htmlMatch!;
-      
-      // TypeScript: htmlMatch is guaranteed non-null by while condition
-      // Use non-null assertion since we've already checked in the while condition
-      const match = htmlMatch!;
       // Skip if we've already processed this index (within 10 chars)
       const isDuplicate = Array.from(processedIndices).some(
         (idx) => Math.abs(idx - match.index) < 10
