@@ -1,0 +1,88 @@
+name: CI Checks (Lint, Type Check, Build)
+
+on:
+  push:
+    branches: [main, develop, 'release/**']
+  pull_request:
+    branches: [main, develop, 'release/**']
+  workflow_dispatch:
+
+# Cancel in-progress runs on the same branch
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  lint-and-type-check:
+    name: Lint, Type Check, and Build
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          # Explicitly disable cache since project uses bun.lock, not package-lock.json
+          package-manager-cache: false
+
+      - name: Install dependencies
+        run: npm install
+        # Using npm install instead of npm ci since package-lock.json doesn't exist
+        # Project uses bun as primary package manager
+
+      - name: Run Prettier formatting check
+        run: |
+          echo "🎨 Running Prettier formatting check..."
+          npm run format -- --check
+        continue-on-error: false
+
+      - name: Run ESLint with auto-fix
+        run: |
+          echo "🔍 Running ESLint with auto-fix..."
+          npm run lint:fix || true
+        continue-on-error: true
+        # Auto-fix doesn't need to fail the workflow
+
+      - name: Run ESLint check
+        run: |
+          echo "🔍 Running ESLint check..."
+          npm run lint
+        continue-on-error: false
+        env:
+          NODE_OPTIONS: "--max-old-space-size=2048"
+
+      - name: TypeScript type checking
+        run: |
+          echo "📘 Running TypeScript type checking..."
+          npm run type-check
+        continue-on-error: false
+        env:
+          NODE_OPTIONS: "--max-old-space-size=2048"
+          # Provide minimal env vars for type checking (to avoid type errors)
+          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.TEST_SUPABASE_URL || 'https://placeholder.supabase.co' }}
+          NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.TEST_SUPABASE_ANON_KEY || 'placeholder-key' }}
+          JWT_SECRET: ${{ secrets.JWT_SECRET || 'placeholder-secret' }}
+
+      - name: Build validation
+        run: |
+          echo "🏗️ Running build validation..."
+          npm run build
+        continue-on-error: false
+        env:
+          NODE_OPTIONS: "--max-old-space-size=2048"
+          NEXT_TELEMETRY_DISABLED: "1"
+          # Provide minimal env vars for build (to avoid build errors)
+          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.TEST_SUPABASE_URL || 'https://placeholder.supabase.co' }}
+          NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.TEST_SUPABASE_ANON_KEY || 'placeholder-key' }}
+          JWT_SECRET: ${{ secrets.JWT_SECRET || 'placeholder-secret' }}
+
+      - name: Cleanup build artifacts
+        if: always()
+        run: |
+          echo "🧹 Cleaning up build artifacts..."
+          rm -rf .next build storybook-static coverage
+          echo "✅ Cleanup completed"
