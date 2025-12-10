@@ -2,11 +2,11 @@
 // v1.1 - Category management for topics and questions
 // Added input sanitization for security
 
-import { NextRequest, NextResponse } from 'next/server';
-import { supabaseOperations } from '@/lib/supabase-server';
-import { createClient } from '@supabase/supabase-js';
-import { sanitizeObjectServer } from '@/lib/utils/sanitize-server';
-import { validateAndSanitize, categorySchema } from '@/lib/utils/validation';
+import { NextRequest, NextResponse } from "next/server";
+import { supabaseOperations } from "@/lib/supabase-server";
+import { createClient } from "@supabase/supabase-js";
+import { sanitizeObjectServer } from "@/lib/utils/sanitize-server";
+import { validateAndSanitize, categorySchema } from "@/lib/utils/validation";
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
 const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
@@ -25,10 +25,10 @@ export interface Category {
 export async function GET() {
   try {
     const { data: categories, error } = await supabase
-      .from('categories')
-      .select('*')
-      .eq('is_active', true)
-      .order('order_index', { ascending: true });
+      .from("categories")
+      .select("*")
+      .eq("is_active", true)
+      .order("order_index", { ascending: true });
 
     if (error) {
       throw new Error(error.message);
@@ -36,7 +36,7 @@ export async function GET() {
 
     // Transform data to match expected format
     const transformedCategories =
-      categories?.map(category => ({
+      categories?.map((category) => ({
         id: category.id,
         name: category.name,
         description: category.description,
@@ -57,13 +57,13 @@ export async function GET() {
       count: transformedCategories.length,
     });
   } catch (error) {
-    console.error('Error fetching categories:', error);
+    console.error("Error fetching categories:", error);
     return NextResponse.json(
       {
         success: false,
-        error: 'Failed to fetch categories',
+        error: "Failed to fetch categories",
       },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
@@ -75,14 +75,14 @@ export async function POST(request: NextRequest) {
 
     // Validate and sanitize category data
     const validationResult = validateAndSanitize(categorySchema, categoryData);
-    
+
     if (!validationResult.success) {
       return NextResponse.json(
         {
           success: false,
           error: validationResult.error,
         },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -92,18 +92,18 @@ export async function POST(request: NextRequest) {
     // Transform data to match Supabase schema
     const supabaseCategoryData = {
       name: sanitizedData.name,
-      description: sanitizedData.description || '',
+      description: sanitizedData.description || "",
       slug:
         sanitizedData.slug ||
-        sanitizedData.name.toLowerCase().replace(/\s+/g, '-'),
-      icon: categoryData.icon || '📁', // Icon is not sanitized as it's an emoji/symbol
-      color: categoryData.color || '#3B82F6', // Color is validated by format
+        sanitizedData.name.toLowerCase().replace(/\s+/g, "-"),
+      icon: categoryData.icon || "📁", // Icon is not sanitized as it's an emoji/symbol
+      color: categoryData.color || "#3B82F6", // Color is validated by format
       order_index: categoryData.orderIndex || categoryData.order_index || 0,
       is_active: categoryData.isActive !== false,
     };
 
     const { data: newCategory, error } = await supabase
-      .from('categories')
+      .from("categories")
       .insert(supabaseCategoryData)
       .select()
       .single();
@@ -113,7 +113,7 @@ export async function POST(request: NextRequest) {
     }
 
     if (!newCategory) {
-      throw new Error('No category was created');
+      throw new Error("No category was created");
     }
 
     // Transform response to match expected format
@@ -132,17 +132,17 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({
       success: true,
       data: transformedCategory,
-      message: 'Category created successfully',
+      message: "Category created successfully",
     });
   } catch (error) {
-    console.error('Error creating category:', error);
+    console.error("Error creating category:", error);
     return NextResponse.json(
       {
         success: false,
         error:
-          error instanceof Error ? error.message : 'Failed to create category',
+          error instanceof Error ? error.message : "Failed to create category",
       },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

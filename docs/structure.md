@@ -3,6 +3,7 @@
 ## Overview
 
 This is an **Nx monorepo** workspace containing:
+
 - **2 Applications:** `website` and `admin`
 - **8 Shared Libraries:** `components`, `hooks`, `types`, `contexts`, `utilities`, `ui`, `auth`, `database`
 
@@ -164,32 +165,32 @@ libs/utilities/
 
 ```typescript
 // Website app
-import { Component } from '@/components/Component'
-import { utility } from '@/lib/utility'
-import { route } from '@/network/routes/route'
+import { Component } from "@/components/Component";
+import { utility } from "@/lib/utility";
+import { route } from "@/network/routes/route";
 
 // Admin app
-import { Component } from '@/components/Component'
-import { utility } from '@/lib/utility'
+import { Component } from "@/components/Component";
+import { utility } from "@/lib/utility";
 ```
 
 ### Shared Library Imports
 
 ```typescript
 // Components
-import { Button, Card } from '@elzatona/components'
+import { Button, Card } from "@elzatona/components";
 
 // Hooks
-import { useCards, usePlans } from '@elzatona/hooks'
+import { useCards, usePlans } from "@elzatona/hooks";
 
 // Types
-import { LearningCard, UnifiedQuestion } from '@elzatona/types'
+import { LearningCard, UnifiedQuestion } from "@elzatona/types";
 
 // Contexts
-import { AuthProvider, ThemeProvider } from '@elzatona/contexts'
+import { AuthProvider, ThemeProvider } from "@elzatona/contexts";
 
 // Utilities
-import { formatDate, validateEmail } from '@elzatona/utilities'
+import { formatDate, validateEmail } from "@elzatona/utilities";
 ```
 
 ## File Naming Conventions
@@ -236,4 +237,3 @@ docs/
 4. **App-Specific Code** - Use `apps/*/` for app-specific code
 5. **Tests** - Co-locate tests with source files
 6. **Documentation** - Keep docs organized by area
-

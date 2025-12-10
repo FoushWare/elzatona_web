@@ -1,8 +1,14 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { supabaseOperations } from '@/lib/supabase-server';
-import { createClient } from '@supabase/supabase-js';
-import { sanitizeObjectServer, sanitizeRichContent } from '@/lib/utils/sanitize-server';
-import { validateAndSanitize, learningCardSchema } from '@/lib/utils/validation';
+import { NextRequest, NextResponse } from "next/server";
+import { supabaseOperations } from "@/lib/supabase-server";
+import { createClient } from "@supabase/supabase-js";
+import {
+  sanitizeObjectServer,
+  sanitizeRichContent,
+} from "@/lib/utils/sanitize-server";
+import {
+  validateAndSanitize,
+  learningCardSchema,
+} from "@/lib/utils/validation";
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
 const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
@@ -44,16 +50,16 @@ const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
 export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
-    const type = searchParams.get('type');
-    const isActive = searchParams.get('isActive');
-    const limit = searchParams.get('limit');
+    const type = searchParams.get("type");
+    const isActive = searchParams.get("isActive");
+    const limit = searchParams.get("limit");
 
     const filters = {
       type: type || undefined,
-      is_active: isActive ? isActive === 'true' : undefined,
+      is_active: isActive ? isActive === "true" : undefined,
       limit: limit ? parseInt(limit, 10) : undefined,
-      orderBy: 'order_index',
-      orderDirection: 'asc' as const,
+      orderBy: "order_index",
+      orderDirection: "asc" as const,
     };
 
     const { data: cards, error } =
@@ -85,10 +91,10 @@ export async function GET(request: NextRequest) {
       count: transformedCards.length,
     });
   } catch (error) {
-    console.error('Error fetching cards:', error);
+    console.error("Error fetching cards:", error);
     return NextResponse.json(
-      { success: false, error: 'Failed to fetch cards' },
-      { status: 500 }
+      { success: false, error: "Failed to fetch cards" },
+      { status: 500 },
     );
   }
 }
@@ -168,7 +174,7 @@ export async function POST(request: NextRequest) {
     if (!validationResult.success) {
       return NextResponse.json(
         { success: false, error: validationResult.error },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -177,22 +183,24 @@ export async function POST(request: NextRequest) {
 
     // Sanitize description if present
     if (sanitizedData.description) {
-      sanitizedData.description = sanitizeRichContent(sanitizedData.description);
+      sanitizedData.description = sanitizeRichContent(
+        sanitizedData.description,
+      );
     }
 
     // Transform data to match Supabase schema
     const supabaseCardData = {
       title: sanitizedData.title,
       type: sanitizedData.type,
-      description: sanitizedData.description || '',
-      color: cardData.color || '#3B82F6', // Color is validated by format
-      icon: cardData.icon || 'code', // Icon is not sanitized as it's a symbol
+      description: sanitizedData.description || "",
+      color: cardData.color || "#3B82F6", // Color is validated by format
+      icon: cardData.icon || "code", // Icon is not sanitized as it's a symbol
       order_index: cardData.order || cardData.order_index || 0,
       is_active: cardData.isActive !== false,
     };
 
     const { data: newCard, error } = await supabase
-      .from('learning_cards')
+      .from("learning_cards")
       .insert(supabaseCardData)
       .select()
       .single();
@@ -202,7 +210,7 @@ export async function POST(request: NextRequest) {
     }
 
     if (!newCard) {
-      throw new Error('No card was created');
+      throw new Error("No card was created");
     }
 
     // Transform response to match expected format
@@ -224,13 +232,13 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({
       success: true,
       data: transformedCard,
-      message: 'Card created successfully',
+      message: "Card created successfully",
     });
   } catch (error) {
-    console.error('Error creating card:', error);
+    console.error("Error creating card:", error);
     return NextResponse.json(
-      { success: false, error: 'Failed to create card' },
-      { status: 500 }
+      { success: false, error: "Failed to create card" },
+      { status: 500 },
     );
   }
 }

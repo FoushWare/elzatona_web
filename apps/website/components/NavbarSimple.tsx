@@ -23,8 +23,8 @@ import { useAuth } from "@elzatona/contexts";
 import {
   supabaseClient as supabase,
   isSupabaseAvailable,
-} from '@/lib/supabase-client';
-import { clearSession } from '@/lib/auth-session';
+} from "@/lib/supabase-client";
+import { clearSession } from "@/lib/auth-session";
 import { useLearningType } from "@/context/LearningTypeContext";
 
 export const NavbarSimple: React.FC = () => {

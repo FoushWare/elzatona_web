@@ -8,16 +8,17 @@
 
 All 4 tables **DO have RLS enabled** according to database verification:
 
-| Table | RLS Status | Policies | Verification Method |
-|-------|-----------|----------|-------------------|
+| Table              | RLS Status | Policies   | Verification Method              |
+| ------------------ | ---------- | ---------- | -------------------------------- |
 | `questions_topics` | ✅ ENABLED | 2 policies | `pg_class.relrowsecurity = true` |
-| `card_categories` | ✅ ENABLED | 2 policies | `pg_class.relrowsecurity = true` |
-| `plan_categories` | ✅ ENABLED | 2 policies | `pg_class.relrowsecurity = true` |
-| `plan_questions` | ✅ ENABLED | 2 policies | `pg_class.relrowsecurity = true` |
+| `card_categories`  | ✅ ENABLED | 2 policies | `pg_class.relrowsecurity = true` |
+| `plan_categories`  | ✅ ENABLED | 2 policies | `pg_class.relrowsecurity = true` |
+| `plan_questions`   | ✅ ENABLED | 2 policies | `pg_class.relrowsecurity = true` |
 
 ### Database Verification Query Results:
+
 ```sql
-SELECT 
+SELECT
   n.nspname as schema_name,
   c.relname as table_name,
   c.relrowsecurity as rls_enabled
@@ -33,6 +34,7 @@ AND c.relkind = 'r';
 ## 🕐 Linter Cache Delay
 
 The Supabase linter appears to be showing **cached results**. This is a known issue where:
+
 1. Database changes are applied immediately
 2. Linter cache may take 5-15 minutes to refresh
 3. Sometimes requires manual refresh in Supabase dashboard
@@ -55,15 +57,18 @@ The Supabase linter appears to be showing **cached results**. This is a known is
 ## 🔄 How to Force Linter Refresh
 
 ### Option 1: Wait (Recommended)
+
 - Linter cache typically refreshes within 5-15 minutes
 - Check Supabase dashboard after waiting
 
 ### Option 2: Manual Refresh in Dashboard
+
 1. Go to Supabase Dashboard → Database → Linter
 2. Click "Refresh" or "Re-run Linter" button (if available)
 3. Wait for results to update
 
 ### Option 3: Make a Schema Change
+
 - Any schema change (even adding a comment) can trigger refresh
 - Example: `COMMENT ON TABLE public.questions_topics IS 'RLS enabled';`
 
@@ -83,12 +88,14 @@ If the linter still shows warnings after 15-20 minutes:
    - Check "Row Level Security" toggle (should be ON)
 
 2. **Run verification query:**
+
    ```sql
-   SELECT tablename, rowsecurity 
-   FROM pg_tables 
-   WHERE schemaname = 'public' 
+   SELECT tablename, rowsecurity
+   FROM pg_tables
+   WHERE schemaname = 'public'
    AND tablename IN ('questions_topics', 'card_categories', 'plan_categories', 'plan_questions');
    ```
+
    All should show `rowsecurity = true`
 
 3. **Contact Supabase Support** if linter continues to show false warnings after verification

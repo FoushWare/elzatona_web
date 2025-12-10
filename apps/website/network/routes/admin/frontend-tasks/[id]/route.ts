@@ -1,11 +1,7 @@
 // v1.0 - API routes for individual frontend task CRUD operations
 
 import { NextRequest, NextResponse } from "next/server";
-import {
-  FrontendTask,
-  FrontendTaskFormData,
-  ApiResponse,
-} from "@/types/admin";
+import { FrontendTask, FrontendTaskFormData, ApiResponse } from "@/types/admin";
 import { createClient } from "@supabase/supabase-js";
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;

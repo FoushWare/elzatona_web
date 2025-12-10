@@ -1,11 +1,11 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { createClient } from '@supabase/supabase-js';
+import { NextRequest, NextResponse } from "next/server";
+import { createClient } from "@supabase/supabase-js";
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
 const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
 const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
 
-import { SectionService } from '@/lib/section-service';
+import { SectionService } from "@/lib/section-service";
 
 interface LearningPath {
   id: string;
@@ -32,47 +32,47 @@ interface LearningPathWithSections extends LearningPath {
 
 // Mapping of learning paths to their relevant sections
 const learningPathSections: Record<string, string[]> = {
-  'performance-optimization': ['performance-optimization'],
-  'typescript-essentials': ['typescript-essentials'],
-  'security-essentials': ['frontend-security'],
-  'css-practice-layout': ['css-fundamentals', 'advanced-css-mastery'],
-  'build-tools-devops': ['build-tools-devops'],
-  'testing-strategies': ['testing-strategies'],
-  'javascript-practice-interview': [
-    'javascript-fundamentals',
-    'problem-solving-javascript',
+  "performance-optimization": ["performance-optimization"],
+  "typescript-essentials": ["typescript-essentials"],
+  "security-essentials": ["frontend-security"],
+  "css-practice-layout": ["css-fundamentals", "advanced-css-mastery"],
+  "build-tools-devops": ["build-tools-devops"],
+  "testing-strategies": ["testing-strategies"],
+  "javascript-practice-interview": [
+    "javascript-fundamentals",
+    "problem-solving-javascript",
   ],
-  'advanced-frontend-architectures': [
-    'design-patterns-architecture',
-    'system-design-frontend',
+  "advanced-frontend-architectures": [
+    "design-patterns-architecture",
+    "system-design-frontend",
   ],
-  'react-practice-advanced': ['react-fundamentals', 'advanced-react-patterns'],
-  'css-mastery': ['css-fundamentals', 'advanced-css-mastery'],
-  'react-mastery': ['react-fundamentals', 'advanced-react-patterns'],
-  'html-practice': ['html-fundamentals'],
-  'html-practice-semantic': ['html-fundamentals'],
-  'css-practice': ['css-fundamentals', 'advanced-css-mastery'],
-  'javascript-practice': [
-    'javascript-fundamentals',
-    'problem-solving-javascript',
+  "react-practice-advanced": ["react-fundamentals", "advanced-react-patterns"],
+  "css-mastery": ["css-fundamentals", "advanced-css-mastery"],
+  "react-mastery": ["react-fundamentals", "advanced-react-patterns"],
+  "html-practice": ["html-fundamentals"],
+  "html-practice-semantic": ["html-fundamentals"],
+  "css-practice": ["css-fundamentals", "advanced-css-mastery"],
+  "javascript-practice": [
+    "javascript-fundamentals",
+    "problem-solving-javascript",
   ],
-  'react-practice': ['react-fundamentals', 'advanced-react-patterns'],
-  'frontend-system-design': [
-    'system-design-frontend',
-    'design-patterns-architecture',
+  "react-practice": ["react-fundamentals", "advanced-react-patterns"],
+  "frontend-system-design": [
+    "system-design-frontend",
+    "design-patterns-architecture",
   ],
-  'frontend-basics': [
-    'html-fundamentals',
-    'css-fundamentals',
-    'javascript-fundamentals',
+  "frontend-basics": [
+    "html-fundamentals",
+    "css-fundamentals",
+    "javascript-fundamentals",
   ],
-  'javascript-deep-dive': [
-    'javascript-fundamentals',
-    'javascript-deep-dive',
-    'problem-solving-javascript',
+  "javascript-deep-dive": [
+    "javascript-fundamentals",
+    "javascript-deep-dive",
+    "problem-solving-javascript",
   ],
-  'api-integration': ['api-integration-communication'],
-  'ai-tools-frontend': ['ai-tools-frontend'],
+  "api-integration": ["api-integration-communication"],
+  "ai-tools-frontend": ["ai-tools-frontend"],
 };
 
 export async function GET(request: NextRequest) {
@@ -80,16 +80,16 @@ export async function GET(request: NextRequest) {
     // Fetch learning paths from Supabase with ordering
     const { data: learningPathsData, error: learningPathsError } =
       await supabase
-        .from('learning_paths')
-        .select('*')
-        .order('order_index', { ascending: true });
+        .from("learning_paths")
+        .select("*")
+        .order("order_index", { ascending: true });
 
     if (learningPathsError) {
       throw learningPathsError;
     }
 
     const learningPaths = (learningPathsData || [])
-      .map(doc => ({
+      .map((doc) => ({
         id: doc.id,
         ...doc,
       }))
@@ -101,16 +101,16 @@ export async function GET(request: NextRequest) {
           return orderA - orderB;
         }
         // If order is the same, prioritize JavaScript Deep Dive
-        if (a.id === 'javascript-deep-dive') return -1;
-        if (b.id === 'javascript-deep-dive') return 1;
-        return (a.name || '').localeCompare(b.name || '');
+        if (a.id === "javascript-deep-dive") return -1;
+        if (b.id === "javascript-deep-dive") return 1;
+        return (a.name || "").localeCompare(b.name || "");
       });
 
     // Fetch sections using SectionService
     const sectionsResult = await SectionService.getSections();
 
     if (!sectionsResult.success) {
-      throw new Error(sectionsResult.error || 'Failed to fetch sections');
+      throw new Error(sectionsResult.error || "Failed to fetch sections");
     }
 
     const sections: Section[] = (sectionsResult.data as Section[]) || [];
@@ -121,19 +121,19 @@ export async function GET(request: NextRequest) {
         acc[section.id] = section;
         return acc;
       },
-      {} as Record<string, Section>
+      {} as Record<string, Section>,
     );
 
     // Deduplicate learning paths by ID and add sections data
     const uniqueLearningPaths = learningPaths.reduce(
       (acc: LearningPathWithSections[], path: any) => {
-        if (!acc.find(existingPath => existingPath.id === path.id)) {
+        if (!acc.find((existingPath) => existingPath.id === path.id)) {
           // Get relevant sections for this learning path
           const relevantSectionIds = learningPathSections[path.id] || [];
           const pathSections = relevantSectionIds
-            .map(sectionId => sectionsMap[sectionId])
+            .map((sectionId) => sectionsMap[sectionId])
             .filter(Boolean)
-            .map(section => ({
+            .map((section) => ({
               id: section.id,
               name: section.name,
               question_count: section.questionCount || 0,
@@ -148,7 +148,7 @@ export async function GET(request: NextRequest) {
         }
         return acc;
       },
-      [] as LearningPathWithSections[]
+      [] as LearningPathWithSections[],
     );
 
     return NextResponse.json({
@@ -156,13 +156,13 @@ export async function GET(request: NextRequest) {
       data: uniqueLearningPaths,
     });
   } catch (error) {
-    console.error('Error fetching learning paths:', error);
+    console.error("Error fetching learning paths:", error);
     return NextResponse.json(
       {
         success: false,
-        error: 'Failed to fetch learning paths',
+        error: "Failed to fetch learning paths",
       },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

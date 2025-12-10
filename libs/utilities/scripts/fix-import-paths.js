@@ -109,4 +109,3 @@ for (const dir of DIRS_TO_FIX) {
 
 console.log(`\n✅ Total files fixed: ${totalFixed}`);
 console.log("✨ Import path fixing complete!");
-
