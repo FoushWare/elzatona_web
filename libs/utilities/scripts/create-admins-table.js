@@ -1,13 +1,13 @@
 #!/usr/bin/env node
 
-import { createClient } from '@supabase/supabase-js';
+import { createClient } from "@supabase/supabase-js";
 
-console.log('🛡️ Creating Admins Table in Supabase\n');
+console.log("🛡️ Creating Admins Table in Supabase\n");
 
 // Supabase configuration
 const supabaseUrl =
   process.env.NEXT_PUBLIC_SUPABASE_URL ||
-  'https://hpnewqkvpnthpohvxcmq.supabase.co';
+  "https://hpnewqkvpnthpohvxcmq.supabase.co";
 const supabaseServiceRoleKey =
   process.env.SUPABASE_SERVICE_ROLE_KEY ||
   process.env.SUPABASE_SERVICE_ROLE_KEY;
@@ -17,7 +17,7 @@ const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
 
 async function createAdminsTable() {
   try {
-    console.log('🔄 Creating admins table...');
+    console.log("🔄 Creating admins table...");
 
     // SQL to create the admins table
     const createTableSQL = `
@@ -51,29 +51,29 @@ async function createAdminsTable() {
         EXECUTE FUNCTION update_updated_at_column();
     `;
 
-    const { error } = await supabase.rpc('exec_sql', { sql: createTableSQL });
+    const { error } = await supabase.rpc("exec_sql", { sql: createTableSQL });
 
     if (error) {
-      console.error('❌ Error creating admins table:', error.message);
+      console.error("❌ Error creating admins table:", error.message);
       return;
     }
 
-    console.log('✅ Admins table created successfully');
+    console.log("✅ Admins table created successfully");
 
     // Now create the admin user
-    console.log('🔄 Creating admin user...');
+    console.log("🔄 Creating admin user...");
 
-    const adminEmail = process.env.INITIAL_ADMIN_EMAIL || 'admin@elzatona.com';
+    const adminEmail = process.env.INITIAL_ADMIN_EMAIL || "admin@elzatona.com";
     const adminPassword = process.env.INITIAL_ADMIN_PASSWORD;
-    const adminName = 'Super Admin';
-    const adminRole = 'super_admin';
+    const adminName = "Super Admin";
+    const adminRole = "super_admin";
 
     if (!adminPassword) {
       console.error(
-        '❌ Missing INITIAL_ADMIN_PASSWORD in environment variables'
+        "❌ Missing INITIAL_ADMIN_PASSWORD in environment variables",
       );
       console.error(
-        'Please set INITIAL_ADMIN_PASSWORD in your .env.local file'
+        "Please set INITIAL_ADMIN_PASSWORD in your .env.local file",
       );
       return;
     }
@@ -91,14 +91,14 @@ async function createAdminsTable() {
       });
 
     if (authError) {
-      console.error('❌ Error creating auth user:', authError.message);
+      console.error("❌ Error creating auth user:", authError.message);
       return;
     }
 
-    console.log('✅ Auth user created:', authData.user?.id);
+    console.log("✅ Auth user created:", authData.user?.id);
 
     // Create admin record
-    const { error: insertError } = await supabase.from('admins').insert({
+    const { error: insertError } = await supabase.from("admins").insert({
       id: authData.user.id,
       email: adminEmail,
       name: adminName,
@@ -106,19 +106,19 @@ async function createAdminsTable() {
     });
 
     if (insertError) {
-      console.error('❌ Error creating admin record:', insertError.message);
+      console.error("❌ Error creating admin record:", insertError.message);
       return;
     }
 
-    console.log('✅ Admin record created successfully');
+    console.log("✅ Admin record created successfully");
 
-    console.log('\n🎯 Admin setup complete!');
-    console.log('You can now login at:');
-    console.log('   URL: http://localhost:3001/admin/login');
+    console.log("\n🎯 Admin setup complete!");
+    console.log("You can now login at:");
+    console.log("   URL: http://localhost:3001/admin/login");
     console.log(`   Email: ${adminEmail}`);
     console.log(`   Password: ${adminPassword}\n`);
   } catch (error) {
-    console.error('❌ Error setting up admin:', error.message);
+    console.error("❌ Error setting up admin:", error.message);
   }
 }
 

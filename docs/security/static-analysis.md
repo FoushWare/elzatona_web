@@ -13,10 +13,12 @@ Static analysis is the automated analysis of source code to identify security vu
 **Configuration:** `eslint.config.mjs`
 
 **Security Plugins:**
+
 - `eslint-plugin-security` - Security-focused linting rules
 - `@typescript-eslint/eslint-plugin` - TypeScript-specific rules
 
 **Usage:**
+
 ```bash
 # Run ESLint
 bun run lint
@@ -29,6 +31,7 @@ bun run lint:all
 ```
 
 **Security Rules:**
+
 - No `eval()` usage
 - No dangerous regex patterns
 - No unsafe assignments
@@ -42,6 +45,7 @@ bun run lint:all
 **Configuration:** `.sonar-project.properties`
 
 **Usage:**
+
 ```bash
 # Run SonarQube analysis
 bun run sonar
@@ -54,6 +58,7 @@ bun run sonar:quick
 ```
 
 **Security Checks:**
+
 - OWASP Top 10 vulnerabilities
 - Injection vulnerabilities
 - Authentication issues
@@ -61,6 +66,7 @@ bun run sonar:quick
 - Security misconfigurations
 
 **Access:**
+
 - SonarCloud Dashboard: [Configure your SonarCloud URL]
 - Local Analysis: Results in `.scannerwork/`
 
@@ -69,16 +75,19 @@ bun run sonar:quick
 **Purpose:** Detect hardcoded secrets and credentials
 
 **Tools:**
+
 - **GitHub Secret Scanning** - Automatic scanning on push
 - **TruffleHog** - Local secret scanning
 - **Gitleaks** - Git history scanning
 
 **Pre-Push Hook:**
+
 - Automatically scans for secrets before push
 - Blocks push if secrets found
 - See [Security Pipeline](../COMPLETE_SECURITY_PIPELINE.md) for details
 
 **Usage:**
+
 ```bash
 # Manual secret scan (if tool installed)
 trufflehog filesystem . --json
@@ -86,6 +95,7 @@ gitleaks detect --source . --verbose
 ```
 
 **Common Secrets to Detect:**
+
 - API keys
 - Database passwords
 - OAuth tokens
@@ -97,12 +107,14 @@ gitleaks detect --source . --verbose
 **Purpose:** Catch type-related security issues
 
 **Usage:**
+
 ```bash
 # Type check all files
 bun run type-check
 ```
 
 **Security Benefits:**
+
 - Prevents type confusion attacks
 - Ensures proper type handling
 - Catches null/undefined issues
@@ -113,6 +125,7 @@ bun run type-check
 **Purpose:** Find vulnerabilities in dependencies
 
 **Usage:**
+
 ```bash
 # Check for vulnerabilities
 npm audit
@@ -125,6 +138,7 @@ npm outdated
 ```
 
 **Automated:**
+
 - GitHub Dependabot - Automatic dependency updates
 - npm audit in CI/CD pipeline
 
@@ -145,6 +159,7 @@ npm outdated
 ### Before Committing
 
 1. **Run Full Analysis**
+
    ```bash
    bun run lint:all
    bun run type-check
@@ -177,11 +192,13 @@ npm outdated
 ### ESLint Results
 
 **Severity Levels:**
+
 - **Error** - Must fix (blocks commit)
 - **Warning** - Should fix (doesn't block)
 - **Info** - Suggestions
 
 **Common Issues:**
+
 - Unused variables
 - Type safety issues
 - Security rule violations
@@ -190,12 +207,14 @@ npm outdated
 ### SonarQube Results
 
 **Issue Types:**
+
 - **Vulnerability** - Security issue (must fix)
 - **Bug** - Code bug (should fix)
 - **Code Smell** - Maintainability issue
 - **Security Hotspot** - Potential security issue
 
 **Severity:**
+
 - **Blocker** - Must fix immediately
 - **Critical** - Fix as soon as possible
 - **Major** - Fix in next release
@@ -205,6 +224,7 @@ npm outdated
 ### Secret Scanning Results
 
 **If Secrets Found:**
+
 1. **Don't commit** - Fix locally first
 2. **Rotate secrets** - Rotate all exposed secrets
 3. **Remove from code** - Replace with environment variables
@@ -331,4 +351,3 @@ Track these metrics:
 - [SonarQube Documentation](https://docs.sonarqube.org/)
 - [OWASP Code Review Guide](https://owasp.org/www-project-code-review-guide/)
 - [Static Analysis Tools](https://owasp.org/www-community/Source_Code_Analysis_Tools)
-

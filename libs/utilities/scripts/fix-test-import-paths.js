@@ -13,21 +13,31 @@ function fixImportsInFile(filePath) {
   // Fix LearningTypeContext imports
   const oldContextPattern = /\.\.\/\.\.\/context\/LearningTypeContext/g;
   if (oldContextPattern.test(content)) {
-    content = content.replace(oldContextPattern, "../../src/context/LearningTypeContext");
+    content = content.replace(
+      oldContextPattern,
+      "../../src/context/LearningTypeContext",
+    );
     modified = true;
   }
 
   // Fix test-utils/mocks/shared-contexts imports (2 levels up)
   const oldTestUtilsPattern = /\.\.\/\.\.\/test-utils\/mocks\/shared-contexts/g;
   if (oldTestUtilsPattern.test(content)) {
-    content = content.replace(oldTestUtilsPattern, "../../src/test-utils/mocks/shared-contexts");
+    content = content.replace(
+      oldTestUtilsPattern,
+      "../../src/test-utils/mocks/shared-contexts",
+    );
     modified = true;
   }
 
   // Fix test-utils/mocks/shared-contexts imports (3 levels up for admin)
-  const oldTestUtilsPattern3 = /\.\.\/\.\.\/\.\.\/test-utils\/mocks\/shared-contexts/g;
+  const oldTestUtilsPattern3 =
+    /\.\.\/\.\.\/\.\.\/test-utils\/mocks\/shared-contexts/g;
   if (oldTestUtilsPattern3.test(content)) {
-    content = content.replace(oldTestUtilsPattern3, "../../../src/test-utils/mocks/shared-contexts");
+    content = content.replace(
+      oldTestUtilsPattern3,
+      "../../../src/test-utils/mocks/shared-contexts",
+    );
     modified = true;
   }
 
@@ -65,4 +75,3 @@ function walkDir(dir) {
 console.log("Fixing test import paths...\n");
 const fixed = walkDir(WEBSITE_PAGE_COMPONENTS);
 console.log(`\n✅ Fixed ${fixed} test file(s)`);
-

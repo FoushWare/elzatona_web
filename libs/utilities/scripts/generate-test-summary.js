@@ -10,13 +10,13 @@ const OUTPUT_FILE = path.join(__dirname, "../../../docs/TEST_SUMMARY.md");
  */
 function findFilesWithTests(dir, extensions = [".tsx", ".ts", ".jsx", ".js"]) {
   const files = [];
-  
+
   function walkDir(currentDir) {
     const entries = fs.readdirSync(currentDir, { withFileTypes: true });
-    
+
     for (const entry of entries) {
       const fullPath = path.join(currentDir, entry.name);
-      
+
       // Skip build/cache directories
       if (
         entry.name.startsWith(".") ||
@@ -28,7 +28,7 @@ function findFilesWithTests(dir, extensions = [".tsx", ".ts", ".jsx", ".js"]) {
       ) {
         continue;
       }
-      
+
       if (entry.isDirectory()) {
         walkDir(fullPath);
       } else if (entry.isFile()) {
@@ -36,7 +36,7 @@ function findFilesWithTests(dir, extensions = [".tsx", ".ts", ".jsx", ".js"]) {
         if (extensions.includes(ext)) {
           const baseName = path.basename(entry.name, ext);
           const dir = path.dirname(fullPath);
-          
+
           // Find associated test files
           const testFiles = [];
           const testPatterns = [
@@ -47,14 +47,14 @@ function findFilesWithTests(dir, extensions = [".tsx", ".ts", ".jsx", ".js"]) {
             `page.integration.test${ext}`,
             `route.test${ext}`,
           ];
-          
+
           for (const pattern of testPatterns) {
             const testPath = path.join(dir, pattern);
             if (fs.existsSync(testPath)) {
               testFiles.push(pattern);
             }
           }
-          
+
           // Find storybook files
           const storyFiles = [];
           const storyPattern = `${baseName}.stories${ext}`;
@@ -62,8 +62,13 @@ function findFilesWithTests(dir, extensions = [".tsx", ".ts", ".jsx", ".js"]) {
           if (fs.existsSync(storyPath)) {
             storyFiles.push(storyPattern);
           }
-          
-          if (testFiles.length > 0 || storyFiles.length > 0 || entry.name.includes("test") || entry.name.includes("spec")) {
+
+          if (
+            testFiles.length > 0 ||
+            storyFiles.length > 0 ||
+            entry.name.includes("test") ||
+            entry.name.includes("spec")
+          ) {
             files.push({
               path: fullPath,
               name: entry.name,
@@ -77,16 +82,19 @@ function findFilesWithTests(dir, extensions = [".tsx", ".ts", ".jsx", ".js"]) {
       }
     }
   }
-  
+
   walkDir(dir);
   return files;
 }
 
 function getFileType(filePath) {
   if (filePath.includes("/components/")) return "component";
-  if (filePath.includes("/page-components/") || filePath.includes("/pages/")) return "page";
-  if (filePath.includes("/network/routes/") || filePath.includes("/api/")) return "route";
-  if (filePath.includes("/utilities/") || filePath.includes("/utils/")) return "utility";
+  if (filePath.includes("/page-components/") || filePath.includes("/pages/"))
+    return "page";
+  if (filePath.includes("/network/routes/") || filePath.includes("/api/"))
+    return "route";
+  if (filePath.includes("/utilities/") || filePath.includes("/utils/"))
+    return "utility";
   if (filePath.includes("/lib/")) return "library";
   if (filePath.includes("/context/")) return "context";
   if (filePath.includes("/providers/")) return "provider";
@@ -103,11 +111,16 @@ function runTests() {
     integration: { passed: 0, failed: 0, total: 0 },
     e2e: { passed: 0, failed: 0, total: 0 },
   };
-  
+
   try {
     console.log("Running unit tests...");
-    const unitOutput = execSync("bun run test:unit 2>&1", { encoding: "utf8", maxBuffer: 10 * 1024 * 1024 });
-    const unitMatch = unitOutput.match(/Tests:\s+(\d+)\s+failed,\s+(\d+)\s+passed/);
+    const unitOutput = execSync("bun run test:unit 2>&1", {
+      encoding: "utf8",
+      maxBuffer: 10 * 1024 * 1024,
+    });
+    const unitMatch = unitOutput.match(
+      /Tests:\s+(\d+)\s+failed,\s+(\d+)\s+passed/,
+    );
     if (unitMatch) {
       results.unit.failed = parseInt(unitMatch[1]);
       results.unit.passed = parseInt(unitMatch[2]);
@@ -122,15 +135,21 @@ function runTests() {
       results.unit.total = results.unit.passed + results.unit.failed;
     }
   }
-  
+
   try {
     console.log("Running integration tests...");
-    const integrationOutput = execSync("bun run test:integration 2>&1", { encoding: "utf8", maxBuffer: 10 * 1024 * 1024 });
-    const integrationMatch = integrationOutput.match(/Tests:\s+(\d+)\s+failed,\s+(\d+)\s+passed/);
+    const integrationOutput = execSync("bun run test:integration 2>&1", {
+      encoding: "utf8",
+      maxBuffer: 10 * 1024 * 1024,
+    });
+    const integrationMatch = integrationOutput.match(
+      /Tests:\s+(\d+)\s+failed,\s+(\d+)\s+passed/,
+    );
     if (integrationMatch) {
       results.integration.failed = parseInt(integrationMatch[1]);
       results.integration.passed = parseInt(integrationMatch[2]);
-      results.integration.total = results.integration.passed + results.integration.failed;
+      results.integration.total =
+        results.integration.passed + results.integration.failed;
     }
   } catch (e) {
     const output = e.stdout || e.message;
@@ -138,10 +157,11 @@ function runTests() {
     if (match) {
       results.integration.failed = parseInt(match[1]);
       results.integration.passed = parseInt(match[2]);
-      results.integration.total = results.integration.passed + results.integration.failed;
+      results.integration.total =
+        results.integration.passed + results.integration.failed;
     }
   }
-  
+
   return results;
 }
 
@@ -150,10 +170,10 @@ function runTests() {
  */
 function generateSummary() {
   console.log("📊 Generating comprehensive test summary...\n");
-  
+
   const files = findFilesWithTests(APPS_DIR);
   const testResults = runTests();
-  
+
   // Group by type
   const byType = {
     component: [],
@@ -166,11 +186,11 @@ function generateSummary() {
     hook: [],
     other: [],
   };
-  
+
   for (const file of files) {
     byType[file.type].push(file);
   }
-  
+
   // Generate markdown report
   let report = `# Comprehensive Test Summary
 
@@ -261,8 +281,8 @@ Generated: ${new Date().toISOString()}
 
   // Summary statistics
   const totalFiles = files.length;
-  const filesWithTests = files.filter(f => f.tests.length > 0).length;
-  const filesWithStories = files.filter(f => f.stories.length > 0).length;
+  const filesWithTests = files.filter((f) => f.tests.length > 0).length;
+  const filesWithStories = files.filter((f) => f.stories.length > 0).length;
   const totalTests = files.reduce((sum, f) => sum + f.tests.length, 0);
   const totalStories = files.reduce((sum, f) => sum + f.stories.length, 0);
 
@@ -280,7 +300,7 @@ Generated: ${new Date().toISOString()}
 
   for (const [type, typeFiles] of Object.entries(byType)) {
     if (typeFiles.length > 0) {
-      const withTests = typeFiles.filter(f => f.tests.length > 0).length;
+      const withTests = typeFiles.filter((f) => f.tests.length > 0).length;
       const coverage = ((withTests / typeFiles.length) * 100).toFixed(1);
       report += `- **${type.charAt(0).toUpperCase() + type.slice(1)}s:** ${withTests}/${typeFiles.length} (${coverage}%)\n`;
     }
@@ -291,4 +311,3 @@ Generated: ${new Date().toISOString()}
 }
 
 generateSummary();
-

@@ -1,7 +1,11 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { UserAuthService } from '@/lib/user-auth';
-import { sanitizeInputServer } from '@/lib/utils/sanitize-server';
-import { validateAndSanitize, registerSchema, loginSchema } from '@/lib/utils/validation';
+import { NextRequest, NextResponse } from "next/server";
+import { UserAuthService } from "@/lib/user-auth";
+import { sanitizeInputServer } from "@/lib/utils/sanitize-server";
+import {
+  validateAndSanitize,
+  registerSchema,
+  loginSchema,
+} from "@/lib/utils/validation";
 
 export async function POST(request: NextRequest) {
   try {
@@ -10,8 +14,8 @@ export async function POST(request: NextRequest) {
 
     if (!email || !password) {
       return NextResponse.json(
-        { success: false, error: 'Email and password are required' },
-        { status: 400 }
+        { success: false, error: "Email and password are required" },
+        { status: 400 },
       );
     }
 
@@ -22,13 +26,13 @@ export async function POST(request: NextRequest) {
         email,
         password,
         name,
-        role: role || 'user',
+        role: role || "user",
       });
 
       if (!validationResult.success) {
         return NextResponse.json(
           { success: false, error: validationResult.error },
-          { status: 400 }
+          { status: 400 },
         );
       }
 
@@ -36,19 +40,19 @@ export async function POST(request: NextRequest) {
         validationResult.data.email,
         validationResult.data.password,
         validationResult.data.name,
-        validationResult.data.role
+        validationResult.data.role,
       );
 
       if (result.success) {
         return NextResponse.json({
           success: true,
-          message: 'User registered successfully',
+          message: "User registered successfully",
           userId: result.userId,
         });
       } else {
         return NextResponse.json(
           { success: false, error: result.error },
-          { status: 400 }
+          { status: 400 },
         );
       }
     } else {
@@ -62,13 +66,13 @@ export async function POST(request: NextRequest) {
       if (!validationResult.success) {
         return NextResponse.json(
           { success: false, error: validationResult.error },
-          { status: 400 }
+          { status: 400 },
         );
       }
 
       const result = await UserAuthService.authenticateUser(
         validationResult.data.email,
-        validationResult.data.password
+        validationResult.data.password,
       );
 
       if (result.success) {
@@ -79,15 +83,15 @@ export async function POST(request: NextRequest) {
       } else {
         return NextResponse.json(
           { success: false, error: result.error },
-          { status: 401 }
+          { status: 401 },
         );
       }
     }
   } catch (error) {
-    console.error('Auth API error:', error);
+    console.error("Auth API error:", error);
     return NextResponse.json(
-      { success: false, error: 'Internal server error' },
-      { status: 500 }
+      { success: false, error: "Internal server error" },
+      { status: 500 },
     );
   }
 }

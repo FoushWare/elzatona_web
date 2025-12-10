@@ -1,7 +1,7 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { createClient } from '@supabase/supabase-js';
-import { cookies } from 'next/headers';
-import { verifySupabaseToken } from '@/lib/server-auth';
+import { NextRequest, NextResponse } from "next/server";
+import { createClient } from "@supabase/supabase-js";
+import { cookies } from "next/headers";
+import { verifySupabaseToken } from "@/lib/server-auth";
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
 const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
@@ -11,14 +11,14 @@ export async function GET(request: NextRequest) {
   try {
     // Get the Firebase token from cookies
     const cookieStore = await cookies();
-    const token = cookieStore.get('firebase_token')?.value;
+    const token = cookieStore.get("firebase_token")?.value;
 
     if (!token) {
-      console.log('⚠️ No authentication token found, returning empty progress');
+      console.log("⚠️ No authentication token found, returning empty progress");
       return NextResponse.json({
         success: true,
         progress: null,
-        message: 'No progress found (not authenticated)',
+        message: "No progress found (not authenticated)",
       });
     }
 
@@ -28,43 +28,43 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({
         success: true,
         progress: null,
-        message: 'Token verification failed',
+        message: "Token verification failed",
       });
     }
 
     const { searchParams } = new URL(request.url);
-    const planId = searchParams.get('planId');
+    const planId = searchParams.get("planId");
 
     if (!planId) {
       return NextResponse.json(
-        { error: 'planId is required' },
-        { status: 400 }
+        { error: "planId is required" },
+        { status: 400 },
       );
     }
 
-    console.log('📥 Loading guided learning progress for plan:', planId);
+    console.log("📥 Loading guided learning progress for plan:", planId);
 
     // Fetch user progress from database
     const { data, error } = await supabase
-      .from('user_progress')
-      .select('*')
-      .eq('user_id', decodedToken.id)
-      .eq('plan_id', planId)
+      .from("user_progress")
+      .select("*")
+      .eq("user_id", decodedToken.id)
+      .eq("plan_id", planId)
       .single();
 
     if (error || !data) {
-      console.log('📭 No existing progress found in database');
+      console.log("📭 No existing progress found in database");
       return NextResponse.json({
         success: true,
         progress: null,
-        message: 'No existing progress found',
+        message: "No existing progress found",
       });
     }
 
     // Extract progress data from JSONB field
     const progressData = data.progress_data as any;
 
-    console.log('✅ Loaded progress from database');
+    console.log("✅ Loaded progress from database");
 
     return NextResponse.json({
       success: true,
@@ -84,12 +84,12 @@ export async function GET(request: NextRequest) {
       },
     });
   } catch (error) {
-    console.error('❌ Error loading progress:', error);
+    console.error("❌ Error loading progress:", error);
 
     return NextResponse.json({
       success: true,
       progress: null,
-      message: 'Error loading progress',
+      message: "Error loading progress",
     });
   }
 }

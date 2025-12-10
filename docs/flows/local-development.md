@@ -11,12 +11,14 @@
 ### Initial Setup
 
 1. **Clone the repository**
+
    ```bash
    git clone <repository-url>
    cd Elzatona-web
    ```
 
 2. **Install dependencies**
+
    ```bash
    bun install
    # or
@@ -24,24 +26,26 @@
    ```
 
 3. **Set up environment variables**
+
    ```bash
    # Copy example files
    cp .env.example .env.local
    cp .env.test.local.example .env.test.local
    cp .env.dev.local.example .env.dev.local
-   
+
    # Fill in your Supabase credentials
    # See docs/flows/environment-setup.md for details
    ```
 
 4. **Start development server**
+
    ```bash
    # Production environment (default)
    bun run dev
-   
+
    # Test environment
    bun run dev:test
-   
+
    # Development environment
    bun run dev:dev
    ```
@@ -172,4 +176,3 @@ See [docs/structure.md](../structure.md) for detailed project structure.
 - [Testing Guide](../testing.md)
 - [CI/CD Pipeline](ci-cd-pipeline.md)
 - [Deployment Flow](deployment.md)
-

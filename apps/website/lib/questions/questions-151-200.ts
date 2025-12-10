@@ -1,7 +1,7 @@
-import { ReactQuestion } from './types';
+import { ReactQuestion } from "./types";
 
 export const questions3: ReactQuestion[] = [
-{
+  {
     id: 151,
     question: "What is the purpose of the useImperativeHandle hook?",
     options: [
@@ -11,7 +11,8 @@ export const questions3: ReactQuestion[] = [
       "To handle DOM manipulations",
     ],
     answer: "A",
-    explanation: "useImperativeHandle allows a child component to expose custom functions or properties to its parent component when using ref.",
+    explanation:
+      "useImperativeHandle allows a child component to expose custom functions or properties to its parent component when using ref.",
     code: `// useImperativeHandle example
 import { useImperativeHandle, forwardRef } from 'react';
 
@@ -28,7 +29,7 @@ const ChildComponent = forwardRef((props, ref) => {
   return <input {...props} />;
 });`,
   },
-{
+  {
     id: 152,
     question: "What is the purpose of the useDebugValue hook?",
     options: [
@@ -38,7 +39,8 @@ const ChildComponent = forwardRef((props, ref) => {
       "To handle debugging operations",
     ],
     answer: "A",
-    explanation: "useDebugValue is used to display custom labels in React DevTools for custom hooks.",
+    explanation:
+      "useDebugValue is used to display custom labels in React DevTools for custom hooks.",
     code: `// useDebugValue example
 import { useState, useDebugValue } from 'react';
 
@@ -50,7 +52,7 @@ function useOnlineStatus() {
   return isOnline;
 }`,
   },
-{
+  {
     id: 153,
     question: "What is the difference between useEffect and useLayoutEffect?",
     options: [
@@ -60,7 +62,8 @@ function useOnlineStatus() {
       "They are identical in functionality",
     ],
     answer: "A",
-    explanation: "useLayoutEffect runs synchronously after all DOM mutations, while useEffect runs asynchronously after the browser has painted.",
+    explanation:
+      "useLayoutEffect runs synchronously after all DOM mutations, while useEffect runs asynchronously after the browser has painted.",
     code: `// useEffect vs useLayoutEffect
 import { useEffect, useLayoutEffect } from 'react';
 
@@ -78,7 +81,7 @@ function MyComponent() {
   return <div>Component</div>;
 }`,
   },
-{
+  {
     id: 154,
     question: "What is the purpose of the useReducer hook?",
     options: [
@@ -88,7 +91,8 @@ function MyComponent() {
       "To handle async operations",
     ],
     answer: "A",
-    explanation: "useReducer is used to manage complex state logic that involves multiple sub-values or when the next state depends on the previous one.",
+    explanation:
+      "useReducer is used to manage complex state logic that involves multiple sub-values or when the next state depends on the previous one.",
     code: `// useReducer example
 import { useReducer } from 'react';
 
@@ -117,7 +121,7 @@ function Counter() {
   );
 }`,
   },
-{
+  {
     id: 155,
     question: "What is the purpose of the useContext hook?",
     options: [
@@ -127,7 +131,8 @@ function Counter() {
       "To handle component communication",
     ],
     answer: "A",
-    explanation: "useContext is used to consume values from React context, allowing components to access data without prop drilling.",
+    explanation:
+      "useContext is used to consume values from React context, allowing components to access data without prop drilling.",
     code: `// useContext example
 import { createContext, useContext } from 'react';
 
@@ -143,7 +148,7 @@ function ThemedButton() {
   );
 }`,
   },
-{
+  {
     id: 156,
     question: "What is the purpose of the useRef hook?",
     options: [
@@ -153,7 +158,8 @@ function ThemedButton() {
       "To store mutable values",
     ],
     answer: "A",
-    explanation: "useRef is used to persist values across renders without causing re-renders, and to access DOM elements directly.",
+    explanation:
+      "useRef is used to persist values across renders without causing re-renders, and to access DOM elements directly.",
     code: `// useRef example
 import { useRef, useEffect } from 'react';
 
@@ -172,7 +178,7 @@ function TextInputWithFocusButton() {
   );
 }`,
   },
-{
+  {
     id: 157,
     question: "What is the purpose of the useMemo hook?",
     options: [
@@ -182,7 +188,8 @@ function TextInputWithFocusButton() {
       "To store computed values",
     ],
     answer: "A",
-    explanation: "useMemo is used to memoize expensive calculations and prevent unnecessary recalculations on every render.",
+    explanation:
+      "useMemo is used to memoize expensive calculations and prevent unnecessary recalculations on every render.",
     code: `// useMemo example
 import { useMemo } from 'react';
 
@@ -194,7 +201,7 @@ function ExpensiveComponent({ items }) {
   return <div>Total: {expensiveValue}</div>;
 }`,
   },
-{
+  {
     id: 158,
     question: "What is the purpose of the useCallback hook?",
     options: [
@@ -204,7 +211,8 @@ function ExpensiveComponent({ items }) {
       "To cache function calls",
     ],
     answer: "A",
-    explanation: "useCallback is used to memoize functions and prevent unnecessary re-renders of child components that depend on those functions.",
+    explanation:
+      "useCallback is used to memoize functions and prevent unnecessary re-renders of child components that depend on those functions.",
     code: `// useCallback example
 import { useCallback } from 'react';
 
@@ -221,7 +229,7 @@ function ParentComponent({ items }) {
   );
 }`,
   },
-{
+  {
     id: 159,
     question: "What is the purpose of the useState hook?",
     options: [
@@ -231,7 +239,8 @@ function ParentComponent({ items }) {
       "To manage local state",
     ],
     answer: "A",
-    explanation: "useState is used to manage component state and trigger re-renders when state changes.",
+    explanation:
+      "useState is used to manage component state and trigger re-renders when state changes.",
     code: `// useState example
 import { useState } from 'react';
 
@@ -248,7 +257,7 @@ function Counter() {
   );
 }`,
   },
-{
+  {
     id: 160,
     question: "What is the purpose of the useEffect hook?",
     options: [
@@ -258,7 +267,8 @@ function Counter() {
       "To perform cleanup",
     ],
     answer: "A",
-    explanation: "useEffect is used to handle side effects in functional components, such as data fetching, subscriptions, or DOM manipulations.",
+    explanation:
+      "useEffect is used to handle side effects in functional components, such as data fetching, subscriptions, or DOM manipulations.",
     code: `// useEffect example
 import { useEffect, useState } from 'react';
 
@@ -272,7 +282,7 @@ function UserProfile({ userId }) {
   return user ? <div>{user.name}</div> : <div>Loading...</div>;
 }`,
   },
-{
+  {
     id: 161,
     question: "What is the Virtual DOM in React?",
     options: [
@@ -282,7 +292,8 @@ function UserProfile({ userId }) {
       "A React-specific DOM implementation",
     ],
     answer: "A",
-    explanation: "The Virtual DOM is a lightweight copy of the actual DOM that React uses to optimize rendering performance by minimizing direct DOM manipulations.",
+    explanation:
+      "The Virtual DOM is a lightweight copy of the actual DOM that React uses to optimize rendering performance by minimizing direct DOM manipulations.",
     code: `// Virtual DOM concept
 // React creates a virtual representation of the UI
 const virtualElement = {
@@ -295,7 +306,7 @@ const virtualElement = {
 // Then compares it with the actual DOM
 // and only updates what changed`,
   },
-{
+  {
     id: 162,
     question: "What is JSX in React?",
     options: [
@@ -305,7 +316,8 @@ const virtualElement = {
       "A styling system",
     ],
     answer: "A",
-    explanation: "JSX is a syntax extension for JavaScript that allows you to write HTML-like code in JavaScript, making React components more readable and expressive.",
+    explanation:
+      "JSX is a syntax extension for JavaScript that allows you to write HTML-like code in JavaScript, making React components more readable and expressive.",
     code: `// JSX example
 function Welcome() {
   return (
@@ -316,7 +328,7 @@ function Welcome() {
   );
 }`,
   },
-{
+  {
     id: 163,
     question: "What is the difference between props and state?",
     options: [
@@ -326,7 +338,8 @@ function Welcome() {
       "Props are immutable, state can change",
     ],
     answer: "A",
-    explanation: "Props are read-only and passed from parent to child components, while state is mutable and managed internally by the component.",
+    explanation:
+      "Props are read-only and passed from parent to child components, while state is mutable and managed internally by the component.",
     code: `// Props vs State example
 function ChildComponent({ name }) { // props
   const [count, setCount] = useState(0); // state
@@ -342,7 +355,7 @@ function ChildComponent({ name }) { // props
   );
 }`,
   },
-{
+  {
     id: 164,
     question: "What is a controlled component?",
     options: [
@@ -352,7 +365,8 @@ function ChildComponent({ name }) { // props
       "A component with controlled rendering",
     ],
     answer: "A",
-    explanation: "A controlled component is a form element whose value is controlled by React state, allowing React to control the input's value and handle changes.",
+    explanation:
+      "A controlled component is a form element whose value is controlled by React state, allowing React to control the input's value and handle changes.",
     code: `// Controlled component example
 function ControlledInput() {
   const [value, setValue] = useState('');
@@ -366,7 +380,7 @@ function ControlledInput() {
   );
 }`,
   },
-{
+  {
     id: 165,
     question: "What is an uncontrolled component?",
     options: [
@@ -376,7 +390,8 @@ function ControlledInput() {
       "A component without event handlers",
     ],
     answer: "A",
-    explanation: "An uncontrolled component manages its own state internally using refs, rather than being controlled by React state.",
+    explanation:
+      "An uncontrolled component manages its own state internally using refs, rather than being controlled by React state.",
     code: `// Uncontrolled component example
 function UncontrolledInput() {
   const inputRef = useRef(null);
@@ -393,7 +408,7 @@ function UncontrolledInput() {
   );
 }`,
   },
-{
+  {
     id: 166,
     question: "What is the key prop in React?",
     options: [
@@ -403,7 +418,8 @@ function UncontrolledInput() {
       "A prop for component keys",
     ],
     answer: "A",
-    explanation: "The key prop is a special attribute that helps React identify which items have changed, been added, or been removed in lists.",
+    explanation:
+      "The key prop is a special attribute that helps React identify which items have changed, been added, or been removed in lists.",
     code: `// Key prop example
 function TodoList({ todos }) {
   return (
@@ -417,7 +433,7 @@ function TodoList({ todos }) {
   );
 }`,
   },
-{
+  {
     id: 167,
     question: "What is a Higher-Order Component (HOC)?",
     options: [
@@ -427,7 +443,8 @@ function TodoList({ todos }) {
       "A component with advanced features",
     ],
     answer: "A",
-    explanation: "A Higher-Order Component is a function that takes a component and returns a new component with additional props or behavior.",
+    explanation:
+      "A Higher-Order Component is a function that takes a component and returns a new component with additional props or behavior.",
     code: `// HOC example
 function withLoading(WrappedComponent) {
   return function WithLoadingComponent(props) {
@@ -440,7 +457,7 @@ function withLoading(WrappedComponent) {
 
 const UserListWithLoading = withLoading(UserList);`,
   },
-{
+  {
     id: 168,
     question: "What is the children prop?",
     options: [
@@ -450,7 +467,8 @@ const UserListWithLoading = withLoading(UserList);`,
       "A prop for component composition",
     ],
     answer: "A",
-    explanation: "The children prop is a special prop that contains the content between the opening and closing tags of a component.",
+    explanation:
+      "The children prop is a special prop that contains the content between the opening and closing tags of a component.",
     code: `// Children prop example
 function Container({ children }) {
   return (
@@ -466,7 +484,7 @@ function Container({ children }) {
   <p>Content</p>
 </Container>`,
   },
-{
+  {
     id: 169,
     question: "What is React Fragments?",
     options: [
@@ -476,7 +494,8 @@ function Container({ children }) {
       "A React-specific element",
     ],
     answer: "A",
-    explanation: "React Fragments allow you to group multiple elements together without adding an extra DOM node.",
+    explanation:
+      "React Fragments allow you to group multiple elements together without adding an extra DOM node.",
     code: `// React Fragments example
 function MyComponent() {
   return (
@@ -488,7 +507,7 @@ function MyComponent() {
   );
 }`,
   },
-{
+  {
     id: 170,
     question: "What is React Portals?",
     options: [
@@ -498,7 +517,8 @@ function MyComponent() {
       "A React feature for DOM manipulation",
     ],
     answer: "A",
-    explanation: "React Portals provide a way to render children into a DOM node that exists outside the DOM hierarchy of the parent component.",
+    explanation:
+      "React Portals provide a way to render children into a DOM node that exists outside the DOM hierarchy of the parent component.",
     code: `// React Portals example
 import { createPortal } from 'react-dom';
 
@@ -511,7 +531,7 @@ function Modal({ children }) {
   );
 }`,
   },
-{
+  {
     id: 171,
     question: "What is React Context?",
     options: [
@@ -521,7 +541,8 @@ function Modal({ children }) {
       "A React feature for data sharing",
     ],
     answer: "A",
-    explanation: "React Context provides a way to share data between components without having to explicitly pass props through every level.",
+    explanation:
+      "React Context provides a way to share data between components without having to explicitly pass props through every level.",
     code: `// React Context example
 import { createContext, useContext } from 'react';
 
@@ -540,7 +561,7 @@ function ThemedButton() {
   return <button className={theme}>Button</button>;
 }`,
   },
-{
+  {
     id: 172,
     question: "What is React Error Boundaries?",
     options: [
@@ -550,7 +571,8 @@ function ThemedButton() {
       "A React feature for error management",
     ],
     answer: "A",
-    explanation: "Error Boundaries are React components that catch JavaScript errors anywhere in their child component tree and display a fallback UI.",
+    explanation:
+      "Error Boundaries are React components that catch JavaScript errors anywhere in their child component tree and display a fallback UI.",
     code: `// Error Boundary example
 class ErrorBoundary extends React.Component {
   constructor(props) {
@@ -571,7 +593,7 @@ class ErrorBoundary extends React.Component {
   }
 }`,
   },
-{
+  {
     id: 173,
     question: "What is React Suspense?",
     options: [
@@ -581,7 +603,8 @@ class ErrorBoundary extends React.Component {
       "A React feature for async operations",
     ],
     answer: "A",
-    explanation: "React Suspense is a component that lets you wrap components that might need to wait for something before they can render.",
+    explanation:
+      "React Suspense is a component that lets you wrap components that might need to wait for something before they can render.",
     code: `// React Suspense example
 import { Suspense, lazy } from 'react';
 
@@ -595,7 +618,7 @@ function App() {
   );
 }`,
   },
-{
+  {
     id: 174,
     question: "What is React.memo?",
     options: [
@@ -605,7 +628,8 @@ function App() {
       "A React feature for optimization",
     ],
     answer: "A",
-    explanation: "React.memo is a higher-order component that memoizes your component, preventing unnecessary re-renders when props haven't changed.",
+    explanation:
+      "React.memo is a higher-order component that memoizes your component, preventing unnecessary re-renders when props haven't changed.",
     code: `// React.memo example
 import { memo } from 'react';
 
@@ -615,7 +639,7 @@ const MyComponent = memo(function MyComponent({ name }) {
 
 // Component will only re-render if 'name' prop changes`,
   },
-{
+  {
     id: 175,
     question: "What is React.lazy?",
     options: [
@@ -625,7 +649,8 @@ const MyComponent = memo(function MyComponent({ name }) {
       "A React feature for performance optimization",
     ],
     answer: "A",
-    explanation: "React.lazy is a function that enables dynamic imports and code splitting, allowing you to load components only when they are needed.",
+    explanation:
+      "React.lazy is a function that enables dynamic imports and code splitting, allowing you to load components only when they are needed.",
     code: `// React.lazy example
 import { lazy, Suspense } from 'react';
 
@@ -639,7 +664,7 @@ function App() {
   );
 }`,
   },
-{
+  {
     id: 176,
     question: "What is the purpose of the useSyncExternalStore hook?",
     options: [
@@ -649,7 +674,8 @@ function App() {
       "To manage external data",
     ],
     answer: "A",
-    explanation: "useSyncExternalStore is used to subscribe to external data sources and ensure consistency between server and client rendering.",
+    explanation:
+      "useSyncExternalStore is used to subscribe to external data sources and ensure consistency between server and client rendering.",
     code: `// useSyncExternalStore example
 import { useSyncExternalStore } from 'react';
 
@@ -670,7 +696,7 @@ function useOnlineStatus() {
   return isOnline;
 }`,
   },
-{
+  {
     id: 177,
     question: "What is the purpose of the useInsertionEffect hook?",
     options: [
@@ -680,7 +706,8 @@ function useOnlineStatus() {
       "To handle DOM insertions",
     ],
     answer: "A",
-    explanation: "useInsertionEffect is used to inject styles into the DOM, particularly useful for CSS-in-JS libraries.",
+    explanation:
+      "useInsertionEffect is used to inject styles into the DOM, particularly useful for CSS-in-JS libraries.",
     code: `// useInsertionEffect example
 import { useInsertionEffect } from 'react';
 
@@ -696,7 +723,7 @@ function useStyles(css) {
   }, [css]);
 }`,
   },
-{
+  {
     id: 178,
     question: "What is the purpose of the useOptimistic hook?",
     options: [
@@ -706,7 +733,8 @@ function useStyles(css) {
       "To handle async operations optimistically",
     ],
     answer: "A",
-    explanation: "useOptimistic is used to show optimistic updates in the UI before the actual operation completes.",
+    explanation:
+      "useOptimistic is used to show optimistic updates in the UI before the actual operation completes.",
     code: `// useOptimistic example
 import { useOptimistic } from 'react';
 
@@ -732,7 +760,7 @@ function TodoList({ todos }) {
   );
 }`,
   },
-{
+  {
     id: 179,
     question: "What is the purpose of the useActionState hook?",
     options: [
@@ -742,7 +770,8 @@ function TodoList({ todos }) {
       "To handle action results",
     ],
     answer: "A",
-    explanation: "useActionState is used to manage the state of server actions, including loading states and results.",
+    explanation:
+      "useActionState is used to manage the state of server actions, including loading states and results.",
     code: `// useActionState example
 import { useActionState } from 'react';
 
@@ -765,7 +794,7 @@ function MyForm() {
   );
 }`,
   },
-{
+  {
     id: 180,
     question: "What is the purpose of the useFormStatus hook?",
     options: [
@@ -775,7 +804,8 @@ function MyForm() {
       "To handle form events",
     ],
     answer: "A",
-    explanation: "useFormStatus provides information about the status of form submissions, useful for showing loading states.",
+    explanation:
+      "useFormStatus provides information about the status of form submissions, useful for showing loading states.",
     code: `// useFormStatus example
 import { useFormStatus } from 'react';
 
@@ -789,7 +819,7 @@ function SubmitButton() {
   );
 }`,
   },
-{
+  {
     id: 181,
     question: "What is the purpose of the use hook?",
     options: [
@@ -799,7 +829,8 @@ function SubmitButton() {
       "To handle data fetching",
     ],
     answer: "A",
-    explanation: "The use hook is used to consume promises and context, allowing components to read from promises and context providers.",
+    explanation:
+      "The use hook is used to consume promises and context, allowing components to read from promises and context providers.",
     code: `// use hook example
 import { use } from 'react';
 
@@ -814,7 +845,7 @@ function UserProfile({ userPromise }) {
   );
 }`,
   },
-{
+  {
     id: 182,
     question: "What is the purpose of the useCache hook?",
     options: [
@@ -824,7 +855,8 @@ function UserProfile({ userPromise }) {
       "To store cached values",
     ],
     answer: "A",
-    explanation: "useCache is used to cache function results and avoid unnecessary recalculations.",
+    explanation:
+      "useCache is used to cache function results and avoid unnecessary recalculations.",
     code: `// useCache example
 import { useCache } from 'react';
 
@@ -836,7 +868,7 @@ function ExpensiveComponent({ id }) {
   return <div>{data}</div>;
 }`,
   },
-{
+  {
     id: 183,
     question: "What is the difference between useMemo and useCallback?",
     options: [
@@ -846,7 +878,8 @@ function ExpensiveComponent({ id }) {
       "useMemo is deprecated",
     ],
     answer: "A",
-    explanation: "useMemo memoizes computed values, while useCallback memoizes functions to prevent unnecessary re-renders of child components.",
+    explanation:
+      "useMemo memoizes computed values, while useCallback memoizes functions to prevent unnecessary re-renders of child components.",
     code: `// useMemo vs useCallback example
 import { useMemo, useCallback } from 'react';
 
@@ -869,7 +902,7 @@ function ParentComponent({ items }) {
   );
 }`,
   },
-{
+  {
     id: 184,
     question: "What is the purpose of the useDeferredValue hook?",
     options: [
@@ -879,7 +912,8 @@ function ParentComponent({ items }) {
       "To handle slow updates",
     ],
     answer: "A",
-    explanation: "useDeferredValue is used to defer updates to prevent blocking the UI, useful for handling slow operations.",
+    explanation:
+      "useDeferredValue is used to defer updates to prevent blocking the UI, useful for handling slow operations.",
     code: `// useDeferredValue example
 import { useState, useDeferredValue } from 'react';
 
@@ -898,7 +932,7 @@ function SearchResults({ query }) {
   );
 }`,
   },
-{
+  {
     id: 185,
     question: "What is the purpose of the useTransition hook?",
     options: [
@@ -908,7 +942,8 @@ function SearchResults({ query }) {
       "To handle async transitions",
     ],
     answer: "A",
-    explanation: "useTransition is used to mark updates as non-urgent, allowing React to interrupt and defer them.",
+    explanation:
+      "useTransition is used to mark updates as non-urgent, allowing React to interrupt and defer them.",
     code: `// useTransition example
 import { useState, useTransition } from 'react';
 
@@ -931,7 +966,7 @@ function App() {
   );
 }`,
   },
-{
+  {
     id: 186,
     question: "What is the purpose of the useId hook?",
     options: [
@@ -941,7 +976,8 @@ function App() {
       "To create stable IDs",
     ],
     answer: "A",
-    explanation: "useId is used to generate unique IDs that are stable across server and client rendering.",
+    explanation:
+      "useId is used to generate unique IDs that are stable across server and client rendering.",
     code: `// useId example
 import { useId } from 'react';
 
@@ -956,7 +992,7 @@ function FormField({ label }) {
   );
 }`,
   },
-{
+  {
     id: 187,
     question: "What is the purpose of the useSyncExternalStore hook?",
     options: [
@@ -966,7 +1002,8 @@ function FormField({ label }) {
       "To manage external data",
     ],
     answer: "A",
-    explanation: "useSyncExternalStore is used to subscribe to external data sources and ensure consistency between server and client rendering.",
+    explanation:
+      "useSyncExternalStore is used to subscribe to external data sources and ensure consistency between server and client rendering.",
     code: `// useSyncExternalStore example
 import { useSyncExternalStore } from 'react';
 
@@ -987,7 +1024,7 @@ function useOnlineStatus() {
   return isOnline;
 }`,
   },
-{
+  {
     id: 188,
     question: "What is the purpose of the useInsertionEffect hook?",
     options: [
@@ -997,7 +1034,8 @@ function useOnlineStatus() {
       "To handle DOM insertions",
     ],
     answer: "A",
-    explanation: "useInsertionEffect is used to inject styles into the DOM, particularly useful for CSS-in-JS libraries.",
+    explanation:
+      "useInsertionEffect is used to inject styles into the DOM, particularly useful for CSS-in-JS libraries.",
     code: `// useInsertionEffect example
 import { useInsertionEffect } from 'react';
 
@@ -1013,7 +1051,7 @@ function useStyles(css) {
   }, [css]);
 }`,
   },
-{
+  {
     id: 189,
     question: "What is the purpose of the useOptimistic hook?",
     options: [
@@ -1023,7 +1061,8 @@ function useStyles(css) {
       "To handle async operations optimistically",
     ],
     answer: "A",
-    explanation: "useOptimistic is used to show optimistic updates in the UI before the actual operation completes.",
+    explanation:
+      "useOptimistic is used to show optimistic updates in the UI before the actual operation completes.",
     code: `// useOptimistic example
 import { useOptimistic } from 'react';
 
@@ -1049,7 +1088,7 @@ function TodoList({ todos }) {
   );
 }`,
   },
-{
+  {
     id: 190,
     question: "What is the purpose of the useActionState hook?",
     options: [
@@ -1059,7 +1098,8 @@ function TodoList({ todos }) {
       "To handle action results",
     ],
     answer: "A",
-    explanation: "useActionState is used to manage the state of server actions, including loading states and results.",
+    explanation:
+      "useActionState is used to manage the state of server actions, including loading states and results.",
     code: `// useActionState example
 import { useActionState } from 'react';
 
@@ -1082,7 +1122,7 @@ function MyForm() {
   );
 }`,
   },
-{
+  {
     id: 191,
     question: "What is the purpose of the useFormStatus hook?",
     options: [
@@ -1092,7 +1132,8 @@ function MyForm() {
       "To handle form events",
     ],
     answer: "A",
-    explanation: "useFormStatus provides information about the status of form submissions, useful for showing loading states.",
+    explanation:
+      "useFormStatus provides information about the status of form submissions, useful for showing loading states.",
     code: `// useFormStatus example
 import { useFormStatus } from 'react';
 
@@ -1106,7 +1147,7 @@ function SubmitButton() {
   );
 }`,
   },
-{
+  {
     id: 192,
     question: "What is the purpose of the useFormState hook?",
     options: [
@@ -1116,7 +1157,8 @@ function SubmitButton() {
       "To manage form events",
     ],
     answer: "A",
-    explanation: "useFormState manages form state and validation. It's useful for handling complex form logic and validation states.",
+    explanation:
+      "useFormState manages form state and validation. It's useful for handling complex form logic and validation states.",
     code: `// useFormState example
 import { useFormState } from 'react';
 
@@ -1135,7 +1177,7 @@ function MyForm() {
   );
 }`,
   },
-{
+  {
     id: 193,
     question: "What is the purpose of the use hook?",
     options: [
@@ -1145,7 +1187,8 @@ function MyForm() {
       "To handle data fetching",
     ],
     answer: "A",
-    explanation: "The use hook is used to consume promises and context, allowing components to read from promises and context providers.",
+    explanation:
+      "The use hook is used to consume promises and context, allowing components to read from promises and context providers.",
     code: `// use hook example
 import { use } from 'react';
 
@@ -1160,7 +1203,7 @@ function UserProfile({ userPromise }) {
   );
 }`,
   },
-{
+  {
     id: 194,
     question: "What is the purpose of the useCache hook?",
     options: [
@@ -1170,7 +1213,8 @@ function UserProfile({ userPromise }) {
       "To store cached values",
     ],
     answer: "A",
-    explanation: "useCache is used to cache function results and avoid unnecessary recalculations.",
+    explanation:
+      "useCache is used to cache function results and avoid unnecessary recalculations.",
     code: `// useCache example
 import { useCache } from 'react';
 
@@ -1182,7 +1226,7 @@ function ExpensiveComponent({ id }) {
   return <div>{data}</div>;
 }`,
   },
-{
+  {
     id: 195,
     question: "What is the difference between useMemo and useCallback?",
     options: [
@@ -1192,7 +1236,8 @@ function ExpensiveComponent({ id }) {
       "useMemo is deprecated",
     ],
     answer: "A",
-    explanation: "useMemo memoizes computed values, while useCallback memoizes functions to prevent unnecessary re-renders of child components.",
+    explanation:
+      "useMemo memoizes computed values, while useCallback memoizes functions to prevent unnecessary re-renders of child components.",
     code: `// useMemo vs useCallback example
 import { useMemo, useCallback } from 'react';
 
@@ -1215,7 +1260,7 @@ function ParentComponent({ items }) {
   );
 }`,
   },
-{
+  {
     id: 196,
     question: "What is the purpose of the useDeferredValue hook?",
     options: [
@@ -1225,7 +1270,8 @@ function ParentComponent({ items }) {
       "To handle slow updates",
     ],
     answer: "A",
-    explanation: "useDeferredValue is used to defer updates to prevent blocking the UI, useful for handling slow operations.",
+    explanation:
+      "useDeferredValue is used to defer updates to prevent blocking the UI, useful for handling slow operations.",
     code: `// useDeferredValue example
 import { useState, useDeferredValue } from 'react';
 
@@ -1244,7 +1290,7 @@ function SearchResults({ query }) {
   );
 }`,
   },
-{
+  {
     id: 197,
     question: "What is the purpose of the useTransition hook?",
     options: [
@@ -1254,7 +1300,8 @@ function SearchResults({ query }) {
       "To handle async transitions",
     ],
     answer: "A",
-    explanation: "useTransition is used to mark updates as non-urgent, allowing React to interrupt and defer them.",
+    explanation:
+      "useTransition is used to mark updates as non-urgent, allowing React to interrupt and defer them.",
     code: `// useTransition example
 import { useState, useTransition } from 'react';
 
@@ -1277,7 +1324,7 @@ function App() {
   );
 }`,
   },
-{
+  {
     id: 198,
     question: "What is the purpose of the useId hook?",
     options: [
@@ -1287,7 +1334,8 @@ function App() {
       "To create stable IDs",
     ],
     answer: "A",
-    explanation: "useId is used to generate unique IDs that are stable across server and client rendering.",
+    explanation:
+      "useId is used to generate unique IDs that are stable across server and client rendering.",
     code: `// useId example
 import { useId } from 'react';
 
@@ -1302,7 +1350,7 @@ function FormField({ label }) {
   );
 }`,
   },
-{
+  {
     id: 199,
     question: "What is the purpose of the useSyncExternalStore hook?",
     options: [
@@ -1312,7 +1360,8 @@ function FormField({ label }) {
       "To manage external data",
     ],
     answer: "A",
-    explanation: "useSyncExternalStore is used to subscribe to external data sources and ensure consistency between server and client rendering.",
+    explanation:
+      "useSyncExternalStore is used to subscribe to external data sources and ensure consistency between server and client rendering.",
     code: `// useSyncExternalStore example
 import { useSyncExternalStore } from 'react';
 
@@ -1333,7 +1382,7 @@ function useOnlineStatus() {
   return isOnline;
 }`,
   },
-{
+  {
     id: 200,
     question: "What is the purpose of the useInsertionEffect hook?",
     options: [
@@ -1343,7 +1392,8 @@ function useOnlineStatus() {
       "To handle DOM insertions",
     ],
     answer: "A",
-    explanation: "useInsertionEffect is used to inject styles into the DOM, particularly useful for CSS-in-JS libraries.",
+    explanation:
+      "useInsertionEffect is used to inject styles into the DOM, particularly useful for CSS-in-JS libraries.",
     code: `// useInsertionEffect example
 import { useInsertionEffect } from 'react';
 
@@ -1359,5 +1409,4 @@ function useStyles(css) {
   }, [css]);
 }`,
   },
-  
 ];

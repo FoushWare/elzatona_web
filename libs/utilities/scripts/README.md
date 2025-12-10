@@ -17,6 +17,7 @@ bash libs/utilities/scripts/script-name.sh
 ## 📋 Script Categories
 
 ### Environment & Configuration
+
 - `verify-env-setup.mjs` - Verify environment setup
 - `verify-supabase-keys.js` - Verify Supabase keys
 - `fix-production-anon-key.js` - Fix production anon key
@@ -28,6 +29,7 @@ bash libs/utilities/scripts/script-name.sh
 - `add-env-comments.js` - Add comments to env files
 
 ### Database & Admin
+
 - `check-supabase-schema.js` - Check Supabase schema
 - `setup-supabase-admin.js` - Setup Supabase admin
 - `setup-admin-final.js` - Final admin setup
@@ -48,6 +50,7 @@ bash libs/utilities/scripts/script-name.sh
 - `verify-password-hash.js` - Verify password hash
 
 ### Database Operations
+
 - `clear-main-database.mjs` - Clear main database
 - `seed-from-testing-to-main.mjs` - Seed from testing to main
 - `export-questions-to-json.js` - Export questions to JSON
@@ -67,6 +70,7 @@ bash libs/utilities/scripts/script-name.sh
 - `save-batch-002.js` - Save batch 002
 
 ### Security & Secrets
+
 - `remove-all-hardcoded-secrets.sh` - Remove hardcoded secrets
 - `fix-all-secrets-comprehensive.js` - Comprehensive secret fixes
 - `fix-all-security-secrets.sh` - Fix all security secrets
@@ -83,6 +87,7 @@ bash libs/utilities/scripts/script-name.sh
 - `pre-push-secret-scan.sh` - Pre-push secret scan
 
 ### Testing & Quality
+
 - `run-all-tests.sh` - Run all tests
 - `run-all-tests-verbose.sh` - Run all tests verbosely
 - `run-sonarqube-local.js` - Run SonarQube locally
@@ -90,6 +95,7 @@ bash libs/utilities/scripts/script-name.sh
 - `remove-failed-github-actions.sh` - Remove failed GitHub actions
 
 ### Deployment & Infrastructure
+
 - `configure-sonarcloud-main-branch.sh` - Configure SonarCloud main branch
 - `create-sonarcloud-project-api.sh` - Create SonarCloud project via API
 - `find-sonarcloud-project-key.sh` - Find SonarCloud project key
@@ -99,6 +105,7 @@ bash libs/utilities/scripts/script-name.sh
 - `cleanup-playwright-videos.sh` - Cleanup Playwright videos
 
 ### Development Tools
+
 - `start-dev-test.sh` - Start dev test environment
 - `check-questions-batches.js` - Check question batches
 - `generate-nextjs-route-handlers.js` - Generate Next.js route handlers
@@ -108,6 +115,7 @@ bash libs/utilities/scripts/script-name.sh
 - `fix-all-imports.js` - Fix all imports
 
 ### Python Scripts (Migrations)
+
 - `apply_migration_from_file.py` - Apply migration from file
 - `apply_topics_migration.py` - Apply topics migration
 - `apply_topics_migration_direct.py` - Apply topics migration directly
@@ -164,6 +172,7 @@ When adding new scripts:
 ## 📦 Script Consolidation
 
 All scripts have been consolidated from:
+
 - `scripts/` → `libs/utilities/scripts/`
 - `Rest/scripts/scripts/` → `libs/utilities/scripts/` (essential ones)
 

@@ -322,7 +322,9 @@ const api = {
       });
     }
     const queryString = searchParams.toString();
-    const url = queryString ? `/api/questions/unified?${queryString}` : "/api/questions/unified";
+    const url = queryString
+      ? `/api/questions/unified?${queryString}`
+      : "/api/questions/unified";
     console.log("API Debug - getQuestionsUnified:", { params, url });
     return api.fetch<{
       data: UnifiedQuestion[];
@@ -466,7 +468,11 @@ const api = {
     api.fetch<{
       success: boolean;
       operations: any[];
-    }>(limit ? `/api/admin/bulk-operations?limit=${limit}` : "/api/admin/bulk-operations"),
+    }>(
+      limit
+        ? `/api/admin/bulk-operations?limit=${limit}`
+        : "/api/admin/bulk-operations",
+    ),
   getBulkOperation: (operationId: string) =>
     api.fetch<{
       success: boolean;
