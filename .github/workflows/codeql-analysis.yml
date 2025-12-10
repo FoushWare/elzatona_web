@@ -52,7 +52,8 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: "20"
-          # Note: No cache since project uses bun.lock, not package-lock.json
+          # Explicitly disable cache since project uses bun.lock, not package-lock.json
+          package-manager-cache: false
 
       - name: Install dependencies
         run: npm install
