@@ -753,7 +753,7 @@ export const QuestionContent = ({ content }: { content: string }) => {
           /<code[^>]*>([^<]{1,30})<\/code>/gi,
           "`$1`",
         );
-        cleanText = cleanText.replace(/<[^>]+>/g, "");
+        cleanText = cleanText.replaceAll(/<[^>]+>/g, "");
         for (let i = 0; i < 3; i++) {
           cleanText = cleanText
             .replaceAll(/<pr<cod?/gi, "")
