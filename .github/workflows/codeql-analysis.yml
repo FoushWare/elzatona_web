@@ -28,20 +28,25 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        language: ["javascript", "typescript"]
+        # CodeQL treats JavaScript and TypeScript as one language
+        # Using just "javascript" will analyze both .js and .ts files
+        language: ["javascript"]
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
       - name: Initialize CodeQL
-        uses: github/codeql-action/init@v3
+        uses: github/codeql-action/init@v4
         with:
           languages: ${{ matrix.language }}
-          # If you wish to specify custom queries, you can do so here or in a config file.
-          # By default, queries listed here will override any specified in a config file.
-          # Prefix the list here with "+" to use these queries and those in the config file.
-          # queries: security-extended,security-and-quality
+          # Use security-extended queries for better coverage
+          queries: security-extended,security-and-quality
+          # Exclude files that don't exist in current worktree (git history only)
+          # These files have syntax errors but are not in the current codebase
+          paths-ignore: |
+            Rest/scripts/**
+            **/*.integration.test.tsx
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -52,7 +57,12 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Autobuild
+        uses: github/codeql-action/autobuild@v4
+        # CodeQL needs to build the code to analyze it properly
+        # This step automatically detects and runs the build command
+
       - name: Perform CodeQL Analysis
-        uses: github/codeql-action/analyze@v3
+        uses: github/codeql-action/analyze@v4
         with:
           category: "/language:${{ matrix.language }}"
