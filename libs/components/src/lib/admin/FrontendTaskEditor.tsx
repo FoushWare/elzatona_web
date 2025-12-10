@@ -17,8 +17,6 @@ import {
   Settings,
   Plus,
   X,
-  ChevronRight,
-  ChevronDown,
   ArrowLeft,
   Sun,
   Moon,
@@ -134,7 +132,7 @@ export default function FrontendTaskEditor({
 
   // Theme detection
   useEffect(() => {
-    const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
+    const mediaQuery = globalThis.window.matchMedia("(prefers-color-scheme: dark)");
     const updateTheme = () => {
       if (theme === "system") {
         setIsDark(mediaQuery.matches);

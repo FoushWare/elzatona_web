@@ -179,8 +179,8 @@ export function BulkUploadForm({
         });
 
         // Post-process for light mode visibility
-        if (typeof window !== "undefined") {
-          const prefersDark = window.matchMedia(
+        if (typeof globalThis.window !== "undefined") {
+          const prefersDark = globalThis.window.matchMedia(
             "(prefers-color-scheme: dark)",
           ).matches;
           if (!prefersDark) {
@@ -480,7 +480,8 @@ export function BulkUploadForm({
         let cleanedJson = jsonText.trim();
 
         // Remove BOM if present
-        if (cleanedJson.charCodeAt(0) === 0xfeff) {
+        const firstCodePoint = cleanedJson.codePointAt(0);
+        if (firstCodePoint === 0xfeff) {
           cleanedJson = cleanedJson.slice(1);
         }
 
@@ -636,6 +637,15 @@ export function BulkUploadForm({
           onDrop={handleDrop}
           onDragOver={handleDragOver}
           onClick={() => fileInputRef.current?.click()}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" || e.key === " ") {
+              e.preventDefault();
+              fileInputRef.current?.click();
+            }
+          }}
+          role="button"
+          tabIndex={0}
+          aria-label="Upload file"
         >
           <Upload className="w-12 h-12 mx-auto mb-4 text-gray-400 dark:text-gray-500" />
           <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">

@@ -3,9 +3,9 @@
 
 // Type-safe environment variable access
 const getEnvVar = (key: string, defaultValue: string = ""): string => {
-  if (typeof window !== "undefined") {
+  if (typeof globalThis.window !== "undefined") {
     // Client-side: use window.env or similar
-    return (window as any).env?.[key] || defaultValue;
+    return (globalThis.window as any).env?.[key] || defaultValue;
   }
   // Server-side: use process.env
   return (process as any).env?.[key] || defaultValue;

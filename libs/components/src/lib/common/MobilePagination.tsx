@@ -26,17 +26,17 @@ interface QuestionsData {
 }
 
 interface MobilePaginationProps {
-  currentGroup: QuestionGroup;
-  currentQuestionIndex: number;
-  questionsData: QuestionsData;
-  onPrevious: () => void;
-  onNext: () => void;
-  onNavigateToQuestion: (groupIndex: number, questionIndex: number) => void;
-  isNavigating: boolean;
-  showAnswer: boolean;
-  answeredQuestions: Set<string>;
-  expandedGroups: Set<string>;
-  onToggleGroupExpansion: (groupId: string) => void;
+  readonly currentGroup: QuestionGroup;
+  readonly currentQuestionIndex: number;
+  readonly questionsData: QuestionsData;
+  readonly onPrevious: () => void;
+  readonly onNext: () => void;
+  readonly onNavigateToQuestion: (groupIndex: number, questionIndex: number) => void;
+  readonly isNavigating: boolean;
+  readonly showAnswer: boolean;
+  readonly answeredQuestions: Set<string>;
+  readonly expandedGroups: Set<string>;
+  readonly onToggleGroupExpansion: (groupId: string) => void;
 }
 
 export default function MobilePagination({

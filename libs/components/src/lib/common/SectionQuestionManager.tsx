@@ -190,7 +190,7 @@ export const SectionQuestionManager: React.FC<SectionQuestionManagerProps> = ({
     const filterCategoryNormalized =
       filterCategory === "all"
         ? "all"
-        : filterCategory.toLowerCase().replace(/[^a-z0-9]/g, "");
+        : filterCategory.toLowerCase().replaceAll(/[^a-z0-9]/g, "");
 
     const matchesCategory =
       filterCategory === "all" || questionCategory === filterCategoryNormalized;
@@ -403,7 +403,7 @@ export const SectionQuestionManager: React.FC<SectionQuestionManagerProps> = ({
           <div className="flex justify-between items-center">
             <div className="text-sm text-gray-600 dark:text-gray-400">
               {selectedQuestions.length} question
-              {selectedQuestions.length !== 1 ? "s" : ""} selected
+              {selectedQuestions.length === 1 ? "" : "s"} selected
             </div>
             <div className="flex space-x-2">
               <Button variant="outline" onClick={onClose}>

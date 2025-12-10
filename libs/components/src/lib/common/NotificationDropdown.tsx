@@ -94,6 +94,14 @@ export function NotificationDropdown({
           <div
             className="fixed inset-0 z-10"
             onClick={() => setIsOpen(false)}
+            onKeyDown={(e) => {
+              if (e.key === "Escape") {
+                setIsOpen(false);
+              }
+            }}
+            role="button"
+            tabIndex={0}
+            aria-label="Close notifications"
           />
 
           {/* Dropdown Content */}
@@ -195,9 +203,9 @@ export function NotificationDropdown({
                           </div>
                           <p
                             className={`text-sm mt-1 ${
-                              !notification.read
-                                ? "text-gray-800 dark:text-gray-200"
-                                : "text-gray-600 dark:text-gray-400"
+                              notification.read
+                                ? "text-gray-600 dark:text-gray-400"
+                                : "text-gray-800 dark:text-gray-200"
                             }`}
                           >
                             {notification.message}

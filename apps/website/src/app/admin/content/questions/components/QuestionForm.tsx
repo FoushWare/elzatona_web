@@ -88,80 +88,92 @@ export function QuestionForm({
     },
   );
 
+  // Helper function to extract category name from initialData
+  const extractCategoryName = (data: any): string => {
+    if (data.category) return data.category;
+    if (data.categories && Array.isArray(data.categories) && data.categories[0]?.name) {
+      return data.categories[0].name;
+    }
+    if (data.categories && typeof data.categories === "object" && data.categories.name) {
+      return data.categories.name;
+    }
+    return "";
+  };
+
+  // Helper function to extract topic name from initialData
+  const extractTopicName = (data: any): string => {
+    if (data.topic) return data.topic;
+    if (data.topics && Array.isArray(data.topics) && data.topics[0]?.name) {
+      return data.topics[0].name;
+    }
+    if (data.topics && typeof data.topics === "object" && data.topics.name) {
+      return data.topics.name;
+    }
+    return "";
+  };
+
+  // Helper function to extract learning card ID from initialData
+  const extractLearningCardId = (data: any): string => {
+    if (data.learningCardId) return data.learningCardId;
+    if (data.learning_card_id) return data.learning_card_id;
+    if (data.learning_card?.id) return data.learning_card.id;
+    if (data.learning_cards?.id) return data.learning_cards.id;
+    return "";
+  };
+
+  // Helper function to normalize resources
+  const normalizeResources = (resourcesValue: any): any[] | null => {
+    if (resourcesValue === null || resourcesValue === undefined) {
+      return null;
+    }
+    if (Array.isArray(resourcesValue)) {
+      return resourcesValue;
+    }
+    if (typeof resourcesValue === "string") {
+      try {
+        const parsed = JSON.parse(resourcesValue);
+        return Array.isArray(parsed) ? parsed : null;
+      } catch {
+        return null;
+      }
+    }
+    // If it's an object but not an array, wrap it in an array
+    return [resourcesValue];
+  };
+
   useEffect(() => {
-    if (initialData) {
-      const categoryName =
-        (initialData as any).category ||
-        ((initialData as any).categories &&
-          Array.isArray((initialData as any).categories) &&
-          (initialData as any).categories[0]?.name) ||
-        ((initialData as any).categories &&
-          typeof (initialData as any).categories === "object" &&
-          (initialData as any).categories.name) ||
-        "";
+    if (!initialData) return;
 
-      const topicName =
-        (initialData as any).topic ||
-        ((initialData as any).topics &&
-          Array.isArray((initialData as any).topics) &&
-          (initialData as any).topics[0]?.name) ||
-        ((initialData as any).topics &&
-          typeof (initialData as any).topics === "object" &&
-          (initialData as any).topics.name) ||
-        "";
+    const categoryName = extractCategoryName(initialData);
+    const topicName = extractTopicName(initialData);
+    const learningCardId = extractLearningCardId(initialData);
 
-      const learningCardId =
-        (initialData as any).learningCardId ||
-        (initialData as any).learning_card_id ||
-        (initialData as any).learning_card?.id ||
-        (initialData as any).learning_cards?.id ||
-        "";
+    console.log("📝 Initializing form with:", {
+      categoryName,
+      topicName,
+      learningCardId,
+      initialData,
+    });
 
-      console.log("📝 Initializing form with:", {
-        categoryName,
-        topicName,
-        learningCardId,
-        initialData,
-      });
+    const normalizedResources = normalizeResources((initialData as any).resources);
 
-      // Normalize resources to ensure it's always an array or null
-      let normalizedResources = null;
-      const resourcesValue = (initialData as any).resources;
-      if (resourcesValue !== null && resourcesValue !== undefined) {
-        if (Array.isArray(resourcesValue)) {
-          normalizedResources = resourcesValue;
-        } else if (typeof resourcesValue === "string") {
-          // Try to parse if it's a string
-          try {
-            const parsed = JSON.parse(resourcesValue);
-            normalizedResources = Array.isArray(parsed) ? parsed : null;
-          } catch {
-            normalizedResources = null;
-          }
-        } else {
-          // If it's an object but not an array, wrap it in an array
-          normalizedResources = [resourcesValue];
-        }
-      }
+    const updatedFormData = {
+      ...initialData,
+      options: initialData.options || [],
+      sampleAnswers: initialData.sampleAnswers || [],
+      tags: initialData.tags || [],
+      explanation: initialData.explanation || "",
+      codeTemplate: initialData.codeTemplate || "",
+      category: categoryName,
+      topic: topicName,
+      learningCardId: learningCardId,
+    };
 
-      const updatedFormData = {
-        ...initialData,
-        options: initialData.options || [],
-        sampleAnswers: initialData.sampleAnswers || [],
-        tags: initialData.tags || [],
-        explanation: initialData.explanation || "",
-        codeTemplate: initialData.codeTemplate || "",
-        category: categoryName,
-        topic: topicName,
-        learningCardId: learningCardId,
-      };
+    setFormData(updatedFormData);
 
-      setFormData(updatedFormData);
-
-      // Initialize JSON text if in JSON mode
-      if (isJsonMode) {
-        setJsonText(JSON.stringify(updatedFormData, null, 2));
-      }
+    // Initialize JSON text if in JSON mode
+    if (isJsonMode) {
+      setJsonText(JSON.stringify(updatedFormData, null, 2));
     }
   }, [initialData, isJsonMode]);
 
@@ -986,11 +998,12 @@ export function QuestionForm({
                 </Label>
               </div>
               <span className="text-sm text-gray-500 dark:text-gray-400">
-                {formData.resources && Array.isArray(formData.resources)
-                  ? `${formData.resources.length} resource${formData.resources.length !== 1 ? "s" : ""}`
-                  : isResourcesOpen
-                    ? "Click to collapse"
-                    : "Click to expand"}
+                {(() => {
+                  if (formData.resources && Array.isArray(formData.resources)) {
+                    return `${formData.resources.length} resource${formData.resources.length !== 1 ? "s" : ""}`;
+                  }
+                  return isResourcesOpen ? "Click to collapse" : "Click to expand";
+                })()}
               </span>
             </CollapsibleTrigger>
             <CollapsibleContent className="pt-4 space-y-4">
