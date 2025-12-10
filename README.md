@@ -238,30 +238,30 @@ See [docs/TESTING_SUMMARY.md](docs/TESTING_SUMMARY.md) for testing strategy.
 
 ```typescript
 // Components
-import { Button, Card } from '@elzatona/components'
+import { Button, Card } from "@elzatona/components";
 
 // Hooks
-import { useCards, usePlans } from '@elzatona/hooks'
+import { useCards, usePlans } from "@elzatona/hooks";
 
 // Types
-import { LearningCard, UnifiedQuestion } from '@elzatona/types'
+import { LearningCard, UnifiedQuestion } from "@elzatona/types";
 
 // Contexts
-import { AuthProvider } from '@elzatona/contexts'
+import { AuthProvider } from "@elzatona/contexts";
 
 // Utilities
-import { formatDate } from '@elzatona/utilities'
+import { formatDate } from "@elzatona/utilities";
 ```
 
 ### App-Specific
 
 ```typescript
 // Website app
-import { Component } from '@/components/Component'
-import { utility } from '@/lib/utility'
+import { Component } from "@/components/Component";
+import { utility } from "@/lib/utility";
 
 // Admin app
-import { Component } from '@/components/Component'
+import { Component } from "@/components/Component";
 ```
 
 ## 🔒 Security
@@ -305,7 +305,7 @@ See [docs/SECURITY.md](docs/SECURITY.md) for complete security guide.
 ## 🆘 Support
 
 For issues and questions:
+
 - Check [documentation](docs/)
 - Review [troubleshooting guide](docs/flows/local-development.md#troubleshooting)
 - Open an issue on GitHub
-

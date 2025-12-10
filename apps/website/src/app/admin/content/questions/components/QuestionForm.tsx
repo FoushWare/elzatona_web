@@ -91,10 +91,18 @@ export function QuestionForm({
   // Helper function to extract category name from initialData
   const extractCategoryName = (data: any): string => {
     if (data.category) return data.category;
-    if (data.categories && Array.isArray(data.categories) && data.categories[0]?.name) {
+    if (
+      data.categories &&
+      Array.isArray(data.categories) &&
+      data.categories[0]?.name
+    ) {
       return data.categories[0].name;
     }
-    if (data.categories && typeof data.categories === "object" && data.categories.name) {
+    if (
+      data.categories &&
+      typeof data.categories === "object" &&
+      data.categories.name
+    ) {
       return data.categories.name;
     }
     return "";
@@ -155,7 +163,9 @@ export function QuestionForm({
       initialData,
     });
 
-    const normalizedResources = normalizeResources((initialData as any).resources);
+    const normalizedResources = normalizeResources(
+      (initialData as any).resources,
+    );
 
     const updatedFormData = {
       ...initialData,
@@ -1002,7 +1012,9 @@ export function QuestionForm({
                   if (formData.resources && Array.isArray(formData.resources)) {
                     return `${formData.resources.length} resource${formData.resources.length !== 1 ? "s" : ""}`;
                   }
-                  return isResourcesOpen ? "Click to collapse" : "Click to expand";
+                  return isResourcesOpen
+                    ? "Click to collapse"
+                    : "Click to expand";
                 })()}
               </span>
             </CollapsibleTrigger>

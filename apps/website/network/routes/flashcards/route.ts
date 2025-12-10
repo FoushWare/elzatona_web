@@ -1,6 +1,9 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { createClient } from '@supabase/supabase-js';
-import { sanitizeObjectServer, sanitizeRichContent } from '@/lib/utils/sanitize-server';
+import { NextRequest, NextResponse } from "next/server";
+import { createClient } from "@supabase/supabase-js";
+import {
+  sanitizeObjectServer,
+  sanitizeRichContent,
+} from "@/lib/utils/sanitize-server";
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
 const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
@@ -14,8 +17,8 @@ export interface Flashcard {
   answer: string;
   explanation: string;
   category: string;
-  difficulty: 'easy' | 'medium' | 'hard';
-  status: 'new' | 'learning' | 'review' | 'mastered';
+  difficulty: "easy" | "medium" | "hard";
+  status: "new" | "learning" | "review" | "mastered";
   interval: number; // days until next review
   repetitions: number;
   easeFactor: number; // SM-2 algorithm
@@ -24,7 +27,7 @@ export interface Flashcard {
   created_at: string;
   updated_at: string;
   tags: string[];
-  source: 'wrong_answer' | 'manual' | 'bookmark';
+  source: "wrong_answer" | "manual" | "bookmark";
 }
 
 // Create a new flashcard
@@ -38,15 +41,15 @@ export async function POST(request: NextRequest) {
       answer,
       explanation,
       category,
-      difficulty = 'medium',
-      source = 'manual',
+      difficulty = "medium",
+      source = "manual",
       tags = [],
     } = body;
 
     if (!userId || !questionId || !question || !answer) {
       return NextResponse.json(
-        { error: 'Missing required fields' },
-        { status: 400 }
+        { error: "Missing required fields" },
+        { status: 400 },
       );
     }
 
@@ -56,20 +59,26 @@ export async function POST(request: NextRequest) {
       questionId,
       question,
       answer,
-      explanation: explanation || '',
-      category: category || 'General',
-      tags: Array.isArray(tags) ? tags.map((tag: any) => typeof tag === 'string' ? sanitizeObjectServer({ tag }).tag : tag) : [],
+      explanation: explanation || "",
+      category: category || "General",
+      tags: Array.isArray(tags)
+        ? tags.map((tag: any) =>
+            typeof tag === "string" ? sanitizeObjectServer({ tag }).tag : tag,
+          )
+        : [],
     });
 
     // Sanitize rich content fields
     const sanitizedQuestion = sanitizeRichContent(sanitizedData.question);
     const sanitizedAnswer = sanitizeRichContent(sanitizedData.answer);
-    const sanitizedExplanation = sanitizedData.explanation ? sanitizeRichContent(sanitizedData.explanation) : '';
+    const sanitizedExplanation = sanitizedData.explanation
+      ? sanitizeRichContent(sanitizedData.explanation)
+      : "";
 
     const now = new Date();
     const nextReview = new Date(now.getTime() + 24 * 60 * 60 * 1000); // 1 day from now
 
-    const flashcard: Omit<Flashcard, 'id'> = {
+    const flashcard: Omit<Flashcard, "id"> = {
       userId: sanitizedData.userId,
       question_id: sanitizedData.questionId,
       question: sanitizedQuestion,
@@ -77,7 +86,7 @@ export async function POST(request: NextRequest) {
       explanation: sanitizedExplanation,
       category: sanitizedData.category,
       difficulty,
-      status: 'new',
+      status: "new",
       interval: 1, // Start with 1 day
       repetitions: 0,
       easeFactor: 2.5, // SM-2 algorithm default
@@ -90,7 +99,7 @@ export async function POST(request: NextRequest) {
     };
 
     const { data: docRef, error } = await supabase
-      .from('flashcards')
+      .from("flashcards")
       .insert(flashcard)
       .select()
       .single();
@@ -100,7 +109,7 @@ export async function POST(request: NextRequest) {
     }
 
     if (!docRef) {
-      throw new Error('No flashcard was created');
+      throw new Error("No flashcard was created");
     }
 
     return NextResponse.json({
@@ -111,10 +120,10 @@ export async function POST(request: NextRequest) {
       },
     });
   } catch (error) {
-    console.error('Error creating flashcard:', error);
+    console.error("Error creating flashcard:", error);
     return NextResponse.json(
-      { error: 'Failed to create flashcard' },
-      { status: 500 }
+      { error: "Failed to create flashcard" },
+      { status: 500 },
     );
   }
 }
@@ -123,34 +132,34 @@ export async function POST(request: NextRequest) {
 export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
-    const userId = searchParams.get('userId');
-    const status = searchParams.get('status');
-    const category = searchParams.get('category');
-    const due = searchParams.get('due') === 'true';
+    const userId = searchParams.get("userId");
+    const status = searchParams.get("status");
+    const category = searchParams.get("category");
+    const due = searchParams.get("due") === "true";
 
     if (!userId) {
       return NextResponse.json(
-        { error: 'User ID is required' },
-        { status: 400 }
+        { error: "User ID is required" },
+        { status: 400 },
       );
     }
 
-    let q = supabase.from('flashcards').select('*').eq('userId', userId);
+    let q = supabase.from("flashcards").select("*").eq("userId", userId);
 
     if (status) {
-      q = q.eq('status', status);
+      q = q.eq("status", status);
     }
 
     if (category) {
-      q = q.eq('category', category);
+      q = q.eq("category", category);
     }
 
     if (due) {
       const now = new Date().toISOString();
-      q = q.lte('nextReview', now);
+      q = q.lte("nextReview", now);
     }
 
-    q = q.order('nextReview', { ascending: true });
+    q = q.order("nextReview", { ascending: true });
 
     const { data: flashcards, error } = await q;
 
@@ -163,10 +172,10 @@ export async function GET(request: NextRequest) {
       data: flashcards,
     });
   } catch (error) {
-    console.error('Error fetching flashcards:', error);
+    console.error("Error fetching flashcards:", error);
     return NextResponse.json(
-      { error: 'Failed to fetch flashcards' },
-      { status: 500 }
+      { error: "Failed to fetch flashcards" },
+      { status: 500 },
     );
   }
 }

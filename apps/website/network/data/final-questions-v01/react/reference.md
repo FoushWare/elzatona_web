@@ -536,20 +536,20 @@ Hide/Show table of contents
 
     ```jsx harmony
     export default function App() {
-      return <h1 className='greeting'>{'Hello, this is a JSX Code!'}</h1>;
+      return <h1 className="greeting">{"Hello, this is a JSX Code!"}</h1>;
     }
     ```
 
     If you don't use JSX syntax then the respective JavaScript code should be written as below,
 
     ```javascript
-    import { createElement } from 'react';
+    import { createElement } from "react";
 
     export default function App() {
       return createElement(
-        'h1',
-        { className: 'greeting' },
-        'Hello, this is a JSX Code!'
+        "h1",
+        { className: "greeting" },
+        "Hello, this is a JSX Code!",
       );
     }
     ```
@@ -560,7 +560,7 @@ Hide/Show table of contents
     ```jsx harmony
     class App extends React.Component {
       render() {
-        return <h1 className='greeting'>{'Hello, this is a JSX Code!'}</h1>;
+        return <h1 className="greeting">{"Hello, this is a JSX Code!"}</h1>;
       }
     }
     ```
@@ -584,16 +584,16 @@ Hide/Show table of contents
 
       ```js
       const element = React.createElement(
-        'button',
-        { id: 'login-btn' },
-        'Login'
+        "button",
+        { id: "login-btn" },
+        "Login",
       );
       ```
 
       **Equivalent JSX syntax:**
 
       ```jsx
-      <button id='login-btn'>Login</button>
+      <button id="login-btn">Login</button>
       ```
 
       **The object returned by `React.createElement`:**
@@ -621,7 +621,7 @@ Hide/Show table of contents
 
       ```jsx
       const Button = ({ handleLogin }) => (
-        <button id='login-btn' onClick={handleLogin}>
+        <button id="login-btn" onClick={handleLogin}>
           Login
         </button>
       );
@@ -632,9 +632,9 @@ Hide/Show table of contents
       ```js
       const Button = ({ handleLogin }) =>
         React.createElement(
-          'button',
-          { id: 'login-btn', onClick: handleLogin },
-          'Login'
+          "button",
+          { id: "login-btn", onClick: handleLogin },
+          "Login",
         );
       ```
 
@@ -696,9 +696,9 @@ Hide/Show table of contents
     > **_Note when using react-error-boundary:_** ErrorBoundary is a client component. You can only pass props to it that are serializable or use it in files that have a `"use client";` directive.
 
     ```jsx
-    'use client';
+    "use client";
 
-    import { ErrorBoundary } from 'react-error-boundary';
+    import { ErrorBoundary } from "react-error-boundary";
 
     <ErrorBoundary fallback={<div>Something went wrong</div>}>
       <ExampleApplication />
@@ -722,7 +722,7 @@ Hide/Show table of contents
     Below is the example of how child component(i.e., EmployeeProfile) prevents re-renders for the same props passed by parent component(i.e.,EmployeeRegForm).
 
     ```jsx
-    import { memo, useState } from 'react';
+    import { memo, useState } from "react";
 
     const EmployeeProfile = memo(function EmployeeProfile({ name, email }) {
       return (
@@ -733,16 +733,17 @@ Hide/Show table of contents
       );
     });
     export default function EmployeeRegForm() {
-      const [name, setName] = useState('');
-      const [email, setEmail] = useState('');
+      const [name, setName] = useState("");
+      const [email, setEmail] = useState("");
       return (
         <>
           <label>
-            Name: <input value={name} onChange={e => setName(e.target.value)} />
+            Name:{" "}
+            <input value={name} onChange={(e) => setName(e.target.value)} />
           </label>
           <label>
-            Email:{' '}
-            <input value={email} onChange={e => setEmail(e.target.value)} />
+            Email:{" "}
+            <input value={email} onChange={(e) => setEmail(e.target.value)} />
           </label>
           <hr />
           <EmployeeProfile name={name} />
@@ -768,10 +769,10 @@ Hide/Show table of contents
     Let's take an example of **User** component with `message` state. Here, **useState** hook has been used to add state to the User component and it returns an array with current state and function to update it.
 
     ```jsx harmony
-    import { useState } from 'react';
+    import { useState } from "react";
 
     function User() {
-      const [message, setMessage] = useState('Welcome to React world');
+      const [message, setMessage] = useState("Welcome to React world");
 
       return (
         <div>
@@ -787,13 +788,13 @@ Hide/Show table of contents
     <p>
 
     ```jsx harmony
-    import React from 'react';
+    import React from "react";
     class User extends React.Component {
       constructor(props) {
         super(props);
 
         this.state = {
-          message: 'Welcome to React world',
+          message: "Welcome to React world",
         };
       }
 
@@ -826,7 +827,7 @@ Hide/Show table of contents
     For example, let us create an element with `reactProp` property:
 
     ```jsx harmony
-    <Element reactProp={'1'} />
+    <Element reactProp={"1"} />
     ```
 
     This `reactProp` (or whatever you came up with) attribute name then becomes a property attached to React's native props object which originally already exists on all components created using React library.
@@ -838,10 +839,10 @@ Hide/Show table of contents
     For example, the usage of props in function component looks like below:
 
     ```jsx
-    import React from 'react';
-    import ReactDOM from 'react-dom';
+    import React from "react";
+    import ReactDOM from "react-dom";
 
-    const ChildComponent = props => {
+    const ChildComponent = (props) => {
       return (
         <div>
           <p>{props.name}</p>
@@ -854,8 +855,8 @@ Hide/Show table of contents
     const ParentComponent = () => {
       return (
         <div>
-          <ChildComponent name='John' age='30' gender='male' />
-          <ChildComponent name='Mary' age='25' geneder='female' />
+          <ChildComponent name="John" age="30" gender="male" />
+          <ChildComponent name="Mary" age="25" geneder="female" />
         </div>
       );
     };
@@ -864,7 +865,7 @@ Hide/Show table of contents
 The properties from props object can be accessed directly using destructing feature from ES6 (ECMAScript 2015). It is also possible to fallback to default value when the prop value is not specified. The above child component can be simplified like below.
 
 ```jsx harmony
-const ChildComponent = ({ name, age, gender = 'male' }) => {
+const ChildComponent = ({ name, age, gender = "male" }) => {
   return (
     <div>
       <p>{name}</p>
@@ -881,8 +882,8 @@ const ChildComponent = ({ name, age, gender = 'male' }) => {
      The Props accessed in Class Based Component as below
 
 ```jsx
-import React from 'react';
-import ReactDOM from 'react-dom';
+import React from "react";
+import ReactDOM from "react-dom";
 
 class ChildComponent extends React.Component {
   render() {
@@ -900,8 +901,8 @@ class ParentComponent extends React.Component {
   render() {
     return (
       <div>
-        <ChildComponent name='John' age='30' gender='male' />
-        <ChildComponent name='Mary' age='25' gender='female' />
+        <ChildComponent name="John" age="30" gender="male" />
+        <ChildComponent name="Mary" age="25" gender="female" />
       </div>
     );
   }
@@ -983,7 +984,7 @@ class ParentComponent extends React.Component {
        ```javascript
        function handleClick(event) {
          event.preventDefault();
-         console.log('The link was clicked.');
+         console.log("The link was clicked.");
        }
        ```
 
@@ -1001,14 +1002,14 @@ class ParentComponent extends React.Component {
     ```js
     function BookStore() {
       function handleTitleChange(e) {
-        console.log('The new title is:', e.target.value);
-        console.log('Synthetic event:', e); // React SyntheticEvent
-        console.log('Native event:', e.nativeEvent); // Browser native event
+        console.log("The new title is:", e.target.value);
+        console.log("Synthetic event:", e); // React SyntheticEvent
+        console.log("Native event:", e.nativeEvent); // Browser native event
         e.stopPropagation();
         e.preventDefault();
       }
 
-      return <input name='title' onChange={handleTitleChange} />;
+      return <input name="title" onChange={handleTitleChange} />;
     }
     ```
 
@@ -1047,7 +1048,7 @@ class ParentComponent extends React.Component {
     Keys should be unique among its siblings. Most often we use ID from our data as _key_:
 
     ```jsx harmony
-    const todoItems = todos.map(todo => <li key={todo.id}>{todo.text}</li>);
+    const todoItems = todos.map((todo) => <li key={todo.id}>{todo.text}</li>);
     ```
 
     When you don't have stable IDs for rendered items, you may use the item _index_ as a _key_ as a last resort:
@@ -1157,12 +1158,12 @@ class ParentComponent extends React.Component {
 For example, the name input field updates the username using `handleChange` event handler as below,
 
 ```javascript
-import React, { useState } from 'react';
+import React, { useState } from "react";
 
 function UserProfile() {
-  const [username, setUsername] = useState('');
+  const [username, setUsername] = useState("");
 
-  const handleChange = e => {
+  const handleChange = (e) => {
     setUsername(e.target.value);
   };
 
@@ -1170,7 +1171,7 @@ function UserProfile() {
     <form>
       <label>
         Name:
-        <input type='text' value={username} onChange={handleChange} />
+        <input type="text" value={username} onChange={handleChange} />
       </label>
     </form>
   );
@@ -1200,23 +1201,23 @@ In these components, DOM does not hold the actual data instead React does.
     In the below UserProfile component, the `username` input is accessed using ref.
 
     ```jsx harmony
-    import React, { useRef } from 'react';
+    import React, { useRef } from "react";
 
     function UserProfile() {
       const usernameRef = useRef(null);
 
-      const handleSubmit = event => {
+      const handleSubmit = (event) => {
         event.preventDefault();
-        console.log('The submitted username is: ' + usernameRef.current.value);
+        console.log("The submitted username is: " + usernameRef.current.value);
       };
 
       return (
         <form onSubmit={handleSubmit}>
           <label>
             Username:
-            <input type='text' ref={usernameRef} />
+            <input type="text" ref={usernameRef} />
           </label>
-          <button type='submit'>Submit</button>
+          <button type="submit">Submit</button>
         </form>
       );
     }
@@ -1243,7 +1244,7 @@ In these components, DOM does not hold the actual data instead React does.
       }
 
       handleSubmit(event) {
-        alert('A name was submitted: ' + this.input.current.value);
+        alert("A name was submitted: " + this.input.current.value);
         event.preventDefault();
       }
 
@@ -1251,10 +1252,10 @@ In these components, DOM does not hold the actual data instead React does.
         return (
           <form onSubmit={this.handleSubmit}>
             <label>
-              {'Name:'}
-              <input type='text' ref={this.input} />
+              {"Name:"}
+              <input type="text" ref={this.input} />
             </label>
-            <input type='submit' value='Submit' />
+            <input type="submit" value="Submit" />
           </form>
         );
       }
@@ -1282,7 +1283,7 @@ In these components, DOM does not hold the actual data instead React does.
     **Example:**
 
     ```jsx
-    React.createElement('button', { className: 'btn' }, 'Click Me');
+    React.createElement("button", { className: "btn" }, "Click Me");
     ```
 
     #### **cloneElement:**
@@ -1298,8 +1299,8 @@ In these components, DOM does not hold the actual data instead React does.
     **Example:**
 
     ```jsx
-    const button = <button className='btn'>Click Me</button>;
-    const cloned = React.cloneElement(button, { className: 'btn-primary' });
+    const button = <button className="btn">Click Me</button>;
+    const cloned = React.cloneElement(button, { className: "btn-primary" });
     // Result: <button className="btn-primary">Click Me</button>
     ```
 
@@ -1326,19 +1327,19 @@ In these components, DOM does not hold the actual data instead React does.
     **withAuth HOC Example:**
 
     ```jsx
-    import React from 'react';
-    import { Navigate } from 'react-router-dom'; // For redirection (assuming React Router v6)
+    import React from "react";
+    import { Navigate } from "react-router-dom"; // For redirection (assuming React Router v6)
 
     const isAuthenticated = () => {
       // e.g., check for a valid token in localStorage or context
-      return !!localStorage.getItem('authToken');
+      return !!localStorage.getItem("authToken");
     };
 
     function withAuth(WrappedComponent) {
       return function AuthenticatedComponent(props) {
         if (!isAuthenticated()) {
           // User is NOT authenticated, redirect to login page
-          return <Navigate to='/login' replace />;
+          return <Navigate to="/login" replace />;
         }
 
         // User is authenticated, render the wrapped component
@@ -1352,8 +1353,8 @@ In these components, DOM does not hold the actual data instead React does.
     **Usage**
 
     ```jsx
-    import React from 'react';
-    import withAuth from './withAuth';
+    import React from "react";
+    import withAuth from "./withAuth";
 
     function Dashboard() {
       return <h1>Welcome to the Dashboard!</h1>;
@@ -1420,10 +1421,10 @@ In these components, DOM does not hold the actual data instead React does.
 
     ReactDOM.render(
       <MyDiv>
-        <span>{'Hello'}</span>
-        <span>{'World'}</span>
+        <span>{"Hello"}</span>
+        <span>{"World"}</span>
       </MyDiv>,
-      node
+      node,
     );
     ```
 
@@ -1484,14 +1485,14 @@ In these components, DOM does not hold the actual data instead React does.
 
     ```javascript
     // IntermediateComponent.js
-    export { SomeComponent as default } from './MoreComponents.js';
+    export { SomeComponent as default } from "./MoreComponents.js";
     ```
 
     Now you can import the module using lazy function as below,
 
     ```javascript
-    import React, { lazy } from 'react';
-    const SomeComponent = lazy(() => import('./IntermediateComponent.js'));
+    import React, { lazy } from "react";
+    const SomeComponent = lazy(() => import("./IntermediateComponent.js"));
     ```
 
     **[⬆ Back to Top](#table-of-contents)**
@@ -1517,25 +1518,25 @@ In these components, DOM does not hold the actual data instead React does.
        When you write JSX like this:
 
        ```jsx
-       <div class='btn'>Click</div>
+       <div class="btn">Click</div>
        ```
 
        It will be compiled to:
 
        ```jsx
-       React.createElement('div', { class: 'btn' }, 'Click');
+       React.createElement("div", { class: "btn" }, "Click");
        ```
 
        But `class` is invalid in this object literal context (since it clashes with the JS keyword), hence React instead uses className.
 
        ```jsx
-       <div className='btn'>Click</div>
+       <div className="btn">Click</div>
        ```
 
        which compiles to:
 
        ```jsx
-       React.createElement('div', { className: 'btn' }, 'Click');
+       React.createElement("div", { className: "btn" }, "Click");
        ```
 
        React then translates `className` to` class` in the final HTML DOM.
@@ -1543,7 +1544,7 @@ In these components, DOM does not hold the actual data instead React does.
     3. Aligns with DOM APIs
        In vanilla JavaScript, you interact with element classes using:
        ```js
-       element.className = 'my-class';
+       element.className = "my-class";
        ```
        React follows this convention, staying consistent with the DOM API's property name rather than HTML’s attribute.
 
@@ -1572,7 +1573,7 @@ In these components, DOM does not hold the actual data instead React does.
 
     ```jsx harmony
     function StoryBook() {
-      return stories.map(story => (
+      return stories.map((story) => (
         <Fragment key={story.id}>
           <h2>{story.title}</h2>
           <p>{story.description}</p>
@@ -1713,8 +1714,8 @@ In these components, DOM does not hold the actual data instead React does.
     We can define `propTypes` for `User` component as below:
 
     ```jsx harmony
-    import React from 'react';
-    import PropTypes from 'prop-types';
+    import React from "react";
+    import PropTypes from "prop-types";
 
     class User extends React.Component {
       static propTypes = {
@@ -1738,8 +1739,8 @@ In these components, DOM does not hold the actual data instead React does.
     _The Equivalent Functional Component_
 
     ```jsx harmony
-    import React from 'react';
-    import PropTypes from 'prop-types';
+    import React from "react";
+    import PropTypes from "prop-types";
 
     function User({ name, age }) {
       return (
@@ -1807,16 +1808,16 @@ In these components, DOM does not hold the actual data instead React does.
 
     ```javascript
     // using Express
-    import { renderToString } from 'react-dom/server';
-    import MyPage from './MyPage';
+    import { renderToString } from "react-dom/server";
+    import MyPage from "./MyPage";
 
-    app.get('/', (req, res) => {
+    app.get("/", (req, res) => {
       res.write(
-        '<!DOCTYPE html><html><head><title>My Page</title></head><body>'
+        "<!DOCTYPE html><html><head><title>My Page</title></head><body>",
       );
       res.write('<div id="content">');
       res.write(renderToString(<MyPage />));
-      res.write('</div></body></html>');
+      res.write("</div></body></html>");
       res.end();
     });
     ```
@@ -1831,7 +1832,7 @@ In these components, DOM does not hold the actual data instead React does.
 
     ```jsx harmony
     function createMarkup() {
-      return { __html: 'First &middot; Second' };
+      return { __html: "First &middot; Second" };
     }
 
     function MyComponent() {
@@ -1847,8 +1848,8 @@ In these components, DOM does not hold the actual data instead React does.
 
     ```jsx harmony
     const divStyle = {
-      color: 'blue',
-      backgroundImage: 'url(' + imgUrl + ')',
+      color: "blue",
+      backgroundImage: "url(" + imgUrl + ")",
     };
 
     function HelloWorldComponent() {
@@ -1884,7 +1885,7 @@ In these components, DOM does not hold the actual data instead React does.
 
     ```jsx harmony
     {
-      todos.map(todo => <Todo {...todo} key={todo.id} />);
+      todos.map((todo) => <Todo {...todo} key={todo.id} />);
     }
     ```
 
@@ -1911,7 +1912,7 @@ In these components, DOM does not hold the actual data instead React does.
     const MyComponent = ({ name, address }) => (
       <div>
         <h2>{name}</h2>
-        {address ? <p>{address}</p> : <p>{'Address is not available'}</p>}
+        {address ? <p>{address}</p> : <p>{"Address is not available"}</p>}
       </div>
     );
     ```
@@ -1926,11 +1927,11 @@ In these components, DOM does not hold the actual data instead React does.
 
     ```jsx harmony
     const ComponentA = () => (
-      <ComponentB isDisplay={true} className={'componentStyle'} />
+      <ComponentB isDisplay={true} className={"componentStyle"} />
     );
 
     const ComponentB = ({ isDisplay, ...domProps }) => (
-      <div {...domProps}>{'ComponentB'}</div>
+      <div {...domProps}>{"ComponentB"}</div>
     );
     ```
 
@@ -1943,14 +1944,14 @@ In these components, DOM does not hold the actual data instead React does.
     For example `moize` library can memoize the component in another component.
 
     ```jsx harmony
-    import moize from 'moize';
-    import Component from './components/Component'; // this module exports a non-memoized component
+    import moize from "moize";
+    import Component from "./components/Component"; // this module exports a non-memoized component
 
     const MemoizedFoo = moize.react(Component);
 
     const Consumer = () => {
       <div>
-        {'I will memoize the following entry:'}
+        {"I will memoize the following entry:"}
         <MemoizedFoo />
       </div>;
     };
@@ -1973,8 +1974,8 @@ In these components, DOM does not hold the actual data instead React does.
     React is already equipped to handle rendering on Node servers. A special version of the DOM renderer is available, which follows the same pattern as on the client side.
 
     ```jsx harmony
-    import ReactDOMServer from 'react-dom/server';
-    import App from './App';
+    import ReactDOMServer from "react-dom/server";
+    import App from "./App";
 
     ReactDOMServer.renderToString(<App />);
     ```
@@ -2002,10 +2003,10 @@ In these components, DOM does not hold the actual data instead React does.
     For example, a switching component to display different pages based on `page` prop:
 
     ```jsx harmony
-    import HomePage from './HomePage';
-    import AboutPage from './AboutPage';
-    import ServicesPage from './ServicesPage';
-    import ContactPage from './ContactPage';
+    import HomePage from "./HomePage";
+    import AboutPage from "./AboutPage";
+    import ServicesPage from "./ServicesPage";
+    import ContactPage from "./ContactPage";
 
     const PAGES = {
       home: HomePage,
@@ -2014,7 +2015,7 @@ In these components, DOM does not hold the actual data instead React does.
       contact: ContactPage,
     };
 
-    const Page = props => {
+    const Page = (props) => {
       const Handler = PAGES[props.page] || ContactPage;
 
       return <Handler {...props} />;
@@ -2035,7 +2036,7 @@ In these components, DOM does not hold the actual data instead React does.
     One of the most commonly used mixins is `PureRenderMixin`. You might be using it in some components to prevent unnecessary re-renders when the props and state are shallowly equal to the previous props and state:
 
     ```javascript
-    const PureRenderMixin = require('react-addons-pure-render-mixin');
+    const PureRenderMixin = require("react-addons-pure-render-mixin");
 
     const Button = React.createClass({
       mixins: [PureRenderMixin],
@@ -2090,7 +2091,7 @@ In these components, DOM does not hold the actual data instead React does.
     While when imported in another file it should start with capital letter:
 
     ```jsx harmony
-    import MyComponent from './myComponent';
+    import MyComponent from "./myComponent";
     ```
 
     **[⬆ Back to Top](#table-of-contents)**
@@ -2102,7 +2103,7 @@ In these components, DOM does not hold the actual data instead React does.
     For example, let's take a look at the below attribute:
 
     ```jsx harmony
-    <div mycustomattribute={'something'} />
+    <div mycustomattribute={"something"} />
     ```
 
     Would render an empty div to the DOM with React v15:
@@ -2129,7 +2130,7 @@ In these components, DOM does not hold the actual data instead React does.
 
     ```jsx harmony
     <tbody>
-      {items.map(item => (
+      {items.map((item) => (
         <SomeComponent key={item.id} name={item.name} />
       ))}
     </tbody>
@@ -2154,19 +2155,19 @@ In these components, DOM does not hold the actual data instead React does.
     React (or JSX) doesn't support variable interpolation inside an attribute value. The below representation won't work:
 
     ```jsx harmony
-    <img className='image' src='images/{this.props.image}' />
+    <img className="image" src="images/{this.props.image}" />
     ```
 
     But you can put any JS expression inside curly braces as the entire attribute value. So the below expression works:
 
     ```jsx harmony
-    <img className='image' src={'images/' + this.props.image} />
+    <img className="image" src={"images/" + this.props.image} />
     ```
 
     Using _template strings_ will also work:
 
     ```jsx harmony
-    <img className='image' src={`images/${this.props.image}`} />
+    <img className="image" src={`images/${this.props.image}`} />
     ```
 
     **[⬆ Back to Top](#table-of-contents)**
@@ -2181,7 +2182,7 @@ In these components, DOM does not hold the actual data instead React does.
         React.PropTypes.shape({
           color: React.PropTypes.string.isRequired,
           fontSize: React.PropTypes.number.isRequired,
-        })
+        }),
       ).isRequired,
     };
     ```
@@ -2248,7 +2249,7 @@ In these components, DOM does not hold the actual data instead React does.
 
     ```jsx harmony
     <button style={{ ...styles.panel.button, ...styles.panel.submitButton }}>
-      {'Submit'}
+      {"Submit"}
     </button>
     ```
 
@@ -2256,7 +2257,7 @@ In these components, DOM does not hold the actual data instead React does.
 
     ```jsx harmony
     <button style={[styles.panel.button, styles.panel.submitButton]}>
-      {'Submit'}
+      {"Submit"}
     </button>
     ```
 
@@ -2267,7 +2268,7 @@ In these components, DOM does not hold the actual data instead React does.
     You can use the `useState` hook to manage the width and height state variables, and the `useEffect` hook to add and remove the `resize` event listener. The `[]` dependency array passed to useEffect ensures that the effect only runs once (on mount) and not on every re-render.
 
     ```javascript
-    import React, { useState, useEffect } from 'react';
+    import React, { useState, useEffect } from "react";
     function WindowDimensions() {
       const [dimensions, setDimensions] = useState({
         width: window.innerWidth,
@@ -2281,8 +2282,8 @@ In these components, DOM does not hold the actual data instead React does.
             height: window.innerHeight,
           });
         }
-        window.addEventListener('resize', handleResize);
-        return () => window.removeEventListener('resize', handleResize);
+        window.addEventListener("resize", handleResize);
+        return () => window.removeEventListener("resize", handleResize);
       }, []);
 
       return (
@@ -2310,11 +2311,11 @@ In these components, DOM does not hold the actual data instead React does.
       }
 
       componentDidMount() {
-        window.addEventListener('resize', this.updateDimensions);
+        window.addEventListener("resize", this.updateDimensions);
       }
 
       componentWillUnmount() {
-        window.removeEventListener('resize', this.updateDimensions);
+        window.removeEventListener("resize", this.updateDimensions);
       }
 
       updateDimensions() {
@@ -2358,7 +2359,7 @@ In these components, DOM does not hold the actual data instead React does.
       <p>
 
     ```jsx harmony
-    const data = { name: 'John', age: 42 };
+    const data = { name: "John", age: 42 };
 
     class User extends React.Component {
       render() {
@@ -2366,7 +2367,7 @@ In these components, DOM does not hold the actual data instead React does.
       }
     }
 
-    React.render(<User />, document.getElementById('container'));
+    React.render(<User />, document.getElementById("container"));
     ```
 
       </p>
@@ -2385,7 +2386,7 @@ In these components, DOM does not hold the actual data instead React does.
     You need to use `useEffect` hook to set focus on input field during page load time for functional component.
 
     ```jsx harmony
-    import React, { useEffect, useRef } from 'react';
+    import React, { useEffect, useRef } from "react";
 
     const App = () => {
       const inputElRef = useRef(null);
@@ -2397,12 +2398,12 @@ In these components, DOM does not hold the actual data instead React does.
       return (
         <div>
           <input defaultValue={"Won't focus"} />
-          <input ref={inputElRef} defaultValue={'Will focus'} />
+          <input ref={inputElRef} defaultValue={"Will focus"} />
         </div>
       );
     };
 
-    ReactDOM.render(<App />, document.getElementById('app'));
+    ReactDOM.render(<App />, document.getElementById("app"));
     ```
 
       <details><summary><b>See Class</b></summary>
@@ -2420,15 +2421,15 @@ In these components, DOM does not hold the actual data instead React does.
           <div>
             <input defaultValue={"Won't focus"} />
             <input
-              ref={input => (this.nameInput = input)}
-              defaultValue={'Will focus'}
+              ref={(input) => (this.nameInput = input)}
+              defaultValue={"Will focus"}
             />
           </div>
         );
       }
     }
 
-    ReactDOM.render(<App />, document.getElementById('app'));
+    ReactDOM.render(<App />, document.getElementById("app"));
     ```
 
       </p>
@@ -2445,7 +2446,7 @@ In these components, DOM does not hold the actual data instead React does.
 
     ReactDOM.render(
       <div>{`React version: ${REACT_VERSION}`}</div>,
-      document.getElementById('app')
+      document.getElementById("app"),
     );
     ```
 
@@ -2457,8 +2458,8 @@ In these components, DOM does not hold the actual data instead React does.
 
     ```javascript
     history.listen(function (location) {
-      window.ga('set', 'page', location.pathname + location.search);
-      window.ga('send', 'pageview', location.pathname + location.search);
+      window.ga("set", "page", location.pathname + location.search);
+      window.ga("send", "pageview", location.pathname + location.search);
     });
     ```
 
@@ -2471,9 +2472,9 @@ In these components, DOM does not hold the actual data instead React does.
     ```jsx harmony
     <div
       style={{
-        transform: 'rotate(90deg)',
-        WebkitTransform: 'rotate(90deg)', // note the capital 'W' here
-        msTransform: 'rotate(90deg)', // 'ms' is the only lowercase vendor prefix
+        transform: "rotate(90deg)",
+        WebkitTransform: "rotate(90deg)", // note the capital 'W' here
+        msTransform: "rotate(90deg)", // 'ms' is the only lowercase vendor prefix
       }}
     />
     ```
@@ -2535,14 +2536,14 @@ In these components, DOM does not hold the actual data instead React does.
     ### Example Usage
 
     ```jsx
-    import { useEffect, useState } from 'react';
+    import { useEffect, useState } from "react";
 
     function UserProfile() {
       const [user, setUser] = useState(null);
 
       useEffect(() => {
         const fetchUser = async () => {
-          const response = await fetch('/api/user');
+          const response = await fetch("/api/user");
           const data = await response.json();
           setUser(data);
         };
@@ -2635,7 +2636,7 @@ In these components, DOM does not hold the actual data instead React does.
     And then imported individually in other components:
 
     ```javascript
-    import { space, colors } from './styles';
+    import { space, colors } from "./styles";
     ```
 
 **[⬆ Back to Top](#table-of-contents)**
@@ -2694,16 +2695,16 @@ In these components, DOM does not hold the actual data instead React does.
         The `withRouter()` higher-order function will inject the history object as a prop of the component. This object provides `push()` and `replace()` methods to avoid the usage of context.
 
         ```jsx harmony
-        import { withRouter } from 'react-router-dom'; // this also works with 'react-router-native'
+        import { withRouter } from "react-router-dom"; // this also works with 'react-router-native'
 
         const Button = withRouter(({ history }) => (
           <button
-            type='button'
+            type="button"
             onClick={() => {
-              history.push('/new-location');
+              history.push("/new-location");
             }}
           >
-            {'Click Me!'}
+            {"Click Me!"}
           </button>
         ));
         ```
@@ -2713,18 +2714,18 @@ In these components, DOM does not hold the actual data instead React does.
         The `<Route>` component passes the same props as `withRouter()`, so you will be able to access the history methods through the history prop.
 
         ```jsx harmony
-        import { Route } from 'react-router-dom';
+        import { Route } from "react-router-dom";
 
         const Button = () => (
           <Route
             render={({ history }) => (
               <button
-                type='button'
+                type="button"
                 onClick={() => {
-                  history.push('/new-location');
+                  history.push("/new-location");
                 }}
               >
-                {'Click Me!'}
+                {"Click Me!"}
               </button>
             )}
           />
@@ -2738,12 +2739,12 @@ In these components, DOM does not hold the actual data instead React does.
         ```jsx harmony
         const Button = (props, context) => (
           <button
-            type='button'
+            type="button"
             onClick={() => {
-              context.history.push('/new-location');
+              context.history.push("/new-location");
             }}
           >
-            {'Click Me!'}
+            {"Click Me!"}
           </button>
         );
 
@@ -2761,7 +2762,7 @@ In these components, DOM does not hold the actual data instead React does.
     The ability to parse query strings was taken out of React Router v4 because there have been user requests over the years to support different implementation. So the decision has been given to users to choose the implementation they like. The recommended approach is to use query strings library.
 
     ```javascript
-    const queryString = require('query-string');
+    const queryString = require("query-string");
     const parsed = queryString.parse(props.location.search);
     ```
 
@@ -2769,7 +2770,7 @@ In these components, DOM does not hold the actual data instead React does.
 
     ```javascript
     const params = new URLSearchParams(props.location.search);
-    const foo = params.get('name');
+    const foo = params.get("name");
     ```
 
     You should use a _polyfill_ for IE11.
@@ -2783,7 +2784,7 @@ In these components, DOM does not hold the actual data instead React does.
     At first you need to add `Switch` to your imports:
 
     ```javascript
-    import { Switch, Router, Route } from 'react-router';
+    import { Switch, Router, Route } from "react-router";
     ```
 
     Then define the routes within `<Switch>` block:
@@ -2805,8 +2806,8 @@ In these components, DOM does not hold the actual data instead React does.
 
     ```javascript
     this.props.history.push({
-      pathname: '/template',
-      search: '?name=sudheer',
+      pathname: "/template",
+      search: "?name=sudheer",
       state: { detail: response.data },
     });
     ```
@@ -2821,8 +2822,8 @@ In these components, DOM does not hold the actual data instead React does.
 
     ```jsx harmony
     <Switch>
-      <Route exact path='/' component={Home} />
-      <Route path='/user' component={User} />
+      <Route exact path="/" component={Home} />
+      <Route path="/user" component={User} />
       <Route component={NotFound} />
     </Switch>
     ```
@@ -2837,7 +2838,7 @@ In these components, DOM does not hold the actual data instead React does.
         For example, create `history.js` file:
 
         ```javascript
-        import { createBrowserHistory } from 'history';
+        import { createBrowserHistory } from "history";
 
         export default createBrowserHistory({
           /* pass a configuration object here if needed */
@@ -2847,15 +2848,15 @@ In these components, DOM does not hold the actual data instead React does.
     2.  You should use the `<Router>` component instead of built-in routers. Import the above `history.js` inside `index.js` file:
 
         ```jsx harmony
-        import { Router } from 'react-router-dom';
-        import history from './history';
-        import App from './App';
+        import { Router } from "react-router-dom";
+        import history from "./history";
+        import App from "./App";
 
         ReactDOM.render(
           <Router history={history}>
             <App />
           </Router>,
-          holder
+          holder,
         );
         ```
 
@@ -2863,9 +2864,9 @@ In these components, DOM does not hold the actual data instead React does.
 
         ```javascript
         // some-other-file.js
-        import history from './history';
+        import history from "./history";
 
-        history.push('/go-here');
+        history.push("/go-here");
         ```
 
 **[⬆ Back to Top](#table-of-contents)**
@@ -2890,15 +2891,15 @@ In these components, DOM does not hold the actual data instead React does.
       <p>
 
     ```jsx
-    import React, { Component } from 'react';
-    import { Redirect } from 'react-router';
+    import React, { Component } from "react";
+    import { Redirect } from "react-router";
 
     export default class LoginComponent extends Component {
       render() {
         if (this.state.isLoggedIn === true) {
-          return <Redirect to='/your/redirect/page' />;
+          return <Redirect to="/your/redirect/page" />;
         } else {
-          return <div>{'Login Please'}</div>;
+          return <div>{"Login Please"}</div>;
         }
       }
     }
@@ -2937,8 +2938,8 @@ In these components, DOM does not hold the actual data instead React does.
 
         ```jsx harmony
         <FormattedMessage
-          id={'account'}
-          defaultMessage={'The amount is less than minimum balance.'}
+          id={"account"}
+          defaultMessage={"The amount is less than minimum balance."}
         />
         ```
 
@@ -2947,8 +2948,8 @@ In these components, DOM does not hold the actual data instead React does.
         ```javascript
         const messages = defineMessages({
           accountMessage: {
-            id: 'account',
-            defaultMessage: 'The amount is less than minimum balance.',
+            id: "account",
+            defaultMessage: "The amount is less than minimum balance.",
           },
         });
 
@@ -2962,11 +2963,11 @@ In these components, DOM does not hold the actual data instead React does.
     The `<Formatted... />` components from `react-intl` return elements, not plain text, so they can't be used for placeholders, alt text, etc. In that case, you should use lower level API `formatMessage()`. You can inject the `intl` object into your component using `injectIntl()` higher-order component and then format the message using `formatMessage()` available on that object.
 
     ```jsx harmony
-    import React from 'react';
-    import { injectIntl, intlShape } from 'react-intl';
+    import React from "react";
+    import { injectIntl, intlShape } from "react-intl";
 
     const MyComponent = ({ intl }) => {
-      const placeholder = intl.formatMessage({ id: 'messageId' });
+      const placeholder = intl.formatMessage({ id: "messageId" });
       return <input placeholder={placeholder} />;
     };
 
@@ -2984,7 +2985,7 @@ In these components, DOM does not hold the actual data instead React does.
     You can get the current locale in any component of your application using `injectIntl()`:
 
     ```jsx harmony
-    import { injectIntl, intlShape } from 'react-intl';
+    import { injectIntl, intlShape } from "react-intl";
 
     const MyComponent = ({ intl }) => (
       <div>{`The current locale is ${intl.locale}`}</div>
@@ -3004,12 +3005,12 @@ In these components, DOM does not hold the actual data instead React does.
     The `injectIntl()` higher-order component will give you access to the `formatDate()` method via the props in your component. The method is used internally by instances of `FormattedDate` and it returns the string representation of the formatted date.
 
     ```jsx harmony
-    import { injectIntl, intlShape } from 'react-intl';
+    import { injectIntl, intlShape } from "react-intl";
 
     const stringDate = this.props.intl.formatDate(date, {
-      year: 'numeric',
-      month: 'numeric',
-      day: 'numeric',
+      year: "numeric",
+      month: "numeric",
+      day: "numeric",
     });
 
     const MyComponent = ({ intl }) => (
@@ -3037,8 +3038,8 @@ In these components, DOM does not hold the actual data instead React does.
     function MyComponent() {
       return (
         <div>
-          <span className={'heading'}>{'Title'}</span>
-          <span className={'description'}>{'Description'}</span>
+          <span className={"heading"}>{"Title"}</span>
+          <span className={"description"}>{"Description"}</span>
         </div>
       );
     }
@@ -3047,7 +3048,7 @@ In these components, DOM does not hold the actual data instead React does.
     Then you can assert as follows:
 
     ```jsx harmony
-    import ShallowRenderer from 'react-test-renderer/shallow';
+    import ShallowRenderer from "react-test-renderer/shallow";
 
     // in your test
     const renderer = new ShallowRenderer();
@@ -3055,10 +3056,10 @@ In these components, DOM does not hold the actual data instead React does.
 
     const result = renderer.getRenderOutput();
 
-    expect(result.type).toBe('div');
+    expect(result.type).toBe("div");
     expect(result.props.children).toEqual([
-      <span className={'heading'}>{'Title'}</span>,
-      <span className={'description'}>{'Description'}</span>,
+      <span className={"heading"}>{"Title"}</span>,
+      <span className={"description"}>{"Description"}</span>,
     ]);
     ```
 
@@ -3069,12 +3070,12 @@ In these components, DOM does not hold the actual data instead React does.
     This package provides a renderer that can be used to render components to pure JavaScript objects, without depending on the DOM or a native mobile environment. This package makes it easy to grab a snapshot of the platform view hierarchy (similar to a DOM tree) rendered by a ReactDOM or React Native without using a browser or `jsdom`.
 
     ```jsx harmony
-    import TestRenderer from 'react-test-renderer';
+    import TestRenderer from "react-test-renderer";
 
     const Link = ({ page, children }) => <a href={page}>{children}</a>;
 
     const testRenderer = TestRenderer.create(
-      <Link page={'https://www.facebook.com/'}>{'Facebook'}</Link>
+      <Link page={"https://www.facebook.com/"}>{"Facebook"}</Link>,
     );
 
     console.log(testRenderer.toJSON());
@@ -3123,9 +3124,9 @@ In these components, DOM does not hold the actual data instead React does.
      Create a file named `sum.test.js` which contains actual test:
 
      ```javascript
-     import sum from './sum';
+     import sum from "./sum";
 
-     test('adds 1 + 2 to equal 3', () => {
+     test("adds 1 + 2 to equal 3", () => {
        expect(sum(1, 2)).toBe(3);
      });
      ```
@@ -3198,7 +3199,7 @@ In these components, DOM does not hold the actual data instead React does.
      2. **State is read-only:** The only way to change the state is to emit an action, an object describing what happened. This ensures that neither the views nor the network callbacks will ever write directly to the state.
 
      ```js
-     const action = { type: 'INCREMENT' };
+     const action = { type: "INCREMENT" };
      store.dispatch(action);
      ```
 
@@ -3207,9 +3208,9 @@ In these components, DOM does not hold the actual data instead React does.
      ```jsx
      function counter(state = 0, action) {
        switch (action.type) {
-         case 'INCREMENT':
+         case "INCREMENT":
            return state + 1;
-         case 'DECREMENT':
+         case "DECREMENT":
            return state - 1;
          default:
            return state;
@@ -3236,7 +3237,7 @@ In these components, DOM does not hold the actual data instead React does.
      `mapStateToProps()` is a utility which helps your component get updated state (which is updated by some other components):
 
      ```javascript
-     const mapStateToProps = state => {
+     const mapStateToProps = (state) => {
        return {
          todos: getVisibleTodos(state.todos, state.visibilityFilter),
        };
@@ -3246,9 +3247,9 @@ In these components, DOM does not hold the actual data instead React does.
      `mapDispatchToProps()` is a utility which will help your component to fire an action event (dispatching action which may cause change of application state):
 
      ```javascript
-     const mapDispatchToProps = dispatch => {
+     const mapDispatchToProps = (dispatch) => {
        return {
-         onTodoClick: id => {
+         onTodoClick: (id) => {
            dispatch(toggleTodo(id));
          },
        };
@@ -3313,7 +3314,7 @@ In these components, DOM does not hold the actual data instead React does.
      });
 
      const rootReducer = (state, action) => {
-       if (action.type === 'USER_LOGOUT') {
+       if (action.type === "USER_LOGOUT") {
          state = undefined;
        }
 
@@ -3329,8 +3330,8 @@ In these components, DOM does not hold the actual data instead React does.
      });
 
      const rootReducer = (state, action) => {
-       if (action.type === 'USER_LOGOUT') {
-         Object.keys(state).forEach(key => {
+       if (action.type === "USER_LOGOUT") {
+         Object.keys(state).forEach((key) => {
            storage.removeItem(`persist:${key}`);
          });
 
@@ -3365,9 +3366,9 @@ In these components, DOM does not hold the actual data instead React does.
 
      ```javascript
      export function fetchAccount(id) {
-       return dispatch => {
+       return (dispatch) => {
          dispatch(setLoadingAccountState()); // Show a loading spinner
-         fetch(`/account/${id}`, response => {
+         fetch(`/account/${id}`, (response) => {
            dispatch(doneFetchingAccount()); // Hide loading spinner
            if (response.status === 200) {
              dispatch(setAccount(response.json)); // Use a normal function to set the received state
@@ -3379,7 +3380,7 @@ In these components, DOM does not hold the actual data instead React does.
      }
 
      function setAccount(data) {
-       return { type: 'SET_Account', data: data };
+       return { type: "SET_Account", data: data };
      }
      ```
 
@@ -3398,9 +3399,9 @@ In these components, DOM does not hold the actual data instead React does.
      Let's take an example of `<FilterLink>` component using connect:
 
      ```javascript
-     import { connect } from 'react-redux';
-     import { setVisibilityFilter } from '../actions';
-     import Link from '../components/Link';
+     import { connect } from "react-redux";
+     import { setVisibilityFilter } from "../actions";
+     import Link from "../components/Link";
 
      const mapStateToProps = (state, ownProps) => ({
        active: ownProps.filter === state.visibilityFilter,
@@ -3442,12 +3443,12 @@ In these components, DOM does not hold the actual data instead React does.
      Normally we will save them in a single file (`constants.js` or `actionTypes.js`).
 
      ```javascript
-     export const ADD_TODO = 'ADD_TODO';
-     export const DELETE_TODO = 'DELETE_TODO';
-     export const EDIT_TODO = 'EDIT_TODO';
-     export const COMPLETE_TODO = 'COMPLETE_TODO';
-     export const COMPLETE_ALL = 'COMPLETE_ALL';
-     export const CLEAR_COMPLETED = 'CLEAR_COMPLETED';
+     export const ADD_TODO = "ADD_TODO";
+     export const DELETE_TODO = "DELETE_TODO";
+     export const EDIT_TODO = "EDIT_TODO";
+     export const COMPLETE_TODO = "COMPLETE_TODO";
+     export const COMPLETE_ALL = "COMPLETE_ALL";
+     export const CLEAR_COMPLETED = "CLEAR_COMPLETED";
      ```
 
      In Redux, you use them in two places:
@@ -3456,7 +3457,7 @@ In these components, DOM does not hold the actual data instead React does.
         Let's take `actions.js`:
 
         ```javascript
-        import { ADD_TODO } from './actionTypes';
+        import { ADD_TODO } from "./actionTypes";
 
         export function addTodo(text) {
           return { type: ADD_TODO, text };
@@ -3468,7 +3469,7 @@ In these components, DOM does not hold the actual data instead React does.
         Let's create `reducer.js`:
 
         ```javascript
-        import { ADD_TODO } from './actionTypes';
+        import { ADD_TODO } from "./actionTypes";
 
         export default (state = [], action) => {
           switch (action.type) {
@@ -3495,13 +3496,13 @@ In these components, DOM does not hold the actual data instead React does.
      Below are the possible options:
 
      ```javascript
-     const mapDispatchToProps = dispatch => ({
+     const mapDispatchToProps = (dispatch) => ({
        action: () => dispatch(action()),
      });
      ```
 
      ```javascript
-     const mapDispatchToProps = dispatch => ({
+     const mapDispatchToProps = (dispatch) => ({
        action: bindActionCreators(action, dispatch),
      });
      ```
@@ -3519,16 +3520,16 @@ In these components, DOM does not hold the actual data instead React does.
      If the `ownProps` parameter is specified, React Redux will pass the props that were passed to the component into your _connect_ functions. So, if you use a connected component:
 
      ```jsx harmony
-     import ConnectedComponent from './containers/ConnectedComponent';
+     import ConnectedComponent from "./containers/ConnectedComponent";
 
-     <ConnectedComponent user={'john'} />;
+     <ConnectedComponent user={"john"} />;
      ```
 
      The `ownProps` inside your `mapStateToProps()` and `mapDispatchToProps()` functions will be an object:
 
      ```javascript
      {
-       user: 'john';
+       user: "john";
      }
      ```
 
@@ -3581,7 +3582,7 @@ In these components, DOM does not hold the actual data instead React does.
 
        // Instructing middleware to dispatch corresponding action.
        yield put({
-         type: 'FETCH_USER_SUCCESS',
+         type: "FETCH_USER_SUCCESS",
          userData,
        });
      }
@@ -3625,7 +3626,7 @@ In these components, DOM does not hold the actual data instead React does.
      For example, to get user details from the state:
 
      ```javascript
-     const getUserData = state => state.user.data;
+     const getUserData = (state) => state.user.data;
      ```
 
      These selectors have two main benefits,
@@ -3656,10 +3657,10 @@ In these components, DOM does not hold the actual data instead React does.
      For example, you can add `redux-thunk` and `logger` passing them as arguments to `applyMiddleware()`:
 
      ```javascript
-     import { createStore, applyMiddleware } from 'redux';
+     import { createStore, applyMiddleware } from "redux";
      const createStoreWithMiddleware = applyMiddleware(
        ReduxThunk,
-       logger
+       logger,
      )(createStore);
      ```
 
@@ -3676,7 +3677,7 @@ In these components, DOM does not hold the actual data instead React does.
      });
 
      const initialState = {
-       todos: [{ id: 123, name: 'example', completed: false }],
+       todos: [{ id: 123, name: "example", completed: false }],
      };
 
      const store = createStore(rootReducer, initialState);
@@ -3779,7 +3780,7 @@ In these components, DOM does not hold the actual data instead React does.
      2. Import `font-awesome` in your `index.js` file:
 
         ```javascript
-        import 'font-awesome/css/font-awesome.min.css';
+        import "font-awesome/css/font-awesome.min.css";
         ```
 
      3. Add Font Awesome classes in `className`:
@@ -3816,13 +3817,13 @@ In these components, DOM does not hold the actual data instead React does.
 
         ```jsx harmony
         <link
-          rel='import'
-          href='../../bower_components/polymer/polymer.html'
+          rel="import"
+          href="../../bower_components/polymer/polymer.html"
         />;
         Polymer({
-          is: 'calendar-element',
+          is: "calendar-element",
           ready: function () {
-            this.textContent = 'I am a calendar';
+            this.textContent = "I am a calendar";
           },
         });
         ```
@@ -3891,8 +3892,8 @@ In these components, DOM does not hold the actual data instead React does.
      Lets create `<Title>` and `<Wrapper>` components with specific styles for each.
 
      ```javascript
-     import React from 'react';
-     import styled from 'styled-components';
+     import React from "react";
+     import styled from "styled-components";
 
      // Create a <Title> component that renders an <h1> which is centered, red and sized at 1.5em
      const Title = styled.h1`
@@ -3912,7 +3913,7 @@ In these components, DOM does not hold the actual data instead React does.
 
      ```jsx harmony
      <Wrapper>
-       <Title>{'Lets start first styled component!'}</Title>
+       <Title>{"Lets start first styled component!"}</Title>
      </Wrapper>
      ```
 
@@ -3938,33 +3939,33 @@ In these components, DOM does not hold the actual data instead React does.
      Let's take calculations and different amounts of a shipment order with the simplified usage of Reselect:
 
      ```javascript
-     import { createSelector } from 'reselect';
+     import { createSelector } from "reselect";
 
-     const shopItemsSelector = state => state.shop.items;
-     const taxPercentSelector = state => state.shop.taxPercent;
+     const shopItemsSelector = (state) => state.shop.items;
+     const taxPercentSelector = (state) => state.shop.taxPercent;
 
-     const subtotalSelector = createSelector(shopItemsSelector, items =>
-       items.reduce((acc, item) => acc + item.value, 0)
+     const subtotalSelector = createSelector(shopItemsSelector, (items) =>
+       items.reduce((acc, item) => acc + item.value, 0),
      );
 
      const taxSelector = createSelector(
        subtotalSelector,
        taxPercentSelector,
-       (subtotal, taxPercent) => subtotal * (taxPercent / 100)
+       (subtotal, taxPercent) => subtotal * (taxPercent / 100),
      );
 
      export const totalSelector = createSelector(
        subtotalSelector,
        taxSelector,
-       (subtotal, tax) => ({ total: subtotal + tax })
+       (subtotal, tax) => ({ total: subtotal + tax }),
      );
 
      let exampleState = {
        shop: {
          taxPercent: 8,
          items: [
-           { name: 'apple', value: 1.2 },
-           { name: 'orange', value: 0.95 },
+           { name: "apple", value: 1.2 },
+           { name: "orange", value: 0.95 },
          ],
        },
      };
@@ -3994,7 +3995,7 @@ In these components, DOM does not hold the actual data instead React does.
 
      ```javascript
      const InitializeFromStateForm = reduxForm({
-       form: 'initializeFromState',
+       form: "initializeFromState",
        enableReinitialize: true,
      })(UserEdit);
      ```
@@ -4022,7 +4023,7 @@ In these components, DOM does not hold the actual data instead React does.
      You can import SVG directly as component instead of loading it as a file. This feature is available with `react-scripts@2.0.0` and higher.
 
      ```jsx harmony
-     import { ReactComponent as Logo } from './logo.svg';
+     import { ReactComponent as Logo } from "./logo.svg";
 
      const App = () => (
        <div>
@@ -4047,7 +4048,7 @@ In these components, DOM does not hold the actual data instead React does.
      We can pass `numbers` as `props` to React component using curly braces `{}` where as `strings` in double quotes `""` or single quotes `''`
 
      ```jsx
-     import React from 'react';
+     import React from "react";
 
      const ChildComponent = ({ name, age }) => {
        return (
@@ -4060,7 +4061,7 @@ In these components, DOM does not hold the actual data instead React does.
      const ParentComponent = () => {
        return (
          <>
-           <ChildComponent name='Chetan' age={30} />
+           <ChildComponent name="Chetan" age={30} />
          </>
        );
      };
@@ -4088,12 +4089,12 @@ In these components, DOM does not hold the actual data instead React does.
      React creates a service worker for you without any configuration by default. The service worker is a web API that helps you cache your assets and other files so that when the user is offline or on a slow network, he/she can still see results on the screen, as such, it helps you build a better user experience, that's what you should know about service worker for now. It's all about adding offline capabilities to your site.
 
      ```jsx
-     import React from 'react';
-     import ReactDOM from 'react-dom';
-     import App from './App';
-     import registerServiceWorker from './registerServiceWorker';
+     import React from "react";
+     import ReactDOM from "react-dom";
+     import App from "./App";
+     import registerServiceWorker from "./registerServiceWorker";
 
-     ReactDOM.render(<App />, document.getElementById('root'));
+     ReactDOM.render(<App />, document.getElementById("root"));
      registerServiceWorker();
      ```
 
@@ -4116,7 +4117,7 @@ In these components, DOM does not hold the actual data instead React does.
      The `React.lazy` function lets you render a dynamic import as a regular component. It will automatically load the bundle containing the `OtherComponent` when the component gets rendered. This must return a Promise which resolves to a module with a default export containing a React component.
 
      ```jsx
-     const OtherComponent = React.lazy(() => import('./OtherComponent'));
+     const OtherComponent = React.lazy(() => import("./OtherComponent"));
 
      function MyComponent() {
        return (
@@ -4139,9 +4140,9 @@ In these components, DOM does not hold the actual data instead React does.
      For example, the user profile information is conditionally rendered as follows,
 
      ```jsx
-     getUserProfile = user => {
+     getUserProfile = (user) => {
        const latestAddress = user.address;
-       this.setState(state => {
+       this.setState((state) => {
          if (state.address === latestAddress) {
            return null;
          } else {
@@ -4162,9 +4163,9 @@ In these components, DOM does not hold the actual data instead React does.
      ```jsx
      const ReactJSDevs = () => {
        return [
-         <li key='1'>John</li>,
-         <li key='2'>Jackie</li>,
-         <li key='3'>Jordan</li>,
+         <li key="1">John</li>,
+         <li key="2">Jackie</li>,
+         <li key="3">Jordan</li>,
        ];
      };
      ```
@@ -4205,7 +4206,7 @@ In these components, DOM does not hold the actual data instead React does.
      Let's see an example of useState hook:
 
      ```jsx
-     import { useState } from 'react';
+     import { useState } from "react";
 
      function Example() {
        // Declare a new state variable, which we'll call "count"
@@ -4235,8 +4236,8 @@ In these components, DOM does not hold the actual data instead React does.
      ```jsx
      function UserProfile() {
        // Correct: Hooks called at the top level
-       const [name, setName] = useState('John');
-       const [country, setCountry] = useState('US');
+       const [name, setName] = useState("John");
+       const [country, setCountry] = useState("US");
 
        return (
          <div>
@@ -4251,25 +4252,24 @@ In these components, DOM does not hold the actual data instead React does.
 
      ```jsx
      function UserProfile() {
-       const [name, setName] = useState('John');
+       const [name, setName] = useState("John");
 
-       if (name === 'John') {
+       if (name === "John") {
          // Incorrect: useState is called inside a conditional
-         const [country, setCountry] = useState('US');
+         const [country, setCountry] = useState("US");
        }
 
        return (
          <div>
            <h1>Name: {name}</h1>
-           <p>Country: {country}</p>{' '}
+           <p>Country: {country}</p>{" "}
            {/* This will throw an error if the name condition isn't met */}
          </div>
        );
      }
      ```
 
-     The `useState` hook for the country field is being called conditionally within an `if` block. This can lead to inconsistent state behavior and may cause hooks to be called in a different order on each re-render.
-     2. **Call Hooks from React Functions only:** You shouldn’t call Hooks from regular JavaScript functions or class components. Instead, you should call them from either function components or custom hooks.
+     The `useState` hook for the country field is being called conditionally within an `if` block. This can lead to inconsistent state behavior and may cause hooks to be called in a different order on each re-render. 2. **Call Hooks from React Functions only:** You shouldn’t call Hooks from regular JavaScript functions or class components. Instead, you should call them from either function components or custom hooks.
 
      Let's find the difference of correct and incorrect usage with below examples,
 
@@ -4289,8 +4289,8 @@ In these components, DOM does not hold the actual data instead React does.
 
        useEffect(() => {
          fetch(url)
-           .then(response => response.json())
-           .then(data => setData(data));
+           .then((response) => response.json())
+           .then((data) => setData(data));
        }, [url]);
 
        return data;
@@ -4298,11 +4298,11 @@ In these components, DOM does not hold the actual data instead React does.
 
      function UserProfile() {
        // Correct: Using a custom hook here
-       const user = useFetchData('https://some-api.com/user');
+       const user = useFetchData("https://some-api.com/user");
 
        return (
          <div>
-           <h1>{user ? user.name : 'Loading profile...'}</h1>
+           <h1>{user ? user.name : "Loading profile..."}</h1>
          </div>
        );
      }
@@ -4324,8 +4324,8 @@ In these components, DOM does not hold the actual data instead React does.
 
        useEffect(() => {
          fetch(url)
-           .then(response => response.json())
-           .then(data => setData(data));
+           .then((response) => response.json())
+           .then((data) => setData(data));
        }, [url]);
 
        return data;
@@ -4484,13 +4484,13 @@ In these components, DOM does not hold the actual data instead React does.
          /* ... */
        }
        WithSubscription.displayName = `WithSubscription(${getDisplayName(
-         WrappedComponent
+         WrappedComponent,
        )})`;
        return WithSubscription;
      }
      function getDisplayName(WrappedComponent) {
        return (
-         WrappedComponent.displayName || WrappedComponent.name || 'Component'
+         WrappedComponent.displayName || WrappedComponent.name || "Component"
        );
      }
      ```
@@ -4511,7 +4511,7 @@ In these components, DOM does not hold the actual data instead React does.
      **moduleA.js**
 
      ```javascript
-     const moduleA = 'Hello';
+     const moduleA = "Hello";
 
      export { moduleA };
      ```
@@ -4542,15 +4542,15 @@ In these components, DOM does not hold the actual data instead React does.
     <p>
 
 ```javascript
-import React, { Component } from 'react';
+import React, { Component } from "react";
 
 class App extends Component {
   handleClick = () => {
-    import('./moduleA')
+    import("./moduleA")
       .then(({ moduleA }) => {
         // Use moduleA
       })
-      .catch(err => {
+      .catch((err) => {
         // Handle failure
       });
   };
@@ -4580,7 +4580,7 @@ export default App;
      function Glossary(props) {
        return (
          <dl>
-           {props.items.map(item => (
+           {props.items.map((item) => (
              // Without the `key`, React will fire a key warning
              <React.Fragment key={item.id}>
                <dt>{item.term}</dt>
@@ -4651,7 +4651,7 @@ export default App;
 
      export default function downloadExcel() {
        function handleClick() {
-         alert('Downloaded');
+         alert("Downloaded");
        }
 
        return <Button onClick={handleClick}></Button>;
@@ -4698,7 +4698,7 @@ export default App;
            <h2>It is {new Date().toLocaleTimeString()}.</h2>
          </div>
        );
-       ReactDOM.render(element, document.getElementById('root'));
+       ReactDOM.render(element, document.getElementById("root"));
      }
 
      setInterval(tick, 1000);
@@ -4741,12 +4741,12 @@ export default App;
      function Book(props) {
        const index = (
          <ul>
-           {props.pages.map(page => (
+           {props.pages.map((page) => (
              <li key={page.id}>{page.title}</li>
            ))}
          </ul>
        );
-       const content = props.pages.map(page => (
+       const content = props.pages.map((page) => (
          <div key={page.id}>
            <h3>{page.title}</h3>
            <p>{page.content}</p>
@@ -4800,12 +4800,12 @@ export default App;
      For example, let us use `Vaadin` date picker web component as below,
 
      ```javascript
-     import './App.css';
-     import '@vaadin/vaadin-date-picker';
+     import "./App.css";
+     import "@vaadin/vaadin-date-picker";
      export default function App() {
        return (
-         <div className='App'>
-           <vaadin-date-picker label='When were you born?'></vaadin-date-picker>
+         <div className="App">
+           <vaadin-date-picker label="When were you born?"></vaadin-date-picker>
          </div>
        );
      }
@@ -4821,14 +4821,14 @@ export default App;
      1. **Normal Import**
 
      ```javascript
-     import { add } from './math';
+     import { add } from "./math";
      console.log(add(10, 20));
      ```
 
      2. **Dynamic Import**
 
      ```javascript
-     import('./math').then(math => {
+     import("./math").then((math) => {
        console.log(math.add(10, 20));
      });
      ```
@@ -4840,9 +4840,9 @@ export default App;
      With the release of React 18, React.lazy and Suspense are now available for server-side rendering. However, prior to React 18, it was recommended to use Loadable Components for code-splitting in a server-side rendered app because React.lazy and Suspense were not available for server-side rendering. Loadable Components lets you render a dynamic import as a regular component. For example, you can use Loadable Components to load the OtherComponent in a separate bundle like this:
 
      ```javascript
-     import loadable from '@loadable/component';
+     import loadable from "@loadable/component";
 
-     const OtherComponent = loadable(() => import('./OtherComponent'));
+     const OtherComponent = loadable(() => import("./OtherComponent"));
 
      function MyComponent() {
        return (
@@ -4866,7 +4866,7 @@ export default App;
         If the module containing the dynamic import is not yet loaded by the time parent component renders, you must show some fallback content while you’re waiting for it to load using a loading indicator. This can be done using **Suspense** component.
 
         ```javascript
-        const OtherComponent = React.lazy(() => import('./OtherComponent'));
+        const OtherComponent = React.lazy(() => import("./OtherComponent"));
 
         function MyComponent() {
           return (
@@ -4901,7 +4901,6 @@ export default App;
 
     ```
 
-
 **[⬆ Back to Top](#table-of-contents)**
 
 200. ### What is route based code splitting?
@@ -4911,18 +4910,18 @@ export default App;
      Let us take an example of route based website using libraries like React Router with React.lazy,
 
      ```javascript
-     import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
-     import React, { Suspense, lazy } from 'react';
+     import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+     import React, { Suspense, lazy } from "react";
 
-     const Home = lazy(() => import('./routes/Home'));
-     const About = lazy(() => import('./routes/About'));
+     const Home = lazy(() => import("./routes/Home"));
+     const About = lazy(() => import("./routes/About"));
 
      const App = () => (
        <Router>
          <Suspense fallback={<div>Loading...</div>}>
            <Switch>
-             <Route exact path='/' component={Home} />
-             <Route path='/about' component={About} />
+             <Route exact path="/" component={Home} />
+             <Route path="/about" component={About} />
            </Switch>
          </Suspense>
        </Router>
@@ -5021,7 +5020,7 @@ export default App;
 
      ```javascript
      <Mouse
-       children={mouse => (
+       children={(mouse) => (
          <p>
            The mouse position is {mouse.x}, {mouse.y}
          </p>
@@ -5033,7 +5032,7 @@ export default App;
 
      ```javascript
      <Mouse>
-       {mouse => (
+       {(mouse) => (
          <p>
            The mouse position is {mouse.x}, {mouse.y}
          </p>
@@ -5192,20 +5191,20 @@ export default App;
      Here is an example of fetching a list of ReactJS articles from an API using fetch.
 
      ```javascript
-     import React from 'react';
+     import React from "react";
 
      function App() {
        const [data, setData] = React.useState({ hits: [] });
 
        React.useEffect(() => {
-         fetch('http://hn.algolia.com/api/v1/search?query=react')
-           .then(response => response.json())
-           .then(data => setData(data));
+         fetch("http://hn.algolia.com/api/v1/search?query=react")
+           .then((response) => response.json())
+           .then((data) => setData(data));
        }, []);
 
        return (
          <ul>
-           {data.hits.map(item => (
+           {data.hits.map((item) => (
              <li key={item.objectID}>
                <a href={item.url}>{item.title}</a>
              </li>
@@ -5245,7 +5244,7 @@ export default App;
      For example, the array index access would look as follows:
 
      ```javascript
-     var userStateVariable = useState('userProfile'); // Returns an array pair
+     var userStateVariable = useState("userProfile"); // Returns an array pair
      var user = userStateVariable[0]; // Access first item
      var setUser = userStateVariable[1]; // Access second item
      ```
@@ -5253,7 +5252,7 @@ export default App;
      Whereas with array destructuring the variables can be accessed as follows:
 
      ```javascript
-     const [user, setUser] = useState('userProfile');
+     const [user, setUser] = useState("userProfile");
      ```
 
      **[⬆ Back to Top](#table-of-contents)**
@@ -5353,7 +5352,7 @@ export default App;
           return <li>{user.name}</li>;
         });
         // es 6
-        const users = usersList.map(user => <li>{user.name}</li>);
+        const users = usersList.map((user) => <li>{user.name}</li>);
         ```
 
 **[⬆ Back to Top](#table-of-contents)**
@@ -5454,7 +5453,7 @@ export default App;
      **App.js**
 
      ```js
-     import { loadUser } from '../actions/auth';
+     import { loadUser } from "../actions/auth";
      store.dispatch(loadUser());
      ```
 
@@ -5463,10 +5462,10 @@ export default App;
      **index.js**
 
      ```js
-     import React from 'react';
-     import ReactDOM from 'react-dom';
-     import App from './App';
-     import AuthState from './context/auth/AuthState';
+     import React from "react";
+     import ReactDOM from "react-dom";
+     import App from "./App";
+     import AuthState from "./context/auth/AuthState";
 
      ReactDOM.render(
        <React.StrictMode>
@@ -5474,7 +5473,7 @@ export default App;
            <App />
          </AuthState>
        </React.StrictMode>,
-       document.getElementById('root')
+       document.getElementById("root"),
      );
      ```
 
@@ -5494,7 +5493,7 @@ export default App;
 
      ```js
      const loadUser = async () => {
-       const token = sessionStorage.getItem('token');
+       const token = sessionStorage.getItem("token");
 
        if (!token) {
          dispatch({
@@ -5504,7 +5503,7 @@ export default App;
        setAuthToken(token);
 
        try {
-         const res = await axios('/api/auth');
+         const res = await axios("/api/auth");
 
          dispatch({
            type: USER_LOADED,
@@ -5536,7 +5535,7 @@ export default App;
      **Old Transform:**
 
      ```js
-     import React from 'react';
+     import React from "react";
 
      function App() {
        return <h1>Good morning!!</h1>;
@@ -5546,10 +5545,10 @@ export default App;
      Now JSX transform convert the above code into regular JavaScript as below,
 
      ```js
-     import React from 'react';
+     import React from "react";
 
      function App() {
-       return React.createElement('h1', null, 'Good morning!!');
+       return React.createElement("h1", null, "Good morning!!");
      }
      ```
 
@@ -5566,10 +5565,10 @@ export default App;
      Under the hood JSX transform compiles to below code
 
      ```js
-     import { jsx as _jsx } from 'react/jsx-runtime';
+     import { jsx as _jsx } from "react/jsx-runtime";
 
      function App() {
-       return _jsx('h1', { children: 'Good morning!!' });
+       return _jsx("h1", { children: "Good morning!!" });
      }
      ```
 
@@ -5612,9 +5611,9 @@ export default App;
      We can create a wrapper component that will add a border to the message component:
 
      ```javascript
-     const MessageWrapper = props => {
+     const MessageWrapper = (props) => {
        return (
-         <div style={{ border: '1px solid black' }}>
+         <div style={{ border: "1px solid black" }}>
            <Message {...props} />
          </div>
        );
@@ -5624,7 +5623,7 @@ export default App;
      Now we can use the MessageWrapper component instead of the Message component and the message will be displayed with a border:
 
      ```javascript
-     <MessageWrapper text='Hello World' />
+     <MessageWrapper text="Hello World" />
      ```
 
      Wrapper component can also accept its own props and pass them down to the wrapped component, for example, we can create a wrapper component that will add a title to the message component:
@@ -5643,7 +5642,7 @@ export default App;
      Now we can use the MessageWrapperWithTitle component and pass title props:
 
      ```javascript
-     <MessageWrapperWithTitle title='My Message' text='Hello World' />
+     <MessageWrapperWithTitle title="My Message" text="Hello World" />
      ```
 
      This way, the wrapper component can add additional functionality, styling, or layout to the wrapped component while keeping the wrapped component simple and reusable.
@@ -5690,7 +5689,7 @@ export default App;
      ```js
      function App() {
        return (
-         <div className='App'>
+         <div className="App">
            <h1>Hello, I'm a function component</h1>
          </div>
        );
@@ -5710,12 +5709,12 @@ export default App;
        constructor() {
          super();
          this.state = {
-           message: 'This is a class component',
+           message: "This is a class component",
          };
        }
        updateMessage() {
          this.setState({
-           message: 'Updating the class component',
+           message: "Updating the class component",
          });
        }
        render() {
@@ -5743,12 +5742,12 @@ export default App;
 
      ```js
      function App() {
-       const [message, setMessage] = useState('This is a functional component');
+       const [message, setMessage] = useState("This is a functional component");
        const updateMessage = () => {
-         setMessage('Updating the functional component');
+         setMessage("Updating the functional component");
        };
        return (
-         <div className='App'>
+         <div className="App">
            <h1>{message} </h1>
            <button onClick={updateMessage}>Click me!!</button>
          </div>
@@ -5767,9 +5766,9 @@ export default App;
        render() {
          return (
            <h1>
-             {' '}
-             This is a functional component and component name is{' '}
-             {this.props.name}{' '}
+             {" "}
+             This is a functional component and component name is{" "}
+             {this.props.name}{" "}
            </h1>
          );
        }
@@ -5778,9 +5777,9 @@ export default App;
      class Parent extends React.Component {
        render() {
          return (
-           <div className='Parent'>
-             <Child name='First child component' />
-             <Child name='Second child component' />
+           <div className="Parent">
+             <Child name="First child component" />
+             <Child name="Second child component" />
            </div>
          );
        }
@@ -5800,9 +5799,9 @@ export default App;
 
      function Parent() {
        return (
-         <div className='Parent'>
-           <Child name='First child component' />
-           <Child name='Second child component' />
+         <div className="Parent">
+           <Child name="First child component" />
+           <Child name="Second child component" />
          </div>
        );
      }
@@ -5815,7 +5814,7 @@ export default App;
      `React.StrictMode` is a useful component for highlighting potential problems in an application. Just like `<Fragment>`, `<StrictMode>` does not render any extra DOM elements. It activates additional checks and warnings for its descendants. These checks apply for _development mode_ only.
 
      ```jsx harmony
-     import { StrictMode } from 'react';
+     import { StrictMode } from "react";
 
      function App() {
        return (
@@ -5857,18 +5856,18 @@ export default App;
      StrictMode renders components twice in development mode(not production) in order to detect any problems with your code and warn you about those problems. This is used to detect accidental side effects in the render phase. If you used `create-react-app` development tool then it automatically enables StrictMode by default.
 
      ```js
-     const root = createRoot(document.getElementById('root'));
+     const root = createRoot(document.getElementById("root"));
      root.render(
        <StrictMode>
          <App />
-       </StrictMode>
+       </StrictMode>,
      );
      ```
 
      If you want to disable this behavior then you can simply remove `strict` mode.
 
      ```js
-     const root = createRoot(document.getElementById('root'));
+     const root = createRoot(document.getElementById("root"));
      root.render(<App />);
      ```
 
@@ -5919,10 +5918,10 @@ export default App;
      For example, the below code triggers the click event of parent first followed by second level child eventhough leaf child button elements stops the propagation.
 
      ```jsx
-     <div onClickCapture={() => alert('parent')}>
-       <div onClickCapture={() => alert('child')}>
-         <button onClick={e => e.stopPropagation()} />
-         <button onClick={e => e.stopPropagation()} />
+     <div onClickCapture={() => alert("parent")}>
+       <div onClickCapture={() => alert("child")}>
+         <button onClick={(e) => e.stopPropagation()} />
+         <button onClick={(e) => e.stopPropagation()} />
        </div>
      </div>
      ```
@@ -5939,9 +5938,9 @@ export default App;
         1. **Initial render:** When the app starts, you can trigger the initial render by calling `creatRoot` with the target DOM node followed by invoking component's `render` method. For example, the following code snippet renders `App` component on root DOM node.
 
         ```jsx
-        import { createRoot } from 'react-dom/client';
+        import { createRoot } from "react-dom/client";
 
-        const root = createRoot(document.getElementById('root'));
+        const root = createRoot(document.getElementById("root"));
         root.render(<App />);
         ```
 
@@ -5960,19 +5959,19 @@ export default App;
       Let's demonstrate this automatic batching feature with a below example.
 
       ```jsx
-      import { useState } from 'react';
+      import { useState } from "react";
 
       export default function BatchingState() {
         const [count, setCount] = useState(0);
-        const [message, setMessage] = useState('batching');
+        const [message, setMessage] = useState("batching");
 
-        console.log('Application Rendered');
+        console.log("Application Rendered");
 
         const handleUsers = () => {
-          fetch('https://jsonplaceholder.typicode.com/users/1').then(() => {
+          fetch("https://jsonplaceholder.typicode.com/users/1").then(() => {
             // Automatic Batching re-render only once
             setCount(count + 1);
-            setMessage('users fetched');
+            setMessage("users fetched");
           });
         };
 
@@ -5996,7 +5995,7 @@ export default App;
       The usage of `flushSync` method within an `onClick` event handler will be looking like as below,
 
       ```jsx
-      import { flushSync } from 'react-dom';
+      import { flushSync } from "react-dom";
 
       const handleClick = () => {
         flushSync(() => {
@@ -6050,10 +6049,10 @@ export default App;
       At this stage `hydrateRoot` API can be used to perform hydration by attaching `onClick` event handler.
 
       ```jsx
-      import { hydrateRoot } from 'react-dom/client';
-      import App from './App.js';
+      import { hydrateRoot } from "react-dom/client";
+      import App from "./App.js";
 
-      hydrateRoot(document.getElementById('root'), <App />);
+      hydrateRoot(document.getElementById("root"), <App />);
       ```
 
       After this step, you are able to run React application on server-side and hydrating the javascript bundle on client-side for smooth user experience and SEO purposes.
@@ -6067,12 +6066,12 @@ export default App;
       Let's see this comparison with an example. The issue with regular object mutation approach can be described by updating the user details fields of `Profile` component. The properties of `Profile` component such as firstName, lastName and age details mutated in an event handler as shown below.
 
       ```jsx
-      import { useState } from 'react';
+      import { useState } from "react";
 
       export default function Profile() {
         const [user, setUser] = useState({
-          firstName: 'John',
-          lastName: 'Abraham',
+          firstName: "John",
+          lastName: "Abraham",
           age: 30,
         });
 
@@ -6133,10 +6132,10 @@ export default App;
 
       ```jsx
       const user = {
-        name: 'John',
+        name: "John",
         age: 32,
         address: {
-          country: 'Singapore',
+          country: "Singapore",
           postalCode: 440004,
         },
       };
@@ -6145,7 +6144,7 @@ export default App;
       If you try to update the country nested field in a regular javascript fashion(as shown below) then user profile screen won't be updated with latest value.
 
       ```js
-      user.address.country = 'Germany';
+      user.address.country = "Germany";
       ```
 
       This issue can be fixed by flattening all the fields into a top-level object or create a new object for each nested object and point it to it's parent object. In this example, first you need to create copy of address object and update it with the latest value. Later, the address object should be linked to parent user object something like below.
@@ -6155,7 +6154,7 @@ export default App;
         ...user,
         address: {
           ...user.address,
-          country: 'Germany',
+          country: "Germany",
         },
       });
       ```
@@ -6209,19 +6208,19 @@ export default App;
       For example, the mutation syntax of immer library simplifies the nested address object of user state as follows,
 
       ```jsx
-      import { useImmer } from 'use-immer';
+      import { useImmer } from "use-immer";
       const [user, setUser] = useImmer({
-        name: 'John',
+        name: "John",
         age: 32,
         address: {
-          country: 'Singapore',
+          country: "Singapore",
           postalCode: 440004,
         },
       });
 
       //Update user details upon any event
-      setUser(draft => {
-        draft.address.country = 'Germany';
+      setUser((draft) => {
+        draft.address.country = "Germany";
       });
       ```
 
@@ -6333,12 +6332,12 @@ Technically it is possible to write nested function components but it is not sug
 
 266. ### How is `useReducer` Different from `useState`?
      There are notable differences between `useState` and `useReducer` hooks.
-     | Feature               | `useState`                           | `useReducer`                          |
+     | Feature | `useState` | `useReducer` |
      | --------------------- | ------------------------------------ | ------------------------------------- |
-     | State complexity      | Simple (one variable or flat object) | Complex, multi-part or deeply nested  |
-     | Update style          | Direct (e.g. `setState(x)`)          | Through actions (e.g. `dispatch({})`) |
-     | Update logic          | In component                         | In reducer function                   |
-     | Reusability & testing | Less reusable                        | Highly reusable & testable            |
+     | State complexity | Simple (one variable or flat object) | Complex, multi-part or deeply nested |
+     | Update style | Direct (e.g. `setState(x)`) | Through actions (e.g. `dispatch({})`) |
+     | Update logic | In component | In reducer function |
+     | Reusability & testing | Less reusable | Highly reusable & testable |
 
 **[⬆ Back to Top](#table-of-contents)**
 
@@ -6355,7 +6354,7 @@ Technically it is possible to write nested function components but it is not sug
      Use `React.createContext()` to create a context object.
 
      ```jsx
-     import React, { createContext } from 'react';
+     import React, { createContext } from "react";
 
      const ThemeContext = createContext(); // default value optional
      ```
@@ -6369,7 +6368,7 @@ Technically it is possible to write nested function components but it is not sug
      ```jsx
      function App() {
        return (
-         <ThemeContext.Provider value='dark'>
+         <ThemeContext.Provider value="dark">
            <MyComponent />
          </ThemeContext.Provider>
        );
@@ -6383,7 +6382,7 @@ Technically it is possible to write nested function components but it is not sug
      In any functional component **inside the Provider**, use the `useContext` hook:
 
      ```jsx
-     import { useContext } from 'react';
+     import { useContext } from "react";
      function MyComponent() {
        const theme = useContext(ThemeContext); // theme = "dark"
        return <p>Current Theme: {theme}</p>;
@@ -6441,7 +6440,7 @@ Technically it is possible to write nested function components but it is not sug
      ```js
      const memoizedValue = useMemo(
        () => computeExpensiveValue(arg),
-       [dependencies]
+       [dependencies],
      );
      ```
 
@@ -6458,45 +6457,45 @@ Technically it is possible to write nested function components but it is not sug
      #### Example: Memoizing a Filtered List
 
      ```javascript
-     import React, { useState, useMemo } from 'react';
+     import React, { useState, useMemo } from "react";
 
      const users = [
-       { id: 1, name: 'Sudheer' },
-       { id: 2, name: 'Brendon' },
-       { id: 3, name: 'Charlie' },
-       { id: 4, name: 'Dary' },
-       { id: 5, name: 'Eden' },
+       { id: 1, name: "Sudheer" },
+       { id: 2, name: "Brendon" },
+       { id: 3, name: "Charlie" },
+       { id: 4, name: "Dary" },
+       { id: 5, name: "Eden" },
      ];
 
      export default function UserSearch({ users }) {
-       const [searchTerm, setSearchTerm] = useState('');
+       const [searchTerm, setSearchTerm] = useState("");
        const [counter, setCounter] = useState(0);
 
        // Memoize the filtered user list based on the search term
        const filteredUsers = useMemo(() => {
-         console.log('Filtering users...');
-         return users.filter(user =>
-           user.name.toLowerCase().includes(searchTerm.toLowerCase())
+         console.log("Filtering users...");
+         return users.filter((user) =>
+           user.name.toLowerCase().includes(searchTerm.toLowerCase()),
          );
        }, [searchTerm]);
 
        return (
          <div>
            <h2>Counter: {counter}</h2>
-           <button onClick={() => setCounter(prev => prev + 1)}>
+           <button onClick={() => setCounter((prev) => prev + 1)}>
              Increment Counter
            </button>
 
            <h2>Search Users</h2>
            <input
-             type='text'
+             type="text"
              value={searchTerm}
-             onChange={e => setSearchTerm(e.target.value)}
-             placeholder='Enter name'
+             onChange={(e) => setSearchTerm(e.target.value)}
+             placeholder="Enter name"
            />
 
            <ul>
-             {filteredUsers.map(user => (
+             {filteredUsers.map((user) => (
                <li key={user.id}>{user.name}</li>
              ))}
            </ul>
@@ -6524,7 +6523,7 @@ Technically it is possible to write nested function components but it is not sug
      The updater function expression looks like below,
 
      ```js
-     setCount(prevCount => prevCount + 1); // Safe and predictable
+     setCount((prevCount) => prevCount + 1); // Safe and predictable
      ```
 
      Here, `prevCount => prevCount + 1` is the updater function.
@@ -6538,9 +6537,9 @@ Technically it is possible to write nested function components but it is not sug
 
      ```js
      function handleCount() {
-       setCounter(a => a + 1);
-       setCounter(a => a + 1);
-       setCounter(a => a + 1);
+       setCounter((a) => a + 1);
+       setCounter((a) => a + 1);
+       setCounter((a) => a + 1);
      }
      ```
 
@@ -6549,7 +6548,7 @@ Technically it is possible to write nested function components but it is not sug
      In many cases, such as setting state based on user input or assigning static values, you don’t need the updater function:
 
      ```js
-     setName('Sudheer');
+     setName("Sudheer");
      ```
 
 **[⬆ Back to Top](#table-of-contents)**
@@ -6716,7 +6715,7 @@ Technically it is possible to write nested function components but it is not sug
         const hook = hooks[currentIndex];
 
         // Process queued updates
-        hook.queue.forEach(update => {
+        hook.queue.forEach((update) => {
           hook.state = update(hook.state);
         });
         hook.queue = [];
@@ -6724,7 +6723,7 @@ Technically it is possible to write nested function components but it is not sug
         // Define updater function
         function setState(action) {
           // action can be new state or function(state) => new state
-          hook.queue.push(typeof action === 'function' ? action : () => action);
+          hook.queue.push(typeof action === "function" ? action : () => action);
           scheduleRender(); // triggers React re-render
         }
 
@@ -6776,11 +6775,11 @@ Technically it is possible to write nested function components but it is not sug
         ```js
         function counterReducer(state, action) {
           switch (action.type) {
-            case 'increment':
+            case "increment":
               return { count: state.count + 1 };
-            case 'decrement':
+            case "decrement":
               return { count: state.count - 1 };
-            case 'reset':
+            case "reset":
               return { count: 0 };
             default:
               return state;
@@ -6792,22 +6791,22 @@ Technically it is possible to write nested function components but it is not sug
         Invoke `useReducer` with above reducer function along with initial state. Thereafter, you can attach dispatch actions for respective button handlers.
 
      ```js
-     import React, { useReducer } from 'react';
+     import React, { useReducer } from "react";
 
      function Counter() {
        const initialState = { count: 0 };
        const [state, dispatch] = useReducer(counterReducer, initialState);
 
        return (
-         <div style={{ textAlign: 'center' }}>
+         <div style={{ textAlign: "center" }}>
            <h2>Count: {state.count}</h2>
-           <button onClick={() => dispatch({ type: 'increment' })}>
+           <button onClick={() => dispatch({ type: "increment" })}>
              Increment
            </button>
-           <button onClick={() => dispatch({ type: 'decrement' })}>
+           <button onClick={() => dispatch({ type: "decrement" })}>
              Decrement
            </button>
-           <button onClick={() => dispatch({ type: 'reset' })}>Reset</button>
+           <button onClick={() => dispatch({ type: "reset" })}>Reset</button>
          </div>
        );
      }
@@ -6847,9 +6846,9 @@ Technically it is possible to write nested function components but it is not sug
 
      ```js
      function handleMultipleActions(dispatch) {
-       dispatch({ type: 'increment' });
-       dispatch({ type: 'increment' });
-       dispatch({ type: 'reset' });
+       dispatch({ type: "increment" });
+       dispatch({ type: "increment" });
+       dispatch({ type: "reset" });
      }
      ```
 
@@ -6871,7 +6870,7 @@ Technically it is possible to write nested function components but it is not sug
      Then dispatch
 
      ```js
-     dispatch({ type: 'increment_twice' });
+     dispatch({ type: "increment_twice" });
      ```
 
 **[⬆ Back to Top](#table-of-contents)**
@@ -6891,14 +6890,14 @@ Technically it is possible to write nested function components but it is not sug
 
      ```js
      // AuthContext.js
-     import React, { createContext, useContext, useState } from 'react';
+     import React, { createContext, useContext, useState } from "react";
 
      const AuthContext = createContext();
 
      export function AuthProvider({ children }) {
        const [user, setUser] = useState(null);
 
-       const login = username => setUser({ name: username });
+       const login = (username) => setUser({ name: username });
        const logout = () => setUser(null);
 
        return (
@@ -6918,10 +6917,10 @@ Technically it is possible to write nested function components but it is not sug
 
      ```js
      // App.js
-     import React from 'react';
-     import { AuthProvider } from './AuthContext';
-     import HomePage from './HomePage';
-     import Dashboard from './Dashboard';
+     import React from "react";
+     import { AuthProvider } from "./AuthContext";
+     import HomePage from "./HomePage";
+     import Dashboard from "./Dashboard";
 
      function App() {
        return (
@@ -6940,8 +6939,8 @@ Technically it is possible to write nested function components but it is not sug
 
      ```js
      // HomePage.js
-     import React from 'react';
-     import { useAuth } from './AuthContext';
+     import React from "react";
+     import { useAuth } from "./AuthContext";
 
      function HomePage() {
        const { user, login } = useAuth();
@@ -6952,7 +6951,7 @@ Technically it is possible to write nested function components but it is not sug
            {user ? (
              <p>Welcome back, {user.name}!</p>
            ) : (
-             <button onClick={() => login('Alice')}>Login</button>
+             <button onClick={() => login("Alice")}>Login</button>
            )}
          </div>
        );
@@ -6966,8 +6965,8 @@ Technically it is possible to write nested function components but it is not sug
 
      ```js
      // Dashboard.js
-     import React from 'react';
-     import { useAuth } from './AuthContext';
+     import React from "react";
+     import { useAuth } from "./AuthContext";
 
      function Dashboard() {
        const { user, logout } = useAuth();
@@ -7002,7 +7001,7 @@ Technically it is possible to write nested function components but it is not sug
      **Example: Using `ThemeContext` and `UserContext` Together**
 
      ```js
-     import React, { createContext, useContext } from 'react';
+     import React, { createContext, useContext } from "react";
 
      // Step 1: Create two contexts
      const ThemeContext = createContext();
@@ -7014,7 +7013,7 @@ Technically it is possible to write nested function components but it is not sug
        const user = useContext(UserContext);
 
        return (
-         <div style={{ background: theme === 'dark' ? '#333' : '#fff' }}>
+         <div style={{ background: theme === "dark" ? "#333" : "#fff" }}>
            <h1>Welcome, {user.name}</h1>
            <p>Current theme: {theme}</p>
          </div>
@@ -7024,8 +7023,8 @@ Technically it is possible to write nested function components but it is not sug
      // Step 3: Provide both contexts
      function App() {
        return (
-         <ThemeContext.Provider value='dark'>
-           <UserContext.Provider value={{ name: 'Sudheer' }}>
+         <ThemeContext.Provider value="dark">
+           <UserContext.Provider value={{ name: "Sudheer" }}>
              <Dashboard />
            </UserContext.Provider>
          </ThemeContext.Provider>
@@ -7050,7 +7049,7 @@ Technically it is possible to write nested function components but it is not sug
 
      function MyProvider({ children }) {
        const [user, setUser] = useState(null);
-       const [theme, setTheme] = useState('light');
+       const [theme, setTheme] = useState("light");
 
        // This causes all consumers to re-render on any state change
        const contextValue = { user, setUser, theme, setTheme };
@@ -7081,7 +7080,7 @@ Technically it is possible to write nested function components but it is not sug
      ```jsx
      const contextValue = useMemo(
        () => ({ user, setUser, theme, setTheme }),
-       [user, theme]
+       [user, theme],
      );
      ```
 
@@ -7094,7 +7093,7 @@ Technically it is possible to write nested function components but it is not sug
      When a component calls `useContext(SomeContext)` but **no matching** `<SomeContext.Provider>` **is present higher up in the component tree**, the **default value** passed to `React.createContext(defaultValue)` is returned.
 
      ```js
-     const ThemeContext = React.createContext('light'); // 'light' is the default value
+     const ThemeContext = React.createContext("light"); // 'light' is the default value
 
      function ThemedComponent() {
        const theme = useContext(ThemeContext);
@@ -7254,7 +7253,7 @@ Technically it is possible to write nested function components but it is not sug
       useLayoutEffect(() => {
         const width = divRef.current.offsetWidth;
         if (width < 400) {
-          divRef.current.style.background = 'blue'; // prevents flicker
+          divRef.current.style.background = "blue"; // prevents flicker
         }
       }, []);
       ```
@@ -7269,7 +7268,7 @@ Technically it is possible to write nested function components but it is not sug
 
      ```jsx
      const useIsomorphicLayoutEffect =
-       typeof window !== 'undefined' ? useLayoutEffect : useEffect;
+       typeof window !== "undefined" ? useLayoutEffect : useEffect;
      ```
 
      i.e, Use `useIsomorphicLayoutEffect` in components that render both on client and server.
@@ -7284,8 +7283,8 @@ Technically it is possible to write nested function components but it is not sug
 
      ```js
      useLayoutEffect(() => {
-       console.log('Tracking analytics');
-       fetch('/log-page-view');
+       console.log("Tracking analytics");
+       fetch("/log-page-view");
      }, []);
      ```
 
@@ -7305,7 +7304,7 @@ Technically it is possible to write nested function components but it is not sug
 
        useLayoutEffect(() => {
          const height = ref.current.offsetHeight; //Read
-         ref.current.style.height = height + 20 + 'px'; //Write
+         ref.current.style.height = height + 20 + "px"; //Write
          const newHeight = ref.current.offsetHeight; //Read again — forces reflow
        }, []);
 
@@ -7328,7 +7327,7 @@ Technically it is possible to write nested function components but it is not sug
      **Example: Focus an input**
 
      ```js
-     import React, { useRef } from 'react';
+     import React, { useRef } from "react";
 
      function FocusInput() {
        const inputRef = useRef(null); // create the ref
@@ -7339,7 +7338,7 @@ Technically it is possible to write nested function components but it is not sug
 
        return (
          <div>
-           <input type='text' ref={inputRef} />
+           <input type="text" ref={inputRef} />
            <button onClick={handleFocus}>Focus the input</button>
          </div>
        );
@@ -7370,10 +7369,12 @@ Technically it is possible to write nested function components but it is not sug
       **[⬆ Back to Top](#table-of-contents)**
 
 297.  ### Can useRef be used to store previous values?
+
       Yes, `useRef` is a common pattern when you want to compare current and previous props or state without causing re-renders.
       **Example: Storing previous state value**
+
       ```js
-      import { useEffect, useRef, useState } from 'react';
+      import { useEffect, useRef, useState } from "react";
 
       function PreviousValueExample() {
         const [count, setCount] = useState(0);
@@ -7389,7 +7390,7 @@ Technically it is possible to write nested function components but it is not sug
           <div>
             <p>Current: {count}</p>
             <p>Previous: {prevCount}</p>
-            <button onClick={() => setCount(c => c + 1)}>Increment</button>
+            <button onClick={() => setCount((c) => c + 1)}>Increment</button>
           </div>
         );
       }
@@ -7398,8 +7399,10 @@ Technically it is possible to write nested function components but it is not sug
 **[⬆ Back to Top](#table-of-contents)**
 
 298. ### Is it possible to access a ref in the render method?
+
      Yes, you can access a ref in the render method, but what you get from it depends on how you're using the ref and when in the component lifecycle you're rendering.
      For example, when using ref to access a DOM node (e.g., divRef.current), it's not immediately available on the first render.
+
      ```js
      const divRef = useRef(null);
 
@@ -7432,29 +7435,29 @@ Technically it is possible to write nested function components but it is not sug
        useState,
        useImperativeHandle,
        forwardRef,
-     } from 'react';
-     import './Dialog.css';
+     } from "react";
+     import "./Dialog.css";
 
      const Dialog = forwardRef((props, ref) => {
        const [isOpen, setIsOpen] = useState(false);
-       const [formData, setFormData] = useState('');
+       const [formData, setFormData] = useState("");
 
        useImperativeHandle(ref, () => ({
          open: () => setIsOpen(true),
          close: () => setIsOpen(false),
-         reset: () => setFormData(''),
+         reset: () => setFormData(""),
        }));
 
        if (!isOpen) return null;
 
        return (
-         <div className='dialog'>
+         <div className="dialog">
            <h2>Dialog</h2>
            <input
-             type='text'
+             type="text"
              value={formData}
-             placeholder='Type something...'
-             onChange={e => setFormData(e.target.value)}
+             placeholder="Type something..."
+             onChange={(e) => setFormData(e.target.value)}
            />
            <br />
            <button onClick={() => setIsOpen(false)}>Close</button>
@@ -7554,7 +7557,7 @@ Technically it is possible to write nested function components but it is not sug
      Let's explain the custom hook usage with `useFetchData` example. The `useFetchData` custom Hook is a reusable function in React that simplifies the process of fetching data from an API. It encapsulates common logic such as initiating the fetch request, managing loading and error states, and storing the fetched data. By using built-in Hooks like `useState` and `useEffect`, `useFetchData` provides a clean interface that returns the `data`, `loading`, and `error` values, which can be directly used in components.
 
      ```jsx
-     import { useState, useEffect } from 'react';
+     import { useState, useEffect } from "react";
 
      function useFetchData(url) {
        const [data, setData] = useState(null); // Holds the response
@@ -7566,17 +7569,17 @@ Technically it is possible to write nested function components but it is not sug
          setLoading(true);
 
          fetch(url)
-           .then(response => {
-             if (!response.ok) throw new Error('Network response was not ok');
+           .then((response) => {
+             if (!response.ok) throw new Error("Network response was not ok");
              return response.json();
            })
-           .then(json => {
+           .then((json) => {
              if (isMounted) {
                setData(json);
                setLoading(false);
              }
            })
-           .catch(err => {
+           .catch((err) => {
              if (isMounted) {
                setError(err.message);
                setLoading(false);
@@ -7599,7 +7602,7 @@ Technically it is possible to write nested function components but it is not sug
      ```jsx
      function AuthorList() {
        const { data, loading, error } = useFetchData(
-         'https://api.example.com/authors'
+         "https://api.example.com/authors",
        );
 
        if (loading) return <p>Loading authors...</p>;
@@ -7607,7 +7610,7 @@ Technically it is possible to write nested function components but it is not sug
 
        return (
          <ul>
-           {data.map(author => (
+           {data.map((author) => (
              <li key={author.id}>{author.name}</li>
            ))}
          </ul>
@@ -7672,14 +7675,14 @@ Technically it is possible to write nested function components but it is not sug
 
    ```javascript
    //Wrong
-   this.state.message = 'Hello world';
+   this.state.message = "Hello world";
    ```
 
    Instead use `setState()` method. It schedules an update to a component's state object. When state changes, the component responds by re-rendering.
 
    ```javascript
    //Correct
-   this.setState({ message: 'Hello World' });
+   this.setState({ message: "Hello World" });
    ```
 
    **Note:** You can directly assign to the state object either in _constructor_ or using latest javascript's class field declaration syntax.
@@ -7693,9 +7696,9 @@ Technically it is possible to write nested function components but it is not sug
    #### Example
 
    ```jsx
-   this.setState({ name: 'Sudheer' }, () => {
+   this.setState({ name: "Sudheer" }, () => {
      console.log(
-       'The name has been updated and the component has re-rendered.'
+       "The name has been updated and the component has re-rendered.",
      );
    });
    ```
@@ -7723,7 +7726,7 @@ Technically it is possible to write nested function components but it is not sug
           this.handleClick = this.handleClick.bind(this);
         }
         handleClick() {
-          console.log('SingOut triggered');
+          console.log("SingOut triggered");
         }
         render() {
           return <button onClick={this.handleClick}>SingOut</button>;
@@ -7735,7 +7738,7 @@ Technically it is possible to write nested function components but it is not sug
 
       ```jsx harmony
       handleClick = () => {
-        console.log('SingOut triggered', this);
+        console.log("SingOut triggered", this);
       };
       ```
 
@@ -7776,8 +7779,8 @@ Technically it is possible to write nested function components but it is not sug
 
    ```jsx harmony
    <button onClick={this.handleClick(id)} />;
-   handleClick = id => () => {
-     console.log('Hello, your ticket number is', id);
+   handleClick = (id) => () => {
+     console.log("Hello, your ticket number is", id);
    };
    ```
 
@@ -7812,8 +7815,8 @@ Technically it is possible to write nested function components but it is not sug
         constructor(props) {
           super(props);
           this.txtSearch = null;
-          this.state = { term: '' };
-          this.setInputSearchRef = e => {
+          this.state = { term: "" };
+          this.setInputSearchRef = (e) => {
             this.txtSearch = e;
           };
         }
@@ -7843,14 +7846,14 @@ Technically it is possible to write nested function components but it is not sug
 
    ```jsx harmony
    const ButtonElement = React.forwardRef((props, ref) => (
-     <button ref={ref} className='CustomButton'>
+     <button ref={ref} className="CustomButton">
        {props.children}
      </button>
    ));
 
    // Create ref to the DOM button:
    const ref = React.createRef();
-   <ButtonElement ref={ref}>{'Forward Ref'}</ButtonElement>;
+   <ButtonElement ref={ref}>{"Forward Ref"}</ButtonElement>;
    ```
 
    **[⬆ Back to Top](#table-of-contents)**
@@ -7903,12 +7906,12 @@ Technically it is possible to write nested function components but it is not sug
 
       ```jsx harmony
       class MyComponent extends Component {
-        renderRow = index => {
+        renderRow = (index) => {
           // This won't work. Ref will get attached to DataTable rather than MyComponent:
-          return <input ref={'input-' + index} />;
+          return <input ref={"input-" + index} />;
 
           // This would work though! Callback refs are awesome.
-          return <input ref={input => (this['input-' + index] = input)} />;
+          return <input ref={(input) => (this["input-" + index] = input)} />;
         };
 
         render() {
@@ -7930,9 +7933,7 @@ Technically it is possible to write nested function components but it is not sug
 
     3. **Unmounting:** In this last phase, the component is not needed and gets unmounted from the browser DOM. This phase includes `componentWillUnmount()` lifecycle method.
 
-    It's worth mentioning that React internally has a concept of phases when applying changes to the DOM. They are separated as follows
-    4. **Render** The component will render without any side effects. This applies to Pure components and in this phase, React can pause, abort, or restart the render.
-
+    It's worth mentioning that React internally has a concept of phases when applying changes to the DOM. They are separated as follows 4. **Render** The component will render without any side effects. This applies to Pure components and in this phase, React can pause, abort, or restart the render.
     5. **Pre-commit** Before the component actually applies the changes to the DOM, there is a moment that allows React to read from the DOM through the `getSnapshotBeforeUpdate()`.
 
     6. **Commit** React works with the DOM and executes the final lifecycles respectively `componentDidMount()` for mounting, `componentDidUpdate()` for updating, and `componentWillUnmount()` for unmounting.
@@ -7977,7 +7978,7 @@ Technically it is possible to write nested function components but it is not sug
       return class Test extends Component {
         render() {
           const newProps = {
-            title: 'New Header',
+            title: "New Header",
             footer: false,
             showFeatureX: false,
             showFeatureY: true,
@@ -8103,7 +8104,7 @@ Technically it is possible to write nested function components but it is not sug
       render() {
         if (this.state.hasError) {
           // You can render any custom fallback UI
-          return <h1>{'Something went wrong.'}</h1>;
+          return <h1>{"Something went wrong."}</h1>;
         }
         return this.props.children;
       }
@@ -8209,7 +8210,7 @@ Technically it is possible to write nested function components but it is not sug
     You can _decorate_ your _class_ components, which is the same as passing the component into a function. **Decorators** are flexible and readable way of modifying component functionality.
 
     ```jsx harmony
-    @setTitle('Profile')
+    @setTitle("Profile")
     class Profile extends React.Component {
       //....
     }
@@ -8219,7 +8220,7 @@ Technically it is possible to write nested function components but it is not sug
       WrappedComponent is what our decorator will receive when
       put directly above a component class as seen in the example above
     */
-    const setTitle = title => WrappedComponent => {
+    const setTitle = (title) => (WrappedComponent) => {
       return class extends React.Component {
         componentDidMount() {
           document.title = title;
@@ -8327,7 +8328,7 @@ Technically it is possible to write nested function components but it is not sug
 
     ```javascript
     export default React.createClass({
-      displayName: 'TodoApp',
+      displayName: "TodoApp",
       // ...
     });
     ```
@@ -8624,7 +8625,7 @@ Technically it is possible to write nested function components but it is not sug
     2.  **Calling `setState()` with a function:**
 
         ```javascript
-        this.setState(prevState => ({
+        this.setState((prevState) => ({
           user: {
             ...prevState.user,
             age: 42,
@@ -8642,9 +8643,9 @@ Technically it is possible to write nested function components but it is not sug
         Create a file called (something like) `polyfills.js` and import it into root `index.js` file. Run `npm install core-js` or `yarn add core-js` and import your specific required features.
 
         ```javascript
-        import 'core-js/fn/array/find';
-        import 'core-js/fn/array/includes';
-        import 'core-js/fn/number/is-nan';
+        import "core-js/fn/array/find";
+        import "core-js/fn/array/includes";
+        import "core-js/fn/number/is-nan";
         ```
 
     2.  **Using Polyfill service:**
@@ -8727,7 +8728,7 @@ Technically it is possible to write nested function components but it is not sug
     1.  Create ref in render method:
 
         ```jsx harmony
-        <input ref={input => (this.inputElement = input)} />
+        <input ref={(input) => (this.inputElement = input)} />
         ```
 
     2.  Apply click event in your event handler:
@@ -8755,17 +8756,17 @@ Technically it is possible to write nested function components but it is not sug
       }
 
       componentDidMount() {
-        fetch('https://api.example.com/items')
-          .then(res => res.json())
+        fetch("https://api.example.com/items")
+          .then((res) => res.json())
           .then(
-            result => {
+            (result) => {
               this.setState({
                 employees: result.employees,
               });
             },
-            error => {
+            (error) => {
               this.setState({ error });
-            }
+            },
           );
       }
 
@@ -8776,7 +8777,7 @@ Technically it is possible to write nested function components but it is not sug
         } else {
           return (
             <ul>
-              {employees.map(employee => (
+              {employees.map((employee) => (
                 <li key={employee.name}>
                   {employee.name}-{employee.experience}
                 </li>
@@ -8795,7 +8796,7 @@ Technically it is possible to write nested function components but it is not sug
     **Render Props** is a simple technique for sharing code between components using a prop whose value is a function. The below component uses render prop which returns a React element.
 
     ```jsx harmony
-    <DataProvider render={data => <h1>{`Hello ${data.target}`}</h1>} />
+    <DataProvider render={(data) => <h1>{`Hello ${data.target}`}</h1>} />
     ```
 
     Libraries such as React Router and DownShift are using this pattern.
@@ -8814,14 +8815,14 @@ Technically it is possible to write nested function components but it is not sug
 
       render() {
         return this.props.isLoaded ? (
-          <div>{'Loaded'}</div>
+          <div>{"Loaded"}</div>
         ) : (
-          <div>{'Not Loaded'}</div>
+          <div>{"Not Loaded"}</div>
         );
       }
     }
 
-    const mapStateToProps = state => ({
+    const mapStateToProps = (state) => ({
       isLoaded: state.isLoaded,
     });
 
@@ -8839,8 +8840,8 @@ Technically it is possible to write nested function components but it is not sug
     2.  **Connect the above props to your container:** The object returned by the `mapStateToProps` function is connected to the container. You can import `connect()` from `react-redux`.
 
         ```jsx harmony
-        import React from 'react';
-        import { connect } from 'react-redux';
+        import React from "react";
+        import { connect } from "react-redux";
 
         class App extends React.Component {
           render() {
@@ -8865,10 +8866,10 @@ Technically it is possible to write nested function components but it is not sug
     - **Without decorator:**
 
       ```javascript
-      import React from 'react';
-      import * as actionCreators from './actionCreators';
-      import { bindActionCreators } from 'redux';
-      import { connect } from 'react-redux';
+      import React from "react";
+      import * as actionCreators from "./actionCreators";
+      import { bindActionCreators } from "redux";
+      import { connect } from "react-redux";
 
       function mapStateToProps(state) {
         return { todos: state.todos };
@@ -8888,10 +8889,10 @@ Technically it is possible to write nested function components but it is not sug
     - **With decorator:**
 
       ```javascript
-      import React from 'react';
-      import * as actionCreators from './actionCreators';
-      import { bindActionCreators } from 'redux';
-      import { connect } from 'react-redux';
+      import React from "react";
+      import * as actionCreators from "./actionCreators";
+      import { bindActionCreators } from "redux";
+      import { connect } from "react-redux";
 
       function mapStateToProps(state) {
         return { todos: state.todos };
@@ -9000,15 +9001,15 @@ Technically it is possible to write nested function components but it is not sug
     ```jsx
     class UserForm extends Component {
       handleSubmit = () => {
-        console.log('Input Value is: ', this.input.value);
+        console.log("Input Value is: ", this.input.value);
       };
 
       render() {
         return (
           <form onSubmit={this.handleSubmit}>
-            <input type='text' ref={input => (this.input = input)} /> // Access
-            DOM input in handle submit
-            <button type='submit'>Submit</button>
+            <input type="text" ref={(input) => (this.input = input)} /> //
+            Access DOM input in handle submit
+            <button type="submit">Submit</button>
           </form>
         );
       }
@@ -9020,19 +9021,19 @@ Technically it is possible to write nested function components but it is not sug
     ```jsx
     class UserForm extends Component {
       handleSubmit = () => {
-        console.log('Input Value is: ', this.input.value);
+        console.log("Input Value is: ", this.input.value);
       };
 
-      setSearchInput = input => {
+      setSearchInput = (input) => {
         this.input = input;
       };
 
       render() {
         return (
           <form onSubmit={this.handleSubmit}>
-            <input type='text' ref={this.setSearchInput} /> // Access DOM input
+            <input type="text" ref={this.setSearchInput} /> // Access DOM input
             in handle submit
-            <button type='submit'>Submit</button>
+            <button type="submit">Submit</button>
           </form>
         );
       }
@@ -9090,13 +9091,13 @@ Technically it is possible to write nested function components but it is not sug
       state = { value: 0 };
 
       handleIncrement = () => {
-        this.setState(prevState => ({
+        this.setState((prevState) => ({
           value: prevState.value + 1,
         }));
       };
 
       handleDecrement = () => {
-        this.setState(prevState => ({
+        this.setState((prevState) => ({
           value: prevState.value - 1,
         }));
       };
@@ -9321,7 +9322,7 @@ Technically it is possible to write nested function components but it is not sug
         const EnhancedComponent = enhance(WrappedComponent);
 
         // The enhanced component has no static method
-        typeof EnhancedComponent.staticMethod === 'undefined'; // true
+        typeof EnhancedComponent.staticMethod === "undefined"; // true
         ```
 
         You can overcome this by copying the methods onto the container before returning it,
@@ -9392,7 +9393,7 @@ Technically it is possible to write nested function components but it is not sug
     ```javascript
     class Foo extends Component {
       handleClick() {
-        console.log('Click happened');
+        console.log("Click happened");
       }
       render() {
         return <button onClick={() => this.handleClick()}>Click Me</button>;
@@ -9467,7 +9468,7 @@ Technically it is possible to write nested function components but it is not sug
         return null;
       }
 
-      return <div className='greeting'>welcome, {props.name}</div>;
+      return <div className="greeting">welcome, {props.name}</div>;
     }
     ```
 
@@ -9501,12 +9502,12 @@ Technically it is possible to write nested function components but it is not sug
 
     ```javascript
     //Lets create a context with a default theme value "luna"
-    const ThemeContext = React.createContext('luna');
+    const ThemeContext = React.createContext("luna");
     // Create App component where it uses provider to pass theme value in the tree
     class App extends React.Component {
       render() {
         return (
-          <ThemeContext.Provider value='nova'>
+          <ThemeContext.Provider value="nova">
             <Toolbar />
           </ThemeContext.Provider>
         );
@@ -9600,7 +9601,7 @@ Technically it is possible to write nested function components but it is not sug
     class App extends React.Component {
       render() {
         return (
-          <Provider value={{ something: 'something' }}>
+          <Provider value={{ something: "something" }}>
             <Toolbar />
           </Provider>
         );
@@ -9615,7 +9616,7 @@ Technically it is possible to write nested function components but it is not sug
       constructor(props) {
         super(props);
         this.state = {
-          value: { something: 'something' },
+          value: { something: "something" },
         };
       }
 
@@ -9641,8 +9642,8 @@ Technically it is possible to write nested function components but it is not sug
     function logProps(Component) {
       class LogProps extends React.Component {
         componentDidUpdate(prevProps) {
-          console.log('old props:', prevProps);
-          console.log('new props:', this.props);
+          console.log("old props:", prevProps);
+          console.log("new props:", this.props);
         }
 
         render() {
@@ -9675,11 +9676,11 @@ Technically it is possible to write nested function components but it is not sug
     Now let's create a ref and pass it to FancyButton component. In this case, you can set focus to button element.
 
     ```javascript
-    import FancyButton from './FancyButton';
+    import FancyButton from "./FancyButton";
 
     const ref = React.createRef();
     ref.current.focus();
-    <FancyButton label='Click Me' handleClick={handleClick} ref={ref} />;
+    <FancyButton label="Click Me" handleClick={handleClick} ref={ref} />;
     ```
 
 **[⬆ Back to Top](#table-of-contents)**
@@ -9702,7 +9703,7 @@ Technically it is possible to write nested function components but it is not sug
     var Greeting = createReactClass({
       getDefaultProps: function () {
         return {
-          name: 'Jhohn',
+          name: "Jhohn",
         };
       },
       getInitialState: function () {
@@ -9735,8 +9736,8 @@ Technically it is possible to write nested function components but it is not sug
     }
 
     ReactDOM.render(
-      <Greeting message='World' />,
-      document.getElementById('root')
+      <Greeting message="World" />,
+      document.getElementById("root"),
     );
     ```
 
@@ -9745,13 +9746,13 @@ Technically it is possible to write nested function components but it is not sug
     ```javascript
     class Greeting extends React.Component {
       render() {
-        return React.createElement('div', null, `Hello ${this.props.message}`);
+        return React.createElement("div", null, `Hello ${this.props.message}`);
       }
     }
 
     ReactDOM.render(
-      React.createElement(Greeting, { message: 'World' }, null),
-      document.getElementById('root')
+      React.createElement(Greeting, { message: "World" }, null),
+      document.getElementById("root"),
     );
     ```
 
@@ -9767,7 +9768,7 @@ Technically it is possible to write nested function components but it is not sug
         render() {
           return (
             <Mouse
-              render={mouse => <Component {...this.props} mouse={mouse} />}
+              render={(mouse) => <Component {...this.props} mouse={mouse} />}
             />
           );
         }
@@ -9804,6 +9805,7 @@ Technically it is possible to write nested function components but it is not sug
 **[⬆ Back to Top](#table-of-contents)**
 
 88. ### How do you get redux scaffolding using create-react-app?
+
     Redux team has provided official redux+js or redux+typescript templates for create-react-app project. The generated project setup includes,
     1.  Redux Toolkit and React-Redux dependencies
     2.  Create and configure Redux store
@@ -9811,11 +9813,13 @@ Technically it is possible to write nested function components but it is not sug
     4.  Small "counter" example to demo how to add redux logic and React-Redux hooks API to interact with the store from components
         The below commands need to be executed along with template option as below,
     5.  **Javascript template:**
+
     ```js
     npx create-react-app my-app --template redux
     ```
 
     2.  **Typescript template:**
+
     ```js
     npx create-react-app my-app --template redux-typescript
     ```

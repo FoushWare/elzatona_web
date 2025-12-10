@@ -194,13 +194,11 @@ export const TopicsList: React.FC<TopicsListProps> = ({
                             </p>
                           )}
                           {topic.category_id && (
-                            <Badge
-                              variant="secondary"
-                              className="mt-1 text-xs"
-                            >
+                            <Badge variant="secondary" className="mt-1 text-xs">
                               Category:{" "}
-                              {categories.find((c) => c.id === topic.category_id)
-                                ?.name || "Unknown"}
+                              {categories.find(
+                                (c) => c.id === topic.category_id,
+                              )?.name || "Unknown"}
                             </Badge>
                           )}
                         </div>
@@ -242,4 +240,3 @@ export const TopicsList: React.FC<TopicsListProps> = ({
     </Suspense>
   );
 };
-

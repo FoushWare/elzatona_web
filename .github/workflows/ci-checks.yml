@@ -2,9 +2,9 @@ name: CI Checks (Lint, Type Check, Build)
 
 on:
   push:
-    branches: [main, develop, 'release/**']
+    branches: [main, develop, "release/**"]
   pull_request:
-    branches: [main, develop, 'release/**']
+    branches: [main, develop, "release/**"]
   workflow_dispatch:
 
 # Cancel in-progress runs on the same branch
@@ -17,7 +17,7 @@ jobs:
     name: Lint, Type Check, and Build
     runs-on: ubuntu-latest
     timeout-minutes: 30
-    
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4

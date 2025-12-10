@@ -24,10 +24,7 @@ const detectLanguage = (code: string): string => {
   ) {
     return "python";
   }
-  if (
-    codeText.includes("public class") ||
-    codeText.includes("public static")
-  ) {
+  if (codeText.includes("public class") || codeText.includes("public static")) {
     return "java";
   }
   if (
@@ -56,25 +53,14 @@ const processColorForLightMode = (
 
     if (brightness > 180) {
       const factor = brightness > 220 ? 0.3 : 0.5;
-      const newR = Math.max(
-        0,
-        Math.min(255, Math.round(r * factor)),
-      );
-      const newG = Math.max(
-        0,
-        Math.min(255, Math.round(g * factor)),
-      );
-      const newB = Math.max(
-        0,
-        Math.min(255, Math.round(b * factor)),
-      );
+      const newR = Math.max(0, Math.min(255, Math.round(r * factor)));
+      const newG = Math.max(0, Math.min(255, Math.round(g * factor)));
+      const newB = Math.max(0, Math.min(255, Math.round(b * factor)));
       newColor = `#${newR.toString(16).padStart(2, "0")}${newG.toString(16).padStart(2, "0")}${newB.toString(16).padStart(2, "0")}`;
       shouldReplace = true;
     }
   } else if (colorValue.startsWith("rgb")) {
-    const rgbMatch = colorValue.match(
-      /rgb\((\d+),\s*(\d+),\s*(\d+)\)/,
-    );
+    const rgbMatch = colorValue.match(/rgb\((\d+),\s*(\d+),\s*(\d+)\)/);
     if (rgbMatch) {
       const r = Number.parseInt(rgbMatch[1], 10);
       const g = Number.parseInt(rgbMatch[2], 10);
@@ -83,18 +69,9 @@ const processColorForLightMode = (
 
       if (brightness > 180) {
         const factor = brightness > 220 ? 0.3 : 0.5;
-        const newR = Math.max(
-          0,
-          Math.min(255, Math.round(r * factor)),
-        );
-        const newG = Math.max(
-          0,
-          Math.min(255, Math.round(g * factor)),
-        );
-        const newB = Math.max(
-          0,
-          Math.min(255, Math.round(b * factor)),
-        );
+        const newR = Math.max(0, Math.min(255, Math.round(r * factor)));
+        const newG = Math.max(0, Math.min(255, Math.round(g * factor)));
+        const newB = Math.max(0, Math.min(255, Math.round(b * factor)));
         newColor = `rgb(${newR}, ${newG}, ${newB})`;
         shouldReplace = true;
       }
@@ -584,7 +561,8 @@ export function ViewQuestionModal({
               // Detect theme
               const prefersDark =
                 typeof globalThis.window !== "undefined" &&
-                globalThis.window.matchMedia("(prefers-color-scheme: dark)").matches;
+                globalThis.window.matchMedia("(prefers-color-scheme: dark)")
+                  .matches;
               const codeTheme = prefersDark ? "dark" : "light";
 
               return (

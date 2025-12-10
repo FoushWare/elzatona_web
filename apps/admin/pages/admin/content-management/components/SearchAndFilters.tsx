@@ -1,7 +1,14 @@
 "use client";
 
 import React, { Suspense } from "react";
-import { Input, Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@elzatona/components";
+import {
+  Input,
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@elzatona/components";
 
 const LoadingSkeleton = () => (
   <div className="animate-pulse">
@@ -44,7 +51,9 @@ export const SearchAndFilters: React.FC<SearchAndFiltersProps> = ({
           <SelectContent>
             <SelectItem value="all">All Card Types</SelectItem>
             <SelectItem value="Core Technologies">Core Technologies</SelectItem>
-            <SelectItem value="Framework Questions">Framework Questions</SelectItem>
+            <SelectItem value="Framework Questions">
+              Framework Questions
+            </SelectItem>
             <SelectItem value="Problem Solving">Problem Solving</SelectItem>
             <SelectItem value="System Design">System Design</SelectItem>
           </SelectContent>
@@ -53,4 +62,3 @@ export const SearchAndFilters: React.FC<SearchAndFiltersProps> = ({
     </div>
   );
 };
-

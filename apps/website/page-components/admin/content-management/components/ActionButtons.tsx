@@ -32,19 +32,13 @@ export const ActionButtons: React.FC<ActionButtonsProps> = ({
   return (
     <div className="flex flex-wrap gap-2 mb-6">
       <Suspense fallback={<LoadingSkeleton />}>
-        <Button
-          onClick={onAddCard}
-          className="bg-blue-600 hover:bg-blue-700"
-        >
+        <Button onClick={onAddCard} className="bg-blue-600 hover:bg-blue-700">
           <Plus className="h-4 w-4 mr-2" />
           Add Card
         </Button>
       </Suspense>
       <Suspense fallback={<LoadingSkeleton />}>
-        <Button
-          onClick={onAddPlan}
-          className="bg-green-600 hover:bg-green-700"
-        >
+        <Button onClick={onAddPlan} className="bg-green-600 hover:bg-green-700">
           <Plus className="h-4 w-4 mr-2" />
           Add Plan
         </Button>
@@ -70,4 +64,3 @@ export const ActionButtons: React.FC<ActionButtonsProps> = ({
     </div>
   );
 };
-

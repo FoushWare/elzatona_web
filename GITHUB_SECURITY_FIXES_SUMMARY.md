@@ -11,6 +11,7 @@
 **Problem:** Hardcoded secrets detected in codebase files
 
 **Files Fixed:**
+
 - `libs/utilities/scripts/remove-secrets-from-history.sh`
   - Replaced all hardcoded Supabase service role keys with placeholders
   - Replaced all hardcoded Google API keys with placeholders
@@ -61,6 +62,7 @@
 #### Remaining Issues (Git History Only):
 
 **Clear-text logging in Rest/scripts files:**
+
 - These files don't exist in the current worktree
 - They only exist in git history
 - CodeQL scans git history, so alerts will persist until history is cleaned
@@ -71,7 +73,8 @@
   - `Rest/scripts/create-table-and-admin.js` (line 145)
   - `Rest/scripts/create-admins-table.js` (line 115)
 
-**Recommendation:** 
+**Recommendation:**
+
 - These files should be removed from git history using `git-filter-repo`
 - Or mark the alerts as "won't fix" if the files are intentionally deleted
 - The alerts will resolve once git history is cleaned
@@ -79,11 +82,13 @@
 ## 📊 Summary
 
 ### Secret Scanning
+
 - **Before:** 32 open alerts
 - **After:** 0 alerts in current files (alerts may remain for git history)
 - **Status:** ✅ All current files fixed
 
 ### Code Scanning
+
 - **Before:** 60 open alerts
 - **Fixed:** 5 alerts (1 logging + 4 regex)
 - **Remaining:** ~55 alerts (mostly in git history - Rest/scripts files)

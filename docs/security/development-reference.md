@@ -114,32 +114,33 @@ Use this checklist during development:
 ### 1. Injection Attacks
 
 **Prevention:**
+
 - Use parameterized queries
 - Validate and sanitize all inputs
 - Use ORM/query builders
 - Escape special characters
 
 **Example:**
+
 ```typescript
 // ❌ DON'T: SQL Injection
 const query = `SELECT * FROM users WHERE id = ${userId}`;
 
 // ✅ DO: Parameterized Query
-const { data } = await supabase
-  .from('users')
-  .select('*')
-  .eq('id', userId);
+const { data } = await supabase.from("users").select("*").eq("id", userId);
 ```
 
 ### 2. Cross-Site Scripting (XSS)
 
 **Prevention:**
+
 - Encode all outputs
 - Use React's built-in XSS protection
 - Sanitize user-generated content
 - Use Content Security Policy (CSP)
 
 **Example:**
+
 ```typescript
 // ❌ DON'T: Direct HTML injection
 <div dangerouslySetInnerHTML={{ __html: userInput }} />
@@ -151,6 +152,7 @@ const { data } = await supabase
 ### 3. Cross-Site Request Forgery (CSRF)
 
 **Prevention:**
+
 - Use CSRF tokens
 - Verify origin/referer headers
 - Use SameSite cookies
@@ -159,6 +161,7 @@ const { data } = await supabase
 ### 4. Authentication Bypass
 
 **Prevention:**
+
 - Strong password requirements
 - Secure session management
 - Multi-factor authentication
@@ -168,6 +171,7 @@ const { data } = await supabase
 ### 5. Sensitive Data Exposure
 
 **Prevention:**
+
 - Encrypt sensitive data at rest
 - Encrypt data in transit (HTTPS)
 - Don't log sensitive data
@@ -175,6 +179,7 @@ const { data } = await supabase
 - Implement proper access controls
 
 **Example:**
+
 ```typescript
 // ❌ DON'T: Hardcode secrets
 const apiKey = "sk_live_1234567890";
@@ -189,12 +194,14 @@ if (!apiKey) {
 ### 6. Insecure Dependencies
 
 **Prevention:**
+
 - Keep dependencies updated
 - Use `npm audit` regularly
 - Review dependency licenses
 - Use security scanning tools
 
 **Commands:**
+
 ```bash
 # Check for vulnerabilities
 npm audit
@@ -209,6 +216,7 @@ npm outdated
 ### 7. Insufficient Logging & Monitoring
 
 **Prevention:**
+
 - Log all security events
 - Monitor for suspicious activity
 - Set up alerts
@@ -219,12 +227,14 @@ npm outdated
 ### Never Hardcode Secrets
 
 **❌ DON'T:**
+
 ```typescript
 const apiKey = "sk_live_1234567890";
 const dbPassword = "mypassword123";
 ```
 
 **✅ DO:**
+
 ```typescript
 const apiKey = process.env.API_KEY;
 const dbPassword = process.env.DB_PASSWORD;
@@ -269,12 +279,12 @@ function sanitizeInput(input: string): string {
 // ✅ DO: Always check authorization
 async function deleteUser(userId: string, currentUser: User) {
   // Check if user has permission
-  if (currentUser.role !== 'admin' && currentUser.id !== userId) {
-    throw new Error('Unauthorized');
+  if (currentUser.role !== "admin" && currentUser.id !== userId) {
+    throw new Error("Unauthorized");
   }
-  
+
   // Perform deletion
-  await supabase.from('users').delete().eq('id', userId);
+  await supabase.from("users").delete().eq("id", userId);
 }
 ```
 
@@ -296,11 +306,13 @@ catch (error) {
 ## 📚 Security Resources
 
 ### OWASP Resources
+
 - [OWASP Top 10](https://owasp.org/www-project-top-ten/)
 - [OWASP ASVS](https://owasp.org/www-project-application-security-verification-standard/)
 - [OWASP Cheat Sheets](https://cheatsheetseries.owasp.org/)
 
 ### Project-Specific
+
 - [Security Pipeline](../COMPLETE_SECURITY_PIPELINE.md)
 - [Secret Management](../SECRET_ROTATION_GUIDE.md)
 - [Threat Modeling](threat-modeling.md)
@@ -332,4 +344,3 @@ Before submitting code for review:
 - [ ] Logging implemented (without sensitive data)
 - [ ] Dependencies updated and secure
 - [ ] Security documentation updated (if needed)
-

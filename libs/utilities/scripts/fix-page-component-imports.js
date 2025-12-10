@@ -10,8 +10,7 @@ const PAGE_COMPONENTS_DIR = path.join(
 const REPLACEMENTS = [
   // Context imports - use @/ alias
   {
-    pattern:
-      /from\s+['"]\.\.\/\.\.\/\.\.\/context\/([^'"]+)['"]/g,
+    pattern: /from\s+['"]\.\.\/\.\.\/\.\.\/context\/([^'"]+)['"]/g,
     replacement: "from '@/context/$1'",
   },
   {
@@ -24,8 +23,7 @@ const REPLACEMENTS = [
   },
   // Types imports - use @/ alias
   {
-    pattern:
-      /from\s+['"]\.\.\/\.\.\/\.\.\/types\/([^'"]+)['"]/g,
+    pattern: /from\s+['"]\.\.\/\.\.\/\.\.\/types\/([^'"]+)['"]/g,
     replacement: "from '@/types/$1'",
   },
   {
@@ -99,4 +97,3 @@ for (const file of files) {
 
 console.log(`\n✅ Total files fixed: ${totalFixed}`);
 console.log("✨ Import path fixing complete!");
-

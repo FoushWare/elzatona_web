@@ -1,10 +1,7 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { createClient } from '@supabase/supabase-js';
-import { cookies } from 'next/headers';
-import {
-  verifySupabaseToken,
-  getUserFromRequest,
-} from '@/lib/server-auth';
+import { NextRequest, NextResponse } from "next/server";
+import { createClient } from "@supabase/supabase-js";
+import { cookies } from "next/headers";
+import { verifySupabaseToken, getUserFromRequest } from "@/lib/server-auth";
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
 const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
@@ -22,11 +19,11 @@ interface FreeStyleProgress {
  * Get user ID from various auth methods
  */
 async function getUserIdFromRequest(
-  request: NextRequest
+  request: NextRequest,
 ): Promise<string | null> {
   // Try to get user from Authorization header first
-  const authHeader = request.headers.get('authorization');
-  if (authHeader && authHeader.startsWith('Bearer ')) {
+  const authHeader = request.headers.get("authorization");
+  if (authHeader && authHeader.startsWith("Bearer ")) {
     const token = authHeader.substring(7);
 
     // Try Supabase token verification
@@ -44,7 +41,7 @@ async function getUserIdFromRequest(
 
   // Fallback to cookie-based auth
   const cookieStore = await cookies();
-  const firebaseToken = cookieStore.get('firebase_token')?.value;
+  const firebaseToken = cookieStore.get("firebase_token")?.value;
   if (firebaseToken) {
     const user = await verifySupabaseToken(firebaseToken);
     if (user) {
@@ -67,15 +64,15 @@ export async function POST(request: NextRequest) {
     if (
       !userId &&
       progressData &&
-      typeof progressData === 'object' &&
-      'userId' in progressData
+      typeof progressData === "object" &&
+      "userId" in progressData
     ) {
       const requestUserId = (progressData as any).userId as string;
       // Verify user exists in database
       const { data: user, error: userError } = await supabase
-        .from('users')
-        .select('id')
-        .eq('id', requestUserId)
+        .from("users")
+        .select("id")
+        .eq("id", requestUserId)
         .single();
 
       if (!userError && user) {
@@ -84,23 +81,23 @@ export async function POST(request: NextRequest) {
     }
 
     if (!userId) {
-      console.log('⚠️ No authenticated user found, using development mode');
+      console.log("⚠️ No authenticated user found, using development mode");
       return NextResponse.json({
         success: true,
         message:
-          'Progress would be saved (development mode - not authenticated)',
-        warning: 'Using development mode - authentication not fully configured',
+          "Progress would be saved (development mode - not authenticated)",
+        warning: "Using development mode - authentication not fully configured",
       });
     }
 
-    console.log('📄 Syncing free-style practice progress for user:', userId);
+    console.log("📄 Syncing free-style practice progress for user:", userId);
 
     // Store progress data in JSONB format in user_progress table
     // Use a special plan_id like 'free-style-practice' to identify free-style progress
-    const { data, error } = await supabase.from('user_progress').upsert(
+    const { data, error } = await supabase.from("user_progress").upsert(
       {
         user_id: userId,
-        plan_id: 'free-style-practice', // Special identifier for free-style practice
+        plan_id: "free-style-practice", // Special identifier for free-style practice
         progress_data: {
           lastQuestionIndex: progressData.lastQuestionIndex,
           lastQuestionId: progressData.lastQuestionId,
@@ -111,39 +108,39 @@ export async function POST(request: NextRequest) {
         updated_at: new Date().toISOString(),
       },
       {
-        onConflict: 'user_id,plan_id',
-      }
+        onConflict: "user_id,plan_id",
+      },
     );
 
     if (error) {
-      console.error('❌ Error syncing free-style progress to database:', error);
+      console.error("❌ Error syncing free-style progress to database:", error);
       return NextResponse.json(
         {
           success: false,
-          error: 'Failed to sync progress',
+          error: "Failed to sync progress",
           details: error.message,
         },
-        { status: 500 }
+        { status: 500 },
       );
     }
 
-    console.log('✅ Free-style practice progress synced successfully');
+    console.log("✅ Free-style practice progress synced successfully");
 
     return NextResponse.json({
       success: true,
-      message: 'Progress synced successfully to database',
+      message: "Progress synced successfully to database",
     });
   } catch (error) {
-    console.error('❌ Error in free-style sync endpoint:', error);
+    console.error("❌ Error in free-style sync endpoint:", error);
 
     return NextResponse.json(
       {
         success: false,
-        error: error instanceof Error ? error.message : 'Unknown error',
-        message: 'Progress would be saved (development mode - server error)',
-        warning: 'Using development mode due to server error',
+        error: error instanceof Error ? error.message : "Unknown error",
+        message: "Progress would be saved (development mode - server error)",
+        warning: "Using development mode due to server error",
       },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
