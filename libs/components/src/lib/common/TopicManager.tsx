@@ -42,7 +42,6 @@ import {
   Search,
   Filter,
   Palette,
-  CheckCircle,
   AlertCircle,
   BookOpen,
   Tag,

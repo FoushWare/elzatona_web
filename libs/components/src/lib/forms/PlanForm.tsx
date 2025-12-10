@@ -2,11 +2,11 @@
 
 import * as React from "react";
 import { useState, useEffect } from "react";
-import { Input } from "@elzatona/components";
-import { Button } from "@elzatona/components";
-import { Label } from "@elzatona/components";
-import { Textarea } from "@elzatona/components";
 import {
+  Input,
+  Button,
+  Label,
+  Textarea,
   Select,
   SelectContent,
   SelectItem,

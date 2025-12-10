@@ -12,8 +12,8 @@ export interface Notification {
 }
 
 interface NotificationProps {
-  notification: Notification;
-  onRemove: (id: string) => void;
+  readonly notification: Notification;
+  readonly onRemove: (id: string) => void;
 }
 
 function NotificationItem({ notification, onRemove }: NotificationProps) {

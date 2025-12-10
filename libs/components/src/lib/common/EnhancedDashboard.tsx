@@ -383,12 +383,16 @@ export default function EnhancedDashboard() {
       // Call app context logout (clears any local user state)
       try {
         logout();
-      } catch (_) {}
+      } catch (error) {
+        console.warn("Error during logout:", error);
+      }
       // Ensure Supabase session is cleared (for social logins)
       if (isSupabaseAvailable() && supabase && supabase.auth) {
         try {
           await supabase.auth.signOut();
-        } catch (_) {}
+        } catch (error) {
+          console.warn("Error during Supabase sign out:", error);
+        }
       }
       // Clear storage and redirect
       try {

@@ -159,7 +159,7 @@ export default function ClientCodeRunner({
                 passed: false,
                 actual: null,
                 expected: null,
-                error: "Invalid JSON",
+                error: err instanceof Error ? err.message : "Invalid JSON",
                 elapsedMs: 0,
               });
               return;

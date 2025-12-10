@@ -15,13 +15,13 @@ import { flashcardService } from "../../../../../apps/website/lib/supabase-flash
 import { useAuth } from "@elzatona/contexts";
 
 interface AddToFlashcardProps {
-  question: string;
-  answer: string;
-  category: string;
-  difficulty: "beginner" | "intermediate" | "advanced";
-  source?: string;
-  onStatusChange?: (status: "added" | "removed" | "error") => void;
-  className?: string;
+  readonly question: string;
+  readonly answer: string;
+  readonly category: string;
+  readonly difficulty: "beginner" | "intermediate" | "advanced";
+  readonly source?: string;
+  readonly onStatusChange?: (status: "added" | "removed" | "error") => void;
+  readonly className?: string;
 }
 
 type FlashcardState = "add" | "saved" | "loading";

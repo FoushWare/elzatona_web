@@ -19,10 +19,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@elzatona/components";
-import { Input } from "@elzatona/components";
-import { Label } from "@elzatona/components";
-import { Textarea } from "@elzatona/components";
-import { Alert, AlertDescription } from "@elzatona/components";
+import { Input, Label, Alert, AlertDescription } from "@elzatona/components";
 import {
   Trash2,
   Edit,
