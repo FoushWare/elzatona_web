@@ -572,7 +572,7 @@ const SectionForm: React.FC<SectionFormProps> = ({
             onChange={(e) =>
               setFormData((prev) => ({
                 ...prev,
-                question_count: parseInt(e.target.value) || 0,
+                question_count: Number.parseInt(e.target.value, 10) || 0,
               }))
             }
             min="0"
