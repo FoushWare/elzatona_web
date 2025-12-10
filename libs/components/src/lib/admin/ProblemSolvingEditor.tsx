@@ -491,18 +491,16 @@ export default function ProblemSolvingEditor({
             <div className="flex items-center gap-1">
               <button
                 onClick={() => setTheme("light")}
-                className={`p-2 rounded-lg transition-colors duration-200 ${
-                  (() => {
-                    if (theme === "light") {
-                      return isDark
-                        ? "bg-blue-600 text-white"
-                        : "bg-blue-100 text-blue-800";
-                    }
+                className={`p-2 rounded-lg transition-colors duration-200 ${(() => {
+                  if (theme === "light") {
                     return isDark
-                      ? "bg-gray-700 text-gray-300"
-                      : "bg-gray-100 text-gray-600";
-                  })()
-                }`}
+                      ? "bg-blue-600 text-white"
+                      : "bg-blue-100 text-blue-800";
+                  }
+                  return isDark
+                    ? "bg-gray-700 text-gray-300"
+                    : "bg-gray-100 text-gray-600";
+                })()}`}
                 title="Light theme"
               >
                 <Sun className="w-4 h-4" />
@@ -524,18 +522,16 @@ export default function ProblemSolvingEditor({
               </button>
               <button
                 onClick={() => setTheme("system")}
-                className={`p-2 rounded-lg transition-colors duration-200 ${
-                  (() => {
-                    if (theme === "system") {
-                      return isDark
-                        ? "bg-blue-600 text-white"
-                        : "bg-blue-100 text-blue-800";
-                    }
+                className={`p-2 rounded-lg transition-colors duration-200 ${(() => {
+                  if (theme === "system") {
                     return isDark
-                      ? "bg-gray-700 text-gray-300"
-                      : "bg-gray-100 text-gray-600";
-                  })()
-                }`}
+                      ? "bg-blue-600 text-white"
+                      : "bg-blue-100 text-blue-800";
+                  }
+                  return isDark
+                    ? "bg-gray-700 text-gray-300"
+                    : "bg-gray-100 text-gray-600";
+                })()}`}
                 title="System theme"
               >
                 <Monitor className="w-4 h-4" />

@@ -3,6 +3,7 @@
 ## Overview
 
 The project supports multiple environments:
+
 - **Production** - Production Supabase database
 - **Test** - Test Supabase database
 - **Development** - Development Supabase database
@@ -18,6 +19,7 @@ The project supports multiple environments:
 ### Setup Steps
 
 1. **Copy example files**
+
    ```bash
    cp .env.example .env.local
    cp .env.test.local.example .env.test.local
@@ -50,37 +52,37 @@ The project supports multiple environments:
 
 ### Supabase Variables
 
-| Variable | Description | Required |
-|----------|-------------|----------|
-| `NEXT_PUBLIC_SUPABASE_URL` | Supabase project URL | Yes |
-| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Supabase anonymous key | Yes |
-| `SUPABASE_SERVICE_ROLE_KEY` | Supabase service role key | Yes |
+| Variable                        | Description               | Required |
+| ------------------------------- | ------------------------- | -------- |
+| `NEXT_PUBLIC_SUPABASE_URL`      | Supabase project URL      | Yes      |
+| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Supabase anonymous key    | Yes      |
+| `SUPABASE_SERVICE_ROLE_KEY`     | Supabase service role key | Yes      |
 
 ### Application Variables
 
-| Variable | Description | Options |
-|----------|-------------|---------|
-| `APP_ENV` | Application environment | `production`, `test`, `development` |
-| `NEXT_PUBLIC_APP_ENV` | Public app environment | `production`, `test`, `development` |
-| `NODE_ENV` | Node environment | `development`, `production` |
+| Variable              | Description             | Options                             |
+| --------------------- | ----------------------- | ----------------------------------- |
+| `APP_ENV`             | Application environment | `production`, `test`, `development` |
+| `NEXT_PUBLIC_APP_ENV` | Public app environment  | `production`, `test`, `development` |
+| `NODE_ENV`            | Node environment        | `development`, `production`         |
 
 ### Admin Variables
 
-| Variable | Description | Required |
-|----------|-------------|----------|
-| `ADMIN_EMAIL` | Admin user email | Yes |
-| `ADMIN_PASSWORD` | Admin user password | Yes |
+| Variable         | Description         | Required |
+| ---------------- | ------------------- | -------- |
+| `ADMIN_EMAIL`    | Admin user email    | Yes      |
+| `ADMIN_PASSWORD` | Admin user password | Yes      |
 
 ### Optional Variables
 
-| Variable | Description |
-|----------|-------------|
+| Variable                 | Description                   |
+| ------------------------ | ----------------------------- |
 | `NEXT_PUBLIC_SENTRY_DSN` | Sentry DSN for error tracking |
-| `SENTRY_AUTH_TOKEN` | Sentry auth token |
-| `SENTRY_ORG` | Sentry organization |
-| `SENTRY_PROJECT` | Sentry project name |
-| `VERCEL_URL` | Vercel deployment URL |
-| `VERCEL_ENV` | Vercel environment |
+| `SENTRY_AUTH_TOKEN`      | Sentry auth token             |
+| `SENTRY_ORG`             | Sentry organization           |
+| `SENTRY_PROJECT`         | Sentry project name           |
+| `VERCEL_URL`             | Vercel deployment URL         |
+| `VERCEL_ENV`             | Vercel environment            |
 
 ## Switching Environments
 
@@ -122,10 +124,10 @@ bun run dev:light:prod
 ## Security Notes
 
 ⚠️ **Important:**
+
 - Never commit `.env.local`, `.env.test.local`, or `.env.dev.local` files
 - These files are in `.gitignore`
 - Use `.env.example` files for documentation only
 - Rotate keys if they are exposed
 
 See [docs/SECURITY.md](../SECURITY.md) for security best practices.
-

@@ -49,19 +49,19 @@ function shouldKeepFile(fileName) {
   if (KEEP_FILES.includes(fileName)) {
     return true;
   }
-  
+
   // Remove files matching REMOVE_PATTERNS
   for (const pattern of REMOVE_PATTERNS) {
     if (pattern.test(fileName)) {
       return false;
     }
   }
-  
+
   // Keep SECURITY.md and other essential files
   if (fileName === "SECURITY.md") {
     return true;
   }
-  
+
   // Default: keep if unsure
   return true;
 }
@@ -79,11 +79,11 @@ if (fs.existsSync(MARKDOWN_DIR)) {
   const files = fs.readdirSync(MARKDOWN_DIR);
   let keptCount = 0;
   let removedCount = 0;
-  
+
   for (const file of files) {
     const sourcePath = path.join(MARKDOWN_DIR, file);
     const destPath = path.join(DOCS_DIR, file);
-    
+
     if (fs.statSync(sourcePath).isFile() && file.endsWith(".md")) {
       if (shouldKeepFile(file)) {
         fs.copyFileSync(sourcePath, destPath);
@@ -95,9 +95,11 @@ if (fs.existsSync(MARKDOWN_DIR)) {
       }
     }
   }
-  
-  console.log(`\n📊 Markdown/ processing: Kept ${keptCount}, Removed ${removedCount}`);
-  
+
+  console.log(
+    `\n📊 Markdown/ processing: Kept ${keptCount}, Removed ${removedCount}`,
+  );
+
   // Remove the Markdown directory after processing
   fs.rmSync(MARKDOWN_DIR, { recursive: true, force: true });
   console.log("✅ Removed Markdown/ directory");
@@ -120,4 +122,3 @@ for (const file of ROOT_MD_FILES) {
 
 console.log("\n✅ Migration complete!");
 console.log(`📁 Documentation is now in: docs/`);
-

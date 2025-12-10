@@ -87,4 +87,3 @@ console.log("🚀 Moving files from src/ to root...\n");
 processApp("website", WEBSITE_SRC, WEBSITE_ROOT);
 processApp("admin", ADMIN_SRC, ADMIN_ROOT);
 console.log("\n✅ Migration complete!");
-

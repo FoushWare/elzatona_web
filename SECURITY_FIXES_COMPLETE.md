@@ -25,6 +25,7 @@
    - `apps/website/network/routes/admin/auth/route.ts` - Fixed sensitive logging (only in dev/test)
 
 ### Result:
+
 ✅ All hardcoded secrets in current files replaced with placeholders  
 ✅ All scripts updated to use patterns instead of actual keys  
 ✅ Sensitive logging restricted to non-production environments
@@ -53,6 +54,7 @@
 ### Remaining Issues (Git History Only):
 
 Many CodeQL alerts refer to files that only exist in git history:
+
 - `Rest/scripts/**` files (deleted, only in history)
 - `**/*.integration.test.tsx` files (deleted, only in history)
 
@@ -88,11 +90,13 @@ These will be resolved after git history cleanup.
 ## 📊 Summary
 
 ### Secret Scanning
+
 - **Before:** 32 open alerts
 - **After:** 0 alerts in current files
 - **Status:** ✅ All current files fixed
 
 ### Code Scanning
+
 - **Before:** 60 open alerts
 - **Fixed:** 5+ alerts (logging, regex, configuration)
 - **Remaining:** ~55 alerts (mostly in git history - deleted files)

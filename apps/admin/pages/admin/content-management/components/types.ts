@@ -72,4 +72,3 @@ export interface Stats {
   totalTopics: number;
   totalQuestions: number;
 }
-

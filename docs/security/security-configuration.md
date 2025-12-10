@@ -29,6 +29,7 @@ ADMIN_PASSWORD=strong-password-here
 ```
 
 **Configuration Checklist:**
+
 - [ ] All secrets in environment variables
 - [ ] No hardcoded credentials
 - [ ] Different keys for each environment
@@ -44,33 +45,34 @@ ADMIN_PASSWORD=strong-password-here
 ```typescript
 const securityHeaders = [
   {
-    key: 'X-DNS-Prefetch-Control',
-    value: 'on'
+    key: "X-DNS-Prefetch-Control",
+    value: "on",
   },
   {
-    key: 'Strict-Transport-Security',
-    value: 'max-age=63072000; includeSubDomains; preload'
+    key: "Strict-Transport-Security",
+    value: "max-age=63072000; includeSubDomains; preload",
   },
   {
-    key: 'X-Frame-Options',
-    value: 'SAMEORIGIN'
+    key: "X-Frame-Options",
+    value: "SAMEORIGIN",
   },
   {
-    key: 'X-Content-Type-Options',
-    value: 'nosniff'
+    key: "X-Content-Type-Options",
+    value: "nosniff",
   },
   {
-    key: 'X-XSS-Protection',
-    value: '1; mode=block'
+    key: "X-XSS-Protection",
+    value: "1; mode=block",
   },
   {
-    key: 'Referrer-Policy',
-    value: 'origin-when-cross-origin'
+    key: "Referrer-Policy",
+    value: "origin-when-cross-origin",
   },
   {
-    key: 'Content-Security-Policy',
-    value: "default-src 'self'; script-src 'self' 'unsafe-eval' 'unsafe-inline'; style-src 'self' 'unsafe-inline';"
-  }
+    key: "Content-Security-Policy",
+    value:
+      "default-src 'self'; script-src 'self' 'unsafe-eval' 'unsafe-inline'; style-src 'self' 'unsafe-inline';",
+  },
 ];
 ```
 
@@ -78,10 +80,7 @@ const securityHeaders = [
 
 ```typescript
 // Allow only trusted origins
-const allowedOrigins = [
-  'https://yourdomain.com',
-  'https://www.yourdomain.com'
-];
+const allowedOrigins = ["https://yourdomain.com", "https://www.yourdomain.com"];
 
 // CORS configuration
 const corsOptions = {
@@ -89,10 +88,10 @@ const corsOptions = {
     if (!origin || allowedOrigins.includes(origin)) {
       callback(null, true);
     } else {
-      callback(new Error('Not allowed by CORS'));
+      callback(new Error("Not allowed by CORS"));
     }
   },
-  credentials: true
+  credentials: true,
 };
 ```
 
@@ -100,11 +99,11 @@ const corsOptions = {
 
 ```typescript
 // Implement rate limiting on API routes
-import rateLimit from 'express-rate-limit';
+import rateLimit from "express-rate-limit";
 
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 100 // limit each IP to 100 requests per windowMs
+  max: 100, // limit each IP to 100 requests per windowMs
 });
 ```
 
@@ -113,16 +112,19 @@ const limiter = rateLimit({
 #### Supabase Security
 
 **Row Level Security (RLS):**
+
 - Enable RLS on all tables
 - Create policies for each table
 - Test policies regularly
 
 **Connection Security:**
+
 - Use SSL/TLS for all connections
 - Use connection pooling
 - Limit connection permissions
 
 **Backup Security:**
+
 - Encrypt backups
 - Secure backup storage
 - Test backup restoration
@@ -138,7 +140,7 @@ const passwordRequirements = {
   requireLowercase: true,
   requireNumbers: true,
   requireSpecialChars: true,
-  preventCommonPasswords: true
+  preventCommonPasswords: true,
 };
 ```
 
@@ -149,7 +151,7 @@ const sessionConfig = {
   maxAge: 24 * 60 * 60 * 1000, // 24 hours
   httpOnly: true,
   secure: true, // HTTPS only
-  sameSite: 'strict'
+  sameSite: "strict",
 };
 ```
 
@@ -160,9 +162,9 @@ const sessionConfig = {
 ```typescript
 // Require authentication for all API routes
 export async function middleware(request: NextRequest) {
-  const token = request.headers.get('Authorization');
+  const token = request.headers.get("Authorization");
   if (!token) {
-    return new Response('Unauthorized', { status: 401 });
+    return new Response("Unauthorized", { status: 401 });
   }
   // Verify token
 }
@@ -175,7 +177,7 @@ export async function middleware(request: NextRequest) {
 const apiLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
   max: 100,
-  message: 'Too many requests from this IP'
+  message: "Too many requests from this IP",
 });
 ```
 
@@ -280,6 +282,7 @@ const apiLimiter = rateLimit({
 #### Automated Assessment
 
 **Tools:**
+
 - SonarQube
 - ESLint security rules
 - npm audit
@@ -291,6 +294,7 @@ const apiLimiter = rateLimit({
 #### Manual Assessment
 
 **Activities:**
+
 - Code review
 - Penetration testing
 - Configuration review
@@ -301,6 +305,7 @@ const apiLimiter = rateLimit({
 #### Third-Party Assessment
 
 **Activities:**
+
 - External security audit
 - Penetration testing
 - Compliance audit
@@ -336,6 +341,7 @@ const apiLimiter = rateLimit({
 #### Logging
 
 **Security Events to Log:**
+
 - Authentication attempts (success/failure)
 - Authorization failures
 - Input validation failures
@@ -343,20 +349,22 @@ const apiLimiter = rateLimit({
 - Suspicious activities
 
 **Example:**
+
 ```typescript
 // Log security events
 logger.security({
-  event: 'authentication_failure',
+  event: "authentication_failure",
   userId: user.id,
   ip: request.ip,
-  userAgent: request.headers['user-agent'],
-  timestamp: new Date()
+  userAgent: request.headers["user-agent"],
+  timestamp: new Date(),
 });
 ```
 
 #### Alerting
 
 **Configure Alerts For:**
+
 - Multiple failed login attempts
 - Unauthorized access attempts
 - Security policy violations
@@ -464,4 +472,3 @@ logger.security({
 - [OWASP ASVS](https://owasp.org/www-project-application-security-verification-standard/)
 - [NIST Cybersecurity Framework](https://www.nist.gov/cyberframework)
 - [Security Configuration Guides](https://owasp.org/www-project-secure-coding-practices-quick-reference-guide/)
-

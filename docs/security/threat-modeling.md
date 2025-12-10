@@ -24,23 +24,28 @@ Document what you're building:
 - **External Dependencies** - What external services are used?
 
 **Template:**
+
 ```markdown
 ## System Definition
 
 ### Components
+
 - Component 1: Description
 - Component 2: Description
 
 ### Data Flow
+
 1. User input → Validation → Processing → Storage
 2. API request → Authentication → Authorization → Response
 
 ### Trust Boundaries
+
 - Client ↔ Server
 - Public API ↔ Internal Services
 - Application ↔ Database
 
 ### External Dependencies
+
 - Supabase (Database, Auth)
 - Sentry (Error Tracking)
 - Vercel (Hosting)
@@ -58,10 +63,12 @@ Use STRIDE methodology:
 - **E**levation of Privilege - Gaining unauthorized access
 
 **Threat Identification Template:**
+
 ```markdown
 ## Threat: [Threat Name]
 
 ### STRIDE Category
+
 - [ ] Spoofing
 - [ ] Tampering
 - [ ] Repudiation
@@ -70,17 +77,21 @@ Use STRIDE methodology:
 - [ ] Elevation of Privilege
 
 ### Description
+
 [Describe the threat]
 
 ### Attack Vector
+
 [How could this threat be exploited?]
 
 ### Impact
+
 - **Severity:** High/Medium/Low
 - **Affected Components:** [List components]
 - **Data at Risk:** [What data is at risk?]
 
 ### Mitigation
+
 [How to mitigate this threat]
 ```
 
@@ -93,6 +104,7 @@ Rate each threat:
 - **Risk Level** - High/Medium/Low
 
 **Risk Matrix:**
+
 ```
         | Low Impact | Medium Impact | High Impact
 --------|-----------|--------------|------------
@@ -112,19 +124,24 @@ For each threat, define mitigation:
 4. **Transfer** - Transfer risk (e.g., insurance)
 
 **Mitigation Template:**
+
 ```markdown
 ## Mitigation: [Threat Name]
 
 ### Strategy
+
 [Eliminate/Mitigate/Accept/Transfer]
 
 ### Implementation
+
 [How to implement the mitigation]
 
 ### Verification
+
 [How to verify the mitigation works]
 
 ### Residual Risk
+
 [What risk remains after mitigation?]
 ```
 
@@ -142,12 +159,14 @@ Document the threat model:
 ### Example 1: User Authentication
 
 **System:**
+
 - User login form
 - Authentication API
 - Session management
 - Password storage
 
 **Threats:**
+
 1. **Spoofing** - Attacker impersonates user
    - **Mitigation:** Strong passwords, MFA, rate limiting
 2. **Information Disclosure** - Password exposed
@@ -158,11 +177,13 @@ Document the threat model:
 ### Example 2: API Endpoint
 
 **System:**
+
 - Public API endpoint
 - Database queries
 - User data
 
 **Threats:**
+
 1. **Tampering** - Unauthorized data modification
    - **Mitigation:** Authentication, authorization, input validation
 2. **Information Disclosure** - Sensitive data exposure
@@ -178,18 +199,22 @@ Document the threat model:
 # Threat Model: [Feature Name]
 
 ## System Overview
+
 [Description of the feature]
 
 ## Components
+
 - [Component 1]
 - [Component 2]
 
 ## Data Flow
+
 [Diagram or description]
 
 ## Threats
 
 ### Threat 1: [Name]
+
 - **Category:** [STRIDE]
 - **Likelihood:** [High/Medium/Low]
 - **Impact:** [High/Medium/Low]
@@ -197,17 +222,21 @@ Document the threat model:
 - **Mitigation:** [Description]
 
 ### Threat 2: [Name]
+
 ...
 
 ## Security Requirements
+
 - [Requirement 1]
 - [Requirement 2]
 
 ## Mitigation Plan
+
 - [ ] Mitigation 1
 - [ ] Mitigation 2
 
 ## Review
+
 - **Date:** [Date]
 - **Reviewers:** [Names]
 - **Status:** [Complete/In Progress]
@@ -249,7 +278,7 @@ Document the threat model:
 ### Resources
 
 - [OWASP Threat Modeling](https://owasp.org/www-community/Threat_Modeling)
-- [STRIDE Methodology](https://en.wikipedia.org/wiki/STRIDE_(security))
+- [STRIDE Methodology](<https://en.wikipedia.org/wiki/STRIDE_(security)>)
 - [Microsoft Threat Modeling](https://docs.microsoft.com/en-us/azure/security/develop/threat-modeling-tool)
 
 ## 📊 Threat Model Review Checklist
@@ -280,9 +309,11 @@ Threat modeling is not a one-time activity:
 # Threat Model: Content Management
 
 ## System Overview
+
 Admin panel for managing learning content (cards, plans, questions).
 
 ## Components
+
 - Admin UI (React)
 - Content Management API
 - Supabase Database
@@ -291,17 +322,19 @@ Admin panel for managing learning content (cards, plans, questions).
 ## Threats
 
 ### Threat 1: Unauthorized Content Modification
+
 - **Category:** Tampering
 - **Likelihood:** Medium
 - **Impact:** High
 - **Risk:** High
-- **Mitigation:** 
+- **Mitigation:**
   - Authentication required
   - Role-based access control (admin only)
   - Audit logging
   - Input validation
 
 ### Threat 2: Sensitive Data Exposure
+
 - **Category:** Information Disclosure
 - **Likelihood:** Low
 - **Impact:** High
@@ -313,15 +346,16 @@ Admin panel for managing learning content (cards, plans, questions).
   - Output filtering
 
 ## Security Requirements
+
 1. All content operations require admin authentication
 2. All changes must be logged
 3. Input validation on all fields
 4. Rate limiting on API endpoints
 
 ## Mitigation Status
+
 - [x] Authentication implemented
 - [x] Authorization checks in place
 - [x] Audit logging implemented
 - [x] Input validation implemented
 ```
-

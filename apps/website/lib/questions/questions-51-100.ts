@@ -1,7 +1,7 @@
-import { ReactQuestion } from './types';
+import { ReactQuestion } from "./types";
 
 export const questions1: ReactQuestion[] = [
-{
+  {
     id: 51,
     question: "What is the purpose of the useActionState hook?",
     options: [
@@ -11,7 +11,8 @@ export const questions1: ReactQuestion[] = [
       "To handle action events",
     ],
     answer: "A",
-    explanation: "useActionState is used to manage state for server actions. It's useful for handling form submissions and other server-side operations with proper state management.",
+    explanation:
+      "useActionState is used to manage state for server actions. It's useful for handling form submissions and other server-side operations with proper state management.",
     code: `// useActionState example
 import { useActionState } from 'react';
 
@@ -39,7 +40,7 @@ function ContactForm() {
   );
 }`,
   },
-{
+  {
     id: 52,
     question: "What is the purpose of the useFormStatus hook?",
     options: [
@@ -49,7 +50,8 @@ function ContactForm() {
       "To handle form events",
     ],
     answer: "A",
-    explanation: "useFormStatus provides information about the status of form submissions. It's useful for showing loading states and handling form submission feedback.",
+    explanation:
+      "useFormStatus provides information about the status of form submissions. It's useful for showing loading states and handling form submission feedback.",
     code: `// useFormStatus example
 import { useFormStatus } from 'react';
 
@@ -63,7 +65,7 @@ function SubmitButton() {
   );
 }`,
   },
-{
+  {
     id: 53,
     question: "What is the purpose of the useFormState hook?",
     options: [
@@ -73,7 +75,8 @@ function SubmitButton() {
       "To handle form data",
     ],
     answer: "A",
-    explanation: "useFormState is used to manage form state and validation. It's useful for handling form data, validation errors, and form submission state.",
+    explanation:
+      "useFormState is used to manage form state and validation. It's useful for handling form data, validation errors, and form submission state.",
     code: `// useFormState example
 import { useFormState } from 'react';
 
@@ -106,7 +109,7 @@ function ContactForm() {
   );
 }`,
   },
-{
+  {
     id: 54,
     question: "What is the purpose of the use hook?",
     options: [
@@ -116,7 +119,8 @@ function ContactForm() {
       "To handle component events",
     ],
     answer: "A",
-    explanation: "The use hook lets you consume promises and context in components. It's useful for handling async data and context values in a more flexible way.",
+    explanation:
+      "The use hook lets you consume promises and context in components. It's useful for handling async data and context values in a more flexible way.",
     code: `// use hook example
 import { use } from 'react';
 
@@ -137,7 +141,7 @@ function ThemedButton() {
   return <button className={theme}>Themed Button</button>;
 }`,
   },
-{
+  {
     id: 55,
     question: "What is the purpose of the useCache hook?",
     options: [
@@ -147,7 +151,8 @@ function ThemedButton() {
       "To handle cache events",
     ],
     answer: "A",
-    explanation: "useCache is used to cache expensive computations and data. It's useful for memoizing expensive operations and avoiding unnecessary recalculations.",
+    explanation:
+      "useCache is used to cache expensive computations and data. It's useful for memoizing expensive operations and avoiding unnecessary recalculations.",
     code: `// useCache example
 import { useCache } from 'react';
 
@@ -160,7 +165,7 @@ function ExpensiveComponent({ data }) {
   return <div>{expensiveResult}</div>;
 }`,
   },
-{
+  {
     id: 56,
     question: "What is the purpose of the useOptimistic hook?",
     options: [
@@ -170,7 +175,8 @@ function ExpensiveComponent({ data }) {
       "To manage optimistic rendering",
     ],
     answer: "A",
-    explanation: "useOptimistic lets you show optimistic updates while waiting for server responses. It's useful for providing immediate feedback to users while background operations are processing.",
+    explanation:
+      "useOptimistic lets you show optimistic updates while waiting for server responses. It's useful for providing immediate feedback to users while background operations are processing.",
     code: `// useOptimistic example
 import { useOptimistic } from 'react';
 
@@ -194,7 +200,7 @@ function TodoList({ todos, addTodo }) {
   );
 }`,
   },
-{
+  {
     id: 57,
     question: "What is the purpose of the useActionState hook?",
     options: [
@@ -204,7 +210,8 @@ function TodoList({ todos, addTodo }) {
       "To handle action events",
     ],
     answer: "A",
-    explanation: "useActionState is used to manage state for server actions. It's useful for handling form submissions and other server-side operations with proper state management.",
+    explanation:
+      "useActionState is used to manage state for server actions. It's useful for handling form submissions and other server-side operations with proper state management.",
     code: `// useActionState example
 import { useActionState } from 'react';
 
@@ -232,7 +239,7 @@ function ContactForm() {
   );
 }`,
   },
-{
+  {
     id: 58,
     question: "What is the purpose of the useFormStatus hook?",
     options: [
@@ -242,7 +249,8 @@ function ContactForm() {
       "To handle form events",
     ],
     answer: "A",
-    explanation: "useFormStatus provides information about the status of form submissions. It's useful for showing loading states and handling form submission feedback.",
+    explanation:
+      "useFormStatus provides information about the status of form submissions. It's useful for showing loading states and handling form submission feedback.",
     code: `// useFormStatus example
 import { useFormStatus } from 'react';
 
@@ -256,7 +264,7 @@ function SubmitButton() {
   );
 }`,
   },
-{
+  {
     id: 59,
     question: "What is the purpose of the useFormState hook?",
     options: [
@@ -266,7 +274,8 @@ function SubmitButton() {
       "To handle form data",
     ],
     answer: "A",
-    explanation: "useFormState is used to manage form state and validation. It's useful for handling form data, validation errors, and form submission state.",
+    explanation:
+      "useFormState is used to manage form state and validation. It's useful for handling form data, validation errors, and form submission state.",
     code: `// useFormState example
 import { useFormState } from 'react';
 
@@ -299,7 +308,7 @@ function ContactForm() {
   );
 }`,
   },
-{
+  {
     id: 60,
     question: "What is the purpose of the use hook?",
     options: [
@@ -309,7 +318,8 @@ function ContactForm() {
       "To handle component events",
     ],
     answer: "A",
-    explanation: "The use hook lets you consume promises and context in components. It's useful for handling async data and context values in a more flexible way.",
+    explanation:
+      "The use hook lets you consume promises and context in components. It's useful for handling async data and context values in a more flexible way.",
     code: `// use hook example
 import { use } from 'react';
 
@@ -330,7 +340,7 @@ function ThemedButton() {
   return <button className={theme}>Themed Button</button>;
 }`,
   },
-{
+  {
     id: 61,
     question: "What is the purpose of the useCache hook?",
     options: [
@@ -340,7 +350,8 @@ function ThemedButton() {
       "To handle cache events",
     ],
     answer: "A",
-    explanation: "useCache is used to cache expensive computations and data. It's useful for memoizing expensive operations and avoiding unnecessary recalculations.",
+    explanation:
+      "useCache is used to cache expensive computations and data. It's useful for memoizing expensive operations and avoiding unnecessary recalculations.",
     code: `// useCache example
 import { useCache } from 'react';
 
@@ -353,7 +364,7 @@ function ExpensiveComponent({ data }) {
   return <div>{expensiveResult}</div>;
 }`,
   },
-{
+  {
     id: 62,
     question: "What is the purpose of the useOptimistic hook?",
     options: [
@@ -363,7 +374,8 @@ function ExpensiveComponent({ data }) {
       "To manage optimistic rendering",
     ],
     answer: "A",
-    explanation: "useOptimistic lets you show optimistic updates while waiting for server responses. It's useful for providing immediate feedback to users while background operations are processing.",
+    explanation:
+      "useOptimistic lets you show optimistic updates while waiting for server responses. It's useful for providing immediate feedback to users while background operations are processing.",
     code: `// useOptimistic example
 import { useOptimistic } from 'react';
 
@@ -387,7 +399,7 @@ function TodoList({ todos, addTodo }) {
   );
 }`,
   },
-{
+  {
     id: 63,
     question: "What is the purpose of the useActionState hook?",
     options: [
@@ -397,7 +409,8 @@ function TodoList({ todos, addTodo }) {
       "To handle action events",
     ],
     answer: "A",
-    explanation: "useActionState is used to manage state for server actions. It's useful for handling form submissions and other server-side operations with proper state management.",
+    explanation:
+      "useActionState is used to manage state for server actions. It's useful for handling form submissions and other server-side operations with proper state management.",
     code: `// useActionState example
 import { useActionState } from 'react';
 
@@ -425,7 +438,7 @@ function ContactForm() {
   );
 }`,
   },
-{
+  {
     id: 64,
     question: "What is the purpose of the useFormStatus hook?",
     options: [
@@ -435,7 +448,8 @@ function ContactForm() {
       "To handle form events",
     ],
     answer: "A",
-    explanation: "useFormStatus provides information about the status of form submissions. It's useful for showing loading states and handling form submission feedback.",
+    explanation:
+      "useFormStatus provides information about the status of form submissions. It's useful for showing loading states and handling form submission feedback.",
     code: `// useFormStatus example
 import { useFormStatus } from 'react';
 
@@ -449,7 +463,7 @@ function SubmitButton() {
   );
 }`,
   },
-{
+  {
     id: 65,
     question: "What is the purpose of the useFormState hook?",
     options: [
@@ -459,7 +473,8 @@ function SubmitButton() {
       "To handle form data",
     ],
     answer: "A",
-    explanation: "useFormState is used to manage form state and validation. It's useful for handling form data, validation errors, and form submission state.",
+    explanation:
+      "useFormState is used to manage form state and validation. It's useful for handling form data, validation errors, and form submission state.",
     code: `// useFormState example
 import { useFormState } from 'react';
 
@@ -492,7 +507,7 @@ function ContactForm() {
   );
 }`,
   },
-{
+  {
     id: 66,
     question: "What is the purpose of the use hook?",
     options: [
@@ -502,7 +517,8 @@ function ContactForm() {
       "To handle component events",
     ],
     answer: "A",
-    explanation: "The use hook lets you consume promises and context in components. It's useful for handling async data and context values in a more flexible way.",
+    explanation:
+      "The use hook lets you consume promises and context in components. It's useful for handling async data and context values in a more flexible way.",
     code: `// use hook example
 import { use } from 'react';
 
@@ -523,7 +539,7 @@ function ThemedButton() {
   return <button className={theme}>Themed Button</button>;
 }`,
   },
-{
+  {
     id: 67,
     question: "What is the purpose of the useCache hook?",
     options: [
@@ -533,7 +549,8 @@ function ThemedButton() {
       "To handle cache events",
     ],
     answer: "A",
-    explanation: "useCache is used to cache expensive computations and data. It's useful for memoizing expensive operations and avoiding unnecessary recalculations.",
+    explanation:
+      "useCache is used to cache expensive computations and data. It's useful for memoizing expensive operations and avoiding unnecessary recalculations.",
     code: `// useCache example
 import { useCache } from 'react';
 
@@ -546,7 +563,7 @@ function ExpensiveComponent({ data }) {
   return <div>{expensiveResult}</div>;
 }`,
   },
-{
+  {
     id: 68,
     question: "What is the purpose of the useOptimistic hook?",
     options: [
@@ -556,7 +573,8 @@ function ExpensiveComponent({ data }) {
       "To manage optimistic rendering",
     ],
     answer: "A",
-    explanation: "useOptimistic lets you show optimistic updates while waiting for server responses. It's useful for providing immediate feedback to users while background operations are processing.",
+    explanation:
+      "useOptimistic lets you show optimistic updates while waiting for server responses. It's useful for providing immediate feedback to users while background operations are processing.",
     code: `// useOptimistic example
 import { useOptimistic } from 'react';
 
@@ -580,7 +598,7 @@ function TodoList({ todos, addTodo }) {
   );
 }`,
   },
-{
+  {
     id: 69,
     question: "What is the purpose of the useActionState hook?",
     options: [
@@ -590,7 +608,8 @@ function TodoList({ todos, addTodo }) {
       "To handle action events",
     ],
     answer: "A",
-    explanation: "useActionState is used to manage state for server actions. It's useful for handling form submissions and other server-side operations with proper state management.",
+    explanation:
+      "useActionState is used to manage state for server actions. It's useful for handling form submissions and other server-side operations with proper state management.",
     code: `// useActionState example
 import { useActionState } from 'react';
 
@@ -618,7 +637,7 @@ function ContactForm() {
   );
 }`,
   },
-{
+  {
     id: 70,
     question: "What is the purpose of the useFormStatus hook?",
     options: [
@@ -628,7 +647,8 @@ function ContactForm() {
       "To handle form events",
     ],
     answer: "A",
-    explanation: "useFormStatus provides information about the status of form submissions. It's useful for showing loading states and handling form submission feedback.",
+    explanation:
+      "useFormStatus provides information about the status of form submissions. It's useful for showing loading states and handling form submission feedback.",
     code: `// useFormStatus example
 import { useFormStatus } from 'react';
 
@@ -642,7 +662,7 @@ function SubmitButton() {
   );
 }`,
   },
-{
+  {
     id: 71,
     question: "What is the purpose of the useFormState hook?",
     options: [
@@ -652,7 +672,8 @@ function SubmitButton() {
       "To handle form data",
     ],
     answer: "A",
-    explanation: "useFormState is used to manage form state and validation. It's useful for handling form data, validation errors, and form submission state.",
+    explanation:
+      "useFormState is used to manage form state and validation. It's useful for handling form data, validation errors, and form submission state.",
     code: `// useFormState example
 import { useFormState } from 'react';
 
@@ -685,7 +706,7 @@ function ContactForm() {
   );
 }`,
   },
-{
+  {
     id: 72,
     question: "What is the purpose of the use hook?",
     options: [
@@ -695,7 +716,8 @@ function ContactForm() {
       "To handle component events",
     ],
     answer: "A",
-    explanation: "The use hook lets you consume promises and context in components. It's useful for handling async data and context values in a more flexible way.",
+    explanation:
+      "The use hook lets you consume promises and context in components. It's useful for handling async data and context values in a more flexible way.",
     code: `// use hook example
 import { use } from 'react';
 
@@ -716,7 +738,7 @@ function ThemedButton() {
   return <button className={theme}>Themed Button</button>;
 }`,
   },
-{
+  {
     id: 73,
     question: "What is the purpose of the useCache hook?",
     options: [
@@ -726,7 +748,8 @@ function ThemedButton() {
       "To handle cache events",
     ],
     answer: "A",
-    explanation: "useCache is used to cache expensive computations and data. It's useful for memoizing expensive operations and avoiding unnecessary recalculations.",
+    explanation:
+      "useCache is used to cache expensive computations and data. It's useful for memoizing expensive operations and avoiding unnecessary recalculations.",
     code: `// useCache example
 import { useCache } from 'react';
 
@@ -739,7 +762,7 @@ function ExpensiveComponent({ data }) {
   return <div>{expensiveResult}</div>;
 }`,
   },
-{
+  {
     id: 74,
     question: "What is the purpose of the useOptimistic hook?",
     options: [
@@ -749,7 +772,8 @@ function ExpensiveComponent({ data }) {
       "To manage optimistic rendering",
     ],
     answer: "A",
-    explanation: "useOptimistic lets you show optimistic updates while waiting for server responses. It's useful for providing immediate feedback to users while background operations are processing.",
+    explanation:
+      "useOptimistic lets you show optimistic updates while waiting for server responses. It's useful for providing immediate feedback to users while background operations are processing.",
     code: `// useOptimistic example
 import { useOptimistic } from 'react';
 
@@ -773,7 +797,7 @@ function TodoList({ todos, addTodo }) {
   );
 }`,
   },
-{
+  {
     id: 75,
     question: "What is the purpose of the useActionState hook?",
     options: [
@@ -783,7 +807,8 @@ function TodoList({ todos, addTodo }) {
       "To handle action events",
     ],
     answer: "A",
-    explanation: "useActionState is used to manage state for server actions. It's useful for handling form submissions and other server-side operations with proper state management.",
+    explanation:
+      "useActionState is used to manage state for server actions. It's useful for handling form submissions and other server-side operations with proper state management.",
     code: `// useActionState example
 import { useActionState } from 'react';
 
@@ -811,7 +836,7 @@ function ContactForm() {
   );
 }`,
   },
-{
+  {
     id: 76,
     question: "What is the purpose of the useFormStatus hook?",
     options: [
@@ -821,7 +846,8 @@ function ContactForm() {
       "To handle form events",
     ],
     answer: "A",
-    explanation: "useFormStatus provides information about the status of form submissions. It's useful for showing loading states and handling form submission feedback.",
+    explanation:
+      "useFormStatus provides information about the status of form submissions. It's useful for showing loading states and handling form submission feedback.",
     code: `// useFormStatus example
 import { useFormStatus } from 'react';
 
@@ -835,7 +861,7 @@ function SubmitButton() {
   );
 }`,
   },
-{
+  {
     id: 77,
     question: "What is the purpose of the useFormState hook?",
     options: [
@@ -845,7 +871,8 @@ function SubmitButton() {
       "To handle form data",
     ],
     answer: "A",
-    explanation: "useFormState is used to manage form state and validation. It's useful for handling form data, validation errors, and form submission state.",
+    explanation:
+      "useFormState is used to manage form state and validation. It's useful for handling form data, validation errors, and form submission state.",
     code: `// useFormState example
 import { useFormState } from 'react';
 
@@ -878,7 +905,7 @@ function ContactForm() {
   );
 }`,
   },
-{
+  {
     id: 78,
     question: "What is the purpose of the use hook?",
     options: [
@@ -888,7 +915,8 @@ function ContactForm() {
       "To handle component events",
     ],
     answer: "A",
-    explanation: "The use hook lets you consume promises and context in components. It's useful for handling async data and context values in a more flexible way.",
+    explanation:
+      "The use hook lets you consume promises and context in components. It's useful for handling async data and context values in a more flexible way.",
     code: `// use hook example
 import { use } from 'react';
 
@@ -909,7 +937,7 @@ function ThemedButton() {
   return <button className={theme}>Themed Button</button>;
 }`,
   },
-{
+  {
     id: 79,
     question: "What is the purpose of the useCache hook?",
     options: [
@@ -919,7 +947,8 @@ function ThemedButton() {
       "To handle cache events",
     ],
     answer: "A",
-    explanation: "useCache is used to cache expensive computations and data. It's useful for memoizing expensive operations and avoiding unnecessary recalculations.",
+    explanation:
+      "useCache is used to cache expensive computations and data. It's useful for memoizing expensive operations and avoiding unnecessary recalculations.",
     code: `// useCache example
 import { useCache } from 'react';
 
@@ -932,7 +961,7 @@ function ExpensiveComponent({ data }) {
   return <div>{expensiveResult}</div>;
 }`,
   },
-{
+  {
     id: 80,
     question: "What is the purpose of the useOptimistic hook?",
     options: [
@@ -942,7 +971,8 @@ function ExpensiveComponent({ data }) {
       "To manage optimistic rendering",
     ],
     answer: "A",
-    explanation: "useOptimistic lets you show optimistic updates while waiting for server responses. It's useful for providing immediate feedback to users while background operations are processing.",
+    explanation:
+      "useOptimistic lets you show optimistic updates while waiting for server responses. It's useful for providing immediate feedback to users while background operations are processing.",
     code: `// useOptimistic example
 import { useOptimistic } from 'react';
 
@@ -966,7 +996,7 @@ function TodoList({ todos, addTodo }) {
   );
 }`,
   },
-{
+  {
     id: 81,
     question: "What is the purpose of the useActionState hook?",
     options: [
@@ -976,7 +1006,8 @@ function TodoList({ todos, addTodo }) {
       "To handle action events",
     ],
     answer: "A",
-    explanation: "useActionState is used to manage state for server actions. It's useful for handling form submissions and other server-side operations with proper state management.",
+    explanation:
+      "useActionState is used to manage state for server actions. It's useful for handling form submissions and other server-side operations with proper state management.",
     code: `// useActionState example
 import { useActionState } from 'react';
 
@@ -1004,7 +1035,7 @@ function ContactForm() {
   );
 }`,
   },
-{
+  {
     id: 82,
     question: "What is the purpose of the useFormStatus hook?",
     options: [
@@ -1014,7 +1045,8 @@ function ContactForm() {
       "To handle form events",
     ],
     answer: "A",
-    explanation: "useFormStatus provides information about the status of form submissions. It's useful for showing loading states and handling form submission feedback.",
+    explanation:
+      "useFormStatus provides information about the status of form submissions. It's useful for showing loading states and handling form submission feedback.",
     code: `// useFormStatus example
 import { useFormStatus } from 'react';
 
@@ -1028,7 +1060,7 @@ function SubmitButton() {
   );
 }`,
   },
-{
+  {
     id: 83,
     question: "What is the purpose of the useFormState hook?",
     options: [
@@ -1038,7 +1070,8 @@ function SubmitButton() {
       "To handle form data",
     ],
     answer: "A",
-    explanation: "useFormState is used to manage form state and validation. It's useful for handling form data, validation errors, and form submission state.",
+    explanation:
+      "useFormState is used to manage form state and validation. It's useful for handling form data, validation errors, and form submission state.",
     code: `// useFormState example
 import { useFormState } from 'react';
 
@@ -1071,7 +1104,7 @@ function ContactForm() {
   );
 }`,
   },
-{
+  {
     id: 84,
     question: "What is the purpose of the use hook?",
     options: [
@@ -1081,7 +1114,8 @@ function ContactForm() {
       "To handle component events",
     ],
     answer: "A",
-    explanation: "The use hook lets you consume promises and context in components. It's useful for handling async data and context values in a more flexible way.",
+    explanation:
+      "The use hook lets you consume promises and context in components. It's useful for handling async data and context values in a more flexible way.",
     code: `// use hook example
 import { use } from 'react';
 
@@ -1102,7 +1136,7 @@ function ThemedButton() {
   return <button className={theme}>Themed Button</button>;
 }`,
   },
-{
+  {
     id: 85,
     question: "What is the purpose of the useCache hook?",
     options: [
@@ -1112,7 +1146,8 @@ function ThemedButton() {
       "To handle cache events",
     ],
     answer: "A",
-    explanation: "useCache is used to cache expensive computations and data. It's useful for memoizing expensive operations and avoiding unnecessary recalculations.",
+    explanation:
+      "useCache is used to cache expensive computations and data. It's useful for memoizing expensive operations and avoiding unnecessary recalculations.",
     code: `// useCache example
 import { useCache } from 'react';
 
@@ -1125,7 +1160,7 @@ function ExpensiveComponent({ data }) {
   return <div>{expensiveResult}</div>;
 }`,
   },
-{
+  {
     id: 86,
     question: "What is the purpose of the useOptimistic hook?",
     options: [
@@ -1135,7 +1170,8 @@ function ExpensiveComponent({ data }) {
       "To manage optimistic rendering",
     ],
     answer: "A",
-    explanation: "useOptimistic lets you show optimistic updates while waiting for server responses. It's useful for providing immediate feedback to users while background operations are processing.",
+    explanation:
+      "useOptimistic lets you show optimistic updates while waiting for server responses. It's useful for providing immediate feedback to users while background operations are processing.",
     code: `// useOptimistic example
 import { useOptimistic } from 'react';
 
@@ -1159,7 +1195,7 @@ function TodoList({ todos, addTodo }) {
   );
 }`,
   },
-{
+  {
     id: 87,
     question: "What is the purpose of the useActionState hook?",
     options: [
@@ -1169,7 +1205,8 @@ function TodoList({ todos, addTodo }) {
       "To handle action events",
     ],
     answer: "A",
-    explanation: "useActionState is used to manage state for server actions. It's useful for handling form submissions and other server-side operations with proper state management.",
+    explanation:
+      "useActionState is used to manage state for server actions. It's useful for handling form submissions and other server-side operations with proper state management.",
     code: `// useActionState example
 import { useActionState } from 'react';
 
@@ -1197,7 +1234,7 @@ function ContactForm() {
   );
 }`,
   },
-{
+  {
     id: 88,
     question: "What is the purpose of the useFormStatus hook?",
     options: [
@@ -1207,7 +1244,8 @@ function ContactForm() {
       "To handle form events",
     ],
     answer: "A",
-    explanation: "useFormStatus provides information about the status of form submissions. It's useful for showing loading states and handling form submission feedback.",
+    explanation:
+      "useFormStatus provides information about the status of form submissions. It's useful for showing loading states and handling form submission feedback.",
     code: `// useFormStatus example
 import { useFormStatus } from 'react';
 
@@ -1221,7 +1259,7 @@ function SubmitButton() {
   );
 }`,
   },
-{
+  {
     id: 89,
     question: "What is the purpose of the useFormState hook?",
     options: [
@@ -1231,7 +1269,8 @@ function SubmitButton() {
       "To handle form data",
     ],
     answer: "A",
-    explanation: "useFormState is used to manage form state and validation. It's useful for handling form data, validation errors, and form submission state.",
+    explanation:
+      "useFormState is used to manage form state and validation. It's useful for handling form data, validation errors, and form submission state.",
     code: `// useFormState example
 import { useFormState } from 'react';
 
@@ -1264,7 +1303,7 @@ function ContactForm() {
   );
 }`,
   },
-{
+  {
     id: 90,
     question: "What is the purpose of the use hook?",
     options: [
@@ -1274,7 +1313,8 @@ function ContactForm() {
       "To handle component events",
     ],
     answer: "A",
-    explanation: "The use hook lets you consume promises and context in components. It's useful for handling async data and context values in a more flexible way.",
+    explanation:
+      "The use hook lets you consume promises and context in components. It's useful for handling async data and context values in a more flexible way.",
     code: `// use hook example
 import { use } from 'react';
 
@@ -1295,7 +1335,7 @@ function ThemedButton() {
   return <button className={theme}>Themed Button</button>;
 }`,
   },
-{
+  {
     id: 91,
     question: "What is the purpose of the useCache hook?",
     options: [
@@ -1305,7 +1345,8 @@ function ThemedButton() {
       "To handle cache events",
     ],
     answer: "A",
-    explanation: "useCache is used to cache expensive computations and data. It's useful for memoizing expensive operations and avoiding unnecessary recalculations.",
+    explanation:
+      "useCache is used to cache expensive computations and data. It's useful for memoizing expensive operations and avoiding unnecessary recalculations.",
     code: `// useCache example
 import { useCache } from 'react';
 
@@ -1318,7 +1359,7 @@ function ExpensiveComponent({ data }) {
   return <div>{expensiveResult}</div>;
 }`,
   },
-{
+  {
     id: 92,
     question: "What is the purpose of the useOptimistic hook?",
     options: [
@@ -1328,7 +1369,8 @@ function ExpensiveComponent({ data }) {
       "To manage optimistic rendering",
     ],
     answer: "A",
-    explanation: "useOptimistic lets you show optimistic updates while waiting for server responses. It's useful for providing immediate feedback to users while background operations are processing.",
+    explanation:
+      "useOptimistic lets you show optimistic updates while waiting for server responses. It's useful for providing immediate feedback to users while background operations are processing.",
     code: `// useOptimistic example
 import { useOptimistic } from 'react';
 
@@ -1352,7 +1394,7 @@ function TodoList({ todos, addTodo }) {
   );
 }`,
   },
-{
+  {
     id: 93,
     question: "What is the purpose of the useActionState hook?",
     options: [
@@ -1362,7 +1404,8 @@ function TodoList({ todos, addTodo }) {
       "To handle action events",
     ],
     answer: "A",
-    explanation: "useActionState is used to manage state for server actions. It's useful for handling form submissions and other server-side operations with proper state management.",
+    explanation:
+      "useActionState is used to manage state for server actions. It's useful for handling form submissions and other server-side operations with proper state management.",
     code: `// useActionState example
 import { useActionState } from 'react';
 
@@ -1390,7 +1433,7 @@ function ContactForm() {
   );
 }`,
   },
-{
+  {
     id: 94,
     question: "What is the purpose of the useFormStatus hook?",
     options: [
@@ -1400,7 +1443,8 @@ function ContactForm() {
       "To handle form events",
     ],
     answer: "A",
-    explanation: "useFormStatus provides information about the status of form submissions. It's useful for showing loading states and handling form submission feedback.",
+    explanation:
+      "useFormStatus provides information about the status of form submissions. It's useful for showing loading states and handling form submission feedback.",
     code: `// useFormStatus example
 import { useFormStatus } from 'react';
 
@@ -1414,7 +1458,7 @@ function SubmitButton() {
   );
 }`,
   },
-{
+  {
     id: 95,
     question: "What is the purpose of the useFormState hook?",
     options: [
@@ -1424,7 +1468,8 @@ function SubmitButton() {
       "To handle form data",
     ],
     answer: "A",
-    explanation: "useFormState is used to manage form state and validation. It's useful for handling form data, validation errors, and form submission state.",
+    explanation:
+      "useFormState is used to manage form state and validation. It's useful for handling form data, validation errors, and form submission state.",
     code: `// useFormState example
 import { useFormState } from 'react';
 
@@ -1457,7 +1502,7 @@ function ContactForm() {
   );
 }`,
   },
-{
+  {
     id: 96,
     question: "What is the purpose of the use hook?",
     options: [
@@ -1467,7 +1512,8 @@ function ContactForm() {
       "To handle component events",
     ],
     answer: "A",
-    explanation: "The use hook lets you consume promises and context in components. It's useful for handling async data and context values in a more flexible way.",
+    explanation:
+      "The use hook lets you consume promises and context in components. It's useful for handling async data and context values in a more flexible way.",
     code: `// use hook example
 import { use } from 'react';
 
@@ -1488,7 +1534,7 @@ function ThemedButton() {
   return <button className={theme}>Themed Button</button>;
 }`,
   },
-{
+  {
     id: 97,
     question: "What is the purpose of the useCache hook?",
     options: [
@@ -1498,7 +1544,8 @@ function ThemedButton() {
       "To handle cache events",
     ],
     answer: "A",
-    explanation: "useCache is used to cache expensive computations and data. It's useful for memoizing expensive operations and avoiding unnecessary recalculations.",
+    explanation:
+      "useCache is used to cache expensive computations and data. It's useful for memoizing expensive operations and avoiding unnecessary recalculations.",
     code: `// useCache example
 import { useCache } from 'react';
 
@@ -1511,7 +1558,7 @@ function ExpensiveComponent({ data }) {
   return <div>{expensiveResult}</div>;
 }`,
   },
-{
+  {
     id: 98,
     question: "What is the purpose of the useOptimistic hook?",
     options: [
@@ -1521,7 +1568,8 @@ function ExpensiveComponent({ data }) {
       "To manage optimistic rendering",
     ],
     answer: "A",
-    explanation: "useOptimistic lets you show optimistic updates while waiting for server responses. It's useful for providing immediate feedback to users while background operations are processing.",
+    explanation:
+      "useOptimistic lets you show optimistic updates while waiting for server responses. It's useful for providing immediate feedback to users while background operations are processing.",
     code: `// useOptimistic example
 import { useOptimistic } from 'react';
 
@@ -1545,7 +1593,7 @@ function TodoList({ todos, addTodo }) {
   );
 }`,
   },
-{
+  {
     id: 99,
     question: "What is the purpose of the useActionState hook?",
     options: [
@@ -1555,7 +1603,8 @@ function TodoList({ todos, addTodo }) {
       "To handle action events",
     ],
     answer: "A",
-    explanation: "useActionState is used to manage state for server actions. It's useful for handling form submissions and other server-side operations with proper state management.",
+    explanation:
+      "useActionState is used to manage state for server actions. It's useful for handling form submissions and other server-side operations with proper state management.",
     code: `// useActionState example
 import { useActionState } from 'react';
 
@@ -1583,7 +1632,7 @@ function ContactForm() {
   );
 }`,
   },
-{
+  {
     id: 100,
     question: "What is the purpose of the useFormStatus hook?",
     options: [
@@ -1593,7 +1642,8 @@ function ContactForm() {
       "To handle form events",
     ],
     answer: "A",
-    explanation: "useFormStatus provides information about the status of form submissions. It's useful for showing loading states and handling form submission feedback.",
+    explanation:
+      "useFormStatus provides information about the status of form submissions. It's useful for showing loading states and handling form submission feedback.",
     code: `// useFormStatus example
 import { useFormStatus } from 'react';
 
@@ -1607,5 +1657,4 @@ function SubmitButton() {
   );
 }`,
   },
-  
 ];

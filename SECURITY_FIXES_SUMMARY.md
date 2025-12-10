@@ -27,12 +27,14 @@ The following secrets exist **only in git history** and are not in current track
 3. **UUIDs in Migration Files** - These are database IDs, not actual API keys (false positives)
 
 **Action Required:** These files don't exist in current workspace, so they're only in git history. Consider:
+
 - Running git history remediation if these secrets are still active
 - Rotating the exposed tokens if they're still in use
 
 ### ✅ Properly Gitignored Files
 
 The following files contain secrets but are properly gitignored:
+
 - `.cursor/mcp.json` - Contains Supabase and Sentry tokens (✅ gitignored)
 - `.env.local` - Contains various secrets (✅ gitignored)
 - `.env.local.backup` - Backup files (✅ gitignored via `*.backup` pattern)

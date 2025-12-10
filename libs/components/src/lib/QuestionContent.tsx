@@ -606,7 +606,7 @@ export const QuestionContent = ({ content }: { content: string }) => {
   // Polynomial regex patterns can be exploited with malicious input
   const MAX_CONTENT_LENGTH = 100000; // 100KB limit
   if (fixedContent.length > MAX_CONTENT_LENGTH) {
-    console.warn('Content too large for safe processing, truncating');
+    console.warn("Content too large for safe processing, truncating");
     fixedContent = fixedContent.substring(0, MAX_CONTENT_LENGTH);
   }
 
@@ -618,7 +618,7 @@ export const QuestionContent = ({ content }: { content: string }) => {
     /<pr<code[^>]*>[\s\S]{0,50000}?<\/code<\/pr/gi,
     /<code[^>]*>[\s\S]{20,50000}?<\/code>/gi,
   ];
-  
+
   const htmlMatches: Array<{
     index: number;
     content: string;
@@ -633,18 +633,21 @@ export const QuestionContent = ({ content }: { content: string }) => {
     if (iterationCount >= MAX_ITERATIONS) break;
     pattern.lastIndex = 0;
     let htmlMatch: RegExpExecArray | null;
-    
-    while ((htmlMatch = pattern.exec(fixedContent)) !== null && iterationCount < MAX_ITERATIONS) {
+
+    while (
+      (htmlMatch = pattern.exec(fixedContent)) !== null &&
+      iterationCount < MAX_ITERATIONS
+    ) {
       iterationCount++;
       // TypeScript: htmlMatch is guaranteed non-null by while condition
       // Use non-null assertion since we've already checked in the while condition
       const match = htmlMatch!;
       // Skip if we've already processed this index (within 10 chars)
       const isDuplicate = Array.from(processedIndices).some(
-        (idx) => Math.abs(idx - match.index) < 10
+        (idx) => Math.abs(idx - match.index) < 10,
       );
       if (isDuplicate) continue;
-      
+
       processedIndices.add(match.index);
       let matchContent = match[0];
       matchContent = matchContent
@@ -672,7 +675,10 @@ export const QuestionContent = ({ content }: { content: string }) => {
   let malformedIterations = 0;
   const MAX_MALFORMED_ITERATIONS = 100;
 
-  while ((malformedMatch = malformedPattern.exec(fixedContent)) !== null && malformedIterations < MAX_MALFORMED_ITERATIONS) {
+  while (
+    (malformedMatch = malformedPattern.exec(fixedContent)) !== null &&
+    malformedIterations < MAX_MALFORMED_ITERATIONS
+  ) {
     malformedIterations++;
     if (!malformedMatch) break;
     const alreadyCaptured = htmlMatches.some(

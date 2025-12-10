@@ -132,7 +132,9 @@ export default function FrontendTaskEditor({
 
   // Theme detection
   useEffect(() => {
-    const mediaQuery = globalThis.window.matchMedia("(prefers-color-scheme: dark)");
+    const mediaQuery = globalThis.window.matchMedia(
+      "(prefers-color-scheme: dark)",
+    );
     const updateTheme = () => {
       if (theme === "system") {
         setIsDark(mediaQuery.matches);

@@ -1,7 +1,7 @@
 // v1.0 - Learning Paths API Route
 
-import { NextRequest, NextResponse } from 'next/server';
-import UnifiedQuestionService from '@/lib/unified-question-schema';
+import { NextRequest, NextResponse } from "next/server";
+import UnifiedQuestionService from "@/lib/unified-question-schema";
 
 // GET /api/questions/learning-paths - Get all learning paths
 export async function GET(request: NextRequest) {
@@ -14,10 +14,10 @@ export async function GET(request: NextRequest) {
       count: learningPaths.length,
     });
   } catch (error) {
-    console.error('Error fetching learning paths:', error);
+    console.error("Error fetching learning paths:", error);
     return NextResponse.json(
-      { success: false, error: 'Failed to fetch learning paths' },
-      { status: 500 }
+      { success: false, error: "Failed to fetch learning paths" },
+      { status: 500 },
     );
   }
 }
@@ -29,13 +29,13 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json({
       success: true,
-      message: 'Default learning paths initialized successfully',
+      message: "Default learning paths initialized successfully",
     });
   } catch (error) {
-    console.error('Error initializing learning paths:', error);
+    console.error("Error initializing learning paths:", error);
     return NextResponse.json(
-      { success: false, error: 'Failed to initialize learning paths' },
-      { status: 500 }
+      { success: false, error: "Failed to initialize learning paths" },
+      { status: 500 },
     );
   }
 }

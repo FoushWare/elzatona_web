@@ -5,6 +5,7 @@
 ### Before Writing Code
 
 1. **Review Security Reference**
+
    ```bash
    # Read development reference
    cat docs/security/development-reference.md
@@ -23,13 +24,14 @@
    - Write security tests
 
 2. **Run Static Analysis**
+
    ```bash
    # Lint code
    bun run lint
-   
+
    # Type check
    bun run type-check
-   
+
    # SonarQube (optional)
    bun run sonar
    ```
@@ -58,13 +60,13 @@
 
 ## 📋 Security Cycle Summary
 
-| Phase | Activity | Document |
-|-------|----------|----------|
-| **1. Reference** | Review security guidelines | [development-reference.md](development-reference.md) |
-| **2. Threat Modeling** | Identify and mitigate threats | [threat-modeling.md](threat-modeling.md) |
-| **3. Static Analysis** | Scan code for vulnerabilities | [static-analysis.md](static-analysis.md) |
-| **4. Security Testing** | Test security controls | [security-testing.md](security-testing.md) |
-| **5. Configuration** | Configure and assess security | [security-configuration.md](security-configuration.md) |
+| Phase                   | Activity                      | Document                                               |
+| ----------------------- | ----------------------------- | ------------------------------------------------------ |
+| **1. Reference**        | Review security guidelines    | [development-reference.md](development-reference.md)   |
+| **2. Threat Modeling**  | Identify and mitigate threats | [threat-modeling.md](threat-modeling.md)               |
+| **3. Static Analysis**  | Scan code for vulnerabilities | [static-analysis.md](static-analysis.md)               |
+| **4. Security Testing** | Test security controls        | [security-testing.md](security-testing.md)             |
+| **5. Configuration**    | Configure and assess security | [security-configuration.md](security-configuration.md) |
 
 ## 🎯 Most Common Security Tasks
 

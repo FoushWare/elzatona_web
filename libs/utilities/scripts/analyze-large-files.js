@@ -12,31 +12,38 @@ function analyzeFile(filePath) {
   const content = fs.readFileSync(filePath, "utf8");
   const lines = content.split("\n");
   const lineCount = lines.length;
-  
+
   // Count functions/components
-  const functionMatches = content.match(/(?:function|const|export\s+(?:function|const))\s+\w+/g) || [];
-  const componentMatches = content.match(/(?:export\s+)?(?:default\s+)?(?:function|const)\s+\w+[^=]*[=:]\s*(?:React\.)?(?:FC|Component|forwardRef|memo)/g) || [];
-  
+  const functionMatches =
+    content.match(/(?:function|const|export\s+(?:function|const))\s+\w+/g) ||
+    [];
+  const componentMatches =
+    content.match(
+      /(?:export\s+)?(?:default\s+)?(?:function|const)\s+\w+[^=]*[=:]\s*(?:React\.)?(?:FC|Component|forwardRef|memo)/g,
+    ) || [];
+
   // Count imports
   const importMatches = content.match(/^import\s+.*from\s+['"]/gm) || [];
-  
+
   // Count exports
   const exportMatches = content.match(/^export\s+/gm) || [];
-  
+
   // Check for multiple responsibilities (heuristics)
   const hasState = /useState|useReducer|useRef/.test(content);
   const hasEffects = /useEffect|useLayoutEffect/.test(content);
   const hasApiCalls = /fetch|axios|useQuery|useMutation/.test(content);
-  const hasEventHandlers = /onClick|onChange|onSubmit|handle[A-Z]/.test(content);
+  const hasEventHandlers = /onClick|onChange|onSubmit|handle[A-Z]/.test(
+    content,
+  );
   const hasRendering = /return\s*\(|<[A-Z]/.test(content);
-  
+
   const responsibilities = [];
   if (hasState) responsibilities.push("state");
   if (hasEffects) responsibilities.push("effects");
   if (hasApiCalls) responsibilities.push("api");
   if (hasEventHandlers) responsibilities.push("events");
   if (hasRendering) responsibilities.push("rendering");
-  
+
   return {
     path: filePath,
     lineCount,
@@ -46,7 +53,10 @@ function analyzeFile(filePath) {
     exports: exportMatches.length,
     responsibilities: responsibilities.length,
     responsibilityTypes: responsibilities,
-    needsRefactoring: lineCount > 300 || responsibilities.length > 3 || functionMatches.length > 10,
+    needsRefactoring:
+      lineCount > 300 ||
+      responsibilities.length > 3 ||
+      functionMatches.length > 10,
   };
 }
 
@@ -55,10 +65,10 @@ function analyzeFile(filePath) {
  */
 function analyzeDirectory(dir, results = []) {
   const entries = fs.readdirSync(dir, { withFileTypes: true });
-  
+
   for (const entry of entries) {
     const fullPath = path.join(dir, entry.name);
-    
+
     // Skip build/cache directories
     if (
       entry.name.startsWith(".") ||
@@ -71,7 +81,7 @@ function analyzeDirectory(dir, results = []) {
     ) {
       continue;
     }
-    
+
     if (entry.isDirectory()) {
       analyzeDirectory(fullPath, results);
     } else if (entry.isFile()) {
@@ -85,7 +95,7 @@ function analyzeDirectory(dir, results = []) {
         ) {
           continue;
         }
-        
+
         try {
           const analysis = analyzeFile(fullPath);
           results.push(analysis);
@@ -95,7 +105,7 @@ function analyzeDirectory(dir, results = []) {
       }
     }
   }
-  
+
   return results;
 }
 
@@ -104,34 +114,34 @@ function analyzeDirectory(dir, results = []) {
  */
 function generateReport() {
   console.log("🔍 Analyzing files for refactoring opportunities...\n");
-  
+
   const websiteResults = analyzeDirectory(path.join(APPS_DIR, "website"));
   const adminResults = analyzeDirectory(path.join(APPS_DIR, "admin"));
   const libsResults = analyzeDirectory(LIBS_DIR);
-  
+
   const allResults = [...websiteResults, ...adminResults, ...libsResults];
-  
+
   // Sort by line count
   allResults.sort((a, b) => b.lineCount - a.lineCount);
-  
+
   // Filter files that need refactoring
-  const needsRefactoring = allResults.filter(r => r.needsRefactoring);
-  
+  const needsRefactoring = allResults.filter((r) => r.needsRefactoring);
+
   console.log(`📊 Analysis Complete\n`);
   console.log(`Total files analyzed: ${allResults.length}`);
   console.log(`Files needing refactoring: ${needsRefactoring.length}\n`);
-  
+
   console.log("🔴 Top 30 Files Needing Refactoring:\n");
   console.log("Line Count | Functions | Components | Responsibilities | Path");
   console.log("-".repeat(100));
-  
+
   for (const file of needsRefactoring.slice(0, 30)) {
     const relPath = path.relative(ROOT_DIR, file.path);
     console.log(
-      `${String(file.lineCount).padStart(9)} | ${String(file.functions).padStart(9)} | ${String(file.components).padStart(10)} | ${String(file.responsibilities).padStart(14)} | ${relPath}`
+      `${String(file.lineCount).padStart(9)} | ${String(file.functions).padStart(9)} | ${String(file.components).padStart(10)} | ${String(file.responsibilities).padStart(14)} | ${relPath}`,
     );
   }
-  
+
   // Group by directory
   const byDir = {};
   for (const file of needsRefactoring) {
@@ -141,7 +151,7 @@ function generateReport() {
     }
     byDir[dir].push(file);
   }
-  
+
   // Write detailed report
   const reportPath = path.join(ROOT_DIR, "docs/REFACTORING_ANALYSIS.md");
   let report = `# Refactoring Analysis Report
@@ -178,10 +188,9 @@ Generated: ${new Date().toISOString()}
     report += `- **Exports:** ${file.exports}\n`;
     report += `\n`;
   }
-  
+
   fs.writeFileSync(reportPath, report);
   console.log(`\n✅ Detailed report written to: ${reportPath}`);
 }
 
 generateReport();
-

@@ -83,7 +83,7 @@ export const LanguageProvider: React.FC<LanguageProviderProps> = ({
       setLanguage,
       isRTL,
     }),
-    [language, setLanguage, isRTL]
+    [language, setLanguage, isRTL],
   );
 
   return (

@@ -17,16 +17,19 @@ The security cycle is integrated into each development step:
 ## 📋 Quick Links
 
 ### Getting Started
+
 - **[SDL Integration Guide](sdlc-integration.md)** - How to integrate security into SDLC
 - **[Development Reference](development-reference.md)** - Security guidelines for developers
 
 ### Security Practices
+
 - **[Threat Modeling](threat-modeling.md)** - Threat modeling and design review process
 - **[Static Analysis](static-analysis.md)** - Code security scanning
 - **[Security Testing](security-testing.md)** - Security testing strategies
 - **[Security Configuration](security-configuration.md)** - Security configuration and assessment
 
 ### Related Documentation
+
 - **[Main Security Guide](../SECURITY.md)** - General security practices
 - **[Security Pipeline](../COMPLETE_SECURITY_PIPELINE.md)** - Complete security pipeline
 - **[Secret Management](../SECRET_ROTATION_GUIDE.md)** - Secret rotation and management
@@ -92,4 +95,3 @@ If a security issue is discovered:
 - [OWASP ASVS](https://owasp.org/www-project-application-security-verification-standard/)
 - [CWE Top 25](https://cwe.mitre.org/top25/)
 - [NIST Cybersecurity Framework](https://www.nist.gov/cyberframework)
-

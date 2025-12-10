@@ -18,11 +18,13 @@ The project uses GitHub Actions for CI/CD with the following workflows:
 **Purpose:** Automated security vulnerability scanning
 
 **Triggers:**
+
 - Push to main/master branches
 - Pull requests
 - Manual trigger
 
 **Actions:**
+
 - Analyzes code for security vulnerabilities
 - Creates alerts in GitHub Security tab
 - Generates reports
@@ -34,17 +36,20 @@ The project uses GitHub Actions for CI/CD with the following workflows:
 **Purpose:** Code quality and security analysis
 
 **Triggers:**
+
 - Push to main/master branches
 - Pull requests
 - Manual trigger
 
 **Actions:**
+
 - Runs SonarQube analysis
 - Checks code quality metrics
 - Identifies code smells and bugs
 - Generates quality reports
 
 **Requirements:**
+
 - `SONAR_TOKEN` secret in GitHub
 - SonarCloud project configured
 
@@ -55,10 +60,12 @@ The project uses GitHub Actions for CI/CD with the following workflows:
 **Purpose:** Automatically resolve secret scanning alerts
 
 **Triggers:**
+
 - Scheduled (daily)
 - Manual trigger
 
 **Actions:**
+
 - Marks resolved alerts as fixed
 - Does NOT fix code (use fix-and-resolve-secrets for that)
 
@@ -69,10 +76,12 @@ The project uses GitHub Actions for CI/CD with the following workflows:
 **Purpose:** Automatically fix and resolve secret scanning alerts
 
 **Triggers:**
+
 - Scheduled (weekly)
 - Manual trigger
 
 **Actions:**
+
 - Finds files with secrets
 - Fixes code (replaces with `process.env`)
 - Creates PR with fixes
@@ -85,6 +94,7 @@ The project uses GitHub Actions for CI/CD with the following workflows:
 **Hook:** `.git/hooks/pre-commit`
 
 **Actions:**
+
 - Formatting (Prettier)
 - Basic linting
 
@@ -95,6 +105,7 @@ The project uses GitHub Actions for CI/CD with the following workflows:
 **Hook:** `.git/hooks/pre-push`
 
 **Actions:**
+
 - Linting (ESLint)
 - Type checking (TypeScript)
 - Build validation
@@ -103,6 +114,7 @@ The project uses GitHub Actions for CI/CD with the following workflows:
 **Time:** ~2-5 minutes
 
 **Blocks push if:**
+
 - Type errors
 - Build failures
 - **Secrets found**
@@ -112,6 +124,7 @@ The project uses GitHub Actions for CI/CD with the following workflows:
 **Triggers:** Push, PR, Manual
 
 **Actions:**
+
 - CodeQL analysis
 - SonarCloud analysis
 - Secret scanning
@@ -122,10 +135,12 @@ The project uses GitHub Actions for CI/CD with the following workflows:
 **Platform:** Vercel
 
 **Triggers:**
+
 - Push to main/master
 - PR previews
 
 **Actions:**
+
 - Build application
 - Deploy to Vercel
 - Run post-deployment checks
@@ -176,4 +191,3 @@ See [docs/SECURITY.md](../SECURITY.md) for complete security pipeline details.
 3. **Review CI results** - Check GitHub Actions after push
 4. **Monitor security alerts** - Review GitHub Security tab regularly
 5. **Keep secrets secure** - Never commit secrets
-

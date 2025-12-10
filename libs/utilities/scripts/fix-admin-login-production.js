@@ -20,7 +20,8 @@ require("dotenv").config({ path: ".env.local" });
 // Production Supabase credentials
 // ⚠️ WARNING: Never hardcode API keys. Always use environment variables.
 // ⚠️ This script should read from environment variables or prompt the user
-const PRODUCTION_SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL || process.env.SUPABASE_URL;
+const PRODUCTION_SUPABASE_URL =
+  process.env.NEXT_PUBLIC_SUPABASE_URL || process.env.SUPABASE_URL;
 const PRODUCTION_SERVICE_ROLE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
 if (!PRODUCTION_SUPABASE_URL || !PRODUCTION_SERVICE_ROLE_KEY) {
@@ -264,7 +265,10 @@ async function fixAdminLogin() {
     console.log(`   Email: ${ADMIN_EMAIL}`);
     // ⚠️ SECURITY: Never log passwords in production
     // Only show password in development/test environments
-    if (process.env.NODE_ENV !== 'production' && (process.env.APP_ENV === 'test' || process.env.APP_ENV === 'development')) {
+    if (
+      process.env.NODE_ENV !== "production" &&
+      (process.env.APP_ENV === "test" || process.env.APP_ENV === "development")
+    ) {
       console.log(`   Password: ${ADMIN_PASSWORD}\n`);
     } else {
       console.log(`   Password: [REDACTED - Check .env.local]\n`);

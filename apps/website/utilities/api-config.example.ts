@@ -12,7 +12,7 @@ import {
   getSupabaseConfig,
   getFetchConfig,
   logApiConfig,
-} from '@/lib/utils/api-config';
+} from "@/lib/utils/api-config";
 
 // ============================================================================
 // EXAMPLE 1: Basic API Route with Environment Detection

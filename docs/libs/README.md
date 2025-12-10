@@ -13,8 +13,9 @@ Shared React components library.
 **Location:** `libs/components/`
 
 **Usage:**
+
 ```typescript
-import { Button, Card, Modal } from '@elzatona/components'
+import { Button, Card, Modal } from "@elzatona/components";
 ```
 
 **Documentation:** [Components Guide](./components.md)
@@ -26,8 +27,9 @@ Shared React hooks library.
 **Location:** `libs/hooks/`
 
 **Usage:**
+
 ```typescript
-import { useCards, usePlans, useQuestions } from '@elzatona/hooks'
+import { useCards, usePlans, useQuestions } from "@elzatona/hooks";
 ```
 
 **Documentation:** [Hooks Guide](./hooks.md)
@@ -39,8 +41,9 @@ Shared TypeScript types library.
 **Location:** `libs/types/`
 
 **Usage:**
+
 ```typescript
-import { LearningCard, UnifiedQuestion } from '@elzatona/types'
+import { LearningCard, UnifiedQuestion } from "@elzatona/types";
 ```
 
 **Documentation:** [Types Guide](./types.md)
@@ -52,8 +55,9 @@ Shared React contexts library.
 **Location:** `libs/contexts/`
 
 **Usage:**
+
 ```typescript
-import { AuthProvider, ThemeProvider } from '@elzatona/contexts'
+import { AuthProvider, ThemeProvider } from "@elzatona/contexts";
 ```
 
 **Documentation:** [Contexts Guide](./contexts.md)
@@ -65,8 +69,9 @@ Shared utilities and scripts library.
 **Location:** `libs/utilities/`
 
 **Usage:**
+
 ```typescript
-import { formatDate, validateEmail } from '@elzatona/utilities'
+import { formatDate, validateEmail } from "@elzatona/utilities";
 ```
 
 **Scripts:** `libs/utilities/scripts/`
@@ -80,8 +85,9 @@ UI component library.
 **Location:** `libs/ui/`
 
 **Usage:**
+
 ```typescript
-import { Button, Input } from '@elzatona/ui'
+import { Button, Input } from "@elzatona/ui";
 ```
 
 ### @elzatona/auth
@@ -91,8 +97,9 @@ Authentication utilities.
 **Location:** `libs/auth/`
 
 **Usage:**
+
 ```typescript
-import { authenticate, authorize } from '@elzatona/auth'
+import { authenticate, authorize } from "@elzatona/auth";
 ```
 
 ### @elzatona/database
@@ -102,8 +109,9 @@ Database utilities.
 **Location:** `libs/database/`
 
 **Usage:**
+
 ```typescript
-import { query, mutate } from '@elzatona/database'
+import { query, mutate } from "@elzatona/database";
 ```
 
 ## Development
@@ -125,4 +133,3 @@ bun run test:database
 - [Types](./types.md)
 - [Contexts](./contexts.md)
 - [Utilities](./utilities.md)
-

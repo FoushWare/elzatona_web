@@ -1,11 +1,11 @@
 #!/usr/bin/env node
 
-import { createClient } from '@supabase/supabase-js';
+import { createClient } from "@supabase/supabase-js";
 
-console.log('🛡️ Creating Admins Table via SQL\n');
+console.log("🛡️ Creating Admins Table via SQL\n");
 
 // Supabase configuration
-const supabaseUrl = 'https://hpnewqkvpnthpohvxcmq.supabase.co';
+const supabaseUrl = "https://hpnewqkvpnthpohvxcmq.supabase.co";
 const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
 // Create Supabase client with service role key for admin operations
@@ -13,7 +13,7 @@ const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
 
 async function createAdminsTable() {
   try {
-    console.log('🔄 Creating admins table using SQL...');
+    console.log("🔄 Creating admins table using SQL...");
 
     // SQL to create the admins table
     const createTableSQL = `
@@ -42,18 +42,18 @@ async function createAdminsTable() {
     `;
 
     // Try to execute the SQL using the Supabase client
-    const { error } = await supabase.rpc('exec', { sql: createTableSQL });
+    const { error } = await supabase.rpc("exec", { sql: createTableSQL });
 
     if (error) {
       console.log(
-        '⚠️  Direct SQL execution failed, trying alternative approach...'
+        "⚠️  Direct SQL execution failed, trying alternative approach...",
       );
 
       // Try using the REST API directly
       const response = await fetch(`${supabaseUrl}/rest/v1/rpc/exec`, {
-        method: 'POST',
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
           Authorization: `Bearer ${supabaseServiceRoleKey}`,
           apikey: supabaseServiceRoleKey,
         },
@@ -61,39 +61,39 @@ async function createAdminsTable() {
       });
 
       if (!response.ok) {
-        console.log('⚠️  REST API approach also failed');
+        console.log("⚠️  REST API approach also failed");
         console.log(
-          '📝 Please create the admins table manually in your Supabase dashboard:'
+          "📝 Please create the admins table manually in your Supabase dashboard:",
         );
-        console.log('   1. Go to your Supabase project dashboard');
-        console.log('   2. Navigate to SQL Editor');
-        console.log('   3. Run this SQL:');
+        console.log("   1. Go to your Supabase project dashboard");
+        console.log("   2. Navigate to SQL Editor");
+        console.log("   3. Run this SQL:");
         console.log(createTableSQL);
         console.log(
-          '\n   Then run this script again to create the admin user.'
+          "\n   Then run this script again to create the admin user.",
         );
         return;
       }
 
-      console.log('✅ Table created via REST API');
+      console.log("✅ Table created via REST API");
     } else {
-      console.log('✅ Table created successfully');
+      console.log("✅ Table created successfully");
     }
 
     // Now create the admin user
-    console.log('🔄 Creating admin user...');
+    console.log("🔄 Creating admin user...");
 
-    const adminEmail = process.env.INITIAL_ADMIN_EMAIL || 'admin@elzatona.com';
+    const adminEmail = process.env.INITIAL_ADMIN_EMAIL || "admin@elzatona.com";
     const adminPassword = process.env.INITIAL_ADMIN_PASSWORD;
-    const adminName = 'Super Admin';
-    const adminRole = 'super_admin';
+    const adminName = "Super Admin";
+    const adminRole = "super_admin";
 
     if (!adminPassword) {
       console.error(
-        '❌ Missing INITIAL_ADMIN_PASSWORD in environment variables'
+        "❌ Missing INITIAL_ADMIN_PASSWORD in environment variables",
       );
       console.error(
-        'Please set INITIAL_ADMIN_PASSWORD in your .env.local file'
+        "Please set INITIAL_ADMIN_PASSWORD in your .env.local file",
       );
       return;
     }
@@ -103,30 +103,30 @@ async function createAdminsTable() {
       await supabase.auth.admin.listUsers();
 
     if (listError) {
-      console.error('❌ Error listing users:', listError.message);
+      console.error("❌ Error listing users:", listError.message);
       return;
     }
 
-    const user = users.users.find(u => u.email === adminEmail);
+    const user = users.users.find((u) => u.email === adminEmail);
     if (!user) {
-      console.error('❌ Could not find existing user');
+      console.error("❌ Could not find existing user");
       return;
     }
 
-    console.log('✅ Found existing auth user:', user.id);
+    console.log("✅ Found existing auth user:", user.id);
 
     // Check if admin record already exists
     const { data: existingAdmin, error: checkError } = await supabase
-      .from('admins')
-      .select('*')
-      .eq('email', adminEmail)
+      .from("admins")
+      .select("*")
+      .eq("email", adminEmail)
       .single();
 
     if (existingAdmin) {
-      console.log('✅ Admin record already exists');
+      console.log("✅ Admin record already exists");
     } else {
       // Create admin record
-      const { error: insertError } = await supabase.from('admins').insert({
+      const { error: insertError } = await supabase.from("admins").insert({
         id: user.id,
         email: adminEmail,
         name: adminName,
@@ -134,20 +134,20 @@ async function createAdminsTable() {
       });
 
       if (insertError) {
-        console.error('❌ Error creating admin record:', insertError.message);
+        console.error("❌ Error creating admin record:", insertError.message);
         return;
       }
 
-      console.log('✅ Admin record created successfully');
+      console.log("✅ Admin record created successfully");
     }
 
-    console.log('\n🎯 Admin setup complete!');
-    console.log('You can now login at:');
-    console.log('   URL: http://localhost:3001/admin/login');
+    console.log("\n🎯 Admin setup complete!");
+    console.log("You can now login at:");
+    console.log("   URL: http://localhost:3001/admin/login");
     console.log(`   Email: ${adminEmail}`);
     console.log(`   Password: ${adminPassword}\n`);
   } catch (error) {
-    console.error('❌ Error setting up admin:', error.message);
+    console.error("❌ Error setting up admin:", error.message);
   }
 }
 

@@ -227,4 +227,3 @@ export const CategoriesList: React.FC<CategoriesListProps> = ({
     </Suspense>
   );
 };
-

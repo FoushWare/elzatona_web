@@ -23,11 +23,7 @@ import {
 } from "lucide-react";
 import { useUserType, useAuth } from "@elzatona/contexts";
 import { QuestionContent as SharedQuestionContent } from "@elzatona/components";
-import {
-  addFlashcard,
-  isInFlashcards,
-  FlashcardItem,
-} from '@/lib/flashcards';
+import { addFlashcard, isInFlashcards, FlashcardItem } from "@/lib/flashcards";
 
 interface Question {
   id: string;

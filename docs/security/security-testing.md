@@ -11,6 +11,7 @@ Security testing ensures that security controls work as intended and that vulner
 **Purpose:** Test security controls at the unit level
 
 **Focus Areas:**
+
 - Input validation
 - Authentication logic
 - Authorization checks
@@ -18,14 +19,15 @@ Security testing ensures that security controls work as intended and that vulner
 - Error handling
 
 **Example:**
+
 ```typescript
 // Input validation test
-describe('validateEmail', () => {
-  it('should reject SQL injection attempts', () => {
+describe("validateEmail", () => {
+  it("should reject SQL injection attempts", () => {
     expect(validateEmail("'; DROP TABLE users; --")).toBe(false);
   });
-  
-  it('should reject XSS attempts', () => {
+
+  it("should reject XSS attempts", () => {
     expect(validateEmail('<script>alert("xss")</script>')).toBe(false);
   });
 });
@@ -36,6 +38,7 @@ describe('validateEmail', () => {
 **Purpose:** Test security controls across components
 
 **Focus Areas:**
+
 - API security
 - Authentication flows
 - Authorization flows
@@ -43,22 +46,23 @@ describe('validateEmail', () => {
 - Session management
 
 **Example:**
+
 ```typescript
 // API authorization test
-describe('DELETE /api/users/:id', () => {
-  it('should reject unauthorized requests', async () => {
-    const response = await fetch('/api/users/123', {
-      method: 'DELETE',
-      headers: { 'Authorization': 'Bearer invalid-token' }
+describe("DELETE /api/users/:id", () => {
+  it("should reject unauthorized requests", async () => {
+    const response = await fetch("/api/users/123", {
+      method: "DELETE",
+      headers: { Authorization: "Bearer invalid-token" },
     });
     expect(response.status).toBe(401);
   });
-  
-  it('should allow admin users', async () => {
+
+  it("should allow admin users", async () => {
     const token = await getAdminToken();
-    const response = await fetch('/api/users/123', {
-      method: 'DELETE',
-      headers: { 'Authorization': `Bearer ${token}` }
+    const response = await fetch("/api/users/123", {
+      method: "DELETE",
+      headers: { Authorization: `Bearer ${token}` },
     });
     expect(response.status).toBe(200);
   });
@@ -70,6 +74,7 @@ describe('DELETE /api/users/:id', () => {
 **Purpose:** Test security from user perspective
 
 **Focus Areas:**
+
 - Authentication flows
 - Authorization in UI
 - Data protection
@@ -77,12 +82,13 @@ describe('DELETE /api/users/:id', () => {
 - Error handling
 
 **Example:**
+
 ```typescript
 // E2E authentication test
-test('user cannot access admin panel without admin role', async ({ page }) => {
-  await page.goto('/admin');
-  await expect(page).toHaveURL('/login');
-  await expect(page.locator('text=Unauthorized')).toBeVisible();
+test("user cannot access admin panel without admin role", async ({ page }) => {
+  await page.goto("/admin");
+  await expect(page).toHaveURL("/login");
+  await expect(page.locator("text=Unauthorized")).toBeVisible();
 });
 ```
 
@@ -91,6 +97,7 @@ test('user cannot access admin panel without admin role', async ({ page }) => {
 **Purpose:** Simulate real-world attacks
 
 **Focus Areas:**
+
 - Authentication bypass
 - Authorization bypass
 - Injection attacks
@@ -98,6 +105,7 @@ test('user cannot access admin panel without admin role', async ({ page }) => {
 - CSRF attacks
 
 **Tools:**
+
 - OWASP ZAP
 - Burp Suite
 - Postman (for API testing)
@@ -107,6 +115,7 @@ test('user cannot access admin panel without admin role', async ({ page }) => {
 **Purpose:** Automated vulnerability detection
 
 **Tools:**
+
 - npm audit (dependency vulnerabilities)
 - Snyk (dependency and code scanning)
 - OWASP Dependency-Check
@@ -116,6 +125,7 @@ test('user cannot access admin panel without admin role', async ({ page }) => {
 ### Authentication Testing
 
 **Test Cases:**
+
 - [ ] Valid credentials accepted
 - [ ] Invalid credentials rejected
 - [ ] Password requirements enforced
@@ -125,13 +135,14 @@ test('user cannot access admin panel without admin role', async ({ page }) => {
 - [ ] MFA works (if implemented)
 
 **Example:**
+
 ```typescript
-describe('Authentication', () => {
-  it('should lock account after 5 failed attempts', async () => {
+describe("Authentication", () => {
+  it("should lock account after 5 failed attempts", async () => {
     for (let i = 0; i < 5; i++) {
-      await login('user@example.com', 'wrong-password');
+      await login("user@example.com", "wrong-password");
     }
-    const response = await login('user@example.com', 'correct-password');
+    const response = await login("user@example.com", "correct-password");
     expect(response.status).toBe(429); // Too Many Requests
   });
 });
@@ -140,6 +151,7 @@ describe('Authentication', () => {
 ### Authorization Testing
 
 **Test Cases:**
+
 - [ ] Unauthorized users cannot access protected resources
 - [ ] Users cannot access other users' data
 - [ ] Admin-only endpoints protected
@@ -147,12 +159,13 @@ describe('Authentication', () => {
 - [ ] Permission checks in place
 
 **Example:**
+
 ```typescript
-describe('Authorization', () => {
-  it('should prevent users from accessing other users data', async () => {
-    const user1Token = await getUserToken('user1');
-    const response = await fetch('/api/users/user2/data', {
-      headers: { 'Authorization': `Bearer ${user1Token}` }
+describe("Authorization", () => {
+  it("should prevent users from accessing other users data", async () => {
+    const user1Token = await getUserToken("user1");
+    const response = await fetch("/api/users/user2/data", {
+      headers: { Authorization: `Bearer ${user1Token}` },
     });
     expect(response.status).toBe(403);
   });
@@ -162,6 +175,7 @@ describe('Authorization', () => {
 ### Input Validation Testing
 
 **Test Cases:**
+
 - [ ] SQL injection prevented
 - [ ] XSS prevented
 - [ ] Command injection prevented
@@ -170,20 +184,21 @@ describe('Authorization', () => {
 - [ ] Type validation works
 
 **Example:**
+
 ```typescript
-describe('Input Validation', () => {
+describe("Input Validation", () => {
   const sqlInjectionPayloads = [
     "'; DROP TABLE users; --",
     "' OR '1'='1",
     "admin'--",
-    "' UNION SELECT * FROM users--"
+    "' UNION SELECT * FROM users--",
   ];
-  
-  sqlInjectionPayloads.forEach(payload => {
+
+  sqlInjectionPayloads.forEach((payload) => {
     it(`should reject SQL injection: ${payload}`, async () => {
-      const response = await fetch('/api/search', {
-        method: 'POST',
-        body: JSON.stringify({ query: payload })
+      const response = await fetch("/api/search", {
+        method: "POST",
+        body: JSON.stringify({ query: payload }),
       });
       expect(response.status).toBe(400);
     });
@@ -194,6 +209,7 @@ describe('Input Validation', () => {
 ### Data Protection Testing
 
 **Test Cases:**
+
 - [ ] Sensitive data encrypted
 - [ ] Passwords hashed
 - [ ] PII protected
@@ -201,17 +217,18 @@ describe('Input Validation', () => {
 - [ ] Secrets not exposed in logs
 
 **Example:**
+
 ```typescript
-describe('Data Protection', () => {
-  it('should not expose passwords in API responses', async () => {
-    const response = await fetch('/api/users/me');
+describe("Data Protection", () => {
+  it("should not expose passwords in API responses", async () => {
+    const response = await fetch("/api/users/me");
     const data = await response.json();
-    expect(data).not.toHaveProperty('password');
-    expect(data).not.toHaveProperty('passwordHash');
+    expect(data).not.toHaveProperty("password");
+    expect(data).not.toHaveProperty("passwordHash");
   });
-  
-  it('should hash passwords before storage', async () => {
-    const password = 'myPassword123';
+
+  it("should hash passwords before storage", async () => {
+    const password = "myPassword123";
     const hashed = await hashPassword(password);
     expect(hashed).not.toBe(password);
     expect(hashed.length).toBeGreaterThan(50); // Bcrypt hash length
@@ -222,6 +239,7 @@ describe('Data Protection', () => {
 ### Session Management Testing
 
 **Test Cases:**
+
 - [ ] Sessions expire correctly
 - [ ] Session tokens secure
 - [ ] Logout invalidates session
@@ -229,13 +247,14 @@ describe('Data Protection', () => {
 - [ ] Session fixation prevented
 
 **Example:**
+
 ```typescript
-describe('Session Management', () => {
-  it('should invalidate session on logout', async () => {
-    const token = await login('user@example.com', 'password');
+describe("Session Management", () => {
+  it("should invalidate session on logout", async () => {
+    const token = await login("user@example.com", "password");
     await logout(token);
-    const response = await fetch('/api/protected', {
-      headers: { 'Authorization': `Bearer ${token}` }
+    const response = await fetch("/api/protected", {
+      headers: { Authorization: `Bearer ${token}` },
     });
     expect(response.status).toBe(401);
   });
@@ -249,6 +268,7 @@ describe('Session Management', () => {
 **Configuration:** `jest.config.js`
 
 **Usage:**
+
 ```bash
 # Run all tests
 bun run test
@@ -265,6 +285,7 @@ bun run test:integration
 **Configuration:** `playwright.config.ts`
 
 **Usage:**
+
 ```bash
 # Run E2E tests
 bun run test:e2e
@@ -276,6 +297,7 @@ bun run test:e2e --ui
 ### 3. OWASP ZAP (Penetration Testing)
 
 **Usage:**
+
 ```bash
 # Install OWASP ZAP
 # Run automated scan
@@ -285,6 +307,7 @@ zap-cli quick-scan --self-contained http://localhost:3000
 ### 4. npm audit (Dependency Scanning)
 
 **Usage:**
+
 ```bash
 # Check vulnerabilities
 npm audit
@@ -324,16 +347,16 @@ Write tests alongside feature development:
 
 ```typescript
 // Feature: User registration
-describe('User Registration Security', () => {
-  it('should validate email format', () => {
+describe("User Registration Security", () => {
+  it("should validate email format", () => {
     // Test input validation
   });
-  
-  it('should hash passwords', () => {
+
+  it("should hash passwords", () => {
     // Test password security
   });
-  
-  it('should prevent duplicate emails', () => {
+
+  it("should prevent duplicate emails", () => {
     // Test business logic security
   });
 });
@@ -387,8 +410,9 @@ open coverage/lcov-report/index.html
 ### Common Attack Scenarios
 
 1. **SQL Injection**
+
    ```typescript
-   test('should prevent SQL injection', async () => {
+   test("should prevent SQL injection", async () => {
      const payload = "'; DROP TABLE users; --";
      const response = await api.search(payload);
      expect(response.status).toBe(400);
@@ -396,19 +420,21 @@ open coverage/lcov-report/index.html
    ```
 
 2. **XSS Attack**
+
    ```typescript
-   test('should prevent XSS', async () => {
+   test("should prevent XSS", async () => {
      const payload = '<script>alert("xss")</script>';
      const response = await api.createComment(payload);
      // Verify script is escaped in response
-     expect(response.body).not.toContain('<script>');
+     expect(response.body).not.toContain("<script>");
    });
    ```
 
 3. **CSRF Attack**
+
    ```typescript
-   test('should prevent CSRF', async () => {
-     const response = await api.deleteUser('123', {
+   test("should prevent CSRF", async () => {
+     const response = await api.deleteUser("123", {
        // Missing CSRF token
      });
      expect(response.status).toBe(403);
@@ -416,8 +442,9 @@ open coverage/lcov-report/index.html
    ```
 
 4. **Authentication Bypass**
+
    ```typescript
-   test('should require authentication', async () => {
+   test("should require authentication", async () => {
      const response = await api.getProtectedData();
      expect(response.status).toBe(401);
    });
@@ -425,10 +452,10 @@ open coverage/lcov-report/index.html
 
 5. **Authorization Bypass**
    ```typescript
-   test('should enforce authorization', async () => {
-     const userToken = await getUserToken('regular-user');
-     const response = await api.deleteUser('123', {
-       headers: { 'Authorization': `Bearer ${userToken}` }
+   test("should enforce authorization", async () => {
+     const userToken = await getUserToken("regular-user");
+     const response = await api.deleteUser("123", {
+       headers: { Authorization: `Bearer ${userToken}` },
      });
      expect(response.status).toBe(403);
    });
@@ -463,4 +490,3 @@ Track these metrics:
 - [OWASP API Security](https://owasp.org/www-project-api-security/)
 - [OWASP Top 10](https://owasp.org/www-project-top-ten/)
 - [Security Testing Tools](https://owasp.org/www-community/Vulnerability_Scanning_Tools)
-

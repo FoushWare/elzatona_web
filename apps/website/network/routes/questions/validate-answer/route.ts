@@ -1,10 +1,10 @@
 // v1.0 - API endpoint for AI validation of open-ended questions
 
-import { NextRequest, NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from "next/server";
 import {
   AIValidationService,
   ValidationRequest,
-} from '@/lib/ai-validation-service';
+} from "@/lib/ai-validation-service";
 
 export async function POST(request: NextRequest) {
   try {
@@ -20,8 +20,8 @@ export async function POST(request: NextRequest) {
     // Validate required fields
     if (!question || !userAnswer) {
       return NextResponse.json(
-        { error: 'Question and userAnswer are required' },
-        { status: 400 }
+        { error: "Question and userAnswer are required" },
+        { status: 400 },
       );
     }
 
@@ -41,13 +41,13 @@ export async function POST(request: NextRequest) {
       result,
     });
   } catch (error) {
-    console.error('Validation API error:', error);
+    console.error("Validation API error:", error);
     return NextResponse.json(
       {
-        error: 'Failed to validate answer',
-        details: error instanceof Error ? error.message : 'Unknown error',
+        error: "Failed to validate answer",
+        details: error instanceof Error ? error.message : "Unknown error",
       },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
