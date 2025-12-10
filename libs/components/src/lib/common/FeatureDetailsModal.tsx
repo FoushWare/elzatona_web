@@ -483,7 +483,11 @@ export default function FeatureDetailsModal({
               {feature.githubUrl && (
                 <Button
                   variant="outline"
-                  onClick={() => window.open(feature.githubUrl!, "_blank")}
+                  onClick={() => {
+                    if (feature.githubUrl) {
+                      globalThis.window.open(feature.githubUrl, "_blank");
+                    }
+                  }}
                   className="flex items-center gap-2"
                 >
                   <Github className="w-4 h-4" />

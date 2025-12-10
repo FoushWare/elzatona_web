@@ -569,7 +569,7 @@ const api = {
     const params = new URLSearchParams();
     if (regenerate) params.append("regenerate", "true");
     return api.fetch<{ success: boolean; analytics: any }>(
-      `/api/analytics/user/${userId}?${params}`,
+      `/api/analytics/user/${userId}?${params.toString()}`,
     );
   },
   getUserInsights: (userId: string) =>
