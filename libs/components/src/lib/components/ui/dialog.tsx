@@ -15,6 +15,14 @@ const Dialog = React.forwardRef<
       <div
         className="fixed inset-0 bg-black/50"
         onClick={() => onOpenChange?.(false)}
+        onKeyDown={(e) => {
+          if (e.key === "Escape") {
+            onOpenChange?.(false);
+          }
+        }}
+        role="button"
+        tabIndex={0}
+        aria-label="Close dialog"
       />
       <div
         ref={ref}

@@ -365,9 +365,6 @@ export default function TopicManager() {
   };
 
   const handleDeleteCategory = async (categoryId: string) => {
-    // Find the category to get its name for logging
-    const category = categories.find((c) => c.id === categoryId);
-
     if (
       !confirm(
         "Are you sure you want to delete this category? This will also delete all topics in this category. This action cannot be undone.",
@@ -375,6 +372,8 @@ export default function TopicManager() {
     ) {
       return;
     }
+    // Find the category to get its name for logging
+    const category = categories.find((c) => c.id === categoryId);
 
     try {
       const response = await fetch(`/api/categories/${categoryId}`, {

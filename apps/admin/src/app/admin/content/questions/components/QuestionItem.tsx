@@ -97,13 +97,15 @@ export const QuestionItem: React.FC<QuestionItemProps> = ({
             {/* Difficulty Badge */}
             {question.difficulty && (
               <Badge
-                variant={
-                  question.difficulty === "beginner"
-                    ? "default"
-                    : question.difficulty === "intermediate"
-                      ? "outline"
-                      : "destructive"
-                }
+                variant={(() => {
+                  if (question.difficulty === "beginner") {
+                    return "default";
+                  }
+                  if (question.difficulty === "intermediate") {
+                    return "outline";
+                  }
+                  return "destructive";
+                })()}
               >
                 {question.difficulty}
               </Badge>

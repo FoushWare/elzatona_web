@@ -268,13 +268,15 @@ export const QuestionPracticeView: React.FC<QuestionPracticeViewProps> = ({
               >
                 <div className="flex items-center space-x-4 sm:space-x-5">
                   <div
-                    className={`w-10 h-10 sm:w-12 sm:h-12 rounded-xl flex items-center justify-center text-base sm:text-lg font-bold shadow-md transition-all duration-300 flex-shrink-0 ${
-                      isCorrect
-                        ? "bg-gradient-to-br from-green-500 to-emerald-600 text-white shadow-green-500/50"
-                        : isWrong
-                          ? "bg-gradient-to-br from-red-500 to-rose-600 text-white shadow-red-500/50"
-                          : "bg-gradient-to-br from-indigo-100 to-purple-100 dark:from-indigo-800/60 dark:to-purple-800/60 text-indigo-700 dark:text-indigo-200"
-                    }`}
+                    className={(() => {
+                      if (isCorrect) {
+                        return "w-10 h-10 sm:w-12 sm:h-12 rounded-xl flex items-center justify-center text-base sm:text-lg font-bold shadow-md transition-all duration-300 flex-shrink-0 bg-gradient-to-br from-green-500 to-emerald-600 text-white shadow-green-500/50";
+                      }
+                      if (isWrong) {
+                        return "w-10 h-10 sm:w-12 sm:h-12 rounded-xl flex items-center justify-center text-base sm:text-lg font-bold shadow-md transition-all duration-300 flex-shrink-0 bg-gradient-to-br from-red-500 to-rose-600 text-white shadow-red-500/50";
+                      }
+                      return "w-10 h-10 sm:w-12 sm:h-12 rounded-xl flex items-center justify-center text-base sm:text-lg font-bold shadow-md transition-all duration-300 flex-shrink-0 bg-gradient-to-br from-indigo-100 to-purple-100 dark:from-indigo-800/60 dark:to-purple-800/60 text-indigo-700 dark:text-indigo-200";
+                    })()}
                   >
                     {optionLetter}
                   </div>
