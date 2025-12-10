@@ -86,7 +86,7 @@ export function useSecureProgress(): UseSecureProgressReturn {
         const progressData: ProgressData = {
           ...data,
           userId: user.uid,
-          sessionId: `session_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+          sessionId: `session_${Date.now()}_${Math.random().toString(36).substring(2, 11)}`,
         };
 
         // Save to server
@@ -140,7 +140,7 @@ export function useSecureProgress(): UseSecureProgressReturn {
                 });
 
                 if (retryResponse.ok) {
-                  const retryResult = await retryResponse.json();
+                  await retryResponse.json();
                   console.log("✅ Progress saved successfully after retry");
 
                   // Update local cache

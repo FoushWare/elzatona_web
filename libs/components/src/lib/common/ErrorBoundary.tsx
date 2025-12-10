@@ -72,7 +72,7 @@ export class ErrorBoundary extends Component<Props, State> {
       console.error("Error info:", errorInfo);
 
       // Generate a simple error ID
-      const errorId = `error_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+      const errorId = `error_${Date.now()}_${Math.random().toString(36).substring(2, 11)}`;
       this.setState({ errorId });
     } catch (logError) {
       console.error("Failed to log error:", logError);

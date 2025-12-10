@@ -24,10 +24,10 @@ import {
   DialogHeader,
   DialogTitle,
   DialogDescription,
+  Button,
+  Input,
+  Label,
 } from "@elzatona/components";
-import { Button } from "@elzatona/components";
-import { Input } from "@elzatona/components";
-import { Label } from "@elzatona/components";
 import { Loader2, Mail, Github, BookOpen, Eye, EyeOff } from "lucide-react";
 
 interface SignInPopupProps {

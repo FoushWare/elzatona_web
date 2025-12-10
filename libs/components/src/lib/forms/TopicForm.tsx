@@ -121,7 +121,7 @@ export const TopicForm: React.FC<TopicFormProps> = ({
           if (!topicData.name || !topicData.name.trim()) {
             topicErrors.push(`Topic ${index + 1}: name is required`);
           }
-          if (!topicData.description || !topicData.description.trim()) {
+          if (!topicData.description?.trim()) {
             topicErrors.push(`Topic ${index + 1}: description is required`);
           }
           if (!topicData.categoryId) {

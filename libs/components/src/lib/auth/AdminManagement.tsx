@@ -151,10 +151,14 @@ export default function AdminManagement({ currentUser }: AdminManagementProps) {
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+              <label
+                htmlFor="admin-email"
+                className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
+              >
                 Email
               </label>
               <input
+                id="admin-email"
                 type="email"
                 value={newAdmin.email}
                 onChange={(e) =>

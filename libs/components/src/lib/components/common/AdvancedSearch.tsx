@@ -75,7 +75,7 @@ export function AdvancedSearch({
   pageSize = 10,
   onPageChange,
   onPageSizeChange,
-}: AdvancedSearchProps) {
+}: Readonly<AdvancedSearchProps>) {
   // URL state management with nuqs
   const [query, setQuery] = useQueryState("q", parseAsString.withDefault(""));
   const [category, setCategory] = useQueryState(

@@ -208,9 +208,9 @@ export function BulkUploadForm({
                   allSpans.forEach((el) => {
                     const style =
                       (el as HTMLElement).getAttribute("style") || "";
-                    const colorMatch = style.match(
-                      /color:\s*(#[0-9a-fA-F]{6}|rgb\([^)]+\))/i,
-                    );
+                    const colorRegex =
+                      /color:\s*(#[0-9a-fA-F]{6}|rgb\([^)]+\))/i;
+                    const colorMatch = colorRegex.exec(style);
 
                     if (colorMatch) {
                       const colorValue = colorMatch[1];
@@ -311,7 +311,7 @@ export function BulkUploadForm({
               /<span class="line">[\s\u00A0\u200B]*<\/span>/g,
               "",
             );
-            html = html.replace(
+            html = html.replaceAll(
               /<span[^>]*class="[^"]*line[^"]*">[\s\u00A0\u200B]*<\/span>/g,
               "",
             );
@@ -577,7 +577,10 @@ export function BulkUploadForm({
             Switch to JSON mode to paste questions directly as JSON
           </span>
         </div>
-        <label className="inline-flex items-center cursor-pointer">
+        <label
+          htmlFor="json-mode"
+          className="inline-flex items-center cursor-pointer"
+        >
           <input
             type="checkbox"
             id="json-mode"

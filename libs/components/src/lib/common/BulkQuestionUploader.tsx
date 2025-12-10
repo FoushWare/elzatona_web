@@ -112,7 +112,7 @@ export default function BulkQuestionUploader({
       | "beginner"
       | "intermediate"
       | "advanced"
-      | string, // string must come last to avoid overriding literal types
+      | (string & Record<never, never>), // string must come last to avoid overriding literal types
   ) => {
     const newQuestions = [...questions];
     newQuestions[index] = { ...newQuestions[index], [field]: value };
@@ -490,6 +490,7 @@ export default function BulkQuestionUploader({
     setError(null);
     setSuccess(null);
   };
+  // clearMessages is used in the component
 
   return (
     <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 max-h-[80vh] overflow-y-auto">

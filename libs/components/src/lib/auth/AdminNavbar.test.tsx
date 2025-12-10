@@ -116,7 +116,7 @@ describe("A-UT-012: AdminNavbar Renders", () => {
 
   it("should render Admin Menu button on large screens (right side)", () => {
     // Mock window.innerWidth to simulate large desktop (≥ 1024px)
-    Object.defineProperty(window, "innerWidth", {
+    Object.defineProperty(globalThis.window, "innerWidth", {
       writable: true,
       configurable: true,
       value: 1024,
@@ -128,7 +128,7 @@ describe("A-UT-012: AdminNavbar Renders", () => {
 
   it("should hide Admin Menu button on mobile", () => {
     // Mock window.innerWidth to simulate mobile (< 768px)
-    Object.defineProperty(window, "innerWidth", {
+    Object.defineProperty(globalThis.window, "innerWidth", {
       writable: true,
       configurable: true,
       value: 375,
@@ -145,13 +145,13 @@ describe("A-UT-012: AdminNavbar Renders", () => {
     if (adminMenuButton) {
       // Check if the button's parent has the hidden class or if it's not visible
       const parent = adminMenuButton.closest(".hidden");
-      expect(parent || !adminMenuButton).toBeTruthy();
+      expect(parent ?? adminMenuButton).toBeTruthy();
     }
   });
 
   it("should hide Admin Menu button on tablet", () => {
     // Mock window.innerWidth to simulate tablet (768px - 1023px)
-    Object.defineProperty(window, "innerWidth", {
+    Object.defineProperty(globalThis.window, "innerWidth", {
       writable: true,
       configurable: true,
       value: 900,
@@ -168,7 +168,7 @@ describe("A-UT-012: AdminNavbar Renders", () => {
     if (adminMenuButton) {
       // Check if the button's parent has the hidden class or if it's not visible
       const parent = adminMenuButton.closest(".hidden");
-      expect(parent || !adminMenuButton).toBeTruthy();
+      expect(parent ?? adminMenuButton).toBeTruthy();
     }
   });
 
@@ -191,7 +191,7 @@ describe("A-UT-013: AdminNavbar Dropdown Functionality", () => {
     window.scrollY = 0;
     Object.assign(document.body.style, {});
     // Set large screen viewport for dropdown tests
-    Object.defineProperty(window, "innerWidth", {
+    Object.defineProperty(globalThis.window, "innerWidth", {
       writable: true,
       configurable: true,
       value: 1024,
@@ -468,7 +468,7 @@ describe("A-UT-017: AdminNavbar Responsive Behavior", () => {
 
   it("should hide Admin Menu on mobile screens", () => {
     // Simulate mobile viewport (< 768px)
-    Object.defineProperty(window, "innerWidth", {
+    Object.defineProperty(globalThis.window, "innerWidth", {
       writable: true,
       configurable: true,
       value: 375,
@@ -483,13 +483,13 @@ describe("A-UT-017: AdminNavbar Responsive Behavior", () => {
     if (adminMenuButton) {
       const parent = adminMenuButton.closest(".hidden");
       // The button should be in a hidden container on mobile
-      expect(parent || !adminMenuButton).toBeTruthy();
+      expect(parent ?? adminMenuButton).toBeTruthy();
     }
   });
 
   it("should hide Admin Menu on tablet screens", () => {
     // Simulate tablet viewport (768px - 1023px)
-    Object.defineProperty(window, "innerWidth", {
+    Object.defineProperty(globalThis.window, "innerWidth", {
       writable: true,
       configurable: true,
       value: 900,
@@ -504,13 +504,13 @@ describe("A-UT-017: AdminNavbar Responsive Behavior", () => {
     if (adminMenuButton) {
       const parent = adminMenuButton.closest(".hidden");
       // The button should be in a hidden container on mobile
-      expect(parent || !adminMenuButton).toBeTruthy();
+      expect(parent ?? adminMenuButton).toBeTruthy();
     }
   });
 
   it("should show Admin Menu on large screens (right side)", () => {
     // Simulate large desktop viewport (≥ 1024px)
-    Object.defineProperty(window, "innerWidth", {
+    Object.defineProperty(globalThis.window, "innerWidth", {
       writable: true,
       configurable: true,
       value: 1024,
@@ -522,7 +522,7 @@ describe("A-UT-017: AdminNavbar Responsive Behavior", () => {
 
   it("should hide hamburger menu on large screens", () => {
     // Simulate large viewport (≥ 1024px)
-    Object.defineProperty(window, "innerWidth", {
+    Object.defineProperty(globalThis.window, "innerWidth", {
       writable: true,
       configurable: true,
       value: 1024,
@@ -541,7 +541,7 @@ describe("A-UT-017: AdminNavbar Responsive Behavior", () => {
 
   it("should show hamburger menu on mobile and tablet", () => {
     // Simulate mobile viewport (< 768px)
-    Object.defineProperty(window, "innerWidth", {
+    Object.defineProperty(globalThis.window, "innerWidth", {
       writable: true,
       configurable: true,
       value: 375,

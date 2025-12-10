@@ -225,7 +225,7 @@ export function NotificationDropdown({
                   onClick={() => {
                     setIsOpen(false);
                     // Navigate to full notifications page
-                    window.location.href = "/notifications";
+                    globalThis.window.location.href = "/notifications";
                   }}
                   className="w-full text-center text-sm text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300"
                 >

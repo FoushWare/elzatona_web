@@ -904,11 +904,16 @@ export default function FrontendTaskEditor({
           >
             <button
               onClick={() => setActiveTab("description")}
-              className={`px-4 py-3 text-sm font-medium transition-colors ${
-                activeTab === "description"
-                  ? `text-white border-b-2 border-blue-500 ${isDark ? "bg-gray-800" : "bg-white"}`
-                  : `${isDark ? "text-gray-400 hover:text-white" : "text-gray-600 hover:text-gray-900"}`
-              }`}
+              className={(() => {
+                if (activeTab === "description") {
+                  return isDark
+                    ? "px-4 py-3 text-sm font-medium transition-colors text-white border-b-2 border-blue-500 bg-gray-800"
+                    : "px-4 py-3 text-sm font-medium transition-colors text-white border-b-2 border-blue-500 bg-white";
+                }
+                return isDark
+                  ? "px-4 py-3 text-sm font-medium transition-colors text-gray-400 hover:text-white"
+                  : "px-4 py-3 text-sm font-medium transition-colors text-gray-600 hover:text-gray-900";
+              })()}
             >
               Description
             </button>
@@ -1719,15 +1724,16 @@ export default function FrontendTaskEditor({
           >
             <button
               onClick={() => setActiveBrowserTab("browser")}
-              className={`px-4 py-2 text-sm font-medium transition-colors ${
-                activeBrowserTab === "browser"
-                  ? isDark
-                    ? "bg-gray-800 text-white border-b-2 border-blue-500"
-                    : "bg-white text-gray-900 border-b-2 border-blue-500"
-                  : isDark
-                    ? "text-gray-400 hover:text-white"
-                    : "text-gray-600 hover:text-gray-900"
-              }`}
+              className={(() => {
+                if (activeBrowserTab === "browser") {
+                  return isDark
+                    ? "px-4 py-2 text-sm font-medium transition-colors bg-gray-800 text-white border-b-2 border-blue-500"
+                    : "px-4 py-2 text-sm font-medium transition-colors bg-white text-gray-900 border-b-2 border-blue-500";
+                }
+                return isDark
+                  ? "px-4 py-2 text-sm font-medium transition-colors text-gray-400 hover:text-white"
+                  : "px-4 py-2 text-sm font-medium transition-colors text-gray-600 hover:text-gray-900";
+              })()}
             >
               Browser
             </button>

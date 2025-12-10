@@ -46,8 +46,9 @@ function HomePageContent() {
 
   // Check for active guided learning plan
   useEffect(() => {
-    if (userType === "guided" && typeof window !== "undefined") {
-      const activePlanData = localStorage.getItem("active-guided-plan");
+    if (userType === "guided" && typeof globalThis.window !== "undefined") {
+      const activePlanData =
+        globalThis.window.localStorage.getItem("active-guided-plan");
       if (activePlanData) {
         try {
           const plan = JSON.parse(activePlanData);
@@ -55,52 +56,62 @@ function HomePageContent() {
           setHasActivePlan(true);
         } catch (error) {
           console.error("Error parsing active plan:", error);
-          localStorage.removeItem("active-guided-plan");
+          globalThis.window.localStorage.removeItem("active-guided-plan");
         }
       }
     }
   }, [userType]);
 
-  const getPersonalizedContent = () => {
-    if (userType === "guided") {
-      if (hasActivePlan && activePlan) {
-        return {
-          title: `Continue ${activePlan.name}`,
-          subtitle: `Pick up where you left off with your ${activePlan.name.toLowerCase()}`,
-          cta: "Continue Practice",
-          ctaLink: `/guided-practice?plan=${activePlan.id}`,
-          icon: <Play className="w-6 h-6" />,
-          color: "green",
-        };
-      } else {
-        return {
-          title: "Master Frontend Development",
-          subtitle: "The complete platform to ace your frontend interviews",
-          cta: "View Learning Plans",
-          ctaLink: "/features/guided-learning",
-          icon: <Map className="w-6 h-6" />,
-          color: "indigo",
-        };
-      }
-    } else if (userType === "self-directed") {
+  // Helper function to get guided learning content
+  const getGuidedContent = () => {
+    if (hasActivePlan && activePlan) {
       return {
-        title: "Build Your Custom Roadmap",
-        subtitle: "Create and manage your personalized learning journey",
-        cta: "View My Roadmap",
-        ctaLink: "/browse-practice-questions",
-        icon: <Compass className="w-6 h-6" />,
-        color: "purple",
-      };
-    } else {
-      return {
-        title: "Master Frontend Development",
-        subtitle: "The complete platform to ace your frontend interviews",
-        cta: "Get Started",
-        ctaLink: "/get-started",
+        title: `Continue ${activePlan.name}`,
+        subtitle: `Pick up where you left off with your ${activePlan.name.toLowerCase()}`,
+        cta: "Continue Practice",
+        ctaLink: `/guided-practice?plan=${activePlan.id}`,
         icon: <Play className="w-6 h-6" />,
-        color: "indigo",
+        color: "green",
       };
     }
+    return {
+      title: "Master Frontend Development",
+      subtitle: "The complete platform to ace your frontend interviews",
+      cta: "View Learning Plans",
+      ctaLink: "/features/guided-learning",
+      icon: <Map className="w-6 h-6" />,
+      color: "indigo",
+    };
+  };
+
+  // Helper function to get default content
+  const getDefaultContent = () => ({
+    title: "Master Frontend Development",
+    subtitle: "The complete platform to ace your frontend interviews",
+    cta: "Get Started",
+    ctaLink: "/get-started",
+    icon: <Play className="w-6 h-6" />,
+    color: "indigo",
+  });
+
+  // Helper function to get self-directed content
+  const getSelfDirectedContent = () => ({
+    title: "Build Your Custom Roadmap",
+    subtitle: "Create and manage your personalized learning journey",
+    cta: "View My Roadmap",
+    ctaLink: "/browse-practice-questions",
+    icon: <Compass className="w-6 h-6" />,
+    color: "purple",
+  });
+
+  const getPersonalizedContent = () => {
+    if (userType === "guided") {
+      return getGuidedContent();
+    }
+    if (userType === "self-directed") {
+      return getSelfDirectedContent();
+    }
+    return getDefaultContent();
   };
 
   const personalizedContent = getPersonalizedContent();
@@ -210,13 +221,15 @@ function HomePageContent() {
             <div className="relative inline-block">
               <Link
                 href={personalizedContent.ctaLink}
-                className={`main-cta-button group inline-flex items-center space-x-3 px-8 py-4 bg-gradient-to-r ${
-                  personalizedContent.color === "indigo"
-                    ? "from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700"
-                    : personalizedContent.color === "purple"
-                      ? "from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700"
-                      : "from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700"
-                } text-white rounded-xl font-semibold shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:scale-105 relative overflow-hidden`}
+                className={(() => {
+                  const colorClasses =
+                    personalizedContent.color === "indigo"
+                      ? "from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700"
+                      : personalizedContent.color === "purple"
+                        ? "from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700"
+                        : "from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700";
+                  return `main-cta-button group inline-flex items-center space-x-3 px-8 py-4 bg-gradient-to-r ${colorClasses} text-white rounded-xl font-semibold shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:scale-105 relative overflow-hidden`;
+                })()}
               >
                 {/* Animated background effect */}
                 <div className="absolute inset-0 bg-gradient-to-r from-white/20 to-transparent transform -skew-x-12 -translate-x-full group-hover:translate-x-full transition-transform duration-700"></div>
