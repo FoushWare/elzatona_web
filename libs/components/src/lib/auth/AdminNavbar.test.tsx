@@ -86,7 +86,7 @@ jest.mock("lucide-react", () => ({
 }));
 
 // Mock window.scrollY
-Object.defineProperty(window, "scrollY", {
+Object.defineProperty(globalThis.window, "scrollY", {
   writable: true,
   value: 0,
 });

@@ -504,13 +504,14 @@ export const TopicForm: React.FC<TopicFormProps> = ({
           type="submit"
           disabled={isLoading || (isJsonMode && parsedTopics.length === 0)}
         >
-          {isLoading
-            ? "Saving..."
-            : topic
-              ? "Update Topic"
-              : isJsonMode
-                ? `Create ${parsedTopics.length} Topic${parsedTopics.length !== 1 ? "s" : ""}`
-                : "Create Topic"}
+          {(() => {
+            if (isLoading) return "Saving...";
+            if (topic) return "Update Topic";
+            if (isJsonMode) {
+              return `Create ${parsedTopics.length} Topic${parsedTopics.length !== 1 ? "s" : ""}`;
+            }
+            return "Create Topic";
+          })()}
         </Button>
       </div>
     </form>

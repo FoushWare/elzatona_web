@@ -182,9 +182,9 @@ export const ProgressIndicator: React.FC<ProgressIndicatorProps> = ({
             Custom Roadmap ({progress.roadmapSections.length} sections)
           </h4>
           <div className="flex flex-wrap gap-2">
-            {progress.roadmapSections.slice(0, 5).map((section, index) => (
+            {progress.roadmapSections.slice(0, 5).map((section) => (
               <span
-                key={index}
+                key={section}
                 className="px-2 py-1 bg-indigo-100 dark:bg-indigo-900 text-indigo-800 dark:text-indigo-200 text-xs rounded-full"
               >
                 {section

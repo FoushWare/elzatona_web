@@ -424,7 +424,7 @@ export const SectionQuestionCountManager: React.FC<
                           updateSectionField(
                             section.id,
                             "question_count",
-                            parseInt(e.target.value) || 0,
+                            Number.parseInt(e.target.value, 10) || 0,
                           )
                         }
                         min="0"
@@ -442,7 +442,7 @@ export const SectionQuestionCountManager: React.FC<
                           updateSectionField(
                             section.id,
                             "maxQuestions",
-                            parseInt(e.target.value) || 15,
+                            Number.parseInt(e.target.value, 10) || 15,
                           )
                         }
                         min="1"
@@ -460,7 +460,7 @@ export const SectionQuestionCountManager: React.FC<
                         updateSectionField(
                           section.id,
                           "weight",
-                          parseInt(e.target.value) || 0,
+                          Number.parseInt(e.target.value, 10) || 0,
                         )
                       }
                       min="0"
@@ -587,7 +587,7 @@ const SectionForm: React.FC<SectionFormProps> = ({
             onChange={(e) =>
               setFormData((prev) => ({
                 ...prev,
-                maxQuestions: parseInt(e.target.value) || 15,
+                maxQuestions: Number.parseInt(e.target.value, 10) || 15,
               }))
             }
             min="1"
@@ -605,7 +605,7 @@ const SectionForm: React.FC<SectionFormProps> = ({
           onChange={(e) =>
             setFormData((prev) => ({
               ...prev,
-              weight: parseInt(e.target.value) || 0,
+              weight: Number.parseInt(e.target.value, 10) || 0,
             }))
           }
           min="0"
