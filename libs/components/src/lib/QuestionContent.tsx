@@ -176,7 +176,7 @@ export const isValidCode = (
 export const formatCodeContent = (code: string): string => {
   if (!code) return "";
 
-  let formatted = code.replace(/\r\n/g, "\n").replace(/\r/g, "\n");
+  let formatted = code.replaceAll(/\r\n/g, "\n").replaceAll(/\r/g, "\n");
   formatted = formatted.trim();
   const lines = formatted.split("\n").map((line) => line.trimEnd());
 
@@ -199,7 +199,7 @@ export const formatCodeContent = (code: string): string => {
         if (/^(class|interface|type)\s+\w+/.test(trimmed)) {
           inClass = true;
           const indent = "  ".repeat(indentLevel);
-          if (trimmed.match(/[{\[\(]\s*$/)) {
+          if (trimmed.match(/[{\[(]\s*$/)) {
             indentLevel++;
           } else {
             indentLevel++;
@@ -216,11 +216,7 @@ export const formatCodeContent = (code: string): string => {
         ) {
           inMethod = true;
           const indent = "  ".repeat(indentLevel);
-          if (trimmed.match(/[{\[\(]\s*$/)) {
-            indentLevel++;
-          } else {
-            indentLevel++;
-          }
+          indentLevel++;
           return indent + trimmed;
         }
 
@@ -299,7 +295,7 @@ export const formatCodeContent = (code: string): string => {
     }
   }
 
-  formatted = formatted.replace(/\n{3,}/g, "\n\n");
+  formatted = formatted.replaceAll(/\n{3,}/g, "\n\n");
 
   return formatted;
 };
@@ -357,39 +353,39 @@ export const QuestionContent = ({ content }: { content: string }) => {
   let fixedContent = content;
   for (let i = 0; i < 3; i++) {
     fixedContent = fixedContent
-      .replace(/<pr<cod<cod/gi, "<pre><code>")
-      .replace(/<pr<code<code/gi, "<pre><code>")
-      .replace(/<pr<codee<code/gi, "<pre><code>")
-      .replace(/<pr<codee<cod/gi, "<pre><code>")
-      .replace(/<pr<code<cod/gi, "<pre><code>")
-      .replace(/<pr<codee/gi, "<pre><code>")
-      .replace(/<pr<code/gi, "<pre><code>")
-      .replace(/<pr<cod/gi, "<pre><code>")
-      .replace(/<pr<co/gi, "<pre><code>")
-      .replace(/<pr</gi, "<pre>")
-      .replace(/<\/cod<\/cod<\/pr/gi, "</code></pre>")
-      .replace(/<\/code<\/code<\/pr/gi, "</code></pre>")
-      .replace(/<\/codee<\/codee<\/pree/gi, "</code></pre>")
-      .replace(/<\/cod<\/cod<\/pree/gi, "</code></pre>")
-      .replace(/<\/code<\/code<\/pree/gi, "</code></pre>")
-      .replace(/<\/codee<\/pree/gi, "</code></pre>")
-      .replace(/<\/cod<\/pree/gi, "</code></pre>")
-      .replace(/<\/code<\/pree/gi, "</code></pre>")
-      .replace(/<\/code><\/pre>e>/gi, "</code></pre>")
-      .replace(/<\/code><\/pre>\s*e>/gi, "</code></pre>")
-      .replace(/<\/pree/gi, "</pre>")
-      .replace(/<\/codee/gi, "</code>")
-      .replace(/<\/cod/gi, "</code>")
-      .replace(/efor\s*\(/gi, "for (")
-      .replace(/efor\s+/gi, "for ")
-      .replace(/econsole\./gi, "console.")
-      .replace(/econsole\.log/gi, "console.log")
+      .replaceAll(/<pr<cod<cod/gi, "<pre><code>")
+      .replaceAll(/<pr<code<code/gi, "<pre><code>")
+      .replaceAll(/<pr<codee<code/gi, "<pre><code>")
+      .replaceAll(/<pr<codee<cod/gi, "<pre><code>")
+      .replaceAll(/<pr<code<cod/gi, "<pre><code>")
+      .replaceAll(/<pr<codee/gi, "<pre><code>")
+      .replaceAll(/<pr<code/gi, "<pre><code>")
+      .replaceAll(/<pr<cod/gi, "<pre><code>")
+      .replaceAll(/<pr<co/gi, "<pre><code>")
+      .replaceAll(/<pr</gi, "<pre>")
+      .replaceAll(/<\/cod<\/cod<\/pr/gi, "</code></pre>")
+      .replaceAll(/<\/code<\/code<\/pr/gi, "</code></pre>")
+      .replaceAll(/<\/codee<\/codee<\/pree/gi, "</code></pre>")
+      .replaceAll(/<\/cod<\/cod<\/pree/gi, "</code></pre>")
+      .replaceAll(/<\/code<\/code<\/pree/gi, "</code></pre>")
+      .replaceAll(/<\/codee<\/pree/gi, "</code></pre>")
+      .replaceAll(/<\/cod<\/pree/gi, "</code></pre>")
+      .replaceAll(/<\/code<\/pree/gi, "</code></pre>")
+      .replaceAll(/<\/code><\/pre>e>/gi, "</code></pre>")
+      .replaceAll(/<\/code><\/pre>\s*e>/gi, "</code></pre>")
+      .replaceAll(/<\/pree/gi, "</pre>")
+      .replaceAll(/<\/codee/gi, "</code>")
+      .replaceAll(/<\/cod/gi, "</code>")
+      .replaceAll(/efor\s*\(/gi, "for (")
+      .replaceAll(/efor\s+/gi, "for ")
+      .replaceAll(/econsole\./gi, "console.")
+      .replaceAll(/econsole\.log/gi, "console.log")
       .replaceAll(/<cod([a-zA-Z])/gi, "<code>$1")
       .replaceAll(/<code([a-zA-Z])/gi, "<code>$1")
       .replaceAll(/([a-zA-Z])<\/cod/gi, "$1</code>")
       .replaceAll(/([a-zA-Z])<\/code/gi, "$1</code>")
-      .replace(/<cod(\d+[a-zA-Z]+)/gi, "<code>$1</code>")
-      .replace(/<cod(\d+)/gi, "<code>$1</code>");
+      .replaceAll(/<cod(\d+[a-zA-Z]+)/gi, "<code>$1</code>")
+      .replaceAll(/<cod(\d+)/gi, "<code>$1</code>");
   }
 
   const parts: Array<{
@@ -414,33 +410,33 @@ export const QuestionContent = ({ content }: { content: string }) => {
     }
 
     const fixedHtml = html
-      .replace(/<pr<cod<cod/gi, "<pre><code>")
-      .replace(/<pr<code<code/gi, "<pre><code>")
-      .replace(/<pr<codee<code/gi, "<pre><code>")
-      .replace(/<pr<codee<cod/gi, "<pre><code>")
-      .replace(/<pr<code<cod/gi, "<pre><code>")
-      .replace(/<pr<codee/gi, "<pre><code>")
-      .replace(/<pr<code/gi, "<pre><code>")
-      .replace(/<pr<cod/gi, "<pre><code>")
-      .replace(/<pr<co/gi, "<pre><code>")
-      .replace(/<pr</gi, "<pre>")
-      .replace(/<\/cod<\/cod<\/pr/gi, "</code></pre>")
-      .replace(/<\/code<\/code<\/pr/gi, "</code></pre>")
-      .replace(/<\/codee<\/codee<\/pree/gi, "</code></pre>")
-      .replace(/<\/cod<\/cod<\/pree/gi, "</code></pre>")
-      .replace(/<\/code<\/code<\/pree/gi, "</code></pre>")
-      .replace(/<\/codee<\/pree/gi, "</code></pre>")
-      .replace(/<\/cod<\/pree/gi, "</code></pre>")
-      .replace(/<\/code<\/pree/gi, "</code></pre>")
-      .replace(/<\/pree/gi, "</pre>")
-      .replace(/<\/codee/gi, "</code>")
-      .replace(/<\/cod/gi, "</code>")
+      .replaceAll(/<pr<cod<cod/gi, "<pre><code>")
+      .replaceAll(/<pr<code<code/gi, "<pre><code>")
+      .replaceAll(/<pr<codee<code/gi, "<pre><code>")
+      .replaceAll(/<pr<codee<cod/gi, "<pre><code>")
+      .replaceAll(/<pr<code<cod/gi, "<pre><code>")
+      .replaceAll(/<pr<codee/gi, "<pre><code>")
+      .replaceAll(/<pr<code/gi, "<pre><code>")
+      .replaceAll(/<pr<cod/gi, "<pre><code>")
+      .replaceAll(/<pr<co/gi, "<pre><code>")
+      .replaceAll(/<pr</gi, "<pre>")
+      .replaceAll(/<\/cod<\/cod<\/pr/gi, "</code></pre>")
+      .replaceAll(/<\/code<\/code<\/pr/gi, "</code></pre>")
+      .replaceAll(/<\/codee<\/codee<\/pree/gi, "</code></pre>")
+      .replaceAll(/<\/cod<\/cod<\/pree/gi, "</code></pre>")
+      .replaceAll(/<\/code<\/code<\/pree/gi, "</code></pre>")
+      .replaceAll(/<\/codee<\/pree/gi, "</code></pre>")
+      .replaceAll(/<\/cod<\/pree/gi, "</code></pre>")
+      .replaceAll(/<\/code<\/pree/gi, "</code></pre>")
+      .replaceAll(/<\/pree/gi, "</pre>")
+      .replaceAll(/<\/codee/gi, "</code>")
+      .replaceAll(/<\/cod/gi, "</code>")
       .replaceAll(/<cod([a-zA-Z])/gi, "<code>$1")
       .replaceAll(/<code([a-zA-Z])/gi, "<code>$1")
       .replaceAll(/([a-zA-Z])<\/cod/gi, "$1</code>")
       .replaceAll(/([a-zA-Z])<\/code/gi, "$1</code>")
-      .replace(/<cod(\d+[a-zA-Z]+)/gi, "<code>$1</code>")
-      .replace(/<cod(\d+)/gi, "<code>$1</code>");
+      .replaceAll(/<cod(\d+[a-zA-Z]+)/gi, "<code>$1</code>")
+      .replaceAll(/<cod(\d+)/gi, "<code>$1</code>");
 
     const findMatchingCloseTag = (
       html: string,
@@ -520,64 +516,64 @@ export const QuestionContent = ({ content }: { content: string }) => {
 
     for (let pass = 0; pass < 3; pass++) {
       code = code
-        .replace(/e>e>e>/g, "")
-        .replace(/e>e>/g, "")
-        .replace(/^e>+/g, "")
-        .replace(/e>+$/g, "")
-        .replace(/(\w+)e>/g, "$1")
-        .replace(/e>(\w+)/g, "$1")
-        .replace(/\s*e>\s*/g, " ")
-        .replace(/consoleonsole\.loge>\.log/g, "console.log")
-        .replace(/consoleonsole\.log/g, "console.log")
-        .replace(/console\.loge>\.log/g, "console.log")
-        .replace(/console\.loge>/g, "console.log")
-        .replace(/console\.log>/g, "console.log")
-        .replace(/console\.loge\.log/g, "console.log")
-        .replace(/console\.log\.log/g, "console.log")
-        .replace(/(\w+)onsole\.log/g, "console.log")
-        .replace(/console\.log([^a-zA-Z])/g, "console.log$1")
-        .replace(/diameterameter/g, "diameter")
-        .replace(/perimeterimeter/g, "perimeter")
-        .replace(/newColorwColor/g, "newColor")
-        .replace(/(\w+)ameter/g, "$1")
-        .replace(/(\w+)imeter/g, "$1")
-        .replace(/NaNe>NaN/g, "NaN")
-        .replace(/NaNe>/g, "NaN")
-        .replace(/NaN>/g, "NaN")
-        .replace(/&lt;/g, "<")
-        .replace(/&gt;/g, ">")
-        .replace(/&amp;/g, "&")
-        .replace(/&quot;/g, '"')
-        .replace(/&#39;/g, "'")
-        .replace(/&apos;/g, "'")
-        .replace(/&nbsp;/g, " ")
+        .replaceAll(/e>e>e>/g, "")
+        .replaceAll(/e>e>/g, "")
+        .replaceAll(/^e>+/g, "")
+        .replaceAll(/e>+$/g, "")
+        .replaceAll(/(\w+)e>/g, "$1")
+        .replaceAll(/e>(\w+)/g, "$1")
+        .replaceAll(/\s*e>\s*/g, " ")
+        .replaceAll(/consoleonsole\.loge>\.log/g, "console.log")
+        .replaceAll(/consoleonsole\.log/g, "console.log")
+        .replaceAll(/console\.loge>\.log/g, "console.log")
+        .replaceAll(/console\.loge>/g, "console.log")
+        .replaceAll(/console\.log>/g, "console.log")
+        .replaceAll(/console\.loge\.log/g, "console.log")
+        .replaceAll(/console\.log\.log/g, "console.log")
+        .replaceAll(/(\w+)onsole\.log/g, "console.log")
+        .replaceAll(/console\.log([^a-zA-Z])/g, "console.log$1")
+        .replaceAll(/diameterameter/g, "diameter")
+        .replaceAll(/perimeterimeter/g, "perimeter")
+        .replaceAll(/newColorwColor/g, "newColor")
+        .replaceAll(/(\w+)ameter/g, "$1")
+        .replaceAll(/(\w+)imeter/g, "$1")
+        .replaceAll(/NaNe>NaN/g, "NaN")
+        .replaceAll(/NaNe>/g, "NaN")
+        .replaceAll(/NaN>/g, "NaN")
+        .replaceAll(/&lt;/g, "<")
+        .replaceAll(/&gt;/g, ">")
+        .replaceAll(/&amp;/g, "&")
+        .replaceAll(/&quot;/g, '"')
+        .replaceAll(/&#39;/g, "'")
+        .replaceAll(/&apos;/g, "'")
+        .replaceAll(/&nbsp;/g, " ")
         // ⚠️ SECURITY: Simplified regex patterns to prevent ReDoS
         // Limit quantifiers and avoid nested quantifiers
-        .replace(/(\w{1,50})\s*&lt;\s*(\d{1,10})\s*&gt;/g, "$1 < $2 >")
-        .replace(/(\w{1,50})\s*&lt;\s*(\d{1,10})/g, "$1 < $2")
-        .replace(/(\d{1,10})\s*&gt;/g, "$1 >")
+        .replaceAll(/(\w{1,50})\s*&lt;\s*(\d{1,10})\s*&gt;/g, "$1 < $2 >")
+        .replaceAll(/(\w{1,50})\s*&lt;\s*(\d{1,10})/g, "$1 < $2")
+        .replaceAll(/(\d{1,10})\s*&gt;/g, "$1 >")
         .replaceAll(/<\/?[a-zA-Z][a-zA-Z0-9]*(?:\s+[^>]*)?>/gi, "")
-        .replace(/^>\s*/g, "")
-        .replace(/\s*>$/g, "")
-        .replace(/\s+>\s+/g, " ");
+        .replaceAll(/^>\s*/g, "")
+        .replaceAll(/\s*>$/g, "")
+        .replaceAll(/\s+>\s+/g, " ");
     }
 
     for (let i = 0; i < 2; i++) {
       code = code
-        .replace(/e>e>e>/g, "")
-        .replace(/e>e>/g, "")
-        .replace(/^e>+/g, "")
-        .replace(/e>+$/g, "")
-        .replace(/(\w+)e>/g, "$1")
-        .replace(/e>(\w+)/g, "$1")
-        .replace(/\s*e>\s*/g, " ")
-        .replace(/<\/cod<\/pr/gi, "")
-        .replace(/<\/code<\/pr/gi, "")
-        .replace(/<\/pr/gi, "")
-        .replace(/<\/cod/gi, "")
-        .replace(/^>\s*/g, "")
-        .replace(/\s*>$/g, "")
-        .replace(/\s+>\s+/g, " ");
+        .replaceAll(/e>e>e>/g, "")
+        .replaceAll(/e>e>/g, "")
+        .replaceAll(/^e>+/g, "")
+        .replaceAll(/e>+$/g, "")
+        .replaceAll(/(\w+)e>/g, "$1")
+        .replaceAll(/e>(\w+)/g, "$1")
+        .replaceAll(/\s*e>\s*/g, " ")
+        .replaceAll(/<\/cod<\/pr/gi, "")
+        .replaceAll(/<\/code<\/pr/gi, "")
+        .replaceAll(/<\/pr/gi, "")
+        .replaceAll(/<\/cod/gi, "")
+        .replaceAll(/^>\s*/g, "")
+        .replaceAll(/\s*>$/g, "")
+        .replaceAll(/\s+>\s+/g, " ");
     }
 
     code = formatCodeContent(code);
@@ -651,10 +647,10 @@ export const QuestionContent = ({ content }: { content: string }) => {
       processedIndices.add(match.index);
       let matchContent = match[0];
       matchContent = matchContent
-        .replace(/<pr<cod/gi, "<pre><code>")
-        .replace(/<pr<code/gi, "<pre><code>")
-        .replace(/<\/cod<\/pr/gi, "</code></pre>")
-        .replace(/<\/code<\/pr/gi, "</code></pre>");
+        .replaceAll(/<pr<cod/gi, "<pre><code>")
+        .replaceAll(/<pr<code/gi, "<pre><code>")
+        .replaceAll(/<\/cod<\/pr/gi, "</code></pre>")
+        .replaceAll(/<\/code<\/pr/gi, "</code></pre>");
 
       const extractedCode = extractCodeFromHtml(matchContent);
       if (extractedCode) {
@@ -688,20 +684,20 @@ export const QuestionContent = ({ content }: { content: string }) => {
     if (!alreadyCaptured && malformedMatch[1]) {
       let code = malformedMatch[1];
       code = decodeHtmlEntities(code);
-      code = code.replace(/<[^>]+>/g, "");
+      code = code.replaceAll(/<[^>]+>/g, "");
       for (let i = 0; i < 3; i++) {
         code = code
-          .replace(/e>e>e>/g, "")
-          .replace(/e>e>/g, "")
-          .replace(/^e>+/g, "")
-          .replace(/e>+$/g, "")
-          .replace(/(\w+)e>/g, "$1")
-          .replace(/consoleonsole\.log/g, "console.log")
-          .replace(/console\.loge>/g, "console.log")
-          .replace(/diameterameter/g, "diameter")
-          .replace(/perimeterimeter/g, "perimeter")
-          .replace(/newColorwColor/g, "newColor")
-          .replace(/NaNe>/g, "NaN");
+          .replaceAll(/e>e>e>/g, "")
+          .replaceAll(/e>e>/g, "")
+          .replaceAll(/^e>+/g, "")
+          .replaceAll(/e>+$/g, "")
+          .replaceAll(/(\w+)e>/g, "$1")
+          .replaceAll(/consoleonsole\.log/g, "console.log")
+          .replaceAll(/console\.loge>/g, "console.log")
+          .replaceAll(/diameterameter/g, "diameter")
+          .replaceAll(/perimeterimeter/g, "perimeter")
+          .replaceAll(/newColorwColor/g, "newColor")
+          .replaceAll(/NaNe>/g, "NaN");
       }
       code = formatCodeContent(code);
 
@@ -760,27 +756,27 @@ export const QuestionContent = ({ content }: { content: string }) => {
         cleanText = cleanText.replace(/<[^>]+>/g, "");
         for (let i = 0; i < 3; i++) {
           cleanText = cleanText
-            .replace(/<pr<cod?/gi, "")
-            .replace(/<pr</gi, "")
-            .replace(/<pr/gi, "")
-            .replace(/<\/cod?<\/pr/gi, "")
-            .replace(/<\/cod?/gi, "")
-            .replace(/<\/pr/gi, "")
-            .replace(/<\/cod/gi, "")
-            .replace(/e>e>e>/g, "")
-            .replace(/e>e>/g, "")
-            .replace(/^e>+/g, "")
-            .replace(/e>+$/g, "")
-            .replace(/(\w+)e>/g, "$1")
-            .replace(/e>(\w+)/g, "$1")
-            .replace(/\s*e>\s*/g, " ")
-            .replace(/^>\s*/g, "")
-            .replace(/\s*>$/g, "")
-            .replace(/\s+>\s+/g, " ");
+            .replaceAll(/<pr<cod?/gi, "")
+            .replaceAll(/<pr</gi, "")
+            .replaceAll(/<pr/gi, "")
+            .replaceAll(/<\/cod?<\/pr/gi, "")
+            .replaceAll(/<\/cod?/gi, "")
+            .replaceAll(/<\/pr/gi, "")
+            .replaceAll(/<\/cod/gi, "")
+            .replaceAll(/e>e>e>/g, "")
+            .replaceAll(/e>e>/g, "")
+            .replaceAll(/^e>+/g, "")
+            .replaceAll(/e>+$/g, "")
+            .replaceAll(/(\w+)e>/g, "$1")
+            .replaceAll(/e>(\w+)/g, "$1")
+            .replaceAll(/\s*e>\s*/g, " ")
+            .replaceAll(/^>\s*/g, "")
+            .replaceAll(/\s*>$/g, "")
+            .replaceAll(/\s+>\s+/g, " ");
         }
         cleanText = cleanText
-          .replace(/[ \t]+/g, " ")
-          .replace(/\n\s*\n/g, "\n\n")
+          .replaceAll(/[ \t]+/g, " ")
+          .replaceAll(/\n\s*\n/g, "\n\n")
           .trim();
         if (cleanText) {
           parts.push({ type: "text", content: cleanText });
@@ -792,20 +788,20 @@ export const QuestionContent = ({ content }: { content: string }) => {
       let cleanCode = match.content;
       for (let i = 0; i < 2; i++) {
         cleanCode = cleanCode
-          .replace(/e>e>e>/g, "")
-          .replace(/e>e>/g, "")
-          .replace(/^e>+/g, "")
-          .replace(/e>+$/g, "")
-          .replace(/(\w+)e>/g, "$1")
-          .replace(/e>(\w+)/g, "$1")
-          .replace(/\s*e>\s*/g, " ")
-          .replace(/<\/cod<\/pr/gi, "")
-          .replace(/<\/code<\/pr/gi, "")
-          .replace(/<\/pr/gi, "")
-          .replace(/<\/cod/gi, "")
-          .replace(/^>\s*/g, "")
-          .replace(/\s*>$/g, "")
-          .replace(/\s+>\s+/g, " ");
+          .replaceAll(/e>e>e>/g, "")
+          .replaceAll(/e>e>/g, "")
+          .replaceAll(/^e>+/g, "")
+          .replaceAll(/e>+$/g, "")
+          .replaceAll(/(\w+)e>/g, "$1")
+          .replaceAll(/e>(\w+)/g, "$1")
+          .replaceAll(/\s*e>\s*/g, " ")
+          .replaceAll(/<\/cod<\/pr/gi, "")
+          .replaceAll(/<\/code<\/pr/gi, "")
+          .replaceAll(/<\/pr/gi, "")
+          .replaceAll(/<\/cod/gi, "")
+          .replaceAll(/^>\s*/g, "")
+          .replaceAll(/\s*>$/g, "")
+          .replaceAll(/\s+>\s+/g, " ");
       }
       const formattedCode = formatCodeContent(cleanCode);
       parts.push({
@@ -833,23 +829,23 @@ export const QuestionContent = ({ content }: { content: string }) => {
           .replace(/<pr</gi, "")
           .replace(/<pr/gi, "")
           .replace(/<\/cod?<\/pr/gi, "")
-          .replace(/<\/cod?/gi, "")
-          .replace(/<\/pr/gi, "")
-          .replace(/<\/cod/gi, "")
-          .replace(/e>e>e>/g, "")
-          .replace(/e>e>/g, "")
-          .replace(/^e>+/g, "")
-          .replace(/e>+$/g, "")
-          .replace(/(\w+)e>/g, "$1")
-          .replace(/e>(\w+)/g, "$1")
-          .replace(/\s*e>\s*/g, " ")
-          .replace(/^>\s*/g, "")
-          .replace(/\s*>$/g, "")
-          .replace(/\s+>\s+/g, " ");
+          .replaceAll(/<\/cod?/gi, "")
+          .replaceAll(/<\/pr/gi, "")
+          .replaceAll(/<\/cod/gi, "")
+          .replaceAll(/e>e>e>/g, "")
+          .replaceAll(/e>e>/g, "")
+          .replaceAll(/^e>+/g, "")
+          .replaceAll(/e>+$/g, "")
+          .replaceAll(/(\w+)e>/g, "$1")
+          .replaceAll(/e>(\w+)/g, "$1")
+          .replaceAll(/\s*e>\s*/g, " ")
+          .replaceAll(/^>\s*/g, "")
+          .replaceAll(/\s*>$/g, "")
+          .replaceAll(/\s+>\s+/g, " ");
       }
       cleanText = cleanText
-        .replace(/[ \t]+/g, " ")
-        .replace(/\n\s*\n/g, "\n\n")
+        .replaceAll(/[ \t]+/g, " ")
+        .replaceAll(/\n\s*\n/g, "\n\n")
         .trim();
       if (cleanText) {
         parts.push({ type: "text", content: cleanText });
@@ -863,29 +859,29 @@ export const QuestionContent = ({ content }: { content: string }) => {
     for (let i = 0; i < 3; i++) {
       cleanContent = cleanContent
         .replace(/<pr<cod/gi, "")
-        .replace(/<\/cod<\/pr/gi, "")
-        .replace(/<pr</gi, "")
-        .replace(/<\/cod/gi, "")
-        .replace(/<\/pr/gi, "")
-        .replace(/<pr/gi, "")
-        .replace(/<[^>]+>/g, "")
-        .replace(/e>e>e>/g, "")
-        .replace(/e>e>/g, "")
-        .replace(/^e>+/g, "")
-        .replace(/e>+$/g, "")
-        .replace(/(\w+)e>/g, "$1")
-        .replace(/e>(\w+)/g, "$1")
-        .replace(/\s*e>\s*/g, " ")
-        .replace(/^>\s*/g, "")
-        .replace(/\s*>$/g, "")
-        .replace(/\s+>\s+/g, " ");
+        .replaceAll(/<\/cod<\/pr/gi, "")
+        .replaceAll(/<pr</gi, "")
+        .replaceAll(/<\/cod/gi, "")
+        .replaceAll(/<\/pr/gi, "")
+        .replaceAll(/<pr/gi, "")
+        .replaceAll(/<[^>]+>/g, "")
+        .replaceAll(/e>e>e>/g, "")
+        .replaceAll(/e>e>/g, "")
+        .replaceAll(/^e>+/g, "")
+        .replaceAll(/e>+$/g, "")
+        .replaceAll(/(\w+)e>/g, "$1")
+        .replaceAll(/e>(\w+)/g, "$1")
+        .replaceAll(/\s*e>\s*/g, " ")
+        .replaceAll(/^>\s*/g, "")
+        .replaceAll(/\s*>$/g, "")
+        .replaceAll(/\s+>\s+/g, " ");
     }
 
     cleanContent = cleanContent
-      .replace(/&nbsp;/g, " ")
-      .replace(/&lt;/g, "<")
-      .replace(/&gt;/g, ">")
-      .replace(/&amp;/g, "&")
+      .replaceAll(/&nbsp;/g, " ")
+      .replaceAll(/&lt;/g, "<")
+      .replaceAll(/&gt;/g, ">")
+      .replaceAll(/&amp;/g, "&")
       .trim();
 
     const codeValidation = isValidCode(cleanContent);
