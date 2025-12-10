@@ -61,10 +61,13 @@ cat > "$REPLACEMENTS_FILE" << 'EOF'
 # ⚠️ This file should NOT be committed with real secrets!
 # Format: actual_secret==>replacement_placeholder
 
-# Example (replace with your actual secrets):
-# eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhwbmV3cWt2cG50aHBvaHZ4Y21xIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc2MDY2MDQxOCwiZXhwIjoyMDc2MjM2NDE4fQ.BH3xSC7yk5DqX5bTgyedOyC45fNg1_vBcV04X_tkYLQ==>YOUR_SUPABASE_SERVICE_ROLE_KEY_HERE
-# AIzaSyBXlcfcdyIqoeJOb2gXcxpRSmQO7lEP82Y==>YOUR_GOOGLE_API_KEY_HERE
-# eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhwbmV3cWt2cG50aHBvaHZ4Y21xIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjA2NjA0MTgsImV4cCI6MjA3NjIzNjQxOH0.UMmriJb5HRr9W_56GilNNDWksvlFEb1V9c_PuBK-H3s==>YOUR_SUPABASE_ANON_KEY_HERE
+# Example format (replace with your actual secrets):
+# EXAMPLE_SUPABASE_SERVICE_ROLE_JWT_TOKEN==>YOUR_SUPABASE_SERVICE_ROLE_KEY_HERE
+# EXAMPLE_GOOGLE_API_KEY==>YOUR_GOOGLE_API_KEY_HERE
+# EXAMPLE_SUPABASE_ANON_JWT_TOKEN==>YOUR_SUPABASE_ANON_KEY_HERE
+#
+# Note: The above are placeholders. Replace with your actual exposed secrets.
+# Format: actual_secret==>replacement_placeholder
 
 # ⚠️ Add your actual secrets here (one per line):
 # YOUR_ACTUAL_SECRET_1==>YOUR_PLACEHOLDER_HERE
