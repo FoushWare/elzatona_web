@@ -90,6 +90,15 @@ const Select = React.forwardRef<
                     key={item.props.value}
                     className="px-3 py-2 text-sm hover:bg-accent hover:text-accent-foreground cursor-pointer"
                     onClick={() => handleValueChange(item.props.value)}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter" || e.key === " ") {
+                        e.preventDefault();
+                        handleValueChange(item.props.value);
+                      }
+                    }}
+                    role="option"
+                    tabIndex={0}
+                    aria-selected={selectedValue === item.props.value}
                   >
                     {item.props.children}
                   </div>

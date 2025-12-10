@@ -9,7 +9,7 @@ const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useAuth } from "@elzatona/contexts";
+import { useAuth, useTheme } from "@elzatona/contexts";
 import {
   Sun,
   Moon,
@@ -22,9 +22,7 @@ import {
   Settings,
 } from "lucide-react";
 import { AlzatonaLogo } from "./AlzatonaLogo";
-import { useUserType } from "@elzatona/contexts";
-import { useMobileMenu } from "@elzatona/contexts";
-import { useTheme } from "@elzatona/contexts";
+import { useUserType, useMobileMenu, useTheme } from "@elzatona/contexts";
 
 // import { LearningModeSwitcher } from '../learning/LearningModeSwitcher';
 
@@ -630,11 +628,13 @@ export const NavbarSimple: React.FC = () => {
                   ) : (
                     <Link
                       href="/auth"
-                      className={`block w-full text-center py-2.5 sm:py-3 font-medium transition-colors duration-200 text-sm sm:text-base rounded-lg ${
-                        isActiveLink("/auth")
-                          ? "text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-900/30 font-semibold"
-                          : "text-gray-700 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-gray-50 dark:hover:bg-gray-800"
-                      }`}
+                      className={(() => {
+                        const baseClasses =
+                          "block w-full text-center py-2.5 sm:py-3 font-medium transition-colors duration-200 text-sm sm:text-base rounded-lg";
+                        return isActiveLink("/auth")
+                          ? `${baseClasses} text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-900/30 font-semibold`
+                          : `${baseClasses} text-gray-700 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-gray-50 dark:hover:bg-gray-800`;
+                      })()}
                       onClick={() => setIsOpen(false)}
                     >
                       Sign In

@@ -4,7 +4,7 @@
 import { useEffect } from "react";
 
 interface LayoutWrapperProps {
-  children: React.ReactNode;
+  readonly children: React.ReactNode;
 }
 
 export default function LayoutWrapper({ children }: LayoutWrapperProps) {

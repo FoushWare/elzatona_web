@@ -541,7 +541,7 @@ export class UnifiedQuestionService {
           (q.explanation &&
             q.explanation.toLowerCase().includes(searchLower)) ||
           (q.tags &&
-            q.tags.some((tag: string) =>
+            q.tags?.some((tag: string) =>
               tag.toLowerCase().includes(searchLower),
             )),
       );
