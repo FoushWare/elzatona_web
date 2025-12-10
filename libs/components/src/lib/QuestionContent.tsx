@@ -384,10 +384,10 @@ export const QuestionContent = ({ content }: { content: string }) => {
       .replace(/efor\s+/gi, "for ")
       .replace(/econsole\./gi, "console.")
       .replace(/econsole\.log/gi, "console.log")
-      .replace(/<cod([a-zA-Z])/gi, "<code>$1")
-      .replace(/<code([a-zA-Z])/gi, "<code>$1")
-      .replace(/([a-zA-Z])<\/cod/gi, "$1</code>")
-      .replace(/([a-zA-Z])<\/code/gi, "$1</code>")
+      .replaceAll(/<cod([a-zA-Z])/gi, "<code>$1")
+      .replaceAll(/<code([a-zA-Z])/gi, "<code>$1")
+      .replaceAll(/([a-zA-Z])<\/cod/gi, "$1</code>")
+      .replaceAll(/([a-zA-Z])<\/code/gi, "$1</code>")
       .replace(/<cod(\d+[a-zA-Z]+)/gi, "<code>$1</code>")
       .replace(/<cod(\d+)/gi, "<code>$1</code>");
   }
@@ -435,10 +435,10 @@ export const QuestionContent = ({ content }: { content: string }) => {
       .replace(/<\/pree/gi, "</pre>")
       .replace(/<\/codee/gi, "</code>")
       .replace(/<\/cod/gi, "</code>")
-      .replace(/<cod([a-zA-Z])/gi, "<code>$1")
-      .replace(/<code([a-zA-Z])/gi, "<code>$1")
-      .replace(/([a-zA-Z])<\/cod/gi, "$1</code>")
-      .replace(/([a-zA-Z])<\/code/gi, "$1</code>")
+      .replaceAll(/<cod([a-zA-Z])/gi, "<code>$1")
+      .replaceAll(/<code([a-zA-Z])/gi, "<code>$1")
+      .replaceAll(/([a-zA-Z])<\/cod/gi, "$1</code>")
+      .replaceAll(/([a-zA-Z])<\/code/gi, "$1</code>")
       .replace(/<cod(\d+[a-zA-Z]+)/gi, "<code>$1</code>")
       .replace(/<cod(\d+)/gi, "<code>$1</code>");
 
@@ -512,7 +512,7 @@ export const QuestionContent = ({ content }: { content: string }) => {
     while (code !== previousCode && iterations < maxIterations) {
       previousCode = code;
       code = decodeHtmlEntities(code);
-      code = code.replace(/<\/?[a-zA-Z][a-zA-Z0-9]*(?:\s+[^>]*)?>/gi, "");
+      code = code.replaceAll(/<\/?[a-zA-Z][a-zA-Z0-9]*(?:\s+[^>]*)?>/gi, "");
       iterations++;
     }
 
@@ -556,7 +556,7 @@ export const QuestionContent = ({ content }: { content: string }) => {
         .replace(/(\w{1,50})\s*&lt;\s*(\d{1,10})\s*&gt;/g, "$1 < $2 >")
         .replace(/(\w{1,50})\s*&lt;\s*(\d{1,10})/g, "$1 < $2")
         .replace(/(\d{1,10})\s*&gt;/g, "$1 >")
-        .replace(/<\/?[a-zA-Z][a-zA-Z0-9]*(?:\s+[^>]*)?>/gi, "")
+        .replaceAll(/<\/?[a-zA-Z][a-zA-Z0-9]*(?:\s+[^>]*)?>/gi, "")
         .replace(/^>\s*/g, "")
         .replace(/\s*>$/g, "")
         .replace(/\s+>\s+/g, " ");
