@@ -24,10 +24,45 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: "20"
-          # Note: cache disabled because project uses bun.lock, not package-lock.json
+          # Explicitly disable cache since project uses bun.lock, not package-lock.json
+          package-manager-cache: false
 
       - name: Install dependencies
         run: npm install
+        # Using npm install instead of npm ci since package-lock.json doesn't exist
+        # Project uses bun as primary package manager
+
+      - name: Validate test database secrets
+        run: |
+          echo "🔒 Validating test database secrets..."
+          if [ -z "${{ secrets.TEST_SUPABASE_URL }}" ]; then
+            echo "❌ ERROR: TEST_SUPABASE_URL secret is not set!"
+            echo "⚠️  Tests will NOT run against production database"
+            echo "💡 Please set TEST_SUPABASE_URL in GitHub Secrets"
+            exit 1
+          fi
+          if [ -z "${{ secrets.TEST_SUPABASE_ANON_KEY }}" ]; then
+            echo "❌ ERROR: TEST_SUPABASE_ANON_KEY secret is not set!"
+            echo "⚠️  Tests will NOT run against production database"
+            echo "💡 Please set TEST_SUPABASE_ANON_KEY in GitHub Secrets"
+            exit 1
+          fi
+          if [ -z "${{ secrets.TEST_SUPABASE_SERVICE_ROLE_KEY }}" ]; then
+            echo "❌ ERROR: TEST_SUPABASE_SERVICE_ROLE_KEY secret is not set!"
+            echo "⚠️  Tests will NOT run against production database"
+            echo "💡 Please set TEST_SUPABASE_SERVICE_ROLE_KEY in GitHub Secrets"
+            exit 1
+          fi
+          echo "✅ All test database secrets are set"
+          # Verify it's actually a test database (not production)
+          TEST_URL="${{ secrets.TEST_SUPABASE_URL }}"
+          if [[ "$TEST_URL" == *"production"* ]] || [[ "$TEST_URL" == *"prod"* ]]; then
+            echo "❌ ERROR: TEST_SUPABASE_URL appears to be a production URL!"
+            echo "⚠️  URL contains 'production' or 'prod' - this is dangerous!"
+            echo "💡 Please use a separate test database, not production"
+            exit 1
+          fi
+          echo "✅ Test database URL validated (not production)"
 
       - name: Run linting with auto-fix
         run: |
@@ -58,10 +93,18 @@ jobs:
 
       - name: Run tests with coverage
         run: |
+          echo "🧪 Running tests against TEST database..."
+          echo "📊 Test Database URL: ${{ secrets.TEST_SUPABASE_URL }}"
+          # Verify we're using test database (not production)
+          if [[ "$NEXT_PUBLIC_SUPABASE_URL" == *"production"* ]] || [[ "$NEXT_PUBLIC_SUPABASE_URL" == *"prod"* ]]; then
+            echo "❌ ERROR: Tests are configured to use PRODUCTION database!"
+            echo "⚠️  This is dangerous and will affect production data!"
+            exit 1
+          fi
           npm run test:unit -- --coverage --coverageReporters=lcov --coverageDirectory=coverage || true
         continue-on-error: true
         env:
-          # Force test environment
+          # Force test environment (CRITICAL - prevents production database usage)
           APP_ENV: "test"
           NEXT_PUBLIC_APP_ENV: "test"
           NODE_ENV: "test"
@@ -71,7 +114,8 @@ jobs:
           # Admin credentials (from GitHub Secrets)
           ADMIN_EMAIL: ${{ secrets.ADMIN_EMAIL }}
           ADMIN_PASSWORD: ${{ secrets.ADMIN_PASSWORD }}
-          # Supabase test environment (from GitHub Secrets)
+          # ⚠️ CRITICAL: Use TEST database only (never production)
+          # These secrets MUST be set to test database credentials
           NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.TEST_SUPABASE_URL }}
           NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.TEST_SUPABASE_ANON_KEY }}
           SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.TEST_SUPABASE_SERVICE_ROLE_KEY }}
@@ -80,6 +124,8 @@ jobs:
           # CI flag
           CI: "true"
           GITHUB_ACTIONS: "true"
+          # Debug flag to verify test environment
+          DEBUG_TEST_ENV: "true"
 
       - name: SonarQube Scan
         uses: SonarSource/sonarqube-scan-action@v6
