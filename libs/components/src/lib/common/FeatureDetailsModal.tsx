@@ -1,6 +1,6 @@
 "use client";
 
-import React, { ReactNode } from "react";
+import React from "react";
 import { createClient } from "@supabase/supabase-js";
 
 const supabaseUrl = process.env["NEXT_PUBLIC_SUPABASE_URL"]!;
@@ -8,8 +8,7 @@ const supabaseServiceRoleKey = process.env["SUPABASE_SERVICE_ROLE_KEY"]!;
 const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
 
 // Using a custom modal implementation since dialog component doesn't exist
-import { Badge } from "@elzatona/components";
-import { Button } from "@elzatona/components";
+import { Badge, Button } from "@elzatona/components";
 import { WebsiteFeature } from "../types/website-features";
 import {
   X,

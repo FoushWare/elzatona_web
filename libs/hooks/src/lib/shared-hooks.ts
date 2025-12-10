@@ -9,7 +9,6 @@ export * from "./useFirebaseQuestions";
 // export * from './useImageOptimization'; // Removed - missing utils dependency
 export * from "./useLanguage";
 export * from "./useLearningPaths";
-// export * from './useLearningPathStats'; // Removed - missing resources dependency
 export * from "./useLearningPathStatsDebug";
 export * from "./useLearningPathStatsSimple";
 // export * from './useLearningPlans'; // Removed - missing firestore types dependency
