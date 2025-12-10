@@ -7933,9 +7933,7 @@ Technically it is possible to write nested function components but it is not sug
 
     3. **Unmounting:** In this last phase, the component is not needed and gets unmounted from the browser DOM. This phase includes `componentWillUnmount()` lifecycle method.
 
-    It's worth mentioning that React internally has a concept of phases when applying changes to the DOM. They are separated as follows 4. **Render** The component will render without any side effects. This applies to Pure components and in this phase, React can pause, abort, or restart the render.
-    5. **Pre-commit** Before the component actually applies the changes to the DOM, there is a moment that allows React to read from the DOM through the `getSnapshotBeforeUpdate()`.
-
+    It's worth mentioning that React internally has a concept of phases when applying changes to the DOM. They are separated as follows 4. **Render** The component will render without any side effects. This applies to Pure components and in this phase, React can pause, abort, or restart the render. 5. **Pre-commit** Before the component actually applies the changes to the DOM, there is a moment that allows React to read from the DOM through the `getSnapshotBeforeUpdate()`.
     6. **Commit** React works with the DOM and executes the final lifecycles respectively `componentDidMount()` for mounting, `componentDidUpdate()` for updating, and `componentWillUnmount()` for unmounting.
 
     React 16.3+ Phases (or an [interactive version](http://projects.wojtekmaj.pl/react-lifecycle-methods-diagram/))

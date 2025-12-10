@@ -61,10 +61,13 @@ cat > "$REPLACEMENTS_FILE" << 'EOF'
 # ⚠️ This file should NOT be committed with real secrets!
 # Format: actual_secret==>replacement_placeholder
 
-# Example (replace with your actual secrets):
-# SUPABASE_SERVICE_ROLE_KEY_REDACTED==>YOUR_SUPABASE_SERVICE_ROLE_KEY_HERE
-# AIzaSyBXlcfcdyIqoeJOb2gXcxpRSmQO7lEP82Y==>YOUR_GOOGLE_API_KEY_HERE
-# SUPABASE_SERVICE_ROLE_KEY_REDACTED==>YOUR_SUPABASE_ANON_KEY_HERE
+# Example format (replace with your actual secrets):
+# EXAMPLE_SUPABASE_SERVICE_ROLE_JWT_TOKEN==>YOUR_SUPABASE_SERVICE_ROLE_KEY_HERE
+# EXAMPLE_GOOGLE_API_KEY==>YOUR_GOOGLE_API_KEY_HERE
+# EXAMPLE_SUPABASE_ANON_JWT_TOKEN==>YOUR_SUPABASE_ANON_KEY_HERE
+#
+# Note: The above are placeholders. Replace with your actual exposed secrets.
+# Format: actual_secret==>replacement_placeholder
 
 # ⚠️ Add your actual secrets here (one per line):
 # YOUR_ACTUAL_SECRET_1==>YOUR_PLACEHOLDER_HERE
