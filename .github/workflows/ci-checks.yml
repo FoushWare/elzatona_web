@@ -37,7 +37,9 @@ jobs:
       - name: Run Prettier formatting check
         run: |
           echo "🎨 Running Prettier formatting check..."
-          npm run format -- --check
+          # Use --check flag to verify formatting without modifying files
+          # Prettier will respect .prettierignore file
+          npx prettier --check . --ignore-path .prettierignore || (echo "⚠️  Prettier found formatting issues. Run 'npm run format' to fix them." && exit 1)
         continue-on-error: false
 
       - name: Run ESLint with auto-fix

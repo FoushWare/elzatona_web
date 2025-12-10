@@ -1,0 +1,73 @@
+# Prettier ignore file
+# Files that should not be formatted by Prettier
+
+# Secret scanning reports (JSONL format, not valid JSON)
+trufflehog-current.json
+trufflehog-history.json
+gitleaks-current.json
+gitleaks-history.json
+
+# Build artifacts
+.next/
+build/
+dist/
+coverage/
+storybook-static/
+.vercel/
+
+# Dependencies
+node_modules/
+.pnp/
+.pnp.js
+
+# Testing
+playwright-report/
+test-results/
+*.log
+
+# Environment files
+.env
+.env.local
+.env.*.local
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Git
+.git/
+.gitignore
+
+# Binary files
+*.ico
+*.png
+*.jpg
+*.jpeg
+*.gif
+*.svg
+*.woff
+*.woff2
+*.ttf
+*.eot
+*.pdf
+*.zip
+*.tar
+*.gz
+
+# Lock files
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+bun.lock
+
+# Generated files
+*.tsbuildinfo
+.scannerwork/
+.sonar/
