@@ -636,14 +636,21 @@ export const QuestionContent = ({ content }: { content: string }) => {
     
     while ((htmlMatch = pattern.exec(fixedContent)) !== null && iterationCount < MAX_ITERATIONS) {
       iterationCount++;
+      // TypeScript: htmlMatch is guaranteed non-null by while condition
+      // Use non-null assertion since we've already checked in the while condition
+      const match = htmlMatch!;
+      
+      // TypeScript: htmlMatch is guaranteed non-null by while condition
+      // Use non-null assertion since we've already checked in the while condition
+      const match = htmlMatch!;
       // Skip if we've already processed this index (within 10 chars)
       const isDuplicate = Array.from(processedIndices).some(
-        (idx) => Math.abs(idx - htmlMatch.index) < 10
+        (idx) => Math.abs(idx - match.index) < 10
       );
       if (isDuplicate) continue;
       
-      processedIndices.add(htmlMatch.index);
-      let matchContent = htmlMatch[0];
+      processedIndices.add(match.index);
+      let matchContent = match[0];
       matchContent = matchContent
         .replace(/<pr<cod/gi, "<pre><code>")
         .replace(/<pr<code/gi, "<pre><code>")
@@ -653,9 +660,9 @@ export const QuestionContent = ({ content }: { content: string }) => {
       const extractedCode = extractCodeFromHtml(matchContent);
       if (extractedCode) {
         htmlMatches.push({
-          index: htmlMatch.index,
+          index: match.index,
           content: extractedCode,
-          fullMatch: htmlMatch[0],
+          fullMatch: match[0],
         });
       }
     }
