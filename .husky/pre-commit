@@ -35,6 +35,12 @@ echo "   📝 Executing: ggshield secret scan pre-commit"
 echo "   ⚠️  This will catch secrets BEFORE they leave your machine!"
 echo ""
 
+# Load GitGuardian API key from .env.local if available
+if [ -f .env.local ] && [ -z "$GITGUARDIAN_API_KEY" ]; then
+  # Extract GITGUARDIAN_API_KEY from .env.local (handle comments and empty lines)
+  export GITGUARDIAN_API_KEY=$(grep -E "^GITGUARDIAN_API_KEY=" .env.local 2>/dev/null | cut -d '=' -f2- | tr -d '"' | tr -d "'" | xargs)
+fi
+
 # Check if ggshield is available
 if ! command -v ggshield &> /dev/null; then
   echo "   ⚠️  GitGuardian CLI (ggshield) not found"
@@ -51,8 +57,9 @@ else
   # Check if the error is due to missing authentication
   if echo "$GGSHIELD_OUTPUT" | grep -q "A GitGuardian API key is needed"; then
     echo "   ⚠️  GitGuardian is not authenticated"
-    echo "   💡 To set up authentication, run: ggshield auth login"
-    echo "   💡 Or set GITGUARDIAN_API_KEY environment variable"
+    echo "   💡 To set up authentication:"
+    echo "      1. Add GITGUARDIAN_API_KEY to .env.local"
+    echo "      2. Or run: ggshield auth login"
     echo "   ⏭️  Allowing commit (pre-push hook will still scan for secrets)"
     echo "   📚 Setup guide: https://docs.gitguardian.com/ggshield-docs/reference/auth/login"
     echo ""
