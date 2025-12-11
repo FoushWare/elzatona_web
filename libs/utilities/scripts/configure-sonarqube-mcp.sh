@@ -64,8 +64,8 @@ fi
 
 echo ""
 echo "2️⃣  Choose installation method:"
-echo "   a) Docker (Recommended - easier setup)"
-echo "   b) NPM (Local installation)"
+echo "   a) Java (Manual installation - requires JAR file)"
+echo "   b) Docker (Container-based - easier setup)"
 echo ""
 read -p "Select method (a/b): " method
 
@@ -75,7 +75,105 @@ if [ -f "$MCP_CONFIG_PATH" ]; then
   EXISTING_CONFIG=$(cat "$MCP_CONFIG_PATH" 2>/dev/null || echo "{}")
 fi
 
+# Get absolute path for storage directory
+STORAGE_DIR="$(pwd)/.cursor/mcp-storage/sonarqube"
+mkdir -p "$STORAGE_DIR"
+
 if [ "$method" = "a" ]; then
+  # Java method (manual installation)
+  echo ""
+  echo "☕ Java Installation Method (Manual)"
+  echo ""
+  echo "The SonarQube MCP server will run using Java."
+  echo "This requires JDK 21 or later and the SonarQube MCP Server JAR file."
+  echo ""
+  
+  # Check if Java is installed
+  if ! command -v java &> /dev/null; then
+    echo "❌ Error: Java is not installed"
+    echo "   Install JDK 21+ from: https://adoptium.net/"
+    exit 1
+  fi
+  
+  JAVA_VERSION=$(java -version 2>&1 | head -1 | cut -d'"' -f2 | sed '/^1\./s///' | cut -d'.' -f1)
+  if [ -z "$JAVA_VERSION" ] || [ "$JAVA_VERSION" -lt 21 ]; then
+    echo "⚠️  Warning: Java version $JAVA_VERSION detected"
+    echo "   SonarQube MCP Server requires JDK 21 or later"
+    echo "   Install JDK 21+ from: https://adoptium.net/"
+    echo ""
+    read -p "Continue anyway? (yes/no): " continue_anyway
+    if [ "$continue_anyway" != "yes" ]; then
+      exit 0
+    fi
+  else
+    echo "✅ Java $JAVA_VERSION is installed"
+  fi
+  
+  echo ""
+  echo "📦 JAR File Setup:"
+  echo "   You need to build or download the SonarQube MCP Server JAR file."
+  echo ""
+  echo "   Option 1: Build from source (requires JDK 21+ and Gradle):"
+  echo "   👉 git clone https://github.com/SonarSource/sonarqube-mcp-server.git"
+  echo "   👉 cd sonarqube-mcp-server"
+  echo "   👉 ./gradlew clean build -x test"
+  echo "   👉 JAR will be in: build/libs/"
+  echo ""
+  echo "   Option 2: Download from releases:"
+  echo "   👉 https://github.com/SonarSource/sonarqube-mcp-server/releases"
+  echo ""
+  
+  read -p "Enter the absolute path to the SonarQube MCP Server JAR file: " JAR_PATH
+  
+  if [ -z "$JAR_PATH" ]; then
+    echo "❌ Error: JAR path cannot be empty"
+    exit 1
+  fi
+  
+  if [ ! -f "$JAR_PATH" ]; then
+    echo "❌ Error: JAR file not found at: $JAR_PATH"
+    exit 1
+  fi
+  
+  echo "✅ JAR file found: $JAR_PATH"
+  echo ""
+  
+  # Create MCP configuration with Java command
+  cat > "$MCP_CONFIG_PATH" << EOF
+{
+  "mcpServers": {
+    "sonarqube": {
+      "command": "java",
+      "args": [
+        "-jar",
+        "${JAR_PATH}"
+      ],
+      "env": {
+        "STORAGE_PATH": "${STORAGE_DIR}",
+        "SONARQUBE_TOKEN": "${SONAR_TOKEN}",
+        "SONARQUBE_ORG": "${ORGANIZATION}"
+      }
+    }
+  }
+}
+EOF
+
+  echo "✅ Created MCP configuration with Java setup"
+  echo ""
+  echo "📝 Configuration saved to: $MCP_CONFIG_PATH"
+  echo "📁 Storage directory: $STORAGE_DIR"
+  echo ""
+  echo "3️⃣  Next Steps:"
+  echo "   - Restart Cursor IDE to load the MCP server"
+  echo "   - The SonarQube MCP server will start automatically when Cursor starts"
+  echo "   - You can analyze code by asking: 'Analyze this code with SonarQube'"
+  echo ""
+  echo "🔍 To test the connection:"
+  echo "   - Open Cursor"
+  echo "   - Check the MCP server status in the Cursor settings"
+  echo "   - Try analyzing a code file with SonarQube"
+  
+elif [ "$method" = "b" ]; then
   # Docker method
   echo ""
   echo "🐳 Docker Installation Method"
@@ -128,73 +226,6 @@ EOF
   echo "   - Check the MCP server status in the Cursor settings"
   echo "   - Try analyzing a code file with SonarQube"
   
-elif [ "$method" = "b" ]; then
-  # NPM method
-  echo ""
-  echo "📦 NPM Installation Method"
-  echo ""
-  echo "The SonarQube MCP server will be installed locally via NPM."
-  echo ""
-  
-  # Check if npm is installed
-  if ! command -v npm &> /dev/null; then
-    echo "❌ Error: npm is not installed"
-    echo "   Install Node.js from: https://nodejs.org/"
-    exit 1
-  fi
-  
-  echo "✅ npm is installed"
-  echo ""
-  echo "📦 Installing SonarQube MCP server package..."
-  
-  # Install the MCP server package (if it exists)
-  if npm list -g @modelcontextprotocol/server-sonarqube &> /dev/null; then
-    echo "✅ SonarQube MCP server package already installed"
-  else
-    echo "⚠️  Note: The official SonarQube MCP server package may need to be installed manually"
-    echo "   Check: https://github.com/modelcontextprotocol/servers for available packages"
-    echo ""
-    read -p "Continue with configuration anyway? (yes/no): " continue_setup
-    if [ "$continue_setup" != "yes" ]; then
-      exit 0
-    fi
-  fi
-  
-  # Create MCP configuration with NPM command
-  # Note: Adjust the command based on the actual package name when available
-  cat > "$MCP_CONFIG_PATH" << EOF
-{
-  "mcpServers": {
-    "sonarqube": {
-      "command": "npx",
-      "args": [
-        "-y",
-        "@modelcontextprotocol/server-sonarqube"
-      ],
-      "env": {
-        "SONARQUBE_TOKEN": "${SONAR_TOKEN}",
-        "SONARQUBE_ORG": "${ORGANIZATION}",
-        "SONARQUBE_PROJECT_KEY": "${PROJECT_KEY}"
-      }
-    }
-  }
-}
-EOF
-
-  echo "✅ Created MCP configuration with NPM setup"
-  echo ""
-  echo "📝 Configuration saved to: $MCP_CONFIG_PATH"
-  echo ""
-  echo "3️⃣  Next Steps:"
-  echo "   - Install the MCP server package (if not already installed)"
-  echo "   - Restart Cursor IDE to load the MCP server"
-  echo "   - The SonarQube MCP server will start automatically when Cursor starts"
-  echo ""
-  echo "🔍 To test the connection:"
-  echo "   - Open Cursor"
-  echo "   - Check the MCP server status in the Cursor settings"
-  echo "   - Try analyzing a code file with SonarQube"
-  
 else
   echo "❌ Invalid selection"
   exit 1
@@ -212,3 +243,4 @@ echo "   - $MCP_CONFIG_PATH contains your SonarQube token"
 echo "   - This file is in .gitignore and should NOT be committed"
 echo "   - Keep your token secure and rotate it if exposed"
 echo ""
+
