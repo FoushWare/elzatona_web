@@ -87,7 +87,7 @@ export const QuestionPracticeView: React.FC<QuestionPracticeViewProps> = ({
     if (typeof question.resources === "string") {
       try {
         return JSON.parse(question.resources);
-      } catch (e) {
+      } catch (_e) {
         console.error("Failed to parse resources:", e);
         return [];
       }
@@ -114,7 +114,7 @@ export const QuestionPracticeView: React.FC<QuestionPracticeViewProps> = ({
     if (typeof question.options === "string") {
       try {
         optionsArray = JSON.parse(question.options);
-      } catch (e) {
+      } catch (_e) {
         console.error("Failed to parse options:", e);
         return [];
       }
@@ -253,7 +253,7 @@ export const QuestionPracticeView: React.FC<QuestionPracticeViewProps> = ({
   };
 
   const displayDifficulty =
-    difficultyMap[question.difficulty] || question.difficulty;
+    (question.difficulty && difficultyMap[question.difficulty]) || question.difficulty || "medium";
 
   return (
     <div className="w-full max-w-4xl mx-auto">
@@ -269,14 +269,14 @@ export const QuestionPracticeView: React.FC<QuestionPracticeViewProps> = ({
                 {displayDifficulty}
               </span>
               <span className="px-3 py-1 rounded-full text-sm font-medium bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 border border-gray-300 dark:border-gray-600">
-                {question.type}
+                {String(question.type || "multiple-choice")}
               </span>
             </div>
           </div>
         </div>
 
         <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white mb-4 leading-tight">
-          <QuestionContent content={cleanQuestionTitle(question.title)} />
+          <QuestionContent content={cleanQuestionTitle(question.title || "")} />
         </h2>
 
         {/* Question Content */}

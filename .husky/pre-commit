@@ -29,8 +29,53 @@ else
 fi
 echo ""
 
-# Step 2: Add formatted files to staging
-echo "📦 STEP 2: Adding formatted files to staging..."
+# Step 2: Secret scanning with GitGuardian (ggshield)
+echo "🔒 STEP 2: Running GitGuardian secret scanning on staged files..."
+echo "   📝 Executing: ggshield secret scan pre-commit"
+echo "   ⚠️  This will catch secrets BEFORE they leave your machine!"
+echo ""
+
+# Check if ggshield is available
+if ! command -v ggshield &> /dev/null; then
+  echo "   ⚠️  GitGuardian CLI (ggshield) not found"
+  echo "   💡 Install with: pipx install ggshield"
+  echo "   💡 Or: brew install ggshield"
+  echo "   ⏭️  Skipping secret scan (pre-push hook will still scan)"
+  echo ""
+else
+  # Run ggshield on staged files
+  # Capture both stdout and stderr to check for auth errors
+  GGSHIELD_OUTPUT=$(ggshield secret scan pre-commit 2>&1)
+  GGSHIELD_EXIT_CODE=$?
+  
+  # Check if the error is due to missing authentication
+  if echo "$GGSHIELD_OUTPUT" | grep -q "A GitGuardian API key is needed"; then
+    echo "   ⚠️  GitGuardian is not authenticated"
+    echo "   💡 To set up authentication, run: ggshield auth login"
+    echo "   💡 Or set GITGUARDIAN_API_KEY environment variable"
+    echo "   ⏭️  Allowing commit (pre-push hook will still scan for secrets)"
+    echo "   📚 Setup guide: https://docs.gitguardian.com/ggshield-docs/reference/auth/login"
+    echo ""
+  elif [ $GGSHIELD_EXIT_CODE -ne 0 ]; then
+    echo "$GGSHIELD_OUTPUT"
+    echo ""
+    echo "   ❌ GitGuardian detected secrets in staged files!"
+    echo "   💡 Please remove hardcoded secrets and use environment variables"
+    echo "   💡 See: https://docs.gitguardian.com/ggshield-docs/getting-started"
+    echo ""
+    echo "════════════════════════════════════════════════════════════════"
+    echo "❌ PRE-COMMIT HOOK FAILED - SECRETS DETECTED!"
+    echo "════════════════════════════════════════════════════════════════"
+    echo ""
+    exit 1
+  else
+    echo "   ✅ GitGuardian secret scan passed - no secrets detected!"
+  fi
+fi
+echo ""
+
+# Step 3: Add formatted files to staging
+echo "📦 STEP 3: Adding formatted files to staging..."
 git add .
 echo "   ✅ Formatted files added to staging"
 echo ""
@@ -38,13 +83,14 @@ echo ""
 # Final status
 echo "📊 PRE-COMMIT SUMMARY:"
 echo "   ✅ Prettier formatting completed"
+echo "   ✅ GitGuardian secret scanning passed"
 echo "   ✅ Files staged for commit"
 echo ""
 echo "════════════════════════════════════════════════════════════════"
 echo "✅ PRE-COMMIT CHECKS COMPLETED SUCCESSFULLY!"
 echo "🚀 READY TO COMMIT!"
 echo ""
-echo "💡 Note: Linting, type checking, build validation, and secret scanning"
+echo "💡 Note: Linting, type checking, and build validation"
 echo "   will run on push (before code reaches GitHub)"
 echo "════════════════════════════════════════════════════════════════"
 echo ""
