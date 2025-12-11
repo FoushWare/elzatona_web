@@ -1,15 +1,5 @@
-'use client';
+// Next.js page wrapper - imports from pages/ directory
+// This file maintains Next.js routing structure
+// Source: /Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/apps/website/page-components/settings/page.tsx
 
-// v1.0
-import React from 'react';
-
-export default function SettingsPage() {
-  return (
-    <main className='pt-24 px-4 max-w-5xl mx-auto'>
-      <h1 className='text-2xl font-semibold mb-4'>Settings</h1>
-      <p className='text-gray-600 dark:text-gray-300'>
-        Manage your account preferences and application settings here.
-      </p>
-    </main>
-  );
-}
+export { default } from "../../../page-components/settings/page";

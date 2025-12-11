@@ -1,9 +1,9 @@
-'use client';
+"use client";
 
-import React from 'react';
-import { Badge, Button } from '@elzatona/shared-components';
-import { Edit, Eye, Trash2 } from 'lucide-react';
-import type { UnifiedQuestion } from './QuestionForm';
+import React from "react";
+import { Badge, Button } from "@elzatona/components";
+import { Edit, Eye, Trash2 } from "lucide-react";
+import type { UnifiedQuestion } from "./QuestionForm";
 
 interface QuestionItemProps {
   question: UnifiedQuestion;
@@ -19,35 +19,35 @@ export const QuestionItem: React.FC<QuestionItemProps> = ({
   onDelete,
 }) => {
   return (
-    <div className='p-4 border-b border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors'>
-      <div className='flex items-start justify-between'>
-        <div className='flex-1 pr-4'>
-          <h4 className='text-lg font-semibold text-gray-900 dark:text-white mb-1'>
+    <div className="p-4 border-b border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
+      <div className="flex items-start justify-between">
+        <div className="flex-1 pr-4">
+          <h4 className="text-lg font-semibold text-gray-900 dark:text-white mb-1">
             {question.title}
           </h4>
-          <p className='text-sm text-gray-600 dark:text-gray-400 line-clamp-2'>
+          <p className="text-sm text-gray-600 dark:text-gray-400 line-clamp-2">
             {question.content}
           </p>
-          <div className='mt-2 flex flex-wrap gap-2'>
+          <div className="mt-2 flex flex-wrap gap-2">
             {/* Topics Badges */}
             {question.topics && question.topics.length > 0 ? (
               question.topics.map((topic, index) => (
                 <Badge
                   key={`${question.id}-topic-${index}`}
-                  variant={topic.is_primary ? 'default' : 'outline'}
+                  variant={topic.is_primary ? "default" : "outline"}
                   className={`${
                     topic.is_primary
-                      ? 'bg-purple-600 text-white'
-                      : 'bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200'
+                      ? "bg-purple-600 text-white"
+                      : "bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200"
                   }`}
                 >
-                  {topic.is_primary && '⭐ '}Topic: {topic.name}
+                  {topic.is_primary && "⭐ "}Topic: {topic.name}
                 </Badge>
               ))
             ) : (
               <Badge
-                variant='outline'
-                className='bg-gray-100 text-gray-600 dark:bg-gray-800 dark:text-gray-400'
+                variant="outline"
+                className="bg-gray-100 text-gray-600 dark:bg-gray-800 dark:text-gray-400"
               >
                 Topic: No Topic
               </Badge>
@@ -58,20 +58,20 @@ export const QuestionItem: React.FC<QuestionItemProps> = ({
               question.categories.map((category, index) => (
                 <Badge
                   key={`${question.id}-category-${index}`}
-                  variant={category.is_primary ? 'default' : 'secondary'}
+                  variant={category.is_primary ? "default" : "secondary"}
                   className={`${
                     category.is_primary
-                      ? 'bg-green-600 text-white'
-                      : 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200'
+                      ? "bg-green-600 text-white"
+                      : "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200"
                   }`}
                 >
-                  {category.is_primary && '⭐ '}Category: {category.name}
+                  {category.is_primary && "⭐ "}Category: {category.name}
                 </Badge>
               ))
             ) : (
               <Badge
-                variant='outline'
-                className='bg-gray-100 text-gray-600 dark:bg-gray-800 dark:text-gray-400'
+                variant="outline"
+                className="bg-gray-100 text-gray-600 dark:bg-gray-800 dark:text-gray-400"
               >
                 Category: No Category
               </Badge>
@@ -80,15 +80,15 @@ export const QuestionItem: React.FC<QuestionItemProps> = ({
             {/* Card Badge */}
             {question.learning_card ? (
               <Badge
-                variant='secondary'
-                className='bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200'
+                variant="secondary"
+                className="bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200"
               >
                 Card: {question.learning_card.title}
               </Badge>
             ) : (
               <Badge
-                variant='outline'
-                className='bg-gray-100 text-gray-600 dark:bg-gray-800 dark:text-gray-400'
+                variant="outline"
+                className="bg-gray-100 text-gray-600 dark:bg-gray-800 dark:text-gray-400"
               >
                 Card: No Card
               </Badge>
@@ -97,49 +97,40 @@ export const QuestionItem: React.FC<QuestionItemProps> = ({
             {/* Difficulty Badge */}
             {question.difficulty && (
               <Badge
-                variant={
-                  question.difficulty === 'beginner'
-                    ? 'default'
-                    : question.difficulty === 'intermediate'
-                      ? 'outline'
-                      : 'destructive'
-                }
+                variant={(() => {
+                  if (question.difficulty === "beginner") {
+                    return "default";
+                  }
+                  if (question.difficulty === "intermediate") {
+                    return "outline";
+                  }
+                  return "destructive";
+                })()}
               >
                 {question.difficulty}
               </Badge>
             )}
 
             {/* Type Badge */}
-            {question.type && (
-              <Badge variant='outline'>{question.type}</Badge>
-            )}
+            {question.type && <Badge variant="outline">{question.type}</Badge>}
           </div>
         </div>
-        <div className='flex space-x-2'>
-          <Button
-            variant='outline'
-            size='sm'
-            onClick={() => onView(question)}
-          >
-            <Eye className='w-4 h-4' />
+        <div className="flex space-x-2">
+          <Button variant="outline" size="sm" onClick={() => onView(question)}>
+            <Eye className="w-4 h-4" />
+          </Button>
+          <Button variant="outline" size="sm" onClick={() => onEdit(question)}>
+            <Edit className="w-4 h-4" />
           </Button>
           <Button
-            variant='outline'
-            size='sm'
-            onClick={() => onEdit(question)}
-          >
-            <Edit className='w-4 h-4' />
-          </Button>
-          <Button
-            variant='destructive'
-            size='sm'
+            variant="destructive"
+            size="sm"
             onClick={() => onDelete(question.id)}
           >
-            <Trash2 className='w-4 h-4' />
+            <Trash2 className="w-4 h-4" />
           </Button>
         </div>
       </div>
     </div>
   );
 };
-

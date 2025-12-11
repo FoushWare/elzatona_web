@@ -3,14 +3,14 @@
  * Task: F-003 - Browse Practice Questions
  */
 
-import React from 'react';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
-import '@testing-library/jest-dom';
-import BrowsePracticeQuestionsPage from './page';
-import * as sharedContexts from '@elzatona/shared-contexts';
+import React from "react";
+import { render, screen, waitFor } from "@testing-library/react";
+import "@testing-library/jest-dom";
+import BrowsePracticeQuestionsPage from "./page";
+import * as sharedContexts from "@elzatona/contexts";
 
-jest.mock('@elzatona/shared-contexts', () => {
-  const actual = jest.requireActual('../../test-utils/mocks/shared-contexts');
+jest.mock("@elzatona/contexts", () => {
+  const actual = jest.requireActual("../../test-utils/mocks/shared-contexts");
   return {
     ...actual,
     useAuth: jest.fn(),
@@ -18,7 +18,7 @@ jest.mock('@elzatona/shared-contexts', () => {
 });
 
 const mockPush = jest.fn();
-jest.mock('next/navigation', () => ({
+jest.mock("next/navigation", () => ({
   useRouter: () => ({
     push: mockPush,
     replace: jest.fn(),
@@ -28,7 +28,7 @@ jest.mock('next/navigation', () => ({
 
 Storage.prototype.getItem = jest.fn(() => JSON.stringify([]));
 
-jest.mock('lucide-react', () => ({
+jest.mock("lucide-react", () => ({
   Code: () => <span>💻</span>,
   Target: () => <span>🎯</span>,
   Brain: () => <span>🧠</span>,
@@ -47,25 +47,25 @@ jest.mock('lucide-react', () => ({
   Loader2: () => <span>⏳</span>,
 }));
 
-describe('F-UT-008: Component Renders', () => {
+describe("F-UT-008: Component Renders", () => {
   beforeEach(() => {
     jest.clearAllMocks();
-    
+
     (sharedContexts.useAuth as jest.Mock).mockReturnValue({
       isAuthenticated: true,
-      user: { id: '1', email: 'user@example.com' },
+      user: { id: "1", email: "user@example.com" },
       isLoading: false,
     });
   });
 
-  it('should render without errors', async () => {
+  it("should render without errors", async () => {
     const { container } = render(<BrowsePracticeQuestionsPage />);
     await waitFor(() => {
       expect(container).toBeInTheDocument();
     });
   });
 
-  it('should display practice options', async () => {
+  it("should display practice options", async () => {
     render(<BrowsePracticeQuestionsPage />);
     await waitFor(() => {
       expect(screen.getByText(/Interview Questions/i)).toBeInTheDocument();
@@ -73,31 +73,31 @@ describe('F-UT-008: Component Renders', () => {
   });
 });
 
-describe('F-UT-SNAPSHOT: Browse Practice Questions Snapshot Tests', () => {
+describe("F-UT-SNAPSHOT: Browse Practice Questions Snapshot Tests", () => {
   beforeEach(() => {
     jest.clearAllMocks();
-    
+
     (sharedContexts.useAuth as jest.Mock).mockReturnValue({
       isAuthenticated: true,
-      user: { id: '1', email: 'user@example.com' },
+      user: { id: "1", email: "user@example.com" },
       isLoading: false,
     });
   });
 
-  it('should match browse practice questions page snapshot', async () => {
+  it("should match browse practice questions page snapshot", async () => {
     const { container } = render(<BrowsePracticeQuestionsPage />);
     await waitFor(() => {
       expect(container.firstChild).toMatchSnapshot();
     });
   });
 
-  it('should match browse practice questions page snapshot (unauthenticated)', () => {
+  it("should match browse practice questions page snapshot (unauthenticated)", () => {
     (sharedContexts.useAuth as jest.Mock).mockReturnValue({
       isAuthenticated: false,
       user: null,
       isLoading: false,
     });
-    
+
     const { container } = render(<BrowsePracticeQuestionsPage />);
     expect(container.firstChild).toMatchSnapshot();
   });
