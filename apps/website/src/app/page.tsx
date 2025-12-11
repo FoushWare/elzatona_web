@@ -15,12 +15,211 @@ import {
   Sparkles,
   Zap,
 } from "lucide-react";
-import { useUserType } from "@elzatona/contexts";
-import { useAuth } from "@elzatona/contexts";
+import { useUserType, useAuth } from "@elzatona/contexts";
 import { UserStatistics } from "@elzatona/components";
 import { ErrorBoundary } from "@elzatona/components";
 import { useRouter } from "next/navigation";
 import { useLearningType } from "@/context/LearningTypeContext";
+
+// Helper component for User Type Specific Content Section
+function UserTypeContentSection({
+  userType,
+  showAnimation,
+  hasActivePlan,
+  activePlan,
+  personalizedContent,
+}: {
+  userType: string;
+  showAnimation: boolean;
+  hasActivePlan: boolean;
+  activePlan: {
+    id: string;
+    name: string;
+    totalQuestions: number;
+    estimatedTime: string;
+  } | null;
+  personalizedContent: ReturnType<typeof getPersonalizedContent>;
+}) {
+  if (userType === "guided") {
+    return (
+      <section
+        className={`py-16 px-4 sm:px-6 lg:px-8 relative z-10 transition-all duration-1000 delay-1400 ${
+          showAnimation
+            ? "opacity-100 translate-y-0"
+            : "opacity-0 translate-y-8"
+        }`}
+      >
+        <div className="max-w-7xl mx-auto">
+          <div
+            className={`bg-gradient-to-r ${
+              hasActivePlan
+                ? "from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20"
+                : "from-indigo-50 to-purple-50 dark:from-indigo-900/20 dark:to-purple-900/20"
+            } rounded-2xl p-8 relative overflow-hidden`}
+          >
+            <div className="absolute inset-0 opacity-10">
+              <div className="absolute top-4 left-4 w-2 h-2 bg-indigo-400 rounded-full animate-ping"></div>
+              <div className="absolute top-8 right-8 w-1 h-1 bg-purple-400 rounded-full animate-pulse"></div>
+              <div className="absolute bottom-4 left-8 w-3 h-3 bg-blue-400 rounded-full animate-bounce"></div>
+              <div className="absolute bottom-8 right-4 w-2 h-2 bg-pink-400 rounded-full animate-ping"></div>
+            </div>
+            <div className="text-center relative z-10">
+              <div
+                className={`w-16 h-16 ${
+                  hasActivePlan ? "bg-green-600" : "bg-indigo-600"
+                } rounded-full flex items-center justify-center mx-auto mb-4 animate-pulse`}
+              >
+                {personalizedContent.icon}
+              </div>
+              <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
+                {personalizedContent.title}
+              </h3>
+              <p className="text-gray-600 dark:text-gray-300 mb-6">
+                {personalizedContent.subtitle}
+              </p>
+              {hasActivePlan && activePlan && (
+                <div className="mb-4 p-4 bg-white/50 dark:bg-gray-800/50 rounded-lg backdrop-blur-sm">
+                  <div className="text-sm text-gray-600 dark:text-gray-300 mb-2">
+                    Current Plan:{" "}
+                    <span className="font-semibold">{activePlan.name}</span>
+                  </div>
+                  <div className="text-sm text-gray-600 dark:text-gray-300">
+                    {activePlan.totalQuestions} questions •{" "}
+                    {activePlan.estimatedTime}
+                  </div>
+                </div>
+              )}
+              <Link
+                href={personalizedContent.ctaLink}
+                className={`inline-flex items-center space-x-2 px-6 py-3 ${
+                  hasActivePlan
+                    ? "bg-green-600 hover:bg-green-700"
+                    : "bg-indigo-600 hover:bg-indigo-700"
+                } text-white rounded-lg font-medium transition-all duration-300 transform hover:scale-105 hover:shadow-lg`}
+              >
+                <span>{personalizedContent.cta}</span>
+                <ArrowRight className="w-4 h-4" />
+              </Link>
+            </div>
+          </div>
+        </div>
+      </section>
+    );
+  }
+
+  return (
+    <section
+      className={`py-16 px-4 sm:px-6 lg:px-8 relative z-10 transition-all duration-1000 delay-1400 ${
+        showAnimation ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
+      }`}
+    >
+      <div className="max-w-7xl mx-auto">
+        <div className="bg-gradient-to-r from-purple-50 to-pink-50 dark:from-purple-900/20 dark:to-pink-900/20 rounded-2xl p-8 relative overflow-hidden">
+          <div className="absolute inset-0 opacity-10">
+            <div className="absolute top-6 left-6 w-3 h-3 bg-purple-400 rounded-full animate-bounce"></div>
+            <div className="absolute top-12 right-12 w-1 h-1 bg-pink-400 rounded-full animate-ping"></div>
+            <div className="absolute bottom-6 left-12 w-2 h-2 bg-indigo-400 rounded-full animate-pulse"></div>
+            <div className="absolute bottom-12 right-6 w-4 h-4 bg-blue-400 rounded-full animate-bounce"></div>
+          </div>
+          <div className="text-center relative z-10">
+            <div className="w-16 h-16 bg-purple-600 rounded-full flex items-center justify-center mx-auto mb-4 animate-pulse">
+              <Compass className="w-8 h-8 text-white" />
+            </div>
+            <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
+              Self-Directed Learning
+            </h3>
+            <p className="text-gray-600 dark:text-gray-300 mb-6">
+              You&apos;re creating your own roadmap. Explore content freely and
+              build your personalized learning journey.
+            </p>
+            <Link
+              href="/browse-practice-questions"
+              className="inline-flex items-center space-x-2 px-6 py-3 bg-purple-600 hover:bg-purple-700 text-white rounded-lg font-medium transition-all duration-300 transform hover:scale-105 hover:shadow-lg"
+            >
+              <span>View My Roadmap</span>
+              <ArrowRight className="w-4 h-4" />
+            </Link>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+// Helper function to get guided learning content
+function getGuidedContent(
+  hasActivePlan: boolean,
+  activePlan: { name: string; id: string } | null,
+) {
+  if (hasActivePlan && activePlan) {
+    return {
+      title: `Continue ${activePlan.name}`,
+      subtitle: `Pick up where you left off with your ${activePlan.name.toLowerCase()}`,
+      cta: "Continue Practice",
+      ctaLink: `/guided-practice?plan=${activePlan.id}`,
+      icon: <Play className="w-6 h-6" />,
+      color: "green",
+    };
+  }
+  return {
+    title: "Master Frontend Development",
+    subtitle: "The complete platform to ace your frontend interviews",
+    cta: "View Learning Plans",
+    ctaLink: "/features/guided-learning",
+    icon: <Map className="w-6 h-6" />,
+    color: "indigo",
+  };
+}
+
+// Helper function to get default content
+function getDefaultContent() {
+  return {
+    title: "Master Frontend Development",
+    subtitle: "The complete platform to ace your frontend interviews",
+    cta: "Get Started",
+    ctaLink: "/get-started",
+    icon: <Play className="w-6 h-6" />,
+    color: "indigo",
+  };
+}
+
+// Helper function to get self-directed content
+function getSelfDirectedContent() {
+  return {
+    title: "Build Your Custom Roadmap",
+    subtitle: "Create and manage your personalized learning journey",
+    cta: "View My Roadmap",
+    ctaLink: "/browse-practice-questions",
+    icon: <Compass className="w-6 h-6" />,
+    color: "purple",
+  };
+}
+
+// Helper function to get personalized content
+function getPersonalizedContent(
+  userType: string | null,
+  hasActivePlan: boolean,
+  activePlan: { name: string; id: string } | null,
+) {
+  if (userType === "guided") {
+    return getGuidedContent(hasActivePlan, activePlan);
+  }
+  if (userType === "self-directed") {
+    return getSelfDirectedContent();
+  }
+  return getDefaultContent();
+}
+
+// Helper function to get color classes for CTA button
+function getColorClasses(color: string): string {
+  if (color === "indigo") {
+    return "from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700";
+  }
+  if (color === "purple") {
+    return "from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700";
+  }
+  return "from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700";
+}
 
 function HomePageContent() {
   const { userType, setUserType } = useUserType();
@@ -62,59 +261,11 @@ function HomePageContent() {
     }
   }, [userType]);
 
-  // Helper function to get guided learning content
-  const getGuidedContent = () => {
-    if (hasActivePlan && activePlan) {
-      return {
-        title: `Continue ${activePlan.name}`,
-        subtitle: `Pick up where you left off with your ${activePlan.name.toLowerCase()}`,
-        cta: "Continue Practice",
-        ctaLink: `/guided-practice?plan=${activePlan.id}`,
-        icon: <Play className="w-6 h-6" />,
-        color: "green",
-      };
-    }
-    return {
-      title: "Master Frontend Development",
-      subtitle: "The complete platform to ace your frontend interviews",
-      cta: "View Learning Plans",
-      ctaLink: "/features/guided-learning",
-      icon: <Map className="w-6 h-6" />,
-      color: "indigo",
-    };
-  };
-
-  // Helper function to get default content
-  const getDefaultContent = () => ({
-    title: "Master Frontend Development",
-    subtitle: "The complete platform to ace your frontend interviews",
-    cta: "Get Started",
-    ctaLink: "/get-started",
-    icon: <Play className="w-6 h-6" />,
-    color: "indigo",
-  });
-
-  // Helper function to get self-directed content
-  const getSelfDirectedContent = () => ({
-    title: "Build Your Custom Roadmap",
-    subtitle: "Create and manage your personalized learning journey",
-    cta: "View My Roadmap",
-    ctaLink: "/browse-practice-questions",
-    icon: <Compass className="w-6 h-6" />,
-    color: "purple",
-  });
-
-  const getPersonalizedContent = () => {
-    if (userType === "guided") {
-      return getGuidedContent();
-    }
-    if (userType === "self-directed") {
-      return getSelfDirectedContent();
-    }
-    return getDefaultContent();
-  };
-
-  const personalizedContent = getPersonalizedContent();
+  const personalizedContent = getPersonalizedContent(
+    userType,
+    hasActivePlan,
+    activePlan,
+  );
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 relative overflow-hidden">
@@ -221,15 +372,7 @@ function HomePageContent() {
             <div className="relative inline-block">
               <Link
                 href={personalizedContent.ctaLink}
-                className={(() => {
-                  const colorClasses =
-                    personalizedContent.color === "indigo"
-                      ? "from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700"
-                      : personalizedContent.color === "purple"
-                        ? "from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700"
-                        : "from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700";
-                  return `main-cta-button group inline-flex items-center space-x-3 px-8 py-4 bg-gradient-to-r ${colorClasses} text-white rounded-xl font-semibold shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:scale-105 relative overflow-hidden`;
-                })()}
+                className={`main-cta-button group inline-flex items-center space-x-3 px-8 py-4 bg-gradient-to-r ${getColorClasses(personalizedContent.color)} text-white rounded-xl font-semibold shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:scale-105 relative overflow-hidden`}
               >
                 {/* Animated background effect */}
                 <div className="absolute inset-0 bg-gradient-to-r from-white/20 to-transparent transform -skew-x-12 -translate-x-full group-hover:translate-x-full transition-transform duration-700"></div>
@@ -351,102 +494,13 @@ function HomePageContent() {
 
       {/* Animated User Type Specific Content */}
       {userType && (
-        <section
-          className={`py-16 px-4 sm:px-6 lg:px-8 relative z-10 transition-all duration-1000 delay-1400 ${
-            showAnimation
-              ? "opacity-100 translate-y-0"
-              : "opacity-0 translate-y-8"
-          }`}
-        >
-          <div className="max-w-7xl mx-auto">
-            {userType === "guided" ? (
-              <div
-                className={`bg-gradient-to-r ${
-                  hasActivePlan
-                    ? "from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20"
-                    : "from-indigo-50 to-purple-50 dark:from-indigo-900/20 dark:to-purple-900/20"
-                } rounded-2xl p-8 relative overflow-hidden`}
-              >
-                {/* Animated background pattern */}
-                <div className="absolute inset-0 opacity-10">
-                  <div className="absolute top-4 left-4 w-2 h-2 bg-indigo-400 rounded-full animate-ping"></div>
-                  <div className="absolute top-8 right-8 w-1 h-1 bg-purple-400 rounded-full animate-pulse"></div>
-                  <div className="absolute bottom-4 left-8 w-3 h-3 bg-blue-400 rounded-full animate-bounce"></div>
-                  <div className="absolute bottom-8 right-4 w-2 h-2 bg-pink-400 rounded-full animate-ping"></div>
-                </div>
-
-                <div className="text-center relative z-10">
-                  <div
-                    className={`w-16 h-16 ${
-                      hasActivePlan ? "bg-green-600" : "bg-indigo-600"
-                    } rounded-full flex items-center justify-center mx-auto mb-4 animate-pulse`}
-                  >
-                    {personalizedContent.icon}
-                  </div>
-                  <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
-                    {personalizedContent.title}
-                  </h3>
-                  <p className="text-gray-600 dark:text-gray-300 mb-6">
-                    {personalizedContent.subtitle}
-                  </p>
-                  {hasActivePlan && activePlan && (
-                    <div className="mb-4 p-4 bg-white/50 dark:bg-gray-800/50 rounded-lg backdrop-blur-sm">
-                      <div className="text-sm text-gray-600 dark:text-gray-300 mb-2">
-                        Current Plan:{" "}
-                        <span className="font-semibold">{activePlan.name}</span>
-                      </div>
-                      <div className="text-sm text-gray-600 dark:text-gray-300">
-                        {activePlan.totalQuestions} questions •{" "}
-                        {activePlan.estimatedTime}
-                      </div>
-                    </div>
-                  )}
-                  <Link
-                    href={personalizedContent.ctaLink}
-                    className={`inline-flex items-center space-x-2 px-6 py-3 ${
-                      hasActivePlan
-                        ? "bg-green-600 hover:bg-green-700"
-                        : "bg-indigo-600 hover:bg-indigo-700"
-                    } text-white rounded-lg font-medium transition-all duration-300 transform hover:scale-105 hover:shadow-lg`}
-                  >
-                    <span>{personalizedContent.cta}</span>
-                    <ArrowRight className="w-4 h-4" />
-                  </Link>
-                </div>
-              </div>
-            ) : (
-              <div className="bg-gradient-to-r from-purple-50 to-pink-50 dark:from-purple-900/20 dark:to-pink-900/20 rounded-2xl p-8 relative overflow-hidden">
-                {/* Animated background pattern */}
-                <div className="absolute inset-0 opacity-10">
-                  <div className="absolute top-6 left-6 w-3 h-3 bg-purple-400 rounded-full animate-bounce"></div>
-                  <div className="absolute top-12 right-12 w-1 h-1 bg-pink-400 rounded-full animate-ping"></div>
-                  <div className="absolute bottom-6 left-12 w-2 h-2 bg-indigo-400 rounded-full animate-pulse"></div>
-                  <div className="absolute bottom-12 right-6 w-4 h-4 bg-blue-400 rounded-full animate-bounce"></div>
-                </div>
-
-                <div className="text-center relative z-10">
-                  <div className="w-16 h-16 bg-purple-600 rounded-full flex items-center justify-center mx-auto mb-4 animate-pulse">
-                    <Compass className="w-8 h-8 text-white" />
-                  </div>
-                  <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
-                    Self-Directed Learning
-                  </h3>
-                  <p className="text-gray-600 dark:text-gray-300 mb-6">
-                    You&apos;re creating your own roadmap. Explore content
-                    freely and build your personalized learning journey.
-                  </p>
-                  <Link
-                    href="/browse-practice-questions"
-                    className="inline-flex items-center space-x-2 px-6 py-3 bg-purple-600 hover:bg-purple-700 text-white rounded-lg font-medium transition-all duration-300 transform hover:scale-105 hover:shadow-lg"
-                  >
-                    <span>View My Roadmap</span>
-                    <ArrowRight className="w-4 h-4" />
-                  </Link>
-                </div>
-              </div>
-            )}
-          </div>
-        </section>
+        <UserTypeContentSection
+          userType={userType}
+          showAnimation={showAnimation}
+          hasActivePlan={hasActivePlan}
+          activePlan={activePlan}
+          personalizedContent={personalizedContent}
+        />
       )}
 
       {/* Animated Call-to-Action Section */}

@@ -372,8 +372,6 @@ export default function TopicManager() {
     ) {
       return;
     }
-    // Find the category to get its name for logging
-    const category = categories.find((c) => c.id === categoryId);
 
     try {
       const response = await fetch(`/api/categories/${categoryId}`, {

@@ -199,11 +199,7 @@ export const formatCodeContent = (code: string): string => {
         if (/^(class|interface|type)\s+\w+/.test(trimmed)) {
           inClass = true;
           const indent = "  ".repeat(indentLevel);
-          if (trimmed.match(/[{\[(]\s*$/)) {
-            indentLevel++;
-          } else {
-            indentLevel++;
-          }
+          indentLevel++;
           return indent + trimmed;
         }
 
@@ -224,7 +220,7 @@ export const formatCodeContent = (code: string): string => {
         const closeBraces = (trimmed.match(/}/g) || []).length;
         const openBrackets = (trimmed.match(/\[/g) || []).length;
         const closeBrackets = (trimmed.match(/\]/g) || []).length;
-        const openParens = (trimmed.match(/\(/g) || []).length;
+        const openParens = (trimmed.match(/[(]/g) || []).length;
         const closeParens = (trimmed.match(/\)/g) || []).length;
 
         const netBraces = openBraces - closeBraces;
@@ -324,15 +320,15 @@ const decodeHtmlEntities = (text: string): string => {
     decoded = decoded.replace(new RegExp(entity, "gi"), char);
   }
 
-  decoded = decoded.replace(/&#(\d+);/g, (match, dec) => {
-    return String.fromCharCode(parseInt(dec, 10));
+  decoded = decoded.replaceAll(/&#(\d+);/g, (match, dec) => {
+    return String.fromCharCode(Number.parseInt(dec, 10));
   });
 
-  decoded = decoded.replace(/&#x([0-9a-fA-F]+);/g, (match, hex) => {
-    return String.fromCharCode(parseInt(hex, 16));
+  decoded = decoded.replaceAll(/&#x([0-9a-fA-F]+);/g, (match, hex) => {
+    return String.fromCharCode(Number.parseInt(hex, 16));
   });
 
-  if (typeof window !== "undefined") {
+  if (typeof globalThis.window !== "undefined") {
     try {
       const textarea = document.createElement("textarea");
       textarea.innerHTML = decoded;
@@ -818,17 +814,17 @@ export const QuestionContent = ({ content }: { content: string }) => {
     const textContent = fixedContent.substring(lastIndex);
     if (textContent.trim()) {
       let cleanText = decodeHtmlEntities(textContent);
-      cleanText = cleanText.replace(
+      cleanText = cleanText.replaceAll(
         /<code[^>]*>([^<]{1,30})<\/code>/gi,
         "`$1`",
       );
-      cleanText = cleanText.replace(/<[^>]+>/g, "");
+      cleanText = cleanText.replaceAll(/<[^>]+>/g, "");
       for (let i = 0; i < 3; i++) {
         cleanText = cleanText
-          .replace(/<pr<cod?/gi, "")
-          .replace(/<pr</gi, "")
-          .replace(/<pr/gi, "")
-          .replace(/<\/cod?<\/pr/gi, "")
+          .replaceAll(/<pr<cod?/gi, "")
+          .replaceAll(/<pr</gi, "")
+          .replaceAll(/<pr/gi, "")
+          .replaceAll(/<\/cod?<\/pr/gi, "")
           .replaceAll(/<\/cod?/gi, "")
           .replaceAll(/<\/pr/gi, "")
           .replaceAll(/<\/cod/gi, "")
@@ -858,7 +854,7 @@ export const QuestionContent = ({ content }: { content: string }) => {
 
     for (let i = 0; i < 3; i++) {
       cleanContent = cleanContent
-        .replace(/<pr<cod/gi, "")
+        .replaceAll(/<pr<cod/gi, "")
         .replaceAll(/<\/cod<\/pr/gi, "")
         .replaceAll(/<pr</gi, "")
         .replaceAll(/<\/cod/gi, "")
