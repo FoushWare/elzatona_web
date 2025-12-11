@@ -144,7 +144,7 @@ export const ViewQuestionModal: React.FC<ViewQuestionModalProps> = ({
             explanation: question.explanation,
             options: question.options,
             correct_answer: question.correct_answer,
-            resources: (question as any).resources || [],
+            resources: (question as { resources?: unknown[] }).resources || [],
           }}
         />
       )}

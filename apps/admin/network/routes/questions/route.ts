@@ -108,10 +108,12 @@ export async function GET(request: NextRequest) {
         totalPages: Math.ceil((count || 0) / pageSize),
       },
     });
-  } catch (error: any) {
-    console.error("Error fetching questions:", error.message);
+  } catch (error: unknown) {
+    const errorMessage =
+      error instanceof Error ? error.message : "Failed to fetch questions";
+    console.error("Error fetching questions:", errorMessage);
     return NextResponse.json(
-      { success: false, error: error.message || "Failed to fetch questions" },
+      { success: false, error: errorMessage },
       { status: 500 },
     );
   }
@@ -169,10 +171,12 @@ export async function POST(request: NextRequest) {
       success: true,
       data,
     });
-  } catch (error: any) {
-    console.error("Error creating question:", error.message);
+  } catch (error: unknown) {
+    const errorMessage =
+      error instanceof Error ? error.message : "Failed to create question";
+    console.error("Error creating question:", errorMessage);
     return NextResponse.json(
-      { success: false, error: error.message || "Failed to create question" },
+      { success: false, error: errorMessage },
       { status: 500 },
     );
   }

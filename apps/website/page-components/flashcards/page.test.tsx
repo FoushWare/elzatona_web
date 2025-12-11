@@ -43,9 +43,10 @@ global.fetch = jest.fn(() =>
 );
 
 // Mock lucide-react using the shared mock
-jest.mock("lucide-react", () =>
-  require("../../test-utils/mocks/lucide-react.tsx"),
-);
+jest.mock("lucide-react", () => {
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
+  return require("../../test-utils/mocks/lucide-react.tsx");
+});
 
 describe("F-UT-012: Theme and Difficulty Filtering", () => {
   beforeEach(() => {
@@ -94,12 +95,14 @@ describe("F-UT-014: CRUD Operations", () => {
   });
 
   it("should load flashcards on mount", () => {
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
     const { loadFlashcards } = require("../../lib/flashcards");
     render(<FlashcardsPage />);
     expect(loadFlashcards).toHaveBeenCalled();
   });
 
   it("should support flashcard removal", () => {
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
     const { removeFlashcard } = require("../../lib/flashcards");
     render(<FlashcardsPage />);
     // Remove functionality should be available
@@ -118,6 +121,7 @@ describe("F-UT-SNAPSHOT: Flashcards Snapshot Tests", () => {
   });
 
   it("should match flashcards page snapshot (with flashcards)", () => {
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
     const { loadFlashcards } = require("../../lib/flashcards");
     loadFlashcards.mockReturnValue([
       {
