@@ -3,20 +3,22 @@
  * Task: A-005 - Admin Frontend Tasks
  */
 
-import React from 'react';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
-import '@testing-library/jest-dom';
-import FrontendTasksAdminPage from './page';
+import React from "react";
+import { render, screen, fireEvent, waitFor } from "@testing-library/react";
+import "@testing-library/jest-dom";
+import FrontendTasksAdminPage from "./page";
 
 // Mock TanStack Query hooks
 const mockTasksData = { data: [] };
 
-jest.mock('@elzatona/shared-hooks', () => ({
-  useFrontendTasks: jest.fn(() => ({
-    data: mockTasksData,
-    isLoading: false,
-    error: null,
-  })),
+const mockUseFrontendTasks = jest.fn(() => ({
+  data: mockTasksData,
+  isLoading: false,
+  error: null,
+}));
+
+jest.mock("@elzatona/hooks", () => ({
+  useFrontendTasks: mockUseFrontendTasks,
   useCreateFrontendTask: jest.fn(() => ({
     mutateAsync: jest.fn(),
     isPending: false,
@@ -31,7 +33,7 @@ jest.mock('@elzatona/shared-hooks', () => ({
   })),
 }));
 
-jest.mock('@elzatona/shared-components', () => ({
+jest.mock("@elzatona/components", () => ({
   FrontendTaskEditor: ({ onSave, onCancel }: any) => (
     <div data-testid="frontend-task-editor">
       <button onClick={() => onSave({})}>Save</button>
@@ -40,7 +42,7 @@ jest.mock('@elzatona/shared-components', () => ({
   ),
 }));
 
-jest.mock('lucide-react', () => ({
+jest.mock("lucide-react", () => ({
   Plus: () => <span>+</span>,
   Edit: () => <span>✏️</span>,
   Trash2: () => <span>🗑️</span>,
@@ -53,43 +55,42 @@ jest.mock('lucide-react', () => ({
 window.confirm = jest.fn(() => true);
 window.alert = jest.fn();
 
-describe('A-UT-016: Component Renders', () => {
+describe("A-UT-016: Component Renders", () => {
   beforeEach(() => {
     jest.clearAllMocks();
   });
 
-  it('should render without errors', () => {
+  it("should render without errors", () => {
     const { container } = render(<FrontendTasksAdminPage />);
     expect(container).toBeInTheDocument();
   });
 
-  it('should display page header', () => {
+  it("should display page header", () => {
     render(<FrontendTasksAdminPage />);
     // Page should render
     expect(document.body).toBeTruthy();
   });
 
-  it('should have Add New Task button', () => {
+  it("should have Add New Task button", () => {
     render(<FrontendTasksAdminPage />);
     // Should have create button
     expect(document.body).toBeTruthy();
   });
 });
 
-describe('A-UT-SNAPSHOT: Admin Frontend Tasks Snapshot Tests', () => {
-  it('should match admin frontend tasks page snapshot', () => {
+describe("A-UT-SNAPSHOT: Admin Frontend Tasks Snapshot Tests", () => {
+  it("should match admin frontend tasks page snapshot", () => {
     const { container } = render(<FrontendTasksAdminPage />);
     expect(container.firstChild).toMatchSnapshot();
   });
 
-  it('should match admin frontend tasks page snapshot (loading state)', () => {
-    const { useFrontendTasks } = require('@elzatona/shared-hooks');
-    useFrontendTasks.mockReturnValue({
+  it("should match admin frontend tasks page snapshot (loading state)", () => {
+    mockUseFrontendTasks.mockReturnValue({
       data: null,
       isLoading: true,
       error: null,
     });
-    
+
     const { container } = render(<FrontendTasksAdminPage />);
     expect(container.firstChild).toMatchSnapshot();
   });

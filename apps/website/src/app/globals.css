@@ -79,10 +79,10 @@ html.light {
   }
 
   /* Dialog visibility fix - ensure content is visible when open */
-  [data-state='open'][role='dialog'],
-  [data-state='open'][data-radix-dialog-content],
-  div[data-state='open'][role='dialog'],
-  [data-radix-portal] [data-state='open'][role='dialog'] {
+  [data-state="open"][role="dialog"],
+  [data-state="open"][data-radix-dialog-content],
+  div[data-state="open"][role="dialog"],
+  [data-radix-portal] [data-state="open"][role="dialog"] {
     opacity: 1 !important;
     visibility: visible !important;
     display: grid !important;
@@ -91,40 +91,40 @@ html.light {
     top: 50% !important;
     transform: translate(-50%, -50%) !important;
   }
-  
+
   /* Force visibility for all dialog content when open - more specific */
-  [data-radix-portal] > div[data-state='open'] {
+  [data-radix-portal] > div[data-state="open"] {
     opacity: 1 !important;
     visibility: visible !important;
   }
-  
+
   /* Ensure dialog content has proper background and is always visible when open */
-  [role='dialog'][data-state='open'],
-  [data-radix-dialog-content][data-state='open'] {
+  [role="dialog"][data-state="open"],
+  [data-radix-dialog-content][data-state="open"] {
     background-color: white !important;
     opacity: 1 !important;
     visibility: visible !important;
     display: grid !important;
   }
-  
-  .dark [role='dialog'][data-state='open'],
-  .dark [data-radix-dialog-content][data-state='open'] {
+
+  .dark [role="dialog"][data-state="open"],
+  .dark [data-radix-dialog-content][data-state="open"] {
     background-color: rgb(17 24 39) !important;
     opacity: 1 !important;
     visibility: visible !important;
     display: grid !important;
   }
-  
+
   /* Override any animation that might hide the content */
-  [data-state='open'] {
+  [data-state="open"] {
     opacity: 1 !important;
     visibility: visible !important;
   }
 
   /* Select dropdown visibility fix - ensure content is visible when open */
   [data-radix-select-content],
-  [data-radix-select-content][data-state='open'],
-  [data-radix-select-content][data-state='closed'] {
+  [data-radix-select-content][data-state="open"],
+  [data-radix-select-content][data-state="closed"] {
     opacity: 1 !important;
     visibility: visible !important;
     display: block !important;
@@ -150,8 +150,8 @@ html.light {
 
   /* Dark mode select content background */
   .dark [data-radix-select-content],
-  .dark [data-radix-select-content][data-state='open'],
-  .dark [data-radix-select-content][data-state='closed'] {
+  .dark [data-radix-select-content][data-state="open"],
+  .dark [data-radix-select-content][data-state="closed"] {
     background-color: rgb(17 24 39) !important; /* gray-900 */
     backdrop-filter: none !important;
     -webkit-backdrop-filter: none !important;
@@ -159,7 +159,7 @@ html.light {
 
   /* Ensure SelectContent appears above Dialog */
   [data-radix-portal] [data-radix-select-content],
-  [data-radix-portal] [data-radix-select-content][data-state='open'] {
+  [data-radix-portal] [data-radix-select-content][data-state="open"] {
     z-index: 110 !important;
     background-color: white !important;
     backdrop-filter: none !important;
@@ -168,7 +168,7 @@ html.light {
 
   /* Dark mode select portal background */
   .dark [data-radix-portal] [data-radix-select-content],
-  .dark [data-radix-portal] [data-radix-select-content][data-state='open'] {
+  .dark [data-radix-portal] [data-radix-select-content][data-state="open"] {
     background-color: rgb(17 24 39) !important; /* gray-900 */
     backdrop-filter: none !important;
     -webkit-backdrop-filter: none !important;
@@ -206,13 +206,13 @@ html.light {
   }
 
   [data-radix-select-item][data-highlighted],
-  [data-radix-select-item][data-state='checked'] {
+  [data-radix-select-item][data-state="checked"] {
     background-color: rgb(239 246 255) !important; /* blue-50 */
     opacity: 1 !important;
   }
 
   .dark [data-radix-select-item][data-highlighted],
-  .dark [data-radix-select-item][data-state='checked'] {
+  .dark [data-radix-select-item][data-state="checked"] {
     background-color: rgb(30 58 138 / 0.2) !important; /* blue-900/20 */
     opacity: 1 !important;
   }
@@ -283,7 +283,7 @@ html.light {
 
   /* Arabic Font Support */
   .font-arabic {
-    font-family: var(--font-arabic), 'Amiri', 'Scheherazade', serif;
+    font-family: var(--font-arabic), "Amiri", "Scheherazade", serif;
     font-weight: 600;
   }
 
@@ -291,17 +291,17 @@ html.light {
   .font-arabic {
     text-rendering: optimizeLegibility;
     -webkit-font-feature-settings:
-      'liga' 1,
-      'kern' 1;
+      "liga" 1,
+      "kern" 1;
     font-feature-settings:
-      'liga' 1,
-      'kern' 1;
+      "liga" 1,
+      "kern" 1;
   }
 
   html {
     font-feature-settings:
-      'rlig' 1,
-      'calt' 1;
+      "rlig" 1,
+      "calt" 1;
     text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
@@ -314,9 +314,9 @@ html.light {
       system-ui,
       -apple-system,
       BlinkMacSystemFont,
-      'Segoe UI',
+      "Segoe UI",
       Roboto,
-      'Helvetica Neue',
+      "Helvetica Neue",
       Arial,
       sans-serif;
     line-height: 1.6;

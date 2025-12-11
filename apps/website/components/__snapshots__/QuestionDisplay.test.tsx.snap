@@ -1,0 +1,191 @@
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+
+exports[`S-UT-SNAPSHOT: Question Display Snapshot Tests should match question card snapshot (no selection) 1`] = `
+<div
+  class="question-card"
+  data-testid="question-card"
+>
+  <h2
+    class="question-text"
+    data-testid="question-text"
+  >
+    What is React?
+  </h2>
+  <div
+    class="options"
+    data-testid="answer-options"
+  >
+    <button
+      class="option   "
+      data-testid="option-0"
+    >
+      A JavaScript library for building user interfaces
+    </button>
+    <button
+      class="option   "
+      data-testid="option-1"
+    >
+      A database management system
+    </button>
+    <button
+      class="option   "
+      data-testid="option-2"
+    >
+      A CSS framework
+    </button>
+    <button
+      class="option   "
+      data-testid="option-3"
+    >
+      A programming language
+    </button>
+  </div>
+</div>
+`;
+
+exports[`S-UT-SNAPSHOT: Question Display Snapshot Tests should match question card snapshot (with explanation, correct) 1`] = `
+<div
+  class="question-card"
+  data-testid="question-card"
+>
+  <h2
+    class="question-text"
+    data-testid="question-text"
+  >
+    What is React?
+  </h2>
+  <div
+    class="options"
+    data-testid="answer-options"
+  >
+    <button
+      class="option selected correct "
+      data-testid="option-0"
+      disabled=""
+    >
+      A JavaScript library for building user interfaces
+    </button>
+    <button
+      class="option   "
+      data-testid="option-1"
+      disabled=""
+    >
+      A database management system
+    </button>
+    <button
+      class="option   "
+      data-testid="option-2"
+      disabled=""
+    >
+      A CSS framework
+    </button>
+    <button
+      class="option   "
+      data-testid="option-3"
+      disabled=""
+    >
+      A programming language
+    </button>
+  </div>
+  <div
+    data-testid="explanation"
+  >
+    Correct!
+  </div>
+</div>
+`;
+
+exports[`S-UT-SNAPSHOT: Question Display Snapshot Tests should match question card snapshot (with explanation, incorrect) 1`] = `
+<div
+  class="question-card"
+  data-testid="question-card"
+>
+  <h2
+    class="question-text"
+    data-testid="question-text"
+  >
+    What is React?
+  </h2>
+  <div
+    class="options"
+    data-testid="answer-options"
+  >
+    <button
+      class="option  correct "
+      data-testid="option-0"
+      disabled=""
+    >
+      A JavaScript library for building user interfaces
+    </button>
+    <button
+      class="option selected  incorrect"
+      data-testid="option-1"
+      disabled=""
+    >
+      A database management system
+    </button>
+    <button
+      class="option   "
+      data-testid="option-2"
+      disabled=""
+    >
+      A CSS framework
+    </button>
+    <button
+      class="option   "
+      data-testid="option-3"
+      disabled=""
+    >
+      A programming language
+    </button>
+  </div>
+  <div
+    data-testid="explanation"
+  >
+    Incorrect. The correct answer is: A JavaScript library for building user interfaces
+  </div>
+</div>
+`;
+
+exports[`S-UT-SNAPSHOT: Question Display Snapshot Tests should match question card snapshot (with selection) 1`] = `
+<div
+  class="question-card"
+  data-testid="question-card"
+>
+  <h2
+    class="question-text"
+    data-testid="question-text"
+  >
+    What is React?
+  </h2>
+  <div
+    class="options"
+    data-testid="answer-options"
+  >
+    <button
+      class="option selected  "
+      data-testid="option-0"
+    >
+      A JavaScript library for building user interfaces
+    </button>
+    <button
+      class="option   "
+      data-testid="option-1"
+    >
+      A database management system
+    </button>
+    <button
+      class="option   "
+      data-testid="option-2"
+    >
+      A CSS framework
+    </button>
+    <button
+      class="option   "
+      data-testid="option-3"
+    >
+      A programming language
+    </button>
+  </div>
+</div>
+`;

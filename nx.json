@@ -54,8 +54,8 @@
       "inputs": [
         "default",
         "^production",
-        "{workspaceRoot}/jest.preset.js",
-        "{workspaceRoot}/jest.config.js",
+        "{workspaceRoot}/tests/config/jest.preset.js",
+        "{workspaceRoot}/tests/config/jest.config.js",
         "{workspaceRoot}/src/test-setup.ts"
       ],
       "cache": true
