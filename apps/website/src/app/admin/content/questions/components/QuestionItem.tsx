@@ -92,11 +92,12 @@ export function QuestionItem({
                   <Badge
                     key={`${question.id}-category-${index}`}
                     variant={category.is_primary ? "default" : "secondary"}
-                    className={`${
-                      category.is_primary
-                        ? "bg-green-600 text-white"
-                        : "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200"
-                    }`}
+                    className={(() => {
+                      if (category.is_primary) {
+                        return "bg-green-600 text-white";
+                      }
+                      return "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200";
+                    })()}
                   >
                     {category.is_primary && "⭐ "}Category:{" "}
                     {category.name || category.title || "Unknown Category"}

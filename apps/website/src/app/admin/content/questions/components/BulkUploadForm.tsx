@@ -581,9 +581,11 @@ export function BulkUploadForm({
           htmlFor="json-mode"
           className="inline-flex items-center cursor-pointer"
         >
+          <span className="sr-only">JSON Mode</span>
           <input
             type="checkbox"
             id="json-mode"
+            aria-label="Enable JSON mode for direct question input"
             checked={isJsonMode}
             onChange={(e) => handleJsonModeToggle(e.target.checked)}
             disabled={loading}
