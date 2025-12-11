@@ -82,6 +82,7 @@ bash libs/utilities/scripts/script-name.sh
 - `remove-secrets-from-history-complete.sh` - Complete secret removal
 - `remove-gitguardian-key-from-history.sh` - Remove GitGuardian key
 - `resolve-gitguardian-via-dashboard.sh` - Resolve GitGuardian via dashboard
+- `resolve-gitguardian-incident.sh` - Resolve GitGuardian incidents via API
 - `resolve-secret-scanning-alerts.sh` - Resolve secret scanning alerts
 - `pre-commit-secret-scan.sh` - Pre-commit secret scan
 - `pre-push-secret-scan.sh` - Pre-push secret scan
