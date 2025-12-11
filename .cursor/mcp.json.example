@@ -1,24 +1,12 @@
 {
   "mcpServers": {
     "sonarqube": {
-      "command": "docker",
-      "args": [
-        "run",
-        "-i",
-        "--rm",
-        "-e",
-        "SONARQUBE_TOKEN=YOUR_SONARQUBE_TOKEN_HERE",
-        "-e",
-        "SONARQUBE_ORG=foushware",
-        "mcp/sonarqube"
-      ]
-    },
-    "supabase": {
-      "command": "npx",
-      "args": ["-y", "@modelcontextprotocol/server-supabase"],
+      "command": "java",
+      "args": ["-jar", "<path_to_sonarqube_mcp_server_jar>"],
       "env": {
-        "SUPABASE_URL": "YOUR_SUPABASE_URL_HERE",
-        "SUPABASE_SERVICE_ROLE_KEY": "YOUR_SERVICE_ROLE_KEY_HERE"
+        "STORAGE_PATH": "<absolute_path_to_storage_directory>",
+        "SONARQUBE_TOKEN": "YOUR_SONARQUBE_TOKEN_HERE",
+        "SONARQUBE_ORG": "foushware"
       }
     }
   }

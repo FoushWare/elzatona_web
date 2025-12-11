@@ -33,6 +33,7 @@
     "type-check": "npx tsc --noEmit",
     "check:schema": "node libs/utilities/scripts/check-supabase-schema.js",
     "configure:sonarqube-mcp": "bash libs/utilities/scripts/configure-sonarqube-mcp.sh",
+    "download:sonarqube-mcp-jar": "bash libs/utilities/scripts/download-sonarqube-mcp-jar.sh",
     "configure:sentry-mcp": "bash libs/utilities/scripts/configure-sentry-mcp.sh",
     "setup:github-test-secrets": "bash libs/utilities/scripts/setup-github-test-secrets.sh",
     "sonar": "NODE_OPTIONS=--max-old-space-size=1536 node libs/utilities/scripts/run-sonarqube-local.js",
