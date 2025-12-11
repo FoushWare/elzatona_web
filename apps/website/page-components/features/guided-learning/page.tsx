@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useMemo } from "react";
 import { useAuth } from "@elzatona/contexts";
-import { useLearningType } from '@/context/LearningTypeContext';
+import { useLearningType } from "@/context/LearningTypeContext";
 
 // Note: This page uses API routes and hooks, not direct supabase client
 

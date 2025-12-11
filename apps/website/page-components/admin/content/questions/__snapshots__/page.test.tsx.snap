@@ -1,0 +1,129 @@
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+
+exports[`A-UT-SNAPSHOT: Admin Bulk Question Addition Snapshot Tests should match admin questions page snapshot (empty state) 1`] = `
+<div
+  class="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800"
+>
+  <div
+    class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8"
+  >
+    <h1
+      class="text-4xl font-bold text-gray-900 dark:text-white mb-8"
+    >
+      Question Management
+    </h1>
+    <div
+      class="flex items-center justify-center h-64"
+    >
+      <div
+        class="text-center"
+      >
+        <span>
+          ⏳
+        </span>
+        <p
+          class="text-gray-600 dark:text-gray-400"
+        >
+          Loading questions...
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`A-UT-SNAPSHOT: Admin Bulk Question Addition Snapshot Tests should match admin questions page snapshot (error state) 1`] = `
+<div
+  class="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800"
+>
+  <div
+    class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8"
+  >
+    <h1
+      class="text-4xl font-bold text-gray-900 dark:text-white mb-8"
+    >
+      Question Management
+    </h1>
+    <div
+      class="flex items-center justify-center h-64"
+    >
+      <div
+        class="text-center"
+      >
+        <span>
+          ⏳
+        </span>
+        <p
+          class="text-gray-600 dark:text-gray-400"
+        >
+          Loading questions...
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`A-UT-SNAPSHOT: Admin Bulk Question Addition Snapshot Tests should match admin questions page snapshot (loading state) 1`] = `
+<div
+  class="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800"
+>
+  <div
+    class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8"
+  >
+    <h1
+      class="text-4xl font-bold text-gray-900 dark:text-white mb-8"
+    >
+      Question Management
+    </h1>
+    <div
+      class="flex items-center justify-center h-64"
+    >
+      <div
+        class="text-center"
+      >
+        <span>
+          ⏳
+        </span>
+        <p
+          class="text-gray-600 dark:text-gray-400"
+        >
+          Loading questions...
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`A-UT-SNAPSHOT: Admin Bulk Question Addition Snapshot Tests should match admin questions page snapshot (with questions) 1`] = `
+<div
+  class="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800"
+>
+  <div
+    class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8"
+  >
+    <h1
+      class="text-4xl font-bold text-gray-900 dark:text-white mb-8"
+    >
+      Question Management
+    </h1>
+    <div
+      class="flex items-center justify-center h-64"
+    >
+      <div
+        class="text-center"
+      >
+        <span>
+          ⏳
+        </span>
+        <p
+          class="text-gray-600 dark:text-gray-400"
+        >
+          Loading questions...
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+`;

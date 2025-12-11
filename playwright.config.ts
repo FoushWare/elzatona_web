@@ -149,5 +149,6 @@ export default defineConfig({
   },
 
   /* Output directory for test artifacts */
+  // Test results (videos, screenshots, traces) - ignored by git
   outputDir: "test-results/",
 });

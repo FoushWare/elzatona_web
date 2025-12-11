@@ -107,3 +107,4 @@ export const CategoriesOverview: React.FC<CategoriesOverviewProps> = ({
     </Card>
   );
 };
+

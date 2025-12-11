@@ -9,7 +9,10 @@ const fs = require("fs");
 const path = require("path");
 
 const WEBSITE_APP = path.join(__dirname, "../../../apps/website/src/app");
-const WEBSITE_PAGES = path.join(__dirname, "../../../apps/website/page-components");
+const WEBSITE_PAGES = path.join(
+  __dirname,
+  "../../../apps/website/page-components",
+);
 const ADMIN_APP = path.join(__dirname, "../../../apps/admin/src/app");
 const ADMIN_PAGES = path.join(__dirname, "../../../apps/admin/pages");
 
@@ -56,7 +59,9 @@ function processPages(appDir, pagesDir, appName) {
 
     for (const entry of entries) {
       const fullPath = path.join(dir, entry.name);
-      const newRelativePath = path.join(relativePath, entry.name).replace(/\\/g, "/");
+      const newRelativePath = path
+        .join(relativePath, entry.name)
+        .replace(/\\/g, "/");
 
       if (entry.isDirectory()) {
         walkDir(fullPath, newRelativePath);
@@ -80,4 +85,3 @@ console.log("\nProcessing admin pages...");
 processPages(ADMIN_APP, ADMIN_PAGES, "admin");
 
 console.log("\n✅ Page wrapper generation complete!");
-

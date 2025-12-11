@@ -1,0 +1,17 @@
+{
+  "enabled": true,
+  "name": "Auto Component Tests",
+  "description": "Automatically creates basic tests for React components when they are saved, if tests don't already exist",
+  "version": "1",
+  "when": {
+    "type": "fileEdited",
+    "patterns": [
+      "**/*.tsx",
+      "**/*.ts"
+    ]
+  },
+  "then": {
+    "type": "askAgent",
+    "prompt": "A file has been saved. Please check if this is a React component and if it doesn't already have tests, create basic tests for it. Look for:\n\n1. React components (files with JSX/TSX that export React components)\n2. Check if a corresponding .test.tsx or .test.ts file already exists\n3. If no tests exist, create a basic test file with:\n   - Import statements\n   - Basic rendering test\n   - Props testing if applicable\n   - Any obvious functionality tests\n\nFollow the project's testing patterns using Jest and React Testing Library. Co-locate tests with the component files."
+  }
+}

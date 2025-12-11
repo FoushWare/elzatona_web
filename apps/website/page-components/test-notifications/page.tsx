@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { useNotifications } from "@/components/NotificationSystem";
+import { useNotifications } from "../../components/NotificationSystem";
 import { useUserType } from "@elzatona/contexts";
 import {
   Compass,

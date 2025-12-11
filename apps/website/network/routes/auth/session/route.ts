@@ -1,6 +1,6 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { getServerSession } from 'next-auth/next';
-import { authOptions } from '@/lib/auth-config';
+import { NextRequest, NextResponse } from "next/server";
+import { getServerSession } from "next-auth/next";
+import { authOptions } from "@/lib/auth-config";
 
 interface UserWithId {
   id?: string;
@@ -31,10 +31,10 @@ export async function GET(request: NextRequest) {
       user: null,
     });
   } catch (error) {
-    console.error('Session check error:', error);
+    console.error("Session check error:", error);
     return NextResponse.json(
-      { error: 'Failed to check session' },
-      { status: 500 }
+      { error: "Failed to check session" },
+      { status: 500 },
     );
   }
 }
@@ -46,28 +46,28 @@ export async function POST(request: NextRequest) {
 
     if (!token || !user) {
       return NextResponse.json(
-        { error: 'Token and user data required' },
-        { status: 400 }
+        { error: "Token and user data required" },
+        { status: 400 },
       );
     }
 
     const response = NextResponse.json({
       success: true,
-      message: 'Authentication cookie set',
+      message: "Authentication cookie set",
     });
 
     // Set HTTP-only cookie
-    response.cookies.set('auth-token', token, {
+    response.cookies.set("auth-token", token, {
       httpOnly: true,
-      secure: process.env['NODE_ENV'] === 'production',
-      sameSite: 'lax',
+      secure: process.env["NODE_ENV"] === "production",
+      sameSite: "lax",
       maxAge: 60 * 60 * 24 * 7, // 7 days
-      path: '/',
+      path: "/",
     });
 
     // Set user data cookie (non-sensitive data only)
     response.cookies.set(
-      'user-data',
+      "user-data",
       JSON.stringify({
         id: user.uid,
         email: user.email,
@@ -76,19 +76,19 @@ export async function POST(request: NextRequest) {
       }),
       {
         httpOnly: false, // Allow client-side access for display
-        secure: process.env['NODE_ENV'] === 'production',
-        sameSite: 'lax',
+        secure: process.env["NODE_ENV"] === "production",
+        sameSite: "lax",
         maxAge: 60 * 60 * 24 * 7, // 7 days
-        path: '/',
-      }
+        path: "/",
+      },
     );
 
     return response;
   } catch (error) {
-    console.error('Set auth cookie error:', error);
+    console.error("Set auth cookie error:", error);
     return NextResponse.json(
-      { error: 'Failed to set authentication cookie' },
-      { status: 500 }
+      { error: "Failed to set authentication cookie" },
+      { status: 500 },
     );
   }
 }
@@ -98,33 +98,33 @@ export async function DELETE(request: NextRequest) {
   try {
     const response = NextResponse.json({
       success: true,
-      message: 'Authentication cookie cleared',
+      message: "Authentication cookie cleared",
     });
 
     // Clear HTTP-only cookie
-    response.cookies.set('auth-token', '', {
+    response.cookies.set("auth-token", "", {
       httpOnly: true,
-      secure: process.env['NODE_ENV'] === 'production',
-      sameSite: 'lax',
+      secure: process.env["NODE_ENV"] === "production",
+      sameSite: "lax",
       maxAge: 0,
-      path: '/',
+      path: "/",
     });
 
     // Clear user data cookie
-    response.cookies.set('user-data', '', {
+    response.cookies.set("user-data", "", {
       httpOnly: false,
-      secure: process.env['NODE_ENV'] === 'production',
-      sameSite: 'lax',
+      secure: process.env["NODE_ENV"] === "production",
+      sameSite: "lax",
       maxAge: 0,
-      path: '/',
+      path: "/",
     });
 
     return response;
   } catch (error) {
-    console.error('Clear auth cookie error:', error);
+    console.error("Clear auth cookie error:", error);
     return NextResponse.json(
-      { error: 'Failed to clear authentication cookie' },
-      { status: 500 }
+      { error: "Failed to clear authentication cookie" },
+      { status: 500 },
     );
   }
 }

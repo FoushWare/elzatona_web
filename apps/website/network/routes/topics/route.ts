@@ -1,20 +1,20 @@
 // Topics API Route
 // v2.1 - Enhanced topic management with input sanitization
 
-import { NextRequest, NextResponse } from 'next/server';
-import { supabaseOperations } from '@/lib/supabase-server';
-import { sanitizeObjectServer } from '@/lib/utils/sanitize-server';
-import { validateAndSanitize, topicSchema } from '@/lib/utils/validation';
+import { NextRequest, NextResponse } from "next/server";
+import { supabaseOperations } from "@/lib/supabase-server";
+import { sanitizeObjectServer } from "@/lib/utils/sanitize-server";
+import { validateAndSanitize, topicSchema } from "@/lib/utils/validation";
 
 // GET /api/topics - Get all topics
 export async function GET() {
   try {
-    console.log('🔄 API: Fetching topics...');
+    console.log("🔄 API: Fetching topics...");
 
     const { data: topics, error } = await supabaseOperations.getTopics({
       isActive: true,
-      orderBy: 'order_index',
-      orderDirection: 'asc',
+      orderBy: "order_index",
+      orderDirection: "asc",
     });
 
     if (error) {
@@ -23,7 +23,7 @@ export async function GET() {
 
     // Transform data to match expected format
     const transformedTopics =
-      (topics as any[])?.map(topic => ({
+      (topics as any[])?.map((topic) => ({
         id: topic.id,
         name: topic.name,
         slug: topic.slug,
@@ -36,8 +36,8 @@ export async function GET() {
         updated_at: new Date(topic.updated_at),
       })) || [];
 
-    console.log('📊 API: Topics fetched:', transformedTopics.length, 'topics');
-    console.log('📊 API: Topics data:', transformedTopics);
+    console.log("📊 API: Topics fetched:", transformedTopics.length, "topics");
+    console.log("📊 API: Topics data:", transformedTopics);
 
     return NextResponse.json({
       success: true,
@@ -45,13 +45,13 @@ export async function GET() {
       count: transformedTopics.length,
     });
   } catch (error) {
-    console.error('❌ API: Error fetching topics:', error);
+    console.error("❌ API: Error fetching topics:", error);
     return NextResponse.json(
       {
         success: false,
-        error: 'Failed to fetch topics',
+        error: "Failed to fetch topics",
       },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
@@ -60,31 +60,31 @@ export async function GET() {
 export async function POST(request: NextRequest) {
   try {
     const topicData = await request.json();
-    console.log('🔄 API: Creating topic with data:', topicData);
+    console.log("🔄 API: Creating topic with data:", topicData);
 
     // Validate and sanitize topic data
     const validationResult = validateAndSanitize(topicSchema, topicData);
-    
+
     if (!validationResult.success) {
-      console.error('❌ API: Validation failed:', validationResult.error);
+      console.error("❌ API: Validation failed:", validationResult.error);
       return NextResponse.json(
         {
           success: false,
           error: validationResult.error,
         },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
     // Sanitize the validated data
     const sanitizedData = sanitizeObjectServer(validationResult.data as any);
 
-    console.log('✅ API: All required fields present, creating topic...');
+    console.log("✅ API: All required fields present, creating topic...");
 
     // Transform data to match Supabase schema
     const supabaseTopicData = {
       name: sanitizedData.name,
-      description: sanitizedData.description || '',
+      description: sanitizedData.description || "",
       category_id: sanitizedData.categoryId,
       order_index: topicData.orderIndex || 0,
       is_active: topicData.isActive !== false,
@@ -97,7 +97,7 @@ export async function POST(request: NextRequest) {
       throw new Error(error.message);
     }
 
-    console.log('✅ API: Topic created with ID:', (newTopic as any).id);
+    console.log("✅ API: Topic created with ID:", (newTopic as any).id);
 
     // Transform response to match expected format
     const transformedTopic = {
@@ -115,17 +115,17 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({
       success: true,
       data: transformedTopic,
-      message: 'Topic created successfully',
+      message: "Topic created successfully",
     });
   } catch (error) {
-    console.error('❌ API: Error creating topic:', error);
+    console.error("❌ API: Error creating topic:", error);
     return NextResponse.json(
       {
         success: false,
         error:
-          error instanceof Error ? error.message : 'Failed to create topic',
+          error instanceof Error ? error.message : "Failed to create topic",
       },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

@@ -112,7 +112,8 @@ export default function BulkQuestionUploader({
       | "code"
       | "beginner"
       | "intermediate"
-      | "advanced",
+      | "advanced"
+      | "intermediate",
   ) => {
     const newQuestions = [...questions];
     newQuestions[index] = { ...newQuestions[index], [field]: value };

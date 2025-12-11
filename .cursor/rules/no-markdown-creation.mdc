@@ -15,13 +15,13 @@ alwaysApply: true
 ## **When Markdown Creation IS Allowed**
 
 - ✅ **DO:** Create markdown files ONLY when the user explicitly asks for documentation
-- ✅ **DO:** Use the `Markdown/` directory for any necessary documentation files
-- ✅ **DO:** Reference existing documentation in `Markdown/` directory instead of creating new files
+- ✅ **DO:** Use the `docs/` directory for any necessary documentation files
+- ✅ **DO:** Reference existing documentation in `docs/` directory instead of creating new files
 
 ## **Project Documentation Structure**
 
-- **Markdown Directory:** `Markdown/` (root level)
-- **Existing Docs:** Check `Markdown/` before creating new documentation
+- **Documentation Directory:** `docs/` (root level)
+- **Existing Docs:** Check `docs/` before creating new documentation
 - **Rule Files:** `.cursor/rules/*.mdc` (only create when explicitly requested)
 
 ## **Examples**
@@ -32,7 +32,7 @@ alwaysApply: true
 
 // ✅ DO: Only create docs when user requests
 // User: "Create documentation for feature X"
-// Then create: Markdown/FEATURE_X.md
+// Then create: docs/FEATURE_X.md
 ```
 
 ## **Exception: Cursor Rules**

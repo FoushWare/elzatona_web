@@ -1,0 +1,345 @@
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+
+exports[`A-UT-SNAPSHOT: Admin Problem Solving Snapshot Tests should match admin problem solving page snapshot (loading state) 1`] = `
+<div
+  class="bg-gray-900 text-white p-6"
+>
+  <div
+    class="max-w-7xl mx-auto"
+  >
+    <div
+      class="flex justify-between items-center mb-8"
+    >
+      <div>
+        <h1
+          class="text-3xl font-bold"
+        >
+          Problem Solving Tasks
+        </h1>
+        <p
+          class="text-gray-400 mt-2"
+        >
+          Manage algorithmic coding challenges
+        </p>
+      </div>
+      <button
+        class="flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded-lg transition-colors"
+      >
+        <span>
+          +
+        </span>
+        Create Task
+      </button>
+    </div>
+    <div
+      class="bg-gray-800 rounded-lg p-4 mb-6"
+    >
+      <div
+        class="flex gap-4 items-center"
+      >
+        <div
+          class="flex-1"
+        >
+          <div
+            class="relative"
+          >
+            <span>
+              🔍
+            </span>
+            <input
+              class="w-full pl-10 pr-4 py-2 bg-gray-700 border border-gray-600 rounded-lg focus:outline-none focus:border-blue-500"
+              placeholder="Search tasks..."
+              type="text"
+              value=""
+            />
+          </div>
+        </div>
+        <select
+          class="px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg focus:outline-none focus:border-blue-500"
+        >
+          <option
+            value=""
+          >
+            All Categories
+          </option>
+          <option
+            value="Arrays"
+          >
+            Arrays
+          </option>
+          <option
+            value="Strings"
+          >
+            Strings
+          </option>
+          <option
+            value="Linked Lists"
+          >
+            Linked Lists
+          </option>
+          <option
+            value="Trees"
+          >
+            Trees
+          </option>
+          <option
+            value="Graphs"
+          >
+            Graphs
+          </option>
+          <option
+            value="Dynamic Programming"
+          >
+            Dynamic Programming
+          </option>
+          <option
+            value="Sorting"
+          >
+            Sorting
+          </option>
+          <option
+            value="Searching"
+          >
+            Searching
+          </option>
+          <option
+            value="Math"
+          >
+            Math
+          </option>
+          <option
+            value="Hash Tables"
+          >
+            Hash Tables
+          </option>
+          <option
+            value="Stacks & Queues"
+          >
+            Stacks & Queues
+          </option>
+          <option
+            value="Greedy"
+          >
+            Greedy
+          </option>
+          <option
+            value="Backtracking"
+          >
+            Backtracking
+          </option>
+          <option
+            value="Bit Manipulation"
+          >
+            Bit Manipulation
+          </option>
+        </select>
+        <select
+          class="px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg focus:outline-none focus:border-blue-500"
+        >
+          <option
+            value=""
+          >
+            All Difficulties
+          </option>
+          <option
+            value="easy"
+          >
+            Easy
+          </option>
+          <option
+            value="medium"
+          >
+            Medium
+          </option>
+          <option
+            value="hard"
+          >
+            Hard
+          </option>
+        </select>
+      </div>
+    </div>
+    <div
+      class="bg-gray-800 rounded-lg overflow-hidden"
+    >
+      <div
+        class="p-8 text-center text-gray-400"
+      >
+        Loading tasks...
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`A-UT-SNAPSHOT: Admin Problem Solving Snapshot Tests should match admin problem solving page snapshot 1`] = `
+<div
+  class="bg-gray-900 text-white p-6"
+>
+  <div
+    class="max-w-7xl mx-auto"
+  >
+    <div
+      class="flex justify-between items-center mb-8"
+    >
+      <div>
+        <h1
+          class="text-3xl font-bold"
+        >
+          Problem Solving Tasks
+        </h1>
+        <p
+          class="text-gray-400 mt-2"
+        >
+          Manage algorithmic coding challenges
+        </p>
+      </div>
+      <button
+        class="flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded-lg transition-colors"
+      >
+        <span>
+          +
+        </span>
+        Create Task
+      </button>
+    </div>
+    <div
+      class="bg-gray-800 rounded-lg p-4 mb-6"
+    >
+      <div
+        class="flex gap-4 items-center"
+      >
+        <div
+          class="flex-1"
+        >
+          <div
+            class="relative"
+          >
+            <span>
+              🔍
+            </span>
+            <input
+              class="w-full pl-10 pr-4 py-2 bg-gray-700 border border-gray-600 rounded-lg focus:outline-none focus:border-blue-500"
+              placeholder="Search tasks..."
+              type="text"
+              value=""
+            />
+          </div>
+        </div>
+        <select
+          class="px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg focus:outline-none focus:border-blue-500"
+        >
+          <option
+            value=""
+          >
+            All Categories
+          </option>
+          <option
+            value="Arrays"
+          >
+            Arrays
+          </option>
+          <option
+            value="Strings"
+          >
+            Strings
+          </option>
+          <option
+            value="Linked Lists"
+          >
+            Linked Lists
+          </option>
+          <option
+            value="Trees"
+          >
+            Trees
+          </option>
+          <option
+            value="Graphs"
+          >
+            Graphs
+          </option>
+          <option
+            value="Dynamic Programming"
+          >
+            Dynamic Programming
+          </option>
+          <option
+            value="Sorting"
+          >
+            Sorting
+          </option>
+          <option
+            value="Searching"
+          >
+            Searching
+          </option>
+          <option
+            value="Math"
+          >
+            Math
+          </option>
+          <option
+            value="Hash Tables"
+          >
+            Hash Tables
+          </option>
+          <option
+            value="Stacks & Queues"
+          >
+            Stacks & Queues
+          </option>
+          <option
+            value="Greedy"
+          >
+            Greedy
+          </option>
+          <option
+            value="Backtracking"
+          >
+            Backtracking
+          </option>
+          <option
+            value="Bit Manipulation"
+          >
+            Bit Manipulation
+          </option>
+        </select>
+        <select
+          class="px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg focus:outline-none focus:border-blue-500"
+        >
+          <option
+            value=""
+          >
+            All Difficulties
+          </option>
+          <option
+            value="easy"
+          >
+            Easy
+          </option>
+          <option
+            value="medium"
+          >
+            Medium
+          </option>
+          <option
+            value="hard"
+          >
+            Hard
+          </option>
+        </select>
+      </div>
+    </div>
+    <div
+      class="bg-gray-800 rounded-lg overflow-hidden"
+    >
+      <div
+        class="p-8 text-center text-gray-400"
+      >
+        No tasks found
+      </div>
+    </div>
+  </div>
+</div>
+`;

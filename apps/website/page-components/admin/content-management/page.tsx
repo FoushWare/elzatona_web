@@ -49,7 +49,7 @@ interface LearningPlan {
   [key: string]: unknown;
 }
 
-interface Category {
+export interface Category {
   id: string;
   name: string;
   description?: string;
@@ -57,7 +57,7 @@ interface Category {
   [key: string]: unknown;
 }
 
-interface Topic {
+export interface Topic {
   id: string;
   name: string;
   description?: string;
