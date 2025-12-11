@@ -11,12 +11,14 @@ import FrontendTasksAdminPage from "./page";
 // Mock TanStack Query hooks
 const mockTasksData = { data: [] };
 
+const mockUseFrontendTasks = jest.fn(() => ({
+  data: mockTasksData,
+  isLoading: false,
+  error: null,
+}));
+
 jest.mock("@elzatona/hooks", () => ({
-  useFrontendTasks: jest.fn(() => ({
-    data: mockTasksData,
-    isLoading: false,
-    error: null,
-  })),
+  useFrontendTasks: mockUseFrontendTasks,
   useCreateFrontendTask: jest.fn(() => ({
     mutateAsync: jest.fn(),
     isPending: false,
@@ -83,8 +85,7 @@ describe("A-UT-SNAPSHOT: Admin Frontend Tasks Snapshot Tests", () => {
   });
 
   it("should match admin frontend tasks page snapshot (loading state)", () => {
-    const { useFrontendTasks } = require("@elzatona/hooks");
-    useFrontendTasks.mockReturnValue({
+    mockUseFrontendTasks.mockReturnValue({
       data: null,
       isLoading: true,
       error: null,
