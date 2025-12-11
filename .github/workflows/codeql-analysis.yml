@@ -42,18 +42,15 @@ jobs:
           languages: ${{ matrix.language }}
           # Use security-extended queries for better coverage
           queries: security-extended,security-and-quality
-          # Exclude files that don't exist in current worktree (git history only)
-          # These files have syntax errors but are not in the current codebase
-          paths-ignore: |
-            Rest/scripts/**
-            **/*.integration.test.tsx
+          # Note: Path exclusions should be done via codeql-config.yml file
+          # if needed, as paths-ignore is not a valid input for init@v4
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: "20"
           # Explicitly disable cache since project uses bun.lock, not package-lock.json
-          package-manager-cache: false
+          cache: false
 
       - name: Install dependencies
         run: npm install
