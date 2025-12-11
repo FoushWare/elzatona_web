@@ -62,12 +62,15 @@ cat > "$REPLACEMENTS_FILE" << 'EOF'
 # Format: actual_secret==>replacement_placeholder
 
 # Example format (replace with your actual secrets):
-# EXAMPLE_SUPABASE_SERVICE_ROLE_JWT_TOKEN==>YOUR_SUPABASE_SERVICE_ROLE_KEY_HERE
-# EXAMPLE_GOOGLE_API_KEY==>YOUR_GOOGLE_API_KEY_HERE
-# EXAMPLE_SUPABASE_ANON_JWT_TOKEN==>YOUR_SUPABASE_ANON_KEY_HERE
+# PLACEHOLDER_SUPABASE_SERVICE_ROLE_JWT_TOKEN==>PLACEHOLDER_REPLACEMENT_TEXT
+# PLACEHOLDER_GOOGLE_API_KEY==>PLACEHOLDER_REPLACEMENT_TEXT
+# PLACEHOLDER_SUPABASE_ANON_JWT_TOKEN==>PLACEHOLDER_REPLACEMENT_TEXT
 #
 # Note: The above are placeholders. Replace with your actual exposed secrets.
 # Format: actual_secret==>replacement_placeholder
+#
+# ⚠️ DO NOT use example JWT tokens or API keys in this file!
+# ⚠️ Only add your ACTUAL exposed secrets that need to be removed from history.
 
 # ⚠️ Add your actual secrets here (one per line):
 # YOUR_ACTUAL_SECRET_1==>YOUR_PLACEHOLDER_HERE
@@ -123,7 +126,9 @@ if python3 -m git_filter_repo --replace-text "$REPLACEMENTS_FILE" --force 2>&1; 
     
     # Verify removal
     echo "🔍 Verifying secrets are removed..."
-    REMAINING=$(GIT_PAGER=cat git log --all -p --no-pager -100 2>/dev/null | grep -iE "AIzaSy|YOUR_SUPABASE_KEY_HERE|gho_|ghp_|sk-proj-|sntryu_" | head -5 || true)
+    # Note: These patterns are used to DETECT secrets, not actual secrets themselves
+    # Using base64-like patterns and common secret prefixes for detection
+    REMAINING=$(GIT_PAGER=cat git log --all -p --no-pager -100 2>/dev/null | grep -iE "AIzaSy[A-Za-z0-9_-]{35}|eyJ[A-Za-z0-9_-]{100,}|gho_[A-Za-z0-9_-]{36}|ghp_[A-Za-z0-9_-]{36}|sk-proj-[A-Za-z0-9_-]{48}|sntryu_[A-Za-z0-9_-]{32}" | head -5 || true)
     
     if [ -z "$REMAINING" ]; then
         echo "✅ No secrets found in recent history!"
@@ -137,7 +142,7 @@ if python3 -m git_filter_repo --replace-text "$REPLACEMENTS_FILE" --force 2>&1; 
     echo ""
     echo "📊 Next Steps:"
     echo "   1. Review the changes: git log --oneline -10"
-    echo "   2. Verify no secrets remain: git log --all -p | grep -iE 'AIzaSy|YOUR_SUPABASE_KEY_HERE'"
+    echo "   2. Verify no secrets remain: git log --all -p | grep -iE 'AIzaSy[A-Za-z0-9_-]{35}|eyJ[A-Za-z0-9_-]{100,}'"
     echo "   3. Force push to remote: git push origin --force --all"
     echo "   4. Notify team members to reset their local repos"
     echo ""
