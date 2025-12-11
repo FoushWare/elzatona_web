@@ -3,10 +3,10 @@
  * Task: A-004 - Admin Content Management
  */
 
-import React from 'react';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
-import '@testing-library/jest-dom';
-import UnifiedAdminPage from './page';
+import React from "react";
+import { render, screen, fireEvent, waitFor } from "@testing-library/react";
+import "@testing-library/jest-dom";
+import UnifiedAdminPage from "./page";
 
 // Mock TanStack Query hooks
 const mockCardsData = { data: [], count: 0 };
@@ -15,12 +15,14 @@ const mockCategoriesData = { data: [], count: 0 };
 const mockTopicsData = { data: [], count: 0 };
 const mockQuestionsData = { data: [], pagination: { totalCount: 0 } };
 
-jest.mock('@elzatona/shared-hooks', () => ({
-  useCards: jest.fn(() => ({
-    data: mockCardsData,
-    isLoading: false,
-    error: null,
-  })),
+const mockUseCards = jest.fn(() => ({
+  data: mockCardsData,
+  isLoading: false,
+  error: null,
+}));
+
+jest.mock("@elzatona/hooks", () => ({
+  useCards: mockUseCards,
   usePlans: jest.fn(() => ({
     data: mockPlansData,
     isLoading: false,
@@ -107,14 +109,16 @@ jest.mock('@elzatona/shared-hooks', () => ({
   })),
 }));
 
-jest.mock('@tanstack/react-query', () => ({
+jest.mock("@tanstack/react-query", () => ({
   useQueryClient: () => ({
     invalidateQueries: jest.fn(),
   }),
 }));
 
-jest.mock('@elzatona/shared-components', () => ({
-  BulkOperations: () => <div data-testid="bulk-operations">Bulk Operations</div>,
+jest.mock("@elzatona/components", () => ({
+  BulkOperations: () => (
+    <div data-testid="bulk-operations">Bulk Operations</div>
+  ),
   useToast: () => ({
     showSuccess: jest.fn(),
     showError: jest.fn(),
@@ -123,12 +127,20 @@ jest.mock('@elzatona/shared-components', () => ({
   }),
   ToastContainer: () => <div data-testid="toast-container">Toasts</div>,
   Button: ({ children, onClick, ...props }: any) => (
-    <button onClick={onClick} {...props}>{children}</button>
+    <button onClick={onClick} {...props}>
+      {children}
+    </button>
   ),
   Card: ({ children }: { children: React.ReactNode }) => <div>{children}</div>,
-  CardContent: ({ children }: { children: React.ReactNode }) => <div>{children}</div>,
-  CardHeader: ({ children }: { children: React.ReactNode }) => <div>{children}</div>,
-  CardTitle: ({ children }: { children: React.ReactNode }) => <h2>{children}</h2>,
+  CardContent: ({ children }: { children: React.ReactNode }) => (
+    <div>{children}</div>
+  ),
+  CardHeader: ({ children }: { children: React.ReactNode }) => (
+    <div>{children}</div>
+  ),
+  CardTitle: ({ children }: { children: React.ReactNode }) => (
+    <h2>{children}</h2>
+  ),
   Input: ({ onChange, value, ...props }: any) => (
     <input onChange={onChange} value={value} {...props} />
   ),
@@ -137,15 +149,23 @@ jest.mock('@elzatona/shared-components', () => ({
       {children}
     </select>
   ),
-  SelectContent: ({ children }: { children: React.ReactNode }) => <div>{children}</div>,
-  SelectItem: ({ children, value }: any) => <option value={value}>{children}</option>,
-  SelectTrigger: ({ children }: { children: React.ReactNode }) => <div>{children}</div>,
+  SelectContent: ({ children }: { children: React.ReactNode }) => (
+    <div>{children}</div>
+  ),
+  SelectItem: ({ children, value }: any) => (
+    <option value={value}>{children}</option>
+  ),
+  SelectTrigger: ({ children }: { children: React.ReactNode }) => (
+    <div>{children}</div>
+  ),
   SelectValue: () => <span>Select...</span>,
-  Badge: ({ children }: { children: React.ReactNode }) => <span>{children}</span>,
-  Modal: ({ children, open }: any) => open ? <div>{children}</div> : null,
+  Badge: ({ children }: { children: React.ReactNode }) => (
+    <span>{children}</span>
+  ),
+  Modal: ({ children, open }: any) => (open ? <div>{children}</div> : null),
 }));
 
-jest.mock('lucide-react', () => ({
+jest.mock("lucide-react", () => ({
   ChevronDown: () => <span>▼</span>,
   ChevronRight: () => <span>▶</span>,
   Plus: () => <span>+</span>,
@@ -161,33 +181,37 @@ jest.mock('lucide-react', () => ({
   Target: () => <span>🎯</span>,
 }));
 
-describe('A-UT-014: Component Renders', () => {
+describe("A-UT-014: Component Renders", () => {
   beforeEach(() => {
     jest.clearAllMocks();
   });
 
-  it('should render without errors', async () => {
+  it("should render without errors", async () => {
     const { container } = render(<UnifiedAdminPage />);
     await waitFor(() => {
       expect(container).toBeInTheDocument();
     });
   });
 
-  it('should display unified admin page title', async () => {
+  it("should display unified admin page title", async () => {
     render(<UnifiedAdminPage />);
     await waitFor(() => {
       // Page should render (check for any content)
-      expect(screen.getByTestId('bulk-operations') || screen.queryByRole('heading') || document.body).toBeTruthy();
+      expect(
+        screen.getByTestId("bulk-operations") ||
+          screen.queryByRole("heading") ||
+          document.body,
+      ).toBeTruthy();
     });
   });
 });
 
-describe('A-UT-015: Content Sections', () => {
+describe("A-UT-015: Content Sections", () => {
   beforeEach(() => {
     jest.clearAllMocks();
   });
 
-  it('should display stats cards', async () => {
+  it("should display stats cards", async () => {
     render(<UnifiedAdminPage />);
     await waitFor(() => {
       // Stats should be calculated from data
@@ -195,9 +219,8 @@ describe('A-UT-015: Content Sections', () => {
     });
   });
 
-  it('should handle loading states', () => {
-    const { useCards } = require('@elzatona/shared-hooks');
-    useCards.mockReturnValue({
+  it("should handle loading states", () => {
+    mockUseCards.mockReturnValue({
       data: null,
       isLoading: true,
       error: null,
@@ -205,28 +228,26 @@ describe('A-UT-015: Content Sections', () => {
 
     const { rerender } = render(<UnifiedAdminPage />);
     rerender(<UnifiedAdminPage />);
-    
+
     // Should handle loading
     expect(screen.queryByText(/Error/i)).not.toBeInTheDocument();
   });
 });
 
-describe('A-UT-SNAPSHOT: Admin Content Management Snapshot Tests', () => {
-  it('should match content management page snapshot', () => {
+describe("A-UT-SNAPSHOT: Admin Content Management Snapshot Tests", () => {
+  it("should match content management page snapshot", () => {
     const { container } = render(<UnifiedAdminPage />);
     expect(container.firstChild).toMatchSnapshot();
   });
 
-  it('should match content management page snapshot (loading state)', () => {
-    const { useCards } = require('@elzatona/shared-hooks');
-    useCards.mockReturnValue({
+  it("should match content management page snapshot (loading state)", () => {
+    mockUseCards.mockReturnValue({
       data: null,
       isLoading: true,
       error: null,
     });
-    
+
     const { container } = render(<UnifiedAdminPage />);
     expect(container.firstChild).toMatchSnapshot();
   });
 });
-

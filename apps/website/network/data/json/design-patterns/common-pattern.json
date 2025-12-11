@@ -1,0 +1,235 @@
+[
+  {
+    "id": "design-patterns-common-pattern-1",
+    "title": "Definition of Common Pattern",
+    "content": "What is the 'Common Pattern' in JavaScript object creation?",
+    "type": "open-ended",
+    "category": "Design Patterns",
+    "topic": "Common Pattern",
+    "difficulty": "beginner",
+    "learningCardId": "system-design",
+    "isActive": true,
+    "createdAt": "2025-10-15T00:47:17.203Z",
+    "updatedAt": "2025-10-15T00:47:17.204Z",
+    "createdBy": "admin",
+    "updatedBy": "admin",
+    "tags": ["design-patterns", "common-pattern", "beginner"],
+    "explanation": "It’s the simplest way of creating objects in JavaScript using object literals or basic functions. It involves manually defining properties and methods without abstraction.",
+    "points": 10,
+    "sampleAnswers": [
+      "It’s the simplest way of creating objects in JavaScript using object literals or basic functions.",
+      "It involves manually defining properties and methods without abstraction."
+    ],
+    "hints": [
+      "Think about `{}` object literals.",
+      "No abstraction, no factories."
+    ],
+    "metadata": {}
+  },
+  {
+    "id": "design-patterns-common-pattern-2",
+    "title": "Code Output - Object Literal",
+    "content": "What will this code log?\n\n```js\nconst user = {\n  firstName: 'Alice',\n  lastName: 'Brown',\n  fullName: function() {\n    return this.firstName + ' ' + this.lastName;\n  }\n};\n\nconsole.log(user.fullName());\n```",
+    "type": "multiple-choice",
+    "category": "Design Patterns",
+    "topic": "General Design Patterns",
+    "difficulty": "beginner",
+    "learningCardId": "system-design",
+    "isActive": true,
+    "createdAt": "2025-10-15T00:47:17.204Z",
+    "updatedAt": "2025-10-15T00:47:17.204Z",
+    "createdBy": "admin",
+    "updatedBy": "admin",
+    "tags": ["design-patterns", "general-design-patterns", "beginner"],
+    "explanation": "The correct answer is: Alice Brown",
+    "points": 10,
+    "options": [
+      {
+        "id": "a",
+        "text": "Alice",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "b",
+        "text": "Brown",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "c",
+        "text": "Alice Brown",
+        "isCorrect": true,
+        "explanation": ""
+      }
+    ],
+    "hints": [],
+    "metadata": {}
+  },
+  {
+    "id": "design-patterns-common-pattern-3",
+    "title": "Pros of Common Pattern",
+    "content": "Which of the following are advantages of the Common Pattern?",
+    "type": "multiple-choice",
+    "category": "Design Patterns",
+    "topic": "General Design Patterns",
+    "difficulty": "beginner",
+    "learningCardId": "system-design",
+    "isActive": true,
+    "createdAt": "2025-10-15T00:47:17.204Z",
+    "updatedAt": "2025-10-15T00:47:17.204Z",
+    "createdBy": "admin",
+    "updatedBy": "admin",
+    "tags": ["design-patterns", "general-design-patterns", "beginner"],
+    "explanation": "The correct answer is: Simple and easy to understand",
+    "points": 10,
+    "options": [
+      {
+        "id": "a",
+        "text": "Simple and easy to understand",
+        "isCorrect": true,
+        "explanation": ""
+      },
+      {
+        "id": "b",
+        "text": "Minimal boilerplate code",
+        "isCorrect": true,
+        "explanation": ""
+      },
+      {
+        "id": "c",
+        "text": "Great for small projects",
+        "isCorrect": true,
+        "explanation": ""
+      },
+      {
+        "id": "d",
+        "text": "Highly scalable for large apps",
+        "isCorrect": false,
+        "explanation": ""
+      }
+    ],
+    "hints": [],
+    "metadata": {}
+  },
+  {
+    "id": "design-patterns-common-pattern-4",
+    "title": "Cons of Common Pattern",
+    "content": "What is a major drawback of the Common Pattern?",
+    "type": "open-ended",
+    "category": "Design Patterns",
+    "topic": "General Design Patterns",
+    "difficulty": "beginner",
+    "learningCardId": "system-design",
+    "isActive": true,
+    "createdAt": "2025-10-15T00:47:17.204Z",
+    "updatedAt": "2025-10-15T00:47:17.204Z",
+    "createdBy": "admin",
+    "updatedBy": "admin",
+    "tags": ["design-patterns", "general-design-patterns", "beginner"],
+    "explanation": "It doesn’t scale well because every object must be defined manually. Code duplication increases with many similar objects.",
+    "points": 10,
+    "sampleAnswers": [
+      "It doesn’t scale well because every object must be defined manually.",
+      "Code duplication increases with many similar objects."
+    ],
+    "hints": [],
+    "metadata": {}
+  },
+  {
+    "id": "design-patterns-common-pattern-5",
+    "title": "Repetition Problem",
+    "content": "Why might using the Common Pattern cause problems when creating many similar objects?",
+    "type": "open-ended",
+    "category": "Design Patterns",
+    "topic": "General Design Patterns",
+    "difficulty": "intermediate",
+    "learningCardId": "system-design",
+    "isActive": true,
+    "createdAt": "2025-10-15T00:47:17.204Z",
+    "updatedAt": "2025-10-15T00:47:17.204Z",
+    "createdBy": "admin",
+    "updatedBy": "admin",
+    "tags": ["design-patterns", "general-design-patterns", "intermediate"],
+    "explanation": "Because you need to repeat the same properties and methods for each object. It leads to duplication and makes changes harder to maintain.",
+    "points": 10,
+    "sampleAnswers": [
+      "Because you need to repeat the same properties and methods for each object.",
+      "It leads to duplication and makes changes harder to maintain."
+    ],
+    "hints": [],
+    "metadata": {}
+  },
+  {
+    "id": "design-patterns-common-pattern-6",
+    "title": "Debugging Common Pattern",
+    "content": "Find the bug in this code:\n\n```js\nconst car = {\n  brand: 'Toyota',\n  model: 'Corolla',\n  getDetails: () => `${this.brand} ${this.model}`\n};\n\nconsole.log(car.getDetails());\n```",
+    "type": "open-ended",
+    "category": "Design Patterns",
+    "topic": "General Design Patterns",
+    "difficulty": "intermediate",
+    "learningCardId": "system-design",
+    "isActive": true,
+    "createdAt": "2025-10-15T00:47:17.204Z",
+    "updatedAt": "2025-10-15T00:47:17.204Z",
+    "createdBy": "admin",
+    "updatedBy": "admin",
+    "tags": ["design-patterns", "general-design-patterns", "intermediate"],
+    "explanation": "The arrow function doesn’t bind `this` properly, so `this.brand` and `this.model` are undefined. Use a regular function instead of an arrow function.",
+    "points": 10,
+    "sampleAnswers": [
+      "The arrow function doesn’t bind `this` properly, so `this.brand` and `this.model` are undefined.",
+      "Use a regular function instead of an arrow function."
+    ],
+    "hints": [],
+    "metadata": {}
+  },
+  {
+    "id": "design-patterns-common-pattern-7",
+    "title": "Best Use Case",
+    "content": "When is it appropriate to use the Common Pattern?",
+    "type": "open-ended",
+    "category": "Design Patterns",
+    "topic": "General Design Patterns",
+    "difficulty": "intermediate",
+    "learningCardId": "system-design",
+    "isActive": true,
+    "createdAt": "2025-10-15T00:47:17.204Z",
+    "updatedAt": "2025-10-15T00:47:17.204Z",
+    "createdBy": "admin",
+    "updatedBy": "admin",
+    "tags": ["design-patterns", "general-design-patterns", "intermediate"],
+    "explanation": "For very small apps or scripts where only one or two objects are needed. When performance and scalability aren’t concerns.",
+    "points": 10,
+    "sampleAnswers": [
+      "For very small apps or scripts where only one or two objects are needed.",
+      "When performance and scalability aren’t concerns."
+    ],
+    "hints": [],
+    "metadata": {}
+  },
+  {
+    "id": "design-patterns-common-pattern-8",
+    "title": "Transition to Other Patterns",
+    "content": "Why do developers often move from the Common Pattern to the Factory Pattern or Constructor Pattern?",
+    "type": "open-ended",
+    "category": "Design Patterns",
+    "topic": "General Design Patterns",
+    "difficulty": "advanced",
+    "learningCardId": "system-design",
+    "isActive": true,
+    "createdAt": "2025-10-15T00:47:17.204Z",
+    "updatedAt": "2025-10-15T00:47:17.204Z",
+    "createdBy": "admin",
+    "updatedBy": "admin",
+    "tags": ["design-patterns", "general-design-patterns", "advanced"],
+    "explanation": "Because as applications grow, manually creating objects becomes repetitive and hard to maintain. Factories and constructors provide abstraction and scalability.",
+    "points": 10,
+    "sampleAnswers": [
+      "Because as applications grow, manually creating objects becomes repetitive and hard to maintain.",
+      "Factories and constructors provide abstraction and scalability."
+    ],
+    "hints": [],
+    "metadata": {}
+  }
+]

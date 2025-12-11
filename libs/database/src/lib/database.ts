@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 // Database library exports
 // This file uses 'any' types for database operations and user data
-import { createClient } from '@supabase/supabase-js';
+import { createClient } from "@supabase/supabase-js";
 
 export interface DatabaseConfig {
   url: string;
@@ -22,9 +22,9 @@ export class DatabaseClient {
   // User operations
   async getUser(id: string) {
     const { data, error } = await this.client
-      .from('users')
-      .select('*')
-      .eq('id', id)
+      .from("users")
+      .select("*")
+      .eq("id", id)
       .single();
 
     if (error) throw error;
@@ -33,7 +33,7 @@ export class DatabaseClient {
 
   async createUser(userData: any) {
     const { data, error } = await this.client
-      .from('users')
+      .from("users")
       .insert(userData)
       .select()
       .single();
@@ -44,7 +44,7 @@ export class DatabaseClient {
 
   // Question operations
   async getQuestions(filters?: Record<string, any>) {
-    let query = this.client.from('questions').select('*');
+    let query = this.client.from("questions").select("*");
 
     if (filters) {
       Object.entries(filters).forEach(([key, value]) => {
@@ -59,7 +59,7 @@ export class DatabaseClient {
 
   async createQuestion(questionData: any) {
     const { data, error } = await this.client
-      .from('questions')
+      .from("questions")
       .insert(questionData)
       .select()
       .single();
@@ -69,7 +69,7 @@ export class DatabaseClient {
   }
 
   async deleteQuestion(id: string) {
-    const { error } = await this.client.from('questions').delete().eq('id', id);
+    const { error } = await this.client.from("questions").delete().eq("id", id);
 
     if (error) throw error;
   }

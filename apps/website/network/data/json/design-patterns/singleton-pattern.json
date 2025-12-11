@@ -1,0 +1,275 @@
+[
+  {
+    "id": "design-patterns-singleton-pattern-76",
+    "title": "Singleton Basics",
+    "content": "What is the main purpose of the Singleton Pattern in JavaScript?",
+    "type": "open-ended",
+    "category": "Design Patterns",
+    "topic": "General Design Patterns",
+    "difficulty": "beginner",
+    "learningCardId": "system-design",
+    "isActive": true,
+    "createdAt": "2025-10-15T00:47:17.208Z",
+    "updatedAt": "2025-10-15T00:47:17.208Z",
+    "createdBy": "admin",
+    "updatedBy": "admin",
+    "tags": ["design-patterns", "general-design-patterns", "beginner"],
+    "explanation": "To ensure only one instance of a class or object exists and provide a global point of access to it. It’s often used for managing global state across an application.",
+    "points": 10,
+    "sampleAnswers": [
+      "To ensure only one instance of a class or object exists and provide a global point of access to it.",
+      "It’s often used for managing global state across an application."
+    ],
+    "hints": [],
+    "metadata": {}
+  },
+  {
+    "id": "design-patterns-singleton-pattern-77",
+    "title": "Non-Singleton Counter",
+    "content": "Why does the initial Counter class implementation in the example fail to meet the Singleton requirements?",
+    "type": "open-ended",
+    "category": "Design Patterns",
+    "topic": "General Design Patterns",
+    "difficulty": "intermediate",
+    "learningCardId": "system-design",
+    "isActive": true,
+    "createdAt": "2025-10-15T00:47:17.208Z",
+    "updatedAt": "2025-10-15T00:47:17.208Z",
+    "createdBy": "admin",
+    "updatedBy": "admin",
+    "tags": ["design-patterns", "general-design-patterns", "intermediate"],
+    "explanation": "Because multiple instances can still be created using the `new` keyword. The getInstance method doesn’t enforce a single instance.",
+    "points": 10,
+    "sampleAnswers": [
+      "Because multiple instances can still be created using the `new` keyword.",
+      "The getInstance method doesn’t enforce a single instance."
+    ],
+    "hints": [],
+    "metadata": {}
+  },
+  {
+    "id": "design-patterns-singleton-pattern-78",
+    "title": "Enforcing a Singleton",
+    "content": "How does introducing a private `instance` variable in the constructor ensure only one instance of the class can exist?",
+    "type": "open-ended",
+    "category": "Design Patterns",
+    "topic": "General Design Patterns",
+    "difficulty": "intermediate",
+    "learningCardId": "system-design",
+    "isActive": true,
+    "createdAt": "2025-10-15T00:47:17.208Z",
+    "updatedAt": "2025-10-15T00:47:17.208Z",
+    "createdBy": "admin",
+    "updatedBy": "admin",
+    "tags": ["design-patterns", "general-design-patterns", "intermediate"],
+    "explanation": "It checks if an instance already exists and throws an error on subsequent instantiations. This prevents creating multiple instances with `new`.",
+    "points": 10,
+    "sampleAnswers": [
+      "It checks if an instance already exists and throws an error on subsequent instantiations.",
+      "This prevents creating multiple instances with `new`."
+    ],
+    "hints": [],
+    "metadata": {}
+  },
+  {
+    "id": "design-patterns-singleton-pattern-79",
+    "title": "Object.freeze in Singleton",
+    "content": "What is the purpose of using `Object.freeze` on a Singleton instance?",
+    "type": "multiple-choice",
+    "category": "Design Patterns",
+    "topic": "General Design Patterns",
+    "difficulty": "beginner",
+    "learningCardId": "system-design",
+    "isActive": true,
+    "createdAt": "2025-10-15T00:47:17.208Z",
+    "updatedAt": "2025-10-15T00:47:17.208Z",
+    "createdBy": "admin",
+    "updatedBy": "admin",
+    "tags": ["design-patterns", "general-design-patterns", "beginner"],
+    "explanation": "The correct answer is: Prevents modification of the Singleton’s properties",
+    "points": 10,
+    "options": [
+      {
+        "id": "a",
+        "text": "Prevents modification of the Singleton’s properties",
+        "isCorrect": true,
+        "explanation": ""
+      },
+      {
+        "id": "b",
+        "text": "Allows multiple instances to be created",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "c",
+        "text": "Automatically resets the Singleton",
+        "isCorrect": false,
+        "explanation": ""
+      }
+    ],
+    "hints": [],
+    "metadata": {}
+  },
+  {
+    "id": "design-patterns-singleton-pattern-80",
+    "title": "Singleton in Multiple Modules",
+    "content": "In the redButton.js and blueButton.js example, why does clicking either button increment the same counter?",
+    "type": "open-ended",
+    "category": "Design Patterns",
+    "topic": "General Design Patterns",
+    "difficulty": "intermediate",
+    "learningCardId": "system-design",
+    "isActive": true,
+    "createdAt": "2025-10-15T00:47:17.208Z",
+    "updatedAt": "2025-10-15T00:47:17.208Z",
+    "createdBy": "admin",
+    "updatedBy": "admin",
+    "tags": ["design-patterns", "general-design-patterns", "intermediate"],
+    "explanation": "Because both modules import the same frozen Singleton instance, which is shared globally. The counter state lives in one place and is referenced everywhere.",
+    "points": 10,
+    "sampleAnswers": [
+      "Because both modules import the same frozen Singleton instance, which is shared globally.",
+      "The counter state lives in one place and is referenced everywhere."
+    ],
+    "hints": [],
+    "metadata": {}
+  },
+  {
+    "id": "design-patterns-singleton-pattern-81",
+    "title": "Singleton vs Object Literal",
+    "content": "Why might using a simple object literal sometimes be a better option than implementing a Singleton class in JavaScript?",
+    "type": "open-ended",
+    "category": "Design Patterns",
+    "topic": "General Design Patterns",
+    "difficulty": "intermediate",
+    "learningCardId": "system-design",
+    "isActive": true,
+    "createdAt": "2025-10-15T00:47:17.208Z",
+    "updatedAt": "2025-10-15T00:47:17.208Z",
+    "createdBy": "admin",
+    "updatedBy": "admin",
+    "tags": ["design-patterns", "general-design-patterns", "intermediate"],
+    "explanation": "Because JavaScript objects are naturally passed by reference, so a single object can already behave like a Singleton. Using a class adds unnecessary complexity if you don’t need instantiation control.",
+    "points": 10,
+    "sampleAnswers": [
+      "Because JavaScript objects are naturally passed by reference, so a single object can already behave like a Singleton.",
+      "Using a class adds unnecessary complexity if you don’t need instantiation control."
+    ],
+    "hints": [],
+    "metadata": {}
+  },
+  {
+    "id": "design-patterns-singleton-pattern-82",
+    "title": "Testing Challenges",
+    "content": "Why can Singletons be difficult to test?",
+    "type": "open-ended",
+    "category": "Design Patterns",
+    "topic": "General Design Patterns",
+    "difficulty": "advanced",
+    "learningCardId": "system-design",
+    "isActive": true,
+    "createdAt": "2025-10-15T00:47:17.208Z",
+    "updatedAt": "2025-10-15T00:47:17.208Z",
+    "createdBy": "admin",
+    "updatedBy": "admin",
+    "tags": ["design-patterns", "general-design-patterns", "advanced"],
+    "explanation": "All tests share the same instance, so modifications in one test affect others. Resetting state between tests can be cumbersome and error-prone.",
+    "points": 10,
+    "sampleAnswers": [
+      "All tests share the same instance, so modifications in one test affect others.",
+      "Resetting state between tests can be cumbersome and error-prone."
+    ],
+    "hints": [],
+    "metadata": {}
+  },
+  {
+    "id": "design-patterns-singleton-pattern-83",
+    "title": "Global Behavior",
+    "content": "How is the behavior of a Singleton similar to that of a global variable?",
+    "type": "multiple-choice",
+    "category": "Design Patterns",
+    "topic": "General Design Patterns",
+    "difficulty": "beginner",
+    "learningCardId": "system-design",
+    "isActive": true,
+    "createdAt": "2025-10-15T00:47:17.208Z",
+    "updatedAt": "2025-10-15T00:47:17.208Z",
+    "createdBy": "admin",
+    "updatedBy": "admin",
+    "tags": ["design-patterns", "general-design-patterns", "beginner"],
+    "explanation": "The correct answer is: Both are accessible throughout the application",
+    "points": 10,
+    "options": [
+      {
+        "id": "a",
+        "text": "Both are accessible throughout the application",
+        "isCorrect": true,
+        "explanation": ""
+      },
+      {
+        "id": "b",
+        "text": "Both prevent mutation of values",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "c",
+        "text": "Both are automatically garbage collected",
+        "isCorrect": false,
+        "explanation": ""
+      }
+    ],
+    "hints": [],
+    "metadata": {}
+  },
+  {
+    "id": "design-patterns-singleton-pattern-84",
+    "title": "Drawbacks of Singletons",
+    "content": "What are some disadvantages of using the Singleton pattern in large JavaScript applications?",
+    "type": "open-ended",
+    "category": "Design Patterns",
+    "topic": "General Design Patterns",
+    "difficulty": "advanced",
+    "learningCardId": "system-design",
+    "isActive": true,
+    "createdAt": "2025-10-15T00:47:17.208Z",
+    "updatedAt": "2025-10-15T00:47:17.208Z",
+    "createdBy": "admin",
+    "updatedBy": "admin",
+    "tags": ["design-patterns", "general-design-patterns", "advanced"],
+    "explanation": "It introduces hidden dependencies across the codebase. It makes testing harder due to shared mutable state. It can act like a global variable, leading to unexpected coupling.",
+    "points": 10,
+    "sampleAnswers": [
+      "It introduces hidden dependencies across the codebase.",
+      "It makes testing harder due to shared mutable state.",
+      "It can act like a global variable, leading to unexpected coupling."
+    ],
+    "hints": [],
+    "metadata": {}
+  },
+  {
+    "id": "design-patterns-singleton-pattern-85",
+    "title": "Singleton Alternatives in React",
+    "content": "What are common alternatives to using Singletons for global state in React applications?",
+    "type": "open-ended",
+    "category": "Design Patterns",
+    "topic": "General Design Patterns",
+    "difficulty": "intermediate",
+    "learningCardId": "system-design",
+    "isActive": true,
+    "createdAt": "2025-10-15T00:47:17.208Z",
+    "updatedAt": "2025-10-15T00:47:17.208Z",
+    "createdBy": "admin",
+    "updatedBy": "admin",
+    "tags": ["design-patterns", "general-design-patterns", "intermediate"],
+    "explanation": "React Context API State management libraries such as Redux, Zustand, or MobX.",
+    "points": 10,
+    "sampleAnswers": [
+      "React Context API",
+      "State management libraries such as Redux, Zustand, or MobX."
+    ],
+    "hints": [],
+    "metadata": {}
+  }
+]

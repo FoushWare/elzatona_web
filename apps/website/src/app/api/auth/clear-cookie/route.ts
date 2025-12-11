@@ -1,36 +1,5 @@
-import { NextResponse } from 'next/server';
+// Auto-generated route handler
+// This file imports from network/routes/ to maintain Next.js routing structure
+// Source: /Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/apps/website/network/routes/auth/clear-cookie/route.ts
 
-export async function POST() {
-  try {
-    // Create response
-    const response = NextResponse.json({
-      success: true,
-      message: 'Auth cookie cleared successfully',
-    });
-
-    // Clear HTTP-only cookies
-    response.cookies.set('firebase_token', '', {
-      httpOnly: true,
-      secure: process.env['NODE_ENV'] === 'production',
-      sameSite: 'strict',
-      maxAge: 0, // Expire immediately
-      path: '/',
-    });
-
-    response.cookies.set('progress-summary', '', {
-      httpOnly: true,
-      secure: process.env['NODE_ENV'] === 'production',
-      sameSite: 'strict',
-      maxAge: 0, // Expire immediately
-      path: '/',
-    });
-
-    return response;
-  } catch (error) {
-    console.error('Error clearing auth cookie:', error);
-    return NextResponse.json(
-      { error: 'Internal server error' },
-      { status: 500 }
-    );
-  }
-}
+export * from "../../../../../network/routes/auth/clear-cookie/route";

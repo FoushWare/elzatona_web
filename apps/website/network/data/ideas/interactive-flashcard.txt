@@ -1,0 +1,53 @@
+Interactive Flashcards Page
+
+Purpose: Help learners reinforce weak areas by revisiting questions they previously struggled with.
+
+Core Features
+
+Flashcard Decks
+
+Each card shows a question on the front.
+
+Learner tries to recall the answer.
+
+On click/flip, the correct answer is revealed.
+
+Answer Feedback
+
+After revealing, user selects:
+
+✅ I was correct
+
+❌ I was wrong
+
+Adaptive Scheduling
+
+If user answers wrong → card is scheduled to appear in the next session (or even at the end of the current one).
+
+If user answers correctly → card is delayed using a spaced repetition interval (e.g., 1 day → 3 days → 7 days → etc.).
+
+Session Mode
+
+Learners get a set of flashcards based on:
+
+Their previous mistakes.
+
+New concepts added recently.
+
+Progress Tracking
+
+Dashboard showing:
+
+Number of cards reviewed today.
+
+Percentage correct vs incorrect.
+
+Upcoming review schedule.
+
+🔧 Implementation Suggestions (since your site is in React + Vercel):
+
+Use a React flashcard component with flipping animation (Framer Motion can make it smooth).
+
+Store progress (correct/incorrect, scheduling) in Firebase Firestore.
+
+Use a queue-based system to serve cards dynamically per session.

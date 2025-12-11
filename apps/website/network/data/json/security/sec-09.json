@@ -1,0 +1,331 @@
+[
+  {
+    "id": "sec-09-sec71",
+    "title": "What is Clickjacking (UI Redressing)?",
+    "content": "Explain how clickjacking attacks work and why they are dangerous.",
+    "type": "open-ended",
+    "category": "Security",
+    "topic": "Clickjacking",
+    "difficulty": "intermediate",
+    "learningCardId": "system-design",
+    "isActive": true,
+    "createdAt": "2025-10-11T01:11:00.000Z",
+    "updatedAt": "2025-10-11T01:11:00.000Z",
+    "createdBy": "admin",
+    "updatedBy": "admin",
+    "tags": ["security", "clickjacking", "clickjacking", "intermediate"],
+    "explanation": "Clickjacking tricks a user into clicking on invisible or disguised elements on a page, performing actions without their knowledge, such as changing settings or authorizing payments.",
+    "points": 10,
+    "sampleAnswers": [
+      "Clickjacking tricks a user into clicking on invisible or disguised elements on a page, performing actions without their knowledge, such as changing settings or authorizing payments."
+    ],
+    "subcategory": "Clickjacking",
+    "hints": [],
+    "metadata": {}
+  },
+  {
+    "id": "sec-09-sec72",
+    "title": "How can you prevent clickjacking attacks?",
+    "content": "Select all correct options.",
+    "type": "multiple-choice",
+    "category": "Security",
+    "topic": "Clickjacking",
+    "difficulty": "intermediate",
+    "learningCardId": "system-design",
+    "isActive": true,
+    "createdAt": "2025-10-11T01:12:00.000Z",
+    "updatedAt": "2025-10-11T01:12:00.000Z",
+    "createdBy": "admin",
+    "updatedBy": "admin",
+    "tags": ["security", "clickjacking", "clickjacking", "intermediate"],
+    "explanation": "X-Frame-Options and CSP frame-ancestors prevent a site from being embedded in iframes, mitigating clickjacking attacks.",
+    "points": 10,
+    "options": [
+      {
+        "id": "o1",
+        "text": "Use X-Frame-Options header",
+        "isCorrect": true,
+        "explanation": ""
+      },
+      {
+        "id": "o2",
+        "text": "Use Content Security Policy frame-ancestors directive",
+        "isCorrect": true,
+        "explanation": ""
+      },
+      {
+        "id": "o3",
+        "text": "Disable JavaScript completely",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "o4",
+        "text": "Use secure authentication only",
+        "isCorrect": false,
+        "explanation": ""
+      }
+    ],
+    "subcategory": "Clickjacking",
+    "hints": [],
+    "metadata": {}
+  },
+  {
+    "id": "sec-09-sec73",
+    "title": "What is Man-in-the-Middle (MITM) attack?",
+    "content": "Explain how MITM attacks occur in web applications.",
+    "type": "open-ended",
+    "category": "Security",
+    "topic": "Web Security Fundamentals",
+    "difficulty": "intermediate",
+    "learningCardId": "system-design",
+    "isActive": true,
+    "createdAt": "2025-10-11T01:13:00.000Z",
+    "updatedAt": "2025-10-11T01:13:00.000Z",
+    "createdBy": "admin",
+    "updatedBy": "admin",
+    "tags": ["security", "web-security-fundamentals", "mitm", "intermediate"],
+    "explanation": "MITM attacks occur when an attacker intercepts communication between a client and server to eavesdrop, steal credentials, or manipulate data in transit.",
+    "points": 10,
+    "sampleAnswers": [
+      "MITM attacks occur when an attacker intercepts communication between a client and server to eavesdrop, steal credentials, or manipulate data in transit."
+    ],
+    "subcategory": "MITM",
+    "hints": [],
+    "metadata": {}
+  },
+  {
+    "id": "sec-09-sec74",
+    "title": "How can you prevent MITM attacks in web applications?",
+    "content": "Select all correct options.",
+    "type": "multiple-choice",
+    "category": "Security",
+    "topic": "Web Security Fundamentals",
+    "difficulty": "intermediate",
+    "learningCardId": "system-design",
+    "isActive": true,
+    "createdAt": "2025-10-11T01:14:00.000Z",
+    "updatedAt": "2025-10-11T01:14:00.000Z",
+    "createdBy": "admin",
+    "updatedBy": "admin",
+    "tags": ["security", "web-security-fundamentals", "mitm", "intermediate"],
+    "explanation": "HTTPS, certificate validation, and HSTS protect against MITM attacks. Network-level security alone is insufficient.",
+    "points": 10,
+    "options": [
+      {
+        "id": "o1",
+        "text": "Use HTTPS for all communication",
+        "isCorrect": true,
+        "explanation": ""
+      },
+      {
+        "id": "o2",
+        "text": "Validate SSL/TLS certificates",
+        "isCorrect": true,
+        "explanation": ""
+      },
+      {
+        "id": "o3",
+        "text": "Implement HSTS headers",
+        "isCorrect": true,
+        "explanation": ""
+      },
+      {
+        "id": "o4",
+        "text": "Rely only on network-level security",
+        "isCorrect": false,
+        "explanation": ""
+      }
+    ],
+    "subcategory": "MITM",
+    "hints": [],
+    "metadata": {}
+  },
+  {
+    "id": "sec-09-sec75",
+    "title": "What is HTTP Strict Transport Security (HSTS)?",
+    "content": "Explain how HSTS helps improve web security.",
+    "type": "open-ended",
+    "category": "Security",
+    "topic": "Web Security Fundamentals",
+    "difficulty": "intermediate",
+    "learningCardId": "system-design",
+    "isActive": true,
+    "createdAt": "2025-10-11T01:15:00.000Z",
+    "updatedAt": "2025-10-11T01:15:00.000Z",
+    "createdBy": "admin",
+    "updatedBy": "admin",
+    "tags": [
+      "security",
+      "web-security-fundamentals",
+      "headers",
+      "intermediate"
+    ],
+    "explanation": "HSTS tells browsers to only communicate over HTTPS, preventing protocol downgrade attacks and reducing the risk of MITM attacks.",
+    "points": 10,
+    "sampleAnswers": [
+      "HSTS tells browsers to only communicate over HTTPS, preventing protocol downgrade attacks and reducing the risk of MITM attacks."
+    ],
+    "subcategory": "Headers",
+    "hints": [],
+    "metadata": {}
+  },
+  {
+    "id": "sec-09-sec76",
+    "title": "What is Subresource Integrity (SRI)?",
+    "content": "Explain how SRI protects your frontend applications.",
+    "type": "open-ended",
+    "category": "Security",
+    "topic": "Web Security Fundamentals",
+    "difficulty": "intermediate",
+    "learningCardId": "system-design",
+    "isActive": true,
+    "createdAt": "2025-10-11T01:16:00.000Z",
+    "updatedAt": "2025-10-11T01:16:00.000Z",
+    "createdBy": "admin",
+    "updatedBy": "admin",
+    "tags": [
+      "security",
+      "web-security-fundamentals",
+      "headers",
+      "intermediate"
+    ],
+    "explanation": "SRI allows you to provide a hash for external scripts or stylesheets. The browser verifies the file has not been tampered with, protecting against CDN compromises or MITM attacks.",
+    "points": 10,
+    "sampleAnswers": [
+      "SRI allows you to provide a hash for external scripts or stylesheets. The browser verifies the file has not been tampered with, protecting against CDN compromises or MITM attacks."
+    ],
+    "subcategory": "Headers",
+    "hints": [],
+    "metadata": {}
+  },
+  {
+    "id": "sec-09-sec77",
+    "title": "How do HTTPS and TLS protect against web attacks?",
+    "content": "Select all correct options.",
+    "type": "multiple-choice",
+    "category": "Security",
+    "topic": "HTTPS & SSL/TLS",
+    "difficulty": "intermediate",
+    "learningCardId": "system-design",
+    "isActive": true,
+    "createdAt": "2025-10-11T01:17:00.000Z",
+    "updatedAt": "2025-10-11T01:17:00.000Z",
+    "createdBy": "admin",
+    "updatedBy": "admin",
+    "tags": ["security", "https-&-ssl/tls", "tls", "intermediate"],
+    "explanation": "HTTPS/TLS encrypts data, ensures integrity, and authenticates servers. It does not sanitize inputs.",
+    "points": 10,
+    "options": [
+      {
+        "id": "o1",
+        "text": "Encrypts data in transit",
+        "isCorrect": true,
+        "explanation": ""
+      },
+      {
+        "id": "o2",
+        "text": "Prevents eavesdropping and tampering",
+        "isCorrect": true,
+        "explanation": ""
+      },
+      {
+        "id": "o3",
+        "text": "Automatically sanitizes user inputs",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "o4",
+        "text": "Provides server authentication",
+        "isCorrect": true,
+        "explanation": ""
+      }
+    ],
+    "subcategory": "TLS",
+    "hints": [],
+    "metadata": {}
+  },
+  {
+    "id": "sec-09-sec78",
+    "title": "What are security implications of storing sensitive data in localStorage?",
+    "content": "Explain the risks of using localStorage for authentication tokens.",
+    "type": "open-ended",
+    "category": "Security",
+    "topic": "Web Security Fundamentals",
+    "difficulty": "intermediate",
+    "learningCardId": "system-design",
+    "isActive": true,
+    "createdAt": "2025-10-11T01:18:00.000Z",
+    "updatedAt": "2025-10-11T01:18:00.000Z",
+    "createdBy": "admin",
+    "updatedBy": "admin",
+    "tags": [
+      "security",
+      "web-security-fundamentals",
+      "storage",
+      "intermediate"
+    ],
+    "explanation": "localStorage is accessible via JavaScript, making it vulnerable to XSS attacks. Sensitive tokens can be stolen if an attacker injects malicious scripts.",
+    "points": 10,
+    "sampleAnswers": [
+      "localStorage is accessible via JavaScript, making it vulnerable to XSS attacks. Sensitive tokens can be stolen if an attacker injects malicious scripts."
+    ],
+    "subcategory": "Storage",
+    "hints": [],
+    "metadata": {}
+  },
+  {
+    "id": "sec-09-sec79",
+    "title": "What is a security audit for frontend applications?",
+    "content": "Explain the purpose of frontend security audits.",
+    "type": "open-ended",
+    "category": "Security",
+    "topic": "Security Auditing",
+    "difficulty": "intermediate",
+    "learningCardId": "system-design",
+    "isActive": true,
+    "createdAt": "2025-10-11T01:19:00.000Z",
+    "updatedAt": "2025-10-11T01:19:00.000Z",
+    "createdBy": "admin",
+    "updatedBy": "admin",
+    "tags": ["security", "security-auditing", "audit", "intermediate"],
+    "explanation": "A security audit identifies vulnerabilities in frontend code, including XSS, CSRF, insecure storage, misconfigured headers, and third-party libraries, and provides recommendations to fix them.",
+    "points": 10,
+    "sampleAnswers": [
+      "A security audit identifies vulnerabilities in frontend code, including XSS, CSRF, insecure storage, misconfigured headers, and third-party libraries, and provides recommendations to fix them."
+    ],
+    "subcategory": "Audit",
+    "hints": [],
+    "metadata": {}
+  },
+  {
+    "id": "sec-09-sec80",
+    "title": "What is the principle of least privilege in frontend security?",
+    "content": "Explain how least privilege applies to frontend applications.",
+    "type": "open-ended",
+    "category": "Security",
+    "topic": "Web Security Fundamentals",
+    "difficulty": "intermediate",
+    "learningCardId": "system-design",
+    "isActive": true,
+    "createdAt": "2025-10-11T01:20:00.000Z",
+    "updatedAt": "2025-10-11T01:20:00.000Z",
+    "createdBy": "admin",
+    "updatedBy": "admin",
+    "tags": [
+      "security",
+      "web-security-fundamentals",
+      "least privilege",
+      "intermediate"
+    ],
+    "explanation": "Least privilege restricts access to only what is necessary for a user or application to perform its tasks, reducing the risk of data breaches and unauthorized actions.",
+    "points": 10,
+    "sampleAnswers": [
+      "Least privilege restricts access to only what is necessary for a user or application to perform its tasks, reducing the risk of data breaches and unauthorized actions."
+    ],
+    "subcategory": "Least Privilege",
+    "hints": [],
+    "metadata": {}
+  }
+]

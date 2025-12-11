@@ -3,15 +3,15 @@
  * Task: G-002 - Get Started Page
  */
 
-import React from 'react';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
-import '@testing-library/jest-dom';
-import GetStartedPage from './page';
-import * as sharedContexts from '@elzatona/shared-contexts';
+import React from "react";
+import { render, screen, fireEvent, waitFor } from "@testing-library/react";
+import "@testing-library/jest-dom";
+import GetStartedPage from "./page";
+import * as sharedContexts from "@elzatona/contexts";
 
 // Mock shared contexts
-jest.mock('@elzatona/shared-contexts', () => {
-  const actual = jest.requireActual('../../test-utils/mocks/shared-contexts');
+jest.mock("@elzatona/contexts", () => {
+  const actual = jest.requireActual("../../test-utils/mocks/shared-contexts");
   return {
     ...actual,
     useUserType: jest.fn(),
@@ -19,7 +19,7 @@ jest.mock('@elzatona/shared-contexts', () => {
 });
 
 // Mock LearningTypeContext
-jest.mock('../../context/LearningTypeContext', () => ({
+jest.mock("../../context/LearningTypeContext", () => ({
   useLearningType: jest.fn(() => ({
     learningType: null,
     setLearningType: jest.fn(),
@@ -27,7 +27,7 @@ jest.mock('../../context/LearningTypeContext', () => ({
 }));
 
 // Mock lucide-react icons
-jest.mock('lucide-react', () => ({
+jest.mock("lucide-react", () => ({
   ArrowRight: () => <span data-testid="arrow-right-icon">→</span>,
   Play: () => <span data-testid="play-icon">▶</span>,
   Code: () => <span data-testid="code-icon">💻</span>,
@@ -45,7 +45,7 @@ jest.mock('lucide-react', () => ({
 const mockPush = jest.fn();
 const mockUseRouter = jest.fn();
 
-jest.mock('next/navigation', () => ({
+jest.mock("next/navigation", () => ({
   useRouter: () => mockUseRouter(),
 }));
 
@@ -53,12 +53,12 @@ describe('G-UT-004: "I need guidance" Option Renders', () => {
   beforeEach(() => {
     jest.clearAllMocks();
     jest.useFakeTimers();
-    
+
     (sharedContexts.useUserType as jest.Mock).mockReturnValue({
       userType: null,
       setUserType: jest.fn(),
     });
-    
+
     mockUseRouter.mockReturnValue({
       push: mockPush,
       replace: jest.fn(),
@@ -80,7 +80,9 @@ describe('G-UT-004: "I need guidance" Option Renders', () => {
   it('should have correct text content for "I need guidance"', () => {
     render(<GetStartedPage />);
     expect(screen.getByText(/I need guidance/i)).toBeInTheDocument();
-    expect(screen.getByText(/Show me structured learning paths/i)).toBeInTheDocument();
+    expect(
+      screen.getByText(/Show me structured learning paths/i),
+    ).toBeInTheDocument();
     expect(screen.getByText(/Pre-defined learning paths/i)).toBeInTheDocument();
   });
 });
@@ -89,12 +91,12 @@ describe('G-UT-005: "I\'m self-directed" Option Renders', () => {
   beforeEach(() => {
     jest.clearAllMocks();
     jest.useFakeTimers();
-    
+
     (sharedContexts.useUserType as jest.Mock).mockReturnValue({
       userType: null,
       setUserType: jest.fn(),
     });
-    
+
     mockUseRouter.mockReturnValue({
       push: mockPush,
       replace: jest.fn(),
@@ -116,21 +118,23 @@ describe('G-UT-005: "I\'m self-directed" Option Renders', () => {
   it('should have correct text content for "I\'m self-directed"', () => {
     render(<GetStartedPage />);
     expect(screen.getByText(/I'm self-directed/i)).toBeInTheDocument();
-    expect(screen.getByText(/Let me create my own roadmap/i)).toBeInTheDocument();
+    expect(
+      screen.getByText(/Let me create my own roadmap/i),
+    ).toBeInTheDocument();
     expect(screen.getByText(/Custom roadmap builder/i)).toBeInTheDocument();
   });
 });
 
-describe('G-UT-006: Selection Feedback Works', () => {
+describe("G-UT-006: Selection Feedback Works", () => {
   beforeEach(() => {
     jest.clearAllMocks();
     jest.useFakeTimers();
-    
+
     (sharedContexts.useUserType as jest.Mock).mockReturnValue({
       userType: null,
       setUserType: jest.fn(),
     });
-    
+
     mockUseRouter.mockReturnValue({
       push: mockPush,
       replace: jest.fn(),
@@ -145,48 +149,54 @@ describe('G-UT-006: Selection Feedback Works', () => {
 
   it('should show selection feedback when "I need guidance" is clicked', async () => {
     render(<GetStartedPage />);
-    
-    const guidedOption = screen.getByText(/I need guidance/i).closest('div[class*="cursor-pointer"]');
+
+    const guidedOption = screen
+      .getByText(/I need guidance/i)
+      .closest('div[class*="cursor-pointer"]');
     expect(guidedOption).toBeInTheDocument();
-    
+
     if (guidedOption) {
       fireEvent.click(guidedOption);
-      
+
       // Wait for the selection to process
       jest.advanceTimersByTime(300);
-      
+
       await waitFor(() => {
         expect(screen.getByText(/Great choice!/i)).toBeInTheDocument();
       });
     }
   });
 
-  it('should show loading transition when option is selected', async () => {
+  it("should show loading transition when option is selected", async () => {
     render(<GetStartedPage />);
-    
-    const guidedOption = screen.getByText(/I need guidance/i).closest('div[class*="cursor-pointer"]');
+
+    const guidedOption = screen
+      .getByText(/I need guidance/i)
+      .closest('div[class*="cursor-pointer"]');
     if (guidedOption) {
       fireEvent.click(guidedOption);
-      
+
       jest.advanceTimersByTime(300);
-      
+
       await waitFor(() => {
-        expect(screen.getByText(/Loading your learning experience/i)).toBeInTheDocument();
+        expect(
+          screen.getByText(/Loading your learning experience/i),
+        ).toBeInTheDocument();
       });
     }
   });
 });
 
-describe('G-UT-007: Page Structure Renders', () => {
+describe("G-UT-007: Page Structure Renders", () => {
   beforeEach(() => {
     jest.clearAllMocks();
     jest.useFakeTimers();
-    
+
     (sharedContexts.useUserType as jest.Mock).mockReturnValue({
       userType: null,
       setUserType: jest.fn(),
     });
-    
+
     mockUseRouter.mockReturnValue({
       push: mockPush,
       replace: jest.fn(),
@@ -199,33 +209,35 @@ describe('G-UT-007: Page Structure Renders', () => {
     jest.useRealTimers();
   });
 
-  it('should render page title', () => {
+  it("should render page title", () => {
     render(<GetStartedPage />);
     expect(screen.getByText(/Choose Your Learning Style/i)).toBeInTheDocument();
   });
 
-  it('should render page description', () => {
+  it("should render page description", () => {
     render(<GetStartedPage />);
-    expect(screen.getByText(/Select how you'd like to learn/i)).toBeInTheDocument();
+    expect(
+      screen.getByText(/Select how you'd like to learn/i),
+    ).toBeInTheDocument();
   });
 
-  it('should render both learning options', () => {
+  it("should render both learning options", () => {
     render(<GetStartedPage />);
     expect(screen.getByText(/I need guidance/i)).toBeInTheDocument();
     expect(screen.getByText(/I'm self-directed/i)).toBeInTheDocument();
   });
 });
 
-describe('G-UT-SNAPSHOT: Get Started Page Snapshot Tests', () => {
+describe("G-UT-SNAPSHOT: Get Started Page Snapshot Tests", () => {
   beforeEach(() => {
     jest.clearAllMocks();
     jest.useFakeTimers();
-    
+
     (sharedContexts.useUserType as jest.Mock).mockReturnValue({
       userType: null,
       setUserType: jest.fn(),
     });
-    
+
     mockUseRouter.mockReturnValue({
       push: mockPush,
       replace: jest.fn(),
@@ -238,22 +250,23 @@ describe('G-UT-SNAPSHOT: Get Started Page Snapshot Tests', () => {
     jest.useRealTimers();
   });
 
-  it('should match get started page snapshot', () => {
+  it("should match get started page snapshot", () => {
     const { container } = render(<GetStartedPage />);
     expect(container.firstChild).toMatchSnapshot();
   });
 
-  it('should match snapshot with loading transition', () => {
+  it("should match snapshot with loading transition", () => {
     const { container, rerender } = render(<GetStartedPage />);
-    
-    const guidedOption = screen.getByText(/I need guidance/i).closest('div[class*="cursor-pointer"]');
+
+    const guidedOption = screen
+      .getByText(/I need guidance/i)
+      .closest('div[class*="cursor-pointer"]');
     if (guidedOption) {
       fireEvent.click(guidedOption);
       jest.advanceTimersByTime(300);
     }
-    
+
     rerender(<GetStartedPage />);
     expect(container.firstChild).toMatchSnapshot();
   });
 });
-

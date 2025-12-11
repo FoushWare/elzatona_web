@@ -18,39 +18,74 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
+          fetch-depth: 0 # Shallow clones should be disabled for a better relevancy of analysis
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
-          cache: 'npm'
+          node-version: "20"
+          # Cache omitted - project uses bun.lock, not package-lock.json
+          # Omitting cache parameter disables caching by default
 
       - name: Install dependencies
         run: npm install
+        # Using npm install instead of npm ci since package-lock.json doesn't exist
+        # Project uses bun as primary package manager
+
+      - name: Validate test database secrets
+        run: |
+          echo "🔒 Validating test database secrets..."
+          if [ -z "${{ secrets.TEST_SUPABASE_URL }}" ]; then
+            echo "❌ ERROR: TEST_SUPABASE_URL secret is not set!"
+            echo "⚠️  Tests will NOT run against production database"
+            echo "💡 Please set TEST_SUPABASE_URL in GitHub Secrets"
+            exit 1
+          fi
+          if [ -z "${{ secrets.TEST_SUPABASE_ANON_KEY }}" ]; then
+            echo "❌ ERROR: TEST_SUPABASE_ANON_KEY secret is not set!"
+            echo "⚠️  Tests will NOT run against production database"
+            echo "💡 Please set TEST_SUPABASE_ANON_KEY in GitHub Secrets"
+            exit 1
+          fi
+          if [ -z "${{ secrets.TEST_SUPABASE_SERVICE_ROLE_KEY }}" ]; then
+            echo "❌ ERROR: TEST_SUPABASE_SERVICE_ROLE_KEY secret is not set!"
+            echo "⚠️  Tests will NOT run against production database"
+            echo "💡 Please set TEST_SUPABASE_SERVICE_ROLE_KEY in GitHub Secrets"
+            exit 1
+          fi
+          echo "✅ All test database secrets are set"
+          # Verify it's actually a test database (not production)
+          TEST_URL="${{ secrets.TEST_SUPABASE_URL }}"
+          if [[ "$TEST_URL" == *"production"* ]] || [[ "$TEST_URL" == *"prod"* ]]; then
+            echo "❌ ERROR: TEST_SUPABASE_URL appears to be a production URL!"
+            echo "⚠️  URL contains 'production' or 'prod' - this is dangerous!"
+            echo "💡 Please use a separate test database, not production"
+            exit 1
+          fi
+          echo "✅ Test database URL validated (not production)"
 
       - name: Run linting with auto-fix
         run: |
           npm run lint:fix || true
         continue-on-error: true
         env:
-          NODE_OPTIONS: '--max-old-space-size=1536'
+          NODE_OPTIONS: "--max-old-space-size=1536"
 
       - name: Run linting check
         run: |
           npm run lint || true
         continue-on-error: true
         env:
-          NODE_OPTIONS: '--max-old-space-size=1536'
+          NODE_OPTIONS: "--max-old-space-size=1536"
 
       - name: TypeScript type checking
         run: |
           npm run type-check
         continue-on-error: true
         env:
-          NODE_OPTIONS: '--max-old-space-size=1536'
+          NODE_OPTIONS: "--max-old-space-size=1536"
           # Memory optimization: Single-threaded (no parallel processing)
-          TS_NODE_TRANSPILE_ONLY: 'true'
+          TS_NODE_TRANSPILE_ONLY: "true"
           # Provide minimal env vars for type checking (to avoid type errors)
           NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.TEST_SUPABASE_URL || 'https://placeholder.supabase.co' }}
           NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.TEST_SUPABASE_ANON_KEY || 'placeholder-key' }}
@@ -58,28 +93,39 @@ jobs:
 
       - name: Run tests with coverage
         run: |
+          echo "🧪 Running tests against TEST database..."
+          echo "📊 Test Database URL: ${{ secrets.TEST_SUPABASE_URL }}"
+          # Verify we're using test database (not production)
+          if [[ "$NEXT_PUBLIC_SUPABASE_URL" == *"production"* ]] || [[ "$NEXT_PUBLIC_SUPABASE_URL" == *"prod"* ]]; then
+            echo "❌ ERROR: Tests are configured to use PRODUCTION database!"
+            echo "⚠️  This is dangerous and will affect production data!"
+            exit 1
+          fi
           npm run test:unit -- --coverage --coverageReporters=lcov --coverageDirectory=coverage || true
         continue-on-error: true
         env:
-          # Force test environment
-          APP_ENV: 'test'
-          NEXT_PUBLIC_APP_ENV: 'test'
-          NODE_ENV: 'test'
+          # Force test environment (CRITICAL - prevents production database usage)
+          APP_ENV: "test"
+          NEXT_PUBLIC_APP_ENV: "test"
+          NODE_ENV: "test"
           # Memory settings
-          NODE_OPTIONS: '--max-old-space-size=1536'
-          JEST_MAX_WORKERS: '1'
+          NODE_OPTIONS: "--max-old-space-size=1536"
+          JEST_MAX_WORKERS: "1"
           # Admin credentials (from GitHub Secrets)
           ADMIN_EMAIL: ${{ secrets.ADMIN_EMAIL }}
           ADMIN_PASSWORD: ${{ secrets.ADMIN_PASSWORD }}
-          # Supabase test environment (from GitHub Secrets)
+          # ⚠️ CRITICAL: Use TEST database only (never production)
+          # These secrets MUST be set to test database credentials
           NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.TEST_SUPABASE_URL }}
           NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.TEST_SUPABASE_ANON_KEY }}
           SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.TEST_SUPABASE_SERVICE_ROLE_KEY }}
           # JWT secret for admin auth
           JWT_SECRET: ${{ secrets.JWT_SECRET }}
           # CI flag
-          CI: 'true'
-          GITHUB_ACTIONS: 'true'
+          CI: "true"
+          GITHUB_ACTIONS: "true"
+          # Debug flag to verify test environment
+          DEBUG_TEST_ENV: "true"
 
       - name: SonarQube Scan
         uses: SonarSource/sonarqube-scan-action@v6
@@ -100,4 +146,3 @@ jobs:
           name: codecov-umbrella
           fail_ci_if_error: false
         continue-on-error: true
-

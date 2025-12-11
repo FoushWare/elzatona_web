@@ -1,5 +1,5 @@
-import { atom } from 'jotai';
-import { atomWithStorage } from 'jotai/utils';
+import { atom } from "jotai";
+import { atomWithStorage } from "jotai/utils";
 
 // Onboarding state interface
 export interface OnboardingState {
@@ -20,29 +20,29 @@ const defaultOnboardingState: OnboardingState = {
 
 // Onboarding state atom
 export const onboardingStateAtom = atomWithStorage<OnboardingState>(
-  'onboardingState',
-  defaultOnboardingState
+  "onboardingState",
+  defaultOnboardingState,
 );
 
 // Individual onboarding atoms
 export const isOnboardingCompletedAtom = atom(
-  get => get(onboardingStateAtom).isCompleted
+  (get) => get(onboardingStateAtom).isCompleted,
 );
 
 export const currentOnboardingStepAtom = atom(
-  get => get(onboardingStateAtom).currentStep
+  (get) => get(onboardingStateAtom).currentStep,
 );
 
 export const totalOnboardingStepsAtom = atom(
-  get => get(onboardingStateAtom).totalSteps
+  (get) => get(onboardingStateAtom).totalSteps,
 );
 
 export const isOnboardingSkippedAtom = atom(
-  get => get(onboardingStateAtom).skipped
+  (get) => get(onboardingStateAtom).skipped,
 );
 
 // Onboarding progress atom
-export const onboardingProgressAtom = atom(get => {
+export const onboardingProgressAtom = atom((get) => {
   const state = get(onboardingStateAtom);
   return (state.currentStep / state.totalSteps) * 100;
 });

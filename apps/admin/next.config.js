@@ -2,23 +2,23 @@
 const nextConfig = {
   /* config options here */
   transpilePackages: [
-    'ui',
-    'auth',
-    'database',
-    'utils',
-    '@elzatona/shared-components',
-    '@elzatona/shared-contexts',
-    '@elzatona/shared-hooks',
-    '@elzatona/shared-atoms',
-    '@elzatona/shared-types',
-    'nuqs',
+    "ui",
+    "auth",
+    "database",
+    "utils",
+    "@elzatona/components",
+    "@elzatona/contexts",
+    "@elzatona/hooks",
+    "@elzatona/shared-atoms",
+    "@elzatona/types",
+    "nuqs",
   ],
   experimental: {
     turbo: {
       rules: {
-        '*.svg': {
-          loaders: ['@svgr/webpack'],
-          as: '*.js',
+        "*.svg": {
+          loaders: ["@svgr/webpack"],
+          as: "*.js",
         },
       },
     },
@@ -26,7 +26,7 @@ const nextConfig = {
   // Configure build to handle error pages
   generateBuildId: async () => {
     // Use a static build ID to ensure consistent builds
-    return 'admin-build';
+    return "admin-build";
   },
 };
 

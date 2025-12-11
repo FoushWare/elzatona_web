@@ -22,32 +22,28 @@
     "baseUrl": ".",
     "paths": {
       "@/*": ["./src/*"],
-      "@elzatona/shared-components": ["../../libs/shared-components/src"],
-      "@elzatona/shared-contexts": [
-        "../../libs/shared-contexts/src/lib/shared-contexts"
-      ],
-      "@elzatona/shared-hooks": [
-        "../../libs/shared-hooks/src/lib/shared-hooks"
-      ],
+      "@/lib/*": ["./lib/*"],
+      "@/components/*": ["./components/*"],
+      "@elzatona/components": ["../../libs/components/src"],
+      "@elzatona/contexts": ["../../libs/contexts/src/lib/shared-contexts"],
+      "@elzatona/hooks": ["../../libs/hooks/src/lib/shared-hooks"],
       "@elzatona/shared-atoms": [
         "../../libs/shared-atoms/src/lib/shared-atoms"
       ],
-      "@elzatona/shared-types": [
-        "../../libs/shared-types/src/lib/shared-types"
-      ],
+      "@elzatona/types": ["../../libs/types/src/lib/shared-types"],
       "@elzatona/ui": ["../../libs/ui/src/lib/ui"],
       "@elzatona/auth": ["../../libs/auth/src/lib/auth"],
       "@elzatona/database": ["../../libs/database/src/lib/database"],
-      "@elzatona/utils": ["../../libs/utils/src/lib/utils"],
-      "@/components/*": ["../../libs/shared-components/src/lib/components/*"],
-      "@/hooks/*": ["../../libs/shared-hooks/src/lib/hooks/*"],
-      "@/contexts/*": ["../../libs/shared-contexts/src/lib/contexts/*"],
+      "@elzatona/utilities": ["../../libs/utilities/src/lib/utils"],
+      "@/components/*": ["../../libs/components/src/lib/components/*"],
+      "@/hooks/*": ["../../libs/hooks/src/lib/hooks/*"],
+      "@/contexts/*": ["../../libs/contexts/src/lib/contexts/*"],
       "@/atoms/*": ["../../libs/shared-atoms/src/lib/atoms/*"],
-      "@/types/*": ["../../libs/shared-types/src/lib/types/*"],
+      "@/types/*": ["../../libs/types/src/lib/types/*"],
       "@/ui/*": ["../../libs/ui/src/lib/ui/*"],
       "@/auth/*": ["../../libs/auth/src/lib/auth/*"],
       "@/database/*": ["../../libs/database/src/lib/database/*"],
-      "@/utils/*": ["../../libs/utils/src/lib/utils/*"]
+      "@/utils/*": ["../../libs/utilities/src/lib/utils/*"]
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],

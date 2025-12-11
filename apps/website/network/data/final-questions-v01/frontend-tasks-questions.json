@@ -1,0 +1,1532 @@
+[
+  {
+    "id": "frontend-task-1",
+    "title": "When building a social media dashboard frontend task, what is the best approach for component structure?",
+    "content": "You need to build a social media dashboard with posts, comments, and user profiles. How should you organize your React components?",
+    "type": "multiple-choice",
+    "category": "Frontend Tasks",
+    "topic": "Core React",
+    "difficulty": "intermediate",
+    "learningCardId": "frontend-tasks",
+    "isActive": true,
+    "createdAt": "2025-11-11T19:33:22.943Z",
+    "updatedAt": "2025-11-11T20:17:28.530Z",
+    "createdBy": "admin",
+    "updatedBy": "admin",
+    "tags": ["frontend-tasks", "frontend-tasks", "core-react", "intermediate"],
+    "explanation": "Break down complex UIs into smaller, reusable components. Use composition to build complex features from simple components.",
+    "points": 15,
+    "options": [
+      {
+        "id": "o1",
+        "text": "Create reusable components (PostCard, CommentList, UserProfile) and compose them in a Dashboard container",
+        "isCorrect": true,
+        "explanation": ""
+      },
+      {
+        "id": "o2",
+        "text": "Put everything in one large component for simplicity",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "o3",
+        "text": "Create separate components for each feature without composition",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "o4",
+        "text": "Use only class components for all features",
+        "isCorrect": false,
+        "explanation": ""
+      }
+    ],
+    "hints": [
+      "Consider React best practices for component architecture",
+      "Think about state management and data flow patterns",
+      "Review frontend task implementation patterns"
+    ],
+    "metadata": {}
+  },
+  {
+    "id": "frontend-task-2",
+    "title": "How should you structure components for a todo list frontend task?",
+    "content": "You need to build a todo list with add, edit, delete, and filter functionality. What component structure is best?",
+    "type": "multiple-choice",
+    "category": "Frontend Tasks",
+    "topic": "Core React",
+    "difficulty": "intermediate",
+    "learningCardId": "frontend-tasks",
+    "isActive": true,
+    "createdAt": "2025-11-11T19:33:22.944Z",
+    "updatedAt": "2025-11-11T20:17:28.530Z",
+    "createdBy": "admin",
+    "updatedBy": "admin",
+    "tags": ["frontend-tasks", "frontend-tasks", "core-react", "intermediate"],
+    "explanation": "Break down into logical components: container for state, item for display, form for input, filter for UI controls.",
+    "points": 15,
+    "options": [
+      {
+        "id": "o1",
+        "text": "TodoList container, TodoItem component, TodoForm component, FilterBar component",
+        "isCorrect": true,
+        "explanation": ""
+      },
+      {
+        "id": "o2",
+        "text": "One component with all functionality",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "o3",
+        "text": "Separate components for each todo item only",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "o4",
+        "text": "No component structure needed",
+        "isCorrect": false,
+        "explanation": ""
+      }
+    ],
+    "hints": [
+      "Consider React best practices for component architecture",
+      "Think about state management and data flow patterns",
+      "Review frontend task implementation patterns"
+    ],
+    "metadata": {}
+  },
+  {
+    "id": "frontend-task-3",
+    "title": "What is the best pattern for sharing data between sibling components in a frontend task?",
+    "content": "You have a ProductList and ShoppingCart component that need to share cart state. What approach should you use?",
+    "type": "multiple-choice",
+    "category": "Frontend Tasks",
+    "topic": "Core React",
+    "difficulty": "intermediate",
+    "learningCardId": "frontend-tasks",
+    "isActive": true,
+    "createdAt": "2025-11-11T19:33:22.944Z",
+    "updatedAt": "2025-11-11T20:17:28.530Z",
+    "createdBy": "admin",
+    "updatedBy": "admin",
+    "tags": ["frontend-tasks", "frontend-tasks", "core-react", "intermediate"],
+    "explanation": "Lift state to common parent or use Context API. Props cannot be passed directly between siblings.",
+    "points": 15,
+    "options": [
+      {
+        "id": "o1",
+        "text": "Lift state up to a common parent component or use Context API",
+        "isCorrect": true,
+        "explanation": ""
+      },
+      {
+        "id": "o2",
+        "text": "Use props to pass data between siblings directly",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "o3",
+        "text": "Store state in localStorage only",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "o4",
+        "text": "Use global variables",
+        "isCorrect": false,
+        "explanation": ""
+      }
+    ],
+    "hints": [
+      "Consider React best practices for component architecture",
+      "Think about state management and data flow patterns",
+      "Review frontend task implementation patterns"
+    ],
+    "metadata": {}
+  },
+  {
+    "id": "frontend-task-4",
+    "title": "How should you handle state management in a complex frontend task like a video streaming app?",
+    "content": "You're building a Netflix-style app with video player, recommendations, and watchlist. What state management approach is best?",
+    "type": "multiple-choice",
+    "category": "Frontend Tasks",
+    "topic": "Core React",
+    "difficulty": "intermediate",
+    "learningCardId": "frontend-tasks",
+    "isActive": true,
+    "createdAt": "2025-11-11T19:33:22.944Z",
+    "updatedAt": "2025-11-11T20:17:28.530Z",
+    "createdBy": "admin",
+    "updatedBy": "admin",
+    "tags": ["frontend-tasks", "frontend-tasks", "core-react", "intermediate"],
+    "explanation": "Use Context API for state shared across multiple components (current video, user). Use useState for component-local state (UI toggles).",
+    "points": 15,
+    "options": [
+      {
+        "id": "o1",
+        "text": "Use Context API for global state (current video, user preferences) and useState for local component state",
+        "isCorrect": true,
+        "explanation": ""
+      },
+      {
+        "id": "o2",
+        "text": "Put all state in a single useState hook at the root",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "o3",
+        "text": "Use only props drilling for all state",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "o4",
+        "text": "Avoid state management entirely",
+        "isCorrect": false,
+        "explanation": ""
+      }
+    ],
+    "hints": [
+      "Consider React best practices for component architecture",
+      "Think about state management and data flow patterns",
+      "Review frontend task implementation patterns"
+    ],
+    "metadata": {}
+  },
+  {
+    "id": "frontend-task-5",
+    "title": "When should you use useReducer instead of useState in a frontend task?",
+    "content": "You're building a complex form with multiple interdependent fields and validation. Which hook is more appropriate?",
+    "type": "multiple-choice",
+    "category": "Frontend Tasks",
+    "topic": "Core React",
+    "difficulty": "intermediate",
+    "learningCardId": "frontend-tasks",
+    "isActive": true,
+    "createdAt": "2025-11-11T19:33:22.944Z",
+    "updatedAt": "2025-11-11T20:17:28.530Z",
+    "createdBy": "admin",
+    "updatedBy": "admin",
+    "tags": ["frontend-tasks", "frontend-tasks", "core-react", "intermediate"],
+    "explanation": "useReducer is better for complex state logic, multiple related state values, or when state updates depend on previous state.",
+    "points": 15,
+    "options": [
+      {
+        "id": "o1",
+        "text": "useReducer when state logic is complex with multiple sub-values or when next state depends on previous state",
+        "isCorrect": true,
+        "explanation": ""
+      },
+      {
+        "id": "o2",
+        "text": "Always use useState - it's simpler",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "o3",
+        "text": "useReducer only for arrays",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "o4",
+        "text": "useState and useReducer are identical",
+        "isCorrect": false,
+        "explanation": ""
+      }
+    ],
+    "hints": [
+      "Consider React best practices for component architecture",
+      "Think about state management and data flow patterns",
+      "Review frontend task implementation patterns"
+    ],
+    "metadata": {}
+  },
+  {
+    "id": "frontend-task-6",
+    "title": "How do you prevent unnecessary re-renders in a frontend task with many child components?",
+    "content": "Your dashboard has 100+ product cards that re-render when parent state changes. How do you optimize this?",
+    "type": "multiple-choice",
+    "category": "Frontend Tasks",
+    "topic": "Core React",
+    "difficulty": "intermediate",
+    "learningCardId": "frontend-tasks",
+    "isActive": true,
+    "createdAt": "2025-11-11T19:33:22.944Z",
+    "updatedAt": "2025-11-11T20:17:28.530Z",
+    "createdBy": "admin",
+    "updatedBy": "admin",
+    "tags": ["frontend-tasks", "frontend-tasks", "core-react", "intermediate"],
+    "explanation": "React.memo prevents re-renders when props haven't changed. useMemo/useCallback memoize values and functions to prevent recreation.",
+    "points": 15,
+    "options": [
+      {
+        "id": "o1",
+        "text": "Use React.memo for child components and useMemo/useCallback for expensive computations and callbacks",
+        "isCorrect": true,
+        "explanation": ""
+      },
+      {
+        "id": "o2",
+        "text": "Disable re-rendering completely",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "o3",
+        "text": "Put all components in one file",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "o4",
+        "text": "Use only class components",
+        "isCorrect": false,
+        "explanation": ""
+      }
+    ],
+    "hints": [
+      "Consider React best practices for component architecture",
+      "Think about state management and data flow patterns",
+      "Review frontend task implementation patterns"
+    ],
+    "metadata": {}
+  },
+  {
+    "id": "frontend-task-7",
+    "title": "What is the best way to handle loading states in a frontend task with multiple API calls?",
+    "content": "Your dashboard needs to fetch users, posts, and comments. How do you manage loading states?",
+    "type": "multiple-choice",
+    "category": "Frontend Tasks",
+    "topic": "Core React",
+    "difficulty": "intermediate",
+    "learningCardId": "frontend-tasks",
+    "isActive": true,
+    "createdAt": "2025-11-11T19:33:22.944Z",
+    "updatedAt": "2025-11-11T20:17:28.530Z",
+    "createdBy": "admin",
+    "updatedBy": "admin",
+    "tags": ["frontend-tasks", "frontend-tasks", "core-react", "intermediate"],
+    "explanation": "Use separate loading states for each data fetch to show partial content as it loads. Libraries like React Query handle this automatically.",
+    "points": 15,
+    "options": [
+      {
+        "id": "o1",
+        "text": "Use separate loading states for each data fetch, or use React Query/SWR for automatic loading state management",
+        "isCorrect": true,
+        "explanation": ""
+      },
+      {
+        "id": "o2",
+        "text": "Show a single loading spinner for the entire page",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "o3",
+        "text": "Don't show loading states - just render empty data",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "o4",
+        "text": "Use setTimeout to simulate loading",
+        "isCorrect": false,
+        "explanation": ""
+      }
+    ],
+    "hints": [
+      "Consider React best practices for component architecture",
+      "Think about state management and data flow patterns",
+      "Review frontend task implementation patterns"
+    ],
+    "metadata": {}
+  },
+  {
+    "id": "frontend-task-8",
+    "title": "How should you handle data fetching in a frontend task with pagination?",
+    "content": "You need to implement infinite scroll for a product list. What approach is best?",
+    "type": "multiple-choice",
+    "category": "Frontend Tasks",
+    "topic": "Core React",
+    "difficulty": "intermediate",
+    "learningCardId": "frontend-tasks",
+    "isActive": true,
+    "createdAt": "2025-11-11T19:33:22.944Z",
+    "updatedAt": "2025-11-11T20:17:28.530Z",
+    "createdBy": "admin",
+    "updatedBy": "admin",
+    "tags": ["frontend-tasks", "frontend-tasks", "core-react", "intermediate"],
+    "explanation": "Use Intersection Observer to detect scroll position. Fetch next page when user nears bottom, append to existing data for seamless infinite scroll.",
+    "points": 15,
+    "options": [
+      {
+        "id": "o1",
+        "text": "Use Intersection Observer API to detect when user scrolls near bottom, then fetch next page and append to existing data",
+        "isCorrect": true,
+        "explanation": ""
+      },
+      {
+        "id": "o2",
+        "text": "Fetch all data at once and paginate client-side",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "o3",
+        "text": "Reload entire page for each page change",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "o4",
+        "text": "Use only localStorage for pagination",
+        "isCorrect": false,
+        "explanation": ""
+      }
+    ],
+    "hints": [
+      "Consider React best practices for component architecture",
+      "Think about state management and data flow patterns",
+      "Review frontend task implementation patterns"
+    ],
+    "metadata": {}
+  },
+  {
+    "id": "frontend-task-9",
+    "title": "What is the best way to handle error states in API calls for a frontend task?",
+    "content": "Your app makes multiple API calls. How should you handle and display errors?",
+    "type": "multiple-choice",
+    "category": "Frontend Tasks",
+    "topic": "Core React",
+    "difficulty": "intermediate",
+    "learningCardId": "frontend-tasks",
+    "isActive": true,
+    "createdAt": "2025-11-11T19:33:22.944Z",
+    "updatedAt": "2025-11-11T20:17:28.530Z",
+    "createdBy": "admin",
+    "updatedBy": "admin",
+    "tags": ["frontend-tasks", "frontend-tasks", "core-react", "intermediate"],
+    "explanation": "Catch errors, set error state, display user-friendly messages, and provide retry mechanisms. Use Error Boundaries for component tree errors.",
+    "points": 15,
+    "options": [
+      {
+        "id": "o1",
+        "text": "Use try-catch blocks, set error state, and display user-friendly error messages with retry options",
+        "isCorrect": true,
+        "explanation": ""
+      },
+      {
+        "id": "o2",
+        "text": "Let errors crash the app",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "o3",
+        "text": "Hide all errors from users",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "o4",
+        "text": "Only log errors to console",
+        "isCorrect": false,
+        "explanation": ""
+      }
+    ],
+    "hints": [
+      "Consider React best practices for component architecture",
+      "Think about state management and data flow patterns",
+      "Review frontend task implementation patterns"
+    ],
+    "metadata": {}
+  },
+  {
+    "id": "frontend-task-10",
+    "title": "How do you optimize a frontend task with large lists of items?",
+    "content": "You need to render 1000+ items in a list. What optimization technique should you use?",
+    "type": "multiple-choice",
+    "category": "Frontend Tasks",
+    "topic": "Core React",
+    "difficulty": "intermediate",
+    "learningCardId": "frontend-tasks",
+    "isActive": true,
+    "createdAt": "2025-11-11T19:33:22.944Z",
+    "updatedAt": "2025-11-11T20:17:28.530Z",
+    "createdBy": "admin",
+    "updatedBy": "admin",
+    "tags": ["frontend-tasks", "frontend-tasks", "core-react", "intermediate"],
+    "explanation": "Virtualization renders only visible items in viewport, dramatically improving performance for large lists. Libraries like react-window handle this.",
+    "points": 15,
+    "options": [
+      {
+        "id": "o1",
+        "text": "Use virtualization (react-window or react-virtualized) to render only visible items",
+        "isCorrect": true,
+        "explanation": ""
+      },
+      {
+        "id": "o2",
+        "text": "Render all items at once",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "o3",
+        "text": "Use display: none to hide items",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "o4",
+        "text": "Split into multiple pages only",
+        "isCorrect": false,
+        "explanation": ""
+      }
+    ],
+    "hints": [
+      "Consider React best practices for component architecture",
+      "Think about state management and data flow patterns",
+      "Review frontend task implementation patterns"
+    ],
+    "metadata": {}
+  },
+  {
+    "id": "frontend-task-11",
+    "title": "How should you optimize images in a frontend task like an e-commerce site?",
+    "content": "Your product catalog has hundreds of product images. How do you optimize loading?",
+    "type": "multiple-choice",
+    "category": "Frontend Tasks",
+    "topic": "Core React",
+    "difficulty": "intermediate",
+    "learningCardId": "frontend-tasks",
+    "isActive": true,
+    "createdAt": "2025-11-11T19:33:22.944Z",
+    "updatedAt": "2025-11-11T20:17:28.530Z",
+    "createdBy": "admin",
+    "updatedBy": "admin",
+    "tags": ["frontend-tasks", "frontend-tasks", "core-react", "intermediate"],
+    "explanation": "Lazy load images, use responsive srcset, modern formats like WebP, and CDN. Only load images when needed and at appropriate sizes.",
+    "points": 15,
+    "options": [
+      {
+        "id": "o1",
+        "text": "Use lazy loading, responsive images with srcset, WebP format, and image CDN with proper sizing",
+        "isCorrect": true,
+        "explanation": ""
+      },
+      {
+        "id": "o2",
+        "text": "Load all images at once",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "o3",
+        "text": "Use only PNG format",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "o4",
+        "text": "Don't optimize - let browser handle it",
+        "isCorrect": false,
+        "explanation": ""
+      }
+    ],
+    "hints": [
+      "Consider React best practices for component architecture",
+      "Think about state management and data flow patterns",
+      "Review frontend task implementation patterns"
+    ],
+    "metadata": {}
+  },
+  {
+    "id": "frontend-task-12",
+    "title": "What is code splitting and how should you implement it in a frontend task?",
+    "content": "Your app is getting large. How do you reduce initial bundle size?",
+    "type": "multiple-choice",
+    "category": "Frontend Tasks",
+    "topic": "Core React",
+    "difficulty": "intermediate",
+    "learningCardId": "frontend-tasks",
+    "isActive": true,
+    "createdAt": "2025-11-11T19:33:22.944Z",
+    "updatedAt": "2025-11-11T20:17:28.530Z",
+    "createdBy": "admin",
+    "updatedBy": "admin",
+    "tags": ["frontend-tasks", "frontend-tasks", "core-react", "intermediate"],
+    "explanation": "React.lazy() enables code splitting. Use it with Suspense for route-based splitting. Dynamic imports split heavy components.",
+    "points": 15,
+    "options": [
+      {
+        "id": "o1",
+        "text": "Use React.lazy() and Suspense for route-based code splitting, and dynamic imports for heavy components",
+        "isCorrect": true,
+        "explanation": ""
+      },
+      {
+        "id": "o2",
+        "text": "Bundle everything into one file",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "o3",
+        "text": "Split code manually by copying files",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "o4",
+        "text": "Code splitting is not possible in React",
+        "isCorrect": false,
+        "explanation": ""
+      }
+    ],
+    "hints": [
+      "Consider React best practices for component architecture",
+      "Think about state management and data flow patterns",
+      "Review frontend task implementation patterns"
+    ],
+    "metadata": {}
+  },
+  {
+    "id": "frontend-task-13",
+    "title": "How should you handle form validation in a frontend task?",
+    "content": "You need to build a registration form with validation. What approach is best?",
+    "type": "multiple-choice",
+    "category": "Frontend Tasks",
+    "topic": "Core React",
+    "difficulty": "intermediate",
+    "learningCardId": "frontend-tasks",
+    "isActive": true,
+    "createdAt": "2025-11-11T19:33:22.944Z",
+    "updatedAt": "2025-11-11T20:17:28.530Z",
+    "createdBy": "admin",
+    "updatedBy": "admin",
+    "tags": ["frontend-tasks", "frontend-tasks", "core-react", "intermediate"],
+    "explanation": "Controlled components with validation provide better UX. Libraries like React Hook Form handle validation, errors, and performance automatically.",
+    "points": 15,
+    "options": [
+      {
+        "id": "o1",
+        "text": "Use controlled components with validation logic, or libraries like React Hook Form or Formik for complex forms",
+        "isCorrect": true,
+        "explanation": ""
+      },
+      {
+        "id": "o2",
+        "text": "Use only HTML5 validation attributes",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "o3",
+        "text": "Validate only on submit",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "o4",
+        "text": "No validation needed",
+        "isCorrect": false,
+        "explanation": ""
+      }
+    ],
+    "hints": [
+      "Consider React best practices for component architecture",
+      "Think about state management and data flow patterns",
+      "Review frontend task implementation patterns"
+    ],
+    "metadata": {}
+  },
+  {
+    "id": "frontend-task-14",
+    "title": "What is the difference between controlled and uncontrolled components in forms?",
+    "content": "When building a form in a frontend task, which approach should you use?",
+    "type": "multiple-choice",
+    "category": "Frontend Tasks",
+    "topic": "Core React",
+    "difficulty": "intermediate",
+    "learningCardId": "frontend-tasks",
+    "isActive": true,
+    "createdAt": "2025-11-11T19:33:22.944Z",
+    "updatedAt": "2025-11-11T20:17:28.530Z",
+    "createdBy": "admin",
+    "updatedBy": "admin",
+    "tags": ["frontend-tasks", "frontend-tasks", "core-react", "intermediate"],
+    "explanation": "Controlled components give React full control over form state, enabling validation and integration. Uncontrolled uses DOM refs for less React overhead.",
+    "points": 15,
+    "options": [
+      {
+        "id": "o1",
+        "text": "Controlled: React controls form state via state. Uncontrolled: DOM handles form state via refs. Use controlled for React integration.",
+        "isCorrect": true,
+        "explanation": ""
+      },
+      {
+        "id": "o2",
+        "text": "They are identical",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "o3",
+        "text": "Controlled components are deprecated",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "o4",
+        "text": "Uncontrolled is always better",
+        "isCorrect": false,
+        "explanation": ""
+      }
+    ],
+    "hints": [
+      "Consider React best practices for component architecture",
+      "Think about state management and data flow patterns",
+      "Review frontend task implementation patterns"
+    ],
+    "metadata": {}
+  },
+  {
+    "id": "frontend-task-15",
+    "title": "How do you handle file uploads in a frontend task?",
+    "content": "You need to allow users to upload profile pictures. How should you implement this?",
+    "type": "multiple-choice",
+    "category": "Frontend Tasks",
+    "topic": "Core React",
+    "difficulty": "intermediate",
+    "learningCardId": "frontend-tasks",
+    "isActive": true,
+    "createdAt": "2025-11-11T19:33:22.944Z",
+    "updatedAt": "2025-11-11T20:17:28.530Z",
+    "createdBy": "admin",
+    "updatedBy": "admin",
+    "tags": ["frontend-tasks", "frontend-tasks", "core-react", "intermediate"],
+    "explanation": "Use file input, File API for preview/validation, FormData for upload. Validate type, size, and show user feedback during upload.",
+    "points": 15,
+    "options": [
+      {
+        "id": "o1",
+        "text": "Use input type=\"file\", handle File API, show preview, validate file type/size, and upload via FormData to API",
+        "isCorrect": true,
+        "explanation": ""
+      },
+      {
+        "id": "o2",
+        "text": "Use only drag-and-drop",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "o3",
+        "text": "Store files in localStorage",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "o4",
+        "text": "File uploads are not possible in React",
+        "isCorrect": false,
+        "explanation": ""
+      }
+    ],
+    "hints": [
+      "Consider React best practices for component architecture",
+      "Think about state management and data flow patterns",
+      "Review frontend task implementation patterns"
+    ],
+    "metadata": {}
+  },
+  {
+    "id": "frontend-task-16",
+    "title": "How do you implement real-time updates in a frontend task like a chat app?",
+    "content": "You need to show new messages as they arrive. What technology should you use?",
+    "type": "multiple-choice",
+    "category": "Frontend Tasks",
+    "topic": "Core React",
+    "difficulty": "intermediate",
+    "learningCardId": "frontend-tasks",
+    "isActive": true,
+    "createdAt": "2025-11-11T19:33:22.944Z",
+    "updatedAt": "2025-11-11T20:17:28.530Z",
+    "createdBy": "admin",
+    "updatedBy": "admin",
+    "tags": ["frontend-tasks", "frontend-tasks", "core-react", "intermediate"],
+    "explanation": "WebSockets enable bidirectional real-time communication. Socket.io provides React-friendly API. Update component state when messages arrive.",
+    "points": 15,
+    "options": [
+      {
+        "id": "o1",
+        "text": "Use WebSockets (Socket.io) or Server-Sent Events for real-time communication, update state when messages arrive",
+        "isCorrect": true,
+        "explanation": ""
+      },
+      {
+        "id": "o2",
+        "text": "Poll API every second",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "o3",
+        "text": "Use only HTTP requests",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "o4",
+        "text": "Real-time is not possible in React",
+        "isCorrect": false,
+        "explanation": ""
+      }
+    ],
+    "hints": [
+      "Consider React best practices for component architecture",
+      "Think about state management and data flow patterns",
+      "Review frontend task implementation patterns"
+    ],
+    "metadata": {}
+  },
+  {
+    "id": "frontend-task-17",
+    "title": "How should you handle WebSocket connections in a React frontend task?",
+    "content": "You're building a collaborative editor with real-time updates. How do you manage the WebSocket connection?",
+    "type": "multiple-choice",
+    "category": "Frontend Tasks",
+    "topic": "Core React",
+    "difficulty": "intermediate",
+    "learningCardId": "frontend-tasks",
+    "isActive": true,
+    "createdAt": "2025-11-11T19:33:22.944Z",
+    "updatedAt": "2025-11-11T20:17:28.530Z",
+    "createdBy": "admin",
+    "updatedBy": "admin",
+    "tags": ["frontend-tasks", "frontend-tasks", "core-react", "intermediate"],
+    "explanation": "Create connection in useEffect, store in ref to persist across renders, cleanup on unmount. Implement reconnection logic for reliability.",
+    "points": 15,
+    "options": [
+      {
+        "id": "o1",
+        "text": "Create WebSocket connection in useEffect, store in useRef, cleanup on unmount, handle reconnection logic",
+        "isCorrect": true,
+        "explanation": ""
+      },
+      {
+        "id": "o2",
+        "text": "Create connection in component body",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "o3",
+        "text": "Use only one global connection for entire app",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "o4",
+        "text": "WebSockets don't need cleanup",
+        "isCorrect": false,
+        "explanation": ""
+      }
+    ],
+    "hints": [
+      "Consider React best practices for component architecture",
+      "Think about state management and data flow patterns",
+      "Review frontend task implementation patterns"
+    ],
+    "metadata": {}
+  },
+  {
+    "id": "frontend-task-18",
+    "title": "How do you prevent memory leaks when using WebSockets in a frontend task?",
+    "content": "Your chat component unmounts but WebSocket listeners remain. How do you fix this?",
+    "type": "multiple-choice",
+    "category": "Frontend Tasks",
+    "topic": "Core React",
+    "difficulty": "intermediate",
+    "learningCardId": "frontend-tasks",
+    "isActive": true,
+    "createdAt": "2025-11-11T19:33:22.944Z",
+    "updatedAt": "2025-11-11T20:17:28.530Z",
+    "createdBy": "admin",
+    "updatedBy": "admin",
+    "tags": ["frontend-tasks", "frontend-tasks", "core-react", "intermediate"],
+    "explanation": "Always clean up event listeners and close connections in useEffect cleanup. This prevents memory leaks and stale updates.",
+    "points": 15,
+    "options": [
+      {
+        "id": "o1",
+        "text": "Remove event listeners in useEffect cleanup function and close WebSocket connection on unmount",
+        "isCorrect": true,
+        "explanation": ""
+      },
+      {
+        "id": "o2",
+        "text": "Leave listeners active",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "o3",
+        "text": "Use only global listeners",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "o4",
+        "text": "Memory leaks don't happen with WebSockets",
+        "isCorrect": false,
+        "explanation": ""
+      }
+    ],
+    "hints": [
+      "Consider React best practices for component architecture",
+      "Think about state management and data flow patterns",
+      "Review frontend task implementation patterns"
+    ],
+    "metadata": {}
+  },
+  {
+    "id": "frontend-task-19",
+    "title": "How should you implement routing in a frontend task with multiple pages?",
+    "content": "Your app needs multiple pages: home, products, cart, checkout. What routing solution should you use?",
+    "type": "multiple-choice",
+    "category": "Frontend Tasks",
+    "topic": "React Router",
+    "difficulty": "intermediate",
+    "learningCardId": "frontend-tasks",
+    "isActive": true,
+    "createdAt": "2025-11-11T19:33:22.944Z",
+    "updatedAt": "2025-11-11T20:17:28.530Z",
+    "createdBy": "admin",
+    "updatedBy": "admin",
+    "tags": [
+      "frontend-tasks",
+      "frontend-tasks",
+      "react-router",
+      "intermediate"
+    ],
+    "explanation": "React Router provides declarative routing. Use BrowserRouter for history API, Routes for route matching, Route for individual routes.",
+    "points": 15,
+    "options": [
+      {
+        "id": "o1",
+        "text": "Use React Router with BrowserRouter, Routes, and Route components for declarative routing",
+        "isCorrect": true,
+        "explanation": ""
+      },
+      {
+        "id": "o2",
+        "text": "Use only window.location",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "o3",
+        "text": "Create separate HTML files",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "o4",
+        "text": "Routing is not needed in React",
+        "isCorrect": false,
+        "explanation": ""
+      }
+    ],
+    "hints": [
+      "Consider React best practices for component architecture",
+      "Think about state management and data flow patterns",
+      "Review frontend task implementation patterns"
+    ],
+    "metadata": {}
+  },
+  {
+    "id": "frontend-task-20",
+    "title": "How do you protect routes in a frontend task that requires authentication?",
+    "content": "Some pages should only be accessible to logged-in users. How do you implement this?",
+    "type": "multiple-choice",
+    "category": "Frontend Tasks",
+    "topic": "React Router",
+    "difficulty": "intermediate",
+    "learningCardId": "frontend-tasks",
+    "isActive": true,
+    "createdAt": "2025-11-11T19:33:22.944Z",
+    "updatedAt": "2025-11-11T20:17:28.530Z",
+    "createdBy": "admin",
+    "updatedBy": "admin",
+    "tags": [
+      "frontend-tasks",
+      "frontend-tasks",
+      "react-router",
+      "intermediate"
+    ],
+    "explanation": "Create ProtectedRoute wrapper component. Check authentication, redirect to login if needed, or render children if authenticated.",
+    "points": 15,
+    "options": [
+      {
+        "id": "o1",
+        "text": "Create a ProtectedRoute component that checks auth state and redirects to login if not authenticated",
+        "isCorrect": true,
+        "explanation": ""
+      },
+      {
+        "id": "o2",
+        "text": "Check auth in every component",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "o3",
+        "text": "Use only server-side protection",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "o4",
+        "text": "All routes should be public",
+        "isCorrect": false,
+        "explanation": ""
+      }
+    ],
+    "hints": [
+      "Consider React best practices for component architecture",
+      "Think about state management and data flow patterns",
+      "Review frontend task implementation patterns"
+    ],
+    "metadata": {}
+  },
+  {
+    "id": "frontend-task-21",
+    "title": "How should you handle deep linking in a frontend task?",
+    "content": "Users should be able to bookmark and share specific product pages. How do you enable this?",
+    "type": "multiple-choice",
+    "category": "Frontend Tasks",
+    "topic": "React Router",
+    "difficulty": "intermediate",
+    "learningCardId": "frontend-tasks",
+    "isActive": true,
+    "createdAt": "2025-11-11T19:33:22.944Z",
+    "updatedAt": "2025-11-11T20:17:28.530Z",
+    "createdBy": "admin",
+    "updatedBy": "admin",
+    "tags": [
+      "frontend-tasks",
+      "frontend-tasks",
+      "react-router",
+      "intermediate"
+    ],
+    "explanation": "React Router enables deep linking. Ensure server returns index.html for all routes (SPA catch-all) so React Router can handle routing.",
+    "points": 15,
+    "options": [
+      {
+        "id": "o1",
+        "text": "Use React Router with proper route structure, ensure server supports client-side routing (catch-all route)",
+        "isCorrect": true,
+        "explanation": ""
+      },
+      {
+        "id": "o2",
+        "text": "Deep linking is not possible",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "o3",
+        "text": "Use only hash routing",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "o4",
+        "text": "Require users to navigate from home page",
+        "isCorrect": false,
+        "explanation": ""
+      }
+    ],
+    "hints": [
+      "Consider React best practices for component architecture",
+      "Think about state management and data flow patterns",
+      "Review frontend task implementation patterns"
+    ],
+    "metadata": {}
+  },
+  {
+    "id": "frontend-task-22",
+    "title": "How should you test a frontend task component?",
+    "content": "You need to test a ProductCard component. What testing approach is best?",
+    "type": "multiple-choice",
+    "category": "Frontend Tasks",
+    "topic": "React Testing",
+    "difficulty": "intermediate",
+    "learningCardId": "frontend-tasks",
+    "isActive": true,
+    "createdAt": "2025-11-11T19:33:22.944Z",
+    "updatedAt": "2025-11-11T20:17:28.530Z",
+    "createdBy": "admin",
+    "updatedBy": "admin",
+    "tags": [
+      "frontend-tasks",
+      "frontend-tasks",
+      "react-testing",
+      "intermediate"
+    ],
+    "explanation": "React Testing Library tests components from user perspective. Test what users see and interact with, not internal implementation.",
+    "points": 15,
+    "options": [
+      {
+        "id": "o1",
+        "text": "Use React Testing Library to test user interactions and rendered output, not implementation details",
+        "isCorrect": true,
+        "explanation": ""
+      },
+      {
+        "id": "o2",
+        "text": "Test only internal state",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "o3",
+        "text": "Test component implementation details",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "o4",
+        "text": "No testing needed for frontend tasks",
+        "isCorrect": false,
+        "explanation": ""
+      }
+    ],
+    "hints": [
+      "Consider React best practices for component architecture",
+      "Think about state management and data flow patterns",
+      "Review frontend task implementation patterns"
+    ],
+    "metadata": {}
+  },
+  {
+    "id": "frontend-task-23",
+    "title": "How do you test async operations in a frontend task?",
+    "content": "Your component fetches data from an API. How should you test this?",
+    "type": "multiple-choice",
+    "category": "Frontend Tasks",
+    "topic": "React Testing",
+    "difficulty": "intermediate",
+    "learningCardId": "frontend-tasks",
+    "isActive": true,
+    "createdAt": "2025-11-11T19:33:22.944Z",
+    "updatedAt": "2025-11-11T20:17:28.530Z",
+    "createdBy": "admin",
+    "updatedBy": "admin",
+    "tags": [
+      "frontend-tasks",
+      "frontend-tasks",
+      "react-testing",
+      "intermediate"
+    ],
+    "explanation": "Mock fetch/API calls, use waitFor for async updates, test loading and error states, verify final rendered output.",
+    "points": 15,
+    "options": [
+      {
+        "id": "o1",
+        "text": "Mock the API call, use waitFor to wait for async updates, and assert on final rendered state",
+        "isCorrect": true,
+        "explanation": ""
+      },
+      {
+        "id": "o2",
+        "text": "Make real API calls in tests",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "o3",
+        "text": "Skip testing async operations",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "o4",
+        "text": "Use only setTimeout in tests",
+        "isCorrect": false,
+        "explanation": ""
+      }
+    ],
+    "hints": [
+      "Consider React best practices for component architecture",
+      "Think about state management and data flow patterns",
+      "Review frontend task implementation patterns"
+    ],
+    "metadata": {}
+  },
+  {
+    "id": "frontend-task-24",
+    "title": "What should you test in a frontend task form component?",
+    "content": "You have a registration form. What aspects should be tested?",
+    "type": "multiple-choice",
+    "category": "Frontend Tasks",
+    "topic": "React Testing",
+    "difficulty": "intermediate",
+    "learningCardId": "frontend-tasks",
+    "isActive": true,
+    "createdAt": "2025-11-11T19:33:22.944Z",
+    "updatedAt": "2025-11-11T20:17:28.530Z",
+    "createdBy": "admin",
+    "updatedBy": "admin",
+    "tags": [
+      "frontend-tasks",
+      "frontend-tasks",
+      "react-testing",
+      "intermediate"
+    ],
+    "explanation": "Test user interactions, validation (errors shown correctly), form submission, state updates, and integration with parent components.",
+    "points": 15,
+    "options": [
+      {
+        "id": "o1",
+        "text": "Test user interactions (typing, submitting), validation errors, successful submission, and form state changes",
+        "isCorrect": true,
+        "explanation": ""
+      },
+      {
+        "id": "o2",
+        "text": "Test only CSS styles",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "o3",
+        "text": "Test internal state only",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "o4",
+        "text": "Forms don't need testing",
+        "isCorrect": false,
+        "explanation": ""
+      }
+    ],
+    "hints": [
+      "Consider React best practices for component architecture",
+      "Think about state management and data flow patterns",
+      "Review frontend task implementation patterns"
+    ],
+    "metadata": {}
+  },
+  {
+    "id": "frontend-task-25",
+    "title": "How do you ensure accessibility in a frontend task?",
+    "content": "Your dashboard needs to be accessible to screen readers. What should you implement?",
+    "type": "multiple-choice",
+    "category": "Frontend Tasks",
+    "topic": "Core React",
+    "difficulty": "intermediate",
+    "learningCardId": "frontend-tasks",
+    "isActive": true,
+    "createdAt": "2025-11-11T19:33:22.944Z",
+    "updatedAt": "2025-11-11T20:17:28.530Z",
+    "createdBy": "admin",
+    "updatedBy": "admin",
+    "tags": ["frontend-tasks", "frontend-tasks", "core-react", "intermediate"],
+    "explanation": "Use semantic HTML (nav, main, article), ARIA labels for complex widgets, keyboard navigation, focus management, and proper heading hierarchy.",
+    "points": 15,
+    "options": [
+      {
+        "id": "o1",
+        "text": "Use semantic HTML, ARIA attributes where needed, keyboard navigation, focus management, and test with screen readers",
+        "isCorrect": true,
+        "explanation": ""
+      },
+      {
+        "id": "o2",
+        "text": "Use only div elements",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "o3",
+        "text": "Accessibility is automatic in React",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "o4",
+        "text": "Only add alt text to images",
+        "isCorrect": false,
+        "explanation": ""
+      }
+    ],
+    "hints": [
+      "Consider React best practices for component architecture",
+      "Think about state management and data flow patterns",
+      "Review frontend task implementation patterns"
+    ],
+    "metadata": {}
+  },
+  {
+    "id": "frontend-task-26",
+    "title": "How should you handle focus management in a modal frontend task?",
+    "content": "You have a modal dialog. How do you manage focus for accessibility?",
+    "type": "multiple-choice",
+    "category": "Frontend Tasks",
+    "topic": "Core React",
+    "difficulty": "intermediate",
+    "learningCardId": "frontend-tasks",
+    "isActive": true,
+    "createdAt": "2025-11-11T19:33:22.944Z",
+    "updatedAt": "2025-11-11T20:17:28.530Z",
+    "createdBy": "admin",
+    "updatedBy": "admin",
+    "tags": ["frontend-tasks", "frontend-tasks", "core-react", "intermediate"],
+    "explanation": "Trap focus within modal (prevent tabbing outside), return focus to trigger element on close, use refs and focus() API.",
+    "points": 15,
+    "options": [
+      {
+        "id": "o1",
+        "text": "Trap focus within modal when open, return focus to trigger when closed, use useRef and useEffect for focus management",
+        "isCorrect": true,
+        "explanation": ""
+      },
+      {
+        "id": "o2",
+        "text": "Let focus go anywhere",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "o3",
+        "text": "Disable focus entirely",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "o4",
+        "text": "Focus management is not needed",
+        "isCorrect": false,
+        "explanation": ""
+      }
+    ],
+    "hints": [
+      "Consider React best practices for component architecture",
+      "Think about state management and data flow patterns",
+      "Review frontend task implementation patterns"
+    ],
+    "metadata": {}
+  },
+  {
+    "id": "frontend-task-27",
+    "title": "How do you implement keyboard shortcuts in a frontend task?",
+    "content": "You want Ctrl+K to open search. How should you implement this?",
+    "type": "multiple-choice",
+    "category": "Frontend Tasks",
+    "topic": "Core React",
+    "difficulty": "intermediate",
+    "learningCardId": "frontend-tasks",
+    "isActive": true,
+    "createdAt": "2025-11-11T19:33:22.944Z",
+    "updatedAt": "2025-11-11T20:17:28.530Z",
+    "createdBy": "admin",
+    "updatedBy": "admin",
+    "tags": ["frontend-tasks", "frontend-tasks", "core-react", "intermediate"],
+    "explanation": "Add keydown listener in useEffect, check event.key and event.ctrlKey/event.metaKey, handle shortcut, cleanup listener on unmount.",
+    "points": 15,
+    "options": [
+      {
+        "id": "o1",
+        "text": "Use useEffect with keydown event listener, check for modifier keys (Ctrl/Cmd), cleanup on unmount",
+        "isCorrect": true,
+        "explanation": ""
+      },
+      {
+        "id": "o2",
+        "text": "Use only onClick handlers",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "o3",
+        "text": "Keyboard shortcuts are not possible",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "o4",
+        "text": "Use only HTML5 keyboard attributes",
+        "isCorrect": false,
+        "explanation": ""
+      }
+    ],
+    "hints": [
+      "Consider React best practices for component architecture",
+      "Think about state management and data flow patterns",
+      "Review frontend task implementation patterns"
+    ],
+    "metadata": {}
+  },
+  {
+    "id": "frontend-task-28",
+    "title": "How should you structure a large frontend task application?",
+    "content": "Your app is growing with many features. How should you organize the codebase?",
+    "type": "multiple-choice",
+    "category": "Frontend Tasks",
+    "topic": "Core React",
+    "difficulty": "intermediate",
+    "learningCardId": "frontend-tasks",
+    "isActive": true,
+    "createdAt": "2025-11-11T19:33:22.944Z",
+    "updatedAt": "2025-11-11T20:17:28.530Z",
+    "createdBy": "admin",
+    "updatedBy": "admin",
+    "tags": ["frontend-tasks", "frontend-tasks", "core-react", "intermediate"],
+    "explanation": "Organize by features (feature-based structure), separate components/hooks/utils/types, use barrel exports, configure path aliases for clean imports.",
+    "points": 15,
+    "options": [
+      {
+        "id": "o1",
+        "text": "Organize by features/modules, use barrel exports, separate concerns (components, hooks, utils, types), and use absolute imports",
+        "isCorrect": true,
+        "explanation": ""
+      },
+      {
+        "id": "o2",
+        "text": "Put everything in one file",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "o3",
+        "text": "Organize only by file type",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "o4",
+        "text": "No organization needed",
+        "isCorrect": false,
+        "explanation": ""
+      }
+    ],
+    "hints": [
+      "Consider React best practices for component architecture",
+      "Think about state management and data flow patterns",
+      "Review frontend task implementation patterns"
+    ],
+    "metadata": {}
+  },
+  {
+    "id": "frontend-task-29",
+    "title": "How do you handle error boundaries in a frontend task?",
+    "content": "You want to prevent one component error from crashing the entire app. How do you implement this?",
+    "type": "multiple-choice",
+    "category": "Frontend Tasks",
+    "topic": "Core React",
+    "difficulty": "intermediate",
+    "learningCardId": "frontend-tasks",
+    "isActive": true,
+    "createdAt": "2025-11-11T19:33:22.944Z",
+    "updatedAt": "2025-11-11T20:17:28.530Z",
+    "createdBy": "admin",
+    "updatedBy": "admin",
+    "tags": ["frontend-tasks", "frontend-tasks", "core-react", "intermediate"],
+    "explanation": "Error Boundaries catch errors in component tree. Create class component with componentDidCatch, wrap sections, show fallback UI.",
+    "points": 15,
+    "options": [
+      {
+        "id": "o1",
+        "text": "Create ErrorBoundary class component with componentDidCatch, wrap error-prone sections, display fallback UI",
+        "isCorrect": true,
+        "explanation": ""
+      },
+      {
+        "id": "o2",
+        "text": "Use try-catch in every component",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "o3",
+        "text": "Errors always crash the app",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "o4",
+        "text": "Use only console.error",
+        "isCorrect": false,
+        "explanation": ""
+      }
+    ],
+    "hints": [
+      "Consider React best practices for component architecture",
+      "Think about state management and data flow patterns",
+      "Review frontend task implementation patterns"
+    ],
+    "metadata": {}
+  },
+  {
+    "id": "frontend-task-30",
+    "title": "How should you optimize bundle size for a production frontend task?",
+    "content": "Your app bundle is too large. What optimization strategies should you use?",
+    "type": "multiple-choice",
+    "category": "Frontend Tasks",
+    "topic": "Core React",
+    "difficulty": "intermediate",
+    "learningCardId": "frontend-tasks",
+    "isActive": true,
+    "createdAt": "2025-11-11T19:33:22.944Z",
+    "updatedAt": "2025-11-11T20:17:28.530Z",
+    "createdBy": "admin",
+    "updatedBy": "admin",
+    "tags": ["frontend-tasks", "frontend-tasks", "core-react", "intermediate"],
+    "explanation": "Code splitting reduces initial load. Tree shaking removes unused code. Analyze bundle, remove unused deps, use dynamic imports, optimize assets.",
+    "points": 15,
+    "options": [
+      {
+        "id": "o1",
+        "text": "Use code splitting, tree shaking, analyze bundle, remove unused dependencies, use dynamic imports, and optimize images/assets",
+        "isCorrect": true,
+        "explanation": ""
+      },
+      {
+        "id": "o2",
+        "text": "Bundle size doesn't matter",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "o3",
+        "text": "Include all libraries",
+        "isCorrect": false,
+        "explanation": ""
+      },
+      {
+        "id": "o4",
+        "text": "Optimization is automatic",
+        "isCorrect": false,
+        "explanation": ""
+      }
+    ],
+    "hints": [
+      "Consider React best practices for component architecture",
+      "Think about state management and data flow patterns",
+      "Review frontend task implementation patterns"
+    ],
+    "metadata": {}
+  }
+]

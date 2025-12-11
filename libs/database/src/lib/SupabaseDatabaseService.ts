@@ -3,14 +3,14 @@
 // v1.0 - Supabase PostgreSQL implementation of IDatabaseService
 // This file uses 'any' types for database filters and query operations
 
-import { createClient, SupabaseClient } from '@supabase/supabase-js';
+import { createClient, SupabaseClient } from "@supabase/supabase-js";
 import {
   IDatabaseService,
   DatabaseConfig,
   QueryOptions,
   DatabaseResult,
   BatchResult,
-} from './IDatabaseService';
+} from "./IDatabaseService";
 
 export class SupabaseDatabaseService implements IDatabaseService {
   private client: SupabaseClient;
@@ -28,12 +28,12 @@ export class SupabaseDatabaseService implements IDatabaseService {
     try {
       const { data, error } = await this.client
         .from(table)
-        .select('*')
-        .eq('id', id)
+        .select("*")
+        .eq("id", id)
         .single();
 
       if (error) {
-        if (error.code === 'PGRST116') {
+        if (error.code === "PGRST116") {
           return null; // No rows found
         }
         throw error;
@@ -41,22 +41,22 @@ export class SupabaseDatabaseService implements IDatabaseService {
 
       return data as T;
     } catch (error) {
-      console.error('Supabase get error:', error);
+      console.error("Supabase get error:", error);
       throw error;
     }
   }
 
   async getAll<T>(table: string, filters?: Record<string, any>): Promise<T[]> {
     try {
-      let query = this.client.from(table).select('*');
+      let query = this.client.from(table).select("*");
 
       if (filters) {
         Object.entries(filters).forEach(([key, value]) => {
           if (
-            typeof value === 'object' &&
+            typeof value === "object" &&
             value &&
-            'operator' in value &&
-            'value' in value
+            "operator" in value &&
+            "value" in value
           ) {
             // Handle advanced filters with operators
             const filterValue = value as { operator: string; value: any };
@@ -72,12 +72,12 @@ export class SupabaseDatabaseService implements IDatabaseService {
       if (error) throw error;
       return (data as T[]) || [];
     } catch (error) {
-      console.error('Supabase getAll error:', error);
+      console.error("Supabase getAll error:", error);
       throw error;
     }
   }
 
-  async add<T>(table: string, data: Omit<T, 'id'>): Promise<T> {
+  async add<T>(table: string, data: Omit<T, "id">): Promise<T> {
     try {
       const { data: result, error } = await this.client
         .from(table)
@@ -92,7 +92,7 @@ export class SupabaseDatabaseService implements IDatabaseService {
       if (error) throw error;
       return result as T;
     } catch (error) {
-      console.error('Supabase add error:', error);
+      console.error("Supabase add error:", error);
       throw error;
     }
   }
@@ -105,39 +105,39 @@ export class SupabaseDatabaseService implements IDatabaseService {
           ...data,
           updated_at: new Date().toISOString(),
         })
-        .eq('id', id)
+        .eq("id", id)
         .select()
         .single();
 
       if (error) throw error;
       return result as T;
     } catch (error) {
-      console.error('Supabase update error:', error);
+      console.error("Supabase update error:", error);
       throw error;
     }
   }
 
   async delete(table: string, id: string): Promise<void> {
     try {
-      const { error } = await this.client.from(table).delete().eq('id', id);
+      const { error } = await this.client.from(table).delete().eq("id", id);
 
       if (error) throw error;
     } catch (error) {
-      console.error('Supabase delete error:', error);
+      console.error("Supabase delete error:", error);
       throw error;
     }
   }
 
   async query<T>(table: string, filters: Record<string, any>): Promise<T[]> {
     try {
-      let query = this.client.from(table).select('*');
+      let query = this.client.from(table).select("*");
 
       Object.entries(filters).forEach(([key, value]) => {
         if (
-          typeof value === 'object' &&
+          typeof value === "object" &&
           value &&
-          'operator' in value &&
-          'value' in value
+          "operator" in value &&
+          "value" in value
         ) {
           // Handle advanced filters with operators
           const filterValue = value as { operator: string; value: any };
@@ -152,24 +152,24 @@ export class SupabaseDatabaseService implements IDatabaseService {
       if (error) throw error;
       return (data as T[]) || [];
     } catch (error) {
-      console.error('Supabase query error:', error);
+      console.error("Supabase query error:", error);
       throw error;
     }
   }
 
   async querySingle<T>(
     table: string,
-    filters: Record<string, any>
+    filters: Record<string, any>,
   ): Promise<T | null> {
     try {
-      let query = this.client.from(table).select('*').limit(1);
+      let query = this.client.from(table).select("*").limit(1);
 
       Object.entries(filters).forEach(([key, value]) => {
         if (
-          typeof value === 'object' &&
+          typeof value === "object" &&
           value &&
-          'operator' in value &&
-          'value' in value
+          "operator" in value &&
+          "value" in value
         ) {
           // Handle advanced filters with operators
           const filterValue = value as { operator: string; value: any };
@@ -184,35 +184,35 @@ export class SupabaseDatabaseService implements IDatabaseService {
       if (error) throw error;
       return data && data.length > 0 ? (data[0] as T) : null;
     } catch (error) {
-      console.error('Supabase querySingle error:', error);
+      console.error("Supabase querySingle error:", error);
       throw error;
     }
   }
 
-  async batchAdd<T>(table: string, data: Omit<T, 'id'>[]): Promise<T[]> {
+  async batchAdd<T>(table: string, data: Omit<T, "id">[]): Promise<T[]> {
     try {
       const { data: result, error } = await this.client
         .from(table)
         .insert(
-          data.map(item => ({
+          data.map((item) => ({
             ...item,
             created_at: new Date().toISOString(),
             updated_at: new Date().toISOString(),
-          }))
+          })),
         )
         .select();
 
       if (error) throw error;
       return result as T[];
     } catch (error) {
-      console.error('Supabase batchAdd error:', error);
+      console.error("Supabase batchAdd error:", error);
       throw error;
     }
   }
 
   async batchUpdate<T>(
     table: string,
-    updates: Array<{ id: string; data: Partial<T> }>
+    updates: Array<{ id: string; data: Partial<T> }>,
   ): Promise<T[]> {
     try {
       const results: T[] = [];
@@ -225,18 +225,18 @@ export class SupabaseDatabaseService implements IDatabaseService {
 
       return results;
     } catch (error) {
-      console.error('Supabase batchUpdate error:', error);
+      console.error("Supabase batchUpdate error:", error);
       throw error;
     }
   }
 
   async batchDelete(table: string, ids: string[]): Promise<void> {
     try {
-      const { error } = await this.client.from(table).delete().in('id', ids);
+      const { error } = await this.client.from(table).delete().in("id", ids);
 
       if (error) throw error;
     } catch (error) {
-      console.error('Supabase batchDelete error:', error);
+      console.error("Supabase batchDelete error:", error);
       throw error;
     }
   }
@@ -245,15 +245,15 @@ export class SupabaseDatabaseService implements IDatabaseService {
     try {
       let query = this.client
         .from(table)
-        .select('*', { count: 'exact', head: true });
+        .select("*", { count: "exact", head: true });
 
       if (filters) {
         Object.entries(filters).forEach(([key, value]) => {
           if (
-            typeof value === 'object' &&
+            typeof value === "object" &&
             value &&
-            'operator' in value &&
-            'value' in value
+            "operator" in value &&
+            "value" in value
           ) {
             // Handle advanced filters with operators
             const filterValue = value as { operator: string; value: any };
@@ -269,7 +269,7 @@ export class SupabaseDatabaseService implements IDatabaseService {
       if (error) throw error;
       return count || 0;
     } catch (error) {
-      console.error('Supabase count error:', error);
+      console.error("Supabase count error:", error);
       throw error;
     }
   }
@@ -278,12 +278,12 @@ export class SupabaseDatabaseService implements IDatabaseService {
     try {
       const { data, error } = await this.client
         .from(table)
-        .select('id')
-        .eq('id', id)
+        .select("id")
+        .eq("id", id)
         .single();
 
       if (error) {
-        if (error.code === 'PGRST116') {
+        if (error.code === "PGRST116") {
           return false; // No rows found
         }
         throw error;
@@ -291,23 +291,23 @@ export class SupabaseDatabaseService implements IDatabaseService {
 
       return !!data;
     } catch (error) {
-      console.error('Supabase exists error:', error);
+      console.error("Supabase exists error:", error);
       throw error;
     }
   }
 
   async transaction<T>(
-    callback: (service: IDatabaseService) => Promise<T>
+    callback: (service: IDatabaseService) => Promise<T>,
   ): Promise<T> {
     try {
       // Supabase doesn't have explicit transaction support in the client library
       // In a real implementation, you might need to use RPC functions or handle this differently
       console.warn(
-        'Supabase transaction support is limited. Consider using RPC functions for complex transactions.'
+        "Supabase transaction support is limited. Consider using RPC functions for complex transactions.",
       );
       return await callback(this);
     } catch (error) {
-      console.error('Supabase transaction error:', error);
+      console.error("Supabase transaction error:", error);
       throw error;
     }
   }
@@ -325,23 +325,23 @@ export class SupabaseDatabaseService implements IDatabaseService {
   subscribe<T>(
     table: string,
     callback: (payload: any) => void,
-    filters?: Record<string, any>
+    filters?: Record<string, any>,
   ) {
     const subscription = this.client
       .channel(`${table}_changes`)
       .on(
-        'postgres_changes',
+        "postgres_changes",
         {
-          event: '*',
-          schema: 'public',
+          event: "*",
+          schema: "public",
           table: table,
           filter: filters
             ? Object.keys(filters)
-                .map(key => `${key}=eq.${filters[key]}`)
-                .join(',')
+                .map((key) => `${key}=eq.${filters[key]}`)
+                .join(",")
             : undefined,
         },
-        callback
+        callback,
       )
       .subscribe();
 

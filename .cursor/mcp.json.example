@@ -1,0 +1,13 @@
+{
+  "mcpServers": {
+    "sonarqube": {
+      "command": "java",
+      "args": ["-jar", "<path_to_sonarqube_mcp_server_jar>"],
+      "env": {
+        "STORAGE_PATH": "<absolute_path_to_storage_directory>",
+        "SONARQUBE_TOKEN": "YOUR_SONARQUBE_TOKEN_HERE",
+        "SONARQUBE_ORG": "foushware"
+      }
+    }
+  }
+}

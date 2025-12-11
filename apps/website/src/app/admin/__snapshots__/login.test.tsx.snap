@@ -1,0 +1,43 @@
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+
+exports[`A-UT-SNAPSHOT: Admin Login Page Snapshot Tests should match admin login page snapshot (default state) 1`] = `
+<div
+  class="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center"
+>
+  <div
+    class="text-center"
+  >
+    <span
+      data-testid="loader-icon"
+    >
+      ⏳
+    </span>
+    <p
+      class="text-gray-600 dark:text-gray-400"
+    >
+      Checking authentication...
+    </p>
+  </div>
+</div>
+`;
+
+exports[`A-UT-SNAPSHOT: Admin Login Page Snapshot Tests should match admin login page snapshot (loading state) 1`] = `
+<div
+  class="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center"
+>
+  <div
+    class="text-center"
+  >
+    <span
+      data-testid="loader-icon"
+    >
+      ⏳
+    </span>
+    <p
+      class="text-gray-600 dark:text-gray-400"
+    >
+      Checking authentication...
+    </p>
+  </div>
+</div>
+`;

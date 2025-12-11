@@ -1,24 +1,24 @@
-import { defineConfig } from 'vite';
-import { nxViteTsPaths } from '@nx/vite/plugins/nx-tsconfig-paths.plugin';
+import { defineConfig } from "vite";
+import { nxViteTsPaths } from "@nx/vite/plugins/nx-tsconfig-paths.plugin";
 
 export default defineConfig({
   root: __dirname,
-  cacheDir: '../../node_modules/.vite/libs/auth',
+  cacheDir: "../../node_modules/.vite/libs/auth",
   plugins: [nxViteTsPaths()],
   build: {
-    outDir: '../../dist/libs/auth',
+    outDir: "../../dist/libs/auth",
     reportCompressedSize: true,
     commonjsOptions: {
       transformMixedEsModules: true,
     },
     lib: {
-      entry: 'src/index.ts',
-      name: 'ui',
-      fileName: 'index',
-      formats: ['es', 'cjs'],
+      entry: "src/index.ts",
+      name: "ui",
+      fileName: "index",
+      formats: ["es", "cjs"],
     },
     rollupOptions: {
-      external: ['react', 'react-dom'],
+      external: ["react", "react-dom"],
     },
   },
 });

@@ -1,59 +1,63 @@
-import type { Metadata } from 'next';
-import { Inter } from 'next/font/google';
-import './globals.css';
-import { JotaiProvider } from '@/providers/JotaiProvider';
-import { QueryProvider } from '@/providers/QueryProvider';
-import { SpeedInsights } from '@vercel/speed-insights/next';
+import type { Metadata } from "next";
+import { Inter } from "next/font/google";
+import "./globals.css";
+import { JotaiProvider } from "@/providers/JotaiProvider";
+import { QueryProvider } from "@/providers/QueryProvider";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 
-import { UserTypeProvider } from '@elzatona/shared-contexts';
-import { MobileMenuProvider } from '@elzatona/shared-contexts';
-import { ThemeProvider } from '@elzatona/shared-contexts';
-import { LanguageProvider } from '@elzatona/shared-contexts';
-import { OnboardingProvider } from '@elzatona/shared-contexts';
-import { AuthProvider } from '@elzatona/shared-contexts';
-import NavbarSimple from '../components/NavbarSimple';
-import { NotificationProvider } from '@/components/NotificationSystem';
-import AuthSessionSync from '@/components/AuthSessionSync';
-import { LearningTypeProvider } from '../context/LearningTypeContext';
-import { SentryErrorBoundary } from '../components/SentryErrorBoundary';
+import {
+  UserTypeProvider,
+  MobileMenuProvider,
+  ThemeProvider,
+  LanguageProvider,
+  OnboardingProvider,
+  AuthProvider,
+} from "@elzatona/contexts";
+import NavbarSimple from "@/components/NavbarSimple";
+import { NotificationProvider } from "@/components/NotificationSystem";
+import AuthSessionSync from "@/components/AuthSessionSync";
+import { LearningTypeProvider } from "@/context/LearningTypeContext";
+import { SentryErrorBoundary } from "@/components/SentryErrorBoundary";
+import { NavigationProgress } from "@/components/NavigationProgress";
+import { NavigationProvider } from "@/context/NavigationContext";
 
 // Force dynamic rendering to prevent static generation issues with auth context
-export const dynamic = 'force-dynamic';
+export const dynamic = "force-dynamic";
 
 const inter = Inter({
-  subsets: ['latin'],
-  display: 'swap',
-  fallback: ['system-ui', 'arial'],
+  subsets: ["latin"],
+  display: "swap",
+  fallback: ["system-ui", "arial"],
 });
 
 export const metadata: Metadata = {
-  title: 'Master Frontend Development Interviews',
+  title: "Master Frontend Development Interviews",
   description:
-    'Comprehensive platform for mastering frontend development interviews. Practice questions, learning paths, coding challenges, and real-time AI assistance.',
+    "Comprehensive platform for mastering frontend development interviews. Practice questions, learning paths, coding challenges, and real-time AI assistance.",
   keywords:
-    'frontend development, interview preparation, React, JavaScript, CSS, HTML, coding challenges, learning paths',
-  authors: [{ name: 'Development Team' }],
-  creator: 'Development Team',
-  publisher: 'Development Team',
-  robots: 'index, follow',
+    "frontend development, interview preparation, React, JavaScript, CSS, HTML, coding challenges, learning paths",
+  authors: [{ name: "Development Team" }],
+  creator: "Development Team",
+  publisher: "Development Team",
+  robots: "index, follow",
   openGraph: {
-    title: 'Master Frontend Development Interviews',
+    title: "Master Frontend Development Interviews",
     description:
-      'Comprehensive platform for mastering frontend development interviews. Practice questions, learning paths, coding challenges, and real-time AI assistance.',
-    type: 'website',
-    locale: 'en_US',
-    siteName: 'Frontend Development Platform',
+      "Comprehensive platform for mastering frontend development interviews. Practice questions, learning paths, coding challenges, and real-time AI assistance.",
+    type: "website",
+    locale: "en_US",
+    siteName: "Frontend Development Platform",
   },
   twitter: {
-    card: 'summary_large_image',
-    title: 'Master Frontend Development Interviews',
+    card: "summary_large_image",
+    title: "Master Frontend Development Interviews",
     description:
-      'Comprehensive platform for mastering frontend development interviews. Practice questions, learning paths, coding challenges, and real-time AI assistance.',
+      "Comprehensive platform for mastering frontend development interviews. Practice questions, learning paths, coding challenges, and real-time AI assistance.",
   },
 };
 
 export const viewport = {
-  width: 'device-width',
+  width: "device-width",
   initialScale: 1,
 };
 
@@ -63,7 +67,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang='en' suppressHydrationWarning>
+    <html lang="en" suppressHydrationWarning>
       <body className={inter.className}>
         <QueryProvider>
           <JotaiProvider>
@@ -75,13 +79,17 @@ export default function RootLayout({
                       <OnboardingProvider>
                         <NotificationProvider>
                           <LearningTypeProvider>
-                            <SentryErrorBoundary>
-                              {/* Ensure auth snapshot sync runs before navbar to avoid flicker */}
-                              <AuthSessionSync />
-                              <NavbarSimple />
-                              {children}
-                              <SpeedInsights />
-                            </SentryErrorBoundary>
+                            <NavigationProvider>
+                              <SentryErrorBoundary>
+                                {/* Navigation progress bar */}
+                                <NavigationProgress />
+                                {/* Ensure auth snapshot sync runs before navbar to avoid flicker */}
+                                <AuthSessionSync />
+                                <NavbarSimple />
+                                {children}
+                                <SpeedInsights />
+                              </SentryErrorBoundary>
+                            </NavigationProvider>
                           </LearningTypeProvider>
                         </NotificationProvider>
                       </OnboardingProvider>
