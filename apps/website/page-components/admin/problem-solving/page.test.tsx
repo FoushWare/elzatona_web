@@ -77,6 +77,7 @@ describe("A-UT-SNAPSHOT: Admin Problem Solving Snapshot Tests", () => {
   });
 
   it("should match admin problem solving page snapshot (loading state)", () => {
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
     const { useProblemSolvingTasks } = require("@elzatona/hooks");
     useProblemSolvingTasks.mockReturnValue({
       data: null,
