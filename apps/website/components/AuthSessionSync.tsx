@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
+import type { Session } from "@supabase/supabase-js";
 import {
   supabaseClient as supabase,
   isSupabaseAvailable,
@@ -14,40 +15,46 @@ export default function AuthSessionSync() {
     // Initial session sync
     supabase.auth
       .getSession()
-      .then(({ data }: { data: { session: unknown } | null }) => {
+      .then(({ data }: { data: { session: Session | null } | null }) => {
         const session = data?.session;
         if (session) {
           try {
-             
-            persistSession(session as unknown);
-          } catch (_) {}
+            persistSession(session);
+          } catch (_) {
+            // Ignore errors
+          }
           try {
             sessionStorage.setItem(
               "navbar-auth-state",
               JSON.stringify({ isAuthenticated: true, isLoading: false }),
             );
-          } catch (_) {}
+          } catch (_) {
+            // Ignore errors
+          }
         }
       });
 
     // Subscribe to auth changes and persist markers
     const { data: listener } = supabase.auth.onAuthStateChange(
-      (_event: unknown, session: unknown) => {
+      (_event: string, session: Session | null) => {
         const authed = !!session;
         try {
           sessionStorage.setItem(
             "navbar-auth-state",
             JSON.stringify({ isAuthenticated: authed, isLoading: false }),
           );
-        } catch (_) {}
+        } catch (_) {
+          // Ignore errors
+        }
         try {
           if (authed && session) {
-             
-            persistSession(session as unknown);
+            persistSession(session);
           } else {
             clearSession();
           }
-        } catch (_) {}
+        } catch (_) {
+          // Ignore errors
+        }
       },
     );
 
