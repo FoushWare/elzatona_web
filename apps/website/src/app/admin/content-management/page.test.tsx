@@ -15,12 +15,14 @@ const mockCategoriesData = { data: [], count: 0 };
 const mockTopicsData = { data: [], count: 0 };
 const mockQuestionsData = { data: [], pagination: { totalCount: 0 } };
 
+const mockUseCards = jest.fn(() => ({
+  data: mockCardsData,
+  isLoading: false,
+  error: null,
+}));
+
 jest.mock("@elzatona/hooks", () => ({
-  useCards: jest.fn(() => ({
-    data: mockCardsData,
-    isLoading: false,
-    error: null,
-  })),
+  useCards: mockUseCards,
   usePlans: jest.fn(() => ({
     data: mockPlansData,
     isLoading: false,
@@ -218,8 +220,7 @@ describe("A-UT-015: Content Sections", () => {
   });
 
   it("should handle loading states", () => {
-    const { useCards } = require("@elzatona/hooks");
-    useCards.mockReturnValue({
+    mockUseCards.mockReturnValue({
       data: null,
       isLoading: true,
       error: null,
@@ -240,8 +241,7 @@ describe("A-UT-SNAPSHOT: Admin Content Management Snapshot Tests", () => {
   });
 
   it("should match content management page snapshot (loading state)", () => {
-    const { useCards } = require("@elzatona/hooks");
-    useCards.mockReturnValue({
+    mockUseCards.mockReturnValue({
       data: null,
       isLoading: true,
       error: null,

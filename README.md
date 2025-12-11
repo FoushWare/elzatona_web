@@ -268,9 +268,28 @@ import { Component } from "@/components/Component";
 
 ### Security Pipeline
 
+- **Pre-commit hooks** - GitGuardian secret scanning (catches secrets before they leave your machine)
 - **Pre-push hooks** - Secret scanning, linting, type checking
 - **GitHub Actions** - CodeQL, SonarCloud, secret scanning
 - **Git Hooks** - Automatic security checks
+
+### GitGuardian Setup (Pre-commit Secret Detection)
+
+The pre-commit hook includes GitGuardian (`ggshield`) to catch secrets before they're committed:
+
+1. **Install GitGuardian CLI:**
+   ```bash
+   pipx install ggshield
+   # Or: brew install ggshield
+   ```
+
+2. **Authenticate (optional but recommended):**
+   ```bash
+   ggshield auth login
+   # Or set GITGUARDIAN_API_KEY environment variable
+   ```
+
+3. **The pre-commit hook will automatically scan staged files** for secrets. If not authenticated, it will show a warning but allow the commit (pre-push hook will still scan).
 
 ### Best Practices
 
@@ -278,6 +297,7 @@ import { Component } from "@/components/Component";
 - Use environment variables for secrets
 - Run security scans before pushing
 - Review security alerts regularly
+- Set up GitGuardian authentication for full protection
 
 See [docs/SECURITY.md](docs/SECURITY.md) for complete security guide.
 
@@ -309,3 +329,4 @@ For issues and questions:
 - Check [documentation](docs/)
 - Review [troubleshooting guide](docs/flows/local-development.md#troubleshooting)
 - Open an issue on GitHub
+
