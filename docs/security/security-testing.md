@@ -490,4 +490,3 @@ Track these metrics:
 - [OWASP API Security](https://owasp.org/www-project-api-security/)
 - [OWASP Top 10](https://owasp.org/www-project-top-ten/)
 - [Security Testing Tools](https://owasp.org/www-community/Vulnerability_Scanning_Tools)
-

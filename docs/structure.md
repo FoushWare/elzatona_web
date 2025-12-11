@@ -237,4 +237,3 @@ docs/
 4. **App-Specific Code** - Use `apps/*/` for app-specific code
 5. **Tests** - Co-locate tests with source files
 6. **Documentation** - Keep docs organized by area
-

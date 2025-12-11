@@ -359,4 +359,3 @@ Admin panel for managing learning content (cards, plans, questions).
 - [x] Audit logging implemented
 - [x] Input validation implemented
 ```
-

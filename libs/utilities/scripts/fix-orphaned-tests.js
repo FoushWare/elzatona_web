@@ -122,4 +122,3 @@ const moved = processDirectory(APPS_DIR);
 console.log(
   `\n✅ Moved ${moved} test files to be co-located with their source files`,
 );
-

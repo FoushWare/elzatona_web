@@ -406,4 +406,3 @@ Track these metrics throughout SDLC:
 - [OWASP SDL](https://owasp.org/www-project-sdl/)
 - [Microsoft SDL](https://www.microsoft.com/en-us/securityengineering/sdl/)
 - [Security Development Lifecycle](https://owasp.org/www-community/Application_Security_Architecture_Cheat_Sheet)
-

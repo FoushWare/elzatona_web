@@ -95,4 +95,3 @@ If a security issue is discovered:
 - [OWASP ASVS](https://owasp.org/www-project-application-security-verification-standard/)
 - [CWE Top 25](https://cwe.mitre.org/top25/)
 - [NIST Cybersecurity Framework](https://www.nist.gov/cyberframework)
-

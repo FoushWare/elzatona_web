@@ -24,28 +24,32 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: "20"
-          cache: "npm"
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v1
+        with:
+          bun-version: latest
 
       - name: Install dependencies
-        run: npm install
+        run: bun install
 
       - name: Run linting with auto-fix
         run: |
-          npm run lint:fix || true
+          bun run lint:fix || true
         continue-on-error: true
         env:
           NODE_OPTIONS: "--max-old-space-size=1536"
 
       - name: Run linting check
         run: |
-          npm run lint || true
+          bun run lint || true
         continue-on-error: true
         env:
           NODE_OPTIONS: "--max-old-space-size=1536"
 
       - name: TypeScript type checking
         run: |
-          npm run type-check
+          bun run type-check
         continue-on-error: true
         env:
           NODE_OPTIONS: "--max-old-space-size=1536"
@@ -58,7 +62,7 @@ jobs:
 
       - name: Run tests with coverage
         run: |
-          npm run test:unit -- --coverage --coverageReporters=lcov --coverageDirectory=coverage || true
+          bun run test:unit -- --coverage --coverageReporters=lcov --coverageDirectory=coverage || true
         continue-on-error: true
         env:
           # Force test environment

@@ -90,4 +90,3 @@ export const PaginationControls: React.FC<PaginationControlsProps> = ({
     </div>
   );
 };
-

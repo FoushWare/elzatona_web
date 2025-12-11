@@ -115,4 +115,3 @@ When adding new documentation:
 3. **Link from relevant README** files
 
 4. **Follow existing format** and structure
-

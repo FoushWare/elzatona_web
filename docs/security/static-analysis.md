@@ -351,4 +351,3 @@ Track these metrics:
 - [SonarQube Documentation](https://docs.sonarqube.org/)
 - [OWASP Code Review Guide](https://owasp.org/www-project-code-review-guide/)
 - [Static Analysis Tools](https://owasp.org/www-community/Source_Code_Analysis_Tools)
-

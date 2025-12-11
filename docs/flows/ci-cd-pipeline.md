@@ -191,4 +191,3 @@ See [docs/SECURITY.md](../SECURITY.md) for complete security pipeline details.
 3. **Review CI results** - Check GitHub Actions after push
 4. **Monitor security alerts** - Review GitHub Security tab regularly
 5. **Keep secrets secure** - Never commit secrets
-

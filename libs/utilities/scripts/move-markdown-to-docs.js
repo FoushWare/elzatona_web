@@ -122,4 +122,3 @@ for (const file of ROOT_MD_FILES) {
 
 console.log("\n✅ Migration complete!");
 console.log(`📁 Documentation is now in: docs/`);
-

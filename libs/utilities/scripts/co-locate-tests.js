@@ -188,4 +188,3 @@ console.log(
 console.log(
   `\n✅ Complete! Moved ${websiteMoved + adminMoved} test files, removed ${websiteRemoved + adminRemoved} empty directories`,
 );
-

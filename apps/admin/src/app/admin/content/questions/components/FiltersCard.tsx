@@ -134,4 +134,3 @@ export const FiltersCard: React.FC<FiltersCardProps> = ({
     </Card>
   );
 };
-

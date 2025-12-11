@@ -131,4 +131,3 @@ bun run dev:light:prod
 - Rotate keys if they are exposed
 
 See [docs/SECURITY.md](../SECURITY.md) for security best practices.
-
