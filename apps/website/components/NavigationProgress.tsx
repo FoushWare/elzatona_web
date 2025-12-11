@@ -14,18 +14,14 @@ export function NavigationProgress() {
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
-  // Safely get navigation context - it will return a default if not available
-  let navigation;
-  try {
-    navigation = useNavigation();
-  } catch (error) {
-    // If context is not available, use default values
-    console.warn("NavigationContext not available, using default values");
-    navigation = {
-      isNavigating: false,
-      setIsNavigating: () => {},
-    };
-  }
+  // Always call hook at top level - React Hooks rules
+  const navigationContext = useNavigation();
+
+  // Safely get navigation context - use context if available, otherwise use defaults
+  const navigation = navigationContext || {
+    isNavigating: false,
+    setIsNavigating: () => {},
+  };
 
   const [progress, setProgress] = useState(0);
   const [isVisible, setIsVisible] = useState(false);

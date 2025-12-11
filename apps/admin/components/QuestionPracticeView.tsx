@@ -46,7 +46,17 @@ interface Question {
 }
 
 interface QuestionPracticeViewProps {
-  question: Question | any; // Allow any to handle different question formats
+  question: Question | {
+    id?: string;
+    title?: string;
+    content?: string;
+    options?: string | Array<{ id?: string; text?: string; label?: string; option?: string; isCorrect?: boolean; correct?: boolean }>;
+    correct_answer?: string | number;
+    explanation?: string;
+    resources?: string | Array<unknown>;
+    difficulty?: string;
+    [key: string]: unknown;
+  };
 }
 
 const getOptionLetter = (index: number): string => {
@@ -79,7 +89,7 @@ export const QuestionPracticeView: React.FC<QuestionPracticeViewProps> = ({
     if (!question.options) return [];
 
     // Handle options as string (JSON)
-    let optionsArray: any[] = [];
+    let optionsArray: Array<string | { id?: string; text?: string; label?: string; option?: string; isCorrect?: boolean; correct?: boolean }> = [];
     if (typeof question.options === "string") {
       try {
         optionsArray = JSON.parse(question.options);
@@ -95,7 +105,7 @@ export const QuestionPracticeView: React.FC<QuestionPracticeViewProps> = ({
 
     if (optionsArray.length === 0) return [];
 
-    return optionsArray.map((option: any, index: number) => {
+    return optionsArray.map((option: string | { id?: string; text?: string; label?: string; option?: string; isCorrect?: boolean; correct?: boolean }, index: number) => {
       // Handle different option formats
       if (typeof option === "string") {
         return {
@@ -340,7 +350,7 @@ export const QuestionPracticeView: React.FC<QuestionPracticeViewProps> = ({
               </p>
             </div>
             <div className="space-y-3 sm:space-y-4">
-              {parsedResources.map((resource: any, index: number) => {
+              {parsedResources.map((resource: { type?: string; url?: string; title?: string; description?: string; duration?: string; author?: string }, index: number) => {
                 const getIcon = () => {
                   switch (resource.type) {
                     case "video":
