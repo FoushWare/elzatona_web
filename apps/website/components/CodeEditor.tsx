@@ -590,7 +590,6 @@ export default function CodeEditor({
               bottom: 16,
               // @ts-expect-error - Monaco Editor type issue - left/right not in type but supported by Monaco
               left: 12,
-              // @ts-expect-error - Monaco Editor type issue - left/right not in type but supported by Monaco
               right: 12,
             },
             cursorBlinking: "smooth",
