@@ -218,6 +218,7 @@ describe("A-UT-015: Content Sections", () => {
   });
 
   it("should handle loading states", () => {
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
     const { useCards } = require("@elzatona/hooks");
     useCards.mockReturnValue({
       data: null,
@@ -240,6 +241,7 @@ describe("A-UT-SNAPSHOT: Admin Content Management Snapshot Tests", () => {
   });
 
   it("should match content management page snapshot (loading state)", () => {
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
     const { useCards } = require("@elzatona/hooks");
     useCards.mockReturnValue({
       data: null,

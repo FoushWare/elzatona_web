@@ -83,6 +83,7 @@ describe("A-UT-SNAPSHOT: Admin Frontend Tasks Snapshot Tests", () => {
   });
 
   it("should match admin frontend tasks page snapshot (loading state)", () => {
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
     const { useFrontendTasks } = require("@elzatona/hooks");
     useFrontendTasks.mockReturnValue({
       data: null,

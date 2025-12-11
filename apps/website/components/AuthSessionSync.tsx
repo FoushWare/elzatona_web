@@ -12,25 +12,27 @@ export default function AuthSessionSync() {
     if (!isSupabaseAvailable() || !supabase) return;
 
     // Initial session sync
-    supabase.auth.getSession().then(({ data }) => {
-      const session = data?.session;
-      if (session) {
-        try {
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          persistSession(session as any);
-        } catch (_) {}
-        try {
-          sessionStorage.setItem(
-            "navbar-auth-state",
-            JSON.stringify({ isAuthenticated: true, isLoading: false }),
-          );
-        } catch (_) {}
-      }
-    });
+    supabase.auth
+      .getSession()
+      .then(({ data }: { data: { session: unknown } | null }) => {
+        const session = data?.session;
+        if (session) {
+          try {
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            persistSession(session as any);
+          } catch (_) {}
+          try {
+            sessionStorage.setItem(
+              "navbar-auth-state",
+              JSON.stringify({ isAuthenticated: true, isLoading: false }),
+            );
+          } catch (_) {}
+        }
+      });
 
     // Subscribe to auth changes and persist markers
     const { data: listener } = supabase.auth.onAuthStateChange(
-      (_event, session) => {
+      (_event: unknown, session: unknown) => {
         const authed = !!session;
         try {
           sessionStorage.setItem(

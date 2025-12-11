@@ -25,7 +25,7 @@ jobs:
         with:
           node-version: "20"
           # Explicitly disable cache since project uses bun.lock, not package-lock.json
-          package-manager-cache: false
+          cache: false
 
       - name: Install dependencies
         run: npm install

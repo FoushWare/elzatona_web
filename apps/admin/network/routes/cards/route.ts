@@ -28,10 +28,12 @@ export async function GET() {
       success: true,
       data: data || [],
     });
-  } catch (error: any) {
-    console.error("Error fetching cards:", error.message);
+  } catch (error: unknown) {
+    const errorMessage =
+      error instanceof Error ? error.message : "Failed to fetch cards";
+    console.error("Error fetching cards:", errorMessage);
     return NextResponse.json(
-      { success: false, error: error.message || "Failed to fetch cards" },
+      { success: false, error: errorMessage },
       { status: 500 },
     );
   }
