@@ -1,0 +1,46 @@
+---
+description: Prevent automatic markdown file creation unless explicitly requested
+globs: **/*
+alwaysApply: true
+---
+
+# No Automatic Markdown Creation Rule
+
+## **CRITICAL: Do NOT Create Markdown Files Automatically**
+
+- ❌ **DON'T:** Create markdown files (`.md`, `.mdc`) unless the user explicitly requests it
+- ❌ **DON'T:** Create documentation files automatically during code changes
+- ❌ **DON'T:** Generate README files, guides, or documentation without explicit instruction
+
+## **When Markdown Creation IS Allowed**
+
+- ✅ **DO:** Create markdown files ONLY when the user explicitly asks for documentation
+- ✅ **DO:** Use the `docs/` directory for any necessary documentation files
+- ✅ **DO:** Reference existing documentation in `docs/` directory instead of creating new files
+
+## **Project Documentation Structure**
+
+- **Documentation Directory:** `docs/` (root level)
+- **Existing Docs:** Check `docs/` before creating new documentation
+- **Rule Files:** `.cursor/rules/*.mdc` (only create when explicitly requested)
+
+## **Examples**
+
+```typescript
+// ❌ DON'T: Automatically create docs after implementing a feature
+// After implementing feature X, creating FEATURE_X.md
+
+// ✅ DO: Only create docs when user requests
+// User: "Create documentation for feature X"
+// Then create: docs/FEATURE_X.md
+```
+
+## **Exception: Cursor Rules**
+
+- Cursor rule files (`.cursor/rules/*.mdc`) can be created when:
+  - User explicitly requests a new rule
+  - Following the rule creation guidelines in [cursor_rules.mdc](mdc:.cursor/rules/cursor_rules.mdc)
+
+---
+
+**Remember:** When in doubt, DON'T create markdown files. Ask the user first or reference existing documentation.

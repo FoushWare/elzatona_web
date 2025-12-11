@@ -1,6 +1,5 @@
-import NextAuth from 'next-auth';
-import { authOptions } from '../../../../lib/auth-config';
+// Auto-generated route handler
+// This file imports from network/routes/ to maintain Next.js routing structure
+// Source: /Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/apps/website/network/routes/auth/[...nextauth]/route.ts
 
-const handler = NextAuth(authOptions);
-
-export { handler as GET, handler as POST };
+export * from "../../../../../network/routes/auth/[...nextauth]/route";

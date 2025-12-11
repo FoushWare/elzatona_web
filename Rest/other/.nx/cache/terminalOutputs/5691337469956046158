@@ -1,6 +1,0 @@
-failed to load config from /Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/libs/shared-hooks/vite.config.ts
-
- NX   The service was stopped: spawn /Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/node_modules/@esbuild/darwin-arm64/bin/esbuild EAGAIN
-
-Pass --verbose to see the stacktrace.
-
