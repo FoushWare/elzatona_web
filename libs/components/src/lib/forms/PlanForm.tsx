@@ -379,9 +379,9 @@ export const PlanForm: React.FC<PlanFormProps> = ({
           </Button>
         </div>
         <div className="mt-2 space-y-1">
-          {formData.prerequisites.map((prereq) => (
+          {formData.prerequisites.map((prereq, index) => (
             <div
-              key={prereq}
+              key={index}
               className="flex items-center justify-between bg-gray-100 dark:bg-gray-700 p-2 rounded"
             >
               <span className="text-sm">{prereq}</span>
