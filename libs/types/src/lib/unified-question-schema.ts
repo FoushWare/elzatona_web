@@ -540,10 +540,10 @@ export class UnifiedQuestionService {
           q.content.toLowerCase().includes(searchLower) ||
           (q.explanation &&
             q.explanation.toLowerCase().includes(searchLower)) ||
-          (q.tags &&
-            q.tags?.some((tag: string) =>
-              tag.toLowerCase().includes(searchLower),
-            )),
+          (q.tags?.some((tag: string) =>
+            tag.toLowerCase().includes(searchLower),
+          ) ??
+            false),
       );
     }
 

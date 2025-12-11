@@ -483,7 +483,10 @@ describe("A-UT-017: AdminNavbar Responsive Behavior", () => {
     if (adminMenuButton) {
       const parent = adminMenuButton.closest(".hidden");
       // The button should be in a hidden container on mobile
-      expect(parent ?? adminMenuButton).toBeTruthy();
+      expect(parent !== null).toBe(true);
+    } else {
+      // If button doesn't exist, that's also acceptable
+      expect(adminMenuButton).toBeNull();
     }
   });
 
@@ -504,7 +507,10 @@ describe("A-UT-017: AdminNavbar Responsive Behavior", () => {
     if (adminMenuButton) {
       const parent = adminMenuButton.closest(".hidden");
       // The button should be in a hidden container on mobile
-      expect(parent ?? adminMenuButton).toBeTruthy();
+      expect(parent !== null).toBe(true);
+    } else {
+      // If button doesn't exist, that's also acceptable
+      expect(adminMenuButton).toBeNull();
     }
   });
 

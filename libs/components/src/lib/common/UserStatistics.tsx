@@ -126,7 +126,7 @@ export const UserStatistics: React.FC = () => {
   if (isLoading) {
     return (
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
-        {[...new Array(4)].map((_, index) => (
+        {Array.from({ length: 4 }).map((_, index) => (
           <div key={index} className="text-center">
             <div className="w-16 h-16 bg-gray-200 dark:bg-gray-700 rounded-full mx-auto mb-4 animate-pulse"></div>
             <div className="h-8 bg-gray-200 dark:bg-gray-700 rounded mb-2 animate-pulse"></div>

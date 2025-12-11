@@ -486,11 +486,7 @@ export default function BulkQuestionUploader({
     URL.revokeObjectURL(url);
   };
 
-  const clearMessages = () => {
-    setError(null);
-    setSuccess(null);
-  };
-  // clearMessages is used in the component
+  // clearMessages function removed - was unused
 
   return (
     <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 max-h-[80vh] overflow-y-auto">
