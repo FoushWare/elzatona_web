@@ -4,8 +4,8 @@ import { useEffect } from "react";
 import {
   supabaseClient as supabase,
   isSupabaseAvailable,
-} from "@/lib/supabase-client";
-import { persistSession, clearSession } from "@/lib/auth-session";
+} from "../lib/supabase-client";
+import { persistSession, clearSession } from "../lib/auth-session";
 
 export default function AuthSessionSync() {
   useEffect(() => {
@@ -18,8 +18,8 @@ export default function AuthSessionSync() {
         const session = data?.session;
         if (session) {
           try {
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            persistSession(session as any);
+             
+            persistSession(session as unknown);
           } catch (_) {}
           try {
             sessionStorage.setItem(
@@ -42,8 +42,8 @@ export default function AuthSessionSync() {
         } catch (_) {}
         try {
           if (authed && session) {
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            persistSession(session as any);
+             
+            persistSession(session as unknown);
           } else {
             clearSession();
           }

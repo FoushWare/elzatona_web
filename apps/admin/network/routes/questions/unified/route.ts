@@ -1,6 +1,39 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
 
+// Type definitions for question relationships
+interface QuestionTopic {
+  id?: string;
+  name?: string;
+  slug?: string;
+  difficulty?: string;
+  is_primary?: boolean;
+  order_index?: number;
+}
+
+interface QuestionCategory {
+  id?: string;
+  name?: string;
+  slug?: string;
+  card_type?: string;
+  is_primary?: boolean;
+  order_index?: number;
+}
+
+interface QuestionTopicRelation {
+  question_id: string;
+  topics: QuestionTopic | QuestionTopic[];
+  is_primary: boolean;
+  order_index: number;
+}
+
+interface QuestionCategoryRelation {
+  card_id: string;
+  categories: QuestionCategory | QuestionCategory[];
+  is_primary: boolean;
+  order_index: number;
+}
+
 // Get Supabase client - handle missing env vars gracefully
 function getSupabaseClient() {
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
@@ -284,7 +317,7 @@ export async function GET(request: NextRequest) {
         const questionTopics =
           allQuestionTopics?.filter((qt) => qt.question_id === question.id) ||
           [];
-        const topics = questionTopics.map((qt: any) => {
+        const topics = questionTopics.map((qt: QuestionTopicRelation) => {
           // Handle topics as array or single object
           const topic = Array.isArray(qt.topics) ? qt.topics[0] : qt.topics;
           return {
@@ -302,7 +335,7 @@ export async function GET(request: NextRequest) {
           allCardCategories?.filter(
             (cc) => cc.card_id === question.learning_card_id,
           ) || [];
-        const categories = cardCategories.map((cc: any) => {
+        const categories = cardCategories.map((cc: QuestionCategoryRelation) => {
           // Handle categories as array or single object
           const category = Array.isArray(cc.categories)
             ? cc.categories[0]
@@ -377,10 +410,11 @@ export async function GET(request: NextRequest) {
         totalPages: Math.ceil((count || 0) / pageSize),
       },
     });
-  } catch (error: any) {
-    console.error("Error fetching questions:", error.message);
+  } catch (error) {
+    const errorMessage = error instanceof Error ? error.message : "Failed to fetch questions";
+    console.error("Error fetching questions:", errorMessage);
     return NextResponse.json(
-      { success: false, error: error.message || "Failed to fetch questions" },
+      { success: false, error: errorMessage },
       { status: 500 },
     );
   }
@@ -441,10 +475,11 @@ export async function POST(request: NextRequest) {
       success: true,
       data,
     });
-  } catch (error: any) {
-    console.error("Error creating question:", error.message);
+  } catch (error) {
+    const errorMessage = error instanceof Error ? error.message : "Failed to create question";
+    console.error("Error creating question:", errorMessage);
     return NextResponse.json(
-      { success: false, error: error.message || "Failed to create question" },
+      { success: false, error: errorMessage },
       { status: 500 },
     );
   }

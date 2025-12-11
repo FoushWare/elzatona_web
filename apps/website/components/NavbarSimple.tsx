@@ -3,6 +3,13 @@
 import React, { useState, useEffect, useLayoutEffect } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
+import AlzatonaLogo from "./AlzatonaLogo";
+import { useUserType } from "@elzatona/contexts";
+import { useMobileMenu } from "@elzatona/contexts";
+import { useTheme } from "@elzatona/contexts";
+import { useAuth } from "@elzatona/contexts";
+import { clearSession } from "../lib/auth-session";
+import { useLearningType } from "../context/LearningTypeContext";
 import {
   Sun,
   Moon,
@@ -15,17 +22,10 @@ import {
   Settings,
   Loader2,
 } from "lucide-react";
-import AlzatonaLogo from "./AlzatonaLogo";
-import { useUserType } from "@elzatona/contexts";
-import { useMobileMenu } from "@elzatona/contexts";
-import { useTheme } from "@elzatona/contexts";
-import { useAuth } from "@elzatona/contexts";
 import {
   supabaseClient as supabase,
   isSupabaseAvailable,
-} from "@/lib/supabase-client";
-import { clearSession } from "@/lib/auth-session";
-import { useLearningType } from "@/context/LearningTypeContext";
+} from "../lib/supabase-client";
 
 export const NavbarSimple: React.FC = () => {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -51,7 +51,7 @@ export const NavbarSimple: React.FC = () => {
   const { isDarkMode, toggleDarkMode } = useTheme();
   const { user, isAuthenticated, isLoading: isAuthLoading, logout } = useAuth();
   const pathname = usePathname();
-  const router = useRouter();
+  const _router = useRouter();
 
   // Read persisted auth snapshot before paint to avoid visible flicker
   useLayoutEffect(() => {
@@ -103,7 +103,7 @@ export const NavbarSimple: React.FC = () => {
     // Initial check
     supabase.auth
       .getSession()
-      .then(({ data }) => {
+      .then(({ data }: { data: { session: unknown } | null }) => {
         const authed = !!data?.session;
         if (authed) {
           setStableAuthState({ isAuthenticated: true, isLoading: false });
@@ -197,7 +197,7 @@ export const NavbarSimple: React.FC = () => {
             setIsModeSwitching(false);
             setSwitchingToMode(null);
           }, 100);
-        } catch (error) {
+        } catch (_error) {
           console.error("Navigation error:", error);
           setIsModeSwitching(false);
           setSwitchingToMode(null);
@@ -218,7 +218,7 @@ export const NavbarSimple: React.FC = () => {
             setIsModeSwitching(false);
             setSwitchingToMode(null);
           }, 100);
-        } catch (error) {
+        } catch (_error) {
           console.error("Navigation error:", error);
           setIsModeSwitching(false);
           setSwitchingToMode(null);
@@ -259,7 +259,7 @@ export const NavbarSimple: React.FC = () => {
       } catch (_) {}
       // Navigate to home after logout for clarity
       router.push("/");
-    } catch (error) {
+    } catch (_error) {
       console.error("Sign out error:", error);
     } finally {
       // If navigation is blocked for any reason, avoid leaving the UI stuck
@@ -682,11 +682,11 @@ export const NavbarSimple: React.FC = () => {
                     {/* User Profile Section */}
                     <div className="flex items-center space-x-3 px-3 py-2 bg-gray-50 dark:bg-gray-800 rounded-lg">
                       {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
-                      {(user as any)?.photoURL || (user as any)?.avatar_url ? (
+                      {(user as unknown)?.photoURL || (user as unknown)?.avatar_url ? (
                         <img
                           src={
                             // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                            (user as any)?.photoURL || (user as any)?.avatar_url
+                            (user as unknown)?.photoURL || (user as unknown)?.avatar_url
                           }
                           alt="Profile"
                           className="w-8 h-8 rounded-full object-cover"
@@ -699,9 +699,9 @@ export const NavbarSimple: React.FC = () => {
                       <div className="flex-1 min-w-0">
                         <p className="text-sm font-medium text-gray-900 dark:text-white truncate">
                           {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
-                          {(user as any)?.displayName ||
+                          {(user as unknown)?.displayName ||
                             // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                            (user as any)?.name ||
+                            (user as unknown)?.name ||
                             "User"}
                         </p>
                         <p className="text-xs text-gray-500 dark:text-gray-400 truncate">

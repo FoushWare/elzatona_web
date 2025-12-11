@@ -5,7 +5,6 @@ import React, {
   useMemo,
   useState,
   useCallback,
-  Suspense,
 } from "react";
 import { createClient } from "@supabase/supabase-js";
 import { toast } from "sonner";
@@ -21,9 +20,6 @@ import {
   CardTitle,
   Button,
   Badge,
-  Select,
-  SelectContent,
-  SelectItem,
   SelectTrigger,
   SelectValue,
   Input,
@@ -76,7 +72,7 @@ const CARD_ICONS = {
 } as const;
 
 // Loading skeleton component for better UX
-const LoadingSkeleton = () => (
+const _LoadingSkeleton = () => (
   <div className="animate-pulse">
     <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-3/4 mb-2"></div>
     <div className="h-3 bg-gray-200 dark:bg-gray-700 rounded w-1/2"></div>
@@ -199,7 +195,7 @@ export default function ContentManagementPage() {
         questions: questionsResult.data?.length || 0,
         planQuestions: planQuestionsResult.data?.length || 0,
       });
-    } catch (err) {
+    } catch (_err) {
       console.error("❌ Error fetching data:", err);
       setError(err instanceof Error ? err.message : "Failed to fetch data");
     } finally {
@@ -358,7 +354,7 @@ export default function ContentManagementPage() {
   // Modal helper functions
   const openTopicQuestionsModal = useCallback(
     (topic: Topic, plan: LearningPlan) => {
-      setSelectedTopic(topic);
+      setSelectedTopic(_topic);
       setSelectedPlan(plan);
       setSelectedQuestions(new Set());
       setIsTopicQuestionsModalOpen(true);
@@ -428,7 +424,7 @@ export default function ContentManagementPage() {
         `Successfully added ${selectedQuestions.size} questions to plan "${selectedPlan.name}"`,
       );
       closeTopicQuestionsModal();
-    } catch (error) {
+    } catch (_error) {
       console.error("Error adding questions to plan:", error);
       toast.error("Failed to add questions to plan");
     }
@@ -487,7 +483,7 @@ export default function ContentManagementPage() {
 
           toast.success("Question added to plan");
         }
-      } catch (error) {
+      } catch (_error) {
         console.error("Error toggling question in plan:", error);
         toast.error("Failed to update question in plan");
       }
@@ -528,7 +524,7 @@ export default function ContentManagementPage() {
       // Refresh the data to reflect the deletion
       await fetchData();
       closeDeleteCardModal();
-    } catch (error) {
+    } catch (_error) {
       console.error("Error deleting card:", error);
       toast.error("Failed to delete card. Please try again.");
       setIsDeleting(false);
@@ -563,7 +559,7 @@ export default function ContentManagementPage() {
       if (cardsError) throw cardsError;
 
       setAvailableCards(allCards || []);
-    } catch (error) {
+    } catch (_error) {
       console.error("Error fetching plan cards:", error);
       toast.error("Failed to load plan cards");
     } finally {
@@ -615,7 +611,7 @@ export default function ContentManagementPage() {
         ]);
 
         toast.success("Card added to plan successfully");
-      } catch (error) {
+      } catch (_error) {
         console.error("Error adding card to plan:", error);
         toast.error("Failed to add card to plan");
       }
@@ -641,7 +637,7 @@ export default function ContentManagementPage() {
         setPlanCards((prev) => prev.filter((pc) => pc.card_id !== cardId));
 
         toast.success("Card removed from plan successfully");
-      } catch (error) {
+      } catch (_error) {
         console.error("Error removing card from plan:", error);
         toast.error("Failed to remove card from plan");
       }
@@ -673,7 +669,7 @@ export default function ContentManagementPage() {
         toast.success(
           `Card ${!isActive ? "activated" : "deactivated"} in plan`,
         );
-      } catch (error) {
+      } catch (_error) {
         console.error("Error updating card status:", error);
         toast.error("Failed to update card status");
       }
@@ -856,7 +852,7 @@ export default function ContentManagementPage() {
                           >
                             {cardCategories.reduce((total, cat) => {
                               const categoryTopics = topics.filter(
-                                (topic) => topic.category_id === cat.id,
+                                (_topic) => topic.category_id === cat.id,
                               );
                               return total + categoryTopics.length;
                             }, 0)}{" "}
@@ -868,11 +864,11 @@ export default function ContentManagementPage() {
                           >
                             {cardCategories.reduce((total, cat) => {
                               const categoryTopics = topics.filter(
-                                (topic) => topic.category_id === cat.id,
+                                (_topic) => topic.category_id === cat.id,
                               );
                               return (
                                 total +
-                                categoryTopics.reduce((topicTotal, topic) => {
+                                categoryTopics.reduce((topicTotal, _topic) => {
                                   const topicQuestions = questions.filter(
                                     (q) => q.category_id === cat.id,
                                   );
@@ -915,7 +911,7 @@ export default function ContentManagementPage() {
                           {/* Categories under this card */}
                           {cardCategories.map((category) => {
                             const categoryTopics = topics.filter(
-                              (topic) => topic.category_id === category.id,
+                              (_topic) => topic.category_id === category.id,
                             );
 
                             return (
@@ -970,7 +966,7 @@ export default function ContentManagementPage() {
 
                                 {expandedCategories.has(category.id) && (
                                   <div className="ml-6 space-y-2">
-                                    {categoryTopics.map((topic) => {
+                                    {categoryTopics.map((_topic) => {
                                       const topicQuestions = questions.filter(
                                         (q) => q.category_id === category.id,
                                       );
@@ -1334,7 +1330,7 @@ export default function ContentManagementPage() {
                                 {expandedPlanCards.has(card.id) &&
                                   cardCategories.map((category) => {
                                     const categoryTopics = topics.filter(
-                                      (topic) =>
+                                      (_topic) =>
                                         topic.category_id === category.id,
                                     );
 
@@ -1400,7 +1396,7 @@ export default function ContentManagementPage() {
                                         {expandedPlanCategories.has(
                                           category.id,
                                         ) &&
-                                          categoryTopics.map((topic) => {
+                                          categoryTopics.map((_topic) => {
                                             const topicQuestions =
                                               questions.filter(
                                                 (q) => q.topic_id === topic.id,

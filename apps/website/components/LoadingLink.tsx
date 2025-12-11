@@ -3,7 +3,7 @@
 import Link, { LinkProps } from "next/link";
 import { useRouter } from "next/navigation";
 import { ReactNode } from "react";
-import { useNavigation } from "@/context/NavigationContext";
+import { useNavigation } from "../context/NavigationContext";
 
 interface LoadingLinkProps extends LinkProps {
   children: ReactNode;
@@ -23,7 +23,7 @@ export function LoadingLink({
   onClick,
   ...linkProps
 }: LoadingLinkProps) {
-  const router = useRouter();
+  const _router = useRouter();
   const { setIsNavigating } = useNavigation();
 
   const handleClick = (e: React.MouseEvent<HTMLAnchorElement>) => {

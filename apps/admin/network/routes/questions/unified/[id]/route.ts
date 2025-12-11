@@ -66,10 +66,11 @@ export async function PUT(
       success: true,
       data,
     });
-  } catch (error: any) {
-    console.error("Error updating question:", error.message);
+  } catch (error) {
+    const errorMessage = error instanceof Error ? error.message : "Failed to update question";
+    console.error("Error updating question:", errorMessage);
     return NextResponse.json(
-      { success: false, error: error.message || "Failed to update question" },
+      { success: false, error: errorMessage },
       { status: 500 },
     );
   }
@@ -89,10 +90,11 @@ export async function DELETE(
       success: true,
       message: "Question deleted successfully",
     });
-  } catch (error: any) {
-    console.error("Error deleting question:", error.message);
+  } catch (error) {
+    const errorMessage = error instanceof Error ? error.message : "Failed to delete question";
+    console.error("Error deleting question:", errorMessage);
     return NextResponse.json(
-      { success: false, error: error.message || "Failed to delete question" },
+      { success: false, error: errorMessage },
       { status: 500 },
     );
   }
