@@ -46,17 +46,28 @@ interface Question {
 }
 
 interface QuestionPracticeViewProps {
-  question: Question | {
-    id?: string;
-    title?: string;
-    content?: string;
-    options?: string | Array<{ id?: string; text?: string; label?: string; option?: string; isCorrect?: boolean; correct?: boolean }>;
-    correct_answer?: string | number;
-    explanation?: string;
-    resources?: string | Array<unknown>;
-    difficulty?: string;
-    [key: string]: unknown;
-  };
+  question:
+    | Question
+    | {
+        id?: string;
+        title?: string;
+        content?: string;
+        options?:
+          | string
+          | Array<{
+              id?: string;
+              text?: string;
+              label?: string;
+              option?: string;
+              isCorrect?: boolean;
+              correct?: boolean;
+            }>;
+        correct_answer?: string | number;
+        explanation?: string;
+        resources?: string | Array<unknown>;
+        difficulty?: string;
+        [key: string]: unknown;
+      };
 }
 
 const getOptionLetter = (index: number): string => {
@@ -89,7 +100,17 @@ export const QuestionPracticeView: React.FC<QuestionPracticeViewProps> = ({
     if (!question.options) return [];
 
     // Handle options as string (JSON)
-    let optionsArray: Array<string | { id?: string; text?: string; label?: string; option?: string; isCorrect?: boolean; correct?: boolean }> = [];
+    let optionsArray: Array<
+      | string
+      | {
+          id?: string;
+          text?: string;
+          label?: string;
+          option?: string;
+          isCorrect?: boolean;
+          correct?: boolean;
+        }
+    > = [];
     if (typeof question.options === "string") {
       try {
         optionsArray = JSON.parse(question.options);
@@ -105,22 +126,36 @@ export const QuestionPracticeView: React.FC<QuestionPracticeViewProps> = ({
 
     if (optionsArray.length === 0) return [];
 
-    return optionsArray.map((option: string | { id?: string; text?: string; label?: string; option?: string; isCorrect?: boolean; correct?: boolean }, index: number) => {
-      // Handle different option formats
-      if (typeof option === "string") {
-        return {
-          id: `option-${index}`,
-          text: option,
-          isCorrect: false,
-        };
-      }
+    return optionsArray.map(
+      (
+        option:
+          | string
+          | {
+              id?: string;
+              text?: string;
+              label?: string;
+              option?: string;
+              isCorrect?: boolean;
+              correct?: boolean;
+            },
+        index: number,
+      ) => {
+        // Handle different option formats
+        if (typeof option === "string") {
+          return {
+            id: `option-${index}`,
+            text: option,
+            isCorrect: false,
+          };
+        }
 
-      return {
-        id: option.id || `option-${index}`,
-        text: option.text || option.label || option.option || String(option),
-        isCorrect: option.isCorrect ?? option.correct ?? false,
-      };
-    });
+        return {
+          id: option.id || `option-${index}`,
+          text: option.text || option.label || option.option || String(option),
+          isCorrect: option.isCorrect ?? option.correct ?? false,
+        };
+      },
+    );
   }, [question.options]);
 
   // Check if answer is correct
@@ -350,100 +385,112 @@ export const QuestionPracticeView: React.FC<QuestionPracticeViewProps> = ({
               </p>
             </div>
             <div className="space-y-3 sm:space-y-4">
-              {parsedResources.map((resource: { type?: string; url?: string; title?: string; description?: string; duration?: string; author?: string }, index: number) => {
-                const getIcon = () => {
-                  switch (resource.type) {
-                    case "video":
-                      return <Video className="w-5 h-5 sm:w-6 sm:h-6" />;
-                    case "course":
-                      return (
-                        <GraduationCap className="w-5 h-5 sm:w-6 sm:h-6" />
-                      );
-                    case "article":
-                      return <FileText className="w-5 h-5 sm:w-6 sm:h-6" />;
-                    default:
-                      return <BookOpen className="w-5 h-5 sm:w-6 sm:h-6" />;
-                  }
-                };
+              {parsedResources.map(
+                (
+                  resource: {
+                    type?: string;
+                    url?: string;
+                    title?: string;
+                    description?: string;
+                    duration?: string;
+                    author?: string;
+                  },
+                  index: number,
+                ) => {
+                  const getIcon = () => {
+                    switch (resource.type) {
+                      case "video":
+                        return <Video className="w-5 h-5 sm:w-6 sm:h-6" />;
+                      case "course":
+                        return (
+                          <GraduationCap className="w-5 h-5 sm:w-6 sm:h-6" />
+                        );
+                      case "article":
+                        return <FileText className="w-5 h-5 sm:w-6 sm:h-6" />;
+                      default:
+                        return <BookOpen className="w-5 h-5 sm:w-6 sm:h-6" />;
+                    }
+                  };
 
-                const getTypeColor = () => {
-                  switch (resource.type) {
-                    case "video":
-                      return "from-red-500 to-pink-600 dark:from-red-600 dark:to-pink-700";
-                    case "course":
-                      return "from-blue-500 to-indigo-600 dark:from-blue-600 dark:to-indigo-700";
-                    case "article":
-                      return "from-green-500 to-emerald-600 dark:from-green-600 dark:to-emerald-700";
-                    default:
-                      return "from-purple-500 to-indigo-600 dark:from-purple-600 dark:to-indigo-700";
-                  }
-                };
+                  const getTypeColor = () => {
+                    switch (resource.type) {
+                      case "video":
+                        return "from-red-500 to-pink-600 dark:from-red-600 dark:to-pink-700";
+                      case "course":
+                        return "from-blue-500 to-indigo-600 dark:from-blue-600 dark:to-indigo-700";
+                      case "article":
+                        return "from-green-500 to-emerald-600 dark:from-green-600 dark:to-emerald-700";
+                      default:
+                        return "from-purple-500 to-indigo-600 dark:from-purple-600 dark:to-indigo-700";
+                    }
+                  };
 
-                const getTypeLabel = () => {
-                  switch (resource.type) {
-                    case "video":
-                      return "Video";
-                    case "course":
-                      return "Course";
-                    case "article":
-                      return "Article";
-                    default:
-                      return "Resource";
-                  }
-                };
+                  const getTypeLabel = () => {
+                    switch (resource.type) {
+                      case "video":
+                        return "Video";
+                      case "course":
+                        return "Course";
+                      case "article":
+                        return "Article";
+                      default:
+                        return "Resource";
+                    }
+                  };
 
-                return (
-                  <a
-                    key={index}
-                    href={resource.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="group block p-4 sm:p-5 bg-white dark:bg-gray-800 rounded-lg sm:rounded-xl border-2 border-purple-200 dark:border-purple-800 hover:border-purple-400 dark:hover:border-purple-600 transition-all duration-300 hover:shadow-lg hover:shadow-purple-200/50 dark:hover:shadow-purple-900/30 transform hover:scale-[1.02] active:scale-[0.98]"
-                  >
-                    <div className="flex items-start space-x-4">
-                      <div
-                        className={`p-2.5 sm:p-3 rounded-lg bg-gradient-to-br ${getTypeColor()} text-white shadow-md flex-shrink-0`}
-                      >
-                        {getIcon()}
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <div className="flex items-center space-x-2 mb-1">
-                          <span className="text-xs sm:text-sm font-semibold uppercase tracking-wider text-purple-600 dark:text-purple-400">
-                            {getTypeLabel()}
-                          </span>
-                          <ExternalLink className="w-3 h-3 sm:w-4 sm:h-4 text-purple-500 dark:text-purple-400 opacity-0 group-hover:opacity-100 transition-opacity" />
+                  return (
+                    <a
+                      key={index}
+                      href={resource.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="group block p-4 sm:p-5 bg-white dark:bg-gray-800 rounded-lg sm:rounded-xl border-2 border-purple-200 dark:border-purple-800 hover:border-purple-400 dark:hover:border-purple-600 transition-all duration-300 hover:shadow-lg hover:shadow-purple-200/50 dark:hover:shadow-purple-900/30 transform hover:scale-[1.02] active:scale-[0.98]"
+                    >
+                      <div className="flex items-start space-x-4">
+                        <div
+                          className={`p-2.5 sm:p-3 rounded-lg bg-gradient-to-br ${getTypeColor()} text-white shadow-md flex-shrink-0`}
+                        >
+                          {getIcon()}
                         </div>
-                        <h4 className="text-sm sm:text-base font-bold text-gray-900 dark:text-gray-100 mb-1 group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors">
-                          {resource.title}
-                        </h4>
-                        {resource.description && (
-                          <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400 mb-2 line-clamp-2">
-                            {resource.description}
-                          </p>
-                        )}
-                        <div className="flex items-center space-x-3 text-xs sm:text-sm text-gray-500 dark:text-gray-500">
-                          {resource.duration && (
-                            <div className="flex items-center space-x-1">
-                              <Clock className="w-3 h-3 sm:w-4 sm:h-4" />
-                              <span>{resource.duration}</span>
-                            </div>
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-center space-x-2 mb-1">
+                            <span className="text-xs sm:text-sm font-semibold uppercase tracking-wider text-purple-600 dark:text-purple-400">
+                              {getTypeLabel()}
+                            </span>
+                            <ExternalLink className="w-3 h-3 sm:w-4 sm:h-4 text-purple-500 dark:text-purple-400 opacity-0 group-hover:opacity-100 transition-opacity" />
+                          </div>
+                          <h4 className="text-sm sm:text-base font-bold text-gray-900 dark:text-gray-100 mb-1 group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors">
+                            {resource.title}
+                          </h4>
+                          {resource.description && (
+                            <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400 mb-2 line-clamp-2">
+                              {resource.description}
+                            </p>
                           )}
-                          {resource.author && (
-                            <div className="flex items-center space-x-1">
-                              <span className="text-gray-400 dark:text-gray-500">
-                                by
-                              </span>
-                              <span className="font-medium">
-                                {resource.author}
-                              </span>
-                            </div>
-                          )}
+                          <div className="flex items-center space-x-3 text-xs sm:text-sm text-gray-500 dark:text-gray-500">
+                            {resource.duration && (
+                              <div className="flex items-center space-x-1">
+                                <Clock className="w-3 h-3 sm:w-4 sm:h-4" />
+                                <span>{resource.duration}</span>
+                              </div>
+                            )}
+                            {resource.author && (
+                              <div className="flex items-center space-x-1">
+                                <span className="text-gray-400 dark:text-gray-500">
+                                  by
+                                </span>
+                                <span className="font-medium">
+                                  {resource.author}
+                                </span>
+                              </div>
+                            )}
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  </a>
-                );
-              })}
+                    </a>
+                  );
+                },
+              )}
             </div>
           </div>
         )}
