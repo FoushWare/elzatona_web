@@ -327,9 +327,9 @@ export default function ProblemSolvingQuestion({
       testCases[selectedTestCaseIndex] ||
       (testCases.length > 0 ? testCases[0] : null);
     const newTestCase: TestCase = {
-      input: lastSelected ? JSON.parse(JSON.stringify(lastSelected.input)) : {},
+      input: lastSelected ? structuredClone(lastSelected.input) : {},
       expectedOutput: lastSelected
-        ? JSON.parse(JSON.stringify(lastSelected.expectedOutput))
+        ? structuredClone(lastSelected.expectedOutput)
         : null,
       description: "Custom",
     };
@@ -557,7 +557,7 @@ export default function ProblemSolvingQuestion({
           .join("\n")
           .trim();
 
-        let actualOutput: any;
+        let actualOutput: unknown;
 
         try {
           // Try to parse the last line as JSON (our console.log output with result)
@@ -1554,7 +1554,7 @@ export default function ProblemSolvingQuestion({
                 {!runOutput && testResults.length === 0 && (
                   <div className="text-center py-6 sm:py-8 text-gray-500 dark:text-gray-400">
                     <p className="text-xs sm:text-sm">
-                      Click "Run" to test your code or "Submit" to run all test
+                      Click &quot;Run&quot; to test your code or &quot;Submit&quot; to run all test
                       cases
                     </p>
                   </div>
