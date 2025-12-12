@@ -260,6 +260,7 @@ export default function ProblemSolvingQuestion({
     setCustomTestCases([]);
     setEditingTestCaseIndex(null);
     setEditingTestCaseData(null);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [question.id, question.code_template, question.content]);
 
   // Parse test cases
