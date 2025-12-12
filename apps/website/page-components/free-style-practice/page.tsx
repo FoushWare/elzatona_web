@@ -2127,7 +2127,7 @@ export default function FreeStylePracticePage() {
         setAvailableSections(categoryNames);
       }
     } catch (_error) {
-      console.error("Error fetching categories:", error);
+      console.error("Error fetching categories:", _error);
       // Fallback to default sections
       setAvailableSections([
         "HTML",
