@@ -51,7 +51,7 @@ export const NavbarSimple: React.FC = () => {
   const { isDarkMode, toggleDarkMode } = useTheme();
   const { user, isAuthenticated, isLoading: isAuthLoading, logout } = useAuth();
   const pathname = usePathname();
-  const _router = useRouter();
+  const router = useRouter();
 
   // Read persisted auth snapshot before paint to avoid visible flicker
   useLayoutEffect(() => {
@@ -144,7 +144,7 @@ export const NavbarSimple: React.FC = () => {
     if (!supabase) return;
     const {
       data: { subscription },
-    } = supabase.auth.onAuthStateChange((event, session) => {
+    } = supabase.auth.onAuthStateChange((event: string, session: { session: unknown } | null) => {
       const authed = !!session;
       setStableAuthState({ isAuthenticated: authed, isLoading: false });
       sessionStorage.setItem(
@@ -198,7 +198,7 @@ export const NavbarSimple: React.FC = () => {
             setSwitchingToMode(null);
           }, 100);
         } catch (_error) {
-          console.error("Navigation error:", error);
+          console.error("Navigation error:", _error);
           setIsModeSwitching(false);
           setSwitchingToMode(null);
         }
@@ -219,7 +219,7 @@ export const NavbarSimple: React.FC = () => {
             setSwitchingToMode(null);
           }, 100);
         } catch (_error) {
-          console.error("Navigation error:", error);
+          console.error("Navigation error:", _error);
           setIsModeSwitching(false);
           setSwitchingToMode(null);
         }
@@ -260,7 +260,7 @@ export const NavbarSimple: React.FC = () => {
       // Navigate to home after logout for clarity
       router.push("/");
     } catch (_error) {
-      console.error("Sign out error:", error);
+      console.error("Sign out error:", _error);
     } finally {
       // If navigation is blocked for any reason, avoid leaving the UI stuck
       setIsSigningOut(false);
@@ -463,7 +463,7 @@ export const NavbarSimple: React.FC = () => {
                     type="button"
                     aria-haspopup="menu"
                     aria-expanded={isUserDropdownOpen}
-                    onClick={() => setIsUserDropdownOpen((v) => !v)}
+                    onClick={() => setIsUserDropdownOpen((v: boolean) => !v)}
                     title="Account menu"
                     data-testid="user-menu-button"
                     className={`px-2.5 py-2 rounded-lg transition-colors duration-200 ${
