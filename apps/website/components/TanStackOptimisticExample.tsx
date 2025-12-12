@@ -18,9 +18,9 @@ import { Textarea } from "@elzatona/components";
 import { Badge } from "@elzatona/components";
 import {
   useCards,
-  _useCreateCard as _useCreateCard,
-  _useUpdateCard as _useUpdateCard,
-  _useDeleteCard as _useDeleteCard,
+  useCreateCard as _useCreateCard,
+  useUpdateCard as _useUpdateCard,
+  useDeleteCard as _useDeleteCard,
   queryKeys,
 } from "@elzatona/hooks";
 import {
