@@ -70,7 +70,7 @@ async function clearTables() {
         .from(table)
         .select("*", { count: "exact", head: true });
       counts[table] = count || 0;
-    } catch (error) {
+    } catch (_error) {
       counts[table] = 0;
     }
   }

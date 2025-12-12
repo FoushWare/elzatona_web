@@ -76,7 +76,7 @@ export async function POST_ExternalApiExample(_request: NextRequest) {
   });
 
   // Make API call - headers include X-Environment, X-Project-Ref automatically
-  const response = await fetch("https://api.example.com/data", {
+  const _response = await fetch("https://api.example.com/data", {
     method: "POST",
     headers: fetchConfig.headers,
     body: JSON.stringify({ data: "example" }),

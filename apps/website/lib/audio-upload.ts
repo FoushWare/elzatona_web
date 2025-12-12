@@ -46,7 +46,7 @@ export class AudioUploadService {
       const fileName = `questions/${question_id}/question_audio.${this.getFileExtension(file.type)}`;
 
       // Upload file to Supabase Storage
-      const { data, error } = await supabase.storage
+      const { data: _data, error } = await supabase.storage
         .from("audio-files")
         .upload(fileName, file, {
           cacheControl: "3600",
@@ -89,7 +89,7 @@ export class AudioUploadService {
       const fileName = `questions/${question_id}/answer_audio.${this.getFileExtension(file.type)}`;
 
       // Upload file to Supabase Storage
-      const { data, error } = await supabase.storage
+      const { data: _data, error } = await supabase.storage
         .from("audio-files")
         .upload(fileName, file, {
           cacheControl: "3600",
