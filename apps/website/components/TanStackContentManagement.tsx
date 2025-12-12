@@ -44,8 +44,8 @@ import {
   Layers,
   Calendar,
   BookOpen,
-  _Target as _Target,
-  _MessageSquare as _MessageSquare,
+  Target as _Target,
+  MessageSquare as _MessageSquare,
   Loader2,
 } from "lucide-react";
 
