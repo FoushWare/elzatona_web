@@ -23,13 +23,13 @@ import {
 import { SafeHTML } from "@/lib/utils/sanitize";
 
 interface TestCase {
-  input: unknown | unknown[];
+  input: unknown[] | Record<string, unknown> | string | number | boolean;
   expectedOutput: unknown;
   description?: string;
 }
 
 interface Example {
-  input: unknown | Record<string, unknown>;
+  input: unknown[] | Record<string, unknown> | string | number | boolean;
   output: unknown;
   explanation?: string;
 }
@@ -74,14 +74,14 @@ export default function ProblemSolvingQuestion({
 
   // Resize state
   const [leftPanelWidth, setLeftPanelWidth] = useState(() => {
-    if (typeof globalThis.window !== "undefined") {
+    if (globalThis.window !== undefined) {
       const saved = localStorage.getItem("problem-solving-left-panel-width");
       return saved ? Number.parseFloat(saved) : 40; // Default 40% width
     }
     return 40;
   });
   const [testPanelHeight, setTestPanelHeight] = useState(() => {
-    if (typeof globalThis.window !== "undefined") {
+    if (globalThis.window !== undefined) {
       const saved = localStorage.getItem("problem-solving-test-panel-height");
       return saved ? Number.parseFloat(saved) : 30; // Default 30% height
     }
@@ -116,7 +116,7 @@ export default function ProblemSolvingQuestion({
       decoded = decoded.replace(/&#(\d+);/g, (_, dec) =>
         String.fromCodePoint(Number.parseInt(dec, 10)),
       );
-      decoded = decoded.replace(/&#x([0-9a-fA-F]+);/gi, (_, hex) =>
+      decoded = decoded.replace(/&#x([0-9a-f]+);/gi, (_, hex) =>
         String.fromCodePoint(Number.parseInt(hex, 16)),
       );
       return decoded;
@@ -125,7 +125,7 @@ export default function ProblemSolvingQuestion({
     // Try to extract from <pre><code> blocks first
     const preCodeRegex = /<pre[^>]*><code[^>]*>([\s\S]*?)<\/code><\/pre>/gi;
     const preCodeMatch = preCodeRegex.exec(content);
-    if (preCodeMatch && preCodeMatch[1]) {
+    if (preCodeMatch?.[1]) {
       let code = preCodeMatch[1];
       // Decode entities and remove HTML tags
       code = decodeHtmlEntities(code);
@@ -165,14 +165,14 @@ export default function ProblemSolvingQuestion({
     const markdownCodeRegex =
       /```(?:javascript|js|typescript|ts)?\n?([\s\S]*?)```/gi;
     const mdMatch = markdownCodeRegex.exec(content);
-    if (mdMatch && mdMatch[1]) {
+    if (mdMatch?.[1]) {
       return mdMatch[1].trim();
     }
 
     // Try to extract from standalone <code> blocks (longer ones, 20+ chars)
     const codeBlockRegex = /<code[^>]*>([\s\S]{20,}?)<\/code>/gi;
     const codeMatch = codeBlockRegex.exec(content);
-    if (codeMatch && codeMatch[1]) {
+    if (codeMatch?.[1]) {
       let code = codeMatch[1];
       code = decodeHtmlEntities(code);
       code = code.replace(/<[^>]+>/g, "");
@@ -291,7 +291,7 @@ export default function ProblemSolvingQuestion({
     if (!question.test_cases) return [];
     if (typeof question.test_cases === "string") {
       try {
-        return JSON.parse(question.test_cases);
+        return JSON.parse(question.test_cases) as TestCase[];
       } catch {
         return [];
       }
@@ -306,7 +306,7 @@ export default function ProblemSolvingQuestion({
   // Parse input into structured fields (for LeetCode-style display)
   const parseInputFields = (input: unknown): Record<string, unknown> => {
     if (typeof input === "object" && input !== null && !Array.isArray(input)) {
-      return input;
+      return input as Record<string, unknown>;
     }
     if (Array.isArray(input)) {
       // If it's an array, try to infer parameter names from common patterns
@@ -317,7 +317,7 @@ export default function ProblemSolvingQuestion({
   };
 
   // Get parameter names from input
-  const getInputFields = (testCase: TestCase): Record<string, any> => {
+  const getInputFields = (testCase: TestCase): Record<string, unknown> => {
     return parseInputFields(testCase.input);
   };
 
@@ -376,11 +376,11 @@ export default function ProblemSolvingQuestion({
 
   // Extract function name from code
   const getFunctionName = (code: string): string => {
-    const functionMatch = code.match(
-      /(?:function\s+|const\s+|let\s+|var\s+)(\w+)\s*[=\(]/,
-    );
+    const functionRegex = /(?:function\s+|const\s+|let\s+|var\s+)(\w+)\s*[=(]/;
+    const functionMatch = functionRegex.exec(code);
     if (functionMatch) return functionMatch[1];
-    const arrowMatch = code.match(/(\w+)\s*=>/);
+    const arrowRegex = /(\w+)\s*=>/;
+    const arrowMatch = arrowRegex.exec(code);
     if (arrowMatch) return arrowMatch[1];
     return "solution";
   };
@@ -393,7 +393,7 @@ export default function ProblemSolvingQuestion({
 
     try {
       const functionName = getFunctionName(code);
-      let codeToExecute = code;
+      let codeToExecute: string;
 
       // Use selected test case from database
       if (
@@ -627,7 +627,7 @@ export default function ProblemSolvingQuestion({
     if (!question.examples) return [];
     if (typeof question.examples === "string") {
       try {
-        return JSON.parse(question.examples);
+        return JSON.parse(question.examples) as Example[];
       } catch {
         return [];
       }
