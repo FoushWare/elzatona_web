@@ -250,11 +250,9 @@ export default function ProgressAnalytics() {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div className="text-center p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
                 <div className="text-2xl font-bold text-blue-600 mb-1">
-                  {
-                    dashboardStats?.recentActivity?.filter(
-                      (a: any) => a.type === "question",
-                    ).length ?? 0
-                  }
+                  {dashboardStats?.recentActivity?.filter(
+                    (a: any) => a.type === "question",
+                  ).length ?? 0}
                 </div>
                 <div className="text-sm text-blue-600 dark:text-blue-400">
                   Questions
@@ -262,11 +260,9 @@ export default function ProgressAnalytics() {
               </div>
               <div className="text-center p-4 bg-green-50 dark:bg-green-900/20 rounded-lg">
                 <div className="text-2xl font-bold text-green-600 mb-1">
-                  {
-                    dashboardStats?.recentActivity?.filter(
-                      (a: any) => a.type === "challenge",
-                    ).length ?? 0
-                  }
+                  {dashboardStats?.recentActivity?.filter(
+                    (a: any) => a.type === "challenge",
+                  ).length ?? 0}
                 </div>
                 <div className="text-sm text-green-600 dark:text-green-400">
                   Challenges
@@ -274,11 +270,9 @@ export default function ProgressAnalytics() {
               </div>
               <div className="text-center p-4 bg-purple-50 dark:bg-purple-900/20 rounded-lg">
                 <div className="text-2xl font-bold text-purple-600 mb-1">
-                  {
-                    dashboardStats?.recentActivity?.filter(
-                      (a: any) => a.type === "path",
-                    ).length ?? 0
-                  }
+                  {dashboardStats?.recentActivity?.filter(
+                    (a: any) => a.type === "path",
+                  ).length ?? 0}
                 </div>
                 <div className="text-sm text-purple-600 dark:text-purple-400">
                   Learning Paths
