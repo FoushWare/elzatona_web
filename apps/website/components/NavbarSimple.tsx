@@ -26,6 +26,7 @@ import {
   supabaseClient as supabase,
   isSupabaseAvailable,
 } from "../lib/supabase-client";
+import type { AuthChangeEvent, Session } from "@supabase/supabase-js";
 
 export const NavbarSimple: React.FC = () => {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -145,7 +146,7 @@ export const NavbarSimple: React.FC = () => {
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange(
-      (event: string, session: { session: unknown } | null) => {
+      (event: AuthChangeEvent, session: Session | null) => {
         const authed = !!session;
         setStableAuthState({ isAuthenticated: authed, isLoading: false });
         sessionStorage.setItem(
