@@ -132,8 +132,10 @@ jobs:
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           SONAR_SCANNER_OPTS: -Xmx1024m
-          # Explicitly set main branch for push events (helps SonarCloud recognize it)
-          SONAR_BRANCH_NAME: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' && 'main' || '' }}
+          # For main branch pushes, don't set SONAR_BRANCH_NAME (let SonarCloud use default)
+          # For PRs, SonarCloud will automatically detect the branch from the PR context
+          # Only set branch name for non-main branch analysis
+          SONAR_BRANCH_NAME: ${{ github.event_name == 'push' && github.ref != 'refs/heads/main' && github.ref_name || '' }}
         with:
           projectBaseDir: .
         continue-on-error: false
