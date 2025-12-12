@@ -15,7 +15,7 @@ import {
   ChevronLeft,
   ChevronRight,
   Loader2,
-  _TrendingUp,
+  TrendingUp as _TrendingUp,
   Clock,
   BarChart3,
 } from "lucide-react";
