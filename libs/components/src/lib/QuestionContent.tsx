@@ -837,17 +837,16 @@ export const QuestionContent = ({ content }: { content: string }) => {
     const textContent = fixedContent.substring(lastIndex);
     if (textContent.trim()) {
       let cleanText = decodeHtmlEntities(textContent);
-      // SECURITY: Remove HTML tags to prevent injection
-      cleanText = cleanText.replace(
-        /<\/?[a-z][a-z0-9]{0,20}(?:\s+[^>]{0,200})?>/gi,
-        "",
-      );
+      // SECURITY: First pass - use sanitizeText to remove all HTML tags
+      cleanText = sanitizeText(cleanText);
+      // Then convert any remaining <code> patterns to backticks (in case they weren't caught)
       cleanText = cleanText.replaceAll(
         /<code[^>]{0,200}>([^<]{1,30})<\/code>/gi,
         "`$1`",
       );
-      // SECURITY: Use sanitizeText to remove all HTML tags and prevent injection
+      // SECURITY: Second pass - sanitize again after code tag conversion
       cleanText = sanitizeText(cleanText);
+      // Clean up malformed HTML patterns that might have been created during processing
       for (let i = 0; i < 3; i++) {
         cleanText = cleanText
           .replaceAll(/<pr<cod?/gi, "")
@@ -867,7 +866,7 @@ export const QuestionContent = ({ content }: { content: string }) => {
           .replaceAll(/^>\s*/g, "")
           .replaceAll(/\s*>$/g, "")
           .replaceAll(/\s+>\s+/g, " ");
-        // SECURITY: Use sanitizeText again to remove any remaining HTML tags
+        // SECURITY: Final sanitization pass after each iteration to ensure no HTML remains
         cleanText = sanitizeText(cleanText);
       }
       cleanText = cleanText

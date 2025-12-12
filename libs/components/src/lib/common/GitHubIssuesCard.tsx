@@ -20,7 +20,7 @@ import {
   GitHubIssuesStats,
   GitHubIssue,
 } from "../types/github-issues";
-import { Github, ExternalLink, AlertCircle, CheckCircle } from "lucide-react";
+import { GitHub, ExternalLink, AlertCircle, CheckCircle } from "lucide-react";
 
 interface GitHubIssuesCardProps {
   className?: string;
@@ -93,7 +93,7 @@ export default function GitHubIssuesCard({ className }: GitHubIssuesCardProps) {
       <Card className={className}>
         <CardHeader>
           <CardTitle className="flex items-center text-sm sm:text-base">
-            <Github className="w-4 h-4 sm:w-5 sm:h-5 text-gray-500 mr-2 flex-shrink-0" />
+            <GitHub className="w-4 h-4 sm:w-5 sm:h-5 text-gray-500 mr-2 flex-shrink-0" />
             <span className="truncate">GitHub Issues</span>
           </CardTitle>
         </CardHeader>
@@ -114,7 +114,7 @@ export default function GitHubIssuesCard({ className }: GitHubIssuesCardProps) {
       <Card className={className}>
         <CardHeader>
           <CardTitle className="flex items-center text-sm sm:text-base">
-            <Github className="w-4 h-4 sm:w-5 sm:h-5 text-gray-500 mr-2 flex-shrink-0" />
+            <GitHub className="w-4 h-4 sm:w-5 sm:h-5 text-gray-500 mr-2 flex-shrink-0" />
             <span className="truncate">GitHub Issues</span>
           </CardTitle>
         </CardHeader>

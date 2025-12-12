@@ -8,7 +8,6 @@ import {
   Save,
   FileText,
   FolderPlus as _FolderPlus,
-  Trash2 as _Trash2,
   Eye,
   Code,
   Plus,
@@ -317,7 +316,7 @@ export default function FrontendTaskEditor({
   useEffect(() => {
     const handleMessage = (event: MessageEvent) => {
       // SECURITY: Verify message origin to prevent XSS
-      if (event.origin !== window.location.origin) {
+      if (event.origin !== globalThis.window.location.origin) {
         console.warn("Received message from untrusted origin:", event.origin);
         return;
       }
