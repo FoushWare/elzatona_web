@@ -331,7 +331,8 @@ const decodeHtmlEntities = (text: string): string => {
   if (typeof globalThis.window !== "undefined") {
     try {
       const textarea = document.createElement("textarea");
-      textarea.innerHTML = decoded;
+      // Use textContent instead of innerHTML to prevent XSS
+      textarea.textContent = decoded;
       decoded = textarea.value;
     } catch (_e) {
       // Fallback
@@ -504,7 +505,8 @@ export const QuestionContent = ({ content }: { content: string }) => {
     while (code !== previousCode && iterations < maxIterations) {
       previousCode = code;
       code = decodeHtmlEntities(code);
-      code = code.replaceAll(/<\/?[a-zA-Z][a-zA-Z0-9]*(?:\s+[^>]*)?>/gi, "");
+      // Use replace() with regex for proper HTML tag removal (replaceAll only works with strings)
+      code = code.replace(/<\/?[a-zA-Z][a-zA-Z0-9]*(?:\s+[^>]*)?>/gi, "");
       iterations++;
     }
 

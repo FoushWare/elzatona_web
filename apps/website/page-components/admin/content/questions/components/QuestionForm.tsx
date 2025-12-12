@@ -125,24 +125,9 @@ export function QuestionForm({
       });
 
       // Normalize resources to ensure it's always an array or null
-      let _normalizedResources = null;
-      const resourcesValue = (initialData as any).resources;
-      if (resourcesValue !== null && resourcesValue !== undefined) {
-        if (Array.isArray(resourcesValue)) {
-          _normalizedResources = resourcesValue;
-        } else if (typeof resourcesValue === "string") {
-          // Try to parse if it's a string
-          try {
-            const parsed = JSON.parse(resourcesValue);
-            _normalizedResources = Array.isArray(parsed) ? parsed : null;
-          } catch {
-            _normalizedResources = null;
-          }
-        } else {
-          // If it's an object but not an array, wrap it in an array
-          _normalizedResources = [resourcesValue];
-        }
-      }
+      // Note: normalizedResources is computed but not currently used
+      // const resourcesValue = (initialData as any).resources;
+      // const normalizedResources = ... (commented out as unused)
 
       const updatedFormData = {
         ...initialData,
