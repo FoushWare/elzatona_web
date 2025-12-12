@@ -165,7 +165,7 @@ Consider:
   private static fallbackValidation(
     request: ValidationRequest,
   ): ValidationResult {
-    const { question, userAnswer, expectedAnswer } = request;
+    const { question: _question, userAnswer, expectedAnswer } = request;
 
     if (!expectedAnswer) {
       return {

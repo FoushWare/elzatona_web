@@ -92,7 +92,7 @@ export function CodeToImageTest({
   }, [highlighter, code, language, theme]);
 
   // Old syntax highlighting function (fallback)
-  const highlightSyntaxFallback = (line: string) => {
+  const _highlightSyntaxFallback = (line: string) => {
     if (!line.trim()) return <span>{line}</span>;
 
     // JavaScript/TypeScript keywords (light blue/cyan)

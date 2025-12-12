@@ -5,7 +5,7 @@ import { useAdminAuth } from "@elzatona/contexts";
 // import QuestionAudioManager from '@elzatona/components';
 
 export default function AdminQuestionsPage() {
-  const { user } = useAdminAuth();
+  const { user: _user } = useAdminAuth();
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">

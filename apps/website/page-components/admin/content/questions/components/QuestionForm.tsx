@@ -48,8 +48,8 @@ export function QuestionForm({
   onSubmit,
   onCancel,
   cards,
-  allCategories: _allCategories,
-  allTags: _allTags,
+  _allCategories: _allCategories,
+  _allTags: _allTags,
   categoriesData,
   topicsData,
   disabled = false,
@@ -125,22 +125,22 @@ export function QuestionForm({
       });
 
       // Normalize resources to ensure it's always an array or null
-      let normalizedResources = null;
+      let _normalizedResources = null;
       const resourcesValue = (initialData as any).resources;
       if (resourcesValue !== null && resourcesValue !== undefined) {
         if (Array.isArray(resourcesValue)) {
-          normalizedResources = resourcesValue;
+          _normalizedResources = resourcesValue;
         } else if (typeof resourcesValue === "string") {
           // Try to parse if it's a string
           try {
             const parsed = JSON.parse(resourcesValue);
-            normalizedResources = Array.isArray(parsed) ? parsed : null;
+            _normalizedResources = Array.isArray(parsed) ? parsed : null;
           } catch {
-            normalizedResources = null;
+            _normalizedResources = null;
           }
         } else {
           // If it's an object but not an array, wrap it in an array
-          normalizedResources = [resourcesValue];
+          _normalizedResources = [resourcesValue];
         }
       }
 

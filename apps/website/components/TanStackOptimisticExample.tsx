@@ -7,7 +7,7 @@ import { createClient } from "@supabase/supabase-js";
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
 const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
-const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
+const _supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
 
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Card, CardContent, CardHeader, CardTitle } from "@elzatona/components";
@@ -18,9 +18,9 @@ import { Textarea } from "@elzatona/components";
 import { Badge } from "@elzatona/components";
 import {
   useCards,
-  useCreateCard as _useCreateCard,
-  useUpdateCard as _useUpdateCard,
-  useDeleteCard as _useDeleteCard,
+  _useCreateCard as _useCreateCard,
+  _useUpdateCard as _useUpdateCard,
+  _useDeleteCard as _useDeleteCard,
   queryKeys,
 } from "@elzatona/hooks";
 import {

@@ -11,23 +11,23 @@ import {
   Code,
   ArrowRight,
   Clock,
-  Target as _Target,
-  Users as _Users,
-  Star as _Star,
+  _Target as _Target,
+  _Users as _Users,
+  _Star as _Star,
   ChevronRight,
   Monitor,
   Flame,
   CheckCircle,
   Search,
-  Filter as _Filter,
+  _Filter as _Filter,
   Grid,
   List,
   Play,
-  Trophy as _Trophy,
+  _Trophy as _Trophy,
   Zap,
-  Shield as _Shield,
+  _Shield as _Shield,
   Layers,
-  Settings as _Settings,
+  _Settings as _Settings,
   Brain,
   Globe,
   Loader2,
@@ -199,7 +199,7 @@ export default function FrontendTasksPage() {
     return matchesSearch && matchesDifficulty && matchesCategory;
   });
 
-  const getDifficultyColor = (difficulty: string) => {
+  const _getDifficultyColor = (difficulty: string) => {
     switch (difficulty) {
       case "easy":
         return "text-green-600 bg-green-100 dark:bg-green-900/30 dark:text-green-400";
@@ -225,7 +225,7 @@ export default function FrontendTasksPage() {
     }
   };
 
-  const getTechnologyIcon = (tech: string) => {
+  const _getTechnologyIcon = (tech: string) => {
     const iconMap: Record<string, React.ReactNode> = {
       React: <Zap className="w-4 h-4" />,
       JavaScript: <Code className="w-4 h-4" />,

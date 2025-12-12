@@ -19,7 +19,7 @@ import {
   Compass,
   User,
   LogOut,
-  Settings as _Settings,
+  _Settings as _Settings,
   Loader2,
 } from "lucide-react";
 import {
@@ -31,7 +31,7 @@ import type { AuthChangeEvent, Session } from "@supabase/supabase-js";
 export const NavbarSimple: React.FC = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
-  const [isMobile, setIsMobile] = useState(false);
+  const [_isMobile, _setIsMobile] = useState(false);
   const [isUserDropdownOpen, setIsUserDropdownOpen] = useState(false);
   const [isHydrated, setIsHydrated] = useState(false);
   const [hasSnapshotApplied, setHasSnapshotApplied] = useState(false);

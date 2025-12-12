@@ -805,7 +805,7 @@ function FrontendTaskModal({
 }
 
 // Frontend Task View Modal Component (unused - replaced by FrontendTaskEditor)
- 
+
 function _FrontendTaskViewModal({
   task,
   onClose,

@@ -11,8 +11,8 @@ import {
   Plus,
   Edit,
   Trash2,
-  Eye as _Eye,
-  Settings as _Settings,
+  _Eye as _Eye,
+  _Settings as _Settings,
   Target,
   Clock,
   BookOpen,
@@ -26,7 +26,7 @@ import type {
 } from "@/types/learning-cards";
 
 export default function LearningCardsAdminPage() {
-  const router = useRouter();
+  const _router = useRouter();
   const [cards, setCards] = useState<LearningCard[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -152,7 +152,7 @@ export default function LearningCardsAdminPage() {
     });
   };
 
-  const getCardTypeColor = (type: string) => {
+  const _getCardTypeColor = (type: string) => {
     return CARD_TYPES[type as keyof typeof CARD_TYPES]?.color || "#6B7280";
   };
 

@@ -113,7 +113,7 @@ export function validateAdminConfig() {
   ];
 
   // Optional environment variables (with dynamic defaults)
-  const optionalVars = [
+  const _optionalVars = [
     "ADMIN_PORT",
     "WEB_PORT",
     "ADMIN_URL",

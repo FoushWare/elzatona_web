@@ -858,11 +858,13 @@ export default function ProblemSolvingQuestion({
     for (const [entity, char] of Object.entries(entityMap)) {
       decoded = decoded.replaceAll(entity, char);
     }
-    decoded = decoded.replace( // NOSONAR S7781: replaceAll() cannot be used with regex patterns that require capture groups
+    decoded = decoded.replace(
+      // NOSONAR S7781: replaceAll() cannot be used with regex patterns that require capture groups
       /&#(\d+);/g,
       (_, dec) => String.fromCodePoint(Number.parseInt(dec, 10)),
     );
-    decoded = decoded.replace( // NOSONAR S7781: replaceAll() cannot be used with regex patterns that require capture groups
+    decoded = decoded.replace(
+      // NOSONAR S7781: replaceAll() cannot be used with regex patterns that require capture groups
       /&#x([0-9a-f]+);/gi,
       (_, hex) => String.fromCodePoint(Number.parseInt(hex, 16)),
     );

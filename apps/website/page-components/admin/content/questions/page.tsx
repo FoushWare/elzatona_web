@@ -1239,7 +1239,7 @@ export default function AdminContentQuestionsPage() {
     }
   };
 
-  const getCardTitleById = (card_id: string) => {
+  const _getCardTitleById = (card_id: string) => {
     return cards.find((card: any) => card.id === card_id)?.title || "N/A";
   };
 

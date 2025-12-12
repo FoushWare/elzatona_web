@@ -74,7 +74,7 @@ export default function FrontendTaskPage() {
   const router = useRouter();
   const params = useParams();
   const taskId = params?.id as string;
-  const { isAuthenticated, user } = useAuth();
+  const { isAuthenticated, user: _user } = useAuth();
 
   const [task, setTask] = useState<FrontendTask | null>(null);
   const [code, setCode] = useState("");
@@ -85,7 +85,7 @@ export default function FrontendTaskPage() {
   const [activeTab, setActiveTab] = useState<"description" | "solution">(
     "description",
   );
-  const [editorTab, setEditorTab] = useState<"code" | "css">("code");
+  const [_editorTab, _setEditorTab] = useState<"code" | "css">("code");
   const [showFileExplorer, setShowFileExplorer] = useState(true);
   const [openFiles, setOpenFiles] = useState<
     Array<{
@@ -156,9 +156,11 @@ export default function FrontendTaskPage() {
     },
   ]);
   const [activeFile, setActiveFile] = useState("app");
-  const [fileContents, setFileContents] = useState<Record<string, string>>({});
+  const [_fileContents, _setFileContents] = useState<Record<string, string>>(
+    {},
+  );
   const [consoleOutput, setConsoleOutput] = useState<string[]>([]);
-  const [errors, setErrors] = useState<string[]>([]);
+  const [_errors, _setErrors] = useState<string[]>([]);
   const [isResizing, setIsResizing] = useState(false);
   const [resizeStartX, setResizeStartX] = useState(0);
   const [leftPanelWidth, setLeftPanelWidth] = useState(25); // percentage

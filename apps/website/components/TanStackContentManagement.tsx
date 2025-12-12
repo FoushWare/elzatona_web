@@ -7,7 +7,7 @@ import { createClient } from "@supabase/supabase-js";
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
 const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
-const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
+const _supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
 
 import { Card, CardContent, CardHeader, CardTitle } from "@elzatona/components";
 import { Button } from "@elzatona/components";
@@ -44,8 +44,8 @@ import {
   Layers,
   Calendar,
   BookOpen,
-  Target as _Target,
-  MessageSquare as _MessageSquare,
+  _Target as _Target,
+  _MessageSquare as _MessageSquare,
   Loader2,
 } from "lucide-react";
 
@@ -73,7 +73,9 @@ export const TanStackContentManagement: React.FC = () => {
   const [expandedCategories, setExpandedCategories] = useState<Set<string>>(
     new Set(),
   );
-  const [expandedTopics, setExpandedTopics] = useState<Set<string>>(new Set());
+  const [_expandedTopics, _setExpandedTopics] = useState<Set<string>>(
+    new Set(),
+  );
   const [expandedPlans, setExpandedPlans] = useState<Set<string>>(new Set());
 
   // Fetch data using custom hooks
@@ -114,11 +116,11 @@ export const TanStackContentManagement: React.FC = () => {
   const createTopicMutation = useCreateTopic();
   const createQuestionMutation = useCreateQuestion();
 
-  const updateCardMutation = useUpdateCard();
-  const updatePlanMutation = useUpdatePlan();
-  const updateCategoryMutation = useUpdateCategory();
-  const updateTopicMutation = useUpdateTopic();
-  const updateQuestionMutation = useUpdateQuestion();
+  const _updateCardMutation = useUpdateCard();
+  const _updatePlanMutation = useUpdatePlan();
+  const _updateCategoryMutation = useUpdateCategory();
+  const _updateTopicMutation = useUpdateTopic();
+  const _updateQuestionMutation = useUpdateQuestion();
 
   const deleteCardMutation = useDeleteCard();
   const deletePlanMutation = useDeletePlan();
@@ -151,8 +153,8 @@ export const TanStackContentManagement: React.FC = () => {
     });
   };
 
-  const toggleTopic = (topicId: string) => {
-    setExpandedTopics((prev) => {
+  const _toggleTopic = (topicId: string) => {
+    _setExpandedTopics((prev) => {
       const newSet = new Set(prev);
       if (newSet.has(topicId)) {
         newSet.delete(topicId);
@@ -193,7 +195,7 @@ export const TanStackContentManagement: React.FC = () => {
     }
   };
 
-  const handleCreateCategory = async (categoryData: any) => {
+  const _handleCreateCategory = async (categoryData: any) => {
     try {
       await createCategoryMutation.mutateAsync(categoryData);
     } catch (error) {
@@ -201,7 +203,7 @@ export const TanStackContentManagement: React.FC = () => {
     }
   };
 
-  const handleCreateTopic = async (topicData: any) => {
+  const _handleCreateTopic = async (topicData: any) => {
     try {
       await createTopicMutation.mutateAsync(topicData);
     } catch (error) {
@@ -209,7 +211,7 @@ export const TanStackContentManagement: React.FC = () => {
     }
   };
 
-  const handleCreateQuestion = async (questionData: any) => {
+  const _handleCreateQuestion = async (questionData: any) => {
     try {
       await createQuestionMutation.mutateAsync(questionData);
     } catch (error) {
@@ -241,7 +243,7 @@ export const TanStackContentManagement: React.FC = () => {
     }
   };
 
-  const handleDeleteTopic = async (topicId: string) => {
+  const _handleDeleteTopic = async (topicId: string) => {
     try {
       await deleteTopicMutation.mutateAsync(topicId);
     } catch (error) {
@@ -249,7 +251,7 @@ export const TanStackContentManagement: React.FC = () => {
     }
   };
 
-  const handleDeleteQuestion = async (question_id: string) => {
+  const _handleDeleteQuestion = async (question_id: string) => {
     try {
       await deleteQuestionMutation.mutateAsync(question_id);
     } catch (error) {
@@ -258,7 +260,7 @@ export const TanStackContentManagement: React.FC = () => {
   };
 
   // Check if any data is loading
-  const isLoading =
+  const _isLoading =
     cardsLoading ||
     plansLoading ||
     categoriesLoading ||

@@ -9,9 +9,9 @@ import {
   ArrowLeft,
   Play,
   RotateCcw,
-  CheckCircle as _CheckCircle,
-  XCircle as _XCircle,
-  Clock as _Clock,
+  _CheckCircle as _CheckCircle,
+  _XCircle as _XCircle,
+  _Clock as _Clock,
   Code,
   Lightbulb,
   Eye,
@@ -28,7 +28,9 @@ export default function ProblemSolvingTaskPage() {
   const [error, setError] = useState<string | null>(null);
   const [userCode, setUserCode] = useState("");
   const [showSolution, setShowSolution] = useState(false);
-  const [activeTab, setActiveTab] = useState<"problem" | "solution">("problem");
+  const [_activeTab, _setActiveTab] = useState<"problem" | "solution">(
+    "problem",
+  );
   const [isDark, setIsDark] = useState(false);
 
   // Theme detection
