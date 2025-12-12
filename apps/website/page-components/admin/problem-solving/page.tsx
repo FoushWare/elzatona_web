@@ -11,7 +11,10 @@ import {
   _TestCase as _TestCase,
   ProblemSolvingEditor,
 } from "@elzatona/components";
-import { ProblemSolvingTask, ProblemSolvingTaskFormData } from "@/types/admin";
+import {
+  ProblemSolvingTask,
+  ProblemSolvingTaskFormData,
+} from "../../../types/admin";
 import {
   useProblemSolvingTasks,
   useCreateProblemSolvingTask,

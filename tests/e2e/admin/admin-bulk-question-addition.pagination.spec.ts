@@ -5,7 +5,7 @@
  * Note: Environment variables are loaded by the setup file
  */
 
-import { test, expect } from "@playwright/test";
+import { test, expect, type Locator, type APIResponse } from "@playwright/test";
 import {
   setupAdminPage,
   createQuestion,
@@ -341,7 +341,7 @@ test.describe("A-E2E-001: Admin Bulk Question Addition - Pagination", () => {
     // Find the Select trigger button - it's in the same container as "Show:" label
     // The structure is: div.flex.items-center.space-x-2 > span "Show:" + Select > SelectTrigger
     // Better approach: find the combobox that's in the pagination area
-    let trigger: any = null;
+    let trigger: Locator | null = null;
 
     // Method 1: Find combobox near "Show:" text (in the same flex container)
     try {
@@ -426,7 +426,7 @@ test.describe("A-E2E-001: Admin Bulk Question Addition - Pagination", () => {
         );
         await trigger.waitFor({ state: "attached", timeout: 5000 });
       }
-    } catch (e: any) {
+    } catch (e: unknown) {
       // Check if error is due to actual page closure
       const errorMsg = e?.message || String(e);
       if (
@@ -530,7 +530,7 @@ test.describe("A-E2E-001: Admin Bulk Question Addition - Pagination", () => {
           clickSucceeded = true;
           console.log("✅ Clicked page size selector");
           break; // Success, exit retry loop
-        } catch (clickErr: any) {
+        } catch (clickErr: unknown) {
           // Check if error is due to page closure (Playwright's actual error message)
           const errorMessage = clickErr?.message || String(clickErr);
           if (
@@ -567,7 +567,7 @@ test.describe("A-E2E-001: Admin Bulk Question Addition - Pagination", () => {
           "Failed to click page size selector after all retry attempts",
         );
       }
-    } catch (clickError: any) {
+    } catch (clickError: unknown) {
       // Check if error is due to actual page closure (Playwright's error message)
       const errorMsg = clickError?.message || String(clickError);
       if (
@@ -585,8 +585,8 @@ test.describe("A-E2E-001: Admin Bulk Question Addition - Pagination", () => {
     }
 
     // NOW set up API response listener AFTER clicking
-    let pageSizeResponse: any = null;
-    const responseHandler = (response: any) => {
+    let pageSizeResponse: APIResponse | null = null;
+    const responseHandler = (response: APIResponse) => {
       const url = response.url();
       if (
         url.includes("/api/questions/unified") &&
@@ -620,7 +620,7 @@ test.describe("A-E2E-001: Admin Bulk Question Addition - Pagination", () => {
 
       await option20.click({ timeout: 5000 });
       console.log("✅ Selected page size 20");
-    } catch (optionError: any) {
+    } catch (optionError: unknown) {
       page.off("response", responseHandler);
       // Check if error is due to actual page closure
       const errorMsg = optionError?.message || String(optionError);
@@ -656,7 +656,7 @@ test.describe("A-E2E-001: Admin Bulk Question Addition - Pagination", () => {
         await pageSizeResponsePromise;
       }
       await page.waitForTimeout(1000);
-    } catch (waitError: any) {
+    } catch (waitError: unknown) {
       // Check if error is due to actual page closure
       const errorMsg = waitError?.message || String(waitError);
       if (

@@ -17,7 +17,7 @@ import {
   _ExternalLink as _ExternalLink,
 } from "lucide-react";
 import { useUserType } from "@elzatona/contexts";
-import { useLearningType } from "@/context/LearningTypeContext";
+import { useLearningType } from "../../context/LearningTypeContext";
 
 type UserType = "guided" | "self-directed" | null;
 

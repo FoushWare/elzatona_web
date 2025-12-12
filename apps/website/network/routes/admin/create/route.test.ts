@@ -12,7 +12,7 @@ import jwt from "jsonwebtoken";
 jest.mock("@supabase/supabase-js");
 jest.mock("bcryptjs");
 jest.mock("jsonwebtoken");
-jest.mock("@/lib/utils/api-config");
+jest.mock("../../../../lib/utils/api-config");
 
 // Mock environment variables
 const mockEnv = {

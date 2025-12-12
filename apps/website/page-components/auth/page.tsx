@@ -5,7 +5,7 @@ import React, { useState } from "react";
 import {
   supabaseClient as supabase,
   isSupabaseAvailable,
-} from "@/lib/supabase-client";
+} from "../../lib/supabase-client";
 
 import { useAuth } from "@elzatona/contexts";
 import { useRouter, useSearchParams } from "next/navigation";

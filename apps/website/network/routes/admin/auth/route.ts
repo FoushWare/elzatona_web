@@ -2,7 +2,10 @@ import { NextRequest, NextResponse } from "next/server";
 import jwt from "jsonwebtoken";
 import { createClient } from "@supabase/supabase-js";
 import bcrypt from "bcryptjs";
-import { getSupabaseConfig, logApiConfig } from "@/lib/utils/api-config";
+import {
+  getSupabaseConfig,
+  logApiConfig,
+} from "../../../../lib/utils/api-config";
 
 // Log API configuration on module load (for debugging)
 logApiConfig("Admin Auth API");

@@ -6,7 +6,7 @@
  *
  * Usage:
  * ```ts
- * import { getApiConfig } from '@/lib/utils/api-config';
+ * import { getApiConfig } from './api-config';
  *
  * const config = getApiConfig();
  * // Use config.supabaseUrl, config.headers, etc.

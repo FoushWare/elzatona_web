@@ -13,7 +13,7 @@ import { createClient } from "@supabase/supabase-js";
 //   getSupabaseConfig,
 //   getFetchConfig,
 //   logApiConfig,
-// } from "@/lib/utils/api-config";
+// } from "../lib/utils/api-config";
 
 // ============================================================================
 // EXAMPLE 1: Basic API Route with Environment Detection
@@ -169,7 +169,7 @@ export async function GET_CompleteExample(_request: NextRequest) {
 // KEY POINTS:
 // ============================================================================
 //
-// 1. ONE IMPORT: import { getApiConfig } from '@/lib/utils/api-config';
+// 1. ONE IMPORT: import { getApiConfig } from '../lib/utils/api-config';
 // 2. ONE VARIABLE: Set APP_ENV=test or APP_ENV=production in .env file
 // 3. EVERYTHING SWITCHES: Database, headers, timeouts, feature flags
 // 4. NO MANUAL CONFIG: Headers are set automatically based on environment

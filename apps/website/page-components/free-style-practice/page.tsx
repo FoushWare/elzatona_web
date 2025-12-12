@@ -20,8 +20,12 @@ import {
   BarChart3,
 } from "lucide-react";
 import { useUserType, useAuth } from "@elzatona/contexts";
-import { addFlashcard, isInFlashcards, FlashcardItem } from "@/lib/flashcards";
-import { sanitizeText } from "@/lib/utils/sanitize";
+import {
+  addFlashcard,
+  isInFlashcards,
+  FlashcardItem,
+} from "../../lib/flashcards";
+import { sanitizeText } from "../../lib/utils/sanitize";
 
 interface Question {
   id: string;

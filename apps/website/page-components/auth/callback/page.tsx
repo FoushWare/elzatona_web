@@ -6,8 +6,8 @@ import { useRouter } from "next/navigation";
 import {
   supabaseClient as supabase,
   isSupabaseAvailable,
-} from "@/lib/supabase-client";
-import { persistSession } from "@/lib/auth-session";
+} from "../../../lib/supabase-client";
+import { persistSession } from "../../lib/auth-session";
 
 export default function AuthCallback() {
   const router = useRouter();
