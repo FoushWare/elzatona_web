@@ -20,8 +20,8 @@ interface NotificationDropdownProps {
 }
 
 export function NotificationDropdown({
-  _userId,
-  _adminId,
+  userId: _userId,
+  adminId: _adminId,
 }: NotificationDropdownProps) {
   const {
     notifications,

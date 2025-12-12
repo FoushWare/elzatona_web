@@ -7,12 +7,13 @@
 
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
-import {
-  getApiConfig,
-  getSupabaseConfig,
-  getFetchConfig,
-  logApiConfig,
-} from "@/lib/utils/api-config";
+// Example file - not meant to be compiled
+// import {
+//   getApiConfig,
+//   getSupabaseConfig,
+//   getFetchConfig,
+//   logApiConfig,
+// } from "@/lib/utils/api-config";
 
 // ============================================================================
 // EXAMPLE 1: Basic API Route with Environment Detection

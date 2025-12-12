@@ -8,7 +8,7 @@ import {
   sessionService,
   Flashcard,
   FlashcardProgress,
-  _FlashcardSession,
+  FlashcardSession,
 } from "./types/supabase-flashcards";
 
 interface SessionStats {

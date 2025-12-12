@@ -7,9 +7,9 @@ import { createClient, SupabaseClient } from "@supabase/supabase-js";
 import {
   IDatabaseService,
   DatabaseConfig,
-  _QueryOptions,
-  _DatabaseResult,
-  _BatchResult,
+  QueryOptions,
+  DatabaseResult,
+  BatchResult,
 } from "./IDatabaseService";
 
 export class SupabaseDatabaseService implements IDatabaseService {
