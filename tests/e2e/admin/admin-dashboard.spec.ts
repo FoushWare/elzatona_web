@@ -361,7 +361,7 @@ test.describe("A-E2E-003: Admin Dashboard", () => {
 
     // Get the current theme from the HTML element
     const htmlElement = page.locator("html");
-    const hasDarkClass = await htmlElement.evaluate((el) =>
+    const _hasDarkClass = await htmlElement.evaluate((el) =>
       el.classList.contains("dark"),
     );
 
