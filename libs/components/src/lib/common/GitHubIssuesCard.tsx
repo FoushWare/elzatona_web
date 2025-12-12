@@ -20,12 +20,7 @@ import {
   GitHubIssuesStats,
   GitHubIssue,
 } from "../types/github-issues";
-import {
-  Github,
-  ExternalLink,
-  AlertCircle,
-  CheckCircle,
-} from "lucide-react";
+import { Github, ExternalLink, AlertCircle, CheckCircle } from "lucide-react";
 
 interface GitHubIssuesCardProps {
   className?: string;
