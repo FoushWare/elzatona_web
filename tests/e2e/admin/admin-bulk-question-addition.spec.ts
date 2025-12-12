@@ -3616,7 +3616,10 @@ test.describe("A-E2E-001: Admin Bulk Question Addition", () => {
         optionError instanceof Error
           ? optionError
           : new Error(String(optionError));
-      const errorMsg = optionError instanceof Error ? optionError.message : String(optionError);
+      const errorMsg =
+        optionError instanceof Error
+          ? optionError.message
+          : String(optionError);
       if (
         errorMsg.includes("Target page, context or browser has been closed") ||
         errorMsg.includes("page has been closed")
