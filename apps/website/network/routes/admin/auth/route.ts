@@ -158,14 +158,19 @@ export async function POST(request: NextRequest) {
     }
 
     // Verify password
-    console.log("[Admin Auth API] 🔐 Verifying password...");
+    // ⚠️ SECURITY: Never log password or password verification details in production
     const isValidPassword = await bcrypt.compare(
       password,
       adminData.password_hash,
     );
-    console.log("[Admin Auth API] 🔐 Password valid:", isValidPassword);
     if (!isValidPassword) {
-      console.log("[Admin Auth API] ❌ Password comparison failed");
+      // Only log in test/dev environments for debugging
+      if (
+        process.env.APP_ENV === "test" ||
+        process.env.NEXT_PUBLIC_APP_ENV === "test"
+      ) {
+        console.log("[Admin Auth API] ❌ Password comparison failed");
+      }
       return NextResponse.json(
         { success: false, error: "Invalid email or password" },
         { status: 401 },
