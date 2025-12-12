@@ -220,7 +220,7 @@ test.describe("A-E2E-001: Admin Bulk Question Addition - Pagination", () => {
 
       if (buttonCount >= 2) {
         // First button is previous (ChevronLeft), last is next (ChevronRight)
-          _prevButton = paginationButtons.first();
+        _prevButton = paginationButtons.first();
         nextButton = paginationButtons.last();
       } else if (buttonCount === 1) {
         // Only one button - check if it's before or after the text
@@ -416,7 +416,7 @@ test.describe("A-E2E-001: Admin Bulk Question Addition - Pagination", () => {
       const buttonCount = await paginationButtons.count();
 
       if (buttonCount >= 2) {
-          _prevButton = paginationButtons.first();
+        _prevButton = paginationButtons.first();
         nextButton = paginationButtons.last();
       } else if (buttonCount === 1) {
         // Check if button is before or after the text
