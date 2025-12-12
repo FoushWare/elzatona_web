@@ -5,7 +5,6 @@ import CodeEditor from "./CodeEditor";
 import {
   CheckCircle,
   XCircle,
-  AlertCircle as _AlertCircle,
   Play,
   Loader2,
   Code2,
@@ -13,10 +12,8 @@ import {
   ChevronRight,
   Maximize2,
   Minimize2,
-  Copy as _Copy,
   Plus,
   Lightbulb,
-  BookOpen as _BookOpen,
 } from "lucide-react";
 import {
   addFlashcard,
@@ -26,14 +23,14 @@ import {
 import { SafeHTML } from "@/lib/utils/sanitize";
 
 interface TestCase {
-  input: any | any[];
-  expectedOutput: any;
+  input: unknown | unknown[];
+  expectedOutput: unknown;
   description?: string;
 }
 
 interface Example {
-  input: any | Record<string, any>;
-  output: any;
+  input: unknown | Record<string, unknown>;
+  output: unknown;
   explanation?: string;
 }
 
@@ -77,16 +74,16 @@ export default function ProblemSolvingQuestion({
 
   // Resize state
   const [leftPanelWidth, setLeftPanelWidth] = useState(() => {
-    if (typeof window !== "undefined") {
+    if (typeof globalThis.window !== "undefined") {
       const saved = localStorage.getItem("problem-solving-left-panel-width");
-      return saved ? parseFloat(saved) : 40; // Default 40% width
+      return saved ? Number.parseFloat(saved) : 40; // Default 40% width
     }
     return 40;
   });
   const [testPanelHeight, setTestPanelHeight] = useState(() => {
-    if (typeof window !== "undefined") {
+    if (typeof globalThis.window !== "undefined") {
       const saved = localStorage.getItem("problem-solving-test-panel-height");
-      return saved ? parseFloat(saved) : 30; // Default 30% height
+      return saved ? Number.parseFloat(saved) : 30; // Default 30% height
     }
     return 30;
   });
@@ -117,10 +114,10 @@ export default function ProblemSolvingQuestion({
         decoded = decoded.replace(new RegExp(entity, "gi"), char);
       }
       decoded = decoded.replace(/&#(\d+);/g, (_, dec) =>
-        String.fromCharCode(parseInt(dec, 10)),
+        String.fromCodePoint(Number.parseInt(dec, 10)),
       );
       decoded = decoded.replace(/&#x([0-9a-fA-F]+);/gi, (_, hex) =>
-        String.fromCharCode(parseInt(hex, 16)),
+        String.fromCodePoint(Number.parseInt(hex, 16)),
       );
       return decoded;
     };
@@ -234,7 +231,7 @@ export default function ProblemSolvingQuestion({
     Array<{
       testCase: TestCase;
       passed: boolean;
-      actualOutput?: any;
+      actualOutput?: unknown;
       error?: string;
       consoleOutput?: string;
     }>
@@ -307,7 +304,7 @@ export default function ProblemSolvingQuestion({
   const testCases = [...baseTestCases, ...customTestCases];
 
   // Parse input into structured fields (for LeetCode-style display)
-  const parseInputFields = (input: any): Record<string, any> => {
+  const parseInputFields = (input: unknown): Record<string, unknown> => {
     if (typeof input === "object" && input !== null && !Array.isArray(input)) {
       return input;
     }
@@ -413,7 +410,7 @@ export default function ProblemSolvingQuestion({
           !Array.isArray(testCase.input)
         ) {
           const args = Object.values(inputFields)
-            .map((arg: any) => JSON.stringify(arg))
+            .map((arg: unknown) => JSON.stringify(arg))
             .join(", ");
           codeToExecute = `${code}\n\n// Test with test case ${selectedTestCaseIndex + 1}\nconst result = ${functionName}(${args});\nconsole.log('Output:', result);`;
         } else {
@@ -421,7 +418,7 @@ export default function ProblemSolvingQuestion({
           const input = Array.isArray(testCase.input)
             ? testCase.input
             : [testCase.input];
-          codeToExecute = `${code}\n\n// Test with test case ${selectedTestCaseIndex + 1}\nconst result = ${functionName}(${input.map((arg: any) => JSON.stringify(arg)).join(", ")});\nconsole.log('Output:', result);`;
+          codeToExecute = `${code}\n\n// Test with test case ${selectedTestCaseIndex + 1}\nconst result = ${functionName}(${input.map((arg: unknown) => JSON.stringify(arg)).join(", ")});\nconsole.log('Output:', result);`;
         }
       } else if (testCases.length > 0) {
         // Use first test case if none selected
@@ -433,14 +430,14 @@ export default function ProblemSolvingQuestion({
           !Array.isArray(testCase.input)
         ) {
           const args = Object.values(inputFields)
-            .map((arg: any) => JSON.stringify(arg))
+            .map((arg: unknown) => JSON.stringify(arg))
             .join(", ");
           codeToExecute = `${code}\n\n// Test with test case 1\nconst result = ${functionName}(${args});\nconsole.log('Output:', result);`;
         } else {
           const input = Array.isArray(testCase.input)
             ? testCase.input
             : [testCase.input];
-          codeToExecute = `${code}\n\n// Test with test case 1\nconst result = ${functionName}(${input.map((arg: any) => JSON.stringify(arg)).join(", ")});\nconsole.log('Output:', result);`;
+          codeToExecute = `${code}\n\n// Test with test case 1\nconst result = ${functionName}(${input.map((arg: unknown) => JSON.stringify(arg)).join(", ")});\nconsole.log('Output:', result);`;
         }
       } else {
         // Default test if no test cases available
@@ -511,7 +508,7 @@ export default function ProblemSolvingQuestion({
     const results: Array<{
       testCase: TestCase;
       passed: boolean;
-      actualOutput?: any;
+      actualOutput?: unknown;
       error?: string;
       consoleOutput?: string; // Store full console output including console.log statements
     }> = [];
@@ -526,7 +523,7 @@ export default function ProblemSolvingQuestion({
 
       try {
         // Execute code with test case - preserve all console.log output
-        const codeToExecute = `${code}\n\n// Test case ${i + 1}\nconst result = ${functionName}(${input.map((arg: any) => JSON.stringify(arg)).join(", ")});\nconsole.log(JSON.stringify(result));`;
+        const codeToExecute = `${code}\n\n// Test case ${i + 1}\nconst result = ${functionName}(${input.map((arg: unknown) => JSON.stringify(arg)).join(", ")});\nconsole.log(JSON.stringify(result));`;
 
         const response = await fetch("/api/code/execute", {
           method: "POST",
@@ -704,7 +701,7 @@ export default function ProblemSolvingQuestion({
   }, [isResizingHorizontal, isResizingVertical]);
 
   // Format input for display (LeetCode style)
-  const formatInput = (input: any): string => {
+  const formatInput = (input: unknown): string => {
     if (typeof input === "object" && input !== null && !Array.isArray(input)) {
       // Object with multiple keys - format as key = value pairs (LeetCode style)
       const entries = Object.entries(input);
