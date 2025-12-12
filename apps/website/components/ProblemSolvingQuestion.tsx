@@ -331,7 +331,11 @@ const ProblemDescriptionPanel: React.FC<ProblemDescriptionPanelProps> = ({
             <div className="bg-gradient-to-br from-indigo-50/50 via-white to-indigo-50/30 dark:from-indigo-900/20 dark:via-gray-800/60 dark:to-indigo-900/20 rounded-2xl p-5 sm:p-6 border-2 border-indigo-200/60 dark:border-indigo-800/60 shadow-lg">
               <ul className="space-y-3 text-sm sm:text-base text-gray-800 dark:text-gray-200 list-disc list-inside marker:text-indigo-600 dark:marker:text-indigo-400 font-medium">
                 {question.constraints.map((constraint, index) => (
-                  <li key={`constraint-${index}-${constraint.substring(0, 20)}`}>{constraint}</li>
+                  <li
+                    key={`constraint-${index}-${constraint.substring(0, 20)}`}
+                  >
+                    {constraint}
+                  </li>
                 ))}
               </ul>
             </div>
@@ -373,57 +377,65 @@ export default function ProblemSolvingQuestion({
   const [isResizingHorizontal, setIsResizingHorizontal] = useState(false);
   const [isResizingVertical, setIsResizingVertical] = useState(false);
 
-    // Helper to decode HTML entities
-    const decodeHtmlEntities = (text: string): string => {
-      if (!text) return "";
-      const entityMap: Record<string, string> = {
-        "&lt;": "<",
-        "&gt;": ">",
-        "&amp;": "&",
-        "&quot;": '"',
-        "&#39;": "'",
-        "&#x27;": "'",
-        "&#x2F;": "/",
-        "&nbsp;": " ",
-        "&#160;": " ",
-        "&apos;": "'",
-      };
-      let decoded = text;
-      for (const [entity, char] of Object.entries(entityMap)) {
-      decoded = decoded.replaceAll(entity, char);
-      }
-    decoded = decoded.replace(/&#(\d+);/g, (_, dec) => // NOSONAR: regex with capture groups required
-      String.fromCodePoint(Number.parseInt(dec, 10)),
-      );
-    decoded = decoded.replace(/&#x([0-9a-f]+);/gi, (_, hex) => // NOSONAR: regex with capture groups required
-      String.fromCodePoint(Number.parseInt(hex, 16)),
-      );
-      return decoded;
+  // Helper to decode HTML entities
+  const decodeHtmlEntities = (text: string): string => {
+    if (!text) return "";
+    const entityMap: Record<string, string> = {
+      "&lt;": "<",
+      "&gt;": ">",
+      "&amp;": "&",
+      "&quot;": '"',
+      "&#39;": "'",
+      "&#x27;": "'",
+      "&#x2F;": "/",
+      "&nbsp;": " ",
+      "&#160;": " ",
+      "&apos;": "'",
     };
+    let decoded = text;
+    for (const [entity, char] of Object.entries(entityMap)) {
+      decoded = decoded.replaceAll(entity, char);
+    }
+    decoded = decoded.replace(
+      /&#(\d+);/g,
+      (
+        _,
+        dec, // NOSONAR: regex with capture groups required
+      ) => String.fromCodePoint(Number.parseInt(dec, 10)),
+    );
+    decoded = decoded.replace(
+      /&#x([0-9a-f]+);/gi,
+      (
+        _,
+        hex, // NOSONAR: regex with capture groups required
+      ) => String.fromCodePoint(Number.parseInt(hex, 16)),
+    );
+    return decoded;
+  };
 
   // Helper to clean up malformed code patterns
   const cleanCodePatterns = (code: string): string => {
-      for (let i = 0; i < 3; i++) {
-        code = code
-          // Remove e> artifacts (most common issue)
+    for (let i = 0; i < 3; i++) {
+      code = code
+        // Remove e> artifacts (most common issue)
         .replace(/e>e>/g, "") // NOSONAR: regex pattern required
         .replace(/e>e>e>/g, "") // NOSONAR: regex pattern required
         .replace(/^e>+/g, "") // NOSONAR: regex pattern required
         .replace(/e>+$/g, "") // NOSONAR: regex pattern required
         .replace(/(\w+)e>/g, "$1") // NOSONAR: regex with capture group required
         .replace(/e>(\w+)/g, "$1") // NOSONAR: regex with capture group required
-          // Fix console.log patterns
+        // Fix console.log patterns
         .replace(/consoleonsole\.log/g, "console.log") // NOSONAR: regex pattern required
         .replace(/console\.loge>/g, "console.log") // NOSONAR: regex pattern required
         .replace(/console\.log>/g, "console.log") // NOSONAR: regex pattern required
-          // Fix method name patterns
+        // Fix method name patterns
         .replace(/diameterameter/g, "diameter") // NOSONAR: regex pattern required
         .replace(/perimeterimeter/g, "perimeter") // NOSONAR: regex pattern required
         .replace(/newColorwColor/g, "newColor") // NOSONAR: regex pattern required
-          // Fix NaN patterns
+        // Fix NaN patterns
         .replace(/NaNe>/g, "NaN") // NOSONAR: regex pattern required
         .replace(/NaN>/g, "NaN") // NOSONAR: regex pattern required
-          // Remove any remaining standalone e> or > characters
+        // Remove any remaining standalone e> or > characters
         .replace(/\s*e>\s*/g, " ") // NOSONAR: regex pattern required
         .replace(/\s*>\s*/g, " ") // NOSONAR: regex pattern required
         .replace(/^>\s*/g, "") // NOSONAR: regex pattern required
@@ -653,20 +665,20 @@ export default function ProblemSolvingQuestion({
     testCase: TestCase,
     testCaseNumber: number,
   ): string => {
-        const inputFields = parseInputFields(testCase.input);
-        if (
-          typeof testCase.input === "object" &&
-          testCase.input !== null &&
-          !Array.isArray(testCase.input)
-        ) {
-          const args = Object.values(inputFields)
+    const inputFields = parseInputFields(testCase.input);
+    if (
+      typeof testCase.input === "object" &&
+      testCase.input !== null &&
+      !Array.isArray(testCase.input)
+    ) {
+      const args = Object.values(inputFields)
         .map((arg: unknown) => JSON.stringify(arg))
-            .join(", ");
+        .join(", ");
       return `${code}\n\n// Test with test case ${testCaseNumber}\nconst result = ${functionName}(${args});\nconsole.log('Output:', result);`;
     }
-          const input = Array.isArray(testCase.input)
-            ? testCase.input
-            : [testCase.input];
+    const input = Array.isArray(testCase.input)
+      ? testCase.input
+      : [testCase.input];
     return `${code}\n\n// Test with test case ${testCaseNumber}\nconst result = ${functionName}(${input.map((arg: unknown) => JSON.stringify(arg)).join(", ")});\nconsole.log('Output:', result);`;
   };
 
@@ -1017,10 +1029,10 @@ export default function ProblemSolvingQuestion({
         revealedHints={revealedHints}
         onToggleHints={() => setShowHints(!showHints)}
         onRevealHint={(index) => {
-                                if (!revealedHints.includes(index)) {
-                                  setRevealedHints([...revealedHints, index]);
-                                }
-                              }}
+          if (!revealedHints.includes(index)) {
+            setRevealedHints([...revealedHints, index]);
+          }
+        }}
       />
 
       {/* Right Panel - Code Editor and Test Cases (LeetCode Style) */}
@@ -1317,7 +1329,10 @@ export default function ProblemSolvingQuestion({
                                     ),
                                   )}
                                   <div className="flex items-center gap-2 pt-2 border-t border-gray-200 dark:border-gray-700">
-                                    <label htmlFor="expected-output-input" className="text-xs font-semibold text-gray-700 dark:text-gray-300 whitespace-nowrap min-w-[80px]">
+                                    <label
+                                      htmlFor="expected-output-input"
+                                      className="text-xs font-semibold text-gray-700 dark:text-gray-300 whitespace-nowrap min-w-[80px]"
+                                    >
                                       Expected =
                                     </label>
                                     <input
@@ -1480,18 +1495,18 @@ export default function ProblemSolvingQuestion({
                           return "bg-red-50 text-red-700 dark:bg-red-900/20 dark:text-red-300 border-red-200 dark:border-red-800";
                         };
                         return (
-                        <button
+                          <button
                             key={`test-result-${index}-${result.passed ? "passed" : "failed"}`}
-                          onClick={() => setSelectedTestCaseIndex(index)}
+                            onClick={() => setSelectedTestCaseIndex(index)}
                             className={`px-2 sm:px-3 py-1 text-xs font-medium rounded border transition-colors whitespace-nowrap ${getButtonClassName()}`}
-                        >
+                          >
                             {result.passed ? (
-                            <CheckCircle className="w-3 h-3 inline mr-1" />
-                          ) : (
-                            <XCircle className="w-3 h-3 inline mr-1" />
-                          )}
-                          Case {index + 1}
-                        </button>
+                              <CheckCircle className="w-3 h-3 inline mr-1" />
+                            ) : (
+                              <XCircle className="w-3 h-3 inline mr-1" />
+                            )}
+                            Case {index + 1}
+                          </button>
                         );
                       })}
                     </div>
@@ -1616,8 +1631,8 @@ export default function ProblemSolvingQuestion({
                 {!runOutput && testResults.length === 0 && (
                   <div className="text-center py-6 sm:py-8 text-gray-500 dark:text-gray-400">
                     <p className="text-xs sm:text-sm">
-                      Click &quot;Run&quot; to test your code or &quot;Submit&quot; to run all test
-                      cases
+                      Click &quot;Run&quot; to test your code or
+                      &quot;Submit&quot; to run all test cases
                     </p>
                   </div>
                 )}
