@@ -15,9 +15,6 @@ import {
   CardTitle,
   Button,
   Badge,
-  SelectTrigger,
-  SelectValue,
-  Input,
   Dialog,
   DialogContent,
   DialogHeader,
@@ -52,7 +49,6 @@ import type {
   Category,
   Topic,
   Question,
-  Stats,
 } from "./components/types";
 import { StatsSection } from "./components/StatsSection";
 import { SearchAndFilters } from "./components/SearchAndFilters";
