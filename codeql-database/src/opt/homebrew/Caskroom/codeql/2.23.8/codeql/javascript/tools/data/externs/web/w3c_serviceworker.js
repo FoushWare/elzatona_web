@@ -41,7 +41,7 @@ ServiceWorker.prototype.onstatechange;
  * 'activated', 'redundant'.
  *  @typedef {string}
  */
-var ServiceWorkerState;
+var _ServiceWorkerState;
 
 /**
  * @see https://w3c.github.io/push-api/
@@ -81,7 +81,7 @@ function PushManager() {}
  * @param {PushSubscriptionOptions=} opt_options
  * @return {!Promise<PushSubscription>}
  */
-PushManager.prototype.subscribe = function (opt_options) {};
+PushManager.prototype.subscribe = function (_opt_options) {};
 
 /** @return {!Promise<PushSubscription>} */
 PushManager.prototype.getSubscription = function () {};
@@ -95,7 +95,7 @@ PushManager.prototype.getSubscription = function () {};
  * @typedef {{userVisibleOnly: (boolean|undefined)}}
  * @see https://w3c.github.io/push-api/#idl-def-PushSubscriptionOptions
  */
-var PushSubscriptionOptions;
+var _PushSubscriptionOptions;
 
 /**
  * @see http://www.w3.org/TR/push-api/#idl-def-PushMessageData
@@ -122,7 +122,7 @@ PushMessageData.prototype.text = function () {};
  * @param {!ExtendableEventInit=} opt_eventInitDict
  * @extends {ExtendableEvent}
  */
-function PushEvent(type, opt_eventInitDict) {}
+function PushEvent(_type, _opt_eventInitDict) {}
 
 /** @type {?PushMessageData} */
 PushEvent.prototype.data;
@@ -168,8 +168,8 @@ ServiceWorkerRegistration.prototype.pushManager;
  * @return {!Promise<void>}
  */
 ServiceWorkerRegistration.prototype.showNotification = function (
-  title,
-  opt_options,
+  _title,
+  _opt_options,
 ) {};
 
 /**
@@ -177,7 +177,7 @@ ServiceWorkerRegistration.prototype.showNotification = function (
  * @param {!GetNotificationOptions=} opt_filter
  * @return {!Promise<?Array<?Notification>>}
  */
-ServiceWorkerRegistration.prototype.getNotifications = function (opt_filter) {};
+ServiceWorkerRegistration.prototype.getNotifications = function (_opt_filter) {};
 
 /**
  * @see http://www.w3.org/TR/service-workers/#service-worker-container-interface
@@ -198,8 +198,8 @@ ServiceWorkerContainer.prototype.ready;
  * @return {!Promise<!ServiceWorkerRegistration>}
  */
 ServiceWorkerContainer.prototype.register = function (
-  scriptURL,
-  opt_options,
+  _scriptURL,
+  _opt_options,
 ) {};
 
 /**
@@ -207,7 +207,7 @@ ServiceWorkerContainer.prototype.register = function (
  * @return {!Promise<!ServiceWorkerRegistration|undefined>}
  */
 ServiceWorkerContainer.prototype.getRegistration = function (
-  opt_documentURL,
+  _opt_documentURL,
 ) {};
 
 /**
@@ -224,7 +224,7 @@ ServiceWorkerContainer.prototype.onerror;
 /**
  * @typedef {{scope: (string|undefined), useCache: (boolean|undefined)}}
  */
-var RegistrationOptions;
+var _RegistrationOptions;
 
 /** @type {!ServiceWorkerContainer} */
 Navigator.prototype.serviceWorker;
@@ -317,7 +317,7 @@ ServiceWorkerClient.prototype.frameType;
  * @param {(!Array<!Transferable>|undefined)=} opt_transfer
  * @return {undefined}
  */
-ServiceWorkerClient.prototype.postMessage = function (message, opt_transfer) {};
+ServiceWorkerClient.prototype.postMessage = function (_message, _opt_transfer) {};
 
 /** @return {!Promise} */
 ServiceWorkerClient.prototype.focus = function () {};
@@ -335,13 +335,13 @@ function ServiceWorkerClients() {}
  * @param {ServiceWorkerClientQueryOptions=} opt_options
  * @return {!Promise<!Array<!ServiceWorkerClient>>}
  */
-ServiceWorkerClients.prototype.getAll = function (opt_options) {};
+ServiceWorkerClients.prototype.getAll = function (_opt_options) {};
 
 /**
  * @param {ServiceWorkerClientQueryOptions=} opt_options
  * @return {!Promise<!Array<!ServiceWorkerClient>>}
  */
-ServiceWorkerClients.prototype.matchAll = function (opt_options) {};
+ServiceWorkerClients.prototype.matchAll = function (_opt_options) {};
 
 /**
  * @return {!Promise<void>}
@@ -352,10 +352,10 @@ ServiceWorkerClients.prototype.claim = function () {};
  * @param {string} url
  * @return {!Promise<!ServiceWorkerClient>}
  */
-ServiceWorkerClients.prototype.openWindow = function (url) {};
+ServiceWorkerClients.prototype.openWindow = function (_url) {};
 
 /** @typedef {{includeUncontrolled: (boolean|undefined)}} */
-var ServiceWorkerClientQueryOptions;
+var _ServiceWorkerClientQueryOptions;
 
 /**
  * @see http://www.w3.org/TR/service-workers/#cache-interface
@@ -368,47 +368,47 @@ function Cache() {}
  * @param {CacheQueryOptions=} opt_options
  * @return {!Promise<!Response|undefined>}
  */
-Cache.prototype.match = function (request, opt_options) {};
+Cache.prototype.match = function (_request, _opt_options) {};
 
 /**
  * @param {RequestInfo=} opt_request
  * @param {CacheQueryOptions=} opt_options
  * @return {!Promise<!Array<!Response>>}
  */
-Cache.prototype.matchAll = function (opt_request, opt_options) {};
+Cache.prototype.matchAll = function (_opt_request, _opt_options) {};
 
 /**
  * @param {!RequestInfo} request
  * @return {!Promise<void>}
  */
-Cache.prototype.add = function (request) {};
+Cache.prototype.add = function (_request) {};
 
 /**
  * @param {!Array<!RequestInfo>} requests
  * @return {!Promise<void>}
  */
-Cache.prototype.addAll = function (requests) {};
+Cache.prototype.addAll = function (_requests) {};
 
 /**
  * @param {!RequestInfo} request
  * @param {!Response} response
  * @return {!Promise<void>}
  */
-Cache.prototype.put = function (request, response) {};
+Cache.prototype.put = function (_request, _response) {};
 
 /**
  * @param {!RequestInfo} request
  * @param {CacheQueryOptions=} opt_options
  * @return {!Promise<boolean>}
  */
-Cache.prototype.delete = function (request, opt_options) {};
+Cache.prototype.delete = function (_request, _opt_options) {};
 
 /**
  * @param {RequestInfo=} opt_request
  * @param {CacheQueryOptions=} opt_options
  * @return {!Promise<!Array<!Request>>}
  */
-Cache.prototype.keys = function (opt_request, opt_options) {};
+Cache.prototype.keys = function (_opt_request, _opt_options) {};
 
 /**
  * @typedef {{
@@ -419,7 +419,7 @@ Cache.prototype.keys = function (opt_request, opt_options) {};
  *   cacheName: (string|undefined)
  * }}
  */
-var CacheQueryOptions;
+var _CacheQueryOptions;
 
 /**
  * @see http://www.w3.org/TR/service-workers/#cache-storage-interface
@@ -439,25 +439,25 @@ Window.prototype.caches;
  * @param {CacheQueryOptions=} opt_options
  * @return {!Promise<!Response|undefined>}
  */
-CacheStorage.prototype.match = function (request, opt_options) {};
+CacheStorage.prototype.match = function (_request, _opt_options) {};
 
 /**
  * @param {string} cacheName
  * @return {!Promise<boolean>}
  */
-CacheStorage.prototype.has = function (cacheName) {};
+CacheStorage.prototype.has = function (_cacheName) {};
 
 /**
  * @param {string} cacheName
  * @return {!Promise<!Cache>}
  */
-CacheStorage.prototype.open = function (cacheName) {};
+CacheStorage.prototype.open = function (_cacheName) {};
 
 /**
  * @param {string} cacheName
  * @return {!Promise<boolean>}
  */
-CacheStorage.prototype.delete = function (cacheName) {};
+CacheStorage.prototype.delete = function (_cacheName) {};
 
 /** @return {!Promise<!Array<string>>} */
 CacheStorage.prototype.keys = function () {};
@@ -469,13 +469,13 @@ CacheStorage.prototype.keys = function () {};
  * @param {ExtendableEventInit=} opt_eventInitDict
  * @extends {Event}
  */
-function ExtendableEvent(type, opt_eventInitDict) {}
+function ExtendableEvent(_type, _opt_eventInitDict) {}
 
 /**
  * @param {IThenable} f
  * @return {undefined}
  */
-ExtendableEvent.prototype.waitUntil = function (f) {};
+ExtendableEvent.prototype.waitUntil = function (_f) {};
 
 /**
  * @typedef {{
@@ -483,7 +483,7 @@ ExtendableEvent.prototype.waitUntil = function (f) {};
  *   cancelable: (boolean|undefined)
  * }}
  */
-var ExtendableEventInit;
+var _ExtendableEventInit;
 
 /**
  * @see http://www.w3.org/TR/service-workers/#install-event-interface
@@ -492,7 +492,7 @@ var ExtendableEventInit;
  * @param {InstallEventInit=} opt_eventInitDict
  * @extends {ExtendableEvent}
  */
-function InstallEvent(type, opt_eventInitDict) {}
+function _InstallEvent(_type, _opt_eventInitDict) {}
 
 /** @type {ServiceWorker} */
 ExtendableEvent.prototype.activeWorker;
@@ -504,7 +504,7 @@ ExtendableEvent.prototype.activeWorker;
  *   activeWorker: (!ServiceWorker|undefined)
  * }}
  */
-var InstallEventInit;
+var _InstallEventInit;
 
 /**
  * @see http://www.w3.org/TR/service-workers/#fetch-event-interface
@@ -513,7 +513,7 @@ var InstallEventInit;
  * @param {FetchEventInit=} opt_eventInitDict
  * @extends {Event}
  */
-function FetchEvent(type, opt_eventInitDict) {}
+function FetchEvent(_type, _opt_eventInitDict) {}
 
 /** @type {!Request} */
 FetchEvent.prototype.request;
@@ -528,13 +528,13 @@ FetchEvent.prototype.isReload;
  * @param {(Response|Promise<Response>)} r
  * @return {undefined}
  */
-FetchEvent.prototype.respondWith = function (r) {};
+FetchEvent.prototype.respondWith = function (_r) {};
 
 /**
  * @param {string} url
  * @return {!Promise<!Response>}
  */
-FetchEvent.prototype.forwardTo = function (url) {};
+FetchEvent.prototype.forwardTo = function (_url) {};
 
 /**
  * @return {!Promise<!Response>}
@@ -550,4 +550,4 @@ FetchEvent.prototype.default = function () {};
  *   isReload: (!boolean|undefined)
  * }}
  */
-var FetchEventInit;
+var _FetchEventInit;

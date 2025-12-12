@@ -28,38 +28,38 @@
  *     was invoked only if the element was visible.
  * @return {number}
  */
-function requestAnimationFrame(callback, opt_element) {}
+function _requestAnimationFrame(_callback, _opt_element) {}
 
 /**
  * @param {number} handle
  * @return {undefined}
  */
-function cancelRequestAnimationFrame(handle) {}
+function _cancelRequestAnimationFrame(_handle) {}
 
 /**
  * @param {number} handle
  * @return {undefined}
  */
-function cancelAnimationFrame(handle) {}
+function _cancelAnimationFrame(_handle) {}
 
 /**
  * @param {function(number)} callback
  * @param {Element=} opt_element
  * @return {number}
  */
-function webkitRequestAnimationFrame(callback, opt_element) {}
+function _webkitRequestAnimationFrame(_callback, _opt_element) {}
 
 /**
  * @param {number} handle
  * @return {undefined}
  */
-function webkitCancelRequestAnimationFrame(handle) {}
+function _webkitCancelRequestAnimationFrame(_handle) {}
 
 /**
  * @param {number} handle
  * @return {undefined}
  */
-function webkitCancelAnimationFrame(handle) {}
+function _webkitCancelAnimationFrame(_handle) {}
 
 /**
  * @param {?function(number)} callback It's legitimate to pass a null
@@ -67,54 +67,54 @@ function webkitCancelAnimationFrame(handle) {}
  * @param {Element=} opt_element
  * @return {number}
  */
-function mozRequestAnimationFrame(callback, opt_element) {}
+function _mozRequestAnimationFrame(_callback, _opt_element) {}
 
 /**
  * @param {number} handle
  * @return {undefined}
  */
-function mozCancelRequestAnimationFrame(handle) {}
+function _mozCancelRequestAnimationFrame(_handle) {}
 
 /**
  * @param {number} handle
  * @return {undefined}
  */
-function mozCancelAnimationFrame(handle) {}
+function _mozCancelAnimationFrame(_handle) {}
 
 /**
  * @param {function(number)} callback
  * @param {Element=} opt_element
  * @return {number}
  */
-function msRequestAnimationFrame(callback, opt_element) {}
+function _msRequestAnimationFrame(_callback, _opt_element) {}
 
 /**
  * @param {number} handle
  * @return {undefined}
  */
-function msCancelRequestAnimationFrame(handle) {}
+function _msCancelRequestAnimationFrame(_handle) {}
 
 /**
  * @param {number} handle
  * @return {undefined}
  */
-function msCancelAnimationFrame(handle) {}
+function _msCancelAnimationFrame(_handle) {}
 
 /**
  * @param {function(number)} callback
  * @param {Element=} opt_element
  * @return {number}
  */
-function oRequestAnimationFrame(callback, opt_element) {}
+function _oRequestAnimationFrame(_callback, _opt_element) {}
 
 /**
  * @param {number} handle
  * @return {undefined}
  */
-function oCancelRequestAnimationFrame(handle) {}
+function _oCancelRequestAnimationFrame(_handle) {}
 
 /**
  * @param {number} handle
  * @return {undefined}
  */
-function oCancelAnimationFrame(handle) {}
+function _oCancelAnimationFrame(_handle) {}

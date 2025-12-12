@@ -27,7 +27,7 @@
  * @see https://bugzilla.mozilla.org/show_bug.cgi?id=403510
  * @return {undefined}
  */
-Element.prototype.scrollIntoViewIfNeeded = function (opt_center) {};
+Element.prototype.scrollIntoViewIfNeeded = function (_opt_center) {};
 
 /**
  * @constructor
@@ -105,80 +105,80 @@ function Console() {}
  * @param {...*} var_args
  * @return {undefined}
  */
-Console.prototype.assert = function (condition, var_args) {};
+Console.prototype.assert = function (_condition, _var_args) {};
 
 /**
  * @param {...*} var_args
  * @return {undefined}
  */
-Console.prototype.error = function (var_args) {};
+Console.prototype.error = function (_var_args) {};
 
 /**
  * @param {...*} var_args
  * @return {undefined}
  */
-Console.prototype.info = function (var_args) {};
+Console.prototype.info = function (_var_args) {};
 
 /**
  * @param {...*} var_args
  * @return {undefined}
  */
-Console.prototype.log = function (var_args) {};
+Console.prototype.log = function (_var_args) {};
 
 /**
  * @param {...*} var_args
  * @return {undefined}
  */
-Console.prototype.warn = function (var_args) {};
+Console.prototype.warn = function (_var_args) {};
 
 /**
  * @param {...*} var_args
  * @return {undefined}
  */
-Console.prototype.debug = function (var_args) {};
+Console.prototype.debug = function (_var_args) {};
 
 /**
  * @param {*} value
  * @return {undefined}
  */
-Console.prototype.dir = function (value) {};
+Console.prototype.dir = function (_value) {};
 
 /**
  * @param {...*} var_args
  * @return {undefined}
  */
-Console.prototype.dirxml = function (var_args) {};
+Console.prototype.dirxml = function (_var_args) {};
 
 /**
  * @param {!Object} data
  * @param {*=} opt_columns
  * @return {undefined}
  */
-Console.prototype.table = function (data, opt_columns) {};
+Console.prototype.table = function (_data, _opt_columns) {};
 
 /**
  * @param {...*} var_args
  * @return {undefined}
  */
-Console.prototype.trace = function (var_args) {};
+Console.prototype.trace = function (_var_args) {};
 
 /**
  * @param {*} value
  * @return {undefined}
  */
-Console.prototype.count = function (value) {};
+Console.prototype.count = function (_value) {};
 
 /**
  * @param {*} value
  * @return {undefined}
  */
-Console.prototype.markTimeline = function (value) {};
+Console.prototype.markTimeline = function (_value) {};
 
 /**
  * @param {string=} opt_title
  * @return {undefined}
  */
-Console.prototype.profile = function (opt_title) {};
+Console.prototype.profile = function (_opt_title) {};
 
 /** @type {Array<ScriptProfile>} */
 Console.prototype.profiles;
@@ -187,37 +187,37 @@ Console.prototype.profiles;
  * @param {string=} opt_title
  * @return {undefined}
  */
-Console.prototype.profileEnd = function (opt_title) {};
+Console.prototype.profileEnd = function (_opt_title) {};
 
 /**
  * @param {string} name
  * @return {undefined}
  */
-Console.prototype.time = function (name) {};
+Console.prototype.time = function (_name) {};
 
 /**
  * @param {string} name
  * @return {undefined}
  */
-Console.prototype.timeEnd = function (name) {};
+Console.prototype.timeEnd = function (_name) {};
 
 /**
  * @param {*} value
  * @return {undefined}
  */
-Console.prototype.timeStamp = function (value) {};
+Console.prototype.timeStamp = function (_value) {};
 
 /**
  * @param {...*} var_args
  * @return {undefined}
  */
-Console.prototype.group = function (var_args) {};
+Console.prototype.group = function (_var_args) {};
 
 /**
  * @param {...*} var_args
  * @return {undefined}
  */
-Console.prototype.groupCollapsed = function (var_args) {};
+Console.prototype.groupCollapsed = function (_var_args) {};
 
 Console.prototype.groupEnd = function () {};
 
@@ -233,7 +233,7 @@ Window.prototype.console;
  * @type {!Console}
  * @suppress {duplicate}
  */
-var console;
+var _console;
 
 /**
  * @type {number}
@@ -269,10 +269,10 @@ Selection.prototype.empty = function () {};
  * @return {undefined}
  */
 Selection.prototype.setBaseAndExtent = function (
-  baseNode,
-  baseOffset,
-  extentNode,
-  extentOffset,
+  _baseNode,
+  _baseOffset,
+  _extentNode,
+  _extentOffset,
 ) {};
 
 /**
@@ -281,7 +281,7 @@ Selection.prototype.setBaseAndExtent = function (
  * @param {string} granularity
  * @return {undefined}
  */
-Selection.prototype.modify = function (alter, direction, granularity) {};
+Selection.prototype.modify = function (_alter, _direction, _granularity) {};
 
 /**
  * @param {Element} element
@@ -291,9 +291,9 @@ Selection.prototype.modify = function (alter, direction, granularity) {};
  * @nosideeffects
  */
 ViewCSS.prototype.getMatchedCSSRules = function (
-  element,
-  pseudoElement,
-  opt_authorOnly,
+  _element,
+  _pseudoElement,
+  _opt_authorOnly,
 ) {};
 
 /**
@@ -305,10 +305,10 @@ ViewCSS.prototype.getMatchedCSSRules = function (
  * @return {undefined}
  */
 Document.prototype.getCSSCanvasContext = function (
-  contextId,
-  name,
-  width,
-  height,
+  _contextId,
+  _name,
+  _width,
+  _height,
 ) {};
 
 /**
@@ -318,4 +318,4 @@ Document.prototype.getCSSCanvasContext = function (
  * @nosideeffects
  * @see https://developer.mozilla.org/en-US/docs/Web/API/Document/caretRangeFromPoint
  */
-Document.prototype.caretRangeFromPoint = function (x, y) {};
+Document.prototype.caretRangeFromPoint = function (_x, _y) {};

@@ -116,7 +116,7 @@ Performance.prototype.webkitClearResourceTimings = function () {};
  * @param {number} maxSize
  * @return {undefined}
  */
-Performance.prototype.setResourceTimingBufferSize = function (maxSize) {};
+Performance.prototype.setResourceTimingBufferSize = function (_maxSize) {};
 
 /**
  * @return {Array<PerformanceEntry>} A copy of the PerformanceEntry list,
@@ -132,7 +132,7 @@ Performance.prototype.getEntries = function () {};
  *     in chronological order with respect to startTime.
  * @nosideeffects
  */
-Performance.prototype.getEntriesByType = function (entryType) {};
+Performance.prototype.getEntriesByType = function (_entryType) {};
 
 /**
  * @param {string} name Only return {@code PerformanceEntry}s with this name.
@@ -142,7 +142,7 @@ Performance.prototype.getEntriesByType = function (entryType) {};
  *     order with respect to startTime.
  * @nosideeffects
  */
-Performance.prototype.getEntriesByName = function (name, opt_entryType) {};
+Performance.prototype.getEntriesByName = function (_name, _opt_entryType) {};
 
 // Only available in WebKit, and only with the --enable-memory-info flag.
 /** @type {PerformanceMemory} */ Performance.prototype.memory;
@@ -163,13 +163,13 @@ Performance.prototype.webkitNow = function () {};
  * @param {string} markName
  * @return {undefined}
  */
-Performance.prototype.mark = function (markName) {};
+Performance.prototype.mark = function (_markName) {};
 
 /**
  * @param {string=} opt_markName
  * @return {undefined}
  */
-Performance.prototype.clearMarks = function (opt_markName) {};
+Performance.prototype.clearMarks = function (_opt_markName) {};
 
 /**
  * @param {string} measureName
@@ -178,16 +178,16 @@ Performance.prototype.clearMarks = function (opt_markName) {};
  * @return {undefined}
  */
 Performance.prototype.measure = function (
-  measureName,
-  opt_startMark,
-  opt_endMark,
+  _measureName,
+  _opt_startMark,
+  _opt_endMark,
 ) {};
 
 /**
  * @param {string=} opt_measureName
  * @return {undefined}
  */
-Performance.prototype.clearMeasures = function (opt_measureName) {};
+Performance.prototype.clearMeasures = function (_opt_measureName) {};
 
 /** @type {Performance} */
 Window.prototype.performance;
@@ -196,4 +196,4 @@ Window.prototype.performance;
  * @type {!Performance}
  * @suppress {duplicate}
  */
-var performance;
+var _performance;

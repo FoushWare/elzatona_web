@@ -33,9 +33,9 @@ function Geolocation() {}
  * @return {undefined}
  */
 Geolocation.prototype.getCurrentPosition = function (
-  successCallback,
-  opt_errorCallback,
-  opt_options,
+  _successCallback,
+  _opt_errorCallback,
+  _opt_options,
 ) {};
 
 /**
@@ -45,16 +45,16 @@ Geolocation.prototype.getCurrentPosition = function (
  * @return {number}
  */
 Geolocation.prototype.watchPosition = function (
-  successCallback,
-  opt_errorCallback,
-  opt_options,
+  _successCallback,
+  _opt_errorCallback,
+  _opt_options,
 ) {};
 
 /**
  * @param {number} watchId
  * @return {undefined}
  */
-Geolocation.prototype.clearWatch = function (watchId) {};
+Geolocation.prototype.clearWatch = function (_watchId) {};
 
 /**
  * @constructor

@@ -25,4 +25,4 @@
  * @typedef {string}
  * @see http://www.w3.org/TR/page-visibility/#VisibilityState
  */
-var VisibilityState;
+var _VisibilityState;

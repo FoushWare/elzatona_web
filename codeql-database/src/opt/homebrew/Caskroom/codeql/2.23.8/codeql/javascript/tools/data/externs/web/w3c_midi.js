@@ -25,14 +25,14 @@
  * @param {!MIDIOptions=} opt_options
  * @return {!Promise.<!MIDIAccess>}
  */
-navigator.requestMIDIAccess = function (opt_options) {};
+navigator.requestMIDIAccess = function (_opt_options) {};
 
 /**
  * @typedef {{
  *   sysex: boolean
  * }}
  */
-var MIDIOptions;
+var _MIDIOptions;
 
 /**
  * @interface
@@ -47,29 +47,29 @@ MIDIInputMap.prototype.size;
 /**
  * @param {function(string)} iterator
  */
-MIDIInputMap.prototype.keys = function (iterator) {};
+MIDIInputMap.prototype.keys = function (_iterator) {};
 
 /**
  * @param {function(!Array.<*>)} iterator
  */
-MIDIInputMap.prototype.entries = function (iterator) {};
+MIDIInputMap.prototype.entries = function (_iterator) {};
 
 /**
  * @param {function(!MIDIInput)} iterator
  */
-MIDIInputMap.prototype.values = function (iterator) {};
+MIDIInputMap.prototype.values = function (_iterator) {};
 
 /**
  * @param {string} key
  * @return {!MIDIInput}
  */
-MIDIInputMap.prototype.get = function (key) {};
+MIDIInputMap.prototype.get = function (_key) {};
 
 /**
  * @param {string} key
  * @return {boolean}
  */
-MIDIInputMap.prototype.has = function (key) {};
+MIDIInputMap.prototype.has = function (_key) {};
 
 /**
  * @interface
@@ -84,29 +84,29 @@ MIDIOutputMap.prototype.size;
 /**
  * @param {function(string)} iterator
  */
-MIDIOutputMap.prototype.keys = function (iterator) {};
+MIDIOutputMap.prototype.keys = function (_iterator) {};
 
 /**
  * @param {function(!Array.<*>)} iterator
  */
-MIDIOutputMap.prototype.entries = function (iterator) {};
+MIDIOutputMap.prototype.entries = function (_iterator) {};
 
 /**
  * @param {function(!MIDIOutput)} iterator
  */
-MIDIOutputMap.prototype.values = function (iterator) {};
+MIDIOutputMap.prototype.values = function (_iterator) {};
 
 /**
  * @param {string} key
  * @return {!MIDIOutput}
  */
-MIDIOutputMap.prototype.get = function (key) {};
+MIDIOutputMap.prototype.get = function (_key) {};
 
 /**
  * @param {string} key
  * @return {boolean}
  */
-MIDIOutputMap.prototype.has = function (key) {};
+MIDIOutputMap.prototype.has = function (_key) {};
 
 /**
  * @interface
@@ -196,7 +196,7 @@ var MIDIOutput = function () {};
  * @param {!Uint8Array} data
  * @param {number=} opt_timestamp
  */
-MIDIOutput.prototype.send = function (data, opt_timestamp) {};
+MIDIOutput.prototype.send = function (_data, _opt_timestamp) {};
 
 /**
  * @constructor
@@ -204,7 +204,7 @@ MIDIOutput.prototype.send = function (data, opt_timestamp) {};
  * @param {string} type
  * @param {!MIDIMessageEventInit=} opt_init
  */
-var MIDIMessageEvent = function (type, opt_init) {};
+var MIDIMessageEvent = function (_type, _opt_init) {};
 
 /**
  * @const {number}
@@ -235,7 +235,7 @@ MIDIMessageEventInit.prototype.data;
  * @param {string} type
  * @param {!MIDIConnectionEventInit=} opt_init
  */
-var MIDIConnectionEvent = function (type, opt_init) {};
+var MIDIConnectionEvent = function (_type, _opt_init) {};
 
 /**
  * @const {MIDIPort}

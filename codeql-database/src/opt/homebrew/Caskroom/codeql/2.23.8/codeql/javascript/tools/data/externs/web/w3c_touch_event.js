@@ -36,7 +36,7 @@
  *   force: (number|undefined)
  * }}
  */
-var TouchInitDict;
+var _TouchInitDict;
 
 /**
  * The Touch class represents a single touch on the surface. A touch is the
@@ -46,7 +46,7 @@ var TouchInitDict;
  * @param {!TouchInitDict} touchInitDict
  * @constructor
  */
-function Touch(touchInitDict) {}
+function Touch(_touchInitDict) {}
 
 /**
  * The x-coordinate of the touch's location relative to the window's viewport.
@@ -133,13 +133,13 @@ Touch.prototype.rotationAngle;
  * @return {Touch}
  */
 Document.prototype.createTouch = function (
-  view,
-  target,
-  identifier,
-  pageX,
-  pageY,
-  screenX,
-  screenY,
+  _view,
+  _target,
+  _identifier,
+  _pageX,
+  _pageY,
+  _screenX,
+  _screenY,
 ) {};
 
 /**
@@ -161,14 +161,14 @@ TouchList.prototype.length;
  * @param {number} index
  * @return {?Touch}
  */
-TouchList.prototype.item = function (index) {};
+TouchList.prototype.item = function (_index) {};
 
 /**
  * @param {number} identifier
  * @return {?Touch}
  * @see http://www.w3.org/TR/touch-events-extensions/#widl-TouchList-identifiedTouch-Touch-long-identifier
  */
-TouchList.prototype.identifiedTouch = function (identifier) {};
+TouchList.prototype.identifiedTouch = function (_identifier) {};
 
 /**
  * Creates a new TouchList object.
@@ -176,7 +176,7 @@ TouchList.prototype.identifiedTouch = function (identifier) {};
  * @param {Array<?Touch>} touches
  * @return {TouchList}
  */
-Document.prototype.createTouchList = function (touches) {};
+Document.prototype.createTouchList = function (_touches) {};
 
 /**
  * @record
@@ -225,7 +225,7 @@ TouchEventInit.prototype.changedTouches;
  * @extends {UIEvent}
  * @constructor
  */
-function TouchEvent(type, opt_eventInitDict) {}
+function TouchEvent(_type, _opt_eventInitDict) {}
 
 /**
  * A collection of Touch objects representing all touches associated with this

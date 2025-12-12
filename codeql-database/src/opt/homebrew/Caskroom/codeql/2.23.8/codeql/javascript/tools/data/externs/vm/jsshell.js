@@ -660,7 +660,7 @@ function _runOffThreadScript() {}
  * @param {number=} seconds
  * @param {function=} func
  */
-function timeout(_seconds, _func) {}
+function _timeout(_seconds, _func) {}
 
 /**
  * @param {boolean} cond

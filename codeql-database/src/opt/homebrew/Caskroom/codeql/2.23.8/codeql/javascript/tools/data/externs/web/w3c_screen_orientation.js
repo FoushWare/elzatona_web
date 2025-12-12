@@ -32,7 +32,7 @@ var ScreenOrientation = function () {};
  * @param {string} orientation
  * @return {!Promise<void>}
  */
-ScreenOrientation.prototype.lock = function (orientation) {};
+ScreenOrientation.prototype.lock = function (_orientation) {};
 
 /** @return {void} */
 ScreenOrientation.prototype.unlock = function () {};

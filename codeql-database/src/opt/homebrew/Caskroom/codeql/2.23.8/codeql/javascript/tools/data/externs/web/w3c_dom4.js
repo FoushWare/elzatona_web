@@ -27,7 +27,7 @@
  * @typedef {?(DocumentType|Element|CharacterData)}
  * @see https://www.w3.org/TR/domcore/#interface-childnode
  */
-var ChildNode;
+var _ChildNode;
 
 /**
  * @return {undefined}

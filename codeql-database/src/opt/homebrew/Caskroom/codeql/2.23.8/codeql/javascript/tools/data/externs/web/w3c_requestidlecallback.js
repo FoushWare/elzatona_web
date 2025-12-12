@@ -27,7 +27,7 @@
  *   timeout: (number|undefined)
  * }}
  */
-var IdleCallbackOptions;
+var _IdleCallbackOptions;
 
 /**
  * Schedules a callback to run when the browser is idle.
@@ -36,7 +36,7 @@ var IdleCallbackOptions;
  *     it must execute the callback. No timeout enforced otherwise.
  * @return {number} A handle that can be used to cancel the scheduled callback.
  */
-function requestIdleCallback(callback, opt_options) {}
+function _requestIdleCallback(_callback, _opt_options) {}
 
 /**
  * Cancels a callback scheduled to run when the browser is idle.
@@ -44,7 +44,7 @@ function requestIdleCallback(callback, opt_options) {}
  *     the scheduled callback to cancel.
  * @return {undefined}
  */
-function cancelIdleCallback(handle) {}
+function _cancelIdleCallback(_handle) {}
 
 /**
  * An interface for an object passed into the callback for

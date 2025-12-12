@@ -30,7 +30,7 @@
  * @nosideeffects
  * @see https://www.w3.org/TR/2000/CR-DOM-Level-2-20000510/core.html#ID-getElBId
  */
-Document.prototype.getElementById = function (s) {};
+Document.prototype.getElementById = function (_s) {};
 
 /**
  * @param {?string} namespaceURI
@@ -40,9 +40,9 @@ Document.prototype.getElementById = function (s) {};
  * @see https://www.w3.org/TR/2000/CR-DOM-Level-2-20000510/core.html#ID-DocCrElNS
  */
 Document.prototype.createElementNS = function (
-  namespaceURI,
-  qualifiedName,
-  opt_typeExtension,
+  _namespaceURI,
+  _qualifiedName,
+  _opt_typeExtension,
 ) {};
 
 /**
@@ -52,8 +52,8 @@ Document.prototype.createElementNS = function (
  * @see https://www.w3.org/TR/2000/CR-DOM-Level-2-20000510/core.html#ID-DocCrElNS
  */
 Document.prototype.createAttributeNS = function (
-  namespaceURI,
-  qualifiedName,
+  _namespaceURI,
+  _qualifiedName,
 ) {};
 
 /**
@@ -63,7 +63,7 @@ Document.prototype.createAttributeNS = function (
  * @nosideeffects
  * @see https://www.w3.org/TR/2000/CR-DOM-Level-2-20000510/core.html#ID-getElBTNNS
  */
-Document.prototype.getElementsByTagNameNS = function (namespace, name) {};
+Document.prototype.getElementsByTagNameNS = function (_namespace, name) {};
 
 /**
  * @param {Node} externalNode
@@ -71,7 +71,7 @@ Document.prototype.getElementsByTagNameNS = function (namespace, name) {};
  * @return {Node}
  * @see https://www.w3.org/TR/2000/CR-DOM-Level-2-20000510/core.html#Core-Document-importNode
  */
-Document.prototype.importNode = function (externalNode, deep) {};
+Document.prototype.importNode = function (_externalNode, _deep) {};
 
 /**
  * @constructor
@@ -94,7 +94,7 @@ HTMLCollection.prototype.length;
  * @see http://www.w3.org/TR/2000/CR-DOM-Level-2-20000510/html.html#ID-33262535
  * @nosideeffects
  */
-HTMLCollection.prototype.item = function (index) {};
+HTMLCollection.prototype.item = function (_index) {};
 
 /**
  * @param {string} name
@@ -102,7 +102,7 @@ HTMLCollection.prototype.item = function (index) {};
  * @see http://www.w3.org/TR/2000/CR-DOM-Level-2-20000510/html.html#ID-21069976
  * @nosideeffects
  */
-HTMLCollection.prototype.namedItem = function (name) {};
+HTMLCollection.prototype.namedItem = function (_name) {};
 
 /**
  * @constructor
@@ -124,7 +124,7 @@ HTMLOptionsCollection.prototype.length;
  * @see http://www.w3.org/TR/DOM-Level-2-HTML/html.html#HTMLOptionsCollection-item
  * @nosideeffects
  */
-HTMLOptionsCollection.prototype.item = function (index) {};
+HTMLOptionsCollection.prototype.item = function (_index) {};
 
 /**
  * @constructor
@@ -208,7 +208,7 @@ HTMLDocument.prototype.cookie;
  * optional parameters: https://msdn.microsoft.com/en-us/library/ms536652(v=vs.85).aspx
  * @override
  */
-HTMLDocument.prototype.open = function (opt_mimeType, opt_replace) {};
+HTMLDocument.prototype.open = function (_opt_mimeType, _opt_replace) {};
 
 /**
  * @return {undefined}
@@ -223,7 +223,7 @@ HTMLDocument.prototype.close = function () {};
  * @see http://www.w3.org/TR/2000/CR-DOM-Level-2-20000510/html.html#ID-75233634
  * @override
  */
-HTMLDocument.prototype.write = function (text) {};
+HTMLDocument.prototype.write = function (_text) {};
 
 /**
  * @param {string} text
@@ -231,7 +231,7 @@ HTMLDocument.prototype.write = function (text) {};
  * @see http://www.w3.org/TR/2000/CR-DOM-Level-2-20000510/html.html#ID-35318390
  * @override
  */
-HTMLDocument.prototype.writeln = function (text) {};
+HTMLDocument.prototype.writeln = function (_text) {};
 
 /**
  * @param {string} elementName
@@ -239,7 +239,7 @@ HTMLDocument.prototype.writeln = function (text) {};
  * @see http://www.w3.org/TR/2000/CR-DOM-Level-2-20000510/html.html#ID-71555259
  * @nosideeffects
  */
-HTMLDocument.prototype.getElementsByName = function (elementName) {};
+HTMLDocument.prototype.getElementsByName = function (_elementName) {};
 
 /**
  * @param {Node} root
@@ -251,10 +251,10 @@ HTMLDocument.prototype.getElementsByName = function (elementName) {};
  * @nosideeffects
  */
 HTMLDocument.prototype.createNodeIterator = function (
-  root,
-  whatToShow,
-  filter,
-  entityReferenceExpansion,
+  _root,
+  _whatToShow,
+  _filter,
+  _entityReferenceExpansion,
 ) {};
 
 /**
@@ -267,17 +267,17 @@ HTMLDocument.prototype.createNodeIterator = function (
  * @nosideeffects
  */
 HTMLDocument.prototype.createTreeWalker = function (
-  root,
-  whatToShow,
-  filter,
-  entityReferenceExpansion,
+  _root,
+  _whatToShow,
+  _filter,
+  _entityReferenceExpansion,
 ) {};
 
 /** @typedef {{
   createNodeIterator: function(Node, number=, NodeFilter=, boolean=) : NodeIterator,
   createTreeWalker: function(Node, number=, NodeFilter=, boolean=) : TreeWalker
 }} */
-var TraversalDocument;
+var _TraversalDocument;
 
 /**
  * @interface
@@ -310,7 +310,7 @@ function NodeFilter() {}
  * @return {number} Any of NodeFilter.FILTER_* constants.
  * @see http://www.w3.org/TR/DOM-Level-2-Traversal-Range/traversal.html#Traversal-NodeFilter-acceptNode
  */
-NodeFilter.prototype.acceptNode = function (n) {};
+NodeFilter.prototype.acceptNode = function (_n) {};
 
 /**
  * @interface
@@ -724,7 +724,7 @@ function HTMLFormControlsCollection() {}
  * @override
  * @suppress {newCheckTypes}
  */
-HTMLFormControlsCollection.prototype.namedItem = function (name) {};
+HTMLFormControlsCollection.prototype.namedItem = function (_name) {};
 
 /**
  * @constructor
@@ -867,7 +867,7 @@ HTMLSelectElement.prototype.size;
  * @return {undefined}
  * @see http://www.w3.org/TR/2000/CR-DOM-Level-2-20000510/html.html#ID-14493106
  */
-HTMLSelectElement.prototype.add = function (element, opt_before) {};
+HTMLSelectElement.prototype.add = function (_element, _opt_before) {};
 
 /**
  * @return {undefined}
@@ -889,7 +889,7 @@ HTMLSelectElement.prototype.focus = function () {};
  * @see http://www.w3.org/TR/2000/CR-DOM-Level-2-20000510/html.html#ID-33404570
  * @override
  */
-HTMLSelectElement.prototype.remove = function (opt_index) {};
+HTMLSelectElement.prototype.remove = function (_opt_index) {};
 
 /**
  * @constructor
@@ -2255,7 +2255,7 @@ HTMLTableElement.prototype.deleteCaption = function () {};
  * @return {HTMLElement}
  * @see http://www.w3.org/TR/2000/CR-DOM-Level-2-20000510/html.html#ID-13114938
  */
-HTMLTableElement.prototype.deleteRow = function (index) {};
+HTMLTableElement.prototype.deleteRow = function (_index) {};
 
 /**
  * @return {undefined}
@@ -2274,7 +2274,7 @@ HTMLTableElement.prototype.deleteTHead = function () {};
  * @return {HTMLElement}
  * @see https://www.w3.org/TR/html5/tabular-data.html#htmltableelement
  */
-HTMLTableElement.prototype.insertRow = function (opt_index) {};
+HTMLTableElement.prototype.insertRow = function (_opt_index) {};
 
 /**
  * @constructor
@@ -2375,14 +2375,14 @@ HTMLTableSectionElement.prototype.vAlign;
  * @return {HTMLElement}
  * @see http://www.w3.org/TR/2000/CR-DOM-Level-2-20000510/html.html#ID-5625626
  */
-HTMLTableSectionElement.prototype.deleteRow = function (index) {};
+HTMLTableSectionElement.prototype.deleteRow = function (_index) {};
 
 /**
  * @param {number=} opt_index
  * @return {HTMLElement}
  * @see https://www.w3.org/TR/html5/tabular-data.html#htmltablesectionelement
  */
-HTMLTableSectionElement.prototype.insertRow = function (opt_index) {};
+HTMLTableSectionElement.prototype.insertRow = function (_opt_index) {};
 
 /**
  * @constructor
@@ -2444,14 +2444,14 @@ HTMLTableRowElement.prototype.vAlign;
  * @return {undefined}
  * @see http://www.w3.org/TR/2000/CR-DOM-Level-2-20000510/html.html#ID-11738598
  */
-HTMLTableRowElement.prototype.deleteCell = function (index) {};
+HTMLTableRowElement.prototype.deleteCell = function (_index) {};
 
 /**
  * @param {number} index
  * @return {HTMLElement}
  * @see http://www.w3.org/TR/2000/CR-DOM-Level-2-20000510/html.html#ID-68927016
  */
-HTMLTableRowElement.prototype.insertCell = function (index) {};
+HTMLTableRowElement.prototype.insertCell = function (_index) {};
 
 /**
  * @constructor

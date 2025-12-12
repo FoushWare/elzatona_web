@@ -31,13 +31,13 @@ var Intl = {};
  *         opt_options
  * @constructor
  */
-Intl.v8BreakIterator = function (_opt_locales, opt_options) {};
+Intl.v8BreakIterator = function (_opt_locales, _opt_options) {};
 
 /**
  * @param {string} text
  * @return {undefined}
  */
-Intl.v8BreakIterator.prototype.adoptText = function (text) {};
+Intl.v8BreakIterator.prototype.adoptText = function (_text) {};
 
 /**
  * @return {string}
@@ -67,21 +67,21 @@ Intl.v8BreakIterator.prototype.next = function () {};
  *     numeric: (boolean|undefined), caseFirst: (string|undefined)}=}
  *         opt_options
  */
-Intl.Collator = function (opt_locales, opt_options) {};
+Intl.Collator = function (_opt_locales, _opt_options) {};
 
 /**
  * @param {Array<string>} locales
  * @param {{localeMatcher: (string|undefined)}=} opt_options
  * @return {Array<string>}
  */
-Intl.Collator.supportedLocalesOf = function (locales, opt_options) {};
+Intl.Collator.supportedLocalesOf = function (_locales, _opt_options) {};
 
 /**
  * @param {string} arg1
  * @param {string} arg2
  * @return {number}
  */
-Intl.Collator.prototype.compare = function (arg1, arg2) {};
+Intl.Collator.prototype.compare = function (_arg1, _arg2) {};
 
 /**
  * @return {{locale: string, usage: string, sensitivity: string,
@@ -103,20 +103,20 @@ Intl.Collator.prototype.resolvedOptions = function () {};
  *     maximumSignificantDigits: (number|undefined)}=}
  *         opt_options
  */
-Intl.NumberFormat = function (opt_locales, opt_options) {};
+Intl.NumberFormat = function (_opt_locales, _opt_options) {};
 
 /**
  * @param {Array<string>} locales
  * @param {{localeMatcher: (string|undefined)}=} opt_options
  * @return {Array<string>}
  */
-Intl.NumberFormat.supportedLocalesOf = function (locales, opt_options) {};
+Intl.NumberFormat.supportedLocalesOf = function (_locales, _opt_options) {};
 
 /**
  * @param {number} num
  * @return {string}
  */
-Intl.NumberFormat.prototype.format = function (num) {};
+Intl.NumberFormat.prototype.format = function (_num) {};
 
 /**
  * @return {{locale: string, numberingSystem: string, style: string,
@@ -140,20 +140,20 @@ Intl.NumberFormat.prototype.resolvedOptions = function () {};
  *    timeZoneName: (string|undefined), hour12: (boolean|undefined)}=}
  *        opt_options
  */
-Intl.DateTimeFormat = function (opt_locales, opt_options) {};
+Intl.DateTimeFormat = function (_opt_locales, _opt_options) {};
 
 /**
  * @param {Array<string>} locales
  * @param {{localeMatcher: string}=} opt_options
  * @return {Array<string>}
  */
-Intl.DateTimeFormat.supportedLocalesOf = function (locales, opt_options) {};
+Intl.DateTimeFormat.supportedLocalesOf = function (_locales, _opt_options) {};
 
 /**
  * @param {(!Date|number)=} date
  * @return {string}
  */
-Intl.DateTimeFormat.prototype.format = function (date) {};
+Intl.DateTimeFormat.prototype.format = function (_date) {};
 
 /**
  * @return {{locale: string, calendar: string, numberingSystem: string,

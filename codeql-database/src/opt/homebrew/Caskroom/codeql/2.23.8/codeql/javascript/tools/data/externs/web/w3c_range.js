@@ -73,7 +73,7 @@ Range.prototype.commonAncestorContainer;
  * @return {undefined}
  * @see http://www.w3.org/TR/DOM-Level-2-Traversal-Range/ranges.html#Level2-Range-method-setStart
  */
-Range.prototype.setStart = function (refNode, offset) {};
+Range.prototype.setStart = function (_refNode, _offset) {};
 
 /**
  * @param {Node} refNode
@@ -81,56 +81,56 @@ Range.prototype.setStart = function (refNode, offset) {};
  * @return {undefined}
  * @see http://www.w3.org/TR/DOM-Level-2-Traversal-Range/ranges.html#Level2-Range-method-setEnd
  */
-Range.prototype.setEnd = function (refNode, offset) {};
+Range.prototype.setEnd = function (_refNode, _offset) {};
 
 /**
  * @param {Node} refNode
  * @return {undefined}
  * @see http://www.w3.org/TR/DOM-Level-2-Traversal-Range/ranges.html#Level2-Range-setStartBefore
  */
-Range.prototype.setStartBefore = function (refNode) {};
+Range.prototype.setStartBefore = function (_refNode) {};
 
 /**
  * @param {Node} refNode
  * @return {undefined}
  * @see http://www.w3.org/TR/DOM-Level-2-Traversal-Range/ranges.html#Level2-Range-method-setStartAfter
  */
-Range.prototype.setStartAfter = function (refNode) {};
+Range.prototype.setStartAfter = function (_refNode) {};
 
 /**
  * @param {Node} refNode
  * @return {undefined}
  * @see http://www.w3.org/TR/DOM-Level-2-Traversal-Range/ranges.html#Level2-Range-method-setEndBefore
  */
-Range.prototype.setEndBefore = function (refNode) {};
+Range.prototype.setEndBefore = function (_refNode) {};
 
 /**
  * @param {Node} refNode
  * @return {undefined}
  * @see http://www.w3.org/TR/DOM-Level-2-Traversal-Range/ranges.html#Level2-Range-method-setEndAfter
  */
-Range.prototype.setEndAfter = function (refNode) {};
+Range.prototype.setEndAfter = function (_refNode) {};
 
 /**
  * @param {boolean} toStart
  * @return {undefined}
  * @see http://www.w3.org/TR/DOM-Level-2-Traversal-Range/ranges.html#Level2-Range-method-collapse
  */
-Range.prototype.collapse = function (toStart) {};
+Range.prototype.collapse = function (_toStart) {};
 
 /**
  * @param {Node} refNode
  * @return {undefined}
  * @see http://www.w3.org/TR/DOM-Level-2-Traversal-Range/ranges.html#Level2-Range-method-selectNode
  */
-Range.prototype.selectNode = function (refNode) {};
+Range.prototype.selectNode = function (_refNode) {};
 
 /**
  * @param {Node} refNode
  * @return {undefined}
  * @see http://www.w3.org/TR/DOM-Level-2-Traversal-Range/ranges.html#Level2-Range-method-selectNodeContents
  */
-Range.prototype.selectNodeContents = function (refNode) {};
+Range.prototype.selectNodeContents = function (_refNode) {};
 
 /**
  * @type {number}
@@ -162,7 +162,7 @@ Range.prototype.END_TO_START = 3;
  * @return {number}
  * @see http://www.w3.org/TR/DOM-Level-2-Traversal-Range/ranges.html#Level2-Range-method-compareBoundaryPoints
  */
-Range.prototype.compareBoundaryPoints = function (how, sourceRange) {};
+Range.prototype.compareBoundaryPoints = function (_how, _sourceRange) {};
 
 /**
  * @return {number}
@@ -187,14 +187,14 @@ Range.prototype.cloneContents = function () {};
  * @return {DocumentFragment}
  * @see http://www.w3.org/TR/DOM-Level-2-Traversal-Range/ranges.html#Level2-Range-method-insertNode
  */
-Range.prototype.insertNode = function (newNode) {};
+Range.prototype.insertNode = function (_newNode) {};
 
 /**
  * @param {Node} newParent
  * @return {undefined}
  * @see http://www.w3.org/TR/DOM-Level-2-Traversal-Range/ranges.html#Level2-Range-method-surroundContents
  */
-Range.prototype.surroundContents = function (newParent) {};
+Range.prototype.surroundContents = function (_newParent) {};
 
 /**
  * @return {Range}

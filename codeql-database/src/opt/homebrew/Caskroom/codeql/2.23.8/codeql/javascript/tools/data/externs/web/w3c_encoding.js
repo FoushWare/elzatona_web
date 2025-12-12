@@ -25,7 +25,7 @@
  * @param {string=} encoding
  * @param {Object=} options
  */
-function TextDecoder(encoding, options) {}
+function TextDecoder(_encoding, _options) {}
 
 /** @type {string} **/ TextDecoder.prototype.encoding;
 /** @type {boolean} **/ TextDecoder.prototype.fatal;
@@ -36,14 +36,14 @@ function TextDecoder(encoding, options) {}
  * @param {Object=} options
  * @return {string}
  */
-TextDecoder.prototype.decode = function decode(input, options) {};
+TextDecoder.prototype.decode = function decode(_input, _options) {};
 
 /**
  * @constructor
  * @param {string=} encoding
  * @param {Object=} options
  */
-function TextEncoder(encoding, options) {}
+function TextEncoder(_encoding, _options) {}
 
 /** @type {string} **/ TextEncoder.prototype.encoding;
 
@@ -51,4 +51,4 @@ function TextEncoder(encoding, options) {}
  * @param {string} input
  * @return {!Uint8Array}
  */
-TextEncoder.prototype.encode = function (input) {};
+TextEncoder.prototype.encode = function (_input) {};
