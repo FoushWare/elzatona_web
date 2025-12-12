@@ -5,7 +5,7 @@ import { createClient } from "@supabase/supabase-js";
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
 const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
-const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
+const _supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
 
 import { Card, CardContent, CardHeader, CardTitle } from "@elzatona/components";
 import { Badge } from "@elzatona/components";
@@ -117,25 +117,26 @@ export const TanStackDashboard: React.FC = () => {
   } = usePlans();
 
   const {
-    data: categoriesData,
+    data: _categoriesData,
     isLoading: categoriesLoading,
     error: categoriesError,
   } = useCategories();
 
   const {
-    data: topicsData,
+    data: _topicsData,
     isLoading: topicsLoading,
     error: topicsError,
   } = useTopics();
 
   const {
-    data: questionsData,
+    data: _questionsData,
     isLoading: questionsLoading,
     error: questionsError,
   } = useQuestionsUnified();
 
   // Prefetch related data for better UX
-  const { prefetchCardData, prefetchCategoryData } = usePrefetchRelatedData();
+  const { prefetchCardData, prefetchCategoryData: _prefetchCategoryData } =
+    usePrefetchRelatedData();
 
   // Handle refresh
   const handleRefresh = () => {

@@ -82,7 +82,7 @@ const processColorForLightMode = (
 };
 
 // Helper function to format code with proper line breaks and indentation
-const formatCodeForDisplay = (code: string): string => {
+const _formatCodeForDisplay = (code: string): string => {
   if (!code) return "";
 
   // Convert code to string if it's not already
@@ -264,10 +264,10 @@ export function ViewQuestionModal({
   isOpen,
   onClose,
   question,
-  cards: _cards,
-  allCategories: _allCategories,
-  categoriesData: _categoriesData,
-  topicsData: _topicsData,
+  _cards: _cards,
+  _allCategories: _allCategories,
+  _categoriesData: _categoriesData,
+  _topicsData: _topicsData,
 }: ViewQuestionModalProps) {
   const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null);
   const [showExplanation, setShowExplanation] = useState(false);
@@ -481,7 +481,7 @@ export function ViewQuestionModal({
 
   if (!question) return null;
 
-  const cleanQuestionTitle = (title: string) => {
+  const _cleanQuestionTitle = (title: string) => {
     if (!title) return "";
     return title.replaceAll('"', "").replaceAll("'", "").trim();
   };
@@ -492,7 +492,7 @@ export function ViewQuestionModal({
     setShowExplanation(true);
   };
 
-  const isCorrectAnswer = (optionText: string) => {
+  const _isCorrectAnswer = (optionText: string) => {
     const correctOption = question.options?.find((opt: any) => opt.isCorrect);
     return correctOption?.text === optionText;
   };

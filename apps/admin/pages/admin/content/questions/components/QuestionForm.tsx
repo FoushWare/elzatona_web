@@ -128,10 +128,10 @@ export const QuestionForm = React.forwardRef<
     {
       initialData,
       onSubmit,
-      onCancel: _onCancel,
+      _onCancel: _onCancel,
       cards,
       allCategories,
-      allTags: _allTags,
+      _allTags: _allTags,
       readOnly = false,
     },
     ref,
