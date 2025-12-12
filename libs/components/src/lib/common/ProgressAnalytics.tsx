@@ -193,7 +193,7 @@ export default function ProgressAnalytics() {
 
       {/* Top Categories */}
       {dashboardStats?.recentActivity &&
-        dashboardStats.recentActivity.length > 0 && (
+        dashboardStats?.recentActivity.length > 0 && (
           <div className="bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-lg border border-gray-200 dark:border-gray-700">
             <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-4 flex items-center">
               <Brain className="w-5 h-5 mr-2 text-purple-500" />
@@ -241,7 +241,7 @@ export default function ProgressAnalytics() {
 
       {/* Recent Activity Summary */}
       {dashboardStats?.recentActivity &&
-        dashboardStats.recentActivity.length > 0 && (
+        dashboardStats?.recentActivity.length > 0 && (
           <div className="bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-lg border border-gray-200 dark:border-gray-700">
             <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-4 flex items-center">
               <Zap className="w-5 h-5 mr-2 text-yellow-500" />
