@@ -249,13 +249,13 @@ const _formatCodeForDisplay = (code: string): string => {
 };
 
 interface ViewQuestionModalProps {
-  isOpen: boolean;
-  onClose: () => void;
-  question: UnifiedQuestion | null;
-  cards: any[];
-  allCategories: string[];
-  categoriesData: any[];
-  topicsData: any[];
+  readonly isOpen: boolean;
+  readonly onClose: () => void;
+  readonly question: UnifiedQuestion | null;
+  readonly cards: any[];
+  readonly allCategories: string[];
+  readonly categoriesData: any[];
+  readonly topicsData: any[];
 }
 
 const getOptionLetter = (index: number) => String.fromCharCode(65 + index);
@@ -264,10 +264,10 @@ export function ViewQuestionModal({
   isOpen,
   onClose,
   question,
-  _cards: _cards,
-  _allCategories: _allCategories,
-  _categoriesData: _categoriesData,
-  _topicsData: _topicsData,
+  cards: _cards,
+  allCategories: _allCategories,
+  categoriesData: _categoriesData,
+  topicsData: _topicsData,
 }: ViewQuestionModalProps) {
   const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null);
   const [showExplanation, setShowExplanation] = useState(false);

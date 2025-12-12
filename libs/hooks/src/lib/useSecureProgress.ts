@@ -282,9 +282,10 @@ export function useSecureProgress(): UseSecureProgressReturn {
           );
           // Don't throw error, just return early and use local cache
           return;
-        } catch (_parseError) {
+        } catch (parseError_) {
           console.warn(
             "Failed to parse error response, continuing with local cache",
+            parseError_,
           );
           return;
         }
