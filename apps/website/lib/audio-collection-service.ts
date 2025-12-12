@@ -6,7 +6,7 @@ import {
   generateAudioPaths,
   createDefaultAudioInfo,
   createCustomAudioInfo,
-  _DEFAULT_AUDIO_PATHS as _DEFAULT_AUDIO_PATHS,
+  DEFAULT_AUDIO_PATHS as _DEFAULT_AUDIO_PATHS,
 } from "./audio-collection-schema";
 import { createClient } from "@supabase/supabase-js";
 
