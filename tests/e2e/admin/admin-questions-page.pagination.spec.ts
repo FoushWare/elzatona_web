@@ -5,7 +5,7 @@
  * Note: Environment variables are loaded by the setup file
  */
 
-import { test, expect } from "@playwright/test";
+import { test, expect, Locator, APIResponse } from "@playwright/test";
 import {
   setupAdminPage,
   createQuestion,
@@ -201,8 +201,8 @@ test.describe("A-E2E-001: Admin Bulk Question Addition - Pagination", () => {
 
     // Find pagination buttons - they're in a flex container with "Page X of Y"
     // Structure: <div className="flex items-center space-x-2"> <Button> <span>Page X of Y</span> <Button> </div>
-    let nextButton: any = null;
-    let _prevButton: any = null;
+    let nextButton: Locator | null = null;
+    let _prevButton: Locator | null = null;
 
     if ((await pageIndicator.count()) > 0) {
       // Find the span element containing "Page X of Y"
@@ -398,8 +398,8 @@ test.describe("A-E2E-001: Admin Bulk Question Addition - Pagination", () => {
 
     // First navigate to page 2 if possible
     // Find pagination buttons - they're in a flex container with "Page X of Y"
-    let nextButton: any = null;
-    let _prevButton: any = null;
+    let nextButton: Locator | null = null;
+    let _prevButton: Locator | null = null;
 
     if ((await pageIndicator.count()) > 0) {
       // Find the span element containing "Page X of Y"
@@ -558,7 +558,7 @@ test.describe("A-E2E-001: Admin Bulk Question Addition - Pagination", () => {
 
       // Now test previous button - find it using the most reliable method
       // The previous button is the one that comes BEFORE the "Page X of Y" text
-      let updatedPrevButton: any = null;
+      let updatedPrevButton: Locator | null = null;
 
       // Find the "Page X of Y" text first
       const pageIndicatorText = page
@@ -1084,9 +1084,10 @@ test.describe("A-E2E-001: Admin Bulk Question Addition - Pagination", () => {
         );
         await trigger.waitFor({ state: "attached", timeout: 5000 });
       }
-    } catch (e: any) {
+    } catch (e: unknown) {
       // Check if error is due to actual page closure
-      const errorMsg = e?.message || String(e);
+      const error = e instanceof Error ? e : new Error(String(e));
+      const errorMsg = error.message || String(e);
       if (
         errorMsg.includes("Target page, context or browser has been closed") ||
         errorMsg.includes("page has been closed")
@@ -1107,7 +1108,7 @@ test.describe("A-E2E-001: Admin Bulk Question Addition - Pagination", () => {
         .first()
         .textContent({ timeout: 5000 })
         .catch(() => null);
-    } catch (_e: any) {
+    } catch (_e: unknown) {
       // If page is actually closed, Playwright will throw a proper error
       // Just log and continue - the click attempt will fail if page is really closed
       console.log('⚠️ Could not get "Showing" text, continuing anyway...');
@@ -1188,9 +1189,10 @@ test.describe("A-E2E-001: Admin Bulk Question Addition - Pagination", () => {
           clickSucceeded = true;
           console.log("✅ Clicked page size selector");
           break; // Success, exit retry loop
-        } catch (clickErr: any) {
+        } catch (clickErr: unknown) {
           // Check if error is due to page closure (Playwright's actual error message)
-          const errorMessage = clickErr?.message || String(clickErr);
+          const error = clickErr instanceof Error ? clickErr : new Error(String(clickErr));
+          const errorMessage = error.message || String(clickErr);
           if (
             errorMessage.includes(
               "Target page, context or browser has been closed",
@@ -1225,9 +1227,10 @@ test.describe("A-E2E-001: Admin Bulk Question Addition - Pagination", () => {
           "Failed to click page size selector after all retry attempts",
         );
       }
-    } catch (clickError: any) {
+    } catch (clickError: unknown) {
       // Check if error is due to actual page closure (Playwright's error message)
-      const errorMsg = clickError?.message || String(clickError);
+      const error = clickError instanceof Error ? clickError : new Error(String(clickError));
+      const errorMsg = error.message || String(clickError);
       if (
         errorMsg.includes("Target page, context or browser has been closed") ||
         errorMsg.includes("page has been closed")
@@ -1243,8 +1246,8 @@ test.describe("A-E2E-001: Admin Bulk Question Addition - Pagination", () => {
     }
 
     // NOW set up API response listener AFTER clicking
-    let pageSizeResponse: any = null;
-    const responseHandler = (response: any) => {
+    let pageSizeResponse: APIResponse | null = null;
+    const responseHandler = (response: APIResponse) => {
       const url = response.url();
       if (
         url.includes("/api/questions/unified") &&
@@ -1278,9 +1281,10 @@ test.describe("A-E2E-001: Admin Bulk Question Addition - Pagination", () => {
 
       await option20.click({ timeout: 5000 });
       console.log("✅ Selected page size 20");
-    } catch (optionError: any) {
+    } catch (optionError: unknown) {
       page.off("response", responseHandler);
       // Check if error is due to actual page closure
+      const error = optionError instanceof Error ? optionError : new Error(String(optionError));
       const errorMsg = optionError?.message || String(optionError);
       if (
         errorMsg.includes("Target page, context or browser has been closed") ||
@@ -1314,9 +1318,10 @@ test.describe("A-E2E-001: Admin Bulk Question Addition - Pagination", () => {
         await pageSizeResponsePromise;
       }
       await page.waitForTimeout(1000);
-    } catch (waitError: any) {
+    } catch (waitError: unknown) {
       // Check if error is due to actual page closure
-      const errorMsg = waitError?.message || String(waitError);
+      const error = waitError instanceof Error ? waitError : new Error(String(waitError));
+      const errorMsg = error.message || String(waitError);
       if (
         errorMsg.includes("Target page, context or browser has been closed") ||
         errorMsg.includes("page has been closed")
