@@ -1191,7 +1191,8 @@ test.describe("A-E2E-001: Admin Bulk Question Addition - Pagination", () => {
           break; // Success, exit retry loop
         } catch (clickErr: unknown) {
           // Check if error is due to page closure (Playwright's actual error message)
-          const error = clickErr instanceof Error ? clickErr : new Error(String(clickErr));
+          const error =
+            clickErr instanceof Error ? clickErr : new Error(String(clickErr));
           const errorMessage = error.message || String(clickErr);
           if (
             errorMessage.includes(
@@ -1229,7 +1230,10 @@ test.describe("A-E2E-001: Admin Bulk Question Addition - Pagination", () => {
       }
     } catch (clickError: unknown) {
       // Check if error is due to actual page closure (Playwright's error message)
-      const error = clickError instanceof Error ? clickError : new Error(String(clickError));
+      const error =
+        clickError instanceof Error
+          ? clickError
+          : new Error(String(clickError));
       const errorMsg = error.message || String(clickError);
       if (
         errorMsg.includes("Target page, context or browser has been closed") ||
@@ -1284,7 +1288,10 @@ test.describe("A-E2E-001: Admin Bulk Question Addition - Pagination", () => {
     } catch (optionError: unknown) {
       page.off("response", responseHandler);
       // Check if error is due to actual page closure
-      const error = optionError instanceof Error ? optionError : new Error(String(optionError));
+      const error =
+        optionError instanceof Error
+          ? optionError
+          : new Error(String(optionError));
       const errorMsg = optionError?.message || String(optionError);
       if (
         errorMsg.includes("Target page, context or browser has been closed") ||
@@ -1320,7 +1327,8 @@ test.describe("A-E2E-001: Admin Bulk Question Addition - Pagination", () => {
       await page.waitForTimeout(1000);
     } catch (waitError: unknown) {
       // Check if error is due to actual page closure
-      const error = waitError instanceof Error ? waitError : new Error(String(waitError));
+      const error =
+        waitError instanceof Error ? waitError : new Error(String(waitError));
       const errorMsg = error.message || String(waitError);
       if (
         errorMsg.includes("Target page, context or browser has been closed") ||

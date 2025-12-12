@@ -961,7 +961,8 @@ export async function setupAdminPage(
       await navigationPromise;
       console.log("✅ Navigation to admin page successful");
     } catch (navError: unknown) {
-      const error = navError instanceof Error ? navError : new Error(String(navError));
+      const error =
+        navError instanceof Error ? navError : new Error(String(navError));
       let currentURL = "";
       try {
         if (!page.isClosed()) {
@@ -1081,7 +1082,8 @@ export async function setupAdminPage(
         });
       } catch (navError: unknown) {
         // Check if error is connection refused (server not ready)
-        const error = navError instanceof Error ? navError : new Error(String(navError));
+        const error =
+          navError instanceof Error ? navError : new Error(String(navError));
         if (
           navError.message.includes("ERR_CONNECTION_REFUSED") ||
           navError.message.includes("net::ERR_CONNECTION_REFUSED")
@@ -1110,7 +1112,10 @@ export async function setupAdminPage(
                 timeout: 15000,
               })
               .catch((retryError: unknown) => {
-                const error = retryError instanceof Error ? retryError : new Error(String(retryError));
+                const error =
+                  retryError instanceof Error
+                    ? retryError
+                    : new Error(String(retryError));
                 throw new Error(
                   `Failed to navigate to questions page after retry. ` +
                     `Original error: ${navError.message}. ` +

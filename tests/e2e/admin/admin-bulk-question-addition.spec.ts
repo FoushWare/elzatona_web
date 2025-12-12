@@ -46,7 +46,14 @@ if (process.env.ADMIN_PASSWORD) {
   process.env.ADMIN_PASSWORD = process.env.ADMIN_PASSWORD.trim();
 }
 
-import { test, expect, Page, APIResponse, Request, ConsoleMessage } from "@playwright/test";
+import {
+  test,
+  expect,
+  Page,
+  APIResponse,
+  Request,
+  ConsoleMessage,
+} from "@playwright/test";
 // Updated: All tests now use headerSection to avoid strict mode violations
 
 // Module-level variables to share state across tests in serial mode
@@ -1215,7 +1222,8 @@ test.describe("A-E2E-001: Admin Bulk Question Addition", () => {
     } catch (navError: unknown) {
       // Navigation promise might have timed out, but navigation might still have happened
       // Check the current URL to see if we're actually on an admin page
-      const error = navError instanceof Error ? navError : new Error(String(navError));
+      const error =
+        navError instanceof Error ? navError : new Error(String(navError));
       let currentURL = "";
       try {
         if (!page.isClosed()) {
@@ -1380,7 +1388,10 @@ test.describe("A-E2E-001: Admin Bulk Question Addition", () => {
         );
       } catch (recoveryError: unknown) {
         // If recovery also failed, throw the original error
-        const error = recoveryError instanceof Error ? recoveryError : new Error(String(recoveryError));
+        const error =
+          recoveryError instanceof Error
+            ? recoveryError
+            : new Error(String(recoveryError));
         throw new Error(
           `Page crashed to error page: ${currentURLAfterLogin}\n` +
             `Recovery failed: ${recoveryError.message}\n\n` +
@@ -1444,7 +1455,8 @@ test.describe("A-E2E-001: Admin Bulk Question Addition", () => {
           });
         } catch (navError: unknown) {
           // If navigation fails, check if we're already on the questions page
-          const error = navError instanceof Error ? navError : new Error(String(navError));
+          const error =
+            navError instanceof Error ? navError : new Error(String(navError));
           if (!page.isClosed()) {
             const currentURL = page.url();
             if (currentURL.includes("/admin/content/questions")) {
@@ -3312,7 +3324,10 @@ test.describe("A-E2E-001: Admin Bulk Question Addition", () => {
     // Find the Select trigger button - it's in the same container as "Show:" label
     // The structure is: div.flex.items-center.space-x-2 > span "Show:" + Select > SelectTrigger
     // Better approach: find the combobox that's in the pagination area
-    let trigger: { click: () => Promise<void>; waitFor: (options: { state: string; timeout: number }) => Promise<void> } | null = null;
+    let trigger: {
+      click: () => Promise<void>;
+      waitFor: (options: { state: string; timeout: number }) => Promise<void>;
+    } | null = null;
 
     // Method 1: Find combobox near "Show:" text (in the same flex container)
     try {
@@ -3504,7 +3519,8 @@ test.describe("A-E2E-001: Admin Bulk Question Addition", () => {
           break; // Success, exit retry loop
         } catch (clickErr: unknown) {
           // Check if error is due to page closure (Playwright's actual error message)
-          const error = clickErr instanceof Error ? clickErr : new Error(String(clickErr));
+          const error =
+            clickErr instanceof Error ? clickErr : new Error(String(clickErr));
           const errorMessage = error.message || String(clickErr);
           if (
             errorMessage.includes(
@@ -3542,7 +3558,10 @@ test.describe("A-E2E-001: Admin Bulk Question Addition", () => {
       }
     } catch (clickError: unknown) {
       // Check if error is due to actual page closure (Playwright's error message)
-      const error = clickError instanceof Error ? clickError : new Error(String(clickError));
+      const error =
+        clickError instanceof Error
+          ? clickError
+          : new Error(String(clickError));
       const errorMsg = error.message || String(clickError);
       if (
         errorMsg.includes("Target page, context or browser has been closed") ||
@@ -3597,7 +3616,10 @@ test.describe("A-E2E-001: Admin Bulk Question Addition", () => {
     } catch (optionError: unknown) {
       page.off("response", responseHandler);
       // Check if error is due to actual page closure
-      const error = optionError instanceof Error ? optionError : new Error(String(optionError));
+      const error =
+        optionError instanceof Error
+          ? optionError
+          : new Error(String(optionError));
       const errorMsg = optionError?.message || String(optionError);
       if (
         errorMsg.includes("Target page, context or browser has been closed") ||
@@ -3633,7 +3655,8 @@ test.describe("A-E2E-001: Admin Bulk Question Addition", () => {
       await page.waitForTimeout(1000);
     } catch (waitError: unknown) {
       // Check if error is due to actual page closure
-      const error = waitError instanceof Error ? waitError : new Error(String(waitError));
+      const error =
+        waitError instanceof Error ? waitError : new Error(String(waitError));
       const errorMsg = error.message || String(waitError);
       if (
         errorMsg.includes("Target page, context or browser has been closed") ||

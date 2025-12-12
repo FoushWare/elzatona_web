@@ -122,8 +122,45 @@ else
   echo ""
 fi
 
-# Step 4: Add formatted files to staging
-echo "📦 STEP 4: Adding formatted files to staging..."
+# Step 4: SonarQube code quality analysis (optional - can be disabled with SKIP_SONAR=1)
+if [ "$SKIP_SONAR" != "1" ]; then
+  echo "📊 STEP 4: Running SonarQube code quality analysis..."
+  echo "   📝 Executing: libs/utilities/scripts/check-sonarqube-precommit.sh"
+  echo "   ⚠️  This will catch code quality issues BEFORE commit!"
+  echo "   💡 To skip: SKIP_SONAR=1 git commit"
+  echo ""
+
+  # Check if SonarQube script exists
+  if [ -f "libs/utilities/scripts/check-sonarqube-precommit.sh" ]; then
+    bash libs/utilities/scripts/check-sonarqube-precommit.sh
+    SONAR_EXIT_CODE=$?
+    
+    if [ $SONAR_EXIT_CODE -ne 0 ]; then
+      echo ""
+      echo "════════════════════════════════════════════════════════════════"
+      echo "❌ PRE-COMMIT HOOK FAILED - SONARQUBE ISSUES DETECTED!"
+      echo "════════════════════════════════════════════════════════════════"
+      echo ""
+      echo "💡 Please review the SonarQube output above for details"
+      echo "💡 Fix issues or skip with:"
+      echo "   SKIP_SONAR=1 git commit (NOT RECOMMENDED)"
+      echo ""
+      exit 1
+    else
+      echo "   ✅ SonarQube code quality analysis passed!"
+    fi
+  else
+    echo "   ⚠️  SonarQube check script not found"
+    echo "   💡 Skipping SonarQube check"
+  fi
+  echo ""
+else
+  echo "⏭️  STEP 4: Skipping SonarQube check (SKIP_SONAR=1)"
+  echo ""
+fi
+
+# Step 5: Add formatted files to staging
+echo "📦 STEP 5: Adding formatted files to staging..."
 git add .
 echo "   ✅ Formatted files added to staging"
 echo ""
@@ -133,6 +170,7 @@ echo "📊 PRE-COMMIT SUMMARY:"
 echo "   ✅ Prettier formatting completed"
 echo "   ✅ GitGuardian secret scanning passed"
 echo "   ✅ CodeQL security analysis passed"
+echo "   ✅ SonarQube code quality analysis passed"
 echo "   ✅ Files staged for commit"
 echo ""
 echo "════════════════════════════════════════════════════════════════"
