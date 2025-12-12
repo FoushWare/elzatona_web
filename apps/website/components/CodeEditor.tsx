@@ -13,7 +13,7 @@ import {
   Copy,
   Check,
   Palette,
-  _Settings as _Settings,
+  Settings as _Settings,
   ZoomIn,
   ZoomOut,
   ChevronRight,
