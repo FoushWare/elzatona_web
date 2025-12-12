@@ -8,7 +8,7 @@ import React, { useState, useMemo, useCallback } from "react";
 import { Plus, Edit, Trash2, Eye, Search, Play } from "lucide-react";
 import {
   ClientCodeRunner,
-  _TestCase,
+  TestCase as _TestCase,
   ProblemSolvingEditor,
 } from "@elzatona/components";
 import { ProblemSolvingTask, ProblemSolvingTaskFormData } from "@/types/admin";
