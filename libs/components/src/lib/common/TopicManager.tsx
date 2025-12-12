@@ -40,8 +40,6 @@ import {
   Edit,
   Trash2,
   Search,
-  _Filter as _Filter,
-  Palette as _Palette,
   AlertCircle,
   BookOpen,
   Tag,

@@ -19,7 +19,6 @@ import {
   Calculator,
 } from "lucide-react";
 import { useTheme, useAdminAuth } from "@elzatona/contexts";
-import {} from "../common/NotificationDropdown";
 import AlzatonaLogo from "../common/AlzatonaLogo";
 
 export default function AdminNavbar() {
