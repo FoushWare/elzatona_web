@@ -629,7 +629,7 @@ export default function FrontendTaskEditor({
             // SECURITY: Escape backslashes in transpiled code as well
             // Use String.fromCharCode to avoid template literal parsing issues
             const backtick = String.fromCharCode(96);
-            const escapedBacktick = String.fromCharCode(92) + backtick; // "\\`"
+            const escapedBacktick = String.fromCharCode(92) + backtick; // backslash + backtick
             const escapedTranspiledCode = transpiledCode
               .replace(/\\/g, "\\\\")
               .replace(new RegExp(backtick, "g"), escapedBacktick)
