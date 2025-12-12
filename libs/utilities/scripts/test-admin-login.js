@@ -1,6 +1,6 @@
 #!/usr/bin/env node
-/**
 /* eslint-disable @typescript-eslint/no-require-imports */
+/**
  * Test Admin Login
  *
  * Tests the admin login API endpoint directly

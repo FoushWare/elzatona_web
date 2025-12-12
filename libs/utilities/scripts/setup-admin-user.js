@@ -1,6 +1,6 @@
 #!/usr/bin/env node
-/**
 /* eslint-disable @typescript-eslint/no-require-imports */
+/**
  * Setup Admin User Script
  *
  * Creates or updates an admin user in the admin_users table

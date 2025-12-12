@@ -1,6 +1,6 @@
 #!/usr/bin/env node
-/**
 /* eslint-disable @typescript-eslint/no-require-imports */
+/**
  * Update .env.local with Production Credentials
  *
  * This script updates .env.local with the correct production Supabase credentials
