@@ -101,10 +101,12 @@ python3 -m pip install --user git-filter-repo
 # Create replacements file
 cat > /tmp/replacements.txt << 'EOF'
 # Format: old_secret==>new_placeholder
-SUPABASE_SERVICE_ROLE_KEY_REDACTED==>YOUR_SUPABASE_SERVICE_ROLE_KEY_HERE
-AIzaSyBXlcfcdyIqoeJOb2gXcxpRSmQO7lEP82Y==>YOUR_GOOGLE_API_KEY_HERE
-gho_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx==>YOUR_GITHUB_TOKEN_HERE
-sk-proj-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx==>YOUR_OPENAI_API_KEY_HERE
+# ⚠️ WARNING: Replace the placeholders below with your actual exposed secrets
+# ⚠️ DO NOT commit this file with real secrets!
+YOUR_ACTUAL_SUPABASE_SERVICE_ROLE_KEY==>YOUR_SUPABASE_SERVICE_ROLE_KEY_HERE
+YOUR_ACTUAL_GOOGLE_API_KEY==>YOUR_GOOGLE_API_KEY_HERE
+YOUR_ACTUAL_GITHUB_TOKEN==>YOUR_GITHUB_TOKEN_HERE
+YOUR_ACTUAL_OPENAI_API_KEY==>YOUR_OPENAI_API_KEY_HERE
 EOF
 
 # Apply replacements
@@ -120,9 +122,11 @@ rm /tmp/replacements.txt
 # Download BFG from https://rtyley.github.io/bfg-repo-cleaner/
 
 # Create secrets file
+# ⚠️ WARNING: Replace placeholders with your actual exposed secrets
+# ⚠️ DO NOT commit this file with real secrets!
 cat > /tmp/secrets.txt << 'EOF'
-SUPABASE_SERVICE_ROLE_KEY_REDACTED
-AIzaSyBXlcfcdyIqoeJOb2gXcxpRSmQO7lEP82Y
+YOUR_ACTUAL_SUPABASE_SERVICE_ROLE_KEY
+YOUR_ACTUAL_GOOGLE_API_KEY
 EOF
 
 # Remove secrets

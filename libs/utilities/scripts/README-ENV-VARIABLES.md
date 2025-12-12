@@ -108,7 +108,7 @@ git check-ignore .env.local
 
 ```bash
 # Search for potential hardcoded tokens (should find nothing)
-grep -r "e410633adf39138ed522d35a8216146ed7750aa5" . --exclude-dir=node_modules
+grep -r "YOUR_SONAR_TOKEN_HERE" . --exclude-dir=node_modules
 # Should return: No matches found
 ```
 

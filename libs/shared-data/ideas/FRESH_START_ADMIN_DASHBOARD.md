@@ -37,7 +37,7 @@ The following collections were preserved as they contain system-critical data:
 
 ### **Admin Login Credentials:**
 
-- **Email:** `afouadsoftwareengineer@gmail.com`
+- **Email:** `<your-admin-email>`
 - **Role:** `super_admin`
 - **Status:** Active
 
@@ -103,7 +103,7 @@ The following collections were preserved as they contain system-critical data:
 ### **Step 1: Access Admin Dashboard**
 
 1. Navigate to `http://localhost:3000/admin/login`
-2. Login with: `afouadsoftwareengineer@gmail.com`
+2. Login with: `<your-admin-email>`
 3. Enter your admin password
 4. You'll be redirected to `/admin/dashboard`
 
