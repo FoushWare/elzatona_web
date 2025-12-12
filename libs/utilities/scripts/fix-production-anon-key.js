@@ -1,6 +1,6 @@
 #!/usr/bin/env node
-/**
 /* eslint-disable @typescript-eslint/no-require-imports */
+/**
  * Fix Production Anon Key
  *
  * Updates NEXT_PUBLIC_SUPABASE_ANON_KEY in .env.local to match production project

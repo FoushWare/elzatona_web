@@ -1,6 +1,6 @@
 #!/usr/bin/env node
-/**
 /* eslint-disable @typescript-eslint/no-require-imports */
+/**
  * Run SonarQube/SonarCloud analysis locally with memory limits
  * v1.0 - Local code quality and security analysis
  */
