@@ -5,12 +5,12 @@ import {
   Zap,
   Target,
   Clock,
-  _Users,
-  _Star,
+  Users as _Users,
+  Star as _Star,
   ArrowRight,
   Map,
   Compass,
-  _CheckCircle,
+  CheckCircle as _CheckCircle,
   Play,
 } from "lucide-react";
 

@@ -10,7 +10,7 @@ import {
   ArrowRight,
   Loader2,
   XCircle,
-  _BookOpen,
+  BookOpen as _BookOpen,
 } from "lucide-react";
 
 interface Question {
