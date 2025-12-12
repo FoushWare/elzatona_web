@@ -114,7 +114,7 @@ test.describe("G-E2E-005: Guided Learning Page", () => {
     const plansContainer = page
       .locator('[class*="grid"]')
       .filter({ hasText: /Day|Plan|Questions/i });
-    const plansVisible = await plansContainer
+    const _plansVisible = await plansContainer
       .first()
       .isVisible({ timeout: 5000 })
       .catch(() => false);
@@ -159,7 +159,7 @@ test.describe("G-E2E-005: Guided Learning Page", () => {
         /No learning plans|No plans available/i,
       );
 
-      const hasErrorOrEmpty = await errorState
+      const _hasErrorOrEmpty = await errorState
         .or(emptyState)
         .first()
         .isVisible({ timeout: 5000 })
@@ -234,7 +234,7 @@ test.describe("G-E2E-005: Guided Learning Page", () => {
 
     // Look for completion statistics (only shown for authenticated users with completed plans)
     const completionStats = page.getByText(/completed|You've completed/i);
-    const statsVisible = await completionStats
+    const _statsVisible = await completionStats
       .isVisible({ timeout: 5000 })
       .catch(() => false);
 
