@@ -94,7 +94,7 @@ const existingTopics = [
 ];
 
 // JavaScript category ID
-const JAVASCRIPT_CATEGORY_ID = "c5929620-9e0e-4be6-86e8-4696112a2cd3";
+const _JAVASCRIPT_CATEGORY_ID = "c5929620-9e0e-4be6-86e8-4696112a2cd3";
 
 // Function to find matching topic
 function findMatchingTopic(question) {

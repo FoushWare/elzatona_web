@@ -74,7 +74,7 @@ export function getApiConfig(): ApiConfig {
   // If APP_ENV=test but we're seeing production URL, log a warning
   if (isTest) {
     const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || "";
-    const isTestProject =
+    const _isTestProject =
       supabaseUrl.includes("kiycimlsatwfqxtfprlr") ||
       supabaseUrl.includes("slfyltsmcivmqfloxpmq") ||
       supabaseUrl.includes("vopfdukvdhnmzzjkxpnj");
