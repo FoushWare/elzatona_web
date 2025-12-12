@@ -776,14 +776,15 @@ export default function CodeEditor({
                 try {
                   // Try to dynamically import Prettier standalone and parsers
                   // These need to be installed: prettier, prettier/standalone, prettier/parser-typescript, prettier/parser-babel
-                  const prettierModule =
-                    await import("prettier/standalone").catch(() => null);
-                  const typescriptParserModule =
-                    await import("prettier/parser-typescript").catch(
-                      () => null,
-                    );
-                  const babelParserModule =
-                    await import("prettier/parser-babel").catch(() => null);
+                  const prettierModule = await import(
+                    "prettier/standalone"
+                  ).catch(() => null);
+                  const typescriptParserModule = await import(
+                    "prettier/parser-typescript"
+                  ).catch(() => null);
+                  const babelParserModule = await import(
+                    "prettier/parser-babel"
+                  ).catch(() => null);
 
                   if (
                     !prettierModule ||
