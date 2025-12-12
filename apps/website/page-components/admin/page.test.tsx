@@ -7,10 +7,10 @@
 import React from "react";
 import {
   render,
-  _screen,
-  _fireEvent,
+  screen as _screen,
+  fireEvent as _fireEvent,
   waitFor,
-  _act,
+  act as _act,
 } from "@testing-library/react";
 import "@testing-library/jest-dom";
 import UnifiedAdminPage from "./questions/page";
