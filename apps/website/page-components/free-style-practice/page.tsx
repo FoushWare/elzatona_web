@@ -1256,7 +1256,7 @@ export default function FreeStylePracticePage() {
       const result = await response.json();
       return result.success === true;
     } catch (_error) {
-      console.error("Error saving progress:", error);
+      console.error("Error saving progress:", _error);
       return false;
     }
   };
@@ -1990,7 +1990,7 @@ export default function FreeStylePracticePage() {
                 categoryId: categoryId,
               };
             } catch (_error) {
-              console.error("Error parsing question:", error, q);
+              console.error("Error parsing question:", _error, q);
               skippedCount++;
               return null;
             }
@@ -2073,7 +2073,7 @@ export default function FreeStylePracticePage() {
             q.tags.forEach((tag) => allTags.add(tag));
           }
         });
-        setAvailableTags(Array.from(_allTags).sort());
+        setAvailableTags(Array.from(allTags).sort());
 
         // If no questions found, log helpful info
         if (transformedQuestions.length === 0) {
@@ -2096,14 +2096,14 @@ export default function FreeStylePracticePage() {
         }
       }
     } catch (_error) {
-      console.error("Error fetching questions:", error);
+      console.error("Error fetching questions:", _error);
       setQuestions([]);
       setTotalQuestionCount(0);
 
       // Log full error for debugging
-      if (error instanceof Error) {
-        console.error("Error message:", error.message);
-        console.error("Error stack:", error.stack);
+      if (_error instanceof Error) {
+        console.error("Error message:", _error.message);
+        console.error("Error stack:", _error.stack);
       }
     } finally {
       setIsLoadingQuestions(false);
@@ -2215,7 +2215,7 @@ export default function FreeStylePracticePage() {
   // Initial data fetch
   useEffect(() => {
     if (!isAuthLoading && userType !== "self-directed") {
-      router.push("/learning-mode");
+      _router.push("/learning-mode");
       return;
     }
 
@@ -2224,7 +2224,7 @@ export default function FreeStylePracticePage() {
     fetchTopics();
     fetchQuestionCount();
     fetchUserProgress();
-  }, [userType, isAuthLoading, router, isAuthenticated]);
+  }, [userType, isAuthLoading, _router, isAuthenticated]);
 
   // Resolve topic ID from subtopic slug
   useEffect(() => {
@@ -2377,7 +2377,7 @@ export default function FreeStylePracticePage() {
           }
         }
       } catch (_error) {
-        console.error("Error resolving topic:", error);
+        console.error("Error resolving topic:", _error);
         setResolvedTopicId(null);
       } finally {
         setIsResolvingTopic(false);

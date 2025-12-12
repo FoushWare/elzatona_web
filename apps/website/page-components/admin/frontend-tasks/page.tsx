@@ -325,7 +325,7 @@ export default function FrontendTasksAdminPage() {
 }
 
 // Frontend Task Modal Component
-function _FrontendTaskModal({
+function FrontendTaskModal({
   task,
   onClose,
   onSave,

@@ -202,7 +202,7 @@ test.describe("A-E2E-001: Admin Bulk Question Addition - Pagination", () => {
     // Find pagination buttons - they're in a flex container with "Page X of Y"
     // Structure: <div className="flex items-center space-x-2"> <Button> <span>Page X of Y</span> <Button> </div>
     let nextButton: any = null;
-    let prevButton: any = null;
+    let _prevButton: any = null;
 
     if ((await pageIndicator.count()) > 0) {
       // Find the span element containing "Page X of Y"
@@ -220,7 +220,7 @@ test.describe("A-E2E-001: Admin Bulk Question Addition - Pagination", () => {
 
       if (buttonCount >= 2) {
         // First button is previous (ChevronLeft), last is next (ChevronRight)
-        prevButton = paginationButtons.first();
+          _prevButton = paginationButtons.first();
         nextButton = paginationButtons.last();
       } else if (buttonCount === 1) {
         // Only one button - check if it's before or after the text
@@ -231,7 +231,7 @@ test.describe("A-E2E-001: Admin Bulk Question Addition - Pagination", () => {
           .locator("xpath=following::button[1]")
           .first();
         if ((await buttonBefore.count()) > 0) {
-          prevButton = buttonBefore;
+          _prevButton = buttonBefore;
         }
         if ((await buttonAfter.count()) > 0) {
           nextButton = buttonAfter;
@@ -399,7 +399,7 @@ test.describe("A-E2E-001: Admin Bulk Question Addition - Pagination", () => {
     // First navigate to page 2 if possible
     // Find pagination buttons - they're in a flex container with "Page X of Y"
     let nextButton: any = null;
-    let prevButton: any = null;
+    let _prevButton: any = null;
 
     if ((await pageIndicator.count()) > 0) {
       // Find the span element containing "Page X of Y"
@@ -416,7 +416,7 @@ test.describe("A-E2E-001: Admin Bulk Question Addition - Pagination", () => {
       const buttonCount = await paginationButtons.count();
 
       if (buttonCount >= 2) {
-        prevButton = paginationButtons.first();
+          _prevButton = paginationButtons.first();
         nextButton = paginationButtons.last();
       } else if (buttonCount === 1) {
         // Check if button is before or after the text
@@ -427,7 +427,7 @@ test.describe("A-E2E-001: Admin Bulk Question Addition - Pagination", () => {
           .locator("xpath=following::button[1]")
           .first();
         if ((await buttonBefore.count()) > 0) {
-          prevButton = buttonBefore;
+          _prevButton = buttonBefore;
         }
         if ((await buttonAfter.count()) > 0) {
           nextButton = buttonAfter;
