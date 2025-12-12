@@ -19,8 +19,8 @@ import {
   addFlashcard,
   isInFlashcards,
   removeFlashcard,
-} from "@/lib/flashcards";
-import { SafeHTML, sanitizeText } from "@/lib/utils/sanitize";
+} from "../lib/flashcards";
+import { SafeHTML, sanitizeText } from "../lib/utils/sanitize";
 
 interface TestCase {
   input: unknown[] | Record<string, unknown> | string | number | boolean;

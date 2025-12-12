@@ -19,7 +19,7 @@ import {
   Compass,
   User,
   LogOut,
-  _Settings as _Settings,
+  Settings as _Settings,
   Loader2,
 } from "lucide-react";
 import {
@@ -297,7 +297,7 @@ export const NavbarSimple: React.FC = () => {
     };
 
     const handleResize = () => {
-      setIsMobile(window.innerWidth < 1024);
+      _setIsMobile(window.innerWidth < 1024);
     };
 
     // Initial check
