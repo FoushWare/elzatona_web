@@ -122,7 +122,7 @@ test.describe("A-E2E-001: Admin Bulk Question Addition - Validation", () => {
       // Check for validation message (browser native or custom)
       const validationMessage = await titleInput.evaluate(
         (el: HTMLInputElement) => {
-          return (el as any).validationMessage || "";
+          return (el as HTMLInputElement).validationMessage || "";
         },
       );
 
