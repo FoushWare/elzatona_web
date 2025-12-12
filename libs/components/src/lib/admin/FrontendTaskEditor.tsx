@@ -316,6 +316,11 @@ export default function FrontendTaskEditor({
   // Console message listener
   useEffect(() => {
     const handleMessage = (event: MessageEvent) => {
+      // SECURITY: Verify message origin to prevent XSS
+      if (event.origin !== window.location.origin) {
+        console.warn("Received message from untrusted origin:", event.origin);
+        return;
+      }
       if (event.data.type === "console") {
         setConsoleOutput((prev) => [...prev.slice(-19), event.data.message]);
       }
@@ -614,14 +619,17 @@ export default function FrontendTaskEditor({
               delete window.App;
             }
             
-            const cleanCode = \`${cleanReactCode.replace(/`/g, "\\`").replace(/\$/g, "\\$")}\`;
+            // SECURITY: Escape backslashes, backticks, and dollar signs for template literal
+            const cleanCode = \`${cleanReactCode.replace(/\\/g, "\\\\").replace(/`/g, "\\`").replace(/\$/g, "\\$")}\`;
             const transpiledCode = Babel.transform(cleanCode, { 
               presets: ['react'],
               plugins: ['transform-class-properties']
             }).code;
             
+            // SECURITY: Escape backslashes in transpiled code as well
+            const escapedTranspiledCode = transpiledCode.replace(/\\/g, "\\\\").replace(/`/g, "\\`").replace(/\$/g, "\\$");
             const wrappedCode = \`(function() {
-              \${transpiledCode}
+              \${escapedTranspiledCode}
               return App;
             })()\`;
             
