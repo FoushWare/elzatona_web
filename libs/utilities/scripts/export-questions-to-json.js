@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 
+/* eslint-disable @typescript-eslint/no-require-imports */
 /**
  * Export all questions from Supabase to JSON file
  * Usage: node scripts/export-questions-to-json.js

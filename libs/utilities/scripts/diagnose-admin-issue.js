@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 /**
+/* eslint-disable @typescript-eslint/no-require-imports */
  * Diagnose Admin Login Issue
  *
  * Checks environment configuration and database connection

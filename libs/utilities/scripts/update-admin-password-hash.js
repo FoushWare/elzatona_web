@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 /**
+/* eslint-disable @typescript-eslint/no-require-imports */
  * Update Admin Password Hash
  *
  * This script updates the password hash for an existing admin user

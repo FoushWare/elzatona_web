@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 /**
+/* eslint-disable @typescript-eslint/no-require-imports */
  * Environment Switcher Script
  *
  * Helps switch between TEST and PRODUCTION environments

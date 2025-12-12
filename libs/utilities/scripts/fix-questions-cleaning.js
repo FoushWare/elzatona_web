@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-require-imports */
 // Script to fix code/content cleaning issues in all questions
 // Applies the same cleaning algorithm used in the API route
 
