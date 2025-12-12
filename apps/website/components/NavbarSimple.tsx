@@ -144,15 +144,17 @@ export const NavbarSimple: React.FC = () => {
     if (!supabase) return;
     const {
       data: { subscription },
-    } = supabase.auth.onAuthStateChange((event: string, session: { session: unknown } | null) => {
-      const authed = !!session;
-      setStableAuthState({ isAuthenticated: authed, isLoading: false });
-      sessionStorage.setItem(
-        "navbar-auth-state",
-        JSON.stringify({ isAuthenticated: authed, isLoading: false }),
-      );
-      setSupabaseChecked(true);
-    });
+    } = supabase.auth.onAuthStateChange(
+      (event: string, session: { session: unknown } | null) => {
+        const authed = !!session;
+        setStableAuthState({ isAuthenticated: authed, isLoading: false });
+        sessionStorage.setItem(
+          "navbar-auth-state",
+          JSON.stringify({ isAuthenticated: authed, isLoading: false }),
+        );
+        setSupabaseChecked(true);
+      },
+    );
 
     return () => {
       subscription?.unsubscribe();
@@ -682,11 +684,13 @@ export const NavbarSimple: React.FC = () => {
                     {/* User Profile Section */}
                     <div className="flex items-center space-x-3 px-3 py-2 bg-gray-50 dark:bg-gray-800 rounded-lg">
                       {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
-                      {(user as unknown)?.photoURL || (user as unknown)?.avatar_url ? (
+                      {(user as unknown)?.photoURL ||
+                      (user as unknown)?.avatar_url ? (
                         <img
                           src={
                             // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                            (user as unknown)?.photoURL || (user as unknown)?.avatar_url
+                            (user as unknown)?.photoURL ||
+                            (user as unknown)?.avatar_url
                           }
                           alt="Profile"
                           className="w-8 h-8 rounded-full object-cover"

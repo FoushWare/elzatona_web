@@ -253,7 +253,9 @@ export const QuestionPracticeView: React.FC<QuestionPracticeViewProps> = ({
   };
 
   const displayDifficulty =
-    (question.difficulty && difficultyMap[question.difficulty]) || question.difficulty || "medium";
+    (question.difficulty && difficultyMap[question.difficulty]) ||
+    question.difficulty ||
+    "medium";
 
   return (
     <div className="w-full max-w-4xl mx-auto">

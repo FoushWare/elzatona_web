@@ -23,7 +23,9 @@ export const ExternalLink = () => <span data-testid="external-icon">🔗</span>;
 export const Filter = () => <span data-testid="filter-icon">🔽</span>;
 export const X = () => <span data-testid="x-icon">✕</span>;
 export const ChevronDown = () => <span data-testid="chevron-down-icon">▼</span>;
-export const ChevronLeft = () => <span data-testid="chevron-left-icon">◀</span>;
+export const ChevronLeft = () => (
+  <span data-testid="chevron-left-icon">◀</span>
+);
 export const ChevronRight = () => (
   <span data-testid="chevron-right-icon">▶</span>
 );
