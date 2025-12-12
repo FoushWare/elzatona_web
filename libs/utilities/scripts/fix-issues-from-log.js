@@ -13,7 +13,7 @@
  *   npm run fix:from-log -- <log-file> # Fix issues from specific log
  */
 
-const { execSync } = require("child_process");
+// const { execSync } = require("child_process"); // Unused
 const fs = require("fs");
 const path = require("path");
 
@@ -45,7 +45,6 @@ function parseLogFile(logFilePath) {
 
   // Find the "--- Output ---" section (prefer "After Fix", fallback to "Before Fix")
   const lines = content.split("\n");
-  let inOutputSection = false;
   let outputStartIndex = -1;
   let outputEndIndex = -1;
 

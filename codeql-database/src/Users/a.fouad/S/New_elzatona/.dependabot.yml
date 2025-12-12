@@ -1,0 +1,50 @@
+version: 2
+updates:
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "daily"
+    # Create PRs but do NOT auto-merge
+    open-pull-requests-limit: 10
+    # Require manual review and approval
+    reviewers:
+      - "FoushWare"
+    assignees:
+      - "FoushWare"
+    commit-message:
+      prefix: "chore"
+      include: "scope"
+    labels:
+      - "dependencies"
+      - "automated"
+      - "dependabot"
+    # Group updates to reduce PR noise
+    groups:
+      production-dependencies:
+        dependency-type: "production"
+      development-dependencies:
+        dependency-type: "development"
+    # Ignore major version updates (uncomment if desired)
+    # ignore:
+    #   - dependency-name: "*"
+    #     update-types: ["version-update:semver-major"]
+
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    # Create PRs but do NOT auto-merge
+    open-pull-requests-limit: 5
+    # Require manual review and approval
+    reviewers:
+      - "FoushWare"
+    assignees:
+      - "FoushWare"
+    commit-message:
+      prefix: "chore"
+      include: "scope"
+    labels:
+      - "dependencies"
+      - "github-actions"
+      - "automated"
+      - "dependabot"

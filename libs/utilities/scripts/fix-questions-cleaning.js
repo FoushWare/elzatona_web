@@ -3,8 +3,8 @@
 // Applies the same cleaning algorithm used in the API route
 
 const { createClient } = require("@supabase/supabase-js");
-const fs = require("fs");
-const path = require("path");
+// const fs = require("fs"); // Unused
+// const path = require("path"); // Unused
 
 // Supabase configuration - REQUIRES environment variables
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
