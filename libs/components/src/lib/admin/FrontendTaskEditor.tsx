@@ -631,6 +631,10 @@ export default function FrontendTaskEditor({
               return App;
             })()\`;
             
+            // SECURITY NOTE: eval() is used here for educational code execution in an iframe sandbox.
+            // The code runs in an isolated iframe (srcDoc) which provides some protection.
+            // This is intentional for allowing users to write and test React code in the editor.
+            // Consider implementing additional sandboxing measures (CSP, worker threads) for production.
             const App = eval(wrappedCode);
             
             const rootElement = document.getElementById('root');
