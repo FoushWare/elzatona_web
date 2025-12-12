@@ -23,6 +23,7 @@ import {
   isInFlashcards,
   removeFlashcard,
 } from "@/lib/flashcards";
+import { SafeHTML } from "@/lib/utils/sanitize";
 
 interface TestCase {
   input: any | any[];
@@ -833,9 +834,9 @@ export default function ProblemSolvingQuestion({
 
             {/* Problem Content */}
             <div className="mb-7 sm:mb-9">
-              <div
+              <SafeHTML
+                html={question.content}
                 className="text-base sm:text-lg text-gray-800 dark:text-gray-200 leading-relaxed prose prose-sm sm:prose-base dark:prose-invert max-w-none prose-headings:font-bold prose-p:mb-4 prose-strong:text-gray-900 dark:prose-strong:text-gray-100"
-                dangerouslySetInnerHTML={{ __html: question.content }}
               />
             </div>
 
