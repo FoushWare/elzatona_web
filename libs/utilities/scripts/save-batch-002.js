@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-require-imports */
 // Temporary script to save batch 002
 // This will be replaced with automated batch processing
 

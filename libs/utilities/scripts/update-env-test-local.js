@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 /**
+/* eslint-disable @typescript-eslint/no-require-imports */
  * Update .env.test.local with Encryption Settings
  *
  * Adds BCRYPT_SALT_ROUNDS and ADMIN_OWNER_EMAIL to .env.test.local

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-require-imports */
 // Script to fix malformed option text in the database
 // Run with: node scripts/fix-option-text.js
 

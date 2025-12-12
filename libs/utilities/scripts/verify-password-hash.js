@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 /**
+/* eslint-disable @typescript-eslint/no-require-imports */
  * Verify Password Hash Script
  *
  * Tests if a password matches the hash stored in the database
