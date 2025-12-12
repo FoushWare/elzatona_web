@@ -59,7 +59,7 @@ interface AdvancedSearchProps {
 
 export function AdvancedSearch({
   onResultsChange,
-  _onFacetsChange,
+  onFacetsChange: _onFacetsChange,
   placeholder = "Search questions, topics, categories...",
   showFilters = true,
   showFacets = true,

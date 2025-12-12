@@ -40,6 +40,7 @@
     "apps/admin/Utils/scripts/**/*",
     "**/*.spec.ts",
     "**/*.stories.ts",
-    "**/*.stories.js"
+    "**/*.stories.js",
+    "**/*.example.ts"
   ]
 }
