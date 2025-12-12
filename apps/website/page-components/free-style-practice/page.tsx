@@ -649,11 +649,12 @@ const QuestionContent = ({ content }: { content: string }) => {
       previousCode = code;
       code = decodeHtmlEntities(code);
       // Comprehensive HTML tag removal: remove script/style tags with content, comments, then all tags
+      // Handle script/style tags with optional spaces in closing tags (e.g., </script >)
       code = code
-        .replace(/<script[\s\S]*?<\/script>/gi, "") // Remove script tags and content
-        .replace(/<style[\s\S]*?<\/style>/gi, "") // Remove style tags and content
+        .replace(/<script[\s\S]*?<\/\s*script\s*>/gi, "") // Remove script tags and content (handles spaces)
+        .replace(/<style[\s\S]*?<\/\s*style\s*>/gi, "") // Remove style tags and content (handles spaces)
         .replace(/<!--[\s\S]*?-->/g, "") // Remove HTML comments
-        .replace(/<\/?[a-zA-Z][a-zA-Z0-9]*(?:\s+[^>]*)?>/gi, ""); // Remove remaining HTML tags
+        .replace(/<\/?[a-zA-Z][a-zA-Z0-9]*(?:\s+[^>]*)?\s*>/gi, ""); // Remove remaining HTML tags (handles trailing spaces)
       iterations++;
     }
 
@@ -697,10 +698,11 @@ const QuestionContent = ({ content }: { content: string }) => {
         .replace(/(\w+)\s*&lt;\s*(\d+)/g, "$1 < $2")
         .replace(/(\d+)\s*&gt;/g, "$1 >")
         // Comprehensive HTML tag removal: remove script/style tags with content, comments, then all tags
-        .replace(/<script[\s\S]*?<\/script>/gi, "") // Remove script tags and content
-        .replace(/<style[\s\S]*?<\/style>/gi, "") // Remove style tags and content
+        // Handle script/style tags with optional spaces in closing tags (e.g., </script >)
+        .replace(/<script[\s\S]*?<\/\s*script\s*>/gi, "") // Remove script tags and content (handles spaces)
+        .replace(/<style[\s\S]*?<\/\s*style\s*>/gi, "") // Remove style tags and content (handles spaces)
         .replace(/<!--[\s\S]*?-->/g, "") // Remove HTML comments
-        .replace(/<\/?[a-zA-Z][a-zA-Z0-9]*(?:\s+[^>]*)?>/gi, "") // Remove remaining HTML tags
+        .replace(/<\/?[a-zA-Z][a-zA-Z0-9]*(?:\s+[^>]*)?\s*>/gi, "") // Remove remaining HTML tags (handles trailing spaces)
         .replace(/^>\s*/g, "")
         .replace(/\s*>$/g, "")
         .replace(/\s+>\s+/g, " ");

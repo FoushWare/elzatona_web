@@ -180,7 +180,7 @@ const REPLACEMENTS = [
   },
 ];
 
-function fixImportsInFile(filePath, appRoot) {
+function fixImportsInFile(filePath, _appRoot) {
   let content = fs.readFileSync(filePath, "utf8");
   let modified = false;
 

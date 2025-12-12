@@ -48,6 +48,9 @@ storybook-static
 
 # Logs
 logs
+.logs/
+*.log
+.code-quality-check.log
 *.log
 dev-debug.log
 # Dependency directories

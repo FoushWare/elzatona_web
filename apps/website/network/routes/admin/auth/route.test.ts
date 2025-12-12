@@ -6,7 +6,7 @@
 import { POST } from "./route";
 import { NextRequest } from "next/server";
 import bcrypt from "bcryptjs";
-import jwt from "jsonwebtoken";
+// import _jwt from "jsonwebtoken";
 
 // Mock dependencies
 jest.mock("@supabase/supabase-js");

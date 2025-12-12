@@ -109,7 +109,7 @@ try {
   execSync("sonar-scanner --version", { stdio: "ignore" });
   sonarScannerAvailable = true;
   console.log("   ✅ SonarScanner is installed");
-} catch (error) {
+} catch (_error) {
   console.log("   ⚠️  SonarScanner not found");
   console.log("   💡 Attempting to use npx (no installation needed)...");
 
@@ -118,7 +118,7 @@ try {
     execSync("npx sonarqube-scanner --version", { stdio: "ignore" });
     sonarScannerAvailable = true;
     console.log("   ✅ SonarScanner available via npx");
-  } catch (npxError) {
+  } catch (_npxError) {
     console.log("   ⚠️  SonarScanner not available via npx");
     console.log("");
     console.log("   📦 Installation options:");
@@ -160,7 +160,7 @@ if (!skipTests) {
     );
     console.log("");
     console.log("   ✅ Tests completed with coverage");
-  } catch (error) {
+  } catch (_error) {
     console.log("");
     console.log("   ⚠️  Tests failed or no coverage generated");
     console.log("   💡 Continuing with SonarQube analysis anyway...");
@@ -188,7 +188,7 @@ if (!skipBuild) {
     });
     console.log("");
     console.log("   ✅ Build completed");
-  } catch (error) {
+  } catch (_error) {
     console.log("");
     console.log("   ⚠️  Build failed");
     console.log("   💡 Continuing with SonarQube analysis anyway...");
@@ -251,7 +251,7 @@ try {
     `📊 View results at: https://sonarcloud.io/dashboard?id=${sonarProjectKey}`,
   );
   console.log("");
-} catch (error) {
+} catch (_error) {
   console.log("");
   console.error("❌ SonarQube analysis failed");
   console.error("");

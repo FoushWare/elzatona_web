@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { UserAuthService } from "@/lib/user-auth";
-import { sanitizeInputServer } from "@/lib/utils/sanitize-server";
+import {} from "@/lib/utils/sanitize-server";
 import {
   validateAndSanitize,
   registerSchema,

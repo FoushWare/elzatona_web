@@ -110,7 +110,7 @@ test.describe("A-E2E-003: Admin Dashboard", () => {
     let response;
     try {
       response = await responsePromise;
-    } catch (error) {
+    } catch (_error) {
       // API response timeout - check what happened
       const currentURL = page.url();
       const errorMessage = page.locator(".bg-red-50, .bg-red-900\\/20");

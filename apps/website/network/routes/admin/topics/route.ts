@@ -78,7 +78,7 @@ async function saveTopic(topic: Omit<QuestionTopic, "id">): Promise<string> {
 }
 
 // Update topic in Supabase
-async function updateTopic(
+async function _updateTopic(
   topicId: string,
   topic: Partial<QuestionTopic>,
 ): Promise<void> {
@@ -96,7 +96,7 @@ async function updateTopic(
 }
 
 // Delete topic from Supabase
-async function deleteTopic(topicId: string): Promise<void> {
+async function _deleteTopic(topicId: string): Promise<void> {
   const { error } = await supabase.from("topics").delete().eq("id", topicId);
 
   if (error) {

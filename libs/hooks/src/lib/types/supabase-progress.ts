@@ -55,48 +55,48 @@ export interface DashboardStats {
 }
 
 export const getUserProgress = async (
-  userId: string,
+  _userId: string,
 ): Promise<UserProgress | null> => {
   return null;
 };
 
 export const saveProgress = async (
-  progress: Omit<UserProgress, "id" | "created_at" | "updated_at">,
+  _progress: Omit<UserProgress, "id" | "created_at" | "updated_at">,
 ): Promise<UserProgress> => {
   throw new Error("Not implemented");
 };
 
 export const updateQuestionProgress = async (
-  userId: string,
-  attempt: Omit<QuestionAttempt, "timestamp" | "points">,
+  _userId: string,
+  _attempt: Omit<QuestionAttempt, "timestamp" | "points">,
 ): Promise<void> => {
   // Stub implementation
 };
 
 export const updateChallengeProgress = async (
-  userId: string,
-  attempt: Omit<ChallengeAttempt, "timestamp" | "points">,
+  _userId: string,
+  _attempt: Omit<ChallengeAttempt, "timestamp" | "points">,
 ): Promise<void> => {
   // Stub implementation
 };
 
 export const updateLearningPathProgress = async (
-  userId: string,
-  pathId: string,
-  pathName: string,
-  sectionId: string,
-  completed: boolean,
-  timeSpent: number,
+  _userId: string,
+  _pathId: string,
+  _pathName: string,
+  _sectionId: string,
+  _completed: boolean,
+  _timeSpent: number,
 ) => {
   // Stub implementation
 };
 
-export const updateUserStreak = async (userId: string) => {
+export const updateUserStreak = async (_userId: string) => {
   // Stub implementation
 };
 
 export const getDashboardStats = async (
-  userId: string,
+  _userId: string,
 ): Promise<DashboardStats> => {
   return {
     totalQuestions: 0,
@@ -109,13 +109,13 @@ export const getDashboardStats = async (
   };
 };
 
-export const getContinueWhereLeftOff = async (userId: string) => {
+export const getContinueWhereLeftOff = async (_userId: string) => {
   return null;
 };
 
 export const updateUserPreferences = async (
-  userId: string,
-  preferences: Record<string, unknown>,
+  _userId: string,
+  _preferences: Record<string, unknown>,
 ) => {
   // Stub implementation
 };

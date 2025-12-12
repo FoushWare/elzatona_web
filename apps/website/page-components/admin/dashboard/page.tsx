@@ -24,7 +24,7 @@ import {
 } from "lucide-react";
 import { useAdminStats } from "@elzatona/hooks";
 
-interface DashboardStats {
+interface _DashboardStats {
   questions: number;
   categories: number;
   topics: number;

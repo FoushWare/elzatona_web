@@ -21,9 +21,9 @@ import {
   TestTube,
   Tag,
   Brain,
-  Zap,
+  Zap as _Zap,
   Target,
-  Clock,
+  Clock as _Clock,
 } from "lucide-react";
 import { toast } from "sonner";
 

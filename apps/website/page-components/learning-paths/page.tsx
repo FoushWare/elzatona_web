@@ -2,16 +2,16 @@
 // This file uses 'any' types for API response data which can have various structures
 "use client";
 
-import React, { useState, useMemo, ReactNode, useCallback } from "react";
+import React, { useState, useMemo, useCallback } from "react";
 
 import { useRouter } from "next/navigation";
 import {
   BookOpen,
   ArrowRight,
-  Clock,
+  _Clock,
   Target,
-  Users,
-  Star,
+  _Users,
+  _Star,
   ChevronRight,
   Code,
   Palette,
@@ -22,7 +22,7 @@ import {
   Brain,
   Globe,
   Search,
-  Filter,
+  _Filter,
   Grid,
   List,
 } from "lucide-react";

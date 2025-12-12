@@ -18,7 +18,7 @@ import {
 // EXAMPLE 1: Basic API Route with Environment Detection
 // ============================================================================
 
-export async function GET_BasicExample(request: NextRequest) {
+export async function GET_BasicExample(_request: NextRequest) {
   // Get all environment-specific configuration
   const config = getApiConfig();
 
@@ -37,7 +37,7 @@ export async function GET_BasicExample(request: NextRequest) {
 // EXAMPLE 2: Supabase Client with Automatic Headers
 // ============================================================================
 
-export async function GET_SupabaseExample(request: NextRequest) {
+export async function GET_SupabaseExample(_request: NextRequest) {
   // Get Supabase configuration (includes headers automatically)
   const supabaseConfig = getSupabaseConfig();
 
@@ -66,7 +66,7 @@ export async function GET_SupabaseExample(request: NextRequest) {
 // EXAMPLE 3: External API Call with Environment Headers
 // ============================================================================
 
-export async function POST_ExternalApiExample(request: NextRequest) {
+export async function POST_ExternalApiExample(_request: NextRequest) {
   const config = getApiConfig();
 
   // Get fetch configuration with environment headers
@@ -89,7 +89,7 @@ export async function POST_ExternalApiExample(request: NextRequest) {
 // EXAMPLE 4: Environment-Specific Logic
 // ============================================================================
 
-export async function GET_ConditionalExample(request: NextRequest) {
+export async function GET_ConditionalExample(_request: NextRequest) {
   const config = getApiConfig();
 
   // Environment-specific behavior
@@ -115,7 +115,7 @@ export async function GET_ConditionalExample(request: NextRequest) {
 // Log config on module load (optional, for debugging)
 logApiConfig("My API Route");
 
-export async function GET_CompleteExample(request: NextRequest) {
+export async function GET_CompleteExample(_request: NextRequest) {
   try {
     // 1. Get configuration (one import, everything you need)
     const config = getApiConfig();

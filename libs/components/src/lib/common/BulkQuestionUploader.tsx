@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { UnifiedQuestion, BulkQuestionData } from "@elzatona/types";
 // Note: MarkdownQuestionParser is website-specific and should be imported where needed
 // import { MarkdownQuestionParser } from '@/lib/markdown-question-parser';

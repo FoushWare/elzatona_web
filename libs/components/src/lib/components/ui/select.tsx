@@ -165,7 +165,7 @@ const SelectItem = React.forwardRef<
   React.HTMLAttributes<HTMLDivElement> & {
     value: string;
   }
->(({ className, children, value, onClick, ...props }, ref) => (
+>(({ className, children, _value, onClick, ...props }, ref) => (
   <div
     ref={ref}
     className={cn(

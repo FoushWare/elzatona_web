@@ -574,7 +574,7 @@ export default function Navbar() {
                                 ? 3
                                 : 2,
                           )
-                          .map((menu, index) => (
+                          .map((menu, _index) => (
                             <div key={menu.label} className="px-3 py-2">
                               {/* Sub-menu Header */}
                               <div className="flex items-center mb-2 px-2 py-1 bg-gray-50 dark:bg-gray-700 rounded-lg">
@@ -595,7 +595,7 @@ export default function Navbar() {
                               <div className="ml-4 space-y-1">
                                 {menu.items
                                   .slice(0, 3)
-                                  .map((item, itemIndex) => (
+                                  .map((item, _itemIndex) => (
                                     <Link
                                       key={item.href}
                                       href={item.href}

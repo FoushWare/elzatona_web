@@ -1,7 +1,7 @@
 // Generic Modal Component
 // v1.0 - Reusable modal for forms
 
-import React, { ReactNode } from "react";
+import React from "react";
 import { X } from "lucide-react";
 import { Button } from "@elzatona/components";
 import { Card, CardContent, CardHeader, CardTitle } from "@elzatona/components";

@@ -28,7 +28,7 @@ for (const envFile of envFiles) {
       config({ path: envFile.path, override: false });
       console.log(`[Config] ✅ Loaded: ${envFile.path.split("/").pop()}`);
     }
-  } catch (error) {
+  } catch (_error) {
     // File doesn't exist or can't be read, that's okay
     console.log(
       `[Config] ⚠️  Could not load: ${envFile.path.split("/").pop()}`,
@@ -46,7 +46,7 @@ try {
       `[Config] ✅ Override loaded: .env.test.local (highest priority)`,
     );
   }
-} catch (error) {
+} catch (_error) {
   // File doesn't exist, that's okay - tests can use .env.test or .env.local
   console.log(
     `[Config] ⚠️  .env.test.local not found, using fallback env files`,

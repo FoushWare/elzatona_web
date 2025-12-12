@@ -929,7 +929,7 @@ export default function AdminContentQuestionsPage() {
               const errorData = await response.json();
               errorMessage =
                 errorData.error || errorData.message || errorMessage;
-            } catch (e) {
+            } catch (_e) {
               // If response is not JSON, use status text
               errorMessage = `HTTP ${response.status}: ${response.statusText}`;
             }

@@ -7,9 +7,9 @@ import { createClient, SupabaseClient } from "@supabase/supabase-js";
 import {
   IDatabaseService,
   DatabaseConfig,
-  QueryOptions,
-  DatabaseResult,
-  BatchResult,
+  _QueryOptions,
+  _DatabaseResult,
+  _BatchResult,
 } from "./IDatabaseService";
 
 export class SupabaseDatabaseService implements IDatabaseService {
@@ -322,7 +322,7 @@ export class SupabaseDatabaseService implements IDatabaseService {
   }
 
   // Real-time subscriptions
-  subscribe<T>(
+  subscribe<_T>(
     table: string,
     callback: (payload: any) => void,
     filters?: Record<string, any>,

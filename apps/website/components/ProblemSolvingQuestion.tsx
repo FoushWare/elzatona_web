@@ -5,7 +5,7 @@ import CodeEditor from "./CodeEditor";
 import {
   CheckCircle,
   XCircle,
-  AlertCircle,
+  AlertCircle as _AlertCircle,
   Play,
   Loader2,
   Code2,
@@ -13,10 +13,10 @@ import {
   ChevronRight,
   Maximize2,
   Minimize2,
-  Copy,
+  Copy as _Copy,
   Plus,
   Lightbulb,
-  BookOpen,
+  BookOpen as _BookOpen,
 } from "lucide-react";
 import {
   addFlashcard,

@@ -42,26 +42,26 @@ export interface FlashcardSession {
 }
 
 export const flashcardService = {
-  async getFlashcard(id: string): Promise<Flashcard | null> {
+  async getFlashcard(_id: string): Promise<Flashcard | null> {
     return null;
   },
 };
 
 export const progressService = {
-  async getCardsDueForReview(userId: string): Promise<FlashcardProgress[]> {
+  async getCardsDueForReview(_userId: string): Promise<FlashcardProgress[]> {
     return [];
   },
-  async getNewCards(userId: string, maxCards: number): Promise<Flashcard[]> {
+  async getNewCards(_userId: string, _maxCards: number): Promise<Flashcard[]> {
     return [];
   },
-  async getUserProgress(userId: string): Promise<FlashcardProgress[]> {
+  async getUserProgress(_userId: string): Promise<FlashcardProgress[]> {
     return [];
   },
   async updateProgress(
-    flashcardId: string,
-    result: "correct" | "incorrect",
-    responseTime: number,
-    sessionId: string,
+    _flashcardId: string,
+    _result: "correct" | "incorrect",
+    _responseTime: number,
+    _sessionId: string,
   ): Promise<void> {
     throw new Error("Not implemented");
   },
@@ -69,25 +69,25 @@ export const progressService = {
 
 export const sessionService = {
   async createSession(
-    session: Omit<FlashcardSession, "id">,
+    _session: Omit<FlashcardSession, "id">,
   ): Promise<FlashcardSession> {
     throw new Error("Not implemented");
   },
-  async startSession(userId: string, type: string): Promise<string> {
+  async startSession(_userId: string, _type: string): Promise<string> {
     throw new Error("Not implemented");
   },
-  async endSession(sessionId: string, duration: number): Promise<void> {
+  async endSession(_sessionId: string, _duration: number): Promise<void> {
     throw new Error("Not implemented");
   },
   async updateSessionStats(
-    sessionId: string,
-    isCorrect: boolean,
+    _sessionId: string,
+    _isCorrect: boolean,
   ): Promise<void> {
     throw new Error("Not implemented");
   },
   async updateSession(
-    id: string,
-    updates: Partial<FlashcardSession>,
+    _id: string,
+    _updates: Partial<FlashcardSession>,
   ): Promise<FlashcardSession> {
     throw new Error("Not implemented");
   },

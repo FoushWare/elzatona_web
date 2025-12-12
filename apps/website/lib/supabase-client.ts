@@ -54,7 +54,7 @@ if (supabaseClient && typeof window !== "undefined" && supabaseClient.auth) {
         document.cookie =
           "sb_session=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT";
       }
-    } catch (e) {
+    } catch (_e) {
       // no-op
     }
   });

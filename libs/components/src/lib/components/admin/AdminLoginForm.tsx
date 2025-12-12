@@ -23,7 +23,7 @@ export default function AdminLoginForm() {
       if (!result.success) {
         setError(result.error || "Login failed");
       }
-    } catch (err) {
+    } catch (_err) {
       setError("An unexpected error occurred");
     } finally {
       setIsLoading(false);

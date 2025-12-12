@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, ReactNode } from "react";
+import React, { useState } from "react";
 import { createClient } from "@supabase/supabase-js";
 
 const supabaseUrl = process.env["NEXT_PUBLIC_SUPABASE_URL"]!;
@@ -45,7 +45,7 @@ interface UserGuidanceSystemProps {
 
 export const UserGuidanceSystem: React.FC<UserGuidanceSystemProps> = ({
   isOpen,
-  onClose,
+  _onClose,
   onComplete,
 }) => {
   const [currentStep, setCurrentStep] = useState(0);

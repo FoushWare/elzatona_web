@@ -11,12 +11,12 @@ export interface AdminSession {
 }
 
 export class AdminAuthService {
-  static async login(email: string, password: string): Promise<AdminSession> {
+  static async login(_email: string, _password: string): Promise<AdminSession> {
     throw new Error("Not implemented");
   }
   static async authenticateAdmin(
-    email: string,
-    password: string,
+    _email: string,
+    _password: string,
   ): Promise<{ success: boolean; admin?: AdminSession; error?: string }> {
     throw new Error("Not implemented");
   }

@@ -5,7 +5,7 @@
 import React, { useState, useEffect, useMemo, useCallback } from "react";
 // Note: This page uses hooks, not direct supabase client
 
-import { Plus, Edit, Trash2, Eye, Search, Filter, Code } from "lucide-react";
+import { Edit, Trash2, Eye, Search, Code } from "lucide-react";
 import {
   FrontendTask,
   FrontendTaskFormData,
@@ -325,7 +325,7 @@ export default function FrontendTasksAdminPage() {
 }
 
 // Frontend Task Modal Component
-function FrontendTaskModal({
+function _FrontendTaskModal({
   task,
   onClose,
   onSave,
@@ -611,7 +611,7 @@ function FrontendTaskModal({
               </button>
             </div>
             <div className="space-y-3">
-              {formData.files.map((file, index) => (
+              {formData.files.map((file, _index) => (
                 <div key={file.id} className="bg-gray-700 rounded p-4">
                   <div className="grid grid-cols-4 gap-2 mb-2">
                     <div>
@@ -804,7 +804,7 @@ function FrontendTaskModal({
 }
 
 // Frontend Task View Modal Component
-function FrontendTaskViewModal({
+function _FrontendTaskViewModal({
   task,
   onClose,
 }: {
@@ -860,7 +860,7 @@ function FrontendTaskViewModal({
             <div>
               <h3 className="font-medium mb-2">Files</h3>
               <div className="space-y-3">
-                {task.files.map((file, index) => (
+                {task.files.map((file, _index) => (
                   <div key={file.id} className="bg-gray-700 rounded p-4">
                     <div className="flex items-center gap-2 mb-2">
                       <span className="font-mono text-sm text-blue-400">

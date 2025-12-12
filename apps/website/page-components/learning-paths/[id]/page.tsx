@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, ReactNode } from "react";
+import React, { useState, useEffect } from "react";
 // Note: This page uses API routes, not direct supabase client
 
 import { useRouter, useParams } from "next/navigation";
@@ -9,8 +9,8 @@ import {
   ArrowRight,
   Clock,
   Target,
-  Users,
-  Star,
+  _Users,
+  _Star,
   ChevronRight,
   Code,
   Palette,
@@ -21,7 +21,7 @@ import {
   Brain,
   Globe,
   Play,
-  CheckCircle,
+  _CheckCircle,
   Circle,
 } from "lucide-react";
 

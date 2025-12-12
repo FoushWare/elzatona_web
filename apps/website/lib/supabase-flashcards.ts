@@ -263,7 +263,7 @@ export const sessionService = {
     return data;
   },
 
-  async startSession(userId: string, type: string) {
+  async startSession(userId: string, _type: string) {
     const { data, error } = await supabase
       .from("flashcard_sessions")
       .insert({

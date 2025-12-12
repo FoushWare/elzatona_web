@@ -333,7 +333,7 @@ const decodeHtmlEntities = (text: string): string => {
       const textarea = document.createElement("textarea");
       textarea.innerHTML = decoded;
       decoded = textarea.value;
-    } catch (e) {
+    } catch (_e) {
       // Fallback
     }
   }

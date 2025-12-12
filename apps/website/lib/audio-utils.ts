@@ -11,7 +11,7 @@ export async function checkAudioExists(audioPath: string): Promise<boolean> {
   try {
     const response = await fetch(audioPath, { method: "HEAD" });
     return response.ok;
-  } catch (error) {
+  } catch (_error) {
     console.log(`Audio file not found: ${audioPath}`);
     return false;
   }

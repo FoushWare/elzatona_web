@@ -60,7 +60,7 @@ async function verifyOwner(
         email: string;
         role: string;
       };
-    } catch (jwtError) {
+    } catch (_jwtError) {
       return { isValid: false, error: "Invalid or expired token" };
     }
 

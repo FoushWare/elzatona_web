@@ -50,7 +50,7 @@ export default function MobilePagination({
   onNext,
   onNavigateToQuestion,
   isNavigating,
-  showAnswer,
+  _showAnswer,
   answeredQuestions,
   expandedGroups,
   onToggleGroupExpansion,

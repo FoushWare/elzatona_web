@@ -19,7 +19,7 @@ const envFiles = [
 for (const envFile of envFiles) {
   try {
     config({ path: envFile, override: false }); // Don't override, respect priority
-  } catch (error) {
+  } catch (_error) {
     // File doesn't exist, that's okay
   }
 }
@@ -307,7 +307,7 @@ test.describe("A-E2E-001: Admin Bulk Question Addition", () => {
           console.error("❌ Question creation failed:", responseData);
         }
       }
-    } catch (error) {
+    } catch (_error) {
       console.log("⚠️ Could not get create API response, continuing...");
     }
 
@@ -317,7 +317,7 @@ test.describe("A-E2E-001: Admin Bulk Question Addition", () => {
       // Wait for modal to disappear (with timeout)
       await modalTitle.waitFor({ state: "hidden", timeout: 10000 });
       console.log("✅ Modal closed");
-    } catch (error) {
+    } catch (_error) {
       console.log(
         "⚠️ Modal did not close automatically, trying to close it...",
       );
@@ -339,7 +339,7 @@ test.describe("A-E2E-001: Admin Bulk Question Addition", () => {
         .filter({ hasText: /^Question Management$/i })
         .waitFor({ state: "visible", timeout: 10000 });
       console.log("✅ Back on questions page");
-    } catch (error) {
+    } catch (_error) {
       console.log("⚠️ Page header not found, but continuing...");
       // Fallback: just wait a bit and continue
       await page.waitForTimeout(2000);
@@ -729,7 +729,7 @@ test.describe("A-E2E-001: Admin Bulk Question Addition", () => {
       });
       console.log("✅ Form submit event triggered via requestSubmit()");
       formSubmitted = true;
-    } catch (e) {
+    } catch (_e) {
       console.log("⚠️ requestSubmit() failed, trying button click...");
       // Approach 2: Click the button (should trigger form onSubmit)
       try {
@@ -742,7 +742,7 @@ test.describe("A-E2E-001: Admin Bulk Question Addition", () => {
         await signInButton.click({ timeout: 5000 });
         console.log("✅ Sign in button clicked");
         formSubmitted = true;
-      } catch (e2) {
+      } catch (_e2) {
         console.log("⚠️ Button click failed, trying Enter key...");
         // Approach 3: Press Enter on the password field
         // Edge may need focus on password field first
@@ -830,7 +830,7 @@ test.describe("A-E2E-001: Admin Bulk Question Addition", () => {
               console.log("✅ Button submitting state detected");
               submissionDetected = true;
             }
-          } catch (checkError) {
+          } catch (_checkError) {
             // Page might be navigating - check URL
             const currentUrl = page.url();
             if (!currentUrl.includes("/admin/login")) {
@@ -839,7 +839,7 @@ test.describe("A-E2E-001: Admin Bulk Question Addition", () => {
             }
           }
         }
-      } catch (e) {
+      } catch (_e) {
         // Button state check failed - check if API already responded or page navigated
         if (apiResponse) {
           console.log(
@@ -859,7 +859,7 @@ test.describe("A-E2E-001: Admin Bulk Question Addition", () => {
                 "⚠️ Button submitting state not detected, but continuing...",
               );
             }
-          } catch (urlError) {
+          } catch (_urlError) {
             // Page might be closed/navigating
             if (apiResponse) {
               console.log(
@@ -882,7 +882,7 @@ test.describe("A-E2E-001: Admin Bulk Question Addition", () => {
     if (!apiResponse && !page.isClosed()) {
       try {
         await page.waitForTimeout(submissionDetected ? 1000 : 500); // Reduced waits
-      } catch (timeoutError) {
+      } catch (_timeoutError) {
         if (page.isClosed()) {
           // If page closed but we have API response, that's OK (navigation happened)
           if (apiResponse) {
@@ -929,7 +929,7 @@ test.describe("A-E2E-001: Admin Bulk Question Addition", () => {
         }
         try {
           await page.waitForTimeout(1000); // Reduced from 1500ms to 1000ms
-        } catch (timeoutError) {
+        } catch (_timeoutError) {
           if (page.isClosed()) {
             // If page closed but we have API response, that's OK
             if (apiResponse) {
@@ -976,7 +976,7 @@ test.describe("A-E2E-001: Admin Bulk Question Addition", () => {
               );
               break;
             }
-          } catch (e) {
+          } catch (_e) {
             // Button might not be accessible (page navigating), continue
             console.log(
               "⚠️ Could not check button state (page may be navigating)",
@@ -1022,7 +1022,7 @@ test.describe("A-E2E-001: Admin Bulk Question Addition", () => {
             if (!page.isClosed()) {
               await page.waitForTimeout(2000);
             }
-          } catch (retryError) {
+          } catch (_retryError) {
             if (page.isClosed()) {
               throw new Error("Page was closed during retry");
             }
@@ -1041,7 +1041,7 @@ test.describe("A-E2E-001: Admin Bulk Question Addition", () => {
       console.log("⏳ Waiting for response promise...");
       try {
         response = await responsePromise;
-      } catch (promiseError) {
+      } catch (_promiseError) {
         if (page.isClosed()) {
           throw new Error("Page was closed while waiting for API response");
         }
@@ -1063,7 +1063,7 @@ test.describe("A-E2E-001: Admin Bulk Question Addition", () => {
           },
           { timeout: 10000 },
         );
-      } catch (e) {
+      } catch (_e) {
         if (page.isClosed()) {
           throw new Error("Page was closed during final response wait");
         }
@@ -1231,7 +1231,7 @@ test.describe("A-E2E-001: Admin Bulk Question Addition", () => {
         } else {
           console.log("⚠️ Page closed during navigation check");
         }
-      } catch (urlError) {
+      } catch (_urlError) {
         console.log("⚠️ Could not check URL (page might be navigating)");
       }
 
@@ -1285,7 +1285,7 @@ test.describe("A-E2E-001: Admin Bulk Question Addition", () => {
         try {
           currentURLAfterLogin = page.url();
           break; // Got URL, exit loop
-        } catch (e) {
+        } catch (_e) {
           // Page might still be navigating
           urlRetryCount++;
           await new Promise((resolve) => setTimeout(resolve, 500));
@@ -1312,7 +1312,7 @@ test.describe("A-E2E-001: Admin Bulk Question Addition", () => {
       if (!page.isClosed()) {
         try {
           currentURLAfterLogin = page.url();
-        } catch (e) {
+        } catch (_e) {
           // Still can't get URL
         }
       }
@@ -1476,7 +1476,7 @@ test.describe("A-E2E-001: Admin Bulk Question Addition", () => {
     }
     try {
       await page.waitForLoadState("networkidle", { timeout: 10000 }); // Reduced from 20000ms to 10000ms
-    } catch (e) {
+    } catch (_e) {
       // If networkidle times out, wait a bit and continue
       if (page.isClosed()) {
         throw new Error("Page was closed during network idle wait");
@@ -1484,7 +1484,7 @@ test.describe("A-E2E-001: Admin Bulk Question Addition", () => {
       console.log("Network idle timeout in beforeEach, waiting 2 seconds..."); // Reduced from 3s to 2s
       try {
         await page.waitForTimeout(2000); // Reduced from 3000ms to 2000ms
-      } catch (timeoutError) {
+      } catch (_timeoutError) {
         if (page.isClosed()) {
           throw new Error("Page was closed during timeout wait");
         }
@@ -1507,7 +1507,7 @@ test.describe("A-E2E-001: Admin Bulk Question Addition", () => {
         if (currentURL.includes("/admin/content/questions")) {
           break; // Success, exit loop
         }
-      } catch (e) {
+      } catch (_e) {
         // Page might still be navigating
       }
 
@@ -1538,7 +1538,7 @@ test.describe("A-E2E-001: Admin Bulk Question Addition", () => {
             `Failed to navigate to questions page. Current URL: ${currentURL}`,
           );
         }
-      } catch (e) {
+      } catch (_e) {
         // If we still can't verify, log warning but continue
         console.log(
           "⚠️ Could not verify questions page URL, but continuing...",
@@ -1554,7 +1554,7 @@ test.describe("A-E2E-001: Admin Bulk Question Addition", () => {
         .filter({ hasText: /^Question Management$/i })
         .waitFor({ state: "visible", timeout: 15000 });
       console.log("Questions page header found");
-    } catch (e) {
+    } catch (_e) {
       console.log("Page header not found, trying alternative selectors...");
       // Try alternative selectors
       const searchInput = page.locator(
@@ -1577,7 +1577,7 @@ test.describe("A-E2E-001: Admin Bulk Question Addition", () => {
     }
     try {
       await page.waitForTimeout(1000); // Reduced from 2000ms to 1000ms
-    } catch (timeoutError) {
+    } catch (_timeoutError) {
       if (page.isClosed()) {
         throw new Error("Page was closed during final wait");
       }
@@ -2009,7 +2009,7 @@ test.describe("A-E2E-001: Admin Bulk Question Addition", () => {
     try {
       await modalTitle.waitFor({ state: "hidden", timeout: 10000 });
       console.log("✅ Modal closed");
-    } catch (error) {
+    } catch (_error) {
       console.log(
         "⚠️ Modal did not close automatically, trying to close manually...",
       );
@@ -2273,7 +2273,7 @@ test.describe("A-E2E-001: Admin Bulk Question Addition", () => {
           try {
             await expect(finalLocator.first()).toBeVisible({ timeout: 5000 });
             return; // Success!
-          } catch (e) {
+          } catch (_e) {
             console.log("⚠️ Question still not visible after final attempt");
           }
         }
@@ -2497,7 +2497,7 @@ test.describe("A-E2E-001: Admin Bulk Question Addition", () => {
         await expect(questionHeading).toBeVisible({ timeout: 5000 });
         questionFound = true;
         console.log("✅ Updated question found on current page");
-      } catch (e) {
+      } catch (_e) {
         console.log("⚠️ Question not found on current page, trying page 1...");
 
         // Navigate to page 1 and try again
@@ -2525,7 +2525,7 @@ test.describe("A-E2E-001: Admin Bulk Question Addition", () => {
             questionFound = true;
             console.log("✅ Updated question found on page 1");
           }
-        } catch (e2) {
+        } catch (_e2) {
           console.log("⚠️ Question not found on page 1 either");
         }
 
@@ -2546,7 +2546,7 @@ test.describe("A-E2E-001: Admin Bulk Question Addition", () => {
               questionFound = true;
               console.log("✅ Updated question found via search");
             }
-          } catch (e3) {
+          } catch (_e3) {
             console.log("⚠️ Question not found via search");
           }
         }
@@ -3036,7 +3036,7 @@ test.describe("A-E2E-001: Admin Bulk Question Addition", () => {
         if (data.success && data.pagination) {
           currentCount = data.pagination.totalCount || 0;
         }
-      } catch (e) {
+      } catch (_e) {
         // API call failed, fall back to counting visible rows
         const questionRows = page
           .locator("div")
@@ -3298,7 +3298,7 @@ test.describe("A-E2E-001: Admin Bulk Question Addition", () => {
           return;
         }
       }
-    } catch (e) {
+    } catch (_e) {
       // If we can't check, continue anyway
       console.log("⚠️ Could not verify question count, continuing...");
     }
@@ -3321,7 +3321,7 @@ test.describe("A-E2E-001: Admin Bulk Question Addition", () => {
         trigger = comboboxInContainer.first();
         console.log("✅ Found page size selector using container method");
       }
-    } catch (e) {
+    } catch (_e) {
       console.log("⚠️ Container method failed, trying alternative...");
     }
 
@@ -3358,7 +3358,7 @@ test.describe("A-E2E-001: Admin Bulk Question Addition", () => {
             }
           }
         }
-      } catch (e) {
+      } catch (_e) {
         console.log("⚠️ Proximity method failed");
       }
     }
@@ -3414,7 +3414,7 @@ test.describe("A-E2E-001: Admin Bulk Question Addition", () => {
         .first()
         .textContent({ timeout: 5000 })
         .catch(() => null);
-    } catch (e: any) {
+    } catch (_e: any) {
       // If page is actually closed, Playwright will throw a proper error
       // Just log and continue - the click attempt will fail if page is really closed
       console.log('⚠️ Could not get "Showing" text, continuing anyway...');
@@ -3435,7 +3435,7 @@ test.describe("A-E2E-001: Admin Bulk Question Addition", () => {
       // Verify trigger is ready (quick check, don't wait too long)
       try {
         await trigger.waitFor({ state: "visible", timeout: 3000 });
-      } catch (e) {
+      } catch (_e) {
         // If not visible, try to find it again
         console.log("⚠️ Trigger not immediately visible, re-finding...");
         const newTrigger = page.locator('button[role="combobox"]').first();
@@ -3799,7 +3799,7 @@ test.describe("A-E2E-001: Admin Bulk Question Addition", () => {
         .first();
       await addButton.waitFor({ state: "visible", timeout: 5000 });
       buttonFound = true;
-    } catch (e) {
+    } catch (_e) {
       console.log("Header section approach failed, trying direct approach...");
     }
 
@@ -3811,7 +3811,7 @@ test.describe("A-E2E-001: Admin Bulk Question Addition", () => {
           .first();
         await addButton.waitFor({ state: "visible", timeout: 5000 });
         buttonFound = true;
-      } catch (e) {
+      } catch (_e) {
         console.log(
           "Direct button approach failed, trying text-based approach...",
         );
@@ -3839,7 +3839,7 @@ test.describe("A-E2E-001: Admin Bulk Question Addition", () => {
     // Click the button with retry logic
     try {
       await addButton.click({ timeout: 10000 });
-    } catch (e) {
+    } catch (_e) {
       // If click fails, try with force
       console.log("Normal click failed, trying force click...");
       await addButton.click({ force: true, timeout: 5000 });

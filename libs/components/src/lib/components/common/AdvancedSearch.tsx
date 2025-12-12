@@ -15,7 +15,7 @@ import {
   ChevronLeft,
   ChevronRight,
   Loader2,
-  TrendingUp,
+  _TrendingUp,
   Clock,
   BarChart3,
 } from "lucide-react";
@@ -30,7 +30,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../ui/select";
-import { Checkbox } from "../ui/checkbox";
+import {} from "../ui/checkbox";
 import { Label } from "../ui/label";
 
 interface AdvancedSearchProps {
@@ -59,7 +59,7 @@ interface AdvancedSearchProps {
 
 export function AdvancedSearch({
   onResultsChange,
-  onFacetsChange,
+  _onFacetsChange,
   placeholder = "Search questions, topics, categories...",
   showFilters = true,
   showFacets = true,

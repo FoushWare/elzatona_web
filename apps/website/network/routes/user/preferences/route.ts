@@ -11,7 +11,7 @@ import { verifySupabaseToken } from "@/lib/server-auth";
 import { UserPreferences } from "@/types/firestore";
 import { sanitizeObjectServer } from "@/lib/utils/sanitize-server";
 
-export async function GET(request: NextRequest) {
+export async function GET(_request: NextRequest) {
   try {
     // Get the Firebase token from cookies
     const cookieStore = await cookies();

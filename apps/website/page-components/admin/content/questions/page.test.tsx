@@ -78,7 +78,7 @@ jest.mock("@elzatona/components", () => ({
   Input: ({ onChange, value, ...props }: any) => (
     <input onChange={onChange} value={value} {...props} />
   ),
-  Dialog: ({ children, open, onOpenChange }: any) =>
+  Dialog: ({ children, open, _onOpenChange }: any) =>
     open ? <div data-testid="dialog">{children}</div> : null,
   DialogContent: ({ children }: { children: React.ReactNode }) => (
     <div>{children}</div>

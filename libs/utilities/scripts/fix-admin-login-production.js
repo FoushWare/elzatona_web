@@ -109,7 +109,7 @@ async function fixAdminLogin() {
                 continue;
               }
             }
-          } catch (e) {
+          } catch (_e) {
             // Keep existing if can't parse
           }
         }

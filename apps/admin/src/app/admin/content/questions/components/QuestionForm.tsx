@@ -128,10 +128,10 @@ export const QuestionForm = React.forwardRef<
     {
       initialData,
       onSubmit,
-      onCancel,
+      onCancel: _onCancel,
       cards,
       allCategories,
-      allTags,
+      allTags: _allTags,
       readOnly = false,
     },
     ref,
@@ -224,7 +224,7 @@ export const QuestionForm = React.forwardRef<
           ...prev,
           resources: parsed,
         }));
-      } catch (error) {
+      } catch (_error) {
         // If invalid JSON, store as string and let validation handle it
         setFormData((prev) => ({
           ...prev,

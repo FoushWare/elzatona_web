@@ -27,7 +27,7 @@ function generateRouteHandler(
   networkRoutePath,
   appApiPath,
   relativePath,
-  networkRoutesBase,
+  _networkRoutesBase,
 ) {
   const routeHandlerPath = path.join(appApiPath, relativePath, "route.ts");
 

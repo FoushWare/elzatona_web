@@ -9,8 +9,8 @@ import { UnifiedQuestion } from "@elzatona/types";
 type LearningPlan = any;
 type Category = any;
 type Topic = any;
-type ApiResponse<T> = { success: boolean; data: T; count?: number };
-type PaginatedResponse<T> = {
+type _ApiResponse<T> = { success: boolean; data: T; count?: number };
+type _PaginatedResponse<T> = {
   success: boolean;
   data: T[];
   count: number;

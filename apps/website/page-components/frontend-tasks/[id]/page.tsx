@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, useMemo, ReactNode } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 
 // Force dynamic rendering to prevent static generation issues with auth context
 export const dynamic = "force-dynamic";
@@ -12,7 +12,7 @@ import {
   Code,
   ArrowRight,
   Clock,
-  Target,
+  _Target,
   Flame,
   CheckCircle,
   Circle,
@@ -421,7 +421,7 @@ export default function App() {
   };
 
   // Resize handlers
-  const handleMouseDown = (e: React.MouseEvent, panel: "left" | "right") => {
+  const handleMouseDown = (e: React.MouseEvent, _panel: "left" | "right") => {
     e.preventDefault();
     setIsResizing(true);
     setResizeStartX(e.clientX);

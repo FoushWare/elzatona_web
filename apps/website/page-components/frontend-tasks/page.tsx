@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, ReactNode } from "react";
+import React, { useState, useEffect } from "react";
 
 // Force dynamic rendering to prevent static generation issues
 export const dynamic = "force-dynamic";
@@ -11,23 +11,23 @@ import {
   Code,
   ArrowRight,
   Clock,
-  Target,
-  Users,
-  Star,
+  _Target,
+  _Users,
+  _Star,
   ChevronRight,
   Monitor,
   Flame,
   CheckCircle,
   Search,
-  Filter,
+  _Filter,
   Grid,
   List,
   Play,
-  Trophy,
+  _Trophy,
   Zap,
-  Shield,
+  _Shield,
   Layers,
-  Settings,
+  _Settings,
   Brain,
   Globe,
   Loader2,

@@ -7,7 +7,7 @@ const Collapsible = React.forwardRef<
     open?: boolean;
     onOpenChange?: (open: boolean) => void;
   }
->(({ className, open, onOpenChange, children, ...props }, ref) => {
+>(({ className, _open, _onOpenChange, children, ...props }, ref) => {
   return (
     <div ref={ref} className={cn("", className)} {...props}>
       {children}

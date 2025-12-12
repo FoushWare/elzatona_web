@@ -134,7 +134,7 @@ function checkQuestionForIssues(question) {
     if (typeof options === "string") {
       try {
         options = JSON.parse(options);
-      } catch (e) {
+      } catch (_e) {
         // Not JSON, treat as string
         options = [options];
       }

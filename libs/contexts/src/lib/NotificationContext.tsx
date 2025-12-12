@@ -54,8 +54,8 @@ interface NotificationProviderProps {
 
 export function NotificationProvider({
   children,
-  userId,
-  adminId,
+  _userId,
+  _adminId,
 }: NotificationProviderProps) {
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [unreadCount, setUnreadCount] = useState(0);

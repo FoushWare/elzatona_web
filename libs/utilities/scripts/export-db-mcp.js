@@ -53,7 +53,7 @@ function escapeSQL(value) {
 }
 
 // Generate INSERT SQL from rows
-function generateInsertSQL(tableName, rows) {
+function _generateInsertSQL(tableName, rows) {
   if (!rows || rows.length === 0) {
     return `-- Table: ${tableName}\n-- No data (0 rows)\n\n`;
   }
@@ -69,7 +69,7 @@ function generateInsertSQL(tableName, rows) {
     const batch = rows.slice(i, i + batchSize);
     sql += `INSERT INTO "${tableName}" (${columnList}) VALUES\n`;
 
-    const values = batch.map((row, idx) => {
+    const values = batch.map((row, _idx) => {
       const rowValues = columns.map((col) => escapeSQL(row[col]));
       return `  (${rowValues.join(", ")})`;
     });

@@ -162,7 +162,7 @@ test.describe("A-E2E-001: Admin Bulk Question Addition - Search", () => {
         },
         { timeout: 15000 },
       );
-    } catch (e) {
+    } catch (_e) {
       // If waitForFunction times out, try to find the heading anyway
       console.log(
         "⚠️ waitForFunction timed out, checking for heading directly...",
@@ -180,7 +180,7 @@ test.describe("A-E2E-001: Admin Bulk Question Addition - Search", () => {
         name: /No questions found/i,
       });
       await expect(noResultsHeading).toBeVisible({ timeout: 10000 });
-    } catch (e) {
+    } catch (_e) {
       // Fallback: try to find by text content
       console.log("⚠️ getByRole failed, trying getByText...");
       noResultsHeading = page.getByText(/No questions found/i);

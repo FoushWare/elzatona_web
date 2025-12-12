@@ -8,7 +8,7 @@
 import { test, expect } from "@playwright/test";
 import {
   setupAdminPage,
-  createQuestion,
+  _createQuestion,
 } from "./admin-bulk-question-addition.setup";
 
 test.describe("A-E2E-001: Admin Bulk Question Addition - CRUD", () => {
@@ -383,7 +383,7 @@ test.describe("A-E2E-001: Admin Bulk Question Addition - CRUD", () => {
     try {
       await modalTitle.waitFor({ state: "hidden", timeout: 10000 });
       console.log("✅ Modal closed");
-    } catch (error) {
+    } catch (_error) {
       console.log(
         "⚠️ Modal did not close automatically, trying to close manually...",
       );
@@ -647,7 +647,7 @@ test.describe("A-E2E-001: Admin Bulk Question Addition - CRUD", () => {
           try {
             await expect(finalLocator.first()).toBeVisible({ timeout: 5000 });
             return; // Success!
-          } catch (e) {
+          } catch (_e) {
             console.log("⚠️ Question still not visible after final attempt");
           }
         }
@@ -871,7 +871,7 @@ test.describe("A-E2E-001: Admin Bulk Question Addition - CRUD", () => {
         await expect(questionHeading).toBeVisible({ timeout: 5000 });
         questionFound = true;
         console.log("✅ Updated question found on current page");
-      } catch (e) {
+      } catch (_e) {
         console.log("⚠️ Question not found on current page, trying page 1...");
 
         // Navigate to page 1 and try again
@@ -899,7 +899,7 @@ test.describe("A-E2E-001: Admin Bulk Question Addition - CRUD", () => {
             questionFound = true;
             console.log("✅ Updated question found on page 1");
           }
-        } catch (e2) {
+        } catch (_e2) {
           console.log("⚠️ Question not found on page 1 either");
         }
 
@@ -920,7 +920,7 @@ test.describe("A-E2E-001: Admin Bulk Question Addition - CRUD", () => {
               questionFound = true;
               console.log("✅ Updated question found via search");
             }
-          } catch (e3) {
+          } catch (_e3) {
             console.log("⚠️ Question not found via search");
           }
         }

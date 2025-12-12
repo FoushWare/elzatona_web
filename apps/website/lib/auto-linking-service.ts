@@ -174,7 +174,7 @@ export class AutoLinkingService {
    */
   private findAppropriateSector(
     sectors: SectorData[],
-    category: string,
+    _category: string,
   ): SectorData | null {
     // For now, return the first active sector
     // In a more sophisticated implementation, you could match based on:

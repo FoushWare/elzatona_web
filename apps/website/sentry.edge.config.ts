@@ -26,7 +26,7 @@ Sentry.init({
     undefined,
 
   // Filter out sensitive data
-  beforeSend(event, hint) {
+  beforeSend(event, _hint) {
     // Filter out errors in development/test environments if needed
     if (
       process.env.APP_ENV === "test" ||

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 
 import {
   supabaseClient as supabase,
@@ -60,7 +60,7 @@ export default function AuthPage() {
       } else {
         setError(isLogin ? "Invalid credentials" : "Registration failed");
       }
-    } catch (error) {
+    } catch (_error) {
       setError("An unexpected error occurred");
     } finally {
       setLoading(false);

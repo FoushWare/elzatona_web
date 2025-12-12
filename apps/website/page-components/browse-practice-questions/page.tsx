@@ -12,15 +12,15 @@ import {
   Brain,
   ArrowRight,
   BookOpen,
-  Zap,
+  _Zap,
   Users,
   Clock,
   CheckCircle,
   Eye,
   Play,
   Star,
-  Award,
-  TrendingUp,
+  _Award,
+  _TrendingUp,
   Calendar,
   Loader2,
 } from "lucide-react";
@@ -137,7 +137,7 @@ export default function BrowsePracticeQuestionsPage() {
     router.push(`/custom-practice/${plan_id}`);
   };
 
-  const handleViewRoadmap = (plan_id: string) => {
+  const handleViewRoadmap = (_plan_id: string) => {
     router.push(`/my-plans`);
   };
 
@@ -210,7 +210,7 @@ export default function BrowsePracticeQuestionsPage() {
 
         {/* Practice Options Grid */}
         <div className="grid lg:grid-cols-3 gap-6 max-w-5xl mx-auto mb-16">
-          {practiceOptions.map((option, index) => (
+          {practiceOptions.map((option, _index) => (
             <div
               key={option.id}
               className={`group relative bg-white dark:bg-gray-800 rounded-3xl shadow-xl transition-all duration-500 overflow-hidden border border-gray-100 dark:border-gray-700 ${

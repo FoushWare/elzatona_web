@@ -3,7 +3,7 @@
 // Added input sanitization for security
 
 import { NextRequest, NextResponse } from "next/server";
-import { supabaseOperations } from "@/lib/supabase-server";
+import {} from "@/lib/supabase-server";
 import { createClient } from "@supabase/supabase-js";
 import { sanitizeObjectServer } from "@/lib/utils/sanitize-server";
 import { validateAndSanitize, categorySchema } from "@/lib/utils/validation";

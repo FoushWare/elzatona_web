@@ -186,7 +186,7 @@ export default function ContentManagementPage() {
         questions: questionsResult.data?.length || 0,
         planQuestions: planQuestionsResult.data?.length || 0,
       });
-    } catch (_err) {
+    } catch (err) {
       console.error("❌ Error fetching data:", err);
       setError(err instanceof Error ? err.message : "Failed to fetch data");
     } finally {
@@ -345,7 +345,7 @@ export default function ContentManagementPage() {
   // Modal helper functions
   const openTopicQuestionsModal = useCallback(
     (topic: Topic, plan: LearningPlan) => {
-      setSelectedTopic(_topic);
+      setSelectedTopic(topic);
       setSelectedPlan(plan);
       setSelectedQuestions(new Set());
       setIsTopicQuestionsModalOpen(true);
@@ -843,7 +843,7 @@ export default function ContentManagementPage() {
                           >
                             {cardCategories.reduce((total, cat) => {
                               const categoryTopics = topics.filter(
-                                (_topic) => topic.category_id === cat.id,
+                                (topic) => topic.category_id === cat.id,
                               );
                               return total + categoryTopics.length;
                             }, 0)}{" "}
@@ -855,7 +855,7 @@ export default function ContentManagementPage() {
                           >
                             {cardCategories.reduce((total, cat) => {
                               const categoryTopics = topics.filter(
-                                (_topic) => topic.category_id === cat.id,
+                                (topic) => topic.category_id === cat.id,
                               );
                               return (
                                 total +
@@ -902,7 +902,7 @@ export default function ContentManagementPage() {
                           {/* Categories under this card */}
                           {cardCategories.map((category) => {
                             const categoryTopics = topics.filter(
-                              (_topic) => topic.category_id === category.id,
+                              (topic) => topic.category_id === category.id,
                             );
 
                             return (
@@ -957,7 +957,7 @@ export default function ContentManagementPage() {
 
                                 {expandedCategories.has(category.id) && (
                                   <div className="ml-6 space-y-2">
-                                    {categoryTopics.map((_topic) => {
+                                    {categoryTopics.map((topic) => {
                                       const topicQuestions = questions.filter(
                                         (q) => q.category_id === category.id,
                                       );
@@ -1321,7 +1321,7 @@ export default function ContentManagementPage() {
                                 {expandedPlanCards.has(card.id) &&
                                   cardCategories.map((category) => {
                                     const categoryTopics = topics.filter(
-                                      (_topic) =>
+                                      (topic) =>
                                         topic.category_id === category.id,
                                     );
 
@@ -1387,7 +1387,7 @@ export default function ContentManagementPage() {
                                         {expandedPlanCategories.has(
                                           category.id,
                                         ) &&
-                                          categoryTopics.map((_topic) => {
+                                          categoryTopics.map((topic) => {
                                             const topicQuestions =
                                               questions.filter(
                                                 (q) => q.topic_id === topic.id,

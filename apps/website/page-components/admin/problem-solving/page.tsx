@@ -2,13 +2,13 @@
 
 "use client";
 
-import React, { useState, useEffect, useMemo, useCallback } from "react";
+import React, { useState, useMemo, useCallback } from "react";
 // Note: This page uses hooks, not direct supabase client
 
-import { Plus, Edit, Trash2, Eye, Search, Play, Code } from "lucide-react";
+import { Plus, Edit, Trash2, Eye, Search, Play } from "lucide-react";
 import {
   ClientCodeRunner,
-  TestCase,
+  _TestCase,
   ProblemSolvingEditor,
 } from "@elzatona/components";
 import { ProblemSolvingTask, ProblemSolvingTaskFormData } from "@/types/admin";
