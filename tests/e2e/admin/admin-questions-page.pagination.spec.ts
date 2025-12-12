@@ -999,7 +999,7 @@ test.describe("A-E2E-001: Admin Bulk Question Addition - Pagination", () => {
     // Find the Select trigger button - it's in the same container as "Show:" label
     // The structure is: div.flex.items-center.space-x-2 > span "Show:" + Select > SelectTrigger
     // Better approach: find the combobox that's in the pagination area
-    let trigger: any = null;
+    let trigger: Locator | null = null;
 
     // Method 1: Find combobox near "Show:" text (in the same flex container)
     try {
