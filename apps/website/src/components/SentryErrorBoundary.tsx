@@ -73,7 +73,7 @@ export class SentryErrorBoundary extends Component<Props, State> {
             <button
               onClick={() => {
                 this.setState({ hasError: false, error: null });
-                window.location.reload();
+                globalThis.window.location.reload();
               }}
               className="mt-6 rounded-md bg-blue-600 px-4 py-2 text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
             >

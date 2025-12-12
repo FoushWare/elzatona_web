@@ -24,7 +24,7 @@ import {
   Edit,
   CheckCircle,
   XCircle,
-  _Play as _Play,
+  Play,
   AlertTriangle,
   Loader2,
   Settings,
