@@ -264,10 +264,10 @@ export function ViewQuestionModal({
   isOpen,
   onClose,
   question,
-  _cards,
-  _allCategories,
-  _categoriesData,
-  _topicsData,
+  cards: _cards,
+  allCategories: _allCategories,
+  categoriesData: _categoriesData,
+  topicsData: _topicsData,
 }: ViewQuestionModalProps) {
   const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null);
   const [showExplanation, setShowExplanation] = useState(false);

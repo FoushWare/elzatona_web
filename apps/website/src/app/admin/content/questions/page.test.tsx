@@ -933,7 +933,7 @@ describe("A-UT-012: Search Filtering Logic", () => {
       expect(searchInput).toBeInTheDocument();
 
       fireEvent.change(searchInput, { target: { value: "HTML" } });
-      expect(searchInput.value).toBe("HTML");
+      expect((searchInput as HTMLInputElement).value).toBe("HTML");
     });
   });
 
