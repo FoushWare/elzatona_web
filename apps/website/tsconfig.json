@@ -3,6 +3,7 @@
   "compilerOptions": {
     "outDir": "../../dist/out-tsc",
     "baseUrl": ".",
+    "typeRoots": ["../../node_modules/@types"],
     "paths": {
       "@/*": ["./src/*"],
       "@/lib/*": ["./lib/*"],
