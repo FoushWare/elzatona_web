@@ -705,12 +705,10 @@ export default function ProblemSolvingQuestion({
           }}
         >
           {/* Resize Handle - Horizontal */}
-          <div
-            role="separator"
-            aria-label="Resize panel"
-            aria-orientation="vertical"
-            tabIndex={0}
-            className="absolute right-0 top-0 bottom-0 w-1.5 bg-transparent hover:bg-indigo-500/80 dark:hover:bg-indigo-500/80 cursor-col-resize z-20 transition-all duration-200 select-none group"
+          <button
+            type="button"
+            aria-label="Resize panel horizontally"
+            className="absolute right-0 top-0 bottom-0 w-1.5 bg-transparent hover:bg-indigo-500/80 dark:hover:bg-indigo-500/80 cursor-col-resize z-20 transition-all duration-200 select-none group border-0 p-0"
             onMouseDown={(e) => {
               e.preventDefault();
               setIsResizingHorizontal(true);
@@ -723,7 +721,7 @@ export default function ProblemSolvingQuestion({
             }}
           >
             <div className="absolute inset-y-0 left-1/2 -translate-x-1/2 w-0.5 bg-gray-300/50 dark:bg-gray-600/50 group-hover:bg-indigo-400 dark:group-hover:bg-indigo-400 transition-all duration-200" />
-          </div>
+          </button>
           <div className="p-5 sm:p-7 md:p-9 lg:p-11">
             {/* Header with Title and Difficulty */}
             <div className="mb-7 sm:mb-9 pb-6 sm:pb-7 border-b-2 border-gray-200/80 dark:border-gray-700/80">
@@ -1060,12 +1058,10 @@ export default function ProblemSolvingQuestion({
           <div ref={outputRef} />
 
           {/* Resize Handle - Vertical */}
-          <div
-            role="separator"
-            aria-label="Resize panel"
-            aria-orientation="horizontal"
-            tabIndex={0}
-            className="absolute bottom-0 left-0 right-0 h-2 bg-transparent hover:bg-indigo-500/80 dark:hover:bg-indigo-500/80 cursor-row-resize z-20 transition-all duration-200 select-none group"
+          <button
+            type="button"
+            aria-label="Resize panel vertically"
+            className="absolute bottom-0 left-0 right-0 h-2 bg-transparent hover:bg-indigo-500/80 dark:hover:bg-indigo-500/80 cursor-row-resize z-20 transition-all duration-200 select-none group border-0 p-0"
             onMouseDown={(e) => {
               e.preventDefault();
               setIsResizingVertical(true);
@@ -1078,7 +1074,7 @@ export default function ProblemSolvingQuestion({
             }}
           >
             <div className="absolute inset-x-0 top-1/2 -translate-y-1/2 h-0.5 bg-gray-300/50 dark:bg-gray-600/50 group-hover:bg-indigo-400 dark:group-hover:bg-indigo-400 transition-all duration-200" />
-          </div>
+          </button>
         </div>
 
         {/* Test Cases / Console Panel */}
