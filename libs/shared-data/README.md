@@ -15,8 +15,8 @@ These files are shared between the admin and website applications to avoid dupli
 ## Migration
 
 Previously, this data was duplicated in:
+
 - `apps/admin/network/data/`
 - `apps/website/network/data/`
 
 All shared data has been consolidated here. App-specific data (like `final-questions-v01/` in website) remains in the respective app directories.
-
