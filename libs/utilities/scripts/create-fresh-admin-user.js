@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 /**
+/* eslint-disable @typescript-eslint/no-require-imports */
  * Create Fresh Admin User Script
  *
  * Deletes existing admin user (if exists) and creates a fresh one

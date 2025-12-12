@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 
+/* eslint-disable @typescript-eslint/no-require-imports */
 /**
  * Create Next.js page wrappers that import from pages/ directory
  * This maintains Next.js routing while using the new structure

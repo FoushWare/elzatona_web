@@ -1,5 +1,5 @@
-// @ts-nocheck - Storybook file, not included in build
-// @ts-ignore - Storybook types not available in build
+// Storybook file, not included in build
+// @ts-expect-error - Storybook types not available in build
 import type { Meta, StoryObj } from "@storybook/react";
 import {
   Select,

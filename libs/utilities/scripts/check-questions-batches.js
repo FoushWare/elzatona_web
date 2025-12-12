@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-require-imports */
 // Script to check all questions in database and divide into batches
 // Then check each batch for code/content cleaning issues
 

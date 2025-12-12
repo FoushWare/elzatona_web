@@ -59,9 +59,11 @@ jest.mock("@elzatona/components", () => ({
 
 // Mock Next.js Link
 jest.mock("next/link", () => {
-  return ({ children, href }: { children: React.ReactNode; href: string }) => {
+  const MockLink = ({ children, href }: { children: React.ReactNode; href: string }) => {
     return <a href={href}>{children}</a>;
   };
+  MockLink.displayName = "MockLink";
+  return MockLink;
 });
 
 const mockPush = jest.fn();

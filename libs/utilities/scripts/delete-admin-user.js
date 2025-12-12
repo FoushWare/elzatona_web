@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 /**
+/* eslint-disable @typescript-eslint/no-require-imports */
  * Delete Admin User Script
  *
  * Deletes an admin user from the admin_users table

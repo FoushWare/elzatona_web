@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 /**
+/* eslint-disable @typescript-eslint/no-require-imports */
  * Fix Admin User in Production Database
  *
  * This script helps you check and fix the admin user in PRODUCTION database

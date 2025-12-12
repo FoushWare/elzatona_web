@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-require-imports */
 // Comprehensive script to fix ALL malformed HTML patterns in questions
 const { createClient } = require("@supabase/supabase-js");
 

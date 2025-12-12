@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 /**
+/* eslint-disable @typescript-eslint/no-require-imports */
  * Set Project Environment
  *
  * Manually switch the entire project between TEST, PRODUCTION, and DEVELOPMENT

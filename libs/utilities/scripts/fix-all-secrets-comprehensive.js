@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 /**
+/* eslint-disable @typescript-eslint/no-require-imports */
  * Comprehensive script to remove all hardcoded secrets from repository files
  * Replaces them with environment variable requirements
  */

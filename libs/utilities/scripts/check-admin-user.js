@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 /**
+/* eslint-disable @typescript-eslint/no-require-imports */
  * Check Admin User Script
  *
  * Checks if admin user exists and verifies password

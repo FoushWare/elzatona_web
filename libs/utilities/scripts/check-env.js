@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 /**
+/* eslint-disable @typescript-eslint/no-require-imports */
  * Quick Environment Check Script
  *
  * Run this to see which environment is currently active

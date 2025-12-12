@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-require-imports */
 /**
  * Export all questions from Supabase to local JSON files
  * This script will be called with question data from MCP

@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 /**
+/* eslint-disable @typescript-eslint/no-require-imports */
  * Verify Supabase Keys Match Project
  *
  * Checks if Supabase URL and anon key match the same project

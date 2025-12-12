@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-require-imports */
 /**
  * Export all questions from Supabase database to local JSON files
  * Splits questions into multiple files for easier review

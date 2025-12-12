@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 
+/* eslint-disable @typescript-eslint/no-require-imports */
 /**
  * Database Export via MCP
  * Exports database tables to SQL INSERT statements

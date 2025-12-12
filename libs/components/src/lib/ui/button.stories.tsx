@@ -1,6 +1,6 @@
-// @ts-nocheck - Storybook file, not included in build
+// Storybook file, not included in build
 import * as React from "react";
-// @ts-ignore - Storybook types not available in build
+// @ts-expect-error - Storybook types not available in build
 import type { Meta, StoryObj } from "@storybook/react";
 import { Button } from "./button";
 import { Plus, Trash2, Download } from "lucide-react";
@@ -117,14 +117,16 @@ export const Loading: Story = {
   ),
 };
 
+const InteractiveComponent = () => {
+  const [count, setCount] = React.useState(0);
+  return (
+    <div className="flex flex-col gap-4 items-center">
+      <p>Clicked {count} times</p>
+      <Button onClick={() => setCount(count + 1)}>Click me</Button>
+    </div>
+  );
+};
+
 export const Interactive: Story = {
-  render: () => {
-    const [count, setCount] = React.useState(0);
-    return (
-      <div className="flex flex-col gap-4 items-center">
-        <p>Clicked {count} times</p>
-        <Button onClick={() => setCount(count + 1)}>Click me</Button>
-      </div>
-    );
-  },
+  render: () => <InteractiveComponent />,
 };
