@@ -22,6 +22,8 @@ jest.mock("next/link", () => {
 });
 
 // Mock flashcards library
+import * as flashcardsModule from "../../lib/flashcards";
+
 jest.mock("../../lib/flashcards", () => ({
   loadFlashcards: jest.fn(() => [
     {
@@ -43,6 +45,7 @@ global.fetch = jest.fn(() =>
 );
 
 // Mock lucide-react using the shared mock
+// eslint-disable-next-line @typescript-eslint/no-require-imports
 jest.mock("lucide-react", () =>
   require("../../test-utils/mocks/lucide-react.tsx"),
 );
@@ -94,13 +97,13 @@ describe("F-UT-014: CRUD Operations", () => {
   });
 
   it("should load flashcards on mount", () => {
-    const { loadFlashcards } = require("../../lib/flashcards");
+    const { loadFlashcards } = jest.mocked(flashcardsModule);
     render(<FlashcardsPage />);
     expect(loadFlashcards).toHaveBeenCalled();
   });
 
   it("should support flashcard removal", () => {
-    const { removeFlashcard } = require("../../lib/flashcards");
+    const { removeFlashcard } = jest.mocked(flashcardsModule);
     render(<FlashcardsPage />);
     // Remove functionality should be available
     expect(removeFlashcard).toBeDefined();
@@ -118,8 +121,8 @@ describe("F-UT-SNAPSHOT: Flashcards Snapshot Tests", () => {
   });
 
   it("should match flashcards page snapshot (with flashcards)", () => {
-    const { loadFlashcards } = require("../../lib/flashcards");
-    loadFlashcards.mockReturnValue([
+    const { loadFlashcards } = jest.mocked(flashcardsModule);
+    (loadFlashcards as jest.Mock).mockReturnValue([
       {
         id: "1",
         question: "Test Question 1",

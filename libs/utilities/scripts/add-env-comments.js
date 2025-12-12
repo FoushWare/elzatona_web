@@ -9,6 +9,7 @@
  *   node scripts/add-env-comments.js [--env=production|test]
  */
 
+/* eslint-disable @typescript-eslint/no-require-imports */
 const fs = require("fs");
 const path = require("path");
 
