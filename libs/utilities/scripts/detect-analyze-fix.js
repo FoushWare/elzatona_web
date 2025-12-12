@@ -339,6 +339,16 @@ function fixUnusedVariable(filePath, line, variableName) {
     }
 
     if (fixed) {
+      // SECURITY: Check file hasn't changed since read to prevent race condition
+      try {
+        const currentStats = fs.statSync(filePath);
+        if (originalStats && currentStats.mtime.getTime() !== originalStats.mtime.getTime()) {
+          console.warn(`⚠️  File ${filePath} was modified during processing. Skipping write.`);
+          return false;
+        }
+      } catch (_statError) {
+        // If stat fails, proceed with write (file might not exist)
+      }
       lines[line - 1] = newLine;
       fs.writeFileSync(filePath, lines.join("\n"), "utf8");
       return true;
@@ -479,6 +489,16 @@ function fixUnusedError(filePath, line) {
     }
 
     if (fixed) {
+      // SECURITY: Check file hasn't changed since read to prevent race condition
+      try {
+        const currentStats = fs.statSync(filePath);
+        if (originalStats && currentStats.mtime.getTime() !== originalStats.mtime.getTime()) {
+          console.warn(`⚠️  File ${filePath} was modified during processing. Skipping write.`);
+          return false;
+        }
+      } catch (_statError) {
+        // If stat fails, proceed with write (file might not exist)
+      }
       lines[line - 1] = newLine;
       fs.writeFileSync(filePath, lines.join("\n"), "utf8");
       return true;
@@ -527,6 +547,18 @@ function updateLogFile(logFilePath, fixedIssues, allIssues) {
       } else {
         finalLines.push(line);
       }
+    }
+
+    // SECURITY: Check file hasn't changed since read to prevent race condition
+    let currentStats;
+    try {
+      currentStats = fs.statSync(logFilePath);
+      if (originalStats && currentStats.mtime.getTime() !== originalStats.mtime.getTime()) {
+        console.warn(`⚠️  Log file ${logFilePath} was modified during processing. Skipping write.`);
+        return null;
+      }
+    } catch (_statError) {
+      // If stat fails, proceed with write (file might not exist)
     }
 
     // Create backup

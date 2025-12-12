@@ -696,8 +696,14 @@ export const QuestionContent = ({ content }: { content: string }) => {
         }
         code = decodeHtmlEntities(code);
         // SECURITY: Remove HTML tags after decoding to prevent injection
+        // Use comprehensive sanitization to remove all HTML tags including edge cases
         // NOSONAR S7781: replaceAll() cannot be used with regex patterns that require capture groups
-        code = code.replace(/<\/?[a-z][a-z0-9]{0,20}(?:\s+[^>]{0,200})?>/gi, "");
+        code = code
+          .replace(/<\/?[a-z][a-z0-9]{0,20}(?:\s+[^>]{0,200})?>/gi, "")
+          .replace(/<script[^>]*>[\s\S]*?<\/script>/gi, "")
+          .replace(/<style[^>]*>[\s\S]*?<\/style>/gi, "")
+          .replace(/<iframe[^>]*>[\s\S]*?<\/iframe>/gi, "")
+          .replace(/on\w+\s*=\s*["'][^"']*["']/gi, "");
       code = code.replaceAll(/<[^>]+>/g, "");
       for (let i = 0; i < 3; i++) {
         code = code
@@ -765,8 +771,14 @@ export const QuestionContent = ({ content }: { content: string }) => {
         if (textContent.trim()) {
           let cleanText = decodeHtmlEntities(textContent);
           // SECURITY: Remove HTML tags to prevent injection
+          // Use comprehensive sanitization to remove all HTML tags including edge cases
           // NOSONAR S7781: replaceAll() cannot be used with regex patterns that require capture groups
-          cleanText = cleanText.replace(/<\/?[a-z][a-z0-9]{0,20}(?:\s+[^>]{0,200})?>/gi, "");
+          cleanText = cleanText
+            .replace(/<\/?[a-z][a-z0-9]{0,20}(?:\s+[^>]{0,200})?>/gi, "")
+            .replace(/<script[^>]*>[\s\S]*?<\/script>/gi, "")
+            .replace(/<style[^>]*>[\s\S]*?<\/style>/gi, "")
+            .replace(/<iframe[^>]*>[\s\S]*?<\/iframe>/gi, "")
+            .replace(/on\w+\s*=\s*["'][^"']*["']/gi, "");
           cleanText = cleanText.replace(
             /<code[^>]{0,200}>([^<]{1,30})<\/code>/gi,
             "`$1`",
@@ -820,6 +832,12 @@ export const QuestionContent = ({ content }: { content: string }) => {
           .replaceAll(/^>\s*/g, "")
           .replaceAll(/\s*>$/g, "")
           .replaceAll(/\s+>\s+/g, " ");
+        // SECURITY: Additional sanitization to remove any remaining HTML tags
+        cleanCode = cleanCode
+          .replace(/<script[^>]*>[\s\S]*?<\/script>/gi, "")
+          .replace(/<style[^>]*>[\s\S]*?<\/style>/gi, "")
+          .replace(/<iframe[^>]*>[\s\S]*?<\/iframe>/gi, "")
+          .replace(/on\w+\s*=\s*["'][^"']*["']/gi, "");
       }
       const formattedCode = formatCodeContent(cleanCode);
       parts.push({
@@ -862,6 +880,12 @@ export const QuestionContent = ({ content }: { content: string }) => {
           .replaceAll(/^>\s*/g, "")
           .replaceAll(/\s*>$/g, "")
           .replaceAll(/\s+>\s+/g, " ");
+        // SECURITY: Additional sanitization to remove any remaining HTML tags
+        cleanText = cleanText
+          .replace(/<script[^>]*>[\s\S]*?<\/script>/gi, "")
+          .replace(/<style[^>]*>[\s\S]*?<\/style>/gi, "")
+          .replace(/<iframe[^>]*>[\s\S]*?<\/iframe>/gi, "")
+          .replace(/on\w+\s*=\s*["'][^"']*["']/gi, "");
       }
       cleanText = cleanText
         .replaceAll(/[ \t]+/g, " ")

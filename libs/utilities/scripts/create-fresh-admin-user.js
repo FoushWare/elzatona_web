@@ -171,7 +171,8 @@ async function createFreshAdminUser() {
     console.log("🎉 Fresh admin user is ready for login!");
     console.log(`🔗 Login at: http://localhost:3000/admin/login`);
     console.log(`   Email: ${adminEmail}`);
-    console.log(`   Password: ${adminPassword}`);
+    // SECURITY: Do not log password in plain text
+    console.log(`   Password: [REDACTED - check your environment variables or database]`);
     console.log(`   Environment: ${env}\n`);
   } catch (error) {
     console.error("❌ Unexpected error:", error.message);
