@@ -45,7 +45,7 @@ export function LearningTypeProvider({
   // Initialize learning type from localStorage on mount (before auth check)
   const getInitialLearningType = (): LearningType => {
     // Always return default during SSR - actual value will be loaded in useEffect
-    if (typeof globalThis.window === "undefined") return "guided";
+    if (globalThis.window === undefined) return "guided";
     try {
       // First try universal key (works for logged out users)
       const universalTypeKey = buildStorageKey(null, "type");
@@ -200,8 +200,7 @@ export function LearningTypeProvider({
         setLearningTypeState(rawType);
       }
       const rawSolved =
-        typeof globalThis.window !== "undefined" &&
-        globalThis.window.localStorage
+        globalThis.window?.localStorage
           ? globalThis.window.localStorage.getItem(solvedKey)
           : null;
       if (rawSolved) {
@@ -224,10 +223,7 @@ export function LearningTypeProvider({
       const typeKey = buildStorageKey(userId, "type");
       const universalTypeKey = buildStorageKey(null, "type"); // Universal key that persists across logout
 
-      if (
-        typeof globalThis.window !== "undefined" &&
-        globalThis.window.localStorage
-      ) {
+      if (globalThis.window?.localStorage) {
         // Save to userId-specific key if logged in
         if (userId) {
           globalThis.window.localStorage.setItem(typeKey, learningType);
@@ -245,10 +241,7 @@ export function LearningTypeProvider({
   useEffect(() => {
     if (!initializedRef.current) return;
     try {
-      if (
-        typeof globalThis.window !== "undefined" &&
-        globalThis.window.localStorage
-      ) {
+      if (globalThis.window?.localStorage) {
         const solvedKey = buildStorageKey(userId, "solved");
         globalThis.window.localStorage.setItem(
           solvedKey,

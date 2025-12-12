@@ -184,7 +184,7 @@ function fixImportsInFile(filePath, _appRoot) {
   let content = fs.readFileSync(filePath, "utf8");
   let modified = false;
 
-  for (const { pattern, replacement, description } of REPLACEMENTS) {
+  for (const { pattern, replacement } of REPLACEMENTS) {
     if (pattern.test(content)) {
       content = content.replace(pattern, replacement);
       modified = true;

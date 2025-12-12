@@ -1,12 +1,10 @@
 #!/usr/bin/env node
-
 /**
  * CodeQL Issues Auto-Fix Script
  * Attempts to automatically fix common CodeQL security issues
  */
 
-const fs = require("fs");
-const path = require("path");
+import fs from "fs";
 
 // Read SARIF file
 const sarifFile = process.argv[2] || ".codeql-results-precommit.sarif";

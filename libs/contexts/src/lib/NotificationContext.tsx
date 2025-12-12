@@ -47,9 +47,9 @@ const NotificationContext = createContext<NotificationContextType | undefined>(
 );
 
 interface NotificationProviderProps {
-  children: ReactNode;
-  userId?: string;
-  adminId?: string;
+  readonly children: ReactNode;
+  readonly userId?: string;
+  readonly adminId?: string;
 }
 
 export function NotificationProvider({

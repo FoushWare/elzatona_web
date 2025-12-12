@@ -1,0 +1,16 @@
+secret:
+  ignored_paths:
+    - "**/test-results/**"
+    - libs/utilities/scripts/scan-git-history-for-secrets.sh
+    - "**/storybook-static/**"
+    - "**/.git/**"
+    - "**/coverage/**"
+    - "**/*.snap"
+    - "**/node_modules/**"
+    - "**/dist/**"
+    - "**/.cursor/**"
+    - libs/utilities/scripts/clean-git-history-secrets.sh
+    - "**/__snapshots__/**"
+    - "**/build/**"
+    - "**/.next/**"
+version: 2

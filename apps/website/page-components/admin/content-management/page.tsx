@@ -1718,7 +1718,7 @@ export default function UnifiedAdminPage() {
                               total +
                               categoryTopics.reduce((topicTotal, topic) => {
                                 const topicQuestions =
-                                  questionsByTopic[topic.id] || [];
+                                  _questionsByTopic[topic.id] || [];
                                 return topicTotal + topicQuestions.length;
                               }, 0)
                             );
@@ -1796,7 +1796,7 @@ export default function UnifiedAdminPage() {
                                   >
                                     {categoryTopics.reduce((total, topic) => {
                                       const topicQuestions =
-                                        questionsByTopic[topic.id] || [];
+                                        _questionsByTopic[topic.id] || [];
                                       return total + topicQuestions.length;
                                     }, 0)}{" "}
                                     Questions
@@ -1828,7 +1828,7 @@ export default function UnifiedAdminPage() {
                                 <div className="ml-6 space-y-2">
                                   {categoryTopics.map((topic) => {
                                     const topicQuestions =
-                                      questionsByTopic[topic.id] || [];
+                                      _questionsByTopic[topic.id] || [];
 
                                     return (
                                       <div

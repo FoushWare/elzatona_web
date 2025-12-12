@@ -1,7 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
 import jwt from "jsonwebtoken";
-import { getSupabaseConfig, getApiConfig } from "@/lib/utils/api-config";
-import { getEnvironment } from "@/lib/utils/environment";
+import {
+  getSupabaseConfig,
+  getApiConfig,
+} from "../../../lib/utils/api-config";
+import { getEnvironment } from "../../../lib/utils/environment";
 
 // Admin config - using environment variables directly
 const adminConfig = {

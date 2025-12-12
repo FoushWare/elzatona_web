@@ -290,7 +290,7 @@ test.describe("A-E2E-001: Admin Bulk Question Addition - CRUD", () => {
 
     // Wait for the POST API response (create question) with timeout handling
     let createApiSuccess = false;
-    let createResponseData: any = null;
+    let createResponseData: unknown = null;
 
     try {
       const createResponse = await Promise.race([
@@ -358,7 +358,7 @@ test.describe("A-E2E-001: Admin Bulk Question Addition - CRUD", () => {
       } else {
         throw new Error("No create response received");
       }
-    } catch (e: any) {
+    } catch (e: unknown) {
       if (e.message === "Timeout") {
         console.error("❌ Create API response timeout after 25s");
         throw new Error(
@@ -414,7 +414,7 @@ test.describe("A-E2E-001: Admin Bulk Question Addition - CRUD", () => {
         // Verify the question is in the response
         const questions = fetchData.data || [];
         const foundQuestion = questions.find(
-          (q: any) =>
+          (q: { title?: string }) =>
             q.title === questionTitle || q.title?.includes("E2E Test Question"),
         );
         if (foundQuestion) {
@@ -430,7 +430,7 @@ test.describe("A-E2E-001: Admin Bulk Question Addition - CRUD", () => {
           );
           console.log(
             "Question titles in response:",
-            questions.map((q: any) => q.title).slice(0, 10),
+            questions.map((q: { title?: string }) => q.title).slice(0, 10),
           );
           console.log("Total count:", fetchData.pagination?.totalCount);
 
@@ -464,7 +464,7 @@ test.describe("A-E2E-001: Admin Bulk Question Addition - CRUD", () => {
       } else {
         console.log("⚠️ No fetch response received, but continuing...");
       }
-    } catch (e: any) {
+    } catch (e: unknown) {
       if (e.message === "Timeout") {
         console.log(
           "⚠️ Fetch API response timeout after 25s, continuing anyway...",
@@ -790,7 +790,7 @@ test.describe("A-E2E-001: Admin Bulk Question Addition - CRUD", () => {
     if (count > 0) {
       // Get the question title before editing (to verify it changes)
       const questionRow = editButtons.first().locator("..").locator("..");
-      const originalTitle = await questionRow
+      const _originalTitle = await questionRow
         .locator('h4, h3, [class*="title"]')
         .first()
         .textContent()

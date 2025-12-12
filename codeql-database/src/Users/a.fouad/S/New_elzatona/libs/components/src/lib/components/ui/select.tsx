@@ -1,0 +1,183 @@
+import * as React from "react";
+import { ChevronDown, ChevronUp } from "lucide-react";
+import { cn } from "../../utils";
+
+const Select = React.forwardRef<
+  HTMLDivElement,
+  React.HTMLAttributes<HTMLDivElement> & {
+    value?: string;
+    onValueChange?: (value: string) => void;
+  }
+>(({ className, value, onValueChange, children, ...props }, ref) => {
+  const [open, setOpen] = React.useState(false);
+  const [selectedValue, setSelectedValue] = React.useState(value || "");
+
+  React.useEffect(() => {
+    setSelectedValue(value || "");
+  }, [value]);
+
+  // Close dropdown when clicking outside
+  React.useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        open &&
+        ref &&
+        "current" in ref &&
+        ref.current &&
+        !ref.current.contains(event.target as Node)
+      ) {
+        setOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [open, ref]);
+
+  const handleValueChange = (newValue: string) => {
+    setSelectedValue(newValue);
+    onValueChange?.(newValue);
+    setOpen(false);
+  };
+
+  // Find SelectTrigger and SelectContent children
+  const selectTrigger = React.Children.toArray(children).find(
+    (child) => React.isValidElement(child) && child.type === SelectTrigger,
+  );
+
+  const selectContent = React.Children.toArray(children).find(
+    (child) => React.isValidElement(child) && child.type === SelectContent,
+  );
+
+  // Extract SelectItems from SelectContent
+  const selectItems = React.Children.toArray(
+    (React.isValidElement(selectContent) && "children" in selectContent.props
+      ? (selectContent.props as { children?: React.ReactNode }).children
+      : undefined) || [],
+  ).filter((child) => React.isValidElement(child) && child.type === SelectItem);
+
+  // Find the selected item text
+  const selectedItem = selectItems.find(
+    (item) => React.isValidElement(item) && item.props.value === selectedValue,
+  );
+  const selectedText = React.isValidElement(selectedItem)
+    ? selectedItem.props.children
+    : "Select...";
+
+  return (
+    <div ref={ref} className={cn("relative", className)} {...props}>
+      <button
+        type="button"
+        className="flex h-10 w-full items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 hover:bg-accent hover:text-accent-foreground cursor-pointer"
+        onClick={() => setOpen(!open)}
+      >
+        <span className="truncate">{selectedText}</span>
+        {open ? (
+          <ChevronUp className="h-4 w-4 opacity-50" />
+        ) : (
+          <ChevronDown className="h-4 w-4 opacity-50" />
+        )}
+      </button>
+      {open && (
+        <div className="absolute z-50 w-full mt-1 rounded-md border bg-background shadow-lg">
+          <div className="max-h-60 overflow-auto">
+            {selectItems.map((item) => {
+              if (React.isValidElement(item)) {
+                return (
+                  <div
+                    key={item.props.value}
+                    className="px-3 py-2 text-sm hover:bg-accent hover:text-accent-foreground cursor-pointer"
+                    onClick={() => handleValueChange(item.props.value)}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter" || e.key === " ") {
+                        e.preventDefault();
+                        handleValueChange(item.props.value);
+                      }
+                    }}
+                    role="option"
+                    tabIndex={0}
+                    aria-selected={selectedValue === item.props.value}
+                  >
+                    {item.props.children}
+                  </div>
+                );
+              }
+              return item;
+            })}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+});
+Select.displayName = "Select";
+
+const SelectTrigger = React.forwardRef<
+  HTMLButtonElement,
+  React.ButtonHTMLAttributes<HTMLButtonElement>
+>(({ className, children, ...props }, ref) => (
+  <button
+    ref={ref}
+    className={cn(
+      "flex h-10 w-full items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 hover:bg-accent hover:text-accent-foreground cursor-pointer",
+      className,
+    )}
+    {...props}
+  >
+    {children}
+  </button>
+));
+SelectTrigger.displayName = "SelectTrigger";
+
+const SelectValue = React.forwardRef<
+  HTMLSpanElement,
+  React.HTMLAttributes<HTMLSpanElement> & {
+    placeholder?: string;
+  }
+>(({ className, placeholder, ...props }, ref) => (
+  <span ref={ref} className={cn("truncate", className)} {...props}>
+    {placeholder}
+  </span>
+));
+SelectValue.displayName = "SelectValue";
+
+const SelectContent = React.forwardRef<
+  HTMLDivElement,
+  React.HTMLAttributes<HTMLDivElement>
+>(({ className, children, ...props }, ref) => (
+  <div
+    ref={ref}
+    className={cn(
+      "relative z-50 max-h-96 min-w-[8rem] overflow-hidden rounded-md border bg-popover text-popover-foreground shadow-md",
+      className,
+    )}
+    {...props}
+  >
+    <div className="p-1">{children}</div>
+  </div>
+));
+SelectContent.displayName = "SelectContent";
+
+const SelectItem = React.forwardRef<
+  HTMLDivElement,
+  React.HTMLAttributes<HTMLDivElement> & {
+    value: string;
+  }
+>(({ className, children, value: _value, onClick, ...props }, ref) => (
+  <div
+    ref={ref}
+    className={cn(
+      "relative flex w-full cursor-default select-none items-center rounded-sm py-1.5 pl-8 pr-2 text-sm outline-none focus:bg-accent focus:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50",
+      className,
+    )}
+    onClick={onClick}
+    {...props}
+  >
+    {children}
+  </div>
+));
+SelectItem.displayName = "SelectItem";
+
+export { Select, SelectContent, SelectItem, SelectTrigger, SelectValue };

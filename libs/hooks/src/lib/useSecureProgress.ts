@@ -54,9 +54,9 @@ export function useSecureProgress(): UseSecureProgressReturn {
       return `session_${Date.now()}_${Array.from(array, (byte) => byte.toString(36)).join("")}`;
     }
     // Fallback for environments without crypto (should not happen in browser)
-    return `session_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+    return `session_${Date.now()}_${Math.random().toString(36).substring(2, 11)}`;
   };
-  const sessionId = generateSecureSessionId();
+  // Session ID is generated on-demand when needed (see line 108)
 
   // Load progress from localStorage cache on mount
   useEffect(() => {

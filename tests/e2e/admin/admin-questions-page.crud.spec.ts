@@ -5,8 +5,9 @@
  * Note: Environment variables are loaded by the setup file
  */
 
-import { test, expect, APIResponse } from "@playwright/test";
+import { test, expect } from "@playwright/test";
 import { setupAdminPage } from "./admin-questions-page.setup";
+// APIResponse is imported but not used directly in this file
 
 test.describe("A-E2E-001: Admin Bulk Question Addition - CRUD", () => {
   // Set default timeout for all tests in this suite

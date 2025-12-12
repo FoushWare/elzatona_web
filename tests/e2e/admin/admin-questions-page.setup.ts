@@ -492,7 +492,7 @@ async function waitForServerReady(
       }
     } catch (error: unknown) {
       // Server not ready yet
-      const err = error instanceof Error ? error : new Error(String(error));
+      const _err = error instanceof Error ? error : new Error(String(error));
       if (attempt < maxRetries) {
         console.log(
           `⏳ Waiting for server to be ready (attempt ${attempt}/${maxRetries})...`,
@@ -961,7 +961,7 @@ export async function setupAdminPage(
       await navigationPromise;
       console.log("✅ Navigation to admin page successful");
     } catch (navError: unknown) {
-      const error =
+      const _error =
         navError instanceof Error ? navError : new Error(String(navError));
       let currentURL = "";
       try {
@@ -1082,7 +1082,7 @@ export async function setupAdminPage(
         });
       } catch (navError: unknown) {
         // Check if error is connection refused (server not ready)
-        const error =
+        const _error =
           navError instanceof Error ? navError : new Error(String(navError));
         if (
           navError.message.includes("ERR_CONNECTION_REFUSED") ||
@@ -1112,7 +1112,7 @@ export async function setupAdminPage(
                 timeout: 15000,
               })
               .catch((retryError: unknown) => {
-                const error =
+                const _error =
                   retryError instanceof Error
                     ? retryError
                     : new Error(String(retryError));
