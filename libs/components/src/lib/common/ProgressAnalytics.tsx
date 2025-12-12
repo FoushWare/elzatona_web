@@ -200,7 +200,7 @@ export default function ProgressAnalytics() {
               Top Performing Categories
             </h3>
             <div className="space-y-4">
-              {dashboardStats.recentActivity.map(
+              {dashboardStats?.recentActivity?.map(
                 (activity: any, index: number) => (
                   <div
                     key={index}
@@ -251,9 +251,9 @@ export default function ProgressAnalytics() {
               <div className="text-center p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
                 <div className="text-2xl font-bold text-blue-600 mb-1">
                   {
-                    dashboardStats.recentActivity.filter(
+                    dashboardStats?.recentActivity?.filter(
                       (a: any) => a.type === "question",
-                    ).length
+                    ).length ?? 0
                   }
                 </div>
                 <div className="text-sm text-blue-600 dark:text-blue-400">
@@ -263,9 +263,9 @@ export default function ProgressAnalytics() {
               <div className="text-center p-4 bg-green-50 dark:bg-green-900/20 rounded-lg">
                 <div className="text-2xl font-bold text-green-600 mb-1">
                   {
-                    dashboardStats.recentActivity.filter(
+                    dashboardStats?.recentActivity?.filter(
                       (a: any) => a.type === "challenge",
-                    ).length
+                    ).length ?? 0
                   }
                 </div>
                 <div className="text-sm text-green-600 dark:text-green-400">
@@ -275,9 +275,9 @@ export default function ProgressAnalytics() {
               <div className="text-center p-4 bg-purple-50 dark:bg-purple-900/20 rounded-lg">
                 <div className="text-2xl font-bold text-purple-600 mb-1">
                   {
-                    dashboardStats.recentActivity.filter(
+                    dashboardStats?.recentActivity?.filter(
                       (a: any) => a.type === "path",
-                    ).length
+                    ).length ?? 0
                   }
                 </div>
                 <div className="text-sm text-purple-600 dark:text-purple-400">
