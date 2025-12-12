@@ -661,6 +661,11 @@ export const QuestionContent = ({ content }: { content: string }) => {
 
   // ⚠️ SECURITY: Limit regex complexity and add iteration limits
   // Use simpler pattern with length limit to prevent ReDoS
+  // Limit input size before regex processing to prevent ReDoS attacks
+  const MAX_INPUT_SIZE = 100000; // 100KB limit
+  if (fixedContent.length > MAX_INPUT_SIZE) {
+    fixedContent = fixedContent.substring(0, MAX_INPUT_SIZE);
+  }
   const malformedPattern = /<pr<cod[^>]*>([\s\S]{0,50000}?)(?:<\/cod<\/pr|$)/gi;
   let malformedMatch: RegExpExecArray | null;
   malformedPattern.lastIndex = 0;
