@@ -787,7 +787,7 @@ test.describe("A-E2E-001: Admin Bulk Question Addition - CRUD", () => {
     if (count > 0) {
       // Get the question title before editing (to verify it changes)
       const questionRow = editButtons.first().locator("..").locator("..");
-      const originalTitle = await questionRow
+      const _originalTitle = await questionRow
         .locator('h4, h3, [class*="title"]')
         .first()
         .textContent()
