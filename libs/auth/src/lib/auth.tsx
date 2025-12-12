@@ -49,7 +49,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     return () => clearTimeout(timer);
   }, []);
 
-  const login = async (email: string, password: string) => {
+  const login = async (email: string, _password: string) => {
     setIsLoading(true);
     try {
       // Simulate login - in real implementation, this would call Supabase
@@ -86,7 +86,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     }
   };
 
-  const signup = async (email: string, password: string) => {
+  const signup = async (_email: string, _password: string) => {
     setIsLoading(true);
     try {
       // Simulate signup

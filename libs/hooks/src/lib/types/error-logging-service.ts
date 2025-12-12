@@ -3,17 +3,17 @@
 
 export class ErrorLoggingService {
   static async logError(
-    error: Error,
-    context?: Record<string, unknown>,
+    _error: Error,
+    _context?: Record<string, unknown>,
   ): Promise<void> {
     // Stub implementation
   }
   static async logPerformance(
-    operation: string,
-    duration: number,
-    success: boolean,
-    context: Record<string, unknown>,
-    metadata?: Record<string, unknown>,
+    _operation: string,
+    _duration: number,
+    _success: boolean,
+    _context: Record<string, unknown>,
+    _metadata?: Record<string, unknown>,
   ): Promise<void> {
     // Stub implementation
   }

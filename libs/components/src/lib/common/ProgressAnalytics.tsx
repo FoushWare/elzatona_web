@@ -1,7 +1,7 @@
 // v1.0 - Progress Analytics Component
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 // import { useUserProgress } from '@elzatona/hooks'; // Removed - useUserProgress is not exported
 import {
   BarChart3,

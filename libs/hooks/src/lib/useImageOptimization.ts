@@ -3,7 +3,7 @@ import { useState, useEffect, useCallback } from "react";
 // Inline utility functions to avoid module resolution issues
 function generateOptimizedImageUrl(
   src: string,
-  options: {
+  _options: {
     quality?: number;
     format?: "webp" | "jpeg" | "png";
     width?: number;

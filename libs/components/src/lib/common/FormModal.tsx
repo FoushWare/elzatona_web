@@ -3,7 +3,7 @@
 import React from "react";
 import { X, Loader2 } from "lucide-react";
 import { Button } from "../ui/button";
-import { Separator } from "../ui/separator";
+import {} from "../ui/separator";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../ui/dialog";
 import { cn } from "../utils";
 

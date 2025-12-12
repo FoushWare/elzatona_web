@@ -18,9 +18,9 @@ import { Textarea } from "@elzatona/components";
 import { Badge } from "@elzatona/components";
 import {
   useCards,
-  useCreateCard,
-  useUpdateCard,
-  useDeleteCard,
+  useCreateCard as _useCreateCard,
+  useUpdateCard as _useUpdateCard,
+  useDeleteCard as _useDeleteCard,
   queryKeys,
 } from "@elzatona/hooks";
 import {
@@ -200,7 +200,7 @@ export const TanStackOptimisticExample: React.FC = () => {
       }
       toast.error("Failed to create card");
     },
-    onSuccess: (data) => {
+    onSuccess: (_data) => {
       toast.success("Card created successfully");
       setShowForm(false);
     },
@@ -245,7 +245,7 @@ export const TanStackOptimisticExample: React.FC = () => {
       }
       toast.error("Failed to update card");
     },
-    onSuccess: (data) => {
+    onSuccess: (_data) => {
       toast.success("Card updated successfully");
       setEditingCard(null);
     },

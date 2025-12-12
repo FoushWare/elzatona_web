@@ -4,7 +4,7 @@
  */
 
 import React from "react";
-import { render, screen, fireEvent, waitFor } from "@testing-library/react";
+import { render } from "@testing-library/react";
 import "@testing-library/jest-dom";
 import FlashcardsPage from "./page";
 
@@ -45,8 +45,8 @@ global.fetch = jest.fn(() =>
 );
 
 // Mock lucide-react using the shared mock
-// eslint-disable-next-line @typescript-eslint/no-require-imports
 jest.mock("lucide-react", () =>
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
   require("../../test-utils/mocks/lucide-react.tsx"),
 );
 

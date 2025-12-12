@@ -15,7 +15,7 @@ function createSupabaseClient() {
 }
 
 // GET /api/plans - Get all learning plans
-export async function GET(request: NextRequest) {
+export async function GET(_request: NextRequest) {
   try {
     console.log("🔍 API Debug: Starting GET /api/plans");
     console.log(

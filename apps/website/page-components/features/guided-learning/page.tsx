@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useEffect } from "react";
 import { useAuth } from "@elzatona/contexts";
 import { useLearningType } from "@/context/LearningTypeContext";
 
@@ -13,15 +13,15 @@ import {
   CheckCircle,
   ArrowRight,
   Calendar,
-  BookOpen,
+  _BookOpen,
   Zap,
   TrendingUp,
   Award,
-  Users,
+  _Users,
   Star,
   Loader2,
   Play,
-  Pause,
+  _Pause,
   RotateCcw,
   Compass,
 } from "lucide-react";
@@ -611,7 +611,7 @@ export default function GuidedLearningPage() {
                 Daily Goals
               </h3>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                {dailyGoals.map((goal, index) => (
+                {dailyGoals.map((goal, _index) => (
                   <div
                     key={goal.day}
                     className={`p-4 rounded-lg border-2 transition-all ${
@@ -853,7 +853,7 @@ export default function GuidedLearningPage() {
             </div>
           )}
 
-          {templates.map((plan, index) => {
+          {templates.map((plan, _index) => {
             const planGrade = planGrades.get(plan.id);
             const isCompleted = completedPlans.has(plan.id);
 

@@ -71,7 +71,7 @@ test.describe("A-E2E-001: Admin Bulk Question Addition - Pagination", () => {
         if (data.success && data.pagination) {
           currentCount = data.pagination.totalCount || 0;
         }
-      } catch (e) {
+      } catch (_e) {
         // API call failed, fall back to counting visible rows
         const questionRows = page
           .locator("div")
@@ -125,7 +125,7 @@ test.describe("A-E2E-001: Admin Bulk Question Addition - Pagination", () => {
         { timeout: 15000 },
       );
       await page.waitForTimeout(1000); // Wait for React to update
-    } catch (e) {
+    } catch (_e) {
       // API might have already responded, continue
     }
 
@@ -142,7 +142,7 @@ test.describe("A-E2E-001: Admin Bulk Question Addition - Pagination", () => {
         pageIndicator.first().waitFor({ timeout: 10000 }),
         showingText.first().waitFor({ timeout: 10000 }),
       ]);
-    } catch (e) {
+    } catch (_e) {
       // Pagination might not be available - check API response
       console.log("⚠️ Pagination controls not found, checking API response...");
       try {
@@ -170,7 +170,7 @@ test.describe("A-E2E-001: Admin Bulk Question Addition - Pagination", () => {
         showingText = page.locator(
           "text=/Showing \\d+ to \\d+ of \\d+ questions/i",
         );
-      } catch (apiError) {
+      } catch (_apiError) {
         console.log("⚠️ Could not check API response");
       }
     }
@@ -326,7 +326,7 @@ test.describe("A-E2E-001: Admin Bulk Question Addition - Pagination", () => {
         { timeout: 15000 },
       );
       await page.waitForTimeout(1000); // Wait for React to update
-    } catch (e) {
+    } catch (_e) {
       // API might have already responded, continue
     }
 
@@ -341,7 +341,7 @@ test.describe("A-E2E-001: Admin Bulk Question Addition - Pagination", () => {
         pageIndicator.first().waitFor({ timeout: 10000 }),
         showingText.first().waitFor({ timeout: 10000 }),
       ]);
-    } catch (e) {
+    } catch (_e) {
       // Check API to see if pagination should be available
       try {
         const response = await page.request.get(
@@ -367,7 +367,7 @@ test.describe("A-E2E-001: Admin Bulk Question Addition - Pagination", () => {
         showingText = page.locator(
           "text=/Showing \\d+ to \\d+ of \\d+ questions/i",
         );
-      } catch (apiError) {
+      } catch (_apiError) {
         console.log("⚠️ Could not check API response");
       }
     }
@@ -513,7 +513,7 @@ test.describe("A-E2E-001: Admin Bulk Question Addition - Pagination", () => {
           });
 
           if (afterNextPageText) break;
-        } catch (e) {
+        } catch (_e) {
           retryCount++;
           if (retryCount < maxRetries) {
             await page.waitForTimeout(1000);
@@ -525,7 +525,7 @@ test.describe("A-E2E-001: Admin Bulk Question Addition - Pagination", () => {
               await showingText.waitFor({ state: "visible", timeout: 3000 });
               // If we found showing text, pagination is there, just need to find page indicator
               await page.waitForTimeout(1000);
-            } catch (e2) {
+            } catch (_e2) {
               // Continue retrying
             }
           }
@@ -543,7 +543,7 @@ test.describe("A-E2E-001: Admin Bulk Question Addition - Pagination", () => {
             );
             return pageSpan?.textContent || null;
           });
-        } catch (e) {
+        } catch (_e) {
           throw new Error(
             "Could not find page indicator after navigation. Pagination may not be working correctly.",
           );
@@ -716,7 +716,7 @@ test.describe("A-E2E-001: Admin Bulk Question Addition - Pagination", () => {
                 "⚠️ Playwright click failed, but JavaScript click should have worked",
               );
             });
-        } catch (e) {
+        } catch (_e) {
           // Ignore - JavaScript click is primary method
         }
 
@@ -778,7 +778,7 @@ test.describe("A-E2E-001: Admin Bulk Question Addition - Pagination", () => {
             });
 
             if (afterPrevPageText) break;
-          } catch (e) {
+          } catch (_e) {
             prevRetryCount++;
             if (prevRetryCount < maxPrevRetries) {
               await page.waitForTimeout(1000);
@@ -797,7 +797,7 @@ test.describe("A-E2E-001: Admin Bulk Question Addition - Pagination", () => {
               );
               return pageSpan?.textContent || null;
             });
-          } catch (e) {
+          } catch (_e) {
             throw new Error(
               "Could not find page indicator after clicking previous. Pagination may not be working correctly.",
             );
@@ -907,7 +907,7 @@ test.describe("A-E2E-001: Admin Bulk Question Addition - Pagination", () => {
         { timeout: 15000 },
       );
       await page.waitForTimeout(1000); // Wait for React to update
-    } catch (e) {
+    } catch (_e) {
       // API might have already responded, continue
     }
 
@@ -922,7 +922,7 @@ test.describe("A-E2E-001: Admin Bulk Question Addition - Pagination", () => {
         pageIndicator.first().waitFor({ timeout: 10000 }),
         showingText.first().waitFor({ timeout: 10000 }),
       ]);
-    } catch (e) {
+    } catch (_e) {
       // Check API to see if pagination should be available
       try {
         const response = await page.request.get(
@@ -948,7 +948,7 @@ test.describe("A-E2E-001: Admin Bulk Question Addition - Pagination", () => {
         showingText = page.locator(
           "text=/Showing \\d+ to \\d+ of \\d+ questions/i",
         );
-      } catch (apiError) {
+      } catch (_apiError) {
         console.log("⚠️ Could not check API response");
       }
     }
@@ -1014,7 +1014,7 @@ test.describe("A-E2E-001: Admin Bulk Question Addition - Pagination", () => {
         trigger = comboboxInContainer.first();
         console.log("✅ Found page size selector using container method");
       }
-    } catch (e) {
+    } catch (_e) {
       console.log("⚠️ Container method failed, trying alternative...");
     }
 
@@ -1051,7 +1051,7 @@ test.describe("A-E2E-001: Admin Bulk Question Addition - Pagination", () => {
             }
           }
         }
-      } catch (e) {
+      } catch (_e) {
         console.log("⚠️ Proximity method failed");
       }
     }
@@ -1107,7 +1107,7 @@ test.describe("A-E2E-001: Admin Bulk Question Addition - Pagination", () => {
         .first()
         .textContent({ timeout: 5000 })
         .catch(() => null);
-    } catch (e: any) {
+    } catch (_e: any) {
       // If page is actually closed, Playwright will throw a proper error
       // Just log and continue - the click attempt will fail if page is really closed
       console.log('⚠️ Could not get "Showing" text, continuing anyway...');
@@ -1128,7 +1128,7 @@ test.describe("A-E2E-001: Admin Bulk Question Addition - Pagination", () => {
       // Verify trigger is ready (quick check, don't wait too long)
       try {
         await trigger.waitFor({ state: "visible", timeout: 3000 });
-      } catch (e) {
+      } catch (_e) {
         // If not visible, try to find it again
         console.log("⚠️ Trigger not immediately visible, re-finding...");
         const newTrigger = page.locator('button[role="combobox"]').first();
@@ -1359,7 +1359,7 @@ test.describe("A-E2E-001: Admin Bulk Question Addition - Pagination", () => {
           .first()
           .textContent({ timeout: 5000 });
         if (afterText) break;
-      } catch (e) {
+      } catch (_e) {
         textRetryCount++;
         if (textRetryCount < maxTextRetries) {
           await page.waitForTimeout(1000);
@@ -1377,7 +1377,7 @@ test.describe("A-E2E-001: Admin Bulk Question Addition - Pagination", () => {
           );
           return showingDiv?.textContent || null;
         });
-      } catch (e) {
+      } catch (_e) {
         // Continue without text
       }
     }

@@ -556,7 +556,7 @@ async function processBatch(batchNumber, questions) {
       if (typeof options === "string") {
         try {
           options = JSON.parse(options);
-        } catch (e) {
+        } catch (_e) {
           options = [options];
         }
       }

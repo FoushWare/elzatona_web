@@ -91,7 +91,7 @@ export async function GET(request: NextRequest) {
           keyProjectRef = payload.ref;
           keyRole = payload.role;
         }
-      } catch (error) {
+      } catch (_error) {
         // Invalid JWT
       }
     }

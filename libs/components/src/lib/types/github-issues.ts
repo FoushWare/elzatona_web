@@ -60,7 +60,7 @@ export class GitHubIssuesService {
   }
 
   static getIssuePriority(
-    issue: GitHubIssue,
+    _issue: GitHubIssue,
   ): "Critical" | "High" | "Medium" | "Low" {
     return "Medium";
   }
