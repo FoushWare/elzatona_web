@@ -356,11 +356,14 @@ function fixUnusedVariable(filePath, line, variableName) {
       } catch (_statError) {
         // If stat fails, proceed with write (file might not exist)
       }
-      
+
       // SECURITY: Final check right before write to prevent race condition
       try {
         const finalStats = fs.statSync(filePath);
-        if (originalStats && finalStats.mtime.getTime() !== originalStats.mtime.getTime()) {
+        if (
+          originalStats &&
+          finalStats.mtime.getTime() !== originalStats.mtime.getTime()
+        ) {
           console.warn(
             `⚠️  File ${filePath} was modified during processing. Skipping write.`,
           );
@@ -370,7 +373,7 @@ function fixUnusedVariable(filePath, line, variableName) {
         // If stat fails, skip write to be safe
         return false;
       }
-      
+
       lines[line - 1] = newLine;
       fs.writeFileSync(filePath, lines.join("\n"), "utf8");
       return true;
@@ -528,11 +531,14 @@ function fixUnusedError(filePath, line) {
       } catch (_statError) {
         // If stat fails, proceed with write (file might not exist)
       }
-      
+
       // SECURITY: Final check right before write to prevent race condition
       try {
         const finalStats = fs.statSync(filePath);
-        if (originalStats && finalStats.mtime.getTime() !== originalStats.mtime.getTime()) {
+        if (
+          originalStats &&
+          finalStats.mtime.getTime() !== originalStats.mtime.getTime()
+        ) {
           console.warn(
             `⚠️  File ${filePath} was modified during processing. Skipping write.`,
           );
@@ -542,7 +548,7 @@ function fixUnusedError(filePath, line) {
         // If stat fails, skip write to be safe
         return false;
       }
-      
+
       lines[line - 1] = newLine;
       fs.writeFileSync(filePath, lines.join("\n"), "utf8");
       return true;
@@ -623,7 +629,10 @@ function updateLogFile(logFilePath, fixedIssues, allIssues) {
     // SECURITY: Final check right before write to prevent race condition
     try {
       const finalStats = fs.statSync(logFilePath);
-      if (originalStats && finalStats.mtime.getTime() !== originalStats.mtime.getTime()) {
+      if (
+        originalStats &&
+        finalStats.mtime.getTime() !== originalStats.mtime.getTime()
+      ) {
         console.warn(
           `⚠️  Log file ${logFilePath} was modified during processing. Skipping write.`,
         );

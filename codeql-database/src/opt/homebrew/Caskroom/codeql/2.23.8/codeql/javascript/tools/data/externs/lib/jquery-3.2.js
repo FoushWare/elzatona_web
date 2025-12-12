@@ -436,7 +436,10 @@ jQuery.prototype.click = function (_arg1, _handler) {};
  * @return {!jQuery}
  * @suppress {checkTypes} see https://code.google.com/p/closure-compiler/issues/detail?id=583
  */
-jQuery.prototype.clone = function (_withDataAndEvents, _deepWithDataAndEvents) {};
+jQuery.prototype.clone = function (
+  _withDataAndEvents,
+  _deepWithDataAndEvents,
+) {};
 
 /**
  * @param {jQuerySelector} arg1
@@ -1187,7 +1190,10 @@ jQuery.jqXHR.prototype.abort = function (_statusText) {};
  * @param {...jQueryCallback} alwaysCallbacks2
  * @return {!jQuery.jqXHR}
  */
-jQuery.jqXHR.prototype.always = function (_alwaysCallbacks, _alwaysCallbacks2) {};
+jQuery.jqXHR.prototype.always = function (
+  _alwaysCallbacks,
+  _alwaysCallbacks2,
+) {};
 
 /**
  * @override

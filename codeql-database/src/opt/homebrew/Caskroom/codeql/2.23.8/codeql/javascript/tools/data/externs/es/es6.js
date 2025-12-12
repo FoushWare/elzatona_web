@@ -977,7 +977,11 @@ DataView.prototype.setUint8 = function (_byteOffset, _value) {};
  * @throws {Error}
  * @return {undefined}
  */
-DataView.prototype.setInt16 = function (_byteOffset, _value, _opt_littleEndian) {};
+DataView.prototype.setInt16 = function (
+  _byteOffset,
+  _value,
+  _opt_littleEndian,
+) {};
 
 /**
  * @param {number} byteOffset
@@ -999,7 +1003,11 @@ DataView.prototype.setUint16 = function (
  * @throws {Error}
  * @return {undefined}
  */
-DataView.prototype.setInt32 = function (_byteOffset, _value, _opt_littleEndian) {};
+DataView.prototype.setInt32 = function (
+  _byteOffset,
+  _value,
+  _opt_littleEndian,
+) {};
 
 /**
  * @param {number} byteOffset

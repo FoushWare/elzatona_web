@@ -96,6 +96,7 @@ export default function AdminManagement({ currentUser }: AdminManagementProps) {
         setError(result.error || "Failed to deactivate admin");
       }
     } catch (_error) {
+      console.error("Error deactivating admin:", _error);
       setError("An unexpected error occurred");
     }
   };

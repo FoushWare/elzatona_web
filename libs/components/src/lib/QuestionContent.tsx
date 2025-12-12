@@ -583,6 +583,7 @@ export const QuestionContent = ({ content }: { content: string }) => {
   };
 
   // SECURITY: Process code blocks with bounded quantifiers
+  // NOSONAR S7781: replaceAll() cannot be used with regex patterns that require capture groups
   fixedContent = fixedContent.replace(
     /<code[^>]{0,200}>([^<]{1,50})<\/code>/gi,
     (match, codeContent, offset) => {

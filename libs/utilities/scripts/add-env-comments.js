@@ -126,7 +126,10 @@ try {
   let currentStats;
   try {
     currentStats = fs.statSync(envFilePath);
-    if (originalStats && currentStats.mtime.getTime() !== originalStats.mtime.getTime()) {
+    if (
+      originalStats &&
+      currentStats.mtime.getTime() !== originalStats.mtime.getTime()
+    ) {
       console.warn("⚠️  File was modified during processing. Retrying...");
       // Re-read file and retry
       return addCommentsToEnvFile(envFile);
@@ -136,7 +139,7 @@ try {
     console.warn("⚠️  Could not verify file state. Skipping write.");
     return;
   }
-  
+
   const updatedContent = updatedLines.join("\n");
   fs.writeFileSync(envFilePath, updatedContent, "utf8");
 

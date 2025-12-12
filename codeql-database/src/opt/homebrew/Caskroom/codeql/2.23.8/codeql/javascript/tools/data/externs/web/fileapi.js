@@ -360,7 +360,10 @@ function FileEntry() {}
  * @param {function(!FileError)=} errorCallback
  * @return {undefined}
  */
-FileEntry.prototype.createWriter = function (_successCallback, _errorCallback) {};
+FileEntry.prototype.createWriter = function (
+  _successCallback,
+  _errorCallback,
+) {};
 
 /**
  * @see http://www.w3.org/TR/file-system-api/#widl-FileEntry-file
@@ -874,7 +877,12 @@ Window.prototype.resolveLocalFileSystemURI = function (
  * @param {function(!FileError)=} errorCallback
  * @return {undefined}
  */
-function _webkitRequestFileSystem(_type, _size, _successCallback, _errorCallback) {}
+function _webkitRequestFileSystem(
+  _type,
+  _size,
+  _successCallback,
+  _errorCallback,
+) {}
 
 /**
  * This has replaced requestFileSystem in Chrome since WebKit revision 84224.
@@ -901,7 +909,11 @@ Window.prototype.webkitRequestFileSystem = function (
  * @param {function(!FileError)=} errorCallback
  * @return {undefined}
  */
-function _webkitResolveLocalFileSystemURI(_uri, _successCallback, _errorCallback) {}
+function _webkitResolveLocalFileSystemURI(
+  _uri,
+  _successCallback,
+  _errorCallback,
+) {}
 
 /**
  * This has replaced resolveLocalFileSystemURI in Chrome since WebKit revision

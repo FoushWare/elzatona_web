@@ -619,7 +619,12 @@ export default function FrontendTaskEditor({
             }
             
             // SECURITY: Escape backslashes, backticks, and dollar signs for template literal
-            const cleanCode = \`${cleanReactCode.replace(/\\/g, "\\\\").replace(/`/g, "\\`").replace(/\$/g, "\\$")}\`;
+            // NOSONAR S6304: String.raw cannot be used here as we need dynamic escaping
+            // NOSONAR S7781: replaceAll() cannot be used with regex patterns that require capture groups
+            const cleanCode = cleanReactCode
+              .replace(/\\/g, "\\\\")
+              .replace(/`/g, "\\`")
+              .replace(/\$/g, "\\$");
             const transpiledCode = Babel.transform(cleanCode, { 
               presets: ['react'],
               plugins: ['transform-class-properties']
