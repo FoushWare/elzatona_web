@@ -4,17 +4,17 @@ import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import {
   ArrowRight,
-  _Play,
-  _Code,
-  _Target,
-  _BookOpen,
+  Play as _Play,
+  Code as _Code,
+  Target as _Target,
+  BookOpen as _BookOpen,
   CheckCircle,
-  _Star,
-  _Users,
-  _Award,
+  Star as _Star,
+  Users as _Users,
+  Award as _Award,
   Map,
   Compass,
-  _ExternalLink,
+  ExternalLink as _ExternalLink,
 } from "lucide-react";
 import { useUserType } from "@elzatona/contexts";
 import { useLearningType } from "@/context/LearningTypeContext";

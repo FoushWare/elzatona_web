@@ -7,11 +7,11 @@ import { useRouter, useParams } from "next/navigation";
 import {
   BookOpen,
   ArrowRight,
-  _Clock,
+  Clock as _Clock,
   Target,
-  _Users,
-  _Star,
-  _ChevronRight,
+  Users as _Users,
+  Star as _Star,
+  ChevronRight as _ChevronRight,
   Code,
   Palette,
   Zap,
@@ -20,12 +20,12 @@ import {
   Settings,
   Brain,
   Globe,
-  _Play,
+  Play as _Play,
   CheckCircle,
-  _Circle,
+  Circle as _Circle,
   HelpCircle,
   Trophy,
-  _TrendingUp,
+  TrendingUp as _TrendingUp,
 } from "lucide-react";
 
 interface Question {

@@ -2,20 +2,20 @@ import React from "react";
 import Link from "next/link";
 import {
   ArrowLeft,
-  _Clock,
+  Clock as _Clock,
   Target,
   BookOpen,
   Play,
   CheckCircle,
-  _Star,
-  _Users,
+  Star as _Star,
+  Users as _Users,
   Zap,
   Code,
   Palette,
   Globe,
   Layers,
   Cpu,
-  _Database,
+  Database as _Database,
 } from "lucide-react";
 
 interface LearningPath {

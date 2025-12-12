@@ -12,7 +12,7 @@ import {
   Clock,
   Target,
   BookOpen,
-  _BookmarkPlus,
+  BookmarkPlus as _BookmarkPlus,
   BookmarkCheck,
   Trophy,
   BarChart3,

@@ -12,7 +12,7 @@ import {
   Code,
   ArrowRight,
   Clock,
-  _Target,
+  Target as _Target,
   Flame,
   CheckCircle,
   Circle,

@@ -15,7 +15,7 @@ import {
   Save,
   Loader2,
   AlertCircle,
-  _CheckCircle,
+  CheckCircle as _CheckCircle,
   ChevronDown,
   ChevronRight,
   Eye,
