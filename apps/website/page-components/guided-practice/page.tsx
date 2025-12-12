@@ -9,10 +9,10 @@ import {
   Clock,
   Target,
   BookOpen,
-  Play as _Play,
+  _Play as _Play,
   ArrowRight,
   Loader2,
-  Zap as _Zap,
+  _Zap as _Zap,
   XCircle,
   Info,
   BookmarkPlus,
@@ -26,6 +26,7 @@ import {
 } from "lucide-react";
 import { addFlashcard, isInFlashcards } from "@/lib/flashcards";
 import { addToCart } from "@/lib/cart";
+import { sanitizeText } from "@/lib/utils/sanitize";
 import { useNotifications } from "../../components/NotificationSystem";
 import { useLearningType } from "../../context/LearningTypeContext";
 import ProblemSolvingQuestion from "../../components/ProblemSolvingQuestion";
@@ -228,7 +229,7 @@ const cleanOptionText = (text: string): string => {
   );
 
   // Step 5: Remove any remaining HTML tags (but preserve backtick-wrapped content)
-  cleaned = cleaned.replace(/<[^>]+>/g, "");
+  cleaned = sanitizeText(cleaned); // Properly sanitize HTML to prevent XSS
 
   // Step 4: Fix common malformed patterns from HTML parsing issues
   // First, handle the specific e> artifact pattern (from </code> tags)
