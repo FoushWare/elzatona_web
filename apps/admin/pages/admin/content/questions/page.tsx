@@ -328,7 +328,7 @@ export default function AdminContentQuestionsPage() {
     setIsQuestionModalOpen(true);
   };
 
-  const getCardTitleById = (cardId: string) => {
+  const _getCardTitleById = (cardId: string) => {
     return (
       cards.find((card: { id: string; title: string }) => card.id === cardId)
         ?.title || "N/A"

@@ -1213,7 +1213,7 @@ export default function AdminContentQuestionsPage() {
       await fetchQuestions();
 
       if (failed.length > 0) {
-        const errorMessage = `Successfully deleted ${successful.length} question(s), but ${failed.length} failed.\n\nFailed:\n${failed.map((f) => `• Question ${f.id}: ${f.error}`).join("\n")}`;
+        const _errorMessage = `Successfully deleted ${successful.length} question(s), but ${failed.length} failed.\n\nFailed:\n${failed.map((f) => `• Question ${f.id}: ${f.error}`).join("\n")}`;
         showError(
           "Bulk Delete Partial Success",
           `Deleted ${successful.length} question(s), but ${failed.length} failed.`,
