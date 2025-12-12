@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 import { useRouter, useSearchParams } from "next/navigation";
 import {
@@ -2139,7 +2139,7 @@ export default function FreeStylePracticePage() {
         setTopics(topicList);
       }
     } catch (_error) {
-      console.error("Error fetching topics:", error);
+      console.error("Error fetching topics:", _error);
     }
   };
 
@@ -2152,7 +2152,7 @@ export default function FreeStylePracticePage() {
         setTotalQuestionCount(data.data.totalCount || 0);
       }
     } catch (_error) {
-      console.error("Error fetching question count:", error);
+      console.error("Error fetching question count:", _error);
     }
   };
 
@@ -2185,7 +2185,7 @@ export default function FreeStylePracticePage() {
         });
       }
     } catch (_error) {
-      console.error("Error fetching user progress:", error);
+      console.error("Error fetching user progress:", _error);
       setUserProgress(null);
     } finally {
       setIsLoadingProgress(false);
@@ -2479,7 +2479,7 @@ export default function FreeStylePracticePage() {
           }
         }
       } catch (_error) {
-        console.error("Error restoring last question:", error);
+        console.error("Error restoring last question:", _error);
       }
 
       // Fallback to first question if no saved progress
@@ -2600,7 +2600,7 @@ export default function FreeStylePracticePage() {
         // It will be restored when questions load in the next useEffect
       }
     } catch (_error) {
-      console.error("Error loading progress from localStorage:", error);
+      console.error("Error loading progress from localStorage:", _error);
     }
   }, []);
 
@@ -2619,7 +2619,7 @@ export default function FreeStylePracticePage() {
         JSON.stringify(progress),
       );
     } catch (_error) {
-      console.error("Error saving progress to localStorage:", error);
+      console.error("Error saving progress to localStorage:", _error);
     }
   };
 
@@ -2860,7 +2860,7 @@ export default function FreeStylePracticePage() {
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-4">
               <button
-                onClick={() => router.push("/free-style-roadmap")}
+                onClick={() => _router.push("/free-style-roadmap")}
                 className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors"
               >
                 <ArrowLeft className="w-5 h-5 text-gray-600 dark:text-gray-400" />
@@ -2877,7 +2877,7 @@ export default function FreeStylePracticePage() {
 
             <div className="flex items-center space-x-4">
               <button
-                onClick={() => router.push("/free-style-analytics")}
+                onClick={() => _router.push("/free-style-analytics")}
                 className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors"
               >
                 <TrendingUp className="w-5 h-5 text-gray-600 dark:text-gray-400" />
@@ -3081,10 +3081,10 @@ export default function FreeStylePracticePage() {
                     <div className="p-2">
                       {topics.length > 0 ? (
                         topics.map((_topic) => {
-                          const isSelected = filters.topics.includes(topic.id);
+                          const isSelected = filters.topics.includes(_topic.id);
                           return (
                             <label
-                              key={topic.id}
+                              key={_topic.id}
                               className="flex items-center px-3 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded cursor-pointer"
                             >
                               <input
@@ -3095,22 +3095,22 @@ export default function FreeStylePracticePage() {
                                     setFilters((prev) => ({
                                       ...prev,
                                       topics: prev.topics.filter(
-                                        (id) => id !== topic.id,
+                                        (id) => id !== _topic.id,
                                       ),
                                     }));
                                   } else {
                                     setFilters((prev) => ({
                                       ...prev,
-                                      topics: prev.topics.includes(topic.id)
+                                      topics: prev.topics.includes(_topic.id)
                                         ? prev.topics
-                                        : [...prev.topics, topic.id],
+                                        : [...prev.topics, _topic.id],
                                     }));
                                   }
                                 }}
                                 className="mr-2 w-4 h-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
                               />
                               <span className="text-sm text-gray-700 dark:text-gray-300">
-                                {topic.name}
+                                {_topic.name}
                               </span>
                             </label>
                           );
@@ -3743,7 +3743,7 @@ export default function FreeStylePracticePage() {
                   </p>
                   <div className="flex flex-col sm:flex-row gap-4 justify-center">
                     <button
-                      onClick={() => router.push("/dashboard")}
+                      onClick={() => _router.push("/dashboard")}
                       className="inline-flex items-center justify-center space-x-2 px-6 py-3 bg-white text-green-600 rounded-lg font-semibold hover:bg-green-50 transition-colors"
                     >
                       <BarChart3 className="w-5 h-5" />
