@@ -349,6 +349,467 @@ const ProblemDescriptionPanel: React.FC<ProblemDescriptionPanelProps> = ({
   );
 };
 
+// Helper component for Test Cases Panel
+interface TestCasesPanelProps {
+  readonly testCases: TestCase[];
+  readonly baseTestCases: TestCase[];
+  readonly selectedTestCaseIndex: number;
+  readonly editingTestCaseIndex: number | null;
+  readonly editingTestCaseData: Partial<TestCase> | null;
+  readonly onSelectTestCase: (index: number) => void;
+  readonly onAddCustomTestCase: () => void;
+  readonly onSaveTestCase: () => void;
+  readonly onCancelEdit: () => void;
+  readonly onDeleteTestCase: (index: number) => void;
+  readonly onStartEdit: (index: number) => void;
+  readonly parseInputFields: (input: unknown) => Record<string, unknown>;
+  readonly setEditingTestCaseData: (
+    data: Partial<TestCase> | null,
+  ) => void;
+}
+
+const TestCasesPanel: React.FC<TestCasesPanelProps> = ({
+  testCases,
+  baseTestCases,
+  selectedTestCaseIndex,
+  editingTestCaseIndex,
+  editingTestCaseData,
+  onSelectTestCase,
+  onAddCustomTestCase,
+  onSaveTestCase,
+  onCancelEdit,
+  onDeleteTestCase,
+  onStartEdit,
+  parseInputFields,
+  setEditingTestCaseData,
+}) => {
+  return (
+    <div className="space-y-4 sm:space-y-5">
+      {/* Test Case Selection Buttons */}
+      <div className="flex items-center gap-2 flex-wrap overflow-x-auto pb-2 -mx-1 px-1">
+        {testCases.map((testCase, index) => (
+          <button
+            key={`testcase-${index}-${JSON.stringify(testCase.input)}`}
+            onClick={() => onSelectTestCase(index)}
+            className={`px-3 sm:px-3.5 py-1.5 text-xs font-semibold rounded-lg border transition-all duration-200 whitespace-nowrap shadow-sm hover:shadow ${
+              selectedTestCaseIndex === index
+                ? "bg-gradient-to-br from-indigo-50 to-indigo-100 text-indigo-700 dark:from-indigo-900/30 dark:to-indigo-900/20 dark:text-indigo-300 border-indigo-300 dark:border-indigo-700"
+                : "bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300 border-gray-200 dark:border-gray-600 hover:bg-indigo-50 dark:hover:bg-gray-600 hover:border-indigo-200 dark:hover:border-gray-500"
+            }`}
+          >
+            {selectedTestCaseIndex === index && (
+              <CheckCircle className="w-3 h-3 inline mr-1" />
+            )}
+            Case {index + 1}
+            {index >= baseTestCases.length && (
+              <span className="ml-1 text-indigo-600 dark:text-indigo-400">
+                *
+              </span>
+            )}
+          </button>
+        ))}
+        <button
+          onClick={onAddCustomTestCase}
+          className="px-3 sm:px-3.5 py-1.5 text-xs font-semibold rounded-lg border border-dashed border-indigo-300 dark:border-indigo-600 text-indigo-600 dark:text-indigo-400 hover:bg-indigo-50 dark:hover:bg-indigo-900/20 whitespace-nowrap transition-all duration-200 shadow-sm hover:shadow"
+        >
+          <Plus className="w-3 h-3 inline mr-1" />
+          Custom
+        </button>
+      </div>
+
+      {/* Selected Test Case Display/Edit */}
+      {selectedTestCaseIndex >= 0 &&
+        selectedTestCaseIndex < testCases.length && (
+          <div className="bg-gradient-to-br from-gray-50 to-white dark:from-gray-900/50 dark:to-gray-800/30 rounded-xl p-4 sm:p-5 border border-gray-200 dark:border-gray-700 shadow-sm">
+            {editingTestCaseIndex === selectedTestCaseIndex &&
+            selectedTestCaseIndex >= baseTestCases.length ? (
+              /* Edit Custom Test Case */
+              <div className="space-y-4">
+                <div className="flex items-center justify-between mb-3">
+                  <span className="text-xs sm:text-sm font-semibold text-gray-800 dark:text-gray-200">
+                    Edit Custom Test Case {selectedTestCaseIndex + 1}
+                  </span>
+                  <div className="flex items-center gap-2">
+                    <button
+                      onClick={onSaveTestCase}
+                      className="px-3 py-1.5 text-xs font-semibold bg-green-600 hover:bg-green-700 text-white rounded-lg transition-colors"
+                    >
+                      Save
+                    </button>
+                    <button
+                      onClick={onCancelEdit}
+                      className="px-3 py-1.5 text-xs font-semibold bg-gray-600 hover:bg-gray-700 text-white rounded-lg transition-colors"
+                    >
+                      Cancel
+                    </button>
+                    <button
+                      onClick={() => onDeleteTestCase(selectedTestCaseIndex)}
+                      className="px-3 py-1.5 text-xs font-semibold bg-red-600 hover:bg-red-700 text-white rounded-lg transition-colors"
+                    >
+                      Delete
+                    </button>
+                  </div>
+                </div>
+                {editingTestCaseData &&
+                  (() => {
+                    const inputFields = parseInputFields(
+                      editingTestCaseData.input || {},
+                    );
+                    return (
+                      <div className="space-y-3">
+                        {Object.entries(inputFields).map(([key, value]) => (
+                          <div key={key} className="flex items-center gap-2">
+                            <label className="text-xs font-semibold text-gray-700 dark:text-gray-300 whitespace-nowrap min-w-[80px]">
+                              {key} =
+                            </label>
+                            <input
+                              type="text"
+                              value={
+                                typeof value === "string"
+                                  ? value
+                                  : JSON.stringify(value)
+                              }
+                              onChange={(e) => {
+                                try {
+                                  const parsed = JSON.parse(e.target.value);
+                                  const currentInput = parseInputFields(
+                                    editingTestCaseData.input || {},
+                                  );
+                                  setEditingTestCaseData({
+                                    ...editingTestCaseData,
+                                    input: {
+                                      ...currentInput,
+                                      [key]: parsed,
+                                    },
+                                  });
+                                } catch {
+                                  const currentInput = parseInputFields(
+                                    editingTestCaseData.input || {},
+                                  );
+                                  setEditingTestCaseData({
+                                    ...editingTestCaseData,
+                                    input: {
+                                      ...currentInput,
+                                      [key]: e.target.value,
+                                    },
+                                  });
+                                }
+                              }}
+                              className="flex-1 px-3 py-2 text-xs font-mono bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-600 rounded-lg text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-indigo-500 dark:focus:ring-indigo-400 focus:border-transparent"
+                            />
+                          </div>
+                        ))}
+                        <div className="flex items-center gap-2 pt-2 border-t border-gray-200 dark:border-gray-700">
+                          <label
+                            htmlFor="expected-output"
+                            className="text-xs font-semibold text-gray-700 dark:text-gray-300 whitespace-nowrap min-w-[80px]"
+                          >
+                            Expected =
+                          </label>
+                          <input
+                            id="expected-output"
+                            type="text"
+                            value={
+                              typeof editingTestCaseData.expectedOutput ===
+                              "string"
+                                ? editingTestCaseData.expectedOutput
+                                : JSON.stringify(
+                                    editingTestCaseData.expectedOutput || "",
+                                  )
+                            }
+                            onChange={(e) => {
+                              try {
+                                const parsed = JSON.parse(e.target.value);
+                                setEditingTestCaseData({
+                                  ...editingTestCaseData,
+                                  expectedOutput: parsed,
+                                });
+                              } catch {
+                                setEditingTestCaseData({
+                                  ...editingTestCaseData,
+                                  expectedOutput: e.target.value,
+                                });
+                              }
+                            }}
+                            className="flex-1 px-3 py-2 text-xs font-mono bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-600 rounded-lg text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-indigo-500 dark:focus:ring-indigo-400 focus:border-transparent"
+                          />
+                        </div>
+                      </div>
+                    );
+                  })()}
+              </div>
+            ) : (
+              /* Display Test Case (Read-only for base, editable for custom) */
+              <div>
+                <div className="flex items-center justify-between mb-3">
+                  <span className="text-xs sm:text-sm font-semibold text-gray-800 dark:text-gray-200">
+                    Test Case {selectedTestCaseIndex + 1}
+                    {testCases[selectedTestCaseIndex].description && (
+                      <span className="ml-2 text-xs font-normal text-gray-600 dark:text-gray-400">
+                        - {testCases[selectedTestCaseIndex].description}
+                      </span>
+                    )}
+                    {selectedTestCaseIndex >= baseTestCases.length && (
+                      <span className="ml-2 text-xs text-indigo-600 dark:text-indigo-400">
+                        (Custom)
+                      </span>
+                    )}
+                  </span>
+                  {selectedTestCaseIndex >= baseTestCases.length && (
+                    <button
+                      onClick={() => onStartEdit(selectedTestCaseIndex)}
+                      className="px-3 py-1.5 text-xs font-semibold bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg transition-colors"
+                    >
+                      Edit
+                    </button>
+                  )}
+                </div>
+                {(() => {
+                  const inputFields = parseInputFields(
+                    testCases[selectedTestCaseIndex].input,
+                  );
+                  return (
+                    <div className="space-y-2.5">
+                      {Object.entries(inputFields).map(([key, value]) => (
+                        <div key={key} className="flex items-center gap-2">
+                          <span className="text-xs font-semibold text-gray-700 dark:text-gray-300 whitespace-nowrap min-w-[80px]">
+                            {key} =
+                          </span>
+                          <code className="flex-1 px-3 py-1.5 text-xs font-mono bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded text-gray-900 dark:text-gray-100">
+                            {JSON.stringify(value)}
+                          </code>
+                        </div>
+                      ))}
+                      <div className="flex items-center gap-2 pt-2 border-t border-gray-200 dark:border-gray-700">
+                        <span className="text-xs font-semibold text-gray-700 dark:text-gray-300 whitespace-nowrap min-w-[80px]">
+                          Expected =
+                        </span>
+                        <code className="flex-1 px-3 py-1.5 text-xs font-mono bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded text-green-700 dark:text-green-300">
+                          {JSON.stringify(
+                            testCases[selectedTestCaseIndex].expectedOutput,
+                          )}
+                        </code>
+                      </div>
+                    </div>
+                  );
+                })()}
+              </div>
+            )}
+          </div>
+        )}
+    </div>
+  );
+};
+
+// Helper component for Test Results Panel
+interface TestResultsPanelProps {
+  readonly runOutput: {
+    stdout: string;
+    stderr: string;
+    exitCode: number;
+  } | null;
+  readonly testResults: Array<{
+    testCase: TestCase;
+    passed: boolean;
+    actualOutput?: unknown;
+    error?: string;
+    consoleOutput?: string;
+  }>;
+  readonly selectedTestCaseIndex: number;
+  readonly allTestsPassed: boolean;
+  readonly onSelectTestCase: (index: number) => void;
+}
+
+const TestResultsPanel: React.FC<TestResultsPanelProps> = ({
+  runOutput,
+  testResults,
+  selectedTestCaseIndex,
+  allTestsPassed,
+  onSelectTestCase,
+}) => {
+  return (
+    <div className="space-y-3 sm:space-y-4">
+      {/* Run Output (Console) */}
+      {runOutput && (
+        <div className="bg-gradient-to-br from-gray-50 to-white dark:from-gray-900 dark:to-gray-800 rounded-xl p-3 sm:p-4 border border-gray-200 dark:border-gray-700 shadow-sm">
+          <div className="flex items-center justify-between mb-3 pb-2 border-b border-gray-200 dark:border-gray-700">
+            <span className="text-xs font-semibold text-gray-700 dark:text-gray-400">
+              Console Output:
+            </span>
+            {runOutput.exitCode === 0 ? (
+              <CheckCircle className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-green-600 dark:text-green-500" />
+            ) : (
+              <XCircle className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-red-600 dark:text-red-500" />
+            )}
+          </div>
+          {runOutput.stdout && (
+            <pre className="text-xs font-mono text-green-800 dark:text-green-400 whitespace-pre-wrap mb-2 break-words overflow-x-auto bg-white dark:bg-gray-900 p-2 rounded border border-green-100 dark:border-green-900/50">
+              {runOutput.stdout}
+            </pre>
+          )}
+          {runOutput.stderr && (
+            <pre className="text-xs font-mono text-red-800 dark:text-red-400 whitespace-pre-wrap break-words overflow-x-auto bg-white dark:bg-gray-900 p-2 rounded border border-red-100 dark:border-red-900/50">
+              {runOutput.stderr}
+            </pre>
+          )}
+          {!runOutput.stdout && !runOutput.stderr && (
+            <p className="text-xs text-gray-500 dark:text-gray-500 italic bg-gray-50 dark:bg-gray-900/50 p-2 rounded border border-gray-200 dark:border-gray-700">
+              No output
+            </p>
+          )}
+        </div>
+      )}
+
+      {/* Test Results */}
+      {testResults.length > 0 && (
+        <>
+          {/* Test Case Selection */}
+          <div className="flex items-center gap-1.5 sm:gap-2 flex-wrap overflow-x-auto pb-2 -mx-1 px-1">
+            {testResults.map((result, index) => {
+              const getButtonClassName = () => {
+                if (selectedTestCaseIndex === index) {
+                  return "bg-indigo-100 text-indigo-700 dark:bg-indigo-900/30 dark:text-indigo-300 border-indigo-300 dark:border-indigo-700";
+                }
+                if (result.passed) {
+                  return "bg-green-50 text-green-700 dark:bg-green-900/20 dark:text-green-300 border-green-200 dark:border-green-800";
+                }
+                return "bg-red-50 text-red-700 dark:bg-red-900/20 dark:text-red-300 border-red-200 dark:border-red-800";
+              };
+              return (
+                <button
+                  key={`test-result-${index}-${result.passed ? "passed" : "failed"}`}
+                  onClick={() => onSelectTestCase(index)}
+                  className={`px-2 sm:px-3 py-1 text-xs font-medium rounded border transition-colors whitespace-nowrap ${getButtonClassName()}`}
+                >
+                  {result.passed ? (
+                    <CheckCircle className="w-3 h-3 inline mr-1" />
+                  ) : (
+                    <XCircle className="w-3 h-3 inline mr-1" />
+                  )}
+                  Case {index + 1}
+                </button>
+              );
+            })}
+          </div>
+
+          {/* Selected Test Case Result */}
+          {selectedTestCaseIndex >= 0 &&
+            selectedTestCaseIndex < testResults.length && (
+              <div
+                className={`p-3 sm:p-4 rounded-lg border ${
+                  testResults[selectedTestCaseIndex].passed
+                    ? "bg-green-50 dark:bg-green-900/20 border-green-200 dark:border-green-800"
+                    : "bg-red-50 dark:bg-red-900/20 border-red-200 dark:border-red-800"
+                }`}
+              >
+                <div className="flex flex-wrap items-center gap-2.5 mb-3">
+                  {testResults[selectedTestCaseIndex].passed ? (
+                    <CheckCircle className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-green-600 dark:text-green-400 flex-shrink-0" />
+                  ) : (
+                    <XCircle className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-red-600 dark:text-red-400 flex-shrink-0" />
+                  )}
+                  <span className="text-xs sm:text-sm font-medium text-gray-900 dark:text-white">
+                    Test Case {selectedTestCaseIndex + 1}
+                  </span>
+                  {testResults[selectedTestCaseIndex].testCase.description && (
+                    <span className="text-xs text-gray-500 dark:text-gray-400 hidden sm:inline">
+                      {testResults[selectedTestCaseIndex].testCase.description}
+                    </span>
+                  )}
+                </div>
+                <div className="space-y-2 sm:space-y-2.5 text-xs">
+                  <div className="break-words">
+                    <span className="text-gray-500 dark:text-gray-400">
+                      Input:{" "}
+                    </span>
+                    <code className="text-gray-900 dark:text-gray-100 font-mono break-all">
+                      {JSON.stringify(
+                        testResults[selectedTestCaseIndex].testCase.input,
+                      )}
+                    </code>
+                  </div>
+                  <div className="break-words">
+                    <span className="text-gray-500 dark:text-gray-400">
+                      Expected:{" "}
+                    </span>
+                    <code className="text-green-700 dark:text-green-300 font-mono break-all">
+                      {JSON.stringify(
+                        testResults[selectedTestCaseIndex].testCase
+                          .expectedOutput,
+                      )}
+                    </code>
+                  </div>
+                  {testResults[selectedTestCaseIndex].actualOutput !==
+                    undefined && (
+                    <div className="break-words">
+                      <span className="text-gray-500 dark:text-gray-400">
+                        Output:{" "}
+                      </span>
+                      <code
+                        className={`font-mono break-all ${
+                          testResults[selectedTestCaseIndex].passed
+                            ? "text-green-700 dark:text-green-300"
+                            : "text-red-700 dark:text-red-300"
+                        }`}
+                      >
+                        {JSON.stringify(
+                          testResults[selectedTestCaseIndex].actualOutput,
+                        )}
+                      </code>
+                    </div>
+                  )}
+                  {testResults[selectedTestCaseIndex].error && (
+                    <div className="text-red-600 dark:text-red-400 font-mono break-words">
+                      Error: {testResults[selectedTestCaseIndex].error}
+                    </div>
+                  )}
+                  {/* Console Output (console.log statements) */}
+                  {testResults[selectedTestCaseIndex].consoleOutput && (
+                    <div className="mt-3 pt-3 border-t border-gray-200 dark:border-gray-700">
+                      <div className="text-xs font-semibold text-gray-600 dark:text-gray-400 mb-2">
+                        Console Output:
+                      </div>
+                      <pre className="text-xs font-mono text-gray-800 dark:text-gray-200 whitespace-pre-wrap break-words overflow-x-auto bg-gray-50 dark:bg-gray-900/50 p-2.5 rounded border border-gray-200 dark:border-gray-700">
+                        {testResults[selectedTestCaseIndex].consoleOutput}
+                      </pre>
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
+
+          {/* All Tests Passed Message */}
+          {allTestsPassed && (
+            <div className="p-3 sm:p-4 bg-green-50 dark:bg-green-900/20 rounded-lg border border-green-200 dark:border-green-800">
+              <div className="flex items-center gap-2 sm:gap-3">
+                <Trophy className="w-4 h-4 sm:w-5 sm:h-5 text-green-600 dark:text-green-400 flex-shrink-0" />
+                <div>
+                  <h4 className="text-xs sm:text-sm font-semibold text-green-800 dark:text-green-200">
+                    All Tests Passed! 🎉
+                  </h4>
+                  <p className="text-xs text-green-700 dark:text-green-300">
+                    Congratulations! Your solution is correct.
+                  </p>
+                </div>
+              </div>
+            </div>
+          )}
+        </>
+      )}
+
+      {/* Empty State */}
+      {!runOutput && testResults.length === 0 && (
+        <div className="text-center py-6 sm:py-8 text-gray-500 dark:text-gray-400">
+          <p className="text-xs sm:text-sm">
+            Click &quot;Run&quot; to test your code or &quot;Submit&quot; to run
+            all test cases
+          </p>
+        </div>
+      )}
+    </div>
+  );
+};
+
 export default function ProblemSolvingQuestion({
   question,
   onComplete,
@@ -400,17 +861,17 @@ export default function ProblemSolvingQuestion({
       decoded = decoded.replaceAll(entity, char);
     }
     decoded = decoded.replace(
-      /&#(\d+);/g,
+      /&#(\d+);/g, // NOSONAR: replaceAll() not applicable for regex with capture groups
       (
         _,
-        dec, // NOSONAR: regex with capture groups required
+        dec,
       ) => String.fromCodePoint(Number.parseInt(dec, 10)),
     );
     decoded = decoded.replace(
-      /&#x([0-9a-f]+);/gi,
+      /&#x([0-9a-f]+);/gi, // NOSONAR: replaceAll() not applicable for regex with capture groups
       (
         _,
-        hex, // NOSONAR: regex with capture groups required
+        hex,
       ) => String.fromCodePoint(Number.parseInt(hex, 16)),
     );
     return decoded;
@@ -591,11 +1052,6 @@ export default function ProblemSolvingQuestion({
       return { input: input };
     }
     return { input: input };
-  };
-
-  // Get parameter names from input
-  const getInputFields = (testCase: TestCase): Record<string, unknown> => {
-    return parseInputFields(testCase.input);
   };
 
   // Add new custom test case (clone last selected)
@@ -1195,451 +1651,39 @@ export default function ProblemSolvingQuestion({
 
           <div className="p-4 sm:p-5 max-h-48 sm:max-h-64 overflow-y-auto">
             {activeTab === "testcase" ? (
-              /* Test Cases - LeetCode Style with Custom Test Cases */
-              <div className="space-y-4 sm:space-y-5">
-                {/* Test Case Selection Buttons */}
-                <div className="flex items-center gap-2 flex-wrap overflow-x-auto pb-2 -mx-1 px-1">
-                  {testCases.map((testCase, index) => (
-                    <button
-                      key={`testcase-${index}-${JSON.stringify(testCase.input)}`}
-                      onClick={() => {
-                        setSelectedTestCaseIndex(index);
-                        setEditingTestCaseIndex(null);
-                        setEditingTestCaseData(null);
-                      }}
-                      className={`px-3 sm:px-3.5 py-1.5 text-xs font-semibold rounded-lg border transition-all duration-200 whitespace-nowrap shadow-sm hover:shadow ${
-                        selectedTestCaseIndex === index
-                          ? "bg-gradient-to-br from-indigo-50 to-indigo-100 text-indigo-700 dark:from-indigo-900/30 dark:to-indigo-900/20 dark:text-indigo-300 border-indigo-300 dark:border-indigo-700"
-                          : "bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300 border-gray-200 dark:border-gray-600 hover:bg-indigo-50 dark:hover:bg-gray-600 hover:border-indigo-200 dark:hover:border-gray-500"
-                      }`}
-                    >
-                      {selectedTestCaseIndex === index && (
-                        <CheckCircle className="w-3 h-3 inline mr-1" />
-                      )}
-                      Case {index + 1}
-                      {index >= baseTestCases.length && (
-                        <span className="ml-1 text-indigo-600 dark:text-indigo-400">
-                          *
-                        </span>
-                      )}
-                    </button>
-                  ))}
-                  <button
-                    onClick={handleAddCustomTestCase}
-                    className="px-3 sm:px-3.5 py-1.5 text-xs font-semibold rounded-lg border border-dashed border-indigo-300 dark:border-indigo-600 text-indigo-600 dark:text-indigo-400 hover:bg-indigo-50 dark:hover:bg-indigo-900/20 whitespace-nowrap transition-all duration-200 shadow-sm hover:shadow"
-                  >
-                    <Plus className="w-3 h-3 inline mr-1" />
-                    Custom
-                  </button>
-                </div>
-
-                {/* Selected Test Case Display/Edit */}
-                {selectedTestCaseIndex >= 0 &&
-                  selectedTestCaseIndex < testCases.length && (
-                    <div className="bg-gradient-to-br from-gray-50 to-white dark:from-gray-900/50 dark:to-gray-800/30 rounded-xl p-4 sm:p-5 border border-gray-200 dark:border-gray-700 shadow-sm">
-                      {editingTestCaseIndex === selectedTestCaseIndex &&
-                      selectedTestCaseIndex >= baseTestCases.length ? (
-                        /* Edit Custom Test Case */
-                        <div className="space-y-4">
-                          <div className="flex items-center justify-between mb-3">
-                            <span className="text-xs sm:text-sm font-semibold text-gray-800 dark:text-gray-200">
-                              Edit Custom Test Case {selectedTestCaseIndex + 1}
-                            </span>
-                            <div className="flex items-center gap-2">
-                              <button
-                                onClick={handleSaveTestCase}
-                                className="px-3 py-1.5 text-xs font-semibold bg-green-600 hover:bg-green-700 text-white rounded-lg transition-colors"
-                              >
-                                Save
-                              </button>
-                              <button
-                                onClick={() => {
-                                  setEditingTestCaseIndex(null);
-                                  setEditingTestCaseData(null);
-                                }}
-                                className="px-3 py-1.5 text-xs font-semibold bg-gray-600 hover:bg-gray-700 text-white rounded-lg transition-colors"
-                              >
-                                Cancel
-                              </button>
-                              <button
-                                onClick={() =>
-                                  handleDeleteTestCase(selectedTestCaseIndex)
-                                }
-                                className="px-3 py-1.5 text-xs font-semibold bg-red-600 hover:bg-red-700 text-white rounded-lg transition-colors"
-                              >
-                                Delete
-                              </button>
-                            </div>
-                          </div>
-                          {editingTestCaseData &&
-                            (() => {
-                              const inputFields = parseInputFields(
-                                editingTestCaseData.input || {},
-                              );
-                              return (
-                                <div className="space-y-3">
-                                  {Object.entries(inputFields).map(
-                                    ([key, value]) => (
-                                      <div
-                                        key={key}
-                                        className="flex items-center gap-2"
-                                      >
-                                        <label className="text-xs font-semibold text-gray-700 dark:text-gray-300 whitespace-nowrap min-w-[80px]">
-                                          {key} =
-                                        </label>
-                                        <input
-                                          type="text"
-                                          value={
-                                            typeof value === "string"
-                                              ? value
-                                              : JSON.stringify(value)
-                                          }
-                                          onChange={(e) => {
-                                            try {
-                                              const parsed = JSON.parse(
-                                                e.target.value,
-                                              );
-                                              const currentInput =
-                                                parseInputFields(
-                                                  editingTestCaseData.input ||
-                                                    {},
-                                                );
-                                              setEditingTestCaseData({
-                                                ...editingTestCaseData,
-                                                input: {
-                                                  ...currentInput,
-                                                  [key]: parsed,
-                                                },
-                                              });
-                                            } catch {
-                                              const currentInput =
-                                                parseInputFields(
-                                                  editingTestCaseData.input ||
-                                                    {},
-                                                );
-                                              setEditingTestCaseData({
-                                                ...editingTestCaseData,
-                                                input: {
-                                                  ...currentInput,
-                                                  [key]: e.target.value,
-                                                },
-                                              });
-                                            }
-                                          }}
-                                          className="flex-1 px-3 py-2 text-xs font-mono bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-600 rounded-lg text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-indigo-500 dark:focus:ring-indigo-400 focus:border-transparent"
-                                        />
-                                      </div>
-                                    ),
-                                  )}
-                                  <div className="flex items-center gap-2 pt-2 border-t border-gray-200 dark:border-gray-700">
-                                    <label
-                                      htmlFor="expected-output-input"
-                                      className="text-xs font-semibold text-gray-700 dark:text-gray-300 whitespace-nowrap min-w-[80px]"
-                                    >
-                                      Expected =
-                                    </label>
-                                    <input
-                                      id="expected-output-input"
-                                      type="text"
-                                      value={
-                                        typeof editingTestCaseData.expectedOutput ===
-                                        "string"
-                                          ? editingTestCaseData.expectedOutput
-                                          : JSON.stringify(
-                                              editingTestCaseData.expectedOutput ||
-                                                "",
-                                            )
-                                      }
-                                      onChange={(e) => {
-                                        try {
-                                          const parsed = JSON.parse(
-                                            e.target.value,
-                                          );
-                                          setEditingTestCaseData({
-                                            ...editingTestCaseData,
-                                            expectedOutput: parsed,
-                                          });
-                                        } catch {
-                                          setEditingTestCaseData({
-                                            ...editingTestCaseData,
-                                            expectedOutput: e.target.value,
-                                          });
-                                        }
-                                      }}
-                                      className="flex-1 px-3 py-2 text-xs font-mono bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-600 rounded-lg text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-indigo-500 dark:focus:ring-indigo-400 focus:border-transparent"
-                                    />
-                                  </div>
-                                </div>
-                              );
-                            })()}
-                        </div>
-                      ) : (
-                        /* Display Test Case (Read-only for base, editable for custom) */
-                        <div>
-                          <div className="flex items-center justify-between mb-3">
-                            <span className="text-xs sm:text-sm font-semibold text-gray-800 dark:text-gray-200">
-                              Test Case {selectedTestCaseIndex + 1}
-                              {testCases[selectedTestCaseIndex].description && (
-                                <span className="ml-2 text-xs font-normal text-gray-600 dark:text-gray-400">
-                                  -{" "}
-                                  {testCases[selectedTestCaseIndex].description}
-                                </span>
-                              )}
-                              {selectedTestCaseIndex >=
-                                baseTestCases.length && (
-                                <span className="ml-2 text-xs text-indigo-600 dark:text-indigo-400">
-                                  (Custom)
-                                </span>
-                              )}
-                            </span>
-                            {selectedTestCaseIndex >= baseTestCases.length && (
-                              <button
-                                onClick={() => {
-                                  setEditingTestCaseIndex(
-                                    selectedTestCaseIndex,
-                                  );
-                                  setEditingTestCaseData({
-                                    ...testCases[selectedTestCaseIndex],
-                                  });
-                                }}
-                                className="px-3 py-1.5 text-xs font-semibold bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg transition-colors"
-                              >
-                                Edit
-                              </button>
-                            )}
-                          </div>
-                          {(() => {
-                            const inputFields = getInputFields(
-                              testCases[selectedTestCaseIndex],
-                            );
-                            return (
-                              <div className="space-y-2.5">
-                                {Object.entries(inputFields).map(
-                                  ([key, value]) => (
-                                    <div
-                                      key={key}
-                                      className="flex items-center gap-2"
-                                    >
-                                      <span className="text-xs font-semibold text-gray-700 dark:text-gray-300 whitespace-nowrap min-w-[80px]">
-                                        {key} =
-                                      </span>
-                                      <code className="flex-1 px-3 py-1.5 text-xs font-mono bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded text-gray-900 dark:text-gray-100">
-                                        {JSON.stringify(value)}
-                                      </code>
-                                    </div>
-                                  ),
-                                )}
-                                <div className="flex items-center gap-2 pt-2 border-t border-gray-200 dark:border-gray-700">
-                                  <span className="text-xs font-semibold text-gray-700 dark:text-gray-300 whitespace-nowrap min-w-[80px]">
-                                    Expected =
-                                  </span>
-                                  <code className="flex-1 px-3 py-1.5 text-xs font-mono bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded text-green-700 dark:text-green-300">
-                                    {JSON.stringify(
-                                      testCases[selectedTestCaseIndex]
-                                        .expectedOutput,
-                                    )}
-                                  </code>
-                                </div>
-                              </div>
-                            );
-                          })()}
-                        </div>
-                      )}
-                    </div>
-                  )}
-              </div>
+              <TestCasesPanel
+                testCases={testCases}
+                baseTestCases={baseTestCases}
+                selectedTestCaseIndex={selectedTestCaseIndex}
+                editingTestCaseIndex={editingTestCaseIndex}
+                editingTestCaseData={editingTestCaseData}
+                onSelectTestCase={(index) => {
+                  setSelectedTestCaseIndex(index);
+                  setEditingTestCaseIndex(null);
+                  setEditingTestCaseData(null);
+                }}
+                onAddCustomTestCase={handleAddCustomTestCase}
+                onSaveTestCase={handleSaveTestCase}
+                onCancelEdit={() => {
+                  setEditingTestCaseIndex(null);
+                  setEditingTestCaseData(null);
+                }}
+                onDeleteTestCase={handleDeleteTestCase}
+                onStartEdit={(index) => {
+                  setEditingTestCaseIndex(index);
+                  setEditingTestCaseData({ ...testCases[index] });
+                }}
+                parseInputFields={parseInputFields}
+                setEditingTestCaseData={setEditingTestCaseData}
+              />
             ) : (
-              /* Test Result Panel */
-              <div className="space-y-3 sm:space-y-4">
-                {/* Run Output (Console) */}
-                {runOutput && (
-                  <div className="bg-gradient-to-br from-gray-50 to-white dark:from-gray-900 dark:to-gray-800 rounded-xl p-3 sm:p-4 border border-gray-200 dark:border-gray-700 shadow-sm">
-                    <div className="flex items-center justify-between mb-3 pb-2 border-b border-gray-200 dark:border-gray-700">
-                      <span className="text-xs font-semibold text-gray-700 dark:text-gray-400">
-                        Console Output:
-                      </span>
-                      {runOutput.exitCode === 0 ? (
-                        <CheckCircle className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-green-600 dark:text-green-500" />
-                      ) : (
-                        <XCircle className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-red-600 dark:text-red-500" />
-                      )}
-                    </div>
-                    {runOutput.stdout && (
-                      <pre className="text-xs font-mono text-green-800 dark:text-green-400 whitespace-pre-wrap mb-2 break-words overflow-x-auto bg-white dark:bg-gray-900 p-2 rounded border border-green-100 dark:border-green-900/50">
-                        {runOutput.stdout}
-                      </pre>
-                    )}
-                    {runOutput.stderr && (
-                      <pre className="text-xs font-mono text-red-800 dark:text-red-400 whitespace-pre-wrap break-words overflow-x-auto bg-white dark:bg-gray-900 p-2 rounded border border-red-100 dark:border-red-900/50">
-                        {runOutput.stderr}
-                      </pre>
-                    )}
-                    {!runOutput.stdout && !runOutput.stderr && (
-                      <p className="text-xs text-gray-500 dark:text-gray-500 italic bg-gray-50 dark:bg-gray-900/50 p-2 rounded border border-gray-200 dark:border-gray-700">
-                        No output
-                      </p>
-                    )}
-                  </div>
-                )}
-
-                {/* Test Results */}
-                {testResults.length > 0 && (
-                  <>
-                    {/* Test Case Selection */}
-                    <div className="flex items-center gap-1.5 sm:gap-2 flex-wrap overflow-x-auto pb-2 -mx-1 px-1">
-                      {testResults.map((result, index) => {
-                        const getButtonClassName = () => {
-                          if (selectedTestCaseIndex === index) {
-                            return "bg-indigo-100 text-indigo-700 dark:bg-indigo-900/30 dark:text-indigo-300 border-indigo-300 dark:border-indigo-700";
-                          }
-                          if (result.passed) {
-                            return "bg-green-50 text-green-700 dark:bg-green-900/20 dark:text-green-300 border-green-200 dark:border-green-800";
-                          }
-                          return "bg-red-50 text-red-700 dark:bg-red-900/20 dark:text-red-300 border-red-200 dark:border-red-800";
-                        };
-                        return (
-                          <button
-                            key={`test-result-${index}-${result.passed ? "passed" : "failed"}`}
-                            onClick={() => setSelectedTestCaseIndex(index)}
-                            className={`px-2 sm:px-3 py-1 text-xs font-medium rounded border transition-colors whitespace-nowrap ${getButtonClassName()}`}
-                          >
-                            {result.passed ? (
-                              <CheckCircle className="w-3 h-3 inline mr-1" />
-                            ) : (
-                              <XCircle className="w-3 h-3 inline mr-1" />
-                            )}
-                            Case {index + 1}
-                          </button>
-                        );
-                      })}
-                    </div>
-
-                    {/* Selected Test Case Result */}
-                    {selectedTestCaseIndex >= 0 &&
-                      selectedTestCaseIndex < testResults.length && (
-                        <div
-                          className={`p-3 sm:p-4 rounded-lg border ${
-                            testResults[selectedTestCaseIndex].passed
-                              ? "bg-green-50 dark:bg-green-900/20 border-green-200 dark:border-green-800"
-                              : "bg-red-50 dark:bg-red-900/20 border-red-200 dark:border-red-800"
-                          }`}
-                        >
-                          <div className="flex flex-wrap items-center gap-2.5 mb-3">
-                            {testResults[selectedTestCaseIndex].passed ? (
-                              <CheckCircle className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-green-600 dark:text-green-400 flex-shrink-0" />
-                            ) : (
-                              <XCircle className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-red-600 dark:text-red-400 flex-shrink-0" />
-                            )}
-                            <span className="text-xs sm:text-sm font-medium text-gray-900 dark:text-white">
-                              Test Case {selectedTestCaseIndex + 1}
-                            </span>
-                            {testResults[selectedTestCaseIndex].testCase
-                              .description && (
-                              <span className="text-xs text-gray-500 dark:text-gray-400 hidden sm:inline">
-                                {
-                                  testResults[selectedTestCaseIndex].testCase
-                                    .description
-                                }
-                              </span>
-                            )}
-                          </div>
-                          <div className="space-y-2 sm:space-y-2.5 text-xs">
-                            <div className="break-words">
-                              <span className="text-gray-500 dark:text-gray-400">
-                                Input:{" "}
-                              </span>
-                              <code className="text-gray-900 dark:text-gray-100 font-mono break-all">
-                                {JSON.stringify(
-                                  testResults[selectedTestCaseIndex].testCase
-                                    .input,
-                                )}
-                              </code>
-                            </div>
-                            <div className="break-words">
-                              <span className="text-gray-500 dark:text-gray-400">
-                                Expected:{" "}
-                              </span>
-                              <code className="text-green-700 dark:text-green-300 font-mono break-all">
-                                {JSON.stringify(
-                                  testResults[selectedTestCaseIndex].testCase
-                                    .expectedOutput,
-                                )}
-                              </code>
-                            </div>
-                            {testResults[selectedTestCaseIndex].actualOutput !==
-                              undefined && (
-                              <div className="break-words">
-                                <span className="text-gray-500 dark:text-gray-400">
-                                  Output:{" "}
-                                </span>
-                                <code
-                                  className={`font-mono break-all ${
-                                    testResults[selectedTestCaseIndex].passed
-                                      ? "text-green-700 dark:text-green-300"
-                                      : "text-red-700 dark:text-red-300"
-                                  }`}
-                                >
-                                  {JSON.stringify(
-                                    testResults[selectedTestCaseIndex]
-                                      .actualOutput,
-                                  )}
-                                </code>
-                              </div>
-                            )}
-                            {testResults[selectedTestCaseIndex].error && (
-                              <div className="text-red-600 dark:text-red-400 font-mono break-words">
-                                Error:{" "}
-                                {testResults[selectedTestCaseIndex].error}
-                              </div>
-                            )}
-                            {/* Console Output (console.log statements) */}
-                            {testResults[selectedTestCaseIndex]
-                              .consoleOutput && (
-                              <div className="mt-3 pt-3 border-t border-gray-200 dark:border-gray-700">
-                                <div className="text-xs font-semibold text-gray-600 dark:text-gray-400 mb-2">
-                                  Console Output:
-                                </div>
-                                <pre className="text-xs font-mono text-gray-800 dark:text-gray-200 whitespace-pre-wrap break-words overflow-x-auto bg-gray-50 dark:bg-gray-900/50 p-2.5 rounded border border-gray-200 dark:border-gray-700">
-                                  {
-                                    testResults[selectedTestCaseIndex]
-                                      .consoleOutput
-                                  }
-                                </pre>
-                              </div>
-                            )}
-                          </div>
-                        </div>
-                      )}
-
-                    {/* All Tests Passed Message */}
-                    {allTestsPassed && (
-                      <div className="p-3 sm:p-4 bg-green-50 dark:bg-green-900/20 rounded-lg border border-green-200 dark:border-green-800">
-                        <div className="flex items-center gap-2 sm:gap-3">
-                          <Trophy className="w-4 h-4 sm:w-5 sm:h-5 text-green-600 dark:text-green-400 flex-shrink-0" />
-                          <div>
-                            <h4 className="text-xs sm:text-sm font-semibold text-green-800 dark:text-green-200">
-                              All Tests Passed! 🎉
-                            </h4>
-                            <p className="text-xs text-green-700 dark:text-green-300">
-                              Congratulations! Your solution is correct.
-                            </p>
-                          </div>
-                        </div>
-                      </div>
-                    )}
-                  </>
-                )}
-
-                {/* Empty State */}
-                {!runOutput && testResults.length === 0 && (
-                  <div className="text-center py-6 sm:py-8 text-gray-500 dark:text-gray-400">
-                    <p className="text-xs sm:text-sm">
-                      Click &quot;Run&quot; to test your code or
-                      &quot;Submit&quot; to run all test cases
-                    </p>
-                  </div>
-                )}
-              </div>
+              <TestResultsPanel
+                runOutput={runOutput}
+                testResults={testResults}
+                selectedTestCaseIndex={selectedTestCaseIndex}
+                allTestsPassed={allTestsPassed}
+                onSelectTestCase={setSelectedTestCaseIndex}
+              />
             )}
           </div>
         </div>
