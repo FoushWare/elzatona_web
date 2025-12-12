@@ -108,7 +108,7 @@ const steps = [
 const TourContent: React.FC<GuidedTourProps> = ({
   isOpen,
   onComplete,
-  _onSkip,
+  onSkip: _onSkip,
 }) => {
   const { setIsOpen, isOpen: tourIsOpen } = useTour();
 
