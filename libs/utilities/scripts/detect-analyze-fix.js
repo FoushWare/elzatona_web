@@ -515,6 +515,8 @@ function updateLogFile(logFilePath, fixedIssues, allIssues) {
   try {
     if (!fs.existsSync(logFilePath)) return;
 
+    // SECURITY: Store file stats before reading to detect race conditions
+    const originalStats = fs.statSync(logFilePath);
     const content = fs.readFileSync(logFilePath, "utf8");
     const lines = content.split("\n");
     const fixedLineIndices = new Set(
