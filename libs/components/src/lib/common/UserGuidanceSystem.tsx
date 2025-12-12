@@ -45,7 +45,7 @@ interface UserGuidanceSystemProps {
 
 export const UserGuidanceSystem: React.FC<UserGuidanceSystemProps> = ({
   isOpen,
-  _onClose,
+  onClose: _onClose,
   onComplete,
 }) => {
   const [currentStep, setCurrentStep] = useState(0);
