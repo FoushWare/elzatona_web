@@ -324,7 +324,8 @@ export default function FrontendTasksAdminPage() {
   );
 }
 
-// Frontend Task Modal Component
+// Frontend Task Modal Component (unused - replaced by FrontendTaskEditor)
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 function FrontendTaskModal({
   task,
   onClose,
@@ -803,7 +804,8 @@ function FrontendTaskModal({
   );
 }
 
-// Frontend Task View Modal Component
+// Frontend Task View Modal Component (unused - replaced by FrontendTaskEditor)
+ 
 function _FrontendTaskViewModal({
   task,
   onClose,
