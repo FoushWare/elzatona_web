@@ -38,11 +38,21 @@ export default function ClientCodeRunner({
 
   useEffect(() => {
     const handleMessage = (e: MessageEvent) => {
+      // SECURITY: Verify message origin to prevent XSS
+      if (e.origin !== window.location.origin) {
+        console.warn("Received message from untrusted origin:", e.origin);
+        return;
+      }
       if (!e.data || e.data.type !== "runner:results") return;
       setRunning(false);
       setResults(e.data.results as TestResult[]);
     };
     const handleCustom = (e: MessageEvent) => {
+      // SECURITY: Verify message origin to prevent XSS
+      if (e.origin !== window.location.origin) {
+        console.warn("Received message from untrusted origin:", e.origin);
+        return;
+      }
       if (!e.data || e.data.type !== "runner:custom:result") return;
       setRunning(false);
       setCustomResult(e.data.result as TestResult);
