@@ -363,9 +363,7 @@ interface TestCasesPanelProps {
   readonly onDeleteTestCase: (index: number) => void;
   readonly onStartEdit: (index: number) => void;
   readonly parseInputFields: (input: unknown) => Record<string, unknown>;
-  readonly setEditingTestCaseData: (
-    data: Partial<TestCase> | null,
-  ) => void;
+  readonly setEditingTestCaseData: (data: Partial<TestCase> | null) => void;
 }
 
 const TestCasesPanel: React.FC<TestCasesPanelProps> = ({
@@ -862,17 +860,11 @@ export default function ProblemSolvingQuestion({
     }
     decoded = decoded.replace(
       /&#(\d+);/g, // NOSONAR: replaceAll() not applicable for regex with capture groups
-      (
-        _,
-        dec,
-      ) => String.fromCodePoint(Number.parseInt(dec, 10)),
+      (_, dec) => String.fromCodePoint(Number.parseInt(dec, 10)),
     );
     decoded = decoded.replace(
       /&#x([0-9a-f]+);/gi, // NOSONAR: replaceAll() not applicable for regex with capture groups
-      (
-        _,
-        hex,
-      ) => String.fromCodePoint(Number.parseInt(hex, 16)),
+      (_, hex) => String.fromCodePoint(Number.parseInt(hex, 16)),
     );
     return decoded;
   };
