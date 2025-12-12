@@ -45,11 +45,11 @@ export function LearningTypeProvider({
   // Initialize learning type from localStorage on mount (before auth check)
   const getInitialLearningType = (): LearningType => {
     // Always return default during SSR - actual value will be loaded in useEffect
-    if (typeof window === "undefined") return "guided";
+    if (typeof globalThis.window === "undefined") return "guided";
     try {
       // First try universal key (works for logged out users)
       const universalTypeKey = buildStorageKey(null, "type");
-      const universalType = window?.localStorage?.getItem(universalTypeKey);
+      const universalType = globalThis.window?.localStorage?.getItem(universalTypeKey);
       if (
         universalType === "guided" ||
         universalType === "free-style" ||
@@ -57,8 +57,9 @@ export function LearningTypeProvider({
       ) {
         return universalType;
       }
-    } catch (_e) {
-      // ignore
+    } catch (error_) {
+      // Silently fail during initialization
+      console.debug("Failed to load initial learning type:", error_);
     }
     return "guided";
   };
@@ -85,8 +86,8 @@ export function LearningTypeProvider({
         const keyToLoad = newUserId ? userTypeKey : universalTypeKey;
 
         try {
-          if (typeof window !== "undefined" && window.localStorage) {
-            const rawType = window.localStorage.getItem(keyToLoad);
+          if (typeof globalThis.window !== "undefined" && globalThis.window.localStorage) {
+            const rawType = globalThis.window.localStorage.getItem(keyToLoad);
             if (
               rawType === "guided" ||
               rawType === "free-style" ||
@@ -95,16 +96,17 @@ export function LearningTypeProvider({
               setLearningTypeState(rawType);
             }
           }
-        } catch (_e) {
-          // ignore
+        } catch (error_) {
+          // Silently fail when loading learning type
+          console.debug("Failed to load learning type:", error_);
         }
       } catch (_) {
         setUserId(null);
         // Load from universal key when logged out
         try {
-          if (typeof window !== "undefined" && window.localStorage) {
+          if (typeof globalThis.window !== "undefined" && globalThis.window.localStorage) {
             const universalTypeKey = buildStorageKey(null, "type");
-            const rawType = window.localStorage.getItem(universalTypeKey);
+            const rawType = globalThis.window.localStorage.getItem(universalTypeKey);
             if (
               rawType === "guided" ||
               rawType === "free-style" ||
@@ -113,8 +115,9 @@ export function LearningTypeProvider({
               setLearningTypeState(rawType);
             }
           }
-        } catch (_e) {
-          // ignore
+        } catch (error_) {
+          // Silently fail when loading learning type
+          console.debug("Failed to load learning type:", error_);
         }
       }
     };
@@ -135,8 +138,8 @@ export function LearningTypeProvider({
         const keyToLoad = newUserId ? userTypeKey : universalTypeKey;
 
         try {
-          if (typeof window !== "undefined" && window.localStorage) {
-            const rawType = window.localStorage.getItem(keyToLoad);
+          if (typeof globalThis.window !== "undefined" && globalThis.window.localStorage) {
+            const rawType = globalThis.window.localStorage.getItem(keyToLoad);
             if (
               rawType === "guided" ||
               rawType === "free-style" ||
@@ -145,8 +148,9 @@ export function LearningTypeProvider({
               setLearningTypeState(rawType);
             }
           }
-        } catch (_e) {
-          // ignore
+        } catch (error_) {
+          // Silently fail when loading learning type
+          console.debug("Failed to load learning type:", error_);
         }
       },
     );
@@ -165,15 +169,15 @@ export function LearningTypeProvider({
       // Priority: userId-specific key (if logged in) > universal key (if logged out)
       let rawType: string | null = null;
 
-      if (typeof window !== "undefined" && window.localStorage) {
+      if (typeof globalThis.window !== "undefined" && globalThis.window.localStorage) {
         if (userId) {
           // When logged in, try user-specific key first, fallback to universal
           rawType =
-            window.localStorage.getItem(typeKey) ||
-            window.localStorage.getItem(universalTypeKey);
+            globalThis.window.localStorage.getItem(typeKey) ||
+            globalThis.window.localStorage.getItem(universalTypeKey);
         } else {
           // When logged out, use universal key
-          rawType = window.localStorage.getItem(universalTypeKey);
+          rawType = globalThis.window.localStorage.getItem(universalTypeKey);
         }
       }
 
@@ -185,16 +189,17 @@ export function LearningTypeProvider({
         setLearningTypeState(rawType);
       }
       const rawSolved =
-        typeof window !== "undefined" && window.localStorage
-          ? window.localStorage.getItem(solvedKey)
+        typeof globalThis.window !== "undefined" && globalThis.window.localStorage
+          ? globalThis.window.localStorage.getItem(solvedKey)
           : null;
       if (rawSolved) {
         const parsed = JSON.parse(rawSolved);
         if (Array.isArray(parsed))
           setSolvedQuestionIds(parsed.filter((x) => typeof x === "string"));
       }
-    } catch (_e) {
-      // ignore
+    } catch (error_) {
+      // Silently fail when loading learning type
+      console.debug("Failed to load learning type:", error_);
     } finally {
       initializedRef.current = true;
     }
@@ -207,32 +212,34 @@ export function LearningTypeProvider({
       const typeKey = buildStorageKey(userId, "type");
       const universalTypeKey = buildStorageKey(null, "type"); // Universal key that persists across logout
 
-      if (typeof window !== "undefined" && window.localStorage) {
+      if (typeof globalThis.window !== "undefined" && globalThis.window.localStorage) {
         // Save to userId-specific key if logged in
         if (userId) {
-          window.localStorage.setItem(typeKey, learningType);
+          globalThis.window.localStorage.setItem(typeKey, learningType);
         }
 
         // Always save to universal key so it persists after logout
-        window.localStorage.setItem(universalTypeKey, learningType);
+        globalThis.window.localStorage.setItem(universalTypeKey, learningType);
       }
-    } catch (_e) {
-      // ignore
+    } catch (error_) {
+      // Silently fail when saving learning type
+      console.debug("Failed to save learning type:", error_);
     }
   }, [learningType, userId]);
 
   useEffect(() => {
     if (!initializedRef.current) return;
     try {
-      if (typeof window !== "undefined" && window.localStorage) {
+      if (typeof globalThis.window !== "undefined" && globalThis.window.localStorage) {
         const solvedKey = buildStorageKey(userId, "solved");
-        window.localStorage.setItem(
+        globalThis.window.localStorage.setItem(
           solvedKey,
           JSON.stringify(solvedQuestionIds),
         );
       }
-    } catch (_e) {
-      // ignore
+    } catch (error_) {
+      // Silently fail when saving solved questions
+      console.debug("Failed to save solved questions:", error_);
     }
   }, [solvedQuestionIds, userId]);
 

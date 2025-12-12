@@ -41,7 +41,7 @@ import {
   Trash2,
   Search,
   _Filter as _Filter,
-  _Palette as _Palette,
+  Palette as _Palette,
   AlertCircle,
   BookOpen,
   Tag,
