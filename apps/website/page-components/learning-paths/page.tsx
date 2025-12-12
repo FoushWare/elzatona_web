@@ -8,10 +8,10 @@ import { useRouter } from "next/navigation";
 import {
   BookOpen,
   ArrowRight,
-  _Clock,
+  Clock as _Clock,
   Target,
-  _Users,
-  _Star,
+  Users as _Users,
+  Star as _Star,
   ChevronRight,
   Code,
   Palette,
@@ -22,7 +22,7 @@ import {
   Brain,
   Globe,
   Search,
-  _Filter,
+  Filter as _Filter,
   Grid,
   List,
 } from "lucide-react";
