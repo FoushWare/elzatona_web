@@ -11,7 +11,11 @@ export default function AdminLoginPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState("");
 
-  const { isAuthenticated: _isAuthenticated, isLoading, login } = useAdminAuth();
+  const {
+    isAuthenticated: _isAuthenticated,
+    isLoading,
+    login,
+  } = useAdminAuth();
   const _router = useRouter();
 
   // Redirect is now handled by AdminAuthProvider context

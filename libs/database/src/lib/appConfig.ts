@@ -109,10 +109,7 @@ export const createDatabaseServiceFromEnv = () => {
       );
       return new FirebaseDatabaseService(dbConfig);
     } catch (error_) {
-      console.warn(
-        "Firebase not available, falling back to Supabase",
-        error_,
-      );
+      console.warn("Firebase not available, falling back to Supabase", error_);
       return createSupabaseService(config.supabase);
     }
   } else {

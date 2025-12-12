@@ -45,7 +45,9 @@ export default function AdminManagement({ currentUser }: AdminManagementProps) {
       const adminList = await AdminAuthService.getAllAdmins();
       setAdmins(adminList);
     } catch (error_) {
-      setError(`Failed to load admins: ${error_ instanceof Error ? error_.message : "Unknown error"}`);
+      setError(
+        `Failed to load admins: ${error_ instanceof Error ? error_.message : "Unknown error"}`,
+      );
     } finally {
       setIsLoading(false);
     }
@@ -73,7 +75,9 @@ export default function AdminManagement({ currentUser }: AdminManagementProps) {
         setError(result.error || "Failed to create admin");
       }
     } catch (error_) {
-      setError(`An unexpected error occurred: ${error_ instanceof Error ? error_.message : "Unknown error"}`);
+      setError(
+        `An unexpected error occurred: ${error_ instanceof Error ? error_.message : "Unknown error"}`,
+      );
     }
   };
 

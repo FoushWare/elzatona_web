@@ -40,10 +40,11 @@ The pre-commit hook automatically runs CodeQL analysis on staged JavaScript/Type
 ### Prerequisites
 
 1. **CodeQL CLI**: Install the CodeQL CLI
+
    ```bash
    # macOS
    brew install codeql
-   
+
    # Or download from:
    # https://github.com/github/codeql-cli-binaries/releases
    ```
@@ -119,10 +120,11 @@ git commit --no-verify
 The auto-fix script can automatically resolve:
 
 1. **Missing Origin Verification**:
+
    ```typescript
    // Before
    window.addEventListener("message", handleMessage);
-   
+
    // After
    window.addEventListener("message", (event) => {
      if (event.origin !== window.location.origin) {
@@ -134,47 +136,52 @@ The auto-fix script can automatically resolve:
    ```
 
 2. **Incomplete String Escaping**:
+
    ```typescript
    // Before
    const code = `${input.replace(/`/g, "\\`")}`;
-   
+
    // After
    const code = `${input.replace(/\\/g, "\\\\").replace(/`/g, "\\`")}`;
    ```
 
 3. **Property Access on Null/Undefined**:
+
    ```typescript
    // Before
    dashboardStats.recentActivity.map(...)
-   
+
    // After
    dashboardStats?.recentActivity?.map(...)
    ```
 
 4. **Incomplete Sanitization**:
+
    ```typescript
    // Before
    code = decodeHtmlEntities(code);
-   
+
    // After
    code = decodeHtmlEntities(code);
    code = code.replace(/<\/?[a-z][a-z0-9]{0,20}(?:\s+[^>]{0,200})?>/gi, "");
    ```
 
 5. **Polynomial Regex**:
+
    ```typescript
    // Before
    /<code[^>]*>[\s\S]*?<\/code>/g
-   
+
    // After
    /<code[^>]{0,200}>[\s\S]{0,50000}?<\/code>/g
    ```
 
 6. **Window Usage**:
+
    ```typescript
    // Before
    if (typeof window !== "undefined")
-   
+
    // After
    if (typeof globalThis.window !== "undefined")
    ```
@@ -184,10 +191,12 @@ The auto-fix script can automatically resolve:
 ### CodeQL Check is Too Slow
 
 The check uses timeouts to prevent hanging:
+
 - Database creation: 2 minutes
 - Analysis: 3 minutes
 
 If it's consistently timing out, consider:
+
 1. Running CodeQL only on push (pre-push hook)
 2. Using a faster query suite (e.g., `security-and-quality` only)
 3. Analyzing only changed files (already implemented)
@@ -195,6 +204,7 @@ If it's consistently timing out, consider:
 ### False Positives
 
 Some CodeQL warnings may be false positives in React code:
+
 - "Useless conditional" - Often false positives with dynamic state
 - "Comparison between inconvertible types" - Valid TypeScript type narrowing
 
@@ -203,6 +213,7 @@ These are typically warnings/notices and won't block commits.
 ### Database Creation Fails
 
 If database creation fails:
+
 - Check that `npm install` works
 - Try running manually: `codeql database create .codeql-database-precommit --language=javascript --source-root=.`
 - The hook will skip the check if database creation fails (non-blocking)
@@ -210,6 +221,7 @@ If database creation fails:
 ## Integration with Other Tools
 
 The CodeQL pre-commit hook works alongside:
+
 - **Prettier**: Formats code (Step 1)
 - **GitGuardian**: Scans for secrets (Step 2)
 - **Pre-push hook**: Runs linting, type checking, and build validation
@@ -238,6 +250,7 @@ The CodeQL pre-commit hook works alongside:
 ## Security Benefits
 
 The pre-commit hook catches security vulnerabilities **before** code reaches GitHub:
+
 - XSS vulnerabilities
 - ReDoS attacks
 - Incomplete sanitization
@@ -245,4 +258,3 @@ The pre-commit hook catches security vulnerabilities **before** code reaches Git
 - Property access on null/undefined
 
 This prevents security issues from entering the codebase and reduces the need for post-commit fixes.
-
