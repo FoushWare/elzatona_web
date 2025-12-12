@@ -1125,7 +1125,6 @@ const QuestionContent = ({ content }: { content: string }) => {
                       overflowWrap: "normal",
                       // @ts-expect-error - Vendor prefixes not in types
                       WebkitTabSize: 2 as unknown,
-                      // @ts-expect-error - Vendor prefixes not in types
                       MozTabSize: 2,
                       letterSpacing: "0.01em",
                     }}
