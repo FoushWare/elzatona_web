@@ -46,7 +46,7 @@ if (process.env.ADMIN_PASSWORD) {
   process.env.ADMIN_PASSWORD = process.env.ADMIN_PASSWORD.trim();
 }
 
-import { test, expect } from "@playwright/test";
+import { test, expect, Page, APIResponse, Request, ConsoleMessage } from "@playwright/test";
 // Updated: All tests now use headerSection to avoid strict mode violations
 
 // Module-level variables to share state across tests in serial mode
@@ -67,7 +67,7 @@ test.describe("A-E2E-001: Admin Bulk Question Addition", () => {
   test.setTimeout(120000); // 2 minutes
 
   // Helper function to create a question
-  async function createQuestion(page: any, title: string): Promise<void> {
+  async function createQuestion(page: Page, title: string): Promise<void> {
     // Wait for page to be ready
     await page.waitForTimeout(1000);
 
@@ -357,7 +357,7 @@ test.describe("A-E2E-001: Admin Bulk Question Addition", () => {
 
   // Helper function to bulk delete questions by titles
   async function bulkDeleteQuestions(
-    page: any,
+    page: Page,
     titles: string[],
   ): Promise<void> {
     if (titles.length === 0) return;
@@ -553,8 +553,8 @@ test.describe("A-E2E-001: Admin Bulk Question Addition", () => {
 
     // Wait for the specific admin auth API response
     // Set up multiple response listeners to catch the API call
-    let apiResponse: any = null;
-    const responseHandler = (response: any) => {
+    let apiResponse: APIResponse | null = null;
+    const responseHandler = (response: APIResponse) => {
       const url = response.url();
       if (
         url.includes("/api/admin/auth") &&
@@ -585,7 +585,7 @@ test.describe("A-E2E-001: Admin Bulk Question Addition", () => {
 
     // Also listen for any network requests to help debug
     const allRequests: string[] = [];
-    const requestListener = (request: any) => {
+    const requestListener = (request: Request) => {
       const url = request.url();
       const method = request.method();
       // Log all requests, but track API requests specifically
@@ -602,7 +602,7 @@ test.describe("A-E2E-001: Admin Bulk Question Addition", () => {
 
     // Also set up response listener to see if requests complete
     const allResponses: string[] = [];
-    const responseListener = (response: any) => {
+    const responseListener = (response: APIResponse) => {
       const url = response.url();
       const status = response.status();
       if (url.includes("/api/")) {
@@ -645,7 +645,7 @@ test.describe("A-E2E-001: Admin Bulk Question Addition", () => {
 
     // Listen for console errors that might prevent submission
     const consoleErrors: string[] = [];
-    const consoleListener = (msg: any) => {
+    const consoleListener = (msg: ConsoleMessage) => {
       if (msg.type() === "error") {
         consoleErrors.push(msg.text());
         console.log("⚠️ Console error:", msg.text());
@@ -1189,8 +1189,9 @@ test.describe("A-E2E-001: Admin Bulk Question Addition", () => {
         );
       }
       console.log("✅ Login API call successful, waiting for navigation...");
-    } catch (e: any) {
-      console.log("⚠️ Error parsing login response:", e.message);
+    } catch (e: unknown) {
+      const error = e instanceof Error ? e : new Error(String(e));
+      console.log("⚠️ Error parsing login response:", error.message);
       // If response parsing fails, check for error message on page
       await page.waitForTimeout(1000); // Wait a bit for error to appear
       const errorBox = page.locator(".bg-red-50, .bg-red-900\\/20");
@@ -1211,9 +1212,10 @@ test.describe("A-E2E-001: Admin Bulk Question Addition", () => {
       // Wait for navigation with a reasonable timeout
       await navigationPromise;
       console.log("✅ Navigation to admin page successful");
-    } catch (navError: any) {
+    } catch (navError: unknown) {
       // Navigation promise might have timed out, but navigation might still have happened
       // Check the current URL to see if we're actually on an admin page
+      const error = navError instanceof Error ? navError : new Error(String(navError));
       let currentURL = "";
       try {
         if (!page.isClosed()) {
@@ -1376,8 +1378,9 @@ test.describe("A-E2E-001: Admin Bulk Question Addition", () => {
         throw new Error(
           `Page crashed to error page but recovered. Retrying test...`,
         );
-      } catch (recoveryError: any) {
+      } catch (recoveryError: unknown) {
         // If recovery also failed, throw the original error
+        const error = recoveryError instanceof Error ? recoveryError : new Error(String(recoveryError));
         throw new Error(
           `Page crashed to error page: ${currentURLAfterLogin}\n` +
             `Recovery failed: ${recoveryError.message}\n\n` +
@@ -1439,8 +1442,9 @@ test.describe("A-E2E-001: Admin Bulk Question Addition", () => {
             waitUntil: "domcontentloaded",
             timeout: 30000,
           });
-        } catch (navError: any) {
+        } catch (navError: unknown) {
           // If navigation fails, check if we're already on the questions page
+          const error = navError instanceof Error ? navError : new Error(String(navError));
           if (!page.isClosed()) {
             const currentURL = page.url();
             if (currentURL.includes("/admin/content/questions")) {
@@ -1916,7 +1920,7 @@ test.describe("A-E2E-001: Admin Bulk Question Addition", () => {
 
     // Wait for the POST API response (create question) with timeout handling
     let createApiSuccess = false;
-    let createResponseData: any = null;
+    let createResponseData: unknown = null;
 
     try {
       const createResponse = await Promise.race([
@@ -1984,8 +1988,9 @@ test.describe("A-E2E-001: Admin Bulk Question Addition", () => {
       } else {
         throw new Error("No create response received");
       }
-    } catch (e: any) {
-      if (e.message === "Timeout") {
+    } catch (e: unknown) {
+      const error = e instanceof Error ? e : new Error(String(e));
+      if (error.message === "Timeout") {
         console.error("❌ Create API response timeout after 25s");
         throw new Error(
           "Question creation API call timed out. The question may not have been created.",
@@ -2056,7 +2061,7 @@ test.describe("A-E2E-001: Admin Bulk Question Addition", () => {
           );
           console.log(
             "Question titles in response:",
-            questions.map((q: any) => q.title).slice(0, 10),
+            questions.map((q: { title?: string }) => q.title).slice(0, 10),
           );
           console.log("Total count:", fetchData.pagination?.totalCount);
 
@@ -2090,8 +2095,9 @@ test.describe("A-E2E-001: Admin Bulk Question Addition", () => {
       } else {
         console.log("⚠️ No fetch response received, but continuing...");
       }
-    } catch (e: any) {
-      if (e.message === "Timeout") {
+    } catch (e: unknown) {
+      const error = e instanceof Error ? e : new Error(String(e));
+      if (error.message === "Timeout") {
         console.log(
           "⚠️ Fetch API response timeout after 25s, continuing anyway...",
         );
@@ -2416,7 +2422,7 @@ test.describe("A-E2E-001: Admin Bulk Question Addition", () => {
     if (count > 0) {
       // Get the question title before editing (to verify it changes)
       const questionRow = editButtons.first().locator("..").locator("..");
-      const originalTitle = await questionRow
+      const _originalTitle = await questionRow
         .locator('h4, h3, [class*="title"]')
         .first()
         .textContent()
@@ -3306,7 +3312,7 @@ test.describe("A-E2E-001: Admin Bulk Question Addition", () => {
     // Find the Select trigger button - it's in the same container as "Show:" label
     // The structure is: div.flex.items-center.space-x-2 > span "Show:" + Select > SelectTrigger
     // Better approach: find the combobox that's in the pagination area
-    let trigger: any = null;
+    let trigger: { click: () => Promise<void>; waitFor: (options: { state: string; timeout: number }) => Promise<void> } | null = null;
 
     // Method 1: Find combobox near "Show:" text (in the same flex container)
     try {
@@ -3391,9 +3397,10 @@ test.describe("A-E2E-001: Admin Bulk Question Addition", () => {
         );
         await trigger.waitFor({ state: "attached", timeout: 5000 });
       }
-    } catch (e: any) {
+    } catch (e: unknown) {
       // Check if error is due to actual page closure
-      const errorMsg = e?.message || String(e);
+      const error = e instanceof Error ? e : new Error(String(e));
+      const errorMsg = error.message || String(e);
       if (
         errorMsg.includes("Target page, context or browser has been closed") ||
         errorMsg.includes("page has been closed")
@@ -3414,7 +3421,7 @@ test.describe("A-E2E-001: Admin Bulk Question Addition", () => {
         .first()
         .textContent({ timeout: 5000 })
         .catch(() => null);
-    } catch (_e: any) {
+    } catch (_e: unknown) {
       // If page is actually closed, Playwright will throw a proper error
       // Just log and continue - the click attempt will fail if page is really closed
       console.log('⚠️ Could not get "Showing" text, continuing anyway...');
@@ -3495,9 +3502,10 @@ test.describe("A-E2E-001: Admin Bulk Question Addition", () => {
           clickSucceeded = true;
           console.log("✅ Clicked page size selector");
           break; // Success, exit retry loop
-        } catch (clickErr: any) {
+        } catch (clickErr: unknown) {
           // Check if error is due to page closure (Playwright's actual error message)
-          const errorMessage = clickErr?.message || String(clickErr);
+          const error = clickErr instanceof Error ? clickErr : new Error(String(clickErr));
+          const errorMessage = error.message || String(clickErr);
           if (
             errorMessage.includes(
               "Target page, context or browser has been closed",
@@ -3532,9 +3540,10 @@ test.describe("A-E2E-001: Admin Bulk Question Addition", () => {
           "Failed to click page size selector after all retry attempts",
         );
       }
-    } catch (clickError: any) {
+    } catch (clickError: unknown) {
       // Check if error is due to actual page closure (Playwright's error message)
-      const errorMsg = clickError?.message || String(clickError);
+      const error = clickError instanceof Error ? clickError : new Error(String(clickError));
+      const errorMsg = error.message || String(clickError);
       if (
         errorMsg.includes("Target page, context or browser has been closed") ||
         errorMsg.includes("page has been closed")
@@ -3550,8 +3559,8 @@ test.describe("A-E2E-001: Admin Bulk Question Addition", () => {
     }
 
     // NOW set up API response listener AFTER clicking
-    let pageSizeResponse: any = null;
-    const responseHandler = (response: any) => {
+    let pageSizeResponse: APIResponse | null = null;
+    const responseHandler = (response: APIResponse) => {
       const url = response.url();
       if (
         url.includes("/api/questions/unified") &&
@@ -3585,9 +3594,10 @@ test.describe("A-E2E-001: Admin Bulk Question Addition", () => {
 
       await option20.click({ timeout: 5000 });
       console.log("✅ Selected page size 20");
-    } catch (optionError: any) {
+    } catch (optionError: unknown) {
       page.off("response", responseHandler);
       // Check if error is due to actual page closure
+      const error = optionError instanceof Error ? optionError : new Error(String(optionError));
       const errorMsg = optionError?.message || String(optionError);
       if (
         errorMsg.includes("Target page, context or browser has been closed") ||
@@ -3621,9 +3631,10 @@ test.describe("A-E2E-001: Admin Bulk Question Addition", () => {
         await pageSizeResponsePromise;
       }
       await page.waitForTimeout(1000);
-    } catch (waitError: any) {
+    } catch (waitError: unknown) {
       // Check if error is due to actual page closure
-      const errorMsg = waitError?.message || String(waitError);
+      const error = waitError instanceof Error ? waitError : new Error(String(waitError));
+      const errorMsg = error.message || String(waitError);
       if (
         errorMsg.includes("Target page, context or browser has been closed") ||
         errorMsg.includes("page has been closed")
@@ -3867,7 +3878,7 @@ test.describe("A-E2E-001: Admin Bulk Question Addition", () => {
       // Check for validation message (browser native or custom)
       const validationMessage = await titleInput.evaluate(
         (el: HTMLInputElement) => {
-          return (el as any).validationMessage || "";
+          return (el as HTMLInputElement).validationMessage || "";
         },
       );
 

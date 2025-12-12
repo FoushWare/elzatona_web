@@ -490,8 +490,9 @@ async function waitForServerReady(
         console.log(`✅ Server is ready (attempt ${attempt}/${maxRetries})`);
         return;
       }
-    } catch (error: any) {
+    } catch (error: unknown) {
       // Server not ready yet
+      const err = error instanceof Error ? error : new Error(String(error));
       if (attempt < maxRetries) {
         console.log(
           `⏳ Waiting for server to be ready (attempt ${attempt}/${maxRetries})...`,
@@ -648,8 +649,8 @@ export async function setupAdminPage(
     });
 
   // Wait for the specific admin auth API response
-  let apiResponse: any = null;
-  const responseHandler = (response: any) => {
+  let apiResponse: APIResponse | null = null;
+  const responseHandler = (response: APIResponse) => {
     const url = response.url();
     if (
       url.includes("/api/admin/auth") &&
@@ -938,8 +939,9 @@ export async function setupAdminPage(
         );
       }
       console.log("✅ Login API call successful, waiting for navigation...");
-    } catch (e: any) {
-      console.log("⚠️ Error parsing login response:", e.message);
+    } catch (e: unknown) {
+      const error = e instanceof Error ? e : new Error(String(e));
+      console.log("⚠️ Error parsing login response:", error.message);
       await page.waitForTimeout(1000);
       const errorBox = page.locator(".bg-red-50, .bg-red-900\\/20");
       const errorBoxCount = await errorBox.count();
@@ -958,7 +960,8 @@ export async function setupAdminPage(
     try {
       await navigationPromise;
       console.log("✅ Navigation to admin page successful");
-    } catch (navError: any) {
+    } catch (navError: unknown) {
+      const error = navError instanceof Error ? navError : new Error(String(navError));
       let currentURL = "";
       try {
         if (!page.isClosed()) {
@@ -1076,8 +1079,9 @@ export async function setupAdminPage(
           waitUntil: "domcontentloaded",
           timeout: 30000,
         });
-      } catch (navError: any) {
+      } catch (navError: unknown) {
         // Check if error is connection refused (server not ready)
+        const error = navError instanceof Error ? navError : new Error(String(navError));
         if (
           navError.message.includes("ERR_CONNECTION_REFUSED") ||
           navError.message.includes("net::ERR_CONNECTION_REFUSED")
@@ -1105,7 +1109,8 @@ export async function setupAdminPage(
                 waitUntil: "domcontentloaded",
                 timeout: 15000,
               })
-              .catch((retryError: any) => {
+              .catch((retryError: unknown) => {
+                const error = retryError instanceof Error ? retryError : new Error(String(retryError));
                 throw new Error(
                   `Failed to navigate to questions page after retry. ` +
                     `Original error: ${navError.message}. ` +
