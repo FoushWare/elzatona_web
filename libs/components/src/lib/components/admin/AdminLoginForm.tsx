@@ -24,6 +24,7 @@ export default function AdminLoginForm() {
         setError(result.error || "Login failed");
       }
     } catch (error_) {
+      console.error("Login error:", error_);
       setError("An unexpected error occurred");
     } finally {
       setIsLoading(false);

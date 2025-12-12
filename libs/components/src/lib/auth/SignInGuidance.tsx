@@ -13,7 +13,6 @@ import {
   Trophy,
   BookOpen,
 } from "lucide-react";
-// import _Link from "next/link";
 
 interface SignInGuidanceProps {
   trigger: "progress" | "roadmap" | "achievement" | "device-switch" | "manual";

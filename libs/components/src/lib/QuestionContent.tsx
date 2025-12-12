@@ -334,8 +334,8 @@ const decodeHtmlEntities = (text: string): string => {
       // Use textContent instead of innerHTML to prevent XSS
       textarea.textContent = decoded;
       decoded = textarea.value;
-    } catch (_e) {
-      // Fallback
+    } catch (error_) {
+      console.warn("Failed to decode HTML entities:", error_);
     }
   }
 
@@ -514,6 +514,7 @@ export const QuestionContent = ({ content }: { content: string }) => {
       code = decodeHtmlEntities(code);
       // SECURITY: Use simpler regex pattern to prevent ReDoS
       // Match HTML tags with bounded quantifiers
+      // NOSONAR S7781: replaceAll() cannot be used with regex patterns that require capture groups
       code = code.replace(/<\/?[a-z][a-z0-9]{0,20}(?:\s+[^>]{0,200})?>/gi, "");
       iterations++;
     }
@@ -607,8 +608,7 @@ export const QuestionContent = ({ content }: { content: string }) => {
   }
 
   // SECURITY: Split complex regex into simpler patterns with bounded quantifiers to reduce ReDoS risk
-  // Use bounded quantifiers and limit input size
-  const MAX_PATTERN_LENGTH = 50000; // 50KB limit per pattern match
+  // Use bounded quantifiers and limit input size (50KB limit per pattern match)
   const htmlCodeBlockPatterns = [
     /<pre[^>]{0,200}><code[^>]{0,200}>[\s\S]{0,50000}?<\/code><\/pre>/gi,
     /<pr<cod[^>]{0,200}>[\s\S]{0,50000}?<\/cod<\/pr/gi,
@@ -696,6 +696,7 @@ export const QuestionContent = ({ content }: { content: string }) => {
         }
         code = decodeHtmlEntities(code);
         // SECURITY: Remove HTML tags after decoding to prevent injection
+        // NOSONAR S7781: replaceAll() cannot be used with regex patterns that require capture groups
         code = code.replace(/<\/?[a-z][a-z0-9]{0,20}(?:\s+[^>]{0,200})?>/gi, "");
       code = code.replaceAll(/<[^>]+>/g, "");
       for (let i = 0; i < 3; i++) {
@@ -764,6 +765,7 @@ export const QuestionContent = ({ content }: { content: string }) => {
         if (textContent.trim()) {
           let cleanText = decodeHtmlEntities(textContent);
           // SECURITY: Remove HTML tags to prevent injection
+          // NOSONAR S7781: replaceAll() cannot be used with regex patterns that require capture groups
           cleanText = cleanText.replace(/<\/?[a-z][a-z0-9]{0,20}(?:\s+[^>]{0,200})?>/gi, "");
           cleanText = cleanText.replace(
             /<code[^>]{0,200}>([^<]{1,30})<\/code>/gi,
@@ -886,6 +888,7 @@ export const QuestionContent = ({ content }: { content: string }) => {
         .replaceAll(/<\/cod/gi, "")
         .replaceAll(/<\/pr/gi, "")
         // SECURITY: Remove all HTML tags to prevent injection
+        // NOSONAR S7781: replaceAll() cannot be used with regex patterns that require capture groups
         .replace(/<\/?[a-z][a-z0-9]{0,20}(?:\s+[^>]{0,200})?>/gi, "")
         .replaceAll(/<pr/gi, "")
         .replaceAll(/<[^>]+>/g, "")

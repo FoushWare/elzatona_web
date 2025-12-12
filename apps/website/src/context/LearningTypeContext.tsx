@@ -37,7 +37,7 @@ function buildStorageKey(userId: string | null, suffix: string) {
 export function LearningTypeProvider({
   children,
 }: {
-  children: React.ReactNode;
+  readonly children: React.ReactNode;
 }) {
   const [userId, setUserId] = useState<string | null>(null);
   const initializedRef = useRef(false);
@@ -86,7 +86,7 @@ export function LearningTypeProvider({
         const keyToLoad = newUserId ? userTypeKey : universalTypeKey;
 
         try {
-          if (typeof globalThis.window !== "undefined" && globalThis.window.localStorage) {
+          if (globalThis.window !== undefined && globalThis.window.localStorage) {
             const rawType = globalThis.window.localStorage.getItem(keyToLoad);
             if (
               rawType === "guided" ||
@@ -98,13 +98,13 @@ export function LearningTypeProvider({
           }
         } catch (error_) {
           // Silently fail when loading learning type
-          console.debug("Failed to load learning type:", error_);
+          console.error("Failed to load learning type:", error_);
         }
       } catch (_) {
         setUserId(null);
         // Load from universal key when logged out
         try {
-          if (typeof globalThis.window !== "undefined" && globalThis.window.localStorage) {
+          if (globalThis.window !== undefined && globalThis.window.localStorage) {
             const universalTypeKey = buildStorageKey(null, "type");
             const rawType = globalThis.window.localStorage.getItem(universalTypeKey);
             if (
@@ -117,7 +117,7 @@ export function LearningTypeProvider({
           }
         } catch (error_) {
           // Silently fail when loading learning type
-          console.debug("Failed to load learning type:", error_);
+          console.error("Failed to load learning type:", error_);
         }
       }
     };
@@ -138,7 +138,7 @@ export function LearningTypeProvider({
         const keyToLoad = newUserId ? userTypeKey : universalTypeKey;
 
         try {
-          if (typeof globalThis.window !== "undefined" && globalThis.window.localStorage) {
+          if (globalThis.window !== undefined && globalThis.window.localStorage) {
             const rawType = globalThis.window.localStorage.getItem(keyToLoad);
             if (
               rawType === "guided" ||
@@ -150,7 +150,7 @@ export function LearningTypeProvider({
           }
         } catch (error_) {
           // Silently fail when loading learning type
-          console.debug("Failed to load learning type:", error_);
+          console.error("Failed to load learning type:", error_);
         }
       },
     );
@@ -169,7 +169,7 @@ export function LearningTypeProvider({
       // Priority: userId-specific key (if logged in) > universal key (if logged out)
       let rawType: string | null = null;
 
-      if (typeof globalThis.window !== "undefined" && globalThis.window.localStorage) {
+      if (globalThis.window !== undefined && globalThis.window.localStorage) {
         if (userId) {
           // When logged in, try user-specific key first, fallback to universal
           rawType =
