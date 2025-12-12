@@ -367,6 +367,8 @@ function fixUnusedError(filePath, line) {
   try {
     if (!fs.existsSync(filePath)) return false;
 
+    // SECURITY: Store file stats before reading to detect race conditions
+    const originalStats = fs.statSync(filePath);
     const content = fs.readFileSync(filePath, "utf8");
     const lines = content.split("\n");
 
