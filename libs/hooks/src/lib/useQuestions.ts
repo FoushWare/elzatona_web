@@ -187,7 +187,7 @@ export const useQuestions = (): UseQuestionsReturn => {
       question_id: string,
       selectedAnswer: number,
       timeSpent: number,
-      attempts: number,
+      _attempts: number,
     ) => {
       if (!user?.uid) {
         throw new Error("User not authenticated");

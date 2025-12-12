@@ -80,7 +80,7 @@ export class LearningResourcesService {
       this.cache.timestamp = now;
 
       return stats;
-    } catch (error) {
+    } catch (_error) {
       // Return mock data if API fails (repository private, not found, or network issues)
       const mockData = this.getMockData();
 
@@ -136,7 +136,7 @@ export class LearningResourcesService {
 
         // Limit to prevent infinite loops
         if (page > 10) break;
-      } catch (error) {
+      } catch (_error) {
         return [];
       }
     }
@@ -828,7 +828,7 @@ export class LearningResourcesService {
       open: openResources.length,
       closed: closedResources.length,
       isMockData: true,
-      openResources: openResources.map((resource, index) => ({
+      openResources: openResources.map((resource, _index) => ({
         id: resource.id,
         number: resource.id,
         title: resource.title,
@@ -844,7 +844,7 @@ export class LearningResourcesService {
         user: { login: "FoushWare", avatar_url: "" },
         html_url: resource.url,
       })),
-      closedResources: closedResources.map((resource, index) => ({
+      closedResources: closedResources.map((resource, _index) => ({
         id: resource.id,
         number: resource.id,
         title: resource.title,

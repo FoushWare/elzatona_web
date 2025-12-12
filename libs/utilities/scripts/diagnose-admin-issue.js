@@ -107,7 +107,7 @@ try {
       console.log("   ✅ Environment matches database");
     }
   }
-} catch (error) {
+} catch (_error) {
   console.log("   ⚠️  Could not read package.json");
 }
 

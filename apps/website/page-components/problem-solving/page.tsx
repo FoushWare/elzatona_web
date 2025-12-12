@@ -4,7 +4,7 @@ import React, { useState, useEffect } from "react";
 // Note: This page uses hooks/API routes, not direct supabase client
 
 import { useRouter } from "next/navigation";
-import { Play, Clock, Users, Code, Search, Filter } from "lucide-react";
+import { Play, Clock, Code, Search } from "lucide-react";
 import { ProblemSolvingTask } from "@/types/admin";
 
 export default function ProblemSolvingPage() {

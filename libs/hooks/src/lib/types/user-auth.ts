@@ -5,7 +5,7 @@ export class UserAuthService {
   static async getCurrentUser() {
     return null;
   }
-  static hasPermission(userRole: string, requiredRole: string): boolean {
+  static hasPermission(_userRole: string, _requiredRole: string): boolean {
     return false;
   }
 }

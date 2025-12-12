@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, ReactNode } from "react";
+import React, { useEffect } from "react";
 import { useAdminAuth } from "@elzatona/contexts";
 import AdminNavbar from "./AdminNavbar";
 import { useRouter } from "next/navigation";

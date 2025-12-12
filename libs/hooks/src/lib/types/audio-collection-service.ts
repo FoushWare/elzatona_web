@@ -10,7 +10,7 @@ export class AudioCollectionService {
   static async getAudioMappings(): Promise<QuestionAudioMapping[]> {
     return [];
   }
-  static async getAudioMapping(questionId: string): Promise<{
+  static async getAudioMapping(_questionId: string): Promise<{
     success: boolean;
     mapping?: QuestionAudioMapping | null;
     error?: string;
@@ -18,7 +18,7 @@ export class AudioCollectionService {
     return { success: true, mapping: null };
   }
   static async getAudioMappingsForLearningPath(
-    learningPathId: string,
+    _learningPathId: string,
   ): Promise<{
     success: boolean;
     mappings?: QuestionAudioMapping[];
@@ -27,8 +27,8 @@ export class AudioCollectionService {
     return { success: true, mappings: [] };
   }
   static async getAudioMappingsForSection(
-    learningPath: string,
-    sectionId: string,
+    _learningPath: string,
+    _sectionId: string,
   ): Promise<{
     success: boolean;
     mappings?: QuestionAudioMapping[];
@@ -37,9 +37,9 @@ export class AudioCollectionService {
     return { success: true, mappings: [] };
   }
   static async updateAudioFile(
-    questionId: string,
-    audioType: string,
-    audioInfo: { localPath: string; isDefault: boolean; duration?: number },
+    _questionId: string,
+    _audioType: string,
+    _audioInfo: { localPath: string; isDefault: boolean; duration?: number },
   ): Promise<{ success: boolean; error?: string }> {
     return { success: true };
   }
@@ -49,7 +49,7 @@ export class AudioCollectionService {
     sectionId: string,
     questionNumber: number,
     questionAudioPath?: string,
-    answerAudioPath?: string,
+    _answerAudioPath?: string,
   ): Promise<{
     success: boolean;
     mapping?: QuestionAudioMapping;
@@ -61,7 +61,7 @@ export class AudioCollectionService {
     };
   }
   static async deleteAudioMapping(
-    questionId: string,
+    _questionId: string,
   ): Promise<{ success: boolean; error?: string }> {
     return { success: true };
   }

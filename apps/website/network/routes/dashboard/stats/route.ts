@@ -256,7 +256,7 @@ export async function GET(request: NextRequest) {
         if (typeof entry.progress_data === "string") {
           try {
             progressData = JSON.parse(entry.progress_data);
-          } catch (e) {
+          } catch (_e) {
             return;
           }
         } else {
@@ -387,7 +387,7 @@ export async function GET(request: NextRequest) {
               if (typeof entry.progress_data === "string") {
                 try {
                   pd = JSON.parse(entry.progress_data);
-                } catch (e) {
+                } catch (_e) {
                   return count;
                 }
               } else {

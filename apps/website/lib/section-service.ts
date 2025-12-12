@@ -115,7 +115,7 @@ export class SectionService {
       try {
         const fileContent = await fs.readFile(sectionsPath, "utf-8");
         sections = JSON.parse(fileContent);
-      } catch (error) {
+      } catch (_error) {
         // File doesn't exist, return default sections
         sections = this.getDefaultSections();
         await this.saveSections(sections);
@@ -154,7 +154,7 @@ export class SectionService {
           message: "Sections file already exists",
           data: null,
         };
-      } catch (error) {
+      } catch (_error) {
         // File doesn't exist, create it with default sections
         const defaultSections = this.getDefaultSections();
         await this.saveSections(defaultSections);
@@ -614,7 +614,7 @@ export class SectionService {
       try {
         const questionsPath = this.getSectionQuestionsPath(sectionId);
         await fs.unlink(questionsPath);
-      } catch (error) {
+      } catch (_error) {
         console.log("No questions file found for section:", sectionId);
       }
 
@@ -695,7 +695,7 @@ export class SectionService {
       try {
         const fileContent = await fs.readFile(questionsPath, "utf-8");
         questions = JSON.parse(fileContent);
-      } catch (error) {
+      } catch (_error) {
         // File doesn't exist, return empty array
         console.log(`No questions found for section: ${sectionId}`);
       }

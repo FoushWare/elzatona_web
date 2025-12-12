@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 import { createClient } from "@supabase/supabase-js";
-import bcrypt from "bcryptjs";
+// import _bcrypt from "bcryptjs";
 
 console.log("🛡️ Supabase Admin Account Setup\n");
 

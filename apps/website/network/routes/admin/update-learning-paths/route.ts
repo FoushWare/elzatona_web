@@ -17,7 +17,7 @@ const learningPathUpdates = [
   { id: "testing-strategies", question_count: 2 },
 ];
 
-export async function POST(request: NextRequest) {
+export async function POST(_request: NextRequest) {
   try {
     console.log("🔄 Updating learning paths via API...");
 

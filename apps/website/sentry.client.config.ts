@@ -17,7 +17,7 @@ Sentry.init({
   replaysSessionSampleRate: process.env.NODE_ENV === "production" ? 0.1 : 0.1,
 
   // Filter out sensitive data
-  beforeSend(event, hint) {
+  beforeSend(event, _hint) {
     // Filter out errors in development/test environments if needed
     if (process.env.NEXT_PUBLIC_APP_ENV === "test") {
       return null; // Don't send errors in test environment
