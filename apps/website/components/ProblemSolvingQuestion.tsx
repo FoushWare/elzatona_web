@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import CodeEditor from "./CodeEditor";
 import {
   CheckCircle,
@@ -59,6 +59,289 @@ interface ProblemSolvingQuestionProps {
   readonly onSubmitSolution?: () => void;
 }
 
+// Helper component for Problem Description Panel
+interface ProblemDescriptionPanelProps {
+  readonly question: ProblemSolvingQuestionProps["question"];
+  readonly leftPanelWidth: number;
+  readonly isFocusMode: boolean;
+  readonly inFlashcards: boolean;
+  readonly onToggleFlashcard: () => void;
+  readonly onEnterFocusMode: () => void;
+  readonly onResizeStart: () => void;
+  readonly getDifficultyBadgeClassName: (difficulty?: string) => string;
+  readonly formatInput: (input: unknown) => string;
+  readonly examples: Example[];
+  readonly showHints: boolean;
+  readonly revealedHints: number[];
+  readonly onToggleHints: () => void;
+  readonly onRevealHint: (index: number) => void;
+}
+
+const ProblemDescriptionPanel: React.FC<ProblemDescriptionPanelProps> = ({
+  question,
+  leftPanelWidth,
+  isFocusMode,
+  inFlashcards,
+  onToggleFlashcard,
+  onEnterFocusMode,
+  onResizeStart,
+  getDifficultyBadgeClassName,
+  formatInput,
+  examples,
+  showHints,
+  revealedHints,
+  onToggleHints,
+  onRevealHint,
+}) => {
+  if (isFocusMode) return null;
+
+  return (
+    <div
+      className="overflow-y-auto bg-gradient-to-br from-white via-gray-50/30 to-white dark:from-gray-900 dark:via-gray-800/50 dark:to-gray-900 border-r-0 lg:border-r-2 border-gray-200/60 dark:border-gray-700/60 border-b lg:border-b-0 relative shadow-sm"
+      style={{
+        width: `${leftPanelWidth}%`,
+        minWidth: "300px",
+        maxWidth: "60%",
+      }}
+    >
+      {/* Resize Handle - Horizontal */}
+      <button
+        type="button"
+        aria-label="Resize panel horizontally"
+        className="absolute right-0 top-0 bottom-0 w-1.5 bg-transparent hover:bg-indigo-500/80 dark:hover:bg-indigo-500/80 cursor-col-resize z-20 transition-all duration-200 select-none group border-0 p-0"
+        onMouseDown={(e) => {
+          e.preventDefault();
+          onResizeStart();
+        }}
+        onKeyDown={(e) => {
+          if (e.key === "Enter" || e.key === " ") {
+            e.preventDefault();
+            onResizeStart();
+          }
+        }}
+      >
+        <div className="absolute inset-y-0 left-1/2 -translate-x-1/2 w-0.5 bg-gray-300/50 dark:bg-gray-600/50 group-hover:bg-indigo-400 dark:group-hover:bg-indigo-400 transition-all duration-200" />
+      </button>
+      <div className="p-5 sm:p-7 md:p-9 lg:p-11">
+        {/* Header with Title and Difficulty */}
+        <div className="mb-7 sm:mb-9 pb-6 sm:pb-7 border-b-2 border-gray-200/80 dark:border-gray-700/80">
+          <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-5 sm:gap-6 mb-5">
+            <div className="flex-1 min-w-0">
+              <div className="flex flex-wrap items-center gap-3 sm:gap-4 mb-5">
+                <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-gray-900 dark:text-white break-words leading-tight tracking-tight">
+                  {question.title}
+                </h2>
+                {question.difficulty && (
+                  <span
+                    className={`inline-flex items-center px-4 sm:px-4.5 py-2 rounded-xl text-xs sm:text-sm font-extrabold uppercase tracking-wider shadow-sm ${getDifficultyBadgeClassName(question.difficulty)}`}
+                  >
+                    {question.difficulty}
+                  </span>
+                )}
+              </div>
+
+              {/* Topic Tags (LeetCode Style) */}
+              {question.tags && question.tags.length > 0 && (
+                <div className="flex flex-wrap items-center gap-2 sm:gap-2.5 mb-5">
+                  {question.tags
+                    .filter((tag) => {
+                      const genericTags = [
+                        "problem-solving",
+                        "algorithms",
+                        "javascript",
+                        "typescript",
+                        "python",
+                        "easy",
+                        "medium",
+                        "hard",
+                        "beginner",
+                        "intermediate",
+                        "advanced",
+                      ];
+                      return !genericTags.includes(tag.toLowerCase());
+                    })
+                    .map((tag, index) => (
+                      <span
+                        key={`tag-${tag}-${index}`}
+                        className="inline-flex items-center px-3 sm:px-3.5 py-1.5 rounded-lg text-xs sm:text-sm font-semibold bg-gradient-to-br from-gray-100 to-gray-50 dark:from-gray-700 dark:to-gray-800 text-gray-700 dark:text-gray-300 border border-gray-200 dark:border-gray-600 hover:from-gray-200 hover:to-gray-100 dark:hover:from-gray-600 dark:hover:to-gray-700 transition-all duration-200 shadow-sm hover:shadow"
+                      >
+                        {tag}
+                      </span>
+                    ))}
+                </div>
+              )}
+
+              {/* Flashcard Button */}
+              <button
+                onClick={onToggleFlashcard}
+                className={`inline-flex items-center gap-2 px-4 sm:px-4.5 py-2.5 rounded-xl border-2 transition-all duration-200 text-xs sm:text-sm font-bold shadow-md hover:shadow-lg transform hover:scale-105 ${
+                  inFlashcards
+                    ? "bg-gradient-to-br from-green-100 via-green-50 to-green-100 text-green-800 dark:from-green-900/40 dark:via-green-900/30 dark:to-green-900/20 dark:text-green-200 border-green-400/80 dark:border-green-600/80"
+                    : "bg-gradient-to-br from-white to-indigo-50/50 dark:from-gray-800 dark:to-indigo-900/20 text-indigo-700 dark:text-indigo-300 border-indigo-300/80 dark:border-indigo-600/80 hover:from-indigo-50 hover:to-indigo-100 dark:hover:from-indigo-900/30 dark:hover:to-indigo-900/40"
+                }`}
+              >
+                <span className="text-base sm:text-lg">🔖</span>
+                <span className="hidden sm:inline">
+                  {inFlashcards ? "Added to Flashcard" : "Add to Flashcard"}
+                </span>
+                <span className="sm:hidden">
+                  {inFlashcards ? "Added" : "Add"}
+                </span>
+              </button>
+            </div>
+            <button
+              onClick={onEnterFocusMode}
+              className="self-start sm:self-auto p-2.5 text-gray-500 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-gray-200 hover:bg-indigo-50 dark:hover:bg-gray-700 rounded-lg border border-gray-200 dark:border-transparent hover:border-indigo-200 dark:hover:border-gray-600 transition-all duration-200 shadow-sm hover:shadow"
+              title="Focus Mode"
+            >
+              <Maximize2 className="w-4 h-4 sm:w-5 sm:h-5" />
+            </button>
+          </div>
+        </div>
+
+        {/* Problem Content */}
+        <div className="mb-7 sm:mb-9">
+          <SafeHTML
+            html={question.content}
+            className="text-base sm:text-lg text-gray-800 dark:text-gray-200 leading-relaxed prose prose-sm sm:prose-base dark:prose-invert max-w-none prose-headings:font-bold prose-p:mb-4 prose-strong:text-gray-900 dark:prose-strong:text-gray-100"
+          />
+        </div>
+
+        {/* Examples Section (LeetCode Style) */}
+        {examples.length > 0 && (
+          <div className="mt-9 sm:mt-11">
+            <h3 className="text-xl sm:text-2xl font-extrabold text-gray-900 dark:text-white mb-6 tracking-tight">
+              Examples
+            </h3>
+            <div className="space-y-6 sm:space-y-7">
+              {examples.map((example, index) => (
+                <div
+                  key={`example-${index}-${JSON.stringify(example.input)}`}
+                  className="bg-gradient-to-br from-white via-gray-50/50 to-white dark:from-gray-800/80 dark:via-gray-800/60 dark:to-gray-800/80 rounded-2xl p-5 sm:p-6 border-2 border-gray-200/60 dark:border-gray-700/60 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-[1.01]"
+                >
+                  <div className="flex items-center gap-2.5 mb-5">
+                    <span className="text-base sm:text-lg font-extrabold text-gray-900 dark:text-white tracking-tight">
+                      Example {index + 1}:
+                    </span>
+                  </div>
+
+                  {/* Input */}
+                  <div className="mb-4 sm:mb-5">
+                    <div className="text-sm sm:text-base font-bold text-gray-800 dark:text-gray-200 mb-3">
+                      <strong>Input:</strong>
+                    </div>
+                    <div className="bg-gradient-to-br from-gray-50 to-white dark:from-gray-900 dark:to-gray-800 rounded-xl p-4 sm:p-5 border-2 border-gray-200/80 dark:border-gray-700/80 shadow-md">
+                      <pre className="text-sm sm:text-base font-mono text-gray-900 dark:text-gray-100 whitespace-pre-wrap break-words overflow-x-auto leading-relaxed">
+                        {formatInput(example.input)}
+                      </pre>
+                    </div>
+                  </div>
+
+                  {/* Output */}
+                  <div className="mb-4 sm:mb-5">
+                    <div className="text-sm sm:text-base font-bold text-gray-800 dark:text-gray-200 mb-3">
+                      <strong>Output:</strong>
+                    </div>
+                    <div className="bg-gradient-to-br from-green-50/50 to-white dark:from-green-900/20 dark:to-gray-800 rounded-xl p-4 sm:p-5 border-2 border-green-200/60 dark:border-green-800/60 shadow-md">
+                      <pre className="text-sm sm:text-base font-mono text-green-900 dark:text-green-100 whitespace-pre-wrap break-words overflow-x-auto leading-relaxed">
+                        {typeof example.output === "string"
+                          ? `"${example.output}"`
+                          : JSON.stringify(example.output, null, 2)}
+                      </pre>
+                    </div>
+                  </div>
+
+                  {/* Explanation */}
+                  {example.explanation && (
+                    <div className="mt-5 pt-5 border-t-2 border-gray-200/80 dark:border-gray-700/80">
+                      <div className="text-sm sm:text-base font-bold text-gray-800 dark:text-gray-200 mb-3">
+                        <strong>Explanation:</strong>
+                      </div>
+                      <p className="text-sm sm:text-base text-gray-700 dark:text-gray-300 leading-relaxed">
+                        {example.explanation}
+                      </p>
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Hints Section */}
+        {question.hints && question.hints.length > 0 && (
+          <div className="mt-9 sm:mt-11">
+            <div className="flex items-center justify-between mb-6">
+              <div className="flex items-center gap-3">
+                <Lightbulb className="w-6 h-6 sm:w-7 sm:h-7 text-amber-600 dark:text-amber-400" />
+                <h3 className="text-xl sm:text-2xl font-extrabold text-gray-900 dark:text-white tracking-tight">
+                  Hints ({question.hints.length})
+                </h3>
+              </div>
+              <button
+                onClick={onToggleHints}
+                className="px-4 py-2.5 text-sm font-bold text-indigo-700 dark:text-indigo-300 bg-gradient-to-br from-indigo-50 to-indigo-100 dark:from-indigo-900/30 dark:to-indigo-900/20 rounded-xl border-2 border-indigo-200/80 dark:border-indigo-700/80 hover:from-indigo-100 hover:to-indigo-200 dark:hover:from-indigo-900/40 dark:hover:to-indigo-900/30 transition-all duration-200 shadow-md hover:shadow-lg transform hover:scale-105"
+              >
+                {showHints ? "Hide Hints" : "Show Hints"}
+              </button>
+            </div>
+            {showHints && (
+              <div className="bg-gradient-to-br from-amber-50/50 via-white to-amber-50/30 dark:from-amber-900/20 dark:via-gray-800/60 dark:to-amber-900/20 rounded-2xl p-5 sm:p-6 border-2 border-amber-200/60 dark:border-amber-800/60 shadow-lg space-y-4">
+                {question.hints.map((hint, index) => (
+                  <div
+                    key={`hint-${index}-${hint.substring(0, 20)}`}
+                    className={`p-4 rounded-xl border-2 transition-all duration-300 ${
+                      revealedHints.includes(index)
+                        ? "bg-gradient-to-br from-amber-100/80 to-white dark:from-amber-900/40 dark:to-gray-800/60 border-amber-300/80 dark:border-amber-700/80 shadow-md"
+                        : "bg-gradient-to-br from-gray-50 to-white dark:from-gray-800/40 dark:to-gray-800/20 border-gray-200/60 dark:border-gray-700/60"
+                    }`}
+                  >
+                    <div className="flex items-start gap-3">
+                      <div className="flex-shrink-0 w-8 h-8 rounded-full bg-gradient-to-br from-amber-400 to-amber-500 dark:from-amber-600 dark:to-amber-700 flex items-center justify-center text-white font-bold text-sm shadow-md">
+                        {index + 1}
+                      </div>
+                      {revealedHints.includes(index) ? (
+                        <div className="flex-1">
+                          <p className="text-sm sm:text-base text-gray-800 dark:text-gray-200 leading-relaxed">
+                            {hint}
+                          </p>
+                        </div>
+                      ) : (
+                        <button
+                          onClick={() => onRevealHint(index)}
+                          className="flex-1 text-left text-sm sm:text-base text-gray-600 dark:text-gray-400 hover:text-amber-600 dark:hover:text-amber-400 transition-colors font-medium"
+                        >
+                          Click to reveal hint {index + 1}
+                        </button>
+                      )}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* Constraints Section - From Database */}
+        {question.constraints && question.constraints.length > 0 && (
+          <div className="mt-9 sm:mt-11">
+            <h3 className="text-xl sm:text-2xl font-extrabold text-gray-900 dark:text-white mb-6 tracking-tight">
+              Constraints
+            </h3>
+            <div className="bg-gradient-to-br from-indigo-50/50 via-white to-indigo-50/30 dark:from-indigo-900/20 dark:via-gray-800/60 dark:to-indigo-900/20 rounded-2xl p-5 sm:p-6 border-2 border-indigo-200/60 dark:border-indigo-800/60 shadow-lg">
+              <ul className="space-y-3 text-sm sm:text-base text-gray-800 dark:text-gray-200 list-disc list-inside marker:text-indigo-600 dark:marker:text-indigo-400 font-medium">
+                {question.constraints.map((constraint, index) => (
+                  <li key={`constraint-${index}-${constraint.substring(0, 20)}`}>{constraint}</li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+};
+
 export default function ProblemSolvingQuestion({
   question,
   onComplete,
@@ -90,57 +373,57 @@ export default function ProblemSolvingQuestion({
   const [isResizingHorizontal, setIsResizingHorizontal] = useState(false);
   const [isResizingVertical, setIsResizingVertical] = useState(false);
 
-  // Helper to decode HTML entities
-  const decodeHtmlEntities = (text: string): string => {
-    if (!text) return "";
-    const entityMap: Record<string, string> = {
-      "&lt;": "<",
-      "&gt;": ">",
-      "&amp;": "&",
-      "&quot;": '"',
-      "&#39;": "'",
-      "&#x27;": "'",
-      "&#x2F;": "/",
-      "&nbsp;": " ",
-      "&#160;": " ",
-      "&apos;": "'",
-    };
-    let decoded = text;
-    for (const [entity, char] of Object.entries(entityMap)) {
+    // Helper to decode HTML entities
+    const decodeHtmlEntities = (text: string): string => {
+      if (!text) return "";
+      const entityMap: Record<string, string> = {
+        "&lt;": "<",
+        "&gt;": ">",
+        "&amp;": "&",
+        "&quot;": '"',
+        "&#39;": "'",
+        "&#x27;": "'",
+        "&#x2F;": "/",
+        "&nbsp;": " ",
+        "&#160;": " ",
+        "&apos;": "'",
+      };
+      let decoded = text;
+      for (const [entity, char] of Object.entries(entityMap)) {
       decoded = decoded.replaceAll(entity, char);
-    }
+      }
     decoded = decoded.replace(/&#(\d+);/g, (_, dec) => // NOSONAR: regex with capture groups required
       String.fromCodePoint(Number.parseInt(dec, 10)),
-    );
+      );
     decoded = decoded.replace(/&#x([0-9a-f]+);/gi, (_, hex) => // NOSONAR: regex with capture groups required
       String.fromCodePoint(Number.parseInt(hex, 16)),
-    );
-    return decoded;
-  };
+      );
+      return decoded;
+    };
 
   // Helper to clean up malformed code patterns
   const cleanCodePatterns = (code: string): string => {
-    for (let i = 0; i < 3; i++) {
-      code = code
-        // Remove e> artifacts (most common issue)
+      for (let i = 0; i < 3; i++) {
+        code = code
+          // Remove e> artifacts (most common issue)
         .replace(/e>e>/g, "") // NOSONAR: regex pattern required
         .replace(/e>e>e>/g, "") // NOSONAR: regex pattern required
         .replace(/^e>+/g, "") // NOSONAR: regex pattern required
         .replace(/e>+$/g, "") // NOSONAR: regex pattern required
         .replace(/(\w+)e>/g, "$1") // NOSONAR: regex with capture group required
         .replace(/e>(\w+)/g, "$1") // NOSONAR: regex with capture group required
-        // Fix console.log patterns
+          // Fix console.log patterns
         .replace(/consoleonsole\.log/g, "console.log") // NOSONAR: regex pattern required
         .replace(/console\.loge>/g, "console.log") // NOSONAR: regex pattern required
         .replace(/console\.log>/g, "console.log") // NOSONAR: regex pattern required
-        // Fix method name patterns
+          // Fix method name patterns
         .replace(/diameterameter/g, "diameter") // NOSONAR: regex pattern required
         .replace(/perimeterimeter/g, "perimeter") // NOSONAR: regex pattern required
         .replace(/newColorwColor/g, "newColor") // NOSONAR: regex pattern required
-        // Fix NaN patterns
+          // Fix NaN patterns
         .replace(/NaNe>/g, "NaN") // NOSONAR: regex pattern required
         .replace(/NaN>/g, "NaN") // NOSONAR: regex pattern required
-        // Remove any remaining standalone e> or > characters
+          // Remove any remaining standalone e> or > characters
         .replace(/\s*e>\s*/g, " ") // NOSONAR: regex pattern required
         .replace(/\s*>\s*/g, " ") // NOSONAR: regex pattern required
         .replace(/^>\s*/g, "") // NOSONAR: regex pattern required
@@ -370,20 +653,20 @@ export default function ProblemSolvingQuestion({
     testCase: TestCase,
     testCaseNumber: number,
   ): string => {
-    const inputFields = parseInputFields(testCase.input);
-    if (
-      typeof testCase.input === "object" &&
-      testCase.input !== null &&
-      !Array.isArray(testCase.input)
-    ) {
-      const args = Object.values(inputFields)
+        const inputFields = parseInputFields(testCase.input);
+        if (
+          typeof testCase.input === "object" &&
+          testCase.input !== null &&
+          !Array.isArray(testCase.input)
+        ) {
+          const args = Object.values(inputFields)
         .map((arg: unknown) => JSON.stringify(arg))
-        .join(", ");
+            .join(", ");
       return `${code}\n\n// Test with test case ${testCaseNumber}\nconst result = ${functionName}(${args});\nconsole.log('Output:', result);`;
     }
-    const input = Array.isArray(testCase.input)
-      ? testCase.input
-      : [testCase.input];
+          const input = Array.isArray(testCase.input)
+            ? testCase.input
+            : [testCase.input];
     return `${code}\n\n// Test with test case ${testCaseNumber}\nconst result = ${functionName}(${input.map((arg: unknown) => JSON.stringify(arg)).join(", ")});\nconsole.log('Output:', result);`;
   };
 
@@ -614,7 +897,9 @@ export default function ProblemSolvingQuestion({
     const container = document.querySelector(
       "[data-problem-container]",
     ) as HTMLElement;
-    if (!container) return;
+    if (!container) {
+      return;
+    }
     const containerRect = container.getBoundingClientRect();
     const relativeX = e.clientX - containerRect.left;
     const containerWidth = containerRect.width;
@@ -632,7 +917,9 @@ export default function ProblemSolvingQuestion({
     const rightPanel = document.querySelector(
       "[data-right-panel]",
     ) as HTMLElement;
-    if (!rightPanel) return;
+    if (!rightPanel) {
+      return;
+    }
     const rightPanelRect = rightPanel.getBoundingClientRect();
     const relativeY = e.clientY - rightPanelRect.top;
     const containerHeight = rightPanelRect.height;
@@ -715,256 +1002,26 @@ export default function ProblemSolvingQuestion({
       className={`w-full ${isFocusMode ? "h-screen fixed inset-0 z-50" : "h-[calc(100vh-4rem)] sm:h-[calc(100vh-6rem)] lg:h-[calc(100vh-8rem)]"} flex flex-col lg:flex-row gap-0 bg-gray-50 dark:bg-gray-900 transition-all duration-300`}
     >
       {/* Left Panel - Problem Description (LeetCode Style) */}
-      {!isFocusMode && (
-        <div
-          className="overflow-y-auto bg-gradient-to-br from-white via-gray-50/30 to-white dark:from-gray-900 dark:via-gray-800/50 dark:to-gray-900 border-r-0 lg:border-r-2 border-gray-200/60 dark:border-gray-700/60 border-b lg:border-b-0 relative shadow-sm"
-          style={{
-            width: `${leftPanelWidth}%`,
-            minWidth: "300px",
-            maxWidth: "60%",
-          }}
-        >
-          {/* Resize Handle - Horizontal */}
-          <button
-            type="button"
-            aria-label="Resize panel horizontally"
-            className="absolute right-0 top-0 bottom-0 w-1.5 bg-transparent hover:bg-indigo-500/80 dark:hover:bg-indigo-500/80 cursor-col-resize z-20 transition-all duration-200 select-none group border-0 p-0"
-            onMouseDown={(e) => {
-              e.preventDefault();
-              setIsResizingHorizontal(true);
-            }}
-            onKeyDown={(e) => {
-              if (e.key === "Enter" || e.key === " ") {
-                e.preventDefault();
-                setIsResizingHorizontal(true);
-              }
-            }}
-          >
-            <div className="absolute inset-y-0 left-1/2 -translate-x-1/2 w-0.5 bg-gray-300/50 dark:bg-gray-600/50 group-hover:bg-indigo-400 dark:group-hover:bg-indigo-400 transition-all duration-200" />
-          </button>
-          <div className="p-5 sm:p-7 md:p-9 lg:p-11">
-            {/* Header with Title and Difficulty */}
-            <div className="mb-7 sm:mb-9 pb-6 sm:pb-7 border-b-2 border-gray-200/80 dark:border-gray-700/80">
-              <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-5 sm:gap-6 mb-5">
-                <div className="flex-1 min-w-0">
-                  <div className="flex flex-wrap items-center gap-3 sm:gap-4 mb-5">
-                    <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-gray-900 dark:text-white break-words leading-tight tracking-tight">
-                      {question.title}
-                    </h2>
-                    {question.difficulty && (
-                      <span
-                        className={`inline-flex items-center px-4 sm:px-4.5 py-2 rounded-xl text-xs sm:text-sm font-extrabold uppercase tracking-wider shadow-sm ${getDifficultyBadgeClassName(question.difficulty)}`}
-                      >
-                        {question.difficulty}
-                      </span>
-                    )}
-                  </div>
-
-                  {/* Topic Tags (LeetCode Style) */}
-                  {question.tags && question.tags.length > 0 && (
-                    <div className="flex flex-wrap items-center gap-2 sm:gap-2.5 mb-5">
-                      {question.tags
-                        .filter((tag) => {
-                          // Filter out generic tags, keep only topic-related tags
-                          const genericTags = [
-                            "problem-solving",
-                            "algorithms",
-                            "javascript",
-                            "typescript",
-                            "python",
-                            "easy",
-                            "medium",
-                            "hard",
-                            "beginner",
-                            "intermediate",
-                            "advanced",
-                          ];
-                          return !genericTags.includes(tag.toLowerCase());
-                        })
-                        .map((tag, index) => (
-                          <span
-                            key={`tag-${tag}-${index}`}
-                            className="inline-flex items-center px-3 sm:px-3.5 py-1.5 rounded-lg text-xs sm:text-sm font-semibold bg-gradient-to-br from-gray-100 to-gray-50 dark:from-gray-700 dark:to-gray-800 text-gray-700 dark:text-gray-300 border border-gray-200 dark:border-gray-600 hover:from-gray-200 hover:to-gray-100 dark:hover:from-gray-600 dark:hover:to-gray-700 transition-all duration-200 shadow-sm hover:shadow"
-                          >
-                            {tag}
-                          </span>
-                        ))}
-                    </div>
-                  )}
-
-                  {/* Flashcard Button */}
-                  <button
-                    onClick={handleToggleFlashcard}
-                    className={`inline-flex items-center gap-2 px-4 sm:px-4.5 py-2.5 rounded-xl border-2 transition-all duration-200 text-xs sm:text-sm font-bold shadow-md hover:shadow-lg transform hover:scale-105 ${
-                      inFlashcards
-                        ? "bg-gradient-to-br from-green-100 via-green-50 to-green-100 text-green-800 dark:from-green-900/40 dark:via-green-900/30 dark:to-green-900/20 dark:text-green-200 border-green-400/80 dark:border-green-600/80"
-                        : "bg-gradient-to-br from-white to-indigo-50/50 dark:from-gray-800 dark:to-indigo-900/20 text-indigo-700 dark:text-indigo-300 border-indigo-300/80 dark:border-indigo-600/80 hover:from-indigo-50 hover:to-indigo-100 dark:hover:from-indigo-900/30 dark:hover:to-indigo-900/40"
-                    }`}
-                  >
-                    <span className="text-base sm:text-lg">🔖</span>
-                    <span className="hidden sm:inline">
-                      {inFlashcards ? "Added to Flashcard" : "Add to Flashcard"}
-                    </span>
-                    <span className="sm:hidden">
-                      {inFlashcards ? "Added" : "Add"}
-                    </span>
-                  </button>
-                </div>
-                <button
-                  onClick={() => setIsFocusMode(true)}
-                  className="self-start sm:self-auto p-2.5 text-gray-500 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-gray-200 hover:bg-indigo-50 dark:hover:bg-gray-700 rounded-lg border border-gray-200 dark:border-transparent hover:border-indigo-200 dark:hover:border-gray-600 transition-all duration-200 shadow-sm hover:shadow"
-                  title="Focus Mode"
-                >
-                  <Maximize2 className="w-4 h-4 sm:w-5 sm:h-5" />
-                </button>
-              </div>
-            </div>
-
-            {/* Problem Content */}
-            <div className="mb-7 sm:mb-9">
-              <SafeHTML
-                html={question.content}
-                className="text-base sm:text-lg text-gray-800 dark:text-gray-200 leading-relaxed prose prose-sm sm:prose-base dark:prose-invert max-w-none prose-headings:font-bold prose-p:mb-4 prose-strong:text-gray-900 dark:prose-strong:text-gray-100"
-              />
-            </div>
-
-            {/* Examples Section (LeetCode Style) */}
-            {examples.length > 0 && (
-              <div className="mt-9 sm:mt-11">
-                <h3 className="text-xl sm:text-2xl font-extrabold text-gray-900 dark:text-white mb-6 tracking-tight">
-                  Examples
-                </h3>
-                <div className="space-y-6 sm:space-y-7">
-                  {examples.map((example, index) => (
-                    <div
-                      key={`example-${index}-${JSON.stringify(example.input)}`}
-                      className="bg-gradient-to-br from-white via-gray-50/50 to-white dark:from-gray-800/80 dark:via-gray-800/60 dark:to-gray-800/80 rounded-2xl p-5 sm:p-6 border-2 border-gray-200/60 dark:border-gray-700/60 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-[1.01]"
-                    >
-                      <div className="flex items-center gap-2.5 mb-5">
-                        <span className="text-base sm:text-lg font-extrabold text-gray-900 dark:text-white tracking-tight">
-                          Example {index + 1}:
-                        </span>
-                      </div>
-
-                      {/* Input */}
-                      <div className="mb-4 sm:mb-5">
-                        <div className="text-sm sm:text-base font-bold text-gray-800 dark:text-gray-200 mb-3">
-                          <strong>Input:</strong>
-                        </div>
-                        <div className="bg-gradient-to-br from-gray-50 to-white dark:from-gray-900 dark:to-gray-800 rounded-xl p-4 sm:p-5 border-2 border-gray-200/80 dark:border-gray-700/80 shadow-md">
-                          <pre className="text-sm sm:text-base font-mono text-gray-900 dark:text-gray-100 whitespace-pre-wrap break-words overflow-x-auto leading-relaxed">
-                            {formatInput(example.input)}
-                          </pre>
-                        </div>
-                      </div>
-
-                      {/* Output */}
-                      <div className="mb-4 sm:mb-5">
-                        <div className="text-sm sm:text-base font-bold text-gray-800 dark:text-gray-200 mb-3">
-                          <strong>Output:</strong>
-                        </div>
-                        <div className="bg-gradient-to-br from-green-50/50 to-white dark:from-green-900/20 dark:to-gray-800 rounded-xl p-4 sm:p-5 border-2 border-green-200/60 dark:border-green-800/60 shadow-md">
-                          <pre className="text-sm sm:text-base font-mono text-green-900 dark:text-green-100 whitespace-pre-wrap break-words overflow-x-auto leading-relaxed">
-                            {typeof example.output === "string"
-                              ? `"${example.output}"`
-                              : JSON.stringify(example.output, null, 2)}
-                          </pre>
-                        </div>
-                      </div>
-
-                      {/* Explanation */}
-                      {example.explanation && (
-                        <div className="mt-5 pt-5 border-t-2 border-gray-200/80 dark:border-gray-700/80">
-                          <div className="text-sm sm:text-base font-bold text-gray-800 dark:text-gray-200 mb-3">
-                            <strong>Explanation:</strong>
-                          </div>
-                          <p className="text-sm sm:text-base text-gray-700 dark:text-gray-300 leading-relaxed">
-                            {example.explanation}
-                          </p>
-                        </div>
-                      )}
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
-
-            {/* Hints Section */}
-            {question.hints && question.hints.length > 0 && (
-              <div className="mt-9 sm:mt-11">
-                <div className="flex items-center justify-between mb-6">
-                  <div className="flex items-center gap-3">
-                    <Lightbulb className="w-6 h-6 sm:w-7 sm:h-7 text-amber-600 dark:text-amber-400" />
-                    <h3 className="text-xl sm:text-2xl font-extrabold text-gray-900 dark:text-white tracking-tight">
-                      Hints ({question.hints.length})
-                    </h3>
-                  </div>
-                  <button
-                    onClick={() => setShowHints(!showHints)}
-                    className="px-4 py-2.5 text-sm font-bold text-indigo-700 dark:text-indigo-300 bg-gradient-to-br from-indigo-50 to-indigo-100 dark:from-indigo-900/30 dark:to-indigo-900/20 rounded-xl border-2 border-indigo-200/80 dark:border-indigo-700/80 hover:from-indigo-100 hover:to-indigo-200 dark:hover:from-indigo-900/40 dark:hover:to-indigo-900/30 transition-all duration-200 shadow-md hover:shadow-lg transform hover:scale-105"
-                  >
-                    {showHints ? "Hide Hints" : "Show Hints"}
-                  </button>
-                </div>
-                {showHints && (
-                  <div className="bg-gradient-to-br from-amber-50/50 via-white to-amber-50/30 dark:from-amber-900/20 dark:via-gray-800/60 dark:to-amber-900/20 rounded-2xl p-5 sm:p-6 border-2 border-amber-200/60 dark:border-amber-800/60 shadow-lg space-y-4">
-                    {question.hints.map((hint, index) => (
-                      <div
-                        key={`hint-${index}-${hint.substring(0, 20)}`}
-                        className={`p-4 rounded-xl border-2 transition-all duration-300 ${
-                          revealedHints.includes(index)
-                            ? "bg-gradient-to-br from-amber-100/80 to-white dark:from-amber-900/40 dark:to-gray-800/60 border-amber-300/80 dark:border-amber-700/80 shadow-md"
-                            : "bg-gradient-to-br from-gray-50 to-white dark:from-gray-800/40 dark:to-gray-800/20 border-gray-200/60 dark:border-gray-700/60"
-                        }`}
-                      >
-                        <div className="flex items-start gap-3">
-                          <div className="flex-shrink-0 w-8 h-8 rounded-full bg-gradient-to-br from-amber-400 to-amber-500 dark:from-amber-600 dark:to-amber-700 flex items-center justify-center text-white font-bold text-sm shadow-md">
-                            {index + 1}
-                          </div>
-                          {revealedHints.includes(index) ? (
-                            <div className="flex-1">
-                              <p className="text-sm sm:text-base text-gray-800 dark:text-gray-200 leading-relaxed">
-                                {hint}
-                              </p>
-                            </div>
-                          ) : (
-                            <button
-                              onClick={() => {
+      <ProblemDescriptionPanel
+        question={question}
+        leftPanelWidth={leftPanelWidth}
+        isFocusMode={isFocusMode}
+        inFlashcards={inFlashcards}
+        onToggleFlashcard={handleToggleFlashcard}
+        onEnterFocusMode={() => setIsFocusMode(true)}
+        onResizeStart={() => setIsResizingHorizontal(true)}
+        getDifficultyBadgeClassName={getDifficultyBadgeClassName}
+        formatInput={formatInput}
+        examples={examples}
+        showHints={showHints}
+        revealedHints={revealedHints}
+        onToggleHints={() => setShowHints(!showHints)}
+        onRevealHint={(index) => {
                                 if (!revealedHints.includes(index)) {
                                   setRevealedHints([...revealedHints, index]);
                                 }
                               }}
-                              className="flex-1 text-left text-sm sm:text-base text-gray-600 dark:text-gray-400 hover:text-amber-600 dark:hover:text-amber-400 transition-colors font-medium"
-                            >
-                              Click to reveal hint {index + 1}
-                            </button>
-                          )}
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                )}
-              </div>
-            )}
-
-            {/* Constraints Section - From Database */}
-            {question.constraints && question.constraints.length > 0 && (
-              <div className="mt-9 sm:mt-11">
-                <h3 className="text-xl sm:text-2xl font-extrabold text-gray-900 dark:text-white mb-6 tracking-tight">
-                  Constraints
-                </h3>
-                <div className="bg-gradient-to-br from-indigo-50/50 via-white to-indigo-50/30 dark:from-indigo-900/20 dark:via-gray-800/60 dark:to-indigo-900/20 rounded-2xl p-5 sm:p-6 border-2 border-indigo-200/60 dark:border-indigo-800/60 shadow-lg">
-                  <ul className="space-y-3 text-sm sm:text-base text-gray-800 dark:text-gray-200 list-disc list-inside marker:text-indigo-600 dark:marker:text-indigo-400 font-medium">
-                    {question.constraints.map((constraint, index) => (
-                      <li key={`constraint-${index}-${constraint.substring(0, 20)}`}>{constraint}</li>
-                    ))}
-                  </ul>
-                </div>
-              </div>
-            )}
-          </div>
-        </div>
-      )}
+      />
 
       {/* Right Panel - Code Editor and Test Cases (LeetCode Style) */}
       <div
@@ -1423,18 +1480,18 @@ export default function ProblemSolvingQuestion({
                           return "bg-red-50 text-red-700 dark:bg-red-900/20 dark:text-red-300 border-red-200 dark:border-red-800";
                         };
                         return (
-                          <button
+                        <button
                             key={`test-result-${index}-${result.passed ? "passed" : "failed"}`}
-                            onClick={() => setSelectedTestCaseIndex(index)}
+                          onClick={() => setSelectedTestCaseIndex(index)}
                             className={`px-2 sm:px-3 py-1 text-xs font-medium rounded border transition-colors whitespace-nowrap ${getButtonClassName()}`}
                         >
                             {result.passed ? (
-                              <CheckCircle className="w-3 h-3 inline mr-1" />
-                            ) : (
-                              <XCircle className="w-3 h-3 inline mr-1" />
-                            )}
-                            Case {index + 1}
-                          </button>
+                            <CheckCircle className="w-3 h-3 inline mr-1" />
+                          ) : (
+                            <XCircle className="w-3 h-3 inline mr-1" />
+                          )}
+                          Case {index + 1}
+                        </button>
                         );
                       })}
                     </div>
