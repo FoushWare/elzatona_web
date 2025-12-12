@@ -462,7 +462,7 @@ const OptionText = ({ text }: { text: string }) => {
 
 // Utility function to clean question titles
 // Since database is clean, we just need minimal processing
-const cleanQuestionTitle = (title: string): string => {
+const _cleanQuestionTitle = (title: string): string => {
   if (!title || typeof title !== "string") return title || "";
   // Database is clean, so just trim and return
   return title.trim();
@@ -639,7 +639,7 @@ const formatCodeContent = (code: string): string => {
 
 function GuidedPracticePageContent() {
   const searchParams = useSearchParams();
-  const router = useRouter();
+  const _router = useRouter();
   const { addNotification } = useNotifications();
   const { setLearningType } = useLearningType();
   const planId = searchParams?.get("plan");
@@ -1208,7 +1208,7 @@ function GuidedPracticePageContent() {
     }
   };
 
-  const markTopicCompleted = (topicId: string) => {
+  const _markTopicCompleted = (topicId: string) => {
     if (!progress) return;
     const updatedProgress = {
       ...progress,
@@ -1218,7 +1218,7 @@ function GuidedPracticePageContent() {
     saveProgress(updatedProgress);
   };
 
-  const markCategoryCompleted = (categoryId: string) => {
+  const _markCategoryCompleted = (categoryId: string) => {
     if (!progress) return;
     const updatedProgress = {
       ...progress,
@@ -1228,7 +1228,7 @@ function GuidedPracticePageContent() {
     saveProgress(updatedProgress);
   };
 
-  const markCardCompleted = (cardId: string) => {
+  const _markCardCompleted = (cardId: string) => {
     if (!progress) return;
     const updatedProgress = {
       ...progress,
@@ -2499,7 +2499,7 @@ function GuidedPracticePageContent() {
 
   // Helper function to extract code for code editor preview
   // Since database is clean (no HTML tags), we just normalize the code
-  const extractCodeForEditor = (content: string): string => {
+  const _extractCodeForEditor = (content: string): string => {
     if (!content || typeof content !== "string") return "";
 
     try {
@@ -2594,7 +2594,7 @@ function GuidedPracticePageContent() {
     }
   }, [currentQuestion]);
 
-  const getOptionClasses = (option: string) => {
+  const _getOptionClasses = (option: string) => {
     if (!currentAnswer) {
       return "w-full text-left p-3 sm:p-4 rounded-lg border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-900 dark:text-white transition-colors";
     }

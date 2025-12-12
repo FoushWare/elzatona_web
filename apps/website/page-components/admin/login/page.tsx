@@ -12,8 +12,12 @@ export default function AdminLoginPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState("");
 
-  const { isAuthenticated, isLoading, login } = useAdminAuth();
-  const router = useRouter();
+  const {
+    isAuthenticated: _isAuthenticated,
+    isLoading,
+    login,
+  } = useAdminAuth();
+  const _router = useRouter();
 
   // Redirect is now handled by AdminAuthProvider context
   // No need for local redirect logic here

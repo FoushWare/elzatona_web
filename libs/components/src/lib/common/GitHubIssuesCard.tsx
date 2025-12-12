@@ -25,7 +25,7 @@ import {
   ExternalLink,
   AlertCircle,
   CheckCircle,
-  TrendingUp as _TrendingUp,
+  _TrendingUp as _TrendingUp,
 } from "lucide-react";
 
 interface GitHubIssuesCardProps {

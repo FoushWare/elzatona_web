@@ -15,7 +15,7 @@ import {
   Save,
   Loader2,
   AlertCircle,
-  CheckCircle as _CheckCircle,
+  _CheckCircle as _CheckCircle,
   ChevronDown,
   ChevronRight,
   Eye,
@@ -1407,7 +1407,7 @@ export default function CustomRoadmapPage() {
   };
 
   // Question selection handler (legacy for Step 3 sections)
-  const handleQuestionToggle = (sectionId: string, question_id: string) => {
+  const _handleQuestionToggle = (sectionId: string, question_id: string) => {
     setSections((prev) =>
       prev.map((section) => {
         if (section.id === sectionId) {
@@ -1425,7 +1425,7 @@ export default function CustomRoadmapPage() {
 
   // Legacy handlers for backward compatibility (not used in new UI but kept for Step 3)
   // Section selection handlers - select all questions when section is selected
-  const handleSectionToggle = (sectionId: string) => {
+  const _handleSectionToggle = (sectionId: string) => {
     const newSelectedSections = new Set(selectedSections);
     if (newSelectedSections.has(sectionId)) {
       newSelectedSections.delete(sectionId);
@@ -1457,7 +1457,7 @@ export default function CustomRoadmapPage() {
     setSelectedSections(newSelectedSections);
   };
 
-  const handleSelectAllQuestions = (sectionId: string) => {
+  const _handleSelectAllQuestions = (sectionId: string) => {
     setSections((prev) =>
       prev.map((section) => {
         if (section.id === sectionId) {
@@ -1469,7 +1469,7 @@ export default function CustomRoadmapPage() {
     );
   };
 
-  const handleClearAllQuestions = (sectionId: string) => {
+  const _handleClearAllQuestions = (sectionId: string) => {
     setSections((prev) =>
       prev.map((section) => {
         if (section.id === sectionId) {

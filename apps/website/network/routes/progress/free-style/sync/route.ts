@@ -94,7 +94,7 @@ export async function POST(request: NextRequest) {
 
     // Store progress data in JSONB format in user_progress table
     // Use a special plan_id like 'free-style-practice' to identify free-style progress
-    const { data, error } = await supabase.from("user_progress").upsert(
+    const { data: _data, error } = await supabase.from("user_progress").upsert(
       {
         user_id: userId,
         plan_id: "free-style-practice", // Special identifier for free-style practice
