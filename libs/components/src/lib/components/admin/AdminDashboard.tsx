@@ -12,7 +12,7 @@ import {
   Code,
   Calculator,
   BarChart3,
-  _FolderOpen as _FolderOpen,
+  FolderOpen as _FolderOpen,
   Users,
   Database,
   TrendingUp,
@@ -23,14 +23,11 @@ import {
   Zap,
   Star,
   ArrowRight,
-  _Plus as _Plus,
   _Eye as _Eye,
-  _Edit as _Edit,
   _Trash2 as _Trash2,
   RefreshCw,
   AlertCircle,
-  _Info as _Info,
-  _ExternalLink as _ExternalLink,
+  Info as _Info,
 } from "lucide-react";
 
 export default function AdminDashboard() {

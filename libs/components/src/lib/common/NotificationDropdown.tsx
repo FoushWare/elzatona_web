@@ -22,7 +22,7 @@ interface NotificationDropdownProps {
 export function NotificationDropdown({
   userId: _userId,
   adminId: _adminId,
-}: NotificationDropdownProps) {
+}: Readonly<NotificationDropdownProps>) {
   const {
     notifications,
     unreadCount,
