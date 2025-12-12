@@ -19,4 +19,3 @@ export function sanitizeText(text: string): string {
   // Use DOMPurify to remove all HTML tags and attributes
   return DOMPurify.sanitize(text, { ALLOWED_TAGS: [] });
 }
-
