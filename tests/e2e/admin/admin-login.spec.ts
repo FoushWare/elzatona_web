@@ -206,8 +206,8 @@ test.describe("A-E2E-002: Admin Login Flow", () => {
           `Current values: ADMIN_EMAIL=${adminEmail ? "***" : "undefined"}, ADMIN_PASSWORD=${adminPassword ? "***" : "undefined"}\n` +
           `Please check your .env.test.local file (lines 18-19) and ensure both variables are set with valid values.\n` +
           "Example (in .env.test.local):\n" +
-          "ADMIN_EMAIL=elzatonafoushware@gmail.com\n" +
-          "ADMIN_PASSWORD=ZatonaFoushware$12",
+          "ADMIN_EMAIL=<your-admin-email>\n" +
+          "ADMIN_PASSWORD=<your-admin-password>",
       );
     }
 
@@ -401,8 +401,8 @@ test.describe("A-E2E-002: Admin Login Flow", () => {
           `Current values: ADMIN_EMAIL=${adminEmail ? "***" : "undefined"}, ADMIN_PASSWORD=${adminPassword ? "***" : "undefined"}\n` +
           `Please check your .env.test.local file (lines 18-19) and ensure both variables are set with valid values.\n` +
           "Example (in .env.test.local):\n" +
-          "ADMIN_EMAIL=elzatonafoushware@gmail.com\n" +
-          "ADMIN_PASSWORD=ZatonaFoushware$12",
+          "ADMIN_EMAIL=<your-admin-email>\n" +
+          "ADMIN_PASSWORD=<your-admin-password>",
       );
     }
 
