@@ -10,8 +10,8 @@ import {
 import {
   BookOpen,
   Trash2,
-  Play,
-  RotateCcw,
+  _Play,
+  _RotateCcw,
   ArrowLeft,
   ArrowRight,
   FlipHorizontal,

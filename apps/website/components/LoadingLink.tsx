@@ -26,7 +26,7 @@ export function LoadingLink({
   const _router = useRouter();
   const { setIsNavigating } = useNavigation();
 
-  const handleClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+  const handleClick = (_e: React.MouseEvent<HTMLAnchorElement>) => {
     // Set navigating state
     setIsNavigating(true);
 

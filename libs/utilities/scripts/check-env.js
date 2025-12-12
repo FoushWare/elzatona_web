@@ -29,7 +29,7 @@ for (const envFile of envFiles) {
       config({ path: envFile, override: false });
       loadedFiles.push(envFile);
     }
-  } catch (error) {
+  } catch (_error) {
     // Ignore
   }
 }

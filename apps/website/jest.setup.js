@@ -15,7 +15,7 @@ const envFiles = [
 for (const envFile of envFiles) {
   try {
     config({ path: envFile, override: false }); // Don't override, respect priority
-  } catch (error) {
+  } catch (_error) {
     // File doesn't exist, that's okay
   }
 }

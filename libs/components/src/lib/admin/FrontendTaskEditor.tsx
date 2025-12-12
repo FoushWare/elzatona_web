@@ -2,19 +2,19 @@
 
 "use client";
 
-import React, { useState, useEffect, useMemo, useRef, ReactNode } from "react";
+import React, { useState, useEffect, useMemo, useRef } from "react";
 import { Editor } from "@monaco-editor/react";
 import {
-  Play,
+  _Play,
   Save,
   FileText,
-  FolderPlus,
-  FilePlus,
-  Trash2,
+  _FolderPlus,
+  _FilePlus,
+  _Trash2,
   Eye,
   Code,
-  Palette,
-  Settings,
+  _Palette,
+  _Settings,
   Plus,
   X,
   ArrowLeft,
@@ -23,11 +23,11 @@ import {
   Monitor,
   Folder,
   FolderOpen,
-  Circle,
+  _Circle,
   AlertCircle,
-  CheckCircle,
+  _CheckCircle,
   Clock,
-  Target,
+  _Target,
   Flame,
   Copy,
   Check,
@@ -270,7 +270,7 @@ export default function FrontendTaskEditor({
   }, [task]);
 
   // Resize handlers
-  const handleMouseDown = (e: React.MouseEvent, panel: "left" | "right") => {
+  const handleMouseDown = (e: React.MouseEvent, _panel: "left" | "right") => {
     e.preventDefault();
     setIsResizing(true);
     setResizeStartX(e.clientX);

@@ -71,7 +71,7 @@ test.describe("A-E2E-001: Admin Bulk Question Addition - Pagination", () => {
         if (data.success && data.pagination) {
           currentCount = data.pagination.totalCount || 0;
         }
-      } catch (e) {
+      } catch (_e) {
         // API call failed, fall back to counting visible rows
         const questionRows = page
           .locator("div")
@@ -333,7 +333,7 @@ test.describe("A-E2E-001: Admin Bulk Question Addition - Pagination", () => {
           return;
         }
       }
-    } catch (e) {
+    } catch (_e) {
       // If we can't check, continue anyway
       console.log("⚠️ Could not verify question count, continuing...");
     }
@@ -356,7 +356,7 @@ test.describe("A-E2E-001: Admin Bulk Question Addition - Pagination", () => {
         trigger = comboboxInContainer.first();
         console.log("✅ Found page size selector using container method");
       }
-    } catch (e) {
+    } catch (_e) {
       console.log("⚠️ Container method failed, trying alternative...");
     }
 
@@ -393,7 +393,7 @@ test.describe("A-E2E-001: Admin Bulk Question Addition - Pagination", () => {
             }
           }
         }
-      } catch (e) {
+      } catch (_e) {
         console.log("⚠️ Proximity method failed");
       }
     }
@@ -449,7 +449,7 @@ test.describe("A-E2E-001: Admin Bulk Question Addition - Pagination", () => {
         .first()
         .textContent({ timeout: 5000 })
         .catch(() => null);
-    } catch (e: any) {
+    } catch (_e: any) {
       // If page is actually closed, Playwright will throw a proper error
       // Just log and continue - the click attempt will fail if page is really closed
       console.log('⚠️ Could not get "Showing" text, continuing anyway...');
@@ -470,7 +470,7 @@ test.describe("A-E2E-001: Admin Bulk Question Addition - Pagination", () => {
       // Verify trigger is ready (quick check, don't wait too long)
       try {
         await trigger.waitFor({ state: "visible", timeout: 3000 });
-      } catch (e) {
+      } catch (_e) {
         // If not visible, try to find it again
         console.log("⚠️ Trigger not immediately visible, re-finding...");
         const newTrigger = page.locator('button[role="combobox"]').first();

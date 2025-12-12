@@ -143,7 +143,7 @@ const CollapsibleContent = React.lazy(() =>
 );
 import { Modal } from "@elzatona/components";
 import { ViewQuestionModal } from "../content/questions/components/ViewQuestionModal";
-import { StatsSection } from "./components/StatsSection";
+import {} from "./components/StatsSection";
 import { CategoriesList } from "./components/CategoriesList";
 import { TopicsList } from "./components/TopicsList";
 import { SearchAndFilters } from "./components/SearchAndFilters";
@@ -164,8 +164,8 @@ import {
   Users,
   Calendar,
   Target,
-  Search,
-  X,
+  Search as _Search,
+  X as _X,
   Eye,
   CheckSquare,
   Square,

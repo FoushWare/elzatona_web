@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 
-interface Flashcard {
+interface _Flashcard {
   question: string;
   answer: string;
   explanation: string;

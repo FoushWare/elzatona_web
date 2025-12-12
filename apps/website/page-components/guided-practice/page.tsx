@@ -9,10 +9,10 @@ import {
   Clock,
   Target,
   BookOpen,
-  Play,
+  _Play,
   ArrowRight,
   Loader2,
-  Zap,
+  _Zap,
   XCircle,
   Info,
   BookmarkPlus,
@@ -29,8 +29,8 @@ import { addToCart } from "@/lib/cart";
 import { useNotifications } from "../../components/NotificationSystem";
 import { useLearningType } from "../../context/LearningTypeContext";
 import ProblemSolvingQuestion from "../../components/ProblemSolvingQuestion";
-import CodeEditor from "../../components/CodeEditor";
-import { QuestionContent, isValidCode } from "@elzatona/components";
+// import _CodeEditor from "../../components/_CodeEditor";
+import { QuestionContent } from "@elzatona/components";
 import { createHighlighter, type Highlighter } from "shiki";
 
 interface Resource {
@@ -172,7 +172,7 @@ const cleanOptionText = (text: string): string => {
         const textarea = document.createElement("textarea");
         textarea.innerHTML = decoded;
         decoded = textarea.value;
-      } catch (e) {
+      } catch (_e) {
         // Fallback to string replacement if DOM API fails
       }
     }

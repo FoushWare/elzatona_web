@@ -4,7 +4,7 @@
  */
 
 import React from "react";
-import { render, screen, fireEvent, waitFor } from "@testing-library/react";
+import { render, screen, waitFor } from "@testing-library/react";
 import "@testing-library/jest-dom";
 import MyPlansPage from "./page";
 import * as sharedContexts from "@elzatona/contexts";

@@ -19,7 +19,7 @@ import {
   Compass,
   User,
   LogOut,
-  Settings,
+  Settings as _Settings,
   Loader2,
 } from "lucide-react";
 import {
