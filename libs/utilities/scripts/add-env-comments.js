@@ -123,6 +123,13 @@ try {
   }
 
   // Write updated content
+  // SECURITY: Check file hasn't changed since read to prevent race condition
+  const currentStats = fs.statSync(envFilePath);
+  if (currentStats.mtime.getTime() !== originalStats.mtime.getTime()) {
+    console.warn("⚠️  File was modified during processing. Retrying...");
+    // Re-read file and retry
+    return addCommentsToEnvFile(envFile);
+  }
   const updatedContent = updatedLines.join("\n");
   fs.writeFileSync(envFilePath, updatedContent, "utf8");
 
