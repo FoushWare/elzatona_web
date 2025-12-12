@@ -44,7 +44,7 @@ export default function AdminDashboard() {
   const {
     data: stats,
     isLoading: loading,
-    error: statsError,
+    error: _statsError,
     refetch: refetchStats,
     isRefetching: refreshing,
   } = useAdminStats();
@@ -53,7 +53,7 @@ export default function AdminDashboard() {
     refetchStats();
   };
 
-  const adminMenuItems = [
+  const _adminMenuItems = [
     {
       href: "/admin/content/questions",
       label: "Questions",

@@ -71,74 +71,10 @@ const Button = React.lazy(() =>
     default: module.Button,
   })),
 );
-const Input = React.lazy(() =>
-  import("@elzatona/components").then((module) => ({
-    default: module.Input,
-  })),
-);
-const Badge = React.lazy(() =>
-  import("@elzatona/components").then((module) => ({
-    default: module.Badge,
-  })),
-);
-const Card = React.lazy(() =>
-  import("@elzatona/components").then((module) => ({
-    default: module.Card,
-  })),
-);
-const CardContent = React.lazy(() =>
-  import("@elzatona/components").then((module) => ({
-    default: module.CardContent,
-  })),
-);
-const CardHeader = React.lazy(() =>
-  import("@elzatona/components").then((module) => ({
-    default: module.CardHeader,
-  })),
-);
+// Removed unused lazy-loaded components: Input, Badge, Card, CardContent, CardHeader, Select, SelectContent, SelectItem, SelectTrigger, SelectValue, Collapsible, CollapsibleTrigger, CollapsibleContent
 const CardTitle = React.lazy(() =>
   import("@elzatona/components").then((module) => ({
     default: module.CardTitle,
-  })),
-);
-const Select = React.lazy(() =>
-  import("@elzatona/components").then((module) => ({
-    default: module.Select,
-  })),
-);
-const SelectContent = React.lazy(() =>
-  import("@elzatona/components").then((module) => ({
-    default: module.SelectContent,
-  })),
-);
-const SelectItem = React.lazy(() =>
-  import("@elzatona/components").then((module) => ({
-    default: module.SelectItem,
-  })),
-);
-const SelectTrigger = React.lazy(() =>
-  import("@elzatona/components").then((module) => ({
-    default: module.SelectTrigger,
-  })),
-);
-const SelectValue = React.lazy(() =>
-  import("@elzatona/components").then((module) => ({
-    default: module.SelectValue,
-  })),
-);
-const Collapsible = React.lazy(() =>
-  import("@elzatona/components").then((module) => ({
-    default: module.Collapsible,
-  })),
-);
-const CollapsibleTrigger = React.lazy(() =>
-  import("@elzatona/components").then((module) => ({
-    default: module.CollapsibleTrigger,
-  })),
-);
-const CollapsibleContent = React.lazy(() =>
-  import("@elzatona/components").then((module) => ({
-    default: module.CollapsibleContent,
   })),
 );
 import { Modal } from "@elzatona/components";
@@ -164,8 +100,8 @@ import {
   Users,
   Calendar,
   Target,
-  Search as _Search,
-  X as _X,
+  _Search as _Search,
+  _X as _X,
   Eye,
   CheckSquare,
   Square,
@@ -498,27 +434,21 @@ export default function UnifiedAdminPage() {
   const [isDeleteCardModalOpen, setIsDeleteCardModalOpen] = useState(false);
   const [isDeletePlanModalOpen, setIsDeletePlanModalOpen] = useState(false);
   // Unused delete modal states - kept for potential future use
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [isDeleteCategoryModalOpen, setIsDeleteCategoryModalOpen] =
+  const [_isDeleteCategoryModalOpen, _setIsDeleteCategoryModalOpen] =
     useState(false);
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [isDeleteTopicModalOpen, setIsDeleteTopicModalOpen] = useState(false);
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [isDeleteQuestionModalOpen, setIsDeleteQuestionModalOpen] =
+  const [_isDeleteTopicModalOpen, _setIsDeleteTopicModalOpen] = useState(false);
+  const [_isDeleteQuestionModalOpen, _setIsDeleteQuestionModalOpen] =
     useState(false);
 
   // Item to delete states
   const [cardToDelete, setCardToDelete] = useState<LearningCard | null>(null);
   const [planToDelete, setPlanToDelete] = useState<LearningPlan | null>(null);
   // Unused delete states - kept for potential future use
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [categoryToDelete, setCategoryToDelete] = useState<Category | null>(
+  const [_categoryToDelete, _setCategoryToDelete] = useState<Category | null>(
     null,
   );
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [topicToDelete, setTopicToDelete] = useState<Topic | null>(null);
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [questionToDelete, setQuestionToDelete] =
+  const [_topicToDelete, _setTopicToDelete] = useState<Topic | null>(null);
+  const [_questionToDelete, _setQuestionToDelete] =
     useState<UnifiedQuestion | null>(null);
 
   const [editingCard, setEditingCard] = useState<LearningCard | null>(null);
@@ -529,8 +459,7 @@ export default function UnifiedAdminPage() {
     useState<UnifiedQuestion | null>(null);
 
   // Questions state
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [questionsByTopic, setQuestionsByTopic] = useState<
+  const [_questionsByTopic, _setQuestionsByTopic] = useState<
     Record<
       string,
       { id: string; title: string; difficulty: string; type: string }[]

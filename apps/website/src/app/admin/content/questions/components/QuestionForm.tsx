@@ -48,8 +48,8 @@ export function QuestionForm({
   onSubmit,
   onCancel,
   cards,
-  allCategories: _allCategories,
-  allTags: _allTags,
+  _allCategories: _allCategories,
+  _allTags: _allTags,
   categoriesData,
   topicsData,
   disabled = false,
@@ -163,7 +163,7 @@ export function QuestionForm({
       initialData,
     });
 
-    const normalizedResources = normalizeResources(
+    const _normalizedResources = normalizeResources(
       (initialData as any).resources,
     );
 

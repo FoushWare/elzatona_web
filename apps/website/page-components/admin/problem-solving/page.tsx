@@ -8,7 +8,7 @@ import React, { useState, useMemo, useCallback } from "react";
 import { Plus, Edit, Trash2, Eye, Search, Play } from "lucide-react";
 import {
   ClientCodeRunner,
-  TestCase as _TestCase,
+  _TestCase as _TestCase,
   ProblemSolvingEditor,
 } from "@elzatona/components";
 import { ProblemSolvingTask, ProblemSolvingTaskFormData } from "@/types/admin";
@@ -24,7 +24,7 @@ export default function ProblemSolvingAdminPage() {
   const {
     data: tasksData,
     isLoading: tasksLoading,
-    error: tasksError,
+    error: _tasksError,
   } = useProblemSolvingTasks();
 
   // Mutation hooks
