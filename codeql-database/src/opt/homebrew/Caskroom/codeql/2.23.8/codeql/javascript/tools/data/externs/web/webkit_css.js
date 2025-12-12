@@ -447,7 +447,7 @@ CSSProperties.prototype.webkitMatchNearestMailBlockquoteColor;
  * @param {number} x
  * @param {number} y
  */
-function WebKitPoint(x, y) {}
+function WebKitPoint(_x, _y) {}
 
 /** @type {number} */
 WebKitPoint.prototype.x;

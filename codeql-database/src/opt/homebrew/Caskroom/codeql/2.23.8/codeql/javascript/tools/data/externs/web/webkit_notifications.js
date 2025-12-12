@@ -26,19 +26,19 @@
  *            actions: (!Array<!NotificationAction>|undefined)}}
  * @see http://notifications.spec.whatwg.org/#notificationoptions
  */
-var NotificationOptions;
+var _NotificationOptions;
 
 /**
  * @typedef {{action: string, title: string, icon: (string|undefined)}}
  * @see https://notifications.spec.whatwg.org/#dictdef-notificationoptions
  */
-var NotificationAction;
+var _NotificationAction;
 
 /**
  * @typedef {{tag: (string|undefined)}}
  * @see https://notifications.spec.whatwg.org/#dictdef-getnotificationoptions
  */
-var GetNotificationOptions;
+var _GetNotificationOptions;
 
 /** @interface */
 var NotificationOptionsInterface_ = function () {};
@@ -57,7 +57,7 @@ NotificationOptionsInterface_.prototype.requireInteraction;
  * @implements {EventTarget}
  * @see http://notifications.spec.whatwg.org/#notification
  */
-function Notification(title, opt_options) {}
+function Notification(_title, _opt_options) {}
 
 /**
  * @type {string}
@@ -68,7 +68,7 @@ Notification.permission;
  * @param {NotificationPermissionCallback=} opt_callback
  * @return {!Promise<string>}
  */
-Notification.requestPermission = function (opt_callback) {};
+Notification.requestPermission = function (_opt_callback) {};
 
 /**
  * @param {boolean=} opt_useCapture
@@ -76,9 +76,9 @@ Notification.requestPermission = function (opt_callback) {};
  * @return {undefined}
  */
 Notification.prototype.addEventListener = function (
-  type,
-  listener,
-  opt_useCapture,
+  _type,
+  _listener,
+  _opt_useCapture,
 ) {};
 
 /**
@@ -87,16 +87,16 @@ Notification.prototype.addEventListener = function (
  * @return {undefined}
  */
 Notification.prototype.removeEventListener = function (
-  type,
-  listener,
-  opt_useCapture,
+  _type,
+  _listener,
+  _opt_useCapture,
 ) {};
 
 /**
  * @override
  * @return {boolean}
  */
-Notification.prototype.dispatchEvent = function (evt) {};
+Notification.prototype.dispatchEvent = function (_evt) {};
 
 /**
  * @type {string}
@@ -191,7 +191,7 @@ Notification.prototype.onclick;
  * @typedef {function(string)}
  * @see http://notifications.spec.whatwg.org/#notificationpermissioncallback
  */
-var NotificationPermissionCallback;
+var _NotificationPermissionCallback;
 
 /**
  * @constructor
@@ -208,9 +208,9 @@ function NotificationCenter() {}
  * @return {Notification}
  */
 NotificationCenter.prototype.createNotification = function (
-  iconUrl,
-  title,
-  body,
+  _iconUrl,
+  _title,
+  _body,
 ) {};
 
 /**
@@ -218,7 +218,7 @@ NotificationCenter.prototype.createNotification = function (
  * @param {string} url
  * @return {Notification}
  */
-NotificationCenter.prototype.createHTMLNotification = function (url) {};
+NotificationCenter.prototype.createHTMLNotification = function (_url) {};
 
 /**
  * Checks if the user has permission to display notifications.
@@ -231,7 +231,7 @@ NotificationCenter.prototype.checkPermission = function () {};
  * @param {Function=} opt_callback
  * @return {void}
  */
-NotificationCenter.prototype.requestPermission = function (opt_callback) {};
+NotificationCenter.prototype.requestPermission = function (_opt_callback) {};
 
 /**
  * WebKit browsers expose the NotificationCenter API through
@@ -247,7 +247,7 @@ Window.prototype.webkitNotifications;
  * @param {!ExtendableEventInit=} opt_eventInitDict
  * @extends {ExtendableEvent}
  */
-function NotificationEvent(type, opt_eventInitDict) {}
+function NotificationEvent(_type, _opt_eventInitDict) {}
 
 /** @type {?Notification} */
 NotificationEvent.prototype.notification;

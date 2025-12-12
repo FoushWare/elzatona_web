@@ -25,33 +25,33 @@
  * @typedef {{name: PermissionName}}
  * @see https://w3c.github.io/permissions/#permission-descriptor
  */
-var PermissionDescriptor;
+var _PermissionDescriptor;
 
 /**
  * @typedef {{name: PermissionName, userVisibleOnly: boolean}}
  * @see https://w3c.github.io/permissions/#push
  */
-var PushPermissionDescriptor;
+var _PushPermissionDescriptor;
 
 /**
  * @typedef {{name: PermissionName, sysex: boolean}}
  * @see https://w3c.github.io/permissions/#midi
  */
-var MidiPermissionDescriptor;
+var _MidiPermissionDescriptor;
 
 /**
  * Set of possible values: 'geolocation', 'notifications', 'push', 'midi'.
  * @typedef {string}
  * @see https://w3c.github.io/permissions/#idl-def-PermissionName
  */
-var PermissionName;
+var _PermissionName;
 
 /**
  * Set of possible values: 'granted', 'denied', 'prompt'.
  * @typedef {string}
  * @see https://w3c.github.io/permissions/#idl-def-PermissionState
  */
-var PermissionState;
+var _PermissionState;
 
 /**
  * @constructor
@@ -78,9 +78,9 @@ PermissionStatus.prototype.onchange;
  * @return {undefined}
  */
 PermissionStatus.prototype.addEventListener = function (
-  type,
-  listener,
-  opt_useCapture,
+  _type,
+  _listener,
+  _opt_useCapture,
 ) {};
 
 /**
@@ -89,15 +89,15 @@ PermissionStatus.prototype.addEventListener = function (
  * @return {undefined}
  */
 PermissionStatus.prototype.removeEventListener = function (
-  type,
-  listener,
-  opt_useCapture,
+  _type,
+  _listener,
+  _opt_useCapture,
 ) {};
 /**
  * @override
  * @return {boolean}
  */
-PermissionStatus.prototype.dispatchEvent = function (evt) {};
+PermissionStatus.prototype.dispatchEvent = function (_evt) {};
 
 /**
  * @constructor
@@ -110,7 +110,7 @@ function Permissions() {}
  * @return {!Promise<!PermissionStatus>}
  * @see https://w3c.github.io/permissions/#dom-permissions-query
  */
-Permissions.prototype.query = function (permission) {};
+Permissions.prototype.query = function (_permission) {};
 
 /** @type {Permissions} */
 Navigator.prototype.permissions;

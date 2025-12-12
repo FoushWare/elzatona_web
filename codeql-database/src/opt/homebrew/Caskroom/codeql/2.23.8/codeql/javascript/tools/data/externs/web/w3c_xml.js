@@ -70,14 +70,14 @@ function XPathEvaluator() {}
  * @throws DOMException
  * @return {undefined}
  */
-XPathEvaluator.prototype.createExpression = function (expr, opt_resolver) {};
+XPathEvaluator.prototype.createExpression = function (_expr, _opt_resolver) {};
 
 /**
  * @param {Node} nodeResolver
  * @see http://www.w3.org/TR/DOM-Level-3-XPath/xpath.html#XPathEvaluator-createNSResolver
  * @return {undefined}
  */
-XPathEvaluator.prototype.createNSResolver = function (nodeResolver) {};
+XPathEvaluator.prototype.createNSResolver = function (_nodeResolver) {};
 
 /**
  * @param {string} expr
@@ -91,11 +91,11 @@ XPathEvaluator.prototype.createNSResolver = function (nodeResolver) {};
  * @see http://www.w3.org/TR/DOM-Level-3-XPath/xpath.html#XPathEvaluator-evaluate
  */
 XPathEvaluator.prototype.evaluate = function (
-  expr,
-  contextNode,
-  opt_resolver,
-  opt_type,
-  opt_result,
+  _expr,
+  _contextNode,
+  _opt_resolver,
+  _opt_type,
+  _opt_result,
 ) {};
 
 /**
@@ -114,9 +114,9 @@ function XPathExpression() {}
  * @see http://www.w3.org/TR/DOM-Level-3-XPath/xpath.html#XPathExpression-evaluate
  */
 XPathExpression.prototype.evaluate = function (
-  contextNode,
-  opt_type,
-  opt_result,
+  _contextNode,
+  _opt_type,
+  _opt_result,
 ) {};
 
 /**
@@ -130,7 +130,7 @@ function XPathNSResolver() {}
  * @return {?string}
  * @see http://www.w3.org/TR/DOM-Level-3-XPath/xpath.html#XPathNSResolver-lookupNamespaceURI
  */
-XPathNSResolver.prototype.lookupNamespaceURI = function (prefix) {};
+XPathNSResolver.prototype.lookupNamespaceURI = function (_prefix) {};
 
 /**
  * From http://www.w3.org/TR/xpath
@@ -205,7 +205,7 @@ XPathResult.prototype.iterateNext = function () {};
  * @throws XPathException
  * @see http://www.w3.org/TR/DOM-Level-3-XPath/xpath.html#XPathResult-snapshotItem
  */
-XPathResult.prototype.snapshotItem = function (index) {};
+XPathResult.prototype.snapshotItem = function (_index) {};
 
 /**
  * @type {number}
@@ -307,9 +307,9 @@ function XMLHttpRequest() {}
  * @return {undefined}
  */
 XMLHttpRequest.prototype.addEventListener = function (
-  type,
-  listener,
-  opt_useCapture,
+  _type,
+  _listener,
+  _opt_useCapture,
 ) {};
 
 /**
@@ -318,16 +318,16 @@ XMLHttpRequest.prototype.addEventListener = function (
  * @return {undefined}
  */
 XMLHttpRequest.prototype.removeEventListener = function (
-  type,
-  listener,
-  opt_useCapture,
+  _type,
+  _listener,
+  _opt_useCapture,
 ) {};
 
 /**
  * @override
  * @return {boolean}
  */
-XMLHttpRequest.prototype.dispatchEvent = function (evt) {};
+XMLHttpRequest.prototype.dispatchEvent = function (_evt) {};
 
 /**
  * @param {string} method
@@ -339,11 +339,11 @@ XMLHttpRequest.prototype.dispatchEvent = function (evt) {};
  * @see http://www.w3.org/TR/XMLHttpRequest/#the-open()-method
  */
 XMLHttpRequest.prototype.open = function (
-  method,
-  url,
-  opt_async,
-  opt_user,
-  opt_password,
+  _method,
+  _url,
+  _opt_async,
+  _opt_user,
+  _opt_password,
 ) {};
 
 /**
@@ -352,14 +352,14 @@ XMLHttpRequest.prototype.open = function (
  * @return {undefined}
  * @see http://www.w3.org/TR/XMLHttpRequest/#the-setrequestheader()-method
  */
-XMLHttpRequest.prototype.setRequestHeader = function (header, value) {};
+XMLHttpRequest.prototype.setRequestHeader = function (_header, _value) {};
 
 /**
  * @param {ArrayBuffer|ArrayBufferView|Blob|Document|FormData|string=} opt_data
  * @return {undefined}
  * @see http://www.w3.org/TR/XMLHttpRequest/#the-send()-method
  */
-XMLHttpRequest.prototype.send = function (opt_data) {};
+XMLHttpRequest.prototype.send = function (_opt_data) {};
 
 /**
  * @return {undefined}
@@ -378,7 +378,7 @@ XMLHttpRequest.prototype.getAllResponseHeaders = function () {};
  * @return {string}
  * @see http://www.w3.org/TR/XMLHttpRequest/#the-getresponseheader()-method
  */
-XMLHttpRequest.prototype.getResponseHeader = function (header) {};
+XMLHttpRequest.prototype.getResponseHeader = function (_header) {};
 
 /**
  * @type {string}
@@ -468,7 +468,7 @@ XMLHttpRequest.DONE;
  * @constructor
  * @see http://www.w3.org/TR/XMLHttpRequest2/#the-formdata-interface
  */
-function FormData(opt_form) {}
+function FormData(_opt_form) {}
 
 /**
  * @param {string} name
@@ -476,4 +476,4 @@ function FormData(opt_form) {}
  * @param {string=} opt_filename
  * @return {undefined}
  */
-FormData.prototype.append = function (name, value, opt_filename) {};
+FormData.prototype.append = function (_name, _value, _opt_filename) {};
