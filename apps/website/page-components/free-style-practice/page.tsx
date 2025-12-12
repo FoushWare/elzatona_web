@@ -8,13 +8,11 @@ import {
   ArrowRight,
   CheckCircle,
   XCircle,
-  Filter,
   Search,
   BookOpen,
   Loader2,
   Target,
   TrendingUp,
-  Clock,
   Star,
   BookmarkPlus,
   BookmarkCheck,
@@ -22,7 +20,6 @@ import {
   BarChart3,
 } from "lucide-react";
 import { useUserType, useAuth } from "@elzatona/contexts";
-import { QuestionContent as SharedQuestionContent } from "@elzatona/components";
 import { addFlashcard, isInFlashcards, FlashcardItem } from "@/lib/flashcards";
 
 interface Question {
@@ -526,7 +523,8 @@ const QuestionContent = ({ content }: { content: string }) => {
     if (typeof window !== "undefined") {
       try {
         const textarea = document.createElement("textarea");
-        textarea.innerHTML = decoded;
+        // Use textContent instead of innerHTML to prevent XSS
+        textarea.textContent = decoded;
         decoded = textarea.value;
       } catch (_e) {
         // Fallback
@@ -650,7 +648,12 @@ const QuestionContent = ({ content }: { content: string }) => {
     while (code !== previousCode && iterations < maxIterations) {
       previousCode = code;
       code = decodeHtmlEntities(code);
-      code = code.replace(/<\/?[a-zA-Z][a-zA-Z0-9]*(?:\s+[^>]*)?>/gi, "");
+      // Comprehensive HTML tag removal: remove script/style tags with content, comments, then all tags
+      code = code
+        .replace(/<script[\s\S]*?<\/script>/gi, "") // Remove script tags and content
+        .replace(/<style[\s\S]*?<\/style>/gi, "") // Remove style tags and content
+        .replace(/<!--[\s\S]*?-->/g, "") // Remove HTML comments
+        .replace(/<\/?[a-zA-Z][a-zA-Z0-9]*(?:\s+[^>]*)?>/gi, ""); // Remove remaining HTML tags
       iterations++;
     }
 
@@ -682,17 +685,22 @@ const QuestionContent = ({ content }: { content: string }) => {
         .replace(/NaNe>NaN/g, "NaN")
         .replace(/NaNe>/g, "NaN")
         .replace(/NaN>/g, "NaN")
+        // Decode HTML entities in correct order: decode &amp; LAST to prevent double-unescaping
         .replace(/&lt;/g, "<")
         .replace(/&gt;/g, ">")
-        .replace(/&amp;/g, "&")
         .replace(/&quot;/g, '"')
         .replace(/&#39;/g, "'")
         .replace(/&apos;/g, "'")
         .replace(/&nbsp;/g, " ")
+        .replace(/&amp;/g, "&") // Decode &amp; last to prevent double-unescaping
         .replace(/(\w+)\s*&lt;\s*(\d+)\s*&gt;/g, "$1 < $2 >")
         .replace(/(\w+)\s*&lt;\s*(\d+)/g, "$1 < $2")
         .replace(/(\d+)\s*&gt;/g, "$1 >")
-        .replace(/<\/?[a-zA-Z][a-zA-Z0-9]*(?:\s+[^>]*)?>/gi, "")
+        // Comprehensive HTML tag removal: remove script/style tags with content, comments, then all tags
+        .replace(/<script[\s\S]*?<\/script>/gi, "") // Remove script tags and content
+        .replace(/<style[\s\S]*?<\/style>/gi, "") // Remove style tags and content
+        .replace(/<!--[\s\S]*?-->/g, "") // Remove HTML comments
+        .replace(/<\/?[a-zA-Z][a-zA-Z0-9]*(?:\s+[^>]*)?>/gi, "") // Remove remaining HTML tags
         .replace(/^>\s*/g, "")
         .replace(/\s*>$/g, "")
         .replace(/\s+>\s+/g, " ");
@@ -721,9 +729,8 @@ const QuestionContent = ({ content }: { content: string }) => {
     return code;
   };
 
-  let processedContent = fixedContent;
-
-  processedContent = processedContent.replace(
+  // Process content to convert code tags to markdown
+  const _processedContent = fixedContent.replace(
     /<code[^>]*>([^<]{1,50})<\/code>/gi,
     (match, codeContent, offset) => {
       const beforeMatch = fixedContent.substring(0, offset);
@@ -807,7 +814,12 @@ const QuestionContent = ({ content }: { content: string }) => {
           /<code[^>]*>([^<]{1,30})<\/code>/gi,
           "`$1`",
         );
-        cleanText = cleanText.replace(/<[^>]+>/g, "");
+        // Comprehensive HTML tag removal: remove script/style tags with content, comments, then all tags
+        cleanText = cleanText
+          .replace(/<script[\s\S]*?<\/script>/gi, "") // Remove script tags and content
+          .replace(/<style[\s\S]*?<\/style>/gi, "") // Remove style tags and content
+          .replace(/<!--[\s\S]*?-->/g, "") // Remove HTML comments
+          .replace(/<[^>]+>/g, ""); // Remove remaining HTML tags
         for (let i = 0; i < 3; i++) {
           cleanText = cleanText
             .replace(/<pr<cod?/gi, "")
@@ -876,7 +888,12 @@ const QuestionContent = ({ content }: { content: string }) => {
         /<code[^>]*>([^<]{1,30})<\/code>/gi,
         "`$1`",
       );
-      cleanText = cleanText.replace(/<[^>]+>/g, "");
+      // Comprehensive HTML tag removal: remove script/style tags with content, comments, then all tags
+      cleanText = cleanText
+        .replace(/<script[\s\S]*?<\/script>/gi, "") // Remove script tags and content
+        .replace(/<style[\s\S]*?<\/style>/gi, "") // Remove style tags and content
+        .replace(/<!--[\s\S]*?-->/g, "") // Remove HTML comments
+        .replace(/<[^>]+>/g, ""); // Remove remaining HTML tags
       for (let i = 0; i < 3; i++) {
         cleanText = cleanText
           .replace(/<pr<cod?/gi, "")
@@ -918,7 +935,11 @@ const QuestionContent = ({ content }: { content: string }) => {
         .replace(/<\/cod/gi, "")
         .replace(/<\/pr/gi, "")
         .replace(/<pr/gi, "")
-        .replace(/<[^>]+>/g, "")
+        // Comprehensive HTML tag removal: remove script/style tags with content, comments, then all tags
+        .replace(/<script[\s\S]*?<\/script>/gi, "") // Remove script tags and content
+        .replace(/<style[\s\S]*?<\/style>/gi, "") // Remove style tags and content
+        .replace(/<!--[\s\S]*?-->/g, "") // Remove HTML comments
+        .replace(/<[^>]+>/g, "") // Remove remaining HTML tags
         .replace(/e>e>e>/g, "")
         .replace(/e>e>/g, "")
         .replace(/^e>+/g, "")
@@ -1285,8 +1306,8 @@ export default function FreeStylePracticePage() {
   const [filteredQuestionCount, setFilteredQuestionCount] = useState(0); // Count from API response
   const [questionsLimit, setQuestionsLimit] = useState(5); // Start with 5 questions
   const [hasMoreQuestions, setHasMoreQuestions] = useState(true);
-  const [availableSections, setAvailableSections] = useState<string[]>([]);
-  const [availableTags, setAvailableTags] = useState<string[]>([]);
+  const [_availableSections, setAvailableSections] = useState<string[]>([]);
+  const [_availableTags, setAvailableTags] = useState<string[]>([]);
   const [categories, setCategories] = useState<
     Array<{ id: string; name: string }>
   >([]);
@@ -1299,7 +1320,7 @@ export default function FreeStylePracticePage() {
     accuracy: number;
     timeSpent: number;
   } | null>(null);
-  const [isLoadingProgress, setIsLoadingProgress] = useState(false);
+  const [_isLoadingProgress, setIsLoadingProgress] = useState(false);
 
   // Available difficulties
   const availableDifficulties = ["easy", "medium", "hard"];
@@ -2791,7 +2812,7 @@ export default function FreeStylePracticePage() {
           console.log("⚠️ Progress save failed, but continuing");
         }
       } catch (_error) {
-        console.error("❌ Error saving progress:", error);
+        console.error("❌ Error saving progress:", _error);
         // Continue with the question flow even if progress save fails
       }
     }
@@ -2810,7 +2831,7 @@ export default function FreeStylePracticePage() {
     }
   };
 
-  const handleFilterChange = (type: keyof FilterOptions, value: string) => {
+  const _handleFilterChange = (type: keyof FilterOptions, value: string) => {
     setFilters((prev) => ({
       ...prev,
       [type]: prev[type].includes(value)
