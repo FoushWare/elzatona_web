@@ -90,74 +90,77 @@ export default function ProblemSolvingQuestion({
   const [isResizingHorizontal, setIsResizingHorizontal] = useState(false);
   const [isResizingVertical, setIsResizingVertical] = useState(false);
 
+  // Helper to decode HTML entities
+  const decodeHtmlEntities = (text: string): string => {
+    if (!text) return "";
+    const entityMap: Record<string, string> = {
+      "&lt;": "<",
+      "&gt;": ">",
+      "&amp;": "&",
+      "&quot;": '"',
+      "&#39;": "'",
+      "&#x27;": "'",
+      "&#x2F;": "/",
+      "&nbsp;": " ",
+      "&#160;": " ",
+      "&apos;": "'",
+    };
+    let decoded = text;
+    for (const [entity, char] of Object.entries(entityMap)) {
+      decoded = decoded.replaceAll(entity, char);
+    }
+    decoded = decoded.replace(/&#(\d+);/g, (_, dec) =>
+      String.fromCodePoint(Number.parseInt(dec, 10)),
+    );
+    decoded = decoded.replace(/&#x([0-9a-f]+);/gi, (_, hex) =>
+      String.fromCodePoint(Number.parseInt(hex, 16)),
+    );
+    return decoded;
+  };
+
+  // Helper to clean up malformed code patterns
+  const cleanCodePatterns = (code: string): string => {
+    for (let i = 0; i < 3; i++) {
+      code = code
+        // Remove e> artifacts (most common issue)
+        .replace(/e>e>/g, "") // Remove double e>
+        .replace(/e>e>e>/g, "") // Remove triple e>
+        .replace(/^e>+/g, "") // Remove e> at start
+        .replace(/e>+$/g, "") // Remove e> at end
+        .replace(/(\w+)e>/g, "$1") // Remove e> after words
+        .replace(/e>(\w+)/g, "$1") // Remove e> before words
+        // Fix console.log patterns
+        .replace(/consoleonsole\.log/g, "console.log")
+        .replace(/console\.loge>/g, "console.log")
+        .replace(/console\.log>/g, "console.log")
+        // Fix method name patterns
+        .replace(/diameterameter/g, "diameter")
+        .replace(/perimeterimeter/g, "perimeter")
+        .replace(/newColorwColor/g, "newColor")
+        // Fix NaN patterns
+        .replace(/NaNe>/g, "NaN")
+        .replace(/NaN>/g, "NaN")
+        // Remove any remaining standalone e> or > characters
+        .replace(/\s*e>\s*/g, " ")
+        .replace(/\s*>\s*/g, " ")
+        .replace(/^>\s*/g, "")
+        .replace(/\s*>$/g, "");
+    }
+    return code.trim();
+  };
+
   // Helper function to extract code blocks from question content
   const extractCodeFromContent = (content: string): string => {
     if (!content) return "";
-
-    // Helper to decode HTML entities
-    const decodeHtmlEntities = (text: string): string => {
-      if (!text) return "";
-      const entityMap: Record<string, string> = {
-        "&lt;": "<",
-        "&gt;": ">",
-        "&amp;": "&",
-        "&quot;": '"',
-        "&#39;": "'",
-        "&#x27;": "'",
-        "&#x2F;": "/",
-        "&nbsp;": " ",
-        "&#160;": " ",
-        "&apos;": "'",
-      };
-      let decoded = text;
-      for (const [entity, char] of Object.entries(entityMap)) {
-        decoded = decoded.replace(new RegExp(entity, "gi"), char);
-      }
-      decoded = decoded.replace(/&#(\d+);/g, (_, dec) =>
-        String.fromCodePoint(Number.parseInt(dec, 10)),
-      );
-      decoded = decoded.replace(/&#x([0-9a-f]+);/gi, (_, hex) =>
-        String.fromCodePoint(Number.parseInt(hex, 16)),
-      );
-      return decoded;
-    };
 
     // Try to extract from <pre><code> blocks first
     const preCodeRegex = /<pre[^>]*><code[^>]*>([\s\S]*?)<\/code><\/pre>/gi;
     const preCodeMatch = preCodeRegex.exec(content);
     if (preCodeMatch?.[1]) {
       let code = preCodeMatch[1];
-      // Decode entities and remove HTML tags
       code = decodeHtmlEntities(code);
       code = code.replace(/<[^>]+>/g, "");
-      // Clean up malformed patterns - multiple passes for thorough cleaning
-      for (let i = 0; i < 3; i++) {
-        code = code
-          // Remove e> artifacts (most common issue)
-          .replace(/e>e>/g, "") // Remove double e>
-          .replace(/e>e>e>/g, "") // Remove triple e>
-          .replace(/^e>+/g, "") // Remove e> at start
-          .replace(/e>+$/g, "") // Remove e> at end
-          .replace(/(\w+)e>/g, "$1") // Remove e> after words
-          .replace(/e>(\w+)/g, "$1") // Remove e> before words
-          // Fix console.log patterns
-          .replace(/consoleonsole\.log/g, "console.log")
-          .replace(/console\.loge>/g, "console.log")
-          .replace(/console\.log>/g, "console.log")
-          // Fix method name patterns
-          .replace(/diameterameter/g, "diameter")
-          .replace(/perimeterimeter/g, "perimeter")
-          .replace(/newColorwColor/g, "newColor")
-          // Fix NaN patterns
-          .replace(/NaNe>/g, "NaN")
-          .replace(/NaN>/g, "NaN")
-          // Remove any remaining standalone e> or > characters
-          .replace(/\s*e>\s*/g, " ")
-          .replace(/\s*>\s*/g, " ")
-          .replace(/^>\s*/g, "")
-          .replace(/\s*>$/g, "");
-      }
-      code = code.trim();
+      code = cleanCodePatterns(code);
       if (code) return code;
     }
 
@@ -176,34 +179,7 @@ export default function ProblemSolvingQuestion({
       let code = codeMatch[1];
       code = decodeHtmlEntities(code);
       code = code.replace(/<[^>]+>/g, "");
-      // Clean up malformed patterns - multiple passes for thorough cleaning
-      for (let i = 0; i < 3; i++) {
-        code = code
-          // Remove e> artifacts (most common issue)
-          .replace(/e>e>/g, "") // Remove double e>
-          .replace(/e>e>e>/g, "") // Remove triple e>
-          .replace(/^e>+/g, "") // Remove e> at start
-          .replace(/e>+$/g, "") // Remove e> at end
-          .replace(/(\w+)e>/g, "$1") // Remove e> after words
-          .replace(/e>(\w+)/g, "$1") // Remove e> before words
-          // Fix console.log patterns
-          .replace(/consoleonsole\.log/g, "console.log")
-          .replace(/console\.loge>/g, "console.log")
-          .replace(/console\.log>/g, "console.log")
-          // Fix method name patterns
-          .replace(/diameterameter/g, "diameter")
-          .replace(/perimeterimeter/g, "perimeter")
-          .replace(/newColorwColor/g, "newColor")
-          // Fix NaN patterns
-          .replace(/NaNe>/g, "NaN")
-          .replace(/NaN>/g, "NaN")
-          // Remove any remaining standalone e> or > characters
-          .replace(/\s*e>\s*/g, " ")
-          .replace(/\s*>\s*/g, " ")
-          .replace(/^>\s*/g, "")
-          .replace(/\s*>$/g, "");
-      }
-      code = code.trim();
+      code = cleanCodePatterns(code);
       if (code) return code;
     }
 
@@ -296,7 +272,7 @@ export default function ProblemSolvingQuestion({
         return [];
       }
     }
-    return question.test_cases as TestCase[];
+    return question.test_cases;
   };
 
   const baseTestCases = parseTestCases();
@@ -385,6 +361,48 @@ export default function ProblemSolvingQuestion({
     return "solution";
   };
 
+  // Helper to build code execution string for a test case
+  const buildCodeForTestCase = (
+    functionName: string,
+    testCase: TestCase,
+    testCaseNumber: number,
+  ): string => {
+    const inputFields = parseInputFields(testCase.input);
+    if (
+      typeof testCase.input === "object" &&
+      testCase.input !== null &&
+      !Array.isArray(testCase.input)
+    ) {
+      const args = Object.values(inputFields)
+        .map((arg: unknown) => JSON.stringify(arg))
+        .join(", ");
+      return `${code}\n\n// Test with test case ${testCaseNumber}\nconst result = ${functionName}(${args});\nconsole.log('Output:', result);`;
+    }
+    const input = Array.isArray(testCase.input)
+      ? testCase.input
+      : [testCase.input];
+    return `${code}\n\n// Test with test case ${testCaseNumber}\nconst result = ${functionName}(${input.map((arg: unknown) => JSON.stringify(arg)).join(", ")});\nconsole.log('Output:', result);`;
+  };
+
+  // Helper to determine which code execution string to use
+  const getCodeToExecute = (functionName: string): string => {
+    if (
+      testCases.length > 0 &&
+      selectedTestCaseIndex >= 0 &&
+      selectedTestCaseIndex < testCases.length
+    ) {
+      return buildCodeForTestCase(
+        functionName,
+        testCases[selectedTestCaseIndex],
+        selectedTestCaseIndex + 1,
+      );
+    }
+    if (testCases.length > 0) {
+      return buildCodeForTestCase(functionName, testCases[0], 1);
+    }
+    return `${code}\n\n// Auto-execute function\nif (typeof ${functionName} === 'function') {\n  try {\n    const result = ${functionName}();\n    console.log('Result:', result);\n  } catch (err) {\n    console.error('Error:', err.message);\n  }\n}`;
+  };
+
   // Run code with selected test case from database
   const handleRunCode = async () => {
     setIsRunning(true);
@@ -393,56 +411,7 @@ export default function ProblemSolvingQuestion({
 
     try {
       const functionName = getFunctionName(code);
-      let codeToExecute: string;
-
-      // Use selected test case from database
-      if (
-        testCases.length > 0 &&
-        selectedTestCaseIndex >= 0 &&
-        selectedTestCaseIndex < testCases.length
-      ) {
-        const testCase = testCases[selectedTestCaseIndex];
-        const inputFields = parseInputFields(testCase.input);
-        // If input is an object, spread it as arguments
-        if (
-          typeof testCase.input === "object" &&
-          testCase.input !== null &&
-          !Array.isArray(testCase.input)
-        ) {
-          const args = Object.values(inputFields)
-            .map((arg: unknown) => JSON.stringify(arg))
-            .join(", ");
-          codeToExecute = `${code}\n\n// Test with test case ${selectedTestCaseIndex + 1}\nconst result = ${functionName}(${args});\nconsole.log('Output:', result);`;
-        } else {
-          // Array or single value
-          const input = Array.isArray(testCase.input)
-            ? testCase.input
-            : [testCase.input];
-          codeToExecute = `${code}\n\n// Test with test case ${selectedTestCaseIndex + 1}\nconst result = ${functionName}(${input.map((arg: unknown) => JSON.stringify(arg)).join(", ")});\nconsole.log('Output:', result);`;
-        }
-      } else if (testCases.length > 0) {
-        // Use first test case if none selected
-        const testCase = testCases[0];
-        const inputFields = parseInputFields(testCase.input);
-        if (
-          typeof testCase.input === "object" &&
-          testCase.input !== null &&
-          !Array.isArray(testCase.input)
-        ) {
-          const args = Object.values(inputFields)
-            .map((arg: unknown) => JSON.stringify(arg))
-            .join(", ");
-          codeToExecute = `${code}\n\n// Test with test case 1\nconst result = ${functionName}(${args});\nconsole.log('Output:', result);`;
-        } else {
-          const input = Array.isArray(testCase.input)
-            ? testCase.input
-            : [testCase.input];
-          codeToExecute = `${code}\n\n// Test with test case 1\nconst result = ${functionName}(${input.map((arg: unknown) => JSON.stringify(arg)).join(", ")});\nconsole.log('Output:', result);`;
-        }
-      } else {
-        // Default test if no test cases available
-        codeToExecute = `${code}\n\n// Auto-execute function\nif (typeof ${functionName} === 'function') {\n  try {\n    const result = ${functionName}();\n    console.log('Result:', result);\n  } catch (err) {\n    console.error('Error:', err.message);\n  }\n}`;
-      }
+      const codeToExecute = getCodeToExecute(functionName);
 
       const response = await fetch("/api/code/execute", {
         method: "POST",
@@ -632,7 +601,7 @@ export default function ProblemSolvingQuestion({
         return [];
       }
     }
-    return question.examples as Example[];
+    return question.examples;
   };
 
   const examples = parseExamples();
@@ -737,10 +706,20 @@ export default function ProblemSolvingQuestion({
         >
           {/* Resize Handle - Horizontal */}
           <div
+            role="separator"
+            aria-label="Resize panel"
+            aria-orientation="vertical"
+            tabIndex={0}
             className="absolute right-0 top-0 bottom-0 w-1.5 bg-transparent hover:bg-indigo-500/80 dark:hover:bg-indigo-500/80 cursor-col-resize z-20 transition-all duration-200 select-none group"
             onMouseDown={(e) => {
               e.preventDefault();
               setIsResizingHorizontal(true);
+            }}
+            onKeyDown={(e) => {
+              if (e.key === "Enter" || e.key === " ") {
+                e.preventDefault();
+                setIsResizingHorizontal(true);
+              }
             }}
           >
             <div className="absolute inset-y-0 left-1/2 -translate-x-1/2 w-0.5 bg-gray-300/50 dark:bg-gray-600/50 group-hover:bg-indigo-400 dark:group-hover:bg-indigo-400 transition-all duration-200" />
@@ -757,11 +736,15 @@ export default function ProblemSolvingQuestion({
                     {question.difficulty && (
                       <span
                         className={`inline-flex items-center px-4 sm:px-4.5 py-2 rounded-xl text-xs sm:text-sm font-extrabold uppercase tracking-wider shadow-sm ${
-                          question.difficulty === "beginner"
-                            ? "bg-gradient-to-br from-green-100 via-green-50 to-green-100 text-green-800 dark:from-green-900/40 dark:via-green-900/30 dark:to-green-900/20 dark:text-green-200 border-2 border-green-300/60 dark:border-green-700/60"
-                            : question.difficulty === "intermediate"
-                              ? "bg-gradient-to-br from-yellow-100 via-yellow-50 to-yellow-100 text-yellow-800 dark:from-yellow-900/40 dark:via-yellow-900/30 dark:to-yellow-900/20 dark:text-yellow-200 border-2 border-yellow-300/60 dark:border-yellow-700/60"
-                              : "bg-gradient-to-br from-red-100 via-red-50 to-red-100 text-red-800 dark:from-red-900/40 dark:via-red-900/30 dark:to-red-900/20 dark:text-red-200 border-2 border-red-300/60 dark:border-red-700/60"
+                          (() => {
+                            if (question.difficulty === "beginner") {
+                              return "bg-gradient-to-br from-green-100 via-green-50 to-green-100 text-green-800 dark:from-green-900/40 dark:via-green-900/30 dark:to-green-900/20 dark:text-green-200 border-2 border-green-300/60 dark:border-green-700/60";
+                            }
+                            if (question.difficulty === "intermediate") {
+                              return "bg-gradient-to-br from-yellow-100 via-yellow-50 to-yellow-100 text-yellow-800 dark:from-yellow-900/40 dark:via-yellow-900/30 dark:to-yellow-900/20 dark:text-yellow-200 border-2 border-yellow-300/60 dark:border-yellow-700/60";
+                            }
+                            return "bg-gradient-to-br from-red-100 via-red-50 to-red-100 text-red-800 dark:from-red-900/40 dark:via-red-900/30 dark:to-red-900/20 dark:text-red-200 border-2 border-red-300/60 dark:border-red-700/60";
+                          })()
                         }`}
                       >
                         {question.difficulty}
@@ -792,7 +775,7 @@ export default function ProblemSolvingQuestion({
                         })
                         .map((tag, index) => (
                           <span
-                            key={index}
+                            key={`tag-${tag}-${index}`}
                             className="inline-flex items-center px-3 sm:px-3.5 py-1.5 rounded-lg text-xs sm:text-sm font-semibold bg-gradient-to-br from-gray-100 to-gray-50 dark:from-gray-700 dark:to-gray-800 text-gray-700 dark:text-gray-300 border border-gray-200 dark:border-gray-600 hover:from-gray-200 hover:to-gray-100 dark:hover:from-gray-600 dark:hover:to-gray-700 transition-all duration-200 shadow-sm hover:shadow"
                           >
                             {tag}
@@ -846,7 +829,7 @@ export default function ProblemSolvingQuestion({
                 <div className="space-y-6 sm:space-y-7">
                   {examples.map((example, index) => (
                     <div
-                      key={index}
+                      key={`example-${index}-${JSON.stringify(example.input)}`}
                       className="bg-gradient-to-br from-white via-gray-50/50 to-white dark:from-gray-800/80 dark:via-gray-800/60 dark:to-gray-800/80 rounded-2xl p-5 sm:p-6 border-2 border-gray-200/60 dark:border-gray-700/60 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-[1.01]"
                     >
                       <div className="flex items-center gap-2.5 mb-5">
@@ -919,7 +902,7 @@ export default function ProblemSolvingQuestion({
                   <div className="bg-gradient-to-br from-amber-50/50 via-white to-amber-50/30 dark:from-amber-900/20 dark:via-gray-800/60 dark:to-amber-900/20 rounded-2xl p-5 sm:p-6 border-2 border-amber-200/60 dark:border-amber-800/60 shadow-lg space-y-4">
                     {question.hints.map((hint, index) => (
                       <div
-                        key={index}
+                        key={`hint-${index}-${hint.substring(0, 20)}`}
                         className={`p-4 rounded-xl border-2 transition-all duration-300 ${
                           revealedHints.includes(index)
                             ? "bg-gradient-to-br from-amber-100/80 to-white dark:from-amber-900/40 dark:to-gray-800/60 border-amber-300/80 dark:border-amber-700/80 shadow-md"
@@ -965,7 +948,7 @@ export default function ProblemSolvingQuestion({
                 <div className="bg-gradient-to-br from-indigo-50/50 via-white to-indigo-50/30 dark:from-indigo-900/20 dark:via-gray-800/60 dark:to-indigo-900/20 rounded-2xl p-5 sm:p-6 border-2 border-indigo-200/60 dark:border-indigo-800/60 shadow-lg">
                   <ul className="space-y-3 text-sm sm:text-base text-gray-800 dark:text-gray-200 list-disc list-inside marker:text-indigo-600 dark:marker:text-indigo-400 font-medium">
                     {question.constraints.map((constraint, index) => (
-                      <li key={index}>{constraint}</li>
+                      <li key={`constraint-${index}-${constraint.substring(0, 20)}`}>{constraint}</li>
                     ))}
                   </ul>
                 </div>
@@ -979,7 +962,7 @@ export default function ProblemSolvingQuestion({
       <div
         data-right-panel
         className={`${isFocusMode ? "w-full" : "flex-1"} flex flex-col overflow-hidden bg-gradient-to-br from-white via-gray-50/30 to-white dark:from-gray-900 dark:via-gray-800/50 dark:to-gray-900`}
-        style={!isFocusMode ? { width: `${100 - leftPanelWidth}%` } : {}}
+        style={isFocusMode ? {} : { width: `${100 - leftPanelWidth}%` }}
       >
         {/* Code Editor Header */}
         <div className="flex-shrink-0 border-b-2 border-gray-200/80 dark:border-gray-700/80 bg-gradient-to-r from-gray-50 via-white to-gray-50 dark:from-gray-900/80 dark:via-gray-800/60 dark:to-gray-900/80 shadow-md">
@@ -1078,10 +1061,20 @@ export default function ProblemSolvingQuestion({
 
           {/* Resize Handle - Vertical */}
           <div
+            role="separator"
+            aria-label="Resize panel"
+            aria-orientation="horizontal"
+            tabIndex={0}
             className="absolute bottom-0 left-0 right-0 h-2 bg-transparent hover:bg-indigo-500/80 dark:hover:bg-indigo-500/80 cursor-row-resize z-20 transition-all duration-200 select-none group"
             onMouseDown={(e) => {
               e.preventDefault();
               setIsResizingVertical(true);
+            }}
+            onKeyDown={(e) => {
+              if (e.key === "Enter" || e.key === " ") {
+                e.preventDefault();
+                setIsResizingVertical(true);
+              }
             }}
           >
             <div className="absolute inset-x-0 top-1/2 -translate-y-1/2 h-0.5 bg-gray-300/50 dark:bg-gray-600/50 group-hover:bg-indigo-400 dark:group-hover:bg-indigo-400 transition-all duration-200" />
@@ -1128,9 +1121,9 @@ export default function ProblemSolvingQuestion({
               <div className="space-y-4 sm:space-y-5">
                 {/* Test Case Selection Buttons */}
                 <div className="flex items-center gap-2 flex-wrap overflow-x-auto pb-2 -mx-1 px-1">
-                  {testCases.map((_, index) => (
+                  {testCases.map((testCase, index) => (
                     <button
-                      key={index}
+                      key={`testcase-${index}-${JSON.stringify(testCase.input)}`}
                       onClick={() => {
                         setSelectedTestCaseIndex(index);
                         setEditingTestCaseIndex(null);
@@ -1261,10 +1254,11 @@ export default function ProblemSolvingQuestion({
                                     ),
                                   )}
                                   <div className="flex items-center gap-2 pt-2 border-t border-gray-200 dark:border-gray-700">
-                                    <label className="text-xs font-semibold text-gray-700 dark:text-gray-300 whitespace-nowrap min-w-[80px]">
+                                    <label htmlFor="expected-output-input" className="text-xs font-semibold text-gray-700 dark:text-gray-300 whitespace-nowrap min-w-[80px]">
                                       Expected =
                                     </label>
                                     <input
+                                      id="expected-output-input"
                                       type="text"
                                       value={
                                         typeof editingTestCaseData.expectedOutput ===
@@ -1412,26 +1406,31 @@ export default function ProblemSolvingQuestion({
                   <>
                     {/* Test Case Selection */}
                     <div className="flex items-center gap-1.5 sm:gap-2 flex-wrap overflow-x-auto pb-2 -mx-1 px-1">
-                      {testResults.map((_, index) => (
-                        <button
-                          key={index}
-                          onClick={() => setSelectedTestCaseIndex(index)}
-                          className={`px-2 sm:px-3 py-1 text-xs font-medium rounded border transition-colors whitespace-nowrap ${
-                            selectedTestCaseIndex === index
-                              ? "bg-indigo-100 text-indigo-700 dark:bg-indigo-900/30 dark:text-indigo-300 border-indigo-300 dark:border-indigo-700"
-                              : testResults[index].passed
-                                ? "bg-green-50 text-green-700 dark:bg-green-900/20 dark:text-green-300 border-green-200 dark:border-green-800"
-                                : "bg-red-50 text-red-700 dark:bg-red-900/20 dark:text-red-300 border-red-200 dark:border-red-800"
-                          }`}
+                      {testResults.map((result, index) => {
+                        const getButtonClassName = () => {
+                          if (selectedTestCaseIndex === index) {
+                            return "bg-indigo-100 text-indigo-700 dark:bg-indigo-900/30 dark:text-indigo-300 border-indigo-300 dark:border-indigo-700";
+                          }
+                          if (result.passed) {
+                            return "bg-green-50 text-green-700 dark:bg-green-900/20 dark:text-green-300 border-green-200 dark:border-green-800";
+                          }
+                          return "bg-red-50 text-red-700 dark:bg-red-900/20 dark:text-red-300 border-red-200 dark:border-red-800";
+                        };
+                        return (
+                          <button
+                            key={`test-result-${index}-${result.passed ? "passed" : "failed"}`}
+                            onClick={() => setSelectedTestCaseIndex(index)}
+                            className={`px-2 sm:px-3 py-1 text-xs font-medium rounded border transition-colors whitespace-nowrap ${getButtonClassName()}`}
                         >
-                          {testResults[index].passed ? (
-                            <CheckCircle className="w-3 h-3 inline mr-1" />
-                          ) : (
-                            <XCircle className="w-3 h-3 inline mr-1" />
-                          )}
-                          Case {index + 1}
-                        </button>
-                      ))}
+                            {result.passed ? (
+                              <CheckCircle className="w-3 h-3 inline mr-1" />
+                            ) : (
+                              <XCircle className="w-3 h-3 inline mr-1" />
+                            )}
+                            Case {index + 1}
+                          </button>
+                        );
+                      })}
                     </div>
 
                     {/* Selected Test Case Result */}
