@@ -55,6 +55,8 @@
     "sonar:quick": "NODE_OPTIONS=--max-old-space-size=1024 SONAR_MEMORY_LIMIT=1024 node libs/utilities/scripts/run-sonarqube-local.js --skip-tests --skip-build",
     "codeql": "bash libs/utilities/scripts/run-codeql-local.sh",
     "codeql:upload": "bash libs/utilities/scripts/run-codeql-local.sh --upload",
+    "codeql:precommit": "bash libs/utilities/scripts/check-codeql-precommit.sh",
+    "codeql:fix": "node libs/utilities/scripts/fix-codeql-issues.js",
     "format": "prettier --write .",
     "cleanup:playwright-videos": "bash libs/utilities/scripts/cleanup-playwright-videos.sh",
     "prepare": "husky",
