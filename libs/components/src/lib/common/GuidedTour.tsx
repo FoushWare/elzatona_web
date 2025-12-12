@@ -8,7 +8,6 @@ const supabaseServiceRoleKey = process.env["SUPABASE_SERVICE_ROLE_KEY"]!;
 const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
 
 import { TourProvider, useTour } from "@reactour/tour";
-import {} from "lucide-react";
 
 interface GuidedTourProps {
   isOpen: boolean;

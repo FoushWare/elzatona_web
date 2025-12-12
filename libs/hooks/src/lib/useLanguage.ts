@@ -4,7 +4,6 @@ import {
   languageLoadingAtom,
   setLanguageAtom,
 } from "@elzatona/shared-atoms";
-import type {} from "@elzatona/shared-atoms";
 
 export function useLanguage() {
   const [language, setLanguage] = useAtom(languageAtom);

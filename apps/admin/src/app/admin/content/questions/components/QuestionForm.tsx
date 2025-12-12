@@ -224,7 +224,8 @@ export const QuestionForm = React.forwardRef<
           ...prev,
           resources: parsed,
         }));
-      } catch (_error) {
+      } catch (error_) {
+        console.warn("Failed to parse resources JSON:", error_);
         // If invalid JSON, store as string and let validation handle it
         setFormData((prev) => ({
           ...prev,
