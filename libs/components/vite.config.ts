@@ -99,7 +99,6 @@ export default defineConfig({
     setupFiles: ["./src/test-setup.ts"],
     include: ["src/**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}"],
     // Enable Jest compatibility
-    // @ts-expect-error - vitest types may not include this
     // jest: true,
     alias: {
       "@elzatona/contexts": path.resolve(
