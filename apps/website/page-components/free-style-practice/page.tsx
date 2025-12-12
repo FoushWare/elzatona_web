@@ -932,7 +932,8 @@ const QuestionContent = ({ content }: { content: string }) => {
         .replace(/\s*>$/g, "")
         .replace(/\s+>\s+/g, " ");
     }
-
+    // Use DOMPurify for secure HTML sanitization (removes all HTML tags)
+    cleanContent = sanitizeText(cleanContent);
     cleanContent = cleanContent
       .replace(/&nbsp;/g, " ")
       .replace(/&lt;/g, "<")
