@@ -513,10 +513,8 @@ export const QuestionContent = ({ content }: { content: string }) => {
     while (code !== previousCode && iterations < maxIterations) {
       previousCode = code;
       code = decodeHtmlEntities(code);
-      // SECURITY: Use simpler regex pattern to prevent ReDoS
-      // Match HTML tags with bounded quantifiers
-      // NOSONAR S7781: replaceAll() cannot be used with regex patterns that require capture groups
-      code = code.replace(/<\/?[a-z][a-z0-9]{0,20}(?:\s+[^>]{0,200})?>/gi, "");
+      // SECURITY: Use sanitizeText to remove HTML tags and prevent ReDoS
+      code = sanitizeText(code);
       iterations++;
     }
 
@@ -848,7 +846,8 @@ export const QuestionContent = ({ content }: { content: string }) => {
         /<code[^>]{0,200}>([^<]{1,30})<\/code>/gi,
         "`$1`",
       );
-      cleanText = cleanText.replaceAll(/<[^>]+>/g, "");
+      // SECURITY: Use sanitizeText to remove all HTML tags and prevent injection
+      cleanText = sanitizeText(cleanText);
       for (let i = 0; i < 3; i++) {
         cleanText = cleanText
           .replaceAll(/<pr<cod?/gi, "")
@@ -868,12 +867,8 @@ export const QuestionContent = ({ content }: { content: string }) => {
           .replaceAll(/^>\s*/g, "")
           .replaceAll(/\s*>$/g, "")
           .replaceAll(/\s+>\s+/g, " ");
-        // SECURITY: Additional sanitization to remove any remaining HTML tags
-        cleanText = cleanText
-          .replace(/<script[^>]*>[\s\S]*?<\/script>/gi, "")
-          .replace(/<style[^>]*>[\s\S]*?<\/style>/gi, "")
-          .replace(/<iframe[^>]*>[\s\S]*?<\/iframe>/gi, "")
-          .replace(/on\w+\s*=\s*["'][^"']*["']/gi, "");
+        // SECURITY: Use sanitizeText again to remove any remaining HTML tags
+        cleanText = sanitizeText(cleanText);
       }
       cleanText = cleanText
         .replaceAll(/[ \t]+/g, " ")
