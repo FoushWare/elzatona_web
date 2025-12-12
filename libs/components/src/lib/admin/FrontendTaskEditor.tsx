@@ -5,16 +5,12 @@
 import React, { useState, useEffect, useMemo, useRef } from "react";
 import { Editor } from "@monaco-editor/react";
 import {
-  _Play as _Play,
   Save,
   FileText,
   _FolderPlus as _FolderPlus,
-  _FilePlus as _FilePlus,
   _Trash2 as _Trash2,
   Eye,
   Code,
-  _Palette as _Palette,
-  _Settings as _Settings,
   Plus,
   X,
   ArrowLeft,
@@ -25,9 +21,7 @@ import {
   FolderOpen,
   _Circle as _Circle,
   AlertCircle,
-  _CheckCircle as _CheckCircle,
   Clock,
-  _Target as _Target,
   Flame,
   Copy,
   Check,

@@ -35,7 +35,6 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
-  _DialogTrigger as _DialogTrigger,
 } from "@elzatona/components";
 import {
   Plus,
@@ -45,7 +44,6 @@ import {
   X,
   Target,
   BookOpen,
-  _Settings as _Settings,
   RefreshCw,
 } from "lucide-react";
 import { toast } from "sonner";

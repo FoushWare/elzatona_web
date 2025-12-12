@@ -49,9 +49,7 @@ export function NavigationProgress() {
 
     // Start progress animation immediately
     setIsVisible(true);
-    if (navigation && navigation.setIsNavigating) {
-      navigation.setIsNavigating(true);
-    }
+    navigation?.setIsNavigating?.(true);
     setProgress(0);
 
     // Simulate progress with smooth increments
@@ -68,6 +66,13 @@ export function NavigationProgress() {
       setProgress(currentProgress);
     }, 50); // Update every 50ms for smoother animation
 
+    // Helper to wait for next paint cycle (reduces nesting)
+    const waitForNextPaint = (callback: () => void) => {
+      requestAnimationFrame(() => {
+        requestAnimationFrame(callback);
+      });
+    };
+
     // Function to complete progress
     const completeProgress = () => {
       // Clear any pending timeouts
@@ -83,9 +88,7 @@ export function NavigationProgress() {
       completionTimeoutRef.current = setTimeout(() => {
         setIsVisible(false);
         setProgress(0);
-        if (navigation && navigation.setIsNavigating) {
-          navigation.setIsNavigating(false);
-        }
+        navigation?.setIsNavigating?.(false);
         previousPathnameRef.current = pathname;
       }, 400); // Wait 400ms for the 100% animation to show
     };
@@ -99,23 +102,13 @@ export function NavigationProgress() {
         document.readyState === "complete" ||
         document.readyState === "interactive"
       ) {
-        // Use requestAnimationFrame to wait for next paint
-        requestAnimationFrame(() => {
-          requestAnimationFrame(() => {
-            completeProgress();
-          });
-        });
+        waitForNextPaint(completeProgress);
         return;
       }
 
       // Wait for DOMContentLoaded or use fallback
       const handleDOMReady = () => {
-        // Wait for next paint cycle
-        requestAnimationFrame(() => {
-          requestAnimationFrame(() => {
-            completeProgress();
-          });
-        });
+        waitForNextPaint(completeProgress);
       };
 
       if (document.readyState === "loading") {

@@ -11,7 +11,6 @@ import {
 } from "@elzatona/components";
 import { Badge } from "@elzatona/components";
 import { Progress } from "@elzatona/components";
-import {} from "@elzatona/components";
 import {
   Select,
   SelectContent,
@@ -26,7 +25,6 @@ import {
   CheckCircle,
   XCircle,
   _Play as _Play,
-  _Pause as _Pause,
   AlertTriangle,
   Loader2,
   Settings,

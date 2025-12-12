@@ -11,7 +11,11 @@ const NavigationContext = createContext<NavigationContextType | undefined>(
   undefined,
 );
 
-export function NavigationProvider({ children }: { children: ReactNode }) {
+export function NavigationProvider({
+  children,
+}: {
+  readonly children: ReactNode;
+}) {
   const [isNavigating, setIsNavigating] = useState(false);
 
   return (

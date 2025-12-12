@@ -506,7 +506,7 @@ export const QuestionContent = ({ content }: { content: string }) => {
       previousCode = code;
       code = decodeHtmlEntities(code);
       // Use replace() with regex for proper HTML tag removal (replaceAll only works with strings)
-      code = code.replace(/<\/?[a-zA-Z][a-zA-Z0-9]*(?:\s+[^>]*)?>/gi, "");
+      code = code.replace(/<\/?[a-z][a-z0-9]*(?:\s+[^>]*)?>/gi, "");
       iterations++;
     }
 
