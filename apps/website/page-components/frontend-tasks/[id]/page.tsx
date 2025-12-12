@@ -12,7 +12,7 @@ import {
   Code,
   ArrowRight,
   Clock,
-  Target as _Target,
+  _Target as _Target,
   Flame,
   CheckCircle,
   Circle,
@@ -171,6 +171,16 @@ export default function FrontendTaskPage() {
   useEffect(() => {
     // Listen for console messages from iframe
     const handleMessage = (event: MessageEvent) => {
+      // Verify origin to prevent XSS attacks
+      const allowedOrigins = [
+        window.location.origin,
+        "https://elzatona.com",
+        "https://www.elzatona.com",
+      ];
+      if (!allowedOrigins.includes(event.origin)) {
+        console.warn("Rejected message from untrusted origin:", event.origin);
+        return;
+      }
       if (event.data && event.data.type === "console") {
         setConsoleOutput((prev) => [...prev.slice(-19), event.data.message]);
       }
@@ -695,7 +705,7 @@ export default function App() {
               delete window.App;
             }
             
-            const cleanCode = \`${cleanReactCode.replace(/`/g, "\\`").replace(/\$/g, "\\$")}\`;
+            const cleanCode = \`${cleanReactCode.replace(/\\/g, "\\\\").replace(/`/g, "\\`").replace(/\$/g, "\\$")}\`;
             const transpiledCode = Babel.transform(cleanCode, { 
               presets: ['react'],
               plugins: ['transform-class-properties']
