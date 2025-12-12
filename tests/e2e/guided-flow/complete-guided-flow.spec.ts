@@ -52,12 +52,12 @@ test.describe("G-E2E-004: Complete Guided Flow", () => {
               localStorage.removeItem("active-guided-plan");
               localStorage.removeItem("learning-preferences:type");
               localStorage.removeItem("learning-type:type");
-            } catch (e) {
+            } catch (_e) {
               // Silently fail if localStorage is not accessible
             }
           });
         }
-      } catch (error) {
+      } catch (_error) {
         // If localStorage access fails, wait and try once more
         await page.waitForTimeout(1000);
         try {
@@ -68,7 +68,7 @@ test.describe("G-E2E-004: Complete Guided Flow", () => {
               localStorage.removeItem("active-guided-plan");
               localStorage.removeItem("learning-preferences:type");
               localStorage.removeItem("learning-type:type");
-            } catch (e) {
+            } catch (_e) {
               // Silently fail
             }
           });
@@ -109,12 +109,12 @@ test.describe("G-E2E-004: Complete Guided Flow", () => {
             localStorage.removeItem("active-guided-plan");
             localStorage.removeItem("learning-preferences:type");
             localStorage.removeItem("learning-type:type");
-          } catch (e) {
+          } catch (_e) {
             // Silently fail during cleanup
           }
         });
       }
-    } catch (error) {
+    } catch (_error) {
       // Ignore errors during cleanup
     }
   });
@@ -280,7 +280,7 @@ test.describe("G-E2E-004: Complete Guided Flow", () => {
     const feedback = page
       .getByText(/Great choice!/i)
       .or(page.locator('[class*="border-indigo-500"]'));
-    const feedbackVisible = await feedback
+    const _feedbackVisible = await feedback
       .first()
       .isVisible({ timeout: 1000 })
       .catch(() => false);
@@ -417,7 +417,7 @@ test.describe("G-E2E-004: Complete Guided Flow", () => {
     await page.waitForTimeout(2000);
 
     // Check if plans are visible (they might show loading state initially)
-    const hasPlans = await plansSection
+    const _hasPlans = await plansSection
       .first()
       .isVisible({ timeout: 5000 })
       .catch(() => false);
