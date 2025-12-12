@@ -89,9 +89,8 @@ export async function setupAdminPage(
 ): Promise<void> {
   // Import and use the existing setupAdminPage from admin-questions-page.setup.ts
   // For now, we'll create a simplified version that navigates to content-management
-  const { setupAdminPage: setupQuestionsPage } = await import(
-    "./admin-questions-page.setup"
-  );
+  const { setupAdminPage: setupQuestionsPage } =
+    await import("./admin-questions-page.setup");
 
   // Use the existing setup which navigates to questions page
   await setupQuestionsPage(page, browserName);
@@ -125,9 +124,8 @@ export async function createQuestion(page: Page, title: string): Promise<void> {
     .waitFor({ state: "visible", timeout: 10000 });
 
   // Use the createQuestion from admin-questions-page.setup
-  const { createQuestion: createQuestionHelper } = await import(
-    "./admin-questions-page.setup"
-  );
+  const { createQuestion: createQuestionHelper } =
+    await import("./admin-questions-page.setup");
   await createQuestionHelper(page, title);
 }
 
@@ -141,8 +139,7 @@ export async function bulkDeleteQuestions(
   if (titles.length === 0) return;
 
   // Use the bulkDeleteQuestions from admin-questions-page.setup
-  const { bulkDeleteQuestions: bulkDeleteHelper } = await import(
-    "./admin-questions-page.setup"
-  );
+  const { bulkDeleteQuestions: bulkDeleteHelper } =
+    await import("./admin-questions-page.setup");
   await bulkDeleteHelper(page, titles);
 }
