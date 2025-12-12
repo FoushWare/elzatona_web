@@ -39,13 +39,13 @@
 After the schema is created, run:
 
 ```bash
-ADMIN_EMAIL=elzatonafoushware@gmail.com ADMIN_PASSWORD='ZatonaFoushware$12' node Rest/scripts/create-test-admin.js
+ADMIN_EMAIL=<your-admin-email> ADMIN_PASSWORD='<your-admin-password>' node Rest/scripts/create-test-admin.js
 ```
 
 This will:
 
-- Create admin user: `elzatonafoushware@gmail.com`
-- Set password: `ZatonaFoushware$12`
+- Create admin user: `<your-admin-email>`
+- Set password: `<your-admin-password>`
 - Grant super_admin role
 - Set up all permissions
 
@@ -54,10 +54,10 @@ This will:
 Update your `.env.test.local` with the admin credentials:
 
 ```bash
-ADMIN_EMAIL=elzatonafoushware@gmail.com
-ADMIN_PASSWORD=ZatonaFoushware$12
-INITIAL_ADMIN_EMAIL=elzatonafoushware@gmail.com
-INITIAL_ADMIN_PASSWORD=ZatonaFoushware$12
+ADMIN_EMAIL=<your-admin-email>
+ADMIN_PASSWORD=<your-admin-password>
+INITIAL_ADMIN_EMAIL=<your-admin-email>
+INITIAL_ADMIN_PASSWORD=<your-admin-password>
 ```
 
 ## ✅ Verification
@@ -75,14 +75,14 @@ After setup, verify:
 
    ```bash
    # Go to Supabase Dashboard → Table Editor → admin_users
-   # You should see your admin user with email: elzatonafoushware@gmail.com
+   # You should see your admin user with email: <your-admin-email>
    ```
 
 3. **Test Login:**
    ```bash
    npm run dev:test
    # Then go to: http://localhost:3000/admin/login
-   # Login with: elzatonafoushware@gmail.com / ZatonaFoushware$12
+   # Login with: <your-admin-email> / <your-admin-password>
    ```
 
 ## 🔗 Direct Links
