@@ -21,6 +21,7 @@ import {
 } from "lucide-react";
 import { useUserType, useAuth } from "@elzatona/contexts";
 import { addFlashcard, isInFlashcards, FlashcardItem } from "@/lib/flashcards";
+import { sanitizeText } from "@/lib/utils/sanitize";
 
 interface Question {
   id: string;
@@ -648,13 +649,8 @@ const QuestionContent = ({ content }: { content: string }) => {
     while (code !== previousCode && iterations < maxIterations) {
       previousCode = code;
       code = decodeHtmlEntities(code);
-      // Comprehensive HTML tag removal: remove script/style tags with content, comments, then all tags
-      // Handle script/style tags with optional spaces in closing tags (e.g., </script >)
-      code = code
-        .replace(/<script[\s\S]*?<\/\s*script\s*>/gi, "") // Remove script tags and content (handles spaces)
-        .replace(/<style[\s\S]*?<\/\s*style\s*>/gi, "") // Remove style tags and content (handles spaces)
-        .replace(/<!--[\s\S]*?-->/g, "") // Remove HTML comments
-        .replace(/<\/?[a-zA-Z][a-zA-Z0-9]*(?:\s+[^>]*)?\s*>/gi, ""); // Remove remaining HTML tags (handles trailing spaces)
+      // Use DOMPurify for secure HTML sanitization (removes all HTML tags)
+      code = sanitizeText(code);
       iterations++;
     }
 
@@ -697,16 +693,12 @@ const QuestionContent = ({ content }: { content: string }) => {
         .replace(/(\w+)\s*&lt;\s*(\d+)\s*&gt;/g, "$1 < $2 >")
         .replace(/(\w+)\s*&lt;\s*(\d+)/g, "$1 < $2")
         .replace(/(\d+)\s*&gt;/g, "$1 >")
-        // Comprehensive HTML tag removal: remove script/style tags with content, comments, then all tags
-        // Handle script/style tags with optional spaces in closing tags (e.g., </script >)
-        .replace(/<script[\s\S]*?<\/\s*script\s*>/gi, "") // Remove script tags and content (handles spaces)
-        .replace(/<style[\s\S]*?<\/\s*style\s*>/gi, "") // Remove style tags and content (handles spaces)
-        .replace(/<!--[\s\S]*?-->/g, "") // Remove HTML comments
-        .replace(/<\/?[a-zA-Z][a-zA-Z0-9]*(?:\s+[^>]*)?\s*>/gi, "") // Remove remaining HTML tags (handles trailing spaces)
         .replace(/^>\s*/g, "")
         .replace(/\s*>$/g, "")
         .replace(/\s+>\s+/g, " ");
     }
+    // Use DOMPurify for secure HTML sanitization (removes all HTML tags)
+    code = sanitizeText(code);
 
     for (let i = 0; i < 2; i++) {
       code = code
@@ -816,12 +808,8 @@ const QuestionContent = ({ content }: { content: string }) => {
           /<code[^>]*>([^<]{1,30})<\/code>/gi,
           "`$1`",
         );
-        // Comprehensive HTML tag removal: remove script/style tags with content, comments, then all tags
-        cleanText = cleanText
-          .replace(/<script[\s\S]*?<\/script>/gi, "") // Remove script tags and content
-          .replace(/<style[\s\S]*?<\/style>/gi, "") // Remove style tags and content
-          .replace(/<!--[\s\S]*?-->/g, "") // Remove HTML comments
-          .replace(/<[^>]+>/g, ""); // Remove remaining HTML tags
+        // Use DOMPurify for secure HTML sanitization (removes all HTML tags)
+        cleanText = sanitizeText(cleanText);
         for (let i = 0; i < 3; i++) {
           cleanText = cleanText
             .replace(/<pr<cod?/gi, "")
@@ -890,12 +878,8 @@ const QuestionContent = ({ content }: { content: string }) => {
         /<code[^>]*>([^<]{1,30})<\/code>/gi,
         "`$1`",
       );
-      // Comprehensive HTML tag removal: remove script/style tags with content, comments, then all tags
-      cleanText = cleanText
-        .replace(/<script[\s\S]*?<\/script>/gi, "") // Remove script tags and content
-        .replace(/<style[\s\S]*?<\/style>/gi, "") // Remove style tags and content
-        .replace(/<!--[\s\S]*?-->/g, "") // Remove HTML comments
-        .replace(/<[^>]+>/g, ""); // Remove remaining HTML tags
+      // Use DOMPurify for secure HTML sanitization (removes all HTML tags)
+      cleanText = sanitizeText(cleanText);
       for (let i = 0; i < 3; i++) {
         cleanText = cleanText
           .replace(/<pr<cod?/gi, "")
@@ -937,11 +921,6 @@ const QuestionContent = ({ content }: { content: string }) => {
         .replace(/<\/cod/gi, "")
         .replace(/<\/pr/gi, "")
         .replace(/<pr/gi, "")
-        // Comprehensive HTML tag removal: remove script/style tags with content, comments, then all tags
-        .replace(/<script[\s\S]*?<\/script>/gi, "") // Remove script tags and content
-        .replace(/<style[\s\S]*?<\/style>/gi, "") // Remove style tags and content
-        .replace(/<!--[\s\S]*?-->/g, "") // Remove HTML comments
-        .replace(/<[^>]+>/g, "") // Remove remaining HTML tags
         .replace(/e>e>e>/g, "")
         .replace(/e>e>/g, "")
         .replace(/^e>+/g, "")
