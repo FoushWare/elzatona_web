@@ -496,6 +496,13 @@ export const QuestionContent = ({ content }: { content: string }) => {
       }
     }
 
+    // SECURITY: Limit input size before processing to prevent ReDoS
+    const MAX_CODE_LENGTH = 50000; // 50KB limit
+    if (code.length > MAX_CODE_LENGTH) {
+      console.warn("Code content too large, truncating for safety");
+      code = code.substring(0, MAX_CODE_LENGTH);
+    }
+
     code = decodeHtmlEntities(code);
 
     let previousCode = "";
@@ -505,8 +512,9 @@ export const QuestionContent = ({ content }: { content: string }) => {
     while (code !== previousCode && iterations < maxIterations) {
       previousCode = code;
       code = decodeHtmlEntities(code);
-      // Use replace() with regex for proper HTML tag removal (replaceAll only works with strings)
-      code = code.replace(/<\/?[a-z][a-z0-9]*(?:\s+[^>]*)?>/gi, "");
+      // SECURITY: Use simpler regex pattern to prevent ReDoS
+      // Match HTML tags with bounded quantifiers
+      code = code.replace(/<\/?[a-z][a-z0-9]{0,20}(?:\s+[^>]{0,200})?>/gi, "");
       iterations++;
     }
 
@@ -538,19 +546,14 @@ export const QuestionContent = ({ content }: { content: string }) => {
         .replaceAll(/NaNe>NaN/g, "NaN")
         .replaceAll(/NaNe>/g, "NaN")
         .replaceAll(/NaN>/g, "NaN")
-        .replaceAll(/&lt;/g, "<")
-        .replaceAll(/&gt;/g, ">")
-        .replaceAll(/&amp;/g, "&")
-        .replaceAll(/&quot;/g, '"')
-        .replaceAll(/&#39;/g, "'")
-        .replaceAll(/&apos;/g, "'")
-        .replaceAll(/&nbsp;/g, " ")
-        // ⚠️ SECURITY: Simplified regex patterns to prevent ReDoS
-        // Limit quantifiers and avoid nested quantifiers
-        .replaceAll(/(\w{1,50})\s*&lt;\s*(\d{1,10})\s*&gt;/g, "$1 < $2 >")
-        .replaceAll(/(\w{1,50})\s*&lt;\s*(\d{1,10})/g, "$1 < $2")
-        .replaceAll(/(\d{1,10})\s*&gt;/g, "$1 >")
-        .replaceAll(/<\/?[a-zA-Z][a-zA-Z0-9]*(?:\s+[^>]*)?>/gi, "")
+        // SECURITY: Decode HTML entities only once to prevent double escaping
+        // Note: Entity decoding happens before this loop, so we work with decoded content
+        // SECURITY: Use bounded quantifiers to prevent ReDoS
+        .replaceAll(/(\w{1,50})\s*<\s*(\d{1,10})\s*>/g, "$1 < $2 >")
+        .replaceAll(/(\w{1,50})\s*<\s*(\d{1,10})/g, "$1 < $2")
+        .replaceAll(/(\d{1,10})\s*>/g, "$1 >")
+        // SECURITY: Use bounded quantifiers for HTML tag removal
+        .replaceAll(/<\/?[a-z][a-z0-9]{0,20}(?:\s+[^>]{0,200})?>/gi, "")
         .replaceAll(/^>\s*/g, "")
         .replaceAll(/\s*>$/g, "")
         .replaceAll(/\s+>\s+/g, " ");
@@ -579,10 +582,9 @@ export const QuestionContent = ({ content }: { content: string }) => {
     return code;
   };
 
-  let processedContent = fixedContent;
-
-  processedContent = processedContent.replace(
-    /<code[^>]*>([^<]{1,50})<\/code>/gi,
+  // SECURITY: Process code blocks with bounded quantifiers
+  fixedContent = fixedContent.replace(
+    /<code[^>]{0,200}>([^<]{1,50})<\/code>/gi,
     (match, codeContent, offset) => {
       const beforeMatch = fixedContent.substring(0, offset);
       const lastPreOpen = beforeMatch.lastIndexOf("<pre");
@@ -604,13 +606,14 @@ export const QuestionContent = ({ content }: { content: string }) => {
     fixedContent = fixedContent.substring(0, MAX_CONTENT_LENGTH);
   }
 
-  // Split complex regex into simpler patterns to reduce ReDoS risk
-  // Instead of one complex alternation, use multiple simpler patterns
+  // SECURITY: Split complex regex into simpler patterns with bounded quantifiers to reduce ReDoS risk
+  // Use bounded quantifiers and limit input size
+  const MAX_PATTERN_LENGTH = 50000; // 50KB limit per pattern match
   const htmlCodeBlockPatterns = [
-    /<pre[^>]*><code[^>]*>[\s\S]{0,50000}?<\/code><\/pre>/gi,
-    /<pr<cod[^>]*>[\s\S]{0,50000}?<\/cod<\/pr/gi,
-    /<pr<code[^>]*>[\s\S]{0,50000}?<\/code<\/pr/gi,
-    /<code[^>]*>[\s\S]{20,50000}?<\/code>/gi,
+    /<pre[^>]{0,200}><code[^>]{0,200}>[\s\S]{0,50000}?<\/code><\/pre>/gi,
+    /<pr<cod[^>]{0,200}>[\s\S]{0,50000}?<\/cod<\/pr/gi,
+    /<pr<code[^>]{0,200}>[\s\S]{0,50000}?<\/code<\/pr/gi,
+    /<code[^>]{0,200}>[\s\S]{20,50000}?<\/code>/gi,
   ];
 
   const htmlMatches: Array<{
@@ -668,7 +671,8 @@ export const QuestionContent = ({ content }: { content: string }) => {
   if (fixedContent.length > MAX_INPUT_SIZE) {
     fixedContent = fixedContent.substring(0, MAX_INPUT_SIZE);
   }
-  const malformedPattern = /<pr<cod[^>]*>([\s\S]{0,50000}?)(?:<\/cod<\/pr|$)/gi;
+  // SECURITY: Use bounded quantifiers to prevent ReDoS
+  const malformedPattern = /<pr<cod[^>]{0,200}>([\s\S]{0,50000}?)(?:<\/cod<\/pr|$)/gi;
   let malformedMatch: RegExpExecArray | null;
   malformedPattern.lastIndex = 0;
   let malformedIterations = 0;
@@ -684,9 +688,15 @@ export const QuestionContent = ({ content }: { content: string }) => {
       (m) => Math.abs(m.index - malformedMatch!.index) < 10,
     );
 
-    if (!alreadyCaptured && malformedMatch[1]) {
-      let code = malformedMatch[1];
-      code = decodeHtmlEntities(code);
+      if (!alreadyCaptured && malformedMatch[1]) {
+        let code = malformedMatch[1];
+        // SECURITY: Limit code length before processing
+        if (code.length > MAX_INPUT_SIZE) {
+          code = code.substring(0, MAX_INPUT_SIZE);
+        }
+        code = decodeHtmlEntities(code);
+        // SECURITY: Remove HTML tags after decoding to prevent injection
+        code = code.replace(/<\/?[a-z][a-z0-9]{0,20}(?:\s+[^>]{0,200})?>/gi, "");
       code = code.replaceAll(/<[^>]+>/g, "");
       for (let i = 0; i < 3; i++) {
         code = code
@@ -716,7 +726,8 @@ export const QuestionContent = ({ content }: { content: string }) => {
 
   htmlMatches.sort((a, b) => a.index - b.index);
 
-  const markdownCodeBlockRegex = /```(\w+)?\n?([\s\S]*?)```/g;
+  // SECURITY: Use bounded quantifier to prevent ReDoS
+  const markdownCodeBlockRegex = /```(\w{0,20})?\n?([\s\S]{0,50000}?)```/g;
   const markdownMatches: Array<{
     index: number;
     content: string;
@@ -748,13 +759,15 @@ export const QuestionContent = ({ content }: { content: string }) => {
   let lastIndex = 0;
 
   for (const match of allMatches) {
-    if (match.index > lastIndex) {
-      const textContent = fixedContent.substring(lastIndex, match.index);
-      if (textContent.trim()) {
-        let cleanText = decodeHtmlEntities(textContent);
-        cleanText = cleanText.replace(
-          /<code[^>]*>([^<]{1,30})<\/code>/gi,
-          "`$1`",
+      if (match.index > lastIndex) {
+        const textContent = fixedContent.substring(lastIndex, match.index);
+        if (textContent.trim()) {
+          let cleanText = decodeHtmlEntities(textContent);
+          // SECURITY: Remove HTML tags to prevent injection
+          cleanText = cleanText.replace(/<\/?[a-z][a-z0-9]{0,20}(?:\s+[^>]{0,200})?>/gi, "");
+          cleanText = cleanText.replace(
+            /<code[^>]{0,200}>([^<]{1,30})<\/code>/gi,
+            "`$1`",
         );
         cleanText = cleanText.replaceAll(/<[^>]+>/g, "");
         for (let i = 0; i < 3; i++) {
@@ -821,8 +834,10 @@ export const QuestionContent = ({ content }: { content: string }) => {
     const textContent = fixedContent.substring(lastIndex);
     if (textContent.trim()) {
       let cleanText = decodeHtmlEntities(textContent);
+      // SECURITY: Remove HTML tags to prevent injection
+      cleanText = cleanText.replace(/<\/?[a-z][a-z0-9]{0,20}(?:\s+[^>]{0,200})?>/gi, "");
       cleanText = cleanText.replaceAll(
-        /<code[^>]*>([^<]{1,30})<\/code>/gi,
+        /<code[^>]{0,200}>([^<]{1,30})<\/code>/gi,
         "`$1`",
       );
       cleanText = cleanText.replaceAll(/<[^>]+>/g, "");
@@ -859,6 +874,10 @@ export const QuestionContent = ({ content }: { content: string }) => {
   if (parts.length === 0) {
     let cleanContent = fixedContent;
 
+    // SECURITY: Limit input size and use bounded patterns
+    if (cleanContent.length > MAX_INPUT_SIZE) {
+      cleanContent = cleanContent.substring(0, MAX_INPUT_SIZE);
+    }
     for (let i = 0; i < 3; i++) {
       cleanContent = cleanContent
         .replaceAll(/<pr<cod/gi, "")
@@ -866,6 +885,8 @@ export const QuestionContent = ({ content }: { content: string }) => {
         .replaceAll(/<pr</gi, "")
         .replaceAll(/<\/cod/gi, "")
         .replaceAll(/<\/pr/gi, "")
+        // SECURITY: Remove all HTML tags to prevent injection
+        .replace(/<\/?[a-z][a-z0-9]{0,20}(?:\s+[^>]{0,200})?>/gi, "")
         .replaceAll(/<pr/gi, "")
         .replaceAll(/<[^>]+>/g, "")
         .replaceAll(/e>e>e>/g, "")
