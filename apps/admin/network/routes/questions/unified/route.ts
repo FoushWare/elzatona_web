@@ -335,20 +335,22 @@ export async function GET(request: NextRequest) {
           allCardCategories?.filter(
             (cc) => cc.card_id === question.learning_card_id,
           ) || [];
-        const categories = cardCategories.map((cc: QuestionCategoryRelation) => {
-          // Handle categories as array or single object
-          const category = Array.isArray(cc.categories)
-            ? cc.categories[0]
-            : cc.categories;
-          return {
-            id: category?.id,
-            name: category?.name,
-            slug: category?.slug,
-            card_type: category?.card_type,
-            is_primary: cc.is_primary,
-            order_index: cc.order_index,
-          };
-        });
+        const categories = cardCategories.map(
+          (cc: QuestionCategoryRelation) => {
+            // Handle categories as array or single object
+            const category = Array.isArray(cc.categories)
+              ? cc.categories[0]
+              : cc.categories;
+            return {
+              id: category?.id,
+              name: category?.name,
+              slug: category?.slug,
+              card_type: category?.card_type,
+              is_primary: cc.is_primary,
+              order_index: cc.order_index,
+            };
+          },
+        );
 
         // Get primary topic and category
         const primaryTopic = topics.find((t) => t.is_primary) || topics[0];
@@ -411,7 +413,8 @@ export async function GET(request: NextRequest) {
       },
     });
   } catch (error) {
-    const errorMessage = error instanceof Error ? error.message : "Failed to fetch questions";
+    const errorMessage =
+      error instanceof Error ? error.message : "Failed to fetch questions";
     console.error("Error fetching questions:", errorMessage);
     return NextResponse.json(
       { success: false, error: errorMessage },
@@ -476,7 +479,8 @@ export async function POST(request: NextRequest) {
       data,
     });
   } catch (error) {
-    const errorMessage = error instanceof Error ? error.message : "Failed to create question";
+    const errorMessage =
+      error instanceof Error ? error.message : "Failed to create question";
     console.error("Error creating question:", errorMessage);
     return NextResponse.json(
       { success: false, error: errorMessage },
