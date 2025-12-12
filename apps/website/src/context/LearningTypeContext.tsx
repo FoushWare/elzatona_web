@@ -45,7 +45,7 @@ export function LearningTypeProvider({
   // Initialize learning type from localStorage on mount (before auth check)
   const getInitialLearningType = (): LearningType => {
     // Always return default during SSR - actual value will be loaded in useEffect
-    if (globalThis.window === undefined) return "guided";
+    if (globalThis.window === undefined) return "guided"; // NOSONAR S6658: Direct comparison needed for SSR check
     try {
       // First try universal key (works for logged out users)
       const universalTypeKey = buildStorageKey(null, "type");
@@ -87,10 +87,7 @@ export function LearningTypeProvider({
         const keyToLoad = newUserId ? userTypeKey : universalTypeKey;
 
         try {
-          if (
-            globalThis.window !== undefined &&
-            globalThis.window.localStorage
-          ) {
+          if (globalThis.window?.localStorage) {
             const rawType = globalThis.window.localStorage.getItem(keyToLoad);
             if (
               rawType === "guided" ||
@@ -108,10 +105,7 @@ export function LearningTypeProvider({
         setUserId(null);
         // Load from universal key when logged out
         try {
-          if (
-            globalThis.window !== undefined &&
-            globalThis.window.localStorage
-          ) {
+          if (globalThis.window?.localStorage) {
             const universalTypeKey = buildStorageKey(null, "type");
             const rawType =
               globalThis.window.localStorage.getItem(universalTypeKey);
@@ -146,10 +140,7 @@ export function LearningTypeProvider({
         const keyToLoad = newUserId ? userTypeKey : universalTypeKey;
 
         try {
-          if (
-            globalThis.window !== undefined &&
-            globalThis.window.localStorage
-          ) {
+          if (globalThis.window?.localStorage) {
             const rawType = globalThis.window.localStorage.getItem(keyToLoad);
             if (
               rawType === "guided" ||
@@ -180,7 +171,7 @@ export function LearningTypeProvider({
       // Priority: userId-specific key (if logged in) > universal key (if logged out)
       let rawType: string | null = null;
 
-      if (globalThis.window !== undefined && globalThis.window.localStorage) {
+      if (globalThis.window?.localStorage) {
         if (userId) {
           // When logged in, try user-specific key first, fallback to universal
           rawType =
@@ -199,10 +190,9 @@ export function LearningTypeProvider({
       ) {
         setLearningTypeState(rawType);
       }
-      const rawSolved =
-        globalThis.window?.localStorage
-          ? globalThis.window.localStorage.getItem(solvedKey)
-          : null;
+      const rawSolved = globalThis.window?.localStorage
+        ? globalThis.window.localStorage.getItem(solvedKey)
+        : null;
       if (rawSolved) {
         const parsed = JSON.parse(rawSolved);
         if (Array.isArray(parsed))
