@@ -3,6 +3,7 @@
 import React from "react";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { vscDarkPlus } from "react-syntax-highlighter/dist/esm/styles/prism";
+import { sanitizeText } from "./utils/sanitize";
 
 // Helper function to determine if content is valid code or should be rendered as text
 // Uses a scoring system to make intelligent decisions
@@ -696,16 +697,9 @@ export const QuestionContent = ({ content }: { content: string }) => {
         code = code.substring(0, MAX_INPUT_SIZE);
       }
       code = decodeHtmlEntities(code);
-      // SECURITY: Remove HTML tags after decoding to prevent injection
-      // Use comprehensive sanitization to remove all HTML tags including edge cases
-      // NOSONAR S7781: replaceAll() cannot be used with regex patterns that require capture groups
-      code = code
-        .replace(/<\/?[a-z][a-z0-9]{0,20}(?:\s+[^>]{0,200})?>/gi, "")
-        .replace(/<script[^>]*>[\s\S]*?<\/script>/gi, "")
-        .replace(/<style[^>]*>[\s\S]*?<\/style>/gi, "")
-        .replace(/<iframe[^>]*>[\s\S]*?<\/iframe>/gi, "")
-        .replace(/on\w+\s*=\s*["'][^"']*["']/gi, "");
-      code = code.replaceAll(/<[^>]+>/g, "");
+      // SECURITY: Use sanitizeText to remove all HTML tags and prevent injection
+      // This replaces manual regex sanitization with DOMPurify-based sanitization
+      code = sanitizeText(code);
       for (let i = 0; i < 3; i++) {
         code = code
           .replaceAll(/e>e>e>/g, "")
@@ -771,20 +765,14 @@ export const QuestionContent = ({ content }: { content: string }) => {
       const textContent = fixedContent.substring(lastIndex, match.index);
       if (textContent.trim()) {
         let cleanText = decodeHtmlEntities(textContent);
-        // SECURITY: Remove HTML tags to prevent injection
-        // Use comprehensive sanitization to remove all HTML tags including edge cases
-        // NOSONAR S7781: replaceAll() cannot be used with regex patterns that require capture groups
-        cleanText = cleanText
-          .replace(/<\/?[a-z][a-z0-9]{0,20}(?:\s+[^>]{0,200})?>/gi, "")
-          .replace(/<script[^>]*>[\s\S]*?<\/script>/gi, "")
-          .replace(/<style[^>]*>[\s\S]*?<\/style>/gi, "")
-          .replace(/<iframe[^>]*>[\s\S]*?<\/iframe>/gi, "")
-          .replace(/on\w+\s*=\s*["'][^"']*["']/gi, "");
+        // SECURITY: Use sanitizeText to remove all HTML tags and prevent injection
+        // This replaces manual regex sanitization with DOMPurify-based sanitization
+        // First, convert <code> tags to backticks before sanitizing
         cleanText = cleanText.replace(
           /<code[^>]{0,200}>([^<]{1,30})<\/code>/gi,
           "`$1`",
         );
-        cleanText = cleanText.replaceAll(/<[^>]+>/g, "");
+        cleanText = sanitizeText(cleanText);
         for (let i = 0; i < 3; i++) {
           cleanText = cleanText
             .replaceAll(/<pr<cod?/gi, "")
@@ -833,12 +821,8 @@ export const QuestionContent = ({ content }: { content: string }) => {
           .replaceAll(/^>\s*/g, "")
           .replaceAll(/\s*>$/g, "")
           .replaceAll(/\s+>\s+/g, " ");
-        // SECURITY: Additional sanitization to remove any remaining HTML tags
-        cleanCode = cleanCode
-          .replace(/<script[^>]*>[\s\S]*?<\/script>/gi, "")
-          .replace(/<style[^>]*>[\s\S]*?<\/style>/gi, "")
-          .replace(/<iframe[^>]*>[\s\S]*?<\/iframe>/gi, "")
-          .replace(/on\w+\s*=\s*["'][^"']*["']/gi, "");
+        // SECURITY: Use sanitizeText to remove any remaining HTML tags
+        cleanCode = sanitizeText(cleanCode);
       }
       const formattedCode = formatCodeContent(cleanCode);
       parts.push({
