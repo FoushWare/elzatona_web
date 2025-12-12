@@ -910,7 +910,7 @@ export default function ProblemSolvingQuestion({
     if (preCodeMatch?.[1]) {
       let code = preCodeMatch[1];
       code = decodeHtmlEntities(code);
-      code = code.replace(/<[^>]+>/g, ""); // NOSONAR: regex pattern required
+      code = sanitizeText(code); // Properly sanitize HTML to prevent XSS
       code = cleanCodePatterns(code);
       if (code) return code;
     }
@@ -929,7 +929,7 @@ export default function ProblemSolvingQuestion({
     if (codeMatch?.[1]) {
       let code = codeMatch[1];
       code = decodeHtmlEntities(code);
-      code = code.replace(/<[^>]+>/g, ""); // NOSONAR: regex pattern required
+      code = sanitizeText(code); // Properly sanitize HTML to prevent XSS
       code = cleanCodePatterns(code);
       if (code) return code;
     }
