@@ -35,28 +35,28 @@ interface Example {
 }
 
 interface ProblemSolvingQuestionProps {
-  question: {
-    id: string;
-    title: string;
-    content: string;
-    code_template?: string;
-    test_cases?: TestCase[] | string;
-    examples?: Example[] | string;
-    difficulty?: string;
-    category?: string;
-    topic?: string;
-    hints?: string[] | null;
-    constraints?: string[] | null;
-    tags?: string[] | null;
-    language?: string;
-    topic_id?: string;
-    topic_name?: string;
-    topic_description?: string;
+  readonly question: {
+    readonly id: string;
+    readonly title: string;
+    readonly content: string;
+    readonly code_template?: string;
+    readonly test_cases?: TestCase[] | string;
+    readonly examples?: Example[] | string;
+    readonly difficulty?: string;
+    readonly category?: string;
+    readonly topic?: string;
+    readonly hints?: string[] | null;
+    readonly constraints?: string[] | null;
+    readonly tags?: string[] | null;
+    readonly language?: string;
+    readonly topic_id?: string;
+    readonly topic_name?: string;
+    readonly topic_description?: string;
   };
-  onComplete?: (isCorrect: boolean) => void;
-  onNextQuestion?: () => void;
-  language?: string; // Fallback only if not in question
-  onSubmitSolution?: () => void;
+  readonly onComplete?: (isCorrect: boolean) => void;
+  readonly onNextQuestion?: () => void;
+  readonly language?: string; // Fallback only if not in question
+  readonly onSubmitSolution?: () => void;
 }
 
 export default function ProblemSolvingQuestion({
