@@ -20,7 +20,7 @@ import {
   isInFlashcards,
   removeFlashcard,
 } from "@/lib/flashcards";
-import { SafeHTML } from "@/lib/utils/sanitize";
+import { SafeHTML, sanitizeText } from "@/lib/utils/sanitize";
 
 interface TestCase {
   input: unknown[] | Record<string, unknown> | string | number | boolean;
@@ -160,14 +160,17 @@ const ProblemDescriptionPanel: React.FC<ProblemDescriptionPanelProps> = ({
                       ];
                       return !genericTags.includes(tag.toLowerCase());
                     })
-                    .map((tag, index) => (
-                      <span
-                        key={`tag-${tag}-${index}`}
-                        className="inline-flex items-center px-3 sm:px-3.5 py-1.5 rounded-lg text-xs sm:text-sm font-semibold bg-gradient-to-br from-gray-100 to-gray-50 dark:from-gray-700 dark:to-gray-800 text-gray-700 dark:text-gray-300 border border-gray-200 dark:border-gray-600 hover:from-gray-200 hover:to-gray-100 dark:hover:from-gray-600 dark:hover:to-gray-700 transition-all duration-200 shadow-sm hover:shadow"
-                      >
-                        {tag}
-                      </span>
-                    ))}
+                    .map((tag, index) => {
+                      const sanitizedTag = sanitizeText(tag);
+                      return (
+                        <span
+                          key={`tag-${sanitizedTag}-${index}`}
+                          className="inline-flex items-center px-3 sm:px-3.5 py-1.5 rounded-lg text-xs sm:text-sm font-semibold bg-gradient-to-br from-gray-100 to-gray-50 dark:from-gray-700 dark:to-gray-800 text-gray-700 dark:text-gray-300 border border-gray-200 dark:border-gray-600 hover:from-gray-200 hover:to-gray-100 dark:hover:from-gray-600 dark:hover:to-gray-700 transition-all duration-200 shadow-sm hover:shadow"
+                        >
+                          {sanitizedTag}
+                        </span>
+                      );
+                    })}
                 </div>
               )}
 
