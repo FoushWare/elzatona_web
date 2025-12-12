@@ -78,8 +78,8 @@ This means:
 ```bash
 # 1. Ensure .env.local has production credentials
 # 2. Set admin credentials:
-#    ADMIN_EMAIL=afouadsoftwareengineer@gmail.com
-#    ADMIN_PASSWORD=ZatonaFoushware$12
+#    ADMIN_EMAIL=<your-admin-email>
+#    ADMIN_PASSWORD=<your-admin-password>
 
 # 3. Run setup script
 node scripts/setup-admin-user.js
