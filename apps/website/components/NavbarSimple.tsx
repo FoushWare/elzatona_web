@@ -702,9 +702,9 @@ export const NavbarSimple: React.FC = () => {
                       <div className="flex-1 min-w-0">
                         <p className="text-sm font-medium text-gray-900 dark:text-white truncate">
                           {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
-                          {(user as unknown)?.displayName ||
+                          {(user as any)?.displayName ||
                             // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                            (user as unknown)?.name ||
+                            (user as any)?.name ||
                             "User"}
                         </p>
                         <p className="text-xs text-gray-500 dark:text-gray-400 truncate">
