@@ -81,40 +81,46 @@ else
 fi
 echo ""
 
-# Step 3: CodeQL security analysis
-echo "🔐 STEP 3: Running CodeQL security analysis..."
-echo "   📝 Executing: libs/utilities/scripts/check-codeql-precommit.sh"
-echo "   ⚠️  This will catch security vulnerabilities BEFORE commit!"
-echo ""
+# Step 3: CodeQL security analysis (optional - can be disabled with SKIP_CODEQL=1)
+if [ "$SKIP_CODEQL" != "1" ]; then
+  echo "🔐 STEP 3: Running CodeQL security analysis..."
+  echo "   📝 Executing: libs/utilities/scripts/check-codeql-precommit.sh"
+  echo "   ⚠️  This will catch security vulnerabilities BEFORE commit!"
+  echo "   💡 To skip: SKIP_CODEQL=1 git commit"
+  echo ""
 
-# Check if CodeQL script exists
-if [ -f "libs/utilities/scripts/check-codeql-precommit.sh" ]; then
-  bash libs/utilities/scripts/check-codeql-precommit.sh
-  CODEQL_EXIT_CODE=$?
-  
-  if [ $CODEQL_EXIT_CODE -ne 0 ]; then
-    echo ""
-    echo "════════════════════════════════════════════════════════════════"
-    echo "❌ PRE-COMMIT HOOK FAILED - CODEQL SECURITY ISSUES DETECTED!"
-    echo "════════════════════════════════════════════════════════════════"
-    echo ""
-    echo "💡 The auto-fix script may have fixed some issues."
-    echo "💡 Please review the changes and stage them:"
-    echo "   git add -A"
-    echo "   git commit"
-    echo ""
-    echo "💡 If issues persist, fix them manually or skip with:"
-    echo "   git commit --no-verify (NOT RECOMMENDED)"
-    echo ""
-    exit 1
+  # Check if CodeQL script exists
+  if [ -f "libs/utilities/scripts/check-codeql-precommit.sh" ]; then
+    bash libs/utilities/scripts/check-codeql-precommit.sh
+    CODEQL_EXIT_CODE=$?
+    
+    if [ $CODEQL_EXIT_CODE -ne 0 ]; then
+      echo ""
+      echo "════════════════════════════════════════════════════════════════"
+      echo "❌ PRE-COMMIT HOOK FAILED - CODEQL SECURITY ISSUES DETECTED!"
+      echo "════════════════════════════════════════════════════════════════"
+      echo ""
+      echo "💡 The auto-fix script may have fixed some issues."
+      echo "💡 Please review the changes and stage them:"
+      echo "   git add -A"
+      echo "   git commit"
+      echo ""
+      echo "💡 If issues persist, fix them manually or skip with:"
+      echo "   SKIP_CODEQL=1 git commit (NOT RECOMMENDED)"
+      echo ""
+      exit 1
+    else
+      echo "   ✅ CodeQL security analysis passed!"
+    fi
   else
-    echo "   ✅ CodeQL security analysis passed!"
+    echo "   ⚠️  CodeQL check script not found"
+    echo "   💡 Skipping CodeQL check"
   fi
+  echo ""
 else
-  echo "   ⚠️  CodeQL check script not found"
-  echo "   💡 Skipping CodeQL check"
+  echo "⏭️  STEP 3: Skipping CodeQL check (SKIP_CODEQL=1)"
+  echo ""
 fi
-echo ""
 
 # Step 4: Add formatted files to staging
 echo "📦 STEP 4: Adding formatted files to staging..."
