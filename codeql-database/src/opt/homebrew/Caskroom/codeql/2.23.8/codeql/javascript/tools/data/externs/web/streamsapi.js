@@ -24,7 +24,7 @@
  */
 
 /** @typedef {{ value:*, done:boolean }} */
-var IteratorResult;
+var _IteratorResult;
 
 /**
  * @typedef {!CountQueuingStrategy|!ByteLengthQueuingStrategy|{
@@ -32,7 +32,7 @@ var IteratorResult;
  *     highWaterMark: number
  * }}
  */
-var QueuingStrategy;
+var _QueuingStrategy;
 
 /**
  * @record
@@ -91,7 +91,7 @@ ReadableStreamSource.prototype.autoAllocateChunkSize;
  * @constructor
  * @see https://streams.spec.whatwg.org/#rs-class
  */
-function ReadableStream(opt_underlyingSource, opt_queuingStrategy) {}
+function ReadableStream(_opt_underlyingSource, _opt_queuingStrategy) {}
 
 /**
  * @type {boolean}
@@ -104,14 +104,14 @@ ReadableStream.prototype.locked;
  * @return {!Promise<void>}
  * @see https://streams.spec.whatwg.org/#rs-cancel
  */
-ReadableStream.prototype.cancel = function (reason) {};
+ReadableStream.prototype.cancel = function (_reason) {};
 
 /**
  * @param {{ mode:(undefined|string) }=} opt_options
  * @return {(!ReadableStreamDefaultReader|!ReadableStreamBYOBReader)}
  * @see https://streams.spec.whatwg.org/#rs-get-reader
  */
-ReadableStream.prototype.getReader = function (opt_options) {};
+ReadableStream.prototype.getReader = function (_opt_options) {};
 
 /**
  * @param {!TransformStream} transform
@@ -119,7 +119,7 @@ ReadableStream.prototype.getReader = function (opt_options) {};
  * @return {!ReadableStream}
  * @see https://streams.spec.whatwg.org/#rs-pipe-through
  */
-ReadableStream.prototype.pipeThrough = function (transform, opt_options) {};
+ReadableStream.prototype.pipeThrough = function (_transform, _opt_options) {};
 
 /**
  * @param {!WritableStream} dest
@@ -127,7 +127,7 @@ ReadableStream.prototype.pipeThrough = function (transform, opt_options) {};
  * @return {!Promise<void>}
  * @see https://streams.spec.whatwg.org/#rs-pipe-to
  */
-ReadableStream.prototype.pipeTo = function (dest, opt_options) {};
+ReadableStream.prototype.pipeTo = function (_dest, _opt_options) {};
 
 /**
  * @return {!Array<!ReadableStream>}
@@ -155,7 +155,7 @@ ReadableStreamDefaultReader.prototype.closed;
  * @return {!Promise<*>}
  * @see https://streams.spec.whatwg.org/#default-reader-cancel
  */
-ReadableStreamDefaultReader.prototype.cancel = function (reason) {};
+ReadableStreamDefaultReader.prototype.cancel = function (_reason) {};
 
 /**
  * @return {!Promise<!IteratorResult>}
@@ -189,14 +189,14 @@ ReadableStreamBYOBReader.prototype.closed;
  * @return {!Promise<*>}
  * @see https://streams.spec.whatwg.org/#byob-reader-cancel
  */
-ReadableStreamBYOBReader.prototype.cancel = function (reason) {};
+ReadableStreamBYOBReader.prototype.cancel = function (_reason) {};
 
 /**
  * @param {!ArrayBufferView} view
  * @return {!Promise<!IteratorResult>}
  * @see https://streams.spec.whatwg.org/#byob-reader-read
  */
-ReadableStreamBYOBReader.prototype.read = function (view) {};
+ReadableStreamBYOBReader.prototype.read = function (_view) {};
 
 /**
  * @return {undefined}
@@ -230,14 +230,14 @@ ReadableStreamDefaultController.prototype.close = function () {};
  * @return {undefined}
  * @see https://streams.spec.whatwg.org/#rs-default-controller-enqueue
  */
-ReadableStreamDefaultController.prototype.enqueue = function (chunk) {};
+ReadableStreamDefaultController.prototype.enqueue = function (_chunk) {};
 
 /**
  * @param {*} err
  * @return {undefined}
  * @see https://streams.spec.whatwg.org/#rs-default-controller-error
  */
-ReadableStreamDefaultController.prototype.error = function (err) {};
+ReadableStreamDefaultController.prototype.error = function (_err) {};
 
 /**
  * The ReadableByteStreamController constructor cannot be used directly;
@@ -271,14 +271,14 @@ ReadableByteStreamController.prototype.close = function () {};
  * @return {undefined}
  * @see https://streams.spec.whatwg.org/#rbs-controller-enqueue
  */
-ReadableByteStreamController.prototype.enqueue = function (chunk) {};
+ReadableByteStreamController.prototype.enqueue = function (_chunk) {};
 
 /**
  * @param {*} err
  * @return {undefined}
  * @see https://streams.spec.whatwg.org/#rbs-controller-error
  */
-ReadableByteStreamController.prototype.error = function (err) {};
+ReadableByteStreamController.prototype.error = function (_err) {};
 
 /**
  * @interface
@@ -297,14 +297,14 @@ ReadableStreamBYOBRequest.prototype.view;
  * @return {undefined}
  * @see https://streams.spec.whatwg.org/#rs-byob-request-respond
  */
-ReadableStreamBYOBRequest.prototype.respond = function (bytesWritten) {};
+ReadableStreamBYOBRequest.prototype.respond = function (_bytesWritten) {};
 
 /**
  * @param {!ArrayBufferView} view
  * @return {undefined}
  * @see https://streams.spec.whatwg.org/#rs-byob-request-respond-with-new-view
  */
-ReadableStreamBYOBRequest.prototype.respondWithNewView = function (view) {};
+ReadableStreamBYOBRequest.prototype.respondWithNewView = function (_view) {};
 
 /**
  * @record
@@ -329,7 +329,7 @@ WritableStreamSink.prototype.abort;
  * @constructor
  * @see https://streams.spec.whatwg.org/#ws-class
  */
-function WritableStream(opt_underlyingSink, opt_queuingStrategy) {}
+function WritableStream(_opt_underlyingSink, _opt_queuingStrategy) {}
 
 /**
  * @type {boolean}
@@ -342,7 +342,7 @@ WritableStream.prototype.locked;
  * @return {!Promise<undefined>}
  * @see https://streams.spec.whatwg.org/#ws-abort
  */
-WritableStream.prototype.abort = function (reason) {};
+WritableStream.prototype.abort = function (_reason) {};
 
 /**
  * @return {!WritableStreamDefaultWriter}
@@ -379,7 +379,7 @@ WritableStreamDefaultWriter.prototype.ready;
  * @return {!Promise<undefined>}
  * @see https://streams.spec.whatwg.org/#default-writer-abort
  */
-WritableStreamDefaultWriter.prototype.abort = function (reason) {};
+WritableStreamDefaultWriter.prototype.abort = function (_reason) {};
 
 /**
  * @return {!Promise<undefined>}
@@ -398,7 +398,7 @@ WritableStreamDefaultWriter.prototype.releaseLock = function () {};
  * @return {!Promise<undefined>}
  * @see https://streams.spec.whatwg.org/#default-writer-write
  */
-WritableStreamDefaultWriter.prototype.write = function (chunk) {};
+WritableStreamDefaultWriter.prototype.write = function (_chunk) {};
 
 /**
  * The WritableStreamDefaultController constructor cannot be used directly;
@@ -414,14 +414,14 @@ function WritableStreamDefaultController() {}
  * @return {!Promise<undefined>}
  * @see https://streams.spec.whatwg.org/#ws-default-controller-error
  */
-WritableStreamDefaultController.prototype.error = function (err) {};
+WritableStreamDefaultController.prototype.error = function (_err) {};
 
 /**
  * @param {{ highWaterMark:number }} config
  * @constructor
  * @see https://streams.spec.whatwg.org/#blqs-class
  */
-function ByteLengthQueuingStrategy(config) {}
+function ByteLengthQueuingStrategy(_config) {}
 
 /**
  * If we don't want to be strict we can define chunk as {*}
@@ -431,18 +431,18 @@ function ByteLengthQueuingStrategy(config) {}
  * @return {number}
  * @see https://streams.spec.whatwg.org/#blqs-size
  */
-ByteLengthQueuingStrategy.prototype.size = function (chunk) {};
+ByteLengthQueuingStrategy.prototype.size = function (_chunk) {};
 
 /**
  * @param {{ highWaterMark:number }} config
  * @constructor
  * @see https://streams.spec.whatwg.org/#cqs-class
  */
-function CountQueuingStrategy(config) {}
+function CountQueuingStrategy(_config) {}
 
 /**
  * @param {*} chunk
  * @return {number}
  * @see https://streams.spec.whatwg.org/#cqs-size
  */
-CountQueuingStrategy.prototype.size = function (chunk) {};
+CountQueuingStrategy.prototype.size = function (_chunk) {};

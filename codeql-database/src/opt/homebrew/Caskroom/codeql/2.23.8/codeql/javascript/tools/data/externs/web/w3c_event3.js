@@ -35,13 +35,13 @@
  * @return {undefined}
  */
 KeyboardEvent.prototype.initKeyboardEvent = function (
-  typeArg,
-  canBubbleArg,
-  cancelableArg,
-  viewArg,
-  keyIdentifierArg,
-  keyLocationArg,
-  modifiersList,
+  _typeArg,
+  _canBubbleArg,
+  _cancelableArg,
+  _viewArg,
+  _keyIdentifierArg,
+  _keyLocationArg,
+  _modifiersList,
 ) {};
 
 /** @type {string} */
@@ -69,7 +69,7 @@ MouseEvent.prototype.buttons;
  * @param {string} keyIdentifierArg
  * @return {boolean}
  */
-MouseEvent.prototype.getModifierState = function (keyIdentifierArg) {};
+MouseEvent.prototype.getModifierState = function (_keyIdentifierArg) {};
 
 /** @type {boolean} */
 Event.prototype.defaultPrevented;

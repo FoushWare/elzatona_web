@@ -38,9 +38,9 @@ function EventTarget() {}
  * @return {undefined}
  */
 EventTarget.prototype.addEventListener = function (
-  type,
-  listener,
-  useCapture,
+  _type,
+  _listener,
+  _useCapture,
 ) {};
 
 /**
@@ -50,16 +50,16 @@ EventTarget.prototype.addEventListener = function (
  * @return {undefined}
  */
 EventTarget.prototype.removeEventListener = function (
-  type,
-  listener,
-  useCapture,
+  _type,
+  _listener,
+  _useCapture,
 ) {};
 
 /**
  * @param {!Event} evt
  * @return {boolean}
  */
-EventTarget.prototype.dispatchEvent = function (evt) {};
+EventTarget.prototype.dispatchEvent = function (_evt) {};
 
 /**
  * @interface
@@ -70,7 +70,7 @@ function EventListener() {}
  * @param {!Event} evt
  * @return {undefined}
  */
-EventListener.prototype.handleEvent = function (evt) {};
+EventListener.prototype.handleEvent = function (_evt) {};
 
 // The EventInit interface and the parameters to the Event constructor are part
 // of DOM Level 3 (suggested) and the DOM "Living Standard" (mandated). They are
@@ -100,7 +100,7 @@ EventInit.prototype.composed;
  * @param {string} type
  * @param {EventInit=} opt_eventInitDict
  */
-function Event(type, opt_eventInitDict) {}
+function Event(_type, _opt_eventInitDict) {}
 
 /**
  * @type {number}
@@ -171,9 +171,9 @@ Event.prototype.preventDefault = function () {};
  * @return {undefined}
  */
 Event.prototype.initEvent = function (
-  eventTypeArg,
-  canBubbleArg,
-  cancelableArg,
+  _eventTypeArg,
+  _canBubbleArg,
+  _cancelableArg,
 ) {};
 
 /**
@@ -193,7 +193,7 @@ CustomEventInit.prototype.detail;
  * @param {CustomEventInit=} opt_eventInitDict
  * @see http://www.w3.org/TR/DOM-Level-3-Events/#interface-CustomEvent
  */
-function CustomEvent(type, opt_eventInitDict) {}
+function CustomEvent(_type, _opt_eventInitDict) {}
 
 /**
  * @param {string} eventType
@@ -203,10 +203,10 @@ function CustomEvent(type, opt_eventInitDict) {}
  * @return {undefined}
  */
 CustomEvent.prototype.initCustomEvent = function (
-  eventType,
-  bubbles,
-  cancelable,
-  detail,
+  _eventType,
+  _bubbles,
+  _cancelable,
+  _detail,
 ) {};
 
 /**
@@ -223,7 +223,7 @@ function DocumentEvent() {}
  * @param {string} eventType
  * @return {!Event}
  */
-DocumentEvent.prototype.createEvent = function (eventType) {};
+DocumentEvent.prototype.createEvent = function (_eventType) {};
 
 /**
  * @record
@@ -244,7 +244,7 @@ UIEventInit.prototype.detail;
  * @param {string} type
  * @param {UIEventInit=} opt_eventInitDict
  */
-function UIEvent(type, opt_eventInitDict) {}
+function UIEvent(_type, _opt_eventInitDict) {}
 
 /** @type {number} */
 UIEvent.prototype.detail;
@@ -258,11 +258,11 @@ UIEvent.prototype.detail;
  * @return {undefined}
  */
 UIEvent.prototype.initUIEvent = function (
-  typeArg,
-  canBubbleArg,
-  cancelableArg,
-  viewArg,
-  detailArg,
+  _typeArg,
+  _canBubbleArg,
+  _cancelableArg,
+  _viewArg,
+  _detailArg,
 ) {};
 
 /**
@@ -348,7 +348,7 @@ MouseEventInit.prototype.relatedTarget;
  * @param {string} type
  * @param {MouseEventInit=} opt_eventInitDict
  */
-function MouseEvent(type, opt_eventInitDict) {}
+function MouseEvent(_type, _opt_eventInitDict) {}
 
 /** @type {number} */
 MouseEvent.prototype.screenX;
@@ -413,14 +413,14 @@ MutationEvent.prototype.attrChange;
  * @return {undefined}
  */
 MutationEvent.prototype.initMutationEvent = function (
-  typeArg,
-  canBubbleArg,
-  cancelableArg,
-  relatedNodeArg,
-  prevValueArg,
-  newValueArg,
-  attrNameArg,
-  attrChangeArg,
+  _typeArg,
+  _canBubbleArg,
+  _cancelableArg,
+  _relatedNodeArg,
+  _prevValueArg,
+  _newValueArg,
+  _attrNameArg,
+  _attrChangeArg,
 ) {};
 
 // DOM3
@@ -458,7 +458,7 @@ KeyboardEventInit.prototype.locale;
  * @param {string} type
  * @param {KeyboardEventInit=} opt_eventInitDict
  */
-function KeyboardEvent(type, opt_eventInitDict) {}
+function KeyboardEvent(_type, _opt_eventInitDict) {}
 
 /** @type {string} */
 KeyboardEvent.prototype.keyIdentifier;
@@ -479,7 +479,7 @@ KeyboardEvent.prototype.metaKey;
  * @param {string} keyIdentifierArg
  * @return {boolean}
  */
-KeyboardEvent.prototype.getModifierState = function (keyIdentifierArg) {};
+KeyboardEvent.prototype.getModifierState = function (_keyIdentifierArg) {};
 
 /**
  * @record
@@ -501,7 +501,7 @@ FocusEventInit.prototype.relatedTarget;
  * @param {string} type
  * @param {FocusEventInit=} opt_eventInitDict
  */
-function FocusEvent(type, opt_eventInitDict) {}
+function FocusEvent(_type, _opt_eventInitDict) {}
 
 /** @type {EventTarget} */
 FocusEvent.prototype.relatedTarget;
@@ -559,7 +559,7 @@ InputEventInit.prototype.dataTransfer;
  * @see https://www.w3.org/TR/uievents/#interface-inputevent
  * @see https://w3c.github.io/input-events/#interface-InputEvent
  */
-function InputEvent(type, opt_eventInitDict) {}
+function InputEvent(_type, _opt_eventInitDict) {}
 
 /** @type {string} */
 InputEvent.prototype.data;

@@ -40,6 +40,7 @@ const eslintConfig = [
       // Legacy Node.js scripts in Rest/ directory (use require() - valid for Node.js)
       "Rest/**", // All files in Rest/ directory use CommonJS (legacy scripts)
       ".cursor/**", // Cursor IDE scripts use CommonJS
+      "codeql-database/**", // CodeQL generated database files
     ],
   },
   {

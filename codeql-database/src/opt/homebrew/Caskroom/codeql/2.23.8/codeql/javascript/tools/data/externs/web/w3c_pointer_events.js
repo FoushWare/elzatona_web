@@ -78,7 +78,7 @@ PointerEventInit.prototype.isPrimary;
  * @param {PointerEventInit=} opt_eventInitDict
  * @see http://www.w3.org/TR/pointerevents/#pointerevent-interface
  */
-function PointerEvent(type, opt_eventInitDict) {}
+function PointerEvent(_type, _opt_eventInitDict) {}
 
 /** @type {number} */
 PointerEvent.prototype.pointerId;

@@ -92,7 +92,7 @@ StyleSheetList.prototype.length;
  * @return {StyleSheet}
  * @see http://www.w3.org/TR/DOM-Level-2-Style/stylesheets.html#StyleSheets-StyleSheetList-item
  */
-StyleSheetList.prototype.item = function (index) {};
+StyleSheetList.prototype.item = function (_index) {};
 
 /**
  * @constructor
@@ -118,7 +118,7 @@ MediaList.prototype.length;
  * @return {string}
  * @see http://www.w3.org/TR/DOM-Level-2-Style/stylesheets.html#StyleSheets-MediaList-item
  */
-MediaList.prototype.item = function (index) {};
+MediaList.prototype.item = function (_index) {};
 
 /**
  * @interface
@@ -169,14 +169,14 @@ CSSStyleSheet.prototype.cssRules;
  * @return {number}
  * @see http://www.w3.org/TR/DOM-Level-2-Style/css.html#CSS-CSSStyleSheet-insertRule
  */
-CSSStyleSheet.prototype.insertRule = function (rule, index) {};
+CSSStyleSheet.prototype.insertRule = function (_rule, _index) {};
 
 /**
  * @param {number} index
  * @see http://www.w3.org/TR/DOM-Level-2-Style/css.html#CSS-CSSStyleSheet-deleteRule
  * @return {undefined}
  */
-CSSStyleSheet.prototype.deleteRule = function (index) {};
+CSSStyleSheet.prototype.deleteRule = function (_index) {};
 
 /**
  * @constructor
@@ -196,7 +196,7 @@ CSSRuleList.prototype.length;
  * @return {CSSRule}
  * @see http://www.w3.org/TR/DOM-Level-2-Style/css.html#CSS-CSSRuleList-item
  */
-CSSRuleList.prototype.item = function (index) {};
+CSSRuleList.prototype.item = function (_index) {};
 
 /**
  * @constructor
@@ -327,14 +327,14 @@ CSSMediaRule.prototype.cssRules;
  * @return {number}
  * @see http://www.w3.org/TR/DOM-Level-2-Style/css.html#CSS-CSSMediaRule-insertRule
  */
-CSSMediaRule.prototype.insertRule = function (rule, index) {};
+CSSMediaRule.prototype.insertRule = function (_rule, _index) {};
 
 /**
  * @param {number} index
  * @see http://www.w3.org/TR/DOM-Level-2-Style/css.html#CSS-CSSMediaRule-deleteRule
  * @return {undefined}
  */
-CSSMediaRule.prototype.deleteRule = function (index) {};
+CSSMediaRule.prototype.deleteRule = function (_index) {};
 
 /**
  * @constructor
@@ -411,7 +411,7 @@ CSSCharsetRule.prototype.encoding;
  * @extends {CSSRule}
  * @see http://www.w3.org/TR/DOM-Level-2-Style/css.html#CSS-CSSUnknownRule
  */
-function CSSUnknownRule() {}
+function _CSSUnknownRule() {}
 
 /**
  * @constructor
@@ -445,35 +445,35 @@ CSSStyleDeclaration.prototype.parentRule;
  * @return {CSSValue}
  * @see http://www.w3.org/TR/DOM-Level-2-Style/css.html#CSS-CSSStyleDeclaration-getPropertyCSSValue
  */
-CSSStyleDeclaration.prototype.getPropertyCSSValue = function (propertyName) {};
+CSSStyleDeclaration.prototype.getPropertyCSSValue = function (_propertyName) {};
 
 /**
  * @param {string} propertyName
  * @return {string}
  * @see http://www.w3.org/TR/DOM-Level-2-Style/css.html#CSS-CSSStyleDeclaration-getPropertyPriority
  */
-CSSStyleDeclaration.prototype.getPropertyPriority = function (propertyName) {};
+CSSStyleDeclaration.prototype.getPropertyPriority = function (_propertyName) {};
 
 /**
  * @param {string} propertyName
  * @return {string}
  * @see http://www.w3.org/TR/DOM-Level-2-Style/css.html#CSS-CSSStyleDeclaration-getPropertyValue
  */
-CSSStyleDeclaration.prototype.getPropertyValue = function (propertyName) {};
+CSSStyleDeclaration.prototype.getPropertyValue = function (_propertyName) {};
 
 /**
  * @param {number} index
  * @return {string}
  * @see http://www.w3.org/TR/DOM-Level-2-Style/css.html#CSS-CSSStyleDeclaration-item
  */
-CSSStyleDeclaration.prototype.item = function (index) {};
+CSSStyleDeclaration.prototype.item = function (_index) {};
 
 /**
  * @param {string} propertyName
  * @return {string}
  * @see http://www.w3.org/TR/DOM-Level-2-Style/css.html#CSS-CSSStyleDeclaration-removeProperty
  */
-CSSStyleDeclaration.prototype.removeProperty = function (propertyName) {};
+CSSStyleDeclaration.prototype.removeProperty = function (_propertyName) {};
 
 /**
  * @param {string} propertyName
@@ -483,9 +483,9 @@ CSSStyleDeclaration.prototype.removeProperty = function (propertyName) {};
  * @see http://www.w3.org/TR/DOM-Level-2-Style/css.html#CSS-CSSStyleDeclaration-setProperty
  */
 CSSStyleDeclaration.prototype.setProperty = function (
-  propertyName,
-  value,
-  opt_priority,
+  _propertyName,
+  _value,
+  _opt_priority,
 ) {};
 
 // IE-specific
@@ -496,14 +496,14 @@ CSSStyleDeclaration.prototype.setProperty = function (
  * @return {string|number|boolean|null}
  * @see http://msdn.microsoft.com/en-us/library/ms536429(VS.85).aspx
  */
-CSSStyleDeclaration.prototype.getAttribute = function (name, opt_flags) {};
+CSSStyleDeclaration.prototype.getAttribute = function (_name, _opt_flags) {};
 
 /**
  * @param {string} name
  * @return {string|number|boolean|null}
  * @see http://msdn.microsoft.com/en-us/library/aa358797(VS.85).aspx
  */
-CSSStyleDeclaration.prototype.getExpression = function (name) {};
+CSSStyleDeclaration.prototype.getExpression = function (_name) {};
 
 /**
  * @param {string} name
@@ -511,14 +511,14 @@ CSSStyleDeclaration.prototype.getExpression = function (name) {};
  * @return {boolean}
  * @see http://msdn.microsoft.com/en-us/library/ms536696(VS.85).aspx
  */
-CSSStyleDeclaration.prototype.removeAttribute = function (name, opt_flags) {};
+CSSStyleDeclaration.prototype.removeAttribute = function (_name, _opt_flags) {};
 
 /**
  * @param {string} name
  * @return {boolean}
  * @see http://msdn.microsoft.com/en-us/library/aa358798(VS.85).aspx
  */
-CSSStyleDeclaration.prototype.removeExpression = function (name) {};
+CSSStyleDeclaration.prototype.removeExpression = function (_name) {};
 
 /**
  * @param {string} name
@@ -528,9 +528,9 @@ CSSStyleDeclaration.prototype.removeExpression = function (name) {};
  * @return {undefined}
  */
 CSSStyleDeclaration.prototype.setAttribute = function (
-  name,
-  value,
-  opt_flags,
+  _name,
+  _value,
+  _opt_flags,
 ) {};
 
 /**
@@ -541,9 +541,9 @@ CSSStyleDeclaration.prototype.setAttribute = function (
  * @see http://msdn.microsoft.com/en-us/library/ms531196(VS.85).aspx
  */
 CSSStyleDeclaration.prototype.setExpression = function (
-  name,
-  expr,
-  opt_language,
+  _name,
+  _expr,
+  _opt_language,
 ) {};
 
 /**
@@ -770,7 +770,7 @@ CSSPrimitiveValue.prototype.getCounterValue = function () {};
  * @see http://www.w3.org/TR/DOM-Level-2-Style/css.html#CSS-CSSPrimitiveValue-getFloatValue
  * @throws DOMException {@see DomException.INVALID_ACCESS_ERR}
  */
-CSSPrimitiveValue.prototype.getFloatValue = function (unitType) {};
+CSSPrimitiveValue.prototype.getFloatValue = function (_unitType) {};
 
 /**
  * @return {RGBColor}
@@ -801,7 +801,7 @@ CSSPrimitiveValue.prototype.getStringValue = function () {};
  * @throws DOMException {@see DomException.INVALID_ACCESS_ERR},
  *                      {@see DomException.NO_MODIFICATION_ALLOWED_ERR}
  */
-CSSPrimitiveValue.prototype.setFloatValue = function (unitType, floatValue) {};
+CSSPrimitiveValue.prototype.setFloatValue = function (_unitType, _floatValue) {};
 
 /**
  * @param {number} stringType
@@ -812,8 +812,8 @@ CSSPrimitiveValue.prototype.setFloatValue = function (unitType, floatValue) {};
  *                      {@see DomException.NO_MODIFICATION_ALLOWED_ERR}
  */
 CSSPrimitiveValue.prototype.setStringValue = function (
-  stringType,
-  stringValue,
+  _stringType,
+  _stringValue,
 ) {};
 
 /**
@@ -835,7 +835,7 @@ CSSValueList.prototype.length;
  * @return {CSSValue}
  * @see http://www.w3.org/TR/DOM-Level-2-Style/css.html#CSS-CSSValueList-item
  */
-CSSValueList.prototype.item = function (index) {};
+CSSValueList.prototype.item = function (_index) {};
 
 /**
  * @constructor
@@ -930,7 +930,7 @@ function ViewCSS() {}
  * @see http://www.w3.org/TR/DOM-Level-2-Style/css.html#CSS-CSSview-getComputedStyle
  * @see https://bugzilla.mozilla.org/show_bug.cgi?id=548397
  */
-ViewCSS.prototype.getComputedStyle = function (elt, opt_pseudoElt) {};
+ViewCSS.prototype.getComputedStyle = function (_elt, _opt_pseudoElt) {};
 
 /**
  * @constructor
@@ -944,7 +944,7 @@ function DocumentCSS() {}
  * @return {CSSStyleDeclaration}
  * @see http://www.w3.org/TR/DOM-Level-2-Style/css.html#CSS-DocumentCSS-getOverrideStyle
  */
-DocumentCSS.prototype.getOverrideStyle = function (elt, pseudoElt) {};
+DocumentCSS.prototype.getOverrideStyle = function (_elt, _pseudoElt) {};
 
 /**
  * @constructor
@@ -959,7 +959,7 @@ function DOMImplementationCSS() {}
  * @see http://www.w3.org/TR/DOM-Level-2-Style/css.html#CSS-DOMImplementationCSS-createCSSStyleSheet
  * @throws DOMException {@see DomException.SYNTAX_ERR}
  */
-DOMImplementationCSS.prototype.createCSSStyleSheet = function (title, media) {};
+DOMImplementationCSS.prototype.createCSSStyleSheet = function (_title, _media) {};
 
 /**
  * @constructor
@@ -2004,7 +2004,7 @@ CSSProperties.prototype.willChange;
  * @return {MediaQueryList}
  * @see http://www.w3.org/TR/cssom-view/#dom-window-matchmedia
  */
-Window.prototype.matchMedia = function (media_query_list) {};
+Window.prototype.matchMedia = function (_media_query_list) {};
 
 /**
  * @type {number}
@@ -2048,7 +2048,7 @@ Window.prototype.pageYOffset;
  * @see http://www.w3.org/TR/cssom-view/#dom-window-scroll
  * @return {undefined}
  */
-Window.prototype.scroll = function (x, y) {};
+Window.prototype.scroll = function (_x, _y) {};
 
 /**
  * @param {number} x
@@ -2056,7 +2056,7 @@ Window.prototype.scroll = function (x, y) {};
  * @see http://www.w3.org/TR/cssom-view/#dom-window-scrollto
  * @return {undefined}
  */
-Window.prototype.scrollTo = function (x, y) {};
+Window.prototype.scrollTo = function (_x, _y) {};
 
 /**
  * @param {number} x
@@ -2064,7 +2064,7 @@ Window.prototype.scrollTo = function (x, y) {};
  * @see http://www.w3.org/TR/cssom-view/#dom-window-scrollby
  * @return {undefined}
  */
-Window.prototype.scrollBy = function (x, y) {};
+Window.prototype.scrollBy = function (_x, _y) {};
 
 /**
  * @type {number}
@@ -2113,20 +2113,20 @@ MediaQueryList.prototype.matches;
  * @see http://www.w3.org/TR/cssom-view/#dom-mediaquerylist-addlistener
  * @return {undefined}
  */
-MediaQueryList.prototype.addListener = function (listener) {};
+MediaQueryList.prototype.addListener = function (_listener) {};
 
 /**
  * @param {MediaQueryListListener} listener
  * @see http://www.w3.org/TR/cssom-view/#dom-mediaquerylist-removelistener
  * @return {undefined}
  */
-MediaQueryList.prototype.removeListener = function (listener) {};
+MediaQueryList.prototype.removeListener = function (_listener) {};
 
 /**
  * @typedef {(function(!MediaQueryList) : void)}
  * @see http://www.w3.org/TR/cssom-view/#mediaquerylistlistener
  */
-var MediaQueryListListener;
+var _MediaQueryListListener;
 
 /**
  * @constructor
@@ -2178,7 +2178,7 @@ Screen.prototype.pixelDepth;
  * @return {?Element}
  * @see http://www.w3.org/TR/cssom-view/#dom-document-elementfrompoint
  */
-Document.prototype.elementFromPoint = function (x, y) {};
+Document.prototype.elementFromPoint = function (_x, _y) {};
 
 /**
  * @param {number} x
@@ -2186,7 +2186,7 @@ Document.prototype.elementFromPoint = function (x, y) {};
  * @return {CaretPosition}
  * @see http://www.w3.org/TR/cssom-view/#dom-document-caretpositionfrompoint
  */
-Document.prototype.caretPositionFromPoint = function (x, y) {};
+Document.prototype.caretPositionFromPoint = function (_x, _y) {};
 
 /**
  * @type {Element}
@@ -2231,7 +2231,7 @@ Element.prototype.getBoundingClientRect = function () {};
  * @see http://www.w3.org/TR/cssom-view/#dom-element-scrollintoview
  * @return {undefined}
  */
-Element.prototype.scrollIntoView = function (opt_top) {};
+Element.prototype.scrollIntoView = function (_opt_top) {};
 
 /**
  * @type {number}
@@ -2414,7 +2414,7 @@ ClientRectList.prototype.length;
  * @return {ClientRect}
  * @see http://www.w3.org/TR/cssom-view/#dom-clientrectlist-item
  */
-ClientRectList.prototype.item = function (index) {};
+ClientRectList.prototype.item = function (_index) {};
 
 /**
  * @constructor
@@ -2470,14 +2470,14 @@ function CSSInterface() {}
  * @see http://www.w3.org/TR/cssom/#the-css.escape()-method
  * @throws DOMException {@see DOMException.INVALID_CHARACTER_ERR}
  */
-CSSInterface.prototype.escape = function (ident) {};
+CSSInterface.prototype.escape = function (_ident) {};
 
 /**
  * @param {string} property
  * @param {string=} opt_value
  * @return {boolean}
  */
-CSSInterface.prototype.supports = function (property, opt_value) {};
+CSSInterface.prototype.supports = function (_property, _opt_value) {};
 
 /**
  * TODO(nicksantos): This suppress tag probably isn't needed, and
@@ -2485,7 +2485,7 @@ CSSInterface.prototype.supports = function (property, opt_value) {};
  * @suppress {duplicate}
  * @type {CSSInterface}
  */
-var CSS;
+var _CSS;
 
 /** @type {CSSInterface} */
 Window.prototype.CSS;
@@ -2497,7 +2497,7 @@ Window.prototype.CSS;
  * @typedef {string}
  * @see http://dev.w3.org/csswg/css-font-loading/#enumdef-fontfaceloadstatus
  */
-var FontFaceLoadStatus;
+var _FontFaceLoadStatus;
 
 /**
  * @typedef {{
@@ -2510,7 +2510,7 @@ var FontFaceLoadStatus;
  * }}
  * @see http://dev.w3.org/csswg/css-font-loading/#dictdef-fontfacedescriptors
  */
-var FontFaceDescriptors;
+var _FontFaceDescriptors;
 
 /**
  * @constructor
@@ -2519,7 +2519,7 @@ var FontFaceDescriptors;
  * @param {!FontFaceDescriptors=} opt_descriptors
  * @see http://dev.w3.org/csswg/css-font-loading/#font-face-constructor
  */
-function FontFace(fontFamily, source, opt_descriptors) {}
+function FontFace(_fontFamily, _source, _opt_descriptors) {}
 
 /**
  * @type {string}
@@ -2580,7 +2580,7 @@ FontFace.prototype.load = function () {};
  * @typedef {string}
  * @see http://dev.w3.org/csswg/css-font-loading/#enumdef-fontfacesetloadstatus
  */
-var FontFaceSetLoadStatus;
+var _FontFaceSetLoadStatus;
 
 /**
  * @interface
@@ -2601,7 +2601,7 @@ function FontFaceSet() {}
  * @see http://dev.w3.org/csswg/css-font-loading/#dom-fontfaceset-add
  * @return {undefined}
  */
-FontFaceSet.prototype.add = function (value) {};
+FontFaceSet.prototype.add = function (_value) {};
 
 /**
  * @see http://dev.w3.org/csswg/css-font-loading/#dom-fontfaceset-clear
@@ -2614,14 +2614,14 @@ FontFaceSet.prototype.clear = function () {};
  * @see http://dev.w3.org/csswg/css-font-loading/#dom-fontfaceset-delete
  * @return {undefined}
  */
-FontFaceSet.prototype.delete = function (value) {};
+FontFaceSet.prototype.delete = function (_value) {};
 
 /**
  * @param {!FontFace} font
  * @return {boolean}
  * @see http://dev.w3.org/csswg/css-font-loading/#dom-fontfaceset-has
  */
-FontFaceSet.prototype.has = function (font) {};
+FontFaceSet.prototype.has = function (_font) {};
 
 /**
  * @param {function(!FontFace, number, !FontFaceSet)} cb
@@ -2629,7 +2629,7 @@ FontFaceSet.prototype.has = function (font) {};
  * see http://dev.w3.org/csswg/css-font-loading/#dom-fontfaceset-foreach
  * @return {undefined}
  */
-FontFaceSet.prototype.forEach = function (cb, opt_selfObj) {};
+FontFaceSet.prototype.forEach = function (_cb, _opt_selfObj) {};
 
 /**
  * @param {string} font
@@ -2637,7 +2637,7 @@ FontFaceSet.prototype.forEach = function (cb, opt_selfObj) {};
  * @return {!Promise<!Array<!FontFace>>}
  * @see http://dev.w3.org/csswg/css-font-loading/#dom-fontfaceset-load
  */
-FontFaceSet.prototype.load = function (font, opt_text) {};
+FontFaceSet.prototype.load = function (_font, _opt_text) {};
 
 /**
  * @param {string} font
@@ -2645,7 +2645,7 @@ FontFaceSet.prototype.load = function (font, opt_text) {};
  * @return {boolean}
  * @see http://dev.w3.org/csswg/css-font-loading/#dom-fontfaceset-check
  */
-FontFaceSet.prototype.check = function (font, opt_text) {};
+FontFaceSet.prototype.check = function (_font, _opt_text) {};
 
 /**
  * @type {!Promise<!FontFaceSet>}

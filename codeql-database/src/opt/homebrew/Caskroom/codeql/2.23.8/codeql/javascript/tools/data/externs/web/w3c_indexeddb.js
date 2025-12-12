@@ -51,13 +51,13 @@ function IDBFactory() {}
  * @param {number=} opt_version The version at which to open the database.
  * @return {!IDBOpenDBRequest} The IDBRequest object.
  */
-IDBFactory.prototype.open = function (name, opt_version) {};
+IDBFactory.prototype.open = function (_name, _opt_version) {};
 
 /**
  * @param {string} name The name of the database to delete.
  * @return {!IDBOpenDBRequest} The IDBRequest object.
  */
-IDBFactory.prototype.deleteDatabase = function (name) {};
+IDBFactory.prototype.deleteDatabase = function (_name) {};
 
 /**
  * @constructor
@@ -241,9 +241,9 @@ function IDBRequest() {}
  * @return {undefined}
  */
 IDBRequest.prototype.addEventListener = function (
-  type,
-  listener,
-  opt_useCapture,
+  _type,
+  _listener,
+  _opt_useCapture,
 ) {};
 
 /**
@@ -252,16 +252,16 @@ IDBRequest.prototype.addEventListener = function (
  * @return {undefined}
  */
 IDBRequest.prototype.removeEventListener = function (
-  type,
-  listener,
-  opt_useCapture,
+  _type,
+  _listener,
+  _opt_useCapture,
 ) {};
 
 /**
  * @override
  * @return {boolean}
  */
-IDBRequest.prototype.dispatchEvent = function (evt) {};
+IDBRequest.prototype.dispatchEvent = function (_evt) {};
 
 /**
  * @constructor
@@ -302,12 +302,12 @@ IDBRequest.prototype.readyState; // readonly
 /**
  * @type {function(!Event)}
  */
-IDBRequest.prototype.onsuccess = function (e) {};
+IDBRequest.prototype.onsuccess = function (_e) {};
 
 /**
  * @type {function(!Event)}
  */
-IDBRequest.prototype.onerror = function (e) {};
+IDBRequest.prototype.onerror = function (_e) {};
 
 /** @type {*} */
 IDBRequest.prototype.result; // readonly
@@ -337,12 +337,12 @@ function IDBOpenDBRequest() {}
 /**
  * @type {function(!IDBVersionChangeEvent)}
  */
-IDBOpenDBRequest.prototype.onblocked = function (e) {};
+IDBOpenDBRequest.prototype.onblocked = function (_e) {};
 
 /**
  * @type {function(!IDBVersionChangeEvent)}
  */
-IDBOpenDBRequest.prototype.onupgradeneeded = function (e) {};
+IDBOpenDBRequest.prototype.onupgradeneeded = function (_e) {};
 
 /**
  * @constructor
@@ -381,19 +381,19 @@ IDBDatabase.prototype.objectStoreNames;
  *     creating the object store.
  * @return {!IDBObjectStore} The created/open object store.
  */
-IDBDatabase.prototype.createObjectStore = function (name, opt_parameters) {};
+IDBDatabase.prototype.createObjectStore = function (_name, _opt_parameters) {};
 
 /**
  * @param {string} name The name of the object store to remove.
  * @return {undefined}
  */
-IDBDatabase.prototype.deleteObjectStore = function (name) {};
+IDBDatabase.prototype.deleteObjectStore = function (_name) {};
 
 /**
  * @param {string} version The new version of the database.
  * @return {!IDBRequest} The IDBRequest object.
  */
-IDBDatabase.prototype.setVersion = function (version) {};
+IDBDatabase.prototype.setVersion = function (_version) {};
 
 /**
  * @param {string|Array<string>} storeNames The stores to open in this
@@ -401,7 +401,7 @@ IDBDatabase.prototype.setVersion = function (version) {};
  * @param {(number|string)=} mode The mode for opening the object stores.
  * @return {!IDBTransaction} The IDBRequest object.
  */
-IDBDatabase.prototype.transaction = function (storeNames, mode) {};
+IDBDatabase.prototype.transaction = function (_storeNames, _mode) {};
 
 /**
  * Closes the database connection.
@@ -430,9 +430,9 @@ IDBDatabase.prototype.onversionchange = function () {};
  * @return {undefined}
  */
 IDBDatabase.prototype.addEventListener = function (
-  type,
-  listener,
-  opt_useCapture,
+  _type,
+  _listener,
+  _opt_useCapture,
 ) {};
 
 /**
@@ -441,16 +441,16 @@ IDBDatabase.prototype.addEventListener = function (
  * @return {undefined}
  */
 IDBDatabase.prototype.removeEventListener = function (
-  type,
-  listener,
-  opt_useCapture,
+  _type,
+  _listener,
+  _opt_useCapture,
 ) {};
 
 /**
  * @override
  * @return {boolean}
  */
-IDBDatabase.prototype.dispatchEvent = function (evt) {};
+IDBDatabase.prototype.dispatchEvent = function (_evt) {};
 
 /**
  * Typedef for valid key types according to the w3 specification. Note that this
@@ -459,7 +459,7 @@ IDBDatabase.prototype.dispatchEvent = function (evt) {};
  * @see http://www.w3.org/TR/IndexedDB/#key-construct
  * @typedef {number|string|!Date|!Array<?>}
  */
-var IDBKeyType;
+var _IDBKeyType;
 
 /**
  * @constructor
@@ -493,26 +493,26 @@ IDBObjectStore.prototype.autoIncrement;
  * @param {IDBKeyType=} key The key of this value.
  * @return {!IDBRequest} The IDBRequest object.
  */
-IDBObjectStore.prototype.put = function (value, key) {};
+IDBObjectStore.prototype.put = function (_value, _key) {};
 
 /**
  * @param {*} value The value to add into the object store.
  * @param {IDBKeyType=} key The key of this value.
  * @return {!IDBRequest} The IDBRequest object.
  */
-IDBObjectStore.prototype.add = function (value, key) {};
+IDBObjectStore.prototype.add = function (_value, _key) {};
 
 /**
  * @param {IDBKeyType} key The key of this value.
  * @return {!IDBRequest} The IDBRequest object.
  */
-IDBObjectStore.prototype.delete = function (key) {};
+IDBObjectStore.prototype.delete = function (_key) {};
 
 /**
  * @param {IDBKeyType|!IDBKeyRange} key The key of the document to retrieve.
  * @return {!IDBRequest} The IDBRequest object.
  */
-IDBObjectStore.prototype.get = function (key) {};
+IDBObjectStore.prototype.get = function (_key) {};
 
 /**
  * @return {!IDBRequest} The IDBRequest object.
@@ -524,7 +524,7 @@ IDBObjectStore.prototype.clear = function () {};
  * @param {(number|string)=} direction The direction of cursor enumeration.
  * @return {!IDBRequest} The IDBRequest object.
  */
-IDBObjectStore.prototype.openCursor = function (range, direction) {};
+IDBObjectStore.prototype.openCursor = function (_range, _direction) {};
 
 /**
  * @param {string} name The name of the index.
@@ -534,29 +534,29 @@ IDBObjectStore.prototype.openCursor = function (range, direction) {};
  * @return {!IDBIndex} The IDBIndex object.
  */
 IDBObjectStore.prototype.createIndex = function (
-  name,
-  keyPath,
-  opt_parameters,
+  _name,
+  _keyPath,
+  _opt_parameters,
 ) {};
 
 /**
  * @param {string} name The name of the index to retrieve.
  * @return {!IDBIndex} The IDBIndex object.
  */
-IDBObjectStore.prototype.index = function (name) {};
+IDBObjectStore.prototype.index = function (_name) {};
 
 /**
  * @param {string} indexName The name of the index to remove.
  * @return {undefined}
  */
-IDBObjectStore.prototype.deleteIndex = function (indexName) {};
+IDBObjectStore.prototype.deleteIndex = function (_indexName) {};
 
 /**
  * @param {(IDBKeyType|IDBKeyRange)=} key The key of this value.
  * @return {!IDBRequest} The IDBRequest object.
  * @see http://www.w3.org/TR/IndexedDB/#widl-IDBObjectStore-count
  */
-IDBObjectStore.prototype.count = function (key) {};
+IDBObjectStore.prototype.count = function (_key) {};
 
 /**
  * @constructor
@@ -593,26 +593,26 @@ IDBIndex.prototype.unique;
  * @param {(number|string)=} direction The direction of cursor enumeration.
  * @return {!IDBRequest} The IDBRequest object.
  */
-IDBIndex.prototype.openCursor = function (range, direction) {};
+IDBIndex.prototype.openCursor = function (_range, _direction) {};
 
 /**
  * @param {IDBKeyRange=} range The range of the cursor.
  * @param {(number|string)=} direction The direction of cursor enumeration.
  * @return {!IDBRequest} The IDBRequest object.
  */
-IDBIndex.prototype.openKeyCursor = function (range, direction) {};
+IDBIndex.prototype.openKeyCursor = function (_range, _direction) {};
 
 /**
  * @param {IDBKeyType|!IDBKeyRange} key The id of the object to retrieve.
  * @return {!IDBRequest} The IDBRequest object.
  */
-IDBIndex.prototype.get = function (key) {};
+IDBIndex.prototype.get = function (_key) {};
 
 /**
  * @param {IDBKeyType|!IDBKeyRange} key The id of the object to retrieve.
  * @return {!IDBRequest} The IDBRequest object.
  */
-IDBIndex.prototype.getKey = function (key) {};
+IDBIndex.prototype.getKey = function (_key) {};
 
 /**
  * @constructor
@@ -703,7 +703,7 @@ IDBCursor.prototype.primaryKey;
  * @param {*} value The new value for the current object in the cursor.
  * @return {!IDBRequest} The IDBRequest object.
  */
-IDBCursor.prototype.update = function (value) {};
+IDBCursor.prototype.update = function (_value) {};
 
 /**
  * Note: Must be quoted to avoid parse error.
@@ -711,13 +711,13 @@ IDBCursor.prototype.update = function (value) {};
  *     key (or next).
  * @return {undefined}
  */
-IDBCursor.prototype.continue = function (key) {};
+IDBCursor.prototype.continue = function (_key) {};
 
 /**
  * @param {number} count Number of times to iterate the cursor.
  * @return {undefined}
  */
-IDBCursor.prototype.advance = function (count) {};
+IDBCursor.prototype.advance = function (_count) {};
 
 /**
  * Note: Must be quoted to avoid parse error.
@@ -800,7 +800,7 @@ IDBTransaction.prototype.db;
  * @param {string} name The name of the object store to retrieve.
  * @return {!IDBObjectStore} The object store.
  */
-IDBTransaction.prototype.objectStore = function (name) {};
+IDBTransaction.prototype.objectStore = function (_name) {};
 
 /**
  * Aborts the transaction.
@@ -864,41 +864,41 @@ IDBKeyRange.prototype.upperOpen;
  * @param {IDBKeyType} value The single key value of this range.
  * @return {!IDBKeyRange} The key range.
  */
-IDBKeyRange.only = function (value) {};
+IDBKeyRange.only = function (_value) {};
 
 /**
  * @param {IDBKeyType} value The single key value of this range.
  * @return {!IDBKeyRange} The key range.
  */
-webkitIDBKeyRange.only = function (value) {};
+webkitIDBKeyRange.only = function (_value) {};
 
 /**
  * @param {IDBKeyType} bound Creates a lower bound key range.
  * @param {boolean=} open Open the key range.
  * @return {!IDBKeyRange} The key range.
  */
-IDBKeyRange.lowerBound = function (bound, open) {};
+IDBKeyRange.lowerBound = function (_bound, _open) {};
 
 /**
  * @param {IDBKeyType} bound Creates a lower bound key range.
  * @param {boolean=} open Open the key range.
  * @return {!IDBKeyRange} The key range.
  */
-webkitIDBKeyRange.lowerBound = function (bound, open) {};
+webkitIDBKeyRange.lowerBound = function (_bound, _open) {};
 
 /**
  * @param {IDBKeyType} bound Creates an upper bound key range.
  * @param {boolean=} open Open the key range.
  * @return {!IDBKeyRange} The key range.
  */
-IDBKeyRange.upperBound = function (bound, open) {};
+IDBKeyRange.upperBound = function (_bound, _open) {};
 
 /**
  * @param {IDBKeyType} bound Creates an upper bound key range.
  * @param {boolean=} open Open the key range.
  * @return {!IDBKeyRange} The key range.
  */
-webkitIDBKeyRange.upperBound = function (bound, open) {};
+webkitIDBKeyRange.upperBound = function (_bound, _open) {};
 
 /**
  * @param {IDBKeyType} left The left bound value.
@@ -907,7 +907,7 @@ webkitIDBKeyRange.upperBound = function (bound, open) {};
  * @param {boolean=} openRight Whether the right bound value should be excluded.
  * @return {!IDBKeyRange} The key range.
  */
-IDBKeyRange.bound = function (left, right, openLeft, openRight) {};
+IDBKeyRange.bound = function (_left, _right, _openLeft, _openRight) {};
 
 /**
  * @param {IDBKeyType} left The left bound value.
@@ -916,7 +916,7 @@ IDBKeyRange.bound = function (left, right, openLeft, openRight) {};
  * @param {boolean=} openRight Whether the right bound value should be excluded.
  * @return {!IDBKeyRange} The key range.
  */
-webkitIDBKeyRange.bound = function (left, right, openLeft, openRight) {};
+webkitIDBKeyRange.bound = function (_left, _right, _openLeft, _openRight) {};
 
 /**
  * @constructor
