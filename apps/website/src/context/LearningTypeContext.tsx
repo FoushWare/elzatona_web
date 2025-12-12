@@ -49,7 +49,8 @@ export function LearningTypeProvider({
     try {
       // First try universal key (works for logged out users)
       const universalTypeKey = buildStorageKey(null, "type");
-      const universalType = globalThis.window?.localStorage?.getItem(universalTypeKey);
+      const universalType =
+        globalThis.window?.localStorage?.getItem(universalTypeKey);
       if (
         universalType === "guided" ||
         universalType === "free-style" ||
@@ -86,7 +87,10 @@ export function LearningTypeProvider({
         const keyToLoad = newUserId ? userTypeKey : universalTypeKey;
 
         try {
-          if (globalThis.window !== undefined && globalThis.window.localStorage) {
+          if (
+            globalThis.window !== undefined &&
+            globalThis.window.localStorage
+          ) {
             const rawType = globalThis.window.localStorage.getItem(keyToLoad);
             if (
               rawType === "guided" ||
@@ -104,9 +108,13 @@ export function LearningTypeProvider({
         setUserId(null);
         // Load from universal key when logged out
         try {
-          if (globalThis.window !== undefined && globalThis.window.localStorage) {
+          if (
+            globalThis.window !== undefined &&
+            globalThis.window.localStorage
+          ) {
             const universalTypeKey = buildStorageKey(null, "type");
-            const rawType = globalThis.window.localStorage.getItem(universalTypeKey);
+            const rawType =
+              globalThis.window.localStorage.getItem(universalTypeKey);
             if (
               rawType === "guided" ||
               rawType === "free-style" ||
@@ -138,7 +146,10 @@ export function LearningTypeProvider({
         const keyToLoad = newUserId ? userTypeKey : universalTypeKey;
 
         try {
-          if (globalThis.window !== undefined && globalThis.window.localStorage) {
+          if (
+            globalThis.window !== undefined &&
+            globalThis.window.localStorage
+          ) {
             const rawType = globalThis.window.localStorage.getItem(keyToLoad);
             if (
               rawType === "guided" ||
@@ -189,7 +200,8 @@ export function LearningTypeProvider({
         setLearningTypeState(rawType);
       }
       const rawSolved =
-        typeof globalThis.window !== "undefined" && globalThis.window.localStorage
+        typeof globalThis.window !== "undefined" &&
+        globalThis.window.localStorage
           ? globalThis.window.localStorage.getItem(solvedKey)
           : null;
       if (rawSolved) {
@@ -212,7 +224,10 @@ export function LearningTypeProvider({
       const typeKey = buildStorageKey(userId, "type");
       const universalTypeKey = buildStorageKey(null, "type"); // Universal key that persists across logout
 
-      if (typeof globalThis.window !== "undefined" && globalThis.window.localStorage) {
+      if (
+        typeof globalThis.window !== "undefined" &&
+        globalThis.window.localStorage
+      ) {
         // Save to userId-specific key if logged in
         if (userId) {
           globalThis.window.localStorage.setItem(typeKey, learningType);
@@ -230,7 +245,10 @@ export function LearningTypeProvider({
   useEffect(() => {
     if (!initializedRef.current) return;
     try {
-      if (typeof globalThis.window !== "undefined" && globalThis.window.localStorage) {
+      if (
+        typeof globalThis.window !== "undefined" &&
+        globalThis.window.localStorage
+      ) {
         const solvedKey = buildStorageKey(userId, "solved");
         globalThis.window.localStorage.setItem(
           solvedKey,

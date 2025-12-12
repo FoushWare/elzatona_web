@@ -672,7 +672,8 @@ export const QuestionContent = ({ content }: { content: string }) => {
     fixedContent = fixedContent.substring(0, MAX_INPUT_SIZE);
   }
   // SECURITY: Use bounded quantifiers to prevent ReDoS
-  const malformedPattern = /<pr<cod[^>]{0,200}>([\s\S]{0,50000}?)(?:<\/cod<\/pr|$)/gi;
+  const malformedPattern =
+    /<pr<cod[^>]{0,200}>([\s\S]{0,50000}?)(?:<\/cod<\/pr|$)/gi;
   let malformedMatch: RegExpExecArray | null;
   malformedPattern.lastIndex = 0;
   let malformedIterations = 0;
@@ -688,22 +689,22 @@ export const QuestionContent = ({ content }: { content: string }) => {
       (m) => Math.abs(m.index - malformedMatch!.index) < 10,
     );
 
-      if (!alreadyCaptured && malformedMatch[1]) {
-        let code = malformedMatch[1];
-        // SECURITY: Limit code length before processing
-        if (code.length > MAX_INPUT_SIZE) {
-          code = code.substring(0, MAX_INPUT_SIZE);
-        }
-        code = decodeHtmlEntities(code);
-        // SECURITY: Remove HTML tags after decoding to prevent injection
-        // Use comprehensive sanitization to remove all HTML tags including edge cases
-        // NOSONAR S7781: replaceAll() cannot be used with regex patterns that require capture groups
-        code = code
-          .replace(/<\/?[a-z][a-z0-9]{0,20}(?:\s+[^>]{0,200})?>/gi, "")
-          .replace(/<script[^>]*>[\s\S]*?<\/script>/gi, "")
-          .replace(/<style[^>]*>[\s\S]*?<\/style>/gi, "")
-          .replace(/<iframe[^>]*>[\s\S]*?<\/iframe>/gi, "")
-          .replace(/on\w+\s*=\s*["'][^"']*["']/gi, "");
+    if (!alreadyCaptured && malformedMatch[1]) {
+      let code = malformedMatch[1];
+      // SECURITY: Limit code length before processing
+      if (code.length > MAX_INPUT_SIZE) {
+        code = code.substring(0, MAX_INPUT_SIZE);
+      }
+      code = decodeHtmlEntities(code);
+      // SECURITY: Remove HTML tags after decoding to prevent injection
+      // Use comprehensive sanitization to remove all HTML tags including edge cases
+      // NOSONAR S7781: replaceAll() cannot be used with regex patterns that require capture groups
+      code = code
+        .replace(/<\/?[a-z][a-z0-9]{0,20}(?:\s+[^>]{0,200})?>/gi, "")
+        .replace(/<script[^>]*>[\s\S]*?<\/script>/gi, "")
+        .replace(/<style[^>]*>[\s\S]*?<\/style>/gi, "")
+        .replace(/<iframe[^>]*>[\s\S]*?<\/iframe>/gi, "")
+        .replace(/on\w+\s*=\s*["'][^"']*["']/gi, "");
       code = code.replaceAll(/<[^>]+>/g, "");
       for (let i = 0; i < 3; i++) {
         code = code
@@ -766,22 +767,22 @@ export const QuestionContent = ({ content }: { content: string }) => {
   let lastIndex = 0;
 
   for (const match of allMatches) {
-      if (match.index > lastIndex) {
-        const textContent = fixedContent.substring(lastIndex, match.index);
-        if (textContent.trim()) {
-          let cleanText = decodeHtmlEntities(textContent);
-          // SECURITY: Remove HTML tags to prevent injection
-          // Use comprehensive sanitization to remove all HTML tags including edge cases
-          // NOSONAR S7781: replaceAll() cannot be used with regex patterns that require capture groups
-          cleanText = cleanText
-            .replace(/<\/?[a-z][a-z0-9]{0,20}(?:\s+[^>]{0,200})?>/gi, "")
-            .replace(/<script[^>]*>[\s\S]*?<\/script>/gi, "")
-            .replace(/<style[^>]*>[\s\S]*?<\/style>/gi, "")
-            .replace(/<iframe[^>]*>[\s\S]*?<\/iframe>/gi, "")
-            .replace(/on\w+\s*=\s*["'][^"']*["']/gi, "");
-          cleanText = cleanText.replace(
-            /<code[^>]{0,200}>([^<]{1,30})<\/code>/gi,
-            "`$1`",
+    if (match.index > lastIndex) {
+      const textContent = fixedContent.substring(lastIndex, match.index);
+      if (textContent.trim()) {
+        let cleanText = decodeHtmlEntities(textContent);
+        // SECURITY: Remove HTML tags to prevent injection
+        // Use comprehensive sanitization to remove all HTML tags including edge cases
+        // NOSONAR S7781: replaceAll() cannot be used with regex patterns that require capture groups
+        cleanText = cleanText
+          .replace(/<\/?[a-z][a-z0-9]{0,20}(?:\s+[^>]{0,200})?>/gi, "")
+          .replace(/<script[^>]*>[\s\S]*?<\/script>/gi, "")
+          .replace(/<style[^>]*>[\s\S]*?<\/style>/gi, "")
+          .replace(/<iframe[^>]*>[\s\S]*?<\/iframe>/gi, "")
+          .replace(/on\w+\s*=\s*["'][^"']*["']/gi, "");
+        cleanText = cleanText.replace(
+          /<code[^>]{0,200}>([^<]{1,30})<\/code>/gi,
+          "`$1`",
         );
         cleanText = cleanText.replaceAll(/<[^>]+>/g, "");
         for (let i = 0; i < 3; i++) {
@@ -855,7 +856,10 @@ export const QuestionContent = ({ content }: { content: string }) => {
     if (textContent.trim()) {
       let cleanText = decodeHtmlEntities(textContent);
       // SECURITY: Remove HTML tags to prevent injection
-      cleanText = cleanText.replace(/<\/?[a-z][a-z0-9]{0,20}(?:\s+[^>]{0,200})?>/gi, "");
+      cleanText = cleanText.replace(
+        /<\/?[a-z][a-z0-9]{0,20}(?:\s+[^>]{0,200})?>/gi,
+        "",
+      );
       cleanText = cleanText.replaceAll(
         /<code[^>]{0,200}>([^<]{1,30})<\/code>/gi,
         "`$1`",

@@ -344,8 +344,13 @@ function fixUnusedVariable(filePath, line, variableName) {
       // SECURITY: Check file hasn't changed since read to prevent race condition
       try {
         const currentStats = fs.statSync(filePath);
-        if (originalStats && currentStats.mtime.getTime() !== originalStats.mtime.getTime()) {
-          console.warn(`⚠️  File ${filePath} was modified during processing. Skipping write.`);
+        if (
+          originalStats &&
+          currentStats.mtime.getTime() !== originalStats.mtime.getTime()
+        ) {
+          console.warn(
+            `⚠️  File ${filePath} was modified during processing. Skipping write.`,
+          );
           return false;
         }
       } catch (_statError) {
@@ -496,8 +501,13 @@ function fixUnusedError(filePath, line) {
       // SECURITY: Check file hasn't changed since read to prevent race condition
       try {
         const currentStats = fs.statSync(filePath);
-        if (originalStats && currentStats.mtime.getTime() !== originalStats.mtime.getTime()) {
-          console.warn(`⚠️  File ${filePath} was modified during processing. Skipping write.`);
+        if (
+          originalStats &&
+          currentStats.mtime.getTime() !== originalStats.mtime.getTime()
+        ) {
+          console.warn(
+            `⚠️  File ${filePath} was modified during processing. Skipping write.`,
+          );
           return false;
         }
       } catch (_statError) {
@@ -559,8 +569,13 @@ function updateLogFile(logFilePath, fixedIssues, allIssues) {
     let currentStats;
     try {
       currentStats = fs.statSync(logFilePath);
-      if (originalStats && currentStats.mtime.getTime() !== originalStats.mtime.getTime()) {
-        console.warn(`⚠️  Log file ${logFilePath} was modified during processing. Skipping write.`);
+      if (
+        originalStats &&
+        currentStats.mtime.getTime() !== originalStats.mtime.getTime()
+      ) {
+        console.warn(
+          `⚠️  Log file ${logFilePath} was modified during processing. Skipping write.`,
+        );
         return null;
       }
     } catch (_statError) {
