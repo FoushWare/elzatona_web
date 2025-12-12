@@ -1,11 +1,6 @@
 "use client";
 
-import React, {
-  useState,
-  useEffect,
-  createContext,
-  useContext,
-} from "react";
+import React, { useState, useEffect, createContext, useContext } from "react";
 
 // Only create Supabase client if environment variables are available
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
