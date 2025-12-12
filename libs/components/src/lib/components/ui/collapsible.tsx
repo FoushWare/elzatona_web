@@ -7,13 +7,18 @@ const Collapsible = React.forwardRef<
     open?: boolean;
     onOpenChange?: (open: boolean) => void;
   }
->(({ className, open: _open, onOpenChange: _onOpenChange, children, ...props }, ref) => {
-  return (
-    <div ref={ref} className={cn("", className)} {...props}>
-      {children}
-    </div>
-  );
-});
+>(
+  (
+    { className, open: _open, onOpenChange: _onOpenChange, children, ...props },
+    ref,
+  ) => {
+    return (
+      <div ref={ref} className={cn("", className)} {...props}>
+        {children}
+      </div>
+    );
+  },
+);
 Collapsible.displayName = "Collapsible";
 
 const CollapsibleTrigger = React.forwardRef<
