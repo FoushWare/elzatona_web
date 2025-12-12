@@ -71,12 +71,33 @@ const Button = React.lazy(() =>
     default: module.Button,
   })),
 );
-// Removed unused lazy-loaded components: Input, Badge, Card, CardContent, CardHeader, Select, SelectContent, SelectItem, SelectTrigger, SelectValue, Collapsible, CollapsibleTrigger, CollapsibleContent
+// Lazy-loaded components (only keeping those that are actually used)
+const Card = React.lazy(() =>
+  import("@elzatona/components").then((module) => ({
+    default: module.Card,
+  })),
+);
+const CardContent = React.lazy(() =>
+  import("@elzatona/components").then((module) => ({
+    default: module.CardContent,
+  })),
+);
+const CardHeader = React.lazy(() =>
+  import("@elzatona/components").then((module) => ({
+    default: module.CardHeader,
+  })),
+);
 const CardTitle = React.lazy(() =>
   import("@elzatona/components").then((module) => ({
     default: module.CardTitle,
   })),
 );
+const Badge = React.lazy(() =>
+  import("@elzatona/components").then((module) => ({
+    default: module.Badge,
+  })),
+);
+// Removed unused lazy-loaded components: Input, Select, SelectContent, SelectItem, SelectTrigger, SelectValue, Collapsible, CollapsibleTrigger, CollapsibleContent
 import { Modal } from "@elzatona/components";
 import { ViewQuestionModal } from "../content/questions/components/ViewQuestionModal";
 import {} from "./components/StatsSection";
