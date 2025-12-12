@@ -424,7 +424,10 @@ test.describe("G-E2E-017: Learning Resources Display", () => {
     }
   });
 
-  test("should open resource links in new tab", async ({ page, context: _context }) => {
+  test("should open resource links in new tab", async ({
+    page,
+    context: _context,
+  }) => {
     const planId = "test-plan-id";
     await page.goto(`/guided-practice?plan=${planId}`);
 
