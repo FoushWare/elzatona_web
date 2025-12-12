@@ -28,7 +28,7 @@ async function globalSetup() {
       if (!result.error) {
         loadedFiles.push(envFile);
       }
-    } catch (error) {
+    } catch (_error) {
       // File doesn't exist, that's okay
     }
   }
