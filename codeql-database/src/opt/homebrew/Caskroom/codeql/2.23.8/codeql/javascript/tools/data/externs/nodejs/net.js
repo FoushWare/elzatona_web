@@ -295,7 +295,11 @@ net.Server.prototype.listen = function (
  * @param {Function=} listeningListener
  * @return {net.Server}
  */
-net.Server.prototype.listen = function (_port, _hostname, _listeningListener) {};
+net.Server.prototype.listen = function (
+  _port,
+  _hostname,
+  _listeningListener,
+) {};
 
 /**
  * @param {number} port
@@ -333,7 +337,11 @@ net.Server.prototype.listen = function (_path, _listeningListener) {};
  * @param {Function=} listeningListener
  * @return {net.Server}
  */
-net.Server.prototype.listen = function (_handle, _backlog, _listeningListener) {};
+net.Server.prototype.listen = function (
+  _handle,
+  _backlog,
+  _listeningListener,
+) {};
 
 /**
  * @param {*} handle

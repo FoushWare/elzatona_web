@@ -661,7 +661,13 @@ crypto.pbkdf2 = function (
  * @param {string} digest
  * @return {Buffer}
  */
-crypto.pbkdf2Sync = function (_password, _salt, _iterations, _keylen, _digest) {};
+crypto.pbkdf2Sync = function (
+  _password,
+  _salt,
+  _iterations,
+  _keylen,
+  _digest,
+) {};
 
 /**
  * @param {number} size

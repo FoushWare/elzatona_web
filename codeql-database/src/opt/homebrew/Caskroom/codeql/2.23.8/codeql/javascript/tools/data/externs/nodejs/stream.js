@@ -304,28 +304,40 @@ internal.Readable.prototype.prependListener = function (_event, _listener) {};
  * @param {Function} listener
  * @return {*}
  */
-internal.Readable.prototype.prependOnceListener = function (_event, _listener) {};
+internal.Readable.prototype.prependOnceListener = function (
+  _event,
+  _listener,
+) {};
 
 /**
  * @param {string} event
  * @param {(function(): void)} listener
  * @return {*}
  */
-internal.Readable.prototype.prependOnceListener = function (_event, _listener) {};
+internal.Readable.prototype.prependOnceListener = function (
+  _event,
+  _listener,
+) {};
 
 /**
  * @param {string} event
  * @param {(function((Buffer|string)): void)} listener
  * @return {*}
  */
-internal.Readable.prototype.prependOnceListener = function (_event, _listener) {};
+internal.Readable.prototype.prependOnceListener = function (
+  _event,
+  _listener,
+) {};
 
 /**
  * @param {string} event
  * @param {(function(Error): void)} listener
  * @return {*}
  */
-internal.Readable.prototype.prependOnceListener = function (_event, _listener) {};
+internal.Readable.prototype.prependOnceListener = function (
+  _event,
+  _listener,
+) {};
 
 /**
  * @param {string} event
@@ -591,28 +603,40 @@ internal.Writable.prototype.prependListener = function (_event, _listener) {};
  * @param {Function} listener
  * @return {*}
  */
-internal.Writable.prototype.prependOnceListener = function (_event, _listener) {};
+internal.Writable.prototype.prependOnceListener = function (
+  _event,
+  _listener,
+) {};
 
 /**
  * @param {string} event
  * @param {(function(): void)} listener
  * @return {*}
  */
-internal.Writable.prototype.prependOnceListener = function (_event, _listener) {};
+internal.Writable.prototype.prependOnceListener = function (
+  _event,
+  _listener,
+) {};
 
 /**
  * @param {string} event
  * @param {(function(Error): void)} listener
  * @return {*}
  */
-internal.Writable.prototype.prependOnceListener = function (_event, _listener) {};
+internal.Writable.prototype.prependOnceListener = function (
+  _event,
+  _listener,
+) {};
 
 /**
  * @param {string} event
  * @param {(function(internal.Readable): void)} listener
  * @return {*}
  */
-internal.Writable.prototype.prependOnceListener = function (_event, _listener) {};
+internal.Writable.prototype.prependOnceListener = function (
+  _event,
+  _listener,
+) {};
 
 /**
  * @param {string} event

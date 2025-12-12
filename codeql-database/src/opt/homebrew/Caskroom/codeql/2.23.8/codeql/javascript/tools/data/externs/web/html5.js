@@ -62,7 +62,11 @@ HTMLCanvasElement.prototype.height;
  * @param {...*} var_args
  * @throws {Error}
  */
-HTMLCanvasElement.prototype.toBlob = function (_callback, _opt_type, _var_args) {};
+HTMLCanvasElement.prototype.toBlob = function (
+  _callback,
+  _opt_type,
+  _var_args,
+) {};
 
 /**
  * @param {string=} opt_type
@@ -394,7 +398,13 @@ CanvasRenderingContext2D.prototype.bezierCurveTo = function (
  * @return {undefined}
  * @override
  */
-CanvasRenderingContext2D.prototype.arcTo = function (_x1, _y1, _x2, _y2, _radius) {};
+CanvasRenderingContext2D.prototype.arcTo = function (
+  _x1,
+  _y1,
+  _x2,
+  _y2,
+  _radius,
+) {};
 
 /**
  * @param {number} x
@@ -567,7 +577,12 @@ CanvasRenderingContext2D.prototype.createImageData = function (_sw, _sh) {};
  * @return {ImageData}
  * @throws {Error}
  */
-CanvasRenderingContext2D.prototype.getImageData = function (_sx, _sy, _sw, _sh) {};
+CanvasRenderingContext2D.prototype.getImageData = function (
+  _sx,
+  _sy,
+  _sw,
+  _sh,
+) {};
 
 /**
  * @param {ImageData} imagedata
@@ -1938,7 +1953,11 @@ TextTrack.prototype.mode;
  * @override
  * @return {undefined}
  */
-TextTrack.prototype.addEventListener = function (_type, _listener, _useCapture) {};
+TextTrack.prototype.addEventListener = function (
+  _type,
+  _listener,
+  _useCapture,
+) {};
 
 /**
  * @override
@@ -4292,7 +4311,11 @@ Navigator.prototype.cookieEnabled;
  * @param {string} title
  * @return {undefined}
  */
-Navigator.prototype.registerProtocolHandler = function (_scheme, _url, _title) {};
+Navigator.prototype.registerProtocolHandler = function (
+  _scheme,
+  _url,
+  _title,
+) {};
 
 /**
  * @param {string} mimeType
@@ -4300,7 +4323,11 @@ Navigator.prototype.registerProtocolHandler = function (_scheme, _url, _title) {
  * @param {string} title
  * @return {undefined}
  */
-Navigator.prototype.registerContentHandler = function (_mimeType, _url, _title) {};
+Navigator.prototype.registerContentHandler = function (
+  _mimeType,
+  _url,
+  _title,
+) {};
 
 /**
  * @param {string} scheme
