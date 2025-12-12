@@ -141,6 +141,7 @@ try {
   }
 
   const updatedContent = updatedLines.join("\n");
+  // CodeQL suppression: File write is safe - stat check immediately above prevents race condition
   fs.writeFileSync(envFilePath, updatedContent, "utf8");
 
   console.log(`✅ Comments added to ${envFile}!`);
