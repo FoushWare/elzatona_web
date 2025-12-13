@@ -2635,7 +2635,7 @@ export default function FreeStylePracticePage() {
 
   // Save to localStorage whenever current question index or answered questions change
   useEffect(() => {
-    if (currentQuestion) {
+    if (true) {
       saveProgressToLocalStorage();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps

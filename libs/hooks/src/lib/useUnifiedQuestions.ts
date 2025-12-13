@@ -249,27 +249,30 @@ export function useUnifiedQuestions(
   );
 
   // Load single question
-  const loadQuestion = useCallback(async (id: string) => {
-    setIsLoading(true);
-    setError(null);
+  const loadQuestion = useCallback(
+    async (id: string) => {
+      setIsLoading(true);
+      setError(null);
 
-    try {
-      const response = await apiCall(`/api/questions/unified/${id}`);
+      try {
+        const response = await apiCall(`/api/questions/unified/${id}`);
 
-      if (response.success) {
-        setCurrentQuestion(response.data);
-      } else {
-        throw new Error(response.error || "Failed to load question");
+        if (response.success) {
+          setCurrentQuestion(response.data);
+        } else {
+          throw new Error(response.error || "Failed to load question");
+        }
+      } catch (err) {
+        const errorMessage =
+          err instanceof Error ? err.message : "Failed to load question";
+        setError(errorMessage);
+        console.error("Error loading question:", err);
+      } finally {
+        setIsLoading(false);
       }
-    } catch (err) {
-      const errorMessage =
-        err instanceof Error ? err.message : "Failed to load question";
-      setError(errorMessage);
-      console.error("Error loading question:", err);
-    } finally {
-      setIsLoading(false);
-    }
-  }, [apiCall]);
+    },
+    [apiCall],
+  );
 
   // Load learning paths
   const loadLearningPaths = useCallback(async () => {

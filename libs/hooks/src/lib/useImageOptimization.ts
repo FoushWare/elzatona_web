@@ -241,7 +241,7 @@ export const useIntersectionObserver = (
       if (entry) {
         setIsIntersecting(entry.isIntersecting);
       }
-    }, options);
+    });
 
     observer.observe(element);
 

@@ -6,9 +6,10 @@ import { vscDarkPlus } from "react-syntax-highlighter/dist/esm/styles/prism";
 import { sanitizeText } from "./utils/sanitize";
 
 // Helper functions to reduce cognitive complexity
-function checkCodeIndicators(
-  trimmed: string,
-): { score: number; reasons: string[] } {
+function checkCodeIndicators(trimmed: string): {
+  score: number;
+  reasons: string[];
+} {
   let score = 0;
   const reasons: string[] = [];
 
@@ -115,9 +116,10 @@ function checkCodeStructure(
   return { score, reasons };
 }
 
-function checkTextIndicators(
-  trimmed: string,
-): { score: number; reasons: string[] } {
+function checkTextIndicators(trimmed: string): {
+  score: number;
+  reasons: string[];
+} {
   let score = 0;
   const reasons: string[] = [];
 
@@ -811,7 +813,7 @@ function processMarkdownCodeBlocks(fixedContent: string): Array<{
     // Decode HTML entities first, then sanitize to remove any HTML tags
     sanitizedContent = decodeHtmlEntities(sanitizedContent);
     sanitizedContent = sanitizeText(sanitizedContent);
-    
+
     markdownMatches.push({
       index: mdMatch.index,
       content: sanitizedContent,
@@ -921,10 +923,10 @@ function processFinalTextContent(
   }
 
   cleanContent = cleanContent
-      .replaceAll("&nbsp;", " ")
-      .replaceAll("&lt;", "<")
-      .replaceAll("&gt;", ">")
-      .replaceAll("&amp;", "&")
+    .replaceAll("&nbsp;", " ")
+    .replaceAll("&lt;", "<")
+    .replaceAll("&gt;", ">")
+    .replaceAll("&amp;", "&")
     .trim();
 
   const codeValidation = isValidCode(cleanContent);
@@ -1122,8 +1124,11 @@ const TextBlock = ({
   part: { content: string };
   partId: string;
 }) => {
-  const textParts: Array<{ type: "text" | "code"; content: string; id: string }> =
-    [];
+  const textParts: Array<{
+    type: "text" | "code";
+    content: string;
+    id: string;
+  }> = [];
   const inlineCodeRegex = /`([^`]+)`/g;
   let lastIndex = 0;
   let match;
@@ -1189,9 +1194,7 @@ const TextBlock = ({
           );
         }
         return (
-          <span key={textPart.id}>
-            {decodeHtmlEntities(textPart.content)}
-          </span>
+          <span key={textPart.id}>{decodeHtmlEntities(textPart.content)}</span>
         );
       })}
     </p>
@@ -1233,8 +1236,10 @@ function processContent(content: string): string {
   // SECURITY: Process code blocks with bounded quantifiers
   // NOSONAR S7781: replaceAll() with function callback for complex replacement logic
   const codeTagRegex = /<code[^>]{0,200}>([^<]{1,50})<\/code>/gi;
-  fixedContent = fixedContent.replaceAll(codeTagRegex, (match, codeContent, offset) =>
-    replaceCodeTagWithMarkdown(match, codeContent, offset, fixedContent),
+  fixedContent = fixedContent.replaceAll(
+    codeTagRegex,
+    (match, codeContent, offset) =>
+      replaceCodeTagWithMarkdown(match, codeContent, offset, fixedContent),
   );
 
   // ⚠️ SECURITY: Limit input size to prevent ReDoS attacks
