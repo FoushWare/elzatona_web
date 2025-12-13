@@ -39,9 +39,9 @@ interface UseSecureProgressReturn {
 }
 
 export function useSecureProgress(): UseSecureProgressReturn {
-  const [user, setUser] = useState({ uid: "placeholder-user" });
-  const [firebaseUser, setFirebaseUser] = useState(null);
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [user] = useState({ uid: "placeholder-user" });
+  const [firebaseUser] = useState(null);
+  const [isAuthenticated] = useState(false);
   const [progress, setProgress] = useState<ProgressSummary | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -54,6 +54,7 @@ export function useSecureProgress(): UseSecureProgressReturn {
     if (isAuthenticated && user) {
       loadCachedProgress();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isAuthenticated, user]);
 
   const loadCachedProgress = useCallback(() => {
@@ -201,6 +202,7 @@ export function useSecureProgress(): UseSecureProgressReturn {
       } finally {
         setIsLoading(false);
       }
+      // eslint-disable-next-line react-hooks/exhaustive-deps
     },
     [isAuthenticated, user],
   );

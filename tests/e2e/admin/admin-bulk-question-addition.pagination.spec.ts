@@ -449,7 +449,7 @@ test.describe("A-E2E-001: Admin Bulk Question Addition - Pagination", () => {
         .first()
         .textContent({ timeout: 5000 })
         .catch(() => null);
-    } catch (_e: any) {
+    } catch (_e: unknown) {
       // If page is actually closed, Playwright will throw a proper error
       // Just log and continue - the click attempt will fail if page is really closed
       console.log('⚠️ Could not get "Showing" text, continuing anyway...');

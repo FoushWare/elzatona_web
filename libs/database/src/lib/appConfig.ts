@@ -5,9 +5,11 @@
 const getEnvVar = (key: string, defaultValue: string = ""): string => {
   if (typeof globalThis.window !== "undefined") {
     // Client-side: use window.env or similar
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     return (globalThis.window as any).env?.[key] || defaultValue;
   }
   // Server-side: use process.env
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   return (process as any).env?.[key] || defaultValue;
 };
 

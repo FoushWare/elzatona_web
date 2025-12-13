@@ -6,7 +6,7 @@ import {
 } from "@elzatona/shared-atoms";
 
 export function useLanguage() {
-  const [language, setLanguage] = useAtom(languageAtom);
+  const [language] = useAtom(languageAtom);
   const [isLoading] = useAtom(languageLoadingAtom);
   const setLanguageWithSideEffects = useSetAtom(setLanguageAtom);
 

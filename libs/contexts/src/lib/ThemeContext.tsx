@@ -4,7 +4,7 @@ import React, { useState, useEffect, createContext, useContext } from "react";
 
 // Only create Supabase client if environment variables are available
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-const supabase: any = null;
+const _supabase: any = null;
 if (
   process.env["NEXT_PUBLIC_SUPABASE_URL"] &&
   process.env["SUPABASE_SERVICE_ROLE_KEY"]
@@ -58,6 +58,7 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
       setIsDarkMode(theme);
     }
     setIsLoaded(true);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []); // Remove isDarkMode dependency to prevent infinite loop
 
   useEffect(() => {

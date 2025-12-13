@@ -17,8 +17,8 @@ interface UseLearningPlansReturn {
 }
 
 export function useLearningPlans(): UseLearningPlansReturn {
-  const [user, setUser] = useState({ uid: "placeholder-user" });
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [user] = useState({ uid: "placeholder-user" });
+  const [isAuthenticated] = useState(false);
   const [plans, setPlans] = useState<LearningPlanProgress[]>([]);
   const [currentPlan, setCurrentPlan] = useState<LearningPlanProgress | null>(
     null,

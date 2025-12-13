@@ -2,7 +2,7 @@
 
 // Only create Supabase client if environment variables are available
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-const supabase: any = null;
+const _supabase: any = null;
 if (
   process.env["NEXT_PUBLIC_SUPABASE_URL"] &&
   process.env["SUPABASE_SERVICE_ROLE_KEY"]
