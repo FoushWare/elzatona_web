@@ -39,21 +39,22 @@ interface UseSecureProgressReturn {
 }
 
 export function useSecureProgress(): UseSecureProgressReturn {
-  const [user, setUser] = useState({ uid: "placeholder-user" });
-  const [firebaseUser, setFirebaseUser] = useState(null);
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [user] = useState({ uid: "placeholder-user" });
+  const [firebaseUser] = useState(null);
+  const [isAuthenticated] = useState(false);
   const [progress, setProgress] = useState<ProgressSummary | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  // Generate a unique session ID for this session
-  const sessionId = `session_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+  // Generate a unique session ID for this session using crypto API
+  // Session ID is generated on-demand when needed (see line 108)
 
   // Load progress from localStorage cache on mount
   useEffect(() => {
     if (isAuthenticated && user) {
       loadCachedProgress();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isAuthenticated, user]);
 
   const loadCachedProgress = useCallback(() => {
@@ -83,10 +84,20 @@ export function useSecureProgress(): UseSecureProgressReturn {
       setError(null);
 
       try {
+        // Generate secure session ID using crypto API
+        const generateSecureSessionId = () => {
+          const array = new Uint8Array(9);
+          if (typeof crypto !== "undefined" && crypto.getRandomValues) {
+            crypto.getRandomValues(array);
+            return `session_${Date.now()}_${Array.from(array, (byte) => byte.toString(36)).join("")}`;
+          }
+          // Fallback for environments without crypto (should not happen in browser)
+          return `session_${Date.now()}_${Math.random().toString(36).substring(2, 11)}`;
+        };
         const progressData: ProgressData = {
           ...data,
           userId: user.uid,
-          sessionId: `session_${Date.now()}_${Math.random().toString(36).substring(2, 11)}`,
+          sessionId: generateSecureSessionId(),
         };
 
         // Save to server
@@ -282,9 +293,10 @@ export function useSecureProgress(): UseSecureProgressReturn {
           );
           // Don't throw error, just return early and use local cache
           return;
-        } catch (parseError) {
+        } catch (parseError_) {
           console.warn(
             "Failed to parse error response, continuing with local cache",
+            parseError_,
           );
           return;
         }

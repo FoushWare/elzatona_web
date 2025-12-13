@@ -1,0 +1,51 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "target": "es5",
+    "lib": ["dom", "dom.iterable", "es6"],
+    "allowJs": true,
+    "skipLibCheck": true,
+    "strict": true,
+    "noEmit": true,
+    "esModuleInterop": true,
+    "module": "esnext",
+    "moduleResolution": "bundler",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "jsx": "preserve",
+    "incremental": true,
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ],
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./src/*"],
+      "@/lib/*": ["./lib/*"],
+      "@/components/*": ["./components/*"],
+      "@elzatona/components": ["../../libs/components/src"],
+      "@elzatona/contexts": ["../../libs/contexts/src/lib/shared-contexts"],
+      "@elzatona/hooks": ["../../libs/hooks/src/lib/shared-hooks"],
+      "@elzatona/shared-atoms": [
+        "../../libs/shared-atoms/src/lib/shared-atoms"
+      ],
+      "@elzatona/types": ["../../libs/types/src/lib/shared-types"],
+      "@elzatona/ui": ["../../libs/ui/src/lib/ui"],
+      "@elzatona/auth": ["../../libs/auth/src/lib/auth"],
+      "@elzatona/database": ["../../libs/database/src/lib/database"],
+      "@elzatona/utilities": ["../../libs/utilities/src/lib/utils"],
+      "@/components/*": ["../../libs/components/src/lib/components/*"],
+      "@/hooks/*": ["../../libs/hooks/src/lib/hooks/*"],
+      "@/contexts/*": ["../../libs/contexts/src/lib/contexts/*"],
+      "@/atoms/*": ["../../libs/shared-atoms/src/lib/atoms/*"],
+      "@/types/*": ["../../libs/types/src/lib/types/*"],
+      "@/ui/*": ["../../libs/ui/src/lib/ui/*"],
+      "@/auth/*": ["../../libs/auth/src/lib/auth/*"],
+      "@/database/*": ["../../libs/database/src/lib/database/*"],
+      "@/utils/*": ["../../libs/utilities/src/lib/utils/*"]
+    }
+  },
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
+  "exclude": ["node_modules"]
+}

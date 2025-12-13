@@ -2,7 +2,6 @@
   "extends": "../../tsconfig.json",
   "compilerOptions": {
     "outDir": "../../dist/out-tsc",
-    "types": ["node"],
     "baseUrl": ".",
     "paths": {
       "@/*": ["./src/*"],
@@ -41,6 +40,8 @@
     "apps/admin/Utils/scripts/**/*",
     "**/*.spec.ts",
     "**/*.stories.ts",
-    "**/*.stories.js"
+    "**/*.stories.js",
+    "**/*.example.ts",
+    "utilities/api-config.example.ts"
   ]
 }

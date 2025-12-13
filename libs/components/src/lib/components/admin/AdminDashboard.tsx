@@ -7,12 +7,10 @@ import {
   BookOpen,
   HelpCircle,
   CreditCard,
-  FileText,
   Settings,
   Code,
   Calculator,
   BarChart3,
-  FolderOpen,
   Users,
   Database,
   TrendingUp,
@@ -23,14 +21,8 @@ import {
   Zap,
   Star,
   ArrowRight,
-  Plus,
-  Eye,
-  Edit,
-  Trash2,
   RefreshCw,
   AlertCircle,
-  Info,
-  ExternalLink,
 } from "lucide-react";
 
 export default function AdminDashboard() {
@@ -43,7 +35,7 @@ export default function AdminDashboard() {
     setIsClient(true);
   }, []);
 
-  const adminMenuItems = [
+  const _adminMenuItems = [
     {
       href: "/admin/content/questions",
       label: "Questions",

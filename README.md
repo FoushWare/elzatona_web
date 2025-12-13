@@ -278,12 +278,14 @@ import { Component } from "@/components/Component";
 The pre-commit hook includes GitGuardian (`ggshield`) to catch secrets before they're committed:
 
 1. **Install GitGuardian CLI:**
+
    ```bash
    pipx install ggshield
    # Or: brew install ggshield
    ```
 
 2. **Authenticate (optional but recommended):**
+
    ```bash
    ggshield auth login
    # Or set GITGUARDIAN_API_KEY environment variable
@@ -330,3 +332,4 @@ For issues and questions:
 - Review [troubleshooting guide](docs/flows/local-development.md#troubleshooting)
 - Open an issue on GitHub
 
+# test change
