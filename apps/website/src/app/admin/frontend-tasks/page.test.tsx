@@ -86,7 +86,7 @@ describe("A-UT-SNAPSHOT: Admin Frontend Tasks Snapshot Tests", () => {
 
   it("should match admin frontend tasks page snapshot (loading state)", () => {
     mockUseFrontendTasks.mockReturnValue({
-      data: { data: [], count: 0 },
+      data: { data: [] },
       isLoading: true,
       error: null,
     });

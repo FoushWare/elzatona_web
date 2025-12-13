@@ -7,11 +7,11 @@ import { useRouter, useParams } from "next/navigation";
 import {
   BookOpen,
   ArrowRight,
-  _Clock as _Clock,
+  Clock,
   Target,
-  _Users as _Users,
-  _Star as _Star,
-  _ChevronRight as _ChevronRight,
+  Users,
+  Star,
+  ChevronRight,
   Code,
   Palette,
   Zap,
@@ -20,12 +20,12 @@ import {
   Settings,
   Brain,
   Globe,
-  _Play as _Play,
+  Play,
   CheckCircle,
-  _Circle as _Circle,
+  Circle,
   HelpCircle,
   Trophy,
-  _TrendingUp as _TrendingUp,
+  TrendingUp,
 } from "lucide-react";
 
 interface Question {
@@ -80,7 +80,7 @@ export default function LearningPathSectionPage() {
   const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null);
   const [showExplanation, setShowExplanation] = useState(false);
   const [score, setScore] = useState(0);
-  const [_completedQuestions, _setCompletedQuestions] = useState<Set<string>>(
+  const [completedQuestions, setCompletedQuestions] = useState<Set<string>>(
     new Set(),
   );
 
