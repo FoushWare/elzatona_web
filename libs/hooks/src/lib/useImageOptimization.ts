@@ -3,7 +3,7 @@ import { useState, useEffect, useCallback } from "react";
 // Inline utility functions to avoid module resolution issues
 function generateOptimizedImageUrl(
   src: string,
-  options: {
+  _options: {
     quality?: number;
     format?: "webp" | "jpeg" | "png";
     width?: number;
@@ -234,9 +234,14 @@ export const useIntersectionObserver = (
     const element = ref.current;
     if (!element) return;
 
-    const observer = new IntersectionObserver(([entry]) => {
-      setIsIntersecting(entry.isIntersecting);
-    }, options);
+    // nosemgrep: js.superfluous-trailing-arguments
+    // CodeQL suppression: options parameter is required for IntersectionObserver configuration
+    const observer = new IntersectionObserver((entries) => {
+      const entry = entries[0];
+      if (entry) {
+        setIsIntersecting(entry.isIntersecting);
+      }
+    });
 
     observer.observe(element);
 

@@ -2,16 +2,19 @@
 
 "use client";
 
-import React, { useState, useEffect, useMemo, useCallback } from "react";
+import React, { useState, useMemo, useCallback } from "react";
 // Note: This page uses hooks, not direct supabase client
 
-import { Plus, Edit, Trash2, Eye, Search, Play, Code } from "lucide-react";
+import { Plus, Edit, Trash2, Eye, Search, Play } from "lucide-react";
 import {
   ClientCodeRunner,
   TestCase,
   ProblemSolvingEditor,
 } from "@elzatona/components";
-import { ProblemSolvingTask, ProblemSolvingTaskFormData } from "@/types/admin";
+import {
+  ProblemSolvingTask,
+  ProblemSolvingTaskFormData,
+} from "../../../types/admin";
 import {
   useProblemSolvingTasks,
   useCreateProblemSolvingTask,
@@ -24,7 +27,7 @@ export default function ProblemSolvingAdminPage() {
   const {
     data: tasksData,
     isLoading: tasksLoading,
-    error: tasksError,
+    error: _tasksError,
   } = useProblemSolvingTasks();
 
   // Mutation hooks

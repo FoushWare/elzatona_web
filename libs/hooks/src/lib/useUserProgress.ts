@@ -61,8 +61,8 @@ export interface UseUserProgressReturn {
 }
 
 export const useUserProgress = (): UseUserProgressReturn => {
-  const [user, setUser] = useState({ uid: "placeholder-user" });
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [user] = useState({ uid: "placeholder-user" });
+  const [isAuthenticated] = useState(false);
   const [progress, setProgress] = useState<UserProgress | null>(null);
   const [dashboardStats, setDashboardStats] = useState<DashboardStats | null>(
     null,

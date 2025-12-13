@@ -202,7 +202,9 @@ export function useUnifiedQuestions(
         }
 
         const queryString = queryParams.toString();
-        const url = `/api/questions/unified${queryString ? `?${queryString}` : ""}`;
+        const url = queryString
+          ? `/api/questions/unified?${queryString}`
+          : "/api/questions/unified";
         console.log("🔄 useUnifiedQuestions: Making API call to:", url);
         const response = await apiCall(url);
         console.log("🔄 useUnifiedQuestions: API response received:", response);
@@ -247,27 +249,30 @@ export function useUnifiedQuestions(
   );
 
   // Load single question
-  const loadQuestion = useCallback(async (id: string) => {
-    setIsLoading(true);
-    setError(null);
+  const loadQuestion = useCallback(
+    async (id: string) => {
+      setIsLoading(true);
+      setError(null);
 
-    try {
-      const response = await apiCall(`/api/questions/unified/${id}`);
+      try {
+        const response = await apiCall(`/api/questions/unified/${id}`);
 
-      if (response.success) {
-        setCurrentQuestion(response.data);
-      } else {
-        throw new Error(response.error || "Failed to load question");
+        if (response.success) {
+          setCurrentQuestion(response.data);
+        } else {
+          throw new Error(response.error || "Failed to load question");
+        }
+      } catch (err) {
+        const errorMessage =
+          err instanceof Error ? err.message : "Failed to load question";
+        setError(errorMessage);
+        console.error("Error loading question:", err);
+      } finally {
+        setIsLoading(false);
       }
-    } catch (err) {
-      const errorMessage =
-        err instanceof Error ? err.message : "Failed to load question";
-      setError(errorMessage);
-      console.error("Error loading question:", err);
-    } finally {
-      setIsLoading(false);
-    }
-  }, []);
+    },
+    [apiCall],
+  );
 
   // Load learning paths
   const loadLearningPaths = useCallback(async () => {
@@ -338,7 +343,7 @@ export function useUnifiedQuestions(
         setIsCreating(false);
       }
     },
-    [loadQuestions, initialFilters],
+    [apiCall, loadQuestions, initialFilters],
   );
 
   // Update question
@@ -375,7 +380,7 @@ export function useUnifiedQuestions(
         setIsUpdating(false);
       }
     },
-    [currentQuestion],
+    [apiCall, currentQuestion],
   );
 
   // Delete question
@@ -407,7 +412,7 @@ export function useUnifiedQuestions(
         setIsDeleting(false);
       }
     },
-    [currentQuestion],
+    [apiCall, currentQuestion],
   );
 
   // Bulk import questions
@@ -467,7 +472,7 @@ export function useUnifiedQuestions(
         setIsCreating(false);
       }
     },
-    [loadQuestions, initialFilters],
+    [apiCall, loadQuestions, initialFilters],
   );
 
   // Search questions
@@ -508,7 +513,7 @@ export function useUnifiedQuestions(
         setIsLoading(false);
       }
     },
-    [],
+    [apiCall],
   );
 
   // Get random questions
@@ -550,7 +555,7 @@ export function useUnifiedQuestions(
         setIsLoading(false);
       }
     },
-    [],
+    [apiCall],
   );
 
   // Utility functions
@@ -575,21 +580,25 @@ export function useUnifiedQuestions(
       );
 
       // Load questions first, then other data with delays to prevent Firebase conflicts
+      const handleLearningPathsError = (err: unknown) => {
+        console.error("Error loading learning paths:", err);
+      };
+
+      const handleStatsError = (err: unknown) => {
+        console.error("Error loading stats:", err);
+      };
+
       const loadDataSequentially = async () => {
         try {
           await loadQuestions(initialFilters);
 
           // Add small delays between API calls to prevent Firebase "Target ID already exists" errors
           setTimeout(() => {
-            loadLearningPaths().catch((err) =>
-              console.error("Error loading learning paths:", err),
-            );
+            loadLearningPaths().catch(handleLearningPathsError);
           }, 100);
 
           setTimeout(() => {
-            loadStats().catch((err) =>
-              console.error("Error loading stats:", err),
-            );
+            loadStats().catch(handleStatsError);
           }, 200);
         } catch (err) {
           console.error("Error in sequential data loading:", err);
@@ -679,5 +688,3 @@ export function useUnifiedQuestions(
     clearQuestions,
   };
 }
-
-// export default useUnifiedQuestions; // Removed default export, use named export instead

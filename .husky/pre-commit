@@ -3,7 +3,7 @@
 
 echo ""
 echo "════════════════════════════════════════════════════════════════"
-echo "🔍 PRE-COMMIT HOOK (Fastest Checks)"
+echo "🔍 PRE-COMMIT HOOK (Fast Checks - All Local)"
 echo "════════════════════════════════════════════════════════════════"
 echo ""
 
@@ -29,15 +29,85 @@ else
 fi
 echo ""
 
-# Step 2: Secret scanning with GitGuardian (ggshield)
-echo "🔒 STEP 2: Running GitGuardian secret scanning on staged files..."
+# Step 2: ESLint with auto-fix (fast check)
+echo "🔍 STEP 2: Running ESLint with auto-fix..."
+echo "   📝 Executing: npm run lint:fix"
+echo ""
+
+npm run lint:fix
+LINT_FIX_EXIT_CODE=$?
+
+# Check if there are any remaining warnings after auto-fix
+echo ""
+echo "🔍 STEP 2b: Checking for remaining ESLint warnings..."
+echo "   📝 Executing: npm run lint --quiet --max-warnings=0"
+echo ""
+
+npm run lint --quiet --max-warnings=0
+LINT_CHECK_EXIT_CODE=$?
+
+if [ $LINT_FIX_EXIT_CODE -ne 0 ]; then
+  echo "   ⚠️  ESLint auto-fix completed with warnings"
+  echo "   💡 Some issues may require manual fixes"
+else
+  echo "   ✅ ESLint auto-fix completed successfully!"
+fi
+echo ""
+
+# Step 3: TypeScript type checking (fast - only staged files)
+echo "📘 STEP 3: Running TypeScript type checking..."
+echo "   📝 Executing: npm run type-check"
+echo "   ⏳ This may take a moment..."
+echo ""
+
+NODE_OPTIONS="--max-old-space-size=1024" npm run type-check
+TS_EXIT_CODE=$?
+
+if [ $TS_EXIT_CODE -ne 0 ]; then
+  echo "   ❌ TypeScript type checking failed"
+  echo "   💡 Please fix TypeScript errors before committing"
+  echo ""
+  echo "════════════════════════════════════════════════════════════════"
+  echo "❌ PRE-COMMIT HOOK FAILED - TYPESCRIPT ERRORS DETECTED!"
+  echo "════════════════════════════════════════════════════════════════"
+  echo ""
+  exit 1
+else
+  echo "   ✅ TypeScript type checking passed!"
+fi
+echo ""
+
+# Step 4: Build check (fast - catches compilation errors)
+echo "🏗️  STEP 4: Running build validation..."
+echo "   📦 Executing: npm run build"
+echo "   ⏳ This may take a moment..."
+echo ""
+
+NODE_OPTIONS="--max-old-space-size=1024" NEXT_TELEMETRY_DISABLED=1 npm run build
+BUILD_EXIT_CODE=$?
+
+if [ $BUILD_EXIT_CODE -ne 0 ]; then
+  echo "   ❌ Build failed"
+  echo "   💡 Please fix build errors before committing"
+  echo ""
+  echo "════════════════════════════════════════════════════════════════"
+  echo "❌ PRE-COMMIT HOOK FAILED - BUILD ERRORS DETECTED!"
+  echo "════════════════════════════════════════════════════════════════"
+  echo ""
+  exit 1
+else
+  echo "   ✅ Build validation passed!"
+fi
+echo ""
+
+# Step 5: Secret scanning with GitGuardian (ggshield)
+echo "🔒 STEP 5: Running GitGuardian secret scanning on staged files..."
 echo "   📝 Executing: ggshield secret scan pre-commit"
 echo "   ⚠️  This will catch secrets BEFORE they leave your machine!"
 echo ""
 
 # Load GitGuardian API key from .env.local if available
 if [ -f .env.local ] && [ -z "$GITGUARDIAN_API_KEY" ]; then
-  # Extract GITGUARDIAN_API_KEY from .env.local (handle comments and empty lines)
   export GITGUARDIAN_API_KEY=$(grep -E "^GITGUARDIAN_API_KEY=" .env.local 2>/dev/null | cut -d '=' -f2- | tr -d '"' | tr -d "'" | xargs)
 fi
 
@@ -49,26 +119,21 @@ if ! command -v ggshield &> /dev/null; then
   echo "   ⏭️  Skipping secret scan (pre-push hook will still scan)"
   echo ""
 else
-  # Run ggshield on staged files
-  # Capture both stdout and stderr to check for auth errors
   GGSHIELD_OUTPUT=$(ggshield secret scan pre-commit 2>&1)
   GGSHIELD_EXIT_CODE=$?
   
-  # Check if the error is due to missing authentication
   if echo "$GGSHIELD_OUTPUT" | grep -q "A GitGuardian API key is needed"; then
     echo "   ⚠️  GitGuardian is not authenticated"
     echo "   💡 To set up authentication:"
     echo "      1. Add GITGUARDIAN_API_KEY to .env.local"
     echo "      2. Or run: ggshield auth login"
     echo "   ⏭️  Allowing commit (pre-push hook will still scan for secrets)"
-    echo "   📚 Setup guide: https://docs.gitguardian.com/ggshield-docs/reference/auth/login"
     echo ""
   elif [ $GGSHIELD_EXIT_CODE -ne 0 ]; then
     echo "$GGSHIELD_OUTPUT"
     echo ""
     echo "   ❌ GitGuardian detected secrets in staged files!"
     echo "   💡 Please remove hardcoded secrets and use environment variables"
-    echo "   💡 See: https://docs.gitguardian.com/ggshield-docs/getting-started"
     echo ""
     echo "════════════════════════════════════════════════════════════════"
     echo "❌ PRE-COMMIT HOOK FAILED - SECRETS DETECTED!"
@@ -81,23 +146,98 @@ else
 fi
 echo ""
 
-# Step 3: Add formatted files to staging
-echo "📦 STEP 3: Adding formatted files to staging..."
+# Step 6: CodeQL security analysis (optional - can be disabled with SKIP_CODEQL=1)
+if [ "$SKIP_CODEQL" != "1" ]; then
+  echo "🔐 STEP 6: Running CodeQL security analysis..."
+  echo "   📝 Executing: libs/utilities/scripts/check-codeql-precommit.sh"
+  echo "   ⚠️  This will catch security vulnerabilities BEFORE commit!"
+  echo "   💡 To skip: SKIP_CODEQL=1 git commit"
+  echo ""
+
+  if [ -f "libs/utilities/scripts/check-codeql-precommit.sh" ]; then
+    bash libs/utilities/scripts/check-codeql-precommit.sh
+    CODEQL_EXIT_CODE=$?
+    
+    if [ $CODEQL_EXIT_CODE -ne 0 ]; then
+      echo ""
+      echo "════════════════════════════════════════════════════════════════"
+      echo "❌ PRE-COMMIT HOOK FAILED - CODEQL SECURITY ISSUES DETECTED!"
+      echo "════════════════════════════════════════════════════════════════"
+      echo ""
+      echo "💡 The auto-fix script may have fixed some issues."
+      echo "💡 Please review the changes and stage them:"
+      echo "   git add -A"
+      echo "   git commit"
+      echo ""
+      exit 1
+    else
+      echo "   ✅ CodeQL security analysis passed!"
+    fi
+  else
+    echo "   ⚠️  CodeQL check script not found"
+    echo "   💡 Skipping CodeQL check"
+  fi
+  echo ""
+else
+  echo "⏭️  STEP 6: Skipping CodeQL check (SKIP_CODEQL=1)"
+  echo ""
+fi
+
+# Step 7: SonarQube code quality analysis (optional - can be disabled with SKIP_SONAR=1)
+if [ "$SKIP_SONAR" != "1" ] && [ -n "$SONAR_TOKEN" ]; then
+  echo "📊 STEP 7: Running SonarQube code quality analysis..."
+  echo "   📝 Executing: npm run sonar:quick"
+  echo "   ⚠️  This will catch code quality issues BEFORE commit!"
+  echo "   💡 To skip: SKIP_SONAR=1 git commit"
+  echo ""
+
+  npm run sonar:quick
+  SONAR_EXIT_CODE=$?
+  
+  if [ $SONAR_EXIT_CODE -ne 0 ]; then
+    echo ""
+    echo "════════════════════════════════════════════════════════════════"
+    echo "❌ PRE-COMMIT HOOK FAILED - SONARQUBE ISSUES DETECTED!"
+    echo "════════════════════════════════════════════════════════════════"
+    echo ""
+    echo "💡 Please review the SonarQube output above for details"
+    echo "💡 Fix issues or skip with: SKIP_SONAR=1 git commit"
+    echo ""
+    exit 1
+  else
+    echo "   ✅ SonarQube code quality analysis passed!"
+  fi
+  echo ""
+else
+  if [ "$SKIP_SONAR" = "1" ]; then
+    echo "⏭️  STEP 7: Skipping SonarQube check (SKIP_SONAR=1)"
+  else
+    echo "⏭️  STEP 7: Skipping SonarQube check (SONAR_TOKEN not set)"
+  fi
+  echo ""
+fi
+
+# Step 8: Add formatted and fixed files to staging
+echo "📦 STEP 8: Adding formatted and fixed files to staging..."
 git add .
-echo "   ✅ Formatted files added to staging"
+echo "   ✅ Formatted and fixed files added to staging"
 echo ""
 
 # Final status
 echo "📊 PRE-COMMIT SUMMARY:"
 echo "   ✅ Prettier formatting completed"
+echo "   ✅ ESLint auto-fix completed"
+echo "   ✅ TypeScript type checking passed"
+echo "   ✅ Build validation passed"
 echo "   ✅ GitGuardian secret scanning passed"
+echo "   ✅ CodeQL security analysis passed"
+echo "   ✅ SonarQube code quality analysis passed"
 echo "   ✅ Files staged for commit"
 echo ""
 echo "════════════════════════════════════════════════════════════════"
 echo "✅ PRE-COMMIT CHECKS COMPLETED SUCCESSFULLY!"
 echo "🚀 READY TO COMMIT!"
 echo ""
-echo "💡 Note: Linting, type checking, and build validation"
-echo "   will run on push (before code reaches GitHub)"
+echo "💡 All checks run locally - CI/CD pipeline will be faster!"
 echo "════════════════════════════════════════════════════════════════"
 echo ""

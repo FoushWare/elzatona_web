@@ -48,6 +48,9 @@ storybook-static
 
 # Logs
 logs
+.logs/
+*.log
+.code-quality-check.log
 *.log
 dev-debug.log
 # Dependency directories
@@ -192,3 +195,12 @@ test-results/
 .playwright/
 **/playwright-report/
 **/test-results/
+
+# Security scan result files (contain sensitive data)
+trufflehog-current.json
+gitleaks-history.json
+**/*trufflehog*.json
+**/*gitleaks*.json
+
+# CodeQL database (generated files)
+codeql-database/

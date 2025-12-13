@@ -18,15 +18,15 @@ import {
   BookOpen,
   Loader2,
 } from "lucide-react";
-import { SupabaseLearningCardsService } from "@/lib/supabase-learning-cards-service";
-import { CARD_TYPES } from "@/types/learning-cards";
+import { SupabaseLearningCardsService } from "../../../lib/supabase-learning-cards-service";
+import { CARD_TYPES } from "../../../types/learning-cards";
 import type {
   LearningCard,
   LearningCardFormData,
-} from "@/types/learning-cards";
+} from "../../../types/learning-cards";
 
 export default function LearningCardsAdminPage() {
-  const router = useRouter();
+  const _router = useRouter();
   const [cards, setCards] = useState<LearningCard[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -152,7 +152,7 @@ export default function LearningCardsAdminPage() {
     });
   };
 
-  const getCardTypeColor = (type: string) => {
+  const _getCardTypeColor = (type: string) => {
     return CARD_TYPES[type as keyof typeof CARD_TYPES]?.color || "#6B7280";
   };
 

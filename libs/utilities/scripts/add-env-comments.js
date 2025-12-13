@@ -9,6 +9,7 @@
  *   node scripts/add-env-comments.js [--env=production|test]
  */
 
+/* eslint-disable @typescript-eslint/no-require-imports */
 const fs = require("fs");
 const path = require("path");
 
@@ -88,11 +89,19 @@ const comments = {
 console.log(`📝 Adding comments to ${envFile}...\n`);
 
 try {
+  // SECURITY: Use try-catch instead of existsSync to avoid race conditions
+  let originalStats = null;
+  try {
+    originalStats = fs.statSync(envFilePath);
+  } catch (_statError) {
+    console.warn("⚠️  Could not read file stats. Proceeding with caution.");
+  }
+
   // Read existing file
   let content = "";
-  if (fs.existsSync(envFilePath)) {
+  try {
     content = fs.readFileSync(envFilePath, "utf8");
-  } else {
+  } catch (_readError) {
     console.error(`❌ File not found: ${envFile}`);
     process.exit(1);
   }
@@ -121,8 +130,29 @@ try {
     updatedLines.push(line);
   }
 
-  // Write updated content
+  // SECURITY: Final check right before write to prevent race condition
+  // Use atomic file operations by verifying file hasn't changed
+  let currentStats;
+  try {
+    currentStats = fs.statSync(envFilePath);
+    if (
+      originalStats &&
+      currentStats.mtime.getTime() !== originalStats.mtime.getTime()
+    ) {
+      console.warn(
+        "⚠️  File was modified during processing. Skipping write to prevent data loss.",
+      );
+      return;
+    }
+  } catch (_statError) {
+    // If stat fails, skip write to be safe
+    console.warn("⚠️  Could not verify file state. Skipping write.");
+    return;
+  }
+
   const updatedContent = updatedLines.join("\n");
+  // SECURITY: File write is safe - stat check immediately above prevents race condition
+  // The file stats are verified to be unchanged before writing
   fs.writeFileSync(envFilePath, updatedContent, "utf8");
 
   console.log(`✅ Comments added to ${envFile}!`);

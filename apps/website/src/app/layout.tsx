@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
-import { JotaiProvider } from "@/providers/JotaiProvider";
-import { QueryProvider } from "@/providers/QueryProvider";
+import { JotaiProvider } from "../../providers/JotaiProvider";
+import { QueryProvider } from "../../providers/QueryProvider";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 
 import {
@@ -13,16 +13,17 @@ import {
   OnboardingProvider,
   AuthProvider,
 } from "@elzatona/contexts";
-import NavbarSimple from "@/components/NavbarSimple";
-import { NotificationProvider } from "@/components/NotificationSystem";
-import AuthSessionSync from "@/components/AuthSessionSync";
-import { LearningTypeProvider } from "@/context/LearningTypeContext";
-import { SentryErrorBoundary } from "@/components/SentryErrorBoundary";
-import { NavigationProgress } from "@/components/NavigationProgress";
-import { NavigationProvider } from "@/context/NavigationContext";
+import NavbarSimple from "../../components/NavbarSimple";
+import { NotificationProvider } from "../../components/NotificationSystem";
+import AuthSessionSync from "../../components/AuthSessionSync";
+import { LearningTypeProvider } from "../../context/LearningTypeContext";
+import { SentryErrorBoundary } from "../../components/SentryErrorBoundary";
+import { NavigationProgress } from "../../components/NavigationProgress";
+import { NavigationProvider } from "../../context/NavigationContext";
 
 // Force dynamic rendering to prevent static generation issues with auth context
 export const dynamic = "force-dynamic";
+export const revalidate = 0;
 
 const inter = Inter({
   subsets: ["latin"],

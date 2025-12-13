@@ -11,13 +11,8 @@ export function useRoleBasedAccess() {
       return false;
     }
 
-    // Cast user role to the expected type
-    const userRole = user.role as
-      | "user"
-      | "premium_user"
-      | "admin"
-      | "super_admin";
-    return UserAuthService.hasPermission(userRole, requiredRole);
+    // Use user role directly - no assertion needed since User interface already defines the correct type
+    return UserAuthService.hasPermission(user.role, requiredRole);
   };
 
   const isUser = () => hasRole("user");
@@ -30,11 +25,8 @@ export function useRoleBasedAccess() {
       return false;
     }
 
-    const userRole = user.role as
-      | "user"
-      | "premium_user"
-      | "admin"
-      | "super_admin";
+    // Use user role directly - no assertion needed since User interface already defines the correct type
+    const userRole = user.role;
 
     // Define feature access rules
     const featureAccess: Record<
@@ -63,11 +55,8 @@ export function useRoleBasedAccess() {
       return [];
     }
 
-    const userRole = user.role as
-      | "user"
-      | "premium_user"
-      | "admin"
-      | "super_admin";
+    // Use user role directly - no assertion needed since User interface already defines the correct type
+    const _userRole = user.role;
     const features = [
       "basic-learning",
       "premium-content",

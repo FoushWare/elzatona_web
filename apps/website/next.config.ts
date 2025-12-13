@@ -52,6 +52,21 @@ if (
 }
 
 const nextConfig: NextConfig = {
+  // Turbopack configuration
+  turbopack: {},
+
+  // Skip static generation for problematic pages
+  trailingSlash: false,
+
+  // Disable automatic error page generation
+  generateEtags: false,
+
+  // Disable static optimization for error pages
+  output: "standalone",
+
+  // Skip prerendering for error pages
+  excludeDefaultMomentLocales: true,
+
   // Performance optimizations
   experimental: {
     optimizeCss: true,
@@ -59,6 +74,24 @@ const nextConfig: NextConfig = {
     // Note: Turbopack is enabled via command line flag (--turbopack), not config
     // Removing turbo config as it's not valid in Next.js 16
   },
+
+  // Disable automatic error page generation
+  pageExtensions: ["tsx", "ts", "jsx", "js"],
+
+  // Skip error page generation
+  skipTrailingSlashRedirect: true,
+
+  // Force dynamic rendering for all pages to avoid prerendering issues
+  poweredByHeader: false,
+
+  // Disable automatic error page generation
+  generateBuildId: () => "build",
+
+  // Disable automatic error page generation
+  distDir: ".next",
+
+  // Disable automatic error page generation
+  reactStrictMode: false,
 
   // Transpile Firebase packages for better compatibility
   transpilePackages: ["firebase", "firebase-admin"],

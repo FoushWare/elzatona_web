@@ -1,0 +1,68 @@
+name: CodeQL Analysis
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  schedule:
+    # Run weekly on Monday at 00:00 UTC
+    - cron: "0 0 * * 1"
+  workflow_dispatch:
+
+# Cancel in-progress runs on the same branch
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  analyze:
+    name: Analyze
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    permissions:
+      actions: read
+      contents: read
+      security-events: write
+
+    strategy:
+      fail-fast: false
+      matrix:
+        # CodeQL treats JavaScript and TypeScript as one language
+        # Using just "javascript" will analyze both .js and .ts files
+        language: ["javascript"]
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v4
+        with:
+          languages: ${{ matrix.language }}
+          # Use security-extended queries for better coverage
+          queries: security-extended,security-and-quality
+          # Note: Path exclusions should be done via codeql-config.yml file
+          # if needed, as paths-ignore is not a valid input for init@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          # Cache omitted - project uses bun.lock, not package-lock.json
+          # Omitting cache parameter disables caching by default
+
+      - name: Install dependencies
+        run: npm install
+        # Using npm install instead of npm ci since package-lock.json doesn't exist
+        # Project uses bun as primary package manager
+
+      - name: Autobuild
+        uses: github/codeql-action/autobuild@v4
+        # CodeQL needs to build the code to analyze it properly
+        # This step automatically detects and runs the build command
+
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@v4
+        with:
+          category: "/language:${{ matrix.language }}"

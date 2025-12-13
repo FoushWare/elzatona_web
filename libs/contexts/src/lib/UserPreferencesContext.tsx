@@ -156,6 +156,7 @@ export function UserPreferencesProvider({
     if (!isLoading) {
       applyTheme();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [preferences.theme, isLoading]);
 
   // Listen for system theme changes when using system preference

@@ -1,6 +1,7 @@
 import { atom } from "jotai";
 
 // Supabase user atom
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const supabaseUserAtom = atom<any | null>(null);
 
 // Auth loading state
@@ -48,7 +49,8 @@ export const signInAtom = atom(
     try {
       // This will be implemented with actual Firebase auth
       // For now, just a placeholder
-      console.log("Sign in with:", { email, password });
+      // SECURITY: Never log passwords - only log email for debugging
+      console.log("Sign in attempt for:", email);
     } catch (error) {
       set(
         authErrorAtom,

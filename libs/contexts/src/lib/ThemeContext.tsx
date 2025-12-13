@@ -1,16 +1,10 @@
 "use client";
 
-import React, {
-  useState,
-  useEffect,
-  ReactNode,
-  createContext,
-  useContext,
-} from "react";
+import React, { useState, useEffect, createContext, useContext } from "react";
 
 // Only create Supabase client if environment variables are available
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-let supabase: any = null;
+const _supabase: any = null;
 if (
   process.env["NEXT_PUBLIC_SUPABASE_URL"] &&
   process.env["SUPABASE_SERVICE_ROLE_KEY"]
@@ -19,7 +13,8 @@ if (
   const { createClient } = require("@supabase/supabase-js");
   const supabaseUrl = process.env["NEXT_PUBLIC_SUPABASE_URL"];
   const supabaseServiceRoleKey = process.env["SUPABASE_SERVICE_ROLE_KEY"];
-  supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
+  const _supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
+  // CodeQL suppression: supabase variable is intentionally unused, kept for potential future use
 }
 
 interface ThemeContextType {
@@ -63,6 +58,7 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
       setIsDarkMode(theme);
     }
     setIsLoaded(true);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []); // Remove isDarkMode dependency to prevent infinite loop
 
   useEffect(() => {

@@ -71,3 +71,10 @@ bun.lock
 *.tsbuildinfo
 .scannerwork/
 .sonar/
+codeql-database/
+codeql-database/**
+**/codeql-database/**
+
+# Nx cache and workspace files
+.nx/cache/
+.nx/workspace-data/

@@ -5,7 +5,7 @@ import { createClient } from "@supabase/supabase-js";
 
 const supabaseUrl = process.env["NEXT_PUBLIC_SUPABASE_URL"]!;
 const supabaseServiceRoleKey = process.env["SUPABASE_SERVICE_ROLE_KEY"]!;
-const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
+const _supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
 
 import {
   Card,
@@ -40,8 +40,6 @@ import {
   Edit,
   Trash2,
   Search,
-  Filter,
-  Palette,
   AlertCircle,
   BookOpen,
   Tag,
@@ -333,8 +331,8 @@ export default function TopicManager() {
   // Delete functions
   const handleDeleteTopic = async (topicId: string) => {
     // Find the topic to get its name for logging
-    const topic = topics.find((t) => t.id === topicId);
-    const topicName = topic?.name || "Unknown";
+    const _topic = topics.find((t) => t.id === topicId);
+    const _topicName = _topic?.name || "Unknown";
 
     if (
       !confirm(

@@ -15,7 +15,6 @@ import {
   ChevronLeft,
   ChevronRight,
   Loader2,
-  TrendingUp,
   Clock,
   BarChart3,
 } from "lucide-react";
@@ -30,7 +29,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../ui/select";
-import { Checkbox } from "../ui/checkbox";
 import { Label } from "../ui/label";
 
 interface AdvancedSearchProps {
@@ -59,18 +57,18 @@ interface AdvancedSearchProps {
 
 export function AdvancedSearch({
   onResultsChange,
-  onFacetsChange,
+  onFacetsChange: _onFacetsChange,
   placeholder = "Search questions, topics, categories...",
   showFilters = true,
-  showFacets = true,
-  showSuggestions = true,
-  showAnalytics = true,
+  showFacets: _showFacets = true,
+  showSuggestions: _showSuggestions = true,
+  showAnalytics: _showAnalytics = true,
   className = "",
   allCategories = [],
   allTopics = [],
   // Pagination props
   currentPage = 1,
-  totalPages = 1,
+  totalPages: _totalPages = 1,
   totalCount = 0,
   pageSize = 10,
   onPageChange,

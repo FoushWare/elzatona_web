@@ -42,11 +42,7 @@ const Select = React.forwardRef<
     setOpen(false);
   };
 
-  // Find SelectTrigger and SelectContent children
-  const selectTrigger = React.Children.toArray(children).find(
-    (child) => React.isValidElement(child) && child.type === SelectTrigger,
-  );
-
+  // Find SelectContent children
   const selectContent = React.Children.toArray(children).find(
     (child) => React.isValidElement(child) && child.type === SelectContent,
   );
@@ -165,7 +161,7 @@ const SelectItem = React.forwardRef<
   React.HTMLAttributes<HTMLDivElement> & {
     value: string;
   }
->(({ className, children, value, onClick, ...props }, ref) => (
+>(({ className, children, value: _value, onClick, ...props }, ref) => (
   <div
     ref={ref}
     className={cn(
