@@ -865,7 +865,7 @@ export const QuestionContent = ({ content }: { content: string }) => {
           // codeql[js/incomplete-multi-character-sanitization]: sanitizeText() called immediately after this line removes all HTML tags
           .replaceAll(/\s+>\s+/g, " ");
         // SECURITY: Final sanitization pass after each iteration to ensure no HTML remains
-        // This sanitizeText() call removes all HTML tags, addressing CodeQL's incomplete sanitization concern
+        // CodeQL suppression: sanitizeText() is called immediately after this line, which uses DOMPurify to remove all HTML tags
         cleanText = sanitizeText(cleanText);
       }
       cleanText = cleanText
