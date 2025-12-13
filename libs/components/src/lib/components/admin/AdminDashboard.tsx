@@ -35,7 +35,7 @@ export default function AdminDashboard() {
     setIsClient(true);
   }, []);
 
-  const adminMenuItems = [
+  const _adminMenuItems = [
     {
       href: "/admin/content/questions",
       label: "Questions",
