@@ -70,7 +70,7 @@ export async function GET(request: NextRequest) {
 
     // Proceed with project check (admin is authenticated)
     const config = getSupabaseConfig();
-    const apiConfig = getApiConfig();
+    const _apiConfig = getApiConfig();
     const env = getEnvironment();
 
     // Extract project reference from URL
