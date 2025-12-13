@@ -63,7 +63,7 @@ export function useRoleBasedAccess() {
       return [];
     }
 
-    const userRole = user.role as
+    const _userRole = user.role as
       | "user"
       | "premium_user"
       | "admin"

@@ -8,7 +8,7 @@ import {
   sessionService,
   Flashcard,
   FlashcardProgress,
-  FlashcardSession,
+  // FlashcardSession,
 } from "./types/supabase-flashcards";
 
 interface SessionStats {
@@ -51,7 +51,7 @@ interface UseFlashcardSessionReturn {
 }
 
 export function useFlashcardSession(): UseFlashcardSessionReturn {
-  const [user, setUser] = useState({ uid: "placeholder-user" });
+  const [user] = useState({ uid: "placeholder-user" });
   const [currentCard, setCurrentCard] = useState<Flashcard | null>(null);
   const [sessionCards, setSessionCards] = useState<Flashcard[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -258,6 +258,7 @@ export function useFlashcardSession(): UseFlashcardSessionReturn {
           err instanceof Error ? err.message : "Failed to record answer",
         );
       }
+      // eslint-disable-next-line react-hooks/exhaustive-deps
     },
     [user, currentCard, sessionId],
   );
