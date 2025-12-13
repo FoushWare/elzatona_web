@@ -4,6 +4,7 @@ import React, { useState, useEffect } from "react";
 import { useAuth } from "@elzatona/hooks";
 
 // Conditional Supabase client creation with fallback values
+// eslint-disable-next-line prefer-const
 let supabase = null;
 try {
   // eslint-disable-next-line @typescript-eslint/no-require-imports
@@ -18,9 +19,7 @@ try {
     supabaseUrl !== "https://placeholder.supabase.co" &&
     supabaseServiceRoleKey !== "placeholder_key"
   ) {
-    const _supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
-    // Store for potential future use
-    void _supabase;
+    supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
   }
 } catch (error) {
   console.warn("Supabase client creation failed in UserStatistics:", error);
