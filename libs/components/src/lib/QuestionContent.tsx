@@ -514,6 +514,54 @@ function cleanCodePatterns(code: string): string {
   return cleaned;
 }
 
+// Helper function to extract code from HTML
+function extractCodeFromHtml(html: string): string {
+  if (!html) return "";
+
+  if (
+    !html.includes("<pre") &&
+    !html.includes("<code") &&
+    !html.includes("&lt;")
+  ) {
+    let code = decodeHtmlEntities(html);
+    code = formatCodeContent(code);
+    return code;
+  }
+
+  const fixedHtml = fixMalformedHtml(html);
+
+  // Try to extract from <pre><code> first, then <code>
+  let code =
+    extractCodeFromPreCode(fixedHtml) || extractCodeFromCode(fixedHtml) || html;
+
+  // SECURITY: Limit input size before processing to prevent ReDoS
+  const MAX_CODE_LENGTH = 50000; // 50KB limit
+  if (code.length > MAX_CODE_LENGTH) {
+    console.warn("Code content too large, truncating for safety");
+    code = code.substring(0, MAX_CODE_LENGTH);
+  }
+
+  code = decodeHtmlEntities(code);
+
+  // Decode entities iteratively until stable
+  let previousCode = "";
+  let iterations = 0;
+  const maxIterations = 20;
+
+  while (code !== previousCode && iterations < maxIterations) {
+    previousCode = code;
+    code = decodeHtmlEntities(code);
+    code = sanitizeText(code);
+    iterations++;
+  }
+
+  code = decodeHtmlEntities(code);
+  code = cleanCodePatterns(code);
+  code = formatCodeContent(code);
+
+  return code;
+}
+
 // Helper function to process HTML code blocks
 function processHtmlCodeBlocks(
   fixedContent: string,
@@ -874,58 +922,10 @@ export const QuestionContent = ({ content }: { content: string }) => {
     language?: string;
   }> = [];
 
-  const extractCodeFromHtml = (html: string): string => {
-    if (!html) return "";
-
-    if (
-      !html.includes("<pre") &&
-      !html.includes("<code") &&
-      !html.includes("&lt;")
-    ) {
-      let code = decodeHtmlEntities(html);
-      code = formatCodeContent(code);
-      return code;
-    }
-
-    const fixedHtml = fixMalformedHtml(html);
-
-    // Try to extract from <pre><code> first, then <code>
-    let code =
-      extractCodeFromPreCode(fixedHtml) ||
-      extractCodeFromCode(fixedHtml) ||
-      html;
-
-    // SECURITY: Limit input size before processing to prevent ReDoS
-    const MAX_CODE_LENGTH = 50000; // 50KB limit
-    if (code.length > MAX_CODE_LENGTH) {
-      console.warn("Code content too large, truncating for safety");
-      code = code.substring(0, MAX_CODE_LENGTH);
-    }
-
-    code = decodeHtmlEntities(code);
-
-    // Decode entities iteratively until stable
-    let previousCode = "";
-    let iterations = 0;
-    const maxIterations = 20;
-
-    while (code !== previousCode && iterations < maxIterations) {
-      previousCode = code;
-      code = decodeHtmlEntities(code);
-      code = sanitizeText(code);
-      iterations++;
-    }
-
-    code = decodeHtmlEntities(code);
-    code = cleanCodePatterns(code);
-    code = formatCodeContent(code);
-
-    return code;
-  };
-
   // SECURITY: Process code blocks with bounded quantifiers
   // NOSONAR S7781: replaceAll() cannot be used with regex patterns that require capture groups and callbacks
   fixedContent = fixedContent.replace(
+    // NOSONAR
     /<code[^>]{0,200}>([^<]{1,50})<\/code>/gi,
     (match, codeContent, offset) => {
       const beforeMatch = fixedContent.substring(0, offset);
