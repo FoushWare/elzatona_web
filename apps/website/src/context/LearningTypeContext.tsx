@@ -65,7 +65,7 @@ export function LearningTypeProvider({
     return "guided";
   };
 
-  const [learningType, setLearningTypeState] = useState<LearningType>(
+  const [learningType, setLearningType] = useState<LearningType>(
     getInitialLearningType(),
   );
   const [solvedQuestionIds, setSolvedQuestionIds] = useState<string[]>([]);
@@ -94,14 +94,15 @@ export function LearningTypeProvider({
               rawType === "free-style" ||
               rawType === "custom"
             ) {
-              setLearningTypeState(rawType);
+              setLearningType(rawType);
             }
           }
         } catch (error_) {
           // Silently fail when loading learning type
           console.error("Failed to load learning type:", error_);
         }
-      } catch (_) {
+      } catch (error) {
+        console.error("Error initializing learning type context:", error);
         setUserId(null);
         // Load from universal key when logged out
         try {
@@ -114,7 +115,7 @@ export function LearningTypeProvider({
               rawType === "free-style" ||
               rawType === "custom"
             ) {
-              setLearningTypeState(rawType);
+              setLearningType(rawType);
             }
           }
         } catch (error_) {
@@ -147,7 +148,7 @@ export function LearningTypeProvider({
               rawType === "free-style" ||
               rawType === "custom"
             ) {
-              setLearningTypeState(rawType);
+              setLearningType(rawType);
             }
           }
         } catch (error_) {
@@ -188,7 +189,7 @@ export function LearningTypeProvider({
         rawType === "free-style" ||
         rawType === "custom"
       ) {
-        setLearningTypeState(rawType);
+        setLearningType(rawType);
       }
       const rawSolved = globalThis.window?.localStorage
         ? globalThis.window.localStorage.getItem(solvedKey)
@@ -245,7 +246,7 @@ export function LearningTypeProvider({
   }, [solvedQuestionIds, userId]);
 
   const setLearningType = useCallback((type: LearningType) => {
-    setLearningTypeState(type);
+    setLearningType(type);
     // Optionally sync preference to API here in future
   }, []);
 

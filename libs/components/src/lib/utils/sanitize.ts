@@ -11,7 +11,7 @@ import DOMPurify from "dompurify";
  * @returns Plain text without HTML
  */
 export function sanitizeText(text: string): string {
-  if (typeof globalThis.window === "undefined") {
+  if (globalThis.window === undefined) {
     // Server-side: return as-is (will be sanitized on client)
     return text;
   }

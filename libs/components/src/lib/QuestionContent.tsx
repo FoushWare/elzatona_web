@@ -343,14 +343,11 @@ const decodeHtmlEntities = (text: string): string => {
   return decoded;
 };
 
-// Component to render question content with code blocks
-export const QuestionContent = ({ content }: { content: string }) => {
-  if (!content) return null;
-
-  // Fix malformed HTML patterns
-  let fixedContent = content;
+// Helper function to fix malformed HTML patterns
+function fixMalformedHtml(content: string): string {
+  let fixed = content;
   for (let i = 0; i < 3; i++) {
-    fixedContent = fixedContent
+    fixed = fixed
       .replaceAll(/<pr<cod<cod/gi, "<pre><code>")
       .replaceAll(/<pr<code<code/gi, "<pre><code>")
       .replaceAll(/<pr<codee<code/gi, "<pre><code>")
@@ -385,6 +382,144 @@ export const QuestionContent = ({ content }: { content: string }) => {
       .replaceAll(/<cod(\d+[a-zA-Z]+)/gi, "<code>$1</code>")
       .replaceAll(/<cod(\d+)/gi, "<code>$1</code>");
   }
+  return fixed;
+}
+
+// Helper function to find matching close tag
+function findMatchingCloseTag(
+  html: string,
+  openTag: string,
+  closeTag: string,
+  startIndex: number,
+): number {
+  let depth = 0;
+  let i = startIndex;
+
+  while (i < html.length) {
+    const openMatch = html.indexOf(openTag, i);
+    const closeMatch = html.indexOf(closeTag, i);
+
+    if (closeMatch === -1) return -1;
+
+    if (openMatch !== -1 && openMatch < closeMatch) {
+      depth++;
+      i = openMatch + openTag.length;
+    } else {
+      if (depth === 0) {
+        return closeMatch;
+      }
+      depth--;
+      i = closeMatch + closeTag.length;
+    }
+  }
+
+  return -1;
+}
+
+// Helper function to extract code from <pre><code> blocks
+function extractCodeFromPreCode(fixedHtml: string): string | null {
+  const preStart = fixedHtml.indexOf("<pre");
+  if (preStart === -1) return null;
+
+  const codeStart = fixedHtml.indexOf("<code", preStart);
+  if (codeStart === -1) return null;
+
+  const contentStart = fixedHtml.indexOf(">", codeStart) + 1;
+  const codeEnd = findMatchingCloseTag(
+    fixedHtml,
+    "<code",
+    "</code>",
+    codeStart + "<code".length,
+  );
+  if (codeEnd > contentStart) {
+    return fixedHtml.substring(contentStart, codeEnd);
+  }
+  return null;
+}
+
+// Helper function to extract code from <code> blocks
+function extractCodeFromCode(fixedHtml: string): string | null {
+  const codeStart = fixedHtml.indexOf("<code");
+  if (codeStart === -1) return null;
+
+  const contentStart = fixedHtml.indexOf(">", codeStart) + 1;
+  const codeEnd = findMatchingCloseTag(
+    fixedHtml,
+    "<code",
+    "</code>",
+    codeStart + "<code".length,
+  );
+  if (codeEnd > contentStart) {
+    return fixedHtml.substring(contentStart, codeEnd);
+  }
+  return null;
+}
+
+// Helper function to clean code patterns
+function cleanCodePatterns(code: string): string {
+  let cleaned = code;
+  for (let pass = 0; pass < 3; pass++) {
+    cleaned = cleaned
+      .replaceAll(/e>e>e>/g, "")
+      .replaceAll(/e>e>/g, "")
+      .replaceAll(/^e>+/g, "")
+      .replaceAll(/e>+$/g, "")
+      .replaceAll(/(\w+)e>/g, "$1")
+      .replaceAll(/e>(\w+)/g, "$1")
+      .replaceAll(/\s*e>\s*/g, " ")
+      .replaceAll(/consoleonsole\.loge>\.log/g, "console.log")
+      .replaceAll(/consoleonsole\.log/g, "console.log")
+      .replaceAll(/console\.loge>\.log/g, "console.log")
+      .replaceAll(/console\.loge>/g, "console.log")
+      .replaceAll(/console\.log>/g, "console.log")
+      .replaceAll(/console\.loge\.log/g, "console.log")
+      .replaceAll(/console\.log\.log/g, "console.log")
+      .replaceAll(/(\w+)onsole\.log/g, "console.log")
+      .replaceAll(/console\.log([^a-zA-Z])/g, "console.log$1")
+      .replaceAll(/diameterameter/g, "diameter")
+      .replaceAll(/perimeterimeter/g, "perimeter")
+      .replaceAll(/newColorwColor/g, "newColor")
+      .replaceAll(/(\w+)ameter/g, "$1")
+      .replaceAll(/(\w+)imeter/g, "$1")
+      .replaceAll(/NaNe>NaN/g, "NaN")
+      .replaceAll(/NaNe>/g, "NaN")
+      .replaceAll(/NaN>/g, "NaN")
+      .replaceAll(/(\w{1,50})\s*<\s*(\d{1,10})\s*>/g, "$1 < $2 >")
+      .replaceAll(/(\w{1,50})\s*<\s*(\d{1,10})/g, "$1 < $2")
+      .replaceAll(/(\d{1,10})\s*>/g, "$1 >")
+      .replaceAll(/<\/?[a-z][a-z0-9]{0,20}(?:\s+[^>]{0,200})?>/gi, "")
+      .replaceAll(/^>\s*/g, "")
+      .replaceAll(/\s*>$/g, "")
+      .replaceAll(/\s+>\s+/g, " ");
+  }
+
+  for (let i = 0; i < 2; i++) {
+    cleaned = cleaned
+      .replaceAll(/e>e>e>/g, "")
+      .replaceAll(/e>e>/g, "")
+      .replaceAll(/^e>+/g, "")
+      .replaceAll(/e>+$/g, "")
+      .replaceAll(/(\w+)e>/g, "$1")
+      .replaceAll(/e>(\w+)/g, "$1")
+      .replaceAll(/\s*e>\s*/g, " ")
+      .replaceAll(/<\/cod<\/pr/gi, "")
+      .replaceAll(/<\/code<\/pr/gi, "")
+      .replaceAll(/<\/pr/gi, "")
+      .replaceAll(/<\/cod/gi, "")
+      .replaceAll(/^>\s*/g, "")
+      .replaceAll(/\s*>$/g, "")
+      .replaceAll(/\s+>\s+/g, " ");
+  }
+
+  return cleaned;
+}
+
+// Component to render question content with code blocks
+export const QuestionContent = ({ content }: { content: string }) => {
+  if (!content) return null;
+
+  // Fix malformed HTML patterns
+  let fixedContent = fixMalformedHtml(content);
 
   const parts: Array<{
     type: "text" | "code";
@@ -395,107 +530,21 @@ export const QuestionContent = ({ content }: { content: string }) => {
   const extractCodeFromHtml = (html: string): string => {
     if (!html) return "";
 
-    let code = html;
-
     if (
       !html.includes("<pre") &&
       !html.includes("<code") &&
       !html.includes("&lt;")
     ) {
-      code = decodeHtmlEntities(html);
+      let code = decodeHtmlEntities(html);
       code = formatCodeContent(code);
       return code;
     }
 
-    const fixedHtml = html
-      .replaceAll(/<pr<cod<cod/gi, "<pre><code>")
-      .replaceAll(/<pr<code<code/gi, "<pre><code>")
-      .replaceAll(/<pr<codee<code/gi, "<pre><code>")
-      .replaceAll(/<pr<codee<cod/gi, "<pre><code>")
-      .replaceAll(/<pr<code<cod/gi, "<pre><code>")
-      .replaceAll(/<pr<codee/gi, "<pre><code>")
-      .replaceAll(/<pr<code/gi, "<pre><code>")
-      .replaceAll(/<pr<cod/gi, "<pre><code>")
-      .replaceAll(/<pr<co/gi, "<pre><code>")
-      .replaceAll(/<pr</gi, "<pre>")
-      .replaceAll(/<\/cod<\/cod<\/pr/gi, "</code></pre>")
-      .replaceAll(/<\/code<\/code<\/pr/gi, "</code></pre>")
-      .replaceAll(/<\/codee<\/codee<\/pree/gi, "</code></pre>")
-      .replaceAll(/<\/cod<\/cod<\/pree/gi, "</code></pre>")
-      .replaceAll(/<\/code<\/code<\/pree/gi, "</code></pre>")
-      .replaceAll(/<\/codee<\/pree/gi, "</code></pre>")
-      .replaceAll(/<\/cod<\/pree/gi, "</code></pre>")
-      .replaceAll(/<\/code<\/pree/gi, "</code></pre>")
-      .replaceAll(/<\/pree/gi, "</pre>")
-      .replaceAll(/<\/codee/gi, "</code>")
-      .replaceAll(/<\/cod/gi, "</code>")
-      .replaceAll(/<cod([a-zA-Z])/gi, "<code>$1")
-      .replaceAll(/<code([a-zA-Z])/gi, "<code>$1")
-      .replaceAll(/([a-zA-Z])<\/cod/gi, "$1</code>")
-      .replaceAll(/([a-zA-Z])<\/code/gi, "$1</code>")
-      .replaceAll(/<cod(\d+[a-zA-Z]+)/gi, "<code>$1</code>")
-      .replaceAll(/<cod(\d+)/gi, "<code>$1</code>");
+    const fixedHtml = fixMalformedHtml(html);
 
-    const findMatchingCloseTag = (
-      html: string,
-      openTag: string,
-      closeTag: string,
-      startIndex: number,
-    ): number => {
-      let depth = 0;
-      let i = startIndex;
-
-      while (i < html.length) {
-        const openMatch = html.indexOf(openTag, i);
-        const closeMatch = html.indexOf(closeTag, i);
-
-        if (closeMatch === -1) return -1;
-
-        if (openMatch !== -1 && openMatch < closeMatch) {
-          depth++;
-          i = openMatch + openTag.length;
-        } else {
-          if (depth === 0) {
-            return closeMatch;
-          }
-          depth--;
-          i = closeMatch + closeTag.length;
-        }
-      }
-
-      return -1;
-    };
-
-    const preStart = fixedHtml.indexOf("<pre");
-    if (preStart !== -1) {
-      const codeStart = fixedHtml.indexOf("<code", preStart);
-      if (codeStart !== -1) {
-        const contentStart = fixedHtml.indexOf(">", codeStart) + 1;
-        const codeEnd = findMatchingCloseTag(
-          fixedHtml,
-          "<code",
-          "</code>",
-          codeStart + "<code".length,
-        );
-        if (codeEnd > contentStart) {
-          code = fixedHtml.substring(contentStart, codeEnd);
-        }
-      }
-    } else {
-      const codeStart = fixedHtml.indexOf("<code");
-      if (codeStart !== -1) {
-        const contentStart = fixedHtml.indexOf(">", codeStart) + 1;
-        const codeEnd = findMatchingCloseTag(
-          fixedHtml,
-          "<code",
-          "</code>",
-          codeStart + "<code".length,
-        );
-        if (codeEnd > contentStart) {
-          code = fixedHtml.substring(contentStart, codeEnd);
-        }
-      }
-    }
+    // Try to extract from <pre><code> first, then <code>
+    let code =
+      extractCodeFromPreCode(fixedHtml) || extractCodeFromCode(fixedHtml) || html;
 
     // SECURITY: Limit input size before processing to prevent ReDoS
     const MAX_CODE_LENGTH = 50000; // 50KB limit
@@ -506,6 +555,7 @@ export const QuestionContent = ({ content }: { content: string }) => {
 
     code = decodeHtmlEntities(code);
 
+    // Decode entities iteratively until stable
     let previousCode = "";
     let iterations = 0;
     const maxIterations = 20;
@@ -513,77 +563,19 @@ export const QuestionContent = ({ content }: { content: string }) => {
     while (code !== previousCode && iterations < maxIterations) {
       previousCode = code;
       code = decodeHtmlEntities(code);
-      // SECURITY: Use sanitizeText to remove HTML tags and prevent ReDoS
       code = sanitizeText(code);
       iterations++;
     }
 
     code = decodeHtmlEntities(code);
-
-    for (let pass = 0; pass < 3; pass++) {
-      code = code
-        .replaceAll(/e>e>e>/g, "")
-        .replaceAll(/e>e>/g, "")
-        .replaceAll(/^e>+/g, "")
-        .replaceAll(/e>+$/g, "")
-        .replaceAll(/(\w+)e>/g, "$1")
-        .replaceAll(/e>(\w+)/g, "$1")
-        .replaceAll(/\s*e>\s*/g, " ")
-        .replaceAll(/consoleonsole\.loge>\.log/g, "console.log")
-        .replaceAll(/consoleonsole\.log/g, "console.log")
-        .replaceAll(/console\.loge>\.log/g, "console.log")
-        .replaceAll(/console\.loge>/g, "console.log")
-        .replaceAll(/console\.log>/g, "console.log")
-        .replaceAll(/console\.loge\.log/g, "console.log")
-        .replaceAll(/console\.log\.log/g, "console.log")
-        .replaceAll(/(\w+)onsole\.log/g, "console.log")
-        .replaceAll(/console\.log([^a-zA-Z])/g, "console.log$1")
-        .replaceAll(/diameterameter/g, "diameter")
-        .replaceAll(/perimeterimeter/g, "perimeter")
-        .replaceAll(/newColorwColor/g, "newColor")
-        .replaceAll(/(\w+)ameter/g, "$1")
-        .replaceAll(/(\w+)imeter/g, "$1")
-        .replaceAll(/NaNe>NaN/g, "NaN")
-        .replaceAll(/NaNe>/g, "NaN")
-        .replaceAll(/NaN>/g, "NaN")
-        // SECURITY: Decode HTML entities only once to prevent double escaping
-        // Note: Entity decoding happens before this loop, so we work with decoded content
-        // SECURITY: Use bounded quantifiers to prevent ReDoS
-        .replaceAll(/(\w{1,50})\s*<\s*(\d{1,10})\s*>/g, "$1 < $2 >")
-        .replaceAll(/(\w{1,50})\s*<\s*(\d{1,10})/g, "$1 < $2")
-        .replaceAll(/(\d{1,10})\s*>/g, "$1 >")
-        // SECURITY: Use bounded quantifiers for HTML tag removal
-        .replaceAll(/<\/?[a-z][a-z0-9]{0,20}(?:\s+[^>]{0,200})?>/gi, "")
-        .replaceAll(/^>\s*/g, "")
-        .replaceAll(/\s*>$/g, "")
-        .replaceAll(/\s+>\s+/g, " ");
-    }
-
-    for (let i = 0; i < 2; i++) {
-      code = code
-        .replaceAll(/e>e>e>/g, "")
-        .replaceAll(/e>e>/g, "")
-        .replaceAll(/^e>+/g, "")
-        .replaceAll(/e>+$/g, "")
-        .replaceAll(/(\w+)e>/g, "$1")
-        .replaceAll(/e>(\w+)/g, "$1")
-        .replaceAll(/\s*e>\s*/g, " ")
-        .replaceAll(/<\/cod<\/pr/gi, "")
-        .replaceAll(/<\/code<\/pr/gi, "")
-        .replaceAll(/<\/pr/gi, "")
-        .replaceAll(/<\/cod/gi, "")
-        .replaceAll(/^>\s*/g, "")
-        .replaceAll(/\s*>$/g, "")
-        .replaceAll(/\s+>\s+/g, " ");
-    }
-
+    code = cleanCodePatterns(code);
     code = formatCodeContent(code);
 
     return code;
   };
 
   // SECURITY: Process code blocks with bounded quantifiers
-  // NOSONAR S7781: replaceAll() cannot be used with regex patterns that require capture groups
+  // NOSONAR S7781: replaceAll() cannot be used with regex patterns that require capture groups and callbacks
   fixedContent = fixedContent.replace(
     /<code[^>]{0,200}>([^<]{1,50})<\/code>/gi,
     (match, codeContent, offset) => {
@@ -728,7 +720,8 @@ export const QuestionContent = ({ content }: { content: string }) => {
   htmlMatches.sort((a, b) => a.index - b.index);
 
   // SECURITY: Use bounded quantifier to prevent ReDoS
-  const markdownCodeBlockRegex = /```(\w{0,20})?\n?([\s\S]{0,50000}?)```/g;
+  // Ensure regex doesn't match empty string by requiring at least one character in code block
+  const markdownCodeBlockRegex = /```(\w{0,20})?\n([\s\S]{1,50000})```/g;
   const markdownMatches: Array<{
     index: number;
     content: string;
@@ -897,8 +890,8 @@ export const QuestionContent = ({ content }: { content: string }) => {
         .replaceAll(/<\/cod/gi, "")
         .replaceAll(/<\/pr/gi, "")
         // SECURITY: Remove all HTML tags to prevent injection
-        // NOSONAR S7781: replaceAll() cannot be used with regex patterns that require capture groups
-        .replace(/<\/?[a-z][a-z0-9]{0,20}(?:\s+[^>]{0,200})?>/gi, "")
+        // NOSONAR S7781: replaceAll() cannot be used with regex patterns that require complex matching
+        .replaceAll(/<\/?[a-z][a-z0-9]{0,20}(?:\s+[^>]{0,200})?>/gi, "")
         .replaceAll(/<pr/gi, "")
         .replaceAll(/<[^>]+>/g, "")
         .replaceAll(/e>e>e>/g, "")
