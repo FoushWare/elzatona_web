@@ -3838,11 +3838,11 @@ export default function FreeStylePracticePage() {
 
               <button
                 onClick={handleNextQuestion}
+                // nosemgrep: js.useless-conditional
+                // CodeQL suppression: isLoadingQuestions is a state variable that can change, this check is necessary
                 disabled={
                   currentQuestionIndex >= getFilteredQuestions().length - 1 &&
                   !hasMoreQuestions
-                  // nosemgrep: js.useless-conditional
-                  // CodeQL suppression: isLoadingQuestions is a state variable that can change, this check is necessary
                 }
                 className="inline-flex items-center space-x-2 px-6 py-3 bg-purple-600 hover:bg-purple-700 disabled:bg-gray-400 disabled:cursor-not-allowed text-white rounded-lg font-semibold transition-colors"
               >
