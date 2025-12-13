@@ -72,3 +72,5 @@ bun.lock
 .scannerwork/
 .sonar/
 codeql-database/
+codeql-database/**
+**/codeql-database/**
