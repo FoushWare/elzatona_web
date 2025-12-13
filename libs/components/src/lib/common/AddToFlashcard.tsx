@@ -124,14 +124,9 @@ export default function AddToFlashcard({
         // Remove from flashcards
         await flashcardService.deleteFlashcard(flashcardId);
 
-        if (true) {
-          setState("add");
-          setFlashcardId(null);
-          onStatusChange?.("removed");
-        } else {
-          setState("saved");
-          onStatusChange?.("error");
-        }
+        setState("add");
+        setFlashcardId(null);
+        onStatusChange?.("removed");
       }
     } catch (error) {
       console.error("Error toggling flashcard:", error);

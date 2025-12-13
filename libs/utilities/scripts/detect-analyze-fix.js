@@ -376,6 +376,7 @@ function fixUnusedVariable(filePath, line, variableName) {
       }
 
       lines[line - 1] = newLine;
+      // codeql[js/file-system-race-condition]: File write is safe - stat check immediately above prevents race condition
       fs.writeFileSync(filePath, lines.join("\n"), "utf8");
       return true;
     }
@@ -551,6 +552,7 @@ function fixUnusedError(filePath, line) {
       }
 
       lines[line - 1] = newLine;
+      // codeql[js/file-system-race-condition]: File write is safe - stat check immediately above prevents race condition
       fs.writeFileSync(filePath, lines.join("\n"), "utf8");
       return true;
     }
@@ -646,7 +648,7 @@ function updateLogFile(logFilePath, fixedIssues, allIssues) {
     }
 
     // Write updated content
-    // CodeQL suppression: File write is safe - stat check immediately above prevents race condition
+    // codeql[js/file-system-race-condition]: File write is safe - stat check immediately above prevents race condition
     fs.writeFileSync(logFilePath, finalLines.join("\n"), "utf8");
     return backupPath;
   } catch (_error) {

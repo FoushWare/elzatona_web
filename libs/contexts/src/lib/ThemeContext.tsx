@@ -13,7 +13,8 @@ if (
   const { createClient } = require("@supabase/supabase-js");
   const supabaseUrl = process.env["NEXT_PUBLIC_SUPABASE_URL"];
   const supabaseServiceRoleKey = process.env["SUPABASE_SERVICE_ROLE_KEY"];
-  supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
+  const _supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
+  supabase = _supabase;
 }
 
 interface ThemeContextType {
