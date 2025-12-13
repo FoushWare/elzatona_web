@@ -127,7 +127,7 @@ echo "STEP 0: Secret Scanning"
 if command -v gitleaks >/dev/null 2>&1; then
   run_check \
     "Secret Scan (Gitleaks)" \
-    "gitleaks detect --no-git --redact --source . --exit-code 1" \
+    "gitleaks detect --redact --exit-code 1" \
     "Remove secrets and rotate compromised credentials"
 else
   echo -e "${YELLOW}⚠️  Gitleaks not installed — skipping secret scan${NC}"
@@ -141,7 +141,7 @@ echo ""
 echo "STEP 1: Formatting"
 run_check \
   "Prettier" \
-  "npx prettier --check . --ignore-path .prettierignore" \
+  "NODE_OPTIONS=\"--max-old-space-size=512\" npx prettier --check . --ignore-path .prettierignore" \
   "npm run format"
 
 ###############################################################################
@@ -151,7 +151,7 @@ echo ""
 echo "STEP 2: Linting"
 run_check \
   "ESLint" \
-  "npm run lint" \
+  "NODE_OPTIONS=\"--max-old-space-size=512\" npm run lint" \
   "npm run lint:fix"
 
 ###############################################################################
@@ -161,7 +161,7 @@ echo ""
 echo "STEP 3: Type Checking"
 run_check \
   "TypeScript" \
-  "npm run type-check" \
+  "NODE_OPTIONS=\"--max-old-space-size=1024\" npm run type-check" \
   "Fix TypeScript errors"
 
 ###############################################################################
@@ -174,7 +174,7 @@ else
   echo "STEP 4: Build"
   run_check \
     "Build" \
-    "npm run build" \
+    "NODE_OPTIONS=\"--max-old-space-size=1024\" npm run build" \
     "Fix build errors"
 fi
 
@@ -186,8 +186,8 @@ if [ -n "$SONAR_TOKEN" ] && [ "$SKIP_SONAR_CHECK" != "true" ]; then
   echo "STEP 5: SonarQube"
   run_check \
     "SonarQube" \
-    "npm run sonar:quick" \
-    "npm run sonar"
+    "NODE_OPTIONS=\"--max-old-space-size=768\" SONAR_MEMORY_LIMIT=768 npm run sonar:quick" \
+    "Fix SonarQube issues"
 else
   echo -e "${YELLOW}⏭️  SonarQube skipped${NC}"
 fi
