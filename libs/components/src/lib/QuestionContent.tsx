@@ -5,20 +5,13 @@ import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { vscDarkPlus } from "react-syntax-highlighter/dist/esm/styles/prism";
 import { sanitizeText } from "./utils/sanitize";
 
-// Helper function to determine if content is valid code or should be rendered as text
-// Uses a scoring system to make intelligent decisions
-export const isValidCode = (
-  content: string,
-): { isValid: boolean; score: number; reasons: string[] } => {
-  if (!content || typeof content !== "string" || content.trim().length === 0) {
-    return { isValid: false, score: 0, reasons: ["Empty or invalid content"] };
-  }
-
+// Helper functions to reduce cognitive complexity
+function checkCodeIndicators(
+  trimmed: string,
+): { score: number; reasons: string[] } {
   let score = 0;
   const reasons: string[] = [];
-  const trimmed = content.trim();
 
-  // CODE INDICATORS (Positive Points)
   const strongKeywords = [
     /\b(class|function|const|let|var|import|export|return|async|await)\b/,
     /\b(if|else|for|while|switch|case|break|continue|try|catch|finally|throw)\b/,
@@ -67,7 +60,16 @@ export const isValidCode = (
     reasons.push(`${operatorMatches} code operator(s) found`);
   }
 
-  const lines = trimmed.split("\n");
+  return { score, reasons };
+}
+
+function checkCodeStructure(
+  trimmed: string,
+  lines: string[],
+): { score: number; reasons: string[] } {
+  let score = 0;
+  const reasons: string[] = [];
+
   const hasMultipleLines = lines.length > 1;
   const hasIndentation = lines.some((line) => /^\s{2,}/.test(line));
   const hasConsistentIndentation =
@@ -110,7 +112,15 @@ export const isValidCode = (
     reasons.push("Class definition found");
   }
 
-  // TEXT INDICATORS (Negative Points)
+  return { score, reasons };
+}
+
+function checkTextIndicators(
+  trimmed: string,
+): { score: number; reasons: string[] } {
+  let score = 0;
+  const reasons: string[] = [];
+
   const textPatterns = [
     /^[A-Z][^.!?]*[.!?]\s*$/,
     /\b(the|a|an|is|are|was|were|be|been|being)\b/i,
@@ -143,6 +153,16 @@ export const isValidCode = (
     );
   }
 
+  return { score, reasons };
+}
+
+function checkTextStructure(
+  trimmed: string,
+  lines: string[],
+): { score: number; reasons: string[] } {
+  let score = 0;
+  const reasons: string[] = [];
+
   const avgLineLength =
     lines.reduce((sum, line) => sum + line.length, 0) / lines.length;
   const hasCodeStructure =
@@ -163,6 +183,39 @@ export const isValidCode = (
     reasons.push("High word-to-symbol ratio (likely text)");
   }
 
+  return { score, reasons };
+}
+
+// Helper function to determine if content is valid code or should be rendered as text
+// Uses a scoring system to make intelligent decisions
+export const isValidCode = (
+  content: string,
+): { isValid: boolean; score: number; reasons: string[] } => {
+  if (!content || typeof content !== "string" || content.trim().length === 0) {
+    return { isValid: false, score: 0, reasons: ["Empty or invalid content"] };
+  }
+
+  const trimmed = content.trim();
+  const lines = trimmed.split("\n");
+
+  const codeIndicators = checkCodeIndicators(trimmed);
+  const codeStructure = checkCodeStructure(trimmed, lines);
+  const textIndicators = checkTextIndicators(trimmed);
+  const textStructure = checkTextStructure(trimmed, lines);
+
+  const score =
+    codeIndicators.score +
+    codeStructure.score +
+    textIndicators.score +
+    textStructure.score;
+
+  const reasons = [
+    ...codeIndicators.reasons,
+    ...codeStructure.reasons,
+    ...textIndicators.reasons,
+    ...textStructure.reasons,
+  ];
+
   const MIN_CODE_SCORE = 5;
   const isValid = score >= MIN_CODE_SCORE;
 
@@ -177,7 +230,7 @@ export const isValidCode = (
 export const formatCodeContent = (code: string): string => {
   if (!code) return "";
 
-  let formatted = code.replaceAll(/\r\n/g, "\n").replaceAll(/\r/g, "\n");
+  let formatted = code.replaceAll("\r\n", "\n").replaceAll("\r", "\n");
   formatted = formatted.trim();
   const lines = formatted.split("\n").map((line) => line.trimEnd());
 
@@ -187,7 +240,7 @@ export const formatCodeContent = (code: string): string => {
     (line) => line.trim().length > 0 && /^\s/.test(line),
   );
 
-  if (!hasExistingIndent) {
+  if (hasExistingIndent === false) {
     let indentLevel = 0;
     let inClass = false;
     let inMethod = false;
@@ -217,18 +270,30 @@ export const formatCodeContent = (code: string): string => {
           return indent + trimmed;
         }
 
-        const openBraces = (trimmed.match(/{/g) || []).length;
-        const closeBraces = (trimmed.match(/}/g) || []).length;
-        const openBrackets = (trimmed.match(/\[/g) || []).length;
-        const closeBrackets = (trimmed.match(/\]/g) || []).length;
-        const openParens = (trimmed.match(/[(]/g) || []).length;
-        const closeParens = (trimmed.match(/\)/g) || []).length;
+        // Helper function to count occurrences using RegExp.exec()
+        const countOccurrences = (text: string, pattern: RegExp): number => {
+          let count = 0;
+          pattern.lastIndex = 0;
+          while (pattern.exec(text) !== null) {
+            count++;
+          }
+          pattern.lastIndex = 0;
+          return count;
+        };
+
+        const openBraces = countOccurrences(trimmed, /{/g);
+        const closeBraces = countOccurrences(trimmed, /}/g);
+        const openBrackets = countOccurrences(trimmed, /\[/g);
+        const closeBrackets = countOccurrences(trimmed, /\]/g);
+        const openParens = countOccurrences(trimmed, /\(/g);
+        const closeParens = countOccurrences(trimmed, /\)/g);
 
         const netBraces = openBraces - closeBraces;
         const netBrackets = openBrackets - closeBrackets;
         const netParens = openParens - closeParens;
 
-        if (trimmed.match(/^[}\]\)]/)) {
+        const closingBracketRegex = /^[}\])]/;
+        if (closingBracketRegex.exec(trimmed)) {
           indentLevel = Math.max(0, indentLevel - 1);
           if (closeBraces > 0) {
             const nextNonEmptyLine = lines
@@ -251,7 +316,8 @@ export const formatCodeContent = (code: string): string => {
         const indent = "  ".repeat(indentLevel);
         const result = indent + trimmed;
 
-        if (trimmed.match(/[{\[\(]\s*$/)) {
+        const openingBracketRegex = /[{[(]\s*$/;
+        if (openingBracketRegex.exec(trimmed)) {
           indentLevel++;
         } else if (netBraces > 0 || netBrackets > 0 || netParens > 0) {
           indentLevel += Math.max(netBraces, netBrackets, netParens);
@@ -264,7 +330,8 @@ export const formatCodeContent = (code: string): string => {
     const indentations = lines
       .filter((line) => line.trim().length > 0)
       .map((line) => {
-        const match = line.match(/^(\s*)/);
+        const whitespaceRegex = /^(\s*)/;
+        const match = whitespaceRegex.exec(line);
         return match ? match[1].length : 0;
       });
 
@@ -275,7 +342,9 @@ export const formatCodeContent = (code: string): string => {
         .map((line) => {
           if (line.trim().length === 0) return "";
 
-          const leadingWhitespace = line.match(/^(\s*)/)?.[1] || "";
+          const leadingWhitespaceRegex = /^(\s*)/;
+          const leadingWhitespaceMatch = leadingWhitespaceRegex.exec(line);
+          const leadingWhitespace = leadingWhitespaceMatch?.[1] || "";
           const indentCount = leadingWhitespace
             .split("")
             .reduce((count, char) => count + (char === "\t" ? 2 : 1), 0);
@@ -318,18 +387,18 @@ const decodeHtmlEntities = (text: string): string => {
 
   let decoded = text;
   for (const [entity, char] of Object.entries(entityMap)) {
-    decoded = decoded.replace(new RegExp(entity, "gi"), char);
+    decoded = decoded.replaceAll(new RegExp(entity, "gi"), char);
   }
 
   decoded = decoded.replaceAll(/&#(\d+);/g, (match, dec) => {
-    return String.fromCharCode(Number.parseInt(dec, 10));
+    return String.fromCodePoint(Number.parseInt(dec, 10));
   });
 
   decoded = decoded.replaceAll(/&#x([0-9a-fA-F]+);/g, (match, hex) => {
-    return String.fromCharCode(Number.parseInt(hex, 16));
+    return String.fromCodePoint(Number.parseInt(hex, 16));
   });
 
-  if (typeof globalThis.window !== "undefined") {
+  if (globalThis.window !== undefined) {
     try {
       const textarea = document.createElement("textarea");
       // Use textContent instead of innerHTML to prevent XSS
@@ -375,11 +444,11 @@ function fixMalformedHtml(content: string): string {
       .replaceAll(/efor\s+/gi, "for ")
       .replaceAll(/econsole\./gi, "console.")
       .replaceAll(/econsole\.log/gi, "console.log")
-      .replaceAll(/<cod([a-zA-Z])/gi, "<code>$1")
-      .replaceAll(/<code([a-zA-Z])/gi, "<code>$1")
-      .replaceAll(/([a-zA-Z])<\/cod/gi, "$1</code>")
-      .replaceAll(/([a-zA-Z])<\/code/gi, "$1</code>")
-      .replaceAll(/<cod(\d+[a-zA-Z]+)/gi, "<code>$1</code>")
+      .replaceAll(/<cod(\w)/gi, "<code>$1")
+      .replaceAll(/<code(\w)/gi, "<code>$1")
+      .replaceAll(/(\w)<\/cod/gi, "$1</code>")
+      .replaceAll(/(\w)<\/code/gi, "$1</code>")
+      .replaceAll(/<cod(\d+\w+)/gi, "<code>$1</code>")
       .replaceAll(/<cod(\d+)/gi, "<code>$1</code>");
   }
   return fixed;
@@ -460,30 +529,30 @@ function cleanCodePatterns(code: string): string {
   let cleaned = code;
   for (let pass = 0; pass < 3; pass++) {
     cleaned = cleaned
-      .replaceAll(/e>e>e>/g, "")
-      .replaceAll(/e>e>/g, "")
+      .replaceAll("e>e>e>", "")
+      .replaceAll("e>e>", "")
       .replaceAll(/^e>+/g, "")
       .replaceAll(/e>+$/g, "")
       .replaceAll(/(\w+)e>/g, "$1")
       .replaceAll(/e>(\w+)/g, "$1")
       .replaceAll(/\s*e>\s*/g, " ")
-      .replaceAll(/consoleonsole\.loge>\.log/g, "console.log")
-      .replaceAll(/consoleonsole\.log/g, "console.log")
-      .replaceAll(/console\.loge>\.log/g, "console.log")
-      .replaceAll(/console\.loge>/g, "console.log")
-      .replaceAll(/console\.log>/g, "console.log")
-      .replaceAll(/console\.loge\.log/g, "console.log")
-      .replaceAll(/console\.log\.log/g, "console.log")
+      .replaceAll("consoleonsole.loge>.log", "console.log")
+      .replaceAll("consoleonsole.log", "console.log")
+      .replaceAll("console.loge>.log", "console.log")
+      .replaceAll("console.loge>", "console.log")
+      .replaceAll("console.log>", "console.log")
+      .replaceAll("console.loge.log", "console.log")
+      .replaceAll("console.log.log", "console.log")
       .replaceAll(/(\w+)onsole\.log/g, "console.log")
       .replaceAll(/console\.log([^a-zA-Z])/g, "console.log$1")
-      .replaceAll(/diameterameter/g, "diameter")
-      .replaceAll(/perimeterimeter/g, "perimeter")
-      .replaceAll(/newColorwColor/g, "newColor")
+      .replaceAll("diameterameter", "diameter")
+      .replaceAll("perimeterimeter", "perimeter")
+      .replaceAll("newColorwColor", "newColor")
       .replaceAll(/(\w+)ameter/g, "$1")
       .replaceAll(/(\w+)imeter/g, "$1")
-      .replaceAll(/NaNe>NaN/g, "NaN")
-      .replaceAll(/NaNe>/g, "NaN")
-      .replaceAll(/NaN>/g, "NaN")
+      .replaceAll("NaNe>NaN", "NaN")
+      .replaceAll("NaNe>", "NaN")
+      .replaceAll("NaN>", "NaN")
       .replaceAll(/(\w{1,50})\s*<\s*(\d{1,10})\s*>/g, "$1 < $2 >")
       .replaceAll(/(\w{1,50})\s*<\s*(\d{1,10})/g, "$1 < $2")
       .replaceAll(/(\d{1,10})\s*>/g, "$1 >")
@@ -495,8 +564,8 @@ function cleanCodePatterns(code: string): string {
 
   for (let i = 0; i < 2; i++) {
     cleaned = cleaned
-      .replaceAll(/e>e>e>/g, "")
-      .replaceAll(/e>e>/g, "")
+      .replaceAll("e>e>e>", "")
+      .replaceAll("e>e>", "")
       .replaceAll(/^e>+/g, "")
       .replaceAll(/e>+$/g, "")
       .replaceAll(/(\w+)e>/g, "$1")
@@ -593,7 +662,7 @@ function processHtmlCodeBlocks(
       iterationCount < MAX_ITERATIONS
     ) {
       iterationCount++;
-      const match = htmlMatch!;
+      const match = htmlMatch;
       const isDuplicate = Array.from(processedIndices).some(
         (idx) => Math.abs(idx - match.index) < 10,
       );
@@ -621,6 +690,72 @@ function processHtmlCodeBlocks(
   return htmlMatches;
 }
 
+// Helper function to clean malformed code content
+function cleanMalformedCode(code: string): string {
+  const MAX_INPUT_SIZE = 100000;
+  if (code.length > MAX_INPUT_SIZE) {
+    code = code.substring(0, MAX_INPUT_SIZE);
+  }
+
+  code = decodeHtmlEntities(code);
+  code = sanitizeText(code);
+
+  for (let i = 0; i < 3; i++) {
+    code = code
+      .replaceAll("e>e>e>", "")
+      .replaceAll("e>e>", "")
+      .replaceAll(/^e>+/g, "")
+      .replaceAll(/e>+$/g, "")
+      .replaceAll(/(\w+)e>/g, "$1")
+      .replaceAll("consoleonsole.log", "console.log")
+      .replaceAll("console.loge>", "console.log")
+      .replaceAll("diameterameter", "diameter")
+      .replaceAll("perimeterimeter", "perimeter")
+      .replaceAll("newColorwColor", "newColor")
+      // codeql[js/incomplete-multi-character-sanitization]: sanitizeText() called immediately after this line removes all HTML
+      .replaceAll("NaNe>", "NaN");
+    // SECURITY: Final sanitization pass after each iteration to ensure no HTML remains
+    code = sanitizeText(code);
+  }
+
+  return formatCodeContent(code);
+}
+
+// Helper function to check if a match index is already captured
+function isAlreadyCaptured(
+  matchIndex: number,
+  htmlMatches: Array<{ index: number; content: string; fullMatch: string }>,
+): boolean {
+  return htmlMatches.some((m) => Math.abs(m.index - matchIndex) < 10);
+}
+
+// Helper function to process a single malformed match
+function processMalformedMatch(
+  malformedMatch: RegExpExecArray,
+  htmlMatches: Array<{ index: number; content: string; fullMatch: string }>,
+): void {
+  const MAX_INPUT_SIZE = 100000;
+  if (!malformedMatch[1]) return;
+
+  const alreadyCaptured = isAlreadyCaptured(malformedMatch.index, htmlMatches);
+  if (alreadyCaptured) return;
+
+  let code = malformedMatch[1];
+  if (code.length > MAX_INPUT_SIZE) {
+    code = code.substring(0, MAX_INPUT_SIZE);
+  }
+
+  code = cleanMalformedCode(code);
+
+  if (code.trim()) {
+    htmlMatches.push({
+      index: malformedMatch.index,
+      content: code,
+      fullMatch: malformedMatch[0],
+    });
+  }
+}
+
 // Helper function to process malformed HTML patterns
 function processMalformedPatterns(
   fixedContent: string,
@@ -633,55 +768,19 @@ function processMalformedPatterns(
 
   const malformedPattern =
     /<pr<cod[^>]{0,200}>([\s\S]{0,50000}?)(?:<\/cod<\/pr|$)/gi;
-  let malformedMatch: RegExpExecArray | null;
   malformedPattern.lastIndex = 0;
   let malformedIterations = 0;
   const MAX_MALFORMED_ITERATIONS = 100;
 
+  let malformedMatch: RegExpExecArray | null;
   while (
     (malformedMatch = malformedPattern.exec(fixedContent)) !== null &&
     malformedIterations < MAX_MALFORMED_ITERATIONS
   ) {
     malformedIterations++;
     if (!malformedMatch) break;
-    const alreadyCaptured = htmlMatches.some(
-      (m) => Math.abs(m.index - malformedMatch!.index) < 10,
-    );
 
-    if (!alreadyCaptured && malformedMatch[1]) {
-      let code = malformedMatch[1];
-      if (code.length > MAX_INPUT_SIZE) {
-        code = code.substring(0, MAX_INPUT_SIZE);
-      }
-      code = decodeHtmlEntities(code);
-      code = sanitizeText(code);
-      for (let i = 0; i < 3; i++) {
-        code = code
-          .replaceAll(/e>e>e>/g, "")
-          .replaceAll(/e>e>/g, "")
-          .replaceAll(/^e>+/g, "")
-          .replaceAll(/e>+$/g, "")
-          .replaceAll(/(\w+)e>/g, "$1")
-          .replaceAll(/consoleonsole\.log/g, "console.log")
-          .replaceAll(/console\.loge>/g, "console.log")
-          .replaceAll(/diameterameter/g, "diameter")
-          .replaceAll(/perimeterimeter/g, "perimeter")
-          .replaceAll(/newColorwColor/g, "newColor")
-          // codeql[js/incomplete-multi-character-sanitization]: sanitizeText() called immediately after this line removes all HTML
-          .replaceAll(/NaNe>/g, "NaN");
-        // SECURITY: Final sanitization pass after each iteration to ensure no HTML remains
-        code = sanitizeText(code);
-      }
-      code = formatCodeContent(code);
-
-      if (code.trim()) {
-        htmlMatches.push({
-          index: malformedMatch.index,
-          content: code,
-          fullMatch: malformedMatch[0],
-        });
-      }
-    }
+    processMalformedMatch(malformedMatch, htmlMatches);
   }
 
   return htmlMatches;
@@ -721,10 +820,11 @@ function processMarkdownCodeBlocks(fixedContent: string): Array<{
 function cleanTextContent(text: string): string {
   let cleanText = decodeHtmlEntities(text);
   // NOSONAR S7781: replaceAll() cannot be used with regex patterns that require capture groups
-  cleanText = cleanText.replace(
-    /<code[^>]{0,200}>([^<]{1,30})<\/code>/gi,
-    "`$1`",
-  );
+  const codeTagRegex = /<code[^>]{0,200}>([^<]{1,30})<\/code>/gi;
+  let codeMatch;
+  while ((codeMatch = codeTagRegex.exec(cleanText)) !== null) {
+    cleanText = cleanText.replace(codeMatch[0], `\`${codeMatch[1]}\``);
+  }
   cleanText = sanitizeText(cleanText);
   for (let i = 0; i < 3; i++) {
     cleanText = cleanText
@@ -735,8 +835,8 @@ function cleanTextContent(text: string): string {
       .replaceAll(/<\/cod?/gi, "")
       .replaceAll(/<\/pr/gi, "")
       .replaceAll(/<\/cod/gi, "")
-      .replaceAll(/e>e>e>/g, "")
-      .replaceAll(/e>e>/g, "")
+      .replaceAll("e>e>e>", "")
+      .replaceAll("e>e>", "")
       .replaceAll(/^e>+/g, "")
       .replaceAll(/e>+$/g, "")
       .replaceAll(/(\w+)e>/g, "$1")
@@ -761,8 +861,8 @@ function cleanCodeContent(code: string): string {
   let cleanCode = code;
   for (let i = 0; i < 2; i++) {
     cleanCode = cleanCode
-      .replaceAll(/e>e>e>/g, "")
-      .replaceAll(/e>e>/g, "")
+      .replaceAll("e>e>e>", "")
+      .replaceAll("e>e>", "")
       .replaceAll(/^e>+/g, "")
       .replaceAll(/e>+$/g, "")
       .replaceAll(/(\w+)e>/g, "$1")
@@ -801,8 +901,8 @@ function processFinalTextContent(
       .replaceAll(/<\/?[a-z][a-z0-9]{0,20}(?:\s+[^>]{0,200})?>/gi, "")
       .replaceAll(/<pr/gi, "")
       .replaceAll(/<[^>]+>/g, "")
-      .replaceAll(/e>e>e>/g, "")
-      .replaceAll(/e>e>/g, "")
+      .replaceAll("e>e>e>", "")
+      .replaceAll("e>e>", "")
       .replaceAll(/^e>+/g, "")
       .replaceAll(/e>+$/g, "")
       .replaceAll(/(\w+)e>/g, "$1")
@@ -814,10 +914,10 @@ function processFinalTextContent(
   }
 
   cleanContent = cleanContent
-    .replaceAll(/&nbsp;/g, " ")
-    .replaceAll(/&lt;/g, "<")
-    .replaceAll(/&gt;/g, ">")
-    .replaceAll(/&amp;/g, "&")
+      .replaceAll("&nbsp;", " ")
+      .replaceAll("&lt;", "<")
+      .replaceAll("&gt;", ">")
+      .replaceAll("&amp;", "&")
     .trim();
 
   const codeValidation = isValidCode(cleanContent);
@@ -914,45 +1014,231 @@ function processFinalTextContent(
   );
 }
 
-// Component to render question content with code blocks
-export const QuestionContent = ({ content }: { content: string }) => {
-  if (!content) return null;
+// PreTag component for SyntaxHighlighter (extracted to reduce complexity)
+const CodeBlockPreTag = ({
+  children,
+  ...props
+}: React.ComponentPropsWithoutRef<"pre">) => (
+  <pre
+    {...props}
+    style={{
+      margin: 0,
+      padding: 0,
+      backgroundColor: "transparent",
+    }}
+  >
+    {children}
+  </pre>
+);
 
+// Component to render a code block
+const CodeBlock = ({
+  part,
+  partId,
+}: {
+  part: { content: string; language?: string };
+  partId: string;
+}) => (
+  <div
+    key={partId}
+    className="relative group my-4 sm:my-6"
+    style={{ backgroundColor: "#1e1e1e" }}
+  >
+    <div
+      className="flex items-center justify-end px-4 py-2.5 rounded-t-xl border-b-2 shadow-sm"
+      style={{
+        background: "linear-gradient(to right, #252526, #1e1e1e)",
+        borderColor: "#3e3e42",
+      }}
+    >
+      <span
+        className="text-xs font-semibold uppercase tracking-wider px-2 py-1 rounded-md"
+        style={{
+          color: "#cccccc",
+          backgroundColor: "rgba(62, 62, 66, 0.5)",
+        }}
+      >
+        {part.language || "javascript"}
+      </span>
+    </div>
+    <div
+      className="relative overflow-hidden rounded-b-xl border-x-2 border-b-2 shadow-lg"
+      style={{ backgroundColor: "#1e1e1e", borderColor: "#3e3e42" }}
+    >
+      <SyntaxHighlighter
+        language={part.language?.toLowerCase() || "javascript"}
+        style={vscDarkPlus}
+        customStyle={{
+          margin: 0,
+          padding: "1.5rem 1.75rem",
+          backgroundColor: "#1e1e1e",
+          fontSize: "0.875rem",
+          lineHeight: "1.8",
+          fontFamily:
+            '"JetBrains Mono", "Fira Code", "SF Mono", "Consolas", "Monaco", "Courier New", monospace',
+          tabSize: 2,
+          ...({ WebkitTabSize: 2, MozTabSize: 2 } as any),
+          WebkitFontSmoothing: "antialiased",
+          MozOsxFontSmoothing: "grayscale",
+          letterSpacing: "0.01em",
+          borderRadius: "0 0 0.75rem 0.75rem",
+        }}
+        codeTagProps={{
+          style: {
+            fontFamily: "inherit",
+            fontSize: "inherit",
+          },
+        }}
+        PreTag={CodeBlockPreTag}
+        showLineNumbers={false}
+        wrapLines={true}
+        wrapLongLines={true}
+      >
+        {part.content}
+      </SyntaxHighlighter>
+      <div
+        className="absolute inset-0 pointer-events-none rounded-b-xl z-0"
+        style={{
+          background:
+            "linear-gradient(to bottom, transparent, transparent, rgba(30, 30, 30, 0.2))",
+        }}
+      ></div>
+    </div>
+  </div>
+);
+
+// Component to render text with inline code
+const TextBlock = ({
+  part,
+  partId,
+}: {
+  part: { content: string };
+  partId: string;
+}) => {
+  const textParts: Array<{ type: "text" | "code"; content: string; id: string }> =
+    [];
+  const inlineCodeRegex = /`([^`]+)`/g;
+  let lastIndex = 0;
+  let match;
+  let textPartIndex = 0;
+
+  while ((match = inlineCodeRegex.exec(part.content)) !== null) {
+    if (match.index > lastIndex) {
+      const textBefore = part.content.substring(lastIndex, match.index);
+      if (textBefore) {
+        textParts.push({
+          type: "text",
+          content: textBefore,
+          id: `${partId}-text-${textPartIndex++}`,
+        });
+      }
+    }
+    textParts.push({
+      type: "code",
+      content: match[1],
+      id: `${partId}-code-${textPartIndex++}`,
+    });
+    lastIndex = match.index + match[0].length;
+  }
+
+  if (lastIndex < part.content.length) {
+    const remainingText = part.content.substring(lastIndex);
+    if (remainingText) {
+      textParts.push({
+        type: "text",
+        content: remainingText,
+        id: `${partId}-text-${textPartIndex++}`,
+      });
+    }
+  }
+
+  if (textParts.length === 0) {
+    textParts.push({
+      type: "text",
+      content: part.content,
+      id: `${partId}-text-0`,
+    });
+  }
+
+  return (
+    <p
+      key={partId}
+      className="text-sm sm:text-base lg:text-lg text-gray-700 dark:text-gray-300 leading-relaxed whitespace-pre-wrap mb-4 sm:mb-5"
+      style={{
+        lineHeight: "1.75",
+        wordSpacing: "0.05em",
+        letterSpacing: "0.01em",
+      }}
+    >
+      {textParts.map((textPart) => {
+        if (textPart.type === "code") {
+          return (
+            <code
+              key={textPart.id}
+              className="px-1.5 py-0.5 bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-gray-100 rounded text-sm font-mono"
+            >
+              {textPart.content}
+            </code>
+          );
+        }
+        return (
+          <span key={textPart.id}>
+            {decodeHtmlEntities(textPart.content)}
+          </span>
+        );
+      })}
+    </p>
+  );
+};
+
+// Helper function to replace code tags with markdown backticks
+function replaceCodeTagWithMarkdown(
+  match: string,
+  codeContent: string,
+  offset: number,
+  fullContent: string,
+): string {
+  const beforeMatch = fullContent.substring(0, offset);
+  const lastPreOpen = beforeMatch.lastIndexOf("<pre");
+  const lastPreClose = beforeMatch.lastIndexOf("</pre>");
+
+  if (lastPreOpen > lastPreClose) {
+    return match;
+  }
+
+  return `\`${codeContent.trim()}\``;
+}
+
+// Helper function to truncate content if too large
+function truncateIfNeeded(content: string, maxLength: number): string {
+  if (content.length > maxLength) {
+    console.warn("Content too large for safe processing, truncating");
+    return content.substring(0, maxLength);
+  }
+  return content;
+}
+
+// Helper function to process and prepare content
+function processContent(content: string): string {
   // Fix malformed HTML patterns
   let fixedContent = fixMalformedHtml(content);
 
-  const parts: Array<{
-    type: "text" | "code";
-    content: string;
-    language?: string;
-  }> = [];
-
   // SECURITY: Process code blocks with bounded quantifiers
-  // NOSONAR S7781: replaceAll() cannot be used with regex patterns that require capture groups and callbacks
-  fixedContent = fixedContent.replace(
-    // NOSONAR
-    /<code[^>]{0,200}>([^<]{1,50})<\/code>/gi,
-    (match, codeContent, offset) => {
-      const beforeMatch = fixedContent.substring(0, offset);
-      const lastPreOpen = beforeMatch.lastIndexOf("<pre");
-      const lastPreClose = beforeMatch.lastIndexOf("</pre>");
-
-      if (lastPreOpen > lastPreClose) {
-        return match;
-      }
-
-      return `\`${codeContent.trim()}\``;
-    },
+  // NOSONAR S7781: replaceAll() with function callback for complex replacement logic
+  const codeTagRegex = /<code[^>]{0,200}>([^<]{1,50})<\/code>/gi;
+  fixedContent = fixedContent.replaceAll(codeTagRegex, (match, codeContent, offset) =>
+    replaceCodeTagWithMarkdown(match, codeContent, offset, fixedContent),
   );
 
   // ⚠️ SECURITY: Limit input size to prevent ReDoS attacks
-  // Polynomial regex patterns can be exploited with malicious input
   const MAX_CONTENT_LENGTH = 100000; // 100KB limit
-  if (fixedContent.length > MAX_CONTENT_LENGTH) {
-    console.warn("Content too large for safe processing, truncating");
-    fixedContent = fixedContent.substring(0, MAX_CONTENT_LENGTH);
-  }
+  fixedContent = truncateIfNeeded(fixedContent, MAX_CONTENT_LENGTH);
 
+  return fixedContent;
+}
+
+// Helper function to extract all matches from content
+function extractAllMatches(fixedContent: string) {
   // Process HTML code blocks
   let htmlMatches = processHtmlCodeBlocks(fixedContent, extractCodeFromHtml);
   htmlMatches.sort((a, b) => a.index - b.index);
@@ -973,49 +1259,118 @@ export const QuestionContent = ({ content }: { content: string }) => {
     ...markdownMatches.map((m) => ({ ...m, type: "markdown" as const })),
   ].sort((a, b) => a.index - b.index);
 
+  return allMatches;
+}
+
+// Helper function to add text part if content exists
+function addTextPartIfExists(
+  parts: Array<{ type: "text" | "code"; content: string; language?: string }>,
+  textContent: string,
+): void {
+  if (textContent.trim()) {
+    const cleanText = cleanTextContent(textContent);
+    if (cleanText) {
+      parts.push({ type: "text", content: cleanText });
+    }
+  }
+}
+
+// Helper function to add code part
+function addCodePart(
+  parts: Array<{ type: "text" | "code"; content: string; language?: string }>,
+  matchContent: string,
+  language?: string,
+): void {
+  if (matchContent) {
+    const formattedCode = cleanCodeContent(matchContent);
+    parts.push({
+      type: "code",
+      content: formattedCode,
+      language: language || "javascript",
+    });
+  }
+}
+
+// Helper function to clean and sanitize text with code tag replacement
+function cleanTextWithCodeTags(text: string): string {
+  let cleanText = decodeHtmlEntities(text);
+  cleanText = sanitizeText(cleanText);
+  // NOSONAR S7781: replaceAll() with function callback for capture group replacement
+  cleanText = cleanText.replaceAll(
+    /<code[^>]{0,200}>([^<]{1,30})<\/code>/gi,
+    (match, codeContent) => `\`${codeContent}\``,
+  );
+  cleanText = sanitizeText(cleanText);
+  cleanText = cleanTextContent(cleanText);
+  return cleanText;
+}
+
+// Helper function to process remaining text content
+function processRemainingText(
+  fixedContent: string,
+  lastIndex: number,
+): string | null {
+  if (lastIndex >= fixedContent.length) {
+    return null;
+  }
+
+  const textContent = fixedContent.substring(lastIndex);
+  if (!textContent.trim()) {
+    return null;
+  }
+
+  const cleanText = cleanTextWithCodeTags(textContent);
+  return cleanText || null;
+}
+
+// Helper function to build parts from matches
+function buildPartsFromMatches(
+  fixedContent: string,
+  allMatches: Array<{
+    index: number;
+    content: string;
+    language?: string;
+    fullMatch: string;
+    type: "html" | "markdown";
+  }>,
+): Array<{
+  type: "text" | "code";
+  content: string;
+  language?: string;
+}> {
+  const parts: Array<{
+    type: "text" | "code";
+    content: string;
+    language?: string;
+  }> = [];
+
   let lastIndex = 0;
 
   for (const match of allMatches) {
     if (match.index > lastIndex) {
       const textContent = fixedContent.substring(lastIndex, match.index);
-      if (textContent.trim()) {
-        const cleanText = cleanTextContent(textContent);
-        if (cleanText) {
-          parts.push({ type: "text", content: cleanText });
-        }
-      }
+      addTextPartIfExists(parts, textContent);
     }
 
-    if (match.content) {
-      const formattedCode = cleanCodeContent(match.content);
-      parts.push({
-        type: "code",
-        content: formattedCode,
-        language: match.language || "javascript",
-      });
-    }
-
+    addCodePart(parts, match.content, match.language);
     lastIndex = match.index + match.fullMatch.length;
   }
 
-  if (lastIndex < fixedContent.length) {
-    const textContent = fixedContent.substring(lastIndex);
-    if (textContent.trim()) {
-      let cleanText = decodeHtmlEntities(textContent);
-      cleanText = sanitizeText(cleanText);
-      // codeql[js/incomplete-multi-character-sanitization]: sanitizeText() called immediately after this replace() removes all HTML
-      // NOSONAR S7781: replaceAll() cannot be used with regex patterns that require capture groups
-      cleanText = cleanText.replace(
-        /<code[^>]{0,200}>([^<]{1,30})<\/code>/gi,
-        "`$1`",
-      );
-      cleanText = sanitizeText(cleanText);
-      cleanText = cleanTextContent(cleanText);
-      if (cleanText) {
-        parts.push({ type: "text", content: cleanText });
-      }
-    }
+  const remainingText = processRemainingText(fixedContent, lastIndex);
+  if (remainingText) {
+    parts.push({ type: "text", content: remainingText });
   }
+
+  return parts;
+}
+
+// Component to render question content with code blocks
+export const QuestionContent = ({ content }: { content: string }) => {
+  if (!content) return null;
+
+  const fixedContent = processContent(content);
+  const allMatches = extractAllMatches(fixedContent);
+  const parts = buildPartsFromMatches(fixedContent, allMatches);
 
   if (parts.length === 0) {
     return processFinalTextContent(fixedContent);
@@ -1024,145 +1379,11 @@ export const QuestionContent = ({ content }: { content: string }) => {
   return (
     <div className="space-y-5 sm:space-y-6">
       {parts.map((part, index) => {
+        const partId = `part-${index}-${part.type}-${part.content.substring(0, 10)}`;
         if (part.type === "code") {
-          return (
-            <div
-              key={index}
-              className="relative group my-4 sm:my-6"
-              style={{ backgroundColor: "#1e1e1e" }}
-            >
-              <div
-                className="flex items-center justify-end px-4 py-2.5 rounded-t-xl border-b-2 shadow-sm"
-                style={{
-                  background: "linear-gradient(to right, #252526, #1e1e1e)",
-                  borderColor: "#3e3e42",
-                }}
-              >
-                <span
-                  className="text-xs font-semibold uppercase tracking-wider px-2 py-1 rounded-md"
-                  style={{
-                    color: "#cccccc",
-                    backgroundColor: "rgba(62, 62, 66, 0.5)",
-                  }}
-                >
-                  {part.language || "javascript"}
-                </span>
-              </div>
-              <div
-                className="relative overflow-hidden rounded-b-xl border-x-2 border-b-2 shadow-lg"
-                style={{ backgroundColor: "#1e1e1e", borderColor: "#3e3e42" }}
-              >
-                <SyntaxHighlighter
-                  language={part.language?.toLowerCase() || "javascript"}
-                  style={vscDarkPlus}
-                  customStyle={{
-                    margin: 0,
-                    padding: "1.5rem 1.75rem",
-                    backgroundColor: "#1e1e1e",
-                    fontSize: "0.875rem",
-                    lineHeight: "1.8",
-                    fontFamily:
-                      '"JetBrains Mono", "Fira Code", "SF Mono", "Consolas", "Monaco", "Courier New", monospace',
-                    tabSize: 2,
-                    ...({ WebkitTabSize: 2, MozTabSize: 2 } as any),
-                    WebkitFontSmoothing: "antialiased",
-                    MozOsxFontSmoothing: "grayscale",
-                    letterSpacing: "0.01em",
-                    borderRadius: "0 0 0.75rem 0.75rem",
-                  }}
-                  codeTagProps={{
-                    style: {
-                      fontFamily: "inherit",
-                      fontSize: "inherit",
-                    },
-                  }}
-                  PreTag={({ children, ...props }) => (
-                    <pre
-                      {...props}
-                      style={{
-                        margin: 0,
-                        padding: 0,
-                        backgroundColor: "transparent",
-                      }}
-                    >
-                      {children}
-                    </pre>
-                  )}
-                  showLineNumbers={false}
-                  wrapLines={true}
-                  wrapLongLines={true}
-                >
-                  {part.content}
-                </SyntaxHighlighter>
-                <div
-                  className="absolute inset-0 pointer-events-none rounded-b-xl z-0"
-                  style={{
-                    background:
-                      "linear-gradient(to bottom, transparent, transparent, rgba(30, 30, 30, 0.2))",
-                  }}
-                ></div>
-              </div>
-            </div>
-          );
-        } else {
-          const textParts: Array<{ type: "text" | "code"; content: string }> =
-            [];
-          const inlineCodeRegex = /`([^`]+)`/g;
-          let lastIndex = 0;
-          let match;
-
-          while ((match = inlineCodeRegex.exec(part.content)) !== null) {
-            if (match.index > lastIndex) {
-              const textBefore = part.content.substring(lastIndex, match.index);
-              if (textBefore) {
-                textParts.push({ type: "text", content: textBefore });
-              }
-            }
-            textParts.push({ type: "code", content: match[1] });
-            lastIndex = match.index + match[0].length;
-          }
-
-          if (lastIndex < part.content.length) {
-            const remainingText = part.content.substring(lastIndex);
-            if (remainingText) {
-              textParts.push({ type: "text", content: remainingText });
-            }
-          }
-
-          if (textParts.length === 0) {
-            textParts.push({ type: "text", content: part.content });
-          }
-
-          return (
-            <p
-              key={index}
-              className="text-sm sm:text-base lg:text-lg text-gray-700 dark:text-gray-300 leading-relaxed whitespace-pre-wrap mb-4 sm:mb-5"
-              style={{
-                lineHeight: "1.75",
-                wordSpacing: "0.05em",
-                letterSpacing: "0.01em",
-              }}
-            >
-              {textParts.map((textPart, textIndex) => {
-                if (textPart.type === "code") {
-                  return (
-                    <code
-                      key={textIndex}
-                      className="px-1.5 py-0.5 bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-gray-100 rounded text-sm font-mono"
-                    >
-                      {textPart.content}
-                    </code>
-                  );
-                }
-                return (
-                  <span key={textIndex}>
-                    {decodeHtmlEntities(textPart.content)}
-                  </span>
-                );
-              })}
-            </p>
-          );
+          return <CodeBlock key={partId} part={part} partId={partId} />;
         }
+        return <TextBlock key={partId} part={part} partId={partId} />;
       })}
     </div>
   );
