@@ -7,15 +7,15 @@ import {
   BookOpen,
   Play,
   CheckCircle,
-  _Star as _Star,
-  _Users as _Users,
+  Star,
+  Users,
   Zap,
   Code,
   Palette,
   Globe,
   Layers,
   Cpu,
-  _Database as _Database,
+  Database,
 } from "lucide-react";
 
 interface LearningPath {

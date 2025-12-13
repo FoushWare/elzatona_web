@@ -9,8 +9,8 @@ import {
   ArrowRight,
   Clock,
   Target,
-  _Users as _Users,
-  _Star as _Star,
+  Users,
+  Star,
   ChevronRight,
   Code,
   Palette,
@@ -21,7 +21,7 @@ import {
   Brain,
   Globe,
   Play,
-  _CheckCircle as _CheckCircle,
+  CheckCircle,
   Circle,
 } from "lucide-react";
 
