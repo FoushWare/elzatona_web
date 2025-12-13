@@ -663,7 +663,6 @@ export async function GET(
         let indentLevel = 0;
         let inClass = false;
         let inMethod = false;
-        let inConstructor = false;
 
         formatted = lines
           .map((line, index) => {
@@ -689,7 +688,6 @@ export async function GET(
                 /^set\s+\w+\s*\(/.test(trimmed)) // setter
             ) {
               inMethod = true;
-              inConstructor = /^constructor\s*\(/.test(trimmed);
               const indent = "  ".repeat(indentLevel);
               // Check if method has opening brace on same line
               if (trimmed.match(/[{\[\(]\s*$/)) {
@@ -728,10 +726,8 @@ export async function GET(
                 ) {
                   inClass = false;
                   inMethod = false;
-                  inConstructor = false;
                 } else if (inMethod) {
                   inMethod = false;
-                  inConstructor = false;
                 }
               }
             }
