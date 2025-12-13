@@ -49,7 +49,7 @@ export async function PUT(
 ) {
   try {
     const { id } = await params;
-    const { quality, reviewResult } = await request.json();
+    const { quality, reviewResult: _reviewResult } = await request.json();
 
     // Check if flashcard exists
     const { data: flashcardSnap, error: fetchError } = await supabase
