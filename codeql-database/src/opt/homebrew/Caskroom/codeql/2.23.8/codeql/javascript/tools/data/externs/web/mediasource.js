@@ -32,28 +32,22 @@ function MediaSource() {}
  * @override
  * @return {undefined}
  */
-MediaSource.prototype.addEventListener = function (
-  _type,
-  _listener,
-  _opt_useCapture,
-) {};
+MediaSource.prototype.addEventListener = function(
+    type, listener, opt_useCapture) {};
 
 /**
  * @param {boolean=} opt_useCapture
  * @override
  * @return {undefined}
  */
-MediaSource.prototype.removeEventListener = function (
-  _type,
-  _listener,
-  _opt_useCapture,
-) {};
+MediaSource.prototype.removeEventListener = function(
+    type, listener, opt_useCapture) {};
 
 /**
  * @override
  * @return {boolean}
  */
-MediaSource.prototype.dispatchEvent = function (_evt) {};
+MediaSource.prototype.dispatchEvent = function(evt) {};
 
 /** @type {Array<SourceBuffer>} */
 MediaSource.prototype.sourceBuffers;
@@ -68,26 +62,26 @@ MediaSource.prototype.duration;
  * @param {string} type
  * @return {SourceBuffer}
  */
-MediaSource.prototype.addSourceBuffer = function (_type) {};
+MediaSource.prototype.addSourceBuffer = function(type) {};
 
 /**
  * @param {SourceBuffer} sourceBuffer
  * @return {undefined}
  */
-MediaSource.prototype.removeSourceBuffer = function (_sourceBuffer) {};
+MediaSource.prototype.removeSourceBuffer = function(sourceBuffer) {};
 
 /**
  * Updates the live seekable range.
  * @param {number} start
  * @param {number} end
  */
-MediaSource.prototype.setLiveSeekableRange = function (_start, _end) {};
+MediaSource.prototype.setLiveSeekableRange = function(start, end) {};
 
 /**
  * Clears the live seekable range.
  * @return {void}
  */
-MediaSource.prototype.clearLiveSeekableRange = function () {};
+MediaSource.prototype.clearLiveSeekableRange = function() {};
 
 /** @type {string} */
 MediaSource.prototype.readyState;
@@ -96,13 +90,14 @@ MediaSource.prototype.readyState;
  * @param {string=} opt_error
  * @return {undefined}
  */
-MediaSource.prototype.endOfStream = function (_opt_error) {};
+MediaSource.prototype.endOfStream = function(opt_error) {};
 
 /**
  * @param {string} type
  * @return {boolean}
  */
-MediaSource.isTypeSupported = function (_type) {};
+MediaSource.isTypeSupported = function(type) {};
+
 
 /**
  * @constructor
@@ -115,28 +110,22 @@ function SourceBuffer() {}
  * @override
  * @return {undefined}
  */
-SourceBuffer.prototype.addEventListener = function (
-  _type,
-  _listener,
-  _opt_useCapture,
-) {};
+SourceBuffer.prototype.addEventListener = function(
+    type, listener, opt_useCapture) {};
 
 /**
  * @param {boolean=} opt_useCapture
  * @override
  * @return {undefined}
  */
-SourceBuffer.prototype.removeEventListener = function (
-  _type,
-  _listener,
-  _opt_useCapture,
-) {};
+SourceBuffer.prototype.removeEventListener = function(
+    type, listener, opt_useCapture) {};
 
 /**
  * @override
  * @return {boolean}
  */
-SourceBuffer.prototype.dispatchEvent = function (_evt) {};
+SourceBuffer.prototype.dispatchEvent = function(evt) {};
 
 /** @type {string} */
 SourceBuffer.prototype.appendMode;
@@ -160,23 +149,23 @@ SourceBuffer.prototype.appendWindowEnd;
  * @param {Uint8Array} data
  * @return {undefined}
  */
-SourceBuffer.prototype.append = function (_data) {};
+SourceBuffer.prototype.append = function(data) {};
 
 /**
  * @param {ArrayBuffer|ArrayBufferView} data
  * @return {undefined}
  */
-SourceBuffer.prototype.appendBuffer = function (_data) {};
+SourceBuffer.prototype.appendBuffer = function(data) {};
 
 /**
  * Abort the current segment append sequence.
  * @return {undefined}
  */
-SourceBuffer.prototype.abort = function () {};
+SourceBuffer.prototype.abort = function() {};
 
 /**
  * @param {number} start
  * @param {number} end
  * @return {undefined}
  */
-SourceBuffer.prototype.remove = function (_start, _end) {};
+SourceBuffer.prototype.remove = function(start, end) {};

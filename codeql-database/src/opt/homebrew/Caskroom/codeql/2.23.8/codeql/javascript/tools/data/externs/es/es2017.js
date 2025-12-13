@@ -13,14 +13,14 @@
  * @return {!Array}
  * @nosideeffects
  */
-Object.values = function (_obj) {};
+Object.values = function(obj) {};
 
 /**
  * @param {*} obj
  * @return {!Array.<Array>}
  * @nosideeffects
  */
-Object.entries = function (_obj) {};
+Object.entries = function(obj) {};
 
 /**
  * @param {number} maxLength
@@ -28,7 +28,7 @@ Object.entries = function (_obj) {};
  * @return {string}
  * @nosideeffects
  */
-String.prototype.padStart = function (_maxLength, _fillString) {};
+String.prototype.padStart = function(maxLength, fillString) {};
 
 /**
  * @param {number} maxLength
@@ -36,11 +36,11 @@ String.prototype.padStart = function (_maxLength, _fillString) {};
  * @return {string}
  * @nosideeffects
  */
-String.prototype.padEnd = function (_maxLength, _fillString) {};
+String.prototype.padEnd = function(maxLength, fillString) {};
 
 /**
  * @param {!Object} obj
  * @return {!Array.<!ObjectPropertyDescriptor>}
  * @nosideeffects
  */
-Object.getOwnPropertyDescriptors = function (_obj) {};
+Object.getOwnPropertyDescriptors = function(obj) {};

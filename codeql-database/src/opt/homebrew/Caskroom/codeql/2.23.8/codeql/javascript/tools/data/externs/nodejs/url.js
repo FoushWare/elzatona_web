@@ -42,7 +42,7 @@ var url = {};
 /**
  * @interface
  */
-url.Url = function () {};
+url.Url = function() {};
 
 /**
  * @type {string}
@@ -110,20 +110,20 @@ url.Url.prototype.path;
  * @param {boolean=} slashesDenoteHost
  * @return {url.Url}
  */
-url.parse = function (_urlStr, _parseQueryString, _slashesDenoteHost) {};
+url.parse = function(urlStr, parseQueryString, slashesDenoteHost) {};
 
 /**
  * @param {url.Url} url
  * @return {string}
  */
-_url.format = function (_url) {};
+url.format = function(url) {};
 
 /**
  * @param {string} from
  * @param {string} to
  * @return {string}
  */
-url.resolve = function (_from, _to) {};
+url.resolve = function(from, to) {};
 
 module.exports.Url = url.Url;
 
@@ -132,3 +132,4 @@ module.exports.parse = url.parse;
 module.exports.format = url.format;
 
 module.exports.resolve = url.resolve;
+

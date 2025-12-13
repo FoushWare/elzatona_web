@@ -10,15 +10,15 @@
  * @return {Object}
  * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Iterator
  */
-function Iterator(_object, _keyOnly) {}
+function Iterator(object, keyOnly) {}
 
 /**
  * @return {*}
  */
-Iterator.prototype.next = function () {};
+Iterator.prototype.next = function() {};
 
 /**
  * @type {Object}
  * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/StopIteration
  */
-var _StopIteration;
+var StopIteration;

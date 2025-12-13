@@ -45,13 +45,13 @@ var timers = {};
  * @param {...*} args
  * @return {NodeJS.Timer}
  */
-timers.setTimeout = function (_callback, _ms, _args) {};
+timers.setTimeout = function(callback, ms, args) {};
 
 /**
  * @param {NodeJS.Timer} timeoutId
  * @return {void}
  */
-timers.clearTimeout = function (_timeoutId) {};
+timers.clearTimeout = function(timeoutId) {};
 
 /**
  * @param {(function(...*): void)} callback
@@ -59,26 +59,26 @@ timers.clearTimeout = function (_timeoutId) {};
  * @param {...*} args
  * @return {NodeJS.Timer}
  */
-timers.setInterval = function (_callback, _ms, _args) {};
+timers.setInterval = function(callback, ms, args) {};
 
 /**
  * @param {NodeJS.Timer} intervalId
  * @return {void}
  */
-timers.clearInterval = function (_intervalId) {};
+timers.clearInterval = function(intervalId) {};
 
 /**
  * @param {(function(...*): void)} callback
  * @param {...*} args
  * @return {*}
  */
-timers.setImmediate = function (_callback, _args) {};
+timers.setImmediate = function(callback, args) {};
 
 /**
  * @param {*} immediateId
  * @return {void}
  */
-timers.clearImmediate = function (_immediateId) {};
+timers.clearImmediate = function(immediateId) {};
 
 module.exports.setTimeout = timers.setTimeout;
 
@@ -96,26 +96,26 @@ module.exports.clearImmediate = timers.clearImmediate;
  * @param {NodeJS.Timer} item
  * @return {*}
  */
-timers.active = function (_item) {};
+timers.active = function(item) {};
 
 /**
  * @param {NodeJS.Timer} item
  * @return {*}
  */
-timers._unrefActive = function (_item) {};
+timers._unrefActive = function(item) {};
 
 /**
  * @param {NodeJS.Timer} item
  * @return {*}
  */
-timers.unenroll = function (_item) {};
+timers.unenroll = function(item) {};
 
 /**
  * @param {NodeJS.Timer} item
  * @param {number} msecs
  * @return {*}
  */
-timers.enroll = function (_item, _msecs) {};
+timers.enroll = function(item, msecs) {};
 
 module.exports.active = timers.active;
 
@@ -124,3 +124,4 @@ module.exports._unrefActive = timers._unrefActive;
 module.exports.unenroll = timers.unenroll;
 
 module.exports.enroll = timers.enroll;
+

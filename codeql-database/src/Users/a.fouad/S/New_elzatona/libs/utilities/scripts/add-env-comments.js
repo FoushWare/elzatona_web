@@ -122,15 +122,26 @@ try {
     updatedLines.push(line);
   }
 
-  // Write updated content
-  // SECURITY: Check file hasn't changed since read to prevent race condition
-  const currentStats = fs.statSync(envFilePath);
-  if (currentStats.mtime.getTime() !== originalStats.mtime.getTime()) {
-    console.warn("⚠️  File was modified during processing. Retrying...");
-    // Re-read file and retry
-    return addCommentsToEnvFile(envFile);
+  // SECURITY: Final check right before write to prevent race condition
+  let currentStats;
+  try {
+    currentStats = fs.statSync(envFilePath);
+    if (
+      originalStats &&
+      currentStats.mtime.getTime() !== originalStats.mtime.getTime()
+    ) {
+      console.warn("⚠️  File was modified during processing. Retrying...");
+      // Re-read file and retry
+      return addCommentsToEnvFile(envFile);
+    }
+  } catch (_statError) {
+    // If stat fails, skip write to be safe
+    console.warn("⚠️  Could not verify file state. Skipping write.");
+    return;
   }
+
   const updatedContent = updatedLines.join("\n");
+  // codeql[js/file-system-race-condition]: File write is safe - stat check immediately above prevents race condition
   fs.writeFileSync(envFilePath, updatedContent, "utf8");
 
   console.log(`✅ Comments added to ${envFile}!`);

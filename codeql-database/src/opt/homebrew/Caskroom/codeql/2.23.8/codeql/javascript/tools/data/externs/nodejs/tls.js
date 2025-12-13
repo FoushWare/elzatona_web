@@ -56,7 +56,7 @@ var CLIENT_RENEG_WINDOW;
 /**
  * @interface
  */
-tls.Certificate = function () {};
+tls.Certificate = function() {};
 
 /**
  * @type {string}
@@ -91,7 +91,7 @@ tls.Certificate.prototype.CN;
 /**
  * @interface
  */
-tls.CipherNameAndProtocol = function () {};
+tls.CipherNameAndProtocol = function() {};
 
 /**
  * @type {string}
@@ -112,7 +112,7 @@ tls.TLSSocket;
 /**
  * @return {{port: number, family: string, address: string}}
  */
-tls.TLSSocket.prototype.address = function () {};
+tls.TLSSocket.prototype.address = function() {};
 
 /**
  * @type {boolean}
@@ -132,23 +132,23 @@ tls.TLSSocket.prototype.encrypted;
 /**
  * @return {tls.CipherNameAndProtocol}
  */
-tls.TLSSocket.prototype.getCipher = function () {};
+tls.TLSSocket.prototype.getCipher = function() {};
 
 /**
  * @param {boolean=} detailed
  * @return {{subject: tls.Certificate, issuerInfo: tls.Certificate, issuer: tls.Certificate, raw: *, valid_from: string, valid_to: string, fingerprint: string, serialNumber: string}}
  */
-tls.TLSSocket.prototype.getPeerCertificate = function (_detailed) {};
+tls.TLSSocket.prototype.getPeerCertificate = function(detailed) {};
 
 /**
  * @return {*}
  */
-tls.TLSSocket.prototype.getSession = function () {};
+tls.TLSSocket.prototype.getSession = function() {};
 
 /**
  * @return {*}
  */
-tls.TLSSocket.prototype.getTLSTicket = function () {};
+tls.TLSSocket.prototype.getTLSTicket = function() {};
 
 /**
  * @type {string}
@@ -180,18 +180,18 @@ tls.TLSSocket.prototype.remotePort;
  * @param {(function(Error): *)} callback
  * @return {*}
  */
-tls.TLSSocket.prototype.renegotiate = function (_options, _callback) {};
+tls.TLSSocket.prototype.renegotiate = function(options, callback) {};
 
 /**
  * @param {number} size
  * @return {boolean}
  */
-tls.TLSSocket.prototype.setMaxSendFragment = function (_size) {};
+tls.TLSSocket.prototype.setMaxSendFragment = function(size) {};
 
 /**
  * @interface
  */
-tls.TlsOptions = function () {};
+tls.TlsOptions = function() {};
 
 /**
  * @type {string}
@@ -306,7 +306,7 @@ tls.TlsOptions.prototype.secureProtocol;
 /**
  * @interface
  */
-tls.ConnectionOptions = function () {};
+tls.ConnectionOptions = function() {};
 
 /**
  * @type {string}
@@ -402,24 +402,24 @@ tls.ConnectionOptions.prototype.minDHSize;
  * @interface
  * @extends {net.Server}
  */
-tls.Server = function () {};
+tls.Server = function() {};
 
 /**
  * @return {tls.Server}
  */
-tls.Server.prototype.close = function () {};
+tls.Server.prototype.close = function() {};
 
 /**
  * @return {{port: number, family: string, address: string}}
  */
-tls.Server.prototype.address = function () {};
+tls.Server.prototype.address = function() {};
 
 /**
  * @param {string} hostName
  * @param {{key: string, cert: string, ca: string}} credentials
  * @return {void}
  */
-tls.Server.prototype.addContext = function (_hostName, _credentials) {};
+tls.Server.prototype.addContext = function(hostName, credentials) {};
 
 /**
  * @type {number}
@@ -435,7 +435,7 @@ tls.Server.prototype.connections;
  * @interface
  * @extends {internal.Duplex}
  */
-tls.ClearTextStream = function () {};
+tls.ClearTextStream = function() {};
 
 /**
  * @type {boolean}
@@ -450,7 +450,7 @@ tls.ClearTextStream.prototype.authorizationError;
 /**
  * @return {*}
  */
-tls.ClearTextStream.prototype.getPeerCertificate = function () {};
+tls.ClearTextStream.prototype.getPeerCertificate = function() {};
 
 tls.ClearTextStream.prototype.getCipher;
 
@@ -463,6 +463,7 @@ tls.ClearTextStream.prototype.getCipher.name;
  * @type {string}
  */
 tls.ClearTextStream.prototype.getCipher.version;
+
 
 tls.ClearTextStream.prototype.address;
 
@@ -481,6 +482,7 @@ tls.ClearTextStream.prototype.address.family;
  */
 tls.ClearTextStream.prototype.address.address;
 
+
 /**
  * @type {string}
  */
@@ -494,7 +496,7 @@ tls.ClearTextStream.prototype.remotePort;
 /**
  * @interface
  */
-tls.SecurePair = function () {};
+tls.SecurePair = function() {};
 
 /**
  * @type {*}
@@ -509,7 +511,7 @@ tls.SecurePair.prototype.cleartext;
 /**
  * @interface
  */
-tls.SecureContextOptions = function () {};
+tls.SecureContextOptions = function() {};
 
 /**
  * @type {(string|Buffer)}
@@ -554,7 +556,7 @@ tls.SecureContextOptions.prototype.honorCipherOrder;
 /**
  * @interface
  */
-tls.SecureContext = function () {};
+tls.SecureContext = function() {};
 
 /**
  * @type {*}
@@ -566,14 +568,14 @@ tls.SecureContext.prototype.context;
  * @param {(function(tls.ClearTextStream): void)=} secureConnectionListener
  * @return {tls.Server}
  */
-tls.createServer = function (_options, _secureConnectionListener) {};
+tls.createServer = function(options, secureConnectionListener) {};
 
 /**
  * @param {tls.ConnectionOptions} options
  * @param {(function(): void)=} secureConnectionListener
  * @return {tls.ClearTextStream}
  */
-tls.connect = function (_options, _secureConnectionListener) {};
+tls.connect = function(options, secureConnectionListener) {};
 
 /**
  * @param {number} port
@@ -582,7 +584,7 @@ tls.connect = function (_options, _secureConnectionListener) {};
  * @param {(function(): void)=} secureConnectListener
  * @return {tls.ClearTextStream}
  */
-tls.connect = function (_port, _host, _options, _secureConnectListener) {};
+tls.connect = function(port, host, options, secureConnectListener) {};
 
 /**
  * @param {number} port
@@ -590,7 +592,7 @@ tls.connect = function (_port, _host, _options, _secureConnectListener) {};
  * @param {(function(): void)=} secureConnectListener
  * @return {tls.ClearTextStream}
  */
-tls.connect = function (_port, _options, _secureConnectListener) {};
+tls.connect = function(port, options, secureConnectListener) {};
 
 /**
  * @param {crypto.Credentials=} credentials
@@ -599,18 +601,13 @@ tls.connect = function (_port, _options, _secureConnectListener) {};
  * @param {boolean=} rejectUnauthorized
  * @return {tls.SecurePair}
  */
-tls.createSecurePair = function (
-  _credentials,
-  _isServer,
-  _requestCert,
-  _rejectUnauthorized,
-) {};
+tls.createSecurePair = function(credentials, isServer, requestCert, rejectUnauthorized) {};
 
 /**
  * @param {tls.SecureContextOptions} details
  * @return {tls.SecureContext}
  */
-tls.createSecureContext = function (_details) {};
+tls.createSecureContext = function(details) {};
 
 module.exports.Certificate = tls.Certificate;
 

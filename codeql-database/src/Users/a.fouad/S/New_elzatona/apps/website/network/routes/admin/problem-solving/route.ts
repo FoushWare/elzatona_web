@@ -58,7 +58,9 @@ export async function GET(request: NextRequest) {
           task.title.toLowerCase().includes(lowerSearch) ||
           task.description.toLowerCase().includes(lowerSearch) ||
           task.category.toLowerCase().includes(lowerSearch) ||
-          task.tags.some((tag) => tag.toLowerCase().includes(lowerSearch)),
+          task.tags.some((tag: string) =>
+            tag.toLowerCase().includes(lowerSearch),
+          ),
       );
     }
 

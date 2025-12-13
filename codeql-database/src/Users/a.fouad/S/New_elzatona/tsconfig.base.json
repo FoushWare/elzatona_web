@@ -48,6 +48,7 @@
     "apps/admin/Utils/scripts/firebase/**/*",
     "Rest/**/*",
     "**/*.stories.tsx",
-    "**/*.stories.ts"
+    "**/*.stories.ts",
+    "**/*.example.ts"
   ]
 }

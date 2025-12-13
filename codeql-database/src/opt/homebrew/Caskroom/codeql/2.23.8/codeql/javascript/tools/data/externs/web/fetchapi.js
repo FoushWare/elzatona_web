@@ -25,6 +25,7 @@
  * @externs
  */
 
+
 /**
  * @typedef {string}
  * @see https://w3c.github.io/webappsec-referrer-policy/#enumdef-referrerpolicy
@@ -32,13 +33,15 @@
  *  'same-origin', 'origin', 'strict-origin', 'origin-when-cross-origin',
  *  'strict-origin-when-cross-origin', 'unsafe-url'
  */
-var _ReferrerPolicy;
+var ReferrerPolicy;
+
 
 /**
  * @typedef {!Headers|!Array<!Array<string>>|!IObject<string,string>}
  * @see https://fetch.spec.whatwg.org/#headersinit
  */
-var _HeadersInit;
+var HeadersInit;
+
 
 /**
  * @param {!HeadersInit=} opt_headersInit
@@ -46,99 +49,104 @@ var _HeadersInit;
  * @implements {Iterable<!Array<string>>}
  * @see https://fetch.spec.whatwg.org/#headers
  */
-function Headers(_opt_headersInit) {}
+function Headers(opt_headersInit) {}
 
 /**
  * @param {string} name
  * @param {string} value
  * @return {undefined}
  */
-Headers.prototype.append = function (_name, _value) {};
+Headers.prototype.append = function(name, value) {};
 
 /**
  * @param {string} name
  * @return {undefined}
  */
-Headers.prototype.delete = function (_name) {};
+Headers.prototype.delete = function(name) {};
 
 /** @return {!Iterator<!Array<string>>} */
-Headers.prototype.entries = function () {};
+Headers.prototype.entries = function() {};
 
 /**
  * @param {string} name
  * @return {?string}
  */
-Headers.prototype.get = function (_name) {};
+Headers.prototype.get = function(name) {};
 
 /**
  * @param {string} name
  * @return {!Array<string>}
  */
-Headers.prototype.getAll = function (_name) {};
+Headers.prototype.getAll = function(name) {};
 
 /**
  * @param {string} name
  * @return {boolean}
  */
-Headers.prototype.has = function (_name) {};
+Headers.prototype.has = function(name) {};
 
 /** @return {!Iterator<string>} */
-Headers.prototype.keys = function () {};
+Headers.prototype.keys = function() {};
 
 /**
  * @param {string} name
  * @param {string} value
  * @return {undefined}
  */
-Headers.prototype.set = function (_name, _value) {};
+Headers.prototype.set = function(name, value) {};
 
 /** @return {!Iterator<string>} */
-Headers.prototype.values = function () {};
+Headers.prototype.values = function() {};
 
 /** @return {!Iterator<!Array<string>>} */
-Headers.prototype[Symbol.iterator] = function () {};
+Headers.prototype[Symbol.iterator] = function() {};
+
 
 /**
  * @typedef {!Blob|!BufferSource|!FormData|string}
  * @see https://fetch.spec.whatwg.org/#bodyinit
  */
-var _BodyInit;
+var BodyInit;
+
 
 /**
  * @typedef {!BodyInit|!ReadableStream}
  * @see https://fetch.spec.whatwg.org/#responsebodyinit
  */
-var _ResponseBodyInit;
+var ResponseBodyInit;
+
 
 /**
  * @interface
  * @see https://fetch.spec.whatwg.org/#body
  */
-function Body() {}
+function Body() {};
 
 /** @type {boolean} */
 Body.prototype.bodyUsed;
 
 /** @return {!Promise<!ArrayBuffer>} */
-Body.prototype.arrayBuffer = function () {};
+Body.prototype.arrayBuffer = function() {};
 
 /** @return {!Promise<!Blob>} */
-Body.prototype.blob = function () {};
+Body.prototype.blob = function() {};
 
 /** @return {!Promise<!FormData>} */
-Body.prototype.formData = function () {};
+Body.prototype.formData = function() {};
 
 /** @return {!Promise<*>} */
-Body.prototype.json = function () {};
+Body.prototype.json = function() {};
 
 /** @return {!Promise<string>} */
-Body.prototype.text = function () {};
+Body.prototype.text = function() {};
+
 
 /**
  * @typedef {!Request|string}
  * @see https://fetch.spec.whatwg.org/#requestinfo
  */
-var _RequestInfo;
+var RequestInfo;
+
 
 /**
  * @param {!RequestInfo} input
@@ -147,25 +155,25 @@ var _RequestInfo;
  * @implements {Body}
  * @see https://fetch.spec.whatwg.org/#request
  */
-function Request(_input, _opt_init) {}
+function Request(input, opt_init) {}
 
 /** @override */
 Request.prototype.bodyUsed;
 
 /** @override */
-Request.prototype.arrayBuffer = function () {};
+Request.prototype.arrayBuffer = function() {};
 
 /** @override */
-Request.prototype.blob = function () {};
+Request.prototype.blob = function() {};
 
 /** @override */
-Request.prototype.formData = function () {};
+Request.prototype.formData = function() {};
 
 /** @override */
-Request.prototype.json = function () {};
+Request.prototype.json = function() {};
 
 /** @override */
-Request.prototype.text = function () {};
+Request.prototype.text = function() {};
 
 /** @type {string} */
 Request.prototype.method;
@@ -201,13 +209,14 @@ Request.prototype.redirect;
 Request.prototype.integrity;
 
 /** @return {!Request} */
-Request.prototype.clone = function () {};
+Request.prototype.clone = function() {};
+
 
 /**
  * @record
  * @see https://fetch.spec.whatwg.org/#requestinit
  */
-function RequestInit() {}
+function RequestInit() {};
 
 /** @type {(undefined|string)} */
 RequestInit.prototype.method;
@@ -248,7 +257,8 @@ RequestInit.prototype.window;
  *  Possible values: '', 'audio', 'font', 'image', 'script', 'style',
  *  'track', 'video'
  */
-var _FetchRequestType;
+var FetchRequestType;
+
 
 /**
  * @typedef {string}
@@ -257,21 +267,24 @@ var _FetchRequestType;
  *  'media', 'object', 'report', 'script', 'serviceworker', 'sharedworker',
  *  'style', 'worker', 'xslt'
  */
-var _RequestDestination;
+var RequestDestination;
+
 
 /**
  * @typedef {string}
  * @see https://fetch.spec.whatwg.org/#requestmode
  * Possible values: 'navigate', 'same-origin', 'no-cors', 'cors'
  */
-var _RequestMode;
+var RequestMode ;
+
 
 /**
  * @typedef {string}
  * @see https://fetch.spec.whatwg.org/#requestcredentials
  * Possible values: 'omit', 'same-origin', 'include'
  */
-var _RequestCredentials;
+var RequestCredentials;
+
 
 /**
  * @typedef {string}
@@ -279,14 +292,16 @@ var _RequestCredentials;
  *  Possible values: 'default', 'no-store', 'reload', 'no-cache', 'force-cache',
  * 'only-if-cached'
  */
-var _RequestCache;
+var RequestCache;
+
 
 /**
  * @typedef {string}
  * @see https://fetch.spec.whatwg.org/#requestredirect
  * Possible values: 'follow', 'error', 'manual'
  */
-var _RequestRedirect;
+var RequestRedirect;
+
 
 /**
  * @param {?ResponseBodyInit=} opt_body
@@ -295,35 +310,35 @@ var _RequestRedirect;
  * @implements {Body}
  * @see https://fetch.spec.whatwg.org/#response
  */
-function Response(_opt_body, _opt_init) {}
+function Response(opt_body, opt_init) {}
 
 /** @return {!Response} */
-Response.error = function () {};
+Response.error = function() {};
 
 /**
  * @param {string} url
  * @param {number=} opt_status
  * @return {!Response}
  */
-Response.redirect = function (_url, _opt_status) {};
+Response.redirect = function(url, opt_status) {};
 
 /** @override */
 Response.prototype.bodyUsed;
 
 /** @override */
-Response.prototype.arrayBuffer = function () {};
+Response.prototype.arrayBuffer = function() {};
 
 /** @override */
-Response.prototype.blob = function () {};
+Response.prototype.blob = function() {};
 
 /** @override */
-Response.prototype.formData = function () {};
+Response.prototype.formData = function() {};
 
 /** @override */
-Response.prototype.json = function () {};
+Response.prototype.json = function() {};
 
 /** @override */
-Response.prototype.text = function () {};
+Response.prototype.text = function() {};
 
 /** @type {!ResponseType} */
 Response.prototype.type;
@@ -353,13 +368,14 @@ Response.prototype.body;
 Response.prototype.trailer;
 
 /** @return {!Response} */
-Response.prototype.clone = function () {};
+Response.prototype.clone = function() {};
+
 
 /**
  * @record
  * @see https://fetch.spec.whatwg.org/#responseinit
  */
-function ResponseInit() {}
+function ResponseInit() {};
 
 /** @type {(undefined|number)} */
 ResponseInit.prototype.status;
@@ -370,13 +386,14 @@ ResponseInit.prototype.statusText;
 /** @type {(undefined|!HeadersInit)} */
 ResponseInit.prototype.headers;
 
+
 /**
  * @typedef {string}
  * @see https://fetch.spec.whatwg.org/#responsetype
  * Possible values: 'basic', 'cors', 'default', 'error', 'opaque',
  *  'opaqueredirect'
  */
-var _ResponseType;
+var ResponseType;
 
 /**
  * @param {!RequestInfo} input
@@ -384,7 +401,7 @@ var _ResponseType;
  * @return {!Promise<!Response>}
  * @see https://fetch.spec.whatwg.org/#fetch-method
  */
-function _fetch(_input, _opt_init) {}
+function fetch(input, opt_init) {}
 
 /**
  * @param {!RequestInfo} input
@@ -392,7 +409,7 @@ function _fetch(_input, _opt_init) {}
  * @return {!Promise<!Response>}
  * @see https://fetch.spec.whatwg.org/#fetch-method
  */
-Window.prototype.fetch = function (_input, _opt_init) {};
+Window.prototype.fetch = function(input, opt_init) {};
 
 /**
  * @param {!RequestInfo} input
@@ -400,4 +417,4 @@ Window.prototype.fetch = function (_input, _opt_init) {};
  * @return {!Promise<!Response>}
  * @see https://fetch.spec.whatwg.org/#fetch-method
  */
-WorkerGlobalScope.prototype.fetch = function (_input, _opt_init) {};
+WorkerGlobalScope.prototype.fetch = function(input, opt_init) {};

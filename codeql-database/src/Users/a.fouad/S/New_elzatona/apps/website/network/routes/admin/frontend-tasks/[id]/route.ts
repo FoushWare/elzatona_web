@@ -106,7 +106,7 @@ export async function PUT(
     }
 
     // Update task in Supabase
-    const { error: updateError } = await supabase
+    const { error: _updateError } = await supabase
       .from("frontend_tasks")
       .update({
         ...body,

@@ -42,7 +42,7 @@
  * @param {string=} message
  * @return {void}
  */
-var internal = function (_value, _message) {};
+var internal = function(value, message) {};
 
 var internal = internal || {};
 
@@ -51,7 +51,7 @@ var internal = internal || {};
  * @return {internal.AssertionError}
  * @constructor
  */
-internal.AssertionError = function (_options) {};
+internal.AssertionError = function(options) {};
 
 /**
  * @type {string}
@@ -90,14 +90,14 @@ internal.AssertionError.prototype.generatedMessage;
  * @param {string} operator
  * @return {void}
  */
-internal.fail = function (_actual, _expected, _message, _operator) {};
+internal.fail = function(actual, expected, message, operator) {};
 
 /**
  * @param {*} value
  * @param {string=} message
  * @return {void}
  */
-internal.ok = function (_value, _message) {};
+internal.ok = function(value, message) {};
 
 /**
  * @param {*} actual
@@ -105,7 +105,7 @@ internal.ok = function (_value, _message) {};
  * @param {string=} message
  * @return {void}
  */
-internal.equal = function (_actual, _expected, _message) {};
+internal.equal = function(actual, expected, message) {};
 
 /**
  * @param {*} actual
@@ -113,7 +113,7 @@ internal.equal = function (_actual, _expected, _message) {};
  * @param {string=} message
  * @return {void}
  */
-internal.notEqual = function (_actual, _expected, _message) {};
+internal.notEqual = function(actual, expected, message) {};
 
 /**
  * @param {*} actual
@@ -121,7 +121,7 @@ internal.notEqual = function (_actual, _expected, _message) {};
  * @param {string=} message
  * @return {void}
  */
-internal.deepEqual = function (_actual, _expected, _message) {};
+internal.deepEqual = function(actual, expected, message) {};
 
 /**
  * @param {*} acutal
@@ -129,7 +129,7 @@ internal.deepEqual = function (_actual, _expected, _message) {};
  * @param {string=} message
  * @return {void}
  */
-internal.notDeepEqual = function (_acutal, _expected, _message) {};
+internal.notDeepEqual = function(acutal, expected, message) {};
 
 /**
  * @param {*} actual
@@ -137,7 +137,7 @@ internal.notDeepEqual = function (_acutal, _expected, _message) {};
  * @param {string=} message
  * @return {void}
  */
-internal.strictEqual = function (_actual, _expected, _message) {};
+internal.strictEqual = function(actual, expected, message) {};
 
 /**
  * @param {*} actual
@@ -145,7 +145,7 @@ internal.strictEqual = function (_actual, _expected, _message) {};
  * @param {string=} message
  * @return {void}
  */
-internal.notStrictEqual = function (_actual, _expected, _message) {};
+internal.notStrictEqual = function(actual, expected, message) {};
 
 /**
  * @param {*} actual
@@ -153,7 +153,7 @@ internal.notStrictEqual = function (_actual, _expected, _message) {};
  * @param {string=} message
  * @return {void}
  */
-internal.deepStrictEqual = function (_actual, _expected, _message) {};
+internal.deepStrictEqual = function(actual, expected, message) {};
 
 /**
  * @param {*} actual
@@ -161,7 +161,7 @@ internal.deepStrictEqual = function (_actual, _expected, _message) {};
  * @param {string=} message
  * @return {void}
  */
-internal.notDeepStrictEqual = function (_actual, _expected, _message) {};
+internal.notDeepStrictEqual = function(actual, expected, message) {};
 
 /**
  * @type {(function(Function, string=): void)|(function(Function, Function, string=): void)|(function(Function, RegExp, string=): void)|(function(Function, (function(*): boolean), string=): void)}
@@ -177,6 +177,8 @@ internal.doesNotThrow;
  * @param {*} value
  * @return {void}
  */
-internal.ifError = function (_value) {};
+internal.ifError = function(value) {};
+
 
 module.exports = internal;
+

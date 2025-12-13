@@ -27,7 +27,7 @@
  * @param {string=} opt_matrix
  * @see https://dvcs.w3.org/hg/FXTF/raw-file/tip/matrix/index.html#the-cssmatrix-interface
  */
-function CSSMatrix(_opt_matrix) {}
+function CSSMatrix(opt_matrix) {}
 
 /**
  * @type {number}
@@ -129,20 +129,20 @@ CSSMatrix.prototype.m44;
  * @param {string} string
  * @return {void}
  */
-CSSMatrix.prototype.setMatrixValue = function (_string) {};
+CSSMatrix.prototype.setMatrixValue = function(string) {};
 
 /**
  * @param {!CSSMatrix} secondMatrix
  * @return {!CSSMatrix}
  * @see https://dvcs.w3.org/hg/FXTF/raw-file/tip/matrix/index.html#widl-CSSMatrix-multiply-CSSMatrix-CSSMatrix-other
  */
-CSSMatrix.prototype.multiply = function (_secondMatrix) {};
+CSSMatrix.prototype.multiply = function(secondMatrix) {};
 
 /**
  * @return {CSSMatrix} Returns void if the matrix is non-invertable.
  * @see https://dvcs.w3.org/hg/FXTF/raw-file/tip/matrix/index.html#widl-CSSMatrix-inverse-CSSMatrix
  */
-CSSMatrix.prototype.inverse = function () {};
+CSSMatrix.prototype.inverse = function() {};
 
 /**
  * @param {number=} opt_x Defaults to 0.
@@ -151,7 +151,7 @@ CSSMatrix.prototype.inverse = function () {};
  * @return {!CSSMatrix}
  * @see https://dvcs.w3.org/hg/FXTF/raw-file/tip/matrix/index.html#widl-CSSMatrix-translate-CSSMatrix-unrestricted-double-tx-unrestricted-double-ty-unrestricted-double-tz
  */
-CSSMatrix.prototype.translate = function (_opt_x, _opt_y, _opt_z) {};
+CSSMatrix.prototype.translate = function(opt_x, opt_y, opt_z) {};
 
 /**
  * @param {number=} opt_scaleX Defaults to 1.
@@ -160,7 +160,7 @@ CSSMatrix.prototype.translate = function (_opt_x, _opt_y, _opt_z) {};
  * @return {!CSSMatrix}
  * @see https://dvcs.w3.org/hg/FXTF/raw-file/tip/matrix/index.html#widl-CSSMatrix-scale-CSSMatrix-unrestricted-double-scale-unrestricted-double-originX-unrestricted-double-originY
  */
-CSSMatrix.prototype.scale = function (_opt_scaleX, _opt_scaleY, _opt_scaleZ) {};
+CSSMatrix.prototype.scale = function(opt_scaleX, opt_scaleY, opt_scaleZ) {};
 
 /**
  * @param {number=} opt_rotX Defaults to 0.
@@ -169,7 +169,7 @@ CSSMatrix.prototype.scale = function (_opt_scaleX, _opt_scaleY, _opt_scaleZ) {};
  * @return {!CSSMatrix}
  * @see https://dvcs.w3.org/hg/FXTF/raw-file/tip/matrix/index.html#widl-CSSMatrix-rotate-CSSMatrix-unrestricted-double-angle-unrestricted-double-originX-unrestricted-double-originY
  */
-CSSMatrix.prototype.rotate = function (_opt_rotX, _opt_rotY, _opt_rotZ) {};
+CSSMatrix.prototype.rotate = function(opt_rotX, opt_rotY, opt_rotZ) {};
 
 /**
  * @param {number=} opt_x Defaults to 0.
@@ -179,12 +179,8 @@ CSSMatrix.prototype.rotate = function (_opt_rotX, _opt_rotY, _opt_rotZ) {};
  * @return {!CSSMatrix}
  * @see https://dvcs.w3.org/hg/FXTF/raw-file/tip/matrix/index.html#widl-CSSMatrix-rotateAxisAngle-CSSMatrix-unrestricted-double-x-unrestricted-double-y-unrestricted-double-z-unrestricted-double-angle
  */
-CSSMatrix.prototype.rotateAxisAngle = function (
-  _opt_x,
-  _opt_y,
-  _opt_z,
-  _opt_angle,
-) {};
+CSSMatrix.prototype.rotateAxisAngle =
+    function(opt_x, opt_y, opt_z, opt_angle) {};
 
 /**
  * @constructor
@@ -192,7 +188,7 @@ CSSMatrix.prototype.rotateAxisAngle = function (
  * @extends {CSSMatrix}
  * @see http://developer.apple.com/safari/library/documentation/AudioVideo/Reference/WebKitCSSMatrixClassReference/WebKitCSSMatrix/WebKitCSSMatrix.html#//apple_ref/javascript/instm/WebKitCSSMatrix/setMatrixValue
  */
-function _WebKitCSSMatrix(_opt_matrix) {}
+function WebKitCSSMatrix(opt_matrix) {}
 
 /**
  * @constructor
@@ -200,4 +196,4 @@ function _WebKitCSSMatrix(_opt_matrix) {}
  * @extends {CSSMatrix}
  * @see http://msdn.microsoft.com/en-us/library/windows/apps/hh453593.aspx
  */
-function _MSCSSMatrix(_opt_matrix) {}
+function MSCSSMatrix(opt_matrix) {}

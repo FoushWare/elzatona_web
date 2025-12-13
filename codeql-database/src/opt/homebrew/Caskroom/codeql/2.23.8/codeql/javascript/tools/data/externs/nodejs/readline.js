@@ -46,7 +46,7 @@ var stream = require("stream");
 /**
  * @interface
  */
-readline.Key = function () {};
+readline.Key = function() {};
 
 /**
  * @type {string}
@@ -77,59 +77,59 @@ readline.Key.prototype.shift;
  * @interface
  * @extends {events.EventEmitter}
  */
-readline.ReadLine = function () {};
+readline.ReadLine = function() {};
 
 /**
  * @param {string} prompt
  * @return {void}
  */
-readline.ReadLine.prototype.setPrompt = function (_prompt) {};
+readline.ReadLine.prototype.setPrompt = function(prompt) {};
 
 /**
  * @param {boolean=} preserveCursor
  * @return {void}
  */
-readline.ReadLine.prototype.prompt = function (_preserveCursor) {};
+readline.ReadLine.prototype.prompt = function(preserveCursor) {};
 
 /**
  * @param {string} query
  * @param {(function(string): void)} callback
  * @return {void}
  */
-readline.ReadLine.prototype.question = function (_query, _callback) {};
+readline.ReadLine.prototype.question = function(query, callback) {};
 
 /**
  * @return {readline.ReadLine}
  */
-readline.ReadLine.prototype.pause = function () {};
+readline.ReadLine.prototype.pause = function() {};
 
 /**
  * @return {readline.ReadLine}
  */
-readline.ReadLine.prototype.resume = function () {};
+readline.ReadLine.prototype.resume = function() {};
 
 /**
  * @return {void}
  */
-readline.ReadLine.prototype.close = function () {};
+readline.ReadLine.prototype.close = function() {};
 
 /**
  * @param {(string|Buffer)} data
  * @param {readline.Key=} key
  * @return {void}
  */
-readline.ReadLine.prototype.write = function (_data, _key) {};
+readline.ReadLine.prototype.write = function(data, key) {};
 
 /**
  * @interface
  * @type {((function(string): readline.CompleterResult)|(function(string, (function(*, readline.CompleterResult): void)): *))}
  */
-readline.Completer = function () {};
+readline.Completer = function() {};
 
 /**
  * @interface
  */
-readline.CompleterResult = function () {};
+readline.CompleterResult = function() {};
 
 /**
  * @type {Array<string>}
@@ -144,7 +144,7 @@ readline.CompleterResult.prototype.line;
 /**
  * @interface
  */
-readline.ReadLineOptions = function () {};
+readline.ReadLineOptions = function() {};
 
 /**
  * @type {NodeJS.ReadableStream}
@@ -178,13 +178,13 @@ readline.ReadLineOptions.prototype.historySize;
  * @param {boolean=} terminal
  * @return {readline.ReadLine}
  */
-readline.createInterface = function (_input, _output, _completer, _terminal) {};
+readline.createInterface = function(input, output, completer, terminal) {};
 
 /**
  * @param {readline.ReadLineOptions} options
  * @return {readline.ReadLine}
  */
-readline.createInterface = function (_options) {};
+readline.createInterface = function(options) {};
 
 /**
  * @param {NodeJS.WritableStream} stream
@@ -192,7 +192,7 @@ readline.createInterface = function (_options) {};
  * @param {number} y
  * @return {void}
  */
-readline.cursorTo = function (_stream, _x, _y) {};
+readline.cursorTo = function(stream, x, y) {};
 
 /**
  * @param {NodeJS.WritableStream} stream
@@ -200,20 +200,20 @@ readline.cursorTo = function (_stream, _x, _y) {};
  * @param {(number|string)} dy
  * @return {void}
  */
-readline.moveCursor = function (_stream, _dx, _dy) {};
+readline.moveCursor = function(stream, dx, dy) {};
 
 /**
  * @param {NodeJS.WritableStream} stream
  * @param {number} dir
  * @return {void}
  */
-readline.clearLine = function (_stream, _dir) {};
+readline.clearLine = function(stream, dir) {};
 
 /**
  * @param {NodeJS.WritableStream} stream
  * @return {void}
  */
-readline.clearScreenDown = function (_stream) {};
+readline.clearScreenDown = function(stream) {};
 
 module.exports.Key = readline.Key;
 
@@ -241,6 +241,7 @@ module.exports.clearScreenDown = readline.clearScreenDown;
  * @interface
  * @extends {readline.ReadLine}
  */
-readline.Interface = function () {};
+readline.Interface = function() {};
 
 module.exports.Interface = readline.Interface;
+

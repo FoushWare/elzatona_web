@@ -37,7 +37,7 @@
  * @fileoverview Definitions for module "events"
  */
 
-var events = function () {};
+var events = function() {};
 
 /**
  * @constructor
@@ -55,7 +55,7 @@ events.EventEmitter.EventEmitter;
  * @param {string} event
  * @return {number}
  */
-events.EventEmitter.listenerCount = function (_emitter, _event) {};
+events.EventEmitter.listenerCount = function(emitter, event) {};
 
 /**
  * @type {number}
@@ -67,85 +67,83 @@ events.EventEmitter.defaultMaxListeners;
  * @param {Function} listener
  * @return {*}
  */
-events.EventEmitter.prototype.addListener = function (_event, _listener) {};
+events.EventEmitter.prototype.addListener = function(event, listener) {};
 
 /**
  * @param {string} event
  * @param {Function} listener
  * @return {*}
  */
-events.EventEmitter.prototype.on = function (_event, _listener) {};
+events.EventEmitter.prototype.on = function(event, listener) {};
 
 /**
  * @param {string} event
  * @param {Function} listener
  * @return {*}
  */
-events.EventEmitter.prototype.once = function (_event, _listener) {};
+events.EventEmitter.prototype.once = function(event, listener) {};
 
 /**
  * @param {string} event
  * @param {Function} listener
  * @return {*}
  */
-events.EventEmitter.prototype.prependListener = function (_event, _listener) {};
+events.EventEmitter.prototype.prependListener = function(event, listener) {};
 
 /**
  * @param {string} event
  * @param {Function} listener
  * @return {*}
  */
-events.EventEmitter.prototype.prependOnceListener = function (
-  _event,
-  _listener,
-) {};
+events.EventEmitter.prototype.prependOnceListener = function(event, listener) {};
 
 /**
  * @param {string} event
  * @param {Function} listener
  * @return {*}
  */
-events.EventEmitter.prototype.removeListener = function (_event, _listener) {};
+events.EventEmitter.prototype.removeListener = function(event, listener) {};
 
 /**
  * @param {string=} event
  * @return {*}
  */
-events.EventEmitter.prototype.removeAllListeners = function (_event) {};
+events.EventEmitter.prototype.removeAllListeners = function(event) {};
 
 /**
  * @param {number} n
  * @return {*}
  */
-events.EventEmitter.prototype.setMaxListeners = function (_n) {};
+events.EventEmitter.prototype.setMaxListeners = function(n) {};
 
 /**
  * @return {number}
  */
-events.EventEmitter.prototype.getMaxListeners = function () {};
+events.EventEmitter.prototype.getMaxListeners = function() {};
 
 /**
  * @param {string} event
  * @return {Array<Function>}
  */
-events.EventEmitter.prototype.listeners = function (_event) {};
+events.EventEmitter.prototype.listeners = function(event) {};
 
 /**
  * @param {string} event
  * @param {...*} args
  * @return {boolean}
  */
-events.EventEmitter.prototype.emit = function (_event, _args) {};
+events.EventEmitter.prototype.emit = function(event, args) {};
 
 /**
  * @return {Array<string>}
  */
-events.EventEmitter.prototype.eventNames = function () {};
+events.EventEmitter.prototype.eventNames = function() {};
 
 /**
  * @param {string} type
  * @return {number}
  */
-events.EventEmitter.prototype.listenerCount = function (_type) {};
+events.EventEmitter.prototype.listenerCount = function(type) {};
 
 module.exports = events;
+

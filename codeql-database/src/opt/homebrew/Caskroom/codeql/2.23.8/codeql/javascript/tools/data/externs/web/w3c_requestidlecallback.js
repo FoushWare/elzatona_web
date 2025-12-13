@@ -22,12 +22,14 @@
  * @externs
  */
 
+
 /**
  * @typedef {{
  *   timeout: (number|undefined)
  * }}
  */
-var _IdleCallbackOptions;
+var IdleCallbackOptions;
+
 
 /**
  * Schedules a callback to run when the browser is idle.
@@ -36,7 +38,8 @@ var _IdleCallbackOptions;
  *     it must execute the callback. No timeout enforced otherwise.
  * @return {number} A handle that can be used to cancel the scheduled callback.
  */
-function _requestIdleCallback(_callback, _opt_options) {}
+function requestIdleCallback(callback, opt_options) {}
+
 
 /**
  * Cancels a callback scheduled to run when the browser is idle.
@@ -44,7 +47,9 @@ function _requestIdleCallback(_callback, _opt_options) {}
  *     the scheduled callback to cancel.
  * @return {undefined}
  */
-function _cancelIdleCallback(_handle) {}
+function cancelIdleCallback(handle) {}
+
+
 
 /**
  * An interface for an object passed into the callback for
@@ -54,11 +59,13 @@ function _cancelIdleCallback(_handle) {}
  */
 function IdleDeadline() {}
 
+
 /**
  * @return {number} The amount of idle time (milliseconds) remaining in the
  *     current time slice. Will always be positive or 0.
  */
-IdleDeadline.prototype.timeRemaining = function () {};
+IdleDeadline.prototype.timeRemaining = function() {};
+
 
 /**
  * Whether the callback was forced to run due to a timeout. Specifically,

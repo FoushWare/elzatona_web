@@ -143,7 +143,7 @@ export function getDefaultAdminSections(): Array<{
   }));
 }
 
-export default {
+const learningPathMapping = {
   getLearningPathByTitle,
   getLearningPathById,
   getAllLearningPathMappings,
@@ -151,3 +151,5 @@ export default {
   learningPathIdToSectionName,
   getDefaultAdminSections,
 };
+
+export default learningPathMapping;

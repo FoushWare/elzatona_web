@@ -31,32 +31,32 @@ var Intl = {};
  *         opt_options
  * @constructor
  */
-Intl.v8BreakIterator = function (_opt_locales, _opt_options) {};
+Intl.v8BreakIterator = function(opt_locales, opt_options) {};
 
 /**
  * @param {string} text
  */
-Intl.v8BreakIterator.prototype.adoptText = function (_text) {};
+Intl.v8BreakIterator.prototype.adoptText = function(text) {};
 
 /**
  * @return {string}
  */
-Intl.v8BreakIterator.prototype.breakType = function () {};
+Intl.v8BreakIterator.prototype.breakType = function() {};
 
 /**
  * @return {number}
  */
-Intl.v8BreakIterator.prototype.current = function () {};
+Intl.v8BreakIterator.prototype.current = function() {};
 
 /**
  * @return {number}
  */
-Intl.v8BreakIterator.prototype.first = function () {};
+Intl.v8BreakIterator.prototype.first = function() {};
 
 /**
  * @return {number}
  */
-Intl.v8BreakIterator.prototype.next = function () {};
+Intl.v8BreakIterator.prototype.next = function() {};
 
 /**
  * @constructor
@@ -66,27 +66,27 @@ Intl.v8BreakIterator.prototype.next = function () {};
  *     numeric: (boolean|undefined), caseFirst: (string|undefined)}=}
  *         opt_options
  */
-Intl.Collator = function (_opt_locales, _opt_options) {};
+Intl.Collator = function(opt_locales, opt_options) {};
 
 /**
  * @param {Array.<string>} locales
  * @param {{localeMatcher: (string|undefined)}=} opt_options
  */
-Intl.Collator.supportedLocalesOf = function (_locales, _opt_options) {};
+Intl.Collator.supportedLocalesOf = function(locales, opt_options) {};
 
 /**
  * @param {string} arg1
  * @param {string} arg2
  * @return {number}
  */
-Intl.Collator.prototype.compare = function (_arg1, _arg2) {};
+Intl.Collator.prototype.compare = function(arg1, arg2) {};
 
 /**
  * @return {{locale: string, usage: string, sensitivity: string,
  *     ignorePunctuation: boolean, collation: string, numeric: boolean,
  *     caseFirst: string}}
  */
-Intl.Collator.prototype.resolvedOptions = function () {};
+Intl.Collator.prototype.resolvedOptions = function() {};
 
 /**
  * @constructor
@@ -101,19 +101,19 @@ Intl.Collator.prototype.resolvedOptions = function () {};
  *     maximumSignificantDigits: (number|undefined)}=}
  *         opt_options
  */
-Intl.NumberFormat = function (_opt_locales, _opt_options) {};
+Intl.NumberFormat = function(opt_locales, opt_options) {};
 
 /**
  * @param {Array.<string>} locales
  * @param {{localeMatcher: (string|undefined)}=} opt_options
  */
-Intl.NumberFormat.supportedLocalesOf = function (_locales, _opt_options) {};
+Intl.NumberFormat.supportedLocalesOf = function(locales, opt_options) {};
 
 /**
  * @param {number} num
  * @return {string}
  */
-Intl.NumberFormat.prototype.format = function (_num) {};
+Intl.NumberFormat.prototype.format = function(num) {};
 
 /**
  * @return {{locale: string, numberingSystem: string, style: string,
@@ -122,7 +122,7 @@ Intl.NumberFormat.prototype.format = function (_num) {};
  *     maximumFractionDigits: number, minimumSignificantDigits: number,
  *     maximumSignificantDigits: number, useGrouping: boolean}}
  */
-Intl.NumberFormat.prototype.resolvedOptions = function () {};
+Intl.NumberFormat.prototype.resolvedOptions = function() {};
 
 /**
  * @constructor
@@ -137,19 +137,19 @@ Intl.NumberFormat.prototype.resolvedOptions = function () {};
  *    timeZoneName: (string|undefined), hour12: (boolean|undefined)}=}
  *        opt_options
  */
-Intl.DateTimeFormat = function (_opt_locales, _opt_options) {};
+Intl.DateTimeFormat = function(opt_locales, opt_options) {};
 
 /**
  * @param {Array.<string>} locales
  * @param {{localeMatcher: string}=} opt_options
  */
-Intl.DateTimeFormat.supportedLocalesOf = function (_locales, _opt_options) {};
+Intl.DateTimeFormat.supportedLocalesOf = function(locales, opt_options) {};
 
 /**
  * @param {number} date
  * @return {string}
  */
-Intl.DateTimeFormat.prototype.format = function (_date) {};
+Intl.DateTimeFormat.prototype.format = function(date) {};
 
 /**
  * @return {{locale: string, calendar: string, numberingSystem: string,
@@ -160,4 +160,4 @@ Intl.DateTimeFormat.prototype.format = function (_date) {};
  *    second: (string|undefined), timeZoneName: (string|undefined),
  *    hour12: (boolean|undefined)}}
  */
-Intl.DateTimeFormat.prototype.resolvedOptions = function () {};
+Intl.DateTimeFormat.prototype.resolvedOptions = function() {};

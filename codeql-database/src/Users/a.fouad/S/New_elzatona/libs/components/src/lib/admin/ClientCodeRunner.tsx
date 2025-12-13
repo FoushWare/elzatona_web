@@ -49,7 +49,7 @@ export default function ClientCodeRunner({
     };
     const handleCustom = (e: MessageEvent) => {
       // SECURITY: Verify message origin to prevent XSS
-      if (e.origin !== window.location.origin) {
+      if (e.origin !== globalThis.window.location.origin) {
         console.warn("Received message from untrusted origin:", e.origin);
         return;
       }

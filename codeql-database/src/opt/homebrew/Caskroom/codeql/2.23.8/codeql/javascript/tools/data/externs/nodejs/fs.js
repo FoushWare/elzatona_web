@@ -49,37 +49,37 @@ function Stats() {}
 /**
  * @return {boolean}
  */
-Stats.prototype.isFile = function () {};
+Stats.prototype.isFile = function() {};
 
 /**
  * @return {boolean}
  */
-Stats.prototype.isDirectory = function () {};
+Stats.prototype.isDirectory = function() {};
 
 /**
  * @return {boolean}
  */
-Stats.prototype.isBlockDevice = function () {};
+Stats.prototype.isBlockDevice = function() {};
 
 /**
  * @return {boolean}
  */
-Stats.prototype.isCharacterDevice = function () {};
+Stats.prototype.isCharacterDevice = function() {};
 
 /**
  * @return {boolean}
  */
-Stats.prototype.isSymbolicLink = function () {};
+Stats.prototype.isSymbolicLink = function() {};
 
 /**
  * @return {boolean}
  */
-Stats.prototype.isFIFO = function () {};
+Stats.prototype.isFIFO = function() {};
 
 /**
  * @return {boolean}
  */
-Stats.prototype.isSocket = function () {};
+Stats.prototype.isSocket = function() {};
 
 /**
  * @type {number}
@@ -160,244 +160,244 @@ function FSWatcher() {}
 /**
  * @return {void}
  */
-FSWatcher.prototype.close = function () {};
+FSWatcher.prototype.close = function() {};
 
 /**
  * @param {string} event
  * @param {Function} listener
  * @return {*}
  */
-FSWatcher.prototype.addListener = function (_event, _listener) {};
+FSWatcher.prototype.addListener = function(event, listener) {};
 
 /**
  * @param {string} event
  * @param {(function(string, (string|Buffer)): void)} listener
  * @return {*}
  */
-FSWatcher.prototype.addListener = function (_event, _listener) {};
+FSWatcher.prototype.addListener = function(event, listener) {};
 
 /**
  * @param {string} event
  * @param {(function(number, string): void)} listener
  * @return {*}
  */
-FSWatcher.prototype.addListener = function (_event, _listener) {};
+FSWatcher.prototype.addListener = function(event, listener) {};
 
 /**
  * @param {string} event
  * @param {Function} listener
  * @return {*}
  */
-FSWatcher.prototype.on = function (_event, _listener) {};
+FSWatcher.prototype.on = function(event, listener) {};
 
 /**
  * @param {string} event
  * @param {(function(string, (string|Buffer)): void)} listener
  * @return {*}
  */
-FSWatcher.prototype.on = function (_event, _listener) {};
+FSWatcher.prototype.on = function(event, listener) {};
 
 /**
  * @param {string} event
  * @param {(function(number, string): void)} listener
  * @return {*}
  */
-FSWatcher.prototype.on = function (_event, _listener) {};
+FSWatcher.prototype.on = function(event, listener) {};
 
 /**
  * @param {string} event
  * @param {Function} listener
  * @return {*}
  */
-FSWatcher.prototype.once = function (_event, _listener) {};
+FSWatcher.prototype.once = function(event, listener) {};
 
 /**
  * @param {string} event
  * @param {(function(string, (string|Buffer)): void)} listener
  * @return {*}
  */
-FSWatcher.prototype.once = function (_event, _listener) {};
+FSWatcher.prototype.once = function(event, listener) {};
 
 /**
  * @param {string} event
  * @param {(function(number, string): void)} listener
  * @return {*}
  */
-FSWatcher.prototype.once = function (_event, _listener) {};
+FSWatcher.prototype.once = function(event, listener) {};
 
 /**
  * @param {string} event
  * @param {Function} listener
  * @return {*}
  */
-FSWatcher.prototype.prependListener = function (_event, _listener) {};
+FSWatcher.prototype.prependListener = function(event, listener) {};
 
 /**
  * @param {string} event
  * @param {(function(string, (string|Buffer)): void)} listener
  * @return {*}
  */
-FSWatcher.prototype.prependListener = function (_event, _listener) {};
+FSWatcher.prototype.prependListener = function(event, listener) {};
 
 /**
  * @param {string} event
  * @param {(function(number, string): void)} listener
  * @return {*}
  */
-FSWatcher.prototype.prependListener = function (_event, _listener) {};
+FSWatcher.prototype.prependListener = function(event, listener) {};
 
 /**
  * @param {string} event
  * @param {Function} listener
  * @return {*}
  */
-FSWatcher.prototype.prependOnceListener = function (_event, _listener) {};
+FSWatcher.prototype.prependOnceListener = function(event, listener) {};
 
 /**
  * @param {string} event
  * @param {(function(string, (string|Buffer)): void)} listener
  * @return {*}
  */
-FSWatcher.prototype.prependOnceListener = function (_event, _listener) {};
+FSWatcher.prototype.prependOnceListener = function(event, listener) {};
 
 /**
  * @param {string} event
  * @param {(function(number, string): void)} listener
  * @return {*}
  */
-FSWatcher.prototype.prependOnceListener = function (_event, _listener) {};
+FSWatcher.prototype.prependOnceListener = function(event, listener) {};
 
 /**
  * @interface
  * @extends {internal.Readable}
  */
-fs.ReadStream = function () {};
+fs.ReadStream = function() {};
 
 /**
  * @return {void}
  */
-fs.ReadStream.prototype.close = function () {};
+fs.ReadStream.prototype.close = function() {};
 
 /**
  * @return {void}
  */
-fs.ReadStream.prototype.destroy = function () {};
+fs.ReadStream.prototype.destroy = function() {};
 
 /**
  * @param {string} event
  * @param {Function} listener
  * @return {*}
  */
-fs.ReadStream.prototype.addListener = function (_event, _listener) {};
+fs.ReadStream.prototype.addListener = function(event, listener) {};
 
 /**
  * @param {string} event
  * @param {(function(number): void)} listener
  * @return {*}
  */
-fs.ReadStream.prototype.addListener = function (_event, _listener) {};
+fs.ReadStream.prototype.addListener = function(event, listener) {};
 
 /**
  * @param {string} event
  * @param {(function(): void)} listener
  * @return {*}
  */
-fs.ReadStream.prototype.addListener = function (_event, _listener) {};
+fs.ReadStream.prototype.addListener = function(event, listener) {};
 
 /**
  * @param {string} event
  * @param {Function} listener
  * @return {*}
  */
-fs.ReadStream.prototype.on = function (_event, _listener) {};
+fs.ReadStream.prototype.on = function(event, listener) {};
 
 /**
  * @param {string} event
  * @param {(function(number): void)} listener
  * @return {*}
  */
-fs.ReadStream.prototype.on = function (_event, _listener) {};
+fs.ReadStream.prototype.on = function(event, listener) {};
 
 /**
  * @param {string} event
  * @param {(function(): void)} listener
  * @return {*}
  */
-fs.ReadStream.prototype.on = function (_event, _listener) {};
+fs.ReadStream.prototype.on = function(event, listener) {};
 
 /**
  * @param {string} event
  * @param {Function} listener
  * @return {*}
  */
-fs.ReadStream.prototype.once = function (_event, _listener) {};
+fs.ReadStream.prototype.once = function(event, listener) {};
 
 /**
  * @param {string} event
  * @param {(function(number): void)} listener
  * @return {*}
  */
-fs.ReadStream.prototype.once = function (_event, _listener) {};
+fs.ReadStream.prototype.once = function(event, listener) {};
 
 /**
  * @param {string} event
  * @param {(function(): void)} listener
  * @return {*}
  */
-fs.ReadStream.prototype.once = function (_event, _listener) {};
+fs.ReadStream.prototype.once = function(event, listener) {};
 
 /**
  * @param {string} event
  * @param {Function} listener
  * @return {*}
  */
-fs.ReadStream.prototype.prependListener = function (_event, _listener) {};
+fs.ReadStream.prototype.prependListener = function(event, listener) {};
 
 /**
  * @param {string} event
  * @param {(function(number): void)} listener
  * @return {*}
  */
-fs.ReadStream.prototype.prependListener = function (_event, _listener) {};
+fs.ReadStream.prototype.prependListener = function(event, listener) {};
 
 /**
  * @param {string} event
  * @param {(function(): void)} listener
  * @return {*}
  */
-fs.ReadStream.prototype.prependListener = function (_event, _listener) {};
+fs.ReadStream.prototype.prependListener = function(event, listener) {};
 
 /**
  * @param {string} event
  * @param {Function} listener
  * @return {*}
  */
-fs.ReadStream.prototype.prependOnceListener = function (_event, _listener) {};
+fs.ReadStream.prototype.prependOnceListener = function(event, listener) {};
 
 /**
  * @param {string} event
  * @param {(function(number): void)} listener
  * @return {*}
  */
-fs.ReadStream.prototype.prependOnceListener = function (_event, _listener) {};
+fs.ReadStream.prototype.prependOnceListener = function(event, listener) {};
 
 /**
  * @param {string} event
  * @param {(function(): void)} listener
  * @return {*}
  */
-fs.ReadStream.prototype.prependOnceListener = function (_event, _listener) {};
+fs.ReadStream.prototype.prependOnceListener = function(event, listener) {};
 
 /**
  * @interface
  * @extends {internal.Writable}
  */
-fs.WriteStream = function () {};
+fs.WriteStream = function() {};
 
 /**
  * @return {void}
  */
-fs.WriteStream.prototype.close = function () {};
+fs.WriteStream.prototype.close = function() {};
 
 /**
  * @type {number}
@@ -414,105 +414,105 @@ fs.WriteStream.prototype.path;
  * @param {Function} listener
  * @return {*}
  */
-fs.WriteStream.prototype.addListener = function (_event, _listener) {};
+fs.WriteStream.prototype.addListener = function(event, listener) {};
 
 /**
  * @param {string} event
  * @param {(function(number): void)} listener
  * @return {*}
  */
-fs.WriteStream.prototype.addListener = function (_event, _listener) {};
+fs.WriteStream.prototype.addListener = function(event, listener) {};
 
 /**
  * @param {string} event
  * @param {(function(): void)} listener
  * @return {*}
  */
-fs.WriteStream.prototype.addListener = function (_event, _listener) {};
+fs.WriteStream.prototype.addListener = function(event, listener) {};
 
 /**
  * @param {string} event
  * @param {Function} listener
  * @return {*}
  */
-fs.WriteStream.prototype.on = function (_event, _listener) {};
+fs.WriteStream.prototype.on = function(event, listener) {};
 
 /**
  * @param {string} event
  * @param {(function(number): void)} listener
  * @return {*}
  */
-fs.WriteStream.prototype.on = function (_event, _listener) {};
+fs.WriteStream.prototype.on = function(event, listener) {};
 
 /**
  * @param {string} event
  * @param {(function(): void)} listener
  * @return {*}
  */
-fs.WriteStream.prototype.on = function (_event, _listener) {};
+fs.WriteStream.prototype.on = function(event, listener) {};
 
 /**
  * @param {string} event
  * @param {Function} listener
  * @return {*}
  */
-fs.WriteStream.prototype.once = function (_event, _listener) {};
+fs.WriteStream.prototype.once = function(event, listener) {};
 
 /**
  * @param {string} event
  * @param {(function(number): void)} listener
  * @return {*}
  */
-fs.WriteStream.prototype.once = function (_event, _listener) {};
+fs.WriteStream.prototype.once = function(event, listener) {};
 
 /**
  * @param {string} event
  * @param {(function(): void)} listener
  * @return {*}
  */
-fs.WriteStream.prototype.once = function (_event, _listener) {};
+fs.WriteStream.prototype.once = function(event, listener) {};
 
 /**
  * @param {string} event
  * @param {Function} listener
  * @return {*}
  */
-fs.WriteStream.prototype.prependListener = function (_event, _listener) {};
+fs.WriteStream.prototype.prependListener = function(event, listener) {};
 
 /**
  * @param {string} event
  * @param {(function(number): void)} listener
  * @return {*}
  */
-fs.WriteStream.prototype.prependListener = function (_event, _listener) {};
+fs.WriteStream.prototype.prependListener = function(event, listener) {};
 
 /**
  * @param {string} event
  * @param {(function(): void)} listener
  * @return {*}
  */
-fs.WriteStream.prototype.prependListener = function (_event, _listener) {};
+fs.WriteStream.prototype.prependListener = function(event, listener) {};
 
 /**
  * @param {string} event
  * @param {Function} listener
  * @return {*}
  */
-fs.WriteStream.prototype.prependOnceListener = function (_event, _listener) {};
+fs.WriteStream.prototype.prependOnceListener = function(event, listener) {};
 
 /**
  * @param {string} event
  * @param {(function(number): void)} listener
  * @return {*}
  */
-fs.WriteStream.prototype.prependOnceListener = function (_event, _listener) {};
+fs.WriteStream.prototype.prependOnceListener = function(event, listener) {};
 
 /**
  * @param {string} event
  * @param {(function(): void)} listener
  * @return {*}
  */
-fs.WriteStream.prototype.prependOnceListener = function (_event, _listener) {};
+fs.WriteStream.prototype.prependOnceListener = function(event, listener) {};
 
 /**
  * @param {string} oldPath
@@ -520,21 +520,21 @@ fs.WriteStream.prototype.prependOnceListener = function (_event, _listener) {};
  * @param {(function(NodeJS.ErrnoException=): void)=} callback
  * @return {void}
  */
-fs.rename = function (_oldPath, _newPath, _callback) {};
+fs.rename = function(oldPath, newPath, callback) {};
 
 /**
  * @param {string} oldPath
  * @param {string} newPath
  * @return {void}
  */
-fs.renameSync = function (_oldPath, _newPath) {};
+fs.renameSync = function(oldPath, newPath) {};
 
 /**
  * @param {(string|Buffer)} path
  * @param {(function(NodeJS.ErrnoException=): void)=} callback
  * @return {void}
  */
-fs.truncate = function (_path, _callback) {};
+fs.truncate = function(path, callback) {};
 
 /**
  * @param {(string|Buffer)} path
@@ -542,21 +542,21 @@ fs.truncate = function (_path, _callback) {};
  * @param {(function(NodeJS.ErrnoException=): void)=} callback
  * @return {void}
  */
-fs.truncate = function (_path, _len, _callback) {};
+fs.truncate = function(path, len, callback) {};
 
 /**
  * @param {(string|Buffer)} path
  * @param {number=} len
  * @return {void}
  */
-fs.truncateSync = function (_path, _len) {};
+fs.truncateSync = function(path, len) {};
 
 /**
  * @param {number} fd
  * @param {(function(NodeJS.ErrnoException=): void)=} callback
  * @return {void}
  */
-fs.ftruncate = function (_fd, _callback) {};
+fs.ftruncate = function(fd, callback) {};
 
 /**
  * @param {number} fd
@@ -564,14 +564,14 @@ fs.ftruncate = function (_fd, _callback) {};
  * @param {(function(NodeJS.ErrnoException=): void)=} callback
  * @return {void}
  */
-fs.ftruncate = function (_fd, _len, _callback) {};
+fs.ftruncate = function(fd, len, callback) {};
 
 /**
  * @param {number} fd
  * @param {number=} len
  * @return {void}
  */
-fs.ftruncateSync = function (_fd, _len) {};
+fs.ftruncateSync = function(fd, len) {};
 
 /**
  * @param {(string|Buffer)} path
@@ -580,7 +580,7 @@ fs.ftruncateSync = function (_fd, _len) {};
  * @param {(function(NodeJS.ErrnoException=): void)=} callback
  * @return {void}
  */
-fs.chown = function (_path, _uid, _gid, _callback) {};
+fs.chown = function(path, uid, gid, callback) {};
 
 /**
  * @param {(string|Buffer)} path
@@ -588,7 +588,7 @@ fs.chown = function (_path, _uid, _gid, _callback) {};
  * @param {number} gid
  * @return {void}
  */
-fs.chownSync = function (_path, _uid, _gid) {};
+fs.chownSync = function(path, uid, gid) {};
 
 /**
  * @param {number} fd
@@ -597,7 +597,7 @@ fs.chownSync = function (_path, _uid, _gid) {};
  * @param {(function(NodeJS.ErrnoException=): void)=} callback
  * @return {void}
  */
-fs.fchown = function (_fd, _uid, _gid, _callback) {};
+fs.fchown = function(fd, uid, gid, callback) {};
 
 /**
  * @param {number} fd
@@ -605,7 +605,7 @@ fs.fchown = function (_fd, _uid, _gid, _callback) {};
  * @param {number} gid
  * @return {void}
  */
-fs.fchownSync = function (_fd, _uid, _gid) {};
+fs.fchownSync = function(fd, uid, gid) {};
 
 /**
  * @param {(string|Buffer)} path
@@ -614,7 +614,7 @@ fs.fchownSync = function (_fd, _uid, _gid) {};
  * @param {(function(NodeJS.ErrnoException=): void)=} callback
  * @return {void}
  */
-fs.lchown = function (_path, _uid, _gid, _callback) {};
+fs.lchown = function(path, uid, gid, callback) {};
 
 /**
  * @param {(string|Buffer)} path
@@ -622,7 +622,7 @@ fs.lchown = function (_path, _uid, _gid, _callback) {};
  * @param {number} gid
  * @return {void}
  */
-fs.lchownSync = function (_path, _uid, _gid) {};
+fs.lchownSync = function(path, uid, gid) {};
 
 /**
  * @param {(string|Buffer)} path
@@ -630,7 +630,7 @@ fs.lchownSync = function (_path, _uid, _gid) {};
  * @param {(function(NodeJS.ErrnoException=): void)=} callback
  * @return {void}
  */
-fs.chmod = function (_path, _mode, _callback) {};
+fs.chmod = function(path, mode, callback) {};
 
 /**
  * @param {(string|Buffer)} path
@@ -638,21 +638,21 @@ fs.chmod = function (_path, _mode, _callback) {};
  * @param {(function(NodeJS.ErrnoException=): void)=} callback
  * @return {void}
  */
-fs.chmod = function (_path, _mode, _callback) {};
+fs.chmod = function(path, mode, callback) {};
 
 /**
  * @param {(string|Buffer)} path
  * @param {number} mode
  * @return {void}
  */
-fs.chmodSync = function (_path, _mode) {};
+fs.chmodSync = function(path, mode) {};
 
 /**
  * @param {(string|Buffer)} path
  * @param {string} mode
  * @return {void}
  */
-fs.chmodSync = function (_path, _mode) {};
+fs.chmodSync = function(path, mode) {};
 
 /**
  * @param {number} fd
@@ -660,7 +660,7 @@ fs.chmodSync = function (_path, _mode) {};
  * @param {(function(NodeJS.ErrnoException=): void)=} callback
  * @return {void}
  */
-fs.fchmod = function (_fd, _mode, _callback) {};
+fs.fchmod = function(fd, mode, callback) {};
 
 /**
  * @param {number} fd
@@ -668,21 +668,21 @@ fs.fchmod = function (_fd, _mode, _callback) {};
  * @param {(function(NodeJS.ErrnoException=): void)=} callback
  * @return {void}
  */
-fs.fchmod = function (_fd, _mode, _callback) {};
+fs.fchmod = function(fd, mode, callback) {};
 
 /**
  * @param {number} fd
  * @param {number} mode
  * @return {void}
  */
-fs.fchmodSync = function (_fd, _mode) {};
+fs.fchmodSync = function(fd, mode) {};
 
 /**
  * @param {number} fd
  * @param {string} mode
  * @return {void}
  */
-fs.fchmodSync = function (_fd, _mode) {};
+fs.fchmodSync = function(fd, mode) {};
 
 /**
  * @param {(string|Buffer)} path
@@ -690,7 +690,7 @@ fs.fchmodSync = function (_fd, _mode) {};
  * @param {(function(NodeJS.ErrnoException=): void)=} callback
  * @return {void}
  */
-fs.lchmod = function (_path, _mode, _callback) {};
+fs.lchmod = function(path, mode, callback) {};
 
 /**
  * @param {(string|Buffer)} path
@@ -698,60 +698,60 @@ fs.lchmod = function (_path, _mode, _callback) {};
  * @param {(function(NodeJS.ErrnoException=): void)=} callback
  * @return {void}
  */
-fs.lchmod = function (_path, _mode, _callback) {};
+fs.lchmod = function(path, mode, callback) {};
 
 /**
  * @param {(string|Buffer)} path
  * @param {number} mode
  * @return {void}
  */
-fs.lchmodSync = function (_path, _mode) {};
+fs.lchmodSync = function(path, mode) {};
 
 /**
  * @param {(string|Buffer)} path
  * @param {string} mode
  * @return {void}
  */
-fs.lchmodSync = function (_path, _mode) {};
+fs.lchmodSync = function(path, mode) {};
 
 /**
  * @param {(string|Buffer)} path
  * @param {(function(NodeJS.ErrnoException, fs.Stats): *)=} callback
  * @return {void}
  */
-fs.stat = function (_path, _callback) {};
+fs.stat = function(path, callback) {};
 
 /**
  * @param {(string|Buffer)} path
  * @param {(function(NodeJS.ErrnoException, fs.Stats): *)=} callback
  * @return {void}
  */
-fs.lstat = function (_path, _callback) {};
+fs.lstat = function(path, callback) {};
 
 /**
  * @param {number} fd
  * @param {(function(NodeJS.ErrnoException, fs.Stats): *)=} callback
  * @return {void}
  */
-fs.fstat = function (_fd, _callback) {};
+fs.fstat = function(fd, callback) {};
 
 /**
  * @param {(string|Buffer)} path
  * @return {fs.Stats}
  */
-fs.statSync = function (_path) {};
+fs.statSync = function(path) {};
 
 /**
  * @param {(string|Buffer)} path
  * @return {fs.Stats}
  */
-fs.lstatSync = function (_path) {};
+fs.lstatSync = function(path) {};
 
 /**
  * @param {number} fd
  * @return {fs.Stats}
  */
-fs.fstatSync = function (_fd) {};
+fs.fstatSync = function(fd) {};
 
 /**
  * @param {(string|Buffer)} srcpath
@@ -759,14 +759,14 @@ fs.fstatSync = function (_fd) {};
  * @param {(function(NodeJS.ErrnoException=): void)=} callback
  * @return {void}
  */
-fs.link = function (_srcpath, _dstpath, _callback) {};
+fs.link = function(srcpath, dstpath, callback) {};
 
 /**
  * @param {(string|Buffer)} srcpath
  * @param {(string|Buffer)} dstpath
  * @return {void}
  */
-fs.linkSync = function (_srcpath, _dstpath) {};
+fs.linkSync = function(srcpath, dstpath) {};
 
 /**
  * @param {(string|Buffer)} srcpath
@@ -775,7 +775,7 @@ fs.linkSync = function (_srcpath, _dstpath) {};
  * @param {(function(NodeJS.ErrnoException=): void)=} callback
  * @return {void}
  */
-fs.symlink = function (_srcpath, _dstpath, _type, _callback) {};
+fs.symlink = function(srcpath, dstpath, type, callback) {};
 
 /**
  * @param {(string|Buffer)} srcpath
@@ -783,27 +783,27 @@ fs.symlink = function (_srcpath, _dstpath, _type, _callback) {};
  * @param {string=} type
  * @return {void}
  */
-fs.symlinkSync = function (_srcpath, _dstpath, _type) {};
+fs.symlinkSync = function(srcpath, dstpath, type) {};
 
 /**
  * @param {(string|Buffer)} path
  * @param {(function(NodeJS.ErrnoException, string): *)=} callback
  * @return {void}
  */
-fs.readlink = function (_path, _callback) {};
+fs.readlink = function(path, callback) {};
 
 /**
  * @param {(string|Buffer)} path
  * @return {string}
  */
-fs.readlinkSync = function (_path) {};
+fs.readlinkSync = function(path) {};
 
 /**
  * @param {(string|Buffer)} path
  * @param {(function(NodeJS.ErrnoException, string): *)=} callback
  * @return {void}
  */
-fs.realpath = function (_path, _callback) {};
+fs.realpath = function(path, callback) {};
 
 /**
  * @param {(string|Buffer)} path
@@ -811,47 +811,47 @@ fs.realpath = function (_path, _callback) {};
  * @param {(function(NodeJS.ErrnoException, string): *)} callback
  * @return {void}
  */
-fs.realpath = function (_path, _cache, _callback) {};
+fs.realpath = function(path, cache, callback) {};
 
 /**
  * @param {(string|Buffer)} path
  * @param {Object<string,string>=} cache
  * @return {string}
  */
-fs.realpathSync = function (_path, _cache) {};
+fs.realpathSync = function(path, cache) {};
 
 /**
  * @param {(string|Buffer)} path
  * @param {(function(NodeJS.ErrnoException=): void)=} callback
  * @return {void}
  */
-fs.unlink = function (_path, _callback) {};
+fs.unlink = function(path, callback) {};
 
 /**
  * @param {(string|Buffer)} path
  * @return {void}
  */
-fs.unlinkSync = function (_path) {};
-
-/**
- * @param {(string|Buffer)} path
- * @param {(function(NodeJS.ErrnoException=): void)=} callback
- * @return {void}
- */
-fs.rmdir = function (_path, _callback) {};
-
-/**
- * @param {(string|Buffer)} path
- * @return {void}
- */
-fs.rmdirSync = function (_path) {};
+fs.unlinkSync = function(path) {};
 
 /**
  * @param {(string|Buffer)} path
  * @param {(function(NodeJS.ErrnoException=): void)=} callback
  * @return {void}
  */
-fs.mkdir = function (_path, _callback) {};
+fs.rmdir = function(path, callback) {};
+
+/**
+ * @param {(string|Buffer)} path
+ * @return {void}
+ */
+fs.rmdirSync = function(path) {};
+
+/**
+ * @param {(string|Buffer)} path
+ * @param {(function(NodeJS.ErrnoException=): void)=} callback
+ * @return {void}
+ */
+fs.mkdir = function(path, callback) {};
 
 /**
  * @param {(string|Buffer)} path
@@ -859,7 +859,7 @@ fs.mkdir = function (_path, _callback) {};
  * @param {(function(NodeJS.ErrnoException=): void)=} callback
  * @return {void}
  */
-fs.mkdir = function (_path, _mode, _callback) {};
+fs.mkdir = function(path, mode, callback) {};
 
 /**
  * @param {(string|Buffer)} path
@@ -867,60 +867,60 @@ fs.mkdir = function (_path, _mode, _callback) {};
  * @param {(function(NodeJS.ErrnoException=): void)=} callback
  * @return {void}
  */
-fs.mkdir = function (_path, _mode, _callback) {};
+fs.mkdir = function(path, mode, callback) {};
 
 /**
  * @param {(string|Buffer)} path
  * @param {number=} mode
  * @return {void}
  */
-fs.mkdirSync = function (_path, _mode) {};
+fs.mkdirSync = function(path, mode) {};
 
 /**
  * @param {(string|Buffer)} path
  * @param {string=} mode
  * @return {void}
  */
-fs.mkdirSync = function (_path, _mode) {};
+fs.mkdirSync = function(path, mode) {};
 
 /**
  * @param {string} prefix
  * @param {(function(NodeJS.ErrnoException, string): void)=} callback
  * @return {void}
  */
-fs.mkdtemp = function (_prefix, _callback) {};
+fs.mkdtemp = function(prefix, callback) {};
 
 /**
  * @param {string} prefix
  * @return {string}
  */
-fs.mkdtempSync = function (_prefix) {};
+fs.mkdtempSync = function(prefix) {};
 
 /**
  * @param {(string|Buffer)} path
  * @param {(function(NodeJS.ErrnoException, Array<string>): void)=} callback
  * @return {void}
  */
-fs.readdir = function (_path, _callback) {};
+fs.readdir = function(path, callback) {};
 
 /**
  * @param {(string|Buffer)} path
  * @return {Array<string>}
  */
-fs.readdirSync = function (_path) {};
+fs.readdirSync = function(path) {};
 
 /**
  * @param {number} fd
  * @param {(function(NodeJS.ErrnoException=): void)=} callback
  * @return {void}
  */
-fs.close = function (_fd, _callback) {};
+fs.close = function(fd, callback) {};
 
 /**
  * @param {number} fd
  * @return {void}
  */
-fs.closeSync = function (_fd) {};
+fs.closeSync = function(fd) {};
 
 /**
  * @param {(string|Buffer)} path
@@ -928,7 +928,7 @@ fs.closeSync = function (_fd) {};
  * @param {(function(NodeJS.ErrnoException, number): void)} callback
  * @return {void}
  */
-fs.open = function (_path, _flags, _callback) {};
+fs.open = function(path, flags, callback) {};
 
 /**
  * @param {(string|Buffer)} path
@@ -937,7 +937,7 @@ fs.open = function (_path, _flags, _callback) {};
  * @param {(function(NodeJS.ErrnoException, number): void)} callback
  * @return {void}
  */
-fs.open = function (_path, _flags, _mode, _callback) {};
+fs.open = function(path, flags, mode, callback) {};
 
 /**
  * @param {(string|Buffer)} path
@@ -945,7 +945,7 @@ fs.open = function (_path, _flags, _mode, _callback) {};
  * @param {number=} mode
  * @return {number}
  */
-fs.openSync = function (_path, _flags, _mode) {};
+fs.openSync = function(path, flags, mode) {};
 
 /**
  * @param {(string|Buffer)} path
@@ -954,7 +954,7 @@ fs.openSync = function (_path, _flags, _mode) {};
  * @param {(function(NodeJS.ErrnoException=): void)=} callback
  * @return {void}
  */
-fs.utimes = function (_path, _atime, _mtime, _callback) {};
+fs.utimes = function(path, atime, mtime, callback) {};
 
 /**
  * @param {(string|Buffer)} path
@@ -963,7 +963,7 @@ fs.utimes = function (_path, _atime, _mtime, _callback) {};
  * @param {(function(NodeJS.ErrnoException=): void)=} callback
  * @return {void}
  */
-fs.utimes = function (_path, _atime, _mtime, _callback) {};
+fs.utimes = function(path, atime, mtime, callback) {};
 
 /**
  * @param {(string|Buffer)} path
@@ -971,7 +971,7 @@ fs.utimes = function (_path, _atime, _mtime, _callback) {};
  * @param {number} mtime
  * @return {void}
  */
-fs.utimesSync = function (_path, _atime, _mtime) {};
+fs.utimesSync = function(path, atime, mtime) {};
 
 /**
  * @param {(string|Buffer)} path
@@ -979,7 +979,7 @@ fs.utimesSync = function (_path, _atime, _mtime) {};
  * @param {Date} mtime
  * @return {void}
  */
-fs.utimesSync = function (_path, _atime, _mtime) {};
+fs.utimesSync = function(path, atime, mtime) {};
 
 /**
  * @param {number} fd
@@ -988,7 +988,7 @@ fs.utimesSync = function (_path, _atime, _mtime) {};
  * @param {(function(NodeJS.ErrnoException=): void)=} callback
  * @return {void}
  */
-fs.futimes = function (_fd, _atime, _mtime, _callback) {};
+fs.futimes = function(fd, atime, mtime, callback) {};
 
 /**
  * @param {number} fd
@@ -997,7 +997,7 @@ fs.futimes = function (_fd, _atime, _mtime, _callback) {};
  * @param {(function(NodeJS.ErrnoException=): void)=} callback
  * @return {void}
  */
-fs.futimes = function (_fd, _atime, _mtime, _callback) {};
+fs.futimes = function(fd, atime, mtime, callback) {};
 
 /**
  * @param {number} fd
@@ -1005,7 +1005,7 @@ fs.futimes = function (_fd, _atime, _mtime, _callback) {};
  * @param {number} mtime
  * @return {void}
  */
-fs.futimesSync = function (_fd, _atime, _mtime) {};
+fs.futimesSync = function(fd, atime, mtime) {};
 
 /**
  * @param {number} fd
@@ -1013,20 +1013,20 @@ fs.futimesSync = function (_fd, _atime, _mtime) {};
  * @param {Date} mtime
  * @return {void}
  */
-fs.futimesSync = function (_fd, _atime, _mtime) {};
+fs.futimesSync = function(fd, atime, mtime) {};
 
 /**
  * @param {number} fd
  * @param {(function(NodeJS.ErrnoException=): void)=} callback
  * @return {void}
  */
-fs.fsync = function (_fd, _callback) {};
+fs.fsync = function(fd, callback) {};
 
 /**
  * @param {number} fd
  * @return {void}
  */
-fs.fsyncSync = function (_fd) {};
+fs.fsyncSync = function(fd) {};
 
 /**
  * @param {number} fd
@@ -1037,7 +1037,7 @@ fs.fsyncSync = function (_fd) {};
  * @param {(function(NodeJS.ErrnoException, number, Buffer): void)=} callback
  * @return {void}
  */
-fs.write = function (_fd, _buffer, _offset, _length, _position, _callback) {};
+fs.write = function(fd, buffer, offset, length, position, callback) {};
 
 /**
  * @param {number} fd
@@ -1047,7 +1047,7 @@ fs.write = function (_fd, _buffer, _offset, _length, _position, _callback) {};
  * @param {(function(NodeJS.ErrnoException, number, Buffer): void)=} callback
  * @return {void}
  */
-fs.write = function (_fd, _buffer, _offset, _length, _callback) {};
+fs.write = function(fd, buffer, offset, length, callback) {};
 
 /**
  * @param {number} fd
@@ -1055,7 +1055,7 @@ fs.write = function (_fd, _buffer, _offset, _length, _callback) {};
  * @param {(function(NodeJS.ErrnoException, number, string): void)=} callback
  * @return {void}
  */
-fs.write = function (_fd, _data, _callback) {};
+fs.write = function(fd, data, callback) {};
 
 /**
  * @param {number} fd
@@ -1064,7 +1064,7 @@ fs.write = function (_fd, _data, _callback) {};
  * @param {(function(NodeJS.ErrnoException, number, string): void)=} callback
  * @return {void}
  */
-fs.write = function (_fd, _data, _offset, _callback) {};
+fs.write = function(fd, data, offset, callback) {};
 
 /**
  * @param {number} fd
@@ -1074,7 +1074,7 @@ fs.write = function (_fd, _data, _offset, _callback) {};
  * @param {(function(NodeJS.ErrnoException, number, string): void)=} callback
  * @return {void}
  */
-fs.write = function (_fd, _data, _offset, _encoding, _callback) {};
+fs.write = function(fd, data, offset, encoding, callback) {};
 
 /**
  * @param {number} fd
@@ -1084,7 +1084,7 @@ fs.write = function (_fd, _data, _offset, _encoding, _callback) {};
  * @param {number=} position
  * @return {number}
  */
-fs.writeSync = function (_fd, _buffer, _offset, _length, _position) {};
+fs.writeSync = function(fd, buffer, offset, length, position) {};
 
 /**
  * @param {number} fd
@@ -1093,7 +1093,7 @@ fs.writeSync = function (_fd, _buffer, _offset, _length, _position) {};
  * @param {string=} enconding
  * @return {number}
  */
-fs.writeSync = function (_fd, _data, _position, _enconding) {};
+fs.writeSync = function(fd, data, position, enconding) {};
 
 /**
  * @param {number} fd
@@ -1104,7 +1104,7 @@ fs.writeSync = function (_fd, _data, _position, _enconding) {};
  * @param {(function(NodeJS.ErrnoException, number, Buffer): void)=} callback
  * @return {void}
  */
-fs.read = function (_fd, _buffer, _offset, _length, _position, _callback) {};
+fs.read = function(fd, buffer, offset, length, position, callback) {};
 
 /**
  * @param {number} fd
@@ -1114,7 +1114,7 @@ fs.read = function (_fd, _buffer, _offset, _length, _position, _callback) {};
  * @param {number} position
  * @return {number}
  */
-fs.readSync = function (_fd, _buffer, _offset, _length, _position) {};
+fs.readSync = function(fd, buffer, offset, length, position) {};
 
 /**
  * @param {string} filename
@@ -1122,7 +1122,7 @@ fs.readSync = function (_fd, _buffer, _offset, _length, _position) {};
  * @param {(function(NodeJS.ErrnoException, string): void)} callback
  * @return {void}
  */
-fs.readFile = function (_filename, _encoding, _callback) {};
+fs.readFile = function(filename, encoding, callback) {};
 
 /**
  * @param {string} filename
@@ -1130,7 +1130,7 @@ fs.readFile = function (_filename, _encoding, _callback) {};
  * @param {(function(NodeJS.ErrnoException, string): void)} callback
  * @return {void}
  */
-fs.readFile = function (_filename, _options, _callback) {};
+fs.readFile = function(filename, options, callback) {};
 
 /**
  * @param {string} filename
@@ -1138,35 +1138,35 @@ fs.readFile = function (_filename, _options, _callback) {};
  * @param {(function(NodeJS.ErrnoException, Buffer): void)} callback
  * @return {void}
  */
-fs.readFile = function (_filename, _options, _callback) {};
+fs.readFile = function(filename, options, callback) {};
 
 /**
  * @param {string} filename
  * @param {(function(NodeJS.ErrnoException, Buffer): void)} callback
  * @return {void}
  */
-fs.readFile = function (_filename, _callback) {};
+fs.readFile = function(filename, callback) {};
 
 /**
  * @param {string} filename
  * @param {string} encoding
  * @return {string}
  */
-fs.readFileSync = function (_filename, _encoding) {};
+fs.readFileSync = function(filename, encoding) {};
 
 /**
  * @param {string} filename
  * @param {{encoding: string, flag: string}} options
  * @return {string}
  */
-fs.readFileSync = function (_filename, _options) {};
+fs.readFileSync = function(filename, options) {};
 
 /**
  * @param {string} filename
  * @param {{flag: string}=} options
  * @return {Buffer}
  */
-fs.readFileSync = function (_filename, _options) {};
+fs.readFileSync = function(filename, options) {};
 
 /**
  * @param {string} filename
@@ -1174,7 +1174,7 @@ fs.readFileSync = function (_filename, _options) {};
  * @param {(function(NodeJS.ErrnoException): void)=} callback
  * @return {void}
  */
-fs.writeFile = function (_filename, _data, _callback) {};
+fs.writeFile = function(filename, data, callback) {};
 
 /**
  * @param {string} filename
@@ -1183,7 +1183,7 @@ fs.writeFile = function (_filename, _data, _callback) {};
  * @param {(function(NodeJS.ErrnoException): void)=} callback
  * @return {void}
  */
-fs.writeFile = function (_filename, _data, _options, _callback) {};
+fs.writeFile = function(filename, data, options, callback) {};
 
 /**
  * @param {string} filename
@@ -1192,7 +1192,7 @@ fs.writeFile = function (_filename, _data, _options, _callback) {};
  * @param {(function(NodeJS.ErrnoException): void)=} callback
  * @return {void}
  */
-fs.writeFile = function (_filename, _data, _options, _callback) {};
+fs.writeFile = function(filename, data, options, callback) {};
 
 /**
  * @param {string} filename
@@ -1200,7 +1200,7 @@ fs.writeFile = function (_filename, _data, _options, _callback) {};
  * @param {{encoding: string, mode: number, flag: string}=} options
  * @return {void}
  */
-fs.writeFileSync = function (_filename, _data, _options) {};
+fs.writeFileSync = function(filename, data, options) {};
 
 /**
  * @param {string} filename
@@ -1208,7 +1208,7 @@ fs.writeFileSync = function (_filename, _data, _options) {};
  * @param {{encoding: string, mode: string, flag: string}=} options
  * @return {void}
  */
-fs.writeFileSync = function (_filename, _data, _options) {};
+fs.writeFileSync = function(filename, data, options) {};
 
 /**
  * @param {string} filename
@@ -1217,7 +1217,7 @@ fs.writeFileSync = function (_filename, _data, _options) {};
  * @param {(function(NodeJS.ErrnoException): void)=} callback
  * @return {void}
  */
-fs.appendFile = function (_filename, _data, _options, _callback) {};
+fs.appendFile = function(filename, data, options, callback) {};
 
 /**
  * @param {string} filename
@@ -1226,7 +1226,7 @@ fs.appendFile = function (_filename, _data, _options, _callback) {};
  * @param {(function(NodeJS.ErrnoException): void)=} callback
  * @return {void}
  */
-fs.appendFile = function (_filename, _data, _options, _callback) {};
+fs.appendFile = function(filename, data, options, callback) {};
 
 /**
  * @param {string} filename
@@ -1234,7 +1234,7 @@ fs.appendFile = function (_filename, _data, _options, _callback) {};
  * @param {(function(NodeJS.ErrnoException): void)=} callback
  * @return {void}
  */
-fs.appendFile = function (_filename, _data, _callback) {};
+fs.appendFile = function(filename, data, callback) {};
 
 /**
  * @param {string} filename
@@ -1242,7 +1242,7 @@ fs.appendFile = function (_filename, _data, _callback) {};
  * @param {{encoding: string, mode: number, flag: string}=} options
  * @return {void}
  */
-fs.appendFileSync = function (_filename, _data, _options) {};
+fs.appendFileSync = function(filename, data, options) {};
 
 /**
  * @param {string} filename
@@ -1250,14 +1250,14 @@ fs.appendFileSync = function (_filename, _data, _options) {};
  * @param {{encoding: string, mode: string, flag: string}=} options
  * @return {void}
  */
-fs.appendFileSync = function (_filename, _data, _options) {};
+fs.appendFileSync = function(filename, data, options) {};
 
 /**
  * @param {string} filename
  * @param {(function(fs.Stats, fs.Stats): void)} listener
  * @return {void}
  */
-fs.watchFile = function (_filename, _listener) {};
+fs.watchFile = function(filename, listener) {};
 
 /**
  * @param {string} filename
@@ -1265,21 +1265,21 @@ fs.watchFile = function (_filename, _listener) {};
  * @param {(function(fs.Stats, fs.Stats): void)} listener
  * @return {void}
  */
-fs.watchFile = function (_filename, _options, _listener) {};
+fs.watchFile = function(filename, options, listener) {};
 
 /**
  * @param {string} filename
  * @param {(function(fs.Stats, fs.Stats): void)=} listener
  * @return {void}
  */
-fs.unwatchFile = function (_filename, _listener) {};
+fs.unwatchFile = function(filename, listener) {};
 
 /**
  * @param {string} filename
  * @param {(function(string, string): *)=} listener
  * @return {fs.FSWatcher}
  */
-fs.watch = function (_filename, _listener) {};
+fs.watch = function(filename, listener) {};
 
 /**
  * @param {string} filename
@@ -1287,7 +1287,7 @@ fs.watch = function (_filename, _listener) {};
  * @param {(function(string, (string|Buffer)): *)=} listener
  * @return {fs.FSWatcher}
  */
-fs.watch = function (_filename, _encoding, _listener) {};
+fs.watch = function(filename, encoding, listener) {};
 
 /**
  * @param {string} filename
@@ -1295,20 +1295,20 @@ fs.watch = function (_filename, _encoding, _listener) {};
  * @param {(function(string, (string|Buffer)): *)=} listener
  * @return {fs.FSWatcher}
  */
-fs.watch = function (_filename, _options, _listener) {};
+fs.watch = function(filename, options, listener) {};
 
 /**
  * @param {(string|Buffer)} path
  * @param {(function(boolean): void)=} callback
  * @return {void}
  */
-fs.exists = function (_path, _callback) {};
+fs.exists = function(path, callback) {};
 
 /**
  * @param {(string|Buffer)} path
  * @return {boolean}
  */
-fs.existsSync = function (_path) {};
+fs.existsSync = function(path) {};
 
 /**
  * @interface
@@ -1345,7 +1345,7 @@ fs.constants;
  * @param {(function(NodeJS.ErrnoException): void)} callback
  * @return {void}
  */
-fs.access = function (_path, _callback) {};
+fs.access = function(path, callback) {};
 
 /**
  * @param {(string|Buffer)} path
@@ -1353,41 +1353,41 @@ fs.access = function (_path, _callback) {};
  * @param {(function(NodeJS.ErrnoException): void)} callback
  * @return {void}
  */
-fs.access = function (_path, _mode, _callback) {};
+fs.access = function(path, mode, callback) {};
 
 /**
  * @param {(string|Buffer)} path
  * @param {number=} mode
  * @return {void}
  */
-fs.accessSync = function (_path, _mode) {};
+fs.accessSync = function(path, mode) {};
 
 /**
  * @param {(string|Buffer)} path
  * @param {{flags: string, encoding: string, fd: number, mode: number, autoClose: boolean, start: number, end: number}=} options
  * @return {fs.ReadStream}
  */
-fs.createReadStream = function (_path, _options) {};
+fs.createReadStream = function(path, options) {};
 
 /**
  * @param {(string|Buffer)} path
  * @param {{flags: string, encoding: string, fd: number, mode: number}=} options
  * @return {fs.WriteStream}
  */
-fs.createWriteStream = function (_path, _options) {};
+fs.createWriteStream = function(path, options) {};
 
 /**
  * @param {number} fd
  * @param {Function} callback
  * @return {void}
  */
-fs.fdatasync = function (_fd, _callback) {};
+fs.fdatasync = function(fd, callback) {};
 
 /**
  * @param {number} fd
  * @return {void}
  */
-fs.fdatasyncSync = function (_fd) {};
+fs.fdatasyncSync = function(fd) {};
 
 module.exports.ReadStream = fs.ReadStream;
 
@@ -1623,7 +1623,7 @@ module.exports.fdatasyncSync = fs.fdatasyncSync;
  * @param {Function=} callback
  * @return {void}
  */
-fs.utimensat = function (_path, _atime, _mtime, _flags, _callback) {};
+fs.utimensat = function(path, atime, mtime, flags, callback) {};
 
 /**
  * @param {string} path
@@ -1632,7 +1632,7 @@ fs.utimensat = function (_path, _atime, _mtime, _flags, _callback) {};
  * @param {number=} flags
  * @return {void}
  */
-fs.utimensatSync = function (_path, _atime, _mtime, _flags) {};
+fs.utimensatSync = function(path, atime, mtime, flags) {};
 
 /**
  * @param {*} fd
@@ -1642,7 +1642,7 @@ fs.utimensatSync = function (_path, _atime, _mtime, _flags) {};
  * @param {Function=} callback
  * @return {void}
  */
-fs.futimensat = function (_fd, _atime, _mtime, _flags, _callback) {};
+fs.futimensat = function(fd, atime, mtime, flags, callback) {};
 
 /**
  * @param {*} fd
@@ -1651,7 +1651,7 @@ fs.futimensat = function (_fd, _atime, _mtime, _flags, _callback) {};
  * @param {number=} flags
  * @return {void}
  */
-fs.futimensatSync = function (_fd, _atime, _mtime, _flags) {};
+fs.futimensatSync = function(fd, atime, mtime, flags) {};
 
 /**
  * @constructor

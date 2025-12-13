@@ -1288,7 +1288,7 @@ test.describe("A-E2E-001: Admin Bulk Question Addition - Pagination", () => {
     } catch (optionError: unknown) {
       page.off("response", responseHandler);
       // Check if error is due to actual page closure
-      const error =
+      const _error =
         optionError instanceof Error
           ? optionError
           : new Error(String(optionError));

@@ -29,7 +29,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../ui/select";
-import {} from "../ui/checkbox";
 import { Label } from "../ui/label";
 
 interface AdvancedSearchProps {

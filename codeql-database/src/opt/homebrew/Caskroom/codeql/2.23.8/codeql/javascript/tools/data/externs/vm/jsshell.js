@@ -3,30 +3,30 @@
  * Sources:
  *  * https://developer.mozilla.org/en-US/docs/Mozilla/Projects/SpiderMonkey/Introduction_to_the_JavaScript_shell
  *  * https://developer.mozilla.org/en-US/docs/Mozilla/Projects/SpiderMonkey/Shell_global_objects
- *  * http://mxr.mozilla.org/mozilla-central/source/js/src/shell/js.cpp
+ *  * http://mxr.mozilla.org/mozilla-central/source/js/src/shell/js.cpp 
  */
 
 /**
  * @type {Object}
  */
-var _environment;
+var environment;
 
 /**
  * @type {Array.<string>}
  */
-var _arguments;
+var arguments;
 
 /**
  * @type {Array.<string>}
  */
-var _scriptArgs;
+var scriptArgs;
 
 /**
  * @constructor
  * @param {string=} name
  * @see https://developer.mozilla.org/en-US/docs/Archive/Mozilla/SpiderMonkey/File_object
  */
-function File(_name) {}
+function File(name) {}
 
 /**
  * @type {File}
@@ -162,83 +162,84 @@ File.prototype.isNative;
  * @param {string} mode
  * @param {string} type
  */
-File.prototype.open = function (_mode, _type) {};
+File.prototype.open = function(mode, type) {};
 
 /**
  */
-File.prototype.close = function () {};
+File.prototype.close = function() {};
 
 /**
  */
-File.prototype.remove = function () {};
+File.prototype.remove = function() {};
 
 /**
  * @param {string} destination
  */
-File.prototype.copyTo = function (_destination) {};
+File.prototype.copyTo = function(destination) {};
 
 /**
  * @param {string} newName
  */
-File.prototype.renameTo = function (_newName) {};
+File.prototype.renameTo = function(newName) {};
 
 /**
  */
-File.prototype.flush = function () {};
+File.prototype.flush = function() {};
 
 /**
  * @param {number} offset
  * @param {number} whence
  * @return {number}
  */
-File.prototype.seek = function (_offset, _whence) {};
+File.prototype.seek = function(offset, whence) {};
 
 /**
  * @param {number} numBytes
  * @return {string}
  */
-File.prototype.read = function (_numBytes) {};
+File.prototype.read = function(numBytes) {};
 
 /**
  * @return {string}
  */
-File.prototype.readln = function () {};
+File.prototype.readln = function() {};
+
 
 /**
  * @return {Array.<string>}
  */
-File.prototype.readAll = function () {};
+File.prototype.readAll = function() {};
 
 /**
  * @param {string} data
  */
-File.prototype.write = function (_data) {};
+File.prototype.write = function(data) {};
 
 /**
  * @param {string} data
  */
-File.prototype.writeln = function (_data) {};
+File.prototype.writeln = function(data) {};
 
 /**
  * @param {Array.<string>} lines
  */
-File.prototype.writeAll = function (_lines) {};
+File.prototype.writeAll = function(lines) {};
 
 /**
  * @param {RegExp=} filter
  * @return {Array.<File>}
  */
-File.prototype.list = function (_filter) {};
+File.prototype.list = function(filter) {};
 
 /**
  * @param {string} name
  */
-File.prototype.mkdir = function (_name) {};
+File.prototype.mkdir = function(name) {};
 
 /**
  * @return {string}
  */
-File.prototype.toURL = function () {};
+File.prototype.toURL = function() {};
 
 /**
  * @see https://developer.mozilla.org/en-US/docs/Mozilla/Projects/SpiderMonkey/Parser_API
@@ -250,80 +251,80 @@ function Reflect() {}
  * @param {Object=} options
  * @return {Object}
  */
-Reflect.parse = function (_code, _options) {};
+Reflect.parse = function(code, options) {};
 
 /**
  * @param {number=} number
  * @return {number}
  */
-function _version(_number) {}
+function version(number) {}
 
 /**
  */
-function _revertVersion() {}
+function revertVersion() {}
 
 /**
  * @param {...string} options
  */
-function _options(_options) {}
+function options(options) {}
 
 /**
  * @param {...string} files
  */
-function _load(_files) {}
+function load(files) {}
 
 /**
  * @param {...string} files
  */
-function _loadRelativeToScript(_files) {}
+function loadRelativeToScript(files) {}
 
 /**
  * @param {string} code
  * @param {Object=} options
  */
-function _evaluate(_code, _options) {}
+function evaluate(code, options) {}
 
 /**
  * @param {string} file
  * @return {number}
  */
-function _run(_file) {}
+function run(file) {}
 
 /**
  * @return {string}
  */
-function _readline() {}
+function readline() {}
 
 /**
  * @param {...*} exprs
  */
-function _print(_exprs) {}
+function print(exprs) {}
 
 /**
  * @param {...*} exprs
  */
-function _printErr(_exprs) {}
+function printErr(exprs) {}
 
 /**
  * @param {*} expr
  */
-function _putstr(_expr) {}
+function putstr(expr) {}
 
 /**
  * @return {number}
  */
-function _dateNow() {}
+function dateNow() {}
 
 /**
  * @param {...string} names
  * @return {string}
  */
-function _help(_names) {}
+function help(names) {}
 
 /**
  * @param {number=} status
  */
-function _quit(_status) {}
+function quit(status) {}
 
 /**
  * @param {*} actual
@@ -331,102 +332,102 @@ function _quit(_status) {}
  * @param {string=} msg
  * @throws {Error}
  */
-function _assertEq(_actual, _expected, _msg) {}
+function assertEq(actual, expected, msg) {}
 
 /**
  * @throws {Error}
  */
-function _assertJit() {}
+function assertJit() {}
 
 /**
  */
-function _gc() {}
+function gc() {}
 
 /**
  */
-function _gcstats() {}
+function gcstats() {}
 
 /**
  * @param {string} name
  * @param {number} value
  */
-function _gcparam(_name, _value) {}
+function gcparam(name, value) {}
 
 /**
  * @param {Object=} start
  * @param {string} kind
  */
-function _countHeap(_start, _kind) {}
+function countHeap(start, kind) {}
 
 /**
  * @return {Object}
  */
-function _makeFinalizeObserver() {}
+function makeFinalizeObserver() {}
 
 /**
  * @return {number}
  */
-function _finalizeCount() {}
+function finalizeCount() {}
 
 /**
  * @param {number} level
  */
-function _gczeal(_level) {}
+function gczeal(level) {}
 
 /**
  * @param {boolean} debug
  */
-function _setDebug(_debug) {}
+function setDebug(debug) {}
 
 /**
  * @param {function} f
  */
-function _setDebuggerHandler(_f) {}
+function setDebuggerHandler(f) {}
 
 /**
  * @param {function} f
  */
-function _setThrowHook(_f) {}
+function setThrowHook(f) {}
 
 /**
  * @param {function=} fun
  * @param {number=} pc
  * @param {*} exp
  */
-function _trap(_fun, _pc, _exp) {}
+function trap(fun, pc, exp) {}
 
 /**
  * @param {function} fun
  * @param {number=} pc
  */
-function _untrap(_fun, _pc) {}
+function untrap(fun, pc) {}
 
 /**
  * @param {function=} fun
  * @param {number} line
  */
-function _line2pc(_fun, line) {}
+function line2pc(fun, line) {}
 
 /**
  * @param {function} fun
  * @param {number=} pc
  */
-function _pc2line(_fun, pc) {}
+function pc2line(fun, pc) {}
 
 /**
  * @param {number=} number
  */
-function _stackQuota(_number) {}
+function stackQuota(number) {}
 
 /**
  * @return {boolean}
  */
-function _stringsAreUTF8() {}
+function stringsAreUTF8() {}
 
 /**
  * @param {number} mode
  */
-function _testUTF8(_mode) {}
+function testUTF8(mode) {}
 
 /**
  * @param {string=} fileName
@@ -435,361 +436,361 @@ function _testUTF8(_mode) {}
  * @param {number=} maxDepth
  * @param {*=} toIgnore
  */
-function _dumpHeap(_fileName, _start, _toFind, _maxDepth, _toIgnore) {}
+function dumpHeap(fileName, start, toFind, maxDepth, toIgnore) {}
 
 /**
  */
-function _dumpObject() {}
+function dumpObject() {}
 
 /**
  * @param {string|boolean} mode
  */
-function _tracing(_mode) {}
+function tracing(mode) {}
 
 /**
  * @param {...string} strings
  */
-function _stats(_strings) {}
+function stats(strings) {}
 
 /**
  */
-function _build() {}
+function build() {}
 
 /**
  * @param {Object=} obj
  */
-function _clear(_obj) {}
+function clear(obj) {}
 
 /**
  * @param {function} fun
  * @param {Object=} scope
  */
-function _clone(_fun, _scope) {}
+function clone(fun, scope) {}
 
 /**
  * @param {Object} obj
  */
-function _getpda(_obj) {}
+function getpda(obj) {}
 
 /**
  * @param {*} n
  * @return {number}
  */
-function _toint32(_n) {}
+function toint32(n) {}
 
 /**
  * @param {number} n
  * @param {string} str
  * @param {boolean} save
  */
-function _evalInFrame(_n, _str, _save) {}
+function evalInFrame(n, str, save) {}
 
 /**
  * @param {string} filename
  * @param {string=} options
  */
-function _snarf(_filename, _options) {}
+function snarf(filename, options) {}
 
 /**
  * @param {string} filename
  * @param {string=} options
  */
-function _read(_filename, _options) {}
+function read(filename, options) {}
 
 /**
  * @param {number=} seconds
  */
-function _timeout(_seconds) {}
+function timeout(seconds) {}
 
 /**
  * @param {Object} obj
  */
-function _parent(_obj) {}
+function parent(obj) {}
 
 /**
  * @param {Object} obj
  */
-function _wrap(_obj) {}
+function wrap(obj) {}
 
 /**
  * @param {*} sd
  */
-function _serialize(_sd) {}
+function serialize(sd) {}
 
 /**
  * @param {*} a
  */
-function _deserialize(_a) {}
+function deserialize(a) {}
 
 /**
  */
-function _mjitstats() {}
+function mjitstats() {}
 
 /**
  */
-function _stringstats() {}
+function stringstats() {}
 
 /**
  * @param {Object} callback
  */
-function _setGCCallback(_callback) {}
+function setGCCallback(callback) {}
 
 /**
  */
-function _startTimingMutator() {}
+function startTimingMutator() {}
 
 /**
  */
-function _stopTimingMutator() {}
+function stopTimingMutator() {}
 
 /**
  * @throws {Error}
  */
-function _throwError() {}
+function throwError() {}
 
 /**
  * @param {function} fun
  */
-function _disassemble(_fun) {}
+function disassemble(fun) {}
 
 /**
  * @param {function} fun
  */
-function _dis(_fun) {}
+function dis(fun) {}
 
 /**
  * @param {string} file
  */
-function _disfile(_file) {}
+function disfile(file) {}
 
 /**
  * @param {function} fun
  */
-function _dissrc(_fun) {}
+function dissrc(fun) {}
 
 /**
  * @param {function} fun
  */
-function _notes(_fun) {}
+function notes(fun) {}
 
 /**
  * @param {boolean} showArgs
  * @param {boolean} showLocals
  * @param {boolean} showThisProps
  */
-function _stackDump(_showArgs, _showLocals, _showThisProps) {}
+function stackDump(showArgs, showLocals, showThisProps) {}
 
 /**
  * @param {string} str
  * @return string
  */
-function _intern(_str) {}
+function intern(str) {}
 
 /**
  * @param {Object} obj
  */
-function _getslx(_obj) {}
+function getslx(obj) {}
 
 /**
  * @param {string} s
  * @param {Object=} o
  */
-function _evalcx(_s, _o) {}
+function evalcx(s, o) {}
 
 /**
  * @param {string} str
  */
-function _evalInWorker(_str) {}
+function evalInWorker(str) {}
 
 /**
  * @return {Object}
  */
-function _getSharedArrayBuffer() {}
+function getSharedArrayBuffer() {}
 
 /**
  * @param {Object} buf
  */
-function _setSharedArrayBuffer(_buf) {}
+function setSharedArrayBuffer(buf) {}
 
 /**
  * @param {Object} obj
  * @return {*}
  */
-function _shapeOf(_obj) {}
+function shapeOf(obj) {}
 
 /**
  * @param {...Array.<*>} arrays
  */
-function _arrayInfo(_arrays) {}
+function arrayInfo(arrays) {}
 
 /**
  * @param {number} dt
  */
-function _sleep(_dt) {}
+function sleep(dt) {}
 
 /**
  * @param {string} code
  * @throws {Error}
  */
-function _compile(_code) {}
+function compile(code) {}
 
 /**
  * @param {string} code
  * @throws {Error}
  */
-function _parse(_code) {}
+function parse(code) {}
 
 /**
  * @param {string} code
  * @return {boolean}
  */
-function _syntaxParse(_code) {}
+function syntaxParse(code) {}
 
 /**
  * @param {string} code
  * @param {Object=} options
  */
-function _offThreadCompileScript(_code, _options) {}
+function offThreadCompileScript(code, options) {}
 
 /**
  * @throws {Error}
  */
-function _runOffThreadScript() {}
+function runOffThreadScript() {}
 
 /**
  * @param {number=} seconds
  * @param {function=} func
  */
-function _timeout(_seconds, _func) {}
+function timeout(seconds, func) {}
 
 /**
  * @param {boolean} cond
  */
-function _interruptIf(_cond) {}
+function interruptIf(cond) {}
 
 /**
  * @param {function} fun
  */
-function _invokeInterruptCallback(_fun) {}
+function invokeInterruptCallback(fun) {}
 
 /**
  * @param {function} fun
  */
-function _setInterruptCallback(_fun) {}
+function setInterruptCallback(fun) {}
 
 /**
  */
-function _enableLastWarning() {}
+function enableLastWarning() {}
 
 /**
  */
-function _disableLastWarning() {}
+function disableLastWarning() {}
 
 /**
  * @return {Object}
  */
-function _getLastWarning() {}
+function getLastWarning() {}
 
 /**
  */
-function _clearLastWarning() {}
+function clearLastWarning() {}
 
 /**
  * @return {number}
  */
-function _elapsed() {}
+function elapsed() {}
 
 /**
  * @param {function} func
  * @return {string}
  */
-function _decompileFunction(_func) {}
+function decompileFunction(func) {}
 
 /**
  * @param {function} func
  * @return {string}
  */
-function _decompileBody(_func) {}
+function decompileBody(func) {}
 
 /**
  * @return {string}
  */
-function _decompileThis() {}
+function decompileThis() {}
 
 /**
  * @return {string}
  */
-function _thisFilename() {}
+function thisFilename() {}
 
 /**
  * @param {Object=} options
  * @return {Object}
  */
-function _newGlobal(_options) {}
+function newGlobal(options) {}
 
 /**
  * @param {string} filename
  * @param {number} offset
  * @param {number} size
  */
-function _createMappedArrayBuffer(_filename, _offset, _size) {}
+function createMappedArrayBuffer(filename, offset, size) {}
 
 /**
  * @return {number}
  */
-function _getMaxArgs() {}
+function getMaxArgs() {}
 
 /**
  * @return {Object}
  */
-function _objectEmulatingUndefined() {}
+function objectEmulatingUndefined() {}
 
 /**
  * @return {boolean}
  */
-function _isCachingEnabled() {}
+function isCachingEnabled() {}
 
 /**
  * @param {boolean} b
  */
-function _setCachingEnabled(_b) {}
+function setCachingEnabled(b) {}
 
 /**
  * @param {string} code
  */
-function _cacheEntry(_code) {}
+function cacheEntry(code) {}
 
 /**
  */
-function _printProfilerEvents() {}
+function printProfilerEvents() {}
 
 /**
  */
-function _enableSingleStepProfiling() {}
+function enableSingleStepProfiling() {}
 
 /**
  */
-function _disableSingleStepProfiling() {}
+function disableSingleStepProfiling() {}
 
 /**
  * @param {string} s
  * @return {boolean}
  */
-function _isLatin1(_s) {}
+function isLatin1(s) {}
 
 /**
  * @return {number}
  */
-function _stackPointerInfo() {}
+function stackPointerInfo() {}
 
 /**
  * @param {Object} params
  * @return {Array.<*>}
  */
-function _entryPoints(_params) {}
+function entryPoints(params) {}
 
 /**
  * @param {Object} object
  * @param {boolean} deep
  */
-function _seal(_object, _deep) {}
+function seal(object, deep) {}

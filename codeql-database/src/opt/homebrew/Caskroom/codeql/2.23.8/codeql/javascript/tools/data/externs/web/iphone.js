@@ -21,6 +21,7 @@
  * @author agrieve@google.com (Andrew Grieve)
  */
 
+
 /**
  * @type {number}
  */
@@ -74,26 +75,9 @@ TouchEvent.prototype.rotation;
  * @param {number} rotation
  * @return {undefined}
  */
-TouchEvent.prototype.initTouchEvent = function (
-  _type,
-  _canBubble,
-  _cancelable,
-  _view,
-  _detail,
-  _screenX,
-  _screenY,
-  _clientX,
-  _clientY,
-  _ctrlKey,
-  _altKey,
-  _shiftKey,
-  _metaKey,
-  _touches,
-  _targetTouches,
-  _changedTouches,
-  _scale,
-  _rotation,
-) {};
+TouchEvent.prototype.initTouchEvent = function(type, canBubble, cancelable,
+    view, detail, screenX, screenY, clientX, clientY, ctrlKey, altKey, shiftKey,
+    metaKey, touches, targetTouches, changedTouches, scale, rotation) {};
 
 /**
  * The GestureEvent class encapsulates information about a multi-touch gesture.
@@ -154,24 +138,10 @@ GestureEvent.prototype.target;
  * @param {number} rotation
  * @return {undefined}
  */
-GestureEvent.prototype.initGestureEvent = function (
-  _type,
-  _canBubble,
-  _cancelable,
-  _view,
-  _detail,
-  _screenX,
-  _screenY,
-  _clientX,
-  _clientY,
-  _ctrlKey,
-  _altKey,
-  _shiftKey,
-  _metaKey,
-  _target,
-  _scale,
-  _rotation,
-) {};
+GestureEvent.prototype.initGestureEvent = function(type, canBubble, cancelable,
+    view, detail, screenX, screenY, clientX, clientY, ctrlKey, altKey, shiftKey,
+    metaKey, target, scale, rotation) {};
+
 
 /**
  * Specifies the JavaScript method to invoke when a gesture is started by

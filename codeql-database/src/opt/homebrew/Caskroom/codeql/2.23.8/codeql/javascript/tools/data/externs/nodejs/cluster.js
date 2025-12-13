@@ -48,7 +48,7 @@ var net = require("net");
 /**
  * @interface
  */
-cluster.ClusterSettings = function () {};
+cluster.ClusterSettings = function() {};
 
 /**
  * @type {Array<string>}
@@ -88,7 +88,7 @@ cluster.ClusterSettings.prototype.gid;
 /**
  * @interface
  */
-cluster.ClusterSetupMasterSettings = function () {};
+cluster.ClusterSetupMasterSettings = function() {};
 
 /**
  * @type {string}
@@ -113,7 +113,7 @@ cluster.ClusterSetupMasterSettings.prototype.stdio;
 /**
  * @interface
  */
-cluster.Address = function () {};
+cluster.Address = function() {};
 
 /**
  * @type {string}
@@ -156,34 +156,34 @@ cluster.Worker.prototype.suicide;
  * @param {*=} sendHandle
  * @return {boolean}
  */
-cluster.Worker.prototype.send = function (_message, _sendHandle) {};
+cluster.Worker.prototype.send = function(message, sendHandle) {};
 
 /**
  * @param {string=} signal
  * @return {void}
  */
-cluster.Worker.prototype.kill = function (_signal) {};
+cluster.Worker.prototype.kill = function(signal) {};
 
 /**
  * @param {string=} signal
  * @return {void}
  */
-cluster.Worker.prototype.destroy = function (_signal) {};
+cluster.Worker.prototype.destroy = function(signal) {};
 
 /**
  * @return {void}
  */
-cluster.Worker.prototype.disconnect = function () {};
+cluster.Worker.prototype.disconnect = function() {};
 
 /**
  * @return {boolean}
  */
-cluster.Worker.prototype.isConnected = function () {};
+cluster.Worker.prototype.isConnected = function() {};
 
 /**
  * @return {boolean}
  */
-cluster.Worker.prototype.isDead = function () {};
+cluster.Worker.prototype.isDead = function() {};
 
 /**
  * @type {boolean}
@@ -195,181 +195,181 @@ cluster.Worker.prototype.exitedAfterDisconnect;
  * @param {Function} listener
  * @return {*}
  */
-cluster.Worker.prototype.addListener = function (_event, _listener) {};
+cluster.Worker.prototype.addListener = function(event, listener) {};
 
 /**
  * @param {string} event
  * @param {(function(): void)} listener
  * @return {*}
  */
-cluster.Worker.prototype.addListener = function (_event, _listener) {};
+cluster.Worker.prototype.addListener = function(event, listener) {};
 
 /**
  * @param {string} event
  * @param {(function(number, string): void)} listener
  * @return {*}
  */
-cluster.Worker.prototype.addListener = function (_event, _listener) {};
+cluster.Worker.prototype.addListener = function(event, listener) {};
 
 /**
  * @param {string} event
  * @param {(function(cluster.Address): void)} listener
  * @return {*}
  */
-cluster.Worker.prototype.addListener = function (_event, _listener) {};
+cluster.Worker.prototype.addListener = function(event, listener) {};
 
 /**
  * @param {string} event
  * @param {(function(*, (net.Socket|net.Server)): void)} listener
  * @return {*}
  */
-cluster.Worker.prototype.addListener = function (_event, _listener) {};
+cluster.Worker.prototype.addListener = function(event, listener) {};
 
 /**
  * @param {string} event
  * @param {Function} listener
  * @return {*}
  */
-cluster.Worker.prototype.on = function (_event, _listener) {};
+cluster.Worker.prototype.on = function(event, listener) {};
 
 /**
  * @param {string} event
  * @param {(function(): void)} listener
  * @return {*}
  */
-cluster.Worker.prototype.on = function (_event, _listener) {};
+cluster.Worker.prototype.on = function(event, listener) {};
 
 /**
  * @param {string} event
  * @param {(function(number, string): void)} listener
  * @return {*}
  */
-cluster.Worker.prototype.on = function (_event, _listener) {};
+cluster.Worker.prototype.on = function(event, listener) {};
 
 /**
  * @param {string} event
  * @param {(function(cluster.Address): void)} listener
  * @return {*}
  */
-cluster.Worker.prototype.on = function (_event, _listener) {};
+cluster.Worker.prototype.on = function(event, listener) {};
 
 /**
  * @param {string} event
  * @param {(function(*, (net.Socket|net.Server)): void)} listener
  * @return {*}
  */
-cluster.Worker.prototype.on = function (_event, _listener) {};
+cluster.Worker.prototype.on = function(event, listener) {};
 
 /**
  * @param {string} event
  * @param {Function} listener
  * @return {*}
  */
-cluster.Worker.prototype.once = function (_event, _listener) {};
+cluster.Worker.prototype.once = function(event, listener) {};
 
 /**
  * @param {string} event
  * @param {(function(): void)} listener
  * @return {*}
  */
-cluster.Worker.prototype.once = function (_event, _listener) {};
+cluster.Worker.prototype.once = function(event, listener) {};
 
 /**
  * @param {string} event
  * @param {(function(number, string): void)} listener
  * @return {*}
  */
-cluster.Worker.prototype.once = function (_event, _listener) {};
+cluster.Worker.prototype.once = function(event, listener) {};
 
 /**
  * @param {string} event
  * @param {(function(cluster.Address): void)} listener
  * @return {*}
  */
-cluster.Worker.prototype.once = function (_event, _listener) {};
+cluster.Worker.prototype.once = function(event, listener) {};
 
 /**
  * @param {string} event
  * @param {(function(*, (net.Socket|net.Server)): void)} listener
  * @return {*}
  */
-cluster.Worker.prototype.once = function (_event, _listener) {};
+cluster.Worker.prototype.once = function(event, listener) {};
 
 /**
  * @param {string} event
  * @param {Function} listener
  * @return {*}
  */
-cluster.Worker.prototype.prependListener = function (_event, _listener) {};
+cluster.Worker.prototype.prependListener = function(event, listener) {};
 
 /**
  * @param {string} event
  * @param {(function(): void)} listener
  * @return {*}
  */
-cluster.Worker.prototype.prependListener = function (_event, _listener) {};
+cluster.Worker.prototype.prependListener = function(event, listener) {};
 
 /**
  * @param {string} event
  * @param {(function(number, string): void)} listener
  * @return {*}
  */
-cluster.Worker.prototype.prependListener = function (_event, _listener) {};
+cluster.Worker.prototype.prependListener = function(event, listener) {};
 
 /**
  * @param {string} event
  * @param {(function(cluster.Address): void)} listener
  * @return {*}
  */
-cluster.Worker.prototype.prependListener = function (_event, _listener) {};
+cluster.Worker.prototype.prependListener = function(event, listener) {};
 
 /**
  * @param {string} event
  * @param {(function(*, (net.Socket|net.Server)): void)} listener
  * @return {*}
  */
-cluster.Worker.prototype.prependListener = function (_event, _listener) {};
+cluster.Worker.prototype.prependListener = function(event, listener) {};
 
 /**
  * @param {string} event
  * @param {Function} listener
  * @return {*}
  */
-cluster.Worker.prototype.prependOnceListener = function (_event, _listener) {};
+cluster.Worker.prototype.prependOnceListener = function(event, listener) {};
 
 /**
  * @param {string} event
  * @param {(function(): void)} listener
  * @return {*}
  */
-cluster.Worker.prototype.prependOnceListener = function (_event, _listener) {};
+cluster.Worker.prototype.prependOnceListener = function(event, listener) {};
 
 /**
  * @param {string} event
  * @param {(function(number, string): void)} listener
  * @return {*}
  */
-cluster.Worker.prototype.prependOnceListener = function (_event, _listener) {};
+cluster.Worker.prototype.prependOnceListener = function(event, listener) {};
 
 /**
  * @param {string} event
  * @param {(function(cluster.Address): void)} listener
  * @return {*}
  */
-cluster.Worker.prototype.prependOnceListener = function (_event, _listener) {};
+cluster.Worker.prototype.prependOnceListener = function(event, listener) {};
 
 /**
  * @param {string} event
  * @param {(function(*, (net.Socket|net.Server)): void)} listener
  * @return {*}
  */
-cluster.Worker.prototype.prependOnceListener = function (_event, _listener) {};
+cluster.Worker.prototype.prependOnceListener = function(event, listener) {};
 
 /**
  * @interface
  * @extends {events.EventEmitter}
  */
-cluster.Cluster = function () {};
+cluster.Cluster = function() {};
 
 /**
  * @type {cluster.Worker}
@@ -380,13 +380,13 @@ cluster.Cluster.prototype.Worker;
  * @param {Function=} callback
  * @return {void}
  */
-cluster.Cluster.prototype.disconnect = function (_callback) {};
+cluster.Cluster.prototype.disconnect = function(callback) {};
 
 /**
  * @param {*=} env
  * @return {cluster.Worker}
  */
-cluster.Cluster.prototype.fork = function (_env) {};
+cluster.Cluster.prototype.fork = function(env) {};
 
 /**
  * @type {boolean}
@@ -407,7 +407,7 @@ cluster.Cluster.prototype.settings;
  * @param {cluster.ClusterSetupMasterSettings=} settings
  * @return {void}
  */
-cluster.Cluster.prototype.setupMaster = function (_settings) {};
+cluster.Cluster.prototype.setupMaster = function(settings) {};
 
 /**
  * @type {cluster.Worker}
@@ -416,227 +416,228 @@ cluster.Cluster.prototype.worker;
 
 cluster.Cluster.prototype.workers;
 
-/**
- * @param {string} event
- * @param {Function} listener
- * @return {*}
- */
-cluster.Cluster.prototype.addListener = function (_event, _listener) {};
-
-/**
- * @param {string} event
- * @param {(function(cluster.Worker): void)} listener
- * @return {*}
- */
-cluster.Cluster.prototype.addListener = function (_event, _listener) {};
-
-/**
- * @param {string} event
- * @param {(function(cluster.Worker, number, string): void)} listener
- * @return {*}
- */
-cluster.Cluster.prototype.addListener = function (_event, _listener) {};
-
-/**
- * @param {string} event
- * @param {(function(cluster.Worker, cluster.Address): void)} listener
- * @return {*}
- */
-cluster.Cluster.prototype.addListener = function (_event, _listener) {};
-
-/**
- * @param {string} event
- * @param {(function(cluster.Worker, *, (net.Socket|net.Server)): void)} listener
- * @return {*}
- */
-cluster.Cluster.prototype.addListener = function (_event, _listener) {};
-
-/**
- * @param {string} event
- * @param {(function(*): void)} listener
- * @return {*}
- */
-cluster.Cluster.prototype.addListener = function (_event, _listener) {};
 
 /**
  * @param {string} event
  * @param {Function} listener
  * @return {*}
  */
-cluster.Cluster.prototype.on = function (_event, _listener) {};
+cluster.Cluster.prototype.addListener = function(event, listener) {};
 
 /**
  * @param {string} event
  * @param {(function(cluster.Worker): void)} listener
  * @return {*}
  */
-cluster.Cluster.prototype.on = function (_event, _listener) {};
+cluster.Cluster.prototype.addListener = function(event, listener) {};
 
 /**
  * @param {string} event
  * @param {(function(cluster.Worker, number, string): void)} listener
  * @return {*}
  */
-cluster.Cluster.prototype.on = function (_event, _listener) {};
+cluster.Cluster.prototype.addListener = function(event, listener) {};
 
 /**
  * @param {string} event
  * @param {(function(cluster.Worker, cluster.Address): void)} listener
  * @return {*}
  */
-cluster.Cluster.prototype.on = function (_event, _listener) {};
+cluster.Cluster.prototype.addListener = function(event, listener) {};
 
 /**
  * @param {string} event
  * @param {(function(cluster.Worker, *, (net.Socket|net.Server)): void)} listener
  * @return {*}
  */
-cluster.Cluster.prototype.on = function (_event, _listener) {};
+cluster.Cluster.prototype.addListener = function(event, listener) {};
 
 /**
  * @param {string} event
  * @param {(function(*): void)} listener
  * @return {*}
  */
-cluster.Cluster.prototype.on = function (_event, _listener) {};
+cluster.Cluster.prototype.addListener = function(event, listener) {};
 
 /**
  * @param {string} event
  * @param {Function} listener
  * @return {*}
  */
-cluster.Cluster.prototype.once = function (_event, _listener) {};
+cluster.Cluster.prototype.on = function(event, listener) {};
 
 /**
  * @param {string} event
  * @param {(function(cluster.Worker): void)} listener
  * @return {*}
  */
-cluster.Cluster.prototype.once = function (_event, _listener) {};
+cluster.Cluster.prototype.on = function(event, listener) {};
 
 /**
  * @param {string} event
  * @param {(function(cluster.Worker, number, string): void)} listener
  * @return {*}
  */
-cluster.Cluster.prototype.once = function (_event, _listener) {};
+cluster.Cluster.prototype.on = function(event, listener) {};
 
 /**
  * @param {string} event
  * @param {(function(cluster.Worker, cluster.Address): void)} listener
  * @return {*}
  */
-cluster.Cluster.prototype.once = function (_event, _listener) {};
+cluster.Cluster.prototype.on = function(event, listener) {};
 
 /**
  * @param {string} event
  * @param {(function(cluster.Worker, *, (net.Socket|net.Server)): void)} listener
  * @return {*}
  */
-cluster.Cluster.prototype.once = function (_event, _listener) {};
+cluster.Cluster.prototype.on = function(event, listener) {};
 
 /**
  * @param {string} event
  * @param {(function(*): void)} listener
  * @return {*}
  */
-cluster.Cluster.prototype.once = function (_event, _listener) {};
+cluster.Cluster.prototype.on = function(event, listener) {};
 
 /**
  * @param {string} event
  * @param {Function} listener
  * @return {*}
  */
-cluster.Cluster.prototype.prependListener = function (_event, _listener) {};
+cluster.Cluster.prototype.once = function(event, listener) {};
 
 /**
  * @param {string} event
  * @param {(function(cluster.Worker): void)} listener
  * @return {*}
  */
-cluster.Cluster.prototype.prependListener = function (_event, _listener) {};
+cluster.Cluster.prototype.once = function(event, listener) {};
 
 /**
  * @param {string} event
  * @param {(function(cluster.Worker, number, string): void)} listener
  * @return {*}
  */
-cluster.Cluster.prototype.prependListener = function (_event, _listener) {};
+cluster.Cluster.prototype.once = function(event, listener) {};
 
 /**
  * @param {string} event
  * @param {(function(cluster.Worker, cluster.Address): void)} listener
  * @return {*}
  */
-cluster.Cluster.prototype.prependListener = function (_event, _listener) {};
+cluster.Cluster.prototype.once = function(event, listener) {};
 
 /**
  * @param {string} event
  * @param {(function(cluster.Worker, *, (net.Socket|net.Server)): void)} listener
  * @return {*}
  */
-cluster.Cluster.prototype.prependListener = function (_event, _listener) {};
+cluster.Cluster.prototype.once = function(event, listener) {};
 
 /**
  * @param {string} event
  * @param {(function(*): void)} listener
  * @return {*}
  */
-cluster.Cluster.prototype.prependListener = function (_event, _listener) {};
+cluster.Cluster.prototype.once = function(event, listener) {};
 
 /**
  * @param {string} event
  * @param {Function} listener
  * @return {*}
  */
-cluster.Cluster.prototype.prependOnceListener = function (_event, _listener) {};
+cluster.Cluster.prototype.prependListener = function(event, listener) {};
 
 /**
  * @param {string} event
  * @param {(function(cluster.Worker): void)} listener
  * @return {*}
  */
-cluster.Cluster.prototype.prependOnceListener = function (_event, _listener) {};
+cluster.Cluster.prototype.prependListener = function(event, listener) {};
 
 /**
  * @param {string} event
  * @param {(function(cluster.Worker, number, string): void)} listener
  * @return {*}
  */
-cluster.Cluster.prototype.prependOnceListener = function (_event, _listener) {};
+cluster.Cluster.prototype.prependListener = function(event, listener) {};
 
 /**
  * @param {string} event
  * @param {(function(cluster.Worker, cluster.Address): void)} listener
  * @return {*}
  */
-cluster.Cluster.prototype.prependOnceListener = function (_event, _listener) {};
+cluster.Cluster.prototype.prependListener = function(event, listener) {};
 
 /**
  * @param {string} event
  * @param {(function(cluster.Worker, *, (net.Socket|net.Server)): void)} listener
  * @return {*}
  */
-cluster.Cluster.prototype.prependOnceListener = function (_event, _listener) {};
+cluster.Cluster.prototype.prependListener = function(event, listener) {};
 
 /**
  * @param {string} event
  * @param {(function(*): void)} listener
  * @return {*}
  */
-cluster.Cluster.prototype.prependOnceListener = function (_event, _listener) {};
+cluster.Cluster.prototype.prependListener = function(event, listener) {};
+
+/**
+ * @param {string} event
+ * @param {Function} listener
+ * @return {*}
+ */
+cluster.Cluster.prototype.prependOnceListener = function(event, listener) {};
+
+/**
+ * @param {string} event
+ * @param {(function(cluster.Worker): void)} listener
+ * @return {*}
+ */
+cluster.Cluster.prototype.prependOnceListener = function(event, listener) {};
+
+/**
+ * @param {string} event
+ * @param {(function(cluster.Worker, number, string): void)} listener
+ * @return {*}
+ */
+cluster.Cluster.prototype.prependOnceListener = function(event, listener) {};
+
+/**
+ * @param {string} event
+ * @param {(function(cluster.Worker, cluster.Address): void)} listener
+ * @return {*}
+ */
+cluster.Cluster.prototype.prependOnceListener = function(event, listener) {};
+
+/**
+ * @param {string} event
+ * @param {(function(cluster.Worker, *, (net.Socket|net.Server)): void)} listener
+ * @return {*}
+ */
+cluster.Cluster.prototype.prependOnceListener = function(event, listener) {};
+
+/**
+ * @param {string} event
+ * @param {(function(*): void)} listener
+ * @return {*}
+ */
+cluster.Cluster.prototype.prependOnceListener = function(event, listener) {};
 
 /**
  * @param {Function=} callback
  * @return {void}
  */
-cluster.disconnect = function (_callback) {};
+cluster.disconnect = function(callback) {};
 
 /**
  * @param {*=} env
  * @return {cluster.Worker}
  */
-cluster.fork = function (_env) {};
+cluster.fork = function(env) {};
 
 /**
  * @type {boolean}
@@ -657,7 +658,7 @@ cluster.settings;
  * @param {cluster.ClusterSetupMasterSettings=} settings
  * @return {void}
  */
-cluster.setupMaster = function (_settings) {};
+cluster.setupMaster = function(settings) {};
 
 /**
  * @type {cluster.Worker}
@@ -666,263 +667,264 @@ cluster.worker;
 
 cluster.workers;
 
+
 /**
  * @param {string} event
  * @param {Function} listener
  * @return {cluster.Cluster}
  */
-cluster.addListener = function (_event, _listener) {};
+cluster.addListener = function(event, listener) {};
 
 /**
  * @param {string} event
  * @param {(function(cluster.Worker): void)} listener
  * @return {cluster.Cluster}
  */
-cluster.addListener = function (_event, _listener) {};
+cluster.addListener = function(event, listener) {};
 
 /**
  * @param {string} event
  * @param {(function(cluster.Worker, number, string): void)} listener
  * @return {cluster.Cluster}
  */
-cluster.addListener = function (_event, _listener) {};
+cluster.addListener = function(event, listener) {};
 
 /**
  * @param {string} event
  * @param {(function(cluster.Worker, cluster.Address): void)} listener
  * @return {cluster.Cluster}
  */
-cluster.addListener = function (_event, _listener) {};
+cluster.addListener = function(event, listener) {};
 
 /**
  * @param {string} event
  * @param {(function(cluster.Worker, *, (net.Socket|net.Server)): void)} listener
  * @return {cluster.Cluster}
  */
-cluster.addListener = function (_event, _listener) {};
+cluster.addListener = function(event, listener) {};
 
 /**
  * @param {string} event
  * @param {(function(*): void)} listener
  * @return {cluster.Cluster}
  */
-cluster.addListener = function (_event, _listener) {};
+cluster.addListener = function(event, listener) {};
 
 /**
  * @param {string} event
  * @param {Function} listener
  * @return {cluster.Cluster}
  */
-cluster.on = function (_event, _listener) {};
+cluster.on = function(event, listener) {};
 
 /**
  * @param {string} event
  * @param {(function(cluster.Worker): void)} listener
  * @return {cluster.Cluster}
  */
-cluster.on = function (_event, _listener) {};
+cluster.on = function(event, listener) {};
 
 /**
  * @param {string} event
  * @param {(function(cluster.Worker, number, string): void)} listener
  * @return {cluster.Cluster}
  */
-cluster.on = function (_event, _listener) {};
+cluster.on = function(event, listener) {};
 
 /**
  * @param {string} event
  * @param {(function(cluster.Worker, cluster.Address): void)} listener
  * @return {cluster.Cluster}
  */
-cluster.on = function (_event, _listener) {};
+cluster.on = function(event, listener) {};
 
 /**
  * @param {string} event
  * @param {(function(cluster.Worker, *, (net.Socket|net.Server)): void)} listener
  * @return {cluster.Cluster}
  */
-cluster.on = function (_event, _listener) {};
+cluster.on = function(event, listener) {};
 
 /**
  * @param {string} event
  * @param {(function(*): void)} listener
  * @return {cluster.Cluster}
  */
-cluster.on = function (_event, _listener) {};
+cluster.on = function(event, listener) {};
 
 /**
  * @param {string} event
  * @param {Function} listener
  * @return {cluster.Cluster}
  */
-cluster.once = function (_event, _listener) {};
+cluster.once = function(event, listener) {};
 
 /**
  * @param {string} event
  * @param {(function(cluster.Worker): void)} listener
  * @return {cluster.Cluster}
  */
-cluster.once = function (_event, _listener) {};
+cluster.once = function(event, listener) {};
 
 /**
  * @param {string} event
  * @param {(function(cluster.Worker, number, string): void)} listener
  * @return {cluster.Cluster}
  */
-cluster.once = function (_event, _listener) {};
+cluster.once = function(event, listener) {};
 
 /**
  * @param {string} event
  * @param {(function(cluster.Worker, cluster.Address): void)} listener
  * @return {cluster.Cluster}
  */
-cluster.once = function (_event, _listener) {};
+cluster.once = function(event, listener) {};
 
 /**
  * @param {string} event
  * @param {(function(cluster.Worker, *, (net.Socket|net.Server)): void)} listener
  * @return {cluster.Cluster}
  */
-cluster.once = function (_event, _listener) {};
+cluster.once = function(event, listener) {};
 
 /**
  * @param {string} event
  * @param {(function(*): void)} listener
  * @return {cluster.Cluster}
  */
-cluster.once = function (_event, _listener) {};
+cluster.once = function(event, listener) {};
 
 /**
  * @param {string} event
  * @param {Function} listener
  * @return {cluster.Cluster}
  */
-cluster.removeListener = function (_event, _listener) {};
+cluster.removeListener = function(event, listener) {};
 
 /**
  * @param {string=} event
  * @return {cluster.Cluster}
  */
-cluster.removeAllListeners = function (_event) {};
+cluster.removeAllListeners = function(event) {};
 
 /**
  * @param {number} n
  * @return {cluster.Cluster}
  */
-cluster.setMaxListeners = function (_n) {};
+cluster.setMaxListeners = function(n) {};
 
 /**
  * @return {number}
  */
-cluster.getMaxListeners = function () {};
+cluster.getMaxListeners = function() {};
 
 /**
  * @param {string} event
  * @return {Array<Function>}
  */
-cluster.listeners = function (_event) {};
+cluster.listeners = function(event) {};
 
 /**
  * @param {string} event
  * @param {...*} args
  * @return {boolean}
  */
-cluster.emit = function (_event, _args) {};
+cluster.emit = function(event, args) {};
 
 /**
  * @param {string} type
  * @return {number}
  */
-cluster.listenerCount = function (_type) {};
+cluster.listenerCount = function(type) {};
 
 /**
  * @param {string} event
  * @param {Function} listener
  * @return {cluster.Cluster}
  */
-cluster.prependListener = function (_event, _listener) {};
+cluster.prependListener = function(event, listener) {};
 
 /**
  * @param {string} event
  * @param {(function(cluster.Worker): void)} listener
  * @return {cluster.Cluster}
  */
-cluster.prependListener = function (_event, _listener) {};
+cluster.prependListener = function(event, listener) {};
 
 /**
  * @param {string} event
  * @param {(function(cluster.Worker, number, string): void)} listener
  * @return {cluster.Cluster}
  */
-cluster.prependListener = function (_event, _listener) {};
+cluster.prependListener = function(event, listener) {};
 
 /**
  * @param {string} event
  * @param {(function(cluster.Worker, cluster.Address): void)} listener
  * @return {cluster.Cluster}
  */
-cluster.prependListener = function (_event, _listener) {};
+cluster.prependListener = function(event, listener) {};
 
 /**
  * @param {string} event
  * @param {(function(cluster.Worker, *, (net.Socket|net.Server)): void)} listener
  * @return {cluster.Cluster}
  */
-cluster.prependListener = function (_event, _listener) {};
+cluster.prependListener = function(event, listener) {};
 
 /**
  * @param {string} event
  * @param {(function(*): void)} listener
  * @return {cluster.Cluster}
  */
-cluster.prependListener = function (_event, _listener) {};
+cluster.prependListener = function(event, listener) {};
 
 /**
  * @param {string} event
  * @param {Function} listener
  * @return {cluster.Cluster}
  */
-cluster.prependOnceListener = function (_event, _listener) {};
+cluster.prependOnceListener = function(event, listener) {};
 
 /**
  * @param {string} event
  * @param {(function(cluster.Worker): void)} listener
  * @return {cluster.Cluster}
  */
-cluster.prependOnceListener = function (_event, _listener) {};
+cluster.prependOnceListener = function(event, listener) {};
 
 /**
  * @param {string} event
  * @param {(function(cluster.Worker, number, string): void)} listener
  * @return {cluster.Cluster}
  */
-cluster.prependOnceListener = function (_event, _listener) {};
+cluster.prependOnceListener = function(event, listener) {};
 
 /**
  * @param {string} event
  * @param {(function(cluster.Worker, cluster.Address): void)} listener
  * @return {cluster.Cluster}
  */
-cluster.prependOnceListener = function (_event, _listener) {};
+cluster.prependOnceListener = function(event, listener) {};
 
 /**
  * @param {string} event
  * @param {(function(cluster.Worker, *, (net.Socket|net.Server)): void)} listener
  * @return {cluster.Cluster}
  */
-cluster.prependOnceListener = function (_event, _listener) {};
+cluster.prependOnceListener = function(event, listener) {};
 
 /**
  * @param {string} event
  * @param {(function(*): void)} listener
  * @return {cluster.Cluster}
  */
-cluster.prependOnceListener = function (_event, _listener) {};
+cluster.prependOnceListener = function(event, listener) {};
 
 /**
  * @return {Array<string>}
  */
-cluster.eventNames = function () {};
+cluster.eventNames = function() {};
 
 module.exports.ClusterSettings = cluster.ClusterSettings;
 
@@ -1025,3 +1027,4 @@ module.exports.prependOnceListener = cluster.prependOnceListener;
 module.exports.prependOnceListener = cluster.prependOnceListener;
 
 module.exports.eventNames = cluster.eventNames;
+

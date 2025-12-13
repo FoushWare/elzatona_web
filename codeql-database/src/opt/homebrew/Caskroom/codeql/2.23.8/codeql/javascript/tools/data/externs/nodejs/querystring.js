@@ -42,7 +42,7 @@ var querystring = {};
 /**
  * @interface
  */
-querystring.StringifyOptions = function () {};
+querystring.StringifyOptions = function() {};
 
 /**
  * @type {Function}
@@ -52,7 +52,7 @@ querystring.StringifyOptions.prototype.encodeURIComponent;
 /**
  * @interface
  */
-querystring.ParseOptions = function () {};
+querystring.ParseOptions = function() {};
 
 /**
  * @type {number}
@@ -72,7 +72,7 @@ querystring.ParseOptions.prototype.decodeURIComponent;
  * @param {querystring.StringifyOptions=} options
  * @return {string}
  */
-querystring.stringify = function (_obj, _sep, _eq, _options) {};
+querystring.stringify = function(obj, sep, eq, options) {};
 
 /**
  * @param {string} str
@@ -81,7 +81,7 @@ querystring.stringify = function (_obj, _sep, _eq, _options) {};
  * @param {querystring.ParseOptions=} options
  * @return {*}
  */
-querystring.parse = function (_str, _sep, _eq, _options) {};
+querystring.parse = function(str, sep, eq, options) {};
 
 /**
  * @template T
@@ -91,19 +91,19 @@ querystring.parse = function (_str, _sep, _eq, _options) {};
  * @param {querystring.ParseOptions=} options
  * @return {T}
  */
-querystring.parse = function (_str, _sep, _eq, _options) {};
+querystring.parse = function(str, sep, eq, options) {};
 
 /**
  * @param {string} str
  * @return {string}
  */
-querystring.escape = function (_str) {};
+querystring.escape = function(str) {};
 
 /**
  * @param {string} str
  * @return {string}
  */
-querystring.unescape = function (_str) {};
+querystring.unescape = function(str) {};
 
 module.exports.StringifyOptions = querystring.StringifyOptions;
 
@@ -124,6 +124,7 @@ module.exports.unescape = querystring.unescape;
  * @param {boolean} decodeSpaces
  * @return {void}
  */
-querystring.unescapeBuffer = function (_s, _decodeSpaces) {};
+querystring.unescapeBuffer = function(s, decodeSpaces) {};
 
 module.exports.unescapeBuffer = querystring.unescapeBuffer;
+
