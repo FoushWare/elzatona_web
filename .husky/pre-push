@@ -125,10 +125,22 @@ run_check() {
 echo "STEP 0: Secret Scanning"
 
 if command -v gitleaks >/dev/null 2>&1; then
+  # Create temporary directory with staged files only
+  STAGED_DIR=$(mktemp -d)
+  git diff --cached --name-only --diff-filter=AM | while read file; do
+    if [ -f "$file" ]; then
+      mkdir -p "$STAGED_DIR/$(dirname "$file")"
+      cp "$file" "$STAGED_DIR/$file"
+    fi
+  done
+  
   run_check \
     "Secret Scan (Gitleaks)" \
-    "gitleaks detect --redact --exit-code 1" \
+    "cd '$STAGED_DIR' && gitleaks detect --redact --exit-code 1 --no-git --source . && cd -" \
     "Remove secrets and rotate compromised credentials"
+  
+  # Clean up temporary directory
+  rm -rf "$STAGED_DIR"
 else
   echo -e "${YELLOW}⚠️  Gitleaks not installed — skipping secret scan${NC}"
   echo -e "${YELLOW}💡 Install: https://github.com/gitleaks/gitleaks${NC}"
