@@ -33,7 +33,7 @@ const envFiles = [
 for (const envFile of envFiles) {
   try {
     config({ path: envFile, override: false });
-  } catch (error) {
+  } catch (_error) {
     // File doesn't exist, that's okay
   }
 }
@@ -101,7 +101,7 @@ for (const envFile of envFiles) {
     if (fs.existsSync(envFile)) {
       loadedFiles.push(envFile);
     }
-  } catch (error) {
+  } catch (_error) {
     // Ignore
   }
 }

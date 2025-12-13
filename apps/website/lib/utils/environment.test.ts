@@ -8,9 +8,9 @@ import {
   getEnvironment,
   isTestEnvironment,
   isProductionEnvironment,
-  isDevelopmentEnvironment,
+  isDevelopmentEnvironment as _isDevelopmentEnvironment,
   getSupabaseProjectRef,
-  getEnvironmentInfo,
+  getEnvironmentInfo as _getEnvironmentInfo,
   assertEnvironment,
   getEnvironmentConfig,
 } from "./environment";

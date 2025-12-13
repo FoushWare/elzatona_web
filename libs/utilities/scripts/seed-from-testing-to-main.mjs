@@ -142,7 +142,7 @@ async function testConnections() {
 
   // Test testing database connection
   try {
-    const { data, error } = await testingClient
+    const { data: _data, error } = await testingClient
       .from("categories")
       .select("id")
       .limit(1);
@@ -165,7 +165,7 @@ async function testConnections() {
 
   // Test main database connection
   try {
-    const { data, error } = await mainClient
+    const { data: _data, error } = await mainClient
       .from("categories")
       .select("id")
       .limit(1);
@@ -476,7 +476,7 @@ async function copyPlanCards() {
     return;
   }
 
-  const { data: inserted, error: insertError } = await mainClient
+  const { data: _inserted, error: insertError } = await mainClient
     .from("plan_cards")
     .insert(transformedPlanCards)
     .select();
@@ -574,7 +574,7 @@ async function copyCardCategories() {
     return;
   }
 
-  const { data: inserted, error: insertError } = await mainClient
+  const { data: _inserted, error: insertError } = await mainClient
     .from("card_categories")
     .insert(transformedCardCategories)
     .select();
@@ -611,7 +611,7 @@ async function clearMainDatabaseTables() {
         .from(table)
         .select("*", { count: "exact", head: true });
       counts[table] = count || 0;
-    } catch (error) {
+    } catch (_error) {
       counts[table] = 0;
     }
   }

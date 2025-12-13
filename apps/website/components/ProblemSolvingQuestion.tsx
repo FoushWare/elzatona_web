@@ -1,11 +1,10 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import CodeEditor from "./CodeEditor";
 import {
   CheckCircle,
   XCircle,
-  AlertCircle,
   Play,
   Loader2,
   Code2,
@@ -13,53 +12,801 @@ import {
   ChevronRight,
   Maximize2,
   Minimize2,
-  Copy,
   Plus,
   Lightbulb,
-  BookOpen,
 } from "lucide-react";
 import {
   addFlashcard,
   isInFlashcards,
   removeFlashcard,
-} from "@/lib/flashcards";
+} from "../lib/flashcards";
+import { SafeHTML, sanitizeText } from "../lib/utils/sanitize";
 
 interface TestCase {
-  input: any | any[];
-  expectedOutput: any;
+  input: unknown[] | Record<string, unknown> | string | number | boolean;
+  expectedOutput: unknown;
   description?: string;
 }
 
 interface Example {
-  input: any | Record<string, any>;
-  output: any;
+  input: unknown[] | Record<string, unknown> | string | number | boolean;
+  output: unknown;
   explanation?: string;
 }
 
 interface ProblemSolvingQuestionProps {
-  question: {
-    id: string;
-    title: string;
-    content: string;
-    code_template?: string;
-    test_cases?: TestCase[] | string;
-    examples?: Example[] | string;
-    difficulty?: string;
-    category?: string;
-    topic?: string;
-    hints?: string[] | null;
-    constraints?: string[] | null;
-    tags?: string[] | null;
-    language?: string;
-    topic_id?: string;
-    topic_name?: string;
-    topic_description?: string;
+  readonly question: {
+    readonly id: string;
+    readonly title: string;
+    readonly content: string;
+    readonly code_template?: string;
+    readonly test_cases?: TestCase[] | string;
+    readonly examples?: Example[] | string;
+    readonly difficulty?: string;
+    readonly category?: string;
+    readonly topic?: string;
+    readonly hints?: string[] | null;
+    readonly constraints?: string[] | null;
+    readonly tags?: string[] | null;
+    readonly language?: string;
+    readonly topic_id?: string;
+    readonly topic_name?: string;
+    readonly topic_description?: string;
   };
-  onComplete?: (isCorrect: boolean) => void;
-  onNextQuestion?: () => void;
-  language?: string; // Fallback only if not in question
-  onSubmitSolution?: () => void;
+  readonly onComplete?: (isCorrect: boolean) => void;
+  readonly onNextQuestion?: () => void;
+  readonly language?: string; // Fallback only if not in question
+  readonly onSubmitSolution?: () => void;
 }
+
+// Helper component for Problem Description Panel
+interface ProblemDescriptionPanelProps {
+  readonly question: ProblemSolvingQuestionProps["question"];
+  readonly leftPanelWidth: number;
+  readonly isFocusMode: boolean;
+  readonly inFlashcards: boolean;
+  readonly onToggleFlashcard: () => void;
+  readonly onEnterFocusMode: () => void;
+  readonly onResizeStart: () => void;
+  readonly getDifficultyBadgeClassName: (difficulty?: string) => string;
+  readonly formatInput: (input: unknown) => string;
+  readonly examples: Example[];
+  readonly showHints: boolean;
+  readonly revealedHints: number[];
+  readonly onToggleHints: () => void;
+  readonly onRevealHint: (index: number) => void;
+}
+
+const ProblemDescriptionPanel: React.FC<ProblemDescriptionPanelProps> = ({
+  question,
+  leftPanelWidth,
+  isFocusMode,
+  inFlashcards,
+  onToggleFlashcard,
+  onEnterFocusMode,
+  onResizeStart,
+  getDifficultyBadgeClassName,
+  formatInput,
+  examples,
+  showHints,
+  revealedHints,
+  onToggleHints,
+  onRevealHint,
+}) => {
+  if (isFocusMode) return null;
+
+  return (
+    <div
+      className="overflow-y-auto bg-gradient-to-br from-white via-gray-50/30 to-white dark:from-gray-900 dark:via-gray-800/50 dark:to-gray-900 border-r-0 lg:border-r-2 border-gray-200/60 dark:border-gray-700/60 border-b lg:border-b-0 relative shadow-sm"
+      style={{
+        width: `${leftPanelWidth}%`,
+        minWidth: "300px",
+        maxWidth: "60%",
+      }}
+    >
+      {/* Resize Handle - Horizontal */}
+      <button
+        type="button"
+        aria-label="Resize panel horizontally"
+        className="absolute right-0 top-0 bottom-0 w-1.5 bg-transparent hover:bg-indigo-500/80 dark:hover:bg-indigo-500/80 cursor-col-resize z-20 transition-all duration-200 select-none group border-0 p-0"
+        onMouseDown={(e) => {
+          e.preventDefault();
+          onResizeStart();
+        }}
+        onKeyDown={(e) => {
+          if (e.key === "Enter" || e.key === " ") {
+            e.preventDefault();
+            onResizeStart();
+          }
+        }}
+      >
+        <div className="absolute inset-y-0 left-1/2 -translate-x-1/2 w-0.5 bg-gray-300/50 dark:bg-gray-600/50 group-hover:bg-indigo-400 dark:group-hover:bg-indigo-400 transition-all duration-200" />
+      </button>
+      <div className="p-5 sm:p-7 md:p-9 lg:p-11">
+        {/* Header with Title and Difficulty */}
+        <div className="mb-7 sm:mb-9 pb-6 sm:pb-7 border-b-2 border-gray-200/80 dark:border-gray-700/80">
+          <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-5 sm:gap-6 mb-5">
+            <div className="flex-1 min-w-0">
+              <div className="flex flex-wrap items-center gap-3 sm:gap-4 mb-5">
+                <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-gray-900 dark:text-white break-words leading-tight tracking-tight">
+                  {question.title}
+                </h2>
+                {question.difficulty && (
+                  <span
+                    className={`inline-flex items-center px-4 sm:px-4.5 py-2 rounded-xl text-xs sm:text-sm font-extrabold uppercase tracking-wider shadow-sm ${getDifficultyBadgeClassName(question.difficulty)}`}
+                  >
+                    {question.difficulty}
+                  </span>
+                )}
+              </div>
+
+              {/* Topic Tags (LeetCode Style) */}
+              {question.tags && question.tags.length > 0 && (
+                <div className="flex flex-wrap items-center gap-2 sm:gap-2.5 mb-5">
+                  {question.tags
+                    .filter((tag) => {
+                      const genericTags = [
+                        "problem-solving",
+                        "algorithms",
+                        "javascript",
+                        "typescript",
+                        "python",
+                        "easy",
+                        "medium",
+                        "hard",
+                        "beginner",
+                        "intermediate",
+                        "advanced",
+                      ];
+                      return !genericTags.includes(tag.toLowerCase());
+                    })
+                    .map((tag, index) => {
+                      const sanitizedTag = sanitizeText(tag);
+                      return (
+                        <span
+                          key={`tag-${sanitizedTag}-${index}`}
+                          className="inline-flex items-center px-3 sm:px-3.5 py-1.5 rounded-lg text-xs sm:text-sm font-semibold bg-gradient-to-br from-gray-100 to-gray-50 dark:from-gray-700 dark:to-gray-800 text-gray-700 dark:text-gray-300 border border-gray-200 dark:border-gray-600 hover:from-gray-200 hover:to-gray-100 dark:hover:from-gray-600 dark:hover:to-gray-700 transition-all duration-200 shadow-sm hover:shadow"
+                        >
+                          {sanitizedTag}
+                        </span>
+                      );
+                    })}
+                </div>
+              )}
+
+              {/* Flashcard Button */}
+              <button
+                onClick={onToggleFlashcard}
+                className={`inline-flex items-center gap-2 px-4 sm:px-4.5 py-2.5 rounded-xl border-2 transition-all duration-200 text-xs sm:text-sm font-bold shadow-md hover:shadow-lg transform hover:scale-105 ${
+                  inFlashcards
+                    ? "bg-gradient-to-br from-green-100 via-green-50 to-green-100 text-green-800 dark:from-green-900/40 dark:via-green-900/30 dark:to-green-900/20 dark:text-green-200 border-green-400/80 dark:border-green-600/80"
+                    : "bg-gradient-to-br from-white to-indigo-50/50 dark:from-gray-800 dark:to-indigo-900/20 text-indigo-700 dark:text-indigo-300 border-indigo-300/80 dark:border-indigo-600/80 hover:from-indigo-50 hover:to-indigo-100 dark:hover:from-indigo-900/30 dark:hover:to-indigo-900/40"
+                }`}
+              >
+                <span className="text-base sm:text-lg">🔖</span>
+                <span className="hidden sm:inline">
+                  {inFlashcards ? "Added to Flashcard" : "Add to Flashcard"}
+                </span>
+                <span className="sm:hidden">
+                  {inFlashcards ? "Added" : "Add"}
+                </span>
+              </button>
+            </div>
+            <button
+              onClick={onEnterFocusMode}
+              className="self-start sm:self-auto p-2.5 text-gray-500 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-gray-200 hover:bg-indigo-50 dark:hover:bg-gray-700 rounded-lg border border-gray-200 dark:border-transparent hover:border-indigo-200 dark:hover:border-gray-600 transition-all duration-200 shadow-sm hover:shadow"
+              title="Focus Mode"
+            >
+              <Maximize2 className="w-4 h-4 sm:w-5 sm:h-5" />
+            </button>
+          </div>
+        </div>
+
+        {/* Problem Content */}
+        <div className="mb-7 sm:mb-9">
+          <SafeHTML
+            html={question.content}
+            className="text-base sm:text-lg text-gray-800 dark:text-gray-200 leading-relaxed prose prose-sm sm:prose-base dark:prose-invert max-w-none prose-headings:font-bold prose-p:mb-4 prose-strong:text-gray-900 dark:prose-strong:text-gray-100"
+          />
+        </div>
+
+        {/* Examples Section (LeetCode Style) */}
+        {examples.length > 0 && (
+          <div className="mt-9 sm:mt-11">
+            <h3 className="text-xl sm:text-2xl font-extrabold text-gray-900 dark:text-white mb-6 tracking-tight">
+              Examples
+            </h3>
+            <div className="space-y-6 sm:space-y-7">
+              {examples.map((example, index) => (
+                <div
+                  key={`example-${index}-${JSON.stringify(example.input)}`}
+                  className="bg-gradient-to-br from-white via-gray-50/50 to-white dark:from-gray-800/80 dark:via-gray-800/60 dark:to-gray-800/80 rounded-2xl p-5 sm:p-6 border-2 border-gray-200/60 dark:border-gray-700/60 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-[1.01]"
+                >
+                  <div className="flex items-center gap-2.5 mb-5">
+                    <span className="text-base sm:text-lg font-extrabold text-gray-900 dark:text-white tracking-tight">
+                      Example {index + 1}:
+                    </span>
+                  </div>
+
+                  {/* Input */}
+                  <div className="mb-4 sm:mb-5">
+                    <div className="text-sm sm:text-base font-bold text-gray-800 dark:text-gray-200 mb-3">
+                      <strong>Input:</strong>
+                    </div>
+                    <div className="bg-gradient-to-br from-gray-50 to-white dark:from-gray-900 dark:to-gray-800 rounded-xl p-4 sm:p-5 border-2 border-gray-200/80 dark:border-gray-700/80 shadow-md">
+                      <pre className="text-sm sm:text-base font-mono text-gray-900 dark:text-gray-100 whitespace-pre-wrap break-words overflow-x-auto leading-relaxed">
+                        {formatInput(example.input)}
+                      </pre>
+                    </div>
+                  </div>
+
+                  {/* Output */}
+                  <div className="mb-4 sm:mb-5">
+                    <div className="text-sm sm:text-base font-bold text-gray-800 dark:text-gray-200 mb-3">
+                      <strong>Output:</strong>
+                    </div>
+                    <div className="bg-gradient-to-br from-green-50/50 to-white dark:from-green-900/20 dark:to-gray-800 rounded-xl p-4 sm:p-5 border-2 border-green-200/60 dark:border-green-800/60 shadow-md">
+                      <pre className="text-sm sm:text-base font-mono text-green-900 dark:text-green-100 whitespace-pre-wrap break-words overflow-x-auto leading-relaxed">
+                        {typeof example.output === "string"
+                          ? `"${example.output}"`
+                          : JSON.stringify(example.output, null, 2)}
+                      </pre>
+                    </div>
+                  </div>
+
+                  {/* Explanation */}
+                  {example.explanation && (
+                    <div className="mt-5 pt-5 border-t-2 border-gray-200/80 dark:border-gray-700/80">
+                      <div className="text-sm sm:text-base font-bold text-gray-800 dark:text-gray-200 mb-3">
+                        <strong>Explanation:</strong>
+                      </div>
+                      <p className="text-sm sm:text-base text-gray-700 dark:text-gray-300 leading-relaxed">
+                        {example.explanation}
+                      </p>
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Hints Section */}
+        {question.hints && question.hints.length > 0 && (
+          <div className="mt-9 sm:mt-11">
+            <div className="flex items-center justify-between mb-6">
+              <div className="flex items-center gap-3">
+                <Lightbulb className="w-6 h-6 sm:w-7 sm:h-7 text-amber-600 dark:text-amber-400" />
+                <h3 className="text-xl sm:text-2xl font-extrabold text-gray-900 dark:text-white tracking-tight">
+                  Hints ({question.hints.length})
+                </h3>
+              </div>
+              <button
+                onClick={onToggleHints}
+                className="px-4 py-2.5 text-sm font-bold text-indigo-700 dark:text-indigo-300 bg-gradient-to-br from-indigo-50 to-indigo-100 dark:from-indigo-900/30 dark:to-indigo-900/20 rounded-xl border-2 border-indigo-200/80 dark:border-indigo-700/80 hover:from-indigo-100 hover:to-indigo-200 dark:hover:from-indigo-900/40 dark:hover:to-indigo-900/30 transition-all duration-200 shadow-md hover:shadow-lg transform hover:scale-105"
+              >
+                {showHints ? "Hide Hints" : "Show Hints"}
+              </button>
+            </div>
+            {showHints && (
+              <div className="bg-gradient-to-br from-amber-50/50 via-white to-amber-50/30 dark:from-amber-900/20 dark:via-gray-800/60 dark:to-amber-900/20 rounded-2xl p-5 sm:p-6 border-2 border-amber-200/60 dark:border-amber-800/60 shadow-lg space-y-4">
+                {question.hints.map((hint, index) => (
+                  <div
+                    key={`hint-${index}-${hint.substring(0, 20)}`}
+                    className={`p-4 rounded-xl border-2 transition-all duration-300 ${
+                      revealedHints.includes(index)
+                        ? "bg-gradient-to-br from-amber-100/80 to-white dark:from-amber-900/40 dark:to-gray-800/60 border-amber-300/80 dark:border-amber-700/80 shadow-md"
+                        : "bg-gradient-to-br from-gray-50 to-white dark:from-gray-800/40 dark:to-gray-800/20 border-gray-200/60 dark:border-gray-700/60"
+                    }`}
+                  >
+                    <div className="flex items-start gap-3">
+                      <div className="flex-shrink-0 w-8 h-8 rounded-full bg-gradient-to-br from-amber-400 to-amber-500 dark:from-amber-600 dark:to-amber-700 flex items-center justify-center text-white font-bold text-sm shadow-md">
+                        {index + 1}
+                      </div>
+                      {revealedHints.includes(index) ? (
+                        <div className="flex-1">
+                          <p className="text-sm sm:text-base text-gray-800 dark:text-gray-200 leading-relaxed">
+                            {hint}
+                          </p>
+                        </div>
+                      ) : (
+                        <button
+                          onClick={() => onRevealHint(index)}
+                          className="flex-1 text-left text-sm sm:text-base text-gray-600 dark:text-gray-400 hover:text-amber-600 dark:hover:text-amber-400 transition-colors font-medium"
+                        >
+                          Click to reveal hint {index + 1}
+                        </button>
+                      )}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* Constraints Section - From Database */}
+        {question.constraints && question.constraints.length > 0 && (
+          <div className="mt-9 sm:mt-11">
+            <h3 className="text-xl sm:text-2xl font-extrabold text-gray-900 dark:text-white mb-6 tracking-tight">
+              Constraints
+            </h3>
+            <div className="bg-gradient-to-br from-indigo-50/50 via-white to-indigo-50/30 dark:from-indigo-900/20 dark:via-gray-800/60 dark:to-indigo-900/20 rounded-2xl p-5 sm:p-6 border-2 border-indigo-200/60 dark:border-indigo-800/60 shadow-lg">
+              <ul className="space-y-3 text-sm sm:text-base text-gray-800 dark:text-gray-200 list-disc list-inside marker:text-indigo-600 dark:marker:text-indigo-400 font-medium">
+                {question.constraints.map((constraint, index) => (
+                  <li
+                    key={`constraint-${index}-${constraint.substring(0, 20)}`}
+                  >
+                    {constraint}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+};
+
+// Helper component for Test Cases Panel
+interface TestCasesPanelProps {
+  readonly testCases: TestCase[];
+  readonly baseTestCases: TestCase[];
+  readonly selectedTestCaseIndex: number;
+  readonly editingTestCaseIndex: number | null;
+  readonly editingTestCaseData: Partial<TestCase> | null;
+  readonly onSelectTestCase: (index: number) => void;
+  readonly onAddCustomTestCase: () => void;
+  readonly onSaveTestCase: () => void;
+  readonly onCancelEdit: () => void;
+  readonly onDeleteTestCase: (index: number) => void;
+  readonly onStartEdit: (index: number) => void;
+  readonly parseInputFields: (input: unknown) => Record<string, unknown>;
+  readonly setEditingTestCaseData: (data: Partial<TestCase> | null) => void;
+}
+
+const TestCasesPanel: React.FC<TestCasesPanelProps> = ({
+  testCases,
+  baseTestCases,
+  selectedTestCaseIndex,
+  editingTestCaseIndex,
+  editingTestCaseData,
+  onSelectTestCase,
+  onAddCustomTestCase,
+  onSaveTestCase,
+  onCancelEdit,
+  onDeleteTestCase,
+  onStartEdit,
+  parseInputFields,
+  setEditingTestCaseData,
+}) => {
+  return (
+    <div className="space-y-4 sm:space-y-5">
+      {/* Test Case Selection Buttons */}
+      <div className="flex items-center gap-2 flex-wrap overflow-x-auto pb-2 -mx-1 px-1">
+        {testCases.map((testCase, index) => (
+          <button
+            key={`testcase-${index}-${JSON.stringify(testCase.input)}`}
+            onClick={() => onSelectTestCase(index)}
+            className={`px-3 sm:px-3.5 py-1.5 text-xs font-semibold rounded-lg border transition-all duration-200 whitespace-nowrap shadow-sm hover:shadow ${
+              selectedTestCaseIndex === index
+                ? "bg-gradient-to-br from-indigo-50 to-indigo-100 text-indigo-700 dark:from-indigo-900/30 dark:to-indigo-900/20 dark:text-indigo-300 border-indigo-300 dark:border-indigo-700"
+                : "bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300 border-gray-200 dark:border-gray-600 hover:bg-indigo-50 dark:hover:bg-gray-600 hover:border-indigo-200 dark:hover:border-gray-500"
+            }`}
+          >
+            {selectedTestCaseIndex === index && (
+              <CheckCircle className="w-3 h-3 inline mr-1" />
+            )}
+            Case {index + 1}
+            {index >= baseTestCases.length && (
+              <span className="ml-1 text-indigo-600 dark:text-indigo-400">
+                *
+              </span>
+            )}
+          </button>
+        ))}
+        <button
+          onClick={onAddCustomTestCase}
+          className="px-3 sm:px-3.5 py-1.5 text-xs font-semibold rounded-lg border border-dashed border-indigo-300 dark:border-indigo-600 text-indigo-600 dark:text-indigo-400 hover:bg-indigo-50 dark:hover:bg-indigo-900/20 whitespace-nowrap transition-all duration-200 shadow-sm hover:shadow"
+        >
+          <Plus className="w-3 h-3 inline mr-1" />
+          Custom
+        </button>
+      </div>
+
+      {/* Selected Test Case Display/Edit */}
+      {selectedTestCaseIndex >= 0 &&
+        selectedTestCaseIndex < testCases.length && (
+          <div className="bg-gradient-to-br from-gray-50 to-white dark:from-gray-900/50 dark:to-gray-800/30 rounded-xl p-4 sm:p-5 border border-gray-200 dark:border-gray-700 shadow-sm">
+            {editingTestCaseIndex === selectedTestCaseIndex &&
+            selectedTestCaseIndex >= baseTestCases.length ? (
+              /* Edit Custom Test Case */
+              <div className="space-y-4">
+                <div className="flex items-center justify-between mb-3">
+                  <span className="text-xs sm:text-sm font-semibold text-gray-800 dark:text-gray-200">
+                    Edit Custom Test Case {selectedTestCaseIndex + 1}
+                  </span>
+                  <div className="flex items-center gap-2">
+                    <button
+                      onClick={onSaveTestCase}
+                      className="px-3 py-1.5 text-xs font-semibold bg-green-600 hover:bg-green-700 text-white rounded-lg transition-colors"
+                    >
+                      Save
+                    </button>
+                    <button
+                      onClick={onCancelEdit}
+                      className="px-3 py-1.5 text-xs font-semibold bg-gray-600 hover:bg-gray-700 text-white rounded-lg transition-colors"
+                    >
+                      Cancel
+                    </button>
+                    <button
+                      onClick={() => onDeleteTestCase(selectedTestCaseIndex)}
+                      className="px-3 py-1.5 text-xs font-semibold bg-red-600 hover:bg-red-700 text-white rounded-lg transition-colors"
+                    >
+                      Delete
+                    </button>
+                  </div>
+                </div>
+                {editingTestCaseData &&
+                  (() => {
+                    const inputFields = parseInputFields(
+                      editingTestCaseData.input || {},
+                    );
+                    return (
+                      <div className="space-y-3">
+                        {Object.entries(inputFields).map(([key, value]) => (
+                          <div key={key} className="flex items-center gap-2">
+                            <label className="text-xs font-semibold text-gray-700 dark:text-gray-300 whitespace-nowrap min-w-[80px]">
+                              {key} =
+                            </label>
+                            <input
+                              type="text"
+                              value={
+                                typeof value === "string"
+                                  ? value
+                                  : JSON.stringify(value)
+                              }
+                              onChange={(e) => {
+                                try {
+                                  const parsed = JSON.parse(e.target.value);
+                                  const currentInput = parseInputFields(
+                                    editingTestCaseData.input || {},
+                                  );
+                                  setEditingTestCaseData({
+                                    ...editingTestCaseData,
+                                    input: {
+                                      ...currentInput,
+                                      [key]: parsed,
+                                    },
+                                  });
+                                } catch {
+                                  const currentInput = parseInputFields(
+                                    editingTestCaseData.input || {},
+                                  );
+                                  setEditingTestCaseData({
+                                    ...editingTestCaseData,
+                                    input: {
+                                      ...currentInput,
+                                      [key]: e.target.value,
+                                    },
+                                  });
+                                }
+                              }}
+                              className="flex-1 px-3 py-2 text-xs font-mono bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-600 rounded-lg text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-indigo-500 dark:focus:ring-indigo-400 focus:border-transparent"
+                            />
+                          </div>
+                        ))}
+                        <div className="flex items-center gap-2 pt-2 border-t border-gray-200 dark:border-gray-700">
+                          <label
+                            htmlFor="expected-output"
+                            className="text-xs font-semibold text-gray-700 dark:text-gray-300 whitespace-nowrap min-w-[80px]"
+                          >
+                            Expected =
+                          </label>
+                          <input
+                            id="expected-output"
+                            type="text"
+                            value={
+                              typeof editingTestCaseData.expectedOutput ===
+                              "string"
+                                ? editingTestCaseData.expectedOutput
+                                : JSON.stringify(
+                                    editingTestCaseData.expectedOutput || "",
+                                  )
+                            }
+                            onChange={(e) => {
+                              try {
+                                const parsed = JSON.parse(e.target.value);
+                                setEditingTestCaseData({
+                                  ...editingTestCaseData,
+                                  expectedOutput: parsed,
+                                });
+                              } catch {
+                                setEditingTestCaseData({
+                                  ...editingTestCaseData,
+                                  expectedOutput: e.target.value,
+                                });
+                              }
+                            }}
+                            className="flex-1 px-3 py-2 text-xs font-mono bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-600 rounded-lg text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-indigo-500 dark:focus:ring-indigo-400 focus:border-transparent"
+                          />
+                        </div>
+                      </div>
+                    );
+                  })()}
+              </div>
+            ) : (
+              /* Display Test Case (Read-only for base, editable for custom) */
+              <div>
+                <div className="flex items-center justify-between mb-3">
+                  <span className="text-xs sm:text-sm font-semibold text-gray-800 dark:text-gray-200">
+                    Test Case {selectedTestCaseIndex + 1}
+                    {testCases[selectedTestCaseIndex].description && (
+                      <span className="ml-2 text-xs font-normal text-gray-600 dark:text-gray-400">
+                        - {testCases[selectedTestCaseIndex].description}
+                      </span>
+                    )}
+                    {selectedTestCaseIndex >= baseTestCases.length && (
+                      <span className="ml-2 text-xs text-indigo-600 dark:text-indigo-400">
+                        (Custom)
+                      </span>
+                    )}
+                  </span>
+                  {selectedTestCaseIndex >= baseTestCases.length && (
+                    <button
+                      onClick={() => onStartEdit(selectedTestCaseIndex)}
+                      className="px-3 py-1.5 text-xs font-semibold bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg transition-colors"
+                    >
+                      Edit
+                    </button>
+                  )}
+                </div>
+                {(() => {
+                  const inputFields = parseInputFields(
+                    testCases[selectedTestCaseIndex].input,
+                  );
+                  return (
+                    <div className="space-y-2.5">
+                      {Object.entries(inputFields).map(([key, value]) => (
+                        <div key={key} className="flex items-center gap-2">
+                          <span className="text-xs font-semibold text-gray-700 dark:text-gray-300 whitespace-nowrap min-w-[80px]">
+                            {key} =
+                          </span>
+                          <code className="flex-1 px-3 py-1.5 text-xs font-mono bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded text-gray-900 dark:text-gray-100">
+                            {JSON.stringify(value)}
+                          </code>
+                        </div>
+                      ))}
+                      <div className="flex items-center gap-2 pt-2 border-t border-gray-200 dark:border-gray-700">
+                        <span className="text-xs font-semibold text-gray-700 dark:text-gray-300 whitespace-nowrap min-w-[80px]">
+                          Expected =
+                        </span>
+                        <code className="flex-1 px-3 py-1.5 text-xs font-mono bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded text-green-700 dark:text-green-300">
+                          {JSON.stringify(
+                            testCases[selectedTestCaseIndex].expectedOutput,
+                          )}
+                        </code>
+                      </div>
+                    </div>
+                  );
+                })()}
+              </div>
+            )}
+          </div>
+        )}
+    </div>
+  );
+};
+
+// Helper component for Test Results Panel
+interface TestResultsPanelProps {
+  readonly runOutput: {
+    stdout: string;
+    stderr: string;
+    exitCode: number;
+  } | null;
+  readonly testResults: Array<{
+    testCase: TestCase;
+    passed: boolean;
+    actualOutput?: unknown;
+    error?: string;
+    consoleOutput?: string;
+  }>;
+  readonly selectedTestCaseIndex: number;
+  readonly allTestsPassed: boolean;
+  readonly onSelectTestCase: (index: number) => void;
+}
+
+const TestResultsPanel: React.FC<TestResultsPanelProps> = ({
+  runOutput,
+  testResults,
+  selectedTestCaseIndex,
+  allTestsPassed,
+  onSelectTestCase,
+}) => {
+  return (
+    <div className="space-y-3 sm:space-y-4">
+      {/* Run Output (Console) */}
+      {runOutput && (
+        <div className="bg-gradient-to-br from-gray-50 to-white dark:from-gray-900 dark:to-gray-800 rounded-xl p-3 sm:p-4 border border-gray-200 dark:border-gray-700 shadow-sm">
+          <div className="flex items-center justify-between mb-3 pb-2 border-b border-gray-200 dark:border-gray-700">
+            <span className="text-xs font-semibold text-gray-700 dark:text-gray-400">
+              Console Output:
+            </span>
+            {runOutput.exitCode === 0 ? (
+              <CheckCircle className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-green-600 dark:text-green-500" />
+            ) : (
+              <XCircle className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-red-600 dark:text-red-500" />
+            )}
+          </div>
+          {runOutput.stdout && (
+            <pre className="text-xs font-mono text-green-800 dark:text-green-400 whitespace-pre-wrap mb-2 break-words overflow-x-auto bg-white dark:bg-gray-900 p-2 rounded border border-green-100 dark:border-green-900/50">
+              {runOutput.stdout}
+            </pre>
+          )}
+          {runOutput.stderr && (
+            <pre className="text-xs font-mono text-red-800 dark:text-red-400 whitespace-pre-wrap break-words overflow-x-auto bg-white dark:bg-gray-900 p-2 rounded border border-red-100 dark:border-red-900/50">
+              {runOutput.stderr}
+            </pre>
+          )}
+          {!runOutput.stdout && !runOutput.stderr && (
+            <p className="text-xs text-gray-500 dark:text-gray-500 italic bg-gray-50 dark:bg-gray-900/50 p-2 rounded border border-gray-200 dark:border-gray-700">
+              No output
+            </p>
+          )}
+        </div>
+      )}
+
+      {/* Test Results */}
+      {testResults.length > 0 && (
+        <>
+          {/* Test Case Selection */}
+          <div className="flex items-center gap-1.5 sm:gap-2 flex-wrap overflow-x-auto pb-2 -mx-1 px-1">
+            {testResults.map((result, index) => {
+              const getButtonClassName = () => {
+                if (selectedTestCaseIndex === index) {
+                  return "bg-indigo-100 text-indigo-700 dark:bg-indigo-900/30 dark:text-indigo-300 border-indigo-300 dark:border-indigo-700";
+                }
+                if (result.passed) {
+                  return "bg-green-50 text-green-700 dark:bg-green-900/20 dark:text-green-300 border-green-200 dark:border-green-800";
+                }
+                return "bg-red-50 text-red-700 dark:bg-red-900/20 dark:text-red-300 border-red-200 dark:border-red-800";
+              };
+              return (
+                <button
+                  key={`test-result-${index}-${result.passed ? "passed" : "failed"}`}
+                  onClick={() => onSelectTestCase(index)}
+                  className={`px-2 sm:px-3 py-1 text-xs font-medium rounded border transition-colors whitespace-nowrap ${getButtonClassName()}`}
+                >
+                  {result.passed ? (
+                    <CheckCircle className="w-3 h-3 inline mr-1" />
+                  ) : (
+                    <XCircle className="w-3 h-3 inline mr-1" />
+                  )}
+                  Case {index + 1}
+                </button>
+              );
+            })}
+          </div>
+
+          {/* Selected Test Case Result */}
+          {selectedTestCaseIndex >= 0 &&
+            selectedTestCaseIndex < testResults.length && (
+              <div
+                className={`p-3 sm:p-4 rounded-lg border ${
+                  testResults[selectedTestCaseIndex].passed
+                    ? "bg-green-50 dark:bg-green-900/20 border-green-200 dark:border-green-800"
+                    : "bg-red-50 dark:bg-red-900/20 border-red-200 dark:border-red-800"
+                }`}
+              >
+                <div className="flex flex-wrap items-center gap-2.5 mb-3">
+                  {testResults[selectedTestCaseIndex].passed ? (
+                    <CheckCircle className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-green-600 dark:text-green-400 flex-shrink-0" />
+                  ) : (
+                    <XCircle className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-red-600 dark:text-red-400 flex-shrink-0" />
+                  )}
+                  <span className="text-xs sm:text-sm font-medium text-gray-900 dark:text-white">
+                    Test Case {selectedTestCaseIndex + 1}
+                  </span>
+                  {testResults[selectedTestCaseIndex].testCase.description && (
+                    <span className="text-xs text-gray-500 dark:text-gray-400 hidden sm:inline">
+                      {testResults[selectedTestCaseIndex].testCase.description}
+                    </span>
+                  )}
+                </div>
+                <div className="space-y-2 sm:space-y-2.5 text-xs">
+                  <div className="break-words">
+                    <span className="text-gray-500 dark:text-gray-400">
+                      Input:{" "}
+                    </span>
+                    <code className="text-gray-900 dark:text-gray-100 font-mono break-all">
+                      {JSON.stringify(
+                        testResults[selectedTestCaseIndex].testCase.input,
+                      )}
+                    </code>
+                  </div>
+                  <div className="break-words">
+                    <span className="text-gray-500 dark:text-gray-400">
+                      Expected:{" "}
+                    </span>
+                    <code className="text-green-700 dark:text-green-300 font-mono break-all">
+                      {JSON.stringify(
+                        testResults[selectedTestCaseIndex].testCase
+                          .expectedOutput,
+                      )}
+                    </code>
+                  </div>
+                  {testResults[selectedTestCaseIndex].actualOutput !==
+                    undefined && (
+                    <div className="break-words">
+                      <span className="text-gray-500 dark:text-gray-400">
+                        Output:{" "}
+                      </span>
+                      <code
+                        className={`font-mono break-all ${
+                          testResults[selectedTestCaseIndex].passed
+                            ? "text-green-700 dark:text-green-300"
+                            : "text-red-700 dark:text-red-300"
+                        }`}
+                      >
+                        {JSON.stringify(
+                          testResults[selectedTestCaseIndex].actualOutput,
+                        )}
+                      </code>
+                    </div>
+                  )}
+                  {testResults[selectedTestCaseIndex].error && (
+                    <div className="text-red-600 dark:text-red-400 font-mono break-words">
+                      Error: {testResults[selectedTestCaseIndex].error}
+                    </div>
+                  )}
+                  {/* Console Output (console.log statements) */}
+                  {testResults[selectedTestCaseIndex].consoleOutput && (
+                    <div className="mt-3 pt-3 border-t border-gray-200 dark:border-gray-700">
+                      <div className="text-xs font-semibold text-gray-600 dark:text-gray-400 mb-2">
+                        Console Output:
+                      </div>
+                      <pre className="text-xs font-mono text-gray-800 dark:text-gray-200 whitespace-pre-wrap break-words overflow-x-auto bg-gray-50 dark:bg-gray-900/50 p-2.5 rounded border border-gray-200 dark:border-gray-700">
+                        {testResults[selectedTestCaseIndex].consoleOutput}
+                      </pre>
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
+
+          {/* All Tests Passed Message */}
+          {allTestsPassed && (
+            <div className="p-3 sm:p-4 bg-green-50 dark:bg-green-900/20 rounded-lg border border-green-200 dark:border-green-800">
+              <div className="flex items-center gap-2 sm:gap-3">
+                <Trophy className="w-4 h-4 sm:w-5 sm:h-5 text-green-600 dark:text-green-400 flex-shrink-0" />
+                <div>
+                  <h4 className="text-xs sm:text-sm font-semibold text-green-800 dark:text-green-200">
+                    All Tests Passed! 🎉
+                  </h4>
+                  <p className="text-xs text-green-700 dark:text-green-300">
+                    Congratulations! Your solution is correct.
+                  </p>
+                </div>
+              </div>
+            </div>
+          )}
+        </>
+      )}
+
+      {/* Empty State */}
+      {!runOutput && testResults.length === 0 && (
+        <div className="text-center py-6 sm:py-8 text-gray-500 dark:text-gray-400">
+          <p className="text-xs sm:text-sm">
+            Click &quot;Run&quot; to test your code or &quot;Submit&quot; to run
+            all test cases
+          </p>
+        </div>
+      )}
+    </div>
+  );
+};
 
 export default function ProblemSolvingQuestion({
   question,
@@ -76,90 +823,97 @@ export default function ProblemSolvingQuestion({
 
   // Resize state
   const [leftPanelWidth, setLeftPanelWidth] = useState(() => {
-    if (typeof window !== "undefined") {
+    if (globalThis.window !== undefined) {
       const saved = localStorage.getItem("problem-solving-left-panel-width");
-      return saved ? parseFloat(saved) : 40; // Default 40% width
+      return saved ? Number.parseFloat(saved) : 40; // Default 40% width
     }
     return 40;
   });
   const [testPanelHeight, setTestPanelHeight] = useState(() => {
-    if (typeof window !== "undefined") {
+    if (globalThis.window !== undefined) {
       const saved = localStorage.getItem("problem-solving-test-panel-height");
-      return saved ? parseFloat(saved) : 30; // Default 30% height
+      return saved ? Number.parseFloat(saved) : 30; // Default 30% height
     }
     return 30;
   });
   const [isResizingHorizontal, setIsResizingHorizontal] = useState(false);
   const [isResizingVertical, setIsResizingVertical] = useState(false);
 
+  // Helper to decode HTML entities
+  const decodeHtmlEntities = (text: string): string => {
+    if (!text) return "";
+    const entityMap: Record<string, string> = {
+      "&lt;": "<",
+      "&gt;": ">",
+      "&amp;": "&",
+      "&quot;": '"',
+      "&#39;": "'",
+      "&#x27;": "'",
+      "&#x2F;": "/",
+      "&nbsp;": " ",
+      "&#160;": " ",
+      "&apos;": "'",
+    };
+    let decoded = text;
+    for (const [entity, char] of Object.entries(entityMap)) {
+      decoded = decoded.replaceAll(entity, char);
+    }
+    decoded = decoded.replace(
+      // NOSONAR S7781: replaceAll() cannot be used with regex patterns that require capture groups
+      /&#(\d+);/g,
+      (_, dec) => String.fromCodePoint(Number.parseInt(dec, 10)),
+    );
+    decoded = decoded.replace(
+      // NOSONAR S7781: replaceAll() cannot be used with regex patterns that require capture groups
+      /&#x([0-9a-f]+);/gi,
+      (_, hex) => String.fromCodePoint(Number.parseInt(hex, 16)),
+    );
+    return decoded;
+  };
+
+  // Helper to clean up malformed code patterns
+  const cleanCodePatterns = (code: string): string => {
+    for (let i = 0; i < 3; i++) {
+      code = code
+        // Remove e> artifacts (most common issue)
+        .replace(/e>e>/g, "") // NOSONAR: regex pattern required
+        .replace(/e>e>e>/g, "") // NOSONAR: regex pattern required
+        .replace(/^e>+/g, "") // NOSONAR: regex pattern required
+        .replace(/e>+$/g, "") // NOSONAR: regex pattern required
+        .replace(/(\w+)e>/g, "$1") // NOSONAR: regex with capture group required
+        .replace(/e>(\w+)/g, "$1") // NOSONAR: regex with capture group required
+        // Fix console.log patterns
+        .replace(/consoleonsole\.log/g, "console.log") // NOSONAR: regex pattern required
+        .replace(/console\.loge>/g, "console.log") // NOSONAR: regex pattern required
+        .replace(/console\.log>/g, "console.log") // NOSONAR: regex pattern required
+        // Fix method name patterns
+        .replace(/diameterameter/g, "diameter") // NOSONAR: regex pattern required
+        .replace(/perimeterimeter/g, "perimeter") // NOSONAR: regex pattern required
+        .replace(/newColorwColor/g, "newColor") // NOSONAR: regex pattern required
+        // Fix NaN patterns
+        .replace(/NaNe>/g, "NaN") // NOSONAR: regex pattern required
+        .replace(/NaN>/g, "NaN") // NOSONAR: regex pattern required
+        // Remove any remaining standalone e> or > characters
+        .replace(/\s*e>\s*/g, " ") // NOSONAR: regex pattern required
+        .replace(/\s*>\s*/g, " ") // NOSONAR: regex pattern required
+        .replace(/^>\s*/g, "") // NOSONAR: regex pattern required
+        .replace(/\s*>$/g, ""); // NOSONAR: regex pattern required
+    }
+    return code.trim();
+  };
+
   // Helper function to extract code blocks from question content
   const extractCodeFromContent = (content: string): string => {
     if (!content) return "";
 
-    // Helper to decode HTML entities
-    const decodeHtmlEntities = (text: string): string => {
-      if (!text) return "";
-      const entityMap: Record<string, string> = {
-        "&lt;": "<",
-        "&gt;": ">",
-        "&amp;": "&",
-        "&quot;": '"',
-        "&#39;": "'",
-        "&#x27;": "'",
-        "&#x2F;": "/",
-        "&nbsp;": " ",
-        "&#160;": " ",
-        "&apos;": "'",
-      };
-      let decoded = text;
-      for (const [entity, char] of Object.entries(entityMap)) {
-        decoded = decoded.replace(new RegExp(entity, "gi"), char);
-      }
-      decoded = decoded.replace(/&#(\d+);/g, (_, dec) =>
-        String.fromCharCode(parseInt(dec, 10)),
-      );
-      decoded = decoded.replace(/&#x([0-9a-fA-F]+);/gi, (_, hex) =>
-        String.fromCharCode(parseInt(hex, 16)),
-      );
-      return decoded;
-    };
-
     // Try to extract from <pre><code> blocks first
     const preCodeRegex = /<pre[^>]*><code[^>]*>([\s\S]*?)<\/code><\/pre>/gi;
     const preCodeMatch = preCodeRegex.exec(content);
-    if (preCodeMatch && preCodeMatch[1]) {
+    if (preCodeMatch?.[1]) {
       let code = preCodeMatch[1];
-      // Decode entities and remove HTML tags
       code = decodeHtmlEntities(code);
-      code = code.replace(/<[^>]+>/g, "");
-      // Clean up malformed patterns - multiple passes for thorough cleaning
-      for (let i = 0; i < 3; i++) {
-        code = code
-          // Remove e> artifacts (most common issue)
-          .replace(/e>e>/g, "") // Remove double e>
-          .replace(/e>e>e>/g, "") // Remove triple e>
-          .replace(/^e>+/g, "") // Remove e> at start
-          .replace(/e>+$/g, "") // Remove e> at end
-          .replace(/(\w+)e>/g, "$1") // Remove e> after words
-          .replace(/e>(\w+)/g, "$1") // Remove e> before words
-          // Fix console.log patterns
-          .replace(/consoleonsole\.log/g, "console.log")
-          .replace(/console\.loge>/g, "console.log")
-          .replace(/console\.log>/g, "console.log")
-          // Fix method name patterns
-          .replace(/diameterameter/g, "diameter")
-          .replace(/perimeterimeter/g, "perimeter")
-          .replace(/newColorwColor/g, "newColor")
-          // Fix NaN patterns
-          .replace(/NaNe>/g, "NaN")
-          .replace(/NaN>/g, "NaN")
-          // Remove any remaining standalone e> or > characters
-          .replace(/\s*e>\s*/g, " ")
-          .replace(/\s*>\s*/g, " ")
-          .replace(/^>\s*/g, "")
-          .replace(/\s*>$/g, "");
-      }
-      code = code.trim();
+      code = sanitizeText(code); // Properly sanitize HTML to prevent XSS
+      code = cleanCodePatterns(code);
       if (code) return code;
     }
 
@@ -167,45 +921,18 @@ export default function ProblemSolvingQuestion({
     const markdownCodeRegex =
       /```(?:javascript|js|typescript|ts)?\n?([\s\S]*?)```/gi;
     const mdMatch = markdownCodeRegex.exec(content);
-    if (mdMatch && mdMatch[1]) {
+    if (mdMatch?.[1]) {
       return mdMatch[1].trim();
     }
 
     // Try to extract from standalone <code> blocks (longer ones, 20+ chars)
     const codeBlockRegex = /<code[^>]*>([\s\S]{20,}?)<\/code>/gi;
     const codeMatch = codeBlockRegex.exec(content);
-    if (codeMatch && codeMatch[1]) {
+    if (codeMatch?.[1]) {
       let code = codeMatch[1];
       code = decodeHtmlEntities(code);
-      code = code.replace(/<[^>]+>/g, "");
-      // Clean up malformed patterns - multiple passes for thorough cleaning
-      for (let i = 0; i < 3; i++) {
-        code = code
-          // Remove e> artifacts (most common issue)
-          .replace(/e>e>/g, "") // Remove double e>
-          .replace(/e>e>e>/g, "") // Remove triple e>
-          .replace(/^e>+/g, "") // Remove e> at start
-          .replace(/e>+$/g, "") // Remove e> at end
-          .replace(/(\w+)e>/g, "$1") // Remove e> after words
-          .replace(/e>(\w+)/g, "$1") // Remove e> before words
-          // Fix console.log patterns
-          .replace(/consoleonsole\.log/g, "console.log")
-          .replace(/console\.loge>/g, "console.log")
-          .replace(/console\.log>/g, "console.log")
-          // Fix method name patterns
-          .replace(/diameterameter/g, "diameter")
-          .replace(/perimeterimeter/g, "perimeter")
-          .replace(/newColorwColor/g, "newColor")
-          // Fix NaN patterns
-          .replace(/NaNe>/g, "NaN")
-          .replace(/NaN>/g, "NaN")
-          // Remove any remaining standalone e> or > characters
-          .replace(/\s*e>\s*/g, " ")
-          .replace(/\s*>\s*/g, " ")
-          .replace(/^>\s*/g, "")
-          .replace(/\s*>$/g, "");
-      }
-      code = code.trim();
+      code = sanitizeText(code); // Properly sanitize HTML to prevent XSS
+      code = cleanCodePatterns(code);
       if (code) return code;
     }
 
@@ -233,7 +960,7 @@ export default function ProblemSolvingQuestion({
     Array<{
       testCase: TestCase;
       passed: boolean;
-      actualOutput?: any;
+      actualOutput?: unknown;
       error?: string;
       consoleOutput?: string;
     }>
@@ -260,32 +987,35 @@ export default function ProblemSolvingQuestion({
   } | null>(null);
   const [isRunning, setIsRunning] = useState(false);
 
-  // Update code when question changes - extract from content if no template
-  useEffect(() => {
-    // Priority 1: Use code_template from database
+  // Helper to determine initial code value
+  const getInitialCode = (): string => {
     if (question.code_template) {
-      setCode(question.code_template);
-    } else if (question.content) {
-      // Priority 2: Extract code from question content
-      const extractedCode = extractCodeFromContent(question.content);
-      if (extractedCode) {
-        setCode(extractedCode);
-      } else {
-        // Priority 3: Empty if no code found
-        setCode("");
-      }
-    } else {
-      setCode("");
+      return question.code_template;
     }
+    if (question.content) {
+      const extractedCode = extractCodeFromContent(question.content);
+      return extractedCode || "";
+    }
+    return "";
+  };
+
+  // Helper to reset question state
+  const resetQuestionState = () => {
     setTestResults([]);
     setAllTestsPassed(false);
     setRunOutput(null);
     setInFlashcards(isInFlashcards(question.id));
-    // Reset to first test case when question changes
     setSelectedTestCaseIndex(0);
     setCustomTestCases([]);
     setEditingTestCaseIndex(null);
     setEditingTestCaseData(null);
+  };
+
+  // Update code when question changes - extract from content if no template
+  useEffect(() => {
+    setCode(getInitialCode());
+    resetQuestionState();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [question.id, question.code_template, question.content]);
 
   // Parse test cases
@@ -293,12 +1023,12 @@ export default function ProblemSolvingQuestion({
     if (!question.test_cases) return [];
     if (typeof question.test_cases === "string") {
       try {
-        return JSON.parse(question.test_cases);
+        return JSON.parse(question.test_cases) as TestCase[];
       } catch {
         return [];
       }
     }
-    return question.test_cases as TestCase[];
+    return question.test_cases;
   };
 
   const baseTestCases = parseTestCases();
@@ -306,9 +1036,9 @@ export default function ProblemSolvingQuestion({
   const testCases = [...baseTestCases, ...customTestCases];
 
   // Parse input into structured fields (for LeetCode-style display)
-  const parseInputFields = (input: any): Record<string, any> => {
+  const parseInputFields = (input: unknown): Record<string, unknown> => {
     if (typeof input === "object" && input !== null && !Array.isArray(input)) {
-      return input;
+      return input as Record<string, unknown>;
     }
     if (Array.isArray(input)) {
       // If it's an array, try to infer parameter names from common patterns
@@ -318,20 +1048,15 @@ export default function ProblemSolvingQuestion({
     return { input: input };
   };
 
-  // Get parameter names from input
-  const getInputFields = (testCase: TestCase): Record<string, any> => {
-    return parseInputFields(testCase.input);
-  };
-
   // Add new custom test case (clone last selected)
   const handleAddCustomTestCase = () => {
     const lastSelected =
       testCases[selectedTestCaseIndex] ||
       (testCases.length > 0 ? testCases[0] : null);
     const newTestCase: TestCase = {
-      input: lastSelected ? JSON.parse(JSON.stringify(lastSelected.input)) : {},
+      input: lastSelected ? structuredClone(lastSelected.input) : {},
       expectedOutput: lastSelected
-        ? JSON.parse(JSON.stringify(lastSelected.expectedOutput))
+        ? structuredClone(lastSelected.expectedOutput)
         : null,
       description: "Custom",
     };
@@ -378,13 +1103,55 @@ export default function ProblemSolvingQuestion({
 
   // Extract function name from code
   const getFunctionName = (code: string): string => {
-    const functionMatch = code.match(
-      /(?:function\s+|const\s+|let\s+|var\s+)(\w+)\s*[=\(]/,
-    );
+    const functionRegex = /(?:function\s+|const\s+|let\s+|var\s+)(\w+)\s*[=(]/;
+    const functionMatch = functionRegex.exec(code);
     if (functionMatch) return functionMatch[1];
-    const arrowMatch = code.match(/(\w+)\s*=>/);
+    const arrowRegex = /(\w+)\s*=>/;
+    const arrowMatch = arrowRegex.exec(code);
     if (arrowMatch) return arrowMatch[1];
     return "solution";
+  };
+
+  // Helper to build code execution string for a test case
+  const buildCodeForTestCase = (
+    functionName: string,
+    testCase: TestCase,
+    testCaseNumber: number,
+  ): string => {
+    const inputFields = parseInputFields(testCase.input);
+    if (
+      typeof testCase.input === "object" &&
+      testCase.input !== null &&
+      !Array.isArray(testCase.input)
+    ) {
+      const args = Object.values(inputFields)
+        .map((arg: unknown) => JSON.stringify(arg))
+        .join(", ");
+      return `${code}\n\n// Test with test case ${testCaseNumber}\nconst result = ${functionName}(${args});\nconsole.log('Output:', result);`;
+    }
+    const input = Array.isArray(testCase.input)
+      ? testCase.input
+      : [testCase.input];
+    return `${code}\n\n// Test with test case ${testCaseNumber}\nconst result = ${functionName}(${input.map((arg: unknown) => JSON.stringify(arg)).join(", ")});\nconsole.log('Output:', result);`;
+  };
+
+  // Helper to determine which code execution string to use
+  const getCodeToExecute = (functionName: string): string => {
+    if (
+      testCases.length > 0 &&
+      selectedTestCaseIndex >= 0 &&
+      selectedTestCaseIndex < testCases.length
+    ) {
+      return buildCodeForTestCase(
+        functionName,
+        testCases[selectedTestCaseIndex],
+        selectedTestCaseIndex + 1,
+      );
+    }
+    if (testCases.length > 0) {
+      return buildCodeForTestCase(functionName, testCases[0], 1);
+    }
+    return `${code}\n\n// Auto-execute function\nif (typeof ${functionName} === 'function') {\n  try {\n    const result = ${functionName}();\n    console.log('Result:', result);\n  } catch (err) {\n    console.error('Error:', err.message);\n  }\n}`;
   };
 
   // Run code with selected test case from database
@@ -395,56 +1162,7 @@ export default function ProblemSolvingQuestion({
 
     try {
       const functionName = getFunctionName(code);
-      let codeToExecute = code;
-
-      // Use selected test case from database
-      if (
-        testCases.length > 0 &&
-        selectedTestCaseIndex >= 0 &&
-        selectedTestCaseIndex < testCases.length
-      ) {
-        const testCase = testCases[selectedTestCaseIndex];
-        const inputFields = parseInputFields(testCase.input);
-        // If input is an object, spread it as arguments
-        if (
-          typeof testCase.input === "object" &&
-          testCase.input !== null &&
-          !Array.isArray(testCase.input)
-        ) {
-          const args = Object.values(inputFields)
-            .map((arg: any) => JSON.stringify(arg))
-            .join(", ");
-          codeToExecute = `${code}\n\n// Test with test case ${selectedTestCaseIndex + 1}\nconst result = ${functionName}(${args});\nconsole.log('Output:', result);`;
-        } else {
-          // Array or single value
-          const input = Array.isArray(testCase.input)
-            ? testCase.input
-            : [testCase.input];
-          codeToExecute = `${code}\n\n// Test with test case ${selectedTestCaseIndex + 1}\nconst result = ${functionName}(${input.map((arg: any) => JSON.stringify(arg)).join(", ")});\nconsole.log('Output:', result);`;
-        }
-      } else if (testCases.length > 0) {
-        // Use first test case if none selected
-        const testCase = testCases[0];
-        const inputFields = parseInputFields(testCase.input);
-        if (
-          typeof testCase.input === "object" &&
-          testCase.input !== null &&
-          !Array.isArray(testCase.input)
-        ) {
-          const args = Object.values(inputFields)
-            .map((arg: any) => JSON.stringify(arg))
-            .join(", ");
-          codeToExecute = `${code}\n\n// Test with test case 1\nconst result = ${functionName}(${args});\nconsole.log('Output:', result);`;
-        } else {
-          const input = Array.isArray(testCase.input)
-            ? testCase.input
-            : [testCase.input];
-          codeToExecute = `${code}\n\n// Test with test case 1\nconst result = ${functionName}(${input.map((arg: any) => JSON.stringify(arg)).join(", ")});\nconsole.log('Output:', result);`;
-        }
-      } else {
-        // Default test if no test cases available
-        codeToExecute = `${code}\n\n// Auto-execute function\nif (typeof ${functionName} === 'function') {\n  try {\n    const result = ${functionName}();\n    console.log('Result:', result);\n  } catch (err) {\n    console.error('Error:', err.message);\n  }\n}`;
-      }
+      const codeToExecute = getCodeToExecute(functionName);
 
       const response = await fetch("/api/code/execute", {
         method: "POST",
@@ -510,7 +1228,7 @@ export default function ProblemSolvingQuestion({
     const results: Array<{
       testCase: TestCase;
       passed: boolean;
-      actualOutput?: any;
+      actualOutput?: unknown;
       error?: string;
       consoleOutput?: string; // Store full console output including console.log statements
     }> = [];
@@ -525,7 +1243,7 @@ export default function ProblemSolvingQuestion({
 
       try {
         // Execute code with test case - preserve all console.log output
-        const codeToExecute = `${code}\n\n// Test case ${i + 1}\nconst result = ${functionName}(${input.map((arg: any) => JSON.stringify(arg)).join(", ")});\nconsole.log(JSON.stringify(result));`;
+        const codeToExecute = `${code}\n\n// Test case ${i + 1}\nconst result = ${functionName}(${input.map((arg: unknown) => JSON.stringify(arg)).join(", ")});\nconsole.log(JSON.stringify(result));`;
 
         const response = await fetch("/api/code/execute", {
           method: "POST",
@@ -559,7 +1277,7 @@ export default function ProblemSolvingQuestion({
           .join("\n")
           .trim();
 
-        let actualOutput: any;
+        let actualOutput: unknown;
 
         try {
           // Try to parse the last line as JSON (our console.log output with result)
@@ -629,54 +1347,64 @@ export default function ProblemSolvingQuestion({
     if (!question.examples) return [];
     if (typeof question.examples === "string") {
       try {
-        return JSON.parse(question.examples);
+        return JSON.parse(question.examples) as Example[];
       } catch {
         return [];
       }
     }
-    return question.examples as Example[];
+    return question.examples;
   };
 
   const examples = parseExamples();
+
+  // Helper to handle horizontal resize
+  const handleHorizontalResize = (e: MouseEvent) => {
+    const container = document.querySelector(
+      "[data-problem-container]",
+    ) as HTMLElement;
+    if (!container) {
+      return;
+    }
+    const containerRect = container.getBoundingClientRect();
+    const relativeX = e.clientX - containerRect.left;
+    const containerWidth = containerRect.width;
+    const newWidth = (relativeX / containerWidth) * 100;
+    const clampedWidth = Math.max(25, Math.min(60, newWidth)); // Min 25%, Max 60%
+    setLeftPanelWidth(clampedWidth);
+    localStorage.setItem(
+      "problem-solving-left-panel-width",
+      clampedWidth.toString(),
+    );
+  };
+
+  // Helper to handle vertical resize
+  const handleVerticalResize = (e: MouseEvent) => {
+    const rightPanel = document.querySelector(
+      "[data-right-panel]",
+    ) as HTMLElement;
+    if (!rightPanel) {
+      return;
+    }
+    const rightPanelRect = rightPanel.getBoundingClientRect();
+    const relativeY = e.clientY - rightPanelRect.top;
+    const containerHeight = rightPanelRect.height;
+    const newHeight = ((containerHeight - relativeY) / containerHeight) * 100;
+    const clampedHeight = Math.max(20, Math.min(60, newHeight)); // Min 20%, Max 60%
+    setTestPanelHeight(clampedHeight);
+    localStorage.setItem(
+      "problem-solving-test-panel-height",
+      clampedHeight.toString(),
+    );
+  };
 
   // Resize handlers
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
       if (isResizingHorizontal) {
-        const container = document.querySelector(
-          "[data-problem-container]",
-        ) as HTMLElement;
-        if (container) {
-          const containerRect = container.getBoundingClientRect();
-          const relativeX = e.clientX - containerRect.left;
-          const containerWidth = containerRect.width;
-          const newWidth = (relativeX / containerWidth) * 100;
-          const clampedWidth = Math.max(25, Math.min(60, newWidth)); // Min 25%, Max 60%
-          setLeftPanelWidth(clampedWidth);
-          localStorage.setItem(
-            "problem-solving-left-panel-width",
-            clampedWidth.toString(),
-          );
-        }
+        handleHorizontalResize(e);
       }
       if (isResizingVertical) {
-        const rightPanel = document.querySelector(
-          "[data-right-panel]",
-        ) as HTMLElement;
-        if (rightPanel) {
-          const rightPanelRect = rightPanel.getBoundingClientRect();
-          const relativeY = e.clientY - rightPanelRect.top;
-          const containerHeight = rightPanelRect.height;
-          // Calculate test panel height as percentage of right panel
-          const newHeight =
-            ((containerHeight - relativeY) / containerHeight) * 100;
-          const clampedHeight = Math.max(20, Math.min(60, newHeight)); // Min 20%, Max 60%
-          setTestPanelHeight(clampedHeight);
-          localStorage.setItem(
-            "problem-solving-test-panel-height",
-            clampedHeight.toString(),
-          );
-        }
+        handleVerticalResize(e);
       }
     };
 
@@ -702,8 +1430,19 @@ export default function ProblemSolvingQuestion({
     };
   }, [isResizingHorizontal, isResizingVertical]);
 
+  // Helper to get difficulty badge className
+  const getDifficultyBadgeClassName = (difficulty?: string): string => {
+    if (difficulty === "beginner") {
+      return "bg-gradient-to-br from-green-100 via-green-50 to-green-100 text-green-800 dark:from-green-900/40 dark:via-green-900/30 dark:to-green-900/20 dark:text-green-200 border-2 border-green-300/60 dark:border-green-700/60";
+    }
+    if (difficulty === "intermediate") {
+      return "bg-gradient-to-br from-yellow-100 via-yellow-50 to-yellow-100 text-yellow-800 dark:from-yellow-900/40 dark:via-yellow-900/30 dark:to-yellow-900/20 dark:text-yellow-200 border-2 border-yellow-300/60 dark:border-yellow-700/60";
+    }
+    return "bg-gradient-to-br from-red-100 via-red-50 to-red-100 text-red-800 dark:from-red-900/40 dark:via-red-900/30 dark:to-red-900/20 dark:text-red-200 border-2 border-red-300/60 dark:border-red-700/60";
+  };
+
   // Format input for display (LeetCode style)
-  const formatInput = (input: any): string => {
+  const formatInput = (input: unknown): string => {
     if (typeof input === "object" && input !== null && !Array.isArray(input)) {
       // Object with multiple keys - format as key = value pairs (LeetCode style)
       const entries = Object.entries(input);
@@ -728,260 +1467,32 @@ export default function ProblemSolvingQuestion({
       className={`w-full ${isFocusMode ? "h-screen fixed inset-0 z-50" : "h-[calc(100vh-4rem)] sm:h-[calc(100vh-6rem)] lg:h-[calc(100vh-8rem)]"} flex flex-col lg:flex-row gap-0 bg-gray-50 dark:bg-gray-900 transition-all duration-300`}
     >
       {/* Left Panel - Problem Description (LeetCode Style) */}
-      {!isFocusMode && (
-        <div
-          className="overflow-y-auto bg-gradient-to-br from-white via-gray-50/30 to-white dark:from-gray-900 dark:via-gray-800/50 dark:to-gray-900 border-r-0 lg:border-r-2 border-gray-200/60 dark:border-gray-700/60 border-b lg:border-b-0 relative shadow-sm"
-          style={{
-            width: `${leftPanelWidth}%`,
-            minWidth: "300px",
-            maxWidth: "60%",
-          }}
-        >
-          {/* Resize Handle - Horizontal */}
-          <div
-            className="absolute right-0 top-0 bottom-0 w-1.5 bg-transparent hover:bg-indigo-500/80 dark:hover:bg-indigo-500/80 cursor-col-resize z-20 transition-all duration-200 select-none group"
-            onMouseDown={(e) => {
-              e.preventDefault();
-              setIsResizingHorizontal(true);
-            }}
-          >
-            <div className="absolute inset-y-0 left-1/2 -translate-x-1/2 w-0.5 bg-gray-300/50 dark:bg-gray-600/50 group-hover:bg-indigo-400 dark:group-hover:bg-indigo-400 transition-all duration-200" />
-          </div>
-          <div className="p-5 sm:p-7 md:p-9 lg:p-11">
-            {/* Header with Title and Difficulty */}
-            <div className="mb-7 sm:mb-9 pb-6 sm:pb-7 border-b-2 border-gray-200/80 dark:border-gray-700/80">
-              <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-5 sm:gap-6 mb-5">
-                <div className="flex-1 min-w-0">
-                  <div className="flex flex-wrap items-center gap-3 sm:gap-4 mb-5">
-                    <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-gray-900 dark:text-white break-words leading-tight tracking-tight">
-                      {question.title}
-                    </h2>
-                    {question.difficulty && (
-                      <span
-                        className={`inline-flex items-center px-4 sm:px-4.5 py-2 rounded-xl text-xs sm:text-sm font-extrabold uppercase tracking-wider shadow-sm ${
-                          question.difficulty === "beginner"
-                            ? "bg-gradient-to-br from-green-100 via-green-50 to-green-100 text-green-800 dark:from-green-900/40 dark:via-green-900/30 dark:to-green-900/20 dark:text-green-200 border-2 border-green-300/60 dark:border-green-700/60"
-                            : question.difficulty === "intermediate"
-                              ? "bg-gradient-to-br from-yellow-100 via-yellow-50 to-yellow-100 text-yellow-800 dark:from-yellow-900/40 dark:via-yellow-900/30 dark:to-yellow-900/20 dark:text-yellow-200 border-2 border-yellow-300/60 dark:border-yellow-700/60"
-                              : "bg-gradient-to-br from-red-100 via-red-50 to-red-100 text-red-800 dark:from-red-900/40 dark:via-red-900/30 dark:to-red-900/20 dark:text-red-200 border-2 border-red-300/60 dark:border-red-700/60"
-                        }`}
-                      >
-                        {question.difficulty}
-                      </span>
-                    )}
-                  </div>
-
-                  {/* Topic Tags (LeetCode Style) */}
-                  {question.tags && question.tags.length > 0 && (
-                    <div className="flex flex-wrap items-center gap-2 sm:gap-2.5 mb-5">
-                      {question.tags
-                        .filter((tag) => {
-                          // Filter out generic tags, keep only topic-related tags
-                          const genericTags = [
-                            "problem-solving",
-                            "algorithms",
-                            "javascript",
-                            "typescript",
-                            "python",
-                            "easy",
-                            "medium",
-                            "hard",
-                            "beginner",
-                            "intermediate",
-                            "advanced",
-                          ];
-                          return !genericTags.includes(tag.toLowerCase());
-                        })
-                        .map((tag, index) => (
-                          <span
-                            key={index}
-                            className="inline-flex items-center px-3 sm:px-3.5 py-1.5 rounded-lg text-xs sm:text-sm font-semibold bg-gradient-to-br from-gray-100 to-gray-50 dark:from-gray-700 dark:to-gray-800 text-gray-700 dark:text-gray-300 border border-gray-200 dark:border-gray-600 hover:from-gray-200 hover:to-gray-100 dark:hover:from-gray-600 dark:hover:to-gray-700 transition-all duration-200 shadow-sm hover:shadow"
-                          >
-                            {tag}
-                          </span>
-                        ))}
-                    </div>
-                  )}
-
-                  {/* Flashcard Button */}
-                  <button
-                    onClick={handleToggleFlashcard}
-                    className={`inline-flex items-center gap-2 px-4 sm:px-4.5 py-2.5 rounded-xl border-2 transition-all duration-200 text-xs sm:text-sm font-bold shadow-md hover:shadow-lg transform hover:scale-105 ${
-                      inFlashcards
-                        ? "bg-gradient-to-br from-green-100 via-green-50 to-green-100 text-green-800 dark:from-green-900/40 dark:via-green-900/30 dark:to-green-900/20 dark:text-green-200 border-green-400/80 dark:border-green-600/80"
-                        : "bg-gradient-to-br from-white to-indigo-50/50 dark:from-gray-800 dark:to-indigo-900/20 text-indigo-700 dark:text-indigo-300 border-indigo-300/80 dark:border-indigo-600/80 hover:from-indigo-50 hover:to-indigo-100 dark:hover:from-indigo-900/30 dark:hover:to-indigo-900/40"
-                    }`}
-                  >
-                    <span className="text-base sm:text-lg">🔖</span>
-                    <span className="hidden sm:inline">
-                      {inFlashcards ? "Added to Flashcard" : "Add to Flashcard"}
-                    </span>
-                    <span className="sm:hidden">
-                      {inFlashcards ? "Added" : "Add"}
-                    </span>
-                  </button>
-                </div>
-                <button
-                  onClick={() => setIsFocusMode(true)}
-                  className="self-start sm:self-auto p-2.5 text-gray-500 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-gray-200 hover:bg-indigo-50 dark:hover:bg-gray-700 rounded-lg border border-gray-200 dark:border-transparent hover:border-indigo-200 dark:hover:border-gray-600 transition-all duration-200 shadow-sm hover:shadow"
-                  title="Focus Mode"
-                >
-                  <Maximize2 className="w-4 h-4 sm:w-5 sm:h-5" />
-                </button>
-              </div>
-            </div>
-
-            {/* Problem Content */}
-            <div className="mb-7 sm:mb-9">
-              <div
-                className="text-base sm:text-lg text-gray-800 dark:text-gray-200 leading-relaxed prose prose-sm sm:prose-base dark:prose-invert max-w-none prose-headings:font-bold prose-p:mb-4 prose-strong:text-gray-900 dark:prose-strong:text-gray-100"
-                dangerouslySetInnerHTML={{ __html: question.content }}
-              />
-            </div>
-
-            {/* Examples Section (LeetCode Style) */}
-            {examples.length > 0 && (
-              <div className="mt-9 sm:mt-11">
-                <h3 className="text-xl sm:text-2xl font-extrabold text-gray-900 dark:text-white mb-6 tracking-tight">
-                  Examples
-                </h3>
-                <div className="space-y-6 sm:space-y-7">
-                  {examples.map((example, index) => (
-                    <div
-                      key={index}
-                      className="bg-gradient-to-br from-white via-gray-50/50 to-white dark:from-gray-800/80 dark:via-gray-800/60 dark:to-gray-800/80 rounded-2xl p-5 sm:p-6 border-2 border-gray-200/60 dark:border-gray-700/60 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-[1.01]"
-                    >
-                      <div className="flex items-center gap-2.5 mb-5">
-                        <span className="text-base sm:text-lg font-extrabold text-gray-900 dark:text-white tracking-tight">
-                          Example {index + 1}:
-                        </span>
-                      </div>
-
-                      {/* Input */}
-                      <div className="mb-4 sm:mb-5">
-                        <div className="text-sm sm:text-base font-bold text-gray-800 dark:text-gray-200 mb-3">
-                          <strong>Input:</strong>
-                        </div>
-                        <div className="bg-gradient-to-br from-gray-50 to-white dark:from-gray-900 dark:to-gray-800 rounded-xl p-4 sm:p-5 border-2 border-gray-200/80 dark:border-gray-700/80 shadow-md">
-                          <pre className="text-sm sm:text-base font-mono text-gray-900 dark:text-gray-100 whitespace-pre-wrap break-words overflow-x-auto leading-relaxed">
-                            {formatInput(example.input)}
-                          </pre>
-                        </div>
-                      </div>
-
-                      {/* Output */}
-                      <div className="mb-4 sm:mb-5">
-                        <div className="text-sm sm:text-base font-bold text-gray-800 dark:text-gray-200 mb-3">
-                          <strong>Output:</strong>
-                        </div>
-                        <div className="bg-gradient-to-br from-green-50/50 to-white dark:from-green-900/20 dark:to-gray-800 rounded-xl p-4 sm:p-5 border-2 border-green-200/60 dark:border-green-800/60 shadow-md">
-                          <pre className="text-sm sm:text-base font-mono text-green-900 dark:text-green-100 whitespace-pre-wrap break-words overflow-x-auto leading-relaxed">
-                            {typeof example.output === "string"
-                              ? `"${example.output}"`
-                              : JSON.stringify(example.output, null, 2)}
-                          </pre>
-                        </div>
-                      </div>
-
-                      {/* Explanation */}
-                      {example.explanation && (
-                        <div className="mt-5 pt-5 border-t-2 border-gray-200/80 dark:border-gray-700/80">
-                          <div className="text-sm sm:text-base font-bold text-gray-800 dark:text-gray-200 mb-3">
-                            <strong>Explanation:</strong>
-                          </div>
-                          <p className="text-sm sm:text-base text-gray-700 dark:text-gray-300 leading-relaxed">
-                            {example.explanation}
-                          </p>
-                        </div>
-                      )}
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
-
-            {/* Hints Section */}
-            {question.hints && question.hints.length > 0 && (
-              <div className="mt-9 sm:mt-11">
-                <div className="flex items-center justify-between mb-6">
-                  <div className="flex items-center gap-3">
-                    <Lightbulb className="w-6 h-6 sm:w-7 sm:h-7 text-amber-600 dark:text-amber-400" />
-                    <h3 className="text-xl sm:text-2xl font-extrabold text-gray-900 dark:text-white tracking-tight">
-                      Hints ({question.hints.length})
-                    </h3>
-                  </div>
-                  <button
-                    onClick={() => setShowHints(!showHints)}
-                    className="px-4 py-2.5 text-sm font-bold text-indigo-700 dark:text-indigo-300 bg-gradient-to-br from-indigo-50 to-indigo-100 dark:from-indigo-900/30 dark:to-indigo-900/20 rounded-xl border-2 border-indigo-200/80 dark:border-indigo-700/80 hover:from-indigo-100 hover:to-indigo-200 dark:hover:from-indigo-900/40 dark:hover:to-indigo-900/30 transition-all duration-200 shadow-md hover:shadow-lg transform hover:scale-105"
-                  >
-                    {showHints ? "Hide Hints" : "Show Hints"}
-                  </button>
-                </div>
-                {showHints && (
-                  <div className="bg-gradient-to-br from-amber-50/50 via-white to-amber-50/30 dark:from-amber-900/20 dark:via-gray-800/60 dark:to-amber-900/20 rounded-2xl p-5 sm:p-6 border-2 border-amber-200/60 dark:border-amber-800/60 shadow-lg space-y-4">
-                    {question.hints.map((hint, index) => (
-                      <div
-                        key={index}
-                        className={`p-4 rounded-xl border-2 transition-all duration-300 ${
-                          revealedHints.includes(index)
-                            ? "bg-gradient-to-br from-amber-100/80 to-white dark:from-amber-900/40 dark:to-gray-800/60 border-amber-300/80 dark:border-amber-700/80 shadow-md"
-                            : "bg-gradient-to-br from-gray-50 to-white dark:from-gray-800/40 dark:to-gray-800/20 border-gray-200/60 dark:border-gray-700/60"
-                        }`}
-                      >
-                        <div className="flex items-start gap-3">
-                          <div className="flex-shrink-0 w-8 h-8 rounded-full bg-gradient-to-br from-amber-400 to-amber-500 dark:from-amber-600 dark:to-amber-700 flex items-center justify-center text-white font-bold text-sm shadow-md">
-                            {index + 1}
-                          </div>
-                          {revealedHints.includes(index) ? (
-                            <div className="flex-1">
-                              <p className="text-sm sm:text-base text-gray-800 dark:text-gray-200 leading-relaxed">
-                                {hint}
-                              </p>
-                            </div>
-                          ) : (
-                            <button
-                              onClick={() => {
-                                if (!revealedHints.includes(index)) {
-                                  setRevealedHints([...revealedHints, index]);
-                                }
-                              }}
-                              className="flex-1 text-left text-sm sm:text-base text-gray-600 dark:text-gray-400 hover:text-amber-600 dark:hover:text-amber-400 transition-colors font-medium"
-                            >
-                              Click to reveal hint {index + 1}
-                            </button>
-                          )}
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                )}
-              </div>
-            )}
-
-            {/* Constraints Section - From Database */}
-            {question.constraints && question.constraints.length > 0 && (
-              <div className="mt-9 sm:mt-11">
-                <h3 className="text-xl sm:text-2xl font-extrabold text-gray-900 dark:text-white mb-6 tracking-tight">
-                  Constraints
-                </h3>
-                <div className="bg-gradient-to-br from-indigo-50/50 via-white to-indigo-50/30 dark:from-indigo-900/20 dark:via-gray-800/60 dark:to-indigo-900/20 rounded-2xl p-5 sm:p-6 border-2 border-indigo-200/60 dark:border-indigo-800/60 shadow-lg">
-                  <ul className="space-y-3 text-sm sm:text-base text-gray-800 dark:text-gray-200 list-disc list-inside marker:text-indigo-600 dark:marker:text-indigo-400 font-medium">
-                    {question.constraints.map((constraint, index) => (
-                      <li key={index}>{constraint}</li>
-                    ))}
-                  </ul>
-                </div>
-              </div>
-            )}
-          </div>
-        </div>
-      )}
+      <ProblemDescriptionPanel
+        question={question}
+        leftPanelWidth={leftPanelWidth}
+        isFocusMode={isFocusMode}
+        inFlashcards={inFlashcards}
+        onToggleFlashcard={handleToggleFlashcard}
+        onEnterFocusMode={() => setIsFocusMode(true)}
+        onResizeStart={() => setIsResizingHorizontal(true)}
+        getDifficultyBadgeClassName={getDifficultyBadgeClassName}
+        formatInput={formatInput}
+        examples={examples}
+        showHints={showHints}
+        revealedHints={revealedHints}
+        onToggleHints={() => setShowHints(!showHints)}
+        onRevealHint={(index) => {
+          if (!revealedHints.includes(index)) {
+            setRevealedHints([...revealedHints, index]);
+          }
+        }}
+      />
 
       {/* Right Panel - Code Editor and Test Cases (LeetCode Style) */}
       <div
         data-right-panel
         className={`${isFocusMode ? "w-full" : "flex-1"} flex flex-col overflow-hidden bg-gradient-to-br from-white via-gray-50/30 to-white dark:from-gray-900 dark:via-gray-800/50 dark:to-gray-900`}
-        style={!isFocusMode ? { width: `${100 - leftPanelWidth}%` } : {}}
+        style={isFocusMode ? {} : { width: `${100 - leftPanelWidth}%` }}
       >
         {/* Code Editor Header */}
         <div className="flex-shrink-0 border-b-2 border-gray-200/80 dark:border-gray-700/80 bg-gradient-to-r from-gray-50 via-white to-gray-50 dark:from-gray-900/80 dark:via-gray-800/60 dark:to-gray-900/80 shadow-md">
@@ -1079,15 +1590,23 @@ export default function ProblemSolvingQuestion({
           <div ref={outputRef} />
 
           {/* Resize Handle - Vertical */}
-          <div
-            className="absolute bottom-0 left-0 right-0 h-2 bg-transparent hover:bg-indigo-500/80 dark:hover:bg-indigo-500/80 cursor-row-resize z-20 transition-all duration-200 select-none group"
+          <button
+            type="button"
+            aria-label="Resize panel vertically"
+            className="absolute bottom-0 left-0 right-0 h-2 bg-transparent hover:bg-indigo-500/80 dark:hover:bg-indigo-500/80 cursor-row-resize z-20 transition-all duration-200 select-none group border-0 p-0"
             onMouseDown={(e) => {
               e.preventDefault();
               setIsResizingVertical(true);
             }}
+            onKeyDown={(e) => {
+              if (e.key === "Enter" || e.key === " ") {
+                e.preventDefault();
+                setIsResizingVertical(true);
+              }
+            }}
           >
             <div className="absolute inset-x-0 top-1/2 -translate-y-1/2 h-0.5 bg-gray-300/50 dark:bg-gray-600/50 group-hover:bg-indigo-400 dark:group-hover:bg-indigo-400 transition-all duration-200" />
-          </div>
+          </button>
         </div>
 
         {/* Test Cases / Console Panel */}
@@ -1126,442 +1645,39 @@ export default function ProblemSolvingQuestion({
 
           <div className="p-4 sm:p-5 max-h-48 sm:max-h-64 overflow-y-auto">
             {activeTab === "testcase" ? (
-              /* Test Cases - LeetCode Style with Custom Test Cases */
-              <div className="space-y-4 sm:space-y-5">
-                {/* Test Case Selection Buttons */}
-                <div className="flex items-center gap-2 flex-wrap overflow-x-auto pb-2 -mx-1 px-1">
-                  {testCases.map((_, index) => (
-                    <button
-                      key={index}
-                      onClick={() => {
-                        setSelectedTestCaseIndex(index);
-                        setEditingTestCaseIndex(null);
-                        setEditingTestCaseData(null);
-                      }}
-                      className={`px-3 sm:px-3.5 py-1.5 text-xs font-semibold rounded-lg border transition-all duration-200 whitespace-nowrap shadow-sm hover:shadow ${
-                        selectedTestCaseIndex === index
-                          ? "bg-gradient-to-br from-indigo-50 to-indigo-100 text-indigo-700 dark:from-indigo-900/30 dark:to-indigo-900/20 dark:text-indigo-300 border-indigo-300 dark:border-indigo-700"
-                          : "bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300 border-gray-200 dark:border-gray-600 hover:bg-indigo-50 dark:hover:bg-gray-600 hover:border-indigo-200 dark:hover:border-gray-500"
-                      }`}
-                    >
-                      {selectedTestCaseIndex === index && (
-                        <CheckCircle className="w-3 h-3 inline mr-1" />
-                      )}
-                      Case {index + 1}
-                      {index >= baseTestCases.length && (
-                        <span className="ml-1 text-indigo-600 dark:text-indigo-400">
-                          *
-                        </span>
-                      )}
-                    </button>
-                  ))}
-                  <button
-                    onClick={handleAddCustomTestCase}
-                    className="px-3 sm:px-3.5 py-1.5 text-xs font-semibold rounded-lg border border-dashed border-indigo-300 dark:border-indigo-600 text-indigo-600 dark:text-indigo-400 hover:bg-indigo-50 dark:hover:bg-indigo-900/20 whitespace-nowrap transition-all duration-200 shadow-sm hover:shadow"
-                  >
-                    <Plus className="w-3 h-3 inline mr-1" />
-                    Custom
-                  </button>
-                </div>
-
-                {/* Selected Test Case Display/Edit */}
-                {selectedTestCaseIndex >= 0 &&
-                  selectedTestCaseIndex < testCases.length && (
-                    <div className="bg-gradient-to-br from-gray-50 to-white dark:from-gray-900/50 dark:to-gray-800/30 rounded-xl p-4 sm:p-5 border border-gray-200 dark:border-gray-700 shadow-sm">
-                      {editingTestCaseIndex === selectedTestCaseIndex &&
-                      selectedTestCaseIndex >= baseTestCases.length ? (
-                        /* Edit Custom Test Case */
-                        <div className="space-y-4">
-                          <div className="flex items-center justify-between mb-3">
-                            <span className="text-xs sm:text-sm font-semibold text-gray-800 dark:text-gray-200">
-                              Edit Custom Test Case {selectedTestCaseIndex + 1}
-                            </span>
-                            <div className="flex items-center gap-2">
-                              <button
-                                onClick={handleSaveTestCase}
-                                className="px-3 py-1.5 text-xs font-semibold bg-green-600 hover:bg-green-700 text-white rounded-lg transition-colors"
-                              >
-                                Save
-                              </button>
-                              <button
-                                onClick={() => {
-                                  setEditingTestCaseIndex(null);
-                                  setEditingTestCaseData(null);
-                                }}
-                                className="px-3 py-1.5 text-xs font-semibold bg-gray-600 hover:bg-gray-700 text-white rounded-lg transition-colors"
-                              >
-                                Cancel
-                              </button>
-                              <button
-                                onClick={() =>
-                                  handleDeleteTestCase(selectedTestCaseIndex)
-                                }
-                                className="px-3 py-1.5 text-xs font-semibold bg-red-600 hover:bg-red-700 text-white rounded-lg transition-colors"
-                              >
-                                Delete
-                              </button>
-                            </div>
-                          </div>
-                          {editingTestCaseData &&
-                            (() => {
-                              const inputFields = parseInputFields(
-                                editingTestCaseData.input || {},
-                              );
-                              return (
-                                <div className="space-y-3">
-                                  {Object.entries(inputFields).map(
-                                    ([key, value]) => (
-                                      <div
-                                        key={key}
-                                        className="flex items-center gap-2"
-                                      >
-                                        <label className="text-xs font-semibold text-gray-700 dark:text-gray-300 whitespace-nowrap min-w-[80px]">
-                                          {key} =
-                                        </label>
-                                        <input
-                                          type="text"
-                                          value={
-                                            typeof value === "string"
-                                              ? value
-                                              : JSON.stringify(value)
-                                          }
-                                          onChange={(e) => {
-                                            try {
-                                              const parsed = JSON.parse(
-                                                e.target.value,
-                                              );
-                                              const currentInput =
-                                                parseInputFields(
-                                                  editingTestCaseData.input ||
-                                                    {},
-                                                );
-                                              setEditingTestCaseData({
-                                                ...editingTestCaseData,
-                                                input: {
-                                                  ...currentInput,
-                                                  [key]: parsed,
-                                                },
-                                              });
-                                            } catch {
-                                              const currentInput =
-                                                parseInputFields(
-                                                  editingTestCaseData.input ||
-                                                    {},
-                                                );
-                                              setEditingTestCaseData({
-                                                ...editingTestCaseData,
-                                                input: {
-                                                  ...currentInput,
-                                                  [key]: e.target.value,
-                                                },
-                                              });
-                                            }
-                                          }}
-                                          className="flex-1 px-3 py-2 text-xs font-mono bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-600 rounded-lg text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-indigo-500 dark:focus:ring-indigo-400 focus:border-transparent"
-                                        />
-                                      </div>
-                                    ),
-                                  )}
-                                  <div className="flex items-center gap-2 pt-2 border-t border-gray-200 dark:border-gray-700">
-                                    <label className="text-xs font-semibold text-gray-700 dark:text-gray-300 whitespace-nowrap min-w-[80px]">
-                                      Expected =
-                                    </label>
-                                    <input
-                                      type="text"
-                                      value={
-                                        typeof editingTestCaseData.expectedOutput ===
-                                        "string"
-                                          ? editingTestCaseData.expectedOutput
-                                          : JSON.stringify(
-                                              editingTestCaseData.expectedOutput ||
-                                                "",
-                                            )
-                                      }
-                                      onChange={(e) => {
-                                        try {
-                                          const parsed = JSON.parse(
-                                            e.target.value,
-                                          );
-                                          setEditingTestCaseData({
-                                            ...editingTestCaseData,
-                                            expectedOutput: parsed,
-                                          });
-                                        } catch {
-                                          setEditingTestCaseData({
-                                            ...editingTestCaseData,
-                                            expectedOutput: e.target.value,
-                                          });
-                                        }
-                                      }}
-                                      className="flex-1 px-3 py-2 text-xs font-mono bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-600 rounded-lg text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-indigo-500 dark:focus:ring-indigo-400 focus:border-transparent"
-                                    />
-                                  </div>
-                                </div>
-                              );
-                            })()}
-                        </div>
-                      ) : (
-                        /* Display Test Case (Read-only for base, editable for custom) */
-                        <div>
-                          <div className="flex items-center justify-between mb-3">
-                            <span className="text-xs sm:text-sm font-semibold text-gray-800 dark:text-gray-200">
-                              Test Case {selectedTestCaseIndex + 1}
-                              {testCases[selectedTestCaseIndex].description && (
-                                <span className="ml-2 text-xs font-normal text-gray-600 dark:text-gray-400">
-                                  -{" "}
-                                  {testCases[selectedTestCaseIndex].description}
-                                </span>
-                              )}
-                              {selectedTestCaseIndex >=
-                                baseTestCases.length && (
-                                <span className="ml-2 text-xs text-indigo-600 dark:text-indigo-400">
-                                  (Custom)
-                                </span>
-                              )}
-                            </span>
-                            {selectedTestCaseIndex >= baseTestCases.length && (
-                              <button
-                                onClick={() => {
-                                  setEditingTestCaseIndex(
-                                    selectedTestCaseIndex,
-                                  );
-                                  setEditingTestCaseData({
-                                    ...testCases[selectedTestCaseIndex],
-                                  });
-                                }}
-                                className="px-3 py-1.5 text-xs font-semibold bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg transition-colors"
-                              >
-                                Edit
-                              </button>
-                            )}
-                          </div>
-                          {(() => {
-                            const inputFields = getInputFields(
-                              testCases[selectedTestCaseIndex],
-                            );
-                            return (
-                              <div className="space-y-2.5">
-                                {Object.entries(inputFields).map(
-                                  ([key, value]) => (
-                                    <div
-                                      key={key}
-                                      className="flex items-center gap-2"
-                                    >
-                                      <span className="text-xs font-semibold text-gray-700 dark:text-gray-300 whitespace-nowrap min-w-[80px]">
-                                        {key} =
-                                      </span>
-                                      <code className="flex-1 px-3 py-1.5 text-xs font-mono bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded text-gray-900 dark:text-gray-100">
-                                        {JSON.stringify(value)}
-                                      </code>
-                                    </div>
-                                  ),
-                                )}
-                                <div className="flex items-center gap-2 pt-2 border-t border-gray-200 dark:border-gray-700">
-                                  <span className="text-xs font-semibold text-gray-700 dark:text-gray-300 whitespace-nowrap min-w-[80px]">
-                                    Expected =
-                                  </span>
-                                  <code className="flex-1 px-3 py-1.5 text-xs font-mono bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded text-green-700 dark:text-green-300">
-                                    {JSON.stringify(
-                                      testCases[selectedTestCaseIndex]
-                                        .expectedOutput,
-                                    )}
-                                  </code>
-                                </div>
-                              </div>
-                            );
-                          })()}
-                        </div>
-                      )}
-                    </div>
-                  )}
-              </div>
+              <TestCasesPanel
+                testCases={testCases}
+                baseTestCases={baseTestCases}
+                selectedTestCaseIndex={selectedTestCaseIndex}
+                editingTestCaseIndex={editingTestCaseIndex}
+                editingTestCaseData={editingTestCaseData}
+                onSelectTestCase={(index) => {
+                  setSelectedTestCaseIndex(index);
+                  setEditingTestCaseIndex(null);
+                  setEditingTestCaseData(null);
+                }}
+                onAddCustomTestCase={handleAddCustomTestCase}
+                onSaveTestCase={handleSaveTestCase}
+                onCancelEdit={() => {
+                  setEditingTestCaseIndex(null);
+                  setEditingTestCaseData(null);
+                }}
+                onDeleteTestCase={handleDeleteTestCase}
+                onStartEdit={(index) => {
+                  setEditingTestCaseIndex(index);
+                  setEditingTestCaseData({ ...testCases[index] });
+                }}
+                parseInputFields={parseInputFields}
+                setEditingTestCaseData={setEditingTestCaseData}
+              />
             ) : (
-              /* Test Result Panel */
-              <div className="space-y-3 sm:space-y-4">
-                {/* Run Output (Console) */}
-                {runOutput && (
-                  <div className="bg-gradient-to-br from-gray-50 to-white dark:from-gray-900 dark:to-gray-800 rounded-xl p-3 sm:p-4 border border-gray-200 dark:border-gray-700 shadow-sm">
-                    <div className="flex items-center justify-between mb-3 pb-2 border-b border-gray-200 dark:border-gray-700">
-                      <span className="text-xs font-semibold text-gray-700 dark:text-gray-400">
-                        Console Output:
-                      </span>
-                      {runOutput.exitCode === 0 ? (
-                        <CheckCircle className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-green-600 dark:text-green-500" />
-                      ) : (
-                        <XCircle className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-red-600 dark:text-red-500" />
-                      )}
-                    </div>
-                    {runOutput.stdout && (
-                      <pre className="text-xs font-mono text-green-800 dark:text-green-400 whitespace-pre-wrap mb-2 break-words overflow-x-auto bg-white dark:bg-gray-900 p-2 rounded border border-green-100 dark:border-green-900/50">
-                        {runOutput.stdout}
-                      </pre>
-                    )}
-                    {runOutput.stderr && (
-                      <pre className="text-xs font-mono text-red-800 dark:text-red-400 whitespace-pre-wrap break-words overflow-x-auto bg-white dark:bg-gray-900 p-2 rounded border border-red-100 dark:border-red-900/50">
-                        {runOutput.stderr}
-                      </pre>
-                    )}
-                    {!runOutput.stdout && !runOutput.stderr && (
-                      <p className="text-xs text-gray-500 dark:text-gray-500 italic bg-gray-50 dark:bg-gray-900/50 p-2 rounded border border-gray-200 dark:border-gray-700">
-                        No output
-                      </p>
-                    )}
-                  </div>
-                )}
-
-                {/* Test Results */}
-                {testResults.length > 0 && (
-                  <>
-                    {/* Test Case Selection */}
-                    <div className="flex items-center gap-1.5 sm:gap-2 flex-wrap overflow-x-auto pb-2 -mx-1 px-1">
-                      {testResults.map((_, index) => (
-                        <button
-                          key={index}
-                          onClick={() => setSelectedTestCaseIndex(index)}
-                          className={`px-2 sm:px-3 py-1 text-xs font-medium rounded border transition-colors whitespace-nowrap ${
-                            selectedTestCaseIndex === index
-                              ? "bg-indigo-100 text-indigo-700 dark:bg-indigo-900/30 dark:text-indigo-300 border-indigo-300 dark:border-indigo-700"
-                              : testResults[index].passed
-                                ? "bg-green-50 text-green-700 dark:bg-green-900/20 dark:text-green-300 border-green-200 dark:border-green-800"
-                                : "bg-red-50 text-red-700 dark:bg-red-900/20 dark:text-red-300 border-red-200 dark:border-red-800"
-                          }`}
-                        >
-                          {testResults[index].passed ? (
-                            <CheckCircle className="w-3 h-3 inline mr-1" />
-                          ) : (
-                            <XCircle className="w-3 h-3 inline mr-1" />
-                          )}
-                          Case {index + 1}
-                        </button>
-                      ))}
-                    </div>
-
-                    {/* Selected Test Case Result */}
-                    {selectedTestCaseIndex >= 0 &&
-                      selectedTestCaseIndex < testResults.length && (
-                        <div
-                          className={`p-3 sm:p-4 rounded-lg border ${
-                            testResults[selectedTestCaseIndex].passed
-                              ? "bg-green-50 dark:bg-green-900/20 border-green-200 dark:border-green-800"
-                              : "bg-red-50 dark:bg-red-900/20 border-red-200 dark:border-red-800"
-                          }`}
-                        >
-                          <div className="flex flex-wrap items-center gap-2.5 mb-3">
-                            {testResults[selectedTestCaseIndex].passed ? (
-                              <CheckCircle className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-green-600 dark:text-green-400 flex-shrink-0" />
-                            ) : (
-                              <XCircle className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-red-600 dark:text-red-400 flex-shrink-0" />
-                            )}
-                            <span className="text-xs sm:text-sm font-medium text-gray-900 dark:text-white">
-                              Test Case {selectedTestCaseIndex + 1}
-                            </span>
-                            {testResults[selectedTestCaseIndex].testCase
-                              .description && (
-                              <span className="text-xs text-gray-500 dark:text-gray-400 hidden sm:inline">
-                                {
-                                  testResults[selectedTestCaseIndex].testCase
-                                    .description
-                                }
-                              </span>
-                            )}
-                          </div>
-                          <div className="space-y-2 sm:space-y-2.5 text-xs">
-                            <div className="break-words">
-                              <span className="text-gray-500 dark:text-gray-400">
-                                Input:{" "}
-                              </span>
-                              <code className="text-gray-900 dark:text-gray-100 font-mono break-all">
-                                {JSON.stringify(
-                                  testResults[selectedTestCaseIndex].testCase
-                                    .input,
-                                )}
-                              </code>
-                            </div>
-                            <div className="break-words">
-                              <span className="text-gray-500 dark:text-gray-400">
-                                Expected:{" "}
-                              </span>
-                              <code className="text-green-700 dark:text-green-300 font-mono break-all">
-                                {JSON.stringify(
-                                  testResults[selectedTestCaseIndex].testCase
-                                    .expectedOutput,
-                                )}
-                              </code>
-                            </div>
-                            {testResults[selectedTestCaseIndex].actualOutput !==
-                              undefined && (
-                              <div className="break-words">
-                                <span className="text-gray-500 dark:text-gray-400">
-                                  Output:{" "}
-                                </span>
-                                <code
-                                  className={`font-mono break-all ${
-                                    testResults[selectedTestCaseIndex].passed
-                                      ? "text-green-700 dark:text-green-300"
-                                      : "text-red-700 dark:text-red-300"
-                                  }`}
-                                >
-                                  {JSON.stringify(
-                                    testResults[selectedTestCaseIndex]
-                                      .actualOutput,
-                                  )}
-                                </code>
-                              </div>
-                            )}
-                            {testResults[selectedTestCaseIndex].error && (
-                              <div className="text-red-600 dark:text-red-400 font-mono break-words">
-                                Error:{" "}
-                                {testResults[selectedTestCaseIndex].error}
-                              </div>
-                            )}
-                            {/* Console Output (console.log statements) */}
-                            {testResults[selectedTestCaseIndex]
-                              .consoleOutput && (
-                              <div className="mt-3 pt-3 border-t border-gray-200 dark:border-gray-700">
-                                <div className="text-xs font-semibold text-gray-600 dark:text-gray-400 mb-2">
-                                  Console Output:
-                                </div>
-                                <pre className="text-xs font-mono text-gray-800 dark:text-gray-200 whitespace-pre-wrap break-words overflow-x-auto bg-gray-50 dark:bg-gray-900/50 p-2.5 rounded border border-gray-200 dark:border-gray-700">
-                                  {
-                                    testResults[selectedTestCaseIndex]
-                                      .consoleOutput
-                                  }
-                                </pre>
-                              </div>
-                            )}
-                          </div>
-                        </div>
-                      )}
-
-                    {/* All Tests Passed Message */}
-                    {allTestsPassed && (
-                      <div className="p-3 sm:p-4 bg-green-50 dark:bg-green-900/20 rounded-lg border border-green-200 dark:border-green-800">
-                        <div className="flex items-center gap-2 sm:gap-3">
-                          <Trophy className="w-4 h-4 sm:w-5 sm:h-5 text-green-600 dark:text-green-400 flex-shrink-0" />
-                          <div>
-                            <h4 className="text-xs sm:text-sm font-semibold text-green-800 dark:text-green-200">
-                              All Tests Passed! 🎉
-                            </h4>
-                            <p className="text-xs text-green-700 dark:text-green-300">
-                              Congratulations! Your solution is correct.
-                            </p>
-                          </div>
-                        </div>
-                      </div>
-                    )}
-                  </>
-                )}
-
-                {/* Empty State */}
-                {!runOutput && testResults.length === 0 && (
-                  <div className="text-center py-6 sm:py-8 text-gray-500 dark:text-gray-400">
-                    <p className="text-xs sm:text-sm">
-                      Click "Run" to test your code or "Submit" to run all test
-                      cases
-                    </p>
-                  </div>
-                )}
-              </div>
+              <TestResultsPanel
+                runOutput={runOutput}
+                testResults={testResults}
+                selectedTestCaseIndex={selectedTestCaseIndex}
+                allTestsPassed={allTestsPassed}
+                onSelectTestCase={setSelectedTestCaseIndex}
+              />
             )}
           </div>
         </div>

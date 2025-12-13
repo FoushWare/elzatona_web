@@ -7,7 +7,7 @@ const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
 const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
 
 import { cookies } from "next/headers";
-import { verifySupabaseToken } from "@/lib/server-auth";
+import { verifySupabaseToken } from "../../../../lib/server-auth";
 interface ProgressData {
   userId: string;
   sessionId: string;

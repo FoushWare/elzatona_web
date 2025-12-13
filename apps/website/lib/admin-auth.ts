@@ -1,5 +1,5 @@
 import bcrypt from "bcryptjs";
-import { adminConfig, getAdminApiUrl } from "@/admin.config";
+import { adminConfig, getAdminApiUrl } from "../admin.config";
 import { createClient } from "@supabase/supabase-js";
 
 const supabaseUrl = process.env["NEXT_PUBLIC_SUPABASE_URL"]!;

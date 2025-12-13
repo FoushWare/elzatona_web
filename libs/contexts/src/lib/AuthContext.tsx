@@ -7,7 +7,7 @@ import {
   useEffect,
   ReactNode,
 } from "react";
-// import { UserAuthService } from '@/lib/user-auth';
+// import { UserAuthService } from '../../../../apps/website/lib/user-auth';
 // Note: syncAllProgressOnLogin is website-specific and should be imported where needed
 // import { syncAllProgressOnLogin } from '@/lib/sync-progress-on-login';
 import { Loader2 } from "lucide-react";

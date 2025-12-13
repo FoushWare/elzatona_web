@@ -35,7 +35,6 @@ import {
   BookOpen,
   Code,
   Target,
-  Clock,
   Zap,
   BarChart3,
   CheckCircle,

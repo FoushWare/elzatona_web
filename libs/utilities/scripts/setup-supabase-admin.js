@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 import { createClient } from "@supabase/supabase-js";
-import bcrypt from "bcryptjs";
+// import _bcrypt from "bcryptjs";
 
 console.log("🛡️ Supabase Admin Account Setup\n");
 
@@ -95,7 +95,7 @@ async function setupAdminAccount() {
     }
 
     // Check if admin record already exists
-    const { data: existingAdmin, error: checkError } = await supabase
+    const { data: existingAdmin } = await supabase
       .from("admins")
       .select("*")
       .eq("email", adminEmail)

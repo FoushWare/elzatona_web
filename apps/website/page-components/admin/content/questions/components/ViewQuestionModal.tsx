@@ -16,7 +16,7 @@ import {
 import { createHighlighter, type Highlighter } from "shiki";
 
 // Helper function to format code with proper line breaks and indentation
-const formatCodeForDisplay = (code: string): string => {
+const _formatCodeForDisplay = (code: string): string => {
   if (!code) return "";
 
   // Convert code to string if it's not already
@@ -198,10 +198,10 @@ export function ViewQuestionModal({
   isOpen,
   onClose,
   question,
-  cards,
-  allCategories,
-  categoriesData,
-  topicsData,
+  cards: _cards,
+  allCategories: _allCategories,
+  categoriesData: _categoriesData,
+  topicsData: _topicsData,
 }: ViewQuestionModalProps) {
   const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null);
   const [showExplanation, setShowExplanation] = useState(false);

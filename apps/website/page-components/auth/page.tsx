@@ -1,11 +1,11 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 
 import {
   supabaseClient as supabase,
   isSupabaseAvailable,
-} from "@/lib/supabase-client";
+} from "../../lib/supabase-client";
 
 import { useAuth } from "@elzatona/contexts";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -60,7 +60,7 @@ export default function AuthPage() {
       } else {
         setError(isLogin ? "Invalid credentials" : "Registration failed");
       }
-    } catch (error) {
+    } catch (_error) {
       setError("An unexpected error occurred");
     } finally {
       setLoading(false);
@@ -92,7 +92,7 @@ export default function AuthPage() {
       // Store redirect URL in sessionStorage for OAuth callback
       sessionStorage.setItem("auth_redirect", redirectTo);
 
-      const { data, error } = await supabase.auth.signInWithOAuth({
+      const { data: _data, error } = await supabase.auth.signInWithOAuth({
         provider: "google",
         options: {
           redirectTo: `${window.location.origin}/auth/callback`,
@@ -129,7 +129,7 @@ export default function AuthPage() {
       // Store redirect URL in sessionStorage for OAuth callback
       sessionStorage.setItem("auth_redirect", redirectTo);
 
-      const { data, error } = await supabase.auth.signInWithOAuth({
+      const { data: _data, error } = await supabase.auth.signInWithOAuth({
         provider: "github",
         options: {
           redirectTo: `${window.location.origin}/auth/callback`,

@@ -929,7 +929,7 @@ export default function AdminContentQuestionsPage() {
               const errorData = await response.json();
               errorMessage =
                 errorData.error || errorData.message || errorMessage;
-            } catch (e) {
+            } catch (_e) {
               // If response is not JSON, use status text
               errorMessage = `HTTP ${response.status}: ${response.statusText}`;
             }
@@ -1213,7 +1213,7 @@ export default function AdminContentQuestionsPage() {
       await fetchQuestions();
 
       if (failed.length > 0) {
-        const errorMessage = `Successfully deleted ${successful.length} question(s), but ${failed.length} failed.\n\nFailed:\n${failed.map((f) => `• Question ${f.id}: ${f.error}`).join("\n")}`;
+        const _errorMessage = `Successfully deleted ${successful.length} question(s), but ${failed.length} failed.\n\nFailed:\n${failed.map((f) => `• Question ${f.id}: ${f.error}`).join("\n")}`;
         showError(
           "Bulk Delete Partial Success",
           `Deleted ${successful.length} question(s), but ${failed.length} failed.`,
@@ -1239,7 +1239,7 @@ export default function AdminContentQuestionsPage() {
     }
   };
 
-  const getCardTitleById = (card_id: string) => {
+  const _getCardTitleById = (card_id: string) => {
     return cards.find((card: any) => card.id === card_id)?.title || "N/A";
   };
 

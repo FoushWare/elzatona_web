@@ -1,7 +1,7 @@
 // v1.0 - Progress Analytics Component
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 // import { useUserProgress } from '@elzatona/hooks'; // Removed - useUserProgress is not exported
 import {
   BarChart3,
@@ -193,14 +193,14 @@ export default function ProgressAnalytics() {
 
       {/* Top Categories */}
       {dashboardStats?.recentActivity &&
-        dashboardStats.recentActivity.length > 0 && (
+        dashboardStats?.recentActivity.length > 0 && (
           <div className="bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-lg border border-gray-200 dark:border-gray-700">
             <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-4 flex items-center">
               <Brain className="w-5 h-5 mr-2 text-purple-500" />
               Top Performing Categories
             </h3>
             <div className="space-y-4">
-              {dashboardStats.recentActivity.map(
+              {dashboardStats?.recentActivity?.map(
                 (activity: any, index: number) => (
                   <div
                     key={index}
@@ -241,7 +241,7 @@ export default function ProgressAnalytics() {
 
       {/* Recent Activity Summary */}
       {dashboardStats?.recentActivity &&
-        dashboardStats.recentActivity.length > 0 && (
+        dashboardStats?.recentActivity.length > 0 && (
           <div className="bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-lg border border-gray-200 dark:border-gray-700">
             <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-4 flex items-center">
               <Zap className="w-5 h-5 mr-2 text-yellow-500" />
@@ -250,11 +250,9 @@ export default function ProgressAnalytics() {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div className="text-center p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
                 <div className="text-2xl font-bold text-blue-600 mb-1">
-                  {
-                    dashboardStats.recentActivity.filter(
-                      (a: any) => a.type === "question",
-                    ).length
-                  }
+                  {dashboardStats?.recentActivity?.filter(
+                    (a: any) => a.type === "question",
+                  ).length ?? 0}
                 </div>
                 <div className="text-sm text-blue-600 dark:text-blue-400">
                   Questions
@@ -262,11 +260,9 @@ export default function ProgressAnalytics() {
               </div>
               <div className="text-center p-4 bg-green-50 dark:bg-green-900/20 rounded-lg">
                 <div className="text-2xl font-bold text-green-600 mb-1">
-                  {
-                    dashboardStats.recentActivity.filter(
-                      (a: any) => a.type === "challenge",
-                    ).length
-                  }
+                  {dashboardStats?.recentActivity?.filter(
+                    (a: any) => a.type === "challenge",
+                  ).length ?? 0}
                 </div>
                 <div className="text-sm text-green-600 dark:text-green-400">
                   Challenges
@@ -274,11 +270,9 @@ export default function ProgressAnalytics() {
               </div>
               <div className="text-center p-4 bg-purple-50 dark:bg-purple-900/20 rounded-lg">
                 <div className="text-2xl font-bold text-purple-600 mb-1">
-                  {
-                    dashboardStats.recentActivity.filter(
-                      (a: any) => a.type === "path",
-                    ).length
-                  }
+                  {dashboardStats?.recentActivity?.filter(
+                    (a: any) => a.type === "path",
+                  ).length ?? 0}
                 </div>
                 <div className="text-sm text-purple-600 dark:text-purple-400">
                   Learning Paths

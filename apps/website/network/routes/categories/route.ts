@@ -3,10 +3,13 @@
 // Added input sanitization for security
 
 import { NextRequest, NextResponse } from "next/server";
-import { supabaseOperations } from "@/lib/supabase-server";
+// Empty import removed
 import { createClient } from "@supabase/supabase-js";
-import { sanitizeObjectServer } from "@/lib/utils/sanitize-server";
-import { validateAndSanitize, categorySchema } from "@/lib/utils/validation";
+import { sanitizeObjectServer } from "../../../lib/utils/sanitize-server";
+import {
+  validateAndSanitize,
+  categorySchema,
+} from "../../../lib/utils/validation";
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
 const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;

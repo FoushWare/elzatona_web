@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import jwt from "jsonwebtoken";
-import { getSupabaseConfig, getApiConfig } from "@/lib/utils/api-config";
-import { getEnvironment } from "@/lib/utils/environment";
+import { getSupabaseConfig, getApiConfig } from "../../../lib/utils/api-config";
+import { getEnvironment } from "../../../lib/utils/environment";
 
 // Admin config - using environment variables directly
 const adminConfig = {
@@ -70,7 +70,7 @@ export async function GET(request: NextRequest) {
 
     // Proceed with project check (admin is authenticated)
     const config = getSupabaseConfig();
-    const apiConfig = getApiConfig();
+    const _apiConfig = getApiConfig();
     const env = getEnvironment();
 
     // Extract project reference from URL
@@ -91,7 +91,7 @@ export async function GET(request: NextRequest) {
           keyProjectRef = payload.ref;
           keyRole = payload.role;
         }
-      } catch (error) {
+      } catch (_error) {
         // Invalid JWT
       }
     }

@@ -1,9 +1,10 @@
+/* eslint-disable @typescript-eslint/no-require-imports */
 // Script to fix code/content cleaning issues in all questions
 // Applies the same cleaning algorithm used in the API route
 
 const { createClient } = require("@supabase/supabase-js");
-const fs = require("fs");
-const path = require("path");
+// const fs = require("fs"); // Unused
+// const path = require("path"); // Unused
 
 // Supabase configuration - REQUIRES environment variables
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
@@ -555,7 +556,7 @@ async function processBatch(batchNumber, questions) {
       if (typeof options === "string") {
         try {
           options = JSON.parse(options);
-        } catch (e) {
+        } catch (_e) {
           options = [options];
         }
       }

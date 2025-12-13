@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, ReactNode } from "react";
+import React, { useState, useEffect } from "react";
 
 // Force dynamic rendering to prevent static generation issues
 export const dynamic = "force-dynamic";
@@ -199,7 +199,7 @@ export default function FrontendTasksPage() {
     return matchesSearch && matchesDifficulty && matchesCategory;
   });
 
-  const getDifficultyColor = (difficulty: string) => {
+  const _getDifficultyColor = (difficulty: string) => {
     switch (difficulty) {
       case "easy":
         return "text-green-600 bg-green-100 dark:bg-green-900/30 dark:text-green-400";
@@ -225,7 +225,7 @@ export default function FrontendTasksPage() {
     }
   };
 
-  const getTechnologyIcon = (tech: string) => {
+  const _getTechnologyIcon = (tech: string) => {
     const iconMap: Record<string, React.ReactNode> = {
       React: <Zap className="w-4 h-4" />,
       JavaScript: <Code className="w-4 h-4" />,

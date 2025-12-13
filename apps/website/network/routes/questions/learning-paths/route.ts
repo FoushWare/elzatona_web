@@ -1,10 +1,10 @@
 // v1.0 - Learning Paths API Route
 
 import { NextRequest, NextResponse } from "next/server";
-import UnifiedQuestionService from "@/lib/unified-question-schema";
+import UnifiedQuestionService from "../../../../lib/unified-question-schema";
 
 // GET /api/questions/learning-paths - Get all learning paths
-export async function GET(request: NextRequest) {
+export async function GET(_request: NextRequest) {
   try {
     const learningPaths = await UnifiedQuestionService.getLearningPaths();
 
@@ -23,7 +23,7 @@ export async function GET(request: NextRequest) {
 }
 
 // POST /api/questions/learning-paths - Initialize default learning paths
-export async function POST(request: NextRequest) {
+export async function POST(_request: NextRequest) {
   try {
     await UnifiedQuestionService.initializeDefaultLearningPaths();
 

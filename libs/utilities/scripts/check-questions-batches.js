@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-require-imports */
 // Script to check all questions in database and divide into batches
 // Then check each batch for code/content cleaning issues
 
@@ -133,7 +134,7 @@ function checkQuestionForIssues(question) {
     if (typeof options === "string") {
       try {
         options = JSON.parse(options);
-      } catch (e) {
+      } catch (_e) {
         // Not JSON, treat as string
         options = [options];
       }

@@ -1,11 +1,11 @@
 "use client";
 
-import React, { useState, ReactNode } from "react";
+import React, { useState } from "react";
 import { createClient } from "@supabase/supabase-js";
 
 const supabaseUrl = process.env["NEXT_PUBLIC_SUPABASE_URL"]!;
 const supabaseServiceRoleKey = process.env["SUPABASE_SERVICE_ROLE_KEY"]!;
-const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
+const _supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
 
 import { useRouter } from "next/navigation";
 import { useUserType } from "@elzatona/contexts";

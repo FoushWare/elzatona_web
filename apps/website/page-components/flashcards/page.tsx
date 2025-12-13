@@ -6,7 +6,7 @@ import {
   loadFlashcards,
   removeFlashcard,
   FlashcardItem,
-} from "@/lib/flashcards";
+} from "../../lib/flashcards";
 import {
   BookOpen,
   Trash2,
@@ -426,7 +426,7 @@ export default function FlashcardsPage() {
   }
 
   if (practiceMode === "quiz") {
-    const isCorrect = selectedAnswer === currentQuestion?.correct_answer;
+    const _isCorrect = selectedAnswer === currentQuestion?.correct_answer;
 
     return (
       <div className="min-h-screen bg-gradient-to-br from-amber-50 via-white to-rose-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 pt-24 pb-10">

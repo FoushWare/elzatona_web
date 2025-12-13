@@ -5,7 +5,7 @@
 
 export function generateOptimizedImageUrl(
   src: string,
-  options: {
+  _options: {
     quality?: number;
     format?: "webp" | "jpeg" | "png";
     width?: number;

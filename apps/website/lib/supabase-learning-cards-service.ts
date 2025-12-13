@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 // This file uses 'any' types for Supabase data transformations
-import { supabaseClient } from "@/lib/supabase";
+import { supabaseClient } from "./supabase";
 import type {
   LearningCard,
   LearningCardFormData,
@@ -182,7 +182,7 @@ export class SupabaseLearningCardsService {
 
   // Learning Plan Cards operations
   static async getLearningPlanCards(
-    plan_id: string,
+    _plan_id: string,
   ): Promise<LearningPlanCard[]> {
     try {
       // This would need to be implemented based on your learning plan structure
@@ -219,8 +219,8 @@ export class SupabaseLearningCardsService {
 
   // Card Progress operations
   static async getCardProgress(
-    userId: string,
-    card_id: string,
+    _userId: string,
+    _card_id: string,
   ): Promise<CardProgress | null> {
     try {
       // This would need to be implemented based on your progress tracking structure

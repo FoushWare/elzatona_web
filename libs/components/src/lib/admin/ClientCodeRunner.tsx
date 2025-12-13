@@ -38,11 +38,21 @@ export default function ClientCodeRunner({
 
   useEffect(() => {
     const handleMessage = (e: MessageEvent) => {
+      // SECURITY: Verify message origin to prevent XSS
+      if (e.origin !== globalThis.window.location.origin) {
+        console.warn("Received message from untrusted origin:", e.origin);
+        return;
+      }
       if (!e.data || e.data.type !== "runner:results") return;
       setRunning(false);
       setResults(e.data.results as TestResult[]);
     };
     const handleCustom = (e: MessageEvent) => {
+      // SECURITY: Verify message origin to prevent XSS
+      if (e.origin !== globalThis.window.location.origin) {
+        console.warn("Received message from untrusted origin:", e.origin);
+        return;
+      }
       if (!e.data || e.data.type !== "runner:custom:result") return;
       setRunning(false);
       setCustomResult(e.data.result as TestResult);
@@ -79,6 +89,10 @@ export default function ClientCodeRunner({
     '<html><head><meta charset="utf-8"/></head><body>' +
     "<script>\n" +
     "function deepEqual(a,b){try{return JSON.stringify(a)===JSON.stringify(b)}catch(e){return false}}\n" +
+    // SECURITY NOTE: eval() is used here for educational code execution in an iframe sandbox.
+    // The code runs in an isolated iframe (srcDoc) with timeout protection and minimal globals.
+    // This is intentional for allowing users to test their code solutions.
+    // Consider implementing additional sandboxing measures (CSP, worker threads) for production.
     "function safeEval(code){return (0,eval)(code)}\n" +
     'function withTimeout(fn,args,ms){return new Promise((resolve,reject)=>{const t=setTimeout(()=>reject(new Error("Timeout")),ms);try{const res=fn.apply(null,args);Promise.resolve(res).then(v=>{clearTimeout(t);resolve(v)}).catch(err=>{clearTimeout(t);reject(err)});}catch(err){clearTimeout(t);reject(err);}})}\n' +
     'window.addEventListener("message",async(e)=>{\n' +

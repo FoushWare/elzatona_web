@@ -42,7 +42,7 @@ export interface QuestionAttempt {
   timestamp: string;
 }
 
-export const getQuestions = async (filters?: {
+export const getQuestions = async (_filters?: {
   category?: string;
   difficulty?: string;
   tags?: string[];
@@ -52,13 +52,13 @@ export const getQuestions = async (filters?: {
   return [];
 };
 
-export const getQuestion = async (id: string): Promise<Question | null> => {
+export const getQuestion = async (_id: string): Promise<Question | null> => {
   return null;
 };
 
 export const getRandomQuestions = async (
-  count: number,
-  filters?: {
+  _count: number,
+  _filters?: {
     category?: string;
     difficulty?: string;
   },
@@ -107,7 +107,7 @@ export const getQuestionStats = async (): Promise<{
   };
 };
 
-export const saveQuestionAttempt = async (attempt: {
+export const saveQuestionAttempt = async (_attempt: {
   question_id: string;
   user_id: string;
   answer: string;
@@ -118,15 +118,15 @@ export const saveQuestionAttempt = async (attempt: {
 };
 
 export const getUserQuestionAttempts = async (
-  userId: string,
-  questionId?: string,
+  _userId: string,
+  _questionId?: string,
 ) => {
   return [];
 };
 
 export const searchQuestions = async (
-  query: string,
-  filters?: {
+  _query: string,
+  _filters?: {
     category?: string;
     difficulty?: string;
     tags?: string[];
@@ -136,8 +136,8 @@ export const searchQuestions = async (
 };
 
 export const getQuizQuestions = async (
-  count: number,
-  filters?: {
+  _count: number,
+  _filters?: {
     category?: string;
     difficulty?: string;
     tags?: string[];

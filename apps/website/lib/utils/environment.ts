@@ -12,7 +12,7 @@
  *
  * @example
  * ```ts
- * import { isTestEnvironment, getEnvironment } from '@/lib/utils/environment';
+ * import { isTestEnvironment, getEnvironment } from './environment';
  *
  * if (isTestEnvironment()) {
  *   // Use test database logic

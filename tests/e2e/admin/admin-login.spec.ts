@@ -206,8 +206,8 @@ test.describe("A-E2E-002: Admin Login Flow", () => {
           `Current values: ADMIN_EMAIL=${adminEmail ? "***" : "undefined"}, ADMIN_PASSWORD=${adminPassword ? "***" : "undefined"}\n` +
           `Please check your .env.test.local file (lines 18-19) and ensure both variables are set with valid values.\n` +
           "Example (in .env.test.local):\n" +
-          "ADMIN_EMAIL=elzatonafoushware@gmail.com\n" +
-          "ADMIN_PASSWORD=ZatonaFoushware$12",
+          "ADMIN_EMAIL=<your-admin-email>\n" +
+          "ADMIN_PASSWORD=<your-admin-password>",
       );
     }
 
@@ -332,7 +332,7 @@ test.describe("A-E2E-002: Admin Login Flow", () => {
 
         // Small delay before next check
         await page.waitForTimeout(50);
-      } catch (error) {
+      } catch (_error) {
         // Page might have navigated or closed, check if error appeared
         const hasError = await page
           .locator(".bg-red-50, .bg-red-900\\/20")
@@ -366,7 +366,7 @@ test.describe("A-E2E-002: Admin Login Flow", () => {
         ) {
           loadingStateDetected = true;
         }
-      } catch (error) {
+      } catch (_error) {
         // Page might have navigated - check if we're still on login page
         const currentUrl = page.url();
         if (!currentUrl.includes("/admin/login")) {
@@ -401,8 +401,8 @@ test.describe("A-E2E-002: Admin Login Flow", () => {
           `Current values: ADMIN_EMAIL=${adminEmail ? "***" : "undefined"}, ADMIN_PASSWORD=${adminPassword ? "***" : "undefined"}\n` +
           `Please check your .env.test.local file (lines 18-19) and ensure both variables are set with valid values.\n` +
           "Example (in .env.test.local):\n" +
-          "ADMIN_EMAIL=elzatonafoushware@gmail.com\n" +
-          "ADMIN_PASSWORD=ZatonaFoushware$12",
+          "ADMIN_EMAIL=<your-admin-email>\n" +
+          "ADMIN_PASSWORD=<your-admin-password>",
       );
     }
 

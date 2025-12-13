@@ -24,13 +24,14 @@ import {
   GraduationCap,
   ExternalLink,
 } from "lucide-react";
-import { addFlashcard, isInFlashcards } from "@/lib/flashcards";
-import { addToCart } from "@/lib/cart";
+import { addFlashcard, isInFlashcards } from "../../lib/flashcards";
+import { addToCart } from "../../lib/cart";
+import { sanitizeText } from "../../lib/utils/sanitize";
 import { useNotifications } from "../../components/NotificationSystem";
 import { useLearningType } from "../../context/LearningTypeContext";
 import ProblemSolvingQuestion from "../../components/ProblemSolvingQuestion";
-import CodeEditor from "../../components/CodeEditor";
-import { QuestionContent, isValidCode } from "@elzatona/components";
+// import _CodeEditor from "../../components/_CodeEditor";
+import { QuestionContent } from "@elzatona/components";
 import { createHighlighter, type Highlighter } from "shiki";
 
 interface Resource {
@@ -172,7 +173,7 @@ const cleanOptionText = (text: string): string => {
         const textarea = document.createElement("textarea");
         textarea.innerHTML = decoded;
         decoded = textarea.value;
-      } catch (e) {
+      } catch (_e) {
         // Fallback to string replacement if DOM API fails
       }
     }
@@ -228,7 +229,7 @@ const cleanOptionText = (text: string): string => {
   );
 
   // Step 5: Remove any remaining HTML tags (but preserve backtick-wrapped content)
-  cleaned = cleaned.replace(/<[^>]+>/g, "");
+  cleaned = sanitizeText(cleaned); // Properly sanitize HTML to prevent XSS
 
   // Step 4: Fix common malformed patterns from HTML parsing issues
   // First, handle the specific e> artifact pattern (from </code> tags)
@@ -461,7 +462,7 @@ const OptionText = ({ text }: { text: string }) => {
 
 // Utility function to clean question titles
 // Since database is clean, we just need minimal processing
-const cleanQuestionTitle = (title: string): string => {
+const _cleanQuestionTitle = (title: string): string => {
   if (!title || typeof title !== "string") return title || "";
   // Database is clean, so just trim and return
   return title.trim();
@@ -638,7 +639,7 @@ const formatCodeContent = (code: string): string => {
 
 function GuidedPracticePageContent() {
   const searchParams = useSearchParams();
-  const router = useRouter();
+  const _router = useRouter();
   const { addNotification } = useNotifications();
   const { setLearningType } = useLearningType();
   const planId = searchParams?.get("plan");
@@ -1207,7 +1208,7 @@ function GuidedPracticePageContent() {
     }
   };
 
-  const markTopicCompleted = (topicId: string) => {
+  const _markTopicCompleted = (topicId: string) => {
     if (!progress) return;
     const updatedProgress = {
       ...progress,
@@ -1217,7 +1218,7 @@ function GuidedPracticePageContent() {
     saveProgress(updatedProgress);
   };
 
-  const markCategoryCompleted = (categoryId: string) => {
+  const _markCategoryCompleted = (categoryId: string) => {
     if (!progress) return;
     const updatedProgress = {
       ...progress,
@@ -1227,7 +1228,7 @@ function GuidedPracticePageContent() {
     saveProgress(updatedProgress);
   };
 
-  const markCardCompleted = (cardId: string) => {
+  const _markCardCompleted = (cardId: string) => {
     if (!progress) return;
     const updatedProgress = {
       ...progress,
@@ -2498,7 +2499,7 @@ function GuidedPracticePageContent() {
 
   // Helper function to extract code for code editor preview
   // Since database is clean (no HTML tags), we just normalize the code
-  const extractCodeForEditor = (content: string): string => {
+  const _extractCodeForEditor = (content: string): string => {
     if (!content || typeof content !== "string") return "";
 
     try {
@@ -2593,7 +2594,7 @@ function GuidedPracticePageContent() {
     }
   }, [currentQuestion]);
 
-  const getOptionClasses = (option: string) => {
+  const _getOptionClasses = (option: string) => {
     if (!currentAnswer) {
       return "w-full text-left p-3 sm:p-4 rounded-lg border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-900 dark:text-white transition-colors";
     }

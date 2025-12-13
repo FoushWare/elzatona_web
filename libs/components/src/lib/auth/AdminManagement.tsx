@@ -3,7 +3,7 @@ import { createClient } from "@supabase/supabase-js";
 
 const supabaseUrl = process.env["NEXT_PUBLIC_SUPABASE_URL"]!;
 const supabaseServiceRoleKey = process.env["SUPABASE_SERVICE_ROLE_KEY"]!;
-const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
+const _supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
 
 // Note: This import path assumes this component is used in apps/website
 // For proper architecture, AdminAuthService should be injected or moved to shared location
@@ -44,8 +44,10 @@ export default function AdminManagement({ currentUser }: AdminManagementProps) {
       setIsLoading(true);
       const adminList = await AdminAuthService.getAllAdmins();
       setAdmins(adminList);
-    } catch (error) {
-      setError("Failed to load admins");
+    } catch (error_) {
+      setError(
+        `Failed to load admins: ${error_ instanceof Error ? error_.message : "Unknown error"}`,
+      );
     } finally {
       setIsLoading(false);
     }
@@ -72,8 +74,10 @@ export default function AdminManagement({ currentUser }: AdminManagementProps) {
       } else {
         setError(result.error || "Failed to create admin");
       }
-    } catch (error) {
-      setError("An unexpected error occurred");
+    } catch (error_) {
+      setError(
+        `An unexpected error occurred: ${error_ instanceof Error ? error_.message : "Unknown error"}`,
+      );
     }
   };
 
@@ -91,7 +95,8 @@ export default function AdminManagement({ currentUser }: AdminManagementProps) {
       } else {
         setError(result.error || "Failed to deactivate admin");
       }
-    } catch (error) {
+    } catch (_error) {
+      console.error("Error deactivating admin:", _error);
       setError("An unexpected error occurred");
     }
   };

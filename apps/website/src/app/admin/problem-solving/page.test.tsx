@@ -4,9 +4,10 @@
  */
 
 import React from "react";
-import { render, fireEvent, waitFor } from "@testing-library/react";
+import { render } from "@testing-library/react";
 import "@testing-library/jest-dom";
 import ProblemSolvingAdminPage from "./page";
+import * as hooksModule from "@elzatona/hooks";
 
 // Mock TanStack Query hooks
 const mockTasksData = { data: [] };
@@ -77,8 +78,8 @@ describe("A-UT-SNAPSHOT: Admin Problem Solving Snapshot Tests", () => {
   });
 
   it("should match admin problem solving page snapshot (loading state)", () => {
-    const { useProblemSolvingTasks } = require("@elzatona/hooks");
-    useProblemSolvingTasks.mockReturnValue({
+    const { useProblemSolvingTasks } = jest.mocked(hooksModule);
+    (useProblemSolvingTasks as jest.Mock).mockReturnValue({
       data: null,
       isLoading: true,
       error: null,

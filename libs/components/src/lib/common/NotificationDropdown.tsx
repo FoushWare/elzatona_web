@@ -20,9 +20,9 @@ interface NotificationDropdownProps {
 }
 
 export function NotificationDropdown({
-  userId,
-  adminId,
-}: NotificationDropdownProps) {
+  userId: _userId,
+  adminId: _adminId,
+}: Readonly<NotificationDropdownProps>) {
   const {
     notifications,
     unreadCount,

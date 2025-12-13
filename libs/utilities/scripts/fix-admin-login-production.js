@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+/* eslint-disable @typescript-eslint/no-require-imports */
 /**
  * Fix Admin Login for Production Environment
  *
@@ -108,7 +109,7 @@ async function fixAdminLogin() {
                 continue;
               }
             }
-          } catch (e) {
+          } catch (_e) {
             // Keep existing if can't parse
           }
         }

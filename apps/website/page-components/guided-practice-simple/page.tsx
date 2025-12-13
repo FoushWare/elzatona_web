@@ -120,7 +120,7 @@ export default function SimpleGuidedPracticePage() {
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
-          {plan.cards?.map((card: any, index: number) => (
+          {plan.cards?.map((card: any, _index: number) => (
             <div
               key={card.id}
               className="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6"

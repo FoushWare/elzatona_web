@@ -1,7 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
 import { cookies } from "next/headers";
-import { verifySupabaseToken, getUserFromRequest } from "@/lib/server-auth";
+import {
+  verifySupabaseToken,
+  getUserFromRequest,
+} from "../../../../lib/server-auth";
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
 const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
@@ -256,7 +259,7 @@ export async function GET(request: NextRequest) {
         if (typeof entry.progress_data === "string") {
           try {
             progressData = JSON.parse(entry.progress_data);
-          } catch (e) {
+          } catch (_e) {
             return;
           }
         } else {
@@ -387,7 +390,7 @@ export async function GET(request: NextRequest) {
               if (typeof entry.progress_data === "string") {
                 try {
                   pd = JSON.parse(entry.progress_data);
-                } catch (e) {
+                } catch (_e) {
                   return count;
                 }
               } else {

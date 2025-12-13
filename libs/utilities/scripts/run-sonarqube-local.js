@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+/* eslint-disable @typescript-eslint/no-require-imports */
 /**
  * Run SonarQube/SonarCloud analysis locally with memory limits
  * v1.0 - Local code quality and security analysis
@@ -108,7 +109,7 @@ try {
   execSync("sonar-scanner --version", { stdio: "ignore" });
   sonarScannerAvailable = true;
   console.log("   ✅ SonarScanner is installed");
-} catch (error) {
+} catch (_error) {
   console.log("   ⚠️  SonarScanner not found");
   console.log("   💡 Attempting to use npx (no installation needed)...");
 
@@ -117,7 +118,7 @@ try {
     execSync("npx sonarqube-scanner --version", { stdio: "ignore" });
     sonarScannerAvailable = true;
     console.log("   ✅ SonarScanner available via npx");
-  } catch (npxError) {
+  } catch (_npxError) {
     console.log("   ⚠️  SonarScanner not available via npx");
     console.log("");
     console.log("   📦 Installation options:");
@@ -159,7 +160,7 @@ if (!skipTests) {
     );
     console.log("");
     console.log("   ✅ Tests completed with coverage");
-  } catch (error) {
+  } catch (_error) {
     console.log("");
     console.log("   ⚠️  Tests failed or no coverage generated");
     console.log("   💡 Continuing with SonarQube analysis anyway...");
@@ -187,7 +188,7 @@ if (!skipBuild) {
     });
     console.log("");
     console.log("   ✅ Build completed");
-  } catch (error) {
+  } catch (_error) {
     console.log("");
     console.log("   ⚠️  Build failed");
     console.log("   💡 Continuing with SonarQube analysis anyway...");
@@ -209,6 +210,8 @@ try {
     `-Dsonar.organization=${sonarOrg}`,
     `-Dsonar.host.url=https://sonarcloud.io`,
     `-Dsonar.login=${sonarToken}`,
+    `-Dsonar.verbose=true`,
+    `-Dsonar.scanner.dumpToFile=./sonar-scanner.log`,
   ];
 
   // Add coverage if available
@@ -227,6 +230,10 @@ try {
   // Set memory limit for SonarScanner
   const sonarCommand = `NODE_OPTIONS="--max-old-space-size=${MEMORY_LIMIT}" ${scannerCommand} ${sonarArgs.join(" ")}`;
 
+  console.log("🚀 Starting SonarQube analysis with verbose output...");
+  console.log(`📝 Command: ${sonarCommand}`);
+  console.log("");
+
   execSync(sonarCommand, {
     stdio: "inherit",
     env: {
@@ -234,6 +241,8 @@ try {
       NODE_OPTIONS: `--max-old-space-size=${MEMORY_LIMIT}`,
       SONAR_TOKEN: sonarToken,
       SONAR_ORG: sonarOrg,
+      SONAR_VERBOSE: "true",
+      SONAR_SCANNER_OPTS: "-Dsonar.verbose=true",
     },
   });
 
@@ -250,7 +259,7 @@ try {
     `📊 View results at: https://sonarcloud.io/dashboard?id=${sonarProjectKey}`,
   );
   console.log("");
-} catch (error) {
+} catch (_error) {
   console.log("");
   console.error("❌ SonarQube analysis failed");
   console.error("");

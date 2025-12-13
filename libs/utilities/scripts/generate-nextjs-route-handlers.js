@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 
+/* eslint-disable @typescript-eslint/no-require-imports */
 /**
  * Generate Next.js route handlers that import from network/routes/
  * This script creates route.ts files in src/app/api/ that re-export from network/routes/
@@ -26,7 +27,7 @@ function generateRouteHandler(
   networkRoutePath,
   appApiPath,
   relativePath,
-  networkRoutesBase,
+  _networkRoutesBase,
 ) {
   const routeHandlerPath = path.join(appApiPath, relativePath, "route.ts");
 

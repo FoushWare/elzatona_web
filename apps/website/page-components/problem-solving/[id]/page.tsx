@@ -17,7 +17,7 @@ import {
   Eye,
   EyeOff,
 } from "lucide-react";
-import { ProblemSolvingTask } from "@/types/admin";
+import { ProblemSolvingTask } from "../../../types/admin";
 import { ClientCodeRunner } from "@elzatona/components";
 
 export default function ProblemSolvingTaskPage() {
@@ -28,7 +28,9 @@ export default function ProblemSolvingTaskPage() {
   const [error, setError] = useState<string | null>(null);
   const [userCode, setUserCode] = useState("");
   const [showSolution, setShowSolution] = useState(false);
-  const [activeTab, setActiveTab] = useState<"problem" | "solution">("problem");
+  const [_activeTab, _setActiveTab] = useState<"problem" | "solution">(
+    "problem",
+  );
   const [isDark, setIsDark] = useState(false);
 
   // Theme detection

@@ -4,7 +4,7 @@
  */
 
 import React from "react";
-import { render, screen, fireEvent, waitFor } from "@testing-library/react";
+import { render } from "@testing-library/react";
 import "@testing-library/jest-dom";
 import FrontendTasksAdminPage from "./page";
 
@@ -86,7 +86,7 @@ describe("A-UT-SNAPSHOT: Admin Frontend Tasks Snapshot Tests", () => {
 
   it("should match admin frontend tasks page snapshot (loading state)", () => {
     mockUseFrontendTasks.mockReturnValue({
-      data: null,
+      data: { data: [] },
       isLoading: true,
       error: null,
     });

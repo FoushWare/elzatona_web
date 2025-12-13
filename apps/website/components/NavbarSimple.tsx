@@ -19,18 +19,19 @@ import {
   Compass,
   User,
   LogOut,
-  Settings,
+  Settings as _Settings,
   Loader2,
 } from "lucide-react";
 import {
   supabaseClient as supabase,
   isSupabaseAvailable,
 } from "../lib/supabase-client";
+import type { AuthChangeEvent, Session } from "@supabase/supabase-js";
 
 export const NavbarSimple: React.FC = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
-  const [isMobile, setIsMobile] = useState(false);
+  const [_isMobile, _setIsMobile] = useState(false);
   const [isUserDropdownOpen, setIsUserDropdownOpen] = useState(false);
   const [isHydrated, setIsHydrated] = useState(false);
   const [hasSnapshotApplied, setHasSnapshotApplied] = useState(false);
@@ -51,7 +52,7 @@ export const NavbarSimple: React.FC = () => {
   const { isDarkMode, toggleDarkMode } = useTheme();
   const { user, isAuthenticated, isLoading: isAuthLoading, logout } = useAuth();
   const pathname = usePathname();
-  const _router = useRouter();
+  const router = useRouter();
 
   // Read persisted auth snapshot before paint to avoid visible flicker
   useLayoutEffect(() => {
@@ -144,15 +145,17 @@ export const NavbarSimple: React.FC = () => {
     if (!supabase) return;
     const {
       data: { subscription },
-    } = supabase.auth.onAuthStateChange((event, session) => {
-      const authed = !!session;
-      setStableAuthState({ isAuthenticated: authed, isLoading: false });
-      sessionStorage.setItem(
-        "navbar-auth-state",
-        JSON.stringify({ isAuthenticated: authed, isLoading: false }),
-      );
-      setSupabaseChecked(true);
-    });
+    } = supabase.auth.onAuthStateChange(
+      (event: AuthChangeEvent, session: Session | null) => {
+        const authed = !!session;
+        setStableAuthState({ isAuthenticated: authed, isLoading: false });
+        sessionStorage.setItem(
+          "navbar-auth-state",
+          JSON.stringify({ isAuthenticated: authed, isLoading: false }),
+        );
+        setSupabaseChecked(true);
+      },
+    );
 
     return () => {
       subscription?.unsubscribe();
@@ -198,7 +201,7 @@ export const NavbarSimple: React.FC = () => {
             setSwitchingToMode(null);
           }, 100);
         } catch (_error) {
-          console.error("Navigation error:", error);
+          console.error("Navigation error:", _error);
           setIsModeSwitching(false);
           setSwitchingToMode(null);
         }
@@ -219,7 +222,7 @@ export const NavbarSimple: React.FC = () => {
             setSwitchingToMode(null);
           }, 100);
         } catch (_error) {
-          console.error("Navigation error:", error);
+          console.error("Navigation error:", _error);
           setIsModeSwitching(false);
           setSwitchingToMode(null);
         }
@@ -260,7 +263,7 @@ export const NavbarSimple: React.FC = () => {
       // Navigate to home after logout for clarity
       router.push("/");
     } catch (_error) {
-      console.error("Sign out error:", error);
+      console.error("Sign out error:", _error);
     } finally {
       // If navigation is blocked for any reason, avoid leaving the UI stuck
       setIsSigningOut(false);
@@ -294,7 +297,7 @@ export const NavbarSimple: React.FC = () => {
     };
 
     const handleResize = () => {
-      setIsMobile(window.innerWidth < 1024);
+      _setIsMobile(window.innerWidth < 1024);
     };
 
     // Initial check
@@ -463,7 +466,7 @@ export const NavbarSimple: React.FC = () => {
                     type="button"
                     aria-haspopup="menu"
                     aria-expanded={isUserDropdownOpen}
-                    onClick={() => setIsUserDropdownOpen((v) => !v)}
+                    onClick={() => setIsUserDropdownOpen((v: boolean) => !v)}
                     title="Account menu"
                     data-testid="user-menu-button"
                     className={`px-2.5 py-2 rounded-lg transition-colors duration-200 ${
@@ -682,11 +685,11 @@ export const NavbarSimple: React.FC = () => {
                     {/* User Profile Section */}
                     <div className="flex items-center space-x-3 px-3 py-2 bg-gray-50 dark:bg-gray-800 rounded-lg">
                       {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
-                      {(user as unknown)?.photoURL || (user as unknown)?.avatar_url ? (
+                      {(user as any)?.photoURL || (user as any)?.avatar_url ? (
                         <img
                           src={
                             // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                            (user as unknown)?.photoURL || (user as unknown)?.avatar_url
+                            (user as any)?.photoURL || (user as any)?.avatar_url
                           }
                           alt="Profile"
                           className="w-8 h-8 rounded-full object-cover"
@@ -699,9 +702,9 @@ export const NavbarSimple: React.FC = () => {
                       <div className="flex-1 min-w-0">
                         <p className="text-sm font-medium text-gray-900 dark:text-white truncate">
                           {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
-                          {(user as unknown)?.displayName ||
+                          {(user as any)?.displayName ||
                             // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                            (user as unknown)?.name ||
+                            (user as any)?.name ||
                             "User"}
                         </p>
                         <p className="text-xs text-gray-500 dark:text-gray-400 truncate">

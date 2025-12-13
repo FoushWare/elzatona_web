@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+/* eslint-disable @typescript-eslint/no-require-imports */
 /**
  * Diagnose Admin Login Issue
  *
@@ -106,7 +107,7 @@ try {
       console.log("   ✅ Environment matches database");
     }
   }
-} catch (error) {
+} catch (_error) {
   console.log("   ⚠️  Could not read package.json");
 }
 

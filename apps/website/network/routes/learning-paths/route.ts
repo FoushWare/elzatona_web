@@ -5,7 +5,7 @@ const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
 const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
 const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
 
-import { SectionService } from "@/lib/section-service";
+import { SectionService } from "../../../lib/section-service";
 
 interface LearningPath {
   id: string;
@@ -75,7 +75,7 @@ const learningPathSections: Record<string, string[]> = {
   "ai-tools-frontend": ["ai-tools-frontend"],
 };
 
-export async function GET(request: NextRequest) {
+export async function GET(_request: NextRequest) {
   try {
     // Fetch learning paths from Supabase with ordering
     const { data: learningPathsData, error: learningPathsError } =

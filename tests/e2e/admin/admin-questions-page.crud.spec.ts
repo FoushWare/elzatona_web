@@ -6,7 +6,8 @@
  */
 
 import { test, expect } from "@playwright/test";
-import { setupAdminPage, createQuestion } from "./admin-questions-page.setup";
+import { setupAdminPage } from "./admin-questions-page.setup";
+// APIResponse is imported but not used directly in this file
 
 test.describe("A-E2E-001: Admin Bulk Question Addition - CRUD", () => {
   // Set default timeout for all tests in this suite
@@ -287,7 +288,7 @@ test.describe("A-E2E-001: Admin Bulk Question Addition - CRUD", () => {
 
     // Wait for the POST API response (create question) with timeout handling
     let createApiSuccess = false;
-    let createResponseData: any = null;
+    let createResponseData: unknown = null;
 
     try {
       const createResponse = await Promise.race([
@@ -355,8 +356,9 @@ test.describe("A-E2E-001: Admin Bulk Question Addition - CRUD", () => {
       } else {
         throw new Error("No create response received");
       }
-    } catch (e: any) {
-      if (e.message === "Timeout") {
+    } catch (e: unknown) {
+      const error = e instanceof Error ? e : new Error(String(e));
+      if (error.message === "Timeout") {
         console.error("❌ Create API response timeout after 25s");
         throw new Error(
           "Question creation API call timed out. The question may not have been created.",
@@ -380,7 +382,7 @@ test.describe("A-E2E-001: Admin Bulk Question Addition - CRUD", () => {
     try {
       await modalTitle.waitFor({ state: "hidden", timeout: 10000 });
       console.log("✅ Modal closed");
-    } catch (error) {
+    } catch (_error) {
       console.log(
         "⚠️ Modal did not close automatically, trying to close manually...",
       );
@@ -411,7 +413,7 @@ test.describe("A-E2E-001: Admin Bulk Question Addition - CRUD", () => {
         // Verify the question is in the response
         const questions = fetchData.data || [];
         const foundQuestion = questions.find(
-          (q: any) =>
+          (q: { title?: string }) =>
             q.title === questionTitle || q.title?.includes("E2E Test Question"),
         );
         if (foundQuestion) {
@@ -427,7 +429,7 @@ test.describe("A-E2E-001: Admin Bulk Question Addition - CRUD", () => {
           );
           console.log(
             "Question titles in response:",
-            questions.map((q: any) => q.title).slice(0, 10),
+            questions.map((q: { title?: string }) => q.title).slice(0, 10),
           );
           console.log("Total count:", fetchData.pagination?.totalCount);
 
@@ -461,8 +463,9 @@ test.describe("A-E2E-001: Admin Bulk Question Addition - CRUD", () => {
       } else {
         console.log("⚠️ No fetch response received, but continuing...");
       }
-    } catch (e: any) {
-      if (e.message === "Timeout") {
+    } catch (e: unknown) {
+      const error = e instanceof Error ? e : new Error(String(e));
+      if (error.message === "Timeout") {
         console.log(
           "⚠️ Fetch API response timeout after 25s, continuing anyway...",
         );
@@ -644,7 +647,7 @@ test.describe("A-E2E-001: Admin Bulk Question Addition - CRUD", () => {
           try {
             await expect(finalLocator.first()).toBeVisible({ timeout: 5000 });
             return; // Success!
-          } catch (e) {
+          } catch (_e) {
             console.log("⚠️ Question still not visible after final attempt");
           }
         }
@@ -787,7 +790,7 @@ test.describe("A-E2E-001: Admin Bulk Question Addition - CRUD", () => {
     if (count > 0) {
       // Get the question title before editing (to verify it changes)
       const questionRow = editButtons.first().locator("..").locator("..");
-      const originalTitle = await questionRow
+      const _originalTitle = await questionRow
         .locator('h4, h3, [class*="title"]')
         .first()
         .textContent()
@@ -868,7 +871,7 @@ test.describe("A-E2E-001: Admin Bulk Question Addition - CRUD", () => {
         await expect(questionHeading).toBeVisible({ timeout: 5000 });
         questionFound = true;
         console.log("✅ Updated question found on current page");
-      } catch (e) {
+      } catch (_e) {
         console.log("⚠️ Question not found on current page, trying page 1...");
 
         // Navigate to page 1 and try again
@@ -896,7 +899,7 @@ test.describe("A-E2E-001: Admin Bulk Question Addition - CRUD", () => {
             questionFound = true;
             console.log("✅ Updated question found on page 1");
           }
-        } catch (e2) {
+        } catch (_e2) {
           console.log("⚠️ Question not found on page 1 either");
         }
 
@@ -917,7 +920,7 @@ test.describe("A-E2E-001: Admin Bulk Question Addition - CRUD", () => {
               questionFound = true;
               console.log("✅ Updated question found via search");
             }
-          } catch (e3) {
+          } catch (_e3) {
             console.log("⚠️ Question not found via search");
           }
         }

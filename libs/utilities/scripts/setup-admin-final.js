@@ -113,7 +113,7 @@ CREATE POLICY "Service role can manage admins" ON admins FOR ALL USING (
       console.log("✅ Found existing auth user:", user.id);
 
       // Check if admin record already exists
-      const { data: existingAdmin, error: checkError } = await supabase
+      const { data: existingAdmin } = await supabase
         .from("admins")
         .select("*")
         .eq("email", adminEmail)

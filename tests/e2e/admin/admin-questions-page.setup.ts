@@ -28,7 +28,7 @@ for (const envFile of envFiles) {
       config({ path: envFile.path, override: false });
       console.log(`[Config] ✅ Loaded: ${envFile.path.split("/").pop()}`);
     }
-  } catch (error) {
+  } catch (_error) {
     // File doesn't exist or can't be read, that's okay
     console.log(
       `[Config] ⚠️  Could not load: ${envFile.path.split("/").pop()}`,
@@ -46,7 +46,7 @@ try {
       `[Config] ✅ Override loaded: .env.test.local (highest priority)`,
     );
   }
-} catch (error) {
+} catch (_error) {
   // File doesn't exist, that's okay - tests can use .env.test or .env.local
   console.log(
     `[Config] ⚠️  .env.test.local not found, using fallback env files`,
@@ -311,7 +311,7 @@ export async function createQuestion(page: Page, title: string): Promise<void> {
         console.error("❌ Question creation failed:", responseData);
       }
     }
-  } catch (error) {
+  } catch (_error) {
     console.log("⚠️ Could not get create API response, continuing...");
   }
 
@@ -321,7 +321,7 @@ export async function createQuestion(page: Page, title: string): Promise<void> {
     // Wait for modal to disappear (with timeout)
     await modalTitle.waitFor({ state: "hidden", timeout: 10000 });
     console.log("✅ Modal closed");
-  } catch (error) {
+  } catch (_error) {
     console.log("⚠️ Modal did not close automatically, trying to close it...");
     // Try to close modal manually if it's still open
     const closeButton = page.getByRole("button", { name: /Close|Cancel/i });
@@ -341,7 +341,7 @@ export async function createQuestion(page: Page, title: string): Promise<void> {
       .filter({ hasText: /^Question Management$/i })
       .waitFor({ state: "visible", timeout: 10000 });
     console.log("✅ Back on questions page");
-  } catch (error) {
+  } catch (_error) {
     console.log("⚠️ Page header not found, but continuing...");
     // Fallback: just wait a bit and continue
     await page.waitForTimeout(2000);
@@ -490,8 +490,9 @@ async function waitForServerReady(
         console.log(`✅ Server is ready (attempt ${attempt}/${maxRetries})`);
         return;
       }
-    } catch (error: any) {
+    } catch (error: unknown) {
       // Server not ready yet
+      const _err = error instanceof Error ? error : new Error(String(error));
       if (attempt < maxRetries) {
         console.log(
           `⏳ Waiting for server to be ready (attempt ${attempt}/${maxRetries})...`,
@@ -648,8 +649,8 @@ export async function setupAdminPage(
     });
 
   // Wait for the specific admin auth API response
-  let apiResponse: any = null;
-  const responseHandler = (response: any) => {
+  let apiResponse: APIResponse | null = null;
+  const responseHandler = (response: APIResponse) => {
     const url = response.url();
     if (
       url.includes("/api/admin/auth") &&
@@ -768,7 +769,7 @@ export async function setupAdminPage(
     });
     console.log("✅ Form submit event triggered via requestSubmit()");
     formSubmitted = true;
-  } catch (e) {
+  } catch (_e) {
     console.log("⚠️ requestSubmit() failed, trying button click...");
     try {
       if (isEdge) {
@@ -779,7 +780,7 @@ export async function setupAdminPage(
       await signInButton.click({ timeout: 5000 });
       console.log("✅ Sign in button clicked");
       formSubmitted = true;
-    } catch (e2) {
+    } catch (_e2) {
       console.log("⚠️ Button click failed, trying Enter key...");
       if (isEdge) {
         await passwordInput.focus();
@@ -822,7 +823,7 @@ export async function setupAdminPage(
   if (!page.isClosed()) {
     try {
       currentURL = page.url();
-    } catch (e) {
+    } catch (_e) {
       // Page might be navigating or closed
       currentURL = null;
     }
@@ -870,10 +871,10 @@ export async function setupAdminPage(
             { timeout: 5000 },
           );
           console.log("✅ API response detected on final attempt");
-        } catch (e) {
+        } catch (_e) {
           // Still no response
         }
-      } catch (e) {
+      } catch (_e) {
         // Page might be closed
       }
     }
@@ -938,8 +939,9 @@ export async function setupAdminPage(
         );
       }
       console.log("✅ Login API call successful, waiting for navigation...");
-    } catch (e: any) {
-      console.log("⚠️ Error parsing login response:", e.message);
+    } catch (e: unknown) {
+      const error = e instanceof Error ? e : new Error(String(e));
+      console.log("⚠️ Error parsing login response:", error.message);
       await page.waitForTimeout(1000);
       const errorBox = page.locator(".bg-red-50, .bg-red-900\\/20");
       const errorBoxCount = await errorBox.count();
@@ -958,7 +960,9 @@ export async function setupAdminPage(
     try {
       await navigationPromise;
       console.log("✅ Navigation to admin page successful");
-    } catch (navError: any) {
+    } catch (navError: unknown) {
+      const _error =
+        navError instanceof Error ? navError : new Error(String(navError));
       let currentURL = "";
       try {
         if (!page.isClosed()) {
@@ -972,7 +976,7 @@ export async function setupAdminPage(
             console.log("⚠️ Navigation failed. Current URL:", currentURL);
           }
         }
-      } catch (urlError) {
+      } catch (_urlError) {
         console.log("⚠️ Could not check URL (page might be navigating)");
       }
 
@@ -1007,7 +1011,7 @@ export async function setupAdminPage(
       try {
         currentURLAfterLogin = page.url();
         break;
-      } catch (e) {
+      } catch (_e) {
         urlRetryCount++;
         await new Promise((resolve) => setTimeout(resolve, 500));
         continue;
@@ -1030,7 +1034,7 @@ export async function setupAdminPage(
     if (!page.isClosed()) {
       try {
         currentURLAfterLogin = page.url();
-      } catch (e) {
+      } catch (_e) {
         // Still can't get URL
       }
     }
@@ -1076,8 +1080,10 @@ export async function setupAdminPage(
           waitUntil: "domcontentloaded",
           timeout: 30000,
         });
-      } catch (navError: any) {
+      } catch (navError: unknown) {
         // Check if error is connection refused (server not ready)
+        const _error =
+          navError instanceof Error ? navError : new Error(String(navError));
         if (
           navError.message.includes("ERR_CONNECTION_REFUSED") ||
           navError.message.includes("net::ERR_CONNECTION_REFUSED")
@@ -1105,7 +1111,11 @@ export async function setupAdminPage(
                 waitUntil: "domcontentloaded",
                 timeout: 15000,
               })
-              .catch((retryError: any) => {
+              .catch((retryError: unknown) => {
+                const _error =
+                  retryError instanceof Error
+                    ? retryError
+                    : new Error(String(retryError));
                 throw new Error(
                   `Failed to navigate to questions page after retry. ` +
                     `Original error: ${navError.message}. ` +
@@ -1128,14 +1138,14 @@ export async function setupAdminPage(
   }
   try {
     await page.waitForLoadState("networkidle", { timeout: 10000 });
-  } catch (e) {
+  } catch (_e) {
     if (page.isClosed()) {
       throw new Error("Page was closed during network idle wait");
     }
     console.log("Network idle timeout in beforeEach, waiting 2 seconds...");
     try {
       await page.waitForTimeout(2000);
-    } catch (timeoutError) {
+    } catch (_timeoutError) {
       if (page.isClosed()) {
         throw new Error("Page was closed during timeout wait");
       }
@@ -1157,7 +1167,7 @@ export async function setupAdminPage(
       if (questionsPageURL.includes("/admin/content/questions")) {
         break;
       }
-    } catch (e) {
+    } catch (_e) {
       // Page might still be navigating
     }
 
@@ -1193,7 +1203,7 @@ export async function setupAdminPage(
           `Failed to navigate to questions page. Current URL: ${questionsPageURL}`,
         );
       }
-    } catch (e) {
+    } catch (_e) {
       console.log("⚠️ Could not verify questions page URL, but continuing...");
     }
   }
@@ -1205,7 +1215,7 @@ export async function setupAdminPage(
       .filter({ hasText: /^Question Management$/i })
       .waitFor({ state: "visible", timeout: 15000 });
     console.log("Questions page header found");
-  } catch (e) {
+  } catch (_e) {
     console.log("Page header not found, trying alternative selectors...");
     const searchInput = page.locator('input[placeholder*="Search questions"]');
     const searchCount = await searchInput.count();
@@ -1224,7 +1234,7 @@ export async function setupAdminPage(
   }
   try {
     await page.waitForTimeout(1000);
-  } catch (timeoutError) {
+  } catch (_timeoutError) {
     if (page.isClosed()) {
       throw new Error("Page was closed during final wait");
     }

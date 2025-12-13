@@ -54,7 +54,7 @@ test.describe("A-E2E-001: Admin Bulk Question Addition - Validation", () => {
         .first();
       await addButton.waitFor({ state: "visible", timeout: 5000 });
       buttonFound = true;
-    } catch (e) {
+    } catch (_e) {
       console.log("Header section approach failed, trying direct approach...");
     }
 
@@ -66,7 +66,7 @@ test.describe("A-E2E-001: Admin Bulk Question Addition - Validation", () => {
           .first();
         await addButton.waitFor({ state: "visible", timeout: 5000 });
         buttonFound = true;
-      } catch (e) {
+      } catch (_e) {
         console.log(
           "Direct button approach failed, trying text-based approach...",
         );
@@ -94,7 +94,7 @@ test.describe("A-E2E-001: Admin Bulk Question Addition - Validation", () => {
     // Click the button with retry logic
     try {
       await addButton.click({ timeout: 10000 });
-    } catch (e) {
+    } catch (_e) {
       // If click fails, try with force
       console.log("Normal click failed, trying force click...");
       await addButton.click({ force: true, timeout: 5000 });
@@ -122,7 +122,7 @@ test.describe("A-E2E-001: Admin Bulk Question Addition - Validation", () => {
       // Check for validation message (browser native or custom)
       const validationMessage = await titleInput.evaluate(
         (el: HTMLInputElement) => {
-          return (el as any).validationMessage || "";
+          return (el as HTMLInputElement).validationMessage || "";
         },
       );
 

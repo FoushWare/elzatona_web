@@ -87,7 +87,7 @@ export const QuestionPracticeView: React.FC<QuestionPracticeViewProps> = ({
     if (typeof question.resources === "string") {
       try {
         return JSON.parse(question.resources);
-      } catch (_e) {
+      } catch (e) {
         console.error("Failed to parse resources:", e);
         return [];
       }
@@ -114,7 +114,7 @@ export const QuestionPracticeView: React.FC<QuestionPracticeViewProps> = ({
     if (typeof question.options === "string") {
       try {
         optionsArray = JSON.parse(question.options);
-      } catch (_e) {
+      } catch (e) {
         console.error("Failed to parse options:", e);
         return [];
       }
@@ -253,7 +253,9 @@ export const QuestionPracticeView: React.FC<QuestionPracticeViewProps> = ({
   };
 
   const displayDifficulty =
-    (question.difficulty && difficultyMap[question.difficulty]) || question.difficulty || "medium";
+    (question.difficulty && difficultyMap[question.difficulty]) ||
+    question.difficulty ||
+    "medium";
 
   return (
     <div className="w-full max-w-4xl mx-auto">

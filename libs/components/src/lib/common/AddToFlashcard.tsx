@@ -5,9 +5,9 @@ import { createClient } from "@supabase/supabase-js";
 
 const supabaseUrl = process.env["NEXT_PUBLIC_SUPABASE_URL"]!;
 const supabaseServiceRoleKey = process.env["SUPABASE_SERVICE_ROLE_KEY"]!;
-const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
+const _supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
 
-import { Bookmark, BookmarkCheck, X } from "lucide-react";
+import { Bookmark, BookmarkCheck } from "lucide-react";
 
 // Note: This import path assumes this component is used in apps/website
 // For proper architecture, flashcardService should be injected or moved to shared location
@@ -124,14 +124,9 @@ export default function AddToFlashcard({
         // Remove from flashcards
         await flashcardService.deleteFlashcard(flashcardId);
 
-        if (true) {
-          setState("add");
-          setFlashcardId(null);
-          onStatusChange?.("removed");
-        } else {
-          setState("saved");
-          onStatusChange?.("error");
-        }
+        setState("add");
+        setFlashcardId(null);
+        onStatusChange?.("removed");
       }
     } catch (error) {
       console.error("Error toggling flashcard:", error);

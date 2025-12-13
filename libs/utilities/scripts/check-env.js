@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+/* eslint-disable @typescript-eslint/no-require-imports */
 /**
  * Quick Environment Check Script
  *
@@ -28,7 +29,7 @@ for (const envFile of envFiles) {
       config({ path: envFile, override: false });
       loadedFiles.push(envFile);
     }
-  } catch (error) {
+  } catch (_error) {
     // Ignore
   }
 }

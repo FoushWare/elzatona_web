@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, ReactNode } from "react";
+import React, { useState, useEffect } from "react";
 // Note: This page uses API routes, not direct supabase client
 
 import { useRouter, useParams } from "next/navigation";

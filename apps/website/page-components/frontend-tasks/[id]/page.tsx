@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, useMemo, ReactNode } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 
 // Force dynamic rendering to prevent static generation issues with auth context
 export const dynamic = "force-dynamic";
@@ -74,7 +74,7 @@ export default function FrontendTaskPage() {
   const router = useRouter();
   const params = useParams();
   const taskId = params?.id as string;
-  const { isAuthenticated, user } = useAuth();
+  const { isAuthenticated, user: _user } = useAuth();
 
   const [task, setTask] = useState<FrontendTask | null>(null);
   const [code, setCode] = useState("");
@@ -85,7 +85,7 @@ export default function FrontendTaskPage() {
   const [activeTab, setActiveTab] = useState<"description" | "solution">(
     "description",
   );
-  const [editorTab, setEditorTab] = useState<"code" | "css">("code");
+  const [_editorTab, _setEditorTab] = useState<"code" | "css">("code");
   const [showFileExplorer, setShowFileExplorer] = useState(true);
   const [openFiles, setOpenFiles] = useState<
     Array<{
@@ -156,9 +156,11 @@ export default function FrontendTaskPage() {
     },
   ]);
   const [activeFile, setActiveFile] = useState("app");
-  const [fileContents, setFileContents] = useState<Record<string, string>>({});
+  const [_fileContents, _setFileContents] = useState<Record<string, string>>(
+    {},
+  );
   const [consoleOutput, setConsoleOutput] = useState<string[]>([]);
-  const [errors, setErrors] = useState<string[]>([]);
+  const [_errors, _setErrors] = useState<string[]>([]);
   const [isResizing, setIsResizing] = useState(false);
   const [resizeStartX, setResizeStartX] = useState(0);
   const [leftPanelWidth, setLeftPanelWidth] = useState(25); // percentage
@@ -171,6 +173,16 @@ export default function FrontendTaskPage() {
   useEffect(() => {
     // Listen for console messages from iframe
     const handleMessage = (event: MessageEvent) => {
+      // Verify origin to prevent XSS attacks
+      const allowedOrigins = [
+        window.location.origin,
+        "https://elzatona.com",
+        "https://www.elzatona.com",
+      ];
+      if (!allowedOrigins.includes(event.origin)) {
+        console.warn("Rejected message from untrusted origin:", event.origin);
+        return;
+      }
       if (event.data && event.data.type === "console") {
         setConsoleOutput((prev) => [...prev.slice(-19), event.data.message]);
       }
@@ -421,7 +433,7 @@ export default function App() {
   };
 
   // Resize handlers
-  const handleMouseDown = (e: React.MouseEvent, panel: "left" | "right") => {
+  const handleMouseDown = (e: React.MouseEvent, _panel: "left" | "right") => {
     e.preventDefault();
     setIsResizing(true);
     setResizeStartX(e.clientX);
@@ -695,7 +707,7 @@ export default function App() {
               delete window.App;
             }
             
-            const cleanCode = \`${cleanReactCode.replace(/`/g, "\\`").replace(/\$/g, "\\$")}\`;
+            const cleanCode = \`${cleanReactCode.replace(/\\/g, "\\\\").replace(/`/g, "\\`").replace(/\$/g, "\\$")}\`;
             const transpiledCode = Babel.transform(cleanCode, { 
               presets: ['react'],
               plugins: ['transform-class-properties']

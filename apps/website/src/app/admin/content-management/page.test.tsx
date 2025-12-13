@@ -4,7 +4,7 @@
  */
 
 import React from "react";
-import { render, screen, fireEvent, waitFor } from "@testing-library/react";
+import { render, screen, waitFor } from "@testing-library/react";
 import "@testing-library/jest-dom";
 import UnifiedAdminPage from "./page";
 
@@ -221,7 +221,7 @@ describe("A-UT-015: Content Sections", () => {
 
   it("should handle loading states", () => {
     mockUseCards.mockReturnValue({
-      data: null,
+      data: { data: [], count: 0 },
       isLoading: true,
       error: null,
     });
@@ -242,7 +242,7 @@ describe("A-UT-SNAPSHOT: Admin Content Management Snapshot Tests", () => {
 
   it("should match content management page snapshot (loading state)", () => {
     mockUseCards.mockReturnValue({
-      data: null,
+      data: { data: [], count: 0 },
       isLoading: true,
       error: null,
     });

@@ -5,7 +5,7 @@
  * Note: Environment variables are loaded by the setup file
  */
 
-import { test, expect } from "@playwright/test";
+import { test, expect, Locator, APIResponse } from "@playwright/test";
 import {
   setupAdminPage,
   createQuestion,
@@ -71,7 +71,7 @@ test.describe("A-E2E-001: Admin Bulk Question Addition - Pagination", () => {
         if (data.success && data.pagination) {
           currentCount = data.pagination.totalCount || 0;
         }
-      } catch (e) {
+      } catch (_e) {
         // API call failed, fall back to counting visible rows
         const questionRows = page
           .locator("div")
@@ -125,7 +125,7 @@ test.describe("A-E2E-001: Admin Bulk Question Addition - Pagination", () => {
         { timeout: 15000 },
       );
       await page.waitForTimeout(1000); // Wait for React to update
-    } catch (e) {
+    } catch (_e) {
       // API might have already responded, continue
     }
 
@@ -142,7 +142,7 @@ test.describe("A-E2E-001: Admin Bulk Question Addition - Pagination", () => {
         pageIndicator.first().waitFor({ timeout: 10000 }),
         showingText.first().waitFor({ timeout: 10000 }),
       ]);
-    } catch (e) {
+    } catch (_e) {
       // Pagination might not be available - check API response
       console.log("⚠️ Pagination controls not found, checking API response...");
       try {
@@ -170,7 +170,7 @@ test.describe("A-E2E-001: Admin Bulk Question Addition - Pagination", () => {
         showingText = page.locator(
           "text=/Showing \\d+ to \\d+ of \\d+ questions/i",
         );
-      } catch (apiError) {
+      } catch (_apiError) {
         console.log("⚠️ Could not check API response");
       }
     }
@@ -201,8 +201,8 @@ test.describe("A-E2E-001: Admin Bulk Question Addition - Pagination", () => {
 
     // Find pagination buttons - they're in a flex container with "Page X of Y"
     // Structure: <div className="flex items-center space-x-2"> <Button> <span>Page X of Y</span> <Button> </div>
-    let nextButton: any = null;
-    let prevButton: any = null;
+    let nextButton: Locator | null = null;
+    let _prevButton: Locator | null = null;
 
     if ((await pageIndicator.count()) > 0) {
       // Find the span element containing "Page X of Y"
@@ -220,7 +220,7 @@ test.describe("A-E2E-001: Admin Bulk Question Addition - Pagination", () => {
 
       if (buttonCount >= 2) {
         // First button is previous (ChevronLeft), last is next (ChevronRight)
-        prevButton = paginationButtons.first();
+        _prevButton = paginationButtons.first();
         nextButton = paginationButtons.last();
       } else if (buttonCount === 1) {
         // Only one button - check if it's before or after the text
@@ -231,7 +231,7 @@ test.describe("A-E2E-001: Admin Bulk Question Addition - Pagination", () => {
           .locator("xpath=following::button[1]")
           .first();
         if ((await buttonBefore.count()) > 0) {
-          prevButton = buttonBefore;
+          _prevButton = buttonBefore;
         }
         if ((await buttonAfter.count()) > 0) {
           nextButton = buttonAfter;
@@ -326,7 +326,7 @@ test.describe("A-E2E-001: Admin Bulk Question Addition - Pagination", () => {
         { timeout: 15000 },
       );
       await page.waitForTimeout(1000); // Wait for React to update
-    } catch (e) {
+    } catch (_e) {
       // API might have already responded, continue
     }
 
@@ -341,7 +341,7 @@ test.describe("A-E2E-001: Admin Bulk Question Addition - Pagination", () => {
         pageIndicator.first().waitFor({ timeout: 10000 }),
         showingText.first().waitFor({ timeout: 10000 }),
       ]);
-    } catch (e) {
+    } catch (_e) {
       // Check API to see if pagination should be available
       try {
         const response = await page.request.get(
@@ -367,7 +367,7 @@ test.describe("A-E2E-001: Admin Bulk Question Addition - Pagination", () => {
         showingText = page.locator(
           "text=/Showing \\d+ to \\d+ of \\d+ questions/i",
         );
-      } catch (apiError) {
+      } catch (_apiError) {
         console.log("⚠️ Could not check API response");
       }
     }
@@ -398,8 +398,8 @@ test.describe("A-E2E-001: Admin Bulk Question Addition - Pagination", () => {
 
     // First navigate to page 2 if possible
     // Find pagination buttons - they're in a flex container with "Page X of Y"
-    let nextButton: any = null;
-    let prevButton: any = null;
+    let nextButton: Locator | null = null;
+    let _prevButton: Locator | null = null;
 
     if ((await pageIndicator.count()) > 0) {
       // Find the span element containing "Page X of Y"
@@ -416,7 +416,7 @@ test.describe("A-E2E-001: Admin Bulk Question Addition - Pagination", () => {
       const buttonCount = await paginationButtons.count();
 
       if (buttonCount >= 2) {
-        prevButton = paginationButtons.first();
+        _prevButton = paginationButtons.first();
         nextButton = paginationButtons.last();
       } else if (buttonCount === 1) {
         // Check if button is before or after the text
@@ -427,7 +427,7 @@ test.describe("A-E2E-001: Admin Bulk Question Addition - Pagination", () => {
           .locator("xpath=following::button[1]")
           .first();
         if ((await buttonBefore.count()) > 0) {
-          prevButton = buttonBefore;
+          _prevButton = buttonBefore;
         }
         if ((await buttonAfter.count()) > 0) {
           nextButton = buttonAfter;
@@ -513,7 +513,7 @@ test.describe("A-E2E-001: Admin Bulk Question Addition - Pagination", () => {
           });
 
           if (afterNextPageText) break;
-        } catch (e) {
+        } catch (_e) {
           retryCount++;
           if (retryCount < maxRetries) {
             await page.waitForTimeout(1000);
@@ -525,7 +525,7 @@ test.describe("A-E2E-001: Admin Bulk Question Addition - Pagination", () => {
               await showingText.waitFor({ state: "visible", timeout: 3000 });
               // If we found showing text, pagination is there, just need to find page indicator
               await page.waitForTimeout(1000);
-            } catch (e2) {
+            } catch (_e2) {
               // Continue retrying
             }
           }
@@ -543,7 +543,7 @@ test.describe("A-E2E-001: Admin Bulk Question Addition - Pagination", () => {
             );
             return pageSpan?.textContent || null;
           });
-        } catch (e) {
+        } catch (_e) {
           throw new Error(
             "Could not find page indicator after navigation. Pagination may not be working correctly.",
           );
@@ -558,7 +558,7 @@ test.describe("A-E2E-001: Admin Bulk Question Addition - Pagination", () => {
 
       // Now test previous button - find it using the most reliable method
       // The previous button is the one that comes BEFORE the "Page X of Y" text
-      let updatedPrevButton: any = null;
+      let updatedPrevButton: Locator | null = null;
 
       // Find the "Page X of Y" text first
       const pageIndicatorText = page
@@ -716,7 +716,7 @@ test.describe("A-E2E-001: Admin Bulk Question Addition - Pagination", () => {
                 "⚠️ Playwright click failed, but JavaScript click should have worked",
               );
             });
-        } catch (e) {
+        } catch (_e) {
           // Ignore - JavaScript click is primary method
         }
 
@@ -778,7 +778,7 @@ test.describe("A-E2E-001: Admin Bulk Question Addition - Pagination", () => {
             });
 
             if (afterPrevPageText) break;
-          } catch (e) {
+          } catch (_e) {
             prevRetryCount++;
             if (prevRetryCount < maxPrevRetries) {
               await page.waitForTimeout(1000);
@@ -797,7 +797,7 @@ test.describe("A-E2E-001: Admin Bulk Question Addition - Pagination", () => {
               );
               return pageSpan?.textContent || null;
             });
-          } catch (e) {
+          } catch (_e) {
             throw new Error(
               "Could not find page indicator after clicking previous. Pagination may not be working correctly.",
             );
@@ -907,7 +907,7 @@ test.describe("A-E2E-001: Admin Bulk Question Addition - Pagination", () => {
         { timeout: 15000 },
       );
       await page.waitForTimeout(1000); // Wait for React to update
-    } catch (e) {
+    } catch (_e) {
       // API might have already responded, continue
     }
 
@@ -922,7 +922,7 @@ test.describe("A-E2E-001: Admin Bulk Question Addition - Pagination", () => {
         pageIndicator.first().waitFor({ timeout: 10000 }),
         showingText.first().waitFor({ timeout: 10000 }),
       ]);
-    } catch (e) {
+    } catch (_e) {
       // Check API to see if pagination should be available
       try {
         const response = await page.request.get(
@@ -948,7 +948,7 @@ test.describe("A-E2E-001: Admin Bulk Question Addition - Pagination", () => {
         showingText = page.locator(
           "text=/Showing \\d+ to \\d+ of \\d+ questions/i",
         );
-      } catch (apiError) {
+      } catch (_apiError) {
         console.log("⚠️ Could not check API response");
       }
     }
@@ -999,7 +999,7 @@ test.describe("A-E2E-001: Admin Bulk Question Addition - Pagination", () => {
     // Find the Select trigger button - it's in the same container as "Show:" label
     // The structure is: div.flex.items-center.space-x-2 > span "Show:" + Select > SelectTrigger
     // Better approach: find the combobox that's in the pagination area
-    let trigger: any = null;
+    let trigger: Locator | null = null;
 
     // Method 1: Find combobox near "Show:" text (in the same flex container)
     try {
@@ -1014,7 +1014,7 @@ test.describe("A-E2E-001: Admin Bulk Question Addition - Pagination", () => {
         trigger = comboboxInContainer.first();
         console.log("✅ Found page size selector using container method");
       }
-    } catch (e) {
+    } catch (_e) {
       console.log("⚠️ Container method failed, trying alternative...");
     }
 
@@ -1051,7 +1051,7 @@ test.describe("A-E2E-001: Admin Bulk Question Addition - Pagination", () => {
             }
           }
         }
-      } catch (e) {
+      } catch (_e) {
         console.log("⚠️ Proximity method failed");
       }
     }
@@ -1084,9 +1084,10 @@ test.describe("A-E2E-001: Admin Bulk Question Addition - Pagination", () => {
         );
         await trigger.waitFor({ state: "attached", timeout: 5000 });
       }
-    } catch (e: any) {
+    } catch (e: unknown) {
       // Check if error is due to actual page closure
-      const errorMsg = e?.message || String(e);
+      const error = e instanceof Error ? e : new Error(String(e));
+      const errorMsg = error.message || String(e);
       if (
         errorMsg.includes("Target page, context or browser has been closed") ||
         errorMsg.includes("page has been closed")
@@ -1107,7 +1108,7 @@ test.describe("A-E2E-001: Admin Bulk Question Addition - Pagination", () => {
         .first()
         .textContent({ timeout: 5000 })
         .catch(() => null);
-    } catch (e: any) {
+    } catch (_e: unknown) {
       // If page is actually closed, Playwright will throw a proper error
       // Just log and continue - the click attempt will fail if page is really closed
       console.log('⚠️ Could not get "Showing" text, continuing anyway...');
@@ -1128,7 +1129,7 @@ test.describe("A-E2E-001: Admin Bulk Question Addition - Pagination", () => {
       // Verify trigger is ready (quick check, don't wait too long)
       try {
         await trigger.waitFor({ state: "visible", timeout: 3000 });
-      } catch (e) {
+      } catch (_e) {
         // If not visible, try to find it again
         console.log("⚠️ Trigger not immediately visible, re-finding...");
         const newTrigger = page.locator('button[role="combobox"]').first();
@@ -1188,9 +1189,11 @@ test.describe("A-E2E-001: Admin Bulk Question Addition - Pagination", () => {
           clickSucceeded = true;
           console.log("✅ Clicked page size selector");
           break; // Success, exit retry loop
-        } catch (clickErr: any) {
+        } catch (clickErr: unknown) {
           // Check if error is due to page closure (Playwright's actual error message)
-          const errorMessage = clickErr?.message || String(clickErr);
+          const error =
+            clickErr instanceof Error ? clickErr : new Error(String(clickErr));
+          const errorMessage = error.message || String(clickErr);
           if (
             errorMessage.includes(
               "Target page, context or browser has been closed",
@@ -1225,9 +1228,13 @@ test.describe("A-E2E-001: Admin Bulk Question Addition - Pagination", () => {
           "Failed to click page size selector after all retry attempts",
         );
       }
-    } catch (clickError: any) {
+    } catch (clickError: unknown) {
       // Check if error is due to actual page closure (Playwright's error message)
-      const errorMsg = clickError?.message || String(clickError);
+      const error =
+        clickError instanceof Error
+          ? clickError
+          : new Error(String(clickError));
+      const errorMsg = error.message || String(clickError);
       if (
         errorMsg.includes("Target page, context or browser has been closed") ||
         errorMsg.includes("page has been closed")
@@ -1243,8 +1250,8 @@ test.describe("A-E2E-001: Admin Bulk Question Addition - Pagination", () => {
     }
 
     // NOW set up API response listener AFTER clicking
-    let pageSizeResponse: any = null;
-    const responseHandler = (response: any) => {
+    let pageSizeResponse: APIResponse | null = null;
+    const responseHandler = (response: APIResponse) => {
       const url = response.url();
       if (
         url.includes("/api/questions/unified") &&
@@ -1278,9 +1285,13 @@ test.describe("A-E2E-001: Admin Bulk Question Addition - Pagination", () => {
 
       await option20.click({ timeout: 5000 });
       console.log("✅ Selected page size 20");
-    } catch (optionError: any) {
+    } catch (optionError: unknown) {
       page.off("response", responseHandler);
       // Check if error is due to actual page closure
+      const _error =
+        optionError instanceof Error
+          ? optionError
+          : new Error(String(optionError));
       const errorMsg = optionError?.message || String(optionError);
       if (
         errorMsg.includes("Target page, context or browser has been closed") ||
@@ -1314,9 +1325,11 @@ test.describe("A-E2E-001: Admin Bulk Question Addition - Pagination", () => {
         await pageSizeResponsePromise;
       }
       await page.waitForTimeout(1000);
-    } catch (waitError: any) {
+    } catch (waitError: unknown) {
       // Check if error is due to actual page closure
-      const errorMsg = waitError?.message || String(waitError);
+      const error =
+        waitError instanceof Error ? waitError : new Error(String(waitError));
+      const errorMsg = error.message || String(waitError);
       if (
         errorMsg.includes("Target page, context or browser has been closed") ||
         errorMsg.includes("page has been closed")
@@ -1359,7 +1372,7 @@ test.describe("A-E2E-001: Admin Bulk Question Addition - Pagination", () => {
           .first()
           .textContent({ timeout: 5000 });
         if (afterText) break;
-      } catch (e) {
+      } catch (_e) {
         textRetryCount++;
         if (textRetryCount < maxTextRetries) {
           await page.waitForTimeout(1000);
@@ -1377,7 +1390,7 @@ test.describe("A-E2E-001: Admin Bulk Question Addition - Pagination", () => {
           );
           return showingDiv?.textContent || null;
         });
-      } catch (e) {
+      } catch (_e) {
         // Continue without text
       }
     }

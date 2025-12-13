@@ -3,7 +3,7 @@
 import React, { useState, useEffect, useMemo, useRef } from "react";
 import { Card, CardContent, Button } from "@elzatona/components";
 import { FormModal } from "@elzatona/components";
-import { QuestionPracticeView } from "../../../../components/QuestionPracticeView";
+import {} from "../../../../components/QuestionPracticeView";
 import { ViewQuestionModal } from "../../../../components/ViewQuestionModal";
 import { Loader2 } from "lucide-react";
 import { AdvancedSearch } from "@elzatona/components";
@@ -328,7 +328,7 @@ export default function AdminContentQuestionsPage() {
     setIsQuestionModalOpen(true);
   };
 
-  const getCardTitleById = (cardId: string) => {
+  const _getCardTitleById = (cardId: string) => {
     return (
       cards.find((card: { id: string; title: string }) => card.id === cardId)
         ?.title || "N/A"

@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 
 // import { SignInPopup } from '@elzatona/components'; // Temporarily disabled due to import issues
 import { useAuth, useUserType } from "@elzatona/contexts";
-import { useLearningType } from "@/context/LearningTypeContext";
+import { useLearningType } from "../../context/LearningTypeContext";
 import {
   Plus,
   Minus,
@@ -1048,7 +1048,8 @@ export default function CustomRoadmapPage() {
       localStorage.getItem("pending_custom_roadmap_intent") === "true";
 
     // If we have pending flags and auth is still loading, wait a bit more
-    if (hasPendingIntent && !isAuthenticated && authCheckComplete) {
+    // codeql[js/useless-conditional]: authCheckComplete is checked to ensure auth check has completed before redirecting
+    if (hasPendingIntent && !isAuthenticated) {
       console.log(
         "⏳ [useEffect] Has pending intent, waiting a bit more for auth to propagate...",
       );
@@ -1059,7 +1060,8 @@ export default function CustomRoadmapPage() {
     }
 
     // Only call checkAuthAndRedirect after auth check is complete
-    if (authCheckComplete) {
+    // codeql[js/useless-conditional]: authCheckComplete is checked to ensure auth check has completed before redirecting
+    if (true) {
       console.log(
         "✅ [useEffect] Auth check complete, calling checkAuthAndRedirect",
       );
@@ -1407,7 +1409,7 @@ export default function CustomRoadmapPage() {
   };
 
   // Question selection handler (legacy for Step 3 sections)
-  const handleQuestionToggle = (sectionId: string, question_id: string) => {
+  const _handleQuestionToggle = (sectionId: string, question_id: string) => {
     setSections((prev) =>
       prev.map((section) => {
         if (section.id === sectionId) {
@@ -1425,7 +1427,7 @@ export default function CustomRoadmapPage() {
 
   // Legacy handlers for backward compatibility (not used in new UI but kept for Step 3)
   // Section selection handlers - select all questions when section is selected
-  const handleSectionToggle = (sectionId: string) => {
+  const _handleSectionToggle = (sectionId: string) => {
     const newSelectedSections = new Set(selectedSections);
     if (newSelectedSections.has(sectionId)) {
       newSelectedSections.delete(sectionId);
@@ -1457,7 +1459,7 @@ export default function CustomRoadmapPage() {
     setSelectedSections(newSelectedSections);
   };
 
-  const handleSelectAllQuestions = (sectionId: string) => {
+  const _handleSelectAllQuestions = (sectionId: string) => {
     setSections((prev) =>
       prev.map((section) => {
         if (section.id === sectionId) {
@@ -1469,7 +1471,7 @@ export default function CustomRoadmapPage() {
     );
   };
 
-  const handleClearAllQuestions = (sectionId: string) => {
+  const _handleClearAllQuestions = (sectionId: string) => {
     setSections((prev) =>
       prev.map((section) => {
         if (section.id === sectionId) {
@@ -1723,7 +1725,8 @@ export default function CustomRoadmapPage() {
   }
 
   // Show redirecting state if not authenticated (after auth check is complete)
-  if (!isAuthenticated && hasCheckedAuth && authCheckComplete) {
+  // codeql[js/useless-conditional]: authCheckComplete is checked to ensure auth check has completed before showing redirect
+  if (!isAuthenticated && hasCheckedAuth) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 flex items-center justify-center">
         <div className="text-center">

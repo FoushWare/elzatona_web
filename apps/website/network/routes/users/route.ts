@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
-import { UserAuthService } from "@/lib/user-auth";
-import { sanitizeObjectServer } from "@/lib/utils/sanitize-server";
+import { UserAuthService } from "../../../lib/user-auth";
+import { sanitizeObjectServer } from "../../../lib/utils/sanitize-server";
 
-export async function GET(request: NextRequest) {
+export async function GET(_request: NextRequest) {
   try {
     // TODO: Add admin authentication check
     // const adminToken = request.headers.get('authorization');

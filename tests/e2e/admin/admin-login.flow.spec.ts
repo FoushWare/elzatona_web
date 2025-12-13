@@ -142,7 +142,7 @@ test.describe("A-E2E-002: Admin Login - Flow", () => {
 
         // Small delay before next check
         await page.waitForTimeout(50);
-      } catch (error) {
+      } catch (_error) {
         // Page might have navigated or closed, check if error appeared
         const hasError = await page
           .locator(".bg-red-50, .bg-red-900\\/20")
@@ -176,7 +176,7 @@ test.describe("A-E2E-002: Admin Login - Flow", () => {
         ) {
           loadingStateDetected = true;
         }
-      } catch (error) {
+      } catch (_error) {
         // Page might have navigated - check if we're still on login page
         const currentUrl = page.url();
         if (!currentUrl.includes("/admin/login")) {

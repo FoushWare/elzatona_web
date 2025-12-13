@@ -71,16 +71,7 @@ const Button = React.lazy(() =>
     default: module.Button,
   })),
 );
-const Input = React.lazy(() =>
-  import("@elzatona/components").then((module) => ({
-    default: module.Input,
-  })),
-);
-const Badge = React.lazy(() =>
-  import("@elzatona/components").then((module) => ({
-    default: module.Badge,
-  })),
-);
+// Lazy-loaded components (only keeping those that are actually used)
 const Card = React.lazy(() =>
   import("@elzatona/components").then((module) => ({
     default: module.Card,
@@ -101,49 +92,15 @@ const CardTitle = React.lazy(() =>
     default: module.CardTitle,
   })),
 );
-const Select = React.lazy(() =>
+const Badge = React.lazy(() =>
   import("@elzatona/components").then((module) => ({
-    default: module.Select,
+    default: module.Badge,
   })),
 );
-const SelectContent = React.lazy(() =>
-  import("@elzatona/components").then((module) => ({
-    default: module.SelectContent,
-  })),
-);
-const SelectItem = React.lazy(() =>
-  import("@elzatona/components").then((module) => ({
-    default: module.SelectItem,
-  })),
-);
-const SelectTrigger = React.lazy(() =>
-  import("@elzatona/components").then((module) => ({
-    default: module.SelectTrigger,
-  })),
-);
-const SelectValue = React.lazy(() =>
-  import("@elzatona/components").then((module) => ({
-    default: module.SelectValue,
-  })),
-);
-const Collapsible = React.lazy(() =>
-  import("@elzatona/components").then((module) => ({
-    default: module.Collapsible,
-  })),
-);
-const CollapsibleTrigger = React.lazy(() =>
-  import("@elzatona/components").then((module) => ({
-    default: module.CollapsibleTrigger,
-  })),
-);
-const CollapsibleContent = React.lazy(() =>
-  import("@elzatona/components").then((module) => ({
-    default: module.CollapsibleContent,
-  })),
-);
+// Removed unused lazy-loaded components: Input, Select, SelectContent, SelectItem, SelectTrigger, SelectValue, Collapsible, CollapsibleTrigger, CollapsibleContent
 import { Modal } from "@elzatona/components";
 import { ViewQuestionModal } from "../content/questions/components/ViewQuestionModal";
-import { StatsSection } from "./components/StatsSection";
+import {} from "./components/StatsSection";
 import { CategoriesList } from "./components/CategoriesList";
 import { TopicsList } from "./components/TopicsList";
 import { SearchAndFilters } from "./components/SearchAndFilters";
@@ -164,8 +121,8 @@ import {
   Users,
   Calendar,
   Target,
-  Search,
-  X,
+  Search as _Search,
+  X as _X,
   Eye,
   CheckSquare,
   Square,
@@ -498,27 +455,21 @@ export default function UnifiedAdminPage() {
   const [isDeleteCardModalOpen, setIsDeleteCardModalOpen] = useState(false);
   const [isDeletePlanModalOpen, setIsDeletePlanModalOpen] = useState(false);
   // Unused delete modal states - kept for potential future use
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [isDeleteCategoryModalOpen, setIsDeleteCategoryModalOpen] =
+  const [_isDeleteCategoryModalOpen, _setIsDeleteCategoryModalOpen] =
     useState(false);
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [isDeleteTopicModalOpen, setIsDeleteTopicModalOpen] = useState(false);
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [isDeleteQuestionModalOpen, setIsDeleteQuestionModalOpen] =
+  const [_isDeleteTopicModalOpen, _setIsDeleteTopicModalOpen] = useState(false);
+  const [_isDeleteQuestionModalOpen, _setIsDeleteQuestionModalOpen] =
     useState(false);
 
   // Item to delete states
   const [cardToDelete, setCardToDelete] = useState<LearningCard | null>(null);
   const [planToDelete, setPlanToDelete] = useState<LearningPlan | null>(null);
   // Unused delete states - kept for potential future use
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [categoryToDelete, setCategoryToDelete] = useState<Category | null>(
+  const [_categoryToDelete, _setCategoryToDelete] = useState<Category | null>(
     null,
   );
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [topicToDelete, setTopicToDelete] = useState<Topic | null>(null);
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [questionToDelete, setQuestionToDelete] =
+  const [_topicToDelete, _setTopicToDelete] = useState<Topic | null>(null);
+  const [_questionToDelete, _setQuestionToDelete] =
     useState<UnifiedQuestion | null>(null);
 
   const [editingCard, setEditingCard] = useState<LearningCard | null>(null);
@@ -529,8 +480,7 @@ export default function UnifiedAdminPage() {
     useState<UnifiedQuestion | null>(null);
 
   // Questions state
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [questionsByTopic, setQuestionsByTopic] = useState<
+  const [_questionsByTopic, _setQuestionsByTopic] = useState<
     Record<
       string,
       { id: string; title: string; difficulty: string; type: string }[]
@@ -1768,7 +1718,7 @@ export default function UnifiedAdminPage() {
                               total +
                               categoryTopics.reduce((topicTotal, topic) => {
                                 const topicQuestions =
-                                  questionsByTopic[topic.id] || [];
+                                  _questionsByTopic[topic.id] || [];
                                 return topicTotal + topicQuestions.length;
                               }, 0)
                             );
@@ -1846,7 +1796,7 @@ export default function UnifiedAdminPage() {
                                   >
                                     {categoryTopics.reduce((total, topic) => {
                                       const topicQuestions =
-                                        questionsByTopic[topic.id] || [];
+                                        _questionsByTopic[topic.id] || [];
                                       return total + topicQuestions.length;
                                     }, 0)}{" "}
                                     Questions
@@ -1878,7 +1828,7 @@ export default function UnifiedAdminPage() {
                                 <div className="ml-6 space-y-2">
                                   {categoryTopics.map((topic) => {
                                     const topicQuestions =
-                                      questionsByTopic[topic.id] || [];
+                                      _questionsByTopic[topic.id] || [];
 
                                     return (
                                       <div

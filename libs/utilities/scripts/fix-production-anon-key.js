@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+/* eslint-disable @typescript-eslint/no-require-imports */
 /**
  * Fix Production Anon Key
  *
@@ -56,7 +57,7 @@ try {
       "✅ Verified: Anon key is for production project (hpnewqkvpnthpohvxcmq)",
     );
   }
-} catch (e) {
+} catch (_e) {
   console.warn("⚠️  Could not verify anon key format, proceeding anyway...");
 }
 

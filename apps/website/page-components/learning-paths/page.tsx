@@ -2,7 +2,7 @@
 // This file uses 'any' types for API response data which can have various structures
 "use client";
 
-import React, { useState, useMemo, ReactNode, useCallback } from "react";
+import React, { useState, useMemo, useCallback } from "react";
 
 import { useRouter } from "next/navigation";
 import {

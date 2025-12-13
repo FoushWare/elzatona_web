@@ -30,17 +30,17 @@ import { UnifiedQuestion } from "@elzatona/types";
 type Question = UnifiedQuestion;
 
 interface QuestionFormProps {
-  initialData?: Question | undefined;
-  onSubmit: (question: Partial<Question>) => void;
-  onCancel: () => void;
-  cards: any[];
-  allCategories: string[];
-  allTags: string[];
-  categoriesData: any[];
-  topicsData: any[];
-  disabled?: boolean;
-  hideFooter?: boolean;
-  externalSubmitTrigger?: number;
+  readonly initialData?: Question;
+  readonly onSubmit: (question: Partial<Question>) => void;
+  readonly onCancel: () => void;
+  readonly cards: any[];
+  readonly allCategories: string[];
+  readonly allTags: string[];
+  readonly categoriesData: any[];
+  readonly topicsData: any[];
+  readonly disabled?: boolean;
+  readonly hideFooter?: boolean;
+  readonly externalSubmitTrigger?: number;
 }
 
 export function QuestionForm({
@@ -48,8 +48,8 @@ export function QuestionForm({
   onSubmit,
   onCancel,
   cards,
-  allCategories,
-  allTags,
+  allCategories: _allCategories,
+  allTags: _allTags,
   categoriesData,
   topicsData,
   disabled = false,
@@ -163,7 +163,7 @@ export function QuestionForm({
       initialData,
     });
 
-    const normalizedResources = normalizeResources(
+    const _normalizedResources = normalizeResources(
       (initialData as any).resources,
     );
 

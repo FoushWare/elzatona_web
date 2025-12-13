@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+/* eslint-disable @typescript-eslint/no-require-imports */
 /**
  * Check Supabase schema for API-related issues
  * This script validates that the database schema matches expected TypeScript types

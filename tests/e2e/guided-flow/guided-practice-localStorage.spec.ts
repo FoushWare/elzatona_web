@@ -424,7 +424,10 @@ test.describe("G-E2E-017: Learning Resources Display", () => {
     }
   });
 
-  test("should open resource links in new tab", async ({ page, context }) => {
+  test("should open resource links in new tab", async ({
+    page,
+    context: _context,
+  }) => {
     const planId = "test-plan-id";
     await page.goto(`/guided-practice?plan=${planId}`);
 
@@ -463,7 +466,7 @@ test.describe("G-E2E-017: Learning Resources Display", () => {
 
         if (linkCount > 0) {
           // Get the href before clicking
-          const href = await resourceLink.getAttribute("href");
+          const _href = await resourceLink.getAttribute("href");
 
           // Verify link opens in new tab (target="_blank")
           await expect(resourceLink).toHaveAttribute("target", "_blank");

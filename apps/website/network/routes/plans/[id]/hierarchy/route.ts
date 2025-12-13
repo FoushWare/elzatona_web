@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
-import { getSupabaseConfig } from "@/lib/utils/api-config";
+import { getSupabaseConfig } from "../../../../../lib/utils/api-config";
 
 // Helper function to create Supabase client using centralized config
 function getSupabaseClient() {
@@ -53,7 +53,7 @@ export async function GET(
       if (!error && data) {
         cardCategories = data;
       }
-    } catch (error) {
+    } catch (_error) {
       // Junction table doesn't exist, will use direct relationships
       console.log(
         "card_categories table not found, using direct relationships",
@@ -93,7 +93,7 @@ export async function GET(
       if (!error && data) {
         categoryTopics = data;
       }
-    } catch (error) {
+    } catch (_error) {
       // Junction table doesn't exist, will use direct relationships
       console.log(
         "category_topics table not found, using direct relationships",
@@ -150,7 +150,7 @@ export async function GET(
         if (!error && data) {
           questionTopics = data;
         }
-      } catch (error) {
+      } catch (_error) {
         // Junction table doesn't exist, will use direct relationships
         console.log(
           "questions_topics table not found, using direct relationships",

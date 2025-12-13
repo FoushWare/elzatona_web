@@ -24,7 +24,7 @@ import {
 } from "lucide-react";
 import { useAdminStats } from "@elzatona/hooks";
 
-interface DashboardStats {
+interface _DashboardStats {
   questions: number;
   categories: number;
   topics: number;
@@ -44,7 +44,7 @@ export default function AdminDashboard() {
   const {
     data: stats,
     isLoading: loading,
-    error: statsError,
+    error: _statsError,
     refetch: refetchStats,
     isRefetching: refreshing,
   } = useAdminStats();
@@ -53,7 +53,7 @@ export default function AdminDashboard() {
     refetchStats();
   };
 
-  const adminMenuItems = [
+  const _adminMenuItems = [
     {
       href: "/admin/content/questions",
       label: "Questions",

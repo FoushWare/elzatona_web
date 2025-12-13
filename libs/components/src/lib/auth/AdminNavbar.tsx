@@ -19,7 +19,6 @@ import {
   Calculator,
 } from "lucide-react";
 import { useTheme, useAdminAuth } from "@elzatona/contexts";
-import { NotificationDropdown } from "../common/NotificationDropdown";
 import AlzatonaLogo from "../common/AlzatonaLogo";
 
 export default function AdminNavbar() {
@@ -61,6 +60,7 @@ export default function AdminNavbar() {
         window.scrollTo(0, scrollY);
       };
     }
+    return undefined;
   }, [isOpen]);
 
   // Close dropdowns when clicking outside
@@ -203,7 +203,7 @@ export default function AdminNavbar() {
 
                   {/* Menu Items */}
                   <div className="py-2">
-                    {adminMenuItems.map((item, index) => (
+                    {adminMenuItems.map((item, _index) => (
                       <Link
                         key={item.href}
                         href={item.href}

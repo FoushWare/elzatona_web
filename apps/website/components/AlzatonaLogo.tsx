@@ -15,8 +15,8 @@ interface AlzatonaLogoProps {
 export const AlzatonaLogo: React.FC<AlzatonaLogoProps> = ({
   size = "md",
   className = "",
-  showText = true,
-  variant = "horizontal",
+  showText: _showText = true,
+  variant: _variant = "horizontal",
   forceDarkMode = false,
 }) => {
   const { isDarkMode } = useTheme();

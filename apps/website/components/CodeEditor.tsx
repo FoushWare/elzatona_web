@@ -13,7 +13,7 @@ import {
   Copy,
   Check,
   Palette,
-  Settings,
+  Settings as _Settings,
   ZoomIn,
   ZoomOut,
   ChevronRight,
@@ -140,7 +140,7 @@ export default function CodeEditor({
   const [currentTheme, setCurrentTheme] = useState<MonacoTheme>(initialTheme);
   const [fontSize, setFontSize] = useState(15);
   const [showThemeMenu, setShowThemeMenu] = useState(false);
-  const [showSettingsMenu, setShowSettingsMenu] = useState(false);
+  const [_showSettingsMenu, _setShowSettingsMenu] = useState(false);
   const outputRef = useRef<HTMLDivElement>(null);
   const editorRef = useRef<any>(null);
 
@@ -238,7 +238,7 @@ export default function CodeEditor({
     onChange?.(newValue);
   };
 
-  const handleRun = async () => {
+  const _handleRun = async () => {
     if (!onRun) return;
 
     setIsRunning(true);
@@ -452,7 +452,7 @@ export default function CodeEditor({
               <button
                 onClick={() => {
                   setShowThemeMenu(!showThemeMenu);
-                  setShowSettingsMenu(false);
+                  _setShowSettingsMenu(false);
                 }}
                 className="theme-button inline-flex items-center gap-1.5 sm:gap-2 px-2 sm:px-3 py-1 sm:py-1.5 text-xs sm:text-sm text-gray-700 dark:text-gray-300 hover:bg-white dark:hover:bg-gray-700 rounded-lg transition-colors border border-gray-200 dark:border-gray-600"
                 title="Select theme"

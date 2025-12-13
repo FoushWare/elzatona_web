@@ -1,9 +1,9 @@
 "use client";
 
 import React, { useRef, useState, useEffect } from "react";
-import { toPng, toJpeg, toBlob } from "html-to-image";
+import { toPng, toJpeg } from "html-to-image";
 import { Button } from "@elzatona/components";
-import { Download, Image as ImageIcon } from "lucide-react";
+import { Image as ImageIcon } from "lucide-react";
 import { createHighlighter, type Highlighter } from "shiki";
 
 interface CodeToImageTestProps {
@@ -92,7 +92,7 @@ export function CodeToImageTest({
   }, [highlighter, code, language, theme]);
 
   // Old syntax highlighting function (fallback)
-  const highlightSyntaxFallback = (line: string) => {
+  const _highlightSyntaxFallback = (line: string) => {
     if (!line.trim()) return <span>{line}</span>;
 
     // JavaScript/TypeScript keywords (light blue/cyan)

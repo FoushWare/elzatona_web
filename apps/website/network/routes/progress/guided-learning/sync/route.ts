@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
 import { cookies } from "next/headers";
-import { verifySupabaseToken } from "@/lib/server-auth";
+import { verifySupabaseToken } from "../../../../../lib/server-auth";
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
 const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
@@ -38,7 +38,7 @@ export async function POST(request: NextRequest) {
 
     if (!token) {
       console.log("⚠️ No authentication token found, using development mode");
-      const progressData: GuidedProgress = await request.json();
+      const _progressData: GuidedProgress = await request.json();
 
       return NextResponse.json({
         success: true,
@@ -98,7 +98,7 @@ export async function POST(request: NextRequest) {
     );
 
     // Store progress data in JSONB format
-    const { data, error } = await supabase.from("user_progress").upsert(
+    const { data: _data, error } = await supabase.from("user_progress").upsert(
       {
         user_id: decodedToken.id,
         plan_id: progressData.planId,

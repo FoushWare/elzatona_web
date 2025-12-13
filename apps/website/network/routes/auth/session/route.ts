@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth/next";
-import { authOptions } from "@/lib/auth-config";
+import { authOptions } from "../../../../lib/auth-config";
 
 interface UserWithId {
   id?: string;
@@ -10,7 +10,7 @@ interface UserWithId {
 }
 
 // Get current session status
-export async function GET(request: NextRequest) {
+export async function GET(_request: NextRequest) {
   try {
     const session = await getServerSession(authOptions);
 
@@ -94,7 +94,7 @@ export async function POST(request: NextRequest) {
 }
 
 // Clear authentication cookie
-export async function DELETE(request: NextRequest) {
+export async function DELETE(_request: NextRequest) {
   try {
     const response = NextResponse.json({
       success: true,

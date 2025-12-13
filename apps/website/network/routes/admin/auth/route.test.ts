@@ -6,13 +6,13 @@
 import { POST } from "./route";
 import { NextRequest } from "next/server";
 import bcrypt from "bcryptjs";
-import jwt from "jsonwebtoken";
+// import _jwt from "jsonwebtoken";
 
 // Mock dependencies
 jest.mock("@supabase/supabase-js");
 jest.mock("bcryptjs");
 jest.mock("jsonwebtoken");
-jest.mock("@/lib/utils/api-config");
+jest.mock("../../../../lib/utils/api-config");
 
 // Mock environment variables
 const mockEnv = {

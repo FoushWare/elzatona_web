@@ -110,7 +110,7 @@ test.describe("A-E2E-003: Admin Dashboard", () => {
     let response;
     try {
       response = await responsePromise;
-    } catch (error) {
+    } catch (_error) {
       // API response timeout - check what happened
       const currentURL = page.url();
       const errorMessage = page.locator(".bg-red-50, .bg-red-900\\/20");
@@ -159,8 +159,9 @@ test.describe("A-E2E-003: Admin Dashboard", () => {
     // Wait for navigation to dashboard (API succeeded, so navigation should happen)
     try {
       await navigationPromise;
-    } catch (error: any) {
+    } catch (error: unknown) {
       // Navigation timeout - check if error message appeared
+      const _err = error instanceof Error ? error : new Error(String(error));
       const errorMessage = page.locator(".bg-red-50, .bg-red-900\\/20");
       if (await errorMessage.isVisible().catch(() => false)) {
         const errorText = await errorMessage.textContent();
@@ -361,7 +362,7 @@ test.describe("A-E2E-003: Admin Dashboard", () => {
 
     // Get the current theme from the HTML element
     const htmlElement = page.locator("html");
-    const hasDarkClass = await htmlElement.evaluate((el) =>
+    const _hasDarkClass = await htmlElement.evaluate((el) =>
       el.classList.contains("dark"),
     );
 

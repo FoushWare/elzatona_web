@@ -12,13 +12,13 @@ import {
   getSupabaseConfig,
   getFetchConfig,
   logApiConfig,
-} from "@/lib/utils/api-config";
+} from "./api-config";
 
 // ============================================================================
 // EXAMPLE 1: Basic API Route with Environment Detection
 // ============================================================================
 
-export async function GET_BasicExample(request: NextRequest) {
+export async function GET_BasicExample(_request: NextRequest) {
   // Get all environment-specific configuration
   const config = getApiConfig();
 
@@ -37,7 +37,7 @@ export async function GET_BasicExample(request: NextRequest) {
 // EXAMPLE 2: Supabase Client with Automatic Headers
 // ============================================================================
 
-export async function GET_SupabaseExample(request: NextRequest) {
+export async function GET_SupabaseExample(_request: NextRequest) {
   // Get Supabase configuration (includes headers automatically)
   const supabaseConfig = getSupabaseConfig();
 
@@ -66,7 +66,7 @@ export async function GET_SupabaseExample(request: NextRequest) {
 // EXAMPLE 3: External API Call with Environment Headers
 // ============================================================================
 
-export async function POST_ExternalApiExample(request: NextRequest) {
+export async function POST_ExternalApiExample(_request: NextRequest) {
   const config = getApiConfig();
 
   // Get fetch configuration with environment headers
@@ -76,7 +76,7 @@ export async function POST_ExternalApiExample(request: NextRequest) {
   });
 
   // Make API call - headers include X-Environment, X-Project-Ref automatically
-  const response = await fetch("https://api.example.com/data", {
+  const _response = await fetch("https://api.example.com/data", {
     method: "POST",
     headers: fetchConfig.headers,
     body: JSON.stringify({ data: "example" }),
@@ -89,7 +89,7 @@ export async function POST_ExternalApiExample(request: NextRequest) {
 // EXAMPLE 4: Environment-Specific Logic
 // ============================================================================
 
-export async function GET_ConditionalExample(request: NextRequest) {
+export async function GET_ConditionalExample(_request: NextRequest) {
   const config = getApiConfig();
 
   // Environment-specific behavior
@@ -115,7 +115,7 @@ export async function GET_ConditionalExample(request: NextRequest) {
 // Log config on module load (optional, for debugging)
 logApiConfig("My API Route");
 
-export async function GET_CompleteExample(request: NextRequest) {
+export async function GET_CompleteExample(_request: NextRequest) {
   try {
     // 1. Get configuration (one import, everything you need)
     const config = getApiConfig();
@@ -168,7 +168,7 @@ export async function GET_CompleteExample(request: NextRequest) {
 // KEY POINTS:
 // ============================================================================
 //
-// 1. ONE IMPORT: import { getApiConfig } from '@/lib/utils/api-config';
+// 1. ONE IMPORT: import { getApiConfig } from './api-config';
 // 2. ONE VARIABLE: Set APP_ENV=test or APP_ENV=production in .env file
 // 3. EVERYTHING SWITCHES: Database, headers, timeouts, feature flags
 // 4. NO MANUAL CONFIG: Headers are set automatically based on environment
