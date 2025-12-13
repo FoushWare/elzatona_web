@@ -15,7 +15,6 @@ async function main() {
 }
 
 main().catch((err) => {
-   
   console.error("❌ Auto-Fix Failed", err);
   process.exit(1);
 });
