@@ -201,3 +201,6 @@ trufflehog-current.json
 gitleaks-history.json
 **/*trufflehog*.json
 **/*gitleaks*.json
+
+# CodeQL database (generated files)
+codeql-database/
