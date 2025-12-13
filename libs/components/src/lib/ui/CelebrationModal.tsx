@@ -6,7 +6,6 @@ import {
   Trophy,
   Star,
   Award,
-  Target as _Target,
   ArrowRight,
   RotateCcw,
 } from "lucide-react";

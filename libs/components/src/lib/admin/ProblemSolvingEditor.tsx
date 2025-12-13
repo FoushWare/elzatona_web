@@ -11,7 +11,6 @@ import {
   Save,
   Plus,
   Trash2,
-  CheckCircle as _CheckCircle,
   RefreshCw,
   FileText,
   Folder,

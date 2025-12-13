@@ -7,7 +7,6 @@ import { Editor } from "@monaco-editor/react";
 import {
   Save,
   FileText,
-  FolderPlus as _FolderPlus,
   Eye,
   Code,
   Plus,
@@ -18,7 +17,6 @@ import {
   Monitor,
   Folder,
   FolderOpen,
-  Circle as _Circle,
   AlertCircle,
   Clock,
   Flame,
@@ -641,6 +639,7 @@ export default function FrontendTaskEditor({
               .replace(/\\/g, "\\\\")
               .replace(new RegExp(backtick, "g"), escapedBacktick)
               .replace(/\$/g, "\\$");
+            // NOSONAR S6328: Escape is necessary to prevent template literal injection in wrappedCode
             const wrappedCode = \`(function() {
               \${escapedTranspiledCode}
               return App;
