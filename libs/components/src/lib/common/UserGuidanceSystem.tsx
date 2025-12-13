@@ -52,7 +52,7 @@ export const UserGuidanceSystem: React.FC<UserGuidanceSystemProps> = ({
   const [userType, setUserType] = useState<"guided" | "self-directed" | null>(
     null,
   );
-  const [showTour, setShowTour] = useState(false);
+  const [_showTour, _setShowTour] = useState(false);
 
   // Don't show guidance during testing
   if (
