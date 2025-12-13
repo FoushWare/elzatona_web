@@ -71,7 +71,7 @@ export async function PUT(
   try {
     const { id } = await params;
     const body = await request.json();
-    const { id: bodyId, ...updateData } = body;
+    const { id: _bodyId, ...updateData } = body;
 
     // Use the same Supabase client helper as the main route
     const supabase = getSupabaseClient();
@@ -246,22 +246,22 @@ export async function PUT(
     // Prepare update data for database
     // Remove fields that don't exist in the database or shouldn't be updated
     const {
-      category,
-      topic,
+      category: _category,
+      topic: _topic,
       learningCardId: _learningCardId,
       learning_card_id: _learning_card_id,
-      categories,
-      topics,
-      learning_cards,
-      learning_card,
-      stats,
-      metadata,
-      test_cases,
-      correct_answer,
-      created_at, // Don't allow updating created_at
+      categories: _categories,
+      topics: _topics,
+      learning_cards: _learning_cards,
+      learning_card: _learning_card,
+      stats: _stats,
+      metadata: _metadata,
+      test_cases: _test_cases,
+      correct_answer: _correct_answer,
+      created_at: _created_at, // Don't allow updating created_at
       updated_at: _updated_at, // We set this ourselves
       id: _id, // Don't include id in update
-      sampleAnswers, // Frontend-only field
+      sampleAnswers: _sampleAnswers, // Frontend-only field
       resources, // Keep resources - it's a valid database field
       ...dbUpdate
     } = sanitizedUpdate;

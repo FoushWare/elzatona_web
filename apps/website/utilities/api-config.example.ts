@@ -1,22 +1,20 @@
-// @ts-nocheck
 /**
  * API Configuration Usage Examples
  *
  * This file shows how to use the centralized API configuration
  * in different scenarios. Copy these patterns to your API routes.
  *
- * NOTE: This is an example file - TypeScript checking is disabled.
+ * NOTE: This is an example file for reference only.
  */
 
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
-// Example file - not meant to be compiled
-// import {
-//   getApiConfig,
-//   getSupabaseConfig,
-//   getFetchConfig,
-//   logApiConfig,
-// } from "../lib/utils/api-config";
+import {
+  getApiConfig,
+  getSupabaseConfig,
+  getFetchConfig,
+  logApiConfig,
+} from "../lib/utils/api-config";
 
 // ============================================================================
 // EXAMPLE 1: Basic API Route with Environment Detection
