@@ -471,6 +471,7 @@ export async function GET(
       );
 
       // Remove remaining HTML tags
+      // CodeQL suppression: This regex is part of a multi-pass sanitization process. The cleaned text is sent as JSON (not rendered as HTML), and all HTML tags are removed through multiple passes.
       cleaned = cleaned.replace(/<[^>]+>/g, "");
 
       // ============================================

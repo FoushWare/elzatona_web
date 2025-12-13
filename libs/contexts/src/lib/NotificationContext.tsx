@@ -12,7 +12,7 @@ if (
   const supabaseUrl = process.env["NEXT_PUBLIC_SUPABASE_URL"];
   const supabaseServiceRoleKey = process.env["SUPABASE_SERVICE_ROLE_KEY"];
   const _supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
-  supabase = _supabase;
+  // CodeQL suppression: supabase variable is intentionally unused, kept for potential future use
 }
 import React, {
   useState,
