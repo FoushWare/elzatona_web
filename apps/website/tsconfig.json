@@ -41,6 +41,7 @@
     "**/*.spec.ts",
     "**/*.stories.ts",
     "**/*.stories.js",
-    "**/*.example.ts"
+    "**/*.example.ts",
+    "utilities/api-config.example.ts"
   ]
 }
