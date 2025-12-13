@@ -210,6 +210,8 @@ try {
     `-Dsonar.organization=${sonarOrg}`,
     `-Dsonar.host.url=https://sonarcloud.io`,
     `-Dsonar.login=${sonarToken}`,
+    `-Dsonar.verbose=true`,
+    `-Dsonar.scanner.dumpToFile=./sonar-scanner.log`,
   ];
 
   // Add coverage if available
@@ -228,6 +230,10 @@ try {
   // Set memory limit for SonarScanner
   const sonarCommand = `NODE_OPTIONS="--max-old-space-size=${MEMORY_LIMIT}" ${scannerCommand} ${sonarArgs.join(" ")}`;
 
+  console.log("🚀 Starting SonarQube analysis with verbose output...");
+  console.log(`📝 Command: ${sonarCommand}`);
+  console.log("");
+
   execSync(sonarCommand, {
     stdio: "inherit",
     env: {
@@ -235,6 +241,8 @@ try {
       NODE_OPTIONS: `--max-old-space-size=${MEMORY_LIMIT}`,
       SONAR_TOKEN: sonarToken,
       SONAR_ORG: sonarOrg,
+      SONAR_VERBOSE: "true",
+      SONAR_SCANNER_OPTS: "-Dsonar.verbose=true",
     },
   });
 
