@@ -477,7 +477,11 @@ export async function GET(
           let decodedContent = decodeHtmlEntities(codeContent).trim();
           // SECURITY: Remove any remaining HTML tags that might have been decoded
           // This ensures no HTML injection even after entity decoding
-          decodedContent = decodedContent.replace(/<[^>]*>/g, "").replace(/decodedContent = decodedContent.replace(/<[^>]+>/g, "");lt;/g, "<").replace(/decodedContent = decodedContent.replace(/<[^>]+>/g, "");gt;/g, ">").replace(/decodedContent = decodedContent.replace(/<[^>]+>/g, "");amp;/g, "decodedContent = decodedContent.replace(/<[^>]+>/g, "");");
+          decodedContent = decodedContent
+            .replace(/<[^>]*>/g, "")
+            .replace(/&lt;/g, "<")
+            .replace(/&gt;/g, ">")
+            .replace(/&amp;/g, "&");
           return `\`${decodedContent}\``;
         },
       );

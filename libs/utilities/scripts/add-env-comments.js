@@ -89,24 +89,19 @@ const comments = {
 console.log(`📝 Adding comments to ${envFile}...\n`);
 
 try {
-  // SECURITY: Capture file stats at the beginning to detect race conditions
+  // SECURITY: Use try-catch instead of existsSync to avoid race conditions
   let originalStats = null;
   try {
-    try {
-      originalStats = fs.statSync(envFilePath);
-    } catch (_statError) {
-      console.warn("⚠️  Could not read file stats. Proceeding with caution.");
-    }
-  } else {
-    console.error(`❌ File not found: ${envFile}`);
-    process.exit(1);
+    originalStats = fs.statSync(envFilePath);
+  } catch (_statError) {
+    console.warn("⚠️  Could not read file stats. Proceeding with caution.");
   }
 
   // Read existing file
   let content = "";
   try {
     content = fs.readFileSync(envFilePath, "utf8");
-  } else {
+  } catch (_readError) {
     console.error(`❌ File not found: ${envFile}`);
     process.exit(1);
   }

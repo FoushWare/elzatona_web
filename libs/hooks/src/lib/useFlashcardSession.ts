@@ -258,7 +258,6 @@ export function useFlashcardSession(): UseFlashcardSessionReturn {
           err instanceof Error ? err.message : "Failed to record answer",
         );
       }
-      // eslint-disable-next-line react-hooks/exhaustive-deps
     },
     [user, currentCard, sessionId],
   );
