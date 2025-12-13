@@ -10,7 +10,7 @@ import React, {
   useRef,
   useState,
 } from "react";
-import { supabaseClient } from "../lib/supabase-client";
+import { supabaseClient } from "../../lib/supabase-client";
 
 export type LearningType = "guided" | "free-style" | "custom";
 
@@ -131,7 +131,7 @@ export function LearningTypeProvider({
       };
     }
     const { data: sub } = supabaseClient.auth.onAuthStateChange(
-      (_event, session) => {
+      (_event: unknown, session: unknown) => {
         const newUserId = session?.user?.id ?? null;
         setUserId(newUserId);
 
@@ -245,10 +245,10 @@ export function LearningTypeProvider({
     }
   }, [solvedQuestionIds, userId]);
 
-  const setLearningType = useCallback((type: LearningType) => {
+  const updateLearningType = useCallback((type: LearningType) => {
     setLearningType(type);
     // Optionally sync preference to API here in future
-  }, []);
+  }, [setLearningType]);
 
   const addSolvedQuestion = useCallback((questionId: string) => {
     setSolvedQuestionIds((prev) =>
