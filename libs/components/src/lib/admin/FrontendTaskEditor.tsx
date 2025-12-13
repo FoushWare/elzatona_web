@@ -625,7 +625,7 @@ export default function FrontendTaskEditor({
             const cleanCode = cleanReactCode
               .replace(/\\/g, "\\\\")
               .replace(new RegExp(backtickChar, "g"), escapedBacktick)
-              .replace(/\$/g, "\\$"); // NOSONAR S6328: Escape is necessary to prevent template literal injection
+              .replace(/\$/g, "\\$"); // NOSONAR: Escape is necessary to prevent template literal injection
             const transpiledCode = Babel.transform(cleanCode, { 
               presets: ['react'],
               plugins: ['transform-class-properties']
@@ -638,7 +638,7 @@ export default function FrontendTaskEditor({
             const escapedTranspiledCode = transpiledCode
               .replace(/\\/g, "\\\\")
               .replace(new RegExp(backtick, "g"), escapedBacktick)
-              .replace(/\$/g, "\\$"); // NOSONAR S6328: Escape is necessary to prevent template literal injection
+              .replace(/\$/g, "\\$"); // NOSONAR: Escape is necessary to prevent template literal injection
             // NOSONAR S6328: Escape is necessary to prevent template literal injection in wrappedCode
             const wrappedCode = \`(function() {
               \${escapedTranspiledCode}
