@@ -1055,10 +1055,6 @@ export default function Navbar() {
                     🚪 Sign Out
                   </button>
                 </div>
-              ) : isLoading ? (
-                <div className="block w-full px-4 py-3 rounded-lg text-base font-medium bg-gray-200 dark:bg-gray-700 animate-pulse">
-                  <div className="h-4 bg-gray-300 dark:bg-gray-600 rounded w-24 mx-auto"></div>
-                </div>
               ) : (
                 <Link
                   href="/auth"
