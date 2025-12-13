@@ -161,7 +161,7 @@ test.describe("A-E2E-003: Admin Dashboard", () => {
       await navigationPromise;
     } catch (error: unknown) {
       // Navigation timeout - check if error message appeared
-      const err = error instanceof Error ? error : new Error(String(error));
+      const _err = error instanceof Error ? error : new Error(String(error));
       const errorMessage = page.locator(".bg-red-50, .bg-red-900\\/20");
       if (await errorMessage.isVisible().catch(() => false)) {
         const errorText = await errorMessage.textContent();
