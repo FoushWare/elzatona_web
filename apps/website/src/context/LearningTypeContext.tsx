@@ -132,7 +132,7 @@ export function LearningTypeProvider({
       };
     }
     const { data: sub } = supabaseClient.auth.onAuthStateChange(
-      (_event: unknown, session: unknown) => {
+      (_event: unknown, session: { user?: { id?: string } } | null) => {
         const newUserId = session?.user?.id ?? null;
         setUserId(newUserId);
 
