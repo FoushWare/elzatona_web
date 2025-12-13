@@ -61,6 +61,9 @@ const nextConfig: NextConfig = {
   // Disable automatic error page generation
   generateEtags: false,
 
+  // Disable static optimization for error pages
+  output: "standalone",
+
   // Performance optimizations
   experimental: {
     optimizeCss: true,
