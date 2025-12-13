@@ -267,6 +267,7 @@ export function useUnifiedQuestions(
     } finally {
       setIsLoading(false);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // Load learning paths
@@ -560,11 +561,13 @@ export function useUnifiedQuestions(
   // Utility functions
   const clearError = useCallback(() => {
     setError(null);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const clearQuestions = useCallback(() => {
     setQuestions([]);
     setCurrentQuestion(null);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // Auto-load on mount
