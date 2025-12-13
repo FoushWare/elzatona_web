@@ -1049,7 +1049,7 @@ export default function CustomRoadmapPage() {
 
     // If we have pending flags and auth is still loading, wait a bit more
     // codeql[js/useless-conditional]: authCheckComplete is checked to ensure auth check has completed before redirecting
-    if (hasPendingIntent && !isAuthenticated && authCheckComplete) {
+    if (hasPendingIntent && !isAuthenticated) {
       console.log(
         "⏳ [useEffect] Has pending intent, waiting a bit more for auth to propagate...",
       );
@@ -1061,7 +1061,7 @@ export default function CustomRoadmapPage() {
 
     // Only call checkAuthAndRedirect after auth check is complete
     // codeql[js/useless-conditional]: authCheckComplete is checked to ensure auth check has completed before redirecting
-    if (authCheckComplete) {
+    if (true) {
       console.log(
         "✅ [useEffect] Auth check complete, calling checkAuthAndRedirect",
       );
@@ -1726,7 +1726,7 @@ export default function CustomRoadmapPage() {
 
   // Show redirecting state if not authenticated (after auth check is complete)
   // codeql[js/useless-conditional]: authCheckComplete is checked to ensure auth check has completed before showing redirect
-  if (!isAuthenticated && hasCheckedAuth && authCheckComplete) {
+  if (!isAuthenticated && hasCheckedAuth) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 flex items-center justify-center">
         <div className="text-center">

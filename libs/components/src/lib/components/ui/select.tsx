@@ -43,10 +43,9 @@ const Select = React.forwardRef<
   };
 
   // Find SelectTrigger and SelectContent children
-  const _selectTrigger = React.Children.toArray(children).find(
+  const selectTrigger = React.Children.toArray(children).find(
     (child) => React.isValidElement(child) && child.type === SelectTrigger,
   );
-  void _selectTrigger; // Suppress unused variable warning
 
   const selectContent = React.Children.toArray(children).find(
     (child) => React.isValidElement(child) && child.type === SelectContent,
