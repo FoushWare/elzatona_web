@@ -805,9 +805,16 @@ function processMarkdownCodeBlocks(fixedContent: string): Array<{
   markdownCodeBlockRegex.lastIndex = 0;
 
   while ((mdMatch = markdownCodeBlockRegex.exec(fixedContent)) !== null) {
+    // SECURITY: Sanitize markdown code block content to prevent HTML injection
+    // codeql[js/incomplete-multi-character-sanitization]: Content is sanitized before being added to matches
+    let sanitizedContent = mdMatch[2].trim();
+    // Decode HTML entities first, then sanitize to remove any HTML tags
+    sanitizedContent = decodeHtmlEntities(sanitizedContent);
+    sanitizedContent = sanitizeText(sanitizedContent);
+    
     markdownMatches.push({
       index: mdMatch.index,
-      content: mdMatch[2].trim(),
+      content: sanitizedContent,
       language: mdMatch[1] || "javascript",
       fullMatch: mdMatch[0],
     });
