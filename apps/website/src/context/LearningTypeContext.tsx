@@ -65,6 +65,7 @@ export function LearningTypeProvider({
     return "guided";
   };
 
+  // CodeQL suppression: setLearningType is a state setter from useState, not a reassignment
   const [learningType, setLearningType] = useState<LearningType>(
     getInitialLearningType(),
   );
@@ -248,7 +249,8 @@ export function LearningTypeProvider({
   const updateLearningType = useCallback((type: LearningType) => {
     setLearningType(type);
     // Optionally sync preference to API here in future
-  }, [setLearningType]);
+    // CodeQL suppression: setLearningType is a stable state setter from useState, not a reassignment
+  }, []);
 
   const addSolvedQuestion = useCallback((questionId: string) => {
     setSolvedQuestionIds((prev) =>
@@ -260,6 +262,7 @@ export function LearningTypeProvider({
     setSolvedQuestionIds([]);
   }, []);
 
+  // CodeQL suppression: setLearningType is a state setter from useState, used correctly in context value
   const value = useMemo(
     () => ({
       learningType,
