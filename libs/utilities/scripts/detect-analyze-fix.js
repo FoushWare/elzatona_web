@@ -239,11 +239,7 @@ function analyzeIssues(issues) {
 // Fix unused variable
 function fixUnusedVariable(filePath, line, variableName) {
   try {
-    if (!fs.existsSync(filePath)) return false;
-
-    // SECURITY: Store file stats before reading to detect race conditions
-    // CodeQL suppression: File system race condition is mitigated by stat checks before write
-    const originalStats = fs.statSync(filePath);
+    // SECURITY: Use try-catch instead of existsSync to avoid race conditions
     const content = fs.readFileSync(filePath, "utf8");
     const lines = content.split("\n");
 
@@ -390,10 +386,7 @@ function fixUnusedVariable(filePath, line, variableName) {
 // Fix unused error (handles both catch blocks and destructured errors)
 function fixUnusedError(filePath, line) {
   try {
-    if (!fs.existsSync(filePath)) return false;
-
-    // SECURITY: Store file stats before reading to detect race conditions
-    const originalStats = fs.statSync(filePath);
+    // SECURITY: Use try-catch instead of existsSync to avoid race conditions
     const content = fs.readFileSync(filePath, "utf8");
     const lines = content.split("\n");
 
@@ -568,7 +561,6 @@ function updateLogFile(logFilePath, fixedIssues, allIssues) {
   try {
     if (!fs.existsSync(logFilePath)) return;
 
-    // SECURITY: Store file stats before reading to detect race conditions
     // CodeQL suppression: File system race condition is mitigated by stat checks before write
     const originalStats = fs.statSync(logFilePath);
     const content = fs.readFileSync(logFilePath, "utf8");

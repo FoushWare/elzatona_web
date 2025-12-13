@@ -91,7 +91,7 @@ console.log(`📝 Adding comments to ${envFile}...\n`);
 try {
   // SECURITY: Capture file stats at the beginning to detect race conditions
   let originalStats = null;
-  if (fs.existsSync(envFilePath)) {
+  try {
     try {
       originalStats = fs.statSync(envFilePath);
     } catch (_statError) {
@@ -104,7 +104,7 @@ try {
 
   // Read existing file
   let content = "";
-  if (fs.existsSync(envFilePath)) {
+  try {
     content = fs.readFileSync(envFilePath, "utf8");
   } else {
     console.error(`❌ File not found: ${envFile}`);
@@ -144,7 +144,9 @@ try {
       originalStats &&
       currentStats.mtime.getTime() !== originalStats.mtime.getTime()
     ) {
-      console.warn("⚠️  File was modified during processing. Skipping write to prevent data loss.");
+      console.warn(
+        "⚠️  File was modified during processing. Skipping write to prevent data loss.",
+      );
       return;
     }
   } catch (_statError) {
