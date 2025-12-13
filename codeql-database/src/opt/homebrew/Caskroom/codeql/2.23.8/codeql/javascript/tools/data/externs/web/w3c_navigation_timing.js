@@ -102,13 +102,13 @@ function Performance() {}
  * PerformanceResourceTiming resources.
  * @return {undefined}
  */
-Performance.prototype.clearResourceTimings = function () {};
+Performance.prototype.clearResourceTimings = function() {};
 
 /**
  * Clear out the buffer of performance timing events for webkit browsers.
  * @return {undefined}
  */
-Performance.prototype.webkitClearResourceTimings = function () {};
+Performance.prototype.webkitClearResourceTimings = function() {};
 
 /**
  * Set the maximum number of PerformanceResourceTiming resources that may be
@@ -116,14 +116,14 @@ Performance.prototype.webkitClearResourceTimings = function () {};
  * @param {number} maxSize
  * @return {undefined}
  */
-Performance.prototype.setResourceTimingBufferSize = function (_maxSize) {};
+Performance.prototype.setResourceTimingBufferSize = function(maxSize) {};
 
 /**
  * @return {Array<PerformanceEntry>} A copy of the PerformanceEntry list,
  *     in chronological order with respect to startTime.
  * @nosideeffects
  */
-Performance.prototype.getEntries = function () {};
+Performance.prototype.getEntries = function() {};
 
 /**
  * @param {string} entryType Only return {@code PerformanceEntry}s with this
@@ -132,7 +132,7 @@ Performance.prototype.getEntries = function () {};
  *     in chronological order with respect to startTime.
  * @nosideeffects
  */
-Performance.prototype.getEntriesByType = function (_entryType) {};
+Performance.prototype.getEntriesByType = function(entryType) {};
 
 /**
  * @param {string} name Only return {@code PerformanceEntry}s with this name.
@@ -142,7 +142,7 @@ Performance.prototype.getEntriesByType = function (_entryType) {};
  *     order with respect to startTime.
  * @nosideeffects
  */
-Performance.prototype.getEntriesByName = function (_name, _opt_entryType) {};
+Performance.prototype.getEntriesByName = function(name, opt_entryType) {};
 
 // Only available in WebKit, and only with the --enable-memory-info flag.
 /** @type {PerformanceMemory} */ Performance.prototype.memory;
@@ -151,25 +151,25 @@ Performance.prototype.getEntriesByName = function (_name, _opt_entryType) {};
  * @return {number}
  * @nosideeffects
  */
-Performance.prototype.now = function () {};
+Performance.prototype.now = function() {};
 
 /**
  * @return {number}
  * @nosideeffects
  */
-Performance.prototype.webkitNow = function () {};
+Performance.prototype.webkitNow = function() {};
 
 /**
  * @param {string} markName
  * @return {undefined}
  */
-Performance.prototype.mark = function (_markName) {};
+Performance.prototype.mark = function(markName) {};
 
 /**
  * @param {string=} opt_markName
  * @return {undefined}
  */
-Performance.prototype.clearMarks = function (_opt_markName) {};
+Performance.prototype.clearMarks = function(opt_markName) {};
 
 /**
  * @param {string} measureName
@@ -177,17 +177,14 @@ Performance.prototype.clearMarks = function (_opt_markName) {};
  * @param {string=} opt_endMark
  * @return {undefined}
  */
-Performance.prototype.measure = function (
-  _measureName,
-  _opt_startMark,
-  _opt_endMark,
-) {};
+Performance.prototype.measure =
+    function(measureName, opt_startMark, opt_endMark) {};
 
 /**
  * @param {string=} opt_measureName
  * @return {undefined}
  */
-Performance.prototype.clearMeasures = function (_opt_measureName) {};
+Performance.prototype.clearMeasures = function(opt_measureName) {};
 
 /** @type {Performance} */
 Window.prototype.performance;
@@ -196,4 +193,4 @@ Window.prototype.performance;
  * @type {!Performance}
  * @suppress {duplicate}
  */
-var _performance;
+var performance;

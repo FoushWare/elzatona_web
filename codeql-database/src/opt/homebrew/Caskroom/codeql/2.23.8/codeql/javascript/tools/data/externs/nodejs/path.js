@@ -42,7 +42,7 @@ var path = {};
 /**
  * @interface
  */
-path.ParsedPath = function () {};
+path.ParsedPath = function() {};
 
 /**
  * @type {string}
@@ -73,57 +73,57 @@ path.ParsedPath.prototype.name;
  * @param {string} p
  * @return {string}
  */
-path.normalize = function (_p) {};
+path.normalize = function(p) {};
 
 /**
  * @param {...*} paths
  * @return {string}
  */
-path.join = function (_paths) {};
+path.join = function(paths) {};
 
 /**
  * @param {...string} paths
  * @return {string}
  */
-path.join = function (_paths) {};
+path.join = function(paths) {};
 
 /**
  * @param {...*} pathSegments
  * @return {string}
  */
-path.resolve = function (_pathSegments) {};
+path.resolve = function(pathSegments) {};
 
 /**
  * @param {string} path
  * @return {boolean}
  */
-_path.isAbsolute = function (_path) {};
+path.isAbsolute = function(path) {};
 
 /**
  * @param {string} from
  * @param {string} to
  * @return {string}
  */
-path.relative = function (_from, _to) {};
+path.relative = function(from, to) {};
 
 /**
  * @param {string} p
  * @return {string}
  */
-path.dirname = function (_p) {};
+path.dirname = function(p) {};
 
 /**
  * @param {string} p
  * @param {string=} ext
  * @return {string}
  */
-path.basename = function (_p, _ext) {};
+path.basename = function(p, ext) {};
 
 /**
  * @param {string} p
  * @return {string}
  */
-path.extname = function (_p) {};
+path.extname = function(p) {};
 
 /**
  * @type {string}
@@ -139,13 +139,13 @@ path.delimiter;
  * @param {string} pathString
  * @return {path.ParsedPath}
  */
-path.parse = function (_pathString) {};
+path.parse = function(pathString) {};
 
 /**
  * @param {path.ParsedPath} pathObject
  * @return {string}
  */
-path.format = function (_pathObject) {};
+path.format = function(pathObject) {};
 
 path.posix = path.posix || {};
 
@@ -153,51 +153,51 @@ path.posix = path.posix || {};
  * @param {string} p
  * @return {string}
  */
-path.posix.normalize = function (_p) {};
+path.posix.normalize = function(p) {};
 
 /**
  * @param {...*} paths
  * @return {string}
  */
-path.posix.join = function (_paths) {};
+path.posix.join = function(paths) {};
 
 /**
  * @param {...*} pathSegments
  * @return {string}
  */
-path.posix.resolve = function (_pathSegments) {};
+path.posix.resolve = function(pathSegments) {};
 
 /**
  * @param {string} p
  * @return {boolean}
  */
-path.posix.isAbsolute = function (_p) {};
+path.posix.isAbsolute = function(p) {};
 
 /**
  * @param {string} from
  * @param {string} to
  * @return {string}
  */
-path.posix.relative = function (_from, _to) {};
+path.posix.relative = function(from, to) {};
 
 /**
  * @param {string} p
  * @return {string}
  */
-path.posix.dirname = function (_p) {};
+path.posix.dirname = function(p) {};
 
 /**
  * @param {string} p
  * @param {string=} ext
  * @return {string}
  */
-path.posix.basename = function (_p, _ext) {};
+path.posix.basename = function(p, ext) {};
 
 /**
  * @param {string} p
  * @return {string}
  */
-path.posix.extname = function (_p) {};
+path.posix.extname = function(p) {};
 
 /**
  * @type {string}
@@ -213,13 +213,14 @@ path.posix.delimiter;
  * @param {string} p
  * @return {path.ParsedPath}
  */
-path.posix.parse = function (_p) {};
+path.posix.parse = function(p) {};
 
 /**
  * @param {path.ParsedPath} pP
  * @return {string}
  */
-path.posix.format = function (_pP) {};
+path.posix.format = function(pP) {};
+
 
 path.win32 = path.win32 || {};
 
@@ -227,51 +228,51 @@ path.win32 = path.win32 || {};
  * @param {string} p
  * @return {string}
  */
-path.win32.normalize = function (_p) {};
+path.win32.normalize = function(p) {};
 
 /**
  * @param {...*} paths
  * @return {string}
  */
-path.win32.join = function (_paths) {};
+path.win32.join = function(paths) {};
 
 /**
  * @param {...*} pathSegments
  * @return {string}
  */
-path.win32.resolve = function (_pathSegments) {};
+path.win32.resolve = function(pathSegments) {};
 
 /**
  * @param {string} p
  * @return {boolean}
  */
-path.win32.isAbsolute = function (_p) {};
+path.win32.isAbsolute = function(p) {};
 
 /**
  * @param {string} from
  * @param {string} to
  * @return {string}
  */
-path.win32.relative = function (_from, _to) {};
+path.win32.relative = function(from, to) {};
 
 /**
  * @param {string} p
  * @return {string}
  */
-path.win32.dirname = function (_p) {};
+path.win32.dirname = function(p) {};
 
 /**
  * @param {string} p
  * @param {string=} ext
  * @return {string}
  */
-path.win32.basename = function (_p, _ext) {};
+path.win32.basename = function(p, ext) {};
 
 /**
  * @param {string} p
  * @return {string}
  */
-path.win32.extname = function (_p) {};
+path.win32.extname = function(p) {};
 
 /**
  * @type {string}
@@ -287,13 +288,14 @@ path.win32.delimiter;
  * @param {string} p
  * @return {path.ParsedPath}
  */
-path.win32.parse = function (_p) {};
+path.win32.parse = function(p) {};
 
 /**
  * @param {path.ParsedPath} pP
  * @return {string}
  */
-path.win32.format = function (_pP) {};
+path.win32.format = function(pP) {};
+
 
 module.exports.ParsedPath = path.ParsedPath;
 
@@ -331,7 +333,7 @@ module.exports.win32 = path.win32;
  * @param {string} path
  * @return {string}
  */
-_path._makeLong = function (_path) {};
+path._makeLong = function(path) {};
 
 module.exports._makeLong = path._makeLong;
 
@@ -340,14 +342,15 @@ module.exports._makeLong = path._makeLong;
  * @param {(function(boolean): *)} callback
  * @return {boolean}
  */
-_path.exists = function (_path, _callback) {};
+path.exists = function(path, callback) {};
 
 /**
  * @param {string} path
  * @return {boolean}
  */
-_path.existsSync = function (_path) {};
+path.existsSync = function(path) {};
 
 module.exports.exists = path.exists;
 
 module.exports.existsSync = path.existsSync;
+

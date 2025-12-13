@@ -237,9 +237,9 @@ MSGesture.prototype.target;
  * @param {number} pointerId
  * @return {undefined}
  */
-MSGesture.prototype.addPointer = function (_pointerId) {};
+MSGesture.prototype.addPointer = function(pointerId) {};
 
-MSGesture.prototype.stop = function () {};
+MSGesture.prototype.stop = function() {};
 
 /**
  * @constructor

@@ -10,7 +10,7 @@ import { createClient } from "@supabase/supabase-js";
 
 const supabaseUrl = process.env["NEXT_PUBLIC_SUPABASE_URL"]!;
 const supabaseServiceRoleKey = process.env["SUPABASE_SERVICE_ROLE_KEY"]!;
-const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
+const _supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
 
 import { Card, CardContent, CardHeader, CardTitle } from "@elzatona/components";
 import { Badge } from "@elzatona/components";
@@ -20,7 +20,12 @@ import {
   GitHubIssuesStats,
   GitHubIssue,
 } from "../types/github-issues";
-import { Github, ExternalLink, AlertCircle, CheckCircle } from "lucide-react";
+import {
+  Github as GitHubIcon,
+  ExternalLink,
+  AlertCircle,
+  CheckCircle,
+} from "lucide-react";
 
 interface GitHubIssuesCardProps {
   className?: string;
@@ -93,7 +98,7 @@ export default function GitHubIssuesCard({ className }: GitHubIssuesCardProps) {
       <Card className={className}>
         <CardHeader>
           <CardTitle className="flex items-center text-sm sm:text-base">
-            <Github className="w-4 h-4 sm:w-5 sm:h-5 text-gray-500 mr-2 flex-shrink-0" />
+            <GitHubIcon className="w-4 h-4 sm:w-5 sm:h-5 text-gray-500 mr-2 flex-shrink-0" />
             <span className="truncate">GitHub Issues</span>
           </CardTitle>
         </CardHeader>
@@ -114,7 +119,7 @@ export default function GitHubIssuesCard({ className }: GitHubIssuesCardProps) {
       <Card className={className}>
         <CardHeader>
           <CardTitle className="flex items-center text-sm sm:text-base">
-            <Github className="w-4 h-4 sm:w-5 sm:h-5 text-gray-500 mr-2 flex-shrink-0" />
+            <GitHubIcon className="w-4 h-4 sm:w-5 sm:h-5 text-gray-500 mr-2 flex-shrink-0" />
             <span className="truncate">GitHub Issues</span>
           </CardTitle>
         </CardHeader>
@@ -134,7 +139,7 @@ export default function GitHubIssuesCard({ className }: GitHubIssuesCardProps) {
     <Card className={className}>
       <CardHeader>
         <CardTitle className="flex items-center text-sm sm:text-base">
-          <Github className="w-4 h-4 sm:w-5 sm:h-5 text-gray-500 mr-2 flex-shrink-0" />
+          <GitHubIcon className="w-4 h-4 sm:w-5 sm:h-5 text-gray-500 mr-2 flex-shrink-0" />
           <span className="truncate">GitHub Issues</span>
         </CardTitle>
       </CardHeader>

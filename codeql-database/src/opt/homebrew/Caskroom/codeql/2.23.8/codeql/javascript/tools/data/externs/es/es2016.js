@@ -14,4 +14,4 @@
  * @return {boolean}
  * @nosideeffects
  */
-Array.prototype.includes = function (_searchElement, _fromIndex) {};
+Array.prototype.includes = function(searchElement, fromIndex) {};

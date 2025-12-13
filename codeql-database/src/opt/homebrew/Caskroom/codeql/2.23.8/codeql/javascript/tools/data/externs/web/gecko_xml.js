@@ -39,7 +39,7 @@ function XMLSerializer() {}
  * @param {Node} subtree
  * @return {string}
  */
-XMLSerializer.prototype.serializeToString = function (_subtree) {};
+XMLSerializer.prototype.serializeToString = function(subtree) {};
 
 /**
  * The subtree rooted by the specified element is serialized to a byte stream
@@ -48,7 +48,7 @@ XMLSerializer.prototype.serializeToString = function (_subtree) {};
  * @param {Node} subtree
  * @return {Object}
  */
-XMLSerializer.prototype.serializeToStream = function (_subtree) {};
+XMLSerializer.prototype.serializeToStream = function(subtree) {};
 
 /**
  * DOMParser is mainly useful for applications and extensions based on Mozilla
@@ -70,4 +70,4 @@ function DOMParser() {}
  * @param {string} type The content type of the string.
  * @return {Document}
  */
-DOMParser.prototype.parseFromString = function (_src, _type) {};
+DOMParser.prototype.parseFromString = function(src, type) {};

@@ -22,7 +22,7 @@ jest.mock("next/link", () => {
 });
 
 // Mock flashcards library
-import * as flashcardsModule from "../../lib/flashcards";
+import * as flashcardsModule from "../../../lib/flashcards";
 
 jest.mock("../../lib/flashcards", () => ({
   loadFlashcards: jest.fn(() => [

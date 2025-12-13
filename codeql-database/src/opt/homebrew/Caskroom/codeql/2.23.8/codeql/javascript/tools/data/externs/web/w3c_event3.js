@@ -34,15 +34,7 @@
  * @param {string} modifiersList
  * @return {undefined}
  */
-KeyboardEvent.prototype.initKeyboardEvent = function (
-  _typeArg,
-  _canBubbleArg,
-  _cancelableArg,
-  _viewArg,
-  _keyIdentifierArg,
-  _keyLocationArg,
-  _modifiersList,
-) {};
+KeyboardEvent.prototype.initKeyboardEvent = function(typeArg, canBubbleArg, cancelableArg, viewArg, keyIdentifierArg, keyLocationArg, modifiersList) {};
 
 /** @type {string} */
 KeyboardEvent.prototype.char;
@@ -69,7 +61,7 @@ MouseEvent.prototype.buttons;
  * @param {string} keyIdentifierArg
  * @return {boolean}
  */
-MouseEvent.prototype.getModifierState = function (_keyIdentifierArg) {};
+MouseEvent.prototype.getModifierState = function(keyIdentifierArg) {};
 
 /** @type {boolean} */
 Event.prototype.defaultPrevented;
@@ -78,4 +70,4 @@ Event.prototype.defaultPrevented;
 Event.prototype.namespaceURI;
 
 /** @return {undefined} */
-Event.prototype.stopImmediatePropagation = function () {};
+Event.prototype.stopImmediatePropagation = function() {};

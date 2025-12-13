@@ -44,7 +44,7 @@ var readline = require("readline");
 /**
  * @interface
  */
-repl.ReplOptions = function () {};
+repl.ReplOptions = function() {};
 
 /**
  * @type {string}
@@ -110,26 +110,26 @@ repl.ReplOptions.prototype.breakEvalOnSigint;
  * @interface
  * @extends {readline.ReadLine}
  */
-repl.REPLServer = function () {};
+repl.REPLServer = function() {};
 
 /**
  * @param {string} keyword
  * @param {(Function|{help: string, action: Function})} cmd
  * @return {void}
  */
-repl.REPLServer.prototype.defineCommand = function (_keyword, _cmd) {};
+repl.REPLServer.prototype.defineCommand = function(keyword, cmd) {};
 
 /**
  * @param {boolean=} preserveCursor
  * @return {void}
  */
-repl.REPLServer.prototype.displayPrompt = function (_preserveCursor) {};
+repl.REPLServer.prototype.displayPrompt = function(preserveCursor) {};
 
 /**
  * @param {repl.ReplOptions} options
  * @return {repl.REPLServer}
  */
-repl.start = function (_options) {};
+repl.start = function(options) {};
 
 module.exports.ReplOptions = repl.ReplOptions;
 
@@ -140,8 +140,10 @@ module.exports.start = repl.start;
 /**
  * @interface
  */
-repl.REPLServer = function () {};
+repl.REPLServer = function() {};
 
 repl.REPLServer.prototype.context;
 
+
 module.exports.REPLServer = repl.REPLServer;
+

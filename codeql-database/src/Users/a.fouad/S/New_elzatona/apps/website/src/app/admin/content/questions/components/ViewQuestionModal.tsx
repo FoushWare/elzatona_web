@@ -46,9 +46,9 @@ const processColorForLightMode = (
 
   if (colorValue.startsWith("#")) {
     const hex = colorValue.substring(1);
-    const r = Number.parseInt(hex.substr(0, 2), 16);
-    const g = Number.parseInt(hex.substr(2, 2), 16);
-    const b = Number.parseInt(hex.substr(4, 2), 16);
+    const r = Number.parseInt(hex.substring(0, 2), 16);
+    const g = Number.parseInt(hex.substring(2, 4), 16);
+    const b = Number.parseInt(hex.substring(4, 6), 16);
     const brightness = (r * 299 + g * 587 + b * 114) / 1000;
 
     if (brightness > 180) {
@@ -81,154 +81,69 @@ const processColorForLightMode = (
   return { shouldReplace, newColor };
 };
 
-// Helper function to format code with proper line breaks and indentation
-const _formatCodeForDisplay = (code: string): string => {
-  if (!code) return "";
-
-  // Convert code to string if it's not already
-  const codeStr = String(code);
-
-  // CRITICAL: Convert \n escape sequences to actual newlines FIRST
-  // The code might come from database as a string with literal "\n" characters
-  // We MUST convert these to actual newline characters before any other processing
-
+// Helper function to normalize line breaks in code
+const normalizeLineBreaks = (code: string): string => {
   // Step 1: Replace literal backslash-n sequences (the two characters: \ and n)
-  // This is the most important step - it converts "\\n" (literal) to "\n" (actual newline)
-  let formatted = codeStr.replace(/\\n/g, "\n");
-
+  let formatted = code.replaceAll(String.raw`\n`, "\n");
   // Step 2: Handle \r\n combinations (escape sequences)
-  formatted = formatted.replace(/\\r\\n/g, "\n");
-
+  formatted = formatted.replaceAll(String.raw`\r\n`, "\n");
   // Step 3: Handle \r escape sequences
-  formatted = formatted.replace(/\\r/g, "\n");
-
+  formatted = formatted.replaceAll(String.raw`\r`, "\n");
   // Step 4: Normalize actual line breaks (Windows, Mac, Unix)
-  formatted = formatted.replace(/\r\n/g, "\n"); // Windows line breaks
-  formatted = formatted.replace(/\r/g, "\n"); // Mac line breaks
-
-  // IMPORTANT: At this point, we have actual \n characters in the string
-  // We must preserve ALL of them - don't collapse or remove any
-
+  formatted = formatted.replaceAll("\r\n", "\n"); // Windows line breaks
+  formatted = formatted.replaceAll("\r", "\n"); // Mac line breaks
   // Remove only leading/trailing whitespace (not newlines)
   formatted = formatted.trim();
-
   // Remove empty lines ONLY at the very start (not all leading newlines)
   while (formatted.startsWith("\n")) {
     formatted = formatted.substring(1);
   }
+  return formatted;
+};
 
-  // Check if code already has proper formatting (multiple lines with indentation)
+// Helper function to check if code has proper structure
+const checkCodeStructure = (formatted: string): boolean => {
   const lines = formatted.split("\n");
   const hasMultipleLines = lines.length > 1;
   const hasIndentation = lines.some(
     (line) => line.trim().length > 0 && /^\s+/.test(line),
   );
-  const hasProperStructure =
+  return (
     hasMultipleLines &&
-    (hasIndentation || lines.filter((l) => l.trim()).length > 3);
+    (hasIndentation || lines.filter((l) => l.trim()).length > 3)
+  );
+};
 
-  // If code already has proper formatting, just normalize indentation
-  // BUT preserve ALL newlines - don't collapse them
-  if (hasProperStructure) {
-    // Preserve existing structure, just normalize indentation
-    const codeLines = formatted.split("\n");
-    let indentLevel = 0;
-    const formattedLines: string[] = [];
-
-    for (let i = 0; i < codeLines.length; i++) {
-      const originalLine = codeLines[i];
-      const trimmed = originalLine.trim();
-
-      // CRITICAL: Preserve empty lines - don't skip them
-      if (!trimmed) {
-        formattedLines.push("");
-        continue;
-      }
-
-      // Decrease indent before closing braces/brackets
-      if (trimmed.match(/^[}\]\)]/)) {
-        indentLevel = Math.max(0, indentLevel - 1);
-      }
-
-      // Add the line with proper indentation
-      formattedLines.push("  ".repeat(indentLevel) + trimmed);
-
-      // Calculate net braces/brackets/parens for this line
-      const openBraces = (trimmed.match(/{/g) || []).length;
-      const closeBraces = (trimmed.match(/}/g) || []).length;
-      const openBrackets = (trimmed.match(/\[/g) || []).length;
-      const closeBrackets = (trimmed.match(/\]/g) || []).length;
-      const openParens = (trimmed.match(/\(/g) || []).length;
-      const closeParens = (trimmed.match(/\)/g) || []).length;
-
-      // Increase indent after opening braces/brackets/parens
-      const netIncrease = Math.max(
-        openBraces - closeBraces,
-        openBrackets - closeBrackets,
-        openParens - closeParens,
-      );
-
-      if (netIncrease > 0) {
-        indentLevel += netIncrease;
-      }
-    }
-
-    // Join with newlines - preserve ALL newlines
-    let result = formattedLines.join("\n");
-    // Only limit excessive empty lines (3+ consecutive), but preserve single and double newlines
-    result = result.replace(/\n{4,}/g, "\n\n\n"); // Max 3 consecutive newlines
-    return result.trimEnd();
-  }
-
-  // If code is on a single line or poorly formatted, try to format it intelligently
-  // Add line breaks after semicolons (but not in strings)
-  formatted = formatted.replace(/;(?![^"']*["'])/g, ";\n");
-
-  // Add line breaks after opening braces
-  formatted = formatted.replace(/\{\s*/g, "{\n");
-
-  // Add line breaks before closing braces
-  formatted = formatted.replace(/\s*\}/g, "\n}");
-
-  // Add line breaks after closing braces followed by non-whitespace
-  formatted = formatted.replace(/\}\s*([^\s}])/g, "}\n\n$1");
-
-  // Clean up multiple consecutive line breaks (max 2)
-  formatted = formatted.replace(/\n{3,}/g, "\n\n");
-
-  // Now apply indentation formatting
-  const codeLines = formatted.split("\n").map((line) => line.trimEnd());
+// Helper function to format code with indentation
+const formatWithIndentation = (codeLines: string[]): string => {
   let indentLevel = 0;
   const formattedLines: string[] = [];
 
   for (let i = 0; i < codeLines.length; i++) {
-    const line = codeLines[i].trim();
-    if (!line) {
-      // Only add empty line if previous line wasn't empty
-      if (
-        formattedLines.length > 0 &&
-        formattedLines[formattedLines.length - 1] !== ""
-      ) {
-        formattedLines.push("");
-      }
+    const originalLine = codeLines[i];
+    const trimmed = originalLine.trim();
+
+    // CRITICAL: Preserve empty lines - don't skip them
+    if (!trimmed) {
+      formattedLines.push("");
       continue;
     }
 
     // Decrease indent before closing braces/brackets
-    if (line.match(/^[}\]\)]/)) {
+    if (trimmed.match(/^[}\]\)]/)) {
       indentLevel = Math.max(0, indentLevel - 1);
     }
 
     // Add the line with proper indentation
-    formattedLines.push("  ".repeat(indentLevel) + line);
+    formattedLines.push("  ".repeat(indentLevel) + trimmed);
 
     // Calculate net braces/brackets/parens for this line
-    const openBraces = (line.match(/{/g) || []).length;
-    const closeBraces = (line.match(/}/g) || []).length;
-    const openBrackets = (line.match(/\[/g) || []).length;
-    const closeBrackets = (line.match(/\]/g) || []).length;
-    const openParens = (line.match(/\(/g) || []).length;
-    const closeParens = (line.match(/\)/g) || []).length;
+    const openBraces = (trimmed.match(/{/g) || []).length;
+    const closeBraces = (trimmed.match(/}/g) || []).length;
+    const openBrackets = (trimmed.match(/\[/g) || []).length;
+    const closeBrackets = (trimmed.match(/\]/g) || []).length;
+    const openParens = (trimmed.match(/\(/g) || []).length;
+    const closeParens = (trimmed.match(/\)/g) || []).length;
 
     // Increase indent after opening braces/brackets/parens
     const netIncrease = Math.max(
@@ -242,9 +157,58 @@ const _formatCodeForDisplay = (code: string): string => {
     }
   }
 
-  // Clean up final result
-  let result = formattedLines.join("\n");
-  result = result.replace(/\n{3,}/g, "\n\n"); // Max 2 consecutive newlines
+  return formattedLines.join("\n");
+};
+
+// Helper function to add line breaks for single-line code
+const addLineBreaks = (formatted: string): string => {
+  // Add line breaks after semicolons (but not in strings)
+  // NOSONAR S7781: replaceAll() cannot be used with regex patterns that require negative lookahead
+  formatted = formatted.replaceAll(/;(?![^"']*["'])/g, ";\n");
+  // Add line breaks after opening braces
+  formatted = formatted.replaceAll(/\{\s*/g, "{\n");
+  // Add line breaks before closing braces
+  formatted = formatted.replaceAll(/\s*\}/g, "\n}");
+  // Add line breaks after closing braces followed by non-whitespace
+  // NOSONAR S7781: replaceAll() cannot be used with regex patterns that require capture groups
+  formatted = formatted.replaceAll(/\}\s*([^\s}])/g, "}\n\n$1");
+  // Clean up multiple consecutive line breaks (max 2)
+  formatted = formatted.replaceAll(/\n{3,}/g, "\n\n");
+  return formatted;
+};
+
+// Helper function to format code with proper line breaks and indentation
+const _formatCodeForDisplay = (code: string): string => {
+  if (!code) return "";
+
+  // Convert code to string if it's not already
+  const codeStr = String(code);
+
+  // CRITICAL: Convert \n escape sequences to actual newlines FIRST
+  // The code might come from database as a string with literal "\n" characters
+  // We MUST convert these to actual newline characters before any other processing
+  let formatted = normalizeLineBreaks(codeStr);
+
+  // Check if code already has proper formatting (multiple lines with indentation)
+  const hasProperStructure = checkCodeStructure(formatted);
+
+  // If code already has proper formatting, just normalize indentation
+  // BUT preserve ALL newlines - don't collapse them
+  if (hasProperStructure) {
+    const codeLines = formatted.split("\n");
+    let result = formatWithIndentation(codeLines);
+    // Only limit excessive empty lines (3+ consecutive), but preserve single and double newlines
+    result = result.replaceAll(/\n{4,}/g, "\n\n\n"); // Max 3 consecutive newlines
+    return result.trimEnd();
+  }
+
+  // If code is on a single line or poorly formatted, try to format it intelligently
+  formatted = addLineBreaks(formatted);
+
+  // Now apply indentation formatting
+  const codeLines = formatted.split("\n").map((line) => line.trimEnd());
+  let result = formatWithIndentation(codeLines);
+  result = result.replaceAll(/\n{3,}/g, "\n\n"); // Max 2 consecutive newlines
   return result.trimEnd();
 };
 
@@ -365,7 +329,7 @@ export function ViewQuestionModal({
 
       // Final check: ensure no consecutive newlines remain
       if (codeWithNewlines.includes("\n\n")) {
-        codeWithNewlines = codeWithNewlines.replace(/\n{2,}/g, "\n");
+        codeWithNewlines = codeWithNewlines.replaceAll(/\n{2,}/g, "\n");
       }
 
       // Detect language
@@ -373,8 +337,8 @@ export function ViewQuestionModal({
 
       // Detect theme based on system preference
       const prefersDark =
-        typeof globalThis.window !== "undefined" &&
-        globalThis.window.matchMedia("(prefers-color-scheme: dark)").matches;
+        globalThis.window?.matchMedia("(prefers-color-scheme: dark)").matches ??
+        false;
       const themeName = prefersDark ? "github-dark" : "github-light";
 
       let html = shikiHighlighter.codeToHtml(codeWithNewlines, {

@@ -50,42 +50,42 @@ buffer.INSPECT_MAX_BYTES;
  * @return {Buffer}
  * @constructor
  */
-var BuffType = function (_str, _encoding) {};
+var BuffType = function(str, encoding) {};
 
 /**
  * @param {number} size
  * @return {Buffer}
  * @constructor
  */
-var BuffType = function (_size) {};
+var BuffType = function(size) {};
 
 /**
  * @param {Uint8Array} array
  * @return {Buffer}
  * @constructor
  */
-var BuffType = function (_array) {};
+var BuffType = function(array) {};
 
 /**
  * @param {ArrayBuffer} arrayBuffer
  * @return {Buffer}
  * @constructor
  */
-var BuffType = function (_arrayBuffer) {};
+var BuffType = function(arrayBuffer) {};
 
 /**
  * @param {Array<*>} array
  * @return {Buffer}
  * @constructor
  */
-var BuffType = function (_array) {};
+var BuffType = function(array) {};
 
 /**
  * @param {Buffer} buffer
  * @return {Buffer}
  * @constructor
  */
-var BuffType = function (_buffer) {};
+var BuffType = function(buffer) {};
 
 /**
  * @type {Buffer}
@@ -137,34 +137,35 @@ BuffType.allocUnsafe;
  */
 BuffType.allocUnsafeSlow;
 
+
 /**
  * @param {string} str
  * @param {string=} encoding
  * @return {Buffer}
  * @constructor
  */
-var SlowBuffType = function (_str, _encoding) {};
+var SlowBuffType = function(str, encoding) {};
 
 /**
  * @param {number} size
  * @return {Buffer}
  * @constructor
  */
-var SlowBuffType = function (_size) {};
+var SlowBuffType = function(size) {};
 
 /**
  * @param {Uint8Array} size
  * @return {Buffer}
  * @constructor
  */
-var SlowBuffType = function (_size) {};
+var SlowBuffType = function(size) {};
 
 /**
  * @param {Array<*>} array
  * @return {Buffer}
  * @constructor
  */
-var SlowBuffType = function (_array) {};
+var SlowBuffType = function(array) {};
 
 /**
  * @type {Buffer}
@@ -186,8 +187,10 @@ SlowBuffType.byteLength;
  */
 SlowBuffType.concat;
 
+
 module.exports.Buffer = BuffType;
 
 module.exports.SlowBuffer = SlowBuffType;
 
 module.exports.INSPECT_MAX_BYTES = buffer.INSPECT_MAX_BYTES;
+

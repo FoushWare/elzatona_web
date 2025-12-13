@@ -43,25 +43,25 @@ var punycode = {};
  * @param {string} string
  * @return {string}
  */
-punycode.decode = function (_string) {};
+punycode.decode = function(string) {};
 
 /**
  * @param {string} string
  * @return {string}
  */
-punycode.encode = function (_string) {};
+punycode.encode = function(string) {};
 
 /**
  * @param {string} domain
  * @return {string}
  */
-punycode.toUnicode = function (_domain) {};
+punycode.toUnicode = function(domain) {};
 
 /**
  * @param {string} domain
  * @return {string}
  */
-punycode.toASCII = function (_domain) {};
+punycode.toASCII = function(domain) {};
 
 /**
  * @type {punycode.ucs2}
@@ -77,13 +77,13 @@ function ucs2() {}
  * @param {string} string
  * @return {Array<number>}
  */
-ucs2.prototype.decode = function (_string) {};
+ucs2.prototype.decode = function(string) {};
 
 /**
  * @param {Array<number>} codePoints
  * @return {string}
  */
-ucs2.prototype.encode = function (_codePoints) {};
+ucs2.prototype.encode = function(codePoints) {};
 
 /**
  * @type {*}
@@ -101,3 +101,4 @@ module.exports.toASCII = punycode.toASCII;
 module.exports.ucs2 = punycode.ucs2;
 
 module.exports.version = punycode.version;
+

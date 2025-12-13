@@ -51,4 +51,4 @@ function TextEncoder(utfLabel) {}
  * @param {string=} input
  * @return {!Uint8Array}
  */
-TextEncoder.prototype.encode = function (input) {};
+TextEncoder.prototype.encode = function(input) {};

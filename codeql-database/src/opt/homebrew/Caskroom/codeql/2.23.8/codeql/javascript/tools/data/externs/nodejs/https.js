@@ -46,7 +46,7 @@ var http = require("http");
 /**
  * @interface
  */
-https.ServerOptions = function () {};
+https.ServerOptions = function() {};
 
 /**
  * @type {*}
@@ -112,7 +112,7 @@ https.ServerOptions.prototype.SNICallback;
  * @interface
  * @extends {http.RequestOptions}
  */
-https.RequestOptions = function () {};
+https.RequestOptions = function() {};
 
 /**
  * @type {*}
@@ -158,13 +158,13 @@ https.RequestOptions.prototype.secureProtocol;
  * @interface
  * @extends {http.Agent}
  */
-https.Agent = function () {};
+https.Agent = function() {};
 
 /**
  * @interface
  * @extends {http.AgentOptions}
  */
-https.AgentOptions = function () {};
+https.AgentOptions = function() {};
 
 /**
  * @type {*}
@@ -220,28 +220,28 @@ https.Agent;
  * @interface
  * @extends {tls.Server}
  */
-https.Server = function () {};
+https.Server = function() {};
 
 /**
  * @param {https.ServerOptions} options
  * @param {Function=} requestListener
  * @return {https.Server}
  */
-https.createServer = function (_options, _requestListener) {};
+https.createServer = function(options, requestListener) {};
 
 /**
  * @param {https.RequestOptions} options
  * @param {(function(http.IncomingMessage): void)=} callback
  * @return {http.ClientRequest}
  */
-https.request = function (_options, _callback) {};
+https.request = function(options, callback) {};
 
 /**
  * @param {https.RequestOptions} options
  * @param {(function(http.IncomingMessage): void)=} callback
  * @return {http.ClientRequest}
  */
-https.get = function (_options, _callback) {};
+https.get = function(options, callback) {};
 
 /**
  * @type {https.Agent}
@@ -267,3 +267,4 @@ module.exports.request = https.request;
 module.exports.get = https.get;
 
 module.exports.globalAgent = https.globalAgent;
+

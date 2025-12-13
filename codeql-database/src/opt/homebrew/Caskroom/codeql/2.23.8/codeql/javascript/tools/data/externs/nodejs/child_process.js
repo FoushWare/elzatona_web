@@ -45,7 +45,7 @@ var events = require("events");
  * @interface
  * @extends {events.EventEmitter}
  */
-child_process.ChildProcess = function () {};
+child_process.ChildProcess = function() {};
 
 /**
  * @type {internal.Writable}
@@ -76,14 +76,14 @@ child_process.ChildProcess.prototype.pid;
  * @param {string=} signal
  * @return {void}
  */
-child_process.ChildProcess.prototype.kill = function (_signal) {};
+child_process.ChildProcess.prototype.kill = function(signal) {};
 
 /**
  * @param {*} message
  * @param {*=} sendHandle
  * @return {boolean}
  */
-child_process.ChildProcess.prototype.send = function (_message, _sendHandle) {};
+child_process.ChildProcess.prototype.send = function(message, sendHandle) {};
 
 /**
  * @type {boolean}
@@ -93,22 +93,22 @@ child_process.ChildProcess.prototype.connected;
 /**
  * @return {void}
  */
-child_process.ChildProcess.prototype.disconnect = function () {};
+child_process.ChildProcess.prototype.disconnect = function() {};
 
 /**
  * @return {void}
  */
-child_process.ChildProcess.prototype.unref = function () {};
+child_process.ChildProcess.prototype.unref = function() {};
 
 /**
  * @return {void}
  */
-child_process.ChildProcess.prototype.ref = function () {};
+child_process.ChildProcess.prototype.ref = function() {};
 
 /**
  * @interface
  */
-child_process.SpawnOptions = function () {};
+child_process.SpawnOptions = function() {};
 
 /**
  * @type {string}
@@ -151,12 +151,12 @@ child_process.SpawnOptions.prototype.shell;
  * @param {child_process.SpawnOptions=} options
  * @return {child_process.ChildProcess}
  */
-child_process.spawn = function (_command, _args, _options) {};
+child_process.spawn = function(command, args, options) {};
 
 /**
  * @interface
  */
-child_process.ExecOptions = function () {};
+child_process.ExecOptions = function() {};
 
 /**
  * @type {string}
@@ -202,7 +202,7 @@ child_process.ExecOptions.prototype.gid;
  * @interface
  * @extends {child_process.ExecOptions}
  */
-child_process.ExecOptionsWithStringEncoding = function () {};
+child_process.ExecOptionsWithStringEncoding = function() {};
 
 /**
  * @type {(string)}
@@ -213,7 +213,7 @@ child_process.ExecOptionsWithStringEncoding.prototype.encoding;
  * @interface
  * @extends {child_process.ExecOptions}
  */
-child_process.ExecOptionsWithBufferEncoding = function () {};
+child_process.ExecOptionsWithBufferEncoding = function() {};
 
 /**
  * @type {string}
@@ -225,7 +225,7 @@ child_process.ExecOptionsWithBufferEncoding.prototype.encoding;
  * @param {(function(Error, string, string): void)=} callback
  * @return {child_process.ChildProcess}
  */
-child_process.exec = function (_command, _callback) {};
+child_process.exec = function(command, callback) {};
 
 /**
  * @param {string} command
@@ -233,7 +233,7 @@ child_process.exec = function (_command, _callback) {};
  * @param {(function(Error, string, string): void)=} callback
  * @return {child_process.ChildProcess}
  */
-child_process.exec = function (_command, _options, _callback) {};
+child_process.exec = function(command, options, callback) {};
 
 /**
  * @param {string} command
@@ -241,7 +241,7 @@ child_process.exec = function (_command, _options, _callback) {};
  * @param {(function(Error, Buffer, Buffer): void)=} callback
  * @return {child_process.ChildProcess}
  */
-child_process.exec = function (_command, _options, _callback) {};
+child_process.exec = function(command, options, callback) {};
 
 /**
  * @param {string} command
@@ -249,12 +249,12 @@ child_process.exec = function (_command, _options, _callback) {};
  * @param {(function(Error, string, string): void)=} callback
  * @return {child_process.ChildProcess}
  */
-child_process.exec = function (_command, _options, _callback) {};
+child_process.exec = function(command, options, callback) {};
 
 /**
  * @interface
  */
-child_process.ExecFileOptions = function () {};
+child_process.ExecFileOptions = function() {};
 
 /**
  * @type {string}
@@ -295,7 +295,7 @@ child_process.ExecFileOptions.prototype.gid;
  * @interface
  * @extends {child_process.ExecFileOptions}
  */
-child_process.ExecFileOptionsWithStringEncoding = function () {};
+child_process.ExecFileOptionsWithStringEncoding = function() {};
 
 /**
  * @type {(string)}
@@ -306,7 +306,7 @@ child_process.ExecFileOptionsWithStringEncoding.prototype.encoding;
  * @interface
  * @extends {child_process.ExecFileOptions}
  */
-child_process.ExecFileOptionsWithBufferEncoding = function () {};
+child_process.ExecFileOptionsWithBufferEncoding = function() {};
 
 /**
  * @type {string}
@@ -318,7 +318,7 @@ child_process.ExecFileOptionsWithBufferEncoding.prototype.encoding;
  * @param {(function(Error, string, string): void)=} callback
  * @return {child_process.ChildProcess}
  */
-child_process.execFile = function (_file, _callback) {};
+child_process.execFile = function(file, callback) {};
 
 /**
  * @param {string} file
@@ -326,7 +326,7 @@ child_process.execFile = function (_file, _callback) {};
  * @param {(function(Error, string, string): void)=} callback
  * @return {child_process.ChildProcess}
  */
-child_process.execFile = function (_file, _options, _callback) {};
+child_process.execFile = function(file, options, callback) {};
 
 /**
  * @param {string} file
@@ -334,7 +334,7 @@ child_process.execFile = function (_file, _options, _callback) {};
  * @param {(function(Error, Buffer, Buffer): void)=} callback
  * @return {child_process.ChildProcess}
  */
-child_process.execFile = function (_file, _options, _callback) {};
+child_process.execFile = function(file, options, callback) {};
 
 /**
  * @param {string} file
@@ -342,7 +342,7 @@ child_process.execFile = function (_file, _options, _callback) {};
  * @param {(function(Error, string, string): void)=} callback
  * @return {child_process.ChildProcess}
  */
-child_process.execFile = function (_file, _options, _callback) {};
+child_process.execFile = function(file, options, callback) {};
 
 /**
  * @param {string} file
@@ -350,7 +350,7 @@ child_process.execFile = function (_file, _options, _callback) {};
  * @param {(function(Error, string, string): void)=} callback
  * @return {child_process.ChildProcess}
  */
-child_process.execFile = function (_file, _args, _callback) {};
+child_process.execFile = function(file, args, callback) {};
 
 /**
  * @param {string} file
@@ -359,7 +359,7 @@ child_process.execFile = function (_file, _args, _callback) {};
  * @param {(function(Error, string, string): void)=} callback
  * @return {child_process.ChildProcess}
  */
-child_process.execFile = function (_file, _args, _options, _callback) {};
+child_process.execFile = function(file, args, options, callback) {};
 
 /**
  * @param {string} file
@@ -368,7 +368,7 @@ child_process.execFile = function (_file, _args, _options, _callback) {};
  * @param {(function(Error, Buffer, Buffer): void)=} callback
  * @return {child_process.ChildProcess}
  */
-child_process.execFile = function (_file, _args, _options, _callback) {};
+child_process.execFile = function(file, args, options, callback) {};
 
 /**
  * @param {string} file
@@ -377,12 +377,12 @@ child_process.execFile = function (_file, _args, _options, _callback) {};
  * @param {(function(Error, string, string): void)=} callback
  * @return {child_process.ChildProcess}
  */
-child_process.execFile = function (_file, _args, _options, _callback) {};
+child_process.execFile = function(file, args, options, callback) {};
 
 /**
  * @interface
  */
-child_process.ForkOptions = function () {};
+child_process.ForkOptions = function() {};
 
 /**
  * @type {string}
@@ -425,12 +425,12 @@ child_process.ForkOptions.prototype.gid;
  * @param {child_process.ForkOptions=} options
  * @return {child_process.ChildProcess}
  */
-child_process.fork = function (_modulePath, _args, _options) {};
+child_process.fork = function(modulePath, args, options) {};
 
 /**
  * @interface
  */
-child_process.SpawnSyncOptions = function () {};
+child_process.SpawnSyncOptions = function() {};
 
 /**
  * @type {string}
@@ -491,7 +491,7 @@ child_process.SpawnSyncOptions.prototype.shell;
  * @interface
  * @extends {child_process.SpawnSyncOptions}
  */
-child_process.SpawnSyncOptionsWithStringEncoding = function () {};
+child_process.SpawnSyncOptionsWithStringEncoding = function() {};
 
 /**
  * @type {(string)}
@@ -502,7 +502,7 @@ child_process.SpawnSyncOptionsWithStringEncoding.prototype.encoding;
  * @interface
  * @extends {child_process.SpawnSyncOptions}
  */
-child_process.SpawnSyncOptionsWithBufferEncoding = function () {};
+child_process.SpawnSyncOptionsWithBufferEncoding = function() {};
 
 /**
  * @type {string}
@@ -513,7 +513,7 @@ child_process.SpawnSyncOptionsWithBufferEncoding.prototype.encoding;
  * @interface
  * @template T
  */
-child_process.SpawnSyncReturns = function () {};
+child_process.SpawnSyncReturns = function() {};
 
 /**
  * @type {number}
@@ -554,28 +554,28 @@ child_process.SpawnSyncReturns.prototype.error;
  * @param {string} command
  * @return {child_process.SpawnSyncReturns<Buffer>}
  */
-child_process.spawnSync = function (_command) {};
+child_process.spawnSync = function(command) {};
 
 /**
  * @param {string} command
  * @param {child_process.SpawnSyncOptionsWithStringEncoding=} options
  * @return {child_process.SpawnSyncReturns<string>}
  */
-child_process.spawnSync = function (_command, _options) {};
+child_process.spawnSync = function(command, options) {};
 
 /**
  * @param {string} command
  * @param {child_process.SpawnSyncOptionsWithBufferEncoding=} options
  * @return {child_process.SpawnSyncReturns<Buffer>}
  */
-child_process.spawnSync = function (_command, _options) {};
+child_process.spawnSync = function(command, options) {};
 
 /**
  * @param {string} command
  * @param {child_process.SpawnSyncOptions=} options
  * @return {child_process.SpawnSyncReturns<Buffer>}
  */
-child_process.spawnSync = function (_command, _options) {};
+child_process.spawnSync = function(command, options) {};
 
 /**
  * @param {string} command
@@ -583,7 +583,7 @@ child_process.spawnSync = function (_command, _options) {};
  * @param {child_process.SpawnSyncOptionsWithStringEncoding=} options
  * @return {child_process.SpawnSyncReturns<string>}
  */
-child_process.spawnSync = function (_command, _args, _options) {};
+child_process.spawnSync = function(command, args, options) {};
 
 /**
  * @param {string} command
@@ -591,7 +591,7 @@ child_process.spawnSync = function (_command, _args, _options) {};
  * @param {child_process.SpawnSyncOptionsWithBufferEncoding=} options
  * @return {child_process.SpawnSyncReturns<Buffer>}
  */
-child_process.spawnSync = function (_command, _args, _options) {};
+child_process.spawnSync = function(command, args, options) {};
 
 /**
  * @param {string} command
@@ -599,12 +599,12 @@ child_process.spawnSync = function (_command, _args, _options) {};
  * @param {child_process.SpawnSyncOptions=} options
  * @return {child_process.SpawnSyncReturns<Buffer>}
  */
-child_process.spawnSync = function (_command, _args, _options) {};
+child_process.spawnSync = function(command, args, options) {};
 
 /**
  * @interface
  */
-child_process.ExecSyncOptions = function () {};
+child_process.ExecSyncOptions = function() {};
 
 /**
  * @type {string}
@@ -665,7 +665,7 @@ child_process.ExecSyncOptions.prototype.encoding;
  * @interface
  * @extends {child_process.ExecSyncOptions}
  */
-child_process.ExecSyncOptionsWithStringEncoding = function () {};
+child_process.ExecSyncOptionsWithStringEncoding = function() {};
 
 /**
  * @type {(string)}
@@ -676,7 +676,7 @@ child_process.ExecSyncOptionsWithStringEncoding.prototype.encoding;
  * @interface
  * @extends {child_process.ExecSyncOptions}
  */
-child_process.ExecSyncOptionsWithBufferEncoding = function () {};
+child_process.ExecSyncOptionsWithBufferEncoding = function() {};
 
 /**
  * @type {string}
@@ -687,33 +687,33 @@ child_process.ExecSyncOptionsWithBufferEncoding.prototype.encoding;
  * @param {string} command
  * @return {Buffer}
  */
-child_process.execSync = function (_command) {};
+child_process.execSync = function(command) {};
 
 /**
  * @param {string} command
  * @param {child_process.ExecSyncOptionsWithStringEncoding=} options
  * @return {string}
  */
-child_process.execSync = function (_command, _options) {};
+child_process.execSync = function(command, options) {};
 
 /**
  * @param {string} command
  * @param {child_process.ExecSyncOptionsWithBufferEncoding=} options
  * @return {Buffer}
  */
-child_process.execSync = function (_command, _options) {};
+child_process.execSync = function(command, options) {};
 
 /**
  * @param {string} command
  * @param {child_process.ExecSyncOptions=} options
  * @return {Buffer}
  */
-child_process.execSync = function (_command, _options) {};
+child_process.execSync = function(command, options) {};
 
 /**
  * @interface
  */
-child_process.ExecFileSyncOptions = function () {};
+child_process.ExecFileSyncOptions = function() {};
 
 /**
  * @type {string}
@@ -769,7 +769,7 @@ child_process.ExecFileSyncOptions.prototype.encoding;
  * @interface
  * @extends {child_process.ExecFileSyncOptions}
  */
-child_process.ExecFileSyncOptionsWithStringEncoding = function () {};
+child_process.ExecFileSyncOptionsWithStringEncoding = function() {};
 
 /**
  * @type {(string)}
@@ -780,7 +780,7 @@ child_process.ExecFileSyncOptionsWithStringEncoding.prototype.encoding;
  * @interface
  * @extends {child_process.ExecFileSyncOptions}
  */
-child_process.ExecFileSyncOptionsWithBufferEncoding = function () {};
+child_process.ExecFileSyncOptionsWithBufferEncoding = function() {};
 
 /**
  * @type {string}
@@ -791,28 +791,28 @@ child_process.ExecFileSyncOptionsWithBufferEncoding.prototype.encoding;
  * @param {string} command
  * @return {Buffer}
  */
-child_process.execFileSync = function (_command) {};
+child_process.execFileSync = function(command) {};
 
 /**
  * @param {string} command
  * @param {child_process.ExecFileSyncOptionsWithStringEncoding=} options
  * @return {string}
  */
-child_process.execFileSync = function (_command, _options) {};
+child_process.execFileSync = function(command, options) {};
 
 /**
  * @param {string} command
  * @param {child_process.ExecFileSyncOptionsWithBufferEncoding=} options
  * @return {Buffer}
  */
-child_process.execFileSync = function (_command, _options) {};
+child_process.execFileSync = function(command, options) {};
 
 /**
  * @param {string} command
  * @param {child_process.ExecFileSyncOptions=} options
  * @return {Buffer}
  */
-child_process.execFileSync = function (_command, _options) {};
+child_process.execFileSync = function(command, options) {};
 
 /**
  * @param {string} command
@@ -820,7 +820,7 @@ child_process.execFileSync = function (_command, _options) {};
  * @param {child_process.ExecFileSyncOptionsWithStringEncoding=} options
  * @return {string}
  */
-child_process.execFileSync = function (_command, _args, _options) {};
+child_process.execFileSync = function(command, args, options) {};
 
 /**
  * @param {string} command
@@ -828,7 +828,7 @@ child_process.execFileSync = function (_command, _args, _options) {};
  * @param {child_process.ExecFileSyncOptionsWithBufferEncoding=} options
  * @return {Buffer}
  */
-child_process.execFileSync = function (_command, _args, _options) {};
+child_process.execFileSync = function(command, args, options) {};
 
 /**
  * @param {string} command
@@ -836,7 +836,7 @@ child_process.execFileSync = function (_command, _args, _options) {};
  * @param {child_process.ExecFileSyncOptions=} options
  * @return {Buffer}
  */
-child_process.execFileSync = function (_command, _args, _options) {};
+child_process.execFileSync = function(command, args, options) {};
 
 module.exports.ChildProcess = child_process.ChildProcess;
 
@@ -846,11 +846,9 @@ module.exports.spawn = child_process.spawn;
 
 module.exports.ExecOptions = child_process.ExecOptions;
 
-module.exports.ExecOptionsWithStringEncoding =
-  child_process.ExecOptionsWithStringEncoding;
+module.exports.ExecOptionsWithStringEncoding = child_process.ExecOptionsWithStringEncoding;
 
-module.exports.ExecOptionsWithBufferEncoding =
-  child_process.ExecOptionsWithBufferEncoding;
+module.exports.ExecOptionsWithBufferEncoding = child_process.ExecOptionsWithBufferEncoding;
 
 module.exports.exec = child_process.exec;
 
@@ -862,11 +860,9 @@ module.exports.exec = child_process.exec;
 
 module.exports.ExecFileOptions = child_process.ExecFileOptions;
 
-module.exports.ExecFileOptionsWithStringEncoding =
-  child_process.ExecFileOptionsWithStringEncoding;
+module.exports.ExecFileOptionsWithStringEncoding = child_process.ExecFileOptionsWithStringEncoding;
 
-module.exports.ExecFileOptionsWithBufferEncoding =
-  child_process.ExecFileOptionsWithBufferEncoding;
+module.exports.ExecFileOptionsWithBufferEncoding = child_process.ExecFileOptionsWithBufferEncoding;
 
 module.exports.execFile = child_process.execFile;
 
@@ -890,11 +886,9 @@ module.exports.fork = child_process.fork;
 
 module.exports.SpawnSyncOptions = child_process.SpawnSyncOptions;
 
-module.exports.SpawnSyncOptionsWithStringEncoding =
-  child_process.SpawnSyncOptionsWithStringEncoding;
+module.exports.SpawnSyncOptionsWithStringEncoding = child_process.SpawnSyncOptionsWithStringEncoding;
 
-module.exports.SpawnSyncOptionsWithBufferEncoding =
-  child_process.SpawnSyncOptionsWithBufferEncoding;
+module.exports.SpawnSyncOptionsWithBufferEncoding = child_process.SpawnSyncOptionsWithBufferEncoding;
 
 module.exports.SpawnSyncReturns = child_process.SpawnSyncReturns;
 
@@ -914,11 +908,9 @@ module.exports.spawnSync = child_process.spawnSync;
 
 module.exports.ExecSyncOptions = child_process.ExecSyncOptions;
 
-module.exports.ExecSyncOptionsWithStringEncoding =
-  child_process.ExecSyncOptionsWithStringEncoding;
+module.exports.ExecSyncOptionsWithStringEncoding = child_process.ExecSyncOptionsWithStringEncoding;
 
-module.exports.ExecSyncOptionsWithBufferEncoding =
-  child_process.ExecSyncOptionsWithBufferEncoding;
+module.exports.ExecSyncOptionsWithBufferEncoding = child_process.ExecSyncOptionsWithBufferEncoding;
 
 module.exports.execSync = child_process.execSync;
 
@@ -930,11 +922,9 @@ module.exports.execSync = child_process.execSync;
 
 module.exports.ExecFileSyncOptions = child_process.ExecFileSyncOptions;
 
-module.exports.ExecFileSyncOptionsWithStringEncoding =
-  child_process.ExecFileSyncOptionsWithStringEncoding;
+module.exports.ExecFileSyncOptionsWithStringEncoding = child_process.ExecFileSyncOptionsWithStringEncoding;
 
-module.exports.ExecFileSyncOptionsWithBufferEncoding =
-  child_process.ExecFileSyncOptionsWithBufferEncoding;
+module.exports.ExecFileSyncOptionsWithBufferEncoding = child_process.ExecFileSyncOptionsWithBufferEncoding;
 
 module.exports.execFileSync = child_process.execFileSync;
 
@@ -949,3 +939,4 @@ module.exports.execFileSync = child_process.execFileSync;
 module.exports.execFileSync = child_process.execFileSync;
 
 module.exports.execFileSync = child_process.execFileSync;
+

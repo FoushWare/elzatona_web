@@ -34,7 +34,7 @@
  * @constructor
  * @extends {HTMLElement}
  */
-function _HTMLSpanElement() {}
+function HTMLSpanElement() {}
 
 /**
  * @see https://developer.mozilla.org/en/Components_object
@@ -95,7 +95,7 @@ Window.prototype.fullScreen;
  * @return {!Promise<!BatteryManager>}
  * @see http://www.w3.org/TR/battery-status/
  */
-Navigator.prototype.getBattery = function () {};
+Navigator.prototype.getBattery = function() {};
 
 /**
  * @see https://developer.mozilla.org/en/DOM/Storage#globalStorage
@@ -107,7 +107,7 @@ Window.prototype.globalStorage;
  * @suppress {duplicate}
  * @see https://developer.mozilla.org/en/DOM/window.history
  */
-var _history;
+var history;
 
 /**
  * Returns the number of frames (either frame or iframe elements) in the
@@ -228,7 +228,7 @@ Window.prototype.window;
  * @see https://developer.mozilla.org/en/DOM/window.alert
  * @return {undefined}
  */
-Window.prototype.alert = function (_message) {};
+Window.prototype.alert = function(message) {};
 
 /**
  * Decodes a string of data which has been encoded using base-64 encoding.
@@ -238,19 +238,19 @@ Window.prototype.alert = function (_message) {};
  * @see https://developer.mozilla.org/en/DOM/window.atob
  * @nosideeffects
  */
-function _atob(_encodedData) {}
+function atob(encodedData) {}
 
 /**
  * @see https://developer.mozilla.org/en/DOM/window.back
  * @return {undefined}
  */
-Window.prototype.back = function () {};
+Window.prototype.back = function() {};
 
 /**
  * @see https://developer.mozilla.org/en/DOM/window.blur
  * @return {undefined}
  */
-Window.prototype.blur = function () {};
+Window.prototype.blur = function() {};
 
 /**
  * @param {string} stringToEncode
@@ -258,7 +258,7 @@ Window.prototype.blur = function () {};
  * @see https://developer.mozilla.org/en/DOM/window.btoa
  * @nosideeffects
  */
-function _btoa(_stringToEncode) {}
+function btoa(stringToEncode) {}
 
 /** @deprecated */
 Window.prototype.captureEvents;
@@ -267,7 +267,7 @@ Window.prototype.captureEvents;
  * @see https://developer.mozilla.org/en/DOM/window.close
  * @return {undefined}
  */
-Window.prototype.close = function () {};
+Window.prototype.close = function() {};
 
 /**@see https://developer.mozilla.org/en/DOM/window.find */
 Window.prototype.find;
@@ -276,32 +276,32 @@ Window.prototype.find;
  * @see https://developer.mozilla.org/en/DOM/window.focus
  * @return {undefined}
  */
-Window.prototype.focus = function () {};
+Window.prototype.focus = function() {};
 
 /**
  * @see https://developer.mozilla.org/en/DOM/window.forward
  * @return {undefined}
  */
-Window.prototype.forward = function () {};
+Window.prototype.forward = function() {};
 
 /**
  * @see https://developer.mozilla.org/en/DOM/window.getAttention
  * @return {undefined}
  */
-Window.prototype.getAttention = function () {};
+Window.prototype.getAttention = function() {};
 
 /**
  * @return {Selection}
  * @see https://developer.mozilla.org/en/DOM/window.getSelection
  * @nosideeffects
  */
-Window.prototype.getSelection = function () {};
+Window.prototype.getSelection = function() {};
 
 /**
  * @see https://developer.mozilla.org/en/DOM/window.home
  * @return {undefined}
  */
-Window.prototype.home = function () {};
+Window.prototype.home = function() {};
 
 Window.prototype.openDialog;
 Window.prototype.releaseEvents;
@@ -322,7 +322,7 @@ Window.prototype.sizeToContent;
  * @see http://msdn.microsoft.com/en-us/library/ms536769(VS.85).aspx
  * @return {undefined}
  */
-Window.prototype.stop = function () {};
+Window.prototype.stop = function() {};
 
 Window.prototype.updateCommands;
 
@@ -465,7 +465,7 @@ Document.prototype.vlinkColor;
  * @see https://developer.mozilla.org/en/DOM/document.clear
  * @return {undefined}
  */
-Document.prototype.clear = function () {};
+Document.prototype.clear = function() {};
 
 /**
  * @see https://developer.mozilla.org/en/DOM/document.close
@@ -476,9 +476,9 @@ Document.prototype.close;
  * @param {string} type
  * @return {Event}
  */
-Document.prototype.createEvent = function (_type) {};
+Document.prototype.createEvent = function(type) {};
 Document.prototype.createNSResolver;
-/** @return {Range} */ Document.prototype.createRange = function () {};
+/** @return {Range} */ Document.prototype.createRange = function() {};
 Document.prototype.createTreeWalker;
 
 Document.prototype.evaluate;
@@ -497,13 +497,13 @@ Document.prototype.execCommand;
  * @nosideeffects
  * @see https://developer.mozilla.org/en/DOM/document.getElementsByClassName
  */
-Document.prototype.getElementsByClassName = function (_name) {};
+Document.prototype.getElementsByClassName = function(name) {};
 
 /**
  * @param {string} uri
  * @return {undefined}
  */
-Document.prototype.load = function (_uri) {};
+Document.prototype.load = function(uri) {};
 Document.prototype.loadOverlay;
 
 /**
@@ -548,14 +548,14 @@ Document.prototype.queryCommandValue;
  * @param {string} text
  * @return {undefined}
  */
-Document.prototype.write = function (_text) {};
+Document.prototype.write = function(text) {};
 
 /**
  * @see https://developer.mozilla.org/en/DOM/document.writeln
  * @param {string} text
  * @return {undefined}
  */
-Document.prototype.writeln = function (_text) {};
+Document.prototype.writeln = function(text) {};
 
 Document.prototype.ononline;
 Document.prototype.onoffline;
@@ -566,7 +566,7 @@ Document.prototype.onoffline;
  * @return {BoxObject}
  * @nosideeffects
  */
-Document.prototype.getBoxObjectFor = function (_element) {};
+Document.prototype.getBoxObjectFor = function(element) {};
 
 // From:
 // http://lxr.mozilla.org/mozilla1.8/source/dom/public/idl/range/nsIDOMNSRange.idl
@@ -606,6 +606,7 @@ Range.prototype.intersectsNode;
  * @nosideeffects
  */
 Range.prototype.compareNode;
+
 
 /** @constructor */
 function Selection() {}
@@ -651,7 +652,7 @@ Selection.prototype.rangeCount;
  * @return {undefined}
  * @see https://developer.mozilla.org/en/DOM/Selection/addRange
  */
-Selection.prototype.addRange = function (_range) {};
+Selection.prototype.addRange = function(range) {};
 
 /**
  * @param {number} index
@@ -659,7 +660,7 @@ Selection.prototype.addRange = function (_range) {};
  * @see https://developer.mozilla.org/en/DOM/Selection/getRangeAt
  * @nosideeffects
  */
-Selection.prototype.getRangeAt = function (_index) {};
+Selection.prototype.getRangeAt = function(index) {};
 
 /**
  * @param {Node} node
@@ -667,19 +668,19 @@ Selection.prototype.getRangeAt = function (_index) {};
  * @return {undefined}
  * @see https://developer.mozilla.org/en/DOM/Selection/collapse
  */
-Selection.prototype.collapse = function (_node, _index) {};
+Selection.prototype.collapse = function(node, index) {};
 
 /**
  * @return {undefined}
  * @see https://developer.mozilla.org/en/DOM/Selection/collapseToEnd
  */
-Selection.prototype.collapseToEnd = function () {};
+Selection.prototype.collapseToEnd = function() {};
 
 /**
  * @return {undefined}
  * @see https://developer.mozilla.org/en/DOM/Selection/collapseToStart
  */
-Selection.prototype.collapseToStart = function () {};
+Selection.prototype.collapseToStart = function() {};
 
 /**
  * @param {Node} node
@@ -688,13 +689,13 @@ Selection.prototype.collapseToStart = function () {};
  * @see https://developer.mozilla.org/en/DOM/Selection/containsNode
  * @nosideeffects
  */
-Selection.prototype.containsNode = function (_node, _partlyContained) {};
+Selection.prototype.containsNode = function(node, partlyContained) {};
 
 /**
  * @see https://developer.mozilla.org/en/DOM/Selection/deleteFromDocument
  * @return {undefined}
  */
-Selection.prototype.deleteFromDocument = function () {};
+Selection.prototype.deleteFromDocument = function() {};
 
 /**
  * @param {Node} parentNode
@@ -702,20 +703,20 @@ Selection.prototype.deleteFromDocument = function () {};
  * @see https://developer.mozilla.org/en/DOM/Selection/extend
  * @return {undefined}
  */
-Selection.prototype.extend = function (_parentNode, _offset) {};
+Selection.prototype.extend = function(parentNode, offset) {};
 
 /**
  * @see https://developer.mozilla.org/en/DOM/Selection/removeAllRanges
  * @return {undefined}
  */
-Selection.prototype.removeAllRanges = function () {};
+Selection.prototype.removeAllRanges = function() {};
 
 /**
  * @param {Range} range
  * @see https://developer.mozilla.org/en/DOM/Selection/removeRange
  * @return {undefined}
  */
-Selection.prototype.removeRange = function (_range) {};
+Selection.prototype.removeRange = function(range) {};
 
 /**
  * @param {Node} parentNode
@@ -778,16 +779,16 @@ Element.prototype.style;
  * @override
  * @return {!Element}
  */
-Element.prototype.cloneNode = function (_deep) {};
+Element.prototype.cloneNode = function(deep) {};
 
 /** @return {undefined} */
-Element.prototype.blur = function () {};
+Element.prototype.blur = function() {};
 
 /** @return {undefined} */
-Element.prototype.click = function () {};
+Element.prototype.click = function() {};
 
 /** @return {undefined} */
-Element.prototype.focus = function () {};
+Element.prototype.focus = function() {};
 
 /** @type {number} */
 HTMLInputElement.prototype.selectionStart;
@@ -801,10 +802,8 @@ HTMLInputElement.prototype.selectionEnd;
  * @see http://www.whatwg.org/specs/web-apps/current-work/multipage/editing.html#dom-textarea/input-setselectionrange
  * @return {undefined}
  */
-HTMLInputElement.prototype.setSelectionRange = function (
-  _selectionStart,
-  _selectionEnd,
-) {};
+HTMLInputElement.prototype.setSelectionRange =
+    function(selectionStart, selectionEnd) {};
 
 /** @type {number} */
 HTMLTextAreaElement.prototype.selectionStart;
@@ -818,10 +817,8 @@ HTMLTextAreaElement.prototype.selectionEnd;
  * @see http://www.whatwg.org/specs/web-apps/current-work/multipage/editing.html#dom-textarea/input-setselectionrange
  * @return {undefined}
  */
-HTMLTextAreaElement.prototype.setSelectionRange = function (
-  _selectionStart,
-  _selectionEnd,
-) {};
+HTMLTextAreaElement.prototype.setSelectionRange =
+    function(selectionStart, selectionEnd) {};
 
 /**
  * @type {string}
@@ -859,7 +856,7 @@ Navigator.prototype.securityPolicy;
  * @return {boolean}
  * @see https://developer.mozilla.org/en-US/docs/Web/API/navigator.sendBeacon
  */
-Navigator.prototype.sendBeacon = function (_url, _opt_data) {};
+Navigator.prototype.sendBeacon = function(url, opt_data) {};
 
 /**
  * @type {string}
@@ -872,6 +869,7 @@ Navigator.prototype.vendor;
  * @see https://developer.mozilla.org/en/Navigator.vendorSub
  */
 Navigator.prototype.vendorSub;
+
 
 /** @constructor */
 function BoxObject() {}
@@ -894,6 +892,7 @@ BoxObject.prototype.y;
 /** @type {number} */
 BoxObject.prototype.width;
 
+
 /**
  * @param {Element} element
  * @param {?string=} pseudoElt
@@ -901,4 +900,4 @@ BoxObject.prototype.width;
  * @nosideeffects
  * @see https://bugzilla.mozilla.org/show_bug.cgi?id=548397
  */
-function _getComputedStyle(_element, _pseudoElt) {}
+function getComputedStyle(element, pseudoElt) {}

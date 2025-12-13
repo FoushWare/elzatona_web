@@ -32,6 +32,7 @@
  * @author stevey@google.com (Steve Yegge)
  */
 
+
 /**
  * @constructor
  * @see http://www.w3.org/TR/DOM-Level-3-XPath/xpath.html#XPathException
@@ -70,14 +71,14 @@ function XPathEvaluator() {}
  * @throws DOMException
  * @return {undefined}
  */
-XPathEvaluator.prototype.createExpression = function (_expr, _opt_resolver) {};
+XPathEvaluator.prototype.createExpression = function(expr, opt_resolver) {};
 
 /**
  * @param {Node} nodeResolver
  * @see http://www.w3.org/TR/DOM-Level-3-XPath/xpath.html#XPathEvaluator-createNSResolver
  * @return {undefined}
  */
-XPathEvaluator.prototype.createNSResolver = function (_nodeResolver) {};
+XPathEvaluator.prototype.createNSResolver = function(nodeResolver) {};
 
 /**
  * @param {string} expr
@@ -90,13 +91,9 @@ XPathEvaluator.prototype.createNSResolver = function (_nodeResolver) {};
  * @throws DOMException
  * @see http://www.w3.org/TR/DOM-Level-3-XPath/xpath.html#XPathEvaluator-evaluate
  */
-XPathEvaluator.prototype.evaluate = function (
-  _expr,
-  _contextNode,
-  _opt_resolver,
-  _opt_type,
-  _opt_result,
-) {};
+XPathEvaluator.prototype.evaluate = function(expr, contextNode, opt_resolver,
+    opt_type, opt_result) {};
+
 
 /**
  * @constructor
@@ -113,11 +110,9 @@ function XPathExpression() {}
  * @throws DOMException
  * @see http://www.w3.org/TR/DOM-Level-3-XPath/xpath.html#XPathExpression-evaluate
  */
-XPathExpression.prototype.evaluate = function (
-  _contextNode,
-  _opt_type,
-  _opt_result,
-) {};
+XPathExpression.prototype.evaluate = function(contextNode, opt_type,
+    opt_result) {};
+
 
 /**
  * @constructor
@@ -130,7 +125,7 @@ function XPathNSResolver() {}
  * @return {?string}
  * @see http://www.w3.org/TR/DOM-Level-3-XPath/xpath.html#XPathNSResolver-lookupNamespaceURI
  */
-XPathNSResolver.prototype.lookupNamespaceURI = function (_prefix) {};
+XPathNSResolver.prototype.lookupNamespaceURI = function(prefix) {};
 
 /**
  * From http://www.w3.org/TR/xpath
@@ -197,7 +192,7 @@ XPathResult.prototype.stringValue;
  * @throws DOMException {@see DOMException.INVALID_STATE_ERR}
  * @see http://www.w3.org/TR/DOM-Level-3-XPath/xpath.html#XPathResult-iterateNext
  */
-XPathResult.prototype.iterateNext = function () {};
+XPathResult.prototype.iterateNext = function() {};
 
 /**
  * @param {number} index
@@ -205,7 +200,7 @@ XPathResult.prototype.iterateNext = function () {};
  * @throws XPathException
  * @see http://www.w3.org/TR/DOM-Level-3-XPath/xpath.html#XPathResult-snapshotItem
  */
-XPathResult.prototype.snapshotItem = function (_index) {};
+XPathResult.prototype.snapshotItem = function(index) {};
 
 /**
  * @type {number}
@@ -306,28 +301,22 @@ function XMLHttpRequest() {}
  * @override
  * @return {undefined}
  */
-XMLHttpRequest.prototype.addEventListener = function (
-  _type,
-  _listener,
-  _opt_useCapture,
-) {};
+XMLHttpRequest.prototype.addEventListener =
+    function(type, listener, opt_useCapture) {};
 
 /**
  * @param {boolean=} opt_useCapture
  * @override
  * @return {undefined}
  */
-XMLHttpRequest.prototype.removeEventListener = function (
-  _type,
-  _listener,
-  _opt_useCapture,
-) {};
+XMLHttpRequest.prototype.removeEventListener =
+    function(type, listener, opt_useCapture) {};
 
 /**
  * @override
  * @return {boolean}
  */
-XMLHttpRequest.prototype.dispatchEvent = function (_evt) {};
+XMLHttpRequest.prototype.dispatchEvent = function(evt) {};
 
 /**
  * @param {string} method
@@ -338,13 +327,8 @@ XMLHttpRequest.prototype.dispatchEvent = function (_evt) {};
  * @return {undefined}
  * @see http://www.w3.org/TR/XMLHttpRequest/#the-open()-method
  */
-XMLHttpRequest.prototype.open = function (
-  _method,
-  _url,
-  _opt_async,
-  _opt_user,
-  _opt_password,
-) {};
+XMLHttpRequest.prototype.open = function(method, url, opt_async, opt_user,
+    opt_password) {};
 
 /**
  * @param {string} header
@@ -352,33 +336,33 @@ XMLHttpRequest.prototype.open = function (
  * @return {undefined}
  * @see http://www.w3.org/TR/XMLHttpRequest/#the-setrequestheader()-method
  */
-XMLHttpRequest.prototype.setRequestHeader = function (_header, _value) {};
+XMLHttpRequest.prototype.setRequestHeader = function(header, value) {};
 
 /**
  * @param {ArrayBuffer|ArrayBufferView|Blob|Document|FormData|string=} opt_data
  * @return {undefined}
  * @see http://www.w3.org/TR/XMLHttpRequest/#the-send()-method
  */
-XMLHttpRequest.prototype.send = function (_opt_data) {};
+XMLHttpRequest.prototype.send = function(opt_data) {};
 
 /**
  * @return {undefined}
  * @see http://www.w3.org/TR/XMLHttpRequest/#the-abort()-method
  */
-XMLHttpRequest.prototype.abort = function () {};
+XMLHttpRequest.prototype.abort = function() {};
 
 /**
  * @return {string}
  * @see http://www.w3.org/TR/XMLHttpRequest/#the-getallresponseheaders()-method
  */
-XMLHttpRequest.prototype.getAllResponseHeaders = function () {};
+XMLHttpRequest.prototype.getAllResponseHeaders = function() {};
 
 /**
  * @param {string} header
  * @return {string}
  * @see http://www.w3.org/TR/XMLHttpRequest/#the-getresponseheader()-method
  */
-XMLHttpRequest.prototype.getResponseHeader = function (_header) {};
+XMLHttpRequest.prototype.getResponseHeader = function(header) {};
 
 /**
  * @type {string}
@@ -468,7 +452,7 @@ XMLHttpRequest.DONE;
  * @constructor
  * @see http://www.w3.org/TR/XMLHttpRequest2/#the-formdata-interface
  */
-function FormData(_opt_form) {}
+function FormData(opt_form) {}
 
 /**
  * @param {string} name
@@ -476,4 +460,4 @@ function FormData(_opt_form) {}
  * @param {string=} opt_filename
  * @return {undefined}
  */
-FormData.prototype.append = function (_name, _value, _opt_filename) {};
+FormData.prototype.append = function(name, value, opt_filename) {};

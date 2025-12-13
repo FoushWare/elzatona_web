@@ -2,13 +2,14 @@
  * Copyright 2016 Semmle Ltd.
  */
 
+
 /**
  * @fileoverview An incomplete model of the Vows library.
  * @externs
  * @see vowsjs.org/#reference
  */
 
-var assert = require("assert");
+var assert = require('assert');
 
 /**
  * @param {number} eps
@@ -17,7 +18,7 @@ var assert = require("assert");
  * @param {string=} message
  * @return {void}
  */
-function epsilon(_eps, _actual, _expected, _message) {}
+function epsilon (eps, actual, expected, message) {}
 assert.epsilon = epsilon;
 
 /**
@@ -26,7 +27,7 @@ assert.epsilon = epsilon;
  * @param {string=} message
  * @return {void}
  */
-function match(_actual, _expected, _message) {}
+function match (actual, expected, message) {}
 assert.match = match;
 assert.matches = match;
 
@@ -35,7 +36,7 @@ assert.matches = match;
  * @param {string=} message
  * @return {void}
  */
-function isTrue(_actual, _message) {}
+function isTrue (actual, message) {}
 assert.isTrue = isTrue;
 
 /**
@@ -43,7 +44,7 @@ assert.isTrue = isTrue;
  * @param {string=} message
  * @return {void}
  */
-function isFalse(_actual, _message) {}
+function isFalse (actual, message) {}
 assert.isFalse = isFalse;
 
 /**
@@ -51,7 +52,7 @@ assert.isFalse = isFalse;
  * @param {string=} message
  * @return {void}
  */
-function isZero(_actual, _message) {}
+function isZero (actual, message) {}
 assert.isZero = isZero;
 
 /**
@@ -59,7 +60,7 @@ assert.isZero = isZero;
  * @param {string=} message
  * @return {void}
  */
-function isNotZero(_actual, _message) {}
+function isNotZero (actual, message) {}
 assert.isNotZero = isNotZero;
 
 /**
@@ -68,7 +69,7 @@ assert.isNotZero = isNotZero;
  * @param {string=} message
  * @return {void}
  */
-function greater(_actual, _expected, _message) {}
+function greater (actual, expected, message) {}
 assert.greater = greater;
 
 /**
@@ -77,7 +78,7 @@ assert.greater = greater;
  * @param {string=} message
  * @return {void}
  */
-function lesser(_actual, _expected, _message) {}
+function lesser (actual, expected, message) {}
 assert.lesser = lesser;
 
 /**
@@ -87,7 +88,7 @@ assert.lesser = lesser;
  * @param {string=} message
  * @return {void}
  */
-function inDelta(_actual, _expected, _delta, _message) {}
+function inDelta (actual, expected, delta, message) {}
 assert.inDelta = inDelta;
 
 /**
@@ -96,7 +97,7 @@ assert.inDelta = inDelta;
  * @param {string=} message
  * @return {void}
  */
-function include(_actual, _expected, _message) {}
+function include (actual, expected, message) {}
 assert.include = include;
 assert.includes = include;
 
@@ -106,7 +107,7 @@ assert.includes = include;
  * @param {string=} message
  * @return {void}
  */
-function notInclude(_actual, _expected, _message) {}
+function notInclude (actual, expected, message) {}
 assert.notInclude = notInclude;
 assert.notIncludes = notInclude;
 
@@ -116,7 +117,7 @@ assert.notIncludes = notInclude;
  * @param {string=} message
  * @return {void}
  */
-function deepInclude(_actual, _expected, _message) {}
+function deepInclude (actual, expected, message) {}
 assert.deepInclude = deepInclude;
 assert.deepIncludes = deepInclude;
 
@@ -125,7 +126,7 @@ assert.deepIncludes = deepInclude;
  * @param {string=} message
  * @return {void}
  */
-function isEmpty(_actual, _message) {}
+function isEmpty (actual, message) {}
 assert.isEmpty = isEmpty;
 
 /**
@@ -133,7 +134,7 @@ assert.isEmpty = isEmpty;
  * @param {string=} message
  * @return {void}
  */
-function isNotEmpty(_actual, _message) {}
+function isNotEmpty (actual, message) {}
 assert.isNotEmpty = isNotEmpty;
 
 /**
@@ -142,7 +143,7 @@ assert.isNotEmpty = isNotEmpty;
  * @param {string=} message
  * @return {void}
  */
-function lengthOf(_actual, _expected, _message) {}
+function lengthOf (actual, expected, message) {}
 assert.lengthOf = lengthOf;
 
 /**
@@ -150,7 +151,7 @@ assert.lengthOf = lengthOf;
  * @param {string=} message
  * @return {void}
  */
-function isArray(_actual, _message) {}
+function isArray (actual, message) {}
 assert.isArray = isArray;
 
 /**
@@ -159,7 +160,7 @@ assert.isArray = isArray;
  * @return {void}
  */
 
-function isObject(_actual, _message) {}
+function isObject (actual, message) {}
 assert.isObject = isObject;
 
 /**
@@ -167,7 +168,7 @@ assert.isObject = isObject;
  * @param {string=} message
  * @return {void}
  */
-function isNumber(_actual, _message) {}
+function isNumber (actual, message) {}
 assert.isNumber = isNumber;
 
 /**
@@ -175,7 +176,7 @@ assert.isNumber = isNumber;
  * @param {string=} message
  * @return {void}
  */
-function isBoolean(_actual, _message) {}
+function isBoolean (actual, message) {}
 assert.isBoolean = isBoolean;
 
 /**
@@ -183,7 +184,7 @@ assert.isBoolean = isBoolean;
  * @param {string=} message
  * @return {void}
  */
-function isNaN(_actual, _message) {}
+function isNaN (actual, message) {}
 assert.isNaN = isNaN;
 
 /**
@@ -191,7 +192,7 @@ assert.isNaN = isNaN;
  * @param {string=} message
  * @return {void}
  */
-function isNull(_actual, _message) {}
+function isNull (actual, message) {}
 assert.isNull = isNull;
 
 /**
@@ -199,7 +200,7 @@ assert.isNull = isNull;
  * @param {string=} message
  * @return {void}
  */
-function isNotNull(_actual, _message) {}
+function isNotNull (actual, message) {}
 assert.isNotNull = isNotNull;
 
 /**
@@ -207,7 +208,7 @@ assert.isNotNull = isNotNull;
  * @param {string=} message
  * @return {void}
  */
-function isUndefined(_actual, _message) {}
+function isUndefined (actual, message) {}
 assert.isUndefined = isUndefined;
 
 /**
@@ -215,7 +216,7 @@ assert.isUndefined = isUndefined;
  * @param {string=} message
  * @return {void}
  */
-function isDefined(_actual, _message) {}
+function isDefined (actual, message) {}
 assert.isDefined = isDefined;
 
 /**
@@ -223,7 +224,7 @@ assert.isDefined = isDefined;
  * @param {string=} message
  * @return {void}
  */
-function isString(_actual, _message) {}
+function isString (actual, message) {}
 assert.isString = isString;
 
 /**
@@ -231,7 +232,7 @@ assert.isString = isString;
  * @param {string=} message
  * @return {void}
  */
-function isFunction(_actual, _message) {}
+function isFunction (actual, message) {}
 assert.isFunction = isFunction;
 
 /**
@@ -240,7 +241,7 @@ assert.isFunction = isFunction;
  * @param {string=} message
  * @return {void}
  */
-function typeOf(_actual, _expected, _message) {}
+function typeOf (actual, expected, message) {}
 assert.typeOf = typeOf;
 
 /**
@@ -249,7 +250,7 @@ assert.typeOf = typeOf;
  * @param {string=} message
  * @return {void}
  */
-function instanceOf(_actual, _expected, _message) {}
+function instanceOf (actual, expected, message) {}
 assert.instanceOf = instanceOf;
 
 /**
@@ -271,20 +272,20 @@ exports.console;
  * @param {*} val
  * @return {string}
  */
-exports.inspect = function (_val) {};
+exports.inspect = function (val) {};
 
 /**
  * @param {Object} obj
  * @param {Array.<string>} targets
  * @return {Object}
  */
-exports.prepare = function (_obj, _targets) {};
+exports.prepare = function (obj, targets) {};
 
 /**
  * @param {Object} batch
  * @return {void}
  */
-exports.tryEnd = function (_batch) {};
+exports.tryEnd = function (batch) {};
 
 /**
  * @type {Array.<Object>}
@@ -296,7 +297,7 @@ exports.suites;
  * @param {...*} args
  * @return {Object}
  */
-exports.describe = function (_subject, _args) {};
+exports.describe = function (subject, args) {};
 
 /**
  * @type {string}

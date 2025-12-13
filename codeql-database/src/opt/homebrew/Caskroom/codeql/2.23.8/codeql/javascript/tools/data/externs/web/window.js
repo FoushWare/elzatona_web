@@ -205,4 +205,4 @@ function setTimeout(callback, opt_delay, var_args) {}
  * @nosideeffects
  * @see http://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/hasOwnProperty
  */
-function hasOwnProperty(propertyName) {}
+function hasOwnProperty (propertyName) {}

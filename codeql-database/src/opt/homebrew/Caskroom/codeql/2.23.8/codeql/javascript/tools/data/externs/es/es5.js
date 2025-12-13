@@ -20,6 +20,7 @@
  * @externs
  */
 
+
 /**
  * @param {Object|undefined} selfObj Specifies the object to which |this| should
  *     point when the function is run. If the value is null or undefined, it
@@ -31,7 +32,8 @@
  * @nosideeffects
  * @see https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Function/bind
  */
-Function.prototype.bind = function (_selfObj, _var_args) {};
+Function.prototype.bind = function(selfObj, var_args) {};
+
 
 /**
  * @this {String|string}
@@ -39,7 +41,8 @@ Function.prototype.bind = function (_selfObj, _var_args) {};
  * @nosideeffects
  * @see http://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/String/Trim
  */
-String.prototype.trim = function () {};
+String.prototype.trim = function() {};
+
 
 /**
  * @this {String|string}
@@ -47,7 +50,8 @@ String.prototype.trim = function () {};
  * @nosideeffects
  * @see http://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/String/TrimLeft
  */
-String.prototype.trimLeft = function () {};
+String.prototype.trimLeft = function() {};
+
 
 /**
  * @this {String|string}
@@ -55,7 +59,8 @@ String.prototype.trimLeft = function () {};
  * @nosideeffects
  * @see http://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/String/TrimRight
  */
-String.prototype.trimRight = function () {};
+String.prototype.trimRight = function() {};
+
 
 /**
  * A object property descriptor used by Object.create, Object.defineProperty,
@@ -85,6 +90,7 @@ ObjectPropertyDescriptor.prototype.enumerable;
 /** @type {boolean|undefined} */
 ObjectPropertyDescriptor.prototype.configurable;
 
+
 /**
  * @param {Object} proto
  * @param {Object=} opt_properties  A map of ObjectPropertyDescriptors.
@@ -92,7 +98,8 @@ ObjectPropertyDescriptor.prototype.configurable;
  * @nosideeffects
  * @see https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Object/create
  */
-Object.create = function (_proto, _opt_properties) {};
+Object.create = function(proto, opt_properties) {};
+
 
 /**
  * @param {!Object} obj
@@ -101,7 +108,8 @@ Object.create = function (_proto, _opt_properties) {};
  * @return {!Object}
  * @see https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Object/defineProperty
  */
-Object.defineProperty = function (_obj, _prop, _descriptor) {};
+Object.defineProperty = function(obj, prop, descriptor) {};
+
 
 /**
  * @param {!Object} obj
@@ -109,7 +117,8 @@ Object.defineProperty = function (_obj, _prop, _descriptor) {};
  * @return {!Object}
  * @see https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Object/defineProperties
  */
-Object.defineProperties = function (_obj, _props) {};
+Object.defineProperties = function(obj, props) {};
+
 
 /**
  * @param {T} obj
@@ -119,7 +128,8 @@ Object.defineProperties = function (_obj, _props) {};
  * @template T
  * @see https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Object/getOwnPropertyDescriptor
  */
-Object.getOwnPropertyDescriptor = function (_obj, _prop) {};
+Object.getOwnPropertyDescriptor = function(obj, prop) {};
+
 
 /**
  * @param {!Object} obj
@@ -127,7 +137,8 @@ Object.getOwnPropertyDescriptor = function (_obj, _prop) {};
  * @nosideeffects
  * @see https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Object/keys
  */
-Object.keys = function (_obj) {};
+Object.keys = function(obj) {};
+
 
 /**
  * @param {!Object} obj
@@ -135,7 +146,8 @@ Object.keys = function (_obj) {};
  * @nosideeffects
  * @see https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Object/getOwnPropertyNames
  */
-Object.getOwnPropertyNames = function (_obj) {};
+Object.getOwnPropertyNames = function(obj) {};
+
 
 /**
  * @param {!Object} obj
@@ -143,7 +155,8 @@ Object.getOwnPropertyNames = function (_obj) {};
  * @nosideeffects
  * @see https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Object/GetPrototypeOf
  */
-Object.getPrototypeOf = function (_obj) {};
+Object.getPrototypeOf = function(obj) {};
+
 
 /**
  * @param {T} obj
@@ -151,7 +164,8 @@ Object.getPrototypeOf = function (_obj) {};
  * @template T
  * @see https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Object/preventExtensions
  */
-Object.preventExtensions = function (_obj) {};
+Object.preventExtensions = function(obj) {};
+
 
 /**
  * @param {T} obj
@@ -159,7 +173,8 @@ Object.preventExtensions = function (_obj) {};
  * @template T
  * @see https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Object/seal
  */
-Object.seal = function (_obj) {};
+Object.seal = function(obj) {};
+
 
 /**
  * @param {T} obj
@@ -167,7 +182,8 @@ Object.seal = function (_obj) {};
  * @template T
  * @see https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Object/freeze
  */
-Object.freeze = function (_obj) {};
+Object.freeze = function(obj) {};
+
 
 /**
  * @param {!Object} obj
@@ -175,7 +191,8 @@ Object.freeze = function (_obj) {};
  * @nosideeffects
  * @see https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Object/isExtensible
  */
-Object.isExtensible = function (_obj) {};
+Object.isExtensible = function(obj) {};
+
 
 /**
  * @param {!Object} obj
@@ -183,7 +200,8 @@ Object.isExtensible = function (_obj) {};
  * @nosideeffects
  * @see https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Object/isSealed
  */
-Object.isSealed = function (_obj) {};
+Object.isSealed = function(obj) {};
+
 
 /**
  * @param {!Object} obj
@@ -191,7 +209,8 @@ Object.isSealed = function (_obj) {};
  * @nosideeffects
  * @see https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Object/isFrozen
  */
-Object.isFrozen = function (_obj) {};
+Object.isFrozen = function(obj) {};
+
 
 /**
  * @param {string=} opt_key The JSON key for this object.
@@ -199,20 +218,23 @@ Object.isFrozen = function (_obj) {};
  *     need not be a string. See http://goo.gl/PEUvs.
  * @see https://es5.github.io/#x15.12.3
  */
-Object.prototype.toJSON = function (_opt_key) {};
+Object.prototype.toJSON = function(opt_key) {};
+
 
 /**
  * @see https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Date/toISOString
  * @return {string}
  */
-Date.prototype.toISOString = function () {};
+Date.prototype.toISOString = function() {};
+
 
 /**
  * @param {*=} opt_ignoredKey
  * @return {string}
  * @override
  */
-Date.prototype.toJSON = function (_opt_ignoredKey) {};
+Date.prototype.toJSON = function(opt_ignoredKey) {};
+
 
 /**
  * @param {string} jsonStr The string to parse.
@@ -220,7 +242,8 @@ Date.prototype.toJSON = function (_opt_ignoredKey) {};
  * @return {*} The JSON object.
  * @throws {Error}
  */
-JSON.parse = function (_jsonStr, _opt_reviver) {};
+JSON.parse = function(jsonStr, opt_reviver) {};
+
 
 /**
  * @param {*} jsonObj Input object.
@@ -229,4 +252,4 @@ JSON.parse = function (_jsonStr, _opt_reviver) {};
  * @return {string} JSON string which represents jsonObj.
  * @throws {Error}
  */
-JSON.stringify = function (_jsonObj, _opt_replacer, _opt_space) {};
+JSON.stringify = function(jsonObj, opt_replacer, opt_space) {};

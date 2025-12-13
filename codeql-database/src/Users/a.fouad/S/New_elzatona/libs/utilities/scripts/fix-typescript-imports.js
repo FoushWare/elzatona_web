@@ -136,7 +136,7 @@ function findFiles(pattern) {
       },
     );
     return result.trim().split("\n").filter(Boolean);
-  } catch (_error) {
+  } catch (error) {
     return [];
   }
 }

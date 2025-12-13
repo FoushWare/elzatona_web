@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useRef } from "react";
 import { usePathname, useSearchParams } from "next/navigation";
-import { useNavigation } from "@/context/NavigationContext";
+import { useNavigation } from "../../context/NavigationContext";
 
 /**
  * Navigation Progress Bar Component

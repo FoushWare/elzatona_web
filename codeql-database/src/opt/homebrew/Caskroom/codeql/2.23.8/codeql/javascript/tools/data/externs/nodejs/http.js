@@ -44,7 +44,7 @@ var net = require("net");
 /**
  * @interface
  */
-http.RequestOptions = function () {};
+http.RequestOptions = function() {};
 
 /**
  * @type {string}
@@ -93,6 +93,7 @@ http.RequestOptions.prototype.path;
 
 http.RequestOptions.prototype.headers;
 
+
 /**
  * @type {string}
  */
@@ -107,14 +108,14 @@ http.RequestOptions.prototype.agent;
  * @interface
  * @extends {net.Server}
  */
-http.Server = function () {};
+http.Server = function() {};
 
 /**
  * @param {number} msecs
  * @param {Function} callback
  * @return {void}
  */
-http.Server.prototype.setTimeout = function (_msecs, _callback) {};
+http.Server.prototype.setTimeout = function(msecs, callback) {};
 
 /**
  * @type {number}
@@ -135,7 +136,7 @@ http.Server.prototype.listening;
  * @interface
  * @extends {http.IncomingMessage}
  */
-http.ServerRequest = function () {};
+http.ServerRequest = function() {};
 
 /**
  * @type {net.Socket}
@@ -146,27 +147,27 @@ http.ServerRequest.prototype.connection;
  * @interface
  * @extends {internal.Writable}
  */
-http.ServerResponse = function () {};
+http.ServerResponse = function() {};
 
 /**
  * @param {Buffer} buffer
  * @return {boolean}
  */
-http.ServerResponse.prototype.write = function (_buffer) {};
+http.ServerResponse.prototype.write = function(buffer) {};
 
 /**
  * @param {Buffer} buffer
  * @param {Function=} cb
  * @return {boolean}
  */
-http.ServerResponse.prototype.write = function (_buffer, _cb) {};
+http.ServerResponse.prototype.write = function(buffer, cb) {};
 
 /**
  * @param {string} str
  * @param {Function=} cb
  * @return {boolean}
  */
-http.ServerResponse.prototype.write = function (_str, _cb) {};
+http.ServerResponse.prototype.write = function(str, cb) {};
 
 /**
  * @param {string} str
@@ -174,7 +175,7 @@ http.ServerResponse.prototype.write = function (_str, _cb) {};
  * @param {Function=} cb
  * @return {boolean}
  */
-http.ServerResponse.prototype.write = function (_str, _encoding, _cb) {};
+http.ServerResponse.prototype.write = function(str, encoding, cb) {};
 
 /**
  * @param {string} str
@@ -182,19 +183,19 @@ http.ServerResponse.prototype.write = function (_str, _encoding, _cb) {};
  * @param {string=} fd
  * @return {boolean}
  */
-http.ServerResponse.prototype.write = function (_str, _encoding, _fd) {};
+http.ServerResponse.prototype.write = function(str, encoding, fd) {};
 
 /**
  * @param {*} chunk
  * @param {string=} encoding
  * @return {*}
  */
-http.ServerResponse.prototype.write = function (_chunk, _encoding) {};
+http.ServerResponse.prototype.write = function(chunk, encoding) {};
 
 /**
  * @return {void}
  */
-http.ServerResponse.prototype.writeContinue = function () {};
+http.ServerResponse.prototype.writeContinue = function() {};
 
 /**
  * @param {number} statusCode
@@ -202,18 +203,14 @@ http.ServerResponse.prototype.writeContinue = function () {};
  * @param {*=} headers
  * @return {void}
  */
-http.ServerResponse.prototype.writeHead = function (
-  _statusCode,
-  _reasonPhrase,
-  _headers,
-) {};
+http.ServerResponse.prototype.writeHead = function(statusCode, reasonPhrase, headers) {};
 
 /**
  * @param {number} statusCode
  * @param {*=} headers
  * @return {void}
  */
-http.ServerResponse.prototype.writeHead = function (_statusCode, _headers) {};
+http.ServerResponse.prototype.writeHead = function(statusCode, headers) {};
 
 /**
  * @type {number}
@@ -235,14 +232,14 @@ http.ServerResponse.prototype.headersSent;
  * @param {(string|Array<string>)} value
  * @return {void}
  */
-http.ServerResponse.prototype.setHeader = function (_name, _value) {};
+http.ServerResponse.prototype.setHeader = function(name, value) {};
 
 /**
  * @param {number} msecs
  * @param {Function} callback
  * @return {http.ServerResponse}
  */
-http.ServerResponse.prototype.setTimeout = function (_msecs, _callback) {};
+http.ServerResponse.prototype.setTimeout = function(msecs, callback) {};
 
 /**
  * @type {boolean}
@@ -253,19 +250,19 @@ http.ServerResponse.prototype.sendDate;
  * @param {string} name
  * @return {string}
  */
-http.ServerResponse.prototype.getHeader = function (_name) {};
+http.ServerResponse.prototype.getHeader = function(name) {};
 
 /**
  * @param {string} name
  * @return {void}
  */
-http.ServerResponse.prototype.removeHeader = function (_name) {};
+http.ServerResponse.prototype.removeHeader = function(name) {};
 
 /**
  * @param {*} headers
  * @return {void}
  */
-http.ServerResponse.prototype.addTrailers = function (_headers) {};
+http.ServerResponse.prototype.addTrailers = function(headers) {};
 
 /**
  * @type {boolean}
@@ -275,21 +272,21 @@ http.ServerResponse.prototype.finished;
 /**
  * @return {void}
  */
-http.ServerResponse.prototype.end = function () {};
+http.ServerResponse.prototype.end = function() {};
 
 /**
  * @param {Buffer} buffer
  * @param {Function=} cb
  * @return {void}
  */
-http.ServerResponse.prototype.end = function (_buffer, _cb) {};
+http.ServerResponse.prototype.end = function(buffer, cb) {};
 
 /**
  * @param {string} str
  * @param {Function=} cb
  * @return {void}
  */
-http.ServerResponse.prototype.end = function (_str, _cb) {};
+http.ServerResponse.prototype.end = function(str, cb) {};
 
 /**
  * @param {string} str
@@ -297,40 +294,40 @@ http.ServerResponse.prototype.end = function (_str, _cb) {};
  * @param {Function=} cb
  * @return {void}
  */
-http.ServerResponse.prototype.end = function (_str, _encoding, _cb) {};
+http.ServerResponse.prototype.end = function(str, encoding, cb) {};
 
 /**
  * @param {*=} data
  * @param {string=} encoding
  * @return {void}
  */
-http.ServerResponse.prototype.end = function (_data, _encoding) {};
+http.ServerResponse.prototype.end = function(data, encoding) {};
 
 /**
  * @interface
  * @extends {internal.Writable}
  */
-http.ClientRequest = function () {};
+http.ClientRequest = function() {};
 
 /**
  * @param {Buffer} buffer
  * @return {boolean}
  */
-http.ClientRequest.prototype.write = function (_buffer) {};
+http.ClientRequest.prototype.write = function(buffer) {};
 
 /**
  * @param {Buffer} buffer
  * @param {Function=} cb
  * @return {boolean}
  */
-http.ClientRequest.prototype.write = function (_buffer, _cb) {};
+http.ClientRequest.prototype.write = function(buffer, cb) {};
 
 /**
  * @param {string} str
  * @param {Function=} cb
  * @return {boolean}
  */
-http.ClientRequest.prototype.write = function (_str, _cb) {};
+http.ClientRequest.prototype.write = function(str, cb) {};
 
 /**
  * @param {string} str
@@ -338,7 +335,7 @@ http.ClientRequest.prototype.write = function (_str, _cb) {};
  * @param {Function=} cb
  * @return {boolean}
  */
-http.ClientRequest.prototype.write = function (_str, _encoding, _cb) {};
+http.ClientRequest.prototype.write = function(str, encoding, cb) {};
 
 /**
  * @param {string} str
@@ -346,86 +343,83 @@ http.ClientRequest.prototype.write = function (_str, _encoding, _cb) {};
  * @param {string=} fd
  * @return {boolean}
  */
-http.ClientRequest.prototype.write = function (_str, _encoding, _fd) {};
+http.ClientRequest.prototype.write = function(str, encoding, fd) {};
 
 /**
  * @param {*} chunk
  * @param {string=} encoding
  * @return {void}
  */
-http.ClientRequest.prototype.write = function (_chunk, _encoding) {};
+http.ClientRequest.prototype.write = function(chunk, encoding) {};
 
 /**
  * @return {void}
  */
-http.ClientRequest.prototype.abort = function () {};
+http.ClientRequest.prototype.abort = function() {};
 
 /**
  * @param {number} timeout
  * @param {Function=} callback
  * @return {void}
  */
-http.ClientRequest.prototype.setTimeout = function (_timeout, _callback) {};
+http.ClientRequest.prototype.setTimeout = function(timeout, callback) {};
 
 /**
  * @param {boolean=} noDelay
  * @return {void}
  */
-http.ClientRequest.prototype.setNoDelay = function (_noDelay) {};
+http.ClientRequest.prototype.setNoDelay = function(noDelay) {};
 
 /**
  * @param {boolean=} enable
  * @param {number=} initialDelay
  * @return {void}
  */
-http.ClientRequest.prototype.setSocketKeepAlive = function (
-  _enable,
-  _initialDelay,
-) {};
+http.ClientRequest.prototype.setSocketKeepAlive = function(enable, initialDelay) {};
 
 /**
  * @param {string} name
  * @param {(string|Array<string>)} value
  * @return {void}
  */
-http.ClientRequest.prototype.setHeader = function (_name, _value) {};
+http.ClientRequest.prototype.setHeader = function(name, value) {};
 
 /**
  * @param {string} name
  * @return {string}
  */
-http.ClientRequest.prototype.getHeader = function (_name) {};
+http.ClientRequest.prototype.getHeader = function(name) {};
 
 /**
  * @param {string} name
  * @return {void}
  */
-http.ClientRequest.prototype.removeHeader = function (_name) {};
+http.ClientRequest.prototype.removeHeader = function(name) {};
 
 /**
  * @param {*} headers
  * @return {void}
  */
-http.ClientRequest.prototype.addTrailers = function (_headers) {};
+http.ClientRequest.prototype.addTrailers = function(headers) {};
 
 /**
  * @return {void}
  */
-http.ClientRequest.prototype.end = function () {};
+http.ClientRequest.prototype.end = function() {};
 
 /**
  * @param {Buffer} buffer
  * @param {Function=} cb
  * @return {void}
  */
-http.ClientRequest.prototype.end = function (_buffer, _cb) {};
+http.ClientRequest.prototype.end = function(buffer, cb) {};
 
 /**
  * @param {string} str
  * @param {Function=} cb
  * @return {void}
  */
-http.ClientRequest.prototype.end = function (_str, _cb) {};
+http.ClientRequest.prototype.end = function(str, cb) {};
 
 /**
  * @param {string} str
@@ -433,20 +427,20 @@ http.ClientRequest.prototype.end = function (_str, _cb) {};
  * @param {Function=} cb
  * @return {void}
  */
-http.ClientRequest.prototype.end = function (_str, _encoding, _cb) {};
+http.ClientRequest.prototype.end = function(str, encoding, cb) {};
 
 /**
  * @param {*=} data
  * @param {string=} encoding
  * @return {void}
  */
-http.ClientRequest.prototype.end = function (_data, _encoding) {};
+http.ClientRequest.prototype.end = function(data, encoding) {};
 
 /**
  * @interface
  * @extends {internal.Readable}
  */
-http.IncomingMessage = function () {};
+http.IncomingMessage = function() {};
 
 /**
  * @type {string}
@@ -493,7 +487,7 @@ http.IncomingMessage.prototype.rawTrailers;
  * @param {Function} callback
  * @return {NodeJS.Timer}
  */
-http.IncomingMessage.prototype.setTimeout = function (_msecs, _callback) {};
+http.IncomingMessage.prototype.setTimeout = function(msecs, callback) {};
 
 /**
  * @type {string}
@@ -524,18 +518,18 @@ http.IncomingMessage.prototype.socket;
  * @param {Error=} error
  * @return {void}
  */
-http.IncomingMessage.prototype.destroy = function (_error) {};
+http.IncomingMessage.prototype.destroy = function(error) {};
 
 /**
  * @interface
  * @extends {http.IncomingMessage}
  */
-http.ClientResponse = function () {};
+http.ClientResponse = function() {};
 
 /**
  * @interface
  */
-http.AgentOptions = function () {};
+http.AgentOptions = function() {};
 
 /**
  * @type {boolean}
@@ -562,7 +556,7 @@ http.AgentOptions.prototype.maxFreeSockets;
  * @return {http.Agent}
  * @constructor
  */
-http.Agent = function (_opts) {};
+http.Agent = function(opts) {};
 
 /**
  * @type {number}
@@ -582,7 +576,7 @@ http.Agent.prototype.requests;
 /**
  * @return {void}
  */
-http.Agent.prototype.destroy = function () {};
+http.Agent.prototype.destroy = function() {};
 
 /**
  * @type {Array<string>}
@@ -591,32 +585,33 @@ http.METHODS;
 
 http.STATUS_CODES;
 
+
 /**
  * @param {(function(http.IncomingMessage, http.ServerResponse): void)=} requestListener
  * @return {http.Server}
  */
-http.createServer = function (_requestListener) {};
+http.createServer = function(requestListener) {};
 
 /**
  * @param {number=} port
  * @param {string=} host
  * @return {*}
  */
-http.createClient = function (_port, _host) {};
+http.createClient = function(port, host) {};
 
 /**
  * @param {http.RequestOptions} options
  * @param {(function(http.IncomingMessage): void)=} callback
  * @return {http.ClientRequest}
  */
-http.request = function (_options, _callback) {};
+http.request = function(options, callback) {};
 
 /**
  * @param {*} options
  * @param {(function(http.IncomingMessage): void)=} callback
  * @return {http.ClientRequest}
  */
-http.get = function (_options, _callback) {};
+http.get = function(options, callback) {};
 
 /**
  * @type {http.Agent}
@@ -654,3 +649,4 @@ module.exports.request = http.request;
 module.exports.get = http.get;
 
 module.exports.globalAgent = http.globalAgent;
+

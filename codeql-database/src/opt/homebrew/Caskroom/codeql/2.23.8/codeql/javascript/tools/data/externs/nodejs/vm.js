@@ -42,12 +42,12 @@ var vm = {};
 /**
  * @interface
  */
-vm.Context = function () {};
+vm.Context = function() {};
 
 /**
  * @interface
  */
-vm.ScriptOptions = function () {};
+vm.ScriptOptions = function() {};
 
 /**
  * @type {string}
@@ -87,7 +87,7 @@ vm.ScriptOptions.prototype.produceCachedData;
 /**
  * @interface
  */
-vm.RunningScriptOptions = function () {};
+vm.RunningScriptOptions = function() {};
 
 /**
  * @type {string}
@@ -120,39 +120,39 @@ vm.RunningScriptOptions.prototype.timeout;
  * @return {vm.Script}
  * @constructor
  */
-vm.Script = function (_code, _options) {};
+vm.Script = function(code, options) {};
 
 /**
  * @param {vm.Context} contextifiedSandbox
  * @param {vm.RunningScriptOptions=} options
  * @return {*}
  */
-vm.Script.prototype.runInContext = function (_contextifiedSandbox, _options) {};
+vm.Script.prototype.runInContext = function(contextifiedSandbox, options) {};
 
 /**
  * @param {vm.Context=} sandbox
  * @param {vm.RunningScriptOptions=} options
  * @return {*}
  */
-vm.Script.prototype.runInNewContext = function (_sandbox, _options) {};
+vm.Script.prototype.runInNewContext = function(sandbox, options) {};
 
 /**
  * @param {vm.RunningScriptOptions=} options
  * @return {*}
  */
-vm.Script.prototype.runInThisContext = function (_options) {};
+vm.Script.prototype.runInThisContext = function(options) {};
 
 /**
  * @param {vm.Context=} sandbox
  * @return {vm.Context}
  */
-vm.createContext = function (_sandbox) {};
+vm.createContext = function(sandbox) {};
 
 /**
  * @param {vm.Context} sandbox
  * @return {boolean}
  */
-vm.isContext = function (_sandbox) {};
+vm.isContext = function(sandbox) {};
 
 /**
  * @param {string} code
@@ -160,13 +160,13 @@ vm.isContext = function (_sandbox) {};
  * @param {vm.RunningScriptOptions=} options
  * @return {*}
  */
-vm.runInContext = function (_code, _contextifiedSandbox, _options) {};
+vm.runInContext = function(code, contextifiedSandbox, options) {};
 
 /**
  * @param {string} code
  * @return {*}
  */
-vm.runInDebugContext = function (_code) {};
+vm.runInDebugContext = function(code) {};
 
 /**
  * @param {string} code
@@ -174,14 +174,14 @@ vm.runInDebugContext = function (_code) {};
  * @param {vm.RunningScriptOptions=} options
  * @return {*}
  */
-vm.runInNewContext = function (_code, _sandbox, _options) {};
+vm.runInNewContext = function(code, sandbox, options) {};
 
 /**
  * @param {string} code
  * @param {vm.RunningScriptOptions=} options
  * @return {*}
  */
-vm.runInThisContext = function (_code, _options) {};
+vm.runInThisContext = function(code, options) {};
 
 module.exports.Context = vm.Context;
 
@@ -208,6 +208,7 @@ module.exports.runInThisContext = vm.runInThisContext;
  * @param {string=} filename
  * @return {vm.Script}
  */
-vm.createScript = function (_code, _filename) {};
+vm.createScript = function(code, filename) {};
 
 module.exports.createScript = vm.createScript;
+

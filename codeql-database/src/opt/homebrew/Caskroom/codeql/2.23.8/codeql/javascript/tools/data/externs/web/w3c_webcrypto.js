@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+
 /**
  * @fileoverview Definitions for W3C's Web Cryptography specification
  * http://www.w3.org/TR/webCryptoAPI
@@ -23,11 +24,13 @@
  *     chrome_extensions.js
  */
 
+
 /**
  * @const
  * @see http://www.w3.org/TR/webCryptoAPI
  */
 var webCrypto = {};
+
 
 /**
  * @typedef {?{
@@ -37,17 +40,20 @@ var webCrypto = {};
  */
 webCrypto.Algorithm;
 
+
 /**
  * @typedef {string|!webCrypto.Algorithm}
  * @see http://www.w3.org/TR/WebCryptoAPI/#dfn-AlgorithmIdentifier
  */
 webCrypto.AlgorithmIdentifier;
 
+
 /**
  * @constructor
  * @see http://www.w3.org/TR/webCryptoAPI/#dfn-CryptoKey
  */
-webCrypto.CryptoKey = function () {};
+webCrypto.CryptoKey = function() {};
+
 
 /**
  * @type {string} An enumerated value representing the type of the key, a secret
@@ -56,11 +62,13 @@ webCrypto.CryptoKey = function () {};
  */
 webCrypto.CryptoKey.prototype.type;
 
+
 /**
  * @type {boolean} Determines whether or not the raw keying material may be
  *     exported by the application.
  */
 webCrypto.CryptoKey.prototype.extractable;
+
 
 /**
  * @type {!Object} An opaque object representing a particular cipher the key
@@ -68,12 +76,14 @@ webCrypto.CryptoKey.prototype.extractable;
  */
 webCrypto.CryptoKey.prototype.algorithm;
 
+
 /**
  * @type {!Object} Returns the cached ECMAScript object associated with the
  *   usages internal slot, which indicates which cryptographic operations are
  *   permissible to be used with this key.
  */
 webCrypto.CryptoKey.prototype.usages;
+
 
 /**
  * @typedef {?{
@@ -83,13 +93,15 @@ webCrypto.CryptoKey.prototype.usages;
  */
 webCrypto.KeyAlgorithm;
 
+
 /**
  * @constructor
  * @see http://www.w3.org/TR/WebCryptoAPI/#dfn-JsonWebKey
  * @see Section 3.1:
  *     https://tools.ietf.org/html/draft-ietf-jose-json-web-key-41
  */
-webCrypto.JsonWebKey = function () {};
+webCrypto.JsonWebKey = function() {};
+
 
 /**
  * @type {string} Identifies the cryptographic algorithm family used with
@@ -97,10 +109,12 @@ webCrypto.JsonWebKey = function () {};
  */
 webCrypto.JsonWebKey.prototype.kty;
 
+
 /**
  * @type {string} Identifies the intended use of the public key.
  */
 webCrypto.JsonWebKey.prototype.use;
+
 
 /**
  * @type {!Array<string>} Identifies the operation(s) that the key is
@@ -108,55 +122,66 @@ webCrypto.JsonWebKey.prototype.use;
  */
 webCrypto.JsonWebKey.prototype.key_ops;
 
+
 /**
  * @type {string} Identifies the algorithm intended for use with the key.
  */
 webCrypto.JsonWebKey.prototype.alg;
+
 
 /**
  * @type {boolean} Boolean to be used with kty values.
  */
 webCrypto.JsonWebKey.prototype.ext;
 
+
 /**
  * @type {string} Identifies the cryptographic curve used with the key.
  */
 webCrypto.JsonWebKey.prototype.crv;
+
 
 /**
  * @type {string} Contains the x coordinate for the elliptic curve point.
  */
 webCrypto.JsonWebKey.prototype.x;
 
+
 /**
  * @type {string} Contains the y coordinate for the elliptic curve point.
  */
 webCrypto.JsonWebKey.prototype.y;
+
 
 /**
  * @type {string} Contains the Elliptic Curve private key value.
  */
 webCrypto.JsonWebKey.prototype.d;
 
+
 /**
  * @type {string} Contains the modulus value for the RSA public key.
  */
 webCrypto.JsonWebKey.prototype.n;
+
 
 /**
  * @type {string} Contains the exponent value for the RSA public key.
  */
 webCrypto.JsonWebKey.prototype.e;
 
+
 /**
  * @type {string} Contains the first prime factor.
  */
 webCrypto.JsonWebKey.prototype.p;
 
+
 /**
  * @type {string} Contains the second prime factor.
  */
 webCrypto.JsonWebKey.prototype.q;
+
 
 /**
  * @type {string} Contains the Chinese Remainder Theorem (CRT) exponent of
@@ -164,11 +189,13 @@ webCrypto.JsonWebKey.prototype.q;
  */
 webCrypto.JsonWebKey.prototype.dp;
 
+
 /**
  * @type {string} Contains the Chinese Remainder Theorem (CRT) exponent of
  *     the second factor.
  */
 webCrypto.JsonWebKey.prototype.dq;
+
 
 /**
  * @type {string} Contains the Chinese Remainder Theorem (CRT) coefficient
@@ -176,11 +203,13 @@ webCrypto.JsonWebKey.prototype.dq;
  */
 webCrypto.JsonWebKey.prototype.qi;
 
+
 /**
  * @type {!Array<!webCrypto.RsaOtherPrimesInfo>} Contains an array of
  *     information about any third and subsequent primes, should they exist.
  */
 webCrypto.JsonWebKey.prototype.oth;
+
 
 /**
  * @type {string} Contains the value of the symmetric (or other
@@ -188,13 +217,15 @@ webCrypto.JsonWebKey.prototype.oth;
  */
 webCrypto.JsonWebKey.prototype.k;
 
+
 /**
  * @constructor
  * @see http://www.w3.org/TR/WebCryptoAPI/#dfn-RsaOtherPrimesInfo
  * @see Section-6.3.2.7:
  *     https://tools.ietf.org/html/draft-ietf-jose-json-web-algorithms-40
  */
-webCrypto.RsaOtherPrimesInfo = function () {};
+webCrypto.RsaOtherPrimesInfo = function() {};
+
 
 /**
  * @type {string} Parameter within an "oth" array member represents the value
@@ -202,11 +233,13 @@ webCrypto.RsaOtherPrimesInfo = function () {};
  */
 webCrypto.RsaOtherPrimesInfo.prototype.r;
 
+
 /**
  * @type {string} Parameter within an "oth" array member represents the CRT
  *     exponent of the corresponding prime factor.
  */
 webCrypto.RsaOtherPrimesInfo.prototype.d;
+
 
 /**
  * @type {string} Parameter within an "oth" array member represents the CRT
@@ -214,11 +247,13 @@ webCrypto.RsaOtherPrimesInfo.prototype.d;
  */
 webCrypto.RsaOtherPrimesInfo.prototype.t;
 
+
 /**
  * @constructor
  * @see http://www.w3.org/TR/WebCryptoAPI/#subtlecrypto-interface
  */
-webCrypto.SubtleCrypto = function () {};
+webCrypto.SubtleCrypto = function() {};
+
 
 /**
  * @param {!webCrypto.AlgorithmIdentifier} algorithm Supported
@@ -228,7 +263,9 @@ webCrypto.SubtleCrypto = function () {};
  * @return {!Promise<*>} Ciphertext generated by the encryption of the
  *     cleartext.
  */
-webCrypto.SubtleCrypto.prototype.encrypt = function (_algorithm, _key, _data) {};
+webCrypto.SubtleCrypto.prototype.encrypt = function(algorithm, key,
+    data) {};
+
 
 /**
  * @param {!webCrypto.AlgorithmIdentifier} algorithm Supported
@@ -238,7 +275,9 @@ webCrypto.SubtleCrypto.prototype.encrypt = function (_algorithm, _key, _data) {}
  * @return {!Promise<*>} Cleartext generated by the decryption of the
  *     ciphertext.
  */
-webCrypto.SubtleCrypto.prototype.decrypt = function (_algorithm, _key, _data) {};
+webCrypto.SubtleCrypto.prototype.decrypt = function(algorithm, key,
+    data) {};
+
 
 /**
  * @param {!webCrypto.AlgorithmIdentifier} algorithm Supported
@@ -247,7 +286,9 @@ webCrypto.SubtleCrypto.prototype.decrypt = function (_algorithm, _key, _data) {}
  * @param {!BufferSource} data Data to be signed.
  * @return {!Promise<*>} Returns the signature on success.
  */
-webCrypto.SubtleCrypto.prototype.sign = function (_algorithm, _key, _data) {};
+webCrypto.SubtleCrypto.prototype.sign = function(algorithm, key,
+    data) {};
+
 
 /**
  * @param {!webCrypto.AlgorithmIdentifier} algorithm Supported
@@ -258,12 +299,9 @@ webCrypto.SubtleCrypto.prototype.sign = function (_algorithm, _key, _data) {};
  * @return {!Promise<*>} Returns a boolean indicating if the signature operating
  *     has been successful.
  */
-webCrypto.SubtleCrypto.prototype.verify = function (
-  _algorithm,
-  _key,
-  _signature,
-  _data,
-) {};
+webCrypto.SubtleCrypto.prototype.verify = function(algorithm, key,
+    signature, data) {};
+
 
 /**
  * @param {!webCrypto.AlgorithmIdentifier} algorithm Supported
@@ -271,7 +309,8 @@ webCrypto.SubtleCrypto.prototype.verify = function (
  * @param {!BufferSource} data Data to be hashed using the hashing algorithm.
  * @return {!Promise<*>} returns the hash on success.
  */
-webCrypto.SubtleCrypto.prototype.digest = function (_algorithm, _data) {};
+webCrypto.SubtleCrypto.prototype.digest = function(algorithm, data) {};
+
 
 /**
  * @param {!webCrypto.AlgorithmIdentifier} algorithm Supported
@@ -284,11 +323,9 @@ webCrypto.SubtleCrypto.prototype.digest = function (_algorithm, _data) {};
  * @return {!Promise<*>} returns the generated key as a CryptoKey or a
  *     CryptoKeyPair.
  */
-webCrypto.SubtleCrypto.prototype.generateKey = function (
-  _algorithm,
-  _extractable,
-  _keyUsages,
-) {};
+webCrypto.SubtleCrypto.prototype.generateKey = function(algorithm,
+    extractable, keyUsages) {};
+
 
 /**
  * @param {!webCrypto.AlgorithmIdentifier} algorithm The key derivation
@@ -304,13 +341,9 @@ webCrypto.SubtleCrypto.prototype.generateKey = function (
  * @return {!Promise<*>} returns the generated key as a CryptoKey or a
  *     CryptoKeyPair.
  */
-webCrypto.SubtleCrypto.prototype.deriveKey = function (
-  _algorithm,
-  _baseKey,
-  _derivedKeyAlgo,
-  _extractable,
-  _keyUsages,
-) {};
+webCrypto.SubtleCrypto.prototype.deriveKey = function(algorithm,
+   baseKey, derivedKeyAlgo, extractable, keyUsages) {};
+
 
 /**
  * @param {!webCrypto.AlgorithmIdentifier} algorithm The key derivation
@@ -321,11 +354,9 @@ webCrypto.SubtleCrypto.prototype.deriveKey = function (
  * @return {!Promise<*>} returns the generated key as a CryptoKey or a
  *     CryptoKeyPair.
  */
-webCrypto.SubtleCrypto.prototype.deriveBits = function (
-  _algorithm,
-  _baseKey,
-  _length,
-) {};
+webCrypto.SubtleCrypto.prototype.deriveBits = function(algorithm,
+   baseKey, length) {};
+
 
 /**
  * @param {string} format Enumerated value describing the data
@@ -342,13 +373,9 @@ webCrypto.SubtleCrypto.prototype.deriveBits = function (
  *     unwrapKey.
  * @return {!Promise<*>} returns the generated key as a CryptoKey.
  */
-webCrypto.SubtleCrypto.prototype.importKey = function (
-  _format,
-  _keyData,
-  _algorithm,
-  _extractable,
-  _keyUsages,
-) {};
+webCrypto.SubtleCrypto.prototype.importKey = function(format, keyData,
+    algorithm, extractable, keyUsages) {};
+
 
 /**
  * @param {string} format Enumerated value describing the data
@@ -356,7 +383,8 @@ webCrypto.SubtleCrypto.prototype.importKey = function (
  * @param {!webCrypto.CryptoKey} key CryptoKey to export.
  * @return {!Promise<*>} returns the key in the requested format.
  */
-webCrypto.SubtleCrypto.prototype.exportKey = function (_format, _key) {};
+webCrypto.SubtleCrypto.prototype.exportKey = function(format, key) {};
+
 
 /**
  * @param {string} format Value describing the data format in which the key must
@@ -369,12 +397,9 @@ webCrypto.SubtleCrypto.prototype.exportKey = function (_format, _key) {};
  *     AES-GCM, RSA-OAEP, and AES-KW.
  * @return {!Promise<*>} returns the wrapped key in the requested format.
  */
-webCrypto.SubtleCrypto.prototype.wrapKey = function (
-  _format,
-  _key,
-  _wrappingKey,
-  _wrapAlgorithm,
-) {};
+webCrypto.SubtleCrypto.prototype.wrapKey = function(format,
+   key, wrappingKey, wrapAlgorithm) {};
+
 
 /**
  * @param {string} format Value describing the data format in which the key must
@@ -394,15 +419,10 @@ webCrypto.SubtleCrypto.prototype.wrapKey = function (
  *     derivated key.
  * @return {!Promise<*>} returns the unwrapped key as a CryptoKey.
  */
-webCrypto.SubtleCrypto.prototype.unwrapKey = function (
-  _format,
-  _wrappedKey,
-  _unwrappingKey,
-  _unwrapAlgorithm,
-  _unwrappedKeyAlgorithm,
-  _extractable,
-  _keyUsages,
-) {};
+webCrypto.SubtleCrypto.prototype.unwrapKey = function(format, wrappedKey,
+    unwrappingKey, unwrapAlgorithm, unwrappedKeyAlgorithm, extractable,
+    keyUsages) {};
+
 
 /**
  * Web Cryptography API
@@ -412,13 +432,15 @@ webCrypto.SubtleCrypto.prototype.unwrapKey = function (
 /** @see https://developer.mozilla.org/en/DOM/window.crypto */
 Window.prototype.crypto;
 
+
 /**
  * @see https://developer.mozilla.org/en/DOM/window.crypto.getRandomValues
  * @param {!ArrayBufferView} typedArray
  * @return {!ArrayBufferView}
  * @throws {Error}
  */
-Window.prototype.crypto.getRandomValues = function (_typedArray) {};
+Window.prototype.crypto.getRandomValues = function(typedArray) {};
+
 
 /**
  * @type {webCrypto.SubtleCrypto}

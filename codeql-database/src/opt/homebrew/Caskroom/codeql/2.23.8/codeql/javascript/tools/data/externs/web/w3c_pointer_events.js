@@ -22,6 +22,7 @@
  * @externs
  */
 
+
 /**
  * @type {string}
  * @see http://www.w3.org/TR/pointerevents/#the-touch-action-css-property
@@ -39,6 +40,7 @@ Navigator.prototype.pointerEnabled;
  * @see http://www.w3.org/TR/pointerevents/#widl-Navigator-maxTouchPoints
  */
 Navigator.prototype.maxTouchPoints;
+
 
 /**
  * @record
@@ -78,7 +80,7 @@ PointerEventInit.prototype.isPrimary;
  * @param {PointerEventInit=} opt_eventInitDict
  * @see http://www.w3.org/TR/pointerevents/#pointerevent-interface
  */
-function PointerEvent(_type, _opt_eventInitDict) {}
+function PointerEvent(type, opt_eventInitDict) {}
 
 /** @type {number} */
 PointerEvent.prototype.pointerId;

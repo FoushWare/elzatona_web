@@ -52,36 +52,36 @@ domain.Domain;
  * @param {Function} fn
  * @return {void}
  */
-domain.Domain.prototype.run = function (_fn) {};
+domain.Domain.prototype.run = function(fn) {};
 
 /**
  * @param {events.EventEmitter} emitter
  * @return {void}
  */
-domain.Domain.prototype.add = function (_emitter) {};
+domain.Domain.prototype.add = function(emitter) {};
 
 /**
  * @param {events.EventEmitter} emitter
  * @return {void}
  */
-domain.Domain.prototype.remove = function (_emitter) {};
+domain.Domain.prototype.remove = function(emitter) {};
 
 /**
  * @param {(function(Error, *): *)} cb
  * @return {*}
  */
-domain.Domain.prototype.bind = function (_cb) {};
+domain.Domain.prototype.bind = function(cb) {};
 
 /**
  * @param {(function(*): *)} cb
  * @return {*}
  */
-domain.Domain.prototype.intercept = function (_cb) {};
+domain.Domain.prototype.intercept = function(cb) {};
 
 /**
  * @return {void}
  */
-domain.Domain.prototype.dispose = function () {};
+domain.Domain.prototype.dispose = function() {};
 
 /**
  * @type {Array<*>}
@@ -91,17 +91,17 @@ domain.Domain.prototype.members;
 /**
  * @return {void}
  */
-domain.Domain.prototype.enter = function () {};
+domain.Domain.prototype.enter = function() {};
 
 /**
  * @return {void}
  */
-domain.Domain.prototype.exit = function () {};
+domain.Domain.prototype.exit = function() {};
 
 /**
  * @return {domain.Domain}
  */
-domain.create = function () {};
+domain.create = function() {};
 
 module.exports.Domain = domain.Domain;
 
@@ -113,3 +113,4 @@ module.exports.create = domain.create;
 domain.active;
 
 module.exports.active = domain.active;
+

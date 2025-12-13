@@ -32,11 +32,9 @@ function Geolocation() {}
  * @param {GeolocationPositionOptions=} opt_options
  * @return {undefined}
  */
-Geolocation.prototype.getCurrentPosition = function (
-  _successCallback,
-  _opt_errorCallback,
-  _opt_options,
-) {};
+Geolocation.prototype.getCurrentPosition = function(successCallback,
+                                                       opt_errorCallback,
+                                                       opt_options) {};
 
 /**
  * @param {function(!GeolocationPosition)} successCallback
@@ -44,17 +42,16 @@ Geolocation.prototype.getCurrentPosition = function (
  * @param {GeolocationPositionOptions=} opt_options
  * @return {number}
  */
-Geolocation.prototype.watchPosition = function (
-  _successCallback,
-  _opt_errorCallback,
-  _opt_options,
-) {};
+Geolocation.prototype.watchPosition = function(successCallback,
+                                                  opt_errorCallback,
+                                                  opt_options) {};
 
 /**
  * @param {number} watchId
  * @return {undefined}
  */
-Geolocation.prototype.clearWatch = function (_watchId) {};
+Geolocation.prototype.clearWatch = function(watchId) {};
+
 
 /**
  * @constructor
@@ -76,6 +73,7 @@ GeolocationCoordinates.prototype.heading;
 /** @type {number} */
 GeolocationCoordinates.prototype.speed;
 
+
 /**
  * @constructor
  * @see http://www.w3.org/TR/geolocation-API/#position
@@ -85,6 +83,7 @@ function GeolocationPosition() {}
 GeolocationPosition.prototype.coords;
 /** @type {Date} */
 GeolocationPosition.prototype.timestamp;
+
 
 /**
  * @record
@@ -97,6 +96,7 @@ GeolocationPositionOptions.prototype.enableHighAccuracy;
 GeolocationPositionOptions.prototype.maximumAge;
 /** @type {number|undefined} */
 GeolocationPositionOptions.prototype.timeout;
+
 
 /**
  * @constructor

@@ -47,16 +47,7 @@ export function useSecureProgress(): UseSecureProgressReturn {
   const [error, setError] = useState<string | null>(null);
 
   // Generate a unique session ID for this session using crypto API
-  const generateSecureSessionId = () => {
-    const array = new Uint8Array(9);
-    if (typeof crypto !== "undefined" && crypto.getRandomValues) {
-      crypto.getRandomValues(array);
-      return `session_${Date.now()}_${Array.from(array, (byte) => byte.toString(36)).join("")}`;
-    }
-    // Fallback for environments without crypto (should not happen in browser)
-    return `session_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
-  };
-  const sessionId = generateSecureSessionId();
+  // Session ID is generated on-demand when needed (see line 108)
 
   // Load progress from localStorage cache on mount
   useEffect(() => {

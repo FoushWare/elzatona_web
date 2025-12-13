@@ -36,7 +36,7 @@
  *   force: (number|undefined)
  * }}
  */
-var _TouchInitDict;
+var TouchInitDict;
 
 /**
  * The Touch class represents a single touch on the surface. A touch is the
@@ -46,7 +46,7 @@ var _TouchInitDict;
  * @param {!TouchInitDict} touchInitDict
  * @constructor
  */
-function Touch(_touchInitDict) {}
+function Touch(touchInitDict) {}
 
 /**
  * The x-coordinate of the touch's location relative to the window's viewport.
@@ -114,11 +114,13 @@ Touch.prototype.radiusX;
  */
 Touch.prototype.radiusY;
 
+
 /**
  * @type {number}
  * @see http://www.w3.org/TR/2011/WD-touch-events-20110505/#widl-Touch-rotationAngle
  */
 Touch.prototype.rotationAngle;
+
 
 /**
  * Creates a new Touch object.
@@ -132,15 +134,9 @@ Touch.prototype.rotationAngle;
  * @param {number} screenY
  * @return {Touch}
  */
-Document.prototype.createTouch = function (
-  _view,
-  _target,
-  _identifier,
-  _pageX,
-  _pageY,
-  _screenX,
-  _screenY,
-) {};
+Document.prototype.createTouch = function(view, target, identifier, pageX,
+    pageY, screenX, screenY) {};
+
 
 /**
  * The TouchList class is used to represent a collection of Touch objects.
@@ -161,14 +157,14 @@ TouchList.prototype.length;
  * @param {number} index
  * @return {?Touch}
  */
-TouchList.prototype.item = function (_index) {};
+TouchList.prototype.item = function(index) {};
 
 /**
  * @param {number} identifier
  * @return {?Touch}
  * @see http://www.w3.org/TR/touch-events-extensions/#widl-TouchList-identifiedTouch-Touch-long-identifier
  */
-TouchList.prototype.identifiedTouch = function (_identifier) {};
+TouchList.prototype.identifiedTouch = function(identifier) {};
 
 /**
  * Creates a new TouchList object.
@@ -176,7 +172,7 @@ TouchList.prototype.identifiedTouch = function (_identifier) {};
  * @param {Array<?Touch>} touches
  * @return {TouchList}
  */
-Document.prototype.createTouchList = function (_touches) {};
+Document.prototype.createTouchList = function(touches) {};
 
 /**
  * @record
@@ -225,7 +221,7 @@ TouchEventInit.prototype.changedTouches;
  * @extends {UIEvent}
  * @constructor
  */
-function TouchEvent(_type, _opt_eventInitDict) {}
+function TouchEvent(type, opt_eventInitDict) {}
 
 /**
  * A collection of Touch objects representing all touches associated with this
@@ -266,6 +262,7 @@ TouchEvent.prototype.ctrlKey;
  * @type {boolean}
  */
 TouchEvent.prototype.shiftKey;
+
 
 /**
  * Specifies the JavaScript method to invoke when the system cancels tracking

@@ -8,7 +8,7 @@
  */
 
 const { execSync } = require("child_process");
-const fs = require("fs");
+// const fs = require("fs"); // Unused
 const readline = require("readline");
 
 const rl = readline.createInterface({

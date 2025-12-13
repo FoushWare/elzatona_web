@@ -45,13 +45,13 @@ var net = require("net");
  * @param {number} fd
  * @return {boolean}
  */
-tty.isatty = function (_fd) {};
+tty.isatty = function(fd) {};
 
 /**
  * @interface
  * @extends {net.Socket}
  */
-tty.ReadStream = function () {};
+tty.ReadStream = function() {};
 
 /**
  * @type {boolean}
@@ -62,7 +62,7 @@ tty.ReadStream.prototype.isRaw;
  * @param {boolean} mode
  * @return {void}
  */
-tty.ReadStream.prototype.setRawMode = function (_mode) {};
+tty.ReadStream.prototype.setRawMode = function(mode) {};
 
 /**
  * @type {boolean}
@@ -73,7 +73,7 @@ tty.ReadStream.prototype.isTTY;
  * @interface
  * @extends {net.Socket}
  */
-tty.WriteStream = function () {};
+tty.WriteStream = function() {};
 
 /**
  * @type {number}
@@ -100,14 +100,14 @@ module.exports.WriteStream = tty.WriteStream;
  * @param {boolean} mode
  * @return {void}
  */
-tty.setRawMode = function (_mode) {};
+tty.setRawMode = function(mode) {};
 
 /**
  * @param {string} path
  * @param {Array<string>=} args
  * @return {Array<*>}
  */
-tty.open = function (_path, _args) {};
+tty.open = function(path, args) {};
 
 /**
  * @param {*} fd
@@ -115,13 +115,13 @@ tty.open = function (_path, _args) {};
  * @param {number} col
  * @return {*}
  */
-tty.setWindowSize = function (_fd, _row, _col) {};
+tty.setWindowSize = function(fd, row, col) {};
 
 /**
  * @param {*} fd
  * @return {Array<number>}
  */
-tty.getWindowSize = function (_fd) {};
+tty.getWindowSize = function(fd) {};
 
 module.exports.setRawMode = tty.setRawMode;
 
@@ -130,3 +130,4 @@ module.exports.open = tty.open;
 module.exports.setWindowSize = tty.setWindowSize;
 
 module.exports.getWindowSize = tty.getWindowSize;
+

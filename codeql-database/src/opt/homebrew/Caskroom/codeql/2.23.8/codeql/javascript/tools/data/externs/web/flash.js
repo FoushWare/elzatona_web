@@ -22,6 +22,7 @@
  * @externs
  */
 
+
 // Standard Methods.
 
 /**
@@ -32,7 +33,7 @@
  *     <string>test</string></invoke>}
  * @return {string} The serialized return value from Flash that you can eval.
  */
-HTMLObjectElement.prototype.CallFunction = function (_xmlString) {};
+HTMLObjectElement.prototype.CallFunction = function(xmlString) {};
 
 /**
  * Returns the value of the Flash variable specified by varName or null if the
@@ -40,7 +41,7 @@ HTMLObjectElement.prototype.CallFunction = function (_xmlString) {};
  * @param {string} varName The variable name.
  * @return {string?} The variable value.
  */
-HTMLObjectElement.prototype.GetVariable = function (_varName) {};
+HTMLObjectElement.prototype.GetVariable = function(varName) {};
 
 /**
  * Activates the frame number specified by {@code frameNumber} in the current
@@ -48,12 +49,12 @@ HTMLObjectElement.prototype.GetVariable = function (_varName) {};
  * @param {number} frameNumber A non-negative integer frame number.
  * @return {undefined}
  */
-HTMLObjectElement.prototype.GotoFrame = function (_frameNumber) {};
+HTMLObjectElement.prototype.GotoFrame = function(frameNumber) {};
 
 /**
  * @return {boolean} Whether the movie is currently playing.
  */
-HTMLObjectElement.prototype.IsPlaying = function () {};
+HTMLObjectElement.prototype.IsPlaying = function() {};
 
 /**
  * Loads the movie identified by {@code url} to the layer specified by {@code
@@ -62,7 +63,7 @@ HTMLObjectElement.prototype.IsPlaying = function () {};
  * @param {string} url The movie URL.
  * @return {undefined}
  */
-HTMLObjectElement.prototype.LoadMovie = function (_layerNumber, _url) {};
+HTMLObjectElement.prototype.LoadMovie = function(layerNumber, url) {};
 
 /**
  * Pans a zoomed-in movie to the coordinates specified by x and y. Use mode to
@@ -74,25 +75,25 @@ HTMLObjectElement.prototype.LoadMovie = function (_layerNumber, _url) {};
  * @param {number} mode The mode.
  * @return {undefined}
  */
-HTMLObjectElement.prototype.Pan = function (_x, _y, _mode) {};
+HTMLObjectElement.prototype.Pan = function(x, y, mode) {};
 
 /**
  * @return {number} The percent of the Flash Player movie that has streamed
  *     into the browser so far; Possible values are from 0 to 100.
  */
-HTMLObjectElement.prototype.PercentLoaded = function () {};
+HTMLObjectElement.prototype.PercentLoaded = function() {};
 
 /**
  * Starts playing the movie.
  * @return {undefined}
  */
-HTMLObjectElement.prototype.Play = function () {};
+HTMLObjectElement.prototype.Play = function() {};
 
 /**
  * Goes to the first frame.
  * @return {undefined}
  */
-HTMLObjectElement.prototype.Rewind = function () {};
+HTMLObjectElement.prototype.Rewind = function() {};
 
 /**
  * Sets the value of the flash variable.
@@ -100,7 +101,7 @@ HTMLObjectElement.prototype.Rewind = function () {};
  * @param {string} value The value.
  * @return {undefined}
  */
-HTMLObjectElement.prototype.SetVariable = function (_variableName, _value) {};
+HTMLObjectElement.prototype.SetVariable = function(variableName, value) {};
 
 /**
  * Zooms in on a rectangular area of the movie. The units of the coordinates
@@ -111,30 +112,26 @@ HTMLObjectElement.prototype.SetVariable = function (_variableName, _value) {};
  * @param {number} bottom The bottom coordinate.
  * @return {undefined}
  */
-HTMLObjectElement.prototype.SetZoomRect = function (
-  _left,
-  _top,
-  _right,
-  _bottom,
-) {};
+HTMLObjectElement.prototype.SetZoomRect = function(left, top, right, bottom) {};
 
 /**
  * Stops playing the movie.
  * @return {undefined}
  */
-HTMLObjectElement.prototype.StopPlay = function () {};
+HTMLObjectElement.prototype.StopPlay = function() {};
 
 /**
  * @return {number} The total number of frames in the movie.
  */
-HTMLObjectElement.prototype.TotalFrames = function () {};
+HTMLObjectElement.prototype.TotalFrames = function() {};
 
 /**
  * Zooms the view by a relative scale factor.
  * @param {number} percent The percentage scale factor, should be an integer.
  * @return {undefined}
  */
-HTMLObjectElement.prototype.Zoom = function (_percent) {};
+HTMLObjectElement.prototype.Zoom = function(percent) {};
+
 
 // TellTarget Methods.
 
@@ -145,7 +142,7 @@ HTMLObjectElement.prototype.Zoom = function (_percent) {};
  * @param {number} frameNumber The frame number.
  * @return {undefined}
  */
-HTMLObjectElement.prototype.TCallFrame = function (_target, _frameNumber) {};
+HTMLObjectElement.prototype.TCallFrame = function(target, frameNumber) {};
 
 /**
  * Executes the action in the timeline specified by {@code target} in the
@@ -154,14 +151,14 @@ HTMLObjectElement.prototype.TCallFrame = function (_target, _frameNumber) {};
  * @param {string} label The frame label.
  * @return {undefined}
  */
-HTMLObjectElement.prototype.TCallLabel = function (_target, _label) {};
+HTMLObjectElement.prototype.TCallLabel = function(target, label) {};
 
 /**
  * Returns the number of the current frame for the specified timeline.
  * @param {string} target The timeline.
  * @return {number} The number of the current frame.
  */
-HTMLObjectElement.prototype.TCurentFrame = function (_target) {};
+HTMLObjectElement.prototype.TCurentFrame = function(target) {};
 
 /**
  * Returns the label of the current frame for the specified timeline.
@@ -169,7 +166,7 @@ HTMLObjectElement.prototype.TCurentFrame = function (_target) {};
  * @return {string} The label of the current frame, empty string if no
  *     current frame.
  */
-HTMLObjectElement.prototype.TCurrentLabel = function (_target) {};
+HTMLObjectElement.prototype.TCurrentLabel = function(target) {};
 
 /**
  * Returns a string indicating the value of the property in the
@@ -178,7 +175,7 @@ HTMLObjectElement.prototype.TCurrentLabel = function (_target) {};
  * @param {number} property The integer corresponding to the desired property.
  * @return {string} The value of the property.
  */
-HTMLObjectElement.prototype.TGetProperty = function (_target, _property) {};
+HTMLObjectElement.prototype.TGetProperty = function(target, property) {};
 
 /**
  * Returns a number indicating the value of the property in the specified
@@ -187,10 +184,7 @@ HTMLObjectElement.prototype.TGetProperty = function (_target, _property) {};
  * @param {number} property The integer corresponding to the desired property.
  * @return {number} A number indicating the value of the property.
  */
-HTMLObjectElement.prototype.TGetPropertyAsNumber = function (
-  _target,
-  _property,
-) {};
+HTMLObjectElement.prototype.TGetPropertyAsNumber = function(target, property) {};
 
 /**
  * Goes to the specified frame number in the specified timeline.
@@ -198,7 +192,7 @@ HTMLObjectElement.prototype.TGetPropertyAsNumber = function (
  * @param {number} frameNumber The frame number.
  * @return {undefined}
  */
-HTMLObjectElement.prototype.TGotoFrame = function (_target, _frameNumber) {};
+HTMLObjectElement.prototype.TGotoFrame = function(target, frameNumber) {};
 
 /**
  * Goes to the specified frame label in the specified timeline.
@@ -206,14 +200,14 @@ HTMLObjectElement.prototype.TGotoFrame = function (_target, _frameNumber) {};
  * @param {string} label The framelabel.
  * @return {undefined}
  */
-HTMLObjectElement.prototype.TGotoLabel = function (_target, _label) {};
+HTMLObjectElement.prototype.TGotoLabel = function(target, label) {};
 
 /**
  * Plays the specified timeline.
  * @param {number} target The timeline.
  * @return {undefined}
  */
-HTMLObjectElement.prototype.TPlay = function (_target) {};
+HTMLObjectElement.prototype.TPlay = function(target) {};
 
 /**
  * Sets the value of the property in the specified timeline.
@@ -222,15 +216,11 @@ HTMLObjectElement.prototype.TPlay = function (_target) {};
  * @param {string|number} value The value.
  * @return {undefined}
  */
-HTMLObjectElement.prototype.TSetProperty = function (
-  _target,
-  _property,
-  _value,
-) {};
+HTMLObjectElement.prototype.TSetProperty = function(target, property, value) {};
 
 /**
  * Stops the specified timeline.
  * @param {number} target The timeline.
  * @return {undefined}
  */
-HTMLObjectElement.prototype.TStopPlay = function (_target) {};
+HTMLObjectElement.prototype.TStopPlay = function(target) {};

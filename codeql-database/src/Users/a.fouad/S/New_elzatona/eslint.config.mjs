@@ -25,6 +25,7 @@ const eslintConfig = [
       "scripts-backup/**", // Backup scripts use CommonJS
       "setup/**", // Setup scripts use CommonJS
       "docs/api/**", // API documentation scripts use CommonJS
+      "libs/utilities/scripts/**", // Utility scripts use CommonJS or ES modules
       "verify-oauth-config.js", // Utility script uses CommonJS
       "setup-oauth-providers.js", // Utility script uses CommonJS
       "fix-imports.js", // Utility script uses CommonJS
@@ -39,6 +40,7 @@ const eslintConfig = [
       // Legacy Node.js scripts in Rest/ directory (use require() - valid for Node.js)
       "Rest/**", // All files in Rest/ directory use CommonJS (legacy scripts)
       ".cursor/**", // Cursor IDE scripts use CommonJS
+      "codeql-database/**", // CodeQL generated database files
     ],
   },
   {

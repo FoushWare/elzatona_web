@@ -90,7 +90,7 @@ XMLDOMDocument.prototype.resolveExternals;
  * @param {*} value
  * @return {undefined}
  */
-XMLDOMDocument.prototype.setProperty = function (_name, _value) {};
+XMLDOMDocument.prototype.setProperty = function(name, value) {};
 
 /**
  * @type {string}
@@ -108,7 +108,7 @@ XMLDOMDocument.prototype.validateOnParse;
  * @see http://msdn.microsoft.com/en-us/library/ms763830(VS.85).aspx
  * @return {undefined}
  */
-XMLDOMDocument.prototype.abort = function () {};
+XMLDOMDocument.prototype.abort = function() {};
 
 /**
  * @param {*} type
@@ -118,7 +118,7 @@ XMLDOMDocument.prototype.abort = function () {};
  * @see http://msdn.microsoft.com/en-us/library/ms757901(VS.85).aspx
  * @nosideeffects
  */
-XMLDOMDocument.prototype.createNode = function (_type, _name, _namespaceURI) {};
+XMLDOMDocument.prototype.createNode = function(type, name, namespaceURI) {};
 
 /**
  * @param {string} xmlSource
@@ -126,7 +126,7 @@ XMLDOMDocument.prototype.createNode = function (_type, _name, _namespaceURI) {};
  * @see http://msdn.microsoft.com/en-us/library/ms762722(VS.85).aspx
  * @override
  */
-XMLDOMDocument.prototype.load = function (_xmlSource) {};
+XMLDOMDocument.prototype.load = function(xmlSource) {};
 
 /**
  * @param {string} xmlString
@@ -134,14 +134,14 @@ XMLDOMDocument.prototype.load = function (_xmlSource) {};
  * @see http://msdn.microsoft.com/en-us/library/ms754585(VS.85).aspx
  * @override
  */
-XMLDOMDocument.prototype.loadXML = function (_xmlString) {};
+XMLDOMDocument.prototype.loadXML = function(xmlString) {};
 
 /**
  * @param {string} id
  * @return {Node}
  * @see http://msdn.microsoft.com/en-us/library/ms766397(VS.85).aspx
  */
-XMLDOMDocument.prototype.nodeFromID = function (_id) {};
+XMLDOMDocument.prototype.nodeFromID = function(id) {};
 
 //==============================================================================
 // XMLNode methods and properties
@@ -174,6 +174,7 @@ Node.prototype.definition;
  */
 Node.prototype.document;
 
+
 /**
  * Inserts the given HTML text into the element at the location.
  * @param {string} sWhere Where to insert the HTML text, one of 'beforeBegin',
@@ -182,7 +183,8 @@ Node.prototype.document;
  * @see http://msdn.microsoft.com/en-us/library/ms536452(VS.85).aspx
  * @return {undefined}
  */
-Node.prototype.insertAdjacentHTML = function (_sWhere, _sText) {};
+Node.prototype.insertAdjacentHTML = function(sWhere, sText) {};
+
 
 /**
  * @type {*}
@@ -232,7 +234,7 @@ Node.prototype.xml;
  * @see http://msdn.microsoft.com/en-us/library/ms754523(VS.85).aspx
  * @nosideeffects
  */
-Node.prototype.selectNodes = function (_expression) {};
+Node.prototype.selectNodes = function(expression) {};
 
 /**
  * @param {string} expression An XPath expression.
@@ -240,7 +242,7 @@ Node.prototype.selectNodes = function (_expression) {};
  * @see http://msdn.microsoft.com/en-us/library/ms757846(VS.85).aspx
  * @nosideeffects
  */
-Node.prototype.selectSingleNode = function (_expression) {};
+Node.prototype.selectSingleNode = function(expression) {};
 
 /**
  * @param {Node} stylesheet XSLT stylesheet.
@@ -248,7 +250,7 @@ Node.prototype.selectSingleNode = function (_expression) {};
  * @see http://msdn.microsoft.com/en-us/library/ms761399(VS.85).aspx
  * @nosideeffects
  */
-Node.prototype.transformNode = function (_stylesheet) {};
+Node.prototype.transformNode = function(stylesheet) {};
 
 /**
  * @param {Node} stylesheet XSLT stylesheet.
@@ -256,7 +258,8 @@ Node.prototype.transformNode = function (_stylesheet) {};
  * @see http://msdn.microsoft.com/en-us/library/ms766561(VS.85).aspx
  * @return {Object}
  */
-Node.prototype.transformNodeToObject = function (_stylesheet, _outputObject) {};
+Node.prototype.transformNodeToObject =
+    function(stylesheet, outputObject) {};
 
 //==============================================================================
 // Node methods
@@ -267,7 +270,7 @@ Node.prototype.transformNodeToObject = function (_stylesheet, _outputObject) {};
  * @return {Node} The object that was removed.
  * @see http://msdn.microsoft.com/en-us/library/ms536708(VS.85).aspx
  */
-Node.prototype.removeNode = function (_opt_bRemoveChildren) {};
+Node.prototype.removeNode = function(opt_bRemoveChildren) {};
 
 /**
  * @constructor
@@ -280,7 +283,7 @@ function ClipboardData() {}
  *     'URL' or 'File' or 'HTML' or 'Image'.
  * @return {undefined}
  */
-ClipboardData.prototype.clearData = function (_opt_type) {};
+ClipboardData.prototype.clearData = function(opt_type) {};
 
 /**
  * @see http://msdn.microsoft.com/en-us/library/ms535220(VS.85).aspx
@@ -288,20 +291,20 @@ ClipboardData.prototype.clearData = function (_opt_type) {};
  * @param {string} data Data to set
  * @return {boolean} Whether the data were set correctly.
  */
-ClipboardData.prototype.setData = function (_type, _data) {};
+ClipboardData.prototype.setData = function(type, data) {};
 
 /**
  * @see http://msdn.microsoft.com/en-us/library/ms535220(VS.85).aspx
  * @param {string} type Type of clipboard data to get ('Text' or 'URL').
  * @return {string} The current data
  */
-ClipboardData.prototype.getData = function (_type) {};
+ClipboardData.prototype.getData = function(type) { };
 
 /**
  * @type {!Window}
  * @see https://developer.mozilla.org/en/DOM/window
  */
-var _window;
+var window;
 
 /**
  * @see http://msdn.microsoft.com/en-us/library/ms535220(VS.85).aspx
@@ -396,7 +399,7 @@ Window.prototype.focus;
  * @see http://msdn.microsoft.com/en-us/library/ms536618(VS.85).aspx
  * @return {undefined}
  */
-Window.prototype.moveBy = function (_x, _y) {};
+Window.prototype.moveBy = function(x, y) {};
 
 /**
  * @param {number} x
@@ -404,7 +407,7 @@ Window.prototype.moveBy = function (_x, _y) {};
  * @see http://msdn.microsoft.com/en-us/library/ms536626(VS.85).aspx
  * @return {undefined}
  */
-Window.prototype.moveTo = function (_x, _y) {};
+Window.prototype.moveTo = function(x, y) {};
 
 /**
  * @see http://msdn.microsoft.com/en-us/library/ms536638(VS.85).aspx
@@ -419,18 +422,14 @@ Window.prototype.navigate;
  * @return {Window}
  * @see http://msdn.microsoft.com/en-us/library/ms536651(VS.85).aspx
  */
-Window.prototype.open = function (
-  _opt_url,
-  _opt_windowName,
-  _opt_windowFeatures,
-  _opt_replace,
-) {};
+Window.prototype.open = function(opt_url, opt_windowName, opt_windowFeatures,
+                                 opt_replace) {};
 
 /**
  * @see http://msdn.microsoft.com/en-us/library/ms536672(VS.85).aspx
  * @return {undefined}
  */
-Window.prototype.print = function () {};
+Window.prototype.print = function() {};
 
 /**
  * @param {number} width
@@ -438,7 +437,7 @@ Window.prototype.print = function () {};
  * @see http://msdn.microsoft.com/en-us/library/ms536722(VS.85).aspx
  * @return {undefined}
  */
-Window.prototype.resizeBy = function (_width, _height) {};
+Window.prototype.resizeBy = function(width, height) {};
 
 /**
  * @param {number} width
@@ -446,7 +445,7 @@ Window.prototype.resizeBy = function (_width, _height) {};
  * @see http://msdn.microsoft.com/en-us/library/ms536723(VS.85).aspx
  * @return {undefined}
  */
-Window.prototype.resizeTo = function (_width, _height) {};
+Window.prototype.resizeTo = function(width, height) {};
 
 /**
  * @see http://msdn.microsoft.com/en-us/library/ms536738(VS.85).aspx
@@ -475,7 +474,7 @@ Window.prototype.external;
  *     the URL to which to go back. (URL form is supported only in IE)
  * @return {undefined}
  */
-History.prototype.go = function (_delta) {};
+History.prototype.go = function(delta) {};
 
 /**
  * @see http://msdn.microsoft.com/en-us/library/ms535864(VS.85).aspx
@@ -483,7 +482,7 @@ History.prototype.go = function (_delta) {};
  *     (Mozilla doesn't support distance -- use #go instead)
  * @return {undefined}
  */
-History.prototype.back = function (_opt_distance) {};
+History.prototype.back = function(opt_distance) {};
 
 /**
  * @see http://msdn.microsoft.com/en-us/library/ms535864(VS.85).aspx
@@ -495,7 +494,7 @@ History.prototype.length;
  * @see http://msdn.microsoft.com/en-us/library/ms535864(VS.85).aspx
  * @return {undefined}
  */
-History.prototype.forward = function () {};
+History.prototype.forward = function() {};
 
 /**
  * @type {boolean}
@@ -551,6 +550,7 @@ HTMLImageElement.prototype.readyState;
  * @see http://msdn.microsoft.com/en-us/library/ms534359(VS.85).aspx
  */
 HTMLObjectElement.prototype.readyState;
+
 
 /**
  * @constructor
@@ -752,7 +752,7 @@ TextRange.prototype.scrollIntoView;
  * @return {undefined}
  * @see http://msdn.microsoft.com/en-us/library/ms536735(VS.85).aspx
  */
-TextRange.prototype.select = function () {};
+TextRange.prototype.select = function() {};
 
 /**
  * @param {string} how
@@ -765,27 +765,29 @@ TextRange.prototype.setEndPoint;
  * @return {undefined}
  * @see http://msdn.microsoft.com/en-us/library/ms536418(VS.85).aspx
  */
-Selection.prototype.clear = function () {};
+Selection.prototype.clear = function() {};
 
 /**
  * @return {TextRange|ControlRange}
  * @see http://msdn.microsoft.com/en-us/library/ms536394(VS.85).aspx
  */
-Selection.prototype.createRange = function () {};
+Selection.prototype.createRange = function() {};
 
 /**
  * @return {Array<TextRange>}
  * @see http://msdn.microsoft.com/en-us/library/ms536396(VS.85).aspx
  */
-Selection.prototype.createRangeCollection = function () {};
+Selection.prototype.createRangeCollection = function() {};
 
 /**
  * @constructor
  * @see http://msdn.microsoft.com/en-us/library/ms537447(VS.85).aspx
  */
-function _controlRange() {}
+function controlRange() {}
+
 
 Document.prototype.loadXML;
+
 
 // http://msdn.microsoft.com/en-us/library/ms531073(VS.85).aspx
 
@@ -916,7 +918,7 @@ Document.prototype.focus;
  * @see http://msdn.microsoft.com/en-us/library/ms536447(VS.85).aspx
  * @return {boolean}
  */
-Document.prototype.hasFocus = function () {};
+Document.prototype.hasFocus = function() {};
 
 /**
  * @see http://msdn.microsoft.com/en-us/library/ms536614(VS.85).aspx
@@ -937,6 +939,7 @@ Document.prototype.releaseCapture;
  * @see http://msdn.microsoft.com/en-us/library/ms536738(VS.85).aspx
  */
 Document.prototype.setActive;
+
 
 // collections
 
@@ -970,7 +973,7 @@ Document.prototype.scripts;
  * @return {number}
  * @see http://msdn.microsoft.com/en-us/library/ms535922(VS.85).aspx
  */
-Element.prototype.addBehavior = function (_sUrl) {};
+Element.prototype.addBehavior = function(sUrl) {};
 
 /**
  * @param {string} event
@@ -1001,7 +1004,8 @@ Element.prototype.classid;
  * @see http://msdn.microsoft.com/en-us/library/ms536375(VS.85).aspx
  * @nosideeffects
  */
-Element.prototype.componentFromPoint = function (_iCoordX, _iCoordY) {};
+Element.prototype.componentFromPoint = function(iCoordX, iCoordY) {};
+
 
 /**
  * @type {boolean}
@@ -1033,7 +1037,7 @@ Element.prototype.detachEvent;
  * @see http://msdn.microsoft.com/en-us/library/ms536414%28VS.85%29.aspx
  * @return {undefined}
  */
-Element.prototype.doScroll = function (_opt_action) {};
+Element.prototype.doScroll = function(opt_action) {};
 
 /**
  * @see http://msdn.microsoft.com/en-us/library/ms536423(VS.85).aspx
@@ -1067,14 +1071,14 @@ Element.prototype.load;
  * @see http://msdn.microsoft.com/en-us/library/ie/hh771882(v=vs.85).aspx
  * @return {undefined}
  */
-Element.prototype.msSetPointerCapture = function (_pointerId) {};
+Element.prototype.msSetPointerCapture = function(pointerId) {};
 
 /**
  * @param {number} pointerId
  * @see http://msdn.microsoft.com/en-us/library/ie/hh771880.aspx
  * @return {undefined}
  */
-Element.prototype.msReleasePointerCapture = function (_pointerId) {};
+Element.prototype.msReleasePointerCapture = function(pointerId) {};
 
 /**
  * @type {?function(Event)}
@@ -1110,14 +1114,14 @@ Element.prototype.outerHTML;
  * @see http://msdn.microsoft.com/en-us/library/ms536689(VS.85).aspx
  * @return {undefined}
  */
-Element.prototype.releaseCapture = function () {};
+Element.prototype.releaseCapture = function() {};
 
 /**
  * @param {number} iID
  * @return {boolean}
  * @see http://msdn.microsoft.com/en-us/library/ms536700(VS.85).aspx
  */
-Element.prototype.removeBehavior = function (_iID) {};
+Element.prototype.removeBehavior = function(iID) {};
 
 /**
  * @see http://msdn.microsoft.com/en-us/library/aa703996(VS.85).aspx
@@ -1130,7 +1134,7 @@ Element.prototype.runtimeStyle;
  * @see http://msdn.microsoft.com/en-us/library/ms531403(v=vs.85).aspx
  * @return {undefined}
  */
-Element.prototype.save = function (_sStoreName) {};
+Element.prototype.save = function(sStoreName) {};
 
 /**
  * @param {boolean=} opt_bContainerCapture Events originating in a container are
@@ -1138,7 +1142,7 @@ Element.prototype.save = function (_sStoreName) {};
  * @see http://msdn.microsoft.com/en-us/library/ms536742(VS.85).aspx
  * @return {undefined}
  */
-Element.prototype.setCapture = function (_opt_bContainerCapture) {};
+Element.prototype.setCapture = function(opt_bContainerCapture) {};
 
 /**
  * @see http://msdn.microsoft.com/en-us/library/ms534635(VS.85).aspx
@@ -1179,7 +1183,7 @@ function HTMLFilter() {}
  * @see http://msdn.microsoft.com/en-us/library/ms532954(v=vs.85).aspx
  * @return {undefined}
  */
-HTMLFilter.prototype.apply = function () {};
+HTMLFilter.prototype.apply = function() {};
 
 /**
  * @constructor
@@ -1277,7 +1281,7 @@ Location.prototype.search;
  * @param {string} url
  * @return {undefined}
  */
-Location.prototype.assign = function (_url) {};
+Location.prototype.assign = function(url) {};
 
 /**
  * @param {boolean=} opt_forceReload If true, reloads the page from
@@ -1285,27 +1289,30 @@ Location.prototype.assign = function (_url) {};
  * @see http://msdn.microsoft.com/en-us/library/ms536691(VS.85).aspx
  * @return {undefined}
  */
-Location.prototype.reload = function (_opt_forceReload) {};
+Location.prototype.reload = function(opt_forceReload) {};
 
 /**
  * @param {string} url
  * @see http://msdn.microsoft.com/en-us/library/ms536712(VS.85).aspx
  * @return {undefined}
  */
-Location.prototype.replace = function (_url) {};
+Location.prototype.replace = function(url) {};
+
 
 // For IE, returns an object representing key-value pairs for all the global
 // variables prefixed with str, e.g. test*
 
 /** @param {*=} opt_str
  */
-function _RuntimeObject(_opt_str) {}
+function RuntimeObject(opt_str) {}
+
 
 /**
  * @type {StyleSheet}
  * @see http://msdn.microsoft.com/en-us/library/dd347030(VS.85).aspx
  */
 HTMLStyleElement.prototype.styleSheet;
+
 
 /**
  * IE implements Cross Origin Resource Sharing (cross-domain XMLHttpRequests)
@@ -1322,7 +1329,7 @@ function XDomainRequest() {}
  * @see http://msdn.microsoft.com/en-us/library/cc288129(v=vs.85).aspx
  * @return {undefined}
  */
-XDomainRequest.prototype.abort = function () {};
+XDomainRequest.prototype.abort = function() {};
 
 /**
  * Sets the method and URL for the request.
@@ -1331,7 +1338,7 @@ XDomainRequest.prototype.abort = function () {};
  * @see http://msdn.microsoft.com/en-us/library/cc288168(v=vs.85).aspx
  * @return {undefined}
  */
-XDomainRequest.prototype.open = function (_bstrMethod, _bstrUrl) {};
+XDomainRequest.prototype.open = function(bstrMethod, bstrUrl) {};
 
 /**
  * Sends the request.
@@ -1340,7 +1347,7 @@ XDomainRequest.prototype.open = function (_bstrMethod, _bstrUrl) {};
  * @see http://msdn.microsoft.com/en-us/library/cc288207(v=vs.85).aspx
  * @return {undefined}
  */
-XDomainRequest.prototype.send = function (_varBody) {};
+XDomainRequest.prototype.send = function(varBody) {};
 
 /**
  * Called if the request could not be completed. Note that error information is
@@ -1414,7 +1421,7 @@ Navigator.prototype.msPointerEnabled;
  * @return {boolean}
  * @see https://msdn.microsoft.com/en-us/library/hh772331(v=vs.85).aspx
  */
-Navigator.prototype.msSaveBlob = function (_blob, _opt_defaultName) {};
+Navigator.prototype.msSaveBlob = function(blob, opt_defaultName) {};
 
 /**
  * @param {(!File|!Blob)} blob
@@ -1422,7 +1429,7 @@ Navigator.prototype.msSaveBlob = function (_blob, _opt_defaultName) {};
  * @return {boolean}
  * @see https://msdn.microsoft.com/en-us/library/hh772332(v=vs.85).aspx
  */
-Navigator.prototype.msSaveOrOpenBlob = function (_blob, _opt_defaultName) {};
+Navigator.prototype.msSaveOrOpenBlob = function(blob, opt_defaultName) {};
 
 /**
  * @type {number}

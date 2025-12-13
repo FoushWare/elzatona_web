@@ -15,4 +15,4 @@
  * @param {Object=} options
  * @see https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest#XMLHttpRequest%28%29
  */
-function _XMLHttpRequest(_options) {}
+function XMLHttpRequest(options) {}

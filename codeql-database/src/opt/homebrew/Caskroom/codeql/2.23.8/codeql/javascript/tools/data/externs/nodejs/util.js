@@ -42,7 +42,7 @@ var util = {};
 /**
  * @interface
  */
-util.InspectOptions = function () {};
+util.InspectOptions = function() {};
 
 /**
  * @type {boolean}
@@ -69,37 +69,37 @@ util.InspectOptions.prototype.customInspect;
  * @param {...*} param
  * @return {string}
  */
-util._format = function (_format, _param) {};
+util.format = function(format, param) {};
 
 /**
  * @param {string} string
  * @return {void}
  */
-util.debug = function (_string) {};
+util.debug = function(string) {};
 
 /**
  * @param {...*} param
  * @return {void}
  */
-util.error = function (_param) {};
+util.error = function(param) {};
 
 /**
  * @param {...*} param
  * @return {void}
  */
-util.puts = function (_param) {};
+util.puts = function(param) {};
 
 /**
  * @param {...*} param
  * @return {void}
  */
-util.print = function (_param) {};
+util.print = function(param) {};
 
 /**
  * @param {string} string
  * @return {void}
  */
-util.log = function (_string) {};
+util.log = function(string) {};
 
 /**
  * @param {*} object
@@ -108,124 +108,124 @@ util.log = function (_string) {};
  * @param {boolean=} color
  * @return {string}
  */
-util.inspect = function (_object, _showHidden, _depth, _color) {};
+util.inspect = function(object, showHidden, depth, color) {};
 
 /**
  * @param {*} object
  * @param {util.InspectOptions} options
  * @return {string}
  */
-util.inspect = function (_object, _options) {};
+util.inspect = function(object, options) {};
 
 /**
  * @param {*} object
  * @return {boolean}
  */
-util.isArray = function (_object) {};
+util.isArray = function(object) {};
 
 /**
  * @param {*} object
  * @return {boolean}
  */
-util.isRegExp = function (_object) {};
+util.isRegExp = function(object) {};
 
 /**
  * @param {*} object
  * @return {boolean}
  */
-util.isDate = function (_object) {};
+util.isDate = function(object) {};
 
 /**
  * @param {*} object
  * @return {boolean}
  */
-util.isError = function (_object) {};
+util.isError = function(object) {};
 
 /**
  * @param {*} constructor
  * @param {*} superConstructor
  * @return {void}
  */
-util.inherits = function (_constructor, _superConstructor) {};
+util.inherits = function(constructor, superConstructor) {};
 
 /**
  * @param {string} key
  * @return {(function(string, ...*): void)}
  */
-util.debuglog = function (_key) {};
+util.debuglog = function(key) {};
 
 /**
  * @param {*} object
  * @return {boolean}
  */
-util.isBoolean = function (_object) {};
+util.isBoolean = function(object) {};
 
 /**
  * @param {*} object
  * @return {boolean}
  */
-util.isBuffer = function (_object) {};
+util.isBuffer = function(object) {};
 
 /**
  * @param {*} object
  * @return {boolean}
  */
-util.isFunction = function (_object) {};
+util.isFunction = function(object) {};
 
 /**
  * @param {*} object
  * @return {boolean}
  */
-util.isNull = function (_object) {};
+util.isNull = function(object) {};
 
 /**
  * @param {*} object
  * @return {boolean}
  */
-util.isNullOrUndefined = function (_object) {};
+util.isNullOrUndefined = function(object) {};
 
 /**
  * @param {*} object
  * @return {boolean}
  */
-util.isNumber = function (_object) {};
+util.isNumber = function(object) {};
 
 /**
  * @param {*} object
  * @return {boolean}
  */
-util.isObject = function (_object) {};
+util.isObject = function(object) {};
 
 /**
  * @param {*} object
  * @return {boolean}
  */
-util.isPrimitive = function (_object) {};
+util.isPrimitive = function(object) {};
 
 /**
  * @param {*} object
  * @return {boolean}
  */
-util.isString = function (_object) {};
+util.isString = function(object) {};
 
 /**
  * @param {*} object
  * @return {boolean}
  */
-util.isSymbol = function (_object) {};
+util.isSymbol = function(object) {};
 
 /**
  * @param {*} object
  * @return {boolean}
  */
-util.isUndefined = function (_object) {};
+util.isUndefined = function(object) {};
 
 /**
  * @param {Function} fn
  * @param {string} message
  * @return {Function}
  */
-util.deprecate = function (_fn, _message) {};
+util.deprecate = function(fn, message) {};
 
 module.exports.InspectOptions = util.InspectOptions;
 
@@ -286,6 +286,7 @@ module.exports.deprecate = util.deprecate;
  * @param {Object} source
  * @return {Object}
  */
-util._extend = function (_destination, _source) {};
+util._extend = function(destination, source) {};
 
 module.exports._extend = util._extend;
+

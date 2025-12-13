@@ -27,45 +27,45 @@
  * @implements {Iterable<!Array<string>>}
  * @param {(string|!URLSearchParams)=} init
  */
-function URLSearchParams(_init) {}
+function URLSearchParams(init) {}
 
 /**
  * @param {string} name
  * @param {string} value
  * @return {undefined}
  */
-URLSearchParams.prototype.append = function (_name, _value) {};
+URLSearchParams.prototype.append = function(name, value) {};
 
 /**
  * @param {string} name
  * @return {undefined}
  */
-URLSearchParams.prototype.delete = function (_name) {};
+URLSearchParams.prototype.delete = function(name) {};
 
 /**
  * @param {string} name
  * @return {?string}
  */
-URLSearchParams.prototype.get = function (_name) {};
+URLSearchParams.prototype.get = function(name) {};
 
 /**
  * @param {string} name
  * @return {!Array<string>}
  */
-URLSearchParams.prototype.getAll = function (_name) {};
+URLSearchParams.prototype.getAll = function(name) {};
 
 /**
  * @param {string} name
  * @return {boolean}
  */
-URLSearchParams.prototype.has = function (_name) {};
+URLSearchParams.prototype.has = function(name) {};
 
 /**
  * @param {string} name
  * @param {string} value
  * @return {undefined}
  */
-URLSearchParams.prototype.set = function (_name, _value) {};
+URLSearchParams.prototype.set = function(name, value) {};
 
 /**
  * @see https://url.spec.whatwg.org
@@ -73,7 +73,7 @@ URLSearchParams.prototype.set = function (_name, _value) {};
  * @param {string} url
  * @param {(string|!URL)=} base
  */
-function URL(_url, _base) {}
+function URL(url, base) {}
 
 /** @type {string} */
 URL.prototype.href;
@@ -121,24 +121,24 @@ URL.prototype.hash;
  * @param {string} domain
  * @return {string}
  */
-URL.domainToASCII = function (_domain) {};
+URL.domainToASCII = function(domain) {};
 
 /**
  * @param {string} domain
  * @return {string}
  */
-URL.domainToUnicode = function (_domain) {};
+URL.domainToUnicode = function(domain) {};
 
 /**
  * @see http://www.w3.org/TR/FileAPI/#dfn-createObjectURL
  * @param {!File|!Blob|!MediaSource|!MediaStream} obj
  * @return {string}
  */
-URL.createObjectURL = function (_obj) {};
+URL.createObjectURL = function(obj) {};
 
 /**
  * @see http://www.w3.org/TR/FileAPI/#dfn-revokeObjectURL
  * @param {string} url
  * @return {undefined}
  */
-URL.revokeObjectURL = function (_url) {};
+URL.revokeObjectURL = function(url) {};

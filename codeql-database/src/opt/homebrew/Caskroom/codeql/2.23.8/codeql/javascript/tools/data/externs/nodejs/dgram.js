@@ -121,20 +121,20 @@ SocketOptions.prototype.reuseAddr;
  * @param {(function(Buffer, dgram.RemoteInfo): void)=} callback
  * @return {dgram.Socket}
  */
-dgram.createSocket = function (_type, _callback) {};
+dgram.createSocket = function(type, callback) {};
 
 /**
  * @param {dgram.SocketOptions} options
  * @param {(function(Buffer, dgram.RemoteInfo): void)=} callback
  * @return {dgram.Socket}
  */
-dgram.createSocket = function (_options, _callback) {};
+dgram.createSocket = function(options, callback) {};
 
 /**
  * @interface
  * @extends {events.EventEmitter}
  */
-dgram.Socket = function () {};
+dgram.Socket = function() {};
 
 /**
  * @param {(Buffer|String|Array<*>)} msg
@@ -143,7 +143,7 @@ dgram.Socket = function () {};
  * @param {(function(Error, number): void)=} callback
  * @return {void}
  */
-dgram.Socket.prototype.send = function (_msg, _port, _address, _callback) {};
+dgram.Socket.prototype.send = function(msg, port, address, callback) {};
 
 /**
  * @param {(Buffer|String|Array<*>)} msg
@@ -154,14 +154,7 @@ dgram.Socket.prototype.send = function (_msg, _port, _address, _callback) {};
  * @param {(function(Error, number): void)=} callback
  * @return {void}
  */
-dgram.Socket.prototype.send = function (
-  _msg,
-  _offset,
-  _length,
-  _port,
-  _address,
-  _callback,
-) {};
+dgram.Socket.prototype.send = function(msg, offset, length, port, address, callback) {};
 
 /**
  * @param {number=} port
@@ -169,82 +162,77 @@ dgram.Socket.prototype.send = function (
  * @param {(function(): void)=} callback
  * @return {void}
  */
-dgram.Socket.prototype.bind = function (_port, _address, _callback) {};
+dgram.Socket.prototype.bind = function(port, address, callback) {};
 
 /**
  * @param {dgram.BindOptions} options
  * @param {Function=} callback
  * @return {void}
  */
-dgram.Socket.prototype.bind = function (_options, _callback) {};
+dgram.Socket.prototype.bind = function(options, callback) {};
 
 /**
  * @param {*=} callback
  * @return {void}
  */
-dgram.Socket.prototype.close = function (_callback) {};
+dgram.Socket.prototype.close = function(callback) {};
 
 /**
  * @return {dgram.AddressInfo}
  */
-dgram.Socket.prototype.address = function () {};
+dgram.Socket.prototype.address = function() {};
 
 /**
  * @param {boolean} flag
  * @return {void}
  */
-dgram.Socket.prototype.setBroadcast = function (_flag) {};
+dgram.Socket.prototype.setBroadcast = function(flag) {};
 
 /**
  * @param {number} ttl
  * @return {void}
  */
-dgram.Socket.prototype.setTTL = function (_ttl) {};
+dgram.Socket.prototype.setTTL = function(ttl) {};
 
 /**
  * @param {number} ttl
  * @return {void}
  */
-dgram.Socket.prototype.setMulticastTTL = function (_ttl) {};
+dgram.Socket.prototype.setMulticastTTL = function(ttl) {};
 
 /**
  * @param {boolean} flag
  * @return {void}
  */
-dgram.Socket.prototype.setMulticastLoopback = function (_flag) {};
+dgram.Socket.prototype.setMulticastLoopback = function(flag) {};
 
 /**
  * @param {string} multicastAddress
  * @param {string=} multicastInterface
  * @return {void}
  */
-dgram.Socket.prototype.addMembership = function (
-  _multicastAddress,
-  _multicastInterface,
-) {};
+dgram.Socket.prototype.addMembership = function(multicastAddress, multicastInterface) {};
 
 /**
  * @param {string} multicastAddress
  * @param {string=} multicastInterface
  * @return {void}
  */
-dgram.Socket.prototype.dropMembership = function (
-  _multicastAddress,
-  _multicastInterface,
-) {};
+dgram.Socket.prototype.dropMembership = function(multicastAddress, multicastInterface) {};
 
 /**
  * @return {void}
  */
-dgram.Socket.prototype.ref = function () {};
+dgram.Socket.prototype.ref = function() {};
 
 /**
  * @return {void}
  */
-dgram.Socket.prototype.unref = function () {};
+dgram.Socket.prototype.unref = function() {};
 
 module.exports.createSocket = dgram.createSocket;
 
 module.exports.createSocket = dgram.createSocket;
 
 module.exports.Socket = dgram.Socket;
+

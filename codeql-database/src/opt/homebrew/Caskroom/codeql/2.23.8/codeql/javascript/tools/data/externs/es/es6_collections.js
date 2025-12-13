@@ -29,7 +29,7 @@
  * @template KEY, VALUE
  * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map
  */
-function Map(_opt_iterable) {}
+function Map(opt_iterable) {}
 
 /** @return {void} */
 Map.prototype.clear;
@@ -97,7 +97,8 @@ Map.prototype.values;
 /**
  * @return {!Iterator<!Array<KEY|VALUE>>}
  */
-Map.prototype[Symbol.iterator] = function () {};
+Map.prototype[Symbol.iterator] = function() {};
+
 
 /**
  * @constructor @struct
@@ -105,7 +106,7 @@ Map.prototype[Symbol.iterator] = function () {};
  * @template KEY, VALUE
  * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/WeakMap
  */
-function WeakMap(_opt_iterable) {}
+function WeakMap(opt_iterable) {}
 
 /** @return {void} */
 WeakMap.prototype.clear;
@@ -139,6 +140,8 @@ WeakMap.prototype.has;
  */
 WeakMap.prototype.set;
 
+
+
 /**
  * @constructor @struct
  * @param {Iterable<VALUE>|Array<VALUE>=} opt_iterable
@@ -146,7 +149,7 @@ WeakMap.prototype.set;
  * @template VALUE
  * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Set
  */
-function Set(_opt_iterable) {}
+function Set(opt_iterable) {}
 
 /**
  * @param {VALUE} value
@@ -209,7 +212,9 @@ Set.prototype.values;
 /**
  * @return {!Iterator<VALUE>}
  */
-Set.prototype[Symbol.iterator] = function () {};
+Set.prototype[Symbol.iterator] = function() {};
+
+
 
 /**
  * @constructor @struct
@@ -217,7 +222,7 @@ Set.prototype[Symbol.iterator] = function () {};
  * @template VALUE
  * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Set
  */
-function WeakSet(_opt_iterable) {}
+function WeakSet(opt_iterable) {}
 
 /**
  * @param {VALUE} value

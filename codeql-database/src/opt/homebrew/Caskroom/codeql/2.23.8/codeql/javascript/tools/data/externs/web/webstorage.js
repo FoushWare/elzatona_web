@@ -35,31 +35,31 @@ Storage.prototype.length;
  * @param {number} index
  * @return {?string}
  */
-Storage.prototype.key = function (index) {};
+Storage.prototype.key = function(index) {};
 
 /**
  * @param {string} key
  * @return {?string}
  */
-Storage.prototype.getItem = function (key) {};
+Storage.prototype.getItem = function(key) {};
 
 /**
  * @param {string} key
  * @param {string} data
  * @return {void}
  */
-Storage.prototype.setItem = function (key, data) {};
+Storage.prototype.setItem = function(key, data) {};
 
 /**
  * @param {string} key
  * @return {void}
  */
-Storage.prototype.removeItem = function (key) {};
+Storage.prototype.removeItem = function(key) {};
 
 /**
  * @return {void}
  */
-Storage.prototype.clear = function () {};
+Storage.prototype.clear = function() {};
 
 /**
  * @interface
@@ -141,13 +141,8 @@ StorageEvent.prototype.storageArea;
  * @param {?Storage} storageAreaArg
  * @return {void}
  */
-StorageEvent.prototype.initStorageEvent = function (
-  typeArg,
-  canBubbleArg,
-  cancelableArg,
-  keyArg,
-  oldValueArg,
-  newValueArg,
-  urlArg,
-  storageAreaArg,
-) {};
+StorageEvent.prototype.initStorageEvent = function(typeArg, canBubbleArg,
+                                                   cancelableArg, keyArg,
+                                                   oldValueArg, newValueArg,
+                                                   urlArg, storageAreaArg) {};
+

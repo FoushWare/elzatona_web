@@ -2,6 +2,7 @@
  * Copyright 2017 Semmle Ltd.
  */
 
+
 /**
  * @fileoverview A model of the builtin Proxy object.
  * @externs
@@ -13,9 +14,10 @@
  * @param {Object} handler
  * @constructor
  */
-function Proxy(_target, _handler) {}
+function Proxy(target, handler) {
+}
 
 /**
  * @returns {Proxy}
  */
-Proxy.prototype.revocable = function () {};
+Proxy.prototype.revocable = function() {};

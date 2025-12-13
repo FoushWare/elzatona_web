@@ -19,17 +19,21 @@
  * @externs
  */
 
+
+
 /**
  * Stack frame elements in V8.
  * @constructor
  */
 function CallSite() {}
 
+
 /**
  * Returns the value of this.
  * @return {Object|undefined}
  */
-CallSite.prototype.getThis = function () {};
+CallSite.prototype.getThis = function() {};
+
 
 /**
  * Returns the type of this as a string. This is the name of the function stored
@@ -37,13 +41,15 @@ CallSite.prototype.getThis = function () {};
  * [[Class]] internal property.
  * @return {string|undefined}
  */
-CallSite.prototype.getTypeName = function () {};
+CallSite.prototype.getTypeName = function() {};
+
 
 /**
  * Returns the current function.
  * @return {!Function|undefined}
  */
-CallSite.prototype.getFunction = function () {};
+CallSite.prototype.getFunction = function() {};
+
 
 /**
  * Returns the name of the current function, typically its name property. If a
@@ -51,60 +57,69 @@ CallSite.prototype.getFunction = function () {};
  * from the function's context.
  * @return {string|undefined}
  */
-CallSite.prototype.getFunctionName = function () {};
+CallSite.prototype.getFunctionName = function() {};
+
 
 /**
  * Returns the name of the property of this or one of its prototypes that holds
  * the current function.
  * @return {string|undefined}
  */
-CallSite.prototype.getMethodName = function () {};
+CallSite.prototype.getMethodName = function() {};
+
 
 /**
  * If this function was defined in a script returns the name of the script
  * @return {string|undefined}
  */
-CallSite.prototype.getFileName = function () {};
+CallSite.prototype.getFileName = function() {};
+
 
 /**
  * If this function was defined in a script returns the current line number.
  * @return {number|undefined}
  */
-CallSite.prototype.getLineNumber = function () {};
+CallSite.prototype.getLineNumber = function() {};
+
 
 /**
  * If this function was defined in a script returns the current column number.
  * @return {number|undefined}
  */
-CallSite.prototype.getColumnNumber = function () {};
+CallSite.prototype.getColumnNumber = function() {};
+
 
 /**
  * If this function was created using a call to eval, returns a CallSite object
  * representing the location where eval was called
  * @return {CallSite|undefined}
  */
-CallSite.prototype.getEvalOrigin = function () {};
+CallSite.prototype.getEvalOrigin = function() {};
+
 
 /**
  * Is this a toplevel invocation, that is, is this the global object?
  * @return {boolean}
  */
-CallSite.prototype.isToplevel = function () {};
+CallSite.prototype.isToplevel = function() {};
+
 
 /**
  * Does this call take place in code defined by a call to eval?
  * @return {boolean}
  */
-CallSite.prototype.isEval = function () {};
+CallSite.prototype.isEval = function() {};
+
 
 /**
  * Is this call in native V8 code?
  * @return {boolean}
  */
-CallSite.prototype.isNative = function () {};
+CallSite.prototype.isNative = function() {};
+
 
 /**
  * Is this a constructor call?
  * @return {boolean}
  */
-CallSite.prototype.isConstructor = function () {};
+CallSite.prototype.isConstructor = function() {};

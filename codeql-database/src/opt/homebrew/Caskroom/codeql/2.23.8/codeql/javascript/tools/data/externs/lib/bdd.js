@@ -24,73 +24,73 @@
  */
 
 /** @param {...*} args */
-function _after(_args) {}
+function after(args) {}
 
 /** @param {...*} args */
-function _afterAll(_args) {}
+function afterAll(args) {}
 
 /** @param {...*} args */
-function _afterEach(_args) {}
+function afterEach(args) {}
 
 /** @param {...*} args */
-function _assert(_args) {}
+function assert(args) {}
 
 /** @param {...*} args */
-function _before(_args) {}
+function before(args) {}
 
 /** @param {...*} args */
-function _beforeAll(_args) {}
+function beforeAll(args) {}
 
 /** @param {...*} args */
-function _beforeEach(_args) {}
+function beforeEach(args) {}
 
 /** @param {...*} args */
-function _context(_args) {}
+function context(args) {}
 
 /** @param {...*} args */
-function _describe(_args) {}
+function describe(args) {}
 
 /** @param {...*} args */
-function _expect(_args) {}
+function expect(args) {}
 
 /** @param {...*} args */
-function _fdescribe(_args) {}
+function fdescribe(args) {}
 
 /** @param {...*} args */
-function _fit(_args) {}
+function fit(args) {}
 
 /** @param {...*} args */
-function _it(_args) {}
+function it(args) {}
 
 /** @param {...*} args */
-function _pending(_args) {}
+function pending(args) {}
 
 /** @param {...*} args */
-function _setup(_args) {}
+function setup(args) {}
 
 /** @param {...*} args */
-function _specify(_args) {}
+function specify(args) {}
 
 /** @param {...*} args */
-function _spyOn(_args) {}
+function spyOn(args) {}
 
 /** @param {...*} args */
-function _suite(_args) {}
+function suite(args) {}
 
 /** @param {...*} args */
-function _suiteSetup(_args) {}
+function suiteSetup(args) {}
 
 /** @param {...*} args */
-function _suiteTeardown(_args) {}
+function suiteTeardown(args) {}
 
 /** @param {...*} args */
-function _teardown(_args) {}
+function teardown(args) {}
 
 /** @param {...*} args */
-function _test(_args) {}
+function test(args) {}
 
 /** @param {...*} args */
-function _xdescribe(_args) {}
+function xdescribe(args) {}
 
 /** @param {...*} args */
-function _xit(_args) {}
+function xit(args) {}

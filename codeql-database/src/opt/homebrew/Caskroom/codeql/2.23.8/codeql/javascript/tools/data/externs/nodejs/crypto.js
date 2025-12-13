@@ -42,36 +42,37 @@ var crypto = {};
 /**
  * @interface
  */
-crypto.Certificate = function () {};
+crypto.Certificate = function() {};
 
 /**
  * @param {(string|Buffer)} spkac
  * @return {Buffer}
  */
-crypto.Certificate.prototype.exportChallenge = function (_spkac) {};
+crypto.Certificate.prototype.exportChallenge = function(spkac) {};
 
 /**
  * @param {(string|Buffer)} spkac
  * @return {Buffer}
  */
-crypto.Certificate.prototype.exportPublicKey = function (_spkac) {};
+crypto.Certificate.prototype.exportPublicKey = function(spkac) {};
 
 /**
  * @param {Buffer} spkac
  * @return {boolean}
  */
-crypto.Certificate.prototype.verifySpkac = function (_spkac) {};
+crypto.Certificate.prototype.verifySpkac = function(spkac) {};
 
 /**
  * @return {crypto.Certificate}
  */
-crypto.Certificate = function () {};
+crypto.Certificate = function() {};
 
 /**
  * @return {crypto.Certificate}
  * @constructor
  */
-crypto.Certificate = function () {};
+crypto.Certificate = function() {};
+
 
 /**
  * @type {boolean}
@@ -81,7 +82,7 @@ crypto.fips;
 /**
  * @interface
  */
-crypto.CredentialDetails = function () {};
+crypto.CredentialDetails = function() {};
 
 /**
  * @type {string}
@@ -121,7 +122,7 @@ crypto.CredentialDetails.prototype.ciphers;
 /**
  * @interface
  */
-crypto.Credentials = function () {};
+crypto.Credentials = function() {};
 
 /**
  * @type {*}
@@ -132,87 +133,87 @@ crypto.Credentials.prototype.context;
  * @param {crypto.CredentialDetails} details
  * @return {crypto.Credentials}
  */
-crypto.createCredentials = function (_details) {};
+crypto.createCredentials = function(details) {};
 
 /**
  * @param {string} algorithm
  * @return {crypto.Hash}
  */
-crypto.createHash = function (_algorithm) {};
+crypto.createHash = function(algorithm) {};
 
 /**
  * @param {string} algorithm
  * @param {(string|Buffer)} key
  * @return {crypto.Hmac}
  */
-crypto.createHmac = function (_algorithm, _key) {};
+crypto.createHmac = function(algorithm, key) {};
 
 /**
  * @interface
  * @extends {NodeJS.ReadWriteStream}
  */
-crypto.Hash = function () {};
+crypto.Hash = function() {};
 
 /**
  * @param {(string|Buffer)} data
  * @return {crypto.Hash}
  */
-crypto.Hash.prototype.update = function (_data) {};
+crypto.Hash.prototype.update = function(data) {};
 
 /**
  * @param {(string|Buffer)} data
  * @param {(string)} input_encoding
  * @return {crypto.Hash}
  */
-crypto.Hash.prototype.update = function (_data, _input_encoding) {};
+crypto.Hash.prototype.update = function(data, input_encoding) {};
 
 /**
  * @return {Buffer}
  */
-crypto.Hash.prototype.digest = function () {};
+crypto.Hash.prototype.digest = function() {};
 
 /**
  * @param {(string)} encoding
  * @return {string}
  */
-crypto.Hash.prototype.digest = function (_encoding) {};
+crypto.Hash.prototype.digest = function(encoding) {};
 
 /**
  * @interface
  * @extends {NodeJS.ReadWriteStream}
  */
-crypto.Hmac = function () {};
+crypto.Hmac = function() {};
 
 /**
  * @param {(string|Buffer)} data
  * @return {crypto.Hmac}
  */
-crypto.Hmac.prototype.update = function (_data) {};
+crypto.Hmac.prototype.update = function(data) {};
 
 /**
  * @param {(string|Buffer)} data
  * @param {(string)} input_encoding
  * @return {crypto.Hmac}
  */
-crypto.Hmac.prototype.update = function (_data, _input_encoding) {};
+crypto.Hmac.prototype.update = function(data, input_encoding) {};
 
 /**
  * @return {Buffer}
  */
-crypto.Hmac.prototype.digest = function () {};
+crypto.Hmac.prototype.digest = function() {};
 
 /**
  * @param {(string)} encoding
  * @return {string}
  */
-crypto.Hmac.prototype.digest = function (_encoding) {};
+crypto.Hmac.prototype.digest = function(encoding) {};
 
 /**
  * @param {string} algorithm
  * @param {*} password
  * @return {crypto.Cipher}
  */
-crypto.createCipher = function (_algorithm, _password) {};
+crypto.createCipher = function(algorithm, password) {};
 
 /**
  * @param {string} algorithm
@@ -220,26 +221,26 @@ crypto.createCipher = function (_algorithm, _password) {};
  * @param {*} iv
  * @return {crypto.Cipher}
  */
-crypto.createCipheriv = function (_algorithm, _key, _iv) {};
+crypto.createCipheriv = function(algorithm, key, iv) {};
 
 /**
  * @interface
  * @extends {NodeJS.ReadWriteStream}
  */
-crypto.Cipher = function () {};
+crypto.Cipher = function() {};
 
 /**
  * @param {Buffer} data
  * @return {Buffer}
  */
-crypto.Cipher.prototype.update = function (_data) {};
+crypto.Cipher.prototype.update = function(data) {};
 
 /**
  * @param {string} data
  * @param {(string)} input_encoding
  * @return {Buffer}
  */
-crypto.Cipher.prototype.update = function (_data, _input_encoding) {};
+crypto.Cipher.prototype.update = function(data, input_encoding) {};
 
 /**
  * @param {Buffer} data
@@ -247,11 +248,7 @@ crypto.Cipher.prototype.update = function (_data, _input_encoding) {};
  * @param {(string)} output_encoding
  * @return {string}
  */
-crypto.Cipher.prototype.update = function (
-  _data,
-  _input_encoding,
-  _output_encoding,
-) {};
+crypto.Cipher.prototype.update = function(data, input_encoding, output_encoding) {};
 
 /**
  * @param {string} data
@@ -259,46 +256,42 @@ crypto.Cipher.prototype.update = function (
  * @param {(string)} output_encoding
  * @return {string}
  */
-crypto.Cipher.prototype.update = function (
-  _data,
-  _input_encoding,
-  _output_encoding,
-) {};
+crypto.Cipher.prototype.update = function(data, input_encoding, output_encoding) {};
 
 /**
  * @return {Buffer}
  */
-crypto.Cipher.prototype.final = function () {};
+crypto.Cipher.prototype.final = function() {};
 
 /**
  * @param {string} output_encoding
  * @return {string}
  */
-crypto.Cipher.prototype.final = function (_output_encoding) {};
+crypto.Cipher.prototype.final = function(output_encoding) {};
 
 /**
  * @param {boolean=} auto_padding
  * @return {void}
  */
-crypto.Cipher.prototype.setAutoPadding = function (_auto_padding) {};
+crypto.Cipher.prototype.setAutoPadding = function(auto_padding) {};
 
 /**
  * @return {Buffer}
  */
-crypto.Cipher.prototype.getAuthTag = function () {};
+crypto.Cipher.prototype.getAuthTag = function() {};
 
 /**
  * @param {Buffer} buffer
  * @return {void}
  */
-crypto.Cipher.prototype.setAAD = function (_buffer) {};
+crypto.Cipher.prototype.setAAD = function(buffer) {};
 
 /**
  * @param {string} algorithm
  * @param {*} password
  * @return {crypto.Decipher}
  */
-crypto.createDecipher = function (_algorithm, _password) {};
+crypto.createDecipher = function(algorithm, password) {};
 
 /**
  * @param {string} algorithm
@@ -306,26 +299,26 @@ crypto.createDecipher = function (_algorithm, _password) {};
  * @param {*} iv
  * @return {crypto.Decipher}
  */
-crypto.createDecipheriv = function (_algorithm, _key, _iv) {};
+crypto.createDecipheriv = function(algorithm, key, iv) {};
 
 /**
  * @interface
  * @extends {NodeJS.ReadWriteStream}
  */
-crypto.Decipher = function () {};
+crypto.Decipher = function() {};
 
 /**
  * @param {Buffer} data
  * @return {Buffer}
  */
-crypto.Decipher.prototype.update = function (_data) {};
+crypto.Decipher.prototype.update = function(data) {};
 
 /**
  * @param {string} data
  * @param {(string)} input_encoding
  * @return {Buffer}
  */
-crypto.Decipher.prototype.update = function (_data, _input_encoding) {};
+crypto.Decipher.prototype.update = function(data, input_encoding) {};
 
 /**
  * @param {Buffer} data
@@ -333,11 +326,7 @@ crypto.Decipher.prototype.update = function (_data, _input_encoding) {};
  * @param {(string)} output_encoding
  * @return {string}
  */
-crypto.Decipher.prototype.update = function (
-  _data,
-  _input_encoding,
-  _output_encoding,
-) {};
+crypto.Decipher.prototype.update = function(data, input_encoding, output_encoding) {};
 
 /**
  * @param {string} data
@@ -345,110 +334,106 @@ crypto.Decipher.prototype.update = function (
  * @param {(string)} output_encoding
  * @return {string}
  */
-crypto.Decipher.prototype.update = function (
-  _data,
-  _input_encoding,
-  _output_encoding,
-) {};
+crypto.Decipher.prototype.update = function(data, input_encoding, output_encoding) {};
 
 /**
  * @return {Buffer}
  */
-crypto.Decipher.prototype.final = function () {};
+crypto.Decipher.prototype.final = function() {};
 
 /**
  * @param {string} output_encoding
  * @return {string}
  */
-crypto.Decipher.prototype.final = function (_output_encoding) {};
+crypto.Decipher.prototype.final = function(output_encoding) {};
 
 /**
  * @param {boolean=} auto_padding
  * @return {void}
  */
-crypto.Decipher.prototype.setAutoPadding = function (_auto_padding) {};
+crypto.Decipher.prototype.setAutoPadding = function(auto_padding) {};
 
 /**
  * @param {Buffer} tag
  * @return {void}
  */
-crypto.Decipher.prototype.setAuthTag = function (_tag) {};
+crypto.Decipher.prototype.setAuthTag = function(tag) {};
 
 /**
  * @param {Buffer} buffer
  * @return {void}
  */
-crypto.Decipher.prototype.setAAD = function (_buffer) {};
+crypto.Decipher.prototype.setAAD = function(buffer) {};
 
 /**
  * @param {string} algorithm
  * @return {crypto.Signer}
  */
-crypto.createSign = function (_algorithm) {};
+crypto.createSign = function(algorithm) {};
 
 /**
  * @interface
  * @extends {NodeJS.WritableStream}
  */
-crypto.Signer = function () {};
+crypto.Signer = function() {};
 
 /**
  * @param {(string|Buffer)} data
  * @return {crypto.Signer}
  */
-crypto.Signer.prototype.update = function (_data) {};
+crypto.Signer.prototype.update = function(data) {};
 
 /**
  * @param {(string|Buffer)} data
  * @param {(string)} input_encoding
  * @return {crypto.Signer}
  */
-crypto.Signer.prototype.update = function (_data, _input_encoding) {};
+crypto.Signer.prototype.update = function(data, input_encoding) {};
 
 /**
  * @param {(string|{key: string, passphrase: string})} private_key
  * @return {Buffer}
  */
-crypto.Signer.prototype.sign = function (_private_key) {};
+crypto.Signer.prototype.sign = function(private_key) {};
 
 /**
  * @param {(string|{key: string, passphrase: string})} private_key
  * @param {(string)} output_format
  * @return {string}
  */
-crypto.Signer.prototype.sign = function (_private_key, _output_format) {};
+crypto.Signer.prototype.sign = function(private_key, output_format) {};
 
 /**
  * @param {string} algorith
  * @return {crypto.Verify}
  */
-crypto.createVerify = function (_algorith) {};
+crypto.createVerify = function(algorith) {};
 
 /**
  * @interface
  * @extends {NodeJS.WritableStream}
  */
-crypto.Verify = function () {};
+crypto.Verify = function() {};
 
 /**
  * @param {(string|Buffer)} data
  * @return {crypto.Verify}
  */
-crypto.Verify.prototype.update = function (_data) {};
+crypto.Verify.prototype.update = function(data) {};
 
 /**
  * @param {(string|Buffer)} data
  * @param {(string)} input_encoding
  * @return {crypto.Verify}
  */
-crypto.Verify.prototype.update = function (_data, _input_encoding) {};
+crypto.Verify.prototype.update = function(data, input_encoding) {};
 
 /**
  * @param {string} object
  * @param {Buffer} signature
  * @return {boolean}
  */
-crypto.Verify.prototype.verify = function (_object, _signature) {};
+crypto.Verify.prototype.verify = function(object, signature) {};
 
 /**
  * @param {string} object
@@ -456,31 +441,27 @@ crypto.Verify.prototype.verify = function (_object, _signature) {};
  * @param {(string)} signature_format
  * @return {boolean}
  */
-crypto.Verify.prototype.verify = function (
-  _object,
-  _signature,
-  _signature_format,
-) {};
+crypto.Verify.prototype.verify = function(object, signature, signature_format) {};
 
 /**
  * @param {number} prime_length
  * @param {number=} generator
  * @return {crypto.DiffieHellman}
  */
-crypto.createDiffieHellman = function (_prime_length, _generator) {};
+crypto.createDiffieHellman = function(prime_length, generator) {};
 
 /**
  * @param {Buffer} prime
  * @return {crypto.DiffieHellman}
  */
-crypto.createDiffieHellman = function (_prime) {};
+crypto.createDiffieHellman = function(prime) {};
 
 /**
  * @param {string} prime
  * @param {(string)} prime_encoding
  * @return {crypto.DiffieHellman}
  */
-crypto.createDiffieHellman = function (_prime, _prime_encoding) {};
+crypto.createDiffieHellman = function(prime, prime_encoding) {};
 
 /**
  * @param {string} prime
@@ -488,7 +469,7 @@ crypto.createDiffieHellman = function (_prime, _prime_encoding) {};
  * @param {(number|Buffer)} generator
  * @return {crypto.DiffieHellman}
  */
-crypto.createDiffieHellman = function (_prime, _prime_encoding, _generator) {};
+crypto.createDiffieHellman = function(prime, prime_encoding, generator) {};
 
 /**
  * @param {string} prime
@@ -497,44 +478,36 @@ crypto.createDiffieHellman = function (_prime, _prime_encoding, _generator) {};
  * @param {(string)} generator_encoding
  * @return {crypto.DiffieHellman}
  */
-crypto.createDiffieHellman = function (
-  _prime,
-  _prime_encoding,
-  _generator,
-  _generator_encoding,
-) {};
+crypto.createDiffieHellman = function(prime, prime_encoding, generator, generator_encoding) {};
 
 /**
  * @interface
  */
-crypto.DiffieHellman = function () {};
+crypto.DiffieHellman = function() {};
 
 /**
  * @return {Buffer}
  */
-crypto.DiffieHellman.prototype.generateKeys = function () {};
+crypto.DiffieHellman.prototype.generateKeys = function() {};
 
 /**
  * @param {(string)} encoding
  * @return {string}
  */
-crypto.DiffieHellman.prototype.generateKeys = function (_encoding) {};
+crypto.DiffieHellman.prototype.generateKeys = function(encoding) {};
 
 /**
  * @param {Buffer} other_public_key
  * @return {Buffer}
  */
-crypto.DiffieHellman.prototype.computeSecret = function (_other_public_key) {};
+crypto.DiffieHellman.prototype.computeSecret = function(other_public_key) {};
 
 /**
  * @param {string} other_public_key
  * @param {(string)} input_encoding
  * @return {Buffer}
  */
-crypto.DiffieHellman.prototype.computeSecret = function (
-  _other_public_key,
-  _input_encoding,
-) {};
+crypto.DiffieHellman.prototype.computeSecret = function(other_public_key, input_encoding) {};
 
 /**
  * @param {string} other_public_key
@@ -542,87 +515,77 @@ crypto.DiffieHellman.prototype.computeSecret = function (
  * @param {(string)} output_encoding
  * @return {string}
  */
-crypto.DiffieHellman.prototype.computeSecret = function (
-  _other_public_key,
-  _input_encoding,
-  _output_encoding,
-) {};
+crypto.DiffieHellman.prototype.computeSecret = function(other_public_key, input_encoding, output_encoding) {};
 
 /**
  * @return {Buffer}
  */
-crypto.DiffieHellman.prototype.getPrime = function () {};
+crypto.DiffieHellman.prototype.getPrime = function() {};
 
 /**
  * @param {(string)} encoding
  * @return {string}
  */
-crypto.DiffieHellman.prototype.getPrime = function (_encoding) {};
+crypto.DiffieHellman.prototype.getPrime = function(encoding) {};
 
 /**
  * @return {Buffer}
  */
-crypto.DiffieHellman.prototype.getGenerator = function () {};
+crypto.DiffieHellman.prototype.getGenerator = function() {};
 
 /**
  * @param {(string)} encoding
  * @return {string}
  */
-crypto.DiffieHellman.prototype.getGenerator = function (_encoding) {};
+crypto.DiffieHellman.prototype.getGenerator = function(encoding) {};
 
 /**
  * @return {Buffer}
  */
-crypto.DiffieHellman.prototype.getPublicKey = function () {};
+crypto.DiffieHellman.prototype.getPublicKey = function() {};
 
 /**
  * @param {(string)} encoding
  * @return {string}
  */
-crypto.DiffieHellman.prototype.getPublicKey = function (_encoding) {};
+crypto.DiffieHellman.prototype.getPublicKey = function(encoding) {};
 
 /**
  * @return {Buffer}
  */
-crypto.DiffieHellman.prototype.getPrivateKey = function () {};
+crypto.DiffieHellman.prototype.getPrivateKey = function() {};
 
 /**
  * @param {(string)} encoding
  * @return {string}
  */
-crypto.DiffieHellman.prototype.getPrivateKey = function (_encoding) {};
+crypto.DiffieHellman.prototype.getPrivateKey = function(encoding) {};
 
 /**
  * @param {Buffer} public_key
  * @return {void}
  */
-crypto.DiffieHellman.prototype.setPublicKey = function (_public_key) {};
+crypto.DiffieHellman.prototype.setPublicKey = function(public_key) {};
 
 /**
  * @param {string} public_key
  * @param {string} encoding
  * @return {void}
  */
-crypto.DiffieHellman.prototype.setPublicKey = function (
-  _public_key,
-  _encoding,
-) {};
+crypto.DiffieHellman.prototype.setPublicKey = function(public_key, encoding) {};
 
 /**
  * @param {Buffer} private_key
  * @return {void}
  */
-crypto.DiffieHellman.prototype.setPrivateKey = function (_private_key) {};
+crypto.DiffieHellman.prototype.setPrivateKey = function(private_key) {};
 
 /**
  * @param {string} private_key
  * @param {string} encoding
  * @return {void}
  */
-crypto.DiffieHellman.prototype.setPrivateKey = function (
-  _private_key,
-  _encoding,
-) {};
+crypto.DiffieHellman.prototype.setPrivateKey = function(private_key, encoding) {};
 
 /**
  * @type {number}
@@ -633,7 +596,7 @@ crypto.DiffieHellman.prototype.verifyError;
  * @param {string} group_name
  * @return {crypto.DiffieHellman}
  */
-crypto.getDiffieHellman = function (_group_name) {};
+crypto.getDiffieHellman = function(group_name) {};
 
 /**
  * @param {(string|Buffer)} password
@@ -644,14 +607,7 @@ crypto.getDiffieHellman = function (_group_name) {};
  * @param {(function(Error, Buffer): *)} callback
  * @return {void}
  */
-crypto.pbkdf2 = function (
-  _password,
-  _salt,
-  _iterations,
-  _keylen,
-  _digest,
-  _callback,
-) {};
+crypto.pbkdf2 = function(password, salt, iterations, keylen, digest, callback) {};
 
 /**
  * @param {(string|Buffer)} password
@@ -661,44 +617,38 @@ crypto.pbkdf2 = function (
  * @param {string} digest
  * @return {Buffer}
  */
-crypto.pbkdf2Sync = function (
-  _password,
-  _salt,
-  _iterations,
-  _keylen,
-  _digest,
-) {};
+crypto.pbkdf2Sync = function(password, salt, iterations, keylen, digest) {};
 
 /**
  * @param {number} size
  * @return {Buffer}
  */
-crypto.randomBytes = function (_size) {};
+crypto.randomBytes = function(size) {};
 
 /**
  * @param {number} size
  * @param {(function(Error, Buffer): void)} callback
  * @return {void}
  */
-crypto.randomBytes = function (_size, _callback) {};
+crypto.randomBytes = function(size, callback) {};
 
 /**
  * @param {number} size
  * @return {Buffer}
  */
-crypto.pseudoRandomBytes = function (_size) {};
+crypto.pseudoRandomBytes = function(size) {};
 
 /**
  * @param {number} size
  * @param {(function(Error, Buffer): void)} callback
  * @return {void}
  */
-crypto.pseudoRandomBytes = function (_size, _callback) {};
+crypto.pseudoRandomBytes = function(size, callback) {};
 
 /**
  * @interface
  */
-crypto.RsaPublicKey = function () {};
+crypto.RsaPublicKey = function() {};
 
 /**
  * @type {string}
@@ -713,7 +663,7 @@ crypto.RsaPublicKey.prototype.padding;
 /**
  * @interface
  */
-crypto.RsaPrivateKey = function () {};
+crypto.RsaPrivateKey = function() {};
 
 /**
  * @type {string}
@@ -735,82 +685,79 @@ crypto.RsaPrivateKey.prototype.padding;
  * @param {Buffer} buffer
  * @return {Buffer}
  */
-crypto.publicEncrypt = function (_public_key, _buffer) {};
+crypto.publicEncrypt = function(public_key, buffer) {};
 
 /**
  * @param {(string|crypto.RsaPrivateKey)} private_key
  * @param {Buffer} buffer
  * @return {Buffer}
  */
-crypto.privateDecrypt = function (_private_key, _buffer) {};
+crypto.privateDecrypt = function(private_key, buffer) {};
 
 /**
  * @param {(string|crypto.RsaPrivateKey)} private_key
  * @param {Buffer} buffer
  * @return {Buffer}
  */
-crypto.privateEncrypt = function (_private_key, _buffer) {};
+crypto.privateEncrypt = function(private_key, buffer) {};
 
 /**
  * @param {(string|crypto.RsaPublicKey)} public_key
  * @param {Buffer} buffer
  * @return {Buffer}
  */
-crypto.publicDecrypt = function (_public_key, _buffer) {};
+crypto.publicDecrypt = function(public_key, buffer) {};
 
 /**
  * @return {Array<string>}
  */
-crypto.getCiphers = function () {};
+crypto.getCiphers = function() {};
 
 /**
  * @return {Array<string>}
  */
-crypto.getCurves = function () {};
+crypto.getCurves = function() {};
 
 /**
  * @return {Array<string>}
  */
-crypto.getHashes = function () {};
+crypto.getHashes = function() {};
 
 /**
  * @interface
  */
-crypto.ECDH = function () {};
+crypto.ECDH = function() {};
 
 /**
  * @return {Buffer}
  */
-crypto.ECDH.prototype.generateKeys = function () {};
+crypto.ECDH.prototype.generateKeys = function() {};
 
 /**
  * @param {(string)} encoding
  * @return {string}
  */
-crypto.ECDH.prototype.generateKeys = function (_encoding) {};
+crypto.ECDH.prototype.generateKeys = function(encoding) {};
 
 /**
  * @param {(string)} encoding
  * @param {(string)} format
  * @return {string}
  */
-crypto.ECDH.prototype.generateKeys = function (_encoding, _format) {};
+crypto.ECDH.prototype.generateKeys = function(encoding, format) {};
 
 /**
  * @param {Buffer} other_public_key
  * @return {Buffer}
  */
-crypto.ECDH.prototype.computeSecret = function (_other_public_key) {};
+crypto.ECDH.prototype.computeSecret = function(other_public_key) {};
 
 /**
  * @param {string} other_public_key
  * @param {(string)} input_encoding
  * @return {Buffer}
  */
-crypto.ECDH.prototype.computeSecret = function (
-  _other_public_key,
-  _input_encoding,
-) {};
+crypto.ECDH.prototype.computeSecret = function(other_public_key, input_encoding) {};
 
 /**
  * @param {string} other_public_key
@@ -818,59 +765,55 @@ crypto.ECDH.prototype.computeSecret = function (
  * @param {(string)} output_encoding
  * @return {string}
  */
-crypto.ECDH.prototype.computeSecret = function (
-  _other_public_key,
-  _input_encoding,
-  _output_encoding,
-) {};
+crypto.ECDH.prototype.computeSecret = function(other_public_key, input_encoding, output_encoding) {};
 
 /**
  * @return {Buffer}
  */
-crypto.ECDH.prototype.getPrivateKey = function () {};
+crypto.ECDH.prototype.getPrivateKey = function() {};
 
 /**
  * @param {(string)} encoding
  * @return {string}
  */
-crypto.ECDH.prototype.getPrivateKey = function (_encoding) {};
+crypto.ECDH.prototype.getPrivateKey = function(encoding) {};
 
 /**
  * @return {Buffer}
  */
-crypto.ECDH.prototype.getPublicKey = function () {};
+crypto.ECDH.prototype.getPublicKey = function() {};
 
 /**
  * @param {(string)} encoding
  * @return {string}
  */
-crypto.ECDH.prototype.getPublicKey = function (_encoding) {};
+crypto.ECDH.prototype.getPublicKey = function(encoding) {};
 
 /**
  * @param {(string)} encoding
  * @param {(string)} format
  * @return {string}
  */
-crypto.ECDH.prototype.getPublicKey = function (_encoding, _format) {};
+crypto.ECDH.prototype.getPublicKey = function(encoding, format) {};
 
 /**
  * @param {Buffer} private_key
  * @return {void}
  */
-crypto.ECDH.prototype.setPrivateKey = function (_private_key) {};
+crypto.ECDH.prototype.setPrivateKey = function(private_key) {};
 
 /**
  * @param {string} private_key
  * @param {(string)} encoding
  * @return {void}
  */
-crypto.ECDH.prototype.setPrivateKey = function (_private_key, _encoding) {};
+crypto.ECDH.prototype.setPrivateKey = function(private_key, encoding) {};
 
 /**
  * @param {string} curve_name
  * @return {crypto.ECDH}
  */
-crypto.createECDH = function (_curve_name) {};
+crypto.createECDH = function(curve_name) {};
 
 /**
  * @type {string}
@@ -971,51 +914,51 @@ module.exports.DEFAULT_ENCODING = crypto.DEFAULT_ENCODING;
  * @interface
  * @extends {crypto.Signer}
  */
-crypto.Sign = function () {};
+crypto.Sign = function() {};
 
 /**
  * @param {number} size
  * @param {(function(Error, Buffer): *)=} callback
  * @return {void}
  */
-crypto.rng = function (_size, _callback) {};
+crypto.rng = function(size, callback) {};
 
 /**
  * @param {number} size
  * @param {(function(Error, Buffer): *)=} callback
  * @return {void}
  */
-crypto.prng = function (_size, _callback) {};
+crypto.prng = function(size, callback) {};
 
 /**
  * @interface
  * @extends {NodeJS.ReadWriteStream}
  */
-crypto.Decipher = function () {};
+crypto.Decipher = function() {};
 
 /**
  * @param {string} output_encoding
  * @return {(string|Buffer)}
  */
-crypto.Decipher.prototype.finaltol = function (_output_encoding) {};
+crypto.Decipher.prototype.finaltol = function(output_encoding) {};
 
 /**
  * @interface
  */
-crypto.ECDH = function () {};
+crypto.ECDH = function() {};
 
 /**
  * @param {Buffer} private_key
  * @return {void}
  */
-crypto.ECDH.prototype.setPublicKey = function (_private_key) {};
+crypto.ECDH.prototype.setPublicKey = function(private_key) {};
 
 /**
  * @param {string} private_key
  * @param {string} encoding
  * @return {void}
  */
-crypto.ECDH.prototype.setPublicKey = function (_private_key, _encoding) {};
+crypto.ECDH.prototype.setPublicKey = function(private_key, encoding) {};
 
 module.exports.Sign = crypto.Sign;
 
@@ -1026,3 +969,4 @@ module.exports.prng = crypto.prng;
 module.exports.Decipher = crypto.Decipher;
 
 module.exports.ECDH = crypto.ECDH;
+

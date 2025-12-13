@@ -27,22 +27,22 @@
  * @typedef {?(DocumentType|Element|CharacterData)}
  * @see https://www.w3.org/TR/domcore/#interface-childnode
  */
-var _ChildNode;
+var ChildNode;
 
 /**
  * @return {undefined}
  * @see https://www.w3.org/TR/domcore/#dom-childnode-remove
  */
-DocumentType.prototype.remove = function () {};
+DocumentType.prototype.remove = function() {};
 
 /**
  * @return {undefined}
  * @see https://www.w3.org/TR/domcore/#dom-childnode-remove
  */
-Element.prototype.remove = function () {};
+Element.prototype.remove = function() {};
 
 /**
  * @return {undefined}
  * @see https://www.w3.org/TR/domcore/#dom-childnode-remove
  */
-CharacterData.prototype.remove = function () {};
+CharacterData.prototype.remove = function() {};
