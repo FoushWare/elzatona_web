@@ -1,6 +1,7 @@
 import { atom } from "jotai";
 
 // Supabase user atom
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const supabaseUserAtom = atom<any | null>(null);
 
 // Auth loading state
