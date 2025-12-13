@@ -202,7 +202,9 @@ export function useUnifiedQuestions(
         }
 
         const queryString = queryParams.toString();
-        const url = `/api/questions/unified${queryString ? `?${queryString}` : ""}`;
+        const url = queryString
+          ? `/api/questions/unified?${queryString}`
+          : "/api/questions/unified";
         console.log("🔄 useUnifiedQuestions: Making API call to:", url);
         const response = await apiCall(url);
         console.log("🔄 useUnifiedQuestions: API response received:", response);
@@ -267,8 +269,7 @@ export function useUnifiedQuestions(
     } finally {
       setIsLoading(false);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [apiCall]);
 
   // Load learning paths
   const loadLearningPaths = useCallback(async () => {
@@ -339,7 +340,7 @@ export function useUnifiedQuestions(
         setIsCreating(false);
       }
     },
-    [loadQuestions, initialFilters],
+    [apiCall, loadQuestions, initialFilters],
   );
 
   // Update question
@@ -375,9 +376,8 @@ export function useUnifiedQuestions(
       } finally {
         setIsUpdating(false);
       }
-      // eslint-disable-next-line react-hooks/exhaustive-deps
     },
-    [currentQuestion],
+    [apiCall, currentQuestion],
   );
 
   // Delete question
@@ -408,9 +408,8 @@ export function useUnifiedQuestions(
       } finally {
         setIsDeleting(false);
       }
-      // eslint-disable-next-line react-hooks/exhaustive-deps
     },
-    [currentQuestion],
+    [apiCall, currentQuestion],
   );
 
   // Bulk import questions
@@ -470,7 +469,7 @@ export function useUnifiedQuestions(
         setIsCreating(false);
       }
     },
-    [loadQuestions, initialFilters],
+    [apiCall, loadQuestions, initialFilters],
   );
 
   // Search questions
@@ -510,9 +509,8 @@ export function useUnifiedQuestions(
       } finally {
         setIsLoading(false);
       }
-      // eslint-disable-next-line react-hooks/exhaustive-deps
     },
-    [],
+    [apiCall],
   );
 
   // Get random questions
@@ -553,21 +551,18 @@ export function useUnifiedQuestions(
       } finally {
         setIsLoading(false);
       }
-      // eslint-disable-next-line react-hooks/exhaustive-deps
     },
-    [],
+    [apiCall],
   );
 
   // Utility functions
   const clearError = useCallback(() => {
     setError(null);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const clearQuestions = useCallback(() => {
     setQuestions([]);
     setCurrentQuestion(null);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // Auto-load on mount
@@ -582,21 +577,25 @@ export function useUnifiedQuestions(
       );
 
       // Load questions first, then other data with delays to prevent Firebase conflicts
+      const handleLearningPathsError = (err: unknown) => {
+        console.error("Error loading learning paths:", err);
+      };
+
+      const handleStatsError = (err: unknown) => {
+        console.error("Error loading stats:", err);
+      };
+
       const loadDataSequentially = async () => {
         try {
           await loadQuestions(initialFilters);
 
           // Add small delays between API calls to prevent Firebase "Target ID already exists" errors
           setTimeout(() => {
-            loadLearningPaths().catch((err) =>
-              console.error("Error loading learning paths:", err),
-            );
+            loadLearningPaths().catch(handleLearningPathsError);
           }, 100);
 
           setTimeout(() => {
-            loadStats().catch((err) =>
-              console.error("Error loading stats:", err),
-            );
+            loadStats().catch(handleStatsError);
           }, 200);
         } catch (err) {
           console.error("Error in sequential data loading:", err);
@@ -686,5 +685,3 @@ export function useUnifiedQuestions(
     clearQuestions,
   };
 }
-
-// export default useUnifiedQuestions; // Removed default export, use named export instead
