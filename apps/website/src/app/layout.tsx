@@ -23,6 +23,7 @@ import { NavigationProvider } from "../../context/NavigationContext";
 
 // Force dynamic rendering to prevent static generation issues with auth context
 export const dynamic = "force-dynamic";
+export const revalidate = 0;
 
 const inter = Inter({
   subsets: ["latin"],
