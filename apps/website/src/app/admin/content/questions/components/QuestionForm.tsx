@@ -30,7 +30,7 @@ import { UnifiedQuestion } from "@elzatona/types";
 type Question = UnifiedQuestion;
 
 interface QuestionFormProps {
-  readonly initialData?: Question | undefined;
+  readonly initialData?: Question;
   readonly onSubmit: (question: Partial<Question>) => void;
   readonly onCancel: () => void;
   readonly cards: any[];
