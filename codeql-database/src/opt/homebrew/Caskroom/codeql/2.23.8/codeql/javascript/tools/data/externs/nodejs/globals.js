@@ -32,9 +32,9 @@
 //                 Zane Hannan AU <https://github.com/ZaneHannanAU>
 // Definitions: https://github.com/DefinitelyTyped/DefinitelyTyped
 
-/*
- *        Automatically generated from globals.d.ts
- */
+/*                                                       
+*        Automatically generated from globals.d.ts
+*/
 /**
  * @externs
  */
@@ -59,10 +59,7 @@ function ErrorConstructor() {}
  * @param {Function=} constructorOpt
  * @return {void}
  */
-ErrorConstructor.prototype.captureStackTrace = function (
-  _targetObject,
-  _constructorOpt,
-) {};
+ErrorConstructor.prototype.captureStackTrace = function(targetObject, constructorOpt) {};
 
 /**
  * @type {number}
@@ -72,32 +69,32 @@ ErrorConstructor.prototype.stackTraceLimit;
 /**
  * @interface
  */
-function _MapConstructor() {}
+function MapConstructor() {}
 
 /**
  * @interface
  */
-function _WeakMapConstructor() {}
+function WeakMapConstructor() {}
 
 /**
  * @interface
  */
-function _SetConstructor() {}
+function SetConstructor() {}
 
 /**
  * @interface
  */
-function _WeakSetConstructor() {}
+function WeakSetConstructor() {}
 
 /**
  * @type {NodeJS.Process}
  */
-var _process;
+var process;
 
 /**
  * @type {NodeJS.Global}
  */
-var _global;
+var global;
 
 /**
  * @type {string}
@@ -115,7 +112,7 @@ var __dirname;
  * @param {...*} args
  * @return {number}
  */
-var setTimeout = function (_handler, _timeout, _args) {};
+var setTimeout = function(handler, timeout, args) {};
 
 /**
  * @param {(function(...*): void)} callback
@@ -123,19 +120,19 @@ var setTimeout = function (_handler, _timeout, _args) {};
  * @param {...*} args
  * @return {NodeJS.Timer}
  */
-var setTimeout = function (_callback, _ms, _args) {};
+var setTimeout = function(callback, ms, args) {};
 
 /**
  * @param {number} handle
  * @return {void}
  */
-var clearTimeout = function (_handle) {};
+var clearTimeout = function(handle) {};
 
 /**
  * @param {NodeJS.Timer} timeoutId
  * @return {void}
  */
-var clearTimeout = function (_timeoutId) {};
+var clearTimeout = function(timeoutId) {};
 
 /**
  * @param {*} handler
@@ -143,7 +140,7 @@ var clearTimeout = function (_timeoutId) {};
  * @param {...*} args
  * @return {number}
  */
-var setInterval = function (_handler, _timeout, _args) {};
+var setInterval = function(handler, timeout, args) {};
 
 /**
  * @param {(function(...*): void)} callback
@@ -151,51 +148,51 @@ var setInterval = function (_handler, _timeout, _args) {};
  * @param {...*} args
  * @return {NodeJS.Timer}
  */
-var setInterval = function (_callback, _ms, _args) {};
+var setInterval = function(callback, ms, args) {};
 
 /**
  * @param {number} handle
  * @return {void}
  */
-var clearInterval = function (_handle) {};
+var clearInterval = function(handle) {};
 
 /**
  * @param {NodeJS.Timer} intervalId
  * @return {void}
  */
-var clearInterval = function (_intervalId) {};
+var clearInterval = function(intervalId) {};
 
 /**
  * @param {*} expression
  * @param {...*} args
  * @return {number}
  */
-var setImmediate = function (_expression, _args) {};
+var setImmediate = function(expression, args) {};
 
 /**
  * @param {(function(...*): void)} callback
  * @param {...*} args
  * @return {*}
  */
-var setImmediate = function (_callback, _args) {};
+var setImmediate = function(callback, args) {};
 
 /**
  * @param {number} handle
  * @return {void}
  */
-var clearImmediate = function (_handle) {};
+var clearImmediate = function(handle) {};
 
 /**
  * @param {*} immediateId
  * @return {void}
  */
-var clearImmediate = function (_immediateId) {};
+var clearImmediate = function(immediateId) {};
 
 /**
  * @interface
  * @type {((function(string): *))}
  */
-function _NodeRequireFunction() {}
+function NodeRequireFunction() {}
 
 /**
  * @interface
@@ -207,7 +204,7 @@ function NodeRequire() {}
  * @param {string} id
  * @return {string}
  */
-NodeRequire.prototype.resolve = function (_id) {};
+NodeRequire.prototype.resolve = function(id) {};
 
 /**
  * @type {*}
@@ -227,7 +224,7 @@ NodeRequire.prototype.main;
 /**
  * @type {NodeRequire}
  */
-var _require;
+var require;
 
 /**
  * @interface
@@ -272,12 +269,12 @@ NodeModule.prototype.children;
 /**
  * @type {NodeModule}
  */
-var _module;
+var module;
 
 /**
  * @type {*}
  */
-var _exports;
+var exports;
 
 /**
  * @param {string} str
@@ -285,28 +282,28 @@ var _exports;
  * @return {Buffer}
  * @constructor
  */
-var SlowBuffer = function (_str, _encoding) {};
+var SlowBuffer = function(str, encoding) {};
 
 /**
  * @param {number} size
  * @return {Buffer}
  * @constructor
  */
-var SlowBuffer = function (_size) {};
+var SlowBuffer = function(size) {};
 
 /**
  * @param {Uint8Array} size
  * @return {Buffer}
  * @constructor
  */
-var SlowBuffer = function (_size) {};
+var SlowBuffer = function(size) {};
 
 /**
  * @param {Array<*>} array
  * @return {Buffer}
  * @constructor
  */
-var SlowBuffer = function (_array) {};
+var SlowBuffer = function(array) {};
 
 /**
  * @type {Buffer}
@@ -328,6 +325,7 @@ SlowBuffer.byteLength;
  */
 SlowBuffer.concat;
 
+
 /**
  * @interface
  * @extends {NodeBuffer}
@@ -340,42 +338,42 @@ function Buffer() {}
  * @return {Buffer}
  * @constructor
  */
-var Buffer = function (_str, _encoding) {};
+var Buffer = function(str, encoding) {};
 
 /**
  * @param {number} size
  * @return {Buffer}
  * @constructor
  */
-var Buffer = function (_size) {};
+var Buffer = function(size) {};
 
 /**
  * @param {Uint8Array} array
  * @return {Buffer}
  * @constructor
  */
-var Buffer = function (_array) {};
+var Buffer = function(array) {};
 
 /**
  * @param {ArrayBuffer} arrayBuffer
  * @return {Buffer}
  * @constructor
  */
-var Buffer = function (_arrayBuffer) {};
+var Buffer = function(arrayBuffer) {};
 
 /**
  * @param {Array<*>} array
  * @return {Buffer}
  * @constructor
  */
-var Buffer = function (_array) {};
+var Buffer = function(array) {};
 
 /**
  * @param {Buffer} buffer
  * @return {Buffer}
  * @constructor
  */
-var Buffer = function (_buffer) {};
+var Buffer = function(buffer) {};
 
 /**
  * @type {(function(Array<*>): Buffer)|(function(ArrayBuffer, number=, number=): Buffer)|(function(Buffer): Buffer)|(function(string, string=): Buffer)}
@@ -422,13 +420,14 @@ Buffer.allocUnsafe;
  */
 Buffer.allocUnsafeSlow;
 
+
 var NodeJS = NodeJS || {};
 
 /**
  * @interface
  * @extends {Error}
  */
-NodeJS.ErrnoException = function () {};
+NodeJS.ErrnoException = function() {};
 
 /**
  * @type {string}
@@ -465,92 +464,89 @@ NodeJS.EventEmitter;
  * @param {Function} listener
  * @return {*}
  */
-NodeJS.EventEmitter.prototype.addListener = function (_event, _listener) {};
+NodeJS.EventEmitter.prototype.addListener = function(event, listener) {};
 
 /**
  * @param {string} event
  * @param {Function} listener
  * @return {*}
  */
-NodeJS.EventEmitter.prototype.on = function (_event, _listener) {};
+NodeJS.EventEmitter.prototype.on = function(event, listener) {};
 
 /**
  * @param {string} event
  * @param {Function} listener
  * @return {*}
  */
-NodeJS.EventEmitter.prototype.once = function (_event, _listener) {};
+NodeJS.EventEmitter.prototype.once = function(event, listener) {};
 
 /**
  * @param {string} event
  * @param {Function} listener
  * @return {*}
  */
-NodeJS.EventEmitter.prototype.removeListener = function (_event, _listener) {};
+NodeJS.EventEmitter.prototype.removeListener = function(event, listener) {};
 
 /**
  * @param {string=} event
  * @return {*}
  */
-NodeJS.EventEmitter.prototype.removeAllListeners = function (_event) {};
+NodeJS.EventEmitter.prototype.removeAllListeners = function(event) {};
 
 /**
  * @param {number} n
  * @return {*}
  */
-NodeJS.EventEmitter.prototype.setMaxListeners = function (_n) {};
+NodeJS.EventEmitter.prototype.setMaxListeners = function(n) {};
 
 /**
  * @return {number}
  */
-NodeJS.EventEmitter.prototype.getMaxListeners = function () {};
+NodeJS.EventEmitter.prototype.getMaxListeners = function() {};
 
 /**
  * @param {string} event
  * @return {Array<Function>}
  */
-NodeJS.EventEmitter.prototype.listeners = function (_event) {};
+NodeJS.EventEmitter.prototype.listeners = function(event) {};
 
 /**
  * @param {string} event
  * @param {...*} args
  * @return {boolean}
  */
-NodeJS.EventEmitter.prototype.emit = function (_event, _args) {};
+NodeJS.EventEmitter.prototype.emit = function(event, args) {};
 
 /**
  * @param {string} type
  * @return {number}
  */
-NodeJS.EventEmitter.prototype.listenerCount = function (_type) {};
+NodeJS.EventEmitter.prototype.listenerCount = function(type) {};
 
 /**
  * @param {string} event
  * @param {Function} listener
  * @return {*}
  */
-NodeJS.EventEmitter.prototype.prependListener = function (_event, _listener) {};
+NodeJS.EventEmitter.prototype.prependListener = function(event, listener) {};
 
 /**
  * @param {string} event
  * @param {Function} listener
  * @return {*}
  */
-NodeJS.EventEmitter.prototype.prependOnceListener = function (
-  _event,
-  _listener,
-) {};
+NodeJS.EventEmitter.prototype.prependOnceListener = function(event, listener) {};
 
 /**
  * @return {Array<string>}
  */
-NodeJS.EventEmitter.prototype.eventNames = function () {};
+NodeJS.EventEmitter.prototype.eventNames = function() {};
 
 /**
  * @interface
  * @extends {NodeJS.EventEmitter}
  */
-NodeJS.ReadableStream = function () {};
+NodeJS.ReadableStream = function() {};
 
 /**
  * @type {boolean}
@@ -561,23 +557,23 @@ NodeJS.ReadableStream.prototype.readable;
  * @param {number=} size
  * @return {(string|Buffer)}
  */
-NodeJS.ReadableStream.prototype.read = function (_size) {};
+NodeJS.ReadableStream.prototype.read = function(size) {};
 
 /**
  * @param {string} encoding
  * @return {void}
  */
-NodeJS.ReadableStream.prototype.setEncoding = function (_encoding) {};
+NodeJS.ReadableStream.prototype.setEncoding = function(encoding) {};
 
 /**
  * @return {NodeJS.ReadableStream}
  */
-NodeJS.ReadableStream.prototype.pause = function () {};
+NodeJS.ReadableStream.prototype.pause = function() {};
 
 /**
  * @return {NodeJS.ReadableStream}
  */
-NodeJS.ReadableStream.prototype.resume = function () {};
+NodeJS.ReadableStream.prototype.resume = function() {};
 
 /**
  * @template T
@@ -585,38 +581,38 @@ NodeJS.ReadableStream.prototype.resume = function () {};
  * @param {{end: boolean}=} options
  * @return {T}
  */
-NodeJS.ReadableStream.prototype.pipe = function (_destination, _options) {};
+NodeJS.ReadableStream.prototype.pipe = function(destination, options) {};
 
 /**
  * @template T
  * @param {T=} destination
  * @return {void}
  */
-NodeJS.ReadableStream.prototype.unpipe = function (_destination) {};
+NodeJS.ReadableStream.prototype.unpipe = function(destination) {};
 
 /**
  * @param {string} chunk
  * @return {void}
  */
-NodeJS.ReadableStream.prototype.unshift = function (_chunk) {};
+NodeJS.ReadableStream.prototype.unshift = function(chunk) {};
 
 /**
  * @param {Buffer} chunk
  * @return {void}
  */
-NodeJS.ReadableStream.prototype.unshift = function (_chunk) {};
+NodeJS.ReadableStream.prototype.unshift = function(chunk) {};
 
 /**
  * @param {NodeJS.ReadableStream} oldStream
  * @return {NodeJS.ReadableStream}
  */
-NodeJS.ReadableStream.prototype.wrap = function (_oldStream) {};
+NodeJS.ReadableStream.prototype.wrap = function(oldStream) {};
 
 /**
  * @interface
  * @extends {NodeJS.EventEmitter}
  */
-NodeJS.WritableStream = function () {};
+NodeJS.WritableStream = function() {};
 
 /**
  * @type {boolean}
@@ -628,7 +624,7 @@ NodeJS.WritableStream.prototype.writable;
  * @param {Function=} cb
  * @return {boolean}
  */
-NodeJS.WritableStream.prototype.write = function (_buffer, _cb) {};
+NodeJS.WritableStream.prototype.write = function(buffer, cb) {};
 
 /**
  * @param {string} str
@@ -636,26 +632,26 @@ NodeJS.WritableStream.prototype.write = function (_buffer, _cb) {};
  * @param {Function=} cb
  * @return {boolean}
  */
-NodeJS.WritableStream.prototype.write = function (_str, _encoding, _cb) {};
+NodeJS.WritableStream.prototype.write = function(str, encoding, cb) {};
 
 /**
  * @return {void}
  */
-NodeJS.WritableStream.prototype.end = function () {};
+NodeJS.WritableStream.prototype.end = function() {};
 
 /**
  * @param {Buffer} buffer
  * @param {Function=} cb
  * @return {void}
  */
-NodeJS.WritableStream.prototype.end = function (_buffer, _cb) {};
+NodeJS.WritableStream.prototype.end = function(buffer, cb) {};
 
 /**
  * @param {string} str
  * @param {Function=} cb
  * @return {void}
  */
-NodeJS.WritableStream.prototype.end = function (_str, _cb) {};
+NodeJS.WritableStream.prototype.end = function(str, cb) {};
 
 /**
  * @param {string} str
@@ -663,110 +659,110 @@ NodeJS.WritableStream.prototype.end = function (_str, _cb) {};
  * @param {Function=} cb
  * @return {void}
  */
-NodeJS.WritableStream.prototype.end = function (_str, _encoding, _cb) {};
+NodeJS.WritableStream.prototype.end = function(str, encoding, cb) {};
 
 /**
  * @interface
  * @extends {NodeJS.ReadableStream}
  * @extends {NodeJS.WritableStream}
  */
-NodeJS.ReadWriteStream = function () {};
+NodeJS.ReadWriteStream = function() {};
 
 /**
  * @return {NodeJS.ReadWriteStream}
  */
-NodeJS.ReadWriteStream.prototype.pause = function () {};
+NodeJS.ReadWriteStream.prototype.pause = function() {};
 
 /**
  * @return {NodeJS.ReadWriteStream}
  */
-NodeJS.ReadWriteStream.prototype.resume = function () {};
+NodeJS.ReadWriteStream.prototype.resume = function() {};
 
 /**
  * @interface
  * @extends {NodeJS.EventEmitter}
  */
-NodeJS.Events = function () {};
+NodeJS.Events = function() {};
 
 /**
  * @interface
  * @extends {NodeJS.Events}
  */
-NodeJS.Domain = function () {};
+NodeJS.Domain = function() {};
 
 /**
  * @param {Function} fn
  * @return {void}
  */
-NodeJS.Domain.prototype.run = function (_fn) {};
+NodeJS.Domain.prototype.run = function(fn) {};
 
 /**
  * @param {NodeJS.Events} emitter
  * @return {void}
  */
-NodeJS.Domain.prototype.add = function (_emitter) {};
+NodeJS.Domain.prototype.add = function(emitter) {};
 
 /**
  * @param {NodeJS.Events} emitter
  * @return {void}
  */
-NodeJS.Domain.prototype.remove = function (_emitter) {};
+NodeJS.Domain.prototype.remove = function(emitter) {};
 
 /**
  * @param {(function(Error, *): *)} cb
  * @return {*}
  */
-NodeJS.Domain.prototype.bind = function (_cb) {};
+NodeJS.Domain.prototype.bind = function(cb) {};
 
 /**
  * @param {(function(*): *)} cb
  * @return {*}
  */
-NodeJS.Domain.prototype.intercept = function (_cb) {};
+NodeJS.Domain.prototype.intercept = function(cb) {};
 
 /**
  * @return {void}
  */
-NodeJS.Domain.prototype.dispose = function () {};
+NodeJS.Domain.prototype.dispose = function() {};
 
 /**
  * @param {string} event
  * @param {Function} listener
  * @return {*}
  */
-NodeJS.Domain.prototype.addListener = function (_event, _listener) {};
+NodeJS.Domain.prototype.addListener = function(event, listener) {};
 
 /**
  * @param {string} event
  * @param {Function} listener
  * @return {*}
  */
-NodeJS.Domain.prototype.on = function (_event, _listener) {};
+NodeJS.Domain.prototype.on = function(event, listener) {};
 
 /**
  * @param {string} event
  * @param {Function} listener
  * @return {*}
  */
-NodeJS.Domain.prototype.once = function (_event, _listener) {};
+NodeJS.Domain.prototype.once = function(event, listener) {};
 
 /**
  * @param {string} event
  * @param {Function} listener
  * @return {*}
  */
-NodeJS.Domain.prototype.removeListener = function (_event, _listener) {};
+NodeJS.Domain.prototype.removeListener = function(event, listener) {};
 
 /**
  * @param {string=} event
  * @return {*}
  */
-NodeJS.Domain.prototype.removeAllListeners = function (_event) {};
+NodeJS.Domain.prototype.removeAllListeners = function(event) {};
 
 /**
  * @interface
  */
-NodeJS.MemoryUsage = function () {};
+NodeJS.MemoryUsage = function() {};
 
 /**
  * @type {number}
@@ -786,7 +782,7 @@ NodeJS.MemoryUsage.prototype.heapUsed;
 /**
  * @interface
  */
-NodeJS.ProcessVersions = function () {};
+NodeJS.ProcessVersions = function() {};
 
 /**
  * @type {string}
@@ -832,7 +828,7 @@ NodeJS.ProcessVersions.prototype.openssl;
  * @interface
  * @extends {NodeJS.EventEmitter}
  */
-NodeJS.Process = function () {};
+NodeJS.Process = function() {};
 
 /**
  * @type {NodeJS.WritableStream}
@@ -867,18 +863,18 @@ NodeJS.Process.prototype.execPath;
 /**
  * @return {void}
  */
-NodeJS.Process.prototype.abort = function () {};
+NodeJS.Process.prototype.abort = function() {};
 
 /**
  * @param {string} directory
  * @return {void}
  */
-NodeJS.Process.prototype.chdir = function (_directory) {};
+NodeJS.Process.prototype.chdir = function(directory) {};
 
 /**
  * @return {string}
  */
-NodeJS.Process.prototype.cwd = function () {};
+NodeJS.Process.prototype.cwd = function() {};
 
 /**
  * @type {*}
@@ -889,7 +885,7 @@ NodeJS.Process.prototype.env;
  * @param {number=} code
  * @return {void}
  */
-NodeJS.Process.prototype.exit = function (_code) {};
+NodeJS.Process.prototype.exit = function(code) {};
 
 /**
  * @type {number}
@@ -899,36 +895,36 @@ NodeJS.Process.prototype.exitCode;
 /**
  * @return {number}
  */
-NodeJS.Process.prototype.getgid = function () {};
+NodeJS.Process.prototype.getgid = function() {};
 
 /**
  * @param {number} id
  * @return {void}
  */
-NodeJS.Process.prototype.setgid = function (_id) {};
+NodeJS.Process.prototype.setgid = function(id) {};
 
 /**
  * @param {string} id
  * @return {void}
  */
-NodeJS.Process.prototype.setgid = function (_id) {};
+NodeJS.Process.prototype.setgid = function(id) {};
 
 /**
  * @return {number}
  */
-NodeJS.Process.prototype.getuid = function () {};
+NodeJS.Process.prototype.getuid = function() {};
 
 /**
  * @param {number} id
  * @return {void}
  */
-NodeJS.Process.prototype.setuid = function (_id) {};
+NodeJS.Process.prototype.setuid = function(id) {};
 
 /**
  * @param {string} id
  * @return {void}
  */
-NodeJS.Process.prototype.setuid = function (_id) {};
+NodeJS.Process.prototype.setuid = function(id) {};
 
 /**
  * @type {string}
@@ -952,12 +948,13 @@ NodeJS.Process.prototype.config.target_defaults;
  */
 NodeJS.Process.prototype.config.variables;
 
+
 /**
  * @param {number} pid
  * @param {(string|number)=} signal
  * @return {void}
  */
-NodeJS.Process.prototype.kill = function (_pid, _signal) {};
+NodeJS.Process.prototype.kill = function(pid, signal) {};
 
 /**
  * @type {number}
@@ -982,31 +979,31 @@ NodeJS.Process.prototype.platform;
 /**
  * @return {NodeJS.MemoryUsage}
  */
-NodeJS.Process.prototype.memoryUsage = function () {};
+NodeJS.Process.prototype.memoryUsage = function() {};
 
 /**
  * @param {Function} callback
  * @param {...*} args
  * @return {void}
  */
-NodeJS.Process.prototype.nextTick = function (_callback, _args) {};
+NodeJS.Process.prototype.nextTick = function(callback, args) {};
 
 /**
  * @param {number=} mask
  * @return {number}
  */
-NodeJS.Process.prototype.umask = function (_mask) {};
+NodeJS.Process.prototype.umask = function(mask) {};
 
 /**
  * @return {number}
  */
-NodeJS.Process.prototype.uptime = function () {};
+NodeJS.Process.prototype.uptime = function() {};
 
 /**
  * @param {Array<number>=} time
  * @return {Array<number>}
  */
-NodeJS.Process.prototype.hrtime = function (_time) {};
+NodeJS.Process.prototype.hrtime = function(time) {};
 
 /**
  * @type {NodeJS.Domain}
@@ -1018,12 +1015,12 @@ NodeJS.Process.prototype.domain;
  * @param {*=} sendHandle
  * @return {void}
  */
-NodeJS.Process.prototype.send = function (_message, _sendHandle) {};
+NodeJS.Process.prototype.send = function(message, sendHandle) {};
 
 /**
  * @return {void}
  */
-NodeJS.Process.prototype.disconnect = function () {};
+NodeJS.Process.prototype.disconnect = function() {};
 
 /**
  * @type {boolean}
@@ -1033,7 +1030,7 @@ NodeJS.Process.prototype.connected;
 /**
  * @interface
  */
-NodeJS.Global = function () {};
+NodeJS.Global = function() {};
 
 /**
  * @type {ArrayConstructor}
@@ -1056,42 +1053,42 @@ NodeJS.Global.prototype.Boolean;
  * @return {Buffer}
  * @constructor
  */
-NodeJS.Global.prototype.Buffer = function (_str, _encoding) {};
+NodeJS.Global.prototype.Buffer = function(str, encoding) {};
 
 /**
  * @param {number} size
  * @return {Buffer}
  * @constructor
  */
-NodeJS.Global.prototype.Buffer = function (_size) {};
+NodeJS.Global.prototype.Buffer = function(size) {};
 
 /**
  * @param {Uint8Array} array
  * @return {Buffer}
  * @constructor
  */
-NodeJS.Global.prototype.Buffer = function (_array) {};
+NodeJS.Global.prototype.Buffer = function(array) {};
 
 /**
  * @param {ArrayBuffer} arrayBuffer
  * @return {Buffer}
  * @constructor
  */
-NodeJS.Global.prototype.Buffer = function (_arrayBuffer) {};
+NodeJS.Global.prototype.Buffer = function(arrayBuffer) {};
 
 /**
  * @param {Array<*>} array
  * @return {Buffer}
  * @constructor
  */
-NodeJS.Global.prototype.Buffer = function (_array) {};
+NodeJS.Global.prototype.Buffer = function(array) {};
 
 /**
  * @param {Buffer} buffer
  * @return {Buffer}
  * @constructor
  */
-NodeJS.Global.prototype.Buffer = function (_buffer) {};
+NodeJS.Global.prototype.Buffer = function(buffer) {};
 
 /**
  * @type {(function(Array<*>): Buffer)|(function(ArrayBuffer, number=, number=): Buffer)|(function(Buffer): Buffer)|(function(string, string=): Buffer)}
@@ -1137,6 +1134,7 @@ NodeJS.Global.prototype.Buffer.allocUnsafe;
  * @type {(function(number): Buffer)}
  */
 NodeJS.Global.prototype.Buffer.allocUnsafeSlow;
+
 
 /**
  * @type {DataViewConstructor}
@@ -1436,23 +1434,24 @@ NodeJS.Global.prototype.v8debug;
 /**
  * @interface
  */
-NodeJS.Timer = function () {};
+NodeJS.Timer = function() {};
 
 /**
  * @return {void}
  */
-NodeJS.Timer.prototype.ref = function () {};
+NodeJS.Timer.prototype.ref = function() {};
 
 /**
  * @return {void}
  */
-NodeJS.Timer.prototype.unref = function () {};
+NodeJS.Timer.prototype.unref = function() {};
+
 
 /**
  * @interface
  * @template T
  */
-function _IterableIterator() {}
+function IterableIterator() {}
 
 /**
  * @interface
@@ -1467,7 +1466,7 @@ function NodeBuffer() {}
  * @param {string=} encoding
  * @return {number}
  */
-NodeBuffer.prototype.write = function (_string, _offset, _length, _encoding) {};
+NodeBuffer.prototype.write = function(string, offset, length, encoding) {};
 
 /**
  * @param {string=} encoding
@@ -1475,18 +1474,18 @@ NodeBuffer.prototype.write = function (_string, _offset, _length, _encoding) {};
  * @param {number=} end
  * @return {string}
  */
-NodeBuffer.prototype.toString = function (_encoding, _start, _end) {};
+NodeBuffer.prototype.toString = function(encoding, start, end) {};
 
 /**
  * @return {{type: string, data: Array<*>}}
  */
-NodeBuffer.prototype.toJSON = function () {};
+NodeBuffer.prototype.toJSON = function() {};
 
 /**
  * @param {Buffer} otherBuffer
  * @return {boolean}
  */
-NodeBuffer.prototype.equals = function (_otherBuffer) {};
+NodeBuffer.prototype.equals = function(otherBuffer) {};
 
 /**
  * @param {Buffer} otherBuffer
@@ -1496,13 +1495,7 @@ NodeBuffer.prototype.equals = function (_otherBuffer) {};
  * @param {number=} sourceEnd
  * @return {number}
  */
-NodeBuffer.prototype.compare = function (
-  _otherBuffer,
-  _targetStart,
-  _targetEnd,
-  _sourceStart,
-  _sourceEnd,
-) {};
+NodeBuffer.prototype.compare = function(otherBuffer, targetStart, targetEnd, sourceStart, sourceEnd) {};
 
 /**
  * @param {Buffer} targetBuffer
@@ -1511,19 +1504,14 @@ NodeBuffer.prototype.compare = function (
  * @param {number=} sourceEnd
  * @return {number}
  */
-NodeBuffer.prototype.copy = function (
-  _targetBuffer,
-  _targetStart,
-  _sourceStart,
-  _sourceEnd,
-) {};
+NodeBuffer.prototype.copy = function(targetBuffer, targetStart, sourceStart, sourceEnd) {};
 
 /**
  * @param {number=} start
  * @param {number=} end
  * @return {Buffer}
  */
-NodeBuffer.prototype.slice = function (_start, _end) {};
+NodeBuffer.prototype.slice = function(start, end) {};
 
 /**
  * @param {number} value
@@ -1532,12 +1520,7 @@ NodeBuffer.prototype.slice = function (_start, _end) {};
  * @param {boolean=} noAssert
  * @return {number}
  */
-NodeBuffer.prototype.writeUIntLE = function (
-  _value,
-  _offset,
-  _byteLength,
-  _noAssert,
-) {};
+NodeBuffer.prototype.writeUIntLE = function(value, offset, byteLength, noAssert) {};
 
 /**
  * @param {number} value
@@ -1546,12 +1529,7 @@ NodeBuffer.prototype.writeUIntLE = function (
  * @param {boolean=} noAssert
  * @return {number}
  */
-NodeBuffer.prototype.writeUIntBE = function (
-  _value,
-  _offset,
-  _byteLength,
-  _noAssert,
-) {};
+NodeBuffer.prototype.writeUIntBE = function(value, offset, byteLength, noAssert) {};
 
 /**
  * @param {number} value
@@ -1560,12 +1538,7 @@ NodeBuffer.prototype.writeUIntBE = function (
  * @param {boolean=} noAssert
  * @return {number}
  */
-NodeBuffer.prototype.writeIntLE = function (
-  _value,
-  _offset,
-  _byteLength,
-  _noAssert,
-) {};
+NodeBuffer.prototype.writeIntLE = function(value, offset, byteLength, noAssert) {};
 
 /**
  * @param {number} value
@@ -1574,12 +1547,7 @@ NodeBuffer.prototype.writeIntLE = function (
  * @param {boolean=} noAssert
  * @return {number}
  */
-NodeBuffer.prototype.writeIntBE = function (
-  _value,
-  _offset,
-  _byteLength,
-  _noAssert,
-) {};
+NodeBuffer.prototype.writeIntBE = function(value, offset, byteLength, noAssert) {};
 
 /**
  * @param {number} offset
@@ -1587,7 +1555,7 @@ NodeBuffer.prototype.writeIntBE = function (
  * @param {boolean=} noAssert
  * @return {number}
  */
-NodeBuffer.prototype.readUIntLE = function (_offset, _byteLength, _noAssert) {};
+NodeBuffer.prototype.readUIntLE = function(offset, byteLength, noAssert) {};
 
 /**
  * @param {number} offset
@@ -1595,7 +1563,7 @@ NodeBuffer.prototype.readUIntLE = function (_offset, _byteLength, _noAssert) {};
  * @param {boolean=} noAssert
  * @return {number}
  */
-NodeBuffer.prototype.readUIntBE = function (_offset, _byteLength, _noAssert) {};
+NodeBuffer.prototype.readUIntBE = function(offset, byteLength, noAssert) {};
 
 /**
  * @param {number} offset
@@ -1603,7 +1571,7 @@ NodeBuffer.prototype.readUIntBE = function (_offset, _byteLength, _noAssert) {};
  * @param {boolean=} noAssert
  * @return {number}
  */
-NodeBuffer.prototype.readIntLE = function (_offset, _byteLength, _noAssert) {};
+NodeBuffer.prototype.readIntLE = function(offset, byteLength, noAssert) {};
 
 /**
  * @param {number} offset
@@ -1611,120 +1579,120 @@ NodeBuffer.prototype.readIntLE = function (_offset, _byteLength, _noAssert) {};
  * @param {boolean=} noAssert
  * @return {number}
  */
-NodeBuffer.prototype.readIntBE = function (_offset, _byteLength, _noAssert) {};
+NodeBuffer.prototype.readIntBE = function(offset, byteLength, noAssert) {};
 
 /**
  * @param {number} offset
  * @param {boolean=} noAssert
  * @return {number}
  */
-NodeBuffer.prototype.readUInt8 = function (_offset, _noAssert) {};
+NodeBuffer.prototype.readUInt8 = function(offset, noAssert) {};
 
 /**
  * @param {number} offset
  * @param {boolean=} noAssert
  * @return {number}
  */
-NodeBuffer.prototype.readUInt16LE = function (_offset, _noAssert) {};
+NodeBuffer.prototype.readUInt16LE = function(offset, noAssert) {};
 
 /**
  * @param {number} offset
  * @param {boolean=} noAssert
  * @return {number}
  */
-NodeBuffer.prototype.readUInt16BE = function (_offset, _noAssert) {};
+NodeBuffer.prototype.readUInt16BE = function(offset, noAssert) {};
 
 /**
  * @param {number} offset
  * @param {boolean=} noAssert
  * @return {number}
  */
-NodeBuffer.prototype.readUInt32LE = function (_offset, _noAssert) {};
+NodeBuffer.prototype.readUInt32LE = function(offset, noAssert) {};
 
 /**
  * @param {number} offset
  * @param {boolean=} noAssert
  * @return {number}
  */
-NodeBuffer.prototype.readUInt32BE = function (_offset, _noAssert) {};
+NodeBuffer.prototype.readUInt32BE = function(offset, noAssert) {};
 
 /**
  * @param {number} offset
  * @param {boolean=} noAssert
  * @return {number}
  */
-NodeBuffer.prototype.readInt8 = function (_offset, _noAssert) {};
+NodeBuffer.prototype.readInt8 = function(offset, noAssert) {};
 
 /**
  * @param {number} offset
  * @param {boolean=} noAssert
  * @return {number}
  */
-NodeBuffer.prototype.readInt16LE = function (_offset, _noAssert) {};
+NodeBuffer.prototype.readInt16LE = function(offset, noAssert) {};
 
 /**
  * @param {number} offset
  * @param {boolean=} noAssert
  * @return {number}
  */
-NodeBuffer.prototype.readInt16BE = function (_offset, _noAssert) {};
+NodeBuffer.prototype.readInt16BE = function(offset, noAssert) {};
 
 /**
  * @param {number} offset
  * @param {boolean=} noAssert
  * @return {number}
  */
-NodeBuffer.prototype.readInt32LE = function (_offset, _noAssert) {};
+NodeBuffer.prototype.readInt32LE = function(offset, noAssert) {};
 
 /**
  * @param {number} offset
  * @param {boolean=} noAssert
  * @return {number}
  */
-NodeBuffer.prototype.readInt32BE = function (_offset, _noAssert) {};
+NodeBuffer.prototype.readInt32BE = function(offset, noAssert) {};
 
 /**
  * @param {number} offset
  * @param {boolean=} noAssert
  * @return {number}
  */
-NodeBuffer.prototype.readFloatLE = function (_offset, _noAssert) {};
+NodeBuffer.prototype.readFloatLE = function(offset, noAssert) {};
 
 /**
  * @param {number} offset
  * @param {boolean=} noAssert
  * @return {number}
  */
-NodeBuffer.prototype.readFloatBE = function (_offset, _noAssert) {};
+NodeBuffer.prototype.readFloatBE = function(offset, noAssert) {};
 
 /**
  * @param {number} offset
  * @param {boolean=} noAssert
  * @return {number}
  */
-NodeBuffer.prototype.readDoubleLE = function (_offset, _noAssert) {};
+NodeBuffer.prototype.readDoubleLE = function(offset, noAssert) {};
 
 /**
  * @param {number} offset
  * @param {boolean=} noAssert
  * @return {number}
  */
-NodeBuffer.prototype.readDoubleBE = function (_offset, _noAssert) {};
+NodeBuffer.prototype.readDoubleBE = function(offset, noAssert) {};
 
 /**
  * @return {Buffer}
  */
-NodeBuffer.prototype.swap16 = function () {};
+NodeBuffer.prototype.swap16 = function() {};
 
 /**
  * @return {Buffer}
  */
-NodeBuffer.prototype.swap32 = function () {};
+NodeBuffer.prototype.swap32 = function() {};
 
 /**
  * @return {Buffer}
  */
-NodeBuffer.prototype.swap64 = function () {};
+NodeBuffer.prototype.swap64 = function() {};
 
 /**
  * @param {number} value
@@ -1732,7 +1700,7 @@ NodeBuffer.prototype.swap64 = function () {};
  * @param {boolean=} noAssert
  * @return {number}
  */
-NodeBuffer.prototype.writeUInt8 = function (_value, _offset, _noAssert) {};
+NodeBuffer.prototype.writeUInt8 = function(value, offset, noAssert) {};
 
 /**
  * @param {number} value
@@ -1740,7 +1708,7 @@ NodeBuffer.prototype.writeUInt8 = function (_value, _offset, _noAssert) {};
  * @param {boolean=} noAssert
  * @return {number}
  */
-NodeBuffer.prototype.writeUInt16LE = function (_value, _offset, _noAssert) {};
+NodeBuffer.prototype.writeUInt16LE = function(value, offset, noAssert) {};
 
 /**
  * @param {number} value
@@ -1748,7 +1716,7 @@ NodeBuffer.prototype.writeUInt16LE = function (_value, _offset, _noAssert) {};
  * @param {boolean=} noAssert
  * @return {number}
  */
-NodeBuffer.prototype.writeUInt16BE = function (_value, _offset, _noAssert) {};
+NodeBuffer.prototype.writeUInt16BE = function(value, offset, noAssert) {};
 
 /**
  * @param {number} value
@@ -1756,7 +1724,7 @@ NodeBuffer.prototype.writeUInt16BE = function (_value, _offset, _noAssert) {};
  * @param {boolean=} noAssert
  * @return {number}
  */
-NodeBuffer.prototype.writeUInt32LE = function (_value, _offset, _noAssert) {};
+NodeBuffer.prototype.writeUInt32LE = function(value, offset, noAssert) {};
 
 /**
  * @param {number} value
@@ -1764,7 +1732,7 @@ NodeBuffer.prototype.writeUInt32LE = function (_value, _offset, _noAssert) {};
  * @param {boolean=} noAssert
  * @return {number}
  */
-NodeBuffer.prototype.writeUInt32BE = function (_value, _offset, _noAssert) {};
+NodeBuffer.prototype.writeUInt32BE = function(value, offset, noAssert) {};
 
 /**
  * @param {number} value
@@ -1772,7 +1740,7 @@ NodeBuffer.prototype.writeUInt32BE = function (_value, _offset, _noAssert) {};
  * @param {boolean=} noAssert
  * @return {number}
  */
-NodeBuffer.prototype.writeInt8 = function (_value, _offset, _noAssert) {};
+NodeBuffer.prototype.writeInt8 = function(value, offset, noAssert) {};
 
 /**
  * @param {number} value
@@ -1780,7 +1748,7 @@ NodeBuffer.prototype.writeInt8 = function (_value, _offset, _noAssert) {};
  * @param {boolean=} noAssert
  * @return {number}
  */
-NodeBuffer.prototype.writeInt16LE = function (_value, _offset, _noAssert) {};
+NodeBuffer.prototype.writeInt16LE = function(value, offset, noAssert) {};
 
 /**
  * @param {number} value
@@ -1788,7 +1756,7 @@ NodeBuffer.prototype.writeInt16LE = function (_value, _offset, _noAssert) {};
  * @param {boolean=} noAssert
  * @return {number}
  */
-NodeBuffer.prototype.writeInt16BE = function (_value, _offset, _noAssert) {};
+NodeBuffer.prototype.writeInt16BE = function(value, offset, noAssert) {};
 
 /**
  * @param {number} value
@@ -1796,7 +1764,7 @@ NodeBuffer.prototype.writeInt16BE = function (_value, _offset, _noAssert) {};
  * @param {boolean=} noAssert
  * @return {number}
  */
-NodeBuffer.prototype.writeInt32LE = function (_value, _offset, _noAssert) {};
+NodeBuffer.prototype.writeInt32LE = function(value, offset, noAssert) {};
 
 /**
  * @param {number} value
@@ -1804,7 +1772,7 @@ NodeBuffer.prototype.writeInt32LE = function (_value, _offset, _noAssert) {};
  * @param {boolean=} noAssert
  * @return {number}
  */
-NodeBuffer.prototype.writeInt32BE = function (_value, _offset, _noAssert) {};
+NodeBuffer.prototype.writeInt32BE = function(value, offset, noAssert) {};
 
 /**
  * @param {number} value
@@ -1812,7 +1780,7 @@ NodeBuffer.prototype.writeInt32BE = function (_value, _offset, _noAssert) {};
  * @param {boolean=} noAssert
  * @return {number}
  */
-NodeBuffer.prototype.writeFloatLE = function (_value, _offset, _noAssert) {};
+NodeBuffer.prototype.writeFloatLE = function(value, offset, noAssert) {};
 
 /**
  * @param {number} value
@@ -1820,7 +1788,7 @@ NodeBuffer.prototype.writeFloatLE = function (_value, _offset, _noAssert) {};
  * @param {boolean=} noAssert
  * @return {number}
  */
-NodeBuffer.prototype.writeFloatBE = function (_value, _offset, _noAssert) {};
+NodeBuffer.prototype.writeFloatBE = function(value, offset, noAssert) {};
 
 /**
  * @param {number} value
@@ -1828,7 +1796,7 @@ NodeBuffer.prototype.writeFloatBE = function (_value, _offset, _noAssert) {};
  * @param {boolean=} noAssert
  * @return {number}
  */
-NodeBuffer.prototype.writeDoubleLE = function (_value, _offset, _noAssert) {};
+NodeBuffer.prototype.writeDoubleLE = function(value, offset, noAssert) {};
 
 /**
  * @param {number} value
@@ -1836,7 +1804,7 @@ NodeBuffer.prototype.writeDoubleLE = function (_value, _offset, _noAssert) {};
  * @param {boolean=} noAssert
  * @return {number}
  */
-NodeBuffer.prototype.writeDoubleBE = function (_value, _offset, _noAssert) {};
+NodeBuffer.prototype.writeDoubleBE = function(value, offset, noAssert) {};
 
 /**
  * @param {*} value
@@ -1844,7 +1812,7 @@ NodeBuffer.prototype.writeDoubleBE = function (_value, _offset, _noAssert) {};
  * @param {number=} end
  * @return {*}
  */
-NodeBuffer.prototype.fill = function (_value, _offset, _end) {};
+NodeBuffer.prototype.fill = function(value, offset, end) {};
 
 /**
  * @param {(string|number|Buffer)} value
@@ -1852,7 +1820,7 @@ NodeBuffer.prototype.fill = function (_value, _offset, _end) {};
  * @param {string=} encoding
  * @return {number}
  */
-NodeBuffer.prototype.indexOf = function (_value, _byteOffset, _encoding) {};
+NodeBuffer.prototype.indexOf = function(value, byteOffset, encoding) {};
 
 /**
  * @param {(string|number|Buffer)} value
@@ -1860,12 +1828,12 @@ NodeBuffer.prototype.indexOf = function (_value, _byteOffset, _encoding) {};
  * @param {string=} encoding
  * @return {number}
  */
-NodeBuffer.prototype.lastIndexOf = function (_value, _byteOffset, _encoding) {};
+NodeBuffer.prototype.lastIndexOf = function(value, byteOffset, encoding) {};
 
 /**
  * @return {IterableIterator<Array<*>>}
  */
-NodeBuffer.prototype.entries = function () {};
+NodeBuffer.prototype.entries = function() {};
 
 /**
  * @param {(string|number|Buffer)} value
@@ -1873,17 +1841,17 @@ NodeBuffer.prototype.entries = function () {};
  * @param {string=} encoding
  * @return {boolean}
  */
-NodeBuffer.prototype.includes = function (_value, _byteOffset, _encoding) {};
+NodeBuffer.prototype.includes = function(value, byteOffset, encoding) {};
 
 /**
  * @return {IterableIterator<number>}
  */
-NodeBuffer.prototype.keys = function () {};
+NodeBuffer.prototype.keys = function() {};
 
 /**
  * @return {IterableIterator<number>}
  */
-NodeBuffer.prototype.values = function () {};
+NodeBuffer.prototype.values = function() {};
 
 /**
  * @interface
@@ -1896,49 +1864,49 @@ function NodeBuffer() {}
  * @param {number=} end
  * @return {Buffer}
  */
-NodeBuffer.prototype.utf8Slice = function (_start, _end) {};
+NodeBuffer.prototype.utf8Slice = function(start, end) {};
 
 /**
  * @param {number=} start
  * @param {number=} end
  * @return {Buffer}
  */
-NodeBuffer.prototype.binarySlice = function (_start, _end) {};
+NodeBuffer.prototype.binarySlice = function(start, end) {};
 
 /**
  * @param {number=} start
  * @param {number=} end
  * @return {Buffer}
  */
-NodeBuffer.prototype.asciiSlice = function (_start, _end) {};
+NodeBuffer.prototype.asciiSlice = function(start, end) {};
 
 /**
  * @param {string} string
  * @param {number=} offset
  * @return {Buffer}
  */
-NodeBuffer.prototype.utf8write = function (_string, _offset) {};
+NodeBuffer.prototype.utf8write = function(string, offset) {};
 
 /**
  * @param {string} string
  * @param {number=} offset
  * @return {Buffer}
  */
-NodeBuffer.prototype.binaryWrite = function (_string, _offset) {};
+NodeBuffer.prototype.binaryWrite = function(string, offset) {};
 
 /**
  * @param {string} string
  * @param {number=} offset
  * @return {Buffer}
  */
-NodeBuffer.prototype.asciiWrite = function (_string, _offset) {};
+NodeBuffer.prototype.asciiWrite = function(string, offset) {};
 
 /**
  * @param {string} string
  * @param {number=} offset
  * @return {Buffer}
  */
-NodeBuffer.prototype.utf8Write = function (_string, _offset) {};
+NodeBuffer.prototype.utf8Write = function(string, offset) {};
 
 /**
  * @interface
@@ -1951,225 +1919,226 @@ function Console() {}
  * @param {...*} optionalParams
  * @return {void}
  */
-Console.prototype.assert = function (_test, _message, _optionalParams) {};
+Console.prototype.assert = function(test, message, optionalParams) {};
 
 /**
  * @param {*} condition
  * @param {...*} var_args
  * @return {*}
  */
-Console.prototype.assert = function (_condition, _var_args) {};
+Console.prototype.assert = function(condition, var_args) {};
 
 /**
  * @param {*=} message
  * @param {...*} optionalParams
  * @return {void}
  */
-Console.prototype.error = function (_message, _optionalParams) {};
+Console.prototype.error = function(message, optionalParams) {};
 
 /**
  * @param {...*} var_args
  * @return {*}
  */
-Console.prototype.error = function (_var_args) {};
+Console.prototype.error = function(var_args) {};
 
 /**
  * @param {*=} message
  * @param {...*} optionalParams
  * @return {void}
  */
-Console.prototype.info = function (_message, _optionalParams) {};
+Console.prototype.info = function(message, optionalParams) {};
 
 /**
  * @param {...*} var_args
  * @return {*}
  */
-Console.prototype.info = function (_var_args) {};
+Console.prototype.info = function(var_args) {};
 
 /**
  * @param {*=} message
  * @param {...*} optionalParams
  * @return {void}
  */
-Console.prototype.log = function (_message, _optionalParams) {};
+Console.prototype.log = function(message, optionalParams) {};
 
 /**
  * @param {...*} var_args
  * @return {*}
  */
-Console.prototype.log = function (_var_args) {};
+Console.prototype.log = function(var_args) {};
 
 /**
  * @param {*=} message
  * @param {...*} optionalParams
  * @return {void}
  */
-Console.prototype.warn = function (_message, _optionalParams) {};
+Console.prototype.warn = function(message, optionalParams) {};
 
 /**
  * @param {...*} var_args
  * @return {*}
  */
-Console.prototype.warn = function (_var_args) {};
+Console.prototype.warn = function(var_args) {};
 
 /**
  * @param {string=} message
  * @param {...*} optionalParams
  * @return {void}
  */
-Console.prototype.debug = function (_message, _optionalParams) {};
+Console.prototype.debug = function(message, optionalParams) {};
 
 /**
  * @param {...*} var_args
  * @return {*}
  */
-Console.prototype.debug = function (_var_args) {};
+Console.prototype.debug = function(var_args) {};
 
 /**
  * @param {*=} value
  * @param {...*} optionalParams
  * @return {void}
  */
-Console.prototype.dir = function (_value, _optionalParams) {};
+Console.prototype.dir = function(value, optionalParams) {};
 
 /**
  * @param {*} value
  * @return {*}
  */
-Console.prototype.dir = function (_value) {};
+Console.prototype.dir = function(value) {};
 
 /**
  * @param {*} value
  * @return {void}
  */
-Console.prototype.dirxml = function (_value) {};
+Console.prototype.dirxml = function(value) {};
 
 /**
  * @param {...*} var_args
  * @return {*}
  */
-Console.prototype.dirxml = function (_var_args) {};
+Console.prototype.dirxml = function(var_args) {};
 
 /**
  * @param {Object} data
  * @param {*=} opt_columns
  * @return {*}
  */
-Console.prototype.table = function (_data, _opt_columns) {};
+Console.prototype.table = function(data, opt_columns) {};
 
 /**
  * @param {*=} message
  * @param {...*} optionalParams
  * @return {void}
  */
-Console.prototype.trace = function (_message, _optionalParams) {};
+Console.prototype.trace = function(message, optionalParams) {};
 
 /**
  * @return {*}
  */
-Console.prototype.trace = function () {};
+Console.prototype.trace = function() {};
 
 /**
  * @param {string=} countTitle
  * @return {void}
  */
-Console.prototype.count = function (_countTitle) {};
+Console.prototype.count = function(countTitle) {};
 
 /**
  * @param {*} value
  * @return {*}
  */
-Console.prototype.count = function (_value) {};
+Console.prototype.count = function(value) {};
 
 /**
  * @param {*} value
  * @return {*}
  */
-Console.prototype.markTimeline = function (_value) {};
+Console.prototype.markTimeline = function(value) {};
 
 /**
  * @param {string=} reportName
  * @return {void}
  */
-Console.prototype.profile = function (_reportName) {};
+Console.prototype.profile = function(reportName) {};
 
 /**
  * @param {string=} opt_title
  * @return {*}
  */
-Console.prototype.profile = function (_opt_title) {};
+Console.prototype.profile = function(opt_title) {};
 
 /**
  * @return {void}
  */
-Console.prototype.profileEnd = function () {};
+Console.prototype.profileEnd = function() {};
 
 /**
  * @param {string=} opt_title
  * @return {*}
  */
-Console.prototype.profileEnd = function (_opt_title) {};
+Console.prototype.profileEnd = function(opt_title) {};
 
 /**
  * @param {string=} timerName
  * @return {void}
  */
-Console.prototype.time = function (_timerName) {};
+Console.prototype.time = function(timerName) {};
 
 /**
  * @param {string} name
  * @return {*}
  */
-Console.prototype.time = function (_name) {};
+Console.prototype.time = function(name) {};
 
 /**
  * @param {string=} timerName
  * @return {void}
  */
-Console.prototype.timeEnd = function (_timerName) {};
+Console.prototype.timeEnd = function(timerName) {};
 
 /**
  * @param {string} name
  * @return {*}
  */
-Console.prototype.timeEnd = function (_name) {};
+Console.prototype.timeEnd = function(name) {};
 
 /**
  * @param {*} value
  * @return {*}
  */
-Console.prototype.timeStamp = function (_value) {};
+Console.prototype.timeStamp = function(value) {};
 
 /**
  * @param {string=} groupTitle
  * @return {void}
  */
-Console.prototype.group = function (_groupTitle) {};
+Console.prototype.group = function(groupTitle) {};
 
 /**
  * @param {...*} var_args
  * @return {*}
  */
-Console.prototype.group = function (_var_args) {};
+Console.prototype.group = function(var_args) {};
 
 /**
  * @param {string=} groupTitle
  * @return {void}
  */
-Console.prototype.groupCollapsed = function (_groupTitle) {};
+Console.prototype.groupCollapsed = function(groupTitle) {};
 
 /**
  * @param {...*} var_args
  * @return {*}
  */
-Console.prototype.groupCollapsed = function (_var_args) {};
+Console.prototype.groupCollapsed = function(var_args) {};
 
 /**
  * @return {void}
  */
-Console.prototype.groupEnd = function () {};
+Console.prototype.groupEnd = function() {};
 
 /**
  * @return {void}
  */
-Console.prototype.clear = function () {};
+Console.prototype.clear = function() {};
+

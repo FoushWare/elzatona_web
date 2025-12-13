@@ -43,7 +43,7 @@
  * @return {Module}
  * @constructor
  */
-var Module = function (_id, _parent) {};
+var Module = function(id, parent) {};
 
 /**
  * @type {Module}
@@ -64,17 +64,17 @@ Module.wrapper;
  * @param {string} script
  * @return {string}
  */
-Module.wrap = function (_script) {};
+Module.wrap = function(script) {};
 
 /**
  * @return {void}
  */
-Module.runMain = function () {};
+Module.runMain = function() {};
 
 /**
  * @return {Object}
  */
-Module.requireRepl = function () {};
+Module.requireRepl = function() {};
 
 /**
  * @type {Object}
@@ -140,6 +140,7 @@ Module._preloadModules;
  * @param {string} id
  * @return {*}
  */
-Module.prototype.require = function (_id) {};
+Module.prototype.require = function(id) {};
 
 module.exports = Module;
+

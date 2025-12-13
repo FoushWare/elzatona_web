@@ -650,7 +650,7 @@ export async function GET(
         let indentLevel = 0;
         let inClass = false;
         let inMethod = false;
-        const _inConstructor = false;
+        let inConstructor = false;
 
         formatted = lines
           .map((line, index) => {

@@ -42,19 +42,19 @@ var string_decoder = {};
 /**
  * @interface
  */
-string_decoder.NodeStringDecoder = function () {};
+string_decoder.NodeStringDecoder = function() {};
 
 /**
  * @param {Buffer} buffer
  * @return {string}
  */
-string_decoder.NodeStringDecoder.prototype.write = function (_buffer) {};
+string_decoder.NodeStringDecoder.prototype.write = function(buffer) {};
 
 /**
  * @param {Buffer=} buffer
  * @return {string}
  */
-string_decoder.NodeStringDecoder.prototype.end = function (_buffer) {};
+string_decoder.NodeStringDecoder.prototype.end = function(buffer) {};
 
 /**
  * @type {(function(new: string_decoder.NodeStringDecoder, string=))}
@@ -68,14 +68,13 @@ module.exports.StringDecoder = string_decoder.StringDecoder;
 /**
  * @interface
  */
-string_decoder.NodeStringDecoder = function () {};
+string_decoder.NodeStringDecoder = function() {};
 
 /**
  * @param {Buffer} buffer
  * @return {number}
  */
-string_decoder.NodeStringDecoder.prototype.detectIncompleteChar = function (
-  _buffer,
-) {};
+string_decoder.NodeStringDecoder.prototype.detectIncompleteChar = function(buffer) {};
 
 module.exports.NodeStringDecoder = string_decoder.NodeStringDecoder;
+

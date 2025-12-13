@@ -22,46 +22,56 @@
  * @externs
  */
 
+
+
 /**
  * @interface
  * @extends {EventTarget}
  */
 function BatteryManager() {}
 
+
 /**
  * @type {boolean}
  */
 BatteryManager.prototype.charging;
+
 
 /**
  * @type {number}
  */
 BatteryManager.prototype.chargingTime;
 
+
 /**
  * @type {number}
  */
 BatteryManager.prototype.dischargingTime;
+
 
 /**
  * @type {number}
  */
 BatteryManager.prototype.level;
 
+
 /**
  * @type {?function(!Event)}
  */
 BatteryManager.prototype.onchargingchange;
+
 
 /**
  * @type {?function(!Event)}
  */
 BatteryManager.prototype.onchargingtimechange;
 
+
 /**
  * @type {?function(!Event)}
  */
 BatteryManager.prototype.ondischargingtimechange;
+
 
 /**
  * @type {?function(!Event)}

@@ -1222,7 +1222,7 @@ test.describe("A-E2E-001: Admin Bulk Question Addition", () => {
     } catch (navError: unknown) {
       // Navigation promise might have timed out, but navigation might still have happened
       // Check the current URL to see if we're actually on an admin page
-      const error =
+      const _error =
         navError instanceof Error ? navError : new Error(String(navError));
       let currentURL = "";
       try {
@@ -1388,13 +1388,9 @@ test.describe("A-E2E-001: Admin Bulk Question Addition", () => {
         );
       } catch (recoveryError: unknown) {
         // If recovery also failed, throw the original error
-        const error =
-          recoveryError instanceof Error
-            ? recoveryError
-            : new Error(String(recoveryError));
         throw new Error(
           `Page crashed to error page: ${currentURLAfterLogin}\n` +
-            `Recovery failed: ${recoveryError.message}\n\n` +
+            `Recovery failed: ${recoveryError instanceof Error ? recoveryError.message : String(recoveryError)}\n\n` +
             `This usually indicates:\n` +
             `1. Dev server is not running (check: npm run dev:light:test)\n` +
             `2. Dev server crashed (check server logs)\n` +
@@ -1455,7 +1451,7 @@ test.describe("A-E2E-001: Admin Bulk Question Addition", () => {
           });
         } catch (navError: unknown) {
           // If navigation fails, check if we're already on the questions page
-          const error =
+          const _error =
             navError instanceof Error ? navError : new Error(String(navError));
           if (!page.isClosed()) {
             const currentURL = page.url();
@@ -2057,7 +2053,7 @@ test.describe("A-E2E-001: Admin Bulk Question Addition", () => {
         // Verify the question is in the response
         const questions = fetchData.data || [];
         const foundQuestion = questions.find(
-          (q: any) =>
+          (q: { title?: string }) =>
             q.title === questionTitle || q.title?.includes("E2E Test Question"),
         );
         if (foundQuestion) {
@@ -3616,11 +3612,14 @@ test.describe("A-E2E-001: Admin Bulk Question Addition", () => {
     } catch (optionError: unknown) {
       page.off("response", responseHandler);
       // Check if error is due to actual page closure
-      const error =
+      const _error =
         optionError instanceof Error
           ? optionError
           : new Error(String(optionError));
-      const errorMsg = optionError?.message || String(optionError);
+      const errorMsg =
+        optionError instanceof Error
+          ? optionError.message
+          : String(optionError);
       if (
         errorMsg.includes("Target page, context or browser has been closed") ||
         errorMsg.includes("page has been closed")

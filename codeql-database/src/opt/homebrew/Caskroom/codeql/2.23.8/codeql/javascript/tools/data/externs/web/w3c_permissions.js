@@ -21,37 +21,43 @@
  * @externs
  */
 
+
 /**
  * @typedef {{name: PermissionName}}
  * @see https://w3c.github.io/permissions/#permission-descriptor
  */
-var _PermissionDescriptor;
+var PermissionDescriptor;
+
 
 /**
  * @typedef {{name: PermissionName, userVisibleOnly: boolean}}
  * @see https://w3c.github.io/permissions/#push
  */
-var _PushPermissionDescriptor;
+var PushPermissionDescriptor;
+
 
 /**
  * @typedef {{name: PermissionName, sysex: boolean}}
  * @see https://w3c.github.io/permissions/#midi
  */
-var _MidiPermissionDescriptor;
+var MidiPermissionDescriptor;
+
 
 /**
  * Set of possible values: 'geolocation', 'notifications', 'push', 'midi'.
  * @typedef {string}
  * @see https://w3c.github.io/permissions/#idl-def-PermissionName
  */
-var _PermissionName;
+var PermissionName;
+
 
 /**
  * Set of possible values: 'granted', 'denied', 'prompt'.
  * @typedef {string}
  * @see https://w3c.github.io/permissions/#idl-def-PermissionState
  */
-var _PermissionState;
+var PermissionState;
+
 
 /**
  * @constructor
@@ -77,27 +83,24 @@ PermissionStatus.prototype.onchange;
  * @override
  * @return {undefined}
  */
-PermissionStatus.prototype.addEventListener = function (
-  _type,
-  _listener,
-  _opt_useCapture,
-) {};
+PermissionStatus.prototype.addEventListener = function(type,
+                                                       listener,
+                                                       opt_useCapture) {};
 
 /**
  * @param {boolean=} opt_useCapture
  * @override
  * @return {undefined}
  */
-PermissionStatus.prototype.removeEventListener = function (
-  _type,
-  _listener,
-  _opt_useCapture,
-) {};
+PermissionStatus.prototype.removeEventListener = function(type,
+                                                          listener,
+                                                          opt_useCapture) {};
 /**
  * @override
  * @return {boolean}
  */
-PermissionStatus.prototype.dispatchEvent = function (_evt) {};
+PermissionStatus.prototype.dispatchEvent = function(evt) {};
+
 
 /**
  * @constructor
@@ -110,7 +113,8 @@ function Permissions() {}
  * @return {!Promise<!PermissionStatus>}
  * @see https://w3c.github.io/permissions/#dom-permissions-query
  */
-Permissions.prototype.query = function (_permission) {};
+Permissions.prototype.query = function(permission) {};
+
 
 /** @type {Permissions} */
 Navigator.prototype.permissions;

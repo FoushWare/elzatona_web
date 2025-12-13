@@ -23,47 +23,48 @@
 /**
  * @return {!Array.<!Gamepad>}
  */
-navigator.getGamepads = function () {};
+navigator.getGamepads = function() {};
 
 /**
  * @return {!Array.<!Gamepad>}
  */
-navigator.webkitGetGamepads = function () {};
+navigator.webkitGetGamepads = function() {};
+
 
 /**
  * @interface
  */
-var Gamepad = function () {};
+var Gamepad = function() {};
 
 /**
  * @type {string}
  */
-Gamepad.prototype.id; // read-only
+Gamepad.prototype.id;  // read-only
 
 /**
  * @type {number}
  */
-Gamepad.prototype.index; // read-only
+Gamepad.prototype.index;  // read-only
 
 /**
  * @type {boolean}
  */
-Gamepad.prototype.connected; // read-only
+Gamepad.prototype.connected;  // read-only
 
 /**
  * @type {number}
  */
-Gamepad.prototype.timestamp; // read-only
+Gamepad.prototype.timestamp;  // read-only
 
 /**
  * @type {string}
  */
-Gamepad.prototype.mapping; // read-only
+Gamepad.prototype.mapping;  // read-only
 
 /**
  * @type {!Array.<number>}
  */
-Gamepad.prototype.axes; // read-only
+Gamepad.prototype.axes;  // read-only
 
 /**
  * Note: The W3C spec changed, this property now returns an array of
@@ -73,17 +74,18 @@ Gamepad.prototype.axes; // read-only
  */
 Gamepad.prototype.buttons;
 
+
 /**
  * @interface
  */
-var GamepadButton = function () {};
+var GamepadButton = function() {};
 
 /**
  * @type {boolean}
  */
-GamepadButton.prototype.pressed; // read-only
+GamepadButton.prototype.pressed;  // read-only
 
 /**
  * @type {number}
  */
-GamepadButton.prototype.value; // read-only
+GamepadButton.prototype.value;  // read-only

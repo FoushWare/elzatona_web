@@ -42,7 +42,7 @@ var os = {};
 /**
  * @interface
  */
-os.CpuInfo = function () {};
+os.CpuInfo = function() {};
 
 /**
  * @type {string}
@@ -81,10 +81,11 @@ os.CpuInfo.prototype.times.idle;
  */
 os.CpuInfo.prototype.times.irq;
 
+
 /**
  * @interface
  */
-os.NetworkInterfaceInfo = function () {};
+os.NetworkInterfaceInfo = function() {};
 
 /**
  * @type {string}
@@ -114,58 +115,58 @@ os.NetworkInterfaceInfo.prototype.internal;
 /**
  * @return {string}
  */
-os.hostname = function () {};
+os.hostname = function() {};
 
 /**
  * @return {Array<number>}
  */
-os.loadavg = function () {};
+os.loadavg = function() {};
 
 /**
  * @return {number}
  */
-os.uptime = function () {};
+os.uptime = function() {};
 
 /**
  * @return {number}
  */
-os.freemem = function () {};
+os.freemem = function() {};
 
 /**
  * @return {number}
  */
-os.totalmem = function () {};
+os.totalmem = function() {};
 
 /**
  * @return {Array<os.CpuInfo>}
  */
-os.cpus = function () {};
+os.cpus = function() {};
 
 /**
  * @return {string}
  */
-os.type = function () {};
+os.type = function() {};
 
 /**
  * @return {string}
  */
-os.release = function () {};
+os.release = function() {};
 
 /**
  * @return {Object<string,Array<os.NetworkInterfaceInfo>>}
  */
-os.networkInterfaces = function () {};
+os.networkInterfaces = function() {};
 
 /**
  * @return {string}
  */
-os.homedir = function () {};
+os.homedir = function() {};
 
 /**
  * @param {{encoding: string}=} options
  * @return {{username: string, uid: number, gid: number, shell: *, homedir: string}}
  */
-os.userInfo = function (_options) {};
+os.userInfo = function(options) {};
 
 os.constants;
 
@@ -184,20 +185,21 @@ os.constants.errno;
  */
 os.constants.signals;
 
-/**
- * @return {string}
- */
-os.arch = function () {};
 
 /**
  * @return {string}
  */
-os.platform = function () {};
+os.arch = function() {};
 
 /**
  * @return {string}
  */
-os.tmpdir = function () {};
+os.platform = function() {};
+
+/**
+ * @return {string}
+ */
+os.tmpdir = function() {};
 
 /**
  * @type {string}
@@ -207,7 +209,7 @@ os.EOL;
 /**
  * @return {(string)}
  */
-os.endianness = function () {};
+os.endianness = function() {};
 
 module.exports.CpuInfo = os.CpuInfo;
 
@@ -250,6 +252,7 @@ module.exports.endianness = os.endianness;
 /**
  * @return {string}
  */
-os.tmpDir = function () {};
+os.tmpDir = function() {};
 
 module.exports.tmpDir = os.tmpDir;
+

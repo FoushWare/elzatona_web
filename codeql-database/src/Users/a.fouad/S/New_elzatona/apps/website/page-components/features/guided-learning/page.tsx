@@ -738,59 +738,53 @@ export default function GuidedLearningPage() {
               data-testid="signup-cta-banner"
             >
               {/* Decorative background pattern - Hidden if user is logged in */}
-              {!isAuthenticated && (
-                <div className="absolute inset-0 opacity-10 overflow-hidden rounded-2xl">
-                  <div className="absolute top-0 right-0 w-64 h-64 bg-white rounded-full blur-3xl transform translate-x-1/2 -translate-y-1/2"></div>
-                  <div className="absolute bottom-0 left-0 w-48 h-48 bg-white rounded-full blur-3xl transform -translate-x-1/2 translate-y-1/2"></div>
-                </div>
-              )}
+              <div className="absolute inset-0 opacity-10 overflow-hidden rounded-2xl">
+                <div className="absolute top-0 right-0 w-64 h-64 bg-white rounded-full blur-3xl transform translate-x-1/2 -translate-y-1/2"></div>
+                <div className="absolute bottom-0 left-0 w-48 h-48 bg-white rounded-full blur-3xl transform -translate-x-1/2 translate-y-1/2"></div>
+              </div>
 
               <div className="relative z-10 flex flex-col md:flex-row md:items-center md:justify-between gap-4 md:gap-6">
                 {/* Left: Content */}
-                {!isAuthenticated && (
-                  <div className="flex-1">
-                    <div className="flex items-center gap-2 mb-3">
-                      <Star
-                        className="w-5 h-5 text-yellow-300"
-                        fill="currentColor"
-                      />
-                      <h3 className="text-white font-bold text-lg sm:text-xl">
-                        Create a free account to unlock full features
-                      </h3>
+                <div className="flex-1">
+                  <div className="flex items-center gap-2 mb-3">
+                    <Star
+                      className="w-5 h-5 text-yellow-300"
+                      fill="currentColor"
+                    />
+                    <h3 className="text-white font-bold text-lg sm:text-xl">
+                      Create a free account to unlock full features
+                    </h3>
+                  </div>
+                  <div
+                    className="grid grid-cols-1 sm:grid-cols-3 gap-2 sm:gap-3"
+                    data-testid="signup-cta-benefits"
+                  >
+                    <div className="flex items-center gap-2 text-blue-100 text-sm">
+                      <CheckCircle className="w-4 h-4 text-green-300 flex-shrink-0" />
+                      <span>Save progress</span>
                     </div>
-                    <div
-                      className="grid grid-cols-1 sm:grid-cols-3 gap-2 sm:gap-3"
-                      data-testid="signup-cta-benefits"
-                    >
-                      <div className="flex items-center gap-2 text-blue-100 text-sm">
-                        <CheckCircle className="w-4 h-4 text-green-300 flex-shrink-0" />
-                        <span>Save progress</span>
-                      </div>
-                      <div className="flex items-center gap-2 text-blue-100 text-sm">
-                        <TrendingUp className="w-4 h-4 text-green-300 flex-shrink-0" />
-                        <span>Track accuracy</span>
-                      </div>
-                      <div className="flex items-center gap-2 text-blue-100 text-sm">
-                        <Award className="w-4 h-4 text-green-300 flex-shrink-0" />
-                        <span>Sync flashcards</span>
-                      </div>
+                    <div className="flex items-center gap-2 text-blue-100 text-sm">
+                      <TrendingUp className="w-4 h-4 text-green-300 flex-shrink-0" />
+                      <span>Track accuracy</span>
+                    </div>
+                    <div className="flex items-center gap-2 text-blue-100 text-sm">
+                      <Award className="w-4 h-4 text-green-300 flex-shrink-0" />
+                      <span>Sync flashcards</span>
                     </div>
                   </div>
-                )}
+                </div>
 
                 {/* Right: CTA Button Container - allows scale transform */}
-                {!isAuthenticated && (
-                  <div className="p-2 -m-2 relative z-10">
-                    <a
-                      href="/auth"
-                      className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-white text-blue-600 hover:text-blue-700 dark:text-blue-700 dark:hover:text-blue-800 rounded-xl font-bold text-base hover:bg-blue-50 dark:hover:bg-blue-100 transition-all duration-200 shadow-lg hover:shadow-xl hover:scale-105 whitespace-nowrap will-change-transform transform-gpu relative"
-                      style={{ transformOrigin: "center" }}
-                    >
-                      Create free account
-                      <ArrowRight className="w-5 h-5" />
-                    </a>
-                  </div>
-                )}
+                <div className="p-2 -m-2 relative z-10">
+                  <a
+                    href="/auth"
+                    className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-white text-blue-600 hover:text-blue-700 dark:text-blue-700 dark:hover:text-blue-800 rounded-xl font-bold text-base hover:bg-blue-50 dark:hover:bg-blue-100 transition-all duration-200 shadow-lg hover:shadow-xl hover:scale-105 whitespace-nowrap will-change-transform transform-gpu relative"
+                    style={{ transformOrigin: "center" }}
+                  >
+                    Create free account
+                    <ArrowRight className="w-5 h-5" />
+                  </a>
+                </div>
               </div>
             </div>
           </div>

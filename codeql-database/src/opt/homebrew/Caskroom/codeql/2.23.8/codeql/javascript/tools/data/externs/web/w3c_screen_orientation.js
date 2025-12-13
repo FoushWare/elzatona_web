@@ -26,16 +26,16 @@
  * @extends {EventTarget}
  * @see https://w3c.github.io/screen-orientation/#screenorientation-interface
  */
-var ScreenOrientation = function () {};
+var ScreenOrientation = function() {};
 
 /**
  * @param {string} orientation
  * @return {!Promise<void>}
  */
-ScreenOrientation.prototype.lock = function (_orientation) {};
+ScreenOrientation.prototype.lock = function(orientation) {};
 
 /** @return {void} */
-ScreenOrientation.prototype.unlock = function () {};
+ScreenOrientation.prototype.unlock = function() {};
 
 /** @const {string} */
 ScreenOrientation.prototype.type;

@@ -29,13 +29,13 @@
  * @typedef {?(Document|DocumentFragment|Element)}
  * @see https://dom.spec.whatwg.org/#parentnode
  */
-var _ParentNode;
+var ParentNode;
 
 /**
  * @typedef {?(Element|CharacterData)}
  * @see https://dom.spec.whatwg.org/#nondocumenttypechildnode
  */
-var _NonDocumentTypeChildNode;
+var NonDocumentTypeChildNode;
 
 /**
  * @type {Element}

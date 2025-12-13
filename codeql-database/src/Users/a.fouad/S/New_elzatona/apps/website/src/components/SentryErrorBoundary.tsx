@@ -67,8 +67,8 @@ export class SentryErrorBoundary extends Component<Props, State> {
               Something went wrong
             </h1>
             <p className="mt-4 text-gray-600 dark:text-gray-400">
-              We're sorry, but something unexpected happened. Our team has been
-              notified and is working on a fix.
+              We&apos;re sorry, but something unexpected happened. Our team has
+              been notified and is working on a fix.
             </p>
             <button
               onClick={() => {

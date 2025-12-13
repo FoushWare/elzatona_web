@@ -23,6 +23,7 @@
  * @externs
  */
 
+
 /**
  * @interface
  */
@@ -37,11 +38,8 @@ function EventTarget() {}
  * @param {boolean} useCapture
  * @return {undefined}
  */
-EventTarget.prototype.addEventListener = function (
-  _type,
-  _listener,
-  _useCapture,
-) {};
+EventTarget.prototype.addEventListener = function(type, listener, useCapture)
+    {};
 
 /**
  * @param {string} type
@@ -49,17 +47,14 @@ EventTarget.prototype.addEventListener = function (
  * @param {boolean} useCapture
  * @return {undefined}
  */
-EventTarget.prototype.removeEventListener = function (
-  _type,
-  _listener,
-  _useCapture,
-) {};
+EventTarget.prototype.removeEventListener = function(type, listener, useCapture)
+    {};
 
 /**
  * @param {!Event} evt
  * @return {boolean}
  */
-EventTarget.prototype.dispatchEvent = function (_evt) {};
+EventTarget.prototype.dispatchEvent = function(evt) {};
 
 /**
  * @interface
@@ -70,7 +65,7 @@ function EventListener() {}
  * @param {!Event} evt
  * @return {undefined}
  */
-EventListener.prototype.handleEvent = function (_evt) {};
+EventListener.prototype.handleEvent = function(evt) {};
 
 // The EventInit interface and the parameters to the Event constructor are part
 // of DOM Level 3 (suggested) and the DOM "Living Standard" (mandated). They are
@@ -95,12 +90,13 @@ EventInit.prototype.cancelable;
 /** @type {(undefined|boolean)} */
 EventInit.prototype.composed;
 
+
 /**
  * @constructor
  * @param {string} type
  * @param {EventInit=} opt_eventInitDict
  */
-function Event(_type, _opt_eventInitDict) {}
+function Event(type, opt_eventInitDict) {}
 
 /**
  * @type {number}
@@ -119,6 +115,7 @@ Event.BUBBLING_PHASE;
  * @see http://www.w3.org/TR/DOM-Level-2-Events/ecma-script-binding.html
  */
 Event.CAPTURING_PHASE;
+
 
 /** @type {string} */
 Event.prototype.type;
@@ -157,12 +154,12 @@ Event.prototype.deepPath;
 /**
  * @return {undefined}
  */
-Event.prototype.stopPropagation = function () {};
+Event.prototype.stopPropagation = function() {};
 
 /**
  * @return {undefined}
  */
-Event.prototype.preventDefault = function () {};
+Event.prototype.preventDefault = function() {};
 
 /**
  * @param {string} eventTypeArg
@@ -170,11 +167,7 @@ Event.prototype.preventDefault = function () {};
  * @param {boolean} cancelableArg
  * @return {undefined}
  */
-Event.prototype.initEvent = function (
-  _eventTypeArg,
-  _canBubbleArg,
-  _cancelableArg,
-) {};
+Event.prototype.initEvent = function(eventTypeArg, canBubbleArg, cancelableArg) {};
 
 /**
  * @record
@@ -193,7 +186,7 @@ CustomEventInit.prototype.detail;
  * @param {CustomEventInit=} opt_eventInitDict
  * @see http://www.w3.org/TR/DOM-Level-3-Events/#interface-CustomEvent
  */
-function CustomEvent(_type, _opt_eventInitDict) {}
+function CustomEvent(type, opt_eventInitDict) {}
 
 /**
  * @param {string} eventType
@@ -202,12 +195,8 @@ function CustomEvent(_type, _opt_eventInitDict) {}
  * @param {*} detail
  * @return {undefined}
  */
-CustomEvent.prototype.initCustomEvent = function (
-  _eventType,
-  _bubbles,
-  _cancelable,
-  _detail,
-) {};
+CustomEvent.prototype.initCustomEvent = function(
+    eventType, bubbles, cancelable, detail) {};
 
 /**
  * @type {*}
@@ -223,7 +212,7 @@ function DocumentEvent() {}
  * @param {string} eventType
  * @return {!Event}
  */
-DocumentEvent.prototype.createEvent = function (_eventType) {};
+DocumentEvent.prototype.createEvent = function(eventType) {};
 
 /**
  * @record
@@ -244,7 +233,7 @@ UIEventInit.prototype.detail;
  * @param {string} type
  * @param {UIEventInit=} opt_eventInitDict
  */
-function UIEvent(_type, _opt_eventInitDict) {}
+function UIEvent(type, opt_eventInitDict) {}
 
 /** @type {number} */
 UIEvent.prototype.detail;
@@ -257,13 +246,8 @@ UIEvent.prototype.detail;
  * @param {number} detailArg
  * @return {undefined}
  */
-UIEvent.prototype.initUIEvent = function (
-  _typeArg,
-  _canBubbleArg,
-  _cancelableArg,
-  _viewArg,
-  _detailArg,
-) {};
+UIEvent.prototype.initUIEvent = function(typeArg, canBubbleArg, cancelableArg,
+    viewArg, detailArg) {};
 
 /**
  * @record
@@ -348,7 +332,7 @@ MouseEventInit.prototype.relatedTarget;
  * @param {string} type
  * @param {MouseEventInit=} opt_eventInitDict
  */
-function MouseEvent(_type, _opt_eventInitDict) {}
+function MouseEvent(type, opt_eventInitDict) {}
 
 /** @type {number} */
 MouseEvent.prototype.screenX;
@@ -379,6 +363,7 @@ MouseEvent.prototype.button;
 
 /** @type {EventTarget} */
 MouseEvent.prototype.relatedTarget;
+
 
 /**
  * @constructor
@@ -412,16 +397,8 @@ MutationEvent.prototype.attrChange;
  * @param {number} attrChangeArg
  * @return {undefined}
  */
-MutationEvent.prototype.initMutationEvent = function (
-  _typeArg,
-  _canBubbleArg,
-  _cancelableArg,
-  _relatedNodeArg,
-  _prevValueArg,
-  _newValueArg,
-  _attrNameArg,
-  _attrChangeArg,
-) {};
+MutationEvent.prototype.initMutationEvent = function(typeArg, canBubbleArg, cancelableArg, relatedNodeArg, prevValueArg, newValueArg, attrNameArg, attrChangeArg) {};
+
 
 // DOM3
 /**
@@ -458,7 +435,7 @@ KeyboardEventInit.prototype.locale;
  * @param {string} type
  * @param {KeyboardEventInit=} opt_eventInitDict
  */
-function KeyboardEvent(_type, _opt_eventInitDict) {}
+function KeyboardEvent(type, opt_eventInitDict) {}
 
 /** @type {string} */
 KeyboardEvent.prototype.keyIdentifier;
@@ -479,7 +456,7 @@ KeyboardEvent.prototype.metaKey;
  * @param {string} keyIdentifierArg
  * @return {boolean}
  */
-KeyboardEvent.prototype.getModifierState = function (_keyIdentifierArg) {};
+KeyboardEvent.prototype.getModifierState = function(keyIdentifierArg) {};
 
 /**
  * @record
@@ -491,6 +468,7 @@ function FocusEventInit() {}
 /** @type {undefined|?EventTarget} */
 FocusEventInit.prototype.relatedTarget;
 
+
 /**
  * The FocusEvent interface provides specific contextual information associated
  * with Focus events.
@@ -501,16 +479,17 @@ FocusEventInit.prototype.relatedTarget;
  * @param {string} type
  * @param {FocusEventInit=} opt_eventInitDict
  */
-function FocusEvent(_type, _opt_eventInitDict) {}
+function FocusEvent(type, opt_eventInitDict) {}
 
 /** @type {EventTarget} */
 FocusEvent.prototype.relatedTarget;
+
 
 /**
  * See https://dom.spec.whatwg.org/#dictdef-eventlisteneroptions
  * @record
  */
-var EventListenerOptions = function () {};
+var EventListenerOptions = function() {};
 
 /** @type {boolean|undefined} */
 EventListenerOptions.prototype.capture;
@@ -520,7 +499,7 @@ EventListenerOptions.prototype.capture;
  * @record
  * @extends {EventListenerOptions}
  */
-var AddEventListenerOptions = function () {};
+var AddEventListenerOptions = function() {};
 
 /** @type {boolean|undefined} */
 AddEventListenerOptions.prototype.passive;
@@ -548,6 +527,7 @@ InputEventInit.prototype.inputType;
 /** @type {undefined|?DataTransfer} */
 InputEventInit.prototype.dataTransfer;
 
+
 // TODO(charleyroy): Add getTargetRanges() once a consensus has been made
 // regarding how to structure these values. See
 // https://github.com/w3c/input-events/issues/38.
@@ -559,7 +539,7 @@ InputEventInit.prototype.dataTransfer;
  * @see https://www.w3.org/TR/uievents/#interface-inputevent
  * @see https://w3c.github.io/input-events/#interface-InputEvent
  */
-function InputEvent(_type, _opt_eventInitDict) {}
+function InputEvent(type, opt_eventInitDict) {}
 
 /** @type {string} */
 InputEvent.prototype.data;

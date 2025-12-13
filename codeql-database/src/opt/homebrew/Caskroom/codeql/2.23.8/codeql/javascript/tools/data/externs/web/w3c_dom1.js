@@ -29,7 +29,7 @@
  * @param {string=} message
  * @see http://www.w3.org/TR/1998/REC-DOM-Level-1-19981001/level-one-core.html#ID-17189187
  */
-function DOMException(_message, _name) {}
+function DOMException(message, name) {}
 
 /**
  * @type {number}
@@ -95,7 +95,7 @@ DOMException.INUSE_ATTRIBUTE_ERR = 10;
  * @constructor
  * @see http://www.w3.org/TR/1998/REC-DOM-Level-1-19981001/level-one-core.html#ID-258A00AF
  */
-function _ExceptionCode() {}
+function ExceptionCode() {}
 
 /**
  * @constructor
@@ -110,7 +110,7 @@ function DOMImplementation() {}
  * @see http://www.w3.org/TR/1998/REC-DOM-Level-1-19981001/level-one-core.html#ID-5CED94D7
  * @nosideeffects
  */
-DOMImplementation.prototype.hasFeature = function (_feature, _version) {};
+DOMImplementation.prototype.hasFeature = function(feature, version) {};
 
 /**
  * @constructor
@@ -124,24 +124,20 @@ function Node() {}
  * @override
  * @return {undefined}
  */
-Node.prototype.addEventListener = function (_type, _listener, _opt_useCapture) {};
+Node.prototype.addEventListener = function(type, listener, opt_useCapture) {};
 
 /**
  * @param {boolean=} opt_useCapture
  * @override
  * @return {undefined}
  */
-Node.prototype.removeEventListener = function (
-  _type,
-  _listener,
-  _opt_useCapture,
-) {};
+Node.prototype.removeEventListener = function(type, listener, opt_useCapture) {};
 
 /**
  * @override
  * @return {boolean}
  */
-Node.prototype.dispatchEvent = function (_evt) {};
+Node.prototype.dispatchEvent = function(evt) {};
 
 /**
  * @type {NamedNodeMap<!Attr>}
@@ -214,7 +210,7 @@ Node.prototype.previousSibling;
  * @return {Node}
  * @see http://www.w3.org/TR/1998/REC-DOM-Level-1-19981001/level-one-core.html#method-appendChild
  */
-Node.prototype.appendChild = function (_newChild) {};
+Node.prototype.appendChild = function(newChild) {};
 
 /**
  * @param {boolean} deep
@@ -222,14 +218,14 @@ Node.prototype.appendChild = function (_newChild) {};
  * @see http://www.w3.org/TR/1998/REC-DOM-Level-1-19981001/level-one-core.html#method-cloneNode
  * @nosideeffects
  */
-Node.prototype.cloneNode = function (_deep) {};
+Node.prototype.cloneNode = function(deep) {};
 
 /**
  * @return {boolean}
  * @see http://www.w3.org/TR/1998/REC-DOM-Level-1-19981001/level-one-core.html#method-hasChildNodes
  * @nosideeffects
  */
-Node.prototype.hasChildNodes = function () {};
+Node.prototype.hasChildNodes = function() {};
 
 /**
  * @param {Node} newChild
@@ -237,14 +233,14 @@ Node.prototype.hasChildNodes = function () {};
  * @return {!Node}
  * @see http://www.w3.org/TR/1998/REC-DOM-Level-1-19981001/level-one-core.html#method-insertBefore
  */
-Node.prototype.insertBefore = function (_newChild, _refChild) {};
+Node.prototype.insertBefore = function(newChild, refChild) {};
 
 /**
  * @param {Node} oldChild
  * @return {!Node}
  * @see http://www.w3.org/TR/1998/REC-DOM-Level-1-19981001/level-one-core.html#method-removeChild
  */
-Node.prototype.removeChild = function (_oldChild) {};
+Node.prototype.removeChild = function(oldChild) {};
 
 /**
  * @param {Node} newChild
@@ -252,7 +248,7 @@ Node.prototype.removeChild = function (_oldChild) {};
  * @return {!Node}
  * @see http://www.w3.org/TR/1998/REC-DOM-Level-1-19981001/level-one-core.html#method-replaceChild
  */
-Node.prototype.replaceChild = function (_newChild, _oldChild) {};
+Node.prototype.replaceChild = function(newChild, oldChild) {};
 
 /**
  * @type {number}
@@ -337,7 +333,7 @@ Node.NOTATION_NODE;
  * @extends {Node}
  * @see http://www.w3.org/TR/1998/REC-DOM-Level-1-19981001/level-one-core.html#ID-B63ED1A3
  */
-function _DocumentFragment() {}
+function DocumentFragment() {}
 
 /**
  * @constructor
@@ -370,7 +366,7 @@ Document.prototype.implementation;
  * @see http://www.w3.org/TR/1998/REC-DOM-Level-1-19981001/level-one-core.html#method-createAttribute
  * @nosideeffects
  */
-Document.prototype.createAttribute = function (_name) {};
+Document.prototype.createAttribute = function(name) {};
 
 /**
  * @param {string} data
@@ -378,7 +374,7 @@ Document.prototype.createAttribute = function (_name) {};
  * @see http://www.w3.org/TR/1998/REC-DOM-Level-1-19981001/level-one-core.html#method-createComment
  * @nosideeffects
  */
-Document.prototype.createComment = function (_data) {};
+Document.prototype.createComment = function(data) {};
 
 /**
  * @param {string} data
@@ -386,14 +382,14 @@ Document.prototype.createComment = function (_data) {};
  * @see http://www.w3.org/TR/1998/REC-DOM-Level-1-19981001/level-one-core.html#method-createCDATASection
  * @nosideeffects
  */
-Document.prototype.createCDATASection = function (_data) {};
+Document.prototype.createCDATASection = function(data) {};
 
 /**
  * @return {!DocumentFragment}
  * @see http://www.w3.org/TR/1998/REC-DOM-Level-1-19981001/level-one-core.html#method-createDocumentFragment
  * @nosideeffects
  */
-Document.prototype.createDocumentFragment = function () {};
+Document.prototype.createDocumentFragment = function() {};
 
 /**
  * Create a DOM element.
@@ -408,7 +404,7 @@ Document.prototype.createDocumentFragment = function () {};
  * @see http://www.w3.org/TR/1998/REC-DOM-Level-1-19981001/level-one-core.html#method-createElement
  * @see http://w3c.github.io/webcomponents/spec/custom/#extensions-to-document-interface-to-instantiate
  */
-Document.prototype.createElement = function (_tagName, _opt_typeExtension) {};
+Document.prototype.createElement = function(tagName, opt_typeExtension) {};
 
 /**
  * @param {string} name
@@ -416,7 +412,7 @@ Document.prototype.createElement = function (_tagName, _opt_typeExtension) {};
  * @see http://www.w3.org/TR/1998/REC-DOM-Level-1-19981001/level-one-core.html#method-createEntityReference
  * @nosideeffects
  */
-Document.prototype.createEntityReference = function (_name) {};
+Document.prototype.createEntityReference = function(name) {};
 
 /**
  * @param {string} target
@@ -425,7 +421,7 @@ Document.prototype.createEntityReference = function (_name) {};
  * @see http://www.w3.org/TR/1998/REC-DOM-Level-1-19981001/level-one-core.html#method-createProcessingInstruction
  * @nosideeffects
  */
-Document.prototype.createProcessingInstruction = function (_target, _data) {};
+Document.prototype.createProcessingInstruction = function(target, data) {};
 
 /**
  * @param {number|string} data
@@ -433,7 +429,7 @@ Document.prototype.createProcessingInstruction = function (_target, _data) {};
  * @see http://www.w3.org/TR/1998/REC-DOM-Level-1-19981001/level-one-core.html#method-createTextNode
  * @nosideeffects
  */
-Document.prototype.createTextNode = function (_data) {};
+Document.prototype.createTextNode = function(data) {};
 
 /**
  * @param {string} tagname
@@ -441,7 +437,7 @@ Document.prototype.createTextNode = function (_data) {};
  * @see http://www.w3.org/TR/1998/REC-DOM-Level-1-19981001/level-one-core.html#ID-A6C9094
  * @nosideeffects
  */
-Document.prototype.getElementsByTagName = function (_tagname) {};
+Document.prototype.getElementsByTagName = function(tagname) {};
 
 /**
  * @constructor
@@ -463,7 +459,7 @@ NodeList.prototype.length;
  * @return {T|null}
  * @see http://www.w3.org/TR/1998/REC-DOM-Level-1-19981001/level-one-core.html#ID-844377136
  */
-NodeList.prototype.item = function (_index) {};
+NodeList.prototype.item = function(index) {};
 
 /**
  * @constructor
@@ -487,7 +483,7 @@ NamedNodeMap.prototype.length;
  * @see http://www.w3.org/TR/1998/REC-DOM-Level-1-19981001/level-one-core.html#ID-1074577549
  * @nosideeffects
  */
-NamedNodeMap.prototype.getNamedItem = function (_name) {};
+NamedNodeMap.prototype.getNamedItem = function(name) {};
 
 /**
  * @param {number} index
@@ -495,21 +491,21 @@ NamedNodeMap.prototype.getNamedItem = function (_name) {};
  * @see http://www.w3.org/TR/1998/REC-DOM-Level-1-19981001/level-one-core.html#ID-349467F9
  * @nosideeffects
  */
-NamedNodeMap.prototype.item = function (_index) {};
+NamedNodeMap.prototype.item = function(index) {};
 
 /**
  * @param {string} name
  * @return {Node}
  * @see http://www.w3.org/TR/1998/REC-DOM-Level-1-19981001/level-one-core.html#ID-D58B193
  */
-NamedNodeMap.prototype.removeNamedItem = function (_name) {};
+NamedNodeMap.prototype.removeNamedItem = function(name) {};
 
 /**
  * @param {Node} arg
  * @return {Node}
  * @see http://www.w3.org/TR/1998/REC-DOM-Level-1-19981001/level-one-core.html#ID-1025163788
  */
-NamedNodeMap.prototype.setNamedItem = function (_arg) {};
+NamedNodeMap.prototype.setNamedItem = function(arg) {};
 
 /**
  * @constructor
@@ -535,7 +531,7 @@ CharacterData.prototype.length;
  * @return {undefined}
  * @see http://www.w3.org/TR/1998/REC-DOM-Level-1-19981001/level-one-core.html#ID-32791A2F
  */
-CharacterData.prototype.appendData = function (_arg) {};
+CharacterData.prototype.appendData = function(arg) {};
 
 /**
  * @param {number} offset
@@ -543,7 +539,7 @@ CharacterData.prototype.appendData = function (_arg) {};
  * @return {undefined}
  * @see http://www.w3.org/TR/1998/REC-DOM-Level-1-19981001/level-one-core.html#ID-7C603781
  */
-CharacterData.prototype.deleteData = function (_offset, _count) {};
+CharacterData.prototype.deleteData = function(offset, count) {};
 
 /**
  * @param {number} offset
@@ -551,7 +547,7 @@ CharacterData.prototype.deleteData = function (_offset, _count) {};
  * @return {undefined}
  * @see http://www.w3.org/TR/1998/REC-DOM-Level-1-19981001/level-one-core.html#ID-3EDB695F
  */
-CharacterData.prototype.insertData = function (_offset, _arg) {};
+CharacterData.prototype.insertData = function(offset, arg) {};
 
 /**
  * @param {number} offset
@@ -560,7 +556,7 @@ CharacterData.prototype.insertData = function (_offset, _arg) {};
  * @return {undefined}
  * @see http://www.w3.org/TR/1998/REC-DOM-Level-1-19981001/level-one-core.html#ID-E5CBA7FB
  */
-CharacterData.prototype.replaceData = function (_offset, _count, _arg) {};
+CharacterData.prototype.replaceData = function(offset, count, arg) {};
 
 /**
  * @param {number} offset
@@ -569,7 +565,7 @@ CharacterData.prototype.replaceData = function (_offset, _count, _arg) {};
  * @see http://www.w3.org/TR/1998/REC-DOM-Level-1-19981001/level-one-core.html#ID-6531BCCF
  * @nosideeffects
  */
-CharacterData.prototype.substringData = function (_offset, _count) {};
+CharacterData.prototype.substringData = function(offset, count) {};
 
 /**
  * @constructor
@@ -636,7 +632,7 @@ Element.prototype.className;
  * @see http://msdn.microsoft.com/en-us/library/ms536429(VS.85).aspx
  * @nosideeffects
  */
-Element.prototype.getAttribute = function (_name, _opt_flags) {};
+Element.prototype.getAttribute = function(name, opt_flags) {};
 
 /**
  * @param {string} name
@@ -644,7 +640,7 @@ Element.prototype.getAttribute = function (_name, _opt_flags) {};
  * @see http://www.w3.org/TR/1998/REC-DOM-Level-1-19981001/level-one-core.html#method-getAttributeNode
  * @nosideeffects
  */
-Element.prototype.getAttributeNode = function (_name) {};
+Element.prototype.getAttributeNode = function(name) {};
 
 /**
  * @param {string} tagname
@@ -652,21 +648,21 @@ Element.prototype.getAttributeNode = function (_name) {};
  * @see http://www.w3.org/TR/1998/REC-DOM-Level-1-19981001/level-one-core.html#ID-1938918D
  * @nosideeffects
  */
-Element.prototype.getElementsByTagName = function (_tagname) {};
+Element.prototype.getElementsByTagName = function(tagname) {};
 
 /**
  * @param {string} name
  * @return {undefined}
  * @see http://www.w3.org/TR/1998/REC-DOM-Level-1-19981001/level-one-core.html#method-removeAttribute
  */
-Element.prototype.removeAttribute = function (_name) {};
+Element.prototype.removeAttribute = function(name) {};
 
 /**
  * @param {Attr} oldAttr
  * @return {?Attr}
  * @see http://www.w3.org/TR/1998/REC-DOM-Level-1-19981001/level-one-core.html#method-removeAttributeNode
  */
-Element.prototype.removeAttributeNode = function (_oldAttr) {};
+Element.prototype.removeAttributeNode = function(oldAttr) {};
 
 /**
  * @param {string} name
@@ -676,14 +672,14 @@ Element.prototype.removeAttributeNode = function (_oldAttr) {};
  * @return {undefined}
  * @see http://www.w3.org/TR/1998/REC-DOM-Level-1-19981001/level-one-core.html#method-setAttribute
  */
-Element.prototype.setAttribute = function (_name, _value) {};
+Element.prototype.setAttribute = function(name, value) {};
 
 /**
  * @param {Attr} newAttr
  * @return {?Attr}
  * @see http://www.w3.org/TR/1998/REC-DOM-Level-1-19981001/level-one-core.html#method-setAttributeNode
  */
-Element.prototype.setAttributeNode = function (_newAttr) {};
+Element.prototype.setAttributeNode = function(newAttr) {};
 
 // Event handlers
 // The DOM level 3 spec has a good index of these
@@ -739,21 +735,21 @@ function Text() {}
  * @return {Text}
  * @see http://www.w3.org/TR/1998/REC-DOM-Level-1-19981001/level-one-core.html#ID-38853C1D
  */
-Text.prototype.splitText = function (_offset) {};
+Text.prototype.splitText = function(offset) {};
 
 /**
  * @constructor
  * @extends {CharacterData}
  * @see http://www.w3.org/TR/1998/REC-DOM-Level-1-19981001/level-one-core.html#ID-1728279322
  */
-function _Comment() {}
+function Comment() {}
 
 /**
  * @constructor
  * @extends {Text}
  * @see http://www.w3.org/TR/1998/REC-DOM-Level-1-19981001/level-one-core.html#ID-667469212
  */
-function _CDATASection() {}
+function CDATASection() {}
 
 /**
  * @constructor
@@ -829,7 +825,7 @@ Entity.prototype.notationName;
  * @extends {Node}
  * @see http://www.w3.org/TR/1998/REC-DOM-Level-1-19981001/level-one-core.html#ID-11C98490
  */
-function _EntityReference() {}
+function EntityReference() {}
 
 /**
  * @constructor
@@ -850,6 +846,7 @@ ProcessingInstruction.prototype.data;
  */
 ProcessingInstruction.prototype.target;
 
+
 /**
  * @constructor
  * @implements {EventTarget}
@@ -862,28 +859,21 @@ Window.prototype.Window;
  * @override
  * @return {undefined}
  */
-Window.prototype.addEventListener = function (
-  _type,
-  _listener,
-  _opt_useCapture,
-) {};
+Window.prototype.addEventListener = function(type, listener, opt_useCapture) {};
 
 /**
  * @param {boolean=} opt_useCapture
  * @override
  * @return {undefined}
  */
-Window.prototype.removeEventListener = function (
-  _type,
-  _listener,
-  _opt_useCapture,
-) {};
+Window.prototype.removeEventListener = function(type, listener, opt_useCapture)
+    {};
 
 /**
  * @override
  * @return {boolean}
  */
-Window.prototype.dispatchEvent = function (_evt) {};
+Window.prototype.dispatchEvent = function(evt) {};
 
 /** @type {?function (Event)} */ Window.prototype.onabort;
 /** @type {?function (Event)} */ Window.prototype.onbeforeunload;

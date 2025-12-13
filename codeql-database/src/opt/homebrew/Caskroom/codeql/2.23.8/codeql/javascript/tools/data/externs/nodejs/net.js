@@ -43,27 +43,27 @@ var net = {};
  * @interface
  * @extends {internal.Duplex}
  */
-net.Socket = function () {};
+net.Socket = function() {};
 
 /**
  * @param {Buffer} buffer
  * @return {boolean}
  */
-net.Socket.prototype.write = function (_buffer) {};
+net.Socket.prototype.write = function(buffer) {};
 
 /**
  * @param {Buffer} buffer
  * @param {Function=} cb
  * @return {boolean}
  */
-net.Socket.prototype.write = function (_buffer, _cb) {};
+net.Socket.prototype.write = function(buffer, cb) {};
 
 /**
  * @param {string} str
  * @param {Function=} cb
  * @return {boolean}
  */
-net.Socket.prototype.write = function (_str, _cb) {};
+net.Socket.prototype.write = function(str, cb) {};
 
 /**
  * @param {string} str
@@ -71,7 +71,7 @@ net.Socket.prototype.write = function (_str, _cb) {};
  * @param {Function=} cb
  * @return {boolean}
  */
-net.Socket.prototype.write = function (_str, _encoding, _cb) {};
+net.Socket.prototype.write = function(str, encoding, cb) {};
 
 /**
  * @param {string} str
@@ -79,7 +79,7 @@ net.Socket.prototype.write = function (_str, _encoding, _cb) {};
  * @param {string=} fd
  * @return {boolean}
  */
-net.Socket.prototype.write = function (_str, _encoding, _fd) {};
+net.Socket.prototype.write = function(str, encoding, fd) {};
 
 /**
  * @param {*} data
@@ -87,7 +87,7 @@ net.Socket.prototype.write = function (_str, _encoding, _fd) {};
  * @param {Function=} callback
  * @return {void}
  */
-net.Socket.prototype.write = function (_data, _encoding, _callback) {};
+net.Socket.prototype.write = function(data, encoding, callback) {};
 
 /**
  * @param {number} port
@@ -95,14 +95,14 @@ net.Socket.prototype.write = function (_data, _encoding, _callback) {};
  * @param {Function=} connectionListener
  * @return {void}
  */
-net.Socket.prototype.connect = function (_port, _host, _connectionListener) {};
+net.Socket.prototype.connect = function(port, host, connectionListener) {};
 
 /**
  * @param {string} path
  * @param {Function=} connectionListener
  * @return {void}
  */
-net.Socket.prototype.connect = function (_path, _connectionListener) {};
+net.Socket.prototype.connect = function(path, connectionListener) {};
 
 /**
  * @type {number}
@@ -113,57 +113,57 @@ net.Socket.prototype.bufferSize;
  * @param {string=} encoding
  * @return {void}
  */
-net.Socket.prototype.setEncoding = function (_encoding) {};
+net.Socket.prototype.setEncoding = function(encoding) {};
 
 /**
  * @return {void}
  */
-net.Socket.prototype.destroy = function () {};
+net.Socket.prototype.destroy = function() {};
 
 /**
  * @return {net.Socket}
  */
-net.Socket.prototype.pause = function () {};
+net.Socket.prototype.pause = function() {};
 
 /**
  * @return {net.Socket}
  */
-net.Socket.prototype.resume = function () {};
+net.Socket.prototype.resume = function() {};
 
 /**
  * @param {number} timeout
  * @param {Function=} callback
  * @return {void}
  */
-net.Socket.prototype.setTimeout = function (_timeout, _callback) {};
+net.Socket.prototype.setTimeout = function(timeout, callback) {};
 
 /**
  * @param {boolean=} noDelay
  * @return {void}
  */
-net.Socket.prototype.setNoDelay = function (_noDelay) {};
+net.Socket.prototype.setNoDelay = function(noDelay) {};
 
 /**
  * @param {boolean=} enable
  * @param {number=} initialDelay
  * @return {void}
  */
-net.Socket.prototype.setKeepAlive = function (_enable, _initialDelay) {};
+net.Socket.prototype.setKeepAlive = function(enable, initialDelay) {};
 
 /**
  * @return {{port: number, family: string, address: string}}
  */
-net.Socket.prototype.address = function () {};
+net.Socket.prototype.address = function() {};
 
 /**
  * @return {void}
  */
-net.Socket.prototype.unref = function () {};
+net.Socket.prototype.unref = function() {};
 
 /**
  * @return {void}
  */
-net.Socket.prototype.ref = function () {};
+net.Socket.prototype.ref = function() {};
 
 /**
  * @type {string}
@@ -203,21 +203,21 @@ net.Socket.prototype.bytesWritten;
 /**
  * @return {void}
  */
-net.Socket.prototype.end = function () {};
+net.Socket.prototype.end = function() {};
 
 /**
  * @param {Buffer} buffer
  * @param {Function=} cb
  * @return {void}
  */
-net.Socket.prototype.end = function (_buffer, _cb) {};
+net.Socket.prototype.end = function(buffer, cb) {};
 
 /**
  * @param {string} str
  * @param {Function=} cb
  * @return {void}
  */
-net.Socket.prototype.end = function (_str, _cb) {};
+net.Socket.prototype.end = function(str, cb) {};
 
 /**
  * @param {string} str
@@ -225,14 +225,14 @@ net.Socket.prototype.end = function (_str, _cb) {};
  * @param {Function=} cb
  * @return {void}
  */
-net.Socket.prototype.end = function (_str, _encoding, _cb) {};
+net.Socket.prototype.end = function(str, encoding, cb) {};
 
 /**
  * @param {*=} data
  * @param {string=} encoding
  * @return {void}
  */
-net.Socket.prototype.end = function (_data, _encoding) {};
+net.Socket.prototype.end = function(data, encoding) {};
 
 /**
  * @type {(function(new: net.Socket, {fd: string, type: string, allowHalfOpen: boolean}=))}
@@ -242,7 +242,7 @@ net.Socket;
 /**
  * @interface
  */
-net.ListenOptions = function () {};
+net.ListenOptions = function() {};
 
 /**
  * @type {number}
@@ -273,7 +273,7 @@ net.ListenOptions.prototype.exclusive;
  * @interface
  * @extends {net.Socket}
  */
-net.Server = function () {};
+net.Server = function() {};
 
 /**
  * @param {number} port
@@ -282,12 +282,7 @@ net.Server = function () {};
  * @param {Function=} listeningListener
  * @return {net.Server}
  */
-net.Server.prototype.listen = function (
-  _port,
-  _hostname,
-  _backlog,
-  _listeningListener,
-) {};
+net.Server.prototype.listen = function(port, hostname, backlog, listeningListener) {};
 
 /**
  * @param {number} port
@@ -295,11 +290,7 @@ net.Server.prototype.listen = function (
  * @param {Function=} listeningListener
  * @return {net.Server}
  */
-net.Server.prototype.listen = function (
-  _port,
-  _hostname,
-  _listeningListener,
-) {};
+net.Server.prototype.listen = function(port, hostname, listeningListener) {};
 
 /**
  * @param {number} port
@@ -307,14 +298,14 @@ net.Server.prototype.listen = function (
  * @param {Function=} listeningListener
  * @return {net.Server}
  */
-net.Server.prototype.listen = function (_port, _backlog, _listeningListener) {};
+net.Server.prototype.listen = function(port, backlog, listeningListener) {};
 
 /**
  * @param {number} port
  * @param {Function=} listeningListener
  * @return {net.Server}
  */
-net.Server.prototype.listen = function (_port, _listeningListener) {};
+net.Server.prototype.listen = function(port, listeningListener) {};
 
 /**
  * @param {string} path
@@ -322,14 +313,14 @@ net.Server.prototype.listen = function (_port, _listeningListener) {};
  * @param {Function=} listeningListener
  * @return {net.Server}
  */
-net.Server.prototype.listen = function (_path, _backlog, _listeningListener) {};
+net.Server.prototype.listen = function(path, backlog, listeningListener) {};
 
 /**
  * @param {string} path
  * @param {Function=} listeningListener
  * @return {net.Server}
  */
-net.Server.prototype.listen = function (_path, _listeningListener) {};
+net.Server.prototype.listen = function(path, listeningListener) {};
 
 /**
  * @param {*} handle
@@ -337,52 +328,48 @@ net.Server.prototype.listen = function (_path, _listeningListener) {};
  * @param {Function=} listeningListener
  * @return {net.Server}
  */
-net.Server.prototype.listen = function (
-  _handle,
-  _backlog,
-  _listeningListener,
-) {};
+net.Server.prototype.listen = function(handle, backlog, listeningListener) {};
 
 /**
  * @param {*} handle
  * @param {Function=} listeningListener
  * @return {net.Server}
  */
-net.Server.prototype.listen = function (_handle, _listeningListener) {};
+net.Server.prototype.listen = function(handle, listeningListener) {};
 
 /**
  * @param {net.ListenOptions} options
  * @param {Function=} listeningListener
  * @return {net.Server}
  */
-net.Server.prototype.listen = function (_options, _listeningListener) {};
+net.Server.prototype.listen = function(options, listeningListener) {};
 
 /**
  * @param {Function=} callback
  * @return {net.Server}
  */
-net.Server.prototype.close = function (_callback) {};
+net.Server.prototype.close = function(callback) {};
 
 /**
  * @return {{port: number, family: string, address: string}}
  */
-net.Server.prototype.address = function () {};
+net.Server.prototype.address = function() {};
 
 /**
  * @param {(function(Error, number): void)} cb
  * @return {void}
  */
-net.Server.prototype.getConnections = function (_cb) {};
+net.Server.prototype.getConnections = function(cb) {};
 
 /**
  * @return {net.Server}
  */
-net.Server.prototype.ref = function () {};
+net.Server.prototype.ref = function() {};
 
 /**
  * @return {net.Server}
  */
-net.Server.prototype.unref = function () {};
+net.Server.prototype.unref = function() {};
 
 /**
  * @type {number}
@@ -398,21 +385,21 @@ net.Server.prototype.connections;
  * @param {(function(net.Socket): void)=} connectionListener
  * @return {net.Server}
  */
-net.createServer = function (_connectionListener) {};
+net.createServer = function(connectionListener) {};
 
 /**
  * @param {{allowHalfOpen: boolean}=} options
  * @param {(function(net.Socket): void)=} connectionListener
  * @return {net.Server}
  */
-net.createServer = function (_options, _connectionListener) {};
+net.createServer = function(options, connectionListener) {};
 
 /**
  * @param {{port: number, host: string, localAddress: string, localPort: string, family: number, allowHalfOpen: boolean}} options
  * @param {Function=} connectionListener
  * @return {net.Socket}
  */
-net.connect = function (_options, _connectionListener) {};
+net.connect = function(options, connectionListener) {};
 
 /**
  * @param {number} port
@@ -420,21 +407,21 @@ net.connect = function (_options, _connectionListener) {};
  * @param {Function=} connectionListener
  * @return {net.Socket}
  */
-net.connect = function (_port, _host, _connectionListener) {};
+net.connect = function(port, host, connectionListener) {};
 
 /**
  * @param {string} path
  * @param {Function=} connectionListener
  * @return {net.Socket}
  */
-net.connect = function (_path, _connectionListener) {};
+net.connect = function(path, connectionListener) {};
 
 /**
  * @param {{port: number, host: string, localAddress: string, localPort: string, family: number, allowHalfOpen: boolean}} options
  * @param {Function=} connectionListener
  * @return {net.Socket}
  */
-net.createConnection = function (_options, _connectionListener) {};
+net.createConnection = function(options, connectionListener) {};
 
 /**
  * @param {number} port
@@ -442,32 +429,32 @@ net.createConnection = function (_options, _connectionListener) {};
  * @param {Function=} connectionListener
  * @return {net.Socket}
  */
-net.createConnection = function (_port, _host, _connectionListener) {};
+net.createConnection = function(port, host, connectionListener) {};
 
 /**
  * @param {string} path
  * @param {Function=} connectionListener
  * @return {net.Socket}
  */
-net.createConnection = function (_path, _connectionListener) {};
+net.createConnection = function(path, connectionListener) {};
 
 /**
  * @param {string} input
  * @return {number}
  */
-net.isIP = function (_input) {};
+net.isIP = function(input) {};
 
 /**
  * @param {string} input
  * @return {boolean}
  */
-net.isIPv4 = function (_input) {};
+net.isIPv4 = function(input) {};
 
 /**
  * @param {string} input
  * @return {boolean}
  */
-net.isIPv6 = function (_input) {};
+net.isIPv6 = function(input) {};
 
 module.exports.Socket = net.Socket;
 
@@ -498,3 +485,4 @@ module.exports.isIP = net.isIP;
 module.exports.isIPv4 = net.isIPv4;
 
 module.exports.isIPv6 = net.isIPv6;
+

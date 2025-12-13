@@ -22,6 +22,7 @@
  * @author nicksantos@google.com (Nick Santos)
  */
 
+
 /** @type {string} */ CSSProperties.prototype.MozAppearance;
 /** @type {string} */ CSSProperties.prototype.MozBackfaceVisibility;
 /** @type {string} */ CSSProperties.prototype.MozBackgroundClip;
@@ -96,6 +97,7 @@
 /** @type {string} */ CSSProperties.prototype.MozUserModify;
 /** @type {string} */ CSSProperties.prototype.MozUserSelect;
 /** @type {string} */ CSSProperties.prototype.MozWindowShadow;
+
 
 // These are non-standard Gecko CSSOM properties on Window.prototype.screen.
 

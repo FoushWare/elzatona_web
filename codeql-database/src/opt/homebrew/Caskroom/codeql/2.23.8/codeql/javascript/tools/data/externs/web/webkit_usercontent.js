@@ -24,10 +24,12 @@
 /** @constructor */
 function WebKitNamespace() {}
 
+
 /**
  * @type {!UserMessageHandlersNamespace}
  */
 WebKitNamespace.prototype.messageHandlers;
+
 
 /**
  * @constructor
@@ -35,14 +37,17 @@ WebKitNamespace.prototype.messageHandlers;
  */
 function UserMessageHandlersNamespace() {}
 
+
 /** @constructor */
 function UserMessageHandler() {}
+
 
 /**
  * @param {*} message
  * @return {undefined}
  */
-UserMessageHandler.prototype.postMessage = function (message) {};
+UserMessageHandler.prototype.postMessage = function(message) {};
+
 
 /**
  * @type {!WebKitNamespace}

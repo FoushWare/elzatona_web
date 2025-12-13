@@ -42,7 +42,7 @@ var dns = {};
 /**
  * @interface
  */
-dns.MxRecord = function () {};
+dns.MxRecord = function() {};
 
 /**
  * @type {string}
@@ -60,14 +60,14 @@ dns.MxRecord.prototype.priority;
  * @param {(function(Error, string, number): void)} callback
  * @return {string}
  */
-dns.lookup = function (_domain, _family, _callback) {};
+dns.lookup = function(domain, family, callback) {};
 
 /**
  * @param {string} domain
  * @param {(function(Error, string, number): void)} callback
  * @return {string}
  */
-dns.lookup = function (_domain, _callback) {};
+dns.lookup = function(domain, callback) {};
 
 /**
  * @param {string} domain
@@ -75,76 +75,76 @@ dns.lookup = function (_domain, _callback) {};
  * @param {(function(Error, Array<string>): void)} callback
  * @return {Array<string>}
  */
-dns.resolve = function (_domain, _rrtype, _callback) {};
+dns.resolve = function(domain, rrtype, callback) {};
 
 /**
  * @param {string} domain
  * @param {(function(Error, Array<string>): void)} callback
  * @return {Array<string>}
  */
-dns.resolve = function (_domain, _callback) {};
+dns.resolve = function(domain, callback) {};
 
 /**
  * @param {string} domain
  * @param {(function(Error, Array<string>): void)} callback
  * @return {Array<string>}
  */
-dns.resolve4 = function (_domain, _callback) {};
+dns.resolve4 = function(domain, callback) {};
 
 /**
  * @param {string} domain
  * @param {(function(Error, Array<string>): void)} callback
  * @return {Array<string>}
  */
-dns.resolve6 = function (_domain, _callback) {};
+dns.resolve6 = function(domain, callback) {};
 
 /**
  * @param {string} domain
  * @param {(function(Error, Array<dns.MxRecord>): void)} callback
  * @return {Array<string>}
  */
-dns.resolveMx = function (_domain, _callback) {};
+dns.resolveMx = function(domain, callback) {};
 
 /**
  * @param {string} domain
  * @param {(function(Error, Array<string>): void)} callback
  * @return {Array<string>}
  */
-dns.resolveTxt = function (_domain, _callback) {};
+dns.resolveTxt = function(domain, callback) {};
 
 /**
  * @param {string} domain
  * @param {(function(Error, Array<string>): void)} callback
  * @return {Array<string>}
  */
-dns.resolveSrv = function (_domain, _callback) {};
+dns.resolveSrv = function(domain, callback) {};
 
 /**
  * @param {string} domain
  * @param {(function(Error, Array<string>): void)} callback
  * @return {Array<string>}
  */
-dns.resolveNs = function (_domain, _callback) {};
+dns.resolveNs = function(domain, callback) {};
 
 /**
  * @param {string} domain
  * @param {(function(Error, Array<string>): void)} callback
  * @return {Array<string>}
  */
-dns.resolveCname = function (_domain, _callback) {};
+dns.resolveCname = function(domain, callback) {};
 
 /**
  * @param {string} ip
  * @param {(function(Error, Array<string>): void)} callback
  * @return {Array<string>}
  */
-dns.reverse = function (_ip, _callback) {};
+dns.reverse = function(ip, callback) {};
 
 /**
  * @param {Array<string>} servers
  * @return {void}
  */
-dns.setServers = function (_servers) {};
+dns.setServers = function(servers) {};
 
 /**
  * @type {string}
@@ -341,3 +341,4 @@ module.exports.LOADIPHLPAPI = dns.LOADIPHLPAPI;
 module.exports.ADDRGETNETWORKPARAMS = dns.ADDRGETNETWORKPARAMS;
 
 module.exports.CANCELLED = dns.CANCELLED;
+

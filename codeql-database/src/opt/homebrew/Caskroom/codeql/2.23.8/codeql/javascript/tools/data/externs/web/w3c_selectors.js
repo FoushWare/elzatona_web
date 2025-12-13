@@ -28,7 +28,7 @@
  * @override
  * @nosideeffects
  */
-Document.prototype.querySelector = function (_selectors) {};
+Document.prototype.querySelector = function(selectors) {};
 
 /**
  * @param {string} selectors
@@ -36,7 +36,7 @@ Document.prototype.querySelector = function (_selectors) {};
  * @override
  * @nosideeffects
  */
-Document.prototype.querySelectorAll = function (_selectors) {};
+Document.prototype.querySelectorAll = function(selectors) {};
 
 /**
  * @param {string} selectors
@@ -44,7 +44,7 @@ Document.prototype.querySelectorAll = function (_selectors) {};
  * @override
  * @nosideeffects
  */
-Element.prototype.querySelector = function (_selectors) {};
+Element.prototype.querySelector = function(selectors) {};
 
 /**
  * @param {string} selectors
@@ -52,7 +52,7 @@ Element.prototype.querySelector = function (_selectors) {};
  * @override
  * @nosideeffects
  */
-Element.prototype.querySelectorAll = function (_selectors) {};
+Element.prototype.querySelectorAll = function(selectors) {};
 
 /**
  * https://dom.spec.whatwg.org/#dom-element-closest
@@ -61,7 +61,7 @@ Element.prototype.querySelectorAll = function (_selectors) {};
  * @return {?Element}
  * @nosideeffects
  */
-Element.prototype.closest = function (_selectors) {};
+Element.prototype.closest = function(selectors) {};
 
 /**
  * https://dom.spec.whatwg.org/#dom-element-matches
@@ -70,7 +70,7 @@ Element.prototype.closest = function (_selectors) {};
  * @return {boolean}
  * @nosideeffects
  */
-Element.prototype.matches = function (_selectors) {};
+Element.prototype.matches = function(selectors) {};
 
 /**
  * @param {string} selectors
@@ -78,7 +78,7 @@ Element.prototype.matches = function (_selectors) {};
  * @return {boolean}
  * @nosideeffects
  */
-Element.prototype.matchesSelector = function (_selectors, _refNodes) {};
+Element.prototype.matchesSelector = function(selectors, refNodes) {};
 
 /**
  * @see https://developer.mozilla.org/en/DOM/Node.mozMatchesSelector
@@ -86,7 +86,7 @@ Element.prototype.matchesSelector = function (_selectors, _refNodes) {};
  * @return {boolean}
  * @nosideeffects
  */
-Element.prototype.mozMatchesSelector = function (_selectors) {};
+Element.prototype.mozMatchesSelector = function(selectors) {};
 
 /**
  * @see http://developer.apple.com/library/safari/documentation/WebKit/Reference/ElementClassRef/Element/Element.html
@@ -94,7 +94,7 @@ Element.prototype.mozMatchesSelector = function (_selectors) {};
  * @return {boolean}
  * @nosideeffects
  */
-Element.prototype.webkitMatchesSelector = function (_selectors) {};
+Element.prototype.webkitMatchesSelector = function(selectors) {};
 
 /**
  * @see http://msdn.microsoft.com/en-us/library/ff975201.aspx
@@ -102,7 +102,7 @@ Element.prototype.webkitMatchesSelector = function (_selectors) {};
  * @return {boolean}
  * @nosideeffects
  */
-Element.prototype.msMatchesSelector = function (_selectors) {};
+Element.prototype.msMatchesSelector = function(selectors) {};
 
 /**
  * @see http://www.opera.com/docs/changelogs/windows/1150/
@@ -110,4 +110,4 @@ Element.prototype.msMatchesSelector = function (_selectors) {};
  * @return {boolean}
  * @nosideeffects
  */
-Element.prototype.oMatchesSelector = function (_selectors) {};
+Element.prototype.oMatchesSelector = function(selectors) {};

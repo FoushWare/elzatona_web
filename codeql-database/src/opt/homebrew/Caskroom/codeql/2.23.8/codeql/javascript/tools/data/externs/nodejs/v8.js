@@ -72,21 +72,22 @@ HeapSpaceInfo.prototype.physical_space_size;
 /**
  * @return {{total_heap_size: number, total_heap_size_executable: number, total_physical_size: number, total_avaialble_size: number, used_heap_size: number, heap_size_limit: number}}
  */
-v8.getHeapStatistics = function () {};
+v8.getHeapStatistics = function() {};
 
 /**
  * @return {Array<v8.HeapSpaceInfo>}
  */
-v8.getHeapSpaceStatistics = function () {};
+v8.getHeapSpaceStatistics = function() {};
 
 /**
  * @param {string} flags
  * @return {void}
  */
-v8.setFlagsFromString = function (_flags) {};
+v8.setFlagsFromString = function(flags) {};
 
 module.exports.getHeapStatistics = v8.getHeapStatistics;
 
 module.exports.getHeapSpaceStatistics = v8.getHeapSpaceStatistics;
 
 module.exports.setFlagsFromString = v8.setFlagsFromString;
+

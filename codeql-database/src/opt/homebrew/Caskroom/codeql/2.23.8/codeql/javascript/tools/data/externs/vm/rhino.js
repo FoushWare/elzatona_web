@@ -6,95 +6,95 @@
 /**
  * @type {Array.<string>}
  */
-var _arguments;
+var arguments;
 
 /**
  * @type {Object}
  */
-var _environment;
+var environment;
 
 /**
  * @type {string}
  */
-var _history;
+var history;
 
 /**
  */
-function _help() {}
+function help() {}
 
 /**
  * @param {string} className
  */
-function _defineClass(_className) {}
+function defineClass(className) {}
 
 /**
  * @param {string} filename
  */
-function _deserialize(_filename) {}
+function deserialize(filename) {}
 
 /**
  */
-function _gc() {}
+function gc() {}
 
 /**
  * @param {...string} files
  */
-function _load(_files) {}
+function load(files) {}
 
 /**
  * @param {string} className
  */
-function _loadClass(_className) {}
+function loadClass(className) {}
 
 /**
  * @param {...*} exprs
  */
-function _print(_exprs) {}
+function print(exprs) {}
 
 /**
  * @param {string} path
  * @param {string=} characterCoding
  */
-function _readFile(_path, _characterCoding) {}
+function readFile(path, characterCoding) {}
 
 /**
  * @param {string} url
  * @param {string=} characterCoding
  */
-function _readUrl(_url, _characterCoding) {}
+function readUrl(url, characterCoding) {}
 
 /**
  * @param {string} commandName
  * @param {...*} args
  */
-function _runCommand(_commandName, _args) {}
+function runCommand(commandName, args) {}
 
 /**
  * @param {Object} object
  */
-function _seal(_object) {}
+function seal(object) {}
 
 /**
  * @param {Object} object
  * @param {string} filename
  */
-function _serialize(_object, _filename) {}
+function serialize(object, filename) {}
 
 /**
  * @param {string|function} functionOrScript
  */
-function _spawn(_functionOrScript) {}
+function spawn(functionOrScript) {}
 
 /**
  * @param {function} fun
  */
-function _sync(_fun) {}
+function sync(fun) {}
 
 /**
  */
-function _quit() {}
+function quit() {}
 
 /**
  * @param {number=} num
  */
-function _version(_num) {}
+function version(num) {}

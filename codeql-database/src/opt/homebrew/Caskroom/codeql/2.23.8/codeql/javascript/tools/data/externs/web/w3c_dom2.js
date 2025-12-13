@@ -30,7 +30,7 @@
  * @nosideeffects
  * @see https://www.w3.org/TR/2000/CR-DOM-Level-2-20000510/core.html#ID-getElBId
  */
-Document.prototype.getElementById = function (_s) {};
+Document.prototype.getElementById = function(s) {};
 
 /**
  * @param {?string} namespaceURI
@@ -39,11 +39,8 @@ Document.prototype.getElementById = function (_s) {};
  * @return {!Element}
  * @see https://www.w3.org/TR/2000/CR-DOM-Level-2-20000510/core.html#ID-DocCrElNS
  */
-Document.prototype.createElementNS = function (
-  _namespaceURI,
-  _qualifiedName,
-  _opt_typeExtension,
-) {};
+Document.prototype.createElementNS =
+    function(namespaceURI, qualifiedName, opt_typeExtension) {};
 
 /**
  * @param {?string} namespaceURI
@@ -51,10 +48,8 @@ Document.prototype.createElementNS = function (
  * @return {!Attr}
  * @see https://www.w3.org/TR/2000/CR-DOM-Level-2-20000510/core.html#ID-DocCrElNS
  */
-Document.prototype.createAttributeNS = function (
-  _namespaceURI,
-  _qualifiedName,
-) {};
+Document.prototype.createAttributeNS =
+    function(namespaceURI, qualifiedName) {};
 
 /**
  * @param {string} namespace
@@ -63,7 +58,7 @@ Document.prototype.createAttributeNS = function (
  * @nosideeffects
  * @see https://www.w3.org/TR/2000/CR-DOM-Level-2-20000510/core.html#ID-getElBTNNS
  */
-Document.prototype.getElementsByTagNameNS = function (_namespace, name) {};
+Document.prototype.getElementsByTagNameNS = function(namespace, name) {};
 
 /**
  * @param {Node} externalNode
@@ -71,7 +66,7 @@ Document.prototype.getElementsByTagNameNS = function (_namespace, name) {};
  * @return {Node}
  * @see https://www.w3.org/TR/2000/CR-DOM-Level-2-20000510/core.html#Core-Document-importNode
  */
-Document.prototype.importNode = function (_externalNode, _deep) {};
+Document.prototype.importNode = function(externalNode, deep) {};
 
 /**
  * @constructor
@@ -94,7 +89,7 @@ HTMLCollection.prototype.length;
  * @see http://www.w3.org/TR/2000/CR-DOM-Level-2-20000510/html.html#ID-33262535
  * @nosideeffects
  */
-HTMLCollection.prototype.item = function (_index) {};
+HTMLCollection.prototype.item = function(index) {};
 
 /**
  * @param {string} name
@@ -102,7 +97,7 @@ HTMLCollection.prototype.item = function (_index) {};
  * @see http://www.w3.org/TR/2000/CR-DOM-Level-2-20000510/html.html#ID-21069976
  * @nosideeffects
  */
-HTMLCollection.prototype.namedItem = function (_name) {};
+HTMLCollection.prototype.namedItem = function(name) {};
 
 /**
  * @constructor
@@ -124,7 +119,7 @@ HTMLOptionsCollection.prototype.length;
  * @see http://www.w3.org/TR/DOM-Level-2-HTML/html.html#HTMLOptionsCollection-item
  * @nosideeffects
  */
-HTMLOptionsCollection.prototype.item = function (_index) {};
+HTMLOptionsCollection.prototype.item = function(index) {};
 
 /**
  * @constructor
@@ -208,14 +203,14 @@ HTMLDocument.prototype.cookie;
  * optional parameters: https://msdn.microsoft.com/en-us/library/ms536652(v=vs.85).aspx
  * @override
  */
-HTMLDocument.prototype.open = function (_opt_mimeType, _opt_replace) {};
+HTMLDocument.prototype.open = function(opt_mimeType, opt_replace) {};
 
 /**
  * @return {undefined}
  * @see http://www.w3.org/TR/2000/CR-DOM-Level-2-20000510/html.html#ID-98948567
  * @override
  */
-HTMLDocument.prototype.close = function () {};
+HTMLDocument.prototype.close = function() {};
 
 /**
  * @param {string} text
@@ -223,7 +218,7 @@ HTMLDocument.prototype.close = function () {};
  * @see http://www.w3.org/TR/2000/CR-DOM-Level-2-20000510/html.html#ID-75233634
  * @override
  */
-HTMLDocument.prototype.write = function (_text) {};
+HTMLDocument.prototype.write = function(text) {};
 
 /**
  * @param {string} text
@@ -231,7 +226,7 @@ HTMLDocument.prototype.write = function (_text) {};
  * @see http://www.w3.org/TR/2000/CR-DOM-Level-2-20000510/html.html#ID-35318390
  * @override
  */
-HTMLDocument.prototype.writeln = function (_text) {};
+HTMLDocument.prototype.writeln = function(text) {};
 
 /**
  * @param {string} elementName
@@ -239,7 +234,7 @@ HTMLDocument.prototype.writeln = function (_text) {};
  * @see http://www.w3.org/TR/2000/CR-DOM-Level-2-20000510/html.html#ID-71555259
  * @nosideeffects
  */
-HTMLDocument.prototype.getElementsByName = function (_elementName) {};
+HTMLDocument.prototype.getElementsByName = function(elementName) {};
 
 /**
  * @param {Node} root
@@ -250,12 +245,8 @@ HTMLDocument.prototype.getElementsByName = function (_elementName) {};
  * @see http://www.w3.org/TR/DOM-Level-2-Traversal-Range/traversal.html#Traversal-Document
  * @nosideeffects
  */
-HTMLDocument.prototype.createNodeIterator = function (
-  _root,
-  _whatToShow,
-  _filter,
-  _entityReferenceExpansion,
-) {};
+HTMLDocument.prototype.createNodeIterator = function(
+    root, whatToShow, filter, entityReferenceExpansion) {};
 
 /**
  * @param {Node} root
@@ -266,23 +257,20 @@ HTMLDocument.prototype.createNodeIterator = function (
  * @see http://www.w3.org/TR/DOM-Level-2-Traversal-Range/traversal.html#Traversal-Document
  * @nosideeffects
  */
-HTMLDocument.prototype.createTreeWalker = function (
-  _root,
-  _whatToShow,
-  _filter,
-  _entityReferenceExpansion,
-) {};
+HTMLDocument.prototype.createTreeWalker = function(
+    root, whatToShow, filter, entityReferenceExpansion) {};
+
 
 /** @typedef {{
   createNodeIterator: function(Node, number=, NodeFilter=, boolean=) : NodeIterator,
   createTreeWalker: function(Node, number=, NodeFilter=, boolean=) : TreeWalker
 }} */
-var _TraversalDocument;
+var TraversalDocument;
 
 /**
  * @interface
  * @see http://www.w3.org/TR/DOM-Level-2-Traversal-Range/traversal.html#Traversal-NodeFilter
- */
+*/
 function NodeFilter() {}
 
 /* Constants for whatToShow */
@@ -309,13 +297,13 @@ function NodeFilter() {}
  * @param {Node} n
  * @return {number} Any of NodeFilter.FILTER_* constants.
  * @see http://www.w3.org/TR/DOM-Level-2-Traversal-Range/traversal.html#Traversal-NodeFilter-acceptNode
- */
-NodeFilter.prototype.acceptNode = function (_n) {};
+*/
+NodeFilter.prototype.acceptNode = function(n) {};
 
 /**
  * @interface
  * @see http://www.w3.org/TR/DOM-Level-2-Traversal-Range/traversal.html#Traversal-NodeIterator
- */
+*/
 function NodeIterator() {}
 
 /**
@@ -323,67 +311,67 @@ function NodeIterator() {}
  * @see http://www.w3.org/TR/DOM-Level-2-Traversal-Range/traversal.html#Traversal-NodeIterator-detach
  * @return {undefined}
  */
-NodeIterator.prototype.detach = function () {};
+NodeIterator.prototype.detach = function() {};
 
 /**
  * @return {Node} Next node in the set.
  * @see http://www.w3.org/TR/DOM-Level-2-Traversal-Range/traversal.html#Traversal-NodeIterator-nextNode
  */
-NodeIterator.prototype.nextNode = function () {};
+NodeIterator.prototype.nextNode = function() {};
 
 /**
  * @return {Node} Previous node in the set.
  * @see http://www.w3.org/TR/DOM-Level-2-Traversal-Range/traversal.html#Traversal-NodeIterator-previousNode
  */
-NodeIterator.prototype.previousNode = function () {};
+NodeIterator.prototype.previousNode = function() {};
 
 /**
  * @interface
  * @see http://www.w3.org/TR/DOM-Level-2-Traversal-Range/traversal.html#Traversal-TreeWalker
- */
+*/
 function TreeWalker() {}
 
 /**
  * @return {?Node} The new Node or null.
  * @see http://www.w3.org/TR/DOM-Level-2-Traversal-Range/traversal.html#Traversal-TreeWalker-firstChild
  */
-TreeWalker.prototype.firstChild = function () {};
+TreeWalker.prototype.firstChild = function() {};
 
 /**
  * @return {?Node} The new Node or null..
  * @see http://www.w3.org/TR/DOM-Level-2-Traversal-Range/traversal.html#Traversal-TreeWalker-lastChild
  */
-TreeWalker.prototype.lastChild = function () {};
+TreeWalker.prototype.lastChild = function() {};
 
 /**
  * @return {?Node} The new Node or null.
  * @see http://www.w3.org/TR/DOM-Level-2-Traversal-Range/traversal.html#Traversal-TreeWalker-nextNode
  */
-TreeWalker.prototype.nextNode = function () {};
+TreeWalker.prototype.nextNode = function() {};
 
 /**
  * @return {?Node} The new Node or null.
  * @see http://www.w3.org/TR/DOM-Level-2-Traversal-Range/traversal.html#Traversal-TreeWalker-nextSibling
  */
-TreeWalker.prototype.nextSibling = function () {};
+TreeWalker.prototype.nextSibling = function() {};
 
 /**
  * @return {?Node} The new Node or null.
  * @see http://www.w3.org/TR/DOM-Level-2-Traversal-Range/traversal.html#Traversal-TreeWalker-parentNode
  */
-TreeWalker.prototype.parentNode = function () {};
+TreeWalker.prototype.parentNode = function() {};
 
 /**
  * @return {?Node} The new Node or null.
  * @see http://www.w3.org/TR/DOM-Level-2-Traversal-Range/traversal.html#Traversal-TreeWalker-previousNode
  */
-TreeWalker.prototype.previousNode = function () {};
+TreeWalker.prototype.previousNode = function() {};
 
 /**
  * @return {?Node} The new Node or null.
  * @see http://www.w3.org/TR/DOM-Level-2-Traversal-Range/traversal.html#Traversal-TreeWalker-previousSibling
  */
-TreeWalker.prototype.previousSibling = function () {};
+TreeWalker.prototype.previousSibling = function() {};
 
 /**
  * @type {Node}
@@ -724,7 +712,7 @@ function HTMLFormControlsCollection() {}
  * @override
  * @suppress {newCheckTypes}
  */
-HTMLFormControlsCollection.prototype.namedItem = function (_name) {};
+HTMLFormControlsCollection.prototype.namedItem = function(name) {};
 
 /**
  * @constructor
@@ -785,13 +773,13 @@ HTMLFormElement.prototype.target;
  * @return {undefined}
  * @see http://www.w3.org/TR/2000/CR-DOM-Level-2-20000510/html.html#ID-76767676
  */
-HTMLFormElement.prototype.submit = function () {};
+HTMLFormElement.prototype.submit = function() {};
 
 /**
  * @return {undefined}
  * @see http://www.w3.org/TR/2000/CR-DOM-Level-2-20000510/html.html#ID-76767677
  */
-HTMLFormElement.prototype.reset = function () {};
+HTMLFormElement.prototype.reset = function() {};
 
 /**
  * @constructor
@@ -867,21 +855,21 @@ HTMLSelectElement.prototype.size;
  * @return {undefined}
  * @see http://www.w3.org/TR/2000/CR-DOM-Level-2-20000510/html.html#ID-14493106
  */
-HTMLSelectElement.prototype.add = function (_element, _opt_before) {};
+HTMLSelectElement.prototype.add = function(element, opt_before) {};
 
 /**
  * @return {undefined}
  * @see http://www.w3.org/TR/2000/CR-DOM-Level-2-20000510/html.html#ID-28216144
  * @override
  */
-HTMLSelectElement.prototype.blur = function () {};
+HTMLSelectElement.prototype.blur = function() {};
 
 /**
  * @return {undefined}
  * @see http://www.w3.org/TR/2000/CR-DOM-Level-2-20000510/html.html#ID-32130014
  * @override
  */
-HTMLSelectElement.prototype.focus = function () {};
+HTMLSelectElement.prototype.focus = function() {};
 
 /**
  * @param {number=} opt_index
@@ -889,7 +877,7 @@ HTMLSelectElement.prototype.focus = function () {};
  * @see http://www.w3.org/TR/2000/CR-DOM-Level-2-20000510/html.html#ID-33404570
  * @override
  */
-HTMLSelectElement.prototype.remove = function (_opt_index) {};
+HTMLSelectElement.prototype.remove = function(opt_index) {};
 
 /**
  * @constructor
@@ -1087,27 +1075,27 @@ HTMLInputElement.prototype.value;
  * @see http://www.w3.org/TR/2000/CR-DOM-Level-2-20000510/html.html#ID-26838235
  * @override
  */
-HTMLInputElement.prototype.blur = function () {};
+HTMLInputElement.prototype.blur = function() {};
 
 /**
  * @return {undefined}
  * @see http://www.w3.org/TR/2000/CR-DOM-Level-2-20000510/html.html#ID-2651361
  * @override
  */
-HTMLInputElement.prototype.click = function () {};
+HTMLInputElement.prototype.click = function() {};
 
 /**
  * @return {undefined}
  * @see http://www.w3.org/TR/2000/CR-DOM-Level-2-20000510/html.html#ID-65996295
  * @override
  */
-HTMLInputElement.prototype.focus = function () {};
+HTMLInputElement.prototype.focus = function() {};
 
 /**
  * @return {undefined}
  * @see http://www.w3.org/TR/2000/CR-DOM-Level-2-20000510/html.html#ID-34677168
  */
-HTMLInputElement.prototype.select = function () {};
+HTMLInputElement.prototype.select = function() {};
 
 /**
  * @constructor
@@ -1188,20 +1176,20 @@ HTMLTextAreaElement.prototype.value;
  * @see http://www.w3.org/TR/2000/CR-DOM-Level-2-20000510/html.html#ID-6750689
  * @override
  */
-HTMLTextAreaElement.prototype.blur = function () {};
+HTMLTextAreaElement.prototype.blur = function() {};
 
 /**
  * @return {undefined}
  * @see http://www.w3.org/TR/2000/CR-DOM-Level-2-20000510/html.html#ID-39055426
  * @override
  */
-HTMLTextAreaElement.prototype.focus = function () {};
+HTMLTextAreaElement.prototype.focus = function() {};
 
 /**
  * @return {undefined}
  * @see http://www.w3.org/TR/2000/CR-DOM-Level-2-20000510/html.html#ID-48880622
  */
-HTMLTextAreaElement.prototype.select = function () {};
+HTMLTextAreaElement.prototype.select = function() {};
 
 /**
  * @constructor
@@ -1687,14 +1675,14 @@ HTMLAnchorElement.prototype.type;
  * @see http://www.w3.org/TR/2000/CR-DOM-Level-2-20000510/html.html#ID-65068939
  * @override
  */
-HTMLAnchorElement.prototype.blur = function () {};
+HTMLAnchorElement.prototype.blur = function() {};
 
 /**
  * @return {undefined}
  * @see http://www.w3.org/TR/2000/CR-DOM-Level-2-20000510/html.html#ID-47150313
  * @override
  */
-HTMLAnchorElement.prototype.focus = function () {};
+HTMLAnchorElement.prototype.focus = function() {};
 
 /**
  * @constructor
@@ -2230,51 +2218,51 @@ HTMLTableElement.prototype.width;
  * @return {HTMLElement}
  * @see http://www.w3.org/TR/2000/CR-DOM-Level-2-20000510/html.html#ID-96920263
  */
-HTMLTableElement.prototype.createCaption = function () {};
+HTMLTableElement.prototype.createCaption = function() {};
 
 /**
  * @return {HTMLElement}
  * @see http://www.w3.org/TR/2000/CR-DOM-Level-2-20000510/html.html#ID-8453710
  */
-HTMLTableElement.prototype.createTFoot = function () {};
+HTMLTableElement.prototype.createTFoot = function() {};
 
 /**
  * @return {HTMLElement}
  * @see http://www.w3.org/TR/2000/CR-DOM-Level-2-20000510/html.html#ID-70313345
  */
-HTMLTableElement.prototype.createTHead = function () {};
+HTMLTableElement.prototype.createTHead = function() {};
 
 /**
  * @return {undefined}
  * @see http://www.w3.org/TR/2000/CR-DOM-Level-2-20000510/html.html#ID-22930071
  */
-HTMLTableElement.prototype.deleteCaption = function () {};
+HTMLTableElement.prototype.deleteCaption = function() {};
 
 /**
  * @param {number} index
  * @return {HTMLElement}
  * @see http://www.w3.org/TR/2000/CR-DOM-Level-2-20000510/html.html#ID-13114938
  */
-HTMLTableElement.prototype.deleteRow = function (_index) {};
+HTMLTableElement.prototype.deleteRow = function(index) {};
 
 /**
  * @return {undefined}
  * @see http://www.w3.org/TR/2000/CR-DOM-Level-2-20000510/html.html#ID-78363258
  */
-HTMLTableElement.prototype.deleteTFoot = function () {};
+HTMLTableElement.prototype.deleteTFoot = function() {};
 
 /**
  * @return {undefined}
  * @see http://www.w3.org/TR/2000/CR-DOM-Level-2-20000510/html.html#ID-38310198
  */
-HTMLTableElement.prototype.deleteTHead = function () {};
+HTMLTableElement.prototype.deleteTHead = function() {};
 
 /**
  * @param {number=} opt_index
  * @return {HTMLElement}
  * @see https://www.w3.org/TR/html5/tabular-data.html#htmltableelement
  */
-HTMLTableElement.prototype.insertRow = function (_opt_index) {};
+HTMLTableElement.prototype.insertRow = function(opt_index) {};
 
 /**
  * @constructor
@@ -2375,14 +2363,14 @@ HTMLTableSectionElement.prototype.vAlign;
  * @return {HTMLElement}
  * @see http://www.w3.org/TR/2000/CR-DOM-Level-2-20000510/html.html#ID-5625626
  */
-HTMLTableSectionElement.prototype.deleteRow = function (_index) {};
+HTMLTableSectionElement.prototype.deleteRow = function(index) {};
 
 /**
  * @param {number=} opt_index
  * @return {HTMLElement}
  * @see https://www.w3.org/TR/html5/tabular-data.html#htmltablesectionelement
  */
-HTMLTableSectionElement.prototype.insertRow = function (_opt_index) {};
+HTMLTableSectionElement.prototype.insertRow = function(opt_index) {};
 
 /**
  * @constructor
@@ -2444,14 +2432,14 @@ HTMLTableRowElement.prototype.vAlign;
  * @return {undefined}
  * @see http://www.w3.org/TR/2000/CR-DOM-Level-2-20000510/html.html#ID-11738598
  */
-HTMLTableRowElement.prototype.deleteCell = function (_index) {};
+HTMLTableRowElement.prototype.deleteCell = function(index) {};
 
 /**
  * @param {number} index
  * @return {HTMLElement}
  * @see http://www.w3.org/TR/2000/CR-DOM-Level-2-20000510/html.html#ID-68927016
  */
-HTMLTableRowElement.prototype.insertCell = function (_index) {};
+HTMLTableRowElement.prototype.insertCell = function(index) {};
 
 /**
  * @constructor
