@@ -71,3 +71,4 @@ bun.lock
 *.tsbuildinfo
 .scannerwork/
 .sonar/
+codeql-database/
