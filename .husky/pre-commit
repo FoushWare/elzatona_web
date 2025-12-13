@@ -37,6 +37,15 @@ echo ""
 npm run lint:fix
 LINT_FIX_EXIT_CODE=$?
 
+# Check if there are any remaining warnings after auto-fix
+echo ""
+echo "🔍 STEP 2b: Checking for remaining ESLint warnings..."
+echo "   📝 Executing: npm run lint --quiet --max-warnings=0"
+echo ""
+
+npm run lint --quiet --max-warnings=0
+LINT_CHECK_EXIT_CODE=$?
+
 if [ $LINT_FIX_EXIT_CODE -ne 0 ]; then
   echo "   ⚠️  ESLint auto-fix completed with warnings"
   echo "   💡 Some issues may require manual fixes"

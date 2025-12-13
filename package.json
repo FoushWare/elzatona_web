@@ -14,7 +14,7 @@
     "dev:light:prod": "APP_ENV=production NEXT_PUBLIC_APP_ENV=production NODE_ENV=development NODE_OPTIONS=--max-old-space-size=1536 dotenv -e .env.local --override -- nx serve website",
     "dev:admin": "NODE_OPTIONS=--max-old-space-size=2048 nx serve admin",
     "dev:turbo": "NODE_OPTIONS=--max-old-space-size=2048 nx serve website --turbopack",
-    "build": "nx build website",
+    "build": "NODE_ENV=production nx build website",
     "build:admin": "nx build admin",
     "build:all": "nx run-many --target=build --all",
     "build:check": "nx build website --turbopack && echo '✅ Build successful' || (echo '❌ Build failed' && exit 1)",
