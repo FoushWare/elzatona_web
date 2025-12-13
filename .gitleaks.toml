@@ -1,0 +1,39 @@
+title = "Gitleaks config - exclude directories"
+
+# Allowlist for directories to exclude
+[allowlist]
+description = "Global allowlist"
+paths = [
+    "node_modules/**",
+    ".next/**", 
+    "dist/**",
+    "coverage/**",
+    ".nyc_output/**",
+    ".cache/**",
+    ".vscode/**",
+    ".cursor/**",
+    ".idea/**",
+    ".git/**",
+    "**/*.log",
+    "**/*.tmp",
+    "**/.DS_Store",
+    "docs/**",
+    "reports/**",
+    "**/.env*",
+    "**/*.env"
+]
+
+# Default rules
+[[rules]]
+description = "AWS Access Key"
+id = "aws-access-key"
+regex = '''(?i)(?:A3T[A-Z0-9]|AKIA|ASIA|ABIA|ACCA)[A-Z0-9]{16}'''
+keywords = ["aws"]
+
+[[rules]]
+description = "AWS Secret Key"
+id = "aws-secret-key"
+regex = '''(?i)aws[\w._%+-:.]+@[\w.-]+\.[a-zA-Z]{2,}'''
+keywords = ["aws"]
+
+# Add more default rules as needed...

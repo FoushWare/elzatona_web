@@ -60,7 +60,7 @@ echo "   📝 Executing: npm run type-check"
 echo "   ⏳ This may take a moment..."
 echo ""
 
-NODE_OPTIONS="--max-old-space-size=2048" npm run type-check
+NODE_OPTIONS="--max-old-space-size=1024" npm run type-check
 TS_EXIT_CODE=$?
 
 if [ $TS_EXIT_CODE -ne 0 ]; then
@@ -83,7 +83,7 @@ echo "   📦 Executing: npm run build"
 echo "   ⏳ This may take a moment..."
 echo ""
 
-NODE_OPTIONS="--max-old-space-size=2048" NEXT_TELEMETRY_DISABLED=1 npm run build
+NODE_OPTIONS="--max-old-space-size=1024" NEXT_TELEMETRY_DISABLED=1 npm run build
 BUILD_EXIT_CODE=$?
 
 if [ $BUILD_EXIT_CODE -ne 0 ]; then
