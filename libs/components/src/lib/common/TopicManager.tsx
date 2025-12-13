@@ -331,8 +331,8 @@ export default function TopicManager() {
   // Delete functions
   const handleDeleteTopic = async (topicId: string) => {
     // Find the topic to get its name for logging
-    const topic = topics.find((t) => t.id === topicId);
-    const topicName = topic?.name || "Unknown";
+    const _topic = topics.find((t) => t.id === topicId);
+    const _topicName = _topic?.name || "Unknown";
 
     if (
       !confirm(

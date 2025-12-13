@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { createClient } from "@supabase/supabase-js";
 
 const supabaseUrl = process.env["NEXT_PUBLIC_SUPABASE_URL"]!;
@@ -84,12 +84,7 @@ export const SectionQuestionCountManager: React.FC<
   const [editingSection, setEditingSection] =
     useState<SectionQuestionCount | null>(null);
 
-  // Load existing plan configuration
-  useEffect(() => {
-    loadPlanConfiguration();
-  }, [planId]);
-
-  const loadPlanConfiguration = async () => {
+  const loadPlanConfiguration = useCallback(async () => {
     try {
       setLoading(true);
 
@@ -126,7 +121,12 @@ export const SectionQuestionCountManager: React.FC<
     } finally {
       setLoading(false);
     }
-  };
+  }, [planId]);
+
+  // Load existing plan configuration
+  useEffect(() => {
+    loadPlanConfiguration();
+  }, [loadPlanConfiguration]);
 
   const addSection = () => {
     const newSection: SectionQuestionCount = {
