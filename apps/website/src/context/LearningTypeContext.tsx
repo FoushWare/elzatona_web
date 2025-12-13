@@ -132,7 +132,8 @@ export function LearningTypeProvider({
       };
     }
     const { data: sub } = supabaseClient.auth.onAuthStateChange(
-      (_event: unknown, session: { user?: { id?: string } } | null) => {
+      (_event: unknown, session: any) => {
+        // TypeScript: session can be Session | null, and Session has a user property
         const newUserId = session?.user?.id ?? null;
         setUserId(newUserId);
 
