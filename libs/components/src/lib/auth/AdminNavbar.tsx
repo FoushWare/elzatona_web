@@ -60,6 +60,7 @@ export default function AdminNavbar() {
         window.scrollTo(0, scrollY);
       };
     }
+    return undefined;
   }, [isOpen]);
 
   // Close dropdowns when clicking outside
