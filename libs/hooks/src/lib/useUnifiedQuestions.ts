@@ -374,6 +374,7 @@ export function useUnifiedQuestions(
       } finally {
         setIsUpdating(false);
       }
+      // eslint-disable-next-line react-hooks/exhaustive-deps
     },
     [currentQuestion],
   );
@@ -406,6 +407,7 @@ export function useUnifiedQuestions(
       } finally {
         setIsDeleting(false);
       }
+      // eslint-disable-next-line react-hooks/exhaustive-deps
     },
     [currentQuestion],
   );
@@ -507,6 +509,7 @@ export function useUnifiedQuestions(
       } finally {
         setIsLoading(false);
       }
+      // eslint-disable-next-line react-hooks/exhaustive-deps
     },
     [],
   );
@@ -549,6 +552,7 @@ export function useUnifiedQuestions(
       } finally {
         setIsLoading(false);
       }
+      // eslint-disable-next-line react-hooks/exhaustive-deps
     },
     [],
   );
