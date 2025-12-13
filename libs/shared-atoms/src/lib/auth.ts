@@ -49,7 +49,8 @@ export const signInAtom = atom(
     try {
       // This will be implemented with actual Firebase auth
       // For now, just a placeholder
-      console.log("Sign in with:", { email, password });
+      // SECURITY: Never log passwords - only log email for debugging
+      console.log("Sign in attempt for:", email);
     } catch (error) {
       set(
         authErrorAtom,

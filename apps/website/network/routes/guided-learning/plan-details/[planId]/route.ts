@@ -469,11 +469,16 @@ export async function GET(
       );
 
       // Convert inline <code> tags to backticks
-      // codeql[js/incomplete-multi-character-sanitization]: This regex is part of a multi-pass sanitization process. The cleaned text is sent as JSON (not rendered as HTML), and all HTML tags are removed through multiple passes including the replace() call immediately below.
+      // SECURITY: Sanitize code content after decoding HTML entities to prevent HTML injection
       cleaned = cleaned.replace(
         /<code[^>]*>([^<]+)<\/code>/gi,
         (_, codeContent) => {
-          return `\`${decodeHtmlEntities(codeContent).trim()}\``;
+          // Decode HTML entities first
+          let decodedContent = decodeHtmlEntities(codeContent).trim();
+          // SECURITY: Remove any remaining HTML tags that might have been decoded
+          // This ensures no HTML injection even after entity decoding
+          decodedContent = decodedContent.replace(/<[^>]+>/g, "");
+          return `\`${decodedContent}\``;
         },
       );
 

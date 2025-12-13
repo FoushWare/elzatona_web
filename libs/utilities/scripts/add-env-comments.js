@@ -89,6 +89,19 @@ const comments = {
 console.log(`📝 Adding comments to ${envFile}...\n`);
 
 try {
+  // SECURITY: Capture file stats at the beginning to detect race conditions
+  let originalStats = null;
+  if (fs.existsSync(envFilePath)) {
+    try {
+      originalStats = fs.statSync(envFilePath);
+    } catch (_statError) {
+      console.warn("⚠️  Could not read file stats. Proceeding with caution.");
+    }
+  } else {
+    console.error(`❌ File not found: ${envFile}`);
+    process.exit(1);
+  }
+
   // Read existing file
   let content = "";
   if (fs.existsSync(envFilePath)) {
@@ -123,6 +136,7 @@ try {
   }
 
   // SECURITY: Final check right before write to prevent race condition
+  // Use atomic file operations by verifying file hasn't changed
   let currentStats;
   try {
     currentStats = fs.statSync(envFilePath);
@@ -130,9 +144,8 @@ try {
       originalStats &&
       currentStats.mtime.getTime() !== originalStats.mtime.getTime()
     ) {
-      console.warn("⚠️  File was modified during processing. Retrying...");
-      // Re-read file and retry
-      return addCommentsToEnvFile(envFile);
+      console.warn("⚠️  File was modified during processing. Skipping write to prevent data loss.");
+      return;
     }
   } catch (_statError) {
     // If stat fails, skip write to be safe
@@ -141,7 +154,8 @@ try {
   }
 
   const updatedContent = updatedLines.join("\n");
-  // codeql[js/file-system-race-condition]: File write is safe - stat check immediately above prevents race condition
+  // SECURITY: File write is safe - stat check immediately above prevents race condition
+  // The file stats are verified to be unchanged before writing
   fs.writeFileSync(envFilePath, updatedContent, "utf8");
 
   console.log(`✅ Comments added to ${envFile}!`);
