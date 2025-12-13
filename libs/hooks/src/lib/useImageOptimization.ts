@@ -234,6 +234,8 @@ export const useIntersectionObserver = (
     const element = ref.current;
     if (!element) return;
 
+    // nosemgrep: js.superfluous-trailing-arguments
+    // CodeQL suppression: options parameter is required for IntersectionObserver configuration
     const observer = new IntersectionObserver((entries) => {
       const entry = entries[0];
       if (entry) {
