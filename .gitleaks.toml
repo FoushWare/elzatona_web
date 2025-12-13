@@ -4,23 +4,22 @@ title = "Gitleaks config - exclude directories"
 [allowlist]
 description = "Global allowlist"
 paths = [
-    "node_modules/**",
-    ".next/**", 
-    "dist/**",
-    "coverage/**",
-    ".nyc_output/**",
-    ".cache/**",
-    ".vscode/**",
-    ".cursor/**",
-    ".idea/**",
-    ".git/**",
-    "**/*.log",
-    "**/*.tmp",
-    "**/.DS_Store",
-    "docs/**",
-    "reports/**",
-    "**/.env*",
-    "**/*.env"
+    "node_modules/.*",
+    ".next/.*", 
+    "dist/.*",
+    "coverage/.*",
+    ".nyc_output/.*",
+    ".cache/.*",
+    ".vscode/.*",
+    ".cursor/.*",
+    ".idea/.*",
+    ".git/.*",
+    ".*\\.log",
+    ".*\\.tmp",
+    ".*\\.DS_Store",
+    "docs/.*",
+    "reports/.*",
+    ".*\\.env.*"
 ]
 
 # Default rules
