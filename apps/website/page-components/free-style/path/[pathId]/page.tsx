@@ -2,7 +2,7 @@ import React from "react";
 import Link from "next/link";
 import {
   ArrowLeft,
-  _Clock as _Clock,
+  Clock,
   Target,
   BookOpen,
   Play,
