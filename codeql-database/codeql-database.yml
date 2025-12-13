@@ -38,9 +38,9 @@ inProgress:
     ruby:
      - /opt/homebrew/Caskroom/codeql/2.23.8/codeql/ruby
 creationMetadata:
-  sha: ddc2b85da083a16c581e4e175fcb0f24fc16f0a0
+  sha: 0e0556030f2da87f6ccd523fdf9ec7b191cc46e7
   cliVersion: 2.23.8
-  creationTime: 2025-12-13T09:50:57.857610Z
-overlayDatabase: false
+  creationTime: 2025-12-13T09:55:43.644306Z
 overlayBaseDatabase: false
+overlayDatabase: false
 finalised: false
