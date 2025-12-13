@@ -7,12 +7,10 @@ import {
   BookOpen,
   HelpCircle,
   CreditCard,
-  FileText as _FileText,
   Settings,
   Code,
   Calculator,
   BarChart3,
-  FolderOpen as _FolderOpen,
   Users,
   Database,
   TrendingUp,
@@ -23,11 +21,8 @@ import {
   Zap,
   Star,
   ArrowRight,
-  Eye as _Eye,
-  Trash2 as _Trash2,
   RefreshCw,
   AlertCircle,
-  Info as _Info,
 } from "lucide-react";
 
 export default function AdminDashboard() {
