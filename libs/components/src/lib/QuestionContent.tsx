@@ -544,7 +544,9 @@ export const QuestionContent = ({ content }: { content: string }) => {
 
     // Try to extract from <pre><code> first, then <code>
     let code =
-      extractCodeFromPreCode(fixedHtml) || extractCodeFromCode(fixedHtml) || html;
+      extractCodeFromPreCode(fixedHtml) ||
+      extractCodeFromCode(fixedHtml) ||
+      html;
 
     // SECURITY: Limit input size before processing to prevent ReDoS
     const MAX_CODE_LENGTH = 50000; // 50KB limit

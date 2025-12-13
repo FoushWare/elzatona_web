@@ -1,14 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import {
-  X,
-  Trophy,
-  Star,
-  Award,
-  ArrowRight,
-  RotateCcw,
-} from "lucide-react";
+import { X, Trophy, Star, Award, ArrowRight, RotateCcw } from "lucide-react";
 
 interface CelebrationModalProps {
   isOpen: boolean;
