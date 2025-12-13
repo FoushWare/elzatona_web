@@ -18,7 +18,9 @@ try {
     supabaseUrl !== "https://placeholder.supabase.co" &&
     supabaseServiceRoleKey !== "placeholder_key"
   ) {
-    supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
+    const _supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
+    // Store for potential future use
+    void _supabase;
   }
 } catch (error) {
   console.warn("Supabase client creation failed in UserStatistics:", error);
