@@ -84,11 +84,11 @@ const processColorForLightMode = (
 // Helper function to normalize line breaks in code
 const normalizeLineBreaks = (code: string): string => {
   // Step 1: Replace literal backslash-n sequences (the two characters: \ and n)
-  let formatted = code.replaceAll("\\n", "\n");
+  let formatted = code.replaceAll(String.raw`\n`, "\n");
   // Step 2: Handle \r\n combinations (escape sequences)
-  formatted = formatted.replaceAll("\\r\\n", "\n");
+  formatted = formatted.replaceAll(String.raw`\r\n`, "\n");
   // Step 3: Handle \r escape sequences
-  formatted = formatted.replaceAll("\\r", "\n");
+  formatted = formatted.replaceAll(String.raw`\r`, "\n");
   // Step 4: Normalize actual line breaks (Windows, Mac, Unix)
   formatted = formatted.replaceAll("\r\n", "\n"); // Windows line breaks
   formatted = formatted.replaceAll("\r", "\n"); // Mac line breaks
@@ -164,14 +164,14 @@ const formatWithIndentation = (codeLines: string[]): string => {
 const addLineBreaks = (formatted: string): string => {
   // Add line breaks after semicolons (but not in strings)
   // NOSONAR S7781: replaceAll() cannot be used with regex patterns that require negative lookahead
-  formatted = formatted.replace(/;(?![^"']*["'])/g, ";\n");
+  formatted = formatted.replaceAll(/;(?![^"']*["'])/g, ";\n");
   // Add line breaks after opening braces
   formatted = formatted.replaceAll(/\{\s*/g, "{\n");
   // Add line breaks before closing braces
   formatted = formatted.replaceAll(/\s*\}/g, "\n}");
   // Add line breaks after closing braces followed by non-whitespace
   // NOSONAR S7781: replaceAll() cannot be used with regex patterns that require capture groups
-  formatted = formatted.replace(/\}\s*([^\s}])/g, "}\n\n$1");
+  formatted = formatted.replaceAll(/\}\s*([^\s}])/g, "}\n\n$1");
   // Clean up multiple consecutive line breaks (max 2)
   formatted = formatted.replaceAll(/\n{3,}/g, "\n\n");
   return formatted;

@@ -21,7 +21,7 @@ import {
   GitHubIssue,
 } from "../types/github-issues";
 import {
-  Github as GitHubIcon,
+  GitHub as GitHubIcon,
   ExternalLink,
   AlertCircle,
   CheckCircle,

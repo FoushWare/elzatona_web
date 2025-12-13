@@ -723,7 +723,7 @@ export const QuestionContent = ({ content }: { content: string }) => {
 
   // SECURITY: Use bounded quantifier to prevent ReDoS
   // Ensure regex doesn't match empty string by requiring at least one character in code block
-  const markdownCodeBlockRegex = /```(\w{0,20})?\n([\s\S]{1,50000})```/g;
+  const markdownCodeBlockRegex = /```(\w{1,20})?\n([\s\S]{1,50000})```/g;
   const markdownMatches: Array<{
     index: number;
     content: string;
