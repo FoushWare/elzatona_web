@@ -4,7 +4,7 @@
  *
  * This file shows how to use the centralized API configuration
  * in different scenarios. Copy these patterns to your API routes.
- * 
+ *
  * NOTE: This is an example file - TypeScript checking is disabled.
  */
 
