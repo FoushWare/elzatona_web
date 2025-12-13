@@ -434,7 +434,7 @@ function getCommonTopics(): Omit<QuestionTopic, "id">[] {
   Object.entries(topicsLibrary).forEach(([category, topicNames]) => {
     topicNames.forEach((topicName) => {
       // Create a clean ID from the topic name
-      const id = topicName
+      const _id = topicName
         .toLowerCase()
         .replace(/[^a-z0-9\s]/g, "")
         .replace(/\s+/g, "-")
@@ -492,7 +492,7 @@ export async function POST(request: NextRequest) {
     }
 
     const commonTopics = getCommonTopics();
-    const topicsRef = supabase.from("topics");
+    const _topicsRef = supabase.from("topics");
     const createdTopics: QuestionTopic[] = [];
 
     // If force is true, we need to clear existing topics first

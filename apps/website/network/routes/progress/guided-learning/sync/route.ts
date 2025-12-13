@@ -38,7 +38,7 @@ export async function POST(request: NextRequest) {
 
     if (!token) {
       console.log("⚠️ No authentication token found, using development mode");
-      const progressData: GuidedProgress = await request.json();
+      const _progressData: GuidedProgress = await request.json();
 
       return NextResponse.json({
         success: true,
@@ -98,7 +98,7 @@ export async function POST(request: NextRequest) {
     );
 
     // Store progress data in JSONB format
-    const { data, error } = await supabase.from("user_progress").upsert(
+    const { data: _data, error } = await supabase.from("user_progress").upsert(
       {
         user_id: decodedToken.id,
         plan_id: progressData.planId,
