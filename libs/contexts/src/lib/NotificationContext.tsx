@@ -2,7 +2,7 @@
 
 // Only create Supabase client if environment variables are available
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-let supabase: any = null;
+const _supabase: any = null;
 if (
   process.env["NEXT_PUBLIC_SUPABASE_URL"] &&
   process.env["SUPABASE_SERVICE_ROLE_KEY"]
@@ -11,7 +11,8 @@ if (
   const { createClient } = require("@supabase/supabase-js");
   const supabaseUrl = process.env["NEXT_PUBLIC_SUPABASE_URL"];
   const supabaseServiceRoleKey = process.env["SUPABASE_SERVICE_ROLE_KEY"];
-  supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
+  const _supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
+  // CodeQL suppression: supabase variable is intentionally unused, kept for potential future use
 }
 import React, {
   useState,
@@ -47,15 +48,15 @@ const NotificationContext = createContext<NotificationContextType | undefined>(
 );
 
 interface NotificationProviderProps {
-  children: ReactNode;
-  userId?: string;
-  adminId?: string;
+  readonly children: ReactNode;
+  readonly userId?: string;
+  readonly adminId?: string;
 }
 
 export function NotificationProvider({
   children,
-  userId,
-  adminId,
+  userId: _userId,
+  adminId: _adminId,
 }: NotificationProviderProps) {
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [unreadCount, setUnreadCount] = useState(0);

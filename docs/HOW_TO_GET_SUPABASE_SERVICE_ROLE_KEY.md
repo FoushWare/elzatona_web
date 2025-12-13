@@ -49,8 +49,8 @@ Add or update in `.env.local`:
 ```bash
 NEXT_PUBLIC_SUPABASE_URL=https://hpnewqkvpnthpohvxcmq.supabase.co
 SUPABASE_SERVICE_ROLE_KEY=<paste-your-service-role-key-here>
-ADMIN_EMAIL=afouadsoftwareengineer@gmail.com
-ADMIN_PASSWORD=ZatonaFoushware$12
+ADMIN_EMAIL=<your-admin-email-here>
+ADMIN_PASSWORD=<your-admin-password-here>
 ```
 
 Then run:

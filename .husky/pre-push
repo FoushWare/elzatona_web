@@ -1,212 +1,237 @@
-#!/usr/bin/env sh
-. "$(dirname -- "$0")/_/husky.sh"
+#!/usr/bin/env bash
+###############################################################################
+# Git Pre-Push Hook
+# - Code quality gate
+# - Secret scanning
+# - Execution time per check
+###############################################################################
 
+set -o pipefail
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Colors
+# ─────────────────────────────────────────────────────────────────────────────
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+YELLOW='\033[1;33m'
+BLUE='\033[0;34m'
+CYAN='\033[0;36m'
+NC='\033[0m'
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Metadata
+# ─────────────────────────────────────────────────────────────────────────────
+START_TS="$(date +"%Y-%m-%d %H:%M:%S")"
+RUN_ID="$(date +%Y%m%d_%H%M%S)"
+LOG_FILE=".code-quality-check.$RUN_ID.log"
+
+FAILED_CHECKS=()
+PASSED_CHECKS=()
+CHECK_DURATIONS=()
+
+###############################################################################
+# Banner
+###############################################################################
 echo ""
 echo "════════════════════════════════════════════════════════════════"
-echo "🚀 PRE-PUSH HOOK (Comprehensive Checks)"
+echo "🔍 Git Pre-Push Quality & Security Gate"
 echo "════════════════════════════════════════════════════════════════"
+echo "📅 Started : $START_TS"
+echo "🆔 Run ID  : $RUN_ID"
+echo "📄 Log    : $LOG_FILE"
 echo ""
 
-# Get the current branch name
-current_branch=$(git branch --show-current)
-echo "📍 Current branch: $current_branch"
-echo ""
+###############################################################################
+# Environment validation
+###############################################################################
+echo -e "${BLUE}🔎 Validating environment${NC}"
 
-# Only run comprehensive checks on development branches
-if [[ "$current_branch" == "release/v1.0.0-main-website" ]] || [[ "$current_branch" == "develop" ]] || [[ "$current_branch" == "main" ]]; then
-  echo "🔄 Running pre-push checks on development branch..."
-  echo ""
-  
-  # Step 1: Auto-fix linting issues
-  echo "🔍 STEP 1: Running ESLint with auto-fix..."
-  echo "   📝 Executing: npm run lint:fix"
-  echo "   ⏳ This may take a moment..."
-  echo ""
-  
-  npm run lint:fix
-  LINT_FIX_EXIT_CODE=$?
-  
-  echo ""
-  if [ $LINT_FIX_EXIT_CODE -ne 0 ]; then
-    echo "   ⚠️  ESLint auto-fix completed with warnings (exit code: $LINT_FIX_EXIT_CODE)"
-    echo "   💡 Some issues may require manual fixes"
-  else
-    echo "   ✅ ESLint auto-fix completed successfully!"
-  fi
-  echo ""
-  
-  # Step 2: Run linting check (after auto-fix)
-  echo "🔍 STEP 2: Running ESLint check (after auto-fix)..."
-  echo "   📝 Executing: npm run lint"
-  echo "   ⏳ Checking for remaining linting issues..."
-  echo ""
-  
-  npm run lint || true  # Allow warnings to pass
-  LINT_EXIT_CODE=$?
-  
-  echo ""
-  if [ $LINT_EXIT_CODE -ne 0 ]; then
-    echo "   ⚠️  ESLint found remaining issues (exit code: $LINT_EXIT_CODE)"
-    echo "   💡 Please review and fix the remaining linting issues"
-    echo "   🔧 You can run 'npm run lint:fix' to auto-fix more issues"
-    echo "   📝 Allowing push to proceed (warnings only)"
-  else
-    echo "   ✅ ESLint check passed successfully!"
-  fi
-  echo ""
-  
-  # Step 3: TypeScript type checking (memory-optimized for 8GB RAM)
-  echo "📘 STEP 3: Running TypeScript type checking..."
-  echo "   📝 Executing: npm run type-check"
-  echo "   ⏳ Checking for TypeScript errors..."
-  echo "   💾 Memory-optimized: Single-threaded mode"
-  echo ""
-  
-  # Limit memory usage for TypeScript (8GB RAM system)
-  NODE_OPTIONS="--max-old-space-size=2048" npm run type-check
-  TS_EXIT_CODE=$?
-  
-  echo ""
-  if [ $TS_EXIT_CODE -ne 0 ]; then
-    echo "   ❌ TypeScript type checking failed with exit code: $TS_EXIT_CODE"
-    echo "   💡 Please fix TypeScript errors before pushing"
-    echo ""
-    echo "════════════════════════════════════════════════════════════════"
-    echo "❌ PRE-PUSH HOOK FAILED - TYPESCRIPT ERRORS DETECTED!"
-    echo "════════════════════════════════════════════════════════════════"
-    echo ""
+for cmd in node npm npx git; do
+  if ! command -v "$cmd" >/dev/null 2>&1; then
+    echo -e "${RED}❌ Missing required command: $cmd${NC}"
     exit 1
-  else
-    echo "   ✅ TypeScript type checking passed successfully!"
   fi
-  echo ""
-  
-  # Step 4: Build check (includes TypeScript compilation) - ONLY local check (no duplication)
-  echo "🏗️  STEP 4: Running build validation..."
-  echo "   📦 Executing: npm run build"
-  echo "   ⏳ This may take a moment..."
-  echo "   💡 This is the ONLY build check (removed from GitHub Actions to avoid duplication)"
-  echo "   💾 Memory-optimized: Single-threaded, limited memory usage"
-  echo ""
-  
-  # Run build with memory optimization (8GB RAM system)
-  # Limit Node.js memory and disable parallel processing
-  NODE_OPTIONS="--max-old-space-size=2048" NEXT_TELEMETRY_DISABLED=1 npm run build
-  BUILD_EXIT_CODE=$?
-  
-  echo ""
-  if [ $BUILD_EXIT_CODE -ne 0 ]; then
-    echo "   ❌ Build failed with exit code: $BUILD_EXIT_CODE"
-    echo "   💡 Please fix build issues before pushing"
-    echo ""
-    echo "════════════════════════════════════════════════════════════════"
-    echo "❌ PRE-PUSH HOOK FAILED - BUILD ERRORS DETECTED!"
-    echo "════════════════════════════════════════════════════════════════"
-    echo ""
-    exit 1
-  else
-    echo "   ✅ Build completed successfully!"
-  fi
-  echo ""
-  
-  # Step 5: Secret scanning on changed files (CRITICAL - prevents secrets from reaching GitHub)
-  echo "🔒 STEP 5: Running secret scanning on changed files..."
-  echo "   📝 This is the ONLY local secret scan (pre-commit scan removed to avoid duplication)"
-  echo "   📝 GitHub will also scan automatically after push as backup"
-  echo ""
-  if [ -f "scripts/pre-push-secret-scan.sh" ]; then
-    bash scripts/pre-push-secret-scan.sh "$@"
-    SECRET_SCAN_EXIT_CODE=$?
-    
-    if [ $SECRET_SCAN_EXIT_CODE -ne 0 ]; then
-      echo "════════════════════════════════════════════════════════════════"
-      echo "❌ PRE-PUSH HOOK FAILED - SECRETS DETECTED!"
-      echo "════════════════════════════════════════════════════════════════"
-      echo ""
-      exit 1
-    fi
-  else
-    echo "   ⚠️  Secret scanning script not found (scripts/pre-push-secret-scan.sh)"
-    echo "   💡 Secret scanning is recommended for security"
-  fi
-  echo ""
-  
-  # Step 6: Add auto-fixed files to staging
-  echo "📦 STEP 6: Adding auto-fixed files to staging..."
-  git add .
-  echo "   ✅ Auto-fixed files added to staging"
-  echo ""
-  
-    # Step 7: Clean up build files after successful build
-    echo "🧹 STEP 7: Cleaning build files..."
-    
-    echo "   🗑️  Removing .next directory..."
-    if [ -d ".next" ]; then
-      rm -rf .next
-      echo "   ✅ .next directory removed"
-    else
-      echo "   ℹ️  .next directory not found (already clean)"
-    fi
-    
-    echo "   🗑️  Removing build directory..."
-    if [ -d "build" ]; then
-      rm -rf build
-      echo "   ✅ build directory removed"
-    else
-      echo "   ℹ️  build directory not found (already clean)"
-    fi
-    
-    echo "   🗑️  Removing storybook-static directory..."
-    if [ -d "storybook-static" ]; then
-      rm -rf storybook-static
-      echo "   ✅ storybook-static directory removed"
-    else
-      echo "   ℹ️  storybook-static directory not found (already clean)"
-    fi
-    
-    echo "   🗑️  Removing coverage directory..."
-    if [ -d "coverage" ]; then
-      rm -rf coverage
-      echo "   ✅ coverage directory removed"
-    else
-      echo "   ℹ️  coverage directory not found (already clean)"
-    fi
-    
-    # Step 7.5: Clean up Playwright videos (save space - videos can be 22GB+)
-    echo "   📹 Cleaning up Playwright test videos..."
-    if [ -f "scripts/cleanup-playwright-videos.sh" ]; then
-      bash scripts/cleanup-playwright-videos.sh
-      echo "   ✅ Playwright videos cleaned up"
-    else
-      echo "   ℹ️  Cleanup script not found (non-critical)"
-    fi
-    
-    echo "   ℹ️  Keeping tsconfig.tsbuildinfo (helps with incremental builds)"
-    echo "   ℹ️  Keeping test-results/ (JSON/XML reports, videos removed)"
-    echo ""
-  
-  # Final status
-  echo "📊 PRE-PUSH SUMMARY:"
-  echo "   ✅ ESLint auto-fix completed"
-  echo "   ✅ ESLint check passed"
-  echo "   ✅ TypeScript type checking passed"
-  echo "   ✅ Build validation passed"
-  echo "   ✅ Secret scanning passed"
-  echo "   ✅ Build files cleaned"
-  echo "   ✅ Ready for push"
-  echo ""
-  echo "════════════════════════════════════════════════════════════════"
-  echo "✅ PRE-PUSH CHECKS COMPLETED SUCCESSFULLY!"
-  echo "🚀 READY TO PUSH TO REMOTE REPOSITORY!"
-  echo "════════════════════════════════════════════════════════════════"
-  echo ""
-else
-  echo "ℹ️  Branch '$current_branch' is not a development branch"
-  echo "💡 Pre-push checks only run on: main, develop, release/v1.0.0-main-website"
-  echo ""
-  echo "════════════════════════════════════════════════════════════════"
-  echo "ℹ️  PRE-PUSH HOOK SKIPPED (Non-development branch)"
-  echo "🚀 READY TO PUSH!"
-  echo "════════════════════════════════════════════════════════════════"
-  echo ""
+done
+
+if [ ! -f package.json ]; then
+  echo -e "${RED}❌ package.json not found${NC}"
+  exit 1
 fi
+
+echo -e "${GREEN}✅ Environment OK${NC}"
+echo ""
+
+###############################################################################
+# Load env vars
+###############################################################################
+if [ -f .env.local ]; then
+  echo -e "${BLUE}📦 Loading .env.local${NC}"
+  set -a
+  source .env.local
+  set +a
+fi
+
+###############################################################################
+# Utility: timed check runner
+###############################################################################
+run_check() {
+  local name="$1"
+  local command="$2"
+  local fix_hint="$3"
+
+  local start end duration exit_code
+
+  echo ""
+  echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+  echo "📋 $name"
+  echo "🧪 $command"
+  echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+  echo ""
+
+  start=$(date +%s)
+
+  {
+    echo "[$(date +"%H:%M:%S")] START $name"
+    bash -c "$command"
+    exit_code=$?
+    echo "[$(date +"%H:%M:%S")] END $name (exit=$exit_code)"
+    return $exit_code
+  } >>"$LOG_FILE" 2>&1
+
+  exit_code=$?
+  end=$(date +%s)
+  duration=$((end - start))
+  CHECK_DURATIONS+=("$name: ${duration}s")
+
+  if [ $exit_code -eq 0 ]; then
+    echo -e "${GREEN}✅ $name passed (${duration}s)${NC}"
+    PASSED_CHECKS+=("$name")
+  else
+    echo -e "${RED}❌ $name failed (${duration}s)${NC}"
+    FAILED_CHECKS+=("$name")
+
+    [ -n "$fix_hint" ] && echo -e "${YELLOW}💡 $fix_hint${NC}"
+
+    echo -e "${BLUE}📄 Log tail:${NC}"
+    tail -n 12 "$LOG_FILE" | sed 's/^/   /'
+  fi
+
+  return $exit_code
+}
+
+###############################################################################
+# STEP 0: Secret Scanning (FAIL FAST)
+###############################################################################
+echo "STEP 0: Secret Scanning"
+
+if command -v gitleaks >/dev/null 2>&1; then
+  # Create temporary directory with staged files only
+  STAGED_DIR=$(mktemp -d)
+  git diff --cached --name-only --diff-filter=AM | while read file; do
+    if [ -f "$file" ]; then
+      mkdir -p "$STAGED_DIR/$(dirname "$file")"
+      cp "$file" "$STAGED_DIR/$file"
+    fi
+  done
+  
+  run_check \
+    "Secret Scan (Gitleaks)" \
+    "cd '$STAGED_DIR' && gitleaks detect --redact --exit-code 1 --no-git --source . && cd -" \
+    "Remove secrets and rotate compromised credentials"
+  
+  # Clean up temporary directory
+  rm -rf "$STAGED_DIR"
+else
+  echo -e "${YELLOW}⚠️  Gitleaks not installed — skipping secret scan${NC}"
+  echo -e "${YELLOW}💡 Install: https://github.com/gitleaks/gitleaks${NC}"
+fi
+
+###############################################################################
+# STEP 1: Prettier
+###############################################################################
+echo ""
+echo "STEP 1: Formatting"
+run_check \
+  "Prettier" \
+  "NODE_OPTIONS=\"--max-old-space-size=512\" npx prettier --check . --ignore-path .prettierignore" \
+  "npm run format"
+
+###############################################################################
+# STEP 2: ESLint
+###############################################################################
+echo ""
+echo "STEP 2: Linting"
+run_check \
+  "ESLint" \
+  "NODE_OPTIONS=\"--max-old-space-size=512\" npm run lint" \
+  "npm run lint:fix"
+
+###############################################################################
+# STEP 3: TypeScript
+###############################################################################
+echo ""
+echo "STEP 3: Type Checking"
+run_check \
+  "TypeScript" \
+  "NODE_OPTIONS=\"--max-old-space-size=1024\" npm run type-check" \
+  "Fix TypeScript errors"
+
+###############################################################################
+# STEP 4: Build
+###############################################################################
+echo ""
+if [ "$SKIP_BUILD_CHECK" = "true" ]; then
+  echo -e "${YELLOW}⏭️  Build skipped${NC}"
+else
+  echo "STEP 4: Build"
+  run_check \
+    "Build" \
+    "NODE_OPTIONS=\"--max-old-space-size=1024\" npm run build" \
+    "Fix build errors"
+fi
+
+###############################################################################
+# STEP 5: SonarQube
+###############################################################################
+echo ""
+if [ -n "$SONAR_TOKEN" ] && [ "$SKIP_SONAR_CHECK" != "true" ]; then
+  echo "STEP 5: SonarQube"
+  run_check \
+    "SonarQube" \
+    "NODE_OPTIONS=\"--max-old-space-size=768\" SONAR_MEMORY_LIMIT=768 npm run sonar:quick" \
+    "Fix SonarQube issues"
+else
+  echo -e "${YELLOW}⏭️  SonarQube skipped${NC}"
+fi
+
+###############################################################################
+# Summary
+###############################################################################
+echo ""
+echo "════════════════════════════════════════════════════════════════"
+
+if [ ${#FAILED_CHECKS[@]} -eq 0 ]; then
+  echo -e "${GREEN}✅ All checks passed${NC}"
+else
+  echo -e "${RED}❌ Push blocked${NC}"
+fi
+
+echo ""
+echo "⏱️  Execution time per check:"
+for t in "${CHECK_DURATIONS[@]}"; do
+  echo "   • $t"
+done
+
+echo ""
+echo "📄 Log file: $LOG_FILE"
+
+if [ ${#FAILED_CHECKS[@]} -ne 0 ]; then
+  echo ""
+  echo -e "${YELLOW}⚠️  Fix issues or bypass with:${NC}"
+  echo "   git push --no-verify"
+  exit 1
+fi
+
+echo ""
+echo -e "${GREEN}🚀 Safe to push${NC}"
+exit 0

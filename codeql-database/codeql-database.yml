@@ -1,0 +1,46 @@
+---
+sourceLocationPrefix: /Users/a.fouad/S/New_elzatona
+baselineLinesOfCode: 173754
+unicodeNewlines: true
+columnKind: utf16
+primaryLanguage: javascript
+inProgress:
+  primaryLanguage: javascript
+  installedExtractors:
+    go:
+     - /opt/homebrew/Caskroom/codeql/2.23.8/codeql/go
+    python:
+     - /opt/homebrew/Caskroom/codeql/2.23.8/codeql/python
+    rust:
+     - /opt/homebrew/Caskroom/codeql/2.23.8/codeql/rust
+    java:
+     - /opt/homebrew/Caskroom/codeql/2.23.8/codeql/java
+    html:
+     - /opt/homebrew/Caskroom/codeql/2.23.8/codeql/html
+    xml:
+     - /opt/homebrew/Caskroom/codeql/2.23.8/codeql/xml
+    properties:
+     - /opt/homebrew/Caskroom/codeql/2.23.8/codeql/properties
+    cpp:
+     - /opt/homebrew/Caskroom/codeql/2.23.8/codeql/cpp
+    swift:
+     - /opt/homebrew/Caskroom/codeql/2.23.8/codeql/swift
+    csv:
+     - /opt/homebrew/Caskroom/codeql/2.23.8/codeql/csv
+    actions:
+     - /opt/homebrew/Caskroom/codeql/2.23.8/codeql/actions
+    yaml:
+     - /opt/homebrew/Caskroom/codeql/2.23.8/codeql/yaml
+    csharp:
+     - /opt/homebrew/Caskroom/codeql/2.23.8/codeql/csharp
+    javascript:
+     - /opt/homebrew/Caskroom/codeql/2.23.8/codeql/javascript
+    ruby:
+     - /opt/homebrew/Caskroom/codeql/2.23.8/codeql/ruby
+creationMetadata:
+  sha: 0e0556030f2da87f6ccd523fdf9ec7b191cc46e7
+  cliVersion: 2.23.8
+  creationTime: 2025-12-13T09:55:43.644306Z
+overlayBaseDatabase: false
+overlayDatabase: false
+finalised: false
