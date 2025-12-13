@@ -17,7 +17,6 @@ const reportPath = path.resolve(process.cwd(), REPORT);
 const outPath = path.resolve(process.cwd(), OUT);
 
 if (!fs.existsSync(reportPath)) {
-   
   console.error(
     `Missing ${reportPath}. Run: gitleaks detect --report-format json --report-path ${REPORT}`,
   );
@@ -27,7 +26,6 @@ if (!fs.existsSync(reportPath)) {
 const raw = fs.readFileSync(reportPath, "utf8").trim();
 const parsed = raw ? (JSON.parse(raw) as unknown) : [];
 if (!Array.isArray(parsed)) {
-   
   console.error("gitleaks report JSON is not an array");
   process.exit(1);
 }
@@ -53,5 +51,4 @@ fs.writeFileSync(
   "utf8",
 );
 
- 
 console.log(`Generated ${outPath} with ${lines.length} replacement(s).`);
