@@ -49,6 +49,7 @@
     "Rest/**/*",
     "**/*.stories.tsx",
     "**/*.stories.ts",
-    "**/*.example.ts"
+    "**/*.example.ts",
+    "apps/website/utilities/api-config.example.ts"
   ]
 }
