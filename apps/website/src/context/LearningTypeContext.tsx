@@ -247,12 +247,6 @@ export function LearningTypeProvider({
     }
   }, [solvedQuestionIds, userId]);
 
-  const updateLearningType = useCallback((type: LearningType) => {
-    setLearningType(type);
-    // Optionally sync preference to API here in future
-    // CodeQL suppression: setLearningType is a stable state setter from useState, not a reassignment
-  }, []);
-
   const addSolvedQuestion = useCallback((questionId: string) => {
     setSolvedQuestionIds((prev) =>
       prev.includes(questionId) ? prev : [...prev, questionId],
