@@ -11,8 +11,8 @@
 The following patterns were searched in git history:
 
 1. **Firebase API Key:** `AIzaSyBXlcfcdyIqoeJOb2gXcxpRSmQO7lEP82Y`
-2. **Supabase Anon Key:** `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...`
-3. **Supabase Service Role Key:** `BH3xSC7yk5DqX5bTgyedOyC45fNg1_vBcV04X_tkYLQ`
+2. **Supabase Anon Key:** `YOUR_SUPABASE_KEY_HERE
+3. **Supabase Service Role Key:** `process.env.SUPABASE_SERVICE_ROLE_KEY`
 4. **Project Identifiers:** `hpnewqkvpnthpohvxcmq`, `fir-demo-project-adffb`
 
 ## ⚠️ Manual Search Required
@@ -26,10 +26,10 @@ Due to terminal limitations, please run the following commands manually to check
 git log --all -p -S "AIzaSyBXlcfcdyIqoeJOb2gXcxpRSmQO7lEP82Y" --oneline
 
 # Search for Supabase anon key
-git log --all -p -S "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9" --oneline
+git log --all -p -S "YOUR_SUPABASE_KEY_HERE" --oneline
 
 # Search for service role key
-git log --all -p -S "BH3xSC7yk5DqX5bTgyedOyC45fNg1_vBcV04X_tkYLQ" --oneline
+git log --all -p -S "process.env.SUPABASE_SERVICE_ROLE_KEY" --oneline
 
 # Search for project identifiers
 git log --all -p -S "hpnewqkvpnthpohvxcmq" --oneline

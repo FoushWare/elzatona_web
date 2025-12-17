@@ -20,7 +20,7 @@ if grep -r "AIzaSyBXlcfcdyIqoeJOb2gXcxpRSmQO7lEP82Y" . --exclude-dir=node_module
 fi
 
 # Check for Supabase anon key
-if grep -r "SUPABASE_SERVICE_ROLE_KEY_REDACTED" . --exclude-dir=node_modules --exclude-dir=.git --exclude-dir=.next 2>/dev/null | grep -v ".cursor" | grep -v "SECURITY_AUDIT" > /dev/null; then
+if grep -r "YOUR_SUPABASE_KEY_HERE.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhwbmV3cWt2cG50aHBvaHZ4Y21xIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjA2NjA0MTgsImV4cCI6MjA3NjIzNjQxOH0.UMmriJb5HRr9W_56GilNNDWksvlFEb1V9c_PuBK-H3s" . --exclude-dir=node_modules --exclude-dir=.git --exclude-dir=.next 2>/dev/null | grep -v ".cursor" | grep -v "SECURITY_AUDIT" > /dev/null; then
     EXPOSED_KEYS+=("Supabase Anon Key")
 fi
 
@@ -59,7 +59,7 @@ echo "Run these commands to check git history:"
 echo ""
 echo "  git log --all -p -S \"AIzaSyBXlcfcdyIqoeJOb2gXcxpRSmQO7lEP82Y\" --oneline"
 echo "  git log --all -p -S \"BH3xSC7yk5DqX5bTgyedOyC45fNg1_vBcV04X_tkYLQ\" --oneline"
-echo "  git log --all -p -S \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9\" --oneline"
+echo "  git log --all -p -S \"YOUR_SUPABASE_KEY_HERE\" --oneline"
 echo ""
 echo "Or use the Python scanner:"
 echo "  python3 .cursor/scripts/git-secrets-check.py"

@@ -80,8 +80,8 @@ brew install git-secrets  # macOS
 # Configure
 git secrets --install
 git secrets --add 'AIzaSy[A-Za-z0-9_-]{35}'
-git secrets --add 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9'
-git secrets --add 'BH3xSC7yk5DqX5bTgyedOyC45fNg1_vBcV04X_tkYLQ'
+git secrets --add 'YOUR_SUPABASE_KEY_HERE'
+git secrets --add 'process.env.SUPABASE_SERVICE_ROLE_KEY'
 ```
 
 ### Push to GitHub

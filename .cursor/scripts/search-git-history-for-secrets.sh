@@ -16,7 +16,7 @@ NC='\033[0m' # No Color
 # Patterns to search for
 PATTERNS=(
   "AIzaSy"                    # Firebase API keys
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9"  # JWT tokens (Supabase anon keys)
+  "YOUR_SUPABASE_KEY_HERE"  # JWT tokens (Supabase anon keys)
   "BH3xSC7yk5DqX5bTgyedOyC45fNg1_vBcV04X_tkYLQ"  # Specific service role key
   "hpnewqkvpnthpohvxcmq"     # Project-specific identifiers
   "fir-demo-project-adffb"   # Firebase project ID

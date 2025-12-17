@@ -33,7 +33,7 @@ This script will:
 ```bash
 # Search for specific patterns
 git log --all -p -S "AIzaSy" --oneline | head -20
-git log --all -p -S "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9" --oneline | head -20
+git log --all -p -S "YOUR_SUPABASE_KEY_HERE" --oneline | head -20
 git log --all -p -S "gho_" --oneline | head -20
 git log --all -p -S "sk-proj-" --oneline | head -20
 ```
@@ -143,7 +143,7 @@ git gc --prune=now --aggressive
 
 ```bash
 # Verify secrets are removed
-git log --all -p | grep -i "AIzaSy\|eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9" | head -5
+git log --all -p | grep -i "AIzaSy\|YOUR_SUPABASE_KEY_HERE" | head -5
 
 # If no results, proceed with force push
 git push origin --force --all
@@ -197,7 +197,7 @@ git secrets --install
 
 # Add patterns
 git secrets --add 'AIzaSy[A-Za-z0-9_-]{35}'
-git secrets --add 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9'
+git secrets --add 'YOUR_SUPABASE_KEY_HERE'
 git secrets --add 'gho_[A-Za-z0-9]{36}'
 git secrets --add 'sk-proj-[A-Za-z0-9_-]{48}'
 git secrets --add 'sntryu_[A-Za-z0-9]{64}'

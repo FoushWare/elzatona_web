@@ -4,7 +4,7 @@
 
 ### 1. Supabase Service Role Key (CRITICAL)
 
-**Exposed Key:** `BH3xSC7yk5DqX5bTgyedOyC45fNg1_vBcV04X_tkYLQ`
+**Exposed Key:** `process.env.SUPABASE_SERVICE_ROLE_KEY`
 
 **Steps:**
 
@@ -31,7 +31,7 @@
 
 ### 2. Supabase Anon Key
 
-**Exposed Key:** `SUPABASE_SERVICE_ROLE_KEY_REDACTED`
+**Exposed Key:** `YOUR_SUPABASE_KEY_HERE
 
 **Steps:**
 

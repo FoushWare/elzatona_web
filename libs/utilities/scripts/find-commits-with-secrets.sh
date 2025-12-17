@@ -11,7 +11,7 @@ echo ""
 # Patterns to search for
 PATTERNS=(
     "AIzaSy[A-Za-z0-9_-]{35}"  # Firebase API keys
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9"  # JWT tokens (Supabase)
+    "YOUR_SUPABASE_KEY_HERE"  # JWT tokens (Supabase)
     "gho_[A-Za-z0-9]{36,}"  # GitHub tokens
     "ghp_[A-Za-z0-9]{36,}"  # GitHub personal access tokens
     "sk-proj-[A-Za-z0-9]{48,}"  # OpenAI keys
