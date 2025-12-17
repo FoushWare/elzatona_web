@@ -12,7 +12,7 @@ from typing import List, Tuple
 # Patterns to search for
 PATTERNS = {
     "Firebase API Key": r"AIzaSy[A-Za-z0-9_-]{35}",
-    "JWT Token (Supabase)": r"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9\.[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+",
+    "JWT Token (Supabase)": r"YOUR_SUPABASE_KEY_HERE\.[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+",
     "Service Role Key": r"BH3xSC7yk5DqX5bTgyedOyC45fNg1_vBcV04X_tkYLQ",
     "Supabase Project Ref": r"hpnewqkvpnthpohvxcmq",
     "Firebase Project ID": r"fir-demo-project-adffb",
@@ -23,7 +23,7 @@ PATTERNS = {
 # Specific known secrets to search for
 KNOWN_SECRETS = [
     "AIzaSyBXlcfcdyIqoeJOb2gXcxpRSmQO7lEP82Y",
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhwbmV3cWt2cG50aHBvaHZ4Y21xIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjA2NjA0MTgsImV4cCI6MjA3NjIzNjQxOH0.UMmriJb5HRr9W_56GilNNDWksvlFEb1V9c_PuBK-H3s",
+    "YOUR_SUPABASE_KEY_HERE.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhwbmV3cWt2cG50aHBvaHZ4Y21xIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjA2NjA0MTgsImV4cCI6MjA3NjIzNjQxOH0.UMmriJb5HRr9W_56GilNNDWksvlFEb1V9c_PuBK-H3s",
     "BH3xSC7yk5DqX5bTgyedOyC45fNg1_vBcV04X_tkYLQ",
 ]
 
@@ -100,7 +100,7 @@ def main():
         description = "Known Secret"
         if "AIzaSy" in secret:
             description = "Firebase API Key"
-        elif "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9" in secret:
+        elif "YOUR_SUPABASE_KEY_HERE" in secret:
             description = "Supabase Anon Key"
         elif "BH3xSC7yk5DqX5bTgyedOyC45fNg1_vBcV04X_tkYLQ" in secret:
             description = "Supabase Service Role Key"

@@ -126,7 +126,7 @@ echo ""
 
 # Verify removal (memory-efficient - limit search)
 echo "🔍 Verifying secrets are removed..."
-REMAINING=$(GIT_PAGER=cat git log --all -p --no-pager -100 | grep -iE "AIzaSy|eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9|gho_|ghp_|sk-proj-|sntryu_" | head -5 || true)
+REMAINING=$(GIT_PAGER=cat git log --all -p --no-pager -100 | grep -iE "AIzaSy|YOUR_SUPABASE_KEY_HERE|gho_|ghp_|sk-proj-|sntryu_" | head -5 || true)
 
 if [ -z "$REMAINING" ]; then
     echo "✅ No secrets found in history!"

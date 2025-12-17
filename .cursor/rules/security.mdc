@@ -24,7 +24,7 @@ alwaysApply: true
 ```typescript
 // ❌ DON'T: Hardcode secrets
 const apiKey = "AIzaSyBXlcfcdyIqoeJOb2gXcxpRSmQO7lEP82Y";
-const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...";
+const token = "YOUR_SUPABASE_KEY_HERE...";
 
 // ✅ DO: Use environment variables
 const apiKey = process.env.GOOGLE_API_KEY;

@@ -16,8 +16,8 @@ All automated security audit work is **COMPLETE**:
 
 **Critical Keys Exposed:**
 
-1. **Supabase Service Role Key:** `BH3xSC7yk5DqX5bTgyedOyC45fNg1_vBcV04X_tkYLQ` ⚠️
-2. **Supabase Anon Key:** `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...`
+1. **Supabase Service Role Key:** `process.env.SUPABASE_SERVICE_ROLE_KEY` ⚠️
+2. **Supabase Anon Key:** `YOUR_SUPABASE_KEY_HERE
 3. **Firebase API Key:** `AIzaSyBXlcfcdyIqoeJOb2gXcxpRSmQO7lEP82Y`
 
 **Follow:** `.cursor/KEY_ROTATION_GUIDE.md` for step-by-step instructions
@@ -57,7 +57,7 @@ This prevents future secret commits.
 python3 .cursor/scripts/git-secrets-check.py
 
 # Or manually search
-git log --all -p -S "BH3xSC7yk5DqX5bTgyedOyC45fNg1_vBcV04X_tkYLQ" --oneline
+git log --all -p -S "process.env.SUPABASE_SERVICE_ROLE_KEY" --oneline
 ```
 
 ### Step 5: Clean Git History (After Rotation)

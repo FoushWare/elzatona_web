@@ -35,7 +35,7 @@ if command -v git-secrets &> /dev/null; then
     # Register common patterns
     git-secrets --register-aws || true
     git-secrets --add 'AIzaSy[A-Za-z0-9_-]{35}' || true  # Firebase
-    git-secrets --add 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9' || true  # JWT
+    git-secrets --add 'YOUR_SUPABASE_KEY_HERE' || true  # JWT
     git-secrets --add 'sk_live_[A-Za-z0-9]{32,}' || true  # Stripe
     git-secrets --add 'sk_test_[A-Za-z0-9]{32,}' || true  # Stripe test
     

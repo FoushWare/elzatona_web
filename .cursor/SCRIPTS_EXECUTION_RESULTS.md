@@ -57,10 +57,10 @@ python3 .cursor/scripts/git-secrets-check.py
 git log --all -p -S "AIzaSyBXlcfcdyIqoeJOb2gXcxpRSmQO7lEP82Y" --oneline
 
 # Search for service role key
-git log --all -p -S "BH3xSC7yk5DqX5bTgyedOyC45fNg1_vBcV04X_tkYLQ" --oneline
+git log --all -p -S "process.env.SUPABASE_SERVICE_ROLE_KEY" --oneline
 
 # Search for Supabase anon key
-git log --all -p -S "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9" --oneline
+git log --all -p -S "YOUR_SUPABASE_KEY_HERE" --oneline
 ```
 
 ## ⚠️ Expected Findings
@@ -71,11 +71,11 @@ Since we found hardcoded secrets in current files, they **likely exist in git hi
    - Likely in: setup files, documentation files, migration guides
    - Commits: Initial setup, documentation updates
 
-2. **Supabase Service Role Key:** `BH3xSC7yk5DqX5bTgyedOyC45fNg1_vBcV04X_tkYLQ`
+2. **Supabase Service Role Key:** `process.env.SUPABASE_SERVICE_ROLE_KEY`
    - Likely in: OAuth setup files, authentication docs
    - Commits: Authentication setup, OAuth configuration
 
-3. **Supabase Anon Key:** `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...`
+3. **Supabase Anon Key:** `YOUR_SUPABASE_KEY_HERE
    - Likely in: Multiple documentation files
    - Commits: Documentation updates, setup guides
 

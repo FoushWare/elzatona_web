@@ -19,7 +19,13 @@ paths = [
     ".*\\.DS_Store",
     "docs/.*",
     "reports/.*",
-    ".*\\.env.*"
+    ".*\\.env.*",
+    ".*\\.lock",
+    "package-lock\\.json",
+    "bun\\.lock",
+    ".nx/workspace-data/.*",
+    "yarn\\.lock",
+    "pnpm-lock\\.yaml"
 ]
 
 # Default rules

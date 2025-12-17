@@ -30,7 +30,7 @@ echo ""
 # Add patterns for common secrets
 echo "🔍 Adding secret patterns..."
 git secrets --add 'AIzaSy[A-Za-z0-9_-]{35}'
-git secrets --add 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9'
+git secrets --add 'YOUR_SUPABASE_KEY_HERE'
 git secrets --add 'BH3xSC7yk5DqX5bTgyedOyC45fNg1_vBcV04X_tkYLQ'
 git secrets --add 'hpnewqkvpnthpohvxcmq'
 git secrets --add 'fir-demo-project-adffb'

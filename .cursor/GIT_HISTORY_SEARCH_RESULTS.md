@@ -38,10 +38,10 @@ bash .cursor/scripts/search-git-history-for-secrets.sh
 git log --all -p -S "AIzaSyBXlcfcdyIqoeJOb2gXcxpRSmQO7lEP82Y" --oneline
 
 # Search for Supabase anon key
-git log --all -p -S "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9" --oneline
+git log --all -p -S "YOUR_SUPABASE_KEY_HERE" --oneline
 
 # Search for service role key
-git log --all -p -S "BH3xSC7yk5DqX5bTgyedOyC45fNg1_vBcV04X_tkYLQ" --oneline
+git log --all -p -S "process.env.SUPABASE_SERVICE_ROLE_KEY" --oneline
 
 # Search commit messages
 git log --all --oneline --grep="secret\|key\|password\|token" -i
@@ -52,8 +52,8 @@ git log --all --oneline --grep="secret\|key\|password\|token" -i
 ### Known Secrets Found in Current Files:
 
 1. **Firebase API Key:** `AIzaSyBXlcfcdyIqoeJOb2gXcxpRSmQO7lEP82Y`
-2. **Supabase Anon Key:** `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhwbmV3cWt2cG50aHBvaHZ4Y21xIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjA2NjA0MTgsImV4cCI6MjA3NjIzNjQxOH0.UMmriJb5HRr9W_56GilNNDWksvlFEb1V9c_PuBK-H3s`
-3. **Supabase Service Role Key:** `BH3xSC7yk5DqX5bTgyedOyC45fNg1_vBcV04X_tkYLQ`
+2. **Supabase Anon Key:** `YOUR_SUPABASE_KEY_HERE
+3. **Supabase Service Role Key:** `process.env.SUPABASE_SERVICE_ROLE_KEY`
 4. **Project Identifiers:** `hpnewqkvpnthpohvxcmq`, `fir-demo-project-adffb`
 
 ## ⚠️ If Secrets Are Found in History
@@ -100,8 +100,8 @@ pip install git-filter-repo
 # Create replacements file
 cat > replacements.txt << EOF
 AIzaSyBXlcfcdyIqoeJOb2gXcxpRSmQO7lEP82Y==>your-firebase-api-key-here
-eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...==>your-supabase-anon-key-here
-BH3xSC7yk5DqX5bTgyedOyC45fNg1_vBcV04X_tkYLQ==>your-service-role-key-here
+YOUR_SUPABASE_KEY_HERE
+process.env.SUPABASE_SERVICE_ROLE_KEY==>your-service-role-key-here
 EOF
 
 # Apply replacements
@@ -132,8 +132,8 @@ brew install git-secrets  # macOS
 # Configure
 git secrets --install
 git secrets --add 'AIzaSy[A-Za-z0-9_-]{35}'
-git secrets --add 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9'
-git secrets --add 'BH3xSC7yk5DqX5bTgyedOyC45fNg1_vBcV04X_tkYLQ'
+git secrets --add 'YOUR_SUPABASE_KEY_HERE'
+git secrets --add 'process.env.SUPABASE_SERVICE_ROLE_KEY'
 ```
 
 ## 📊 Recommended Workflow

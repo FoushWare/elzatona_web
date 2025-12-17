@@ -30,7 +30,7 @@
 
 5. **Copy the Key**
    - Click the copy button next to the service role key
-   - The key will look like: `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...` (very long string)
+   - The key will look like: `YOUR_SUPABASE_KEY_HERE (very long string)
 
 ### Method 2: From Project Settings URL
 
