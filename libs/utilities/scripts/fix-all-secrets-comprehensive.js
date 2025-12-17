@@ -13,13 +13,13 @@ const { execSync } = require("child_process");
 const SECRET_PATTERNS = [
   {
     name: "Supabase Service Role Key",
-    pattern: /YOUR_SUPABASE_KEY_HERE\.[^'"]*/g,
+    pattern: /YOUR_SUPABASE_KEY_HERE/g,
     envVar: "SUPABASE_SERVICE_ROLE_KEY",
     replacement: "process.env.SUPABASE_SERVICE_ROLE_KEY",
   },
   {
     name: "Supabase Anon Key",
-    pattern: /YOUR_SUPABASE_KEY_HERE\.[^'"]*/g,
+    pattern: /YOUR_SUPABASE_KEY_HERE/g,
     envVar: "NEXT_PUBLIC_SUPABASE_ANON_KEY",
     replacement: "process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY",
   },

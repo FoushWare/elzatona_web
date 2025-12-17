@@ -13,7 +13,7 @@ replace_in_file() {
   fi
 
   # Replace Supabase keys
-  sed -i '' 's/YOUR_SUPABASE_KEY_HERE\.[^"'"'"' ]*/YOUR_SUPABASE_KEY_HERE/g' "$file" 2>/dev/null || true
+  sed -i '' 's/YOUR_SUPABASE_KEY_HERE/YOUR_SUPABASE_KEY_HERE/g' "$file" 2>/dev/null || true
   
   # Replace Google API keys
   sed -i '' 's/AIzaSy[^"'"'"' ]*/YOUR_GOOGLE_API_KEY_HERE/g' "$file" 2>/dev/null || true

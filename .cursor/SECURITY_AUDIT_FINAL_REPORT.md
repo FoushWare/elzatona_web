@@ -30,7 +30,7 @@
 ### Secrets Found in Current Files (Now Fixed):
 
 1. **Firebase API Key:** `AIzaSyBXlcfcdyIqoeJOb2gXcxpRSmQO7lEP82Y`
-2. **Supabase Anon Key:** `YOUR_SUPABASE_KEY_HERE...`
+2. **Supabase Anon Key:** `YOUR_SUPABASE_KEY_HERE
 3. **Supabase Service Role Key:** `process.env.SUPABASE_SERVICE_ROLE_KEY` ⚠️ CRITICAL
 4. **Project Identifiers:** `hpnewqkvpnthpohvxcmq`, `fir-demo-project-adffb`
 
@@ -99,7 +99,7 @@ pip install git-filter-repo
 # Create replacements
 cat > /tmp/replacements.txt << 'EOF'
 AIzaSyBXlcfcdyIqoeJOb2gXcxpRSmQO7lEP82Y==>your-firebase-api-key-here
-YOUR_SUPABASE_KEY_HERE...==>your-supabase-anon-key-here
+YOUR_SUPABASE_KEY_HERE
 process.env.SUPABASE_SERVICE_ROLE_KEY==>your-service-role-key-here
 EOF
 

@@ -75,7 +75,7 @@ Since we found hardcoded secrets in current files, they **likely exist in git hi
    - Likely in: OAuth setup files, authentication docs
    - Commits: Authentication setup, OAuth configuration
 
-3. **Supabase Anon Key:** `YOUR_SUPABASE_KEY_HERE...`
+3. **Supabase Anon Key:** `YOUR_SUPABASE_KEY_HERE
    - Likely in: Multiple documentation files
    - Commits: Documentation updates, setup guides
 

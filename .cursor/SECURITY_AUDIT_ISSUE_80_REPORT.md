@@ -64,7 +64,7 @@ A comprehensive security audit was performed on the codebase following the secur
 **Files with Hardcoded Keys:**
 
 1. `docs/guides/COMPLETE_MIGRATION_GUIDE.md`
-   - Supabase anon key: `YOUR_SUPABASE_KEY_HERE...`
+   - Supabase anon key: `YOUR_SUPABASE_KEY_HERE
    - Firebase API key: `AIzaSyBXlcfcdyIqoeJOb2gXcxpRSmQO7lEP82Y`
    - Project-specific URLs
 

@@ -96,7 +96,7 @@ pip install git-filter-repo
 # Create replacement file
 cat > replacements.txt << EOF
 AIzaSyBXlcfcdyIqoeJOb2gXcxpRSmQO7lEP82Y==>your-firebase-api-key-here
-YOUR_SUPABASE_KEY_HERE...==>your-supabase-anon-key-here
+YOUR_SUPABASE_KEY_HERE
 process.env.SUPABASE_SERVICE_ROLE_KEY==>your-service-role-key-here
 EOF
 
