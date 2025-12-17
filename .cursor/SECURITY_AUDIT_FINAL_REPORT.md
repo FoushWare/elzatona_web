@@ -30,8 +30,8 @@
 ### Secrets Found in Current Files (Now Fixed):
 
 1. **Firebase API Key:** `AIzaSyBXlcfcdyIqoeJOb2gXcxpRSmQO7lEP82Y`
-2. **Supabase Anon Key:** `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...`
-3. **Supabase Service Role Key:** `BH3xSC7yk5DqX5bTgyedOyC45fNg1_vBcV04X_tkYLQ` ⚠️ CRITICAL
+2. **Supabase Anon Key:** `YOUR_SUPABASE_KEY_HERE
+3. **Supabase Service Role Key:** `process.env.SUPABASE_SERVICE_ROLE_KEY` ⚠️ CRITICAL
 4. **Project Identifiers:** `hpnewqkvpnthpohvxcmq`, `fir-demo-project-adffb`
 
 ### ⚠️ These Secrets Likely Exist in Git History
@@ -77,8 +77,8 @@ Run these commands:
 git log --all -p -S "AIzaSyBXlcfcdyIqoeJOb2gXcxpRSmQO7lEP82Y" --oneline
 
 # Search for Supabase keys
-git log --all -p -S "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9" --oneline
-git log --all -p -S "BH3xSC7yk5DqX5bTgyedOyC45fNg1_vBcV04X_tkYLQ" --oneline
+git log --all -p -S "YOUR_SUPABASE_KEY_HERE" --oneline
+git log --all -p -S "process.env.SUPABASE_SERVICE_ROLE_KEY" --oneline
 
 # Or use the Python scanner
 python3 .cursor/scripts/git-secrets-check.py
@@ -99,8 +99,8 @@ pip install git-filter-repo
 # Create replacements
 cat > /tmp/replacements.txt << 'EOF'
 AIzaSyBXlcfcdyIqoeJOb2gXcxpRSmQO7lEP82Y==>your-firebase-api-key-here
-eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...==>your-supabase-anon-key-here
-BH3xSC7yk5DqX5bTgyedOyC45fNg1_vBcV04X_tkYLQ==>your-service-role-key-here
+YOUR_SUPABASE_KEY_HERE
+process.env.SUPABASE_SERVICE_ROLE_KEY==>your-service-role-key-here
 EOF
 
 # Apply
@@ -119,7 +119,7 @@ brew install git-secrets
 # Configure
 git secrets --install
 git secrets --add 'AIzaSy[A-Za-z0-9_-]{35}'
-git secrets --add 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9'
+git secrets --add 'YOUR_SUPABASE_KEY_HERE'
 ```
 
 ## 📁 All Files Created

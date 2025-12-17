@@ -42,7 +42,7 @@ for (const f of findings) {
 const lines: string[] = [];
 for (const secret of uniqueSecrets) {
   // filter-repo replace-text format: <old>==><new>
-  lines.push(`${secret}==>__REDACTED_SECRET__`);
+  lines.push(`${secret}==>____REDACTED_SECRET___SECRET__`);
 }
 
 fs.writeFileSync(

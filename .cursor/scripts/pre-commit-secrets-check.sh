@@ -10,7 +10,7 @@ echo "🔍 Checking for exposed secrets before commit..."
 # Patterns to check for
 PATTERNS=(
     "AIzaSy[A-Za-z0-9_-]{35}"  # Firebase API Key
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9"  # JWT tokens
+    "YOUR_SUPABASE_KEY_HERE"  # JWT tokens
     "sk_live_[A-Za-z0-9]{32,}"  # Stripe live keys
     "sk_test_[A-Za-z0-9]{32,}"  # Stripe test keys
     "AKIA[0-9A-Z]{16}"  # AWS Access Key ID

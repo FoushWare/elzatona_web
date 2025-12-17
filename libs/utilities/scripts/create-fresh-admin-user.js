@@ -173,7 +173,7 @@ async function createFreshAdminUser() {
     console.log(`   Email: ${adminEmail}`);
     // SECURITY: Do not log password in plain text
     console.log(
-      `   Password: [REDACTED - check your environment variables or database]`,
+      `   Password: [__REDACTED_SECRET__ - check your environment variables or database]`,
     );
     console.log(`   Environment: ${env}\n`);
   } catch (error) {

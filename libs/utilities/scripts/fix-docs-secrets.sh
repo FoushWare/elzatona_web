@@ -13,7 +13,7 @@ replace_in_file() {
   fi
 
   # Replace Supabase keys
-  sed -i '' 's/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9\.[^"'"'"' ]*/YOUR_SUPABASE_KEY_HERE/g' "$file" 2>/dev/null || true
+  sed -i '' 's/YOUR_SUPABASE_KEY_HERE/YOUR_SUPABASE_KEY_HERE/g' "$file" 2>/dev/null || true
   
   # Replace Google API keys
   sed -i '' 's/AIzaSy[^"'"'"' ]*/YOUR_GOOGLE_API_KEY_HERE/g' "$file" 2>/dev/null || true
@@ -33,7 +33,7 @@ replace_in_file() {
 
 # Process documentation files
 find Rest/markdown -type f \( -name "*.md" -o -name "*.yaml" \) | while read file; do
-  if grep -q "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9\|AIzaSy\|gho_\|sk-proj-\|sntryu_\|GOCSPX-" "$file" 2>/dev/null; then
+  if grep -q "YOUR_SUPABASE_KEY_HERE\|AIzaSy\|gho_\|sk-proj-\|sntryu_\|GOCSPX-" "$file" 2>/dev/null; then
     echo "   Processing: $file"
     replace_in_file "$file"
   fi

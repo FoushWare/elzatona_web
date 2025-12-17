@@ -64,7 +64,7 @@ A comprehensive security audit was performed on the codebase following the secur
 **Files with Hardcoded Keys:**
 
 1. `docs/guides/COMPLETE_MIGRATION_GUIDE.md`
-   - Supabase anon key: `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...`
+   - Supabase anon key: `YOUR_SUPABASE_KEY_HERE
    - Firebase API key: `AIzaSyBXlcfcdyIqoeJOb2gXcxpRSmQO7lEP82Y`
    - Project-specific URLs
 
@@ -75,7 +75,7 @@ A comprehensive security audit was performed on the codebase following the secur
 
 3. `docs/setup/QUICK_OAUTH_SETUP.md`
    - Supabase anon key
-   - Supabase service role key: `BH3xSC7yk5DqX5bTgyedOyC45fNg1_vBcV04X_tkYLQ` ⚠️ CRITICAL
+   - Supabase service role key: `process.env.SUPABASE_SERVICE_ROLE_KEY` ⚠️ CRITICAL
    - Firebase API key
    - Hardcoded admin password: `admin123`
 

@@ -54,7 +54,7 @@ python3 .cursor/scripts/git-secrets-check.py
 **Or manually:**
 
 ```bash
-git log --all -p -S "BH3xSC7yk5DqX5bTgyedOyC45fNg1_vBcV04X_tkYLQ" --oneline
+git log --all -p -S "process.env.SUPABASE_SERVICE_ROLE_KEY" --oneline
 git log --all -p -S "AIzaSyBXlcfcdyIqoeJOb2gXcxpRSmQO7lEP82Y" --oneline
 ```
 
@@ -73,8 +73,8 @@ pip install git-filter-repo
 # Create replacements file
 cat > /tmp/replacements.txt << 'EOF'
 AIzaSyBXlcfcdyIqoeJOb2gXcxpRSmQO7lEP82Y==>your-firebase-api-key-here
-BH3xSC7yk5DqX5bTgyedOyC45fNg1_vBcV04X_tkYLQ==>your-service-role-key-here
-eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...==>your-supabase-anon-key-here
+process.env.SUPABASE_SERVICE_ROLE_KEY==>your-service-role-key-here
+YOUR_SUPABASE_KEY_HERE
 EOF
 
 # Apply

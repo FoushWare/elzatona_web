@@ -16,7 +16,7 @@ echo ""
 
 # Patterns to detect secrets
 PATTERNS=(
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9"  # JWT tokens (Supabase, etc.)
+  "YOUR_SUPABASE_KEY_HERE"  # JWT tokens (Supabase, etc.)
   "AIzaSy[A-Za-z0-9_-]{35}"                # Google API keys
   "gho_[A-Za-z0-9]{36}"                    # GitHub OAuth tokens
   "ghp_[A-Za-z0-9]{36}"                    # GitHub Personal Access Tokens

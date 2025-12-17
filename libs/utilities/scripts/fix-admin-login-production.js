@@ -272,7 +272,7 @@ async function fixAdminLogin() {
     ) {
       console.log(`   Password: ${ADMIN_PASSWORD}\n`);
     } else {
-      console.log(`   Password: [REDACTED - Check .env.local]\n`);
+      console.log(`   Password: [__REDACTED_SECRET__ - Check .env.local]\n`);
     }
   } catch (error) {
     console.error("❌ Error:", error.message);

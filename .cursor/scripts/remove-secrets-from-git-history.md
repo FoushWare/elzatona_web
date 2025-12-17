@@ -17,7 +17,7 @@ Or manually search:
 ```bash
 # Search for specific patterns
 git log --all -p -S "AIzaSy" --oneline
-git log --all -p -S "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9" --oneline
+git log --all -p -S "YOUR_SUPABASE_KEY_HERE" --oneline
 git log --all -p -S "BH3xSC7yk5DqX5bTgyedOyC45fNg1_vBcV04X_tkYLQ" --oneline
 ```
 
@@ -48,7 +48,7 @@ pip install git-filter-repo
 
 # Remove specific strings from all commits
 git filter-repo --replace-text <(echo "AIzaSyBXlcfcdyIqoeJOb2gXcxpRSmQO7lEP82Y==>your-firebase-api-key-here")
-git filter-repo --replace-text <(echo "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...==>your-supabase-anon-key-here")
+git filter-repo --replace-text <(echo "YOUR_SUPABASE_KEY_HERE...==>your-supabase-anon-key-here")
 git filter-repo --replace-text <(echo "BH3xSC7yk5DqX5bTgyedOyC45fNg1_vBcV04X_tkYLQ==>your-service-role-key-here")
 ```
 
@@ -60,7 +60,7 @@ git filter-repo --replace-text <(echo "BH3xSC7yk5DqX5bTgyedOyC45fNg1_vBcV04X_tkY
 
 # Create a file with secrets to remove
 echo "AIzaSyBXlcfcdyIqoeJOb2gXcxpRSmQO7lEP82Y" > secrets.txt
-echo "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..." >> secrets.txt
+echo "YOUR_SUPABASE_KEY_HERE..." >> secrets.txt
 
 # Remove secrets
 java -jar bfg.jar --replace-text secrets.txt
@@ -129,7 +129,7 @@ git secrets --register-aws
 
 # Add custom patterns
 git secrets --add 'AIzaSy[A-Za-z0-9_-]{35}'
-git secrets --add 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9'
+git secrets --add 'YOUR_SUPABASE_KEY_HERE'
 ```
 
 ## Best Practices Going Forward

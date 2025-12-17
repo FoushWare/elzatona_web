@@ -9,10 +9,10 @@
 git log --all -p -S "AIzaSy" --oneline
 
 # Search for JWT tokens (Supabase anon keys)
-git log --all -p -S "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9" --oneline
+git log --all -p -S "YOUR_SUPABASE_KEY_HERE" --oneline
 
 # Search for specific service role key
-git log --all -p -S "BH3xSC7yk5DqX5bTgyedOyC45fNg1_vBcV04X_tkYLQ" --oneline
+git log --all -p -S "process.env.SUPABASE_SERVICE_ROLE_KEY" --oneline
 
 # Search for project identifiers
 git log --all -p -S "hpnewqkvpnthpohvxcmq" --oneline
@@ -23,7 +23,7 @@ git log --all -p -S "hpnewqkvpnthpohvxcmq" --oneline
 ```bash
 # Search in all commits for any file containing the pattern
 git log --all --source --pretty=format:"%H %s" | while read commit; do
-  git show $commit | grep -l "AIzaSy\|eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9" && echo "Found in: $commit"
+  git show $commit | grep -l "AIzaSy\|YOUR_SUPABASE_KEY_HERE" && echo "Found in: $commit"
 done
 ```
 
@@ -53,12 +53,12 @@ bash .cursor/scripts/search-git-history-for-secrets.sh
    - Example: `AIzaSyBXlcfcdyIqoeJOb2gXcxpRSmQO7lEP82Y`
 
 2. **JWT Tokens:**
-   - Pattern: `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9`
+   - Pattern: `YOUR_SUPABASE_KEY_HERE`
    - These are Supabase anon keys or JWT tokens
 
 3. **Service Role Keys:**
    - Pattern: Long JWT tokens ending with specific signatures
-   - Example: `BH3xSC7yk5DqX5bTgyedOyC45fNg1_vBcV04X_tkYLQ`
+   - Example: `process.env.SUPABASE_SERVICE_ROLE_KEY`
 
 4. **Project Identifiers:**
    - Supabase project refs: `hpnewqkvpnthpohvxcmq`
@@ -96,8 +96,8 @@ pip install git-filter-repo
 # Create replacement file
 cat > replacements.txt << EOF
 AIzaSyBXlcfcdyIqoeJOb2gXcxpRSmQO7lEP82Y==>your-firebase-api-key-here
-eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...==>your-supabase-anon-key-here
-BH3xSC7yk5DqX5bTgyedOyC45fNg1_vBcV04X_tkYLQ==>your-service-role-key-here
+YOUR_SUPABASE_KEY_HERE
+process.env.SUPABASE_SERVICE_ROLE_KEY==>your-service-role-key-here
 EOF
 
 # Apply replacements
@@ -116,7 +116,7 @@ brew install git-secrets  # macOS
 # Configure
 git secrets --install
 git secrets --add 'AIzaSy[A-Za-z0-9_-]{35}'
-git secrets --add 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9'
+git secrets --add 'YOUR_SUPABASE_KEY_HERE'
 ```
 
 ## Alternative: Use Secret Scanning Tools
