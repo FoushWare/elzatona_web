@@ -26,7 +26,7 @@ export async function POST(request: NextRequest) {
         email,
         password,
         name,
-        role: role || "user",
+        role: "user",
       });
 
       if (!validationResult.success) {

@@ -4,6 +4,21 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
 
+function sanitizeForLog(value: unknown): string {
+  const raw =
+    typeof value === "string"
+      ? value
+      : (() => {
+          try {
+            return JSON.stringify(value);
+          } catch {
+            return "[unserializable]";
+          }
+        })();
+
+  return raw.split("\r").join(" ").split("\n").join(" ").slice(0, 500);
+}
+
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
 const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
 const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
@@ -76,7 +91,10 @@ export async function GET() {
 export async function POST(request: NextRequest) {
   try {
     const categoryData = await request.json();
-    console.log("🔄 Admin API: Creating category with data:", categoryData);
+    console.log(
+      "🔄 Admin API: Creating category with data:",
+      sanitizeForLog(categoryData),
+    );
 
     // Validate required fields
     if (!categoryData.name || categoryData.name.trim() === "") {
@@ -95,7 +113,7 @@ export async function POST(request: NextRequest) {
       description: categoryData.description || "",
       slug:
         categoryData.slug ||
-        categoryData.name.toLowerCase().replace(/\s+/g, "-"),
+        categoryData.name.toLowerCase().trim().split(/\s+/).join("-"),
       icon: categoryData.icon || "📁",
       color: categoryData.color || "#3B82F6",
       order_index: categoryData.order_index || 0,
