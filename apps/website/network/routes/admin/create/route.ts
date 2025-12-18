@@ -4,6 +4,21 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { getSupabaseConfig } from "../../../../lib/utils/api-config";
 
+function sanitizeForLog(value: unknown): string {
+  const raw =
+    typeof value === "string"
+      ? value
+      : (() => {
+          try {
+            return JSON.stringify(value);
+          } catch {
+            return "[unserializable]";
+          }
+        })();
+
+  return raw.split("\r").join(" ").split("\n").join(" ").slice(0, 500);
+}
+
 /**
  * Protected Admin Creation API
  *
@@ -99,7 +114,9 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    console.log(`[Admin Create API] ✅ Owner verified: ${ownerCheck.email}`);
+    console.log(
+      `[Admin Create API] ✅ Owner verified: ${sanitizeForLog(ownerCheck.email)}`,
+    );
 
     // Step 2: Parse request body
     let body;
@@ -155,7 +172,7 @@ export async function POST(request: NextRequest) {
     if (checkError && checkError.code !== "PGRST116") {
       console.error(
         "[Admin Create API] Error checking existing admin:",
-        checkError,
+        sanitizeForLog(checkError),
       );
       return NextResponse.json(
         { success: false, error: "Database error" },
@@ -196,7 +213,10 @@ export async function POST(request: NextRequest) {
       .single();
 
     if (insertError) {
-      console.error("[Admin Create API] Error creating admin:", insertError);
+      console.error(
+        "[Admin Create API] Error creating admin:",
+        sanitizeForLog(insertError),
+      );
       return NextResponse.json(
         { success: false, error: "Failed to create admin user" },
         { status: 500 },
@@ -204,7 +224,7 @@ export async function POST(request: NextRequest) {
     }
 
     console.log(
-      `[Admin Create API] ✅ Admin created: ${email} by ${ownerCheck.email}`,
+      `[Admin Create API] ✅ Admin created: ${sanitizeForLog(email)} by ${sanitizeForLog(ownerCheck.email)}`,
     );
 
     // Return success (don't return password hash)
@@ -220,7 +240,10 @@ export async function POST(request: NextRequest) {
       },
     });
   } catch (error) {
-    console.error("[Admin Create API] Unexpected error:", error);
+    console.error(
+      "[Admin Create API] Unexpected error:",
+      sanitizeForLog(error),
+    );
     return NextResponse.json(
       { success: false, error: "Internal server error" },
       { status: 500 },

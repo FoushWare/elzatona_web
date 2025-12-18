@@ -1,12 +1,33 @@
 import { NextRequest, NextResponse } from "next/server";
 import { verifySupabaseToken } from "../../../../lib/server-auth";
 
+function sanitizeForLog(value: unknown): string {
+  const raw =
+    typeof value === "string"
+      ? value
+      : (() => {
+          try {
+            return JSON.stringify(value);
+          } catch {
+            return "[unserializable]";
+          }
+        })();
+
+  return raw.split("\r").join(" ").split("\n").join(" ").slice(0, 500);
+}
+
 export async function POST(request: NextRequest) {
   try {
-    const { token } = await request.json();
+    const authHeader = request.headers.get("authorization");
+    const token = authHeader?.startsWith("Bearer ")
+      ? authHeader.substring("Bearer ".length)
+      : null;
 
     if (!token) {
-      return NextResponse.json({ error: "Token is required" }, { status: 400 });
+      return NextResponse.json(
+        { error: "Authorization Bearer token is required" },
+        { status: 400 },
+      );
     }
 
     // Verify the Firebase token
@@ -32,7 +53,7 @@ export async function POST(request: NextRequest) {
 
     return response;
   } catch (error) {
-    console.error("Error setting auth cookie:", error);
+    console.error("Error setting auth cookie:", sanitizeForLog(error));
     return NextResponse.json(
       { error: "Internal server error" },
       { status: 500 },
