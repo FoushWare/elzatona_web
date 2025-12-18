@@ -63,7 +63,7 @@ This guide documents all secrets that were exposed in the git repository history
 
 - `.cursor/mcp.json`
 
-**Token:** `YOUR_GITHUB_TOKEN_HERE` (⚠️ Rotate immediately - token was exposed in git history)
+**Token:** `GH_OAUTH_TOKEN_PLACEHOLDER` (⚠️ Rotate immediately - token was exposed in git history)
 
 **Action Required:**
 

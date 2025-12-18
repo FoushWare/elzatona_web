@@ -58,7 +58,7 @@ GOOGLE_KEY_9="YOUR_GOOGLE_API_KEY_HERE"
 # GitHub OAuth Token
 # ⚠️ WARNING: This is a placeholder. Replace with actual token from GitHub Settings
 # ⚠️ This token should be revoked and regenerated if it was ever committed to git history
-GITHUB_TOKEN="YOUR_GITHUB_OAUTH_TOKEN_HERE"
+GITHUB_TOKEN="GH_OAUTH_TOKEN_PLACEHOLDER"
 
 # OpenAI API Key
 # ⚠️ WARNING: This is a placeholder. Replace with actual key from OpenAI dashboard
@@ -113,7 +113,7 @@ cat > "$REPLACEMENT_FILE" << 'EOFREPLACE'
 # ... (add more as needed)
 
 # GitHub OAuth (example - replace with your actual token if needed)
-# YOUR_ACTUAL_GITHUB_TOKEN==>YOUR_GITHUB_OAUTH_TOKEN_HERE
+# YOUR_ACTUAL_GITHUB_TOKEN==>GH_OAUTH_TOKEN_PLACEHOLDER
 
 # OpenAI (example - replace with your actual key if needed)
 # YOUR_ACTUAL_OPENAI_KEY==>YOUR_OPENAI_API_KEY_HERE
