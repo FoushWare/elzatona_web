@@ -97,7 +97,7 @@ This guide documents all secrets that were exposed in the git repository history
 
 - `Rest/docs/SENTRY_MCP_SETUP_COMPLETE.md`
 
-**Token:** `YOUR_SENTRY_TOKEN_HERE` (⚠️ This token was exposed and should be rotated)
+**Token:** `SENTRY_TOKEN_PLACEHOLDER` (⚠️ This token was exposed and should be rotated)
 
 **Action Required:**
 

@@ -68,7 +68,7 @@ OPENAI_KEY="OPENAI_API_KEY_PLACEHOLDER"
 # Sentry Token
 # ⚠️ WARNING: This is a placeholder. Replace with actual token from Sentry dashboard
 # ⚠️ This token should be rotated immediately if it was ever committed to git history
-SENTRY_TOKEN="YOUR_SENTRY_TOKEN_HERE"
+SENTRY_TOKEN="SENTRY_TOKEN_PLACEHOLDER"
 
 # Google OAuth
 # ⚠️ WARNING: These are placeholders. Replace with actual credentials from Google Cloud Console
@@ -119,7 +119,7 @@ cat > "$REPLACEMENT_FILE" << 'EOFREPLACE'
 # YOUR_ACTUAL_OPENAI_KEY==>OPENAI_API_KEY_PLACEHOLDER
 
 # Sentry (example - replace with your actual token if needed)
-# YOUR_ACTUAL_SENTRY_TOKEN==>YOUR_SENTRY_TOKEN_HERE
+# YOUR_ACTUAL_SENTRY_TOKEN==>SENTRY_TOKEN_PLACEHOLDER
 
 # Google OAuth (examples - replace with your actual credentials if needed)
 # YOUR_ACTUAL_GOOGLE_OAUTH_ID==>YOUR_GOOGLE_OAUTH_CLIENT_ID_HERE
