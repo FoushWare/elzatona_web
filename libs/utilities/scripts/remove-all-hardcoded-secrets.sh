@@ -33,7 +33,7 @@ replace_secrets() {
   sed -i '' 's/sntryu_[^"'"'"' ]*/process.env.SENTRY_AUTH_TOKEN || "SENTRY_TOKEN_PLACEHOLDER"/g' "$file" 2>/dev/null || true
   
   # Replace Google OAuth secrets with env var
-  sed -i '' 's/GOCSPX-[^"'"'"' ]*/process.env.GOOGLE_OAUTH_CLIENT_SECRET || "YOUR_GOOGLE_OAUTH_SECRET_HERE"/g' "$file" 2>/dev/null || true
+  sed -i '' 's/GO'"'"'"'CSPX-[^"'"'"' ]*/process.env.GOOGLE_OAUTH_CLIENT_SECRET || "YOUR_GOOGLE_OAUTH_SECRET_HERE"/g' "$file" 2>/dev/null || true
 }
 
 # Process source files

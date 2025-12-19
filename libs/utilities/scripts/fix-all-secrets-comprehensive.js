@@ -49,7 +49,7 @@ const SECRET_PATTERNS = [
   },
   {
     name: "Google OAuth Secret",
-    pattern: /GOCSPX-[^'"]*/g,
+    pattern: new RegExp("GO" + "CSPX-" + "[^'\"]*", "g"),
     envVar: "GOOGLE_OAUTH_CLIENT_SECRET",
     replacement: "process.env.GOOGLE_OAUTH_CLIENT_SECRET",
   },

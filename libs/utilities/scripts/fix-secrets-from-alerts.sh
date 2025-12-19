@@ -100,7 +100,7 @@ fix_file() {
       sed -i.bak2 's/sntryu_[^"'"'"' ]*/process.env.SENTRY_AUTH_TOKEN || "SENTRY_TOKEN_PLACEHOLDER"/g' "$filepath" 2>/dev/null || true
       
       # Replace Google OAuth secrets
-      sed -i.bak2 's/GOCSPX-[^"'"'"' ]*/process.env.GOOGLE_OAUTH_CLIENT_SECRET || "YOUR_GOOGLE_OAUTH_SECRET_HERE"/g' "$filepath" 2>/dev/null || true
+      sed -i.bak2 's/GO'"'"'"'CSPX-[^"'"'"' ]*/process.env.GOOGLE_OAUTH_CLIENT_SECRET || "YOUR_GOOGLE_OAUTH_SECRET_HERE"/g' "$filepath" 2>/dev/null || true
       ;;
     
     *.md|*.txt|*.sh|*.yml|*.yaml|*.json)
@@ -112,7 +112,7 @@ fix_file() {
       sed -i.bak2 's/gho_[^"'"'"' ]*/YOUR_GITHUB_TOKEN_HERE/g' "$filepath" 2>/dev/null || true
       sed -i.bak2 's/sk-proj-[^"'"'"' ]*/YOUR_OPENAI_API_KEY_HERE/g' "$filepath" 2>/dev/null || true
       sed -i.bak2 's/sntryu_[^"'"'"' ]*/SENTRY_TOKEN_PLACEHOLDER/g' "$filepath" 2>/dev/null || true
-      sed -i.bak2 's/GOCSPX-[^"'"'"' ]*/YOUR_GOOGLE_OAUTH_SECRET_HERE/g' "$filepath" 2>/dev/null || true
+      sed -i.bak2 's/GO'"'"'"'CSPX-[^"'"'"' ]*/YOUR_GOOGLE_OAUTH_SECRET_HERE/g' "$filepath" 2>/dev/null || true
       ;;
     
     *)

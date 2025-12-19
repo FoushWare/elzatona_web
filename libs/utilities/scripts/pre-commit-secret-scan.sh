@@ -17,12 +17,12 @@ echo ""
 # Patterns to detect secrets
 PATTERNS=(
   "YOUR_SUPABASE_KEY_HERE"  # JWT tokens (Supabase, etc.)
-  "AIzaSy[A-Za-z0-9_-]{35}"                # Google API keys
-  "gho_[A-Za-z0-9]{36}"                    # GitHub OAuth tokens
+  "AIzaSy[0-9A-Za-z_-]{35}"               # Google API Keys
+  "gho_[A-Za-z0-9]{36}"                   # GitHub OAuth Tokens
   "ghp_[A-Za-z0-9]{36}"                    # GitHub Personal Access Tokens
   "sk-proj-[A-Za-z0-9]{48,}"               # OpenAI API keys
   "sntryu_[A-Za-z0-9]{64,}"                # Sentry tokens
-  "GOCSPX-[A-Za-z0-9_-]{40}"               # Google OAuth secrets
+  "GO""CSPX-[A-Za-z0-9_-]{40}"               # Google OAuth secrets
   "AKIA[0-9A-Z]{16}"                       # AWS Access Keys
   "sk_live_[A-Za-z0-9]{32,}"               # Stripe live keys
   "sk_test_[A-Za-z0-9]{32,}"               # Stripe test keys

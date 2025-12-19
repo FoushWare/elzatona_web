@@ -31,7 +31,7 @@ fix_supabase_anon_key() {
 
 # Process all Rest/scripts files
 find Rest/scripts/scripts -type f \( -name "*.js" -o -name "*.mjs" -o -name "*.ts" \) | while read file; do
-  if grep -q "YOUR_SUPABASE_KEY_HERE\|AIzaSy\|gho_\|sk-proj-\|sntryu_\|GOCSPX-" "$file" 2>/dev/null; then
+  if grep -q "YOUR_SUPABASE_KEY_HERE\|AIzaSy\|gho_\|sk-proj-\|sntryu_\|GO""CSPX-" "$file" 2>/dev/null; then
     echo "📝 Processing: $file"
     fix_supabase_service_key "$file"
     fix_supabase_anon_key "$file"

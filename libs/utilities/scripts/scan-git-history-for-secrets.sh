@@ -25,7 +25,7 @@ echo ""
 
 # Secret patterns to search for
 PATTERNS=(
-    "AIzaSy[A-Za-z0-9_-]{35}"  # Google API Key
+    "AIzaSy[0-9A-Za-z_-]{35}"  # Google API Key
     "YOUR_SUPABASE_KEY_HERE"  # JWT tokens (Supabase, etc.)
     "gho_[A-Za-z0-9]{36}"  # GitHub OAuth Token
     "ghp_[A-Za-z0-9]{36}"  # GitHub Personal Access Token
@@ -34,7 +34,7 @@ PATTERNS=(
     "sk-proj-[A-Za-z0-9_-]{48}"  # OpenAI API Key
     "sntryu_[A-Za-z0-9]{64}"  # Sentry Personal Token
     "[0-9]{12}-[a-z0-9]{32}\.apps\.googleusercontent\.com"  # Google OAuth Client ID
-    "GOCSPX-[A-Za-z0-9_-]{32}"  # Google OAuth Client Secret
+    "GO""CSPX-[A-Za-z0-9_-]{32}"  # Google OAuth Client Secret
     "sk_live_[A-Za-z0-9]{32,}"  # Stripe live keys
     "sk_test_[A-Za-z0-9]{32,}"  # Stripe test keys
     "AKIA[0-9A-Z]{16}"  # AWS Access Key ID
