@@ -943,6 +943,7 @@ const QuestionContent = ({ content }: { content: string }) => {
     if (codeValidation.isValid && cleanContent.length > 10) {
       const formattedCode = formatCodeContent(cleanContent);
       return (
+        <>
         <div className="relative group" style={{ backgroundColor: "#111827" }}>
           <div
             className="flex items-center justify-end px-4 py-2.5 rounded-t-xl border-b-2 shadow-sm"
@@ -984,7 +985,7 @@ const QuestionContent = ({ content }: { content: string }) => {
                 WebkitTabSize: 2,
                 MozTabSize: 2,
                 letterSpacing: "0.01em",
-              } as any)}
+              } as any}
             >
               <code
                 style={{
@@ -1003,7 +1004,7 @@ const QuestionContent = ({ content }: { content: string }) => {
                   MozTabSize: 2,
                   overflowWrap: "normal",
                   letterSpacing: "0.01em",
-                } as any)}
+                } as any}
               >
                 {formattedCode}
               </code>
@@ -1017,6 +1018,7 @@ const QuestionContent = ({ content }: { content: string }) => {
             ></div>
           </div>
         </div>
+        </>
       );
     }
 
@@ -1039,6 +1041,7 @@ const QuestionContent = ({ content }: { content: string }) => {
       {parts.map((part, index) => {
         if (part.type === "code") {
           return (
+          <>
             <div
               key={index}
               className="relative group my-4 sm:my-6 max-w-4xl mx-auto"
@@ -1084,7 +1087,7 @@ const QuestionContent = ({ content }: { content: string }) => {
                     WebkitTabSize: 2,
                     MozTabSize: 2,
                     letterSpacing: "0.01em",
-                  } as any)}
+                  } as any}
                 >
                   <code
                     style={{
@@ -1103,7 +1106,7 @@ const QuestionContent = ({ content }: { content: string }) => {
                       WebkitTabSize: 2,
                       MozTabSize: 2,
                       letterSpacing: "0.01em",
-                    } as any)}
+                    } as any}
                   >
                     {part.content}
                   </code>
@@ -1117,7 +1120,8 @@ const QuestionContent = ({ content }: { content: string }) => {
                 ></div>
               </div>
             </div>
-          );
+          </>
+        );
         } else {
           const textParts: Array<{ type: "text" | "code"; content: string }> =
             [];
