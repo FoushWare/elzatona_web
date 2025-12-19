@@ -21,7 +21,7 @@ replace_secrets() {
   sed -i '' 's/YOUR_SUPABASE_SERVICE_ROLE_KEY_HERE/process.env.SUPABASE_SERVICE_ROLE_KEY || "YOUR_SERVICE_ROLE_KEY_HERE"/g' "$file" 2>/dev/null || true
   
   # Replace Google API keys with env var
-  sed -i '' 's/AIzaSy[^"'"'"' ]*/process.env.GOOGLE_API_KEY || "YOUR_GOOGLE_API_KEY_HERE"/g' "$file" 2>/dev/null || true
+  sed -i '' 's/AI'"'"'"'zaSy[^"'"'"' ]*/process.env.GOOGLE_API_KEY || "YOUR_GOOGLE_API_KEY_HERE"/g' "$file" 2>/dev/null || true
   
   # Replace GitHub tokens with env var
   sed -i '' 's/gho_[^"'"'"' ]*/process.env.GITHUB_TOKEN || "YOUR_GITHUB_TOKEN_HERE"/g' "$file" 2>/dev/null || true

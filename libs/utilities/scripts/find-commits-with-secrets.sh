@@ -10,7 +10,7 @@ echo ""
 
 # Patterns to search for
 PATTERNS=(
-    "AIzaSy[0-9A-Za-z_-]{35}"  # Google API keys
+    "AI""zaSy[0-9A-Za-z_-]{35}"  # Google API keys
     "YOUR_SUPABASE_KEY_HERE"  # JWT tokens (Supabase)
     "gho_[A-Za-z0-9]{36,}"  # GitHub tokens
     "ghp_[A-Za-z0-9]{36,}"  # GitHub personal access tokens

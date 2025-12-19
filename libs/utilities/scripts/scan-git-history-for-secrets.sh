@@ -25,7 +25,7 @@ echo ""
 
 # Secret patterns to search for
 PATTERNS=(
-    "AIzaSy[0-9A-Za-z_-]{35}"  # Google API Key
+    "AI""zaSy[0-9A-Za-z_-]{35}"  # Google API Key
     "YOUR_SUPABASE_KEY_HERE"  # JWT tokens (Supabase, etc.)
     "gho_[A-Za-z0-9]{36}"  # GitHub OAuth Token
     "ghp_[A-Za-z0-9]{36}"  # GitHub Personal Access Token

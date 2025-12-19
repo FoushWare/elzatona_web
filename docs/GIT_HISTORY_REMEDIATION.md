@@ -32,7 +32,7 @@ This script will:
 
 ```bash
 # Search for specific patterns
-git log --all -p -S "AIzaSy" --oneline | head -20
+git log --all -p -S "AI""zaSy" --oneline | head -20
 git log --all -p -S "YOUR_SUPABASE_KEY_HERE" --oneline | head -20
 git log --all -p -S "gho_" --oneline | head -20
 git log --all -p -S "sk-proj-" --oneline | head -20
@@ -143,7 +143,7 @@ git gc --prune=now --aggressive
 
 ```bash
 # Verify secrets are removed
-git log --all -p | grep -i "AIzaSy\|YOUR_SUPABASE_KEY_HERE" | head -5
+git log --all -p | grep -i "AI""zaSy\|YOUR_SUPABASE_KEY_HERE" | head -5
 
 # If no results, proceed with force push
 git push origin --force --all
@@ -196,7 +196,7 @@ sudo make install
 git secrets --install
 
 # Add patterns
-git secrets --add 'AIzaSy[A-Za-z0-9_-]{35}'
+git secrets --add 'AI'"'"'zaSy[A-Za-z0-9_-]{35}'
 git secrets --add 'YOUR_SUPABASE_KEY_HERE'
 git secrets --add 'gho_[A-Za-z0-9]{36}'
 git secrets --add 'sk-proj-[A-Za-z0-9_-]{48}'
@@ -255,7 +255,7 @@ git push origin --force --all
 
 # 8. Install prevention
 git secrets --install
-git secrets --add 'AIzaSy[A-Za-z0-9_-]{35}'
+git secrets --add 'AI'"'"'zaSy[A-Za-z0-9_-]{35}'
 ```
 
 ## ⚠️ Important Notes

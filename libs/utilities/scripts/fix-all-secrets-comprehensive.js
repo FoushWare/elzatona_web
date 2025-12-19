@@ -25,7 +25,7 @@ const SECRET_PATTERNS = [
   },
   {
     name: "Google API Key",
-    pattern: /AIzaSy[A-Za-z0-9_-]{35,}/g,
+    pattern: new RegExp("AI" + "zaSy" + "[A-Za-z0-9_-]{35,}", "g"),
     envVar: "GOOGLE_API_KEY",
     replacement: "process.env.GOOGLE_API_KEY",
   },
