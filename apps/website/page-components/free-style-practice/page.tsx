@@ -981,11 +981,10 @@ const QuestionContent = ({ content }: { content: string }) => {
                 tabSize: 2,
                 WebkitFontSmoothing: "antialiased",
                 MozOsxFontSmoothing: "grayscale",
-                // @ts-expect-error - Vendor prefixes not in types
                 WebkitTabSize: 2,
                 MozTabSize: 2,
                 letterSpacing: "0.01em",
-              }}
+              } as any)}
             >
               <code
                 style={{
@@ -1000,13 +999,11 @@ const QuestionContent = ({ content }: { content: string }) => {
                   lineHeight: "inherit",
                   tabSize: 2,
                   wordBreak: "normal",
-                  // @ts-expect-error - Vendor prefixes not in types
                   WebkitTabSize: 2,
-                  // @ts-expect-error - Vendor prefixes not in types
                   MozTabSize: 2,
                   overflowWrap: "normal",
                   letterSpacing: "0.01em",
-                }}
+                } as any)}
               >
                 {formattedCode}
               </code>
@@ -1084,12 +1081,10 @@ const QuestionContent = ({ content }: { content: string }) => {
                     tabSize: 2,
                     WebkitFontSmoothing: "antialiased",
                     MozOsxFontSmoothing: "grayscale",
-                    // @ts-expect-error - Vendor prefixes not in types
                     WebkitTabSize: 2,
-                    // @ts-expect-error - Vendor prefixes not in types
                     MozTabSize: 2,
                     letterSpacing: "0.01em",
-                  }}
+                  } as any)}
                 >
                   <code
                     style={{
@@ -1105,12 +1100,10 @@ const QuestionContent = ({ content }: { content: string }) => {
                       tabSize: 2,
                       wordBreak: "normal",
                       overflowWrap: "normal",
-                      // @ts-expect-error - Vendor prefixes not in types
                       WebkitTabSize: 2,
-                      // @ts-expect-error - Vendor prefixes not in types
                       MozTabSize: 2,
                       letterSpacing: "0.01em",
-                    }}
+                    } as any)}
                   >
                     {part.content}
                   </code>
