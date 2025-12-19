@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 
 import { useRouter, useSearchParams } from "next/navigation";
 import {
@@ -981,7 +981,7 @@ const QuestionContent = ({ content }: { content: string }) => {
                 tabSize: 2,
                 WebkitFontSmoothing: "antialiased",
                 MozOsxFontSmoothing: "grayscale",
-                // @ts-expect-error - Vendor prefixes not in types
+                // @ts-ignore - Vendor prefixes not in types
                 ...({ WebkitTabSize: 2, MozTabSize: 2 } as unknown),
                 letterSpacing: "0.01em",
               }}
@@ -999,9 +999,9 @@ const QuestionContent = ({ content }: { content: string }) => {
                   lineHeight: "inherit",
                   tabSize: 2,
                   wordBreak: "normal",
-                  // @ts-expect-error - Vendor prefixes not in types
+                  // @ts-ignore - Vendor prefixes not in types
                   WebkitTabSize: 2 as unknown,
-                  // @ts-expect-error - Vendor prefixes not in types
+                  // @ts-ignore - Vendor prefixes not in types
                   MozTabSize: 2,
                   overflowWrap: "normal",
                   letterSpacing: "0.01em",
@@ -1083,9 +1083,9 @@ const QuestionContent = ({ content }: { content: string }) => {
                     tabSize: 2,
                     WebkitFontSmoothing: "antialiased",
                     MozOsxFontSmoothing: "grayscale",
-                    // @ts-expect-error - Vendor prefixes not in types
+                    // @ts-ignore - Vendor prefixes not in types
                     WebkitTabSize: 2 as unknown,
-                    // @ts-expect-error - Vendor prefixes not in types
+                    // @ts-ignore - Vendor prefixes not in types
                     MozTabSize: 2,
                     letterSpacing: "0.01em",
                   }}
@@ -1104,9 +1104,9 @@ const QuestionContent = ({ content }: { content: string }) => {
                       tabSize: 2,
                       wordBreak: "normal",
                       overflowWrap: "normal",
-                      // @ts-expect-error - Vendor prefixes not in types
+                      // @ts-ignore - Vendor prefixes not in types
                       WebkitTabSize: 2 as unknown,
-                      // @ts-expect-error - Vendor prefixes not in types
+                      // @ts-ignore - Vendor prefixes not in types
                       MozTabSize: 2,
                       letterSpacing: "0.01em",
                     }}
@@ -1191,7 +1191,7 @@ const QuestionContent = ({ content }: { content: string }) => {
 export default function FreeStylePracticePage() {
   const { userType } = useUserType();
   const { isAuthenticated, isLoading: isAuthLoading, user } = useAuth();
-  const _router = useRouter();
+  const router = useRouter();
   const searchParams = useSearchParams();
 
   // Get topic and subtopic from URL query params
@@ -1235,7 +1235,7 @@ export default function FreeStylePracticePage() {
 
       const result = await response.json();
       return result.success === true;
-    } catch (_error) {
+    } catch (error) {
       console.error("Error saving progress:", error);
       return false;
     }
@@ -1969,7 +1969,7 @@ export default function FreeStylePracticePage() {
                 topicId: q.topicId || q.topic_id,
                 categoryId: categoryId,
               };
-            } catch (_error) {
+            } catch (error) {
               console.error("Error parsing question:", error, q);
               skippedCount++;
               return null;
@@ -2053,7 +2053,7 @@ export default function FreeStylePracticePage() {
             q.tags.forEach((tag) => allTags.add(tag));
           }
         });
-        setAvailableTags(Array.from(_allTags).sort());
+        setAvailableTags(Array.from(allTags).sort());
 
         // If no questions found, log helpful info
         if (transformedQuestions.length === 0) {
@@ -2075,7 +2075,7 @@ export default function FreeStylePracticePage() {
           console.error("API Error details:", data.error);
         }
       }
-    } catch (_error) {
+    } catch (error) {
       console.error("Error fetching questions:", error);
       setQuestions([]);
       setTotalQuestionCount(0);
@@ -2106,7 +2106,7 @@ export default function FreeStylePracticePage() {
         );
         setAvailableSections(categoryNames);
       }
-    } catch (_error) {
+    } catch (error) {
       console.error("Error fetching categories:", error);
       // Fallback to default sections
       setAvailableSections([
@@ -2138,7 +2138,7 @@ export default function FreeStylePracticePage() {
         }));
         setTopics(topicList);
       }
-    } catch (_error) {
+    } catch (error) {
       console.error("Error fetching topics:", error);
     }
   };
@@ -2151,7 +2151,7 @@ export default function FreeStylePracticePage() {
       if (data.success && data.data) {
         setTotalQuestionCount(data.data.totalCount || 0);
       }
-    } catch (_error) {
+    } catch (error) {
       console.error("Error fetching question count:", error);
     }
   };
@@ -2184,7 +2184,7 @@ export default function FreeStylePracticePage() {
           timeSpent: 0,
         });
       }
-    } catch (_error) {
+    } catch (error) {
       console.error("Error fetching user progress:", error);
       setUserProgress(null);
     } finally {
@@ -2356,7 +2356,7 @@ export default function FreeStylePracticePage() {
             setResolvedTopicId(null);
           }
         }
-      } catch (_error) {
+      } catch (error) {
         console.error("Error resolving topic:", error);
         setResolvedTopicId(null);
       } finally {
@@ -2478,7 +2478,7 @@ export default function FreeStylePracticePage() {
             return;
           }
         }
-      } catch (_error) {
+      } catch (error) {
         console.error("Error restoring last question:", error);
       }
 
@@ -2599,7 +2599,7 @@ export default function FreeStylePracticePage() {
         // Note: We don't set currentQuestionIndex here because questions aren't loaded yet
         // It will be restored when questions load in the next useEffect
       }
-    } catch (_error) {
+    } catch (error) {
       console.error("Error loading progress from localStorage:", error);
     }
   }, []);
@@ -2618,7 +2618,7 @@ export default function FreeStylePracticePage() {
         "free-style-practice-progress",
         JSON.stringify(progress),
       );
-    } catch (_error) {
+    } catch (error) {
       console.error("Error saving progress to localStorage:", error);
     }
   };
@@ -2793,7 +2793,7 @@ export default function FreeStylePracticePage() {
           console.log("⚠️ Progress save failed, but continuing");
         }
       } catch (_error) {
-        console.error("❌ Error saving progress:", error);
+        console.error("❌ Error saving progress:", _error);
         // Continue with the question flow even if progress save fails
       }
     }
@@ -3080,7 +3080,7 @@ export default function FreeStylePracticePage() {
                   <div className="absolute top-full left-0 mt-1 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg shadow-lg z-20 min-w-[200px] max-h-64 overflow-y-auto">
                     <div className="p-2">
                       {topics.length > 0 ? (
-                        topics.map((_topic) => {
+                        topics.map((topic) => {
                           const isSelected = filters.topics.includes(topic.id);
                           return (
                             <label

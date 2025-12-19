@@ -929,7 +929,7 @@ describe("A-UT-012: Search Filtering Logic", () => {
     await waitFor(() => {
       const searchInput = screen.getByPlaceholderText(
         /Search questions by title, content, tags/i,
-      );
+      ) as HTMLInputElement;
       expect(searchInput).toBeInTheDocument();
 
       fireEvent.change(searchInput, { target: { value: "HTML" } });

@@ -51,7 +51,7 @@ export const NavbarSimple: React.FC = () => {
   const { isDarkMode, toggleDarkMode } = useTheme();
   const { user, isAuthenticated, isLoading: isAuthLoading, logout } = useAuth();
   const pathname = usePathname();
-  const _router = useRouter();
+  const router = useRouter();
 
   // Read persisted auth snapshot before paint to avoid visible flicker
   useLayoutEffect(() => {
@@ -197,7 +197,7 @@ export const NavbarSimple: React.FC = () => {
             setIsModeSwitching(false);
             setSwitchingToMode(null);
           }, 100);
-        } catch (_error) {
+        } catch (error) {
           console.error("Navigation error:", error);
           setIsModeSwitching(false);
           setSwitchingToMode(null);
@@ -218,7 +218,7 @@ export const NavbarSimple: React.FC = () => {
             setIsModeSwitching(false);
             setSwitchingToMode(null);
           }, 100);
-        } catch (_error) {
+        } catch (error) {
           console.error("Navigation error:", error);
           setIsModeSwitching(false);
           setSwitchingToMode(null);
@@ -259,7 +259,7 @@ export const NavbarSimple: React.FC = () => {
       } catch (_) {}
       // Navigate to home after logout for clarity
       router.push("/");
-    } catch (_error) {
+    } catch (error) {
       console.error("Sign out error:", error);
     } finally {
       // If navigation is blocked for any reason, avoid leaving the UI stuck
@@ -681,12 +681,16 @@ export const NavbarSimple: React.FC = () => {
                   <>
                     {/* User Profile Section */}
                     <div className="flex items-center space-x-3 px-3 py-2 bg-gray-50 dark:bg-gray-800 rounded-lg">
-                      {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
-                      {(user as unknown)?.photoURL || (user as unknown)?.avatar_url ? (
+                      {(user as { photoURL?: string; avatar_url?: string })
+                        ?.photoURL ||
+                      (user as { photoURL?: string; avatar_url?: string })
+                        ?.avatar_url ? (
                         <img
                           src={
-                            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                            (user as unknown)?.photoURL || (user as unknown)?.avatar_url
+                            (user as { photoURL?: string; avatar_url?: string })
+                              ?.photoURL ||
+                            (user as { photoURL?: string; avatar_url?: string })
+                              ?.avatar_url
                           }
                           alt="Profile"
                           className="w-8 h-8 rounded-full object-cover"
@@ -699,9 +703,9 @@ export const NavbarSimple: React.FC = () => {
                       <div className="flex-1 min-w-0">
                         <p className="text-sm font-medium text-gray-900 dark:text-white truncate">
                           {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
-                          {(user as unknown)?.displayName ||
+                          {(user as any)?.displayName ||
                             // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                            (user as unknown)?.name ||
+                            (user as any)?.name ||
                             "User"}
                         </p>
                         <p className="text-xs text-gray-500 dark:text-gray-400 truncate">

@@ -67,7 +67,8 @@ export async function PUT(
       data,
     });
   } catch (error) {
-    const errorMessage = error instanceof Error ? error.message : "Failed to update question";
+    const errorMessage =
+      error instanceof Error ? error.message : "Failed to update question";
     console.error("Error updating question:", errorMessage);
     return NextResponse.json(
       { success: false, error: errorMessage },
@@ -91,7 +92,8 @@ export async function DELETE(
       message: "Question deleted successfully",
     });
   } catch (error) {
-    const errorMessage = error instanceof Error ? error.message : "Failed to delete question";
+    const errorMessage =
+      error instanceof Error ? error.message : "Failed to delete question";
     console.error("Error deleting question:", errorMessage);
     return NextResponse.json(
       { success: false, error: errorMessage },
