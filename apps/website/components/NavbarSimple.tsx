@@ -19,18 +19,19 @@ import {
   Compass,
   User,
   LogOut,
-  Settings,
+  Settings as _Settings,
   Loader2,
 } from "lucide-react";
 import {
   supabaseClient as supabase,
   isSupabaseAvailable,
 } from "../lib/supabase-client";
+import type { AuthChangeEvent, Session } from "@supabase/supabase-js";
 
 export const NavbarSimple: React.FC = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
-  const [isMobile, setIsMobile] = useState(false);
+  const [_isMobile, _setIsMobile] = useState(false);
   const [isUserDropdownOpen, setIsUserDropdownOpen] = useState(false);
   const [isHydrated, setIsHydrated] = useState(false);
   const [hasSnapshotApplied, setHasSnapshotApplied] = useState(false);
@@ -144,15 +145,17 @@ export const NavbarSimple: React.FC = () => {
     if (!supabase) return;
     const {
       data: { subscription },
-    } = supabase.auth.onAuthStateChange((event, session) => {
-      const authed = !!session;
-      setStableAuthState({ isAuthenticated: authed, isLoading: false });
-      sessionStorage.setItem(
-        "navbar-auth-state",
-        JSON.stringify({ isAuthenticated: authed, isLoading: false }),
-      );
-      setSupabaseChecked(true);
-    });
+    } = supabase.auth.onAuthStateChange(
+      (event: AuthChangeEvent, session: Session | null) => {
+        const authed = !!session;
+        setStableAuthState({ isAuthenticated: authed, isLoading: false });
+        sessionStorage.setItem(
+          "navbar-auth-state",
+          JSON.stringify({ isAuthenticated: authed, isLoading: false }),
+        );
+        setSupabaseChecked(true);
+      },
+    );
 
     return () => {
       subscription?.unsubscribe();
@@ -294,7 +297,7 @@ export const NavbarSimple: React.FC = () => {
     };
 
     const handleResize = () => {
-      setIsMobile(window.innerWidth < 1024);
+      _setIsMobile(window.innerWidth < 1024);
     };
 
     // Initial check
@@ -463,7 +466,7 @@ export const NavbarSimple: React.FC = () => {
                     type="button"
                     aria-haspopup="menu"
                     aria-expanded={isUserDropdownOpen}
-                    onClick={() => setIsUserDropdownOpen((v) => !v)}
+                    onClick={() => setIsUserDropdownOpen((v: boolean) => !v)}
                     title="Account menu"
                     data-testid="user-menu-button"
                     className={`px-2.5 py-2 rounded-lg transition-colors duration-200 ${

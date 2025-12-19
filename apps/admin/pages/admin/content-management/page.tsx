@@ -15,9 +15,6 @@ import {
   CardTitle,
   Button,
   Badge,
-  SelectTrigger,
-  SelectValue,
-  Input,
   Dialog,
   DialogContent,
   DialogHeader,
@@ -52,7 +49,6 @@ import type {
   Category,
   Topic,
   Question,
-  Stats,
 } from "./components/types";
 import { StatsSection } from "./components/StatsSection";
 import { SearchAndFilters } from "./components/SearchAndFilters";
@@ -420,7 +416,7 @@ export default function ContentManagementPage() {
       );
       closeTopicQuestionsModal();
     } catch (_error) {
-      console.error("Error adding questions to plan:", error);
+      console.error("Error adding questions to plan:", _error);
       toast.error("Failed to add questions to plan");
     }
   }, [
@@ -479,7 +475,7 @@ export default function ContentManagementPage() {
           toast.success("Question added to plan");
         }
       } catch (_error) {
-        console.error("Error toggling question in plan:", error);
+        console.error("Error toggling question in plan:", _error);
         toast.error("Failed to update question in plan");
       }
     },
@@ -520,7 +516,7 @@ export default function ContentManagementPage() {
       await fetchData();
       closeDeleteCardModal();
     } catch (_error) {
-      console.error("Error deleting card:", error);
+      console.error("Error deleting card:", _error);
       toast.error("Failed to delete card. Please try again.");
       setIsDeleting(false);
     }
@@ -555,7 +551,7 @@ export default function ContentManagementPage() {
 
       setAvailableCards(allCards || []);
     } catch (_error) {
-      console.error("Error fetching plan cards:", error);
+      console.error("Error fetching plan cards:", _error);
       toast.error("Failed to load plan cards");
     } finally {
       setIsManagingCards(false);
@@ -607,7 +603,7 @@ export default function ContentManagementPage() {
 
         toast.success("Card added to plan successfully");
       } catch (_error) {
-        console.error("Error adding card to plan:", error);
+        console.error("Error adding card to plan:", _error);
         toast.error("Failed to add card to plan");
       }
     },
@@ -633,7 +629,7 @@ export default function ContentManagementPage() {
 
         toast.success("Card removed from plan successfully");
       } catch (_error) {
-        console.error("Error removing card from plan:", error);
+        console.error("Error removing card from plan:", _error);
         toast.error("Failed to remove card from plan");
       }
     },
@@ -665,7 +661,7 @@ export default function ContentManagementPage() {
           `Card ${!isActive ? "activated" : "deactivated"} in plan`,
         );
       } catch (_error) {
-        console.error("Error updating card status:", error);
+        console.error("Error updating card status:", _error);
         toast.error("Failed to update card status");
       }
     },
