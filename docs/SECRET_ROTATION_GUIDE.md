@@ -80,7 +80,7 @@ This guide documents all secrets that were exposed in the git repository history
 
 - `.cursor/mcp.json`
 
-**Key:** `YOUR_OPENAI_API_KEY_HERE` (⚠️ Rotate immediately - key was exposed in git history)
+**Key:** `OPENAI_API_KEY_PLACEHOLDER` (⚠️ Rotate immediately - key was exposed in git history)
 
 **Action Required:**
 

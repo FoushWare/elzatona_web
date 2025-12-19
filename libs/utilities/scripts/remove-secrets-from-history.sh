@@ -63,7 +63,7 @@ GITHUB_TOKEN="GH_OAUTH_TOKEN_PLACEHOLDER"
 # OpenAI API Key
 # ⚠️ WARNING: This is a placeholder. Replace with actual key from OpenAI dashboard
 # ⚠️ This key should be rotated immediately if it was ever committed to git history
-OPENAI_KEY="YOUR_OPENAI_API_KEY_HERE"
+OPENAI_KEY="OPENAI_API_KEY_PLACEHOLDER"
 
 # Sentry Token
 # ⚠️ WARNING: This is a placeholder. Replace with actual token from Sentry dashboard
@@ -116,7 +116,7 @@ cat > "$REPLACEMENT_FILE" << 'EOFREPLACE'
 # YOUR_ACTUAL_GITHUB_TOKEN==>GH_OAUTH_TOKEN_PLACEHOLDER
 
 # OpenAI (example - replace with your actual key if needed)
-# YOUR_ACTUAL_OPENAI_KEY==>YOUR_OPENAI_API_KEY_HERE
+# YOUR_ACTUAL_OPENAI_KEY==>OPENAI_API_KEY_PLACEHOLDER
 
 # Sentry (example - replace with your actual token if needed)
 # YOUR_ACTUAL_SENTRY_TOKEN==>YOUR_SENTRY_TOKEN_HERE
