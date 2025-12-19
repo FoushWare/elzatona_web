@@ -25,7 +25,7 @@ replace_in_file() {
   sed -i '' 's/sk-proj-[^"'"'"' ]*/YOUR_OPENAI_API_KEY_HERE/g' "$file" 2>/dev/null || true
   
   # Replace Sentry tokens
-  sed -i '' 's/sntryu_[^"'"'"' ]*/YOUR_SENTRY_TOKEN_HERE/g' "$file" 2>/dev/null || true
+  sed -i '' 's/sntryu_[^"'"'"' ]*/SENTRY_TOKEN_PLACEHOLDER/g' "$file" 2>/dev/null || true
   
   # Replace Google OAuth secrets
   sed -i '' 's/GOCSPX-[^"'"'"' ]*/YOUR_GOOGLE_OAUTH_SECRET_HERE/g' "$file" 2>/dev/null || true

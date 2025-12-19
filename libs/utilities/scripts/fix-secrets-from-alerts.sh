@@ -97,7 +97,7 @@ fix_file() {
       sed -i.bak2 's/sk-proj-[^"'"'"' ]*/process.env.OPENAI_API_KEY || "YOUR_OPENAI_API_KEY_HERE"/g' "$filepath" 2>/dev/null || true
       
       # Replace Sentry tokens
-      sed -i.bak2 's/sntryu_[^"'"'"' ]*/process.env.SENTRY_AUTH_TOKEN || "YOUR_SENTRY_TOKEN_HERE"/g' "$filepath" 2>/dev/null || true
+      sed -i.bak2 's/sntryu_[^"'"'"' ]*/process.env.SENTRY_AUTH_TOKEN || "SENTRY_TOKEN_PLACEHOLDER"/g' "$filepath" 2>/dev/null || true
       
       # Replace Google OAuth secrets
       sed -i.bak2 's/GOCSPX-[^"'"'"' ]*/process.env.GOOGLE_OAUTH_CLIENT_SECRET || "YOUR_GOOGLE_OAUTH_SECRET_HERE"/g' "$filepath" 2>/dev/null || true
@@ -111,7 +111,7 @@ fix_file() {
       sed -i.bak2 's/AIzaSy[^"'"'"' ]*/YOUR_GOOGLE_API_KEY_HERE/g' "$filepath" 2>/dev/null || true
       sed -i.bak2 's/gho_[^"'"'"' ]*/YOUR_GITHUB_TOKEN_HERE/g' "$filepath" 2>/dev/null || true
       sed -i.bak2 's/sk-proj-[^"'"'"' ]*/YOUR_OPENAI_API_KEY_HERE/g' "$filepath" 2>/dev/null || true
-      sed -i.bak2 's/sntryu_[^"'"'"' ]*/YOUR_SENTRY_TOKEN_HERE/g' "$filepath" 2>/dev/null || true
+      sed -i.bak2 's/sntryu_[^"'"'"' ]*/SENTRY_TOKEN_PLACEHOLDER/g' "$filepath" 2>/dev/null || true
       sed -i.bak2 's/GOCSPX-[^"'"'"' ]*/YOUR_GOOGLE_OAUTH_SECRET_HERE/g' "$filepath" 2>/dev/null || true
       ;;
     

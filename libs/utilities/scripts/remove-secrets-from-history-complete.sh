@@ -79,7 +79,7 @@ cat > "$REPLACEMENTS_FILE" << 'EOF'
 # YOUR_ACTUAL_OPENAI_KEY==>YOUR_OPENAI_API_KEY_HERE
 
 # Sentry Tokens (examples - replace with your actual tokens)
-# YOUR_ACTUAL_SENTRY_TOKEN==>YOUR_SENTRY_TOKEN_HERE
+# YOUR_ACTUAL_SENTRY_TOKEN==>SENTRY_TOKEN_PLACEHOLDER
 EOF
 
 echo "✅ Replacements file created: $REPLACEMENTS_FILE"
