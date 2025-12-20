@@ -1,15 +1,9 @@
 // v1.0 - Unified Question Schema
 // Centralized type definitions for the unified question system
 
-import { createClient } from "@supabase/supabase-js";
-
 // Type aliases for union types
 export type QuestionType = "multiple-choice" | "true-false" | "code";
 export type DifficultyLevel = "beginner" | "intermediate" | "advanced";
-
-const supabaseUrl = process.env["NEXT_PUBLIC_SUPABASE_URL"]!;
-const supabaseServiceRoleKey = process.env["SUPABASE_SERVICE_ROLE_KEY"]!;
-const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
 
 export interface UnifiedQuestion {
   id: string;
@@ -211,7 +205,6 @@ export interface QuestionValidationResult {
 }
 
 // Utility types
-export type QuestionType = UnifiedQuestion["type"];
 export type QuestionDifficulty = UnifiedQuestion["difficulty"];
 export type QuestionCategory = string;
 
