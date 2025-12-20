@@ -15,12 +15,12 @@ import { AlertTriangle, Trash2, Loader2 } from "lucide-react";
 import { UnifiedQuestion } from "@elzatona/types";
 
 interface BulkDeleteModalProps {
-  isOpen: boolean;
-  onClose: () => void;
-  selectedQuestionIds: Set<string>;
-  questions: UnifiedQuestion[];
-  onConfirm: () => void;
-  loading: boolean;
+  readonly isOpen: boolean;
+  readonly onClose: () => void;
+  readonly selectedQuestionIds: Set<string>;
+  readonly questions: UnifiedQuestion[];
+  readonly onConfirm: () => void;
+  readonly loading: boolean;
 }
 
 export function BulkDeleteModal({

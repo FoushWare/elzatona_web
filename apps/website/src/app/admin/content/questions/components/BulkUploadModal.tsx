@@ -11,14 +11,14 @@ import {
 import { BulkUploadForm } from "./BulkUploadForm";
 
 interface BulkUploadModalProps {
-  isOpen: boolean;
-  onClose: () => void;
-  onUpload: (file: File) => void;
-  loading: boolean;
-  error: string | null;
-  success: string | null;
-  progress: { current: number; total: number } | null;
-  onClearState: () => void;
+  readonly isOpen: boolean;
+  readonly onClose: () => void;
+  readonly onUpload: (file: File) => void;
+  readonly loading: boolean;
+  readonly error: string | null;
+  readonly success: string | null;
+  readonly progress: { current: number; total: number } | null;
+  readonly onClearState: () => void;
 }
 
 export function BulkUploadModal({

@@ -5,11 +5,11 @@ import { Button } from "@elzatona/components";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
 interface BottomPaginationProps {
-  currentPage: number;
-  totalPages: number;
-  pageSize: number;
-  totalCount: number;
-  onPageChange: (page: number) => void;
+  readonly currentPage: number;
+  readonly totalPages: number;
+  readonly pageSize: number;
+  readonly totalCount: number;
+  readonly onPageChange: (page: number) => void;
 }
 
 export function BottomPagination({

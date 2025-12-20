@@ -6,13 +6,13 @@ import { UnifiedQuestion } from "@elzatona/types";
 import { QuestionForm } from "./QuestionForm";
 
 interface CreateQuestionModalProps {
-  isOpen: boolean;
-  onClose: () => void;
-  onSubmit: (question: Partial<UnifiedQuestion>) => void;
-  cards: any[];
-  allCategories: string[];
-  categoriesData: any[];
-  topicsData: any[];
+  readonly isOpen: boolean;
+  readonly onClose: () => void;
+  readonly onSubmit: (question: Partial<UnifiedQuestion>) => void;
+  readonly cards: any[];
+  readonly allCategories: string[];
+  readonly categoriesData: any[];
+  readonly topicsData: any[];
 }
 
 export function CreateQuestionModal({
