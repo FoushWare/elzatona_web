@@ -176,7 +176,6 @@ export async function POST(request: NextRequest) {
     }
 
     // Step 6: Hash password
-    const saltRounds = getSaltRounds();
     const passwordHash = await bcrypt.hash(password, saltRounds);
 
     // Step 7: Create admin user (role='admin', NOT 'super_admin')
