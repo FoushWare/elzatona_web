@@ -3,14 +3,14 @@
 // v1.0 - React context for database service injection
 // This file uses 'any' types for environment variable access and window/process objects
 
-import React, { createContext, useContext, ReactNode } from "react";
+import React, { createContext, useContext, ReactNode, useMemo } from "react";
 import { IDatabaseService, DatabaseConfig } from "./IDatabaseService";
 import { SupabaseDatabaseService } from "./SupabaseDatabaseService";
 
 // Type-safe environment variable access
 const getEnvVar = (key: string, defaultValue: string = ""): string => {
-  if (typeof window !== "undefined") {
-    return (window as any).env?.[key] || defaultValue;
+  if (typeof globalThis !== "undefined") {
+    return (globalThis as any).env?.[key] || defaultValue;
   }
   return (process as any).env?.[key] || defaultValue;
 };
@@ -59,12 +59,12 @@ export const DatabaseProvider: React.FC<DatabaseProviderProps> = ({
       })()
     : new SupabaseDatabaseService(defaultConfig);
 
-  const contextValue: DatabaseContextType = {
+  const contextValue: DatabaseContextType = useMemo(() => ({
     database,
     config: defaultConfig,
     isFirebase: false, // Always false for now since Firebase isn't available
     isSupabase: true, // Always true for now
-  };
+  }), [database, defaultConfig]);
 
   return (
     <DatabaseContext.Provider value={contextValue}>
