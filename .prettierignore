@@ -78,3 +78,6 @@ codeql-database/**
 # Nx cache and workspace files
 .nx/cache/
 .nx/workspace-data/
+
+# Utility scripts
+libs/utilities/scripts/setup-supabase-admin.js
