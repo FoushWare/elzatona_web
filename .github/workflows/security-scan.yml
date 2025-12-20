@@ -12,7 +12,8 @@ jobs:
     permissions:
       contents: read
       security-events: write
-      actions: read
+      # Remove actions: read to reduce API calls
+      # actions: read
 
     steps:
       - name: Checkout code
