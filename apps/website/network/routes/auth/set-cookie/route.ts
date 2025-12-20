@@ -11,7 +11,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Sanitize token - remove potential injection characters
-    const sanitizedToken = token.trim().replace(/[<>\"'&]/g, '');
+    const sanitizedToken = token.trim().replaceAll(/[<>"'&]/g, '');
 
     // Verify the Supabase token
     const decodedToken = await verifySupabaseToken(sanitizedToken);

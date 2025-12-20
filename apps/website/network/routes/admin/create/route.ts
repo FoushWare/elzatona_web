@@ -16,7 +16,7 @@ import { getSupabaseConfig } from "../../../../lib/utils/api-config";
 
 // Get salt rounds from environment (default: 10)
 const getSaltRounds = () =>
-  parseInt(process.env.BCRYPT_SALT_ROUNDS || "10", 10);
+  Number.parseInt(process.env.BCRYPT_SALT_ROUNDS || "10", 10);
 
 // Get owner email from environment
 const getOwnerEmail = () => process.env.ADMIN_OWNER_EMAIL || "";
@@ -60,7 +60,8 @@ async function verifyOwner(
         email: string;
         role: string;
       };
-    } catch (_jwtError) {
+    } catch (jwtError) {
+      console.error("JWT verification failed:", jwtError);
       return { isValid: false, error: "Invalid or expired token" };
     }
 
@@ -105,7 +106,8 @@ export async function POST(request: NextRequest) {
     let body;
     try {
       body = await request.json();
-    } catch (_jsonError) {
+    } catch (jsonError) {
+      console.error("JSON parsing failed:", jsonError);
       return NextResponse.json(
         { success: false, error: "Invalid JSON in request body" },
         { status: 400 },
@@ -135,18 +137,18 @@ export async function POST(request: NextRequest) {
     // Validate password strength (minimum 8 characters)
     if (password.length < 8) {
       return NextResponse.json(
-        {
-          success: false,
-          error: "Password must be at least 8 characters long",
-        },
+        { success: false, error: "Password must be at least 8 characters long" },
         { status: 400 },
       );
     }
 
-    // Step 4: Get Supabase client
-    const supabase = getSupabaseClient();
+    // Hash password
+    const bcrypt = require("bcryptjs");
+    const saltRounds = 12;
+    const hashedPassword = await bcrypt.hash(password, saltRounds);
 
     // Step 5: Check if admin already exists
+    const supabase = getSupabaseClient();
     const { data: existingAdmin, error: checkError } = await supabase
       .from("admin_users")
       .select("email")
