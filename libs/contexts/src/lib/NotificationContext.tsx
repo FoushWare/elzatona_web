@@ -70,15 +70,18 @@ export function NotificationProvider({
     setError(null);
   }, []);
 
-  const markAsRead = useCallback(async (notificationId: string): Promise<void> => {
-    setNotifications((prev) =>
-      prev.map((notification) =>
-        notification.id === notificationId
-          ? { ...notification, read: true }
-          : notification,
-      ),
-    );
-  }, []);
+  const markAsRead = useCallback(
+    async (notificationId: string): Promise<void> => {
+      setNotifications((prev) =>
+        prev.map((notification) =>
+          notification.id === notificationId
+            ? { ...notification, read: true }
+            : notification,
+        ),
+      );
+    },
+    [],
+  );
 
   const markAllAsRead = useCallback(async (): Promise<void> => {
     setNotifications((prev) =>
