@@ -14,7 +14,7 @@ import { sanitizeInputServer } from "./sanitize-server";
 export const emailSchema = z
   .string()
   .min(1, "Email is required")
-  .email({ message: "Invalid email format" })
+  .email()
   .transform((val) => sanitizeInputServer(val.toLowerCase().trim()));
 
 // Password validation
@@ -51,7 +51,7 @@ export const contentSchema = z
 // URL validation
 export const urlSchema = z
   .string()
-  .url({ message: "Invalid URL format" })
+  .url()
   .transform((val) => sanitizeInputServer(val));
 
 // ID validation (UUID or string ID)
@@ -92,21 +92,11 @@ export const questionSchema = z
       .default("multiple-choice"), // Required in DB, default to 'multiple-choice'
     category: z.string().min(1).optional(), // Optional - used for lookup if category_id not provided
     category_id: z
-      .union([
-        z.string().uuid({ message: "Invalid category ID format" }),
-        z.literal(""),
-        z.undefined(),
-        z.null(),
-      ])
+      .union([z.string().uuid(), z.literal(""), z.undefined(), z.null()])
       .optional(), // Optional in DB (nullable)
     topic: z.string().optional(), // Optional - used for lookup if topic_id not provided
     topic_id: z
-      .union([
-        z.string().uuid({ message: "Invalid topic ID format" }),
-        z.literal(""),
-        z.undefined(),
-        z.null(),
-      ])
+      .union([z.string().uuid(), z.literal(""), z.undefined(), z.null()])
       .optional(), // Optional in DB (nullable)
     difficulty: z
       .enum(["beginner", "intermediate", "advanced"])
@@ -135,7 +125,7 @@ export const questionSchema = z
     time_limit: z.number().int().min(0).max(3600).optional(), // Accept snake_case (in seconds, max 1 hour)
     learningCardId: z
       .union([
-        z.string().uuid({ message: "Invalid learning card ID format" }),
+        z.string().uuid(),
         z.string().min(1), // Allow non-UUID identifiers like "core-technologies"
         z.literal(""),
         z.undefined(),
@@ -144,7 +134,7 @@ export const questionSchema = z
       .optional(),
     learning_card_id: z
       .union([
-        z.string().uuid({ message: "Invalid learning card ID format" }),
+        z.string().uuid(),
         z.string().min(1), // Allow non-UUID identifiers like "core-technologies"
         z.literal(""),
         z.undefined(),
@@ -283,10 +273,9 @@ function validateOptionsField(dataObj: any): void {
   if (dataObj.options !== undefined && dataObj.options !== null) {
     if (
       typeof dataObj.options === "string" ||
-      !Array.isArray(dataObj.options)
+      !Array.isArray(dataObj.options) ||
+      dataObj.options.length === 0
     ) {
-      delete dataObj.options;
-    } else if (dataObj.options.length === 0) {
       delete dataObj.options;
     }
   }
@@ -364,17 +353,11 @@ export function validateAndSanitize<T>(
 
       // Ensure options is either undefined, null, or a valid array
       if (dataObj.options !== undefined && dataObj.options !== null) {
-        if (typeof dataObj.options === "string") {
-          // Invalid: options is a string, remove it
-          delete dataObj.options;
-        } else if (!Array.isArray(dataObj.options)) {
-          // Invalid: options is not an array, remove it
-          delete dataObj.options;
-        } else if (
-          Array.isArray(dataObj.options) &&
+        if (
+          typeof dataObj.options === "string" ||
+          !Array.isArray(dataObj.options) ||
           dataObj.options.length === 0
         ) {
-          // Empty array, remove it for optional field
           delete dataObj.options;
         }
       }
