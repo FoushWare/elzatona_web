@@ -88,10 +88,10 @@ const localStorageMock = {
   removeItem: jest.fn(),
   clear: jest.fn(),
 };
-global.localStorage = localStorageMock;
+globalThis.localStorage = localStorageMock;
 
 // Mock window.matchMedia
-Object.defineProperty(window, "matchMedia", {
+Object.defineProperty(globalThis, "matchMedia", {
   writable: true,
   value: jest.fn().mockImplementation((query) => ({
     matches: false,
@@ -106,23 +106,35 @@ Object.defineProperty(window, "matchMedia", {
 });
 
 // Mock IntersectionObserver
-global.IntersectionObserver = class IntersectionObserver {
-  constructor() {}
-  disconnect() {}
-  observe() {}
-  unobserve() {}
+globalThis.IntersectionObserver = class IntersectionObserver {
+  // No constructor needed for mock
+  disconnect() {
+    // Mock implementation
+  }
+  observe() {
+    // Mock implementation
+  }
+  unobserve() {
+    // Mock implementation
+  }
 };
 
 // Mock ResizeObserver
-global.ResizeObserver = class ResizeObserver {
-  constructor() {}
-  disconnect() {}
-  observe() {}
-  unobserve() {}
+globalThis.ResizeObserver = class ResizeObserver {
+  // No constructor needed for mock
+  disconnect() {
+    // Mock implementation
+  }
+  observe() {
+    // Mock implementation
+  }
+  unobserve() {
+    // Mock implementation
+  }
 };
 
 // Mock window.scrollTo (not implemented in jsdom)
-Object.defineProperty(window, "scrollTo", {
+Object.defineProperty(globalThis, "scrollTo", {
   writable: true,
   value: jest.fn(),
 });
