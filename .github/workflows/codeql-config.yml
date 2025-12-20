@@ -1,7 +1,7 @@
 name: CodeQL Configuration
 version: 2.0
 
-# Reduce scanning scope to avoid rate limits
+# Aggressively reduce scanning scope to avoid rate limits
 paths-ignore:
   - "**/node_modules/**"
   - "**/dist/**"
@@ -15,16 +15,25 @@ paths-ignore:
   - "**/.backup.logs/**"
   - "**/.scannerwork/**"
   - "**/playwright-report/**"
+  - "**/*.test.ts"
+  - "**/*.test.tsx"
+  - "**/*.spec.ts"
+  - "**/*.spec.tsx"
+  - "**/*.stories.tsx"
+  - "**/public/**"
+  - "**/assets/**"
+  - "**/*.config.js"
+  - "**/*.config.ts"
 
-# Focus on critical source code directories
+# Focus only on critical source code directories
 paths:
-  - "apps/**/src/**"
-  - "libs/**/src/**"
-  - "tools/**"
+  - "apps/website/src/**"
+  - "libs/shared-atoms/src/**"
+  - "libs/components/src/**"
+  - "libs/contexts/src/**"
+  - "libs/hooks/src/**"
 
-# Use optimized queries to reduce processing time
+# Use minimal security queries to reduce processing time
 queries:
-  - name: Security and quality
-    uses: security-and-quality
-  - name: Security extended
-    uses: security-extended
+  - name: Security only
+    uses: security

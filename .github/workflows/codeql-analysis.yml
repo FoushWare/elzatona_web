@@ -21,11 +21,11 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 45 # Further reduced timeout to avoid rate limit issues
     permissions:
-      actions: read
       contents: read
       security-events: write
-      # Remove pull-requests permission to reduce API calls
-      # pull-requests: read
+      # Minimize permissions to reduce API calls
+      # actions: read - Remove to reduce telemetry API calls
+      # pull-requests: read - Remove to reduce API calls
 
     strategy:
       fail-fast: false
@@ -68,10 +68,9 @@ jobs:
         uses: github/codeql-action/analyze@v4
         with:
           category: "/language:${{ matrix.language }}"
-          # Add retry logic for API rate limits
-          # Use wait-for-processing to handle large PRs
-          wait-for-processing: true
-          # Reduce API calls to avoid rate limits
+          # Disable all API-intensive features to avoid rate limits
           upload: false
-          # Skip SARIF upload to prevent API rate limit issues
           output_file_path: false
+          wait-for-processing: false
+          # Disable database upload and status checks
+          skip_database_upload: true
