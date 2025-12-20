@@ -4,6 +4,21 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { getSupabaseConfig } from "../../../../lib/utils/api-config";
 
+function sanitizeForLog(value: unknown): string {
+  const raw =
+    typeof value === "string"
+      ? value
+      : (() => {
+          try {
+            return JSON.stringify(value);
+          } catch {
+            return "[unserializable]";
+          }
+        })();
+
+  return raw.split("\r").join(" ").split("\n").join(" ").slice(0, 500);
+}
+
 /**
  * Protected Admin Creation API
  *
@@ -16,7 +31,7 @@ import { getSupabaseConfig } from "../../../../lib/utils/api-config";
 
 // Get salt rounds from environment (default: 10)
 const getSaltRounds = () =>
-  Number.parseInt(process.env.BCRYPT_SALT_ROUNDS || "10", 10);
+  parseInt(process.env.BCRYPT_SALT_ROUNDS || "10", 10);
 
 // Get owner email from environment
 const getOwnerEmail = () => process.env.ADMIN_OWNER_EMAIL || "";
@@ -60,8 +75,7 @@ async function verifyOwner(
         email: string;
         role: string;
       };
-    } catch (jwtError) {
-      console.error("JWT verification failed:", jwtError);
+    } catch (_jwtError) {
       return { isValid: false, error: "Invalid or expired token" };
     }
 
@@ -100,14 +114,15 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    console.log(`[Admin Create API] ✅ Owner verified: ${ownerCheck.email}`);
+    console.log(
+      `[Admin Create API] ✅ Owner verified: ${sanitizeForLog(ownerCheck.email)}`,
+    );
 
     // Step 2: Parse request body
     let body;
     try {
       body = await request.json();
-    } catch (jsonError) {
-      console.error("JSON parsing failed:", jsonError);
+    } catch (_jsonError) {
       return NextResponse.json(
         { success: false, error: "Invalid JSON in request body" },
         { status: 400 },
@@ -124,9 +139,8 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Validate email format - use safe regex without ReDoS vulnerability
-    // Safe email validation that avoids catastrophic backtracking
-    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    // Validate email format
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
       return NextResponse.json(
         { success: false, error: "Invalid email format" },
@@ -145,12 +159,10 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Hash password
-    const saltRounds = 12;
-    const hashedPassword = await bcrypt.hash(password, saltRounds);
+    // Step 4: Get Supabase client
+    const supabase = getSupabaseClient();
 
     // Step 5: Check if admin already exists
-    const supabase = getSupabaseClient();
     const { data: existingAdmin, error: checkError } = await supabase
       .from("admin_users")
       .select("email")
@@ -160,7 +172,7 @@ export async function POST(request: NextRequest) {
     if (checkError && checkError.code !== "PGRST116") {
       console.error(
         "[Admin Create API] Error checking existing admin:",
-        checkError,
+        sanitizeForLog(checkError),
       );
       return NextResponse.json(
         { success: false, error: "Database error" },
@@ -176,6 +188,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Step 6: Hash password
+    const saltRounds = getSaltRounds();
     const passwordHash = await bcrypt.hash(password, saltRounds);
 
     // Step 7: Create admin user (role='admin', NOT 'super_admin')
@@ -200,7 +213,10 @@ export async function POST(request: NextRequest) {
       .single();
 
     if (insertError) {
-      console.error("[Admin Create API] Error creating admin:", insertError);
+      console.error(
+        "[Admin Create API] Error creating admin:",
+        sanitizeForLog(insertError),
+      );
       return NextResponse.json(
         { success: false, error: "Failed to create admin user" },
         { status: 500 },
@@ -208,7 +224,7 @@ export async function POST(request: NextRequest) {
     }
 
     console.log(
-      `[Admin Create API] ✅ Admin created: ${email} by ${ownerCheck.email}`,
+      `[Admin Create API] ✅ Admin created: ${sanitizeForLog(email)} by ${sanitizeForLog(ownerCheck.email)}`,
     );
 
     // Return success (don't return password hash)
@@ -224,7 +240,10 @@ export async function POST(request: NextRequest) {
       },
     });
   } catch (error) {
-    console.error("[Admin Create API] Unexpected error:", error);
+    console.error(
+      "[Admin Create API] Unexpected error:",
+      sanitizeForLog(error),
+    );
     return NextResponse.json(
       { success: false, error: "Internal server error" },
       { status: 500 },

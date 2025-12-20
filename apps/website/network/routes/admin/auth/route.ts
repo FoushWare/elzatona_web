@@ -7,6 +7,21 @@ import {
   logApiConfig,
 } from "../../../../lib/utils/api-config";
 
+function sanitizeForLog(value: unknown): string {
+  const raw =
+    typeof value === "string"
+      ? value
+      : (() => {
+          try {
+            return JSON.stringify(value);
+          } catch {
+            return "[unserializable]";
+          }
+        })();
+
+  return raw.split("\r").join(" ").split("\n").join(" ").slice(0, 500);
+}
+
 // Log API configuration on module load (for debugging)
 logApiConfig("Admin Auth API");
 
@@ -15,7 +30,7 @@ logApiConfig("Admin Auth API");
 const adminConfig = {
   security: {
     // Use BCRYPT_SALT_ROUNDS from environment, default to 10 if not set
-    saltRounds: parseInt(process.env.BCRYPT_SALT_ROUNDS || "10", 10),
+    saltRounds: Number.parseInt(process.env.BCRYPT_SALT_ROUNDS || "10", 10),
     sessionTimeout: 24 * 60 * 60 * 1000,
   },
   get jwtSecret() {
@@ -92,7 +107,10 @@ export async function POST(request: NextRequest) {
           })()
         : "missing",
     );
-    console.log("[Admin Auth API] 🔍 Looking for admin email:", email);
+    console.log(
+      "[Admin Auth API] 🔍 Looking for admin email:",
+      sanitizeForLog(email),
+    );
 
     // Debug logging for test environment
     if (
@@ -117,7 +135,10 @@ export async function POST(request: NextRequest) {
             })()
           : "missing",
       );
-      console.log("[Admin Auth API] 🔍 Looking for admin email:", email);
+      console.log(
+        "[Admin Auth API] 🔍 Looking for admin email:",
+        sanitizeForLog(email),
+      );
     }
 
     // Query admin from Supabase
@@ -131,15 +152,18 @@ export async function POST(request: NextRequest) {
     if (error) {
       console.log(
         "[Admin Auth API] ❌ Database error:",
-        error.message,
-        error.code,
+        sanitizeForLog(error.message),
+        sanitizeForLog(error.code),
       );
     } else if (!adminData) {
-      console.log("[Admin Auth API] ⚠️  No admin found with email:", email);
+      console.log(
+        "[Admin Auth API] ⚠️  No admin found with email:",
+        sanitizeForLog(email),
+      );
     } else {
       console.log(
         "[Admin Auth API] ✅ Admin found:",
-        adminData.email,
+        sanitizeForLog(adminData.email),
         "Active:",
         adminData.is_active,
       );

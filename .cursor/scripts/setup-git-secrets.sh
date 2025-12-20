@@ -31,7 +31,7 @@ echo ""
 echo "🔍 Adding secret patterns..."
 git secrets --add 'AIzaSy[A-Za-z0-9_-]{35}'
 git secrets --add 'YOUR_SUPABASE_KEY_HERE'
-git secrets --add 'process.env.SUPABASE_SERVICE_ROLE_KEY'
+git secrets --add 'BH3xSC7yk5DqX5bTgyedOyC45fNg1_vBcV04X_tkYLQ'
 git secrets --add 'hpnewqkvpnthpohvxcmq'
 git secrets --add 'fir-demo-project-adffb'
 git secrets --add 'elzatona-super-secret-jwt-key-2024-production-ready'

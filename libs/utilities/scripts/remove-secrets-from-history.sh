@@ -58,17 +58,17 @@ GOOGLE_KEY_9="YOUR_GOOGLE_API_KEY_HERE"
 # GitHub OAuth Token
 # ⚠️ WARNING: This is a placeholder. Replace with actual token from GitHub Settings
 # ⚠️ This token should be revoked and regenerated if it was ever committed to git history
-GITHUB_TOKEN="YOUR_GITHUB_OAUTH_TOKEN_HERE"
+GITHUB_TOKEN="GH_OAUTH_TOKEN_PLACEHOLDER"
 
 # OpenAI API Key
 # ⚠️ WARNING: This is a placeholder. Replace with actual key from OpenAI dashboard
 # ⚠️ This key should be rotated immediately if it was ever committed to git history
-OPENAI_KEY="YOUR_OPENAI_API_KEY_HERE"
+OPENAI_KEY="OPENAI_API_KEY_PLACEHOLDER"
 
 # Sentry Token
 # ⚠️ WARNING: This is a placeholder. Replace with actual token from Sentry dashboard
 # ⚠️ This token should be rotated immediately if it was ever committed to git history
-SENTRY_TOKEN="YOUR_SENTRY_TOKEN_HERE"
+SENTRY_TOKEN="SENTRY_TOKEN_PLACEHOLDER"
 
 # Google OAuth
 # ⚠️ WARNING: These are placeholders. Replace with actual credentials from Google Cloud Console
@@ -113,13 +113,13 @@ cat > "$REPLACEMENT_FILE" << 'EOFREPLACE'
 # ... (add more as needed)
 
 # GitHub OAuth (example - replace with your actual token if needed)
-# YOUR_ACTUAL_GITHUB_TOKEN==>YOUR_GITHUB_OAUTH_TOKEN_HERE
+# YOUR_ACTUAL_GITHUB_TOKEN==>GH_OAUTH_TOKEN_PLACEHOLDER
 
 # OpenAI (example - replace with your actual key if needed)
-# YOUR_ACTUAL_OPENAI_KEY==>YOUR_OPENAI_API_KEY_HERE
+# YOUR_ACTUAL_OPENAI_KEY==>OPENAI_API_KEY_PLACEHOLDER
 
 # Sentry (example - replace with your actual token if needed)
-# YOUR_ACTUAL_SENTRY_TOKEN==>YOUR_SENTRY_TOKEN_HERE
+# YOUR_ACTUAL_SENTRY_TOKEN==>SENTRY_TOKEN_PLACEHOLDER
 
 # Google OAuth (examples - replace with your actual credentials if needed)
 # YOUR_ACTUAL_GOOGLE_OAUTH_ID==>YOUR_GOOGLE_OAUTH_CLIENT_ID_HERE

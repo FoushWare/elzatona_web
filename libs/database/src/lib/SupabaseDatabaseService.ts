@@ -13,8 +13,8 @@ import {
 } from "./IDatabaseService";
 
 export class SupabaseDatabaseService implements IDatabaseService {
-  private readonly client: SupabaseClient;
-  private readonly serviceRoleClient?: SupabaseClient;
+  private client: SupabaseClient;
+  private serviceRoleClient?: SupabaseClient;
 
   constructor(config: DatabaseConfig) {
     this.client = createClient(config.url, config.key);

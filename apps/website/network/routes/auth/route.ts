@@ -12,7 +12,6 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
     const { email, password, name, role } = body;
 
-    // Validate required fields - prevent user-controlled security bypass
     if (!email || !password) {
       return NextResponse.json(
         { success: false, error: "Email and password are required" },
@@ -20,26 +19,14 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Sanitize inputs to prevent injection
-    const sanitizedEmail =
-      typeof email === "string" ? email.trim().toLowerCase() : "";
-    const sanitizedPassword = typeof password === "string" ? password : "";
-    const sanitizedName = typeof name === "string" ? name.trim() : "";
-    const sanitizedRole =
-      typeof role === "string"
-        ? ["user", "admin"].includes(role)
-          ? role
-          : "user"
-        : "user";
-
     // If name is provided, this is a registration request
-    if (sanitizedName) {
+    if (name) {
       // Validate and sanitize registration data
       const validationResult = validateAndSanitize(registerSchema, {
-        email: sanitizedEmail,
-        password: sanitizedPassword,
-        name: sanitizedName,
-        role: sanitizedRole,
+        email,
+        password,
+        name,
+        role: "user",
       });
 
       if (!validationResult.success) {

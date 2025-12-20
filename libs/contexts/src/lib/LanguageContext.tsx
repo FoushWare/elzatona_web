@@ -42,14 +42,14 @@ interface LanguageProviderProps {
 export const LanguageProvider: React.FC<LanguageProviderProps> = ({
   children,
 }) => {
-  const [language, setLanguage] = useState<Language>("en");
+  const [language, setLanguageState] = useState<Language>("en");
   const [isLoaded, setIsLoaded] = useState(false);
 
   // Load language from localStorage on mount
   useEffect(() => {
     const savedLanguage = localStorage.getItem("language") as Language;
     if (savedLanguage && (savedLanguage === "en" || savedLanguage === "ar")) {
-      setLanguage(savedLanguage);
+      setLanguageState(savedLanguage);
     }
     setIsLoaded(true);
   }, []);
@@ -63,6 +63,10 @@ export const LanguageProvider: React.FC<LanguageProviderProps> = ({
       document.documentElement.lang = language;
     }
   }, [language, isLoaded]);
+
+  const setLanguage = (newLanguage: Language) => {
+    setLanguageState(newLanguage);
+  };
 
   const isRTL = language === "ar";
 

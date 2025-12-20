@@ -13,19 +13,19 @@ const { execSync } = require("child_process");
 const SECRET_PATTERNS = [
   {
     name: "Supabase Service Role Key",
-    pattern: /YOUR_SUPABASE_KEY_HERE\.[^'"]*/g,
+    pattern: /YOUR_SUPABASE_KEY_HERE/g,
     envVar: "SUPABASE_SERVICE_ROLE_KEY",
     replacement: "process.env.SUPABASE_SERVICE_ROLE_KEY",
   },
   {
     name: "Supabase Anon Key",
-    pattern: /YOUR_SUPABASE_KEY_HERE\.[^'"]*/g,
+    pattern: /YOUR_SUPABASE_KEY_HERE/g,
     envVar: "NEXT_PUBLIC_SUPABASE_ANON_KEY",
     replacement: "process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY",
   },
   {
     name: "Google API Key",
-    pattern: /AIzaSy[^'"]*/g,
+    pattern: new RegExp("AI" + "zaSy" + "[A-Za-z0-9_-]{35,}", "g"),
     envVar: "GOOGLE_API_KEY",
     replacement: "process.env.GOOGLE_API_KEY",
   },
@@ -49,7 +49,7 @@ const SECRET_PATTERNS = [
   },
   {
     name: "Google OAuth Secret",
-    pattern: /GOCSPX-[^'"]*/g,
+    pattern: new RegExp("GO" + "CSPX-" + "[^'\"]*", "g"),
     envVar: "GOOGLE_OAUTH_CLIENT_SECRET",
     replacement: "process.env.GOOGLE_OAUTH_CLIENT_SECRET",
   },

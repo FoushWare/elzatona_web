@@ -8,6 +8,21 @@ const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
 
 import { cookies } from "next/headers";
 import { verifySupabaseToken } from "../../../../lib/server-auth";
+
+function sanitizeForLog(value: unknown): string {
+  const raw =
+    typeof value === "string"
+      ? value
+      : (() => {
+          try {
+            return JSON.stringify(value);
+          } catch {
+            return "[unserializable]";
+          }
+        })();
+
+  return raw.split("\r").join(" ").split("\n").join(" ").slice(0, 500);
+}
 interface ProgressData {
   userId: string;
   sessionId: string;
@@ -30,48 +45,40 @@ export async function POST(request: NextRequest) {
     const cookieStore = await cookies();
     const token = cookieStore.get("firebase_token")?.value;
 
-    // Debug: Log all cookies
-    console.log(
-      "🍪 All cookies:",
-      cookieStore.getAll().map((c) => `${c.name}=${c.value}`),
-    );
     console.log("🔑 Firebase token:", token ? "Present" : "Missing");
-
-    if (!token) {
-      // For development, allow progress saving without authentication
-      console.log("⚠️ No authentication token found, using development mode");
-
-      try {
-        const progressData: ProgressData = await request.json();
-        console.log("📄 Progress data received (dev mode):", progressData);
-
-        // Return success response for development
-        return NextResponse.json({
-          success: true,
-          progressId: `progress_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
-          message: "Progress saved successfully (development mode)",
-          warning:
-            "Using development mode - authentication not fully configured",
-        });
-      } catch (parseError) {
-        console.error("❌ Error parsing request body (dev mode):", parseError);
-        return NextResponse.json(
-          { error: "Invalid request body" },
-          { status: 400 },
-        );
-      }
-    }
 
     let progressData: ProgressData;
     try {
       progressData = await request.json();
-      console.log("📄 Progress data received:", progressData);
+      console.log("📄 Progress data received:", {
+        hasUserId: !!progressData.userId,
+        hasQuestionId: !!progressData.question_id,
+        learningMode: sanitizeForLog(progressData.learningMode),
+        isCorrect:
+          typeof progressData.isCorrect === "boolean"
+            ? progressData.isCorrect
+            : "invalid",
+      });
     } catch (parseError) {
-      console.error("❌ Error parsing request body:", parseError);
+      console.error(
+        "❌ Error parsing request body:",
+        sanitizeForLog(parseError),
+      );
       return NextResponse.json(
         { error: "Invalid request body" },
         { status: 400 },
       );
+    }
+
+    if (!token) {
+      // For development, allow progress saving without authentication
+      console.log("⚠️ No authentication token found, using development mode");
+      return NextResponse.json({
+        success: true,
+        progressId: `progress_${Date.now()}_${Math.random().toString(36).substring(2, 11)}`,
+        message: "Progress saved successfully (development mode)",
+        warning: "Using development mode - authentication not fully configured",
+      });
     }
 
     // Verify the Firebase token
@@ -79,25 +86,12 @@ export async function POST(request: NextRequest) {
     if (!decodedToken) {
       console.warn("Token verification failed, using development mode");
 
-      try {
-        const progressData: ProgressData = await request.json();
-        console.log("📄 Progress data received (dev mode):", progressData);
-
-        // Return success response for development
-        return NextResponse.json({
-          success: true,
-          progressId: `progress_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
-          message: "Progress saved successfully (development mode)",
-          warning:
-            "Using development mode - authentication not fully configured",
-        });
-      } catch (parseError) {
-        console.error("❌ Error parsing request body (dev mode):", parseError);
-        return NextResponse.json(
-          { error: "Invalid request body" },
-          { status: 400 },
-        );
-      }
+      return NextResponse.json({
+        success: true,
+        progressId: `progress_${Date.now()}_${Math.random().toString(36).substring(2, 11)}`,
+        message: "Progress saved successfully (development mode)",
+        warning: "Using development mode - authentication not fully configured",
+      });
     }
 
     // Validate the progress data
@@ -134,7 +128,10 @@ export async function POST(request: NextRequest) {
       if (progressError) throw progressError;
       console.log("✅ Progress saved to Supabase successfully");
     } catch (supabaseError) {
-      console.error("❌ Error saving progress to Supabase:", supabaseError);
+      console.error(
+        "❌ Error saving progress to Supabase:",
+        sanitizeForLog(supabaseError),
+      );
       // Continue with response even if Supabase fails
     }
 
@@ -169,14 +166,17 @@ export async function POST(request: NextRequest) {
           console.warn("⚠️ Learning plan not found, skipping plan update");
         }
       } catch (planError) {
-        console.error("❌ Error updating learning plan:", planError);
+        console.error(
+          "❌ Error updating learning plan:",
+          sanitizeForLog(planError),
+        );
         // Continue with response even if plan update fails
       }
     }
 
     const savedProgress = {
       ...progressData,
-      id: `progress_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+      id: `progress_${Date.now()}_${Math.random().toString(36).substring(2, 11)}`,
       savedAt: new Date().toISOString(),
     };
 
@@ -205,31 +205,14 @@ export async function POST(request: NextRequest) {
 
     return response;
   } catch (error) {
-    console.error("❌ Error saving progress:", error);
+    console.error("❌ Error saving progress:", sanitizeForLog(error));
 
     // Return success response for development instead of error
-    try {
-      const progressData: ProgressData = await request.json();
-      console.log("📄 Progress data received (error fallback):", progressData);
-
-      return NextResponse.json({
-        success: true,
-        progressId: `progress_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
-        message: "Progress saved successfully (development mode)",
-        warning: "Using development mode due to server error",
-      });
-    } catch (parseError) {
-      console.error(
-        "❌ Error parsing request body (error fallback):",
-        parseError,
-      );
-
-      return NextResponse.json({
-        success: true,
-        progressId: `progress_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
-        message: "Progress saved successfully (development mode)",
-        warning: "Using development mode due to server error",
-      });
-    }
+    return NextResponse.json({
+      success: true,
+      progressId: `progress_${Date.now()}_${Math.random().toString(36).substring(2, 11)}`,
+      message: "Progress saved successfully (development mode)",
+      warning: "Using development mode due to server error",
+    });
   }
 }

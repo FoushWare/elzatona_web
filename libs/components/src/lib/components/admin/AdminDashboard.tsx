@@ -287,8 +287,8 @@ export default function AdminDashboard() {
           <div className="flex flex-wrap gap-4">
             {quickActions.map((action, index) => (
               <button
-                key={`action-${action.title}-${index}`}
-                onClick={() => (globalThis.location.href = action.href)}
+                key={index}
+                onClick={() => (window.location.href = action.href)}
                 className="flex items-center space-x-3 px-6 py-3 bg-white dark:bg-gray-800 rounded-lg shadow-md hover:shadow-lg transition-all duration-200 border border-gray-200 dark:border-gray-700 hover:border-blue-300 dark:hover:border-blue-600 group"
               >
                 <div

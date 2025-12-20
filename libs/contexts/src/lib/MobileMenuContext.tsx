@@ -1,12 +1,6 @@
 "use client";
 
-import React, {
-  useState,
-  useMemo,
-  ReactNode,
-  createContext,
-  useContext,
-} from "react";
+import React, { useState, ReactNode, createContext, useContext } from "react";
 
 // Only create Supabase client if environment variables are available
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -38,10 +32,7 @@ export const MobileMenuProvider: React.FC<{ children: ReactNode }> = ({
 
   return (
     <MobileMenuContext.Provider
-      value={useMemo(
-        () => ({ isMobileMenuOpen, setIsMobileMenuOpen }),
-        [isMobileMenuOpen, setIsMobileMenuOpen],
-      )}
+      value={{ isMobileMenuOpen, setIsMobileMenuOpen }}
     >
       {children}
     </MobileMenuContext.Provider>

@@ -6,6 +6,21 @@ const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
 const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
 const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
 
+function sanitizeForLog(value: unknown): string {
+  const raw =
+    typeof value === "string"
+      ? value
+      : (() => {
+          try {
+            return JSON.stringify(value);
+          } catch {
+            return "[unserializable]";
+          }
+        })();
+
+  return raw.split("\r").join(" ").split("\n").join(" ").slice(0, 500);
+}
+
 // POST /api/questions/bulk-topics
 export async function POST(request: NextRequest) {
   try {
@@ -28,7 +43,7 @@ export async function POST(request: NextRequest) {
 
     console.log(
       `Bulk updating topics for ${questionIds.length} questions:`,
-      topics,
+      sanitizeForLog(topics),
     );
 
     const results = [];
@@ -44,7 +59,7 @@ export async function POST(request: NextRequest) {
           .single();
 
         if (fetchError || !existingQuestion) {
-          errors.push(`Question ${questionId} not found`);
+          errors.push(`Question ${sanitizeForLog(questionId)} not found`);
           continue;
         }
 
@@ -67,9 +82,12 @@ export async function POST(request: NextRequest) {
           message: "Topics updated",
         });
       } catch (error) {
-        console.error(`Error processing question ${questionId}:`, error);
+        console.error(
+          `Error processing question ${sanitizeForLog(questionId)}:`,
+          sanitizeForLog(error),
+        );
         errors.push(
-          `Failed to update question ${questionId}: ${error instanceof Error ? error.message : "Unknown error"}`,
+          `Failed to update question ${sanitizeForLog(questionId)}: ${sanitizeForLog(error instanceof Error ? error.message : "Unknown error")}`,
         );
       }
     }

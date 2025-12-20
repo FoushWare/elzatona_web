@@ -25,8 +25,8 @@ if grep -r "YOUR_SUPABASE_KEY_HERE.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhwbmV3cWt2c
 fi
 
 # Check for service role key
-if grep -r "process.env.SUPABASE_SERVICE_ROLE_KEY" . --exclude-dir=node_modules --exclude-dir=.git --exclude-dir=.next 2>/dev/null | grep -v ".cursor" | grep -v "SECURITY_AUDIT" > /dev/null; then
-    EXPOSED_KEYS+=("Supabase Service Role Key: process.env.SUPABASE_SERVICE_ROLE_KEY ⚠️ CRITICAL")
+if grep -r "BH3xSC7yk5DqX5bTgyedOyC45fNg1_vBcV04X_tkYLQ" . --exclude-dir=node_modules --exclude-dir=.git --exclude-dir=.next 2>/dev/null | grep -v ".cursor" | grep -v "SECURITY_AUDIT" > /dev/null; then
+    EXPOSED_KEYS+=("Supabase Service Role Key: BH3xSC7yk5DqX5bTgyedOyC45fNg1_vBcV04X_tkYLQ ⚠️ CRITICAL")
 fi
 
 # Check for project identifiers
@@ -58,7 +58,7 @@ echo ""
 echo "Run these commands to check git history:"
 echo ""
 echo "  git log --all -p -S \"AIzaSyBXlcfcdyIqoeJOb2gXcxpRSmQO7lEP82Y\" --oneline"
-echo "  git log --all -p -S \"process.env.SUPABASE_SERVICE_ROLE_KEY\" --oneline"
+echo "  git log --all -p -S \"BH3xSC7yk5DqX5bTgyedOyC45fNg1_vBcV04X_tkYLQ\" --oneline"
 echo "  git log --all -p -S \"YOUR_SUPABASE_KEY_HERE\" --oneline"
 echo ""
 echo "Or use the Python scanner:"

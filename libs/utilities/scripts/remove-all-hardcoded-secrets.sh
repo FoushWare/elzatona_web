@@ -18,10 +18,10 @@ replace_secrets() {
   echo "   Processing: $file"
   
   # Replace Supabase service role keys with env var
-  sed -i '' 's/YOUR_SUPABASE_KEY_HERE\.[^"'"'"']*/process.env.SUPABASE_SERVICE_ROLE_KEY || "YOUR_SERVICE_ROLE_KEY_HERE"/g' "$file" 2>/dev/null || true
+  sed -i '' 's/YOUR_SUPABASE_SERVICE_ROLE_KEY_HERE/process.env.SUPABASE_SERVICE_ROLE_KEY || "YOUR_SERVICE_ROLE_KEY_HERE"/g' "$file" 2>/dev/null || true
   
   # Replace Google API keys with env var
-  sed -i '' 's/AIzaSy[^"'"'"' ]*/process.env.GOOGLE_API_KEY || "YOUR_GOOGLE_API_KEY_HERE"/g' "$file" 2>/dev/null || true
+  sed -i '' 's/AI'"'"'"'zaSy[^"'"'"' ]*/process.env.GOOGLE_API_KEY || "YOUR_GOOGLE_API_KEY_HERE"/g' "$file" 2>/dev/null || true
   
   # Replace GitHub tokens with env var
   sed -i '' 's/gho_[^"'"'"' ]*/process.env.GITHUB_TOKEN || "YOUR_GITHUB_TOKEN_HERE"/g' "$file" 2>/dev/null || true
@@ -30,10 +30,10 @@ replace_secrets() {
   sed -i '' 's/sk-proj-[^"'"'"' ]*/process.env.OPENAI_API_KEY || "YOUR_OPENAI_API_KEY_HERE"/g' "$file" 2>/dev/null || true
   
   # Replace Sentry tokens with env var
-  sed -i '' 's/sntryu_[^"'"'"' ]*/process.env.SENTRY_AUTH_TOKEN || "YOUR_SENTRY_TOKEN_HERE"/g' "$file" 2>/dev/null || true
+  sed -i '' 's/sntryu_[^"'"'"' ]*/process.env.SENTRY_AUTH_TOKEN || "SENTRY_TOKEN_PLACEHOLDER"/g' "$file" 2>/dev/null || true
   
   # Replace Google OAuth secrets with env var
-  sed -i '' 's/GOCSPX-[^"'"'"' ]*/process.env.GOOGLE_OAUTH_CLIENT_SECRET || "YOUR_GOOGLE_OAUTH_SECRET_HERE"/g' "$file" 2>/dev/null || true
+  sed -i '' 's/GO'"'"'"'CSPX-[^"'"'"' ]*/process.env.GOOGLE_OAUTH_CLIENT_SECRET || "YOUR_GOOGLE_OAUTH_SECRET_HERE"/g' "$file" 2>/dev/null || true
 }
 
 # Process source files

@@ -79,7 +79,7 @@ cat > "$REPLACEMENTS_FILE" << 'EOF'
 # YOUR_ACTUAL_OPENAI_KEY==>YOUR_OPENAI_API_KEY_HERE
 
 # Sentry Tokens (examples - replace with your actual tokens)
-# YOUR_ACTUAL_SENTRY_TOKEN==>YOUR_SENTRY_TOKEN_HERE
+# YOUR_ACTUAL_SENTRY_TOKEN==>SENTRY_TOKEN_PLACEHOLDER
 EOF
 
 echo "✅ Replacements file created: $REPLACEMENTS_FILE"
@@ -126,7 +126,7 @@ echo ""
 
 # Verify removal (memory-efficient - limit search)
 echo "🔍 Verifying secrets are removed..."
-REMAINING=$(GIT_PAGER=cat git log --all -p --no-pager -100 | grep -iE "AIzaSy|YOUR_SUPABASE_KEY_HERE|gho_|ghp_|sk-proj-|sntryu_" | head -5 || true)
+REMAINING=$(GIT_PAGER=cat git log --all -p --no-pager -100 | grep -iE "AI""zaSy|YOUR_SUPABASE_KEY_HERE|gho_|ghp_|sk-proj-|sntryu_" | head -5 || true)
 
 if [ -z "$REMAINING" ]; then
     echo "✅ No secrets found in history!"

@@ -3,7 +3,7 @@
 
 // Type-safe environment variable access
 const getEnvVar = (key: string, defaultValue: string = ""): string => {
-  if (globalThis.window !== undefined) {
+  if (typeof globalThis.window !== "undefined") {
     // Client-side: use window.env or similar
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     return (globalThis.window as any).env?.[key] || defaultValue;

@@ -17,7 +17,7 @@ NC='\033[0m' # No Color
 PATTERNS=(
   "AIzaSy"                    # Firebase API keys
   "YOUR_SUPABASE_KEY_HERE"  # JWT tokens (Supabase anon keys)
-  "process.env.SUPABASE_SERVICE_ROLE_KEY"  # Specific service role key
+  "BH3xSC7yk5DqX5bTgyedOyC45fNg1_vBcV04X_tkYLQ"  # Specific service role key
   "hpnewqkvpnthpohvxcmq"     # Project-specific identifiers
   "fir-demo-project-adffb"   # Firebase project ID
   "elzatona-super-secret-jwt-key-2024-production-ready"  # Hardcoded JWT secrets

@@ -17,7 +17,11 @@ All automated security audit work is **COMPLETE**:
 **Critical Keys Exposed:**
 
 1. **Supabase Service Role Key:** `process.env.SUPABASE_SERVICE_ROLE_KEY` ⚠️
+<<<<<<< HEAD
 2. **Supabase Anon Key:** `YOUR_SUPABASE_KEY_HERE...`
+=======
+2. **Supabase Anon Key:** `YOUR_SUPABASE_KEY_HERE
+>>>>>>> origin/security/fix-gitleaks-config
 3. **Firebase API Key:** `AIzaSyBXlcfcdyIqoeJOb2gXcxpRSmQO7lEP82Y`
 
 **Follow:** `.cursor/KEY_ROTATION_GUIDE.md` for step-by-step instructions

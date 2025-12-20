@@ -22,7 +22,11 @@ const _supabasejs = require("@supabase/supabase-js");
 // Helper function to create Supabase client
 function createSupabaseClient() {
     const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://hpnewqkvpnthpohvxcmq.supabase.co';
+<<<<<<< HEAD
     const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'YOUR_SUPABASE_KEY_HERE.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhwbmV3cWt2cG50aHBvaHZ4Y21xIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjA2NjA0MTgsImV4cCI6MjA3NjIzNjQxOH0.UMmriJb5HRr9W_56GilNNDWksvlFEb1V9c_PuBK-H3s';
+=======
+    const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'SUPABASE_SERVICE_ROLE_KEY_REDACTED';
+>>>>>>> origin/security/fix-gitleaks-config
     if (!supabaseUrl || !supabaseAnonKey) {
         throw new Error('Supabase credentials are missing');
     }

@@ -74,7 +74,11 @@ pip install git-filter-repo
 cat > /tmp/replacements.txt << 'EOF'
 AIzaSyBXlcfcdyIqoeJOb2gXcxpRSmQO7lEP82Y==>your-firebase-api-key-here
 process.env.SUPABASE_SERVICE_ROLE_KEY==>your-service-role-key-here
+<<<<<<< HEAD
 YOUR_SUPABASE_KEY_HERE...==>your-supabase-anon-key-here
+=======
+YOUR_SUPABASE_KEY_HERE
+>>>>>>> origin/security/fix-gitleaks-config
 EOF
 
 # Apply

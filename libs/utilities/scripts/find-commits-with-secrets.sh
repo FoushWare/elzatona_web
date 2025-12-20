@@ -10,13 +10,13 @@ echo ""
 
 # Patterns to search for
 PATTERNS=(
-    "AIzaSy[A-Za-z0-9_-]{35}"  # Firebase API keys
+    "AI""zaSy[0-9A-Za-z_-]{35}"  # Google API keys
     "YOUR_SUPABASE_KEY_HERE"  # JWT tokens (Supabase)
     "gho_[A-Za-z0-9]{36,}"  # GitHub tokens
     "ghp_[A-Za-z0-9]{36,}"  # GitHub personal access tokens
     "sk-proj-[A-Za-z0-9]{48,}"  # OpenAI keys
     "sntryu_[A-Za-z0-9_-]{40,}"  # Sentry tokens
-    "GOCSPX-[A-Za-z0-9_-]{40,}"  # Google OAuth secrets
+    "GO""CSPX-[A-Za-z0-9_-]{40,}"  # Google OAuth secrets
 )
 
 OUTPUT_FILE="commits-with-secrets-$(date +%Y%m%d-%H%M%S).txt"

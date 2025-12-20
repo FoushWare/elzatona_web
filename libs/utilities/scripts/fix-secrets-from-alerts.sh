@@ -85,10 +85,10 @@ fix_file() {
       echo "   📝 JavaScript/TypeScript - replacing with process.env"
       
       # Replace Supabase service keys
-      sed -i.bak2 's/YOUR_SUPABASE_KEY_HERE\.[^"'"'"' ]*/process.env.SUPABASE_SERVICE_ROLE_KEY || "YOUR_SERVICE_ROLE_KEY_HERE"/g' "$filepath" 2>/dev/null || true
+      sed -i.bak2 's/YOUR_SUPABASE_SERVICE_ROLE_KEY_HERE/process.env.SUPABASE_SERVICE_ROLE_KEY || "YOUR_SERVICE_ROLE_KEY_HERE"/g' "$filepath" 2>/dev/null || true
       
       # Replace Google API keys
-      sed -i.bak2 's/AIzaSy[^"'"'"' ]*/process.env.GOOGLE_API_KEY || "YOUR_GOOGLE_API_KEY_HERE"/g' "$filepath" 2>/dev/null || true
+      sed -i.bak2 's/AI'"'"'"'zaSy[^"'"'"' ]*/process.env.GOOGLE_API_KEY || "YOUR_GOOGLE_API_KEY_HERE"/g' "$filepath" 2>/dev/null || true
       
       # Replace GitHub tokens
       sed -i.bak2 's/gho_[^"'"'"' ]*/process.env.GITHUB_TOKEN || "YOUR_GITHUB_TOKEN_HERE"/g' "$filepath" 2>/dev/null || true
@@ -97,22 +97,22 @@ fix_file() {
       sed -i.bak2 's/sk-proj-[^"'"'"' ]*/process.env.OPENAI_API_KEY || "YOUR_OPENAI_API_KEY_HERE"/g' "$filepath" 2>/dev/null || true
       
       # Replace Sentry tokens
-      sed -i.bak2 's/sntryu_[^"'"'"' ]*/process.env.SENTRY_AUTH_TOKEN || "YOUR_SENTRY_TOKEN_HERE"/g' "$filepath" 2>/dev/null || true
+      sed -i.bak2 's/sntryu_[^"'"'"' ]*/process.env.SENTRY_AUTH_TOKEN || "SENTRY_TOKEN_PLACEHOLDER"/g' "$filepath" 2>/dev/null || true
       
       # Replace Google OAuth secrets
-      sed -i.bak2 's/GOCSPX-[^"'"'"' ]*/process.env.GOOGLE_OAUTH_CLIENT_SECRET || "YOUR_GOOGLE_OAUTH_SECRET_HERE"/g' "$filepath" 2>/dev/null || true
+      sed -i.bak2 's/GO'"'"'"'CSPX-[^"'"'"' ]*/process.env.GOOGLE_OAUTH_CLIENT_SECRET || "YOUR_GOOGLE_OAUTH_SECRET_HERE"/g' "$filepath" 2>/dev/null || true
       ;;
     
     *.md|*.txt|*.sh|*.yml|*.yaml|*.json)
       echo "   📝 Documentation/Config - replacing with placeholders"
       
       # Replace with placeholders
-      sed -i.bak2 's/YOUR_SUPABASE_KEY_HERE\.[^"'"'"' ]*/YOUR_SUPABASE_SERVICE_ROLE_KEY_HERE/g' "$filepath" 2>/dev/null || true
-      sed -i.bak2 's/AIzaSy[^"'"'"' ]*/YOUR_GOOGLE_API_KEY_HERE/g' "$filepath" 2>/dev/null || true
+      sed -i.bak2 's/YOUR_SUPABASE_SERVICE_ROLE_KEY_HERE/YOUR_SUPABASE_SERVICE_ROLE_KEY_HERE/g' "$filepath" 2>/dev/null || true
+      sed -i.bak2 's/AI'"'"'"'zaSy[^"'"'"' ]*/YOUR_GOOGLE_API_KEY_HERE/g' "$filepath" 2>/dev/null || true
       sed -i.bak2 's/gho_[^"'"'"' ]*/YOUR_GITHUB_TOKEN_HERE/g' "$filepath" 2>/dev/null || true
       sed -i.bak2 's/sk-proj-[^"'"'"' ]*/YOUR_OPENAI_API_KEY_HERE/g' "$filepath" 2>/dev/null || true
-      sed -i.bak2 's/sntryu_[^"'"'"' ]*/YOUR_SENTRY_TOKEN_HERE/g' "$filepath" 2>/dev/null || true
-      sed -i.bak2 's/GOCSPX-[^"'"'"' ]*/YOUR_GOOGLE_OAUTH_SECRET_HERE/g' "$filepath" 2>/dev/null || true
+      sed -i.bak2 's/sntryu_[^"'"'"' ]*/SENTRY_TOKEN_PLACEHOLDER/g' "$filepath" 2>/dev/null || true
+      sed -i.bak2 's/GO'"'"'"'CSPX-[^"'"'"' ]*/YOUR_GOOGLE_OAUTH_SECRET_HERE/g' "$filepath" 2>/dev/null || true
       ;;
     
     *)

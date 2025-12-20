@@ -36,13 +36,14 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     // Load theme preference from localStorage on mount (client-side only)
     let theme = true; // default to dark to prevent hydration mismatch
 
-    if (typeof globalThis !== "undefined") {
-      const savedTheme = globalThis.localStorage.getItem("theme");
+    if (typeof window !== "undefined") {
+      const savedTheme = localStorage.getItem("theme");
       if (savedTheme) {
         theme = savedTheme === "dark";
       } else {
-        // Default to dark mode and save preference
-        globalThis.localStorage.setItem("theme", "dark");
+        // Default to dark mode if no preference saved
+        theme = true;
+        localStorage.setItem("theme", "dark");
       }
 
       // Debug logging
@@ -65,8 +66,8 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     if (!isLoaded) return;
 
     // Save theme preference to localStorage whenever it changes (client-side only)
-    if (typeof globalThis !== "undefined") {
-      globalThis.localStorage.setItem("theme", isDarkMode ? "dark" : "light");
+    if (typeof window !== "undefined") {
+      localStorage.setItem("theme", isDarkMode ? "dark" : "light");
     }
 
     // Apply theme class to document root with proper cleanup (client-side only)
@@ -77,12 +78,12 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
         root.classList.remove("light");
         root.classList.add("dark");
         // Also set data attribute for additional CSS targeting
-        root.dataset.theme = "dark";
+        root.setAttribute("data-theme", "dark");
       } else {
         root.classList.remove("dark");
         root.classList.add("light");
         // Also set data attribute for additional CSS targeting
-        root.dataset.theme = "light";
+        root.setAttribute("data-theme", "light");
       }
 
       // Debug logging

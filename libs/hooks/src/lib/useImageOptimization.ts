@@ -31,9 +31,9 @@ function shouldPrioritizeImage(
 }
 
 function getPreferredImageFormat(): string {
-  if (typeof globalThis !== "undefined") {
+  if (typeof window !== "undefined") {
     const canvas = document.createElement("canvas");
-    return canvas.toDataURL("image/webp").startsWith("data:image/webp")
+    return canvas.toDataURL("image/webp").indexOf("data:image/webp") === 0
       ? "webp"
       : "jpeg";
   }
@@ -97,7 +97,7 @@ export const useImageOptimization = (
 
   // Detect preferred image format
   useEffect(() => {
-    if (typeof globalThis !== "undefined") {
+    if (typeof window !== "undefined") {
       setPreferredFormat(getPreferredImageFormat());
     }
   }, []);
@@ -154,7 +154,7 @@ export const useImageOptimization = (
       document.head.appendChild(link);
 
       return () => {
-        link.remove();
+        document.head.removeChild(link);
       };
     }
   }, [isAboveTheFold, isHero, isLogo, optimizedUrl]);
@@ -176,26 +176,6 @@ export const useImageOptimization = (
 /**
  * Hook for managing multiple images with optimization
  */
-const processImageOptions = (
-  images: UseImageOptimizationOptions[],
-): OptimizedImageData[] => {
-  return images.map((imageOptions) => {
-    // Create optimized image data directly without calling the hook
-    return {
-      src: imageOptions.src,
-      srcSet: undefined, // Will be generated when needed
-      sizes: undefined, // Will be generated when needed
-      loading: "lazy" as const,
-      format: imageOptions.format || "webp",
-      optimizedUrl: imageOptions.src, // Simplified for now
-      isLoaded: false,
-      error: null,
-      onLoad: () => {},
-      onError: () => {},
-    } as OptimizedImageData;
-  });
-};
-
 export const useMultipleImageOptimization = (
   images: UseImageOptimizationOptions[],
 ) => {
@@ -206,9 +186,28 @@ export const useMultipleImageOptimization = (
 
   useEffect(() => {
     // Process images without calling hooks inside callbacks
-    const results = processImageOptions(images);
-    setOptimizedImages(results);
-    setAllLoaded(false); // Will be updated when images actually load
+    const processImages = async () => {
+      const results = images.map((imageOptions) => {
+        // Create optimized image data directly without calling the hook
+        return {
+          src: imageOptions.src,
+          srcSet: undefined, // Will be generated when needed
+          sizes: undefined, // Will be generated when needed
+          loading: "lazy" as const,
+          format: imageOptions.format || "webp",
+          optimizedUrl: imageOptions.src, // Simplified for now
+          isLoaded: false,
+          error: null,
+          onLoad: () => {},
+          onError: () => {},
+        } as OptimizedImageData;
+      });
+
+      setOptimizedImages(results);
+      setAllLoaded(false); // Will be updated when images actually load
+    };
+
+    processImages();
   }, [images]);
 
   return {

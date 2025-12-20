@@ -18,7 +18,11 @@ Or manually search:
 # Search for specific patterns
 git log --all -p -S "AIzaSy" --oneline
 git log --all -p -S "YOUR_SUPABASE_KEY_HERE" --oneline
+<<<<<<< HEAD
 git log --all -p -S "process.env.SUPABASE_SERVICE_ROLE_KEY" --oneline
+=======
+git log --all -p -S "BH3xSC7yk5DqX5bTgyedOyC45fNg1_vBcV04X_tkYLQ" --oneline
+>>>>>>> origin/security/fix-gitleaks-config
 ```
 
 ## Step 2: Rotate Exposed Keys FIRST
@@ -49,7 +53,11 @@ pip install git-filter-repo
 # Remove specific strings from all commits
 git filter-repo --replace-text <(echo "AIzaSyBXlcfcdyIqoeJOb2gXcxpRSmQO7lEP82Y==>your-firebase-api-key-here")
 git filter-repo --replace-text <(echo "YOUR_SUPABASE_KEY_HERE...==>your-supabase-anon-key-here")
+<<<<<<< HEAD
 git filter-repo --replace-text <(echo "process.env.SUPABASE_SERVICE_ROLE_KEY==>your-service-role-key-here")
+=======
+git filter-repo --replace-text <(echo "BH3xSC7yk5DqX5bTgyedOyC45fNg1_vBcV04X_tkYLQ==>your-service-role-key-here")
+>>>>>>> origin/security/fix-gitleaks-config
 ```
 
 ### Option B: Using BFG Repo-Cleaner

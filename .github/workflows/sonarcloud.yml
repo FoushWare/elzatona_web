@@ -35,6 +35,7 @@ jobs:
       - name: Validate test database secrets
         run: |
           echo "🔒 Validating test database secrets..."
+<<<<<<< HEAD
           if [ -z "${{ secrets.TEST_SUPABASE_URL }}" ]; then
             echo "❌ ERROR: TEST_SUPABASE_URL secret is not set!"
             echo "⚠️  Tests will NOT run against production database"
@@ -54,6 +55,17 @@ jobs:
             exit 1
           fi
           echo "✅ All test database secrets are set"
+=======
+          if [ -z "${{ secrets.TEST_SUPABASE_URL }}" ] || [ -z "${{ secrets.TEST_SUPABASE_ANON_KEY }}" ] || [ -z "${{ secrets.TEST_SUPABASE_SERVICE_ROLE_KEY }}" ]; then
+            echo "⚠️  TEST Supabase secrets are not fully set. Skipping tests to avoid any risk of hitting production."
+            echo "RUN_TESTS=false" >> "$GITHUB_ENV"
+            exit 0
+          fi
+
+          echo "RUN_TESTS=true" >> "$GITHUB_ENV"
+          echo "✅ All test database secrets are set"
+
+>>>>>>> origin/security/fix-gitleaks-config
           # Verify it's actually a test database (not production)
           TEST_URL="${{ secrets.TEST_SUPABASE_URL }}"
           if [[ "$TEST_URL" == *"production"* ]] || [[ "$TEST_URL" == *"prod"* ]]; then
@@ -92,6 +104,10 @@ jobs:
           JWT_SECRET: ${{ secrets.JWT_SECRET || 'placeholder-secret' }}
 
       - name: Run tests with coverage
+<<<<<<< HEAD
+=======
+        if: env.RUN_TESTS == 'true'
+>>>>>>> origin/security/fix-gitleaks-config
         run: |
           echo "🧪 Running tests against TEST database..."
           echo "📊 Test Database URL: ${{ secrets.TEST_SUPABASE_URL }}"

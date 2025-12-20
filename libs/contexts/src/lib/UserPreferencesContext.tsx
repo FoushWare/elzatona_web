@@ -5,7 +5,6 @@ import {
   useContext,
   useState,
   useEffect,
-  useMemo,
   ReactNode,
 } from "react";
 import type { SupabaseClient } from "@supabase/supabase-js";
@@ -69,7 +68,7 @@ export function useUserPreferences() {
 }
 
 interface UserPreferencesProviderProps {
-  readonly children: ReactNode;
+  children: ReactNode;
 }
 
 export function UserPreferencesProvider({
@@ -93,8 +92,7 @@ export function UserPreferencesProvider({
     const loadPreferences = () => {
       try {
         // Load from localStorage
-        const savedPreferences =
-          globalThis.localStorage.getItem("user-preferences");
+        const savedPreferences = localStorage.getItem("user-preferences");
         if (savedPreferences) {
           const parsed = JSON.parse(savedPreferences);
           setPreferences({
@@ -120,10 +118,7 @@ export function UserPreferencesProvider({
       setPreferences(newPreferences);
 
       // Save to localStorage immediately
-      globalThis.localStorage.setItem(
-        "user-preferences",
-        JSON.stringify(newPreferences),
-      );
+      localStorage.setItem("user-preferences", JSON.stringify(newPreferences));
 
       // Save to Firebase if user is authenticated
       if (user) {
@@ -132,7 +127,6 @@ export function UserPreferencesProvider({
         });
       }
     } catch (error) {
-      globalThis.console.error("Error updating preferences:", error);
       console.error("Error updating preferences:", error);
       throw error;
     }
@@ -145,9 +139,8 @@ export function UserPreferencesProvider({
 
       if (theme === "system") {
         // Use system preference
-        const systemTheme = globalThis.matchMedia(
-          "(prefers-color-scheme: dark)",
-        ).matches
+        const systemTheme = window.matchMedia("(prefers-color-scheme: dark)")
+          .matches
           ? "dark"
           : "light";
         document.documentElement.classList.toggle(
@@ -169,7 +162,7 @@ export function UserPreferencesProvider({
   // Listen for system theme changes when using system preference
   useEffect(() => {
     if (preferences.theme === "system") {
-      const mediaQuery = globalThis.matchMedia("(prefers-color-scheme: dark)");
+      const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
       const handleChange = () => {
         document.documentElement.classList.toggle("dark", mediaQuery.matches);
       };
@@ -180,14 +173,11 @@ export function UserPreferencesProvider({
     return undefined;
   }, [preferences.theme]);
 
-  const value: UserPreferencesContextType = useMemo(
-    () => ({
-      preferences,
-      updatePreferences,
-      isLoading,
-    }),
-    [preferences, updatePreferences, isLoading],
-  );
+  const value: UserPreferencesContextType = {
+    preferences,
+    updatePreferences,
+    isLoading,
+  };
 
   return (
     <UserPreferencesContext.Provider value={value}>

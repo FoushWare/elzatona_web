@@ -30,7 +30,11 @@
 
 5. **Copy the Key**
    - Click the copy button next to the service role key
+<<<<<<< HEAD
    - The key will look like: `YOUR_SUPABASE_KEY_HERE...` (very long string)
+=======
+   - The key will look like: `YOUR_SUPABASE_KEY_HERE (very long string)
+>>>>>>> origin/security/fix-gitleaks-config
 
 ### Method 2: From Project Settings URL
 

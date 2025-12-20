@@ -16,7 +16,6 @@ if (
 import React, {
   useState,
   useEffect,
-  useMemo,
   ReactNode,
   createContext,
   useContext,
@@ -52,23 +51,20 @@ export const UserTypeProvider: React.FC<UserTypeProviderProps> = ({
 
   // Load user preferences from localStorage on mount
   useEffect(() => {
-    if (typeof globalThis !== "undefined") {
+    if (typeof window !== "undefined") {
       try {
         // Fallback to localStorage only
-        const savedUserType = globalThis.localStorage.getItem(
-          "userType",
-        ) as UserType;
+        const savedUserType = localStorage.getItem("userType") as UserType;
         if (savedUserType) {
           setUserType(savedUserType);
         } else {
           setUserType("guided");
-          globalThis.localStorage.setItem("userType", "guided");
+          localStorage.setItem("userType", "guided");
         }
 
         const savedOnboarding =
-          globalThis.localStorage.getItem("hasCompletedOnboarding") === "true";
-        const savedFirstVisit =
-          globalThis.localStorage.getItem("isFirstVisit") === "true";
+          localStorage.getItem("hasCompletedOnboarding") === "true";
+        const savedFirstVisit = localStorage.getItem("isFirstVisit") === "true";
 
         setHasCompletedOnboarding(savedOnboarding);
         setIsFirstVisit(savedFirstVisit);
@@ -84,19 +80,16 @@ export const UserTypeProvider: React.FC<UserTypeProviderProps> = ({
 
   // Save user preferences to localStorage when they change
   useEffect(() => {
-    if (typeof globalThis !== "undefined") {
+    if (typeof window !== "undefined") {
       try {
         if (userType) {
-          globalThis.localStorage.setItem("userType", userType);
+          localStorage.setItem("userType", userType);
         }
-        globalThis.localStorage.setItem(
+        localStorage.setItem(
           "hasCompletedOnboarding",
           hasCompletedOnboarding.toString(),
         );
-        globalThis.localStorage.setItem(
-          "isFirstVisit",
-          isFirstVisit.toString(),
-        );
+        localStorage.setItem("isFirstVisit", isFirstVisit.toString());
       } catch (error) {
         console.error("Error saving user preferences:", error);
       }
@@ -107,37 +100,26 @@ export const UserTypeProvider: React.FC<UserTypeProviderProps> = ({
     setUserType("guided");
     setHasCompletedOnboarding(false);
     setIsFirstVisit(false);
-    if (typeof globalThis !== "undefined") {
+    if (typeof window !== "undefined") {
       try {
-        globalThis.localStorage.removeItem("userType");
-        globalThis.localStorage.removeItem("hasCompletedOnboarding");
-        globalThis.localStorage.removeItem("isFirstVisit");
+        localStorage.removeItem("userType");
+        localStorage.removeItem("hasCompletedOnboarding");
+        localStorage.removeItem("isFirstVisit");
       } catch (error) {
         console.error("Error resetting user preferences:", error);
       }
     }
   };
 
-  const value: UserTypeContextType = useMemo(
-    () => ({
-      userType,
-      setUserType,
-      hasCompletedOnboarding,
-      setHasCompletedOnboarding,
-      isFirstVisit,
-      setIsFirstVisit,
-      resetUserPreferences,
-    }),
-    [
-      userType,
-      setUserType,
-      hasCompletedOnboarding,
-      setHasCompletedOnboarding,
-      isFirstVisit,
-      setIsFirstVisit,
-      resetUserPreferences,
-    ],
-  );
+  const value: UserTypeContextType = {
+    userType,
+    setUserType,
+    hasCompletedOnboarding,
+    setHasCompletedOnboarding,
+    isFirstVisit,
+    setIsFirstVisit,
+    resetUserPreferences,
+  };
 
   return (
     <UserTypeContext.Provider value={value}>

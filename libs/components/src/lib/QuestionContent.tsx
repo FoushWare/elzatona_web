@@ -232,7 +232,7 @@ export const isValidCode = (
 export const formatCodeContent = (code: string): string => {
   if (!code) return "";
 
-  let formatted = code.replace(/\r\n/g, "\n").replace(/\r/g, "\n");
+  let formatted = code.replaceAll("\r\n", "\n").replaceAll("\r", "\n");
   formatted = formatted.trim();
   const lines = formatted.split("\n").map((line) => line.trimEnd());
 
@@ -363,7 +363,7 @@ export const formatCodeContent = (code: string): string => {
     }
   }
 
-  formatted = formatted.replace(/\n{3,}/g, "\n\n");
+  formatted = formatted.replaceAll(/\n{3,}/g, "\n\n");
 
   return formatted;
 };
@@ -389,14 +389,14 @@ const decodeHtmlEntities = (text: string): string => {
 
   let decoded = text;
   for (const [entity, char] of Object.entries(entityMap)) {
-    decoded = decoded.replace(new RegExp(entity, "gi"), char);
+    decoded = decoded.replaceAll(new RegExp(entity, "gi"), char);
   }
 
-  decoded = decoded.replace(/&#(\d+);/g, (match, dec) => {
+  decoded = decoded.replaceAll(/&#(\d+);/g, (match, dec) => {
     return String.fromCodePoint(Number.parseInt(dec, 10));
   });
 
-  decoded = decoded.replace(/&#x([0-9a-fA-F]+);/g, (match, hex) => {
+  decoded = decoded.replaceAll(/&#x([0-9a-fA-F]+);/g, (match, hex) => {
     return String.fromCodePoint(Number.parseInt(hex, 16));
   });
 
@@ -419,39 +419,39 @@ function fixMalformedHtml(content: string): string {
   let fixed = content;
   for (let i = 0; i < 3; i++) {
     fixed = fixed
-      .replace(/<pr<cod<cod/gi, "<pre><code>")
-      .replace(/<pr<code<code/gi, "<pre><code>")
-      .replace(/<pr<codee<code/gi, "<pre><code>")
-      .replace(/<pr<codee<cod/gi, "<pre><code>")
-      .replace(/<pr<code<cod/gi, "<pre><code>")
-      .replace(/<pr<codee/gi, "<pre><code>")
-      .replace(/<pr<code/gi, "<pre><code>")
-      .replace(/<pr<cod/gi, "<pre><code>")
-      .replace(/<pr<co/gi, "<pre><code>")
-      .replace(/<pr</gi, "<pre>")
-      .replace(/<\/cod<\/cod<\/pr/gi, "</code></pre>")
-      .replace(/<\/code<\/code<\/pr/gi, "</code></pre>")
-      .replace(/<\/codee<\/codee<\/pree/gi, "</code></pre>")
-      .replace(/<\/cod<\/cod<\/pree/gi, "</code></pre>")
-      .replace(/<\/code<\/code<\/pree/gi, "</code></pre>")
-      .replace(/<\/codee<\/pree/gi, "</code></pre>")
-      .replace(/<\/cod<\/pree/gi, "</code></pre>")
-      .replace(/<\/code<\/pree/gi, "</code></pre>")
-      .replace(/<\/code><\/pre>e>/gi, "</code></pre>")
-      .replace(/<\/code><\/pre>\s*e>/gi, "</code></pre>")
-      .replace(/<\/pree/gi, "</pre>")
-      .replace(/<\/codee/gi, "</code>")
-      .replace(/<\/cod/gi, "</code>")
-      .replace(/efor\s*\(/gi, "for (")
-      .replace(/efor\s+/gi, "for ")
-      .replace(/econsole\./gi, "console.")
-      .replace(/econsole\.log/gi, "console.log")
-      .replace(/<cod(\w)/gi, "<code>$1")
-      .replace(/<code(\w)/gi, "<code>$1")
-      .replace(/(\w)<\/cod/gi, "$1</code>")
-      .replace(/(\w)<\/code/gi, "$1</code>")
-      .replace(/<cod(\d+\w+)/gi, "<code>$1</code>")
-      .replace(/<cod(\d+)/gi, "<code>$1</code>");
+      .replaceAll(/<pr<cod<cod/gi, "<pre><code>")
+      .replaceAll(/<pr<code<code/gi, "<pre><code>")
+      .replaceAll(/<pr<codee<code/gi, "<pre><code>")
+      .replaceAll(/<pr<codee<cod/gi, "<pre><code>")
+      .replaceAll(/<pr<code<cod/gi, "<pre><code>")
+      .replaceAll(/<pr<codee/gi, "<pre><code>")
+      .replaceAll(/<pr<code/gi, "<pre><code>")
+      .replaceAll(/<pr<cod/gi, "<pre><code>")
+      .replaceAll(/<pr<co/gi, "<pre><code>")
+      .replaceAll(/<pr</gi, "<pre>")
+      .replaceAll(/<\/cod<\/cod<\/pr/gi, "</code></pre>")
+      .replaceAll(/<\/code<\/code<\/pr/gi, "</code></pre>")
+      .replaceAll(/<\/codee<\/codee<\/pree/gi, "</code></pre>")
+      .replaceAll(/<\/cod<\/cod<\/pree/gi, "</code></pre>")
+      .replaceAll(/<\/code<\/code<\/pree/gi, "</code></pre>")
+      .replaceAll(/<\/codee<\/pree/gi, "</code></pre>")
+      .replaceAll(/<\/cod<\/pree/gi, "</code></pre>")
+      .replaceAll(/<\/code<\/pree/gi, "</code></pre>")
+      .replaceAll(/<\/code><\/pre>e>/gi, "</code></pre>")
+      .replaceAll(/<\/code><\/pre>\s*e>/gi, "</code></pre>")
+      .replaceAll(/<\/pree/gi, "</pre>")
+      .replaceAll(/<\/codee/gi, "</code>")
+      .replaceAll(/<\/cod/gi, "</code>")
+      .replaceAll(/efor\s*\(/gi, "for (")
+      .replaceAll(/efor\s+/gi, "for ")
+      .replaceAll(/econsole\./gi, "console.")
+      .replaceAll(/econsole\.log/gi, "console.log")
+      .replaceAll(/<cod(\w)/gi, "<code>$1")
+      .replaceAll(/<code(\w)/gi, "<code>$1")
+      .replaceAll(/(\w)<\/cod/gi, "$1</code>")
+      .replaceAll(/(\w)<\/code/gi, "$1</code>")
+      .replaceAll(/<cod(\d+\w+)/gi, "<code>$1</code>")
+      .replaceAll(/<cod(\d+)/gi, "<code>$1</code>");
   }
   return fixed;
 }
@@ -531,55 +531,55 @@ function cleanCodePatterns(code: string): string {
   let cleaned = code;
   for (let pass = 0; pass < 3; pass++) {
     cleaned = cleaned
-      .replace("e>e>e>", "")
-      .replace("e>e>", "")
-      .replace(/^e>+/g, "")
-      .replace(/e>+$/g, "")
-      .replace(/(\w+)e>/g, "$1")
-      .replace(/e>(\w+)/g, "$1")
-      .replace(/\s*e>\s*/g, " ")
-      .replace("consoleonsole.loge>.log", "console.log")
-      .replace("consoleonsole.log", "console.log")
-      .replace("console.loge>.log", "console.log")
-      .replace("console.loge>", "console.log")
-      .replace("console.log>", "console.log")
-      .replace("console.loge.log", "console.log")
-      .replace("console.log.log", "console.log")
-      .replace(/(\w+)onsole\.log/g, "console.log")
-      .replace(/console\.log([^a-zA-Z])/g, "console.log$1")
-      .replace("diameterameter", "diameter")
-      .replace("perimeterimeter", "perimeter")
-      .replace("newColorwColor", "newColor")
-      .replace(/(\w+)ameter/g, "$1")
-      .replace(/(\w+)imeter/g, "$1")
-      .replace("NaNe>NaN", "NaN")
-      .replace("NaNe>", "NaN")
-      .replace("NaN>", "NaN")
-      .replace(/(\w{1,50})\s*<\s*(\d{1,10})\s*>/g, "$1 < $2 >")
-      .replace(/(\w{1,50})\s*<\s*(\d{1,10})/g, "$1 < $2")
-      .replace(/(\d{1,10})\s*>/g, "$1 >")
-      .replace(/<\/?[a-z][a-z0-9]{0,20}(?:\s+[^>]{0,200})?>/gi, "")
-      .replace(/^>\s*/g, "")
-      .replace(/\s*>$/g, "")
-      .replace(/\s+>\s+/g, " ");
+      .replaceAll("e>e>e>", "")
+      .replaceAll("e>e>", "")
+      .replaceAll(/^e>+/g, "")
+      .replaceAll(/e>+$/g, "")
+      .replaceAll(/(\w+)e>/g, "$1")
+      .replaceAll(/e>(\w+)/g, "$1")
+      .replaceAll(/\s*e>\s*/g, " ")
+      .replaceAll("consoleonsole.loge>.log", "console.log")
+      .replaceAll("consoleonsole.log", "console.log")
+      .replaceAll("console.loge>.log", "console.log")
+      .replaceAll("console.loge>", "console.log")
+      .replaceAll("console.log>", "console.log")
+      .replaceAll("console.loge.log", "console.log")
+      .replaceAll("console.log.log", "console.log")
+      .replaceAll(/(\w+)onsole\.log/g, "console.log")
+      .replaceAll(/console\.log([^a-zA-Z])/g, "console.log$1")
+      .replaceAll("diameterameter", "diameter")
+      .replaceAll("perimeterimeter", "perimeter")
+      .replaceAll("newColorwColor", "newColor")
+      .replaceAll(/(\w+)ameter/g, "$1")
+      .replaceAll(/(\w+)imeter/g, "$1")
+      .replaceAll("NaNe>NaN", "NaN")
+      .replaceAll("NaNe>", "NaN")
+      .replaceAll("NaN>", "NaN")
+      .replaceAll(/(\w{1,50})\s*<\s*(\d{1,10})\s*>/g, "$1 < $2 >")
+      .replaceAll(/(\w{1,50})\s*<\s*(\d{1,10})/g, "$1 < $2")
+      .replaceAll(/(\d{1,10})\s*>/g, "$1 >")
+      .replaceAll(/<\/?[a-z][a-z0-9]{0,20}(?:\s+[^>]{0,200})?>/gi, "")
+      .replaceAll(/^>\s*/g, "")
+      .replaceAll(/\s*>$/g, "")
+      .replaceAll(/\s+>\s+/g, " ");
   }
 
   for (let i = 0; i < 2; i++) {
     cleaned = cleaned
-      .replace("e>e>e>", "")
-      .replace("e>e>", "")
-      .replace(/^e>+/g, "")
-      .replace(/e>+$/g, "")
-      .replace(/(\w+)e>/g, "$1")
-      .replace(/e>(\w+)/g, "$1")
-      .replace(/\s*e>\s*/g, " ")
-      .replace(/<\/cod<\/pr/gi, "")
-      .replace(/<\/code<\/pr/gi, "")
-      .replace(/<\/pr/gi, "")
-      .replace(/<\/cod/gi, "")
-      .replace(/^>\s*/g, "")
-      .replace(/\s*>$/g, "")
-      .replace(/\s+>\s+/g, " ");
+      .replaceAll("e>e>e>", "")
+      .replaceAll("e>e>", "")
+      .replaceAll(/^e>+/g, "")
+      .replaceAll(/e>+$/g, "")
+      .replaceAll(/(\w+)e>/g, "$1")
+      .replaceAll(/e>(\w+)/g, "$1")
+      .replaceAll(/\s*e>\s*/g, " ")
+      .replaceAll(/<\/cod<\/pr/gi, "")
+      .replaceAll(/<\/code<\/pr/gi, "")
+      .replaceAll(/<\/pr/gi, "")
+      .replaceAll(/<\/cod/gi, "")
+      .replaceAll(/^>\s*/g, "")
+      .replaceAll(/\s*>$/g, "")
+      .replaceAll(/\s+>\s+/g, " ");
   }
 
   return cleaned;
@@ -673,10 +673,10 @@ function processHtmlCodeBlocks(
       processedIndices.add(match.index);
       let matchContent = match[0];
       matchContent = matchContent
-        .replace(/<pr<cod/gi, "<pre><code>")
-        .replace(/<pr<code/gi, "<pre><code>")
-        .replace(/<\/cod<\/pr/gi, "</code></pre>")
-        .replace(/<\/code<\/pr/gi, "</code></pre>");
+        .replaceAll(/<pr<cod/gi, "<pre><code>")
+        .replaceAll(/<pr<code/gi, "<pre><code>")
+        .replaceAll(/<\/cod<\/pr/gi, "</code></pre>")
+        .replaceAll(/<\/code<\/pr/gi, "</code></pre>");
 
       const extractedCode = extractCodeFromHtml(matchContent);
       if (extractedCode) {
@@ -704,18 +704,18 @@ function cleanMalformedCode(code: string): string {
 
   for (let i = 0; i < 3; i++) {
     code = code
-      .replace("e>e>e>", "")
-      .replace("e>e>", "")
-      .replace(/^e>+/g, "")
-      .replace(/e>+$/g, "")
-      .replace(/(\w+)e>/g, "$1")
-      .replace("consoleonsole.log", "console.log")
-      .replace("console.loge>", "console.log")
-      .replace("diameterameter", "diameter")
-      .replace("perimeterimeter", "perimeter")
-      .replace("newColorwColor", "newColor")
+      .replaceAll("e>e>e>", "")
+      .replaceAll("e>e>", "")
+      .replaceAll(/^e>+/g, "")
+      .replaceAll(/e>+$/g, "")
+      .replaceAll(/(\w+)e>/g, "$1")
+      .replaceAll("consoleonsole.log", "console.log")
+      .replaceAll("console.loge>", "console.log")
+      .replaceAll("diameterameter", "diameter")
+      .replaceAll("perimeterimeter", "perimeter")
+      .replaceAll("newColorwColor", "newColor")
       // codeql[js/incomplete-multi-character-sanitization]: sanitizeText() called immediately after this line removes all HTML
-      .replace("NaNe>", "NaN");
+      .replaceAll("NaNe>", "NaN");
     // SECURITY: Final sanitization pass after each iteration to ensure no HTML remains
     code = sanitizeText(code);
   }
@@ -837,30 +837,30 @@ function cleanTextContent(text: string): string {
   cleanText = sanitizeText(cleanText);
   for (let i = 0; i < 3; i++) {
     cleanText = cleanText
-      .replace(/<pr<cod?/gi, "")
-      .replace(/<pr</gi, "")
-      .replace(/<pr/gi, "")
-      .replace(/<\/cod?<\/pr/gi, "")
-      .replace(/<\/cod?/gi, "")
-      .replace(/<\/pr/gi, "")
-      .replace(/<\/cod/gi, "")
-      .replace("e>e>e>", "")
-      .replace("e>e>", "")
-      .replace(/^e>+/g, "")
-      .replace(/e>+$/g, "")
-      .replace(/(\w+)e>/g, "$1")
-      .replace(/e>(\w+)/g, "$1")
-      .replace(/\s*e>\s*/g, " ")
-      .replace(/^>\s*/g, "")
-      .replace(/\s*>$/g, "")
+      .replaceAll(/<pr<cod?/gi, "")
+      .replaceAll(/<pr</gi, "")
+      .replaceAll(/<pr/gi, "")
+      .replaceAll(/<\/cod?<\/pr/gi, "")
+      .replaceAll(/<\/cod?/gi, "")
+      .replaceAll(/<\/pr/gi, "")
+      .replaceAll(/<\/cod/gi, "")
+      .replaceAll("e>e>e>", "")
+      .replaceAll("e>e>", "")
+      .replaceAll(/^e>+/g, "")
+      .replaceAll(/e>+$/g, "")
+      .replaceAll(/(\w+)e>/g, "$1")
+      .replaceAll(/e>(\w+)/g, "$1")
+      .replaceAll(/\s*e>\s*/g, " ")
+      .replaceAll(/^>\s*/g, "")
+      .replaceAll(/\s*>$/g, "")
       // codeql[js/incomplete-multi-character-sanitization]: sanitizeText() called immediately after this line removes all HTML tags
-      .replace(/\s+>\s+/g, " ");
+      .replaceAll(/\s+>\s+/g, " ");
     // SECURITY: Final sanitization pass after each iteration to ensure no HTML remains
     cleanText = sanitizeText(cleanText);
   }
   cleanText = cleanText
-    .replace(/[ \t]+/g, " ")
-    .replace(/\n\s*\n/g, "\n\n")
+    .replaceAll(/[ \t]+/g, " ")
+    .replaceAll(/\n\s*\n/g, "\n\n")
     .trim();
   return cleanText;
 }
@@ -870,20 +870,20 @@ function cleanCodeContent(code: string): string {
   let cleanCode = code;
   for (let i = 0; i < 2; i++) {
     cleanCode = cleanCode
-      .replace("e>e>e>", "")
-      .replace("e>e>", "")
-      .replace(/^e>+/g, "")
-      .replace(/e>+$/g, "")
-      .replace(/(\w+)e>/g, "$1")
-      .replace(/e>(\w+)/g, "$1")
-      .replace(/\s*e>\s*/g, " ")
-      .replace(/<\/cod<\/pr/gi, "")
-      .replace(/<\/code<\/pr/gi, "")
-      .replace(/<\/pr/gi, "")
-      .replace(/<\/cod/gi, "")
-      .replace(/^>\s*/g, "")
-      .replace(/\s*>$/g, "")
-      .replace(/\s+>\s+/g, " ");
+      .replaceAll("e>e>e>", "")
+      .replaceAll("e>e>", "")
+      .replaceAll(/^e>+/g, "")
+      .replaceAll(/e>+$/g, "")
+      .replaceAll(/(\w+)e>/g, "$1")
+      .replaceAll(/e>(\w+)/g, "$1")
+      .replaceAll(/\s*e>\s*/g, " ")
+      .replaceAll(/<\/cod<\/pr/gi, "")
+      .replaceAll(/<\/code<\/pr/gi, "")
+      .replaceAll(/<\/pr/gi, "")
+      .replaceAll(/<\/cod/gi, "")
+      .replaceAll(/^>\s*/g, "")
+      .replaceAll(/\s*>$/g, "")
+      .replaceAll(/\s+>\s+/g, " ");
     cleanCode = sanitizeText(cleanCode);
   }
   return formatCodeContent(cleanCode);
@@ -901,32 +901,32 @@ function processFinalTextContent(
   }
   for (let i = 0; i < 3; i++) {
     cleanContent = cleanContent
-      .replace(/<pr<cod/gi, "")
-      .replace(/<\/cod<\/pr/gi, "")
-      .replace(/<pr</gi, "")
-      .replace(/<\/cod/gi, "")
-      .replace(/<\/pr/gi, "")
+      .replaceAll(/<pr<cod/gi, "")
+      .replaceAll(/<\/cod<\/pr/gi, "")
+      .replaceAll(/<pr</gi, "")
+      .replaceAll(/<\/cod/gi, "")
+      .replaceAll(/<\/pr/gi, "")
       // NOSONAR S7781: replaceAll() cannot be used with regex patterns that require complex matching
-      .replace(/<\/?[a-z][a-z0-9]{0,20}(?:\s+[^>]{0,200})?>/gi, "")
-      .replace(/<pr/gi, "")
-      .replace(/<[^>]+>/g, "")
-      .replace("e>e>e>", "")
-      .replace("e>e>", "")
-      .replace(/^e>+/g, "")
-      .replace(/e>+$/g, "")
-      .replace(/(\w+)e>/g, "$1")
-      .replace(/e>(\w+)/g, "$1")
-      .replace(/\s*e>\s*/g, " ")
-      .replace(/^>\s*/g, "")
-      .replace(/\s*>$/g, "")
-      .replace(/\s+>\s+/g, " ");
+      .replaceAll(/<\/?[a-z][a-z0-9]{0,20}(?:\s+[^>]{0,200})?>/gi, "")
+      .replaceAll(/<pr/gi, "")
+      .replaceAll(/<[^>]+>/g, "")
+      .replaceAll("e>e>e>", "")
+      .replaceAll("e>e>", "")
+      .replaceAll(/^e>+/g, "")
+      .replaceAll(/e>+$/g, "")
+      .replaceAll(/(\w+)e>/g, "$1")
+      .replaceAll(/e>(\w+)/g, "$1")
+      .replaceAll(/\s*e>\s*/g, " ")
+      .replaceAll(/^>\s*/g, "")
+      .replaceAll(/\s*>$/g, "")
+      .replaceAll(/\s+>\s+/g, " ");
   }
 
   cleanContent = cleanContent
-    .replace("&nbsp;", " ")
-    .replace("&lt;", "<")
-    .replace("&gt;", ">")
-    .replace("&amp;", "&")
+    .replaceAll("&nbsp;", " ")
+    .replaceAll("&lt;", "<")
+    .replaceAll("&gt;", ">")
+    .replaceAll("&amp;", "&")
     .trim();
 
   const codeValidation = isValidCode(cleanContent);
@@ -1029,7 +1029,7 @@ const CodeBlockPreTag = ({
   ...props
 }: React.ComponentPropsWithoutRef<"pre">) => (
   <pre
-    {...(props as any)}
+    {...props}
     style={{
       margin: 0,
       padding: 0,
@@ -1236,7 +1236,7 @@ function processContent(content: string): string {
   // SECURITY: Process code blocks with bounded quantifiers
   // NOSONAR S7781: replaceAll() with function callback for complex replacement logic
   const codeTagRegex = /<code[^>]{0,200}>([^<]{1,50})<\/code>/gi;
-  fixedContent = fixedContent.replace(
+  fixedContent = fixedContent.replaceAll(
     codeTagRegex,
     (match, codeContent, offset) =>
       replaceCodeTagWithMarkdown(match, codeContent, offset, fixedContent),
@@ -1308,7 +1308,7 @@ function cleanTextWithCodeTags(text: string): string {
   let cleanText = decodeHtmlEntities(text);
   cleanText = sanitizeText(cleanText);
   // NOSONAR S7781: replaceAll() with function callback for capture group replacement
-  cleanText = cleanText.replace(
+  cleanText = cleanText.replaceAll(
     /<code[^>]{0,200}>([^<]{1,30})<\/code>/gi,
     (match, codeContent) => `\`${codeContent}\``,
   );

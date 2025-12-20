@@ -18,7 +18,6 @@ import React, {
   useState,
   useEffect,
   useCallback,
-  useMemo,
   ReactNode,
   createContext,
   useContext,
@@ -70,20 +69,17 @@ export function NotificationProvider({
     setError(null);
   }, []);
 
-  const markAsRead = useCallback(
-    async (notificationId: string): Promise<void> => {
-      setNotifications((prev) =>
-        prev.map((notification) =>
-          notification.id === notificationId
-            ? { ...notification, read: true }
-            : notification,
-        ),
-      );
-    },
-    [],
-  );
+  const markAsRead = useCallback(async (notificationId: string) => {
+    setNotifications((prev) =>
+      prev.map((notification) =>
+        notification.id === notificationId
+          ? { ...notification, read: true }
+          : notification,
+      ),
+    );
+  }, []);
 
-  const markAllAsRead = useCallback(async (): Promise<void> => {
+  const markAllAsRead = useCallback(async () => {
     setNotifications((prev) =>
       prev.map((notification) => ({ ...notification, read: true })),
     );
@@ -95,26 +91,15 @@ export function NotificationProvider({
     setUnreadCount(unread);
   }, [notifications]);
 
-  const value: NotificationContextType = useMemo(
-    () => ({
-      notifications,
-      unreadCount,
-      isLoading,
-      error,
-      markAsRead,
-      markAllAsRead,
-      refreshNotifications,
-    }),
-    [
-      notifications,
-      unreadCount,
-      isLoading,
-      error,
-      markAsRead,
-      markAllAsRead,
-      refreshNotifications,
-    ],
-  );
+  const value: NotificationContextType = {
+    notifications,
+    unreadCount,
+    isLoading,
+    error,
+    markAsRead,
+    markAllAsRead,
+    refreshNotifications,
+  };
 
   return (
     <NotificationContext.Provider value={value}>

@@ -13,7 +13,11 @@ from typing import List, Tuple
 PATTERNS = {
     "Firebase API Key": r"AIzaSy[A-Za-z0-9_-]{35}",
     "JWT Token (Supabase)": r"YOUR_SUPABASE_KEY_HERE\.[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+",
+<<<<<<< HEAD
     "Service Role Key": r"process.env.SUPABASE_SERVICE_ROLE_KEY",
+=======
+    "Service Role Key": r"BH3xSC7yk5DqX5bTgyedOyC45fNg1_vBcV04X_tkYLQ",
+>>>>>>> origin/security/fix-gitleaks-config
     "Supabase Project Ref": r"hpnewqkvpnthpohvxcmq",
     "Firebase Project ID": r"fir-demo-project-adffb",
     "Hardcoded JWT Secret": r"elzatona-super-secret-jwt-key-2024-production-ready",
@@ -24,7 +28,11 @@ PATTERNS = {
 KNOWN_SECRETS = [
     "AIzaSyBXlcfcdyIqoeJOb2gXcxpRSmQO7lEP82Y",
     "YOUR_SUPABASE_KEY_HERE.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhwbmV3cWt2cG50aHBvaHZ4Y21xIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjA2NjA0MTgsImV4cCI6MjA3NjIzNjQxOH0.UMmriJb5HRr9W_56GilNNDWksvlFEb1V9c_PuBK-H3s",
+<<<<<<< HEAD
     "process.env.SUPABASE_SERVICE_ROLE_KEY",
+=======
+    "BH3xSC7yk5DqX5bTgyedOyC45fNg1_vBcV04X_tkYLQ",
+>>>>>>> origin/security/fix-gitleaks-config
 ]
 
 
@@ -102,7 +110,11 @@ def main():
             description = "Firebase API Key"
         elif "YOUR_SUPABASE_KEY_HERE" in secret:
             description = "Supabase Anon Key"
+<<<<<<< HEAD
         elif "process.env.SUPABASE_SERVICE_ROLE_KEY" in secret:
+=======
+        elif "BH3xSC7yk5DqX5bTgyedOyC45fNg1_vBcV04X_tkYLQ" in secret:
+>>>>>>> origin/security/fix-gitleaks-config
             description = "Supabase Service Role Key"
         
         commits = search_for_secret(secret, description)

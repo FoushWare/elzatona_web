@@ -1,20 +1,37 @@
 import { NextRequest, NextResponse } from "next/server";
 import { verifySupabaseToken } from "../../../../lib/server-auth";
 
+function sanitizeForLog(value: unknown): string {
+  const raw =
+    typeof value === "string"
+      ? value
+      : (() => {
+          try {
+            return JSON.stringify(value);
+          } catch {
+            return "[unserializable]";
+          }
+        })();
+
+  return raw.split("\r").join(" ").split("\n").join(" ").slice(0, 500);
+}
+
 export async function POST(request: NextRequest) {
   try {
-    const { token } = await request.json();
+    const authHeader = request.headers.get("authorization");
+    const token = authHeader?.startsWith("Bearer ")
+      ? authHeader.substring("Bearer ".length)
+      : null;
 
-    // Validate token input - prevent user-controlled security bypass
-    if (!token || typeof token !== "string" || token.trim().length === 0) {
-      return NextResponse.json({ error: "Token is required" }, { status: 400 });
+    if (!token) {
+      return NextResponse.json(
+        { error: "Authorization Bearer token is required" },
+        { status: 400 },
+      );
     }
 
-    // Sanitize token - remove potential injection characters
-    const sanitizedToken = token.trim().replaceAll(/[<>"'&]/g, "");
-
-    // Verify the Supabase token
-    const decodedToken = await verifySupabaseToken(sanitizedToken);
+    // Verify the Firebase token
+    const decodedToken = await verifySupabaseToken(token);
     if (!decodedToken) {
       return NextResponse.json({ error: "Invalid token" }, { status: 401 });
     }
@@ -36,7 +53,7 @@ export async function POST(request: NextRequest) {
 
     return response;
   } catch (error) {
-    console.error("Error setting auth cookie:", error);
+    console.error("Error setting auth cookie:", sanitizeForLog(error));
     return NextResponse.json(
       { error: "Internal server error" },
       { status: 500 },

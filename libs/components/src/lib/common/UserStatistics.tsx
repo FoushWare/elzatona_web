@@ -44,24 +44,13 @@ export const UserStatistics: React.FC = () => {
   });
   const [isLoading, setIsLoading] = useState(true);
 
-  const updateActiveLearners = (value: number) => {
-    setStats((prev) => ({ ...prev, activeLearners: Math.floor(value) }));
-  };
-
-  const updateSuccessRate = (value: number) => {
-    setStats((prev) => ({ ...prev, successRate: Math.floor(value) }));
-  };
-
-  const updateTotalQuestions = (value: number) => {
-    setStats((prev) => ({ ...prev, totalQuestions: Math.floor(value) }));
-  };
-
   useEffect(() => {
     // Simulate loading and calculating stats
     const loadStats = async () => {
       setIsLoading(true);
 
       // In a real implementation, this would fetch from your backend/API
+      // For now, we'll simulate with realistic numbers that grow over time
       const baseLearners = 8500; // Base number of learners
       const baseSuccessRate = 82; // Base success rate
 
@@ -79,9 +68,17 @@ export const UserStatistics: React.FC = () => {
       const averageTime = `${Math.floor(Math.random() * 30) + 15}m`; // 15-45 minutes
 
       // Animate the numbers
-      await animateNumber(0, activeLearners, updateActiveLearners);
-      await animateNumber(0, successRate, updateSuccessRate);
-      await animateNumber(0, totalQuestions, updateTotalQuestions);
+      await animateNumber(0, activeLearners, (value) => {
+        setStats((prev) => ({ ...prev, activeLearners: Math.floor(value) }));
+      });
+
+      await animateNumber(0, successRate, (value) => {
+        setStats((prev) => ({ ...prev, successRate: Math.floor(value) }));
+      });
+
+      await animateNumber(0, totalQuestions, (value) => {
+        setStats((prev) => ({ ...prev, totalQuestions: Math.floor(value) }));
+      });
 
       setStats((prev) => ({ ...prev, averageTime }));
       setIsLoading(false);
@@ -90,42 +87,32 @@ export const UserStatistics: React.FC = () => {
     loadStats();
   }, [isAuthenticated]);
 
-  const createAnimateFunction = (
-    start: number,
-    end: number,
-    callback: (value: number) => void,
-    resolve: () => void,
-  ) => {
-    const duration = 2000; // 2 seconds
-    const startTime = Date.now();
-
-    const animate = () => {
-      const elapsed = Date.now() - startTime;
-      const progress = Math.min(elapsed / duration, 1);
-
-      // Easing function for smooth animation
-      const easeOutQuart = 1 - Math.pow(1 - progress, 4);
-      const currentValue = start + (end - start) * easeOutQuart;
-
-      callback(currentValue);
-
-      if (progress < 1) {
-        requestAnimationFrame(animate);
-      } else {
-        resolve();
-      }
-    };
-
-    return animate;
-  };
-
   const animateNumber = (
     start: number,
     end: number,
     callback: (value: number) => void,
   ): Promise<void> => {
     return new Promise((resolve) => {
-      const animate = createAnimateFunction(start, end, callback, resolve);
+      const duration = 2000; // 2 seconds
+      const startTime = Date.now();
+
+      const animate = () => {
+        const elapsed = Date.now() - startTime;
+        const progress = Math.min(elapsed / duration, 1);
+
+        // Easing function for smooth animation
+        const easeOutQuart = 1 - Math.pow(1 - progress, 4);
+        const currentValue = start + (end - start) * easeOutQuart;
+
+        callback(currentValue);
+
+        if (progress < 1) {
+          requestAnimationFrame(animate);
+        } else {
+          resolve();
+        }
+      };
+
       animate();
     });
   };
@@ -141,7 +128,7 @@ export const UserStatistics: React.FC = () => {
     return (
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
         {Array.from({ length: 4 }).map((_, index) => (
-          <div key={`skeleton-${index}`} className="text-center">
+          <div key={index} className="text-center">
             <div className="w-16 h-16 bg-gray-200 dark:bg-gray-700 rounded-full mx-auto mb-4 animate-pulse"></div>
             <div className="h-8 bg-gray-200 dark:bg-gray-700 rounded mb-2 animate-pulse"></div>
             <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded animate-pulse"></div>

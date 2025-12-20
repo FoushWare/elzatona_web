@@ -63,7 +63,7 @@ const Select = React.forwardRef<
     : "Select...";
 
   return (
-    <div ref={ref} className={cn("relative", className)} {...(props as any)}>
+    <div ref={ref} className={cn("relative", className)} {...props}>
       <button
         type="button"
         className="flex h-10 w-full items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 hover:bg-accent hover:text-accent-foreground cursor-pointer"
@@ -120,7 +120,7 @@ const SelectTrigger = React.forwardRef<
       "flex h-10 w-full items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 hover:bg-accent hover:text-accent-foreground cursor-pointer",
       className,
     )}
-    {...(props as any)}
+    {...props}
   >
     {children}
   </button>
@@ -133,7 +133,7 @@ const SelectValue = React.forwardRef<
     placeholder?: string;
   }
 >(({ className, placeholder, ...props }, ref) => (
-  <span ref={ref} className={cn("truncate", className)} {...(props as any)}>
+  <span ref={ref} className={cn("truncate", className)} {...props}>
     {placeholder}
   </span>
 ));
@@ -149,7 +149,7 @@ const SelectContent = React.forwardRef<
       "relative z-50 max-h-96 min-w-[8rem] overflow-hidden rounded-md border bg-popover text-popover-foreground shadow-md",
       className,
     )}
-    {...(props as any)}
+    {...props}
   >
     <div className="p-1">{children}</div>
   </div>
@@ -169,7 +169,7 @@ const SelectItem = React.forwardRef<
       className,
     )}
     onClick={onClick}
-    {...(props as any)}
+    {...props}
   >
     {children}
   </div>
