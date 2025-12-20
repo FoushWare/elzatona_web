@@ -1036,37 +1036,32 @@ export async function POST(request: NextRequest) {
           questionWithTimestamps.code = codeContent;
           processedCode = codeContent; // Update for consistency
           const newlineCount = (codeContent.match(/\n/g) || []).length;
-          console.log(
-            `💾 Storing code from originalCode (last resort): ${newlineCount} newlines, length: ${codeContent.length}`,
-            {
-              codePreview: codeContent.substring(0, 150),
-            },
-          );
+          console.log("💾 Storing code from originalCode (last resort)", {
+            newlineCount,
+            length: codeContent.length,
+            codePreview: codeContent.substring(0, 150),
+          });
         } else {
           // Explicitly set to null if not provided (to ensure the field is included in the insert)
           questionWithTimestamps.code = null;
-          console.log(
-            `ℹ️ No code field provided for question: ${questionWithTimestamps.title}`,
-            {
-              hasProcessedCode: processedCode !== null && processedCode !== "",
-              hasCodeForDb:
-                codeForDb !== undefined &&
-                codeForDb !== null &&
-                codeForDb !== "",
-              hasDbQuestionCode:
-                dbQuestion.code !== undefined &&
-                dbQuestion.code !== null &&
-                dbQuestion.code !== "",
-              hasSanitizedCode:
-                sanitizedQuestion.code !== undefined &&
-                sanitizedQuestion.code !== null &&
-                sanitizedQuestion.code !== "",
-              hasOriginalCode:
-                originalCode !== undefined &&
-                originalCode !== null &&
-                originalCode !== "",
-            },
-          );
+          console.log("ℹ️ No code field provided for question", {
+            title: questionWithTimestamps.title,
+            hasProcessedCode: processedCode !== null && processedCode !== "",
+            hasCodeForDb:
+              codeForDb !== undefined && codeForDb !== null && codeForDb !== "",
+            hasDbQuestionCode:
+              dbQuestion.code !== undefined &&
+              dbQuestion.code !== null &&
+              dbQuestion.code !== "",
+            hasSanitizedCode:
+              sanitizedQuestion.code !== undefined &&
+              sanitizedQuestion.code !== null &&
+              sanitizedQuestion.code !== "",
+            hasOriginalCode:
+              originalCode !== undefined &&
+              originalCode !== null &&
+              originalCode !== "",
+          });
         }
 
         // CRITICAL: Ensure code field is ALWAYS present in questionWithTimestamps
