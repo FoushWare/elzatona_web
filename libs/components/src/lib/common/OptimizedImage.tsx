@@ -91,7 +91,7 @@ export const OptimizedImage: React.FC<OptimizedImageProps> = ({
       style={{
         width: fill ? "100%" : width,
         height: fill ? "100%" : height,
-        ...style,
+        ...(style as any),
       }}
       onClick={onClick}
     >
@@ -108,7 +108,7 @@ export const OptimizedImage: React.FC<OptimizedImageProps> = ({
         className="object-cover"
         style={{
           objectFit: "cover",
-          objectPosition: "center",
+          ...(style as any),
         }}
         // Enable blur placeholder for better perceived performance
         blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAABAAEDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAhEAACAQMDBQAAAAAAAAAAAAABAgMABAUGIWGRkqGx0f/EABUBAQEAAAAAAAAAAAAAAAAAAAMF/8QAGhEAAgIDAAAAAAAAAAAAAAAAAAECEgMRkf/aAAwDAQACEQMRAD8AltJagyeH0AthI5xdrLcNM91BF5pX2HaH9bcfaSXWGaRmknyJckliyjqTzSlT54b6bk+h0R//2Q=="

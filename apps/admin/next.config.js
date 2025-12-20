@@ -14,14 +14,7 @@ const nextConfig = {
     "nuqs",
   ],
   experimental: {
-    turbo: {
-      rules: {
-        "*.svg": {
-          loaders: ["@svgr/webpack"],
-          as: "*.js",
-        },
-      },
-    },
+    forceSwcTransforms: true,
   },
   // Configure build to handle error pages
   generateBuildId: async () => {

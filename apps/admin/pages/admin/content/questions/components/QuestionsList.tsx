@@ -96,3 +96,5 @@ export const QuestionsList: React.FC<QuestionsListProps> = ({
     </Card>
   );
 };
+
+export default QuestionsList;

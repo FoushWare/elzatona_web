@@ -11,13 +11,12 @@
 The following patterns were searched in git history:
 
 1. **Firebase API Key:** `AIzaSyBXlcfcdyIqoeJOb2gXcxpRSmQO7lEP82Y`
-<<<<<<< HEAD
-2. **Supabase Anon Key:** `YOUR_SUPABASE_KEY_HERE...`
-=======
-2. **Supabase Anon Key:** `YOUR_SUPABASE_KEY_HERE
->>>>>>> origin/security/fix-gitleaks-config
-3. **Supabase Service Role Key:** `process.env.SUPABASE_SERVICE_ROLE_KEY`
-4. **Project Identifiers:** `hpnewqkvpnthpohvxcmq`, `fir-demo-project-adffb`
+   <<<<<<< HEAD
+2. # **Supabase Anon Key:** `YOUR_SUPABASE_KEY_HERE...`
+3. **Supabase Anon Key:** `YOUR_SUPABASE_KEY_HERE
+   > > > > > > > origin/security/fix-gitleaks-config
+4. **Supabase Service Role Key:** `process.env.SUPABASE_SERVICE_ROLE_KEY`
+5. **Project Identifiers:** `hpnewqkvpnthpohvxcmq`, `fir-demo-project-adffb`
 
 ## ⚠️ Manual Search Required
 

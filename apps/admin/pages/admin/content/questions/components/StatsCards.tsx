@@ -92,3 +92,5 @@ export const StatsCards: React.FC<StatsCardsProps> = ({
     </div>
   );
 };
+
+export default StatsCards;

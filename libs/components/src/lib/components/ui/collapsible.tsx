@@ -13,7 +13,7 @@ const Collapsible = React.forwardRef<
     ref,
   ) => {
     return (
-      <div ref={ref} className={cn("", className)} {...props}>
+      <div ref={ref} className={cn("", className)} {...(props as any)}>
         {children}
       </div>
     );
@@ -25,7 +25,7 @@ const CollapsibleTrigger = React.forwardRef<
   HTMLButtonElement,
   React.ButtonHTMLAttributes<HTMLButtonElement>
 >(({ className, ...props }, ref) => (
-  <button ref={ref} className={cn("", className)} {...props} />
+  <button ref={ref} className={cn("", className)} {...(props as any)} />
 ));
 CollapsibleTrigger.displayName = "CollapsibleTrigger";
 
@@ -36,7 +36,7 @@ const CollapsibleContent = React.forwardRef<
   <div
     ref={ref}
     className={cn("overflow-hidden transition-all", className)}
-    {...props}
+    {...(props as any)}
   />
 ));
 CollapsibleContent.displayName = "CollapsibleContent";

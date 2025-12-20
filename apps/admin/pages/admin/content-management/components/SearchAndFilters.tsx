@@ -62,3 +62,5 @@ export const SearchAndFilters: React.FC<SearchAndFiltersProps> = ({
     </div>
   );
 };
+
+export default SearchAndFilters;

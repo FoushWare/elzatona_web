@@ -13,7 +13,7 @@ const Skeleton = React.forwardRef<HTMLDivElement, SkeletonProps>(
           "animate-pulse rounded-md bg-gray-200 dark:bg-gray-700",
           className,
         )}
-        {...props}
+        {...(props as any)}
       />
     );
   },

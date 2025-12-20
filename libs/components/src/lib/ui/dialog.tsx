@@ -24,7 +24,7 @@ const DialogOverlay = React.forwardRef<
       "fixed inset-0 z-[99] bg-black/50 backdrop-blur-sm data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0",
       className,
     )}
-    {...props}
+    {...(props as any)}
   />
 ));
 DialogOverlay.displayName = DialogPrimitive.Overlay.displayName;
@@ -50,7 +50,7 @@ const DialogContent = React.forwardRef<
         display: "grid",
         ...style,
       }}
-      {...props}
+      {...(props as any)}
     >
       {children}
       <DialogPrimitive.Close
@@ -74,7 +74,7 @@ const DialogHeader = ({
       "flex flex-col space-y-1.5 text-center sm:text-left",
       className,
     )}
-    {...props}
+    {...(props as any)}
   />
 );
 DialogHeader.displayName = "DialogHeader";
@@ -88,7 +88,7 @@ const DialogFooter = ({
       "flex flex-col-reverse sm:flex-row sm:justify-end sm:space-x-2",
       className,
     )}
-    {...props}
+    {...(props as any)}
   />
 );
 DialogFooter.displayName = "DialogFooter";
@@ -103,7 +103,7 @@ const DialogTitle = React.forwardRef<
       "text-lg font-semibold leading-none tracking-tight",
       className,
     )}
-    {...props}
+    {...(props as any)}
   />
 ));
 DialogTitle.displayName = DialogPrimitive.Title.displayName;
@@ -115,7 +115,7 @@ const DialogDescription = React.forwardRef<
   <DialogPrimitive.Description
     ref={ref}
     className={cn("text-sm text-muted-foreground", className)}
-    {...props}
+    {...(props as any)}
   />
 ));
 DialogDescription.displayName = DialogPrimitive.Description.displayName;

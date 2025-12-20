@@ -729,3 +729,5 @@ export const QuestionForm = React.forwardRef<
 );
 
 QuestionForm.displayName = "QuestionForm";
+
+export default QuestionForm;

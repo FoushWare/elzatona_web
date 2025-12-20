@@ -58,28 +58,19 @@ export const FiltersCard: React.FC<FiltersCardProps> = ({
                   id="category-filter"
                   className="w-full sm:w-[200px]"
                 >
-                  <SelectValue placeholder="All Categories" />
+                  <SelectValue placeholder="Select a category" />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="">All Categories</SelectItem>
-                  {categoriesData.data.map(
-                    (category: { id: string; name: string }) => (
-                      <SelectItem key={category.id} value={category.id}>
-                        {category.name}
-                      </SelectItem>
-                    ),
-                  )}
+                  {categoriesData.data.map((category) => (
+                    <SelectItem key={category.id} value={category.id}>
+                      {category.name}
+                    </SelectItem>
+                  ))}
                 </SelectContent>
               </Select>
             ) : (
-              <Select disabled>
-                <SelectTrigger
-                  id="category-filter"
-                  className="w-full sm:w-[200px]"
-                >
-                  <SelectValue placeholder="Loading categories..." />
-                </SelectTrigger>
-              </Select>
+              <div className="text-sm text-gray-500">No categories available</div>
             )}
           </div>
           <div className="flex-1 w-full sm:w-auto">
@@ -95,38 +86,29 @@ export const FiltersCard: React.FC<FiltersCardProps> = ({
                   id="topic-filter"
                   className="w-full sm:w-[200px]"
                 >
-                  <SelectValue placeholder="All Topics" />
+                  <SelectValue placeholder="Select a topic" />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="">All Topics</SelectItem>
-                  {topicsData.data.map(
-                    (topic: { id: string; name: string }) => (
-                      <SelectItem key={topic.id} value={topic.id}>
-                        {topic.name}
-                      </SelectItem>
-                    ),
-                  )}
+                  {topicsData.data.map((topic) => (
+                    <SelectItem key={topic.id} value={topic.id}>
+                      {topic.name}
+                    </SelectItem>
+                  ))}
                 </SelectContent>
               </Select>
             ) : (
-              <Select disabled>
-                <SelectTrigger
-                  id="topic-filter"
-                  className="w-full sm:w-[200px]"
-                >
-                  <SelectValue placeholder="Loading topics..." />
-                </SelectTrigger>
-              </Select>
+              <div className="text-sm text-gray-500">No topics available</div>
             )}
           </div>
           {(selectedCategory || selectedTopic) && (
             <Button
               variant="outline"
               onClick={onClearFilters}
-              className="flex items-center gap-2"
+              className="flex items-center space-x-2"
             >
-              <X className="w-4 h-4" />
-              Clear Filters
+              <X className="h-4 w-4" />
+              <span>Clear Filters</span>
             </Button>
           )}
         </div>
@@ -134,3 +116,5 @@ export const FiltersCard: React.FC<FiltersCardProps> = ({
     </Card>
   );
 };
+
+export default FiltersCard;
