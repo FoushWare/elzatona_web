@@ -24,7 +24,9 @@ jobs:
       - name: Run Gitleaks (without license requirement)
         run: |
           # Install gitleaks directly to avoid license issues
-          wget https://github.com/gitleaks/gitleaks/releases/latest/download/gitleaks-linux-amd64
+          GITLEAKS_VERSION=$(curl -s "https://api.github.com/repos/gitleaks/gitleaks/releases/latest" | grep '"tag_name"' | sed -E 's/.*"tag_name": ?"v?([^"]+).*/\1/')
+          echo "Installing Gitleaks version: ${GITLEAKS_VERSION}"
+          wget "https://github.com/gitleaks/gitleaks/releases/download/v${GITLEAKS_VERSION}/gitleaks-linux-amd64"
           chmod +x gitleaks-linux-amd64
           ./gitleaks-linux-amd64 detect --config .gitleaks.toml --verbose --report-format sarif --report-path gitleaks-results.sarif || true
         env:
