@@ -532,29 +532,31 @@ export async function POST(request: NextRequest) {
 
           const newlineCount = (codeContent.match(/\n/g) || []).length;
           console.log(
-            `✅ Code field restored (NOT sanitized, using CSP protection): ${newlineCount} newlines preserved, length: ${codeContent.length}`,
+            "✅ Code field restored (NOT sanitized, using CSP protection)",
             {
+              newlineCount,
+              length: codeContent.length,
               codePreview: codeContent.substring(0, 150),
             },
           );
 
           if (newlineCount === 0 && codeContent.length > 50) {
             console.error(
-              `❌ CRITICAL: Code field has no newlines after restoration!`,
+              "❌ CRITICAL: Code field has no newlines after restoration!",
+              {
+                codePreview: codeContent.substring(0, 150),
+              },
             );
-            console.error(`   Code preview: ${codeContent.substring(0, 150)}`);
           }
         } else {
           // Explicitly set to null (not undefined) so it's included in the database insert
           sanitizedQuestion.code = null;
-          console.log(
-            `ℹ️ No code field to restore for question: ${normalizedData.title}`,
-            {
-              codeBeforeSanitization: codeBeforeSanitization,
-              processedCode: processedCode,
-              originalCode: originalCode,
-            },
-          );
+          console.log("ℹ️ No code field to restore for question", {
+            title: normalizedData.title,
+            codeBeforeSanitization,
+            processedCode,
+            originalCode,
+          });
         }
 
         // CRITICAL: Ensure code field is ALWAYS present in sanitizedQuestion
