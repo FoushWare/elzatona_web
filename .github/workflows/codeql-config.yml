@@ -24,6 +24,12 @@ paths-ignore:
   - "**/assets/**"
   - "**/*.config.js"
   - "**/*.config.ts"
+  - "apps/website/lib/questions/**"
+  - "apps/website/lib/reactQuestions.ts"
+  - "apps/website/lib/internalResources.ts"
+  - "apps/website/lib/challenges.ts"
+  - "apps/website/lib/seniorInterviewQA.ts"
+  - "apps/website/network/data/**"
 
 # Focus only on critical source code directories
 paths:
