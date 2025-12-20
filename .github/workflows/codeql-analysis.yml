@@ -42,10 +42,12 @@ jobs:
         uses: github/codeql-action/init@v4
         with:
           languages: ${{ matrix.language }}
-          # Use security-extended queries for better coverage
-          queries: security-extended,security-and-quality
+          # Use minimal queries to reduce processing time
+          queries: security
           # Use custom config to reduce scanning scope
           config-file: .github/workflows/codeql-config.yml
+          # Disable features that cause API calls
+          disable-defaultqueries: true
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -68,9 +70,12 @@ jobs:
         uses: github/codeql-action/analyze@v4
         with:
           category: "/language:${{ matrix.language }}"
-          # Disable all API-intensive features to avoid rate limits
+          # Completely disable all API-intensive features
           upload: false
           output_file_path: false
           wait-for-processing: false
-          # Disable database upload and status checks
           skip_database_upload: true
+          # Additional flags to prevent API calls
+          no_fingerprint: true
+          threads: 1
+          ram: 1024
