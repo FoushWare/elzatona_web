@@ -127,32 +127,49 @@ Object.defineProperty(window, "scrollTo", {
   value: jest.fn(),
 });
 
-// Suppress console warnings in tests
+// Helper function to sanitize log arguments
+function sanitizeForLog(value) {
+  if (typeof value === "string") {
+    return value.split("\r").join(" ").split("\n").join(" ").slice(0, 500);
+  }
+  try {
+    return JSON.stringify(value).slice(0, 500);
+  } catch {
+    return "[unserializable]";
+  }
+}
+
+// Suppress console warnings during tests
 const originalWarn = console.warn;
+console.warn = (...args) => {
+  if (
+    args[0] &&
+    typeof args[0] === "string" &&
+    (args[0].includes("Warning:") ||
+      args[0].includes("Error: Could not parse CSS"))
+  ) {
+    return;
+  }
+  // Sanitize arguments before passing to original function
+  const sanitizedArgs = args.map(arg => sanitizeForLog(arg));
+  originalWarn.call(console, ...sanitizedArgs);
+};
+
+// Suppress console errors during tests
 const originalError = console.error;
-
-beforeAll(() => {
-  console.warn = (...args) => {
-    if (
-      typeof args[0] === "string" &&
-      args[0].includes("Warning: ReactDOM.render is no longer supported")
-    ) {
-      return;
-    }
-    originalWarn.call(console, ...args);
-  };
-
-  console.error = (...args) => {
-    if (
-      typeof args[0] === "string" &&
-      (args[0].includes("Warning:") ||
-        args[0].includes("Error: Could not parse CSS"))
-    ) {
-      return;
-    }
-    originalError.call(console, ...args);
-  };
-});
+console.error = (...args) => {
+  if (
+    args[0] &&
+    typeof args[0] === "string" &&
+    (args[0].includes("Warning:") ||
+      args[0].includes("Error: Could not parse CSS"))
+  ) {
+    return;
+  }
+  // Sanitize arguments before passing to original function
+  const sanitizedArgs = args.map(arg => sanitizeForLog(arg));
+  originalError.call(console, ...sanitizedArgs);
+};
 
 afterAll(() => {
   console.warn = originalWarn;

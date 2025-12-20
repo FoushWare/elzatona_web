@@ -41,10 +41,11 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    console.log(
-      `Bulk updating topics for ${sanitizeForLog(questionIds.length)} questions:`,
-      sanitizeForLog(topics),
-    );
+    const questionCount = questionIds.length;
+    const topicsStr = sanitizeForLog(topics);
+    
+    console.log("Bulk updating topics for question count:", questionCount);
+    console.log("Topics data:", topicsStr);
 
     const results = [];
     const errors = [];
@@ -82,12 +83,14 @@ export async function POST(request: NextRequest) {
           message: "Topics updated",
         });
       } catch (error) {
-        console.error(
-          `Error processing question ${sanitizeForLog(questionId)}:`,
-          sanitizeForLog(error),
-        );
+        const questionIdStr = sanitizeForLog(questionId);
+        const errorStr = sanitizeForLog(error);
+        
+        console.error("Error processing question ID:", questionIdStr);
+        console.error("Error details:", errorStr);
+        
         errors.push(
-          `Failed to update question ${sanitizeForLog(questionId)}: ${sanitizeForLog(
+          `Failed to update question ${questionIdStr}: ${sanitizeForLog(
             error instanceof Error ? error.message : "Unknown error",
           )}`,
         );

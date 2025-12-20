@@ -12,12 +12,17 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
     const { email, password, name, role, action } = body;
 
+    // Validate and sanitize input first
+    const sanitizedEmail = typeof email === "string" ? email.trim() : "";
+    const sanitizedPassword = typeof password === "string" ? password : "";
+    const sanitizedAction = typeof action === "string" ? action.trim().toLowerCase() : "";
+
     // Validate required fields first
     if (
-      !email ||
-      typeof email !== "string" ||
-      !password ||
-      typeof password !== "string"
+      !sanitizedEmail ||
+      sanitizedEmail.length === 0 ||
+      !sanitizedPassword ||
+      sanitizedPassword.length === 0
     ) {
       return NextResponse.json(
         { success: false, error: "Email and password are required" },
@@ -27,11 +32,7 @@ export async function POST(request: NextRequest) {
 
     // Validate action parameter against allowed values
     const allowedActions = ["login", "register"];
-    if (
-      !action ||
-      typeof action !== "string" ||
-      !allowedActions.includes(action)
-    ) {
+    if (!sanitizedAction || !allowedActions.includes(sanitizedAction)) {
       return NextResponse.json(
         { success: false, error: "Invalid action. Use 'login' or 'register'" },
         { status: 400 },
@@ -39,11 +40,11 @@ export async function POST(request: NextRequest) {
     }
 
     // Explicitly check for action parameter instead of relying on user-controlled name
-    if (action === "register") {
+    if (sanitizedAction === "register") {
       // Validate and sanitize registration data
       const validationResult = validateAndSanitize(registerSchema, {
-        email,
-        password,
+        email: sanitizedEmail,
+        password: sanitizedPassword,
         name: name || "", // Ensure name is provided for registration
         role: "user",
       });
@@ -74,12 +75,12 @@ export async function POST(request: NextRequest) {
           { status: 400 },
         );
       }
-    } else if (action === "login") {
+    } else if (sanitizedAction === "login") {
       // This is a login request - action is already validated above
       // Validate and sanitize login data
       const validationResult = validateAndSanitize(loginSchema, {
-        email,
-        password,
+        email: sanitizedEmail,
+        password: sanitizedPassword,
       });
 
       if (!validationResult.success) {
