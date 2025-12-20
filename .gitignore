@@ -204,6 +204,29 @@ gitleaks-history.json
 
 # CodeQL database (generated files)
 codeql-database/
-.gitleaks.toml
 *.sarif
 .github/workflows/codeql-config.yml
+# Security scan exclusions - prevent false positives
+# Log files and scanner outputs
+*.log
+*.sarif
+.code-quality-check.*
+.sonar-scanner.log
+.backup.logs/
+.logs/
+.scannerwork/
+# Development and test files
+node_modules/
+.nx/
+coverage/
+.next/
+dist/
+build/
+# Configuration files that trigger false positives
+.github/workflows/codeql-config.yml
+# Utility scripts (development only)
+libs/utilities/scripts/
+tools/
+tests/e2e/
+.cursor/
+.gitleaks.toml
