@@ -6,12 +6,12 @@ export async function POST(request: NextRequest) {
     const { token } = await request.json();
 
     // Validate token input - prevent user-controlled security bypass
-    if (!token || typeof token !== 'string' || token.trim().length === 0) {
+    if (!token || typeof token !== "string" || token.trim().length === 0) {
       return NextResponse.json({ error: "Token is required" }, { status: 400 });
     }
 
     // Sanitize token - remove potential injection characters
-    const sanitizedToken = token.trim().replaceAll(/[<>"'&]/g, '');
+    const sanitizedToken = token.trim().replaceAll(/[<>"'&]/g, "");
 
     // Verify the Supabase token
     const decodedToken = await verifySupabaseToken(sanitizedToken);

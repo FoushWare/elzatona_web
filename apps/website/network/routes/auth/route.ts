@@ -21,10 +21,16 @@ export async function POST(request: NextRequest) {
     }
 
     // Sanitize inputs to prevent injection
-    const sanitizedEmail = typeof email === 'string' ? email.trim().toLowerCase() : '';
-    const sanitizedPassword = typeof password === 'string' ? password : '';
-    const sanitizedName = typeof name === 'string' ? name.trim() : '';
-    const sanitizedRole = typeof role === 'string' ? ['user', 'admin'].includes(role) ? role : 'user' : 'user';
+    const sanitizedEmail =
+      typeof email === "string" ? email.trim().toLowerCase() : "";
+    const sanitizedPassword = typeof password === "string" ? password : "";
+    const sanitizedName = typeof name === "string" ? name.trim() : "";
+    const sanitizedRole =
+      typeof role === "string"
+        ? ["user", "admin"].includes(role)
+          ? role
+          : "user"
+        : "user";
 
     // If name is provided, this is a registration request
     if (sanitizedName) {
