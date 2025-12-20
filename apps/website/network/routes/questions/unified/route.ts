@@ -53,9 +53,17 @@ export async function GET(request: NextRequest) {
     const { searchParams } = new URL(request.url);
 
     // Pagination parameters
-    const page = parseInt(searchParams.get("page") || "1");
-    const pageSize = parseInt(searchParams.get("pageSize") || "10");
+    const page = Number.parseInt(searchParams.get("page") || "1");
+    const pageSize = Number.parseInt(searchParams.get("pageSize") || "10");
     const offset = (page - 1) * pageSize;
+
+    const isActiveParam = searchParams.get("isActive");
+    const is_active =
+      isActiveParam === "true" ? true : isActiveParam === "false" ? false : undefined;
+    
+    const isCompleteParam = searchParams.get("isComplete");
+    const isComplete =
+      isCompleteParam === "true" ? true : isCompleteParam === "false" ? false : undefined;
 
     const filters = {
       category: searchParams.get("category") || undefined,
@@ -65,18 +73,8 @@ export async function GET(request: NextRequest) {
       difficulty: searchParams.get("difficulty") || undefined,
       learningPath: searchParams.get("learningPath") || undefined,
       sectionId: searchParams.get("sectionId") || undefined,
-      is_active:
-        searchParams.get("isActive") === "true"
-          ? true
-          : searchParams.get("isActive") === "false"
-            ? false
-            : undefined,
-      isComplete:
-        searchParams.get("isComplete") === "true"
-          ? true
-          : searchParams.get("isComplete") === "false"
-            ? false
-            : undefined,
+      is_active,
+      isComplete,
       limit: pageSize,
       orderBy:
         (searchParams.get("orderBy") as
@@ -187,11 +185,11 @@ export async function GET(request: NextRequest) {
       if (transformed.code && typeof transformed.code === "string") {
         // Handle cases where newlines might be stored as escape sequences
         transformed.code = transformed.code
-          .replace(/\\n/g, "\n") // Replace \n escape sequences with actual newlines
-          .replace(/\\r\\n/g, "\n") // Replace \r\n escape sequences
-          .replace(/\\r/g, "\n") // Replace \r escape sequences
-          .replace(/\r\n/g, "\n") // Normalize Windows line breaks
-          .replace(/\r/g, "\n"); // Normalize Mac line breaks
+          .replaceAll(/\\n/g, "\n") // Replace \n escape sequences with actual newlines
+          .replaceAll(/\\r\\n/g, "\n") // Replace \r\n escape sequences
+          .replaceAll(/\\r/g, "\n") // Replace \r escape sequences
+          .replaceAll(/\r\n/g, "\n") // Normalize Windows line breaks
+          .replaceAll(/\r/g, "\n"); // Normalize Mac line breaks
       }
 
       // Transform categories: single object -> array for display, also add category name for form
@@ -383,13 +381,13 @@ export async function POST(request: NextRequest) {
           let codeContent = String(codeField);
 
           // Convert literal \n escape sequences to actual newlines
-          codeContent = codeContent.replace(/\\n/g, "\n");
-          codeContent = codeContent.replace(/\\r\\n/g, "\n");
-          codeContent = codeContent.replace(/\\r/g, "\n");
+          codeContent = codeContent.replaceAll(/\\n/g, "\n");
+          codeContent = codeContent.replaceAll(/\\r\\n/g, "\n");
+          codeContent = codeContent.replaceAll(/\\r/g, "\n");
 
           // Normalize line breaks
-          codeContent = codeContent.replace(/\r\n/g, "\n");
-          codeContent = codeContent.replace(/\r/g, "\n");
+          codeContent = codeContent.replaceAll(/\r\n/g, "\n");
+          codeContent = codeContent.replaceAll(/\r/g, "\n");
 
           // Store processed code separately (will restore after sanitization)
           processedCode = codeContent;
@@ -512,11 +510,11 @@ export async function POST(request: NextRequest) {
 
           // Only process if not already processed
           if (!processedCode || processedCode === "") {
-            codeContent = codeContent.replace(/\\n/g, "\n");
-            codeContent = codeContent.replace(/\\r\\n/g, "\n");
-            codeContent = codeContent.replace(/\\r/g, "\n");
-            codeContent = codeContent.replace(/\r\n/g, "\n");
-            codeContent = codeContent.replace(/\r/g, "\n");
+            codeContent = codeContent.replaceAll(/\\n/g, "\n");
+            codeContent = codeContent.replaceAll(/\\r\\n/g, "\n");
+            codeContent = codeContent.replaceAll(/\\r/g, "\n");
+            codeContent = codeContent.replaceAll(/\r\n/g, "\n");
+            codeContent = codeContent.replaceAll(/\r/g, "\n");
             processedCode = codeContent;
           } else {
             codeContent = processedCode;
@@ -562,11 +560,11 @@ export async function POST(request: NextRequest) {
             originalCode !== ""
           ) {
             let codeContent = String(originalCode);
-            codeContent = codeContent.replace(/\\n/g, "\n");
-            codeContent = codeContent.replace(/\\r\\n/g, "\n");
-            codeContent = codeContent.replace(/\\r/g, "\n");
-            codeContent = codeContent.replace(/\r\n/g, "\n");
-            codeContent = codeContent.replace(/\r/g, "\n");
+            codeContent = codeContent.replaceAll(/\\n/g, "\n");
+            codeContent = codeContent.replaceAll(/\\r\\n/g, "\n");
+            codeContent = codeContent.replaceAll(/\\r/g, "\n");
+            codeContent = codeContent.replaceAll(/\r\n/g, "\n");
+            codeContent = codeContent.replaceAll(/\r/g, "\n");
             sanitizedQuestion.code = codeContent;
             processedCode = codeContent;
             console.log(
@@ -635,12 +633,11 @@ export async function POST(request: NextRequest) {
         // Map category name to category_id if needed
         let categoryId =
           sanitizedQuestion.category_id || sanitizedQuestion.category;
+        const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
         if (
           categoryId &&
           typeof categoryId === "string" &&
-          !categoryId.match(
-            /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i,
-          )
+          !uuidRegex.exec(categoryId)
         ) {
           // It's a category name, not an ID - need to look it up
           // Categories table only has 'name' column, not 'title'
