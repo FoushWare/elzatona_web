@@ -40,6 +40,27 @@ interface ProgressSummary {
   };
 }
 
+// Helper function for authentication retry logic
+const retryAuthentication = async (firebaseUser: any): Promise<boolean> => {
+  if (!firebaseUser) {
+    throw new Error("No Firebase user available for token refresh");
+  }
+  const { cookieManager } = await import("./types/cookie-manager");
+  return await cookieManager.retryAuthCookie(firebaseUser);
+};
+
+// Helper function for progress save request
+const saveProgressToServer = async (progressData: ProgressData): Promise<Response> => {
+  return await fetch("/api/progress/save", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(progressData),
+    credentials: "include",
+  });
+};
+
 interface UseSecureProgressReturn {
   progress: ProgressSummary | null;
   isLoading: boolean;
@@ -102,14 +123,7 @@ export function useSecureProgress(): UseSecureProgressReturn {
         };
 
         // Save to server
-        const response = await fetch("/api/progress/save", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(progressData),
-          credentials: "include", // Include cookies
-        });
+        const response = await saveProgressToServer(progressData);
 
         if (!response.ok) {
           const errorData = await response.json();
@@ -131,25 +145,14 @@ export function useSecureProgress(): UseSecureProgressReturn {
 
             // Try to get a fresh token and set the cookie
             try {
-              if (!firebaseUser) {
-                throw new Error("No Firebase user available for token refresh");
-              }
-              const { cookieManager } = await import("./types/cookie-manager");
-              const success = await cookieManager.retryAuthCookie(firebaseUser);
+              const success = await retryAuthentication(firebaseUser);
               if (success) {
                 console.log(
                   "✅ Auth cookie set successfully, retrying progress save...",
                 );
 
                 // Retry the request
-                const retryResponse = await fetch("/api/progress/save", {
-                  method: "POST",
-                  headers: {
-                    "Content-Type": "application/json",
-                  },
-                  body: JSON.stringify(progressData),
-                  credentials: "include",
-                });
+                const retryResponse = await saveProgressToServer(progressData);
 
                 if (retryResponse.ok) {
                   await retryResponse.json();
