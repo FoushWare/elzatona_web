@@ -1,9 +1,23 @@
 // v1.0 - Unified Question Schema
 // Centralized type definitions for the unified question system
 
+import { createClient } from "@supabase/supabase-js";
+
 // Type aliases for union types
 export type QuestionType = "multiple-choice" | "true-false" | "code";
 export type DifficultyLevel = "beginner" | "intermediate" | "advanced";
+
+// Supabase client initialization (only when environment variables are available)
+const supabaseUrl = typeof process !== "undefined" && process.env?.NEXT_PUBLIC_SUPABASE_URL 
+  ? process.env.NEXT_PUBLIC_SUPABASE_URL 
+  : "";
+const supabaseServiceRoleKey = typeof process !== "undefined" && process.env?.SUPABASE_SERVICE_ROLE_KEY 
+  ? process.env.SUPABASE_SERVICE_ROLE_KEY 
+  : "";
+
+export const supabase = supabaseUrl && supabaseServiceRoleKey 
+  ? createClient(supabaseUrl, supabaseServiceRoleKey) 
+  : null;
 
 export interface UnifiedQuestion {
   id: string;
@@ -392,7 +406,7 @@ export class UnifiedQuestionService {
     };
 
     // Process each question
-    questions.forEach((question) => {
+    questions.forEach((question: UnifiedQuestion) => {
       // Count by category
       if (question.category) {
         stats.questionsByCategory[question.category] =
@@ -428,7 +442,7 @@ export class UnifiedQuestionService {
     // Calculate average difficulty
     const difficultyValues = { beginner: 1, intermediate: 2, advanced: 3 };
     const totalDifficulty = questions.reduce(
-      (sum, q) =>
+      (sum: number, q: UnifiedQuestion) =>
         sum +
         (difficultyValues[q.difficulty as keyof typeof difficultyValues] || 0),
       0,
@@ -457,7 +471,7 @@ export class UnifiedQuestionService {
       }
     > = {};
 
-    questions.forEach((q) => {
+    questions.forEach((q: UnifiedQuestion) => {
       // Handle both string and any timestamp formats
       let date: string;
       if (typeof q.created_at === "string") {
@@ -532,7 +546,7 @@ export class UnifiedQuestionService {
     if (searchTerm) {
       const searchLower = searchTerm.toLowerCase();
       questions = questions.filter(
-        (q) =>
+        (q: UnifiedQuestion) =>
           q.title.toLowerCase().includes(searchLower) ||
           q.content.toLowerCase().includes(searchLower) ||
           (q.explanation &&
