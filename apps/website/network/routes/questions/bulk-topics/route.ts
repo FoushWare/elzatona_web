@@ -101,8 +101,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({
       success: true,
       data: {
-        message:
-          `Successfully updated topics for ${sanitizeForLog(results.length)} questions`,
+        message: `Successfully updated topics for ${sanitizeForLog(results.length)} questions`,
         results,
         errors,
         totalProcessed: questionIds.length,

@@ -13,7 +13,12 @@ export async function POST(request: NextRequest) {
     const { email, password, name, role, action } = body;
 
     // Validate required fields first
-    if (!email || typeof email !== 'string' || !password || typeof password !== 'string') {
+    if (
+      !email ||
+      typeof email !== "string" ||
+      !password ||
+      typeof password !== "string"
+    ) {
       return NextResponse.json(
         { success: false, error: "Email and password are required" },
         { status: 400 },
@@ -21,8 +26,12 @@ export async function POST(request: NextRequest) {
     }
 
     // Validate action parameter against allowed values
-    const allowedActions = ['login', 'register'];
-    if (!action || typeof action !== 'string' || !allowedActions.includes(action)) {
+    const allowedActions = ["login", "register"];
+    if (
+      !action ||
+      typeof action !== "string" ||
+      !allowedActions.includes(action)
+    ) {
       return NextResponse.json(
         { success: false, error: "Invalid action. Use 'login' or 'register'" },
         { status: 400 },
