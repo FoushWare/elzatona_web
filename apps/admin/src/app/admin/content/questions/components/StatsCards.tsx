@@ -10,7 +10,7 @@ interface StatsCardsProps {
   filteredResultsCount: number;
 }
 
-export const StatsCards: React.FC<StatsCardsProps> = ({
+export const StatsCards: React.FC<Readonly<StatsCardsProps>> = ({
   totalCount,
   categoryCount,
   activeQuestionsCount,

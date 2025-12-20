@@ -1,5 +1,5 @@
 {
-    "sonarCloudOrganization": "foushware",
-    "projectKey": "FoushWare_GreatFrontendHub",
-    "region": "EU"
+  "sonarCloudOrganization": "foushware",
+  "projectKey": "FoushWare_GreatFrontendHub",
+  "region": "EU"
 }

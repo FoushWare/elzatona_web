@@ -140,9 +140,29 @@ export function sanitizeObjectServer<T extends Record<string, any>>(obj: T): T {
 
   // Define allowed property names to prevent remote property injection
   const allowedKeys = new Set([
-    'id', 'title', 'description', 'content', 'code', 'difficulty', 'category', 'topic',
-    'email', 'password', 'name', 'role', 'userId', 'questionId', 'answer', 'explanation',
-    'createdAt', 'updatedAt', 'status', 'type', 'language', 'tags', 'metadata'
+    "id",
+    "title",
+    "description",
+    "content",
+    "code",
+    "difficulty",
+    "category",
+    "topic",
+    "email",
+    "password",
+    "name",
+    "role",
+    "userId",
+    "questionId",
+    "answer",
+    "explanation",
+    "createdAt",
+    "updatedAt",
+    "status",
+    "type",
+    "language",
+    "tags",
+    "metadata",
   ]);
 
   // Helper function to sanitize string fields
@@ -151,7 +171,7 @@ export function sanitizeObjectServer<T extends Record<string, any>>(obj: T): T {
     if (skipSanitizationFields.has(key)) {
       return value; // Preserve as-is
     }
-    
+
     // For content and other rich text fields, preserve newlines
     if (preserveNewlinesFields.has(key)) {
       // Only remove dangerous control characters, but preserve newlines and tabs
@@ -159,7 +179,7 @@ export function sanitizeObjectServer<T extends Record<string, any>>(obj: T): T {
         .replaceAll(/[\x00-\x08\x0B-\x0C\x0E-\x1F\x7F]/g, "") // Remove control chars except newline (0x0A), carriage return (0x0D), tab (0x09)
         .replaceAll("\x00", ""); // Remove null bytes
     }
-    
+
     // For other string fields, use standard sanitization
     return sanitizeInputServer(value);
   };
@@ -167,12 +187,17 @@ export function sanitizeObjectServer<T extends Record<string, any>>(obj: T): T {
   for (const key in sanitized) {
     // Validate that the key is allowed to prevent remote property injection
     if (!allowedKeys.has(key)) {
-      console.warn(`[Security] Unexpected property key: ${key}. Skipping sanitization.`);
+      console.warn(
+        `[Security] Unexpected property key: ${key}. Skipping sanitization.`,
+      );
       continue;
     }
 
     if (typeof sanitized[key] === "string") {
-      sanitized[key] = sanitizeStringField(key, sanitized[key]) as T[typeof key];
+      sanitized[key] = sanitizeStringField(
+        key,
+        sanitized[key],
+      ) as T[typeof key];
     } else if (Array.isArray(sanitized[key])) {
       sanitized[key] = sanitized[key].map((item: any) =>
         typeof item === "string" ? sanitizeInputServer(item) : item,

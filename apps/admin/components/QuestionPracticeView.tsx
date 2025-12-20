@@ -71,7 +71,7 @@ interface QuestionPracticeViewProps {
 }
 
 const getOptionLetter = (index: number): string => {
-  return String.fromCharCode(65 + index); // A, B, C, D, etc.
+  return String.fromCodePoint(65 + index); // A, B, C, D, etc.
 };
 
 export const QuestionPracticeView: React.FC<QuestionPracticeViewProps> = ({
@@ -227,7 +227,7 @@ export const QuestionPracticeView: React.FC<QuestionPracticeViewProps> = ({
       const codeContent = match[1].replace(/[`{}[\]]/g, "");
       parts.push(
         <code
-          key={match.index}
+          key={`code-${match.index}-${codeContent}`}
           className="px-1.5 py-0.5 bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-gray-100 rounded text-sm font-mono"
         >
           {codeContent}
@@ -442,7 +442,7 @@ export const QuestionPracticeView: React.FC<QuestionPracticeViewProps> = ({
 
                   return (
                     <a
-                      key={index}
+                      key={`resource-${resource.type}-${resource.url || index}`}
                       href={resource.url}
                       target="_blank"
                       rel="noopener noreferrer"

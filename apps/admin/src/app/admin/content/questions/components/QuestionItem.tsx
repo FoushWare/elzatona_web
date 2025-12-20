@@ -31,9 +31,9 @@ export const QuestionItem: React.FC<QuestionItemProps> = ({
           <div className="mt-2 flex flex-wrap gap-2">
             {/* Topics Badges */}
             {question.topics && question.topics.length > 0 ? (
-              question.topics.map((topic, index) => (
+              question.topics.map((topic) => (
                 <Badge
-                  key={`${question.id}-topic-${index}`}
+                  key={`topic-${topic.name}-${topic.is_primary}`}
                   variant={topic.is_primary ? "default" : "outline"}
                   className={`${
                     topic.is_primary
@@ -55,9 +55,9 @@ export const QuestionItem: React.FC<QuestionItemProps> = ({
 
             {/* Categories Badges */}
             {question.categories && question.categories.length > 0 ? (
-              question.categories.map((category, index) => (
+              question.categories.map((category) => (
                 <Badge
-                  key={`${question.id}-category-${index}`}
+                  key={`category-${category.name}-${category.is_primary}`}
                   variant={category.is_primary ? "default" : "secondary"}
                   className={`${
                     category.is_primary

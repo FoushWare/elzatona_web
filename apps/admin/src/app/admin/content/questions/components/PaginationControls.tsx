@@ -21,7 +21,9 @@ interface PaginationControlsProps {
   showPageInfo?: boolean;
 }
 
-export const PaginationControls: React.FC<Readonly<PaginationControlsProps>> = ({
+export const PaginationControls: React.FC<
+  Readonly<PaginationControlsProps>
+> = ({
   currentPage,
   totalPages,
   totalCount,

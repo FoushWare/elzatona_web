@@ -75,7 +75,7 @@ export default function ProblemSolvingEditor({
   onSave,
   onCancel,
   isEditing = false,
-}: ProblemSolvingEditorProps): JSX.Element {
+}: Readonly<ProblemSolvingEditorProps>): JSX.Element {
   // Theme management
   const [theme, setTheme] = useState<"light" | "dark" | "system">("system");
   const [isDark, setIsDark] = useState(false);
@@ -105,7 +105,7 @@ export default function ProblemSolvingEditor({
   // Code editor states
   const [starterCode, setStarterCode] = useState("");
   const [solutionCode, setSolutionCode] = useState("");
-  const [activeTab, setActiveTab] = useState<"starter" | "solution">("starter");
+  const [, setActiveTab] = useState<"starter" | "solution">("starter");
   // File explorer states
   const [activeFile, setActiveFile] = useState<string>("");
   const [fileTree, setFileTree] = useState<FileNode[]>([]);
@@ -113,10 +113,10 @@ export default function ProblemSolvingEditor({
     new Set(),
   );
   const [openFiles, setOpenFiles] = useState<string[]>([]);
-  const [newFileName, setNewFileName] = useState("");
-  const [newFolderName, setNewFolderName] = useState("");
-  const [showAddFile, setShowAddFile] = useState(false);
-  const [showAddFolder, setShowAddFolder] = useState(false);
+  const [, setNewFileName] = useState("");
+  const [, setNewFolderName] = useState("");
+  const [, setShowAddFile] = useState(false);
+  const [, setShowAddFolder] = useState(false);
   const [showFileExplorer, setShowFileExplorer] = useState(true);
   // Dynamic field states
   const [newConstraint, setNewConstraint] = useState("");
@@ -155,7 +155,7 @@ export default function ProblemSolvingEditor({
   }, [task]);
   // Theme detection
   useEffect(() => {
-    const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
+    const mediaQuery = globalThis.window?.matchMedia("(prefers-color-scheme: dark)");
     const updateTheme = () => {
       setIsDark(theme === "dark" || (theme === "system" && mediaQuery.matches));
     };
