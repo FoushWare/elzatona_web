@@ -25,7 +25,7 @@ export const useAdminAuth = (): UseAdminAuthReturn => {
   useEffect(() => {
     const checkSession = () => {
       try {
-        if (typeof window === "undefined") {
+        if (globalThis.window === undefined) {
           setIsLoading(false);
           return;
         }
@@ -65,7 +65,7 @@ export const useAdminAuth = (): UseAdminAuthReturn => {
         }
       } catch (error) {
         console.error("Error checking session:", error);
-        if (typeof window !== "undefined") {
+        if (globalThis.window !== undefined) {
           localStorage.removeItem(ADMIN_SESSION_KEY);
         }
         setIsAuthenticated(false);
@@ -91,7 +91,7 @@ export const useAdminAuth = (): UseAdminAuthReturn => {
 
       if (result.success && result.admin) {
         // Save session to localStorage (only in browser)
-        if (typeof window !== "undefined") {
+        if (globalThis.window !== undefined) {
           localStorage.setItem(ADMIN_SESSION_KEY, JSON.stringify(result.admin));
         }
 
