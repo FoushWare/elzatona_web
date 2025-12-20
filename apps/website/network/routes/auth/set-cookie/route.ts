@@ -5,12 +5,16 @@ export async function POST(request: NextRequest) {
   try {
     const { token } = await request.json();
 
-    if (!token) {
+    // Validate token input - prevent user-controlled security bypass
+    if (!token || typeof token !== 'string' || token.trim().length === 0) {
       return NextResponse.json({ error: "Token is required" }, { status: 400 });
     }
 
-    // Verify the Firebase token
-    const decodedToken = await verifySupabaseToken(token);
+    // Sanitize token - remove potential injection characters
+    const sanitizedToken = token.trim().replace(/[<>\"'&]/g, '');
+
+    // Verify the Supabase token
+    const decodedToken = await verifySupabaseToken(sanitizedToken);
     if (!decodedToken) {
       return NextResponse.json({ error: "Invalid token" }, { status: 401 });
     }
