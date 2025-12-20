@@ -82,12 +82,12 @@ Since we found hardcoded secrets in current files, they **likely exist in git hi
 > > > > > > > origin/security/fix-gitleaks-config
 
 - Likely in: Multiple documentation files
-- Commits: Documentation updates, setup guides
-=======
+- # Commits: Documentation updates, setup guides
+
 3. **Supabase Anon Key:** `YOUR_SUPABASE_KEY_HERE
    - Likely in: Multiple documentation files
    - Commits: Documentation updates, setup guides
->>>>>>> origin/main
+     > > > > > > > origin/main
 
 ## 🎯 Action Plan Based on Results
 

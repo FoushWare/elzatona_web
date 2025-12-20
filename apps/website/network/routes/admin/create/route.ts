@@ -139,9 +139,22 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Validate email format
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) {
+    // Validate email format using a simple, safe approach
+    if (
+      !email.includes("@") ||
+      !email.includes(".") ||
+      email.length < 5 ||
+      email.length > 254
+    ) {
+      return NextResponse.json(
+        { success: false, error: "Invalid email format" },
+        { status: 400 },
+      );
+    }
+
+    // Additional validation: check for valid email structure
+    const parts = email.split("@");
+    if (parts.length !== 2 || parts[0].length === 0 || parts[1].length === 0) {
       return NextResponse.json(
         { success: false, error: "Invalid email format" },
         { status: 400 },

@@ -30,18 +30,17 @@
 ### Secrets Found in Current Files (Now Fixed):
 
 1. **Firebase API Key:** `AIzaSyBXlcfcdyIqoeJOb2gXcxpRSmQO7lEP82Y`
-<<<<<<< HEAD
+   <<<<<<< HEAD
    <<<<<<< HEAD
 2. # **Supabase Anon Key:** `YOUR_SUPABASE_KEY_HERE...`
 3. **Supabase Anon Key:** `YOUR_SUPABASE_KEY_HERE
    > > > > > > > origin/security/fix-gitleaks-config
 4. **Supabase Service Role Key:** `process.env.SUPABASE_SERVICE_ROLE_KEY` ⚠️ CRITICAL
-5. **Project Identifiers:** `hpnewqkvpnthpohvxcmq`, `fir-demo-project-adffb`
-=======
-2. **Supabase Anon Key:** `YOUR_SUPABASE_KEY_HERE
-3. **Supabase Service Role Key:** `process.env.SUPABASE_SERVICE_ROLE_KEY` ⚠️ CRITICAL
-4. **Project Identifiers:** `hpnewqkvpnthpohvxcmq`, `fir-demo-project-adffb`
->>>>>>> origin/main
+5. # **Project Identifiers:** `hpnewqkvpnthpohvxcmq`, `fir-demo-project-adffb`
+6. **Supabase Anon Key:** `YOUR_SUPABASE_KEY_HERE
+7. **Supabase Service Role Key:** `process.env.SUPABASE_SERVICE_ROLE_KEY` ⚠️ CRITICAL
+8. **Project Identifiers:** `hpnewqkvpnthpohvxcmq`, `fir-demo-project-adffb`
+   > > > > > > > origin/main
 
 ### ⚠️ These Secrets Likely Exist in Git History
 

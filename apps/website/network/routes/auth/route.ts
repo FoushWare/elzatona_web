@@ -10,7 +10,7 @@ import {
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const { email, password, name, role } = body;
+    const { email, password, name, role, action } = body;
 
     if (!email || !password) {
       return NextResponse.json(
@@ -19,13 +19,13 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // If name is provided, this is a registration request
-    if (name) {
+    // Explicitly check for action parameter instead of relying on user-controlled name
+    if (action === "register") {
       // Validate and sanitize registration data
       const validationResult = validateAndSanitize(registerSchema, {
         email,
         password,
-        name,
+        name: name || "", // Ensure name is provided for registration
         role: "user",
       });
 
@@ -55,7 +55,7 @@ export async function POST(request: NextRequest) {
           { status: 400 },
         );
       }
-    } else {
+    } else if (action === "login") {
       // This is a login request
       // Validate and sanitize login data
       const validationResult = validateAndSanitize(loginSchema, {
@@ -86,6 +86,11 @@ export async function POST(request: NextRequest) {
           { status: 401 },
         );
       }
+    } else {
+      return NextResponse.json(
+        { success: false, error: "Invalid action. Use 'login' or 'register'" },
+        { status: 400 },
+      );
     }
   } catch (error) {
     console.error("Auth API error:", error);

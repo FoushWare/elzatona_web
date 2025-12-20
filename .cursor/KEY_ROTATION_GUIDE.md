@@ -42,8 +42,8 @@
 =======
 **Exposed Key:** `YOUR_SUPABASE_KEY_HERE
 
->>>>>>> origin/main
-**Steps:**
+> > > > > > > origin/main
+> > > > > > > **Steps:**
 
 1. Same dashboard as above
 2. Find the **anon** key

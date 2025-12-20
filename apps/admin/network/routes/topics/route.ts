@@ -4,24 +4,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
 
-<<<<<<< HEAD
-function sanitizeForLog(value: unknown): string {
-  const raw =
-    typeof value === "string"
-      ? value
-      : (() => {
-          try {
-            return JSON.stringify(value);
-          } catch {
-            return "[unserializable]";
-          }
-        })();
-
-  return raw.split("\r").join(" ").split("\n").join(" ").slice(0, 500);
-}
-
-=======
->>>>>>> origin/main
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
 const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
 const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
@@ -92,27 +74,13 @@ export async function GET() {
 export async function POST(request: NextRequest) {
   try {
     const topicData = await request.json();
-<<<<<<< HEAD
-    console.log(
-      "🔄 Admin API: Creating topic with data:",
-      sanitizeForLog(topicData),
-    );
-=======
     console.log("🔄 Admin API: Creating topic with data:", topicData);
->>>>>>> origin/main
 
     // Validate required fields
     const requiredFields = ["name"];
     for (const field of requiredFields) {
       if (!topicData[field]) {
-<<<<<<< HEAD
-        console.error(
-          "❌ Admin API: Missing required field:",
-          sanitizeForLog(field),
-        );
-=======
         console.error("❌ Admin API: Missing required field:", field);
->>>>>>> origin/main
         return NextResponse.json(
           {
             success: false,
