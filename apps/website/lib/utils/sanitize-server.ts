@@ -138,7 +138,20 @@ export function sanitizeObjectServer<T extends Record<string, any>>(obj: T): T {
   // These fields are preserved exactly as-is without any modification
   const skipSanitizationFields = ["code"];
 
+  // Define allowed property names to prevent remote property injection
+  const allowedKeys = new Set([
+    'id', 'title', 'description', 'content', 'code', 'difficulty', 'category', 'topic',
+    'email', 'password', 'name', 'role', 'userId', 'questionId', 'answer', 'explanation',
+    'createdAt', 'updatedAt', 'status', 'type', 'language', 'tags', 'metadata'
+  ]);
+
   for (const key in sanitized) {
+    // Validate that the key is allowed to prevent remote property injection
+    if (!allowedKeys.has(key)) {
+      console.warn(`[Security] Unexpected property key: ${key}. Skipping sanitization.`);
+      continue;
+    }
+
     if (typeof sanitized[key] === "string") {
       // For code field, skip sanitization entirely - we'll use CSP protection instead
       if (skipSanitizationFields.includes(key)) {
