@@ -1,11 +1,10 @@
+export type LearningCardType = "core-technologies" | "framework-questions" | "problem-solving" | "system-design";
+export type LearningCardDifficulty = "beginner" | "intermediate" | "advanced";
+
 export interface LearningCard {
   id: string;
   title: string;
-  type:
-    | "core-technologies"
-    | "framework-questions"
-    | "problem-solving"
-    | "system-design";
+  type: LearningCardType;
   description: string;
   color: string;
   icon: string;
@@ -16,7 +15,7 @@ export interface LearningCard {
   metadata: {
     question_count: number;
     estimatedTime: string;
-    difficulty: "beginner" | "intermediate" | "advanced";
+    difficulty: LearningCardDifficulty;
     topics: string[];
     categories: LearningCardCategory[];
   };
@@ -45,7 +44,7 @@ export interface LearningPlanCard {
   card: LearningCard;
   question_count: number;
   timeLimit: number; // in minutes
-  difficulty: "beginner" | "intermediate" | "advanced";
+  difficulty: LearningCardDifficulty;
   is_active: boolean;
   created_at: Date;
   updated_at: Date;
@@ -68,11 +67,7 @@ export interface CardProgress {
 
 export interface LearningCardFormData {
   title: string;
-  type:
-    | "core-technologies"
-    | "framework-questions"
-    | "problem-solving"
-    | "system-design";
+  type: LearningCardType;
   description: string;
   color: string;
   icon: string;
@@ -81,7 +76,7 @@ export interface LearningCardFormData {
   metadata: {
     question_count: number;
     estimatedTime: string;
-    difficulty: "beginner" | "intermediate" | "advanced";
+    difficulty: LearningCardDifficulty;
     topics: string[];
     categories: Omit<LearningCardCategory, "id">[];
   };

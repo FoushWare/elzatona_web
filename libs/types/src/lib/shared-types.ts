@@ -12,10 +12,4 @@ export type {
 // Export resource types but exclude LearningPath to avoid conflict with unified-question-schema
 export type { ResourceCategory, ResourceType } from "./resource";
 export type { LearningResource, ResourceCategoryInfo } from "./resource";
-// export * from './auth'; // Auth types moved to shared-contexts
-// export * from './common'; // File does not exist
-// export * from './frontend-tasks'; // File does not exist
-// export * from './learning-paths'; // File does not exist
-// export * from './problem-solving'; // File does not exist
 export * from "./progress";
-// export * from './user'; // File does not exist

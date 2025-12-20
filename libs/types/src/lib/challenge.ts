@@ -1,5 +1,8 @@
 export type Difficulty = "easy" | "medium" | "hard";
 export type Category = "html" | "css" | "javascript" | "react";
+export type TestCaseType = "html" | "css" | "javascript";
+export type TestInput = Record<string, unknown> | null;
+export type TestOutput = string | boolean | number | null;
 
 export interface Challenge {
   id: string;
@@ -28,9 +31,9 @@ export interface TestCase {
   id: string;
   name: string;
   description: string;
-  input: Record<string, unknown> | null;
-  expectedOutput: string | boolean | number | null;
-  type: "html" | "css" | "javascript";
+  input: TestInput;
+  expectedOutput: TestOutput;
+  type: TestCaseType;
 }
 
 export interface ChallengeFilters {
