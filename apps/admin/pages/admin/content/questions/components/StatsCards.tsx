@@ -10,7 +10,7 @@ interface StatsCardsProps {
   filteredResultsCount: number;
 }
 
-export const StatsCards: React.FC<StatsCardsProps> = ({
+const StatsCards: React.FC<StatsCardsProps> = ({
   totalCount,
   categoryCount,
   activeQuestionsCount,
@@ -92,3 +92,5 @@ export const StatsCards: React.FC<StatsCardsProps> = ({
     </div>
   );
 };
+export default StatsCards;
+export { StatsCards };

@@ -51,7 +51,7 @@ interface StatsSectionProps {
   };
 }
 
-export const StatsSection: React.FC<StatsSectionProps> = ({ stats }) => {
+const StatsSection: React.FC<StatsSectionProps> = ({ stats }) => {
   return (
     <div className="grid grid-cols-2 md:grid-cols-5 gap-4 mb-8">
       <Suspense fallback={<LoadingSkeleton />}>
@@ -97,3 +97,6 @@ export const StatsSection: React.FC<StatsSectionProps> = ({ stats }) => {
     </div>
   );
 };
+
+export default StatsSection;
+export { StatsSection };

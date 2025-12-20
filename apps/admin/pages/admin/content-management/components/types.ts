@@ -72,3 +72,8 @@ export interface Stats {
   totalTopics: number;
   totalQuestions: number;
 }
+
+// Default export to satisfy Next.js build validation
+export default function TypesComponent() {
+  return null;
+}

@@ -23,7 +23,7 @@ interface SearchAndFiltersProps {
   onFilterChange: (value: string) => void;
 }
 
-export const SearchAndFilters: React.FC<SearchAndFiltersProps> = ({
+const SearchAndFilters: React.FC<SearchAndFiltersProps> = ({
   searchTerm,
   onSearchChange,
   filterCardType,
@@ -62,3 +62,6 @@ export const SearchAndFilters: React.FC<SearchAndFiltersProps> = ({
     </div>
   );
 };
+
+export default SearchAndFilters;
+export { SearchAndFilters };

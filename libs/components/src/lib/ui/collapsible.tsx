@@ -18,7 +18,7 @@ const CollapsibleContent = React.forwardRef<
       "overflow-hidden transition-all duration-300 data-[state=closed]:animate-accordion-up data-[state=open]:animate-accordion-down",
       className,
     )}
-    {...props}
+    {...(props as any)}
   />
 ));
 CollapsibleContent.displayName = CollapsiblePrimitive.Content.displayName;

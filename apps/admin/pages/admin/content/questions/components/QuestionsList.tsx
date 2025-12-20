@@ -27,7 +27,7 @@ interface QuestionsListProps {
   onCreate: () => void;
 }
 
-export const QuestionsList: React.FC<QuestionsListProps> = ({
+const QuestionsList: React.FC<QuestionsListProps> = ({
   questions,
   currentPage,
   totalPages,
@@ -96,3 +96,5 @@ export const QuestionsList: React.FC<QuestionsListProps> = ({
     </Card>
   );
 };
+export default QuestionsList;
+export { QuestionsList };

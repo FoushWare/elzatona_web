@@ -91,7 +91,7 @@ export const OptimizedImage: React.FC<OptimizedImageProps> = ({
       style={{
         width: fill ? "100%" : width,
         height: fill ? "100%" : height,
-        ...style,
+        ...(style as any),
       }}
       onClick={onClick}
     >

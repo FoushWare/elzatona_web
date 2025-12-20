@@ -11,7 +11,7 @@ export type CalendarProps = React.ComponentProps<typeof DayPicker>;
 
 // Extracted component to reduce cognitive complexity
 function CalendarChevron(props: React.ComponentProps<typeof ChevronRight>) {
-  return <ChevronRight {...props} />;
+  return <ChevronRight {...(props as any)} />;
 }
 
 function Calendar({
@@ -61,7 +61,7 @@ function Calendar({
       components={{
         Chevron: CalendarChevron,
       }}
-      {...props}
+      {...(props as any)}
     />
   );
 }

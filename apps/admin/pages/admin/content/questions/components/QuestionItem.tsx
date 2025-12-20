@@ -23,7 +23,7 @@ const getDifficultyVariant = (difficulty: string) => {
   }
 };
 
-export const QuestionItem: React.FC<QuestionItemProps> = ({
+const QuestionItem: React.FC<QuestionItemProps> = ({
   question,
   onView,
   onEdit,
@@ -135,3 +135,5 @@ export const QuestionItem: React.FC<QuestionItemProps> = ({
     </div>
   );
 };
+export default QuestionItem;
+export { QuestionItem };

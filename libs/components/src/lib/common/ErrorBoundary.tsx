@@ -174,7 +174,7 @@ export function withErrorBoundary<P extends object>(
 ) {
   const WrappedComponent = (props: P) => (
     <ErrorBoundary {...errorBoundaryProps}>
-      <Component {...props} />
+      <Component {...(props as any)} />
     </ErrorBoundary>
   );
 

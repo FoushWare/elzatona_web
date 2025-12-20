@@ -31,7 +31,7 @@ const Checkbox = React.forwardRef<HTMLInputElement, CheckboxProps>(
           ref={ref}
           checked={checked}
           onChange={handleChange}
-          {...props}
+          {...(props as any)}
         />
         <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
           <Check

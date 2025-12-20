@@ -26,7 +26,7 @@ interface FiltersCardProps {
   onClearFilters: () => void;
 }
 
-export const FiltersCard: React.FC<FiltersCardProps> = ({
+const FiltersCard: React.FC<FiltersCardProps> = ({
   selectedCategory,
   selectedTopic,
   categoriesData,
@@ -134,3 +134,5 @@ export const FiltersCard: React.FC<FiltersCardProps> = ({
     </Card>
   );
 };
+export default FiltersCard;
+export { FiltersCard };

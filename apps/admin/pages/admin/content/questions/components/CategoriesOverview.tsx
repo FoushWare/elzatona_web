@@ -23,7 +23,7 @@ interface CategoriesOverviewProps {
   categoryCounts: Category[];
 }
 
-export const CategoriesOverview: React.FC<CategoriesOverviewProps> = ({
+const CategoriesOverview: React.FC<CategoriesOverviewProps> = ({
   categoryCounts,
 }) => {
   return (
@@ -107,3 +107,6 @@ export const CategoriesOverview: React.FC<CategoriesOverviewProps> = ({
     </Card>
   );
 };
+
+export default CategoriesOverview;
+export { CategoriesOverview };

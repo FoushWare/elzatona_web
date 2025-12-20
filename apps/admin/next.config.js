@@ -13,20 +13,24 @@ const nextConfig = {
     "@elzatona/types",
     "nuqs",
   ],
-  experimental: {
-    turbo: {
-      rules: {
-        "*.svg": {
-          loaders: ["@svgr/webpack"],
-          as: "*.js",
-        },
-      },
-    },
-  },
   // Configure build to handle error pages
   generateBuildId: async () => {
     // Use a static build ID to ensure consistent builds
     return "admin-build";
+  },
+  // Handle TypeScript compilation issues
+  experimental: {
+    forceSwcTransforms: true,
+  },
+  // Configure webpack to handle CSS type conflicts
+  webpack: (config, { isServer }) => {
+    if (!isServer) {
+      config.resolve.fallback = {
+        ...config.resolve.fallback,
+        fs: false,
+      };
+    }
+    return config;
   },
 };
 

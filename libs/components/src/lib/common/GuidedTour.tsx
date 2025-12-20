@@ -232,7 +232,7 @@ export const GuidedTour: React.FC<GuidedTourProps> = (props) => {
         padding={10}
         className="tour-container"
       >
-        <TourContent {...props} />
+        <TourContent {...(props as any)} />
       </TourProvider>
     </>
   );

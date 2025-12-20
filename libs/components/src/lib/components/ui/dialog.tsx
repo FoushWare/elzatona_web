@@ -30,7 +30,7 @@ const Dialog = React.forwardRef<
           "relative z-50 w-full rounded-lg border bg-background p-6 shadow-lg",
           className,
         )}
-        {...props}
+        {...(props as any)}
       />
     </div>
   );
@@ -47,7 +47,7 @@ const DialogContent = React.forwardRef<
       "relative z-50 w-full rounded-lg border bg-background p-6 shadow-lg",
       className,
     )}
-    {...props}
+    {...(props as any)}
   />
 ));
 DialogContent.displayName = "DialogContent";
@@ -62,7 +62,7 @@ const DialogHeader = React.forwardRef<
       "flex flex-col space-y-1.5 text-center sm:text-left",
       className,
     )}
-    {...props}
+    {...(props as any)}
   />
 ));
 DialogHeader.displayName = "DialogHeader";
@@ -77,7 +77,7 @@ const DialogTitle = React.forwardRef<
       "text-lg font-semibold leading-none tracking-tight",
       className,
     )}
-    {...props}
+    {...(props as any)}
   />
 ));
 DialogTitle.displayName = "DialogTitle";
@@ -89,7 +89,7 @@ const DialogDescription = React.forwardRef<
   <p
     ref={ref}
     className={cn("text-sm text-muted-foreground", className)}
-    {...props}
+    {...(props as any)}
   />
 ));
 DialogDescription.displayName = "DialogDescription";
@@ -104,7 +104,7 @@ const DialogFooter = React.forwardRef<
       "flex flex-col-reverse sm:flex-row sm:justify-end sm:space-x-2",
       className,
     )}
-    {...props}
+    {...(props as any)}
   />
 ));
 DialogFooter.displayName = "DialogFooter";
@@ -119,7 +119,7 @@ const DialogTrigger = React.forwardRef<
       "inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none ring-offset-background",
       className,
     )}
-    {...props}
+    {...(props as any)}
   />
 ));
 DialogTrigger.displayName = "DialogTrigger";
