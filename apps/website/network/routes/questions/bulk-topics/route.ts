@@ -43,7 +43,7 @@ export async function POST(request: NextRequest) {
 
     const questionCount = questionIds.length;
     const topicsStr = sanitizeForLog(topics);
-    
+
     console.log("Bulk updating topics for question count:", questionCount);
     console.log("Topics data:", topicsStr);
 
@@ -85,10 +85,10 @@ export async function POST(request: NextRequest) {
       } catch (error) {
         const questionIdStr = sanitizeForLog(questionId);
         const errorStr = sanitizeForLog(error);
-        
+
         console.error("Error processing question ID:", questionIdStr);
         console.error("Error details:", errorStr);
-        
+
         errors.push(
           `Failed to update question ${questionIdStr}: ${sanitizeForLog(
             error instanceof Error ? error.message : "Unknown error",

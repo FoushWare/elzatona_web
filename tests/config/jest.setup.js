@@ -163,7 +163,7 @@ console.warn = (...args) => {
     return;
   }
   // Sanitize arguments before passing to original function
-  const sanitizedArgs = args.map(arg => sanitizeForLog(arg));
+  const sanitizedArgs = args.map((arg) => sanitizeForLog(arg));
   originalWarn.call(console, ...sanitizedArgs);
 };
 
@@ -179,7 +179,7 @@ console.error = (...args) => {
     return;
   }
   // Sanitize arguments before passing to original function
-  const sanitizedArgs = args.map(arg => sanitizeForLog(arg));
+  const sanitizedArgs = args.map((arg) => sanitizeForLog(arg));
   originalError.call(console, ...sanitizedArgs);
 };
 

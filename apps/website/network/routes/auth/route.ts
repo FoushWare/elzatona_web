@@ -11,7 +11,8 @@ function sanitizeInput(email: unknown, password: unknown, action: unknown) {
   return {
     sanitizedEmail: typeof email === "string" ? email.trim() : "",
     sanitizedPassword: typeof password === "string" ? password : "",
-    sanitizedAction: typeof action === "string" ? action.trim().toLowerCase() : "",
+    sanitizedAction:
+      typeof action === "string" ? action.trim().toLowerCase() : "",
   };
 }
 
@@ -36,7 +37,11 @@ function validateAction(action: string) {
   return null;
 }
 
-async function handleRegistration(email: string, password: string, name: unknown) {
+async function handleRegistration(
+  email: string,
+  password: string,
+  name: unknown,
+) {
   const validationResult = validateAndSanitize(registerSchema, {
     email,
     password,
@@ -108,13 +113,13 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
     const { email, password, name, role, action } = body;
 
-    const { sanitizedEmail, sanitizedPassword, sanitizedAction } = sanitizeInput(
-      email,
-      password,
-      action,
-    );
+    const { sanitizedEmail, sanitizedPassword, sanitizedAction } =
+      sanitizeInput(email, password, action);
 
-    const validationError = validateRequiredFields(sanitizedEmail, sanitizedPassword);
+    const validationError = validateRequiredFields(
+      sanitizedEmail,
+      sanitizedPassword,
+    );
     if (validationError) return validationError;
 
     const actionError = validateAction(sanitizedAction);
