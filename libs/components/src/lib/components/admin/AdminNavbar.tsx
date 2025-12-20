@@ -21,6 +21,16 @@ import {
 import { useAdminAuth, useTheme } from "@elzatona/contexts";
 import AlzatonaLogo from "../../common/AlzatonaLogo";
 
+const getThemeClasses = (isDarkMode: boolean, isClient: boolean) => ({
+  navbarBg: isClient && isDarkMode ? "bg-red-700" : "bg-red-600",
+  logoText: isClient && isDarkMode ? "text-white hover:text-red-100" : "text-white hover:text-red-50",
+  titleText: isClient && isDarkMode ? "text-white drop-shadow-sm" : "text-white drop-shadow-md",
+  subtitleText: isClient && isDarkMode ? "text-red-50 drop-shadow-sm" : "text-red-100 drop-shadow-sm",
+  themeButton: isClient && isDarkMode 
+    ? "bg-white/25 text-white hover:bg-white/35 border border-white/40"
+    : "bg-white/30 text-white hover:bg-white/40 border border-white/50"
+});
+
 export default function AdminNavbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
@@ -31,6 +41,8 @@ export default function AdminNavbar() {
   const { isDarkMode, toggleDarkMode } = useTheme();
   const router = useRouter();
   const pathname = usePathname();
+
+  const themeClasses = getThemeClasses(isDarkMode, isClient);
 
   // Prevent hydration mismatch by only using theme after client-side hydration
   useEffect(() => {
@@ -117,7 +129,7 @@ export default function AdminNavbar() {
     return (
       <nav
         className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 shadow-lg backdrop-blur-sm ${
-          isClient && isDarkMode ? "bg-red-700" : "bg-red-600"
+          themeClasses.navbarBg
         }`}
         suppressHydrationWarning
       >
@@ -127,9 +139,7 @@ export default function AdminNavbar() {
             <Link
               href="/"
               className={`flex items-center space-x-2 transition-colors duration-200 flex-shrink-0 ${
-                isClient && isDarkMode
-                  ? "text-white hover:text-red-100"
-                  : "text-white hover:text-red-50"
+                themeClasses.logoText
               }`}
               aria-label="Go to home page"
             >
@@ -140,18 +150,14 @@ export default function AdminNavbar() {
             <div className="flex-1 text-center hidden md:block min-w-0">
               <h1
                 className={`text-lg sm:text-xl font-bold truncate ${
-                  isClient && isDarkMode
-                    ? "text-white drop-shadow-sm"
-                    : "text-white drop-shadow-md"
+                  themeClasses.titleText
                 }`}
               >
                 Admin Access Portal
               </h1>
               <p
                 className={`text-xs sm:text-sm font-medium truncate ${
-                  isClient && isDarkMode
-                    ? "text-red-50 drop-shadow-sm"
-                    : "text-red-100 drop-shadow-sm"
+                  themeClasses.subtitleText
                 }`}
               >
                 Secure Authentication Required
@@ -164,9 +170,7 @@ export default function AdminNavbar() {
               <button
                 onClick={toggleDarkMode}
                 className={`p-2 rounded-lg transition-all duration-200 shadow-sm hover:shadow-md hover:scale-105 active:scale-95 ${
-                  isClient && isDarkMode
-                    ? "bg-white/25 text-white hover:bg-white/35 border border-white/40"
-                    : "bg-white/30 text-white hover:bg-white/40 border border-white/50"
+                  themeClasses.themeButton
                 }`}
                 aria-label="Toggle theme"
                 title={
