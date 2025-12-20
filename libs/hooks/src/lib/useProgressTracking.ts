@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 
-interface WindowWithGuidance extends Window {
+interface WindowWithGuidance extends globalThis.Window {
   triggerSignInGuidance?: (
     trigger: string,
     context: Record<string, unknown>,
@@ -66,12 +66,12 @@ export const useProgressTracking = () => {
 
     // Trigger sign-in guidance if needed
     if (
-      typeof window !== "undefined" &&
-      (window as WindowWithGuidance).triggerSignInGuidance
+      globalThis.window !== undefined &&
+      (globalThis.window as WindowWithGuidance).triggerSignInGuidance
     ) {
       const newCount = progress.completedQuestions + 1;
       if (newCount % 5 === 0) {
-        (window as WindowWithGuidance).triggerSignInGuidance?.("progress", {
+        (globalThis.window as WindowWithGuidance).triggerSignInGuidance?.("progress", {
           progressCount: newCount,
         });
       }
@@ -90,10 +90,10 @@ export const useProgressTracking = () => {
 
     // Trigger sign-in guidance for achievements
     if (
-      typeof window !== "undefined" &&
-      (window as WindowWithGuidance).triggerSignInGuidance
+      globalThis.window !== undefined &&
+      (globalThis.window as WindowWithGuidance).triggerSignInGuidance
     ) {
-      (window as WindowWithGuidance).triggerSignInGuidance?.("achievement", {
+      (globalThis.window as WindowWithGuidance).triggerSignInGuidance?.("achievement", {
         achievement,
       });
     }
@@ -108,11 +108,11 @@ export const useProgressTracking = () => {
 
     // Trigger sign-in guidance for roadmap
     if (
-      typeof window !== "undefined" &&
-      (window as WindowWithGuidance).triggerSignInGuidance &&
+      globalThis.window !== undefined &&
+      (globalThis.window as WindowWithGuidance).triggerSignInGuidance &&
       sections.length >= 3
     ) {
-      (window as WindowWithGuidance).triggerSignInGuidance?.("roadmap", {
+      (globalThis.window as WindowWithGuidance).triggerSignInGuidance?.("roadmap", {
         roadmapSections: sections.length,
       });
     }
