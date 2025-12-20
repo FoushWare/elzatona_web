@@ -20,8 +20,11 @@ paths = [
     "docs/.*",
     "reports/.*",
 <<<<<<< HEAD
+<<<<<<< HEAD
     ".*\\.env.*"
 =======
+=======
+>>>>>>> origin/main
     ".*\\.env.*",
     ".*\\.lock",
     "package-lock\\.json",
@@ -29,7 +32,10 @@ paths = [
     ".nx/workspace-data/.*",
     "yarn\\.lock",
     "pnpm-lock\\.yaml"
+<<<<<<< HEAD
 >>>>>>> origin/security/fix-gitleaks-config
+=======
+>>>>>>> origin/main
 ]
 
 # Default rules
@@ -45,6 +51,7 @@ id = "aws-secret-key"
 regex = '''(?i)aws[\w._%+-:.]+@[\w.-]+\.[a-zA-Z]{2,}'''
 keywords = ["aws"]
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 [[rules]]
 description = "Generic API Key"
@@ -78,4 +85,6 @@ keywords = ["firebase", "web:"]
 
 =======
 >>>>>>> origin/security/fix-gitleaks-config
+=======
+>>>>>>> origin/main
 # Add more default rules as needed...

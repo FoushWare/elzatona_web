@@ -1,5 +1,0 @@
-// Auto-generated route handler
-// This file imports from network/routes/ to maintain Next.js routing structure
-// Source: /Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/apps/website/network/routes/admin/frontend-tasks/[id]/route.ts
-
-export * from "../../../../../../network/routes/admin/frontend-tasks/[id]/route";

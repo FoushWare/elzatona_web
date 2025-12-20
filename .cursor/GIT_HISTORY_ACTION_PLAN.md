@@ -11,12 +11,18 @@ Since we found hardcoded secrets in current files, it's **highly likely** these 
 ### Secrets Likely in Git History:
 
 1. **Firebase API Key:** `AIzaSyBXlcfcdyIqoeJOb2gXcxpRSmQO7lEP82Y`
+<<<<<<< HEAD
    <<<<<<< HEAD
 2. # **Supabase Anon Key:** `YOUR_SUPABASE_KEY_HERE.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhwbmV3cWt2cG50aHBvaHZ4Y21xIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjA2NjA0MTgsImV4cCI6MjA3NjIzNjQxOH0.UMmriJb5HRr9W_56GilNNDWksvlFEb1V9c_PuBK-H3s`
 3. **Supabase Anon Key:** `YOUR_SUPABASE_KEY_HERE
    > > > > > > > origin/security/fix-gitleaks-config
 4. **Supabase Service Role Key:** `process.env.SUPABASE_SERVICE_ROLE_KEY`
 5. **Project Identifiers:** `hpnewqkvpnthpohvxcmq`, `fir-demo-project-adffb`
+=======
+2. **Supabase Anon Key:** `YOUR_SUPABASE_KEY_HERE
+3. **Supabase Service Role Key:** `process.env.SUPABASE_SERVICE_ROLE_KEY`
+4. **Project Identifiers:** `hpnewqkvpnthpohvxcmq`, `fir-demo-project-adffb`
+>>>>>>> origin/main
 
 ## 🚨 CRITICAL ACTIONS REQUIRED
 
@@ -74,10 +80,14 @@ pip install git-filter-repo
 cat > /tmp/replacements.txt << 'EOF'
 AIzaSyBXlcfcdyIqoeJOb2gXcxpRSmQO7lEP82Y==>your-firebase-api-key-here
 <<<<<<< HEAD
+<<<<<<< HEAD
 YOUR_SUPABASE_KEY_HERE.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhwbmV3cWt2cG50aHBvaHZ4Y21xIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjA2NjA0MTgsImV4cCI6MjA3NjIzNjQxOH0.UMmriJb5HRr9W_56GilNNDWksvlFEb1V9c_PuBK-H3s==>your-supabase-anon-key-here
 =======
 YOUR_SUPABASE_KEY_HERE
 >>>>>>> origin/security/fix-gitleaks-config
+=======
+YOUR_SUPABASE_KEY_HERE
+>>>>>>> origin/main
 process.env.SUPABASE_SERVICE_ROLE_KEY==>your-service-role-key-here
 hpnewqkvpnthpohvxcmq==>your-project-ref-here
 fir-demo-project-adffb==>your-project-id-here
@@ -99,10 +109,14 @@ rm /tmp/replacements.txt
 cat > /tmp/secrets.txt << 'EOF'
 AIzaSyBXlcfcdyIqoeJOb2gXcxpRSmQO7lEP82Y
 <<<<<<< HEAD
+<<<<<<< HEAD
 YOUR_SUPABASE_KEY_HERE.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhwbmV3cWt2cG50aHBvaHZ4Y21xIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjA2NjA0MTgsImV4cCI6MjA3NjIzNjQxOH0.UMmriJb5HRr9W_56GilNNDWksvlFEb1V9c_PuBK-H3s
 =======
 YOUR_SUPABASE_KEY_HERE
 >>>>>>> origin/security/fix-gitleaks-config
+=======
+YOUR_SUPABASE_KEY_HERE
+>>>>>>> origin/main
 process.env.SUPABASE_SERVICE_ROLE_KEY
 EOF
 

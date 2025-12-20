@@ -32,12 +32,17 @@
 ### 2. Supabase Anon Key
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 **Exposed Key:** `YOUR_SUPABASE_KEY_HERE.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhwbmV3cWt2cG50aHBvaHZ4Y21xIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjA2NjA0MTgsImV4cCI6MjA3NjIzNjQxOH0.UMmriJb5HRr9W_56GilNNDWksvlFEb1V9c_PuBK-H3s`
 =======
 **Exposed Key:** `YOUR_SUPABASE_KEY_HERE
 
 > > > > > > > origin/security/fix-gitleaks-config
 
+=======
+**Exposed Key:** `YOUR_SUPABASE_KEY_HERE
+
+>>>>>>> origin/main
 **Steps:**
 
 1. Same dashboard as above

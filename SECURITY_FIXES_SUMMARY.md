@@ -10,18 +10,26 @@
 
 1. **`docs/SECRET_ROTATION_GUIDE.md`**
    - **Issue:** Hardcoded Sentry token (⚠️ Rotated - token was exposed in git history)
+<<<<<<< HEAD
      <<<<<<< HEAD
    - # **Fix:** Replaced with placeholder `YOUR_SENTRY_TOKEN_HERE` with warning about rotation
    - **Fix:** Replaced with placeholder `SENTRY_TOKEN_PLACEHOLDER` with warning about rotation
      > > > > > > > origin/security/fix-gitleaks-config
+=======
+   - **Fix:** Replaced with placeholder `YOUR_SENTRY_TOKEN_HERE` with warning about rotation
+>>>>>>> origin/main
    - **Status:** ✅ Fixed and committed
 
 2. **`libs/utilities/scripts/remove-secrets-from-history.sh`**
    - **Issue:** Hardcoded Sentry token in script
+<<<<<<< HEAD
      <<<<<<< HEAD
    - # **Fix:** Replaced with placeholder `YOUR_SENTRY_TOKEN_HERE` with warning comment
    - **Fix:** Replaced with placeholder `SENTRY_TOKEN_PLACEHOLDER` with warning comment
      > > > > > > > origin/security/fix-gitleaks-config
+=======
+   - **Fix:** Replaced with placeholder `YOUR_SENTRY_TOKEN_HERE` with warning comment
+>>>>>>> origin/main
    - **Status:** ✅ Fixed and committed
 
 ### ⚠️ Secrets in Git History (Not in Current Files)
@@ -77,10 +85,14 @@ The following files contain secrets but are properly gitignored:
 ### Immediate Actions
 
 1. **Rotate Exposed Secrets** (if still active):
+<<<<<<< HEAD
    <<<<<<< HEAD
    - [ ] # Sentry Token: `YOUR_SENTRY_TOKEN_HERE` (⚠️ Rotate immediately - token was exposed in git history)
    - [ ] Sentry Token: `SENTRY_TOKEN_PLACEHOLDER` (⚠️ Rotate immediately - token was exposed in git history)
      > > > > > > > origin/security/fix-gitleaks-config
+=======
+   - [ ] Sentry Token: `YOUR_SENTRY_TOKEN_HERE` (⚠️ Rotate immediately - token was exposed in git history)
+>>>>>>> origin/main
    - [ ] SonarCloud Token: `d9b64b95424980fdae326ab8d909f45c9cad4a9f`
    - See `docs/SECRET_ROTATION_GUIDE.md` for detailed instructions
 

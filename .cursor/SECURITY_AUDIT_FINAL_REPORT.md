@@ -30,12 +30,18 @@
 ### Secrets Found in Current Files (Now Fixed):
 
 1. **Firebase API Key:** `AIzaSyBXlcfcdyIqoeJOb2gXcxpRSmQO7lEP82Y`
+<<<<<<< HEAD
    <<<<<<< HEAD
 2. # **Supabase Anon Key:** `YOUR_SUPABASE_KEY_HERE...`
 3. **Supabase Anon Key:** `YOUR_SUPABASE_KEY_HERE
    > > > > > > > origin/security/fix-gitleaks-config
 4. **Supabase Service Role Key:** `process.env.SUPABASE_SERVICE_ROLE_KEY` ⚠️ CRITICAL
 5. **Project Identifiers:** `hpnewqkvpnthpohvxcmq`, `fir-demo-project-adffb`
+=======
+2. **Supabase Anon Key:** `YOUR_SUPABASE_KEY_HERE
+3. **Supabase Service Role Key:** `process.env.SUPABASE_SERVICE_ROLE_KEY` ⚠️ CRITICAL
+4. **Project Identifiers:** `hpnewqkvpnthpohvxcmq`, `fir-demo-project-adffb`
+>>>>>>> origin/main
 
 ### ⚠️ These Secrets Likely Exist in Git History
 
@@ -103,10 +109,14 @@ pip install git-filter-repo
 cat > /tmp/replacements.txt << 'EOF'
 AIzaSyBXlcfcdyIqoeJOb2gXcxpRSmQO7lEP82Y==>your-firebase-api-key-here
 <<<<<<< HEAD
+<<<<<<< HEAD
 YOUR_SUPABASE_KEY_HERE...==>your-supabase-anon-key-here
 =======
 YOUR_SUPABASE_KEY_HERE
 >>>>>>> origin/security/fix-gitleaks-config
+=======
+YOUR_SUPABASE_KEY_HERE
+>>>>>>> origin/main
 process.env.SUPABASE_SERVICE_ROLE_KEY==>your-service-role-key-here
 EOF
 

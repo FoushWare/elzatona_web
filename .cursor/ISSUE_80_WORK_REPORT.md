@@ -71,12 +71,18 @@ A comprehensive security audit was performed for Issue #80, identifying and fixi
 ### Exposed Secrets Identified:
 
 1. **Supabase Service Role Key:** `process.env.SUPABASE_SERVICE_ROLE_KEY` ⚠️ CRITICAL
+<<<<<<< HEAD
    <<<<<<< HEAD
 2. # **Supabase Anon Key:** `YOUR_SUPABASE_KEY_HERE...`
 3. **Supabase Anon Key:** `YOUR_SUPABASE_KEY_HERE
    > > > > > > > origin/security/fix-gitleaks-config
 4. **Firebase API Key:** `AIzaSyBXlcfcdyIqoeJOb2gXcxpRSmQO7lEP82Y`
 5. **Project Identifiers:** `hpnewqkvpnthpohvxcmq`, `fir-demo-project-adffb`
+=======
+2. **Supabase Anon Key:** `YOUR_SUPABASE_KEY_HERE
+3. **Firebase API Key:** `AIzaSyBXlcfcdyIqoeJOb2gXcxpRSmQO7lEP82Y`
+4. **Project Identifiers:** `hpnewqkvpnthpohvxcmq`, `fir-demo-project-adffb`
+>>>>>>> origin/main
 
 ### Security Issues Fixed:
 
