@@ -21,6 +21,11 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GITLEAKS_LICENSE: ${{ secrets.GITLEAKS_LICENSE }}
+        with:
+          config_path: .gitleaks.toml
+          # Disable PR comments to avoid rate limits on large diffs
+          # Results will still be available in the workflow summary and artifacts
+          no_comment: true
 
       - name: Run Trivy vulnerability scanner
         uses: aquasecurity/trivy-action@0.29.0
