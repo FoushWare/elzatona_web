@@ -127,14 +127,17 @@ export function CookieAuthProvider({ children }: CookieAuthProviderProps) {
     }
   };
 
-  const value: CookieAuthContextType = useMemo(() => ({
-    user,
-    isAuthenticated: !!user,
-    isLoading,
-    signIn,
-    signOut,
-    refreshAuth,
-  }), [user, isLoading, signIn, signOut, refreshAuth]);
+  const value: CookieAuthContextType = useMemo(
+    () => ({
+      user,
+      isAuthenticated: !!user,
+      isLoading,
+      signIn,
+      signOut,
+      refreshAuth,
+    }),
+    [user, isLoading, signIn, signOut, refreshAuth],
+  );
 
   return (
     <CookieAuthContext.Provider value={value}>

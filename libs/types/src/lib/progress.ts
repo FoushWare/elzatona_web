@@ -1,5 +1,5 @@
 // Type aliases for union types
-export type LearningCategory = 
+export type LearningCategory =
   | "javascript"
   | "react"
   | "css"

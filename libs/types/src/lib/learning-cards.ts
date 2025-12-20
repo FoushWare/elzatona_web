@@ -1,4 +1,8 @@
-export type LearningCardType = "core-technologies" | "framework-questions" | "problem-solving" | "system-design";
+export type LearningCardType =
+  | "core-technologies"
+  | "framework-questions"
+  | "problem-solving"
+  | "system-design";
 export type LearningCardDifficulty = "beginner" | "intermediate" | "advanced";
 
 export interface LearningCard {

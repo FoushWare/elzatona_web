@@ -59,12 +59,15 @@ export const DatabaseProvider: React.FC<DatabaseProviderProps> = ({
       })()
     : new SupabaseDatabaseService(defaultConfig);
 
-  const contextValue: DatabaseContextType = useMemo(() => ({
-    database,
-    config: defaultConfig,
-    isFirebase: false, // Always false for now since Firebase isn't available
-    isSupabase: true, // Always true for now
-  }), [database, defaultConfig]);
+  const contextValue: DatabaseContextType = useMemo(
+    () => ({
+      database,
+      config: defaultConfig,
+      isFirebase: false, // Always false for now since Firebase isn't available
+      isSupabase: true, // Always true for now
+    }),
+    [database, defaultConfig],
+  );
 
   return (
     <DatabaseContext.Provider value={contextValue}>

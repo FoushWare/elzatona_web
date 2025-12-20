@@ -66,13 +66,22 @@ export const OnboardingProvider: React.FC<{ children: ReactNode }> = ({
 
   return (
     <OnboardingContext.Provider
-      value={useMemo(() => ({
-        hasSeenOnboarding,
-        showOnboarding,
-        startOnboarding,
-        completeOnboarding,
-        skipOnboarding,
-      }), [hasSeenOnboarding, showOnboarding, startOnboarding, completeOnboarding, skipOnboarding])}
+      value={useMemo(
+        () => ({
+          hasSeenOnboarding,
+          showOnboarding,
+          startOnboarding,
+          completeOnboarding,
+          skipOnboarding,
+        }),
+        [
+          hasSeenOnboarding,
+          showOnboarding,
+          startOnboarding,
+          completeOnboarding,
+          skipOnboarding,
+        ],
+      )}
     >
       {children}
     </OnboardingContext.Provider>

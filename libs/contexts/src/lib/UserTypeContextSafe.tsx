@@ -55,7 +55,9 @@ export const UserTypeProvider: React.FC<UserTypeProviderProps> = ({
     if (typeof globalThis !== "undefined") {
       try {
         // Fallback to localStorage only
-        const savedUserType = globalThis.localStorage.getItem("userType") as UserType;
+        const savedUserType = globalThis.localStorage.getItem(
+          "userType",
+        ) as UserType;
         if (savedUserType) {
           setUserType(savedUserType);
         } else {
@@ -65,7 +67,8 @@ export const UserTypeProvider: React.FC<UserTypeProviderProps> = ({
 
         const savedOnboarding =
           globalThis.localStorage.getItem("hasCompletedOnboarding") === "true";
-        const savedFirstVisit = globalThis.localStorage.getItem("isFirstVisit") === "true";
+        const savedFirstVisit =
+          globalThis.localStorage.getItem("isFirstVisit") === "true";
 
         setHasCompletedOnboarding(savedOnboarding);
         setIsFirstVisit(savedFirstVisit);
@@ -90,7 +93,10 @@ export const UserTypeProvider: React.FC<UserTypeProviderProps> = ({
           "hasCompletedOnboarding",
           hasCompletedOnboarding.toString(),
         );
-        globalThis.localStorage.setItem("isFirstVisit", isFirstVisit.toString());
+        globalThis.localStorage.setItem(
+          "isFirstVisit",
+          isFirstVisit.toString(),
+        );
       } catch (error) {
         console.error("Error saving user preferences:", error);
       }
@@ -112,15 +118,26 @@ export const UserTypeProvider: React.FC<UserTypeProviderProps> = ({
     }
   };
 
-  const value: UserTypeContextType = useMemo(() => ({
-    userType,
-    setUserType,
-    hasCompletedOnboarding,
-    setHasCompletedOnboarding,
-    isFirstVisit,
-    setIsFirstVisit,
-    resetUserPreferences,
-  }), [userType, setUserType, hasCompletedOnboarding, setHasCompletedOnboarding, isFirstVisit, setIsFirstVisit, resetUserPreferences]);
+  const value: UserTypeContextType = useMemo(
+    () => ({
+      userType,
+      setUserType,
+      hasCompletedOnboarding,
+      setHasCompletedOnboarding,
+      isFirstVisit,
+      setIsFirstVisit,
+      resetUserPreferences,
+    }),
+    [
+      userType,
+      setUserType,
+      hasCompletedOnboarding,
+      setHasCompletedOnboarding,
+      isFirstVisit,
+      setIsFirstVisit,
+      resetUserPreferences,
+    ],
+  );
 
   return (
     <UserTypeContext.Provider value={value}>

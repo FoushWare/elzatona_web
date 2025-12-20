@@ -50,7 +50,9 @@ const retryAuthentication = async (firebaseUser: any): Promise<boolean> => {
 };
 
 // Helper function for progress save request
-const saveProgressToServer = async (progressData: ProgressData): Promise<Response> => {
+const saveProgressToServer = async (
+  progressData: ProgressData,
+): Promise<Response> => {
   return await fetch("/api/progress/save", {
     method: "POST",
     headers: {

@@ -92,15 +92,26 @@ export function NotificationProvider({
     setUnreadCount(unread);
   }, [notifications]);
 
-  const value: NotificationContextType = useMemo(() => ({
-    notifications,
-    unreadCount,
-    isLoading,
-    error,
-    markAsRead,
-    markAllAsRead,
-    refreshNotifications,
-  }), [notifications, unreadCount, isLoading, error, markAsRead, markAllAsRead, refreshNotifications]);
+  const value: NotificationContextType = useMemo(
+    () => ({
+      notifications,
+      unreadCount,
+      isLoading,
+      error,
+      markAsRead,
+      markAllAsRead,
+      refreshNotifications,
+    }),
+    [
+      notifications,
+      unreadCount,
+      isLoading,
+      error,
+      markAsRead,
+      markAllAsRead,
+      refreshNotifications,
+    ],
+  );
 
   return (
     <NotificationContext.Provider value={value}>

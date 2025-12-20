@@ -176,7 +176,9 @@ export const useImageOptimization = (
 /**
  * Hook for managing multiple images with optimization
  */
-const processImageOptions = (images: UseImageOptimizationOptions[]): OptimizedImageData[] => {
+const processImageOptions = (
+  images: UseImageOptimizationOptions[],
+): OptimizedImageData[] => {
   return images.map((imageOptions) => {
     // Create optimized image data directly without calling the hook
     return {

@@ -23,12 +23,22 @@ import AlzatonaLogo from "../../common/AlzatonaLogo";
 
 const getThemeClasses = (isDarkMode: boolean, isClient: boolean) => ({
   navbarBg: isClient && isDarkMode ? "bg-red-700" : "bg-red-600",
-  logoText: isClient && isDarkMode ? "text-white hover:text-red-100" : "text-white hover:text-red-50",
-  titleText: isClient && isDarkMode ? "text-white drop-shadow-sm" : "text-white drop-shadow-md",
-  subtitleText: isClient && isDarkMode ? "text-red-50 drop-shadow-sm" : "text-red-100 drop-shadow-sm",
-  themeButton: isClient && isDarkMode 
-    ? "bg-white/25 text-white hover:bg-white/35 border border-white/40"
-    : "bg-white/30 text-white hover:bg-white/40 border border-white/50"
+  logoText:
+    isClient && isDarkMode
+      ? "text-white hover:text-red-100"
+      : "text-white hover:text-red-50",
+  titleText:
+    isClient && isDarkMode
+      ? "text-white drop-shadow-sm"
+      : "text-white drop-shadow-md",
+  subtitleText:
+    isClient && isDarkMode
+      ? "text-red-50 drop-shadow-sm"
+      : "text-red-100 drop-shadow-sm",
+  themeButton:
+    isClient && isDarkMode
+      ? "bg-white/25 text-white hover:bg-white/35 border border-white/40"
+      : "bg-white/30 text-white hover:bg-white/40 border border-white/50",
 });
 
 export default function AdminNavbar() {

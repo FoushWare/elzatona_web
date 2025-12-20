@@ -12,7 +12,8 @@ export default function VideoEmbed({ url, title }: VideoEmbedProps) {
 
   // Extract YouTube video ID from URL
   const getYouTubeVideoId = (url: string): string | null => {
-    const regex = /(?:youtube\.com\/(?:[^/]+\/.+\/(?:v|e(?:mbed)?)|.*[?&]v=)|youtu\.be\/)([^"&?/\s]{11})/;
+    const regex =
+      /(?:youtube\.com\/(?:[^/]+\/.+\/(?:v|e(?:mbed)?)|.*[?&]v=)|youtu\.be\/)([^"&?/\s]{11})/;
     const match = regex.exec(url);
     return match ? match[1] : null;
   };
@@ -48,7 +49,7 @@ export default function VideoEmbed({ url, title }: VideoEmbedProps) {
           style={{ aspectRatio: "16/9" }}
           aria-label={`Play video: ${title}`}
           onKeyDown={(e) => {
-            if (e.key === 'Enter' || e.key === ' ') {
+            if (e.key === "Enter" || e.key === " ") {
               e.preventDefault();
               setShowEmbed(true);
             }

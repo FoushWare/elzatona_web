@@ -69,16 +69,18 @@ export default function AddToFlashcard({
     }
   };
 
-  const getDifficultyLevel = (difficulty: string): "easy" | "medium" | "hard" => {
-  switch (difficulty) {
-    case "beginner":
-      return "easy";
-    case "intermediate":
-      return "medium";
-    default:
-      return "hard";
-  }
-};
+  const getDifficultyLevel = (
+    difficulty: string,
+  ): "easy" | "medium" | "hard" => {
+    switch (difficulty) {
+      case "beginner":
+        return "easy";
+      case "intermediate":
+        return "medium";
+      default:
+        return "hard";
+    }
+  };
 
   const handleToggleFlashcard = async () => {
     if (!user) {

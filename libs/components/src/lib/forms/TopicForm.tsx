@@ -17,7 +17,11 @@ import {
 } from "@elzatona/components";
 import { AlertTriangle } from "lucide-react";
 
-const validateTopicData = (topicData: any, index: number, categories: Category[]) => {
+const validateTopicData = (
+  topicData: any,
+  index: number,
+  categories: Category[],
+) => {
   const topicErrors: string[] = [];
 
   // Validate required fields
@@ -52,8 +56,9 @@ const parseJsonTopics = (parsed: any, categories: Category[]) => {
     topicsArray = parsed.topics;
   } else {
     return {
-      error: 'Invalid format. Expected an array of topics or an object with a "topics" property.',
-      topics: []
+      error:
+        'Invalid format. Expected an array of topics or an object with a "topics" property.',
+      topics: [],
     };
   }
 
@@ -63,7 +68,7 @@ const parseJsonTopics = (parsed: any, categories: Category[]) => {
 
   topicsArray.forEach((topicData, index) => {
     const topicErrors = validateTopicData(topicData, index, categories);
-    
+
     if (topicErrors.length === 0) {
       validatedTopics.push({
         name: topicData.name || "",
@@ -81,7 +86,7 @@ const parseJsonTopics = (parsed: any, categories: Category[]) => {
 
   return {
     error: validationErrors.length > 0 ? validationErrors.join("; ") : null,
-    topics: validatedTopics
+    topics: validatedTopics,
   };
 };
 
@@ -164,7 +169,7 @@ export const TopicForm: React.FC<TopicFormProps> = ({
       try {
         const parsed = JSON.parse(text);
         const result = parseJsonTopics(parsed, categories);
-        
+
         setJsonError(result.error);
         setParsedTopics(result.topics);
       } catch (error) {

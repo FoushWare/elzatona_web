@@ -93,7 +93,8 @@ export function UserPreferencesProvider({
     const loadPreferences = () => {
       try {
         // Load from localStorage
-        const savedPreferences = globalThis.localStorage.getItem("user-preferences");
+        const savedPreferences =
+          globalThis.localStorage.getItem("user-preferences");
         if (savedPreferences) {
           const parsed = JSON.parse(savedPreferences);
           setPreferences({
@@ -144,8 +145,9 @@ export function UserPreferencesProvider({
 
       if (theme === "system") {
         // Use system preference
-        const systemTheme = globalThis.matchMedia("(prefers-color-scheme: dark)")
-          .matches
+        const systemTheme = globalThis.matchMedia(
+          "(prefers-color-scheme: dark)",
+        ).matches
           ? "dark"
           : "light";
         document.documentElement.classList.toggle(
@@ -178,11 +180,14 @@ export function UserPreferencesProvider({
     return undefined;
   }, [preferences.theme]);
 
-  const value: UserPreferencesContextType = useMemo(() => ({
-    preferences,
-    updatePreferences,
-    isLoading,
-  }), [preferences, updatePreferences, isLoading]);
+  const value: UserPreferencesContextType = useMemo(
+    () => ({
+      preferences,
+      updatePreferences,
+      isLoading,
+    }),
+    [preferences, updatePreferences, isLoading],
+  );
 
   return (
     <UserPreferencesContext.Provider value={value}>

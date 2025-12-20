@@ -362,7 +362,8 @@ export default function BulkQuestionUploader({
 
       if (result.success > 0) {
         const successMessage = `${result.success} questions added successfully!`;
-        const failureMessage = result.failed > 0 ? `${result.failed} failed.` : "";
+        const failureMessage =
+          result.failed > 0 ? `${result.failed} failed.` : "";
         setSuccess(`${successMessage} ${failureMessage}`);
         setQuestions([
           {
@@ -858,7 +859,7 @@ then click "Save X Questions" to add them to Firebase.`}
           <div className="space-y-2 max-h-40 overflow-y-auto">
             {questions.slice(0, 5).map((question, index) => (
               <div
-                key={`question-${question.title?.slice(0, 20) || 'empty'}-${index}`}
+                key={`question-${question.title?.slice(0, 20) || "empty"}-${index}`}
                 className="text-sm text-blue-700 dark:text-blue-300"
               >
                 <span className="font-medium">{index + 1}.</span>{" "}
@@ -933,7 +934,7 @@ then click "Save X Questions" to add them to Firebase.`}
         <form onSubmit={handleSubmit} className="space-y-8">
           {questions.map((question, questionIndex) => (
             <div
-              key={`question-form-${question.title?.slice(0, 20) || 'empty'}-${questionIndex}`}
+              key={`question-form-${question.title?.slice(0, 20) || "empty"}-${questionIndex}`}
               className="border border-gray-200 dark:border-gray-700 rounded-lg p-6"
             >
               <div className="flex items-center justify-between mb-4">

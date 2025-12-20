@@ -107,9 +107,7 @@ export const QuestionItem: React.FC<QuestionItemProps> = ({
 
             {/* Difficulty Badge */}
             {question.difficulty && (
-              <Badge
-                variant={getDifficultyVariant(question.difficulty)}
-              >
+              <Badge variant={getDifficultyVariant(question.difficulty)}>
                 {question.difficulty}
               </Badge>
             )}
