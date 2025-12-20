@@ -35,7 +35,7 @@ async function setupAdminAccount() {
     }
 
     console.log(`   Email: ${adminEmail}`);
-    console.log(`   Password: ${adminPassword}`);
+    console.log("   Password: [REDACTED]");
     console.log(`   Name: ${adminName}`);
     console.log(`   Role: ${adminRole}\n`);
 
@@ -142,7 +142,7 @@ async function setupAdminAccount() {
     console.log("You can now login at:");
     console.log("   URL: http://localhost:3001/admin/login");
     console.log(`   Email: ${adminEmail}`);
-    console.log(`   Password: ${adminPassword}\n`);
+    console.log("   Password: [REDACTED] (saved to your terminal history only if you print it manually)");
   } catch (error) {
     console.error("❌ Error setting up admin account:", error.message);
   }
