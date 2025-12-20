@@ -9,7 +9,7 @@ export interface DatabaseConfig {
 }
 
 export class DatabaseClient {
-  private client: ReturnType<typeof createClient>;
+  private readonly client: ReturnType<typeof createClient>;
 
   constructor(config: DatabaseConfig) {
     this.client = createClient(config.url, config.anonKey);
@@ -48,7 +48,7 @@ export class DatabaseClient {
 
     if (filters) {
       Object.entries(filters).forEach(([key, value]) => {
-        query = query.eq(key, value as any);
+        query = query.eq(key, value);
       });
     }
 
