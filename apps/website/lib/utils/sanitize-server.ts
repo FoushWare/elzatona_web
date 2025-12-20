@@ -39,11 +39,11 @@ const xssOptions: IFilterXSSOptions = {
       if (value.startsWith("http://") || value.startsWith("https://")) {
         // Escape attribute value manually
         const escaped = value
-          .replace(/&/g, "&amp;")
-          .replace(/"/g, "&quot;")
-          .replace(/'/g, "&#x27;")
-          .replace(/</g, "&lt;")
-          .replace(/>/g, "&gt;");
+          .replaceAll(/&/g, "&amp;")
+          .replaceAll(/"/g, "&quot;")
+          .replaceAll(/'/g, "&#x27;")
+          .replaceAll(/</g, "&lt;")
+          .replaceAll(/>/g, "&gt;");
         return `${name}="${escaped}"`;
       }
       return "";
@@ -102,7 +102,7 @@ export function sanitizeInputServer(input: string): string {
   }
 
   // Remove null bytes and control characters
-  let sanitized = input.replace(/[\x00-\x1F\x7F]/g, "");
+  let sanitized = input.replaceAll(/[\x00-\x1F\x7F]/g, "");
 
   // Trim whitespace
   sanitized = sanitized.trim();
@@ -126,17 +126,17 @@ export function sanitizeObjectServer<T extends Record<string, any>>(obj: T): T {
   const sanitized = { ...obj };
 
   // Fields that should preserve newlines and special characters (code, content, etc.)
-  const preserveNewlinesFields = [
+  const preserveNewlinesFields = new Set([
     "content",
     "explanation",
     "description",
     "starter_code",
     "code_template",
-  ];
+  ]);
 
   // Fields that should be completely skipped from sanitization (will use CSP protection instead)
   // These fields are preserved exactly as-is without any modification
-  const skipSanitizationFields = ["code"];
+  const skipSanitizationFields = new Set(["code"]);
 
   // Define allowed property names to prevent remote property injection
   const allowedKeys = new Set([
@@ -144,6 +144,25 @@ export function sanitizeObjectServer<T extends Record<string, any>>(obj: T): T {
     'email', 'password', 'name', 'role', 'userId', 'questionId', 'answer', 'explanation',
     'createdAt', 'updatedAt', 'status', 'type', 'language', 'tags', 'metadata'
   ]);
+
+  // Helper function to sanitize string fields
+  const sanitizeStringField = (key: string, value: string): string => {
+    // For code field, skip sanitization entirely - we'll use CSP protection instead
+    if (skipSanitizationFields.has(key)) {
+      return value; // Preserve as-is
+    }
+    
+    // For content and other rich text fields, preserve newlines
+    if (preserveNewlinesFields.has(key)) {
+      // Only remove dangerous control characters, but preserve newlines and tabs
+      return value
+        .replaceAll(/[\x00-\x08\x0B-\x0C\x0E-\x1F\x7F]/g, "") // Remove control chars except newline (0x0A), carriage return (0x0D), tab (0x09)
+        .replaceAll(/\x00/g, ""); // Remove null bytes
+    }
+    
+    // For other string fields, use standard sanitization
+    return sanitizeInputServer(value);
+  };
 
   for (const key in sanitized) {
     // Validate that the key is allowed to prevent remote property injection
@@ -153,25 +172,7 @@ export function sanitizeObjectServer<T extends Record<string, any>>(obj: T): T {
     }
 
     if (typeof sanitized[key] === "string") {
-      // For code field, skip sanitization entirely - we'll use CSP protection instead
-      if (skipSanitizationFields.includes(key)) {
-        // Don't sanitize code field at all - preserve it exactly as-is
-        // CSP (Content Security Policy) will protect against XSS attacks
-        // The field is already in sanitized object, just don't modify it
-        continue; // Skip processing this field - leave it as-is
-      }
-      // For content and other rich text fields, preserve newlines - don't use sanitizeInputServer
-      else if (preserveNewlinesFields.includes(key)) {
-        // Only remove dangerous control characters, but preserve newlines and tabs
-        let content = sanitized[key];
-        content = content
-          .replace(/[\x00-\x08\x0B-\x0C\x0E-\x1F\x7F]/g, "") // Remove control chars except \n (0x0A), \r (0x0D), \t (0x09)
-          .replace(/\x00/g, ""); // Remove null bytes
-        sanitized[key] = content as T[typeof key];
-      } else {
-        // For other string fields, use standard sanitization
-        sanitized[key] = sanitizeInputServer(sanitized[key]) as T[typeof key];
-      }
+      sanitized[key] = sanitizeStringField(key, sanitized[key]) as T[typeof key];
     } else if (Array.isArray(sanitized[key])) {
       sanitized[key] = sanitized[key].map((item: any) =>
         typeof item === "string" ? sanitizeInputServer(item) : item,
