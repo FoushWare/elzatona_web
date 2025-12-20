@@ -16,7 +16,7 @@ import { usePathname } from "next/navigation";
 import "../globals.css";
 
 interface AdminLayoutProps {
-  children: React.ReactNode;
+  readonly children: React.ReactNode;
 }
 
 function AdminLayoutContent({ children }: AdminLayoutProps) {

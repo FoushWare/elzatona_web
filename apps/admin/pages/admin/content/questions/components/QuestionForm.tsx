@@ -111,7 +111,7 @@ export interface UnifiedQuestion {
 }
 
 interface QuestionFormProps {
-  initialData?: UnifiedQuestion | undefined;
+  initialData?: UnifiedQuestion;
   onSubmit: (question: Partial<UnifiedQuestion>) => void;
   onCancel: () => void;
   cards: Array<{ id: string; title: string }>;

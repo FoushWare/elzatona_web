@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import { useRouter } from "next/navigation";
 import {
   Card,
   CardContent,
@@ -26,6 +27,8 @@ interface CategoriesOverviewProps {
 export const CategoriesOverview: React.FC<CategoriesOverviewProps> = ({
   categoryCounts,
 }) => {
+  const router = useRouter();
+
   return (
     <Card className="mb-8">
       <CardHeader>
@@ -78,8 +81,13 @@ export const CategoriesOverview: React.FC<CategoriesOverviewProps> = ({
                         variant="ghost"
                         size="sm"
                         onClick={() => {
-                          // TODO: Implement view category questions functionality
-                          console.log("View category questions:", category.id);
+                          const params = new URLSearchParams({
+                            category: category.name,
+                            page: "1",
+                          });
+                          router.push(
+                            `/admin/content/questions?${params.toString()}`,
+                          );
                         }}
                         className="h-8 px-2 text-blue-600 hover:bg-blue-100"
                       >
@@ -89,8 +97,7 @@ export const CategoriesOverview: React.FC<CategoriesOverviewProps> = ({
                         variant="ghost"
                         size="sm"
                         onClick={() => {
-                          // TODO: Implement edit category functionality
-                          console.log("Edit category:", category.id);
+                          router.push("/admin/content-management");
                         }}
                         className="h-8 px-2 text-green-600 hover:bg-green-100"
                       >
