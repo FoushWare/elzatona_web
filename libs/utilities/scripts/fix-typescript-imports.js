@@ -96,7 +96,7 @@ function fixImportsInFile(filePath) {
         const fileDir = path.dirname(filePath);
         const targetFile = path.join(
           WEBSITE_DIR,
-          correctPath.replace("../", ""),
+          correctPath.replaceAll("../", ""),
         );
 
         if (
