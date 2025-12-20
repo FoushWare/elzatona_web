@@ -15,7 +15,8 @@ jobs:
     timeout-minutes: 30
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
@@ -27,85 +28,98 @@ jobs:
       - name: Install dependencies
         run: npm install
 
+      # --------------------------------------------------
+      # Validate TEST Supabase secrets (SAFE MODE)
+      # --------------------------------------------------
       - name: Validate test database secrets
         run: |
-          echo "🔒 Validating test database secrets..."
+          echo "🔒 Validating TEST Supabase secrets..."
 
           if [ -z "${{ secrets.TEST_SUPABASE_URL }}" ] || \
              [ -z "${{ secrets.TEST_SUPABASE_ANON_KEY }}" ] || \
              [ -z "${{ secrets.TEST_SUPABASE_SERVICE_ROLE_KEY }}" ]; then
-            echo "⚠️ Test database secrets are missing"
-            echo "RUN_TESTS=false" >> "$GITHUB_ENV"
+            echo "⚠️ TEST Supabase secrets are missing"
+            echo "RUN_TESTS=false" >> $GITHUB_ENV
             exit 0
           fi
 
           TEST_URL="${{ secrets.TEST_SUPABASE_URL }}"
+
           if [[ "$TEST_URL" == *"prod"* ]] || [[ "$TEST_URL" == *"production"* ]]; then
-            echo "❌ ERROR: TEST_SUPABASE_URL looks like production!"
+            echo "❌ ERROR: TEST_SUPABASE_URL looks like PRODUCTION!"
             exit 1
           fi
 
-          echo "RUN_TESTS=true" >> "$GITHUB_ENV"
           echo "✅ Test database validated"
+          echo "RUN_TESTS=true" >> $GITHUB_ENV
 
+      # --------------------------------------------------
+      # Linting
+      # --------------------------------------------------
       - name: Run linting with auto-fix
         run: npm run lint:fix || true
+        continue-on-error: true
         env:
           NODE_OPTIONS: "--max-old-space-size=1536"
 
       - name: Run linting check
         run: npm run lint || true
+        continue-on-error: true
         env:
           NODE_OPTIONS: "--max-old-space-size=1536"
 
+      # --------------------------------------------------
+      # Type checking
+      # --------------------------------------------------
       - name: TypeScript type checking
-        run: npm run type-check || true
+        run: npm run type-check
+        continue-on-error: true
         env:
           NODE_OPTIONS: "--max-old-space-size=1536"
           NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.TEST_SUPABASE_URL || 'https://placeholder.supabase.co' }}
-          NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.TEST_SUPABASE_ANON_KEY || 'placeholder' }}
-          JWT_SECRET: ${{ secrets.JWT_SECRET || 'placeholder' }}
+          NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.TEST_SUPABASE_ANON_KEY || 'placeholder-key' }}
+          JWT_SECRET: ${{ secrets.JWT_SECRET || 'placeholder-secret' }}
 
+      # --------------------------------------------------
+      # Tests (ONLY if safe test DB exists)
+      # --------------------------------------------------
       - name: Run tests with coverage
         if: env.RUN_TESTS == 'true'
         run: |
-          echo "🧪 Running tests on TEST database"
+          echo "🧪 Running tests against TEST database"
           npm run test:unit -- --coverage --coverageReporters=lcov --coverageDirectory=coverage || true
+        continue-on-error: true
         env:
           NODE_ENV: test
           APP_ENV: test
-          NEXT_PUBLIC_APP_ENV: test
+          CI: "true"
           NODE_OPTIONS: "--max-old-space-size=1536"
           JEST_MAX_WORKERS: "1"
+
           NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.TEST_SUPABASE_URL }}
           NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.TEST_SUPABASE_ANON_KEY }}
           SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.TEST_SUPABASE_SERVICE_ROLE_KEY }}
           JWT_SECRET: ${{ secrets.JWT_SECRET }}
-          CI: "true"
 
+      # --------------------------------------------------
+      # SonarQube Scan
+      # --------------------------------------------------
       - name: SonarQube Scan
         uses: SonarSource/sonarqube-scan-action@v6
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-          SONAR_SCANNER_OPTS: -Xmx1024m
-          SONAR_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_SCANNER_OPTS: "-Xmx1024m"
         with:
           projectBaseDir: .
-          args: >
-            -Dsonar.projectKey=FoushWare_elzatona_web
-            -Dsonar.organization=foushware
-            -Dsonar.host.url=https://sonarcloud.io
-            -Dsonar.projectName=Elzatona Web Application
-            -Dsonar.sources=apps,libs
-            -Dsonar.tests=tests
-            -Dsonar.inclusions=**/*.ts,**/*.tsx,**/*.js,**/*.jsx
-            -Dsonar.exclusions=**/*.test.ts,**/*.test.tsx,**/*.spec.ts,**/*.spec.tsx,**/*.test.js,**/*.spec.js,**/node_modules/**,**/dist/**,**/.next/**,**/coverage/**
-            -Dsonar.javascript.lcov.reportPaths=coverage/lcov.info
-            -Dsonar.typescript.lcov.reportPaths=coverage/lcov.info
 
+      # --------------------------------------------------
+      # Upload Coverage
+      # --------------------------------------------------
       - name: Upload coverage reports
         uses: codecov/codecov-action@v4
         with:
           files: ./coverage/lcov.info
           flags: unittests
+          name: codecov-umbrella
           fail_ci_if_error: false
+        continue-on-error: true
