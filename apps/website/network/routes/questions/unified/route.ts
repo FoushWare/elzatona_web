@@ -59,11 +59,19 @@ export async function GET(request: NextRequest) {
 
     const isActiveParam = searchParams.get("isActive");
     const is_active =
-      isActiveParam === "true" ? true : isActiveParam === "false" ? false : undefined;
-    
+      isActiveParam === "true"
+        ? true
+        : isActiveParam === "false"
+          ? false
+          : undefined;
+
     const isCompleteParam = searchParams.get("isComplete");
     const isComplete =
-      isCompleteParam === "true" ? true : isCompleteParam === "false" ? false : undefined;
+      isCompleteParam === "true"
+        ? true
+        : isCompleteParam === "false"
+          ? false
+          : undefined;
 
     const filters = {
       category: searchParams.get("category") || undefined,
@@ -381,9 +389,9 @@ export async function POST(request: NextRequest) {
           let codeContent = String(codeField);
 
           // Convert literal \n escape sequences to actual newlines
-          codeContent = codeContent.replaceAll("\\n", "\n");
-          codeContent = codeContent.replaceAll("\\r\\n", "\n");
-          codeContent = codeContent.replaceAll("\\r", "\n");
+          codeContent = codeContent.replaceAll(String.raw`\n`, "\n");
+          codeContent = codeContent.replaceAll(String.raw`\r\n`, "\n");
+          codeContent = codeContent.replaceAll(String.raw`\r`, "\n");
 
           // Normalize line breaks
           codeContent = codeContent.replaceAll("\r\n", "\n");
@@ -510,9 +518,9 @@ export async function POST(request: NextRequest) {
 
           // Only process if not already processed
           if (!processedCode || processedCode === "") {
-            codeContent = codeContent.replaceAll("\\n", "\n");
-            codeContent = codeContent.replaceAll("\\r\\n", "\n");
-            codeContent = codeContent.replaceAll("\\r", "\n");
+            codeContent = codeContent.replaceAll(String.raw`\n`, "\n");
+            codeContent = codeContent.replaceAll(String.raw`\r\n`, "\n");
+            codeContent = codeContent.replaceAll(String.raw`\r`, "\n");
             codeContent = codeContent.replaceAll("\r\n", "\n");
             codeContent = codeContent.replaceAll("\r", "\n");
             processedCode = codeContent;
@@ -560,9 +568,9 @@ export async function POST(request: NextRequest) {
             originalCode !== ""
           ) {
             let codeContent = String(originalCode);
-            codeContent = codeContent.replaceAll("\\n", "\n");
-            codeContent = codeContent.replaceAll("\\r\\n", "\n");
-            codeContent = codeContent.replaceAll("\\r", "\n");
+            codeContent = codeContent.replaceAll(String.raw`\n`, "\n");
+            codeContent = codeContent.replaceAll(String.raw`\r\n`, "\n");
+            codeContent = codeContent.replaceAll(String.raw`\r`, "\n");
             codeContent = codeContent.replaceAll("\r\n", "\n");
             codeContent = codeContent.replaceAll("\r", "\n");
             sanitizedQuestion.code = codeContent;
@@ -633,7 +641,8 @@ export async function POST(request: NextRequest) {
         // Map category name to category_id if needed
         let categoryId =
           sanitizedQuestion.category_id || sanitizedQuestion.category;
-        const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+        const uuidRegex =
+          /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
         if (
           categoryId &&
           typeof categoryId === "string" &&

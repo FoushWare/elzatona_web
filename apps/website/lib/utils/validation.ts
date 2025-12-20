@@ -269,14 +269,82 @@ export const planSchema = z.object({
   description: z
     .string()
     .max(2000)
-    .optional()
-    .transform((val) => (val ? sanitizeInputServer(val) : undefined)),
+    .transform((val) => sanitizeInputServer(val)),
+  type: z
+    .string()
+    .max(50)
+    .transform((val) => sanitizeInputServer(val)),
 });
 
 /**
- * Validate and sanitize data using a schema
- * @param schema - Zod schema
- * @param data - Data to validate
+ * Helper function to validate and sanitize options field
+ */
+function validateOptionsField(dataObj: any): void {
+  if (dataObj.options !== undefined && dataObj.options !== null) {
+    if (
+      typeof dataObj.options === "string" ||
+      !Array.isArray(dataObj.options)
+    ) {
+      delete dataObj.options;
+    } else if (dataObj.options.length === 0) {
+      delete dataObj.options;
+    }
+  }
+}
+
+/**
+ * Helper function to convert array field to single string value
+ */
+function convertArrayFieldToString(
+  dataObj: any,
+  arrayField: string,
+  stringField: string,
+): void {
+  if (dataObj[arrayField] && Array.isArray(dataObj[arrayField])) {
+    if (dataObj[arrayField].length > 0 && dataObj[arrayField][0]) {
+      dataObj[stringField] =
+        dataObj[arrayField][0]?.name ||
+        dataObj[arrayField][0]?.title ||
+        dataObj[stringField] ||
+        "";
+    }
+    delete dataObj[arrayField];
+  }
+}
+
+/**
+ * Helper function to validate metadata field
+ */
+function validateMetadataField(dataObj: any): void {
+  if (dataObj.metadata !== undefined && dataObj.metadata !== null) {
+    if (
+      typeof dataObj.metadata !== "object" ||
+      Array.isArray(dataObj.metadata)
+    ) {
+      delete dataObj.metadata;
+    }
+  }
+}
+
+/**
+ * Helper function to preprocess data structure
+ */
+function preprocessData(data: unknown): unknown {
+  if (data && typeof data === "object" && !Array.isArray(data)) {
+    const dataObj = data as any;
+
+    validateOptionsField(dataObj);
+    convertArrayFieldToString(dataObj, "categories", "category");
+    convertArrayFieldToString(dataObj, "topics", "topic");
+    validateMetadataField(dataObj);
+  }
+  return data;
+}
+
+/**
+ * Validates and sanitizes data using a Zod schema
+ * @param schema - Zod schema to validate against
+ * @param data - Data to validate and sanitize
  * @returns Validated and sanitized data
  */
 export function validateAndSanitize<T>(

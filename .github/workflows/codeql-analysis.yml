@@ -19,11 +19,13 @@ jobs:
   analyze:
     name: Analyze
     runs-on: ubuntu-latest
-    timeout-minutes: 60 # Reduced timeout to avoid long-running rate limit issues
+    timeout-minutes: 45 # Further reduced timeout to avoid rate limit issues
     permissions:
       actions: read
       contents: read
       security-events: write
+      # Remove pull-requests permission to reduce API calls
+      # pull-requests: read
 
     strategy:
       fail-fast: false
@@ -42,8 +44,8 @@ jobs:
           languages: ${{ matrix.language }}
           # Use security-extended queries for better coverage
           queries: security-extended,security-and-quality
-          # Note: Path exclusions should be done via codeql-config.yml file
-          # if needed, as paths-ignore is not a valid input for init@v4
+          # Use custom config to reduce scanning scope
+          config-file: .github/workflows/codeql-config.yml
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -69,3 +71,7 @@ jobs:
           # Add retry logic for API rate limits
           # Use wait-for-processing to handle large PRs
           wait-for-processing: true
+          # Reduce API calls to avoid rate limits
+          upload: false
+          # Skip SARIF upload to prevent API rate limit issues
+          output_file_path: false

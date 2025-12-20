@@ -1,0 +1,30 @@
+name: CodeQL Configuration
+version: 2.0
+
+# Reduce scanning scope to avoid rate limits
+paths-ignore:
+  - "**/node_modules/**"
+  - "**/dist/**"
+  - "**/build/**"
+  - "**/.nx/**"
+  - "**/coverage/**"
+  - "**/.git/**"
+  - "**/.next/**"
+  - "**/logs/**"
+  - "**/*.log"
+  - "**/.backup.logs/**"
+  - "**/.scannerwork/**"
+  - "**/playwright-report/**"
+
+# Focus on critical source code directories
+paths:
+  - "apps/**/src/**"
+  - "libs/**/src/**"
+  - "tools/**"
+
+# Use optimized queries to reduce processing time
+queries:
+  - name: Security and quality
+    uses: security-and-quality
+  - name: Security extended
+    uses: security-extended

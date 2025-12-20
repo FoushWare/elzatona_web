@@ -88,6 +88,16 @@ jobs:
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           SONAR_SCANNER_OPTS: -Xmx1024m
+          SONAR_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          projectBaseDir: .
+          args: >
+            -Dsonar.projectKey=FoushWare_elzatona_web
+            -Dsonar.organization=foushware
+            -Dsonar.host.url=https://sonarcloud.io
+            -Dsonar.pullrequest.key=${{ github.event.number }}
+            -Dsonar.pullrequest.branch=${{ github.head_ref }}
+            -Dsonar.pullrequest.base=main
 
       - name: Upload coverage reports
         uses: codecov/codecov-action@v4
