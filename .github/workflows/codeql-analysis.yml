@@ -42,12 +42,10 @@ jobs:
         uses: github/codeql-action/init@v4
         with:
           languages: ${{ matrix.language }}
-          # Use minimal queries to reduce processing time
-          queries: security
+          # Use valid query packs for CodeQL v2.23.8
+          queries: security-and-quality
           # Use custom config to reduce scanning scope
           config-file: .github/workflows/codeql-config.yml
-          # Disable features that cause API calls
-          disable-defaultqueries: true
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
