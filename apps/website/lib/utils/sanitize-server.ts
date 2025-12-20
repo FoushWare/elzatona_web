@@ -39,11 +39,11 @@ const xssOptions: IFilterXSSOptions = {
       if (value.startsWith("http://") || value.startsWith("https://")) {
         // Escape attribute value manually
         const escaped = value
-          .replaceAll(/&/g, "&amp;")
-          .replaceAll(/"/g, "&quot;")
-          .replaceAll(/'/g, "&#x27;")
-          .replaceAll(/</g, "&lt;")
-          .replaceAll(/>/g, "&gt;");
+          .replaceAll("&", "&amp;")
+          .replaceAll('"', "&quot;")
+          .replaceAll("'", "&#x27;")
+          .replaceAll("<", "&lt;")
+          .replaceAll(">", "&gt;");
         return `${name}="${escaped}"`;
       }
       return "";
@@ -157,7 +157,7 @@ export function sanitizeObjectServer<T extends Record<string, any>>(obj: T): T {
       // Only remove dangerous control characters, but preserve newlines and tabs
       return value
         .replaceAll(/[\x00-\x08\x0B-\x0C\x0E-\x1F\x7F]/g, "") // Remove control chars except newline (0x0A), carriage return (0x0D), tab (0x09)
-        .replaceAll(/\x00/g, ""); // Remove null bytes
+        .replaceAll("\x00", ""); // Remove null bytes
     }
     
     // For other string fields, use standard sanitization
