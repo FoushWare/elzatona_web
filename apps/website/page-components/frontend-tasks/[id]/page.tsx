@@ -651,7 +651,7 @@ export default function App() {
                 method: method,
                 message: logEntry,
                 timestamp: timestamp
-              }, '*');
+              }, window.location.origin);
             } catch (e) {
               // Fallback if postMessage fails
             }

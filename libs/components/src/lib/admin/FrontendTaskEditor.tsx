@@ -566,7 +566,7 @@ export default function FrontendTaskEditor({
                 method: method,
                 message: logEntry,
                 timestamp: timestamp
-              }, '*');
+              }, window.location.origin);
             } catch (e) {}
             
             originalConsole[method].apply(console, args);

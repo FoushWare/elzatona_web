@@ -35,32 +35,31 @@ export default function ClientCodeRunner({
   const [running, setRunning] = useState(false);
   const [customInput, setCustomInput] = useState<string>("");
   const [customResult, setCustomResult] = useState<TestResult | null>(null);
+  const origin = globalThis.window.location.origin;
 
   useEffect(() => {
     const handleMessage = (e: MessageEvent) => {
-      // SECURITY: Verify message origin to prevent XSS
-      if (e.origin !== globalThis.window.location.origin) {
+      if (e.origin !== origin) {
         console.warn("Received message from untrusted origin:", e.origin);
         return;
       }
-      if (!e.data || e.data.type !== "runner:results") return;
-      setRunning(false);
-      setResults(e.data.results as TestResult[]);
-    };
-    const handleCustom = (e: MessageEvent) => {
-      // SECURITY: Verify message origin to prevent XSS
-      if (e.origin !== globalThis.window.location.origin) {
-        console.warn("Received message from untrusted origin:", e.origin);
-        return;
+      if (!e.data) return;
+
+      if (e.data.type === "runner:results") {
+        setRunning(false);
+        setResults(e.data.results as TestResult[]);
       }
-      if (!e.data || e.data.type !== "runner:custom:result") return;
-      setRunning(false);
-      setCustomResult(e.data.result as TestResult);
+
+      if (e.data.type === "runner:custom:result") {
+        setRunning(false);
+        setCustomResult(e.data.result as TestResult);
+      }
     };
-    window.addEventListener("message", handleMessage);
-    window.addEventListener("message", handleCustom);
-    return () => window.removeEventListener("message", handleMessage);
-  }, []);
+
+    globalThis.window.addEventListener("message", handleMessage);
+    return () =>
+      globalThis.window.removeEventListener("message", handleMessage);
+  }, [origin]);
 
   const run = () => {
     setRunning(true);
@@ -81,7 +80,10 @@ export default function ClientCodeRunner({
       tests: testCases,
     };
 
-    iframe.contentWindow?.postMessage({ type: "runner:start", payload }, "*");
+    iframe.contentWindow?.postMessage(
+      { type: "runner:start", payload },
+      origin,
+    );
   };
 
   const srcDoc =
@@ -106,7 +108,7 @@ export default function ClientCodeRunner({
     "    fn=eval(fnName);\n" +
     "  }catch(err){\n" +
     "    results=tests.map(t=>({id:t.id,passed:false,actual:null,expected:t.expected,error:String(err)}));\n" +
-    '    parent.postMessage({type:"runner:results",results},"*");\n' +
+    '    parent.postMessage({type:"runner:results",results},e.origin);\n' +
     "    return;\n" +
     "  }\n" +
     "  for(const t of tests){\n" +
@@ -121,15 +123,15 @@ export default function ClientCodeRunner({
     "      results.push({id:t.id,passed:false,actual:null,expected:t.expected,error:String(err),elapsedMs:0});\n" +
     "    }\n" +
     "  }\n" +
-    '  parent.postMessage({type:"runner:results",results},"*");\n' +
+    '  parent.postMessage({type:"runner:results",results},e.origin);\n' +
     "});\n" +
     "// custom single-run handler\n" +
     'window.addEventListener("message",async(e)=>{\n' +
     '  if(!e.data||e.data.type!=="runner:custom")return;\n' +
     "  const {fnName,code,input}=e.data.payload;\n" +
-    '  try{safeEval(code);}catch(err){parent.postMessage({type:"runner:custom:result",result:{id:"custom",passed:false,actual:null,expected:null,error:String(err),elapsedMs:0}},"*");return;}\n' +
-    '  let fn;try{fn=eval(fnName);}catch(err){parent.postMessage({type:"runner:custom:result",result:{id:"custom",passed:false,actual:null,expected:null,error:String(err),elapsedMs:0}},"*");return;}\n' +
-    '  try{const args=Array.isArray(input)?input:[input];const start=performance.now();const actual=await withTimeout(fn,args,1500);const elapsed=performance.now()-start;parent.postMessage({type:"runner:custom:result",result:{id:"custom",passed:true,actual,expected:null,elapsedMs:Math.round(elapsed)}},"*");}catch(err){parent.postMessage({type:"runner:custom:result",result:{id:"custom",passed:false,actual:null,expected:null,error:String(err),elapsedMs:0}},"*");}\n' +
+    '  try{safeEval(code);}catch(err){parent.postMessage({type:"runner:custom:result",result:{id:"custom",passed:false,actual:null,expected:null,error:String(err),elapsedMs:0}},e.origin);return;}\n' +
+    '  let fn;try{fn=eval(fnName);}catch(err){parent.postMessage({type:"runner:custom:result",result:{id:"custom",passed:false,actual:null,expected:null,error:String(err),elapsedMs:0}},e.origin);return;}\n' +
+    '  try{const args=Array.isArray(input)?input:[input];const start=performance.now();const actual=await withTimeout(fn,args,1500);const elapsed=performance.now()-start;parent.postMessage({type:"runner:custom:result",result:{id:"custom",passed:true,actual,expected:null,elapsedMs:Math.round(elapsed)}},e.origin);}catch(err){parent.postMessage({type:"runner:custom:result",result:{id:"custom",passed:false,actual:null,expected:null,error:String(err),elapsedMs:0}},e.origin);}\n' +
     "});\n" +
     "<\/script>" +
     "</body></html>";
@@ -197,7 +199,7 @@ export default function ClientCodeRunner({
                   input: parsed,
                 },
               },
-              "*",
+              origin,
             );
           }}
           className="px-3 py-2 rounded bg-emerald-600 text-white"
