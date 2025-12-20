@@ -69,6 +69,59 @@ export const SignInGuidanceDetector: React.FC<SignInGuidanceDetectorProps> = ({
     }
   }, [userId]);
 
+  const parseUserProgress = () => {
+  const progress = localStorage.getItem("userProgress");
+  const roadmap = localStorage.getItem("freeStyleRoadmap");
+  const achievements = localStorage.getItem("userAchievements");
+  
+  let progressCount = 0;
+  let roadmapSections = 0;
+  let hasAchievements = false;
+
+  if (progress) {
+    try {
+      const progressData = JSON.parse(progress);
+      progressCount = progressData.completedQuestions || 0;
+    } catch (e) {
+      console.error("Error parsing progress data:", e);
+    }
+  }
+
+  if (roadmap) {
+    try {
+      const roadmapData = JSON.parse(roadmap);
+      roadmapSections = Array.isArray(roadmapData) ? roadmapData.length : 0;
+    } catch (e) {
+      console.error("Error parsing roadmap data:", e);
+    }
+  }
+
+  if (achievements) {
+    try {
+      const achievementsData = JSON.parse(achievements);
+      hasAchievements = achievementsData.length > 0;
+    } catch (e) {
+      console.error("Error parsing achievements data:", e);
+    }
+  }
+
+  return { progressCount, roadmapSections, hasAchievements };
+};
+
+const determineGuidanceTrigger = (progressCount: number, roadmapSections: number, hasAchievements: boolean) => {
+  const now = new Date();
+  
+  if (progressCount >= 5 && progressCount % 5 === 0) {
+    return { trigger: "progress", context: { progressCount } };
+  } else if (roadmapSections >= 3) {
+    return { trigger: "roadmap", context: { roadmapSections } };
+  } else if (hasAchievements) {
+    return { trigger: "achievement", context: { achievement: "Learning Streak!" } };
+  }
+  
+  return null;
+};
+
   // Track user progress and trigger guidance
   useEffect(() => {
     // Don't show guidance during testing
@@ -80,9 +133,6 @@ export const SignInGuidanceDetector: React.FC<SignInGuidanceDetectorProps> = ({
 
     const trackProgress = () => {
       // Check localStorage for progress
-      const progress = localStorage.getItem("userProgress");
-      const roadmap = localStorage.getItem("freeStyleRoadmap");
-      const achievements = localStorage.getItem("userAchievements");
       const lastGuidanceShown = localStorage.getItem("lastSignInGuidanceShown");
       const lastGuidanceDate = lastGuidanceShown
         ? new Date(lastGuidanceShown)
@@ -98,54 +148,14 @@ export const SignInGuidanceDetector: React.FC<SignInGuidanceDetectorProps> = ({
       }
 
       // Parse progress data
-      let progressCount = 0;
-      let roadmapSections = 0;
-      let hasAchievements = false;
-
-      if (progress) {
-        try {
-          const progressData = JSON.parse(progress);
-          progressCount = progressData.completedQuestions || 0;
-        } catch (e) {
-          console.error("Error parsing progress data:", e);
-        }
-      }
-
-      if (roadmap) {
-        try {
-          const roadmapData = JSON.parse(roadmap);
-          roadmapSections = Array.isArray(roadmapData) ? roadmapData.length : 0;
-        } catch (e) {
-          console.error("Error parsing roadmap data:", e);
-        }
-      }
-
-      if (achievements) {
-        try {
-          const achievementsData = JSON.parse(achievements);
-          hasAchievements = achievementsData.length > 0;
-        } catch (e) {
-          console.error("Error parsing achievements data:", e);
-        }
-      }
-
+      const { progressCount, roadmapSections, hasAchievements } = parseUserProgress();
+      
       // Determine trigger based on user activity
-      if (progressCount >= 5 && progressCount % 5 === 0) {
-        // Show guidance every 5 questions completed
-        setGuidanceTrigger("progress");
-        setGuidanceContext({ progressCount });
-        setShowGuidance(true);
-        localStorage.setItem("lastSignInGuidanceShown", now.toISOString());
-      } else if (roadmapSections >= 3) {
-        // Show guidance when user has selected a substantial roadmap
-        setGuidanceTrigger("roadmap");
-        setGuidanceContext({ roadmapSections });
-        setShowGuidance(true);
-        localStorage.setItem("lastSignInGuidanceShown", now.toISOString());
-      } else if (hasAchievements) {
-        // Show guidance when user has achievements
-        setGuidanceTrigger("achievement");
-        setGuidanceContext({ achievement: "Learning Streak!" });
+      const triggerResult = determineGuidanceTrigger(progressCount, roadmapSections, hasAchievements);
+      
+      if (triggerResult) {
+        setGuidanceTrigger(triggerResult.trigger);
+        setGuidanceContext(triggerResult.context);
         setShowGuidance(true);
         localStorage.setItem("lastSignInGuidanceShown", now.toISOString());
       }
