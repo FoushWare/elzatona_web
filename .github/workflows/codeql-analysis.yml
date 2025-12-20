@@ -70,10 +70,6 @@ jobs:
           category: "/language:${{ matrix.language }}"
           # Completely disable all API-intensive features
           upload: false
-          output_file_path: false
           wait-for-processing: false
-          skip_database_upload: true
-          # Additional flags to prevent API calls
-          no_fingerprint: true
           threads: 1
           ram: 2048
