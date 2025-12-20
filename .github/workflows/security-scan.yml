@@ -26,9 +26,10 @@ jobs:
           # Install gitleaks directly to avoid license issues
           GITLEAKS_VERSION=$(curl -s "https://api.github.com/repos/gitleaks/gitleaks/releases/latest" | grep '"tag_name"' | sed -E 's/.*"tag_name": ?"v?([^"]+).*/\1/')
           echo "Installing Gitleaks version: ${GITLEAKS_VERSION}"
-          wget "https://github.com/gitleaks/gitleaks/releases/download/v${GITLEAKS_VERSION}/gitleaks-linux-amd64"
-          chmod +x gitleaks-linux-amd64
-          ./gitleaks-linux-amd64 detect --config .gitleaks.toml --verbose --report-format sarif --report-path gitleaks-results.sarif || true
+          wget "https://github.com/gitleaks/gitleaks/releases/download/v${GITLEAKS_VERSION}/gitleaks_${GITLEAKS_VERSION}_linux_x64.tar.gz"
+          tar -xzf gitleaks_${GITLEAKS_VERSION}_linux_x64.tar.gz
+          chmod +x gitleaks
+          ./gitleaks detect --config .gitleaks.toml --verbose --report-format sarif --report-path gitleaks-results.sarif || true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
