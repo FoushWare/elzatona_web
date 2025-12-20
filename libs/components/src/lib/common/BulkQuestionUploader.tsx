@@ -28,7 +28,7 @@ export default function BulkQuestionUploader({
   sectionName,
   onQuestionsAdded,
   onClose,
-}: BulkQuestionUploaderProps) {
+}: Readonly<BulkQuestionUploaderProps>) {
   const { bulkImportQuestions } = useUnifiedQuestions({ autoLoad: false });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -361,9 +361,9 @@ export default function BulkQuestionUploader({
       console.log("📥 Firebase Import Result:", result);
 
       if (result.success > 0) {
-        setSuccess(
-          `${result.success} questions added successfully! ${result.failed > 0 ? `${result.failed} failed.` : ""}`,
-        );
+        const successMessage = `${result.success} questions added successfully!`;
+        const failureMessage = result.failed > 0 ? `${result.failed} failed.` : "";
+        setSuccess(`${successMessage} ${failureMessage}`);
         setQuestions([
           {
             id: "",
@@ -482,7 +482,7 @@ export default function BulkQuestionUploader({
     a.download = "bulk-questions-template.json";
     document.body.appendChild(a);
     a.click();
-    document.body.removeChild(a);
+    a.remove();
     URL.revokeObjectURL(url);
   };
 
@@ -858,7 +858,7 @@ then click "Save X Questions" to add them to Firebase.`}
           <div className="space-y-2 max-h-40 overflow-y-auto">
             {questions.slice(0, 5).map((question, index) => (
               <div
-                key={index}
+                key={`question-${question.title?.slice(0, 20) || 'empty'}-${index}`}
                 className="text-sm text-blue-700 dark:text-blue-300"
               >
                 <span className="font-medium">{index + 1}.</span>{" "}
@@ -933,7 +933,7 @@ then click "Save X Questions" to add them to Firebase.`}
         <form onSubmit={handleSubmit} className="space-y-8">
           {questions.map((question, questionIndex) => (
             <div
-              key={questionIndex}
+              key={`question-form-${question.title?.slice(0, 20) || 'empty'}-${questionIndex}`}
               className="border border-gray-200 dark:border-gray-700 rounded-lg p-6"
             >
               <div className="flex items-center justify-between mb-4">

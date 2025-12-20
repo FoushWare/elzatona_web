@@ -19,7 +19,9 @@ interface AdminManagementProps {
   };
 }
 
-export default function AdminManagement({ currentUser }: Readonly<AdminManagementProps>) {
+export default function AdminManagement({
+  currentUser,
+}: Readonly<AdminManagementProps>) {
   const [admins, setAdmins] = useState<AdminCredential[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [showCreateForm, setShowCreateForm] = useState(false);

@@ -69,6 +69,17 @@ export default function AddToFlashcard({
     }
   };
 
+  const getDifficultyLevel = (difficulty: string): "easy" | "medium" | "hard" => {
+  switch (difficulty) {
+    case "beginner":
+      return "easy";
+    case "intermediate":
+      return "medium";
+    default:
+      return "hard";
+  }
+};
+
   const handleToggleFlashcard = async () => {
     if (!user) {
       onStatusChange?.("error");
@@ -90,12 +101,7 @@ export default function AddToFlashcard({
           answer,
           explanation: answer,
           category,
-          difficulty:
-            difficulty === "beginner"
-              ? "easy"
-              : difficulty === "intermediate"
-                ? "medium"
-                : ("hard" as "easy" | "medium" | "hard"),
+          difficulty: getDifficultyLevel(difficulty),
           status: "new" as "new" | "learning" | "review" | "mastered",
           interval: 0,
           repetitions: 0,
@@ -161,11 +167,6 @@ export default function AddToFlashcard({
       default:
         return "Click to bookmark this question";
     }
-  };
-
-  const getButtonText = () => {
-    // No text for icon-only button
-    return "";
   };
 
   const getButtonClasses = () => {

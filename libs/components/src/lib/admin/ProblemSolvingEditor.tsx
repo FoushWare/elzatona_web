@@ -113,8 +113,8 @@ export default function ProblemSolvingEditor({
     new Set(),
   );
   const [openFiles, setOpenFiles] = useState<string[]>([]);
-  const [, setNewFileName] = useState("");
-  const [, setNewFolderName] = useState("");
+  const [newFileName, setNewFileName] = useState("");
+  const [newFolderName, setNewFolderName] = useState("");
   const [, setShowAddFile] = useState(false);
   const [, setShowAddFolder] = useState(false);
   const [showFileExplorer, setShowFileExplorer] = useState(true);
@@ -155,7 +155,9 @@ export default function ProblemSolvingEditor({
   }, [task]);
   // Theme detection
   useEffect(() => {
-    const mediaQuery = globalThis.window?.matchMedia("(prefers-color-scheme: dark)");
+    const mediaQuery = globalThis.window?.matchMedia(
+      "(prefers-color-scheme: dark)",
+    );
     const updateTheme = () => {
       setIsDark(theme === "dark" || (theme === "system" && mediaQuery.matches));
     };
