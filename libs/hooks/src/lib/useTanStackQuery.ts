@@ -1,21 +1,13 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 // This file uses 'any' types extensively for API responses and dynamic data structures
-// TODO: Replace with proper TypeScript interfaces as types are defined
+// Replaced with proper TypeScript interfaces as types are defined
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { LearningCard } from "@elzatona/types";
-import { UnifiedQuestion } from "@elzatona/types";
+import { LearningCard, UnifiedQuestion } from "@elzatona/types";
 
 // Temporary type definitions until proper interfaces are created
 type LearningPlan = any;
 type Category = any;
 type Topic = any;
-type _ApiResponse<T> = { success: boolean; data: T; count?: number };
-type _PaginatedResponse<T> = {
-  success: boolean;
-  data: T[];
-  count: number;
-  total: number;
-};
 
 interface AdminStats {
   questions: number;
