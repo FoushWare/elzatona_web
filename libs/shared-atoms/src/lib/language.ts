@@ -14,7 +14,7 @@ export const setLanguageAtom = atom(null, (get, set, newLanguage: Language) => {
   set(languageAtom, newLanguage);
 
   // Update document language
-  if (typeof window !== "undefined") {
+  if (globalThis.window !== undefined) {
     document.documentElement.lang = newLanguage;
   }
 });
