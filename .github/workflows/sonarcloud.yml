@@ -95,9 +95,13 @@ jobs:
             -Dsonar.projectKey=FoushWare_elzatona_web
             -Dsonar.organization=foushware
             -Dsonar.host.url=https://sonarcloud.io
-            -Dsonar.pullrequest.key=${{ github.event.number }}
-            -Dsonar.pullrequest.branch=${{ github.head_ref }}
-            -Dsonar.pullrequest.base=main
+            -Dsonar.projectName=Elzatona Web Application
+            -Dsonar.sources=apps,libs
+            -Dsonar.tests=tests
+            -Dsonar.inclusions=**/*.ts,**/*.tsx,**/*.js,**/*.jsx
+            -Dsonar.exclusions=**/*.test.ts,**/*.test.tsx,**/*.spec.ts,**/*.spec.tsx,**/*.test.js,**/*.spec.js,**/node_modules/**,**/dist/**,**/.next/**,**/coverage/**
+            -Dsonar.javascript.lcov.reportPaths=coverage/lcov.info
+            -Dsonar.typescript.lcov.reportPaths=coverage/lcov.info
 
       - name: Upload coverage reports
         uses: codecov/codecov-action@v4
