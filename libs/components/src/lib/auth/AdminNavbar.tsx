@@ -25,6 +25,7 @@ export default function AdminNavbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [isAdminDropdownOpen, setIsAdminDropdownOpen] = useState(false);
+  const [isUserDropdownOpen, setIsUserDropdownOpen] = useState(false);
   const { isDarkMode, toggleDarkMode } = useTheme();
   const { isAuthenticated, user, logout } = useAdminAuth();
   const router = useRouter();
