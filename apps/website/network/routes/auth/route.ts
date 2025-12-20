@@ -11,8 +11,7 @@ function sanitizeInput(email: unknown, password: unknown, action: unknown) {
   return {
     sanitizedEmail: typeof email === "string" ? email.trim() : "",
     sanitizedPassword: typeof password === "string" ? password : "",
-    sanitizedAction:
-      typeof action === "string" ? action.trim().toLowerCase() : "",
+    sanitizedAction: sanitizeAction(action),
   };
 }
 
@@ -26,7 +25,7 @@ function validateRequiredFields(email: string, password: string) {
   return null;
 }
 
-function validateAction(action: string) {
+function validateAction(action: string): NextResponse | null {
   const allowedActions = ["login", "register"];
   if (!action || !allowedActions.includes(action)) {
     return NextResponse.json(
@@ -35,6 +34,15 @@ function validateAction(action: string) {
     );
   }
   return null;
+}
+
+function sanitizeAction(action: unknown): string {
+  if (typeof action !== "string") {
+    return "";
+  }
+  const normalizedAction = action.trim().toLowerCase();
+  const allowedActions = ["login", "register"];
+  return allowedActions.includes(normalizedAction) ? normalizedAction : "";
 }
 
 async function handleRegistration(
@@ -125,11 +133,13 @@ export async function POST(request: NextRequest) {
     const actionError = validateAction(sanitizedAction);
     if (actionError) return actionError;
 
+    // Use hardcoded action mapping instead of user-controlled flow
     if (sanitizedAction === "register") {
       return await handleRegistration(sanitizedEmail, sanitizedPassword, name);
     } else if (sanitizedAction === "login") {
       return await handleLogin(sanitizedEmail, sanitizedPassword);
     } else {
+      // This should never be reached due to validation, but added as defense-in-depth
       return NextResponse.json(
         { success: false, error: "Invalid action. Use 'login' or 'register'" },
         { status: 400 },

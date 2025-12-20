@@ -7,18 +7,22 @@ const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
 const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
 
 function sanitizeForLog(value: unknown): string {
-  const raw =
-    typeof value === "string"
-      ? value
-      : (() => {
-          try {
-            return JSON.stringify(value);
-          } catch {
-            return "[unserializable]";
-          }
-        })();
+  let raw: string;
+  
+  if (typeof value === "string") {
+    // Remove potentially dangerous characters from strings
+    raw = value.replace(/[\r\n]/g, " ").slice(0, 500);
+  } else {
+    try {
+      const jsonString = JSON.stringify(value);
+      // Remove potentially dangerous characters from JSON
+      raw = jsonString.replace(/[\r\n]/g, " ").slice(0, 500);
+    } catch {
+      raw = "[unserializable]";
+    }
+  }
 
-  return raw.split("\r").join(" ").split("\n").join(" ").slice(0, 500);
+  return raw;
 }
 
 // POST /api/questions/bulk-topics
