@@ -986,12 +986,11 @@ export async function POST(request: NextRequest) {
           // processedCode is already processed with newlines
           questionWithTimestamps.code = processedCode;
           const newlineCount = (processedCode.match(/\n/g) || []).length;
-          console.log(
-            `💾 Storing code from processedCode: ${newlineCount} newlines, length: ${processedCode.length}`,
-            {
-              codePreview: processedCode.substring(0, 150),
-            },
-          );
+          console.log("💾 Storing code from processedCode", {
+            newlineCount,
+            length: processedCode.length,
+            codePreview: processedCode.substring(0, 150),
+          });
         } else if (
           codeToStore !== undefined &&
           codeToStore !== null &&
@@ -1000,26 +999,23 @@ export async function POST(request: NextRequest) {
           // Fallback to codeToStore if processedCode is not available
           const codeString = String(codeToStore);
           const newlineCount = (codeString.match(/\n/g) || []).length;
-          console.log(
-            `💾 Storing code from codeToStore: ${newlineCount} newlines, length: ${codeString.length}`,
-            {
-              codeSource:
-                codeForDb !== undefined &&
-                codeForDb !== null &&
-                codeForDb !== ""
-                  ? "codeForDb"
-                  : dbQuestion.code !== undefined &&
-                      dbQuestion.code !== null &&
-                      dbQuestion.code !== ""
-                    ? "dbQuestion.code"
-                    : sanitizedQuestion.code !== undefined &&
-                        sanitizedQuestion.code !== null &&
-                        sanitizedQuestion.code !== ""
-                      ? "sanitizedQuestion.code"
-                      : "originalCode",
-              codePreview: codeString.substring(0, 150),
-            },
-          );
+          console.log("💾 Storing code from codeToStore", {
+            newlineCount,
+            length: codeString.length,
+            codeSource:
+              codeForDb !== undefined && codeForDb !== null && codeForDb !== ""
+                ? "codeForDb"
+                : dbQuestion.code !== undefined &&
+                    dbQuestion.code !== null &&
+                    dbQuestion.code !== ""
+                  ? "dbQuestion.code"
+                  : sanitizedQuestion.code !== undefined &&
+                      sanitizedQuestion.code !== null &&
+                      sanitizedQuestion.code !== ""
+                    ? "sanitizedQuestion.code"
+                    : "originalCode",
+            codePreview: codeString.substring(0, 150),
+          });
           questionWithTimestamps.code = codeString;
         } else if (
           originalCode !== undefined &&
