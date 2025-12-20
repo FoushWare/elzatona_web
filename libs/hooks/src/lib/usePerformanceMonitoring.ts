@@ -44,7 +44,7 @@ export function usePerformanceMonitoring() {
         {
           ...context,
           url:
-            typeof window !== "undefined" ? window.location.href : context.url,
+            globalThis.window !== undefined ? globalThis.window.location.href : context.url,
         },
         metadata,
       );
