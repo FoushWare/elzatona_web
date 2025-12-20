@@ -404,12 +404,11 @@ export async function POST(request: NextRequest) {
           normalizedData.code = codeContent;
 
           const newlineCount = (codeContent.match(/\n/g) || []).length;
-          console.log(
-            `📝 Code field pre-processing: ${newlineCount} newlines, length: ${codeContent.length}`,
-            {
-              codePreview: codeContent.substring(0, 150),
-            },
-          );
+          console.log("📝 Code field pre-processing", {
+            newlineCount,
+            length: codeContent.length,
+            codePreview: codeContent.substring(0, 150),
+          });
         } else {
           console.log(`⚠️ Code field is missing or empty:`, {
             codeField: codeField,
