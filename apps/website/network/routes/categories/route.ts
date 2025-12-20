@@ -98,7 +98,7 @@ export async function POST(request: NextRequest) {
       description: sanitizedData.description || "",
       slug:
         sanitizedData.slug ||
-        sanitizedData.name.toLowerCase().replace(/\s+/g, "-"),
+        sanitizedData.name.toLowerCase().replaceAll(/\s+/g, "-"),
       icon: categoryData.icon || "📁", // Icon is not sanitized as it's an emoji/symbol
       color: categoryData.color || "#3B82F6", // Color is validated by format
       order_index: categoryData.orderIndex || categoryData.order_index || 0,
