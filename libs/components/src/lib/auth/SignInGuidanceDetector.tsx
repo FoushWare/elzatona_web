@@ -166,7 +166,12 @@ export const SignInGuidanceDetector: React.FC<SignInGuidanceDetectorProps> = ({
       );
 
       if (triggerResult) {
-        const validTrigger = triggerResult.trigger as "progress" | "roadmap" | "achievement" | "device-switch" | "manual";
+        const validTrigger = triggerResult.trigger as
+          | "progress"
+          | "roadmap"
+          | "achievement"
+          | "device-switch"
+          | "manual";
         setGuidanceTrigger(validTrigger);
         setGuidanceContext(triggerResult.context);
         setShowGuidance(true);
