@@ -33,7 +33,7 @@ paths:
   - "libs/contexts/src/**"
   - "libs/hooks/src/**"
 
-# Use minimal security queries to reduce processing time
+# Use only critical security queries to prevent memory issues
 queries:
-  - name: Security only
-    uses: security
+  - name: Critical Security Only
+    uses: security-extended

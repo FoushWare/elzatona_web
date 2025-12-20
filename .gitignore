@@ -204,3 +204,6 @@ gitleaks-history.json
 
 # CodeQL database (generated files)
 codeql-database/
+.gitleaks.toml
+*.sarif
+.github/workflows/codeql-config.yml

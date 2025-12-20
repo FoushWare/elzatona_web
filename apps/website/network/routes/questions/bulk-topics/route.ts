@@ -8,7 +8,7 @@ const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
 
 function sanitizeForLog(value: unknown): string {
   let raw: string;
-  
+
   if (typeof value === "string") {
     // Remove potentially dangerous characters from strings
     raw = value.replace(/[\r\n]/g, " ").slice(0, 500);

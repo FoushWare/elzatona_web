@@ -43,7 +43,7 @@ jobs:
         with:
           languages: ${{ matrix.language }}
           # Use valid query packs for CodeQL v2.23.8
-          queries: security-and-quality
+          queries: security-extended
           # Use custom config to reduce scanning scope
           config-file: .github/workflows/codeql-config.yml
 
@@ -76,4 +76,4 @@ jobs:
           # Additional flags to prevent API calls
           no_fingerprint: true
           threads: 1
-          ram: 1024
+          ram: 2048
