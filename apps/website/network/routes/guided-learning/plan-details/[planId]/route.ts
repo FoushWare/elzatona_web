@@ -475,13 +475,15 @@ export async function GET(
         (_, codeContent) => {
           // Decode HTML entities first
           let decodedContent = decodeHtmlEntities(codeContent).trim();
-          // SECURITY: Remove any remaining HTML tags that might have been decoded
-          // This ensures no HTML injection even after entity decoding
+          // SECURITY: Ensure decoded content cannot form HTML tags.
+          // Strip any tag-like sequences repeatedly, then escape any remaining angle brackets.
+          while (/<[^>]*>/g.test(decodedContent)) {
+            decodedContent = decodedContent.replace(/<[^>]*>/g, "");
+          }
           decodedContent = decodedContent
-            .replace(/<[^>]*>/g, "")
-            .replace(/&lt;/g, "<")
-            .replace(/&gt;/g, ">")
-            .replace(/&amp;/g, "&");
+            .replaceAll("&", "&amp;")
+            .replaceAll("<", "&lt;")
+            .replaceAll(">", "&gt;");
           return `\`${decodedContent}\``;
         },
       );
