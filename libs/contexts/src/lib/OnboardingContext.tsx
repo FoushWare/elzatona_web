@@ -16,6 +16,7 @@ if (
 import React, {
   useState,
   useEffect,
+  useMemo,
   ReactNode,
   createContext,
   useContext,
@@ -42,8 +43,8 @@ export const OnboardingProvider: React.FC<{ children: ReactNode }> = ({
   useEffect(() => {
     // Check if user has seen onboarding (only after they sign in)
     // For now, we'll check localStorage but only after authentication
-    if (typeof window !== "undefined") {
-      const seen = localStorage.getItem("hasSeenOnboarding");
+    if (typeof globalThis !== "undefined") {
+      const seen = globalThis.localStorage.getItem("hasSeenOnboarding");
       setHasSeenOnboarding(seen === "true");
     }
   }, []);
@@ -56,29 +57,22 @@ export const OnboardingProvider: React.FC<{ children: ReactNode }> = ({
     setShowOnboarding(false);
     setHasSeenOnboarding(true);
     // Only save to localStorage if user is authenticated
-    if (typeof window !== "undefined") {
-      localStorage.setItem("hasSeenOnboarding", "true");
+    if (typeof globalThis !== "undefined") {
+      globalThis.localStorage.setItem("hasSeenOnboarding", "true");
     }
   };
 
-  const skipOnboarding = () => {
-    setShowOnboarding(false);
-    setHasSeenOnboarding(true);
-    // Only save to localStorage if user is authenticated
-    if (typeof window !== "undefined") {
-      localStorage.setItem("hasSeenOnboarding", "true");
-    }
-  };
+  const skipOnboarding = completeOnboarding;
 
   return (
     <OnboardingContext.Provider
-      value={{
+      value={useMemo(() => ({
         hasSeenOnboarding,
         showOnboarding,
         startOnboarding,
         completeOnboarding,
         skipOnboarding,
-      }}
+      }), [hasSeenOnboarding, showOnboarding, startOnboarding, completeOnboarding, skipOnboarding])}
     >
       {children}
     </OnboardingContext.Provider>
