@@ -70,7 +70,9 @@ export const FiltersCard: React.FC<FiltersCardProps> = ({
                 </SelectContent>
               </Select>
             ) : (
-              <div className="text-sm text-gray-500">No categories available</div>
+              <div className="text-sm text-gray-500">
+                No categories available
+              </div>
             )}
           </div>
           <div className="flex-1 w-full sm:w-auto">
