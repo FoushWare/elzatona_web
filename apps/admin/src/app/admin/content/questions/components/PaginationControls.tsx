@@ -21,7 +21,7 @@ interface PaginationControlsProps {
   showPageInfo?: boolean;
 }
 
-export const PaginationControls: React.FC<PaginationControlsProps> = ({
+export const PaginationControls: React.FC<Readonly<PaginationControlsProps>> = ({
   currentPage,
   totalPages,
   totalCount,
@@ -49,7 +49,7 @@ export const PaginationControls: React.FC<PaginationControlsProps> = ({
           </span>
           <Select
             value={pageSize.toString()}
-            onValueChange={(value) => onPageSizeChange(parseInt(value))}
+            onValueChange={(value) => onPageSizeChange(Number.parseInt(value))}
           >
             <SelectTrigger className="w-20">
               <SelectValue />
