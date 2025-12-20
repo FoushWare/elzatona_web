@@ -42,9 +42,7 @@ export async function POST(request: NextRequest) {
     }
 
     console.log(
-      "Bulk updating topics for " +
-        sanitizeForLog(questionIds.length) +
-        " questions:",
+      `Bulk updating topics for ${sanitizeForLog(questionIds.length)} questions:`,
       sanitizeForLog(topics),
     );
 
@@ -85,33 +83,26 @@ export async function POST(request: NextRequest) {
         });
       } catch (error) {
         console.error(
-          "Error processing question " + sanitizeForLog(questionId) + ":",
+          `Error processing question ${sanitizeForLog(questionId)}:`,
           sanitizeForLog(error),
         );
         errors.push(
-          "Failed to update question " +
-            sanitizeForLog(questionId) +
-            ": " +
-            sanitizeForLog(
-              error instanceof Error ? error.message : "Unknown error",
-            ),
+          `Failed to update question ${sanitizeForLog(questionId)}: ${sanitizeForLog(
+            error instanceof Error ? error.message : "Unknown error",
+          )}`,
         );
       }
     }
 
     console.log(
-      "Successfully updated topics for " +
-        sanitizeForLog(results.length) +
-        " questions",
+      `Successfully updated topics for ${sanitizeForLog(results.length)} questions`,
     );
 
     return NextResponse.json({
       success: true,
       data: {
         message:
-          "Successfully updated topics for " +
-          sanitizeForLog(results.length) +
-          " questions",
+          `Successfully updated topics for ${sanitizeForLog(results.length)} questions`,
         results,
         errors,
         totalProcessed: questionIds.length,

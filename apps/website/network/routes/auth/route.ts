@@ -12,9 +12,19 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
     const { email, password, name, role, action } = body;
 
-    if (!email || !password) {
+    // Validate required fields first
+    if (!email || typeof email !== 'string' || !password || typeof password !== 'string') {
       return NextResponse.json(
         { success: false, error: "Email and password are required" },
+        { status: 400 },
+      );
+    }
+
+    // Validate action parameter against allowed values
+    const allowedActions = ['login', 'register'];
+    if (!action || typeof action !== 'string' || !allowedActions.includes(action)) {
+      return NextResponse.json(
+        { success: false, error: "Invalid action. Use 'login' or 'register'" },
         { status: 400 },
       );
     }
@@ -56,7 +66,7 @@ export async function POST(request: NextRequest) {
         );
       }
     } else if (action === "login") {
-      // This is a login request
+      // This is a login request - action is already validated above
       // Validate and sanitize login data
       const validationResult = validateAndSanitize(loginSchema, {
         email,
