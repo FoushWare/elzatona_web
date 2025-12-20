@@ -3,8 +3,8 @@
 import { useState } from "react";
 
 interface VideoEmbedProps {
-  url: string;
-  title: string;
+  readonly url: string;
+  readonly title: string;
 }
 
 export default function VideoEmbed({ url, title }: VideoEmbedProps) {
@@ -12,9 +12,8 @@ export default function VideoEmbed({ url, title }: VideoEmbedProps) {
 
   // Extract YouTube video ID from URL
   const getYouTubeVideoId = (url: string): string | null => {
-    const regex =
-      /(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/;
-    const match = url.match(regex);
+    const regex = /(?:youtube\.com\/(?:[^/]+\/.+\/(?:v|e(?:mbed)?)|.*[?&]v=)|youtu\.be\/)([^"&?/\s]{11})/;
+    const match = regex.exec(url);
     return match ? match[1] : null;
   };
 
@@ -42,10 +41,18 @@ export default function VideoEmbed({ url, title }: VideoEmbedProps) {
   return (
     <div className="w-full">
       {!showEmbed ? (
-        <div
+        <button
+          type="button"
           onClick={() => setShowEmbed(true)}
-          className="relative w-full bg-gray-900 rounded-lg cursor-pointer group overflow-hidden"
+          className="relative w-full bg-gray-900 rounded-lg cursor-pointer group overflow-hidden border-0 bg-transparent p-0"
           style={{ aspectRatio: "16/9" }}
+          aria-label={`Play video: ${title}`}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+              e.preventDefault();
+              setShowEmbed(true);
+            }
+          }}
         >
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
@@ -68,7 +75,7 @@ export default function VideoEmbed({ url, title }: VideoEmbedProps) {
             <h3 className="text-white font-semibold text-lg mb-1">{title}</h3>
             <p className="text-gray-200 text-sm">Click to play video</p>
           </div>
-        </div>
+        </button>
       ) : (
         <div className="w-full" style={{ aspectRatio: "16/9" }}>
           <iframe

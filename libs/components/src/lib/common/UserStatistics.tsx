@@ -87,35 +87,45 @@ export const UserStatistics: React.FC = () => {
     loadStats();
   }, [isAuthenticated]);
 
-  const animateNumber = (
-    start: number,
-    end: number,
-    callback: (value: number) => void,
-  ): Promise<void> => {
-    return new Promise((resolve) => {
-      const duration = 2000; // 2 seconds
-      const startTime = Date.now();
+  const createAnimateFunction = (
+  start: number,
+  end: number,
+  callback: (value: number) => void,
+  resolve: () => void
+) => {
+  const duration = 2000; // 2 seconds
+  const startTime = Date.now();
 
-      const animate = () => {
-        const elapsed = Date.now() - startTime;
-        const progress = Math.min(elapsed / duration, 1);
+  const animate = () => {
+    const elapsed = Date.now() - startTime;
+    const progress = Math.min(elapsed / duration, 1);
 
-        // Easing function for smooth animation
-        const easeOutQuart = 1 - Math.pow(1 - progress, 4);
-        const currentValue = start + (end - start) * easeOutQuart;
+    // Easing function for smooth animation
+    const easeOutQuart = 1 - Math.pow(1 - progress, 4);
+    const currentValue = start + (end - start) * easeOutQuart;
 
-        callback(currentValue);
+    callback(currentValue);
 
-        if (progress < 1) {
-          requestAnimationFrame(animate);
-        } else {
-          resolve();
-        }
-      };
-
-      animate();
-    });
+    if (progress < 1) {
+      requestAnimationFrame(animate);
+    } else {
+      resolve();
+    }
   };
+
+  return animate;
+};
+
+const animateNumber = (
+  start: number,
+  end: number,
+  callback: (value: number) => void,
+): Promise<void> => {
+  return new Promise((resolve) => {
+    const animate = createAnimateFunction(start, end, callback, resolve);
+    animate();
+  });
+};
 
   const formatNumber = (num: number): string => {
     if (num >= 1000) {
@@ -128,7 +138,7 @@ export const UserStatistics: React.FC = () => {
     return (
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
         {Array.from({ length: 4 }).map((_, index) => (
-          <div key={index} className="text-center">
+          <div key={`skeleton-${index}`} className="text-center">
             <div className="w-16 h-16 bg-gray-200 dark:bg-gray-700 rounded-full mx-auto mb-4 animate-pulse"></div>
             <div className="h-8 bg-gray-200 dark:bg-gray-700 rounded mb-2 animate-pulse"></div>
             <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded animate-pulse"></div>
