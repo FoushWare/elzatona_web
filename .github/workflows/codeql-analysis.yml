@@ -19,7 +19,7 @@ jobs:
   analyze:
     name: Analyze
     runs-on: ubuntu-latest
-    timeout-minutes: 360
+    timeout-minutes: 60  # Reduced timeout to avoid long-running rate limit issues
     permissions:
       actions: read
       contents: read
@@ -66,3 +66,6 @@ jobs:
         uses: github/codeql-action/analyze@v4
         with:
           category: "/language:${{ matrix.language }}"
+          # Add retry logic for API rate limits
+          # Use wait-for-processing to handle large PRs
+          wait-for-processing: true
