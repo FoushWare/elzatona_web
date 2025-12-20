@@ -5,6 +5,7 @@ import {
   useContext,
   useState,
   useEffect,
+  useMemo,
   ReactNode,
 } from "react";
 
@@ -37,7 +38,7 @@ export function useCookieAuth() {
 }
 
 interface CookieAuthProviderProps {
-  children: ReactNode;
+  readonly children: ReactNode;
 }
 
 export function CookieAuthProvider({ children }: CookieAuthProviderProps) {
@@ -84,7 +85,7 @@ export function CookieAuthProvider({ children }: CookieAuthProviderProps) {
 
       // Redirect to NextAuth sign-in
       const signInUrl = `/api/auth/signin/${provider}`;
-      window.location.href = signInUrl;
+      globalThis.location.href = signInUrl;
     } catch (error) {
       console.error("Sign in error:", error);
       setIsLoading(false);
@@ -104,7 +105,7 @@ export function CookieAuthProvider({ children }: CookieAuthProviderProps) {
       setUser(null);
 
       // Redirect to NextAuth sign-out
-      window.location.href = "/api/auth/signout";
+      globalThis.location.href = "/api/auth/signout";
     } catch (error) {
       console.error("Sign out error:", error);
       setIsLoading(false);
@@ -126,14 +127,14 @@ export function CookieAuthProvider({ children }: CookieAuthProviderProps) {
     }
   };
 
-  const value: CookieAuthContextType = {
+  const value: CookieAuthContextType = useMemo(() => ({
     user,
     isAuthenticated: !!user,
     isLoading,
     signIn,
     signOut,
     refreshAuth,
-  };
+  }), [user, isLoading, signIn, signOut, refreshAuth]);
 
   return (
     <CookieAuthContext.Provider value={value}>
