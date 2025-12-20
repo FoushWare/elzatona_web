@@ -111,7 +111,7 @@ async function handleLogin(email: string, password: string) {
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const { email, password, name, role, action } = body;
+    const { email, password, name, action } = body;
 
     const { sanitizedEmail, sanitizedPassword, sanitizedAction } =
       sanitizeInput(email, password, action);
