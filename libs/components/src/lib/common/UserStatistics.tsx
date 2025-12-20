@@ -44,13 +44,24 @@ export const UserStatistics: React.FC = () => {
   });
   const [isLoading, setIsLoading] = useState(true);
 
+  const updateActiveLearners = (value: number) => {
+    setStats((prev) => ({ ...prev, activeLearners: Math.floor(value) }));
+  };
+
+  const updateSuccessRate = (value: number) => {
+    setStats((prev) => ({ ...prev, successRate: Math.floor(value) }));
+  };
+
+  const updateTotalQuestions = (value: number) => {
+    setStats((prev) => ({ ...prev, totalQuestions: Math.floor(value) }));
+  };
+
   useEffect(() => {
     // Simulate loading and calculating stats
     const loadStats = async () => {
       setIsLoading(true);
 
       // In a real implementation, this would fetch from your backend/API
-      // For now, we'll simulate with realistic numbers that grow over time
       const baseLearners = 8500; // Base number of learners
       const baseSuccessRate = 82; // Base success rate
 
@@ -68,17 +79,9 @@ export const UserStatistics: React.FC = () => {
       const averageTime = `${Math.floor(Math.random() * 30) + 15}m`; // 15-45 minutes
 
       // Animate the numbers
-      await animateNumber(0, activeLearners, (value) => {
-        setStats((prev) => ({ ...prev, activeLearners: Math.floor(value) }));
-      });
-
-      await animateNumber(0, successRate, (value) => {
-        setStats((prev) => ({ ...prev, successRate: Math.floor(value) }));
-      });
-
-      await animateNumber(0, totalQuestions, (value) => {
-        setStats((prev) => ({ ...prev, totalQuestions: Math.floor(value) }));
-      });
+      await animateNumber(0, activeLearners, updateActiveLearners);
+      await animateNumber(0, successRate, updateSuccessRate);
+      await animateNumber(0, totalQuestions, updateTotalQuestions);
 
       setStats((prev) => ({ ...prev, averageTime }));
       setIsLoading(false);
