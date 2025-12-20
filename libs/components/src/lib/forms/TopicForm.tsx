@@ -17,6 +17,74 @@ import {
 } from "@elzatona/components";
 import { AlertTriangle } from "lucide-react";
 
+const validateTopicData = (topicData: any, index: number, categories: Category[]) => {
+  const topicErrors: string[] = [];
+
+  // Validate required fields
+  if (!topicData.name || !topicData.name.trim()) {
+    topicErrors.push(`Topic ${index + 1}: name is required`);
+  }
+  if (topicData.description && !topicData.description.trim()) {
+    topicErrors.push(`Topic ${index + 1}: description is required`);
+  }
+  if (!topicData.categoryId) {
+    topicErrors.push(`Topic ${index + 1}: categoryId is required`);
+  }
+
+  // Validate categoryId exists
+  if (
+    topicData.categoryId &&
+    !categories.find((c) => c.id === topicData.categoryId)
+  ) {
+    topicErrors.push(`Topic ${index + 1}: categoryId does not exist`);
+  }
+
+  return topicErrors;
+};
+
+const parseJsonTopics = (parsed: any, categories: Category[]) => {
+  let topicsArray: any[] = [];
+
+  // Handle both array format and object with "topics" property
+  if (Array.isArray(parsed)) {
+    topicsArray = parsed;
+  } else if (parsed.topics && Array.isArray(parsed.topics)) {
+    topicsArray = parsed.topics;
+  } else {
+    return {
+      error: 'Invalid format. Expected an array of topics or an object with a "topics" property.',
+      topics: []
+    };
+  }
+
+  // Validate each topic
+  const validatedTopics: TopicFormData[] = [];
+  const validationErrors: string[] = [];
+
+  topicsArray.forEach((topicData, index) => {
+    const topicErrors = validateTopicData(topicData, index, categories);
+    
+    if (topicErrors.length === 0) {
+      validatedTopics.push({
+        name: topicData.name || "",
+        description: topicData.description || "",
+        categoryId: topicData.categoryId || "",
+        difficulty: topicData.difficulty || "beginner",
+        estimatedQuestions: topicData.estimatedQuestions || 10,
+        slug: topicData.slug || "",
+        order: topicData.order || index + 1,
+      });
+    } else {
+      validationErrors.push(...topicErrors);
+    }
+  });
+
+  return {
+    error: validationErrors.length > 0 ? validationErrors.join("; ") : null,
+    topics: validatedTopics
+  };
+};
+
 interface TopicFormProps {
   topic?: {
     id: string;
@@ -95,92 +163,10 @@ export const TopicForm: React.FC<TopicFormProps> = ({
 
       try {
         const parsed = JSON.parse(text);
-        let topicsArray: any[] = [];
-
-        // Handle both array format and object with "topics" property
-        if (Array.isArray(parsed)) {
-          topicsArray = parsed;
-        } else if (parsed.topics && Array.isArray(parsed.topics)) {
-          topicsArray = parsed.topics;
-        } else {
-          setJsonError(
-            'Invalid format. Expected an array of topics or an object with a "topics" property.',
-          );
-          setParsedTopics([]);
-          return;
-        }
-
-        // Validate each topic
-        const validatedTopics: TopicFormData[] = [];
-        const validationErrors: string[] = [];
-
-        topicsArray.forEach((topicData, index) => {
-          const topicErrors: string[] = [];
-
-          // Validate required fields
-          if (!topicData.name || !topicData.name.trim()) {
-            topicErrors.push(`Topic ${index + 1}: name is required`);
-          }
-          if (topicData.description && !topicData.description.trim()) {
-            topicErrors.push(`Topic ${index + 1}: description is required`);
-          }
-          if (!topicData.categoryId) {
-            topicErrors.push(`Topic ${index + 1}: categoryId is required`);
-          }
-
-          // Validate categoryId exists
-          if (
-            topicData.categoryId &&
-            !categories.find((c) => c.id === topicData.categoryId)
-          ) {
-            topicErrors.push(
-              `Topic ${index + 1}: categoryId "${topicData.categoryId}" not found`,
-            );
-          }
-
-          // Validate difficulty
-          if (
-            topicData.difficulty &&
-            !["beginner", "intermediate", "advanced"].includes(
-              topicData.difficulty,
-            )
-          ) {
-            topicErrors.push(
-              `Topic ${index + 1}: difficulty must be "beginner", "intermediate", or "advanced"`,
-            );
-          }
-
-          if (topicErrors.length > 0) {
-            validationErrors.push(...topicErrors);
-          } else {
-            // Auto-generate slug if not provided
-            let slug = topicData.slug || "";
-            if (!slug && topicData.name) {
-              slug = topicData.name
-                .toLowerCase()
-                .replace(/[^a-z0-9]+/g, "-")
-                .replace(/(^-|-$)/g, "");
-            }
-
-            validatedTopics.push({
-              name: topicData.name.trim(),
-              description: topicData.description.trim(),
-              categoryId: topicData.categoryId,
-              difficulty: topicData.difficulty || "beginner",
-              estimatedQuestions: topicData.estimatedQuestions || 10,
-              slug: slug,
-              order: topicData.order || 1,
-            });
-          }
-        });
-
-        if (validationErrors.length > 0) {
-          setJsonError(validationErrors.join("\n"));
-          setParsedTopics([]);
-        } else {
-          setJsonError(null);
-          setParsedTopics(validatedTopics);
-        }
+        const result = parseJsonTopics(parsed, categories);
+        
+        setJsonError(result.error);
+        setParsedTopics(result.topics);
       } catch (error) {
         setJsonError(
           error instanceof Error ? error.message : "Invalid JSON format",
