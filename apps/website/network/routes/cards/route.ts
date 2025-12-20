@@ -57,7 +57,7 @@ export async function GET(request: NextRequest) {
     const filters = {
       type: type || undefined,
       is_active: isActive ? isActive === "true" : undefined,
-      limit: limit ? parseInt(limit, 10) : undefined,
+      limit: limit ? Number.parseInt(limit, 10) : undefined,
       orderBy: "order_index",
       orderDirection: "asc" as const,
     };
