@@ -381,13 +381,13 @@ export async function POST(request: NextRequest) {
           let codeContent = String(codeField);
 
           // Convert literal \n escape sequences to actual newlines
-          codeContent = codeContent.replaceAll(/\\n/g, "\n");
-          codeContent = codeContent.replaceAll(/\\r\\n/g, "\n");
-          codeContent = codeContent.replaceAll(/\\r/g, "\n");
+          codeContent = codeContent.replaceAll("\\n", "\n");
+          codeContent = codeContent.replaceAll("\\r\\n", "\n");
+          codeContent = codeContent.replaceAll("\\r", "\n");
 
           // Normalize line breaks
-          codeContent = codeContent.replaceAll(/\r\n/g, "\n");
-          codeContent = codeContent.replaceAll(/\r/g, "\n");
+          codeContent = codeContent.replaceAll("\r\n", "\n");
+          codeContent = codeContent.replaceAll("\r", "\n");
 
           // Store processed code separately (will restore after sanitization)
           processedCode = codeContent;
@@ -510,11 +510,11 @@ export async function POST(request: NextRequest) {
 
           // Only process if not already processed
           if (!processedCode || processedCode === "") {
-            codeContent = codeContent.replaceAll(/\\n/g, "\n");
-            codeContent = codeContent.replaceAll(/\\r\\n/g, "\n");
-            codeContent = codeContent.replaceAll(/\\r/g, "\n");
-            codeContent = codeContent.replaceAll(/\r\n/g, "\n");
-            codeContent = codeContent.replaceAll(/\r/g, "\n");
+            codeContent = codeContent.replaceAll("\\n", "\n");
+            codeContent = codeContent.replaceAll("\\r\\n", "\n");
+            codeContent = codeContent.replaceAll("\\r", "\n");
+            codeContent = codeContent.replaceAll("\r\n", "\n");
+            codeContent = codeContent.replaceAll("\r", "\n");
             processedCode = codeContent;
           } else {
             codeContent = processedCode;
@@ -560,11 +560,11 @@ export async function POST(request: NextRequest) {
             originalCode !== ""
           ) {
             let codeContent = String(originalCode);
-            codeContent = codeContent.replaceAll(/\\n/g, "\n");
-            codeContent = codeContent.replaceAll(/\\r\\n/g, "\n");
-            codeContent = codeContent.replaceAll(/\\r/g, "\n");
-            codeContent = codeContent.replaceAll(/\r\n/g, "\n");
-            codeContent = codeContent.replaceAll(/\r/g, "\n");
+            codeContent = codeContent.replaceAll("\\n", "\n");
+            codeContent = codeContent.replaceAll("\\r\\n", "\n");
+            codeContent = codeContent.replaceAll("\\r", "\n");
+            codeContent = codeContent.replaceAll("\r\n", "\n");
+            codeContent = codeContent.replaceAll("\r", "\n");
             sanitizedQuestion.code = codeContent;
             processedCode = codeContent;
             console.log(
