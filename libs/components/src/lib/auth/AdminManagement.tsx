@@ -178,10 +178,11 @@ export default function AdminManagement({
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+              <label htmlFor="name" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                 Name
               </label>
               <input
+                id="name"
                 type="text"
                 value={newAdmin.name}
                 onChange={(e) =>
@@ -194,10 +195,11 @@ export default function AdminManagement({
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+              <label htmlFor="password" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                 Password
               </label>
               <input
+                id="password"
                 type="password"
                 value={newAdmin.password}
                 onChange={(e) =>
@@ -210,10 +212,11 @@ export default function AdminManagement({
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+              <label htmlFor="role" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                 Role
               </label>
               <select
+                id="role"
                 value={newAdmin.role}
                 onChange={(e) =>
                   setNewAdmin({

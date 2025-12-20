@@ -19,6 +19,19 @@ interface ViewQuestionModalProps {
   editFormRef: React.RefObject<HTMLFormElement>;
 }
 
+const mapDifficulty = (difficulty: string | undefined): string => {
+  switch (difficulty) {
+    case "beginner":
+      return "easy";
+    case "intermediate":
+      return "medium";
+    case "advanced":
+      return "hard";
+    default:
+      return difficulty || "medium";
+  }
+};
+
 export const ViewQuestionModal: React.FC<ViewQuestionModalProps> = ({
   isOpen,
   onClose,
@@ -133,14 +146,7 @@ export const ViewQuestionModal: React.FC<ViewQuestionModalProps> = ({
             title: question.title || "",
             content: question.content,
             type: question.type || "multiple-choice",
-            difficulty:
-              (question.difficulty === "beginner"
-                ? "easy"
-                : question.difficulty === "intermediate"
-                  ? "medium"
-                  : question.difficulty === "advanced"
-                    ? "hard"
-                    : question.difficulty) || "medium",
+            difficulty: mapDifficulty(question.difficulty),
             explanation: question.explanation,
             options: question.options,
             correct_answer: question.correct_answer,
