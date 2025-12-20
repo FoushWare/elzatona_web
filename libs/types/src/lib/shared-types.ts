@@ -12,11 +12,12 @@ export type {
 // Export resource types but exclude LearningPath to avoid conflict with unified-question-schema
 export type { ResourceCategory, ResourceType } from "./resource";
 export type { LearningResource, ResourceCategoryInfo } from "./resource";
-export type {
-  LearningItem,
-  LearningGoal,
-  LearningProgress,
-  LearningRecommendation,
+export type { 
+  LearningItem, 
+  LearningGoal, 
+  ProgressStats,
+  LearningProgress, 
+  LearningRecommendation, 
   LearningCategory as ProgressCategory,
-  PriorityLevel,
+  PriorityLevel 
 } from "./progress";

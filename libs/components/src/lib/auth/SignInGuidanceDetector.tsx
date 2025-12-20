@@ -166,7 +166,8 @@ export const SignInGuidanceDetector: React.FC<SignInGuidanceDetectorProps> = ({
       );
 
       if (triggerResult) {
-        setGuidanceTrigger(triggerResult.trigger);
+        const validTrigger = triggerResult.trigger as "progress" | "roadmap" | "achievement" | "device-switch" | "manual";
+        setGuidanceTrigger(validTrigger);
         setGuidanceContext(triggerResult.context);
         setShowGuidance(true);
         localStorage.setItem("lastSignInGuidanceShown", now.toISOString());

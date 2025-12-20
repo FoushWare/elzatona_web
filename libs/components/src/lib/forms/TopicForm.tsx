@@ -4,6 +4,11 @@
 "use client";
 
 import React, { useEffect, useState, useCallback } from "react";
+
+interface Category {
+  id: string;
+  name: string;
+}
 import { Button } from "@elzatona/components";
 import { Input } from "@elzatona/components";
 import { Label } from "@elzatona/components";
