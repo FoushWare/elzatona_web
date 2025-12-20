@@ -1,27 +1,33 @@
+// Type aliases for union types
+export type LearningCategory = 
+  | "javascript"
+  | "react"
+  | "css"
+  | "html"
+  | "system-design"
+  | "algorithms"
+  | "web-apis"
+  | "performance"
+  | "accessibility"
+  | "testing";
+
+export type DifficultyLevel = "beginner" | "intermediate" | "advanced";
+export type PriorityLevel = "low" | "medium" | "high";
+
 export interface LearningItem {
   id: string;
   title: string;
   description: string;
-  category:
-    | "javascript"
-    | "react"
-    | "css"
-    | "html"
-    | "system-design"
-    | "algorithms"
-    | "web-apis"
-    | "performance"
-    | "accessibility"
-    | "testing";
+  category: LearningCategory;
   subCategory: string;
-  difficulty: "beginner" | "intermediate" | "advanced";
+  difficulty: DifficultyLevel;
   estimatedTime: number; // in minutes
   tags: string[];
   isCompleted: boolean;
   completedAt?: Date;
   actualTimeSpent?: number; // in minutes
   notes?: string;
-  priority: "low" | "medium" | "high";
+  priority: PriorityLevel;
   relatedResources?: string[]; // IDs of related resources
   relatedChallenges?: string[]; // IDs of related challenges
   relatedQuestions?: string[]; // IDs of related questions
@@ -60,7 +66,7 @@ export interface LearningRecommendation {
   id: string;
   title: string;
   reason: string;
-  priority: "low" | "medium" | "high";
+  priority: PriorityLevel;
   estimatedTime: number;
   category: string;
   difficulty: string;

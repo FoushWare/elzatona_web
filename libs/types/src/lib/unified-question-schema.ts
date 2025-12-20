@@ -3,6 +3,10 @@
 
 import { createClient } from "@supabase/supabase-js";
 
+// Type aliases for union types
+export type QuestionType = "multiple-choice" | "true-false" | "code";
+export type DifficultyLevel = "beginner" | "intermediate" | "advanced";
+
 const supabaseUrl = process.env["NEXT_PUBLIC_SUPABASE_URL"]!;
 const supabaseServiceRoleKey = process.env["SUPABASE_SERVICE_ROLE_KEY"]!;
 const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
@@ -11,10 +15,10 @@ export interface UnifiedQuestion {
   id: string;
   title: string;
   content: string;
-  type: "multiple-choice" | "true-false" | "code";
+  type: QuestionType;
   category?: string; // Made optional
   subcategory?: string;
-  difficulty: "beginner" | "intermediate" | "advanced";
+  difficulty: DifficultyLevel;
   learningPath?: string; // Already optional
   sectionId?: string; // Already optional
   topic?: string; // Added topic field
@@ -139,7 +143,7 @@ export interface LearningPath {
   id: string;
   title: string;
   description: string;
-  difficulty: "beginner" | "intermediate" | "advanced";
+  difficulty: DifficultyLevel;
   estimatedTime: number; // in hours
   prerequisites?: string[];
   targetSkills: string[];
