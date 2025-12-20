@@ -101,7 +101,7 @@ export function useLearningPaths(): UseLearningPathsReturn {
 
   useEffect(() => {
     // Only run on client side
-    if (typeof window !== "undefined") {
+    if (globalThis.window !== undefined) {
       fetchLearningPaths();
     }
   }, [fetchLearningPaths]);
