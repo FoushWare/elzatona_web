@@ -47,7 +47,7 @@ if (process.env.DEBUG_TEST_ENV === "true") {
 
 // Polyfill for Web APIs needed by Next.js in Node.js test environment
 // Next.js requires these globals to be available
-if (typeof global.Request === "undefined") {
+if (global.Request === undefined) {
   // Use Node.js 18+ built-in fetch API if available
   if (typeof fetch !== "undefined" && fetch.Request) {
     global.Request = fetch.Request;
