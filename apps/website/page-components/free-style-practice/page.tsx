@@ -518,11 +518,11 @@ const QuestionContent = ({ content }: { content: string }) => {
     }
 
     decoded = decoded.replace(/&#(\d+);/g, (match, dec) => {
-      return String.fromCharCode(parseInt(dec, 10));
+      return String.fromCodePoint(parseInt(dec, 10));
     });
 
     decoded = decoded.replace(/&#x([0-9a-fA-F]+);/g, (match, hex) => {
-      return String.fromCharCode(parseInt(hex, 16));
+      return String.fromCodePoint(parseInt(hex, 16));
     });
 
     if (typeof window !== "undefined") {
@@ -1956,7 +1956,7 @@ export default function FreeStylePracticePage() {
                   optionsCount: filteredOptions.length,
                   options: filteredOptions.map((opt, idx) => ({
                     index: idx,
-                    letter: String.fromCharCode(65 + idx),
+                    letter: String.fromCodePoint(65 + idx),
                     text: opt.substring(0, 40) + "...",
                     isCorrect: idx === finalCorrectAnswer,
                   })),
@@ -2667,7 +2667,7 @@ export default function FreeStylePracticePage() {
         correctAnswerIndex: question.correctAnswer,
         options: question.options.map((opt, optIdx) => ({
           index: optIdx,
-          letter: String.fromCharCode(65 + optIdx),
+          letter: String.fromCodePoint(65 + optIdx),
           text: opt.substring(0, 50) + "...",
           isCorrect: optIdx === question.correctAnswer,
         })),
@@ -3687,7 +3687,7 @@ export default function FreeStylePracticePage() {
                       >
                         The correct answer is{" "}
                         <span className="font-semibold">
-                          {String.fromCharCode(
+                          {String.fromCodePoint(
                             65 + currentQuestion.correctAnswer,
                           )}
                           :{" "}

@@ -469,7 +469,7 @@ export default function CustomPracticePage() {
                               : "bg-gray-200 dark:bg-gray-600 text-gray-700 dark:text-gray-300"
                         }`}
                       >
-                        {String.fromCharCode(65 + index)}
+                        {String.fromCodePoint(65 + index)}
                       </div>
                       <span>{option}</span>
                     </div>
@@ -497,7 +497,7 @@ export default function CustomPracticePage() {
                   <p className="text-sm text-gray-600 dark:text-gray-400">
                     The correct answer is{" "}
                     <span className="font-semibold text-gray-900 dark:text-white">
-                      {String.fromCharCode(65 + currentQuestion.correctAnswer)}:{" "}
+                      {String.fromCodePoint(65 + currentQuestion.correctAnswer)}: {" "}
                       {currentQuestion.options[currentQuestion.correctAnswer]}
                     </span>
                   </p>

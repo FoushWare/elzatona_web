@@ -216,7 +216,7 @@ export default function BulkQuestionUploader({
               opt: { id: string; text: string; isCorrect: boolean },
               optIndex: number,
             ) => ({
-              id: opt.id || String.fromCharCode(97 + optIndex), // a, b, c, d...
+              id: opt.id || String.fromCodePoint(97 + optIndex), // a, b, c, d...
               text: opt.text || "",
               isCorrect: opt.isCorrect || false,
             }),

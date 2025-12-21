@@ -533,7 +533,7 @@ export default function FlashcardsPage() {
                                   : "bg-indigo-100 dark:bg-indigo-900/30 text-indigo-700 dark:text-indigo-300"
                             }`}
                           >
-                            {String.fromCharCode(65 + index)}
+                            {String.fromCodePoint(65 + index)}
                           </div>
                           <span className="flex-1">{optionText}</span>
                           {selectedAnswer && isCorrectOption && (

@@ -159,12 +159,12 @@ const cleanOptionText = (text: string): string => {
 
     // Replace numeric entities (decimal)
     decoded = decoded.replace(/&#(\d+);/g, (match, dec) => {
-      return String.fromCharCode(Number.parseInt(dec, 10));
+      return String.fromCodePoint(Number.parseInt(dec, 10));
     });
 
     // Replace numeric entities (hexadecimal)
     decoded = decoded.replace(/&#x([0-9a-fA-F]+);/g, (match, hex) => {
-      return String.fromCharCode(Number.parseInt(hex, 16));
+      return String.fromCodePoint(Number.parseInt(hex, 16));
     });
 
     // If client-side, use DOM API as fallback
@@ -2414,7 +2414,7 @@ function GuidedPracticePageContent() {
     });
   };
 
-  const getOptionLetter = (index: number) => String.fromCharCode(65 + index);
+  const getOptionLetter = (index: number) => String.fromCodePoint(65 + index);
 
   // Shuffle options deterministically based on question ID
   // This ensures the same question always has the same order (consistent UX)

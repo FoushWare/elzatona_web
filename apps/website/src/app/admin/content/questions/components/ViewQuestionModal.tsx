@@ -222,7 +222,7 @@ interface ViewQuestionModalProps {
   readonly topicsData: any[];
 }
 
-const getOptionLetter = (index: number) => String.fromCharCode(65 + index);
+const getOptionLetter = (index: number) => String.fromCodePoint(65 + index);
 
 export function ViewQuestionModal({
   isOpen,

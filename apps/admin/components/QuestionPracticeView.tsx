@@ -71,7 +71,7 @@ interface QuestionPracticeViewProps {
 }
 
 const getOptionLetter = (index: number): string => {
-  return String.fromCharCode(65 + index); // A, B, C, D, etc.
+  return String.fromCodePoint(65 + index); // A, B, C, D, etc.
 };
 
 export const QuestionPracticeView: React.FC<QuestionPracticeViewProps> = ({
