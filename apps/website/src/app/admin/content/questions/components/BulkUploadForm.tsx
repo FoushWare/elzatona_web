@@ -189,8 +189,8 @@ export function BulkUploadForm({
 
         // Detect theme
         const prefersDark =
-          typeof window !== "undefined" &&
-          window.matchMedia("(prefers-color-scheme: dark)").matches;
+          typeof globalThis.window !== "undefined" &&
+          globalThis.window.matchMedia("(prefers-color-scheme: dark)").matches;
         const themeName = prefersDark ? "github-dark" : "github-light";
 
         let html = shikiHighlighter.codeToHtml(codeWithNewlines, {
@@ -791,8 +791,8 @@ export function BulkUploadForm({
 
                       // Detect theme
                       const prefersDark =
-                        typeof window !== "undefined" &&
-                        window.matchMedia("(prefers-color-scheme: dark)")
+                        typeof globalThis.window !== "undefined" &&
+                        globalThis.window.matchMedia("(prefers-color-scheme: dark)")
                           .matches;
                       const codeTheme = prefersDark ? "dark" : "light";
                       const highlightedHtml = codeHighlightedHtml[qIndex] || "";
