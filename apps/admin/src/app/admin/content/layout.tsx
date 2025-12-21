@@ -4,8 +4,6 @@ interface ContentLayoutProps {
   readonly children: React.ReactNode;
 }
 
-export default function ContentLayout({
-  children,
-}: ContentLayoutProps) {
+export default function ContentLayout({ children }: ContentLayoutProps) {
   return <>{children}</>;
 }

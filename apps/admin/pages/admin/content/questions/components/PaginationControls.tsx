@@ -49,7 +49,9 @@ export const PaginationControls: React.FC<PaginationControlsProps> = ({
           </span>
           <Select
             value={pageSize.toString()}
-            onValueChange={(value) => onPageSizeChange(Number.parseInt(value, 10))}
+            onValueChange={(value) =>
+              onPageSizeChange(Number.parseInt(value, 10))
+            }
           >
             <SelectTrigger className="w-20">
               <SelectValue />

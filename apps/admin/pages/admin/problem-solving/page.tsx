@@ -404,7 +404,11 @@ export default function ProblemSolvingPage() {
                       </h4>
                       <ul className="text-sm text-orange-700 dark:text-orange-300 space-y-1">
                         {task.constraints.map((constraint, index) => (
-                          <li key={`constraint-${index}-${constraint.substring(0, 10)}`}>• {constraint}</li>
+                          <li
+                            key={`constraint-${index}-${constraint.substring(0, 10)}`}
+                          >
+                            • {constraint}
+                          </li>
                         ))}
                       </ul>
                     </div>

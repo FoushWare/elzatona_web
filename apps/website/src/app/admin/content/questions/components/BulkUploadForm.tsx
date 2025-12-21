@@ -436,27 +436,32 @@ export function BulkUploadForm({
     }
   };
 
-  const parseFile = async (selectedFile: File, setTotalQuestionsCount: React.Dispatch<React.SetStateAction<number>>, setPreviewQuestions: React.Dispatch<React.SetStateAction<any[]>>, setShowPreview: React.Dispatch<React.SetStateAction<boolean>>) => {
-  try {
-    const fileType = selectedFile.name.split(".").pop()?.toLowerCase();
-    let questions: any[] = [];
+  const parseFile = async (
+    selectedFile: File,
+    setTotalQuestionsCount: React.Dispatch<React.SetStateAction<number>>,
+    setPreviewQuestions: React.Dispatch<React.SetStateAction<any[]>>,
+    setShowPreview: React.Dispatch<React.SetStateAction<boolean>>,
+  ) => {
+    try {
+      const fileType = selectedFile.name.split(".").pop()?.toLowerCase();
+      let questions: any[] = [];
 
-    if (fileType === "json") {
-      questions = await parseJsonFile(selectedFile);
-    } else if (fileType === "csv") {
-      questions = await parseCsvFile(selectedFile);
+      if (fileType === "json") {
+        questions = await parseJsonFile(selectedFile);
+      } else if (fileType === "csv") {
+        questions = await parseCsvFile(selectedFile);
+      }
+
+      setTotalQuestionsCount(questions.length);
+      setPreviewQuestions(questions.slice(0, 3));
+      setShowPreview(questions.length > 0);
+    } catch (err) {
+      console.error("Error parsing file:", err);
+      setPreviewQuestions([]);
+      setTotalQuestionsCount(0);
+      setShowPreview(false);
     }
-
-    setTotalQuestionsCount(questions.length);
-    setPreviewQuestions(questions.slice(0, 3));
-    setShowPreview(questions.length > 0);
-  } catch (err) {
-    console.error("Error parsing file:", err);
-    setPreviewQuestions([]);
-    setTotalQuestionsCount(0);
-    setShowPreview(false);
-  }
-};
+  };
 
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFile = e.target.files?.[0];
@@ -466,7 +471,12 @@ export function BulkUploadForm({
         return;
       }
       setFile(selectedFile);
-      await parseFile(selectedFile, setTotalQuestionsCount, setPreviewQuestions, setShowPreview);
+      await parseFile(
+        selectedFile,
+        setTotalQuestionsCount,
+        setPreviewQuestions,
+        setShowPreview,
+      );
     }
   };
 
@@ -563,7 +573,12 @@ export function BulkUploadForm({
       const fileType = droppedFile.name.split(".").pop()?.toLowerCase();
       if (fileType === "csv" || fileType === "json") {
         setFile(droppedFile);
-        await parseFile(droppedFile, setTotalQuestionsCount, setPreviewQuestions, setShowPreview);
+        await parseFile(
+          droppedFile,
+          setTotalQuestionsCount,
+          setPreviewQuestions,
+          setShowPreview,
+        );
       }
     }
   };
@@ -792,8 +807,9 @@ export function BulkUploadForm({
                       // Detect theme
                       const prefersDark =
                         typeof globalThis.window !== "undefined" &&
-                        globalThis.window.matchMedia("(prefers-color-scheme: dark)")
-                          .matches;
+                        globalThis.window.matchMedia(
+                          "(prefers-color-scheme: dark)",
+                        ).matches;
                       const codeTheme = prefersDark ? "dark" : "light";
                       const highlightedHtml = codeHighlightedHtml[qIndex] || "";
 

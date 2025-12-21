@@ -350,11 +350,16 @@ export function ViewQuestionModal({
       // Post-process HTML for light mode color adjustments
       if (typeof globalThis.window !== "undefined") {
         const prefersDark = globalThis.window.matchMedia(
-                  }
-                });
+          "(prefers-color-scheme: dark)"
+        ).matches;
 
-                html = `<pre><code>${codeElement.innerHTML}</code></pre>`;
-              }
+        if (!prefersDark) {
+          try {
+            const tempDiv = document.createElement("div");
+            tempDiv.innerHTML = html;
+            const codeElement = tempDiv.querySelector("pre code");
+            if (codeElement) {
+              html = `<pre><code>${codeElement.innerHTML}</code></pre>`;
             }
           } catch (e) {
             console.warn("DOM parsing for color adjustment failed:", e);

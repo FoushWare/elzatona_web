@@ -1050,7 +1050,10 @@ export default function FrontendTaskEditor({
                       </label>
                       <div className="space-y-2">
                         {formData.tags.map((tag, index) => (
-                          <div key={`tag-${index}-${tag.substring(0, 10)}`} className="flex items-center gap-2">
+                          <div
+                            key={`tag-${index}-${tag.substring(0, 10)}`}
+                            className="flex items-center gap-2"
+                          >
                             <input
                               type="text"
                               value={tag}
@@ -1229,7 +1232,10 @@ export default function FrontendTaskEditor({
                   ) : (
                     <div className="space-y-2">
                       {formData.hints.map((hint, index) => (
-                        <div key={`hint-edit-${index}-${hint.substring(0, 10)}`} className="flex items-center gap-2">
+                        <div
+                          key={`hint-edit-${index}-${hint.substring(0, 10)}`}
+                          className="flex items-center gap-2"
+                        >
                           <input
                             type="text"
                             value={hint}

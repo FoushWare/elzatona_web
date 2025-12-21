@@ -121,12 +121,33 @@ interface QuestionFormProps {
 }
 
 // Helper components to reduce cognitive complexity
-const ChevronIcon = ({ show, readOnly }: { show: boolean; readOnly: boolean }) => {
+const ChevronIcon = ({
+  show,
+  readOnly,
+}: {
+  show: boolean;
+  readOnly: boolean;
+}) => {
   if (readOnly) return null;
-  return show ? <ChevronDown className="h-5 w-5" /> : <ChevronRightIcon className="h-5 w-5" />;
+  return show ? (
+    <ChevronDown className="h-5 w-5" />
+  ) : (
+    <ChevronRightIcon className="h-5 w-5" />
+  );
 };
 
-const InputField = ({ id, name, value, onChange, required, readOnly, disabled, className, placeholder, label }: {
+const InputField = ({
+  id,
+  name,
+  value,
+  onChange,
+  required,
+  readOnly,
+  disabled,
+  className,
+  placeholder,
+  label,
+}: {
   id: string;
   name: string;
   value: string | number;
@@ -139,7 +160,9 @@ const InputField = ({ id, name, value, onChange, required, readOnly, disabled, c
   label: string;
 }) => (
   <div>
-    <Label htmlFor={id} className="text-sm font-medium">{label}</Label>
+    <Label htmlFor={id} className="text-sm font-medium">
+      {label}
+    </Label>
     <Input
       id={id}
       name={name}
@@ -154,7 +177,15 @@ const InputField = ({ id, name, value, onChange, required, readOnly, disabled, c
   </div>
 );
 
-const SelectField = ({ label, value, onValueChange, disabled, readOnly, children, placeholder }: {
+const SelectField = ({
+  label,
+  value,
+  onValueChange,
+  disabled,
+  readOnly,
+  children,
+  placeholder,
+}: {
   label: string;
   value: string;
   onValueChange: (value: string) => void;
@@ -166,14 +197,19 @@ const SelectField = ({ label, value, onValueChange, disabled, readOnly, children
   <div>
     <Label className="text-sm font-medium">{label}</Label>
     <Select value={value} onValueChange={onValueChange} disabled={disabled}>
-      <SelectTrigger className={`mt-1 ${readOnly ? "bg-gray-50 dark:bg-gray-900 cursor-not-allowed" : ""}`}>
+      <SelectTrigger
+        className={`mt-1 ${readOnly ? "bg-gray-50 dark:bg-gray-900 cursor-not-allowed" : ""}`}
+      >
         <SelectValue placeholder={placeholder} />
       </SelectTrigger>
       <SelectContent>{children}</SelectContent>
     </Select>
   </div>
 );
-const initializeFormState = (initialData: Partial<UnifiedQuestion> | null, readOnly: boolean) => ({
+const initializeFormState = (
+  initialData: Partial<UnifiedQuestion> | null,
+  readOnly: boolean,
+) => ({
   formData: initialData || {
     title: "",
     content: "",
@@ -193,9 +229,13 @@ const initializeFormState = (initialData: Partial<UnifiedQuestion> | null, readO
   showAdditionalSettings: false,
 });
 
-const createFormHandlers = (setFormData: React.Dispatch<React.SetStateAction<Partial<UnifiedQuestion>>>) => ({
+const createFormHandlers = (
+  setFormData: React.Dispatch<React.SetStateAction<Partial<UnifiedQuestion>>>,
+) => ({
   handleChange: (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+    >,
   ) => {
     const { name, value, type, checked } = e.target as HTMLInputElement;
     setFormData((prev) => ({
@@ -241,13 +281,23 @@ export const QuestionForm = React.forwardRef<
     ref,
   ) => {
     const initialState = initializeFormState(initialData, readOnly);
-    const [formData, setFormData] = useState<Partial<UnifiedQuestion>>(initialState.formData);
-    const [showQuestionInfo, setShowQuestionInfo] = useState(initialState.showQuestionInfo);
+    const [formData, setFormData] = useState<Partial<UnifiedQuestion>>(
+      initialState.formData,
+    );
+    const [showQuestionInfo, setShowQuestionInfo] = useState(
+      initialState.showQuestionInfo,
+    );
     const [showContent, setShowContent] = useState(initialState.showContent);
     const [showOptions, setShowOptions] = useState(initialState.showOptions);
-    const [showExplanation, setShowExplanation] = useState(initialState.showExplanation);
-    const [showResources, setShowResources] = useState(initialState.showResources);
-    const [showAdditionalSettings, setShowAdditionalSettings] = useState(initialState.showAdditionalSettings);
+    const [showExplanation, setShowExplanation] = useState(
+      initialState.showExplanation,
+    );
+    const [showResources, setShowResources] = useState(
+      initialState.showResources,
+    );
+    const [showAdditionalSettings, setShowAdditionalSettings] = useState(
+      initialState.showAdditionalSettings,
+    );
 
     useEffect(() => {
       if (initialData) {
@@ -322,20 +372,25 @@ export const QuestionForm = React.forwardRef<
                 <SelectField
                   label="Type"
                   value={formData.type || "multiple-choice"}
-                  onValueChange={(value) => handlers.handleSelectChange("type", value)}
+                  onValueChange={(value) =>
+                    handlers.handleSelectChange("type", value)
+                  }
                   disabled={readOnly}
                   placeholder="Select Type"
                 >
                   {questionTypes.map((type) => (
                     <SelectItem key={type} value={type}>
-                      {type.charAt(0).toUpperCase() + type.slice(1).replace("-", " ")}
+                      {type.charAt(0).toUpperCase() +
+                        type.slice(1).replace("-", " ")}
                     </SelectItem>
                   ))}
                 </SelectField>
                 <SelectField
                   label="Difficulty"
                   value={formData.difficulty || "beginner"}
-                  onValueChange={(value) => handlers.handleSelectChange("difficulty", value)}
+                  onValueChange={(value) =>
+                    handlers.handleSelectChange("difficulty", value)
+                  }
                   disabled={readOnly}
                   placeholder="Select Difficulty"
                 >
@@ -348,7 +403,9 @@ export const QuestionForm = React.forwardRef<
                 <SelectField
                   label="Category"
                   value={formData.category || ""}
-                  onValueChange={(value) => handlers.handleSelectChange("category", value)}
+                  onValueChange={(value) =>
+                    handlers.handleSelectChange("category", value)
+                  }
                   disabled={readOnly}
                   placeholder="Select Category"
                 >
@@ -361,7 +418,9 @@ export const QuestionForm = React.forwardRef<
                 <SelectField
                   label="Learning Card"
                   value={formData.learning_card_id || ""}
-                  onValueChange={(value) => handlers.handleSelectChange("learning_card_id", value)}
+                  onValueChange={(value) =>
+                    handlers.handleSelectChange("learning_card_id", value)
+                  }
                   disabled={readOnly}
                   placeholder="Select Learning Card"
                 >

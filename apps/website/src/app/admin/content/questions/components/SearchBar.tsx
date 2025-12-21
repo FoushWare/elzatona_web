@@ -1,7 +1,13 @@
 "use client";
 
 import React from "react";
-import { Card, CardContent, CardHeader, CardTitle, Input } from "@elzatona/components";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+  Input,
+} from "@elzatona/components";
 
 interface SearchBarProps {
   readonly searchTerm: string;

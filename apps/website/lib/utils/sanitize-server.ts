@@ -118,7 +118,9 @@ export function sanitizeInputServer(input: string): string {
  * @param obj - Object to sanitize
  * @returns Sanitized object
  */
-export function sanitizeObjectServer<T extends Record<string, unknown>>(obj: T): T {
+export function sanitizeObjectServer<T extends Record<string, unknown>>(
+  obj: T,
+): T {
   if (!obj || typeof obj !== "object") {
     return obj;
   }
