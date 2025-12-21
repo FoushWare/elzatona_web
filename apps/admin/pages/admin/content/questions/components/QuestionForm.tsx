@@ -120,7 +120,59 @@ interface QuestionFormProps {
   readOnly?: boolean;
 }
 
-// Helper functions to reduce cognitive complexity
+// Helper components to reduce cognitive complexity
+const ChevronIcon = ({ show, readOnly }: { show: boolean; readOnly: boolean }) => {
+  if (readOnly) return null;
+  return show ? <ChevronDown className="h-5 w-5" /> : <ChevronRightIcon className="h-5 w-5" />;
+};
+
+const InputField = ({ id, name, value, onChange, required, readOnly, disabled, className, placeholder, label }: {
+  id: string;
+  name: string;
+  value: string | number;
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  required?: boolean;
+  readOnly?: boolean;
+  disabled?: boolean;
+  className?: string;
+  placeholder?: string;
+  label: string;
+}) => (
+  <div>
+    <Label htmlFor={id} className="text-sm font-medium">{label}</Label>
+    <Input
+      id={id}
+      name={name}
+      value={value}
+      onChange={onChange}
+      required={required}
+      readOnly={readOnly}
+      disabled={disabled}
+      className={`mt-1 ${readOnly ? "bg-gray-50 dark:bg-gray-900 cursor-text" : ""} ${className}`}
+      placeholder={placeholder}
+    />
+  </div>
+);
+
+const SelectField = ({ label, value, onValueChange, disabled, readOnly, children, placeholder }: {
+  label: string;
+  value: string;
+  onValueChange: (value: string) => void;
+  disabled?: boolean;
+  readOnly?: boolean;
+  children: React.ReactNode;
+  placeholder?: string;
+}) => (
+  <div>
+    <Label className="text-sm font-medium">{label}</Label>
+    <Select value={value} onValueChange={onValueChange} disabled={disabled}>
+      <SelectTrigger className={`mt-1 ${readOnly ? "bg-gray-50 dark:bg-gray-900 cursor-not-allowed" : ""}`}>
+        <SelectValue placeholder={placeholder} />
+      </SelectTrigger>
+      <SelectContent>{children}</SelectContent>
+    </Select>
+  </div>
+);
 const initializeFormState = (initialData: Partial<UnifiedQuestion> | null, readOnly: boolean) => ({
   formData: initialData || {
     title: "",
@@ -252,147 +304,86 @@ export const QuestionForm = React.forwardRef<
               <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
                 Question Information
               </h3>
-              {!readOnly &&
-                (showQuestionInfo ? (
-                  <ChevronDown className="h-5 w-5" />
-                ) : (
-                  <ChevronRightIcon className="h-5 w-5" />
-                ))}
+              <ChevronIcon show={showQuestionInfo} readOnly={readOnly} />
             </CollapsibleTrigger>
             <CollapsibleContent className="px-6 pb-6">
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                <div>
-                  <Label htmlFor="title" className="text-sm font-medium">
-                    Title
-                  </Label>
-                  <Input
-                    id="title"
-                    name="title"
-                    value={formData.title || ""}
-                    onChange={handlers.handleChange}
-                    required={!readOnly}
-                    readOnly={readOnly}
-                    disabled={readOnly}
-                    className={`mt-1 ${readOnly ? "bg-gray-50 dark:bg-gray-900 cursor-text" : ""}`}
-                    placeholder="Enter question title..."
-                  />
-                </div>
-                <div>
-                  <Label htmlFor="type" className="text-sm font-medium">
-                    Type
-                  </Label>
-                  <Select
-                    value={formData.type || "multiple-choice"}
-                    onValueChange={(value) => handlers.handleSelectChange("type", value)}
-                    disabled={readOnly}
-                  >
-                    <SelectTrigger
-                      className={`mt-1 ${readOnly ? "bg-gray-50 dark:bg-gray-900 cursor-not-allowed" : ""}`}
-                    >
-                      <SelectValue placeholder="Select Type" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {questionTypes.map((type) => (
-                        <SelectItem key={type} value={type}>
-                          {type.charAt(0).toUpperCase() +
-                            type.slice(1).replace("-", " ")}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
-                <div>
-                  <Label htmlFor="difficulty" className="text-sm font-medium">
-                    Difficulty
-                  </Label>
-                  <Select
-                    value={formData.difficulty || "beginner"}
-                    onValueChange={(value) => handlers.handleSelectChange("difficulty", value)}
-                    disabled={readOnly}
-                  >
-                    <SelectTrigger
-                      className={`mt-1 ${readOnly ? "bg-gray-50 dark:bg-gray-900 cursor-not-allowed" : ""}`}
-                    >
-                      <SelectValue placeholder="Select Difficulty" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {difficulties.map((difficulty) => (
-                        <SelectItem key={difficulty} value={difficulty}>
-                          {difficulty.charAt(0).toUpperCase() +
-                            difficulty.slice(1)}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
-                <div>
-                  <Label htmlFor="category" className="text-sm font-medium">
-                    Category
-                  </Label>
-                  <Select
-                    value={formData.category || ""}
-                    onValueChange={(value) => handlers.handleSelectChange("category", value)}
-                    disabled={readOnly}
-                  >
-                    <SelectTrigger
-                      className={`mt-1 ${readOnly ? "bg-gray-50 dark:bg-gray-900 cursor-not-allowed" : ""}`}
-                    >
-                      <SelectValue placeholder="Select Category" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {allCategories.map((category) => (
-                        <SelectItem key={category} value={category}>
-                          {category}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
-                <div>
-                  <Label
-                    htmlFor="learning_card_id"
-                    className="text-sm font-medium"
-                  >
-                    Learning Card
-                  </Label>
-                  <Select
-                    value={formData.learning_card_id || ""}
-                    onValueChange={(value) =>
-                      handleSelectChange("learning_card_id", value)
-                    }
-                    disabled={readOnly}
-                  >
-                    <SelectTrigger
-                      className={`mt-1 ${readOnly ? "bg-gray-50 dark:bg-gray-900 cursor-not-allowed" : ""}`}
-                    >
-                      <SelectValue placeholder="Select Learning Card" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {cards.map((card) => (
-                        <SelectItem key={card.id} value={card.id}>
-                          {card.title}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
-                <div>
-                  <Label htmlFor="points" className="text-sm font-medium">
-                    Points
-                  </Label>
-                  <Input
-                    id="points"
-                    name="points"
-                    type="number"
-                    value={formData.points || 1}
-                    onChange={handlers.handleChange}
-                    readOnly={readOnly}
-                    disabled={readOnly}
-                    className={`mt-1 ${readOnly ? "bg-gray-50 dark:bg-gray-900 cursor-text" : ""}`}
-                    min="1"
-                    max="10"
-                  />
-                </div>
+                <InputField
+                  id="title"
+                  name="title"
+                  value={formData.title || ""}
+                  onChange={handlers.handleChange}
+                  required={!readOnly}
+                  readOnly={readOnly}
+                  disabled={readOnly}
+                  placeholder="Enter question title..."
+                  label="Title"
+                />
+                <SelectField
+                  label="Type"
+                  value={formData.type || "multiple-choice"}
+                  onValueChange={(value) => handlers.handleSelectChange("type", value)}
+                  disabled={readOnly}
+                  placeholder="Select Type"
+                >
+                  {questionTypes.map((type) => (
+                    <SelectItem key={type} value={type}>
+                      {type.charAt(0).toUpperCase() + type.slice(1).replace("-", " ")}
+                    </SelectItem>
+                  ))}
+                </SelectField>
+                <SelectField
+                  label="Difficulty"
+                  value={formData.difficulty || "beginner"}
+                  onValueChange={(value) => handlers.handleSelectChange("difficulty", value)}
+                  disabled={readOnly}
+                  placeholder="Select Difficulty"
+                >
+                  {difficulties.map((difficulty) => (
+                    <SelectItem key={difficulty} value={difficulty}>
+                      {difficulty.charAt(0).toUpperCase() + difficulty.slice(1)}
+                    </SelectItem>
+                  ))}
+                </SelectField>
+                <SelectField
+                  label="Category"
+                  value={formData.category || ""}
+                  onValueChange={(value) => handlers.handleSelectChange("category", value)}
+                  disabled={readOnly}
+                  placeholder="Select Category"
+                >
+                  {allCategories.map((category) => (
+                    <SelectItem key={category} value={category}>
+                      {category}
+                    </SelectItem>
+                  ))}
+                </SelectField>
+                <SelectField
+                  label="Learning Card"
+                  value={formData.learning_card_id || ""}
+                  onValueChange={(value) => handlers.handleSelectChange("learning_card_id", value)}
+                  disabled={readOnly}
+                  placeholder="Select Learning Card"
+                >
+                  {cards.map((card) => (
+                    <SelectItem key={card.id} value={card.id}>
+                      {card.title}
+                    </SelectItem>
+                  ))}
+                </SelectField>
+                <InputField
+                  id="points"
+                  name="points"
+                  value={formData.points || 1}
+                  onChange={handlers.handleChange}
+                  readOnly={readOnly}
+                  disabled={readOnly}
+                  className=""
+                  min="1"
+                  max="10"
+                  type="number"
+                  label="Points"
+                />
               </div>
             </CollapsibleContent>
           </div>
@@ -406,12 +397,7 @@ export const QuestionForm = React.forwardRef<
                 <BookOpen className="w-5 h-5 text-blue-600" />
                 Question Content
               </h4>
-              {!readOnly &&
-                (showContent ? (
-                  <ChevronDown className="h-5 w-5" />
-                ) : (
-                  <ChevronRightIcon className="h-5 w-5" />
-                ))}
+              <ChevronIcon show={showContent} readOnly={readOnly} />
             </CollapsibleTrigger>
             <CollapsibleContent className="px-6 pb-6">
               <div>
@@ -605,12 +591,7 @@ export const QuestionForm = React.forwardRef<
                   ? "Explanation"
                   : "Correct Answer"}
               </h4>
-              {!readOnly &&
-                (showExplanation ? (
-                  <ChevronDown className="h-5 w-5" />
-                ) : (
-                  <ChevronRightIcon className="h-5 w-5" />
-                ))}
+              <ChevronIcon show={showExplanation} readOnly={readOnly} />
             </CollapsibleTrigger>
             <CollapsibleContent className="px-6 pb-6">
               <Label htmlFor="explanation" className="text-sm font-medium">
@@ -643,12 +624,7 @@ export const QuestionForm = React.forwardRef<
                 <BookOpen className="w-5 h-5 text-blue-600" />
                 Learning Resources (Optional)
               </h4>
-              {!readOnly &&
-                (showResources ? (
-                  <ChevronDown className="h-5 w-5" />
-                ) : (
-                  <ChevronRightIcon className="h-5 w-5" />
-                ))}
+              <ChevronIcon show={showResources} readOnly={readOnly} />
             </CollapsibleTrigger>
             <CollapsibleContent className="px-6 pb-6">
               <Label htmlFor="resources" className="text-sm font-medium">
@@ -689,12 +665,7 @@ export const QuestionForm = React.forwardRef<
                 <BarChart3 className="w-5 h-5 text-gray-600" />
                 Additional Settings
               </h4>
-              {!readOnly &&
-                (showAdditionalSettings ? (
-                  <ChevronDown className="h-5 w-5" />
-                ) : (
-                  <ChevronRightIcon className="h-5 w-5" />
-                ))}
+              <ChevronIcon show={showAdditionalSettings} readOnly={readOnly} />
             </CollapsibleTrigger>
             <CollapsibleContent className="px-6 pb-6">
               <div className="flex items-center space-x-2">
