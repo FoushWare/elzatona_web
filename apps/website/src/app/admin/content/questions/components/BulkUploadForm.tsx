@@ -11,6 +11,27 @@ import {
 import { Upload, FileText, AlertTriangle, Loader2 } from "lucide-react";
 import { createHighlighter, type Highlighter } from "shiki";
 
+// Helper functions to reduce cognitive complexity in BulkUploadForm
+const parseJsonFile = async (file: File): Promise<any[]> => {
+  const text = await file.text();
+  const data = JSON.parse(text);
+  return Array.isArray(data) ? data : data.questions || [];
+};
+
+const parseCsvFile = async (file: File): Promise<any[]> => {
+  const text = await file.text();
+  const lines = text.split("\n").filter((line) => line.trim());
+  const headers = lines[0].split(",").map((h) => h.trim());
+  return lines.slice(1).map((line) => {
+    const values = line.split(",").map((v) => v.trim());
+    const question: any = {};
+    headers.forEach((header, index) => {
+      question[header] = values[index] || "";
+    });
+    return question;
+  });
+};
+
 interface BulkUploadFormProps {
   readonly onUpload: (file: File) => void;
   readonly onCancel: () => void;
@@ -415,39 +436,27 @@ export function BulkUploadForm({
     }
   };
 
-  const parseFile = async (selectedFile: File) => {
-    try {
-      const fileType = selectedFile.name.split(".").pop()?.toLowerCase();
-      let questions: any[] = [];
+  const parseFile = async (selectedFile: File, setTotalQuestionsCount: React.Dispatch<React.SetStateAction<number>>, setPreviewQuestions: React.Dispatch<React.SetStateAction<any[]>>, setShowPreview: React.Dispatch<React.SetStateAction<boolean>>) => {
+  try {
+    const fileType = selectedFile.name.split(".").pop()?.toLowerCase();
+    let questions: any[] = [];
 
-      if (fileType === "json") {
-        const text = await selectedFile.text();
-        const data = JSON.parse(text);
-        questions = Array.isArray(data) ? data : data.questions || [];
-      } else if (fileType === "csv") {
-        const text = await selectedFile.text();
-        const lines = text.split("\n").filter((line) => line.trim());
-        const headers = lines[0].split(",").map((h) => h.trim());
-        questions = lines.slice(1).map((line) => {
-          const values = line.split(",").map((v) => v.trim());
-          const question: any = {};
-          headers.forEach((header, index) => {
-            question[header] = values[index] || "";
-          });
-          return question;
-        });
-      }
-
-      setTotalQuestionsCount(questions.length);
-      setPreviewQuestions(questions.slice(0, 3));
-      setShowPreview(questions.length > 0);
-    } catch (err) {
-      console.error("Error parsing file:", err);
-      setPreviewQuestions([]);
-      setTotalQuestionsCount(0);
-      setShowPreview(false);
+    if (fileType === "json") {
+      questions = await parseJsonFile(selectedFile);
+    } else if (fileType === "csv") {
+      questions = await parseCsvFile(selectedFile);
     }
-  };
+
+    setTotalQuestionsCount(questions.length);
+    setPreviewQuestions(questions.slice(0, 3));
+    setShowPreview(questions.length > 0);
+  } catch (err) {
+    console.error("Error parsing file:", err);
+    setPreviewQuestions([]);
+    setTotalQuestionsCount(0);
+    setShowPreview(false);
+  }
+};
 
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFile = e.target.files?.[0];
@@ -457,7 +466,7 @@ export function BulkUploadForm({
         return;
       }
       setFile(selectedFile);
-      await parseFile(selectedFile);
+      await parseFile(selectedFile, setTotalQuestionsCount, setPreviewQuestions, setShowPreview);
     }
   };
 
@@ -554,7 +563,7 @@ export function BulkUploadForm({
       const fileType = droppedFile.name.split(".").pop()?.toLowerCase();
       if (fileType === "csv" || fileType === "json") {
         setFile(droppedFile);
-        await parseFile(droppedFile);
+        await parseFile(droppedFile, setTotalQuestionsCount, setPreviewQuestions, setShowPreview);
       }
     }
   };
