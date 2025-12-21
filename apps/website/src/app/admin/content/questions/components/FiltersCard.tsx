@@ -17,20 +17,20 @@ import {
 import { Filter, X } from "lucide-react";
 
 interface FiltersCardProps {
-  selectedCategory: string;
-  selectedTopic: string;
-  selectedType: string;
-  selectedDifficulty: string;
-  selectedStatus: string;
-  categoriesData: any[];
-  topicsData: any[];
-  allTypes: string[];
-  onCategoryChange: (value: string) => void;
-  onTopicChange: (value: string) => void;
-  onTypeChange: (value: string) => void;
-  onDifficultyChange: (value: string) => void;
-  onStatusChange: (value: string) => void;
-  onClearFilters: () => void;
+  readonly selectedCategory: string;
+  readonly selectedTopic: string;
+  readonly selectedType: string;
+  readonly selectedDifficulty: string;
+  readonly selectedStatus: string;
+  readonly categoriesData: any[];
+  readonly topicsData: any[];
+  readonly allTypes: string[];
+  readonly onCategoryChange: (value: string) => void;
+  readonly onTopicChange: (value: string) => void;
+  readonly onTypeChange: (value: string) => void;
+  readonly onDifficultyChange: (value: string) => void;
+  readonly onStatusChange: (value: string) => void;
+  readonly onClearFilters: () => void;
 }
 
 export const FiltersCard: React.FC<FiltersCardProps> = ({

@@ -152,19 +152,22 @@ export function sanitizeObjectServer<T extends Record<string, unknown>>(
       // For content and other rich text fields, preserve newlines - don't use sanitizeInputServer
       else if (preserveNewlinesFields.includes(key)) {
         // Only remove dangerous control characters, but preserve newlines and tabs
-        let content = sanitized[key];
+        let content = sanitized[key] as string;
         content = content
           .replace(/[\x00-\x08\x0B-\x0C\x0E-\x1F\x7F]/g, "") // Remove control chars except \n (0x0A), \r (0x0D), \t (0x09)
           .replace(/\x00/g, ""); // Remove null bytes
-        sanitized[key] = content as T[typeof key];
+        sanitized[key] = content as T[Extract<keyof T, string>];
       } else {
         // For other string fields, use standard sanitization
-        sanitized[key] = sanitizeInputServer(sanitized[key]) as T[typeof key];
+        sanitized[key] = sanitizeInputServer(sanitized[key]) as T[Extract<
+          keyof T,
+          string
+        >];
       }
     } else if (Array.isArray(sanitized[key])) {
       sanitized[key] = sanitized[key].map((item: unknown) =>
         typeof item === "string" ? sanitizeInputServer(item) : item,
-      ) as T[typeof key];
+      ) as T[Extract<keyof T, string>];
     } else if (
       sanitized[key] &&
       typeof sanitized[key] === "object" &&
@@ -176,7 +179,9 @@ export function sanitizeObjectServer<T extends Record<string, unknown>>(
       const isDate =
         value && typeof value === "object" && value.constructor === Date;
       if (!isDate) {
-        sanitized[key] = sanitizeObjectServer(sanitized[key]) as T[typeof key];
+        sanitized[key] = sanitizeObjectServer(
+          sanitized[key] as Record<string, unknown>,
+        ) as T[Extract<keyof T, string>];
       }
     }
   }

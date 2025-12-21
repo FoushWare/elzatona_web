@@ -497,8 +497,8 @@ export default function CustomPracticePage() {
                   <p className="text-sm text-gray-600 dark:text-gray-400">
                     The correct answer is{" "}
                     <span className="font-semibold text-gray-900 dark:text-white">
-                      {String.fromCodePoint(65 + currentQuestion.correctAnswer)}: {" "}
-                      {currentQuestion.options[currentQuestion.correctAnswer]}
+                      {String.fromCodePoint(65 + currentQuestion.correctAnswer)}
+                      : {currentQuestion.options[currentQuestion.correctAnswer]}
                     </span>
                   </p>
                 </div>

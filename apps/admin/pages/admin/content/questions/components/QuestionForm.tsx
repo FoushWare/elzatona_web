@@ -225,7 +225,7 @@ const initializeFormState = (
   showContent: readOnly,
   showOptions: readOnly,
   showExplanation: readOnly || !!initialData?.explanation,
-  showResources: readOnly || !!(initialData as UnifiedQuestion)?.resources,
+  showResources: readOnly || !!(initialData as any)?.resources,
   showAdditionalSettings: false,
 });
 
@@ -254,7 +254,7 @@ const createFormHandlers = (
     } catch (_error) {
       setFormData((prev) => ({
         ...prev,
-        resources: value as string[],
+        resources: value as unknown as string[],
       }));
     }
   },
@@ -280,7 +280,7 @@ export const QuestionForm = React.forwardRef<
     },
     ref,
   ) => {
-    const initialState = initializeFormState(initialData, readOnly);
+    const initialState = initializeFormState(initialData || null, readOnly);
     const [formData, setFormData] = useState<Partial<UnifiedQuestion>>(
       initialState.formData,
     );
@@ -328,7 +328,7 @@ export const QuestionForm = React.forwardRef<
         setShowContent(false);
         setShowOptions(false);
         setShowExplanation(!!initialData?.explanation);
-        setShowResources(!!(initialData as UnifiedQuestion)?.resources);
+        setShowResources(!!(initialData as any)?.resources);
         setShowAdditionalSettings(false);
       }
     }, [readOnly, initialData]);
@@ -438,9 +438,6 @@ export const QuestionForm = React.forwardRef<
                   readOnly={readOnly}
                   disabled={readOnly}
                   className=""
-                  min="1"
-                  max="10"
-                  type="number"
                   label="Points"
                 />
               </div>
@@ -693,9 +690,9 @@ export const QuestionForm = React.forwardRef<
                 id="resources"
                 name="resources"
                 value={
-                  typeof formData.resources === "string"
-                    ? formData.resources
-                    : JSON.stringify(formData.resources || [], null, 2)
+                  typeof (formData as any).resources === "string"
+                    ? (formData as any).resources
+                    : JSON.stringify((formData as any).resources || [], null, 2)
                 }
                 onChange={(e) => handlers.handleResourcesChange(e.target.value)}
                 rows={8}

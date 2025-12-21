@@ -306,10 +306,10 @@ export async function GET(
         decoded = decoded.replace(new RegExp(entity, "gi"), char);
       }
       decoded = decoded.replace(/&#(\d+);/g, (_, dec) =>
-        String.fromCharCode(parseInt(dec, 10)),
+        String.fromCodePoint(parseInt(dec, 10)),
       );
       decoded = decoded.replace(/&#x([0-9a-fA-F]+);/gi, (_, hex) =>
-        String.fromCharCode(parseInt(hex, 16)),
+        String.fromCodePoint(parseInt(hex, 16)),
       );
       return decoded;
     };

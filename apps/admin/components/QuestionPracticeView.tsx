@@ -442,7 +442,7 @@ export const QuestionPracticeView: React.FC<QuestionPracticeViewProps> = ({
 
                   return (
                     <a
-                      key={index}
+                      key={resource.url || `resource-${index}`}
                       href={resource.url}
                       target="_blank"
                       rel="noopener noreferrer"

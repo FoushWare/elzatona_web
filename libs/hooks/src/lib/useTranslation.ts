@@ -62,7 +62,7 @@ export function useTranslation() {
     localStorage.setItem("locale", newLocale);
 
     // Update URL with locale parameter
-    const url = new URL(window.location.href);
+    const url = new URL(globalThis.window.location.href);
     url.searchParams.set("locale", newLocale);
     router.push(url.pathname + url.search);
   };

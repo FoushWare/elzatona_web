@@ -90,13 +90,7 @@ export default function ProblemSolvingPage() {
 
   useEffect(() => {
     fetchTasks();
-  }, [
-    currentPage,
-    selectedCategory,
-    selectedDifficulty,
-    searchTerm,
-    fetchTasks,
-  ]);
+  }, [currentPage, selectedCategory, selectedDifficulty, searchTerm]);
 
   const fetchTasks = useCallback(async () => {
     try {

@@ -32,11 +32,12 @@ export function QuestionItem({
 
   // Handle both array and single object formats for categories
   const categories = (question as any).categories;
-  const categoriesArray = Array.isArray(categories)
+  const categoriesSource = Array.isArray(categories)
     ? categories
     : categories && typeof categories === "object"
       ? [categories]
       : [];
+  const categoriesArray = categoriesSource;
 
   return (
     <div
@@ -136,13 +137,15 @@ export function QuestionItem({
               {/* Difficulty Badge */}
               {question.difficulty && (
                 <Badge
-                  variant={
-                    question.difficulty === "beginner"
-                      ? "default"
-                      : question.difficulty === "intermediate"
-                        ? "outline"
-                        : "destructive"
-                  }
+                  variant={(() => {
+                    const difficultyVariant =
+                      question.difficulty === "beginner"
+                        ? "default"
+                        : question.difficulty === "intermediate"
+                          ? "outline"
+                          : "destructive";
+                    return difficultyVariant;
+                  })()}
                 >
                   {question.difficulty}
                 </Badge>

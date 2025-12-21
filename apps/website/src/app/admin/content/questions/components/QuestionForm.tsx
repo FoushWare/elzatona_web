@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useEffect, useMemo, useCallback } from "react";
 import {
   Button,
   Input,
@@ -30,7 +30,7 @@ import { UnifiedQuestion } from "@elzatona/types";
 type Question = UnifiedQuestion;
 
 interface QuestionFormProps {
-  readonly initialData?: Question;
+  readonly initialData: Question | undefined;
   readonly onSubmit: (question: Partial<Question>) => void;
   readonly onCancel: () => void;
   readonly cards: any[];
@@ -205,14 +205,45 @@ export function QuestionForm({
     );
   }, [cards, learningCardSearch]);
 
+  // Helper function to apply topic search filter
+  const applyTopicSearchFilter = useCallback(
+    (topics: any[], searchTerm: string) => {
+      if (!searchTerm.trim()) return topics;
+      const searchLower = searchTerm.toLowerCase();
+      return topics.filter((topic: any) =>
+        (topic.name || topic.title || "").toLowerCase().includes(searchLower),
+      );
+    },
+    [],
+  );
+
+  // Helper function to filter topics by category
+  const filterTopicsByCategory = useCallback(
+    (categoryId: string) => {
+      return topicsData.filter(
+        (topic: any) =>
+          topic.categoryId === categoryId || topic.category_id === categoryId,
+      );
+    },
+    [topicsData],
+  );
+
+  // Helper function to find selected category
+  const findSelectedCategory = useCallback(
+    (categoryName: string) => {
+      return categoriesData.find(
+        (cat: any) => (cat.name || cat.title) === categoryName,
+      );
+    },
+    [categoriesData],
+  );
+
   const filteredTopics = useMemo(() => {
     if (!formData.category) {
       console.log("🔍 No category selected, returning empty topics");
       return [];
     }
-    const selectedCategory = categoriesData.find(
-      (cat: any) => (cat.name || cat.title) === formData.category,
-    );
+    const selectedCategory = findSelectedCategory(formData.category);
     if (!selectedCategory) {
       console.log(
         "⚠️ Category not found:",
@@ -222,19 +253,10 @@ export function QuestionForm({
       );
       return [];
     }
-    let filtered = topicsData.filter(
-      (topic: any) =>
-        topic.categoryId === selectedCategory.id ||
-        topic.category_id === selectedCategory.id,
-    );
+    let filtered = filterTopicsByCategory(selectedCategory.id);
 
     // Apply topic search filter
-    if (topicSearch.trim()) {
-      const searchLower = topicSearch.toLowerCase();
-      filtered = filtered.filter((topic: any) =>
-        (topic.name || topic.title || "").toLowerCase().includes(searchLower),
-      );
-    }
+    filtered = applyTopicSearchFilter(filtered, topicSearch);
 
     const uniqueTopicsMap = new Map<string, any>();
 
@@ -451,27 +473,23 @@ export function QuestionForm({
       {/* JSON Mode Toggle */}
       <div className="flex items-center justify-between p-4 rounded-lg border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800/50">
         <div className="flex items-center gap-3">
-          <Label
-            htmlFor="json-mode"
-            className="text-base font-semibold cursor-pointer"
-          >
+          <label className="text-base font-semibold cursor-pointer">
             Use JSON Format
-          </Label>
+            <input
+              type="checkbox"
+              checked={isJsonMode}
+              onChange={(e) => handleJsonModeToggle(e.target.checked)}
+              disabled={disabled}
+              className="sr-only peer"
+            />
+          </label>
           <span className="text-xs text-gray-500 dark:text-gray-400">
             Switch to JSON mode to input question data as JSON
           </span>
         </div>
-        <label className="inline-flex items-center cursor-pointer">
-          <input
-            type="checkbox"
-            id="json-mode"
-            checked={isJsonMode}
-            onChange={(e) => handleJsonModeToggle(e.target.checked)}
-            disabled={disabled}
-            className="sr-only peer"
-          />
+        <div className="inline-flex items-center cursor-pointer">
           <div className="relative w-9 h-5 bg-gray-300 dark:bg-gray-600 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-red-200 dark:peer-focus:ring-red-900 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-red-600 dark:peer-checked:bg-red-700"></div>
-        </label>
+        </div>
       </div>
 
       {/* JSON Mode View */}
@@ -625,9 +643,9 @@ export function QuestionForm({
                 >
                   <SelectValue
                     placeholder={
-                      !formData.category
-                        ? "Select category first"
-                        : "Select Topic (Optional)"
+                      formData.category
+                        ? "Select Topic (Optional)"
+                        : "Select category first"
                     }
                   />
                 </SelectTrigger>
@@ -663,12 +681,10 @@ export function QuestionForm({
                   {filteredTopics.length > 0 ? (
                     filteredTopics.map((topic: any, index: number) => {
                       const topicId = topic.id || `no-id-${index}`;
-                      const topicName = (
-                        topic.name ||
-                        topic.title ||
-                        `no-name-${index}`
-                      ).trim();
-                      const uniqueKey = `topic-${topicId}-${topicName.replace(/\s+/g, "-")}-${index}`;
+                      const topicNameSource =
+                        topic.name || topic.title || `no-name-${index}`;
+                      const topicName = topicNameSource.trim();
+                      const uniqueKey = `topic-${topicId}-${topicName.replaceAll(/\s+/, "-")}-${index}`;
 
                       return (
                         <SelectItem key={uniqueKey} value={topicName}>
@@ -678,11 +694,11 @@ export function QuestionForm({
                     })
                   ) : (
                     <SelectItem value="no-topics" disabled>
-                      {!formData.category
-                        ? "Select category first"
-                        : topicSearch
+                      {formData.category
+                        ? topicSearch
                           ? "No topics found"
-                          : "No topics available for this category"}
+                          : "No topics available for this category"
+                        : "Select category first"}
                     </SelectItem>
                   )}
                 </SelectContent>
@@ -1010,7 +1026,7 @@ export function QuestionForm({
               <span className="text-sm text-gray-500 dark:text-gray-400">
                 {(() => {
                   if (formData.resources && Array.isArray(formData.resources)) {
-                    return `${formData.resources.length} resource${formData.resources.length !== 1 ? "s" : ""}`;
+                    return `${formData.resources.length} resource${formData.resources.length === 1 ? "" : "s"}`;
                   }
                   return isResourcesOpen
                     ? "Click to collapse"
@@ -1022,27 +1038,23 @@ export function QuestionForm({
               {/* Toggle between Form and JSON Mode */}
               <div className="flex items-center justify-between p-3 rounded-lg border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800/50">
                 <div className="flex items-center gap-3">
-                  <Label
-                    htmlFor="resources-json-mode"
-                    className="text-sm font-semibold cursor-pointer"
-                  >
+                  <label className="text-sm font-semibold cursor-pointer">
                     Use JSON Format
-                  </Label>
+                    <input
+                      type="checkbox"
+                      checked={isResourcesJsonMode}
+                      onChange={(e) => setIsResourcesJsonMode(e.target.checked)}
+                      disabled={disabled}
+                      className="sr-only peer"
+                    />
+                  </label>
                   <span className="text-xs text-gray-500 dark:text-gray-400">
                     Switch to JSON mode to paste resources directly
                   </span>
                 </div>
-                <label className="inline-flex items-center cursor-pointer">
-                  <input
-                    type="checkbox"
-                    id="resources-json-mode"
-                    checked={isResourcesJsonMode}
-                    onChange={(e) => setIsResourcesJsonMode(e.target.checked)}
-                    disabled={disabled}
-                    className="sr-only peer"
-                  />
+                <div className="inline-flex items-center cursor-pointer">
                   <div className="relative w-9 h-5 bg-gray-300 dark:bg-gray-600 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-200 dark:peer-focus:ring-blue-900 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-blue-600 dark:peer-checked:bg-blue-700"></div>
-                </label>
+                </div>
               </div>
 
               {/* JSON Mode */}
@@ -1110,7 +1122,7 @@ export function QuestionForm({
                   formData.resources.length > 0 ? (
                     formData.resources.map((resource: any, index: number) => (
                       <div
-                        key={index}
+                        key={`resource-${resource.type || "unknown"}-${resource.title || "no-title"}-${resource.url || "no-url"}-${index}`}
                         className="p-4 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 space-y-3"
                       >
                         <div className="flex items-center justify-between mb-3">

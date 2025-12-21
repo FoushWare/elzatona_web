@@ -49,6 +49,7 @@ export function CreateQuestionModal({
       maxWidth="max-w-3xl"
     >
       <QuestionForm
+        initialData={undefined}
         onSubmit={onSubmit}
         onCancel={onClose}
         cards={cards}

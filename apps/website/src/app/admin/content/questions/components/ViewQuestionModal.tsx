@@ -60,7 +60,8 @@ const processColorForLightMode = (
       shouldReplace = true;
     }
   } else if (colorValue.startsWith("rgb")) {
-    const rgbMatch = colorValue.match(/rgb\((\d+),\s*(\d+),\s*(\d+)\)/);
+    const rgbRegex = /rgb\((\d+),\s*(\d+),\s*(\d+)\)/;
+    const rgbMatch = rgbRegex.exec(colorValue);
     if (rgbMatch) {
       const r = Number.parseInt(rgbMatch[1], 10);
       const g = Number.parseInt(rgbMatch[2], 10);
@@ -114,13 +115,30 @@ const checkCodeStructure = (formatted: string): boolean => {
   );
 };
 
+// Helper function to determine option CSS classes
+const getOptionClasses = (
+  selectedAnswer: string | null,
+  isCorrect: boolean,
+  isWrong: boolean,
+) => {
+  if (!selectedAnswer) {
+    return "border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 hover:border-indigo-500 dark:hover:border-indigo-500 hover:bg-indigo-50 dark:hover:bg-indigo-900/30 hover:shadow-xl hover:shadow-indigo-200/50 dark:hover:shadow-indigo-900/30 hover:scale-[1.02] active:scale-[0.98] text-gray-900 dark:text-gray-100 cursor-pointer";
+  }
+  if (isCorrect) {
+    return "border-green-500 dark:border-green-400 bg-gradient-to-r from-green-50 to-emerald-50 dark:from-green-900/40 dark:to-emerald-900/40 text-green-900 dark:text-green-100 shadow-xl shadow-green-200/50 dark:shadow-green-900/30 scale-[1.02]";
+  }
+  if (isWrong) {
+    return "border-red-500 dark:border-red-400 bg-gradient-to-r from-red-50 to-rose-50 dark:from-red-900/40 dark:to-rose-900/40 text-red-900 dark:text-red-100 shadow-xl shadow-red-200/50 dark:shadow-red-900/30 scale-[1.02]";
+  }
+  return "border-gray-300 dark:border-gray-600 bg-gray-100 dark:bg-gray-700/70 text-gray-500 dark:text-gray-500 opacity-70 dark:opacity-60";
+};
+
 // Helper function to format code with indentation
 const formatWithIndentation = (codeLines: string[]): string => {
   let indentLevel = 0;
   const formattedLines: string[] = [];
 
-  for (let i = 0; i < codeLines.length; i++) {
-    const originalLine = codeLines[i];
+  for (const originalLine of codeLines) {
     const trimmed = originalLine.trim();
 
     // CRITICAL: Preserve empty lines - don't skip them
@@ -130,7 +148,7 @@ const formatWithIndentation = (codeLines: string[]): string => {
     }
 
     // Decrease indent before closing braces/brackets
-    if (trimmed.match(/^[}\]\)]/)) {
+    if (/^[}\])]/.exec(trimmed)) {
       indentLevel = Math.max(0, indentLevel - 1);
     }
 
@@ -302,9 +320,9 @@ export function ViewQuestionModal({
         rawCodePreview: rawCode.substring(0, 100),
       });
       let codeWithNewlines = rawCode
-        .replaceAll("\\n", "\n")
-        .replaceAll("\\r\\n", "\n")
-        .replaceAll("\\r", "\n")
+        .replaceAll(String.raw`\n`, "\n")
+        .replaceAll(String.raw`\r\n`, "\n")
+        .replaceAll(String.raw`\r`, "\n")
         .replaceAll("\r\n", "\n")
         .replaceAll("\r", "\n")
         .trim();
@@ -341,16 +359,21 @@ export function ViewQuestionModal({
         false;
       const themeName = prefersDark ? "github-dark" : "github-light";
 
+      // Determine highlighter language
+      const highlighterLang = (() => {
+        if (lang === "typescript") return "ts";
+        if (lang === "javascript") return "js";
+        return lang;
+      })();
       let html = shikiHighlighter.codeToHtml(codeWithNewlines, {
-        lang:
-          lang === "typescript" ? "ts" : lang === "javascript" ? "js" : lang,
+        lang: highlighterLang,
         theme: themeName,
       });
 
       // Post-process HTML for light mode color adjustments
-      if (typeof globalThis.window !== "undefined") {
+      if (globalThis.window !== undefined) {
         const prefersDark = globalThis.window.matchMedia(
-          "(prefers-color-scheme: dark)"
+          "(prefers-color-scheme: dark)",
         ).matches;
 
         if (!prefersDark) {
@@ -463,9 +486,9 @@ export function ViewQuestionModal({
               if (!codeStr) return null;
               const rawCode = codeStr;
               let codeWithNewlines = rawCode
-                .replaceAll("\\n", "\n")
-                .replaceAll("\\r\\n", "\n")
-                .replaceAll("\\r", "\n")
+                .replaceAll(String.raw`\n`, "\n")
+                .replaceAll(String.raw`\r\n`, "\n")
+                .replaceAll(String.raw`\r`, "\n")
                 .replaceAll("\r\n", "\n")
                 .replaceAll("\r", "\n")
                 .trim();
@@ -482,9 +505,8 @@ export function ViewQuestionModal({
 
               // Detect theme
               const prefersDark =
-                typeof globalThis.window !== "undefined" &&
-                globalThis.window.matchMedia("(prefers-color-scheme: dark)")
-                  .matches;
+                globalThis.window?.matchMedia("(prefers-color-scheme: dark)")
+                  ?.matches || false;
               const codeTheme = prefersDark ? "dark" : "light";
 
               return (
@@ -533,13 +555,13 @@ export function ViewQuestionModal({
                             }`}
                           >
                             code.
-                            {detectedLanguage === "python"
-                              ? "py"
-                              : detectedLanguage === "java"
-                                ? "java"
-                                : detectedLanguage === "typescript"
-                                  ? "ts"
-                                  : "js"}
+                            {(() => {
+                              if (detectedLanguage === "python") return "py";
+                              if (detectedLanguage === "java") return "java";
+                              if (detectedLanguage === "typescript")
+                                return "ts";
+                              return "js";
+                            })()}
                           </span>
                         </div>
                       </div>
@@ -633,31 +655,6 @@ export function ViewQuestionModal({
                               }
                             `}</style>
                           </div>
-
-                            {/* Line numbers */}
-                            <div
-                              className="absolute left-0 top-0 flex flex-col"
-                              style={{ paddingTop: "0.375rem" }}
-                            >
-                              {nonEmptyLines.map((_, index) => (
-                                <span
-                                  key={index}
-                                  className={`select-none pr-2 pl-2 text-right min-w-[2.5rem] text-xs font-medium ${
-                                    codeTheme === "dark"
-                                      ? "text-gray-400"
-                                      : "text-gray-500"
-                                  }`}
-                                  style={{
-                                    lineHeight: "1.25",
-                                    minHeight: "1.25rem",
-                                    display: "block",
-                                  }}
-                                >
-                                  {index + 1}
-                                </span>
-                              ))}
-                            </div>
-                          </div>
                         </div>
                       ) : (
                         // Fallback: plain code display
@@ -672,7 +669,10 @@ export function ViewQuestionModal({
                           <pre className="m-0 p-2 pl-10 text-sm font-mono font-medium leading-relaxed">
                             <code className="block">
                               {nonEmptyLines.map((line, index) => (
-                                <div key={index} className="flex items-start">
+                                <div
+                                  key={`line-${index}-${line.slice(0, 20)}`}
+                                  className="flex items-start"
+                                >
                                   <span
                                     className={`select-none pr-2 text-right min-w-[2.5rem] text-xs font-medium ${
                                       codeTheme === "dark"
@@ -723,15 +723,11 @@ export function ViewQuestionModal({
                   key={optionId}
                   onClick={() => handleAnswerSelect(option.text)}
                   disabled={!!selectedAnswer}
-                  className={`w-full text-left p-4 sm:p-5 rounded-xl sm:rounded-2xl border-2 transition-all duration-300 transform ${
-                    !selectedAnswer
-                      ? "border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 hover:border-indigo-500 dark:hover:border-indigo-500 hover:bg-indigo-50 dark:hover:bg-indigo-900/30 hover:shadow-xl hover:shadow-indigo-200/50 dark:hover:shadow-indigo-900/30 hover:scale-[1.02] active:scale-[0.98] text-gray-900 dark:text-gray-100 cursor-pointer"
-                      : isCorrect
-                        ? "border-green-500 dark:border-green-400 bg-gradient-to-r from-green-50 to-emerald-50 dark:from-green-900/40 dark:to-emerald-900/40 text-green-900 dark:text-green-100 shadow-xl shadow-green-200/50 dark:shadow-green-900/30 scale-[1.02]"
-                        : isWrong
-                          ? "border-red-500 dark:border-red-400 bg-gradient-to-r from-red-50 to-rose-50 dark:from-red-900/40 dark:to-rose-900/40 text-red-900 dark:text-red-100 shadow-xl shadow-red-200/50 dark:shadow-red-900/30 scale-[1.02]"
-                          : "border-gray-300 dark:border-gray-600 bg-gray-100 dark:bg-gray-700/70 text-gray-500 dark:text-gray-500 opacity-70 dark:opacity-60"
-                  } ${selectedAnswer ? "cursor-default" : "cursor-pointer"}`}
+                  className={`w-full text-left p-4 sm:p-5 rounded-xl sm:rounded-2xl border-2 transition-all duration-300 transform ${getOptionClasses(
+                    selectedAnswer,
+                    isCorrect,
+                    isWrong,
+                  )} ${selectedAnswer ? "cursor-default" : "cursor-pointer"}`}
                 >
                   <div className="flex items-center space-x-4 sm:space-x-5">
                     <div
@@ -853,7 +849,7 @@ export function ViewQuestionModal({
 
                   return (
                     <a
-                      key={index}
+                      key={resource.url || `resource-${index}`}
                       href={resource.url}
                       target="_blank"
                       rel="noopener noreferrer"

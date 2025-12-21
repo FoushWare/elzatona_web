@@ -107,7 +107,9 @@ export function sanitizeObject<T extends Record<string, unknown>>(obj: T): T {
       const isDate =
         value && typeof value === "object" && value.constructor === Date;
       if (!isDate && !Array.isArray(sanitized[key])) {
-        sanitized[key] = sanitizeObject(sanitized[key]) as T[typeof key];
+        sanitized[key] = sanitizeObject(
+          sanitized[key] as Record<string, unknown>,
+        ) as T[typeof key];
       }
     }
   }

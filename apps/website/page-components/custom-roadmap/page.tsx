@@ -3015,7 +3015,7 @@ export default function CustomRoadmapPage() {
                                 >
                                   <div className="flex items-start space-x-2">
                                     <span className="font-medium text-gray-600 dark:text-gray-400">
-                                      {String.fromCharCode(65 + index)}.
+                                      {String.fromCodePoint(65 + index)}.
                                     </span>
                                     <span className="text-gray-900 dark:text-white flex-1">
                                       {optionText}

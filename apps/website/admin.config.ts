@@ -53,7 +53,7 @@ export const adminConfig = {
     baseUrl:
       process.env["ADMIN_API_BASE_URL"] ||
       `http://localhost:${process.env["ADMIN_PORT"] || process.env["PORT"] || "3000"}/api`,
-    timeout: parseInt(process.env["ADMIN_API_TIMEOUT"] || "10000"),
+    timeout: Number.parseInt(process.env["ADMIN_API_TIMEOUT"] || "10000", 10),
   },
 
   // Admin Credentials (for initialization only)
@@ -72,12 +72,19 @@ export const adminConfig = {
 
   // Security Configuration
   security: {
-    saltRounds: parseInt(process.env["BCRYPT_SALT_ROUNDS"] || "12"),
-    sessionTimeout: parseInt(
+    saltRounds: Number.parseInt(process.env["BCRYPT_SALT_ROUNDS"] || "12", 10),
+    sessionTimeout: Number.parseInt(
       process.env["ADMIN_SESSION_TIMEOUT"] || "86400000",
+      10,
     ), // 24 hours in ms
-    maxLoginAttempts: parseInt(process.env["MAX_LOGIN_ATTEMPTS"] || "5"),
-    lockoutDuration: parseInt(process.env["LOCKOUT_DURATION"] || "900000"), // 15 minutes in ms
+    maxLoginAttempts: Number.parseInt(
+      process.env["MAX_LOGIN_ATTEMPTS"] || "5",
+      10,
+    ),
+    lockoutDuration: Number.parseInt(
+      process.env["LOCKOUT_DURATION"] || "900000",
+      10,
+    ), // 15 minutes in ms
   },
 
   // Database Configuration

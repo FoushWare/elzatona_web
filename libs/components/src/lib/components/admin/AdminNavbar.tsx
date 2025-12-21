@@ -43,11 +43,11 @@ export default function AdminNavbar() {
   // Handle scroll effect
   useEffect(() => {
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 10);
+      setIsScrolled(globalThis.window.scrollY > 10);
     };
 
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
+    globalThis.window.addEventListener("scroll", handleScroll);
+    return () => globalThis.window.removeEventListener("scroll", handleScroll);
   }, []);
 
   // Close dropdowns when clicking outside

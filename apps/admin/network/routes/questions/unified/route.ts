@@ -86,8 +86,8 @@ export async function GET(request: NextRequest) {
     const supabase = getSupabaseClient();
 
     const { searchParams } = new URL(request.url);
-    const page = parseInt(searchParams.get("page") || "1");
-    const pageSize = parseInt(searchParams.get("pageSize") || "10");
+    const page = Number.parseInt(searchParams.get("page") || "1", 10);
+    const pageSize = Number.parseInt(searchParams.get("pageSize") || "10", 10);
     const category = searchParams.get("category");
     const difficulty = searchParams.get("difficulty");
     const type = searchParams.get("type");

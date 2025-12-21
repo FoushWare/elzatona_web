@@ -4,10 +4,10 @@ import React from "react";
 import { Card, CardContent } from "@elzatona/components";
 
 interface StatsCardsProps {
-  totalCount: number;
-  categoriesCount: number;
-  topicsCount: number;
-  filteredCount: number;
+  readonly totalCount: number;
+  readonly categoriesCount: number;
+  readonly topicsCount: number;
+  readonly filteredCount: number;
 }
 
 export function StatsCards({
