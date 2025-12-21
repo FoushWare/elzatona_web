@@ -12,12 +12,12 @@ import { Upload, FileText, AlertTriangle, Loader2 } from "lucide-react";
 import { createHighlighter, type Highlighter } from "shiki";
 
 interface BulkUploadFormProps {
-  onUpload: (file: File) => void;
-  onCancel: () => void;
-  loading: boolean;
-  error: string | null;
-  success: string | null;
-  progress: { current: number; total: number } | null;
+  readonly onUpload: (file: File) => void;
+  readonly onCancel: () => void;
+  readonly loading: boolean;
+  readonly error: string | null;
+  readonly success: string | null;
+  readonly progress: { current: number; total: number } | null;
 }
 
 export function BulkUploadForm({
@@ -142,7 +142,7 @@ export function BulkUploadForm({
 
         // Final check
         if (codeWithNewlines.includes("\n\n")) {
-          codeWithNewlines = codeWithNewlines.replace(/\n{2,}/g, "\n");
+          codeWithNewlines = codeWithNewlines.replaceAll(/\n{2,}/g, "\n");
         }
 
         // Detect language
@@ -220,9 +220,9 @@ export function BulkUploadForm({
 
                       if (colorValue.startsWith("#")) {
                         const hex = colorValue.substring(1);
-                        const r = parseInt(hex.substr(0, 2), 16);
-                        const g = parseInt(hex.substr(2, 2), 16);
-                        const b = parseInt(hex.substr(4, 2), 16);
+                        const r = Number.parseInt(hex.slice(0, 2), 16);
+                        const g = Number.parseInt(hex.slice(2, 2), 16);
+                        const b = Number.parseInt(hex.slice(4, 2), 16);
                         const brightness = (r * 299 + g * 587 + b * 114) / 1000;
 
                         if (brightness > 180) {
@@ -247,9 +247,9 @@ export function BulkUploadForm({
                           /rgb\((\d+),\s*(\d+),\s*(\d+)\)/,
                         );
                         if (rgbMatch) {
-                          const r = parseInt(rgbMatch[1]);
-                          const g = parseInt(rgbMatch[2]);
-                          const b = parseInt(rgbMatch[3]);
+                          const r = Number.parseInt(rgbMatch[1], 10);
+                          const g = Number.parseInt(rgbMatch[2], 10);
+                          const b = Number.parseInt(rgbMatch[3], 10);
                           const brightness =
                             (r * 299 + g * 587 + b * 114) / 1000;
 
@@ -274,7 +274,7 @@ export function BulkUploadForm({
                       }
 
                       if (shouldReplace) {
-                        const newStyle = style.replace(
+                        const newStyle = style.replaceAll(
                           /color:\s*(#[0-9a-fA-F]{6}|rgb\([^)]+\))/i,
                           `color: ${newColor}`,
                         );
@@ -308,7 +308,7 @@ export function BulkUploadForm({
             }
           } else {
             // Dark mode: just remove empty lines
-            html = html.replace(
+            html = html.replaceAll(
               /<span class="line">[\s\u00A0\u200B]*<\/span>/g,
               "",
             );

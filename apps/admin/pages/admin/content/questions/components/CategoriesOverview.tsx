@@ -21,7 +21,7 @@ interface Category {
 }
 
 interface CategoriesOverviewProps {
-  categoryCounts: Category[];
+  readonly categoryCounts: Category[];
 }
 
 export const CategoriesOverview: React.FC<CategoriesOverviewProps> = ({
