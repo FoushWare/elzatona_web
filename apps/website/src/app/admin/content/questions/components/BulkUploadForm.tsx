@@ -35,11 +35,11 @@ const parseCsvFile = async (file: File): Promise<any[]> => {
 // Helper function to normalize code text
 const normalizeCodeText = (rawCode: string): string => {
   let codeWithNewlines = rawCode
-    .replace(/\\n/g, "\n")
-    .replace(/\\r\\n/g, "\n")
-    .replace(/\\r/g, "\n")
-    .replace(/\r\n/g, "\n")
-    .replace(/\r/g, "\n")
+    .replaceAll(/\\n/g, "\n")
+    .replaceAll(/\\r\\n/g, "\n")
+    .replaceAll(/\\r/g, "\n")
+    .replaceAll(/\r\n/g, "\n")
+    .replaceAll(/\r/g, "\n")
     .trim();
 
   // Remove empty lines at the start
@@ -753,11 +753,11 @@ export function BulkUploadForm({
                     (() => {
                       const rawCode = String(question.code || "");
                       const codeWithNewlines = rawCode
-                        .replace(/\\n/g, "\n")
-                        .replace(/\\r\\n/g, "\n")
-                        .replace(/\\r/g, "\n")
-                        .replace(/\r\n/g, "\n")
-                        .replace(/\r/g, "\n");
+                        .replaceAll(/\\n/g, "\n")
+                        .replaceAll(/\\r\\n/g, "\n")
+                        .replaceAll(/\\r/g, "\n")
+                        .replaceAll(/\r\n/g, "\n")
+                        .replaceAll(/\r/g, "\n");
 
                       // Format code - remove blank lines
                       let formattedCode = codeWithNewlines.trim();
@@ -773,7 +773,7 @@ export function BulkUploadForm({
                       );
                       formattedCode = nonEmptyLines.join("\n");
                       if (formattedCode.includes("\n\n")) {
-                        formattedCode = formattedCode.replace(/\n{2,}/g, "\n");
+                        formattedCode = formattedCode.replaceAll(/\n{2,}/g, "\n");
                       }
 
                       const codeLines = formattedCode

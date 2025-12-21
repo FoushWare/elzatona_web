@@ -204,12 +204,12 @@ export const QuestionPracticeView: React.FC<QuestionPracticeViewProps> = ({
   const cleanQuestionTitle = (title: string): string => {
     if (!title) return "";
     return title
-      .replace(/&nbsp;/g, " ")
-      .replace(/&lt;/g, "<")
-      .replace(/&gt;/g, ">")
-      .replace(/&amp;/g, "&")
-      .replace(/&quot;/g, '"')
-      .replace(/&#39;/g, "'")
+      .replaceAll(/&nbsp;/g, " ")
+      .replaceAll(/&lt;/g, "<")
+      .replaceAll(/&gt;/g, ">")
+      .replaceAll(/&amp;/g, "&")
+      .replaceAll(/&quot;/g, '"')
+      .replaceAll(/&#39;/g, "'")
       .trim();
   };
 
@@ -224,7 +224,7 @@ export const QuestionPracticeView: React.FC<QuestionPracticeViewProps> = ({
       if (match.index > lastIndex) {
         parts.push(text.substring(lastIndex, match.index));
       }
-      const codeContent = match[1].replace(/[`{}[\]]/g, "");
+      const codeContent = match[1].replaceAll(/[`{}[\]]/g, "");
       parts.push(
         <code
           key={match.index}
