@@ -120,6 +120,58 @@ interface QuestionFormProps {
   readOnly?: boolean;
 }
 
+// Helper functions to reduce cognitive complexity
+const initializeFormState = (initialData: Partial<UnifiedQuestion> | null, readOnly: boolean) => ({
+  formData: initialData || {
+    title: "",
+    content: "",
+    explanation: "",
+    type: "multiple-choice",
+    difficulty: "beginner",
+    isActive: true,
+    options: [],
+    tags: [],
+    points: 1,
+  },
+  showQuestionInfo: readOnly,
+  showContent: readOnly,
+  showOptions: readOnly,
+  showExplanation: readOnly || !!initialData?.explanation,
+  showResources: readOnly || !!(initialData as UnifiedQuestion)?.resources,
+  showAdditionalSettings: false,
+});
+
+const createFormHandlers = (setFormData: React.Dispatch<React.SetStateAction<Partial<UnifiedQuestion>>>) => ({
+  handleChange: (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
+  ) => {
+    const { name, value, type, checked } = e.target as HTMLInputElement;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: type === "checkbox" ? checked : value,
+    }));
+  },
+
+  handleResourcesChange: (value: string) => {
+    try {
+      const parsed = value ? JSON.parse(value) : null;
+      setFormData((prev) => ({
+        ...prev,
+        resources: parsed,
+      }));
+    } catch (_error) {
+      setFormData((prev) => ({
+        ...prev,
+        resources: value as string[],
+      }));
+    }
+  },
+
+  handleSelectChange: (name: keyof UnifiedQuestion, value: string) => {
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  },
+});
+
 export const QuestionForm = React.forwardRef<
   HTMLFormElement,
   QuestionFormProps
@@ -136,39 +188,14 @@ export const QuestionForm = React.forwardRef<
     },
     ref,
   ) => {
-    const [formData, setFormData] = useState<Partial<UnifiedQuestion>>(
-      initialData || {
-        title: "",
-        content: "",
-        explanation: "",
-        type: "multiple-choice",
-        difficulty: "beginner",
-        isActive: true,
-        options: [],
-        tags: [],
-        points: 1,
-      },
-    );
-
-    // State for showing/hiding collapsible sections
-    // In edit mode, start collapsed to save space. In view mode, show all.
-    // Initialize all as collapsed in edit mode, expanded in view mode
-    const [showQuestionInfo, setShowQuestionInfo] = useState(() => {
-      // If readOnly (view mode), show all. If edit mode, start collapsed
-      return readOnly;
-    });
-    const [showContent, setShowContent] = useState(() => readOnly);
-    const [showOptions, setShowOptions] = useState(() => readOnly);
-    const [showExplanation, setShowExplanation] = useState(() => {
-      // In view mode, always show. In edit mode, only if has content
-      return readOnly || !!initialData?.explanation;
-    });
-    const [showResources, setShowResources] = useState(() => {
-      return readOnly || !!(initialData as UnifiedQuestion)?.resources;
-    });
-    const [showAdditionalSettings, setShowAdditionalSettings] = useState(
-      () => readOnly,
-    );
+    const initialState = initializeFormState(initialData, readOnly);
+    const [formData, setFormData] = useState<Partial<UnifiedQuestion>>(initialState.formData);
+    const [showQuestionInfo, setShowQuestionInfo] = useState(initialState.showQuestionInfo);
+    const [showContent, setShowContent] = useState(initialState.showContent);
+    const [showOptions, setShowOptions] = useState(initialState.showOptions);
+    const [showExplanation, setShowExplanation] = useState(initialState.showExplanation);
+    const [showResources, setShowResources] = useState(initialState.showResources);
+    const [showAdditionalSettings, setShowAdditionalSettings] = useState(initialState.showAdditionalSettings);
 
     useEffect(() => {
       if (initialData) {
@@ -204,38 +231,7 @@ export const QuestionForm = React.forwardRef<
       }
     }, [readOnly, initialData]);
 
-    const handleChange = (
-      e: React.ChangeEvent<
-        HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
-      >,
-    ) => {
-      const { name, value, type, checked } = e.target as HTMLInputElement;
-      setFormData((prev) => ({
-        ...prev,
-        [name]: type === "checkbox" ? checked : value,
-      }));
-    };
-
-    const handleResourcesChange = (value: string) => {
-      try {
-        // Try to parse as JSON
-        const parsed = value ? JSON.parse(value) : null;
-        setFormData((prev) => ({
-          ...prev,
-          resources: parsed,
-        }));
-      } catch (_error) {
-        // If invalid JSON, store as string and let validation handle it
-        setFormData((prev) => ({
-          ...prev,
-          resources: value as string[],
-        }));
-      }
-    };
-
-    const handleSelectChange = (name: keyof UnifiedQuestion, value: string) => {
-      setFormData((prev) => ({ ...prev, [name]: value }));
-    };
+    const handlers = createFormHandlers(setFormData);
 
     const handleSubmit = (e: React.FormEvent) => {
       e.preventDefault();
@@ -273,7 +269,7 @@ export const QuestionForm = React.forwardRef<
                     id="title"
                     name="title"
                     value={formData.title || ""}
-                    onChange={handleChange}
+                    onChange={handlers.handleChange}
                     required={!readOnly}
                     readOnly={readOnly}
                     disabled={readOnly}
@@ -287,7 +283,7 @@ export const QuestionForm = React.forwardRef<
                   </Label>
                   <Select
                     value={formData.type || "multiple-choice"}
-                    onValueChange={(value) => handleSelectChange("type", value)}
+                    onValueChange={(value) => handlers.handleSelectChange("type", value)}
                     disabled={readOnly}
                   >
                     <SelectTrigger
@@ -311,9 +307,7 @@ export const QuestionForm = React.forwardRef<
                   </Label>
                   <Select
                     value={formData.difficulty || "beginner"}
-                    onValueChange={(value) =>
-                      handleSelectChange("difficulty", value)
-                    }
+                    onValueChange={(value) => handlers.handleSelectChange("difficulty", value)}
                     disabled={readOnly}
                   >
                     <SelectTrigger
@@ -337,9 +331,7 @@ export const QuestionForm = React.forwardRef<
                   </Label>
                   <Select
                     value={formData.category || ""}
-                    onValueChange={(value) =>
-                      handleSelectChange("category", value)
-                    }
+                    onValueChange={(value) => handlers.handleSelectChange("category", value)}
                     disabled={readOnly}
                   >
                     <SelectTrigger
@@ -393,7 +385,7 @@ export const QuestionForm = React.forwardRef<
                     name="points"
                     type="number"
                     value={formData.points || 1}
-                    onChange={handleChange}
+                    onChange={handlers.handleChange}
                     readOnly={readOnly}
                     disabled={readOnly}
                     className={`mt-1 ${readOnly ? "bg-gray-50 dark:bg-gray-900 cursor-text" : ""}`}
@@ -433,7 +425,7 @@ export const QuestionForm = React.forwardRef<
                   id="content"
                   name="content"
                   value={formData.content || ""}
-                  onChange={handleChange}
+                  onChange={handlers.handleChange}
                   rows={8}
                   required={!readOnly}
                   readOnly={readOnly}
@@ -628,7 +620,7 @@ export const QuestionForm = React.forwardRef<
                 id="explanation"
                 name="explanation"
                 value={formData.explanation || ""}
-                onChange={handleChange}
+                onChange={handlers.handleChange}
                 rows={4}
                 readOnly={readOnly}
                 disabled={readOnly}
@@ -670,7 +662,7 @@ export const QuestionForm = React.forwardRef<
                     ? formData.resources
                     : JSON.stringify(formData.resources || [], null, 2)
                 }
-                onChange={(e) => handleResourcesChange(e.target.value)}
+                onChange={(e) => handlers.handleResourcesChange(e.target.value)}
                 rows={8}
                 readOnly={readOnly}
                 disabled={readOnly}
