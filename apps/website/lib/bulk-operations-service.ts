@@ -43,7 +43,7 @@ export class BulkOperationsService {
     type: BulkOperation["type"],
     targetType: BulkOperation["targetType"],
     targetIds: string[],
-    operationData?: Record<string, any>,
+    operationData?: Record<string, unknown>,
   ): { isValid: boolean; errors: string[] } {
     const errors: string[] = [];
 
@@ -87,7 +87,7 @@ export class BulkOperationsService {
     type: BulkOperation["type"],
     targetType: BulkOperation["targetType"],
     targetIds: string[],
-    operationData?: Record<string, any>,
+    operationData?: Record<string, unknown>,
     createdBy: string = "admin",
   ): Promise<BulkOperation> {
     const operationId = `bulk_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;

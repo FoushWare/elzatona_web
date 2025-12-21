@@ -164,7 +164,7 @@ export const QuestionForm = React.forwardRef<
       return readOnly || !!initialData?.explanation;
     });
     const [showResources, setShowResources] = useState(() => {
-      return readOnly || !!(initialData as any)?.resources;
+      return readOnly || !!(initialData as UnifiedQuestion)?.resources;
     });
     const [showAdditionalSettings, setShowAdditionalSettings] = useState(
       () => readOnly,
@@ -199,7 +199,7 @@ export const QuestionForm = React.forwardRef<
         setShowContent(false);
         setShowOptions(false);
         setShowExplanation(!!initialData?.explanation);
-        setShowResources(!!(initialData as any)?.resources);
+        setShowResources(!!(initialData as UnifiedQuestion)?.resources);
         setShowAdditionalSettings(false);
       }
     }, [readOnly, initialData]);
@@ -228,7 +228,7 @@ export const QuestionForm = React.forwardRef<
         // If invalid JSON, store as string and let validation handle it
         setFormData((prev) => ({
           ...prev,
-          resources: value as any,
+          resources: value as string[],
         }));
       }
     };
@@ -666,9 +666,9 @@ export const QuestionForm = React.forwardRef<
                 id="resources"
                 name="resources"
                 value={
-                  typeof (formData as any).resources === "string"
-                    ? (formData as any).resources
-                    : JSON.stringify((formData as any).resources || [], null, 2)
+                  typeof formData.resources === "string"
+                    ? formData.resources
+                    : JSON.stringify(formData.resources || [], null, 2)
                 }
                 onChange={(e) => handleResourcesChange(e.target.value)}
                 rows={8}

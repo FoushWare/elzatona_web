@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import {
   Card,
   Button,
@@ -27,6 +27,18 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 
+interface TestCase {
+  input: string;
+  expected_output: string;
+  explanation?: string;
+}
+
+interface Example {
+  input: string;
+  output: string;
+  explanation?: string;
+}
+
 interface ProblemSolvingTask {
   id: string;
   title: string;
@@ -36,9 +48,9 @@ interface ProblemSolvingTask {
   function_name?: string;
   starter_code?: string;
   solution?: string;
-  test_cases: any[];
+  test_cases: TestCase[];
   constraints: string[];
-  examples: any[];
+  examples: Example[];
   tags: string[];
   created_at: string;
   updated_at: string;
@@ -78,9 +90,15 @@ export default function ProblemSolvingPage() {
 
   useEffect(() => {
     fetchTasks();
-  }, [currentPage, selectedCategory, selectedDifficulty, searchTerm]);
+  }, [
+    currentPage,
+    selectedCategory,
+    selectedDifficulty,
+    searchTerm,
+    fetchTasks,
+  ]);
 
-  const fetchTasks = async () => {
+  const fetchTasks = useCallback(async () => {
     try {
       setLoading(true);
       const params = new URLSearchParams({
@@ -107,7 +125,7 @@ export default function ProblemSolvingPage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [currentPage, selectedCategory, selectedDifficulty, searchTerm]);
 
   const calculateStats = (taskList: ProblemSolvingTask[]) => {
     const newStats: TaskStats = {

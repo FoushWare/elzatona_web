@@ -87,14 +87,14 @@ export function sanitizeInput(input: string): string {
  * @param obj - Object to sanitize
  * @returns Sanitized object
  */
-export function sanitizeObject<T extends Record<string, any>>(obj: T): T {
+export function sanitizeObject<T extends Record<string, unknown>>(obj: T): T {
   const sanitized = { ...obj };
 
   for (const key in sanitized) {
     if (typeof sanitized[key] === "string") {
       sanitized[key] = sanitizeInput(sanitized[key]) as T[typeof key];
     } else if (Array.isArray(sanitized[key])) {
-      sanitized[key] = sanitized[key].map((item: any) =>
+      sanitized[key] = sanitized[key].map((item: unknown) =>
         typeof item === "string" ? sanitizeInput(item) : item,
       ) as T[typeof key];
     } else if (
@@ -103,7 +103,7 @@ export function sanitizeObject<T extends Record<string, any>>(obj: T): T {
       sanitized[key] !== null
     ) {
       // Check if it's a Date using a type guard
-      const value = sanitized[key] as any;
+      const value = sanitized[key] as Record<string, unknown>;
       const isDate =
         value && typeof value === "object" && value.constructor === Date;
       if (!isDate && !Array.isArray(sanitized[key])) {

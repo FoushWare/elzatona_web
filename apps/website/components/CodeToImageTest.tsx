@@ -5,6 +5,7 @@ import { toPng, toJpeg } from "html-to-image";
 import { Button } from "@elzatona/components";
 import { Image as ImageIcon } from "lucide-react";
 import { createHighlighter, type Highlighter } from "shiki";
+import Image from "next/image";
 
 interface CodeToImageTestProps {
   code: string;
@@ -469,9 +470,12 @@ export function CodeToImageTest({
           <h3 className="text-sm font-semibold mb-2">
             Generated Image Preview:
           </h3>
-          <img
+          <Image
             src={imageUrl}
             alt="Generated code image"
+            width={800}
+            height={600}
+            style={{ maxWidth: "100%", height: "auto" }}
             className="border rounded-lg shadow-lg max-w-full"
           />
         </div>

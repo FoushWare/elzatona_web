@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, useMemo } from "react";
 import { usePathname, useSearchParams } from "next/navigation";
 import { useNavigation } from "@/context/NavigationContext";
 
@@ -18,10 +18,14 @@ export function NavigationProgress() {
   const navigationContext = useNavigation();
 
   // Safely get navigation context - use context if available, otherwise use defaults
-  const navigation = navigationContext || {
-    isNavigating: false,
-    setIsNavigating: () => {},
-  };
+  const navigation = useMemo(
+    () =>
+      navigationContext || {
+        isNavigating: false,
+        setIsNavigating: () => {},
+      },
+    [navigationContext],
+  );
 
   const [progress, setProgress] = useState(0);
   const [isVisible, setIsVisible] = useState(false);

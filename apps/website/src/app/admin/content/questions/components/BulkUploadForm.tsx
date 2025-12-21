@@ -186,9 +186,10 @@ export function BulkUploadForm({
           if (!prefersDark) {
             // Process HTML to darken light colors
             try {
-              const tempDiv = document.createElement("div");
-              tempDiv.innerHTML = html;
-              const preElement = tempDiv.querySelector("pre");
+              // Use DOMParser instead of innerHTML for safer parsing
+              const parser = new DOMParser();
+              const doc = parser.parseFromString(html, "text/html");
+              const preElement = doc.querySelector("pre");
               if (preElement) {
                 const codeElement = preElement.querySelector("code");
                 if (codeElement) {
@@ -298,8 +299,8 @@ export function BulkUploadForm({
                     }
                   });
 
-                  const cleanedCode = codeElement.innerHTML;
-                  html = `<pre><code>${cleanedCode}</code></pre>`;
+                  // Serialize back to HTML safely
+                  html = doc.body.innerHTML;
                 }
               }
             } catch (e) {

@@ -142,7 +142,7 @@ export default function CodeEditor({
   const [showThemeMenu, setShowThemeMenu] = useState(false);
   const [_showSettingsMenu, _setShowSettingsMenu] = useState(false);
   const outputRef = useRef<HTMLDivElement>(null);
-  const editorRef = useRef<any>(null);
+  const editorRef = useRef<monaco.editor.IStandaloneCodeEditor | null>(null);
 
   useEffect(() => {
     setEditorValue(code);
@@ -760,7 +760,12 @@ export default function CodeEditor({
               if (typeof window !== "undefined") {
                 // Set the loader path to use local Monaco build
                 // @monaco-editor/react bundles Monaco locally, so we don't need CDN
-                const monacoEnv = (window as any).monaco?.env || {};
+                const monacoEnv =
+                  (
+                    window as typeof window & {
+                      monaco?: { env?: Record<string, unknown> };
+                    }
+                  ).monaco?.env || {};
                 if (!monacoEnv.baseUrl) {
                   // Monaco is bundled, no need for CDN loader
                   console.log(

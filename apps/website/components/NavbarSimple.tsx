@@ -3,6 +3,7 @@
 import React, { useState, useEffect, useLayoutEffect } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
+import Image from "next/image";
 import AlzatonaLogo from "./AlzatonaLogo";
 import { useUserType } from "@elzatona/contexts";
 import { useMobileMenu } from "@elzatona/contexts";
@@ -160,7 +161,7 @@ export const NavbarSimple: React.FC = () => {
     return () => {
       subscription?.unsubscribe();
     };
-  }, []);
+  }, [supabaseChecked]);
 
   // Helper function to check if a link is active
   const isActiveLink = (href: string) => {
@@ -686,12 +687,14 @@ export const NavbarSimple: React.FC = () => {
                     <div className="flex items-center space-x-3 px-3 py-2 bg-gray-50 dark:bg-gray-800 rounded-lg">
                       {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
                       {(user as any)?.photoURL || (user as any)?.avatar_url ? (
-                        <img
+                        <Image
                           src={
                             // eslint-disable-next-line @typescript-eslint/no-explicit-any
                             (user as any)?.photoURL || (user as any)?.avatar_url
                           }
                           alt="Profile"
+                          width={32}
+                          height={32}
                           className="w-8 h-8 rounded-full object-cover"
                         />
                       ) : (

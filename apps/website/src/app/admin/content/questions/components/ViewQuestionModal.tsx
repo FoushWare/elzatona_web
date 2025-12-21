@@ -350,53 +350,6 @@ export function ViewQuestionModal({
       // Post-process HTML for light mode color adjustments
       if (typeof globalThis.window !== "undefined") {
         const prefersDark = globalThis.window.matchMedia(
-          "(prefers-color-scheme: dark)",
-        ).matches;
-        if (!prefersDark) {
-          // In light mode, darken any colors that are too light
-          try {
-            const tempDiv = document.createElement("div");
-            tempDiv.innerHTML = html;
-            const preElement = tempDiv.querySelector("pre");
-            if (preElement) {
-              const codeElement = preElement.querySelector("code");
-              if (codeElement) {
-                // Remove empty lines
-                const lines = Array.from(codeElement.querySelectorAll(".line"));
-                lines.forEach((line) => {
-                  const text = (line.textContent || "").trim();
-                  if (text.length === 0) {
-                    line.remove();
-                  }
-                });
-
-                // Process all spans to ensure visibility in light mode
-                const allSpans = codeElement.querySelectorAll("span");
-                allSpans.forEach((el) => {
-                  const style = (el as HTMLElement).getAttribute("style") || "";
-                  const colorRegex = /color:\s*(#[0-9a-fA-F]{6}|rgb\([^)]+\))/i;
-                  const colorMatch = colorRegex.exec(style);
-
-                  if (colorMatch) {
-                    const colorValue = colorMatch[1];
-                    const { shouldReplace, newColor } =
-                      processColorForLightMode(colorValue);
-
-                    if (shouldReplace) {
-                      const newStyle = style.replace(
-                        /color:\s*(#[0-9a-fA-F]{6}|rgb\([^)]+\))/i,
-                        `color: ${newColor}`,
-                      );
-                      (el as HTMLElement).setAttribute("style", newStyle);
-                    }
-                  } else if (!style) {
-                    const text = (el as HTMLElement).textContent || "";
-                    if (text.trim().length > 0) {
-                      (el as HTMLElement).setAttribute(
-                        "style",
-                        "color: #24292e;",
-                      );
-                    }
                   }
                 });
 
@@ -633,22 +586,14 @@ export function ViewQuestionModal({
                               }}
                             />
 
-                            {/* Custom styles for Shiki output - compact with better light mode support */}
-                            <style
-                              dangerouslySetInnerHTML={{
-                                __html: `
+                            {/* Custom styles for Shiki output - using CSS module instead of dangerouslySetInnerHTML */}
+                            <style jsx>{`
                               .shiki-wrapper pre {
                                 margin: 0 !important;
-                                padding: 0.375rem 0 0.375rem 0 !important;
+                                padding: 0 !important;
                                 background: transparent !important;
-                                overflow: visible !important;
-                                font-size: 0.875rem !important;
-                                line-height: 1.25 !important;
-                                font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace !important;
-                                font-weight: 500 !important;
                               }
                               .shiki-wrapper pre code {
-                                display: block !important;
                                 background: transparent !important;
                               }
                               .shiki-wrapper pre code .line {
@@ -657,20 +602,12 @@ export function ViewQuestionModal({
                                 margin: 0 !important;
                                 line-height: 1.25 !important;
                               }
-                              /* Remove min-height to prevent spacing from empty lines */
                               .shiki-wrapper pre code .line:empty {
                                 display: none !important;
-                                height: 0 !important;
-                                min-height: 0 !important;
-                                margin: 0 !important;
-                                padding: 0 !important;
                               }
-                              /* Also hide lines that only contain whitespace */
                               .shiki-wrapper pre code .line:has(> :empty) {
                                 display: none !important;
                               }
-                              /* Shiki theme support - preserve syntax highlighting colors */
-                              /* Dark mode */
                               @media (prefers-color-scheme: dark) {
                                 .shiki-wrapper,
                                 .shiki-wrapper pre,
@@ -681,7 +618,6 @@ export function ViewQuestionModal({
                                   color: inherit !important;
                                 }
                               }
-                              /* Light mode - preserve syntax colors but ensure visibility */
                               .shiki-light-mode .shiki-wrapper,
                               .shiki-light-mode .shiki-wrapper pre,
                               .shiki-light-mode .shiki-wrapper pre code {
@@ -690,28 +626,8 @@ export function ViewQuestionModal({
                               .shiki-light-mode .shiki-wrapper pre code .line {
                                 background-color: transparent !important;
                               }
-                              /* In light mode, only override very light colors (invisible on white) */
-                              /* Let Shiki's syntax highlighting colors show through */
-                              .shiki-light-mode .shiki-wrapper pre code .line span[style*="color"] {
-                                /* Only override if color is too light - preserve syntax highlighting */
-                              }
-                              /* Media query for light mode (fallback) */
-                              @media (prefers-color-scheme: light), (prefers-color-scheme: no-preference) {
-                                .shiki-wrapper:not(.shiki-dark-mode) {
-                                  background-color: #ffffff !important;
-                                }
-                                .shiki-wrapper:not(.shiki-dark-mode) pre,
-                                .shiki-wrapper:not(.shiki-dark-mode) pre code {
-                                  background-color: #ffffff !important;
-                                }
-                              }
-                              /* Preserve syntax highlighting - don't override colors */
-                              .shiki-wrapper pre code .line {
-                                color: inherit !important;
-                              }
-                            `,
-                              }}
-                            />
+                            `}</style>
+                          </div>
 
                             {/* Line numbers */}
                             <div

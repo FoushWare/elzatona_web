@@ -141,7 +141,7 @@ export default function AdminContentQuestionsPage() {
     if (currentPage !== 1) {
       setCurrentPage(1);
     }
-  }, [selectedCategory, selectedTopic]);
+  }, [selectedCategory, selectedTopic, currentPage]);
 
   // Fetch cards data
   useEffect(() => {
