@@ -48,7 +48,7 @@ export function BulkDeleteModal({
             <strong className="text-red-600 dark:text-red-400">
               {selectedQuestionIds.size}
             </strong>{" "}
-            question{selectedQuestionIds.size !== 1 ? "s" : ""}? This action
+            question{selectedQuestionIds.size === 1 ? "" : "s"}? This action
             cannot be undone.
           </DialogDescription>
         </DialogHeader>
@@ -82,7 +82,7 @@ export function BulkDeleteModal({
             {selectedQuestionIds.size > 10 && (
               <p className="text-xs text-gray-600 dark:text-gray-400 italic text-center pt-2">
                 ... and {selectedQuestionIds.size - 10} more question
-                {selectedQuestionIds.size - 10 !== 1 ? "s" : ""}
+                {selectedQuestionIds.size - 10 === 1 ? "" : "s"}
               </p>
             )}
           </div>
@@ -112,7 +112,7 @@ export function BulkDeleteModal({
               <>
                 <Trash2 className="w-4 h-4 mr-2" />
                 Delete {selectedQuestionIds.size} Question
-                {selectedQuestionIds.size !== 1 ? "s" : ""}
+                {selectedQuestionIds.size === 1 ? "" : "s"}
               </>
             )}
           </Button>
