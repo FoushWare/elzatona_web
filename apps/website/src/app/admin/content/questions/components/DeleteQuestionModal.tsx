@@ -14,11 +14,11 @@ import { AlertTriangle, Trash2, Loader2, BookOpen } from "lucide-react";
 import { UnifiedQuestion } from "@elzatona/types";
 
 interface DeleteQuestionModalProps {
-  isOpen: boolean;
-  onClose: () => void;
-  question: UnifiedQuestion | null;
-  onConfirm: () => void;
-  loading: boolean;
+  readonly isOpen: boolean;
+  readonly onClose: () => void;
+  readonly question: UnifiedQuestion | null;
+  readonly onConfirm: () => void;
+  readonly loading: boolean;
 }
 
 export function DeleteQuestionModal({

@@ -9,30 +9,29 @@ import {
   Button,
   Checkbox,
 } from "@elzatona/components";
-import { Plus, Trash2, Upload } from "lucide-react";
+import { Plus, Trash2, Upload, BookOpen } from "lucide-react";
 import { UnifiedQuestion } from "@elzatona/types";
 import { QuestionItem } from "./QuestionItem";
 import { PaginationControls } from "./PaginationControls";
-import { BookOpen } from "lucide-react";
 
 interface QuestionsListProps {
-  questions: UnifiedQuestion[];
-  selectedQuestionIds: Set<string>;
-  currentPage: number;
-  totalPages: number;
-  pageSize: number;
-  totalCount: number;
-  searchTerm: string;
-  onSelectQuestion: (questionId: string) => void;
-  onSelectAll: () => void;
-  onView: (question: UnifiedQuestion) => void;
-  onEdit: (question: UnifiedQuestion) => void;
-  onDelete: (question: UnifiedQuestion) => void;
-  onBulkDelete: () => void;
-  onBulkUpload: () => void;
-  onCreate: () => void;
-  onPageChange: (page: number) => void;
-  onPageSizeChange: (size: number) => void;
+  readonly questions: UnifiedQuestion[];
+  readonly selectedQuestionIds: Set<string>;
+  readonly currentPage: number;
+  readonly totalPages: number;
+  readonly pageSize: number;
+  readonly totalCount: number;
+  readonly searchTerm: string;
+  readonly onSelectQuestion: (questionId: string) => void;
+  readonly onSelectAll: () => void;
+  readonly onView: (question: UnifiedQuestion) => void;
+  readonly onEdit: (question: UnifiedQuestion) => void;
+  readonly onDelete: (question: UnifiedQuestion) => void;
+  readonly onBulkDelete: () => void;
+  readonly onBulkUpload: () => void;
+  readonly onCreate: () => void;
+  readonly onPageChange: (page: number) => void;
+  readonly onPageSizeChange: (size: number) => void;
 }
 
 export function QuestionsList({

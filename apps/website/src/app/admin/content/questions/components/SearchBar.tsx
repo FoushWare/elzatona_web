@@ -1,12 +1,11 @@
 "use client";
 
 import React from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@elzatona/components";
-import { Input } from "@elzatona/components";
+import { Card, CardContent, CardHeader, CardTitle, Input } from "@elzatona/components";
 
 interface SearchBarProps {
-  searchTerm: string;
-  onSearchChange: (value: string) => void;
+  readonly searchTerm: string;
+  readonly onSearchChange: (value: string) => void;
 }
 
 export function SearchBar({ searchTerm, onSearchChange }: SearchBarProps) {

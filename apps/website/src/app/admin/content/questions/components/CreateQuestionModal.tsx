@@ -9,10 +9,10 @@ interface CreateQuestionModalProps {
   readonly isOpen: boolean;
   readonly onClose: () => void;
   readonly onSubmit: (question: Partial<UnifiedQuestion>) => void;
-  readonly cards: any[];
+  readonly cards: Array<{ id: string; title: string }>;
   readonly allCategories: string[];
-  readonly categoriesData: any[];
-  readonly topicsData: any[];
+  readonly categoriesData: Array<{ id: string; name: string }>;
+  readonly topicsData: Array<{ id: string; name: string }>;
 }
 
 export function CreateQuestionModal({
