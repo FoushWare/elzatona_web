@@ -6,12 +6,12 @@ import { Eye, Edit, Trash2 } from "lucide-react";
 import { UnifiedQuestion } from "@elzatona/types";
 
 interface QuestionItemProps {
-  question: UnifiedQuestion;
-  isSelected: boolean;
-  onSelect: (questionId: string) => void;
-  onView: (question: UnifiedQuestion) => void;
-  onEdit: (question: UnifiedQuestion) => void;
-  onDelete: (question: UnifiedQuestion) => void;
+  readonly question: UnifiedQuestion;
+  readonly isSelected: boolean;
+  readonly onSelect: (questionId: string) => void;
+  readonly onView: (question: UnifiedQuestion) => void;
+  readonly onEdit: (question: UnifiedQuestion) => void;
+  readonly onDelete: (question: UnifiedQuestion) => void;
 }
 
 export function QuestionItem({

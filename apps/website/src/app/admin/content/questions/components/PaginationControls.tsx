@@ -12,13 +12,13 @@ import {
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
 interface PaginationControlsProps {
-  currentPage: number;
-  totalPages: number;
-  pageSize: number;
-  totalCount: number;
-  onPageChange: (page: number) => void;
-  onPageSizeChange: (size: number) => void;
-  showPageSize?: boolean;
+  readonly currentPage: number;
+  readonly totalPages: number;
+  readonly pageSize: number;
+  readonly totalCount: number;
+  readonly onPageChange: (page: number) => void;
+  readonly onPageSizeChange: (size: number) => void;
+  readonly showPageSize?: boolean;
 }
 
 export function PaginationControls({

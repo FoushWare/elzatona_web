@@ -7,9 +7,9 @@ import React, { Component, ErrorInfo, ReactNode } from "react";
 import * as Sentry from "@sentry/nextjs";
 
 interface Props {
-  children: ReactNode;
-  fallback?: ReactNode;
-  onError?: (error: Error, errorInfo: ErrorInfo) => void;
+  readonly children: ReactNode;
+  readonly fallback?: ReactNode;
+  readonly onError?: (error: Error, errorInfo: ErrorInfo) => void;
 }
 
 interface State {
