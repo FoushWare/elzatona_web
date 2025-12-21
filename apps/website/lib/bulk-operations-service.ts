@@ -90,7 +90,7 @@ export class BulkOperationsService {
     operationData?: Record<string, unknown>,
     createdBy: string = "admin",
   ): Promise<BulkOperation> {
-    const operationId = `bulk_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+    const operationId = `bulk_${Date.now()}_${Math.random().toString(36).substring(2, 11)}`;
 
     const operation: BulkOperation = {
       id: operationId,

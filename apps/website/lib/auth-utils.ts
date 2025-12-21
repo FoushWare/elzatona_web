@@ -109,7 +109,7 @@ export const clearAuthData = async () => {
       // Clear any cookies (if any)
       document.cookie.split(";").forEach((cookie) => {
         const eqPos = cookie.indexOf("=");
-        const name = eqPos > -1 ? cookie.substr(0, eqPos) : cookie;
+        const name = eqPos > -1 ? cookie.substring(0, eqPos) : cookie;
         if (name.includes("auth") || name.includes("supabase")) {
           document.cookie =
             name + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/";

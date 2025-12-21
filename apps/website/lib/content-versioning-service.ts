@@ -317,7 +317,7 @@ export class ContentVersioningService {
   ): Promise<void> {
     try {
       const auditLog: AuditLog = {
-        id: `audit_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+        id: `audit_${Date.now()}_${Math.random().toString(36).substring(2, 11)}`,
         ...logData,
       };
 

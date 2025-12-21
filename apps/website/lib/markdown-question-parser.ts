@@ -552,7 +552,7 @@ export class MarkdownQuestionParser {
    */
   static convertToBulkData(questions: MarkdownQuestion[]): BulkQuestionData {
     const unifiedQuestions = questions.map((question) => ({
-      id: `md_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+      id: `md_${Date.now()}_${Math.random().toString(36).substring(2, 11)}`,
       title: question.title,
       content: question.content,
       type: (question.type === "single"
