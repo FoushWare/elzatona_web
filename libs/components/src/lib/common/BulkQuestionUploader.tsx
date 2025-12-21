@@ -149,7 +149,7 @@ export default function BulkQuestionUploader({
     const newQuestions = [...questions];
     const question = newQuestions[questionIndex];
     const currentOptions = question.options || [];
-    const newId = String.fromCharCode(97 + currentOptions.length);
+    const newId = String.fromCodePoint(97 + currentOptions.length);
     question.options = [
       ...currentOptions,
       { id: newId, text: "", isCorrect: false },

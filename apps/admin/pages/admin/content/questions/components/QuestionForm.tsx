@@ -488,7 +488,7 @@ export const QuestionForm = React.forwardRef<
                               : "bg-gray-300 text-gray-700 dark:bg-gray-600 dark:text-gray-300"
                           }`}
                         >
-                          {String.fromCharCode(65 + index)}
+                          {String.fromCodePoint(65 + index)}
                         </div>
 
                         <div className="flex-1">
@@ -511,7 +511,7 @@ export const QuestionForm = React.forwardRef<
                             }}
                             readOnly={readOnly}
                             disabled={readOnly}
-                            placeholder={`Option ${String.fromCharCode(65 + index)}`}
+                            placeholder={`Option ${String.fromCodePoint(65 + index)}`}
                             className={`border-0 bg-transparent p-0 text-sm ${readOnly ? "cursor-text" : ""}`}
                           />
                         </div>

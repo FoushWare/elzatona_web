@@ -619,9 +619,9 @@ export default function FrontendTaskEditor({
             // SECURITY: Escape backslashes, backticks, and dollar signs for template literal
             // NOSONAR S6304: String.raw cannot be used here as we need dynamic escaping
             // NOSONAR S7781: replaceAll() cannot be used with regex patterns that require capture groups
-            // Use String.fromCharCode to avoid template literal parsing issues with backticks
-            const backtickChar = String.fromCharCode(96);
-            const escapedBacktick = String.fromCharCode(92) + backtickChar; // backslash + backtick
+            // Use String.fromCodePoint to avoid template literal parsing issues with backticks
+            const backtickChar = String.fromCodePoint(96);
+            const escapedBacktick = String.fromCodePoint(92) + backtickChar; // backslash + backtick
             const cleanCode = cleanReactCode
               .replace(/\\/g, "\\\\")
               .replace(new RegExp(backtickChar, "g"), escapedBacktick)
@@ -632,9 +632,9 @@ export default function FrontendTaskEditor({
             }).code;
             
             // SECURITY: Escape backslashes in transpiled code as well
-            // Use String.fromCharCode to avoid template literal parsing issues
-            const backtick = String.fromCharCode(96);
-            const escapedBacktick = String.fromCharCode(92) + backtick; // backslash + backtick
+            // Use String.fromCodePoint to avoid template literal parsing issues
+            const backtick = String.fromCodePoint(96);
+            const escapedBacktick = String.fromCodePoint(92) + backtick; // backslash + backtick
             const escapedTranspiledCode = transpiledCode
               .replace(/\\/g, "\\\\")
               .replace(new RegExp(backtick, "g"), escapedBacktick)
