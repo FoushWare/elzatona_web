@@ -57,9 +57,16 @@ const cleanOptionText = (text) => {
     (_, codeContent) => {
       return `\`${decodeHtmlEntities(codeContent).trim()}\``;
     },
-  );
-  cleaned = cleaned.replace(/<[^>]+>/g, "");
-
+  // Multi-pass HTML tag removal to prevent re-introduction
+  let prevLength = -1;
+  for (let i = 0; i < 5 && cleaned.length !== prevLength; i++) {
+    prevLength = cleaned.length;
+    cleaned = cleaned.replace(/<[^>]+>/g, "");
+    // Also handle broken tag artifacts that can re-form tags
+    cleaned = cleaned.replace(/(w+)e>/g, "$1");
+    cleaned = cleaned.replace(/(w+)>(w+)/g, "$1 $2");
+    cleaned = cleaned.replace(/(w+)>/g, "$1");
+  }
   // First, handle the specific e> artifact pattern
   cleaned = cleaned.replace(/(\w+)e>/g, "$1");
 

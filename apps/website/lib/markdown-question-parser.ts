@@ -431,9 +431,19 @@ export class MarkdownQuestionParser {
       // Extract content between <p> tags, removing HTML tags
       const pMatch = detailsMatch[0].match(/<p>([\s\S]*?)<\/p>/i);
       if (pMatch) {
-        return pMatch[1]
-          .replace(/<[^>]*>/g, "") // Remove HTML tags
-          .replace(/\n\s*\n/g, "\n") // Clean up extra whitespace
+        // Multi-pass HTML tag removal to prevent re-introduction
+        let cleaned = pMatch[1];
+        let prevLength = -1;
+        for (let i = 0; i < 5 && cleaned.length !== prevLength; i++) {
+          prevLength = cleaned.length;
+          cleaned = cleaned.replace(/<[^>]*>/g, "");
+          // Handle broken tag artifacts
+          cleaned = cleaned.replace(/(w+)e>/g, "$1");
+          cleaned = cleaned.replace(/(w+)>(w+)/g, "$1 $2");
+          cleaned = cleaned.replace(/(w+)>/g, "$1");
+        }
+        return cleaned
+          .replace(/ns*n/g, "n") // Clean up extra whitespace
           .trim();
       }
     }

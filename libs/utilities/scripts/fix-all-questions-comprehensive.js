@@ -123,7 +123,7 @@ function cleanText(text) {
   cleaned = cleaned.replace(/Math<\/code>\.PIe>\.PI/g, "Math.PI");
   cleaned = cleaned.replace(/Math\.PIe>/g, "Math.PI");
 
-  // Decode HTML entities
+  // Decode HTML entities (single pass to avoid double escaping)
   cleaned = cleaned.replace(/&lt;/g, "<");
   cleaned = cleaned.replace(/&gt;/g, ">");
   cleaned = cleaned.replace(/&amp;/g, "&");
@@ -131,9 +131,7 @@ function cleanText(text) {
   cleaned = cleaned.replace(/&#39;/g, "'");
   cleaned = cleaned.replace(/&apos;/g, "'");
   cleaned = cleaned.replace(/&nbsp;/g, " ");
-
-  // Fix general patterns
-  cleaned = cleaned.replace(/(\w+)e>(\w+)/g, "$1$2");
+  cleaned = cleaned.replace(/&nbsp;/g, " ");
   cleaned = cleaned.replace(/(\w+)>(\w+)/g, "$1 $2");
   cleaned = cleaned.replace(/(\w+)>/g, "$1");
 

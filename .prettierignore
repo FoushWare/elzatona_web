@@ -81,3 +81,7 @@ codeql-database/**
 
 # Utility scripts
 libs/utilities/scripts/setup-supabase-admin.js
+
+# CodeQL security fix scripts
+libs/utilities/scripts/fix-option-text.js
+libs/utilities/scripts/fix-all-questions-comprehensive.js
