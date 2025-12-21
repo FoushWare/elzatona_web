@@ -176,7 +176,7 @@ export const QuestionPracticeView: React.FC<QuestionPracticeViewProps> = ({
       const correctIndex =
         typeof question.correct_answer === "number"
           ? question.correct_answer
-          : parseInt(correctAnswerStr, 10);
+          : Number.parseInt(correctAnswerStr, 10);
 
       if (
         !isNaN(correctIndex) &&

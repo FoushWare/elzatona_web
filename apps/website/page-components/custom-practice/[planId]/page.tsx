@@ -184,7 +184,7 @@ export default function CustomPracticePage() {
                 correctAnswerIndex = letter.charCodeAt(0) - 97; // a=0, b=1, c=2, etc.
               } else {
                 // Try to parse as number
-                const parsed = parseInt(letter, 10);
+                const parsed = Number.parseInt(letter, 10);
                 if (!isNaN(parsed) && parsed >= 0 && parsed < options.length) {
                   correctAnswerIndex = parsed;
                 } else {

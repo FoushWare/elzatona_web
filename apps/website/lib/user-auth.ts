@@ -299,13 +299,13 @@ export class UserAuthService {
    * Generate unique user ID
    */
   private static generateUserId(): string {
-    return `user_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+    return `user_${Date.now()}_${Math.random().toString(36).substring(2, 11)}`;
   }
 
   /**
    * Generate JWT-like token (simplified)
    */
   private static generateToken(): string {
-    return `token_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+    return `token_${Date.now()}_${Math.random().toString(36).substring(2, 11)}`;
   }
 }

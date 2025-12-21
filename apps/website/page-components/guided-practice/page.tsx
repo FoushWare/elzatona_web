@@ -159,12 +159,12 @@ const cleanOptionText = (text: string): string => {
 
     // Replace numeric entities (decimal)
     decoded = decoded.replace(/&#(\d+);/g, (match, dec) => {
-      return String.fromCharCode(parseInt(dec, 10));
+      return String.fromCharCode(Number.parseInt(dec, 10));
     });
 
     // Replace numeric entities (hexadecimal)
     decoded = decoded.replace(/&#x([0-9a-fA-F]+);/g, (match, hex) => {
-      return String.fromCharCode(parseInt(hex, 16));
+      return String.fromCharCode(Number.parseInt(hex, 16));
     });
 
     // If client-side, use DOM API as fallback
@@ -817,9 +817,9 @@ function GuidedPracticePageContent() {
               // If it's a dark color (low brightness), replace with white
               const color = match.match(/#([0-9a-fA-F]{6})/i)?.[1];
               if (color) {
-                const r = parseInt(color.substr(0, 2), 16);
-                const g = parseInt(color.substr(2, 2), 16);
-                const b = parseInt(color.substr(4, 2), 16);
+                const r = Number.parseInt(color.substring(0, 2), 16);
+                const g = Number.parseInt(color.substring(2, 4), 16);
+                const b = Number.parseInt(color.substring(4, 6), 16);
                 const brightness = (r * 299 + g * 587 + b * 114) / 1000;
                 if (brightness < 128) {
                   return "background-color: #ffffff";
@@ -833,9 +833,9 @@ function GuidedPracticePageContent() {
           html = html.replace(/color:\s*#[0-9a-fA-F]{6}/g, (match) => {
             const color = match.match(/#([0-9a-fA-F]{6})/i)?.[1];
             if (color) {
-              const r = parseInt(color.substr(0, 2), 16);
-              const g = parseInt(color.substr(2, 2), 16);
-              const b = parseInt(color.substr(4, 2), 16);
+              const r = Number.parseInt(color.substring(0, 2), 16);
+              const g = Number.parseInt(color.substring(2, 4), 16);
+              const b = Number.parseInt(color.substring(4, 6), 16);
               const brightness = (r * 299 + g * 587 + b * 114) / 1000;
               // If it's a light color (brightness > 180), darken it while preserving hue
               if (brightness > 180) {
@@ -935,9 +935,9 @@ function GuidedPracticePageContent() {
                     if (colorValue.startsWith("#")) {
                       // Hex color
                       const hex = colorValue.substring(1);
-                      const r = parseInt(hex.substr(0, 2), 16);
-                      const g = parseInt(hex.substr(2, 2), 16);
-                      const b = parseInt(hex.substr(4, 2), 16);
+                      const r = Number.parseInt(hex.substring(0, 2), 16);
+                      const g = Number.parseInt(hex.substring(2, 4), 16);
+                      const b = Number.parseInt(hex.substring(4, 6), 16);
                       const brightness = (r * 299 + g * 587 + b * 114) / 1000;
 
                       // If color is too light (brightness > 180), make it darker but preserve hue

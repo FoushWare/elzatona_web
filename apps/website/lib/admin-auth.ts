@@ -297,6 +297,6 @@ export class AdminAuthService {
    * Generate unique admin ID
    */
   private static generateAdminId(): string {
-    return `admin_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+    return `admin_${Date.now()}_${Math.random().toString(36).substring(2, 11)}`;
   }
 }

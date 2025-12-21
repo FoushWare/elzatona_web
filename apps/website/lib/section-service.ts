@@ -734,7 +734,7 @@ export class SectionService {
 
       // Create new question with incomplete structure handling
       const newQuestion: SectionQuestion = {
-        id: `question_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+        id: `question_${Date.now()}_${Math.random().toString(36).substring(2, 11)}`,
         title: questionData.title || "",
         content: questionData.content || "",
         type: questionData.type || "single",
@@ -807,7 +807,7 @@ export class SectionService {
 
       questionsData.forEach((questionData, index) => {
         const newQuestion: SectionQuestion = {
-          id: `question_${Date.now()}_${index}_${Math.random().toString(36).substr(2, 9)}`,
+          id: `question_${Date.now()}_${index}_${Math.random().toString(36).substring(2, 11)}`,
           title: questionData.title || `Question ${index + 1}`,
           content: questionData.content || "",
           type: questionData.type || "single",
