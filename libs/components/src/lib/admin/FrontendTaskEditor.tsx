@@ -653,7 +653,9 @@ export default function FrontendTaskEditor({
             
             const rootElement = document.getElementById('root');
             if (rootElement) {
-              rootElement.innerHTML = '';
+              while (rootElement.firstChild) {
+                rootElement.removeChild(rootElement.firstChild);
+              }
             }
             
             if (!window.reactRoot) {
@@ -669,12 +671,13 @@ export default function FrontendTaskEditor({
             
           } catch (error) {
             console.error('Compilation Error:', error);
-            document.getElementById('root').innerHTML = \`
-              <div class="error-boundary">
-                Compilation Error: \${error.message}
-                \\n\\n\${error.stack || ''}
-              </div>
-            \`;
+            const errorElement = document.getElementById('root');
+            if (errorElement) {
+              const errorDiv = document.createElement('div');
+              errorDiv.className = 'error-boundary';
+              errorDiv.textContent = 'Compilation Error: ' + error.message + '\\n\\n' + (error.stack || '');
+              errorElement.appendChild(errorDiv);
+            }
           }
         </script>
       `;
