@@ -389,7 +389,7 @@ export function BulkUploadForm({
       if (err instanceof SyntaxError) {
         const match = err.message.match(/position (\d+)/);
         if (match) {
-          const position = parseInt(match[1], 10);
+          const position = Number.parseInt(match[1], 10);
           const lines = text.substring(0, position).split("\n");
           const lineNumber = lines.length;
           const columnNumber = lines[lines.length - 1].length + 1;
@@ -535,7 +535,7 @@ export function BulkUploadForm({
         if (err instanceof SyntaxError) {
           const match = err.message.match(/position (\d+)/);
           if (match) {
-            const position = parseInt(match[1], 10);
+            const position = Number.parseInt(match[1], 10);
             const lines = jsonText.substring(0, position).split("\n");
             const lineNumber = lines.length;
             const columnNumber = lines[lines.length - 1].length + 1;
