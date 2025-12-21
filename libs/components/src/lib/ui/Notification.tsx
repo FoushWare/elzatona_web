@@ -104,7 +104,7 @@ export function NotificationContainer() {
     const handleNotification = (event: CustomEvent<Notification>) => {
       const notification = {
         ...event.detail,
-        id: Math.random().toString(36).substr(2, 9),
+        id: Math.random().toString(36).substring(2, 11),
       };
       setNotifications((prev) => [...prev, notification]);
     };

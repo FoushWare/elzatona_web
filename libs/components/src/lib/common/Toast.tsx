@@ -100,7 +100,7 @@ export function useToast() {
   const [toasts, setToasts] = React.useState<Toast[]>([]);
 
   const addToast = (toast: Omit<Toast, "id">) => {
-    const id = Math.random().toString(36).substr(2, 9);
+    const id = Math.random().toString(36).substring(2, 11);
     const newToast: Toast = { ...toast, id };
     setToasts((prev) => [...prev, newToast]);
   };

@@ -53,7 +53,7 @@ export const throttle = <T extends (...args: any[]) => any>(
 };
 
 export const generateId = (): string => {
-  return Math.random().toString(36).substr(2, 9);
+  return Math.random().toString(36).substring(2, 11);
 };
 
 export const sleep = (ms: number): Promise<void> => {
@@ -67,5 +67,5 @@ export const isValidEmail = (email: string): boolean => {
 
 export const truncateText = (text: string, maxLength: number): string => {
   if (text.length <= maxLength) return text;
-  return text.substr(0, maxLength) + "...";
+  return text.substring(0, maxLength) + "...";
 };

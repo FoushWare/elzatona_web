@@ -94,33 +94,19 @@ export const getAppConfig = (): AppConfig => {
 };
 
 // Database service factory with environment configuration
-export const createDatabaseServiceFromEnv = () => {
+export const createDatabaseServiceFromEnv = async () => {
   const config = getDatabaseConfig();
 
+  // Only Supabase is supported currently
   if (config.provider === "firebase") {
-    // Convert Firebase config to our DatabaseConfig format
-    const dbConfig = {
-      url: `https://${config.firebase.projectId}.firebaseapp.com`,
-      key: config.firebase.apiKey,
-    };
-
-    // Dynamic import to avoid build-time errors
-    try {
-      const { FirebaseDatabaseService } = eval("require")(
-        "./FirebaseDatabaseService",
-      );
-      return new FirebaseDatabaseService(dbConfig);
-    } catch (error_) {
-      console.warn("Firebase not available, falling back to Supabase", error_);
-      return createSupabaseService(config.supabase);
-    }
-  } else {
-    return createSupabaseService(config.supabase);
+    console.warn("Firebase not implemented, falling back to Supabase");
   }
+
+  return await createSupabaseService(config.supabase);
 };
 
 // Helper function to create Supabase service
-const createSupabaseService = (
+const createSupabaseService = async (
   supabaseConfig: AppConfig["database"]["supabase"],
 ) => {
   const dbConfig = {
@@ -130,9 +116,8 @@ const createSupabaseService = (
   };
 
   try {
-    const { SupabaseDatabaseService } = eval("require")(
-      "./SupabaseDatabaseService",
-    );
+    const supabaseModule = await import("./SupabaseDatabaseService");
+    const { SupabaseDatabaseService } = supabaseModule;
     return new SupabaseDatabaseService(dbConfig);
   } catch (error) {
     console.error("Failed to create Supabase service:", error);
