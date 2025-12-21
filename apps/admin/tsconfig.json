@@ -23,7 +23,6 @@
     "paths": {
       "@/*": ["./src/*"],
       "@/lib/*": ["./lib/*"],
-      "@/components/*": ["./components/*"],
       "@elzatona/components": ["../../libs/components/src"],
       "@elzatona/contexts": ["../../libs/contexts/src/lib/shared-contexts"],
       "@elzatona/hooks": ["../../libs/hooks/src/lib/shared-hooks"],
