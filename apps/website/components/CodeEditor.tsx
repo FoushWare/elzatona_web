@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from "react";
 import dynamic from "next/dynamic";
+import * as monaco from "monaco-editor";
 import {
   Loader2,
   Play,
