@@ -473,7 +473,7 @@ export const QuestionForm = React.forwardRef<
                 <div className="space-y-4">
                   {(formData.options || []).map((option, index) => (
                     <div
-                      key={index}
+                      key={option.id || `option-${index}`}
                       className={`p-4 rounded-lg border-2 transition-all duration-200 ${
                         option.isCorrect
                           ? "bg-green-50 border-green-300 dark:bg-green-900/30 dark:border-green-600"

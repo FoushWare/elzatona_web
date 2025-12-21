@@ -367,7 +367,7 @@ export default function FrontendTasksPage() {
                       <div className="flex flex-wrap gap-2">
                         {task.tags.map((tag, index) => (
                           <Badge
-                            key={index}
+                            key={`tag-${tag}`}
                             variant="outline"
                             className="text-xs"
                           >
@@ -386,7 +386,7 @@ export default function FrontendTasksPage() {
                       </h4>
                       <ul className="text-sm text-blue-700 dark:text-blue-300 space-y-1">
                         {task.hints.slice(0, 2).map((hint, index) => (
-                          <li key={index}>• {hint}</li>
+                          <li key={`hint-${index}-${hint.substring(0, 10)}`}>• {hint}</li>
                         ))}
                         {task.hints.length > 2 && (
                           <li className="text-blue-600 dark:text-blue-400">

@@ -404,7 +404,7 @@ export default function ProblemSolvingPage() {
                       </h4>
                       <ul className="text-sm text-orange-700 dark:text-orange-300 space-y-1">
                         {task.constraints.map((constraint, index) => (
-                          <li key={index}>• {constraint}</li>
+                          <li key={`constraint-${index}-${constraint.substring(0, 10)}`}>• {constraint}</li>
                         ))}
                       </ul>
                     </div>
@@ -420,7 +420,7 @@ export default function ProblemSolvingPage() {
                       <div className="space-y-2">
                         {task.examples.slice(0, 2).map((example, index) => (
                           <div
-                            key={index}
+                            key={`example-${index}-${JSON.stringify(example.input).substring(0, 10)}`}
                             className="text-sm text-green-700 dark:text-green-300"
                           >
                             <div className="font-mono bg-green-100 dark:bg-green-800 px-2 py-1 rounded">
