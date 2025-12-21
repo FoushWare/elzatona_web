@@ -53,7 +53,7 @@ export function PaginationControls({
               </span>
               <Select
                 value={pageSize.toString()}
-                onValueChange={(value) => onPageSizeChange(parseInt(value))}
+                onValueChange={(value) => onPageSizeChange(Number.parseInt(value, 10))}
               >
                 <SelectTrigger className="w-20 h-9">
                   <SelectValue />
