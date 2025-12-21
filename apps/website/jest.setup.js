@@ -49,7 +49,7 @@ if (process.env.DEBUG_TEST_ENV === "true") {
 // Next.js requires these globals to be available
 if (global.Request === undefined) {
   // Use Node.js 18+ built-in fetch API if available
-  if (typeof fetch !== "undefined" && fetch.Request) {
+  if (fetch?.Request) {
     global.Request = fetch.Request;
     global.Response = fetch.Response;
     global.Headers = fetch.Headers;
