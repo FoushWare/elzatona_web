@@ -32,10 +32,10 @@ import {
 } from "@elzatona/types";
 
 interface FrontendTaskEditorProps {
-  task?: FrontendTask | null;
-  onSave: (taskData: FrontendTaskFormData) => Promise<void>;
-  onCancel: () => void;
-  mode?: "create" | "edit" | "view";
+  readonly task?: FrontendTask | null;
+  readonly onSave: (taskData: FrontendTaskFormData) => Promise<void>;
+  readonly onCancel: () => void;
+  readonly mode?: "create" | "edit" | "view";
 }
 
 interface FileNode {
@@ -97,7 +97,7 @@ export default function FrontendTaskEditor({
   >([]);
   const [showFileExplorer, setShowFileExplorer] = useState(true);
   const [showPreview, setShowPreview] = useState(true);
-  const [showConsole, setShowConsole] = useState(true);
+  const [showConsole] = useState(true);
   const [consoleOutput, setConsoleOutput] = useState<string[]>([]);
   const [copied, setCopied] = useState(false);
 
@@ -1050,7 +1050,7 @@ export default function FrontendTaskEditor({
                       </label>
                       <div className="space-y-2">
                         {formData.tags.map((tag, index) => (
-                          <div key={index} className="flex items-center gap-2">
+                          <div key={`tag-${index}-${tag.substring(0, 10)}`} className="flex items-center gap-2">
                             <input
                               type="text"
                               value={tag}
@@ -1218,7 +1218,7 @@ export default function FrontendTaskEditor({
                     <ul className="space-y-2">
                       {formData.hints.map((hint, index) => (
                         <li
-                          key={index}
+                          key={`hint-${index}-${hint.substring(0, 10)}`}
                           className={`flex items-start gap-2 ${isDark ? "text-gray-300" : "text-gray-700"}`}
                         >
                           <AlertCircle className="w-4 h-4 mt-1 flex-shrink-0 text-blue-400" />
@@ -1229,7 +1229,7 @@ export default function FrontendTaskEditor({
                   ) : (
                     <div className="space-y-2">
                       {formData.hints.map((hint, index) => (
-                        <div key={index} className="flex items-center gap-2">
+                        <div key={`hint-edit-${index}-${hint.substring(0, 10)}`} className="flex items-center gap-2">
                           <input
                             type="text"
                             value={hint}
