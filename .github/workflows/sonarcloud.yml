@@ -108,7 +108,7 @@ jobs:
         uses: SonarSource/sonarqube-scan-action@v6
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-          SONAR_SCANNER_OPTS: "-Xmx1024m"
+          SONAR_SCANNER_OPTS: "-Xmx2048m"
         with:
           projectBaseDir: .
 
