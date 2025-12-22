@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import { FormModal } from "@elzatona/components";
 import { UnifiedQuestion } from "@elzatona/types";
-import { QuestionForm } from "./QuestionForm";
+import QuestionForm from "./QuestionForm";
 
 interface CreateQuestionModalProps {
   readonly isOpen: boolean;

@@ -62,7 +62,9 @@ export default function ProblemSolvingEditor({
   // Minimal local state
   const [copied, setCopied] = React.useState(false);
   const [showPreview, setShowPreview] = React.useState(true);
-  const [activeBrowserTab, setActiveBrowserTab] = React.useState<"browser" | "console">("browser");
+  const [activeBrowserTab, setActiveBrowserTab] = React.useState<
+    "browser" | "console"
+  >("browser");
 
   // Simple form handlers
   const handleSave = () => {
@@ -106,7 +108,11 @@ export default function ProblemSolvingEditor({
     });
   };
 
-  const handleUpdateTestCase = (index: number, field: string, value: string) => {
+  const handleUpdateTestCase = (
+    index: number,
+    field: string,
+    value: string,
+  ) => {
     const updatedTestCases = [...formData.testCases];
     updatedTestCases[index] = {
       ...updatedTestCases[index],
@@ -119,7 +125,10 @@ export default function ProblemSolvingEditor({
   };
 
   const handleAddConstraint = () => {
-    const updatedConstraints = addConstraint(formData.constraints, dynamicFieldsState.newConstraint);
+    const updatedConstraints = addConstraint(
+      formData.constraints,
+      dynamicFieldsState.newConstraint,
+    );
     setFormData({
       ...formData,
       constraints: updatedConstraints,
@@ -128,7 +137,10 @@ export default function ProblemSolvingEditor({
   };
 
   const handleAddExample = () => {
-    const updatedExamples = addExample(formData.examples, dynamicFieldsState.newExample);
+    const updatedExamples = addExample(
+      formData.examples,
+      dynamicFieldsState.newExample,
+    );
     setFormData({
       ...formData,
       examples: updatedExamples,

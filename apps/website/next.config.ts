@@ -75,6 +75,9 @@ const nextConfig: NextConfig = {
     // Removing turbo config as it's not valid in Next.js 16
   },
 
+  // External packages for server components
+  serverExternalPackages: [],
+
   // Disable automatic error page generation
   pageExtensions: ["tsx", "ts", "jsx", "js"],
 

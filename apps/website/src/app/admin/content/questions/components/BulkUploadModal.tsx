@@ -8,7 +8,7 @@ import {
   DialogTitle,
   DialogDescription,
 } from "@elzatona/components";
-import { BulkUploadForm } from "./BulkUploadForm";
+import BulkUploadForm from "./BulkUploadForm";
 
 interface BulkUploadModalProps {
   readonly isOpen: boolean;
@@ -32,8 +32,20 @@ export function BulkUploadModal({
   onClearState,
 }: BulkUploadModalProps) {
   const handleClose = () => {
-    onClearState();
+    if (loading) return;
     onClose();
+    onClearState();
+  };
+
+  const handleBulkUpload = (questions: any[]) => {
+    // Convert questions array back to file format for the modal's onUpload
+    // This is a temporary fix - ideally the modal should be updated to handle questions directly
+    const jsonString = JSON.stringify(questions);
+    const blob = new Blob([jsonString], { type: "application/json" });
+    const file = new File([blob], "bulk-upload.json", {
+      type: "application/json",
+    });
+    onUpload(file);
   };
 
   return (
@@ -47,12 +59,16 @@ export function BulkUploadModal({
           </DialogDescription>
         </DialogHeader>
         <BulkUploadForm
-          onUpload={onUpload}
+          onUpload={handleBulkUpload}
           onCancel={handleClose}
           loading={loading}
           error={error}
-          success={success}
-          progress={progress}
+          success={!!success}
+          progress={
+            progress
+              ? Math.round((progress.current / progress.total) * 100)
+              : undefined
+          }
         />
       </DialogContent>
     </Dialog>
