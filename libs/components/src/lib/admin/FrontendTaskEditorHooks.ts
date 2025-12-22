@@ -1,0 +1,300 @@
+import { useState, useEffect } from "react";
+import { FrontendTask, FrontendTaskFormData } from "@elzatona/types";
+
+interface FileNode {
+  id: string;
+  name: string;
+  type: "file" | "folder";
+  children?: FileNode[];
+  content?: string;
+  fileType?: string;
+  isEntryPoint?: boolean;
+}
+
+// Hook for theme management
+export const useThemeManagement = () => {
+  const [theme, setTheme] = useState<"light" | "dark" | "system">("system");
+  const [isDark, setIsDark] = useState(false);
+
+  useEffect(() => {
+    const mediaQuery = globalThis.window.matchMedia(
+      "(prefers-color-scheme: dark)",
+    );
+    const updateTheme = () => {
+      if (theme === "system") {
+        setIsDark(mediaQuery.matches);
+      } else {
+        setIsDark(theme === "dark");
+      }
+    };
+
+    updateTheme();
+    mediaQuery.addEventListener("change", updateTheme);
+    return () => mediaQuery.removeEventListener("change", updateTheme);
+  }, [theme]);
+
+  return { theme, setTheme, isDark };
+};
+
+// Hook for form data management
+export const useFormDataManagement = (task?: FrontendTask | null) => {
+  const [formData, setFormData] = useState<FrontendTaskFormData>({
+    title: "",
+    description: "",
+    requirements: "",
+    solution: "",
+    category: "react",
+    difficulty: "easy",
+    estimatedTime: 30,
+    author: "",
+    starterCode: "",
+    tags: [],
+    hints: [],
+    files: [],
+    is_active: true,
+  });
+
+  useEffect(() => {
+    if (task) {
+      setFormData({
+        title: task.title || "",
+        description: task.description || "",
+        requirements: task.requirements || "",
+        solution: task.solution || "",
+        category: task.category || "react",
+        difficulty: task.difficulty || "easy",
+        estimatedTime: task.estimatedTime || 30,
+        author: task.author || "",
+        starterCode: task.starterCode || "",
+        tags: task.tags || [],
+        hints: task.hints || [],
+        files: task.files || [],
+        is_active: task.is_active !== false,
+      });
+    }
+  }, [task]);
+
+  return { formData, setFormData };
+};
+
+// Hook for panel layout management
+export const usePanelLayout = () => {
+  const [leftPanelWidth, setLeftPanelWidth] = useState(25);
+  const [rightPanelWidth, setRightPanelWidth] = useState(25);
+  const [isResizing, setIsResizing] = useState(false);
+  const [resizeStartX, setResizeStartX] = useState(0);
+
+  const handleMouseDown = (e: React.MouseEvent, _panel: "left" | "right") => {
+    e.preventDefault();
+    setIsResizing(true);
+    setResizeStartX(e.clientX);
+  };
+
+  const handleMouseMove = (e: MouseEvent) => {
+    if (!isResizing) return;
+
+    const deltaX = e.clientX - resizeStartX;
+    const containerWidth = window.innerWidth;
+    const deltaPercent = (deltaX / containerWidth) * 100;
+
+    if (deltaPercent !== 0) {
+      setLeftPanelWidth((prev) =>
+        Math.max(20, Math.min(60, prev + deltaPercent)),
+      );
+      setRightPanelWidth((prev) =>
+        Math.max(20, Math.min(60, prev - deltaPercent)),
+      );
+      setResizeStartX(e.clientX);
+    }
+  };
+
+  const handleMouseUp = () => {
+    setIsResizing(false);
+  };
+
+  useEffect(() => {
+    if (isResizing) {
+      document.addEventListener("mousemove", handleMouseMove);
+      document.addEventListener("mouseup", handleMouseUp);
+      document.body.style.cursor = "col-resize";
+      document.body.style.userSelect = "none";
+    } else {
+      document.removeEventListener("mousemove", handleMouseMove);
+      document.removeEventListener("mouseup", handleMouseUp);
+      document.body.style.cursor = "";
+      document.body.style.userSelect = "";
+    }
+
+    return () => {
+      document.removeEventListener("mousemove", handleMouseMove);
+      document.removeEventListener("mouseup", handleMouseUp);
+      document.body.style.cursor = "";
+      document.body.style.userSelect = "";
+    };
+  }, [isResizing, resizeStartX]);
+
+  return {
+    leftPanelWidth,
+    rightPanelWidth,
+    setLeftPanelWidth,
+    setRightPanelWidth,
+    handleMouseDown,
+  };
+};
+
+// Hook for file management
+export const useFileManagement = (task?: FrontendTask | null) => {
+  const [activeFile, setActiveFile] = useState<string | null>(null);
+  const [fileTree, setFileTree] = useState<FileNode[]>([]);
+  const [expandedFolders, setExpandedFolders] = useState<Set<string>>(
+    new Set(),
+  );
+  const [openFiles, setOpenFiles] = useState<
+    Array<{
+      id: string;
+      name: string;
+      type: "tsx" | "css" | "html" | "js" | "json";
+      content: string;
+    }>
+  >([]);
+  const [showFileExplorer, setShowFileExplorer] = useState(true);
+
+  // Initialize file tree and open files
+  useEffect(() => {
+    if (task?.files && task.files.length > 0) {
+      const files = task.files.map((file) => ({
+        id: file.id,
+        name: file.name,
+        type: "file" as const,
+        content: file.content,
+        fileType: file.type,
+        isEntryPoint: file.isEntryPoint,
+      }));
+
+      setFileTree([
+        {
+          id: "src",
+          name: "src",
+          type: "folder",
+          children: files.filter(
+            (f) => f.fileType !== "html" && f.fileType !== "json",
+          ),
+        },
+        {
+          id: "public",
+          name: "public",
+          type: "folder",
+          children: files.filter((f) => f.fileType === "html"),
+        },
+        {
+          id: "root",
+          name: "Root",
+          type: "folder",
+          children: files.filter((f) => f.fileType === "json"),
+        },
+      ]);
+
+      setOpenFiles(
+        files.map((f) => ({
+          id: f.id,
+          name: f.name,
+          type: f.fileType as "tsx" | "css" | "html" | "js" | "json",
+          content: f.content,
+        })),
+      );
+      setActiveFile(
+        files.find((f) => f.isEntryPoint)?.id || files[0]?.id || null,
+      );
+      setExpandedFolders(new Set(["src", "public", "root"]));
+    } else {
+      // Default files
+      const defaultFiles = [
+        {
+          id: "app",
+          name: "App.tsx",
+          type: "file" as const,
+          fileType: "tsx",
+          content: "",
+        },
+        {
+          id: "styles",
+          name: "styles.css",
+          type: "file" as const,
+          fileType: "css",
+          content: "",
+        },
+        {
+          id: "index",
+          name: "index.html",
+          type: "file" as const,
+          fileType: "html",
+          content:
+            '<!doctype html>\n<html lang="en">\n  <head>\n    <meta charset="UTF-8" />\n    <meta name="viewport" content="width=device-width, initial-scale=1.0" />\n  </head>\n  <body>\n    <div id="root"></div>\n  </body>\n</html>',
+        },
+      ];
+
+      setFileTree([
+        {
+          id: "src",
+          name: "src",
+          type: "folder",
+          children: defaultFiles.filter((f) => f.fileType !== "html"),
+        },
+        {
+          id: "public",
+          name: "public",
+          type: "folder",
+          children: defaultFiles.filter((f) => f.fileType === "html"),
+        },
+      ]);
+
+      setOpenFiles(
+        defaultFiles.map((f) => ({
+          id: f.id,
+          name: f.name,
+          type: f.fileType as "tsx" | "css" | "html" | "js" | "json",
+          content: f.content,
+        })),
+      );
+      setActiveFile("app");
+      setExpandedFolders(new Set(["src", "public"]));
+    }
+  }, [task]);
+
+  return {
+    activeFile,
+    fileTree,
+    expandedFolders,
+    openFiles,
+    showFileExplorer,
+    setActiveFile,
+    setFileTree,
+    setExpandedFolders,
+    setOpenFiles,
+    setShowFileExplorer,
+  };
+};
+
+// Hook for console management
+export const useConsoleManagement = () => {
+  const [consoleOutput, setConsoleOutput] = useState<string[]>([]);
+  const [showConsole] = useState(true);
+
+  useEffect(() => {
+    const handleMessage = (event: MessageEvent) => {
+      // SECURITY: Verify message origin to prevent XSS
+      if (event.origin !== globalThis.window.location.origin) {
+        console.warn("Received message from untrusted origin:", event.origin);
+        return;
+      }
+      if (event.data.type === "console") {
+        setConsoleOutput((prev) => [...prev.slice(-19), event.data.message]);
+      }
+    };
+
+    window.addEventListener("message", handleMessage);
+    return () => window.removeEventListener("message", handleMessage);
+  }, []);
+
+  return { consoleOutput, setConsoleOutput, showConsole };
+};
