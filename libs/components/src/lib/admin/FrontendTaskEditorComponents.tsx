@@ -1,5 +1,5 @@
 import React from "react";
-import { ArrowLeft, Sun, Moon, Monitor, Save } from "lucide-react";
+import { ArrowLeft, Sun, Moon, Monitor, Save, Code, Flame } from "lucide-react";
 
 interface HeaderProps {
   isDark: boolean;
