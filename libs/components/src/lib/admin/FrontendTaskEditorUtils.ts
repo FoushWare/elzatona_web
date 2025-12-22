@@ -1,4 +1,3 @@
-import { Code } from "lucide-react";
 import { FrontendTaskFile, FrontendTaskFormData } from "@elzatona/types";
 
 interface FileNode {
@@ -12,7 +11,11 @@ interface FileNode {
 }
 
 // File management helper functions
-export const createFileNode = (name: string, type: string, content: string = ""): FileNode => {
+export const createFileNode = (
+  name: string,
+  type: string,
+  content: string = "",
+): FileNode => {
   const id = `file_${Date.now()}`;
   return {
     id,
@@ -23,7 +26,10 @@ export const createFileNode = (name: string, type: string, content: string = "")
   };
 };
 
-export const addFileToTree = (fileTree: FileNode[], newFile: FileNode): FileNode[] => {
+export const addFileToTree = (
+  fileTree: FileNode[],
+  newFile: FileNode,
+): FileNode[] => {
   return fileTree.map((folder) => {
     if (folder.type === "folder" && folder.children) {
       return {
@@ -35,7 +41,10 @@ export const addFileToTree = (fileTree: FileNode[], newFile: FileNode): FileNode
   });
 };
 
-export const removeFileFromTree = (fileTree: FileNode[], fileId: string): FileNode[] => {
+export const removeFileFromTree = (
+  fileTree: FileNode[],
+  fileId: string,
+): FileNode[] => {
   return fileTree.map((folder) => {
     if (folder.type === "folder" && folder.children) {
       return {
@@ -47,13 +56,17 @@ export const removeFileFromTree = (fileTree: FileNode[], fileId: string): FileNo
   });
 };
 
-export const updateFileInTree = (fileTree: FileNode[], fileId: string, content: string): FileNode[] => {
+export const updateFileInTree = (
+  fileTree: FileNode[],
+  fileId: string,
+  content: string,
+): FileNode[] => {
   return fileTree.map((folder) => {
     if (folder.type === "folder" && folder.children) {
       return {
         ...folder,
         children: folder.children.map((file) =>
-          file.id === fileId ? { ...file, content } : file
+          file.id === fileId ? { ...file, content } : file,
         ),
       };
     }
@@ -66,17 +79,17 @@ export const getFileIcon = (fileType: string) => {
   switch (fileType) {
     case "tsx":
     case "jsx":
-      return <Code className="w-4 h-4 text-blue-500" />;
+      return "blue";
     case "css":
-      return <Code className="w-4 h-4 text-purple-500" />;
+      return "purple";
     case "html":
-      return <Code className="w-4 h-4 text-orange-500" />;
+      return "orange";
     case "js":
-      return <Code className="w-4 h-4 text-yellow-500" />;
+      return "yellow";
     case "json":
-      return <Code className="w-4 h-4 text-green-500" />;
+      return "green";
     default:
-      return <Code className="w-4 h-4 text-gray-500" />;
+      return "gray";
   }
 };
 
@@ -84,16 +97,23 @@ export const getFileById = (openFiles: any[], fileId: string) => {
   return openFiles.find((file) => file.id === fileId);
 };
 
-export const getCurrentFileContent = (openFiles: any[], activeFile: string | null) => {
+export const getCurrentFileContent = (
+  openFiles: any[],
+  activeFile: string | null,
+) => {
   if (!activeFile) return "";
   const file = getFileById(openFiles, activeFile);
   return file?.content || "";
 };
 
-export const setCurrentFileContent = (openFiles: any[], activeFile: string | null, content: string) => {
+export const setCurrentFileContent = (
+  openFiles: any[],
+  activeFile: string | null,
+  content: string,
+) => {
   if (!activeFile) return openFiles;
   return openFiles.map((file) =>
-    file.id === activeFile ? { ...file, content } : file
+    file.id === activeFile ? { ...file, content } : file,
   );
 };
 
@@ -305,7 +325,9 @@ export const generateCssStyles = (cssCode: string): string => {
 };
 
 // Form handling helper functions
-export const extractFilesFromTree = (fileTree: FileNode[]): FrontendTaskFile[] => {
+export const extractFilesFromTree = (
+  fileTree: FileNode[],
+): FrontendTaskFile[] => {
   return fileTree
     .flatMap((folder) => folder.children || [])
     .map((file) => ({
@@ -317,7 +339,10 @@ export const extractFilesFromTree = (fileTree: FileNode[]): FrontendTaskFile[] =
     }));
 };
 
-export const createTaskData = (formData: FrontendTaskFormData, files: FrontendTaskFile[]): FrontendTaskFormData => {
+export const createTaskData = (
+  formData: FrontendTaskFormData,
+  files: FrontendTaskFile[],
+): FrontendTaskFormData => {
   return {
     ...formData,
     files,
@@ -337,18 +362,21 @@ export const copyToClipboard = async (content: string): Promise<void> => {
 export const getCategoryIcon = (category: string) => {
   switch (category.toLowerCase()) {
     case "react":
-      return <Code className="w-4 h-4" />;
+      return "React";
     case "javascript":
-      return <Code className="w-4 h-4" />;
+      return "JavaScript";
     case "css":
-      return <Code className="w-4 h-4" />;
+      return "CSS";
     default:
-      return <Code className="w-4 h-4" />;
+      return "Code";
   }
 };
 
 // Preview generation helper functions
-export const generateReactPreview = (reactCode: string, cssText: string): string => {
+export const generateReactPreview = (
+  reactCode: string,
+  cssText: string,
+): string => {
   const jsText = generateReactJsCode(reactCode);
   const cleanedCode = cleanReactCode(reactCode);
 
@@ -384,7 +412,10 @@ export const generateReactPreview = (reactCode: string, cssText: string): string
         </html>`;
 };
 
-export const generatePlainPreview = (reactCode: string, cssText: string): string => {
+export const generatePlainPreview = (
+  reactCode: string,
+  cssText: string,
+): string => {
   const jsText = generatePlainJsCode(reactCode);
 
   return `<!DOCTYPE html>

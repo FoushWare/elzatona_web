@@ -7,7 +7,6 @@ interface HeaderProps {
   setTheme: (theme: "light" | "dark" | "system") => void;
   mode: "create" | "edit" | "view";
   formData: any;
-  getCategoryIcon: (category: string) => React.ReactNode;
   handleSave: () => void;
   onCancel: () => void;
 }
@@ -18,7 +17,6 @@ export const FrontendTaskEditorHeader: React.FC<HeaderProps> = ({
   setTheme,
   mode,
   formData,
-  getCategoryIcon,
   handleSave,
   onCancel,
 }) => (
@@ -47,7 +45,7 @@ export const FrontendTaskEditorHeader: React.FC<HeaderProps> = ({
                 : "bg-gradient-to-r from-blue-500 to-purple-500"
             }`}
           >
-            {getCategoryIcon(formData.category)}
+            <Code className="w-4 h-4" />
           </div>
           <div>
             <h1
@@ -66,9 +64,7 @@ export const FrontendTaskEditorHeader: React.FC<HeaderProps> = ({
                 isDark ? "text-gray-400" : "text-gray-600"
               }`}
             >
-              <span className="flex items-center gap-1">
-                React
-              </span>
+              <span className="flex items-center gap-1">React</span>
               <span className="flex items-center gap-1">
                 {formData.difficulty}
               </span>
@@ -306,7 +302,9 @@ export const FrontendTaskEditorMainContent: React.FC<MainContentProps> = ({
       >
         <div className="flex items-center gap-2">
           Eye
-          <span className={`text-sm font-medium ${isDark ? "text-white" : "text-gray-900"}`}>
+          <span
+            className={`text-sm font-medium ${isDark ? "text-white" : "text-gray-900"}`}
+          >
             Preview
           </span>
         </div>

@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import { Code } from "lucide-react";
 import { FrontendTask, FrontendTaskFormData } from "@elzatona/types";
 import {
   useThemeManagement,
@@ -17,7 +18,6 @@ import {
   extractFilesFromTree,
   createTaskData,
   copyToClipboard,
-  getCategoryIcon,
   getCurrentFileContent,
 } from "./FrontendTaskEditorUtils";
 
@@ -37,11 +37,7 @@ export default function FrontendTaskEditor({
   // Extracted hooks for state management
   const { theme, setTheme, isDark } = useThemeManagement();
   const { formData, setFormData } = useFormDataManagement(task);
-  const {
-    leftPanelWidth,
-    rightPanelWidth,
-    handleMouseDown,
-  } = usePanelLayout();
+  const { leftPanelWidth, rightPanelWidth, handleMouseDown } = usePanelLayout();
   const {
     activeFile,
     fileTree,
@@ -59,8 +55,12 @@ export default function FrontendTaskEditor({
   // Minimal local state
   const [copied, setCopied] = React.useState(false);
   const [showPreview, setShowPreview] = React.useState(true);
-  const [activeTab, setActiveTab] = React.useState<"description" | "solution">("description");
-  const [activeBrowserTab, setActiveBrowserTab] = React.useState<"browser" | "console">("browser");
+  const [activeTab, setActiveTab] = React.useState<"description" | "solution">(
+    "description",
+  );
+  const [activeBrowserTab, setActiveBrowserTab] = React.useState<
+    "browser" | "console"
+  >("browser");
   const [newHint, setNewHint] = React.useState("");
   const [newTag, setNewTag] = React.useState("");
   const [newFileName, setNewFileName] = React.useState("");
@@ -112,7 +112,6 @@ export default function FrontendTaskEditor({
         setTheme={setTheme}
         mode={mode}
         formData={formData}
-        getCategoryIcon={getCategoryIcon}
         handleSave={handleSave}
         onCancel={onCancel}
       />
