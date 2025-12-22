@@ -82,7 +82,7 @@ export default function ClientCodeRunner({
 
     iframe.contentWindow?.postMessage(
       { type: "runner:start", payload },
-      "*", // Safe for iframe with srcDoc since it's isolated
+      window.location.origin, // Use specific origin for better security
     );
   };
 
@@ -108,7 +108,7 @@ export default function ClientCodeRunner({
     "    fn=eval(fnName);\n" +
     "  }catch(err){\n" +
     "    results=tests.map(t=>({id:t.id,passed:false,actual:null,expected:t.expected,error:String(err)}));\n" +
-    '    parent.postMessage({type:"runner:results",results},"*");\n' +
+    '    parent.postMessage({type:"runner:results",results},window.location.origin);\n' +
     "    return;\n" +
     "  }\n" +
     "  for(const t of tests){\n" +
@@ -123,15 +123,15 @@ export default function ClientCodeRunner({
     "      results.push({id:t.id,passed:false,actual:null,expected:t.expected,error:String(err),elapsedMs:0});\n" +
     "    }\n" +
     "  }\n" +
-    '  parent.postMessage({type:"runner:results",results},"*");\n' +
+    '  parent.postMessage({type:"runner:results",results},window.location.origin);\n' +
     "});\n" +
     "// custom single-run handler\n" +
     'window.addEventListener("message",async(e)=>{\n' +
     '  if(!e.data||e.data.type!=="runner:custom")return;\n' +
     "  const {fnName,code,input}=e.data.payload;\n" +
-    '  try{safeEval(code);}catch(err){parent.postMessage({type:"runner:custom:result",result:{id:"custom",passed:false,actual:null,expected:null,error:String(err),elapsedMs:0}},"*");return;}\n' +
-    '  let fn;try{fn=eval(fnName);}catch(err){parent.postMessage({type:"runner:custom:result",result:{id:"custom",passed:false,actual:null,expected:null,error:String(err),elapsedMs:0}},"*");return;}\n' +
-    '  try{const args=Array.isArray(input)?input:[input];const start=performance.now();const actual=await withTimeout(fn,args,1500);const elapsed=performance.now()-start;parent.postMessage({type:"runner:custom:result",result:{id:"custom",passed:true,actual,expected:null,elapsedMs:Math.round(elapsed)}},"*");}catch(err){parent.postMessage({type:"runner:custom:result",result:{id:"custom",passed:false,actual:null,expected:null,error:String(err),elapsedMs:0}},"*");}\n' +
+    '  try{safeEval(code);}catch(err){parent.postMessage({type:"runner:custom:result",result:{id:"custom",passed:false,actual:null,expected:null,error:String(err),elapsedMs:0}},window.location.origin);return;}\n' +
+    '  let fn;try{fn=eval(fnName);}catch(err){parent.postMessage({type:"runner:custom:result",result:{id:"custom",passed:false,actual:null,expected:null,error:String(err),elapsedMs:0}},window.location.origin);return;}\n' +
+    '  try{const args=Array.isArray(input)?input:[input];const start=performance.now();const actual=await withTimeout(fn,args,1500);const elapsed=performance.now()-start;parent.postMessage({type:"runner:custom:result",result:{id:"custom",passed:true,actual,expected:null,elapsedMs:Math.round(elapsed)}},window.location.origin);}catch(err){parent.postMessage({type:"runner:custom:result",result:{id:"custom",passed:false,actual:null,expected:null,error:String(err),elapsedMs:0}},window.location.origin);}\n' +
     "});\n" +
     "<\/script>" +
     "</body></html>";
@@ -199,7 +199,7 @@ export default function ClientCodeRunner({
                   input: parsed,
                 },
               },
-              "*", // Safe for iframe with srcDoc since it's isolated
+              window.location.origin, // Use specific origin for better security
             );
           }}
           className="px-3 py-2 rounded bg-emerald-600 text-white"
