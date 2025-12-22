@@ -484,17 +484,15 @@ export default function FrontendTaskEditor({
     }
   };
 
-  // Preview generation
-  const previewSrcDoc = useMemo(() => {
-    const appFile = openFiles.find((f) => f.id === "app");
-    const stylesFile = openFiles.find((f) => f.id === "styles");
-    const indexFile = openFiles.find((f) => f.id === "index");
+  // Helper function to get file content by ID
+  const getFileContent = (fileId: string): string => {
+    const file = openFiles.find((f) => f.id === fileId);
+    return file?.content || "";
+  };
 
-    const reactCode = appFile?.content || "";
-    const cssCode = stylesFile?.content || "";
-    const htmlCode = indexFile?.content || '<div id="root"></div>';
-
-    const cssText = `
+  // Helper function to generate CSS styles
+  const generateCssStyles = (cssCode: string): string => {
+    return `
       <style>
         * {
           box-sizing: border-box;
@@ -523,21 +521,33 @@ export default function FrontendTaskEditor({
         ${cssCode}
       </style>
     `;
+  };
 
-    if (
-      reactCode.includes("import") ||
-      reactCode.includes("export default") ||
-      reactCode.includes("React")
-    ) {
-      const cleanReactCode = reactCode
-        .replace(/import\s+.*?from\s+['"][^'"]*['"];?\s*/g, "")
-        .replace(/import\s+\{.*?\}\s+from\s+['"][^'"]*['"];?\s*/g, "")
-        .replace(/import\s+\*\s+as\s+\w+\s+from\s+['"][^'"]*['"];?\s*/g, "")
-        .replace(/export\s+default\s+/g, "")
-        .replace(/export\s+\{.*?\};?\s*/g, "")
-        .replace(/export\s+.*?;?\s*/g, "");
+  // Helper function to check if code is React
+  const isReactCode = (code: string): boolean => {
+    return (
+      code.includes("import") ||
+      code.includes("export default") ||
+      code.includes("React")
+    );
+  };
 
-      const jsText = `
+  // Helper function to clean React code
+  const cleanReactCode = (reactCode: string): string => {
+    return reactCode
+      .replace(/import\s+.*?from\s+['"][^'"]*['"];?\s*/g, "")
+      .replace(/import\s+\{.*?\}\s+from\s+['"][^'"]*['"];?\s*/g, "")
+      .replace(/import\s+\*\s+as\s+\w+\s+from\s+['"][^'"]*['"];?\s*/g, "")
+      .replace(/export\s+default\s+/g, "")
+      .replace(/export\s+\{.*?\};?\s*/g, "")
+      .replace(/export\s+.*?;?\s*/g, "");
+  };
+
+  // Helper function to generate React JavaScript code
+  const generateReactJsCode = (reactCode: string): string => {
+    const cleanReactCodeResult = cleanReactCode(reactCode);
+
+    return `
         <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
         <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
         <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
@@ -585,137 +595,131 @@ export default function FrontendTaskEditor({
             
             static getDerivedStateFromError(error) {
               return { hasError: true, error };
-            }
+            }`;
+  };
+
+  // Helper function to generate plain JavaScript code
+  const generatePlainJsCode = (reactCode: string): string => {
+    return `
+        <script>
+          const originalConsole = {
+            log: console.log,
+            error: console.error,
+            warn: console.warn,
+            info: console.info
+          };
+          
+          const consoleOutput = [];
+          
+          function captureConsole(method, args) {
+            const timestamp = new Date().toLocaleTimeString();
+            const message = Array.from(args).map(arg => 
+              typeof arg === 'object' ? JSON.stringify(arg, null, 2) : String(arg)
+            ).join(' ');
             
-            componentDidCatch(error, errorInfo) {
-              console.error('React Error:', error, errorInfo);
-            }
+            const logEntry = \`[\${timestamp}] [\${method.toUpperCase()}] \${message}\`;
+            consoleOutput.push(logEntry);
             
-            render() {
-              if (this.state.hasError) {
-                return React.createElement('div', {
-                  className: 'error-boundary'
-                }, \`Error: \${this.state.error?.message || 'Unknown error'}\\n\\n\${this.state.error?.stack || ''}\`);
-              }
-              return this.props.children;
-            }
+            try {
+              window.parent.postMessage({
+                type: 'console',
+                method: method,
+                message: logEntry,
+                timestamp: timestamp
+              }, window.location.origin);
+            } catch (e) {}
+            
+            originalConsole[method].apply(console, args);
           }
           
+          console.log = (...args) => captureConsole('log', args);
+          console.error = (...args) => captureConsole('error', args);
+          console.warn = (...args) => captureConsole('warn', args);
+          console.info = (...args) => captureConsole('info', args);
+          
           try {
-            const { useState, useEffect, useMemo, useCallback, useRef, useContext, useReducer } = React;
-            window.React = React;
-            window.useState = useState;
-            window.useEffect = useEffect;
-            window.useMemo = useMemo;
-            window.useCallback = useCallback;
-            window.useRef = useRef;
-            window.useContext = useContext;
-            window.useReducer = useReducer;
-            
-            if (window.App) {
-              delete window.App;
-            }
-            
-            // SECURITY: Escape backslashes, backticks, and dollar signs for template literal
-            // NOSONAR S6304: String.raw cannot be used here as we need dynamic escaping
-            // NOSONAR S7781: replaceAll() cannot be used with regex patterns that require capture groups
-            // Use String.fromCodePoint to avoid template literal parsing issues with backticks
-            const backtickChar = String.fromCodePoint(96);
-            const escapedBacktick = String.fromCodePoint(92) + backtickChar; // backslash + backtick
-            const cleanCode = cleanReactCode
-              .replace(/\\/g, "\\\\")
-              .replace(new RegExp(backtickChar, "g"), escapedBacktick)
-              .replace(/\$/g, "$"); // NOSONAR
-            const transpiledCode = Babel.transform(cleanCode, { 
-              presets: ['react'],
-              plugins: ['transform-class-properties']
-            }).code;
-            
-            // SECURITY: Escape backslashes in transpiled code as well
-            // Use String.fromCodePoint to avoid template literal parsing issues
-            const backtick = String.fromCodePoint(96);
-            const escapedBacktick = String.fromCodePoint(92) + backtick; // backslash + backtick
-            const escapedTranspiledCode = transpiledCode
-              .replace(/\\/g, "\\\\")
-              .replace(new RegExp(backtick, "g"), escapedBacktick)
-              .replace(/\$/g, "$"); // NOSONAR
-            // NOSONAR S6328: Escape is necessary to prevent template literal injection in wrappedCode
-            const wrappedCode = \`(function() {
-              \${escapedTranspiledCode}
-              return App;
-            })()\`;
-            
-            // SECURITY NOTE: eval() is used here for educational code execution in an iframe sandbox.
-            // The code runs in an isolated iframe (srcDoc) which provides some protection.
-            // This is intentional for allowing users to write and test React code in the editor.
-            // Consider implementing additional sandboxing measures (CSP, worker threads) for production.
-            const App = eval(wrappedCode);
-            
-            const rootElement = document.getElementById('root');
-            if (rootElement) {
-              while (rootElement.firstChild) {
-                rootElement.removeChild(rootElement.firstChild);
-              }
-            }
-            
-            if (!window.reactRoot) {
-              window.reactRoot = ReactDOM.createRoot(rootElement);
-            }
-            
-            window.reactRoot.render(React.createElement(ErrorBoundary, null, 
-              React.createElement(App)
-            ));
-            
-            console.log('React app loaded successfully');
-            console.info('Ready to start coding!');
-            
+            ${reactCode}
           } catch (error) {
-            console.error('Compilation Error:', error);
-            const errorElement = document.getElementById('root');
-            if (errorElement) {
-              const errorDiv = document.createElement('div');
-              errorDiv.className = 'error-boundary';
-              errorDiv.textContent = 'Compilation Error: ' + error.message + '\\n\\n' + (error.stack || '');
-              errorElement.appendChild(errorDiv);
-            }
+            console.error('Error executing code:', error);
+            document.getElementById('root').innerHTML = \`
+              <div class="error-boundary">
+                <strong>Error:</strong> \${error.message}
+                <br><br>
+                <strong>Stack:</strong><br>
+                \${error.stack}
+              </div>
+            \`;
           }
-        </script>
-      `;
+        </script>`;
+  };
 
-      return (
-        "<!DOCTYPE html>" +
-        "<html>" +
-        "<head>" +
-        '<meta charset="utf-8">' +
-        '<meta name="viewport" content="width=device-width, initial-scale=1">' +
-        "<title>Live Preview</title>" +
-        cssText +
-        "</head>" +
-        "<body>" +
-        htmlCode +
-        jsText +
-        "</body>" +
-        "</html>"
-      );
+  // Preview generation
+  const previewSrcDoc = useMemo(() => {
+    const reactCode = getFileContent("app");
+    const cssCode = getFileContent("styles");
+    const htmlCode = getFileContent("index") || '<div id="root"></div>';
+
+    const cssText = generateCssStyles(cssCode);
+
+    if (isReactCode(reactCode)) {
+      const jsText = generateReactJsCode(reactCode);
+
+      return `<!DOCTYPE html>
+        <html>
+          <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>React Preview</title>
+            ${cssText}
+          </head>
+          <body>
+            <div id="root"></div>
+            ${jsText}
+            <script>
+              try {
+                const App = ${cleanReactCode};
+                const root = ReactDOM.createRoot(document.getElementById('root'));
+                root.render(React.createElement(App));
+              } catch (error) {
+                console.error('Error rendering React component:', error);
+                document.getElementById('root').innerHTML = \`
+                  <div class="error-boundary">
+                    <strong>Error:</strong> \${error.message}
+                    <br><br>
+                    <strong>Stack:</strong><br>
+                    \${error.stack}
+                  </div>
+                \`;
+              }
+            </script>
+          </body>
+        </html>`;
     } else {
-      const jsText = "<script>" + reactCode + "</script>";
-      return (
-        "<!DOCTYPE html>" +
-        "<html>" +
-        "<head>" +
-        '<meta charset="utf-8">' +
-        '<meta name="viewport" content="width=device-width, initial-scale=1">' +
-        "<title>Live Preview</title>" +
-        cssText +
-        "</head>" +
-        "<body>" +
-        htmlCode +
-        jsText +
-        "</body>" +
-        "</html>"
-      );
+      // Plain JavaScript/HTML
+      const jsText = generatePlainJsCode(reactCode);
+
+      return `<!DOCTYPE html>
+        <html>
+          <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>Preview</title>
+            ${cssText}
+          </head>
+          <body>
+            <div id="root"></div>
+            ${jsText}
+          </body>
+        </html>`;
     }
-  }, [openFiles]);
+  }, [
+    openFiles,
+    getFileContent,
+    generateCssStyles,
+    isReactCode,
+    generateReactJsCode,
+    generatePlainJsCode,
+  ]);
 
   // Form handlers
   const handleSave = async () => {

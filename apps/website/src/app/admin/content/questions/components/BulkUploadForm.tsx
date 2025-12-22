@@ -32,114 +32,89 @@ const parseCsvFile = async (file: File): Promise<any[]> => {
   });
 };
 
-// Helper function to normalize code text
-const normalizeCodeText = (rawCode: string): string => {
-  let codeWithNewlines = rawCode
-    .replaceAll(/\\n/g, "\n")
-    .replaceAll(/\\r\\n/g, "\n")
-    .replaceAll(/\\r/g, "\n")
-    .replaceAll(/\r\n/g, "\n")
-    .replaceAll(/\r/g, "\n")
-    .trim();
-
-  // Remove empty lines at the start
-  while (codeWithNewlines.startsWith("\n")) {
-    codeWithNewlines = codeWithNewlines.substring(1);
-  }
-
-  // Remove empty lines at the end
-  while (codeWithNewlines.endsWith("\n")) {
-    codeWithNewlines = codeWithNewlines.slice(0, -1);
-  }
-
-  // Remove ALL blank lines
-  const lines = codeWithNewlines.split("\n");
-  const nonEmptyLines = lines.filter((line) => {
-    const trimmed = line.trim();
-    return trimmed.length > 0;
-  });
-  codeWithNewlines = nonEmptyLines.join("\n");
-
-  // Final check
-  if (codeWithNewlines.includes("\n\n")) {
-    codeWithNewlines = codeWithNewlines.replaceAll(/\n{2,}/g, "\n");
-  }
-
-  return codeWithNewlines;
-};
-
-// Helper function to detect programming language
-const detectLanguage = (codeText: string): string => {
-  if (
-    codeText.includes("def ") ||
-    (codeText.includes("import ") && codeText.includes("print"))
-  ) {
-    return "python";
-  } else if (
-    codeText.includes("public class") ||
-    codeText.includes("public static")
-  ) {
-    return "java";
-  } else if (
-    codeText.includes("interface ") ||
-    codeText.includes("type ") ||
-    codeText.includes(": string")
-  ) {
-    return "typescript";
-  }
-  return "javascript";
-};
-
-// Helper function to detect theme
-const detectTheme = (): string => {
-  const prefersDark =
-    globalThis.window !== undefined &&
-    globalThis.window.matchMedia("(prefers-color-scheme: dark)").matches;
-  return prefersDark ? "github-dark" : "github-light";
-};
-
 // Helper function to calculate color brightness
 const calculateBrightness = (r: number, g: number, b: number): number => {
   return (r * 299 + g * 587 + b * 114) / 1000;
 };
 
-// Helper function to darken hex color
-const darkenHexColor = (colorValue: string): string => {
-  const hex = colorValue.substring(1);
+// Helper function to extract RGB values from hex
+const extractRgbFromHex = (
+  hex: string,
+): { r: number; g: number; b: number } => {
   const r = Number.parseInt(hex.substring(0, 2), 16);
   const g = Number.parseInt(hex.substring(2, 4), 16);
   const b = Number.parseInt(hex.substring(4, 6), 16);
+  return { r, g, b };
+};
+
+// Helper function to get dimming factor based on brightness
+const getDimmingFactor = (brightness: number): number => {
+  return brightness > 220 ? 0.3 : 0.5;
+};
+
+// Helper function to apply dimming to RGB values
+const applyDimming = (
+  r: number,
+  g: number,
+  b: number,
+  factor: number,
+): { r: number; g: number; b: number } => {
+  const newR = Math.max(0, Math.min(255, Math.round(r * factor)));
+  const newG = Math.max(0, Math.min(255, Math.round(g * factor)));
+  const newB = Math.max(0, Math.min(255, Math.round(b * factor)));
+  return { r: newR, g: newG, b: newB };
+};
+
+// Helper function to convert RGB to hex
+const rgbToHex = (r: number, g: number, b: number): string => {
+  return `#${r.toString(16).padStart(2, "0")}${g.toString(16).padStart(2, "0")}${b.toString(16).padStart(2, "0")}`;
+};
+
+// Helper function to darken hex color
+const darkenHexColor = (colorValue: string): string => {
+  const hex = colorValue.substring(1);
+  const { r, g, b } = extractRgbFromHex(hex);
   const brightness = calculateBrightness(r, g, b);
 
   if (brightness <= 180) return colorValue;
 
-  const factor = brightness > 220 ? 0.3 : 0.5;
-  const newR = Math.max(0, Math.min(255, Math.round(r * factor)));
-  const newG = Math.max(0, Math.min(255, Math.round(g * factor)));
-  const newB = Math.max(0, Math.min(255, Math.round(b * factor)));
-
-  return `#${newR.toString(16).padStart(2, "0")}${newG.toString(16).padStart(2, "0")}${newB.toString(16).padStart(2, "0")}`;
+  const factor = getDimmingFactor(brightness);
+  const { r: newR, g: newG, b: newB } = applyDimming(r, g, b, factor);
+  return rgbToHex(newR, newG, newB);
 };
 
-// Helper function to darken RGB color
-const darkenRgbColor = (colorValue: string): string => {
+// Helper function to extract RGB values from RGB string
+const extractRgbFromRgbString = (
+  colorValue: string,
+): { r: number; g: number; b: number } | null => {
   const rgbRegex = /rgb\((\d+),\s*(\d+),\s*(\d+)\)/;
   const rgbMatch = rgbRegex.exec(colorValue);
-  if (!rgbMatch) return colorValue;
+  if (!rgbMatch) return null;
 
   const r = Number.parseInt(rgbMatch[1], 10);
   const g = Number.parseInt(rgbMatch[2], 10);
   const b = Number.parseInt(rgbMatch[3], 10);
+  return { r, g, b };
+};
+
+// Helper function to format RGB string
+const formatRgbString = (r: number, g: number, b: number): string => {
+  return `rgb(${r}, ${g}, ${b})`;
+};
+
+// Helper function to darken RGB color
+const darkenRgbColor = (colorValue: string): string => {
+  const rgbValues = extractRgbFromRgbString(colorValue);
+  if (!rgbValues) return colorValue;
+
+  const { r, g, b } = rgbValues;
   const brightness = calculateBrightness(r, g, b);
 
   if (brightness <= 180) return colorValue;
 
-  const factor = brightness > 220 ? 0.3 : 0.5;
-  const newR = Math.max(0, Math.min(255, Math.round(r * factor)));
-  const newG = Math.max(0, Math.min(255, Math.round(g * factor)));
-  const newB = Math.max(0, Math.min(255, Math.round(b * factor)));
-
-  return `rgb(${newR}, ${newG}, ${newB})`;
+  const factor = getDimmingFactor(brightness);
+  const { r: newR, g: newG, b: newB } = applyDimming(r, g, b, factor);
+  return formatRgbString(newR, newG, newB);
 };
 
 // Helper function to process a single span element
@@ -172,6 +147,81 @@ const processSpanElement = (el: Element): void => {
   }
 };
 
+// Helper function to normalize code text
+const normalizeCodeText = (code: string): string => {
+  return code
+    .replaceAll(/\\n/g, "\n")
+    .replaceAll(/\\r\\n/g, "\n")
+    .replaceAll(/\\r/g, "\n")
+    .replaceAll(/\r\n/g, "\n")
+    .replaceAll(/\r/g, "\n");
+};
+
+// Helper function to format code by removing blank lines
+const formatCode = (code: string): string => {
+  let formattedCode = code.trim();
+
+  // Remove leading newlines
+  while (formattedCode.startsWith("\n")) {
+    formattedCode = formattedCode.substring(1);
+  }
+
+  // Remove trailing newlines
+  while (formattedCode.endsWith("\n")) {
+    formattedCode = formattedCode.slice(0, -1);
+  }
+
+  // Remove empty lines
+  const lines = formattedCode.split("\n");
+  const nonEmptyLines = lines.filter((line) => line.trim().length > 0);
+  formattedCode = nonEmptyLines.join("\n");
+
+  if (formattedCode.includes("\n\n")) {
+    formattedCode = formattedCode.replaceAll(/\n{2,}/g, "\n");
+  }
+
+  return formattedCode;
+};
+
+// Helper function to get code lines
+const getCodeLines = (formattedCode: string): string[] => {
+  return formattedCode.split("\n").filter((line) => line.trim().length > 0);
+};
+
+// Helper function to detect programming language
+const detectLanguage = (code: string): string => {
+  const codeText = code.toLowerCase();
+
+  if (
+    codeText.includes("def ") ||
+    (codeText.includes("import ") && codeText.includes("print"))
+  ) {
+    return "python";
+  }
+
+  if (codeText.includes("public class") || codeText.includes("public static")) {
+    return "java";
+  }
+
+  if (
+    codeText.includes("interface ") ||
+    codeText.includes("type ") ||
+    codeText.includes(": string")
+  ) {
+    return "typescript";
+  }
+
+  return "javascript";
+};
+
+// Helper function to detect theme
+const detectTheme = (): string => {
+  const prefersDark =
+    globalThis.window !== undefined &&
+    globalThis.window.matchMedia("(prefers-color-scheme: dark)").matches;
+  return prefersDark ? "dark" : "light";
+};
+
 // Helper function to remove empty lines
 const removeEmptyLines = (codeElement: Element): void => {
   const lines = Array.from(codeElement.querySelectorAll(".line"));
@@ -190,58 +240,11 @@ const formatCodeAndDetectLanguage = (
   codeHighlightedHtml: Record<number, string>,
 ) => {
   const rawCode = String(code || "");
-  const codeWithNewlines = rawCode
-    .replaceAll(/\\n/g, "\n")
-    .replaceAll(/\\r\\n/g, "\n")
-    .replaceAll(/\\r/g, "\n")
-    .replaceAll(/\r\n/g, "\n")
-    .replaceAll(/\r/g, "\n");
-
-  // Format code - remove blank lines
-  let formattedCode = codeWithNewlines.trim();
-  while (formattedCode.startsWith("\n")) {
-    formattedCode = formattedCode.substring(1);
-  }
-  while (formattedCode.endsWith("\n")) {
-    formattedCode = formattedCode.slice(0, -1);
-  }
-  const lines = formattedCode.split("\n");
-  const nonEmptyLines = lines.filter((line) => line.trim().length > 0);
-  formattedCode = nonEmptyLines.join("\n");
-  if (formattedCode.includes("\n\n")) {
-    formattedCode = formattedCode.replaceAll(/\n{2,}/g, "\n");
-  }
-
-  const codeLines = formattedCode
-    .split("\n")
-    .filter((line) => line.trim().length > 0);
-
-  // Detect language
-  let detectedLanguage = "javascript";
-  const codeText = formattedCode.toLowerCase();
-  if (
-    codeText.includes("def ") ||
-    (codeText.includes("import ") && codeText.includes("print"))
-  ) {
-    detectedLanguage = "python";
-  } else if (
-    codeText.includes("public class") ||
-    codeText.includes("public static")
-  ) {
-    detectedLanguage = "java";
-  } else if (
-    codeText.includes("interface ") ||
-    codeText.includes("type ") ||
-    codeText.includes(": string")
-  ) {
-    detectedLanguage = "typescript";
-  }
-
-  // Detect theme
-  const prefersDark =
-    globalThis.window !== undefined &&
-    globalThis.window.matchMedia("(prefers-color-scheme: dark)").matches;
-  const codeTheme = prefersDark ? "dark" : "light";
+  const codeWithNewlines = normalizeCodeText(rawCode);
+  const formattedCode = formatCode(codeWithNewlines);
+  const codeLines = getCodeLines(formattedCode);
+  const detectedLanguage = detectLanguage(formattedCode);
+  const codeTheme = detectTheme();
   const highlightedHtml = codeHighlightedHtml[qIndex] || "";
 
   return {
@@ -453,58 +456,176 @@ export function BulkUploadForm({
     highlightAllQuestions();
   }, [shikiHighlighter, previewQuestions]);
 
+  // Helper function to clear preview state
+  const clearPreviewState = () => {
+    setPreviewQuestions([]);
+    setTotalQuestionsCount(0);
+    setShowPreview(false);
+    setJsonError(null);
+  };
+
+  // Helper function to set preview state with questions
+  const setPreviewStateWithQuestions = (questions: any[]) => {
+    setTotalQuestionsCount(questions.length);
+    setPreviewQuestions(questions.slice(0, 3));
+    setShowPreview(questions.length > 0);
+    setJsonError(null);
+  };
+
+  // Helper function to remove BOM from text
+  const removeBomFromText = (text: string): string => {
+    let cleanedText = text.trim();
+    if (cleanedText.codePointAt(0) === 0xfeff) {
+      cleanedText = cleanedText.slice(1);
+    }
+    return cleanedText;
+  };
+
+  // Helper function to extract questions from parsed data
+  const extractQuestionsFromData = (data: any): any[] => {
+    return Array.isArray(data) ? data : data.questions || [];
+  };
+
+  // Helper function to format JSON error with position info
+  const formatJsonErrorWithPosition = (
+    err: SyntaxError,
+    text: string,
+  ): string => {
+    const match = /position (\d+)/.exec(err.message);
+    if (match) {
+      const position = Number.parseInt(match[1], 10);
+      const lines = text.substring(0, position).split("\n");
+      const lineNumber = lines.length;
+      const columnNumber = (lines.at(-1)?.length ?? 0) + 1;
+      return `JSON Error at line ${lineNumber}, column ${columnNumber}: ${err.message}`;
+    }
+    return `JSON Error: ${err.message}`;
+  };
+
+  // Helper function to handle JSON parse errors
+  const handleJsonParseError = (err: any, text: string) => {
+    clearPreviewState();
+
+    if (err instanceof SyntaxError) {
+      const errorMessage = formatJsonErrorWithPosition(err, text);
+      setJsonError(errorMessage);
+    } else {
+      setJsonError(null); // Clear error if it's not a syntax error
+    }
+  };
+
   // Parse JSON text when in JSON mode
   const parseJsonText = (text: string) => {
     // Don't parse if text is empty or just whitespace
     if (!text || !text.trim()) {
-      setPreviewQuestions([]);
-      setTotalQuestionsCount(0);
-      setShowPreview(false);
-      setJsonError(null);
+      clearPreviewState();
       return [];
     }
 
     try {
-      // Remove BOM if present
-      let cleanedText = text.trim();
-      if (cleanedText.codePointAt(0) === 0xfeff) {
-        cleanedText = cleanedText.slice(1);
-      }
-
+      const cleanedText = removeBomFromText(text);
       const data = JSON.parse(cleanedText);
-      const questions = Array.isArray(data) ? data : data.questions || [];
-      setTotalQuestionsCount(questions.length);
-      setPreviewQuestions(questions.slice(0, 3));
-      setShowPreview(questions.length > 0);
-      setJsonError(null); // Clear any previous errors
+      const questions = extractQuestionsFromData(data);
+      setPreviewStateWithQuestions(questions);
       return questions;
     } catch (err: any) {
-      // Silently handle JSON parse errors (user might still be typing)
-      // Only show preview when JSON is valid
-      setPreviewQuestions([]);
-      setTotalQuestionsCount(0);
-      setShowPreview(false);
-
-      // Store error for display, but only if it's a real syntax error
-      if (err instanceof SyntaxError) {
-        const match = /position (\d+)/.exec(err.message);
-        if (match) {
-          const position = Number.parseInt(match[1], 10);
-          const lines = text.substring(0, position).split("\n");
-          const lineNumber = lines.length;
-          const columnNumber = (lines.at(-1)?.length ?? 0) + 1;
-
-          setJsonError(
-            `JSON Error at line ${lineNumber}, column ${columnNumber}: ${err.message}`,
-          );
-        } else {
-          setJsonError(`JSON Error: ${err.message}`);
-        }
-      } else {
-        setJsonError(null); // Clear error if it's not a syntax error
-      }
+      handleJsonParseError(err, text);
       return [];
     }
+  };
+
+  // Code preview section component to reduce complexity
+  const CodePreviewSection: React.FC<{
+    code: string;
+    qIndex: number;
+    codeHighlightedHtml: Record<number, string>;
+  }> = ({ code, qIndex, codeHighlightedHtml }) => {
+    const { detectedLanguage, codeTheme, highlightedHtml, codeLines } =
+      formatCodeAndDetectLanguage(code, qIndex, codeHighlightedHtml);
+
+    return (
+      <div className="space-y-1">
+        <p className="text-sm font-medium text-gray-700 dark:text-gray-300">
+          Code:
+        </p>
+        {/* Code display with Shiki syntax highlighting - same as guided practice */}
+        <div
+          className={`relative rounded-lg overflow-hidden shadow-lg border ${
+            codeTheme === "dark"
+              ? "border-gray-700 bg-gray-900"
+              : "border-gray-300 bg-white"
+          }`}
+        >
+          {/* Code editor header bar */}
+          <div
+            className={`flex items-center justify-between px-2 py-1.5 border-b ${
+              codeTheme === "dark"
+                ? "bg-gray-800 border-gray-700"
+                : "bg-gray-100 border-gray-200"
+            }`}
+          >
+            <div className="flex items-center gap-2">
+              {/* Window controls */}
+              <div className="flex gap-1">
+                <div className="w-2 h-2 rounded-full bg-red-500"></div>
+                <div className="w-2 h-2 rounded-full bg-yellow-500"></div>
+                <div className="w-2 h-2 rounded-full bg-green-500"></div>
+              </div>
+              <span className="text-xs font-medium text-gray-600 dark:text-gray-400">
+                {detectedLanguage}
+              </span>
+            </div>
+            <div className="flex items-center gap-2 text-xs text-gray-500 dark:text-gray-400">
+              <span>{codeLines.length} lines</span>
+              <span>•</span>
+              <span>{codeTheme === "dark" ? "Dark" : "Light"} theme</span>
+            </div>
+          </div>
+
+          {/* Code content with line numbers */}
+          <div className="relative">
+            <div
+              className={`absolute left-0 top-0 bottom-0 w-10 border-r ${
+                codeTheme === "dark"
+                  ? "bg-gray-800/50 border-gray-700"
+                  : "bg-gray-100 border-gray-200"
+              }`}
+            ></div>
+            <pre className="m-0 p-2 pl-10 text-xs font-mono font-medium leading-relaxed">
+              <code className="block">
+                {codeLines.map((line, index) => (
+                  <div
+                    key={`line-${qIndex}-${line ? line.substring(0, 20) : `line-${index}`}`}
+                    className="flex items-start"
+                  >
+                    <span
+                      className={`select-none pr-2 text-right min-w-[2.5rem] text-xs font-medium ${
+                        codeTheme === "dark" ? "text-gray-400" : "text-gray-500"
+                      }`}
+                      style={{
+                        lineHeight: "1.25",
+                        minHeight: "1.25rem",
+                        display: "block",
+                      }}
+                    >
+                      {index + 1}
+                    </span>
+                    <span
+                      className={`flex-1 ${
+                        codeTheme === "dark" ? "text-gray-300" : "text-gray-800"
+                      }`}
+                      style={{ lineHeight: "1.25" }}
+                    >
+                      {line || " "}
+                    </span>
+                  </div>
+                ))}
+              </code>
+            </pre>
+          </div>
+        </div>
+      </div>
+    );
   };
 
   // Handle JSON text change with debouncing to avoid parsing incomplete JSON
@@ -853,239 +974,13 @@ export function BulkUploadForm({
                   )}
 
                   {/* Code Section */}
-                  {question.code &&
-                    (() => {
-                      const {
-                        detectedLanguage,
-                        codeTheme,
-                        highlightedHtml,
-                        codeLines,
-                      } = formatCodeAndDetectLanguage(
-                        question.code,
-                        qIndex,
-                        codeHighlightedHtml,
-                      );
-
-                      return (
-                        <div className="space-y-1">
-                          <p className="text-sm font-medium text-gray-700 dark:text-gray-300">
-                            Code:
-                          </p>
-                          {/* Code display with Shiki syntax highlighting - same as guided practice */}
-                          <div
-                            className={`relative rounded-lg overflow-hidden shadow-lg border ${
-                              codeTheme === "dark"
-                                ? "border-gray-700 bg-gray-900"
-                                : "border-gray-300 bg-white"
-                            }`}
-                          >
-                            {/* Code editor header bar */}
-                            <div
-                              className={`flex items-center justify-between px-2 py-1.5 border-b ${
-                                codeTheme === "dark"
-                                  ? "bg-gray-800 border-gray-700"
-                                  : "bg-gray-100 border-gray-200"
-                              }`}
-                            >
-                              <div className="flex items-center gap-2">
-                                {/* Window controls */}
-                                <div className="flex gap-1">
-                                  <div className="w-2 h-2 rounded-full bg-red-500"></div>
-                                  <div className="w-2 h-2 rounded-full bg-yellow-500"></div>
-                                  <div className="w-2 h-2 rounded-full bg-green-500"></div>
-                                </div>
-                                {/* File name */}
-                                <div
-                                  className={`flex items-center gap-1.5 ml-1 px-2 py-0.5 rounded border ${
-                                    codeTheme === "dark"
-                                      ? "bg-gray-700/50 border-gray-600"
-                                      : "bg-gray-200 border-gray-300"
-                                  }`}
-                                >
-                                  <div
-                                    className={`w-1.5 h-1.5 rounded-full ${codeTheme === "dark" ? "bg-blue-400" : "bg-blue-500"}`}
-                                  ></div>
-                                  <span
-                                    className={`text-xs font-medium font-mono ${
-                                      codeTheme === "dark"
-                                        ? "text-gray-300"
-                                        : "text-gray-700"
-                                    }`}
-                                  >
-                                    code.
-                                    {detectedLanguage === "python"
-                                      ? "py"
-                                      : detectedLanguage === "java"
-                                        ? "java"
-                                        : detectedLanguage === "typescript"
-                                          ? "ts"
-                                          : "js"}
-                                  </span>
-                                </div>
-                              </div>
-                              {/* Language badge */}
-                              <div
-                                className={`px-2 py-0.5 rounded border ${
-                                  codeTheme === "dark"
-                                    ? "bg-gray-700/50 border-gray-600"
-                                    : "bg-gray-200 border-gray-300"
-                                }`}
-                              >
-                                <span
-                                  className={`text-xs font-medium uppercase ${
-                                    codeTheme === "dark"
-                                      ? "text-gray-300"
-                                      : "text-gray-700"
-                                  }`}
-                                >
-                                  {detectedLanguage}
-                                </span>
-                              </div>
-                            </div>
-                            {/* Code content with Shiki highlighting */}
-                            <div
-                              className={`overflow-x-auto ${codeTheme === "dark" ? "bg-gray-900" : "bg-white border border-gray-200"}`}
-                            >
-                              {isLoadingShiki ? (
-                                <div className="p-2 text-center text-xs text-gray-500">
-                                  Loading syntax highlighting...
-                                </div>
-                              ) : highlightedHtml ? (
-                                <div className="relative">
-                                  {/* Line numbers background */}
-                                  <div
-                                    className={`absolute left-0 top-0 bottom-0 w-10 border-r ${
-                                      codeTheme === "dark"
-                                        ? "bg-gray-800/50 border-gray-700"
-                                        : "bg-gray-100 border-gray-200"
-                                    }`}
-                                  ></div>
-                                  {/* Shiki highlighted code with line numbers */}
-                                  <div className="relative">
-                                    <div
-                                      className={`shiki-wrapper pl-10 ${codeTheme === "light" ? "shiki-light-mode" : "shiki-dark-mode"}`}
-                                      dangerouslySetInnerHTML={{
-                                        __html: highlightedHtml,
-                                      }}
-                                    />
-                                    {/* Custom styles for Shiki output */}
-                                    <style
-                                      dangerouslySetInnerHTML={{
-                                        __html: `
-                                    .shiki-wrapper pre {
-                                      margin: 0 !important;
-                                      padding: 0.375rem 0 0.375rem 0 !important;
-                                      background: transparent !important;
-                                      overflow: visible !important;
-                                      font-size: 0.75rem !important;
-                                      line-height: 1.25 !important;
-                                      font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace !important;
-                                      font-weight: 500 !important;
-                                    }
-                                    .shiki-wrapper pre code {
-                                      display: block !important;
-                                      background: transparent !important;
-                                    }
-                                    .shiki-wrapper pre code .line {
-                                      display: block !important;
-                                      padding: 0 !important;
-                                      margin: 0 !important;
-                                      line-height: 1.25 !important;
-                                    }
-                                    .shiki-wrapper pre code .line:empty {
-                                      display: none !important;
-                                    }
-                                    .shiki-light-mode .shiki-wrapper,
-                                    .shiki-light-mode .shiki-wrapper pre,
-                                    .shiki-light-mode .shiki-wrapper pre code {
-                                      background-color: #ffffff !important;
-                                    }
-                                    .shiki-dark-mode .shiki-wrapper,
-                                    .shiki-dark-mode .shiki-wrapper pre,
-                                    .shiki-dark-mode .shiki-wrapper pre code {
-                                      background-color: #0d1117 !important;
-                                    }
-                                    .shiki-wrapper pre code .line:hover {
-                                      background-color: ${
-                                        codeTheme === "dark"
-                                          ? "rgba(255, 255, 255, 0.05)"
-                                          : "rgba(0, 0, 0, 0.05)"
-                                      } !important;
-                                    }
-                                  `,
-                                      }}
-                                    />
-                                    {/* Line numbers */}
-                                    <div
-                                      className="absolute left-0 top-0 flex flex-col"
-                                      style={{ paddingTop: "0.375rem" }}
-                                    >
-                                      {codeLines.map((_, index) => (
-                                        <span
-                                          key={`line-${qIndex}-${index}`}
-                                          className={`select-none pr-2 pl-2 text-right min-w-[2.5rem] text-xs font-medium ${
-                                            codeTheme === "dark"
-                                              ? "text-gray-400"
-                                              : "text-gray-500"
-                                          }`}
-                                          style={{
-                                            lineHeight: "1.25",
-                                            minHeight: "1.25rem",
-                                            display: "block",
-                                          }}
-                                        >
-                                          {index + 1}
-                                        </span>
-                                      ))}
-                                    </div>
-                                  </div>
-                                </div>
-                              ) : (
-                                // Fallback: plain code display
-                                <div className="relative">
-                                  <div
-                                    className={`absolute left-0 top-0 bottom-0 w-10 border-r ${
-                                      codeTheme === "dark"
-                                        ? "bg-gray-800/50 border-gray-700"
-                                        : "bg-gray-100 border-gray-200"
-                                    }`}
-                                  ></div>
-                                  <pre className="m-0 p-2 pl-10 text-xs font-mono font-medium leading-relaxed">
-                                    <code className="block">
-                                      {codeLines.map((line, index) => (
-                                        <div
-                                          key={`fallback-line-${qIndex}-${index}`}
-                                          className="flex items-start"
-                                        >
-                                          <span
-                                            className={`select-none pr-2 text-right min-w-[2.5rem] text-xs font-medium ${
-                                              codeTheme === "dark"
-                                                ? "text-gray-400"
-                                                : "text-gray-500"
-                                            }`}
-                                          >
-                                            {index + 1}
-                                          </span>
-                                          <span
-                                            className={`flex-1 whitespace-pre pl-2 pr-2 py-0.5 text-xs ${
-                                              codeTheme === "dark"
-                                                ? "text-gray-100"
-                                                : "text-gray-900"
-                                            }`}
-                                          >
-                                            {line || " "}
-                                          </span>
-                                        </div>
-                                      ))}
-                                    </code>
-                                  </pre>
-                                </div>
-                              )}
-                            </div>
-                          </div>
-                        </div>
-                      );
-                    })()}
+                  {question.code && (
+                    <CodePreviewSection
+                      code={question.code}
+                      qIndex={qIndex}
+                      codeHighlightedHtml={codeHighlightedHtml}
+                    />
+                  )}
 
                   {/* Metadata badges */}
                   <div className="flex flex-wrap gap-2 pt-2 border-t border-gray-200 dark:border-gray-700">

@@ -129,21 +129,31 @@ export function QuestionForm({
     return "";
   };
 
+  // Helper function to check if value is null or undefined
+  const isNullOrUndefined = (value: any): boolean => {
+    return value === null || value === undefined;
+  };
+
+  // Helper function to parse string resources
+  const parseStringResources = (stringValue: string): any[] | null => {
+    try {
+      const parsed = JSON.parse(stringValue);
+      return Array.isArray(parsed) ? parsed : null;
+    } catch {
+      return null;
+    }
+  };
+
   // Helper function to normalize resources
   const normalizeResources = (resourcesValue: any): any[] | null => {
-    if (resourcesValue === null || resourcesValue === undefined) {
+    if (isNullOrUndefined(resourcesValue)) {
       return null;
     }
     if (Array.isArray(resourcesValue)) {
       return resourcesValue;
     }
     if (typeof resourcesValue === "string") {
-      try {
-        const parsed = JSON.parse(resourcesValue);
-        return Array.isArray(parsed) ? parsed : null;
-      } catch {
-        return null;
-      }
+      return parseStringResources(resourcesValue);
     }
     // If it's an object but not an array, wrap it in an array
     return [resourcesValue];
@@ -206,44 +216,44 @@ export function QuestionForm({
   }, [cards, learningCardSearch]);
 
   // Helper function to apply topic search filter
-  const applyTopicSearchFilter = useCallback(
-    (topics: any[], searchTerm: string) => {
-      if (!searchTerm.trim()) return topics;
-      const searchLower = searchTerm.toLowerCase();
-      return topics.filter((topic: any) =>
-        (topic.name || topic.title || "").toLowerCase().includes(searchLower),
-      );
-    },
-    [],
-  );
+  const applyTopicSearchFilter = (topics: any[], searchTerm: string): any[] => {
+    if (!searchTerm.trim()) return topics;
+    const searchLower = searchTerm.toLowerCase();
+    return topics.filter((topic: any) =>
+      (topic.name || topic.title || "").toLowerCase().includes(searchLower),
+    );
+  };
 
   // Helper function to filter topics by category
-  const filterTopicsByCategory = useCallback(
-    (categoryId: string) => {
-      return topicsData.filter(
-        (topic: any) =>
-          topic.categoryId === categoryId || topic.category_id === categoryId,
-      );
-    },
-    [topicsData],
-  );
+  const filterTopicsByCategory = (
+    topicsData: any[],
+    categoryId: string,
+  ): any[] => {
+    return topicsData.filter(
+      (topic: any) =>
+        topic.categoryId === categoryId || topic.category_id === categoryId,
+    );
+  };
 
   // Helper function to find selected category
-  const findSelectedCategory = useCallback(
-    (categoryName: string) => {
-      return categoriesData.find(
-        (cat: any) => (cat.name || cat.title) === categoryName,
-      );
-    },
-    [categoriesData],
-  );
+  const findSelectedCategory = (
+    categoriesData: any[],
+    categoryName: string,
+  ): any => {
+    return categoriesData.find(
+      (cat: any) => (cat.name || cat.title) === categoryName,
+    );
+  };
 
   const filteredTopics = useMemo(() => {
     if (!formData.category) {
       console.log("🔍 No category selected, returning empty topics");
       return [];
     }
-    const selectedCategory = findSelectedCategory(formData.category);
+    const selectedCategory = findSelectedCategory(
+      categoriesData,
+      formData.category,
+    );
     if (!selectedCategory) {
       console.log(
         "⚠️ Category not found:",
@@ -253,7 +263,7 @@ export function QuestionForm({
       );
       return [];
     }
-    let filtered = filterTopicsByCategory(selectedCategory.id);
+    let filtered = filterTopicsByCategory(topicsData, selectedCategory.id);
 
     // Apply topic search filter
     filtered = applyTopicSearchFilter(filtered, topicSearch);
@@ -888,7 +898,13 @@ export function QuestionForm({
               <div className="space-y-3">
                 {formData.options.map((option: any, index: number) => (
                   <div
-                    key={option.id || index}
+                    key={
+                      option.id ||
+                      `option-${index}-${option.text || option.content || ""}`.substring(
+                        0,
+                        20,
+                      )
+                    }
                     className="flex items-start gap-3 p-3 rounded-lg border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800/50"
                   >
                     <div className="flex items-center gap-2 h-10 mt-1">
@@ -1122,7 +1138,7 @@ export function QuestionForm({
                   formData.resources.length > 0 ? (
                     formData.resources.map((resource: any, index: number) => (
                       <div
-                        key={`resource-${resource.type || "unknown"}-${resource.title || "no-title"}-${resource.url || "no-url"}-${index}`}
+                        key={`resource-${resource.type || "unknown"}-${resource.title || "no-title"}-${resource.url || "no-url"}`}
                         className="p-4 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 space-y-3"
                       >
                         <div className="flex items-center justify-between mb-3">
