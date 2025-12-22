@@ -167,6 +167,7 @@ export const usePanelLayout = () => {
       setLeftPanelWidth(newLeftWidth);
       setRightPanelWidth(newRightWidth);
     }
+    return;
   };
 
   const handleMouseUp = () => {

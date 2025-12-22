@@ -166,7 +166,7 @@ export default function ProblemSolvingEditor({
         rightPanelWidth={rightPanelWidth}
         handleMouseDown={handleMouseDown}
         activeTab={activeTab}
-        setActiveTab={setActiveTab}
+        setActiveTab={(tab) => setActiveTab(tab as "starter" | "solution")}
         formData={formData}
         setFormData={setFormData}
         starterCode={starterCode}

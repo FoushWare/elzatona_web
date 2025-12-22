@@ -117,17 +117,17 @@ export const getLanguageForType = (fileType: string) => {
 export const createTestCase = (): TestCase => ({
   id: `test_${Date.now()}`,
   input: "",
-  expectedOutput: "",
+  output: "",
   description: "",
   isHidden: false,
 });
 
 export const validateTestCase = (testCase: TestCase): boolean => {
-  return testCase.input.trim() !== "" && testCase.expectedOutput.trim() !== "";
+  return testCase.input.trim() !== "" && testCase.output.trim() !== "";
 };
 
 export const formatTestCase = (testCase: TestCase): string => {
-  return `Input: ${testCase.input}\nExpected: ${testCase.expectedOutput}`;
+  return `Input: ${testCase.input}\nExpected: ${testCase.output}`;
 };
 
 // Form helper functions
@@ -142,10 +142,9 @@ export const extractFilesFromTree = (fileTree: FileNode[]): any[] => {
     }));
 };
 
-export const createTaskData = (formData: ProblemSolvingTaskFormData, files: any[]): ProblemSolvingTaskFormData => {
+export const createTaskData = (formData: ProblemSolvingTaskFormData): ProblemSolvingTaskFormData => {
   return {
     ...formData,
-    files,
   };
 };
 
@@ -232,7 +231,7 @@ export const generateTestRunnerCode = (testCases: TestCase[], functionName: stri
   const testCode = testCases.map((testCase, index) => {
     return `// Test Case ${index + 1}
 const input${index + 1} = ${testCase.input};
-const expected${index + 1} = ${testCase.expectedOutput};
+const expected${index + 1} = ${testCase.output};
 const result${index + 1} = ${functionName}(input${index + 1});
 console.log('Test ${index + 1}:', result${index + 1} === expected${index + 1} ? 'PASS' : 'FAIL');
 console.log('Expected:', expected${index + 1});
