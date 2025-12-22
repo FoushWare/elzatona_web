@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, useMemo, useCallback } from "react";
+import React from "react";
 import {
   Button,
   Input,
@@ -26,6 +26,27 @@ import {
   X,
 } from "lucide-react";
 import { UnifiedQuestion } from "@elzatona/types";
+import {
+  useQuestionFormData,
+  useOptionsManagement,
+  useTagsManagement,
+  useCodeEditor,
+  useCategorySearch,
+  useTagSearch,
+  useFormValidation,
+  useFormSubmission,
+} from "./QuestionFormHooks";
+import {
+  getDefaultFormData,
+  sanitizeFormData,
+  validateQuestionField,
+  validateQuestionConsistency,
+  getLanguageDisplayName,
+  generateDefaultFileName,
+  transformFormDataForSubmission,
+  getAriaLabelForField,
+  getFieldErrorId,
+} from "./QuestionFormUtils";
 
 type Question = UnifiedQuestion;
 
@@ -43,1321 +64,408 @@ interface QuestionFormProps {
   readonly externalSubmitTrigger?: number;
 }
 
-export function QuestionForm({
+export default function QuestionForm({
   initialData,
   onSubmit,
   onCancel,
   cards,
-  allCategories: _allCategories,
-  allTags: _allTags,
+  allCategories,
+  allTags,
   categoriesData,
   topicsData,
   disabled = false,
   hideFooter = false,
   externalSubmitTrigger,
 }: QuestionFormProps) {
-  // State for collapsible sections - both closed by default
-  const [isContentOpen, setIsContentOpen] = useState(false);
-  const [isResourcesOpen, setIsResourcesOpen] = useState(false);
+  // Extracted hooks for state management
+  const { formData, updateFormData } = useQuestionFormData(initialData);
+  const { updateOption, addOption, removeOption, setCorrectAnswer } = useOptionsManagement(formData, updateFormData);
+  const { newTag, setNewTag, addTag, removeTag, handleTagInputKeyDown } = useTagsManagement(formData, updateFormData);
+  const { showCodeEditor, setShowCodeEditor, updateCode, updateLanguage, updateFileName } = useCodeEditor(formData, updateFormData);
+  const { categorySearchTerm, setCategorySearchTerm, showCategoryDropdown, setShowCategoryDropdown, filteredCategories, getCategoryInfo } = useCategorySearch(allCategories, categoriesData);
+  const { tagSearchTerm, setTagSearchTerm, showTagDropdown, setShowTagDropdown, filteredTags } = useTagSearch(allTags);
+  const { errors, validateForm, clearErrors } = useFormValidation(formData);
+  const { isSubmitting, handleSubmit } = useFormSubmission(formData, onSubmit, validateForm, externalSubmitTrigger);
 
-  // State for JSON mode toggle
-  const [isJsonMode, setIsJsonMode] = useState(false);
-  const [jsonText, setJsonText] = useState("");
-
-  // State for resources JSON mode toggle
-  const [isResourcesJsonMode, setIsResourcesJsonMode] = useState(false);
-
-  // Search state for dropdowns
-  const [categorySearch, setCategorySearch] = useState("");
-  const [topicSearch, setTopicSearch] = useState("");
-  const [learningCardSearch, setLearningCardSearch] = useState("");
-
-  const [formData, setFormData] = useState<Partial<Question>>(
-    initialData || {
-      title: "",
-      content: "",
-      type: "multiple-choice",
-      difficulty: "beginner",
-      is_active: true,
-      options: [],
-      sampleAnswers: [],
-      tags: [],
-      points: 1,
-      timeLimit: 60,
-      explanation: "",
-    },
-  );
-
-  // Helper function to extract category name from initialData
-  const extractCategoryName = (data: any): string => {
-    if (data.category) return data.category;
-    if (
-      data.categories &&
-      Array.isArray(data.categories) &&
-      data.categories[0]?.name
-    ) {
-      return data.categories[0].name;
-    }
-    if (
-      data.categories &&
-      typeof data.categories === "object" &&
-      data.categories.name
-    ) {
-      return data.categories.name;
-    }
-    return "";
+  // Event handlers
+  const handleFieldChange = (field: keyof Question, value: any) => {
+    updateFormData({ [field]: value });
+    clearErrors();
   };
 
-  // Helper function to extract topic name from initialData
-  const extractTopicName = (data: any): string => {
-    if (data.topic) return data.topic;
-    if (data.topics && Array.isArray(data.topics) && data.topics[0]?.name) {
-      return data.topics[0].name;
-    }
-    if (data.topics && typeof data.topics === "object" && data.topics.name) {
-      return data.topics.name;
-    }
-    return "";
-  };
-
-  // Helper function to extract learning card ID from initialData
-  const extractLearningCardId = (data: any): string => {
-    if (data.learningCardId) return data.learningCardId;
-    if (data.learning_card_id) return data.learning_card_id;
-    if (data.learning_card?.id) return data.learning_card.id;
-    if (data.learning_cards?.id) return data.learning_cards.id;
-    return "";
-  };
-
-  // Helper function to check if value is null or undefined
-  const isNullOrUndefined = (value: any): boolean => {
-    return value === null || value === undefined;
-  };
-
-  // Helper function to parse string resources
-  const parseStringResources = (stringValue: string): any[] | null => {
-    try {
-      const parsed = JSON.parse(stringValue);
-      return Array.isArray(parsed) ? parsed : null;
-    } catch {
-      return null;
+  const handleOptionChange = (index: number, value: string) => {
+    updateOption(index, value);
+    if (value === formData.correctAnswer) {
+      setCorrectAnswer(value);
     }
   };
 
-  // Helper function to normalize resources
-  const normalizeResources = (resourcesValue: any): any[] | null => {
-    if (isNullOrUndefined(resourcesValue)) {
-      return null;
+  const handleCategorySelect = (category: string) => {
+    updateFormData({ category });
+    setCategorySearchTerm(category);
+    setShowCategoryDropdown(false);
+  };
+
+  const handleTagSelect = (tag: string) => {
+    if (!formData.tags?.includes(tag)) {
+      updateFormData({ tags: [...(formData.tags || []), tag] });
     }
-    if (Array.isArray(resourcesValue)) {
-      return resourcesValue;
-    }
-    if (typeof resourcesValue === "string") {
-      return parseStringResources(resourcesValue);
-    }
-    // If it's an object but not an array, wrap it in an array
-    return [resourcesValue];
+    setTagSearchTerm("");
+    setShowTagDropdown(false);
   };
 
-  useEffect(() => {
-    if (!initialData) return;
-
-    const categoryName = extractCategoryName(initialData);
-    const topicName = extractTopicName(initialData);
-    const learningCardId = extractLearningCardId(initialData);
-
-    console.log("📝 Initializing form with:", {
-      categoryName,
-      topicName,
-      learningCardId,
-      initialData,
-    });
-
-    const _normalizedResources = normalizeResources(
-      (initialData as any).resources,
-    );
-
-    const updatedFormData = {
-      ...initialData,
-      options: initialData.options || [],
-      sampleAnswers: initialData.sampleAnswers || [],
-      tags: initialData.tags || [],
-      explanation: initialData.explanation || "",
-      codeTemplate: initialData.codeTemplate || "",
-      category: categoryName,
-      topic: topicName,
-      learningCardId: learningCardId,
-    };
-
-    setFormData(updatedFormData);
-
-    // Initialize JSON text if in JSON mode
-    if (isJsonMode) {
-      setJsonText(JSON.stringify(updatedFormData, null, 2));
-    }
-  }, [initialData, isJsonMode]);
-
-  // Filtered categories based on search
-  const filteredCategories = useMemo(() => {
-    if (!categorySearch.trim()) return categoriesData;
-    const searchLower = categorySearch.toLowerCase();
-    return categoriesData.filter((cat: any) =>
-      (cat.name || cat.title || "").toLowerCase().includes(searchLower),
-    );
-  }, [categoriesData, categorySearch]);
-
-  // Filtered learning cards based on search
-  const filteredCards = useMemo(() => {
-    if (!learningCardSearch.trim()) return cards;
-    const searchLower = learningCardSearch.toLowerCase();
-    return cards.filter((card: any) =>
-      (card.title || "").toLowerCase().includes(searchLower),
-    );
-  }, [cards, learningCardSearch]);
-
-  // Helper function to apply topic search filter
-  const applyTopicSearchFilter = (topics: any[], searchTerm: string): any[] => {
-    if (!searchTerm.trim()) return topics;
-    const searchLower = searchTerm.toLowerCase();
-    return topics.filter((topic: any) =>
-      (topic.name || topic.title || "").toLowerCase().includes(searchLower),
-    );
-  };
-
-  // Helper function to filter topics by category
-  const filterTopicsByCategory = (
-    topicsData: any[],
-    categoryId: string,
-  ): any[] => {
-    return topicsData.filter(
-      (topic: any) =>
-        topic.categoryId === categoryId || topic.category_id === categoryId,
-    );
-  };
-
-  // Helper function to find selected category
-  const findSelectedCategory = (
-    categoriesData: any[],
-    categoryName: string,
-  ): any => {
-    return categoriesData.find(
-      (cat: any) => (cat.name || cat.title) === categoryName,
-    );
-  };
-
-  const filteredTopics = useMemo(() => {
-    if (!formData.category) {
-      console.log("🔍 No category selected, returning empty topics");
-      return [];
-    }
-    const selectedCategory = findSelectedCategory(
-      categoriesData,
-      formData.category,
-    );
-    if (!selectedCategory) {
-      console.log(
-        "⚠️ Category not found:",
-        formData.category,
-        "Available categories:",
-        categoriesData.map((c: any) => c.name || c.title),
-      );
-      return [];
-    }
-    let filtered = filterTopicsByCategory(topicsData, selectedCategory.id);
-
-    // Apply topic search filter
-    filtered = applyTopicSearchFilter(filtered, topicSearch);
-
-    const uniqueTopicsMap = new Map<string, any>();
-
-    filtered.forEach((topic: any, index: number) => {
-      const topicName = (topic.name || topic.title || "").trim();
-
-      if (!topicName) {
-        console.warn("⚠️ Topic with no name/title found:", topic);
-        return;
-      }
-
-      const normalizedName = topicName.toLowerCase().trim();
-
-      if (!uniqueTopicsMap.has(normalizedName)) {
-        uniqueTopicsMap.set(normalizedName, topic);
-      } else {
-        const existing = uniqueTopicsMap.get(normalizedName);
-        if (topic.id && !existing.id) {
-          uniqueTopicsMap.set(normalizedName, topic);
-          console.warn(
-            "⚠️ Duplicate topic name found, keeping topic with ID:",
-            topicName,
-            topic,
-          );
-        } else if (existing.id && !topic.id) {
-          console.warn(
-            "⚠️ Duplicate topic name found, keeping existing topic with ID:",
-            topicName,
-            existing,
-          );
-        } else {
-          console.warn(
-            "⚠️ Duplicate topic name found, keeping first occurrence:",
-            topicName,
-            { existing, new: topic, index },
-          );
-        }
-      }
-    });
-
-    const uniqueTopics = Array.from(uniqueTopicsMap.values());
-
-    console.log(
-      "🔍 Filtered topics for category",
-      formData.category,
-      ":",
-      uniqueTopics.length,
-      "topics (deduplicated from",
-      filtered.length,
-      ")",
-    );
-    return uniqueTopics;
-  }, [formData.category, categoriesData, topicsData, topicSearch]);
-
-  const handleChange = (
-    e: React.ChangeEvent<
-      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
-    >,
-  ) => {
-    if (disabled) return;
-    const { name, value, type, checked } = e.target as HTMLInputElement;
-    setFormData((prev: any) => ({
-      ...prev,
-      [name]: type === "checkbox" ? checked : value,
-    }));
-  };
-
-  const handleSelectChange = (name: keyof Question, value: string) => {
-    if (disabled) return;
-    setFormData((prev: any) => ({ ...prev, [name]: value }));
-  };
-
-  // Resource management functions
-  const handleResourceChange = (
-    index: number,
-    field: string,
-    value: string,
-  ) => {
-    if (disabled) return;
-    const updatedResources = [...(formData.resources || [])];
-    if (!updatedResources[index]) {
-      updatedResources[index] = { type: "video", title: "", url: "" };
-    }
-    updatedResources[index] = {
-      ...updatedResources[index],
-      [field]: value,
-    };
-    setFormData((prev: any) => ({ ...prev, resources: updatedResources }));
-  };
-
-  const handleAddResource = () => {
-    if (disabled) return;
-    const newResource = { type: "video", title: "", url: "" };
-    setFormData((prev: any) => ({
-      ...prev,
-      resources: [...(prev.resources || []), newResource],
-    }));
-  };
-
-  const handleRemoveResource = (index: number) => {
-    if (disabled) return;
-    const updatedResources = [...(formData.resources || [])];
-    updatedResources.splice(index, 1);
-    setFormData((prev: any) => ({
-      ...prev,
-      resources: updatedResources.length > 0 ? updatedResources : null,
-    }));
-  };
-
-  // Handle JSON mode toggle
-  const handleJsonModeToggle = (checked: boolean) => {
-    setIsJsonMode(checked);
-    if (checked) {
-      // Convert form data to JSON when switching to JSON mode
-      setJsonText(JSON.stringify(formData, null, 2));
-    } else {
-      // Parse JSON back to form data when switching to form mode
-      try {
-        if (jsonText.trim()) {
-          const parsed = JSON.parse(jsonText);
-          setFormData(parsed);
-        }
-      } catch (err) {
-        console.error("Invalid JSON format:", err);
-        // Keep current form data if JSON is invalid
-      }
+  const handleLanguageChange = (language: string) => {
+    updateLanguage(language);
+    if (!formData.fileName) {
+      updateFileName(generateDefaultFileName(language));
     }
   };
 
-  const handleSubmit = (e?: React.FormEvent) => {
-    if (e) {
-      e.preventDefault();
-    }
-    if (disabled) return;
-
-    let dataToSubmit: Partial<Question>;
-
-    if (isJsonMode) {
-      // Parse JSON when submitting in JSON mode
-      try {
-        if (!jsonText.trim()) {
-          console.error("JSON text is empty");
-          return;
-        }
-        dataToSubmit = JSON.parse(jsonText);
-      } catch (err) {
-        console.error("Invalid JSON format:", err);
-        alert("Invalid JSON format. Please check your JSON syntax.");
-        return;
-      }
-    } else {
-      dataToSubmit = formData;
-    }
-
-    console.log("📤 Submitting question form:", {
-      title: dataToSubmit.title,
-      content: dataToSubmit.content,
-      category: dataToSubmit.category,
-      topic: dataToSubmit.topic,
-      learningCardId: dataToSubmit.learningCardId,
-      type: dataToSubmit.type,
-      difficulty: dataToSubmit.difficulty,
-      isJsonMode,
-    });
-    onSubmit(dataToSubmit);
+  const handleFormSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    handleSubmit();
   };
-
-  // Handle external submit trigger
-  useEffect(() => {
-    if (
-      externalSubmitTrigger !== undefined &&
-      externalSubmitTrigger > 0 &&
-      !disabled
-    ) {
-      let dataToSubmit: Partial<Question>;
-
-      if (isJsonMode) {
-        // Parse JSON when submitting in JSON mode
-        try {
-          if (!jsonText.trim()) {
-            console.error("JSON text is empty");
-            return;
-          }
-          dataToSubmit = JSON.parse(jsonText);
-        } catch (err) {
-          console.error("Invalid JSON format:", err);
-          alert("Invalid JSON format. Please check your JSON syntax.");
-          return;
-        }
-      } else {
-        dataToSubmit = formData;
-      }
-
-      console.log("📤 Submitting question form (external trigger):", {
-        title: dataToSubmit.title,
-        content: dataToSubmit.content,
-        category: dataToSubmit.category,
-        topic: dataToSubmit.topic,
-        learningCardId: dataToSubmit.learningCardId,
-        type: dataToSubmit.type,
-        difficulty: dataToSubmit.difficulty,
-        isJsonMode,
-      });
-      onSubmit(dataToSubmit);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [externalSubmitTrigger, disabled, isJsonMode, jsonText]);
-
-  const questionTypes = ["multiple-choice", "true-false", "code"];
-  const difficulties = ["beginner", "intermediate", "advanced"];
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-6 p-4">
-      {/* JSON Mode Toggle */}
-      <div className="flex items-center justify-between p-4 rounded-lg border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800/50">
-        <div className="flex items-center gap-3">
-          <label className="text-base font-semibold cursor-pointer">
-            Use JSON Format
-            <input
-              type="checkbox"
-              checked={isJsonMode}
-              onChange={(e) => handleJsonModeToggle(e.target.checked)}
-              disabled={disabled}
-              className="sr-only peer"
-            />
-          </label>
-          <span className="text-xs text-gray-500 dark:text-gray-400">
-            Switch to JSON mode to input question data as JSON
-          </span>
+    <form onSubmit={handleFormSubmit} className="space-y-6">
+      {/* Basic Question Fields */}
+      <div className="space-y-4">
+        <div>
+          <Label htmlFor="question" className={errors.question ? "text-red-500" : ""}>
+            Question Text *
+          </Label>
+          <Textarea
+            id="question"
+            value={formData.question || ""}
+            onChange={(e) => handleFieldChange("question", e.target.value)}
+            placeholder="Enter your question here..."
+            className="min-h-[100px]"
+            disabled={disabled}
+            aria-label={getAriaLabelForField("question", true)}
+            aria-describedby={errors.question ? getFieldErrorId("question") : undefined}
+          />
+          {errors.question && (
+            <p id={getFieldErrorId("question")} className="text-sm text-red-500 mt-1">
+              {errors.question}
+            </p>
+          )}
         </div>
-        <div className="inline-flex items-center cursor-pointer">
-          <div className="relative w-9 h-5 bg-gray-300 dark:bg-gray-600 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-red-200 dark:peer-focus:ring-red-900 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-red-600 dark:peer-checked:bg-red-700"></div>
+
+        <div>
+          <Label htmlFor="explanation">Explanation</Label>
+          <Textarea
+            id="explanation"
+            value={formData.explanation || ""}
+            onChange={(e) => handleFieldChange("explanation", e.target.value)}
+            placeholder="Explain why this answer is correct..."
+            className="min-h-[80px]"
+            disabled={disabled}
+          />
         </div>
       </div>
 
-      {/* JSON Mode View */}
-      {isJsonMode ? (
-        <div className="space-y-2">
-          <Label htmlFor="json-input">
-            Question JSON <span className="text-red-500">*</span>
-          </Label>
-          <Textarea
-            id="json-input"
-            value={jsonText}
-            onChange={(e) => setJsonText(e.target.value)}
-            rows={20}
-            disabled={disabled}
-            placeholder={`{\n  "title": "Question Title",\n  "content": "Question content...",\n  "type": "multiple-choice",\n  "difficulty": "beginner",\n  "category": "Category Name",\n  "topic": "Topic Name",\n  "options": [\n    {\n      "id": "o1",\n      "text": "Option 1",\n      "isCorrect": true,\n      "explanation": ""\n    }\n  ],\n  "explanation": "Explanation...",\n  "points": 1,\n  "is_active": true\n}`}
-            className="border-gray-300 dark:border-gray-600 font-mono text-sm"
-          />
-          <p className="text-xs text-gray-500 dark:text-gray-400">
-            Enter the complete question data as JSON. The JSON will be validated
-            before submission.
-          </p>
+      {/* Options Section */}
+      <div className="space-y-4">
+        <div className="flex items-center justify-between">
+          <Label>Answer Options *</Label>
+          <Button
+            type="button"
+            variant="outline"
+            size="sm"
+            onClick={addOption}
+            disabled={disabled || (formData.options?.length || 0) >= 6}
+          >
+            <Plus className="w-4 h-4 mr-2" />
+            Add Option
+          </Button>
         </div>
-      ) : (
-        <>
-          {/* Regular Form View */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-              <Label htmlFor="title">
-                Title <span className="text-red-500">*</span>
-              </Label>
+
+        <div className="space-y-2">
+          {(formData.options || ["", "", "", ""]).map((option, index) => (
+            <div key={index} className="flex items-center gap-2">
+              <Checkbox
+                checked={formData.correctAnswer === option}
+                onCheckedChange={() => setCorrectAnswer(option)}
+                disabled={disabled}
+              />
               <Input
-                id="title"
-                name="title"
-                value={formData.title || ""}
-                onChange={handleChange}
-                required
+                value={option}
+                onChange={(e) => handleOptionChange(index, e.target.value)}
+                placeholder={`Option ${index + 1}`}
                 disabled={disabled}
-                className="border-gray-300 dark:border-gray-600"
               />
-            </div>
-            <div>
-              <Label htmlFor="type">
-                Type <span className="text-red-500">*</span>
-              </Label>
-              <Select
-                value={formData.type || "multiple-choice"}
-                onValueChange={(value) => handleSelectChange("type", value)}
-                disabled={disabled}
-              >
-                <SelectTrigger
-                  className="border-gray-300 dark:border-gray-600"
-                  disabled={disabled}
-                >
-                  <SelectValue placeholder="Select Type" />
-                </SelectTrigger>
-                <SelectContent className="z-[110]">
-                  {questionTypes.map((type) => (
-                    <SelectItem key={type} value={type}>
-                      {type.charAt(0).toUpperCase() +
-                        type.slice(1).replace("-", " ")}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-            <div>
-              <Label htmlFor="category">
-                Category <span className="text-red-500">*</span>
-              </Label>
-              <Select
-                value={formData.category || ""}
-                onValueChange={(value) => {
-                  handleSelectChange("category", value);
-                  setFormData((prev: any) => ({ ...prev, topic: undefined }));
-                  setTopicSearch(""); // Clear topic search when category changes
-                }}
-                disabled={disabled}
-              >
-                <SelectTrigger
-                  className="border-gray-300 dark:border-gray-600"
-                  disabled={disabled}
-                >
-                  <SelectValue placeholder="Select Category" />
-                </SelectTrigger>
-                <SelectContent className="z-[110]">
-                  {/* Search Input for Categories */}
-                  <div className="p-2 border-b border-gray-200 dark:border-gray-700">
-                    <div className="relative">
-                      <Search className="absolute left-2 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
-                      <Input
-                        placeholder="Search categories..."
-                        value={categorySearch}
-                        onChange={(e) => setCategorySearch(e.target.value)}
-                        onClick={(e) => e.stopPropagation()}
-                        onKeyDown={(e) => e.stopPropagation()}
-                        className="pl-8 pr-8 h-8 text-sm"
-                      />
-                      {categorySearch && (
-                        <button
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            setCategorySearch("");
-                          }}
-                          className="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
-                        >
-                          <X className="h-4 w-4" />
-                        </button>
-                      )}
-                    </div>
-                  </div>
-                  {filteredCategories.length === 0 ? (
-                    <SelectItem value="no-results" disabled>
-                      {categorySearch
-                        ? "No categories found"
-                        : "Loading categories..."}
-                    </SelectItem>
-                  ) : (
-                    filteredCategories.map((category: any) => (
-                      <SelectItem
-                        key={category.id}
-                        value={category.name || category.title}
-                      >
-                        {category.name || category.title}
-                      </SelectItem>
-                    ))
-                  )}
-                </SelectContent>
-              </Select>
-            </div>
-            <div>
-              <Label htmlFor="topic">
-                Topic{" "}
-                <span className="text-gray-500 dark:text-gray-400 text-xs font-normal">
-                  (Optional)
-                </span>
-              </Label>
-              <Select
-                value={formData.topic || ""}
-                onValueChange={(value) => handleSelectChange("topic", value)}
-                disabled={
-                  disabled || !formData.category || filteredTopics.length === 0
-                }
-              >
-                <SelectTrigger
-                  className="border-gray-300 dark:border-gray-600 disabled:opacity-50"
-                  disabled={
-                    disabled ||
-                    !formData.category ||
-                    filteredTopics.length === 0
-                  }
-                >
-                  <SelectValue
-                    placeholder={
-                      formData.category
-                        ? "Select Topic (Optional)"
-                        : "Select category first"
-                    }
-                  />
-                </SelectTrigger>
-                <SelectContent className="z-[110]">
-                  {/* Search Input for Topics */}
-                  <div className="p-2 border-b border-gray-200 dark:border-gray-700">
-                    <div className="relative">
-                      <Search className="absolute left-2 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
-                      <Input
-                        placeholder="Search topics..."
-                        value={topicSearch}
-                        onChange={(e) => setTopicSearch(e.target.value)}
-                        onClick={(e) => e.stopPropagation()}
-                        onKeyDown={(e) => e.stopPropagation()}
-                        className="pl-8 pr-8 h-8 text-sm"
-                        disabled={
-                          !formData.category || filteredTopics.length === 0
-                        }
-                      />
-                      {topicSearch && (
-                        <button
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            setTopicSearch("");
-                          }}
-                          className="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
-                        >
-                          <X className="h-4 w-4" />
-                        </button>
-                      )}
-                    </div>
-                  </div>
-                  {filteredTopics.length > 0 ? (
-                    filteredTopics.map((topic: any, index: number) => {
-                      const topicId = topic.id || `no-id-${index}`;
-                      const topicNameSource =
-                        topic.name || topic.title || `no-name-${index}`;
-                      const topicName = topicNameSource.trim();
-                      const uniqueKey = `topic-${topicId}-${topicName.replaceAll(/\s+/, "-")}-${index}`;
-
-                      return (
-                        <SelectItem key={uniqueKey} value={topicName}>
-                          {topicName}
-                        </SelectItem>
-                      );
-                    })
-                  ) : (
-                    <SelectItem value="no-topics" disabled>
-                      {formData.category
-                        ? topicSearch
-                          ? "No topics found"
-                          : "No topics available for this category"
-                        : "Select category first"}
-                    </SelectItem>
-                  )}
-                </SelectContent>
-              </Select>
-            </div>
-            <div>
-              <Label htmlFor="difficulty">
-                Difficulty <span className="text-red-500">*</span>
-              </Label>
-              <Select
-                value={formData.difficulty || "beginner"}
-                onValueChange={(value) =>
-                  handleSelectChange("difficulty", value)
-                }
-                disabled={disabled}
-              >
-                <SelectTrigger
-                  className="border-gray-300 dark:border-gray-600"
-                  disabled={disabled}
-                >
-                  <SelectValue placeholder="Select Difficulty" />
-                </SelectTrigger>
-                <SelectContent className="z-[110]">
-                  {difficulties.map((difficulty) => (
-                    <SelectItem key={difficulty} value={difficulty}>
-                      {difficulty.charAt(0).toUpperCase() + difficulty.slice(1)}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-            <div>
-              <Label htmlFor="learningCardId">
-                Learning Card{" "}
-                <span className="text-gray-500 dark:text-gray-400 text-xs font-normal">
-                  (Optional)
-                </span>
-              </Label>
-              <Select
-                value={formData.learningCardId || ""}
-                onValueChange={(value) =>
-                  handleSelectChange(
-                    "learningCardId",
-                    value === "none" ? "" : value,
-                  )
-                }
-                disabled={disabled}
-              >
-                <SelectTrigger
-                  className="border-gray-300 dark:border-gray-600"
-                  disabled={disabled}
-                >
-                  <SelectValue placeholder="Select Learning Card (Optional)" />
-                </SelectTrigger>
-                <SelectContent className="z-[110] max-h-[300px]">
-                  {/* Search Input for Learning Cards */}
-                  <div className="p-2 border-b border-gray-200 dark:border-gray-700">
-                    <div className="relative">
-                      <Search className="absolute left-2 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
-                      <Input
-                        placeholder="Search learning cards..."
-                        value={learningCardSearch}
-                        onChange={(e) => setLearningCardSearch(e.target.value)}
-                        onClick={(e) => e.stopPropagation()}
-                        onKeyDown={(e) => e.stopPropagation()}
-                        className="pl-8 pr-8 h-8 text-sm"
-                      />
-                      {learningCardSearch && (
-                        <button
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            setLearningCardSearch("");
-                          }}
-                          className="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
-                        >
-                          <X className="h-4 w-4" />
-                        </button>
-                      )}
-                    </div>
-                  </div>
-                  <SelectItem
-                    value="none"
-                    className="text-gray-500 dark:text-gray-400 italic"
-                  >
-                    None (No Learning Card)
-                  </SelectItem>
-                  {filteredCards.length === 0 ? (
-                    <SelectItem value="no-results" disabled>
-                      {learningCardSearch
-                        ? "No cards found"
-                        : "Loading cards..."}
-                    </SelectItem>
-                  ) : (
-                    filteredCards.map((card) => (
-                      <SelectItem key={card.id} value={card.id}>
-                        {card.title}
-                      </SelectItem>
-                    ))
-                  )}
-                </SelectContent>
-              </Select>
-            </div>
-            <div>
-              <Label htmlFor="points">Points</Label>
-              <Input
-                id="points"
-                name="points"
-                type="number"
-                value={formData.points || 1}
-                onChange={handleChange}
-                disabled={disabled}
-                className="border-gray-300 dark:border-gray-600"
-              />
-            </div>
-          </div>
-
-          {/* Content Section - Collapsible */}
-          <Collapsible open={isContentOpen} onOpenChange={setIsContentOpen}>
-            <CollapsibleTrigger className="flex items-center justify-between w-full py-3 px-4 rounded-lg border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800/50 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors cursor-pointer">
-              <div className="flex items-center gap-2">
-                {isContentOpen ? (
-                  <ChevronDown className="h-4 w-4 text-gray-600 dark:text-gray-400" />
-                ) : (
-                  <ChevronRight className="h-4 w-4 text-gray-600 dark:text-gray-400" />
-                )}
-                <Label
-                  htmlFor="content"
-                  className="text-base font-semibold cursor-pointer"
-                >
-                  Content <span className="text-red-500">*</span>
-                </Label>
-              </div>
-              <span className="text-sm text-gray-500 dark:text-gray-400">
-                {isContentOpen ? "Click to collapse" : "Click to expand"}
-              </span>
-            </CollapsibleTrigger>
-            <CollapsibleContent className="pt-2 space-y-2">
-              <Textarea
-                id="content"
-                name="content"
-                value={formData.content || ""}
-                onChange={handleChange}
-                required
-                rows={6}
-                disabled={disabled}
-                placeholder="Enter the question content or description..."
-                className="border-gray-300 dark:border-gray-600"
-              />
-              <p className="text-xs text-gray-500 dark:text-gray-400">
-                Provide the main question content or description that users will
-                see.
-              </p>
-            </CollapsibleContent>
-          </Collapsible>
-
-          {/* Options Section */}
-          <div className="space-y-3">
-            <div className="flex items-center justify-between">
-              <Label>Options</Label>
-              {!disabled && (
+              {(formData.options?.length || 0) > 2 && (
                 <Button
                   type="button"
                   variant="outline"
                   size="sm"
-                  onClick={() => {
-                    const newOptions = [...(formData.options || [])];
-                    newOptions.push({
-                      id: `o${newOptions.length + 1}`,
-                      text: "",
-                      isCorrect: false,
-                      explanation: "",
-                    });
-                    setFormData((prev: any) => ({
-                      ...prev,
-                      options: newOptions,
-                    }));
-                  }}
-                  className="flex items-center gap-2"
+                  onClick={() => removeOption(index)}
+                  disabled={disabled}
                 >
-                  <Plus className="w-4 h-4" />
-                  Add Option
+                  <Trash2 className="w-4 h-4" />
                 </Button>
               )}
             </div>
+          ))}
+        </div>
 
-            {formData.options && formData.options.length > 0 ? (
-              <div className="space-y-3">
-                {formData.options.map((option: any, index: number) => (
+        {errors.options && (
+          <p className="text-sm text-red-500">{errors.options}</p>
+        )}
+        {errors.correctAnswer && (
+          <p className="text-sm text-red-500">{errors.correctAnswer}</p>
+        )}
+      </div>
+
+      {/* Category and Tags */}
+      <div className="space-y-4">
+        <div>
+          <Label htmlFor="category">Category</Label>
+          <div className="relative">
+            <Input
+              id="category"
+              value={categorySearchTerm}
+              onChange={(e) => {
+                setCategorySearchTerm(e.target.value);
+                setShowCategoryDropdown(true);
+              }}
+              onFocus={() => setShowCategoryDropdown(true)}
+              placeholder="Search or select a category..."
+              disabled={disabled}
+            />
+            {showCategoryDropdown && (
+              <div className="absolute z-10 w-full mt-1 bg-white border rounded-md shadow-lg max-h-60 overflow-auto">
+                {filteredCategories.map((category) => (
                   <div
-                    key={
-                      option.id ||
-                      `option-${index}-${option.text || option.content || ""}`.substring(
-                        0,
-                        20,
-                      )
-                    }
-                    className="flex items-start gap-3 p-3 rounded-lg border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800/50"
+                    key={category}
+                    className="px-3 py-2 hover:bg-gray-100 cursor-pointer"
+                    onClick={() => handleCategorySelect(category)}
                   >
-                    <div className="flex items-center gap-2 h-10 mt-1">
-                      <Checkbox
-                        id={`isCorrect-${index}`}
-                        checked={option.isCorrect || false}
-                        onCheckedChange={(checked) => {
-                          if (disabled) return;
-                          const newOptions = [...(formData.options || [])];
-                          newOptions[index] = {
-                            ...newOptions[index],
-                            isCorrect: !!checked,
-                          };
-                          setFormData((prev: any) => ({
-                            ...prev,
-                            options: newOptions,
-                          }));
-                        }}
-                        disabled={disabled}
-                        className="w-5 h-5"
-                      />
-                      <Label
-                        htmlFor={`isCorrect-${index}`}
-                        className="text-sm font-medium cursor-pointer"
-                      >
-                        Is Correct
-                      </Label>
-                    </div>
-                    <div className="flex-1">
-                      <Input
-                        placeholder={`Option ${index + 1} text`}
-                        value={option.text || ""}
-                        onChange={(e) => {
-                          if (disabled) return;
-                          const newOptions = [...(formData.options || [])];
-                          newOptions[index] = {
-                            ...newOptions[index],
-                            text: e.target.value,
-                          };
-                          setFormData((prev: any) => ({
-                            ...prev,
-                            options: newOptions,
-                          }));
-                        }}
-                        disabled={disabled}
-                        className="w-full border-gray-300 dark:border-gray-600"
-                      />
-                    </div>
-                    {!disabled && (
-                      <Button
-                        type="button"
-                        variant="ghost"
-                        size="sm"
-                        onClick={() => {
-                          const newOptions = [...(formData.options || [])];
-                          newOptions.splice(index, 1);
-                          setFormData((prev: any) => ({
-                            ...prev,
-                            options: newOptions,
-                          }));
-                        }}
-                        className="text-red-500 hover:text-red-700 dark:hover:text-red-400"
-                      >
-                        <Trash2 className="w-4 h-4" />
-                      </Button>
-                    )}
+                    {category}
                   </div>
                 ))}
               </div>
-            ) : (
-              <div className="text-sm text-gray-500 dark:text-gray-400 text-center py-4 border border-dashed border-gray-300 dark:border-gray-700 rounded-lg">
-                No options added. Click &quot;Add Option&quot; to add options.
-              </div>
             )}
           </div>
+        </div>
 
-          {/* Code Field */}
-          <div>
-            <Label htmlFor="codeTemplate">
-              Code Template{" "}
-              <span className="text-gray-500 dark:text-gray-400 text-xs font-normal">
-                (Optional - Displayed as formatted code block)
-              </span>
-            </Label>
-            <Textarea
-              id="codeTemplate"
-              name="codeTemplate"
-              value={formData.codeTemplate || ""}
-              onChange={handleChange}
-              rows={10}
-              disabled={disabled}
-              placeholder="Enter code snippet here (will be displayed as formatted code block)..."
-              className="border-gray-300 dark:border-gray-600 font-mono text-sm"
-            />
-            <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
-              Code will be displayed as a formatted code block in question
-              details. Supports syntax highlighting.
-            </p>
-          </div>
+        <div>
+          <Label htmlFor="tags">Tags</Label>
+          <div className="space-y-2">
+            <div className="flex items-center gap-2">
+              <Input
+                id="tags"
+                value={newTag}
+                onChange={(e) => setNewTag(e.target.value)}
+                onKeyDown={handleTagInputKeyDown}
+                onFocus={() => setShowTagDropdown(true)}
+                placeholder="Add a tag..."
+                disabled={disabled}
+              />
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                onClick={addTag}
+                disabled={disabled || !newTag.trim()}
+              >
+                <Plus className="w-4 h-4" />
+              </Button>
+            </div>
 
-          {/* Explanation */}
-          <div>
-            <Label htmlFor="explanation">Explanation</Label>
-            <Textarea
-              id="explanation"
-              name="explanation"
-              value={formData.explanation || ""}
-              onChange={handleChange}
-              rows={4}
-              disabled={disabled}
-              placeholder="Provide an explanation for the correct answer..."
-              className="border-gray-300 dark:border-gray-600"
-            />
-          </div>
-
-          {/* Learning Resources Section - Collapsible */}
-          <Collapsible open={isResourcesOpen} onOpenChange={setIsResourcesOpen}>
-            <CollapsibleTrigger className="flex items-center justify-between w-full py-3 px-4 rounded-lg border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800/50 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors cursor-pointer">
-              <div className="flex items-center gap-2">
-                {isResourcesOpen ? (
-                  <ChevronDown className="h-4 w-4 text-gray-600 dark:text-gray-400" />
-                ) : (
-                  <ChevronRight className="h-4 w-4 text-gray-600 dark:text-gray-400" />
-                )}
-                <Label
-                  htmlFor="resources"
-                  className="text-base font-semibold cursor-pointer"
-                >
-                  Learning Resources{" "}
-                  <span className="text-gray-500 dark:text-gray-400 text-xs font-normal">
-                    (Optional)
-                  </span>
-                </Label>
-              </div>
-              <span className="text-sm text-gray-500 dark:text-gray-400">
-                {(() => {
-                  if (formData.resources && Array.isArray(formData.resources)) {
-                    return `${formData.resources.length} resource${formData.resources.length === 1 ? "" : "s"}`;
-                  }
-                  return isResourcesOpen
-                    ? "Click to collapse"
-                    : "Click to expand";
-                })()}
-              </span>
-            </CollapsibleTrigger>
-            <CollapsibleContent className="pt-4 space-y-4">
-              {/* Toggle between Form and JSON Mode */}
-              <div className="flex items-center justify-between p-3 rounded-lg border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800/50">
-                <div className="flex items-center gap-3">
-                  <label className="text-sm font-semibold cursor-pointer">
-                    Use JSON Format
-                    <input
-                      type="checkbox"
-                      checked={isResourcesJsonMode}
-                      onChange={(e) => setIsResourcesJsonMode(e.target.checked)}
-                      disabled={disabled}
-                      className="sr-only peer"
-                    />
-                  </label>
-                  <span className="text-xs text-gray-500 dark:text-gray-400">
-                    Switch to JSON mode to paste resources directly
-                  </span>
-                </div>
-                <div className="inline-flex items-center cursor-pointer">
-                  <div className="relative w-9 h-5 bg-gray-300 dark:bg-gray-600 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-200 dark:peer-focus:ring-blue-900 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-blue-600 dark:peer-checked:bg-blue-700"></div>
-                </div>
-              </div>
-
-              {/* JSON Mode */}
-              {isResourcesJsonMode ? (
-                <div className="space-y-2">
-                  <Textarea
-                    id="resources-json"
-                    name="resources-json"
-                    value={
-                      formData.resources
-                        ? JSON.stringify(formData.resources, null, 2)
-                        : ""
-                    }
-                    onChange={(e) => {
-                      if (disabled) return;
-                      try {
-                        const value = e.target.value.trim();
-                        if (!value) {
-                          setFormData((prev: any) => ({
-                            ...prev,
-                            resources: null,
-                          }));
-                          return;
-                        }
-                        const parsed = JSON.parse(value);
-                        if (Array.isArray(parsed)) {
-                          setFormData((prev: any) => ({
-                            ...prev,
-                            resources: parsed,
-                          }));
-                        } else if (parsed && typeof parsed === "object") {
-                          setFormData((prev: any) => ({
-                            ...prev,
-                            resources: [parsed],
-                          }));
-                        } else {
-                          console.warn(
-                            "Resources must be an array or object. Got:",
-                            typeof parsed,
-                          );
-                        }
-                      } catch (err) {
-                        console.warn(
-                          "Invalid JSON for resources (still typing?):",
-                          err,
-                        );
-                      }
-                    }}
-                    rows={12}
-                    disabled={disabled}
-                    placeholder={`[\n  {\n    "type": "video",\n    "title": "CSS clamp() Tutorial",\n    "url": "https://youtube.com/watch?v=...",\n    "description": "Learn clamp() in 10 minutes",\n    "duration": "10:30",\n    "author": "Web Dev Simplified"\n  },\n  {\n    "type": "article",\n    "title": "CSS clamp() Guide",\n    "url": "https://css-tricks.com/clamp/",\n    "description": "Complete guide to clamp()"\n  }\n]`}
-                    className="border-gray-300 dark:border-gray-600 font-mono text-sm"
-                  />
-                  <p className="text-xs text-gray-500 dark:text-gray-400">
-                    Enter a JSON array of resource objects. Each resource should
-                    have: type (video/course/article), title, url, and
-                    optionally description, duration, author.
-                  </p>
-                </div>
-              ) : (
-                /* Form Mode */
-                <div className="space-y-4">
-                  {formData.resources &&
-                  Array.isArray(formData.resources) &&
-                  formData.resources.length > 0 ? (
-                    formData.resources.map((resource: any, index: number) => (
-                      <div
-                        key={`resource-${resource.type || "unknown"}-${resource.title || "no-title"}-${resource.url || "no-url"}`}
-                        className="p-4 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 space-y-3"
-                      >
-                        <div className="flex items-center justify-between mb-3">
-                          <h4 className="text-sm font-semibold text-gray-700 dark:text-gray-300">
-                            Resource {index + 1}
-                          </h4>
-                          <Button
-                            type="button"
-                            variant="outline"
-                            size="sm"
-                            onClick={() => handleRemoveResource(index)}
-                            disabled={disabled}
-                            className="text-red-600 hover:text-red-700 hover:bg-red-50 dark:hover:bg-red-900/20"
-                          >
-                            <Trash2 className="h-4 w-4" />
-                          </Button>
-                        </div>
-
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                          {/* Type */}
-                          <div className="space-y-2">
-                            <Label htmlFor={`resource-type-${index}`}>
-                              Type <span className="text-red-500">*</span>
-                            </Label>
-                            <Select
-                              value={resource.type || "video"}
-                              onValueChange={(value) =>
-                                handleResourceChange(index, "type", value)
-                              }
-                              disabled={disabled}
-                            >
-                              <SelectTrigger>
-                                <SelectValue placeholder="Select type" />
-                              </SelectTrigger>
-                              <SelectContent>
-                                <SelectItem value="video">Video</SelectItem>
-                                <SelectItem value="course">Course</SelectItem>
-                                <SelectItem value="article">Article</SelectItem>
-                              </SelectContent>
-                            </Select>
-                          </div>
-
-                          {/* Title */}
-                          <div className="space-y-2">
-                            <Label htmlFor={`resource-title-${index}`}>
-                              Title <span className="text-red-500">*</span>
-                            </Label>
-                            <Input
-                              id={`resource-title-${index}`}
-                              value={resource.title || ""}
-                              onChange={(e) =>
-                                handleResourceChange(
-                                  index,
-                                  "title",
-                                  e.target.value,
-                                )
-                              }
-                              placeholder="Resource title"
-                              disabled={disabled}
-                              className="border-gray-300 dark:border-gray-600"
-                            />
-                          </div>
-
-                          {/* URL */}
-                          <div className="space-y-2 md:col-span-2">
-                            <Label htmlFor={`resource-url-${index}`}>
-                              URL <span className="text-red-500">*</span>
-                            </Label>
-                            <Input
-                              id={`resource-url-${index}`}
-                              type="url"
-                              value={resource.url || ""}
-                              onChange={(e) =>
-                                handleResourceChange(
-                                  index,
-                                  "url",
-                                  e.target.value,
-                                )
-                              }
-                              placeholder="https://example.com/resource"
-                              disabled={disabled}
-                              className="border-gray-300 dark:border-gray-600"
-                            />
-                          </div>
-
-                          {/* Description */}
-                          <div className="space-y-2 md:col-span-2">
-                            <Label htmlFor={`resource-description-${index}`}>
-                              Description
-                            </Label>
-                            <Textarea
-                              id={`resource-description-${index}`}
-                              value={resource.description || ""}
-                              onChange={(e) =>
-                                handleResourceChange(
-                                  index,
-                                  "description",
-                                  e.target.value,
-                                )
-                              }
-                              placeholder="Optional description"
-                              rows={2}
-                              disabled={disabled}
-                              className="border-gray-300 dark:border-gray-600"
-                            />
-                          </div>
-
-                          {/* Duration */}
-                          <div className="space-y-2">
-                            <Label htmlFor={`resource-duration-${index}`}>
-                              Duration
-                            </Label>
-                            <Input
-                              id={`resource-duration-${index}`}
-                              value={resource.duration || ""}
-                              onChange={(e) =>
-                                handleResourceChange(
-                                  index,
-                                  "duration",
-                                  e.target.value,
-                                )
-                              }
-                              placeholder="e.g., 10:30 or 5 hours"
-                              disabled={disabled}
-                              className="border-gray-300 dark:border-gray-600"
-                            />
-                          </div>
-
-                          {/* Author */}
-                          <div className="space-y-2">
-                            <Label htmlFor={`resource-author-${index}`}>
-                              Author
-                            </Label>
-                            <Input
-                              id={`resource-author-${index}`}
-                              value={resource.author || ""}
-                              onChange={(e) =>
-                                handleResourceChange(
-                                  index,
-                                  "author",
-                                  e.target.value,
-                                )
-                              }
-                              placeholder="Author name"
-                              disabled={disabled}
-                              className="border-gray-300 dark:border-gray-600"
-                            />
-                          </div>
-                        </div>
-                      </div>
-                    ))
-                  ) : (
-                    <div className="text-center py-8 text-gray-500 dark:text-gray-400">
-                      <p className="text-sm">No resources added yet.</p>
-                      <p className="text-xs mt-1">
-                        Click "Add Resource" to get started.
-                      </p>
+            {showTagDropdown && (
+              <div className="relative z-10">
+                <div className="absolute w-full mt-1 bg-white border rounded-md shadow-lg max-h-40 overflow-auto">
+                  {filteredTags.map((tag) => (
+                    <div
+                      key={tag}
+                      className="px-3 py-2 hover:bg-gray-100 cursor-pointer"
+                      onClick={() => handleTagSelect(tag)}
+                    >
+                      {tag}
                     </div>
-                  )}
+                  ))}
+                </div>
+              </div>
+            )}
 
-                  {/* Add Resource Button */}
+            <div className="flex flex-wrap gap-2">
+              {formData.tags?.map((tag) => (
+                <div
+                  key={tag}
+                  className="inline-flex items-center gap-1 px-2 py-1 bg-blue-100 text-blue-800 rounded-md text-sm"
+                >
+                  {tag}
                   <Button
                     type="button"
-                    variant="outline"
-                    onClick={handleAddResource}
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => removeTag(tag)}
                     disabled={disabled}
-                    className="w-full"
                   >
-                    <Plus className="h-4 w-4 mr-2" />
-                    Add Resource
+                    <X className="w-3 h-3" />
                   </Button>
                 </div>
-              )}
-            </CollapsibleContent>
-          </Collapsible>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
 
-          <div className="flex items-center space-x-2">
-            <Checkbox
-              id="isActive"
-              name="isActive"
-              checked={formData.is_active || false}
-              onCheckedChange={(checked) => {
-                if (disabled) return;
-                setFormData((prev: any) => ({ ...prev, is_active: !!checked }));
-              }}
+      {/* Code Section */}
+      <Collapsible open={showCodeEditor} onOpenChange={setShowCodeEditor}>
+        <CollapsibleTrigger asChild>
+          <Button
+            type="button"
+            variant="outline"
+            className="w-full"
+            disabled={disabled}
+          >
+            <ChevronDown className="w-4 h-4 mr-2" />
+            Code Snippet (Optional)
+          </Button>
+        </CollapsibleTrigger>
+        <CollapsibleContent className="space-y-4 mt-4">
+          <div>
+            <Label htmlFor="language">Programming Language</Label>
+            <Select
+              value={formData.language || "javascript"}
+              onValueChange={handleLanguageChange}
+              disabled={disabled}
+            >
+              <SelectTrigger>
+                <SelectValue placeholder="Select language" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="javascript">JavaScript</SelectItem>
+                <SelectItem value="typescript">TypeScript</SelectItem>
+                <SelectItem value="python">Python</SelectItem>
+                <SelectItem value="java">Java</SelectItem>
+                <SelectItem value="cpp">C++</SelectItem>
+                <SelectItem value="csharp">C#</SelectItem>
+                <SelectItem value="html">HTML</SelectItem>
+                <SelectItem value="css">CSS</SelectItem>
+                <SelectItem value="sql">SQL</SelectItem>
+                <SelectItem value="json">JSON</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+
+          <div>
+            <Label htmlFor="code">Code</Label>
+            <Textarea
+              id="code"
+              value={formData.code || ""}
+              onChange={(e) => updateCode(e.target.value)}
+              placeholder="Enter your code snippet here..."
+              className="min-h-[150px] font-mono text-sm"
               disabled={disabled}
             />
-            <Label htmlFor="isActive">Is Active</Label>
           </div>
-        </>
-      )}
 
-      {!hideFooter && (
-        <DialogFooter className="gap-3 pt-4">
-          {disabled ? (
-            <Button
-              variant="outline"
-              onClick={onCancel}
-              className="border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-800 hover:border-gray-400 dark:hover:border-gray-500"
+          <div>
+            <Label htmlFor="fileName">File Name</Label>
+            <Input
+              id="fileName"
+              value={formData.fileName || ""}
+              onChange={(e) => updateFileName(e.target.value)}
+              placeholder="example.js"
+              disabled={disabled}
+            />
+          </div>
+        </CollapsibleContent>
+      </Collapsible>
+
+      {/* Additional Settings */}
+      <div className="space-y-4">
+        <div className="grid grid-cols-2 gap-4">
+          <div>
+            <Label htmlFor="difficulty">Difficulty</Label>
+            <Select
+              value={formData.difficulty || "medium"}
+              onValueChange={(value) => handleFieldChange("difficulty", value)}
+              disabled={disabled}
             >
-              Close
-            </Button>
-          ) : (
-            <>
-              <Button
-                variant="outline"
-                onClick={onCancel}
-                className="border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-800 hover:border-gray-400 dark:hover:border-gray-500"
-              >
-                Cancel
-              </Button>
-              <Button
-                type="submit"
-                className="bg-red-600 hover:bg-red-700 dark:bg-red-700 dark:hover:bg-red-600 text-white dark:text-white shadow-sm dark:shadow-md"
-              >
-                {initialData ? "Save Changes" : "Create Question"}
-              </Button>
-            </>
-          )}
+              <SelectTrigger>
+                <SelectValue placeholder="Select difficulty" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="easy">Easy</SelectItem>
+                <SelectItem value="medium">Medium</SelectItem>
+                <SelectItem value="hard">Hard</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+
+          <div>
+            <Label htmlFor="timeLimit">Time Limit (seconds)</Label>
+            <Input
+              id="timeLimit"
+              type="number"
+              min="5"
+              max="600"
+              value={formData.timeLimit || 30}
+              onChange={(e) => handleFieldChange("timeLimit", parseInt(e.target.value) || 30)}
+              disabled={disabled}
+            />
+          </div>
+        </div>
+
+        <div className="grid grid-cols-2 gap-4">
+          <div>
+            <Label htmlFor="points">Points</Label>
+            <Input
+              id="points"
+              type="number"
+              min="1"
+              max="100"
+              value={formData.points || 1}
+              onChange={(e) => handleFieldChange("points", parseInt(e.target.value) || 1)}
+              disabled={disabled}
+            />
+          </div>
+
+          <div className="flex items-center space-x-4">
+            <div className="flex items-center space-x-2">
+              <Checkbox
+                id="isRequired"
+                checked={formData.isRequired || false}
+                onCheckedChange={(checked) => handleFieldChange("isRequired", checked)}
+                disabled={disabled}
+              />
+              <Label htmlFor="isRequired">Required</Label>
+            </div>
+
+            <div className="flex items-center space-x-2">
+              <Checkbox
+                id="isRandomized"
+                checked={formData.isRandomized || false}
+                onCheckedChange={(checked) => handleFieldChange("isRandomized", checked)}
+                disabled={disabled}
+              />
+              <Label htmlFor="isRandomized">Randomize Options</Label>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Form Footer */}
+      {!hideFooter && (
+        <DialogFooter>
+          <Button
+            type="button"
+            variant="outline"
+            onClick={onCancel}
+            disabled={disabled || isSubmitting}
+          >
+            Cancel
+          </Button>
+          <Button
+            type="submit"
+            disabled={disabled || isSubmitting}
+          >
+            {isSubmitting ? "Saving..." : (initialData ? "Update Question" : "Create Question")}
+          </Button>
         </DialogFooter>
       )}
     </form>
