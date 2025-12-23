@@ -70,11 +70,15 @@ const NavigationLink: React.FC<{
   isScrolled: boolean;
   pathname: string;
 }> = ({ href, children, isScrolled, pathname }) => {
-  const isActive = href === "/" ? pathname === "/" : pathname?.startsWith(href) || false;
+  const isActive =
+    href === "/" ? pathname === "/" : pathname?.startsWith(href) || false;
   const styles = getLinkStyles(isActive, isScrolled);
-  
+
   return (
-    <Link href={href} className={`font-medium transition-colors duration-200 ${styles}`}>
+    <Link
+      href={href}
+      className={`font-medium transition-colors duration-200 ${styles}`}
+    >
       {children}
     </Link>
   );
@@ -282,18 +286,34 @@ export const NavbarSimple: React.FC = () => {
           {/* Desktop Navigation - Only show for authenticated users */}
           {stableAuthState.isAuthenticated && (
             <div className="hidden lg:flex items-center space-x-6 flex-1 justify-center">
-              <NavigationLink href="/practice" isScrolled={isScrolled} pathname={pathname}>
+              <NavigationLink
+                href="/practice"
+                isScrolled={isScrolled}
+                pathname={pathname}
+              >
                 Practice
               </NavigationLink>
-              <NavigationLink href="/progress" isScrolled={isScrolled} pathname={pathname}>
+              <NavigationLink
+                href="/progress"
+                isScrolled={isScrolled}
+                pathname={pathname}
+              >
                 Progress
               </NavigationLink>
-              <NavigationLink href="/my-plans" isScrolled={isScrolled} pathname={pathname}>
+              <NavigationLink
+                href="/my-plans"
+                isScrolled={isScrolled}
+                pathname={pathname}
+              >
                 My Plans
               </NavigationLink>
-              <NavigationLink 
-                href={userType === "self-directed" ? "/free-style-roadmap" : "/learn"} 
-                isScrolled={isScrolled} 
+              <NavigationLink
+                href={
+                  userType === "self-directed"
+                    ? "/free-style-roadmap"
+                    : "/learn"
+                }
+                isScrolled={isScrolled}
                 pathname={pathname}
               >
                 {userType === "self-directed" ? "My Roadmap" : "Learn"}
@@ -309,7 +329,9 @@ export const NavbarSimple: React.FC = () => {
 
             {/* Sign In / Logout Link */}
             {stableAuthState.isLoading ? (
-              <div className={`px-4 py-2 rounded-lg font-medium ${getLoadingStyles(isScrolled)}`}>
+              <div
+                className={`px-4 py-2 rounded-lg font-medium ${getLoadingStyles(isScrolled)}`}
+              >
                 Loading...
               </div>
             ) : stableAuthState.isAuthenticated ? (

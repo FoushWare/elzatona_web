@@ -48,18 +48,23 @@ export const UserStatistics: React.FC = () => {
       const totalQuestions = activeLearners * 45; // Average questions per user
       const averageTime = `${Math.floor(Math.random() * 30) + 15}m`; // 15-45 minutes
 
-      // Animate the numbers
-      await animateNumber(0, activeLearners, (value) => {
+      // Extract animation callbacks to reduce nesting depth
+      const updateActiveLearners = (value: number) => {
         setStats((prev) => ({ ...prev, activeLearners: Math.floor(value) }));
-      });
+      };
 
-      await animateNumber(0, successRate, (value) => {
+      const updateSuccessRate = (value: number) => {
         setStats((prev) => ({ ...prev, successRate: Math.floor(value) }));
-      });
+      };
 
-      await animateNumber(0, totalQuestions, (value) => {
+      const updateTotalQuestions = (value: number) => {
         setStats((prev) => ({ ...prev, totalQuestions: Math.floor(value) }));
-      });
+      };
+
+      // Animate the numbers
+      await animateNumber(0, activeLearners, updateActiveLearners);
+      await animateNumber(0, successRate, updateSuccessRate);
+      await animateNumber(0, totalQuestions, updateTotalQuestions);
 
       setStats((prev) => ({ ...prev, averageTime }));
       setIsLoading(false);

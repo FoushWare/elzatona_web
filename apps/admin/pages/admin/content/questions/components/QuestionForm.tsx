@@ -265,14 +265,25 @@ const createFormHandlers = (
 });
 
 // Helper hook to manage collapsible sections state
-const useCollapsibleSections = (initialData: UnifiedQuestion | null, readOnly: boolean) => {
+const useCollapsibleSections = (
+  initialData: UnifiedQuestion | null,
+  readOnly: boolean,
+) => {
   const initialState = initializeFormState(initialData || null, readOnly);
-  const [showQuestionInfo, setShowQuestionInfo] = useState(initialState.showQuestionInfo);
+  const [showQuestionInfo, setShowQuestionInfo] = useState(
+    initialState.showQuestionInfo,
+  );
   const [showContent, setShowContent] = useState(initialState.showContent);
   const [showOptions, setShowOptions] = useState(initialState.showOptions);
-  const [showExplanation, setShowExplanation] = useState(initialState.showExplanation);
-  const [showResources, setShowResources] = useState(initialState.showResources);
-  const [showAdditionalSettings, setShowAdditionalSettings] = useState(initialState.showAdditionalSettings);
+  const [showExplanation, setShowExplanation] = useState(
+    initialState.showExplanation,
+  );
+  const [showResources, setShowResources] = useState(
+    initialState.showResources,
+  );
+  const [showAdditionalSettings, setShowAdditionalSettings] = useState(
+    initialState.showAdditionalSettings,
+  );
 
   // Separate effect to handle collapsible sections based on readOnly mode
   useEffect(() => {

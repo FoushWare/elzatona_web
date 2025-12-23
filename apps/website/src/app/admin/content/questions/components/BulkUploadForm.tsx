@@ -106,12 +106,12 @@ export default function BulkUploadForm({
   const processJsonQuestions = (jsonText: string) => {
     const questions = validateJsonText(jsonText);
     const validationErrors = validateQuestions(questions);
-    
+
     if (validationErrors.length > 0) {
       setJsonError(validationErrors.join(", "));
       return null;
     }
-    
+
     return transformQuestionData(questions);
   };
 
@@ -125,7 +125,7 @@ export default function BulkUploadForm({
   const handleProcessJson = () => {
     try {
       const transformedQuestions = processJsonQuestions(jsonText);
-      
+
       if (transformedQuestions) {
         updatePreviewState(transformedQuestions);
       }

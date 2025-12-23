@@ -17,18 +17,27 @@ import {
 } from "@elzatona/components";
 import { AlertTriangle } from "lucide-react";
 
+// Define missing types
+interface Topic {
+  id: string;
+  name: string;
+  description: string;
+  categoryId: string;
+  difficulty: string;
+  estimatedQuestions: number;
+  slug: string;
+  order: number;
+}
+
+interface Category {
+  id: string;
+  name: string;
+  description?: string;
+}
+
 interface TopicFormProps {
-  topic?: {
-    id: string;
-    name: string;
-    description?: string;
-    categoryId?: string;
-    difficulty?: string;
-    estimatedQuestions?: number;
-    slug?: string;
-    order?: number;
-  };
-  categories: Array<{ id: string; name: string }>;
+  topic?: Topic;
+  categories: Category[];
   onSubmit: (data: TopicFormData | TopicFormData[]) => Promise<void>;
   onCancel: () => void;
   isLoading?: boolean;
@@ -50,13 +59,8 @@ const DIFFICULTIES = [
   { value: "advanced", label: "Advanced" },
 ];
 
-export const TopicForm: React.FC<TopicFormProps> = ({
-  topic,
-  categories,
-  onSubmit,
-  onCancel,
-  isLoading = false,
-}) => {
+// Custom hook to consolidate topic form state management
+const useTopicFormState = (topic: Topic | undefined, categories: Category[]) => {
   const [formData, setFormData] = useState<TopicFormData>({
     name: topic?.name || "",
     description: topic?.description || "",
@@ -72,6 +76,44 @@ export const TopicForm: React.FC<TopicFormProps> = ({
   const [jsonText, setJsonText] = useState("");
   const [jsonError, setJsonError] = useState<string | null>(null);
   const [parsedTopics, setParsedTopics] = useState<TopicFormData[]>([]);
+
+  return {
+    formData,
+    setFormData,
+    errors,
+    setErrors,
+    isJsonMode,
+    setIsJsonMode,
+    jsonText,
+    setJsonText,
+    jsonError,
+    setJsonError,
+    parsedTopics,
+    setParsedTopics,
+  };
+};
+
+export const TopicForm: React.FC<TopicFormProps> = ({
+  topic,
+  categories,
+  onSubmit,
+  onCancel,
+  isLoading = false,
+}) => {
+  const {
+    formData,
+    setFormData,
+    errors,
+    setErrors,
+    isJsonMode,
+    setIsJsonMode,
+    jsonText,
+    setJsonText,
+    jsonError,
+    setJsonError,
+    parsedTopics,
+    setParsedTopics,
+  } = useTopicFormState(topic, categories);
 
   // Auto-generate slug from name
   useEffect(() => {

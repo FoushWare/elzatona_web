@@ -52,7 +52,7 @@ const useQuestionFormState = (
   categoriesData: any[],
   allTags: string[],
   onSubmit: (data: Partial<UnifiedQuestion>) => void,
-  externalSubmitTrigger?: number
+  externalSubmitTrigger?: number,
 ) => {
   // Extracted hooks for state management
   const { formData, updateFormData } = useQuestionFormData(initialData);
@@ -148,7 +148,7 @@ export default function QuestionForm({
     categoriesData,
     allTags,
     onSubmit,
-    externalSubmitTrigger
+    externalSubmitTrigger,
   );
 
   const handleFormSubmit = (e: React.FormEvent) => {

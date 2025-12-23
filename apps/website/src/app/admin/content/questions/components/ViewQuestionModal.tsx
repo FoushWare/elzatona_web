@@ -21,36 +21,36 @@ const languagePatterns = [
     language: "python",
     patterns: [
       (code: string) => code.includes("def "),
-      (code: string) => code.includes("import ") && code.includes("print")
-    ]
+      (code: string) => code.includes("import ") && code.includes("print"),
+    ],
   },
   {
-    language: "java", 
+    language: "java",
     patterns: [
       (code: string) => code.includes("public class"),
-      (code: string) => code.includes("public static")
-    ]
+      (code: string) => code.includes("public static"),
+    ],
   },
   {
     language: "typescript",
     patterns: [
       (code: string) => code.includes("interface "),
       (code: string) => code.includes("type "),
-      (code: string) => code.includes(": string")
-    ]
-  }
+      (code: string) => code.includes(": string"),
+    ],
+  },
 ];
 
 // Helper function to detect programming language from code (reduces cognitive complexity)
 const detectLanguage = (code: string): string => {
   const codeText = code.toLowerCase();
-  
+
   for (const { language, patterns } of languagePatterns) {
-    if (patterns.some(pattern => pattern(codeText))) {
+    if (patterns.some((pattern) => pattern(codeText))) {
       return language;
     }
   }
-  
+
   return "javascript";
 };
 
@@ -504,24 +504,28 @@ export function ViewQuestionModal({
   const resourceConfig = {
     video: {
       icon: <Video className="w-5 h-5 sm:w-6 sm:h-6" />,
-      colorClasses: "from-red-500 to-pink-600 dark:from-red-500 dark:to-rose-600 border-red-400 dark:border-red-500",
-      label: "Video"
+      colorClasses:
+        "from-red-500 to-pink-600 dark:from-red-500 dark:to-rose-600 border-red-400 dark:border-red-500",
+      label: "Video",
     },
     course: {
       icon: <GraduationCap className="w-5 h-5 sm:w-6 sm:h-6" />,
-      colorClasses: "from-blue-500 to-indigo-600 dark:from-blue-500 dark:to-indigo-500 border-blue-400 dark:border-blue-400",
-      label: "Course"
+      colorClasses:
+        "from-blue-500 to-indigo-600 dark:from-blue-500 dark:to-indigo-500 border-blue-400 dark:border-blue-400",
+      label: "Course",
     },
     article: {
       icon: <FileText className="w-5 h-5 sm:w-6 sm:h-6" />,
-      colorClasses: "from-green-500 to-emerald-600 dark:from-green-500 dark:to-emerald-500 border-green-400 dark:border-green-400",
-      label: "Article"
+      colorClasses:
+        "from-green-500 to-emerald-600 dark:from-green-500 dark:to-emerald-500 border-green-400 dark:border-green-400",
+      label: "Article",
     },
     default: {
       icon: <BookOpen className="w-5 h-5 sm:w-6 sm:h-6" />,
-      colorClasses: "from-indigo-500 to-purple-600 dark:from-indigo-500 dark:to-purple-500 border-indigo-400 dark:border-indigo-400",
-      label: "Resource"
-    }
+      colorClasses:
+        "from-indigo-500 to-purple-600 dark:from-indigo-500 dark:to-purple-500 border-indigo-400 dark:border-indigo-400",
+      label: "Resource",
+    },
   };
 
   // Helper function to get shiki wrapper class
@@ -531,17 +535,26 @@ export function ViewQuestionModal({
 
   // Helper function to get resource icon based on type
   const getResourceIcon = (resourceType: string) => {
-    return resourceConfig[resourceType as keyof typeof resourceConfig]?.icon || resourceConfig.default.icon;
+    return (
+      resourceConfig[resourceType as keyof typeof resourceConfig]?.icon ||
+      resourceConfig.default.icon
+    );
   };
 
   // Helper function to get resource color classes based on type
   const getResourceColorClasses = (resourceType: string): string => {
-    return resourceConfig[resourceType as keyof typeof resourceConfig]?.colorClasses || resourceConfig.default.colorClasses;
+    return (
+      resourceConfig[resourceType as keyof typeof resourceConfig]
+        ?.colorClasses || resourceConfig.default.colorClasses
+    );
   };
 
   // Helper function to get resource type label
   const getResourceTypeLabel = (resourceType: string): string => {
-    return resourceConfig[resourceType as keyof typeof resourceConfig]?.label || resourceConfig.default.label;
+    return (
+      resourceConfig[resourceType as keyof typeof resourceConfig]?.label ||
+      resourceConfig.default.label
+    );
   };
 
   // Helper function to render code display with Shiki highlighting

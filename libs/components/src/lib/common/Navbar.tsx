@@ -62,178 +62,175 @@ const useNavbarState = () => {
 
 // Extract dropdown menu data to reduce cognitive complexity
 const dropdownMenus: DropdownMenu[] = [
-    {
-      label: "Learning",
-      icon: "📚",
-      items: [
-        {
-          href: "/learning-paths",
-          label: "Learning Paths",
-          icon: "🗺️",
-          description: "Structured learning paths for frontend development",
-        },
-        {
-          href: "/tutorials",
-          label: "Tutorials",
-          icon: "🎓",
-          description: "Step-by-step tutorials for all skill levels",
-        },
-        {
-          href: "/cheatsheet",
-          label: "Cheat Sheet",
-          icon: "📋",
-          description: "Quick reference for frontend best practices",
-        },
-        {
-          href: "/resources",
-          label: "Resources",
-          icon: "📖",
-          description: "Curated learning materials and tools",
-        },
-        {
-          href: "/articles",
-          label: "Articles",
-          icon: "📰",
-          description: "High-quality frontend development articles",
-        },
-        {
-          href: "/video-courses",
-          label: "Video Courses",
-          icon: "🎥",
-          description: "Comprehensive video-based learning content",
-        },
-        {
-          href: "/documentation",
-          label: "Documentation",
-          icon: "📚",
-          description: "Official docs and API references",
-        },
-        {
-          href: "/reports",
-          label: "Feature Reports",
-          icon: "📊",
-          description: "View all features, development status, and stories",
-        },
-      ],
-    },
-    {
-      label: "Practice",
-      icon: "💻",
-      items: [
-        {
-          href: "/frontend-tasks",
-          label: "Frontend Tasks",
-          icon: "⚛️",
-          description: "React and frontend coding challenges",
-        },
-        {
-          href: "/problem-solving",
-          label: "Problem Solving",
-          icon: "🧮",
-          description: "Algorithmic coding challenges",
-        },
-        {
-          href: "/practice/frontend-challenges",
-          label: "Frontend Challenges",
-          icon: "⚡",
-          description: "React, JavaScript, CSS, and DOM challenges",
-        },
-        {
-          href: "/practice/algorithm-problems",
-          label: "Algorithm Problems",
-          icon: "🧮",
-          description: "Data structures and algorithm challenges",
-        },
-        {
-          href: "/practice/coding-exercises",
-          label: "Coding Exercises",
-          icon: "⌨️",
-          description: "Interactive coding exercises with instant feedback",
-        },
-        {
-          href: "/practice/projects",
-          label: "Projects",
-          icon: "🚀",
-          description: "Build real-world projects to showcase your skills",
-        },
-        {
-          href: "/practice/code-reviews",
-          label: "Code Reviews",
-          icon: "👀",
-          description: "Review and improve existing code examples",
-        },
-        {
-          href: "/practice/quiz",
-          label: "Quiz & Tests",
-          icon: "🧠",
-          description: "Test your knowledge with interactive quizzes",
-        },
-        {
-          href: "/questions/behavioral",
-          label: "Behavioral Questions",
-          icon: "🤝",
-          description:
-            "Practice behavioral interview questions with text input",
-        },
-        {
-          href: "/questions/company-specific",
-          label: "Company-Specific Questions",
-          icon: "🏢",
-          description: "Questions tailored for specific companies",
-        },
-        {
-          href: "/flashcards",
-          label: "Interactive Flashcards",
-          icon: "🃏",
-          description: "Reinforce learning with spaced repetition",
-        },
-      ],
-    },
-    {
-      label: "Interview Prep",
-      icon: "🎯",
-      items: [
-        {
-          href: "/mock-interviews",
-          label: "Mock Interviews",
-          icon: "🎬",
-          description: "Video mock interviews and practice sessions",
-        },
-        {
-          href: "/ai-mock-interview",
-          label: "AI Mock Interview",
-          icon: "🤖",
-          description:
-            "Practice with AI interviewer and get real-time feedback",
-        },
-        {
-          href: "/culture-fit-interviews",
-          label: "Culture Fit Questions",
-          icon: "🌟",
-          description:
-            "Master culture fit questions and demonstrate your values",
-        },
-        {
-          href: "/preparation-guides",
-          label: "Preparation Guides",
-          icon: "📖",
-          description: "Comprehensive interview preparation guides",
-        },
-      ],
-    },
-    {
-      label: "Media",
-      icon: "🎧",
-      items: [
-        {
-          href: "/podcasts",
-          label: "Podcasts",
-          icon: "🎧",
-          description: "Tech podcasts and audio content",
-        },
-      ],
-    },
-  ];
+  {
+    label: "Learning",
+    icon: "📚",
+    items: [
+      {
+        href: "/learning-paths",
+        label: "Learning Paths",
+        icon: "🗺️",
+        description: "Structured learning paths for frontend development",
+      },
+      {
+        href: "/tutorials",
+        label: "Tutorials",
+        icon: "🎓",
+        description: "Step-by-step tutorials for all skill levels",
+      },
+      {
+        href: "/cheatsheet",
+        label: "Cheat Sheet",
+        icon: "📋",
+        description: "Quick reference for frontend best practices",
+      },
+      {
+        href: "/resources",
+        label: "Resources",
+        icon: "📖",
+        description: "Curated learning materials and tools",
+      },
+      {
+        href: "/articles",
+        label: "Articles",
+        icon: "📰",
+        description: "High-quality frontend development articles",
+      },
+      {
+        href: "/video-courses",
+        label: "Video Courses",
+        icon: "🎥",
+        description: "Comprehensive video-based learning content",
+      },
+      {
+        href: "/documentation",
+        label: "Documentation",
+        icon: "📚",
+        description: "Official docs and API references",
+      },
+      {
+        href: "/reports",
+        label: "Feature Reports",
+        icon: "📊",
+        description: "View all features, development status, and stories",
+      },
+    ],
+  },
+  {
+    label: "Practice",
+    icon: "💻",
+    items: [
+      {
+        href: "/frontend-tasks",
+        label: "Frontend Tasks",
+        icon: "⚛️",
+        description: "React and frontend coding challenges",
+      },
+      {
+        href: "/problem-solving",
+        label: "Problem Solving",
+        icon: "🧮",
+        description: "Algorithmic coding challenges",
+      },
+      {
+        href: "/practice/frontend-challenges",
+        label: "Frontend Challenges",
+        icon: "⚡",
+        description: "React, JavaScript, CSS, and DOM challenges",
+      },
+      {
+        href: "/practice/algorithm-problems",
+        label: "Algorithm Problems",
+        icon: "🧮",
+        description: "Data structures and algorithm challenges",
+      },
+      {
+        href: "/practice/coding-exercises",
+        label: "Coding Exercises",
+        icon: "⌨️",
+        description: "Interactive coding exercises with instant feedback",
+      },
+      {
+        href: "/practice/projects",
+        label: "Projects",
+        icon: "🚀",
+        description: "Build real-world projects to showcase your skills",
+      },
+      {
+        href: "/practice/code-reviews",
+        label: "Code Reviews",
+        icon: "👀",
+        description: "Review and improve existing code examples",
+      },
+      {
+        href: "/practice/quiz",
+        label: "Quiz & Tests",
+        icon: "🧠",
+        description: "Test your knowledge with interactive quizzes",
+      },
+      {
+        href: "/questions/behavioral",
+        label: "Behavioral Questions",
+        icon: "🤝",
+        description: "Practice behavioral interview questions with text input",
+      },
+      {
+        href: "/questions/company-specific",
+        label: "Company-Specific Questions",
+        icon: "🏢",
+        description: "Questions tailored for specific companies",
+      },
+      {
+        href: "/flashcards",
+        label: "Interactive Flashcards",
+        icon: "🃏",
+        description: "Reinforce learning with spaced repetition",
+      },
+    ],
+  },
+  {
+    label: "Interview Prep",
+    icon: "🎯",
+    items: [
+      {
+        href: "/mock-interviews",
+        label: "Mock Interviews",
+        icon: "🎬",
+        description: "Video mock interviews and practice sessions",
+      },
+      {
+        href: "/ai-mock-interview",
+        label: "AI Mock Interview",
+        icon: "🤖",
+        description: "Practice with AI interviewer and get real-time feedback",
+      },
+      {
+        href: "/culture-fit-interviews",
+        label: "Culture Fit Questions",
+        icon: "🌟",
+        description: "Master culture fit questions and demonstrate your values",
+      },
+      {
+        href: "/preparation-guides",
+        label: "Preparation Guides",
+        icon: "📖",
+        description: "Comprehensive interview preparation guides",
+      },
+    ],
+  },
+  {
+    label: "Media",
+    icon: "🎧",
+    items: [
+      {
+        href: "/podcasts",
+        label: "Podcasts",
+        icon: "🎧",
+        description: "Tech podcasts and audio content",
+      },
+    ],
+  },
+];
 
 export default function Navbar() {
   const {

@@ -73,6 +73,17 @@ export function useSecureProgress(): UseSecureProgressReturn {
     }
   }, [user?.uid]);
 
+  // Generate secure session ID using crypto API
+  const generateSecureSessionId = () => {
+    const array = new Uint8Array(9);
+    if (typeof crypto !== "undefined" && crypto.getRandomValues) {
+      crypto.getRandomValues(array);
+      return `session_${Date.now()}_${Array.from(array, (byte) => byte.toString(36)).join("")}`;
+    }
+    // Fallback for environments without crypto (should not happen in browser)
+    return `session_${Date.now()}_${Math.random().toString(36).substring(2, 11)}`;
+  };
+
   const saveProgress = useCallback(
     async (data: Omit<ProgressData, "userId">): Promise<boolean> => {
       if (!isAuthenticated || !user) {
@@ -84,16 +95,6 @@ export function useSecureProgress(): UseSecureProgressReturn {
       setError(null);
 
       try {
-        // Generate secure session ID using crypto API
-        const generateSecureSessionId = () => {
-          const array = new Uint8Array(9);
-          if (typeof crypto !== "undefined" && crypto.getRandomValues) {
-            crypto.getRandomValues(array);
-            return `session_${Date.now()}_${Array.from(array, (byte) => byte.toString(36)).join("")}`;
-          }
-          // Fallback for environments without crypto (should not happen in browser)
-          return `session_${Date.now()}_${Math.random().toString(36).substring(2, 11)}`;
-        };
         const progressData: ProgressData = {
           ...data,
           userId: user.uid,

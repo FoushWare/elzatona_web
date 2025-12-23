@@ -31,9 +31,9 @@ function shouldPrioritizeImage(
 }
 
 function getPreferredImageFormat(): string {
-  if (typeof window !== "undefined") {
+  if (typeof globalThis.window !== "undefined") {
     const canvas = document.createElement("canvas");
-    return canvas.toDataURL("image/webp").indexOf("data:image/webp") === 0
+    return canvas.toDataURL("image/webp").startsWith("data:image/webp")
       ? "webp"
       : "jpeg";
   }
@@ -97,7 +97,7 @@ export const useImageOptimization = (
 
   // Detect preferred image format
   useEffect(() => {
-    if (typeof window !== "undefined") {
+    if (typeof globalThis.window !== "undefined") {
       setPreferredFormat(getPreferredImageFormat());
     }
   }, []);
@@ -154,7 +154,7 @@ export const useImageOptimization = (
       document.head.appendChild(link);
 
       return () => {
-        document.head.removeChild(link);
+        link.remove();
       };
     }
   }, [isAboveTheFold, isHero, isLogo, optimizedUrl]);
@@ -187,6 +187,10 @@ export const useMultipleImageOptimization = (
   useEffect(() => {
     // Process images without calling hooks inside callbacks
     const processImages = async () => {
+      // Extract callback functions to reduce nesting depth
+      const handleImageLoad = () => {};
+      const handleImageError = () => {};
+
       const results = images.map((imageOptions) => {
         // Create optimized image data directly without calling the hook
         return {
@@ -198,8 +202,8 @@ export const useMultipleImageOptimization = (
           optimizedUrl: imageOptions.src, // Simplified for now
           isLoaded: false,
           error: null,
-          onLoad: () => {},
-          onError: () => {},
+          onLoad: handleImageLoad,
+          onError: handleImageError,
         } as OptimizedImageData;
       });
 
@@ -223,11 +227,13 @@ export const useMultipleImageOptimization = (
  */
 export const useIntersectionObserver = (
   ref: React.RefObject<Element>,
-  options: IntersectionObserverInit = {
+  options: IntersectionObserverInit,
+) => {
+  const defaultOptions: IntersectionObserverInit = {
     rootMargin: "50px 0px",
     threshold: 0.1,
-  },
-) => {
+  };
+  const observerOptions = options || defaultOptions;
   const [isIntersecting, setIsIntersecting] = useState(false);
 
   useEffect(() => {
@@ -241,7 +247,7 @@ export const useIntersectionObserver = (
       if (entry) {
         setIsIntersecting(entry.isIntersecting);
       }
-    });
+    }, observerOptions);
 
     observer.observe(element);
 

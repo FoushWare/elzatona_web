@@ -149,7 +149,9 @@ const createFileTree = (files: Array<FileNode & { fileType?: string }>) => {
       id: "src",
       name: "src",
       type: "folder" as const,
-      children: files.filter((f) => f.fileType !== "html" && f.fileType !== "json"),
+      children: files.filter(
+        (f) => f.fileType !== "html" && f.fileType !== "json",
+      ),
     },
     {
       id: "public",
@@ -221,7 +223,7 @@ const initializeFromTask = (task: FrontendTask) => {
 // Helper function to initialize default files
 const initializeDefaults = () => {
   const defaultFiles = createDefaultFiles();
-  
+
   return {
     fileTree: [
       {
@@ -268,13 +270,23 @@ export const useFileManagement = (task?: FrontendTask | null) => {
   // Initialize file tree and open files
   useEffect(() => {
     if (task?.files && task.files.length > 0) {
-      const { fileTree: tree, openFiles: files, activeFile: active, expandedFolders: folders } = initializeFromTask(task);
+      const {
+        fileTree: tree,
+        openFiles: files,
+        activeFile: active,
+        expandedFolders: folders,
+      } = initializeFromTask(task);
       setFileTree(tree);
       setOpenFiles(files);
       setActiveFile(active);
       setExpandedFolders(folders);
     } else {
-      const { fileTree: tree, openFiles: files, activeFile: active, expandedFolders: folders } = initializeDefaults();
+      const {
+        fileTree: tree,
+        openFiles: files,
+        activeFile: active,
+        expandedFolders: folders,
+      } = initializeDefaults();
       setFileTree(tree);
       setOpenFiles(files);
       setActiveFile(active);
