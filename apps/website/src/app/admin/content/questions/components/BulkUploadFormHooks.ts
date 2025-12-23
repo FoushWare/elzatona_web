@@ -1,6 +1,10 @@
 import { useState, useEffect, useRef } from "react";
 import { createHighlighter, type Highlighter } from "shiki";
-import { parseJsonFile, parseCsvFile, highlightQuestionCode } from "./BulkUploadFormUtils";
+import {
+  parseJsonFile,
+  parseCsvFile,
+  highlightQuestionCode,
+} from "./BulkUploadFormUtils";
 
 // File management hook
 export const useFileManagement = () => {
@@ -58,9 +62,13 @@ export const useJsonMode = () => {
 
 // Shiki syntax highlighting hook
 export const useShikiHighlighting = (previewQuestions: any[]) => {
-  const [shikiHighlighter, setShikiHighlighter] = useState<Highlighter | null>(null);
+  const [shikiHighlighter, setShikiHighlighter] = useState<Highlighter | null>(
+    null,
+  );
   const [isLoadingShiki, setIsLoadingShiki] = useState(true);
-  const [codeHighlightedHtml, setCodeHighlightedHtml] = useState<Record<number, string>>({});
+  const [codeHighlightedHtml, setCodeHighlightedHtml] = useState<
+    Record<number, string>
+  >({});
 
   useEffect(() => {
     let mounted = true;
@@ -110,7 +118,11 @@ export const useShikiHighlighting = (previewQuestions: any[]) => {
 
       for (let index = 0; index < previewQuestions.length; index++) {
         const question = previewQuestions[index];
-        const html = await highlightQuestionCode(question, index, shikiHighlighter);
+        const html = await highlightQuestionCode(
+          question,
+          index,
+          shikiHighlighter,
+        );
         if (html) {
           highlighted[index] = html;
         }
@@ -130,7 +142,11 @@ export const useShikiHighlighting = (previewQuestions: any[]) => {
 };
 
 // Form state management hook
-export const useFormState = (error: string | null, success: boolean, loading: boolean) => {
+export const useFormState = (
+  error: string | null,
+  success: boolean,
+  loading: boolean,
+) => {
   const fileManagement = useFileManagement();
   const jsonMode = useJsonMode();
 
@@ -158,7 +174,9 @@ export const useFileProcessing = () => {
     } else if (fileType === "text/csv" || fileName.endsWith(".csv")) {
       return await parseCsvFile(file);
     } else {
-      throw new Error("Unsupported file type. Please upload a JSON or CSV file.");
+      throw new Error(
+        "Unsupported file type. Please upload a JSON or CSV file.",
+      );
     }
   };
 

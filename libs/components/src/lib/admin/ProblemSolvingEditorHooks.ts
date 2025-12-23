@@ -1,5 +1,8 @@
 import { useState, useEffect } from "react";
-import { ProblemSolvingTask, ProblemSolvingTaskFormData } from "@elzatona/types";
+import {
+  ProblemSolvingTask,
+  ProblemSolvingTaskFormData,
+} from "@elzatona/types";
 
 interface FileNode {
   id: string;
@@ -89,14 +92,23 @@ export const useCodeEditorManagement = (task?: ProblemSolvingTask | null) => {
     }
   }, [task]);
 
-  return { starterCode, setStarterCode, solutionCode, setSolutionCode, activeTab, setActiveTab };
+  return {
+    starterCode,
+    setStarterCode,
+    solutionCode,
+    setSolutionCode,
+    activeTab,
+    setActiveTab,
+  };
 };
 
 // File explorer management hook
 export const useFileExplorerManagement = () => {
   const [activeFile, setActiveFile] = useState<string>("");
   const [fileTree, setFileTree] = useState<FileNode[]>([]);
-  const [expandedFolders, setExpandedFolders] = useState<Set<string>>(new Set());
+  const [expandedFolders, setExpandedFolders] = useState<Set<string>>(
+    new Set(),
+  );
   const [openFiles, setOpenFiles] = useState<string[]>([]);
   const [newFileName, setNewFileName] = useState("");
   const [newFolderName, setNewFolderName] = useState("");
@@ -160,7 +172,8 @@ export const usePanelLayout = () => {
     if (!isResizing) return;
     const deltaX = e.clientX - resizeStartX;
     const containerWidth = window.innerWidth;
-    const newLeftWidth = ((resizeStartLeftWidth * containerWidth + deltaX) / containerWidth) * 100;
+    const newLeftWidth =
+      ((resizeStartLeftWidth * containerWidth + deltaX) / containerWidth) * 100;
     const newRightWidth = 100 - newLeftWidth - 20; // 20% for middle panel
 
     if (newLeftWidth >= 20 && newLeftWidth <= 50) {

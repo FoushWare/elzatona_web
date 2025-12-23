@@ -799,19 +799,19 @@ export default function UnifiedAdminPage() {
     }
   };
 
-  const addCategoryToCard = async (cardId: string, categoryId: string) => {
+  const addCategoryToCard = async (cardId: string, _categoryId: string) => {
     try {
       const response = await fetch(`/api/cards/${cardId}/categories`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ category_id: categoryId }),
+        body: JSON.stringify({ category_id: _categoryId }),
       });
       const result = await response.json();
       if (result.success) {
         showSuccess("Category Added", "Category added to card successfully");
         // Find which plan contains this card and refresh
-        const plan = plans.find((p) => {
-          const hierarchy: PlanHierarchyCard[] = planHierarchy[p.id] || [];
+        const plan = plans.find((_p) => {
+          const hierarchy: PlanHierarchyCard[] = planHierarchy[_p.id] || [];
           return hierarchy.some((c) => c.id === cardId);
         });
         if (plan) {
@@ -830,12 +830,12 @@ export default function UnifiedAdminPage() {
     }
   };
 
-  const addTopicToCategory = async (categoryId: string, topicId: string) => {
+  const addTopicToCategory = async (categoryId: string, _topicId: string) => {
     try {
       const response = await fetch(`/api/categories/${categoryId}/topics`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ topic_id: topicId }),
+        body: JSON.stringify({ topic_id: _topicId }),
       });
       const result = await response.json();
       if (result.success) {
@@ -1568,8 +1568,8 @@ export default function UnifiedAdminPage() {
             setEditingCategory(null);
             setIsCategoryModalOpen(true);
           }}
-          onEdit={(category) => {
-            setEditingCategory(category);
+          onEdit={(_category) => {
+            setEditingCategory(_category);
             setIsCategoryModalOpen(true);
           }}
           onDelete={handleDeleteCategory}
@@ -1584,8 +1584,8 @@ export default function UnifiedAdminPage() {
             setEditingTopic(null);
             setIsTopicModalOpen(true);
           }}
-          onEdit={(topic) => {
-            setEditingTopic(topic);
+          onEdit={(_topic) => {
+            setEditingTopic(_topic);
             setIsTopicModalOpen(true);
           }}
           onDelete={handleDeleteTopic}

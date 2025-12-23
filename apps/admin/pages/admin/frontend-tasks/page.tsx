@@ -365,7 +365,7 @@ export default function FrontendTasksPage() {
                     <div className="flex items-center space-x-2 mb-4">
                       <Tag className="h-4 w-4 text-gray-500" />
                       <div className="flex flex-wrap gap-2">
-                        {task.tags.map((tag, index) => (
+                        {task.tags.map((tag, _index) => (
                           <Badge
                             key={`tag-${tag}`}
                             variant="outline"

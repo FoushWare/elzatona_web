@@ -79,13 +79,39 @@ export default function QuestionForm({
 }: QuestionFormProps) {
   // Extracted hooks for state management
   const { formData, updateFormData } = useQuestionFormData(initialData);
-  const { updateOption, addOption, removeOption, setCorrectAnswer } = useOptionsManagement(formData, updateFormData);
-  const { newTag, setNewTag, addTag, removeTag, handleTagInputKeyDown } = useTagsManagement(formData, updateFormData);
-  const { showCodeEditor, setShowCodeEditor, updateCode, updateLanguage, updateFileName } = useCodeEditor(formData, updateFormData);
-  const { categorySearchTerm, setCategorySearchTerm, showCategoryDropdown, setShowCategoryDropdown, filteredCategories, getCategoryInfo } = useCategorySearch(allCategories, categoriesData);
-  const { tagSearchTerm, setTagSearchTerm, showTagDropdown, setShowTagDropdown, filteredTags } = useTagSearch(allTags);
+  const { updateOption, addOption, removeOption, setCorrectAnswer } =
+    useOptionsManagement(formData, updateFormData);
+  const { newTag, setNewTag, addTag, removeTag, handleTagInputKeyDown } =
+    useTagsManagement(formData, updateFormData);
+  const {
+    showCodeEditor,
+    setShowCodeEditor,
+    updateCode,
+    updateLanguage,
+    updateFileName,
+  } = useCodeEditor(formData, updateFormData);
+  const {
+    categorySearchTerm,
+    setCategorySearchTerm,
+    showCategoryDropdown,
+    setShowCategoryDropdown,
+    filteredCategories,
+    getCategoryInfo,
+  } = useCategorySearch(allCategories, categoriesData);
+  const {
+    tagSearchTerm,
+    setTagSearchTerm,
+    showTagDropdown,
+    setShowTagDropdown,
+    filteredTags,
+  } = useTagSearch(allTags);
   const { errors, validateForm, clearErrors } = useFormValidation(formData);
-  const { isSubmitting, handleSubmit } = useFormSubmission(formData, onSubmit, validateForm, externalSubmitTrigger);
+  const { isSubmitting, handleSubmit } = useFormSubmission(
+    formData,
+    onSubmit,
+    validateForm,
+    externalSubmitTrigger,
+  );
 
   // Event handlers
   const handleFieldChange = (field: keyof Question, value: any) => {
@@ -131,7 +157,10 @@ export default function QuestionForm({
       {/* Basic Question Fields */}
       <div className="space-y-4">
         <div>
-          <Label htmlFor="question" className={errors.question ? "text-red-500" : ""}>
+          <Label
+            htmlFor="question"
+            className={errors.question ? "text-red-500" : ""}
+          >
             Question Text *
           </Label>
           <Textarea
@@ -142,10 +171,15 @@ export default function QuestionForm({
             className="min-h-[100px]"
             disabled={disabled}
             aria-label={getAriaLabelForField("question", true)}
-            aria-describedby={errors.question ? getFieldErrorId("question") : undefined}
+            aria-describedby={
+              errors.question ? getFieldErrorId("question") : undefined
+            }
           />
           {errors.question && (
-            <p id={getFieldErrorId("question")} className="text-sm text-red-500 mt-1">
+            <p
+              id={getFieldErrorId("question")}
+              className="text-sm text-red-500 mt-1"
+            >
               {errors.question}
             </p>
           )}
@@ -405,7 +439,9 @@ export default function QuestionForm({
               min="5"
               max="600"
               value={formData.timeLimit || 30}
-              onChange={(e) => handleFieldChange("timeLimit", parseInt(e.target.value) || 30)}
+              onChange={(e) =>
+                handleFieldChange("timeLimit", parseInt(e.target.value) || 30)
+              }
               disabled={disabled}
             />
           </div>
@@ -420,7 +456,9 @@ export default function QuestionForm({
               min="1"
               max="100"
               value={formData.points || 1}
-              onChange={(e) => handleFieldChange("points", parseInt(e.target.value) || 1)}
+              onChange={(e) =>
+                handleFieldChange("points", parseInt(e.target.value) || 1)
+              }
               disabled={disabled}
             />
           </div>
@@ -430,7 +468,9 @@ export default function QuestionForm({
               <Checkbox
                 id="isRequired"
                 checked={formData.isRequired || false}
-                onCheckedChange={(checked) => handleFieldChange("isRequired", checked)}
+                onCheckedChange={(checked) =>
+                  handleFieldChange("isRequired", checked)
+                }
                 disabled={disabled}
               />
               <Label htmlFor="isRequired">Required</Label>
@@ -440,7 +480,9 @@ export default function QuestionForm({
               <Checkbox
                 id="isRandomized"
                 checked={formData.isRandomized || false}
-                onCheckedChange={(checked) => handleFieldChange("isRandomized", checked)}
+                onCheckedChange={(checked) =>
+                  handleFieldChange("isRandomized", checked)
+                }
                 disabled={disabled}
               />
               <Label htmlFor="isRandomized">Randomize Options</Label>
@@ -460,11 +502,12 @@ export default function QuestionForm({
           >
             Cancel
           </Button>
-          <Button
-            type="submit"
-            disabled={disabled || isSubmitting}
-          >
-            {isSubmitting ? "Saving..." : (initialData ? "Update Question" : "Create Question")}
+          <Button type="submit" disabled={disabled || isSubmitting}>
+            {isSubmitting
+              ? "Saving..."
+              : initialData
+                ? "Update Question"
+                : "Create Question"}
           </Button>
         </DialogFooter>
       )}

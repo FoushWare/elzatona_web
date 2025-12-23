@@ -9,8 +9,16 @@ import {
   Textarea,
 } from "@elzatona/components";
 import { Upload, FileText, AlertTriangle, Loader2 } from "lucide-react";
-import { useFormState, useFileProcessing, useShikiHighlighting } from "./BulkUploadFormHooks";
-import { validateFile, validateQuestions, transformQuestionData } from "./BulkUploadFormUtils";
+import {
+  useFormState,
+  useFileProcessing,
+  useShikiHighlighting,
+} from "./BulkUploadFormHooks";
+import {
+  validateFile,
+  validateQuestions,
+  transformQuestionData,
+} from "./BulkUploadFormUtils";
 
 interface BulkUploadFormProps {
   onUpload: (questions: any[]) => void;
@@ -48,11 +56,14 @@ export default function BulkUploadForm({
     setJsonError,
   } = useFormState(error, success, loading);
 
-  const { shikiHighlighter, isLoadingShiki, codeHighlightedHtml } = useShikiHighlighting(previewQuestions);
+  const { shikiHighlighter, isLoadingShiki, codeHighlightedHtml } =
+    useShikiHighlighting(previewQuestions);
   const { processFile, validateJsonText } = useFileProcessing();
 
   // Event handlers
-  const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileChange = async (
+    event: React.ChangeEvent<HTMLInputElement>,
+  ) => {
     const selectedFile = event.target.files?.[0];
     if (!selectedFile) return;
 
@@ -65,7 +76,7 @@ export default function BulkUploadForm({
     try {
       const questions = await processFile(selectedFile);
       const validationErrors = validateQuestions(questions);
-      
+
       if (validationErrors.length > 0) {
         setJsonError(validationErrors.join(", "));
         return;
@@ -78,11 +89,15 @@ export default function BulkUploadForm({
       setShowPreview(true);
       setJsonError(null);
     } catch (error) {
-      setJsonError(error instanceof Error ? error.message : "Failed to process file");
+      setJsonError(
+        error instanceof Error ? error.message : "Failed to process file",
+      );
     }
   };
 
-  const handleJsonTextChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
+  const handleJsonTextChange = (
+    event: React.ChangeEvent<HTMLTextAreaElement>,
+  ) => {
     const text = event.target.value;
     setJsonText(text);
     setJsonError(null);
@@ -92,7 +107,7 @@ export default function BulkUploadForm({
     try {
       const questions = validateJsonText(jsonText);
       const validationErrors = validateQuestions(questions);
-      
+
       if (validationErrors.length > 0) {
         setJsonError(validationErrors.join(", "));
         return;
@@ -104,7 +119,9 @@ export default function BulkUploadForm({
       setShowPreview(true);
       setJsonError(null);
     } catch (error) {
-      setJsonError(error instanceof Error ? error.message : "Failed to process JSON");
+      setJsonError(
+        error instanceof Error ? error.message : "Failed to process JSON",
+      );
     }
   };
 
@@ -249,21 +266,25 @@ export default function BulkUploadForm({
                 <div className="space-y-2">
                   <h4 className="font-medium">{question.question}</h4>
                   <div className="grid grid-cols-2 gap-2 text-sm">
-                    {question.options.map((option: string, optIndex: number) => (
-                      <div
-                        key={optIndex}
-                        className={`p-2 rounded ${
-                          option === question.correctAnswer
-                            ? "bg-green-100 text-green-800"
-                            : "bg-gray-100"
-                        }`}
-                      >
-                        {option}
-                      </div>
-                    ))}
+                    {question.options.map(
+                      (option: string, optIndex: number) => (
+                        <div
+                          key={optIndex}
+                          className={`p-2 rounded ${
+                            option === question.correctAnswer
+                              ? "bg-green-100 text-green-800"
+                              : "bg-gray-100"
+                          }`}
+                        >
+                          {option}
+                        </div>
+                      ),
+                    )}
                   </div>
                   {question.explanation && (
-                    <p className="text-sm text-gray-600">{question.explanation}</p>
+                    <p className="text-sm text-gray-600">
+                      {question.explanation}
+                    </p>
                   )}
                   {question.code && (
                     <div className="mt-2">
@@ -288,7 +309,12 @@ export default function BulkUploadForm({
 
       {/* Actions */}
       <DialogFooter>
-        <Button type="button" variant="outline" onClick={onCancel} disabled={loading}>
+        <Button
+          type="button"
+          variant="outline"
+          onClick={onCancel}
+          disabled={loading}
+        >
           Cancel
         </Button>
         <Button

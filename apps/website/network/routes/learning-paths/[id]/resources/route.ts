@@ -68,9 +68,9 @@ export async function GET(
 
     // Filter resources based on learning path (for now, return all)
     // TODO: Implement proper filtering based on learning path ID
-    const resources = mockResources;
+    const _resources = mockResources;
 
-    return NextResponse.json(resources);
+    return NextResponse.json(mockResources);
   } catch (error) {
     console.error("Error fetching learning path resources:", error);
     return NextResponse.json(

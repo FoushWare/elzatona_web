@@ -37,12 +37,12 @@ function getSupabaseClient() {
 }
 
 // Simple in-memory cache for questions (resets on server restart)
-let questionsCache: Array<{
+const _questionsCache: Array<{
   id: string;
   [key: string]: unknown;
 }> | null = null;
-const cacheTimestamp: number = 0;
-const CACHE_DURATION = 30000; // 30 seconds
+const _cacheTimestamp: number = 0;
+const _CACHE_DURATION = 30000; // 30 seconds
 
 // GET /api/questions/unified - Get questions with filters
 export async function GET(request: NextRequest) {

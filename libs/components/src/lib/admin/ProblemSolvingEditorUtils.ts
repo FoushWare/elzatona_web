@@ -10,7 +10,11 @@ interface FileNode {
 }
 
 // File management helper functions
-export const createFileNode = (name: string, type: string, content: string = ""): FileNode => {
+export const createFileNode = (
+  name: string,
+  type: string,
+  content: string = "",
+): FileNode => {
   const id = `file_${Date.now()}`;
   return {
     id,
@@ -21,7 +25,10 @@ export const createFileNode = (name: string, type: string, content: string = "")
   };
 };
 
-export const addFileToTree = (fileTree: FileNode[], newFile: FileNode): FileNode[] => {
+export const addFileToTree = (
+  fileTree: FileNode[],
+  newFile: FileNode,
+): FileNode[] => {
   return fileTree.map((folder) => {
     if (folder.type === "folder" && folder.children) {
       return {
@@ -33,7 +40,10 @@ export const addFileToTree = (fileTree: FileNode[], newFile: FileNode): FileNode
   });
 };
 
-export const removeFileFromTree = (fileTree: FileNode[], fileId: string): FileNode[] => {
+export const removeFileFromTree = (
+  fileTree: FileNode[],
+  fileId: string,
+): FileNode[] => {
   return fileTree.map((folder) => {
     if (folder.type === "folder" && folder.children) {
       return {
@@ -45,13 +55,17 @@ export const removeFileFromTree = (fileTree: FileNode[], fileId: string): FileNo
   });
 };
 
-export const updateFileInTree = (fileTree: FileNode[], fileId: string, content: string): FileNode[] => {
+export const updateFileInTree = (
+  fileTree: FileNode[],
+  fileId: string,
+  content: string,
+): FileNode[] => {
   return fileTree.map((folder) => {
     if (folder.type === "folder" && folder.children) {
       return {
         ...folder,
         children: folder.children.map((file) =>
-          file.id === fileId ? { ...file, content } : file
+          file.id === fileId ? { ...file, content } : file,
         ),
       };
     }
@@ -82,16 +96,23 @@ export const getFileById = (openFiles: any[], fileId: string) => {
   return openFiles.find((file) => file.id === fileId);
 };
 
-export const getCurrentFileContent = (openFiles: any[], activeFile: string | null) => {
+export const getCurrentFileContent = (
+  openFiles: any[],
+  activeFile: string | null,
+) => {
   if (!activeFile) return "";
   const file = getFileById(openFiles, activeFile);
   return file?.content || "";
 };
 
-export const setCurrentFileContent = (openFiles: any[], activeFile: string | null, content: string) => {
+export const setCurrentFileContent = (
+  openFiles: any[],
+  activeFile: string | null,
+  content: string,
+) => {
   if (!activeFile) return openFiles;
   return openFiles.map((file) =>
-    file.id === activeFile ? { ...file, content } : file
+    file.id === activeFile ? { ...file, content } : file,
   );
 };
 
@@ -142,7 +163,9 @@ export const extractFilesFromTree = (fileTree: FileNode[]): any[] => {
     }));
 };
 
-export const createTaskData = (formData: ProblemSolvingTaskFormData): ProblemSolvingTaskFormData => {
+export const createTaskData = (
+  formData: ProblemSolvingTaskFormData,
+): ProblemSolvingTaskFormData => {
   return {
     ...formData,
   };
@@ -159,25 +182,34 @@ export const copyToClipboard = async (content: string): Promise<void> => {
 };
 
 // Dynamic field helper functions
-export const addConstraint = (constraints: string[], newConstraint: string): string[] => {
+export const addConstraint = (
+  constraints: string[],
+  newConstraint: string,
+): string[] => {
   if (newConstraint.trim()) {
     return [...constraints, newConstraint.trim()];
   }
   return constraints;
 };
 
-export const removeConstraint = (constraints: string[], index: number): string[] => {
+export const removeConstraint = (
+  constraints: string[],
+  index: number,
+): string[] => {
   return constraints.filter((_, i) => i !== index);
 };
 
 export const addExample = (examples: any[], newExample: string): any[] => {
   if (newExample.trim()) {
-    return [...examples, {
-      id: `example_${Date.now()}`,
-      input: "",
-      output: "",
-      explanation: newExample.trim(),
-    }];
+    return [
+      ...examples,
+      {
+        id: `example_${Date.now()}`,
+        input: "",
+        output: "",
+        explanation: newExample.trim(),
+      },
+    ];
   }
   return examples;
 };
@@ -227,16 +259,21 @@ export const generateDefaultStarterCode = (functionName: string): string => {
 }`;
 };
 
-export const generateTestRunnerCode = (testCases: TestCase[], functionName: string): string => {
-  const testCode = testCases.map((testCase, index) => {
-    return `// Test Case ${index + 1}
+export const generateTestRunnerCode = (
+  testCases: TestCase[],
+  functionName: string,
+): string => {
+  const testCode = testCases
+    .map((testCase, index) => {
+      return `// Test Case ${index + 1}
 const input${index + 1} = ${testCase.input};
 const expected${index + 1} = ${testCase.output};
 const result${index + 1} = ${functionName}(input${index + 1});
 console.log('Test ${index + 1}:', result${index + 1} === expected${index + 1} ? 'PASS' : 'FAIL');
 console.log('Expected:', expected${index + 1});
 console.log('Got:', result${index + 1});`;
-  }).join('\n\n');
+    })
+    .join("\n\n");
 
   return `${testCode}
 
@@ -245,7 +282,9 @@ console.log('Running tests...');`;
 };
 
 // Validation helper functions
-export const validateFormData = (formData: ProblemSolvingTaskFormData): string[] => {
+export const validateFormData = (
+  formData: ProblemSolvingTaskFormData,
+): string[] => {
   const errors: string[] = [];
 
   if (!formData.title.trim()) {
@@ -271,5 +310,5 @@ export const validateFormData = (formData: ProblemSolvingTaskFormData): string[]
 };
 
 export const sanitizeFunctionName = (name: string): string => {
-  return name.replace(/[^a-zA-Z0-9_]/g, '').replace(/^[0-9]/, '_');
+  return name.replace(/[^a-zA-Z0-9_]/g, "").replace(/^[0-9]/, "_");
 };

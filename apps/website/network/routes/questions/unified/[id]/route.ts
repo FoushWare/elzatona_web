@@ -262,7 +262,7 @@ export async function PUT(
       updated_at: _updated_at, // We set this ourselves
       id: _id, // Don't include id in update
       sampleAnswers: _sampleAnswers, // Frontend-only field
-      resources, // Keep resources - it's a valid database field
+      _resources, // Keep resources - it's a valid database field
       ...dbUpdate
     } = sanitizedUpdate;
 

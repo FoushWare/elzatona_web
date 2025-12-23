@@ -49,7 +49,7 @@ export const useQuestionFormData = (initialData?: Question) => {
   }, [initialData]);
 
   const updateFormData = useCallback((updates: Partial<Question>) => {
-    setFormData(prev => ({ ...prev, ...updates }));
+    setFormData((prev) => ({ ...prev, ...updates }));
   }, []);
 
   const resetFormData = useCallback(() => {
@@ -83,26 +83,40 @@ export const useQuestionFormData = (initialData?: Question) => {
 };
 
 // Options management hook
-export const useOptionsManagement = (formData: Partial<Question>, updateFormData: (updates: Partial<Question>) => void) => {
-  const updateOption = useCallback((index: number, value: string) => {
-    const newOptions = [...(formData.options || ["", "", "", ""])];
-    newOptions[index] = value;
-    updateFormData({ options: newOptions });
-  }, [formData.options, updateFormData]);
+export const useOptionsManagement = (
+  formData: Partial<Question>,
+  updateFormData: (updates: Partial<Question>) => void,
+) => {
+  const updateOption = useCallback(
+    (index: number, value: string) => {
+      const newOptions = [...(formData.options || ["", "", "", ""])];
+      newOptions[index] = value;
+      updateFormData({ options: newOptions });
+    },
+    [formData.options, updateFormData],
+  );
 
   const addOption = useCallback(() => {
     const newOptions = [...(formData.options || ["", "", "", ""]), ""];
     updateFormData({ options: newOptions });
   }, [formData.options, updateFormData]);
 
-  const removeOption = useCallback((index: number) => {
-    const newOptions = (formData.options || ["", "", "", ""]).filter((_, i) => i !== index);
-    updateFormData({ options: newOptions });
-  }, [formData.options, updateFormData]);
+  const removeOption = useCallback(
+    (index: number) => {
+      const newOptions = (formData.options || ["", "", "", ""]).filter(
+        (_, i) => i !== index,
+      );
+      updateFormData({ options: newOptions });
+    },
+    [formData.options, updateFormData],
+  );
 
-  const setCorrectAnswer = useCallback((answer: string) => {
-    updateFormData({ correctAnswer: answer });
-  }, [updateFormData]);
+  const setCorrectAnswer = useCallback(
+    (answer: string) => {
+      updateFormData({ correctAnswer: answer });
+    },
+    [updateFormData],
+  );
 
   return {
     updateOption,
@@ -113,7 +127,10 @@ export const useOptionsManagement = (formData: Partial<Question>, updateFormData
 };
 
 // Tags management hook
-export const useTagsManagement = (formData: Partial<Question>, updateFormData: (updates: Partial<Question>) => void) => {
+export const useTagsManagement = (
+  formData: Partial<Question>,
+  updateFormData: (updates: Partial<Question>) => void,
+) => {
   const [newTag, setNewTag] = useState("");
 
   const addTag = useCallback(() => {
@@ -123,16 +140,24 @@ export const useTagsManagement = (formData: Partial<Question>, updateFormData: (
     }
   }, [newTag, formData.tags, updateFormData]);
 
-  const removeTag = useCallback((tagToRemove: string) => {
-    updateFormData({ tags: formData.tags?.filter(tag => tag !== tagToRemove) || [] });
-  }, [formData.tags, updateFormData]);
+  const removeTag = useCallback(
+    (tagToRemove: string) => {
+      updateFormData({
+        tags: formData.tags?.filter((tag) => tag !== tagToRemove) || [],
+      });
+    },
+    [formData.tags, updateFormData],
+  );
 
-  const handleTagInputKeyDown = useCallback((e: React.KeyboardEvent) => {
-    if (e.key === "Enter" || e.key === ",") {
-      e.preventDefault();
-      addTag();
-    }
-  }, [addTag]);
+  const handleTagInputKeyDown = useCallback(
+    (e: React.KeyboardEvent) => {
+      if (e.key === "Enter" || e.key === ",") {
+        e.preventDefault();
+        addTag();
+      }
+    },
+    [addTag],
+  );
 
   return {
     newTag,
@@ -144,20 +169,32 @@ export const useTagsManagement = (formData: Partial<Question>, updateFormData: (
 };
 
 // Code editor management hook
-export const useCodeEditor = (formData: Partial<Question>, updateFormData: (updates: Partial<Question>) => void) => {
+export const useCodeEditor = (
+  formData: Partial<Question>,
+  updateFormData: (updates: Partial<Question>) => void,
+) => {
   const [showCodeEditor, setShowCodeEditor] = useState(false);
 
-  const updateCode = useCallback((code: string) => {
-    updateFormData({ code });
-  }, [updateFormData]);
+  const updateCode = useCallback(
+    (code: string) => {
+      updateFormData({ code });
+    },
+    [updateFormData],
+  );
 
-  const updateLanguage = useCallback((language: string) => {
-    updateFormData({ language });
-  }, [updateFormData]);
+  const updateLanguage = useCallback(
+    (language: string) => {
+      updateFormData({ language });
+    },
+    [updateFormData],
+  );
 
-  const updateFileName = useCallback((fileName: string) => {
-    updateFormData({ fileName });
-  }, [updateFormData]);
+  const updateFileName = useCallback(
+    (fileName: string) => {
+      updateFormData({ fileName });
+    },
+    [updateFormData],
+  );
 
   return {
     showCodeEditor,
@@ -169,20 +206,26 @@ export const useCodeEditor = (formData: Partial<Question>, updateFormData: (upda
 };
 
 // Search and filter hooks
-export const useCategorySearch = (allCategories: string[], categoriesData: any[]) => {
+export const useCategorySearch = (
+  allCategories: string[],
+  categoriesData: any[],
+) => {
   const [categorySearchTerm, setCategorySearchTerm] = useState("");
   const [showCategoryDropdown, setShowCategoryDropdown] = useState(false);
 
   const filteredCategories = useMemo(() => {
     if (!categorySearchTerm) return allCategories;
-    return allCategories.filter(category =>
-      category.toLowerCase().includes(categorySearchTerm.toLowerCase())
+    return allCategories.filter((category) =>
+      category.toLowerCase().includes(categorySearchTerm.toLowerCase()),
     );
   }, [allCategories, categorySearchTerm]);
 
-  const getCategoryInfo = useCallback((categoryName: string) => {
-    return categoriesData.find(cat => cat.name === categoryName);
-  }, [categoriesData]);
+  const getCategoryInfo = useCallback(
+    (categoryName: string) => {
+      return categoriesData.find((cat) => cat.name === categoryName);
+    },
+    [categoriesData],
+  );
 
   return {
     categorySearchTerm,
@@ -200,9 +243,9 @@ export const useTagSearch = (allTags: string[]) => {
 
   const filteredTags = useMemo(() => {
     if (!tagSearchTerm) return allTags.slice(0, 10);
-    return allTags.filter(tag =>
-      tag.toLowerCase().includes(tagSearchTerm.toLowerCase())
-    ).slice(0, 10);
+    return allTags
+      .filter((tag) => tag.toLowerCase().includes(tagSearchTerm.toLowerCase()))
+      .slice(0, 10);
   }, [allTags, tagSearchTerm]);
 
   return {
@@ -229,7 +272,8 @@ export const useFormValidation = (formData: Partial<Question>) => {
       newErrors.correctAnswer = "Correct answer is required";
     }
 
-    const validOptions = formData.options?.filter(option => option.trim()) || [];
+    const validOptions =
+      formData.options?.filter((option) => option.trim()) || [];
     if (validOptions.length < 2) {
       newErrors.options = "At least 2 valid options are required";
     }
@@ -258,7 +302,7 @@ export const useFormSubmission = (
   formData: Partial<Question>,
   onSubmit: (question: Partial<Question>) => void,
   validateForm: () => boolean,
-  externalSubmitTrigger?: number
+  externalSubmitTrigger?: number,
 ) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
 

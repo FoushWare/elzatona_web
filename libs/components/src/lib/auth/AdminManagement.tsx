@@ -19,7 +19,9 @@ interface AdminManagementProps {
   };
 }
 
-export default function AdminManagement({ currentUser }: AdminManagementProps) {
+export default function AdminManagement({
+  currentUser: _currentUser,
+}: AdminManagementProps) {
   const [admins, setAdmins] = useState<AdminCredential[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [showCreateForm, setShowCreateForm] = useState(false);
@@ -102,7 +104,7 @@ export default function AdminManagement({ currentUser }: AdminManagementProps) {
   };
 
   // Only super admins can manage other admins
-  if (!currentUser || currentUser.role !== "super_admin") {
+  if (!_currentUser || _currentUser.role !== "super_admin") {
     return (
       <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6">
         <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
@@ -296,8 +298,8 @@ export default function AdminManagement({ currentUser }: AdminManagementProps) {
 
                 <div className="flex items-center space-x-2">
                   {admin.is_active &&
-                    currentUser &&
-                    admin.id !== currentUser.id && (
+                    _currentUser &&
+                    admin.id !== _currentUser.id && (
                       <button
                         onClick={() =>
                           handleDeactivateAdmin(admin.id, admin.email)

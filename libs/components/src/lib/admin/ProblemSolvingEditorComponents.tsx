@@ -317,8 +317,8 @@ export const ProblemSolvingEditorMainContent: React.FC<MainContentProps> = ({
                   ? "bg-gray-900 text-white border-b-2 border-indigo-500"
                   : "bg-white text-gray-900 border-b-2 border-indigo-500"
                 : isDark
-                ? "text-gray-400 hover:text-gray-200"
-                : "text-gray-600 hover:text-gray-900"
+                  ? "text-gray-400 hover:text-gray-200"
+                  : "text-gray-600 hover:text-gray-900"
             }`}
           >
             Starter Code
@@ -331,8 +331,8 @@ export const ProblemSolvingEditorMainContent: React.FC<MainContentProps> = ({
                   ? "bg-gray-900 text-white border-b-2 border-indigo-500"
                   : "bg-white text-gray-900 border-b-2 border-indigo-500"
                 : isDark
-                ? "text-gray-400 hover:text-gray-200"
-                : "text-gray-600 hover:text-gray-900"
+                  ? "text-gray-400 hover:text-gray-200"
+                  : "text-gray-600 hover:text-gray-900"
             }`}
           >
             Solution
@@ -340,9 +340,7 @@ export const ProblemSolvingEditorMainContent: React.FC<MainContentProps> = ({
         </div>
 
         {/* Code Editor Area */}
-        <div className="flex-1">
-          {children}
-        </div>
+        <div className="flex-1">{children}</div>
       </div>
     </div>
 

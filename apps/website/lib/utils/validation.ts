@@ -318,7 +318,7 @@ function validateMetadataField(dataObj: any): void {
 /**
  * Helper function to preprocess data structure
  */
-function preprocessData(data: unknown): unknown {
+function _preprocessData(data: unknown): unknown {
   if (data && typeof data === "object" && !Array.isArray(data)) {
     const dataObj = data as any;
 

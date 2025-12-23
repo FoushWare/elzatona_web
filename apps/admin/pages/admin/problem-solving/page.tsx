@@ -260,9 +260,9 @@ export default function ProblemSolvingPage() {
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="">All Categories</SelectItem>
-                {categories.map((category) => (
-                  <SelectItem key={category} value={category}>
-                    {category}
+                {categories.map((_category) => (
+                  <SelectItem key={_category} value={_category}>
+                    {_category}
                   </SelectItem>
                 ))}
               </SelectContent>

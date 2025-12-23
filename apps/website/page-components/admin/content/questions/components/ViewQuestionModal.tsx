@@ -488,7 +488,7 @@ export function ViewQuestionModal({
 
   if (!question) return null;
 
-  const cleanQuestionTitle = (title: string) => {
+  const _cleanQuestionTitle = (title: string) => {
     if (!title) return "";
     return title.replace(/"/g, "").replace(/'/g, "").trim();
   };
@@ -499,7 +499,7 @@ export function ViewQuestionModal({
     setShowExplanation(true);
   };
 
-  const isCorrectAnswer = (optionText: string) => {
+  const _isCorrectAnswer = (optionText: string) => {
     const correctOption = question.options?.find((opt: any) => opt.isCorrect);
     return correctOption?.text === optionText;
   };

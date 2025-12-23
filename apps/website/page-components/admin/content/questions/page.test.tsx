@@ -268,7 +268,7 @@ describe("A-UT-002: Question List Renders", () => {
         const questionText = screen.queryByText(/Test Question 1/i);
         if (!questionText) {
           // If question not found, check if component is in a valid state
-          const noQuestions = screen.queryByText(/No questions found/i);
+          const _noQuestions = screen.queryByText(/No questions found/i);
           const pageTitle = screen.getByText(/Question Management/i);
           // At minimum, page should be rendered
           expect(pageTitle).toBeInTheDocument();

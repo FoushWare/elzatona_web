@@ -22,11 +22,17 @@ export const parseCsvFile = async (file: File): Promise<any[]> => {
 };
 
 // Color processing utilities
-export const calculateBrightness = (r: number, g: number, b: number): number => {
+export const calculateBrightness = (
+  r: number,
+  g: number,
+  b: number,
+): number => {
   return (r * 299 + g * 587 + b * 114) / 1000;
 };
 
-export const extractRgbFromHex = (hex: string): { r: number; g: number; b: number } => {
+export const extractRgbFromHex = (
+  hex: string,
+): { r: number; g: number; b: number } => {
   const r = Number.parseInt(hex.substring(0, 2), 16);
   const g = Number.parseInt(hex.substring(2, 4), 16);
   const b = Number.parseInt(hex.substring(4, 6), 16);
@@ -40,7 +46,12 @@ export const getDimmingFactor = (brightness: number): number => {
   return 0.7;
 };
 
-export const applyDimming = (r: number, g: number, b: number, factor: number) => {
+export const applyDimming = (
+  r: number,
+  g: number,
+  b: number,
+  factor: number,
+) => {
   return {
     r: Math.round(r * factor),
     g: Math.round(g * factor),
@@ -52,7 +63,9 @@ export const formatRgbString = (r: number, g: number, b: number): string => {
   return `rgb(${r}, ${g}, ${b})`;
 };
 
-export const extractRgbFromRgbString = (rgbString: string): { r: number; g: number; b: number } | null => {
+export const extractRgbFromRgbString = (
+  rgbString: string,
+): { r: number; g: number; b: number } | null => {
   const match = rgbString.match(/rgb\((\d+),\s*(\d+),\s*(\d+)\)/);
   if (!match) return null;
   return {
@@ -186,7 +199,10 @@ export const validateFile = (file: File): string | null => {
   const allowedExtensions = [".json", ".csv", ".xlsx", ".xls"];
   const fileExtension = "." + file.name.split(".").pop()?.toLowerCase();
 
-  if (!allowedTypes.includes(file.type) && !allowedExtensions.includes(fileExtension)) {
+  if (
+    !allowedTypes.includes(file.type) &&
+    !allowedExtensions.includes(fileExtension)
+  ) {
     return "Unsupported file type. Please upload JSON, CSV, or Excel files.";
   }
 
@@ -222,7 +238,9 @@ export const transformQuestionData = (questions: any[]): any[] => {
   return questions.map((question) => {
     // Normalize field names
     return {
-      id: question.id || `q_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+      id:
+        question.id ||
+        `q_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
       question: question.question || question.title || "",
       correctAnswer: question.correctAnswer || question.answer || "",
       options: question.options || question.choices || [],
