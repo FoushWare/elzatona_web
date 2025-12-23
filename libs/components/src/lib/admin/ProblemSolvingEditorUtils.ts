@@ -137,18 +137,17 @@ export const getLanguageForType = (fileType: string) => {
 // Test case helper functions
 export const createTestCase = (): TestCase => ({
   id: `test_${Date.now()}`,
-  input: "",
-  output: "",
-  description: "",
+  input: [],
+  expected: "",
   isHidden: false,
 });
 
 export const validateTestCase = (testCase: TestCase): boolean => {
-  return testCase.input.trim() !== "" && testCase.output.trim() !== "";
+  return testCase.input.length > 0 && testCase.expected !== "";
 };
 
 export const formatTestCase = (testCase: TestCase): string => {
-  return `Input: ${testCase.input}\nExpected: ${testCase.output}`;
+  return `Input: ${JSON.stringify(testCase.input)}\nExpected: ${JSON.stringify(testCase.expected)}`;
 };
 
 // Form helper functions
@@ -267,7 +266,7 @@ export const generateTestRunnerCode = (
     .map((testCase, index) => {
       return `// Test Case ${index + 1}
 const input${index + 1} = ${testCase.input};
-const expected${index + 1} = ${testCase.output};
+const expected${index + 1} = ${testCase.expected};
 const result${index + 1} = ${functionName}(input${index + 1});
 console.log('Test ${index + 1}:', result${index + 1} === expected${index + 1} ? 'PASS' : 'FAIL');
 console.log('Expected:', expected${index + 1});

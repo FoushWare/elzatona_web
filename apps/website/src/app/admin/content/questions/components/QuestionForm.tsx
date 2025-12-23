@@ -17,36 +17,17 @@ import {
   CollapsibleTrigger,
   CollapsibleContent,
 } from "@elzatona/components";
-import {
-  Plus,
-  Trash2,
-  ChevronDown,
-  ChevronRight,
-  Search,
-  X,
-} from "lucide-react";
+import { Plus, Trash2, ChevronDown, X } from "lucide-react";
 import { UnifiedQuestion } from "@elzatona/types";
 import {
   useQuestionFormData,
-  useOptionsManagement,
   useTagsManagement,
-  useCodeEditor,
   useCategorySearch,
   useTagSearch,
   useFormValidation,
   useFormSubmission,
 } from "./QuestionFormHooks";
-import {
-  getDefaultFormData,
-  sanitizeFormData,
-  validateQuestionField,
-  validateQuestionConsistency,
-  getLanguageDisplayName,
-  generateDefaultFileName,
-  transformFormDataForSubmission,
-  getAriaLabelForField,
-  getFieldErrorId,
-} from "./QuestionFormUtils";
+import { getAriaLabelForField, getFieldErrorId } from "./QuestionFormUtils";
 
 type Question = UnifiedQuestion;
 
@@ -79,27 +60,16 @@ export default function QuestionForm({
 }: QuestionFormProps) {
   // Extracted hooks for state management
   const { formData, updateFormData } = useQuestionFormData(initialData);
-  const { updateOption, addOption, removeOption, setCorrectAnswer } =
-    useOptionsManagement(formData, updateFormData);
   const { newTag, setNewTag, addTag, removeTag, handleTagInputKeyDown } =
     useTagsManagement(formData, updateFormData);
-  const {
-    showCodeEditor,
-    setShowCodeEditor,
-    updateCode,
-    updateLanguage,
-    updateFileName,
-  } = useCodeEditor(formData, updateFormData);
   const {
     categorySearchTerm,
     setCategorySearchTerm,
     showCategoryDropdown,
     setShowCategoryDropdown,
     filteredCategories,
-    getCategoryInfo,
   } = useCategorySearch(allCategories, categoriesData);
   const {
-    tagSearchTerm,
     setTagSearchTerm,
     showTagDropdown,
     setShowTagDropdown,
@@ -119,13 +89,6 @@ export default function QuestionForm({
     clearErrors();
   };
 
-  const handleOptionChange = (index: number, value: string) => {
-    updateOption(index, value);
-    if (value === formData.correctAnswer) {
-      setCorrectAnswer(value);
-    }
-  };
-
   const handleCategorySelect = (category: string) => {
     updateFormData({ category });
     setCategorySearchTerm(category);
@@ -140,47 +103,71 @@ export default function QuestionForm({
     setShowTagDropdown(false);
   };
 
-  const handleLanguageChange = (language: string) => {
-    updateLanguage(language);
-    if (!formData.fileName) {
-      updateFileName(generateDefaultFileName(language));
-    }
-  };
-
   const handleFormSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     handleSubmit();
   };
+
+  const buttonText = isSubmitting
+    ? "Saving..."
+    : initialData
+      ? "Update Question"
+      : "Create Question";
 
   return (
     <form onSubmit={handleFormSubmit} className="space-y-6">
       {/* Basic Question Fields */}
       <div className="space-y-4">
         <div>
-          <Label
-            htmlFor="question"
-            className={errors.question ? "text-red-500" : ""}
-          >
-            Question Text *
+          <Label htmlFor="title" className={errors.title ? "text-red-500" : ""}>
+            Question Title *
           </Label>
-          <Textarea
-            id="question"
-            value={formData.question || ""}
-            onChange={(e) => handleFieldChange("question", e.target.value)}
-            placeholder="Enter your question here..."
-            className="min-h-[100px]"
+          <Input
+            id="title"
+            value={formData.title || ""}
+            onChange={(e) => handleFieldChange("title", e.target.value)}
+            placeholder="Enter question title..."
             disabled={disabled}
-            aria-label={getAriaLabelForField("question", true)}
+            aria-label={getAriaLabelForField("title", true)}
             aria-describedby={
-              errors.question ? getFieldErrorId("question") : undefined
+              errors.title ? getFieldErrorId("title") : undefined
             }
           />
-          {errors.question && (
+          {errors.title && (
             <p
-              id={getFieldErrorId("question")}
+              id={getFieldErrorId("title")}
               className="text-sm text-red-500 mt-1"
             >
-              {errors.question}
+              {errors.title}
+            </p>
+          )}
+        </div>
+
+        <div>
+          <Label
+            htmlFor="content"
+            className={errors.content ? "text-red-500" : ""}
+          >
+            Question Content *
+          </Label>
+          <Textarea
+            id="content"
+            value={formData.content || ""}
+            onChange={(e) => handleFieldChange("content", e.target.value)}
+            placeholder="Enter your question content here..."
+            className="min-h-[100px]"
+            disabled={disabled}
+            aria-label={getAriaLabelForField("content", true)}
+            aria-describedby={
+              errors.content ? getFieldErrorId("content") : undefined
+            }
+          />
+          {errors.content && (
+            <p
+              id={getFieldErrorId("content")}
+              className="text-sm text-red-500 mt-1"
+            >
+              {errors.content}
             </p>
           )}
         </div>
@@ -196,59 +183,6 @@ export default function QuestionForm({
             disabled={disabled}
           />
         </div>
-      </div>
-
-      {/* Options Section */}
-      <div className="space-y-4">
-        <div className="flex items-center justify-between">
-          <Label>Answer Options *</Label>
-          <Button
-            type="button"
-            variant="outline"
-            size="sm"
-            onClick={addOption}
-            disabled={disabled || (formData.options?.length || 0) >= 6}
-          >
-            <Plus className="w-4 h-4 mr-2" />
-            Add Option
-          </Button>
-        </div>
-
-        <div className="space-y-2">
-          {(formData.options || ["", "", "", ""]).map((option, index) => (
-            <div key={index} className="flex items-center gap-2">
-              <Checkbox
-                checked={formData.correctAnswer === option}
-                onCheckedChange={() => setCorrectAnswer(option)}
-                disabled={disabled}
-              />
-              <Input
-                value={option}
-                onChange={(e) => handleOptionChange(index, e.target.value)}
-                placeholder={`Option ${index + 1}`}
-                disabled={disabled}
-              />
-              {(formData.options?.length || 0) > 2 && (
-                <Button
-                  type="button"
-                  variant="outline"
-                  size="sm"
-                  onClick={() => removeOption(index)}
-                  disabled={disabled}
-                >
-                  <Trash2 className="w-4 h-4" />
-                </Button>
-              )}
-            </div>
-          ))}
-        </div>
-
-        {errors.options && (
-          <p className="text-sm text-red-500">{errors.options}</p>
-        )}
-        {errors.correctAnswer && (
-          <p className="text-sm text-red-500">{errors.correctAnswer}</p>
-        )}
       </div>
 
       {/* Category and Tags */}
@@ -273,7 +207,15 @@ export default function QuestionForm({
                   <div
                     key={category}
                     className="px-3 py-2 hover:bg-gray-100 cursor-pointer"
+                    role="option"
+                    tabIndex={0}
                     onClick={() => handleCategorySelect(category)}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter" || e.key === " ") {
+                        e.preventDefault();
+                        handleCategorySelect(category);
+                      }
+                    }}
                   >
                     {category}
                   </div>
@@ -314,7 +256,15 @@ export default function QuestionForm({
                     <div
                       key={tag}
                       className="px-3 py-2 hover:bg-gray-100 cursor-pointer"
+                      role="option"
+                      tabIndex={0}
                       onClick={() => handleTagSelect(tag)}
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter" || e.key === " ") {
+                          e.preventDefault();
+                          handleTagSelect(tag);
+                        }
+                      }}
                     >
                       {tag}
                     </div>
@@ -346,77 +296,13 @@ export default function QuestionForm({
         </div>
       </div>
 
-      {/* Code Section */}
-      <Collapsible open={showCodeEditor} onOpenChange={setShowCodeEditor}>
-        <CollapsibleTrigger asChild>
-          <Button
-            type="button"
-            variant="outline"
-            className="w-full"
-            disabled={disabled}
-          >
-            <ChevronDown className="w-4 h-4 mr-2" />
-            Code Snippet (Optional)
-          </Button>
-        </CollapsibleTrigger>
-        <CollapsibleContent className="space-y-4 mt-4">
-          <div>
-            <Label htmlFor="language">Programming Language</Label>
-            <Select
-              value={formData.language || "javascript"}
-              onValueChange={handleLanguageChange}
-              disabled={disabled}
-            >
-              <SelectTrigger>
-                <SelectValue placeholder="Select language" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="javascript">JavaScript</SelectItem>
-                <SelectItem value="typescript">TypeScript</SelectItem>
-                <SelectItem value="python">Python</SelectItem>
-                <SelectItem value="java">Java</SelectItem>
-                <SelectItem value="cpp">C++</SelectItem>
-                <SelectItem value="csharp">C#</SelectItem>
-                <SelectItem value="html">HTML</SelectItem>
-                <SelectItem value="css">CSS</SelectItem>
-                <SelectItem value="sql">SQL</SelectItem>
-                <SelectItem value="json">JSON</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-
-          <div>
-            <Label htmlFor="code">Code</Label>
-            <Textarea
-              id="code"
-              value={formData.code || ""}
-              onChange={(e) => updateCode(e.target.value)}
-              placeholder="Enter your code snippet here..."
-              className="min-h-[150px] font-mono text-sm"
-              disabled={disabled}
-            />
-          </div>
-
-          <div>
-            <Label htmlFor="fileName">File Name</Label>
-            <Input
-              id="fileName"
-              value={formData.fileName || ""}
-              onChange={(e) => updateFileName(e.target.value)}
-              placeholder="example.js"
-              disabled={disabled}
-            />
-          </div>
-        </CollapsibleContent>
-      </Collapsible>
-
       {/* Additional Settings */}
       <div className="space-y-4">
         <div className="grid grid-cols-2 gap-4">
           <div>
             <Label htmlFor="difficulty">Difficulty</Label>
             <Select
-              value={formData.difficulty || "medium"}
+              value={formData.difficulty || "beginner"}
               onValueChange={(value) => handleFieldChange("difficulty", value)}
               disabled={disabled}
             >
@@ -424,9 +310,9 @@ export default function QuestionForm({
                 <SelectValue placeholder="Select difficulty" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="easy">Easy</SelectItem>
-                <SelectItem value="medium">Medium</SelectItem>
-                <SelectItem value="hard">Hard</SelectItem>
+                <SelectItem value="beginner">Beginner</SelectItem>
+                <SelectItem value="intermediate">Intermediate</SelectItem>
+                <SelectItem value="advanced">Advanced</SelectItem>
               </SelectContent>
             </Select>
           </div>
@@ -440,7 +326,10 @@ export default function QuestionForm({
               max="600"
               value={formData.timeLimit || 30}
               onChange={(e) =>
-                handleFieldChange("timeLimit", parseInt(e.target.value) || 30)
+                handleFieldChange(
+                  "timeLimit",
+                  Number.parseInt(e.target.value) || 30,
+                )
               }
               disabled={disabled}
             />
@@ -457,36 +346,25 @@ export default function QuestionForm({
               max="100"
               value={formData.points || 1}
               onChange={(e) =>
-                handleFieldChange("points", parseInt(e.target.value) || 1)
+                handleFieldChange(
+                  "points",
+                  Number.parseInt(e.target.value) || 1,
+                )
               }
               disabled={disabled}
             />
           </div>
 
-          <div className="flex items-center space-x-4">
-            <div className="flex items-center space-x-2">
-              <Checkbox
-                id="isRequired"
-                checked={formData.isRequired || false}
-                onCheckedChange={(checked) =>
-                  handleFieldChange("isRequired", checked)
-                }
-                disabled={disabled}
-              />
-              <Label htmlFor="isRequired">Required</Label>
-            </div>
-
-            <div className="flex items-center space-x-2">
-              <Checkbox
-                id="isRandomized"
-                checked={formData.isRandomized || false}
-                onCheckedChange={(checked) =>
-                  handleFieldChange("isRandomized", checked)
-                }
-                disabled={disabled}
-              />
-              <Label htmlFor="isRandomized">Randomize Options</Label>
-            </div>
+          <div className="flex items-center space-x-2">
+            <Checkbox
+              id="is_active"
+              checked={formData.is_active !== false}
+              onCheckedChange={(checked) =>
+                handleFieldChange("is_active", checked)
+              }
+              disabled={disabled}
+            />
+            <Label htmlFor="is_active">Active</Label>
           </div>
         </div>
       </div>
@@ -503,11 +381,7 @@ export default function QuestionForm({
             Cancel
           </Button>
           <Button type="submit" disabled={disabled || isSubmitting}>
-            {isSubmitting
-              ? "Saving..."
-              : initialData
-                ? "Update Question"
-                : "Create Question"}
+            {buttonText}
           </Button>
         </DialogFooter>
       )}

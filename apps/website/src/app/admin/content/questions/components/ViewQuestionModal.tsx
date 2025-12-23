@@ -458,9 +458,66 @@ export function ViewQuestionModal({
       : "bg-gray-100 border-gray-200";
   };
 
+  // Helper function to get option styling classes
+  const getOptionStylingClasses = (
+    isCorrect: boolean,
+    isWrong: boolean,
+    showFeedback: boolean,
+  ): string => {
+    if (isCorrect && showFeedback) {
+      return "bg-gradient-to-br from-green-500 to-emerald-600 text-white shadow-green-500/50";
+    } else if (isWrong) {
+      return "bg-gradient-to-br from-red-500 to-rose-600 text-white shadow-red-500/50";
+    } else {
+      return "bg-gradient-to-br from-indigo-100 to-purple-100 dark:from-indigo-800/60 dark:to-purple-800/60 text-indigo-700 dark:text-indigo-200";
+    }
+  };
+
   // Helper function to get shiki wrapper class
   const getShikiWrapperClass = (codeTheme: string): string => {
     return codeTheme === "light" ? "shiki-light-mode" : "shiki-dark-mode";
+  };
+
+  // Helper function to get resource icon based on type
+  const getResourceIcon = (resourceType: string) => {
+    switch (resourceType) {
+      case "video":
+        return <Video className="w-5 h-5 sm:w-6 sm:h-6" />;
+      case "course":
+        return <GraduationCap className="w-5 h-5 sm:w-6 sm:h-6" />;
+      case "article":
+        return <FileText className="w-5 h-5 sm:w-6 sm:h-6" />;
+      default:
+        return <BookOpen className="w-5 h-5 sm:w-6 sm:h-6" />;
+    }
+  };
+
+  // Helper function to get resource color classes based on type
+  const getResourceColorClasses = (resourceType: string): string => {
+    switch (resourceType) {
+      case "video":
+        return "from-red-500 to-pink-600 dark:from-red-500 dark:to-rose-600 border-red-400 dark:border-red-500";
+      case "course":
+        return "from-blue-500 to-indigo-600 dark:from-blue-500 dark:to-indigo-500 border-blue-400 dark:border-blue-400";
+      case "article":
+        return "from-green-500 to-emerald-600 dark:from-green-500 dark:to-emerald-500 border-green-400 dark:border-green-400";
+      default:
+        return "from-indigo-500 to-purple-600 dark:from-indigo-500 dark:to-purple-500 border-indigo-400 dark:border-indigo-400";
+    }
+  };
+
+  // Helper function to get resource type label
+  const getResourceTypeLabel = (resourceType: string): string => {
+    switch (resourceType) {
+      case "video":
+        return "Video";
+      case "course":
+        return "Course";
+      case "article":
+        return "Article";
+      default:
+        return "Resource";
+    }
   };
 
   // Helper function to render code display with Shiki highlighting
@@ -811,15 +868,11 @@ export function ViewQuestionModal({
                 >
                   <div className="flex items-center space-x-4 sm:space-x-5">
                     <div
-                      className={`w-10 h-10 sm:w-12 sm:h-12 rounded-xl flex items-center justify-center text-base sm:text-lg font-bold shadow-md transition-all duration-300 flex-shrink-0 ${(() => {
-                        if (isCorrect && showFeedback) {
-                          return "bg-gradient-to-br from-green-500 to-emerald-600 text-white shadow-green-500/50";
-                        } else if (isWrong) {
-                          return "bg-gradient-to-br from-red-500 to-rose-600 text-white shadow-red-500/50";
-                        } else {
-                          return "bg-gradient-to-br from-indigo-100 to-purple-100 dark:from-indigo-800/60 dark:to-purple-800/60 text-indigo-700 dark:text-indigo-200";
-                        }
-                      })()}`}
+                      className={`w-10 h-10 sm:w-12 sm:h-12 rounded-xl flex items-center justify-center text-base sm:text-lg font-bold shadow-md transition-all duration-300 flex-shrink-0 ${getOptionStylingClasses(
+                        isCorrect,
+                        isWrong,
+                        showFeedback,
+                      )}`}
                     >
                       {optionLetter}
                     </div>
@@ -888,47 +941,6 @@ export function ViewQuestionModal({
               </div>
               <div className="space-y-3 sm:space-y-4">
                 {question.resources.map((resource: any, index: number) => {
-                  const getIcon = () => {
-                    switch (resource.type) {
-                      case "video":
-                        return <Video className="w-5 h-5 sm:w-6 sm:h-6" />;
-                      case "course":
-                        return (
-                          <GraduationCap className="w-5 h-5 sm:w-6 sm:h-6" />
-                        );
-                      case "article":
-                        return <FileText className="w-5 h-5 sm:w-6 sm:h-6" />;
-                      default:
-                        return <BookOpen className="w-5 h-5 sm:w-6 sm:h-6" />;
-                    }
-                  };
-
-                  const getTypeColor = () => {
-                    switch (resource.type) {
-                      case "video":
-                        return "from-red-500 to-pink-600 dark:from-red-500 dark:to-rose-600 border-red-400 dark:border-red-500";
-                      case "course":
-                        return "from-blue-500 to-indigo-600 dark:from-blue-500 dark:to-indigo-500 border-blue-400 dark:border-blue-400";
-                      case "article":
-                        return "from-green-500 to-emerald-600 dark:from-green-500 dark:to-emerald-500 border-green-400 dark:border-green-400";
-                      default:
-                        return "from-indigo-500 to-purple-600 dark:from-indigo-500 dark:to-purple-500 border-indigo-400 dark:border-indigo-400";
-                    }
-                  };
-
-                  const getTypeLabel = () => {
-                    switch (resource.type) {
-                      case "video":
-                        return "Video";
-                      case "course":
-                        return "Course";
-                      case "article":
-                        return "Article";
-                      default:
-                        return "Resource";
-                    }
-                  };
-
                   return (
                     <a
                       key={
@@ -941,14 +953,16 @@ export function ViewQuestionModal({
                       href={resource.url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className={`block p-4 rounded-xl border-2 bg-gradient-to-r ${getTypeColor()} text-white shadow-lg dark:shadow-2xl hover:shadow-xl dark:hover:shadow-2xl transition-all transform hover:scale-[1.02]`}
+                      className={`block p-4 rounded-xl border-2 bg-gradient-to-r ${getResourceColorClasses(resource.type)} text-white shadow-lg dark:shadow-2xl hover:shadow-xl dark:hover:shadow-2xl transition-all transform hover:scale-[1.02]`}
                     >
                       <div className="flex items-center space-x-3">
-                        <div className="flex-shrink-0">{getIcon()}</div>
+                        <div className="flex-shrink-0">
+                          {getResourceIcon(resource.type)}
+                        </div>
                         <div className="flex-1 min-w-0">
                           <div className="flex items-center justify-between mb-1">
                             <span className="text-xs font-semibold uppercase tracking-wider text-white/95">
-                              {getTypeLabel()}
+                              {getResourceTypeLabel(resource.type)}
                             </span>
                           </div>
                           <h4 className="text-base sm:text-lg font-bold mb-1 truncate text-white">
