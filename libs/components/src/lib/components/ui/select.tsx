@@ -82,7 +82,7 @@ const Select = React.forwardRef<
             {selectItems.map((item) => {
               if (React.isValidElement(item)) {
                 return (
-                  <div
+                  <option
                     key={item.props.value}
                     className="px-3 py-2 text-sm hover:bg-accent hover:text-accent-foreground cursor-pointer"
                     onClick={() => handleValueChange(item.props.value)}
@@ -92,12 +92,11 @@ const Select = React.forwardRef<
                         handleValueChange(item.props.value);
                       }
                     }}
-                    role="option"
-                    tabIndex={0}
-                    aria-selected={selectedValue === item.props.value}
+                    value={item.props.value}
+                    selected={selectedValue === item.props.value}
                   >
                     {item.props.children}
-                  </div>
+                  </option>
                 );
               }
               return item;

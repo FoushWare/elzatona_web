@@ -199,6 +199,14 @@ export const NavbarSimple: React.FC = () => {
     return pathname?.startsWith(href) || false;
   };
 
+  // Extract link styling logic to reduce nested ternary operations
+  const getLinkClassName = (href: string, activeColors: string, hoverColors: string) => {
+    const baseClasses = "block w-full text-center py-2.5 sm:py-3 font-medium transition-colors duration-200 text-sm sm:text-base rounded-lg";
+    const isActive = isActiveLink(href);
+    const activeClasses = isActive ? activeColors : hoverColors;
+    return `${baseClasses} ${activeClasses}`;
+  };
+
   // Handle sign out
   const handleSignOut = async () => {
     try {
@@ -620,11 +628,11 @@ export const NavbarSimple: React.FC = () => {
                   {/* Profile Actions */}
                   <Link
                     href="/profile"
-                    className={`block w-full text-center py-2.5 sm:py-3 font-medium transition-colors duration-200 text-sm sm:text-base rounded-lg ${
-                      isActiveLink("/profile")
-                        ? "text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-900/30 font-semibold"
-                        : "text-gray-700 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-gray-50 dark:hover:bg-gray-800"
-                    }`}
+                    className={getLinkClassName(
+                      "/profile",
+                      "text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-900/30 font-semibold",
+                      "text-gray-700 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-gray-50 dark:hover:bg-gray-800"
+                    )}
                     onClick={() => setIsOpen(false)}
                   >
                     <Settings className="w-4 h-4 inline mr-2" />
@@ -634,11 +642,11 @@ export const NavbarSimple: React.FC = () => {
                   {/* Admin Panel Link */}
                   <Link
                     href="/admin"
-                    className={`block w-full text-center py-2.5 sm:py-3 font-medium transition-colors duration-200 text-sm sm:text-base rounded-lg ${
-                      isActiveLink("/admin")
-                        ? "text-purple-600 dark:text-purple-400 bg-purple-50 dark:bg-purple-900/30 font-semibold"
-                        : "text-gray-700 dark:text-gray-300 hover:text-purple-600 dark:hover:text-purple-400 hover:bg-gray-50 dark:hover:bg-gray-800"
-                    }`}
+                    className={getLinkClassName(
+                      "/admin",
+                      "text-purple-600 dark:text-purple-400 bg-purple-50 dark:bg-purple-900/30 font-semibold",
+                      "text-gray-700 dark:text-gray-300 hover:text-purple-600 dark:hover:text-purple-400 hover:bg-gray-50 dark:hover:bg-gray-800"
+                    )}
                     onClick={() => setIsOpen(false)}
                   >
                     <User className="w-4 h-4 inline mr-2" />

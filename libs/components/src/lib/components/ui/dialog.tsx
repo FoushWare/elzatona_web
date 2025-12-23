@@ -12,15 +12,14 @@ const Dialog = React.forwardRef<
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center">
-      <div
-        className="fixed inset-0 bg-black/50"
+      <button
+        className="fixed inset-0 bg-black/50 border-0 cursor-pointer"
         onClick={() => onOpenChange?.(false)}
         onKeyDown={(e) => {
           if (e.key === "Escape") {
             onOpenChange?.(false);
           }
         }}
-        role="button"
         tabIndex={0}
         aria-label="Close dialog"
       />
