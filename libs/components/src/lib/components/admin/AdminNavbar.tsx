@@ -21,7 +21,8 @@ import {
 import { useAdminAuth, useTheme } from "@elzatona/contexts";
 import AlzatonaLogo from "../../common/AlzatonaLogo";
 
-export default function AdminNavbar() {
+// Custom hook to consolidate all navbar state management
+const useAdminNavbarState = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [isUserDropdownOpen, setIsUserDropdownOpen] = useState(false);
@@ -71,6 +72,31 @@ export default function AdminNavbar() {
     // Redirect to login page using Next.js router
     router.replace("/admin/login");
   };
+
+  return {
+    // State
+    isOpen,
+    setIsOpen,
+    isScrolled,
+    isUserDropdownOpen,
+    setIsUserDropdownOpen,
+    isAdminDropdownOpen,
+    setIsAdminDropdownOpen,
+    isClient,
+    // Auth and theme
+    user,
+    isAuthenticated,
+    isDarkMode,
+    toggleDarkMode,
+    // Navigation
+    isLoginPage,
+    // Handlers
+    handleLogout,
+  };
+};
+
+export default function AdminNavbar() {
+  const navbarState = useAdminNavbarState();
 
   const adminMenuItems = [
     {

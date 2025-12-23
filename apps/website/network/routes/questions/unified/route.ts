@@ -37,7 +37,7 @@ function getSupabaseClient() {
 }
 
 // Simple in-memory cache for questions (resets on server restart)
-const _questionsCache: Array<{
+let _questionsCache: Array<{
   id: string;
   [key: string]: unknown;
 }> | null = null;

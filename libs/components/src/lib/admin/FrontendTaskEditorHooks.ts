@@ -142,6 +142,112 @@ export const usePanelLayout = () => {
   };
 };
 
+// Helper function to create file tree structure
+const createFileTree = (files: Array<FileNode & { fileType?: string }>) => {
+  return [
+    {
+      id: "src",
+      name: "src",
+      type: "folder" as const,
+      children: files.filter((f) => f.fileType !== "html" && f.fileType !== "json"),
+    },
+    {
+      id: "public",
+      name: "public",
+      type: "folder" as const,
+      children: files.filter((f) => f.fileType === "html"),
+    },
+    {
+      id: "root",
+      name: "Root",
+      type: "folder" as const,
+      children: files.filter((f) => f.fileType === "json"),
+    },
+  ];
+};
+
+// Helper function to create default files
+const createDefaultFiles = () => {
+  return [
+    {
+      id: "app",
+      name: "App.tsx",
+      type: "file" as const,
+      fileType: "tsx",
+      content: "",
+    },
+    {
+      id: "styles",
+      name: "styles.css",
+      type: "file" as const,
+      fileType: "css",
+      content: "",
+    },
+    {
+      id: "index",
+      name: "index.html",
+      type: "file" as const,
+      fileType: "html",
+      content:
+        '<!doctype html>\n<html lang="en">\n  <head>\n    <meta charset="UTF-8" />\n    <meta name="viewport" content="width=device-width, initial-scale=1.0" />\n  </head>\n  <body>\n    <div id="root"></div>\n  </body>\n</html>',
+    },
+  ];
+};
+
+// Helper function to initialize from task files
+const initializeFromTask = (task: FrontendTask) => {
+  const files = task.files.map((file) => ({
+    id: file.id,
+    name: file.name,
+    type: "file" as const,
+    content: file.content,
+    fileType: file.type,
+    isEntryPoint: file.isEntryPoint,
+  }));
+
+  return {
+    fileTree: createFileTree(files),
+    openFiles: files.map((f) => ({
+      id: f.id,
+      name: f.name,
+      type: f.fileType as "tsx" | "css" | "html" | "js" | "json",
+      content: f.content,
+    })),
+    activeFile: files.find((f) => f.isEntryPoint)?.id || files[0]?.id || null,
+    expandedFolders: new Set(["src", "public", "root"]),
+  };
+};
+
+// Helper function to initialize default files
+const initializeDefaults = () => {
+  const defaultFiles = createDefaultFiles();
+  
+  return {
+    fileTree: [
+      {
+        id: "src",
+        name: "src",
+        type: "folder" as const,
+        children: defaultFiles.filter((f) => f.fileType !== "html"),
+      },
+      {
+        id: "public",
+        name: "public",
+        type: "folder" as const,
+        children: defaultFiles.filter((f) => f.fileType === "html"),
+      },
+    ],
+    openFiles: defaultFiles.map((f) => ({
+      id: f.id,
+      name: f.name,
+      type: f.fileType as "tsx" | "css" | "html" | "js" | "json",
+      content: f.content,
+    })),
+    activeFile: "app",
+    expandedFolders: new Set(["src", "public"]),
+  };
+};
+
 // Hook for file management
 export const useFileManagement = (task?: FrontendTask | null) => {
   const [activeFile, setActiveFile] = useState<string | null>(null);
@@ -162,102 +268,17 @@ export const useFileManagement = (task?: FrontendTask | null) => {
   // Initialize file tree and open files
   useEffect(() => {
     if (task?.files && task.files.length > 0) {
-      const files = task.files.map((file) => ({
-        id: file.id,
-        name: file.name,
-        type: "file" as const,
-        content: file.content,
-        fileType: file.type,
-        isEntryPoint: file.isEntryPoint,
-      }));
-
-      setFileTree([
-        {
-          id: "src",
-          name: "src",
-          type: "folder",
-          children: files.filter(
-            (f) => f.fileType !== "html" && f.fileType !== "json",
-          ),
-        },
-        {
-          id: "public",
-          name: "public",
-          type: "folder",
-          children: files.filter((f) => f.fileType === "html"),
-        },
-        {
-          id: "root",
-          name: "Root",
-          type: "folder",
-          children: files.filter((f) => f.fileType === "json"),
-        },
-      ]);
-
-      setOpenFiles(
-        files.map((f) => ({
-          id: f.id,
-          name: f.name,
-          type: f.fileType as "tsx" | "css" | "html" | "js" | "json",
-          content: f.content,
-        })),
-      );
-      setActiveFile(
-        files.find((f) => f.isEntryPoint)?.id || files[0]?.id || null,
-      );
-      setExpandedFolders(new Set(["src", "public", "root"]));
+      const { fileTree: tree, openFiles: files, activeFile: active, expandedFolders: folders } = initializeFromTask(task);
+      setFileTree(tree);
+      setOpenFiles(files);
+      setActiveFile(active);
+      setExpandedFolders(folders);
     } else {
-      // Default files
-      const defaultFiles = [
-        {
-          id: "app",
-          name: "App.tsx",
-          type: "file" as const,
-          fileType: "tsx",
-          content: "",
-        },
-        {
-          id: "styles",
-          name: "styles.css",
-          type: "file" as const,
-          fileType: "css",
-          content: "",
-        },
-        {
-          id: "index",
-          name: "index.html",
-          type: "file" as const,
-          fileType: "html",
-          content:
-            '<!doctype html>\n<html lang="en">\n  <head>\n    <meta charset="UTF-8" />\n    <meta name="viewport" content="width=device-width, initial-scale=1.0" />\n  </head>\n  <body>\n    <div id="root"></div>\n  </body>\n</html>',
-        },
-      ];
-
-      setFileTree([
-        {
-          id: "src",
-          name: "src",
-          type: "folder",
-          children: defaultFiles.filter((f) => f.fileType !== "html"),
-        },
-        {
-          id: "public",
-          name: "public",
-          type: "folder",
-          children: defaultFiles.filter((f) => f.fileType === "html"),
-        },
-      ]);
-
-      setOpenFiles(
-        defaultFiles.map((f) => ({
-          id: f.id,
-          name: f.name,
-          type: f.fileType as "tsx" | "css" | "html" | "js" | "json",
-          content: f.content,
-        })),
-      );
-      setActiveFile("app");
-      setExpandedFolders(new Set(["src", "public"]));
+      const { fileTree: tree, openFiles: files, activeFile: active, expandedFolders: folders } = initializeDefaults();
+      setFileTree(tree);
+      setOpenFiles(files);
+      setActiveFile(active);
+      setExpandedFolders(folders);
     }
   }, [task]);
 

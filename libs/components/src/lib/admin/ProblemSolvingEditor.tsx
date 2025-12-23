@@ -38,12 +38,8 @@ interface ProblemSolvingEditorProps {
   isEditing?: boolean;
 }
 
-export default function ProblemSolvingEditor({
-  task,
-  onSave,
-  onCancel,
-  isEditing = false,
-}: ProblemSolvingEditorProps) {
+// Custom hook to consolidate all problem solving editor state management
+const useProblemSolvingEditorState = (task?: ProblemSolvingTask | null) => {
   // Extracted hooks for state management
   const { theme, setTheme, isDark } = useThemeManagement();
   const { formData, setFormData } = useFormDataManagement(task);
@@ -65,6 +61,46 @@ export default function ProblemSolvingEditor({
   const [activeBrowserTab, setActiveBrowserTab] = React.useState<
     "browser" | "console"
   >("browser");
+
+  return {
+    // Theme management
+    theme,
+    setTheme,
+    isDark,
+    // Form data
+    formData,
+    setFormData,
+    // Code editor management
+    starterCode,
+    setStarterCode,
+    solutionCode,
+    setSolutionCode,
+    activeTab,
+    setActiveTab,
+    // File explorer and dynamic fields
+    fileExplorerState,
+    dynamicFieldsState,
+    // Panel layout
+    leftPanelWidth,
+    rightPanelWidth,
+    handleMouseDown,
+    // Local state
+    copied,
+    setCopied,
+    showPreview,
+    setShowPreview,
+    activeBrowserTab,
+    setActiveBrowserTab,
+  };
+};
+
+export default function ProblemSolvingEditor({
+  task,
+  onSave,
+  onCancel,
+  isEditing = false,
+}: ProblemSolvingEditorProps) {
+  const editorState = useProblemSolvingEditorState(task);
 
   // Simple form handlers
   const handleSave = () => {

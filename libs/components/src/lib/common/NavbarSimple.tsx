@@ -30,7 +30,58 @@ import { AlzatonaLogo } from "./AlzatonaLogo";
 
 // import { LearningModeSwitcher } from '../learning/LearningModeSwitcher';
 
-export const NavbarSimple: React.FC = () => {
+// Helper function to get link styling
+const getLinkStyles = (isActive: boolean, isScrolled: boolean) => {
+  if (isActive) {
+    return isScrolled
+      ? "text-indigo-600 dark:text-indigo-400 font-semibold border-b-2 border-indigo-600 dark:border-indigo-400 pb-1"
+      : "text-indigo-100 font-semibold border-b-2 border-indigo-100 pb-1";
+  }
+  return isScrolled
+    ? "text-gray-700 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400"
+    : "text-white hover:text-indigo-100";
+};
+
+// Helper function to get logo styling
+const getLogoStyles = (isScrolled: boolean) => {
+  return isScrolled
+    ? "text-gray-900 dark:text-white hover:text-indigo-600 dark:hover:text-indigo-400"
+    : "text-white hover:text-indigo-100";
+};
+
+// Helper function to get navbar styling
+const getNavbarStyles = (isScrolled: boolean) => {
+  return isScrolled
+    ? "bg-white/98 dark:bg-gray-900/98 backdrop-blur-lg shadow-xl border-b border-gray-200 dark:border-gray-700"
+    : "bg-gradient-to-r from-indigo-600 via-purple-600 to-blue-600";
+};
+
+// Helper function to get loading state styling
+const getLoadingStyles = (isScrolled: boolean) => {
+  return isScrolled
+    ? "bg-gray-200 dark:bg-gray-700 text-gray-500 dark:text-gray-400"
+    : "bg-gray-200/20 text-gray-300";
+};
+
+// Navigation link component
+const NavigationLink: React.FC<{
+  href: string;
+  children: React.ReactNode;
+  isScrolled: boolean;
+  pathname: string;
+}> = ({ href, children, isScrolled, pathname }) => {
+  const isActive = href === "/" ? pathname === "/" : pathname?.startsWith(href) || false;
+  const styles = getLinkStyles(isActive, isScrolled);
+  
+  return (
+    <Link href={href} className={`font-medium transition-colors duration-200 ${styles}`}>
+      {children}
+    </Link>
+  );
+};
+
+// Custom hook to consolidate all navbar simple state management
+const useNavbarSimpleState = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
@@ -46,6 +97,60 @@ export const NavbarSimple: React.FC = () => {
   const { isDarkMode, toggleDarkMode } = useTheme();
   const { user, isAuthenticated, isLoading: isAuthLoading, logout } = useAuth();
   const pathname = usePathname();
+
+  return {
+    // State
+    isScrolled,
+    setIsScrolled,
+    isOpen,
+    setIsOpen,
+    isMobile,
+    setIsMobile,
+    isUserDropdownOpen,
+    setIsUserDropdownOpen,
+    isHydrated,
+    setIsHydrated,
+    stableAuthState,
+    setStableAuthState,
+    // Hooks
+    userType,
+    setUserType,
+    setIsMobileMenuOpen,
+    isDarkMode,
+    toggleDarkMode,
+    user,
+    isAuthenticated,
+    isAuthLoading,
+    logout,
+    pathname,
+  };
+};
+
+export const NavbarSimple: React.FC = () => {
+  const {
+    isScrolled,
+    setIsScrolled,
+    isOpen,
+    setIsOpen,
+    isMobile,
+    setIsMobile,
+    isUserDropdownOpen,
+    setIsUserDropdownOpen,
+    isHydrated,
+    setIsHydrated,
+    stableAuthState,
+    setStableAuthState,
+    userType,
+    setUserType,
+    setIsMobileMenuOpen,
+    isDarkMode,
+    toggleDarkMode,
+    user,
+    isAuthenticated,
+    isAuthLoading,
+    logout,
+    pathname,
+  } = useNavbarSimpleState();
 
   // Prevent hydration mismatch and flashing by using stable auth state
   useEffect(() => {
@@ -77,18 +182,10 @@ export const NavbarSimple: React.FC = () => {
         stableAuthState.isLoading !== newState.isLoading
       ) {
         setStableAuthState(newState);
-
-        // Store in session storage for persistence across page reloads
         sessionStorage.setItem("navbar-auth-state", JSON.stringify(newState));
       }
     }
-  }, [
-    isAuthenticated,
-    isAuthLoading,
-    isHydrated,
-    stableAuthState.isAuthenticated,
-    stableAuthState.isLoading,
-  ]);
+  }, [isHydrated, isAuthenticated, isAuthLoading, stableAuthState]);
 
   // Helper function to check if a link is active
   const isActiveLink = (href: string) => {
@@ -170,22 +267,14 @@ export const NavbarSimple: React.FC = () => {
 
   return (
     <nav
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ease-in-out ${
-        isScrolled
-          ? "bg-white/98 dark:bg-gray-900/98 backdrop-blur-lg shadow-xl border-b border-gray-200 dark:border-gray-700"
-          : "bg-gradient-to-r from-indigo-600 via-purple-600 to-blue-600"
-      }`}
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ease-in-out ${getNavbarStyles(isScrolled)}`}
     >
       <div className="w-full px-3 sm:px-4 lg:px-8">
         <div className="flex items-center justify-between h-16 sm:h-18 lg:h-20">
           {/* Logo */}
           <Link
             href="/"
-            className={`flex items-center transition-colors duration-200 ${
-              isScrolled
-                ? "text-gray-900 dark:text-white hover:text-indigo-600 dark:hover:text-indigo-400"
-                : "text-white hover:text-indigo-100"
-            }`}
+            className={`flex items-center transition-colors duration-200 ${getLogoStyles(isScrolled)}`}
           >
             <AlzatonaLogo size="sm" showText={false} />
           </Link>
@@ -193,72 +282,22 @@ export const NavbarSimple: React.FC = () => {
           {/* Desktop Navigation - Only show for authenticated users */}
           {stableAuthState.isAuthenticated && (
             <div className="hidden lg:flex items-center space-x-6 flex-1 justify-center">
-              {/* Navigation Links - Only for authenticated users */}
-              <Link
-                href="/practice"
-                className={`font-medium transition-colors duration-200 ${
-                  isActiveLink("/practice")
-                    ? isScrolled
-                      ? "text-indigo-600 dark:text-indigo-400 font-semibold border-b-2 border-indigo-600 dark:border-indigo-400 pb-1"
-                      : "text-indigo-100 font-semibold border-b-2 border-indigo-100 pb-1"
-                    : isScrolled
-                      ? "text-gray-700 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400"
-                      : "text-white hover:text-indigo-100"
-                }`}
-              >
+              <NavigationLink href="/practice" isScrolled={isScrolled} pathname={pathname}>
                 Practice
-              </Link>
-              <Link
-                href="/progress"
-                className={`font-medium transition-colors duration-200 ${
-                  isActiveLink("/progress")
-                    ? isScrolled
-                      ? "text-indigo-600 dark:text-indigo-400 font-semibold border-b-2 border-indigo-600 dark:border-indigo-400 pb-1"
-                      : "text-indigo-100 font-semibold border-b-2 border-indigo-100 pb-1"
-                    : isScrolled
-                      ? "text-gray-700 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400"
-                      : "text-white hover:text-indigo-100"
-                }`}
-              >
+              </NavigationLink>
+              <NavigationLink href="/progress" isScrolled={isScrolled} pathname={pathname}>
                 Progress
-              </Link>
-              <Link
-                href="/my-plans"
-                className={`font-medium transition-colors duration-200 ${(() => {
-                  if (isActiveLink("/my-plans")) {
-                    return isScrolled
-                      ? "text-indigo-600 dark:text-indigo-400 font-semibold border-b-2 border-indigo-600 dark:border-indigo-400 pb-1"
-                      : "text-indigo-100 font-semibold border-b-2 border-indigo-100 pb-1";
-                  }
-                  return isScrolled
-                    ? "text-gray-700 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400"
-                    : "text-white hover:text-indigo-100";
-                })()}`}
-              >
+              </NavigationLink>
+              <NavigationLink href="/my-plans" isScrolled={isScrolled} pathname={pathname}>
                 My Plans
-              </Link>
-              <Link
-                href={
-                  userType === "self-directed"
-                    ? "/free-style-roadmap"
-                    : "/learn"
-                }
-                className={`font-medium transition-colors duration-200 ${
-                  isActiveLink(
-                    userType === "self-directed"
-                      ? "/free-style-roadmap"
-                      : "/learn",
-                  )
-                    ? isScrolled
-                      ? "text-indigo-600 dark:text-indigo-400 font-semibold border-b-2 border-indigo-600 dark:border-indigo-400 pb-1"
-                      : "text-indigo-100 font-semibold border-b-2 border-indigo-100 pb-1"
-                    : isScrolled
-                      ? "text-gray-700 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400"
-                      : "text-white hover:text-indigo-100"
-                }`}
+              </NavigationLink>
+              <NavigationLink 
+                href={userType === "self-directed" ? "/free-style-roadmap" : "/learn"} 
+                isScrolled={isScrolled} 
+                pathname={pathname}
               >
                 {userType === "self-directed" ? "My Roadmap" : "Learn"}
-              </Link>
+              </NavigationLink>
             </div>
           )}
 
@@ -270,13 +309,7 @@ export const NavbarSimple: React.FC = () => {
 
             {/* Sign In / Logout Link */}
             {stableAuthState.isLoading ? (
-              <div
-                className={`px-4 py-2 rounded-lg font-medium ${
-                  isScrolled
-                    ? "bg-gray-200 dark:bg-gray-700 text-gray-500 dark:text-gray-400"
-                    : "bg-gray-200/20 text-gray-300"
-                }`}
-              >
+              <div className={`px-4 py-2 rounded-lg font-medium ${getLoadingStyles(isScrolled)}`}>
                 Loading...
               </div>
             ) : stableAuthState.isAuthenticated ? (

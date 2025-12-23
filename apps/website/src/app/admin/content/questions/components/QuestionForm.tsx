@@ -45,19 +45,15 @@ interface QuestionFormProps {
   readonly externalSubmitTrigger?: number;
 }
 
-export default function QuestionForm({
-  initialData,
-  onSubmit,
-  onCancel,
-  cards,
-  allCategories,
-  allTags,
-  categoriesData,
-  topicsData,
-  disabled = false,
-  hideFooter = false,
-  externalSubmitTrigger,
-}: QuestionFormProps) {
+// Custom hook to consolidate all form state management
+const useQuestionFormState = (
+  initialData: UnifiedQuestion | null,
+  allCategories: string[],
+  categoriesData: any[],
+  allTags: string[],
+  onSubmit: (data: Partial<UnifiedQuestion>) => void,
+  externalSubmitTrigger?: number
+) => {
   // Extracted hooks for state management
   const { formData, updateFormData } = useQuestionFormData(initialData);
   const { newTag, setNewTag, addTag, removeTag, handleTagInputKeyDown } =
@@ -102,6 +98,58 @@ export default function QuestionForm({
     setTagSearchTerm("");
     setShowTagDropdown(false);
   };
+
+  return {
+    // Form data
+    formData,
+    newTag,
+    setNewTag,
+    categorySearchTerm,
+    setCategorySearchTerm,
+    showCategoryDropdown,
+    setShowCategoryDropdown,
+    filteredCategories,
+    showTagDropdown,
+    setShowTagDropdown,
+    filteredTags,
+    setTagSearchTerm,
+    errors,
+    isSubmitting,
+    // Event handlers
+    updateFormData,
+    addTag,
+    removeTag,
+    handleTagInputKeyDown,
+    handleFieldChange,
+    handleCategorySelect,
+    handleTagSelect,
+    handleSubmit,
+    validateForm,
+    clearErrors,
+  };
+};
+
+export default function QuestionForm({
+  initialData,
+  onSubmit,
+  onCancel,
+  cards,
+  allCategories,
+  allTags,
+  categoriesData,
+  topicsData,
+  disabled = false,
+  hideFooter = false,
+  externalSubmitTrigger,
+}: QuestionFormProps) {
+  const formState = useQuestionFormState(
+    initialData,
+    allCategories,
+    categoriesData,
+    allTags,
+    onSubmit,
+    externalSubmitTrigger
+  );
 
   const handleFormSubmit = (e: React.FormEvent) => {
     e.preventDefault();

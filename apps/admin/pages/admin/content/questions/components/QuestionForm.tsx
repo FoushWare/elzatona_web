@@ -264,6 +264,53 @@ const createFormHandlers = (
   },
 });
 
+// Helper hook to manage collapsible sections state
+const useCollapsibleSections = (initialData: UnifiedQuestion | null, readOnly: boolean) => {
+  const initialState = initializeFormState(initialData || null, readOnly);
+  const [showQuestionInfo, setShowQuestionInfo] = useState(initialState.showQuestionInfo);
+  const [showContent, setShowContent] = useState(initialState.showContent);
+  const [showOptions, setShowOptions] = useState(initialState.showOptions);
+  const [showExplanation, setShowExplanation] = useState(initialState.showExplanation);
+  const [showResources, setShowResources] = useState(initialState.showResources);
+  const [showAdditionalSettings, setShowAdditionalSettings] = useState(initialState.showAdditionalSettings);
+
+  // Separate effect to handle collapsible sections based on readOnly mode
+  useEffect(() => {
+    if (readOnly) {
+      // View mode: show everything
+      setShowQuestionInfo(true);
+      setShowContent(true);
+      setShowOptions(true);
+      setShowExplanation(true);
+      setShowResources(true);
+      setShowAdditionalSettings(true);
+    } else {
+      // Edit mode: start collapsed, only expand if has content
+      setShowQuestionInfo(false);
+      setShowContent(false);
+      setShowOptions(false);
+      setShowExplanation(!!initialData?.explanation);
+      setShowResources(!!(initialData as any)?.resources);
+      setShowAdditionalSettings(false);
+    }
+  }, [readOnly, initialData]);
+
+  return {
+    showQuestionInfo,
+    setShowQuestionInfo,
+    showContent,
+    setShowContent,
+    showOptions,
+    setShowOptions,
+    showExplanation,
+    setShowExplanation,
+    showResources,
+    setShowResources,
+    showAdditionalSettings,
+    setShowAdditionalSettings,
+  };
+};
+
 export const QuestionForm = React.forwardRef<
   HTMLFormElement,
   QuestionFormProps
@@ -284,20 +331,8 @@ export const QuestionForm = React.forwardRef<
     const [formData, setFormData] = useState<Partial<UnifiedQuestion>>(
       initialState.formData,
     );
-    const [showQuestionInfo, setShowQuestionInfo] = useState(
-      initialState.showQuestionInfo,
-    );
-    const [showContent, setShowContent] = useState(initialState.showContent);
-    const [showOptions, setShowOptions] = useState(initialState.showOptions);
-    const [showExplanation, setShowExplanation] = useState(
-      initialState.showExplanation,
-    );
-    const [showResources, setShowResources] = useState(
-      initialState.showResources,
-    );
-    const [showAdditionalSettings, setShowAdditionalSettings] = useState(
-      initialState.showAdditionalSettings,
-    );
+
+    const collapsibleSections = useCollapsibleSections(initialData, readOnly);
 
     useEffect(() => {
       if (initialData) {
@@ -311,27 +346,6 @@ export const QuestionForm = React.forwardRef<
         });
       }
     }, [initialData]);
-
-    // Separate effect to handle collapsible sections based on readOnly mode
-    useEffect(() => {
-      if (readOnly) {
-        // View mode: show everything
-        setShowQuestionInfo(true);
-        setShowContent(true);
-        setShowOptions(true);
-        setShowExplanation(true);
-        setShowResources(true);
-        setShowAdditionalSettings(true);
-      } else {
-        // Edit mode: start collapsed, only expand if has content
-        setShowQuestionInfo(false);
-        setShowContent(false);
-        setShowOptions(false);
-        setShowExplanation(!!initialData?.explanation);
-        setShowResources(!!(initialData as any)?.resources);
-        setShowAdditionalSettings(false);
-      }
-    }, [readOnly, initialData]);
 
     const handlers = createFormHandlers(setFormData);
 

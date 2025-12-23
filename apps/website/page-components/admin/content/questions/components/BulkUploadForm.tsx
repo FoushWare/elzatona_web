@@ -203,74 +203,81 @@ export function BulkUploadForm({
                     }
                   });
 
+                  // Helper function to calculate brightness from RGB values
+const calculateBrightness = (r: number, g: number, b: number): number => {
+  return (r * 299 + g * 587 + b * 114) / 1000;
+};
+
+// Helper function to get dimming factor based on brightness
+const getDimmingFactor = (brightness: number): number => {
+  return brightness > 220 ? 0.3 : 0.5;
+};
+
+// Helper function to apply dimming to RGB values
+const applyDimming = (r: number, g: number, b: number, factor: number) => {
+  const newR = Math.max(0, Math.min(255, Math.round(r * factor)));
+  const newG = Math.max(0, Math.min(255, Math.round(g * factor)));
+  const newB = Math.max(0, Math.min(255, Math.round(b * factor)));
+  return { newR, newG, newB };
+};
+
+// Helper function to process hex color
+const processHexColor = (colorValue: string): { shouldReplace: boolean; newColor: string } => {
+  const hex = colorValue.substring(1);
+  const r = Number.parseInt(hex.substring(0, 2), 16);
+  const g = Number.parseInt(hex.substring(2, 4), 16);
+  const b = Number.parseInt(hex.substring(4, 6), 16);
+  const brightness = calculateBrightness(r, g, b);
+
+  if (brightness > 180) {
+    const factor = getDimmingFactor(brightness);
+    const { newR, newG, newB } = applyDimming(r, g, b, factor);
+    const newColor = `#${newR.toString(16).padStart(2, "0")}${newG.toString(16).padStart(2, "0")}${newB.toString(16).padStart(2, "0")}`;
+    return { shouldReplace: true, newColor };
+  }
+
+  return { shouldReplace: false, newColor: colorValue };
+};
+
+// Helper function to process RGB color
+const processRgbColor = (colorValue: string): { shouldReplace: boolean; newColor: string } => {
+  const rgbMatch = colorValue.match(/rgb\((\d+),\s*(\d+),\s*(\d+)\)/);
+  if (rgbMatch) {
+    const r = parseInt(rgbMatch[1]);
+    const g = parseInt(rgbMatch[2]);
+    const b = parseInt(rgbMatch[3]);
+    const brightness = calculateBrightness(r, g, b);
+
+    if (brightness > 180) {
+      const factor = getDimmingFactor(brightness);
+      const { newR, newG, newB } = applyDimming(r, g, b, factor);
+      const newColor = `rgb(${newR}, ${newG}, ${newB})`;
+      return { shouldReplace: true, newColor };
+    }
+  }
+
+  return { shouldReplace: false, newColor: colorValue };
+};
+
+// Helper function to process color for light mode
+const processColorForLightMode = (colorValue: string): { shouldReplace: boolean; newColor: string } => {
+  if (colorValue.startsWith("#")) {
+    return processHexColor(colorValue);
+  } else if (colorValue.startsWith("rgb")) {
+    return processRgbColor(colorValue);
+  }
+  return { shouldReplace: false, newColor: colorValue };
+};
+
                   // Darken light colors for visibility
                   const allSpans = codeElement.querySelectorAll("span");
                   allSpans.forEach((el) => {
-                    const style =
-                      (el as HTMLElement).getAttribute("style") || "";
-                    const colorMatch = style.match(
-                      /color:\s*(#[0-9a-fA-F]{6}|rgb\([^)]+\))/i,
-                    );
+                    const style = (el as HTMLElement).getAttribute("style") || "";
+                    const colorMatch = style.match(/color:\s*(#[0-9a-fA-F]{6}|rgb\([^)]+\))/i);
 
                     if (colorMatch) {
                       const colorValue = colorMatch[1];
-                      let shouldReplace = false;
-                      let newColor = colorValue;
-
-                      if (colorValue.startsWith("#")) {
-                        const hex = colorValue.substring(1);
-                        const r = Number.parseInt(hex.substring(0, 2), 16);
-                        const g = Number.parseInt(hex.substring(2, 4), 16);
-                        const b = Number.parseInt(hex.substring(4, 6), 16);
-                        const brightness = (r * 299 + g * 587 + b * 114) / 1000;
-
-                        if (brightness > 180) {
-                          const factor = brightness > 220 ? 0.3 : 0.5;
-                          const newR = Math.max(
-                            0,
-                            Math.min(255, Math.round(r * factor)),
-                          );
-                          const newG = Math.max(
-                            0,
-                            Math.min(255, Math.round(g * factor)),
-                          );
-                          const newB = Math.max(
-                            0,
-                            Math.min(255, Math.round(b * factor)),
-                          );
-                          newColor = `#${newR.toString(16).padStart(2, "0")}${newG.toString(16).padStart(2, "0")}${newB.toString(16).padStart(2, "0")}`;
-                          shouldReplace = true;
-                        }
-                      } else if (colorValue.startsWith("rgb")) {
-                        const rgbMatch = colorValue.match(
-                          /rgb\((\d+),\s*(\d+),\s*(\d+)\)/,
-                        );
-                        if (rgbMatch) {
-                          const r = parseInt(rgbMatch[1]);
-                          const g = parseInt(rgbMatch[2]);
-                          const b = parseInt(rgbMatch[3]);
-                          const brightness =
-                            (r * 299 + g * 587 + b * 114) / 1000;
-
-                          if (brightness > 180) {
-                            const factor = brightness > 220 ? 0.3 : 0.5;
-                            const newR = Math.max(
-                              0,
-                              Math.min(255, Math.round(r * factor)),
-                            );
-                            const newG = Math.max(
-                              0,
-                              Math.min(255, Math.round(g * factor)),
-                            );
-                            const newB = Math.max(
-                              0,
-                              Math.min(255, Math.round(b * factor)),
-                            );
-                            newColor = `rgb(${newR}, ${newG}, ${newB})`;
-                            shouldReplace = true;
-                          }
-                        }
-                      }
+                      const { shouldReplace, newColor } = processColorForLightMode(colorValue);
 
                       if (shouldReplace) {
                         const newStyle = style.replace(
@@ -460,85 +467,94 @@ export function BulkUploadForm({
     }
   };
 
+  const validateJsonInput = (jsonText: string, jsonError: string | null) => {
+    if (!jsonText.trim()) {
+      return { isValid: false, error: "JSON text is empty" };
+    }
+    
+    if (jsonError) {
+      return { isValid: false, error: "Please fix JSON errors before submitting" };
+    }
+    
+    return { isValid: true, error: null };
+  };
+
+  const processJsonFile = (jsonText: string) => {
+    let cleanedJson = jsonText.trim();
+
+    // Remove BOM if present
+    if (cleanedJson.charCodeAt(0) === 0xfeff) {
+      cleanedJson = cleanedJson.slice(1);
+    }
+
+    // Validate JSON
+    const data = JSON.parse(cleanedJson);
+    const questions = Array.isArray(data) ? data : data.questions || [];
+
+    if (questions.length === 0) {
+      throw new Error(
+        "JSON is valid but contains no questions. Please add at least one question."
+      );
+    }
+
+    // Create a File object from cleaned JSON text
+    const blob = new Blob([cleanedJson], { type: "application/json" });
+    return new File([blob], "questions.json", {
+      type: "application/json",
+    });
+  };
+
+  const formatJsonError = (err: any, jsonText: string) => {
+    let errorMessage = "Invalid JSON format. ";
+
+    if (err instanceof SyntaxError) {
+      const match = err.message.match(/position (\d+)/);
+      if (match) {
+        const position = parseInt(match[1], 10);
+        const lines = jsonText.substring(0, position).split("\n");
+        const lineNumber = lines.length;
+        const columnNumber = lines[lines.length - 1].length + 1;
+
+        errorMessage = `JSON Error at line ${lineNumber}, column ${columnNumber}: ${err.message}`;
+
+        // Show context around the error
+        const start = Math.max(0, position - 100);
+        const end = Math.min(jsonText.length, position + 100);
+        const contextStart = Math.max(0, position - 50);
+        const beforeError = jsonText.substring(contextStart, position);
+        const afterError = jsonText.substring(
+          position,
+          Math.min(jsonText.length, position + 50),
+        );
+
+        errorMessage += `\n\nContext around error:\n...${beforeError}>>>ERROR HERE<<<${afterError}...`;
+      } else {
+        errorMessage = `JSON Error: ${err.message}`;
+      }
+    } else {
+      errorMessage = err?.message || "Unknown JSON parsing error";
+    }
+
+    return errorMessage;
+  };
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
     if (isJsonMode) {
-      // Create a File from JSON text
-      if (!jsonText.trim()) {
-        return;
-      }
-
-      // Check if there's a JSON validation error
-      if (jsonError) {
-        // Don't submit if there's a JSON error
+      const validation = validateJsonInput(jsonText, jsonError);
+      if (!validation.isValid) {
+        setJsonError(validation.error);
         return;
       }
 
       try {
-        // First, try to clean up common JSON issues
-        let cleanedJson = jsonText.trim();
-
-        // Remove BOM if present
-        if (cleanedJson.charCodeAt(0) === 0xfeff) {
-          cleanedJson = cleanedJson.slice(1);
-        }
-
-        // Validate JSON
-        const data = JSON.parse(cleanedJson);
-        const questions = Array.isArray(data) ? data : data.questions || [];
-
-        if (questions.length === 0) {
-          setJsonError(
-            "JSON is valid but contains no questions. Please add at least one question.",
-          );
-          return;
-        }
-
-        // Create a File object from cleaned JSON text
-        const blob = new Blob([cleanedJson], { type: "application/json" });
-        const jsonFile = new File([blob], "questions.json", {
-          type: "application/json",
-        });
+        const jsonFile = processJsonFile(jsonText);
         onUpload(jsonFile);
       } catch (err: any) {
         console.error("Invalid JSON format:", err);
-
-        // Provide helpful error message
-        let errorMessage = "Invalid JSON format. ";
-
-        if (err instanceof SyntaxError) {
-          const match = err.message.match(/position (\d+)/);
-          if (match) {
-            const position = parseInt(match[1], 10);
-            const lines = jsonText.substring(0, position).split("\n");
-            const lineNumber = lines.length;
-            const columnNumber = lines[lines.length - 1].length + 1;
-
-            errorMessage = `JSON Error at line ${lineNumber}, column ${columnNumber}: ${err.message}`;
-
-            // Show context around the error
-            const start = Math.max(0, position - 100);
-            const end = Math.min(jsonText.length, position + 100);
-            const context = jsonText.substring(start, end);
-            const contextStart = Math.max(0, position - 50);
-            const beforeError = jsonText.substring(contextStart, position);
-            const afterError = jsonText.substring(
-              position,
-              Math.min(jsonText.length, position + 50),
-            );
-
-            errorMessage += `\n\nContext around error:\n...${beforeError}>>>ERROR HERE<<<${afterError}...`;
-          } else {
-            errorMessage = `JSON Error: ${err.message}`;
-          }
-        } else {
-          errorMessage = err?.message || "Unknown JSON parsing error";
-        }
-
-        // Set JSON error state to show to user
+        const errorMessage = formatJsonError(err, jsonText);
         setJsonError(errorMessage);
-        return;
       }
     } else if (file) {
       onUpload(file);
@@ -704,72 +720,91 @@ export function BulkUploadForm({
                     </div>
                   )}
 
+                  // Helper function to normalize line breaks in code
+const normalizeLineBreaks = (code: string): string => {
+  return code
+    .replace(/\\n/g, "\n")
+    .replace(/\\r\\n/g, "\n")
+    .replace(/\\r/g, "\n")
+    .replace(/\r\n/g, "\n")
+    .replace(/\r/g, "\n");
+};
+
+// Helper function to clean up code formatting
+const cleanCodeFormatting = (code: string): string => {
+  let formattedCode = code.trim();
+  
+  // Remove leading and trailing newlines
+  while (formattedCode.startsWith("\n")) {
+    formattedCode = formattedCode.substring(1);
+  }
+  while (formattedCode.endsWith("\n")) {
+    formattedCode = formattedCode.slice(0, -1);
+  }
+  
+  // Remove empty lines and reduce multiple consecutive newlines
+  const lines = formattedCode.split("\n");
+  const nonEmptyLines = lines.filter((line) => line.trim().length > 0);
+  formattedCode = nonEmptyLines.join("\n");
+  
+  if (formattedCode.includes("\n\n")) {
+    formattedCode = formattedCode.replace(/\n{2,}/g, "\n");
+  }
+  
+  return formattedCode;
+};
+
+// Helper function to detect programming language from code
+const detectLanguage = (code: string): string => {
+  const codeText = code.toLowerCase();
+  
+  if (
+    codeText.includes("def ") ||
+    (codeText.includes("import ") && codeText.includes("print"))
+  ) {
+    return "python";
+  } else if (
+    codeText.includes("public class") ||
+    codeText.includes("public static")
+  ) {
+    return "java";
+  } else if (
+    codeText.includes("interface ") ||
+    codeText.includes("type ") ||
+    codeText.includes(": string")
+  ) {
+    return "typescript";
+  } else if (
+    codeText.includes("function ") ||
+    codeText.includes("const ") ||
+    codeText.includes("let ")
+  ) {
+    return "javascript";
+  }
+  
+  return "javascript";
+};
+
+// Helper function to detect theme preference
+const detectTheme = (): string => {
+  const prefersDark =
+    typeof window !== "undefined" &&
+    window.matchMedia("(prefers-color-scheme: dark)").matches;
+  return prefersDark ? "dark" : "light";
+};
+
                   {/* Code Section */}
                   {question.code &&
                     (() => {
                       const rawCode = String(question.code || "");
-                      const codeWithNewlines = rawCode
-                        .replace(/\\n/g, "\n")
-                        .replace(/\\r\\n/g, "\n")
-                        .replace(/\\r/g, "\n")
-                        .replace(/\r\n/g, "\n")
-                        .replace(/\r/g, "\n");
-
-                      // Format code - remove blank lines
-                      let formattedCode = codeWithNewlines.trim();
-                      while (formattedCode.startsWith("\n")) {
-                        formattedCode = formattedCode.substring(1);
-                      }
-                      while (formattedCode.endsWith("\n")) {
-                        formattedCode = formattedCode.slice(0, -1);
-                      }
-                      const lines = formattedCode.split("\n");
-                      const nonEmptyLines = lines.filter(
-                        (line) => line.trim().length > 0,
-                      );
-                      formattedCode = nonEmptyLines.join("\n");
-                      if (formattedCode.includes("\n\n")) {
-                        formattedCode = formattedCode.replace(/\n{2,}/g, "\n");
-                      }
-
+                      const codeWithNewlines = normalizeLineBreaks(rawCode);
+                      const formattedCode = cleanCodeFormatting(codeWithNewlines);
                       const codeLines = formattedCode
                         .split("\n")
                         .filter((line) => line.trim().length > 0);
 
-                      // Detect language
-                      let detectedLanguage = "javascript";
-                      const codeText = formattedCode.toLowerCase();
-                      if (
-                        codeText.includes("def ") ||
-                        (codeText.includes("import ") &&
-                          codeText.includes("print"))
-                      ) {
-                        detectedLanguage = "python";
-                      } else if (
-                        codeText.includes("public class") ||
-                        codeText.includes("public static")
-                      ) {
-                        detectedLanguage = "java";
-                      } else if (
-                        codeText.includes("interface ") ||
-                        codeText.includes("type ") ||
-                        codeText.includes(": string")
-                      ) {
-                        detectedLanguage = "typescript";
-                      } else if (
-                        codeText.includes("function ") ||
-                        codeText.includes("const ") ||
-                        codeText.includes("let ")
-                      ) {
-                        detectedLanguage = "javascript";
-                      }
-
-                      // Detect theme
-                      const prefersDark =
-                        typeof window !== "undefined" &&
-                        window.matchMedia("(prefers-color-scheme: dark)")
-                          .matches;
-                      const codeTheme = prefersDark ? "dark" : "light";
+                      const detectedLanguage = detectLanguage(formattedCode);
+                      const codeTheme = detectTheme();
                       const highlightedHtml = codeHighlightedHtml[qIndex] || "";
 
                       return (

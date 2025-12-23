@@ -15,25 +15,42 @@ import {
 } from "lucide-react";
 import { createHighlighter, type Highlighter } from "shiki";
 
+// Language detection patterns to reduce cognitive complexity
+const languagePatterns = [
+  {
+    language: "python",
+    patterns: [
+      (code: string) => code.includes("def "),
+      (code: string) => code.includes("import ") && code.includes("print")
+    ]
+  },
+  {
+    language: "java", 
+    patterns: [
+      (code: string) => code.includes("public class"),
+      (code: string) => code.includes("public static")
+    ]
+  },
+  {
+    language: "typescript",
+    patterns: [
+      (code: string) => code.includes("interface "),
+      (code: string) => code.includes("type "),
+      (code: string) => code.includes(": string")
+    ]
+  }
+];
+
 // Helper function to detect programming language from code (reduces cognitive complexity)
 const detectLanguage = (code: string): string => {
   const codeText = code.toLowerCase();
-  if (
-    codeText.includes("def ") ||
-    (codeText.includes("import ") && codeText.includes("print"))
-  ) {
-    return "python";
+  
+  for (const { language, patterns } of languagePatterns) {
+    if (patterns.some(pattern => pattern(codeText))) {
+      return language;
+    }
   }
-  if (codeText.includes("public class") || codeText.includes("public static")) {
-    return "java";
-  }
-  if (
-    codeText.includes("interface ") ||
-    codeText.includes("type ") ||
-    codeText.includes(": string")
-  ) {
-    return "typescript";
-  }
+  
   return "javascript";
 };
 
@@ -254,6 +271,27 @@ const addLineBreaks = (formatted: string): string => {
   return formatted;
 };
 
+// Helper function to process already well-formatted code
+const processWellFormattedCode = (formatted: string): string => {
+  const codeLines = formatted.split("\n");
+  let result = formatWithIndentation(codeLines);
+  // Only limit excessive empty lines (3+ consecutive), but preserve single and double newlines
+  result = result.replaceAll(/\n{4,}/g, "\n\n\n"); // Max 3 consecutive newlines
+  return result.trimEnd();
+};
+
+// Helper function to process poorly formatted code
+const processPoorlyFormattedCode = (formatted: string): string => {
+  // If code is on a single line or poorly formatted, try to format it intelligently
+  formatted = addLineBreaks(formatted);
+
+  // Now apply indentation formatting
+  const codeLines = formatted.split("\n").map((line) => line.trimEnd());
+  let result = formatWithIndentation(codeLines);
+  result = result.replaceAll(/\n{3,}/g, "\n\n"); // Max 2 consecutive newlines
+  return result.trimEnd();
+};
+
 // Helper function to format code with proper line breaks and indentation
 const _formatCodeForDisplay = (code: string): string => {
   if (!code) return "";
@@ -272,21 +310,10 @@ const _formatCodeForDisplay = (code: string): string => {
   // If code already has proper formatting, just normalize indentation
   // BUT preserve ALL newlines - don't collapse them
   if (hasProperStructure) {
-    const codeLines = formatted.split("\n");
-    let result = formatWithIndentation(codeLines);
-    // Only limit excessive empty lines (3+ consecutive), but preserve single and double newlines
-    result = result.replaceAll(/\n{4,}/g, "\n\n\n"); // Max 3 consecutive newlines
-    return result.trimEnd();
+    return processWellFormattedCode(formatted);
   }
 
-  // If code is on a single line or poorly formatted, try to format it intelligently
-  formatted = addLineBreaks(formatted);
-
-  // Now apply indentation formatting
-  const codeLines = formatted.split("\n").map((line) => line.trimEnd());
-  let result = formatWithIndentation(codeLines);
-  result = result.replaceAll(/\n{3,}/g, "\n\n"); // Max 2 consecutive newlines
-  return result.trimEnd();
+  return processPoorlyFormattedCode(formatted);
 };
 
 interface ViewQuestionModalProps {
@@ -473,6 +500,30 @@ export function ViewQuestionModal({
     }
   };
 
+  // Resource configuration object to reduce cognitive complexity
+  const resourceConfig = {
+    video: {
+      icon: <Video className="w-5 h-5 sm:w-6 sm:h-6" />,
+      colorClasses: "from-red-500 to-pink-600 dark:from-red-500 dark:to-rose-600 border-red-400 dark:border-red-500",
+      label: "Video"
+    },
+    course: {
+      icon: <GraduationCap className="w-5 h-5 sm:w-6 sm:h-6" />,
+      colorClasses: "from-blue-500 to-indigo-600 dark:from-blue-500 dark:to-indigo-500 border-blue-400 dark:border-blue-400",
+      label: "Course"
+    },
+    article: {
+      icon: <FileText className="w-5 h-5 sm:w-6 sm:h-6" />,
+      colorClasses: "from-green-500 to-emerald-600 dark:from-green-500 dark:to-emerald-500 border-green-400 dark:border-green-400",
+      label: "Article"
+    },
+    default: {
+      icon: <BookOpen className="w-5 h-5 sm:w-6 sm:h-6" />,
+      colorClasses: "from-indigo-500 to-purple-600 dark:from-indigo-500 dark:to-purple-500 border-indigo-400 dark:border-indigo-400",
+      label: "Resource"
+    }
+  };
+
   // Helper function to get shiki wrapper class
   const getShikiWrapperClass = (codeTheme: string): string => {
     return codeTheme === "light" ? "shiki-light-mode" : "shiki-dark-mode";
@@ -480,44 +531,17 @@ export function ViewQuestionModal({
 
   // Helper function to get resource icon based on type
   const getResourceIcon = (resourceType: string) => {
-    switch (resourceType) {
-      case "video":
-        return <Video className="w-5 h-5 sm:w-6 sm:h-6" />;
-      case "course":
-        return <GraduationCap className="w-5 h-5 sm:w-6 sm:h-6" />;
-      case "article":
-        return <FileText className="w-5 h-5 sm:w-6 sm:h-6" />;
-      default:
-        return <BookOpen className="w-5 h-5 sm:w-6 sm:h-6" />;
-    }
+    return resourceConfig[resourceType as keyof typeof resourceConfig]?.icon || resourceConfig.default.icon;
   };
 
   // Helper function to get resource color classes based on type
   const getResourceColorClasses = (resourceType: string): string => {
-    switch (resourceType) {
-      case "video":
-        return "from-red-500 to-pink-600 dark:from-red-500 dark:to-rose-600 border-red-400 dark:border-red-500";
-      case "course":
-        return "from-blue-500 to-indigo-600 dark:from-blue-500 dark:to-indigo-500 border-blue-400 dark:border-blue-400";
-      case "article":
-        return "from-green-500 to-emerald-600 dark:from-green-500 dark:to-emerald-500 border-green-400 dark:border-green-400";
-      default:
-        return "from-indigo-500 to-purple-600 dark:from-indigo-500 dark:to-purple-500 border-indigo-400 dark:border-indigo-400";
-    }
+    return resourceConfig[resourceType as keyof typeof resourceConfig]?.colorClasses || resourceConfig.default.colorClasses;
   };
 
   // Helper function to get resource type label
   const getResourceTypeLabel = (resourceType: string): string => {
-    switch (resourceType) {
-      case "video":
-        return "Video";
-      case "course":
-        return "Course";
-      case "article":
-        return "Article";
-      default:
-        return "Resource";
-    }
+    return resourceConfig[resourceType as keyof typeof resourceConfig]?.label || resourceConfig.default.label;
   };
 
   // Helper function to render code display with Shiki highlighting

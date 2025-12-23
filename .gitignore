@@ -168,6 +168,9 @@ temp/
 # MCP server configuration (contains sensitive tokens)
 .cursor/mcp.json
 
+# SonarQube MCP server configuration (contains sensitive tokens)
+.sonarqube/
+
 # Cursor cache and logs (regenerated files)
 .cursor/cache/
 .cursor/logs/

@@ -28,12 +28,8 @@ interface FrontendTaskEditorProps {
   readonly mode?: "create" | "edit" | "view";
 }
 
-export default function FrontendTaskEditor({
-  task,
-  onSave,
-  onCancel,
-  mode = "create",
-}: FrontendTaskEditorProps) {
+// Custom hook to consolidate all editor state management
+const useFrontendTaskEditorState = (task?: FrontendTask | null) => {
   // Extracted hooks for state management
   const { theme, setTheme, isDark } = useThemeManagement();
   const { formData, setFormData } = useFormDataManagement(task);
@@ -67,6 +63,64 @@ export default function FrontendTaskEditor({
   const [newFolderName, setNewFolderName] = React.useState("");
   const [showAddFile, setShowAddFile] = React.useState(false);
   const [showAddFolder, setShowAddFolder] = React.useState(false);
+
+  return {
+    // Theme management
+    theme,
+    setTheme,
+    isDark,
+    // Form data
+    formData,
+    setFormData,
+    // Panel layout
+    leftPanelWidth,
+    rightPanelWidth,
+    handleMouseDown,
+    // File management
+    activeFile,
+    fileTree,
+    expandedFolders,
+    openFiles,
+    showFileExplorer,
+    setActiveFile,
+    setFileTree,
+    setExpandedFolders,
+    setOpenFiles,
+    setShowFileExplorer,
+    // Console management
+    consoleOutput,
+    setConsoleOutput,
+    // Local state
+    copied,
+    setCopied,
+    showPreview,
+    setShowPreview,
+    activeTab,
+    setActiveTab,
+    activeBrowserTab,
+    setActiveBrowserTab,
+    newHint,
+    setNewHint,
+    newTag,
+    setNewTag,
+    newFileName,
+    setNewFileName,
+    newFolderName,
+    setNewFolderName,
+    showAddFile,
+    setShowAddFile,
+    showAddFolder,
+    setShowAddFolder,
+  };
+};
+
+export default function FrontendTaskEditor({
+  task,
+  onSave,
+  onCancel,
+  mode = "create",
+}: FrontendTaskEditorProps) {
+  const editorState = useFrontendTaskEditorState(task);
 
   // Simple form handlers
   const handleSave = async () => {

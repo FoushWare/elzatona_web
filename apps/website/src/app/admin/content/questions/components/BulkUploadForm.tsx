@@ -103,21 +103,32 @@ export default function BulkUploadForm({
     setJsonError(null);
   };
 
+  const processJsonQuestions = (jsonText: string) => {
+    const questions = validateJsonText(jsonText);
+    const validationErrors = validateQuestions(questions);
+    
+    if (validationErrors.length > 0) {
+      setJsonError(validationErrors.join(", "));
+      return null;
+    }
+    
+    return transformQuestionData(questions);
+  };
+
+  const updatePreviewState = (transformedQuestions: any[]) => {
+    setPreviewQuestions(transformedQuestions);
+    setTotalQuestionsCount(transformedQuestions.length);
+    setShowPreview(true);
+    setJsonError(null);
+  };
+
   const handleProcessJson = () => {
     try {
-      const questions = validateJsonText(jsonText);
-      const validationErrors = validateQuestions(questions);
-
-      if (validationErrors.length > 0) {
-        setJsonError(validationErrors.join(", "));
-        return;
+      const transformedQuestions = processJsonQuestions(jsonText);
+      
+      if (transformedQuestions) {
+        updatePreviewState(transformedQuestions);
       }
-
-      const transformedQuestions = transformQuestionData(questions);
-      setPreviewQuestions(transformedQuestions);
-      setTotalQuestionsCount(transformedQuestions.length);
-      setShowPreview(true);
-      setJsonError(null);
     } catch (error) {
       setJsonError(
         error instanceof Error ? error.message : "Failed to process JSON",

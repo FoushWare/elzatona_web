@@ -21,7 +21,8 @@ interface DropdownMenu {
   items: DropdownItem[];
 }
 
-export default function Navbar() {
+// Custom hook to consolidate all navbar state management
+const useNavbarState = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
@@ -34,8 +35,33 @@ export default function Navbar() {
   const dropdownRef = useRef<HTMLDivElement>(null);
   const userDropdownRef = useRef<HTMLDivElement>(null);
 
-  // Dropdown menu data
-  const dropdownMenus: DropdownMenu[] = [
+  return {
+    // State
+    isOpen,
+    setIsOpen,
+    isScrolled,
+    setIsScrolled,
+    activeDropdown,
+    setActiveDropdown,
+    isUserDropdownOpen,
+    setIsUserDropdownOpen,
+    screenSize,
+    setScreenSize,
+    // Auth and theme
+    isDarkMode,
+    toggleDarkMode,
+    isAuthenticated,
+    user,
+    logout,
+    isLoading,
+    // Refs
+    dropdownRef,
+    userDropdownRef,
+  };
+};
+
+// Extract dropdown menu data to reduce cognitive complexity
+const dropdownMenus: DropdownMenu[] = [
     {
       label: "Learning",
       icon: "📚",
@@ -208,6 +234,28 @@ export default function Navbar() {
       ],
     },
   ];
+
+export default function Navbar() {
+  const {
+    isOpen,
+    setIsOpen,
+    isScrolled,
+    setIsScrolled,
+    activeDropdown,
+    setActiveDropdown,
+    isUserDropdownOpen,
+    setIsUserDropdownOpen,
+    screenSize,
+    setScreenSize,
+    isDarkMode,
+    toggleDarkMode,
+    isAuthenticated,
+    user,
+    logout,
+    isLoading,
+    dropdownRef,
+    userDropdownRef,
+  } = useNavbarState();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -431,13 +479,10 @@ export default function Navbar() {
                             {dropdownMenus
                               .filter((menu) => {
                                 // For mobile, tablet and laptop, exclude Interview Prep from main nav since it's in More dropdown
-                                if (
-                                  screenSize !== "desktop" &&
-                                  menu.label === "Interview Prep"
-                                ) {
-                                  return false;
-                                }
-                                return true;
+                                return (
+                                  screenSize === "desktop" ||
+                                  menu.label !== "Interview Prep"
+                                );
                               })
                               .slice(
                                 screenSize === "desktop"
