@@ -52,7 +52,7 @@ export function useTranslation() {
       // Replace parameters if provided
       if (params) {
         return Object.entries(params).reduce((str, [key, val]) => {
-          return str.replace(new RegExp(`{${key}}`, "g"), String(val));
+          return str.replaceAll(`{${key}}`, String(val));
         }, value);
       }
 
