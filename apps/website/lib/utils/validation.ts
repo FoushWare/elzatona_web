@@ -348,7 +348,7 @@ export function validateAndSanitize<T>(
     }
 
     // Pre-validate data structure to prevent "Cannot read properties of undefined" errors
-    const processedData = preprocessData(data);
+    const processedData = _preprocessData(data);
 
     const result = schema.parse(processedData);
     return { success: true, data: result };
