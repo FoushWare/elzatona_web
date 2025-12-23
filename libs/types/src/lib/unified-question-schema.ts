@@ -4,8 +4,8 @@
 import { createClient } from "@supabase/supabase-js";
 
 // Use environment variables with proper typing
-const supabaseUrl = typeof process !== "undefined" ? process.env["NEXT_PUBLIC_SUPABASE_URL"]! : "";
-const supabaseServiceRoleKey = typeof process !== "undefined" ? process.env["SUPABASE_SERVICE_ROLE_KEY"]! : "";
+const supabaseUrl = (globalThis as any).process?.env?.["NEXT_PUBLIC_SUPABASE_URL"] || "";
+const supabaseServiceRoleKey = (globalThis as any).process?.env?.["SUPABASE_SERVICE_ROLE_KEY"] || "";
 const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
 
 export interface UnifiedQuestion {
