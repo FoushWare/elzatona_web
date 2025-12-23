@@ -348,59 +348,9 @@ export function validateAndSanitize<T>(
     }
 
     // Pre-validate data structure to prevent "Cannot read properties of undefined" errors
-    if (data && typeof data === "object" && !Array.isArray(data)) {
-      const dataObj = data as any;
+    const processedData = preprocessData(data);
 
-      // Ensure options is either undefined, null, or a valid array
-      if (dataObj.options !== undefined && dataObj.options !== null) {
-        if (
-          typeof dataObj.options === "string" ||
-          !Array.isArray(dataObj.options) ||
-          dataObj.options.length === 0
-        ) {
-          delete dataObj.options;
-        }
-      }
-
-      // Ensure categories is not an array (should be a string name or undefined)
-      if (dataObj.categories && Array.isArray(dataObj.categories)) {
-        // If categories is an array, extract the first one's name or use empty string
-        if (dataObj.categories.length > 0 && dataObj.categories[0]) {
-          dataObj.category =
-            dataObj.categories[0]?.name ||
-            dataObj.categories[0]?.title ||
-            dataObj.category ||
-            "";
-        }
-        delete dataObj.categories; // Remove array, use category name instead
-      }
-
-      // Ensure topics is not an array (should be a string name or undefined)
-      if (dataObj.topics && Array.isArray(dataObj.topics)) {
-        // If topics is an array, extract the first one's name or use empty string
-        if (dataObj.topics.length > 0 && dataObj.topics[0]) {
-          dataObj.topic =
-            dataObj.topics[0]?.name ||
-            dataObj.topics[0]?.title ||
-            dataObj.topic ||
-            "";
-        }
-        delete dataObj.topics; // Remove array, use topic name instead
-      }
-
-      // Ensure metadata is an object or null/undefined
-      if (dataObj.metadata !== undefined && dataObj.metadata !== null) {
-        if (
-          typeof dataObj.metadata !== "object" ||
-          Array.isArray(dataObj.metadata)
-        ) {
-          // Invalid metadata format, remove it
-          delete dataObj.metadata;
-        }
-      }
-    }
-
-    const result = schema.parse(data);
+    const result = schema.parse(processedData);
     return { success: true, data: result };
   } catch (error: any) {
     // Log the error type and details for debugging

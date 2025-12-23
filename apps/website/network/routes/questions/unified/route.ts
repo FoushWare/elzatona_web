@@ -1336,7 +1336,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Invalidate cache after creating questions
-    questionsCache = null;
+    _questionsCache = null;
 
     return NextResponse.json({
       success: true,
@@ -1646,7 +1646,7 @@ export async function PUT(request: NextRequest) {
     if (error) throw error;
 
     // Invalidate cache after updating question
-    questionsCache = null;
+    _questionsCache = null;
 
     return NextResponse.json({
       success: true,
@@ -1682,7 +1682,7 @@ export async function DELETE(request: NextRequest) {
     if (error) throw error;
 
     // Invalidate cache after deleting question
-    questionsCache = null;
+    _questionsCache = null;
 
     return NextResponse.json({
       success: true,

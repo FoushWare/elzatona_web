@@ -204,7 +204,7 @@ export default function MyPlansPage() {
     );
   };
 
-  const getDaysRemaining = (plan: CustomPlan) => {
+  const _getDaysRemaining = (plan: CustomPlan) => {
     if (!plan.progress) return plan.duration;
     return Math.max(0, plan.duration - plan.progress.currentDay);
   };

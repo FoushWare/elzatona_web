@@ -44,8 +44,8 @@ interface CustomPlan {
 
 export default function MyPlansPage() {
   const router = useRouter();
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [user, setUser] = useState(null);
+  const [isAuthenticated, _setIsAuthenticated] = useState(false);
+  const [_user, _setUser] = useState(null);
   const [showSignInPopup, setShowSignInPopup] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [plans, setPlans] = useState<CustomPlan[]>([]);
@@ -128,7 +128,7 @@ export default function MyPlansPage() {
     );
   };
 
-  const getDaysRemaining = (plan: CustomPlan) => {
+  const _getDaysRemaining = (plan: CustomPlan) => {
     if (!plan.progress) return plan.duration;
     return Math.max(0, plan.duration - plan.progress.currentDay);
   };

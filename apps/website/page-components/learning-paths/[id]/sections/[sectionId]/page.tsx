@@ -80,7 +80,7 @@ export default function LearningPathSectionPage() {
   const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null);
   const [showExplanation, setShowExplanation] = useState(false);
   const [score, setScore] = useState(0);
-  const [completedQuestions, setCompletedQuestions] = useState<Set<string>>(
+  const [_completedQuestions, _setCompletedQuestions] = useState<Set<string>>(
     new Set(),
   );
 
