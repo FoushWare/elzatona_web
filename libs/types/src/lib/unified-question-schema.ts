@@ -563,6 +563,36 @@ export class UnifiedQuestionService {
     };
   }
 
+  // Extract validation functions to reduce cognitive complexity
+  private validateTitle(
+    title: string | undefined,
+    errors: QuestionValidationError[],
+    warnings: QuestionValidationError[],
+  ): void {
+    if (!title || title.trim().length === 0) {
+      errors.push({
+        field: "title",
+        message: "Title is required",
+        severity: "error",
+      });
+      return;
+    }
+
+    if (title.length < QUESTION_VALIDATION_RULES.title.minLength) {
+      errors.push({
+        field: "title",
+        message: `Title must be at least ${QUESTION_VALIDATION_RULES.title.minLength} characters`,
+        severity: "error",
+      });
+    } else if (title.length > QUESTION_VALIDATION_RULES.title.maxLength) {
+      warnings.push({
+        field: "title",
+        message: `Title is very long (${title.length} characters)`,
+        severity: "warning",
+      });
+    }
+  }
+
   // Validate a question
   validateQuestion(
     question: Partial<UnifiedQuestion>,
@@ -571,29 +601,7 @@ export class UnifiedQuestionService {
     const warnings: QuestionValidationError[] = [];
 
     // Validate title
-    if (!question.title || question.title.trim().length === 0) {
-      errors.push({
-        field: "title",
-        message: "Title is required",
-        severity: "error",
-      });
-    } else if (
-      question.title.length < QUESTION_VALIDATION_RULES.title.minLength
-    ) {
-      errors.push({
-        field: "title",
-        message: `Title must be at least ${QUESTION_VALIDATION_RULES.title.minLength} characters`,
-        severity: "error",
-      });
-    } else if (
-      question.title.length > QUESTION_VALIDATION_RULES.title.maxLength
-    ) {
-      warnings.push({
-        field: "title",
-        message: `Title is very long (${question.title.length} characters)`,
-        severity: "warning",
-      });
-    }
+    this.validateTitle(question.title, errors, warnings);
 
     // Validate content
     if (!question.content || question.content.trim().length === 0) {
