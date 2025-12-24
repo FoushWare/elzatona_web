@@ -201,12 +201,16 @@ const getOptionClasses = (
 
 // Helper function to count regex matches
 const countRegexMatches = (text: string, regex: RegExp): number => {
-  const matches = [];
+  let count = 0;
   let match;
   while ((match = regex.exec(text)) !== null) {
-    matches.push(match);
+    count++;
+    // Avoid infinite loops with zero-length matches
+    if (match[0].length === 0) {
+      regex.lastIndex++;
+    }
   }
-  return matches.length;
+  return count;
 };
 
 // Helper function to format code with indentation

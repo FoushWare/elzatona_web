@@ -28,7 +28,7 @@ function UserTypeContentSection({
   hasActivePlan,
   activePlan,
   personalizedContent,
-}: {
+}: Readonly<{
   userType: string;
   showAnimation: boolean;
   hasActivePlan: boolean;
@@ -245,7 +245,7 @@ function HomePageContent() {
 
   // Check for active guided learning plan
   useEffect(() => {
-    if (userType === "guided" && typeof globalThis.window !== "undefined") {
+    if (userType === "guided" && globalThis.window !== undefined) {
       const activePlanData =
         globalThis.window.localStorage.getItem("active-guided-plan");
       if (activePlanData) {
