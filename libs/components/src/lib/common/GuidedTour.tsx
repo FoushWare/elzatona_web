@@ -23,6 +23,68 @@ const sanitizeCSS = (css: string): string => {
   });
 };
 
+// Pre-defined tour styles to avoid parsing issues
+const tourStyles = `
+  :root {
+    --tour-bg: #ffffff;
+    --tour-text: #1f2937;
+    --tour-border: #e5e7eb;
+    --tour-mask: rgba(0, 0, 0, 0.4);
+    --tour-close: #6b7280;
+    --tour-accent: #6366f1;
+    --tour-accent-hover: #4f46e5;
+    --tour-disabled: #9ca3af;
+  }
+
+  .dark {
+    --tour-bg: #1f2937;
+    --tour-text: #f9fafb;
+    --tour-border: #374151;
+    --tour-mask: rgba(0, 0, 0, 0.6);
+    --tour-close: #9ca3af;
+    --tour-accent: #6366f1;
+    --tour-accent-hover: #4f46e5;
+    --tour-disabled: #6b7280;
+  }
+
+  .tour-container .reactour__arrow {
+    color: var(--tour-bg) !important;
+    border: 1px solid var(--tour-border) !important;
+  }
+
+  .tour-container .reactour__popover {
+    background-color: var(--tour-bg) !important;
+    color: var(--tour-text) !important;
+    border: 1px solid var(--tour-border) !important;
+    border-radius: 12px !important;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1) !important;
+  }
+
+  .tour-container .reactour__close {
+    color: var(--tour-close) !important;
+  }
+
+  .tour-container .reactour__controls button {
+    background-color: var(--tour-accent, #6366f1) !important;
+    color: white !important;
+    border: none !important;
+    border-radius: 6px !important;
+    padding: 8px 16px !important;
+    font-weight: 500 !important;
+    transition: all 0.2s ease !important;
+  }
+
+  .tour-container .reactour__controls button:hover {
+    background-color: var(--tour-accent-hover, #4f46e5) !important;
+    transform: translateY(-1px) !important;
+  }
+
+  .tour-container .reactour__controls button:disabled {
+    background-color: var(--tour-disabled, #9ca3af) !important;
+    cursor: not-allowed !important;
+  }
+`;
+
 interface GuidedTourProps {
   isOpen: boolean;
   onComplete: () => void;
@@ -144,63 +206,7 @@ export const GuidedTour: React.FC<GuidedTourProps> = (props) => {
     <>
       <style
         dangerouslySetInnerHTML={{
-          __html: sanitizeCSS(`
-        :root {
-          --tour-bg: #ffffff;
-          --tour-text: #1f2937;
-          --tour-border: #e5e7eb;
-          --tour-mask: rgba(0, 0, 0, 0.4);
-          --tour-close: #6b7280;
-          --tour-accent: #6366f1;
-          --tour-accent-hover: #4f46e5;
-          --tour-disabled: #9ca3af;
-        }
-
-        .dark {
-          --tour-bg: #1f2937;
-          --tour-text: #f9fafb;
-          --tour-border: #374151;
-          --tour-mask: rgba(0, 0, 0, 0.6);
-          --tour-close: #9ca3af;
-          --tour-accent: #6366f1;
-          --tour-accent-hover: #4f46e5;
-          --tour-disabled: #6b7280;
-        }
-
-        .tour-container .reactour__popover {
-          background-color: var(--tour-bg) !important;
-          color: var(--tour-text) !important;
-          border: 1px solid var(--tour-border) !important;
-        }
-
-        .tour-container .reactour__mask {
-          color: var(--tour-mask) !important;
-        }
-
-        .tour-container .reactour__close {
-          color: var(--tour-close) !important;
-        }
-
-        .tour-container .reactour__controls button {
-          background-color: var(--tour-accent, #6366f1) !important;
-          color: white !important;
-          border: none !important;
-          border-radius: 6px !important;
-          padding: 8px 16px !important;
-          font-weight: 500 !important;
-          transition: all 0.2s ease !important;
-        }
-
-        .tour-container .reactour__controls button:hover {
-          background-color: var(--tour-accent-hover, #4f46e5) !important;
-          transform: translateY(-1px) !important;
-        }
-
-        .tour-container .reactour__controls button:disabled {
-          background-color: var(--tour-disabled, #9ca3af) !important;
-          cursor: not-allowed !important;
-        }
-        `),
+          __html: sanitizeCSS(tourStyles),
         }}
       />
       <TourProvider

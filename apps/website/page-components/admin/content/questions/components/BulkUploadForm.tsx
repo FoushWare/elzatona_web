@@ -67,6 +67,41 @@ const sanitizeCSS = (css: string): string => {
   });
 };
 
+// Pre-defined CSS styles to avoid parsing issues
+const shikiStyles = `
+  .shiki-wrapper pre {
+    margin: 0 !important;
+    padding: 0.375rem 0 0.375rem 0 !important;
+    background: transparent !important;
+    overflow: visible !important;
+    font-size: 0.75rem !important;
+    line-height: 1.25 !important;
+    font-family: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace !important;
+    font-weight: 500 !important;
+  }
+  .shiki-wrapper pre code {
+    display: block !important;
+    background: transparent !important;
+  }
+  .shiki-wrapper pre code .line {
+    display: block !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    line-height: 1.25 !important;
+  }
+  .shiki-wrapper pre code .line:empty {
+    display: none !important;
+  }
+  .shiki-light-mode .shiki-wrapper,
+  .shiki-light-mode .shiki-wrapper pre,
+  .shiki-light-mode .shiki-wrapper pre code {
+    background-color: #ffffff !important;
+  }
+  .shiki-light-mode .shiki-wrapper pre code .line {
+    background-color: transparent !important;
+  }
+`;
+
 const processHexColor = (colorValue: string): { shouldReplace: boolean; newColor: string } => {
   const hex = colorValue.substring(1);
   const r = Number.parseInt(hex.substring(0, 2), 16);
@@ -934,39 +969,7 @@ export function BulkUploadForm({
                                     {/* Custom styles for Shiki output */}
                                     <style
                                       dangerouslySetInnerHTML={{
-                                        __html: sanitizeCSS(`
-                                      .shiki-wrapper pre {
-                                        margin: 0 !important;
-                                        padding: 0.375rem 0 0.375rem 0 !important;
-                                        background: transparent !important;
-                                        overflow: visible !important;
-                                        font-size: 0.75rem !important;
-                                        line-height: 1.25 !important;
-                                        font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace !important;
-                                        font-weight: 500 !important;
-                                      }
-                                      .shiki-wrapper pre code {
-                                        display: block !important;
-                                        background: transparent !important;
-                                      }
-                                      .shiki-wrapper pre code .line {
-                                        display: block !important;
-                                        padding: 0 !important;
-                                        margin: 0 !important;
-                                        line-height: 1.25 !important;
-                                      }
-                                      .shiki-wrapper pre code .line:empty {
-                                        display: none !important;
-                                      }
-                                      .shiki-light-mode .shiki-wrapper,
-                                      .shiki-light-mode .shiki-wrapper pre,
-                                      .shiki-light-mode .shiki-wrapper pre code {
-                                        background-color: #ffffff !important;
-                                      }
-                                      .shiki-light-mode .shiki-wrapper pre code .line {
-                                        background-color: transparent !important;
-                                      }
-                                    `),
+                                        __html: sanitizeCSS(shikiStyles),
                                       }}
                                     />
 
