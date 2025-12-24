@@ -10,7 +10,7 @@ import { useMobileMenu } from "@elzatona/contexts";
 import { useTheme } from "@elzatona/contexts";
 import { useAuth } from "@elzatona/contexts";
 import { clearSession } from "../lib/auth-session";
-import { useLearningType } from "../context/LearningTypeContext";
+import { useLearningType } from "../src/context/LearningTypeContext"";
 import {
   Sun,
   Moon,

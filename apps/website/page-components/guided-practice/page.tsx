@@ -28,7 +28,7 @@ import { addFlashcard, isInFlashcards } from "../../lib/flashcards";
 import { addToCart } from "../../lib/cart";
 import { sanitizeText } from "../../lib/utils/sanitize";
 import { useNotifications } from "../../components/NotificationSystem";
-import { useLearningType } from "../../context/LearningTypeContext";
+import { useLearningType } from "../../../src/context/LearningTypeContext"";
 import ProblemSolvingQuestion from "../../components/ProblemSolvingQuestion";
 // import _CodeEditor from "../../components/_CodeEditor";
 import { QuestionContent } from "@elzatona/components";
