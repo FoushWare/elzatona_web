@@ -4,7 +4,7 @@ import React from "react";
 import { useUserType } from "@elzatona/contexts";
 import { ErrorBoundary } from "@elzatona/components";
 import { useRouter } from "next/navigation";
-import { useLearningType } from "../../context/LearningTypeContext";
+import { useLearningType } from "../context/LearningTypeContext"";
 import { HomePageLayout } from "../components/home/organisms/HomePageLayout";
 import { useHomePageState } from "../components/home/hooks/useHomePageState";
 import { getPersonalizedContent } from "../../lib/utils/homePageHelpers";
