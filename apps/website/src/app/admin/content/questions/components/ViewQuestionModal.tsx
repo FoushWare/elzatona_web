@@ -235,19 +235,36 @@ const formatWithIndentation = (codeLines: string[]): string => {
     // Add the line with proper indentation
     formattedLines.push("  ".repeat(indentLevel) + trimmed);
 
-    // Calculate net braces/brackets/parens for this line
-    const openBraces = countRegexMatches(trimmed, /{/g);
-    const closeBraces = countRegexMatches(trimmed, /}/g);
-    const openBrackets = countRegexMatches(trimmed, /\[/g);
-    const closeBrackets = countRegexMatches(trimmed, /\]/g);
-    const openParens = countRegexMatches(trimmed, /\(/g);
-    const closeParens = countRegexMatches(trimmed, /\)/g);
+    // Calculate net braces/brackets/parens for this line using single regex
+    const bracketCounts = {
+      openBraces: 0,
+      closeBraces: 0,
+      openBrackets: 0,
+      closeBrackets: 0,
+      openParens: 0,
+      closeParens: 0,
+    };
+    
+    // Use single regex to match all bracket types
+    const bracketMatches = trimmed.match(/[{}()\[\]]/g);
+    if (bracketMatches) {
+      bracketMatches.forEach(bracket => {
+        switch (bracket) {
+          case '{': bracketCounts.openBraces++; break;
+          case '}': bracketCounts.closeBraces++; break;
+          case '[': bracketCounts.openBrackets++; break;
+          case ']': bracketCounts.closeBrackets++; break;
+          case '(': bracketCounts.openParens++; break;
+          case ')': bracketCounts.closeParens++; break;
+        }
+      });
+    }
 
     // Increase indent after opening braces/brackets/parens
     const netIncrease = Math.max(
-      openBraces - closeBraces,
-      openBrackets - closeBrackets,
-      openParens - closeParens,
+      bracketCounts.openBraces - bracketCounts.closeBraces,
+      bracketCounts.openBrackets - bracketCounts.closeBrackets,
+      bracketCounts.openParens - bracketCounts.closeParens,
     );
 
     if (netIncrease > 0) {
@@ -539,18 +556,14 @@ export function ViewQuestionModal({
 
   // Helper function to get resource icon based on type
   const getResourceIcon = (resourceType: string) => {
-    return (
-      resourceConfig[resourceType as keyof typeof resourceConfig]?.icon ||
-      resourceConfig.default.icon
-    );
+    const config = resourceConfig[resourceType as keyof typeof resourceConfig];
+    return config?.icon || resourceConfig.default.icon;
   };
 
   // Helper function to get resource color classes based on type
   const getResourceColorClasses = (resourceType: string): string => {
-    return (
-      resourceConfig[resourceType as keyof typeof resourceConfig]
-        ?.colorClasses || resourceConfig.default.colorClasses
-    );
+    const config = resourceConfig[resourceType as keyof typeof resourceConfig];
+    return config?.colorClasses || resourceConfig.default.colorClasses;
   };
 
   // Helper function to get resource type label

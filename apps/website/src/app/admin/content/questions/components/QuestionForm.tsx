@@ -406,7 +406,7 @@ export default function QuestionForm({
           <div className="flex items-center space-x-2">
             <Checkbox
               id="is_active"
-              checked={formData.is_active !== false}
+              checked={formData.is_active === true}
               onCheckedChange={(checked) =>
                 handleFieldChange("is_active", checked)
               }
