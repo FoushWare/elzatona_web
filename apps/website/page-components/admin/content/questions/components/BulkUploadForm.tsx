@@ -54,6 +54,19 @@ const sanitizeShikiHtml = (html: string): string => {
   });
 };
 
+// Security wrapper for CSS content
+const sanitizeCSS = (css: string): string => {
+  if (typeof window === "undefined") {
+    return css; // Server-side: return as-is
+  }
+  
+  return DOMPurify.sanitize(css, {
+    ALLOWED_TAGS: ["style"],
+    ALLOWED_ATTR: [],
+    ALLOW_DATA_ATTR: false,
+  });
+};
+
 const processHexColor = (colorValue: string): { shouldReplace: boolean; newColor: string } => {
   const hex = colorValue.substring(1);
   const r = Number.parseInt(hex.substring(0, 2), 16);
@@ -921,7 +934,7 @@ export function BulkUploadForm({
                                     {/* Custom styles for Shiki output */}
                                     <style
                                       dangerouslySetInnerHTML={{
-                                        __html: sanitizeShikiHtml(`
+                                        __html: sanitizeCSS(`
                                       .shiki-wrapper pre {
                                         margin: 0 !important;
                                         padding: 0.375rem 0 0.375rem 0 !important;
@@ -953,7 +966,7 @@ export function BulkUploadForm({
                                       .shiki-light-mode .shiki-wrapper pre code .line {
                                         background-color: transparent !important;
                                       }
-                                    `,
+                                    `),
                                       }}
                                     />
 

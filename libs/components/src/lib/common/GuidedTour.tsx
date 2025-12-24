@@ -200,7 +200,7 @@ export const GuidedTour: React.FC<GuidedTourProps> = (props) => {
           background-color: var(--tour-disabled, #9ca3af) !important;
           cursor: not-allowed !important;
         }
-      `,
+        `),
         }}
       />
       <TourProvider
