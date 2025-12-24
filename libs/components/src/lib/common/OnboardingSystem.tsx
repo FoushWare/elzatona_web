@@ -300,16 +300,14 @@ export const OnboardingSystem: React.FC<OnboardingSystemProps> = ({
   return (
     <div className="fixed inset-0 z-50 overflow-y-auto">
       <div className="flex min-h-full items-center justify-center p-4">
-        <div
-          className="fixed inset-0 bg-black bg-opacity-50 transition-opacity"
+        <button
+          className="fixed inset-0 bg-black bg-opacity-50 transition-opacity border-0 cursor-pointer"
           onClick={onClose}
           onKeyDown={(e) => {
             if (e.key === "Escape") {
               onClose();
             }
           }}
-          role="button"
-          tabIndex={0}
           aria-label="Close onboarding"
         />
 

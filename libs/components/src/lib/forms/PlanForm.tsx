@@ -416,7 +416,7 @@ export const PlanForm: React.FC<PlanFormProps> = ({
         <div className="mt-2 space-y-1">
           {formData.learningObjectives.map((objective, index) => (
             <div
-              key={index}
+              key={`objective-${objective}`}
               className="flex items-center justify-between bg-gray-100 dark:bg-gray-700 p-2 rounded"
             >
               <span className="text-sm">{objective}</span>

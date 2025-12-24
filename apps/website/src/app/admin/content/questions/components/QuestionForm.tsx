@@ -252,11 +252,10 @@ export default function QuestionForm({
             {showCategoryDropdown && (
               <div className="absolute z-10 w-full mt-1 bg-white border rounded-md shadow-lg max-h-60 overflow-auto">
                 {filteredCategories.map((category) => (
-                  <div
+                  <button
                     key={category}
-                    className="px-3 py-2 hover:bg-gray-100 cursor-pointer"
-                    role="option"
-                    tabIndex={0}
+                    type="button"
+                    className="w-full px-3 py-2 hover:bg-gray-100 cursor-pointer text-left border-0 bg-transparent"
                     onClick={() => handleCategorySelect(category)}
                     onKeyDown={(e) => {
                       if (e.key === "Enter" || e.key === " ") {
@@ -266,7 +265,7 @@ export default function QuestionForm({
                     }}
                   >
                     {category}
-                  </div>
+                  </button>
                 ))}
               </div>
             )}
@@ -301,11 +300,10 @@ export default function QuestionForm({
               <div className="relative z-10">
                 <div className="absolute w-full mt-1 bg-white border rounded-md shadow-lg max-h-40 overflow-auto">
                   {filteredTags.map((tag) => (
-                    <div
+                    <button
                       key={tag}
-                      className="px-3 py-2 hover:bg-gray-100 cursor-pointer"
-                      role="option"
-                      tabIndex={0}
+                      type="button"
+                      className="w-full px-3 py-2 hover:bg-gray-100 cursor-pointer text-left border-0 bg-transparent"
                       onClick={() => handleTagSelect(tag)}
                       onKeyDown={(e) => {
                         if (e.key === "Enter" || e.key === " ") {
@@ -315,7 +313,7 @@ export default function QuestionForm({
                       }}
                     >
                       {tag}
-                    </div>
+                    </button>
                   ))}
                 </div>
               </div>

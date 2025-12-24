@@ -1,23 +1,21 @@
 "use client";
 
 import React, { useState } from "react";
-import { Button } from "@elzatona/components";
 import {
+  Button,
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@elzatona/components";
-import { Badge } from "@elzatona/components";
-import { Progress } from "@elzatona/components";
-import {
+  Badge,
+  Progress,
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-Input,
+  Input,
   Label,
   Alert,
   AlertDescription,

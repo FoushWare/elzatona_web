@@ -207,6 +207,26 @@ export const NavbarSimple: React.FC = () => {
     return `${baseClasses} ${activeClasses}`;
   };
 
+  // Helper function to get auth link styling to reduce nested ternary
+  const getAuthLinkClassName = (href: string) => {
+    const baseClasses = "font-medium transition-colors duration-200";
+    const isActive = isActiveLink(href);
+    
+    if (isActive) {
+      return `${baseClasses} ${
+        isScrolled
+          ? "text-indigo-600 dark:text-indigo-400 font-semibold border-b-2 border-indigo-600 dark:border-indigo-400 pb-1"
+          : "text-indigo-100 font-semibold border-b-2 border-indigo-100 pb-1"
+      }`;
+    }
+    
+    return `${baseClasses} ${
+      isScrolled
+        ? "text-gray-700 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400"
+        : "text-white hover:text-indigo-100"
+    }`;
+  };
+
   // Handle sign out
   const handleSignOut = async () => {
     try {
@@ -356,15 +376,7 @@ export const NavbarSimple: React.FC = () => {
             ) : (
               <Link
                 href="/auth"
-                className={`font-medium transition-colors duration-200 ${
-                  isActiveLink("/auth")
-                    ? isScrolled
-                      ? "text-indigo-600 dark:text-indigo-400 font-semibold border-b-2 border-indigo-600 dark:border-indigo-400 pb-1"
-                      : "text-indigo-100 font-semibold border-b-2 border-indigo-100 pb-1"
-                    : isScrolled
-                      ? "text-gray-700 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400"
-                      : "text-white hover:text-indigo-100"
-                }`}
+                className={getAuthLinkClassName("/auth")}
               >
                 Sign In
               </Link>

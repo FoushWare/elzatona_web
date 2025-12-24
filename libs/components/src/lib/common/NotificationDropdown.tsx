@@ -91,16 +91,14 @@ export function NotificationDropdown({
       {isOpen && (
         <>
           {/* Backdrop */}
-          <div
-            className="fixed inset-0 z-10"
+          <button
+            className="fixed inset-0 z-10 bg-transparent border-0 cursor-pointer"
             onClick={() => setIsOpen(false)}
             onKeyDown={(e) => {
               if (e.key === "Escape") {
                 setIsOpen(false);
               }
             }}
-            role="button"
-            tabIndex={0}
             aria-label="Close notifications"
           />
 

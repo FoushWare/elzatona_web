@@ -896,7 +896,7 @@ export function ViewQuestionModal({
         </div>
 
         {/* Answer Options */}
-        {question.options && question.options.length > 0 ? (
+        {question.options?.length > 0 ? (
           <div className="space-y-3 sm:space-y-4">
             <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-3">
               Answer Options
