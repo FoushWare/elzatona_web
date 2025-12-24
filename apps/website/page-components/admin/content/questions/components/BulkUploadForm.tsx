@@ -115,11 +115,8 @@ export function BulkUploadForm({
       try {
         const rawCode = String(question.code || "");
         let codeWithNewlines = rawCode
-          .replace(/\\n/g, "\n")
-          .replace(/\\r\\n/g, "\n")
-          .replace(/\\r/g, "\n")
-          .replace(/\r\n/g, "\n")
-          .replace(/\r/g, "\n")
+          // Handle all line break variations with single regex
+          .replace(/\\r\\n|\\r|\\n|\r\n|\r/g, "\n")
           .trim();
 
         // Remove empty lines at the start
@@ -179,7 +176,7 @@ export function BulkUploadForm({
         });
 
         // Post-process for light mode visibility
-        if (typeof window !== "undefined") {
+        if (window !== undefined) {
           const prefersDark = window.matchMedia(
             "(prefers-color-scheme: dark)",
           ).matches;
