@@ -165,7 +165,7 @@ export function BulkUploadForm({
 
         // Detect theme
         const prefersDark =
-          typeof window !== "undefined" &&
+          window !== undefined &&
           window.matchMedia("(prefers-color-scheme: dark)").matches;
         const themeName = prefersDark ? "github-dark" : "github-light";
 
@@ -785,7 +785,7 @@ const detectLanguage = (code: string): string => {
 // Helper function to detect theme preference
 const detectTheme = (): string => {
   const prefersDark =
-    typeof window !== "undefined" &&
+    window !== undefined &&
     window.matchMedia("(prefers-color-scheme: dark)").matches;
   return prefersDark ? "dark" : "light";
 };
