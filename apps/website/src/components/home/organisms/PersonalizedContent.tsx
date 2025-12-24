@@ -3,12 +3,16 @@
 import React from "react";
 import Link from "next/link";
 import { ArrowRight, Compass } from "lucide-react";
-import type { ActivePlan, PersonalizedContent as PersonalizedContentType } from "@/types/homePage.types";
+import type {
+  UserType,
+  ActivePlan,
+  PersonalizedContent as PersonalizedContentType,
+} from "@/types/homePage.types";
 import { ANIMATION_DELAYS } from "@/lib/constants/homePage.constants";
 import { cn } from "@/lib/utils";
 
 interface PersonalizedContentProps {
-  userType: string;
+  userType: UserType;
   showAnimation: boolean;
   hasActivePlan: boolean;
   activePlan: ActivePlan | null;
@@ -33,7 +37,7 @@ export function PersonalizedContent({
           "py-16 px-4 sm:px-6 lg:px-8 relative z-10 transition-all duration-1000",
           showAnimation
             ? "opacity-100 translate-y-0"
-            : "opacity-0 translate-y-8"
+            : "opacity-0 translate-y-8",
         )}
         style={{ transitionDelay: `${ANIMATION_DELAYS.CONTENT_SECTION}ms` }}
       >
@@ -43,7 +47,7 @@ export function PersonalizedContent({
               "bg-gradient-to-r rounded-2xl p-8 relative overflow-hidden",
               hasActivePlan
                 ? "from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20"
-                : "from-indigo-50 to-purple-50 dark:from-indigo-900/20 dark:to-purple-900/20"
+                : "from-indigo-50 to-purple-50 dark:from-indigo-900/20 dark:to-purple-900/20",
             )}
           >
             <div className="absolute inset-0 opacity-10">
@@ -56,7 +60,7 @@ export function PersonalizedContent({
               <div
                 className={cn(
                   "w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 animate-pulse",
-                  hasActivePlan ? "bg-green-600" : "bg-indigo-600"
+                  hasActivePlan ? "bg-green-600" : "bg-indigo-600",
                 )}
               >
                 {personalizedContent.icon}
@@ -85,7 +89,7 @@ export function PersonalizedContent({
                   "inline-flex items-center space-x-2 px-6 py-3 text-white rounded-lg font-medium transition-all duration-300 transform hover:scale-105 hover:shadow-lg",
                   hasActivePlan
                     ? "bg-green-600 hover:bg-green-700"
-                    : "bg-indigo-600 hover:bg-indigo-700"
+                    : "bg-indigo-600 hover:bg-indigo-700",
                 )}
               >
                 <span>{personalizedContent.cta}</span>
@@ -102,7 +106,7 @@ export function PersonalizedContent({
     <section
       className={cn(
         "py-16 px-4 sm:px-6 lg:px-8 relative z-10 transition-all duration-1000",
-        showAnimation ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
+        showAnimation ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8",
       )}
       style={{ transitionDelay: `${ANIMATION_DELAYS.CONTENT_SECTION}ms` }}
     >
@@ -138,4 +142,3 @@ export function PersonalizedContent({
     </section>
   );
 }
-

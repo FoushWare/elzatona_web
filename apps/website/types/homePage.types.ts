@@ -44,4 +44,3 @@ export interface UserTypeContentSectionProps {
   activePlan: ActivePlan | null;
   personalizedContent: PersonalizedContent;
 }
-

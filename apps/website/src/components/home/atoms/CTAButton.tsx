@@ -39,9 +39,7 @@ export function CTAButton({
   return (
     <div
       className={`transition-all duration-1000 ${
-        showAnimation
-          ? "opacity-100 translate-y-0"
-          : "opacity-0 translate-y-8"
+        showAnimation ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
       } ${className}`}
     >
       <div className="relative inline-block">
@@ -64,4 +62,3 @@ export function CTAButton({
     </div>
   );
 }
-

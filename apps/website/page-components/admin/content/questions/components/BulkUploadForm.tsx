@@ -42,12 +42,22 @@ const sanitizeShikiHtml = (html: string): string => {
   if (typeof window === "undefined") {
     return html; // Server-side: return as-is
   }
-  
+
   // Shiki already outputs safe HTML, but add extra sanitization for defense-in-depth
   return DOMPurify.sanitize(html, {
     ALLOWED_TAGS: [
-      "pre", "code", "span", "div", "style",
-      "br", "p", "strong", "em", "u", "i", "b"
+      "pre",
+      "code",
+      "span",
+      "div",
+      "style",
+      "br",
+      "p",
+      "strong",
+      "em",
+      "u",
+      "i",
+      "b",
     ],
     ALLOWED_ATTR: ["class", "style", "data-*"],
     ALLOW_DATA_ATTR: true,
@@ -59,7 +69,7 @@ const sanitizeCSS = (css: string): string => {
   if (typeof window === "undefined") {
     return css; // Server-side: return as-is
   }
-  
+
   return DOMPurify.sanitize(css, {
     ALLOWED_TAGS: ["style"],
     ALLOWED_ATTR: [],
@@ -102,7 +112,9 @@ const shikiStyles = `
   }
 `;
 
-const processHexColor = (colorValue: string): { shouldReplace: boolean; newColor: string } => {
+const processHexColor = (
+  colorValue: string,
+): { shouldReplace: boolean; newColor: string } => {
   const hex = colorValue.substring(1);
   const r = Number.parseInt(hex.substring(0, 2), 16);
   const g = Number.parseInt(hex.substring(2, 4), 16);
@@ -119,7 +131,9 @@ const processHexColor = (colorValue: string): { shouldReplace: boolean; newColor
   return { shouldReplace: false, newColor: colorValue };
 };
 
-const processRgbColor = (colorValue: string): { shouldReplace: boolean; newColor: string } => {
+const processRgbColor = (
+  colorValue: string,
+): { shouldReplace: boolean; newColor: string } => {
   const matches = colorValue.match(/rgb\((\d+),\s*(\d+),\s*(\d+)\)/);
   if (!matches) return { shouldReplace: false, newColor: colorValue };
 
@@ -139,14 +153,12 @@ const processRgbColor = (colorValue: string): { shouldReplace: boolean; newColor
 };
 
 const normalizeCodeBreaks = (code: string): string => {
-  return code
-    .replace(/\\r\\n|\\r|\\n|\r\n|\r/g, "\n")
-    .trim();
+  return code.replace(/\\r\\n|\\r|\\n|\r\n|\r/g, "\n").trim();
 };
 
 const cleanCodeFormatting = (code: string): string => {
   let formattedCode = code.trim();
-  
+
   // Remove leading and trailing newlines
   while (formattedCode.startsWith("\n")) {
     formattedCode = formattedCode.substring(1);
@@ -154,22 +166,22 @@ const cleanCodeFormatting = (code: string): string => {
   while (formattedCode.endsWith("\n")) {
     formattedCode = formattedCode.slice(0, -1);
   }
-  
+
   // Remove empty lines and reduce multiple consecutive newlines
   const lines = formattedCode.split("\n");
   const nonEmptyLines = lines.filter((line) => line.trim().length > 0);
   formattedCode = nonEmptyLines.join("\n");
-  
+
   if (formattedCode.includes("\n\n")) {
     formattedCode = formattedCode.replace(/\n{2,}/g, "\n");
   }
-  
+
   return formattedCode;
 };
 
 const detectLanguage = (code: string): string => {
   const codeText = code.toLowerCase();
-  
+
   if (
     codeText.includes("def ") ||
     (codeText.includes("import ") && codeText.includes("print"))
@@ -187,7 +199,7 @@ const detectLanguage = (code: string): string => {
   ) {
     return "typescript";
   }
-  
+
   return "javascript";
 };
 
@@ -198,7 +210,9 @@ const detectTheme = (): string => {
 };
 
 // Helper function to process color for light mode
-const processColorForLightMode = (colorValue: string): { shouldReplace: boolean; newColor: string } => {
+const processColorForLightMode = (
+  colorValue: string,
+): { shouldReplace: boolean; newColor: string } => {
   if (colorValue.startsWith("#")) {
     return processHexColor(colorValue);
   } else if (colorValue.startsWith("rgb")) {
@@ -208,7 +222,11 @@ const processColorForLightMode = (colorValue: string): { shouldReplace: boolean;
 };
 
 // Helper function to highlight a single question's code
-const highlightQuestionCode = (question: any, index: number, shikiHighlighter: any): string => {
+const highlightQuestionCode = (
+  question: any,
+  index: number,
+  shikiHighlighter: any,
+): string => {
   if (!question.code) return "";
 
   try {
@@ -219,20 +237,30 @@ const highlightQuestionCode = (question: any, index: number, shikiHighlighter: a
     const theme = detectTheme();
 
     let html = shikiHighlighter.codeToHtml(formattedCode, {
-      lang: language === "typescript" ? "ts" : language === "javascript" ? "js" : language,
+      lang:
+        language === "typescript"
+          ? "ts"
+          : language === "javascript"
+            ? "js"
+            : language,
       theme,
     });
 
     // Post-process for light mode visibility
     if (typeof window !== "undefined") {
-      const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+      const prefersDark = window.matchMedia(
+        "(prefers-color-scheme: dark)",
+      ).matches;
       if (!prefersDark) {
         html = processHtmlForLightMode(html);
       } else {
         // Dark mode: just remove empty lines
         html = html
           .replace(/<span class="line">[\s\u00A0\u200B]*<\/span>/g, "")
-          .replace(/<span[^>]*class="[^"]*line[^"]*">[\s\u00A0\u200B]*<\/span>/g, "");
+          .replace(
+            /<span[^>]*class="[^"]*line[^"]*">[\s\u00A0\u200B]*<\/span>/g,
+            "",
+          );
       }
     }
 
@@ -249,7 +277,7 @@ const processHtmlForLightMode = (html: string): string => {
     const tempDiv = document.createElement("div");
     tempDiv.innerHTML = html;
     const preElement = tempDiv.querySelector("pre");
-    
+
     if (preElement) {
       const codeElement = preElement.querySelector("code");
       if (codeElement) {
@@ -266,11 +294,14 @@ const processHtmlForLightMode = (html: string): string => {
         const allSpans = codeElement.querySelectorAll("span");
         allSpans.forEach((el) => {
           const style = (el as HTMLElement).getAttribute("style") || "";
-          const colorMatch = style.match(/color:\s*(#[0-9a-f]{6}|rgb\([^)]+\))/i);
+          const colorMatch = style.match(
+            /color:\s*(#[0-9a-f]{6}|rgb\([^)]+\))/i,
+          );
 
           if (colorMatch) {
             const colorValue = colorMatch[1];
-            const { shouldReplace, newColor } = processColorForLightMode(colorValue);
+            const { shouldReplace, newColor } =
+              processColorForLightMode(colorValue);
 
             if (shouldReplace) {
               const newStyle = style.replace(
@@ -302,7 +333,7 @@ const processHtmlForLightMode = (html: string): string => {
   } catch (e) {
     console.warn("DOM processing failed:", e);
   }
-  
+
   return html;
 };
 
@@ -396,7 +427,11 @@ export function BulkUploadForm({
     const highlighted: Record<number, string> = {};
 
     previewQuestions.forEach((question, index) => {
-      highlighted[index] = highlightQuestionCode(question, index, shikiHighlighter);
+      highlighted[index] = highlightQuestionCode(
+        question,
+        index,
+        shikiHighlighter,
+      );
     });
 
     setCodeHighlightedHtml(highlighted);
@@ -539,11 +574,14 @@ export function BulkUploadForm({
     if (!jsonText.trim()) {
       return { isValid: false, error: "JSON text is empty" };
     }
-    
+
     if (jsonError) {
-      return { isValid: false, error: "Please fix JSON errors before submitting" };
+      return {
+        isValid: false,
+        error: "Please fix JSON errors before submitting",
+      };
     }
-    
+
     return { isValid: true, error: null };
   };
 
@@ -561,7 +599,7 @@ export function BulkUploadForm({
 
     if (questions.length === 0) {
       throw new Error(
-        "JSON is valid but contains no questions. Please add at least one question."
+        "JSON is valid but contains no questions. Please add at least one question.",
       );
     }
 
@@ -871,448 +909,10 @@ export function BulkUploadForm({
                   )}
                 </div>
               </div>
-            </div>
-          ))}
-        </div>
-      )}
-    </div>
-  );
-}
-                                  ? "bg-gray-800 border-gray-700"
-                                  : "bg-gray-100 border-gray-200"
-                              }`}
-                            >
-                              <div className="flex items-center gap-2">
-                                {/* Window controls */}
-                                <div className="flex gap-1">
-                                  <div className="w-2 h-2 rounded-full bg-red-500"></div>
-                                  <div className="w-2 h-2 rounded-full bg-yellow-500"></div>
-                                  <div className="w-2 h-2 rounded-full bg-green-500"></div>
-                                </div>
-                                {/* File name */}
-                                <div
-                                  className={`flex items-center gap-1.5 ml-1 px-2 py-0.5 rounded border ${
-                                    codeTheme === "dark"
-                                      ? "bg-gray-700/50 border-gray-600"
-                                      : "bg-gray-200 border-gray-300"
-                                  }`}
-                                >
-                                  <div
-                                    className={`w-1.5 h-1.5 rounded-full ${codeTheme === "dark" ? "bg-blue-400" : "bg-blue-500"}`}
-                                  ></div>
-                                  <span
-                                    className={`text-xs font-medium font-mono ${
-                                      codeTheme === "dark"
-                                        ? "text-gray-300"
-                                        : "text-gray-700"
-                                    }`}
-                                  >
-                                    code.
-                                    {detectedLanguage === "python"
-                                      ? "py"
-                                      : detectedLanguage === "java"
-                                        ? "java"
-                                        : detectedLanguage === "typescript"
-                                          ? "ts"
-                                          : "js"}
-                                  </span>
-                                </div>
-                              </div>
-                              {/* Language badge */}
-                              <div
-                                className={`px-2 py-0.5 rounded border ${
-                                  codeTheme === "dark"
-                                    ? "bg-gray-700/50 border-gray-600"
-                                    : "bg-gray-200 border-gray-300"
-                                }`}
-                              >
-                                <span
-                                  className={`text-xs font-medium uppercase ${
-                                    codeTheme === "dark"
-                                      ? "text-gray-300"
-                                      : "text-gray-700"
-                                  }`}
-                                >
-                                  {detectedLanguage}
-                                </span>
-                              </div>
-                            </div>
-
-                            {/* Code content with Shiki highlighting */}
-                            <div
-                              className={`overflow-x-auto ${codeTheme === "dark" ? "bg-gray-900" : "bg-white border border-gray-200"}`}
-                            >
-                              {isLoadingShiki ? (
-                                <div className="p-2 text-center text-xs text-gray-500">
-                                  Loading syntax highlighting...
-                                </div>
-                              ) : highlightedHtml ? (
-                                <div className="relative">
-                                  {/* Line numbers background */}
-                                  <div
-                                    className={`absolute left-0 top-0 bottom-0 w-10 border-r ${
-                                      codeTheme === "dark"
-                                        ? "bg-gray-800/50 border-gray-700"
-                                        : "bg-gray-100 border-gray-200"
-                                    }`}
-                                  ></div>
-
-                                  {/* Shiki highlighted code with line numbers */}
-                                  <div className="relative">
-                                    <div
-                                      className={`shiki-wrapper pl-10 ${codeTheme === "light" ? "shiki-light-mode" : "shiki-dark-mode"}`}
-                                      dangerouslySetInnerHTML={{
-                                        __html: sanitizeShikiHtml(highlightedHtml),
-                                      }}
-                                    />
-
-                                    {/* Custom styles for Shiki output */}
-                                    <style
-                                      dangerouslySetInnerHTML={{
-                                        __html: sanitizeCSS(shikiStyles),
-                                      }}
-                                    />
-
-                                    {/* Line numbers */}
-                                    <div
-                                      className="absolute left-0 top-0 flex flex-col"
-                                      style={{ paddingTop: "0.375rem" }}
-                                    >
-                                      {codeLines.map((_, index) => (
-                                        <span
-                                          key={index}
-                                          className={`select-none pr-2 pl-2 text-right min-w-[2.5rem] text-xs font-medium ${
-                                            codeTheme === "dark"
-                                              ? "text-gray-400"
-                                              : "text-gray-500"
-                                          }`}
-                                          style={{
-                                            lineHeight: "1.25",
-                                            minHeight: "1.25rem",
-                                            display: "block",
-                                          }}
-                                        >
-                                          {index + 1}
-                                        </span>
-                                      ))}
-                                    </div>
-                                  </div>
-                                </div>
-                              ) : (
-                                // Fallback: plain code display
-                                <div className="relative">
-                                  <div
-                                    className={`absolute left-0 top-0 bottom-0 w-10 border-r ${
-                                      codeTheme === "dark"
-                                        ? "bg-gray-800/50 border-gray-700"
-                                        : "bg-gray-100 border-gray-200"
-                                    }`}
-                                  ></div>
-                                  <pre className="m-0 p-2 pl-10 text-xs font-mono font-medium leading-relaxed">
-                                    <code className="block">
-                                      {codeLines.map((line, index) => (
-                                        <div
-                                          key={index}
-                                          className="flex items-start"
-                                        >
-                                          <span
-                                            className={`select-none pr-2 text-right min-w-[2.5rem] text-xs font-medium ${
-                                              codeTheme === "dark"
-                                                ? "text-gray-400"
-                                                : "text-gray-500"
-                                            }`}
-                                          >
-                                            {index + 1}
-                                          </span>
-                                          <span
-                                            className={`flex-1 whitespace-pre pl-2 pr-2 py-0.5 text-xs ${
-                                              codeTheme === "dark"
-                                                ? "text-gray-100"
-                                                : "text-gray-900"
-                                            }`}
-                                          >
-                                            {line || " "}
-                                          </span>
-                                        </div>
-                                      ))}
-                                    </code>
-                                  </pre>
-                                </div>
-                              )}
-                            </div>
-                          </div>
-                        </div>
-                      );
-                    })()}
-
-                  {/* Metadata badges */}
-                  <div className="flex flex-wrap gap-2 pt-2 border-t border-gray-200 dark:border-gray-700">
-                    {question.difficulty && (
-                      <Badge variant="outline" className="text-xs capitalize">
-                        {question.difficulty}
-                      </Badge>
-                    )}
-                    {question.category && (
-                      <Badge variant="secondary" className="text-xs">
-                        {question.category}
-                      </Badge>
-                    )}
-                    {question.topic && (
-                      <Badge variant="outline" className="text-xs">
-                        {question.topic}
-                      </Badge>
-                    )}
-                    {question.type && (
-                      <Badge variant="outline" className="text-xs">
-                        {question.type}
-                      </Badge>
-                    )}
-                  </div>
-                </div>
-
-                {question.options &&
-                  Array.isArray(question.options) &&
-                  question.options.length > 0 && (
-                    <div className="space-y-2">
-                      <p className="text-xs font-medium text-gray-700 dark:text-gray-300">
-                        Options:
-                      </p>
-                      <div className="space-y-2 pl-2">
-                        {question.options.map((option: any, oIndex: number) => (
-                          <div
-                            key={oIndex}
-                            className={`flex items-start gap-2 p-2 rounded-md border ${
-                              option.isCorrect
-                                ? "bg-green-50 dark:bg-green-900/20 border-green-200 dark:border-green-800"
-                                : "bg-gray-50 dark:bg-gray-800/50 border-gray-200 dark:border-gray-700"
-                            }`}
-                          >
-                            <div className="flex items-center h-5 mt-0.5">
-                              <input
-                                type="checkbox"
-                                checked={option.isCorrect || false}
-                                readOnly
-                                className="w-4 h-4 rounded border-gray-300 dark:border-gray-600 text-green-600 focus:ring-green-500 dark:focus:ring-green-400"
-                              />
-                            </div>
-                            <div className="flex-1 min-w-0">
-                              <p
-                                className={`text-sm ${
-                                  option.isCorrect
-                                    ? "text-green-800 dark:text-green-200 font-medium"
-                                    : "text-gray-700 dark:text-gray-300"
-                                }`}
-                              >
-                                {option.text || `Option ${oIndex + 1}`}
-                              </p>
-                              {option.explanation && (
-                                <p className="text-xs text-gray-600 dark:text-gray-400 mt-1 italic">
-                                  {option.explanation}
-                                </p>
-                              )}
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  )}
-
-                {question.explanation && (
-                  <div className="pt-2 border-t border-gray-200 dark:border-gray-700">
-                    <p className="text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">
-                      Explanation:
-                    </p>
-                    <p className="text-xs text-gray-600 dark:text-gray-400">
-                      {question.explanation}
-                    </p>
-                  </div>
-                )}
-
-                {question.hints &&
-                  Array.isArray(question.hints) &&
-                  question.hints.length > 0 && (
-                    <div className="pt-2 border-t border-gray-200 dark:border-gray-700">
-                      <p className="text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">
-                        Hints:
-                      </p>
-                      <ul className="list-disc list-inside space-y-1">
-                        {question.hints.map((hint: string, hIndex: number) => (
-                          <li
-                            key={hIndex}
-                            className="text-xs text-gray-600 dark:text-gray-400"
-                          >
-                            {hint}
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                  )}
-
-                {question.points && (
-                  <div className="flex items-center gap-2 text-xs text-gray-600 dark:text-gray-400">
-                    <span className="font-medium">Points:</span>
-                    <Badge variant="outline" className="text-xs">
-                      {question.points}
-                    </Badge>
-                  </div>
-                )}
-              </div>
             ))}
           </div>
-
-          {totalQuestionsCount > 3 && (
-            <div className="mt-3 pt-3 border-t border-blue-200 dark:border-blue-800">
-              <p className="text-xs text-center text-gray-600 dark:text-gray-400 italic">
-                + {totalQuestionsCount - 3} more question
-                {totalQuestionsCount - 3 !== 1 ? "s" : ""} will be uploaded
-              </p>
-            </div>
-          )}
         </div>
       )}
-
-      {error && (
-        <div className="p-4 bg-red-50 dark:bg-red-900/20 border-2 border-red-200 dark:border-red-800 text-red-700 dark:text-red-300 rounded-lg">
-          <div className="flex items-start gap-3">
-            <div className="flex-shrink-0 w-5 h-5 mt-0.5">
-              <AlertTriangle className="w-5 h-5 text-red-600 dark:text-red-400" />
-            </div>
-            <div className="flex-1">
-              <p className="text-sm font-semibold mb-1">Upload Errors</p>
-              <p className="text-sm whitespace-pre-line">{error}</p>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {progress && (
-        <div className="p-4 bg-blue-50 dark:bg-blue-900/20 border-2 border-blue-200 dark:border-blue-800 rounded-lg">
-          <div className="flex items-center gap-3 mb-3">
-            <Loader2 className="w-5 h-5 text-blue-600 dark:text-blue-400 animate-spin" />
-            <div className="flex-1">
-              <p className="text-sm font-semibold text-blue-900 dark:text-blue-200">
-                Uploading questions...
-              </p>
-              <p className="text-xs text-blue-700 dark:text-blue-300 mt-0.5">
-                Processing batch {progress.current} of {progress.total}
-              </p>
-            </div>
-            <Badge
-              variant="secondary"
-              className="bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 border-blue-200 dark:border-blue-800"
-            >
-              {Math.round((progress.current / progress.total) * 100)}%
-            </Badge>
-          </div>
-          <div className="w-full bg-blue-200 dark:bg-blue-800 rounded-full h-2 overflow-hidden">
-            <div
-              className="bg-blue-600 dark:bg-blue-400 h-2 transition-all duration-300 ease-out"
-              style={{ width: `${(progress.current / progress.total) * 100}%` }}
-            />
-          </div>
-        </div>
-      )}
-
-      {success && (
-        <div className="p-4 bg-green-100 dark:bg-green-900 text-green-700 dark:text-green-300 rounded-lg">
-          <p className="text-sm">{success}</p>
-        </div>
-      )}
-
-      <div className="bg-blue-50 dark:bg-blue-900/20 p-4 rounded-lg">
-        <h4 className="text-sm font-semibold mb-2 text-gray-900 dark:text-white">
-          File Format Requirements:
-        </h4>
-        <div className="text-sm text-gray-600 dark:text-gray-400 space-y-2">
-          <div>
-            <p className="font-medium mb-1">
-              <strong>JSON Format:</strong> Array of question objects
-            </p>
-            <p className="ml-2">
-              <strong>Required fields:</strong> title, content
-            </p>
-            <p className="ml-2">
-              <strong>Optional fields:</strong>
-            </p>
-            <ul className="ml-6 list-disc space-y-0.5">
-              <li>
-                type: &quot;multiple-choice&quot; | &quot;true-false&quot; |
-                &quot;code&quot; &quot;true-false&quot; | &quot;code&quot;
-              </li>
-              <li>
-                difficulty: &quot;beginner&quot; | &quot;intermediate&quot; |
-                &quot;advanced&quot;
-              </li>
-              <li>
-                category: string (e.g., &quot;HTML&quot;, &quot;CSS&quot;)
-              </li>
-              <li>topic: string (e.g., &quot;HTML5 Semantics&quot;)</li>
-              <li>learningCardId: string</li>
-              <li>isActive: boolean (default: true)</li>
-              <li>tags: string[]</li>
-              <li>explanation: string</li>
-              <li>hints: string[]</li>
-              <li>points: number</li>
-              <li>
-                options: Array of objects with id, text, isCorrect, explanation
-              </li>
-              <li>answer: string</li>
-              <li>metadata: object</li>
-            </ul>
-          </div>
-          <div className="mt-2 pt-2 border-t border-gray-300 dark:border-gray-700">
-            <p className="font-medium mb-1">
-              <strong>CSV Format:</strong> First row contains headers
-            </p>
-            <p className="ml-2">Required columns: title, content</p>
-            <p className="ml-2">
-              Optional columns: type, difficulty, category, topic,
-              learningCardId, isActive, tags, explanation, hints, points, answer
-            </p>
-          </div>
-          <div className="mt-2 pt-2 border-t border-gray-300 dark:border-gray-700">
-            <p className="text-xs italic">
-              Note: Fields can be in camelCase (isActive, learningCardId) or
-              snake_case (is_active, learning_card_id). The system will
-              automatically convert them.
-            </p>
-          </div>
-        </div>
-      </div>
-
-      <DialogFooter className="gap-3 pt-4">
-        <Button
-          variant="outline"
-          onClick={onCancel}
-          disabled={loading}
-          className="border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-800 hover:border-gray-400 dark:hover:border-gray-500 disabled:opacity-50"
-        >
-          Cancel
-        </Button>
-        <Button
-          type="submit"
-          disabled={
-            (!file && !isJsonMode) ||
-            (isJsonMode && !jsonText.trim()) ||
-            loading
-          }
-          className="bg-red-600 hover:bg-red-700 dark:bg-red-700 dark:hover:bg-red-600 text-white dark:text-white shadow-sm dark:shadow-md disabled:opacity-50"
-        >
-          {loading ? (
-            <>
-              <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-              {progress
-                ? `Uploading... (${progress.current}/${progress.total})`
-                : "Uploading..."}
-            </>
-          ) : (
-            <>
-              <Upload className="w-4 h-4 mr-2" />
-              Upload Questions
-            </>
-          )}
-        </Button>
-      </DialogFooter>
     </form>
   );
 }

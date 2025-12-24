@@ -1,4 +1,4 @@
-import type { ReactNode } from "react";
+import React, { type ReactNode } from "react";
 import { Play, Map, Compass, type LucideIcon } from "lucide-react";
 import type {
   UserType,
@@ -110,9 +110,7 @@ export function getColorClasses(color: ContentColor): string {
 /**
  * Parse and validate active plan from localStorage
  */
-export function parseActivePlan(
-  planData: string | null,
-): ActivePlan | null {
+export function parseActivePlan(planData: string | null): ActivePlan | null {
   if (!planData) {
     return null;
   }
@@ -135,4 +133,3 @@ export function parseActivePlan(
     return null;
   }
 }
-

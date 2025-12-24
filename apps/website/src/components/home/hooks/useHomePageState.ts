@@ -3,7 +3,10 @@
 import { useState, useEffect } from "react";
 import type { UserType, ActivePlan } from "@/types/homePage.types";
 import { parseActivePlan } from "@/lib/utils/homePageHelpers";
-import { LOCAL_STORAGE_KEYS, ANIMATION_DELAYS } from "@/lib/constants/homePage.constants";
+import {
+  LOCAL_STORAGE_KEYS,
+  ANIMATION_DELAYS,
+} from "@/lib/constants/homePage.constants";
 
 interface UseHomePageStateReturn {
   hasActivePlan: boolean;
@@ -31,10 +34,10 @@ export function useHomePageState(userType: UserType): UseHomePageStateReturn {
   useEffect(() => {
     if (userType === "guided" && typeof window !== "undefined") {
       const activePlanData = window.localStorage.getItem(
-        LOCAL_STORAGE_KEYS.ACTIVE_GUIDED_PLAN
+        LOCAL_STORAGE_KEYS.ACTIVE_GUIDED_PLAN,
       );
       const parsedPlan = parseActivePlan(activePlanData);
-      
+
       if (parsedPlan) {
         setActivePlan(parsedPlan);
         setHasActivePlan(true);
@@ -58,4 +61,3 @@ export function useHomePageState(userType: UserType): UseHomePageStateReturn {
     showAnimation,
   };
 }
-

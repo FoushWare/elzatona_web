@@ -6,7 +6,11 @@ import { HeroSection } from "../molecules/HeroSection";
 import { LearningStyleSelector } from "../molecules/LearningStyleSelector";
 import { PersonalizedContent } from "./PersonalizedContent";
 import { FinalCTASection } from "./FinalCTASection";
-import type { UserType, ActivePlan, PersonalizedContent as PersonalizedContentType } from "@/types/homePage.types";
+import type {
+  UserType,
+  ActivePlan,
+  PersonalizedContent as PersonalizedContentType,
+} from "@/types/homePage.types";
 
 interface HomePageLayoutProps {
   userType: UserType;
@@ -61,4 +65,3 @@ export function HomePageLayout({
     </div>
   );
 }
-

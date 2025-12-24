@@ -38,4 +38,3 @@ export const ROUTES = {
   BROWSE_QUESTIONS: "/browse-practice-questions",
   LEARN: "/learn",
 } as const;
-

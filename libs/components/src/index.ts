@@ -68,3 +68,16 @@ export {
   CollapsibleTrigger,
   CollapsibleContent,
 } from "./lib/ui/collapsible";
+export { ActivityFeed } from "./lib/components/organisms/ActivityFeed";
+export { ErrorAlert } from "./lib/components/molecules/ErrorAlert";
+export type { ErrorAlertPropsType } from "./lib/components/molecules/ErrorAlert";
+export { DataTableHeader } from "./lib/components/molecules/DataTableHeader";
+export type { DataTableHeaderPropsType } from "./lib/components/molecules/DataTableHeader";
+export { WelcomeHeader } from "./lib/components/molecules/WelcomeHeader";
+export type { WelcomeHeaderPropsType } from "./lib/components/molecules/WelcomeHeader";
+export { MetricGrid } from "./lib/components/organisms/MetricGrid";
+export {
+  QuickActions,
+  type QuickAction,
+} from "./lib/components/organisms/QuickActions";
+export type { QuickActionsPropsType } from "./lib/components/organisms/QuickActions";

@@ -167,9 +167,14 @@ temp/
 .github/instructions/nx.instructions.md
 # MCP server configuration (contains sensitive tokens)
 .cursor/mcp.json
+.cursor/mcp-storage/
+.cursor/**/mcp*.json
+**/mcp*.json
+!**/mcp*.json.example
 
 # SonarQube MCP server configuration (contains sensitive tokens)
 .sonarqube/
+sonarqube-mcp-storage/
 
 # Cursor cache and logs (regenerated files)
 .cursor/cache/
@@ -233,3 +238,4 @@ tools/
 tests/e2e/
 .cursor/
 .gitleaks.toml
+.code-quality-check.*.log

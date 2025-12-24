@@ -101,6 +101,30 @@ export default function ProblemSolvingEditor({
   isEditing = false,
 }: ProblemSolvingEditorProps) {
   const editorState = useProblemSolvingEditorState(task);
+  const {
+    theme,
+    setTheme,
+    isDark,
+    formData,
+    setFormData,
+    starterCode,
+    setStarterCode,
+    solutionCode,
+    setSolutionCode,
+    activeTab,
+    setActiveTab,
+    fileExplorerState,
+    dynamicFieldsState,
+    leftPanelWidth,
+    rightPanelWidth,
+    handleMouseDown,
+    copied,
+    setCopied,
+    showPreview,
+    setShowPreview,
+    activeBrowserTab,
+    setActiveBrowserTab,
+  } = editorState;
 
   // Simple form handlers
   const handleSave = () => {

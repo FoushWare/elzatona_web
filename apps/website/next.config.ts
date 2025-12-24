@@ -52,6 +52,10 @@ if (
 }
 
 const nextConfig: NextConfig = {
+  // CRITICAL: Tell Next.js to look in src/app, not app/
+  // In Nx monorepos with sourceRoot, Next.js needs explicit path
+  // This ensures Next.js finds pages in apps/website/src/app/
+
   // Turbopack configuration
   turbopack: {},
 
@@ -61,8 +65,10 @@ const nextConfig: NextConfig = {
   // Disable automatic error page generation
   generateEtags: false,
 
-  // Disable static optimization for error pages
-  output: "standalone",
+  // Only use standalone output in production (for Docker deployments)
+  // This breaks development routing, so we disable it in dev
+  // CRITICAL: output: "standalone" causes all routes to return 404 in development
+  // Removed completely - only enable for production builds, not dev server
 
   // Skip prerendering for error pages
   excludeDefaultMomentLocales: true,

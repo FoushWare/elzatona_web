@@ -86,3 +86,6 @@ export { default as OnboardingTour } from "./common/OnboardingTour";
 export { OnboardingTrigger } from "./common/OnboardingTrigger";
 export { default as PerformanceMonitor } from "./common/PerformanceMonitor";
 export { UserGuidanceSystem } from "./common/UserGuidanceSystem";
+
+// Atomic Design Components
+export * from "./components";

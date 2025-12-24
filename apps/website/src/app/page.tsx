@@ -18,7 +18,8 @@ function HomePageContent() {
   const { userType, setUserType } = useUserType();
   const router = useRouter();
   const { setLearningType } = useLearningType();
-  const { hasActivePlan, activePlan, showAnimation } = useHomePageState(userType);
+  const { hasActivePlan, activePlan, showAnimation } =
+    useHomePageState(userType);
 
   const personalizedContent = getPersonalizedContent(
     userType,

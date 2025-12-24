@@ -20,14 +20,16 @@ interface LearningTypeCardProps {
 
 const colorVariants = {
   indigo: {
-    gradient: "from-indigo-50 to-purple-50 dark:from-indigo-900/20 dark:to-purple-900/20",
+    gradient:
+      "from-indigo-50 to-purple-50 dark:from-indigo-900/20 dark:to-purple-900/20",
     iconBg: "bg-indigo-600",
     ring: "ring-indigo-400",
     text: "text-indigo-600 dark:text-indigo-400",
     hoverText: "group-hover:text-indigo-600 dark:group-hover:text-indigo-400",
   },
   green: {
-    gradient: "from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20",
+    gradient:
+      "from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20",
     iconBg: "bg-green-600",
     ring: "ring-green-400",
     text: "text-green-600 dark:text-green-400",
@@ -60,7 +62,7 @@ export function LearningTypeCard({
         colors.gradient,
         showAnimation ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8",
         isSelected && `ring-2 ${colors.ring} ring-opacity-50 shadow-lg`,
-        className
+        className,
       )}
       style={{ transitionDelay: animationDelay }}
     >
@@ -68,7 +70,7 @@ export function LearningTypeCard({
         <div
           className={cn(
             "w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform duration-300",
-            colors.iconBg
+            colors.iconBg,
           )}
         >
           <Icon className="w-8 h-8 text-white" />
@@ -76,7 +78,7 @@ export function LearningTypeCard({
         <h3
           className={cn(
             "text-2xl font-semibold text-gray-900 dark:text-white mb-4 transition-colors",
-            colors.hoverText
+            colors.hoverText,
           )}
         >
           {title}
@@ -84,7 +86,12 @@ export function LearningTypeCard({
         <p className="text-gray-600 dark:text-gray-300 mb-6 group-hover:text-gray-700 dark:group-hover:text-gray-200 transition-colors">
           {description}
         </p>
-        <div className={cn("flex items-center justify-center space-x-2 font-medium", colors.text)}>
+        <div
+          className={cn(
+            "flex items-center justify-center space-x-2 font-medium",
+            colors.text,
+          )}
+        >
           <span>Start {title}</span>
           <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform duration-300" />
         </div>
@@ -92,4 +99,3 @@ export function LearningTypeCard({
     </div>
   );
 }
-
