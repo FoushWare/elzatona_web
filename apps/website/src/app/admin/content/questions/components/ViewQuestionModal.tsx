@@ -1,19 +1,36 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { FormModal, QuestionContent } from "@elzatona/components";
-import { UnifiedQuestion } from "@elzatona/types";
 import {
-  Target,
-  Info,
-  BookOpen,
-  Video,
-  FileText,
-  GraduationCap,
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+} from "@elzatona/components";
+import {
+  X,
+  ChevronLeft,
+  ChevronRight,
   CheckCircle,
   XCircle,
+  Clock,
+  AlertTriangle,
+  Play,
+  Pause,
+  RotateCcw,
+  Volume2,
+  VolumeX,
+  Loader2,
+  FileText,
+  Video,
+  GraduationCap,
+  BookOpen,
+  Code,
+  Zap,
 } from "lucide-react";
 import { createHighlighter, type Highlighter } from "shiki";
+import DOMPurify from "dompurify";
 
 // Language detection patterns to reduce cognitive complexity
 const languagePatterns = [
@@ -25,18 +42,38 @@ const languagePatterns = [
     ],
   },
   {
-    language: "java",
+    language: "javascript",
     patterns: [
-      (code: string) => code.includes("public class"),
-      (code: string) => code.includes("public static"),
+      (code: string) => code.includes("function ") || code.includes("const "),
+      (code: string) => code.includes("console.") || code.includes("return "),
     ],
   },
   {
     language: "typescript",
     patterns: [
-      (code: string) => code.includes("interface "),
-      (code: string) => code.includes("type "),
-      (code: string) => code.includes(": string"),
+      (code: string) => code.includes(":") && (code.includes("string") || code.includes("number")),
+      (code: string) => code.includes("interface ") || code.includes("type "),
+    ],
+  },
+  {
+    language: "java",
+    patterns: [
+      (code: string) => code.includes("public class") || code.includes("public static"),
+      (code: string) => code.includes("System.out.") || code.includes("void main"),
+    ],
+  },
+  {
+    language: "cpp",
+    patterns: [
+      (code: string) => code.includes("#include") || code.includes("using namespace"),
+      (code: string) => code.includes("std::") || code.includes("cout"),
+    ],
+  },
+  {
+    language: "csharp",
+    patterns: [
+      (code: string) => code.includes("using ") && code.includes(";"),
+      (code: string) => code.includes("public class") || code.includes("Console."),
     ],
   },
 ];
@@ -52,6 +89,23 @@ const detectLanguage = (code: string): string => {
   }
 
   return "javascript";
+};
+
+// Security wrapper for Shiki HTML output
+const sanitizeShikiHtml = (html: string): string => {
+  if (typeof window === "undefined") {
+    return html; // Server-side: return as-is
+  }
+  
+  // Shiki already outputs safe HTML, but add extra sanitization for defense-in-depth
+  return DOMPurify.sanitize(html, {
+    ALLOWED_TAGS: [
+      "pre", "code", "span", "div", "style",
+      "br", "p", "strong", "em", "u", "i", "b"
+    ],
+    ALLOWED_ATTR: ["class", "style", "data-*"],
+    ALLOW_DATA_ATTR: true,
+  });
 };
 
 // Helper function to calculate brightness
@@ -244,18 +298,30 @@ const formatWithIndentation = (codeLines: string[]): string => {
       openParens: 0,
       closeParens: 0,
     };
-    
+
     // Use single regex to match all bracket types
     const bracketMatches = trimmed.match(/[{}()\[\]]/g);
     if (bracketMatches) {
-      bracketMatches.forEach(bracket => {
+      bracketMatches.forEach((bracket) => {
         switch (bracket) {
-          case '{': bracketCounts.openBraces++; break;
-          case '}': bracketCounts.closeBraces++; break;
-          case '[': bracketCounts.openBrackets++; break;
-          case ']': bracketCounts.closeBrackets++; break;
-          case '(': bracketCounts.openParens++; break;
-          case ')': bracketCounts.closeParens++; break;
+          case "{":
+            bracketCounts.openBraces++;
+            break;
+          case "}":
+            bracketCounts.closeBraces++;
+            break;
+          case "[":
+            bracketCounts.openBrackets++;
+            break;
+          case "]":
+            bracketCounts.closeBrackets++;
+            break;
+          case "(":
+            bracketCounts.openParens++;
+            break;
+          case ")":
+            bracketCounts.closeParens++;
+            break;
         }
       });
     }
@@ -669,7 +735,7 @@ export function ViewQuestionModal({
                   <div
                     className={`shiki-wrapper pl-10 ${getShikiWrapperClass(codeTheme)}`}
                     dangerouslySetInnerHTML={{
-                      __html: codeHighlightedHtml,
+                      __html: sanitizeShikiHtml(codeHighlightedHtml),
                     }}
                   />
                 </div>

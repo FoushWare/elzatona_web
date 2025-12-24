@@ -200,8 +200,13 @@ export const NavbarSimple: React.FC = () => {
   };
 
   // Extract link styling logic to reduce nested ternary operations
-  const getLinkClassName = (href: string, activeColors: string, hoverColors: string) => {
-    const baseClasses = "block w-full text-center py-2.5 sm:py-3 font-medium transition-colors duration-200 text-sm sm:text-base rounded-lg";
+  const getLinkClassName = (
+    href: string,
+    activeColors: string,
+    hoverColors: string,
+  ) => {
+    const baseClasses =
+      "block w-full text-center py-2.5 sm:py-3 font-medium transition-colors duration-200 text-sm sm:text-base rounded-lg";
     const isActive = isActiveLink(href);
     const activeClasses = isActive ? activeColors : hoverColors;
     return `${baseClasses} ${activeClasses}`;
@@ -211,7 +216,7 @@ export const NavbarSimple: React.FC = () => {
   const getAuthLinkClassName = (href: string) => {
     const baseClasses = "font-medium transition-colors duration-200";
     const isActive = isActiveLink(href);
-    
+
     if (isActive) {
       return `${baseClasses} ${
         isScrolled
@@ -219,7 +224,7 @@ export const NavbarSimple: React.FC = () => {
           : "text-indigo-100 font-semibold border-b-2 border-indigo-100 pb-1"
       }`;
     }
-    
+
     return `${baseClasses} ${
       isScrolled
         ? "text-gray-700 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400"
@@ -374,10 +379,7 @@ export const NavbarSimple: React.FC = () => {
                 Logout
               </button>
             ) : (
-              <Link
-                href="/auth"
-                className={getAuthLinkClassName("/auth")}
-              >
+              <Link href="/auth" className={getAuthLinkClassName("/auth")}>
                 Sign In
               </Link>
             )}
@@ -643,7 +645,7 @@ export const NavbarSimple: React.FC = () => {
                     className={getLinkClassName(
                       "/profile",
                       "text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-900/30 font-semibold",
-                      "text-gray-700 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-gray-50 dark:hover:bg-gray-800"
+                      "text-gray-700 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-gray-50 dark:hover:bg-gray-800",
                     )}
                     onClick={() => setIsOpen(false)}
                   >
@@ -657,7 +659,7 @@ export const NavbarSimple: React.FC = () => {
                     className={getLinkClassName(
                       "/admin",
                       "text-purple-600 dark:text-purple-400 bg-purple-50 dark:bg-purple-900/30 font-semibold",
-                      "text-gray-700 dark:text-gray-300 hover:text-purple-600 dark:hover:text-purple-400 hover:bg-gray-50 dark:hover:bg-gray-800"
+                      "text-gray-700 dark:text-gray-300 hover:text-purple-600 dark:hover:text-purple-400 hover:bg-gray-50 dark:hover:bg-gray-800",
                     )}
                     onClick={() => setIsOpen(false)}
                   >

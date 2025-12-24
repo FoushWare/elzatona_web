@@ -60,7 +60,10 @@ const DIFFICULTIES = [
 ];
 
 // Custom hook to consolidate topic form state management
-const useTopicFormState = (topic: Topic | undefined, categories: Category[]) => {
+const useTopicFormState = (
+  topic: Topic | undefined,
+  categories: Category[],
+) => {
   const [formData, setFormData] = useState<TopicFormData>({
     name: topic?.name || "",
     description: topic?.description || "",

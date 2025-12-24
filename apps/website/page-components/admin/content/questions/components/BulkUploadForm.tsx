@@ -10,6 +10,7 @@ import {
 } from "@elzatona/components";
 import { Upload, FileText, AlertTriangle, Loader2 } from "lucide-react";
 import { createHighlighter, type Highlighter } from "shiki";
+import DOMPurify from "dompurify";
 
 interface BulkUploadFormProps {
   onUpload: (file: File) => void;
@@ -34,6 +35,23 @@ const applyDimming = (r: number, g: number, b: number, factor: number) => {
   const newG = Math.max(0, Math.min(255, Math.round(g * factor)));
   const newB = Math.max(0, Math.min(255, Math.round(b * factor)));
   return { newR, newG, newB };
+};
+
+// Security wrapper for Shiki HTML output
+const sanitizeShikiHtml = (html: string): string => {
+  if (typeof window === "undefined") {
+    return html; // Server-side: return as-is
+  }
+  
+  // Shiki already outputs safe HTML, but add extra sanitization for defense-in-depth
+  return DOMPurify.sanitize(html, {
+    ALLOWED_TAGS: [
+      "pre", "code", "span", "div", "style",
+      "br", "p", "strong", "em", "u", "i", "b"
+    ],
+    ALLOWED_ATTR: ["class", "style", "data-*"],
+    ALLOW_DATA_ATTR: true,
+  });
 };
 
 const processHexColor = (colorValue: string): { shouldReplace: boolean; newColor: string } => {
@@ -896,14 +914,14 @@ export function BulkUploadForm({
                                     <div
                                       className={`shiki-wrapper pl-10 ${codeTheme === "light" ? "shiki-light-mode" : "shiki-dark-mode"}`}
                                       dangerouslySetInnerHTML={{
-                                        __html: highlightedHtml,
+                                        __html: sanitizeShikiHtml(highlightedHtml),
                                       }}
                                     />
 
                                     {/* Custom styles for Shiki output */}
                                     <style
                                       dangerouslySetInnerHTML={{
-                                        __html: `
+                                        __html: sanitizeShikiHtml(`
                                       .shiki-wrapper pre {
                                         margin: 0 !important;
                                         padding: 0.375rem 0 0.375rem 0 !important;
