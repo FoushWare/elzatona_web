@@ -200,7 +200,7 @@ export async function POST(request: NextRequest) {
     };
 
     return NextResponse.json({ success: true, admin: session });
-  } catch (error) {
+  } catch (_error) {
     // Security: Removed detailed error logging to prevent information disclosure
     return NextResponse.json(
       { success: false, error: "Internal server error" },

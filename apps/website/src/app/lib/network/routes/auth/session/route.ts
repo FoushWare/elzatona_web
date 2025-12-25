@@ -84,7 +84,7 @@ export async function POST(request: NextRequest) {
     );
 
     return response;
-  } catch (error) {
+  } catch (_error) {
     // Security: Removed detailed error logging to prevent information disclosure
     return NextResponse.json(
       { error: "Failed to set authentication cookie" },
@@ -120,7 +120,7 @@ export async function DELETE(_request: NextRequest) {
     });
 
     return response;
-  } catch (error) {
+  } catch (_error) {
     // Security: Removed detailed error logging to prevent information disclosure
     return NextResponse.json(
       { error: "Failed to clear authentication cookie" },

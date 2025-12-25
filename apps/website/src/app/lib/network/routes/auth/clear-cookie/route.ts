@@ -26,7 +26,7 @@ export async function POST() {
     });
 
     return response;
-  } catch (error) {
+  } catch (_error) {
     // Security: Removed detailed error logging to prevent information disclosure
     return NextResponse.json(
       { error: "Internal server error" },
