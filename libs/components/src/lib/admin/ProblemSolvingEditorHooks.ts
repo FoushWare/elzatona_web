@@ -168,20 +168,24 @@ export const usePanelLayout = () => {
     setResizeStartLeftWidth(leftPanelWidth);
   };
 
-  const handleMouseMove = useCallback((e: MouseEvent) => {
-    if (!isResizing) return;
-    const deltaX = e.clientX - resizeStartX;
-    const containerWidth = window.innerWidth;
-    const newLeftWidth =
-      ((resizeStartLeftWidth * containerWidth + deltaX) / containerWidth) * 100;
-    const newRightWidth = 100 - newLeftWidth - 20; // 20% for middle panel
+  const handleMouseMove = useCallback(
+    (e: MouseEvent) => {
+      if (!isResizing) return;
+      const deltaX = e.clientX - resizeStartX;
+      const containerWidth = window.innerWidth;
+      const newLeftWidth =
+        ((resizeStartLeftWidth * containerWidth + deltaX) / containerWidth) *
+        100;
+      const newRightWidth = 100 - newLeftWidth - 20; // 20% for middle panel
 
-    if (newLeftWidth >= 20 && newLeftWidth <= 50) {
-      setLeftPanelWidth(newLeftWidth);
-      setRightPanelWidth(newRightWidth);
-    }
-    return;
-  }, [isResizing, resizeStartX, resizeStartLeftWidth]);
+      if (newLeftWidth >= 20 && newLeftWidth <= 50) {
+        setLeftPanelWidth(newLeftWidth);
+        setRightPanelWidth(newRightWidth);
+      }
+      return;
+    },
+    [isResizing, resizeStartX, resizeStartLeftWidth],
+  );
 
   const handleMouseUp = useCallback(() => {
     setIsResizing(false);
@@ -196,7 +200,13 @@ export const usePanelLayout = () => {
         document.removeEventListener("mouseup", handleMouseUp);
       };
     }
-  }, [isResizing, resizeStartX, resizeStartLeftWidth, handleMouseMove, handleMouseUp]);
+  }, [
+    isResizing,
+    resizeStartX,
+    resizeStartLeftWidth,
+    handleMouseMove,
+    handleMouseUp,
+  ]);
 
   return {
     leftPanelWidth,

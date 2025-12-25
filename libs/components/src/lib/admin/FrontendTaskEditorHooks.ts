@@ -90,23 +90,26 @@ export const usePanelLayout = () => {
     setResizeStartX(e.clientX);
   };
 
-  const handleMouseMove = useCallback((e: MouseEvent) => {
-    if (!isResizing) return;
+  const handleMouseMove = useCallback(
+    (e: MouseEvent) => {
+      if (!isResizing) return;
 
-    const deltaX = e.clientX - resizeStartX;
-    const containerWidth = window.innerWidth;
-    const deltaPercent = (deltaX / containerWidth) * 100;
+      const deltaX = e.clientX - resizeStartX;
+      const containerWidth = window.innerWidth;
+      const deltaPercent = (deltaX / containerWidth) * 100;
 
-    if (deltaPercent !== 0) {
-      setLeftPanelWidth((prev) =>
-        Math.max(20, Math.min(60, prev + deltaPercent)),
-      );
-      setRightPanelWidth((prev) =>
-        Math.max(20, Math.min(60, prev - deltaPercent)),
-      );
-      setResizeStartX(e.clientX);
-    }
-  }, [isResizing, resizeStartX]);
+      if (deltaPercent !== 0) {
+        setLeftPanelWidth((prev) =>
+          Math.max(20, Math.min(60, prev + deltaPercent)),
+        );
+        setRightPanelWidth((prev) =>
+          Math.max(20, Math.min(60, prev - deltaPercent)),
+        );
+        setResizeStartX(e.clientX);
+      }
+    },
+    [isResizing, resizeStartX],
+  );
 
   const handleMouseUp = useCallback(() => {
     setIsResizing(false);

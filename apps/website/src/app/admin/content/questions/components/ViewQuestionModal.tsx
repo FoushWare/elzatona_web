@@ -846,39 +846,42 @@ export function ViewQuestionModal({
   };
 
   // Helper function to handle code highlighting logic
-  const handleCodeHighlighting = useCallback((
-    shikiHighlighter: Highlighter | null,
-    question: UnifiedQuestion | null,
-    setCodeHighlightedHtml: (html: string) => void,
-  ) => {
-    if (!shikiHighlighter || !question?.codeTemplate) {
-      setCodeHighlightedHtml("");
-      _logHighlightingSkip(shikiHighlighter, question);
-      return;
-    }
+  const handleCodeHighlighting = useCallback(
+    (
+      shikiHighlighter: Highlighter | null,
+      question: UnifiedQuestion | null,
+      setCodeHighlightedHtml: (html: string) => void,
+    ) => {
+      if (!shikiHighlighter || !question?.codeTemplate) {
+        setCodeHighlightedHtml("");
+        _logHighlightingSkip(shikiHighlighter, question);
+        return;
+      }
 
-    try {
-      const rawCode = String(question.codeTemplate || "");
-      // Security: Removed debug logging to prevent information disclosure
+      try {
+        const rawCode = String(question.codeTemplate || "");
+        // Security: Removed debug logging to prevent information disclosure
 
-      const codeWithNewlines = processCodeForHighlighting(rawCode);
-      const lang = detectLanguage(codeWithNewlines);
-      const themeName = getThemeName();
-      const highlighterLang = getHighlighterLanguage(lang);
+        const codeWithNewlines = processCodeForHighlighting(rawCode);
+        const lang = detectLanguage(codeWithNewlines);
+        const themeName = getThemeName();
+        const highlighterLang = getHighlighterLanguage(lang);
 
-      let html = shikiHighlighter.codeToHtml(codeWithNewlines, {
-        lang: highlighterLang,
-        theme: themeName,
-      });
+        let html = shikiHighlighter.codeToHtml(codeWithNewlines, {
+          lang: highlighterLang,
+          theme: themeName,
+        });
 
-      html = adjustHtmlForLightMode(html);
-      _logHighlightingSuccess(html);
-      setCodeHighlightedHtml(html);
-    } catch (error) {
-      console.error("ViewQuestionModal - Error highlighting code:", error);
-      setCodeHighlightedHtml("");
-    }
-  }, []);
+        html = adjustHtmlForLightMode(html);
+        _logHighlightingSuccess(html);
+        setCodeHighlightedHtml(html);
+      } catch (error) {
+        console.error("ViewQuestionModal - Error highlighting code:", error);
+        setCodeHighlightedHtml("");
+      }
+    },
+    [],
+  );
 
   // Helper function to reset question state
   const resetQuestionState = (
@@ -909,7 +912,12 @@ export function ViewQuestionModal({
   // Highlight code when it changes or highlighter is ready
   useEffect(() => {
     handleCodeHighlighting(shikiHighlighter, question, setCodeHighlightedHtml);
-  }, [shikiHighlighter, question, handleCodeHighlighting, setCodeHighlightedHtml]);
+  }, [
+    shikiHighlighter,
+    question,
+    handleCodeHighlighting,
+    setCodeHighlightedHtml,
+  ]);
 
   // Reset state when question changes
   useEffect(() => {

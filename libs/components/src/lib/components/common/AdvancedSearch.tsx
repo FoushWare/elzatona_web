@@ -200,7 +200,18 @@ export function AdvancedSearch({
       setIsLoading(false);
       onResultsChange?.([]);
     }
-  }, [query, category, difficulty, type, isActive, topic, selectedTopics, page, size, onResultsChange]);
+  }, [
+    query,
+    category,
+    difficulty,
+    type,
+    isActive,
+    topic,
+    selectedTopics,
+    page,
+    size,
+    onResultsChange,
+  ]);
 
   // Remove automatic search - only search on submit
   // Auto-search when filters change

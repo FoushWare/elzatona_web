@@ -183,7 +183,13 @@ export const NavbarSimple: React.FC = () => {
         sessionStorage.setItem("navbar-auth-state", JSON.stringify(newState));
       }
     }
-  }, [isHydrated, isAuthenticated, isAuthLoading, stableAuthState, setStableAuthState]);
+  }, [
+    isHydrated,
+    isAuthenticated,
+    isAuthLoading,
+    stableAuthState,
+    setStableAuthState,
+  ]);
 
   // Helper function to check if a link is active
   const isActiveLink = (href: string) => {
