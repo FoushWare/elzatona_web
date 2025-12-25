@@ -9,9 +9,9 @@ export function createMockFn<T extends (...args: any[]) => any>(
 ): T {
   if (typeof jest !== "undefined" && jest.fn) {
     if (implementation) {
-      return jest.fn(implementation) as T;
+      return jest.fn(implementation) as unknown as T;
     }
-    return jest.fn() as T;
+    return jest.fn() as unknown as T;
   }
   // Runtime fallback - return a no-op function
   if (implementation && typeof implementation === "function") {
