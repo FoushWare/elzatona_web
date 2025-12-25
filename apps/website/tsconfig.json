@@ -10,7 +10,7 @@
       "@/components/*": ["./src/app/Components/*"],
       "@/providers/*": ["./providers/*"],
       "@/types/*": ["./src/app/Types/*"],
-      "@/test-utils/*": ["./test-utils/*"],
+      "@/test-utils/*": ["../../libs/utilities/src/lib/test-utils/*"],
       "@/translations/*": ["./translations/*"],
       "@/utils/*": ["./src/app/utils/*"],
       "@/config/*": ["./config/*"],

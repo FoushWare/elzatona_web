@@ -218,6 +218,8 @@ libs/utilities/
 ├── src/
 │   ├── lib/
 │   │   ├── scripts/        # Utility scripts
+│   │   ├── test-utils/     # Test utilities and mocks
+│   │   │   └── mocks/      # Mock implementations
 │   │   └── ... (more utilities)
 │   └── index.ts            # Barrel export
 ├── package.json

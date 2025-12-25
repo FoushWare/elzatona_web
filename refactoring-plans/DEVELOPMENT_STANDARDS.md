@@ -36,14 +36,22 @@ apps/website/
   │   │   │   ├── page.tsx      # Main page component (<500 lines)
   │   │   │   ├── components/   # Page-specific components
   │   │   │   └── hooks/        # Page-specific hooks
-  │   ├── Components/           # App-specific shared components
-  │   │   ├── atoms/
-  │   │   ├── molecules/
-  │   │   └── organisms/
+  │   ├── Components/           # App-specific components only
+  │   │   └── (website-specific: NavbarSimple, CodeEditor, etc.)
   │   ├── Network/              # API routes
-  │   ├── utils/                # Utilities and services
-  │   └── Types/                # TypeScript types
+  │   ├── utils/                # App-specific utilities
+  │   └── Types/                # App-specific types
   └── context/                  # React contexts
+
+libs/components/src/lib/components/ (SHARED):
+  ├── atoms/                    # Atomic design: atoms
+  ├── molecules/                # Atomic design: molecules
+  ├── organisms/                # Atomic design: organisms
+  └── templates/                # Atomic design: templates (future)
+
+libs/utilities/src/lib/ (SHARED):
+  ├── test-utils/               # Test utilities and mocks
+  └── (other shared utilities)
 ```
 
 ### File Naming Conventions
