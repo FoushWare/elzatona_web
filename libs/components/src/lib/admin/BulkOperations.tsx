@@ -56,12 +56,12 @@ export const BulkOperations: React.FC<BulkOperationsProps> = ({
     "delete" | "edit" | "activate" | "deactivate"
   >("delete");
   const [editData, setEditData] = useState<Record<string, any>>({});
-  const [isOperationModalOpen, setIsOperationModalOpen] = useState(false);
+  const [_isOperationModalOpen, setIsOperationModalOpen] = useState(false);
 
   // Hooks
   const { data: operations, isLoading: operationsLoading } =
     useBulkOperations(10);
-  const { data: stats, isLoading: statsLoading } = useBulkOperationStats();
+  const { data: stats, isLoading: _statsLoading } = useBulkOperationStats();
   const bulkDelete = useBulkDelete();
   const bulkEdit = useBulkEdit();
   const bulkActivate = useBulkActivate();

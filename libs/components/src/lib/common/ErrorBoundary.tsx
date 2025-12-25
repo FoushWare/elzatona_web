@@ -82,7 +82,7 @@ export class ErrorBoundary extends Component<Props, State> {
     }
   }
 
-  private handleRetry = () => {
+  private readonly handleRetry = () => {
     this.setState({
       hasError: false,
       error: null,
@@ -90,7 +90,7 @@ export class ErrorBoundary extends Component<Props, State> {
     });
   };
 
-  private handleGoHome = () => {
+  private readonly handleGoHome = () => {
     if (typeof globalThis.window !== "undefined") {
       globalThis.window.location.href = "/";
     }

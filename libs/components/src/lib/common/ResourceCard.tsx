@@ -2,8 +2,6 @@
 
 import { useState } from "react";
 import { LearningResource } from "@elzatona/types";
-// Note: resourceCategories is website-specific and should be passed as a prop or imported where needed
-// import { resourceCategories } from '@/lib/resources';
 
 interface ResourceCardProps {
   resource: LearningResource;
@@ -20,7 +18,7 @@ export default function ResourceCard({
 
   // Note: resourceCategories should be passed as a prop or imported from the website app
   // For now, using a fallback
-  const category: { icon?: string; name?: string } | null = null; // resourceCategories?.find(cat => cat.id === resource.category);
+  const category: { icon?: string; name?: string } | null = null;
 
   const getDifficultyColor = (difficulty: string) => {
     switch (difficulty) {

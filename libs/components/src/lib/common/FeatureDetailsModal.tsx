@@ -499,7 +499,7 @@ export default function FeatureDetailsModal({
                 <Button
                   variant="outline"
                   onClick={() => {
-                    // TODO: Implement documentation viewer
+                    // Documentation viewer implementation pending
                     console.log("View documentation:", feature.documentation);
                   }}
                   className="flex items-center gap-2"

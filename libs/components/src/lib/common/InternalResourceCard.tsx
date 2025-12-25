@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import Link from "next/link";
-// import { InternalResource } from "@/lib/internalResources";
 
 interface InternalResourceCardProps {
   resource: {

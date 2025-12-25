@@ -70,6 +70,61 @@ export default function AddToFlashcard({
     }
   }, [user, question, checkExistingFlashcard]);
 
+  // Helper: Map difficulty to flashcard format
+  const mapDifficultyToFlashcard = (
+    diff: string | undefined,
+  ): "easy" | "medium" | "hard" => {
+    if (diff === "beginner") return "easy";
+    if (diff === "intermediate") return "medium";
+    return "hard";
+  };
+
+  // Helper: Create flashcard object
+  const createFlashcardData = () => {
+    const now = new Date().toISOString();
+    return {
+      userId: user.id,
+      question_id: `manual-${Date.now()}`,
+      question,
+      answer,
+      explanation: answer,
+      category,
+      difficulty: mapDifficultyToFlashcard(difficulty),
+      status: "new" as "new" | "learning" | "review" | "mastered",
+      interval: 0,
+      repetitions: 0,
+      easeFactor: 2.5,
+      lastReviewed: null,
+      nextReview: now,
+      tags: [],
+      source: (source || "manual") as "wrong_answer" | "manual" | "bookmark",
+    };
+  };
+
+  // Helper: Handle adding flashcard
+  const handleAddFlashcard = async () => {
+    const flashcard = createFlashcardData();
+    const newFlashcardId = await flashcardService.createFlashcard(flashcard);
+
+    if (newFlashcardId) {
+      setState("saved");
+      setFlashcardId(newFlashcardId);
+      onStatusChange?.("added");
+    } else {
+      setState("add");
+      onStatusChange?.("error");
+    }
+  };
+
+  // Helper: Handle removing flashcard
+  const handleRemoveFlashcard = async () => {
+    if (!flashcardId) return;
+    await flashcardService.deleteFlashcard(flashcardId);
+    setState("add");
+    setFlashcardId(null);
+    onStatusChange?.("removed");
+  };
+
   const handleToggleFlashcard = async () => {
     if (!user) {
       onStatusChange?.("error");
@@ -82,52 +137,9 @@ export default function AddToFlashcard({
 
     try {
       if (state === "add") {
-        // Add to flashcards
-        const now = new Date().toISOString();
-        const flashcard = {
-          userId: user.id,
-          question_id: `manual-${Date.now()}`,
-          question,
-          answer,
-          explanation: answer,
-          category,
-          difficulty:
-            difficulty === "beginner"
-              ? "easy"
-              : difficulty === "intermediate"
-                ? "medium"
-                : ("hard" as "easy" | "medium" | "hard"),
-          status: "new" as "new" | "learning" | "review" | "mastered",
-          interval: 0,
-          repetitions: 0,
-          easeFactor: 2.5,
-          lastReviewed: null,
-          nextReview: now,
-          tags: [],
-          source: (source || "manual") as
-            | "wrong_answer"
-            | "manual"
-            | "bookmark",
-        };
-
-        const newFlashcardId =
-          await flashcardService.createFlashcard(flashcard);
-
-        if (newFlashcardId) {
-          setState("saved");
-          setFlashcardId(newFlashcardId);
-          onStatusChange?.("added");
-        } else {
-          setState("add");
-          onStatusChange?.("error");
-        }
+        await handleAddFlashcard();
       } else if (state === "saved" && flashcardId) {
-        // Remove from flashcards
-        await flashcardService.deleteFlashcard(flashcardId);
-
-        setState("add");
-        setFlashcardId(null);
-        onStatusChange?.("removed");
+        await handleRemoveFlashcard();
       }
     } catch (error) {
       console.error("Error toggling flashcard:", error);

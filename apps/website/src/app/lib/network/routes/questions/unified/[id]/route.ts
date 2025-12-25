@@ -369,14 +369,17 @@ export async function PUT(
         : sanitizeForLogging(String(error));
     console.error("❌ Error updating question:", errorMessage);
     if (error instanceof Error) {
+      const errorDetails = error as any;
       console.error("❌ Error details:", {
         message: sanitizeForLogging(error.message),
-        code: error.code ? sanitizeForLogging(String(error.code)) : undefined,
-        details: (error as any)?.details
-          ? sanitizeForLogging(String((error as any).details))
+        code: errorDetails.code
+          ? sanitizeForLogging(String(errorDetails.code))
           : undefined,
-        hint: (error as any)?.hint
-          ? sanitizeForLogging(String((error as any).hint))
+        details: errorDetails.details
+          ? sanitizeForLogging(String(errorDetails.details))
+          : undefined,
+        hint: errorDetails.hint
+          ? sanitizeForLogging(String(errorDetails.hint))
           : undefined,
         stack: error.stack ? sanitizeForLogging(error.stack) : undefined,
       });
