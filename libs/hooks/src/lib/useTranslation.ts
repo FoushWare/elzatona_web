@@ -20,7 +20,7 @@ export function useTranslation() {
   }, []);
 
   // Extract translation lookup logic to reduce cognitive complexity
-  const getTranslationValue = (key: string): string => {
+  const getTranslationValue = useCallback((key: string): string => {
     const keys = key.split(".");
     let value: unknown =
       translations[locale as keyof typeof translations] || translations.en;
