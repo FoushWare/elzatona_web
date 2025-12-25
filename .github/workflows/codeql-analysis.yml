@@ -42,9 +42,8 @@ jobs:
         uses: github/codeql-action/init@v4
         with:
           languages: ${{ matrix.language }}
-          # Use security query pack and exclude memory-intensive queries via config
-          queries: security
           # Use custom config to reduce scanning scope and exclude PolynomialReDoS
+          # The config file specifies the security query suite
           config-file: .github/codeql-config.yml
 
       - name: Setup Node.js
