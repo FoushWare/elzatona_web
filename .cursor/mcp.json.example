@@ -1,12 +1,13 @@
 {
   "mcpServers": {
     "sonarqube": {
-      "command": "java",
-      "args": ["-jar", "<path_to_sonarqube_mcp_server_jar>"],
+      "command": "npx",
+      "args": ["-y", "oe-sonar-mcp"],
       "env": {
-        "STORAGE_PATH": "<absolute_path_to_storage_directory>",
-        "SONARQUBE_TOKEN": "YOUR_SONARQUBE_TOKEN_HERE",
-        "SONARQUBE_ORG": "foushware"
+        "SONAR_TOKEN": "YOUR_SONAR_TOKEN_HERE",
+        "SONAR_ORG": "foushware",
+        "SONAR_PROJECT_KEY": "FoushWare_GreatFrontendHub",
+        "SONAR_HOST_URL": "https://sonarcloud.io"
       }
     }
   }
