@@ -823,13 +823,22 @@ export function ViewQuestionModal({
 
     try {
       const tempDiv = document.createElement("div");
-      tempDiv.innerHTML = html;
+      // Security: Sanitize HTML before using innerHTML (defense-in-depth)
+      tempDiv.innerHTML = DOMPurify.sanitize(html, {
+        ALLOWED_TAGS: ["pre", "code", "span", "div", "style"],
+        ALLOWED_ATTR: ["class", "style"],
+      });
       const codeElement = tempDiv.querySelector("pre code");
       if (codeElement) {
-        return `<pre><code>${codeElement.innerHTML}</code></pre>`;
+        // Security: Sanitize innerHTML before returning
+        return `<pre><code>${DOMPurify.sanitize(codeElement.innerHTML, {
+          ALLOWED_TAGS: ["span"],
+          ALLOWED_ATTR: ["class", "style"],
+        })}</code></pre>`;
       }
     } catch (e) {
-      console.warn("DOM parsing for color adjustment failed:", e);
+      // Security: Removed detailed error logging to prevent information disclosure
+      console.warn("DOM parsing for color adjustment failed");
     }
 
     return html;

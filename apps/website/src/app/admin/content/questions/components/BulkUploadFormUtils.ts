@@ -1,4 +1,5 @@
 import type { Highlighter } from "shiki";
+import DOMPurify from "dompurify";
 
 // File parsing utilities
 export const parseJsonFile = async (file: File): Promise<any[]> => {
@@ -172,9 +173,24 @@ export const highlightQuestionCode = async (
     });
 
     // Process HTML to darken colors for better contrast
+    // Security: Sanitize HTML before using innerHTML (defense-in-depth)
     const tempDiv = document.createElement("div");
-    tempDiv.innerHTML = html;
+    if (typeof window !== "undefined") {
+      tempDiv.innerHTML = DOMPurify.sanitize(html, {
+        ALLOWED_TAGS: ["pre", "code", "span", "div", "style"],
+        ALLOWED_ATTR: ["class", "style"],
+      });
+    } else {
+      tempDiv.innerHTML = html; // Server-side: will be sanitized on client
+    }
     Array.from(tempDiv.children).forEach(processHtmlElement);
+    // Security: Sanitize before returning
+    if (typeof window !== "undefined") {
+      return DOMPurify.sanitize(tempDiv.innerHTML, {
+        ALLOWED_TAGS: ["pre", "code", "span", "div", "style"],
+        ALLOWED_ATTR: ["class", "style"],
+      });
+    }
     return tempDiv.innerHTML;
   } catch (error) {
     console.error("Error highlighting code:", error);
