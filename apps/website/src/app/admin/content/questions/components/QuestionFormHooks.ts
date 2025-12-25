@@ -3,20 +3,6 @@ import { UnifiedQuestion } from "@elzatona/types";
 
 type Question = UnifiedQuestion;
 
-interface QuestionFormProps {
-  readonly initialData: Question | undefined;
-  readonly onSubmit: (question: Partial<Question>) => void;
-  readonly onCancel: () => void;
-  readonly cards: any[];
-  readonly allCategories: string[];
-  readonly allTags: string[];
-  readonly categoriesData: any[];
-  readonly topicsData: any[];
-  readonly disabled?: boolean;
-  readonly hideFooter?: boolean;
-  readonly externalSubmitTrigger?: number;
-}
-
 // Form data management hook
 export const useQuestionFormData = (initialData?: Question) => {
   const [formData, setFormData] = useState<Partial<Question>>({

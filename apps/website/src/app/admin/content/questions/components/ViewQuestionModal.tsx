@@ -2,26 +2,14 @@
 
 import React, { useState, useEffect } from "react";
 import { UnifiedQuestion } from "@elzatona/types";
-import { DialogDescription, FormModal } from "@elzatona/components";
+import { FormModal } from "@elzatona/components";
 import {
-  X,
-  ChevronLeft,
-  ChevronRight,
   CheckCircle,
   XCircle,
-  Clock,
-  AlertTriangle,
-  Play,
-  Pause,
-  RotateCcw,
-  Volume2,
-  VolumeX,
-  Loader2,
   FileText,
   Video,
   GraduationCap,
   BookOpen,
-  Code,
   Zap,
   Target,
   Info,
