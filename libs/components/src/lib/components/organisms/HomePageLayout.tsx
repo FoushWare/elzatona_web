@@ -10,7 +10,7 @@ import type {
   UserType,
   ActivePlan,
   PersonalizedContent as PersonalizedContentType,
-} from "@/types/homePage.types";
+} from "../../../../../../apps/website/src/app/Types/homePage.types";
 
 interface HomePageLayoutProps {
   userType: UserType;
