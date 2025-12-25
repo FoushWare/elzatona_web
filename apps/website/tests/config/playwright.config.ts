@@ -1,18 +1,45 @@
 import { defineConfig, devices } from "@playwright/test";
 import { config } from "dotenv";
 import { resolve } from "path";
+import { existsSync } from "fs";
+import { requireTestEnvironment } from "../e2e/validate-test-env";
 
-// Load test-specific environment variables for E2E tests
-// Priority: .env.test.local > .env.test > .env.local (fallback)
-// This ensures E2E tests use a separate test database
+// CRITICAL: .env.test.local is REQUIRED for E2E tests
+// Load it first and validate before proceeding
 const projectRoot = process.cwd();
+const testEnvFile = resolve(projectRoot, ".env.test.local");
+
+// Check if .env.test.local exists
+if (!existsSync(testEnvFile)) {
+  console.error("❌ CRITICAL: .env.test.local file is missing!");
+  console.error(`   Location: ${testEnvFile}`);
+  console.error("\n📝 To fix:");
+  console.error("   1. Copy .env.test.local.example to .env.test.local");
+  console.error("   2. Fill in your TEST Supabase project credentials");
+  console.error(`   3. File location: ${testEnvFile}\n`);
+  throw new Error(
+    "E2E tests require .env.test.local file. Please create it from .env.test.local.example",
+  );
+}
+
+// Load .env.test.local first (REQUIRED)
+const testEnvResult = config({ path: testEnvFile });
+if (testEnvResult.error) {
+  console.error("❌ CRITICAL: Failed to load .env.test.local");
+  console.error(`   File: ${testEnvFile}`);
+  console.error(`   Error: ${testEnvResult.error.message}`);
+  throw new Error(
+    `Failed to load .env.test.local: ${testEnvResult.error.message}`,
+  );
+}
+
+// Load other env files as fallback (lower priority)
 const envFiles = [
-  resolve(projectRoot, ".env.test.local"), // Highest priority - test overrides
   resolve(projectRoot, ".env.test"), // Test-specific defaults
   resolve(projectRoot, ".env.local"), // Fallback to dev (for backwards compatibility)
 ];
 
-const loadedFiles: string[] = [];
+const loadedFiles: string[] = [testEnvFile]; // Track that we loaded .env.test.local
 for (const envFile of envFiles) {
   try {
     const result = config({ path: envFile, override: false }); // Don't override, respect priority
@@ -22,6 +49,15 @@ for (const envFile of envFiles) {
   } catch (_error) {
     // File doesn't exist, that's okay
   }
+}
+
+// CRITICAL: Validate test environment configuration
+// This will throw an error if .env.test.local is misconfigured
+try {
+  requireTestEnvironment();
+} catch (error) {
+  console.error("\n❌ E2E Test Environment Validation Failed");
+  throw error;
 }
 
 // FORCE TEST ENVIRONMENT for all E2E tests

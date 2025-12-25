@@ -1,12 +1,38 @@
 import "@testing-library/jest-dom";
 import { config } from "dotenv";
 import { resolve } from "path";
+import { existsSync } from "fs";
 
-// Load test-specific environment variables
-// Priority: .env.test.local > .env.test > .env.local > defaults
+// CRITICAL: .env.test.local is REQUIRED for unit/integration tests
+// Load it first and validate before proceeding
 const projectRoot = process.cwd();
+const testEnvFile = resolve(projectRoot, ".env.test.local");
+
+// Check if .env.test.local exists
+if (!existsSync(testEnvFile)) {
+  console.error("❌ CRITICAL: .env.test.local file is missing!");
+  console.error(`   Location: ${testEnvFile}`);
+  console.error("\n📝 To fix:");
+  console.error("   1. Copy .env.test.local.example to .env.test.local");
+  console.error("   2. Fill in your TEST Supabase project credentials");
+  console.error(`   3. File location: ${testEnvFile}\n`);
+  throw new Error(
+    "Tests require .env.test.local file. Please create it from .env.test.local.example",
+  );
+}
+
+// Load .env.test.local first (REQUIRED)
+const testEnvResult = config({ path: testEnvFile });
+if (testEnvResult.error) {
+  console.error("❌ CRITICAL: Failed to load .env.test.local");
+  console.error(`   Error: ${testEnvResult.error.message}`);
+  throw new Error(
+    `Failed to load .env.test.local: ${testEnvResult.error.message}`,
+  );
+}
+
+// Load other env files as fallback (lower priority)
 const envFiles = [
-  resolve(projectRoot, ".env.test.local"), // Highest priority - test overrides
   resolve(projectRoot, ".env.test"), // Test-specific defaults
   resolve(projectRoot, ".env.local"), // Fallback to dev (for backwards compatibility)
 ];
@@ -18,6 +44,63 @@ for (const envFile of envFiles) {
   } catch (_error) {
     // File doesn't exist, that's okay
   }
+}
+
+// Validate test database configuration
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || "";
+const testProjectRefs = [
+  "kiycimlsatwfqxtfprlr", // Current test project
+  "slfyltsmcivmqfloxpmq", // Old test project 1
+  "vopfdukvdhnmzzjkxpnj", // Old test project 2
+];
+const productionProjectRef = "hpnewqkvpnthpohvxcmq";
+
+const isTestProject = testProjectRefs.some((ref) => supabaseUrl.includes(ref));
+const isProdProject = supabaseUrl.includes(productionProjectRef);
+
+if (isProdProject) {
+  console.error(
+    "❌ CRITICAL ERROR: .env.test.local points to PRODUCTION database!",
+  );
+  console.error(`   Production project reference detected: ${productionProjectRef}`);
+  console.error(`   URL: ${supabaseUrl.substring(0, 50)}...`);
+  console.error("   Tests MUST use TEST database only.");
+  throw new Error(
+    "Tests cannot run against production database. Please update .env.test.local with TEST database credentials.",
+  );
+}
+
+if (!isTestProject && supabaseUrl && !supabaseUrl.includes("your-")) {
+  console.warn(
+    "⚠️  WARNING: Supabase URL doesn't match known test project references",
+  );
+  console.warn(`   URL: ${supabaseUrl.substring(0, 50)}...`);
+  console.warn("   Expected one of:", testProjectRefs.join(", "));
+}
+
+// Validate required variables are not placeholders
+const requiredVars = [
+  "NEXT_PUBLIC_SUPABASE_URL",
+  "NEXT_PUBLIC_SUPABASE_ANON_KEY",
+  "SUPABASE_SERVICE_ROLE_KEY",
+];
+
+const missingVars = requiredVars.filter(
+  (varName) =>
+    !process.env[varName] ||
+    process.env[varName]?.includes("your-") ||
+    process.env[varName]?.includes("placeholder"),
+);
+
+if (missingVars.length > 0) {
+  console.error(
+    "❌ .env.test.local has placeholder values for:",
+    missingVars.join(", "),
+  );
+  console.error("   Please update .env.test.local with real test database credentials.");
+  throw new Error(
+    `.env.test.local has placeholder values. Please update: ${missingVars.join(", ")}`,
+  );
 }
 
 // FORCE TEST ENVIRONMENT for all tests
