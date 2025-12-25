@@ -296,16 +296,28 @@ export class UserAuthService {
   }
 
   /**
-   * Generate unique user ID
+   * Generate unique user ID using cryptographically secure random values
    */
   private static generateUserId(): string {
-    return `user_${Date.now()}_${Math.random().toString(36).substring(2, 11)}`;
+    const randomBytes = new Uint8Array(9);
+    crypto.getRandomValues(randomBytes);
+    const randomString = Array.from(randomBytes)
+      .map((byte) => byte.toString(36))
+      .join("")
+      .substring(0, 9);
+    return `user_${Date.now()}_${randomString}`;
   }
 
   /**
-   * Generate JWT-like token (simplified)
+   * Generate JWT-like token using cryptographically secure random values
    */
   private static generateToken(): string {
-    return `token_${Date.now()}_${Math.random().toString(36).substring(2, 11)}`;
+    const randomBytes = new Uint8Array(9);
+    crypto.getRandomValues(randomBytes);
+    const randomString = Array.from(randomBytes)
+      .map((byte) => byte.toString(36))
+      .join("")
+      .substring(0, 9);
+    return `token_${Date.now()}_${randomString}`;
   }
 }

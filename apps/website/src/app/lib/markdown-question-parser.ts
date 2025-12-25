@@ -436,7 +436,13 @@ export class MarkdownQuestionParser {
         let prevLength = -1;
         for (let i = 0; i < 5 && cleaned.length !== prevLength; i++) {
           prevLength = cleaned.length;
-          cleaned = cleaned.replace(/<[^>]*>/g, "");
+          // Use more comprehensive regex to catch incomplete tags like <script
+          cleaned = cleaned.replace(/<[^>]*>/g, ""); // Remove complete tags
+          cleaned = cleaned.replace(/<[^>]*$/g, ""); // Remove incomplete tags at end of string
+          cleaned = cleaned.replace(/<script/gi, ""); // Explicitly remove script tags (case-insensitive)
+          cleaned = cleaned.replace(/<iframe/gi, ""); // Remove iframe tags
+          cleaned = cleaned.replace(/<object/gi, ""); // Remove object tags
+          cleaned = cleaned.replace(/<embed/gi, ""); // Remove embed tags
           // Handle broken tag artifacts
           cleaned = cleaned.replace(/(w+)e>/g, "$1");
           cleaned = cleaned.replace(/(w+)>(w+)/g, "$1 $2");

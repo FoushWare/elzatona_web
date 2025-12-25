@@ -488,10 +488,14 @@ export async function GET(
         },
       );
 
-      // Remove remaining HTML tags
-      // nosemgrep: js.incomplete-multi-character-sanitization
-      // CodeQL suppression: This regex is part of a multi-pass sanitization process. The cleaned text is sent as JSON (not rendered as HTML), and all HTML tags are removed through multiple passes.
-      cleaned = cleaned.replace(/<[^>]+>/g, "");
+      // Remove remaining HTML tags with comprehensive sanitization
+      // Use multiple passes to catch incomplete tags like <script
+      cleaned = cleaned.replace(/<[^>]+>/g, ""); // Remove complete tags
+      cleaned = cleaned.replace(/<[^>]*$/g, ""); // Remove incomplete tags at end of string
+      cleaned = cleaned.replace(/<script/gi, ""); // Explicitly remove script tags (case-insensitive)
+      cleaned = cleaned.replace(/<iframe/gi, ""); // Remove iframe tags
+      cleaned = cleaned.replace(/<object/gi, ""); // Remove object tags
+      cleaned = cleaned.replace(/<embed/gi, ""); // Remove embed tags
 
       // ============================================
       // PHASE 4: Fix code-related artifacts (MULTIPLE PASSES)

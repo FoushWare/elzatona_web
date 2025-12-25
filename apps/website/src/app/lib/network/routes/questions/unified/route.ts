@@ -862,9 +862,8 @@ export async function POST(request: NextRequest) {
           codeContent = codeContent.replace(/\r\n/g, "\n");
           codeContent = codeContent.replace(/\r/g, "\n");
           codeToStore = codeContent;
-          console.log(
-            `⚠️ Using originalCode as fallback: ${codeContent.length} chars`,
-          );
+          // Security: Removed user data from logs to prevent log injection
+          console.log("⚠️ Using originalCode as fallback");
         }
 
         // ALWAYS explicitly set the code field, even if it's null
@@ -973,10 +972,8 @@ export async function POST(request: NextRequest) {
         }
 
         if (existingQuestion) {
-          console.log("⚠️ Duplicate question found:", {
-            existingId: existingQuestion.id,
-            title: questionWithTimestamps.title,
-          });
+          // Security: Removed user data from logs to prevent log injection
+          console.log("⚠️ Duplicate question found");
           errors.push({
             question: questionData,
             error: `Duplicate question: A question with the same title${questionWithTimestamps.code ? " and code" : questionWithTimestamps.content ? " and content" : ""} already exists (ID: ${existingQuestion.id})`,
@@ -999,9 +996,8 @@ export async function POST(request: NextRequest) {
           // Try to recover code from any available source
           if (processedCode !== null && processedCode !== "") {
             questionWithTimestamps.code = processedCode;
-            console.log(
-              `✅ Code field recovered from processedCode: ${processedCode.length} chars`,
-            );
+          // Security: Removed user data from logs to prevent log injection
+          console.log("✅ Code field recovered from processedCode");
           } else if (
             originalCode !== undefined &&
             originalCode !== null &&
@@ -1023,14 +1019,11 @@ export async function POST(request: NextRequest) {
             sanitizedQuestion.code !== ""
           ) {
             questionWithTimestamps.code = sanitizedQuestion.code;
-            console.log(
-              `✅ Code field recovered from sanitizedQuestion: ${String(sanitizedQuestion.code).length} chars`,
-            );
+            // Security: Removed user data from logs to prevent log injection
+            console.log("✅ Code field recovered from sanitizedQuestion");
           } else {
             questionWithTimestamps.code = null;
-            console.log(
-              `⚠️ Code field not found in any source, setting to null`,
-            );
+            console.log("⚠️ Code field not found in any source, setting to null");
           }
         } else {
           // Code field exists, but verify it's not empty when it should have content
@@ -1065,20 +1058,8 @@ export async function POST(request: NextRequest) {
         // Security: Removed debug logging to prevent information disclosure
 
         // Insert question with code field
-        // CRITICAL: Log the exact data being inserted to debug code field issues
-        console.log("🔍 FINAL INSERT DATA - questionWithTimestamps:", {
-          title: questionWithTimestamps.title,
-          hasCode: "code" in questionWithTimestamps,
-          codeValue: questionWithTimestamps.code,
-          codeType: typeof questionWithTimestamps.code,
-          codeLength: questionWithTimestamps.code
-            ? String(questionWithTimestamps.code).length
-            : 0,
-          codePreview: questionWithTimestamps.code
-            ? String(questionWithTimestamps.code).substring(0, 150)
-            : null,
-          allKeys: Object.keys(questionWithTimestamps),
-        });
+        // Security: Removed user data from logs to prevent log injection
+        console.log("🔍 FINAL INSERT DATA - questionWithTimestamps");
 
         // Explicitly select code field in the response to ensure it's returned
         const { data, error } = await supabase
@@ -1087,17 +1068,9 @@ export async function POST(request: NextRequest) {
           .select("*, code") // Explicitly include code in the response
           .single();
 
-        // Log what was actually inserted
+        // Security: Removed user data from logs to prevent log injection
         if (data) {
-          console.log("✅ INSERT SUCCESS - Data returned from database:", {
-            id: data.id,
-            title: data.title,
-            hasCode: "code" in data,
-            codeValue: data.code,
-            codeType: typeof data.code,
-            codeLength: data.code ? String(data.code).length : 0,
-            codePreview: data.code ? String(data.code).substring(0, 100) : null,
-          });
+          console.log("✅ INSERT SUCCESS - Data returned from database");
         }
 
         if (error) {

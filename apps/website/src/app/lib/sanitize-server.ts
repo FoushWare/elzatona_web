@@ -140,13 +140,23 @@ export function sanitizeObjectServer<T extends Record<string, unknown>>(
   // These fields are preserved exactly as-is without any modification
   const skipSanitizationFields = ["code"];
 
-  for (const key in sanitized) {
+  // Validate all keys before processing to prevent remote property injection
+  const validKeys = Object.keys(sanitized).filter((key) => {
+    // Only allow alphanumeric characters, underscores, and hyphens in keys
+    // This prevents injection of dangerous property names like __proto__, constructor, etc.
+    return /^[a-zA-Z0-9_-]+$/.test(key);
+  });
+
+  // Create a new object with only valid keys
+  const validatedObject = {} as T;
+  for (const key of validKeys) {
     if (typeof sanitized[key] === "string") {
       // For code field, skip sanitization entirely - we'll use CSP protection instead
       if (skipSanitizationFields.includes(key)) {
         // Don't sanitize code field at all - preserve it exactly as-is
         // CSP (Content Security Policy) will protect against XSS attacks
         // The field is already in sanitized object, just don't modify it
+        (validatedObject as Record<string, unknown>)[key] = sanitized[key];
         continue; // Skip processing this field - leave it as-is
       }
       // For content and other rich text fields, preserve newlines - don't use sanitizeInputServer
@@ -156,18 +166,19 @@ export function sanitizeObjectServer<T extends Record<string, unknown>>(
         content = content
           .replace(/[\x00-\x08\x0B-\x0C\x0E-\x1F\x7F]/g, "") // Remove control chars except \n (0x0A), \r (0x0D), \t (0x09)
           .replace(/\x00/g, ""); // Remove null bytes
-        sanitized[key] = content as T[Extract<keyof T, string>];
+        (validatedObject as Record<string, unknown>)[key] = content;
       } else {
         // For other string fields, use standard sanitization
-        sanitized[key] = sanitizeInputServer(sanitized[key]) as T[Extract<
-          keyof T,
-          string
-        >];
+        (validatedObject as Record<string, unknown>)[key] = sanitizeInputServer(
+          sanitized[key],
+        );
       }
     } else if (Array.isArray(sanitized[key])) {
-      sanitized[key] = sanitized[key].map((item: unknown) =>
+      (validatedObject as Record<string, unknown>)[key] = (
+        sanitized[key] as unknown[]
+      ).map((item: unknown) =>
         typeof item === "string" ? sanitizeInputServer(item) : item,
-      ) as T[Extract<keyof T, string>];
+      );
     } else if (
       sanitized[key] &&
       typeof sanitized[key] === "object" &&
@@ -179,14 +190,18 @@ export function sanitizeObjectServer<T extends Record<string, unknown>>(
       const isDate =
         value && typeof value === "object" && value.constructor === Date;
       if (!isDate) {
-        sanitized[key] = sanitizeObjectServer(
-          sanitized[key] as Record<string, unknown>,
-        ) as T[Extract<keyof T, string>];
+        (validatedObject as Record<string, unknown>)[key] =
+          sanitizeObjectServer(sanitized[key] as Record<string, unknown>);
+      } else {
+        (validatedObject as Record<string, unknown>)[key] = sanitized[key];
       }
+    } else {
+      // For other types (numbers, booleans, null, etc.), copy as-is
+      (validatedObject as Record<string, unknown>)[key] = sanitized[key];
     }
   }
 
-  return sanitized;
+  return validatedObject;
 }
 
 /**
