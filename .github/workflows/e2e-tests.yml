@@ -73,18 +73,51 @@ jobs:
           echo "RUN_E2E_TESTS=true" >> $GITHUB_ENV
 
       # --------------------------------------------------
+      # Verify test database configuration
+      # --------------------------------------------------
+      - name: Verify test database configuration
+        if: env.RUN_E2E_TESTS == 'true'
+        run: |
+          echo "🔍 Verifying test database configuration..."
+          TEST_URL="${{ secrets.TEST_SUPABASE_URL }}"
+          
+          # Check that URL contains test project reference
+          if [[ "$TEST_URL" != *"kiycimlsatwfqxtfprlr"* ]] && \
+             [[ "$TEST_URL" != *"slfyltsmcivmqfloxpmq"* ]] && \
+             [[ "$TEST_URL" != *"vopfdukvdhnmzzjkxpnj"* ]]; then
+            echo "⚠️  WARNING: TEST_SUPABASE_URL doesn't match known test project references"
+            echo "   Expected: kiycimlsatwfqxtfprlr, slfyltsmcivmqfloxpmq, or vopfdukvdhnmzzjkxpnj"
+            echo "   Actual: $TEST_URL"
+          fi
+          
+          # Ensure it's NOT production
+          if [[ "$TEST_URL" == *"hpnewqkvpnthpohvxcmq"* ]]; then
+            echo "❌ ERROR: TEST_SUPABASE_URL points to PRODUCTION project!"
+            exit 1
+          fi
+          
+          echo "✅ Test database configuration verified"
+
+      # --------------------------------------------------
       # Build application (required for E2E tests)
       # --------------------------------------------------
       - name: Build application
         if: env.RUN_E2E_TESTS == 'true'
         run: |
           echo "🏗️ Building application for E2E tests..."
+          echo "📊 Using TEST database: ${{ secrets.TEST_SUPABASE_URL }}"
           npm run build
         env:
           NODE_OPTIONS: "--max-old-space-size=2048"
           NEXT_TELEMETRY_DISABLED: "1"
+          # CRITICAL: Force test environment
+          APP_ENV: "test"
+          NEXT_PUBLIC_APP_ENV: "test"
+          NODE_ENV: "test"
+          # CRITICAL: Use TEST database credentials
           NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.TEST_SUPABASE_URL }}
           NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.TEST_SUPABASE_ANON_KEY }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.TEST_SUPABASE_SERVICE_ROLE_KEY }}
           JWT_SECRET: ${{ secrets.JWT_SECRET }}
 
       # --------------------------------------------------
@@ -93,14 +126,37 @@ jobs:
       - name: Start application server
         if: env.RUN_E2E_TESTS == 'true'
         run: |
-          echo "🚀 Starting application server..."
-          npm run start &
-          sleep 10
-          echo "✅ Server should be running"
+          echo "🚀 Starting application server with TEST database..."
+          echo "📊 Database URL: ${{ secrets.TEST_SUPABASE_URL }}"
+          # Start server in background
+          npm run start > server.log 2>&1 &
+          SERVER_PID=$!
+          echo "SERVER_PID=$SERVER_PID" >> $GITHUB_ENV
+          
+          # Wait for server to be ready
+          echo "⏳ Waiting for server to start..."
+          for i in {1..30}; do
+            if curl -f http://localhost:3000 > /dev/null 2>&1; then
+              echo "✅ Server is ready!"
+              break
+            fi
+            if [ $i -eq 30 ]; then
+              echo "❌ Server failed to start after 30 seconds"
+              cat server.log
+              exit 1
+            fi
+            sleep 1
+          done
         env:
           NODE_OPTIONS: "--max-old-space-size=2048"
+          # CRITICAL: Force test environment
+          APP_ENV: "test"
+          NEXT_PUBLIC_APP_ENV: "test"
+          NODE_ENV: "test"
+          # CRITICAL: Use TEST database credentials
           NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.TEST_SUPABASE_URL }}
           NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.TEST_SUPABASE_ANON_KEY }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.TEST_SUPABASE_SERVICE_ROLE_KEY }}
           JWT_SECRET: ${{ secrets.JWT_SECRET }}
           PORT: "3000"
 
@@ -263,8 +319,12 @@ jobs:
         if: always() && env.RUN_E2E_TESTS == 'true'
         run: |
           echo "🛑 Stopping application server..."
+          if [ -n "$SERVER_PID" ]; then
+            kill $SERVER_PID 2>/dev/null || true
+          fi
           pkill -f "npm run start" || true
           pkill -f "next-server" || true
+          pkill -f "node.*next" || true
 
       - name: Cleanup build artifacts
         if: always()

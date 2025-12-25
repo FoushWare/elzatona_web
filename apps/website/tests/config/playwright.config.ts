@@ -128,19 +128,21 @@ export default defineConfig({
   ],
 
   /* Run your local dev server before starting the tests */
-  webServer: {
-    // Use dev:light:test to ensure Next.js loads .env.test.local for test database
-    command: "NODE_OPTIONS=--max-old-space-size=1536 npm run dev:light:test", // Use light mode for 8GB RAM with test environment
-    url: "http://localhost:3000",
-    reuseExistingServer: !process.env.CI,
-    timeout: 120 * 1000, // 2 minutes
-    env: {
-      // Ensure test environment is set for the dev server
-      APP_ENV: "test",
-      NEXT_PUBLIC_APP_ENV: "test",
-      NODE_ENV: "test",
-    },
-  },
+  webServer: process.env.CI
+    ? undefined // In CI, server is started manually in workflow
+    : {
+        // Use dev:light:test to ensure Next.js loads .env.test.local for test database
+        command: "NODE_OPTIONS=--max-old-space-size=1536 npm run dev:light:test", // Use light mode for 8GB RAM with test environment
+        url: "http://localhost:3000",
+        reuseExistingServer: true,
+        timeout: 120 * 1000, // 2 minutes
+        env: {
+          // CRITICAL: Force test environment to ensure test database is used
+          APP_ENV: "test",
+          NEXT_PUBLIC_APP_ENV: "test",
+          NODE_ENV: "test",
+        },
+      },
 
   /* Global setup and teardown */
   globalSetup: require.resolve("../e2e/global-setup.ts"),
