@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useMemo, useState, useEffect } from "react";
+import { useMemo, useState, useEffect, useCallback } from "react";
 import { enTranslations, arTranslations } from "./types/translations";
 
 const translations = {
@@ -43,7 +43,7 @@ export function useTranslation() {
     }
 
     return typeof value === "string" ? value : key;
-  };
+  }, [locale]);
 
   const t = useMemo(() => {
     return (key: string, params?: Record<string, string | number>) => {

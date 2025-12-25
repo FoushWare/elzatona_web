@@ -119,15 +119,16 @@ export const TopicForm: React.FC<TopicFormProps> = ({
   } = useTopicFormState(topic, categories);
 
   // Auto-generate slug from name
+  const formDataName = formData.name;
   useEffect(() => {
-    if (!topic && formData.name && !isJsonMode) {
-      const slug = formData.name
+    if (!topic && formDataName && !isJsonMode) {
+      const slug = formDataName
         .toLowerCase()
         .replace(/[^a-z0-9]+/g, "-")
         .replace(/(^-|-$)/g, "");
       setFormData((prev) => ({ ...prev, slug }));
     }
-  }, [formData, topic, isJsonMode, setFormData]);
+  }, [formDataName, topic, isJsonMode, setFormData]);
 
   // Parse JSON text with debouncing
   const parseJsonText = useCallback(
