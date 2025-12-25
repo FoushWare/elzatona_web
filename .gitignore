@@ -235,7 +235,7 @@ build/
 # Utility scripts (development only)
 libs/utilities/scripts/
 tools/
-tests/e2e/
+apps/*/tests/e2e/
 .cursor/
 .gitleaks.toml
 .code-quality-check.*.log
