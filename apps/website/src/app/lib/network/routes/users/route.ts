@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { UserAuthService } from "../../../user-auth";
 import { sanitizeObjectServer } from "../../../sanitize-server";
-import { getUserFromRequest, isAdmin } from "../../server-auth";
+import { getUserFromRequest, isAdmin } from "../../../server-auth";
 
 export async function GET(request: NextRequest) {
   try {
