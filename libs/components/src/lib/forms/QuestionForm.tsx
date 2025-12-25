@@ -92,8 +92,9 @@ export const QuestionForm: React.FC<QuestionFormProps> = ({
   // Filter topics based on selected category
   const formDataCategoryId = formData["categoryId"];
   const formDataTopicId = formData["topicId"];
-  const filteredTopics = topics.filter(
-    (topic) => topic.categoryId === formDataCategoryId,
+  const filteredTopics = useMemo(
+    () => topics.filter((topic) => topic.categoryId === formDataCategoryId),
+    [topics, formDataCategoryId],
   );
 
   // Update topicId when category changes
