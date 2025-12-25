@@ -344,20 +344,7 @@ export async function POST(request: NextRequest) {
         }
 
         // Validate and sanitize question data
-        console.log("🔍 Validating question:", {
-          index: index + 1,
-          title: normalizedData.title,
-          hasCategory: !!normalizedData.category,
-          hasCategoryId: !!normalizedData.category_id,
-          category: normalizedData.category,
-          category_id: normalizedData.category_id,
-          hasOriginalCode:
-            originalCode !== undefined &&
-            originalCode !== null &&
-            originalCode !== "",
-          originalCodeType: typeof originalCode,
-          originalCodeLength: originalCode ? String(originalCode).length : 0,
-        });
+        // Security: Removed debug logging to prevent information disclosure
 
         // CRITICAL: Process code field BEFORE validation/sanitization to preserve newlines
         // Extract and preserve code field separately - this ensures newlines are never lost
@@ -365,18 +352,7 @@ export async function POST(request: NextRequest) {
           originalCode !== undefined ? originalCode : normalizedData.code;
         let processedCode: string | null = null;
 
-        console.log("🔍 Code field extraction:", {
-          hasOriginalCode: originalCode !== undefined,
-          originalCodeType: typeof originalCode,
-          originalCodeValue: originalCode
-            ? String(originalCode).substring(0, 100)
-            : null,
-          hasNormalizedCode: normalizedData.code !== undefined,
-          normalizedCodeType: typeof normalizedData.code,
-          codeFieldValue: codeField
-            ? String(codeField).substring(0, 100)
-            : null,
-        });
+        // Security: Removed debug logging to prevent information disclosure
 
         if (codeField !== undefined && codeField !== null && codeField !== "") {
           // Convert to string and ensure \n escape sequences become actual newlines
@@ -397,19 +373,9 @@ export async function POST(request: NextRequest) {
           // Also update normalizedData for validation
           normalizedData.code = codeContent;
 
-          const newlineCount = (codeContent.match(/\n/g) || []).length;
-          console.log("📝 Code field pre-processing", {
-            newlineCount,
-            length: codeContent.length,
-            codePreview: codeContent.substring(0, 150),
-          });
+          // Security: Removed debug logging to prevent information disclosure
         } else {
-          console.log(`⚠️ Code field is missing or empty:`, {
-            codeField: codeField,
-            codeFieldType: typeof codeField,
-            originalCode: originalCode,
-            normalizedCode: normalizedData.code,
-          });
+          // Security: Removed debug logging to prevent information disclosure
         }
 
         // CRITICAL: Ensure code is in normalizedData before validation
@@ -427,14 +393,7 @@ export async function POST(request: NextRequest) {
           normalizedData.code = null;
         }
 
-        console.log("🔍 Before validation - normalizedData.code:", {
-          hasCode: "code" in normalizedData,
-          codeValue: normalizedData.code,
-          codeType: typeof normalizedData.code,
-          codeLength: normalizedData.code
-            ? String(normalizedData.code).length
-            : 0,
-        });
+        // Security: Removed debug logging to prevent information disclosure
 
         const validationResult = validateAndSanitize(
           questionSchema,
@@ -442,12 +401,9 @@ export async function POST(request: NextRequest) {
         );
 
         if (!validationResult.success) {
-          console.error("❌ Validation failed for question:", {
-            index: index + 1,
-            title: questionData.title,
-            error: validationResult.error,
-            normalizedData: normalizedData,
-          });
+          // Security: Removed detailed error logging to prevent information disclosure
+          // Only log minimal error information
+          console.error("❌ Validation failed for question:", index + 1);
           errors.push({
             question: questionData,
             error: validationResult.error,
@@ -456,12 +412,7 @@ export async function POST(request: NextRequest) {
           continue; // Continue to next question
         }
 
-        console.log("✅ Validation passed for question:", {
-          index: index + 1,
-          title: normalizedData.title,
-          validatedCode: validationResult.data?.code,
-          validatedCodeType: typeof validationResult.data?.code,
-        });
+        // Security: Removed debug logging to prevent information disclosure
 
         // Extract code field BEFORE sanitization to completely bypass it
         // Code field will NOT be sanitized - we'll use CSP protection instead
@@ -479,23 +430,7 @@ export async function POST(request: NextRequest) {
                 ? String(validationResult.data.code)
                 : null;
 
-        console.log("🔍 Code before sanitization:", {
-          hasProcessedCode: processedCode !== null && processedCode !== "",
-          hasOriginalCode:
-            originalCode !== undefined &&
-            originalCode !== null &&
-            originalCode !== "",
-          hasValidatedCode:
-            validationResult.data?.code !== undefined &&
-            validationResult.data?.code !== null &&
-            validationResult.data?.code !== "",
-          codeBeforeSanitization: codeBeforeSanitization
-            ? String(codeBeforeSanitization).substring(0, 100)
-            : null,
-          codeBeforeSanitizationLength: codeBeforeSanitization
-            ? String(codeBeforeSanitization).length
-            : 0,
-        });
+        // Security: Removed debug logging to prevent information disclosure
 
         // Sanitize the validated data (code field is now excluded from sanitization)
         const sanitizedQuestion = sanitizeObjectServer(
@@ -523,40 +458,24 @@ export async function POST(request: NextRequest) {
 
           sanitizedQuestion.code = codeContent;
 
-          const newlineCount = (codeContent.match(/\n/g) || []).length;
-          console.log(
-            "✅ Code field restored (NOT sanitized, using CSP protection)",
-            {
-              newlineCount,
-              length: codeContent.length,
-              codePreview: codeContent.substring(0, 150),
-            },
-          );
+          // Security: Removed debug logging to prevent information disclosure
+          const _newlineCount = (codeContent.match(/\n/g) || []).length;
 
-          if (newlineCount === 0 && codeContent.length > 50) {
+          if (_newlineCount === 0 && codeContent.length > 50) {
+            // Security: Removed detailed error logging to prevent information disclosure
             console.error(
               "❌ CRITICAL: Code field has no newlines after restoration!",
-              {
-                codePreview: codeContent.substring(0, 150),
-              },
             );
           }
         } else {
           // Explicitly set to null (not undefined) so it's included in the database insert
           sanitizedQuestion.code = null;
-          console.log("ℹ️ No code field to restore for question", {
-            title: normalizedData.title,
-            codeBeforeSanitization,
-            processedCode,
-            originalCode,
-          });
+          // Security: Removed debug logging to prevent information disclosure
         }
 
         // CRITICAL: Ensure code field is ALWAYS present in sanitizedQuestion
         if (!("code" in sanitizedQuestion)) {
-          console.error(
-            `❌ CRITICAL: Code field missing from sanitizedQuestion! Restoring from originalCode...`,
-          );
+          // Security: Removed detailed error logging to prevent information disclosure
           if (
             originalCode !== undefined &&
             originalCode !== null &&
@@ -570,12 +489,10 @@ export async function POST(request: NextRequest) {
             codeContent = codeContent.replaceAll("\r", "\n");
             sanitizedQuestion.code = codeContent;
             processedCode = codeContent;
-            console.log(
-              `✅ Code field recovered from originalCode: ${codeContent.length} chars`,
-            );
+            // Security: Removed debug logging to prevent information disclosure
           } else {
             sanitizedQuestion.code = null;
-            console.log(`⚠️ Code field set to null (no source available)`);
+            // Security: Removed debug logging to prevent information disclosure
           }
         }
 
@@ -587,15 +504,7 @@ export async function POST(request: NextRequest) {
           sanitizedQuestion.is_active = sanitizedQuestion.isActive;
         }
 
-        // Log learningCardId after validation and sanitization
-        console.log("🔍 After validation/sanitization:", {
-          learningCardId: sanitizedQuestion.learningCardId,
-          learning_card_id: sanitizedQuestion.learning_card_id,
-          hasLearningCardId: !!(
-            sanitizedQuestion.learningCardId ||
-            sanitizedQuestion.learning_card_id
-          ),
-        });
+        // Security: Removed debug logging to prevent information disclosure
 
         // Sanitize rich content fields (explanation, etc.)
         // NOTE: Code field is NOT sanitized - we use CSP protection instead
@@ -654,12 +563,8 @@ export async function POST(request: NextRequest) {
             .single();
 
           if (categoryError || !categoryData) {
-            console.error(
-              "Category lookup error:",
-              categoryError,
-              "Looking for:",
-              categoryName,
-            );
+            // Security: Removed detailed error logging to prevent information disclosure
+            console.error("Category lookup error");
             // Get list of available categories for better error message
             const { data: allCategories } = await supabase
               .from("categories")
@@ -673,9 +578,7 @@ export async function POST(request: NextRequest) {
           }
 
           categoryId = categoryData.id;
-          console.log(
-            `✅ Found category "${categoryData.name}" with ID: ${categoryId}`,
-          );
+          // Security: Removed debug logging to prevent information disclosure
         }
 
         // Map topic name to topic_id if needed
@@ -720,7 +623,7 @@ export async function POST(request: NextRequest) {
           }
 
           topicId = topicData.id;
-          console.log(`✅ Found topic "${topicData.name}" with ID: ${topicId}`);
+          // Security: Removed debug logging to prevent information disclosure
         }
 
         // Map learningCardId to learning_card_id
@@ -744,13 +647,11 @@ export async function POST(request: NextRequest) {
           ) {
             // It's already a UUID, use it directly
             finalLearningCardId = trimmedId;
-            console.log(`✅ Using learning card UUID: ${finalLearningCardId}`);
+            // Security: Removed debug logging to prevent information disclosure
           } else {
             // It's not a UUID - might be an identifier like "core-technologies"
             // Try to look it up in the learning_cards table by slug or title
-            console.log(
-              `🔍 Looking up learning card by identifier: "${trimmedId}"`,
-            );
+            // Security: Removed debug logging to prevent information disclosure
 
             // Try to find by title first (case-insensitive)
             let { data: cardData, error: cardError } = await supabase
@@ -788,18 +689,14 @@ export async function POST(request: NextRequest) {
 
             if (cardData) {
               finalLearningCardId = cardData.id;
-              console.log(
-                `✅ Found learning card "${trimmedId}" with UUID: ${finalLearningCardId}`,
-              );
+              // Security: Removed debug logging to prevent information disclosure
             } else {
-              console.warn(
-                `⚠️ Learning card not found: "${trimmedId}". Skipping learning card assignment.`,
-              );
+              // Security: Removed debug logging to prevent information disclosure
               // Don't throw error - learning card is optional
             }
           }
         } else {
-          console.log("ℹ️ No learning card ID provided (this is optional)");
+          // Security: Removed debug logging to prevent information disclosure
         }
 
         // Prepare question data for database
@@ -837,9 +734,7 @@ export async function POST(request: NextRequest) {
         // Restore code field to dbQuestion if it exists
         if (codeForDb !== undefined && codeForDb !== null && codeForDb !== "") {
           dbQuestion.code = codeForDb;
-          console.log(
-            `✅ Code field preserved in dbQuestion: ${String(codeForDb).length} chars`,
-          );
+          // Security: Removed debug logging to prevent information disclosure
         }
 
         // Ensure content field exists (required by database)
@@ -855,9 +750,7 @@ export async function POST(request: NextRequest) {
           // Database constraint only allows: 'multiple-choice', 'open-ended', 'true-false', 'code'
           // Map 'multiple-select' to 'multiple-choice' as they're functionally the same
           dbQuestion.type = "multiple-choice";
-          console.log(
-            `🔄 Mapped 'multiple-select' to 'multiple-choice' for question: ${sanitizedQuestion.title}`,
-          );
+          // Security: Removed debug logging to prevent information disclosure
         }
 
         // Handle metadata if provided
@@ -980,12 +873,8 @@ export async function POST(request: NextRequest) {
         if (processedCode !== null && processedCode !== "") {
           // processedCode is already processed with newlines
           questionWithTimestamps.code = processedCode;
-          const newlineCount = (processedCode.match(/\n/g) || []).length;
-          console.log("💾 Storing code from processedCode", {
-            newlineCount,
-            length: processedCode.length,
-            codePreview: processedCode.substring(0, 150),
-          });
+          // Security: Removed debug logging to prevent information disclosure
+          const _newlineCount = (processedCode.match(/\n/g) || []).length;
         } else if (
           codeToStore !== undefined &&
           codeToStore !== null &&
@@ -993,24 +882,8 @@ export async function POST(request: NextRequest) {
         ) {
           // Fallback to codeToStore if processedCode is not available
           const codeString = String(codeToStore);
-          const newlineCount = (codeString.match(/\n/g) || []).length;
-          console.log("💾 Storing code from codeToStore", {
-            newlineCount,
-            length: codeString.length,
-            codeSource:
-              codeForDb !== undefined && codeForDb !== null && codeForDb !== ""
-                ? "codeForDb"
-                : dbQuestion.code !== undefined &&
-                    dbQuestion.code !== null &&
-                    dbQuestion.code !== ""
-                  ? "dbQuestion.code"
-                  : sanitizedQuestion.code !== undefined &&
-                      sanitizedQuestion.code !== null &&
-                      sanitizedQuestion.code !== ""
-                    ? "sanitizedQuestion.code"
-                    : "originalCode",
-            codePreview: codeString.substring(0, 150),
-          });
+          // Security: Removed debug logging to prevent information disclosure
+          const _newlineCount = (codeString.match(/\n/g) || []).length;
           questionWithTimestamps.code = codeString;
         } else if (
           originalCode !== undefined &&
@@ -1026,33 +899,12 @@ export async function POST(request: NextRequest) {
           codeContent = codeContent.replace(/\r/g, "\n");
           questionWithTimestamps.code = codeContent;
           processedCode = codeContent; // Update for consistency
-          const newlineCount = (codeContent.match(/\n/g) || []).length;
-          console.log("💾 Storing code from originalCode (last resort)", {
-            newlineCount,
-            length: codeContent.length,
-            codePreview: codeContent.substring(0, 150),
-          });
+          // Security: Removed debug logging to prevent information disclosure
+          const _newlineCount = (codeContent.match(/\n/g) || []).length;
         } else {
           // Explicitly set to null if not provided (to ensure the field is included in the insert)
           questionWithTimestamps.code = null;
-          console.log("ℹ️ No code field provided for question", {
-            title: questionWithTimestamps.title,
-            hasProcessedCode: processedCode !== null && processedCode !== "",
-            hasCodeForDb:
-              codeForDb !== undefined && codeForDb !== null && codeForDb !== "",
-            hasDbQuestionCode:
-              dbQuestion.code !== undefined &&
-              dbQuestion.code !== null &&
-              dbQuestion.code !== "",
-            hasSanitizedCode:
-              sanitizedQuestion.code !== undefined &&
-              sanitizedQuestion.code !== null &&
-              sanitizedQuestion.code !== "",
-            hasOriginalCode:
-              originalCode !== undefined &&
-              originalCode !== null &&
-              originalCode !== "",
-          });
+          // Security: Removed debug logging to prevent information disclosure
         }
 
         // CRITICAL: Ensure code field is ALWAYS present in questionWithTimestamps
@@ -1083,25 +935,7 @@ export async function POST(request: NextRequest) {
           );
         }
 
-        console.log("📝 Question data to insert:", {
-          title: questionWithTimestamps.title,
-          type: questionWithTimestamps.type,
-          category_id: questionWithTimestamps.category_id,
-          topic_id: questionWithTimestamps.topic_id,
-          learning_card_id: questionWithTimestamps.learning_card_id,
-          hasOptions: !!(
-            questionWithTimestamps.options &&
-            Array.isArray(questionWithTimestamps.options) &&
-            questionWithTimestamps.options.length > 0
-          ),
-          hasCode: !!questionWithTimestamps.code,
-          codeLength: questionWithTimestamps.code
-            ? String(questionWithTimestamps.code).length
-            : 0,
-          codePreview: questionWithTimestamps.code
-            ? String(questionWithTimestamps.code).substring(0, 100)
-            : null,
-        });
+        // Security: Removed debug logging to prevent information disclosure
 
         // Check for duplicate questions before inserting
         // A question is considered duplicate if it has the same title (case-insensitive) AND (same content OR same code)
@@ -1182,9 +1016,7 @@ export async function POST(request: NextRequest) {
             codeContent = codeContent.replace(/\r/g, "\n");
             questionWithTimestamps.code = codeContent;
             processedCode = codeContent; // Update for consistency
-            console.log(
-              `✅ Code field recovered from originalCode: ${codeContent.length} chars`,
-            );
+            // Security: Removed debug logging to prevent information disclosure
           } else if (
             sanitizedQuestion.code !== undefined &&
             sanitizedQuestion.code !== null &&
@@ -1209,9 +1041,7 @@ export async function POST(request: NextRequest) {
             // If we have code from other sources, use it
             if (processedCode !== null && processedCode !== "") {
               questionWithTimestamps.code = processedCode;
-              console.log(
-                `⚠️ Code field was null/empty, restored from processedCode: ${processedCode.length} chars`,
-              );
+              // Security: Removed debug logging to prevent information disclosure
             } else if (
               originalCode !== undefined &&
               originalCode !== null &&
@@ -1232,27 +1062,7 @@ export async function POST(request: NextRequest) {
           }
         }
 
-        // ABSOLUTE FINAL CHECK: Log the final state before insert
-        console.log("🔍 ABSOLUTE FINAL CHECK - questionWithTimestamps.code:", {
-          hasCode: "code" in questionWithTimestamps,
-          codeValue: questionWithTimestamps.code,
-          codeType: typeof questionWithTimestamps.code,
-          codeIsNull: questionWithTimestamps.code === null,
-          codeIsUndefined: questionWithTimestamps.code === undefined,
-          codeIsEmpty: questionWithTimestamps.code === "",
-          codeLength: questionWithTimestamps.code
-            ? String(questionWithTimestamps.code).length
-            : 0,
-          codePreview: questionWithTimestamps.code
-            ? String(questionWithTimestamps.code).substring(0, 100)
-            : null,
-          processedCode: processedCode
-            ? String(processedCode).substring(0, 50)
-            : null,
-          originalCode: originalCode
-            ? String(originalCode).substring(0, 50)
-            : null,
-        });
+        // Security: Removed debug logging to prevent information disclosure
 
         // Insert question with code field
         // CRITICAL: Log the exact data being inserted to debug code field issues

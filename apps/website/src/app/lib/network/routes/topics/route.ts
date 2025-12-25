@@ -9,8 +9,7 @@ import { validateAndSanitize, topicSchema } from "../../utils/validation";
 // GET /api/topics - Get all topics
 export async function GET() {
   try {
-    console.log("🔄 API: Fetching topics...");
-
+    // Security: Removed debug logging to prevent information disclosure
     const { data: topics, error } = await supabaseOperations.getTopics({
       isActive: true,
       orderBy: "order_index",
@@ -36,8 +35,7 @@ export async function GET() {
         updated_at: new Date(topic.updated_at),
       })) || [];
 
-    console.log("📊 API: Topics fetched:", transformedTopics.length, "topics");
-    console.log("📊 API: Topics data:", transformedTopics);
+    // Security: Removed debug logging to prevent information disclosure
 
     return NextResponse.json({
       success: true,
@@ -60,7 +58,7 @@ export async function GET() {
 export async function POST(request: NextRequest) {
   try {
     const topicData = await request.json();
-    console.log("🔄 API: Creating topic with data:", topicData);
+    // Security: Removed debug logging to prevent information disclosure
 
     // Validate and sanitize topic data
     const validationResult = validateAndSanitize(topicSchema, topicData);
@@ -97,7 +95,7 @@ export async function POST(request: NextRequest) {
       throw new Error(error.message);
     }
 
-    console.log("✅ API: Topic created with ID:", (newTopic as any).id);
+    // Security: Removed debug logging to prevent information disclosure
 
     // Transform response to match expected format
     const transformedTopic = {

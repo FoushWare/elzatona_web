@@ -17,34 +17,15 @@ function createSupabaseClient() {
 // GET /api/plans - Get all learning plans
 export async function GET(_request: NextRequest) {
   try {
-    console.log("🔍 API Debug: Starting GET /api/plans");
-    console.log(
-      "🔍 API Debug: NEXT_PUBLIC_SUPABASE_URL:",
-      process.env.NEXT_PUBLIC_SUPABASE_URL?.substring(0, 40) + "...",
-    );
-    console.log(
-      "🔍 API Debug: NEXT_PUBLIC_SUPABASE_ANON_KEY exists:",
-      !!process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
-    );
-    console.log(
-      "🔍 API Debug: Anon key starts with:",
-      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY?.substring(0, 20) + "...",
-    );
-
+    // Security: Removed debug logging to prevent information disclosure
     const supabase = createSupabaseClient();
-    console.log("🔍 API Debug: Supabase client created");
 
     const { data: plans, error } = await supabase
       .from("learning_plans")
       .select("*")
       .order("created_at", { ascending: true });
 
-    console.log("🔍 API Debug: Plans query result:", {
-      plansCount: plans?.length || 0,
-      plans:
-        plans?.map((p) => ({ id: p.id, name: p.name, title: p.title })) || [],
-      error: error?.message || null,
-    });
+    // Security: Removed debug logging to prevent information disclosure
 
     if (error) {
       console.error("❌ Error fetching plans:", error);
@@ -58,11 +39,7 @@ export async function GET(_request: NextRequest) {
       );
     }
 
-    console.log(
-      "✅ API Debug: Successfully returning",
-      plans?.length || 0,
-      "plans",
-    );
+    // Security: Removed debug logging to prevent information disclosure
 
     return NextResponse.json({
       success: true,

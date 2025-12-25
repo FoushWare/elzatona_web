@@ -835,27 +835,17 @@ export function ViewQuestionModal({
     return html;
   };
 
-  // Helper function to log highlighting success
-  const logHighlightingSuccess = (html: string) => {
-    console.log("ViewQuestionModal - Code highlighted successfully:", {
-      htmlLength: html.length,
-      hasContent: html.length > 0,
-      htmlPreview: html.substring(0, 200),
-    });
+  // Security: Removed debug logging to prevent information disclosure
+  const _logHighlightingSuccess = (_html: string) => {
+    // Removed for security
   };
 
-  // Helper function to log highlighting skip
-  const logHighlightingSkip = (
-    shikiHighlighter: Highlighter | null,
-    question: UnifiedQuestion | null,
+  // Security: Removed debug logging to prevent information disclosure
+  const _logHighlightingSkip = (
+    _shikiHighlighter: Highlighter | null,
+    _question: UnifiedQuestion | null,
   ) => {
-    console.log("ViewQuestionModal - Shiki highlighting skipped:", {
-      hasHighlighter: !!shikiHighlighter,
-      hasCode: !!question?.codeTemplate,
-      codeValue: question?.codeTemplate
-        ? String(question.codeTemplate).substring(0, 50)
-        : null,
-    });
+    // Removed for security
   };
 
   // Helper function to handle code highlighting logic
@@ -866,16 +856,13 @@ export function ViewQuestionModal({
   ) => {
     if (!shikiHighlighter || !question?.codeTemplate) {
       setCodeHighlightedHtml("");
-      logHighlightingSkip(shikiHighlighter, question);
+      _logHighlightingSkip(shikiHighlighter, question);
       return;
     }
 
     try {
       const rawCode = String(question.codeTemplate || "");
-      console.log("ViewQuestionModal - Processing code for highlighting:", {
-        rawCodeLength: rawCode.length,
-        rawCodePreview: rawCode.substring(0, 100),
-      });
+      // Security: Removed debug logging to prevent information disclosure
 
       const codeWithNewlines = processCodeForHighlighting(rawCode);
       const lang = detectLanguage(codeWithNewlines);
@@ -888,7 +875,7 @@ export function ViewQuestionModal({
       });
 
       html = adjustHtmlForLightMode(html);
-      logHighlightingSuccess(html);
+      _logHighlightingSuccess(html);
       setCodeHighlightedHtml(html);
     } catch (error) {
       console.error("ViewQuestionModal - Error highlighting code:", error);

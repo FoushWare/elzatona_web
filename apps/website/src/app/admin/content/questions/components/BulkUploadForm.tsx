@@ -9,6 +9,7 @@ import {
   Textarea,
 } from "@elzatona/components";
 import { Upload, FileText, AlertTriangle, Loader2 } from "lucide-react";
+import DOMPurify from "dompurify";
 import {
   useFormState,
   useFileProcessing,
@@ -304,7 +305,23 @@ export default function BulkUploadForm({
                     <div className="mt-2">
                       <div
                         dangerouslySetInnerHTML={{
-                          __html: codeHighlightedHtml[index] || "",
+                          __html:
+                            typeof window !== "undefined"
+                              ? DOMPurify.sanitize(
+                                  codeHighlightedHtml[index] || "",
+                                  {
+                                    ALLOWED_TAGS: [
+                                      "pre",
+                                      "code",
+                                      "span",
+                                      "div",
+                                      "style",
+                                      "br",
+                                    ],
+                                    ALLOWED_ATTR: ["class", "style"],
+                                  },
+                                )
+                              : codeHighlightedHtml[index] || "",
                         }}
                       />
                     </div>

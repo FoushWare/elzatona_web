@@ -85,29 +85,8 @@ export async function POST(request: NextRequest) {
     const supabase = getSupabaseClient();
     const config = getSupabaseConfig();
 
-    // Debug logging for all environments (to help diagnose issues)
-    console.log("[Admin Auth API] 🔍 Debug Info:");
-    console.log("[Admin Auth API] 📋 Supabase URL:", config.url);
-    console.log(
-      "[Admin Auth API] 🔑 Service Role Key Project:",
-      config.serviceRoleKey
-        ? (() => {
-            try {
-              const parts = config.serviceRoleKey.split(".");
-              const payload = JSON.parse(
-                Buffer.from(parts[1], "base64").toString(),
-              );
-              return payload.ref;
-            } catch {
-              return "unknown";
-            }
-          })()
-        : "missing",
-    );
-    console.log(
-      "[Admin Auth API] 🔍 Looking for admin email:",
-      sanitizeForLog(email),
-    );
+    // Security: Removed debug logging that could expose sensitive information
+    // Debug logging removed to prevent information disclosure
 
     // Debug logging for test environment
     if (
@@ -189,12 +168,7 @@ export async function POST(request: NextRequest) {
     );
     if (!isValidPassword) {
       // Only log in test/dev environments for debugging
-      if (
-        process.env.APP_ENV === "test" ||
-        process.env.NEXT_PUBLIC_APP_ENV === "test"
-      ) {
-        console.log("[Admin Auth API] ❌ Password comparison failed");
-      }
+      // Security: Removed password comparison logging to prevent information disclosure
       return NextResponse.json(
         { success: false, error: "Invalid email or password" },
         { status: 401 },

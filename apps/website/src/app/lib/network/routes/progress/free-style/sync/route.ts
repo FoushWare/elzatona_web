@@ -1,7 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
 import { cookies } from "next/headers";
-import { verifySupabaseToken } from "../../../../server-auth";
+import {
+  verifySupabaseToken,
+  getUserFromRequest,
+} from "../../../../server-auth";
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
 const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
@@ -32,11 +35,12 @@ async function getUserIdFromRequest(
       return supabaseUser.id;
     }
 
-    // If Supabase token fails, try custom auth token
-    // Custom auth tokens might contain user ID in JWT or we need to look it up
-    // For now, we'll try to get user info from the users table
-    // This assumes the token might be a user ID or we can extract email from it
-    // TODO: Implement custom JWT verification for user auth tokens
+    // If Supabase token fails, try custom auth token via getUserFromRequest
+    // This handles both Supabase tokens and custom JWT tokens (admin tokens)
+    const user = await getUserFromRequest(request);
+    if (user) {
+      return user.id;
+    }
   }
 
   // Fallback to cookie-based auth

@@ -1,14 +1,18 @@
 import { NextRequest, NextResponse } from "next/server";
 import { UserAuthService } from "../../user-auth";
 import { sanitizeObjectServer } from "../../utils/sanitize-server";
+import { getUserFromRequest, isAdmin } from "../../server-auth";
 
-export async function GET(_request: NextRequest) {
+export async function GET(request: NextRequest) {
   try {
-    // TODO: Add admin authentication check
-    // const adminToken = request.headers.get('authorization');
-    // if (!adminToken || !isValidAdminToken(adminToken)) {
-    //   return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-    // }
+    // Security: Admin authentication check
+    const user = await getUserFromRequest(request);
+    if (!user || !isAdmin(user)) {
+      return NextResponse.json(
+        { success: false, error: "Unauthorized" },
+        { status: 401 },
+      );
+    }
 
     const users = await UserAuthService.getAllUsers();
 

@@ -45,20 +45,12 @@ export async function POST(request: NextRequest) {
     const cookieStore = await cookies();
     const token = cookieStore.get("firebase_token")?.value;
 
-    console.log("🔑 Firebase token:", token ? "Present" : "Missing");
+    // Security: Removed token logging to prevent information disclosure
 
     let progressData: ProgressData;
     try {
       progressData = await request.json();
-      console.log("📄 Progress data received:", {
-        hasUserId: !!progressData.userId,
-        hasQuestionId: !!progressData.question_id,
-        learningMode: sanitizeForLog(progressData.learningMode),
-        isCorrect:
-          typeof progressData.isCorrect === "boolean"
-            ? progressData.isCorrect
-            : "invalid",
-      });
+      // Security: Removed debug logging to prevent information disclosure
     } catch (parseError) {
       console.error(
         "❌ Error parsing request body:",

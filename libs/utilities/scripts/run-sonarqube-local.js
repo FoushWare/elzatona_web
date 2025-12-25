@@ -1,13 +1,16 @@
 #!/usr/bin/env node
-/* eslint-disable @typescript-eslint/no-require-imports */
 /**
  * Run SonarQube/SonarCloud analysis locally with memory limits
  * v1.0 - Local code quality and security analysis
  */
 
-const { execSync } = require("child_process");
-const fs = require("fs");
-const path = require("path");
+import { execSync } from "child_process";
+import fs from "fs";
+import path from "path";
+import { fileURLToPath } from "url";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 // Memory limit for SonarQube scanner (in MB)
 const MEMORY_LIMIT = process.env.SONAR_MEMORY_LIMIT || "1536"; // Default to light mode
