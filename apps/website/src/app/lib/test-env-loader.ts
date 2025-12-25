@@ -28,6 +28,20 @@ export function loadTestEnvironment(): {
   loadedFiles: string[];
   isCI: boolean;
 } {
+  // Skip during Next.js build to avoid process.env modification errors
+  // Next.js build sets NODE_ENV to 'production' and doesn't allow process.env modifications
+  const isBuildContext = process.env.NODE_ENV === "production" && 
+                         (process.env.NEXT_PHASE === "phase-production-build" || 
+                          !process.env.JEST_WORKER_ID);
+  
+  if (isBuildContext) {
+    return {
+      environment: "production",
+      loadedFiles: [],
+      isCI: !!process.env.CI || !!process.env.GITHUB_ACTIONS,
+    };
+  }
+
   const projectRoot = process.cwd();
   const isCI = !!process.env.CI || !!process.env.GITHUB_ACTIONS;
 
@@ -78,10 +92,14 @@ export function loadTestEnvironment(): {
   }
 
   // Normalize admin credentials (handle fallbacks and trim)
-  normalizeAdminCredentials();
+  // Skip during build to avoid process.env modification errors
+  if (!isBuildContext) {
+    normalizeAdminCredentials();
+  }
 
   // Force test environment if in test mode
-  if (isTest) {
+  // Skip during build to avoid Next.js build errors
+  if (isTest && !isBuildContext) {
     process.env.APP_ENV = "test";
     process.env.NEXT_PUBLIC_APP_ENV = "test";
     // NODE_ENV is read-only in some environments, only set if not already set

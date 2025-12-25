@@ -1,11 +1,10 @@
+// @ts-nocheck - Storybook file, not included in production build
 /**
  * Storybook Stories for HeroSection Component
  *
  * Stories for the HeroSection molecule component
  * Co-located with component for easy discovery
  */
-
-// Storybook file, not included in build
 import * as React from "react";
 // @ts-expect-error - Storybook types not available in build
 import type { Meta, StoryObj } from "@storybook/react";
@@ -36,7 +35,7 @@ const defaultContent: PersonalizedContent = {
   subtitle: "The complete platform to ace your frontend interviews",
   cta: "Get Started",
   ctaLink: "/get-started",
-  icon: Play,
+  icon: React.createElement(Play),
   color: "indigo",
 };
 
@@ -54,7 +53,7 @@ export const GuidedContent: Story = {
       subtitle: "The complete platform to ace your frontend interviews",
       cta: "Choose Learning Plan",
       ctaLink: "/features/guided-learning",
-      icon: Map,
+      icon: React.createElement(Map),
       color: "indigo",
     },
     showAnimation: true,
@@ -68,7 +67,7 @@ export const SelfDirectedContent: Story = {
       subtitle: "Create and manage your personalized learning journey",
       cta: "View My Roadmap",
       ctaLink: "/browse-practice-questions",
-      icon: Compass,
+      icon: React.createElement(Compass),
       color: "purple",
     },
     showAnimation: true,

@@ -24,7 +24,13 @@ for (const envFile of envFiles) {
 // This ensures tests ALWAYS use test database, regardless of other settings
 process.env.APP_ENV = "test";
 process.env.NEXT_PUBLIC_APP_ENV = "test";
-process.env.NODE_ENV = "test";
+// Only set NODE_ENV if not in build context
+// Use type assertion to avoid TypeScript read-only property error
+if (process.env.NODE_ENV !== "production" && !process.env.NEXT_PHASE) {
+  if (!process.env.NODE_ENV) {
+    (process.env as any).NODE_ENV = "test";
+  }
+}
 
 // Set up environment variables before any module imports
 // This ensures supabase-client.ts and other modules have access to these values

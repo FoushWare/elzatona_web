@@ -8,7 +8,7 @@ const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
 
 import { cookies } from "next/headers";
 import { verifySupabaseToken } from "../../../../server-auth";
-import { UserPreferences } from "../../../../types/firestore";
+import { UserPreferences } from "@elzatona/types";
 import { sanitizeObjectServer } from "../../../../sanitize-server";
 
 export async function GET(_request: NextRequest) {

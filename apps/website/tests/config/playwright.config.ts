@@ -26,9 +26,15 @@ for (const envFile of envFiles) {
 
 // FORCE TEST ENVIRONMENT for all E2E tests
 // This ensures E2E tests ALWAYS use test database, regardless of other settings
-process.env.APP_ENV = "test";
-process.env.NEXT_PUBLIC_APP_ENV = "test";
-process.env.NODE_ENV = "test";
+// Only set environment variables if not in build context
+if (process.env.NODE_ENV !== "production" && !process.env.NEXT_PHASE) {
+  process.env.APP_ENV = "test";
+  process.env.NEXT_PUBLIC_APP_ENV = "test";
+  // NODE_ENV is read-only in some environments, only set if not already set
+  if (!process.env.NODE_ENV) {
+    (process.env as any).NODE_ENV = "test";
+  }
+}
 
 // Debug: Log loaded admin credentials and environment info
 if (process.env.ADMIN_EMAIL) {

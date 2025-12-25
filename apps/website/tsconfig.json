@@ -40,8 +40,13 @@
     "jest.setup.js",
     "apps/admin/Utils/scripts/**/*",
     "**/*.spec.ts",
+    "**/*.spec.tsx",
     "**/*.stories.ts",
+    "**/*.stories.tsx",
     "**/*.stories.js",
+    "**/*.stories.jsx",
+    "**/*.test.ts",
+    "**/*.test.tsx",
     "**/*.example.ts",
     "utilities/api-config.example.ts"
   ]

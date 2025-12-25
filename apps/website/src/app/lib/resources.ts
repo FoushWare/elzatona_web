@@ -1,7 +1,7 @@
 import { LearningResource, ResourceCategoryInfo } from "@elzatona/types";
 // Import LearningPath directly from resource file to avoid conflict with unified-question-schema
 // Using relative path since it's not exported from shared-types index
-import type { LearningPath } from "../../../libs/types/src/lib/resource";
+import type { LearningPath } from "@elzatona/types";
 
 export const resourceCategories: ResourceCategoryInfo[] = [
   {

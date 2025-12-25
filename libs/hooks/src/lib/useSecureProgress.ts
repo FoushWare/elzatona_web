@@ -84,129 +84,6 @@ export function useSecureProgress(): UseSecureProgressReturn {
     return `session_${Date.now()}_${Math.random().toString(36).substring(2, 11)}`;
   };
 
-  const saveProgress = useCallback(
-    async (data: Omit<ProgressData, "userId">): Promise<boolean> => {
-      if (!isAuthenticated || !user) {
-        console.log("⚠️ User not authenticated, skipping progress save");
-        return false;
-      }
-
-      setIsLoading(true);
-      setError(null);
-
-      try {
-        const progressData: ProgressData = {
-          ...data,
-          userId: user.uid,
-          sessionId: generateSecureSessionId(),
-        };
-
-        // Save to server
-        const response = await fetch("/api/progress/save", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(progressData),
-          credentials: "include", // Include cookies
-        });
-
-        if (!response.ok) {
-          const errorData = await response.json();
-          console.error("❌ Progress save failed:", {
-            status: response.status,
-            statusText: response.statusText,
-            errorData,
-            url: "/api/progress/save",
-          });
-
-          // If it's an authentication error, try to set the cookie again
-          if (
-            errorData.error === "Authentication required" ||
-            errorData.error === "Invalid authentication token"
-          ) {
-            console.warn(
-              "Authentication cookie not set, trying to set it again...",
-            );
-
-            // Try to get a fresh token and set the cookie
-            try {
-              if (!firebaseUser) {
-                throw new Error("No Firebase user available for token refresh");
-              }
-              const { cookieManager } = await import("./types/cookie-manager");
-              const success = await cookieManager.retryAuthCookie(firebaseUser);
-              if (success) {
-                console.log(
-                  "✅ Auth cookie set successfully, retrying progress save...",
-                );
-
-                // Retry the request
-                const retryResponse = await fetch("/api/progress/save", {
-                  method: "POST",
-                  headers: {
-                    "Content-Type": "application/json",
-                  },
-                  body: JSON.stringify(progressData),
-                  credentials: "include",
-                });
-
-                if (retryResponse.ok) {
-                  await retryResponse.json();
-                  console.log("✅ Progress saved successfully after retry");
-
-                  // Update local cache
-                  updateLocalCache(progressData);
-                  return true;
-                }
-              }
-            } catch (retryError) {
-              console.warn(
-                "Retry failed, continuing with local storage only:",
-                retryError,
-              );
-            }
-          }
-
-          console.error(
-            "❌ Progress save failed:",
-            errorData.error || "Failed to save progress",
-          );
-          setError(errorData.error || "Failed to save progress");
-          return false;
-        }
-
-        const result = await response.json();
-
-        // Check if we're in development mode
-        if (result.warning) {
-          console.warn("Development mode:", result.warning);
-        }
-
-        // Update local cache
-        updateLocalCache(progressData);
-
-        // Sync with server to get updated progress
-        await syncProgress();
-
-        return true;
-      } catch (error) {
-        console.error("Error saving progress:", error);
-        setError(
-          error instanceof Error ? error.message : "Failed to save progress",
-        );
-
-        // Still save to localStorage as backup
-        updateLocalCache({ ...data, userId: user.uid });
-
-        return false;
-      } finally {
-        setIsLoading(false);
-      }
-    },
-    [isAuthenticated, user, updateLocalCache, syncProgress, firebaseUser],
-  );
-
   const updateLocalCache = useCallback(
     (progressData: ProgressData) => {
       try {
@@ -329,6 +206,129 @@ export function useSecureProgress(): UseSecureProgressReturn {
       setIsLoading(false);
     }
   }, [isAuthenticated, user]);
+
+  const saveProgress = useCallback(
+    async (data: Omit<ProgressData, "userId">): Promise<boolean> => {
+      if (!isAuthenticated || !user) {
+        console.log("⚠️ User not authenticated, skipping progress save");
+        return false;
+      }
+
+      setIsLoading(true);
+      setError(null);
+
+      try {
+        const progressData: ProgressData = {
+          ...data,
+          userId: user.uid,
+          sessionId: generateSecureSessionId(),
+        };
+
+        // Save to server
+        const response = await fetch("/api/progress/save", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(progressData),
+          credentials: "include", // Include cookies
+        });
+
+        if (!response.ok) {
+          const errorData = await response.json();
+          console.error("❌ Progress save failed:", {
+            status: response.status,
+            statusText: response.statusText,
+            errorData,
+            url: "/api/progress/save",
+          });
+
+          // If it's an authentication error, try to set the cookie again
+          if (
+            errorData.error === "Authentication required" ||
+            errorData.error === "Invalid authentication token"
+          ) {
+            console.warn(
+              "Authentication cookie not set, trying to set it again...",
+            );
+
+            // Try to get a fresh token and set the cookie
+            try {
+              if (!firebaseUser) {
+                throw new Error("No Firebase user available for token refresh");
+              }
+              const { cookieManager } = await import("./types/cookie-manager");
+              const success = await cookieManager.retryAuthCookie(firebaseUser);
+              if (success) {
+                console.log(
+                  "✅ Auth cookie set successfully, retrying progress save...",
+                );
+
+                // Retry the request
+                const retryResponse = await fetch("/api/progress/save", {
+                  method: "POST",
+                  headers: {
+                    "Content-Type": "application/json",
+                  },
+                  body: JSON.stringify(progressData),
+                  credentials: "include",
+                });
+
+                if (retryResponse.ok) {
+                  await retryResponse.json();
+                  console.log("✅ Progress saved successfully after retry");
+
+                  // Update local cache
+                  updateLocalCache(progressData);
+                  return true;
+                }
+              }
+            } catch (retryError) {
+              console.warn(
+                "Retry failed, continuing with local storage only:",
+                retryError,
+              );
+            }
+          }
+
+          console.error(
+            "❌ Progress save failed:",
+            errorData.error || "Failed to save progress",
+          );
+          setError(errorData.error || "Failed to save progress");
+          return false;
+        }
+
+        const result = await response.json();
+
+        // Check if we're in development mode
+        if (result.warning) {
+          console.warn("Development mode:", result.warning);
+        }
+
+        // Update local cache
+        updateLocalCache(progressData);
+
+        // Sync with server to get updated progress
+        await syncProgress();
+
+        return true;
+      } catch (error) {
+        console.error("Error saving progress:", error);
+        setError(
+          error instanceof Error ? error.message : "Failed to save progress",
+        );
+
+        // Still save to localStorage as backup
+        updateLocalCache({ ...data, userId: user.uid });
+
+        return false;
+      } finally {
+        setIsLoading(false);
+      }
+    },
+    [isAuthenticated, user, updateLocalCache, syncProgress, firebaseUser],
+  );
 
   const clearLocalCache = useCallback(() => {
     if (user?.uid) {

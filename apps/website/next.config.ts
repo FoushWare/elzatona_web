@@ -154,13 +154,27 @@ const nextConfig: NextConfig = {
 
   // Bundle optimization
   webpack: (config, { dev, isServer }) => {
-    // Ignore storybook files
+    // Ignore storybook and test files
     config.module = config.module || {};
     config.module.rules = config.module.rules || [];
+    
+    // Exclude storybook files from build
     config.module.rules.push({
       test: /\.stories\.(tsx?|jsx?)$/,
-      use: "null-loader",
+      loader: "ignore-loader",
     });
+    
+    // Exclude test files from build
+    config.module.rules.push({
+      test: /\.(test|spec)\.(tsx?|jsx?)$/,
+      loader: "ignore-loader",
+    });
+    // Exclude tests directory from build
+    config.resolve = config.resolve || {};
+    config.resolve.alias = {
+      ...config.resolve.alias,
+      "^tests/": false,
+    };
     // Exclude scripts directory from build
     config.module.rules.push({
       test: /\.ts$/,

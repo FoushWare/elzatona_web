@@ -7,6 +7,8 @@
 
 // Storybook file, not included in build
 // @ts-expect-error - Storybook types not available in build
+// @ts-nocheck - Storybook file, not included in production build
+import * as React from "react";
 import type { Meta, StoryObj } from "@storybook/react";
 import { Play, Map } from "lucide-react";
 import { PersonalizedContent } from "./PersonalizedContent";
@@ -47,7 +49,7 @@ const defaultContent: PersonalizedContentType = {
   subtitle: "Pick up where you left off",
   cta: "Continue Practice",
   ctaLink: "/continue",
-  icon: Play,
+  icon: React.createElement(Play),
   color: "green",
 };
 
@@ -75,7 +77,7 @@ export const GuidedWithoutPlan: Story = {
       subtitle: "The complete platform to ace your frontend interviews",
       cta: "Choose Learning Plan",
       ctaLink: "/features/guided-learning",
-      icon: Map,
+      icon: React.createElement(Map),
       color: "indigo",
     },
   },
@@ -92,7 +94,7 @@ export const SelfDirected: Story = {
       subtitle: "Create and manage your personalized learning journey",
       cta: "View My Roadmap",
       ctaLink: "/browse-practice-questions",
-      icon: Play,
+      icon: React.createElement(Play),
       color: "purple",
     },
   },
