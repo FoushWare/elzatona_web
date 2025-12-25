@@ -27,20 +27,23 @@ This document defines strict development standards for the Elzatona web applicat
 
 ```
 apps/website/
-├── src/app/                    # Next.js App Router pages (wrappers only)
-├── page-components/            # Actual page implementations
-│   ├── [page-name]/
-│   │   ├── page.tsx            # Main page component (<500 lines)
-│   │   ├── components/         # Page-specific components
-│   │   │   ├── atoms/
-│   │   │   ├── molecules/
-│   │   │   └── organisms/
-│   │   └── hooks/              # Page-specific hooks
-├── components/                  # App-specific shared components
-│   ├── atoms/
-│   ├── molecules/
-│   └── organisms/
-└── lib/                         # Utilities and services
+├── src/
+  ├── app/                      # Next.js App Router
+  │   ├── layout.tsx            # Root layout
+  │   ├── page.tsx              # Home page
+  │   ├── Pages/                # Page components
+  │   │   ├── [page-name]/
+  │   │   │   ├── page.tsx      # Main page component (<500 lines)
+  │   │   │   ├── components/   # Page-specific components
+  │   │   │   └── hooks/        # Page-specific hooks
+  │   ├── Components/           # App-specific shared components
+  │   │   ├── atoms/
+  │   │   ├── molecules/
+  │   │   └── organisms/
+  │   ├── Network/              # API routes
+  │   ├── utils/                # Utilities and services
+  │   └── Types/                # TypeScript types
+  └── context/                  # React contexts
 ```
 
 ### File Naming Conventions

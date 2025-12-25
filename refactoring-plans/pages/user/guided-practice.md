@@ -3,7 +3,7 @@
 ## Page Information
 
 - **Route**: `/guided-practice`
-- **File**: `apps/website/page-components/guided-practice/page.tsx`
+- **File**: `apps/website/src/app/Pages/guided-practice/page.tsx`
 - **Current Lines**: **3966** - EXTREMELY LARGE
 - **Complexity**: Very High
 - **Priority**: **CRITICAL** - Second largest user-facing page
@@ -12,7 +12,7 @@
 
 ### File Location
 
-- **Source**: `apps/website/page-components/guided-practice/page.tsx`
+- **Source**: `apps/website/src/app/Pages/guided-practice/page.tsx`
 
 ### Current Implementation
 
