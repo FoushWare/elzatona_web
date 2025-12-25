@@ -383,13 +383,16 @@ export async function PUT(
     }
 
     // Return more specific error messages
-    let errorMessage = "Internal server error";
+    let finalErrorMessage = "Internal server error";
     if (error instanceof Error) {
-      errorMessage = error.message;
-    } else if (error?.message) {
-      errorMessage = error.message;
-    } else if (error?.details) {
-      errorMessage = error.details;
+      finalErrorMessage = error.message;
+    } else {
+      const errorObj = error as any;
+      if (errorObj?.message) {
+        finalErrorMessage = errorObj.message;
+      } else if (errorObj?.details) {
+        finalErrorMessage = errorObj.details;
+      }
     }
 
     return NextResponse.json(
