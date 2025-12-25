@@ -1,14 +1,14 @@
 import { NextRequest, NextResponse } from "next/server";
-import { supabaseOperations } from "../../supabase-server";
+import { supabaseOperations } from "../../../supabase-server";
 import { createClient } from "@supabase/supabase-js";
 import {
   sanitizeObjectServer,
   sanitizeRichContent,
-} from "../../utils/sanitize-server";
+} from "../../../sanitize-server";
 import {
   validateAndSanitize,
   learningCardSchema,
-} from "../../utils/validation";
+} from "../../../validation";
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
 const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;

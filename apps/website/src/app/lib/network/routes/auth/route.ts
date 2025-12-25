@@ -1,11 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
-import { UserAuthService } from "../../user-auth";
+import { UserAuthService } from "../../../user-auth";
 // Empty import removed
 import {
   validateAndSanitize,
   registerSchema,
   loginSchema,
-} from "../../utils/validation";
+} from "../../../validation";
 
 function sanitizeInput(email: unknown, password: unknown, action: unknown) {
   return {

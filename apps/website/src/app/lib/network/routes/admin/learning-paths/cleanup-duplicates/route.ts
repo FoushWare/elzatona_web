@@ -1,7 +1,7 @@
 // v1.0 - Cleanup Duplicate Learning Paths API Route
 
 import { NextRequest, NextResponse } from "next/server";
-import UnifiedQuestionService from "../../../../unified-question-schema";
+import UnifiedQuestionService from "../../../../../unified-question-schema";
 
 // POST /api/admin/learning-paths/cleanup-duplicates - Remove duplicate learning paths
 export async function POST(_request: NextRequest) {

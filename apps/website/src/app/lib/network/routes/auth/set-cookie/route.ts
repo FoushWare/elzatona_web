@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { verifySupabaseToken } from "../../../server-auth";
+import { verifySupabaseToken } from "../../../../server-auth";
 
 function sanitizeForLog(value: unknown): string {
   const raw =

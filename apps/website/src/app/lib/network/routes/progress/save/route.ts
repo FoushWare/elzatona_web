@@ -7,7 +7,7 @@ const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
 const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
 
 import { cookies } from "next/headers";
-import { verifySupabaseToken } from "../../../server-auth";
+import { verifySupabaseToken } from "../../../../server-auth";
 
 function sanitizeForLog(value: unknown): string {
   const raw =

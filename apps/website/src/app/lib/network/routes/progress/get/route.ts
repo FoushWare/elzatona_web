@@ -7,7 +7,7 @@ const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
 const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
 
 import { cookies } from "next/headers";
-import { verifySupabaseToken } from "../../../server-auth";
+import { verifySupabaseToken } from "../../../../server-auth";
 export async function GET(request: NextRequest) {
   try {
     // Get the Firebase token from cookies
