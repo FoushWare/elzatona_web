@@ -90,6 +90,8 @@ export default function ClientCodeRunner({
   };
 
   // Security: Inject target origin into iframe code to ensure secure postMessage communication
+  // Escape the origin to prevent injection attacks
+  const escapedOrigin = targetOrigin.replace(/\\/g, "\\\\").replace(/"/g, '\\"').replace(/'/g, "\\'");
   const srcDoc =
     "<!doctype html>" +
     '<html><head><meta charset="utf-8"/></head><body>' +
@@ -101,7 +103,7 @@ export default function ClientCodeRunner({
     // Consider implementing additional sandboxing measures (CSP, worker threads) for production.
     "function safeEval(code){return (0,eval)(code)}\n" +
     'function withTimeout(fn,args,ms){return new Promise((resolve,reject)=>{const t=setTimeout(()=>reject(new Error("Timeout")),ms);try{const res=fn.apply(null,args);Promise.resolve(res).then(v=>{clearTimeout(t);resolve(v)}).catch(err=>{clearTimeout(t);reject(err)});}catch(err){clearTimeout(t);reject(err);}})}\n' +
-    `const TARGET_ORIGIN="${targetOrigin}";\n` +
+    `const TARGET_ORIGIN="${escapedOrigin}";\n` +
     'window.addEventListener("message",async(e)=>{\n' +
     '  if(!e.data||e.data.type!=="runner:start")return;\n' +
     "  const {fnName,code,tests}=e.data.payload;\n" +
@@ -138,7 +140,7 @@ export default function ClientCodeRunner({
     `  let fn;try{fn=eval(fnName);}catch(err){parent.postMessage({type:"runner:custom:result",result:{id:"custom",passed:false,actual:null,expected:null,error:String(err),elapsedMs:0}},TARGET_ORIGIN);return;}\n` +
     `  try{const args=Array.isArray(input)?input:[input];const start=performance.now();const actual=await withTimeout(fn,args,1500);const elapsed=performance.now()-start;parent.postMessage({type:"runner:custom:result",result:{id:"custom",passed:true,actual,expected:null,elapsedMs:Math.round(elapsed)}},TARGET_ORIGIN);}catch(err){parent.postMessage({type:"runner:custom:result",result:{id:"custom",passed:false,actual:null,expected:null,error:String(err),elapsedMs:0}},TARGET_ORIGIN);}\n` +
     "});\n" +
-    "<\/script>" +
+    "</script>" +
     "</body></html>";
 
   return (
