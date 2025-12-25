@@ -398,7 +398,7 @@ export async function PUT(
     return NextResponse.json(
       {
         success: false,
-        error: errorMessage,
+        error: finalErrorMessage,
       },
       { status: 500 },
     );
