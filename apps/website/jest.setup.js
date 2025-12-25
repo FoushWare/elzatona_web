@@ -25,10 +25,20 @@ for (const envFile of envFiles) {
 process.env.APP_ENV = "test";
 process.env.NEXT_PUBLIC_APP_ENV = "test";
 // Only set NODE_ENV if not in build context
-
+// Use Object.defineProperty to bypass read-only restriction in JavaScript
 if (process.env.NODE_ENV !== "production" && !process.env.NEXT_PHASE) {
   if (!process.env.NODE_ENV) {
-    process.env.NODE_ENV = "test";
+    try {
+      Object.defineProperty(process.env, "NODE_ENV", {
+        value: "test",
+        writable: true,
+        configurable: true,
+      });
+    } catch {
+      // If defineProperty fails, try direct assignment (works in some environments)
+      // eslint-disable-next-line no-param-reassign
+      process.env.NODE_ENV = "test";
+    }
   }
 }
 
