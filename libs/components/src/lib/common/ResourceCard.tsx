@@ -65,11 +65,13 @@ export default function ResourceCard({
   };
 
   return (
-    <div
-      className={`bg-card rounded-lg shadow-sm border border-border hover:shadow-md transition-shadow cursor-pointer ${
+    <button
+      type="button"
+      className={`bg-card rounded-lg shadow-sm border border-border hover:shadow-md transition-shadow cursor-pointer text-left w-full ${
         featured ? "ring-2 ring-blue-500" : ""
       }`}
       onClick={handleCardClick}
+      aria-label={`Open resource: ${resource.title}`}
     >
       <div className="p-6">
         {/* Header */}
@@ -178,6 +180,6 @@ export default function ResourceCard({
           </div>
         )}
       </div>
-    </div>
+    </button>
   );
 }
