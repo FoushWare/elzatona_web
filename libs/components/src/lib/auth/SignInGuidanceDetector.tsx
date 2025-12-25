@@ -78,76 +78,87 @@ export const SignInGuidanceDetector: React.FC<SignInGuidanceDetectorProps> = ({
       return;
     }
 
-    const trackProgress = () => {
-      // Check localStorage for progress
-      const progress = localStorage.getItem("userProgress");
-      const roadmap = localStorage.getItem("freeStyleRoadmap");
-      const achievements = localStorage.getItem("userAchievements");
+    // Helper: Check if guidance was shown recently (within 24 hours)
+    const wasGuidanceShownRecently = (): boolean => {
       const lastGuidanceShown = localStorage.getItem("lastSignInGuidanceShown");
-      const lastGuidanceDate = lastGuidanceShown
-        ? new Date(lastGuidanceShown)
-        : null;
+      if (!lastGuidanceShown) return false;
+      const lastGuidanceDate = new Date(lastGuidanceShown);
       const now = new Date();
+      const hoursSinceLastGuidance =
+        (now.getTime() - lastGuidanceDate.getTime()) / (1000 * 60 * 60);
+      return hoursSinceLastGuidance < 24;
+    };
 
+    // Helper: Parse progress data from localStorage
+    const parseProgressData = (): number => {
+      const progress = localStorage.getItem("userProgress");
+      if (!progress) return 0;
+      try {
+        const progressData = JSON.parse(progress);
+        return progressData.completedQuestions || 0;
+      } catch (e) {
+        console.error("Error parsing progress data:", e);
+        return 0;
+      }
+    };
+
+    // Helper: Parse roadmap data from localStorage
+    const parseRoadmapData = (): number => {
+      const roadmap = localStorage.getItem("freeStyleRoadmap");
+      if (!roadmap) return 0;
+      try {
+        const roadmapData = JSON.parse(roadmap);
+        return Array.isArray(roadmapData) ? roadmapData.length : 0;
+      } catch (e) {
+        console.error("Error parsing roadmap data:", e);
+        return 0;
+      }
+    };
+
+    // Helper: Check if user has achievements
+    const hasUserAchievements = (): boolean => {
+      const achievements = localStorage.getItem("userAchievements");
+      if (!achievements) return false;
+      try {
+        const achievementsData = JSON.parse(achievements);
+        return Array.isArray(achievementsData) && achievementsData.length > 0;
+      } catch (e) {
+        console.error("Error parsing achievements data:", e);
+        return false;
+      }
+    };
+
+    // Helper: Show guidance with trigger and context
+    const showGuidanceWithTrigger = (
+      trigger: "progress" | "roadmap" | "achievement",
+      context: Record<string, unknown>,
+    ) => {
+      setGuidanceTrigger(trigger);
+      setGuidanceContext(context);
+      setShowGuidance(true);
+      localStorage.setItem("lastSignInGuidanceShown", new Date().toISOString());
+    };
+
+    const trackProgress = () => {
       // Don't show guidance if shown within last 24 hours
-      if (
-        lastGuidanceDate &&
-        now.getTime() - lastGuidanceDate.getTime() < 24 * 60 * 60 * 1000
-      ) {
+      if (wasGuidanceShownRecently()) {
         return;
       }
 
-      // Parse progress data
-      let progressCount = 0;
-      let roadmapSections = 0;
-      let hasAchievements = false;
-
-      if (progress) {
-        try {
-          const progressData = JSON.parse(progress);
-          progressCount = progressData.completedQuestions || 0;
-        } catch (e) {
-          console.error("Error parsing progress data:", e);
-        }
-      }
-
-      if (roadmap) {
-        try {
-          const roadmapData = JSON.parse(roadmap);
-          roadmapSections = Array.isArray(roadmapData) ? roadmapData.length : 0;
-        } catch (e) {
-          console.error("Error parsing roadmap data:", e);
-        }
-      }
-
-      if (achievements) {
-        try {
-          const achievementsData = JSON.parse(achievements);
-          hasAchievements = achievementsData.length > 0;
-        } catch (e) {
-          console.error("Error parsing achievements data:", e);
-        }
-      }
+      // Parse user data
+      const progressCount = parseProgressData();
+      const roadmapSections = parseRoadmapData();
+      const hasAchievements = hasUserAchievements();
 
       // Determine trigger based on user activity
       if (progressCount >= 5 && progressCount % 5 === 0) {
-        // Show guidance every 5 questions completed
-        setGuidanceTrigger("progress");
-        setGuidanceContext({ progressCount });
-        setShowGuidance(true);
-        localStorage.setItem("lastSignInGuidanceShown", now.toISOString());
+        showGuidanceWithTrigger("progress", { progressCount });
       } else if (roadmapSections >= 3) {
-        // Show guidance when user has selected a substantial roadmap
-        setGuidanceTrigger("roadmap");
-        setGuidanceContext({ roadmapSections });
-        setShowGuidance(true);
-        localStorage.setItem("lastSignInGuidanceShown", now.toISOString());
+        showGuidanceWithTrigger("roadmap", { roadmapSections });
       } else if (hasAchievements) {
-        // Show guidance when user has achievements
-        setGuidanceTrigger("achievement");
-        setGuidanceContext({ achievement: "Learning Streak!" });
-        setShowGuidance(true);
-        localStorage.setItem("lastSignInGuidanceShown", now.toISOString());
+        showGuidanceWithTrigger("achievement", {
+          achievement: "Learning Streak!",
+        });
       }
     };
 

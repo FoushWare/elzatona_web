@@ -1053,7 +1053,7 @@ export async function POST(request: NextRequest) {
               processedCode = codeContent;
               // Security: Log code length instead of content to prevent log injection
               console.log(
-                `⚠️ Code field was null/empty, restored from originalCode: ${codeContent.length} chars`,
+                `⚠️ Code field was null/empty, restored from originalCode: ${sanitizeForLogging(String(codeContent.length))} chars`,
               );
             }
           }
@@ -1245,12 +1245,14 @@ export async function PUT(request: NextRequest) {
 
         categoryId = categoryData.id;
         console.log(
-          `✅ Found category "${categoryData.name}" with ID: ${categoryId}`,
+          `✅ Found category "${sanitizeForLogging(categoryData.name)}" with ID: ${sanitizeForLogging(String(categoryId))}`,
         );
       } else if (categoryValue && typeof categoryValue === "string") {
         // It's already an ID
         categoryId = categoryValue;
-        console.log(`✅ Using provided category ID: ${categoryId}`);
+        console.log(
+          `✅ Using provided category ID: ${sanitizeForLogging(categoryId)}`,
+        );
       }
     }
 
@@ -1299,7 +1301,9 @@ export async function PUT(request: NextRequest) {
         }
 
         topicId = topicData.id;
-        console.log(`✅ Found topic "${topicData.name}" with ID: ${topicId}`);
+        console.log(
+          `✅ Found topic "${sanitizeForLogging(topicData.name)}" with ID: ${sanitizeForLogging(String(topicId))}`,
+        );
       } else if (topicValue && typeof topicValue === "string") {
         // It's already an ID
         topicId = topicValue;
@@ -1334,7 +1338,9 @@ export async function PUT(request: NextRequest) {
           )
         ) {
           finalLearningCardId = trimmedId;
-          console.log(`✅ Using learning card ID: ${finalLearningCardId}`);
+          console.log(
+            `✅ Using learning card ID: ${sanitizeForLogging(finalLearningCardId)}`,
+          );
         } else {
           // Security: Sanitize user data before logging to prevent log injection
           console.warn(
@@ -1438,10 +1444,14 @@ export async function PUT(request: NextRequest) {
       success: true,
       message: "Question updated successfully",
     });
-  } catch (error: any) {
+  } catch (error: unknown) {
     // Security: Sanitize error details before logging to prevent log injection
-    console.error("Error updating question:", error);
-    if (error?.message) {
+    const errorMessage =
+      error instanceof Error
+        ? sanitizeForLogging(error.message)
+        : sanitizeForLogging(String(error));
+    console.error("Error updating question:", errorMessage);
+    if (error instanceof Error && error.message) {
       console.error("Error message:", sanitizeForLogging(error.message));
     }
     return NextResponse.json(

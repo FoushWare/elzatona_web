@@ -252,10 +252,14 @@ export function removeAllHTMLTags(text: string): string {
     iterations++;
 
     // Remove complete HTML tags: <tag> or <tag attr="value">
-    cleaned = cleaned.replace(/<[^>]+>/g, "");
+    // Also catches incomplete tags like <script (without closing >)
+    cleaned = cleaned.replace(/<[^>]*>?/g, "");
 
     // Remove incomplete tags at the end of string: <script, <iframe, etc.
     cleaned = cleaned.replace(/<[^>]*$/g, "");
+
+    // Aggressively remove any <script pattern (even incomplete)
+    cleaned = cleaned.replace(/<script[^>]*>?/gi, "");
 
     // Remove dangerous tag patterns (case-insensitive, even if incomplete)
     // These patterns catch tags even if they're broken or incomplete

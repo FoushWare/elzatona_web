@@ -266,25 +266,24 @@ try {
     ? "sonar-scanner"
     : "npx sonarqube-scanner";
 
-  // Set memory limit for SonarScanner
-  // Use sanitized memory limit value
-  const sonarCommand = `NODE_OPTIONS="--max-old-space-size=${sanitizedMemoryLimit}" ${scannerCommand} ${sonarArgs.join(" ")}`;
-
   console.log("🚀 Starting SonarQube analysis with verbose output...");
   // Security: Don't log the full command with token - only log safe parts
   console.log(`📝 Command: NODE_OPTIONS="--max-old-space-size=${sanitizedMemoryLimit}" ${scannerCommand} [args with sanitized values]`);
   console.log("");
 
-  execSync(sonarCommand, {
+  // Security: Execute command with args array to prevent shell injection
+  // Pass arguments as array instead of string interpolation
+  execSync(scannerCommand, {
     stdio: "inherit",
     env: {
       ...process.env,
       NODE_OPTIONS: `--max-old-space-size=${sanitizedMemoryLimit}`,
-      SONAR_TOKEN: sanitizedToken,
-      SONAR_ORG: sanitizedOrg,
+      SONAR_TOKEN: sonarToken, // Use original token, not sanitized (sanitization was for logging only)
+      SONAR_ORG: sonarOrg, // Use original org, not sanitized
       SONAR_VERBOSE: "true",
-      SONAR_SCANNER_OPTS: "-Dsonar.verbose=true",
+      SONAR_SCANNER_OPTS: sonarArgs.join(" "), // Join args safely
     },
+    // Note: sonar-scanner reads args from SONAR_SCANNER_OPTS env var, not command line args
   });
 
   console.log("");

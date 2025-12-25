@@ -36,7 +36,7 @@ if (process.env.NODE_ENV !== "production" && !process.env.NEXT_PHASE) {
       });
     } catch {
       // If defineProperty fails, try direct assignment (works in some environments)
-       
+
       process.env.NODE_ENV = "test";
     }
   }

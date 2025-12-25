@@ -361,16 +361,26 @@ export async function PUT(
       data: data,
       message: "Question updated successfully",
     });
-  } catch (error: any) {
-    console.error("❌ Error updating question:", error);
+  } catch (error: unknown) {
     // Security: Sanitize error details before logging to prevent log injection
-    console.error("❌ Error details:", {
-      message: sanitizeForLogging(error?.message),
-      code: sanitizeForLogging(error?.code),
-      details: sanitizeForLogging(error?.details),
-      hint: sanitizeForLogging(error?.hint),
-      stack: error?.stack,
-    });
+    const errorMessage =
+      error instanceof Error
+        ? sanitizeForLogging(error.message)
+        : sanitizeForLogging(String(error));
+    console.error("❌ Error updating question:", errorMessage);
+    if (error instanceof Error) {
+      console.error("❌ Error details:", {
+        message: sanitizeForLogging(error.message),
+        code: error.code ? sanitizeForLogging(String(error.code)) : undefined,
+        details: (error as any)?.details
+          ? sanitizeForLogging(String((error as any).details))
+          : undefined,
+        hint: (error as any)?.hint
+          ? sanitizeForLogging(String((error as any).hint))
+          : undefined,
+        stack: error.stack ? sanitizeForLogging(error.stack) : undefined,
+      });
+    }
 
     // Return more specific error messages
     let errorMessage = "Internal server error";
