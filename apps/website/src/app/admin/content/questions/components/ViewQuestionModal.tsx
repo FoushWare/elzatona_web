@@ -531,7 +531,7 @@ export function ViewQuestionModal({
   // Helper function to get theme name based on system preference
   const getThemeName = (): string => {
     const prefersDark =
-      globalThis.window?.matchMedia("(prefers-color-scheme: dark)").matches ??
+      globalThis.window?.matchMedia("(prefers-color-scheme: dark)")?.matches ??
       false;
     return prefersDark ? "github-dark" : "github-light";
   };
