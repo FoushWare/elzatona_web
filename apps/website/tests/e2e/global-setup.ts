@@ -16,31 +16,58 @@ import { requireTestEnvironment } from "./validate-test-env";
  * Priority: .env.test.local (REQUIRED) > .env.test > .env.local (fallback)
  */
 async function globalSetup() {
-  // CRITICAL: .env.test.local is REQUIRED for E2E tests
-  // Load it first and validate before proceeding
+  // Check if we're in CI (GitHub Actions)
+  const isCI =
+    process.env.CI === "true" ||
+    process.env.GITHUB_ACTIONS === "true" ||
+    !!process.env.TEST_SUPABASE_URL;
+
   const projectRoot = process.cwd();
   const testEnvFile = resolve(projectRoot, ".env.test.local");
-  
-  // Load .env.test.local first (REQUIRED)
-  const testEnvResult = config({ path: testEnvFile });
-  if (testEnvResult.error) {
-    console.error("❌ CRITICAL: Failed to load .env.test.local");
-    console.error(`   File: ${testEnvFile}`);
-    console.error(`   Error: ${testEnvResult.error.message}`);
-    console.error("\n📝 To fix:");
-    console.error("   1. Copy .env.test.local.example to .env.test.local");
-    console.error("   2. Fill in your TEST Supabase project credentials");
-    console.error(`   3. File location: ${testEnvFile}\n`);
-    throw new Error(
-      "E2E tests require .env.test.local file. Please create it from .env.test.local.example",
-    );
+
+  // In CI, environment variables come from GitHub Secrets
+  // In local development, .env.test.local is REQUIRED
+  if (!isCI) {
+    // Local development: .env.test.local is REQUIRED
+    const testEnvResult = config({ path: testEnvFile });
+    if (testEnvResult.error) {
+      console.error("❌ CRITICAL: Failed to load .env.test.local");
+      console.error(`   File: ${testEnvFile}`);
+      console.error(`   Error: ${testEnvResult.error.message}`);
+      console.error("\n📝 To fix:");
+      console.error("   1. Copy .env.test.local.example to .env.test.local");
+      console.error("   2. Fill in your TEST Supabase project credentials");
+      console.error(`   3. File location: ${testEnvFile}\n`);
+      throw new Error(
+        "E2E tests require .env.test.local file. Please create it from .env.test.local.example",
+      );
+    }
+  } else {
+    // CI: Check that required environment variables are set (from GitHub Secrets)
+    const requiredVars = [
+      "NEXT_PUBLIC_SUPABASE_URL",
+      "NEXT_PUBLIC_SUPABASE_ANON_KEY",
+      "SUPABASE_SERVICE_ROLE_KEY",
+    ];
+    const missingVars = requiredVars.filter((varName) => !process.env[varName]);
+    if (missingVars.length > 0) {
+      console.error("❌ CRITICAL: CI environment is missing required variables:");
+      console.error(`   ${missingVars.join(", ")}`);
+      console.error("\n📝 To fix:");
+      console.error("   1. Ensure GitHub Secrets are set in repository settings");
+      console.error("   2. Required secrets: TEST_SUPABASE_URL, TEST_SUPABASE_ANON_KEY, TEST_SUPABASE_SERVICE_ROLE_KEY");
+      throw new Error(
+        `CI environment missing required variables: ${missingVars.join(", ")}`,
+      );
+    }
   }
 
-  // Load other env files as fallback (lower priority)
-  const envFiles = [
-    resolve(projectRoot, ".env.test"), // Test-specific defaults
-    resolve(projectRoot, ".env.local"), // Fallback to dev (for backwards compatibility)
-  ];
+  // Load other env files as fallback (lower priority) - only in local dev
+  if (!isCI) {
+    const envFiles = [
+      resolve(projectRoot, ".env.test"), // Test-specific defaults
+      resolve(projectRoot, ".env.local"), // Fallback to dev (for backwards compatibility)
+    ];
 
   const loadedFiles: string[] = [];
   for (const envFile of envFiles) {

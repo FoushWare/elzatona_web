@@ -34,16 +34,18 @@ export function validateTestEnvironment(): {
     return { isValid: false, errors, warnings };
   }
 
-  // Load the file
-  const result = config({ path: testEnvFile });
-  if (result.error) {
-    errors.push(
-      `❌ Failed to load .env.test.local: ${result.error.message}`,
-    );
-    return { isValid: false, errors, warnings };
+  // Load .env.test.local only in local development
+  if (!isCI) {
+    const result = config({ path: testEnvFile });
+    if (result.error) {
+      errors.push(
+        `❌ Failed to load .env.test.local: ${result.error.message}`,
+      );
+      return { isValid: false, errors, warnings };
+    }
   }
 
-  // Validate required variables
+  // Validate required variables (both CI and local)
   const requiredVars = [
     "NEXT_PUBLIC_SUPABASE_URL",
     "NEXT_PUBLIC_SUPABASE_ANON_KEY",
@@ -53,17 +55,28 @@ export function validateTestEnvironment(): {
   const missingVars: string[] = [];
   for (const varName of requiredVars) {
     const value = process.env[varName];
-    if (!value || value.includes("your-") || value.includes("placeholder")) {
+    if (!value) {
+      missingVars.push(varName);
+    } else if (!isCI && (value.includes("your-") || value.includes("placeholder"))) {
+      // In local dev, check for placeholder values
       missingVars.push(varName);
     }
   }
 
   if (missingVars.length > 0) {
-    errors.push(
-      `❌ .env.test.local is missing or has placeholder values for:\n` +
-        `   ${missingVars.join(", ")}\n` +
-        `   Please update .env.test.local with real test database credentials.`,
-    );
+    if (isCI) {
+      errors.push(
+        `❌ CI environment is missing required environment variables:\n` +
+          `   ${missingVars.join(", ")}\n` +
+          `   These should be set as GitHub Secrets in the workflow.`,
+      );
+    } else {
+      errors.push(
+        `❌ .env.test.local is missing or has placeholder values for:\n` +
+          `   ${missingVars.join(", ")}\n` +
+          `   Please update .env.test.local with real test database credentials.`,
+      );
+    }
   }
 
   // Validate Supabase URL is TEST database, not production
@@ -122,6 +135,7 @@ export function validateTestEnvironment(): {
  */
 export function requireTestEnvironment(): void {
   const validation = validateTestEnvironment();
+  const isCI = isCIEnvironment();
 
   if (validation.warnings.length > 0) {
     console.warn("\n⚠️  Test Environment Warnings:");
@@ -132,17 +146,26 @@ export function requireTestEnvironment(): void {
   if (!validation.isValid) {
     console.error("\n❌ Test Environment Validation Failed:");
     validation.errors.forEach((error) => console.error(`   ${error}`));
-    console.error("\n📝 To fix:");
-    console.error("   1. Copy .env.test.local.example to .env.test.local");
-    console.error("   2. Fill in your TEST Supabase project credentials");
-    console.error("   3. Ensure the URL contains a test project reference (not production)");
-    console.error(`   4. File location: ${testEnvFile}\n`);
+    
+    if (isCI) {
+      console.error("\n📝 To fix (CI/GitHub Actions):");
+      console.error("   1. Ensure GitHub Secrets are set in repository settings");
+      console.error("   2. Required secrets: TEST_SUPABASE_URL, TEST_SUPABASE_ANON_KEY, TEST_SUPABASE_SERVICE_ROLE_KEY");
+      console.error("   3. Check .github/workflows/e2e-tests.yml for secret usage");
+    } else {
+      console.error("\n📝 To fix (Local Development):");
+      console.error("   1. Copy .env.test.local.example to .env.test.local");
+      console.error("   2. Fill in your TEST Supabase project credentials");
+      console.error("   3. Ensure the URL contains a test project reference (not production)");
+      console.error(`   4. File location: ${testEnvFile}\n`);
+    }
+    
     throw new Error(
-      "Test environment validation failed. Please configure .env.test.local correctly.",
+      "Test environment validation failed. Please configure test environment correctly.",
     );
   }
 
-  console.log("✅ Test environment validated successfully");
+  console.log(`✅ Test environment validated successfully (${isCI ? "CI" : "Local"})`);
   console.log(`   Using TEST database: ${process.env.NEXT_PUBLIC_SUPABASE_URL?.substring(0, 50)}...`);
 }
 

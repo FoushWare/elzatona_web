@@ -3,46 +3,75 @@ import { config } from "dotenv";
 import { resolve } from "path";
 import { existsSync } from "fs";
 
-// CRITICAL: .env.test.local is REQUIRED for unit/integration tests
-// Load it first and validate before proceeding
+// Check if we're in CI (GitHub Actions)
+const isCI =
+  process.env.CI === "true" ||
+  process.env.GITHUB_ACTIONS === "true" ||
+  !!process.env.TEST_SUPABASE_URL;
+
+// CRITICAL: .env.test.local is REQUIRED for unit/integration tests (local only)
+// In CI, environment variables come from GitHub Secrets
 const projectRoot = process.cwd();
 const testEnvFile = resolve(projectRoot, ".env.test.local");
 
-// Check if .env.test.local exists
-if (!existsSync(testEnvFile)) {
-  console.error("❌ CRITICAL: .env.test.local file is missing!");
-  console.error(`   Location: ${testEnvFile}`);
-  console.error("\n📝 To fix:");
-  console.error("   1. Copy .env.test.local.example to .env.test.local");
-  console.error("   2. Fill in your TEST Supabase project credentials");
-  console.error(`   3. File location: ${testEnvFile}\n`);
-  throw new Error(
-    "Tests require .env.test.local file. Please create it from .env.test.local.example",
-  );
+// In local development, .env.test.local is REQUIRED
+if (!isCI) {
+  // Check if .env.test.local exists
+  if (!existsSync(testEnvFile)) {
+    console.error("❌ CRITICAL: .env.test.local file is missing!");
+    console.error(`   Location: ${testEnvFile}`);
+    console.error("\n📝 To fix:");
+    console.error("   1. Copy .env.test.local.example to .env.test.local");
+    console.error("   2. Fill in your TEST Supabase project credentials");
+    console.error(`   3. File location: ${testEnvFile}\n`);
+    throw new Error(
+      "Tests require .env.test.local file. Please create it from .env.test.local.example",
+    );
+  }
+
+  // Load .env.test.local first (REQUIRED)
+  const testEnvResult = config({ path: testEnvFile });
+  if (testEnvResult.error) {
+    console.error("❌ CRITICAL: Failed to load .env.test.local");
+    console.error(`   Error: ${testEnvResult.error.message}`);
+    throw new Error(
+      `Failed to load .env.test.local: ${testEnvResult.error.message}`,
+    );
+  }
+} else {
+  // CI: Check that required environment variables are set (from GitHub Secrets)
+  const requiredVars = [
+    "NEXT_PUBLIC_SUPABASE_URL",
+    "NEXT_PUBLIC_SUPABASE_ANON_KEY",
+    "SUPABASE_SERVICE_ROLE_KEY",
+  ];
+  const missingVars = requiredVars.filter((varName) => !process.env[varName]);
+  if (missingVars.length > 0) {
+    console.error("❌ CRITICAL: CI environment is missing required variables:");
+    console.error(`   ${missingVars.join(", ")}`);
+    console.error("\n📝 To fix:");
+    console.error("   1. Ensure GitHub Secrets are set in repository settings");
+    console.error("   2. Required secrets: TEST_SUPABASE_URL, TEST_SUPABASE_ANON_KEY, TEST_SUPABASE_SERVICE_ROLE_KEY");
+    throw new Error(
+      `CI environment missing required variables: ${missingVars.join(", ")}`,
+    );
+  }
 }
 
-// Load .env.test.local first (REQUIRED)
-const testEnvResult = config({ path: testEnvFile });
-if (testEnvResult.error) {
-  console.error("❌ CRITICAL: Failed to load .env.test.local");
-  console.error(`   Error: ${testEnvResult.error.message}`);
-  throw new Error(
-    `Failed to load .env.test.local: ${testEnvResult.error.message}`,
-  );
-}
+// Load other env files as fallback (lower priority) - only in local dev
+if (!isCI) {
+  const envFiles = [
+    resolve(projectRoot, ".env.test"), // Test-specific defaults
+    resolve(projectRoot, ".env.local"), // Fallback to dev (for backwards compatibility)
+  ];
 
-// Load other env files as fallback (lower priority)
-const envFiles = [
-  resolve(projectRoot, ".env.test"), // Test-specific defaults
-  resolve(projectRoot, ".env.local"), // Fallback to dev (for backwards compatibility)
-];
-
-// Load environment files in priority order
-for (const envFile of envFiles) {
-  try {
-    config({ path: envFile, override: false }); // Don't override, respect priority
-  } catch (_error) {
-    // File doesn't exist, that's okay
+  // Load environment files in priority order
+  for (const envFile of envFiles) {
+    try {
+      config({ path: envFile, override: false }); // Don't override, respect priority
+    } catch (_error) {
+      // File doesn't exist, that's okay
+    }
   }
 }
 
@@ -78,29 +107,31 @@ if (!isTestProject && supabaseUrl && !supabaseUrl.includes("your-")) {
   console.warn("   Expected one of:", testProjectRefs.join(", "));
 }
 
-// Validate required variables are not placeholders
-const requiredVars = [
-  "NEXT_PUBLIC_SUPABASE_URL",
-  "NEXT_PUBLIC_SUPABASE_ANON_KEY",
-  "SUPABASE_SERVICE_ROLE_KEY",
-];
+// Validate required variables are not placeholders (local dev only)
+if (!isCI) {
+  const requiredVars = [
+    "NEXT_PUBLIC_SUPABASE_URL",
+    "NEXT_PUBLIC_SUPABASE_ANON_KEY",
+    "SUPABASE_SERVICE_ROLE_KEY",
+  ];
 
-const missingVars = requiredVars.filter(
-  (varName) =>
-    !process.env[varName] ||
-    process.env[varName]?.includes("your-") ||
-    process.env[varName]?.includes("placeholder"),
-);
+  const missingVars = requiredVars.filter(
+    (varName) =>
+      !process.env[varName] ||
+      process.env[varName]?.includes("your-") ||
+      process.env[varName]?.includes("placeholder"),
+  );
 
-if (missingVars.length > 0) {
-  console.error(
-    "❌ .env.test.local has placeholder values for:",
-    missingVars.join(", "),
-  );
-  console.error("   Please update .env.test.local with real test database credentials.");
-  throw new Error(
-    `.env.test.local has placeholder values. Please update: ${missingVars.join(", ")}`,
-  );
+  if (missingVars.length > 0) {
+    console.error(
+      "❌ .env.test.local has placeholder values for:",
+      missingVars.join(", "),
+    );
+    console.error("   Please update .env.test.local with real test database credentials.");
+    throw new Error(
+      `.env.test.local has placeholder values. Please update: ${missingVars.join(", ")}`,
+    );
+  }
 }
 
 // FORCE TEST ENVIRONMENT for all tests

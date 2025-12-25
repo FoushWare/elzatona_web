@@ -4,55 +4,86 @@ import { resolve } from "path";
 import { existsSync } from "fs";
 import { requireTestEnvironment } from "../e2e/validate-test-env";
 
-// CRITICAL: .env.test.local is REQUIRED for E2E tests
-// Load it first and validate before proceeding
+// Check if we're in CI (GitHub Actions)
+const isCI =
+  process.env.CI === "true" ||
+  process.env.GITHUB_ACTIONS === "true" ||
+  !!process.env.TEST_SUPABASE_URL;
+
+// CRITICAL: .env.test.local is REQUIRED for E2E tests (local only)
+// In CI, environment variables come from GitHub Secrets
 const projectRoot = process.cwd();
 const testEnvFile = resolve(projectRoot, ".env.test.local");
 
-// Check if .env.test.local exists
-if (!existsSync(testEnvFile)) {
-  console.error("❌ CRITICAL: .env.test.local file is missing!");
-  console.error(`   Location: ${testEnvFile}`);
-  console.error("\n📝 To fix:");
-  console.error("   1. Copy .env.test.local.example to .env.test.local");
-  console.error("   2. Fill in your TEST Supabase project credentials");
-  console.error(`   3. File location: ${testEnvFile}\n`);
-  throw new Error(
-    "E2E tests require .env.test.local file. Please create it from .env.test.local.example",
-  );
+// In local development, .env.test.local is REQUIRED
+if (!isCI) {
+  // Check if .env.test.local exists
+  if (!existsSync(testEnvFile)) {
+    console.error("❌ CRITICAL: .env.test.local file is missing!");
+    console.error(`   Location: ${testEnvFile}`);
+    console.error("\n📝 To fix:");
+    console.error("   1. Copy .env.test.local.example to .env.test.local");
+    console.error("   2. Fill in your TEST Supabase project credentials");
+    console.error(`   3. File location: ${testEnvFile}\n`);
+    throw new Error(
+      "E2E tests require .env.test.local file. Please create it from .env.test.local.example",
+    );
+  }
+
+  // Load .env.test.local first (REQUIRED)
+  const testEnvResult = config({ path: testEnvFile });
+  if (testEnvResult.error) {
+    console.error("❌ CRITICAL: Failed to load .env.test.local");
+    console.error(`   File: ${testEnvFile}`);
+    console.error(`   Error: ${testEnvResult.error.message}`);
+    throw new Error(
+      `Failed to load .env.test.local: ${testEnvResult.error.message}`,
+    );
+  }
+} else {
+  // CI: Check that required environment variables are set (from GitHub Secrets)
+  const requiredVars = [
+    "NEXT_PUBLIC_SUPABASE_URL",
+    "NEXT_PUBLIC_SUPABASE_ANON_KEY",
+    "SUPABASE_SERVICE_ROLE_KEY",
+  ];
+  const missingVars = requiredVars.filter((varName) => !process.env[varName]);
+  if (missingVars.length > 0) {
+    console.error("❌ CRITICAL: CI environment is missing required variables:");
+    console.error(`   ${missingVars.join(", ")}`);
+    console.error("\n📝 To fix:");
+    console.error("   1. Ensure GitHub Secrets are set in repository settings");
+    console.error("   2. Required secrets: TEST_SUPABASE_URL, TEST_SUPABASE_ANON_KEY, TEST_SUPABASE_SERVICE_ROLE_KEY");
+    throw new Error(
+      `CI environment missing required variables: ${missingVars.join(", ")}`,
+    );
+  }
 }
 
-// Load .env.test.local first (REQUIRED)
-const testEnvResult = config({ path: testEnvFile });
-if (testEnvResult.error) {
-  console.error("❌ CRITICAL: Failed to load .env.test.local");
-  console.error(`   File: ${testEnvFile}`);
-  console.error(`   Error: ${testEnvResult.error.message}`);
-  throw new Error(
-    `Failed to load .env.test.local: ${testEnvResult.error.message}`,
-  );
-}
+// Load other env files as fallback (lower priority) - only in local dev
+const loadedFiles: string[] = [];
+if (!isCI) {
+  loadedFiles.push(testEnvFile); // Track that we loaded .env.test.local
+  
+  const envFiles = [
+    resolve(projectRoot, ".env.test"), // Test-specific defaults
+    resolve(projectRoot, ".env.local"), // Fallback to dev (for backwards compatibility)
+  ];
 
-// Load other env files as fallback (lower priority)
-const envFiles = [
-  resolve(projectRoot, ".env.test"), // Test-specific defaults
-  resolve(projectRoot, ".env.local"), // Fallback to dev (for backwards compatibility)
-];
-
-const loadedFiles: string[] = [testEnvFile]; // Track that we loaded .env.test.local
-for (const envFile of envFiles) {
-  try {
-    const result = config({ path: envFile, override: false }); // Don't override, respect priority
-    if (!result.error) {
-      loadedFiles.push(envFile);
+  for (const envFile of envFiles) {
+    try {
+      const result = config({ path: envFile, override: false }); // Don't override, respect priority
+      if (!result.error) {
+        loadedFiles.push(envFile);
+      }
+    } catch (_error) {
+      // File doesn't exist, that's okay
     }
-  } catch (_error) {
-    // File doesn't exist, that's okay
   }
 }
 
 // CRITICAL: Validate test environment configuration
-// This will throw an error if .env.test.local is misconfigured
+// This will throw an error if environment is misconfigured
 try {
   requireTestEnvironment();
 } catch (error) {
