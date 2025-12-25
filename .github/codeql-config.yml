@@ -26,6 +26,6 @@ paths-ignore:
 # Use security queries but exclude memory-intensive ones
 # The PolynomialReDoS query causes OOM errors on standard runners
 queries:
-  - uses: codeql-suites:javascript-security-and-quality.qls
+  - uses: security-extended
     exclude:
       - id: js/polynomial-redos
