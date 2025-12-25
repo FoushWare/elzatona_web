@@ -6,7 +6,7 @@ import React from "react";
 import { useRouter } from "next/navigation";
 import { ArrowLeft, BookOpen, Target, Users } from "lucide-react";
 import { useUserType } from "@elzatona/contexts";
-import { useLearningType } from "../../../../src/context/LearningTypeContext""";
+import { useLearningType } from "../../../../src/context/LearningTypeContext";
 
 export default function LearningModePage() {
   const router = useRouter();
