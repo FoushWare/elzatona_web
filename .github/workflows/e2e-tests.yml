@@ -125,11 +125,12 @@ jobs:
       # --------------------------------------------------
       - name: Run E2E tests - Home Page
         if: env.RUN_E2E_TESTS == 'true' && steps.test-suite.outputs.suite == 'home-page'
+        working-directory: apps/website
         run: |
           echo "🧪 Running home page E2E tests..."
           APP_ENV=test NODE_OPTIONS=--max-old-space-size=1536 npx playwright test \
-            --config=apps/website/tests/config/playwright.config.ts \
-            apps/website/tests/e2e/home-page/ \
+            --config=tests/config/playwright.config.ts \
+            tests/e2e/home-page/ \
             --workers=1 \
             --reporter=html,list
         continue-on-error: true
