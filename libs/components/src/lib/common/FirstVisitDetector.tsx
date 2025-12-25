@@ -11,7 +11,11 @@ import { FirstVisitModal } from "./FirstVisitModal";
 import { useUserType } from "@elzatona/contexts";
 
 export const FirstVisitDetector: React.FC = () => {
-  const { isFirstVisit: _isFirstVisit, setIsFirstVisit, userType } = useUserType();
+  const {
+    isFirstVisit: _isFirstVisit,
+    setIsFirstVisit,
+    userType,
+  } = useUserType();
   const [showModal, setShowModal] = useState(false);
 
   useEffect(() => {

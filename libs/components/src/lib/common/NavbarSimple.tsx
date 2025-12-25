@@ -22,7 +22,6 @@ import {
 } from "lucide-react";
 import { AlzatonaLogo } from "./AlzatonaLogo";
 
-
 // Helper function to get link styling
 const getLinkStyles = (isActive: boolean, isScrolled: boolean) => {
   if (isActive) {
