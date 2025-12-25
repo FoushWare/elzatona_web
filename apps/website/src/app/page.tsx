@@ -4,11 +4,11 @@ import React from "react";
 import { useUserType } from "@elzatona/contexts";
 import { ErrorBoundary } from "@elzatona/components";
 import { useRouter } from "next/navigation";
-import { useLearningType } from "../context/LearningTypeContext"";
-import { HomePageLayout } from "../components/home/organisms/HomePageLayout";
-import { useHomePageState } from "../components/home/hooks/useHomePageState";
-import { getPersonalizedContent } from "../../lib/utils/homePageHelpers";
-import { ROUTES } from "../../lib/constants/homePage.constants";
+import { useLearningType } from "../context/LearningTypeContext";
+import { HomePageLayout } from "./Components/home/organisms/HomePageLayout";
+import { useHomePageState } from "./Components/home/hooks/useHomePageState";
+import { getPersonalizedContent } from "./utils/homePageHelpers";
+import { ROUTES } from "./utils/constants/homePage.constants";
 
 /**
  * HomePageContent Component
