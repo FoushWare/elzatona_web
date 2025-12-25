@@ -30,7 +30,7 @@ import { useAuth } from "@elzatona/contexts";
 import {
   supabaseClient as supabase,
   isSupabaseAvailable,
-} from "../../../../../apps/website/src/app/Network/supabase-client";
+} from "../../../../../apps/website/src/app/utils/supabase-client";
 
 import {
   BookOpen,
@@ -387,9 +387,9 @@ export default function EnhancedDashboard() {
         console.warn("Error during logout:", error);
       }
       // Ensure Supabase session is cleared (for social logins)
-      if (isSupabaseAvailable() && supabase && supabase && supabase && supabase.auth) {
+      if (isSupabaseAvailable() && supabase && supabase && supabase.auth) {
         try {
-          await supabase && supabase && supabase.auth.signOut();
+          await supabase && supabase.auth.signOut();
         } catch (error) {
           console.warn("Error during Supabase sign out:", error);
         }
