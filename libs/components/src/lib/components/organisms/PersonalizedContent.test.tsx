@@ -13,7 +13,7 @@ import type {
   UserType,
   ActivePlan,
   PersonalizedContent as PersonalizedContentType,
-} from "../../../../../../apps/website/src/app/Types/homePage.types";
+} from "../../../../../../apps/website/src/app/types/homePage.types";
 import { Play } from "lucide-react";
 
 const mockPersonalizedContent: PersonalizedContentType = {

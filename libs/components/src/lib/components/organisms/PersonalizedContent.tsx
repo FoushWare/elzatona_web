@@ -7,9 +7,9 @@ import type {
   UserType,
   ActivePlan,
   PersonalizedContent as PersonalizedContentType,
-} from "../../../../../../apps/website/src/app/Types/homePage.types";
-import { ANIMATION_DELAYS } from "../../../../../../apps/website/src/app/utils/constants/homePage.constants";
-import { cn } from "../../../../../../apps/website/src/app/utils/utils";
+} from "../../../../../../apps/website/src/app/types/homePage.types";
+import { ANIMATION_DELAYS } from "../../../../../../apps/website/src/app/lib/constants/homePage.constants";
+import { cn } from "../../../../../../apps/website/src/app/lib/utils";
 
 interface PersonalizedContentProps {
   userType: UserType;

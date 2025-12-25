@@ -3,7 +3,7 @@
 import React from "react";
 import { Compass, Map } from "lucide-react";
 import { LearningTypeCard } from "../atoms/LearningTypeCard";
-import { ANIMATION_DELAYS } from "../../../../../apps/website/src/app/utils/constants/homePage.constants";
+import { ANIMATION_DELAYS } from "../../../../../apps/website/src/app/lib/constants/homePage.constants";
 import type { UserType } from "../../../../../apps/website/src/app/Types/homePage.types";
 
 interface LearningStyleSelectorProps {

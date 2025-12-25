@@ -2,7 +2,7 @@
 
 import React from "react";
 import { Sparkles, Zap, Star } from "lucide-react";
-import { ANIMATION_DURATION } from "../../../../../apps/website/src/app/utils/constants/homePage.constants";
+import { ANIMATION_DURATION } from "../../../../../apps/website/src/app/lib/constants/homePage.constants";
 
 interface AnimatedTitleProps {
   title: string;

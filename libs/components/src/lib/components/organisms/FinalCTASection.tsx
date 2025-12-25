@@ -3,7 +3,7 @@
 import React from "react";
 import Link from "next/link";
 import { Play, BookOpen, ArrowRight } from "lucide-react";
-import { ANIMATION_DELAYS } from "../../../../../../apps/website/src/app/utils/constants/homePage.constants";
+import { ANIMATION_DELAYS } from "../../../../../../apps/website/src/app/lib/constants/homePage.constants";
 
 interface FinalCTASectionProps {
   showAnimation: boolean;

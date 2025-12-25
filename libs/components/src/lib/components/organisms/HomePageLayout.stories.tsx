@@ -12,7 +12,7 @@ import type {
   UserType,
   ActivePlan,
   PersonalizedContent,
-} from "../../../../../../apps/website/src/app/Types/homePage.types";
+} from "../../../../../../apps/website/src/app/types/homePage.types";
 
 const meta: Meta<typeof HomePageLayout> = {
   title: "Organisms/HomePageLayout",
