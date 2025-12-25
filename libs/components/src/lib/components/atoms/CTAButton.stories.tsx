@@ -1,6 +1,6 @@
 /**
  * Storybook Stories for CTAButton Component
- * 
+ *
  * Stories for the CTAButton atom component
  * Co-located with component for easy discovery
  */
@@ -105,4 +105,3 @@ export const NoAnimation: Story = {
     showAnimation: false,
   },
 };
-

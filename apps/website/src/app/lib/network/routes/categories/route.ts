@@ -6,10 +6,7 @@ import { NextRequest, NextResponse } from "next/server";
 // Empty import removed
 import { createClient } from "@supabase/supabase-js";
 import { sanitizeObjectServer } from "../../utils/sanitize-server";
-import {
-  validateAndSanitize,
-  categorySchema,
-} from "../../utils/validation";
+import { validateAndSanitize, categorySchema } from "../../utils/validation";
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
 const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;

@@ -33,7 +33,9 @@ export function HeroSection({
           {/* Animated subtitle */}
           <p
             className={`text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto leading-relaxed transition-all duration-300 ${
-              showAnimation ? "delay-50 opacity-100 translate-y-0" : "opacity-100 translate-y-0"
+              showAnimation
+                ? "delay-50 opacity-100 translate-y-0"
+                : "opacity-100 translate-y-0"
             }`}
           >
             {personalizedContent.subtitle}
@@ -54,7 +56,9 @@ export function HeroSection({
         {/* Animated stats */}
         <div
           className={`transition-all duration-300 ${
-            showAnimation ? "delay-150 opacity-100 translate-y-0" : "opacity-100 translate-y-0"
+            showAnimation
+              ? "delay-150 opacity-100 translate-y-0"
+              : "opacity-100 translate-y-0"
           }`}
         >
           <UserStatistics />

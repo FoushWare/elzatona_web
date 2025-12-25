@@ -1,6 +1,6 @@
 /**
  * Storybook Stories for PersonalizedContent Component
- * 
+ *
  * Stories for the PersonalizedContent organism component
  * Co-located with component for easy discovery
  */
@@ -110,4 +110,3 @@ export const NoAnimation: Story = {
     personalizedContent: defaultContent,
   },
 };
-

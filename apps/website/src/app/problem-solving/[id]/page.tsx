@@ -1,6 +1,6 @@
 "use client";
 
-export default function problem-solving[id]Page() {
+export default function ProblemSolvingIdPage() {
   return (
     <div className="min-h-screen p-8">
       <h1 className="text-2xl font-bold">problem-solving/[id]</h1>

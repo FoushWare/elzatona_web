@@ -1,6 +1,6 @@
 /**
  * Unit Tests for CTAButton Component
- * 
+ *
  * Tests for the CTAButton atom component
  * Co-located with component for easy discovery
  */
@@ -132,4 +132,3 @@ describe("CTAButton", () => {
     expect(wrapper).toHaveClass("custom-class");
   });
 });
-

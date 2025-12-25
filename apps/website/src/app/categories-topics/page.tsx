@@ -1,6 +1,6 @@
 "use client";
 
-export default function categories-topicsPage() {
+export default function categoriestopicsPage() {
   return (
     <div className="min-h-screen p-8">
       <h1 className="text-2xl font-bold">categories-topics</h1>

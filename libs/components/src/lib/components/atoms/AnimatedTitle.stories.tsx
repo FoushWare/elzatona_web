@@ -1,6 +1,6 @@
 /**
  * Storybook Stories for AnimatedTitle Component
- * 
+ *
  * Stories for the AnimatedTitle atom component
  * Co-located with component for easy discovery
  */
@@ -79,4 +79,3 @@ export const ShortTitle: Story = {
     showAnimation: true,
   },
 };
-

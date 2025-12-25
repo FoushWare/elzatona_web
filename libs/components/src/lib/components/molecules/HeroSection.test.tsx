@@ -1,6 +1,6 @@
 /**
  * Unit Tests for HeroSection Component
- * 
+ *
  * Tests for the HeroSection molecule component
  * Co-located with component for easy discovery
  */
@@ -66,4 +66,3 @@ describe("HeroSection", () => {
     expect(container).toBeInTheDocument();
   });
 });
-

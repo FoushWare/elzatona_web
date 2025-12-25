@@ -1,6 +1,6 @@
 "use client";
 
-export default function learning-paths[id]Page() {
+export default function LearningPathDetailPage() {
   return (
     <div className="min-h-screen p-8">
       <h1 className="text-2xl font-bold">learning-paths/[id]</h1>

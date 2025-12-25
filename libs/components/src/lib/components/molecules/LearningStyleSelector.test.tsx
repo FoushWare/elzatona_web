@@ -1,6 +1,6 @@
 /**
  * Unit Tests for LearningStyleSelector Component
- * 
+ *
  * Tests for the LearningStyleSelector molecule component
  * Co-located with component for easy discovery
  */
@@ -67,4 +67,3 @@ describe("LearningStyleSelector", () => {
     expect(container).toBeInTheDocument();
   });
 });
-

@@ -1,6 +1,6 @@
 /**
  * Unit Tests for PersonalizedContent Component
- * 
+ *
  * Tests for the PersonalizedContent organism component
  * Co-located with component for easy discovery
  */
@@ -70,4 +70,3 @@ describe("PersonalizedContent", () => {
     expect(container.firstChild).toBeNull();
   });
 });
-

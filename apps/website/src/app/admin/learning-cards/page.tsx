@@ -1,6 +1,6 @@
 "use client";
 
-export default function adminlearning-cardsPage() {
+export default function adminlearningcardsPage() {
   return (
     <div className="min-h-screen p-8">
       <h1 className="text-2xl font-bold">admin/learning-cards</h1>

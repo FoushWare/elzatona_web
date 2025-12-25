@@ -7,10 +7,15 @@ interface UseHomePageStateReturn {
   showAnimation: boolean;
 }
 
-export function useHomePageState(userType: string | null): UseHomePageStateReturn {
+export function useHomePageState(
+  userType: string | null,
+): UseHomePageStateReturn {
   const { isAuthenticated, isLoading } = useAuth();
   const [hasActivePlan, setHasActivePlan] = useState(false);
-  const [activePlan, setActivePlan] = useState<{ name: string; id: string } | null>(null);
+  const [activePlan, setActivePlan] = useState<{
+    name: string;
+    id: string;
+  } | null>(null);
   const [showAnimation, setShowAnimation] = useState(true);
 
   useEffect(() => {

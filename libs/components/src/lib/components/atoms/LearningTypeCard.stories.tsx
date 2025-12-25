@@ -1,6 +1,6 @@
 /**
  * Storybook Stories for LearningTypeCard Component
- * 
+ *
  * Stories for the LearningTypeCard atom component
  * Co-located with component for easy discovery
  */
@@ -61,7 +61,8 @@ export const GuidedLearning: Story = {
 export const FreeStyleLearning: Story = {
   args: {
     title: "Free Style Learning",
-    description: "Create your own learning roadmap and explore topics at your own pace",
+    description:
+      "Create your own learning roadmap and explore topics at your own pace",
     icon: Compass,
     onClick: () => console.log("Freestyle clicked"),
     colorVariant: "green",
@@ -91,4 +92,3 @@ export const NoAnimation: Story = {
     showAnimation: false,
   },
 };
-

@@ -1,6 +1,6 @@
 /**
  * Unit Tests for FinalCTASection Component
- * 
+ *
  * Tests for the FinalCTASection organism component
  * Co-located with component for easy discovery
  */
@@ -33,4 +33,3 @@ describe("FinalCTASection", () => {
     expect(container).toBeInTheDocument();
   });
 });
-

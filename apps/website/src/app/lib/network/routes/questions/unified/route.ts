@@ -9,14 +9,8 @@ import {
   sanitizeObjectServer,
   sanitizeRichContent,
 } from "../../../utils/sanitize-server";
-import {
-  validateAndSanitize,
-  questionSchema,
-} from "../../../utils/validation";
-import {
-  getSupabaseConfig,
-  logApiConfig,
-} from "../../../utils/api-config";
+import { validateAndSanitize, questionSchema } from "../../../utils/validation";
+import { getSupabaseConfig, logApiConfig } from "../../../utils/api-config";
 
 // Log API configuration on module load (for debugging)
 logApiConfig("Questions API");

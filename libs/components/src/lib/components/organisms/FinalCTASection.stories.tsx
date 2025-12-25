@@ -1,6 +1,6 @@
 /**
  * Storybook Stories for FinalCTASection Component
- * 
+ *
  * Stories for the FinalCTASection organism component
  * Co-located with component for easy discovery
  */
@@ -40,4 +40,3 @@ export const NoAnimation: Story = {
     showAnimation: false,
   },
 };
-

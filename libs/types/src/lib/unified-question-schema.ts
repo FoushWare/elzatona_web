@@ -19,7 +19,9 @@ function getSupabaseClient(): SupabaseClient | null {
   try {
     // Try to access process.env safely
     if (typeof globalThis !== "undefined") {
-      const env = (globalThis as { process?: { env?: Record<string, string | undefined> } }).process?.env;
+      const env = (
+        globalThis as { process?: { env?: Record<string, string | undefined> } }
+      ).process?.env;
       if (env) {
         supabaseUrl = env["NEXT_PUBLIC_SUPABASE_URL"] || "";
         supabaseServiceRoleKey = env["SUPABASE_SERVICE_ROLE_KEY"] || "";
@@ -30,7 +32,12 @@ function getSupabaseClient(): SupabaseClient | null {
   }
 
   // Only create client if we have valid credentials
-  if (supabaseUrl && supabaseServiceRoleKey && supabaseUrl !== "" && supabaseServiceRoleKey !== "") {
+  if (
+    supabaseUrl &&
+    supabaseServiceRoleKey &&
+    supabaseUrl !== "" &&
+    supabaseServiceRoleKey !== ""
+  ) {
     try {
       supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
       return supabase;

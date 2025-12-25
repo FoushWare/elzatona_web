@@ -1,6 +1,6 @@
 "use client";
 
-export default function admincontent-managementPage() {
+export default function admincontentmanagementPage() {
   return (
     <div className="min-h-screen p-8">
       <h1 className="text-2xl font-bold">admin/content-management</h1>

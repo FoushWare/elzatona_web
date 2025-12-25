@@ -6,8 +6,12 @@ const noOpFn = () => {};
 const noOpState = [null, noOpFn] as const;
 
 export const useQueryState = createMockFn(() => noOpState);
-export const parseAsString = createMockFn((defaultValue?: string) => defaultValue || "");
-export const parseAsInteger = createMockFn((defaultValue?: number) => defaultValue || 0);
+export const parseAsString = createMockFn(
+  (defaultValue?: string) => defaultValue || "",
+);
+export const parseAsInteger = createMockFn(
+  (defaultValue?: number) => defaultValue || 0,
+);
 export const parseAsArrayOf = createMockFn(() => noOpState);
 export const useQueryStates = createMockFn(() => [
   {} as Record<string, any>,

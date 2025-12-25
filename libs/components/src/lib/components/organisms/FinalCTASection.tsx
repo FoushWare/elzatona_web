@@ -17,7 +17,9 @@ export function FinalCTASection({ showAnimation }: FinalCTASectionProps) {
   return (
     <section
       className={`final-cta-section py-16 px-4 sm:px-6 lg:px-8 relative z-10 transition-all duration-300 ${
-        showAnimation ? "delay-450 opacity-100 translate-y-0" : "opacity-100 translate-y-0"
+        showAnimation
+          ? "delay-450 opacity-100 translate-y-0"
+          : "opacity-100 translate-y-0"
       }`}
       style={{ transitionDelay: `${ANIMATION_DELAYS.FINAL_CTA}ms` }}
     >

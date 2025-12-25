@@ -1,6 +1,6 @@
 "use client";
 
-export default function adminfrontend-tasksPage() {
+export default function adminfrontendtasksPage() {
   return (
     <div className="min-h-screen p-8">
       <h1 className="text-2xl font-bold">admin/frontend-tasks</h1>

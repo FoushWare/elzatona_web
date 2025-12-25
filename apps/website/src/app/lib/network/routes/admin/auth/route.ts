@@ -2,10 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import jwt from "jsonwebtoken";
 import { createClient } from "@supabase/supabase-js";
 import bcrypt from "bcryptjs";
-import {
-  getSupabaseConfig,
-  logApiConfig,
-} from "../../../utils/api-config";
+import { getSupabaseConfig, logApiConfig } from "../../../utils/api-config";
 
 function sanitizeForLog(value: unknown): string {
   const raw =

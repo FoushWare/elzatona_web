@@ -31,9 +31,7 @@ const defaultAdminAuth = {
   user: null,
 };
 
-export const useAdminAuth = createMockFn(
-  () => defaultAdminAuth,
-) as any;
+export const useAdminAuth = createMockFn(() => defaultAdminAuth) as any;
 
 // Notification context mocks
 export const NotificationProvider = ({

@@ -1,6 +1,7 @@
 # Elzatona Web - Project Structure
 
 ## Overview
+
 This is an **Nx monorepo** workspace containing frontend development interview preparation applications built with Next.js, React, and TypeScript.
 
 **Workspace Name:** `elzatona-web`  
@@ -44,6 +45,7 @@ New_elzatona/
 ## Website Application Structure (apps/website/)
 
 ### Root Files
+
 ```
 apps/website/
 ├── next.config.ts           # Next.js configuration
@@ -56,6 +58,7 @@ apps/website/
 ```
 
 ### Source Structure (src/)
+
 ```
 src/
 ├── app/                     # Next.js App Router
@@ -71,6 +74,7 @@ src/
 ```
 
 ### Website App Pages (src/app/Pages/)
+
 ```
 Pages/
 ├── dashboard/               # Dashboard page
@@ -90,6 +94,7 @@ Pages/
 ```
 
 ### Website App Components (src/app/Components/)
+
 ```
 Components/
 ├── home/                    # Home page components
@@ -103,6 +108,7 @@ Components/
 ```
 
 ### Website App Network (src/app/Network/)
+
 ```
 Network/
 ├── routes/                  # API routes
@@ -116,6 +122,7 @@ Network/
 ```
 
 ### Website App Utils (src/app/utils/)
+
 ```
 utils/
 ├── constants/               # Application constants
@@ -127,6 +134,7 @@ utils/
 ```
 
 ### Website App Types (src/app/Types/)
+
 ```
 Types/
 ├── admin.ts                # Admin types
@@ -141,6 +149,7 @@ Types/
 ## Shared Libraries (libs/)
 
 ### 1. components/ (Shared UI Components)
+
 Shared React components library with reusable UI components.
 
 ```
@@ -161,6 +170,7 @@ libs/components/
 ```
 
 ### 2. hooks/ (Shared React Hooks)
+
 Shared React hooks library.
 
 ```
@@ -178,6 +188,7 @@ libs/hooks/
 ```
 
 ### 3. contexts/ (Shared React Contexts)
+
 Shared React contexts library.
 
 ```
@@ -195,6 +206,7 @@ libs/contexts/
 ```
 
 ### 4. types/ (Shared TypeScript Types)
+
 Shared TypeScript types library.
 
 ```
@@ -211,6 +223,7 @@ libs/types/
 ```
 
 ### 5. utilities/ (Shared Utilities)
+
 Shared utility functions library.
 
 ```
@@ -233,24 +246,29 @@ libs/utilities/
 ## Key Technologies & Dependencies
 
 ### Core Framework
+
 - **React:** 18.x
 - **Next.js:** 16.x
 - **TypeScript:** Latest
 - **Nx:** Latest
 
 ### State Management
+
 - **React Context API**
 - **Zustand** (if used)
 
 ### UI & Styling
+
 - **Tailwind CSS:** Latest
 - **shadcn/ui** components
 
 ### Database & Backend
+
 - **Supabase:** PostgreSQL database
 - **Firebase:** (if used)
 
 ### Code Quality
+
 - **ESLint:** Latest
 - **Prettier:** Latest
 - **TypeScript:** Strict mode
@@ -260,12 +278,14 @@ libs/utilities/
 ## Project Conventions
 
 ### File Naming
+
 - **Components:** PascalCase (e.g., `NavbarSimple.tsx`)
 - **Pages:** lowercase with hyphens (e.g., `dashboard/page.tsx`)
 - **Utilities:** camelCase (e.g., `auth-utils.ts`)
 - **Types:** camelCase (e.g., `admin.ts`)
 
 ### Directory Structure
+
 - All website code under `apps/website/src/`
 - Shared code in `libs/`
 - Page components in `src/app/Pages/`
@@ -275,6 +295,7 @@ libs/utilities/
 - Types in `src/app/Types/`
 
 ### Import Paths
+
 - Use `@elzatona/components` for shared components
 - Use `@elzatona/hooks` for shared hooks
 - Use `@elzatona/contexts` for shared contexts
@@ -287,6 +308,7 @@ libs/utilities/
 ## Development Workflow
 
 1. **Start Development Server**
+
    ```bash
    npm run dev
    ```
@@ -296,6 +318,7 @@ libs/utilities/
    - Hot module replacement (HMR) updates automatically
 
 3. **Build for Production**
+
    ```bash
    npm run build
    ```
@@ -309,28 +332,33 @@ libs/utilities/
 ## Best Practices
 
 ### Component Development
+
 - Keep components small and focused
 - Use TypeScript for type safety
 - Implement proper error boundaries
 - Write reusable components in `libs/components/`
 
 ### State Management
+
 - Use React Context for global state
 - Use React hooks for local state
 - Keep contexts focused and modular
 
 ### API Integration
+
 - Centralize API calls in `Network/routes/` directory
 - Use Next.js API routes
 - Handle errors consistently
 
 ### Performance
+
 - Lazy load routes and components
 - Optimize bundle size
 - Use Next.js code splitting
 - Leverage Nx caching
 
 ### Code Quality
+
 - Follow ESLint rules
 - Use Prettier for formatting
 - Write meaningful commit messages

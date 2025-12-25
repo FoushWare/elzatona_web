@@ -1,9 +1,9 @@
 /**
  * Integration Tests for Homepage
- * 
+ *
  * Tests for the refactored home page component integration
  * Following refactoring plans and testing standards
- * 
+ *
  * Coverage: Integration between components, hooks, and context providers
  */
 
@@ -129,11 +129,10 @@ describe("HomePage Integration", () => {
       render(<HomePage />);
 
       await waitFor(() => {
-        expect(getPersonalizedContent).toHaveBeenCalledWith(
-          "guided",
-          true,
-          { name: "React Mastery", id: "react-001" },
-        );
+        expect(getPersonalizedContent).toHaveBeenCalledWith("guided", true, {
+          name: "React Mastery",
+          id: "react-001",
+        });
       });
     });
   });
@@ -150,7 +149,9 @@ describe("HomePage Integration", () => {
 
       // Wait for component to render
       await waitFor(() => {
-        expect(screen.getByText(/Master Frontend Development/i)).toBeInTheDocument();
+        expect(
+          screen.getByText(/Master Frontend Development/i),
+        ).toBeInTheDocument();
       });
 
       // Verify navigation would be triggered (mocked)
@@ -167,7 +168,9 @@ describe("HomePage Integration", () => {
       render(<HomePage />);
 
       await waitFor(() => {
-        expect(screen.getByText(/Master Frontend Development/i)).toBeInTheDocument();
+        expect(
+          screen.getByText(/Master Frontend Development/i),
+        ).toBeInTheDocument();
       });
 
       // Verify navigation would be triggered (mocked)
@@ -228,4 +231,3 @@ describe("HomePage Integration", () => {
     });
   });
 });
-

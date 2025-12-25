@@ -1,6 +1,6 @@
 /**
  * Unit Tests for LearningTypeCard Component
- * 
+ *
  * Tests for the LearningTypeCard atom component
  * Co-located with component for easy discovery
  */
@@ -123,4 +123,3 @@ describe("LearningTypeCard", () => {
     expect(card).toHaveClass("custom-class");
   });
 });
-

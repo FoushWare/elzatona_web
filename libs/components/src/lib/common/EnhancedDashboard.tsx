@@ -389,7 +389,7 @@ export default function EnhancedDashboard() {
       // Ensure Supabase session is cleared (for social logins)
       if (isSupabaseAvailable() && supabase && supabase && supabase.auth) {
         try {
-          await supabase && supabase.auth.signOut();
+          (await supabase) && supabase.auth.signOut();
         } catch (error) {
           console.warn("Error during Supabase sign out:", error);
         }

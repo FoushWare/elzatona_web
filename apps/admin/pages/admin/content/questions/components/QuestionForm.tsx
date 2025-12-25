@@ -343,7 +343,20 @@ export const QuestionForm = React.forwardRef<
       initialState.formData,
     );
 
-    const collapsibleSections = useCollapsibleSections(initialData, readOnly);
+    const {
+      showQuestionInfo,
+      setShowQuestionInfo,
+      showContent,
+      setShowContent,
+      showOptions,
+      setShowOptions,
+      showExplanation,
+      setShowExplanation,
+      showResources,
+      setShowResources,
+      showAdditionalSettings,
+      setShowAdditionalSettings,
+    } = useCollapsibleSections(initialData || null, readOnly);
 
     useEffect(() => {
       if (initialData) {

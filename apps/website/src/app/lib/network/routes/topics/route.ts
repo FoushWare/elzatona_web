@@ -4,10 +4,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { supabaseOperations } from "../../supabase-server";
 import { sanitizeObjectServer } from "../../utils/sanitize-server";
-import {
-  validateAndSanitize,
-  topicSchema,
-} from "../../utils/validation";
+import { validateAndSanitize, topicSchema } from "../../utils/validation";
 
 // GET /api/topics - Get all topics
 export async function GET() {

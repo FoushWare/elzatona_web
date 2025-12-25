@@ -25,7 +25,9 @@ export function AnimatedTitle({
     <div className={`relative inline-block ${className}`}>
       <h1
         className={`hero-title text-5xl md:text-6xl font-bold text-gray-900 dark:text-white mb-6 transition-all duration-300 ${
-          showAnimation ? "opacity-100 translate-y-0" : "opacity-100 translate-y-0"
+          showAnimation
+            ? "opacity-100 translate-y-0"
+            : "opacity-100 translate-y-0"
         }`}
       >
         {title}

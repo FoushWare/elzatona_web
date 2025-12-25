@@ -21,4 +21,3 @@ export interface PersonalizedContent {
   icon: React.ReactNode;
   color: ContentColor;
 }
-

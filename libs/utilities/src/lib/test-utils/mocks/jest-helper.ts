@@ -28,4 +28,3 @@ export function createMockObject<T extends object>(defaultValue: T): T {
   // In runtime, return the object as-is
   return defaultValue;
 }
-

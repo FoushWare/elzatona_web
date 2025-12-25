@@ -1,6 +1,6 @@
 /**
  * Home Page Tests
- * 
+ *
  * Tests for the refactored home page component
  * Following refactoring plans and testing standards
  */
@@ -33,7 +33,9 @@ vi.mock("@elzatona/components", () => ({
     <div data-testid="home-page-layout">
       <div data-testid="user-type">{userType || "null"}</div>
       <div data-testid="show-animation">{showAnimation ? "true" : "false"}</div>
-      <div data-testid="has-active-plan">{hasActivePlan ? "true" : "false"}</div>
+      <div data-testid="has-active-plan">
+        {hasActivePlan ? "true" : "false"}
+      </div>
       <button data-testid="guided-click" onClick={onGuidedClick}>
         Guided Learning
       </button>
@@ -118,20 +120,26 @@ describe("HomePage", () => {
   it("should render guided learning button", () => {
     render(<HomePage />);
     expect(screen.getByTestId("guided-click")).toBeInTheDocument();
-    expect(screen.getByTestId("guided-click")).toHaveTextContent("Guided Learning");
+    expect(screen.getByTestId("guided-click")).toHaveTextContent(
+      "Guided Learning",
+    );
   });
 
   it("should render freestyle practice button", () => {
     render(<HomePage />);
     expect(screen.getByTestId("freestyle-click")).toBeInTheDocument();
-    expect(screen.getByTestId("freestyle-click")).toHaveTextContent("Freestyle Practice");
+    expect(screen.getByTestId("freestyle-click")).toHaveTextContent(
+      "Freestyle Practice",
+    );
   });
 
   it("should wrap content in ErrorBoundary", () => {
     render(<HomePage />);
     const errorBoundary = screen.getByTestId("error-boundary");
     expect(errorBoundary).toBeInTheDocument();
-    expect(errorBoundary).toContainElement(screen.getByTestId("home-page-layout"));
+    expect(errorBoundary).toContainElement(
+      screen.getByTestId("home-page-layout"),
+    );
   });
 });
 
@@ -146,10 +154,10 @@ describe("HomePage Integration", () => {
     } as any);
 
     render(<HomePage />);
-    
+
     const guidedButton = screen.getByTestId("guided-click");
     guidedButton.click();
-    
+
     // Verify navigation would be called (mocked)
     expect(guidedButton).toBeInTheDocument();
   });

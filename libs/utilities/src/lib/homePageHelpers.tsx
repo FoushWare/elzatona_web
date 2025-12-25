@@ -133,4 +133,3 @@ export function parseActivePlan(planData: string | null): ActivePlan | null {
     return null;
   }
 }
-

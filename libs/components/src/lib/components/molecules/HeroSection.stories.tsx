@@ -1,6 +1,6 @@
 /**
  * Storybook Stories for HeroSection Component
- * 
+ *
  * Stories for the HeroSection molecule component
  * Co-located with component for easy discovery
  */
@@ -81,4 +81,3 @@ export const NoAnimation: Story = {
     showAnimation: false,
   },
 };
-

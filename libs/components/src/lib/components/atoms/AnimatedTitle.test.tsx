@@ -1,6 +1,6 @@
 /**
  * Unit Tests for AnimatedTitle Component
- * 
+ *
  * Tests for the AnimatedTitle atom component
  * Co-located with component for easy discovery
  */
@@ -12,12 +12,7 @@ import { AnimatedTitle } from "./AnimatedTitle";
 
 describe("AnimatedTitle", () => {
   it("should render title text", () => {
-    render(
-      <AnimatedTitle
-        title="Test Title"
-        showAnimation={false}
-      />,
-    );
+    render(<AnimatedTitle title="Test Title" showAnimation={false} />);
     expect(screen.getByText("Test Title")).toBeInTheDocument();
   });
 
@@ -35,10 +30,7 @@ describe("AnimatedTitle", () => {
 
   it("should apply animation classes when showAnimation is true", () => {
     const { container } = render(
-      <AnimatedTitle
-        title="Test Title"
-        showAnimation={true}
-      />,
+      <AnimatedTitle title="Test Title" showAnimation={true} />,
     );
     const title = container.querySelector("h1");
     expect(title).toHaveClass("opacity-100", "translate-y-0");
@@ -46,10 +38,7 @@ describe("AnimatedTitle", () => {
 
   it("should apply no-animation classes when showAnimation is false", () => {
     const { container } = render(
-      <AnimatedTitle
-        title="Test Title"
-        showAnimation={false}
-      />,
+      <AnimatedTitle title="Test Title" showAnimation={false} />,
     );
     const title = container.querySelector("h1");
     expect(title).toHaveClass("opacity-0", "translate-y-8");
@@ -57,10 +46,7 @@ describe("AnimatedTitle", () => {
 
   it("should render sparkles when showAnimation is true", () => {
     const { container } = render(
-      <AnimatedTitle
-        title="Test Title"
-        showAnimation={true}
-      />,
+      <AnimatedTitle title="Test Title" showAnimation={true} />,
     );
     // Sparkles should be rendered (check for icon elements)
     const sparkles = container.querySelectorAll("svg");
@@ -69,10 +55,7 @@ describe("AnimatedTitle", () => {
 
   it("should not render sparkles when showAnimation is false", () => {
     const { container } = render(
-      <AnimatedTitle
-        title="Test Title"
-        showAnimation={false}
-      />,
+      <AnimatedTitle title="Test Title" showAnimation={false} />,
     );
     // No sparkles should be rendered
     const sparkles = container.querySelectorAll("svg");
@@ -91,4 +74,3 @@ describe("AnimatedTitle", () => {
     expect(wrapper).toHaveClass("custom-class");
   });
 });
-

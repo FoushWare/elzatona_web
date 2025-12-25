@@ -1,6 +1,6 @@
 /**
  * Storybook Stories for LearningStyleSelector Component
- * 
+ *
  * Stories for the LearningStyleSelector molecule component
  * Co-located with component for easy discovery
  */
@@ -69,4 +69,3 @@ export const NoAnimation: Story = {
     showAnimation: false,
   },
 };
-

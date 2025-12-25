@@ -1,6 +1,6 @@
 "use client";
 
-export default function frontend-tasksPage() {
+export default function frontendtasksPage() {
   return (
     <div className="min-h-screen p-8">
       <h1 className="text-2xl font-bold">frontend-tasks</h1>

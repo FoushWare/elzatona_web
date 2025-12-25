@@ -1,6 +1,6 @@
 /**
  * Unit Tests for HomePageLayout Component
- * 
+ *
  * Tests for the HomePageLayout organism component
  * Co-located with component for easy discovery
  */
@@ -39,7 +39,9 @@ describe("HomePageLayout", () => {
       />,
     );
     expect(screen.getByText("Master Frontend Development")).toBeInTheDocument();
-    expect(screen.getByText(/How would you like to learn\?/i)).toBeInTheDocument();
+    expect(
+      screen.getByText(/How would you like to learn\?/i),
+    ).toBeInTheDocument();
   });
 
   it("should render PersonalizedContent when userType is provided", () => {
@@ -91,4 +93,3 @@ describe("HomePageLayout", () => {
     ).not.toBeInTheDocument();
   });
 });
-

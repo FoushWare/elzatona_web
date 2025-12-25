@@ -1,6 +1,6 @@
 "use client";
 
-export default function test-notificationsPage() {
+export default function testnotificationsPage() {
   return (
     <div className="min-h-screen p-8">
       <h1 className="text-2xl font-bold">test-notifications</h1>

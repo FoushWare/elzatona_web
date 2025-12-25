@@ -29,14 +29,18 @@ export function LearningStyleSelector({
         <div className="text-center mb-12">
           <h2
             className={`text-3xl font-bold text-gray-900 dark:text-white mb-4 transition-all duration-300 ${
-              showAnimation ? "delay-200 opacity-100 translate-y-0" : "opacity-100 translate-y-0"
+              showAnimation
+                ? "delay-200 opacity-100 translate-y-0"
+                : "opacity-100 translate-y-0"
             }`}
           >
             How would you like to learn?
           </h2>
           <p
             className={`text-xl text-gray-600 dark:text-gray-300 transition-all duration-300 ${
-              showAnimation ? "delay-250 opacity-100 translate-y-0" : "opacity-100 translate-y-0"
+              showAnimation
+                ? "delay-250 opacity-100 translate-y-0"
+                : "opacity-100 translate-y-0"
             }`}
           >
             Choose your learning style to get the most personalized experience.
