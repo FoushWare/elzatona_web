@@ -11,7 +11,7 @@ import {
   ProblemSolvingTaskFormData,
   ApiResponse,
   PaginatedResponse,
-} from "../../../../types/admin";
+} from "@elzatona/types";
 
 // GET /api/admin/problem-solving - List all problem solving tasks
 export async function GET(request: NextRequest) {

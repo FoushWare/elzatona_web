@@ -10,7 +10,7 @@ import {
   ProblemSolvingTask,
   ProblemSolvingTaskFormData,
   ApiResponse,
-} from "../../../../../types/admin";
+} from "@elzatona/types";
 
 // GET /api/admin/problem-solving/[id] - Get specific problem solving task
 export async function GET(
