@@ -21,7 +21,7 @@ const mockPersonalizedContent: PersonalizedContentType = {
   subtitle: "Pick up where you left off",
   cta: "Continue Practice",
   ctaLink: "/continue",
-  icon: Play,
+  icon: React.createElement(Play),
   color: "green",
 };
 
@@ -43,6 +43,8 @@ describe("PersonalizedContent", () => {
     const activePlan: ActivePlan = {
       name: "React Mastery",
       id: "react-001",
+      totalQuestions: 50,
+      estimatedTime: "10 hours",
     };
     render(
       <PersonalizedContent

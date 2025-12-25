@@ -17,7 +17,7 @@ const mockPersonalizedContent: PersonalizedContent = {
   subtitle: "The complete platform to ace your frontend interviews",
   cta: "Get Started",
   ctaLink: "/get-started",
-  icon: Play,
+  icon: React.createElement(Play),
   color: "indigo",
 };
 

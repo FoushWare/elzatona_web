@@ -28,7 +28,18 @@ for (const envFile of envFiles) {
 // This ensures E2E tests ALWAYS use test database, regardless of other settings
 process.env.APP_ENV = "test";
 process.env.NEXT_PUBLIC_APP_ENV = "test";
-process.env.NODE_ENV = "test";
+// Only set NODE_ENV if not in build context
+if (process.env.NODE_ENV !== "production" && !process.env.NEXT_PHASE) {
+  try {
+    Object.defineProperty(process.env, "NODE_ENV", {
+      value: "test",
+      writable: true,
+      configurable: true,
+    });
+  } catch {
+    // If defineProperty fails, skip (some environments don't allow modification)
+  }
+}
 
 // Debug: Log loaded admin credentials and environment info
 if (process.env.ADMIN_EMAIL) {
