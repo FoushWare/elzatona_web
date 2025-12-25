@@ -147,11 +147,12 @@ jobs:
 
       - name: Run E2E tests - Guided Flow
         if: env.RUN_E2E_TESTS == 'true' && steps.test-suite.outputs.suite == 'guided-flow'
+        working-directory: apps/website
         run: |
           echo "🧪 Running guided flow E2E tests..."
           APP_ENV=test NODE_OPTIONS=--max-old-space-size=1536 npx playwright test \
-            --config=apps/website/tests/config/playwright.config.ts \
-            apps/website/tests/e2e/guided-flow/ \
+            --config=tests/config/playwright.config.ts \
+            tests/e2e/guided-flow/ \
             --workers=1 \
             --reporter=html,list
         continue-on-error: true
@@ -169,11 +170,12 @@ jobs:
 
       - name: Run E2E tests - Freestyle Flow
         if: env.RUN_E2E_TESTS == 'true' && steps.test-suite.outputs.suite == 'freestyle-flow'
+        working-directory: apps/website
         run: |
           echo "🧪 Running freestyle flow E2E tests..."
           APP_ENV=test NODE_OPTIONS=--max-old-space-size=1536 npx playwright test \
-            --config=apps/website/tests/config/playwright.config.ts \
-            apps/website/tests/e2e/freestyle-flow/ \
+            --config=tests/config/playwright.config.ts \
+            tests/e2e/freestyle-flow/ \
             --workers=1 \
             --reporter=html,list
         continue-on-error: true
@@ -191,11 +193,12 @@ jobs:
 
       - name: Run E2E tests - Admin
         if: env.RUN_E2E_TESTS == 'true' && steps.test-suite.outputs.suite == 'admin'
+        working-directory: apps/website
         run: |
           echo "🧪 Running admin E2E tests..."
           APP_ENV=test NODE_OPTIONS=--max-old-space-size=1536 npx playwright test \
-            --config=apps/website/tests/config/playwright.config.ts \
-            apps/website/tests/e2e/admin/ \
+            --config=tests/config/playwright.config.ts \
+            tests/e2e/admin/ \
             --workers=1 \
             --reporter=html,list
         continue-on-error: true
@@ -213,10 +216,11 @@ jobs:
 
       - name: Run E2E tests - All
         if: env.RUN_E2E_TESTS == 'true' && steps.test-suite.outputs.suite == 'all'
+        working-directory: apps/website
         run: |
           echo "🧪 Running all E2E tests..."
           APP_ENV=test NODE_OPTIONS=--max-old-space-size=1536 npx playwright test \
-            --config=apps/website/tests/config/playwright.config.ts \
+            --config=tests/config/playwright.config.ts \
             --workers=1 \
             --reporter=html,list
         continue-on-error: true
@@ -240,7 +244,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: playwright-report
-          path: playwright-report/
+          path: apps/website/playwright-report/
           retention-days: 7
 
       - name: Upload Playwright videos
@@ -248,7 +252,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: playwright-videos
-          path: test-results/
+          path: apps/website/test-results/
           retention-days: 7
 
       # --------------------------------------------------
@@ -265,6 +269,6 @@ jobs:
         if: always()
         run: |
           echo "🧹 Cleaning up build artifacts..."
-          rm -rf .next build storybook-static coverage playwright-report test-results
+          rm -rf .next build storybook-static coverage apps/website/playwright-report apps/website/test-results
           echo "✅ Cleanup completed"
 
