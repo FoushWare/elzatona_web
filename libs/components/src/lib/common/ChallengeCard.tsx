@@ -74,9 +74,9 @@ export default function ChallengeCard({
         </p>
 
         <div className="flex flex-wrap gap-1 mb-4">
-          {challenge.tags.slice(0, 3).map((tag: any, index: number) => (
+          {challenge.tags.slice(0, 3).map((tag: any) => (
             <span
-              key={index}
+              key={tag}
               className="px-2 py-1 bg-muted text-muted-foreground text-xs rounded font-medium"
             >
               {tag}
