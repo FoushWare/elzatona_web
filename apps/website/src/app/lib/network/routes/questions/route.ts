@@ -144,10 +144,6 @@ export async function GET(request: NextRequest) {
 
     // Security: Removed user data from logs to prevent log injection
     console.log("🔍 API Questions Route - Applied Filters");
-      difficulty: filters.difficulty || "none",
-      questionType: filters.questionType || "none",
-      limit: filters.limit || "none",
-    });
 
     // Get the filtered count (same filters, without limit)
     if (!supabase) {
