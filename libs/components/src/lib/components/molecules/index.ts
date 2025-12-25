@@ -1,10 +1,6 @@
-export { MetricCard } from "./MetricCard";
-export type { MetricCardPropsType } from "./MetricCard";
-export { DataTableHeader } from "./DataTableHeader";
-export type { DataTableHeaderPropsType } from "./DataTableHeader";
-export { ActivityItem } from "./ActivityItem";
-export type { ActivityItemPropsType } from "./ActivityItem";
-export { WelcomeHeader } from "./WelcomeHeader";
-export type { WelcomeHeaderPropsType } from "./WelcomeHeader";
-export { ErrorAlert } from "./ErrorAlert";
-export type { ErrorAlertPropsType } from "./ErrorAlert";
+// Atomic Design: Molecules
+// Simple combinations of atoms that form basic UI elements
+
+export { HeroSection } from "./HeroSection";
+export { LearningStyleSelector } from "./LearningStyleSelector";
+export { AnimatedBackground } from "./AnimatedBackground";

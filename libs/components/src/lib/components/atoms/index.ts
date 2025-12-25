@@ -1,5 +1,6 @@
-export { DashboardCard } from "./DashboardCard";
-export { MetricBadge } from "./MetricBadge";
-export type { MetricBadgePropsType } from "./MetricBadge";
-export { RefreshButton } from "./RefreshButton";
-export type { RefreshButtonPropsType } from "./RefreshButton";
+// Atomic Design: Atoms
+// Smallest, most basic UI components that cannot be broken down further
+
+export { AnimatedTitle } from "./AnimatedTitle";
+export { CTAButton } from "./CTAButton";
+export { LearningTypeCard } from "./LearningTypeCard";
