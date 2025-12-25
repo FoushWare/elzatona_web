@@ -244,3 +244,8 @@ apps/*/tests/e2e/
 .jest-cache/
 .next/
 coverage/
+
+# Jest/Vitest snapshot files
+*.snap
+**/__snapshots__/
+**/*.snap
