@@ -13,11 +13,8 @@ import {
   SelectTrigger,
   SelectValue,
   DialogFooter,
-  Collapsible,
-  CollapsibleTrigger,
-  CollapsibleContent,
 } from "@elzatona/components";
-import { Plus, Trash2, ChevronDown, X } from "lucide-react";
+import { Plus, X } from "lucide-react";
 import { UnifiedQuestion } from "@elzatona/types";
 import {
   useQuestionFormData,
@@ -135,11 +132,11 @@ export default function QuestionForm({
   initialData,
   onSubmit,
   onCancel,
-  cards,
+  cards: _cards,
   allCategories,
   allTags,
   categoriesData,
-  topicsData,
+  topicsData: _topicsData,
   disabled = false,
   hideFooter = false,
   externalSubmitTrigger,

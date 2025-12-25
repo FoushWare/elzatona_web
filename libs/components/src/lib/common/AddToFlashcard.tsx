@@ -1,11 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
-import { createClient } from "@supabase/supabase-js";
-
-const supabaseUrl = process.env["NEXT_PUBLIC_SUPABASE_URL"]!;
-const supabaseServiceRoleKey = process.env["SUPABASE_SERVICE_ROLE_KEY"]!;
-const _supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
+import React, { useState, useEffect, useCallback } from "react";
 
 import { Bookmark, BookmarkCheck } from "lucide-react";
 
@@ -13,6 +8,12 @@ import { Bookmark, BookmarkCheck } from "lucide-react";
 // For proper architecture, flashcardService should be injected or moved to shared location
 import { flashcardService } from "../../../../../apps/website/lib/supabase-flashcards";
 import { useAuth } from "@elzatona/contexts";
+
+interface Flashcard {
+  id: string;
+  question: string;
+  [key: string]: unknown;
+}
 
 interface AddToFlashcardProps {
   readonly question: string;
@@ -39,25 +40,14 @@ export default function AddToFlashcard({
   const [state, setState] = useState<FlashcardState>("add");
   const [flashcardId, setFlashcardId] = useState<string | null>(null);
 
-  // Check if flashcard already exists when component mounts or question changes
-  useEffect(() => {
-    // Reset state when question changes
-    setState("add");
-    setFlashcardId(null);
-
-    if (user) {
-      checkExistingFlashcard();
-    }
-  }, [user, question]);
-
-  const checkExistingFlashcard = async () => {
+  const checkExistingFlashcard = useCallback(async () => {
     if (!user) return;
 
     try {
       // Get all flashcards for the user and check if one matches the question
       const flashcards = await flashcardService.getFlashcards(user.id);
       const existingCard = flashcards?.find(
-        (card: any) => card.question === question,
+        (card: Flashcard) => card.question === question,
       );
 
       if (existingCard) {
@@ -67,7 +57,18 @@ export default function AddToFlashcard({
     } catch (error) {
       console.error("Error checking existing flashcard:", error);
     }
-  };
+  }, [user, question]);
+
+  // Check if flashcard already exists when component mounts or question changes
+  useEffect(() => {
+    // Reset state when question changes
+    setState("add");
+    setFlashcardId(null);
+
+    if (user) {
+      checkExistingFlashcard();
+    }
+  }, [user, question, checkExistingFlashcard]);
 
   const handleToggleFlashcard = async () => {
     if (!user) {
@@ -161,11 +162,6 @@ export default function AddToFlashcard({
       default:
         return "Click to bookmark this question";
     }
-  };
-
-  const getButtonText = () => {
-    // No text for icon-only button
-    return "";
   };
 
   const getButtonClasses = () => {

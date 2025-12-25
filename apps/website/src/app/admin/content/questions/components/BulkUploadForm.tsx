@@ -35,7 +35,7 @@ export default function BulkUploadForm({
   loading = false,
   error = null,
   success = false,
-  progress = 0,
+  progress: _progress = 0,
 }: BulkUploadFormProps) {
   // Extracted hooks for state management
   const {
@@ -56,8 +56,11 @@ export default function BulkUploadForm({
     setJsonError,
   } = useFormState(error, success, loading);
 
-  const { shikiHighlighter, isLoadingShiki, codeHighlightedHtml } =
-    useShikiHighlighting(previewQuestions);
+  const {
+    shikiHighlighter: _shikiHighlighter,
+    isLoadingShiki: _isLoadingShiki,
+    codeHighlightedHtml,
+  } = useShikiHighlighting(previewQuestions);
   const { processFile, validateJsonText } = useFileProcessing();
 
   // Event handlers
@@ -144,7 +147,7 @@ export default function BulkUploadForm({
     onUpload(previewQuestions);
   };
 
-  const handleToggleMode = () => {
+  const _handleToggleMode = () => {
     setIsJsonMode(!isJsonMode);
     setJsonError(null);
     if (!isJsonMode) {

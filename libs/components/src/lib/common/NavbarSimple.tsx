@@ -130,9 +130,9 @@ export const NavbarSimple: React.FC = () => {
     setIsScrolled,
     isOpen,
     setIsOpen,
-    isMobile,
+    isMobile: _isMobile,
     setIsMobile,
-    isUserDropdownOpen,
+    isUserDropdownOpen: _isUserDropdownOpen,
     setIsUserDropdownOpen,
     isHydrated,
     setIsHydrated,
@@ -164,7 +164,7 @@ export const NavbarSimple: React.FC = () => {
         console.warn("Failed to parse stored auth state:", error);
       }
     }
-  }, []);
+  }, [setIsHydrated, setStableAuthState]);
 
   // Update stable auth state when Firebase auth changes, but only after hydration
   useEffect(() => {
@@ -262,7 +262,7 @@ export const NavbarSimple: React.FC = () => {
       window.removeEventListener("scroll", handleScroll);
       window.removeEventListener("resize", handleResize);
     };
-  }, [isHydrated]);
+  }, [isHydrated, setIsMobile, setIsScrolled]);
 
   // Close mobile menu when clicking outside
   useEffect(() => {

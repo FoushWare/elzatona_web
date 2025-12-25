@@ -2,7 +2,6 @@
 
 import React from "react";
 import { Sparkles, Zap, Star } from "lucide-react";
-import { ANIMATION_DURATION } from "@elzatona/types";
 
 interface AnimatedTitleProps {
   title: string;

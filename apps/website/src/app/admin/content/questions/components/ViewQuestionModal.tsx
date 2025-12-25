@@ -2,14 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import { UnifiedQuestion } from "@elzatona/types";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogDescription,
-  FormModal,
-} from "@elzatona/components";
+import { DialogDescription, FormModal } from "@elzatona/components";
 import {
   X,
   ChevronLeft,

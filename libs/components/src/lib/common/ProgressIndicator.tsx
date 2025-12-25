@@ -34,7 +34,8 @@ export const ProgressIndicator: React.FC<ProgressIndicatorProps> = ({
   compact = false,
 }) => {
   const { progress } = useProgressTracking();
-  const [showSignInModal, setShowSignInModal] = useState(false);
+  // Reserved for future sign-in modal functionality
+  // const [showSignInModal, setShowSignInModal] = useState(false);
 
   const formatTime = (seconds: number) => {
     const hours = Math.floor(seconds / 3600);

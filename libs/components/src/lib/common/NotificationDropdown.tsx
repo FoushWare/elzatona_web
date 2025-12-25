@@ -48,7 +48,7 @@ export function NotificationDropdown({
     }
   };
 
-  const getNotificationBgColor = (type: string) => {
+  const _getNotificationBgColor = (type: string) => {
     switch (type) {
       case "success":
         return "bg-green-50 dark:bg-green-900/20 border-green-200 dark:border-green-800";

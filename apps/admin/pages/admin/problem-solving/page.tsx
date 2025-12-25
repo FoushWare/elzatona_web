@@ -88,10 +88,6 @@ export default function ProblemSolvingPage() {
   ];
   const difficulties = ["easy", "medium", "hard"];
 
-  useEffect(() => {
-    fetchTasks();
-  }, [currentPage, selectedCategory, selectedDifficulty, searchTerm]);
-
   const fetchTasks = useCallback(async () => {
     try {
       setLoading(true);

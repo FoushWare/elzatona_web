@@ -187,7 +187,7 @@ export const useFileProcessing = () => {
         throw new Error("JSON must be an array of questions.");
       }
       return data;
-    } catch (error) {
+    } catch (_error) {
       throw new Error("Invalid JSON format. Please check your syntax.");
     }
   };

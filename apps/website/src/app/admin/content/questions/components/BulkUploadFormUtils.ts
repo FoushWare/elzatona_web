@@ -1,4 +1,4 @@
-import { createHighlighter, type Highlighter } from "shiki";
+import type { Highlighter } from "shiki";
 
 // File parsing utilities
 export const parseJsonFile = async (file: File): Promise<any[]> => {

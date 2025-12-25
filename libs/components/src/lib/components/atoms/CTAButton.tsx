@@ -2,10 +2,9 @@
 
 import React from "react";
 import Link from "next/link";
-import { ArrowRight, type LucideIcon } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { getColorClasses } from "@elzatona/utilities";
 import type { ContentColor } from "@elzatona/types";
-import { ANIMATION_DURATION } from "@elzatona/types";
 
 interface CTAButtonProps {
   href: string;

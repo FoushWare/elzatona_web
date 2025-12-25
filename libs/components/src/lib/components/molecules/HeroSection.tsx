@@ -5,7 +5,6 @@ import { AnimatedTitle } from "../atoms/AnimatedTitle";
 import { CTAButton } from "../atoms/CTAButton";
 import { UserStatistics } from "@elzatona/components";
 import type { PersonalizedContent } from "@elzatona/types";
-import { ANIMATION_DELAYS } from "@elzatona/types";
 
 interface HeroSectionProps {
   personalizedContent: PersonalizedContent;

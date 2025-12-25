@@ -21,7 +21,7 @@ export const ComprehensiveGuidanceDetector: React.FC = () => {
     isFirstVisit,
     setIsFirstVisit,
     userType,
-    setUserType,
+    setUserType: _setUserType,
     setHasCompletedOnboarding,
   } = useUserType();
   const [showGuidance, setShowGuidance] = useState(false);
