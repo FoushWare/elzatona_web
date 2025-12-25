@@ -3,9 +3,9 @@
 import React from "react";
 import Link from "next/link";
 import { ArrowRight, type LucideIcon } from "lucide-react";
-import { getColorClasses } from "@/lib/utils/homePageHelpers";
-import type { ContentColor } from "@/types/homePage.types";
-import { ANIMATION_DURATION } from "@/lib/constants/homePage.constants";
+import { getColorClasses } from "../../../../../apps/website/src/app/utils/homePageHelpers";
+import type { ContentColor } from "../../../../../apps/website/src/app/Types/homePage.types";
+import { ANIMATION_DURATION } from "../../../../../apps/website/src/app/utils/constants/homePage.constants";
 
 interface CTAButtonProps {
   href: string;

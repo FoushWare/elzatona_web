@@ -4,8 +4,8 @@ import React from "react";
 import { AnimatedTitle } from "../atoms/AnimatedTitle";
 import { CTAButton } from "../atoms/CTAButton";
 import { UserStatistics } from "@elzatona/components";
-import type { PersonalizedContent } from "@/types/homePage.types";
-import { ANIMATION_DELAYS } from "@/lib/constants/homePage.constants";
+import type { PersonalizedContent } from "../../../../../apps/website/src/app/Types/homePage.types";
+import { ANIMATION_DELAYS } from "../../../../../apps/website/src/app/utils/constants/homePage.constants";
 
 interface HeroSectionProps {
   personalizedContent: PersonalizedContent;
