@@ -25,7 +25,7 @@ for (const envFile of envFiles) {
 process.env.APP_ENV = "test";
 process.env.NEXT_PUBLIC_APP_ENV = "test";
 // Only set NODE_ENV if not in build context
- 
+
 if (process.env.NODE_ENV !== "production" && !process.env.NEXT_PHASE) {
   if (!process.env.NODE_ENV) {
     process.env.NODE_ENV = "test";
