@@ -218,9 +218,7 @@ export default function AdminContentQuestionsPage() {
       categoryId: "", // Will be populated if category data is available
     }),
   );
-  const allCategories = (categoriesData?.data || []).map(
-    (cat: { id: string; name: string }) => cat.name,
-  );
+  const allCategories = categoriesData?.data || [];
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const allTypes = useMemo(() => {
@@ -499,7 +497,7 @@ export default function AdminContentQuestionsPage() {
         onClose={() => setIsViewModalOpen(false)}
         question={selectedQuestion}
         cards={cards}
-        allCategories={allCategories}
+        allCategories={allCategories.map((cat) => cat.name)}
         onUpdate={handleCreateQuestion}
         editFormRef={questionFormRef}
       />
@@ -527,7 +525,7 @@ export default function AdminContentQuestionsPage() {
           onSubmit={handleCreateQuestion}
           onCancel={closeModals}
           cards={cards}
-          allCategories={allCategories}
+          allCategories={allCategories.map((cat) => cat.name)}
           allTags={[]}
         />
       </FormModal>
