@@ -4,11 +4,26 @@
 import { createClient, type SupabaseClient } from "@supabase/supabase-js";
 
 // Lazy Supabase client creation - only create when needed and if environment variables are available
+// This should NEVER be called in client-side code - only in server-side API routes
 let supabase: SupabaseClient | null = null;
 
 function getSupabaseClient(): SupabaseClient | null {
+  // Early return if already initialized
   if (supabase) {
     return supabase;
+  }
+
+  // CRITICAL: Never create Supabase client in browser/client environment
+  // Check if we're in a browser environment first
+  if (typeof window !== "undefined") {
+    // We're in a browser - Supabase client should not be created here
+    // This file should only be used for types in client components
+    return null;
+  }
+
+  // Only proceed if we're in a server environment (Node.js)
+  if (typeof process === "undefined") {
+    return null;
   }
 
   // Only create client if we're in a server environment with proper env vars
@@ -17,18 +32,15 @@ function getSupabaseClient(): SupabaseClient | null {
   let supabaseServiceRoleKey = "";
 
   try {
-    // Try to access process.env safely
-    if (typeof globalThis !== "undefined") {
-      const env = (
-        globalThis as { process?: { env?: Record<string, string | undefined> } }
-      ).process?.env;
-      if (env) {
-        supabaseUrl = env["NEXT_PUBLIC_SUPABASE_URL"] || "";
-        supabaseServiceRoleKey = env["SUPABASE_SERVICE_ROLE_KEY"] || "";
-      }
+    // Access process.env safely (only available in Node.js/server environment)
+    const env = process.env;
+    if (env) {
+      supabaseUrl = env["NEXT_PUBLIC_SUPABASE_URL"] || "";
+      supabaseServiceRoleKey = env["SUPABASE_SERVICE_ROLE_KEY"] || "";
     }
   } catch {
     // Ignore errors accessing environment variables
+    return null;
   }
 
   // Only create client if we have valid credentials

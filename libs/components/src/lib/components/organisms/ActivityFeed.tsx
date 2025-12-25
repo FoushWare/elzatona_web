@@ -1,4 +1,7 @@
-import { ActivityItemPropsType } from "../molecules/ActivityItem";
+import {
+  ActivityItem,
+  type ActivityItemPropsType,
+} from "../molecules/ActivityItem";
 import { cn } from "../../utils";
 
 interface ActivityFeedProps {
