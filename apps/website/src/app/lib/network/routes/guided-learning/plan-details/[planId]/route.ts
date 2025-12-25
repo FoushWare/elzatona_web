@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
+import { removeAllHTMLTags } from "../../../../../sanitize-server";
 
 // GET /api/guided-learning/plan-details/[planId] - Get detailed plan with cards, categories, topics, and questions
 export async function GET(
@@ -489,13 +490,8 @@ export async function GET(
       );
 
       // Remove remaining HTML tags with comprehensive sanitization
-      // Use multiple passes to catch incomplete tags like <script
-      cleaned = cleaned.replace(/<[^>]+>/g, ""); // Remove complete tags
-      cleaned = cleaned.replace(/<[^>]*$/g, ""); // Remove incomplete tags at end of string
-      cleaned = cleaned.replace(/<script/gi, ""); // Explicitly remove script tags (case-insensitive)
-      cleaned = cleaned.replace(/<iframe/gi, ""); // Remove iframe tags
-      cleaned = cleaned.replace(/<object/gi, ""); // Remove object tags
-      cleaned = cleaned.replace(/<embed/gi, ""); // Remove embed tags
+      // Use comprehensive function to catch all incomplete tags like <script, <iframe, etc.
+      cleaned = removeAllHTMLTags(cleaned);
 
       // ============================================
       // PHASE 4: Fix code-related artifacts (MULTIPLE PASSES)

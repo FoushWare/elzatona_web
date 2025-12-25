@@ -3,6 +3,74 @@
 
 import { BulkQuestionData } from "./unified-question-schema";
 
+/**
+ * Completely remove all HTML tags including incomplete ones
+ * This is a comprehensive function that handles edge cases like <script, <iframe, etc.
+ * @param text - Text that may contain HTML tags
+ * @returns Plain text with all HTML tags removed
+ */
+function removeAllHTMLTagsComprehensive(text: string): string {
+  if (!text || typeof text !== "string") {
+    return "";
+  }
+
+  let cleaned = text;
+  let prevLength = -1;
+  let iterations = 0;
+  const maxIterations = 10;
+
+  // Multi-pass approach to catch all variations and incomplete tags
+  while (iterations < maxIterations && cleaned.length !== prevLength) {
+    prevLength = cleaned.length;
+    iterations++;
+
+    // Remove complete HTML tags: <tag> or <tag attr="value">
+    cleaned = cleaned.replace(/<[^>]+>/g, "");
+
+    // Remove incomplete tags at the end of string: <script, <iframe, etc.
+    cleaned = cleaned.replace(/<[^>]*$/g, "");
+
+    // Remove dangerous tag patterns (case-insensitive, even if incomplete)
+    // These patterns catch tags even if they're broken or incomplete
+    const dangerousPatterns = [
+      /<script[^>]*/gi,
+      /<iframe[^>]*/gi,
+      /<object[^>]*/gi,
+      /<embed[^>]*/gi,
+      /<form[^>]*/gi,
+      /<input[^>]*/gi,
+      /<button[^>]*/gi,
+      /<link[^>]*/gi,
+      /<meta[^>]*/gi,
+      /<style[^>]*/gi,
+      /<svg[^>]*/gi,
+      /<math[^>]*/gi,
+    ];
+
+    for (const pattern of dangerousPatterns) {
+      cleaned = cleaned.replace(pattern, "");
+    }
+
+    // Remove any remaining < characters that might be part of incomplete tags
+    // This catches cases like "text<script" where the tag is incomplete
+    cleaned = cleaned.replace(/<[^<]*$/g, "");
+
+    // Handle broken tag artifacts (like "script>", "iframe>", etc.)
+    cleaned = cleaned.replace(
+      /\b(script|iframe|object|embed|form|input|button|link|meta|style|svg|math)\s*>/gi,
+      "",
+    );
+
+    // Remove any remaining orphaned > characters that don't have matching <
+    // But be careful not to remove legitimate > characters in text
+    // Only remove > if it appears to be part of a broken tag
+    cleaned = cleaned.replace(/(\w+)\s*>\s*(\w+)/g, "$1 $2");
+    cleaned = cleaned.replace(/(\w+)\s*>/g, "$1");
+  }
+
+  return cleaned.trim();
+}
+
 export interface MarkdownQuestion {
   title: string;
   content: string;
@@ -431,17 +499,8 @@ export class MarkdownQuestionParser {
       // Extract content between <p> tags, removing HTML tags
       const pMatch = detailsMatch[0].match(/<p>([\s\S]*?)<\/p>/i);
       if (pMatch) {
-        // Multi-pass HTML tag removal to prevent re-introduction
-        let cleaned = pMatch[1];
-        let prevLength = -1;
-        for (let i = 0; i < 5 && cleaned.length !== prevLength; i++) {
-          prevLength = cleaned.length;
-          cleaned = cleaned.replace(/<[^>]*>/g, "");
-          // Handle broken tag artifacts
-          cleaned = cleaned.replace(/(w+)e>/g, "$1");
-          cleaned = cleaned.replace(/(w+)>(w+)/g, "$1 $2");
-          cleaned = cleaned.replace(/(w+)>/g, "$1");
-        }
+        // Use comprehensive HTML tag removal function
+        const cleaned = removeAllHTMLTagsComprehensive(pMatch[1]);
         return cleaned
           .replace(/ns*n/g, "n") // Clean up extra whitespace
           .trim();

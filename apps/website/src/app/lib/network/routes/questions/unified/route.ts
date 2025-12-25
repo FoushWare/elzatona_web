@@ -8,6 +8,7 @@ import { createClient } from "@supabase/supabase-js";
 import {
   sanitizeObjectServer,
   sanitizeRichContent,
+  sanitizeForLogging,
 } from "../../../../sanitize-server";
 import { validateAndSanitize, questionSchema } from "../../../../validation";
 import { getSupabaseConfig, logApiConfig } from "../../../../api-config";
@@ -1050,6 +1051,7 @@ export async function POST(request: NextRequest) {
               codeContent = codeContent.replace(/\r/g, "\n");
               questionWithTimestamps.code = codeContent;
               processedCode = codeContent;
+              // Security: Log code length instead of content to prevent log injection
               console.log(
                 `⚠️ Code field was null/empty, restored from originalCode: ${codeContent.length} chars`,
               );
@@ -1223,11 +1225,12 @@ export async function PUT(request: NextRequest) {
           .single();
 
         if (categoryError || !categoryData) {
+          // Security: Sanitize user data before logging to prevent log injection
           console.error(
             "Category lookup error:",
             categoryError,
             "Looking for:",
-            categoryName,
+            sanitizeForLogging(categoryName),
           );
           const { data: allCategories } = await supabase
             .from("categories")
@@ -1285,9 +1288,9 @@ export async function PUT(request: NextRequest) {
             "Topic lookup error:",
             topicError,
             "Looking for:",
-            topicName,
+            sanitizeForLogging(topicName),
             "Category ID:",
-            categoryId,
+            sanitizeForLogging(categoryId),
           );
           const categoryHint = categoryId ? ` for the selected category` : "";
           throw new Error(
@@ -1300,7 +1303,10 @@ export async function PUT(request: NextRequest) {
       } else if (topicValue && typeof topicValue === "string") {
         // It's already an ID
         topicId = topicValue;
-        console.log(`✅ Using provided topic ID: ${topicId}`);
+        // Security: Sanitize user data before logging to prevent log injection
+        console.log(
+          `✅ Using provided topic ID: ${sanitizeForLogging(topicId)}`,
+        );
       }
     }
 
@@ -1330,8 +1336,9 @@ export async function PUT(request: NextRequest) {
           finalLearningCardId = trimmedId;
           console.log(`✅ Using learning card ID: ${finalLearningCardId}`);
         } else {
+          // Security: Sanitize user data before logging to prevent log injection
           console.warn(
-            `⚠️ Invalid learning card ID format: "${trimmedId}". Expected UUID.`,
+            `⚠️ Invalid learning card ID format: "${sanitizeForLogging(trimmedId)}". Expected UUID.`,
           );
           finalLearningCardId = null; // Invalid format, set to null to clear it
         }
@@ -1431,8 +1438,12 @@ export async function PUT(request: NextRequest) {
       success: true,
       message: "Question updated successfully",
     });
-  } catch (error) {
+  } catch (error: any) {
+    // Security: Sanitize error details before logging to prevent log injection
     console.error("Error updating question:", error);
+    if (error?.message) {
+      console.error("Error message:", sanitizeForLogging(error.message));
+    }
     return NextResponse.json(
       { success: false, error: "Failed to update question" },
       { status: 500 },

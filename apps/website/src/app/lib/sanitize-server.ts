@@ -114,6 +114,61 @@ export function sanitizeInputServer(input: string): string {
 }
 
 /**
+ * Helper function to sanitize a single field value
+ * Reduces cognitive complexity of sanitizeObjectServer
+ */
+function sanitizeFieldValue(
+  value: unknown,
+  key: string,
+  skipSanitizationFields: Set<string>,
+  preserveNewlinesFields: Set<string>,
+): unknown {
+  // For code field, skip sanitization entirely - we'll use CSP protection instead
+  if (skipSanitizationFields.has(key)) {
+    // Don't sanitize code field at all - preserve it exactly as-is
+    // CSP (Content Security Policy) will protect against XSS attacks
+    return value;
+  }
+
+  if (typeof value === "string") {
+    // For content and other rich text fields, preserve newlines - don't use sanitizeInputServer
+    if (preserveNewlinesFields.has(key)) {
+      // Only remove dangerous control characters, but preserve newlines and tabs
+      return value
+        .replace(/[\x00-\x08\x0B-\x0C\x0E-\x1F\x7F]/g, "") // Remove control chars except \n (0x0A), \r (0x0D), \t (0x09)
+        .replace(/\x00/g, ""); // Remove null bytes
+    }
+    // For other string fields, use standard sanitization
+    return sanitizeInputServer(value);
+  }
+
+  if (Array.isArray(value)) {
+    return value.map((item: unknown) =>
+      typeof item === "string" ? sanitizeInputServer(item) : item,
+    );
+  }
+
+  if (
+    value &&
+    typeof value === "object" &&
+    value !== null &&
+    !Array.isArray(value)
+  ) {
+    // Check if it's a Date using a type guard
+    const valueObj = value as Record<string, unknown>;
+    const isDate =
+      valueObj && typeof valueObj === "object" && valueObj.constructor === Date;
+    if (isDate) {
+      return value;
+    }
+    return sanitizeObjectServer(valueObj);
+  }
+
+  // For other types (numbers, booleans, null, etc.), copy as-is
+  return value;
+}
+
+/**
  * Sanitize object with string values recursively
  * @param obj - Object to sanitize
  * @returns Sanitized object
@@ -128,17 +183,17 @@ export function sanitizeObjectServer<T extends Record<string, unknown>>(
   const sanitized = { ...obj };
 
   // Fields that should preserve newlines and special characters (code, content, etc.)
-  const preserveNewlinesFields = [
+  const preserveNewlinesFields = new Set([
     "content",
     "explanation",
     "description",
     "starter_code",
     "code_template",
-  ];
+  ]);
 
   // Fields that should be completely skipped from sanitization (will use CSP protection instead)
   // These fields are preserved exactly as-is without any modification
-  const skipSanitizationFields = ["code"];
+  const skipSanitizationFields = new Set(["code"]);
 
   // Validate all keys before processing to prevent remote property injection
   const validKeys = Object.keys(sanitized).filter((key) => {
@@ -150,55 +205,13 @@ export function sanitizeObjectServer<T extends Record<string, unknown>>(
   // Create a new object with only valid keys
   const validatedObject = {} as T;
   for (const key of validKeys) {
-    if (typeof sanitized[key] === "string") {
-      // For code field, skip sanitization entirely - we'll use CSP protection instead
-      if (skipSanitizationFields.includes(key)) {
-        // Don't sanitize code field at all - preserve it exactly as-is
-        // CSP (Content Security Policy) will protect against XSS attacks
-        // The field is already in sanitized object, just don't modify it
-        (validatedObject as Record<string, unknown>)[key] = sanitized[key];
-        continue; // Skip processing this field - leave it as-is
-      }
-      // For content and other rich text fields, preserve newlines - don't use sanitizeInputServer
-      else if (preserveNewlinesFields.includes(key)) {
-        // Only remove dangerous control characters, but preserve newlines and tabs
-        let content = sanitized[key] as string;
-        content = content
-          .replace(/[\x00-\x08\x0B-\x0C\x0E-\x1F\x7F]/g, "") // Remove control chars except \n (0x0A), \r (0x0D), \t (0x09)
-          .replace(/\x00/g, ""); // Remove null bytes
-        (validatedObject as Record<string, unknown>)[key] = content;
-      } else {
-        // For other string fields, use standard sanitization
-        (validatedObject as Record<string, unknown>)[key] = sanitizeInputServer(
-          sanitized[key],
-        );
-      }
-    } else if (Array.isArray(sanitized[key])) {
-      (validatedObject as Record<string, unknown>)[key] = (
-        sanitized[key] as unknown[]
-      ).map((item: unknown) =>
-        typeof item === "string" ? sanitizeInputServer(item) : item,
-      );
-    } else if (
-      sanitized[key] &&
-      typeof sanitized[key] === "object" &&
-      sanitized[key] !== null &&
-      !Array.isArray(sanitized[key])
-    ) {
-      // Check if it's a Date using a type guard
-      const value = sanitized[key] as Record<string, unknown>;
-      const isDate =
-        value && typeof value === "object" && value.constructor === Date;
-      if (!isDate) {
-        (validatedObject as Record<string, unknown>)[key] =
-          sanitizeObjectServer(sanitized[key] as Record<string, unknown>);
-      } else {
-        (validatedObject as Record<string, unknown>)[key] = sanitized[key];
-      }
-    } else {
-      // For other types (numbers, booleans, null, etc.), copy as-is
-      (validatedObject as Record<string, unknown>)[key] = sanitized[key];
-    }
+    const value = sanitized[key];
+    (validatedObject as Record<string, unknown>)[key] = sanitizeFieldValue(
+      value,
+      key,
+      skipSanitizationFields,
+      preserveNewlinesFields,
+    );
   }
 
   return validatedObject;
@@ -215,4 +228,97 @@ export function sanitizeRichContent(html: string): string {
   }
 
   return sanitizeHTMLServer(html);
+}
+
+/**
+ * Completely remove all HTML tags including incomplete ones
+ * This is a comprehensive function that handles edge cases like <script, <iframe, etc.
+ * @param text - Text that may contain HTML tags
+ * @returns Plain text with all HTML tags removed
+ */
+export function removeAllHTMLTags(text: string): string {
+  if (!text || typeof text !== "string") {
+    return "";
+  }
+
+  let cleaned = text;
+  let prevLength = -1;
+  let iterations = 0;
+  const maxIterations = 10;
+
+  // Multi-pass approach to catch all variations and incomplete tags
+  while (iterations < maxIterations && cleaned.length !== prevLength) {
+    prevLength = cleaned.length;
+    iterations++;
+
+    // Remove complete HTML tags: <tag> or <tag attr="value">
+    cleaned = cleaned.replace(/<[^>]+>/g, "");
+
+    // Remove incomplete tags at the end of string: <script, <iframe, etc.
+    cleaned = cleaned.replace(/<[^>]*$/g, "");
+
+    // Remove dangerous tag patterns (case-insensitive, even if incomplete)
+    // These patterns catch tags even if they're broken or incomplete
+    const dangerousPatterns = [
+      /<script[^>]*/gi,
+      /<iframe[^>]*/gi,
+      /<object[^>]*/gi,
+      /<embed[^>]*/gi,
+      /<form[^>]*/gi,
+      /<input[^>]*/gi,
+      /<button[^>]*/gi,
+      /<link[^>]*/gi,
+      /<meta[^>]*/gi,
+      /<style[^>]*/gi,
+      /<svg[^>]*/gi,
+      /<math[^>]*/gi,
+    ];
+
+    for (const pattern of dangerousPatterns) {
+      cleaned = cleaned.replace(pattern, "");
+    }
+
+    // Remove any remaining < characters that might be part of incomplete tags
+    // This catches cases like "text<script" where the tag is incomplete
+    cleaned = cleaned.replace(/<[^<]*$/g, "");
+
+    // Handle broken tag artifacts (like "script>", "iframe>", etc.)
+    cleaned = cleaned.replace(
+      /\b(script|iframe|object|embed|form|input|button|link|meta|style|svg|math)\s*>/gi,
+      "",
+    );
+
+    // Remove any remaining orphaned > characters that don't have matching <
+    // But be careful not to remove legitimate > characters in text
+    // Only remove > if it appears to be part of a broken tag
+    cleaned = cleaned.replace(/(\w+)\s*>\s*(\w+)/g, "$1 $2");
+    cleaned = cleaned.replace(/(\w+)\s*>/g, "$1");
+  }
+
+  return cleaned.trim();
+}
+
+/**
+ * Sanitize a value for safe logging (prevents log injection)
+ * Removes control characters, newlines, and other dangerous characters
+ * @param value - Value to sanitize for logging
+ * @returns Sanitized value safe for logging
+ */
+export function sanitizeForLogging(value: unknown): string {
+  if (value === null || value === undefined) {
+    return String(value);
+  }
+
+  let sanitized = String(value);
+
+  // Remove control characters (including newlines, carriage returns, etc.)
+  sanitized = sanitized.replace(/[\x00-\x1F\x7F-\x9F]/g, "");
+
+  // Limit length to prevent log flooding
+  const maxLength = 200;
+  if (sanitized.length > maxLength) {
+    sanitized = sanitized.substring(0, maxLength) + "... [truncated]";
+  }
+
+  return sanitized;
 }

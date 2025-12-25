@@ -98,4 +98,3 @@ If you can't connect to SonarCloud:
 - Keep your SonarCloud token secure
 - Rotate tokens regularly
 - Use read-only tokens when possible
-

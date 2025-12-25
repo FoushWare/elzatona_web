@@ -2,6 +2,7 @@
 // Parses markdown content to extract questions in various formats
 
 import { BulkQuestionData } from "./unified-question-schema";
+import { removeAllHTMLTags } from "./sanitize-server";
 
 export interface MarkdownQuestion {
   title: string;
@@ -431,23 +432,8 @@ export class MarkdownQuestionParser {
       // Extract content between <p> tags, removing HTML tags
       const pMatch = detailsMatch[0].match(/<p>([\s\S]*?)<\/p>/i);
       if (pMatch) {
-        // Multi-pass HTML tag removal to prevent re-introduction
-        let cleaned = pMatch[1];
-        let prevLength = -1;
-        for (let i = 0; i < 5 && cleaned.length !== prevLength; i++) {
-          prevLength = cleaned.length;
-          // Use more comprehensive regex to catch incomplete tags like <script
-          cleaned = cleaned.replace(/<[^>]*>/g, ""); // Remove complete tags
-          cleaned = cleaned.replace(/<[^>]*$/g, ""); // Remove incomplete tags at end of string
-          cleaned = cleaned.replace(/<script/gi, ""); // Explicitly remove script tags (case-insensitive)
-          cleaned = cleaned.replace(/<iframe/gi, ""); // Remove iframe tags
-          cleaned = cleaned.replace(/<object/gi, ""); // Remove object tags
-          cleaned = cleaned.replace(/<embed/gi, ""); // Remove embed tags
-          // Handle broken tag artifacts
-          cleaned = cleaned.replace(/(w+)e>/g, "$1");
-          cleaned = cleaned.replace(/(w+)>(w+)/g, "$1 $2");
-          cleaned = cleaned.replace(/(w+)>/g, "$1");
-        }
+        // Use comprehensive HTML tag removal function
+        const cleaned = removeAllHTMLTags(pMatch[1]);
         return cleaned
           .replace(/ns*n/g, "n") // Clean up extra whitespace
           .trim();

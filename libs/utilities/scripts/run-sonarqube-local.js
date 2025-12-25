@@ -52,6 +52,31 @@ function parseSonarProperties(filePath) {
   return properties;
 }
 
+/**
+ * Sanitize a value for safe use in shell commands
+ * Removes dangerous characters that could be used for command injection
+ * @param {string} value - Value to sanitize
+ * @returns {string} Sanitized value
+ */
+function sanitizeShellArg(value) {
+  if (typeof value !== "string") {
+    return String(value);
+  }
+
+  // Remove or escape dangerous shell metacharacters
+  // Allow only alphanumeric, hyphens, underscores, dots, and colons
+  // This is safe for project keys, organization names, and tokens
+  const sanitized = value.replace(/[^a-zA-Z0-9._:-]/g, "");
+
+  // Validate length to prevent extremely long values
+  const maxLength = 200;
+  if (sanitized.length > maxLength) {
+    throw new Error(`Sanitized value exceeds maximum length of ${maxLength} characters`);
+  }
+
+  return sanitized;
+}
+
 const sonarProperties = parseSonarProperties(sonarConfigPath);
 const sonarProjectKey = sonarProperties["sonar.projectKey"];
 const sonarOrg = sonarProperties["sonar.organization"] || process.env.SONAR_ORG;
@@ -208,11 +233,22 @@ console.log("   ⏳ This may take a few minutes...");
 console.log("");
 
 try {
+  // Sanitize all user-provided values to prevent command injection
+  const sanitizedProjectKey = sanitizeShellArg(sonarProjectKey);
+  const sanitizedOrg = sanitizeShellArg(sonarOrg);
+  const sanitizedToken = sanitizeShellArg(sonarToken);
+  const sanitizedMemoryLimit = sanitizeShellArg(MEMORY_LIMIT);
+
+  // Validate that sanitized values are not empty
+  if (!sanitizedProjectKey || !sanitizedOrg || !sanitizedToken) {
+    throw new Error("Sanitized values are empty - possible injection attempt detected");
+  }
+
   const sonarArgs = [
-    `-Dsonar.projectKey=${sonarProjectKey}`,
-    `-Dsonar.organization=${sonarOrg}`,
+    `-Dsonar.projectKey=${sanitizedProjectKey}`,
+    `-Dsonar.organization=${sanitizedOrg}`,
     `-Dsonar.host.url=https://sonarcloud.io`,
-    `-Dsonar.login=${sonarToken}`,
+    `-Dsonar.login=${sanitizedToken}`,
     `-Dsonar.verbose=true`,
     `-Dsonar.scanner.dumpToFile=./sonar-scanner.log`,
   ];
@@ -231,19 +267,21 @@ try {
     : "npx sonarqube-scanner";
 
   // Set memory limit for SonarScanner
-  const sonarCommand = `NODE_OPTIONS="--max-old-space-size=${MEMORY_LIMIT}" ${scannerCommand} ${sonarArgs.join(" ")}`;
+  // Use sanitized memory limit value
+  const sonarCommand = `NODE_OPTIONS="--max-old-space-size=${sanitizedMemoryLimit}" ${scannerCommand} ${sonarArgs.join(" ")}`;
 
   console.log("🚀 Starting SonarQube analysis with verbose output...");
-  console.log(`📝 Command: ${sonarCommand}`);
+  // Security: Don't log the full command with token - only log safe parts
+  console.log(`📝 Command: NODE_OPTIONS="--max-old-space-size=${sanitizedMemoryLimit}" ${scannerCommand} [args with sanitized values]`);
   console.log("");
 
   execSync(sonarCommand, {
     stdio: "inherit",
     env: {
       ...process.env,
-      NODE_OPTIONS: `--max-old-space-size=${MEMORY_LIMIT}`,
-      SONAR_TOKEN: sonarToken,
-      SONAR_ORG: sonarOrg,
+      NODE_OPTIONS: `--max-old-space-size=${sanitizedMemoryLimit}`,
+      SONAR_TOKEN: sanitizedToken,
+      SONAR_ORG: sanitizedOrg,
       SONAR_VERBOSE: "true",
       SONAR_SCANNER_OPTS: "-Dsonar.verbose=true",
     },

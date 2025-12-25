@@ -3,6 +3,7 @@ import { createClient } from "@supabase/supabase-js";
 import {
   sanitizeObjectServer,
   sanitizeRichContent,
+  sanitizeForLogging,
 } from "../../../../../sanitize-server";
 
 // Helper function to create Supabase client using centralized config
@@ -180,14 +181,14 @@ export async function PUT(
           await topicQuery.single();
 
         if (topicError || !topicData) {
-          // Security: Removed user data from logs to prevent log injection
+          // Security: Sanitize user data before logging to prevent log injection
           console.error(
             "Topic lookup error:",
             topicError,
             "Looking for:",
-            topicName,
+            sanitizeForLogging(topicName),
             "Category ID:",
-            categoryId,
+            sanitizeForLogging(categoryId),
           );
           const categoryHint = categoryId ? ` for the selected category` : "";
           throw new Error(
@@ -235,9 +236,9 @@ export async function PUT(
           // Security: Removed user data from logs to prevent log injection
           console.log("✅ Using learning card ID");
         } else {
-          // Security: Removed user data from logs to prevent log injection
+          // Security: Sanitize user data before logging to prevent log injection
           console.warn(
-            `⚠️ Invalid learning card ID format: "${trimmedId}". Expected UUID.`,
+            `⚠️ Invalid learning card ID format: "${sanitizeForLogging(trimmedId)}". Expected UUID.`,
           );
           finalLearningCardId = null; // Invalid format, set to null to clear it
         }
@@ -362,11 +363,12 @@ export async function PUT(
     });
   } catch (error: any) {
     console.error("❌ Error updating question:", error);
+    // Security: Sanitize error details before logging to prevent log injection
     console.error("❌ Error details:", {
-      message: error?.message,
-      code: error?.code,
-      details: error?.details,
-      hint: error?.hint,
+      message: sanitizeForLogging(error?.message),
+      code: sanitizeForLogging(error?.code),
+      details: sanitizeForLogging(error?.details),
+      hint: sanitizeForLogging(error?.hint),
       stack: error?.stack,
     });
 

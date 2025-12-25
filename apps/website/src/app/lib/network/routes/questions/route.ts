@@ -360,7 +360,6 @@ export async function POST(request: NextRequest) {
       };
       // Security: Removed user data from logs to prevent log injection
       console.log("⚠️ Duplicate question found");
-      });
       return NextResponse.json(
         {
           success: false,
