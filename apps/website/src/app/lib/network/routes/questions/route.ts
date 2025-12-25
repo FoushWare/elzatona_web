@@ -123,11 +123,6 @@ export async function GET(request: NextRequest) {
             console.warn("⚠️ Could not resolve topic/subtopic to a topic ID");
             // Security: Removed user data from logs to prevent log injection
             console.log("Available topics");
-                id: t.id,
-                name: t.name,
-                slug: t.slug,
-              })),
-            );
           }
         }
       } catch (error) {
