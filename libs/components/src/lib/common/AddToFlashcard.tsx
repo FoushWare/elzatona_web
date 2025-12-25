@@ -81,6 +81,9 @@ export default function AddToFlashcard({
 
   // Helper: Create flashcard object
   const createFlashcardData = () => {
+    if (!user) {
+      throw new Error("User is required to create flashcard");
+    }
     const now = new Date().toISOString();
     return {
       userId: user.id,

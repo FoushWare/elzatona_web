@@ -218,7 +218,9 @@ export default function AdminContentQuestionsPage() {
       categoryId: "", // Will be populated if category data is available
     }),
   );
-  const allCategories = categoriesData?.data || [];
+  const allCategories = (categoriesData?.data || []).map(
+    (cat: { id: string; name: string }) => cat.name,
+  );
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const allTypes = useMemo(() => {

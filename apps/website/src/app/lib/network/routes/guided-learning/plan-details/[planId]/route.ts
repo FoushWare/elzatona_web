@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
-import { removeAllHTMLTags } from "../../../sanitize-server";
+import { removeAllHTMLTags } from "../../../../../sanitize-server";
 
 // GET /api/guided-learning/plan-details/[planId] - Get detailed plan with cards, categories, topics, and questions
 export async function GET(
