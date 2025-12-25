@@ -6,7 +6,7 @@ import { ErrorBoundary } from "@elzatona/components";
 import { useRouter } from "next/navigation";
 import { useLearningType } from "../context/LearningTypeContext";
 import { HomePageLayout } from "@elzatona/components";
-import { useHomePageState } from "./lib/homePageHelpers";
+import { useHomePageState } from "./lib/hooks/useHomePageState";
 import { getPersonalizedContent } from "./lib/homePageHelpers";
 import { ROUTES } from "./lib/constants/homePage.constants";
 
