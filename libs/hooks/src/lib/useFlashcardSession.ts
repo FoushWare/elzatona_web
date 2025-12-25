@@ -259,7 +259,7 @@ export function useFlashcardSession(): UseFlashcardSessionReturn {
         );
       }
     },
-    [user, currentCard, sessionId],
+    [user, currentCard, sessionId, nextCard],
   );
 
   // Move to next card
@@ -282,6 +282,53 @@ export function useFlashcardSession(): UseFlashcardSessionReturn {
       }
     });
   }, [sessionCards]);
+
+  // Handle answer submission
+  const handleAnswer = useCallback(
+    async (isCorrect: boolean) => {
+      if (!user || !currentCard || !sessionId) return;
+
+      try {
+        // Update progress in Supabase
+        await progressService.updateProgress(
+          currentCard.id,
+          isCorrect ? "correct" : "incorrect",
+          0, // responseTime - placeholder
+          sessionId,
+        );
+
+        // Update session stats
+        await sessionService.updateSessionStats(sessionId, isCorrect);
+
+        // Update local stats
+        setSessionStats((prev) => {
+          const newCorrect = isCorrect
+            ? prev.correctAnswers + 1
+            : prev.correctAnswers;
+          const newIncorrect = isCorrect
+            ? prev.incorrectAnswers
+            : prev.incorrectAnswers + 1;
+          const newReviewed = prev.cardsReviewed + 1;
+
+          return {
+            ...prev,
+            cardsReviewed: newReviewed,
+            correctAnswers: newCorrect,
+            incorrectAnswers: newIncorrect,
+            accuracy: newReviewed > 0 ? (newCorrect / newReviewed) * 100 : 0,
+          };
+        });
+
+        // Move to next card
+        nextCard();
+      } catch (err) {
+        setError(
+          err instanceof Error ? err.message : "Failed to record answer",
+        );
+      }
+    },
+    [user, currentCard, sessionId, nextCard],
+  );
 
   // Skip current card
   const skipCard = useCallback(() => {

@@ -254,7 +254,7 @@ export const useIntersectionObserver = (
     return () => {
       observer.unobserve(element);
     };
-  }, [ref, options]);
+  }, [ref, observerOptions]);
 
   return isIntersecting;
 };
