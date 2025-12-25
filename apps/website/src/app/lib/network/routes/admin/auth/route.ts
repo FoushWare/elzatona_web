@@ -110,10 +110,8 @@ export async function POST(request: NextRequest) {
             })()
           : "missing",
       );
-      console.log(
-        "[Admin Auth API] 🔍 Looking for admin email:",
-        sanitizeForLog(email),
-      );
+      // Security: Removed user data from logs to prevent log injection
+      console.log("[Admin Auth API] 🔍 Looking for admin email");
     }
 
     // Query admin from Supabase
@@ -131,10 +129,8 @@ export async function POST(request: NextRequest) {
         sanitizeForLog(error.code),
       );
     } else if (!adminData) {
-      console.log(
-        "[Admin Auth API] ⚠️  No admin found with email:",
-        sanitizeForLog(email),
-      );
+      // Security: Removed user data from logs to prevent log injection
+      console.log("[Admin Auth API] ⚠️  No admin found with email");
     } else {
       console.log(
         "[Admin Auth API] ✅ Admin found:",

@@ -38,7 +38,8 @@ export async function GET(request: NextRequest) {
           const slugToFind = subtopic || topic || "";
           const slugLower = slugToFind.toLowerCase();
 
-          console.log(`🔍 API: Searching for topic/subtopic "${slugToFind}"`);
+          // Security: Removed user data from logs to prevent log injection
+          console.log("🔍 API: Searching for topic/subtopic");
 
           // Normalize slug for better matching (remove plural 's', handle common variations)
           const normalizeForMatch = (str: string) => {
@@ -115,16 +116,13 @@ export async function GET(request: NextRequest) {
 
           if (matchingTopic) {
             topicId = matchingTopic.id;
-            console.log(
-              `✅ Resolved topic/subtopic "${slugToFind}" to topic: "${matchingTopic.name}" (ID: ${topicId})`,
-            );
+            // Security: Removed user data from logs to prevent log injection
+            console.log("✅ Resolved topic/subtopic to topic");
           } else {
-            console.warn(
-              `⚠️ Could not resolve topic/subtopic "${slugToFind}" to a topic ID`,
-            );
-            console.log(
-              "Available topics:",
-              (topics as any[]).slice(0, 10).map((t: any) => ({
+            // Security: Removed user data from logs to prevent log injection
+            console.warn("⚠️ Could not resolve topic/subtopic to a topic ID");
+            // Security: Removed user data from logs to prevent log injection
+            console.log("Available topics");
                 id: t.id,
                 name: t.name,
                 slug: t.slug,
@@ -149,10 +147,8 @@ export async function GET(request: NextRequest) {
       orderDirection: "desc" as const,
     };
 
-    // Log the filters being applied
-    console.log("🔍 API Questions Route - Applied Filters:", {
-      topicId: topicId || "none",
-      categoryId: filters.categoryId || "none",
+    // Security: Removed user data from logs to prevent log injection
+    console.log("🔍 API Questions Route - Applied Filters");
       difficulty: filters.difficulty || "none",
       questionType: filters.questionType || "none",
       limit: filters.limit || "none",
@@ -183,7 +179,8 @@ export async function GET(request: NextRequest) {
       countQuery = countQuery.eq("question_type", filters.questionType);
     }
     if (filters.topicId) {
-      console.log(`📌 Applying topic_id filter: ${filters.topicId}`);
+      // Security: Removed user data from logs to prevent log injection
+      console.log("📌 Applying topic_id filter");
       countQuery = countQuery.eq("topic_id", filters.topicId);
     } else {
       console.log("⚠️ No topic_id filter applied");
@@ -212,12 +209,11 @@ export async function GET(request: NextRequest) {
       });
     }
 
-    // Log the results for debugging
-    console.log(`📊 Questions fetched: ${questions.length || 0}`);
+    // Security: Removed user data from logs to prevent log injection
+    console.log("📊 Questions fetched");
     if (filters.topicId && questions.length > 0) {
-      console.log(
-        "Sample question topic_ids:",
-        questions.slice(0, 3).map((q: any) => q.topic_id || "NULL"),
+      // Security: Removed user data from logs to prevent log injection
+      console.log("Sample question topic_ids");
       );
     }
 
@@ -236,9 +232,8 @@ export async function GET(request: NextRequest) {
               "";
 
             if (!questionText) {
-              console.warn("Question missing text field:", {
-                id: question.id,
-                availableFields: Object.keys(question),
+              // Security: Removed user data from logs to prevent log injection
+              console.warn("Question missing text field");
               });
             }
 
@@ -374,9 +369,8 @@ export async function POST(request: NextRequest) {
         id: string;
         [key: string]: unknown;
       };
-      console.log("⚠️ Duplicate question found:", {
-        existingId: existing.id,
-        title: questionTitle,
+      // Security: Removed user data from logs to prevent log injection
+      console.log("⚠️ Duplicate question found");
       });
       return NextResponse.json(
         {

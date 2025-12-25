@@ -236,9 +236,8 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    console.log(
-      `[Admin Create API] ✅ Admin created: ${sanitizeForLog(email)} by ${sanitizeForLog(ownerCheck.email)}`,
-    );
+    // Security: Removed user data from logs to prevent log injection
+    console.log("[Admin Create API] ✅ Admin created");
 
     // Return success (don't return password hash)
     return NextResponse.json({

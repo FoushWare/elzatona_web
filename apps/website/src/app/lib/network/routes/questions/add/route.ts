@@ -138,9 +138,8 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    console.log(
-      `Adding ${questionsToAdd.length} questions to Supabase for learning path: ${learningPath}`,
-    );
+    // Security: Removed user data from logs to prevent log injection
+    console.log("Adding questions to Supabase");
 
     const results = [];
 
@@ -156,9 +155,8 @@ export async function POST(request: NextRequest) {
       results.push(
         `✅ Added question ${question.id}: ${question.question?.substring(0, 50)}...`,
       );
-      console.log(
-        `✅ Added question ${question.id}: ${question.question?.substring(0, 50)}...`,
-      );
+      // Security: Removed user data from logs to prevent log injection
+      console.log("✅ Added question");
     }
 
     return NextResponse.json({

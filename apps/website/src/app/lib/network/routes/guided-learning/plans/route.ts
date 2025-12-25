@@ -119,7 +119,8 @@ export async function DELETE(request: NextRequest) {
     console.log("DELETE request received");
     const { searchParams } = new URL(request.url);
     const planId = searchParams.get("id");
-    console.log("Plan ID to delete:", planId);
+    // Security: Removed user data from logs to prevent log injection
+    console.log("Plan ID to delete");
 
     if (!planId) {
       console.log("No plan ID provided");

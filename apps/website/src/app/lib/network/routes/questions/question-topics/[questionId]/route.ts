@@ -30,7 +30,8 @@ export async function PUT(
       );
     }
 
-    console.log(`Updating topics for question: ${questionId}`, topics);
+    // Security: Removed user data from logs to prevent log injection
+    console.log("Updating topics for question");
 
     const { data: questionData, error: questionError } = await supabase
       .from("questions")
@@ -68,7 +69,8 @@ export async function PUT(
       ...updatedData,
     };
 
-    console.log(`Successfully updated topics for question: ${questionId}`);
+    // Security: Removed user data from logs to prevent log injection
+    console.log("Successfully updated topics for question");
 
     return NextResponse.json({
       success: true,

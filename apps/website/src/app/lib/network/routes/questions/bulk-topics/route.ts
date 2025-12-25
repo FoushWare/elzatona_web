@@ -48,8 +48,8 @@ export async function POST(request: NextRequest) {
     const questionCount = questionIds.length;
     const topicsStr = sanitizeForLog(topics);
 
-    console.log("Bulk updating topics for question count:", questionCount);
-    console.log("Topics data:", topicsStr);
+    // Security: Removed user data from logs to prevent log injection
+    console.log("Bulk updating topics for questions");
 
     const results = [];
     const errors = [];
@@ -90,8 +90,8 @@ export async function POST(request: NextRequest) {
         const questionIdStr = sanitizeForLog(questionId);
         const errorStr = sanitizeForLog(error);
 
-        console.error("Error processing question ID:", questionIdStr);
-        console.error("Error details:", errorStr);
+        // Security: Removed user data from logs to prevent log injection
+        console.error("Error processing question");
 
         errors.push(
           `Failed to update question ${questionIdStr}: ${sanitizeForLog(
@@ -101,9 +101,8 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    console.log(
-      `Successfully updated topics for ${sanitizeForLog(results.length)} questions`,
-    );
+    // Security: Removed user data from logs to prevent log injection
+    console.log("Successfully updated topics for questions");
 
     return NextResponse.json({
       success: true,

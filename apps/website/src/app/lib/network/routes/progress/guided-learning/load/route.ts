@@ -42,7 +42,8 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    console.log("📥 Loading guided learning progress for plan:", planId);
+    // Security: Removed user data from logs to prevent log injection
+    console.log("📥 Loading guided learning progress for plan");
 
     // Fetch user progress from database
     const { data, error } = await supabase
