@@ -33,25 +33,41 @@ function removeAllHTMLTagsComprehensive(text: string): string {
 
     // Aggressively remove any <script pattern (even incomplete) - multiple passes
     // This catches: <script, <SCRIPT, <Script, <script>, <script src=, etc.
+    // Use more aggressive patterns to catch all variations including with whitespace
     cleaned = cleaned.replace(/<script[^>]*>?/gi, "");
+    cleaned = cleaned.replace(/<script\s*/gi, ""); // Catch incomplete <script with whitespace
     cleaned = cleaned.replace(/<script/gi, ""); // Catch incomplete <script without >
+    cleaned = cleaned.replace(/script\s*>/gi, ""); // Catch broken script> artifacts with whitespace
     cleaned = cleaned.replace(/script>/gi, ""); // Catch broken script> artifacts
 
     // Remove dangerous tag patterns (case-insensitive, even if incomplete)
     // These patterns catch tags even if they're broken or incomplete
+    // Use more aggressive patterns that catch tags even with whitespace or newlines
     const dangerousPatterns = [
       /<script[^>]*/gi,
+      /<script\s*/gi, // Catch <script with whitespace
       /<iframe[^>]*/gi,
+      /<iframe\s*/gi, // Catch <iframe with whitespace
       /<object[^>]*/gi,
+      /<object\s*/gi, // Catch <object with whitespace
       /<embed[^>]*/gi,
+      /<embed\s*/gi, // Catch <embed with whitespace
       /<form[^>]*/gi,
+      /<form\s*/gi, // Catch <form with whitespace
       /<input[^>]*/gi,
+      /<input\s*/gi, // Catch <input with whitespace
       /<button[^>]*/gi,
+      /<button\s*/gi, // Catch <button with whitespace
       /<link[^>]*/gi,
+      /<link\s*/gi, // Catch <link with whitespace
       /<meta[^>]*/gi,
+      /<meta\s*/gi, // Catch <meta with whitespace
       /<style[^>]*/gi,
+      /<style\s*/gi, // Catch <style with whitespace
       /<svg[^>]*/gi,
+      /<svg\s*/gi, // Catch <svg with whitespace
       /<math[^>]*/gi,
+      /<math\s*/gi, // Catch <math with whitespace
     ];
 
     for (const pattern of dangerousPatterns) {
