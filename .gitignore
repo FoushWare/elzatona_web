@@ -239,3 +239,8 @@ tests/e2e/
 .cursor/
 .gitleaks.toml
 .code-quality-check.*.log
+
+# Build and cache directories
+.jest-cache/
+.next/
+coverage/
