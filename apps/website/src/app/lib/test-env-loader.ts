@@ -30,10 +30,11 @@ export function loadTestEnvironment(): {
 } {
   // Skip during Next.js build to avoid process.env modification errors
   // Next.js build sets NODE_ENV to 'production' and doesn't allow process.env modifications
-  const isBuildContext = process.env.NODE_ENV === "production" && 
-                         (process.env.NEXT_PHASE === "phase-production-build" || 
-                          !process.env.JEST_WORKER_ID);
-  
+  const isBuildContext =
+    process.env.NODE_ENV === "production" &&
+    (process.env.NEXT_PHASE === "phase-production-build" ||
+      !process.env.JEST_WORKER_ID);
+
   if (isBuildContext) {
     return {
       environment: "production",

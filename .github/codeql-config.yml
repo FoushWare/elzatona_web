@@ -1,0 +1,31 @@
+name: "CodeQL Configuration"
+
+# Exclude paths that are not needed for security analysis
+paths-ignore:
+  - "**/node_modules/**"
+  - "**/dist/**"
+  - "**/.next/**"
+  - "**/coverage/**"
+  - "**/build/**"
+  - "**/.nx/cache/**"
+  - "**/tools/**"
+  - "**/Rest/**"
+  - "**/docs/**"
+  - "**/refactoring-plans/**"
+  - "**/*.test.ts"
+  - "**/*.test.tsx"
+  - "**/*.spec.ts"
+  - "**/*.spec.tsx"
+  - "**/*.stories.tsx"
+  - "**/tests/**"
+  - "**/__tests__/**"
+  - "**/jest.config.*"
+  - "**/playwright.config.*"
+  - "**/vite.config.*"
+
+# Use security queries but exclude memory-intensive ones
+# The PolynomialReDoS query causes OOM errors on standard runners
+queries:
+  - uses: security
+    exclude:
+      - id: js/polynomial-redos

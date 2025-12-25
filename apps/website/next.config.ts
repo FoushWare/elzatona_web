@@ -157,13 +157,13 @@ const nextConfig: NextConfig = {
     // Ignore storybook and test files
     config.module = config.module || {};
     config.module.rules = config.module.rules || [];
-    
+
     // Exclude storybook files from build
     config.module.rules.push({
       test: /\.stories\.(tsx?|jsx?)$/,
       loader: "ignore-loader",
     });
-    
+
     // Exclude test files from build
     config.module.rules.push({
       test: /\.(test|spec)\.(tsx?|jsx?)$/,

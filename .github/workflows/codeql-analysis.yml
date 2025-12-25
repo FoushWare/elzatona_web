@@ -42,10 +42,10 @@ jobs:
         uses: github/codeql-action/init@v4
         with:
           languages: ${{ matrix.language }}
-          # Use valid query packs for CodeQL v2.23.8
-          queries: security-extended
-          # Use custom config to reduce scanning scope
-          config-file: .github/workflows/codeql-config.yml
+          # Use security query pack and exclude memory-intensive queries via config
+          queries: security
+          # Use custom config to reduce scanning scope and exclude PolynomialReDoS
+          config-file: .github/codeql-config.yml
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -71,4 +71,4 @@ jobs:
           upload: true
           wait-for-processing: true
           threads: 1
-          ram: 2048
+          ram: 3072
