@@ -21,7 +21,7 @@ export async function GET(request: NextRequest) {
       users,
       count: users.length,
     });
-  } catch (error) {
+  } catch (_error) {
     // Security: Removed detailed error logging to prevent information disclosure
     return NextResponse.json(
       { success: false, error: "Internal server error" },
@@ -76,7 +76,7 @@ export async function PUT(request: NextRequest) {
         { status: 500 },
       );
     }
-  } catch (error) {
+  } catch (_error) {
     // Security: Removed detailed error logging to prevent information disclosure
     return NextResponse.json(
       { success: false, error: "Internal server error" },

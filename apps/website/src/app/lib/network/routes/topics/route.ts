@@ -42,7 +42,7 @@ export async function GET() {
       data: transformedTopics,
       count: transformedTopics.length,
     });
-  } catch (error) {
+  } catch (_error) {
     // Security: Removed detailed error logging to prevent information disclosure
     return NextResponse.json(
       {

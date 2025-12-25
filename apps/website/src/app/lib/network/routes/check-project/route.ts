@@ -57,7 +57,7 @@ export async function GET(request: NextRequest) {
       console.log(
         `[Check Project API] Admin access: ${decoded.email || decoded.adminId || "unknown"}`,
       );
-    } catch (error) {
+    } catch (_error) {
       // Security: Removed detailed error logging to prevent information disclosure
       return NextResponse.json(
         {

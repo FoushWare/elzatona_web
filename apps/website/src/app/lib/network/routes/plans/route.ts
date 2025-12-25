@@ -46,7 +46,7 @@ export async function GET(_request: NextRequest) {
       data: plans || [],
       count: plans?.length || 0,
     });
-  } catch (error) {
+  } catch (_error) {
     // Security: Removed detailed error logging to prevent information disclosure
     return NextResponse.json(
       {
@@ -97,7 +97,7 @@ export async function POST(request: NextRequest) {
       data: newPlan,
       message: "Plan created successfully",
     });
-  } catch (error) {
+  } catch (_error) {
     // Security: Removed detailed error logging to prevent information disclosure
     return NextResponse.json(
       {

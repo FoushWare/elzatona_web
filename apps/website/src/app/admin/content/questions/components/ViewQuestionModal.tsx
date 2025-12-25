@@ -878,7 +878,7 @@ export function ViewQuestionModal({
       console.error("ViewQuestionModal - Error highlighting code:", error);
       setCodeHighlightedHtml("");
     }
-  }, [setCodeHighlightedHtml]);
+  }, []);
 
   // Helper function to reset question state
   const resetQuestionState = (

@@ -48,7 +48,7 @@ export async function GET(_request: NextRequest) {
       success: true,
       preferences: userData.preferences,
     });
-  } catch (error) {
+  } catch (_error) {
     // Security: Removed detailed error logging to prevent information disclosure
     return NextResponse.json(
       { error: "Internal server error" },
@@ -107,7 +107,7 @@ export async function PUT(request: NextRequest) {
       success: true,
       message: "Preferences updated successfully",
     });
-  } catch (error) {
+  } catch (_error) {
     // Security: Removed detailed error logging to prevent information disclosure
     return NextResponse.json(
       { error: "Internal server error" },
