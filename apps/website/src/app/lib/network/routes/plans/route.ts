@@ -28,7 +28,7 @@ export async function GET(_request: NextRequest) {
     // Security: Removed debug logging to prevent information disclosure
 
     if (error) {
-      console.error("❌ Error fetching plans:", error);
+      // Security: Removed detailed error logging to prevent information disclosure
       return NextResponse.json(
         {
           success: false,
@@ -47,19 +47,11 @@ export async function GET(_request: NextRequest) {
       count: plans?.length || 0,
     });
   } catch (error) {
-    console.error("❌ Error in GET /api/plans:", error);
-    const errorMessage =
-      error instanceof Error ? error.message : "Unknown error";
-    const isFetchError =
-      errorMessage.includes("fetch") || errorMessage.includes("network");
-
+    // Security: Removed detailed error logging to prevent information disclosure
     return NextResponse.json(
       {
         success: false,
-        error: isFetchError
-          ? "Failed to connect to database. Please check your network connection and Supabase configuration."
-          : "Failed to fetch plans from database",
-        details: errorMessage,
+        error: "Failed to fetch plans from database",
       },
       { status: 500 },
     );
@@ -89,7 +81,7 @@ export async function POST(request: NextRequest) {
       .single();
 
     if (error) {
-      console.error("❌ Error creating plan:", error);
+      // Security: Removed detailed error logging to prevent information disclosure
       return NextResponse.json(
         {
           success: false,

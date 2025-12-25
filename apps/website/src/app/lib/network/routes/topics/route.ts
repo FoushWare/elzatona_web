@@ -43,7 +43,7 @@ export async function GET() {
       count: transformedTopics.length,
     });
   } catch (error) {
-    console.error("❌ API: Error fetching topics:", error);
+    // Security: Removed detailed error logging to prevent information disclosure
     return NextResponse.json(
       {
         success: false,

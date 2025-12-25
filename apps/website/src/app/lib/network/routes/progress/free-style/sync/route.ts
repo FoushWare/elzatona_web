@@ -85,7 +85,7 @@ export async function POST(request: NextRequest) {
     }
 
     if (!userId) {
-      console.log("⚠️ No authenticated user found, using development mode");
+      // Security: Removed user information from logs
       return NextResponse.json({
         success: true,
         message:
@@ -93,8 +93,6 @@ export async function POST(request: NextRequest) {
         warning: "Using development mode - authentication not fully configured",
       });
     }
-
-    console.log("📄 Syncing free-style practice progress for user:", userId);
 
     // Store progress data in JSONB format in user_progress table
     // Use a special plan_id like 'free-style-practice' to identify free-style progress
@@ -117,7 +115,7 @@ export async function POST(request: NextRequest) {
     );
 
     if (error) {
-      console.error("❌ Error syncing free-style progress to database:", error);
+      // Security: Removed detailed error logging to prevent information disclosure
       return NextResponse.json(
         {
           success: false,
@@ -128,15 +126,12 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    console.log("✅ Free-style practice progress synced successfully");
-
     return NextResponse.json({
       success: true,
       message: "Progress synced successfully to database",
     });
   } catch (error) {
-    console.error("❌ Error in free-style sync endpoint:", error);
-
+    // Security: Removed detailed error logging to prevent information disclosure
     return NextResponse.json(
       {
         success: false,
