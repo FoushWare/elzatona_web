@@ -29,7 +29,7 @@ function NotificationItem({ notification, onRemove }: NotificationProps) {
     }, notification.duration || 5000);
 
     return () => clearTimeout(timer);
-  }, [notification.duration]);
+  }, [notification.duration, handleRemove]);
 
   const handleRemove = () => {
     setIsVisible(false);

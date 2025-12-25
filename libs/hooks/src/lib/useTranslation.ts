@@ -58,7 +58,7 @@ export function useTranslation() {
 
       return value;
     };
-  }, [locale, getTranslationValue]);
+  }, [getTranslationValue]);
 
   const changeLanguage = (newLocale: string) => {
     setLocale(newLocale);

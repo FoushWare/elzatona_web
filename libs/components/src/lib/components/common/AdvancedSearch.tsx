@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import {
   useQueryState,
   parseAsString,
@@ -127,7 +127,7 @@ export function AdvancedSearch({
   // Server-side search - no need for client-side facets or suggestions
 
   // Perform actual search on real data
-  const performSearch = async () => {
+  const performSearch = useCallback(async () => {
     console.log("🔍 performSearch called with current state:", {
       query,
       category,

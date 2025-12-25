@@ -328,7 +328,7 @@ export function useSecureProgress(): UseSecureProgressReturn {
     } finally {
       setIsLoading(false);
     }
-  }, [isAuthenticated, user, firebaseUser]);
+  }, [isAuthenticated, user]);
 
   const clearLocalCache = useCallback(() => {
     if (user?.uid) {

@@ -127,7 +127,7 @@ export const TopicForm: React.FC<TopicFormProps> = ({
         .replace(/(^-|-$)/g, "");
       setFormData((prev) => ({ ...prev, slug }));
     }
-  }, [formData.name, topic, isJsonMode]);
+  }, [formData, topic, isJsonMode, setFormData]);
 
   // Parse JSON text with debouncing
   const parseJsonText = useCallback(
@@ -233,7 +233,7 @@ export const TopicForm: React.FC<TopicFormProps> = ({
         setParsedTopics([]);
       }
     },
-    [categories],
+    [categories, setJsonError, setParsedTopics],
   );
 
   // Debounce JSON parsing
