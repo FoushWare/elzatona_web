@@ -115,7 +115,7 @@ export default function EnhancedDashboard() {
   const [dashboardStats, setDashboardStats] =
     useState<LocalDashboardStats | null>(null);
   const [statsLoading, setStatsLoading] = useState(true);
-  const [statsError, setStatsError] = useState<string | null>(null);
+  const [_statsError, setStatsError] = useState<string | null>(null);
 
   // Dashboard cards with real progress data
   const dashboardCards: DashboardCard[] = [

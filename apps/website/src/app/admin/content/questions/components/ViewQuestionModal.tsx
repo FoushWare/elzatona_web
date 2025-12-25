@@ -836,7 +836,7 @@ export function ViewQuestionModal({
           ALLOWED_ATTR: ["class", "style"],
         })}</code></pre>`;
       }
-    } catch (e) {
+    } catch (_e) {
       // Security: Removed detailed error logging to prevent information disclosure
       console.warn("DOM parsing for color adjustment failed");
     }
