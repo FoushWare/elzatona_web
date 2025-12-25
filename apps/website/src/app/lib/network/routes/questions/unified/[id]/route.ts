@@ -76,9 +76,11 @@ export async function PUT(
     // Use the same Supabase client helper as the main route
     const supabase = getSupabaseClient();
 
-    console.log("🔄 Updating question:", id);
+    // Security: Removed user data from logs to prevent log injection
+    console.log("🔄 Updating question");
     // Security: Removed debug logging to prevent information disclosure
-    console.log("📥 Raw update data:", JSON.stringify(updateData, null, 2));
+    // Security: Removed user data from logs to prevent log injection
+    console.log("📥 Raw update data");
 
     // Sanitize update data
     const sanitizedUpdate = sanitizeObjectServer(updateData);
