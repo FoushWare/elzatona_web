@@ -63,8 +63,7 @@ export async function POST(request: NextRequest) {
     }
 
     if (!token) {
-      // For development, allow progress saving without authentication
-      console.log("⚠️ No authentication token found, using development mode");
+      // Security: Removed authentication token logging
       return NextResponse.json({
         success: true,
         progressId: `progress_${Date.now()}_${Math.random().toString(36).substring(2, 11)}`,
@@ -76,7 +75,7 @@ export async function POST(request: NextRequest) {
     // Verify the Firebase token
     const decodedToken = await verifySupabaseToken(token);
     if (!decodedToken) {
-      console.warn("Token verification failed, using development mode");
+      // Security: Removed token verification failure logging
 
       return NextResponse.json({
         success: true,

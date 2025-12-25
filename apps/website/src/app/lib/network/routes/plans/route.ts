@@ -98,14 +98,11 @@ export async function POST(request: NextRequest) {
       message: "Plan created successfully",
     });
   } catch (error) {
-    console.error("❌ Error in POST /api/plans:", error);
-    const errorMessage =
-      error instanceof Error ? error.message : "Unknown error";
+    // Security: Removed detailed error logging to prevent information disclosure
     return NextResponse.json(
       {
         success: false,
-        error: "Failed to create plan",
-        details: errorMessage,
+        error: "Failed to create plan in database",
       },
       { status: 500 },
     );

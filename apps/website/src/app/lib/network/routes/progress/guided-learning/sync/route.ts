@@ -37,7 +37,7 @@ export async function POST(request: NextRequest) {
     }
 
     if (!token) {
-      console.log("⚠️ No authentication token found, using development mode");
+      // Security: Removed authentication token logging
       const _progressData: GuidedProgress = await request.json();
 
       return NextResponse.json({

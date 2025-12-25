@@ -238,7 +238,7 @@ export async function GET(request: NextRequest) {
       },
     });
   } catch (error) {
-    console.error("Token verification error:", error);
+    // Security: Removed detailed error logging to prevent information disclosure
     return NextResponse.json(
       { success: false, error: "Invalid token" },
       { status: 401 },

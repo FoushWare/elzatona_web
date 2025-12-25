@@ -153,7 +153,7 @@ export async function GET(request: NextRequest) {
       });
     }
 
-    console.log("📊 Fetching dashboard stats for user:", userId);
+    // Security: Removed user ID logging to prevent information disclosure
 
     // 1. Get all question attempts (for questions completed and points)
     const { data: questionAttempts, error: attemptsError } = await supabase
@@ -162,7 +162,7 @@ export async function GET(request: NextRequest) {
       .eq("user_id", userId);
 
     if (attemptsError) {
-      console.error("❌ Error fetching question attempts:", attemptsError);
+      // Security: Removed detailed error logging to prevent information disclosure
     }
 
     // 2. Get all user_progress entries (guided learning and free-style)
@@ -172,7 +172,7 @@ export async function GET(request: NextRequest) {
       .eq("user_id", userId);
 
     if (progressError) {
-      console.error("❌ Error fetching user progress:", progressError);
+      // Security: Removed detailed error logging to prevent information disclosure
     }
 
     // 3. Aggregate questions completed

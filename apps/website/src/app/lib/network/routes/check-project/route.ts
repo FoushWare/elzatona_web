@@ -58,7 +58,7 @@ export async function GET(request: NextRequest) {
         `[Check Project API] Admin access: ${decoded.email || decoded.adminId || "unknown"}`,
       );
     } catch (error) {
-      console.error("[Check Project API] Token verification error:", error);
+      // Security: Removed detailed error logging to prevent information disclosure
       return NextResponse.json(
         {
           success: false,

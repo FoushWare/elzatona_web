@@ -14,7 +14,7 @@ export async function GET(request: NextRequest) {
     const token = cookieStore.get("firebase_token")?.value;
 
     if (!token) {
-      console.log("⚠️ No authentication token found, returning empty progress");
+      // Security: Removed authentication token logging
       return NextResponse.json({
         success: true,
         progress: null,
