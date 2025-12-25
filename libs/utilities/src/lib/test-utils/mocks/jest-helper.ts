@@ -7,7 +7,7 @@
 export function createMockFn<T extends (...args: any[]) => any>(
   implementation?: T | any,
 ): T {
-  if (typeof jest !== "undefined" && jest.fn) {
+  if (typeof jest !== "undefined") {
     if (implementation) {
       return jest.fn(implementation) as unknown as T;
     }
@@ -21,7 +21,7 @@ export function createMockFn<T extends (...args: any[]) => any>(
 }
 
 export function createMockObject<T extends object>(defaultValue: T): T {
-  if (typeof jest !== "undefined" && jest.fn) {
+  if (typeof jest !== "undefined") {
     // In test environment, return the object as-is (tests will mock it)
     return defaultValue;
   }
