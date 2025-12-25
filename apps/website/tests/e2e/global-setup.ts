@@ -63,21 +63,22 @@ async function globalSetup() {
   }
 
   // Load other env files as fallback (lower priority) - only in local dev
+  const loadedFiles: string[] = [];
   if (!isCI) {
     const envFiles = [
       resolve(projectRoot, ".env.test"), // Test-specific defaults
       resolve(projectRoot, ".env.local"), // Fallback to dev (for backwards compatibility)
     ];
 
-  const loadedFiles: string[] = [];
-  for (const envFile of envFiles) {
-    try {
-      const result = config({ path: envFile, override: false }); // Don't override, respect priority
-      if (!result.error) {
-        loadedFiles.push(envFile);
+    for (const envFile of envFiles) {
+      try {
+        const result = config({ path: envFile, override: false }); // Don't override, respect priority
+        if (!result.error) {
+          loadedFiles.push(envFile);
+        }
+      } catch (_error) {
+        // File doesn't exist, that's okay
       }
-    } catch (_error) {
-      // File doesn't exist, that's okay
     }
   }
 
