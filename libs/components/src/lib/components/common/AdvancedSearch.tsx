@@ -222,6 +222,7 @@ export function AdvancedSearch({
     isActive,
     topic,
     selectedTopics,
+    performSearch,
     page,
     size,
   ]);

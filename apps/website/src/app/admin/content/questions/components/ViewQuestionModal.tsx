@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { UnifiedQuestion } from "@elzatona/types";
 import { FormModal } from "@elzatona/components";
 import {
@@ -846,7 +846,7 @@ export function ViewQuestionModal({
   };
 
   // Helper function to handle code highlighting logic
-  const handleCodeHighlighting = (
+  const handleCodeHighlighting = useCallback((
     shikiHighlighter: Highlighter | null,
     question: UnifiedQuestion | null,
     setCodeHighlightedHtml: (html: string) => void,
@@ -909,17 +909,17 @@ export function ViewQuestionModal({
   // Highlight code when it changes or highlighter is ready
   useEffect(() => {
     handleCodeHighlighting(shikiHighlighter, question, setCodeHighlightedHtml);
-  }, [shikiHighlighter, question?.codeTemplate]);
+  }, [shikiHighlighter, question, handleCodeHighlighting, setCodeHighlightedHtml]);
 
   // Reset state when question changes
   useEffect(() => {
     resetQuestionState(question, setSelectedAnswer, setShowExplanation);
-  }, [question?.id]);
+  }, [question, setSelectedAnswer, setShowExplanation]);
 
   // Debug: Log question data to check if code field exists
   useEffect(() => {
     logQuestionData(question);
-  }, [question?.id]);
+  }, [question]);
 
   if (!question) return null;
 

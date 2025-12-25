@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import {
   ProblemSolvingTask,
   ProblemSolvingTaskFormData,
@@ -168,7 +168,7 @@ export const usePanelLayout = () => {
     setResizeStartLeftWidth(leftPanelWidth);
   };
 
-  const handleMouseMove = (e: MouseEvent) => {
+  const handleMouseMove = useCallback((e: MouseEvent) => {
     if (!isResizing) return;
     const deltaX = e.clientX - resizeStartX;
     const containerWidth = window.innerWidth;
@@ -181,11 +181,11 @@ export const usePanelLayout = () => {
       setRightPanelWidth(newRightWidth);
     }
     return;
-  };
+  }, [isResizing, resizeStartX, resizeStartLeftWidth]);
 
-  const handleMouseUp = () => {
+  const handleMouseUp = useCallback(() => {
     setIsResizing(false);
-  };
+  }, []);
 
   useEffect(() => {
     if (isResizing) {
@@ -196,7 +196,7 @@ export const usePanelLayout = () => {
         document.removeEventListener("mouseup", handleMouseUp);
       };
     }
-  }, [isResizing, resizeStartX, resizeStartLeftWidth]);
+  }, [isResizing, resizeStartX, resizeStartLeftWidth, handleMouseMove, handleMouseUp]);
 
   return {
     leftPanelWidth,

@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { FrontendTask, FrontendTaskFormData } from "@elzatona/types";
 
 interface FileNode {
@@ -90,7 +90,7 @@ export const usePanelLayout = () => {
     setResizeStartX(e.clientX);
   };
 
-  const handleMouseMove = (e: MouseEvent) => {
+  const handleMouseMove = useCallback((e: MouseEvent) => {
     if (!isResizing) return;
 
     const deltaX = e.clientX - resizeStartX;
@@ -106,11 +106,11 @@ export const usePanelLayout = () => {
       );
       setResizeStartX(e.clientX);
     }
-  };
+  }, [isResizing, resizeStartX]);
 
-  const handleMouseUp = () => {
+  const handleMouseUp = useCallback(() => {
     setIsResizing(false);
-  };
+  }, []);
 
   useEffect(() => {
     if (isResizing) {
@@ -131,7 +131,7 @@ export const usePanelLayout = () => {
       document.body.style.cursor = "";
       document.body.style.userSelect = "";
     };
-  }, [isResizing, resizeStartX]);
+  }, [isResizing, resizeStartX, handleMouseMove, handleMouseUp]);
 
   return {
     leftPanelWidth,
