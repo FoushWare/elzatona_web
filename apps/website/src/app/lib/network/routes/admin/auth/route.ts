@@ -93,8 +93,7 @@ export async function POST(request: NextRequest) {
       process.env.APP_ENV === "test" ||
       process.env.NEXT_PUBLIC_APP_ENV === "test"
     ) {
-      console.log("[Admin Auth API] 🧪 TEST MODE");
-      console.log("[Admin Auth API] 📋 Supabase URL:", config.url);
+      // Security: Removed Supabase URL logging to prevent information disclosure
       console.log(
         "[Admin Auth API] 🔑 Service Role Key Project:",
         config.serviceRoleKey
@@ -202,7 +201,7 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json({ success: true, admin: session });
   } catch (error) {
-    console.error("Admin authentication error:", error);
+    // Security: Removed detailed error logging to prevent information disclosure
     return NextResponse.json(
       { success: false, error: "Internal server error" },
       { status: 500 },

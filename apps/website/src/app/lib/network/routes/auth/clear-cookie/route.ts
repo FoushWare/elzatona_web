@@ -27,7 +27,7 @@ export async function POST() {
 
     return response;
   } catch (error) {
-    console.error("Error clearing auth cookie:", error);
+    // Security: Removed detailed error logging to prevent information disclosure
     return NextResponse.json(
       { error: "Internal server error" },
       { status: 500 },
