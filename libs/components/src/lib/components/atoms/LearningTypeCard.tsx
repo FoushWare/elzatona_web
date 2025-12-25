@@ -2,7 +2,7 @@
 
 import React from "react";
 import { ArrowRight, type LucideIcon } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { cn } from "../../utils";
 
 type ColorVariant = "indigo" | "green";
 

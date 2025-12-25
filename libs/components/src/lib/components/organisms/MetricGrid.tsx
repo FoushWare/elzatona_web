@@ -1,5 +1,5 @@
 import { type MetricCardPropsType } from "../molecules/MetricCard";
-import { cn } from "@/lib/utils";
+import { cn } from "../../utils";
 
 interface MetricGridProps {
   metrics: MetricCardPropsType[];
