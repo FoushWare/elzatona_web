@@ -1228,7 +1228,9 @@ export async function PUT(request: NextRequest) {
           // Security: Sanitize user data before logging to prevent log injection
           console.error(
             "Category lookup error:",
-            categoryError,
+            categoryError instanceof Error
+              ? sanitizeForLogging(categoryError.message)
+              : sanitizeForLogging(String(categoryError)),
             "Looking for:",
             sanitizeForLogging(categoryName),
           );
@@ -1288,7 +1290,9 @@ export async function PUT(request: NextRequest) {
         if (topicError || !topicData) {
           console.error(
             "Topic lookup error:",
-            topicError,
+            topicError instanceof Error
+              ? sanitizeForLogging(topicError.message)
+              : sanitizeForLogging(String(topicError)),
             "Looking for:",
             sanitizeForLogging(topicName),
             "Category ID:",

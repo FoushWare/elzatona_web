@@ -31,8 +31,11 @@ function removeAllHTMLTagsComprehensive(text: string): string {
     // Remove incomplete tags at the end of string: <script, <iframe, etc.
     cleaned = cleaned.replace(/<[^>]*$/g, "");
 
-    // Aggressively remove any <script pattern (even incomplete)
+    // Aggressively remove any <script pattern (even incomplete) - multiple passes
+    // This catches: <script, <SCRIPT, <Script, <script>, <script src=, etc.
     cleaned = cleaned.replace(/<script[^>]*>?/gi, "");
+    cleaned = cleaned.replace(/<script/gi, ""); // Catch incomplete <script without >
+    cleaned = cleaned.replace(/script>/gi, ""); // Catch broken script> artifacts
 
     // Remove dangerous tag patterns (case-insensitive, even if incomplete)
     // These patterns catch tags even if they're broken or incomplete

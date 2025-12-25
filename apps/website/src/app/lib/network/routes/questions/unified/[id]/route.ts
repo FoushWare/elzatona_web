@@ -184,7 +184,9 @@ export async function PUT(
           // Security: Sanitize user data before logging to prevent log injection
           console.error(
             "Topic lookup error:",
-            topicError,
+            topicError instanceof Error
+              ? sanitizeForLogging(topicError.message)
+              : sanitizeForLogging(String(topicError)),
             "Looking for:",
             sanitizeForLogging(topicName),
             "Category ID:",
