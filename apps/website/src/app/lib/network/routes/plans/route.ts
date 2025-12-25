@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
-import { getSupabaseConfig } from "../../../lib/utils/api-config";
+import { getSupabaseConfig } from "../../utils/api-config";
 
 // Helper function to create Supabase client using centralized config
 // This ensures correct environment (test/production) is used

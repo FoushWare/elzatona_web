@@ -10,7 +10,7 @@ import type {
   UserType,
   ActivePlan,
   PersonalizedContent as PersonalizedContentType,
-} from "../../../../../../apps/website/src/app/types/homePage.types";
+} from "@elzatona/types";
 
 interface HomePageLayoutProps {
   userType: UserType;

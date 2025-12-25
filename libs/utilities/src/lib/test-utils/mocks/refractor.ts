@@ -1,25 +1,25 @@
 // Mock for refractor ESM module
 // refractor uses ESM which Jest cannot parse, so we provide a mock
+import { createMockFn } from "./jest-helper";
 
-export const highlight = jest.fn((code: string, language?: string) => {
-  return {
-    type: "root",
-    children: [
-      {
-        type: "element",
-        tagName: "code",
-        properties: { className: [`language-${language || "text"}`] },
-        children: [{ type: "text", value: code }],
-      },
-    ],
-  };
+const highlightImpl = (code: string, language?: string) => ({
+  type: "root",
+  children: [
+    {
+      type: "element",
+      tagName: "code",
+      properties: { className: [`language-${language || "text"}`] },
+      children: [{ type: "text", value: code }],
+    },
+  ],
 });
 
-export const register = jest.fn();
-export const registerLanguage = jest.fn();
-export const alias = jest.fn();
-export const listLanguages = jest.fn(() => []);
-export const listPlugins = jest.fn(() => []);
+export const highlight = createMockFn(highlightImpl);
+export const register = createMockFn(() => {});
+export const registerLanguage = createMockFn(() => {});
+export const alias = createMockFn(() => {});
+export const listLanguages = createMockFn(() => []);
+export const listPlugins = createMockFn(() => []);
 
 export default {
   highlight,

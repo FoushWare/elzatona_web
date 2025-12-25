@@ -1,18 +1,20 @@
 // Mock for nuqs (ESM module) to avoid Jest parsing issues
-export const useQueryState = jest.fn(() => [null, jest.fn()]);
-export const parseAsString = jest.fn(
-  (defaultValue?: string) => defaultValue || "",
-);
-export const parseAsInteger = jest.fn(
-  (defaultValue?: number) => defaultValue || 0,
-);
-export const parseAsArrayOf = jest.fn(() => [null, jest.fn()]);
-export const useQueryStates = jest.fn(() => [
+// Only use jest.fn() in test environments, otherwise provide no-op implementations
+import { createMockFn } from "./jest-helper";
+
+const noOpFn = () => {};
+const noOpState = [null, noOpFn] as const;
+
+export const useQueryState = createMockFn(() => noOpState);
+export const parseAsString = createMockFn((defaultValue?: string) => defaultValue || "");
+export const parseAsInteger = createMockFn((defaultValue?: number) => defaultValue || 0);
+export const parseAsArrayOf = createMockFn(() => noOpState);
+export const useQueryStates = createMockFn(() => [
   {} as Record<string, any>,
-  jest.fn(),
+  noOpFn,
 ]);
-export const createSearchParamsCache = jest.fn(() => ({}));
-export const useQueryStateAdapter = jest.fn(() => [null, jest.fn()]);
+export const createSearchParamsCache = createMockFn(() => ({}));
+export const useQueryStateAdapter = createMockFn(() => noOpState);
 
 // Export default for compatibility
 export default {

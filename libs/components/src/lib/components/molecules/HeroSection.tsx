@@ -4,8 +4,8 @@ import React from "react";
 import { AnimatedTitle } from "../atoms/AnimatedTitle";
 import { CTAButton } from "../atoms/CTAButton";
 import { UserStatistics } from "@elzatona/components";
-import type { PersonalizedContent } from "../../../../../apps/website/src/app/types/homePage.types";
-import { ANIMATION_DELAYS } from "../../../../../apps/website/src/app/lib/constants/homePage.constants";
+import type { PersonalizedContent } from "@elzatona/types";
+import { ANIMATION_DELAYS } from "@elzatona/types";
 
 interface HeroSectionProps {
   personalizedContent: PersonalizedContent;
@@ -32,10 +32,8 @@ export function HeroSection({
 
           {/* Animated subtitle */}
           <p
-            className={`text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto leading-relaxed transition-all duration-1000 delay-300 ${
-              showAnimation
-                ? "opacity-100 translate-y-0"
-                : "opacity-0 translate-y-8"
+            className={`text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto leading-relaxed transition-all duration-300 ${
+              showAnimation ? "delay-50 opacity-100 translate-y-0" : "opacity-100 translate-y-0"
             }`}
           >
             {personalizedContent.subtitle}
@@ -55,10 +53,8 @@ export function HeroSection({
 
         {/* Animated stats */}
         <div
-          className={`transition-all duration-1000 delay-700 ${
-            showAnimation
-              ? "opacity-100 translate-y-0"
-              : "opacity-0 translate-y-8"
+          className={`transition-all duration-300 ${
+            showAnimation ? "delay-150 opacity-100 translate-y-0" : "opacity-100 translate-y-0"
           }`}
         >
           <UserStatistics />

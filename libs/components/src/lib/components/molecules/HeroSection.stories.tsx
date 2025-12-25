@@ -11,7 +11,7 @@ import * as React from "react";
 import type { Meta, StoryObj } from "@storybook/react";
 import { Play, Map, Compass } from "lucide-react";
 import { HeroSection } from "./HeroSection";
-import type { PersonalizedContent } from "../../../../../../apps/website/src/app/types/homePage.types";
+import type { PersonalizedContent } from "@elzatona/types";
 
 const meta: Meta<typeof HeroSection> = {
   title: "Molecules/HeroSection",

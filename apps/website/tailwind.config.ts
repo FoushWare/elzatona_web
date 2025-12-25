@@ -3,9 +3,10 @@ import tailwindcssAnimate from "tailwindcss-animate";
 
 const config: Config = {
   content: [
-    "./page-components/**/*.{js,ts,jsx,tsx,mdx}",
-    "./components/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
+    "./src/context/**/*.{js,ts,jsx,tsx,mdx}",
+    "../../libs/components/src/**/*.{js,ts,jsx,tsx,mdx}",
+    "../../libs/contexts/src/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   darkMode: "class",
   theme: {

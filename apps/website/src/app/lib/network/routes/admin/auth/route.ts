@@ -5,7 +5,7 @@ import bcrypt from "bcryptjs";
 import {
   getSupabaseConfig,
   logApiConfig,
-} from "../../../../lib/utils/api-config";
+} from "../../../utils/api-config";
 
 function sanitizeForLog(value: unknown): string {
   const raw =

@@ -8,15 +8,15 @@ import { createClient } from "@supabase/supabase-js";
 import {
   sanitizeObjectServer,
   sanitizeRichContent,
-} from "../../../../lib/utils/sanitize-server";
+} from "../../../utils/sanitize-server";
 import {
   validateAndSanitize,
   questionSchema,
-} from "../../../../lib/utils/validation";
+} from "../../../utils/validation";
 import {
   getSupabaseConfig,
   logApiConfig,
-} from "../../../../lib/utils/api-config";
+} from "../../../utils/api-config";
 
 // Log API configuration on module load (for debugging)
 logApiConfig("Questions API");

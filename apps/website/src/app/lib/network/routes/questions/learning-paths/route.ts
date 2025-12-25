@@ -1,7 +1,7 @@
 // v1.0 - Learning Paths API Route
 
 import { NextRequest, NextResponse } from "next/server";
-import UnifiedQuestionService from "../../../../lib/unified-question-schema";
+import UnifiedQuestionService from "../../unified-question-schema";
 
 // GET /api/questions/learning-paths - Get all learning paths
 export async function GET(_request: NextRequest) {

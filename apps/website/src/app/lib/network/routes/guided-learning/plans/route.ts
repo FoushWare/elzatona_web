@@ -16,7 +16,7 @@ if (!supabaseUrl || !supabaseKey) {
 }
 const supabase = createClient(supabaseUrl, supabaseKey);
 
-import { AutoLinkingService } from "../../../../lib/auto-linking-service";
+import { AutoLinkingService } from "../../../auto-linking-service";
 
 // GET /api/guided-learning/plans - Get all learning plans or filtered content
 export async function GET(request: NextRequest) {

@@ -12,7 +12,7 @@ import type {
   UserType,
   ActivePlan,
   PersonalizedContent,
-} from "../../../../../../apps/website/src/app/types/homePage.types";
+} from "@elzatona/types";
 
 const meta: Meta<typeof HomePageLayout> = {
   title: "Organisms/HomePageLayout",

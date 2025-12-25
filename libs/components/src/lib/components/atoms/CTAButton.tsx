@@ -3,9 +3,9 @@
 import React from "react";
 import Link from "next/link";
 import { ArrowRight, type LucideIcon } from "lucide-react";
-import { getColorClasses } from "../../../../../apps/website/src/app/lib/homePageHelpers";
-import type { ContentColor } from "../../../../../apps/website/src/app/types/homePage.types";
-import { ANIMATION_DURATION } from "../../../../../apps/website/src/app/lib/constants/homePage.constants";
+import { getColorClasses } from "@elzatona/utilities";
+import type { ContentColor } from "@elzatona/types";
+import { ANIMATION_DURATION } from "@elzatona/types";
 
 interface CTAButtonProps {
   href: string;
@@ -38,8 +38,8 @@ export function CTAButton({
 
   return (
     <div
-      className={`transition-all duration-1000 ${
-        showAnimation ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
+      className={`transition-all duration-300 ${
+        showAnimation ? "opacity-100 translate-y-0" : "opacity-100 translate-y-0"
       } ${className}`}
     >
       <div className="relative inline-block">

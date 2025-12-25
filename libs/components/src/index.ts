@@ -38,6 +38,7 @@ export { EmptyState } from "./lib/ui/empty-state";
 export { SignInPopup } from "./lib/auth/SignInPopup";
 export { default as AdminNavbar } from "./lib/auth/AdminNavbar";
 export { default as AdminLoginNavbar } from "./lib/auth/AdminLoginNavbar";
+export { default as NavbarSimple } from "./lib/common/NavbarSimple";
 export { default as FirestoreErrorBoundary } from "./lib/common/FirestoreErrorBoundary";
 export { default as FrontendTaskEditor } from "./lib/admin/FrontendTaskEditor";
 export { default as ProblemSolvingEditor } from "./lib/admin/ProblemSolvingEditor";

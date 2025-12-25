@@ -253,11 +253,11 @@ const nextConfig: NextConfig = {
             key: "Content-Security-Policy",
             value: [
               "default-src 'self'",
-              "script-src 'self' 'unsafe-eval' 'unsafe-inline' https://vercel.live https://cdn.jsdelivr.net",
+              "script-src 'self' 'unsafe-eval' 'unsafe-inline' https://vercel.live https://cdn.jsdelivr.net https://va.vercel-scripts.com",
               "style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net",
               "font-src 'self' data: https://cdn.jsdelivr.net",
               "img-src 'self' data: https: blob:",
-              "connect-src 'self' https://cdn.jsdelivr.net",
+              "connect-src 'self' https://cdn.jsdelivr.net https://va.vercel-scripts.com",
               "worker-src 'self' blob:",
             ].join("; "),
           },

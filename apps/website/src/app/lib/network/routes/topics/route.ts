@@ -2,12 +2,12 @@
 // v2.1 - Enhanced topic management with input sanitization
 
 import { NextRequest, NextResponse } from "next/server";
-import { supabaseOperations } from "../../../lib/supabase-server";
-import { sanitizeObjectServer } from "../../../lib/utils/sanitize-server";
+import { supabaseOperations } from "../../supabase-server";
+import { sanitizeObjectServer } from "../../utils/sanitize-server";
 import {
   validateAndSanitize,
   topicSchema,
-} from "../../../lib/utils/validation";
+} from "../../utils/validation";
 
 // GET /api/topics - Get all topics
 export async function GET() {

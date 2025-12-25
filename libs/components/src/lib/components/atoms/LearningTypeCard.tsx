@@ -60,7 +60,7 @@ export function LearningTypeCard({
       className={cn(
         "group bg-gradient-to-br rounded-2xl p-8 hover:shadow-xl transition-all duration-500 transform hover:scale-105 hover:-translate-y-2 cursor-pointer",
         colors.gradient,
-        showAnimation ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8",
+        showAnimation ? "opacity-100 translate-y-0" : "opacity-100 translate-y-0",
         isSelected && `ring-2 ${colors.ring} ring-opacity-50 shadow-lg`,
         className,
       )}

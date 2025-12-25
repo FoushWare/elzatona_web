@@ -13,7 +13,7 @@ import { PersonalizedContent } from "./PersonalizedContent";
 import type {
   ActivePlan,
   PersonalizedContent as PersonalizedContentType,
-} from "../../../../../../apps/website/src/app/types/homePage.types";
+} from "@elzatona/types";
 
 const meta: Meta<typeof PersonalizedContent> = {
   title: "Organisms/PersonalizedContent",

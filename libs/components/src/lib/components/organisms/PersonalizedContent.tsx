@@ -7,9 +7,9 @@ import type {
   UserType,
   ActivePlan,
   PersonalizedContent as PersonalizedContentType,
-} from "../../../../../../apps/website/src/app/types/homePage.types";
-import { ANIMATION_DELAYS } from "../../../../../../apps/website/src/app/lib/constants/homePage.constants";
-import { cn } from "../../../../../../apps/website/src/app/lib/utils";
+} from "@elzatona/types";
+import { ANIMATION_DELAYS } from "@elzatona/types";
+import { cn } from "@elzatona/utilities";
 
 interface PersonalizedContentProps {
   userType: UserType;
@@ -34,10 +34,8 @@ export function PersonalizedContent({
     return (
       <section
         className={cn(
-          "py-16 px-4 sm:px-6 lg:px-8 relative z-10 transition-all duration-1000",
-          showAnimation
-            ? "opacity-100 translate-y-0"
-            : "opacity-0 translate-y-8",
+          "py-16 px-4 sm:px-6 lg:px-8 relative z-10 transition-all duration-300",
+          showAnimation ? "opacity-100 translate-y-0" : "opacity-100 translate-y-0",
         )}
         style={{ transitionDelay: `${ANIMATION_DELAYS.CONTENT_SECTION}ms` }}
       >
@@ -104,10 +102,10 @@ export function PersonalizedContent({
 
   return (
     <section
-      className={cn(
-        "py-16 px-4 sm:px-6 lg:px-8 relative z-10 transition-all duration-1000",
-        showAnimation ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8",
-      )}
+        className={cn(
+          "py-16 px-4 sm:px-6 lg:px-8 relative z-10 transition-all duration-300",
+          showAnimation ? "opacity-100 translate-y-0" : "opacity-100 translate-y-0",
+        )}
       style={{ transitionDelay: `${ANIMATION_DELAYS.CONTENT_SECTION}ms` }}
     >
       <div className="max-w-7xl mx-auto">

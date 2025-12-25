@@ -13,7 +13,7 @@ import type {
   UserType,
   ActivePlan,
   PersonalizedContent,
-} from "../../../../../../apps/website/src/app/types/homePage.types";
+} from "@elzatona/types";
 import { Play } from "lucide-react";
 
 const mockPersonalizedContent: PersonalizedContent = {

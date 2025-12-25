@@ -30,7 +30,7 @@ import { useAuth } from "@elzatona/contexts";
 import {
   supabaseClient as supabase,
   isSupabaseAvailable,
-} from "../../../../../apps/website/src/app/utils/supabase-client";
+} from "../../../../../apps/website/src/app/lib/supabase-client";
 
 import {
   BookOpen,

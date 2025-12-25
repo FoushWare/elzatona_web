@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
-import { UserAuthService } from "../../../lib/user-auth";
-import { sanitizeObjectServer } from "../../../lib/utils/sanitize-server";
+import { UserAuthService } from "../../user-auth";
+import { sanitizeObjectServer } from "../../utils/sanitize-server";
 
 export async function GET(_request: NextRequest) {
   try {

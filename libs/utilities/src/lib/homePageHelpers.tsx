@@ -5,7 +5,7 @@ import type {
   ContentColor,
   ActivePlan,
   PersonalizedContent,
-} from "@/types/homePage.types";
+} from "@elzatona/types";
 
 /**
  * Home Page Helper Functions
@@ -133,3 +133,4 @@ export function parseActivePlan(planData: string | null): ActivePlan | null {
     return null;
   }
 }
+

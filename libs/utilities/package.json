@@ -1,7 +1,8 @@
 {
-  "name": "@elzatona/types",
+  "name": "@elzatona/utilities",
   "version": "0.0.1",
   "type": "module",
   "main": "./src/index.ts",
   "types": "./src/index.ts"
 }
+

@@ -9,7 +9,7 @@ import React from "react";
 import { render, screen } from "@testing-library/react";
 import { describe, it, expect } from "vitest";
 import { HeroSection } from "./HeroSection";
-import type { PersonalizedContent } from "../../../../../../apps/website/src/app/types/homePage.types";
+import type { PersonalizedContent } from "@elzatona/types";
 import { Play } from "lucide-react";
 
 const mockPersonalizedContent: PersonalizedContent = {

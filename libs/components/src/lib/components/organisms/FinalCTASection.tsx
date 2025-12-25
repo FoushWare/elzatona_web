@@ -3,7 +3,7 @@
 import React from "react";
 import Link from "next/link";
 import { Play, BookOpen, ArrowRight } from "lucide-react";
-import { ANIMATION_DELAYS } from "../../../../../../apps/website/src/app/lib/constants/homePage.constants";
+import { ANIMATION_DELAYS } from "@elzatona/types";
 
 interface FinalCTASectionProps {
   showAnimation: boolean;
@@ -16,8 +16,8 @@ interface FinalCTASectionProps {
 export function FinalCTASection({ showAnimation }: FinalCTASectionProps) {
   return (
     <section
-      className={`final-cta-section py-16 px-4 sm:px-6 lg:px-8 relative z-10 transition-all duration-1000 delay-1500 ${
-        showAnimation ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
+      className={`final-cta-section py-16 px-4 sm:px-6 lg:px-8 relative z-10 transition-all duration-300 ${
+        showAnimation ? "delay-450 opacity-100 translate-y-0" : "opacity-100 translate-y-0"
       }`}
       style={{ transitionDelay: `${ANIMATION_DELAYS.FINAL_CTA}ms` }}
     >

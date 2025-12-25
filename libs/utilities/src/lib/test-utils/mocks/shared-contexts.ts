@@ -21,17 +21,19 @@ export const AdminAuthProvider = ({
   children: React.ReactNode;
 }) => children;
 
+import { createMockFn } from "./jest-helper";
+
 const defaultAdminAuth = {
   isAuthenticated: false,
   isLoading: false,
-  login: jest.fn(),
-  logout: jest.fn(),
+  login: createMockFn(() => {}),
+  logout: createMockFn(() => {}),
   user: null,
 };
 
-export const useAdminAuth = jest.fn(
+export const useAdminAuth = createMockFn(
   () => defaultAdminAuth,
-) as jest.MockedFunction<() => typeof defaultAdminAuth>;
+) as any;
 
 // Notification context mocks
 export const NotificationProvider = ({
@@ -39,14 +41,14 @@ export const NotificationProvider = ({
 }: {
   children: React.ReactNode;
 }) => children;
-export const useNotifications = jest.fn(() => ({
+export const useNotifications = createMockFn(() => ({
   notifications: [],
   unreadCount: 0,
   isLoading: false,
   error: null,
-  markAsRead: jest.fn(),
-  markAllAsRead: jest.fn(),
-  refreshNotifications: jest.fn(),
+  markAsRead: createMockFn(() => {}),
+  markAllAsRead: createMockFn(() => {}),
+  refreshNotifications: createMockFn(() => {}),
 }));
 
 // Theme provider mocks

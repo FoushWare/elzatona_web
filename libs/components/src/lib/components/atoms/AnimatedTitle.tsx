@@ -2,7 +2,7 @@
 
 import React from "react";
 import { Sparkles, Zap, Star } from "lucide-react";
-import { ANIMATION_DURATION } from "../../../../../apps/website/src/app/lib/constants/homePage.constants";
+import { ANIMATION_DURATION } from "@elzatona/types";
 
 interface AnimatedTitleProps {
   title: string;
@@ -24,10 +24,8 @@ export function AnimatedTitle({
   return (
     <div className={`relative inline-block ${className}`}>
       <h1
-        className={`hero-title text-5xl md:text-6xl font-bold text-gray-900 dark:text-white mb-6 transition-all duration-1000 ${
-          showAnimation
-            ? "opacity-100 translate-y-0"
-            : "opacity-0 translate-y-8"
+        className={`hero-title text-5xl md:text-6xl font-bold text-gray-900 dark:text-white mb-6 transition-all duration-300 ${
+          showAnimation ? "opacity-100 translate-y-0" : "opacity-100 translate-y-0"
         }`}
       >
         {title}
@@ -44,11 +42,11 @@ export function AnimatedTitle({
           <Sparkles className="absolute -top-4 w-8 h-8 text-yellow-400 animate-pulse right-4" />
           <Zap
             className="absolute -bottom-2 w-6 h-6 text-blue-400 animate-bounce right-4"
-            style={{ animationDelay: "0.5s" }}
+            style={{ animationDelay: "0.1s" }}
           />
           <Star
             className="absolute top-1/2 w-5 h-5 text-purple-400 animate-ping right-4"
-            style={{ animationDelay: "1s" }}
+            style={{ animationDelay: "0.2s" }}
           />
         </>
       )}

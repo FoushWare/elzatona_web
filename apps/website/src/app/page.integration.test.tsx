@@ -58,7 +58,7 @@ jest.mock("./lib/constants/homePage.constants", () => ({
 }));
 
 import { useHomePageState } from "./lib/hooks/useHomePageState";
-import { getPersonalizedContent } from "./lib/homePageHelpers";
+import { getPersonalizedContent } from "@elzatona/utilities";
 
 describe("HomePage Integration", () => {
   beforeEach(() => {
