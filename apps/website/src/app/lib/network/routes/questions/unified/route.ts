@@ -996,8 +996,8 @@ export async function POST(request: NextRequest) {
           // Try to recover code from any available source
           if (processedCode !== null && processedCode !== "") {
             questionWithTimestamps.code = processedCode;
-          // Security: Removed user data from logs to prevent log injection
-          console.log("✅ Code field recovered from processedCode");
+            // Security: Removed user data from logs to prevent log injection
+            console.log("✅ Code field recovered from processedCode");
           } else if (
             originalCode !== undefined &&
             originalCode !== null &&
@@ -1023,7 +1023,9 @@ export async function POST(request: NextRequest) {
             console.log("✅ Code field recovered from sanitizedQuestion");
           } else {
             questionWithTimestamps.code = null;
-            console.log("⚠️ Code field not found in any source, setting to null");
+            console.log(
+              "⚠️ Code field not found in any source, setting to null",
+            );
           }
         } else {
           // Code field exists, but verify it's not empty when it should have content

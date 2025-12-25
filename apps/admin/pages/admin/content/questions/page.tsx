@@ -211,11 +211,13 @@ export default function AdminContentQuestionsPage() {
   }, []);
 
   const cards = cardsData?.data || [];
-  const allTopics = (topicsData?.data || []).map((topic: { id: string; name: string }) => ({
-    id: topic.id,
-    name: topic.name,
-    categoryId: "", // Will be populated if category data is available
-  }));
+  const allTopics = (topicsData?.data || []).map(
+    (topic: { id: string; name: string }) => ({
+      id: topic.id,
+      name: topic.name,
+      categoryId: "", // Will be populated if category data is available
+    }),
+  );
   const allCategories = categoriesData?.data || [];
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars

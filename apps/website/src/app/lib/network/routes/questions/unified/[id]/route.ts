@@ -141,13 +141,13 @@ export async function PUT(
         categoryId = categoryData.id;
         // Security: Removed user data from logs to prevent log injection
         // Security: Removed user data from logs to prevent log injection
-      console.log("✅ Found category");
+        console.log("✅ Found category");
       } else if (categoryValue && typeof categoryValue === "string") {
         // It's already an ID
         categoryId = categoryValue;
         // Security: Removed user data from logs to prevent log injection
         // Security: Removed user data from logs to prevent log injection
-      console.log("✅ Using provided category ID");
+        console.log("✅ Using provided category ID");
       }
     }
 
@@ -198,13 +198,13 @@ export async function PUT(
         topicId = topicData.id;
         // Security: Removed user data from logs to prevent log injection
         // Security: Removed user data from logs to prevent log injection
-      console.log("✅ Found topic");
+        console.log("✅ Found topic");
       } else if (topicValue && typeof topicValue === "string") {
         // It's already an ID
         topicId = topicValue;
         // Security: Removed user data from logs to prevent log injection
         // Security: Removed user data from logs to prevent log injection
-      console.log("✅ Using provided topic ID");
+        console.log("✅ Using provided topic ID");
       }
     }
 
@@ -233,7 +233,7 @@ export async function PUT(
           finalLearningCardId = trimmedId;
           // Security: Removed user data from logs to prevent log injection
           // Security: Removed user data from logs to prevent log injection
-      console.log("✅ Using learning card ID");
+          console.log("✅ Using learning card ID");
         } else {
           // Security: Removed user data from logs to prevent log injection
           console.warn(
@@ -246,7 +246,7 @@ export async function PUT(
         finalLearningCardId = null;
         // Security: Removed user data from logs to prevent log injection
         // Security: Removed user data from logs to prevent log injection
-      console.log("ℹ️ Learning card ID explicitly cleared (set to null)");
+        console.log("ℹ️ Learning card ID explicitly cleared (set to null)");
       }
     } else {
       // Security: Removed user data from logs to prevent log injection
