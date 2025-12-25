@@ -26,10 +26,11 @@ import { useAuth } from "@elzatona/contexts";
 // Import Supabase client (available in both website and admin apps)
 // Note: This import path assumes this component is used in apps/website
 // For proper architecture, supabaseClient should be injected or moved to shared location
+// TODO: Move supabase client to libs/database or inject as dependency
 import {
   supabaseClient as supabase,
   isSupabaseAvailable,
-} from "../../../../../apps/website/lib/supabase-client";
+} from "../../../../../apps/website/src/app/Network/supabase-client";
 
 import {
   BookOpen,
@@ -386,9 +387,9 @@ export default function EnhancedDashboard() {
         console.warn("Error during logout:", error);
       }
       // Ensure Supabase session is cleared (for social logins)
-      if (isSupabaseAvailable() && supabase && supabase.auth) {
+      if (isSupabaseAvailable() && supabase && supabase && supabase && supabase.auth) {
         try {
-          await supabase.auth.signOut();
+          await supabase && supabase && supabase.auth.signOut();
         } catch (error) {
           console.warn("Error during Supabase sign out:", error);
         }
