@@ -205,7 +205,6 @@ export async function GET(request: NextRequest) {
     if (filters.topicId && questions.length > 0) {
       // Security: Removed user data from logs to prevent log injection
       console.log("Sample question topic_ids");
-      );
     }
 
     // Transform data to match expected format
@@ -225,7 +224,6 @@ export async function GET(request: NextRequest) {
             if (!questionText) {
               // Security: Removed user data from logs to prevent log injection
               console.warn("Question missing text field");
-              });
             }
 
             return {
