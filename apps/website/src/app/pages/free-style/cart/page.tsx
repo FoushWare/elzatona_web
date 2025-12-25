@@ -9,7 +9,7 @@ import {
   CartItem,
 } from "../../../lib/cart";
 import { ShoppingCart, Trash2, CheckCircle2, BookOpen } from "lucide-react";
-import { useLearningType } from "../../../src/context/LearningTypeContext"";
+import { useLearningType } from "../../../../src/context/LearningTypeContext"""";
 
 export default function FreeStyleCartPage() {
   const [items, setItems] = useState<CartItem[]>([]);
