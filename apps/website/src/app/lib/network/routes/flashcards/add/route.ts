@@ -32,7 +32,7 @@ export async function POST(request: NextRequest) {
 
     // In a real implementation, you would save these to a database
     // For now, we'll just return success
-    console.log(`Adding ${flashcards.length} flashcards to user's collection`);
+    // Security: Removed debug logging to prevent information disclosure
 
     return NextResponse.json({
       success: true,

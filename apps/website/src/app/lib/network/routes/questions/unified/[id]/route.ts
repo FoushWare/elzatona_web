@@ -77,12 +77,12 @@ export async function PUT(
     const supabase = getSupabaseClient();
 
     console.log("🔄 Updating question:", id);
-    console.log("📥 Raw update data keys:", Object.keys(updateData));
+    // Security: Removed debug logging to prevent information disclosure
     console.log("📥 Raw update data:", JSON.stringify(updateData, null, 2));
 
     // Sanitize update data
     const sanitizedUpdate = sanitizeObjectServer(updateData);
-    console.log("🧹 Sanitized update data keys:", Object.keys(sanitizedUpdate));
+    // Security: Removed debug logging to prevent information disclosure
 
     // Sanitize rich content fields
     if (sanitizedUpdate.explanation) {
