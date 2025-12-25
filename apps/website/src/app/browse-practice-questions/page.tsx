@@ -1,2 +1,10 @@
-// Next.js page - imports from Pages/ directory
-export { default } from "../Pages/browse-practice-questions/page";
+"use client";
+
+export default function browse-practice-questionsPage() {
+  return (
+    <div className="min-h-screen p-8">
+      <h1 className="text-2xl font-bold">browse-practice-questions</h1>
+      <p>Page component - needs implementation</p>
+    </div>
+  );
+}

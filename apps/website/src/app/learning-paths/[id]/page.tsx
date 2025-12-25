@@ -1,2 +1,10 @@
-// Next.js page - imports from Pages/ directory
-export { default } from "../../Pages/learning-paths/[id]/page";
+"use client";
+
+export default function learning-paths[id]Page() {
+  return (
+    <div className="min-h-screen p-8">
+      <h1 className="text-2xl font-bold">learning-paths/[id]</h1>
+      <p>Page component - needs implementation</p>
+    </div>
+  );
+}
