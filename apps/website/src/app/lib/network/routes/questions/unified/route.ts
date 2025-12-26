@@ -728,8 +728,8 @@ export async function POST(request: NextRequest) {
           processedCode !== null ? processedCode : sanitizedQuestion.code;
 
         const {
-          category,
-          topic,
+          category: _category,
+          topic: _topic,
           learningCardId: _learningCardId,
           learning_card_id: _learning_card_id,
           isActive: _isActive, // Remove camelCase version, keep is_active
@@ -1423,11 +1423,11 @@ export async function PUT(request: NextRequest) {
     // Prepare update data for database
     // Remove fields that don't exist in the database
     const {
-      category,
-      topic,
+      category: _category,
+      topic: _topic,
       learningCardId: _learningCardId,
       learning_card_id: _learning_card_id,
-      resources, // Keep resources - it's a valid database field
+      resources: _resources, // Remove resources - it's handled separately
       ...dbUpdate
     } = sanitizedUpdate;
 

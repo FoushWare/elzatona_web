@@ -20,10 +20,10 @@ import { NextRequest, NextResponse } from "next/server";
  * ```
  */
 export function withSentryErrorTracking<T extends NextRequest>(
-  handler: (request: T, context?: any) => Promise<NextResponse>,
+  handler: (request: T, context?: unknown) => Promise<NextResponse>,
   routeName?: string,
 ) {
-  return async (request: T, context?: any): Promise<NextResponse> => {
+  return async (request: T, context?: unknown): Promise<NextResponse> => {
     try {
       // Add request context to Sentry
       Sentry.setContext("request", {

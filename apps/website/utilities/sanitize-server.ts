@@ -118,7 +118,9 @@ export function sanitizeInputServer(input: string): string {
  * @param obj - Object to sanitize
  * @returns Sanitized object
  */
-export function sanitizeObjectServer<T extends Record<string, any>>(obj: T): T {
+export function sanitizeObjectServer<T extends Record<string, unknown>>(
+  obj: T,
+): T {
   if (!obj || typeof obj !== "object") {
     return obj;
   }
@@ -150,17 +152,17 @@ export function sanitizeObjectServer<T extends Record<string, any>>(obj: T): T {
       // For content and other rich text fields, preserve newlines - don't use sanitizeInputServer
       else if (preserveNewlinesFields.includes(key)) {
         // Only remove dangerous control characters, but preserve newlines and tabs
-        let content = sanitized[key];
-        content = content
+        const content = String(sanitized[key]);
+        const cleaned = content
           .replace(/[\x00-\x08\x0B-\x0C\x0E-\x1F\x7F]/g, "") // Remove control chars except \n (0x0A), \r (0x0D), \t (0x09)
           .replace(/\x00/g, ""); // Remove null bytes
-        sanitized[key] = content as T[typeof key];
+        sanitized[key] = cleaned as T[typeof key];
       } else {
         // For other string fields, use standard sanitization
         sanitized[key] = sanitizeInputServer(sanitized[key]) as T[typeof key];
       }
     } else if (Array.isArray(sanitized[key])) {
-      sanitized[key] = sanitized[key].map((item: any) =>
+      sanitized[key] = sanitized[key].map((item: unknown) =>
         typeof item === "string" ? sanitizeInputServer(item) : item,
       ) as T[typeof key];
     } else if (
@@ -170,11 +172,13 @@ export function sanitizeObjectServer<T extends Record<string, any>>(obj: T): T {
       !Array.isArray(sanitized[key])
     ) {
       // Check if it's a Date using a type guard
-      const value = sanitized[key] as any;
+      const value = sanitized[key] as unknown;
       const isDate =
         value && typeof value === "object" && value.constructor === Date;
       if (!isDate) {
-        sanitized[key] = sanitizeObjectServer(sanitized[key]) as T[typeof key];
+        sanitized[key] = sanitizeObjectServer(
+          sanitized[key] as Record<string, unknown>,
+        ) as T[typeof key];
       }
     }
   }

@@ -292,7 +292,7 @@ export function validateAndSanitize<T>(
 
     // Pre-validate data structure to prevent "Cannot read properties of undefined" errors
     if (data && typeof data === "object" && !Array.isArray(data)) {
-      const dataObj = data as any;
+      const dataObj = data as Record<string, unknown>;
 
       // Ensure options is either undefined, null, or a valid array
       if (dataObj.options !== undefined && dataObj.options !== null) {
@@ -351,15 +351,19 @@ export function validateAndSanitize<T>(
 
     const result = schema.parse(data);
     return { success: true, data: result };
-  } catch (error: any) {
+  } catch (error: unknown) {
     // Log the error type and details for debugging
+    const errorObj = error instanceof Error ? error : new Error(String(error));
     console.error(
       "🔴 Validation catch block - Error type:",
-      error?.constructor?.name,
+      errorObj.constructor?.name,
     );
-    console.error("🔴 Validation catch block - Error:", error);
-    console.error("🔴 Validation catch block - Error message:", error?.message);
-    console.error("🔴 Validation catch block - Error stack:", error?.stack);
+    console.error("🔴 Validation catch block - Error:", errorObj);
+    console.error(
+      "🔴 Validation catch block - Error message:",
+      errorObj.message,
+    );
+    console.error("🔴 Validation catch block - Error stack:", errorObj.stack);
     console.error(
       "🔴 Input data being validated:",
       JSON.stringify(data, null, 2),
@@ -383,7 +387,7 @@ export function validateAndSanitize<T>(
           message: error.message,
           stack: error.stack,
           issues: error.issues,
-          errors: (error as any).errors,
+          errors: (error as unknown as Record<string, unknown>).errors,
         });
         return {
           success: false,
@@ -403,7 +407,7 @@ export function validateAndSanitize<T>(
       if (issues.length > 1) {
         console.warn(
           `⚠️ Multiple validation errors for question:`,
-          issues.map((e: any) => ({
+          issues.map((e: z.ZodIssue) => ({
             path: e.path?.join(".") || "root",
             message: e.message,
             code: e.code,
@@ -427,9 +431,11 @@ export function validateAndSanitize<T>(
     }
     // Handle any other error type
     console.error("Validation error (unknown type):", error);
+    const errorMessage =
+      error instanceof Error ? error.message : "Unknown error";
     return {
       success: false,
-      error: `Validation failed: ${error?.message || "Unknown error"}`,
+      error: `Validation failed: ${errorMessage}`,
     };
   }
 }

@@ -16,7 +16,7 @@ export function useHomePageState(
     name: string;
     id: string;
   } | null>(null);
-  const [showAnimation, setShowAnimation] = useState(true);
+  const [showAnimation] = useState(true);
 
   useEffect(() => {
     // Simulate fetching user plan data

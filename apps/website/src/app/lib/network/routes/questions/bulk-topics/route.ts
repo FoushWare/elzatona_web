@@ -6,25 +6,6 @@ const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
 const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
 const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
 
-function sanitizeForLog(value: unknown): string {
-  let raw: string;
-
-  if (typeof value === "string") {
-    // Remove potentially dangerous characters from strings
-    raw = value.replace(/[\r\n]/g, " ").slice(0, 500);
-  } else {
-    try {
-      const jsonString = JSON.stringify(value);
-      // Remove potentially dangerous characters from JSON
-      raw = jsonString.replace(/[\r\n]/g, " ").slice(0, 500);
-    } catch {
-      raw = "[unserializable]";
-    }
-  }
-
-  return raw;
-}
-
 // POST /api/questions/bulk-topics
 export async function POST(request: NextRequest) {
   try {
@@ -45,9 +26,6 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const questionCount = questionIds.length;
-    const topicsStr = sanitizeForLog(topics);
-
     // Security: Removed user data from logs to prevent log injection
     console.log("Bulk updating topics for questions");
 
@@ -64,7 +42,7 @@ export async function POST(request: NextRequest) {
           .single();
 
         if (fetchError || !existingQuestion) {
-          errors.push(`Question ${sanitizeForLog(questionId)} not found`);
+          errors.push(`Question ${questionId} not found`);
           continue;
         }
 
@@ -87,17 +65,12 @@ export async function POST(request: NextRequest) {
           message: "Topics updated",
         });
       } catch (error) {
-        const questionIdStr = sanitizeForLog(questionId);
-        const errorStr = sanitizeForLog(error);
-
         // Security: Removed user data from logs to prevent log injection
         console.error("Error processing question");
 
-        errors.push(
-          `Failed to update question ${questionIdStr}: ${sanitizeForLog(
-            error instanceof Error ? error.message : "Unknown error",
-          )}`,
-        );
+        const errorMessage =
+          error instanceof Error ? error.message : "Unknown error";
+        errors.push(`Failed to update question ${questionId}: ${errorMessage}`);
       }
     }
 
@@ -107,7 +80,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({
       success: true,
       data: {
-        message: `Successfully updated topics for ${sanitizeForLog(results.length)} questions`,
+        message: `Successfully updated topics for ${results.length} questions`,
         results,
         errors,
         totalProcessed: questionIds.length,

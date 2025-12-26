@@ -1,21 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { verifySupabaseToken } from "../../../../server-auth";
 
-function sanitizeForLog(value: unknown): string {
-  const raw =
-    typeof value === "string"
-      ? value
-      : (() => {
-          try {
-            return JSON.stringify(value);
-          } catch {
-            return "[unserializable]";
-          }
-        })();
-
-  return raw.split("\r").join(" ").split("\n").join(" ").slice(0, 500);
-}
-
 export async function POST(request: NextRequest) {
   try {
     const authHeader = request.headers.get("authorization");

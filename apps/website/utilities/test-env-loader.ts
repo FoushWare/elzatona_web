@@ -86,6 +86,7 @@ export function loadTestEnvironment(): {
     process.env.NEXT_PUBLIC_APP_ENV = "test";
     // NODE_ENV is read-only in some environments, only set if not already set
     if (!process.env.NODE_ENV) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       (process.env as any).NODE_ENV = "test";
     }
   }
