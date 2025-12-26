@@ -1,6 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 
-import { getSupabaseClient } from "../../../../get-supabase-client";
+import {
+  getSupabaseClient,
+  getSupabaseClientWithAnonKey,
+} from "../../../../get-supabase-client";
 
 import { AutoLinkingService } from "../../../../auto-linking-service";
 
@@ -39,7 +42,14 @@ export async function GET(request: NextRequest) {
     }
 
     // Otherwise, get all learning plans
-    const supabase = getSupabaseClient();
+    // Use anon key for public read access (this is a public endpoint)
+    let supabase;
+    try {
+      supabase = getSupabaseClient(); // Try service role first
+    } catch {
+      // Fallback to anon key if service role is not available
+      supabase = getSupabaseClientWithAnonKey();
+    }
 
     // Try learning_plans first (standard table name), then learningplantemplates as fallback
     let { data: plans, error } = await supabase
