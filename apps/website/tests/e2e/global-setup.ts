@@ -51,11 +51,17 @@ async function globalSetup() {
     ];
     const missingVars = requiredVars.filter((varName) => !process.env[varName]);
     if (missingVars.length > 0) {
-      console.error("❌ CRITICAL: CI environment is missing required variables:");
+      console.error(
+        "❌ CRITICAL: CI environment is missing required variables:",
+      );
       console.error(`   ${missingVars.join(", ")}`);
       console.error("\n📝 To fix:");
-      console.error("   1. Ensure GitHub Secrets are set in repository settings");
-      console.error("   2. Required secrets: TEST_SUPABASE_URL, TEST_SUPABASE_ANON_KEY, TEST_SUPABASE_SERVICE_ROLE_KEY");
+      console.error(
+        "   1. Ensure GitHub Secrets are set in repository settings",
+      );
+      console.error(
+        "   2. Required secrets: TEST_SUPABASE_URL, TEST_SUPABASE_ANON_KEY, TEST_SUPABASE_SERVICE_ROLE_KEY",
+      );
       throw new Error(
         `CI environment missing required variables: ${missingVars.join(", ")}`,
       );
@@ -116,11 +122,16 @@ async function globalSetup() {
   }
 
   // Log if admin credentials are available (without exposing them)
-  if (process.env.ADMIN_EMAIL && !process.env.ADMIN_EMAIL.includes("example.com")) {
+  if (
+    process.env.ADMIN_EMAIL &&
+    !process.env.ADMIN_EMAIL.includes("example.com")
+  ) {
     console.log("✅ Admin credentials loaded");
     console.log(`   Email: ${process.env.ADMIN_EMAIL.substring(0, 10)}...`);
   } else {
-    console.warn("⚠️  ADMIN_EMAIL not set or is placeholder - admin login tests will fail");
+    console.warn(
+      "⚠️  ADMIN_EMAIL not set or is placeholder - admin login tests will fail",
+    );
   }
 }
 

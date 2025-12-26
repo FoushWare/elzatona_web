@@ -1,6 +1,6 @@
 /**
  * Test Environment Validation
- * 
+ *
  * Validates that .env.test.local exists and contains valid test database credentials.
  * This ensures tests ALWAYS use the test database, never production.
  */
@@ -44,9 +44,7 @@ export function validateTestEnvironment(): {
   if (!isCI) {
     const result = config({ path: testEnvFile });
     if (result.error) {
-      errors.push(
-        `❌ Failed to load .env.test.local: ${result.error.message}`,
-      );
+      errors.push(`❌ Failed to load .env.test.local: ${result.error.message}`);
       return { isValid: false, errors, warnings };
     }
   }
@@ -63,7 +61,10 @@ export function validateTestEnvironment(): {
     const value = process.env[varName];
     if (!value) {
       missingVars.push(varName);
-    } else if (!isCI && (value.includes("your-") || value.includes("placeholder"))) {
+    } else if (
+      !isCI &&
+      (value.includes("your-") || value.includes("placeholder"))
+    ) {
       // In local dev, check for placeholder values
       missingVars.push(varName);
     }
@@ -116,13 +117,19 @@ export function validateTestEnvironment(): {
   }
 
   // Check for admin credentials (warnings, not errors - some tests might not need them)
-  if (!process.env.ADMIN_EMAIL || process.env.ADMIN_EMAIL.includes("example.com")) {
+  if (
+    !process.env.ADMIN_EMAIL ||
+    process.env.ADMIN_EMAIL.includes("example.com")
+  ) {
     warnings.push(
       `⚠️  ADMIN_EMAIL not set or is placeholder - admin login tests will fail`,
     );
   }
 
-  if (!process.env.ADMIN_PASSWORD || process.env.ADMIN_PASSWORD.includes("your-")) {
+  if (
+    !process.env.ADMIN_PASSWORD ||
+    process.env.ADMIN_PASSWORD.includes("your-")
+  ) {
     warnings.push(
       `⚠️  ADMIN_PASSWORD not set or is placeholder - admin login tests will fail`,
     );
@@ -157,26 +164,37 @@ export function requireTestEnvironment(): void {
   if (!validation.isValid) {
     console.error("\n❌ Test Environment Validation Failed:");
     validation.errors.forEach((error) => console.error(`   ${error}`));
-    
+
     if (isCI) {
       console.error("\n📝 To fix (CI/GitHub Actions):");
-      console.error("   1. Ensure GitHub Secrets are set in repository settings");
-      console.error("   2. Required secrets: TEST_SUPABASE_URL, TEST_SUPABASE_ANON_KEY, TEST_SUPABASE_SERVICE_ROLE_KEY");
-      console.error("   3. Check .github/workflows/e2e-tests.yml for secret usage");
+      console.error(
+        "   1. Ensure GitHub Secrets are set in repository settings",
+      );
+      console.error(
+        "   2. Required secrets: TEST_SUPABASE_URL, TEST_SUPABASE_ANON_KEY, TEST_SUPABASE_SERVICE_ROLE_KEY",
+      );
+      console.error(
+        "   3. Check .github/workflows/e2e-tests.yml for secret usage",
+      );
     } else {
       console.error("\n📝 To fix (Local Development):");
       console.error("   1. Copy .env.test.local.example to .env.test.local");
       console.error("   2. Fill in your TEST Supabase project credentials");
-      console.error("   3. Ensure the URL contains a test project reference (not production)");
+      console.error(
+        "   3. Ensure the URL contains a test project reference (not production)",
+      );
       console.error(`   4. File location: ${testEnvFile}\n`);
     }
-    
+
     throw new Error(
       "Test environment validation failed. Please configure test environment correctly.",
     );
   }
 
-  console.log(`✅ Test environment validated successfully (${isCI ? "CI" : "Local"})`);
-  console.log(`   Using TEST database: ${process.env.NEXT_PUBLIC_SUPABASE_URL?.substring(0, 50)}...`);
+  console.log(
+    `✅ Test environment validated successfully (${isCI ? "CI" : "Local"})`,
+  );
+  console.log(
+    `   Using TEST database: ${process.env.NEXT_PUBLIC_SUPABASE_URL?.substring(0, 50)}...`,
+  );
 }
-

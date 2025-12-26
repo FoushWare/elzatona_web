@@ -324,7 +324,8 @@ test.describe("A-E2E-001: Admin Bulk Question Addition - CRUD", () => {
           );
         }
 
-        createResponseData = (await createResponse.json()) as CreateResponseData;
+        createResponseData =
+          (await createResponse.json()) as CreateResponseData;
         console.log("✅ Question creation API response received");
         console.log(
           "Question creation response:",
@@ -379,7 +380,10 @@ test.describe("A-E2E-001: Admin Bulk Question Addition - CRUD", () => {
         // Re-throw creation failures
         throw error;
       } else {
-        console.error("❌ Could not wait for create API response:", error.message);
+        console.error(
+          "❌ Could not wait for create API response:",
+          error.message,
+        );
         throw new Error(`Failed to create question: ${error.message}`);
       }
     }

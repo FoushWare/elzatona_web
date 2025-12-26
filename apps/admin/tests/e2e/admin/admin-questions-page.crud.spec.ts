@@ -322,7 +322,8 @@ test.describe("A-E2E-001: Admin Bulk Question Addition - CRUD", () => {
           );
         }
 
-        createResponseData = (await createResponse.json()) as CreateResponseData;
+        createResponseData =
+          (await createResponse.json()) as CreateResponseData;
         console.log("✅ Question creation API response received");
         console.log(
           "Question creation response:",
@@ -377,7 +378,10 @@ test.describe("A-E2E-001: Admin Bulk Question Addition - CRUD", () => {
         // Re-throw creation failures
         throw error;
       } else {
-        console.error("❌ Could not wait for create API response:", error.message);
+        console.error(
+          "❌ Could not wait for create API response:",
+          error.message,
+        );
         throw new Error(`Failed to create question: ${error.message}`);
       }
     }
@@ -416,7 +420,13 @@ test.describe("A-E2E-001: Admin Bulk Question Addition - CRUD", () => {
         ),
       ]);
 
-      if (fetchResponse && typeof fetchResponse === "object" && fetchResponse !== null && "ok" in fetchResponse && (fetchResponse as Response).ok) {
+      if (
+        fetchResponse &&
+        typeof fetchResponse === "object" &&
+        fetchResponse !== null &&
+        "ok" in fetchResponse &&
+        (fetchResponse as Response).ok
+      ) {
         const fetchData = (await (fetchResponse as Response).json()) as {
           data?: Array<{ id?: string; title?: string; [key: string]: unknown }>;
           pagination?: { totalCount?: number; [key: string]: unknown };

@@ -71,7 +71,9 @@ function sanitizeShellArg(value) {
   // Validate length to prevent extremely long values
   const maxLength = 200;
   if (sanitized.length > maxLength) {
-    throw new Error(`Sanitized value exceeds maximum length of ${maxLength} characters`);
+    throw new Error(
+      `Sanitized value exceeds maximum length of ${maxLength} characters`,
+    );
   }
 
   return sanitized;
@@ -241,7 +243,9 @@ try {
 
   // Validate that sanitized values are not empty
   if (!sanitizedProjectKey || !sanitizedOrg || !sanitizedToken) {
-    throw new Error("Sanitized values are empty - possible injection attempt detected");
+    throw new Error(
+      "Sanitized values are empty - possible injection attempt detected",
+    );
   }
 
   const sonarArgs = [
@@ -268,7 +272,9 @@ try {
 
   console.log("🚀 Starting SonarQube analysis with verbose output...");
   // Security: Don't log the full command with token - only log safe parts
-  console.log(`📝 Command: NODE_OPTIONS="--max-old-space-size=${sanitizedMemoryLimit}" ${scannerCommand} [args with sanitized values]`);
+  console.log(
+    `📝 Command: NODE_OPTIONS="--max-old-space-size=${sanitizedMemoryLimit}" ${scannerCommand} [args with sanitized values]`,
+  );
   console.log("");
 
   // Security: Execute command with args array to prevent shell injection

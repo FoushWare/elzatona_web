@@ -464,7 +464,9 @@ test.describe("A-E2E-001: Admin Bulk Question Addition - Pagination", () => {
 
     const nextCount = nextButton ? await nextButton.count() : 0;
     const nextDisabled =
-      nextCount > 0 && nextButton ? await nextButton.first().isDisabled() : true;
+      nextCount > 0 && nextButton
+        ? await nextButton.first().isDisabled()
+        : true;
 
     if (nextCount > 0 && !nextDisabled) {
       // Set up API response listener for next page
