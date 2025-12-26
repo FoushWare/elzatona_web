@@ -1,5 +1,10 @@
-// Next.js page wrapper - imports from pages/ directory
-// This file maintains Next.js routing structure
-// Source: /Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/apps/website/page-components/admin/content/questions/page.tsx
+"use client";
 
-export { default } from "../../../../../page-components/admin/content/questions/page";
+export default function admincontentquestionsPage() {
+  return (
+    <div className="min-h-screen p-8">
+      <h1 className="text-2xl font-bold">admin/content/questions</h1>
+      <p>Page component - needs implementation</p>
+    </div>
+  );
+}

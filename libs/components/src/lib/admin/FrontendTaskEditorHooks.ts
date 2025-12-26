@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { FrontendTask, FrontendTaskFormData } from "@elzatona/types";
 
 interface FileNode {
@@ -90,27 +90,30 @@ export const usePanelLayout = () => {
     setResizeStartX(e.clientX);
   };
 
-  const handleMouseMove = (e: MouseEvent) => {
-    if (!isResizing) return;
+  const handleMouseMove = useCallback(
+    (e: MouseEvent) => {
+      if (!isResizing) return;
 
-    const deltaX = e.clientX - resizeStartX;
-    const containerWidth = window.innerWidth;
-    const deltaPercent = (deltaX / containerWidth) * 100;
+      const deltaX = e.clientX - resizeStartX;
+      const containerWidth = window.innerWidth;
+      const deltaPercent = (deltaX / containerWidth) * 100;
 
-    if (deltaPercent !== 0) {
-      setLeftPanelWidth((prev) =>
-        Math.max(20, Math.min(60, prev + deltaPercent)),
-      );
-      setRightPanelWidth((prev) =>
-        Math.max(20, Math.min(60, prev - deltaPercent)),
-      );
-      setResizeStartX(e.clientX);
-    }
-  };
+      if (deltaPercent !== 0) {
+        setLeftPanelWidth((prev) =>
+          Math.max(20, Math.min(60, prev + deltaPercent)),
+        );
+        setRightPanelWidth((prev) =>
+          Math.max(20, Math.min(60, prev - deltaPercent)),
+        );
+        setResizeStartX(e.clientX);
+      }
+    },
+    [isResizing, resizeStartX],
+  );
 
-  const handleMouseUp = () => {
+  const handleMouseUp = useCallback(() => {
     setIsResizing(false);
-  };
+  }, []);
 
   useEffect(() => {
     if (isResizing) {
@@ -131,7 +134,7 @@ export const usePanelLayout = () => {
       document.body.style.cursor = "";
       document.body.style.userSelect = "";
     };
-  }, [isResizing, resizeStartX]);
+  }, [isResizing, resizeStartX, handleMouseMove, handleMouseUp]);
 
   return {
     leftPanelWidth,

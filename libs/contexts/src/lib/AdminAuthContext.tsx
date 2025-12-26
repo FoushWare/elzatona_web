@@ -103,11 +103,7 @@ export function AdminAuthProvider({ children }: AdminAuthProviderProps) {
           error,
         } = await supabase.auth.getSession();
 
-        console.log("🔍 AdminAuthProvider checking Supabase session:", {
-          hasSession: !!session,
-          pathname,
-          error: error?.message,
-        });
+        // Security: Removed pathname from debug logging to prevent information disclosure
 
         if (error) {
           console.error("Error getting session:", error);

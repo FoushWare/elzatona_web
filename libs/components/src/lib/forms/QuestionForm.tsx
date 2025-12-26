@@ -3,7 +3,7 @@
 
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import {
   Button,
   Input,
@@ -90,22 +90,25 @@ export const QuestionForm: React.FC<QuestionFormProps> = ({
   const [tagInput, setTagInput] = useState("");
 
   // Filter topics based on selected category
-  const filteredTopics = topics.filter(
-    (topic) => topic.categoryId === formData["categoryId"],
+  const formDataCategoryId = formData["categoryId"];
+  const formDataTopicId = formData["topicId"];
+  const filteredTopics = useMemo(
+    () => topics.filter((topic) => topic.categoryId === formDataCategoryId),
+    [topics, formDataCategoryId],
   );
 
   // Update topicId when category changes
   useEffect(() => {
     if (
-      formData["categoryId"] &&
-      !filteredTopics.find((topic) => topic.id === formData["topicId"])
+      formDataCategoryId &&
+      !filteredTopics.find((topic) => topic.id === formDataTopicId)
     ) {
       setFormData((prev) => ({
         ...prev,
         topicId: filteredTopics[0]?.id || "",
       }));
     }
-  }, [formData["categoryId"], filteredTopics, formData["topicId"]]);
+  }, [formDataCategoryId, filteredTopics, formDataTopicId, setFormData]);
 
   const validateForm = (): boolean => {
     const newErrors: Record<string, string> = {};

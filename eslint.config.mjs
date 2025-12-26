@@ -74,6 +74,13 @@ const eslintConfig = [
       "react/no-unescaped-entities": "warn",
     },
   },
+  {
+    // Allow @ts-nocheck in storybook and test files
+    files: ["**/*.stories.tsx", "**/*.test.tsx", "**/*.test.ts"],
+    rules: {
+      "@typescript-eslint/ban-ts-comment": "off",
+    },
+  },
 ];
 
 export default eslintConfig;

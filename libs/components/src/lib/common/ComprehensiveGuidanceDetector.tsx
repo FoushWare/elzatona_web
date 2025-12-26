@@ -18,10 +18,10 @@ interface WindowWithTestFlags extends Window {
 
 export const ComprehensiveGuidanceDetector: React.FC = () => {
   const {
-    isFirstVisit,
+    isFirstVisit: _isFirstVisit,
     setIsFirstVisit,
     userType,
-    setUserType,
+    setUserType: _setUserType,
     setHasCompletedOnboarding,
   } = useUserType();
   const [showGuidance, setShowGuidance] = useState(false);

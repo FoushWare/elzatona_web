@@ -6,10 +6,16 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 // useUserProgress is not exported from shared-hooks in this workspace build.
 // Provide a safe local fallback that returns empty data to avoid runtime errors.
+import type {
+  DashboardStats as SupabaseDashboardStats,
+  ContinueData,
+  UserProgress,
+} from "../../../../../apps/website/src/app/lib/supabase-progress";
+
 const useUserProgress = () => ({
-  progress: null,
-  dashboardStats: null as any,
-  continueData: null,
+  progress: null as UserProgress | null,
+  dashboardStats: null as SupabaseDashboardStats | null,
+  continueData: null as ContinueData | null,
   isLoading: false,
   error: null as string | null,
   updateQuestion: async () => {},
@@ -26,10 +32,11 @@ import { useAuth } from "@elzatona/contexts";
 // Import Supabase client (available in both website and admin apps)
 // Note: This import path assumes this component is used in apps/website
 // For proper architecture, supabaseClient should be injected or moved to shared location
+// TODO: Move supabase client to libs/database or inject as dependency
 import {
   supabaseClient as supabase,
   isSupabaseAvailable,
-} from "../../../../../apps/website/lib/supabase-client";
+} from "../../../../../apps/website/src/app/lib/supabase-client";
 
 import {
   BookOpen,
@@ -75,7 +82,7 @@ interface RecentActivity {
   color: string;
 }
 
-interface DashboardStats {
+interface LocalDashboardStats {
   questionsCompleted: number;
   totalPoints: number;
   dayStreak: number;
@@ -105,11 +112,10 @@ export default function EnhancedDashboard() {
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [isSigningOut, setIsSigningOut] = useState(false);
   const [plans, setPlans] = useState<{ id: string; name: string }[]>([]);
-  const [dashboardStats, setDashboardStats] = useState<DashboardStats | null>(
-    null,
-  );
+  const [dashboardStats, setDashboardStats] =
+    useState<LocalDashboardStats | null>(null);
   const [statsLoading, setStatsLoading] = useState(true);
-  const [statsError, setStatsError] = useState<string | null>(null);
+  const [_statsError, setStatsError] = useState<string | null>(null);
 
   // Dashboard cards with real progress data
   const dashboardCards: DashboardCard[] = [
@@ -160,8 +166,8 @@ export default function EnhancedDashboard() {
       icon: BookOpen,
       color: "from-blue-500 to-blue-600",
       href: "/questions",
-      stats: `${(progress as any)?.total_questions_answered || 0} completed`,
-      progress: (dashboardStats as any)?.accuracy || 0,
+      stats: `${progress?.total_questions_answered || 0} completed`,
+      progress: oldDashboardStats?.accuracy || 0,
     },
     // Learning Paths card removed per product decision
     {
@@ -172,7 +178,7 @@ export default function EnhancedDashboard() {
       color: "from-green-500 to-green-600",
       href: "/challenges",
       stats: `${0} challenges solved`,
-      progress: (dashboardStats as any)?.accuracy || 0,
+      progress: oldDashboardStats?.accuracy || 0,
     },
     {
       id: "analytics",
@@ -356,7 +362,7 @@ export default function EnhancedDashboard() {
   const recentActivities: RecentActivity[] =
     oldDashboardStats?.recentActivity
       ?.slice(0, 4)
-      .map((activity: any, index: number) => ({
+      .map((activity, index: number) => ({
         id: `activity-${index}`,
         type: activity.type as "question" | "challenge" | "path",
         title: activity.description,
@@ -386,9 +392,9 @@ export default function EnhancedDashboard() {
         console.warn("Error during logout:", error);
       }
       // Ensure Supabase session is cleared (for social logins)
-      if (isSupabaseAvailable() && supabase && supabase.auth) {
+      if (isSupabaseAvailable() && supabase && supabase && supabase.auth) {
         try {
-          await supabase.auth.signOut();
+          (await supabase) && supabase.auth.signOut();
         } catch (error) {
           console.warn("Error during Supabase sign out:", error);
         }
@@ -564,7 +570,7 @@ export default function EnhancedDashboard() {
         </div>
 
         {/* Continue Where You Left Off */}
-        {(continueData as any)?.recentPath && (
+        {continueData?.recentPath && (
           <div className="mb-8">
             <div className="bg-gradient-to-r from-blue-600 to-purple-600 rounded-2xl p-6 text-white">
               <div className="flex items-center justify-between mb-4">
@@ -573,33 +579,33 @@ export default function EnhancedDashboard() {
                   Continue Where You Left Off
                 </h2>
                 <span className="text-blue-200 text-sm">
-                  {formatTimeAgo((continueData as any).recentPath.lastAccessed)}
+                  {formatTimeAgo(continueData.recentPath.lastAccessed)}
                 </span>
               </div>
               <div className="flex items-center justify-between">
                 <div>
                   <h3 className="text-xl font-semibold mb-2">
-                    {(continueData as any).recentPath.pathName}
+                    {continueData.recentPath.pathName}
                   </h3>
                   <p className="text-blue-100 mb-3">
-                    {(continueData as any).recentPath.completedSections.length}{" "}
+                    {Array.isArray(continueData.recentPath.completedSections)
+                      ? continueData.recentPath.completedSections.length
+                      : 0}{" "}
                     sections completed
                   </p>
                   <div className="flex items-center space-x-4 text-sm text-blue-200">
                     <span className="flex items-center">
                       <Timer className="w-4 h-4 mr-1" />
-                      {formatTimeSpent(
-                        (continueData as any).recentPath.timeSpent,
-                      )}
+                      {formatTimeSpent(continueData.recentPath.timeSpent)}
                     </span>
                     <span className="flex items-center">
                       <Target className="w-4 h-4 mr-1" />
-                      {(continueData as any).recentPath.progress}% complete
+                      {continueData.recentPath.progress}% complete
                     </span>
                   </div>
                 </div>
                 <Link
-                  href={`/learning-paths/${(continueData as any).recentPath.pathId}`}
+                  href={`/learning-paths/${continueData.recentPath.pathId}`}
                   className="flex items-center space-x-2 px-6 py-3 bg-white text-blue-600 rounded-xl hover:bg-blue-50 transition-colors font-semibold"
                 >
                   <span>Continue</span>
@@ -611,7 +617,7 @@ export default function EnhancedDashboard() {
                   <div
                     className="bg-white h-2 rounded-full transition-all duration-500"
                     style={{
-                      width: `${(continueData as any).recentPath.progress}%`,
+                      width: `${continueData.recentPath.progress}%`,
                     }}
                   ></div>
                 </div>
@@ -644,7 +650,7 @@ export default function EnhancedDashboard() {
                         <Loader2 className="w-6 h-6 animate-spin inline-block" />
                       ) : (
                         (dashboardStats?.questionsCompleted ??
-                        (progress as any)?.total_questions_answered ??
+                        progress?.total_questions_answered ??
                         0)
                       )}
                     </div>
@@ -664,7 +670,7 @@ export default function EnhancedDashboard() {
                         <Loader2 className="w-6 h-6 animate-spin inline-block" />
                       ) : (
                         (dashboardStats?.totalPoints ??
-                        (progress as any)?.total_points ??
+                        progress?.total_points ??
                         0)
                       )}
                     </div>
@@ -684,7 +690,7 @@ export default function EnhancedDashboard() {
                         <Loader2 className="w-6 h-6 animate-spin inline-block" />
                       ) : (
                         (dashboardStats?.dayStreak ??
-                        (progress as any)?.current_streak ??
+                        progress?.current_streak ??
                         0)
                       )}
                     </div>
@@ -704,7 +710,9 @@ export default function EnhancedDashboard() {
                         <Loader2 className="w-6 h-6 animate-spin inline-block" />
                       ) : (
                         (dashboardStats?.achievements?.length ??
-                        (progress as any)?.achievements?.length ??
+                        (Array.isArray(progress?.achievements)
+                          ? progress.achievements.length
+                          : 0) ??
                         0)
                       )}
                     </div>

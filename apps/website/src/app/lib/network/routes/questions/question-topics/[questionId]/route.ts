@@ -1,0 +1,87 @@
+import { NextRequest, NextResponse } from "next/server";
+import { getSupabaseClient } from "../../../../../get-supabase-client";
+
+// PUT /api/questions/question-topics/[questionId]
+export async function PUT(
+  request: NextRequest,
+  { params }: { params: Promise<{ questionId: string }> },
+) {
+  try {
+    const { questionId } = await params;
+    const body = await request.json();
+    const { topics } = body;
+
+    if (!questionId) {
+      return NextResponse.json(
+        { success: false, error: "Question ID is required" },
+        { status: 400 },
+      );
+    }
+
+    if (!Array.isArray(topics)) {
+      return NextResponse.json(
+        { success: false, error: "Topics must be an array" },
+        { status: 400 },
+      );
+    }
+
+    // Security: Removed user data from logs to prevent log injection
+    console.log("Updating topics for question");
+
+    const supabase = getSupabaseClient();
+    const { data: questionData, error: questionError } = await supabase
+      .from("questions")
+      .select("*")
+      .eq("id", questionId)
+      .single();
+
+    if (questionError || !questionData) {
+      return NextResponse.json(
+        {
+          success: false,
+          error: "Question not found",
+        },
+        { status: 404 },
+      );
+    }
+
+    // Update the question with new topics
+    const { data: updatedData, error: updateError } = await supabase
+      .from("questions")
+      .update({
+        topics: topics,
+        updated_at: new Date().toISOString(),
+      })
+      .eq("id", questionId)
+      .select()
+      .single();
+
+    if (updateError) {
+      throw updateError;
+    }
+
+    const updatedQuestion = {
+      id: updatedData.id,
+      ...updatedData,
+    };
+
+    // Security: Removed user data from logs to prevent log injection
+    console.log("Successfully updated topics for question");
+
+    return NextResponse.json({
+      success: true,
+      data: updatedQuestion,
+      message: "Question topics updated successfully",
+    });
+  } catch (error) {
+    console.error("Error updating question topics:", error);
+    return NextResponse.json(
+      {
+        success: false,
+        error: "Failed to update question topics",
+        details: error instanceof Error ? error.message : "Unknown error",
+      },
+      { status: 500 },
+    );
+  }
+}

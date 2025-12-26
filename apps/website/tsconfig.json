@@ -6,13 +6,13 @@
     "paths": {
       "@/*": ["./src/*"],
       "@/lib/*": ["./lib/*"],
-      "@/context/*": ["./context/*"],
-      "@/components/*": ["./components/*"],
+      "@/context/*": ["./src/context/*"],
+      "@/components/*": ["./src/app/Components/*"],
       "@/providers/*": ["./providers/*"],
-      "@/types/*": ["./types/*"],
-      "@/test-utils/*": ["./test-utils/*"],
+      "@/types/*": ["./src/app/Types/*"],
+      "@/test-utils/*": ["../../libs/utilities/src/lib/test-utils/*"],
       "@/translations/*": ["./translations/*"],
-      "@/utils/*": ["./utils/*"],
+      "@/utils/*": ["./src/app/utils/*"],
       "@/config/*": ["./config/*"],
       "@/middleware": ["./middleware.ts"],
       "@/admin.config": ["./admin.config.ts"],
@@ -24,6 +24,7 @@
       "@elzatona/components": ["../../libs/components/src/index.ts"],
       "@elzatona/hooks": ["../../libs/hooks/src/index.ts"],
       "@elzatona/types": ["../../libs/types/src/index.ts"],
+      "@elzatona/utilities": ["../../libs/utilities/src/index.ts"],
       "@elzatona/shared-atoms": ["../../libs/shared-atoms/src/index.ts"]
     }
   },
@@ -39,9 +40,16 @@
     "jest.setup.js",
     "apps/admin/Utils/scripts/**/*",
     "**/*.spec.ts",
+    "**/*.spec.tsx",
     "**/*.stories.ts",
+    "**/*.stories.tsx",
     "**/*.stories.js",
+    "**/*.stories.jsx",
+    "**/*.test.ts",
+    "**/*.test.tsx",
     "**/*.example.ts",
-    "utilities/api-config.example.ts"
+    "utilities/api-config.example.ts",
+    "tests/**/*",
+    "**/tests/**/*"
   ]
 }

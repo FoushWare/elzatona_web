@@ -37,8 +37,21 @@ export default function ChallengeCard({
     }
   };
 
+  // Convert to button for accessibility if onClick is provided
+  const CardWrapper = onClick ? "button" : "div";
+  const cardProps = onClick
+    ? {
+        onClick,
+        type: "button" as const,
+        className: "card cursor-pointer transition-smooth text-left w-full",
+        "aria-label": `View challenge: ${challenge.title}`,
+      }
+    : {
+        className: "card cursor-pointer transition-smooth",
+      };
+
   return (
-    <div className="card cursor-pointer transition-smooth" onClick={onClick}>
+    <CardWrapper {...cardProps}>
       <div className="p-6">
         <div className="flex items-start justify-between mb-4">
           <h3 className="text-lg font-semibold text-card-foreground mb-2 leading-tight">
@@ -61,9 +74,9 @@ export default function ChallengeCard({
         </p>
 
         <div className="flex flex-wrap gap-1 mb-4">
-          {challenge.tags.slice(0, 3).map((tag: any, index: number) => (
+          {challenge.tags.slice(0, 3).map((tag: any) => (
             <span
-              key={index}
+              key={tag}
               className="px-2 py-1 bg-muted text-muted-foreground text-xs rounded font-medium"
             >
               {tag}
@@ -83,6 +96,6 @@ export default function ChallengeCard({
           <span className="font-mono">ID: {challenge.id}</span>
         </div>
       </div>
-    </div>
+    </CardWrapper>
   );
 }

@@ -29,6 +29,7 @@
       "@elzatona/components": ["./libs/components/src/index.ts"],
       "@elzatona/hooks": ["./libs/hooks/src/index.ts"],
       "@elzatona/types": ["./libs/types/src/index.ts"],
+      "@elzatona/utilities": ["./libs/utilities/src/index.ts"],
       "@elzatona/shared-atoms": ["./libs/shared-atoms/src/index.ts"]
     }
   },
@@ -42,6 +43,11 @@
   "exclude": [
     "node_modules",
     "tests/**/*",
+    "**/tests/**/*",
+    "**/*.spec.ts",
+    "**/*.spec.tsx",
+    "**/*.test.ts",
+    "**/*.test.tsx",
     "scripts-backup/**/*",
     "apps/admin/Utils/scripts/**/*",
     "apps/website/src/scripts/**/*",

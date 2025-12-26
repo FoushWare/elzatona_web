@@ -13,11 +13,8 @@ import {
   SelectTrigger,
   SelectValue,
   DialogFooter,
-  Collapsible,
-  CollapsibleTrigger,
-  CollapsibleContent,
 } from "@elzatona/components";
-import { Plus, Trash2, ChevronDown, X } from "lucide-react";
+import { Plus, X } from "lucide-react";
 import { UnifiedQuestion } from "@elzatona/types";
 import {
   useQuestionFormData,
@@ -47,7 +44,7 @@ interface QuestionFormProps {
 
 // Custom hook to consolidate all form state management
 const useQuestionFormState = (
-  initialData: UnifiedQuestion | null,
+  initialData: UnifiedQuestion | null | undefined,
   allCategories: string[],
   categoriesData: any[],
   allTags: string[],
@@ -55,7 +52,9 @@ const useQuestionFormState = (
   externalSubmitTrigger?: number,
 ) => {
   // Extracted hooks for state management
-  const { formData, updateFormData } = useQuestionFormData(initialData);
+  const { formData, updateFormData } = useQuestionFormData(
+    initialData ?? undefined,
+  );
   const { newTag, setNewTag, addTag, removeTag, handleTagInputKeyDown } =
     useTagsManagement(formData, updateFormData);
   const {
@@ -133,23 +132,46 @@ export default function QuestionForm({
   initialData,
   onSubmit,
   onCancel,
-  cards,
+  cards: _cards,
   allCategories,
   allTags,
   categoriesData,
-  topicsData,
+  topicsData: _topicsData,
   disabled = false,
   hideFooter = false,
   externalSubmitTrigger,
 }: QuestionFormProps) {
   const formState = useQuestionFormState(
-    initialData,
+    initialData ?? null,
     allCategories,
     categoriesData,
     allTags,
     onSubmit,
     externalSubmitTrigger,
   );
+
+  const {
+    formData,
+    categorySearchTerm,
+    setCategorySearchTerm,
+    showCategoryDropdown,
+    setShowCategoryDropdown,
+    filteredCategories,
+    showTagDropdown,
+    setShowTagDropdown,
+    filteredTags,
+    newTag,
+    setNewTag,
+    errors,
+    isSubmitting,
+    handleSubmit,
+    handleFieldChange,
+    handleCategorySelect,
+    handleTagSelect,
+    handleTagInputKeyDown,
+    addTag,
+    removeTag,
+  } = formState;
 
   const handleFormSubmit = (e: React.FormEvent) => {
     e.preventDefault();

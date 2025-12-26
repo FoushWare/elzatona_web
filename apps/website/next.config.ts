@@ -52,6 +52,10 @@ if (
 }
 
 const nextConfig: NextConfig = {
+  // CRITICAL: Tell Next.js to look in src/app, not app/
+  // In Nx monorepos with sourceRoot, Next.js needs explicit path
+  // This ensures Next.js finds pages in apps/website/src/app/
+
   // Turbopack configuration
   turbopack: {},
 
@@ -61,8 +65,10 @@ const nextConfig: NextConfig = {
   // Disable automatic error page generation
   generateEtags: false,
 
-  // Disable static optimization for error pages
-  output: "standalone",
+  // Only use standalone output in production (for Docker deployments)
+  // This breaks development routing, so we disable it in dev
+  // CRITICAL: output: "standalone" causes all routes to return 404 in development
+  // Removed completely - only enable for production builds, not dev server
 
   // Skip prerendering for error pages
   excludeDefaultMomentLocales: true,
@@ -148,13 +154,27 @@ const nextConfig: NextConfig = {
 
   // Bundle optimization
   webpack: (config, { dev, isServer }) => {
-    // Ignore storybook files
+    // Ignore storybook and test files
     config.module = config.module || {};
     config.module.rules = config.module.rules || [];
+
+    // Exclude storybook files from build
     config.module.rules.push({
       test: /\.stories\.(tsx?|jsx?)$/,
-      use: "null-loader",
+      loader: "ignore-loader",
     });
+
+    // Exclude test files from build
+    config.module.rules.push({
+      test: /\.(test|spec)\.(tsx?|jsx?)$/,
+      loader: "ignore-loader",
+    });
+    // Exclude tests directory from build
+    config.resolve = config.resolve || {};
+    config.resolve.alias = {
+      ...config.resolve.alias,
+      "^tests/": false,
+    };
     // Exclude scripts directory from build
     config.module.rules.push({
       test: /\.ts$/,
@@ -247,11 +267,11 @@ const nextConfig: NextConfig = {
             key: "Content-Security-Policy",
             value: [
               "default-src 'self'",
-              "script-src 'self' 'unsafe-eval' 'unsafe-inline' https://vercel.live https://cdn.jsdelivr.net",
+              "script-src 'self' 'unsafe-eval' 'unsafe-inline' https://vercel.live https://cdn.jsdelivr.net https://va.vercel-scripts.com",
               "style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net",
               "font-src 'self' data: https://cdn.jsdelivr.net",
               "img-src 'self' data: https: blob:",
-              "connect-src 'self' https://cdn.jsdelivr.net",
+              "connect-src 'self' https://cdn.jsdelivr.net https://va.vercel-scripts.com",
               "worker-src 'self' blob:",
             ].join("; "),
           },

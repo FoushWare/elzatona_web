@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { CheckCircle, XCircle, AlertCircle, X } from "lucide-react";
 
 export interface Notification {
@@ -19,6 +19,11 @@ interface NotificationProps {
 function NotificationItem({ notification, onRemove }: NotificationProps) {
   const [isVisible, setIsVisible] = useState(false);
 
+  const handleRemove = useCallback(() => {
+    setIsVisible(false);
+    setTimeout(() => onRemove(notification.id), 300);
+  }, [onRemove, notification.id]);
+
   useEffect(() => {
     // Trigger animation
     setIsVisible(true);
@@ -29,12 +34,7 @@ function NotificationItem({ notification, onRemove }: NotificationProps) {
     }, notification.duration || 5000);
 
     return () => clearTimeout(timer);
-  }, [notification.duration]);
-
-  const handleRemove = () => {
-    setIsVisible(false);
-    setTimeout(() => onRemove(notification.id), 300);
-  };
+  }, [notification.duration, handleRemove]);
 
   const getIcon = () => {
     switch (notification.type) {

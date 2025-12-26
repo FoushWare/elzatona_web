@@ -1,18 +1,19 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
-import { createClient } from "@supabase/supabase-js";
-
-const supabaseUrl = process.env["NEXT_PUBLIC_SUPABASE_URL"]!;
-const supabaseServiceRoleKey = process.env["SUPABASE_SERVICE_ROLE_KEY"]!;
-const _supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
+import React, { useState, useEffect, useCallback } from "react";
 
 import { Bookmark, BookmarkCheck } from "lucide-react";
 
 // Note: This import path assumes this component is used in apps/website
 // For proper architecture, flashcardService should be injected or moved to shared location
-import { flashcardService } from "../../../../../apps/website/lib/supabase-flashcards";
+import { flashcardService } from "../../../../../apps/website/src/app/lib/supabase-flashcards";
 import { useAuth } from "@elzatona/contexts";
+
+interface Flashcard {
+  id: string;
+  question: string;
+  [key: string]: unknown;
+}
 
 interface AddToFlashcardProps {
   readonly question: string;
@@ -39,25 +40,14 @@ export default function AddToFlashcard({
   const [state, setState] = useState<FlashcardState>("add");
   const [flashcardId, setFlashcardId] = useState<string | null>(null);
 
-  // Check if flashcard already exists when component mounts or question changes
-  useEffect(() => {
-    // Reset state when question changes
-    setState("add");
-    setFlashcardId(null);
-
-    if (user) {
-      checkExistingFlashcard();
-    }
-  }, [user, question]);
-
-  const checkExistingFlashcard = async () => {
+  const checkExistingFlashcard = useCallback(async () => {
     if (!user) return;
 
     try {
       // Get all flashcards for the user and check if one matches the question
       const flashcards = await flashcardService.getFlashcards(user.id);
       const existingCard = flashcards?.find(
-        (card: any) => card.question === question,
+        (card: Flashcard) => card.question === question,
       );
 
       if (existingCard) {
@@ -67,6 +57,75 @@ export default function AddToFlashcard({
     } catch (error) {
       console.error("Error checking existing flashcard:", error);
     }
+  }, [user, question]);
+
+  // Check if flashcard already exists when component mounts or question changes
+  useEffect(() => {
+    // Reset state when question changes
+    setState("add");
+    setFlashcardId(null);
+
+    if (user) {
+      checkExistingFlashcard();
+    }
+  }, [user, question, checkExistingFlashcard]);
+
+  // Helper: Map difficulty to flashcard format
+  const mapDifficultyToFlashcard = (
+    diff: string | undefined,
+  ): "easy" | "medium" | "hard" => {
+    if (diff === "beginner") return "easy";
+    if (diff === "intermediate") return "medium";
+    return "hard";
+  };
+
+  // Helper: Create flashcard object
+  const createFlashcardData = () => {
+    if (!user) {
+      throw new Error("User is required to create flashcard");
+    }
+    const now = new Date().toISOString();
+    return {
+      userId: user.id,
+      question_id: `manual-${Date.now()}`,
+      question,
+      answer,
+      explanation: answer,
+      category,
+      difficulty: mapDifficultyToFlashcard(difficulty),
+      status: "new" as "new" | "learning" | "review" | "mastered",
+      interval: 0,
+      repetitions: 0,
+      easeFactor: 2.5,
+      lastReviewed: null,
+      nextReview: now,
+      tags: [],
+      source: (source || "manual") as "wrong_answer" | "manual" | "bookmark",
+    };
+  };
+
+  // Helper: Handle adding flashcard
+  const handleAddFlashcard = async () => {
+    const flashcard = createFlashcardData();
+    const newFlashcardId = await flashcardService.createFlashcard(flashcard);
+
+    if (newFlashcardId) {
+      setState("saved");
+      setFlashcardId(newFlashcardId);
+      onStatusChange?.("added");
+    } else {
+      setState("add");
+      onStatusChange?.("error");
+    }
+  };
+
+  // Helper: Handle removing flashcard
+  const handleRemoveFlashcard = async () => {
+    if (!flashcardId) return;
+    await flashcardService.deleteFlashcard(flashcardId);
+    setState("add");
+    setFlashcardId(null);
+    onStatusChange?.("removed");
   };
 
   const handleToggleFlashcard = async () => {
@@ -81,52 +140,9 @@ export default function AddToFlashcard({
 
     try {
       if (state === "add") {
-        // Add to flashcards
-        const now = new Date().toISOString();
-        const flashcard = {
-          userId: user.id,
-          question_id: `manual-${Date.now()}`,
-          question,
-          answer,
-          explanation: answer,
-          category,
-          difficulty:
-            difficulty === "beginner"
-              ? "easy"
-              : difficulty === "intermediate"
-                ? "medium"
-                : ("hard" as "easy" | "medium" | "hard"),
-          status: "new" as "new" | "learning" | "review" | "mastered",
-          interval: 0,
-          repetitions: 0,
-          easeFactor: 2.5,
-          lastReviewed: null,
-          nextReview: now,
-          tags: [],
-          source: (source || "manual") as
-            | "wrong_answer"
-            | "manual"
-            | "bookmark",
-        };
-
-        const newFlashcardId =
-          await flashcardService.createFlashcard(flashcard);
-
-        if (newFlashcardId) {
-          setState("saved");
-          setFlashcardId(newFlashcardId);
-          onStatusChange?.("added");
-        } else {
-          setState("add");
-          onStatusChange?.("error");
-        }
+        await handleAddFlashcard();
       } else if (state === "saved" && flashcardId) {
-        // Remove from flashcards
-        await flashcardService.deleteFlashcard(flashcardId);
-
-        setState("add");
-        setFlashcardId(null);
-        onStatusChange?.("removed");
+        await handleRemoveFlashcard();
       }
     } catch (error) {
       console.error("Error toggling flashcard:", error);
@@ -161,11 +177,6 @@ export default function AddToFlashcard({
       default:
         return "Click to bookmark this question";
     }
-  };
-
-  const getButtonText = () => {
-    // No text for icon-only button
-    return "";
   };
 
   const getButtonClasses = () => {

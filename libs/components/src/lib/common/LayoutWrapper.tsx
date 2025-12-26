@@ -1,6 +1,5 @@
 "use client";
 
-// import { useTranslation } from '@elzatona/hooks'; // Removed - useTranslation is not exported
 import { useEffect } from "react";
 
 interface LayoutWrapperProps {

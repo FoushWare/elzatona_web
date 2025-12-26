@@ -1,36 +1,32 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
+import { UnifiedQuestion } from "@elzatona/types";
+import { FormModal } from "@elzatona/components";
 import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogDescription,
-} from "@elzatona/components";
-import {
-  X,
-  ChevronLeft,
-  ChevronRight,
   CheckCircle,
   XCircle,
-  Clock,
-  AlertTriangle,
-  Play,
-  Pause,
-  RotateCcw,
-  Volume2,
-  VolumeX,
-  Loader2,
   FileText,
   Video,
   GraduationCap,
   BookOpen,
-  Code,
-  Zap,
+  Target,
+  Info,
 } from "lucide-react";
 import { createHighlighter, type Highlighter } from "shiki";
 import DOMPurify from "dompurify";
+
+// Component to render question content safely
+const QuestionContent = ({ content }: { content: string }) => {
+  if (typeof window === "undefined") {
+    return <div>{content}</div>;
+  }
+  const sanitized = DOMPurify.sanitize(content, {
+    ALLOWED_TAGS: ["p", "br", "strong", "em", "u", "i", "b", "code", "pre"],
+    ALLOWED_ATTR: [],
+  });
+  return <div dangerouslySetInnerHTML={{ __html: sanitized }} />;
+};
 
 // Language detection patterns to reduce cognitive complexity
 const languagePatterns = [
@@ -51,21 +47,26 @@ const languagePatterns = [
   {
     language: "typescript",
     patterns: [
-      (code: string) => code.includes(":") && (code.includes("string") || code.includes("number")),
+      (code: string) =>
+        code.includes(":") &&
+        (code.includes("string") || code.includes("number")),
       (code: string) => code.includes("interface ") || code.includes("type "),
     ],
   },
   {
     language: "java",
     patterns: [
-      (code: string) => code.includes("public class") || code.includes("public static"),
-      (code: string) => code.includes("System.out.") || code.includes("void main"),
+      (code: string) =>
+        code.includes("public class") || code.includes("public static"),
+      (code: string) =>
+        code.includes("System.out.") || code.includes("void main"),
     ],
   },
   {
     language: "cpp",
     patterns: [
-      (code: string) => code.includes("#include") || code.includes("using namespace"),
+      (code: string) =>
+        code.includes("#include") || code.includes("using namespace"),
       (code: string) => code.includes("std::") || code.includes("cout"),
     ],
   },
@@ -73,7 +74,8 @@ const languagePatterns = [
     language: "csharp",
     patterns: [
       (code: string) => code.includes("using ") && code.includes(";"),
-      (code: string) => code.includes("public class") || code.includes("Console."),
+      (code: string) =>
+        code.includes("public class") || code.includes("Console."),
     ],
   },
 ];
@@ -96,12 +98,22 @@ const sanitizeShikiHtml = (html: string): string => {
   if (typeof window === "undefined") {
     return html; // Server-side: return as-is
   }
-  
+
   // Shiki already outputs safe HTML, but add extra sanitization for defense-in-depth
   return DOMPurify.sanitize(html, {
     ALLOWED_TAGS: [
-      "pre", "code", "span", "div", "style",
-      "br", "p", "strong", "em", "u", "i", "b"
+      "pre",
+      "code",
+      "span",
+      "div",
+      "style",
+      "br",
+      "p",
+      "strong",
+      "em",
+      "u",
+      "i",
+      "b",
     ],
     ALLOWED_ATTR: ["class", "style", "data-*"],
     ALLOW_DATA_ATTR: true,
@@ -188,7 +200,8 @@ const isRgbColor = (colorValue: string): boolean => {
 };
 
 // Helper function to process color for light mode visibility (reduces cognitive complexity)
-const processColorForLightMode = (
+
+const _processColorForLightMode = (
   colorValue: string,
 ): { shouldReplace: boolean; newColor: string } => {
   if (isHexColor(colorValue)) {
@@ -254,7 +267,8 @@ const getOptionClasses = (
 };
 
 // Helper function to count regex matches
-const countRegexMatches = (text: string, regex: RegExp): number => {
+
+const _countRegexMatches = (text: string, regex: RegExp): number => {
   let count = 0;
   let match;
   while ((match = regex.exec(text)) !== null) {
@@ -389,7 +403,7 @@ const _formatCodeForDisplay = (code: string): string => {
   // CRITICAL: Convert \n escape sequences to actual newlines FIRST
   // The code might come from database as a string with literal "\n" characters
   // We MUST convert these to actual newline characters before any other processing
-  let formatted = normalizeLineBreaks(codeStr);
+  const formatted = normalizeLineBreaks(codeStr);
 
   // Check if code already has proper formatting (multiple lines with indentation)
   const hasProperStructure = checkCodeStructure(formatted);
@@ -518,7 +532,7 @@ export function ViewQuestionModal({
   // Helper function to get theme name based on system preference
   const getThemeName = (): string => {
     const prefersDark =
-      globalThis.window?.matchMedia("(prefers-color-scheme: dark)").matches ??
+      globalThis.window?.matchMedia("(prefers-color-scheme: dark)")?.matches ??
       false;
     return prefersDark ? "github-dark" : "github-light";
   };
@@ -798,78 +812,77 @@ export function ViewQuestionModal({
 
     try {
       const tempDiv = document.createElement("div");
-      tempDiv.innerHTML = html;
+      // Security: Sanitize HTML before using innerHTML (defense-in-depth)
+      tempDiv.innerHTML = DOMPurify.sanitize(html, {
+        ALLOWED_TAGS: ["pre", "code", "span", "div", "style"],
+        ALLOWED_ATTR: ["class", "style"],
+      });
       const codeElement = tempDiv.querySelector("pre code");
       if (codeElement) {
-        return `<pre><code>${codeElement.innerHTML}</code></pre>`;
+        // Security: Sanitize innerHTML before returning
+        return `<pre><code>${DOMPurify.sanitize(codeElement.innerHTML, {
+          ALLOWED_TAGS: ["span"],
+          ALLOWED_ATTR: ["class", "style"],
+        })}</code></pre>`;
       }
-    } catch (e) {
-      console.warn("DOM parsing for color adjustment failed:", e);
+    } catch (_e) {
+      // Security: Removed detailed error logging to prevent information disclosure
+      console.warn("DOM parsing for color adjustment failed");
     }
 
     return html;
   };
 
-  // Helper function to log highlighting success
-  const logHighlightingSuccess = (html: string) => {
-    console.log("ViewQuestionModal - Code highlighted successfully:", {
-      htmlLength: html.length,
-      hasContent: html.length > 0,
-      htmlPreview: html.substring(0, 200),
-    });
+  // Security: Removed debug logging to prevent information disclosure
+  const _logHighlightingSuccess = (_html: string) => {
+    // Removed for security
   };
 
-  // Helper function to log highlighting skip
-  const logHighlightingSkip = (
-    shikiHighlighter: Highlighter | null,
-    question: UnifiedQuestion | null,
+  // Security: Removed debug logging to prevent information disclosure
+  const _logHighlightingSkip = (
+    _shikiHighlighter: Highlighter | null,
+    _question: UnifiedQuestion | null,
   ) => {
-    console.log("ViewQuestionModal - Shiki highlighting skipped:", {
-      hasHighlighter: !!shikiHighlighter,
-      hasCode: !!question?.codeTemplate,
-      codeValue: question?.codeTemplate
-        ? String(question.codeTemplate).substring(0, 50)
-        : null,
-    });
+    // Removed for security
   };
 
   // Helper function to handle code highlighting logic
-  const handleCodeHighlighting = (
-    shikiHighlighter: Highlighter | null,
-    question: UnifiedQuestion | null,
-    setCodeHighlightedHtml: (html: string) => void,
-  ) => {
-    if (!shikiHighlighter || !question?.codeTemplate) {
-      setCodeHighlightedHtml("");
-      logHighlightingSkip(shikiHighlighter, question);
-      return;
-    }
+  const handleCodeHighlighting = useCallback(
+    (
+      shikiHighlighter: Highlighter | null,
+      question: UnifiedQuestion | null,
+      setCodeHighlightedHtml: (html: string) => void,
+    ) => {
+      if (!shikiHighlighter || !question?.codeTemplate) {
+        setCodeHighlightedHtml("");
+        _logHighlightingSkip(shikiHighlighter, question);
+        return;
+      }
 
-    try {
-      const rawCode = String(question.codeTemplate || "");
-      console.log("ViewQuestionModal - Processing code for highlighting:", {
-        rawCodeLength: rawCode.length,
-        rawCodePreview: rawCode.substring(0, 100),
-      });
+      try {
+        const rawCode = String(question.codeTemplate || "");
+        // Security: Removed debug logging to prevent information disclosure
 
-      const codeWithNewlines = processCodeForHighlighting(rawCode);
-      const lang = detectLanguage(codeWithNewlines);
-      const themeName = getThemeName();
-      const highlighterLang = getHighlighterLanguage(lang);
+        const codeWithNewlines = processCodeForHighlighting(rawCode);
+        const lang = detectLanguage(codeWithNewlines);
+        const themeName = getThemeName();
+        const highlighterLang = getHighlighterLanguage(lang);
 
-      let html = shikiHighlighter.codeToHtml(codeWithNewlines, {
-        lang: highlighterLang,
-        theme: themeName,
-      });
+        let html = shikiHighlighter.codeToHtml(codeWithNewlines, {
+          lang: highlighterLang,
+          theme: themeName,
+        });
 
-      html = adjustHtmlForLightMode(html);
-      logHighlightingSuccess(html);
-      setCodeHighlightedHtml(html);
-    } catch (error) {
-      console.error("ViewQuestionModal - Error highlighting code:", error);
-      setCodeHighlightedHtml("");
-    }
-  };
+        html = adjustHtmlForLightMode(html);
+        _logHighlightingSuccess(html);
+        setCodeHighlightedHtml(html);
+      } catch (error) {
+        console.error("ViewQuestionModal - Error highlighting code:", error);
+        setCodeHighlightedHtml("");
+      }
+    },
+    [],
+  );
 
   // Helper function to reset question state
   const resetQuestionState = (
@@ -900,17 +913,22 @@ export function ViewQuestionModal({
   // Highlight code when it changes or highlighter is ready
   useEffect(() => {
     handleCodeHighlighting(shikiHighlighter, question, setCodeHighlightedHtml);
-  }, [shikiHighlighter, question?.codeTemplate]);
+  }, [
+    shikiHighlighter,
+    question,
+    handleCodeHighlighting,
+    setCodeHighlightedHtml,
+  ]);
 
   // Reset state when question changes
   useEffect(() => {
     resetQuestionState(question, setSelectedAnswer, setShowExplanation);
-  }, [question?.id]);
+  }, [question, setSelectedAnswer, setShowExplanation]);
 
   // Debug: Log question data to check if code field exists
   useEffect(() => {
     logQuestionData(question);
-  }, [question?.id]);
+  }, [question]);
 
   if (!question) return null;
 
@@ -962,7 +980,7 @@ export function ViewQuestionModal({
         </div>
 
         {/* Answer Options */}
-        {question.options?.length > 0 ? (
+        {question.options && question.options.length > 0 ? (
           <div className="space-y-3 sm:space-y-4">
             <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-3">
               Answer Options
@@ -1060,7 +1078,7 @@ export function ViewQuestionModal({
                 </p>
               </div>
               <div className="space-y-3 sm:space-y-4">
-                {question.resources.map((resource: any, index: number) => {
+                {question.resources.map((resource: any) => {
                   return (
                     <a
                       key={

@@ -119,15 +119,32 @@ export const TopicForm: React.FC<TopicFormProps> = ({
   } = useTopicFormState(topic, categories);
 
   // Auto-generate slug from name
+  const formDataName = formData.name;
   useEffect(() => {
-    if (!topic && formData.name && !isJsonMode) {
-      const slug = formData.name
+    if (!topic && formDataName && !isJsonMode) {
+      const slug = formDataName
         .toLowerCase()
         .replace(/[^a-z0-9]+/g, "-")
         .replace(/(^-|-$)/g, "");
       setFormData((prev) => ({ ...prev, slug }));
     }
-  }, [formData.name, topic, isJsonMode]);
+  }, [formDataName, topic, isJsonMode, setFormData]);
+
+  // Helper: Extract topics array from parsed JSON
+  const extractTopicsArray = (parsed: unknown): any[] => {
+    if (Array.isArray(parsed)) {
+      return parsed;
+    }
+    if (
+      parsed &&
+      typeof parsed === "object" &&
+      "topics" in parsed &&
+      Array.isArray((parsed as { topics: unknown }).topics)
+    ) {
+      return (parsed as { topics: any[] }).topics;
+    }
+    return [];
+  };
 
   // Parse JSON text with debouncing
   const parseJsonText = useCallback(
@@ -140,14 +157,9 @@ export const TopicForm: React.FC<TopicFormProps> = ({
 
       try {
         const parsed = JSON.parse(text);
-        let topicsArray: any[] = [];
+        const topicsArray = extractTopicsArray(parsed);
 
-        // Handle both array format and object with "topics" property
-        if (Array.isArray(parsed)) {
-          topicsArray = parsed;
-        } else if (parsed.topics && Array.isArray(parsed.topics)) {
-          topicsArray = parsed.topics;
-        } else {
+        if (topicsArray.length === 0) {
           setJsonError(
             'Invalid format. Expected an array of topics or an object with a "topics" property.',
           );
@@ -233,7 +245,7 @@ export const TopicForm: React.FC<TopicFormProps> = ({
         setParsedTopics([]);
       }
     },
-    [categories],
+    [categories, setJsonError, setParsedTopics],
   );
 
   // Debounce JSON parsing

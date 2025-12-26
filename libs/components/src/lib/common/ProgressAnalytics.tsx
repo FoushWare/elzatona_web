@@ -2,7 +2,6 @@
 "use client";
 
 import { useState } from "react";
-// import { useUserProgress } from '@elzatona/hooks'; // Removed - useUserProgress is not exported
 import {
   BarChart3,
   TrendingUp,

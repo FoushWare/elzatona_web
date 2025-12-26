@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import Link from "next/link";
-// import { InternalResource } from "@/lib/internalResources";
 
 interface InternalResourceCardProps {
   resource: {
@@ -139,9 +138,9 @@ export default function InternalResourceCard({
               Prerequisites
             </h4>
             <div className="flex flex-wrap gap-2">
-              {resource.prerequisites?.map((prereq, index) => (
+              {resource.prerequisites?.map((prereq) => (
                 <span
-                  key={index}
+                  key={prereq}
                   className="px-2 py-1 bg-muted text-muted-foreground text-xs rounded"
                 >
                   {prereq}
@@ -155,9 +154,9 @@ export default function InternalResourceCard({
               Learning Outcomes
             </h4>
             <ul className="space-y-1">
-              {resource.learningOutcomes?.map((outcome, index) => (
+              {resource.learningOutcomes?.map((outcome) => (
                 <li
-                  key={index}
+                  key={outcome}
                   className="text-sm text-muted-foreground font-medium flex items-start"
                 >
                   <span className="text-green-500 mr-2">✓</span>

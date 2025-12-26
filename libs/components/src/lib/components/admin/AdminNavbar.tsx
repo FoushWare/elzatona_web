@@ -97,6 +97,22 @@ const useAdminNavbarState = () => {
 
 export default function AdminNavbar() {
   const navbarState = useAdminNavbarState();
+  const {
+    isOpen,
+    setIsOpen,
+    isScrolled,
+    isUserDropdownOpen,
+    setIsUserDropdownOpen,
+    isAdminDropdownOpen,
+    setIsAdminDropdownOpen,
+    isClient,
+    user,
+    isAuthenticated,
+    isDarkMode,
+    toggleDarkMode,
+    isLoginPage,
+    handleLogout,
+  } = navbarState;
 
   const adminMenuItems = [
     {

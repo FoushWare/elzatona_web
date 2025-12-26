@@ -12,14 +12,11 @@ import {
   LanguageProvider,
   OnboardingProvider,
   AuthProvider,
+  NotificationProvider,
 } from "@elzatona/contexts";
-import NavbarSimple from "../../components/NavbarSimple";
-import { NotificationProvider } from "../../components/NotificationSystem";
-import AuthSessionSync from "../../components/AuthSessionSync";
-import { LearningTypeProvider } from "../../context/LearningTypeContext";
-import { SentryErrorBoundary } from "../../components/SentryErrorBoundary";
-import { NavigationProgress } from "../../components/NavigationProgress";
-import { NavigationProvider } from "../../context/NavigationContext";
+import { NavbarSimple, ErrorBoundary } from "@elzatona/components";
+import { LearningTypeProvider } from "../context/LearningTypeContext";
+import { NavigationProvider } from "../context/NavigationContext";
 
 // Force dynamic rendering to prevent static generation issues with auth context
 export const dynamic = "force-dynamic";
@@ -81,15 +78,11 @@ export default function RootLayout({
                         <NotificationProvider>
                           <LearningTypeProvider>
                             <NavigationProvider>
-                              <SentryErrorBoundary>
-                                {/* Navigation progress bar */}
-                                <NavigationProgress />
-                                {/* Ensure auth snapshot sync runs before navbar to avoid flicker */}
-                                <AuthSessionSync />
+                              <ErrorBoundary>
                                 <NavbarSimple />
                                 {children}
                                 <SpeedInsights />
-                              </SentryErrorBoundary>
+                              </ErrorBoundary>
                             </NavigationProvider>
                           </LearningTypeProvider>
                         </NotificationProvider>

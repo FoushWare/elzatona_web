@@ -281,7 +281,7 @@ export default function Navbar() {
       window.removeEventListener("scroll", handleScroll);
       window.removeEventListener("resize", handleResize);
     };
-  }, []);
+  }, [setIsScrolled, setScreenSize]);
 
   // Prevent body scroll when mobile menu is open
   useEffect(() => {
@@ -325,7 +325,7 @@ export default function Navbar() {
 
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
+  }, [dropdownRef, setActiveDropdown, setIsUserDropdownOpen, userDropdownRef]);
 
   // Handle escape key to close mobile menu
   useEffect(() => {
@@ -337,7 +337,7 @@ export default function Navbar() {
 
     document.addEventListener("keydown", handleEscapeKey);
     return () => document.removeEventListener("keydown", handleEscapeKey);
-  }, [isOpen]);
+  }, [isOpen, setIsOpen]);
 
   const toggleDropdown = (dropdownLabel: string) => {
     setActiveDropdown(activeDropdown === dropdownLabel ? null : dropdownLabel);

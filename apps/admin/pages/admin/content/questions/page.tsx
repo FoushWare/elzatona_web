@@ -211,10 +211,14 @@ export default function AdminContentQuestionsPage() {
   }, []);
 
   const cards = cardsData?.data || [];
-  const allTopics = topicsData?.data || [];
-  const allCategories = (categoriesData?.data || []).map(
-    (cat: { id: string; name: string }) => cat.name,
+  const allTopics = (topicsData?.data || []).map(
+    (topic: { id: string; name: string }) => ({
+      id: topic.id,
+      name: topic.name,
+      categoryId: "", // Will be populated if category data is available
+    }),
   );
+  const allCategories = categoriesData?.data || [];
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const allTypes = useMemo(() => {
@@ -420,7 +424,8 @@ export default function AdminContentQuestionsPage() {
           <AdvancedSearch
             onResultsChange={(results) => {
               // Update questions with server-side search results
-              setQuestions(results);
+              // Type cast results to UnifiedQuestion[] since AdvancedSearch returns unknown[]
+              setQuestions(results as UnifiedQuestion[]);
               // Server-side search handles pagination, so we don't override totalCount
             }}
             onFacetsChange={(_facets) => {
@@ -492,7 +497,7 @@ export default function AdminContentQuestionsPage() {
         onClose={() => setIsViewModalOpen(false)}
         question={selectedQuestion}
         cards={cards}
-        allCategories={allCategories}
+        allCategories={allCategories.map((cat) => cat.name)}
         onUpdate={handleCreateQuestion}
         editFormRef={questionFormRef}
       />
@@ -520,7 +525,7 @@ export default function AdminContentQuestionsPage() {
           onSubmit={handleCreateQuestion}
           onCancel={closeModals}
           cards={cards}
-          allCategories={allCategories}
+          allCategories={allCategories.map((cat) => cat.name)}
           allTags={[]}
         />
       </FormModal>

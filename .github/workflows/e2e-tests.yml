@@ -1,0 +1,334 @@
+name: E2E Tests
+
+on:
+  push:
+    branches: [main, develop, "release/**"]
+  pull_request:
+    branches: [main, develop, "release/**"]
+  workflow_dispatch:
+    inputs:
+      test_suite:
+        description: "Test suite to run (home-page, guided-flow, freestyle-flow, admin, all)"
+        required: false
+        default: "home-page"
+        type: choice
+        options:
+          - home-page
+          - guided-flow
+          - freestyle-flow
+          - admin
+          - all
+
+# Cancel in-progress runs on the same branch
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  e2e-tests:
+    name: E2E Tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps chromium
+        env:
+          PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: "0"
+
+      # --------------------------------------------------
+      # Validate TEST Supabase secrets (SAFE MODE)
+      # --------------------------------------------------
+      - name: Validate test database secrets
+        run: |
+          echo "🔒 Validating TEST Supabase secrets..."
+
+          if [ -z "${{ secrets.TEST_SUPABASE_URL }}" ] || \
+             [ -z "${{ secrets.TEST_SUPABASE_ANON_KEY }}" ] || \
+             [ -z "${{ secrets.TEST_SUPABASE_SERVICE_ROLE_KEY }}" ]; then
+            echo "⚠️ TEST Supabase secrets are missing"
+            echo "RUN_E2E_TESTS=false" >> $GITHUB_ENV
+            exit 0
+          fi
+
+          TEST_URL="${{ secrets.TEST_SUPABASE_URL }}"
+
+          if [[ "$TEST_URL" == *"prod"* ]] || [[ "$TEST_URL" == *"production"* ]]; then
+            echo "❌ ERROR: TEST_SUPABASE_URL looks like PRODUCTION!"
+            exit 1
+          fi
+
+          echo "✅ Test database validated"
+          echo "RUN_E2E_TESTS=true" >> $GITHUB_ENV
+
+      # --------------------------------------------------
+      # Verify test database configuration
+      # --------------------------------------------------
+      - name: Verify test database configuration
+        if: env.RUN_E2E_TESTS == 'true'
+        run: |
+          echo "🔍 Verifying test database configuration..."
+          TEST_URL="${{ secrets.TEST_SUPABASE_URL }}"
+
+          # Check that URL contains test project reference
+          if [[ "$TEST_URL" != *"kiycimlsatwfqxtfprlr"* ]] && \
+             [[ "$TEST_URL" != *"slfyltsmcivmqfloxpmq"* ]] && \
+             [[ "$TEST_URL" != *"vopfdukvdhnmzzjkxpnj"* ]]; then
+            echo "⚠️  WARNING: TEST_SUPABASE_URL doesn't match known test project references"
+            echo "   Expected: kiycimlsatwfqxtfprlr, slfyltsmcivmqfloxpmq, or vopfdukvdhnmzzjkxpnj"
+            echo "   Actual: $TEST_URL"
+          fi
+
+          # Ensure it's NOT production
+          if [[ "$TEST_URL" == *"hpnewqkvpnthpohvxcmq"* ]]; then
+            echo "❌ ERROR: TEST_SUPABASE_URL points to PRODUCTION project!"
+            exit 1
+          fi
+
+          echo "✅ Test database configuration verified"
+
+      # --------------------------------------------------
+      # Build application (required for E2E tests)
+      # --------------------------------------------------
+      - name: Build application
+        if: env.RUN_E2E_TESTS == 'true'
+        run: |
+          echo "🏗️ Building application for E2E tests..."
+          echo "📊 Using TEST database: ${{ secrets.TEST_SUPABASE_URL }}"
+          npm run build
+        env:
+          NODE_OPTIONS: "--max-old-space-size=2048"
+          NEXT_TELEMETRY_DISABLED: "1"
+          # CRITICAL: Force test environment
+          APP_ENV: "test"
+          NEXT_PUBLIC_APP_ENV: "test"
+          NODE_ENV: "test"
+          # CRITICAL: Use TEST database credentials
+          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.TEST_SUPABASE_URL }}
+          NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.TEST_SUPABASE_ANON_KEY }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.TEST_SUPABASE_SERVICE_ROLE_KEY }}
+          JWT_SECRET: ${{ secrets.JWT_SECRET }}
+
+      # --------------------------------------------------
+      # Start application server
+      # --------------------------------------------------
+      - name: Start application server
+        if: env.RUN_E2E_TESTS == 'true'
+        run: |
+          echo "🚀 Starting application server with TEST database..."
+          echo "📊 Database URL: ${{ secrets.TEST_SUPABASE_URL }}"
+          # Start server in background
+          npm run start > server.log 2>&1 &
+          SERVER_PID=$!
+          echo "SERVER_PID=$SERVER_PID" >> $GITHUB_ENV
+
+          # Wait for server to be ready
+          echo "⏳ Waiting for server to start..."
+          for i in {1..30}; do
+            if curl -f http://localhost:3000 > /dev/null 2>&1; then
+              echo "✅ Server is ready!"
+              break
+            fi
+            if [ $i -eq 30 ]; then
+              echo "❌ Server failed to start after 30 seconds"
+              cat server.log
+              exit 1
+            fi
+            sleep 1
+          done
+        env:
+          NODE_OPTIONS: "--max-old-space-size=2048"
+          # CRITICAL: Force test environment
+          APP_ENV: "test"
+          NEXT_PUBLIC_APP_ENV: "test"
+          NODE_ENV: "test"
+          # CRITICAL: Use TEST database credentials
+          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.TEST_SUPABASE_URL }}
+          NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.TEST_SUPABASE_ANON_KEY }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.TEST_SUPABASE_SERVICE_ROLE_KEY }}
+          JWT_SECRET: ${{ secrets.JWT_SECRET }}
+          PORT: "3000"
+
+      # --------------------------------------------------
+      # Determine test suite to run
+      # --------------------------------------------------
+      - name: Determine test suite
+        id: test-suite
+        run: |
+          if [ "${{ github.event_name }}" == "workflow_dispatch" ]; then
+            TEST_SUITE="${{ github.event.inputs.test_suite }}"
+          else
+            # Default: run home-page tests for now
+            # As we refactor more pages, we'll add them here
+            TEST_SUITE="home-page"
+          fi
+          echo "suite=$TEST_SUITE" >> $GITHUB_OUTPUT
+          echo "🧪 Running E2E tests for: $TEST_SUITE"
+
+      # --------------------------------------------------
+      # Run E2E tests
+      # --------------------------------------------------
+      - name: Run E2E tests - Home Page
+        if: env.RUN_E2E_TESTS == 'true' && steps.test-suite.outputs.suite == 'home-page'
+        working-directory: apps/website
+        run: |
+          echo "🧪 Running home page E2E tests..."
+          APP_ENV=test NODE_OPTIONS=--max-old-space-size=1536 npx playwright test \
+            --config=tests/config/playwright.config.ts \
+            tests/e2e/home-page/ \
+            --workers=1 \
+            --reporter=html,list
+        continue-on-error: true
+        env:
+          APP_ENV: test
+          NODE_ENV: test
+          CI: "true"
+          NODE_OPTIONS: "--max-old-space-size=1536"
+          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.TEST_SUPABASE_URL }}
+          NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.TEST_SUPABASE_ANON_KEY }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.TEST_SUPABASE_SERVICE_ROLE_KEY }}
+          JWT_SECRET: ${{ secrets.JWT_SECRET }}
+          ADMIN_EMAIL: ${{ secrets.ADMIN_EMAIL }}
+          ADMIN_PASSWORD: ${{ secrets.ADMIN_PASSWORD }}
+
+      - name: Run E2E tests - Guided Flow
+        if: env.RUN_E2E_TESTS == 'true' && steps.test-suite.outputs.suite == 'guided-flow'
+        working-directory: apps/website
+        run: |
+          echo "🧪 Running guided flow E2E tests..."
+          APP_ENV=test NODE_OPTIONS=--max-old-space-size=1536 npx playwright test \
+            --config=tests/config/playwright.config.ts \
+            tests/e2e/guided-flow/ \
+            --workers=1 \
+            --reporter=html,list
+        continue-on-error: true
+        env:
+          APP_ENV: test
+          NODE_ENV: test
+          CI: "true"
+          NODE_OPTIONS: "--max-old-space-size=1536"
+          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.TEST_SUPABASE_URL }}
+          NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.TEST_SUPABASE_ANON_KEY }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.TEST_SUPABASE_SERVICE_ROLE_KEY }}
+          JWT_SECRET: ${{ secrets.JWT_SECRET }}
+          ADMIN_EMAIL: ${{ secrets.ADMIN_EMAIL }}
+          ADMIN_PASSWORD: ${{ secrets.ADMIN_PASSWORD }}
+
+      - name: Run E2E tests - Freestyle Flow
+        if: env.RUN_E2E_TESTS == 'true' && steps.test-suite.outputs.suite == 'freestyle-flow'
+        working-directory: apps/website
+        run: |
+          echo "🧪 Running freestyle flow E2E tests..."
+          APP_ENV=test NODE_OPTIONS=--max-old-space-size=1536 npx playwright test \
+            --config=tests/config/playwright.config.ts \
+            tests/e2e/freestyle-flow/ \
+            --workers=1 \
+            --reporter=html,list
+        continue-on-error: true
+        env:
+          APP_ENV: test
+          NODE_ENV: test
+          CI: "true"
+          NODE_OPTIONS: "--max-old-space-size=1536"
+          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.TEST_SUPABASE_URL }}
+          NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.TEST_SUPABASE_ANON_KEY }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.TEST_SUPABASE_SERVICE_ROLE_KEY }}
+          JWT_SECRET: ${{ secrets.JWT_SECRET }}
+          ADMIN_EMAIL: ${{ secrets.ADMIN_EMAIL }}
+          ADMIN_PASSWORD: ${{ secrets.ADMIN_PASSWORD }}
+
+      - name: Run E2E tests - Admin
+        if: env.RUN_E2E_TESTS == 'true' && steps.test-suite.outputs.suite == 'admin'
+        working-directory: apps/website
+        run: |
+          echo "🧪 Running admin E2E tests..."
+          APP_ENV=test NODE_OPTIONS=--max-old-space-size=1536 npx playwright test \
+            --config=tests/config/playwright.config.ts \
+            tests/e2e/admin/ \
+            --workers=1 \
+            --reporter=html,list
+        continue-on-error: true
+        env:
+          APP_ENV: test
+          NODE_ENV: test
+          CI: "true"
+          NODE_OPTIONS: "--max-old-space-size=1536"
+          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.TEST_SUPABASE_URL }}
+          NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.TEST_SUPABASE_ANON_KEY }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.TEST_SUPABASE_SERVICE_ROLE_KEY }}
+          JWT_SECRET: ${{ secrets.JWT_SECRET }}
+          ADMIN_EMAIL: ${{ secrets.ADMIN_EMAIL }}
+          ADMIN_PASSWORD: ${{ secrets.ADMIN_PASSWORD }}
+
+      - name: Run E2E tests - All
+        if: env.RUN_E2E_TESTS == 'true' && steps.test-suite.outputs.suite == 'all'
+        working-directory: apps/website
+        run: |
+          echo "🧪 Running all E2E tests..."
+          APP_ENV=test NODE_OPTIONS=--max-old-space-size=1536 npx playwright test \
+            --config=tests/config/playwright.config.ts \
+            --workers=1 \
+            --reporter=html,list
+        continue-on-error: true
+        env:
+          APP_ENV: test
+          NODE_ENV: test
+          CI: "true"
+          NODE_OPTIONS: "--max-old-space-size=1536"
+          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.TEST_SUPABASE_URL }}
+          NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.TEST_SUPABASE_ANON_KEY }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.TEST_SUPABASE_SERVICE_ROLE_KEY }}
+          JWT_SECRET: ${{ secrets.JWT_SECRET }}
+          ADMIN_EMAIL: ${{ secrets.ADMIN_EMAIL }}
+          ADMIN_PASSWORD: ${{ secrets.ADMIN_PASSWORD }}
+
+      # --------------------------------------------------
+      # Upload test results
+      # --------------------------------------------------
+      - name: Upload Playwright test results
+        if: always() && env.RUN_E2E_TESTS == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: apps/website/playwright-report/
+          retention-days: 7
+
+      - name: Upload Playwright videos
+        if: always() && env.RUN_E2E_TESTS == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-videos
+          path: apps/website/test-results/
+          retention-days: 7
+
+      # --------------------------------------------------
+      # Cleanup
+      # --------------------------------------------------
+      - name: Stop application server
+        if: always() && env.RUN_E2E_TESTS == 'true'
+        run: |
+          echo "🛑 Stopping application server..."
+          if [ -n "$SERVER_PID" ]; then
+            kill $SERVER_PID 2>/dev/null || true
+          fi
+          pkill -f "npm run start" || true
+          pkill -f "next-server" || true
+          pkill -f "node.*next" || true
+
+      - name: Cleanup build artifacts
+        if: always()
+        run: |
+          echo "🧹 Cleaning up build artifacts..."
+          rm -rf .next build storybook-static coverage apps/website/playwright-report apps/website/test-results
+          echo "✅ Cleanup completed"

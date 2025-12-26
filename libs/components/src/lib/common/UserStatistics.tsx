@@ -1,30 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
-import { useAuth } from "@elzatona/hooks";
-
-// Conditional Supabase client creation with fallback values
-
-const supabase = null;
-try {
-  // eslint-disable-next-line @typescript-eslint/no-require-imports
-  const { createClient } = require("@supabase/supabase-js");
-  const supabaseUrl =
-    process.env["NEXT_PUBLIC_SUPABASE_URL"] ||
-    "https://placeholder.supabase.co";
-  const supabaseServiceRoleKey =
-    process.env["SUPABASE_SERVICE_ROLE_KEY"] || "placeholder_key";
-
-  if (
-    supabaseUrl !== "https://placeholder.supabase.co" &&
-    supabaseServiceRoleKey !== "placeholder_key"
-  ) {
-    createClient(supabaseUrl, supabaseServiceRoleKey);
-  }
-} catch (error) {
-  console.warn("Supabase client creation failed in UserStatistics:", error);
-}
-
+import React from "react";
 import { Users, TrendingUp, Award, Clock } from "lucide-react";
 
 interface UserStats {
@@ -35,91 +11,12 @@ interface UserStats {
 }
 
 export const UserStatistics: React.FC = () => {
-  const { isAuthenticated } = useAuth();
-  const [stats, setStats] = useState<UserStats>({
-    activeLearners: 0,
-    successRate: 0,
-    totalQuestions: 0,
-    averageTime: "0m",
-  });
-  const [isLoading, setIsLoading] = useState(true);
-
-  useEffect(() => {
-    // Simulate loading and calculating stats
-    const loadStats = async () => {
-      setIsLoading(true);
-
-      // In a real implementation, this would fetch from your backend/API
-      // For now, we'll simulate with realistic numbers that grow over time
-      const baseLearners = 8500; // Base number of learners
-      const baseSuccessRate = 82; // Base success rate
-
-      // Add some randomness and growth over time
-      const timeBasedGrowth =
-        Math.floor(Date.now() / (1000 * 60 * 60 * 24)) * 2; // 2 new learners per day
-      const randomGrowth = Math.floor(Math.random() * 100);
-
-      const activeLearners = baseLearners + timeBasedGrowth + randomGrowth;
-      const successRate = Math.min(
-        95,
-        baseSuccessRate + Math.floor(Math.random() * 6),
-      ); // Cap at 95%
-      const totalQuestions = activeLearners * 45; // Average questions per user
-      const averageTime = `${Math.floor(Math.random() * 30) + 15}m`; // 15-45 minutes
-
-      // Extract animation callbacks to reduce nesting depth
-      const updateActiveLearners = (value: number) => {
-        setStats((prev) => ({ ...prev, activeLearners: Math.floor(value) }));
-      };
-
-      const updateSuccessRate = (value: number) => {
-        setStats((prev) => ({ ...prev, successRate: Math.floor(value) }));
-      };
-
-      const updateTotalQuestions = (value: number) => {
-        setStats((prev) => ({ ...prev, totalQuestions: Math.floor(value) }));
-      };
-
-      // Animate the numbers
-      await animateNumber(0, activeLearners, updateActiveLearners);
-      await animateNumber(0, successRate, updateSuccessRate);
-      await animateNumber(0, totalQuestions, updateTotalQuestions);
-
-      setStats((prev) => ({ ...prev, averageTime }));
-      setIsLoading(false);
-    };
-
-    loadStats();
-  }, [isAuthenticated]);
-
-  const animateNumber = (
-    start: number,
-    end: number,
-    callback: (value: number) => void,
-  ): Promise<void> => {
-    return new Promise((resolve) => {
-      const duration = 2000; // 2 seconds
-      const startTime = Date.now();
-
-      const animate = () => {
-        const elapsed = Date.now() - startTime;
-        const progress = Math.min(elapsed / duration, 1);
-
-        // Easing function for smooth animation
-        const easeOutQuart = 1 - Math.pow(1 - progress, 4);
-        const currentValue = start + (end - start) * easeOutQuart;
-
-        callback(currentValue);
-
-        if (progress < 1) {
-          requestAnimationFrame(animate);
-        } else {
-          resolve();
-        }
-      };
-
-      animate();
-    });
+  // Hardcoded stats - show immediately without loading or animation delays
+  const stats: UserStats = {
+    activeLearners: 49500, // 49.5K+
+    successRate: 86, // 86%
+    totalQuestions: 2226300, // 2226.3K+
+    averageTime: "32m", // 32m
   };
 
   const formatNumber = (num: number): string => {
@@ -128,20 +25,6 @@ export const UserStatistics: React.FC = () => {
     }
     return num.toString();
   };
-
-  if (isLoading) {
-    return (
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
-        {Array.from({ length: 4 }).map((_, index) => (
-          <div key={index} className="text-center">
-            <div className="w-16 h-16 bg-gray-200 dark:bg-gray-700 rounded-full mx-auto mb-4 animate-pulse"></div>
-            <div className="h-8 bg-gray-200 dark:bg-gray-700 rounded mb-2 animate-pulse"></div>
-            <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded animate-pulse"></div>
-          </div>
-        ))}
-      </div>
-    );
-  }
 
   return (
     <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 mb-12">

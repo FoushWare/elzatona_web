@@ -68,6 +68,9 @@ const Select = React.forwardRef<
         type="button"
         className="flex h-10 w-full items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 hover:bg-accent hover:text-accent-foreground cursor-pointer"
         onClick={() => setOpen(!open)}
+        aria-haspopup="listbox"
+        aria-expanded={open}
+        aria-label={`Select option. Current: ${selectedText}`}
       >
         <span className="truncate">{selectedText}</span>
         {open ? (
@@ -77,14 +80,21 @@ const Select = React.forwardRef<
         )}
       </button>
       {open && (
-        <div className="absolute z-50 w-full mt-1 rounded-md border bg-background shadow-lg">
+        <div
+          className="absolute z-50 w-full mt-1 rounded-md border bg-background shadow-lg"
+          role="listbox"
+          aria-label="Select option"
+        >
           <div className="max-h-60 overflow-auto">
             {selectItems.map((item) => {
               if (React.isValidElement(item)) {
+                const isSelected = selectedValue === item.props.value;
                 return (
-                  <option
+                  <div
                     key={item.props.value}
-                    className="px-3 py-2 text-sm hover:bg-accent hover:text-accent-foreground cursor-pointer"
+                    role="option"
+                    aria-selected={isSelected}
+                    className="px-3 py-2 text-sm hover:bg-accent hover:text-accent-foreground cursor-pointer focus:bg-accent focus:outline-none"
                     onClick={() => handleValueChange(item.props.value)}
                     onKeyDown={(e) => {
                       if (e.key === "Enter" || e.key === " ") {
@@ -92,11 +102,10 @@ const Select = React.forwardRef<
                         handleValueChange(item.props.value);
                       }
                     }}
-                    value={item.props.value}
-                    selected={selectedValue === item.props.value}
+                    tabIndex={0}
                   >
                     {item.props.children}
-                  </option>
+                  </div>
                 );
               }
               return item;

@@ -1,14 +1,66 @@
 // v1.0 - Unified Question Schema
 // Centralized type definitions for the unified question system
 
-import { createClient } from "@supabase/supabase-js";
+import { createClient, type SupabaseClient } from "@supabase/supabase-js";
 
-// Use environment variables with proper typing
-const supabaseUrl =
-  (globalThis as any).process?.env?.["NEXT_PUBLIC_SUPABASE_URL"] || "";
-const supabaseServiceRoleKey =
-  (globalThis as any).process?.env?.["SUPABASE_SERVICE_ROLE_KEY"] || "";
-const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
+// Lazy Supabase client creation - only create when needed and if environment variables are available
+// This should NEVER be called in client-side code - only in server-side API routes
+let supabase: SupabaseClient | null = null;
+
+function getSupabaseClient(): SupabaseClient | null {
+  // Early return if already initialized
+  if (supabase) {
+    return supabase;
+  }
+
+  // CRITICAL: Never create Supabase client in browser/client environment
+  // Check if we're in a browser environment first
+  if (typeof window !== "undefined") {
+    // We're in a browser - Supabase client should not be created here
+    // This file should only be used for types in client components
+    return null;
+  }
+
+  // Only proceed if we're in a server environment (Node.js)
+  if (typeof process === "undefined") {
+    return null;
+  }
+
+  // Only create client if we're in a server environment with proper env vars
+  // Use safe property access to avoid TypeScript errors
+  let supabaseUrl = "";
+  let supabaseServiceRoleKey = "";
+
+  try {
+    // Access process.env safely (only available in Node.js/server environment)
+    const env = process.env;
+    if (env) {
+      supabaseUrl = env["NEXT_PUBLIC_SUPABASE_URL"] || "";
+      supabaseServiceRoleKey = env["SUPABASE_SERVICE_ROLE_KEY"] || "";
+    }
+  } catch {
+    // Ignore errors accessing environment variables
+    return null;
+  }
+
+  // Only create client if we have valid credentials
+  if (
+    supabaseUrl &&
+    supabaseServiceRoleKey &&
+    supabaseUrl !== "" &&
+    supabaseServiceRoleKey !== ""
+  ) {
+    try {
+      supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
+      return supabase;
+    } catch (error) {
+      console.warn("Failed to create Supabase client:", error);
+      return null;
+    }
+  }
+
+  return null;
+}
 
 export interface UnifiedQuestion {
   id: string;
@@ -269,7 +321,8 @@ export class UnifiedQuestionService {
 
   // Get all questions with optional filters
   async getQuestions(filters?: QuestionFilter): Promise<UnifiedQuestion[]> {
-    if (!supabase) throw new Error("any not initialized");
+    const supabase = getSupabaseClient();
+    if (!supabase) throw new Error("Supabase client not initialized");
 
     let q = supabase.from("questions").select("*");
 
@@ -302,7 +355,8 @@ export class UnifiedQuestionService {
 
   // Get a single question by ID
   async getQuestion(id: string): Promise<UnifiedQuestion | null> {
-    if (!supabase) throw new Error("any not initialized");
+    const supabase = getSupabaseClient();
+    if (!supabase) throw new Error("Supabase client not initialized");
 
     const { data: docSnap, error } = await supabase
       .from("questions")
@@ -320,7 +374,8 @@ export class UnifiedQuestionService {
   async createQuestion(
     question: Omit<UnifiedQuestion, "id" | "createdAt" | "updatedAt">,
   ): Promise<UnifiedQuestion> {
-    if (!supabase) throw new Error("any not initialized");
+    const supabase = getSupabaseClient();
+    if (!supabase) throw new Error("Supabase client not initialized");
 
     const questionWithTimestamps = {
       ...question,
@@ -342,7 +397,8 @@ export class UnifiedQuestionService {
     id: string,
     updates: Partial<UnifiedQuestion>,
   ): Promise<UnifiedQuestion> {
-    if (!supabase) throw new Error("any not initialized");
+    const supabase = getSupabaseClient();
+    if (!supabase) throw new Error("Supabase client not initialized");
 
     const updateWithTimestamps = {
       ...updates,
@@ -361,7 +417,8 @@ export class UnifiedQuestionService {
 
   // Delete a question
   async deleteQuestion(id: string): Promise<boolean> {
-    if (!supabase) throw new Error("any not initialized");
+    const supabase = getSupabaseClient();
+    if (!supabase) throw new Error("Supabase client not initialized");
 
     try {
       const { error } = await supabase.from("questions").delete().eq("id", id);
@@ -375,7 +432,8 @@ export class UnifiedQuestionService {
 
   // Get question statistics
   async getQuestionStats(): Promise<QuestionStats> {
-    if (!supabase) throw new Error("any not initialized");
+    const supabase = getSupabaseClient();
+    if (!supabase) throw new Error("Supabase client not initialized");
 
     // For small datasets, get all questions at once (more efficient than multiple queries)
     const { data: questions, error } = await supabase
@@ -507,7 +565,8 @@ export class UnifiedQuestionService {
     searchTerm: string,
     filters?: QuestionFilter,
   ): Promise<QuestionSearchResult> {
-    if (!supabase) throw new Error("any not initialized");
+    const supabase = getSupabaseClient();
+    if (!supabase) throw new Error("Supabase client not initialized");
 
     const startTime = Date.now();
 

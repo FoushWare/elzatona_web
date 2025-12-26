@@ -1,12 +1,6 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { createClient } from "@supabase/supabase-js";
-
-const supabaseUrl = process.env["NEXT_PUBLIC_SUPABASE_URL"]!;
-const supabaseServiceRoleKey = process.env["SUPABASE_SERVICE_ROLE_KEY"]!;
-const _supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
-
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
@@ -27,8 +21,6 @@ import {
   Settings,
 } from "lucide-react";
 import { AlzatonaLogo } from "./AlzatonaLogo";
-
-// import { LearningModeSwitcher } from '../learning/LearningModeSwitcher';
 
 // Helper function to get link styling
 const getLinkStyles = (isActive: boolean, isScrolled: boolean) => {
@@ -136,9 +128,9 @@ export const NavbarSimple: React.FC = () => {
     setIsScrolled,
     isOpen,
     setIsOpen,
-    isMobile,
+    isMobile: _isMobile,
     setIsMobile,
-    isUserDropdownOpen,
+    isUserDropdownOpen: _isUserDropdownOpen,
     setIsUserDropdownOpen,
     isHydrated,
     setIsHydrated,
@@ -170,7 +162,7 @@ export const NavbarSimple: React.FC = () => {
         console.warn("Failed to parse stored auth state:", error);
       }
     }
-  }, []);
+  }, [setIsHydrated, setStableAuthState]);
 
   // Update stable auth state when Firebase auth changes, but only after hydration
   useEffect(() => {
@@ -189,7 +181,13 @@ export const NavbarSimple: React.FC = () => {
         sessionStorage.setItem("navbar-auth-state", JSON.stringify(newState));
       }
     }
-  }, [isHydrated, isAuthenticated, isAuthLoading, stableAuthState]);
+  }, [
+    isHydrated,
+    isAuthenticated,
+    isAuthLoading,
+    stableAuthState,
+    setStableAuthState,
+  ]);
 
   // Helper function to check if a link is active
   const isActiveLink = (href: string) => {
@@ -268,7 +266,7 @@ export const NavbarSimple: React.FC = () => {
       window.removeEventListener("scroll", handleScroll);
       window.removeEventListener("resize", handleResize);
     };
-  }, [isHydrated]);
+  }, [isHydrated, setIsMobile, setIsScrolled]);
 
   // Close mobile menu when clicking outside
   useEffect(() => {

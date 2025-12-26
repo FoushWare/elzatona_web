@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import {
   useQueryState,
   parseAsString,
@@ -32,20 +32,16 @@ import {
 import { Label } from "../ui/label";
 
 interface AdvancedSearchProps {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  onResultsChange?: (results: any[]) => void;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  onFacetsChange?: (facets: any) => void;
+  onResultsChange?: (results: unknown[]) => void;
+  onFacetsChange?: (facets: Record<string, unknown>) => void;
   placeholder?: string;
   showFilters?: boolean;
   showFacets?: boolean;
   showSuggestions?: boolean;
   showAnalytics?: boolean;
   className?: string;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  allCategories?: any[];
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  allTopics?: any[];
+  allCategories?: Array<{ id: string; name: string }>;
+  allTopics?: Array<{ id: string; name: string; categoryId: string }>;
   // Pagination props
   currentPage?: number;
   totalPages?: number;
@@ -127,7 +123,7 @@ export function AdvancedSearch({
   // Server-side search - no need for client-side facets or suggestions
 
   // Perform actual search on real data
-  const performSearch = async () => {
+  const performSearch = useCallback(async () => {
     console.log("🔍 performSearch called with current state:", {
       query,
       category,
@@ -204,7 +200,18 @@ export function AdvancedSearch({
       setIsLoading(false);
       onResultsChange?.([]);
     }
-  };
+  }, [
+    query,
+    category,
+    difficulty,
+    type,
+    isActive,
+    topic,
+    selectedTopics,
+    page,
+    size,
+    onResultsChange,
+  ]);
 
   // Remove automatic search - only search on submit
   // Auto-search when filters change
@@ -222,6 +229,7 @@ export function AdvancedSearch({
     isActive,
     topic,
     selectedTopics,
+    performSearch,
     page,
     size,
   ]);

@@ -215,7 +215,28 @@ export function useFlashcardSession(): UseFlashcardSessionReturn {
     }
   }, [sessionId, sessionStartTime, loadUserData]);
 
-  // Handle card answer
+  // Move to next card
+  const nextCard = useCallback(() => {
+    setCurrentIndex((prev) => {
+      const nextIndex = prev + 1;
+      console.log("Moving to next card:", {
+        prev,
+        nextIndex,
+        sessionCardsLength: sessionCards.length,
+      });
+      if (nextIndex < sessionCards.length) {
+        setCurrentCard(sessionCards[nextIndex]);
+        return nextIndex;
+      } else {
+        // Session complete
+        console.log("Session complete - no more cards");
+        setCurrentCard(null);
+        return nextIndex;
+      }
+    });
+  }, [sessionCards]);
+
+  // Handle answer submission
   const handleAnswer = useCallback(
     async (isCorrect: boolean) => {
       if (!user || !currentCard || !sessionId) return;
@@ -259,29 +280,8 @@ export function useFlashcardSession(): UseFlashcardSessionReturn {
         );
       }
     },
-    [user, currentCard, sessionId],
+    [user, currentCard, sessionId, nextCard],
   );
-
-  // Move to next card
-  const nextCard = useCallback(() => {
-    setCurrentIndex((prev) => {
-      const nextIndex = prev + 1;
-      console.log("Moving to next card:", {
-        prev,
-        nextIndex,
-        sessionCardsLength: sessionCards.length,
-      });
-      if (nextIndex < sessionCards.length) {
-        setCurrentCard(sessionCards[nextIndex]);
-        return nextIndex;
-      } else {
-        // Session complete
-        console.log("Session complete - no more cards");
-        setCurrentCard(null);
-        return nextIndex;
-      }
-    });
-  }, [sessionCards]);
 
   // Skip current card
   const skipCard = useCallback(() => {

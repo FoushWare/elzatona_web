@@ -9,6 +9,7 @@ import {
   Textarea,
 } from "@elzatona/components";
 import { Upload, FileText, AlertTriangle, Loader2 } from "lucide-react";
+import DOMPurify from "dompurify";
 import {
   useFormState,
   useFileProcessing,
@@ -35,7 +36,7 @@ export default function BulkUploadForm({
   loading = false,
   error = null,
   success = false,
-  progress = 0,
+  progress: _progress = 0,
 }: BulkUploadFormProps) {
   // Extracted hooks for state management
   const {
@@ -56,8 +57,11 @@ export default function BulkUploadForm({
     setJsonError,
   } = useFormState(error, success, loading);
 
-  const { shikiHighlighter, isLoadingShiki, codeHighlightedHtml } =
-    useShikiHighlighting(previewQuestions);
+  const {
+    shikiHighlighter: _shikiHighlighter,
+    isLoadingShiki: _isLoadingShiki,
+    codeHighlightedHtml,
+  } = useShikiHighlighting(previewQuestions);
   const { processFile, validateJsonText } = useFileProcessing();
 
   // Event handlers
@@ -144,7 +148,7 @@ export default function BulkUploadForm({
     onUpload(previewQuestions);
   };
 
-  const handleToggleMode = () => {
+  const _handleToggleMode = () => {
     setIsJsonMode(!isJsonMode);
     setJsonError(null);
     if (!isJsonMode) {
@@ -301,7 +305,23 @@ export default function BulkUploadForm({
                     <div className="mt-2">
                       <div
                         dangerouslySetInnerHTML={{
-                          __html: codeHighlightedHtml[index] || "",
+                          __html:
+                            typeof window !== "undefined"
+                              ? DOMPurify.sanitize(
+                                  codeHighlightedHtml[index] || "",
+                                  {
+                                    ALLOWED_TAGS: [
+                                      "pre",
+                                      "code",
+                                      "span",
+                                      "div",
+                                      "style",
+                                      "br",
+                                    ],
+                                    ALLOWED_ATTR: ["class", "style"],
+                                  },
+                                )
+                              : codeHighlightedHtml[index] || "",
                         }}
                       />
                     </div>

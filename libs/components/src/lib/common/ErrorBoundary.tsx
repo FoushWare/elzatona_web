@@ -3,7 +3,7 @@
 import React, { Component, ReactNode, ErrorInfo } from "react";
 
 // Conditional Supabase client creation with fallback values
-let supabase = null;
+const supabase = null;
 try {
   // eslint-disable-next-line @typescript-eslint/no-require-imports
   const { createClient } = require("@supabase/supabase-js");
@@ -17,7 +17,10 @@ try {
     supabaseUrl !== "https://placeholder.supabase.co" &&
     supabaseServiceRoleKey !== "placeholder_key"
   ) {
-    supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
+    const _supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
+    // Supabase client created but not used in ErrorBoundary
+    // Reserved for future error logging functionality
+    void _supabase;
   }
 } catch (error) {
   console.warn("Supabase client creation failed in ErrorBoundary:", error);
@@ -79,7 +82,7 @@ export class ErrorBoundary extends Component<Props, State> {
     }
   }
 
-  private handleRetry = () => {
+  private readonly handleRetry = () => {
     this.setState({
       hasError: false,
       error: null,
@@ -87,7 +90,7 @@ export class ErrorBoundary extends Component<Props, State> {
     });
   };
 
-  private handleGoHome = () => {
+  private readonly handleGoHome = () => {
     if (typeof globalThis.window !== "undefined") {
       globalThis.window.location.href = "/";
     }

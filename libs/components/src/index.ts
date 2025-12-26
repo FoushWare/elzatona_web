@@ -38,6 +38,7 @@ export { EmptyState } from "./lib/ui/empty-state";
 export { SignInPopup } from "./lib/auth/SignInPopup";
 export { default as AdminNavbar } from "./lib/auth/AdminNavbar";
 export { default as AdminLoginNavbar } from "./lib/auth/AdminLoginNavbar";
+export { default as NavbarSimple } from "./lib/common/NavbarSimple";
 export { default as FirestoreErrorBoundary } from "./lib/common/FirestoreErrorBoundary";
 export { default as FrontendTaskEditor } from "./lib/admin/FrontendTaskEditor";
 export { default as ProblemSolvingEditor } from "./lib/admin/ProblemSolvingEditor";
@@ -68,3 +69,21 @@ export {
   CollapsibleTrigger,
   CollapsibleContent,
 } from "./lib/ui/collapsible";
+export { ActivityFeed } from "./lib/components/organisms/ActivityFeed";
+
+// Atomic Design Components
+export * from "./lib/components/atoms";
+export * from "./lib/components/molecules";
+export * from "./lib/components/organisms";
+export { ErrorAlert } from "./lib/components/molecules/ErrorAlert";
+export type { ErrorAlertPropsType } from "./lib/components/molecules/ErrorAlert";
+export { DataTableHeader } from "./lib/components/molecules/DataTableHeader";
+export type { DataTableHeaderPropsType } from "./lib/components/molecules/DataTableHeader";
+export { WelcomeHeader } from "./lib/components/molecules/WelcomeHeader";
+export type { WelcomeHeaderPropsType } from "./lib/components/molecules/WelcomeHeader";
+export { MetricGrid } from "./lib/components/organisms/MetricGrid";
+export {
+  QuickActions,
+  type QuickAction,
+} from "./lib/components/organisms/QuickActions";
+export type { QuickActionsPropsType } from "./lib/components/organisms/QuickActions";

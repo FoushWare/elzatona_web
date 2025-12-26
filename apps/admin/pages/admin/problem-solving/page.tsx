@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import {
   Card,
   Button,
@@ -88,10 +88,6 @@ export default function ProblemSolvingPage() {
   ];
   const difficulties = ["easy", "medium", "hard"];
 
-  useEffect(() => {
-    fetchTasks();
-  }, [currentPage, selectedCategory, selectedDifficulty, searchTerm]);
-
   const fetchTasks = useCallback(async () => {
     try {
       setLoading(true);
@@ -120,6 +116,10 @@ export default function ProblemSolvingPage() {
       setLoading(false);
     }
   }, [currentPage, selectedCategory, selectedDifficulty, searchTerm]);
+
+  useEffect(() => {
+    fetchTasks();
+  }, [fetchTasks]);
 
   const calculateStats = (taskList: ProblemSolvingTask[]) => {
     const newStats: TaskStats = {

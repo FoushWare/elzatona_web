@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useMemo, useState, useEffect } from "react";
+import { useMemo, useState, useEffect, useCallback } from "react";
 import { enTranslations, arTranslations } from "./types/translations";
 
 const translations = {
@@ -20,30 +20,33 @@ export function useTranslation() {
   }, []);
 
   // Extract translation lookup logic to reduce cognitive complexity
-  const getTranslationValue = (key: string): string => {
-    const keys = key.split(".");
-    let value: unknown =
-      translations[locale as keyof typeof translations] || translations.en;
+  const getTranslationValue = useCallback(
+    (key: string): string => {
+      const keys = key.split(".");
+      let value: unknown =
+        translations[locale as keyof typeof translations] || translations.en;
 
-    for (const k of keys) {
-      if (value && typeof value === "object" && k in value) {
-        value = (value as Record<string, unknown>)[k];
-      } else {
-        // Fallback to English if translation not found
-        value = translations.en;
-        for (const fallbackKey of keys) {
-          if (value && typeof value === "object" && fallbackKey in value) {
-            value = (value as Record<string, unknown>)[fallbackKey];
-          } else {
-            return key; // Return the key if translation not found
+      for (const k of keys) {
+        if (value && typeof value === "object" && k in value) {
+          value = (value as Record<string, unknown>)[k];
+        } else {
+          // Fallback to English if translation not found
+          value = translations.en;
+          for (const fallbackKey of keys) {
+            if (value && typeof value === "object" && fallbackKey in value) {
+              value = (value as Record<string, unknown>)[fallbackKey];
+            } else {
+              return key; // Return the key if translation not found
+            }
           }
+          break;
         }
-        break;
       }
-    }
 
-    return typeof value === "string" ? value : key;
-  };
+      return typeof value === "string" ? value : key;
+    },
+    [locale],
+  );
 
   const t = useMemo(() => {
     return (key: string, params?: Record<string, string | number>) => {
@@ -58,7 +61,7 @@ export function useTranslation() {
 
       return value;
     };
-  }, [locale]);
+  }, [getTranslationValue]);
 
   const changeLanguage = (newLocale: string) => {
     setLocale(newLocale);

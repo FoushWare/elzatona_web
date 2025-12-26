@@ -35,11 +35,13 @@ export default function ClientCodeRunner({
   const [running, setRunning] = useState(false);
   const [customInput, setCustomInput] = useState<string>("");
   const [customResult, setCustomResult] = useState<TestResult | null>(null);
-  const origin = globalThis.window.location.origin;
+  // Security: Use specific origin for postMessage to prevent XSS attacks
+  const targetOrigin: string = globalThis.window.location.origin;
 
   useEffect(() => {
     const handleMessage = (e: MessageEvent) => {
-      if (e.origin !== origin) {
+      // Security: Verify message origin to prevent XSS attacks
+      if (e.origin !== targetOrigin) {
         console.warn("Received message from untrusted origin:", e.origin);
         return;
       }
@@ -59,7 +61,7 @@ export default function ClientCodeRunner({
     globalThis.window.addEventListener("message", handleMessage);
     return () =>
       globalThis.window.removeEventListener("message", handleMessage);
-  }, [origin]);
+  }, [targetOrigin]);
 
   const run = () => {
     setRunning(true);
@@ -68,11 +70,12 @@ export default function ClientCodeRunner({
     const iframe = iframeRef.current;
     if (!iframe) return;
 
+    // Use replaceAll() with regex patterns (requires global flag)
     const safeCode = userCode
-      .replace(/import\s+[^;]+;?/g, "")
-      .replace(/export\s+default\s+/g, "")
-      .replace(/export\s+\{[^}]*\};?/g, "")
-      .replace(/export\s+\w+\s+/g, "");
+      .replaceAll(/import\s+[^;]+;?/g, "")
+      .replaceAll(/export\s+default\s+/g, "")
+      .replaceAll(/export\s+\{[^}]*\};?/g, "")
+      .replaceAll(/export\s+\w+\s+/g, "");
 
     const payload = {
       fnName: functionName,
@@ -80,15 +83,22 @@ export default function ClientCodeRunner({
       tests: testCases,
     };
 
+    // Security: Specify target origin to prevent XSS attacks
     iframe.contentWindow?.postMessage(
       { type: "runner:start", payload },
-      window.location.origin, // Use specific origin for better security
+      targetOrigin,
     );
   };
 
+  // Security: Inject target origin into iframe code to ensure secure postMessage communication
+  // Escape the origin to prevent injection attacks
+  const escapedOrigin = targetOrigin
+    .replaceAll(/\\/g, "\\\\")
+    .replaceAll(/"/g, '\\"')
+    .replaceAll(/'/g, "\\'");
   const srcDoc =
     "<!doctype html>" +
-    '<html><head><meta charset="utf-8"/></head><body>' +
+    '<html><head><meta charset="utf-8"></head><body>' +
     "<script>\n" +
     "function deepEqual(a,b){try{return JSON.stringify(a)===JSON.stringify(b)}catch(e){return false}}\n" +
     // SECURITY NOTE: eval() is used here for educational code execution in an iframe sandbox.
@@ -97,6 +107,7 @@ export default function ClientCodeRunner({
     // Consider implementing additional sandboxing measures (CSP, worker threads) for production.
     "function safeEval(code){return (0,eval)(code)}\n" +
     'function withTimeout(fn,args,ms){return new Promise((resolve,reject)=>{const t=setTimeout(()=>reject(new Error("Timeout")),ms);try{const res=fn.apply(null,args);Promise.resolve(res).then(v=>{clearTimeout(t);resolve(v)}).catch(err=>{clearTimeout(t);reject(err)});}catch(err){clearTimeout(t);reject(err);}})}\n' +
+    `const TARGET_ORIGIN="${escapedOrigin}";\n` +
     'window.addEventListener("message",async(e)=>{\n' +
     '  if(!e.data||e.data.type!=="runner:start")return;\n' +
     "  const {fnName,code,tests}=e.data.payload;\n" +
@@ -108,7 +119,7 @@ export default function ClientCodeRunner({
     "    fn=eval(fnName);\n" +
     "  }catch(err){\n" +
     "    results=tests.map(t=>({id:t.id,passed:false,actual:null,expected:t.expected,error:String(err)}));\n" +
-    '    parent.postMessage({type:"runner:results",results},window.location.origin);\n' +
+    `    parent.postMessage({type:"runner:results",results},TARGET_ORIGIN);\n` +
     "    return;\n" +
     "  }\n" +
     "  for(const t of tests){\n" +
@@ -123,17 +134,17 @@ export default function ClientCodeRunner({
     "      results.push({id:t.id,passed:false,actual:null,expected:t.expected,error:String(err),elapsedMs:0});\n" +
     "    }\n" +
     "  }\n" +
-    '  parent.postMessage({type:"runner:results",results},window.location.origin);\n' +
+    `  parent.postMessage({type:"runner:results",results},TARGET_ORIGIN);\n` +
     "});\n" +
     "// custom single-run handler\n" +
     'window.addEventListener("message",async(e)=>{\n' +
     '  if(!e.data||e.data.type!=="runner:custom")return;\n' +
     "  const {fnName,code,input}=e.data.payload;\n" +
-    '  try{safeEval(code);}catch(err){parent.postMessage({type:"runner:custom:result",result:{id:"custom",passed:false,actual:null,expected:null,error:String(err),elapsedMs:0}},window.location.origin);return;}\n' +
-    '  let fn;try{fn=eval(fnName);}catch(err){parent.postMessage({type:"runner:custom:result",result:{id:"custom",passed:false,actual:null,expected:null,error:String(err),elapsedMs:0}},window.location.origin);return;}\n' +
-    '  try{const args=Array.isArray(input)?input:[input];const start=performance.now();const actual=await withTimeout(fn,args,1500);const elapsed=performance.now()-start;parent.postMessage({type:"runner:custom:result",result:{id:"custom",passed:true,actual,expected:null,elapsedMs:Math.round(elapsed)}},window.location.origin);}catch(err){parent.postMessage({type:"runner:custom:result",result:{id:"custom",passed:false,actual:null,expected:null,error:String(err),elapsedMs:0}},window.location.origin);}\n' +
+    `  try{safeEval(code);}catch(err){parent.postMessage({type:"runner:custom:result",result:{id:"custom",passed:false,actual:null,expected:null,error:String(err),elapsedMs:0}},TARGET_ORIGIN);return;}\n` +
+    `  let fn;try{fn=eval(fnName);}catch(err){parent.postMessage({type:"runner:custom:result",result:{id:"custom",passed:false,actual:null,expected:null,error:String(err),elapsedMs:0}},TARGET_ORIGIN);return;}\n` +
+    `  try{const args=Array.isArray(input)?input:[input];const start=performance.now();const actual=await withTimeout(fn,args,1500);const elapsed=performance.now()-start;parent.postMessage({type:"runner:custom:result",result:{id:"custom",passed:true,actual,expected:null,elapsedMs:Math.round(elapsed)}},TARGET_ORIGIN);}catch(err){parent.postMessage({type:"runner:custom:result",result:{id:"custom",passed:false,actual:null,expected:null,error:String(err),elapsedMs:0}},TARGET_ORIGIN);}\n` +
     "});\n" +
-    "<\/script>" +
+    "</script>" +
     "</body></html>";
 
   return (
@@ -185,11 +196,13 @@ export default function ClientCodeRunner({
               setRunning(false);
               return;
             }
+            // Use replaceAll() with regex patterns (requires global flag)
             const safeCode = userCode
-              .replace(/import\s+[^;]+;?/g, "")
-              .replace(/export\s+default\s+/g, "")
-              .replace(/export\s+\{[^}]*\};?/g, "")
-              .replace(/export\s+\w+\s+/g, "");
+              .replaceAll(/import\s+[^;]+;?/g, "")
+              .replaceAll(/export\s+default\s+/g, "")
+              .replaceAll(/export\s+\{[^}]*\};?/g, "")
+              .replaceAll(/export\s+\w+\s+/g, "");
+            // Security: Specify target origin to prevent XSS attacks
             iframe.contentWindow?.postMessage(
               {
                 type: "runner:custom",
@@ -199,7 +212,7 @@ export default function ClientCodeRunner({
                   input: parsed,
                 },
               },
-              window.location.origin, // Use specific origin for better security
+              targetOrigin,
             );
           }}
           className="px-3 py-2 rounded bg-emerald-600 text-white"

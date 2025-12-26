@@ -2,7 +2,6 @@
 "use client";
 
 import { useEffect } from "react";
-// import { useUserProgress } from '@elzatona/hooks'; // Removed - useUserProgress is not exported
 
 interface ProgressTrackerProps {
   questionId?: string;

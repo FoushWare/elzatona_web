@@ -85,3 +85,6 @@ libs/utilities/scripts/setup-supabase-admin.js
 # CodeQL security fix scripts
 libs/utilities/scripts/fix-option-text.js
 libs/utilities/scripts/fix-all-questions-comprehensive.js
+
+# Documentation files in scripts directory (ignored by git)
+libs/utilities/scripts/*.md

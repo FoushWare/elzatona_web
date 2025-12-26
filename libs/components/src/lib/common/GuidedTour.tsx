@@ -15,7 +15,7 @@ const sanitizeCSS = (css: string): string => {
   if (typeof window === "undefined") {
     return css; // Server-side: return as-is
   }
-  
+
   return DOMPurify.sanitize(css, {
     ALLOWED_TAGS: ["style"],
     ALLOWED_ATTR: [],

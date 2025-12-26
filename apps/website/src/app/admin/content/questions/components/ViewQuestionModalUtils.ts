@@ -1,4 +1,4 @@
-import { createHighlighter, type Highlighter } from "shiki";
+import { type Highlighter } from "shiki";
 
 // Language detection utility
 export const detectLanguage = (code: string): string => {

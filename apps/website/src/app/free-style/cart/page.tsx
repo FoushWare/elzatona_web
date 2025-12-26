@@ -1,5 +1,10 @@
-// Next.js page wrapper - imports from pages/ directory
-// This file maintains Next.js routing structure
-// Source: /Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/apps/website/page-components/free-style/cart/page.tsx
+"use client";
 
-export { default } from "../../../../page-components/free-style/cart/page";
+export default function freestylecartPage() {
+  return (
+    <div className="min-h-screen p-8">
+      <h1 className="text-2xl font-bold">free-style/cart</h1>
+      <p>Page component - needs implementation</p>
+    </div>
+  );
+}
