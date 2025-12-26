@@ -290,17 +290,27 @@ test.describe("A-E2E-001: Admin Bulk Question Addition - CRUD", () => {
 
     // Wait for the POST API response (create question) with timeout handling
     let createApiSuccess = false;
-    let createResponseData: unknown = null;
+    type CreateResponseData = {
+      success?: boolean;
+      data?: {
+        success?: number;
+        failed?: number;
+        results?: Array<{ id?: string; [key: string]: unknown }>;
+        errors?: string[];
+      };
+      error?: string;
+    };
+    let createResponseData: CreateResponseData | null = null;
 
     try {
-      const createResponse = await Promise.race([
+      const createResponse = (await Promise.race([
         createResponsePromise,
-        new Promise((_, reject) =>
+        new Promise<Response>((_, reject) =>
           setTimeout(() => reject(new Error("Timeout")), 25000),
         ),
-      ]);
+      ])) as Response | null;
 
-      if (createResponse) {
+      if (createResponse && "ok" in createResponse) {
         // Check HTTP status first
         if (!createResponse.ok) {
           const errorText = await createResponse.text();
@@ -314,7 +324,7 @@ test.describe("A-E2E-001: Admin Bulk Question Addition - CRUD", () => {
           );
         }
 
-        createResponseData = await createResponse.json();
+        createResponseData = (await createResponse.json()) as CreateResponseData;
         console.log("✅ Question creation API response received");
         console.log(
           "Question creation response:",
@@ -324,22 +334,22 @@ test.describe("A-E2E-001: Admin Bulk Question Addition - CRUD", () => {
         // Check if creation was successful
         // Response structure: { success: true, data: { success: 1, failed: 0, results: [...] } }
         const isSuccess =
-          createResponseData.success === true &&
-          (createResponseData.data?.success > 0 ||
-            createResponseData.data?.results?.length > 0);
+          createResponseData?.success === true &&
+          ((createResponseData.data?.success ?? 0) > 0 ||
+            (createResponseData.data?.results?.length ?? 0) > 0);
 
         if (!isSuccess) {
-          const errorMessages = createResponseData.data?.errors || [];
+          const errorMessages = createResponseData?.data?.errors || [];
           const errorMsg =
             errorMessages.length > 0
               ? errorMessages.join(", ")
-              : createResponseData.error || JSON.stringify(createResponseData);
+              : createResponseData?.error || JSON.stringify(createResponseData);
           console.error("❌ Question creation failed:", createResponseData);
           throw new Error(`Question creation failed: ${errorMsg}`);
         }
 
         // Verify we have a result with an ID
-        const createdQuestion = createResponseData.data?.results?.[0];
+        const createdQuestion = createResponseData?.data?.results?.[0];
         if (!createdQuestion || !createdQuestion.id) {
           console.error(
             "❌ Question creation response missing question ID:",
@@ -359,17 +369,18 @@ test.describe("A-E2E-001: Admin Bulk Question Addition - CRUD", () => {
         throw new Error("No create response received");
       }
     } catch (e: unknown) {
-      if (e.message === "Timeout") {
+      const error = e instanceof Error ? e : new Error(String(e));
+      if (error.message === "Timeout") {
         console.error("❌ Create API response timeout after 25s");
         throw new Error(
           "Question creation API call timed out. The question may not have been created.",
         );
-      } else if (e.message.includes("Question creation failed")) {
+      } else if (error.message.includes("Question creation failed")) {
         // Re-throw creation failures
-        throw e;
+        throw error;
       } else {
-        console.error("❌ Could not wait for create API response:", e.message);
-        throw new Error(`Failed to create question: ${e.message}`);
+        console.error("❌ Could not wait for create API response:", error.message);
+        throw new Error(`Failed to create question: ${error.message}`);
       }
     }
 
@@ -465,14 +476,15 @@ test.describe("A-E2E-001: Admin Bulk Question Addition - CRUD", () => {
         console.log("⚠️ No fetch response received, but continuing...");
       }
     } catch (e: unknown) {
-      if (e.message === "Timeout") {
+      const error = e instanceof Error ? e : new Error(String(e));
+      if (error.message === "Timeout") {
         console.log(
           "⚠️ Fetch API response timeout after 25s, continuing anyway...",
         );
       } else {
         console.log(
           "⚠️ Could not wait for fetch API response, continuing anyway...",
-          e.message,
+          error.message,
         );
       }
     }
