@@ -1,10 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 
-import { createClient } from "@supabase/supabase-js";
-
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
-const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
+import { getSupabaseClient } from "../../../../get-supabase-client";
 
 export interface QuestionTopic {
   id: string;
@@ -33,6 +29,7 @@ export interface QuestionTopic {
 // Load topics from Supabase
 async function loadTopics(): Promise<QuestionTopic[]> {
   try {
+    const supabase = getSupabaseClient();
     const { data: querySnapshot, error } = await supabase
       .from("topics")
       .select("*")
@@ -60,6 +57,7 @@ async function loadTopics(): Promise<QuestionTopic[]> {
 
 // Save topic to Supabase
 async function saveTopic(topic: Omit<QuestionTopic, "id">): Promise<string> {
+  const supabase = getSupabaseClient();
   const { data: newTopic, error } = await supabase
     .from("topics")
     .insert({
@@ -82,6 +80,7 @@ async function _updateTopic(
   topicId: string,
   topic: Partial<QuestionTopic>,
 ): Promise<void> {
+  const supabase = getSupabaseClient();
   const { error } = await supabase
     .from("topics")
     .update({
@@ -97,6 +96,7 @@ async function _updateTopic(
 
 // Delete topic from Supabase
 async function _deleteTopic(topicId: string): Promise<void> {
+  const supabase = getSupabaseClient();
   const { error } = await supabase.from("topics").delete().eq("id", topicId);
 
   if (error) {
@@ -107,6 +107,7 @@ async function _deleteTopic(topicId: string): Promise<void> {
 // Check if topic exists by name
 async function topicExistsByName(name: string): Promise<boolean> {
   try {
+    const supabase = getSupabaseClient();
     const { data, error } = await supabase
       .from("topics")
       .select("id")
