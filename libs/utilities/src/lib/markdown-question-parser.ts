@@ -5,7 +5,7 @@ import { BulkQuestionData } from "./unified-question-schema";
 
 /**
  * Completely remove all HTML tags including incomplete ones
- * This is a comprehensive function that handles edge cases like <script, <iframe, etc.
+ * This function uses a comprehensive regex-based approach to remove all HTML tags
  * @param text - Text that may contain HTML tags
  * @returns Plain text with all HTML tags removed
  */
@@ -16,41 +16,26 @@ function removeAllHTMLTagsComprehensive(text: string): string {
 
   let cleaned = text;
 
-  // SECURITY: CodeQL-verifiable single-pass HTML tag removal
-  // Remove ALL HTML tags including script tags in explicit, statically-verifiable steps
-  // CodeQL can verify each replace() call removes specific patterns
-
-  // Step 1: Remove complete script tags with any attributes: <script>, </script>, <script src="...">
-  cleaned = cleaned.replace(/<\/?\s*script\s*[^>]*>/gi, "");
-
-  // Step 2: Remove incomplete script tags without closing >: <script, <script src=, </script
-  cleaned = cleaned.replace(/<\/?\s*script\s*[^>]*/gi, "");
-
-  // Step 3: Remove script tag fragments: script>, </script (without <)
-  cleaned = cleaned.replace(/script\s*>/gi, "");
-  cleaned = cleaned.replace(/<\/?\s*script/gi, "");
-
-  // Step 4: Remove ALL remaining HTML tags (including any script tags that might have been missed)
-  // This single pattern removes: <tag>, </tag>, <tag attr="...">, <tag/>, <tag (incomplete)
+  // SECURITY: Remove ALL HTML tags including script tags
+  // Use a comprehensive regex pattern that removes all HTML tag variations
+  // This pattern removes: <tag>, </tag>, <tag attr="...">, <tag/>, etc.
+  // including ALL variations of <script> tags: <script>, <script src="...">, </script>, etc.
   cleaned = cleaned.replace(/<\/?[^>]*>/g, "");
 
-  // Step 5: Remove incomplete tags at end of string: <iframe, <object, etc.
+  // Remove incomplete tags at end of string (tags without closing >)
+  // This catches cases like "text<script" or "text<iframe" where the tag is incomplete
   cleaned = cleaned.replace(/<[^>]*$/g, "");
 
-  // Step 6: Remove any remaining < characters that might be part of incomplete tags
+  // Remove any remaining < characters that might be part of incomplete tags
+  // This catches edge cases where < appears without a matching >
   cleaned = cleaned.replace(/<[^<]*$/g, "");
 
-  // Step 7: Remove broken tag artifacts: script>, iframe>, etc. (without opening <)
+  // Remove broken tag artifacts (like "script>", "iframe>", etc. without opening <)
+  // This handles cases where only the closing part of a tag remains
   cleaned = cleaned.replace(
     /\b(script|iframe|object|embed|form|input|button|link|meta|style|svg|math)\s*>/gi,
     "",
   );
-
-  // Step 8: Final explicit script tag removal pass (CodeQL verification)
-  cleaned = cleaned.replace(/<\/?\s*script\s*[^>]*>/gi, "");
-  cleaned = cleaned.replace(/<\/?\s*script\s*[^>]*/gi, "");
-  cleaned = cleaned.replace(/script\s*>/gi, "");
-  cleaned = cleaned.replace(/<\/?\s*script/gi, "");
 
   return cleaned.trim();
 }
