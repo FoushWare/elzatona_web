@@ -1,9 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { createClient } from "@supabase/supabase-js";
-
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
-const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
+import { getSupabaseClient } from "../../../../get-supabase-client";
 
 const _questions = [
   {
@@ -142,6 +138,7 @@ export async function POST(request: NextRequest) {
     console.log("Adding questions to Supabase");
 
     const results = [];
+    const supabase = getSupabaseClient();
 
     for (const question of questionsToAdd) {
       const { error: insertError } = await supabase

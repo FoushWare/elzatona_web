@@ -1,13 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
-import { createClient } from "@supabase/supabase-js";
+import { getSupabaseClient } from "../../../get-supabase-client";
 import {
   sanitizeObjectServer,
   sanitizeRichContent,
 } from "../../../sanitize-server";
-
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
-const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
 
 export interface Flashcard {
   id: string;
@@ -98,6 +94,7 @@ export async function POST(request: NextRequest) {
       source,
     };
 
+    const supabase = getSupabaseClient();
     const { data: docRef, error } = await supabase
       .from("flashcards")
       .insert(flashcard)
@@ -144,6 +141,7 @@ export async function GET(request: NextRequest) {
       );
     }
 
+    const supabase = getSupabaseClient();
     let q = supabase.from("flashcards").select("*").eq("userId", userId);
 
     if (status) {

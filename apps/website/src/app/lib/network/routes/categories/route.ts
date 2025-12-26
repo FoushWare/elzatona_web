@@ -4,13 +4,9 @@
 
 import { NextRequest, NextResponse } from "next/server";
 // Empty import removed
-import { createClient } from "@supabase/supabase-js";
+import { getSupabaseClient } from "../../../get-supabase-client";
 import { sanitizeObjectServer } from "../../../sanitize-server";
 import { validateAndSanitize, categorySchema } from "../../../validation";
-
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
-const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
 
 export interface Category {
   id: string;
@@ -24,6 +20,7 @@ export interface Category {
 // GET /api/categories - Get all categories
 export async function GET() {
   try {
+    const supabase = getSupabaseClient();
     const { data: categories, error } = await supabase
       .from("categories")
       .select("*")
@@ -102,6 +99,7 @@ export async function POST(request: NextRequest) {
       is_active: categoryData.isActive !== false,
     };
 
+    const supabase = getSupabaseClient();
     const { data: newCategory, error } = await supabase
       .from("categories")
       .insert(supabaseCategoryData)

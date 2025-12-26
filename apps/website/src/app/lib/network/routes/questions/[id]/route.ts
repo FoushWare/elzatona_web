@@ -1,9 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { createClient } from "@supabase/supabase-js";
-
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
-const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
+import { getSupabaseClient } from "../../../../get-supabase-client";
 
 // GET /api/questions/[id] - Get a specific question
 export async function GET(
@@ -20,6 +16,7 @@ export async function GET(
       );
     }
 
+    const supabase = getSupabaseClient();
     const { data: questionData, error: questionError } = await supabase
       .from("questions")
       .select("*")
@@ -70,6 +67,7 @@ export async function PUT(
       );
     }
 
+    const supabase = getSupabaseClient();
     // Check if question exists
     const { data: existingQuestion, error: fetchError } = await supabase
       .from("questions")
@@ -128,6 +126,7 @@ export async function DELETE(
       );
     }
 
+    const supabase = getSupabaseClient();
     // Check if question exists
     const { data: existingQuestion, error: fetchError } = await supabase
       .from("questions")

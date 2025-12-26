@@ -1,15 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { createClient } from "@supabase/supabase-js";
-
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
-
-const supabase = createClient(supabaseUrl, supabaseServiceRoleKey, {
-  auth: {
-    autoRefreshToken: false,
-    persistSession: false,
-  },
-});
+import { getSupabaseClient } from "../../../../get-supabase-client";
 
 // GET /api/topics/[id] - Get a specific topic
 export async function GET(
@@ -26,6 +16,7 @@ export async function GET(
       );
     }
 
+    const supabase = getSupabaseClient();
     const { data: topic, error } = await supabase
       .from("topics")
       .select("*")
@@ -118,6 +109,7 @@ export async function PUT(
 
     console.log("📝 Updating topic:", topicId, "with data:", updateData);
 
+    const supabase = getSupabaseClient();
     const { data: updatedTopic, error } = await supabase
       .from("topics")
       .update(updateData)
@@ -177,6 +169,7 @@ export async function DELETE(
       );
     }
 
+    const supabase = getSupabaseClient();
     const { error } = await supabase.from("topics").delete().eq("id", topicId);
 
     if (error) {

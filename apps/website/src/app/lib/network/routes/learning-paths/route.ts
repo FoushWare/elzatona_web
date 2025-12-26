@@ -1,9 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { createClient } from "@supabase/supabase-js";
-
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
-const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
+import { getSupabaseClient } from "../../../get-supabase-client";
 
 import { SectionService } from "../../../section-service";
 
@@ -78,6 +74,7 @@ const learningPathSections: Record<string, string[]> = {
 export async function GET(_request: NextRequest) {
   try {
     // Fetch learning paths from Supabase with ordering
+    const supabase = getSupabaseClient();
     const { data: learningPathsData, error: learningPathsError } =
       await supabase
         .from("learning_paths")

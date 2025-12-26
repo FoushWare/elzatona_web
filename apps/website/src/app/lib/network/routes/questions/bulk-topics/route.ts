@@ -1,10 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 
-import { createClient } from "@supabase/supabase-js";
-
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
-const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
+import { getSupabaseClient } from "../../../../get-supabase-client";
 
 // POST /api/questions/bulk-topics
 export async function POST(request: NextRequest) {
@@ -33,6 +29,7 @@ export async function POST(request: NextRequest) {
     const errors = [];
 
     // Process each question
+    const supabase = getSupabaseClient();
     for (const questionId of questionIds) {
       try {
         const { data: existingQuestion, error: fetchError } = await supabase

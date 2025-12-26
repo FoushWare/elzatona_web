@@ -1,15 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
 import { supabaseOperations } from "../../../supabase-server";
-import { createClient } from "@supabase/supabase-js";
+import { getSupabaseClient } from "../../../get-supabase-client";
 import {
   sanitizeObjectServer,
   sanitizeRichContent,
 } from "../../../sanitize-server";
 import { validateAndSanitize, learningCardSchema } from "../../../validation";
-
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
-const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
 
 /**
  * @swagger
@@ -196,6 +192,7 @@ export async function POST(request: NextRequest) {
       is_active: cardData.isActive !== false,
     };
 
+    const supabase = getSupabaseClient();
     const { data: newCard, error } = await supabase
       .from("learning_cards")
       .insert(supabaseCardData)

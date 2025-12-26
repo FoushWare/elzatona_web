@@ -1,14 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
-import { createClient } from "@supabase/supabase-js";
+import { getSupabaseClient } from "../../../../get-supabase-client";
 import { cookies } from "next/headers";
 import {
   verifySupabaseToken,
   getUserFromRequest,
 } from "../../../../server-auth";
-
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
-const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
 
 /**
  * Calculate day streak from activity dates
@@ -159,6 +155,7 @@ export async function GET(request: NextRequest) {
     // Security: Removed user ID logging to prevent information disclosure
 
     // 1. Get all question attempts (for questions completed and points)
+    const supabase = getSupabaseClient();
     const { data: questionAttempts, error: attemptsError } = await supabase
       .from("question_attempts")
       .select("question_id, is_correct, points_earned, created_at")

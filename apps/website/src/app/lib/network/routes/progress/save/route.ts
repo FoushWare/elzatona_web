@@ -1,10 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 
-import { createClient } from "@supabase/supabase-js";
-
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
-const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
+import { getSupabaseClient } from "../../../../get-supabase-client";
 
 import { cookies } from "next/headers";
 import { verifySupabaseToken } from "../../../../server-auth";
@@ -103,6 +99,7 @@ export async function POST(request: NextRequest) {
 
     // Save progress to Supabase
     try {
+      const supabase = getSupabaseClient();
       const { error: progressError } = await supabase
         .from("user_progress")
         .insert({
@@ -129,6 +126,7 @@ export async function POST(request: NextRequest) {
     // Update learning plan progress if guided mode
     if (progressData.learningMode === "guided" && progressData.planId) {
       try {
+        const supabase = getSupabaseClient();
         const { data: currentPlan, error: planError } = await supabase
           .from("learning_plans")
           .select("*")
