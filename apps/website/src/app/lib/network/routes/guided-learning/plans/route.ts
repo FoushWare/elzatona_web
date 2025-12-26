@@ -89,8 +89,19 @@ export async function GET(request: NextRequest) {
   } catch (error) {
     const errorMessage = error instanceof Error ? error.message : String(error);
     const errorDetails = error instanceof Error ? error.stack : undefined;
+    const errorCode =
+      error && typeof error === "object" && "code" in error
+        ? String(error.code)
+        : undefined;
+    const errorHint =
+      error && typeof error === "object" && "hint" in error
+        ? String(error.hint)
+        : undefined;
+
     console.error("❌ Error fetching learning plans:", {
       message: errorMessage,
+      code: errorCode,
+      hint: errorHint,
       details: errorDetails,
       supabaseUrl: process.env.NEXT_PUBLIC_SUPABASE_URL
         ? "✅ Set"
@@ -101,15 +112,26 @@ export async function GET(request: NextRequest) {
           ? "✅ Set"
           : "❌ Missing",
     });
-    return NextResponse.json(
-      {
-        success: false,
-        error: "Failed to fetch learning plans",
-        details:
-          process.env.NODE_ENV === "development" ? errorMessage : undefined,
-      },
-      { status: 500 },
-    );
+
+    // Return detailed error in development, generic in production
+    const responseError: {
+      success: false;
+      error: string;
+      details?: string;
+      code?: string;
+      hint?: string;
+    } = {
+      success: false,
+      error: "Failed to fetch learning plans",
+    };
+
+    if (process.env.NODE_ENV === "development") {
+      responseError.details = errorMessage;
+      if (errorCode) responseError.code = errorCode;
+      if (errorHint) responseError.hint = errorHint;
+    }
+
+    return NextResponse.json(responseError, { status: 500 });
   }
 }
 
