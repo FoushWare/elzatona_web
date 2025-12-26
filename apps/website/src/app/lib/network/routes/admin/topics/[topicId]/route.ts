@@ -1,10 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-
-import { createClient } from "@supabase/supabase-js";
-
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
-const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
+import { getSupabaseClient } from "../../../../../get-supabase-client";
 import { QuestionTopic } from "../route";
 
 // GET /api/admin/topics/[topicId]
@@ -13,6 +8,7 @@ export async function GET(
   { params }: { params: Promise<{ topicId: string }> },
 ) {
   try {
+    const supabase = getSupabaseClient();
     const { topicId } = await params;
 
     const { data: topicSnap, error } = await supabase
@@ -58,6 +54,7 @@ export async function PUT(
   { params }: { params: Promise<{ topicId: string }> },
 ) {
   try {
+    const supabase = getSupabaseClient();
     const { topicId } = await params;
     const body = await request.json();
     const { name, description, category, color } = body;
@@ -134,6 +131,7 @@ export async function DELETE(
   { params }: { params: Promise<{ topicId: string }> },
 ) {
   try {
+    const supabase = getSupabaseClient();
     const { topicId } = await params;
 
     const { data: topicSnap, error: fetchError } = await supabase

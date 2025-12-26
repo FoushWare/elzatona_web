@@ -6,11 +6,7 @@ import {
   FrontendTaskFormData,
   ApiResponse,
 } from "@elzatona/types";
-import { createClient } from "@supabase/supabase-js";
-
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
-const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
+import { getSupabaseClient } from "../../../../../get-supabase-client";
 
 // GET /api/admin/frontend-tasks/[id] - Get a specific frontend task
 export async function GET(
@@ -18,6 +14,7 @@ export async function GET(
   { params }: { params: Promise<{ id: string }> },
 ) {
   try {
+    const supabase = getSupabaseClient();
     console.log("🔄 API: Fetching frontend task by ID...");
 
     const { id } = await params;
@@ -71,6 +68,7 @@ export async function PUT(
   { params }: { params: Promise<{ id: string }> },
 ) {
   try {
+    const supabase = getSupabaseClient();
     console.log("🔄 API: Updating frontend task...");
 
     const { id } = await params;
@@ -137,6 +135,7 @@ export async function DELETE(
   { params }: { params: Promise<{ id: string }> },
 ) {
   try {
+    const supabase = getSupabaseClient();
     console.log("🔄 API: Deleting frontend task...");
 
     const { id } = await params;

@@ -7,15 +7,12 @@ import {
   ApiResponse,
   PaginatedResponse,
 } from "@elzatona/types";
-import { createClient } from "@supabase/supabase-js";
-
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
-const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
+import { getSupabaseClient } from "../../../../get-supabase-client";
 
 // GET /api/admin/frontend-tasks - List all frontend tasks
 export async function GET(request: NextRequest) {
   try {
+    const supabase = getSupabaseClient();
     console.log("🔄 API: Fetching frontend tasks...");
 
     const { searchParams } = new URL(request.url);
@@ -92,6 +89,7 @@ export async function GET(request: NextRequest) {
 // POST /api/admin/frontend-tasks - Create new frontend task
 export async function POST(request: NextRequest) {
   try {
+    const supabase = getSupabaseClient();
     console.log("🔄 API: Creating new frontend task...");
 
     const body: FrontendTaskFormData = await request.json();

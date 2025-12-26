@@ -1,15 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
-import { createClient } from "@supabase/supabase-js";
-
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
-const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
-
+import { getSupabaseClient } from "../../../../get-supabase-client";
 import { LearningCard } from "@elzatona/types";
 
 // GET /api/admin/learning-cards - Get all learning cards
 export async function GET() {
   try {
+    const supabase = getSupabaseClient();
     const { data: snapshot, error } = await supabase
       .from("learning_cards")
       .select("*")
@@ -58,6 +54,7 @@ export async function GET() {
 // POST /api/admin/learning-cards - Create a new learning card
 export async function POST(request: NextRequest) {
   try {
+    const supabase = getSupabaseClient();
     const body = await request.json();
     const {
       title,

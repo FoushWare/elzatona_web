@@ -1,11 +1,7 @@
 // v1.0 - API routes for problem solving tasks CRUD operations
 
 import { NextRequest, NextResponse } from "next/server";
-import { createClient } from "@supabase/supabase-js";
-
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
-const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
+import { getSupabaseClient } from "../../../../get-supabase-client";
 import {
   ProblemSolvingTask,
   ProblemSolvingTaskFormData,
@@ -16,6 +12,7 @@ import {
 // GET /api/admin/problem-solving - List all problem solving tasks
 export async function GET(request: NextRequest) {
   try {
+    const supabase = getSupabaseClient();
     console.log("🔄 API: Fetching problem solving tasks...");
 
     const { searchParams } = new URL(request.url);
@@ -95,6 +92,7 @@ export async function GET(request: NextRequest) {
 // POST /api/admin/problem-solving - Create new problem solving task
 export async function POST(request: NextRequest) {
   try {
+    const supabase = getSupabaseClient();
     console.log("🔄 API: Creating new problem solving task...");
 
     const body: ProblemSolvingTaskFormData = await request.json();

@@ -1,9 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { createClient } from "@supabase/supabase-js";
-
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
-const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
+import { getSupabaseClient } from "../../../../../get-supabase-client";
 
 // GET /api/admin/learning-cards/[id] - Get a specific learning card
 export async function GET(
@@ -11,6 +7,7 @@ export async function GET(
   { params }: { params: Promise<{ id: string }> },
 ) {
   try {
+    const supabase = getSupabaseClient();
     const { id } = await params;
     const { data: cardSnap, error } = await supabase
       .from("learning_cards")
@@ -65,6 +62,7 @@ export async function PUT(
   { params }: { params: Promise<{ id: string }> },
 ) {
   try {
+    const supabase = getSupabaseClient();
     const { id } = await params;
     const body = await request.json();
     const {
@@ -142,6 +140,7 @@ export async function DELETE(
   { params }: { params: Promise<{ id: string }> },
 ) {
   try {
+    const supabase = getSupabaseClient();
     const { id } = await params;
     const { error } = await supabase
       .from("learning_cards")

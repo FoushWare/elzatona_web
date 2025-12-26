@@ -1,9 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { createClient } from "@supabase/supabase-js";
-
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
-const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
+import { getSupabaseClient } from "../../../../get-supabase-client";
 
 /**
  * @swagger
@@ -88,6 +84,7 @@ export async function GET(_request: NextRequest) {
   const startTime = Date.now();
 
   try {
+    const supabase = getSupabaseClient();
     console.log("📊 Fetching admin stats with performance monitoring...");
 
     // Get all collections in parallel with performance tracking

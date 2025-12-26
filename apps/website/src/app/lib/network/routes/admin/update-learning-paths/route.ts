@@ -1,9 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { createClient } from "@supabase/supabase-js";
-
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
-const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
+import { getSupabaseClient } from "../../../../get-supabase-client";
 
 // Learning paths that should have questions and their correct counts
 const learningPathUpdates = [
@@ -19,6 +15,7 @@ const learningPathUpdates = [
 
 export async function POST(_request: NextRequest) {
   try {
+    const supabase = getSupabaseClient();
     console.log("🔄 Updating learning paths via API...");
 
     const results = [];

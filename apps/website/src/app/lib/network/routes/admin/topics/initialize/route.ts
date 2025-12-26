@@ -1,10 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
-
-import { createClient } from "@supabase/supabase-js";
-
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
-const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
+import { getSupabaseClient } from "../../../../../get-supabase-client";
+import type { SupabaseClient } from "@supabase/supabase-js";
 import { QuestionTopic } from "../route";
 
 // ==========================================
@@ -459,7 +455,7 @@ function getCommonTopics(): Omit<QuestionTopic, "id">[] {
 }
 
 // Check if topics already exist in Supabase
-async function topicsExist(): Promise<boolean> {
+async function topicsExist(supabase: SupabaseClient): Promise<boolean> {
   try {
     const { data, error } = await supabase.from("topics").select("*");
     if (error) {
@@ -476,10 +472,11 @@ async function topicsExist(): Promise<boolean> {
 // POST /api/admin/topics/initialize
 export async function POST(request: NextRequest) {
   try {
+    const supabase = getSupabaseClient();
     const body = await request.json();
     const { force = false } = body;
 
-    const existingTopics = await topicsExist();
+    const existingTopics = await topicsExist(supabase);
 
     if (existingTopics && !force) {
       return NextResponse.json(
