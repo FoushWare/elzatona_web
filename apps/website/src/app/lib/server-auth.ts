@@ -2,12 +2,8 @@
  * Server-side authentication utilities using Supabase
  */
 
-import { createClient } from "@supabase/supabase-js";
 import jwt from "jsonwebtoken";
-
-const supabaseUrl = process.env["NEXT_PUBLIC_SUPABASE_URL"]!;
-const supabaseServiceRoleKey = process.env["SUPABASE_SERVICE_ROLE_KEY"]!;
-const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
+import { getSupabaseClient } from "./get-supabase-client";
 
 // JWT secret for admin tokens
 const JWT_SECRET = process.env.JWT_SECRET || "your-secret-key";
@@ -35,6 +31,7 @@ export async function verifySupabaseToken(
   token: string,
 ): Promise<AuthUser | null> {
   try {
+    const supabase = getSupabaseClient();
     const {
       data: { user },
       error,
@@ -212,6 +209,7 @@ export async function getAdminByEmail(
   email: string,
 ): Promise<AdminUser | null> {
   try {
+    const supabase = getSupabaseClient();
     const { data: admin, error } = await supabase
       .from("admin_users")
       .select("*")
@@ -245,6 +243,7 @@ export async function createAdminUser(adminData: {
   role?: "admin" | "super_admin";
 }): Promise<AdminUser | null> {
   try {
+    const supabase = getSupabaseClient();
     const { data, error } = await supabase
       .from("admin_users")
       .insert({
