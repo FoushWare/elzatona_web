@@ -1,26 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 
-import { createClient } from "@supabase/supabase-js";
+import { getSupabaseClient } from "../../../../get-supabase-client";
 
 import { AutoLinkingService } from "../../../../auto-linking-service";
-
-// Lazy Supabase client creation - only create when route is called, not during build
-function getSupabaseClient() {
-  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-  // For service role operations, use anon key as fallback if service role key is not available
-  // ⚠️ WARNING: Never hardcode API keys. Always use environment variables.
-  const supabaseKey =
-    process.env.SUPABASE_SERVICE_ROLE_KEY ||
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
-
-  if (!supabaseUrl || !supabaseKey) {
-    throw new Error(
-      "Missing required Supabase environment variables: NEXT_PUBLIC_SUPABASE_URL and (SUPABASE_SERVICE_ROLE_KEY or NEXT_PUBLIC_SUPABASE_ANON_KEY) must be set",
-    );
-  }
-
-  return createClient(supabaseUrl, supabaseKey);
-}
 
 // GET /api/guided-learning/plans - Get all learning plans or filtered content
 export async function GET(request: NextRequest) {
@@ -58,30 +40,64 @@ export async function GET(request: NextRequest) {
 
     // Otherwise, get all learning plans
     const supabase = getSupabaseClient();
-    // Try learningplantemplates first (old table name), then learning_plans
+
+    // Try learning_plans first (standard table name), then learningplantemplates as fallback
     let { data: plans, error } = await supabase
-      .from("learningplantemplates")
+      .from("learning_plans")
       .select("*")
       .order("created_at", { ascending: false });
 
-    // If learningplantemplates doesn't exist or is empty, try learning_plans
+    // If learning_plans doesn't exist or is empty, try learningplantemplates (old table name)
     if (error || !plans || plans.length === 0) {
+      console.log(
+        "⚠️ learning_plans query failed or empty, trying learningplantemplates:",
+        error?.message,
+      );
       const { data: plansAlt, error: errorAlt } = await supabase
-        .from("learning_plans")
+        .from("learningplantemplates")
         .select("*")
         .order("created_at", { ascending: false });
-      if (!errorAlt && plansAlt) {
+      if (!errorAlt && plansAlt && plansAlt.length > 0) {
         plans = plansAlt;
         error = null;
+        console.log("✅ Found plans in learningplantemplates table");
+      } else {
+        console.log(
+          "⚠️ learningplantemplates query also failed:",
+          errorAlt?.message,
+        );
+        // If both fail but we have an empty result (no error), return empty array
+        if (!error && !errorAlt) {
+          console.log("ℹ️ Both tables exist but are empty");
+          return NextResponse.json({ success: true, data: [] });
+        }
       }
     }
 
     if (error) throw error;
     return NextResponse.json({ success: true, data: plans || [] });
   } catch (error) {
-    console.error("Error fetching learning plans:", error);
+    const errorMessage = error instanceof Error ? error.message : String(error);
+    const errorDetails = error instanceof Error ? error.stack : undefined;
+    console.error("❌ Error fetching learning plans:", {
+      message: errorMessage,
+      details: errorDetails,
+      supabaseUrl: process.env.NEXT_PUBLIC_SUPABASE_URL
+        ? "✅ Set"
+        : "❌ Missing",
+      supabaseKey:
+        process.env.SUPABASE_SERVICE_ROLE_KEY ||
+        process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+          ? "✅ Set"
+          : "❌ Missing",
+    });
     return NextResponse.json(
-      { success: false, error: "Failed to fetch learning plans" },
+      {
+        success: false,
+        error: "Failed to fetch learning plans",
+        details:
+          process.env.NODE_ENV === "development" ? errorMessage : undefined,
+      },
       { status: 500 },
     );
   }
@@ -150,8 +166,8 @@ export async function DELETE(request: NextRequest) {
       );
     }
 
-    // Delete from Firestore
-    console.log("Attempting to delete from Firestore...");
+    // Delete from Supabase
+    console.log("Attempting to delete from Supabase...");
     const supabase = getSupabaseClient();
     await supabase.from("learningplantemplates").delete().eq("id", planId);
     console.log("Successfully deleted from Firestore");
