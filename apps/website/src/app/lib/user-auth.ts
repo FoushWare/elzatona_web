@@ -1,9 +1,5 @@
 import bcrypt from "bcryptjs";
-import { createClient } from "@supabase/supabase-js";
-
-const supabaseUrl = process.env["NEXT_PUBLIC_SUPABASE_URL"]!;
-const supabaseServiceRoleKey = process.env["SUPABASE_SERVICE_ROLE_KEY"]!;
-const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
+import { getSupabaseClient } from "./get-supabase-client";
 
 // Enhanced user types with roles
 export interface User {
@@ -95,6 +91,7 @@ export class UserAuthService {
         },
       };
 
+      const supabase = getSupabaseClient();
       await supabase.from("users").insert({
         id: userId,
         ...userData,
@@ -161,6 +158,7 @@ export class UserAuthService {
     email: string,
   ): Promise<(User & { passwordHash: string }) | null> {
     try {
+      const supabase = getSupabaseClient();
       const { data, error } = await supabase
         .from("users")
         .select("*")
@@ -183,6 +181,7 @@ export class UserAuthService {
    */
   static async getUserById(userId: string): Promise<User | null> {
     try {
+      const supabase = getSupabaseClient();
       const { data, error } = await supabase
         .from("users")
         .select("*")
@@ -208,6 +207,7 @@ export class UserAuthService {
     preferences: Partial<User["preferences"]>,
   ): Promise<boolean> {
     try {
+      const supabase = getSupabaseClient();
       await supabase
         .from("users")
         .update({
@@ -230,6 +230,7 @@ export class UserAuthService {
     progress: Partial<User["progress"]>,
   ): Promise<boolean> {
     try {
+      const supabase = getSupabaseClient();
       await supabase
         .from("users")
         .update({
@@ -266,6 +267,7 @@ export class UserAuthService {
    */
   static async getAllUsers(): Promise<User[]> {
     try {
+      const supabase = getSupabaseClient();
       const { data, error } = await supabase.from("users").select("*");
 
       if (error || !data) {
@@ -284,6 +286,7 @@ export class UserAuthService {
    */
   private static async updateLastLogin(userId: string): Promise<void> {
     try {
+      const supabase = getSupabaseClient();
       await supabase
         .from("users")
         .update({
