@@ -1,10 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-
-import { createClient } from "@supabase/supabase-js";
-
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
-const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
+import { getSupabaseClient } from "../../../../../../get-supabase-client";
 
 interface _LearningPlanTemplate {
   id: string;
@@ -56,6 +51,7 @@ export async function GET(
     const { planId } = await params;
 
     // Get the plan details
+    const supabase = getSupabaseClient();
     const { data: plans, error } = await supabase
       .from("learning_plans")
       .select("*")
@@ -99,6 +95,7 @@ export async function PUT(
     const config = await request.json();
 
     // Get the current plan
+    const supabase = getSupabaseClient();
     const { data: plans, error: plansError } = await supabase
       .from("learning_plans")
       .select("*")

@@ -1,4 +1,3 @@
-import { createClient } from "@supabase/supabase-js";
 import type {
   LearningCard,
   LearningCardFormData,
@@ -6,15 +5,13 @@ import type {
   CardProgress,
   CardType,
 } from "@elzatona/types";
-
-const supabaseUrl = process.env["NEXT_PUBLIC_SUPABASE_URL"]!;
-const supabaseServiceRoleKey = process.env["SUPABASE_SERVICE_ROLE_KEY"]!;
-const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
+import { getSupabaseClient } from "./get-supabase-client";
 
 export class LearningCardsService {
   // Learning Cards CRUD operations
   static async getAllCards(): Promise<LearningCard[]> {
     try {
+      const supabase = getSupabaseClient();
       const { data: cards, error } = await supabase
         .from("learning_cards")
         .select("*")
@@ -31,6 +28,7 @@ export class LearningCardsService {
 
   static async getCardById(card_id: string): Promise<LearningCard | null> {
     try {
+      const supabase = getSupabaseClient();
       const { data: card, error } = await supabase
         .from("learning_cards")
         .select("*")
@@ -47,6 +45,7 @@ export class LearningCardsService {
 
   static async createCard(cardData: LearningCardFormData): Promise<string> {
     try {
+      const supabase = getSupabaseClient();
       const { data, error } = await supabase
         .from("learning_cards")
         .insert({
@@ -70,6 +69,7 @@ export class LearningCardsService {
     cardData: Partial<LearningCardFormData>,
   ): Promise<void> {
     try {
+      const supabase = getSupabaseClient();
       const { error } = await supabase
         .from("learning_cards")
         .update({
@@ -87,6 +87,7 @@ export class LearningCardsService {
 
   static async deleteCard(card_id: string): Promise<void> {
     try {
+      const supabase = getSupabaseClient();
       const { error } = await supabase
         .from("learning_cards")
         .delete()
@@ -102,6 +103,7 @@ export class LearningCardsService {
   // Learning Plan Cards operations
   static async getCardsForPlan(plan_id: string): Promise<LearningPlanCard[]> {
     try {
+      const supabase = getSupabaseClient();
       const { data: planCards, error } = await supabase
         .from("learning_plan_cards")
         .select("*")
@@ -143,6 +145,7 @@ export class LearningCardsService {
     },
   ): Promise<string> {
     try {
+      const supabase = getSupabaseClient();
       const { data, error } = await supabase
         .from("learning_plan_cards")
         .insert({
@@ -166,6 +169,7 @@ export class LearningCardsService {
 
   static async removeCardFromPlan(planCardId: string): Promise<void> {
     try {
+      const supabase = getSupabaseClient();
       const { error } = await supabase
         .from("learning_plan_cards")
         .delete()
@@ -185,6 +189,7 @@ export class LearningCardsService {
     card_id: string,
   ): Promise<CardProgress | null> {
     try {
+      const supabase = getSupabaseClient();
       const { data: progress, error } = await supabase
         .from("card_progress")
         .select("*")
@@ -209,6 +214,7 @@ export class LearningCardsService {
         throw new Error("Progress ID is required for update");
       }
 
+      const supabase = getSupabaseClient();
       const { error } = await supabase
         .from("card_progress")
         .update({
@@ -228,6 +234,7 @@ export class LearningCardsService {
     progressData: Omit<CardProgress, "id">,
   ): Promise<string> {
     try {
+      const supabase = getSupabaseClient();
       const { data, error } = await supabase
         .from("card_progress")
         .insert({
@@ -249,6 +256,7 @@ export class LearningCardsService {
   // Utility methods
   static async getCardsByType(type: CardType): Promise<LearningCard[]> {
     try {
+      const supabase = getSupabaseClient();
       const { data: cards, error } = await supabase
         .from("learning_cards")
         .select("*")
@@ -265,6 +273,7 @@ export class LearningCardsService {
 
   static async getActiveCards(): Promise<LearningCard[]> {
     try {
+      const supabase = getSupabaseClient();
       const { data: cards, error } = await supabase
         .from("learning_cards")
         .select("*")

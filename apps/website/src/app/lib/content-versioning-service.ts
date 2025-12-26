@@ -1,11 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 // This file uses 'any' types for content versioning data which can be of various content types
-import { createClient } from "@supabase/supabase-js";
-
-const supabaseUrl = process.env["NEXT_PUBLIC_SUPABASE_URL"]!;
-const supabaseServiceRoleKey = process.env["SUPABASE_SERVICE_ROLE_KEY"]!;
-
-const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
+import { getSupabaseClient } from "./get-supabase-client";
 
 export interface ContentVersion {
   id: string;
@@ -82,6 +77,7 @@ export class ContentVersioningService {
     };
 
     // Save version to Supabase
+    const supabase = getSupabaseClient();
     await supabase.from(this.VERSIONS_COLLECTION).insert(version);
 
     // Create audit log
@@ -106,6 +102,7 @@ export class ContentVersioningService {
     limitCount: number = 50,
   ): Promise<ContentVersion[]> {
     try {
+      const supabase = getSupabaseClient();
       const { data: versions, error } = await supabase
         .from(this.VERSIONS_COLLECTION)
         .select("*")
@@ -133,6 +130,7 @@ export class ContentVersioningService {
     contentType: ContentVersion["contentType"],
   ): Promise<ContentVersion | null> {
     try {
+      const supabase = getSupabaseClient();
       const { data: version, error } = await supabase
         .from(this.VERSIONS_COLLECTION)
         .select("*")
@@ -160,6 +158,7 @@ export class ContentVersioningService {
     versionId: string,
   ): Promise<ContentVersion | null> {
     try {
+      const supabase = getSupabaseClient();
       const { data: version, error } = await supabase
         .from(this.VERSIONS_COLLECTION)
         .select("*")
@@ -233,6 +232,7 @@ export class ContentVersioningService {
       }
 
       // Update the content in the main table
+      const supabase = getSupabaseClient();
       const tableName = this.getTableName(version.contentType);
       const { error: updateError } = await supabase
         .from(tableName)
@@ -265,6 +265,7 @@ export class ContentVersioningService {
    */
   static async deleteVersion(versionId: string): Promise<boolean> {
     try {
+      const supabase = getSupabaseClient();
       const { error } = await supabase
         .from(this.VERSIONS_COLLECTION)
         .delete()
@@ -290,6 +291,7 @@ export class ContentVersioningService {
     limitCount: number = 50,
   ): Promise<AuditLog[]> {
     try {
+      const supabase = getSupabaseClient();
       const { data: logs, error } = await supabase
         .from(this.AUDIT_LOGS_COLLECTION)
         .select("*")
@@ -316,6 +318,7 @@ export class ContentVersioningService {
     logData: Omit<AuditLog, "id">,
   ): Promise<void> {
     try {
+      const supabase = getSupabaseClient();
       const auditLog: AuditLog = {
         id: `audit_${Date.now()}_${Math.random().toString(36).substring(2, 11)}`,
         ...logData,
@@ -353,6 +356,7 @@ export class ContentVersioningService {
     recentActivity: number;
   }> {
     try {
+      const supabase = getSupabaseClient();
       const { data: logs, error } = await supabase
         .from(this.AUDIT_LOGS_COLLECTION)
         .select("*");

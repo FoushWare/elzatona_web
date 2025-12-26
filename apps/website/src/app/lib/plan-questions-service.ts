@@ -1,8 +1,4 @@
-import { createClient } from "@supabase/supabase-js";
-
-const supabaseUrl = process.env["NEXT_PUBLIC_SUPABASE_URL"]!;
-const supabaseServiceRoleKey = process.env["SUPABASE_SERVICE_ROLE_KEY"]!;
-const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
+import { getSupabaseClient } from "./get-supabase-client";
 
 export interface PlanQuestion {
   id: string;
@@ -31,6 +27,7 @@ export class PlanQuestionsService {
   // Get all plan questions for a specific plan
   static async getPlanQuestions(plan_id: string): Promise<PlanQuestion[]> {
     try {
+      const supabase = getSupabaseClient();
       const { data: planQuestions, error } = await supabase
         .from(PLAN_QUESTIONS_COLLECTION)
         .select("*")
@@ -49,6 +46,7 @@ export class PlanQuestionsService {
   // Get a specific plan question by ID
   static async getPlanQuestionById(id: string): Promise<PlanQuestion | null> {
     try {
+      const supabase = getSupabaseClient();
       const { data: planQuestion, error } = await supabase
         .from(PLAN_QUESTIONS_COLLECTION)
         .select("*")
@@ -68,6 +66,7 @@ export class PlanQuestionsService {
     planQuestionData: PlanQuestionFormData,
   ): Promise<string> {
     try {
+      const supabase = getSupabaseClient();
       const { data, error } = await supabase
         .from(PLAN_QUESTIONS_COLLECTION)
         .insert({
@@ -92,6 +91,7 @@ export class PlanQuestionsService {
     planQuestionData: Partial<PlanQuestionFormData>,
   ): Promise<void> {
     try {
+      const supabase = getSupabaseClient();
       const { error } = await supabase
         .from(PLAN_QUESTIONS_COLLECTION)
         .update({
@@ -110,6 +110,7 @@ export class PlanQuestionsService {
   // Delete a plan question
   static async deletePlanQuestion(id: string): Promise<void> {
     try {
+      const supabase = getSupabaseClient();
       const { error } = await supabase
         .from(PLAN_QUESTIONS_COLLECTION)
         .delete()
@@ -127,6 +128,7 @@ export class PlanQuestionsService {
     card_id: string,
   ): Promise<PlanQuestion[]> {
     try {
+      const supabase = getSupabaseClient();
       const { data: planQuestions, error } = await supabase
         .from(PLAN_QUESTIONS_COLLECTION)
         .select("*")
@@ -146,6 +148,7 @@ export class PlanQuestionsService {
     categoryId: string,
   ): Promise<PlanQuestion[]> {
     try {
+      const supabase = getSupabaseClient();
       const { data: planQuestions, error } = await supabase
         .from(PLAN_QUESTIONS_COLLECTION)
         .select("*")
@@ -165,6 +168,7 @@ export class PlanQuestionsService {
     topicId: string,
   ): Promise<PlanQuestion[]> {
     try {
+      const supabase = getSupabaseClient();
       const { data: planQuestions, error } = await supabase
         .from(PLAN_QUESTIONS_COLLECTION)
         .select("*")
@@ -185,6 +189,7 @@ export class PlanQuestionsService {
     questionIds: string[],
   ): Promise<void> {
     try {
+      const supabase = getSupabaseClient();
       const updates = questionIds.map((questionId, index) => ({
         id: questionId,
         order: index + 1,
@@ -214,6 +219,7 @@ export class PlanQuestionsService {
     planQuestionsData: PlanQuestionFormData[],
   ): Promise<string[]> {
     try {
+      const supabase = getSupabaseClient();
       const insertData = planQuestionsData.map((data) => ({
         ...data,
         created_at: new Date().toISOString(),
@@ -236,6 +242,7 @@ export class PlanQuestionsService {
   // Bulk delete plan questions
   static async bulkDeletePlanQuestions(ids: string[]): Promise<void> {
     try {
+      const supabase = getSupabaseClient();
       const { error } = await supabase
         .from(PLAN_QUESTIONS_COLLECTION)
         .delete()
@@ -251,6 +258,7 @@ export class PlanQuestionsService {
   // Get plan questions count
   static async getPlanQuestionsCount(plan_id: string): Promise<number> {
     try {
+      const supabase = getSupabaseClient();
       const { count, error } = await supabase
         .from(PLAN_QUESTIONS_COLLECTION)
         .select("*", { count: "exact", head: true })

@@ -1,12 +1,7 @@
 // v1.0 - Supabase Progress Service
 "use client";
 
-import { createClient } from "@supabase/supabase-js";
-
-const supabaseUrl = process.env["NEXT_PUBLIC_SUPABASE_URL"]!;
-const supabaseKey = process.env["NEXT_PUBLIC_SUPABASE_ANON_KEY"]!;
-
-const supabase = createClient(supabaseUrl, supabaseKey);
+import { getSupabaseClient } from "./get-supabase-client";
 
 // Types
 export interface UserProgress {
@@ -91,6 +86,7 @@ export const getUserProgress = async (
   userId: string,
 ): Promise<UserProgress | null> => {
   try {
+    const supabase = getSupabaseClient();
     const { data, error } = await supabase
       .from("user_progress")
       .select("*")
@@ -114,6 +110,7 @@ export const updateQuestionProgress = async (
   attempt: Omit<QuestionAttempt, "timestamp" | "points">,
 ): Promise<void> => {
   try {
+    const supabase = getSupabaseClient();
     const points = attempt.is_correct ? 10 : 0;
 
     // Insert question attempt
@@ -161,6 +158,7 @@ export const updateChallengeProgress = async (
   attempt: Omit<ChallengeAttempt, "timestamp" | "points">,
 ): Promise<void> => {
   try {
+    const supabase = getSupabaseClient();
     const points = Math.floor(attempt.score * 2); // Convert score to points
 
     // Insert challenge attempt
@@ -204,6 +202,7 @@ export const updateLearningPathProgress = async (
   timeSpent: number,
 ): Promise<void> => {
   try {
+    const supabase = getSupabaseClient();
     const points = completed ? 25 : 5; // Points for completing section vs attempting
 
     // Insert or update learning path progress
@@ -243,6 +242,7 @@ export const updateLearningPathProgress = async (
 
 export const updateUserStreak = async (userId: string): Promise<void> => {
   try {
+    const supabase = getSupabaseClient();
     const { data: currentProgress } = await supabase
       .from("user_progress")
       .select("*")
@@ -294,6 +294,7 @@ export const getDashboardStats = async (
   userId: string,
 ): Promise<DashboardStats | null> => {
   try {
+    const supabase = getSupabaseClient();
     const { data: progress } = await supabase
       .from("user_progress")
       .select("*")
@@ -344,6 +345,7 @@ export const getContinueWhereLeftOff = async (
   userId: string,
 ): Promise<ContinueData | null> => {
   try {
+    const supabase = getSupabaseClient();
     // Get recent learning path progress
     const { data: recentPath } = await supabase
       .from("learning_path_progress")
@@ -395,6 +397,7 @@ export const updateUserPreferences = async (
   preferences: Partial<UserProgress["preferences"]>,
 ): Promise<void> => {
   try {
+    const supabase = getSupabaseClient();
     const { data: currentProgress } = await supabase
       .from("user_progress")
       .select("preferences")

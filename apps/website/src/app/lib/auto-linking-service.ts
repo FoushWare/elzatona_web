@@ -1,9 +1,4 @@
-import { createClient } from "@supabase/supabase-js";
-
-const supabaseUrl = process.env["NEXT_PUBLIC_SUPABASE_URL"]!;
-const supabaseServiceRoleKey = process.env["SUPABASE_SERVICE_ROLE_KEY"]!;
-
-const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
+import { getSupabaseClient } from "./get-supabase-client";
 
 export interface QuestionData {
   id?: string;
@@ -111,6 +106,7 @@ export class AutoLinkingService {
       });
 
       // Find sectors that match the question's learning path
+      const supabase = getSupabaseClient();
       const { data: sectors, error: sectorsError } = await supabase
         .from("sectors")
         .select("*")
@@ -240,6 +236,7 @@ export class AutoLinkingService {
   async removeQuestionFromSectors(question_id: string): Promise<void> {
     try {
       // Find all sectors that contain this question
+      const supabase = getSupabaseClient();
       const { data: sectors, error: fetchError } = await supabase
         .from("sectors")
         .select("*")
@@ -292,6 +289,7 @@ export class AutoLinkingService {
     learningPath?: string,
   ): Promise<SectionData[]> {
     try {
+      const supabase = getSupabaseClient();
       let query = supabase.from("sections").select("*").eq("is_active", true);
 
       if (category) {
@@ -328,6 +326,7 @@ export class AutoLinkingService {
       );
 
       // Get all sectors for the learning path
+      const supabase = getSupabaseClient();
       const { data: sectors, error: sectorsError } = await supabase
         .from("sectors")
         .select("*")

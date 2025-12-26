@@ -1,11 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 // This file uses 'any' types for error metadata which can contain various dynamic properties
-import { createClient } from "@supabase/supabase-js";
-
-const supabaseUrl = process.env["NEXT_PUBLIC_SUPABASE_URL"]!;
-const supabaseServiceRoleKey = process.env["SUPABASE_SERVICE_ROLE_KEY"]!;
-
-const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
+import { getSupabaseClient } from "./get-supabase-client";
 
 export interface ErrorLog {
   id: string;
@@ -70,6 +65,7 @@ export class ErrorLoggingService {
     metadata: ErrorLog["metadata"] = {},
   ): Promise<string> {
     try {
+      const supabase = getSupabaseClient();
       const errorData = {
         level,
         message,
@@ -126,6 +122,7 @@ export class ErrorLoggingService {
         metadata,
       };
 
+      const supabase = getSupabaseClient();
       const { data, error: insertError } = await supabase
         .from(this.PERFORMANCE_COLLECTION)
         .insert(performanceData)
@@ -158,6 +155,7 @@ export class ErrorLoggingService {
     limitCount: number = 100,
   ): Promise<ErrorLog[]> {
     try {
+      const supabase = getSupabaseClient();
       let query = supabase.from(this.ERROR_COLLECTION).select("*");
 
       if (filters.level) {
@@ -214,6 +212,7 @@ export class ErrorLoggingService {
     limitCount: number = 100,
   ): Promise<PerformanceLog[]> {
     try {
+      const supabase = getSupabaseClient();
       let query = supabase.from(this.PERFORMANCE_COLLECTION).select("*");
 
       if (filters.operation) {
@@ -263,6 +262,7 @@ export class ErrorLoggingService {
     resolvedBy: string,
   ): Promise<boolean> {
     try {
+      const supabase = getSupabaseClient();
       const { error } = await supabase
         .from(this.ERROR_COLLECTION)
         .update({
@@ -291,6 +291,7 @@ export class ErrorLoggingService {
     logType: "error" | "performance" | "both" = "both",
   ): Promise<number> {
     try {
+      const supabase = getSupabaseClient();
       const cutoffDate = new Date();
       cutoffDate.setDate(cutoffDate.getDate() - olderThanDays);
 
@@ -334,6 +335,7 @@ export class ErrorLoggingService {
     recentErrors: number;
   }> {
     try {
+      const supabase = getSupabaseClient();
       const { data: errors, error } = await supabase
         .from(this.ERROR_COLLECTION)
         .select("*");
@@ -398,6 +400,7 @@ export class ErrorLoggingService {
     }>;
   }> {
     try {
+      const supabase = getSupabaseClient();
       const { data: logs, error } = await supabase
         .from(this.PERFORMANCE_COLLECTION)
         .select("*");
@@ -419,17 +422,25 @@ export class ErrorLoggingService {
       }
 
       const averageDuration =
-        allLogs.reduce((sum, log) => sum + log.duration, 0) / totalOperations;
+        allLogs.reduce(
+          (sum: number, log: PerformanceLog) => sum + log.duration,
+          0,
+        ) / totalOperations;
       const successRate =
-        (allLogs.filter((log) => log.success).length / totalOperations) * 100;
+        (allLogs.filter((log: PerformanceLog) => log.success).length /
+          totalOperations) *
+        100;
 
       const slowestOperations = allLogs
-        .sort((a, b) => b.duration - a.duration)
+        .sort((a: PerformanceLog, b: PerformanceLog) => b.duration - a.duration)
         .slice(0, 10)
-        .map((log) => ({
+        .map((log: PerformanceLog) => ({
           operation: log.operation,
           duration: log.duration,
-          timestamp: log.context.timestamp,
+          timestamp:
+            typeof log.context.timestamp === "string"
+              ? log.context.timestamp
+              : new Date(log.context.timestamp).toISOString(),
         }));
 
       return {

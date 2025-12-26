@@ -1,9 +1,5 @@
-import { createClient } from "@supabase/supabase-js";
 import { QuestionStats as UnifiedQuestionStats } from "./unified-question-schema";
-
-const supabaseUrl = process.env["NEXT_PUBLIC_SUPABASE_URL"]!;
-const supabaseServiceRoleKey = process.env["SUPABASE_SERVICE_ROLE_KEY"]!;
-const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
+import { getSupabaseClient } from "./get-supabase-client";
 
 export interface Question {
   id: string;
@@ -65,6 +61,7 @@ export const getQuestions = async (filters?: {
   limit?: number;
   offset?: number;
 }): Promise<Question[]> => {
+  const supabase = getSupabaseClient();
   let query = supabase.from("questions").select("*").eq("is_active", true);
 
   if (filters?.category) {
@@ -95,6 +92,7 @@ export const getQuestions = async (filters?: {
 };
 
 export const getQuestion = async (id: string): Promise<Question | null> => {
+  const supabase = getSupabaseClient();
   const { data, error } = await supabase
     .from("questions")
     .select("*")
@@ -117,6 +115,7 @@ export const getRandomQuestions = async (
     tags?: string[];
   },
 ): Promise<Question[]> => {
+  const supabase = getSupabaseClient();
   let query = supabase.from("questions").select("*").eq("is_active", true);
 
   if (filters?.category) {
@@ -138,6 +137,7 @@ export const getRandomQuestions = async (
 };
 
 export const getCategories = async (): Promise<QuestionCategory[]> => {
+  const supabase = getSupabaseClient();
   const { data, error } = await supabase
     .from("categories")
     .select("*")
@@ -149,6 +149,7 @@ export const getCategories = async (): Promise<QuestionCategory[]> => {
 };
 
 export const getQuestionStats = async (): Promise<UnifiedQuestionStats> => {
+  const supabase = getSupabaseClient();
   const { data: questions, error } = await supabase
     .from("questions")
     .select(
@@ -223,6 +224,7 @@ export const getQuestionStats = async (): Promise<UnifiedQuestionStats> => {
 export const saveQuestionAttempt = async (
   attempt: Omit<QuestionAttempt, "id" | "created_at">,
 ): Promise<QuestionAttempt> => {
+  const supabase = getSupabaseClient();
   const { data, error } = await supabase
     .from("question_attempts")
     .insert({
@@ -240,6 +242,7 @@ export const getUserQuestionAttempts = async (
   userId: string,
   questionId?: string,
 ): Promise<QuestionAttempt[]> => {
+  const supabase = getSupabaseClient();
   let query = supabase
     .from("question_attempts")
     .select("*")
@@ -264,6 +267,7 @@ export const searchQuestions = async (
     limit?: number;
   },
 ): Promise<Question[]> => {
+  const supabase = getSupabaseClient();
   let supabaseQuery = supabase
     .from("questions")
     .select("*")

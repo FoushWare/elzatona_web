@@ -1,8 +1,4 @@
-import { createClient } from "@supabase/supabase-js";
-
-const supabaseUrl = process.env["NEXT_PUBLIC_SUPABASE_URL"]!;
-const supabaseServiceRoleKey = process.env["SUPABASE_SERVICE_ROLE_KEY"]!;
-const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
+import { getSupabaseClient } from "./get-supabase-client";
 
 export interface Flashcard {
   id: string;
@@ -53,6 +49,7 @@ export const flashcardService = {
     flashcard: Omit<Flashcard, "id" | "created_at" | "updated_at">,
   ) {
     const now = new Date().toISOString();
+    const supabase = getSupabaseClient();
     const { data, error } = await supabase
       .from("flashcards")
       .insert({
@@ -75,6 +72,7 @@ export const flashcardService = {
       due?: boolean;
     },
   ) {
+    const supabase = getSupabaseClient();
     let query = supabase.from("flashcards").select("*").eq("userId", userId);
 
     if (filters?.status) {
@@ -96,6 +94,7 @@ export const flashcardService = {
   },
 
   async updateFlashcard(id: string, updates: Partial<Flashcard>) {
+    const supabase = getSupabaseClient();
     const { data, error } = await supabase
       .from("flashcards")
       .update({
@@ -111,6 +110,7 @@ export const flashcardService = {
   },
 
   async deleteFlashcard(id: string) {
+    const supabase = getSupabaseClient();
     const { error } = await supabase.from("flashcards").delete().eq("id", id);
 
     if (error) throw error;
@@ -118,6 +118,7 @@ export const flashcardService = {
   },
 
   async getFlashcard(id: string) {
+    const supabase = getSupabaseClient();
     const { data, error } = await supabase
       .from("flashcards")
       .select("*")
@@ -132,6 +133,7 @@ export const flashcardService = {
 // Progress Service
 export const progressService = {
   async recordProgress(progress: Omit<FlashcardProgress, "id" | "timestamp">) {
+    const supabase = getSupabaseClient();
     const { data, error } = await supabase
       .from("flashcard_progress")
       .insert({
@@ -146,6 +148,7 @@ export const progressService = {
   },
 
   async getProgressBySession(sessionId: string) {
+    const supabase = getSupabaseClient();
     const { data, error } = await supabase
       .from("flashcard_progress")
       .select("*")
@@ -158,6 +161,7 @@ export const progressService = {
 
   async getCardsDueForReview(userId: string) {
     const now = new Date().toISOString();
+    const supabase = getSupabaseClient();
     const { data, error } = await supabase
       .from("flashcards")
       .select("*")
@@ -170,6 +174,7 @@ export const progressService = {
   },
 
   async getNewCards(userId: string, limit: number = 20) {
+    const supabase = getSupabaseClient();
     const { data, error } = await supabase
       .from("flashcards")
       .select("*")
@@ -183,6 +188,7 @@ export const progressService = {
   },
 
   async getUserProgress(userId: string) {
+    const supabase = getSupabaseClient();
     const { data, error } = await supabase
       .from("flashcard_progress")
       .select("*")
@@ -199,6 +205,7 @@ export const progressService = {
     responseTime: number,
     sessionId: string,
   ) {
+    const supabase = getSupabaseClient();
     const { data, error } = await supabase
       .from("flashcard_progress")
       .insert({
@@ -222,6 +229,7 @@ export const sessionService = {
   async createSession(
     session: Omit<FlashcardSession, "id" | "startTime" | "endTime" | "status">,
   ) {
+    const supabase = getSupabaseClient();
     const { data, error } = await supabase
       .from("flashcard_sessions")
       .insert({
@@ -237,6 +245,7 @@ export const sessionService = {
   },
 
   async updateSession(id: string, updates: Partial<FlashcardSession>) {
+    const supabase = getSupabaseClient();
     const { data, error } = await supabase
       .from("flashcard_sessions")
       .update({
@@ -252,6 +261,7 @@ export const sessionService = {
   },
 
   async getActiveSession(userId: string) {
+    const supabase = getSupabaseClient();
     const { data, error } = await supabase
       .from("flashcard_sessions")
       .select("*")
@@ -264,6 +274,7 @@ export const sessionService = {
   },
 
   async startSession(userId: string, _type: string) {
+    const supabase = getSupabaseClient();
     const { data, error } = await supabase
       .from("flashcard_sessions")
       .insert({
@@ -283,6 +294,7 @@ export const sessionService = {
   },
 
   async endSession(sessionId: string, duration: number) {
+    const supabase = getSupabaseClient();
     const { data, error } = await supabase
       .from("flashcard_sessions")
       .update({
@@ -301,6 +313,7 @@ export const sessionService = {
 
   async updateSessionStats(sessionId: string, isCorrect: boolean) {
     // First, get the current session data
+    const supabase = getSupabaseClient();
     const { data: currentSession, error: fetchError } = await supabase
       .from("flashcard_sessions")
       .select("cardsReviewed, correctAnswers, incorrectAnswers")

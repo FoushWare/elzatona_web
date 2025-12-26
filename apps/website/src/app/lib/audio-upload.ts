@@ -1,9 +1,4 @@
-import { createClient } from "@supabase/supabase-js";
-
-const supabaseUrl = process.env["NEXT_PUBLIC_SUPABASE_URL"]!;
-const supabaseServiceRoleKey = process.env["SUPABASE_SERVICE_ROLE_KEY"]!;
-
-const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
+import { getSupabaseClient } from "./get-supabase-client";
 
 export interface AudioUploadResult {
   success: boolean;
@@ -46,6 +41,7 @@ export class AudioUploadService {
       const fileName = `questions/${question_id}/question_audio.${this.getFileExtension(file.type)}`;
 
       // Upload file to Supabase Storage
+      const supabase = getSupabaseClient();
       const { data: _data, error } = await supabase.storage
         .from("audio-files")
         .upload(fileName, file, {
@@ -89,6 +85,7 @@ export class AudioUploadService {
       const fileName = `questions/${question_id}/answer_audio.${this.getFileExtension(file.type)}`;
 
       // Upload file to Supabase Storage
+      const supabase = getSupabaseClient();
       const { data: _data, error } = await supabase.storage
         .from("audio-files")
         .upload(fileName, file, {
@@ -126,6 +123,7 @@ export class AudioUploadService {
       }
 
       // Delete file from Supabase Storage
+      const supabase = getSupabaseClient();
       const { error } = await supabase.storage
         .from("audio-files")
         .remove([filePath]);

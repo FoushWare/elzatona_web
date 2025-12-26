@@ -1,11 +1,6 @@
 import bcrypt from "bcryptjs";
 import { adminConfig, getAdminApiUrl } from "../../../admin.config";
-import { createClient } from "@supabase/supabase-js";
-
-const supabaseUrl = process.env["NEXT_PUBLIC_SUPABASE_URL"]!;
-const supabaseServiceRoleKey = process.env["SUPABASE_SERVICE_ROLE_KEY"]!;
-
-const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
+import { getSupabaseClient } from "./get-supabase-client";
 
 // Types
 export interface AdminCredential {
@@ -85,6 +80,7 @@ export class AdminAuthService {
         created_at: new Date().toISOString(),
       };
 
+      const supabase = getSupabaseClient();
       const { error } = await supabase.from(this.TABLE_NAME).insert(adminData);
 
       if (error) {
@@ -167,6 +163,7 @@ export class AdminAuthService {
         created_at: new Date().toISOString(),
       };
 
+      const supabase = getSupabaseClient();
       const { error } = await supabase.from(this.TABLE_NAME).insert(adminData);
 
       if (error) {
@@ -189,6 +186,7 @@ export class AdminAuthService {
     adminId: string,
   ): Promise<AdminDeactivationResult> {
     try {
+      const supabase = getSupabaseClient();
       const { error } = await supabase
         .from(this.TABLE_NAME)
         .update({ is_active: false })
@@ -212,6 +210,7 @@ export class AdminAuthService {
    */
   static async getAllAdmins(): Promise<AdminCredential[]> {
     try {
+      const supabase = getSupabaseClient();
       const { data, error } = await supabase
         .from(this.TABLE_NAME)
         .select("*")
@@ -262,6 +261,7 @@ export class AdminAuthService {
     email: string,
   ): Promise<AdminCredential | null> {
     try {
+      const supabase = getSupabaseClient();
       const { data, error } = await supabase
         .from(this.TABLE_NAME)
         .select("*")
@@ -284,6 +284,7 @@ export class AdminAuthService {
    */
   private static async updateLastLogin(adminId: string): Promise<void> {
     try {
+      const supabase = getSupabaseClient();
       await supabase
         .from(this.TABLE_NAME)
         .update({ last_login: new Date().toISOString() })

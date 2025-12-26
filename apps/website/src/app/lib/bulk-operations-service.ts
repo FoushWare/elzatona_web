@@ -1,9 +1,4 @@
-import { createClient } from "@supabase/supabase-js";
-
-const supabaseUrl = process.env["NEXT_PUBLIC_SUPABASE_URL"]!;
-const supabaseServiceRoleKey = process.env["SUPABASE_SERVICE_ROLE_KEY"]!;
-
-const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
+import { getSupabaseClient } from "./get-supabase-client";
 
 export interface BulkOperation {
   id: string;
@@ -108,6 +103,7 @@ export class BulkOperationsService {
     };
 
     // Save operation to Supabase
+    const supabase = getSupabaseClient();
     await supabase.from(this.COLLECTION_NAME).insert(operation);
 
     // Start processing in background
@@ -123,6 +119,7 @@ export class BulkOperationsService {
     operationId: string,
   ): Promise<void> {
     try {
+      const supabase = getSupabaseClient();
       // Update status to running
       await supabase
         .from(this.COLLECTION_NAME)
@@ -189,6 +186,7 @@ export class BulkOperationsService {
       console.log(`✅ Bulk operation completed: ${operationId}`);
     } catch (error) {
       console.error(`❌ Bulk operation failed: ${operationId}`, error);
+      const supabase = getSupabaseClient();
       await supabase
         .from(this.COLLECTION_NAME)
         .update({
@@ -206,6 +204,7 @@ export class BulkOperationsService {
     operation: BulkOperation,
     batch: string[],
   ): Promise<void> {
+    const supabase = getSupabaseClient();
     const tableName = this.getTableName(operation.targetType);
 
     switch (operation.type) {
@@ -273,6 +272,7 @@ export class BulkOperationsService {
     operationId: string,
   ): Promise<BulkOperation | null> {
     try {
+      const supabase = getSupabaseClient();
       const { data: operation, error } = await supabase
         .from(this.COLLECTION_NAME)
         .select("*")
@@ -297,6 +297,7 @@ export class BulkOperationsService {
     operationId: string,
   ): Promise<BulkOperationProgress | null> {
     try {
+      const supabase = getSupabaseClient();
       const { data: operation, error } = await supabase
         .from(this.COLLECTION_NAME)
         .select("*")
@@ -358,6 +359,7 @@ export class BulkOperationsService {
     totalItemsProcessed: number;
   }> {
     try {
+      const supabase = getSupabaseClient();
       const { data: operations, error } = await supabase
         .from(this.COLLECTION_NAME)
         .select("*");
@@ -429,6 +431,7 @@ export class BulkOperationsService {
     limit: number = 50,
   ): Promise<BulkOperation[]> {
     try {
+      const supabase = getSupabaseClient();
       const { data: operations, error } = await supabase
         .from(this.COLLECTION_NAME)
         .select("*")
@@ -451,6 +454,7 @@ export class BulkOperationsService {
    */
   static async listOperations(): Promise<BulkOperation[]> {
     try {
+      const supabase = getSupabaseClient();
       const { data: operations, error } = await supabase
         .from(this.COLLECTION_NAME)
         .select("*")
@@ -479,6 +483,7 @@ export class BulkOperationsService {
    */
   static async cancelOperation(operationId: string): Promise<boolean> {
     try {
+      const supabase = getSupabaseClient();
       const { error } = await supabase
         .from(this.COLLECTION_NAME)
         .update({ status: "failed" })
@@ -500,6 +505,7 @@ export class BulkOperationsService {
    */
   static async deleteOperation(operationId: string): Promise<boolean> {
     try {
+      const supabase = getSupabaseClient();
       const { error } = await supabase
         .from(this.COLLECTION_NAME)
         .delete()
