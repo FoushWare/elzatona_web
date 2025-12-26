@@ -556,8 +556,17 @@ export async function POST(request: NextRequest) {
           } else {
             // If options is not a valid array (e.g., it's a string like "multiple-select"), remove it
             // This prevents errors when trying to access options[0] later
+            // Security: Sanitize values before logging
+            const sanitizedTitle = sanitizeForLogging(sanitizedQuestion.title);
+            const sanitizedOptionsType = sanitizeForLogging(
+              typeof sanitizedQuestion.options,
+            );
             console.warn(
-              `⚠️ Invalid options format for question "${sanitizedQuestion.title}". Expected array, got: ${typeof sanitizedQuestion.options}. Removing options.`,
+              "⚠️ Invalid options format for question:",
+              sanitizedTitle,
+              "Expected array, got:",
+              sanitizedOptionsType,
+              "Removing options.",
             );
             delete sanitizedQuestion.options;
           }
@@ -952,8 +961,12 @@ export async function POST(request: NextRequest) {
         ) {
           // For multiple-choice questions, options should exist
           // If missing, log a warning but don't fail (might be intentional)
+          // Security: Sanitize title before logging
+          const sanitizedTitle = sanitizeForLogging(sanitizedQuestion.title);
           console.warn(
-            `⚠️ Multiple-choice question "${sanitizedQuestion.title}" has no options`,
+            "⚠️ Multiple-choice question:",
+            sanitizedTitle,
+            "has no options",
           );
         }
 
