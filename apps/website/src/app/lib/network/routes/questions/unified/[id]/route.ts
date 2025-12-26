@@ -134,8 +134,12 @@ export async function PUT(
             .order("name");
           const categoryNames =
             allCategories?.map((c) => c.name).join(", ") || "None";
+          const sanitizedCategoryNameForError =
+            sanitizeForLogging(categoryName);
+          const sanitizedCategoryNamesForError =
+            sanitizeForLogging(categoryNames);
           throw new Error(
-            `Category "${categoryName}" not found. Available categories: ${categoryNames}`,
+            `Category "${sanitizedCategoryNameForError}" not found. Available categories: ${sanitizedCategoryNamesForError}`,
           );
         }
 
@@ -198,8 +202,9 @@ export async function PUT(
             sanitizedCategoryId,
           );
           const categoryHint = categoryId ? ` for the selected category` : "";
+          const sanitizedTopicNameForError = sanitizeForLogging(topicName);
           throw new Error(
-            `Topic "${topicName}" not found${categoryHint}. Make sure the topic exists and belongs to the selected category.`,
+            `Topic "${sanitizedTopicNameForError}" not found${categoryHint}. Make sure the topic exists and belongs to the selected category.`,
           );
         }
 
@@ -362,8 +367,13 @@ export async function PUT(
       .single();
 
     if (error) {
-      console.error("❌ Supabase update error:", error);
-      throw error;
+      // Security: Sanitize error before logging and throwing to prevent log injection
+      const sanitizedErrorMsg =
+        error instanceof Error
+          ? sanitizeForLogging(error.message)
+          : sanitizeForLogging(String(error));
+      console.error("❌ Supabase update error:", sanitizedErrorMsg);
+      throw new Error(`Database update error: ${sanitizedErrorMsg}`);
     }
 
     return NextResponse.json({

@@ -602,8 +602,12 @@ export async function POST(request: NextRequest) {
               .order("name");
             const categoryNames =
               allCategories?.map((c) => c.name).join(", ") || "None";
+            const sanitizedCategoryNameForError =
+              sanitizeForLogging(categoryName);
+            const sanitizedCategoryNamesForError =
+              sanitizeForLogging(categoryNames);
             throw new Error(
-              `Category "${categoryName}" not found. Available categories: ${categoryNames}`,
+              `Category "${sanitizedCategoryNameForError}" not found. Available categories: ${sanitizedCategoryNamesForError}`,
             );
           }
 
@@ -647,8 +651,9 @@ export async function POST(request: NextRequest) {
               categoryId,
             );
             const categoryHint = categoryId ? ` for the selected category` : "";
+            const sanitizedTopicNameForError = sanitizeForLogging(topicName);
             throw new Error(
-              `Topic "${topicName}" not found${categoryHint}. Make sure the topic exists and belongs to the selected category.`,
+              `Topic "${sanitizedTopicNameForError}" not found${categoryHint}. Make sure the topic exists and belongs to the selected category.`,
             );
           }
 
@@ -1124,12 +1129,15 @@ export async function POST(request: NextRequest) {
             console.warn(
               "⚠️ Code column not found in PostgREST schema cache. Cache may need to refresh (1-5 minutes).",
             );
+            const sanitizedErrorCode = sanitizeForLogging(error.code);
             throw new Error(
-              `Database error: Code column not available yet. PostgREST schema cache needs to refresh. Please wait 1-5 minutes and try again. (Code: ${error.code})`,
+              `Database error: Code column not available yet. PostgREST schema cache needs to refresh. Please wait 1-5 minutes and try again. (Code: ${sanitizedErrorCode})`,
             );
           }
+          const sanitizedErrorMessage = sanitizeForLogging(error.message);
+          const sanitizedErrorCode = sanitizeForLogging(error.code);
           throw new Error(
-            `Database error: ${error.message} (Code: ${error.code})`,
+            `Database error: ${sanitizedErrorMessage} (Code: ${sanitizedErrorCode})`,
           );
         }
 
@@ -1296,8 +1304,12 @@ export async function PUT(request: NextRequest) {
             .order("name");
           const categoryNames =
             allCategories?.map((c) => c.name).join(", ") || "None";
+          const sanitizedCategoryNameForError =
+            sanitizeForLogging(categoryName);
+          const sanitizedCategoryNamesForError =
+            sanitizeForLogging(categoryNames);
           throw new Error(
-            `Category "${categoryName}" not found. Available categories: ${categoryNames}`,
+            `Category "${sanitizedCategoryNameForError}" not found. Available categories: ${sanitizedCategoryNamesForError}`,
           );
         }
 
@@ -1366,8 +1378,9 @@ export async function PUT(request: NextRequest) {
             sanitizedCategoryId,
           );
           const categoryHint = categoryId ? ` for the selected category` : "";
+          const sanitizedTopicNameForError = sanitizeForLogging(topicName);
           throw new Error(
-            `Topic "${topicName}" not found${categoryHint}. Make sure the topic exists and belongs to the selected category.`,
+            `Topic "${sanitizedTopicNameForError}" not found${categoryHint}. Make sure the topic exists and belongs to the selected category.`,
           );
         }
 
@@ -1517,7 +1530,20 @@ export async function PUT(request: NextRequest) {
       .update(updateWithTimestamps)
       .eq("id", id);
 
-    if (error) throw error;
+    if (error) {
+      // Security: Sanitize error message before throwing to prevent log injection
+      const sanitizedErrorMessage = sanitizeForLogging(
+        error.message || "Unknown database error",
+      );
+      const sanitizedErrorCode = error.code
+        ? sanitizeForLogging(String(error.code))
+        : undefined;
+      throw new Error(
+        sanitizedErrorCode
+          ? `Database error: ${sanitizedErrorMessage} (Code: ${sanitizedErrorCode})`
+          : `Database error: ${sanitizedErrorMessage}`,
+      );
+    }
 
     // Invalidate cache after updating question
     _questionsCache = null;
