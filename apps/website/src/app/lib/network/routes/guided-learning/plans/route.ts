@@ -46,36 +46,64 @@ export async function GET(request: NextRequest) {
     let supabase;
     try {
       supabase = getSupabaseClient(); // Try service role first
-    } catch {
+      console.log("✅ Using service role key for Supabase client");
+    } catch (clientError) {
       // Fallback to anon key if service role is not available
+      console.log(
+        "⚠️ Service role key not available, using anon key:",
+        clientError instanceof Error
+          ? clientError.message
+          : String(clientError),
+      );
       supabase = getSupabaseClientWithAnonKey();
+      console.log("✅ Using anon key for Supabase client");
     }
 
     // Try learning_plans first (standard table name), then learningplantemplates as fallback
+    console.log("🔍 Querying learning_plans table...");
     let { data: plans, error } = await supabase
       .from("learning_plans")
       .select("*")
       .order("created_at", { ascending: false });
 
+    // Log the error details if present
+    if (error) {
+      console.log("❌ learning_plans query error:", {
+        message: error.message,
+        code: error.code,
+        hint: error.hint,
+        details: error.details,
+      });
+    } else if (plans) {
+      console.log(`✅ Found ${plans.length} plans in learning_plans table`);
+    }
+
     // If learning_plans doesn't exist or is empty, try learningplantemplates (old table name)
     if (error || !plans || plans.length === 0) {
       console.log(
-        "⚠️ learning_plans query failed or empty, trying learningplantemplates:",
-        error?.message,
+        "⚠️ learning_plans query failed or empty, trying learningplantemplates...",
       );
       const { data: plansAlt, error: errorAlt } = await supabase
         .from("learningplantemplates")
         .select("*")
         .order("created_at", { ascending: false });
+
+      if (errorAlt) {
+        console.log("❌ learningplantemplates query error:", {
+          message: errorAlt.message,
+          code: errorAlt.code,
+          hint: errorAlt.hint,
+          details: errorAlt.details,
+        });
+      }
+
       if (!errorAlt && plansAlt && plansAlt.length > 0) {
         plans = plansAlt;
         error = null;
-        console.log("✅ Found plans in learningplantemplates table");
-      } else {
         console.log(
-          "⚠️ learningplantemplates query also failed:",
-          errorAlt?.message,
+          `✅ Found ${plansAlt.length} plans in learningplantemplates table`,
         );
+      } else {
         // If both fail but we have an empty result (no error), return empty array
         if (!error && !errorAlt) {
           console.log("ℹ️ Both tables exist but are empty");
@@ -84,7 +112,21 @@ export async function GET(request: NextRequest) {
       }
     }
 
-    if (error) throw error;
+    if (error) {
+      // Create a proper Error object from Supabase error
+      const supabaseError = new Error(error.message || "Supabase query failed");
+       
+      const errorWithExtras = supabaseError as Error & {
+        code?: string;
+        hint?: string;
+        details?: string;
+      };
+      if (error.code) errorWithExtras.code = error.code;
+      if (error.hint) errorWithExtras.hint = error.hint;
+      if (error.details) errorWithExtras.details = error.details;
+      throw errorWithExtras;
+    }
+
     return NextResponse.json({ success: true, data: plans || [] });
   } catch (error) {
     const errorMessage = error instanceof Error ? error.message : String(error);
