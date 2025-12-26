@@ -74,6 +74,7 @@ export default function ClientCodeRunner({
     const safeCode = userCode
       .replaceAll(/import\s+[^;]+;?/g, "")
       .replaceAll(/export\s+default\s+/g, "")
+      // NOSONAR: replaceAll() is already used, SonarLint cache issue
       .replaceAll(/export\s+\{[^}]*\};?/g, "")
       .replaceAll(/export\s+\w+\s+/g, "");
 
@@ -138,6 +139,7 @@ export default function ClientCodeRunner({
     "});\n" +
     "// custom single-run handler\n" +
     'window.addEventListener("message",async(e)=>{\n' +
+    // NOSONAR: No unnecessary escape, false positive
     '  if(!e.data||e.data.type!=="runner:custom")return;\n' +
     "  const {fnName,code,input}=e.data.payload;\n" +
     `  try{safeEval(code);}catch(err){parent.postMessage({type:"runner:custom:result",result:{id:"custom",passed:false,actual:null,expected:null,error:String(err),elapsedMs:0}},TARGET_ORIGIN);return;}\n` +
@@ -200,6 +202,7 @@ export default function ClientCodeRunner({
             const safeCode = userCode
               .replaceAll(/import\s+[^;]+;?/g, "")
               .replaceAll(/export\s+default\s+/g, "")
+              // NOSONAR: replaceAll() is already used, SonarLint cache issue
               .replaceAll(/export\s+\{[^}]*\};?/g, "")
               .replaceAll(/export\s+\w+\s+/g, "");
             // Security: Specify target origin to prevent XSS attacks
