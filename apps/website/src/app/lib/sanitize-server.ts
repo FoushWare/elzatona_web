@@ -354,7 +354,10 @@ export function sanitizeForLogging(value: unknown): string {
 
   // SECURITY: Final pass - ensure no dangerous patterns remain
   // Remove any patterns that could be interpreted as log format specifiers
-  sanitized = sanitized.replace(/%[0-9]*[diouxXeEfFgGaAcspn%]/g, "[format-removed]");
+  sanitized = sanitized.replace(
+    /%[0-9]*[diouxXeEfFgGaAcspn%]/g,
+    "[format-removed]",
+  );
 
   return sanitized;
 }
