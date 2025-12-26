@@ -1225,14 +1225,16 @@ export async function PUT(request: NextRequest) {
           .single();
 
         if (categoryError || !categoryData) {
-          // Security: Sanitize user data before logging to prevent log injection
+          // Security: Sanitize all values before logging
+          const sanitizedCategoryError = categoryError instanceof Error
+            ? sanitizeForLogging(categoryError.message)
+            : sanitizeForLogging(String(categoryError));
+          const sanitizedCategoryName = sanitizeForLogging(categoryName);
           console.error(
             "Category lookup error:",
-            categoryError instanceof Error
-              ? sanitizeForLogging(categoryError.message)
-              : sanitizeForLogging(String(categoryError)),
+            sanitizedCategoryError,
             "Looking for:",
-            sanitizeForLogging(categoryName),
+            sanitizedCategoryName,
           );
           const { data: allCategories } = await supabase
             .from("categories")
@@ -1291,15 +1293,19 @@ export async function PUT(request: NextRequest) {
           await topicQuery.single();
 
         if (topicError || !topicData) {
+          // Security: Sanitize all values before logging
+          const sanitizedTopicError = topicError instanceof Error
+            ? sanitizeForLogging(topicError.message)
+            : sanitizeForLogging(String(topicError));
+          const sanitizedTopicName = sanitizeForLogging(topicName);
+          const sanitizedCategoryId = sanitizeForLogging(categoryId);
           console.error(
             "Topic lookup error:",
-            topicError instanceof Error
-              ? sanitizeForLogging(topicError.message)
-              : sanitizeForLogging(String(topicError)),
+            sanitizedTopicError,
             "Looking for:",
-            sanitizeForLogging(topicName),
+            sanitizedTopicName,
             "Category ID:",
-            sanitizeForLogging(categoryId),
+            sanitizedCategoryId,
           );
           const categoryHint = categoryId ? ` for the selected category` : "";
           throw new Error(
@@ -1348,8 +1354,10 @@ export async function PUT(request: NextRequest) {
           )
         ) {
           finalLearningCardId = trimmedId;
+          // Security: Sanitize value before using in template string
+          const sanitizedLearningCardId = sanitizeForLogging(finalLearningCardId);
           console.log(
-            `✅ Using learning card ID: ${sanitizeForLogging(finalLearningCardId)}`,
+            `✅ Using learning card ID: ${sanitizedLearningCardId}`,
           );
         } else {
           // Security: Sanitize user data before logging to prevent log injection
@@ -1462,7 +1470,9 @@ export async function PUT(request: NextRequest) {
         : sanitizeForLogging(String(error));
     console.error("Error updating question:", errorMessage);
     if (error instanceof Error && error.message) {
-      console.error("Error message:", sanitizeForLogging(error.message));
+      // Security: Sanitize error message before logging
+      const sanitizedErrorMessage = sanitizeForLogging(error.message);
+      console.error("Error message:", sanitizedErrorMessage);
     }
     return NextResponse.json(
       { success: false, error: "Failed to update question" },

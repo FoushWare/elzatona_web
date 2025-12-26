@@ -377,11 +377,14 @@ export async function PUT(
     console.error("❌ Error updating question:", errorMessage);
     if (error instanceof Error) {
       const errorDetails = error as any;
+      // Security: Sanitize all error details before logging
+      const sanitizedErrorMessage = sanitizeForLogging(error.message);
+      const sanitizedErrorCode = errorDetails.code
+        ? sanitizeForLogging(String(errorDetails.code))
+        : undefined;
       console.error("❌ Error details:", {
-        message: sanitizeForLogging(error.message),
-        code: errorDetails.code
-          ? sanitizeForLogging(String(errorDetails.code))
-          : undefined,
+        message: sanitizedErrorMessage,
+        code: sanitizedErrorCode,
         details: errorDetails.details
           ? sanitizeForLogging(String(errorDetails.details))
           : undefined,
