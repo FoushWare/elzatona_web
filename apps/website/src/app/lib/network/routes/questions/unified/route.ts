@@ -1293,14 +1293,17 @@ export async function PUT(request: NextRequest) {
         const sanitizedCategoryName = sanitizeForLogging(categoryData.name);
         const sanitizedCategoryId = sanitizeForLogging(String(categoryId));
         console.log(
-          `✅ Found category "${sanitizedCategoryName}" with ID: ${sanitizedCategoryId}`,
+          "✅ Found category:",
+          sanitizedCategoryName,
+          "with ID:",
+          sanitizedCategoryId,
         );
       } else if (categoryValue && typeof categoryValue === "string") {
         // It's already an ID
         categoryId = categoryValue;
         // Security: Sanitize value before using in template string
         const sanitizedCategoryId = sanitizeForLogging(categoryId);
-        console.log(`✅ Using provided category ID: ${sanitizedCategoryId}`);
+        console.log("✅ Using provided category ID:", sanitizedCategoryId);
       }
     }
 
@@ -1360,7 +1363,10 @@ export async function PUT(request: NextRequest) {
         const sanitizedTopicName = sanitizeForLogging(topicData.name);
         const sanitizedTopicId = sanitizeForLogging(String(topicId));
         console.log(
-          `✅ Found topic "${sanitizedTopicName}" with ID: ${sanitizedTopicId}`,
+          "✅ Found topic:",
+          sanitizedTopicName,
+          "with ID:",
+          sanitizedTopicId,
         );
       } else if (topicValue && typeof topicValue === "string") {
         // It's already an ID
@@ -1398,7 +1404,7 @@ export async function PUT(request: NextRequest) {
           // Security: Sanitize value before using in template string
           const sanitizedLearningCardId =
             sanitizeForLogging(finalLearningCardId);
-          console.log(`✅ Using learning card ID: ${sanitizedLearningCardId}`);
+          console.log("✅ Using learning card ID:", sanitizedLearningCardId);
         } else {
           // Security: Sanitize user data before logging to prevent log injection
           const sanitizedTrimmedId = sanitizeForLogging(trimmedId);

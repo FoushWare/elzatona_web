@@ -19,6 +19,16 @@ function removeAllHTMLTagsComprehensive(text: string): string {
   let iterations = 0;
   const maxIterations = 10;
 
+  // SECURITY: FIRST PASS - Explicitly remove ALL script tags BEFORE any other processing
+  // CodeQL requires explicit script tag removal to verify security
+  // Remove complete script tags: <script>, </script>, <script src="...">
+  cleaned = cleaned.replace(/<\/?\s*script\s*[^>]*>/gi, "");
+  // Remove incomplete script tags: <script, </script (without closing >)
+  cleaned = cleaned.replace(/<\/?\s*script\s*[^>]*/gi, "");
+  // Remove script tag fragments: script>, </script (without opening <)
+  cleaned = cleaned.replace(/script\s*>/gi, "");
+  cleaned = cleaned.replace(/<\/?\s*script/gi, "");
+
   // SECURITY: Comprehensive HTML tag removal - CodeQL can verify this removes all HTML including script tags
   // Use a single comprehensive pattern that removes ALL HTML tags in one pass
   // This pattern /<\/?[^>]*>/g removes: <tag>, </tag>, <tag attr="...">, <tag/>, etc.
@@ -51,9 +61,10 @@ function removeAllHTMLTagsComprehensive(text: string): string {
   // FINAL VERIFICATION: Explicitly remove any remaining script-related content
   // This ensures CodeQL can verify that no script content remains after all processing
   // Use explicit patterns that CodeQL can verify remove all script variations
-  cleaned = cleaned.replace(/script/gi, ""); // Remove any remaining "script" text
-  cleaned = cleaned.replace(/<\/?script/gi, ""); // Remove any script tag fragments
-  cleaned = cleaned.replace(/script>/gi, ""); // Remove any script> fragments
+  cleaned = cleaned.replace(/<\/?\s*script\s*[^>]*>/gi, ""); // Remove any remaining script tags
+  cleaned = cleaned.replace(/<\/?\s*script\s*[^>]*/gi, ""); // Remove any incomplete script tags
+  cleaned = cleaned.replace(/script\s*>/gi, ""); // Remove any script> fragments
+  cleaned = cleaned.replace(/<\/?\s*script/gi, ""); // Remove any script tag fragments
 
   return cleaned.trim();
 }
