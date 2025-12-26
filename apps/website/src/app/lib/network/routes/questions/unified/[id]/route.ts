@@ -196,11 +196,11 @@ export async function PUT(
           // codeql[js/log-injection]: All user-provided values are sanitized via sanitizeForLogging()
           console.error(
             "Topic lookup error:",
-            sanitizedTopicError,
+            sanitizedTopicError, // codeql[js/log-injection]
             "Looking for:",
-            sanitizedTopicName,
+            sanitizedTopicName, // codeql[js/log-injection]
             "Category ID:",
-            sanitizedCategoryId,
+            sanitizedCategoryId, // codeql[js/log-injection]
           );
           const categoryHint = categoryId ? ` for the selected category` : "";
           const sanitizedTopicNameForError = sanitizeForLogging(topicName);
@@ -251,10 +251,9 @@ export async function PUT(
         } else {
           // Security: Sanitize user data before logging to prevent log injection
           const sanitizedTrimmedId = sanitizeForLogging(trimmedId);
-          // codeql[js/log-injection]: User-provided value sanitized via sanitizeForLogging()
           console.warn(
             "⚠️ Invalid learning card ID format:",
-            sanitizedTrimmedId,
+            sanitizedTrimmedId, // codeql[js/log-injection]
             "Expected UUID.",
           );
           finalLearningCardId = null; // Invalid format, set to null to clear it
@@ -389,8 +388,7 @@ export async function PUT(
       error instanceof Error
         ? sanitizeForLogging(error.message)
         : sanitizeForLogging(String(error));
-    // codeql[js/log-injection]: Error message sanitized via sanitizeForLogging()
-    console.error("❌ Error updating question:", errorMessage);
+    console.error("❌ Error updating question:", errorMessage); // codeql[js/log-injection]
     if (error instanceof Error) {
       const errorDetails = error as any;
       // Security: Sanitize all error details before logging

@@ -1095,10 +1095,9 @@ export async function POST(request: NextRequest) {
               const sanitizedCodeLength = sanitizeForLogging(
                 String(codeContent.length),
               );
-              // codeql[js/log-injection]: Value sanitized via sanitizeForLogging()
               console.log(
                 "⚠️ Code field was null/empty, restored from originalCode:",
-                sanitizedCodeLength,
+                sanitizedCodeLength, // codeql[js/log-injection]
                 "chars",
               );
             }
@@ -1330,8 +1329,7 @@ export async function PUT(request: NextRequest) {
         categoryId = categoryValue;
         // Security: Sanitize value before using in template string
         const sanitizedCategoryId = sanitizeForLogging(categoryId);
-        // codeql[js/log-injection]: User-provided value sanitized via sanitizeForLogging()
-        console.log("✅ Using provided category ID:", sanitizedCategoryId);
+        console.log("✅ Using provided category ID:", sanitizedCategoryId); // codeql[js/log-injection]
       }
     }
 
@@ -1372,14 +1370,13 @@ export async function PUT(request: NextRequest) {
               : sanitizeForLogging(String(topicError));
           const sanitizedTopicName = sanitizeForLogging(topicName);
           const sanitizedCategoryId = sanitizeForLogging(categoryId);
-          // codeql[js/log-injection]: All user-provided values are sanitized via sanitizeForLogging()
           console.error(
             "Topic lookup error:",
-            sanitizedTopicError,
+            sanitizedTopicError, // codeql[js/log-injection]
             "Looking for:",
-            sanitizedTopicName,
+            sanitizedTopicName, // codeql[js/log-injection]
             "Category ID:",
-            sanitizedCategoryId,
+            sanitizedCategoryId, // codeql[js/log-injection]
           );
           const categoryHint = categoryId ? ` for the selected category` : "";
           const sanitizedTopicNameForError = sanitizeForLogging(topicName);
@@ -1403,8 +1400,7 @@ export async function PUT(request: NextRequest) {
         topicId = topicValue;
         // Security: Sanitize user data before logging to prevent log injection
         const sanitizedTopicId = sanitizeForLogging(topicId);
-        // codeql[js/log-injection]: User-provided value sanitized via sanitizeForLogging()
-        console.log("✅ Using provided topic ID:", sanitizedTopicId);
+        console.log("✅ Using provided topic ID:", sanitizedTopicId); // codeql[js/log-injection]
       }
     }
 
@@ -1439,10 +1435,9 @@ export async function PUT(request: NextRequest) {
         } else {
           // Security: Sanitize user data before logging to prevent log injection
           const sanitizedTrimmedId = sanitizeForLogging(trimmedId);
-          // codeql[js/log-injection]: User-provided value sanitized via sanitizeForLogging()
           console.warn(
             "⚠️ Invalid learning card ID format:",
-            sanitizedTrimmedId,
+            sanitizedTrimmedId, // codeql[js/log-injection]
             "Expected UUID.",
           );
           finalLearningCardId = null; // Invalid format, set to null to clear it
@@ -1564,13 +1559,11 @@ export async function PUT(request: NextRequest) {
       error instanceof Error
         ? sanitizeForLogging(error.message)
         : sanitizeForLogging(String(error));
-    // codeql[js/log-injection]: Error message sanitized via sanitizeForLogging()
-    console.error("Error updating question:", errorMessage);
+    console.error("Error updating question:", errorMessage); // codeql[js/log-injection]
     if (error instanceof Error && error.message) {
       // Security: Sanitize error message before logging
       const sanitizedErrorMessage = sanitizeForLogging(error.message);
-      // codeql[js/log-injection]: Error message sanitized via sanitizeForLogging()
-      console.error("Error message:", sanitizedErrorMessage);
+      console.error("Error message:", sanitizedErrorMessage); // codeql[js/log-injection]
     }
     return NextResponse.json(
       { success: false, error: "Failed to update question" },
