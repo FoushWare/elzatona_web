@@ -1292,12 +1292,11 @@ export async function PUT(request: NextRequest) {
               ? sanitizeForLogging(categoryError.message)
               : sanitizeForLogging(String(categoryError));
           const sanitizedCategoryName = sanitizeForLogging(categoryName);
-          // codeql[js/log-injection]: All user-provided values are sanitized via sanitizeForLogging()
           console.error(
             "Category lookup error:",
-            sanitizedCategoryError,
+            sanitizedCategoryError, // codeql[js/log-injection]
             "Looking for:",
-            sanitizedCategoryName,
+            sanitizedCategoryName, // codeql[js/log-injection]
           );
           const { data: allCategories } = await supabase
             .from("categories")
