@@ -2,21 +2,25 @@ import { NextRequest, NextResponse } from "next/server";
 
 import { createClient } from "@supabase/supabase-js";
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-// For service role operations, use anon key as fallback if service role key is not available
-// ⚠️ WARNING: Never hardcode API keys. Always use environment variables.
-const supabaseKey =
-  process.env.SUPABASE_SERVICE_ROLE_KEY ||
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
-
-if (!supabaseUrl || !supabaseKey) {
-  throw new Error(
-    "Missing required Supabase environment variables: NEXT_PUBLIC_SUPABASE_URL and (SUPABASE_SERVICE_ROLE_KEY or NEXT_PUBLIC_SUPABASE_ANON_KEY) must be set",
-  );
-}
-const supabase = createClient(supabaseUrl, supabaseKey);
-
 import { AutoLinkingService } from "../../../../auto-linking-service";
+
+// Lazy Supabase client creation - only create when route is called, not during build
+function getSupabaseClient() {
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  // For service role operations, use anon key as fallback if service role key is not available
+  // ⚠️ WARNING: Never hardcode API keys. Always use environment variables.
+  const supabaseKey =
+    process.env.SUPABASE_SERVICE_ROLE_KEY ||
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+
+  if (!supabaseUrl || !supabaseKey) {
+    throw new Error(
+      "Missing required Supabase environment variables: NEXT_PUBLIC_SUPABASE_URL and (SUPABASE_SERVICE_ROLE_KEY or NEXT_PUBLIC_SUPABASE_ANON_KEY) must be set",
+    );
+  }
+
+  return createClient(supabaseUrl, supabaseKey);
+}
 
 // GET /api/guided-learning/plans - Get all learning plans or filtered content
 export async function GET(request: NextRequest) {
@@ -53,6 +57,7 @@ export async function GET(request: NextRequest) {
     }
 
     // Otherwise, get all learning plans
+    const supabase = getSupabaseClient();
     const { data: plans, error } = await supabase
       .from("learning_plans")
       .select("*")
@@ -92,6 +97,7 @@ export async function POST(request: NextRequest) {
     };
 
     // Save to Supabase
+    const supabase = getSupabaseClient();
     const { data: createdPlan, error } = await supabase
       .from("learning_plans")
       .insert(newPlan)
@@ -132,6 +138,7 @@ export async function DELETE(request: NextRequest) {
 
     // Delete from Firestore
     console.log("Attempting to delete from Firestore...");
+    const supabase = getSupabaseClient();
     await supabase.from("learningplantemplates").delete().eq("id", planId);
     console.log("Successfully deleted from Firestore");
 
