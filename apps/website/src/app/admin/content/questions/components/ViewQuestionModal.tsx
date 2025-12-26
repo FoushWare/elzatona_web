@@ -200,7 +200,7 @@ const isRgbColor = (colorValue: string): boolean => {
 };
 
 // Helper function to process color for light mode visibility (reduces cognitive complexity)
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
+
 const _processColorForLightMode = (
   colorValue: string,
 ): { shouldReplace: boolean; newColor: string } => {
@@ -267,7 +267,7 @@ const getOptionClasses = (
 };
 
 // Helper function to count regex matches
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
+
 const _countRegexMatches = (text: string, regex: RegExp): number => {
   let count = 0;
   let match;
