@@ -49,6 +49,19 @@
         }
       }
     },
+    "start": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "next start",
+        "cwd": "apps/website"
+      },
+      "dependsOn": ["build"],
+      "configurations": {
+        "production": {
+          "buildTarget": "website:build:production"
+        }
+      }
+    },
     "export": {
       "executor": "@nx/next:export",
       "options": {
