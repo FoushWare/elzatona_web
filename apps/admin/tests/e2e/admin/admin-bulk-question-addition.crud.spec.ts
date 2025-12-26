@@ -411,23 +411,24 @@ test.describe("A-E2E-001: Admin Bulk Question Addition - CRUD", () => {
     // Wait for the GET API response (fetch questions list) with timeout handling
     let questionInResponse = false;
     try {
-      const fetchResponse = await Promise.race([
+      const fetchResponse = (await Promise.race([
         fetchQuestionsPromise,
-        new Promise((_, reject) =>
+        new Promise<Response>((_, reject) =>
           setTimeout(() => reject(new Error("Timeout")), 25000),
         ),
-      ]);
+      ])) as Response | null;
 
-      if (fetchResponse && "json" in fetchResponse) {
+      if (fetchResponse && "ok" in fetchResponse) {
         const fetchData = (await fetchResponse.json()) as {
-          data?: Array<{ id?: string; [key: string]: unknown }>;
+          data?: Array<{ id?: string; title?: string; [key: string]: unknown }>;
+          pagination?: unknown;
         };
         console.log("✅ Questions fetch API response received");
 
         // Verify the question is in the response
         const questions = fetchData.data || [];
         const foundQuestion = questions.find(
-          (q: { title?: string }) =>
+          (q) =>
             q.title === questionTitle || q.title?.includes("E2E Test Question"),
         );
         if (foundQuestion) {
