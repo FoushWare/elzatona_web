@@ -1052,8 +1052,9 @@ export async function POST(request: NextRequest) {
               questionWithTimestamps.code = codeContent;
               processedCode = codeContent;
               // Security: Log code length instead of content to prevent log injection
+              const sanitizedCodeLength = sanitizeForLogging(String(codeContent.length));
               console.log(
-                `⚠️ Code field was null/empty, restored from originalCode: ${sanitizeForLogging(String(codeContent.length))} chars`,
+                `⚠️ Code field was null/empty, restored from originalCode: ${sanitizedCodeLength} chars`,
               );
             }
           }
@@ -1257,8 +1258,10 @@ export async function PUT(request: NextRequest) {
       } else if (categoryValue && typeof categoryValue === "string") {
         // It's already an ID
         categoryId = categoryValue;
+        // Security: Sanitize value before using in template string
+        const sanitizedCategoryId = sanitizeForLogging(categoryId);
         console.log(
-          `✅ Using provided category ID: ${sanitizeForLogging(categoryId)}`,
+          `✅ Using provided category ID: ${sanitizedCategoryId}`,
         );
       }
     }
@@ -1324,8 +1327,9 @@ export async function PUT(request: NextRequest) {
         // It's already an ID
         topicId = topicValue;
         // Security: Sanitize user data before logging to prevent log injection
+        const sanitizedTopicId = sanitizeForLogging(topicId);
         console.log(
-          `✅ Using provided topic ID: ${sanitizeForLogging(topicId)}`,
+          `✅ Using provided topic ID: ${sanitizedTopicId}`,
         );
       }
     }

@@ -382,16 +382,19 @@ export async function PUT(
       const sanitizedErrorCode = errorDetails.code
         ? sanitizeForLogging(String(errorDetails.code))
         : undefined;
+      const sanitizedErrorDetails = errorDetails.details
+        ? sanitizeForLogging(String(errorDetails.details))
+        : undefined;
+      const sanitizedErrorHint = errorDetails.hint
+        ? sanitizeForLogging(String(errorDetails.hint))
+        : undefined;
+      const sanitizedErrorStack = error.stack ? sanitizeForLogging(error.stack) : undefined;
       console.error("❌ Error details:", {
         message: sanitizedErrorMessage,
         code: sanitizedErrorCode,
-        details: errorDetails.details
-          ? sanitizeForLogging(String(errorDetails.details))
-          : undefined,
-        hint: errorDetails.hint
-          ? sanitizeForLogging(String(errorDetails.hint))
-          : undefined,
-        stack: error.stack ? sanitizeForLogging(error.stack) : undefined,
+        details: sanitizedErrorDetails,
+        hint: sanitizedErrorHint,
+        stack: sanitizedErrorStack,
       });
     }
 
