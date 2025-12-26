@@ -2,16 +2,12 @@
  * Authentication utilities for enhanced security and persistence
  */
 
-import { createClient } from "@supabase/supabase-js";
-
-const supabaseUrl = process.env["NEXT_PUBLIC_SUPABASE_URL"]!;
-const supabaseKey = process.env["NEXT_PUBLIC_SUPABASE_ANON_KEY"]!;
-
-const supabase = createClient(supabaseUrl, supabaseKey);
+import { getSupabaseClientWithAnonKey } from "./get-supabase-client";
 
 // Check if user session is still valid
 export const isSessionValid = async (): Promise<boolean> => {
   try {
+    const supabase = getSupabaseClientWithAnonKey();
     const {
       data: { session },
       error,
@@ -36,6 +32,7 @@ export const isSessionValid = async (): Promise<boolean> => {
 // Get user authentication status with validation
 export const getAuthStatus = async () => {
   try {
+    const supabase = getSupabaseClientWithAnonKey();
     const {
       data: { user },
       error,
@@ -88,6 +85,7 @@ export const clearAuthCookie = async (): Promise<void> => {
 export const clearAuthData = async () => {
   try {
     // Sign out from Supabase
+    const supabase = getSupabaseClientWithAnonKey();
     await supabase.auth.signOut();
 
     if (typeof window !== "undefined") {
@@ -127,6 +125,7 @@ export const setupTokenRefresh = () => {
 
   // Supabase handles token refresh automatically
   // We just need to listen for auth state changes
+  const supabase = getSupabaseClientWithAnonKey();
   const {
     data: { subscription },
   } = supabase.auth.onAuthStateChange(async (event, session) => {
@@ -144,6 +143,7 @@ export const setupTokenRefresh = () => {
 // Get current user (Supabase equivalent)
 export const getCurrentUser = async () => {
   try {
+    const supabase = getSupabaseClientWithAnonKey();
     const {
       data: { user },
       error,
@@ -161,6 +161,7 @@ export const getCurrentUser = async () => {
 // Refresh user token (Supabase handles this automatically)
 export const refreshUserToken = async () => {
   try {
+    const supabase = getSupabaseClientWithAnonKey();
     const { data, error } = await supabase.auth.refreshSession();
     if (error) {
       return { success: false, error: error.message };
