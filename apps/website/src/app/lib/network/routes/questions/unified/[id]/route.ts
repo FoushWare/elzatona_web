@@ -246,7 +246,9 @@ export async function PUT(
           // Security: Sanitize user data before logging to prevent log injection
           const sanitizedTrimmedId = sanitizeForLogging(trimmedId);
           console.warn(
-            `⚠️ Invalid learning card ID format: "${sanitizedTrimmedId}". Expected UUID.`,
+            "⚠️ Invalid learning card ID format:",
+            sanitizedTrimmedId,
+            "Expected UUID.",
           );
           finalLearningCardId = null; // Invalid format, set to null to clear it
         }

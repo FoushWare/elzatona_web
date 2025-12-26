@@ -1056,7 +1056,9 @@ export async function POST(request: NextRequest) {
                 String(codeContent.length),
               );
               console.log(
-                `⚠️ Code field was null/empty, restored from originalCode: ${sanitizedCodeLength} chars`,
+                "⚠️ Code field was null/empty, restored from originalCode:",
+                sanitizedCodeLength,
+                "chars",
               );
             }
           }
@@ -1330,7 +1332,7 @@ export async function PUT(request: NextRequest) {
         topicId = topicValue;
         // Security: Sanitize user data before logging to prevent log injection
         const sanitizedTopicId = sanitizeForLogging(topicId);
-        console.log(`✅ Using provided topic ID: ${sanitizedTopicId}`);
+        console.log("✅ Using provided topic ID:", sanitizedTopicId);
       }
     }
 
@@ -1366,7 +1368,9 @@ export async function PUT(request: NextRequest) {
           // Security: Sanitize user data before logging to prevent log injection
           const sanitizedTrimmedId = sanitizeForLogging(trimmedId);
           console.warn(
-            `⚠️ Invalid learning card ID format: "${sanitizedTrimmedId}". Expected UUID.`,
+            "⚠️ Invalid learning card ID format:",
+            sanitizedTrimmedId,
+            "Expected UUID.",
           );
           finalLearningCardId = null; // Invalid format, set to null to clear it
         }
