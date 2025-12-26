@@ -1,11 +1,7 @@
 // v1.0 - Unified Question Schema
 // Centralized type definitions for the unified question system
 
-import { createClient } from "@supabase/supabase-js";
-
-const supabaseUrl = process.env["NEXT_PUBLIC_SUPABASE_URL"]!;
-const supabaseServiceRoleKey = process.env["SUPABASE_SERVICE_ROLE_KEY"]!;
-const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
+import { getSupabaseClient } from "./get-supabase-client";
 
 export interface UnifiedQuestion {
   id: string;
@@ -261,7 +257,7 @@ export class UnifiedQuestionService {
 
   // Get all questions with optional filters
   async getQuestions(filters?: QuestionFilter): Promise<UnifiedQuestion[]> {
-    if (!supabase) throw new Error("any not initialized");
+    const supabase = getSupabaseClient();
 
     let q = supabase.from("questions").select("*");
 
@@ -294,7 +290,7 @@ export class UnifiedQuestionService {
 
   // Get a single question by ID
   async getQuestion(id: string): Promise<UnifiedQuestion | null> {
-    if (!supabase) throw new Error("any not initialized");
+    const supabase = getSupabaseClient();
 
     const { data: docSnap, error } = await supabase
       .from("questions")
@@ -312,7 +308,7 @@ export class UnifiedQuestionService {
   async createQuestion(
     question: Omit<UnifiedQuestion, "id" | "createdAt" | "updatedAt">,
   ): Promise<UnifiedQuestion> {
-    if (!supabase) throw new Error("any not initialized");
+    const supabase = getSupabaseClient();
 
     const questionWithTimestamps = {
       ...question,
@@ -334,7 +330,7 @@ export class UnifiedQuestionService {
     id: string,
     updates: Partial<UnifiedQuestion>,
   ): Promise<UnifiedQuestion> {
-    if (!supabase) throw new Error("any not initialized");
+    const supabase = getSupabaseClient();
 
     const updateWithTimestamps = {
       ...updates,
@@ -353,7 +349,7 @@ export class UnifiedQuestionService {
 
   // Delete a question
   async deleteQuestion(id: string): Promise<boolean> {
-    if (!supabase) throw new Error("any not initialized");
+    const supabase = getSupabaseClient();
 
     try {
       const { error } = await supabase.from("questions").delete().eq("id", id);
@@ -367,7 +363,7 @@ export class UnifiedQuestionService {
 
   // Get question statistics
   async getQuestionStats(): Promise<QuestionStats> {
-    if (!supabase) throw new Error("any not initialized");
+    const supabase = getSupabaseClient();
 
     // For small datasets, get all questions at once (more efficient than multiple queries)
     const { data: questions, error } = await supabase
@@ -499,7 +495,7 @@ export class UnifiedQuestionService {
     searchTerm: string,
     filters?: QuestionFilter,
   ): Promise<QuestionSearchResult> {
-    if (!supabase) throw new Error("any not initialized");
+    const supabase = getSupabaseClient();
 
     const startTime = Date.now();
 
