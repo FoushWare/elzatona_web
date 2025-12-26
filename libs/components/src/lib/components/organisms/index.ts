@@ -4,3 +4,4 @@
 export { HomePageLayout } from "./HomePageLayout";
 export { PersonalizedContent } from "./PersonalizedContent";
 export { FinalCTASection } from "./FinalCTASection";
+export { LoginPageTemplate } from "./LoginPageTemplate";

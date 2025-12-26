@@ -51,11 +51,48 @@ jest.mock("@elzatona/contexts", () => {
 });
 
 // Mock shared components
-jest.mock("@elzatona/components", () => ({
-  AdminLoginNavbar: () => (
-    <nav data-testid="admin-login-navbar">Admin Navbar</nav>
-  ),
-}));
+jest.mock("@elzatona/components", () => {
+  const React = require("react");
+  return {
+    AdminLoginNavbar: () => (
+      <nav data-testid="admin-login-navbar">Admin Navbar</nav>
+    ),
+    LoginPageTemplate: ({ children }: { children: React.ReactNode }) => (
+      <div data-testid="login-page-template">
+        <nav data-testid="admin-login-navbar">Admin Navbar</nav>
+        <h1>Admin Login</h1>
+        <div>{children}</div>
+        <a href="/">Back to Home</a>
+      </div>
+    ),
+    AdminLoginForm: () => {
+      const React = require("react");
+      const [email, setEmail] = React.useState("");
+      const [password, setPassword] = React.useState("");
+      return (
+        <form data-testid="admin-login-form">
+          <label htmlFor="email">Email Address</label>
+          <input
+            id="email"
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            aria-label="Email Address"
+          />
+          <label htmlFor="password">Password</label>
+          <input
+            id="password"
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            aria-label="Password"
+          />
+          <button type="submit">Sign In</button>
+        </form>
+      );
+    },
+  };
+});
 
 // Mock Next.js Link
 jest.mock("next/link", () => {
