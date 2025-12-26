@@ -57,15 +57,32 @@ jest.mock("@elzatona/components", () => {
     AdminLoginNavbar: () => (
       <nav data-testid="admin-login-navbar">Admin Navbar</nav>
     ),
-    LoginPageTemplate: ({ children }: { children: React.ReactNode }) => (
-      <div data-testid="login-page-template">
-        <nav data-testid="admin-login-navbar">Admin Navbar</nav>
-        <h1>Admin Login</h1>
-        <div>{children}</div>
-        <a href="/">Back to Home</a>
-      </div>
-    ),
-    AdminLoginForm: () => {
+    AdminLoginPageTemplate: ({
+      children,
+      isLoading,
+    }: {
+      children: React.ReactNode;
+      isLoading?: boolean;
+    }) => {
+      if (isLoading) {
+        return (
+          <div data-testid="admin-login-page-template-loading">
+            <nav data-testid="admin-login-navbar">Admin Navbar</nav>
+            <div>Loading...</div>
+          </div>
+        );
+      }
+      return (
+        <div data-testid="admin-login-page-template">
+          <nav data-testid="admin-login-navbar">Admin Navbar</nav>
+          <h1>Admin Login</h1>
+          <p>Access the admin dashboard</p>
+          <div>{children}</div>
+          <a href="/">← Back to Home</a>
+        </div>
+      );
+    },
+    AdminLoginFormMolecule: () => {
       const React = require("react");
       const [email, setEmail] = React.useState("");
       const [password, setPassword] = React.useState("");

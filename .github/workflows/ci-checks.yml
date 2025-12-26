@@ -69,6 +69,27 @@ jobs:
           NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.TEST_SUPABASE_ANON_KEY || 'placeholder-key' }}
           JWT_SECRET: ${{ secrets.JWT_SECRET || 'placeholder-secret' }}
 
+      - name: Run unit tests for admin login components
+        run: |
+          echo "🧪 Running unit tests for admin login components..."
+          NODE_OPTIONS=--max-old-space-size=768 JEST_MAX_WORKERS=1 npx jest \
+            libs/components/src/lib/components/molecules/AdminLoginFormMolecule.test.tsx \
+            libs/components/src/lib/components/organisms/AdminLoginPageTemplate.test.tsx \
+            apps/website/src/app/admin/login/page.test.tsx \
+            --maxWorkers=1 \
+            --silent \
+            --coverage=false
+        continue-on-error: false
+        env:
+          NODE_OPTIONS: "--max-old-space-size=768"
+          CI: "true"
+          # Provide minimal env vars for tests
+          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.TEST_SUPABASE_URL || 'https://placeholder.supabase.co' }}
+          NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.TEST_SUPABASE_ANON_KEY || 'placeholder-key' }}
+          JWT_SECRET: ${{ secrets.JWT_SECRET || 'placeholder-secret' }}
+          ADMIN_EMAIL: ${{ secrets.ADMIN_EMAIL || 'test@example.com' }}
+          ADMIN_PASSWORD: ${{ secrets.ADMIN_PASSWORD || 'test-password' }}
+
       - name: Build validation
         run: |
           echo "🏗️ Running build validation..."
