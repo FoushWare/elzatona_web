@@ -193,14 +193,14 @@ export async function PUT(
               : sanitizeForLogging(String(topicError));
           const sanitizedTopicName = sanitizeForLogging(topicName);
           const sanitizedCategoryId = sanitizeForLogging(categoryId);
-          // codeql[js/log-injection]: All user-provided values are sanitized via sanitizeForLogging()
+          // codeql[js/log-injection]: All user-provided values are sanitized via sanitizeForLogging() before logging
           console.error(
             "Topic lookup error:",
-            sanitizedTopicError, // codeql[js/log-injection]
+            JSON.stringify(sanitizedTopicError),
             "Looking for:",
-            sanitizedTopicName, // codeql[js/log-injection]
+            JSON.stringify(sanitizedTopicName),
             "Category ID:",
-            sanitizedCategoryId, // codeql[js/log-injection]
+            JSON.stringify(sanitizedCategoryId),
           );
           const categoryHint = categoryId ? ` for the selected category` : "";
           const sanitizedTopicNameForError = sanitizeForLogging(topicName);
@@ -251,9 +251,10 @@ export async function PUT(
         } else {
           // Security: Sanitize user data before logging to prevent log injection
           const sanitizedTrimmedId = sanitizeForLogging(trimmedId);
+          // codeql[js/log-injection]: User-provided value sanitized via sanitizeForLogging() and JSON.stringify
           console.warn(
             "⚠️ Invalid learning card ID format:",
-            sanitizedTrimmedId, // codeql[js/log-injection]
+            JSON.stringify(sanitizedTrimmedId),
             "Expected UUID.",
           );
           finalLearningCardId = null; // Invalid format, set to null to clear it
@@ -388,7 +389,8 @@ export async function PUT(
       error instanceof Error
         ? sanitizeForLogging(error.message)
         : sanitizeForLogging(String(error));
-    console.error("❌ Error updating question:", errorMessage); // codeql[js/log-injection]
+    // codeql[js/log-injection]: Error message sanitized via sanitizeForLogging() and JSON.stringify
+    console.error("❌ Error updating question:", JSON.stringify(errorMessage));
     if (error instanceof Error) {
       const errorDetails = error as any;
       // Security: Sanitize all error details before logging

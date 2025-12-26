@@ -1095,9 +1095,10 @@ export async function POST(request: NextRequest) {
               const sanitizedCodeLength = sanitizeForLogging(
                 String(codeContent.length),
               );
+              // codeql[js/log-injection]: Value sanitized via sanitizeForLogging() and JSON.stringify
               console.log(
                 "⚠️ Code field was null/empty, restored from originalCode:",
-                sanitizedCodeLength, // codeql[js/log-injection]
+                JSON.stringify(sanitizedCodeLength),
                 "chars",
               );
             }
@@ -1292,11 +1293,12 @@ export async function PUT(request: NextRequest) {
               ? sanitizeForLogging(categoryError.message)
               : sanitizeForLogging(String(categoryError));
           const sanitizedCategoryName = sanitizeForLogging(categoryName);
+          // codeql[js/log-injection]: All user-provided values are sanitized via sanitizeForLogging() and JSON.stringify
           console.error(
             "Category lookup error:",
-            sanitizedCategoryError, // codeql[js/log-injection]
+            JSON.stringify(sanitizedCategoryError),
             "Looking for:",
-            sanitizedCategoryName, // codeql[js/log-injection]
+            JSON.stringify(sanitizedCategoryName),
           );
           const { data: allCategories } = await supabase
             .from("categories")
@@ -1328,7 +1330,11 @@ export async function PUT(request: NextRequest) {
         categoryId = categoryValue;
         // Security: Sanitize value before using in template string
         const sanitizedCategoryId = sanitizeForLogging(categoryId);
-        console.log("✅ Using provided category ID:", sanitizedCategoryId); // codeql[js/log-injection]
+        // codeql[js/log-injection]: User-provided value sanitized via sanitizeForLogging() and JSON.stringify
+        console.log(
+          "✅ Using provided category ID:",
+          JSON.stringify(sanitizedCategoryId),
+        );
       }
     }
 
@@ -1369,13 +1375,14 @@ export async function PUT(request: NextRequest) {
               : sanitizeForLogging(String(topicError));
           const sanitizedTopicName = sanitizeForLogging(topicName);
           const sanitizedCategoryId = sanitizeForLogging(categoryId);
+          // codeql[js/log-injection]: All user-provided values are sanitized via sanitizeForLogging() and JSON.stringify
           console.error(
             "Topic lookup error:",
-            sanitizedTopicError, // codeql[js/log-injection]
+            JSON.stringify(sanitizedTopicError),
             "Looking for:",
-            sanitizedTopicName, // codeql[js/log-injection]
+            JSON.stringify(sanitizedTopicName),
             "Category ID:",
-            sanitizedCategoryId, // codeql[js/log-injection]
+            JSON.stringify(sanitizedCategoryId),
           );
           const categoryHint = categoryId ? ` for the selected category` : "";
           const sanitizedTopicNameForError = sanitizeForLogging(topicName);
@@ -1399,7 +1406,11 @@ export async function PUT(request: NextRequest) {
         topicId = topicValue;
         // Security: Sanitize user data before logging to prevent log injection
         const sanitizedTopicId = sanitizeForLogging(topicId);
-        console.log("✅ Using provided topic ID:", sanitizedTopicId); // codeql[js/log-injection]
+        // codeql[js/log-injection]: User-provided value sanitized via sanitizeForLogging() and JSON.stringify
+        console.log(
+          "✅ Using provided topic ID:",
+          JSON.stringify(sanitizedTopicId),
+        );
       }
     }
 
@@ -1434,9 +1445,10 @@ export async function PUT(request: NextRequest) {
         } else {
           // Security: Sanitize user data before logging to prevent log injection
           const sanitizedTrimmedId = sanitizeForLogging(trimmedId);
+          // codeql[js/log-injection]: User-provided value sanitized via sanitizeForLogging() and JSON.stringify
           console.warn(
             "⚠️ Invalid learning card ID format:",
-            sanitizedTrimmedId, // codeql[js/log-injection]
+            JSON.stringify(sanitizedTrimmedId),
             "Expected UUID.",
           );
           finalLearningCardId = null; // Invalid format, set to null to clear it
@@ -1558,11 +1570,13 @@ export async function PUT(request: NextRequest) {
       error instanceof Error
         ? sanitizeForLogging(error.message)
         : sanitizeForLogging(String(error));
-    console.error("Error updating question:", errorMessage); // codeql[js/log-injection]
+    // codeql[js/log-injection]: Error message sanitized via sanitizeForLogging() and JSON.stringify
+    console.error("Error updating question:", JSON.stringify(errorMessage));
     if (error instanceof Error && error.message) {
       // Security: Sanitize error message before logging
       const sanitizedErrorMessage = sanitizeForLogging(error.message);
-      console.error("Error message:", sanitizedErrorMessage); // codeql[js/log-injection]
+      // codeql[js/log-injection]: Error message sanitized via sanitizeForLogging() and JSON.stringify
+      console.error("Error message:", JSON.stringify(sanitizedErrorMessage));
     }
     return NextResponse.json(
       { success: false, error: "Failed to update question" },
