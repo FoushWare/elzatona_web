@@ -22,87 +22,65 @@ interface LearningPlan {
   learningPath?: string;
 }
 
+// Default plans - shown immediately while API loads
+const DEFAULT_PLANS: LearningPlan[] = Array.from({ length: 7 }, (_, i) => ({
+  id: `plan-${i + 1}`,
+  name: `${i + 1} Day Plan`,
+  description: `A structured ${i + 1}-day learning plan to master frontend development`,
+  duration: i + 1,
+}));
+
 export default function GuidedLearningPage() {
   const router = useRouter();
-  const [plans, setPlans] = useState<LearningPlan[]>([]);
-  const [loading, setLoading] = useState(true);
+  // Start with default plans for immediate render
+  const [plans, setPlans] = useState<LearningPlan[]>(DEFAULT_PLANS);
+  const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
+    // Fetch plans in background without blocking render
+    let isMounted = true;
+
     async function fetchPlans() {
+      setIsLoading(true);
       try {
-        setLoading(true);
-        const response = await fetch("/api/guided-learning/plans");
+        const response = await fetch("/api/guided-learning/plans", {
+          // Add timeout to prevent hanging
+          signal: AbortSignal.timeout(5000),
+        });
         const data = await response.json();
 
+        if (!isMounted) return;
+
         if (data.success && data.data) {
-          // If we have plans, use them; otherwise create default 1-7 day plans
           if (Array.isArray(data.data) && data.data.length > 0) {
             setPlans(data.data);
-          } else {
-            // Create default plans if none exist
-            const defaultPlans: LearningPlan[] = Array.from(
-              { length: 7 },
-              (_, i) => ({
-                id: `plan-${i + 1}`,
-                name: `${i + 1} Day Plan`,
-                description: `A structured ${i + 1}-day learning plan to master frontend development`,
-                duration: i + 1,
-              }),
-            );
-            setPlans(defaultPlans);
           }
-        } else {
-          // Fallback to default plans
-          const defaultPlans: LearningPlan[] = Array.from(
-            { length: 7 },
-            (_, i) => ({
-              id: `plan-${i + 1}`,
-              name: `${i + 1} Day Plan`,
-              description: `A structured ${i + 1}-day learning plan to master frontend development`,
-              duration: i + 1,
-            }),
-          );
-          setPlans(defaultPlans);
         }
       } catch (err) {
+        if (!isMounted) return;
+        // Silently fail - we already have default plans showing
         console.error("Error fetching learning plans:", err);
-        setError("Failed to load learning plans");
-        // Fallback to default plans even on error
-        const defaultPlans: LearningPlan[] = Array.from(
-          { length: 7 },
-          (_, i) => ({
-            id: `plan-${i + 1}`,
-            name: `${i + 1} Day Plan`,
-            description: `A structured ${i + 1}-day learning plan to master frontend development`,
-            duration: i + 1,
-          }),
-        );
-        setPlans(defaultPlans);
+        setError("Using default plans");
       } finally {
-        setLoading(false);
+        if (isMounted) {
+          setIsLoading(false);
+        }
       }
     }
 
-    fetchPlans();
+    // Small delay to let initial render complete
+    const timeoutId = setTimeout(fetchPlans, 100);
+
+    return () => {
+      isMounted = false;
+      clearTimeout(timeoutId);
+    };
   }, []);
 
   const handlePlanClick = (planId: string) => {
     router.push(`/features/guided-learning/${planId}`);
   };
-
-  if (loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600 mx-auto mb-4"></div>
-          <p className="text-gray-600 dark:text-gray-400">
-            Loading learning plans...
-          </p>
-        </div>
-      </div>
-    );
-  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 py-12 px-4 sm:px-6 lg:px-8">
@@ -121,8 +99,17 @@ export default function GuidedLearningPage() {
           </p>
         </div>
 
+        {/* Loading Indicator */}
+        {isLoading && (
+          <div className="mb-4 text-center">
+            <p className="text-sm text-gray-500 dark:text-gray-400">
+              Updating plans...
+            </p>
+          </div>
+        )}
+
         {/* Error Message */}
-        {error && (
+        {error && !isLoading && (
           <div className="mb-6 p-4 bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-lg">
             <p className="text-yellow-800 dark:text-yellow-200">{error}</p>
           </div>
