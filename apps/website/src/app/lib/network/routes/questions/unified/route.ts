@@ -1127,7 +1127,18 @@ export async function POST(request: NextRequest) {
           // code is included in the spread from sanitizedQuestion
         });
       } catch (error) {
-        console.error(`Error creating question ${index + 1}:`, error);
+        // Security: Sanitize error before logging to prevent log injection
+        const sanitizedError =
+          error instanceof Error
+            ? sanitizeForLogging(error.message)
+            : sanitizeForLogging(String(error));
+        const sanitizedIndex = sanitizeForLogging(String(index + 1));
+        console.error(
+          "Error creating question:",
+          sanitizedIndex,
+          "Error:",
+          sanitizedError,
+        );
         const errorMessage =
           error instanceof Error
             ? error.message
