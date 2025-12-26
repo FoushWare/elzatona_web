@@ -52,7 +52,6 @@ jest.mock("@elzatona/contexts", () => {
 
 // Mock shared components
 jest.mock("@elzatona/components", () => {
-   
   const React = jest.requireActual("react");
   return {
     AdminLoginNavbar: () => (
@@ -84,7 +83,6 @@ jest.mock("@elzatona/components", () => {
       );
     },
     AdminLoginFormMolecule: () => {
-       
       const React = jest.requireActual("react");
       const [email, setEmail] = React.useState("");
       const [password, setPassword] = React.useState("");
