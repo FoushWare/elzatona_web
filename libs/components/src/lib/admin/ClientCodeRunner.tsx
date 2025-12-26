@@ -70,11 +70,12 @@ export default function ClientCodeRunner({
     const iframe = iframeRef.current;
     if (!iframe) return;
 
+    // Use replaceAll() with regex patterns (requires global flag)
     const safeCode = userCode
-      .replace(/import\s+[^;]+;?/g, "")
-      .replace(/export\s+default\s+/g, "")
-      .replace(/export\s+\{[^}]*\};?/g, "")
-      .replace(/export\s+\w+\s+/g, "");
+      .replaceAll(/import\s+[^;]+;?/g, "")
+      .replaceAll(/export\s+default\s+/g, "")
+      .replaceAll(/export\s+\{[^}]*\};?/g, "")
+      .replaceAll(/export\s+\w+\s+/g, "");
 
     const payload = {
       fnName: functionName,
@@ -92,12 +93,12 @@ export default function ClientCodeRunner({
   // Security: Inject target origin into iframe code to ensure secure postMessage communication
   // Escape the origin to prevent injection attacks
   const escapedOrigin = targetOrigin
-    .replace(/\\/g, "\\\\")
-    .replace(/"/g, '\\"')
-    .replace(/'/g, "\\'");
+    .replaceAll(/\\/g, "\\\\")
+    .replaceAll(/"/g, '\\"')
+    .replaceAll(/'/g, "\\'");
   const srcDoc =
     "<!doctype html>" +
-    '<html><head><meta charset="utf-8"/></head><body>' +
+    '<html><head><meta charset="utf-8"></head><body>' +
     "<script>\n" +
     "function deepEqual(a,b){try{return JSON.stringify(a)===JSON.stringify(b)}catch(e){return false}}\n" +
     // SECURITY NOTE: eval() is used here for educational code execution in an iframe sandbox.
@@ -195,11 +196,12 @@ export default function ClientCodeRunner({
               setRunning(false);
               return;
             }
+            // Use replaceAll() with regex patterns (requires global flag)
             const safeCode = userCode
-              .replace(/import\s+[^;]+;?/g, "")
-              .replace(/export\s+default\s+/g, "")
-              .replace(/export\s+\{[^}]*\};?/g, "")
-              .replace(/export\s+\w+\s+/g, "");
+              .replaceAll(/import\s+[^;]+;?/g, "")
+              .replaceAll(/export\s+default\s+/g, "")
+              .replaceAll(/export\s+\{[^}]*\};?/g, "")
+              .replaceAll(/export\s+\w+\s+/g, "");
             // Security: Specify target origin to prevent XSS attacks
             iframe.contentWindow?.postMessage(
               {
