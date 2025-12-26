@@ -1095,6 +1095,7 @@ export async function POST(request: NextRequest) {
               const sanitizedCodeLength = sanitizeForLogging(
                 String(codeContent.length),
               );
+              // codeql[js/log-injection]: Value sanitized via sanitizeForLogging()
               console.log(
                 "⚠️ Code field was null/empty, restored from originalCode:",
                 sanitizedCodeLength,
@@ -1292,6 +1293,7 @@ export async function PUT(request: NextRequest) {
               ? sanitizeForLogging(categoryError.message)
               : sanitizeForLogging(String(categoryError));
           const sanitizedCategoryName = sanitizeForLogging(categoryName);
+          // codeql[js/log-injection]: All user-provided values are sanitized via sanitizeForLogging()
           console.error(
             "Category lookup error:",
             sanitizedCategoryError,
@@ -1328,6 +1330,7 @@ export async function PUT(request: NextRequest) {
         categoryId = categoryValue;
         // Security: Sanitize value before using in template string
         const sanitizedCategoryId = sanitizeForLogging(categoryId);
+        // codeql[js/log-injection]: User-provided value sanitized via sanitizeForLogging()
         console.log("✅ Using provided category ID:", sanitizedCategoryId);
       }
     }
@@ -1369,6 +1372,7 @@ export async function PUT(request: NextRequest) {
               : sanitizeForLogging(String(topicError));
           const sanitizedTopicName = sanitizeForLogging(topicName);
           const sanitizedCategoryId = sanitizeForLogging(categoryId);
+          // codeql[js/log-injection]: All user-provided values are sanitized via sanitizeForLogging()
           console.error(
             "Topic lookup error:",
             sanitizedTopicError,
@@ -1399,6 +1403,7 @@ export async function PUT(request: NextRequest) {
         topicId = topicValue;
         // Security: Sanitize user data before logging to prevent log injection
         const sanitizedTopicId = sanitizeForLogging(topicId);
+        // codeql[js/log-injection]: User-provided value sanitized via sanitizeForLogging()
         console.log("✅ Using provided topic ID:", sanitizedTopicId);
       }
     }
@@ -1434,6 +1439,7 @@ export async function PUT(request: NextRequest) {
         } else {
           // Security: Sanitize user data before logging to prevent log injection
           const sanitizedTrimmedId = sanitizeForLogging(trimmedId);
+          // codeql[js/log-injection]: User-provided value sanitized via sanitizeForLogging()
           console.warn(
             "⚠️ Invalid learning card ID format:",
             sanitizedTrimmedId,
@@ -1558,10 +1564,12 @@ export async function PUT(request: NextRequest) {
       error instanceof Error
         ? sanitizeForLogging(error.message)
         : sanitizeForLogging(String(error));
+    // codeql[js/log-injection]: Error message sanitized via sanitizeForLogging()
     console.error("Error updating question:", errorMessage);
     if (error instanceof Error && error.message) {
       // Security: Sanitize error message before logging
       const sanitizedErrorMessage = sanitizeForLogging(error.message);
+      // codeql[js/log-injection]: Error message sanitized via sanitizeForLogging()
       console.error("Error message:", sanitizedErrorMessage);
     }
     return NextResponse.json(
