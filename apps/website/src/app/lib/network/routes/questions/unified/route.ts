@@ -181,8 +181,8 @@ export async function GET(request: NextRequest) {
 
     // Transform questions to normalize the relationship data
     // Supabase returns single objects for foreign keys, but frontend expects arrays for display
-    const questions = rawQuestions.map((question: any) => {
-      const transformed: any = { ...question };
+    const questions = rawQuestions.map((question: Record<string, unknown>) => {
+      const transformed: Record<string, unknown> = { ...question };
 
       // Ensure code field preserves newlines - convert any \n escape sequences to actual newlines
       if (transformed.code && typeof transformed.code === "string") {
@@ -201,16 +201,20 @@ export async function GET(request: NextRequest) {
         typeof question.categories === "object" &&
         !Array.isArray(question.categories)
       ) {
+        const categoryObj = question.categories as Record<string, unknown>;
         transformed.categories = [question.categories];
         transformed.category =
-          question.categories.name || question.categories.title || "";
+          (categoryObj.name as string) || (categoryObj.title as string) || "";
       } else if (
         Array.isArray(question.categories) &&
         question.categories.length > 0 &&
         question.categories[0]
       ) {
+        const firstCategory = question.categories[0] as Record<string, unknown>;
         transformed.category =
-          question.categories[0]?.name || question.categories[0]?.title || "";
+          (firstCategory.name as string) ||
+          (firstCategory.title as string) ||
+          "";
       } else {
         transformed.categories = [];
         transformed.category = "";
@@ -222,15 +226,18 @@ export async function GET(request: NextRequest) {
         typeof question.topics === "object" &&
         !Array.isArray(question.topics)
       ) {
+        const topicObj = question.topics as Record<string, unknown>;
         transformed.topics = [question.topics];
-        transformed.topic = question.topics.name || question.topics.title || "";
+        transformed.topic =
+          (topicObj.name as string) || (topicObj.title as string) || "";
       } else if (
         Array.isArray(question.topics) &&
         question.topics.length > 0 &&
         question.topics[0]
       ) {
+        const firstTopic = question.topics[0] as Record<string, unknown>;
         transformed.topic =
-          question.topics[0]?.name || question.topics[0]?.title || "";
+          (firstTopic.name as string) || (firstTopic.title as string) || "";
       } else {
         transformed.topics = [];
         transformed.topic = "";
@@ -243,11 +250,19 @@ export async function GET(request: NextRequest) {
           Array.isArray(question.learning_cards) &&
           question.learning_cards.length > 0
         ) {
+          const firstLearningCard = question.learning_cards[0] as Record<
+            string,
+            unknown
+          >;
           transformed.learning_card = question.learning_cards[0];
-          transformed.learningCardId = question.learning_cards[0].id || "";
+          transformed.learningCardId = (firstLearningCard.id as string) || "";
         } else if (typeof question.learning_cards === "object") {
+          const learningCardObj = question.learning_cards as Record<
+            string,
+            unknown
+          >;
           transformed.learning_card = question.learning_cards;
-          transformed.learningCardId = question.learning_cards.id || "";
+          transformed.learningCardId = (learningCardObj.id as string) || "";
         } else {
           transformed.learning_card = null;
           transformed.learningCardId = question.learning_card_id || "";
@@ -307,14 +322,19 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const results = [];
-    const errors: Array<{ question: any; error: string; index: number }> = [];
+    const results: Array<{ success: boolean; id?: string; error?: string }> =
+      [];
+    const errors: Array<{
+      question: Record<string, unknown>;
+      error: string;
+      index: number;
+    }> = [];
 
     for (let index = 0; index < questions.length; index++) {
-      const questionData = questions[index];
+      const questionData = questions[index] as Record<string, unknown>;
       try {
         // Normalize field names: convert camelCase to snake_case for database fields
-        const normalizedData: any = { ...questionData };
+        const normalizedData: Record<string, unknown> = { ...questionData };
 
         // CRITICAL: Extract code field FIRST, before any processing, to ensure it's never lost
         // Store the original code value from the input data
@@ -435,7 +455,7 @@ export async function POST(request: NextRequest) {
 
         // Sanitize the validated data (code field is now excluded from sanitization)
         const sanitizedQuestion = sanitizeObjectServer(
-          validationResult.data as any,
+          validationResult.data as Record<string, unknown>,
         );
 
         // CRITICAL: Restore code field AFTER sanitization (it was skipped during sanitization)
@@ -500,7 +520,7 @@ export async function POST(request: NextRequest) {
         // Ensure is_active is set (use isActive if is_active is not set)
         if (
           sanitizedQuestion.is_active === undefined &&
-          sanitizedQuestion.isActive !== undefined
+          (sanitizedQuestion.isActive as unknown) !== undefined
         ) {
           sanitizedQuestion.is_active = sanitizedQuestion.isActive;
         }
@@ -511,7 +531,7 @@ export async function POST(request: NextRequest) {
         // NOTE: Code field is NOT sanitized - we use CSP protection instead
         if (sanitizedQuestion.explanation) {
           sanitizedQuestion.explanation = sanitizeRichContent(
-            sanitizedQuestion.explanation,
+            sanitizedQuestion.explanation as string,
           );
         }
 
@@ -528,9 +548,9 @@ export async function POST(request: NextRequest) {
             sanitizedQuestion.options.length > 0
           ) {
             sanitizedQuestion.options = sanitizedQuestion.options.map(
-              (option: any) => ({
+              (option: Record<string, unknown>) => ({
                 ...option,
-                text: sanitizeRichContent(option.text || ""),
+                text: sanitizeRichContent((option.text as string) || ""),
               }),
             );
           } else {
@@ -764,19 +784,19 @@ export async function POST(request: NextRequest) {
         }
 
         // Handle hints if provided
-        let hints = null;
+        let hints: string[] | null = null;
         if (sanitizedQuestion.hints && Array.isArray(sanitizedQuestion.hints)) {
-          hints = sanitizedQuestion.hints;
+          hints = sanitizedQuestion.hints as string[];
         }
 
         // Handle tags if provided
-        let tags = null;
+        let tags: string[] | null = null;
         if (sanitizedQuestion.tags && Array.isArray(sanitizedQuestion.tags)) {
-          tags = sanitizedQuestion.tags;
+          tags = sanitizedQuestion.tags as string[];
         }
 
         // Handle resources if provided
-        let resources = null;
+        let resources: Array<Record<string, unknown>> | null = null;
         if (
           sanitizedQuestion.resources !== undefined &&
           sanitizedQuestion.resources !== null
@@ -784,11 +804,13 @@ export async function POST(request: NextRequest) {
           if (Array.isArray(sanitizedQuestion.resources)) {
             // Validate each resource object
             const validResources = sanitizedQuestion.resources.filter(
-              (resource: any) => {
+              (resource: Record<string, unknown>) => {
                 return (
                   resource &&
                   typeof resource === "object" &&
-                  ["video", "course", "article"].includes(resource.type) &&
+                  ["video", "course", "article"].includes(
+                    resource.type as string,
+                  ) &&
                   typeof resource.title === "string" &&
                   typeof resource.url === "string"
                 );
@@ -803,7 +825,7 @@ export async function POST(request: NextRequest) {
           }
         }
 
-        const questionWithTimestamps: any = {
+        const questionWithTimestamps: Record<string, unknown> = {
           ...dbQuestion,
           category_id: categoryId || null,
           topic_id: topicId || null,
@@ -837,19 +859,19 @@ export async function POST(request: NextRequest) {
           codeForDb !== null &&
           codeForDb !== ""
         ) {
-          codeToStore = codeForDb;
+          codeToStore = codeForDb as string;
         } else if (
           dbQuestion.code !== undefined &&
           dbQuestion.code !== null &&
           dbQuestion.code !== ""
         ) {
-          codeToStore = dbQuestion.code;
+          codeToStore = dbQuestion.code as string;
         } else if (
           sanitizedQuestion.code !== undefined &&
           sanitizedQuestion.code !== null &&
           sanitizedQuestion.code !== ""
         ) {
-          codeToStore = sanitizedQuestion.code;
+          codeToStore = sanitizedQuestion.code as string;
         } else if (
           originalCode !== undefined &&
           originalCode !== null &&
@@ -942,7 +964,7 @@ export async function POST(request: NextRequest) {
         let duplicateQuery = supabase
           .from("questions")
           .select("id, title, content, code")
-          .ilike("title", questionWithTimestamps.title) // Case-insensitive match
+          .ilike("title", questionWithTimestamps.title as string) // Case-insensitive match
           .limit(1);
 
         // If code exists, also check for same code
@@ -1100,9 +1122,9 @@ export async function POST(request: NextRequest) {
 
         // Include code in the result - ensure it's returned from the database response
         results.push({
+          success: true,
           id: data.id,
-          ...sanitizedQuestion,
-          code: data.code || sanitizedQuestion.code || null, // Ensure code is included in response
+          // code is included in the spread from sanitizedQuestion
         });
       } catch (error) {
         console.error(`Error creating question ${index + 1}:`, error);
@@ -1200,10 +1222,12 @@ export async function PUT(request: NextRequest) {
 
     // Sanitize options if present
     if (sanitizedUpdate.options && Array.isArray(sanitizedUpdate.options)) {
-      sanitizedUpdate.options = sanitizedUpdate.options.map((option: any) => ({
-        ...option,
-        text: sanitizeRichContent(option.text || ""),
-      }));
+      sanitizedUpdate.options = sanitizedUpdate.options.map(
+        (option: Record<string, unknown>) => ({
+          ...option,
+          text: sanitizeRichContent((option.text as string) || ""),
+        }),
+      );
     }
 
     // Map category name to category_id if needed (same logic as POST)
@@ -1407,11 +1431,13 @@ export async function PUT(request: NextRequest) {
       } else if (Array.isArray(sanitizedUpdate.resources)) {
         // Validate each resource object
         const validResources = sanitizedUpdate.resources.filter(
-          (resource: any) => {
+          (resource: Record<string, unknown>) => {
             return (
               resource &&
               typeof resource === "object" &&
-              ["video", "course", "article"].includes(resource.type) &&
+              ["video", "course", "article"].includes(
+                resource.type as string,
+              ) &&
               typeof resource.title === "string" &&
               typeof resource.url === "string"
             );
@@ -1432,7 +1458,7 @@ export async function PUT(request: NextRequest) {
     }
 
     // Build update object with only the fields that should be updated
-    const updateWithTimestamps: any = {
+    const updateWithTimestamps: Record<string, unknown> = {
       ...dbUpdate,
       updated_at: new Date().toISOString(),
     };
