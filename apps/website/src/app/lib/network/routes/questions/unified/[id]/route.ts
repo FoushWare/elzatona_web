@@ -183,9 +183,10 @@ export async function PUT(
         if (topicError || !topicData) {
           // Security: Sanitize user data before logging to prevent log injection
           // Security: Sanitize all values before logging
-          const sanitizedTopicError = topicError instanceof Error
-            ? sanitizeForLogging(topicError.message)
-            : sanitizeForLogging(String(topicError));
+          const sanitizedTopicError =
+            topicError instanceof Error
+              ? sanitizeForLogging(topicError.message)
+              : sanitizeForLogging(String(topicError));
           const sanitizedTopicName = sanitizeForLogging(topicName);
           const sanitizedCategoryId = sanitizeForLogging(categoryId);
           console.error(
@@ -388,7 +389,9 @@ export async function PUT(
       const sanitizedErrorHint = errorDetails.hint
         ? sanitizeForLogging(String(errorDetails.hint))
         : undefined;
-      const sanitizedErrorStack = error.stack ? sanitizeForLogging(error.stack) : undefined;
+      const sanitizedErrorStack = error.stack
+        ? sanitizeForLogging(error.stack)
+        : undefined;
       console.error("❌ Error details:", {
         message: sanitizedErrorMessage,
         code: sanitizedErrorCode,

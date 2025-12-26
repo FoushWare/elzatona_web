@@ -1052,7 +1052,9 @@ export async function POST(request: NextRequest) {
               questionWithTimestamps.code = codeContent;
               processedCode = codeContent;
               // Security: Log code length instead of content to prevent log injection
-              const sanitizedCodeLength = sanitizeForLogging(String(codeContent.length));
+              const sanitizedCodeLength = sanitizeForLogging(
+                String(codeContent.length),
+              );
               console.log(
                 `⚠️ Code field was null/empty, restored from originalCode: ${sanitizedCodeLength} chars`,
               );
@@ -1227,9 +1229,10 @@ export async function PUT(request: NextRequest) {
 
         if (categoryError || !categoryData) {
           // Security: Sanitize all values before logging
-          const sanitizedCategoryError = categoryError instanceof Error
-            ? sanitizeForLogging(categoryError.message)
-            : sanitizeForLogging(String(categoryError));
+          const sanitizedCategoryError =
+            categoryError instanceof Error
+              ? sanitizeForLogging(categoryError.message)
+              : sanitizeForLogging(String(categoryError));
           const sanitizedCategoryName = sanitizeForLogging(categoryName);
           console.error(
             "Category lookup error:",
@@ -1260,9 +1263,7 @@ export async function PUT(request: NextRequest) {
         categoryId = categoryValue;
         // Security: Sanitize value before using in template string
         const sanitizedCategoryId = sanitizeForLogging(categoryId);
-        console.log(
-          `✅ Using provided category ID: ${sanitizedCategoryId}`,
-        );
+        console.log(`✅ Using provided category ID: ${sanitizedCategoryId}`);
       }
     }
 
@@ -1297,9 +1298,10 @@ export async function PUT(request: NextRequest) {
 
         if (topicError || !topicData) {
           // Security: Sanitize all values before logging
-          const sanitizedTopicError = topicError instanceof Error
-            ? sanitizeForLogging(topicError.message)
-            : sanitizeForLogging(String(topicError));
+          const sanitizedTopicError =
+            topicError instanceof Error
+              ? sanitizeForLogging(topicError.message)
+              : sanitizeForLogging(String(topicError));
           const sanitizedTopicName = sanitizeForLogging(topicName);
           const sanitizedCategoryId = sanitizeForLogging(categoryId);
           console.error(
@@ -1328,9 +1330,7 @@ export async function PUT(request: NextRequest) {
         topicId = topicValue;
         // Security: Sanitize user data before logging to prevent log injection
         const sanitizedTopicId = sanitizeForLogging(topicId);
-        console.log(
-          `✅ Using provided topic ID: ${sanitizedTopicId}`,
-        );
+        console.log(`✅ Using provided topic ID: ${sanitizedTopicId}`);
       }
     }
 
@@ -1359,10 +1359,9 @@ export async function PUT(request: NextRequest) {
         ) {
           finalLearningCardId = trimmedId;
           // Security: Sanitize value before using in template string
-          const sanitizedLearningCardId = sanitizeForLogging(finalLearningCardId);
-          console.log(
-            `✅ Using learning card ID: ${sanitizedLearningCardId}`,
-          );
+          const sanitizedLearningCardId =
+            sanitizeForLogging(finalLearningCardId);
+          console.log(`✅ Using learning card ID: ${sanitizedLearningCardId}`);
         } else {
           // Security: Sanitize user data before logging to prevent log injection
           console.warn(
