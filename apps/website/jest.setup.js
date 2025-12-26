@@ -51,7 +51,9 @@ if (!isCI) {
     console.error(`   ${missingVars.join(", ")}`);
     console.error("\n📝 To fix:");
     console.error("   1. Ensure GitHub Secrets are set in repository settings");
-    console.error("   2. Required secrets: TEST_SUPABASE_URL, TEST_SUPABASE_ANON_KEY, TEST_SUPABASE_SERVICE_ROLE_KEY");
+    console.error(
+      "   2. Required secrets: TEST_SUPABASE_URL, TEST_SUPABASE_ANON_KEY, TEST_SUPABASE_SERVICE_ROLE_KEY",
+    );
     throw new Error(
       `CI environment missing required variables: ${missingVars.join(", ")}`,
     );
@@ -91,7 +93,9 @@ if (isProdProject) {
   console.error(
     "❌ CRITICAL ERROR: .env.test.local points to PRODUCTION database!",
   );
-  console.error(`   Production project reference detected: ${productionProjectRef}`);
+  console.error(
+    `   Production project reference detected: ${productionProjectRef}`,
+  );
   console.error(`   URL: ${supabaseUrl.substring(0, 50)}...`);
   console.error("   Tests MUST use TEST database only.");
   throw new Error(
@@ -127,7 +131,9 @@ if (!isCI) {
       "❌ .env.test.local has placeholder values for:",
       missingVars.join(", "),
     );
-    console.error("   Please update .env.test.local with real test database credentials.");
+    console.error(
+      "   Please update .env.test.local with real test database credentials.",
+    );
     throw new Error(
       `.env.test.local has placeholder values. Please update: ${missingVars.join(", ")}`,
     );

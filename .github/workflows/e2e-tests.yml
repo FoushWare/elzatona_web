@@ -8,9 +8,9 @@ on:
   workflow_dispatch:
     inputs:
       test_suite:
-        description: 'Test suite to run (home-page, guided-flow, freestyle-flow, admin, all)'
+        description: "Test suite to run (home-page, guided-flow, freestyle-flow, admin, all)"
         required: false
-        default: 'home-page'
+        default: "home-page"
         type: choice
         options:
           - home-page
@@ -80,7 +80,7 @@ jobs:
         run: |
           echo "🔍 Verifying test database configuration..."
           TEST_URL="${{ secrets.TEST_SUPABASE_URL }}"
-          
+
           # Check that URL contains test project reference
           if [[ "$TEST_URL" != *"kiycimlsatwfqxtfprlr"* ]] && \
              [[ "$TEST_URL" != *"slfyltsmcivmqfloxpmq"* ]] && \
@@ -89,13 +89,13 @@ jobs:
             echo "   Expected: kiycimlsatwfqxtfprlr, slfyltsmcivmqfloxpmq, or vopfdukvdhnmzzjkxpnj"
             echo "   Actual: $TEST_URL"
           fi
-          
+
           # Ensure it's NOT production
           if [[ "$TEST_URL" == *"hpnewqkvpnthpohvxcmq"* ]]; then
             echo "❌ ERROR: TEST_SUPABASE_URL points to PRODUCTION project!"
             exit 1
           fi
-          
+
           echo "✅ Test database configuration verified"
 
       # --------------------------------------------------
@@ -132,7 +132,7 @@ jobs:
           npm run start > server.log 2>&1 &
           SERVER_PID=$!
           echo "SERVER_PID=$SERVER_PID" >> $GITHUB_ENV
-          
+
           # Wait for server to be ready
           echo "⏳ Waiting for server to start..."
           for i in {1..30}; do
@@ -332,4 +332,3 @@ jobs:
           echo "🧹 Cleaning up build artifacts..."
           rm -rf .next build storybook-static coverage apps/website/playwright-report apps/website/test-results
           echo "✅ Cleanup completed"
-

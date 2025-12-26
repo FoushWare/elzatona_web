@@ -53,7 +53,9 @@ if (!isCI) {
     console.error(`   ${missingVars.join(", ")}`);
     console.error("\n📝 To fix:");
     console.error("   1. Ensure GitHub Secrets are set in repository settings");
-    console.error("   2. Required secrets: TEST_SUPABASE_URL, TEST_SUPABASE_ANON_KEY, TEST_SUPABASE_SERVICE_ROLE_KEY");
+    console.error(
+      "   2. Required secrets: TEST_SUPABASE_URL, TEST_SUPABASE_ANON_KEY, TEST_SUPABASE_SERVICE_ROLE_KEY",
+    );
     throw new Error(
       `CI environment missing required variables: ${missingVars.join(", ")}`,
     );
@@ -64,7 +66,7 @@ if (!isCI) {
 const loadedFiles: string[] = [];
 if (!isCI) {
   loadedFiles.push(testEnvFile); // Track that we loaded .env.test.local
-  
+
   const envFiles = [
     resolve(projectRoot, ".env.test"), // Test-specific defaults
     resolve(projectRoot, ".env.local"), // Fallback to dev (for backwards compatibility)
@@ -199,7 +201,8 @@ export default defineConfig({
     ? undefined // In CI, server is started manually in workflow
     : {
         // Use dev:light:test to ensure Next.js loads .env.test.local for test database
-        command: "NODE_OPTIONS=--max-old-space-size=1536 npm run dev:light:test", // Use light mode for 8GB RAM with test environment
+        command:
+          "NODE_OPTIONS=--max-old-space-size=1536 npm run dev:light:test", // Use light mode for 8GB RAM with test environment
         url: "http://localhost:3000",
         reuseExistingServer: true,
         timeout: 120 * 1000, // 2 minutes

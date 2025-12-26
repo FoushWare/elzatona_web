@@ -91,7 +91,10 @@ export default function ClientCodeRunner({
 
   // Security: Inject target origin into iframe code to ensure secure postMessage communication
   // Escape the origin to prevent injection attacks
-  const escapedOrigin = targetOrigin.replace(/\\/g, "\\\\").replace(/"/g, '\\"').replace(/'/g, "\\'");
+  const escapedOrigin = targetOrigin
+    .replace(/\\/g, "\\\\")
+    .replace(/"/g, '\\"')
+    .replace(/'/g, "\\'");
   const srcDoc =
     "<!doctype html>" +
     '<html><head><meta charset="utf-8"/></head><body>' +
