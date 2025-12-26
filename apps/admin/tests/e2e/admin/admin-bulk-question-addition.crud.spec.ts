@@ -450,7 +450,10 @@ test.describe("A-E2E-001: Admin Bulk Question Addition - CRUD", () => {
 
           // If question is not on current page, it might be on page 1
           // New questions typically appear on page 1
-          if (fetchData.pagination?.totalCount > questions.length) {
+          if (
+            fetchData.pagination?.totalCount &&
+            fetchData.pagination.totalCount > questions.length
+          ) {
             console.log(
               "⚠️ Question might be on a different page. Navigating to page 1...",
             );
