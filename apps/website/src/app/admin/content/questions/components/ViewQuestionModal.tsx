@@ -10,7 +10,6 @@ import {
   Video,
   GraduationCap,
   BookOpen,
-  Zap,
   Target,
   Info,
 } from "lucide-react";
@@ -201,7 +200,8 @@ const isRgbColor = (colorValue: string): boolean => {
 };
 
 // Helper function to process color for light mode visibility (reduces cognitive complexity)
-const processColorForLightMode = (
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const _processColorForLightMode = (
   colorValue: string,
 ): { shouldReplace: boolean; newColor: string } => {
   if (isHexColor(colorValue)) {
@@ -267,7 +267,8 @@ const getOptionClasses = (
 };
 
 // Helper function to count regex matches
-const countRegexMatches = (text: string, regex: RegExp): number => {
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const _countRegexMatches = (text: string, regex: RegExp): number => {
   let count = 0;
   let match;
   while ((match = regex.exec(text)) !== null) {
@@ -1077,7 +1078,7 @@ export function ViewQuestionModal({
                 </p>
               </div>
               <div className="space-y-3 sm:space-y-4">
-                {question.resources.map((resource: any, index: number) => {
+                {question.resources.map((resource: any) => {
                   return (
                     <a
                       key={
