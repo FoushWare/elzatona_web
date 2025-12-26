@@ -115,7 +115,7 @@ export async function GET(request: NextRequest) {
     if (error) {
       // Create a proper Error object from Supabase error
       const supabaseError = new Error(error.message || "Supabase query failed");
-       
+
       const errorWithExtras = supabaseError as Error & {
         code?: string;
         hint?: string;
