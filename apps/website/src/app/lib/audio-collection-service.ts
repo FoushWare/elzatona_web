@@ -8,12 +8,7 @@ import {
   createCustomAudioInfo,
   DEFAULT_AUDIO_PATHS as _DEFAULT_AUDIO_PATHS,
 } from "./audio-collection-schema";
-import { createClient } from "@supabase/supabase-js";
-
-const supabaseUrl = process.env["NEXT_PUBLIC_SUPABASE_URL"]!;
-const supabaseServiceRoleKey = process.env["SUPABASE_SERVICE_ROLE_KEY"]!;
-
-const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
+import { getSupabaseClient } from "./get-supabase-client";
 
 export class AudioCollectionService {
   private static readonly TABLE_NAME = "question_audio";
@@ -58,6 +53,7 @@ export class AudioCollectionService {
         updated_at: new Date().toISOString(),
       };
 
+      const supabase = getSupabaseClient();
       const { error } = await supabase
         .from(this.TABLE_NAME)
         .upsert(audioMapping);
@@ -89,6 +85,7 @@ export class AudioCollectionService {
     error?: string;
   }> {
     try {
+      const supabase = getSupabaseClient();
       const { data, error } = await supabase
         .from(this.TABLE_NAME)
         .select("*")
@@ -131,6 +128,7 @@ export class AudioCollectionService {
     error?: string;
   }> {
     try {
+      const supabase = getSupabaseClient();
       const { data, error } = await supabase
         .from(this.TABLE_NAME)
         .select("*")
@@ -179,6 +177,7 @@ export class AudioCollectionService {
     error?: string;
   }> {
     try {
+      const supabase = getSupabaseClient();
       const { data, error } = await supabase
         .from(this.TABLE_NAME)
         .select("*")
@@ -247,6 +246,7 @@ export class AudioCollectionService {
         updateData.answer_audio = audioInfo;
       }
 
+      const supabase = getSupabaseClient();
       const { error } = await supabase
         .from(this.TABLE_NAME)
         .update(updateData)
@@ -284,6 +284,7 @@ export class AudioCollectionService {
       }
 
       const mappingId = mappingResult.mapping.id;
+      const supabase = getSupabaseClient();
       const { error } = await supabase
         .from(this.TABLE_NAME)
         .delete()
@@ -315,6 +316,7 @@ export class AudioCollectionService {
     sectionId: string,
   ): Promise<{ success: boolean; nextNumber?: number; error?: string }> {
     try {
+      const supabase = getSupabaseClient();
       const { data, error } = await supabase
         .from(this.TABLE_NAME)
         .select("question_number")
