@@ -58,12 +58,26 @@ export async function GET(request: NextRequest) {
 
     // Otherwise, get all learning plans
     const supabase = getSupabaseClient();
-    const { data: plans, error } = await supabase
-      .from("learning_plans")
+    // Try learningplantemplates first (old table name), then learning_plans
+    let { data: plans, error } = await supabase
+      .from("learningplantemplates")
       .select("*")
       .order("created_at", { ascending: false });
+
+    // If learningplantemplates doesn't exist or is empty, try learning_plans
+    if (error || !plans || plans.length === 0) {
+      const { data: plansAlt, error: errorAlt } = await supabase
+        .from("learning_plans")
+        .select("*")
+        .order("created_at", { ascending: false });
+      if (!errorAlt && plansAlt) {
+        plans = plansAlt;
+        error = null;
+      }
+    }
+
     if (error) throw error;
-    return NextResponse.json({ success: true, plans });
+    return NextResponse.json({ success: true, data: plans || [] });
   } catch (error) {
     console.error("Error fetching learning plans:", error);
     return NextResponse.json(
@@ -91,7 +105,7 @@ export async function POST(request: NextRequest) {
       ...planData,
       created_at: new Date(),
       updated_at: new Date(),
-      is_active: planData.isActive !== undefined ? planData.isActive : true,
+      is_active: planData.isActive === undefined ? true : planData.isActive,
       completionRate: planData.completionRate || 0,
       enrolledUsers: planData.enrolledUsers || 0,
     };
