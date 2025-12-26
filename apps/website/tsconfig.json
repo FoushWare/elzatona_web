@@ -48,6 +48,8 @@
     "**/*.test.ts",
     "**/*.test.tsx",
     "**/*.example.ts",
-    "utilities/api-config.example.ts"
+    "utilities/api-config.example.ts",
+    "tests/**/*",
+    "**/tests/**/*"
   ]
 }
