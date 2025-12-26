@@ -1246,8 +1246,11 @@ export async function PUT(request: NextRequest) {
         }
 
         categoryId = categoryData.id;
+        // Security: Sanitize values before using in template string
+        const sanitizedCategoryName = sanitizeForLogging(categoryData.name);
+        const sanitizedCategoryId = sanitizeForLogging(String(categoryId));
         console.log(
-          `✅ Found category "${sanitizeForLogging(categoryData.name)}" with ID: ${sanitizeForLogging(String(categoryId))}`,
+          `✅ Found category "${sanitizedCategoryName}" with ID: ${sanitizedCategoryId}`,
         );
       } else if (categoryValue && typeof categoryValue === "string") {
         // It's already an ID
@@ -1305,8 +1308,11 @@ export async function PUT(request: NextRequest) {
         }
 
         topicId = topicData.id;
+        // Security: Sanitize values before using in template string
+        const sanitizedTopicName = sanitizeForLogging(topicData.name);
+        const sanitizedTopicId = sanitizeForLogging(String(topicId));
         console.log(
-          `✅ Found topic "${sanitizeForLogging(topicData.name)}" with ID: ${sanitizeForLogging(String(topicId))}`,
+          `✅ Found topic "${sanitizedTopicName}" with ID: ${sanitizedTopicId}`,
         );
       } else if (topicValue && typeof topicValue === "string") {
         // It's already an ID

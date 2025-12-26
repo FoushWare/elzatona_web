@@ -251,21 +251,23 @@ export function removeAllHTMLTags(text: string): string {
     prevLength = cleaned.length;
     iterations++;
 
+    // SECURITY: Comprehensive single-pass removal of ALL HTML tags including script tags
+    // This pattern removes complete tags, incomplete tags, and all dangerous patterns
+    // Pattern breakdown:
+    // - <[\/]? matches opening < or closing </
+    // - script matches the tag name (case-insensitive)
+    // - \s* matches optional whitespace
+    // - [^>]* matches any characters except > (attributes, etc.)
+    // - >? matches optional closing >
+    // This single pattern catches: <script>, <script>, <script src="...">, </script>, <script, etc.
+    cleaned = cleaned.replace(/<[\/]?\s*script\s*[^>]*>?/gi, "");
+
     // Remove complete HTML tags: <tag> or <tag attr="value">
-    // Also catches incomplete tags like <script (without closing >)
+    // Also catches incomplete tags like <iframe (without closing >)
     cleaned = cleaned.replace(/<[^>]*>?/g, "");
 
-    // Remove incomplete tags at the end of string: <script, <iframe, etc.
+    // Remove incomplete tags at the end of string: <iframe, etc.
     cleaned = cleaned.replace(/<[^>]*$/g, "");
-
-    // Aggressively remove any <script pattern (even incomplete) - multiple passes
-    // This catches: <script, <SCRIPT, <Script, <script>, <script src=, etc.
-    // Use more aggressive patterns to catch all variations including with whitespace
-    cleaned = cleaned.replace(/<script[^>]*>?/gi, "");
-    cleaned = cleaned.replace(/<script\s*/gi, ""); // Catch incomplete <script with whitespace
-    cleaned = cleaned.replace(/<script/gi, ""); // Catch incomplete <script without >
-    cleaned = cleaned.replace(/script\s*>/gi, ""); // Catch broken script> artifacts with whitespace
-    cleaned = cleaned.replace(/script>/gi, ""); // Catch broken script> artifacts
 
     // Remove dangerous tag patterns (case-insensitive, even if incomplete)
     // These patterns catch tags even if they're broken or incomplete

@@ -182,15 +182,19 @@ export async function PUT(
 
         if (topicError || !topicData) {
           // Security: Sanitize user data before logging to prevent log injection
+          // Security: Sanitize all values before logging
+          const sanitizedTopicError = topicError instanceof Error
+            ? sanitizeForLogging(topicError.message)
+            : sanitizeForLogging(String(topicError));
+          const sanitizedTopicName = sanitizeForLogging(topicName);
+          const sanitizedCategoryId = sanitizeForLogging(categoryId);
           console.error(
             "Topic lookup error:",
-            topicError instanceof Error
-              ? sanitizeForLogging(topicError.message)
-              : sanitizeForLogging(String(topicError)),
+            sanitizedTopicError,
             "Looking for:",
-            sanitizeForLogging(topicName),
+            sanitizedTopicName,
             "Category ID:",
-            sanitizeForLogging(categoryId),
+            sanitizedCategoryId,
           );
           const categoryHint = categoryId ? ` for the selected category` : "";
           throw new Error(
@@ -239,8 +243,9 @@ export async function PUT(
           console.log("✅ Using learning card ID");
         } else {
           // Security: Sanitize user data before logging to prevent log injection
+          const sanitizedTrimmedId = sanitizeForLogging(trimmedId);
           console.warn(
-            `⚠️ Invalid learning card ID format: "${sanitizeForLogging(trimmedId)}". Expected UUID.`,
+            `⚠️ Invalid learning card ID format: "${sanitizedTrimmedId}". Expected UUID.`,
           );
           finalLearningCardId = null; // Invalid format, set to null to clear it
         }
