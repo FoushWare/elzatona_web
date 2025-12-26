@@ -24,6 +24,12 @@ export function validateTestEnvironment(): {
   const errors: string[] = [];
   const warnings: string[] = [];
 
+  // Check if we're in CI (GitHub Actions)
+  const isCI =
+    process.env.CI === "true" ||
+    process.env.GITHUB_ACTIONS === "true" ||
+    !!process.env.TEST_SUPABASE_URL;
+
   // Check if file exists
   if (!existsSync(testEnvFile)) {
     errors.push(
@@ -134,8 +140,13 @@ export function validateTestEnvironment(): {
  * Use this in test setup files to fail fast if environment is misconfigured
  */
 export function requireTestEnvironment(): void {
+  // Check if we're in CI (GitHub Actions)
+  const isCI =
+    process.env.CI === "true" ||
+    process.env.GITHUB_ACTIONS === "true" ||
+    !!process.env.TEST_SUPABASE_URL;
+
   const validation = validateTestEnvironment();
-  const isCI = isCIEnvironment();
 
   if (validation.warnings.length > 0) {
     console.warn("\n⚠️  Test Environment Warnings:");
