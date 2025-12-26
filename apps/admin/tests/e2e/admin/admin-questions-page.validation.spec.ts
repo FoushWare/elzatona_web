@@ -5,7 +5,7 @@
  * Note: Environment variables are loaded by the setup file
  */
 
-import { test, expect } from "@playwright/test";
+import { test, expect, type Locator } from "@playwright/test";
 import { setupAdminPage } from "./admin-questions-page.setup";
 
 test.describe("A-E2E-001: Admin Bulk Question Addition - Validation", () => {
