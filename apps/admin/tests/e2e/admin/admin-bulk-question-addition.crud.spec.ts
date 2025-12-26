@@ -418,8 +418,10 @@ test.describe("A-E2E-001: Admin Bulk Question Addition - CRUD", () => {
         ),
       ]);
 
-      if (fetchResponse) {
-        const fetchData = await fetchResponse.json();
+      if (fetchResponse && "json" in fetchResponse) {
+        const fetchData = (await fetchResponse.json()) as {
+          data?: Array<{ id?: string; [key: string]: unknown }>;
+        };
         console.log("✅ Questions fetch API response received");
 
         // Verify the question is in the response
