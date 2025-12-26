@@ -43,6 +43,11 @@
   "exclude": [
     "node_modules",
     "tests/**/*",
+    "**/tests/**/*",
+    "**/*.spec.ts",
+    "**/*.spec.tsx",
+    "**/*.test.ts",
+    "**/*.test.tsx",
     "scripts-backup/**/*",
     "apps/admin/Utils/scripts/**/*",
     "apps/website/src/scripts/**/*",
