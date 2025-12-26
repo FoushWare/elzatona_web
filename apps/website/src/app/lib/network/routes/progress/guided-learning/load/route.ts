@@ -1,11 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
-import { createClient } from "@supabase/supabase-js";
 import { cookies } from "next/headers";
 import { verifySupabaseToken } from "../../../../../server-auth";
-
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
-const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
+import { getSupabaseClient } from "../../../../../get-supabase-client";
 
 export async function GET(request: NextRequest) {
   try {
@@ -46,6 +42,7 @@ export async function GET(request: NextRequest) {
     console.log("📥 Loading guided learning progress for plan");
 
     // Fetch user progress from database
+    const supabase = getSupabaseClient();
     const { data, error } = await supabase
       .from("user_progress")
       .select("*")

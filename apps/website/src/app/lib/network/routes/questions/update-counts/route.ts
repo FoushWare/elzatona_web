@@ -1,11 +1,7 @@
 // v1.0 - Update Learning Path Question Counts API Route
 
 import { NextRequest, NextResponse } from "next/server";
-import { createClient } from "@supabase/supabase-js";
-
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
-const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
+import { getSupabaseClient } from "../../../../get-supabase-client";
 
 // POST /api/questions/update-counts - Update all learning path question counts
 export async function POST(_request: NextRequest) {
@@ -27,6 +23,7 @@ export async function POST(_request: NextRequest) {
         console.log(`📝 Processing ${path.title} (${path.id})...`);
 
         // Get question count for this learning path
+        const supabase = getSupabaseClient();
         const { data: questions, error } = await supabase
           .from("questions")
           .select("*")

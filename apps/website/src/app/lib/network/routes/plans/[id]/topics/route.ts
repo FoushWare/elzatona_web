@@ -1,9 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { createClient } from "@supabase/supabase-js";
-
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
-const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
+import { getSupabaseClient } from "../../../../../get-supabase-client";
 
 // POST /api/plans/[id]/topics - Add a topic to a plan (through plan_categories)
 export async function POST(
@@ -23,6 +19,7 @@ export async function POST(
 
     // If category_id is provided, ensure the category is in the plan first
     if (category_id) {
+      const supabase = getSupabaseClient();
       const { data: planCategory } = await supabase
         .from("plan_categories")
         .select("id")
@@ -65,6 +62,7 @@ export async function GET(
     const { id: planId } = await params;
 
     // Get all categories in the plan
+    const supabase = getSupabaseClient();
     const { data: planCategories, error: pcError } = await supabase
       .from("plan_categories")
       .select("category_id")
@@ -79,7 +77,9 @@ export async function GET(
       });
     }
 
-    const categoryIds = planCategories.map((pc) => pc.category_id);
+    const categoryIds = planCategories.map(
+      (pc: { category_id: string }) => pc.category_id,
+    );
 
     // Get all topics for these categories
     const { data: topics, error } = await supabase

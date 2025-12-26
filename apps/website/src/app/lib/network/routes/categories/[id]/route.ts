@@ -1,9 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { createClient } from "@supabase/supabase-js";
-
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
-const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
+import { getSupabaseClient } from "../../../../get-supabase-client";
 
 // GET /api/categories/[id] - Get a specific category
 export async function GET(
@@ -20,6 +16,7 @@ export async function GET(
       );
     }
 
+    const supabase = getSupabaseClient();
     const { data: categorySnap, error } = await supabase
       .from("categories")
       .select("*")
@@ -76,6 +73,7 @@ export async function PUT(
     }
 
     // Check if category exists
+    const supabase = getSupabaseClient();
     const { data: categorySnap, error: fetchError } = await supabase
       .from("categories")
       .select("*")
@@ -134,6 +132,7 @@ export async function DELETE(
     }
 
     // Check if category exists
+    const supabase = getSupabaseClient();
     const { data: categorySnap, error: fetchError } = await supabase
       .from("categories")
       .select("*")

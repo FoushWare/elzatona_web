@@ -2,11 +2,7 @@
 // v1.0 - Get questions for a specific topic
 
 import { NextRequest, NextResponse } from "next/server";
-import { createClient } from "@supabase/supabase-js";
-
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
-const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
+import { getSupabaseClient } from "../../../../../get-supabase-client";
 
 // GET /api/questions/by-topic/[topicId] - Get questions for a specific topic
 export async function GET(
@@ -23,6 +19,7 @@ export async function GET(
     const limit = parseInt(searchParams.get("limit") || "50");
 
     // Build query
+    const supabase = getSupabaseClient();
     let query = supabase.from("questions").select("*").eq("topic_id", topicId);
 
     if (difficulty) {

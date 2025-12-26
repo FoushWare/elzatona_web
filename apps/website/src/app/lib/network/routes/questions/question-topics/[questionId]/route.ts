@@ -1,10 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-
-import { createClient } from "@supabase/supabase-js";
-
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
-const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
+import { getSupabaseClient } from "../../../../../get-supabase-client";
 
 // PUT /api/questions/question-topics/[questionId]
 export async function PUT(
@@ -33,6 +28,7 @@ export async function PUT(
     // Security: Removed user data from logs to prevent log injection
     console.log("Updating topics for question");
 
+    const supabase = getSupabaseClient();
     const { data: questionData, error: questionError } = await supabase
       .from("questions")
       .select("*")

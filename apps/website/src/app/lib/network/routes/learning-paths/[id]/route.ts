@@ -1,10 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-
-import { createClient } from "@supabase/supabase-js";
-
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
-const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
+import { getSupabaseClient } from "../../../../get-supabase-client";
 
 export async function GET(
   request: NextRequest,
@@ -21,6 +16,7 @@ export async function GET(
     }
 
     // Fetch learning path from Firebase
+    const supabase = getSupabaseClient();
     const { data: learningPath, error } = await supabase
       .from("learningpaths")
       .select("*")
@@ -61,6 +57,7 @@ export async function PUT(
     }
 
     // Update learning path in Firebase
+    const supabase = getSupabaseClient();
     const { data: updatedPath, error } = await supabase
       .from("learningpaths")
       .update({ ...body, updated_at: new Date().toISOString() })
@@ -99,6 +96,7 @@ export async function DELETE(
     }
 
     // Delete learning path from Firebase
+    const supabase = getSupabaseClient();
     const { data: success, error } = await supabase
       .from("learningpaths")
       .delete()

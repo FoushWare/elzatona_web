@@ -1,15 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
-
-import { createClient } from "@supabase/supabase-js";
-
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
-const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
-
 import { cookies } from "next/headers";
 import { verifySupabaseToken } from "../../../../server-auth";
 import { UserPreferences } from "@elzatona/types";
 import { sanitizeObjectServer } from "../../../../sanitize-server";
+import { getSupabaseClient } from "../../../../get-supabase-client";
 
 export async function GET(_request: NextRequest) {
   try {
@@ -34,6 +28,7 @@ export async function GET(_request: NextRequest) {
     }
 
     // Get user data from Supabase
+    const supabase = getSupabaseClient();
     const { data: userData, error } = await supabase
       .from("users")
       .select("*")
@@ -93,6 +88,7 @@ export async function PUT(request: NextRequest) {
     const sanitizedPreferences = sanitizeObjectServer(preferences);
 
     // Update user preferences in Supabase
+    const supabase = getSupabaseClient();
     const { error } = await supabase
       .from("users")
       .update({

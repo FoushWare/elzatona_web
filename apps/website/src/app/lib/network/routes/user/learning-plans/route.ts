@@ -1,14 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
-
-import { createClient } from "@supabase/supabase-js";
-
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
-const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
-
 import { cookies } from "next/headers";
 import { verifySupabaseToken } from "../../../../server-auth";
 import { LearningPlanProgress } from "@elzatona/types";
+import { getSupabaseClient } from "../../../../get-supabase-client";
 
 export async function GET(request: NextRequest) {
   try {
@@ -37,6 +31,7 @@ export async function GET(request: NextRequest) {
 
     if (planId) {
       // Get specific learning plan
+      const supabase = getSupabaseClient();
       const { data: plan, error } = await supabase
         .from("learning_plans")
         .select("*")
@@ -56,6 +51,7 @@ export async function GET(request: NextRequest) {
       });
     } else {
       // Get all learning plans for user
+      const supabase = getSupabaseClient();
       const { data: userData, error } = await supabase
         .from("users")
         .select("*")
@@ -113,6 +109,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Start new learning plan
+    const supabase = getSupabaseClient();
     const { error } = await supabase.from("user_learning_plans").insert({
       user_id: decodedToken.id,
       plan_id: planData.plan_id,
@@ -174,6 +171,7 @@ export async function PUT(request: NextRequest) {
     const updates: Partial<LearningPlanProgress> = await request.json();
 
     // Update learning plan
+    const supabase = getSupabaseClient();
     const { error } = await supabase
       .from("user_learning_plans")
       .update({

@@ -1,9 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { createClient } from "@supabase/supabase-js";
-
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
-const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
+import { getSupabaseClient } from "../../../../get-supabase-client";
 
 interface Question {
   id: string;
@@ -28,6 +24,7 @@ export async function POST(request: NextRequest) {
     } = await request.json();
 
     // Get all questions for this learning path
+    const supabase = getSupabaseClient();
     const { data: questionsData, error: questionsError } = await supabase
       .from("questions")
       .select("*")

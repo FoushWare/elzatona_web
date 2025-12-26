@@ -1,9 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { createClient } from "@supabase/supabase-js";
-
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
-const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
+import { getSupabaseClient } from "../../../../get-supabase-client";
 
 // Get a specific flashcard
 export async function GET(
@@ -13,6 +9,7 @@ export async function GET(
   try {
     const { id } = await params;
 
+    const supabase = getSupabaseClient();
     const { data: flashcardSnap, error } = await supabase
       .from("flashcards")
       .select("*")
@@ -52,6 +49,7 @@ export async function PUT(
     const { quality, reviewResult: _reviewResult } = await request.json();
 
     // Check if flashcard exists
+    const supabase = getSupabaseClient();
     const { data: flashcardSnap, error: fetchError } = await supabase
       .from("flashcards")
       .select("*")
@@ -158,6 +156,7 @@ export async function DELETE(
     const { id } = await params;
 
     // Check if flashcard exists
+    const supabase = getSupabaseClient();
     const { data: flashcardSnap, error: fetchError } = await supabase
       .from("flashcards")
       .select("*")

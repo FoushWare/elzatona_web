@@ -2,28 +2,13 @@
 // v2.0 - Enhanced section management
 
 import { NextRequest, NextResponse } from "next/server";
-import { createClient } from "@supabase/supabase-js";
-
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
-const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
+import { getSupabaseClient } from "../../../get-supabase-client";
 
 // GET /api/sections - Get all sections
 export async function GET() {
   try {
-    // Check if Supabase is configured
-    if (!supabaseUrl || !supabaseServiceRoleKey) {
-      console.error("Supabase configuration missing");
-      return NextResponse.json(
-        {
-          success: false,
-          error: "Database configuration missing",
-        },
-        { status: 500 },
-      );
-    }
-
     // Try to fetch sections with order_index, fallback to created_at if order_index doesn't exist
+    const supabase = getSupabaseClient();
     let { data: sectionsData, error } = await supabase
       .from("sections")
       .select("*")
@@ -139,6 +124,7 @@ export async function POST(request: NextRequest) {
       updated_at: new Date().toISOString(),
     };
 
+    const supabase = getSupabaseClient();
     const { data: newSection, error } = await supabase
       .from("sections")
       .insert(sectionWithTimestamps)

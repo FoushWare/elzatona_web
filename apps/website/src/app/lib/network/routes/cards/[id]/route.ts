@@ -1,9 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { createClient } from "@supabase/supabase-js";
-
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
-const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
+import { getSupabaseClient } from "../../../../get-supabase-client";
 
 // GET /api/cards/[id] - Get a single card by ID
 export async function GET(
@@ -12,6 +8,7 @@ export async function GET(
 ) {
   try {
     const { id } = await params;
+    const supabase = getSupabaseClient();
     const { data: cardSnap, error } = await supabase
       .from("learning_cards")
       .select("*")
@@ -47,6 +44,7 @@ export async function PUT(
     const { id } = await params;
     const updateData = await request.json();
 
+    const supabase = getSupabaseClient();
     const { error } = await supabase
       .from("learning_cards")
       .update({ ...updateData, updated_at: new Date().toISOString() })
@@ -77,6 +75,7 @@ export async function DELETE(
   try {
     const { id } = await params;
 
+    const supabase = getSupabaseClient();
     const { error } = await supabase
       .from("learning_cards")
       .delete()

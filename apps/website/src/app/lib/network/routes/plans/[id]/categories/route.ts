@@ -1,9 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { createClient } from "@supabase/supabase-js";
-
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
-const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
+import { getSupabaseClient } from "../../../../../get-supabase-client";
 
 // POST /api/plans/[id]/categories - Add a category to a plan
 export async function POST(
@@ -22,6 +18,7 @@ export async function POST(
     }
 
     // Check if category is already in plan
+    const supabase = getSupabaseClient();
     const { data: existing } = await supabase
       .from("plan_categories")
       .select("id")
@@ -85,6 +82,7 @@ export async function GET(
   try {
     const { id: planId } = await params;
 
+    const supabase = getSupabaseClient();
     const { data, error } = await supabase
       .from("plan_categories")
       .select("*, categories(*)")
@@ -126,6 +124,7 @@ export async function DELETE(
       );
     }
 
+    const supabase = getSupabaseClient();
     const { error } = await supabase
       .from("plan_categories")
       .delete()

@@ -1,14 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
-import { createClient } from "@supabase/supabase-js";
 import { cookies } from "next/headers";
 import {
   verifySupabaseToken,
   getUserFromRequest,
 } from "../../../../../server-auth";
-
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
-const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
+import { getSupabaseClient } from "../../../../../get-supabase-client";
 
 interface FreeStyleProgress {
   lastQuestionIndex: number;
@@ -73,6 +69,7 @@ export async function POST(request: NextRequest) {
     ) {
       const requestUserId = (progressData as any).userId as string;
       // Verify user exists in database
+      const supabase = getSupabaseClient();
       const { data: user, error: userError } = await supabase
         .from("users")
         .select("id")
@@ -96,6 +93,7 @@ export async function POST(request: NextRequest) {
 
     // Store progress data in JSONB format in user_progress table
     // Use a special plan_id like 'free-style-practice' to identify free-style progress
+    const supabase = getSupabaseClient();
     const { data: _data, error } = await supabase.from("user_progress").upsert(
       {
         user_id: userId,

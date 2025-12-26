@@ -2,11 +2,7 @@
 // Fast endpoint to get just the total count of questions
 
 import { NextRequest, NextResponse } from "next/server";
-import { createClient } from "@supabase/supabase-js";
-
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
-const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
+import { getSupabaseClient } from "../../../../get-supabase-client";
 
 // GET /api/questions/count - Get total count of questions
 export async function GET(request: NextRequest) {
@@ -15,6 +11,7 @@ export async function GET(request: NextRequest) {
     const category = searchParams.get("category");
 
     // Build query
+    const supabase = getSupabaseClient();
     let query = supabase
       .from("questions")
       .select("*", { count: "exact", head: true });
