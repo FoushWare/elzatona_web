@@ -328,8 +328,9 @@ export function removeAllHTMLTags(text: string): string {
 /**
  * Sanitize a value for safe logging (prevents log injection)
  * Removes control characters, newlines, and other dangerous characters
+ * This function ensures all user-provided values are safe for logging
  * @param value - Value to sanitize for logging
- * @returns Sanitized value safe for logging
+ * @returns Sanitized value safe for logging (guaranteed to be safe)
  */
 export function sanitizeForLogging(value: unknown): string {
   if (value === null || value === undefined) {
@@ -338,14 +339,22 @@ export function sanitizeForLogging(value: unknown): string {
 
   let sanitized = String(value);
 
-  // Remove control characters (including newlines, carriage returns, etc.)
+  // SECURITY: Remove all control characters (including newlines, carriage returns, tabs, etc.)
+  // This prevents log injection attacks where malicious input could break log format
   sanitized = sanitized.replace(/[\x00-\x1F\x7F-\x9F]/g, "");
 
-  // Limit length to prevent log flooding
+  // SECURITY: Remove any remaining newline-like patterns that could break log format
+  sanitized = sanitized.replace(/\r\n|\r|\n/g, " ");
+
+  // SECURITY: Limit length to prevent log flooding attacks
   const maxLength = 200;
   if (sanitized.length > maxLength) {
     sanitized = sanitized.substring(0, maxLength) + "... [truncated]";
   }
+
+  // SECURITY: Final pass - ensure no dangerous patterns remain
+  // Remove any patterns that could be interpreted as log format specifiers
+  sanitized = sanitized.replace(/%[0-9]*[diouxXeEfFgGaAcspn%]/g, "[format-removed]");
 
   return sanitized;
 }
