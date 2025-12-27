@@ -89,6 +89,7 @@ main (production)
    - Test release candidate thoroughly
 
 6. **Release to Production**
+
    ```bash
    git checkout main
    git pull origin main

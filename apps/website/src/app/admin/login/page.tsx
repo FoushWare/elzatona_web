@@ -1,11 +1,17 @@
 "use client";
 
-import { LoginPageTemplate, AdminLoginForm } from "@elzatona/components";
+import { useAdminAuth } from "@elzatona/contexts";
+import {
+  AdminLoginPageTemplate,
+  AdminLoginFormMolecule,
+} from "@elzatona/components";
 
 export default function AdminLoginPage() {
+  const { isLoading } = useAdminAuth();
+
   return (
-    <LoginPageTemplate>
-      <AdminLoginForm />
-    </LoginPageTemplate>
+    <AdminLoginPageTemplate isLoading={isLoading}>
+      <AdminLoginFormMolecule />
+    </AdminLoginPageTemplate>
   );
 }

@@ -2,10 +2,10 @@ name: SonarCloud Code Analysis
 
 on:
   push:
-    branches: [main]
+    branches: [main, develop]
   pull_request:
     types: [opened, synchronize, reopened]
-    branches: [main]
+    branches: [main, develop]
   workflow_dispatch:
 
 jobs:
