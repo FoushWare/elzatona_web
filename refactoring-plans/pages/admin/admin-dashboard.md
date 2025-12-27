@@ -3,8 +3,8 @@
 ## Page Information
 
 - **Route**: `/admin/dashboard`
-- **File**: `apps/website/page-components/admin/dashboard/page.tsx`
-- **Current Lines**: ~380
+- **File**: `apps/website/src/app/admin/dashboard/page.tsx`
+- **Current Lines**: 172 (refactored from 380)
 - **Complexity**: Medium
 - **Priority**: High
 
@@ -12,8 +12,8 @@
 
 ### File Location
 
-- **Source**: `apps/website/page-components/admin/dashboard/page.tsx`
-- **Wrapper**: `apps/website/src/app/admin/dashboard/page.tsx`
+- **Page**: `apps/website/src/app/admin/dashboard/page.tsx`
+- **Test**: `apps/website/src/app/admin/dashboard/page.test.tsx`
 
 ### Current Implementation
 
@@ -195,8 +195,8 @@ interface AdminStatsRepository {
 
 ## Success Metrics
 
-- **Line Count Reduction**: Target 50%+ (380 → <200)
-- **Component Count**: 0 → 8 components
+- **Line Count Reduction**: ✅ Achieved 55% (380 → 172 lines)
+- **Component Count**: ✅ Created 4 components (AdminMetricCard, AdminStatsGrid, AdminQuickActionsSection, AdminDashboardTemplate)
 - **SonarQube Score**: Improve to A rating
 - **Security Vulnerabilities**: 0 critical, 0 high
 - **Test Coverage**: ≥80% (target: 90%)
@@ -231,16 +231,15 @@ interface AdminStatsRepository {
 
 ## Automated Testing
 
-### Test Files to Create
+### Test Files Created ✅
 
-- `MetricCard.test.tsx`
-- `QuickActionButton.test.tsx`
-- `StatsGrid.test.tsx`
-- `QuickActionsSection.test.tsx`
-- `SystemHealthSection.test.tsx`
-- `AdminDashboard.test.tsx`
-- `AdminDashboard.integration.test.tsx`
-- `AdminDashboard.e2e.spec.tsx`
+- `@elzatona/components` → `components/molecules/AdminMetricCard.test.tsx` ✅
+- `@elzatona/components` → `components/organisms/AdminStatsGrid.test.tsx` ✅
+- `@elzatona/components` → `components/organisms/AdminQuickActionsSection.test.tsx` ✅
+- `@elzatona/components` → `components/templates/AdminDashboardTemplate.test.tsx` ✅
+- `apps/website/src/app/admin/dashboard/page.test.tsx` ✅ (updated for refactored version)
+
+**Note:** File paths use package aliases for clarity. See [FILE_PATH_CONVENTIONS.md](../FILE_PATH_CONVENTIONS.md) for the mapping. The `lib/` folder in the physical structure is an implementation detail.
 
 ## Documentation Updates
 
@@ -251,15 +250,23 @@ interface AdminStatsRepository {
 
 ## Related Files
 
-- `apps/website/page-components/admin/dashboard/page.tsx` - Main component
-- `apps/website/src/app/admin/dashboard/page.tsx` - Wrapper
-- `libs/hooks/src/lib/useAdminStats.ts` - Stats hook
-- `libs/contexts/src/lib/AdminAuthProvider.tsx` - Auth provider
+- `apps/website/src/app/admin/dashboard/page.tsx` - Main page component (172 lines)
+- `apps/website/src/app/admin/dashboard/page.test.tsx` - Page unit tests
+- `@elzatona/components` → `components/molecules/AdminMetricCard.tsx` - Metric card molecule
+- `@elzatona/components` → `components/organisms/AdminStatsGrid.tsx` - Stats grid organism
+- `@elzatona/components` → `components/organisms/AdminQuickActionsSection.tsx` - Quick actions organism
+- `@elzatona/components` → `components/templates/AdminDashboardTemplate.tsx` - Dashboard template
+- `@elzatona/hooks` → `useAdminStats.ts` - Stats hook
+- `@elzatona/contexts` → `AdminAuthProvider.tsx` - Auth provider
+
+**Note:** See [FILE_PATH_CONVENTIONS.md](../FILE_PATH_CONVENTIONS.md) for path format explanation. The `lib/` folder in the physical structure is an implementation detail.
 
 ## Notes
 
-- Already uses TanStack Query (good)
-- Already uses hooks (good)
-- Needs component extraction
-- Needs security hardening
-- Needs database abstraction
+- ✅ Already uses TanStack Query (good)
+- ✅ Already uses hooks (good)
+- ✅ Component extraction completed (4 new components created)
+- ✅ Page refactored from 380 to 172 lines (55% reduction)
+- ✅ Comprehensive unit tests added
+- ⏳ Security hardening (admin auth already handled by AdminLayout)
+- ⏳ Database abstraction (using hooks, no direct DB calls)

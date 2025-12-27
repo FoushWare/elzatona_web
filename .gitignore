@@ -59,7 +59,9 @@ node_modules/
 .env
 # Editor directories and files
 .idea
-.vscode
+.vscode/*
+!.vscode/settings.json
+!.vscode/extensions.json
 *.suo
 *.ntvs*
 *.njsproj
@@ -94,7 +96,9 @@ build/
 out/
 
 # IDE and editor files
-.vscode/
+.vscode/*
+!.vscode/settings.json
+!.vscode/extensions.json
 .idea/
 *.swp
 *.swo
@@ -219,6 +223,7 @@ codeql-database/
 *.log
 *.sarif
 .code-quality-check.*
+.code-quality-check.*.log
 .sonar-scanner.log
 .backup.logs/
 .logs/

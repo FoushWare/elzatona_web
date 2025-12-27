@@ -211,30 +211,30 @@ import type { User } from "../../types/user";
 
 ## Page Refactoring Tracking
 
-| Page                  | Route                        | Status  | Lines (Before) | Lines (After) | Components | Security | Tests | SonarQube | Priority     |
-| --------------------- | ---------------------------- | ------- | -------------- | ------------- | ---------- | -------- | ----- | --------- | ------------ |
-| Admin Root            | `/admin`                     | Planned | 5              | -             | 0/0        | ❌       | 0%    | ❌        | Low          |
-| Admin Dashboard       | `/admin/dashboard`           | Planned | 380            | -             | 0/5        | ❌       | 0%    | ❌        | High         |
-| Admin Login           | `/admin/login`               | Planned | 5              | -             | 0/3        | ❌       | 0%    | ❌        | High         |
-| Content Management    | `/admin/content-management`  | Planned | 3367           | -             | 0/15       | ❌       | 0%    | ❌        | **CRITICAL** |
-| Content Questions     | `/admin/content/questions`   | Planned | 1496           | -             | 0/8        | ❌       | 0%    | ❌        | **CRITICAL** |
-| Frontend Tasks Admin  | `/admin/frontend-tasks`      | Planned | 940            | -             | 0/5        | ❌       | 0%    | ❌        | High         |
-| Problem Solving Admin | `/admin/problem-solving`     | Planned | 332            | -             | 0/5        | ❌       | 0%    | ❌        | Medium       |
-| Learning Cards Admin  | `/admin/learning-cards`      | Planned | 554            | -             | 0/4        | ❌       | 0%    | ❌        | Medium       |
-| Users Admin           | `/admin/users`               | Planned | 5              | -             | 0/4        | ❌       | 0%    | ❌        | High         |
-| Home Page             | `/`                          | Done    | 565            | 66            | 5/5        | ❌       | 0%    | ❌        | High         |
-| Authentication        | `/auth`                      | Planned | 5              | -             | 0/4        | ❌       | 0%    | ❌        | **CRITICAL** |
-| User Dashboard        | `/dashboard`                 | Planned | -              | -             | 0/5        | ❌       | 0%    | ❌        | High         |
-| Browse Practice       | `/browse-practice-questions` | Planned | 562            | -             | 0/4        | ❌       | 0%    | ❌        | Medium       |
-| Custom Roadmap        | `/custom-roadmap`            | Planned | 3115           | -             | 0/8        | ❌       | 0%    | ❌        | **CRITICAL** |
-| Free Style Practice   | `/free-style-practice`       | Planned | 3941           | -             | 0/8        | ❌       | 0%    | ❌        | **CRITICAL** |
-| Guided Practice       | `/guided-practice`           | Planned | 3966           | -             | 0/7        | ❌       | 0%    | ❌        | **CRITICAL** |
-| Frontend Tasks        | `/frontend-tasks`            | Planned | 565            | -             | 0/5        | ❌       | 0%    | ❌        | Medium       |
-| Frontend Task Detail  | `/frontend-tasks/[id]`       | Planned | 1535           | -             | 0/6        | ❌       | 0%    | ❌        | High         |
-| Guided Learning       | `/features/guided-learning`  | Planned | 1019           | -             | 0/6        | ❌       | 0%    | ❌        | Medium       |
-| Custom Practice       | `/custom-practice/[planId]`  | Planned | 585            | -             | 0/5        | ❌       | 0%    | ❌        | Medium       |
-| Flashcards            | `/flashcards`                | Planned | 780            | -             | 0/5        | ❌       | 0%    | ❌        | Medium       |
-| Problem Solving       | `/problem-solving/[id]`      | Planned | 515            | -             | 0/5        | ❌       | 0%    | ❌        | Medium       |
+| Page                  | Route                        | Status      | Lines (Before) | Lines (After) | Components | Security | Tests | SonarQube | Priority     |
+| --------------------- | ---------------------------- | ----------- | -------------- | ------------- | ---------- | -------- | ----- | --------- | ------------ |
+| Admin Root            | `/admin`                     | Planned     | 5              | -             | 0/0        | ❌       | 0%    | ❌        | Low          |
+| Admin Dashboard       | `/admin/dashboard`           | In Progress | 380            | -             | 0/8        | ❌       | 0%    | ❌        | High         |
+| Admin Login           | `/admin/login`               | Done        | 5              | 17            | 3/3        | ❌       | 0%    | ❌        | High         |
+| Content Management    | `/admin/content-management`  | Planned     | 3367           | -             | 0/15       | ❌       | 0%    | ❌        | **CRITICAL** |
+| Content Questions     | `/admin/content/questions`   | Planned     | 1496           | -             | 0/8        | ❌       | 0%    | ❌        | **CRITICAL** |
+| Frontend Tasks Admin  | `/admin/frontend-tasks`      | Planned     | 940            | -             | 0/5        | ❌       | 0%    | ❌        | High         |
+| Problem Solving Admin | `/admin/problem-solving`     | Planned     | 332            | -             | 0/5        | ❌       | 0%    | ❌        | Medium       |
+| Learning Cards Admin  | `/admin/learning-cards`      | Planned     | 554            | -             | 0/4        | ❌       | 0%    | ❌        | Medium       |
+| Users Admin           | `/admin/users`               | Planned     | 5              | -             | 0/4        | ❌       | 0%    | ❌        | High         |
+| Home Page             | `/`                          | Done        | 565            | 66            | 5/5        | ❌       | 0%    | ❌        | High         |
+| Authentication        | `/auth`                      | Planned     | 5              | -             | 0/4        | ❌       | 0%    | ❌        | **CRITICAL** |
+| User Dashboard        | `/dashboard`                 | Planned     | -              | -             | 0/5        | ❌       | 0%    | ❌        | High         |
+| Browse Practice       | `/browse-practice-questions` | Planned     | 562            | -             | 0/4        | ❌       | 0%    | ❌        | Medium       |
+| Custom Roadmap        | `/custom-roadmap`            | Planned     | 3115           | -             | 0/8        | ❌       | 0%    | ❌        | **CRITICAL** |
+| Free Style Practice   | `/free-style-practice`       | Planned     | 3941           | -             | 0/8        | ❌       | 0%    | ❌        | **CRITICAL** |
+| Guided Practice       | `/guided-practice`           | Planned     | 3966           | -             | 0/7        | ❌       | 0%    | ❌        | **CRITICAL** |
+| Frontend Tasks        | `/frontend-tasks`            | Planned     | 565            | -             | 0/5        | ❌       | 0%    | ❌        | Medium       |
+| Frontend Task Detail  | `/frontend-tasks/[id]`       | Planned     | 1535           | -             | 0/6        | ❌       | 0%    | ❌        | High         |
+| Guided Learning       | `/features/guided-learning`  | Planned     | 1019           | -             | 0/6        | ❌       | 0%    | ❌        | Medium       |
+| Custom Practice       | `/custom-practice/[planId]`  | Planned     | 585            | -             | 0/5        | ❌       | 0%    | ❌        | Medium       |
+| Flashcards            | `/flashcards`                | Planned     | 780            | -             | 0/5        | ❌       | 0%    | ❌        | Medium       |
+| Problem Solving       | `/problem-solving/[id]`      | Planned     | 515            | -             | 0/5        | ❌       | 0%    | ❌        | Medium       |
 
 **Status Legend:**
 

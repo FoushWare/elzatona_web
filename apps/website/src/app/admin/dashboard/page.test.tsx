@@ -46,6 +46,67 @@ jest.mock("@elzatona/hooks", () => ({
   })),
 }));
 
+// Mock @elzatona/components
+jest.mock("@elzatona/components", () => {
+  const React = jest.requireActual("react");
+  return {
+    AdminDashboardTemplate: ({
+      welcomeTitle,
+      welcomeSubtitle,
+      refreshButton,
+      stats,
+      quickActions,
+    }: {
+      welcomeTitle: string;
+      welcomeSubtitle: React.ReactNode;
+      refreshButton?: {
+        onClick: () => void;
+        loading?: boolean;
+        disabled?: boolean;
+      };
+      stats: { metrics: unknown[]; loading?: boolean };
+      quickActions: {
+        actions: Array<{ title: string; description: string; href: string }>;
+      };
+    }) => (
+      <div data-testid="admin-dashboard-template">
+        <h1>{welcomeTitle}</h1>
+        <div>{welcomeSubtitle}</div>
+        {refreshButton && (
+          <button
+            onClick={refreshButton.onClick}
+            disabled={refreshButton.disabled}
+          >
+            {refreshButton.loading ? "Refreshing..." : "Refresh"}
+          </button>
+        )}
+        <div data-testid="stats-grid">
+          {stats.metrics.map(
+            (
+              metric: { label: string; value: string | number },
+              index: number,
+            ) => (
+              <div key={index}>
+                {metric.label}: {metric.value}
+              </div>
+            ),
+          )}
+        </div>
+        <div data-testid="quick-actions">
+          {quickActions.actions.map((action, index) => (
+            <button
+              key={index}
+              onClick={() => (window.location.href = action.href)}
+            >
+              {action.title}
+            </button>
+          ))}
+        </div>
+      </div>
+    ),
+  };
+});
+
 // Mock lucide-react icons
 jest.mock("lucide-react", () => ({
   BookOpen: () => <span>📖</span>,
@@ -155,12 +216,19 @@ describe("A-UT-012: Stats Display", () => {
     expect(screen.getByText(/Total Tasks/i)).toBeInTheDocument();
   });
 
-  it("should display admin menu items", () => {
+  it("should display quick action buttons", () => {
     render(<AdminDashboard />);
     // Check for quick actions that are actually displayed
     expect(screen.getByText(/Add New Question/i)).toBeInTheDocument();
     expect(screen.getByText(/Create Frontend Task/i)).toBeInTheDocument();
     expect(screen.getByText(/Add Problem Solving/i)).toBeInTheDocument();
+  });
+
+  it("should display all metric labels", () => {
+    render(<AdminDashboard />);
+    expect(screen.getByText(/Total Questions: 100/i)).toBeInTheDocument();
+    expect(screen.getByText(/Learning Cards: 5/i)).toBeInTheDocument();
+    expect(screen.getByText(/Learning Plans: 3/i)).toBeInTheDocument();
   });
 });
 
