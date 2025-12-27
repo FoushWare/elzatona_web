@@ -30,7 +30,7 @@
 
 ### Dependencies
 
-- `@elzatona/components` - UI components, FrontendTaskEditor
+- `@elzatona/common-ui` - UI components, FrontendTaskEditor
 - `@elzatona/hooks` - Data fetching hooks
 - React hooks
 

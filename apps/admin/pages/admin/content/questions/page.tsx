@@ -1,12 +1,12 @@
 "use client";
 
 import React, { useState, useEffect, useMemo, useRef } from "react";
-import { Card, CardContent, Button } from "@elzatona/components";
-import { FormModal } from "@elzatona/components";
+import { Card, CardContent, Button } from "@elzatona/common-ui";
+import { FormModal } from "@elzatona/common-ui";
 import {} from "../../../../components/QuestionPracticeView";
 import { ViewQuestionModal } from "../../../../components/ViewQuestionModal";
 import { Loader2 } from "lucide-react";
-import { AdvancedSearch } from "@elzatona/components";
+import { AdvancedSearch } from "@elzatona/common-ui";
 import { StatsCards } from "./components/StatsCards";
 import { CategoriesOverview } from "./components/CategoriesOverview";
 import { FiltersCard } from "./components/FiltersCard";

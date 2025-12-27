@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { Card, CardContent } from "@elzatona/components";
+import { Card, CardContent } from "@elzatona/common-ui";
 
 interface StatsCardsProps {
   readonly totalCount: number;

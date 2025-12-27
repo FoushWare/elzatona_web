@@ -202,7 +202,7 @@ Example:
 ```typescript
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { Button, Card } from "@elzatona/components";
+import { Button, Card } from "@elzatona/common-ui";
 import { useAuth } from "@elzatona/contexts";
 import { SearchBar } from "../molecules/SearchBar";
 import { formatDate } from "../../utils/date";
@@ -273,7 +273,7 @@ import type { User } from "../../types/user";
 ### Phase 1: Critical Infrastructure (Weeks 1-2)
 
 1. ✅ Home Page (`/`) - **COMPLETED**
-   - Components moved to `libs/components/`
+   - Components moved to `libs/common-ui/`
    - Page reduced from 565 to 66 lines
    - Atomic design structure implemented
 2. Authentication (`/auth`)

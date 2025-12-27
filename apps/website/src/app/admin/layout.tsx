@@ -10,7 +10,7 @@ import {
   AdminNavbar,
   NotificationContainer,
   FirestoreErrorBoundary,
-} from "@elzatona/components";
+} from "@elzatona/common-ui";
 import { usePathname } from "next/navigation";
 // ThemeProvider is already provided by root layout
 import "../globals.css";

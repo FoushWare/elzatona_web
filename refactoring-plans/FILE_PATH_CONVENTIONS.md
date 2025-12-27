@@ -10,13 +10,13 @@ To avoid confusion between package roots and source directories, we use the foll
 
 **Examples:**
 
-- `@elzatona/components` → `components/molecules/AdminMetricCard.tsx`
+- `@elzatona/common-ui` → `components/molecules/AdminMetricCard.tsx`
 - `@elzatona/hooks` → `useAdminStats.ts`
 - `@elzatona/contexts` → `AdminAuthProvider.tsx`
 
 **Full Path Mapping:**
 
-- `@elzatona/components` → `libs/components/src/components/...` (or `libs/components/src/lib/components/...` currently)
+- `@elzatona/common-ui` → `libs/common-ui/src/components/...`
 - `@elzatona/hooks` → `libs/hooks/src/lib/...` (currently)
 - `@elzatona/contexts` → `libs/contexts/src/lib/...` (currently)
 - `@elzatona/types` → `libs/types/src/lib/...` (currently)
@@ -39,7 +39,7 @@ To avoid confusion between package roots and source directories, we use the foll
 
 ```typescript
 // ✅ DO: Use package alias
-import { AdminMetricCard } from "@elzatona/components";
+import { AdminMetricCard } from "@elzatona/common-ui";
 import { useAdminStats } from "@elzatona/hooks";
 ```
 
@@ -48,14 +48,14 @@ import { useAdminStats } from "@elzatona/hooks";
 ```markdown
 <!-- ✅ DO: Use package alias → relative path (no lib/ prefix) -->
 
-- `@elzatona/components` → `components/molecules/AdminMetricCard.tsx`
+- `@elzatona/common-ui` → `components/molecules/AdminMetricCard.tsx`
 - `@elzatona/hooks` → `useAdminStats.ts`
 ```
 
 ## Rationale
 
-1. **Clarity**: Package aliases (`@elzatona/components`) are what developers see in imports
+1. **Clarity**: Package aliases (`@elzatona/common-ui`) are what developers see in imports
 2. **Consistency**: All shared libraries follow the same pattern
 3. **Simplicity**: Shorter paths that map clearly to actual file locations
-4. **No Confusion**: Avoids mixing `libs/components` and `libs/components/src`
+4. **No Confusion**: Avoids mixing `libs/common-ui` and `libs/common-ui/src`
 5. **Logical Structure**: Shows the logical organization, not the physical `lib/` nesting (which is an implementation detail)

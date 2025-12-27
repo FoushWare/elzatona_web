@@ -7,7 +7,7 @@ import {
   DialogFooter,
   Label,
   Textarea,
-} from "@elzatona/components";
+} from "@elzatona/common-ui";
 import { Upload, FileText, AlertTriangle, Loader2 } from "lucide-react";
 import DOMPurify from "dompurify";
 import {

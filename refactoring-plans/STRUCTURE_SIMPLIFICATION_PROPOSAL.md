@@ -5,7 +5,7 @@
 The current structure has redundant nesting:
 
 ```
-libs/components/src/lib/components/molecules/AdminMetricCard.tsx
+libs/common-ui/src/lib/components/molecules/AdminMetricCard.tsx
 ```
 
 The `lib` folder inside `src` is unnecessary and adds confusion.
@@ -15,7 +15,7 @@ The `lib` folder inside `src` is unnecessary and adds confusion.
 **Simplified:**
 
 ```
-libs/components/src/components/molecules/AdminMetricCard.tsx
+libs/common-ui/src/components/molecules/AdminMetricCard.tsx
 ```
 
 ## Why Simplify?
@@ -30,7 +30,7 @@ libs/components/src/components/molecules/AdminMetricCard.tsx
 ### Current Structure
 
 ```
-libs/components/src/
+libs/common-ui/src/
 ├── index.ts
 ├── lib/
 │   ├── components/
@@ -48,7 +48,7 @@ libs/components/src/
 ### Proposed Structure
 
 ```
-libs/components/src/
+libs/common-ui/src/
 ├── index.ts
 ├── components/
 │   ├── atoms/
@@ -68,7 +68,7 @@ libs/components/src/
 
 - ✅ Update `FILE_PATH_CONVENTIONS.md` to use simplified paths
 - ✅ Update all refactoring plans to use new format
-- ✅ Document the mapping: `@elzatona/components` → `components/...` (not `lib/components/...`)
+- ✅ Document the mapping: `@elzatona/common-ui` → `components/...` (not `lib/components/...`)
 
 ### Phase 2: Code Migration (Future)
 
@@ -84,14 +84,14 @@ libs/components/src/
 **For Shared Libraries:**
 
 - Format: `@elzatona/[package]` → `[relative-path]` (no `lib/` prefix)
-- Example: `@elzatona/components` → `components/molecules/AdminMetricCard.tsx`
-- Full path: `libs/components/src/components/molecules/AdminMetricCard.tsx`
+- Example: `@elzatona/common-ui` → `components/molecules/AdminMetricCard.tsx`
+- Full path: `libs/common-ui/src/components/molecules/AdminMetricCard.tsx`
 
 **Rationale:**
 
 - The `lib/` folder is an implementation detail
 - Documentation should show the logical structure, not the physical nesting
-- Developers import from `@elzatona/components`, not from `@elzatona/components/lib`
+- Developers import from `@elzatona/common-ui`, not from `@elzatona/common-ui/lib`
 
 ## Benefits
 

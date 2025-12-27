@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useCallback } from "react";
 import { UnifiedQuestion } from "@elzatona/types";
-import { FormModal } from "@elzatona/components";
+import { FormModal } from "@elzatona/common-ui";
 import {
   CheckCircle,
   XCircle,

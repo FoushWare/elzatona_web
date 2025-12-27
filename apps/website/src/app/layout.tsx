@@ -14,7 +14,7 @@ import {
   AuthProvider,
   NotificationProvider,
 } from "@elzatona/contexts";
-import { ErrorBoundary } from "@elzatona/components";
+import { ErrorBoundary } from "@elzatona/common-ui";
 import { LearningTypeProvider } from "../context/LearningTypeContext";
 import { NavigationProvider } from "../context/NavigationContext";
 import { ConditionalNavbar } from "./components/ConditionalNavbar";

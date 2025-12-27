@@ -22,7 +22,7 @@ import {
   DialogDescription,
   DialogFooter,
   Checkbox,
-} from "@elzatona/components";
+} from "@elzatona/common-ui";
 
 // Import icons with tree shaking
 import {

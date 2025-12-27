@@ -13,8 +13,8 @@ import {
   ExternalLink,
   Clock,
 } from "lucide-react";
-import { QuestionContent } from "@elzatona/components";
-import { Button } from "@elzatona/components";
+import { QuestionContent } from "@elzatona/common-ui";
+import { Button } from "@elzatona/common-ui";
 
 interface Question {
   id: string;

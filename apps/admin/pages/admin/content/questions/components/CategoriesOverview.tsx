@@ -9,7 +9,7 @@ import {
   CardTitle,
   Badge,
   Button,
-} from "@elzatona/components";
+} from "@elzatona/common-ui";
 import { BookOpen, Eye, Edit } from "lucide-react";
 
 interface Category {

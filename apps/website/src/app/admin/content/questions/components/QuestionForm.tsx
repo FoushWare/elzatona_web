@@ -13,7 +13,7 @@ import {
   SelectTrigger,
   SelectValue,
   DialogFooter,
-} from "@elzatona/components";
+} from "@elzatona/common-ui";
 import { Plus, X } from "lucide-react";
 import { UnifiedQuestion } from "@elzatona/types";
 import {
@@ -372,9 +372,8 @@ export default function QuestionForm({
             <Select
               value={formData.difficulty || "beginner"}
               onValueChange={(value) => handleFieldChange("difficulty", value)}
-              disabled={disabled}
             >
-              <SelectTrigger>
+              <SelectTrigger disabled={disabled}>
                 <SelectValue placeholder="Select difficulty" />
               </SelectTrigger>
               <SelectContent>

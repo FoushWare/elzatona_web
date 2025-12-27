@@ -46,8 +46,8 @@ jest.mock("@elzatona/hooks", () => ({
   })),
 }));
 
-// Mock @elzatona/components
-jest.mock("@elzatona/components", () => {
+// Mock @elzatona/common-ui
+jest.mock("@elzatona/common-ui", () => {
   const React = jest.requireActual("react");
   return {
     AdminDashboardTemplate: ({

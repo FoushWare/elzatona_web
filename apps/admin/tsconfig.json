@@ -23,7 +23,7 @@
     "paths": {
       "@/*": ["./src/*"],
       "@/lib/*": ["./lib/*"],
-      "@elzatona/components": ["../../libs/components/src"],
+      "@elzatona/common-ui": ["../../libs/common-ui/src/index.ts"],
       "@elzatona/contexts": ["../../libs/contexts/src/lib/shared-contexts"],
       "@elzatona/hooks": ["../../libs/hooks/src/lib/shared-hooks"],
       "@elzatona/shared-atoms": [
@@ -34,7 +34,7 @@
       "@elzatona/auth": ["../../libs/auth/src/lib/auth"],
       "@elzatona/database": ["../../libs/database/src/lib/database"],
       "@elzatona/utilities": ["../../libs/utilities/src/lib/utils"],
-      "@/components/*": ["../../libs/components/src/lib/components/*"],
+      "@/components/*": ["../../libs/common-ui/src/components/*"],
       "@/hooks/*": ["../../libs/hooks/src/lib/hooks/*"],
       "@/contexts/*": ["../../libs/contexts/src/lib/contexts/*"],
       "@/atoms/*": ["../../libs/shared-atoms/src/lib/atoms/*"],

@@ -35,7 +35,7 @@ const config = {
   moduleNameMapper: {
     "^@/(.*)$": "<rootDir>/src/$1",
     "^@elzatona/contexts$": "<rootDir>/../../libs/contexts/src/index.ts",
-    "^@elzatona/components$": "<rootDir>/../../libs/components/src/index.ts",
+    "^@elzatona/common-ui$": "<rootDir>/../../libs/common-ui/src/index.ts",
     "^@elzatona/hooks$": "<rootDir>/../../libs/hooks/src/index.ts",
     "^lucide-react$": "<rootDir>/test-utils/mocks/lucide-react.tsx",
     // Mock nuqs to avoid ESM issues in tests
