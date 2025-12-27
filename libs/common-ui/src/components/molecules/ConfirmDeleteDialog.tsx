@@ -40,8 +40,8 @@ export function ConfirmDeleteDialog({
     <Modal isOpen={isOpen} onClose={onClose} title={title}>
       <div className="space-y-4">
         <p className="text-sm text-muted-foreground">
-          Are you sure you want to delete the {itemType} "{itemName}"? This
-          action cannot be undone.
+          Are you sure you want to delete the {itemType} &quot;{itemName}&quot;?
+          This action cannot be undone.
         </p>
         <div className="flex justify-end space-x-2">
           <Button variant="outline" onClick={onClose} disabled={isLoading}>

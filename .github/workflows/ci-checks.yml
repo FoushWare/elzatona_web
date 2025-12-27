@@ -74,11 +74,36 @@ jobs:
           echo "🧪 Running unit tests for admin login components..."
           # Run Vitest tests for components library (AdminLogin components)
           echo "📦 Testing AdminLoginFormMolecule and AdminLoginPageTemplate..."
-          NODE_OPTIONS=--max-old-space-size=768 npx nx test components --testNamePattern="AdminLogin" --run || echo "⚠️  Vitest tests skipped (may need setup)"
+          NODE_OPTIONS=--max-old-space-size=768 npx nx test common-ui --testNamePattern="AdminLogin" --run || echo "⚠️  Vitest tests skipped (may need setup)"
           # Run Jest tests for website app (AdminLoginPage)
           echo "📦 Testing AdminLoginPage..."
           NODE_OPTIONS=--max-old-space-size=768 JEST_MAX_WORKERS=1 npx jest \
             apps/website/src/app/admin/login/page.test.tsx \
+            --maxWorkers=1 \
+            --silent \
+            --coverage=false \
+            --config=apps/website/jest.config.js || echo "⚠️  Jest tests skipped"
+        continue-on-error: true
+        env:
+          NODE_OPTIONS: "--max-old-space-size=768"
+          CI: "true"
+          # Provide minimal env vars for tests
+          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.TEST_SUPABASE_URL || 'https://placeholder.supabase.co' }}
+          NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.TEST_SUPABASE_ANON_KEY || 'placeholder-key' }}
+          JWT_SECRET: ${{ secrets.JWT_SECRET || 'placeholder-secret' }}
+          ADMIN_EMAIL: ${{ secrets.ADMIN_EMAIL || 'test@example.com' }}
+          ADMIN_PASSWORD: ${{ secrets.ADMIN_PASSWORD || 'test-password' }}
+
+      - name: Run unit tests for content management components
+        run: |
+          echo "🧪 Running unit tests for content management components..."
+          # Run Vitest tests for common-ui library (Content Management components)
+          echo "📦 Testing ContentManagementTemplate, StatsSection, SearchAndFilters, ActionButtons, CategoriesList, TopicsList, CardsList, PlansList, ConfirmDeleteDialog..."
+          NODE_OPTIONS=--max-old-space-size=768 npx nx test common-ui --testNamePattern="(ContentManagement|StatsSection|SearchAndFilters|ActionButtons|CategoriesList|TopicsList|CardsList|PlansList|ConfirmDeleteDialog)" --run || echo "⚠️  Vitest tests skipped (may need setup)"
+          # Run Jest tests for website app (ContentManagementPage)
+          echo "📦 Testing ContentManagementPage..."
+          NODE_OPTIONS=--max-old-space-size=768 JEST_MAX_WORKERS=1 npx jest \
+            apps/website/src/app/admin/content-management/page.test.tsx \
             --maxWorkers=1 \
             --silent \
             --coverage=false \

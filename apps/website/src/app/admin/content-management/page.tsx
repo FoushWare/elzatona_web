@@ -1,12 +1,6 @@
 "use client";
 
-import React, {
-  useEffect,
-  useMemo,
-  useState,
-  useCallback,
-  Suspense,
-} from "react";
+import React, { useEffect, useMemo, useState, useCallback } from "react";
 // Note: This page uses hooks, not direct supabase client
 
 import {
@@ -43,46 +37,14 @@ import {
 import { ContentManagementTemplate } from "@elzatona/common-ui";
 
 // Define types for other entities (these should be moved to proper type files)
-type LearningPlan = any;
-type Category = any;
-type Topic = any;
+type LearningPlan = any; // eslint-disable-line @typescript-eslint/no-explicit-any
+type Category = any; // eslint-disable-line @typescript-eslint/no-explicit-any
+type Topic = any; // eslint-disable-line @typescript-eslint/no-explicit-any
 
-// Types for API responses
-interface ApiResponse<T> {
-  success: boolean;
-  data: T;
-  count?: number;
-  error?: string;
-}
-
-interface BasicCard {
-  id: string;
-  name: string;
-  description: string;
-  color: string;
-  icon: string;
-  order: number;
-}
-
-interface BasicPlan {
-  id: string;
-  name: string;
-  description: string;
-  duration: string;
-  difficulty: string;
-  color: string;
-  estimatedHours: number;
-}
-
-// Lazy load UI components to improve initial bundle size
+// Lazy load UI components to improve initial bundle size (only those used in modals)
 const Button = React.lazy(() =>
   import("@elzatona/common-ui").then((module) => ({
     default: module.Button,
-  })),
-);
-const Input = React.lazy(() =>
-  import("@elzatona/common-ui").then((module) => ({
-    default: module.Input,
   })),
 );
 const Badge = React.lazy(() =>
@@ -90,86 +52,16 @@ const Badge = React.lazy(() =>
     default: module.Badge,
   })),
 );
-const Card = React.lazy(() =>
-  import("@elzatona/common-ui").then((module) => ({
-    default: module.Card,
-  })),
-);
-const CardContent = React.lazy(() =>
-  import("@elzatona/common-ui").then((module) => ({
-    default: module.CardContent,
-  })),
-);
-const CardHeader = React.lazy(() =>
-  import("@elzatona/common-ui").then((module) => ({
-    default: module.CardHeader,
-  })),
-);
-const CardTitle = React.lazy(() =>
-  import("@elzatona/common-ui").then((module) => ({
-    default: module.CardTitle,
-  })),
-);
-const Select = React.lazy(() =>
-  import("@elzatona/common-ui").then((module) => ({
-    default: module.Select,
-  })),
-);
-const SelectContent = React.lazy(() =>
-  import("@elzatona/common-ui").then((module) => ({
-    default: module.SelectContent,
-  })),
-);
-const SelectItem = React.lazy(() =>
-  import("@elzatona/common-ui").then((module) => ({
-    default: module.SelectItem,
-  })),
-);
-const SelectTrigger = React.lazy(() =>
-  import("@elzatona/common-ui").then((module) => ({
-    default: module.SelectTrigger,
-  })),
-);
-const SelectValue = React.lazy(() =>
-  import("@elzatona/common-ui").then((module) => ({
-    default: module.SelectValue,
-  })),
-);
-const Collapsible = React.lazy(() =>
-  import("@elzatona/common-ui").then((module) => ({
-    default: module.Collapsible,
-  })),
-);
-const CollapsibleTrigger = React.lazy(() =>
-  import("@elzatona/common-ui").then((module) => ({
-    default: module.CollapsibleTrigger,
-  })),
-);
-const CollapsibleContent = React.lazy(() =>
-  import("@elzatona/common-ui").then((module) => ({
-    default: module.CollapsibleContent,
-  })),
-);
 import { Modal } from "@elzatona/common-ui";
 import { ViewQuestionModal } from "../content/questions/components/ViewQuestionModal";
 
 // Import icons with tree shaking
 import {
-  ChevronDown,
-  ChevronRight,
   Plus,
-  Edit,
-  Trash2,
   MessageSquare,
   BookOpen,
   Layers,
-  Puzzle,
-  Network,
-  Users,
-  Calendar,
   Target,
-  Search,
-  X,
   Eye,
   CheckSquare,
   Square,
@@ -201,19 +93,7 @@ const PlanForm = React.lazy(() =>
     default: module.PlanForm,
   })),
 );
-const EmptyState = React.lazy(() =>
-  import("@elzatona/common-ui").then((module) => ({
-    default: module.EmptyState,
-  })),
-);
-
-interface Stats {
-  totalCards: number;
-  totalPlans: number;
-  totalCategories: number;
-  totalTopics: number;
-  totalQuestions: number;
-}
+// Stats interface is now defined in ContentManagementTemplate
 
 export default function UnifiedAdminPage() {
   // Use TanStack Query hooks for data fetching
@@ -265,7 +145,7 @@ export default function UnifiedAdminPage() {
   const deleteQuestionMutation = useDeleteQuestion();
 
   // Notification actions
-  const { notifyContentUpdate, notifyAdminAction } = useNotificationActions();
+  const { notifyContentUpdate } = useNotificationActions();
 
   // Query client for manual invalidation
   const queryClient = useQueryClient();
@@ -442,21 +322,9 @@ export default function UnifiedAdminPage() {
   // Confirmation modal states
   const [isDeleteCardModalOpen, setIsDeleteCardModalOpen] = useState(false);
   const [isDeletePlanModalOpen, setIsDeletePlanModalOpen] = useState(false);
-  const [isDeleteCategoryModalOpen, setIsDeleteCategoryModalOpen] =
-    useState(false);
-  const [isDeleteTopicModalOpen, setIsDeleteTopicModalOpen] = useState(false);
-  const [isDeleteQuestionModalOpen, setIsDeleteQuestionModalOpen] =
-    useState(false);
-
   // Item to delete states
   const [cardToDelete, setCardToDelete] = useState<LearningCard | null>(null);
   const [planToDelete, setPlanToDelete] = useState<LearningPlan | null>(null);
-  const [categoryToDelete, setCategoryToDelete] = useState<Category | null>(
-    null,
-  );
-  const [topicToDelete, setTopicToDelete] = useState<Topic | null>(null);
-  const [questionToDelete, setQuestionToDelete] =
-    useState<UnifiedQuestion | null>(null);
 
   const [editingCard, setEditingCard] = useState<LearningCard | null>(null);
   const [editingPlan, setEditingPlan] = useState<LearningPlan | null>(null);
@@ -521,15 +389,15 @@ export default function UnifiedAdminPage() {
     parentId?: string; // card_id for category, category_id for topic, topic_id for question
   } | null>(null);
 
-  // Step-by-step selection state
-  const [selectionStep, setSelectionStep] = useState<
-    "card" | "category" | "topic" | "question"
-  >("card");
-  const [selectedCardId, setSelectedCardId] = useState<string | null>(null);
-  const [selectedCategoryId, setSelectedCategoryId] = useState<string | null>(
-    null,
-  );
-  const [selectedTopicId, setSelectedTopicId] = useState<string | null>(null);
+  // Step-by-step selection state (currently not used but kept for future multi-step selection)
+  // const [selectionStep, setSelectionStep] = useState<
+  //   "card" | "category" | "topic" | "question"
+  // >("card");
+  // const [selectedCardId, setSelectedCardId] = useState<string | null>(null);
+  // const [selectedCategoryId, setSelectedCategoryId] = useState<string | null>(
+  //   null,
+  // );
+  // const [selectedTopicId, setSelectedTopicId] = useState<string | null>(null);
 
   // Question view and selection state
   const [viewingQuestion, setViewingQuestion] =
@@ -995,46 +863,47 @@ export default function UnifiedAdminPage() {
     }
   };
 
-  const removeQuestionFromTopic = async (
-    topicId: string,
-    questionId: string,
-  ) => {
-    try {
-      const response = await fetch(
-        `/api/topics/${topicId}/questions?question_id=${questionId}`,
-        {
-          method: "DELETE",
-        },
-      );
-      const result = await response.json();
-      if (result.success) {
-        showSuccess(
-          "Question Removed",
-          "Question removed from topic successfully",
-        );
-        const plan = plans.find((p) => {
-          const hierarchy = planHierarchy[p.id] || [];
-          return hierarchy.some((c: any) =>
-            c.categories?.some((cat: any) =>
-              cat.topics?.some((t: any) => t.id === topicId),
-            ),
-          );
-        });
-        if (plan) {
-          await fetchPlanHierarchy(plan.id);
-        }
-        queryClient.invalidateQueries();
-      } else {
-        showError(
-          "Failed to Remove",
-          result.error || "Failed to remove question from topic",
-        );
-      }
-    } catch (error) {
-      console.error("Error removing question from topic:", error);
-      showError("Failed to Remove", "Failed to remove question from topic");
-    }
-  };
+  // Note: removeQuestionFromTopic is not currently used but kept for future use
+  // const removeQuestionFromTopic = async (
+  //   topicId: string,
+  //   questionId: string,
+  // ) => {
+  //   try {
+  //     const response = await fetch(
+  //       `/api/topics/${topicId}/questions?question_id=${questionId}`,
+  //       {
+  //         method: "DELETE",
+  //       },
+  //     );
+  //     const result = await response.json();
+  //     if (result.success) {
+  //       showSuccess(
+  //         "Question Removed",
+  //         "Question removed from topic successfully",
+  //       );
+  //       const plan = plans.find((p) => {
+  //         const hierarchy = planHierarchy[p.id] || [];
+  //         return hierarchy.some((c: any) =>
+  //           c.categories?.some((cat: any) =>
+  //             cat.topics?.some((t: any) => t.id === topicId),
+  //           ),
+  //         );
+  //       });
+  //       if (plan) {
+  //         await fetchPlanHierarchy(plan.id);
+  //       }
+  //       queryClient.invalidateQueries();
+  //     } else {
+  //       showError(
+  //         "Failed to Remove",
+  //         result.error || "Failed to remove question from topic",
+  //       );
+  //     }
+  //   } catch (error) {
+  //     console.error("Error removing question from topic:", error);
+  //     showError("Failed to Remove", "Failed to remove question from topic");
+  //   }
+  // };
 
   // Remove question from both topic and plan
   const removeQuestionFromPlan = async (
@@ -1761,10 +1630,7 @@ export default function UnifiedAdminPage() {
         isOpen={!!addItemContext}
         onClose={() => {
           setAddItemContext(null);
-          setSelectionStep("card");
-          setSelectedCardId(null);
-          setSelectedCategoryId(null);
-          setSelectedTopicId(null);
+          // Reset selection state
           setSelectedQuestionIds(new Set());
         }}
         title={
