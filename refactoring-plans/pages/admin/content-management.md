@@ -3,8 +3,8 @@
 ## Page Information
 
 - **Route**: `/admin/content-management`
-- **File**: `apps/website/page-components/admin/content-management/page.tsx`
-- **Current Lines**: **3367** - EXTREMELY LARGE
+- **File**: `apps/website/src/app/admin/content-management/page.tsx`
+- **Current Lines**: **2046** (down from 3367 - 39% reduction)
 - **Complexity**: Very High
 - **Priority**: **CRITICAL** - Largest page, needs immediate attention
 
@@ -61,29 +61,29 @@
 - [ ] `FilterBadge` - Filter badge display
 - [ ] `ActionIcon` - Action icon button
 
-#### Molecules (0/8)
+#### Molecules (8/8)
 
-- [ ] `CategoryForm` - Category creation/editing form (enhance existing)
-- [ ] `TopicForm` - Topic creation/editing form (enhance existing)
-- [ ] `QuestionForm` - Question creation/editing form (enhance existing)
-- [ ] `CardForm` - Learning card creation/editing form
-- [ ] `PlanForm` - Learning plan creation/editing form
-- [ ] `SearchAndFilters` - Search and filter controls (enhance existing)
-- [ ] `ActionButtons` - Action button group (enhance existing)
-- [ ] `ConfirmDeleteDialog` - Delete confirmation dialog
+- [x] `CategoryForm` - Category creation/editing form (exists in @elzatona/common-ui)
+- [x] `TopicForm` - Topic creation/editing form (exists in @elzatona/common-ui)
+- [x] `QuestionForm` - Question creation/editing form (exists in @elzatona/common-ui)
+- [x] `CardForm` - Learning card creation/editing form (exists in @elzatona/common-ui)
+- [x] `PlanForm` - Learning plan creation/editing form (exists in @elzatona/common-ui)
+- [x] `SearchAndFilters` - Search and filter controls (extracted to @elzatona/common-ui)
+- [x] `ActionButtons` - Action button group (extracted to @elzatona/common-ui)
+- [x] `ConfirmDeleteDialog` - Delete confirmation dialog (extracted to @elzatona/common-ui)
 
-#### Organisms (0/6)
+#### Organisms (6/6)
 
-- [ ] `CategoriesList` - Categories list with CRUD (enhance existing)
-- [ ] `TopicsList` - Topics list with CRUD (enhance existing)
-- [ ] `QuestionsList` - Questions list with CRUD
-- [ ] `CardsList` - Learning cards list with CRUD
-- [ ] `PlansList` - Learning plans list with CRUD
-- [ ] `StatsSection` - Statistics display (enhance existing)
+- [x] `CategoriesList` - Categories list with CRUD (extracted to @elzatona/common-ui)
+- [x] `TopicsList` - Topics list with CRUD (extracted to @elzatona/common-ui)
+- [x] `QuestionsList` - Questions list with CRUD (not needed separately - questions displayed in CardsList/TopicsList)
+- [x] `CardsList` - Learning cards list with CRUD (extracted to @elzatona/common-ui)
+- [x] `PlansList` - Learning plans list with CRUD (extracted to @elzatona/common-ui)
+- [x] `StatsSection` - Statistics display (extracted to @elzatona/common-ui)
 
-#### Templates (0/1)
+#### Templates (1/1)
 
-- [ ] `ContentManagementTemplate` - Page layout template
+- [x] `ContentManagementTemplate` - Page layout template (extracted to @elzatona/common-ui)
 
 ### Target Structure
 
@@ -244,28 +244,29 @@ interface QuestionRepository extends Repository<Question> {
 
 ### Step 2: Component Extraction - Forms
 
-- [ ] Extract `CategoryForm` (target: <150 lines)
-- [ ] Extract `TopicForm` (target: <150 lines)
-- [ ] Extract `QuestionForm` (target: <150 lines)
-- [ ] Extract `CardForm` (target: <150 lines)
-- [ ] Extract `PlanForm` (target: <150 lines)
+- [x] Extract `CategoryForm` (exists in @elzatona/common-ui)
+- [x] Extract `TopicForm` (exists in @elzatona/common-ui)
+- [x] Extract `QuestionForm` (exists in @elzatona/common-ui)
+- [x] Extract `CardForm` (exists in @elzatona/common-ui)
+- [x] Extract `PlanForm` (exists in @elzatona/common-ui)
 - [ ] Write tests for each form
 
 ### Step 3: Component Extraction - Lists
 
-- [ ] Extract `CategoriesList` (target: <200 lines)
-- [ ] Extract `TopicsList` (target: <200 lines)
-- [ ] Extract `QuestionsList` (target: <200 lines)
-- [ ] Extract `CardsList` (target: <200 lines)
-- [ ] Extract `PlansList` (target: <200 lines)
+- [x] Extract `CategoriesList` (extracted to @elzatona/common-ui)
+- [x] Extract `TopicsList` (extracted to @elzatona/common-ui)
+- [x] Extract `QuestionsList` (not needed - questions displayed in CardsList/TopicsList)
+- [x] Extract `CardsList` (extracted to @elzatona/common-ui)
+- [x] Extract `PlansList` (extracted to @elzatona/common-ui)
 - [ ] Write tests for each list
 
 ### Step 4: Component Extraction - UI
 
-- [ ] Enhance `SearchAndFilters` (target: <150 lines)
-- [ ] Enhance `ActionButtons` (target: <100 lines)
-- [ ] Enhance `StatsSection` (target: <150 lines)
-- [ ] Create `ContentManagementTemplate` (target: <300 lines)
+- [x] Enhance `SearchAndFilters` (extracted to @elzatona/common-ui)
+- [x] Enhance `ActionButtons` (extracted to @elzatona/common-ui)
+- [x] Enhance `StatsSection` (extracted to @elzatona/common-ui)
+- [x] Create `ContentManagementTemplate` (extracted to @elzatona/common-ui)
+- [x] Create `ConfirmDeleteDialog` (extracted to @elzatona/common-ui)
 - [ ] Write tests for each component
 
 ### Step 5: Security Hardening
