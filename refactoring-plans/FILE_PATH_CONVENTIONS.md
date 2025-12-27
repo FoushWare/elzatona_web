@@ -6,21 +6,23 @@ To avoid confusion between package roots and source directories, we use the foll
 
 ### For Shared Libraries
 
-**Format:** `@elzatona/[package]` → `lib/[relative-path]`
+**Format:** `@elzatona/[package]` → `[relative-path]` (no `lib/` prefix)
 
 **Examples:**
 
-- `@elzatona/components` → `lib/components/molecules/AdminMetricCard.tsx`
-- `@elzatona/hooks` → `lib/useAdminStats.ts`
-- `@elzatona/contexts` → `lib/AdminAuthProvider.tsx`
+- `@elzatona/components` → `components/molecules/AdminMetricCard.tsx`
+- `@elzatona/hooks` → `useAdminStats.ts`
+- `@elzatona/contexts` → `AdminAuthProvider.tsx`
 
 **Full Path Mapping:**
 
-- `@elzatona/components` → `libs/components/src/lib/components/...`
-- `@elzatona/hooks` → `libs/hooks/src/lib/...`
-- `@elzatona/contexts` → `libs/contexts/src/lib/...`
-- `@elzatona/types` → `libs/types/src/lib/...`
-- `@elzatona/utilities` → `libs/utilities/src/lib/...`
+- `@elzatona/components` → `libs/components/src/components/...` (or `libs/components/src/lib/components/...` currently)
+- `@elzatona/hooks` → `libs/hooks/src/lib/...` (currently)
+- `@elzatona/contexts` → `libs/contexts/src/lib/...` (currently)
+- `@elzatona/types` → `libs/types/src/lib/...` (currently)
+- `@elzatona/utilities` → `libs/utilities/src/lib/...` (currently)
+
+**Note:** The `lib/` folder in the physical structure is an implementation detail. Documentation uses the simplified logical structure without `lib/` to avoid confusion.
 
 ### For App Files
 
@@ -44,10 +46,10 @@ import { useAdminStats } from "@elzatona/hooks";
 **In Documentation:**
 
 ```markdown
-<!-- ✅ DO: Use package alias → relative path -->
+<!-- ✅ DO: Use package alias → relative path (no lib/ prefix) -->
 
-- `@elzatona/components` → `lib/components/molecules/AdminMetricCard.tsx`
-- `@elzatona/hooks` → `lib/useAdminStats.ts`
+- `@elzatona/components` → `components/molecules/AdminMetricCard.tsx`
+- `@elzatona/hooks` → `useAdminStats.ts`
 ```
 
 ## Rationale
@@ -56,3 +58,4 @@ import { useAdminStats } from "@elzatona/hooks";
 2. **Consistency**: All shared libraries follow the same pattern
 3. **Simplicity**: Shorter paths that map clearly to actual file locations
 4. **No Confusion**: Avoids mixing `libs/components` and `libs/components/src`
+5. **Logical Structure**: Shows the logical organization, not the physical `lib/` nesting (which is an implementation detail)

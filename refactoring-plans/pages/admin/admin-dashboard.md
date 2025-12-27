@@ -233,13 +233,13 @@ interface AdminStatsRepository {
 
 ### Test Files Created ✅
 
-- `@elzatona/components` → `lib/components/molecules/AdminMetricCard.test.tsx` ✅
-- `@elzatona/components` → `lib/components/organisms/AdminStatsGrid.test.tsx` ✅
-- `@elzatona/components` → `lib/components/organisms/AdminQuickActionsSection.test.tsx` ✅
-- `@elzatona/components` → `lib/components/templates/AdminDashboardTemplate.test.tsx` ✅
+- `@elzatona/components` → `components/molecules/AdminMetricCard.test.tsx` ✅
+- `@elzatona/components` → `components/organisms/AdminStatsGrid.test.tsx` ✅
+- `@elzatona/components` → `components/organisms/AdminQuickActionsSection.test.tsx` ✅
+- `@elzatona/components` → `components/templates/AdminDashboardTemplate.test.tsx` ✅
 - `apps/website/src/app/admin/dashboard/page.test.tsx` ✅ (updated for refactored version)
 
-**Note:** File paths use package aliases for clarity. See [FILE_PATH_CONVENTIONS.md](../FILE_PATH_CONVENTIONS.md) for the mapping.
+**Note:** File paths use package aliases for clarity. See [FILE_PATH_CONVENTIONS.md](../FILE_PATH_CONVENTIONS.md) for the mapping. The `lib/` folder in the physical structure is an implementation detail.
 
 ## Documentation Updates
 
@@ -252,14 +252,14 @@ interface AdminStatsRepository {
 
 - `apps/website/src/app/admin/dashboard/page.tsx` - Main page component (172 lines)
 - `apps/website/src/app/admin/dashboard/page.test.tsx` - Page unit tests
-- `@elzatona/components` → `lib/components/molecules/AdminMetricCard.tsx` - Metric card molecule
-- `@elzatona/components` → `lib/components/organisms/AdminStatsGrid.tsx` - Stats grid organism
-- `@elzatona/components` → `lib/components/organisms/AdminQuickActionsSection.tsx` - Quick actions organism
-- `@elzatona/components` → `lib/components/templates/AdminDashboardTemplate.tsx` - Dashboard template
-- `@elzatona/hooks` → `lib/useAdminStats.ts` - Stats hook
-- `@elzatona/contexts` → `lib/AdminAuthProvider.tsx` - Auth provider
+- `@elzatona/components` → `components/molecules/AdminMetricCard.tsx` - Metric card molecule
+- `@elzatona/components` → `components/organisms/AdminStatsGrid.tsx` - Stats grid organism
+- `@elzatona/components` → `components/organisms/AdminQuickActionsSection.tsx` - Quick actions organism
+- `@elzatona/components` → `components/templates/AdminDashboardTemplate.tsx` - Dashboard template
+- `@elzatona/hooks` → `useAdminStats.ts` - Stats hook
+- `@elzatona/contexts` → `AdminAuthProvider.tsx` - Auth provider
 
-**Note:** See [FILE_PATH_CONVENTIONS.md](../FILE_PATH_CONVENTIONS.md) for path format explanation.
+**Note:** See [FILE_PATH_CONVENTIONS.md](../FILE_PATH_CONVENTIONS.md) for path format explanation. The `lib/` folder in the physical structure is an implementation detail.
 
 ## Notes
 

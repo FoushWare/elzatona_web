@@ -45,12 +45,15 @@ apps/website/
 
 @elzatona/components (SHARED):
   Package: @elzatona/components
-  Location: libs/components/src/lib/components/
+  Logical Path: components/ (documentation format)
+  Physical Path: libs/components/src/lib/components/ (current implementation)
   Import: import { Component } from "@elzatona/components";
   ├── atoms/                    # Atomic design: atoms
   ├── molecules/                # Atomic design: molecules
   ├── organisms/                # Atomic design: organisms
   └── templates/                # Atomic design: templates
+
+  Note: Documentation uses simplified paths without `lib/` prefix. See FILE_PATH_CONVENTIONS.md
 
 libs/utilities/src/lib/ (SHARED):
   ├── test-utils/               # Test utilities and mocks

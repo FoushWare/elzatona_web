@@ -35,19 +35,19 @@
 
 ## Component Structure ✅
 
-### Atoms (`@elzatona/components` → `lib/components/atoms/`)
+### Atoms (`@elzatona/components` → `components/atoms/`)
 
 - ✅ `AnimatedTitle` - Animated title with sparkles
 - ✅ `CTAButton` - Call-to-action button with hover effects
 - ✅ `LearningTypeCard` - Individual learning type selection card
 
-### Molecules (`@elzatona/components` → `lib/components/molecules/`)
+### Molecules (`@elzatona/components` → `components/molecules/`)
 
 - ✅ `HeroSection` - Main hero section with title and CTA
 - ✅ `LearningStyleSelector` - Learning type selection interface
 - ✅ `AnimatedBackground` - Background animations and particles
 
-### Organisms (`@elzatona/components` → `lib/components/organisms/`)
+### Organisms (`@elzatona/components` → `components/organisms/`)
 
 - ✅ `HomePageLayout` - Overall page layout structure
 - ✅ `PersonalizedContent` - User-specific content sections
