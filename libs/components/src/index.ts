@@ -75,6 +75,7 @@ export { ActivityFeed } from "./lib/components/organisms/ActivityFeed";
 export * from "./lib/components/atoms";
 export * from "./lib/components/molecules";
 export * from "./lib/components/organisms";
+export * from "./lib/components/templates";
 export { ErrorAlert } from "./lib/components/molecules/ErrorAlert";
 export type { ErrorAlertPropsType } from "./lib/components/molecules/ErrorAlert";
 export { DataTableHeader } from "./lib/components/molecules/DataTableHeader";
