@@ -1,53 +1,53 @@
-export * from "./lib/components/ui";
-export * from "./lib/components/admin";
-export * from "./lib/components/common/AdvancedSearch";
-export * from "./lib/utils";
+export * from "./components/ui";
+export * from "./components/admin";
+export * from "./components/common/AdvancedSearch";
+export * from "./utils";
 // Export specific common components that are needed
-export { ErrorBoundary, UserStatistics } from "./lib/common";
+export { ErrorBoundary, UserStatistics } from "./common";
 // Removed problematic auth components that have import issues
 // export * from './lib';
 // Explicitly export dashboards required by website app
-export { default as EnhancedDashboard } from "./lib/common/EnhancedDashboard";
-export { default as EnhancedUserDashboard } from "./lib/common/EnhancedUserDashboard";
+export { default as EnhancedDashboard } from "./common/EnhancedDashboard";
+export { default as EnhancedUserDashboard } from "./common/EnhancedUserDashboard";
 // Re-export commonly used UI primitives for app imports
-export { Button } from "./lib/ui/button";
-export { Badge } from "./lib/ui/badge";
-export { Progress } from "./lib/ui/progress";
-export { Skeleton } from "./lib/ui/skeleton";
-export { Card, CardContent, CardHeader, CardTitle } from "./lib/ui/card";
-export { Switch } from "./lib/ui/switch";
-export { Input } from "./lib/ui/input";
-export { Label } from "./lib/ui/label";
+export { Button } from "./ui/button";
+export { Badge } from "./ui/badge";
+export { Progress } from "./ui/progress";
+export { Skeleton } from "./ui/skeleton";
+export { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
+export { Switch } from "./ui/switch";
+export { Input } from "./ui/input";
+export { Label } from "./ui/label";
 export {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "./lib/ui/select";
-export { ToastContainer, useToast } from "./lib/common/Toast";
-export { BulkOperations } from "./lib/admin/BulkOperations";
-export { CategoryForm } from "./lib/forms/CategoryForm";
-export { TopicForm } from "./lib/forms/TopicForm";
-export { QuestionForm } from "./lib/forms/QuestionForm";
-export { CardForm } from "./lib/forms/CardForm";
-export { PlanForm } from "./lib/forms/PlanForm";
-export { Modal } from "./lib/ui/modal";
-export { Alert, AlertTitle, AlertDescription } from "./lib/ui/alert";
-export { EmptyState } from "./lib/ui/empty-state";
-export { SignInPopup } from "./lib/auth/SignInPopup";
-export { default as AdminNavbar } from "./lib/auth/AdminNavbar";
-export { default as AdminLoginNavbar } from "./lib/auth/AdminLoginNavbar";
-export { default as NavbarSimple } from "./lib/common/NavbarSimple";
-export { default as FirestoreErrorBoundary } from "./lib/common/FirestoreErrorBoundary";
-export { default as FrontendTaskEditor } from "./lib/admin/FrontendTaskEditor";
-export { default as ProblemSolvingEditor } from "./lib/admin/ProblemSolvingEditor";
+} from "./ui/select";
+export { ToastContainer, useToast } from "./common/Toast";
+export { BulkOperations } from "./admin/BulkOperations";
+export { CategoryForm } from "./forms/CategoryForm";
+export { TopicForm } from "./forms/TopicForm";
+export { QuestionForm } from "./forms/QuestionForm";
+export { CardForm } from "./forms/CardForm";
+export { PlanForm } from "./forms/PlanForm";
+export { Modal } from "./ui/modal";
+export { Alert, AlertTitle, AlertDescription } from "./ui/alert";
+export { EmptyState } from "./ui/empty-state";
+export { SignInPopup } from "./auth/SignInPopup";
+export { default as AdminNavbar } from "./auth/AdminNavbar";
+export { default as AdminLoginNavbar } from "./auth/AdminLoginNavbar";
+export { default as NavbarSimple } from "./common/NavbarSimple";
+export { default as FirestoreErrorBoundary } from "./common/FirestoreErrorBoundary";
+export { default as FrontendTaskEditor } from "./admin/FrontendTaskEditor";
+export { default as ProblemSolvingEditor } from "./admin/ProblemSolvingEditor";
 export {
   default as ClientCodeRunner,
   type TestCase,
-} from "./lib/admin/ClientCodeRunner";
-export { NotificationContainer } from "./lib/ui/Notification";
-export { Tabs, TabsList, TabsTrigger, TabsContent } from "./lib/ui/tabs";
+} from "./admin/ClientCodeRunner";
+export { NotificationContainer } from "./ui/Notification";
+export { Tabs, TabsList, TabsTrigger, TabsContent } from "./ui/tabs";
 export {
   Dialog,
   DialogContent,
@@ -56,35 +56,35 @@ export {
   DialogTitle,
   DialogTrigger,
   DialogFooter,
-} from "./lib/ui/dialog";
+} from "./ui/dialog";
 export {
   QuestionContent,
   isValidCode,
   formatCodeContent,
-} from "./lib/QuestionContent";
-export { FormModal, type FormModalProps } from "./lib/common/FormModal";
-export { Separator } from "./lib/ui/separator";
+} from "./QuestionContent";
+export { FormModal, type FormModalProps } from "./common/FormModal";
+export { Separator } from "./ui/separator";
 export {
   Collapsible,
   CollapsibleTrigger,
   CollapsibleContent,
-} from "./lib/ui/collapsible";
-export { ActivityFeed } from "./lib/components/organisms/ActivityFeed";
+} from "./ui/collapsible";
+export { ActivityFeed } from "./components/organisms/ActivityFeed";
 
 // Atomic Design Components
-export * from "./lib/components/atoms";
-export * from "./lib/components/molecules";
-export * from "./lib/components/organisms";
-export * from "./lib/components/templates";
-export { ErrorAlert } from "./lib/components/molecules/ErrorAlert";
-export type { ErrorAlertPropsType } from "./lib/components/molecules/ErrorAlert";
-export { DataTableHeader } from "./lib/components/molecules/DataTableHeader";
-export type { DataTableHeaderPropsType } from "./lib/components/molecules/DataTableHeader";
-export { WelcomeHeader } from "./lib/components/molecules/WelcomeHeader";
-export type { WelcomeHeaderPropsType } from "./lib/components/molecules/WelcomeHeader";
-export { MetricGrid } from "./lib/components/organisms/MetricGrid";
+export * from "./components/atoms";
+export * from "./components/molecules";
+export * from "./components/organisms";
+export * from "./components/templates";
+export { ErrorAlert } from "./components/molecules/ErrorAlert";
+export type { ErrorAlertPropsType } from "./components/molecules/ErrorAlert";
+export { DataTableHeader } from "./components/molecules/DataTableHeader";
+export type { DataTableHeaderPropsType } from "./components/molecules/DataTableHeader";
+export { WelcomeHeader } from "./components/molecules/WelcomeHeader";
+export type { WelcomeHeaderPropsType } from "./components/molecules/WelcomeHeader";
+export { MetricGrid } from "./components/organisms/MetricGrid";
 export {
   QuickActions,
   type QuickAction,
-} from "./lib/components/organisms/QuickActions";
-export type { QuickActionsPropsType } from "./lib/components/organisms/QuickActions";
+} from "./components/organisms/QuickActions";
+export type { QuickActionsPropsType } from "./components/organisms/QuickActions";

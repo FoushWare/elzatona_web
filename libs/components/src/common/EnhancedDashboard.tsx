@@ -10,7 +10,7 @@ import type {
   DashboardStats as SupabaseDashboardStats,
   ContinueData,
   UserProgress,
-} from "../../../../../apps/website/src/app/lib/supabase-progress";
+} from "../../../../apps/website/src/app/lib/supabase-progress";
 
 const useUserProgress = () => ({
   progress: null as UserProgress | null,
@@ -36,7 +36,7 @@ import { useAuth } from "@elzatona/contexts";
 import {
   supabaseClient as supabase,
   isSupabaseAvailable,
-} from "../../../../../apps/website/src/app/lib/supabase-client";
+} from "../../../../apps/website/src/app/lib/supabase-client";
 
 import {
   BookOpen,
