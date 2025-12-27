@@ -32,21 +32,21 @@
 
 ### Component Breakdown (Atomic Design) ✅ COMPLETED
 
-#### Atoms ✅ Moved to `libs/components/src/lib/components/atoms/`
+#### Atoms ✅ Moved to `@elzatona/components` → `lib/components/atoms/`
 
 - ✅ `AnimatedTitle` - Animated title with sparkles
 - ✅ `CTAButton` - Call-to-action button with hover effects
 - ✅ `LearningTypeCard` - Individual learning type selection card
 - `StatCard` - Statistics display component (if needed)
 
-#### Molecules ✅ Moved to `libs/components/src/lib/components/molecules/`
+#### Molecules ✅ Moved to `@elzatona/components` → `lib/components/molecules/`
 
 - ✅ `HeroSection` - Main hero section with title and CTA
 - ✅ `LearningStyleSelector` - Learning type selection interface
 - `UserStatsDisplay` - User statistics section (if needed)
 - ✅ `AnimatedBackground` - Background animations and particles
 
-#### Organisms ✅ Moved to `libs/components/src/lib/components/organisms/`
+#### Organisms ✅ Moved to `@elzatona/components` → `lib/components/organisms/`
 
 - ✅ `HomePageLayout` - Overall page layout structure
 - ✅ `PersonalizedContent` - User-specific content sections

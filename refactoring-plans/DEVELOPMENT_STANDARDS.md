@@ -43,11 +43,14 @@ apps/website/
   │   └── Types/                # App-specific types
   └── context/                  # React contexts
 
-libs/components/src/lib/components/ (SHARED):
+@elzatona/components (SHARED):
+  Package: @elzatona/components
+  Location: libs/components/src/lib/components/
+  Import: import { Component } from "@elzatona/components";
   ├── atoms/                    # Atomic design: atoms
   ├── molecules/                # Atomic design: molecules
   ├── organisms/                # Atomic design: organisms
-  └── templates/                # Atomic design: templates (future)
+  └── templates/                # Atomic design: templates
 
 libs/utilities/src/lib/ (SHARED):
   ├── test-utils/               # Test utilities and mocks
