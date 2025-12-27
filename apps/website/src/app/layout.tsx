@@ -14,9 +14,10 @@ import {
   AuthProvider,
   NotificationProvider,
 } from "@elzatona/contexts";
-import { NavbarSimple, ErrorBoundary } from "@elzatona/components";
+import { ErrorBoundary } from "@elzatona/components";
 import { LearningTypeProvider } from "../context/LearningTypeContext";
 import { NavigationProvider } from "../context/NavigationContext";
+import { ConditionalNavbar } from "./components/ConditionalNavbar";
 
 // Force dynamic rendering to prevent static generation issues with auth context
 export const dynamic = "force-dynamic";
@@ -79,7 +80,7 @@ export default function RootLayout({
                           <LearningTypeProvider>
                             <NavigationProvider>
                               <ErrorBoundary>
-                                <NavbarSimple />
+                                <ConditionalNavbar />
                                 {children}
                                 <SpeedInsights />
                               </ErrorBoundary>
