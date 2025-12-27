@@ -4,30 +4,24 @@
  */
 
 import React from "react";
-import {
-  render,
-  screen,
-  fireEvent,
-  waitFor,
-  act,
-} from "@testing-library/react";
-import "@testing-library/jest-dom";
+import { render, screen, fireEvent, waitFor } from "@testing-library/react";
+import { describe, it, expect, beforeEach, vi } from "vitest";
 import { AdminLoginFormMolecule } from "./AdminLoginFormMolecule";
 import { useAdminAuth } from "@elzatona/contexts";
 
 // Mock the useAdminAuth hook
-jest.mock("@elzatona/contexts", () => ({
-  useAdminAuth: jest.fn(),
+vi.mock("@elzatona/contexts", () => ({
+  useAdminAuth: vi.fn(),
 }));
 
-const mockLogin = jest.fn();
+const mockLogin = vi.fn();
 
 describe("AdminLoginFormMolecule", () => {
   beforeEach(() => {
-    jest.clearAllMocks();
-    (useAdminAuth as jest.Mock).mockReturnValue({
+    vi.clearAllMocks();
+    vi.mocked(useAdminAuth).mockReturnValue({
       login: mockLogin,
-    });
+    } as ReturnType<typeof useAdminAuth>);
   });
 
   describe("Rendering", () => {
@@ -58,28 +52,24 @@ describe("AdminLoginFormMolecule", () => {
   });
 
   describe("Form Input Handling", () => {
-    it("should update email input value on change", async () => {
+    it("should update email input value on change", () => {
       render(<AdminLoginFormMolecule />);
       const emailInput = screen.getByLabelText(
         /Email Address/i,
       ) as HTMLInputElement;
 
-      await act(async () => {
-        fireEvent.change(emailInput, { target: { value: "test@example.com" } });
-      });
+      fireEvent.change(emailInput, { target: { value: "test@example.com" } });
 
       expect(emailInput.value).toBe("test@example.com");
     });
 
-    it("should update password input value on change", async () => {
+    it("should update password input value on change", () => {
       render(<AdminLoginFormMolecule />);
       const passwordInput = screen.getByLabelText(
         /Password/i,
       ) as HTMLInputElement;
 
-      await act(async () => {
-        fireEvent.change(passwordInput, { target: { value: "password123" } });
-      });
+      fireEvent.change(passwordInput, { target: { value: "password123" } });
 
       expect(passwordInput.value).toBe("password123");
     });
@@ -94,11 +84,9 @@ describe("AdminLoginFormMolecule", () => {
       const passwordInput = screen.getByLabelText(/Password/i);
       const form = emailInput.closest("form");
 
-      await act(async () => {
-        fireEvent.change(emailInput, { target: { value: "test@example.com" } });
-        fireEvent.change(passwordInput, { target: { value: "password123" } });
-        fireEvent.submit(form!);
-      });
+      fireEvent.change(emailInput, { target: { value: "test@example.com" } });
+      fireEvent.change(passwordInput, { target: { value: "password123" } });
+      fireEvent.submit(form!);
 
       await waitFor(() => {
         expect(mockLogin).toHaveBeenCalledWith(
@@ -109,7 +97,7 @@ describe("AdminLoginFormMolecule", () => {
     });
 
     it("should call onSuccess callback on successful login", async () => {
-      const onSuccess = jest.fn();
+      const onSuccess = vi.fn();
       mockLogin.mockResolvedValue({ success: true });
 
       render(<AdminLoginFormMolecule onSuccess={onSuccess} />);
@@ -117,11 +105,9 @@ describe("AdminLoginFormMolecule", () => {
       const passwordInput = screen.getByLabelText(/Password/i);
       const form = emailInput.closest("form");
 
-      await act(async () => {
-        fireEvent.change(emailInput, { target: { value: "test@example.com" } });
-        fireEvent.change(passwordInput, { target: { value: "password123" } });
-        fireEvent.submit(form!);
-      });
+      fireEvent.change(emailInput, { target: { value: "test@example.com" } });
+      fireEvent.change(passwordInput, { target: { value: "password123" } });
+      fireEvent.submit(form!);
 
       await waitFor(() => {
         expect(onSuccess).toHaveBeenCalled();
@@ -129,7 +115,7 @@ describe("AdminLoginFormMolecule", () => {
     });
 
     it("should not call onSuccess callback on failed login", async () => {
-      const onSuccess = jest.fn();
+      const onSuccess = vi.fn();
       mockLogin.mockResolvedValue({
         success: false,
         error: "Invalid credentials",
@@ -140,11 +126,9 @@ describe("AdminLoginFormMolecule", () => {
       const passwordInput = screen.getByLabelText(/Password/i);
       const form = emailInput.closest("form");
 
-      await act(async () => {
-        fireEvent.change(emailInput, { target: { value: "test@example.com" } });
-        fireEvent.change(passwordInput, { target: { value: "wrongpassword" } });
-        fireEvent.submit(form!);
-      });
+      fireEvent.change(emailInput, { target: { value: "test@example.com" } });
+      fireEvent.change(passwordInput, { target: { value: "wrongpassword" } });
+      fireEvent.submit(form!);
 
       await waitFor(() => {
         expect(onSuccess).not.toHaveBeenCalled();
@@ -164,11 +148,9 @@ describe("AdminLoginFormMolecule", () => {
       const passwordInput = screen.getByLabelText(/Password/i);
       const form = emailInput.closest("form");
 
-      await act(async () => {
-        fireEvent.change(emailInput, { target: { value: "test@example.com" } });
-        fireEvent.change(passwordInput, { target: { value: "wrongpassword" } });
-        fireEvent.submit(form!);
-      });
+      fireEvent.change(emailInput, { target: { value: "test@example.com" } });
+      fireEvent.change(passwordInput, { target: { value: "wrongpassword" } });
+      fireEvent.submit(form!);
 
       await waitFor(() => {
         expect(screen.getByText(/Invalid credentials/i)).toBeInTheDocument();
@@ -183,11 +165,9 @@ describe("AdminLoginFormMolecule", () => {
       const passwordInput = screen.getByLabelText(/Password/i);
       const form = emailInput.closest("form");
 
-      await act(async () => {
-        fireEvent.change(emailInput, { target: { value: "test@example.com" } });
-        fireEvent.change(passwordInput, { target: { value: "password123" } });
-        fireEvent.submit(form!);
-      });
+      fireEvent.change(emailInput, { target: { value: "test@example.com" } });
+      fireEvent.change(passwordInput, { target: { value: "password123" } });
+      fireEvent.submit(form!);
 
       await waitFor(() => {
         expect(screen.getByText(/Login failed/i)).toBeInTheDocument();
@@ -202,11 +182,9 @@ describe("AdminLoginFormMolecule", () => {
       const passwordInput = screen.getByLabelText(/Password/i);
       const form = emailInput.closest("form");
 
-      await act(async () => {
-        fireEvent.change(emailInput, { target: { value: "test@example.com" } });
-        fireEvent.change(passwordInput, { target: { value: "password123" } });
-        fireEvent.submit(form!);
-      });
+      fireEvent.change(emailInput, { target: { value: "test@example.com" } });
+      fireEvent.change(passwordInput, { target: { value: "password123" } });
+      fireEvent.submit(form!);
 
       await waitFor(() => {
         expect(
@@ -226,23 +204,19 @@ describe("AdminLoginFormMolecule", () => {
       const form = emailInput.closest("form");
 
       // First submission - error
-      await act(async () => {
-        fireEvent.change(emailInput, { target: { value: "test@example.com" } });
-        fireEvent.change(passwordInput, { target: { value: "wrong" } });
-        fireEvent.submit(form!);
-      });
+      fireEvent.change(emailInput, { target: { value: "test@example.com" } });
+      fireEvent.change(passwordInput, { target: { value: "wrong" } });
+      fireEvent.submit(form!);
 
       await waitFor(() => {
         expect(screen.getByText(/First error/i)).toBeInTheDocument();
       });
 
       // Second submission - should clear error
-      await act(async () => {
-        fireEvent.change(passwordInput, {
-          target: { value: "correctpassword" },
-        });
-        fireEvent.submit(form!);
+      fireEvent.change(passwordInput, {
+        target: { value: "correctpassword" },
       });
+      fireEvent.submit(form!);
 
       await waitFor(
         () => {
@@ -268,11 +242,9 @@ describe("AdminLoginFormMolecule", () => {
       const submitButton = screen.getByRole("button", { name: /Sign In/i });
       const form = emailInput.closest("form");
 
-      await act(async () => {
-        fireEvent.change(emailInput, { target: { value: "test@example.com" } });
-        fireEvent.change(passwordInput, { target: { value: "password123" } });
-        fireEvent.submit(form!);
-      });
+      fireEvent.change(emailInput, { target: { value: "test@example.com" } });
+      fireEvent.change(passwordInput, { target: { value: "password123" } });
+      fireEvent.submit(form!);
 
       expect(submitButton).toBeDisabled();
     });
@@ -290,11 +262,9 @@ describe("AdminLoginFormMolecule", () => {
       const passwordInput = screen.getByLabelText(/Password/i);
       const form = emailInput.closest("form");
 
-      await act(async () => {
-        fireEvent.change(emailInput, { target: { value: "test@example.com" } });
-        fireEvent.change(passwordInput, { target: { value: "password123" } });
-        fireEvent.submit(form!);
-      });
+      fireEvent.change(emailInput, { target: { value: "test@example.com" } });
+      fireEvent.change(passwordInput, { target: { value: "password123" } });
+      fireEvent.submit(form!);
 
       await waitFor(() => {
         expect(screen.getByText(/Signing In/i)).toBeInTheDocument();
@@ -310,11 +280,9 @@ describe("AdminLoginFormMolecule", () => {
       const submitButton = screen.getByRole("button", { name: /Sign In/i });
       const form = emailInput.closest("form");
 
-      await act(async () => {
-        fireEvent.change(emailInput, { target: { value: "test@example.com" } });
-        fireEvent.change(passwordInput, { target: { value: "password123" } });
-        fireEvent.submit(form!);
-      });
+      fireEvent.change(emailInput, { target: { value: "test@example.com" } });
+      fireEvent.change(passwordInput, { target: { value: "password123" } });
+      fireEvent.submit(form!);
 
       await waitFor(() => {
         expect(submitButton).not.toBeDisabled();

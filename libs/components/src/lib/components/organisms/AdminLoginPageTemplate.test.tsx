@@ -5,18 +5,18 @@
 
 import React from "react";
 import { render, screen } from "@testing-library/react";
-import "@testing-library/jest-dom";
+import { describe, it, expect, vi } from "vitest";
 import { AdminLoginPageTemplate } from "./AdminLoginPageTemplate";
 
 // Mock AdminLoginNavbar
-jest.mock("@elzatona/components", () => ({
+vi.mock("@elzatona/components", () => ({
   AdminLoginNavbar: () => (
     <nav data-testid="admin-login-navbar">Admin Navbar</nav>
   ),
 }));
 
 // Mock Next.js Link
-jest.mock("next/link", () => {
+vi.mock("next/link", () => {
   const MockLink = ({
     children,
     href,
@@ -27,7 +27,7 @@ jest.mock("next/link", () => {
     return <a href={href}>{children}</a>;
   };
   MockLink.displayName = "MockLink";
-  return MockLink;
+  return { default: MockLink };
 });
 
 describe("AdminLoginPageTemplate", () => {
