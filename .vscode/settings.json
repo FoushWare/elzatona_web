@@ -22,7 +22,8 @@
         "**/.code-quality-check.*.log": true,
         "**/coverage": true,
         "**/.turbo": true,
-        "**/.cache": true
+        "**/.cache": true,
+        "**/.*": true
     },
     "search.exclude": {
         "**/node_modules": true,
@@ -41,6 +42,7 @@
         "**/.code-quality-check.*.log": true,
         "**/coverage": true,
         "**/.turbo": true,
-        "**/.cache": true
+        "**/.cache": true,
+        "**/.*": true
     }
 }
