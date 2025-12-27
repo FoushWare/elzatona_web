@@ -8,20 +8,20 @@ This document provides a comprehensive inventory of all pages in the Elzatona we
 
 ### Admin Pages (12 pages)
 
-| #   | Route                       | File                                              | Lines | Status      | Components | Security | Tests | SonarQube | Priority     | Plan                                                 |
-| --- | --------------------------- | ------------------------------------------------- | ----- | ----------- | ---------- | -------- | ----- | --------- | ------------ | ---------------------------------------------------- |
-| 1   | `/admin`                    | `src/app/admin/page.tsx`                          | 5     | Planned     | 0/0        | ❌       | 0%    | ❌        | Low          | [admin-root.md](admin/admin-root.md)                 |
-| 2   | `/admin/dashboard`          | `src/app/admin/dashboard/page.tsx`                | 380   | In Progress | 0/8        | ❌       | 0%    | ❌        | High         | [admin-dashboard.md](admin/admin-dashboard.md)       |
-| 3   | `/admin/login`              | `src/app/admin/login/page.tsx`                    | 5     | Done        | 3/3        | ❌       | 0%    | ❌        | High         | [admin-login.md](admin/admin-login.md)               |
-| 4   | `/admin/content-management` | `src/app/Pages/admin/content-management/page.tsx` | 3367  | Planned     | 0/15       | ❌       | 0%    | ❌        | **CRITICAL** | [content-management.md](admin/content-management.md) |
-| 5   | `/admin/content/questions`  | `src/app/Pages/admin/content/questions/page.tsx`  | 1496  | Planned     | 0/8        | ❌       | 0%    | ❌        | **CRITICAL** | [content-questions.md](admin/content-questions.md)   |
-| 6   | `/admin/frontend-tasks`     | `src/app/Pages/admin/frontend-tasks/page.tsx`     | 940   | Planned     | 0/5        | ❌       | 0%    | ❌        | High         | [frontend-tasks.md](admin/frontend-tasks.md)         |
-| 7   | `/admin/problem-solving`    | `src/app/Pages/admin/problem-solving/page.tsx`    | 332   | Planned     | 0/5        | ❌       | 0%    | ❌        | Medium       | [problem-solving.md](admin/problem-solving.md)       |
-| 8   | `/admin/learning-cards`     | `src/app/Pages/admin/learning-cards/page.tsx`     | 554   | Planned     | 0/4        | ❌       | 0%    | ❌        | Medium       | [learning-cards.md](admin/learning-cards.md)         |
-| 9   | `/admin/users`              | `src/app/admin/users/page.tsx`                    | 5     | Planned     | 0/4        | ❌       | 0%    | ❌        | High         | [users.md](admin/users.md)                           |
-| 10  | `/admin/questions`          | `src/app/admin/questions/page.tsx`                | 5     | Planned     | 0/0        | ❌       | 0%    | ❌        | Low          | [questions-legacy.md](admin/questions-legacy.md)     |
-| 11  | `/admin/questions/unified`  | `src/app/admin/questions/unified/page.tsx`        | 5     | Planned     | 0/0        | ❌       | 0%    | ❌        | Low          | [questions-unified.md](admin/questions-unified.md)   |
-| 12  | `/admin/logs`               | `src/app/admin/logs/page.tsx`                     | -     | Planned     | 0/0        | ❌       | 0%    | ❌        | Low          | [logs.md](admin/logs.md)                             |
+| #   | Route                       | File                                             | Lines | Status      | Components | Security | Tests | SonarQube | Priority     | Plan                                                 |
+| --- | --------------------------- | ------------------------------------------------ | ----- | ----------- | ---------- | -------- | ----- | --------- | ------------ | ---------------------------------------------------- |
+| 1   | `/admin`                    | `src/app/admin/page.tsx`                         | 5     | Planned     | 0/0        | ❌       | 0%    | ❌        | Low          | [admin-root.md](admin/admin-root.md)                 |
+| 2   | `/admin/dashboard`          | `src/app/admin/dashboard/page.tsx`               | 380   | In Progress | 0/8        | ❌       | 0%    | ❌        | High         | [admin-dashboard.md](admin/admin-dashboard.md)       |
+| 3   | `/admin/login`              | `src/app/admin/login/page.tsx`                   | 5     | Done        | 3/3        | ❌       | 0%    | ❌        | High         | [admin-login.md](admin/admin-login.md)               |
+| 4   | `/admin/content-management` | `src/app/admin/content-management/page.tsx`      | 3367  | In Progress | 16/16      | ❌       | 0%    | ❌        | **CRITICAL** | [content-management.md](admin/content-management.md) |
+| 5   | `/admin/content/questions`  | `src/app/Pages/admin/content/questions/page.tsx` | 1496  | Planned     | 0/8        | ❌       | 0%    | ❌        | **CRITICAL** | [content-questions.md](admin/content-questions.md)   |
+| 6   | `/admin/frontend-tasks`     | `src/app/Pages/admin/frontend-tasks/page.tsx`    | 940   | Planned     | 0/5        | ❌       | 0%    | ❌        | High         | [frontend-tasks.md](admin/frontend-tasks.md)         |
+| 7   | `/admin/problem-solving`    | `src/app/Pages/admin/problem-solving/page.tsx`   | 332   | Planned     | 0/5        | ❌       | 0%    | ❌        | Medium       | [problem-solving.md](admin/problem-solving.md)       |
+| 8   | `/admin/learning-cards`     | `src/app/Pages/admin/learning-cards/page.tsx`    | 554   | Planned     | 0/4        | ❌       | 0%    | ❌        | Medium       | [learning-cards.md](admin/learning-cards.md)         |
+| 9   | `/admin/users`              | `src/app/admin/users/page.tsx`                   | 5     | Planned     | 0/4        | ❌       | 0%    | ❌        | High         | [users.md](admin/users.md)                           |
+| 10  | `/admin/questions`          | `src/app/admin/questions/page.tsx`               | 5     | Planned     | 0/0        | ❌       | 0%    | ❌        | Low          | [questions-legacy.md](admin/questions-legacy.md)     |
+| 11  | `/admin/questions/unified`  | `src/app/admin/questions/unified/page.tsx`       | 5     | Planned     | 0/0        | ❌       | 0%    | ❌        | Low          | [questions-unified.md](admin/questions-unified.md)   |
+| 12  | `/admin/logs`               | `src/app/admin/logs/page.tsx`                    | -     | Planned     | 0/0        | ❌       | 0%    | ❌        | Low          | [logs.md](admin/logs.md)                             |
 
 ### User-Facing Pages (33+ pages)
 
