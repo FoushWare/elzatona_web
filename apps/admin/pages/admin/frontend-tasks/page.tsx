@@ -11,7 +11,7 @@ import {
   SelectValue,
   SelectContent,
   SelectItem,
-} from "@elzatona/components";
+} from "@elzatona/common-ui";
 import {
   Plus,
   Search,

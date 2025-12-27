@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { Badge, Button } from "@elzatona/components";
+import { Badge, Button } from "@elzatona/common-ui";
 import { Edit, Eye, Trash2 } from "lucide-react";
 import type { UnifiedQuestion } from "./QuestionForm";
 

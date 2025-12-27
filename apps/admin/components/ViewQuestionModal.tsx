@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useRef } from "react";
-import { FormModal, Switch, Label } from "@elzatona/components";
+import { FormModal, Switch, Label } from "@elzatona/common-ui";
 import { QuestionPracticeView } from "./QuestionPracticeView";
 import {
   QuestionForm,

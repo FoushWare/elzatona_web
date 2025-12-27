@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { Button, Badge, Checkbox } from "@elzatona/components";
+import { Button, Badge, Checkbox } from "@elzatona/common-ui";
 import { Eye, Edit, Trash2 } from "lucide-react";
 import { UnifiedQuestion } from "@elzatona/types";
 

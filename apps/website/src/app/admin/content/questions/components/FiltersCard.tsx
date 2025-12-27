@@ -13,7 +13,7 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@elzatona/components";
+} from "@elzatona/common-ui";
 import { Filter, X } from "lucide-react";
 
 interface FiltersCardProps {
@@ -97,8 +97,8 @@ export const FiltersCard: React.FC<FiltersCardProps> = ({
                 </SelectContent>
               </Select>
             ) : (
-              <Select disabled>
-                <SelectTrigger id="category-filter" className="w-full">
+              <Select>
+                <SelectTrigger id="category-filter" disabled className="w-full">
                   <SelectValue placeholder="Loading..." />
                 </SelectTrigger>
               </Select>
@@ -128,8 +128,12 @@ export const FiltersCard: React.FC<FiltersCardProps> = ({
                 </SelectContent>
               </Select>
             ) : (
-              <Select disabled={!selectedCategory}>
-                <SelectTrigger id="topic-filter" className="w-full">
+              <Select>
+                <SelectTrigger
+                  id="topic-filter"
+                  disabled={!selectedCategory}
+                  className="w-full"
+                >
                   <SelectValue
                     placeholder={
                       selectedCategory
@@ -171,8 +175,8 @@ export const FiltersCard: React.FC<FiltersCardProps> = ({
                 </SelectContent>
               </Select>
             ) : (
-              <Select disabled>
-                <SelectTrigger id="type-filter" className="w-full">
+              <Select>
+                <SelectTrigger id="type-filter" disabled className="w-full">
                   <SelectValue placeholder="No types available" />
                 </SelectTrigger>
               </Select>

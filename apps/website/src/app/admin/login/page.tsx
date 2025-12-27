@@ -4,7 +4,7 @@ import { useAdminAuth } from "@elzatona/contexts";
 import {
   AdminLoginPageTemplate,
   AdminLoginFormMolecule,
-} from "@elzatona/components";
+} from "@elzatona/common-ui";
 
 export default function AdminLoginPage() {
   const { isLoading } = useAdminAuth();

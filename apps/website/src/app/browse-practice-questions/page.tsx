@@ -17,7 +17,7 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@elzatona/components";
+} from "@elzatona/common-ui";
 
 export default function BrowsePracticeQuestionsPage() {
   const router = useRouter();

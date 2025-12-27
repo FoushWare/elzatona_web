@@ -34,7 +34,7 @@
 
 - `@elzatona/contexts` - AdminAuthProvider, useAdminAuth
 - `@elzatona/hooks` - useAdminStats
-- `@elzatona/components` - Various UI components
+- `@elzatona/common-ui` - Various UI components
 - `lucide-react` - Icons
 
 ## Refactoring Strategy
@@ -233,10 +233,10 @@ interface AdminStatsRepository {
 
 ### Test Files Created ✅
 
-- `@elzatona/components` → `components/molecules/AdminMetricCard.test.tsx` ✅
-- `@elzatona/components` → `components/organisms/AdminStatsGrid.test.tsx` ✅
-- `@elzatona/components` → `components/organisms/AdminQuickActionsSection.test.tsx` ✅
-- `@elzatona/components` → `components/templates/AdminDashboardTemplate.test.tsx` ✅
+- `@elzatona/common-ui` → `components/molecules/AdminMetricCard.test.tsx` ✅
+- `@elzatona/common-ui` → `components/organisms/AdminStatsGrid.test.tsx` ✅
+- `@elzatona/common-ui` → `components/organisms/AdminQuickActionsSection.test.tsx` ✅
+- `@elzatona/common-ui` → `components/templates/AdminDashboardTemplate.test.tsx` ✅
 - `apps/website/src/app/admin/dashboard/page.test.tsx` ✅ (updated for refactored version)
 
 **Note:** File paths use package aliases for clarity. See [FILE_PATH_CONVENTIONS.md](../FILE_PATH_CONVENTIONS.md) for the mapping. The `lib/` folder in the physical structure is an implementation detail.
@@ -252,10 +252,10 @@ interface AdminStatsRepository {
 
 - `apps/website/src/app/admin/dashboard/page.tsx` - Main page component (172 lines)
 - `apps/website/src/app/admin/dashboard/page.test.tsx` - Page unit tests
-- `@elzatona/components` → `components/molecules/AdminMetricCard.tsx` - Metric card molecule
-- `@elzatona/components` → `components/organisms/AdminStatsGrid.tsx` - Stats grid organism
-- `@elzatona/components` → `components/organisms/AdminQuickActionsSection.tsx` - Quick actions organism
-- `@elzatona/components` → `components/templates/AdminDashboardTemplate.tsx` - Dashboard template
+- `@elzatona/common-ui` → `components/molecules/AdminMetricCard.tsx` - Metric card molecule
+- `@elzatona/common-ui` → `components/organisms/AdminStatsGrid.tsx` - Stats grid organism
+- `@elzatona/common-ui` → `components/organisms/AdminQuickActionsSection.tsx` - Quick actions organism
+- `@elzatona/common-ui` → `components/templates/AdminDashboardTemplate.tsx` - Dashboard template
 - `@elzatona/hooks` → `useAdminStats.ts` - Stats hook
 - `@elzatona/contexts` → `AdminAuthProvider.tsx` - Auth provider
 

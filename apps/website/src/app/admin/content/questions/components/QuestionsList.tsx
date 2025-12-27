@@ -8,7 +8,7 @@ import {
   CardTitle,
   Button,
   Checkbox,
-} from "@elzatona/components";
+} from "@elzatona/common-ui";
 import { Plus, Trash2, Upload, BookOpen } from "lucide-react";
 import { UnifiedQuestion } from "@elzatona/types";
 import { QuestionItem } from "./QuestionItem";

@@ -13,7 +13,7 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@elzatona/components";
+} from "@elzatona/common-ui";
 import { Filter, X } from "lucide-react";
 
 interface FiltersCardProps {

@@ -7,7 +7,7 @@ import {
   DialogHeader,
   DialogTitle,
   DialogDescription,
-} from "@elzatona/components";
+} from "@elzatona/common-ui";
 import BulkUploadForm from "./BulkUploadForm";
 
 interface BulkUploadModalProps {

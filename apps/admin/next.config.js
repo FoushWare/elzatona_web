@@ -6,7 +6,7 @@ const nextConfig = {
     "auth",
     "database",
     "utils",
-    "@elzatona/components",
+    "@elzatona/common-ui",
     "@elzatona/contexts",
     "@elzatona/hooks",
     "@elzatona/shared-atoms",

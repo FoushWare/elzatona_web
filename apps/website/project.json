@@ -9,7 +9,7 @@
     "hooks",
     "shared-atoms",
     "types",
-    "components",
+    "common-ui",
     "utilities"
   ],
   "targets": {

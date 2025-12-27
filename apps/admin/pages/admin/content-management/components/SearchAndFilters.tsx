@@ -8,7 +8,7 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@elzatona/components";
+} from "@elzatona/common-ui";
 
 const LoadingSkeleton = () => (
   <div className="animate-pulse">

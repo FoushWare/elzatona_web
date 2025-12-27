@@ -39,7 +39,7 @@ jest.mock("next/navigation", () => ({
 }));
 
 // Mock shared components
-jest.mock("@elzatona/components", () => ({
+jest.mock("@elzatona/common-ui", () => ({
   Card: ({ children }: { children: React.ReactNode }) => (
     <div data-testid="card">{children}</div>
   ),

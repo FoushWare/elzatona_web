@@ -51,7 +51,7 @@ jest.mock("@elzatona/contexts", () => {
 });
 
 // Mock shared components
-jest.mock("@elzatona/components", () => {
+jest.mock("@elzatona/common-ui", () => {
   const React = jest.requireActual("react");
   return {
     AdminLoginNavbar: () => (

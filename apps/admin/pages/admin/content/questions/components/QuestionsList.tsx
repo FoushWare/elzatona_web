@@ -7,7 +7,7 @@ import {
   CardHeader,
   CardTitle,
   Button,
-} from "@elzatona/components";
+} from "@elzatona/common-ui";
 import { Plus, BookOpen } from "lucide-react";
 import { QuestionItem } from "./QuestionItem";
 import { PaginationControls } from "./PaginationControls";

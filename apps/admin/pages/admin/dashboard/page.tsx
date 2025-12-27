@@ -1,6 +1,6 @@
 "use client";
 
-import { AdminDashboard } from "@elzatona/components";
+import { AdminDashboard } from "@elzatona/common-ui";
 
 export default function DashboardPage() {
   return <AdminDashboard />;

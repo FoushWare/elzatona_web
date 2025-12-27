@@ -15,7 +15,7 @@ import {
   Collapsible,
   CollapsibleTrigger,
   CollapsibleContent,
-} from "@elzatona/components";
+} from "@elzatona/common-ui";
 import {
   BookOpen,
   BarChart3,
@@ -196,8 +196,9 @@ const SelectField = ({
 }) => (
   <div>
     <Label className="text-sm font-medium">{label}</Label>
-    <Select value={value} onValueChange={onValueChange} disabled={disabled}>
+    <Select value={value} onValueChange={onValueChange}>
       <SelectTrigger
+        disabled={disabled}
         className={`mt-1 ${readOnly ? "bg-gray-50 dark:bg-gray-900 cursor-not-allowed" : ""}`}
       >
         <SelectValue placeholder={placeholder} />

@@ -33,7 +33,7 @@ jest.mock("@elzatona/hooks", () => ({
   })),
 }));
 
-jest.mock("@elzatona/components", () => ({
+jest.mock("@elzatona/common-ui", () => ({
   FrontendTaskEditor: ({ onSave, onCancel }: any) => (
     <div data-testid="frontend-task-editor">
       <button onClick={() => onSave({})}>Save</button>

@@ -138,7 +138,7 @@ This document provides a comprehensive inventory of all pages in the Elzatona we
 ### Phase 1: Critical Infrastructure (Weeks 1-2)
 
 - [x] Home Page (`/`) - **COMPLETED**
-  - Components moved to `libs/components/`
+  - Components moved to `libs/common-ui/`
   - Page reduced from 565 to 66 lines
   - Atomic design structure implemented
 - [ ] Authentication (`/auth`, `/auth/callback`)

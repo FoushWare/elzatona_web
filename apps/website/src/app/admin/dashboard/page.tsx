@@ -20,7 +20,7 @@ import { useAdminStats } from "@elzatona/hooks";
 import {
   AdminDashboardTemplate,
   type AdminMetricCardPropsType,
-} from "@elzatona/components";
+} from "@elzatona/common-ui";
 
 export default function AdminDashboard() {
   const { user } = useAdminAuth();

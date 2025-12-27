@@ -115,7 +115,7 @@ jest.mock("@tanstack/react-query", () => ({
   }),
 }));
 
-jest.mock("@elzatona/components", () => ({
+jest.mock("@elzatona/common-ui", () => ({
   BulkOperations: () => (
     <div data-testid="bulk-operations">Bulk Operations</div>
   ),

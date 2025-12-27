@@ -10,7 +10,7 @@ import {
   DialogFooter,
   Button,
   Badge,
-} from "@elzatona/components";
+} from "@elzatona/common-ui";
 import { AlertTriangle, Trash2, Loader2 } from "lucide-react";
 import { UnifiedQuestion } from "@elzatona/types";
 

@@ -1,7 +1,7 @@
 "use client";
 
 import { usePathname } from "next/navigation";
-import { NavbarSimple } from "@elzatona/components";
+import { NavbarSimple } from "@elzatona/common-ui";
 
 /**
  * ConditionalNavbar Component

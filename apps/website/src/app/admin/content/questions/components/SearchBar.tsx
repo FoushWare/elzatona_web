@@ -7,7 +7,7 @@ import {
   CardHeader,
   CardTitle,
   Input,
-} from "@elzatona/components";
+} from "@elzatona/common-ui";
 
 interface SearchBarProps {
   readonly searchTerm: string;
