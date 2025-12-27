@@ -219,6 +219,7 @@ codeql-database/
 *.log
 *.sarif
 .code-quality-check.*
+.code-quality-check.*.log
 .sonar-scanner.log
 .backup.logs/
 .logs/
