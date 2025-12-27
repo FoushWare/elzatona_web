@@ -216,7 +216,7 @@ import type { User } from "../../types/user";
 | Admin Root            | `/admin`                     | Planned     | 5              | -             | 0/0        | ❌       | 0%    | ❌        | Low          |
 | Admin Dashboard       | `/admin/dashboard`           | In Progress | 380            | -             | 0/8        | ❌       | 0%    | ❌        | High         |
 | Admin Login           | `/admin/login`               | Done        | 5              | 17            | 3/3        | ❌       | 0%    | ❌        | High         |
-| Content Management    | `/admin/content-management`  | Planned     | 3367           | -             | 0/15       | ❌       | 0%    | ❌        | **CRITICAL** |
+| Content Management    | `/admin/content-management`  | In Progress | 3367           | -             | 0/15       | ❌       | 0%    | ❌        | **CRITICAL** |
 | Content Questions     | `/admin/content/questions`   | Planned     | 1496           | -             | 0/8        | ❌       | 0%    | ❌        | **CRITICAL** |
 | Frontend Tasks Admin  | `/admin/frontend-tasks`      | Planned     | 940            | -             | 0/5        | ❌       | 0%    | ❌        | High         |
 | Problem Solving Admin | `/admin/problem-solving`     | Planned     | 332            | -             | 0/5        | ❌       | 0%    | ❌        | Medium       |
@@ -224,7 +224,7 @@ import type { User } from "../../types/user";
 | Users Admin           | `/admin/users`               | Planned     | 5              | -             | 0/4        | ❌       | 0%    | ❌        | High         |
 | Home Page             | `/`                          | Done        | 565            | 66            | 5/5        | ❌       | 0%    | ❌        | High         |
 | Authentication        | `/auth`                      | Planned     | 5              | -             | 0/4        | ❌       | 0%    | ❌        | **CRITICAL** |
-| User Dashboard        | `/dashboard`                 | Planned     | -              | -             | 0/5        | ❌       | 0%    | ❌        | High         |
+| User Dashboard        | `/dashboard`                 | Done        | -              | -             | 0/5        | ❌       | 0%    | ❌        | High         |
 | Browse Practice       | `/browse-practice-questions` | Planned     | 562            | -             | 0/4        | ❌       | 0%    | ❌        | Medium       |
 | Custom Roadmap        | `/custom-roadmap`            | Planned     | 3115           | -             | 0/8        | ❌       | 0%    | ❌        | **CRITICAL** |
 | Free Style Practice   | `/free-style-practice`       | Planned     | 3941           | -             | 0/8        | ❌       | 0%    | ❌        | **CRITICAL** |
