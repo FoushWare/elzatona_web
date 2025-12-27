@@ -1,0 +1,46 @@
+{
+    "sonarlint.connectedMode.project": {
+        "connectionId": "foushware",
+        "projectKey": "FoushWare_GreatFrontendHub"
+    },
+    "files.exclude": {
+        "**/.git": true,
+        "**/.DS_Store": true,
+        "**/node_modules": true,
+        "**/.next": true,
+        "**/dist": true,
+        "**/build": true,
+        "**/.nx": true,
+        "**/.swc": true,
+        "**/.cursor": true,
+        "**/.vscode": true,
+        "**/.idea": true,
+        "**/.husky": true,
+        "**/.sonarlint": true,
+        "**/.logs": true,
+        "**/.backup.logs": true,
+        "**/.code-quality-check.*.log": true,
+        "**/coverage": true,
+        "**/.turbo": true,
+        "**/.cache": true
+    },
+    "search.exclude": {
+        "**/node_modules": true,
+        "**/.next": true,
+        "**/dist": true,
+        "**/build": true,
+        "**/.nx": true,
+        "**/.swc": true,
+        "**/.cursor": true,
+        "**/.vscode": true,
+        "**/.idea": true,
+        "**/.husky": true,
+        "**/.sonarlint": true,
+        "**/.logs": true,
+        "**/.backup.logs": true,
+        "**/.code-quality-check.*.log": true,
+        "**/coverage": true,
+        "**/.turbo": true,
+        "**/.cache": true
+    }
+}
