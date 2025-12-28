@@ -67,7 +67,8 @@ const config = {
     ".*e2e.*", // Catch-all for any path containing "e2e"
   ],
   // Allow tests outside the app directory
-  roots: ["<rootDir>", "<rootDir>/../../tests", "<rootDir>/../../libs"],
+  // Only include roots that exist - tests directory may not exist in all environments
+  roots: ["<rootDir>", "<rootDir>/../../libs"],
   // Transform ESM modules - allow nuqs and other ESM packages
   // Need to include the full path for nuqs submodules
   // Note: shiki and refractor are mocked via moduleNameMapper, so we don't need to transform them
