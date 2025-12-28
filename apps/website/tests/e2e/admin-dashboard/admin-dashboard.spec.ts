@@ -23,7 +23,7 @@ test.describe("Admin Dashboard Page E2E", () => {
       if (adminEmail && adminPassword) {
         await page.getByLabel(/Email Address/i).fill(adminEmail);
         await page.getByLabel(/Password/i).fill(adminPassword);
-        await page.getByRole("button", { name: /Sign In/i).click();
+        await page.getByRole("button", { name: /Sign In/i }).click();
         await page.waitForURL("/admin/dashboard", { timeout: 10000 });
       } else {
         test.skip();
