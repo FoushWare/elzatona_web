@@ -37,7 +37,7 @@ interface Category {
 
 interface TopicFormProps {
   topic?: Topic;
-  categories: Category[];
+  categories: readonly Category[];
   onSubmit: (data: TopicFormData | TopicFormData[]) => Promise<void>;
   onCancel: () => void;
   isLoading?: boolean;
@@ -62,7 +62,7 @@ const DIFFICULTIES = [
 // Custom hook to consolidate topic form state management
 const useTopicFormState = (
   topic: Topic | undefined,
-  categories: Category[],
+  categories: readonly Category[],
 ) => {
   const [formData, setFormData] = useState<TopicFormData>({
     name: topic?.name || "",
