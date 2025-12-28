@@ -216,7 +216,7 @@ import type { User } from "../../types/user";
 | Admin Root            | `/admin`                     | Planned     | 5              | -             | 0/0        | ❌       | 0%    | ❌        | Low          |
 | Admin Dashboard       | `/admin/dashboard`           | In Progress | 380            | -             | 0/8        | ❌       | 0%    | ❌        | High         |
 | Admin Login           | `/admin/login`               | Done        | 5              | 17            | 3/3        | ❌       | 0%    | ❌        | High         |
-| Content Management    | `/admin/content-management`  | In Progress | 3367           | 2046          | 16/16      | ❌       | 0%    | ❌        | **CRITICAL** |
+| Content Management    | `/admin/content-management`  | Done        | 3367           | 266           | 16/16      | ✅       | 92%   | ✅        | **CRITICAL** |
 | Content Questions     | `/admin/content/questions`   | Planned     | 1496           | -             | 0/8        | ❌       | 0%    | ❌        | **CRITICAL** |
 | Frontend Tasks Admin  | `/admin/frontend-tasks`      | Planned     | 940            | -             | 0/5        | ❌       | 0%    | ❌        | High         |
 | Problem Solving Admin | `/admin/problem-solving`     | Planned     | 332            | -             | 0/5        | ❌       | 0%    | ❌        | Medium       |
@@ -282,7 +282,7 @@ import type { User } from "../../types/user";
 ### Phase 2: Core Features (Weeks 3-5)
 
 4. User Dashboard (`/dashboard`)
-5. Content Management (`/admin/content-management`) - **3367 lines**
+5. Content Management (`/admin/content-management`) - **266 lines** ✅ (moved to apps/admin)
 6. Questions Management (`/admin/content/questions`) - **1496 lines**
 7. Browse Practice Questions (`/browse-practice-questions`)
 

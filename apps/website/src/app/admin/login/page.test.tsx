@@ -473,7 +473,7 @@ describe("A-UT-SNAPSHOT: Admin Login Page Snapshot Tests", () => {
 
   it("should match admin login page snapshot (default state)", () => {
     const { container } = render(<AdminLoginPage />);
-    expect(container.firstChild).toMatchSnapshot();
+    expect(container.firstChild).toMatchSnapshot("admin-login-default");
   });
 
   it("should match admin login page snapshot (loading state)", () => {
@@ -486,7 +486,7 @@ describe("A-UT-SNAPSHOT: Admin Login Page Snapshot Tests", () => {
     });
 
     const { container } = render(<AdminLoginPage />);
-    expect(container.firstChild).toMatchSnapshot();
+    expect(container.firstChild).toMatchSnapshot("admin-login-loading");
   });
 
   it("should match admin login page snapshot (with form values)", () => {
@@ -503,6 +503,29 @@ describe("A-UT-SNAPSHOT: Admin Login Page Snapshot Tests", () => {
     fireEvent.change(emailInput, { target: { value: MOCK_EMAIL } });
     fireEvent.change(passwordInput, { target: { value: MOCK_PASSWORD } });
 
-    expect(container.firstChild).toMatchSnapshot();
+    expect(container.firstChild).toMatchSnapshot("admin-login-with-form-values");
+  });
+
+  it("should match admin login page snapshot (error state)", async () => {
+    mockLogin.mockResolvedValueOnce({
+      success: false,
+      error: "Invalid credentials",
+    });
+
+    const { container } = render(<AdminLoginPage />);
+    const emailInput = screen.getByLabelText(/Email Address/i);
+    const passwordInput = screen.getByLabelText(/Password/i);
+    const submitButton = screen.getByRole("button", { name: /Sign In/i });
+    const form = submitButton.closest("form");
+
+    await act(async () => {
+      fireEvent.change(emailInput, { target: { value: "wrong@example.com" } });
+      fireEvent.change(passwordInput, { target: { value: "wrong" } });
+      fireEvent.submit(form!);
+    });
+
+    await waitFor(() => {
+      expect(container.firstChild).toMatchSnapshot("admin-login-error");
+    });
   });
 });

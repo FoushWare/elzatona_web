@@ -55,10 +55,10 @@ interface AdminAuthProviderProps {
 
 export function AdminAuthProvider({ children }: AdminAuthProviderProps) {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [isLoading, setIsLoading] = useState(false); // Start with false for development
+  const [isLoading, setIsLoading] = useState(true); // Start with true to check session first
   const [user, setUser] = useState<AdminSession | null>(null);
   const [error, setError] = useState<string | null>(null);
-  const [isHydrated, setIsHydrated] = useState(true); // Start as hydrated for development
+  const [isHydrated, setIsHydrated] = useState(false); // Start as not hydrated, will be set to true after check
 
   const router = useRouter();
   const pathname = usePathname();
@@ -72,30 +72,41 @@ export function AdminAuthProvider({ children }: AdminAuthProviderProps) {
           return;
         }
 
-        // Mark as hydrated first
-        setIsHydrated(true);
-
-        // Check for mock session in localStorage first
+        // Check for admin session in localStorage first (primary auth method)
         const storedSession = localStorage.getItem("admin_session");
         if (storedSession) {
           try {
-            const mockSession = JSON.parse(storedSession);
+            const adminSession = JSON.parse(storedSession);
             // Check if session is still valid (not expired)
-            if (new Date(mockSession.expiresAt) > new Date()) {
-              console.log("✅ Restoring mock admin session");
-              setUser(mockSession);
+            const expiresAt = new Date(adminSession.expiresAt);
+            const now = new Date();
+            if (expiresAt > now) {
+              console.log("✅ Restoring admin session from localStorage:", {
+                email: adminSession.email,
+                name: adminSession.name,
+                role: adminSession.role,
+                expiresAt: adminSession.expiresAt,
+              });
+              setUser(adminSession);
               setIsAuthenticated(true);
+              setIsHydrated(true);
               setIsLoading(false);
-              return;
+              return; // Exit early, session restored successfully
             } else {
               // Session expired, remove it
+              console.log(
+                "⏰ Admin session expired, removing from localStorage",
+              );
               localStorage.removeItem("admin_session");
             }
           } catch (error) {
-            console.error("Error parsing stored session:", error);
+            console.error("❌ Error parsing stored session:", error);
             localStorage.removeItem("admin_session");
           }
         }
+
+        // Mark as hydrated after checking localStorage
+        setIsHydrated(true);
 
         // If no mock session, check Supabase session
         const {
@@ -109,6 +120,7 @@ export function AdminAuthProvider({ children }: AdminAuthProviderProps) {
           console.error("Error getting session:", error);
           setIsAuthenticated(false);
           setUser(null);
+          setIsLoading(false);
           return;
         }
 
@@ -142,17 +154,24 @@ export function AdminAuthProvider({ children }: AdminAuthProviderProps) {
 
           setUser(adminSession);
           setIsAuthenticated(true);
+          console.log("✅ Admin session restored from Supabase");
         } else {
           console.log("❌ No Supabase session found");
           setIsAuthenticated(false);
           setUser(null);
         }
       } catch (error) {
-        console.error("Error checking session:", error);
+        console.error("❌ Error checking session:", error);
         setIsAuthenticated(false);
         setUser(null);
       } finally {
+        console.log("🏁 Session check complete. Final state:", {
+          isAuthenticated,
+          hasUser: !!user,
+          isLoading: false,
+        });
         setIsLoading(false);
+        setIsHydrated(true);
       }
     };
 
@@ -166,25 +185,15 @@ export function AdminAuthProvider({ children }: AdminAuthProviderProps) {
     const isLoginPage = pathname === "/admin/login";
     const isAdminRootPage = pathname === "/admin";
 
-    // TEMPORARY: Skip authentication for development/testing
-    const isDevelopment = process.env["NODE_ENV"] === "development";
-    const skipAuthForTesting =
-      isDevelopment &&
-      (pathname === "/" ||
-        pathname?.includes("/admin/content/questions") ||
-        pathname?.includes("/admin/enhanced-structure") ||
-        pathname?.includes("/admin/content-management") ||
-        pathname?.includes("/admin/dashboard"));
-
+    // All admin routes require authentication (except login and root)
     const isProtectedRoute =
-      pathname?.startsWith("/admin") && !isLoginPage && !skipAuthForTesting;
+      pathname?.startsWith("/admin") && !isLoginPage && !isAdminRootPage;
 
     console.log("🔄 AdminAuthProvider redirect logic:", {
       isLoading,
       isAuthenticated,
       isLoginPage,
       isAdminRootPage,
-      skipAuthForTesting,
       isProtectedRoute,
       pathname,
     });
@@ -208,7 +217,7 @@ export function AdminAuthProvider({ children }: AdminAuthProviderProps) {
       return;
     }
 
-    // Only redirect from protected routes, not from login or testing routes
+    // Redirect unauthenticated users from protected routes to login
     if (!isAuthenticated && isProtectedRoute) {
       console.log(
         "🚨 Redirecting to login - not authenticated on protected route",

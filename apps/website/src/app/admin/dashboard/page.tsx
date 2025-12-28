@@ -28,22 +28,27 @@ export default function AdminDashboard() {
   // Use TanStack Query hook for admin stats
   const {
     data: stats,
-    isLoading: loading,
+    isLoading,
+    isFetching,
     error: statsError,
     refetch: refetchStats,
     isRefetching: refreshing,
   } = useAdminStats();
+
+  // Show loading skeleton when initially loading OR when fetching OR when no data exists yet
+  const loading = isLoading || (isFetching && !stats) || !stats;
 
   const handleRefresh = () => {
     refetchStats();
   };
 
   // Prepare metrics for AdminStatsGrid
+  // Use 0 as placeholder value - the loading prop will control skeleton display
   const metrics: readonly AdminMetricCardPropsType[] = [
     {
       icon: Database,
       label: "Total Questions",
-      value: stats?.questions || 0,
+      value: stats?.questions ?? 0,
       iconBgColor: "bg-gradient-to-r from-blue-500 to-blue-600",
       trend: {
         icon: TrendingUp,
@@ -54,7 +59,7 @@ export default function AdminDashboard() {
     {
       icon: BookOpen,
       label: "Learning Cards",
-      value: stats?.learningCards || 0,
+      value: stats?.learningCards ?? 0,
       iconBgColor: "bg-gradient-to-r from-green-500 to-green-600",
       trend: {
         icon: Star,
@@ -65,7 +70,7 @@ export default function AdminDashboard() {
     {
       icon: Target,
       label: "Learning Plans",
-      value: stats?.learningPlans || 0,
+      value: stats?.learningPlans ?? 0,
       iconBgColor: "bg-gradient-to-r from-purple-500 to-purple-600",
       trend: {
         icon: Activity,
@@ -76,7 +81,7 @@ export default function AdminDashboard() {
     {
       icon: Tag,
       label: "Topics",
-      value: stats?.topics || 0,
+      value: stats?.topics ?? 0,
       iconBgColor: "bg-gradient-to-r from-indigo-500 to-indigo-600",
       trend: {
         icon: Tag,
@@ -87,7 +92,7 @@ export default function AdminDashboard() {
     {
       icon: Folder,
       label: "Categories",
-      value: stats?.categories || 0,
+      value: stats?.categories ?? 0,
       iconBgColor: "bg-gradient-to-r from-pink-500 to-pink-600",
       trend: {
         icon: Folder,
@@ -98,7 +103,7 @@ export default function AdminDashboard() {
     {
       icon: Zap,
       label: "Total Tasks",
-      value: (stats?.frontendTasks || 0) + (stats?.problemSolvingTasks || 0),
+      value: (stats?.frontendTasks ?? 0) + (stats?.problemSolvingTasks ?? 0),
       iconBgColor: "bg-gradient-to-r from-orange-500 to-orange-600",
       trend: {
         icon: Code,
@@ -123,6 +128,7 @@ export default function AdminDashboard() {
       href: "/admin/content-management",
       icon: CreditCard,
       color: "bg-green-500",
+      // Note: This route is now in apps/admin app, not apps/website
     },
     {
       title: "Create Frontend Task",

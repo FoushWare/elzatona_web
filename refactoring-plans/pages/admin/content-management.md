@@ -3,36 +3,38 @@
 ## Page Information
 
 - **Route**: `/admin/content-management`
-- **File**: `apps/website/src/app/admin/content-management/page.tsx`
-- **Current Lines**: **2046** (down from 3367 - 39% reduction)
+- **File**: `apps/admin/pages/admin/content-management/page.tsx` ✅ **MOVED FROM apps/website**
+- **Current Lines**: **266** (down from 3367 - 92% reduction) ✅ **UNDER 300 LINE LIMIT**
 - **Complexity**: Very High
 - **Priority**: **CRITICAL** - Largest page, needs immediate attention
+- **Status**: ✅ **DONE** - Refactored and moved to apps/admin
 
 ## Current State Analysis
 
 ### File Location
 
-- **Source**: `apps/website/page-components/admin/content-management/page.tsx`
-- **Wrapper**: `apps/website/src/app/admin/content-management/page.tsx`
+- **Current**: `apps/admin/pages/admin/content-management/page.tsx` ✅
+- **Previous**: `apps/website/src/app/admin/content-management/page.tsx` (removed)
+- **Note**: Page has been moved to `apps/admin` app where it belongs
 
-### Current Implementation
+### Current Implementation ✅ **REFACTORED**
 
-- Monolithic component (3367 lines)
-- Manages: Cards, Plans, Categories, Topics, Questions
-- Uses TanStack Query for data fetching
-- Complex state management
-- Multiple forms and modals
-- Search and filter functionality
+- ✅ Refactored component (266 lines - 92% reduction)
+- ✅ Manages: Cards, Plans, Categories, Topics, Questions
+- ✅ Uses TanStack Query for data fetching
+- ✅ Separated concerns with custom hooks (8 hooks)
+- ✅ Extracted components (7 components)
+- ✅ Search and filter functionality
+- ✅ Single responsibility principle followed
 
-### Current Issues
+### Refactoring Results ✅
 
-- **CRITICAL**: Extremely large file (3367 lines)
-- Monolithic structure
-- Mixed concerns (data + UI + business logic)
-- Hard to maintain
-- Hard to test
-- Performance issues likely
-- Security vulnerabilities possible
+- ✅ **File size**: Reduced from 3367 to 266 lines (92% reduction)
+- ✅ **Under 300 line limit**: ✅ Achieved
+- ✅ **Single responsibility**: ✅ Main page only orchestrates hooks
+- ✅ **Testable**: ✅ Unit tests created
+- ✅ **Maintainable**: ✅ Clear separation of concerns
+- ✅ **Location**: ✅ Moved to apps/admin where it belongs
 
 ### Dependencies
 
@@ -371,10 +373,11 @@ interface QuestionRepository extends Repository<Question> {
 
 ## Related Files
 
-- `apps/website/page-components/admin/content-management/page.tsx` - Main component
-- `apps/website/page-components/admin/content-management/components/` - Existing components
+- `apps/admin/pages/admin/content-management/page.tsx` - Main component ✅ **MOVED**
+- `apps/admin/pages/admin/content-management/hooks/` - Custom hooks (8 hooks)
+- `apps/admin/pages/admin/content-management/components/` - Components (7 components)
 - `libs/hooks/src/lib/` - Data fetching hooks
-- `apps/website/network/routes/admin/` - API routes
+- `apps/admin/network/routes/` - API routes
 
 ## Notes
 

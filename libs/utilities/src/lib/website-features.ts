@@ -532,12 +532,13 @@ export const allWebsiteFeatures: WebsiteFeature[] = [
   {
     id: "content-management",
     title: "Content Management",
-    description: "General content management interface",
+    description:
+      "General content management interface (moved to apps/admin app)",
     category: "Admin",
     section: "Content",
     status: "completed",
     priority: "High",
-    url: "/admin/content",
+    url: "/admin/content-management", // Note: This route is now in apps/admin app
     icon: FileText,
   },
   {

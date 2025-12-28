@@ -77,10 +77,27 @@ jobs:
           ADMIN_EMAIL: ${{ secrets.ADMIN_EMAIL || 'test@example.com' }}
           ADMIN_PASSWORD: ${{ secrets.ADMIN_PASSWORD || 'test-password' }}
 
+      - name: Start development server for E2E tests
+        run: |
+          echo "🚀 Starting development server for E2E tests..."
+          npm run dev:light:test &
+          sleep 15
+          echo "✅ Development server started"
+        continue-on-error: true
+        env:
+          APP_ENV: "test"
+          NEXT_PUBLIC_APP_ENV: "test"
+          NODE_ENV: "test"
+          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.TEST_SUPABASE_URL || 'https://placeholder.supabase.co' }}
+          NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.TEST_SUPABASE_ANON_KEY || 'placeholder-key' }}
+          JWT_SECRET: ${{ secrets.JWT_SECRET || 'placeholder-secret' }}
+          ADMIN_EMAIL: ${{ secrets.ADMIN_EMAIL || 'test@example.com' }}
+          ADMIN_PASSWORD: ${{ secrets.ADMIN_PASSWORD || 'test-password' }}
+
       - name: Run E2E tests for Admin Login
         run: |
           echo "🌐 Running E2E tests for Admin Login..."
-          npx playwright test apps/website/tests/e2e/admin-login/ --project=chromium || echo "⚠️  E2E tests not found, skipping"
+          npx playwright test apps/website/tests/e2e/admin-login/admin-login.spec.ts --project=chromium || echo "⚠️  E2E tests failed or not found"
         continue-on-error: true
         env:
           CI: "true"

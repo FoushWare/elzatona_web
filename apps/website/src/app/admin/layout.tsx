@@ -23,37 +23,16 @@ function AdminLayoutContent({ children }: AdminLayoutProps) {
   const { isAuthenticated, isLoading } = useAdminAuth();
   const pathname = usePathname();
 
-  // Skip authentication check for login page and admin root page
+  // Skip authentication check only for login page and admin root page
   const isLoginPage = pathname === "/admin/login";
   const isAdminRootPage = pathname === "/admin";
-
-  // TEMPORARY: Skip authentication for development/testing
-  const isDevelopment = process.env["NODE_ENV"] === "development";
-  const skipAuthForTesting =
-    isDevelopment &&
-    (pathname?.includes("/admin/content/questions") ||
-      pathname?.includes("/admin/enhanced-structure") ||
-      pathname?.includes("/admin/content-management") ||
-      pathname?.includes("/admin/dashboard") ||
-      pathname?.includes("/admin/frontend-tasks") ||
-      pathname?.includes("/admin/problem-solving"));
 
   // For login page and admin root page, render immediately without waiting for auth check
   if (isLoginPage || isAdminRootPage) {
     return <>{children}</>;
   }
 
-  // For testing pages, render with navbar but skip auth check
-  if (skipAuthForTesting) {
-    return (
-      <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
-        <AdminNavbar />
-        <main className="pt-16">{children}</main>
-        <NotificationContainer />
-      </div>
-    );
-  }
-
+  // Show loading state while checking authentication
   if (isLoading) {
     return (
       <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center">
@@ -67,7 +46,7 @@ function AdminLayoutContent({ children }: AdminLayoutProps) {
     );
   }
 
-  // Check authentication for all other admin routes
+  // Check authentication for all admin routes (except login and root)
   if (!isAuthenticated) {
     return null; // Will redirect to login via AdminAuthProvider
   }
@@ -94,32 +73,7 @@ function AdminLayoutWithNotifications({ children }: AdminLayoutProps) {
 }
 
 export default function AdminLayout({ children }: AdminLayoutProps) {
-  // TEMPORARY: Skip AdminAuthProvider for testing
-  const pathname = usePathname();
-  const isDevelopment = process.env["NODE_ENV"] === "development";
-  const skipAuthForTesting =
-    isDevelopment &&
-    (pathname?.includes("/admin/content/questions") ||
-      pathname?.includes("/admin/enhanced-structure") ||
-      pathname?.includes("/admin/content-management") ||
-      pathname?.includes("/admin/dashboard") ||
-      pathname?.includes("/admin/frontend-tasks") ||
-      pathname?.includes("/admin/problem-solving"));
-
-  if (skipAuthForTesting) {
-    return (
-      <AdminAuthProvider>
-        <NotificationProvider>
-          <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
-            <AdminNavbar />
-            <main className="pt-16">{children}</main>
-            <NotificationContainer />
-          </div>
-        </NotificationProvider>
-      </AdminAuthProvider>
-    );
-  }
-
+  // All admin routes require authentication (except login and root which are handled in AdminLayoutContent)
   return (
     <AdminAuthProvider>
       <AdminLayoutWithNotifications>{children}</AdminLayoutWithNotifications>

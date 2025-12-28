@@ -22,8 +22,7 @@
         "**/.code-quality-check.*.log": true,
         "**/coverage": true,
         "**/.turbo": true,
-        "**/.cache": true,
-        "**/.*": true
+        "**/.cache": true
     },
     "search.exclude": {
         "**/node_modules": true,
@@ -42,7 +41,12 @@
         "**/.code-quality-check.*.log": true,
         "**/coverage": true,
         "**/.turbo": true,
-        "**/.cache": true,
-        "**/.*": true
+        "**/.cache": true
+    },
+    "files.associations": {
+        ".env.local": "dotenv",
+        ".env*.local": "dotenv",
+        ".env.example": "dotenv",
+        ".env*.example": "dotenv"
     }
 }

@@ -278,6 +278,61 @@ describe("A-UT-SNAPSHOT: Admin Dashboard Snapshot Tests", () => {
 
   it("should match admin dashboard snapshot (with stats)", () => {
     const { container } = render(<AdminDashboard />);
-    expect(container.firstChild).toMatchSnapshot();
+    expect(container.firstChild).toMatchSnapshot("admin-dashboard-with-stats");
+  });
+
+  it("should match admin dashboard snapshot (loading state)", () => {
+    const { useAdminStats } = require("@elzatona/hooks");
+    useAdminStats.mockReturnValueOnce({
+      data: null,
+      isLoading: true,
+      isFetching: true,
+      error: null,
+      refetch: mockRefetch,
+      isRefetching: false,
+    });
+
+    const { container } = render(<AdminDashboard />);
+    expect(container.firstChild).toMatchSnapshot("admin-dashboard-loading");
+  });
+
+  it("should match admin dashboard snapshot (error state)", () => {
+    const { useAdminStats } = require("@elzatona/hooks");
+    useAdminStats.mockReturnValueOnce({
+      data: null,
+      isLoading: false,
+      isFetching: false,
+      error: new Error("Failed to load stats"),
+      refetch: mockRefetch,
+      isRefetching: false,
+    });
+
+    const { container } = render(<AdminDashboard />);
+    expect(container.firstChild).toMatchSnapshot("admin-dashboard-error");
+  });
+
+  it("should match admin dashboard snapshot (empty stats)", () => {
+    const { useAdminStats } = require("@elzatona/hooks");
+    useAdminStats.mockReturnValueOnce({
+      data: {
+        questions: 0,
+        categories: 0,
+        topics: 0,
+        learningCards: 0,
+        learningPlans: 0,
+        frontendTasks: 0,
+        problemSolvingTasks: 0,
+        totalContent: 0,
+        totalUsers: 0,
+      },
+      isLoading: false,
+      isFetching: false,
+      error: null,
+      refetch: mockRefetch,
+      isRefetching: false,
+    });
+
+    const { container } = render(<AdminDashboard />);
+    expect(container.firstChild).toMatchSnapshot("admin-dashboard-empty-stats");
   });
 });

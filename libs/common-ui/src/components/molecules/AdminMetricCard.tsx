@@ -55,9 +55,9 @@ export function AdminMetricCard({
             <div className="text-sm font-medium text-gray-600 dark:text-gray-400">
               {label}
             </div>
-            <div className="text-3xl font-bold text-gray-900 dark:text-white">
+            <div className="text-3xl font-bold text-gray-900 dark:text-white min-h-[2.25rem] flex items-center">
               {loading ? (
-                <div className="animate-pulse bg-gray-300 dark:bg-gray-600 h-8 w-16 rounded"></div>
+                <div className="animate-pulse bg-gray-300 dark:bg-gray-600 h-9 w-20 rounded-md"></div>
               ) : typeof value === "number" ? (
                 value.toLocaleString()
               ) : (

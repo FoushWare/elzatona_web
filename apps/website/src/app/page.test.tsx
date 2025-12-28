@@ -162,3 +162,64 @@ describe("HomePage Integration", () => {
     expect(guidedButton).toBeInTheDocument();
   });
 });
+
+describe("HomePage Snapshot Tests", () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
+  it("should match home page snapshot (default state)", () => {
+    const { container } = render(<HomePage />);
+    expect(container.firstChild).toMatchSnapshot("home-page-default");
+  });
+
+  it("should match home page snapshot (with guided user type)", () => {
+    const { useUserType } = require("@elzatona/contexts");
+    vi.mocked(useUserType).mockReturnValue({
+      userType: "guided",
+      setUserType: vi.fn(),
+    });
+
+    const { container } = render(<HomePage />);
+    expect(container.firstChild).toMatchSnapshot("home-page-guided");
+  });
+
+  it("should match home page snapshot (with self-directed user type)", () => {
+    const { useUserType } = require("@elzatona/contexts");
+    vi.mocked(useUserType).mockReturnValue({
+      userType: "self-directed",
+      setUserType: vi.fn(),
+    });
+
+    const { container } = render(<HomePage />);
+    expect(container.firstChild).toMatchSnapshot("home-page-self-directed");
+  });
+
+  it("should match home page snapshot (with active plan)", () => {
+    const { useHomePageState } = require("./lib/hooks/useHomePageState");
+    vi.mocked(useHomePageState).mockReturnValue({
+      hasActivePlan: true,
+      activePlan: {
+        id: "test-plan-001",
+        name: "React Mastery",
+        totalQuestions: 50,
+      },
+      showAnimation: false,
+    });
+
+    const { container } = render(<HomePage />);
+    expect(container.firstChild).toMatchSnapshot("home-page-with-active-plan");
+  });
+
+  it("should match home page snapshot (loading state)", () => {
+    const { useHomePageState } = require("./lib/hooks/useHomePageState");
+    vi.mocked(useHomePageState).mockReturnValue({
+      hasActivePlan: false,
+      activePlan: null,
+      showAnimation: true,
+    });
+
+    const { container } = render(<HomePage />);
+    expect(container.firstChild).toMatchSnapshot("home-page-loading");
+  });
+});
