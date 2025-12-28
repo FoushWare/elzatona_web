@@ -9,7 +9,7 @@ import { LearningCard, UnifiedQuestion } from "@elzatona/types";
 import { ContentManagementFormModals } from "./ContentManagementFormModals";
 import { ContentManagementDeleteModals } from "./ContentManagementDeleteModals";
 import { AddItemModal } from "./AddItemModal";
-import { ViewQuestionModal } from "../../../../components/ViewQuestionModal";
+import { ViewQuestionModal } from "../../content/questions/components/ViewQuestionModal";
 
 type LearningPlan = any; // eslint-disable-line @typescript-eslint/no-explicit-any
 type Category = any; // eslint-disable-line @typescript-eslint/no-explicit-any
