@@ -51,7 +51,6 @@ const config = {
     "<rootDir>/**/*.{test,spec}.{js,jsx,ts,tsx}",
     "<rootDir>/../pages/**/*.{test,spec}.{js,jsx,ts,tsx}",
     "<rootDir>/../components/**/*.{test,spec}.{js,jsx,ts,tsx}",
-    "<rootDir>/../../tests/**/*.{test,spec}.{js,jsx,ts,tsx}",
     "<rootDir>/../../libs/**/*.{test,spec}.{js,jsx,ts,tsx}",
   ],
   // Exclude e2e tests - these should only be run by Playwright
