@@ -241,6 +241,9 @@ build/
 libs/utilities/scripts/
 tools/
 apps/*/tests/e2e/
+# Allow E2E test spec files
+!apps/*/tests/e2e/**/*.spec.ts
+!apps/*/tests/e2e/**/*.spec.tsx
 .cursor/
 .gitleaks.toml
 .code-quality-check.*.log
