@@ -4,7 +4,7 @@ import React from "react";
 import { useAdminAuth } from "@elzatona/contexts";
 // Import AdminManagement component directly
 // Note: This component has dependencies on apps/website, so it's imported from the lib
-import AdminManagement from "../../../../libs/common-ui/src/auth/AdminManagement";
+import AdminManagement from "../../../../../libs/common-ui/src/auth/AdminManagement";
 
 export default function AdminUsersPage() {
   const { user, isAuthenticated } = useAdminAuth();
