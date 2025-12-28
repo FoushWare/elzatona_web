@@ -70,7 +70,13 @@ export const FormModal: React.FC<FormModalProps> = ({
     }
   };
 
-  const handleSave = () => {
+  const handleSave = (e?: React.MouseEvent) => {
+    // Prevent accidental submissions - require explicit user action
+    if (e) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
+    // Only allow save if explicitly enabled and not loading
     if (onSave && !saveDisabled && !saveLoading) {
       onSave();
     }
