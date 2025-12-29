@@ -176,6 +176,7 @@ describe("HomePage Snapshot Tests", () => {
   });
 
   it("should match home page snapshot (with guided user type)", () => {
+    // eslint-disable-next-line @typescript-eslint/no-require-imports, @typescript-eslint/no-var-requires
     const { useUserType } = require("@elzatona/contexts");
     jest.mocked(useUserType).mockReturnValue({
       userType: "guided",
@@ -187,6 +188,7 @@ describe("HomePage Snapshot Tests", () => {
   });
 
   it("should match home page snapshot (with self-directed user type)", () => {
+    // eslint-disable-next-line @typescript-eslint/no-require-imports, @typescript-eslint/no-var-requires
     const { useUserType } = require("@elzatona/contexts");
     jest.mocked(useUserType).mockReturnValue({
       userType: "self-directed",
@@ -198,6 +200,7 @@ describe("HomePage Snapshot Tests", () => {
   });
 
   it("should match home page snapshot (with active plan)", () => {
+    // eslint-disable-next-line @typescript-eslint/no-require-imports, @typescript-eslint/no-var-requires
     const { useHomePageState } = require("./lib/hooks/useHomePageState");
     jest.mocked(useHomePageState).mockReturnValue({
       hasActivePlan: true,

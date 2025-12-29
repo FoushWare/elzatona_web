@@ -10,8 +10,10 @@ const _supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
 // Import AdminAuthService from website app (temporary until moved to shared location)
 // Note: This creates a cross-app dependency but is necessary for AdminManagement functionality
 // TODO: Move AdminAuthService to a shared location (libs/utilities or libs/auth)
-// eslint-disable-next-line @typescript-eslint/no-require-imports
-const AdminAuthService = require("../../../../apps/website/src/app/lib/admin-auth").AdminAuthService;
+// Using dynamic import to avoid cross-app dependency issues
+// eslint-disable-next-line @typescript-eslint/no-require-imports, @typescript-eslint/no-var-requires
+const AdminAuthService = require("../../../../apps/website/src/app/lib/admin-auth")
+  .AdminAuthService;
 
 // Define AdminCredential type locally to avoid type import issues
 interface AdminCredential {
