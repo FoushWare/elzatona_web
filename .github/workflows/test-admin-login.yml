@@ -4,7 +4,7 @@ on:
   push:
     branches: [main, develop, "release/**"]
     paths:
-      - "apps/website/src/app/admin/login/**"
+      - "apps/admin/pages/admin/login/**"
       - "libs/common-ui/src/components/organisms/AdminLoginPageTemplate.*"
       - "libs/common-ui/src/components/molecules/AdminLoginFormMolecule.*"
       - ".github/workflows/test-admin-login.yml"

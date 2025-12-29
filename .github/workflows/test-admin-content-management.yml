@@ -4,7 +4,6 @@ on:
   push:
     branches: [main, develop, "release/**"]
     paths:
-      - "apps/website/src/app/admin/content-management/**"
       - "apps/admin/pages/admin/content-management/**"
       - "libs/common-ui/src/components/templates/ContentManagementTemplate.*"
       - "libs/common-ui/src/components/organisms/**"
@@ -44,7 +43,7 @@ jobs:
         run: |
           echo "🧪 Running unit tests for Admin Content Management page..."
           NODE_OPTIONS=--max-old-space-size=768 npx jest \
-            apps/website/src/app/admin/content-management/page.test.tsx \
+            apps/admin/pages/admin/content-management/page.test.tsx \
             --maxWorkers=1 \
             --silent \
             --coverage=false \

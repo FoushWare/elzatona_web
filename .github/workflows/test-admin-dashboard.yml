@@ -4,7 +4,7 @@ on:
   push:
     branches: [main, develop, "release/**"]
     paths:
-      - "apps/website/src/app/admin/dashboard/**"
+      - "apps/admin/pages/admin/dashboard/**"
       - "libs/common-ui/src/components/templates/AdminDashboardTemplate.*"
       - "libs/common-ui/src/components/organisms/AdminStatsGrid.*"
       - "libs/common-ui/src/components/organisms/AdminQuickActionsSection.*"
