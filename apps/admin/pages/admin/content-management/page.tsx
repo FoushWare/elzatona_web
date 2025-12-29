@@ -13,7 +13,7 @@ import {
   ToastContainer,
   ContentManagementTemplate,
 } from "@elzatona/common-ui";
-import { type ContentManagementStats } from "@elzatona/types";
+import type { ContentManagementStats } from "@elzatona/types";
 
 // Custom hooks
 import {

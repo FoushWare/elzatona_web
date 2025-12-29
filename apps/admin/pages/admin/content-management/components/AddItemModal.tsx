@@ -19,11 +19,11 @@ import {
   Square,
 } from "lucide-react";
 import { LearningCard, UnifiedQuestion } from "@elzatona/types";
-import {
-  type Category,
-  type Topic,
-  type AddItemContext,
-} from "@elzatona/types/admin/content-management";
+import type {
+  AdminCategory as Category,
+  Topic,
+  AddItemContext,
+} from "@elzatona/types";
 
 interface AddItemModalProps {
   isOpen: boolean;

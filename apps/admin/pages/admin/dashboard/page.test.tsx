@@ -252,7 +252,7 @@ describe("A-UT-SNAPSHOT: Admin Dashboard Snapshot Tests", () => {
   });
 
   it("should match admin dashboard snapshot (loading state)", () => {
-    const { useAdminStats } = require("@elzatona/hooks");
+    const { useAdminStats } = await import("@elzatona/hooks");
     useAdminStats.mockReturnValueOnce({
       data: null,
       isLoading: true,
@@ -266,9 +266,9 @@ describe("A-UT-SNAPSHOT: Admin Dashboard Snapshot Tests", () => {
     expect(container.firstChild).toMatchSnapshot("admin-dashboard-loading");
   });
 
-  it("should match admin dashboard snapshot (error state)", () => {
-    const { useAdminStats } = require("@elzatona/hooks");
-    useAdminStats.mockReturnValueOnce({
+  it("should match admin dashboard snapshot (error state)", async () => {
+    const { useAdminStats } = await import("@elzatona/hooks");
+    (useAdminStats as jest.Mock).mockReturnValueOnce({
       data: null,
       isLoading: false,
       isFetching: false,
@@ -281,9 +281,9 @@ describe("A-UT-SNAPSHOT: Admin Dashboard Snapshot Tests", () => {
     expect(container.firstChild).toMatchSnapshot("admin-dashboard-error");
   });
 
-  it("should match admin dashboard snapshot (empty stats)", () => {
-    const { useAdminStats } = require("@elzatona/hooks");
-    useAdminStats.mockReturnValueOnce({
+  it("should match admin dashboard snapshot (empty stats)", async () => {
+    const { useAdminStats } = await import("@elzatona/hooks");
+    (useAdminStats as jest.Mock).mockReturnValueOnce({
       data: {
         questions: 0,
         categories: 0,
