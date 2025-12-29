@@ -10,7 +10,9 @@ import MyPlansPage from "./page";
 import * as sharedContexts from "@elzatona/contexts";
 
 jest.mock("@elzatona/contexts", () => {
-  const actual = jest.requireActual("../../test-utils/mocks/shared-contexts");
+  const actual = jest.requireActual(
+    "../../../../libs/utilities/src/lib/test-utils/mocks/shared-contexts",
+  );
   return {
     ...actual,
     useAuth: jest.fn(),

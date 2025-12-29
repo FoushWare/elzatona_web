@@ -108,7 +108,7 @@ jest.mock("@elzatona/common-ui", () => {
 });
 
 // Note: lucide-react is automatically mocked via moduleNameMapper in jest.config.js
-// The mock file at apps/website/test-utils/mocks/lucide-react.tsx handles all icons
+// The mock file at libs/utilities/src/lib/test-utils/mocks/lucide-react.tsx handles all icons
 
 describe("A-UT-011: Dashboard Renders", () => {
   beforeEach(() => {

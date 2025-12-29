@@ -19,6 +19,22 @@ const config = {
   ...(process.env.JEST_RUN_IN_BAND === "true" ? { runInBand: true } : {}),
   // Add more setup options before each test is run
   setupFilesAfterEnv: ["<rootDir>/jest.setup.js"],
+  moduleNameMapper: {
+    "^@/(.*)$": "<rootDir>/src/$1",
+    "^@elzatona/contexts$": "<rootDir>/../../libs/contexts/src/index.ts",
+    "^@elzatona/common-ui$": "<rootDir>/../../libs/common-ui/src/index.ts",
+    "^@elzatona/hooks$": "<rootDir>/../../libs/hooks/src/index.ts",
+    "^lucide-react$":
+      "<rootDir>/../../libs/utilities/src/lib/test-utils/mocks/lucide-react.tsx",
+    // Mock nuqs to avoid ESM issues in tests
+    "^nuqs$": "<rootDir>/../../libs/utilities/src/lib/test-utils/mocks/nuqs.ts",
+    // Mock shiki ESM module
+    "^shiki$":
+      "<rootDir>/../../libs/utilities/src/lib/test-utils/mocks/shiki.ts",
+    // Mock refractor ESM module (used by react-syntax-highlighter)
+    "^refractor$":
+      "<rootDir>/../../libs/utilities/src/lib/test-utils/mocks/refractor.ts",
+  },
   testMatch: [
     "<rootDir>/**/*.{test,spec}.{js,jsx,ts,tsx}",
     "<rootDir>/../pages/**/*.{test,spec}.{js,jsx,ts,tsx}",
