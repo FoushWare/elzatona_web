@@ -37,6 +37,8 @@ const config = {
     "^@elzatona/contexts$": "<rootDir>/../../libs/contexts/src/index.ts",
     "^@elzatona/common-ui$": "<rootDir>/../../libs/common-ui/src/index.ts",
     "^@elzatona/hooks$": "<rootDir>/../../libs/hooks/src/index.ts",
+    "^@elzatona/utilities$": "<rootDir>/../../libs/utilities/src/index.ts",
+    "^@elzatona/types$": "<rootDir>/../../libs/types/src/index.ts",
     "^lucide-react$":
       "<rootDir>/../../libs/utilities/src/lib/test-utils/mocks/lucide-react.tsx",
     // Mock nuqs to avoid ESM issues in tests
