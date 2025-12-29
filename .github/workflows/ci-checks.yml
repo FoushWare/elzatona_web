@@ -90,6 +90,7 @@ jobs:
           # Provide minimal env vars for tests
           NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.TEST_SUPABASE_URL || 'https://placeholder.supabase.co' }}
           NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.TEST_SUPABASE_ANON_KEY || 'placeholder-key' }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.TEST_SUPABASE_SERVICE_ROLE_KEY || 'placeholder-service-role-key' }}
           JWT_SECRET: ${{ secrets.JWT_SECRET || 'placeholder-secret' }}
           ADMIN_EMAIL: ${{ secrets.ADMIN_EMAIL || 'test@example.com' }}
           ADMIN_PASSWORD: ${{ secrets.ADMIN_PASSWORD || 'test-password' }}
@@ -115,6 +116,7 @@ jobs:
           # Provide minimal env vars for tests
           NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.TEST_SUPABASE_URL || 'https://placeholder.supabase.co' }}
           NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.TEST_SUPABASE_ANON_KEY || 'placeholder-key' }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.TEST_SUPABASE_SERVICE_ROLE_KEY || 'placeholder-service-role-key' }}
           JWT_SECRET: ${{ secrets.JWT_SECRET || 'placeholder-secret' }}
           ADMIN_EMAIL: ${{ secrets.ADMIN_EMAIL || 'test@example.com' }}
           ADMIN_PASSWORD: ${{ secrets.ADMIN_PASSWORD || 'test-password' }}
