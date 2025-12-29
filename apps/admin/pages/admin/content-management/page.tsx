@@ -8,14 +8,12 @@
 "use client";
 
 import React, { useMemo, Suspense } from "react";
-import { LearningCard } from "@elzatona/types";
-import { UnifiedQuestion } from "@elzatona/types";
 import {
   useToast,
   ToastContainer,
   ContentManagementTemplate,
 } from "@elzatona/common-ui";
-import { Plus } from "lucide-react";
+import { type ContentManagementStats } from "@elzatona/types";
 
 // Custom hooks
 import {
@@ -36,12 +34,9 @@ import {
 } from "@elzatona/common-ui";
 import { ContentManagementModals } from "@elzatona/common-ui";
 import { AddItemModal } from "./components/AddItemModal";
-import { ViewQuestionModal } from "../../../../components/ViewQuestionModal";
+import { ViewQuestionModal } from "../content/questions/components/ViewQuestionModal";
 
-// Types
-type LearningPlan = any; // eslint-disable-line @typescript-eslint/no-explicit-any
-type Category = any; // eslint-disable-line @typescript-eslint/no-explicit-any
-type Topic = any; // eslint-disable-line @typescript-eslint/no-explicit-any
+// Types are defined in hooks/components
 
 export default function UnifiedAdminPage() {
   // Data fetching
@@ -77,7 +72,7 @@ export default function UnifiedAdminPage() {
   const { toasts, removeToast } = useToast();
 
   // Stats calculation
-  const stats = useMemo(
+  const stats = useMemo<ContentManagementStats>(
     () => ({
       totalCards: data.cardsData?.count || 0,
       totalPlans: data.plansData?.count || 0,
@@ -96,6 +91,41 @@ export default function UnifiedAdminPage() {
 
   // Filtered cards and plans (computed in state hook)
   const { filteredCards, filteredPlans } = state;
+
+  // Event handlers (must be defined before templateProps)
+  const handlers = useContentManagementHandlers({
+    cards: data.cards,
+    plans: data.plans,
+    categories: data.categories,
+    topics: data.topics,
+    questions: data.questions,
+    setCardToDelete: modals.setCardToDelete,
+    setPlanToDelete: modals.setPlanToDelete,
+    setCategoryToDelete: modals.setCategoryToDelete,
+    setTopicToDelete: modals.setTopicToDelete,
+    setQuestionToDelete: modals.setQuestionToDelete,
+    handleDeleteCard: actions.handleDeleteCard,
+    handleDeletePlan: actions.handleDeletePlan,
+    handleDeleteCategory: actions.handleDeleteCategory,
+    handleDeleteTopic: actions.handleDeleteTopic,
+    handleDeleteQuestion: actions.handleDeleteQuestion,
+    handleCreateCard: actions.handleCreateCard,
+    handleUpdateCard: actions.handleUpdateCard,
+    handleCreatePlan: actions.handleCreatePlan,
+    handleUpdatePlan: actions.handleUpdatePlan,
+    handleCreateCategory: actions.handleCreateCategory,
+    handleUpdateCategory: actions.handleUpdateCategory,
+    handleCreateTopic: actions.handleCreateTopic,
+    handleBulkCreateTopics: actions.handleBulkCreateTopics,
+    handleUpdateTopic: actions.handleUpdateTopic,
+    handleCreateQuestion: actions.handleCreateQuestion,
+    handleUpdateQuestion: actions.handleUpdateQuestion,
+    editingCard: modals.editingCard,
+    editingPlan: modals.editingPlan,
+    editingCategory: modals.editingCategory,
+    editingTopic: modals.editingTopic,
+    editingQuestion: modals.editingQuestion,
+  });
 
   // Template props
   const templateProps = useContentManagementTemplateProps({
@@ -176,41 +206,6 @@ export default function UnifiedAdminPage() {
     },
     filteredCards,
     filteredPlans,
-  });
-
-  // Event handlers
-  const handlers = useContentManagementHandlers({
-    cards: data.cards,
-    plans: data.plans,
-    categories: data.categories,
-    topics: data.topics,
-    questions: data.questions,
-    setCardToDelete: modals.setCardToDelete,
-    setPlanToDelete: modals.setPlanToDelete,
-    setCategoryToDelete: modals.setCategoryToDelete,
-    setTopicToDelete: modals.setTopicToDelete,
-    setQuestionToDelete: modals.setQuestionToDelete,
-    handleDeleteCard: actions.handleDeleteCard,
-    handleDeletePlan: actions.handleDeletePlan,
-    handleDeleteCategory: actions.handleDeleteCategory,
-    handleDeleteTopic: actions.handleDeleteTopic,
-    handleDeleteQuestion: actions.handleDeleteQuestion,
-    handleCreateCard: actions.handleCreateCard,
-    handleUpdateCard: actions.handleUpdateCard,
-    handleCreatePlan: actions.handleCreatePlan,
-    handleUpdatePlan: actions.handleUpdatePlan,
-    handleCreateCategory: actions.handleCreateCategory,
-    handleUpdateCategory: actions.handleUpdateCategory,
-    handleCreateTopic: actions.handleCreateTopic,
-    handleBulkCreateTopics: actions.handleBulkCreateTopics,
-    handleUpdateTopic: actions.handleUpdateTopic,
-    handleCreateQuestion: actions.handleCreateQuestion,
-    handleUpdateQuestion: actions.handleUpdateQuestion,
-    editingCard: modals.editingCard,
-    editingPlan: modals.editingPlan,
-    editingCategory: modals.editingCategory,
-    editingTopic: modals.editingTopic,
-    editingQuestion: modals.editingQuestion,
   });
 
   // Confirm delete handlers

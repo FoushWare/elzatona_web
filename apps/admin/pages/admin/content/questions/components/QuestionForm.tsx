@@ -1,791 +1,457 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React from "react";
 import {
   Button,
   Input,
   Label,
+  Textarea,
+  Checkbox,
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-  Textarea,
-  Checkbox,
-  Collapsible,
-  CollapsibleTrigger,
-  CollapsibleContent,
+  DialogFooter,
 } from "@elzatona/common-ui";
+import { Plus, X } from "lucide-react";
+import { UnifiedQuestion } from "@elzatona/types";
 import {
-  BookOpen,
-  BarChart3,
-  TrendingUp,
-  HelpCircle,
-  ChevronDown,
-  ChevronRight as ChevronRightIcon,
-  Plus,
-  Trash2,
-} from "lucide-react";
+  useQuestionFormData,
+  useTagsManagement,
+  useCategorySearch,
+  useTagSearch,
+  useFormValidation,
+  useFormSubmission,
+} from "./QuestionFormHooks";
+import { getAriaLabelForField, getFieldErrorId } from "./QuestionFormUtils";
 
-// Define the UnifiedQuestion type based on Elzatona-web-ui schema
-export interface UnifiedQuestion {
-  id: string;
-  title: string;
-  content: string;
-  type: "multiple-choice" | "true-false" | "code" | "mcq";
-  category?: string;
-  subcategory?: string;
-  difficulty: "beginner" | "intermediate" | "advanced";
-  learningPath?: string;
-  sectionId?: string;
-  topic?: string;
-  isActive: boolean;
-  createdAt: string;
-  updatedAt: string;
-  createdBy?: string;
-  updatedBy?: string;
-  tags?: string[];
-  explanation?: string;
-  hints?: string[];
-  timeLimit?: number;
-  points?: number;
-  metadata?: {
-    source?: string;
-    version?: string;
-    references?: string[];
-    [key: string]: unknown;
-  };
-  // For multiple choice questions
-  options?: {
-    id: string;
-    text: string;
-    isCorrect: boolean;
-    explanation?: string;
-  }[];
-  // For code questions
-  codeTemplate?: string;
-  testCases?: {
-    input: string;
-    expectedOutput: string;
-    description?: string;
-  }[];
-  // For open-ended questions
-  sampleAnswers?: string[];
-  // Statistics
-  stats?: {
-    totalAttempts: number;
-    correctAttempts: number;
-    averageTime: number;
-    difficultyRating: number;
-  };
-  // Legacy fields for compatibility
-  correct_answer?: string | number;
-  test_cases?: string[];
-  learning_card_id?: string;
-  category_id?: string;
-  topic_id?: string;
-  // New fields with junction table data
-  topics?: Array<{
-    id: string;
-    name: string;
-    slug: string;
-    difficulty: string;
-    is_primary: boolean;
-    order_index: number;
-  }>;
-  categories?: Array<{
-    id: string;
-    name: string;
-    slug: string;
-    card_type: string;
-    is_primary: boolean;
-    order_index: number;
-  }>;
-  learning_card?: {
-    id: string;
-    title: string;
-    type: string;
-    color: string;
-    icon: string;
-  };
-}
+type Question = UnifiedQuestion;
 
 interface QuestionFormProps {
-  initialData?: UnifiedQuestion;
-  onSubmit: (question: Partial<UnifiedQuestion>) => void;
-  onCancel: () => void;
-  cards: Array<{ id: string; title: string }>;
-  allCategories: string[];
-  allTags: string[];
-  readOnly?: boolean;
+  readonly initialData: Question | undefined;
+  readonly onSubmit: (question: Partial<Question>) => void;
+  readonly onCancel: () => void;
+  readonly cards: any[];
+  readonly allCategories: string[];
+  readonly allTags: string[];
+  readonly categoriesData: any[];
+  readonly topicsData: any[];
+  readonly disabled?: boolean;
+  readonly hideFooter?: boolean;
+  readonly externalSubmitTrigger?: number;
 }
 
-// Helper components to reduce cognitive complexity
-const ChevronIcon = ({
-  show,
-  readOnly,
-}: {
-  show: boolean;
-  readOnly: boolean;
-}) => {
-  if (readOnly) return null;
-  return show ? (
-    <ChevronDown className="h-5 w-5" />
-  ) : (
-    <ChevronRightIcon className="h-5 w-5" />
-  );
-};
-
-const InputField = ({
-  id,
-  name,
-  value,
-  onChange,
-  required,
-  readOnly,
-  disabled,
-  className,
-  placeholder,
-  label,
-}: {
-  id: string;
-  name: string;
-  value: string | number;
-  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  required?: boolean;
-  readOnly?: boolean;
-  disabled?: boolean;
-  className?: string;
-  placeholder?: string;
-  label: string;
-}) => (
-  <div>
-    <Label htmlFor={id} className="text-sm font-medium">
-      {label}
-    </Label>
-    <Input
-      id={id}
-      name={name}
-      value={value}
-      onChange={onChange}
-      required={required}
-      readOnly={readOnly}
-      disabled={disabled}
-      className={`mt-1 ${readOnly ? "bg-gray-50 dark:bg-gray-900 cursor-text" : ""} ${className}`}
-      placeholder={placeholder}
-    />
-  </div>
-);
-
-const SelectField = ({
-  label,
-  value,
-  onValueChange,
-  disabled,
-  readOnly,
-  children,
-  placeholder,
-}: {
-  label: string;
-  value: string;
-  onValueChange: (value: string) => void;
-  disabled?: boolean;
-  readOnly?: boolean;
-  children: React.ReactNode;
-  placeholder?: string;
-}) => (
-  <div>
-    <Label className="text-sm font-medium">{label}</Label>
-    <Select value={value} onValueChange={onValueChange}>
-      <SelectTrigger
-        disabled={disabled}
-        className={`mt-1 ${readOnly ? "bg-gray-50 dark:bg-gray-900 cursor-not-allowed" : ""}`}
-      >
-        <SelectValue placeholder={placeholder} />
-      </SelectTrigger>
-      <SelectContent>{children}</SelectContent>
-    </Select>
-  </div>
-);
-const initializeFormState = (
-  initialData: Partial<UnifiedQuestion> | null,
-  readOnly: boolean,
-) => ({
-  formData: initialData || {
-    title: "",
-    content: "",
-    explanation: "",
-    type: "multiple-choice",
-    difficulty: "beginner",
-    isActive: true,
-    options: [],
-    tags: [],
-    points: 1,
-  },
-  showQuestionInfo: readOnly,
-  showContent: readOnly,
-  showOptions: readOnly,
-  showExplanation: readOnly || !!initialData?.explanation,
-  showResources: readOnly || !!(initialData as any)?.resources,
-  showAdditionalSettings: false,
-});
-
-const createFormHandlers = (
-  setFormData: React.Dispatch<React.SetStateAction<Partial<UnifiedQuestion>>>,
-) => ({
-  handleChange: (
-    e: React.ChangeEvent<
-      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
-    >,
-  ) => {
-    const { name, value, type, checked } = e.target as HTMLInputElement;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: type === "checkbox" ? checked : value,
-    }));
-  },
-
-  handleResourcesChange: (value: string) => {
-    try {
-      const parsed = value ? JSON.parse(value) : null;
-      setFormData((prev) => ({
-        ...prev,
-        resources: parsed,
-      }));
-    } catch (_error) {
-      setFormData((prev) => ({
-        ...prev,
-        resources: value as unknown as string[],
-      }));
-    }
-  },
-
-  handleSelectChange: (name: keyof UnifiedQuestion, value: string) => {
-    setFormData((prev) => ({ ...prev, [name]: value }));
-  },
-});
-
-// Helper hook to manage collapsible sections state
-const useCollapsibleSections = (
-  initialData: UnifiedQuestion | null,
-  readOnly: boolean,
+// Custom hook to consolidate all form state management
+const useQuestionFormState = (
+  initialData: UnifiedQuestion | null | undefined,
+  allCategories: string[],
+  categoriesData: any[],
+  allTags: string[],
+  onSubmit: (data: Partial<UnifiedQuestion>) => void,
+  externalSubmitTrigger?: number,
 ) => {
-  const initialState = initializeFormState(initialData || null, readOnly);
-  const [showQuestionInfo, setShowQuestionInfo] = useState(
-    initialState.showQuestionInfo,
+  // Extracted hooks for state management
+  const { formData, updateFormData } = useQuestionFormData(
+    initialData ?? undefined,
   );
-  const [showContent, setShowContent] = useState(initialState.showContent);
-  const [showOptions, setShowOptions] = useState(initialState.showOptions);
-  const [showExplanation, setShowExplanation] = useState(
-    initialState.showExplanation,
-  );
-  const [showResources, setShowResources] = useState(
-    initialState.showResources,
-  );
-  const [showAdditionalSettings, setShowAdditionalSettings] = useState(
-    initialState.showAdditionalSettings,
+  const { newTag, setNewTag, addTag, removeTag, handleTagInputKeyDown } =
+    useTagsManagement(formData, updateFormData);
+  const {
+    categorySearchTerm,
+    setCategorySearchTerm,
+    showCategoryDropdown,
+    setShowCategoryDropdown,
+    filteredCategories,
+  } = useCategorySearch(allCategories, categoriesData);
+  const {
+    setTagSearchTerm,
+    showTagDropdown,
+    setShowTagDropdown,
+    filteredTags,
+  } = useTagSearch(allTags);
+  const { errors, validateForm, clearErrors } = useFormValidation(formData);
+  const { isSubmitting, handleSubmit } = useFormSubmission(
+    formData,
+    onSubmit,
+    validateForm,
+    externalSubmitTrigger,
   );
 
-  // Separate effect to handle collapsible sections based on readOnly mode
-  useEffect(() => {
-    if (readOnly) {
-      // View mode: show everything
-      setShowQuestionInfo(true);
-      setShowContent(true);
-      setShowOptions(true);
-      setShowExplanation(true);
-      setShowResources(true);
-      setShowAdditionalSettings(true);
-    } else {
-      // Edit mode: start collapsed, only expand if has content
-      setShowQuestionInfo(false);
-      setShowContent(false);
-      setShowOptions(false);
-      setShowExplanation(!!initialData?.explanation);
-      setShowResources(!!(initialData as any)?.resources);
-      setShowAdditionalSettings(false);
+  // Event handlers
+  const handleFieldChange = (field: keyof Question, value: any) => {
+    updateFormData({ [field]: value });
+    clearErrors();
+  };
+
+  const handleCategorySelect = (category: string) => {
+    updateFormData({ category });
+    setCategorySearchTerm(category);
+    setShowCategoryDropdown(false);
+  };
+
+  const handleTagSelect = (tag: string) => {
+    if (!formData.tags?.includes(tag)) {
+      updateFormData({ tags: [...(formData.tags || []), tag] });
     }
-  }, [readOnly, initialData]);
+    setTagSearchTerm("");
+    setShowTagDropdown(false);
+  };
 
   return {
-    showQuestionInfo,
-    setShowQuestionInfo,
-    showContent,
-    setShowContent,
-    showOptions,
-    setShowOptions,
-    showExplanation,
-    setShowExplanation,
-    showResources,
-    setShowResources,
-    showAdditionalSettings,
-    setShowAdditionalSettings,
+    // Form data
+    formData,
+    newTag,
+    setNewTag,
+    categorySearchTerm,
+    setCategorySearchTerm,
+    showCategoryDropdown,
+    setShowCategoryDropdown,
+    filteredCategories,
+    showTagDropdown,
+    setShowTagDropdown,
+    filteredTags,
+    setTagSearchTerm,
+    errors,
+    isSubmitting,
+    // Event handlers
+    updateFormData,
+    addTag,
+    removeTag,
+    handleTagInputKeyDown,
+    handleFieldChange,
+    handleCategorySelect,
+    handleTagSelect,
+    handleSubmit,
+    validateForm,
+    clearErrors,
   };
 };
 
-export const QuestionForm = React.forwardRef<
-  HTMLFormElement,
-  QuestionFormProps
->(
-  (
-    {
-      initialData,
-      onSubmit,
-      onCancel: _onCancel,
-      cards,
-      allCategories,
-      allTags: _allTags,
-      readOnly = false,
-    },
-    ref,
-  ) => {
-    const initialState = initializeFormState(initialData || null, readOnly);
-    const [formData, setFormData] = useState<Partial<UnifiedQuestion>>(
-      initialState.formData,
-    );
+export default function QuestionForm({
+  initialData,
+  onSubmit,
+  onCancel,
+  cards: _cards,
+  allCategories,
+  allTags,
+  categoriesData,
+  topicsData: _topicsData,
+  disabled = false,
+  hideFooter = false,
+  externalSubmitTrigger,
+}: QuestionFormProps) {
+  const formState = useQuestionFormState(
+    initialData ?? null,
+    allCategories,
+    categoriesData,
+    allTags,
+    onSubmit,
+    externalSubmitTrigger,
+  );
 
-    const {
-      showQuestionInfo,
-      setShowQuestionInfo,
-      showContent,
-      setShowContent,
-      showOptions,
-      setShowOptions,
-      showExplanation,
-      setShowExplanation,
-      showResources,
-      setShowResources,
-      showAdditionalSettings,
-      setShowAdditionalSettings,
-    } = useCollapsibleSections(initialData || null, readOnly);
+  const {
+    formData,
+    categorySearchTerm,
+    setCategorySearchTerm,
+    showCategoryDropdown,
+    setShowCategoryDropdown,
+    filteredCategories,
+    showTagDropdown,
+    setShowTagDropdown,
+    filteredTags,
+    newTag,
+    setNewTag,
+    errors,
+    isSubmitting,
+    handleSubmit,
+    handleFieldChange,
+    handleCategorySelect,
+    handleTagSelect,
+    handleTagInputKeyDown,
+    addTag,
+    removeTag,
+  } = formState;
 
-    useEffect(() => {
-      if (initialData) {
-        setFormData({
-          ...initialData,
-          content: initialData.content || "",
-          title: initialData.title || "",
-          options: initialData.options || [],
-          tags: initialData.tags || [],
-          explanation: initialData.explanation || "",
-        });
-      }
-    }, [initialData]);
+  const handleFormSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    handleSubmit();
+  };
 
-    const handlers = createFormHandlers(setFormData);
+  const buttonText = isSubmitting
+    ? "Saving..."
+    : initialData
+      ? "Update Question"
+      : "Create Question";
 
-    const handleSubmit = (e: React.FormEvent) => {
-      e.preventDefault();
-      if (!readOnly) {
-        onSubmit(formData);
-      }
-    };
+  return (
+    <form onSubmit={handleFormSubmit} className="space-y-6">
+      {/* Basic Question Fields */}
+      <div className="space-y-4">
+        <div>
+          <Label htmlFor="title" className={errors.title ? "text-red-500" : ""}>
+            Question Title *
+          </Label>
+          <Input
+            id="title"
+            value={formData.title || ""}
+            onChange={(e) => handleFieldChange("title", e.target.value)}
+            placeholder="Enter question title..."
+            disabled={disabled}
+            aria-label={getAriaLabelForField("title", true)}
+            aria-describedby={
+              errors.title ? getFieldErrorId("title") : undefined
+            }
+          />
+          {errors.title && (
+            <p
+              id={getFieldErrorId("title")}
+              className="text-sm text-red-500 mt-1"
+            >
+              {errors.title}
+            </p>
+          )}
+        </div>
 
-    const questionTypes = ["multiple-choice", "true-false", "code", "mcq"];
-    const difficulties = ["beginner", "intermediate", "advanced"];
+        <div>
+          <Label
+            htmlFor="content"
+            className={errors.content ? "text-red-500" : ""}
+          >
+            Question Content *
+          </Label>
+          <Textarea
+            id="content"
+            value={formData.content || ""}
+            onChange={(e) => handleFieldChange("content", e.target.value)}
+            placeholder="Enter your question content here..."
+            className="min-h-[100px]"
+            disabled={disabled}
+            aria-label={getAriaLabelForField("content", true)}
+            aria-describedby={
+              errors.content ? getFieldErrorId("content") : undefined
+            }
+          />
+          {errors.content && (
+            <p
+              id={getFieldErrorId("content")}
+              className="text-sm text-red-500 mt-1"
+            >
+              {errors.content}
+            </p>
+          )}
+        </div>
 
-    return (
-      <form ref={ref} onSubmit={handleSubmit} className="space-y-6">
-        {/* Header Section - Collapsible */}
-        <Collapsible open={showQuestionInfo} onOpenChange={setShowQuestionInfo}>
-          <div className="bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 rounded-lg border">
-            <CollapsibleTrigger className="flex items-center justify-between w-full p-6 pb-4 hover:text-primary transition-colors">
-              <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
-                Question Information
-              </h3>
-              <ChevronIcon show={showQuestionInfo} readOnly={readOnly} />
-            </CollapsibleTrigger>
-            <CollapsibleContent className="px-6 pb-6">
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                <InputField
-                  id="title"
-                  name="title"
-                  value={formData.title || ""}
-                  onChange={handlers.handleChange}
-                  required={!readOnly}
-                  readOnly={readOnly}
-                  disabled={readOnly}
-                  placeholder="Enter question title..."
-                  label="Title"
-                />
-                <SelectField
-                  label="Type"
-                  value={formData.type || "multiple-choice"}
-                  onValueChange={(value) =>
-                    handlers.handleSelectChange("type", value)
-                  }
-                  disabled={readOnly}
-                  placeholder="Select Type"
-                >
-                  {questionTypes.map((type) => (
-                    <SelectItem key={type} value={type}>
-                      {type.charAt(0).toUpperCase() +
-                        type.slice(1).replace("-", " ")}
-                    </SelectItem>
-                  ))}
-                </SelectField>
-                <SelectField
-                  label="Difficulty"
-                  value={formData.difficulty || "beginner"}
-                  onValueChange={(value) =>
-                    handlers.handleSelectChange("difficulty", value)
-                  }
-                  disabled={readOnly}
-                  placeholder="Select Difficulty"
-                >
-                  {difficulties.map((difficulty) => (
-                    <SelectItem key={difficulty} value={difficulty}>
-                      {difficulty.charAt(0).toUpperCase() + difficulty.slice(1)}
-                    </SelectItem>
-                  ))}
-                </SelectField>
-                <SelectField
-                  label="Category"
-                  value={formData.category || ""}
-                  onValueChange={(value) =>
-                    handlers.handleSelectChange("category", value)
-                  }
-                  disabled={readOnly}
-                  placeholder="Select Category"
-                >
-                  {allCategories.map((category) => (
-                    <SelectItem key={category} value={category}>
-                      {category}
-                    </SelectItem>
-                  ))}
-                </SelectField>
-                <SelectField
-                  label="Learning Card"
-                  value={formData.learning_card_id || ""}
-                  onValueChange={(value) =>
-                    handlers.handleSelectChange("learning_card_id", value)
-                  }
-                  disabled={readOnly}
-                  placeholder="Select Learning Card"
-                >
-                  {cards.map((card) => (
-                    <SelectItem key={card.id} value={card.id}>
-                      {card.title}
-                    </SelectItem>
-                  ))}
-                </SelectField>
-                <InputField
-                  id="points"
-                  name="points"
-                  value={formData.points || 1}
-                  onChange={handlers.handleChange}
-                  readOnly={readOnly}
-                  disabled={readOnly}
-                  className=""
-                  label="Points"
-                />
+        <div>
+          <Label htmlFor="explanation">Explanation</Label>
+          <Textarea
+            id="explanation"
+            value={formData.explanation || ""}
+            onChange={(e) => handleFieldChange("explanation", e.target.value)}
+            placeholder="Explain why this answer is correct..."
+            className="min-h-[80px]"
+            disabled={disabled}
+          />
+        </div>
+      </div>
+
+      {/* Category and Tags */}
+      <div className="space-y-4">
+        <div>
+          <Label htmlFor="category">Category</Label>
+          <div className="relative">
+            <Input
+              id="category"
+              value={categorySearchTerm}
+              onChange={(e) => {
+                setCategorySearchTerm(e.target.value);
+                setShowCategoryDropdown(true);
+              }}
+              onFocus={() => setShowCategoryDropdown(true)}
+              placeholder="Search or select a category..."
+              disabled={disabled}
+            />
+            {showCategoryDropdown && (
+              <div className="absolute z-10 w-full mt-1 bg-white border rounded-md shadow-lg max-h-60 overflow-auto">
+                {filteredCategories.map((category) => (
+                  <button
+                    key={category}
+                    type="button"
+                    className="w-full px-3 py-2 hover:bg-gray-100 cursor-pointer text-left border-0 bg-transparent"
+                    onClick={() => handleCategorySelect(category)}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter" || e.key === " ") {
+                        e.preventDefault();
+                        handleCategorySelect(category);
+                      }
+                    }}
+                  >
+                    {category}
+                  </button>
+                ))}
               </div>
-            </CollapsibleContent>
+            )}
           </div>
-        </Collapsible>
+        </div>
 
-        {/* Content Section - Collapsible */}
-        <Collapsible open={showContent} onOpenChange={setShowContent}>
-          <div className="bg-white dark:bg-gray-800 rounded-lg border shadow-sm">
-            <CollapsibleTrigger className="flex items-center justify-between w-full p-6 pb-4 hover:text-primary transition-colors">
-              <h4 className="text-lg font-semibold flex items-center gap-2">
-                <BookOpen className="w-5 h-5 text-blue-600" />
-                Question Content
-              </h4>
-              <ChevronIcon show={showContent} readOnly={readOnly} />
-            </CollapsibleTrigger>
-            <CollapsibleContent className="px-6 pb-6">
-              <div>
-                <Label
-                  htmlFor="content"
-                  className="text-sm font-medium mb-2 block"
-                >
-                  Content <span className="text-red-500">*</span>
-                </Label>
-                <Textarea
-                  id="content"
-                  name="content"
-                  value={formData.content || ""}
-                  onChange={handlers.handleChange}
-                  rows={8}
-                  required={!readOnly}
-                  readOnly={readOnly}
-                  disabled={readOnly}
-                  className={`mt-1 w-full resize-y ${readOnly ? "bg-gray-50 dark:bg-gray-900 cursor-text" : ""}`}
-                  placeholder="Enter the question content..."
-                />
-                <p className="text-xs text-gray-500 dark:text-gray-400 mt-2">
-                  This is the main question text that users will see.
-                </p>
+        <div>
+          <Label htmlFor="tags">Tags</Label>
+          <div className="space-y-2">
+            <div className="flex items-center gap-2">
+              <Input
+                id="tags"
+                value={newTag}
+                onChange={(e) => setNewTag(e.target.value)}
+                onKeyDown={handleTagInputKeyDown}
+                onFocus={() => setShowTagDropdown(true)}
+                placeholder="Add a tag..."
+                disabled={disabled}
+              />
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                onClick={addTag}
+                disabled={disabled || !newTag.trim()}
+              >
+                <Plus className="w-4 h-4" />
+              </Button>
+            </div>
+
+            {showTagDropdown && (
+              <div className="relative z-10">
+                <div className="absolute w-full mt-1 bg-white border rounded-md shadow-lg max-h-40 overflow-auto">
+                  {filteredTags.map((tag) => (
+                    <button
+                      key={tag}
+                      type="button"
+                      className="w-full px-3 py-2 hover:bg-gray-100 cursor-pointer text-left border-0 bg-transparent"
+                      onClick={() => handleTagSelect(tag)}
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter" || e.key === " ") {
+                          e.preventDefault();
+                          handleTagSelect(tag);
+                        }
+                      }}
+                    >
+                      {tag}
+                    </button>
+                  ))}
+                </div>
               </div>
-            </CollapsibleContent>
-          </div>
-        </Collapsible>
+            )}
 
-        {/* Options Section for Multiple Choice Questions - Collapsible */}
-        {formData.type === "multiple-choice" && (
-          <Collapsible open={showOptions} onOpenChange={setShowOptions}>
-            <div className="bg-white dark:bg-gray-800 rounded-lg border shadow-sm">
-              <div className="flex items-center justify-between p-6 pb-4">
-                <CollapsibleTrigger className="flex items-center gap-2 hover:text-primary transition-colors flex-1">
-                  <h4 className="text-lg font-semibold flex items-center gap-2">
-                    <TrendingUp className="w-5 h-5 text-purple-600" />
-                    Answer Options
-                  </h4>
-                  {!readOnly &&
-                    (showOptions ? (
-                      <ChevronDown className="h-5 w-5 ml-auto" />
-                    ) : (
-                      <ChevronRightIcon className="h-5 w-5 ml-auto" />
-                    ))}
-                </CollapsibleTrigger>
-                {showOptions && !readOnly && (
+            <div className="flex flex-wrap gap-2">
+              {formData.tags?.map((tag) => (
+                <div
+                  key={tag}
+                  className="inline-flex items-center gap-1 px-2 py-1 bg-blue-100 text-blue-800 rounded-md text-sm"
+                >
+                  {tag}
                   <Button
                     type="button"
-                    variant="outline"
+                    variant="ghost"
                     size="sm"
-                    onClick={() => {
-                      setFormData((prev) => ({
-                        ...prev,
-                        options: [
-                          ...(prev.options || []),
-                          {
-                            id: `option-${Date.now()}`,
-                            text: "",
-                            isCorrect: false,
-                          },
-                        ],
-                      }));
-                    }}
-                    className="bg-purple-50 hover:bg-purple-100 text-purple-700 border-purple-200"
+                    onClick={() => removeTag(tag)}
+                    disabled={disabled}
                   >
-                    <Plus className="w-4 h-4 mr-2" />
-                    Add Option
+                    <X className="w-3 h-3" />
                   </Button>
-                )}
-              </div>
-              <CollapsibleContent className="px-6 pb-6">
-                <div className="space-y-4">
-                  {(formData.options || []).map((option, index) => (
-                    <div
-                      key={option.id || `option-${index}`}
-                      className={`p-4 rounded-lg border-2 transition-all duration-200 ${
-                        option.isCorrect
-                          ? "bg-green-50 border-green-300 dark:bg-green-900/30 dark:border-green-600"
-                          : "bg-gray-50 border-gray-200 dark:bg-gray-700 dark:border-gray-600"
-                      }`}
-                    >
-                      <div className="flex items-center space-x-3">
-                        <div
-                          className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold ${
-                            option.isCorrect
-                              ? "bg-green-600 text-white"
-                              : "bg-gray-300 text-gray-700 dark:bg-gray-600 dark:text-gray-300"
-                          }`}
-                        >
-                          {String.fromCodePoint(65 + index)}
-                        </div>
-
-                        <div className="flex-1">
-                          <Input
-                            value={option.text}
-                            onChange={(e) => {
-                              if (!readOnly) {
-                                const newOptions = [
-                                  ...(formData.options || []),
-                                ];
-                                newOptions[index] = {
-                                  ...option,
-                                  text: e.target.value,
-                                };
-                                setFormData((prev) => ({
-                                  ...prev,
-                                  options: newOptions,
-                                }));
-                              }
-                            }}
-                            readOnly={readOnly}
-                            disabled={readOnly}
-                            placeholder={`Option ${String.fromCodePoint(65 + index)}`}
-                            className={`border-0 bg-transparent p-0 text-sm ${readOnly ? "cursor-text" : ""}`}
-                          />
-                        </div>
-
-                        <div className="flex items-center space-x-2">
-                          <Checkbox
-                            checked={option.isCorrect}
-                            onCheckedChange={(checked) => {
-                              if (!readOnly) {
-                                const newOptions = [
-                                  ...(formData.options || []),
-                                ];
-                                newOptions[index] = {
-                                  ...option,
-                                  isCorrect: !!checked,
-                                };
-                                setFormData((prev) => ({
-                                  ...prev,
-                                  options: newOptions,
-                                }));
-                              }
-                            }}
-                            disabled={readOnly}
-                          />
-                          <Label className="text-sm font-medium">
-                            {option.isCorrect ? "✅ Correct" : "❌ Incorrect"}
-                          </Label>
-                        </div>
-
-                        {!readOnly && (
-                          <Button
-                            type="button"
-                            variant="outline"
-                            size="sm"
-                            onClick={() => {
-                              const newOptions = (
-                                formData.options || []
-                              ).filter((_, i) => i !== index);
-                              setFormData((prev) => ({
-                                ...prev,
-                                options: newOptions,
-                              }));
-                            }}
-                            className="text-red-600 hover:text-red-700 hover:bg-red-50"
-                          >
-                            <Trash2 className="w-4 h-4" />
-                          </Button>
-                        )}
-                      </div>
-                    </div>
-                  ))}
-                  {(!formData.options || formData.options.length === 0) && (
-                    <div className="text-center py-8 text-gray-500 dark:text-gray-400 border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg">
-                      <TrendingUp className="w-12 h-12 mx-auto mb-4 text-gray-400" />
-                      <p className="text-lg font-medium mb-2">
-                        No options added yet
-                      </p>
-                      <p className="text-sm">
-                        Click &quot;Add Option&quot; to get started with
-                        multiple choice answers
-                      </p>
-                    </div>
-                  )}
                 </div>
-              </CollapsibleContent>
+              ))}
             </div>
-          </Collapsible>
-        )}
-
-        {/* Answer/Explanation Section - Collapsible */}
-        <Collapsible open={showExplanation} onOpenChange={setShowExplanation}>
-          <div className="bg-white dark:bg-gray-800 rounded-lg border shadow-sm">
-            <CollapsibleTrigger className="flex items-center justify-between w-full p-6 pb-4 hover:text-primary transition-colors">
-              <h4 className="text-lg font-semibold flex items-center gap-2">
-                <HelpCircle className="w-5 h-5 text-orange-600" />
-                {formData.type === "multiple-choice"
-                  ? "Explanation"
-                  : "Correct Answer"}
-              </h4>
-              <ChevronIcon show={showExplanation} readOnly={readOnly} />
-            </CollapsibleTrigger>
-            <CollapsibleContent className="px-6 pb-6">
-              <Label htmlFor="explanation" className="text-sm font-medium">
-                {formData.type === "multiple-choice" ? "Explanation" : "Answer"}
-              </Label>
-              <Textarea
-                id="explanation"
-                name="explanation"
-                value={formData.explanation || ""}
-                onChange={handlers.handleChange}
-                rows={4}
-                readOnly={readOnly}
-                disabled={readOnly}
-                className={`mt-1 ${readOnly ? "bg-gray-50 dark:bg-gray-900 cursor-text" : ""}`}
-                placeholder={
-                  formData.type === "multiple-choice"
-                    ? "Enter explanation for the correct answer..."
-                    : "Enter the correct answer..."
-                }
-              />
-            </CollapsibleContent>
           </div>
-        </Collapsible>
+        </div>
+      </div>
 
-        {/* Learning Resources Section - Collapsible */}
-        <Collapsible open={showResources} onOpenChange={setShowResources}>
-          <div className="bg-white dark:bg-gray-800 rounded-lg border shadow-sm">
-            <CollapsibleTrigger className="flex items-center justify-between w-full p-6 pb-4 hover:text-primary transition-colors">
-              <h4 className="text-lg font-semibold flex items-center gap-2">
-                <BookOpen className="w-5 h-5 text-blue-600" />
-                Learning Resources (Optional)
-              </h4>
-              <ChevronIcon show={showResources} readOnly={readOnly} />
-            </CollapsibleTrigger>
-            <CollapsibleContent className="px-6 pb-6">
-              <Label htmlFor="resources" className="text-sm font-medium">
-                Resources (JSON Format)
-              </Label>
-              <Textarea
-                id="resources"
-                name="resources"
-                value={
-                  typeof (formData as any).resources === "string"
-                    ? (formData as any).resources
-                    : JSON.stringify((formData as any).resources || [], null, 2)
-                }
-                onChange={(e) => handlers.handleResourcesChange(e.target.value)}
-                rows={8}
-                readOnly={readOnly}
-                disabled={readOnly}
-                className={`mt-1 font-mono text-sm ${readOnly ? "bg-gray-50 dark:bg-gray-900 cursor-text" : ""}`}
-                placeholder={`[\n  {\n    "type": "video",\n    "title": "Video Title",\n    "url": "https://example.com/video",\n    "description": "Video description",\n    "duration": "10:30"\n  },\n  {\n    "type": "article",\n    "title": "Article Title",\n    "url": "https://example.com/article",\n    "description": "Article description"\n  }\n]`}
-              />
-              <p className="text-xs text-gray-500 dark:text-gray-400 mt-2">
-                Enter resources as a JSON array. Each resource should have: type
-                (video/course/article), title, url, and optionally description,
-                duration, author.
-              </p>
-            </CollapsibleContent>
+      {/* Additional Settings */}
+      <div className="space-y-4">
+        <div className="grid grid-cols-2 gap-4">
+          <div>
+            <Label htmlFor="difficulty">Difficulty</Label>
+            <Select
+              value={formData.difficulty || "beginner"}
+              onValueChange={(value) => handleFieldChange("difficulty", value)}
+            >
+              <SelectTrigger disabled={disabled}>
+                <SelectValue placeholder="Select difficulty" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="beginner">Beginner</SelectItem>
+                <SelectItem value="intermediate">Intermediate</SelectItem>
+                <SelectItem value="advanced">Advanced</SelectItem>
+              </SelectContent>
+            </Select>
           </div>
-        </Collapsible>
 
-        {/* Metadata Section - Collapsible */}
-        <Collapsible
-          open={showAdditionalSettings}
-          onOpenChange={setShowAdditionalSettings}
-        >
-          <div className="bg-white dark:bg-gray-800 rounded-lg border shadow-sm">
-            <CollapsibleTrigger className="flex items-center justify-between w-full p-6 pb-4 hover:text-primary transition-colors">
-              <h4 className="text-lg font-semibold flex items-center gap-2">
-                <BarChart3 className="w-5 h-5 text-gray-600" />
-                Additional Settings
-              </h4>
-              <ChevronIcon show={showAdditionalSettings} readOnly={readOnly} />
-            </CollapsibleTrigger>
-            <CollapsibleContent className="px-6 pb-6">
-              <div className="flex items-center space-x-2">
-                <Checkbox
-                  id="isActive"
-                  name="isActive"
-                  checked={formData.isActive || false}
-                  onCheckedChange={(checked) =>
-                    !readOnly &&
-                    setFormData((prev) => ({ ...prev, isActive: !!checked }))
-                  }
-                  disabled={readOnly}
-                />
-                <Label htmlFor="isActive" className="text-sm font-medium">
-                  Question is Active
-                </Label>
-              </div>
-            </CollapsibleContent>
+          <div>
+            <Label htmlFor="timeLimit">Time Limit (seconds)</Label>
+            <Input
+              id="timeLimit"
+              type="number"
+              min="5"
+              max="600"
+              value={formData.timeLimit || 30}
+              onChange={(e) =>
+                handleFieldChange(
+                  "timeLimit",
+                  Number.parseInt(e.target.value) || 30,
+                )
+              }
+              disabled={disabled}
+            />
           </div>
-        </Collapsible>
-      </form>
-    );
-  },
-);
+        </div>
 
-QuestionForm.displayName = "QuestionForm";
+        <div className="grid grid-cols-2 gap-4">
+          <div>
+            <Label htmlFor="points">Points</Label>
+            <Input
+              id="points"
+              type="number"
+              min="1"
+              max="100"
+              value={formData.points || 1}
+              onChange={(e) =>
+                handleFieldChange(
+                  "points",
+                  Number.parseInt(e.target.value) || 1,
+                )
+              }
+              disabled={disabled}
+            />
+          </div>
 
-export default QuestionForm;
+          <div className="flex items-center space-x-2">
+            <Checkbox
+              id="is_active"
+              checked={formData.is_active === true}
+              onCheckedChange={(checked) =>
+                handleFieldChange("is_active", checked)
+              }
+              disabled={disabled}
+            />
+            <Label htmlFor="is_active">Active</Label>
+          </div>
+        </div>
+      </div>
+
+      {/* Form Footer */}
+      {!hideFooter && (
+        <DialogFooter>
+          <Button
+            type="button"
+            variant="outline"
+            onClick={onCancel}
+            disabled={disabled || isSubmitting}
+          >
+            Cancel
+          </Button>
+          <Button type="submit" disabled={disabled || isSubmitting}>
+            {buttonText}
+          </Button>
+        </DialogFooter>
+      )}
+    </form>
+  );
+}

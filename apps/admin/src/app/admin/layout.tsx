@@ -13,7 +13,7 @@ import {
 } from "@elzatona/common-ui";
 import { usePathname } from "next/navigation";
 // ThemeProvider is already provided by root layout
-import "../globals.css";
+import "../../globals.css";
 
 interface AdminLayoutProps {
   readonly children: React.ReactNode;

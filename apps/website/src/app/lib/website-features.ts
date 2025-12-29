@@ -488,7 +488,7 @@ export const allWebsiteFeatures: WebsiteFeature[] = [
     section: "Core",
     status: "completed",
     priority: "Critical",
-    url: "/admin/dashboard",
+    url: "https://admin.elzatona.com/admin/dashboard", // Admin app route
     icon: BarChart3,
   },
   {
@@ -499,7 +499,7 @@ export const allWebsiteFeatures: WebsiteFeature[] = [
     section: "Core",
     status: "completed",
     priority: "Critical",
-    url: "/admin/login",
+    url: "https://admin.elzatona.com/admin/login", // Admin app route
     icon: Users,
   },
   {
@@ -533,7 +533,7 @@ export const allWebsiteFeatures: WebsiteFeature[] = [
     section: "Content",
     status: "completed",
     priority: "High",
-    url: "/admin/content-management", // Note: This route is now in apps/admin app
+    url: "https://admin.elzatona.com/admin/content-management", // Admin app route
     icon: FileText,
   },
   {
