@@ -1,3 +1,5 @@
+"use client";
+
 import React, { useState, useEffect } from "react";
 import { createClient } from "@supabase/supabase-js";
 
@@ -5,12 +7,13 @@ const supabaseUrl = process.env["NEXT_PUBLIC_SUPABASE_URL"]!;
 const supabaseServiceRoleKey = process.env["SUPABASE_SERVICE_ROLE_KEY"]!;
 const _supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
 
-// Note: This import path assumes this component is used in apps/website
-// For proper architecture, AdminAuthService should be injected or moved to shared location
-import {
-  AdminAuthService,
-  AdminCredential,
-} from "../../../../apps/website/src/app/lib/admin-auth";
+// Import AdminAuthService from website app (temporary until moved to shared location)
+// Note: This creates a cross-app dependency but is necessary for AdminManagement functionality
+// TODO: Move AdminAuthService to a shared location (libs/utilities or libs/auth)
+// eslint-disable-next-line @typescript-eslint/no-require-imports
+const AdminAuthService = require("../../../../apps/website/src/app/lib/admin-auth").AdminAuthService;
+// eslint-disable-next-line @typescript-eslint/no-require-imports
+const AdminCredential = require("../../../../apps/website/src/app/lib/admin-auth").AdminCredential;
 
 interface AdminManagementProps {
   currentUser: {
