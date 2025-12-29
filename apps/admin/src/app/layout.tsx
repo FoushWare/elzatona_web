@@ -1,35 +1,13 @@
 import type { Metadata } from "next";
-import { AdminAuthProvider, ThemeProvider } from "@elzatona/contexts";
-import { AdminNavbar } from "@elzatona/common-ui";
-import { NuqsAdapter } from "nuqs/adapters/next/app";
-import { Toaster } from "sonner";
+import { AdminRootLayout, adminMetadata } from "@elzatona/common-ui";
 import "./globals.css";
 
-export const metadata: Metadata = {
-  title: "Admin Dashboard - Elzatona",
-  description: "Admin dashboard for managing Elzatona content",
-};
+export const metadata: Metadata = adminMetadata;
 
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  return (
-    <html lang="en">
-      <body>
-        <NuqsAdapter>
-          <ThemeProvider>
-            <AdminAuthProvider>
-              <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
-                <AdminNavbar />
-                <main className="pt-16">{children}</main>
-                <Toaster position="top-right" />
-              </div>
-            </AdminAuthProvider>
-          </ThemeProvider>
-        </NuqsAdapter>
-      </body>
-    </html>
-  );
+  return <AdminRootLayout>{children}</AdminRootLayout>;
 }
