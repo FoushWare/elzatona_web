@@ -7,3 +7,6 @@ export * from "./useUserPreferences";
 export * from "./useMobileMenu";
 export * from "./useOnboarding";
 export * from "./useUserType";
+
+// Admin hooks
+export * from "./admin/content-management";

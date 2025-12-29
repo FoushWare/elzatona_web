@@ -15,14 +15,16 @@ import {
 } from "@elzatona/common-ui";
 
 // Custom hooks
-import { useContentManagementData } from "./hooks/useContentManagementData";
-import { useContentManagementState } from "./hooks/useContentManagementState";
-import { useContentManagementModals } from "./hooks/useContentManagementModals";
-import { usePlanHierarchy } from "./hooks/usePlanHierarchy";
-import { useContentManagementActions } from "./hooks/useContentManagementActions";
-import { useContentManagementTemplateProps } from "./hooks/useContentManagementTemplateProps";
-import { useContentManagementHandlers } from "./hooks/useContentManagementHandlers";
-import { useContentManagementDeleteHandlers } from "./hooks/useContentManagementDeleteHandlers";
+import {
+  useContentManagementData,
+  useContentManagementState,
+  useContentManagementModals,
+  usePlanHierarchy,
+  useContentManagementActions,
+  useContentManagementTemplateProps,
+  useContentManagementHandlers,
+  useContentManagementDeleteHandlers,
+} from "@elzatona/hooks";
 
 // Components
 import {
