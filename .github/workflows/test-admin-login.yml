@@ -11,7 +11,7 @@ on:
   pull_request:
     branches: [main, develop, "release/**"]
     paths:
-      - "apps/website/src/app/admin/login/**"
+      - "apps/admin/pages/admin/login/**"
       - "libs/common-ui/src/components/organisms/AdminLoginPageTemplate.*"
       - "libs/common-ui/src/components/molecules/AdminLoginFormMolecule.*"
       - ".github/workflows/test-admin-login.yml"
@@ -43,11 +43,11 @@ jobs:
         run: |
           echo "🧪 Running unit tests for Admin Login page..."
           NODE_OPTIONS=--max-old-space-size=768 npx jest \
-            apps/website/src/app/admin/login/page.test.tsx \
+            apps/admin/pages/admin/login/page.test.tsx \
             --maxWorkers=1 \
             --silent \
             --coverage=false \
-            --config=apps/website/jest.config.js
+            --config=apps/admin/jest.config.js
         continue-on-error: false
         env:
           NODE_OPTIONS: "--max-old-space-size=768"
@@ -63,11 +63,11 @@ jobs:
         run: |
           echo "🔗 Running integration tests for Admin Login..."
           NODE_OPTIONS=--max-old-space-size=768 npx jest \
-            apps/website/src/app/admin/login/page.integration.test.tsx \
+            apps/admin/pages/admin/login/page.integration.test.tsx \
             --maxWorkers=1 \
             --silent \
             --coverage=false \
-            --config=apps/website/jest.config.js || echo "⚠️  Integration tests not found, skipping"
+            --config=apps/admin/jest.config.js || echo "⚠️  Integration tests not found, skipping"
         continue-on-error: true
         env:
           NODE_OPTIONS: "--max-old-space-size=768"
@@ -99,7 +99,7 @@ jobs:
       - name: Run E2E tests for Admin Login
         run: |
           echo "🌐 Running E2E tests for Admin Login..."
-          npx playwright test apps/website/tests/e2e/admin-login/admin-login.spec.ts --project=chromium || echo "⚠️  E2E tests failed or not found"
+          npx playwright test apps/admin/tests/e2e/admin/admin-login.spec.ts --project=chromium || echo "⚠️  E2E tests failed or not found"
         continue-on-error: true
         env:
           CI: "true"
@@ -113,11 +113,11 @@ jobs:
         run: |
           echo "📸 Updating snapshot tests for Admin Login..."
           NODE_OPTIONS=--max-old-space-size=768 npx jest \
-            apps/website/src/app/admin/login/page.test.tsx \
+            apps/admin/pages/admin/login/page.test.tsx \
             --updateSnapshot \
             --maxWorkers=1 \
             --silent \
-            --config=apps/website/jest.config.js || echo "⚠️  Snapshot update skipped"
+            --config=apps/admin/jest.config.js || echo "⚠️  Snapshot update skipped"
         continue-on-error: true
         env:
           NODE_OPTIONS: "--max-old-space-size=768"

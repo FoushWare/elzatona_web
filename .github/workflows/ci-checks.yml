@@ -78,7 +78,7 @@ jobs:
           # Run Jest tests for website app (AdminLoginPage)
           echo "📦 Testing AdminLoginPage..."
           NODE_OPTIONS=--max-old-space-size=768 JEST_MAX_WORKERS=1 npx jest \
-            apps/website/src/app/admin/login/page.test.tsx \
+            apps/admin/pages/admin/login/page.test.tsx \
             --maxWorkers=1 \
             --silent \
             --coverage=false \
@@ -104,7 +104,7 @@ jobs:
           # Run Jest tests for website app (ContentManagementPage)
           echo "📦 Testing ContentManagementPage..."
           NODE_OPTIONS=--max-old-space-size=768 JEST_MAX_WORKERS=1 npx jest \
-            apps/website/src/app/admin/content-management/page.test.tsx \
+            apps/admin/pages/admin/content-management/page.test.tsx \
             --maxWorkers=1 \
             --silent \
             --coverage=false \

@@ -12,7 +12,6 @@ on:
   pull_request:
     branches: [main, develop, "release/**"]
     paths:
-      - "apps/website/src/app/admin/content-management/**"
       - "apps/admin/pages/admin/content-management/**"
       - "libs/common-ui/src/components/templates/ContentManagementTemplate.*"
       - "libs/common-ui/src/components/organisms/**"
@@ -49,7 +48,7 @@ jobs:
             --maxWorkers=1 \
             --silent \
             --coverage=false \
-            --config=apps/website/jest.config.js || echo "⚠️  Unit tests not found, skipping"
+            --config=apps/admin/jest.config.js || echo "⚠️  Unit tests not found, skipping"
         continue-on-error: true
         env:
           NODE_OPTIONS: "--max-old-space-size=768"
@@ -65,11 +64,11 @@ jobs:
         run: |
           echo "🔗 Running integration tests for Admin Content Management..."
           NODE_OPTIONS=--max-old-space-size=768 npx jest \
-            apps/website/src/app/admin/content-management/page.integration.test.tsx \
+            apps/admin/pages/admin/content-management/page.integration.test.tsx \
             --maxWorkers=1 \
             --silent \
             --coverage=false \
-            --config=apps/website/jest.config.js || echo "⚠️  Integration tests not found, skipping"
+            --config=apps/admin/jest.config.js || echo "⚠️  Integration tests not found, skipping"
         continue-on-error: true
         env:
           NODE_OPTIONS: "--max-old-space-size=768"
@@ -102,7 +101,7 @@ jobs:
       - name: Run E2E tests for Admin Content Management
         run: |
           echo "🌐 Running E2E tests for Admin Content Management..."
-          npx playwright test apps/website/tests/e2e/admin-content-management/admin-content-management.spec.ts --project=chromium || echo "⚠️  E2E tests failed or not found"
+          npx playwright test apps/admin/tests/e2e/admin/admin-content-management.spec.ts --project=chromium || echo "⚠️  E2E tests failed or not found"
         continue-on-error: true
         env:
           CI: "true"
@@ -116,11 +115,11 @@ jobs:
         run: |
           echo "📸 Updating snapshot tests for Admin Content Management..."
           NODE_OPTIONS=--max-old-space-size=768 npx jest \
-            apps/website/src/app/admin/content-management/page.test.tsx \
+            apps/admin/pages/admin/content-management/page.test.tsx \
             --updateSnapshot \
             --maxWorkers=1 \
             --silent \
-            --config=apps/website/jest.config.js || echo "⚠️  Snapshot update skipped"
+            --config=apps/admin/jest.config.js || echo "⚠️  Snapshot update skipped"
         continue-on-error: true
         env:
           NODE_OPTIONS: "--max-old-space-size=768"

@@ -13,7 +13,7 @@ on:
   pull_request:
     branches: [main, develop, "release/**"]
     paths:
-      - "apps/website/src/app/admin/dashboard/**"
+      - "apps/admin/pages/admin/dashboard/**"
       - "libs/common-ui/src/components/templates/AdminDashboardTemplate.*"
       - "libs/common-ui/src/components/organisms/AdminStatsGrid.*"
       - "libs/common-ui/src/components/organisms/AdminQuickActionsSection.*"
@@ -47,11 +47,11 @@ jobs:
         run: |
           echo "🧪 Running unit tests for Admin Dashboard page..."
           NODE_OPTIONS=--max-old-space-size=768 npx jest \
-            apps/website/src/app/admin/dashboard/page.test.tsx \
+            apps/admin/pages/admin/dashboard/page.test.tsx \
             --maxWorkers=1 \
             --silent \
             --coverage=false \
-            --config=apps/website/jest.config.js
+            --config=apps/admin/jest.config.js
         continue-on-error: false
         env:
           NODE_OPTIONS: "--max-old-space-size=768"
@@ -67,11 +67,11 @@ jobs:
         run: |
           echo "🔗 Running integration tests for Admin Dashboard..."
           NODE_OPTIONS=--max-old-space-size=768 npx jest \
-            apps/website/src/app/admin/dashboard/page.integration.test.tsx \
+            apps/admin/pages/admin/dashboard/page.integration.test.tsx \
             --maxWorkers=1 \
             --silent \
             --coverage=false \
-            --config=apps/website/jest.config.js || echo "⚠️  Integration tests not found, skipping"
+            --config=apps/admin/jest.config.js || echo "⚠️  Integration tests not found, skipping"
         continue-on-error: true
         env:
           NODE_OPTIONS: "--max-old-space-size=768"
@@ -103,7 +103,7 @@ jobs:
       - name: Run E2E tests for Admin Dashboard
         run: |
           echo "🌐 Running E2E tests for Admin Dashboard..."
-          npx playwright test apps/website/tests/e2e/admin-dashboard/admin-dashboard.spec.ts --project=chromium || echo "⚠️  E2E tests failed or not found"
+          npx playwright test apps/admin/tests/e2e/admin/admin-dashboard.spec.ts --project=chromium || echo "⚠️  E2E tests failed or not found"
         continue-on-error: true
         env:
           CI: "true"
@@ -117,11 +117,11 @@ jobs:
         run: |
           echo "📸 Updating snapshot tests for Admin Dashboard..."
           NODE_OPTIONS=--max-old-space-size=768 npx jest \
-            apps/website/src/app/admin/dashboard/page.test.tsx \
+            apps/admin/pages/admin/dashboard/page.test.tsx \
             --updateSnapshot \
             --maxWorkers=1 \
             --silent \
-            --config=apps/website/jest.config.js || echo "⚠️  Snapshot update skipped"
+            --config=apps/admin/jest.config.js || echo "⚠️  Snapshot update skipped"
         continue-on-error: true
         env:
           NODE_OPTIONS: "--max-old-space-size=768"
