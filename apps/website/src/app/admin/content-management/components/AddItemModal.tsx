@@ -18,25 +18,19 @@ import {
   CheckSquare,
   Square,
 } from "lucide-react";
-import { LearningCard } from "@elzatona/types";
-import { UnifiedQuestion } from "@elzatona/types";
-
-// Types
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-type LearningPlan = any;
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-type Category = any;
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-type Topic = any;
+import {
+  LearningCard,
+  UnifiedQuestion,
+  type LearningPlan,
+  type Category,
+  type Topic,
+  type AddItemContext,
+} from "@elzatona/types";
 
 interface AddItemModalProps {
   isOpen: boolean;
   onClose: () => void;
-  addItemContext: {
-    planId: string;
-    type: "card" | "category" | "topic" | "question";
-    parentId?: string;
-  } | null;
+  addItemContext: AddItemContext | null;
   cards: readonly LearningCard[];
   categories: readonly Category[];
   topics: readonly Topic[];

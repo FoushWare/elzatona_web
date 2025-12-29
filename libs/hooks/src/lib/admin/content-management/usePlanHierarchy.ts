@@ -7,8 +7,7 @@
 import { useState, useCallback, useEffect } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { useToast } from "@elzatona/common-ui";
-
-type LearningPlan = any; // eslint-disable-line @typescript-eslint/no-explicit-any
+import { type LearningPlan } from "@elzatona/types";
 
 export function usePlanHierarchy(plans: readonly LearningPlan[]) {
   const queryClient = useQueryClient();

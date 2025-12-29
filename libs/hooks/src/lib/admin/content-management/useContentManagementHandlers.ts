@@ -5,13 +5,13 @@
  */
 
 import { useCallback } from "react";
-import { LearningCard } from "@elzatona/types";
-import { UnifiedQuestion } from "@elzatona/types";
-
-// Types
-type LearningPlan = any; // eslint-disable-line @typescript-eslint/no-explicit-any
-type Category = any; // eslint-disable-line @typescript-eslint/no-explicit-any
-type Topic = any; // eslint-disable-line @typescript-eslint/no-explicit-any
+import {
+  LearningCard,
+  UnifiedQuestion,
+  type LearningPlan,
+  type Category,
+  type Topic,
+} from "@elzatona/types";
 
 interface UseContentManagementHandlersParams {
   // Data

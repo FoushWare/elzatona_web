@@ -5,15 +5,18 @@
  */
 
 import React, { Suspense } from "react";
-import { LearningCard, UnifiedQuestion } from "@elzatona/types";
+import {
+  LearningCard,
+  UnifiedQuestion,
+  type LearningPlan,
+  type Category,
+  type Topic,
+  type AddItemContext,
+} from "@elzatona/types";
 import {
   ContentManagementFormModals,
   ContentManagementDeleteModals,
 } from "../organisms";
-
-type LearningPlan = any; // eslint-disable-line @typescript-eslint/no-explicit-any
-type Category = any; // eslint-disable-line @typescript-eslint/no-explicit-any
-type Topic = any; // eslint-disable-line @typescript-eslint/no-explicit-any
 
 interface ContentManagementModalsProps {
   // Data
@@ -43,11 +46,7 @@ interface ContentManagementModalsProps {
     topicToDelete: Topic | null;
     questionToDelete: UnifiedQuestion | null;
     viewingQuestion: UnifiedQuestion | null;
-    addItemContext: {
-      planId: string;
-      type: "card" | "category" | "topic" | "question";
-      parentId?: string;
-    } | null;
+    addItemContext: AddItemContext | null;
     closeCardModal: () => void;
     closePlanModal: () => void;
     closeCategoryModal: () => void;
@@ -117,11 +116,7 @@ interface ContentManagementModalsProps {
     AddItemModal?: React.ComponentType<{
       isOpen: boolean;
       onClose: () => void;
-      addItemContext: {
-        planId: string;
-        type: "card" | "category" | "topic" | "question";
-        parentId?: string;
-      } | null;
+      addItemContext: AddItemContext | null;
       cards: readonly LearningCard[];
       categories: readonly Category[];
       topics: readonly Topic[];

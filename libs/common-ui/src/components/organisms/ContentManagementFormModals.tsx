@@ -8,8 +8,13 @@
 
 import React, { Suspense } from "react";
 import { Modal } from "@elzatona/common-ui";
-import { LearningCard } from "@elzatona/types";
-import { UnifiedQuestion } from "@elzatona/types";
+import {
+  LearningCard,
+  UnifiedQuestion,
+  type LearningPlan,
+  type Category,
+  type Topic,
+} from "@elzatona/types";
 
 // Lazy load forms
 const CategoryForm = React.lazy(() =>
@@ -37,11 +42,6 @@ const PlanForm = React.lazy(() =>
     default: module.PlanForm,
   })),
 );
-
-// Types
-type LearningPlan = any; // eslint-disable-line @typescript-eslint/no-explicit-any
-type Category = any; // eslint-disable-line @typescript-eslint/no-explicit-any
-type Topic = any; // eslint-disable-line @typescript-eslint/no-explicit-any
 
 interface ContentManagementFormModalsProps {
   // Card modal

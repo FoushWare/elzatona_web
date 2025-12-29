@@ -5,11 +5,13 @@
  */
 
 import { useMemo } from "react";
-import { LearningCard, UnifiedQuestion } from "@elzatona/types";
-
-type LearningPlan = any; // eslint-disable-line @typescript-eslint/no-explicit-any
-type Category = any; // eslint-disable-line @typescript-eslint/no-explicit-any
-type Topic = any; // eslint-disable-line @typescript-eslint/no-explicit-any
+import {
+  LearningCard,
+  UnifiedQuestion,
+  type LearningPlan,
+  type Category,
+  type Topic,
+} from "@elzatona/types";
 
 interface UseContentManagementDeleteHandlersParams {
   modals: {

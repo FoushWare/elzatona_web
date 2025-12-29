@@ -21,6 +21,7 @@ import {
   AdminDashboardTemplate,
   type AdminMetricCardPropsType,
 } from "@elzatona/common-ui";
+import { type AdminQuickAction } from "@elzatona/types";
 
 export default function AdminDashboard() {
   const { user } = useAdminAuth();
@@ -114,7 +115,7 @@ export default function AdminDashboard() {
   ];
 
   // Prepare quick actions
-  const quickActions = [
+  const quickActions: AdminQuickAction[] = [
     {
       title: "Add New Question",
       description: "Create a new learning question",

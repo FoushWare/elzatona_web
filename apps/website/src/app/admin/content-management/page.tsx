@@ -13,6 +13,7 @@ import {
   ToastContainer,
   ContentManagementTemplate,
 } from "@elzatona/common-ui";
+import { type ContentManagementStats } from "@elzatona/types";
 
 // Custom hooks
 import {
@@ -71,7 +72,7 @@ export default function UnifiedAdminPage() {
   const { toasts, removeToast } = useToast();
 
   // Stats calculation
-  const stats = useMemo(
+  const stats = useMemo<ContentManagementStats>(
     () => ({
       totalCards: data.cardsData?.count || 0,
       totalPlans: data.plansData?.count || 0,

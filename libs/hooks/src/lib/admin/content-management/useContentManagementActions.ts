@@ -24,14 +24,14 @@ import {
   useDeleteQuestion,
   useNotificationActions,
 } from "@elzatona/hooks";
-import { LearningCard } from "@elzatona/types";
-import { UnifiedQuestion } from "@elzatona/types";
+import {
+  LearningCard,
+  UnifiedQuestion,
+  type LearningPlan,
+  type Category,
+  type Topic,
+} from "@elzatona/types";
 import { useToast } from "@elzatona/common-ui";
-
-// Define types for other entities
-type LearningPlan = any; // eslint-disable-line @typescript-eslint/no-explicit-any
-type Category = any; // eslint-disable-line @typescript-eslint/no-explicit-any
-type Topic = any; // eslint-disable-line @typescript-eslint/no-explicit-any
 
 interface UseContentManagementActionsProps {
   cards: readonly LearningCard[];
