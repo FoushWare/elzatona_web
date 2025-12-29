@@ -184,7 +184,9 @@ export function ContentManagementModals({
         isCategoryModalOpen={modals.isCategoryModalOpen}
         onCloseCategoryModal={modals.closeCategoryModal}
         editingCategory={modals.editingCategory}
-        onCategoryFormSubmit={handlers.onCategoryFormSubmit}
+        onCategoryFormSubmit={async (data: any) => {
+          await handlers.onCategoryFormSubmit(data);
+        }}
         isCategoryLoading={
           actions.createCategoryMutation.isPending ||
           actions.updateCategoryMutation.isPending
@@ -193,7 +195,9 @@ export function ContentManagementModals({
         onCloseTopicModal={modals.closeTopicModal}
         editingTopic={modals.editingTopic}
         categories={data.categories}
-        onTopicFormSubmit={handlers.onTopicFormSubmit}
+        onTopicFormSubmit={async (data: any) => {
+          await handlers.onTopicFormSubmit(data);
+        }}
         isTopicLoading={
           actions.createTopicMutation.isPending ||
           actions.updateTopicMutation.isPending
@@ -202,7 +206,9 @@ export function ContentManagementModals({
         onCloseQuestionModal={modals.closeQuestionModal}
         editingQuestion={modals.editingQuestion}
         topics={data.topics}
-        onQuestionFormSubmit={handlers.onQuestionFormSubmit}
+        onQuestionFormSubmit={async (data: any) => {
+          await handlers.onQuestionFormSubmit(data);
+        }}
         isQuestionLoading={
           actions.createQuestionMutation.isPending ||
           actions.updateQuestionMutation.isPending

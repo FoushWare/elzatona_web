@@ -46,6 +46,7 @@ export { Alert, AlertTitle, AlertDescription } from "./components/ui/alert";
 export { EmptyState } from "./components/ui/empty-state";
 export { SignInPopup } from "./auth/SignInPopup";
 export { default as AdminLoginNavbar } from "./auth/AdminLoginNavbar";
+export { default as AdminManagement } from "./auth/AdminManagement";
 export { default as NavbarSimple } from "./common/NavbarSimple";
 export { default as FirestoreErrorBoundary } from "./common/FirestoreErrorBoundary";
 export { NotificationContainer } from "./components/ui/Notification";

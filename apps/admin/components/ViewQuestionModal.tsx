@@ -113,7 +113,7 @@ export const ViewQuestionModal: React.FC<ViewQuestionModalProps> = ({
           categoriesData={[]}
           topicsData={[]}
           disabled={isSaving}
-          externalSubmitTrigger={submitTrigger}
+          externalSubmitTrigger={isSaving ? Date.now() : undefined}
         />
       ) : (
         <QuestionPracticeView

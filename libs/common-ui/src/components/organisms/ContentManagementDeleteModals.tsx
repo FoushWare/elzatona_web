@@ -12,7 +12,7 @@ import {
   LearningCard,
   UnifiedQuestion,
   type LearningPlan,
-  type Category,
+  type AdminCategory as Category,
   type Topic,
 } from "@elzatona/types";
 

@@ -421,10 +421,10 @@ interface ViewQuestionModalProps {
   readonly isOpen: boolean;
   readonly onClose: () => void;
   readonly question: UnifiedQuestion | null;
-  readonly cards: any[];
+  readonly cards: readonly any[];
   readonly allCategories: string[];
-  readonly categoriesData: any[];
-  readonly topicsData: any[];
+  readonly categoriesData: readonly any[];
+  readonly topicsData: readonly any[];
 }
 
 const getOptionLetter = (index: number) => String.fromCodePoint(65 + index);

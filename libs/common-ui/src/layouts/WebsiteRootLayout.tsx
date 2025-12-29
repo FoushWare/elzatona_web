@@ -4,6 +4,7 @@
  * v1.0
  */
 
+import React from "react";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 // Note: JotaiProvider and QueryProvider should be imported from the consuming app
