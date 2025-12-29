@@ -185,7 +185,8 @@ export function ContentManagementModals({
         onCloseCategoryModal={modals.closeCategoryModal}
         editingCategory={modals.editingCategory}
         onCategoryFormSubmit={async (data: any) => {
-          await handlers.onCategoryFormSubmit(data);
+          const result = handlers.onCategoryFormSubmit(data);
+          await Promise.resolve(result);
         }}
         isCategoryLoading={
           actions.createCategoryMutation.isPending ||
@@ -196,7 +197,8 @@ export function ContentManagementModals({
         editingTopic={modals.editingTopic}
         categories={data.categories}
         onTopicFormSubmit={async (data: any) => {
-          await handlers.onTopicFormSubmit(data);
+          const result = handlers.onTopicFormSubmit(data);
+          await Promise.resolve(result);
         }}
         isTopicLoading={
           actions.createTopicMutation.isPending ||
@@ -207,7 +209,8 @@ export function ContentManagementModals({
         editingQuestion={modals.editingQuestion}
         topics={data.topics}
         onQuestionFormSubmit={async (data: any) => {
-          await handlers.onQuestionFormSubmit(data);
+          const result = handlers.onQuestionFormSubmit(data);
+          await Promise.resolve(result);
         }}
         isQuestionLoading={
           actions.createQuestionMutation.isPending ||
