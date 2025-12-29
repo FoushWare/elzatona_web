@@ -36,11 +36,15 @@ const CARD_ICONS = {
   "System Design": { icon: Layers, color: "#EF4444" },
 } as const;
 
+// LearningCard interface - compatible with LearningCard from @elzatona/types
+// This allows CardsList to work with the full LearningCard type from the types library
 interface LearningCard {
   readonly id: string;
   readonly title: string;
   readonly description: string;
   readonly color: string;
+  // Allow additional properties to be compatible with full LearningCard type
+  readonly [key: string]: unknown;
 }
 
 interface Category {
