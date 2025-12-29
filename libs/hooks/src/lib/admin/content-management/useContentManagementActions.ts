@@ -199,7 +199,8 @@ export function useContentManagementActions({
 
   // Category operations
   const handleCreateCategory = useCallback(
-    async (categoryData: Partial<Category>) => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    async (categoryData: any) => {
       try {
         await createCategoryMutation.mutateAsync(categoryData);
       } catch (error) {
