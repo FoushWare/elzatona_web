@@ -503,7 +503,9 @@ describe("A-UT-SNAPSHOT: Admin Login Page Snapshot Tests", () => {
     fireEvent.change(emailInput, { target: { value: MOCK_EMAIL } });
     fireEvent.change(passwordInput, { target: { value: MOCK_PASSWORD } });
 
-    expect(container.firstChild).toMatchSnapshot("admin-login-with-form-values");
+    expect(container.firstChild).toMatchSnapshot(
+      "admin-login-with-form-values",
+    );
   });
 
   it("should match admin login page snapshot (error state)", async () => {

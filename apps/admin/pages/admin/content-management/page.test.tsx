@@ -366,9 +366,7 @@ describe("Content Management Page Snapshot Tests", () => {
         screen.getByTestId("content-management-template"),
       ).toBeInTheDocument();
     });
-    expect(container.firstChild).toMatchSnapshot(
-      "content-management-default",
-    );
+    expect(container.firstChild).toMatchSnapshot("content-management-default");
   });
 
   it("should match content management page snapshot (loading state)", () => {
@@ -381,9 +379,7 @@ describe("Content Management Page Snapshot Tests", () => {
     });
 
     const { container } = renderWithProviders(<UnifiedAdminPage />);
-    expect(container.firstChild).toMatchSnapshot(
-      "content-management-loading",
-    );
+    expect(container.firstChild).toMatchSnapshot("content-management-loading");
   });
 
   it("should match content management page snapshot (error state)", () => {
@@ -420,6 +416,8 @@ describe("Content Management Page Snapshot Tests", () => {
         screen.getByTestId("content-management-template"),
       ).toBeInTheDocument();
     });
-    expect(container.firstChild).toMatchSnapshot("content-management-with-data");
+    expect(container.firstChild).toMatchSnapshot(
+      "content-management-with-data",
+    );
   });
 });
