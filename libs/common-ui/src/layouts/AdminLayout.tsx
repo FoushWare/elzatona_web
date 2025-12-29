@@ -19,7 +19,7 @@ import {
 } from "@elzatona/common-ui";
 import { usePathname } from "next/navigation";
 
-interface AdminLayoutProps {
+export interface AdminLayoutProps {
   readonly children: React.ReactNode;
 }
 
