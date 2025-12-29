@@ -69,7 +69,8 @@ jest.mock("./lib/hooks/useHomePageState", () => ({
   }),
 }));
 
-jest.mock("./lib/homePageHelpers", () => ({
+jest.mock("@elzatona/utilities", () => ({
+  ...jest.requireActual("@elzatona/utilities"),
   getPersonalizedContent: () => ({
     title: "Master Frontend Development",
     subtitle: "The complete platform to ace your frontend interviews",
@@ -80,7 +81,8 @@ jest.mock("./lib/homePageHelpers", () => ({
   }),
 }));
 
-jest.mock("./lib/constants/homePage.constants", () => ({
+jest.mock("@elzatona/types", () => ({
+  ...jest.requireActual("@elzatona/types"),
   ROUTES: {
     GUIDED_LEARNING: "/features/guided-learning",
     BROWSE_QUESTIONS: "/browse-practice-questions",
