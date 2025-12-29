@@ -25,7 +25,14 @@ export default function AdminUsersPage() {
 
   return (
     <div className="min-h-screen p-8">
-      <AdminManagement currentUser={user} />
+      <AdminManagement
+        currentUser={{
+          id: user.id,
+          role: (user.role === "super_admin" || user.role === "admin"
+            ? user.role
+            : "admin") as "admin" | "super_admin",
+        }}
+      />
     </div>
   );
 }

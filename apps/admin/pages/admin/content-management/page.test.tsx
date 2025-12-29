@@ -277,11 +277,11 @@ describe("UnifiedAdminPage", () => {
     );
   };
 
-  it("should render loading state when data is loading", () => {
-    const {
-      useContentManagementData,
-    } = require("./hooks/useContentManagementData");
-    useContentManagementData.mockReturnValueOnce({
+  it("should render loading state when data is loading", async () => {
+    const { useContentManagementData } = await import(
+      "./hooks/useContentManagementData"
+    );
+    (useContentManagementData as ReturnType<typeof vi.fn>).mockReturnValueOnce({
       loading: true,
       hasError: false,
     });
@@ -290,11 +290,11 @@ describe("UnifiedAdminPage", () => {
     expect(screen.getByTestId("loading-state")).toBeInTheDocument();
   });
 
-  it("should render error state when there is an error", () => {
-    const {
-      useContentManagementData,
-    } = require("./hooks/useContentManagementData");
-    useContentManagementData.mockReturnValueOnce({
+  it("should render error state when there is an error", async () => {
+    const { useContentManagementData } = await import(
+      "./hooks/useContentManagementData"
+    );
+    (useContentManagementData as ReturnType<typeof vi.fn>).mockReturnValueOnce({
       loading: false,
       hasError: true,
       cardsError: new Error("Test error"),
@@ -369,11 +369,11 @@ describe("Content Management Page Snapshot Tests", () => {
     expect(container.firstChild).toMatchSnapshot("content-management-default");
   });
 
-  it("should match content management page snapshot (loading state)", () => {
-    const {
-      useContentManagementData,
-    } = require("./hooks/useContentManagementData");
-    useContentManagementData.mockReturnValueOnce({
+  it("should match content management page snapshot (loading state)", async () => {
+    const { useContentManagementData } = await import(
+      "./hooks/useContentManagementData"
+    );
+    (useContentManagementData as ReturnType<typeof vi.fn>).mockReturnValueOnce({
       loading: true,
       hasError: false,
     });
@@ -382,11 +382,11 @@ describe("Content Management Page Snapshot Tests", () => {
     expect(container.firstChild).toMatchSnapshot("content-management-loading");
   });
 
-  it("should match content management page snapshot (error state)", () => {
-    const {
-      useContentManagementData,
-    } = require("./hooks/useContentManagementData");
-    useContentManagementData.mockReturnValueOnce({
+  it("should match content management page snapshot (error state)", async () => {
+    const { useContentManagementData } = await import(
+      "./hooks/useContentManagementData"
+    );
+    (useContentManagementData as ReturnType<typeof vi.fn>).mockReturnValueOnce({
       loading: false,
       hasError: true,
       cardsError: new Error("Test error"),
@@ -397,10 +397,10 @@ describe("Content Management Page Snapshot Tests", () => {
   });
 
   it("should match content management page snapshot (with data)", async () => {
-    const {
-      useContentManagementData,
-    } = require("./hooks/useContentManagementData");
-    useContentManagementData.mockReturnValueOnce({
+    const { useContentManagementData } = await import(
+      "./hooks/useContentManagementData"
+    );
+    (useContentManagementData as ReturnType<typeof vi.fn>).mockReturnValueOnce({
       cards: [{ id: "1", name: "Test Card" }],
       plans: [{ id: "1", name: "Test Plan" }],
       categories: [{ id: "1", name: "Test Category" }],

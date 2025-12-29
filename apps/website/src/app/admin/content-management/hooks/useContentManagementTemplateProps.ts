@@ -173,7 +173,7 @@ export function useContentManagementTemplateProps({
         onOpenChange: state.setIsCategoriesOpen,
         onAdd: () => modals.openCategoryModal(),
         onEdit: (category: Category) => modals.openCategoryModal(category),
-        onDelete: (categoryId: string) => handlers.onDeleteCategory(categoryId),
+        onDelete: (category: any) => handlers.onDeleteCategory(category.id),
       },
       topicsList: {
         topics: data.topics,
@@ -188,7 +188,7 @@ export function useContentManagementTemplateProps({
         onOpenChange: state.setIsTopicsOpen,
         onAdd: () => modals.openTopicModal(),
         onEdit: (topic: Topic) => modals.openTopicModal(topic),
-        onDelete: (topicId: string) => handlers.onDeleteTopic(topicId),
+        onDelete: (topic: any) => handlers.onDeleteTopic(topic.id),
       },
       cardsList: {
         cards: filteredCards,
@@ -201,14 +201,14 @@ export function useContentManagementTemplateProps({
         onToggleCard: state.toggleCard,
         onToggleCategory: state.toggleCategory,
         onToggleTopic: state.toggleTopic,
-        onEditCard: (card) => modals.openCardModal(card as LearningCard),
+        onEditCard: (card: any) => modals.openCardModal(card as any),
         onDeleteCard: handlers.onDeleteCard,
-        onEditCategory: (category) => modals.openCategoryModal(category),
+        onEditCategory: (category: any) => modals.openCategoryModal(category),
         onDeleteCategory: handlers.onDeleteCategory,
-        onEditTopic: (topic) => modals.openTopicModal(topic),
+        onEditTopic: (topic: any) => modals.openTopicModal(topic),
         onDeleteTopic: handlers.onDeleteTopic,
-        onEditQuestion: (question) =>
-          modals.openQuestionModal(question as UnifiedQuestion),
+        onEditQuestion: (question: any) =>
+          modals.openQuestionModal(question as any),
         onDeleteQuestion: handlers.onDeleteQuestion,
         onAddQuestion: () => modals.openQuestionModal(),
         totalCards: stats.totalCards,
@@ -229,7 +229,7 @@ export function useContentManagementTemplateProps({
         onTogglePlanCard: hierarchy.togglePlanCard,
         onTogglePlanCategory: hierarchy.togglePlanCategory,
         onTogglePlanTopic: hierarchy.togglePlanTopic,
-        onEditPlan: (plan) => modals.openPlanModal(plan),
+        onEditPlan: (plan: any) => modals.openPlanModal(plan),
         onDeletePlan: handlers.onDeletePlan,
         onAddCardToPlan: (planId: string) =>
           modals.setAddItemContext({ planId, type: "card" }),
@@ -257,7 +257,7 @@ export function useContentManagementTemplateProps({
         onRemoveQuestionFromPlan: actions.removeQuestionFromPlan,
         totalPlans: stats.totalPlans,
         isDeletingPlan: actions.deletePlanMutation.isPending,
-        onViewQuestion: (question) => {
+        onViewQuestion: (question: any) => {
           modals.setViewingQuestion(question);
           modals.setIsViewQuestionModalOpen(true);
         },

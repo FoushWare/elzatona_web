@@ -73,9 +73,9 @@ interface ContentManagementModalsProps {
   handlers: {
     onCardFormSubmit: (data: any) => void;
     onPlanFormSubmit: (data: any) => void;
-    onCategoryFormSubmit: (data: any) => void;
-    onTopicFormSubmit: (data: any) => void;
-    onQuestionFormSubmit: (data: any) => void;
+    onCategoryFormSubmit: (data: any) => Promise<void>;
+    onTopicFormSubmit: (data: any) => Promise<void>;
+    onQuestionFormSubmit: (data: any) => Promise<void>;
   };
   // Actions
   actions: {
@@ -226,12 +226,12 @@ export function ContentManagementModals({
           modals.setViewingQuestion(null);
         }}
         question={modals.viewingQuestion}
-        cards={data.cardsData?.data || []}
+        cards={[...(data.cardsData?.data || [])]}
         allCategories={data.categories
           .map((c) => c.name || c.title)
           .filter(Boolean)}
-        categoriesData={data.categories}
-        topicsData={data.topics}
+        categoriesData={[...data.categories]}
+        topicsData={[...data.topics]}
       />
     </Suspense>
   );

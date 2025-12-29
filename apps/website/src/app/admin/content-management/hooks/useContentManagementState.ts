@@ -222,7 +222,5 @@ export function useContentManagementState(
     questionsByTopic,
     filteredCards,
     filteredPlans,
-    // Debounced search
-    debouncedSearchTerm,
   };
 }

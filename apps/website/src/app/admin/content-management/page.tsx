@@ -8,14 +8,11 @@
 "use client";
 
 import React, { useMemo, Suspense } from "react";
-import { LearningCard } from "@elzatona/types";
-import { UnifiedQuestion } from "@elzatona/types";
 import {
   useToast,
   ToastContainer,
   ContentManagementTemplate,
 } from "@elzatona/common-ui";
-import { Plus } from "lucide-react";
 
 // Custom hooks
 import { useContentManagementData } from "./hooks/useContentManagementData";
@@ -32,10 +29,7 @@ import { ContentManagementErrorState } from "./components/ContentManagementError
 import { ContentManagementLoadingState } from "./components/ContentManagementLoadingState";
 import { ContentManagementModals } from "./components/ContentManagementModals";
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-type LearningPlan = any; // eslint-disable-line @typescript-eslint/no-explicit-any
-type Category = any;
-type Topic = any; // eslint-disable-line @typescript-eslint/no-explicit-any
+// Types are defined in hooks/components
 
 export default function UnifiedAdminPage() {
   // Data fetching
