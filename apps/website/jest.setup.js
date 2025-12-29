@@ -185,10 +185,29 @@ if (process.env.DEBUG_TEST_ENV === "true") {
 // Next.js requires these globals to be available
 if (global.Request === undefined) {
   // Use Node.js 18+ built-in fetch API if available
-  if (fetch?.Request) {
-    global.Request = fetch.Request;
-    global.Response = fetch.Response;
-    global.Headers = fetch.Headers;
+  // Check multiple ways fetch might be available
+  let fetchAPI = null;
+  try {
+    // Try global.fetch first (Node.js 18+)
+    if (global.fetch && global.fetch.Request) {
+      fetchAPI = global.fetch;
+    }
+    // Try globalThis.fetch
+    else if (globalThis.fetch && globalThis.fetch.Request) {
+      fetchAPI = globalThis.fetch;
+    }
+    // Try fetch in current scope (if available)
+    else if (typeof fetch !== "undefined" && fetch?.Request) {
+      fetchAPI = fetch;
+    }
+  } catch (e) {
+    // fetch is not available, will use fallback polyfills
+  }
+
+  if (fetchAPI?.Request) {
+    global.Request = fetchAPI.Request;
+    global.Response = fetchAPI.Response;
+    global.Headers = fetchAPI.Headers;
   } else {
     // Fallback: Create minimal polyfills
     global.Headers = class Headers {
