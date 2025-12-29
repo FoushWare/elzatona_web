@@ -23,3 +23,7 @@ export { CardsList } from "./CardsList";
 export type { CardsListPropsType } from "./CardsList";
 export { PlansList } from "./PlansList";
 export type { PlansListPropsType } from "./PlansList";
+export { ContentManagementDeleteModals } from "./ContentManagementDeleteModals";
+export type { ContentManagementDeleteModalsPropsType } from "./ContentManagementDeleteModals";
+export { ContentManagementFormModals } from "./ContentManagementFormModals";
+export type { ContentManagementFormModalsPropsType } from "./ContentManagementFormModals";

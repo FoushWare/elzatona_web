@@ -166,7 +166,7 @@ export function ContentManagementFormModals({
         <Suspense fallback={<div>Loading form...</div>}>
           <TopicForm
             topic={editingTopic}
-            categories={categories}
+            categories={[...categories] as readonly Category[]}
             onSubmit={onTopicFormSubmit}
             onCancel={onCloseTopicModal}
             isLoading={isTopicLoading}
@@ -182,8 +182,14 @@ export function ContentManagementFormModals({
         <Suspense fallback={<div>Loading form...</div>}>
           <QuestionForm
             question={editingQuestion as any}
-            topics={topics}
-            categories={categories}
+            topics={
+              [...topics] as Array<{
+                id: string;
+                name: string;
+                categoryId: string;
+              }>
+            }
+            categories={[...categories] as Array<{ id: string; name: string }>}
             onSubmit={onQuestionFormSubmit}
             onCancel={onCloseQuestionModal}
             isLoading={isQuestionLoading}
@@ -193,3 +199,6 @@ export function ContentManagementFormModals({
     </>
   );
 }
+
+export type ContentManagementFormModalsPropsType =
+  ContentManagementFormModalsProps;

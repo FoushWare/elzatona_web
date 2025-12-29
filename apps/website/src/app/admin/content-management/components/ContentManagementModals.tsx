@@ -6,8 +6,10 @@
 
 import React, { Suspense } from "react";
 import { LearningCard, UnifiedQuestion } from "@elzatona/types";
-import { ContentManagementFormModals } from "./ContentManagementFormModals";
-import { ContentManagementDeleteModals } from "./ContentManagementDeleteModals";
+import {
+  ContentManagementFormModals,
+  ContentManagementDeleteModals,
+} from "@elzatona/common-ui";
 import { AddItemModal } from "./AddItemModal";
 import { ViewQuestionModal } from "../../content/questions/components/ViewQuestionModal";
 

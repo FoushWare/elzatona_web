@@ -7,7 +7,7 @@
 "use client";
 
 import React from "react";
-import { ConfirmDeleteDialog } from "@elzatona/common-ui";
+import { ConfirmDeleteDialog } from "../molecules/ConfirmDeleteDialog";
 import { LearningCard } from "@elzatona/types";
 import { UnifiedQuestion } from "@elzatona/types";
 
@@ -119,3 +119,6 @@ export function ContentManagementDeleteModals({
     </>
   );
 }
+
+export type ContentManagementDeleteModalsPropsType =
+  ContentManagementDeleteModalsProps;
