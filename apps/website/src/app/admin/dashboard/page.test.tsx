@@ -109,23 +109,6 @@ jest.mock("@elzatona/common-ui", () => {
 
 // Note: lucide-react is automatically mocked via moduleNameMapper in jest.config.js
 // The mock file at apps/website/test-utils/mocks/lucide-react.tsx handles all icons
-  TrendingUp: () => <span>📈</span>,
-  CheckCircle: () => <span>✅</span>,
-  Clock: () => <span>⏰</span>,
-  Target: () => <span>🎯</span>,
-  Activity: () => <span>📊</span>,
-  Zap: () => <span>⚡</span>,
-  Star: () => <span>⭐</span>,
-  ArrowRight: () => <span>→</span>,
-  Plus: () => <span>+</span>,
-  Eye: () => <span>👁️</span>,
-  Edit: () => <span>✏️</span>,
-  Trash2: () => <span>🗑️</span>,
-  RefreshCw: () => <span>🔄</span>,
-  AlertCircle: () => <span>⚠️</span>,
-  Info: () => <span>ℹ️</span>,
-  ExternalLink: () => <span>🔗</span>,
-}));
 
 describe("A-UT-011: Dashboard Renders", () => {
   beforeEach(() => {
