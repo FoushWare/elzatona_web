@@ -10,7 +10,7 @@ import {
   LearningCard,
   UnifiedQuestion,
   type LearningPlan,
-  type Category,
+  type AdminCategory as Category,
   type Topic,
 } from "@elzatona/types";
 
@@ -174,8 +174,8 @@ export function useContentManagementTemplateProps({
         onOpenChange: state.setIsCategoriesOpen,
         onAdd: () => modals.openCategoryModal(),
         onEdit: (category: Category) => modals.openCategoryModal(category),
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        onDelete: (category: any) => handlers.onDeleteCategory((category as any).id),
+         
+        onDelete: (category: Category) => handlers.onDeleteCategory(category),
       },
       topicsList: {
         topics: data.topics,

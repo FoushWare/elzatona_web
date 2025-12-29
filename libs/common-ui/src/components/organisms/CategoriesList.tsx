@@ -29,10 +29,15 @@ const LoadingSkeleton = () => (
   </div>
 );
 
+// Category interface - compatible with AdminCategory from @elzatona/types
+// This allows CategoriesList to work with both AdminCategory and challenge Category types
 interface Category {
   readonly id: string;
   readonly name?: string;
+  readonly title?: string;
   readonly description?: string;
+  // Index signature to allow additional properties from different Category types
+  readonly [key: string]: unknown;
 }
 
 interface CategoriesListProps {
