@@ -25,8 +25,10 @@ import { useContentManagementHandlers } from "./hooks/useContentManagementHandle
 import { useContentManagementDeleteHandlers } from "./hooks/useContentManagementDeleteHandlers";
 
 // Components
-import { ContentManagementErrorState } from "./components/ContentManagementErrorState";
-import { ContentManagementLoadingState } from "./components/ContentManagementLoadingState";
+import {
+  ContentManagementErrorState,
+  ContentManagementLoadingState,
+} from "@elzatona/common-ui";
 import { ContentManagementModals } from "./components/ContentManagementModals";
 
 // Types are defined in hooks/components

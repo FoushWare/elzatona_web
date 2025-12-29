@@ -53,3 +53,6 @@ export function ContentManagementErrorState({
     </div>
   );
 }
+
+export type ContentManagementErrorStatePropsType =
+  ContentManagementErrorStateProps;
