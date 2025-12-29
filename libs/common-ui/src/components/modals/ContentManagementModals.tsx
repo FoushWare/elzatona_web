@@ -184,11 +184,13 @@ export function ContentManagementModals({
         isCategoryModalOpen={modals.isCategoryModalOpen}
         onCloseCategoryModal={modals.closeCategoryModal}
         editingCategory={modals.editingCategory}
-        onCategoryFormSubmit={async (data: any) => {
+        onCategoryFormSubmit={async (data: any): Promise<void> => {
           const result = handlers.onCategoryFormSubmit(data);
           if (result instanceof Promise) {
             await result;
           }
+          // Explicitly return void as Promise<void>
+          return Promise.resolve();
         }}
         isCategoryLoading={
           actions.createCategoryMutation.isPending ||
@@ -198,11 +200,13 @@ export function ContentManagementModals({
         onCloseTopicModal={modals.closeTopicModal}
         editingTopic={modals.editingTopic}
         categories={data.categories}
-        onTopicFormSubmit={async (data: any) => {
+        onTopicFormSubmit={async (data: any): Promise<void> => {
           const result = handlers.onTopicFormSubmit(data);
           if (result instanceof Promise) {
             await result;
           }
+          // Explicitly return void as Promise<void>
+          return Promise.resolve();
         }}
         isTopicLoading={
           actions.createTopicMutation.isPending ||
@@ -212,11 +216,13 @@ export function ContentManagementModals({
         onCloseQuestionModal={modals.closeQuestionModal}
         editingQuestion={modals.editingQuestion}
         topics={data.topics}
-        onQuestionFormSubmit={async (data: any) => {
+        onQuestionFormSubmit={async (data: any): Promise<void> => {
           const result = handlers.onQuestionFormSubmit(data);
           if (result instanceof Promise) {
             await result;
           }
+          // Explicitly return void as Promise<void>
+          return Promise.resolve();
         }}
         isQuestionLoading={
           actions.createQuestionMutation.isPending ||
