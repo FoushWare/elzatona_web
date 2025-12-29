@@ -129,7 +129,6 @@ export default function AdminDashboard() {
       href: "/admin/content-management",
       icon: CreditCard,
       color: "bg-green-500",
-      // Note: This route is now in apps/admin app, not apps/website
     },
     {
       title: "Create Frontend Task",
