@@ -12,8 +12,18 @@ const _supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
 // TODO: Move AdminAuthService to a shared location (libs/utilities or libs/auth)
 // eslint-disable-next-line @typescript-eslint/no-require-imports
 const AdminAuthService = require("../../../../apps/website/src/app/lib/admin-auth").AdminAuthService;
-// eslint-disable-next-line @typescript-eslint/no-require-imports
-const AdminCredential = require("../../../../apps/website/src/app/lib/admin-auth").AdminCredential;
+
+// Define AdminCredential type locally to avoid type import issues
+interface AdminCredential {
+  id: string;
+  email: string;
+  password_hash: string;
+  name: string;
+  role: "super_admin" | "admin";
+  is_active: boolean;
+  created_at: string;
+  last_login?: string;
+}
 
 interface AdminManagementProps {
   currentUser: {
