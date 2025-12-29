@@ -32,7 +32,9 @@ import {
   ContentManagementErrorState,
   ContentManagementLoadingState,
 } from "@elzatona/common-ui";
-import { ContentManagementModals } from "./components/ContentManagementModals";
+import { ContentManagementModals } from "@elzatona/common-ui";
+import { AddItemModal } from "./components/AddItemModal";
+import { ViewQuestionModal } from "../../../../components/ViewQuestionModal";
 
 // Types
 type LearningPlan = any; // eslint-disable-line @typescript-eslint/no-explicit-any
@@ -259,6 +261,10 @@ export default function UnifiedAdminPage() {
         actions={actions}
         hierarchy={hierarchy}
         confirmDeleteHandlers={confirmDeleteHandlers}
+        appSpecificModals={{
+          AddItemModal,
+          ViewQuestionModal,
+        }}
       />
 
       {/* Toast Notifications */}

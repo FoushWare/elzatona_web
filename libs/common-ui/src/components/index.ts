@@ -9,3 +9,6 @@ export * from "./organisms";
 
 // Templates
 export * from "./templates";
+
+// Modals
+export * from "./modals";

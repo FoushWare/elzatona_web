@@ -9,9 +9,7 @@ import { LearningCard, UnifiedQuestion } from "@elzatona/types";
 import {
   ContentManagementFormModals,
   ContentManagementDeleteModals,
-} from "@elzatona/common-ui";
-import { AddItemModal } from "./AddItemModal";
-import { ViewQuestionModal } from "../../../../components/ViewQuestionModal";
+} from "../organisms";
 
 type LearningPlan = any; // eslint-disable-line @typescript-eslint/no-explicit-any
 type Category = any; // eslint-disable-line @typescript-eslint/no-explicit-any
@@ -75,9 +73,9 @@ interface ContentManagementModalsProps {
   handlers: {
     onCardFormSubmit: (data: any) => void;
     onPlanFormSubmit: (data: any) => void;
-    onCategoryFormSubmit: (data: any) => void;
-    onTopicFormSubmit: (data: any) => void;
-    onQuestionFormSubmit: (data: any) => void;
+    onCategoryFormSubmit: (data: any) => void | Promise<void>;
+    onTopicFormSubmit: (data: any) => void | Promise<void>;
+    onQuestionFormSubmit: (data: any) => void | Promise<void>;
   };
   // Actions
   actions: {
@@ -114,6 +112,47 @@ interface ContentManagementModalsProps {
     topic: () => Promise<void>;
     question: () => Promise<void>;
   };
+  // Optional app-specific modals
+  appSpecificModals?: {
+    AddItemModal?: React.ComponentType<{
+      isOpen: boolean;
+      onClose: () => void;
+      addItemContext: {
+        planId: string;
+        type: "card" | "category" | "topic" | "question";
+        parentId?: string;
+      } | null;
+      cards: readonly LearningCard[];
+      categories: readonly Category[];
+      topics: readonly Topic[];
+      questions: readonly UnifiedQuestion[];
+      planHierarchy: Record<string, any>;
+      onAddCardToPlan: (planId: string, cardId: string) => Promise<void>;
+      onAddCategoryToCard: (
+        cardId: string,
+        categoryId: string,
+      ) => Promise<void>;
+      onAddTopicToCategory: (
+        categoryId: string,
+        topicId: string,
+      ) => Promise<void>;
+      onAddQuestionToTopic: (
+        topicId: string,
+        questionId: string,
+      ) => Promise<void>;
+      onFetchPlanHierarchy: (planId: string) => Promise<void>;
+      onViewQuestion: (question: UnifiedQuestion) => void;
+    }>;
+    ViewQuestionModal?: React.ComponentType<{
+      isOpen: boolean;
+      onClose: () => void;
+      question: UnifiedQuestion | null;
+      cards: readonly LearningCard[];
+      allCategories: string[];
+      categoriesData: readonly Category[];
+      topicsData: readonly Topic[];
+    }>;
+  };
 }
 
 export function ContentManagementModals({
@@ -123,7 +162,11 @@ export function ContentManagementModals({
   actions,
   hierarchy,
   confirmDeleteHandlers,
+  appSpecificModals,
 }: ContentManagementModalsProps) {
+  const AddItemModal = appSpecificModals?.AddItemModal;
+  const ViewQuestionModal = appSpecificModals?.ViewQuestionModal;
+
   return (
     <Suspense fallback={null}>
       {/* Form Modals */}
@@ -196,45 +239,51 @@ export function ContentManagementModals({
         isDeletingPlan={actions.deletePlanMutation.isPending}
       />
 
-      {/* Add Item Modal */}
-      <AddItemModal
-        isOpen={!!modals.addItemContext}
-        onClose={() => {
-          modals.setAddItemContext(null);
-          modals.setSelectedQuestionIds(new Set());
-        }}
-        addItemContext={modals.addItemContext}
-        cards={data.cards}
-        categories={data.categories}
-        topics={data.topics}
-        questions={data.questions}
-        planHierarchy={hierarchy.planHierarchy}
-        onAddCardToPlan={actions.addCardToPlan}
-        onAddCategoryToCard={actions.addCategoryToCard}
-        onAddTopicToCategory={actions.addTopicToCategory}
-        onAddQuestionToTopic={actions.addQuestionToTopic}
-        onFetchPlanHierarchy={hierarchy.fetchPlanHierarchy}
-        onViewQuestion={(question) => {
-          modals.setViewingQuestion(question);
-          modals.setIsViewQuestionModalOpen(true);
-        }}
-      />
+      {/* Add Item Modal - App-specific */}
+      {AddItemModal && (
+        <AddItemModal
+          isOpen={!!modals.addItemContext}
+          onClose={() => {
+            modals.setAddItemContext(null);
+            modals.setSelectedQuestionIds(new Set());
+          }}
+          addItemContext={modals.addItemContext}
+          cards={data.cards}
+          categories={data.categories}
+          topics={data.topics}
+          questions={data.questions}
+          planHierarchy={hierarchy.planHierarchy}
+          onAddCardToPlan={actions.addCardToPlan}
+          onAddCategoryToCard={actions.addCategoryToCard}
+          onAddTopicToCategory={actions.addTopicToCategory}
+          onAddQuestionToTopic={actions.addQuestionToTopic}
+          onFetchPlanHierarchy={hierarchy.fetchPlanHierarchy}
+          onViewQuestion={(question) => {
+            modals.setViewingQuestion(question);
+            modals.setIsViewQuestionModalOpen(true);
+          }}
+        />
+      )}
 
-      {/* View Question Modal */}
-      <ViewQuestionModal
-        isOpen={modals.isViewQuestionModalOpen}
-        onClose={() => {
-          modals.setIsViewQuestionModalOpen(false);
-          modals.setViewingQuestion(null);
-        }}
-        question={modals.viewingQuestion}
-        cards={data.cardsData?.data || []}
-        allCategories={data.categories
-          .map((c) => c.name || c.title)
-          .filter(Boolean)}
-        categoriesData={data.categories}
-        topicsData={data.topics}
-      />
+      {/* View Question Modal - App-specific */}
+      {ViewQuestionModal && (
+        <ViewQuestionModal
+          isOpen={modals.isViewQuestionModalOpen}
+          onClose={() => {
+            modals.setIsViewQuestionModalOpen(false);
+            modals.setViewingQuestion(null);
+          }}
+          question={modals.viewingQuestion}
+          cards={data.cardsData?.data || data.cards}
+          allCategories={data.categories
+            .map((c) => c.name || c.title)
+            .filter(Boolean)}
+          categoriesData={data.categories}
+          topicsData={data.topics}
+        />
+      )}
     </Suspense>
   );
 }
+
+export type ContentManagementModalsPropsType = ContentManagementModalsProps;

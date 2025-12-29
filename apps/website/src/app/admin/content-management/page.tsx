@@ -29,7 +29,9 @@ import {
   ContentManagementErrorState,
   ContentManagementLoadingState,
 } from "@elzatona/common-ui";
-import { ContentManagementModals } from "./components/ContentManagementModals";
+import { ContentManagementModals } from "@elzatona/common-ui";
+import { AddItemModal } from "./components/AddItemModal";
+import { ViewQuestionModal } from "../content/questions/components/ViewQuestionModal";
 
 // Types are defined in hooks/components
 
@@ -253,6 +255,10 @@ export default function UnifiedAdminPage() {
         actions={actions}
         hierarchy={hierarchy}
         confirmDeleteHandlers={confirmDeleteHandlers}
+        appSpecificModals={{
+          AddItemModal,
+          ViewQuestionModal,
+        }}
       />
 
       {/* Toast Notifications */}
