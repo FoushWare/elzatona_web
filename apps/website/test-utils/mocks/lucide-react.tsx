@@ -58,6 +58,13 @@ export const Brain = () => <span data-testid="brain-icon">🧠</span>;
 export const LayoutDashboard = () => (
   <span data-testid="layout-dashboard-icon">📊</span>
 );
+export const BarChart3 = () => <span data-testid="bar-chart-icon">📊</span>;
+export const FolderOpen = () => <span data-testid="folder-open-icon">📁</span>;
+export const Folder = () => <span data-testid="folder-icon">📁</span>;
+export const Tag = () => <span data-testid="tag-icon">🏷️</span>;
+export const Database = () => <span data-testid="database-icon">🗄️</span>;
+export const AlertCircle = () => <span data-testid="alert-icon">⚠️</span>;
+export const Info = () => <span data-testid="info-icon">ℹ️</span>;
 
 // Default export for any other icons
 export default {
@@ -109,4 +116,11 @@ export default {
   Settings,
   Brain,
   LayoutDashboard,
+  BarChart3,
+  FolderOpen,
+  Folder,
+  Tag,
+  Database,
+  AlertCircle,
+  Info,
 };

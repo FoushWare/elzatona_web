@@ -107,21 +107,8 @@ jest.mock("@elzatona/common-ui", () => {
   };
 });
 
-// Mock lucide-react icons
-jest.mock("lucide-react", () => ({
-  BookOpen: () => <span>📖</span>,
-  HelpCircle: () => <span>❓</span>,
-  CreditCard: () => <span>💳</span>,
-  FileText: () => <span>📄</span>,
-  Settings: () => <span>⚙️</span>,
-  Code: () => <span>💻</span>,
-  Calculator: () => <span>🔢</span>,
-  BarChart3: () => <span>📊</span>,
-  FolderOpen: () => <span>📁</span>,
-  Folder: () => <span>📁</span>,
-  Tag: () => <span>🏷️</span>,
-  Users: () => <span>👥</span>,
-  Database: () => <span>🗄️</span>,
+// Note: lucide-react is automatically mocked via moduleNameMapper in jest.config.js
+// The mock file at apps/website/test-utils/mocks/lucide-react.tsx handles all icons
   TrendingUp: () => <span>📈</span>,
   CheckCircle: () => <span>✅</span>,
   Clock: () => <span>⏰</span>,
