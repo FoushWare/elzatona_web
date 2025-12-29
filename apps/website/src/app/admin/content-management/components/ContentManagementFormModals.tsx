@@ -182,7 +182,13 @@ export function ContentManagementFormModals({
         <Suspense fallback={<div>Loading form...</div>}>
           <QuestionForm
             question={editingQuestion as any}
-            topics={[...topics] as Array<{ id: string; name: string; categoryId: string }>}
+            topics={
+              [...topics] as Array<{
+                id: string;
+                name: string;
+                categoryId: string;
+              }>
+            }
             categories={[...categories] as Array<{ id: string; name: string }>}
             onSubmit={onQuestionFormSubmit}
             onCancel={onCloseQuestionModal}

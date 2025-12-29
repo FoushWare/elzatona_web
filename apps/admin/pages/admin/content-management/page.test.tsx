@@ -278,9 +278,8 @@ describe("UnifiedAdminPage", () => {
   };
 
   it("should render loading state when data is loading", async () => {
-    const { useContentManagementData } = await import(
-      "./hooks/useContentManagementData"
-    );
+    const { useContentManagementData } =
+      await import("./hooks/useContentManagementData");
     (useContentManagementData as ReturnType<typeof vi.fn>).mockReturnValueOnce({
       loading: true,
       hasError: false,
@@ -291,9 +290,8 @@ describe("UnifiedAdminPage", () => {
   });
 
   it("should render error state when there is an error", async () => {
-    const { useContentManagementData } = await import(
-      "./hooks/useContentManagementData"
-    );
+    const { useContentManagementData } =
+      await import("./hooks/useContentManagementData");
     (useContentManagementData as ReturnType<typeof vi.fn>).mockReturnValueOnce({
       loading: false,
       hasError: true,
@@ -370,9 +368,8 @@ describe("Content Management Page Snapshot Tests", () => {
   });
 
   it("should match content management page snapshot (loading state)", async () => {
-    const { useContentManagementData } = await import(
-      "./hooks/useContentManagementData"
-    );
+    const { useContentManagementData } =
+      await import("./hooks/useContentManagementData");
     (useContentManagementData as ReturnType<typeof vi.fn>).mockReturnValueOnce({
       loading: true,
       hasError: false,
@@ -383,9 +380,8 @@ describe("Content Management Page Snapshot Tests", () => {
   });
 
   it("should match content management page snapshot (error state)", async () => {
-    const { useContentManagementData } = await import(
-      "./hooks/useContentManagementData"
-    );
+    const { useContentManagementData } =
+      await import("./hooks/useContentManagementData");
     (useContentManagementData as ReturnType<typeof vi.fn>).mockReturnValueOnce({
       loading: false,
       hasError: true,
@@ -397,9 +393,8 @@ describe("Content Management Page Snapshot Tests", () => {
   });
 
   it("should match content management page snapshot (with data)", async () => {
-    const { useContentManagementData } = await import(
-      "./hooks/useContentManagementData"
-    );
+    const { useContentManagementData } =
+      await import("./hooks/useContentManagementData");
     (useContentManagementData as ReturnType<typeof vi.fn>).mockReturnValueOnce({
       cards: [{ id: "1", name: "Test Card" }],
       plans: [{ id: "1", name: "Test Plan" }],
