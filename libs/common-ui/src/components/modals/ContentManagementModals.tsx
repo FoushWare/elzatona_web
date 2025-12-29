@@ -6,12 +6,12 @@
 
 import React, { Suspense } from "react";
 import { LearningCard, UnifiedQuestion } from "@elzatona/types";
-import {
-  type LearningPlan,
-  type Category,
-  type Topic,
-  type AddItemContext,
-} from "@elzatona/types/admin/content-management";
+import type {
+  LearningPlan,
+  AdminCategory as Category,
+  Topic,
+  AddItemContext,
+} from "@elzatona/types";
 import {
   ContentManagementFormModals,
   ContentManagementDeleteModals,
