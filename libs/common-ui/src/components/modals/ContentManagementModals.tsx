@@ -5,14 +5,13 @@
  */
 
 import React, { Suspense } from "react";
+import { LearningCard, UnifiedQuestion } from "@elzatona/types";
 import {
-  LearningCard,
-  UnifiedQuestion,
   type LearningPlan,
   type Category,
   type Topic,
   type AddItemContext,
-} from "@elzatona/types";
+} from "@elzatona/types/admin/content-management";
 import {
   ContentManagementFormModals,
   ContentManagementDeleteModals,

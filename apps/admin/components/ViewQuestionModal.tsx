@@ -3,10 +3,8 @@
 import React, { useState, useRef } from "react";
 import { FormModal, Switch, Label } from "@elzatona/common-ui";
 import { QuestionPracticeView } from "./QuestionPracticeView";
-import {
-  QuestionForm,
-  type UnifiedQuestion,
-} from "../pages/admin/content/questions/components/QuestionForm";
+import QuestionForm from "../pages/admin/content/questions/components/QuestionForm";
+import { type UnifiedQuestion } from "@elzatona/types";
 import { Edit, Eye } from "lucide-react";
 
 interface ViewQuestionModalProps {
@@ -37,19 +35,8 @@ export const ViewQuestionModal: React.FC<ViewQuestionModalProps> = ({
   };
 
   const handleSave = async () => {
-    if (isEditMode && (editFormRef.current || localFormRef.current)) {
-      const formRef = editFormRef.current || localFormRef.current;
-      if (formRef) {
-        setIsSaving(true);
-        try {
-          formRef.requestSubmit();
-        } catch (error) {
-          console.error("Error saving question:", error);
-        } finally {
-          setIsSaving(false);
-        }
-      }
-    }
+    // QuestionForm handles submission internally via onSubmit
+    // This is kept for UI consistency but the form submission is handled by QuestionForm
   };
 
   const handleUpdate = async (updatedQuestion: Partial<UnifiedQuestion>) => {
@@ -117,14 +104,16 @@ export const ViewQuestionModal: React.FC<ViewQuestionModalProps> = ({
       {/* Content based on mode */}
       {isEditMode ? (
         <QuestionForm
-          ref={editFormRef || localFormRef}
           initialData={question}
           onSubmit={handleUpdate}
           onCancel={onClose}
           cards={cards}
           allCategories={allCategories}
           allTags={[]}
-          readOnly={false}
+          categoriesData={[]}
+          topicsData={[]}
+          disabled={isSaving}
+          externalSubmitTrigger={submitTrigger}
         />
       ) : (
         <QuestionPracticeView
@@ -143,7 +132,9 @@ export const ViewQuestionModal: React.FC<ViewQuestionModalProps> = ({
                     : question.difficulty) || "medium",
             explanation: question.explanation,
             options: question.options,
-            correct_answer: question.correct_answer,
+            correct_answer:
+              (question as any).correct_answer ||
+              (question as any).correctAnswer,
             resources: (question as { resources?: unknown[] }).resources || [],
           }}
         />

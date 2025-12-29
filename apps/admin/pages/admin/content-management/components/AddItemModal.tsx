@@ -18,14 +18,12 @@ import {
   CheckSquare,
   Square,
 } from "lucide-react";
+import { LearningCard, UnifiedQuestion } from "@elzatona/types";
 import {
-  LearningCard,
-  UnifiedQuestion,
-  type LearningPlan,
   type Category,
   type Topic,
   type AddItemContext,
-} from "@elzatona/types";
+} from "@elzatona/types/admin/content-management";
 
 interface AddItemModalProps {
   isOpen: boolean;
@@ -156,33 +154,36 @@ export function AddItemModal({
             </h4>
             <div className="max-h-96 overflow-y-auto space-y-2 border rounded-lg p-2">
               {categories
-                .filter(
-                  (cat) =>
-                    cat.learning_card_id === addItemContext.parentId ||
-                    (cat as any).card_id === addItemContext.parentId,
-                )
+                .filter((cat) => {
+                  const catAny = cat as any;
+                  return (
+                    catAny.learning_card_id === addItemContext.parentId ||
+                    catAny.card_id === addItemContext.parentId
+                  );
+                })
                 .map((category) => {
+                  const catAny = category as any;
                   const hierarchy = planHierarchy[addItemContext.planId] || [];
                   const card = hierarchy.find(
                     (c: any) => c.id === addItemContext.parentId,
                   );
                   const isInCard = card?.categories?.some(
-                    (cat: any) => cat.id === category.id,
+                    (cat: any) => cat.id === catAny.id,
                   );
                   return (
                     <div
-                      key={category.id}
+                      key={catAny.id}
                       className="flex items-center justify-between p-3 rounded border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
                     >
                       <div className="flex items-center space-x-3 flex-1">
                         <BookOpen className="h-5 w-5 text-purple-600" />
                         <div>
                           <span className="text-sm font-medium text-gray-900 dark:text-gray-100">
-                            {category.name || category.title}
+                            {catAny.name || catAny.title}
                           </span>
-                          {category.description && (
+                          {catAny.description && (
                             <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
-                              {category.description}
+                              {catAny.description}
                             </p>
                           )}
                         </div>
@@ -196,7 +197,7 @@ export function AddItemModal({
                           onClick={async () => {
                             await onAddCategoryToCard(
                               addItemContext.parentId!,
-                              category.id,
+                              catAny.id,
                             );
                             await onFetchPlanHierarchy(addItemContext.planId);
                             handleClose();
@@ -209,11 +210,13 @@ export function AddItemModal({
                     </div>
                   );
                 })}
-              {categories.filter(
-                (cat) =>
-                  cat.learning_card_id === addItemContext.parentId ||
-                  (cat as any).card_id === addItemContext.parentId,
-              ).length === 0 && (
+              {categories.filter((cat) => {
+                const catAny = cat as any;
+                return (
+                  catAny.learning_card_id === addItemContext.parentId ||
+                  catAny.card_id === addItemContext.parentId
+                );
+              }).length === 0 && (
                 <div className="text-center py-8 text-gray-500 dark:text-gray-400">
                   <BookOpen className="h-12 w-12 mx-auto mb-2 opacity-50" />
                   <p>No categories available for this card</p>
@@ -230,10 +233,12 @@ export function AddItemModal({
               <p className="text-xs text-gray-600 dark:text-gray-400">
                 Selected Category:{" "}
                 <span className="font-medium">
-                  {categories.find((c) => c.id === addItemContext.parentId)
-                    ?.name ||
-                    categories.find((c) => c.id === addItemContext.parentId)
-                      ?.title}
+                  {(() => {
+                    const cat = categories.find(
+                      (c) => (c as any).id === addItemContext.parentId,
+                    );
+                    return (cat as any)?.name || (cat as any)?.title;
+                  })()}
                 </span>
               </p>
             </div>
