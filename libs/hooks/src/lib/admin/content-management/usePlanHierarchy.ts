@@ -5,16 +5,14 @@
  */
 
 import { useState, useCallback, useEffect } from "react";
-import { useQueryClient } from "@tanstack/react-query";
-import { useToast } from "@elzatona/common-ui";
 import { type LearningPlan } from "@elzatona/types";
 
-export function usePlanHierarchy(plans: readonly LearningPlan[]) {
-  const queryClient = useQueryClient();
-  const { showSuccess, showError } = useToast();
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type PlanHierarchyData = Record<string, any>;
 
+export function usePlanHierarchy(plans: readonly LearningPlan[]) {
   // Hierarchy state
-  const [planHierarchy, setPlanHierarchy] = useState<Record<string, any>>({});
+  const [planHierarchy, setPlanHierarchy] = useState<PlanHierarchyData>({});
   const [loadingPlanHierarchy, setLoadingPlanHierarchy] = useState<
     Record<string, boolean>
   >({});

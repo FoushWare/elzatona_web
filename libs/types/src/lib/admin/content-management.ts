@@ -97,10 +97,15 @@ export interface ContentManagementModalActions {
 
 // Form Handlers
 export interface ContentManagementFormHandlers {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   onCardFormSubmit: (data: any) => void | Promise<void>;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   onPlanFormSubmit: (data: any) => void | Promise<void>;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   onCategoryFormSubmit: (data: any) => void | Promise<void>;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   onTopicFormSubmit: (data: any) => void | Promise<void>;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   onQuestionFormSubmit: (data: any) => void | Promise<void>;
 }
 
@@ -142,6 +147,7 @@ export interface ContentManagementDeleteHandlers {
 
 // Plan Hierarchy
 export interface ContentManagementPlanHierarchy {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   planHierarchy: Record<string, any>;
   fetchPlanHierarchy: (planId: string) => Promise<void>;
 }

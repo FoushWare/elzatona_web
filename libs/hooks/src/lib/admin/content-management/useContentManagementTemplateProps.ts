@@ -60,6 +60,7 @@ interface UseContentManagementTemplatePropsParams {
     toggleTopic: (id: string) => void;
   };
   hierarchy: {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     planHierarchy: Record<string, any>;
     loadingPlanHierarchy: Record<string, boolean>;
     expandedPlans: Set<string>;
@@ -173,6 +174,7 @@ export function useContentManagementTemplateProps({
         onOpenChange: state.setIsCategoriesOpen,
         onAdd: () => modals.openCategoryModal(),
         onEdit: (category: Category) => modals.openCategoryModal(category),
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         onDelete: (category: any) => handlers.onDeleteCategory(category.id),
       },
       topicsList: {
@@ -188,6 +190,7 @@ export function useContentManagementTemplateProps({
         onOpenChange: state.setIsTopicsOpen,
         onAdd: () => modals.openTopicModal(),
         onEdit: (topic: Topic) => modals.openTopicModal(topic),
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         onDelete: (topic: any) => handlers.onDeleteTopic(topic.id),
       },
       cardsList: {
@@ -201,13 +204,18 @@ export function useContentManagementTemplateProps({
         onToggleCard: state.toggleCard,
         onToggleCategory: state.toggleCategory,
         onToggleTopic: state.toggleTopic,
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         onEditCard: (card: any) => modals.openCardModal(card as any),
         onDeleteCard: handlers.onDeleteCard,
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         onEditCategory: (category: any) => modals.openCategoryModal(category),
         onDeleteCategory: handlers.onDeleteCategory,
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         onEditTopic: (topic: any) => modals.openTopicModal(topic),
         onDeleteTopic: handlers.onDeleteTopic,
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         onEditQuestion: (question: any) =>
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
           modals.openQuestionModal(question as any),
         onDeleteQuestion: handlers.onDeleteQuestion,
         onAddQuestion: () => modals.openQuestionModal(),
@@ -229,6 +237,7 @@ export function useContentManagementTemplateProps({
         onTogglePlanCard: hierarchy.togglePlanCard,
         onTogglePlanCategory: hierarchy.togglePlanCategory,
         onTogglePlanTopic: hierarchy.togglePlanTopic,
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         onEditPlan: (plan: any) => modals.openPlanModal(plan),
         onDeletePlan: handlers.onDeletePlan,
         onAddCardToPlan: (planId: string) =>

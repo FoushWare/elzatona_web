@@ -48,6 +48,7 @@ export function useContentManagementState(
       { id: string; title: string; difficulty: string; type: string }[]
     > = {};
     questions.forEach((question) => {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const topicId = question.topic_id || (question as any).topicId;
       if (topicId) {
         if (!grouped[topicId]) {
