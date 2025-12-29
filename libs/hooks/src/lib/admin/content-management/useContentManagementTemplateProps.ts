@@ -190,8 +190,7 @@ export function useContentManagementTemplateProps({
         onOpenChange: state.setIsTopicsOpen,
         onAdd: () => modals.openTopicModal(),
         onEdit: (topic: Topic) => modals.openTopicModal(topic),
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        onDelete: (topic: any) => handlers.onDeleteTopic(topic.id),
+        onDelete: (topic: Topic) => handlers.onDeleteTopic(topic),
       },
       cardsList: {
         cards: filteredCards,
@@ -204,19 +203,14 @@ export function useContentManagementTemplateProps({
         onToggleCard: state.toggleCard,
         onToggleCategory: state.toggleCategory,
         onToggleTopic: state.toggleTopic,
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        onEditCard: (card: any) => modals.openCardModal(card as any),
+        onEditCard: (card: LearningCard) => modals.openCardModal(card),
         onDeleteCard: handlers.onDeleteCard,
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        onEditCategory: (category: any) => modals.openCategoryModal(category),
+        onEditCategory: (category: Category) => modals.openCategoryModal(category),
         onDeleteCategory: handlers.onDeleteCategory,
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        onEditTopic: (topic: any) => modals.openTopicModal(topic),
+        onEditTopic: (topic: Topic) => modals.openTopicModal(topic),
         onDeleteTopic: handlers.onDeleteTopic,
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        onEditQuestion: (question: any) =>
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          modals.openQuestionModal(question as any),
+        onEditQuestion: (question: UnifiedQuestion) =>
+          modals.openQuestionModal(question),
         onDeleteQuestion: handlers.onDeleteQuestion,
         onAddQuestion: () => modals.openQuestionModal(),
         totalCards: stats.totalCards,
@@ -237,8 +231,7 @@ export function useContentManagementTemplateProps({
         onTogglePlanCard: hierarchy.togglePlanCard,
         onTogglePlanCategory: hierarchy.togglePlanCategory,
         onTogglePlanTopic: hierarchy.togglePlanTopic,
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        onEditPlan: (plan: any) => modals.openPlanModal(plan),
+        onEditPlan: (plan: LearningPlan) => modals.openPlanModal(plan),
         onDeletePlan: handlers.onDeletePlan,
         onAddCardToPlan: (planId: string) =>
           modals.setAddItemContext({ planId, type: "card" }),
@@ -266,7 +259,7 @@ export function useContentManagementTemplateProps({
         onRemoveQuestionFromPlan: actions.removeQuestionFromPlan,
         totalPlans: stats.totalPlans,
         isDeletingPlan: actions.deletePlanMutation.isPending,
-        onViewQuestion: (question: any) => {
+        onViewQuestion: (question: UnifiedQuestion) => {
           modals.setViewingQuestion(question);
           modals.setIsViewQuestionModalOpen(true);
         },
