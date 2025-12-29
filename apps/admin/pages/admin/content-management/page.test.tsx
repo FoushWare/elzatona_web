@@ -243,11 +243,15 @@ vi.mock("./components/ContentManagementErrorState", () => ({
   ),
 }));
 
-vi.mock("./components/ContentManagementLoadingState", () => ({
-  ContentManagementLoadingState: () => (
-    <div data-testid="loading-state">Loading State</div>
-  ),
-}));
+vi.mock("@elzatona/common-ui", async () => {
+  const actual = await vi.importActual("@elzatona/common-ui");
+  return {
+    ...actual,
+    ContentManagementLoadingState: () => (
+      <div data-testid="loading-state">Loading State</div>
+    ),
+  };
+});
 
 vi.mock("./components/ContentManagementModals", () => ({
   ContentManagementModals: () => (
