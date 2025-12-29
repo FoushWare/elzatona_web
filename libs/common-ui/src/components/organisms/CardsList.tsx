@@ -38,14 +38,9 @@ const CARD_ICONS = {
 
 // LearningCard interface - compatible with LearningCard from @elzatona/types
 // This allows CardsList to work with the full LearningCard type from the types library
-interface LearningCard {
-  readonly id: string;
-  readonly title: string;
-  readonly description: string;
-  readonly color: string;
-  // Allow additional properties to be compatible with full LearningCard type
-  readonly [key: string]: unknown;
-}
+// Use LearningCard type from @elzatona/types instead of local interface
+// This ensures type compatibility across the codebase
+type LearningCard = LearningCardType;
 
 interface Category {
   readonly id: string;
@@ -79,7 +74,7 @@ interface CardsListProps {
   readonly onToggleCard: (cardId: string) => void;
   readonly onToggleCategory: (categoryId: string) => void;
   readonly onToggleTopic: (topicId: string) => void;
-  readonly onEditCard: (card: LearningCard) => void;
+  readonly onEditCard: (card: LearningCardType) => void;
   readonly onDeleteCard: (cardId: string) => void;
   readonly onEditCategory: (category: Category) => void;
   readonly onDeleteCategory: (categoryId: string) => void;
