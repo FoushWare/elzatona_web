@@ -175,7 +175,7 @@ export function useContentManagementTemplateProps({
         onAdd: () => modals.openCategoryModal(),
         onEdit: (category: Category) => modals.openCategoryModal(category),
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        onDelete: (category: any) => handlers.onDeleteCategory(category.id),
+        onDelete: (category: any) => handlers.onDeleteCategory((category as any).id),
       },
       topicsList: {
         topics: data.topics,

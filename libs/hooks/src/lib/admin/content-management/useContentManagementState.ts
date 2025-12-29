@@ -70,9 +70,14 @@ export function useContentManagementState(
     if (!categorySearch.trim()) return categories;
     const searchLower = categorySearch.toLowerCase();
     return categories.filter(
-      (category) =>
-        (category.name || "").toLowerCase().includes(searchLower) ||
-        (category.description || "").toLowerCase().includes(searchLower),
+      (category) => {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const cat = category as any;
+        return (
+          (cat.name || "").toLowerCase().includes(searchLower) ||
+          (cat.description || "").toLowerCase().includes(searchLower)
+        );
+      },
     );
   }, [categories, categorySearch]);
 

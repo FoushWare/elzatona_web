@@ -111,7 +111,8 @@ export function useContentManagementHandlers({
 
   const onDeleteCategory = useCallback(
     (categoryId: string) => {
-      const category = categories.find((c) => c.id === categoryId);
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const category = categories.find((c) => (c as any).id === categoryId);
       if (category) {
         setCategoryToDelete(category);
       }
@@ -185,8 +186,10 @@ export function useContentManagementHandlers({
 
   const onCategoryFormSubmit = useCallback(
     async (formData: any) => {
-      if (editingCategory?.id) {
-        await handleUpdateCategory(editingCategory.id, formData);
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const categoryId = editingCategory ? (editingCategory as any).id : null;
+      if (categoryId) {
+        await handleUpdateCategory(categoryId, formData);
       } else {
         await handleCreateCategory(formData);
       }
