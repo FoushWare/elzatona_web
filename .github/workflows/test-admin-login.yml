@@ -40,14 +40,15 @@ jobs:
         run: npm install
 
       - name: Run unit tests for Admin Login
+        working-directory: apps/admin
         run: |
           echo "🧪 Running unit tests for Admin Login page..."
           NODE_OPTIONS=--max-old-space-size=768 npx jest \
-            apps/admin/pages/admin/login/page.test.tsx \
+            pages/admin/login/page.test.tsx \
             --maxWorkers=1 \
             --silent \
             --coverage=false \
-            --config=apps/admin/jest.config.js
+            --config=jest.config.js
         continue-on-error: false
         env:
           NODE_OPTIONS: "--max-old-space-size=768"
@@ -60,14 +61,15 @@ jobs:
           ADMIN_PASSWORD: ${{ secrets.ADMIN_PASSWORD || 'test-password' }}
 
       - name: Run integration tests for Admin Login
+        working-directory: apps/admin
         run: |
           echo "🔗 Running integration tests for Admin Login..."
           NODE_OPTIONS=--max-old-space-size=768 npx jest \
-            apps/admin/pages/admin/login/page.integration.test.tsx \
+            pages/admin/login/page.integration.test.tsx \
             --maxWorkers=1 \
             --silent \
             --coverage=false \
-            --config=apps/admin/jest.config.js || echo "⚠️  Integration tests not found, skipping"
+            --config=jest.config.js || echo "⚠️  Integration tests not found, skipping"
         continue-on-error: true
         env:
           NODE_OPTIONS: "--max-old-space-size=768"
@@ -110,14 +112,15 @@ jobs:
           ADMIN_PASSWORD: ${{ secrets.ADMIN_PASSWORD || 'test-password' }}
 
       - name: Update snapshot tests
+        working-directory: apps/admin
         run: |
           echo "📸 Updating snapshot tests for Admin Login..."
           NODE_OPTIONS=--max-old-space-size=768 npx jest \
-            apps/admin/pages/admin/login/page.test.tsx \
+            pages/admin/login/page.test.tsx \
             --updateSnapshot \
             --maxWorkers=1 \
             --silent \
-            --config=apps/admin/jest.config.js || echo "⚠️  Snapshot update skipped"
+            --config=jest.config.js || echo "⚠️  Snapshot update skipped"
         continue-on-error: true
         env:
           NODE_OPTIONS: "--max-old-space-size=768"

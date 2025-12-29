@@ -1,10 +1,14 @@
 const nextJest = require("next/jest.js");
+const path = require("path");
+
+// Get the absolute path to the admin directory
+const adminDir = path.resolve(__dirname);
 
 const createJestConfig = nextJest({
   // Provide the path to your Next.js app to load next.config.js and .env files
-  // Point to the root of the Next.js app (where next.config.js is located)
+  // Use absolute path to ensure Next.js can find the app directory
   // Next.js will automatically detect src/app as the app directory
-  dir: "./",
+  dir: adminDir,
 });
 
 // Add any custom config to be passed to Jest
