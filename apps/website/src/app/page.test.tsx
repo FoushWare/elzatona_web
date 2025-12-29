@@ -6,18 +6,18 @@
  */
 
 import { render, screen, waitFor } from "@testing-library/react";
-import { describe, it, expect, vi, beforeEach } from "vitest";
+import "@testing-library/jest-dom";
 import HomePage from "./page";
 
 // Mock dependencies
-vi.mock("@elzatona/contexts", () => ({
+jest.mock("@elzatona/contexts", () => ({
   useUserType: () => ({
     userType: null,
-    setUserType: vi.fn(),
+    setUserType: jest.fn(),
   }),
 }));
 
-vi.mock("@elzatona/common-ui", () => ({
+jest.mock("@elzatona/common-ui", () => ({
   ErrorBoundary: ({ children }: { children: React.ReactNode }) => (
     <div data-testid="error-boundary">{children}</div>
   ),
@@ -46,22 +46,22 @@ vi.mock("@elzatona/common-ui", () => ({
   ),
 }));
 
-vi.mock("next/navigation", () => ({
+jest.mock("next/navigation", () => ({
   useRouter: () => ({
-    push: vi.fn(),
-    replace: vi.fn(),
+    push: jest.fn(),
+    replace: jest.fn(),
     pathname: "/",
   }),
 }));
 
-vi.mock("../context/LearningTypeContext", () => ({
+jest.mock("../context/LearningTypeContext", () => ({
   useLearningType: () => ({
     learningType: null,
-    setLearningType: vi.fn(),
+    setLearningType: jest.fn(),
   }),
 }));
 
-vi.mock("./lib/hooks/useHomePageState", () => ({
+jest.mock("./lib/hooks/useHomePageState", () => ({
   useHomePageState: () => ({
     hasActivePlan: false,
     activePlan: null,
@@ -69,7 +69,7 @@ vi.mock("./lib/hooks/useHomePageState", () => ({
   }),
 }));
 
-vi.mock("./lib/homePageHelpers", () => ({
+jest.mock("./lib/homePageHelpers", () => ({
   getPersonalizedContent: () => ({
     title: "Master Frontend Development",
     subtitle: "The complete platform to ace your frontend interviews",
@@ -80,7 +80,7 @@ vi.mock("./lib/homePageHelpers", () => ({
   }),
 }));
 
-vi.mock("./lib/constants/homePage.constants", () => ({
+jest.mock("./lib/constants/homePage.constants", () => ({
   ROUTES: {
     GUIDED_LEARNING: "/features/guided-learning",
     BROWSE_QUESTIONS: "/browse-practice-questions",
@@ -89,7 +89,7 @@ vi.mock("./lib/constants/homePage.constants", () => ({
 
 describe("HomePage", () => {
   beforeEach(() => {
-    vi.clearAllMocks();
+    jest.clearAllMocks();
   });
 
   it("should render without crashing", () => {
@@ -146,10 +146,10 @@ describe("HomePage", () => {
 describe("HomePage Integration", () => {
   it("should handle user interactions", async () => {
     const { useRouter } = await import("next/navigation");
-    const mockPush = vi.fn();
-    vi.mocked(useRouter).mockReturnValue({
+    const mockPush = jest.fn();
+    jest.mocked(useRouter).mockReturnValue({
       push: mockPush,
-      replace: vi.fn(),
+      replace: jest.fn(),
       pathname: "/",
     } as any);
 
@@ -165,7 +165,7 @@ describe("HomePage Integration", () => {
 
 describe("HomePage Snapshot Tests", () => {
   beforeEach(() => {
-    vi.clearAllMocks();
+    jest.clearAllMocks();
   });
 
   it("should match home page snapshot (default state)", () => {
@@ -175,9 +175,9 @@ describe("HomePage Snapshot Tests", () => {
 
   it("should match home page snapshot (with guided user type)", () => {
     const { useUserType } = require("@elzatona/contexts");
-    vi.mocked(useUserType).mockReturnValue({
+    jest.mocked(useUserType).mockReturnValue({
       userType: "guided",
-      setUserType: vi.fn(),
+      setUserType: jest.fn(),
     });
 
     const { container } = render(<HomePage />);
@@ -186,9 +186,9 @@ describe("HomePage Snapshot Tests", () => {
 
   it("should match home page snapshot (with self-directed user type)", () => {
     const { useUserType } = require("@elzatona/contexts");
-    vi.mocked(useUserType).mockReturnValue({
+    jest.mocked(useUserType).mockReturnValue({
       userType: "self-directed",
-      setUserType: vi.fn(),
+      setUserType: jest.fn(),
     });
 
     const { container } = render(<HomePage />);
@@ -197,7 +197,7 @@ describe("HomePage Snapshot Tests", () => {
 
   it("should match home page snapshot (with active plan)", () => {
     const { useHomePageState } = require("./lib/hooks/useHomePageState");
-    vi.mocked(useHomePageState).mockReturnValue({
+    jest.mocked(useHomePageState).mockReturnValue({
       hasActivePlan: true,
       activePlan: {
         id: "test-plan-001",
@@ -213,7 +213,7 @@ describe("HomePage Snapshot Tests", () => {
 
   it("should match home page snapshot (loading state)", () => {
     const { useHomePageState } = require("./lib/hooks/useHomePageState");
-    vi.mocked(useHomePageState).mockReturnValue({
+    jest.mocked(useHomePageState).mockReturnValue({
       hasActivePlan: false,
       activePlan: null,
       showAnimation: true,
