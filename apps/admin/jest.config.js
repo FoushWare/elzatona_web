@@ -2,8 +2,9 @@ const nextJest = require("next/jest.js");
 
 const createJestConfig = nextJest({
   // Provide the path to your Next.js app to load next.config.js and .env files
-  // Use src/app as the Next.js app directory
-  dir: "./src",
+  // Point to the root of the Next.js app (where next.config.js is located)
+  // Next.js will automatically detect src/app as the app directory
+  dir: "./",
 });
 
 // Add any custom config to be passed to Jest
