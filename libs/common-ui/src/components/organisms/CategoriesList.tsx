@@ -69,8 +69,8 @@ export function CategoriesList({
       <Card className="bg-white dark:bg-gray-800">
         <Collapsible open={isOpen} onOpenChange={onOpenChange}>
           <CardHeader className="cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors">
-            <div className="flex items-center justify-between mb-4">
-              <CollapsibleTrigger className="flex items-center gap-2 text-left">
+            <div className="flex items-center justify-between">
+              <CollapsibleTrigger className="flex items-center gap-2 text-left flex-1">
                 <CardTitle className="text-xl font-semibold text-gray-900 dark:text-gray-100 flex items-center gap-2">
                   {isOpen ? (
                     <ChevronDown className="h-5 w-5 text-gray-500 dark:text-gray-400" />
@@ -94,27 +94,27 @@ export function CategoriesList({
                 Add
               </Button>
             </div>
-            {/* Search Input */}
-            <div className="relative" onClick={(e) => e.stopPropagation()}>
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
-              <Input
-                placeholder="Search categories..."
-                value={searchTerm}
-                onChange={(e) => onSearchChange(e.target.value)}
-                className="pl-10 pr-10"
-              />
-              {searchTerm && (
-                <button
-                  onClick={() => onSearchChange("")}
-                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
-                >
-                  <X className="h-4 w-4" />
-                </button>
-              )}
-            </div>
           </CardHeader>
           <CollapsibleContent>
             <CardContent>
+              {/* Search Input - Only visible when open */}
+              <div className="relative mb-4">
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+                <Input
+                  placeholder="Search categories..."
+                  value={searchTerm}
+                  onChange={(e) => onSearchChange(e.target.value)}
+                  className="pl-10 pr-10"
+                />
+                {searchTerm && (
+                  <button
+                    onClick={() => onSearchChange("")}
+                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
+                  >
+                    <X className="h-4 w-4" />
+                  </button>
+                )}
+              </div>
               {isLoading ? (
                 <div className="text-center py-4">
                   <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-purple-600 mx-auto"></div>
