@@ -48,6 +48,7 @@ export { SignInPopup } from "./auth/SignInPopup";
 export { default as AdminLoginNavbar } from "./auth/AdminLoginNavbar";
 export { default as AdminManagement } from "./auth/AdminManagement";
 export { default as NavbarSimple } from "./common/NavbarSimple";
+export { LearningModeSwitcher } from "./common/LearningModeSwitcher";
 export { default as FirestoreErrorBoundary } from "./common/FirestoreErrorBoundary";
 export { NotificationContainer } from "./components/ui/Notification";
 export { Tabs, TabsList, TabsTrigger, TabsContent } from "./components/ui/tabs";
