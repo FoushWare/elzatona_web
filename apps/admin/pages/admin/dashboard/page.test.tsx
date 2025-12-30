@@ -15,75 +15,43 @@ import "@testing-library/jest-dom";
 import AdminDashboard from "./page";
 
 // Mock shared contexts
-// Create the mock function inside the factory to avoid hoisting issues
-// Then access it through the module in tests
-// Mock both the alias and the actual resolved path to ensure the mock is applied
-jest.mock("@elzatona/contexts", () => {
-  const React = jest.requireActual("react");
-  const { createContext, useContext } = React;
-
-  // Create a mock context
-  const MockAdminAuthContext = createContext(undefined);
-
-  const AdminAuthProvider = ({ children }: { children: React.ReactNode }) => {
-    const mockValue = {
-      isAuthenticated: true,
-      isLoading: false,
-      login: jest.fn(),
-      logout: jest.fn(),
-      user: {
-        id: "1",
-        email: "admin@example.com",
-        role: "super_admin",
-        name: "Admin User",
-      },
-      error: null,
-    };
-
-    return React.createElement(
-      MockAdminAuthContext.Provider,
-      { value: mockValue },
-      children,
-    );
-  };
-
-  const useAdminAuth = jest.fn(() => {
-    const context = useContext(MockAdminAuthContext);
-    if (context === undefined) {
-      throw new Error("useAdminAuth must be used within an AdminAuthProvider");
-    }
-    return context;
-  });
-
-  return {
-    useUserType: jest.fn(() => ({
-      userType: "guided",
-      setUserType: jest.fn(),
-    })),
-    useMobileMenu: jest.fn(() => ({ setIsMobileMenuOpen: jest.fn() })),
-    useTheme: jest.fn(() => ({ isDarkMode: false, toggleDarkMode: jest.fn() })),
-    useAuth: jest.fn(() => ({
-      user: null,
-      isAuthenticated: false,
-      isLoading: false,
-      signOut: jest.fn(),
-    })),
-    AdminAuthProvider,
-    useAdminAuth,
-    NotificationProvider: ({ children }: { children: React.ReactNode }) =>
-      children,
-    useNotifications: jest.fn(() => ({
-      notifications: [],
-      unreadCount: 0,
-      isLoading: false,
-      error: null,
-      markAsRead: jest.fn(),
-      markAllAsRead: jest.fn(),
-      refreshNotifications: jest.fn(),
-    })),
-    ThemeProvider: ({ children }: { children: React.ReactNode }) => children,
-  };
-});
+// Simple mock that directly returns values without complex context setup
+jest.mock("@elzatona/contexts", () => ({
+  useUserType: jest.fn(() => ({ userType: "guided", setUserType: jest.fn() })),
+  useMobileMenu: jest.fn(() => ({ setIsMobileMenuOpen: jest.fn() })),
+  useTheme: jest.fn(() => ({ isDarkMode: false, toggleDarkMode: jest.fn() })),
+  useAuth: jest.fn(() => ({
+    user: null,
+    isAuthenticated: false,
+    isLoading: false,
+    signOut: jest.fn(),
+  })),
+  AdminAuthProvider: ({ children }: { children: React.ReactNode }) => children,
+  useAdminAuth: jest.fn(() => ({
+    isAuthenticated: true,
+    isLoading: false,
+    login: jest.fn(),
+    logout: jest.fn(),
+    user: {
+      id: "1",
+      email: "admin@example.com",
+      role: "super_admin",
+      name: "Admin User",
+    },
+    error: null,
+  })),
+  NotificationProvider: ({ children }: { children: React.ReactNode }) => children,
+  useNotifications: jest.fn(() => ({
+    notifications: [],
+    unreadCount: 0,
+    isLoading: false,
+    error: null,
+    markAsRead: jest.fn(),
+    markAllAsRead: jest.fn(),
+    refreshNotifications: jest.fn(),
+  })),
+  ThemeProvider: ({ children }: { children: React.ReactNode }) => children,
+}));
 
 // Get the mock function after the mock is set up
 let mockUseAdminAuth: jest.Mock;
@@ -106,22 +74,9 @@ const mockUseAdminAuthFn = jest.fn(() => ({
   },
 }));
 
-// Create a test wrapper component that provides the mock context
-const TestWrapper = ({ children }: { children: React.ReactNode }) => {
-  return React.createElement(AdminAuthProvider, { children });
-};
-
 // Helper function to render with AdminAuthProvider
 const renderWithProvider = (component: React.ReactElement) => {
-  // Create a custom wrapper that provides the context directly
-  const TestWrapper = () => {
-    const React = require("react");
-    const { AdminAuthProvider } = require("@elzatona/contexts");
-
-    return React.createElement(AdminAuthProvider, {}, component);
-  };
-
-  return render(<TestWrapper />);
+  return render(component);
 };
 
 // Mock shared hooks
