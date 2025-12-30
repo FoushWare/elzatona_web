@@ -16,22 +16,24 @@ import AdminDashboard from "./page";
 
 // Declare mock functions at top level before jest.mock() calls
 const mockRefetch = jest.fn();
+const mockUseAdminAuthFn = jest.fn(() => ({
+  user: {
+    id: "1",
+    email: "admin@example.com",
+    role: "super_admin",
+    name: "Admin User",
+  },
+}));
 
 // Mock shared contexts
-// IMPORTANT: Do NOT use jest.requireActual here as it loads the real module
-// which includes the real useAdminAuth that throws if not in provider
+// Import the mock utilities directly to get all exports
+// Then override useAdminAuth with our mock function
 jest.mock("@elzatona/contexts", () => {
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
+  const mockUtils = require("../../../../libs/utilities/src/lib/test-utils/mocks/admin");
   return {
-    useAdminAuth: jest.fn(() => ({
-      user: {
-        id: "1",
-        email: "admin@example.com",
-        role: "super_admin",
-        name: "Admin User",
-      },
-    })),
-    AdminAuthProvider: ({ children }) => children,
-    NotificationProvider: ({ children }) => children,
+    ...mockUtils,
+    useAdminAuth: mockUseAdminAuthFn,
   };
 });
 
@@ -105,9 +107,7 @@ describe("A-UT-011: Dashboard Renders", () => {
   beforeEach(() => {
     jest.clearAllMocks();
 
-    // eslint-disable-next-line @typescript-eslint/no-require-imports
-    const { useAdminAuth } = require("@elzatona/contexts");
-    (useAdminAuth as jest.Mock).mockReturnValue({
+    mockUseAdminAuthFn.mockReturnValue({
       user: {
         id: "1",
         email: "admin@example.com",
@@ -158,9 +158,7 @@ describe("A-UT-012: Stats Display", () => {
   beforeEach(() => {
     jest.clearAllMocks();
 
-    // eslint-disable-next-line @typescript-eslint/no-require-imports
-    const { useAdminAuth } = require("@elzatona/contexts");
-    (useAdminAuth as jest.Mock).mockReturnValue({
+    mockUseAdminAuthFn.mockReturnValue({
       user: {
         id: "1",
         email: "admin@example.com",
@@ -242,9 +240,7 @@ describe("A-UT-013: Refresh Functionality", () => {
     jest.clearAllMocks();
     mockRefetch.mockClear();
 
-    // eslint-disable-next-line @typescript-eslint/no-require-imports
-    const { useAdminAuth } = require("@elzatona/contexts");
-    (useAdminAuth as jest.Mock).mockReturnValue({
+    mockUseAdminAuthFn.mockReturnValue({
       user: {
         id: "1",
         email: "admin@example.com",
@@ -293,9 +289,7 @@ describe("A-UT-SNAPSHOT: Admin Dashboard Snapshot Tests", () => {
   beforeEach(() => {
     jest.clearAllMocks();
 
-    // eslint-disable-next-line @typescript-eslint/no-require-imports
-    const { useAdminAuth } = require("@elzatona/contexts");
-    (useAdminAuth as jest.Mock).mockReturnValue({
+    mockUseAdminAuthFn.mockReturnValue({
       user: {
         id: "1",
         email: "admin@example.com",

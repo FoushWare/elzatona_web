@@ -36,21 +36,23 @@ try {
 
 // Declare mock function at top level before jest.mock() calls
 const mockRefetch = jest.fn();
+const mockUseAdminAuthFn = jest.fn(() => ({
+  isAuthenticated: false,
+  isLoading: false,
+  login: jest.fn(),
+  logout: jest.fn(),
+  user: null,
+}));
 
 // Mock shared contexts
-// IMPORTANT: Do NOT use jest.requireActual here as it loads the real module
-// which includes the real useAdminAuth that throws if not in provider
+// Import the mock utilities directly to get all exports
+// Then override useAdminAuth with our mock function
 jest.mock("@elzatona/contexts", () => {
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
+  const mockUtils = require("../../../../libs/utilities/src/lib/test-utils/mocks/admin");
   return {
-    useAdminAuth: jest.fn(() => ({
-      isAuthenticated: false,
-      isLoading: false,
-      login: jest.fn(),
-      logout: jest.fn(),
-      user: null,
-    })),
-    AdminAuthProvider: ({ children }) => children,
-    NotificationProvider: ({ children }) => children,
+    ...mockUtils,
+    useAdminAuth: mockUseAdminAuthFn,
   };
 });
 
@@ -146,10 +148,7 @@ jest.mock("next/navigation", () => ({
 describe("A-UT-006: Admin Login Page Renders", () => {
   beforeEach(() => {
     jest.clearAllMocks();
-
-    // eslint-disable-next-line @typescript-eslint/no-require-imports
-    const { useAdminAuth } = require("@elzatona/contexts");
-    (useAdminAuth as jest.Mock).mockReturnValue({
+    mockUseAdminAuthFn.mockReturnValue({
       isAuthenticated: false,
       isLoading: false,
       login: mockLogin,
@@ -202,9 +201,7 @@ describe("A-UT-007: Form Inputs Handle Changes", () => {
   beforeEach(() => {
     jest.clearAllMocks();
 
-    // eslint-disable-next-line @typescript-eslint/no-require-imports
-    const { useAdminAuth } = require("@elzatona/contexts");
-    (useAdminAuth as jest.Mock).mockReturnValue({
+    mockUseAdminAuthFn.mockReturnValue({
       isAuthenticated: false,
       isLoading: false,
       login: mockLogin,
@@ -262,9 +259,7 @@ describe("A-UT-008: Form Validation", () => {
   beforeEach(() => {
     jest.clearAllMocks();
 
-    // eslint-disable-next-line @typescript-eslint/no-require-imports
-    const { useAdminAuth } = require("@elzatona/contexts");
-    (useAdminAuth as jest.Mock).mockReturnValue({
+    mockUseAdminAuthFn.mockReturnValue({
       isAuthenticated: false,
       isLoading: false,
       login: mockLogin,
@@ -330,9 +325,7 @@ describe("A-UT-009: Loading State", () => {
   });
 
   it("should show loading state during submission", async () => {
-    // eslint-disable-next-line @typescript-eslint/no-require-imports
-    const { useAdminAuth } = require("@elzatona/contexts");
-    (useAdminAuth as jest.Mock).mockReturnValue({
+    mockUseAdminAuthFn.mockReturnValue({
       isAuthenticated: false,
       isLoading: false,
       login: mockLogin,
@@ -359,9 +352,7 @@ describe("A-UT-009: Loading State", () => {
   });
 
   it("should show loading spinner when isLoading is true", () => {
-    // eslint-disable-next-line @typescript-eslint/no-require-imports
-    const { useAdminAuth } = require("@elzatona/contexts");
-    (useAdminAuth as jest.Mock).mockReturnValue({
+    mockUseAdminAuthFn.mockReturnValue({
       isAuthenticated: false,
       isLoading: true,
       login: mockLogin,
@@ -378,9 +369,7 @@ describe("A-UT-010: Error Message Display", () => {
   beforeEach(() => {
     jest.clearAllMocks();
 
-    // eslint-disable-next-line @typescript-eslint/no-require-imports
-    const { useAdminAuth } = require("@elzatona/contexts");
-    (useAdminAuth as jest.Mock).mockReturnValue({
+    mockUseAdminAuthFn.mockReturnValue({
       isAuthenticated: false,
       isLoading: false,
       login: mockLogin,
@@ -478,9 +467,7 @@ describe("A-UT-SNAPSHOT: Admin Login Page Snapshot Tests", () => {
   beforeEach(() => {
     jest.clearAllMocks();
 
-    // eslint-disable-next-line @typescript-eslint/no-require-imports
-    const { useAdminAuth } = require("@elzatona/contexts");
-    (useAdminAuth as jest.Mock).mockReturnValue({
+    mockUseAdminAuthFn.mockReturnValue({
       isAuthenticated: false,
       isLoading: false,
       login: mockLogin,
@@ -495,9 +482,7 @@ describe("A-UT-SNAPSHOT: Admin Login Page Snapshot Tests", () => {
   });
 
   it("should match admin login page snapshot (loading state)", () => {
-    // eslint-disable-next-line @typescript-eslint/no-require-imports
-    const { useAdminAuth } = require("@elzatona/contexts");
-    (useAdminAuth as jest.Mock).mockReturnValue({
+    mockUseAdminAuthFn.mockReturnValue({
       isAuthenticated: false,
       isLoading: true,
       login: mockLogin,
