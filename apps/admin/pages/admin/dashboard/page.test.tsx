@@ -21,10 +21,10 @@ import AdminDashboard from "./page";
 jest.mock("@elzatona/contexts", () => {
   const React = jest.requireActual("react");
   const { createContext, useContext } = React;
-  
+
   // Create a mock context
   const MockAdminAuthContext = createContext(undefined);
-  
+
   const AdminAuthProvider = ({ children }: { children: React.ReactNode }) => {
     const mockValue = {
       isAuthenticated: true,
@@ -39,10 +39,14 @@ jest.mock("@elzatona/contexts", () => {
       },
       error: null,
     };
-    
-    return React.createElement(MockAdminAuthContext.Provider, { value: mockValue }, children);
+
+    return React.createElement(
+      MockAdminAuthContext.Provider,
+      { value: mockValue },
+      children,
+    );
   };
-  
+
   const useAdminAuth = jest.fn(() => {
     const context = useContext(MockAdminAuthContext);
     if (context === undefined) {
@@ -50,9 +54,12 @@ jest.mock("@elzatona/contexts", () => {
     }
     return context;
   });
-  
+
   return {
-    useUserType: jest.fn(() => ({ userType: "guided", setUserType: jest.fn() })),
+    useUserType: jest.fn(() => ({
+      userType: "guided",
+      setUserType: jest.fn(),
+    })),
     useMobileMenu: jest.fn(() => ({ setIsMobileMenuOpen: jest.fn() })),
     useTheme: jest.fn(() => ({ isDarkMode: false, toggleDarkMode: jest.fn() })),
     useAuth: jest.fn(() => ({
@@ -63,7 +70,8 @@ jest.mock("@elzatona/contexts", () => {
     })),
     AdminAuthProvider,
     useAdminAuth,
-    NotificationProvider: ({ children }: { children: React.ReactNode }) => children,
+    NotificationProvider: ({ children }: { children: React.ReactNode }) =>
+      children,
     useNotifications: jest.fn(() => ({
       notifications: [],
       unreadCount: 0,
@@ -109,14 +117,10 @@ const renderWithProvider = (component: React.ReactElement) => {
   const TestWrapper = () => {
     const React = require("react");
     const { AdminAuthProvider } = require("@elzatona/contexts");
-    
-    return React.createElement(
-      AdminAuthProvider,
-      {},
-      component
-    );
+
+    return React.createElement(AdminAuthProvider, {}, component);
   };
-  
+
   return render(<TestWrapper />);
 };
 

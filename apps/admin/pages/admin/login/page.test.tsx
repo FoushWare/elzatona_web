@@ -44,10 +44,10 @@ const mockRefetch = jest.fn();
 jest.mock("@elzatona/contexts", () => {
   const React = jest.requireActual("react");
   const { createContext, useContext } = React;
-  
+
   // Create a mock context
   const MockAdminAuthContext = createContext(undefined);
-  
+
   const AdminAuthProvider = ({ children }: { children: React.ReactNode }) => {
     const mockValue = {
       isAuthenticated: false,
@@ -57,10 +57,14 @@ jest.mock("@elzatona/contexts", () => {
       user: null,
       error: null,
     };
-    
-    return React.createElement(MockAdminAuthContext.Provider, { value: mockValue }, children);
+
+    return React.createElement(
+      MockAdminAuthContext.Provider,
+      { value: mockValue },
+      children,
+    );
   };
-  
+
   const useAdminAuth = jest.fn(() => {
     const context = useContext(MockAdminAuthContext);
     if (context === undefined) {
@@ -68,9 +72,12 @@ jest.mock("@elzatona/contexts", () => {
     }
     return context;
   });
-  
+
   return {
-    useUserType: jest.fn(() => ({ userType: "guided", setUserType: jest.fn() })),
+    useUserType: jest.fn(() => ({
+      userType: "guided",
+      setUserType: jest.fn(),
+    })),
     useMobileMenu: jest.fn(() => ({ setIsMobileMenuOpen: jest.fn() })),
     useTheme: jest.fn(() => ({ isDarkMode: false, toggleDarkMode: jest.fn() })),
     useAuth: jest.fn(() => ({
@@ -81,7 +88,8 @@ jest.mock("@elzatona/contexts", () => {
     })),
     AdminAuthProvider,
     useAdminAuth,
-    NotificationProvider: ({ children }: { children: React.ReactNode }) => children,
+    NotificationProvider: ({ children }: { children: React.ReactNode }) =>
+      children,
     useNotifications: jest.fn(() => ({
       notifications: [],
       unreadCount: 0,
@@ -103,7 +111,7 @@ beforeAll(() => {
   const contextsModule = require("@elzatona/contexts");
   mockUseAdminAuth = contextsModule.useAdminAuth as jest.Mock;
   AdminAuthProvider = contextsModule.AdminAuthProvider;
-  
+
   // Debug: Log the mock function to ensure it's being set up correctly
   console.log("Mock useAdminAuth set up:", typeof mockUseAdminAuth);
   console.log("Is mock function:", typeof mockUseAdminAuth.mockReturnValue);
