@@ -174,7 +174,7 @@ export function useContentManagementTemplateProps({
         onOpenChange: state.setIsCategoriesOpen,
         onAdd: () => modals.openCategoryModal(),
         onEdit: (category: Category) => modals.openCategoryModal(category),
-         
+
         onDelete: (category: Category) => handlers.onDeleteCategory(category),
       },
       topicsList: {
@@ -205,12 +205,23 @@ export function useContentManagementTemplateProps({
         onToggleTopic: state.toggleTopic,
         onEditCard: (card: LearningCard) => modals.openCardModal(card),
         onDeleteCard: handlers.onDeleteCard,
-        onEditCategory: (category: Category) => modals.openCategoryModal(category),
+        onEditCategory: (category: Category) =>
+          modals.openCategoryModal(category),
         onDeleteCategory: handlers.onDeleteCategory,
         onEditTopic: (topic: Topic) => modals.openTopicModal(topic),
         onDeleteTopic: handlers.onDeleteTopic,
-        onEditQuestion: (question: UnifiedQuestion) =>
-          modals.openQuestionModal(question),
+        onEditQuestion: (question: {
+          id: string;
+          title?: string;
+          difficulty?: string;
+          type?: string;
+        }) => {
+          // Find the full UnifiedQuestion from data.questions
+          const fullQuestion = data.questions.find((q) => q.id === question.id);
+          if (fullQuestion) {
+            modals.openQuestionModal(fullQuestion);
+          }
+        },
         onDeleteQuestion: handlers.onDeleteQuestion,
         onAddQuestion: () => modals.openQuestionModal(),
         totalCards: stats.totalCards,
@@ -259,10 +270,6 @@ export function useContentManagementTemplateProps({
         onRemoveQuestionFromPlan: actions.removeQuestionFromPlan,
         totalPlans: stats.totalPlans,
         isDeletingPlan: actions.deletePlanMutation.isPending,
-        onViewQuestion: (question: UnifiedQuestion) => {
-          modals.setViewingQuestion(question);
-          modals.setIsViewQuestionModalOpen(true);
-        },
       },
     }),
     [

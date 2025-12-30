@@ -77,12 +77,61 @@ if (!isCI) {
   }
 }
 
-// Validate test database configuration
+// FORCE TEST ENVIRONMENT for all tests
+// This ensures tests ALWAYS use test database, regardless of other settings
+process.env.APP_ENV = "test";
+process.env.NEXT_PUBLIC_APP_ENV = "test";
+// Only set NODE_ENV if not in build context
+// Use Object.defineProperty to bypass read-only restriction in JavaScript
+if (process.env.NODE_ENV !== "production" && !process.env.NEXT_PHASE) {
+  if (!process.env.NODE_ENV) {
+    try {
+      Object.defineProperty(process.env, "NODE_ENV", {
+        value: "test",
+        writable: true,
+        configurable: true,
+      });
+    } catch {
+      // If defineProperty fails, try direct assignment (works in some environments)
+
+      process.env.NODE_ENV = "test";
+    }
+  }
+}
+
+// Set up environment variables before any module imports
+// This ensures supabase-client.ts and other modules have access to these values
+// Use test-specific values if available, otherwise fall back to safe defaults
+// If values are placeholders, replace them with test defaults
+const hasPlaceholder = (value) =>
+  !value || value.includes("your-") || value.includes("placeholder");
+
+if (
+  hasPlaceholder(process.env.NEXT_PUBLIC_SUPABASE_URL) ||
+  hasPlaceholder(process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) ||
+  hasPlaceholder(process.env.SUPABASE_SERVICE_ROLE_KEY)
+) {
+  // Replace placeholders with test defaults
+  process.env.NEXT_PUBLIC_SUPABASE_URL = "https://test.supabase.co";
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY = "test-anon-key";
+  process.env.SUPABASE_SERVICE_ROLE_KEY = "test-service-role-key";
+} else {
+  // Use existing values or fall back to defaults
+  process.env.NEXT_PUBLIC_SUPABASE_URL =
+    process.env.NEXT_PUBLIC_SUPABASE_URL || "https://test.supabase.co";
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY =
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || "test-anon-key";
+  process.env.SUPABASE_SERVICE_ROLE_KEY =
+    process.env.SUPABASE_SERVICE_ROLE_KEY || "test-service-role-key";
+}
+
+// Validate test database configuration (after setting defaults)
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || "";
 const testProjectRefs = [
   "kiycimlsatwfqxtfprlr", // Current test project
   "slfyltsmcivmqfloxpmq", // Old test project 1
   "vopfdukvdhnmzzjkxpnj", // Old test project 2
+  "test.supabase.co", // Test default
 ];
 const productionProjectRef = "hpnewqkvpnthpohvxcmq";
 
@@ -103,7 +152,12 @@ if (isProdProject) {
   );
 }
 
-if (!isTestProject && supabaseUrl && !supabaseUrl.includes("your-")) {
+if (
+  !isTestProject &&
+  supabaseUrl &&
+  !supabaseUrl.includes("your-") &&
+  !supabaseUrl.includes("test")
+) {
   console.warn(
     "⚠️  WARNING: Supabase URL doesn't match known test project references",
   );
@@ -112,7 +166,17 @@ if (!isTestProject && supabaseUrl && !supabaseUrl.includes("your-")) {
 }
 
 // Validate required variables are not placeholders (local dev only)
-if (!isCI) {
+// Skip validation if using test defaults or in CI
+// Note: Placeholders are already replaced with defaults above, so this check
+// is mainly for ensuring real test credentials are used when not using defaults
+const isUsingTestDefaults =
+  supabaseUrl.includes("test.supabase.co") ||
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY === "test-anon-key" ||
+  process.env.SUPABASE_SERVICE_ROLE_KEY === "test-service-role-key";
+
+// Only validate if not in CI and not using test defaults
+// This allows tests to run with placeholder values (replaced with defaults above)
+if (!isCI && !isUsingTestDefaults) {
   const requiredVars = [
     "NEXT_PUBLIC_SUPABASE_URL",
     "NEXT_PUBLIC_SUPABASE_ANON_KEY",
@@ -139,38 +203,6 @@ if (!isCI) {
     );
   }
 }
-
-// FORCE TEST ENVIRONMENT for all tests
-// This ensures tests ALWAYS use test database, regardless of other settings
-process.env.APP_ENV = "test";
-process.env.NEXT_PUBLIC_APP_ENV = "test";
-// Only set NODE_ENV if not in build context
-// Use Object.defineProperty to bypass read-only restriction in JavaScript
-if (process.env.NODE_ENV !== "production" && !process.env.NEXT_PHASE) {
-  if (!process.env.NODE_ENV) {
-    try {
-      Object.defineProperty(process.env, "NODE_ENV", {
-        value: "test",
-        writable: true,
-        configurable: true,
-      });
-    } catch {
-      // If defineProperty fails, try direct assignment (works in some environments)
-
-      process.env.NODE_ENV = "test";
-    }
-  }
-}
-
-// Set up environment variables before any module imports
-// This ensures supabase-client.ts and other modules have access to these values
-// Use test-specific values if available, otherwise fall back to safe defaults
-process.env.NEXT_PUBLIC_SUPABASE_URL =
-  process.env.NEXT_PUBLIC_SUPABASE_URL || "https://test.supabase.co";
-process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY =
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || "test-anon-key";
-process.env.SUPABASE_SERVICE_ROLE_KEY =
-  process.env.SUPABASE_SERVICE_ROLE_KEY || "test-service-role-key";
 
 // Log which environment is being used (for debugging)
 if (process.env.DEBUG_TEST_ENV === "true") {
@@ -200,7 +232,7 @@ if (global.Request === undefined) {
     else if (typeof fetch !== "undefined" && fetch?.Request) {
       fetchAPI = fetch;
     }
-  } catch (e) {
+  } catch (_e) {
     // fetch is not available, will use fallback polyfills
   }
 

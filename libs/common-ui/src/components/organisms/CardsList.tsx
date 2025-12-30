@@ -1,6 +1,7 @@
 "use client";
 
 import React, { Suspense } from "react";
+import type { LearningCard } from "@elzatona/types";
 import {
   Card,
   CardContent,
@@ -38,9 +39,8 @@ const CARD_ICONS = {
 
 // LearningCard interface - compatible with LearningCard from @elzatona/types
 // This allows CardsList to work with the full LearningCard type from the types library
-// Use LearningCard type from @elzatona/types instead of local interface
-// This ensures type compatibility across the codebase
-type LearningCard = LearningCardType;
+// LearningCard type is imported from @elzatona/types above
+// No local interface needed - using the type from the types library directly
 
 interface Category {
   readonly id: string;
@@ -74,7 +74,7 @@ interface CardsListProps {
   readonly onToggleCard: (cardId: string) => void;
   readonly onToggleCategory: (categoryId: string) => void;
   readonly onToggleTopic: (topicId: string) => void;
-  readonly onEditCard: (card: LearningCardType) => void;
+  readonly onEditCard: (card: LearningCard) => void;
   readonly onDeleteCard: (cardId: string) => void;
   readonly onEditCategory: (category: Category) => void;
   readonly onDeleteCategory: (categoryId: string) => void;

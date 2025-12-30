@@ -11,9 +11,6 @@ const _supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
 // Note: This creates a cross-app dependency but is necessary for AdminManagement functionality
 // TODO: Move AdminAuthService to a shared location (libs/utilities or libs/auth)
 // Using dynamic import to avoid cross-app dependency issues
-// eslint-disable-next-line @typescript-eslint/no-require-imports, @typescript-eslint/no-var-requires
-const AdminAuthService = require("../../../../apps/website/src/app/lib/admin-auth")
-  .AdminAuthService;
 
 // Define AdminCredential type locally to avoid type import issues
 interface AdminCredential {
@@ -42,6 +39,10 @@ export default function AdminManagement({
   const [showCreateForm, setShowCreateForm] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
+  const [adminAuthService, setAdminAuthService] = useState<
+    | typeof import("../../../../apps/website/src/app/lib/admin-auth").AdminAuthService
+    | null
+  >(null);
 
   // Form state for creating new admin
   const [newAdmin, setNewAdmin] = useState({
@@ -51,15 +52,38 @@ export default function AdminManagement({
     role: "admin" as "super_admin" | "admin",
   });
 
-  // Load admins on component mount
+  // Load AdminAuthService dynamically on component mount
   useEffect(() => {
-    loadAdmins();
+    const loadAdminAuthService = async () => {
+      try {
+        const adminAuthModule =
+          await import("../../../../apps/website/src/app/lib/admin-auth");
+        setAdminAuthService(adminAuthModule.AdminAuthService);
+      } catch (error_) {
+        setError(
+          `Failed to load admin service: ${error_ instanceof Error ? error_.message : "Unknown error"}`,
+        );
+      }
+    };
+    loadAdminAuthService();
   }, []);
 
+  // Load admins on component mount and when AdminAuthService is available
+  useEffect(() => {
+    if (adminAuthService) {
+      loadAdmins();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [adminAuthService]);
+
   const loadAdmins = async () => {
+    if (!adminAuthService) {
+      setError("Admin service not loaded");
+      return;
+    }
     try {
       setIsLoading(true);
-      const adminList = await AdminAuthService.getAllAdmins();
+      const adminList = await adminAuthService.getAllAdmins();
       setAdmins(adminList);
     } catch (error_) {
       setError(
@@ -75,8 +99,13 @@ export default function AdminManagement({
     setError("");
     setSuccess("");
 
+    if (!adminAuthService) {
+      setError("Admin service not loaded");
+      return;
+    }
+
     try {
-      const result = await AdminAuthService.createAdmin(
+      const result = await adminAuthService.createAdmin(
         newAdmin.email,
         newAdmin.password,
         newAdmin.name,
@@ -103,8 +132,13 @@ export default function AdminManagement({
       return;
     }
 
+    if (!adminAuthService) {
+      setError("Admin service not loaded");
+      return;
+    }
+
     try {
-      const result = await AdminAuthService.deactivateAdmin(adminId);
+      const result = await adminAuthService.deactivateAdmin(adminId);
 
       if (result.success) {
         setSuccess("Admin deactivated successfully!");

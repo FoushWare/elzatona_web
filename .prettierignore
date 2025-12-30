@@ -88,3 +88,7 @@ libs/utilities/scripts/fix-all-questions-comprehensive.js
 
 # Documentation files in scripts directory (ignored by git)
 libs/utilities/scripts/*.md
+
+# E2E test files (ignored by git but checked by pre-push hook)
+apps/admin/tests/e2e/
+apps/website/tests/e2e/

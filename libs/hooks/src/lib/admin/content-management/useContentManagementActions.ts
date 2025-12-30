@@ -232,8 +232,9 @@ export function useContentManagementActions({
         const categoryId = (category as any).id;
         await deleteCategoryMutation.mutateAsync(categoryId);
         await notifyContentUpdate("Category", "deleted");
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        const categoryName = (category as any).name || (category as any).title || "Category";
+
+        const categoryName =
+          (category as any).name || (category as any).title || "Category";
         showSuccess(
           "Category Deleted Successfully",
           `"${categoryName}" has been deleted.`,

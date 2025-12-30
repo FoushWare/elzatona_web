@@ -69,16 +69,14 @@ export function useContentManagementState(
   const filteredCategories = useMemo(() => {
     if (!categorySearch.trim()) return categories;
     const searchLower = categorySearch.toLowerCase();
-    return categories.filter(
-      (category) => {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        const cat = category as any;
-        return (
-          (cat.name || "").toLowerCase().includes(searchLower) ||
-          (cat.description || "").toLowerCase().includes(searchLower)
-        );
-      },
-    );
+    return categories.filter((category) => {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const cat = category as any;
+      return (
+        (cat.name || "").toLowerCase().includes(searchLower) ||
+        (cat.description || "").toLowerCase().includes(searchLower)
+      );
+    });
   }, [categories, categorySearch]);
 
   const filteredTopics = useMemo(() => {

@@ -9,12 +9,14 @@ import { render, screen, waitFor } from "@testing-library/react";
 import "@testing-library/jest-dom";
 import HomePage from "./page";
 
-// Mock dependencies
+// Mock dependencies - declare functions first
+const mockUseUserType = jest.fn();
+const mockUseLearningType = jest.fn();
+const mockUseHomePageState = jest.fn();
+const mockUseRouter = jest.fn();
+
 jest.mock("@elzatona/contexts", () => ({
-  useUserType: () => ({
-    userType: null,
-    setUserType: jest.fn(),
-  }),
+  useUserType: () => mockUseUserType(),
 }));
 
 jest.mock("@elzatona/common-ui", () => ({
@@ -47,26 +49,15 @@ jest.mock("@elzatona/common-ui", () => ({
 }));
 
 jest.mock("next/navigation", () => ({
-  useRouter: () => ({
-    push: jest.fn(),
-    replace: jest.fn(),
-    pathname: "/",
-  }),
+  useRouter: () => mockUseRouter(),
 }));
 
 jest.mock("../context/LearningTypeContext", () => ({
-  useLearningType: () => ({
-    learningType: null,
-    setLearningType: jest.fn(),
-  }),
+  useLearningType: () => mockUseLearningType(),
 }));
 
 jest.mock("./lib/hooks/useHomePageState", () => ({
-  useHomePageState: () => ({
-    hasActivePlan: false,
-    activePlan: null,
-    showAnimation: true,
-  }),
+  useHomePageState: () => mockUseHomePageState(),
 }));
 
 jest.mock("@elzatona/utilities", () => ({
@@ -92,6 +83,25 @@ jest.mock("@elzatona/types", () => ({
 describe("HomePage", () => {
   beforeEach(() => {
     jest.clearAllMocks();
+    // Reset mocks to default values
+    mockUseUserType.mockReturnValue({
+      userType: null,
+      setUserType: jest.fn(),
+    });
+    mockUseLearningType.mockReturnValue({
+      learningType: null,
+      setLearningType: jest.fn(),
+    });
+    mockUseHomePageState.mockReturnValue({
+      hasActivePlan: false,
+      activePlan: null,
+      showAnimation: true,
+    });
+    mockUseRouter.mockReturnValue({
+      push: jest.fn(),
+      replace: jest.fn(),
+      pathname: "/",
+    });
   });
 
   it("should render without crashing", () => {
@@ -146,10 +156,9 @@ describe("HomePage", () => {
 });
 
 describe("HomePage Integration", () => {
-  it("should handle user interactions", async () => {
-    const { useRouter } = await import("next/navigation");
+  it("should handle user interactions", () => {
     const mockPush = jest.fn();
-    jest.mocked(useRouter).mockReturnValue({
+    mockUseRouter.mockReturnValue({
       push: mockPush,
       replace: jest.fn(),
       pathname: "/",
@@ -168,6 +177,25 @@ describe("HomePage Integration", () => {
 describe("HomePage Snapshot Tests", () => {
   beforeEach(() => {
     jest.clearAllMocks();
+    // Reset mocks to default values
+    mockUseUserType.mockReturnValue({
+      userType: null,
+      setUserType: jest.fn(),
+    });
+    mockUseLearningType.mockReturnValue({
+      learningType: null,
+      setLearningType: jest.fn(),
+    });
+    mockUseHomePageState.mockReturnValue({
+      hasActivePlan: false,
+      activePlan: null,
+      showAnimation: true,
+    });
+    mockUseRouter.mockReturnValue({
+      push: jest.fn(),
+      replace: jest.fn(),
+      pathname: "/",
+    } as any);
   });
 
   it("should match home page snapshot (default state)", () => {
@@ -176,9 +204,7 @@ describe("HomePage Snapshot Tests", () => {
   });
 
   it("should match home page snapshot (with guided user type)", () => {
-    // eslint-disable-next-line @typescript-eslint/no-require-imports, @typescript-eslint/no-var-requires
-    const { useUserType } = require("@elzatona/contexts");
-    jest.mocked(useUserType).mockReturnValue({
+    mockUseUserType.mockReturnValue({
       userType: "guided",
       setUserType: jest.fn(),
     });
@@ -188,9 +214,7 @@ describe("HomePage Snapshot Tests", () => {
   });
 
   it("should match home page snapshot (with self-directed user type)", () => {
-    // eslint-disable-next-line @typescript-eslint/no-require-imports, @typescript-eslint/no-var-requires
-    const { useUserType } = require("@elzatona/contexts");
-    jest.mocked(useUserType).mockReturnValue({
+    mockUseUserType.mockReturnValue({
       userType: "self-directed",
       setUserType: jest.fn(),
     });
@@ -200,9 +224,7 @@ describe("HomePage Snapshot Tests", () => {
   });
 
   it("should match home page snapshot (with active plan)", () => {
-    // eslint-disable-next-line @typescript-eslint/no-require-imports, @typescript-eslint/no-var-requires
-    const { useHomePageState } = require("./lib/hooks/useHomePageState");
-    jest.mocked(useHomePageState).mockReturnValue({
+    mockUseHomePageState.mockReturnValue({
       hasActivePlan: true,
       activePlan: {
         id: "test-plan-001",
@@ -217,9 +239,7 @@ describe("HomePage Snapshot Tests", () => {
   });
 
   it("should match home page snapshot (loading state)", () => {
-    // eslint-disable-next-line @typescript-eslint/no-require-imports, @typescript-eslint/no-var-requires
-    const { useHomePageState } = require("./lib/hooks/useHomePageState");
-    jest.mocked(useHomePageState).mockReturnValue({
+    mockUseHomePageState.mockReturnValue({
       hasActivePlan: false,
       activePlan: null,
       showAnimation: true,
