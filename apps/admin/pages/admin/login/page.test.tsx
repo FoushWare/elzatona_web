@@ -22,7 +22,6 @@ import {
 } from "@testing-library/react";
 import "@testing-library/jest-dom";
 import AdminLoginPage from "./page";
-import { useAdminAuth } from "@elzatona/contexts";
 
 // Get credentials from environment variables (with validation)
 let ADMIN_EMAIL = "";
@@ -35,18 +34,23 @@ try {
   console.warn("Admin credentials not found - some tests may fail:", error);
 }
 
+// Declare mock function at top level before jest.mock() calls
+const mockRefetch = jest.fn();
+
 // Mock shared contexts
+// IMPORTANT: Do NOT use jest.requireActual here as it loads the real module
+// which includes the real useAdminAuth that throws if not in provider
 jest.mock("@elzatona/contexts", () => {
-  const actual = jest.requireActual("@elzatona/contexts");
   return {
-    ...actual,
-    useAdminAuth: jest.fn(),
-    AdminAuthProvider: ({ children }: { children: React.ReactNode }) => (
-      <>{children}</>
-    ),
-    NotificationProvider: ({ children }: { children: React.ReactNode }) => (
-      <>{children}</>
-    ),
+    useAdminAuth: jest.fn(() => ({
+      isAuthenticated: false,
+      isLoading: false,
+      login: jest.fn(),
+      logout: jest.fn(),
+      user: null,
+    })),
+    AdminAuthProvider: ({ children }) => children,
+    NotificationProvider: ({ children }) => children,
   };
 });
 
@@ -143,6 +147,8 @@ describe("A-UT-006: Admin Login Page Renders", () => {
   beforeEach(() => {
     jest.clearAllMocks();
 
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
+    const { useAdminAuth } = require("@elzatona/contexts");
     (useAdminAuth as jest.Mock).mockReturnValue({
       isAuthenticated: false,
       isLoading: false,
@@ -196,6 +202,8 @@ describe("A-UT-007: Form Inputs Handle Changes", () => {
   beforeEach(() => {
     jest.clearAllMocks();
 
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
+    const { useAdminAuth } = require("@elzatona/contexts");
     (useAdminAuth as jest.Mock).mockReturnValue({
       isAuthenticated: false,
       isLoading: false,
@@ -254,6 +262,8 @@ describe("A-UT-008: Form Validation", () => {
   beforeEach(() => {
     jest.clearAllMocks();
 
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
+    const { useAdminAuth } = require("@elzatona/contexts");
     (useAdminAuth as jest.Mock).mockReturnValue({
       isAuthenticated: false,
       isLoading: false,
@@ -320,6 +330,8 @@ describe("A-UT-009: Loading State", () => {
   });
 
   it("should show loading state during submission", async () => {
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
+    const { useAdminAuth } = require("@elzatona/contexts");
     (useAdminAuth as jest.Mock).mockReturnValue({
       isAuthenticated: false,
       isLoading: false,
@@ -347,6 +359,8 @@ describe("A-UT-009: Loading State", () => {
   });
 
   it("should show loading spinner when isLoading is true", () => {
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
+    const { useAdminAuth } = require("@elzatona/contexts");
     (useAdminAuth as jest.Mock).mockReturnValue({
       isAuthenticated: false,
       isLoading: true,
@@ -364,6 +378,8 @@ describe("A-UT-010: Error Message Display", () => {
   beforeEach(() => {
     jest.clearAllMocks();
 
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
+    const { useAdminAuth } = require("@elzatona/contexts");
     (useAdminAuth as jest.Mock).mockReturnValue({
       isAuthenticated: false,
       isLoading: false,
@@ -462,6 +478,8 @@ describe("A-UT-SNAPSHOT: Admin Login Page Snapshot Tests", () => {
   beforeEach(() => {
     jest.clearAllMocks();
 
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
+    const { useAdminAuth } = require("@elzatona/contexts");
     (useAdminAuth as jest.Mock).mockReturnValue({
       isAuthenticated: false,
       isLoading: false,
@@ -477,6 +495,8 @@ describe("A-UT-SNAPSHOT: Admin Login Page Snapshot Tests", () => {
   });
 
   it("should match admin login page snapshot (loading state)", () => {
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
+    const { useAdminAuth } = require("@elzatona/contexts");
     (useAdminAuth as jest.Mock).mockReturnValue({
       isAuthenticated: false,
       isLoading: true,
