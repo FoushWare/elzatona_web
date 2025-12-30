@@ -36,25 +36,90 @@ try {
 
 // Declare mock function at top level before jest.mock() calls
 const mockRefetch = jest.fn();
-const mockUseAdminAuthFn = jest.fn(() => ({
-  isAuthenticated: false,
-  isLoading: false,
-  login: jest.fn(),
-  logout: jest.fn(),
-  user: null,
-}));
 
 // Mock shared contexts
-// Import the mock utilities directly to get all exports
-// Then override useAdminAuth with our mock function
+// Create the mock function inside the factory to avoid hoisting issues
+// Then access it through the module in tests
+// Mock both the alias and the actual resolved path to ensure the mock is applied
 jest.mock("@elzatona/contexts", () => {
-  // eslint-disable-next-line @typescript-eslint/no-require-imports
-  const mockUtils = require("../../../../libs/utilities/src/lib/test-utils/mocks/admin");
+  const React = jest.requireActual("react");
+  const { createContext, useContext } = React;
+  
+  // Create a mock context
+  const MockAdminAuthContext = createContext(undefined);
+  
+  const AdminAuthProvider = ({ children }: { children: React.ReactNode }) => {
+    const mockValue = {
+      isAuthenticated: false,
+      isLoading: false,
+      login: jest.fn(),
+      logout: jest.fn(),
+      user: null,
+      error: null,
+    };
+    
+    return React.createElement(MockAdminAuthContext.Provider, { value: mockValue }, children);
+  };
+  
+  const useAdminAuth = jest.fn(() => {
+    const context = useContext(MockAdminAuthContext);
+    if (context === undefined) {
+      throw new Error("useAdminAuth must be used within an AdminAuthProvider");
+    }
+    return context;
+  });
+  
   return {
-    ...mockUtils,
-    useAdminAuth: mockUseAdminAuthFn,
+    useUserType: jest.fn(() => ({ userType: "guided", setUserType: jest.fn() })),
+    useMobileMenu: jest.fn(() => ({ setIsMobileMenuOpen: jest.fn() })),
+    useTheme: jest.fn(() => ({ isDarkMode: false, toggleDarkMode: jest.fn() })),
+    useAuth: jest.fn(() => ({
+      user: null,
+      isAuthenticated: false,
+      isLoading: false,
+      signOut: jest.fn(),
+    })),
+    AdminAuthProvider,
+    useAdminAuth,
+    NotificationProvider: ({ children }: { children: React.ReactNode }) => children,
+    useNotifications: jest.fn(() => ({
+      notifications: [],
+      unreadCount: 0,
+      isLoading: false,
+      error: null,
+      markAsRead: jest.fn(),
+      markAllAsRead: jest.fn(),
+      refreshNotifications: jest.fn(),
+    })),
+    ThemeProvider: ({ children }: { children: React.ReactNode }) => children,
   };
 });
+
+// Get the mock function after the mock is set up
+let mockUseAdminAuth: jest.Mock;
+let AdminAuthProvider: React.FC<{ children: React.ReactNode }>;
+beforeAll(() => {
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
+  const contextsModule = require("@elzatona/contexts");
+  mockUseAdminAuth = contextsModule.useAdminAuth as jest.Mock;
+  AdminAuthProvider = contextsModule.AdminAuthProvider;
+  
+  // Debug: Log the mock function to ensure it's being set up correctly
+  console.log("Mock useAdminAuth set up:", typeof mockUseAdminAuth);
+  console.log("Is mock function:", typeof mockUseAdminAuth.mockReturnValue);
+});
+
+// Create a test wrapper component that provides the mock context
+const TestWrapper = ({ children }: { children: React.ReactNode }) => {
+  return React.createElement(AdminAuthProvider, { children });
+};
+
+// Helper function to render with AdminAuthProvider
+const renderWithProvider = (component: React.ReactElement) => {
+  // Debug: Log the mock call to see if it's being called
+  console.log("Mock useAdminAuth calls:", mockUseAdminAuth.mock.calls);
+  return render(<TestWrapper>{component}</TestWrapper>);
+};
 
 // Mock shared components
 jest.mock("@elzatona/common-ui", () => {
@@ -148,7 +213,7 @@ jest.mock("next/navigation", () => ({
 describe("A-UT-006: Admin Login Page Renders", () => {
   beforeEach(() => {
     jest.clearAllMocks();
-    mockUseAdminAuthFn.mockReturnValue({
+    mockUseAdminAuth.mockReturnValue({
       isAuthenticated: false,
       isLoading: false,
       login: mockLogin,
@@ -158,39 +223,39 @@ describe("A-UT-006: Admin Login Page Renders", () => {
   });
 
   it("should render without errors", () => {
-    const { container } = render(<AdminLoginPage />);
+    const { container } = renderWithProvider(<AdminLoginPage />);
     expect(container).toBeInTheDocument();
   });
 
   it("should render login form", () => {
-    render(<AdminLoginPage />);
+    renderWithProvider(<AdminLoginPage />);
     expect(screen.getByText(/Admin Login/i)).toBeInTheDocument();
     expect(screen.getByLabelText(/Email Address/i)).toBeInTheDocument();
     expect(screen.getByLabelText(/Password/i)).toBeInTheDocument();
   });
 
   it("should have email input field", () => {
-    render(<AdminLoginPage />);
+    renderWithProvider(<AdminLoginPage />);
     const emailInput = screen.getByLabelText(/Email Address/i);
     expect(emailInput).toBeInTheDocument();
     expect(emailInput).toHaveAttribute("type", "email");
   });
 
   it("should have password input field", () => {
-    render(<AdminLoginPage />);
+    renderWithProvider(<AdminLoginPage />);
     const passwordInput = screen.getByLabelText(/Password/i);
     expect(passwordInput).toBeInTheDocument();
     expect(passwordInput).toHaveAttribute("type", "password");
   });
 
   it("should have Sign In button", () => {
-    render(<AdminLoginPage />);
+    renderWithProvider(<AdminLoginPage />);
     const submitButton = screen.getByRole("button", { name: /Sign In/i });
     expect(submitButton).toBeInTheDocument();
   });
 
   it("should have Back to Home link", () => {
-    render(<AdminLoginPage />);
+    renderWithProvider(<AdminLoginPage />);
     const homeLink = screen.getByRole("link", { name: /Back to Home/i });
     expect(homeLink).toBeInTheDocument();
     expect(homeLink).toHaveAttribute("href", "/");
@@ -200,8 +265,7 @@ describe("A-UT-006: Admin Login Page Renders", () => {
 describe("A-UT-007: Form Inputs Handle Changes", () => {
   beforeEach(() => {
     jest.clearAllMocks();
-
-    mockUseAdminAuthFn.mockReturnValue({
+    mockUseAdminAuth.mockReturnValue({
       isAuthenticated: false,
       isLoading: false,
       login: mockLogin,
@@ -211,33 +275,29 @@ describe("A-UT-007: Form Inputs Handle Changes", () => {
   });
 
   it("should update email input on change", async () => {
-    render(<AdminLoginPage />);
+    renderWithProvider(<AdminLoginPage />);
     const emailInput = screen.getByLabelText(
       /Email Address/i,
     ) as HTMLInputElement;
 
-    await act(async () => {
-      fireEvent.change(emailInput, { target: { value: ADMIN_EMAIL } });
-    });
+    fireEvent.change(emailInput, { target: { value: "test@example.com" } });
 
-    expect(emailInput.value).toBe(ADMIN_EMAIL);
+    expect(emailInput.value).toBe("test@example.com");
   });
 
   it("should update password input on change", async () => {
-    render(<AdminLoginPage />);
+    renderWithProvider(<AdminLoginPage />);
     const passwordInput = screen.getByLabelText(
       /Password/i,
     ) as HTMLInputElement;
 
-    await act(async () => {
-      fireEvent.change(passwordInput, { target: { value: ADMIN_PASSWORD } });
-    });
+    fireEvent.change(passwordInput, { target: { value: "password123" } });
 
-    expect(passwordInput.value).toBe(ADMIN_PASSWORD);
+    expect(passwordInput.value).toBe("password123");
   });
 
   it("should update state correctly on input changes", async () => {
-    render(<AdminLoginPage />);
+    renderWithProvider(<AdminLoginPage />);
     const emailInput = screen.getByLabelText(
       /Email Address/i,
     ) as HTMLInputElement;
@@ -245,21 +305,18 @@ describe("A-UT-007: Form Inputs Handle Changes", () => {
       /Password/i,
     ) as HTMLInputElement;
 
-    await act(async () => {
-      fireEvent.change(emailInput, { target: { value: "test@example.com" } });
-      fireEvent.change(passwordInput, { target: { value: "testpass" } });
-    });
+    fireEvent.change(emailInput, { target: { value: "test@example.com" } });
+    fireEvent.change(passwordInput, { target: { value: "password123" } });
 
     expect(emailInput.value).toBe("test@example.com");
-    expect(passwordInput.value).toBe("testpass");
+    expect(passwordInput.value).toBe("password123");
   });
 });
 
 describe("A-UT-008: Form Validation", () => {
   beforeEach(() => {
     jest.clearAllMocks();
-
-    mockUseAdminAuthFn.mockReturnValue({
+    mockUseAdminAuth.mockReturnValue({
       isAuthenticated: false,
       isLoading: false,
       login: mockLogin,
@@ -269,7 +326,7 @@ describe("A-UT-008: Form Validation", () => {
   });
 
   it("should show error for empty email", async () => {
-    render(<AdminLoginPage />);
+    renderWithProvider(<AdminLoginPage />);
     const submitButton = screen.getByRole("button", { name: /Sign In/i });
     const form = submitButton.closest("form");
 
@@ -285,7 +342,7 @@ describe("A-UT-008: Form Validation", () => {
   });
 
   it("should show error for invalid email format", async () => {
-    render(<AdminLoginPage />);
+    renderWithProvider(<AdminLoginPage />);
     const emailInput = screen.getByLabelText(
       /Email Address/i,
     ) as HTMLInputElement;
@@ -300,7 +357,7 @@ describe("A-UT-008: Form Validation", () => {
   });
 
   it("should require password field", async () => {
-    render(<AdminLoginPage />);
+    renderWithProvider(<AdminLoginPage />);
     const passwordInput = screen.getByLabelText(
       /Password/i,
     ) as HTMLInputElement;
@@ -325,7 +382,7 @@ describe("A-UT-009: Loading State", () => {
   });
 
   it("should show loading state during submission", async () => {
-    mockUseAdminAuthFn.mockReturnValue({
+    mockUseAdminAuth.mockReturnValue({
       isAuthenticated: false,
       isLoading: false,
       login: mockLogin,
@@ -333,7 +390,7 @@ describe("A-UT-009: Loading State", () => {
       user: null,
     });
 
-    render(<AdminLoginPage />);
+    renderWithProvider(<AdminLoginPage />);
     const emailInput = screen.getByLabelText(/Email Address/i);
     const passwordInput = screen.getByLabelText(/Password/i);
     const submitButton = screen.getByRole("button", { name: /Sign In/i });
@@ -352,7 +409,7 @@ describe("A-UT-009: Loading State", () => {
   });
 
   it("should show loading spinner when isLoading is true", () => {
-    mockUseAdminAuthFn.mockReturnValue({
+    mockUseAdminAuth.mockReturnValue({
       isAuthenticated: false,
       isLoading: true,
       login: mockLogin,
@@ -360,7 +417,7 @@ describe("A-UT-009: Loading State", () => {
       user: null,
     });
 
-    render(<AdminLoginPage />);
+    renderWithProvider(<AdminLoginPage />);
     expect(screen.getByText(/Loading/i)).toBeInTheDocument();
   });
 });
@@ -368,8 +425,7 @@ describe("A-UT-009: Loading State", () => {
 describe("A-UT-010: Error Message Display", () => {
   beforeEach(() => {
     jest.clearAllMocks();
-
-    mockUseAdminAuthFn.mockReturnValue({
+    mockUseAdminAuth.mockReturnValue({
       isAuthenticated: false,
       isLoading: false,
       login: mockLogin,
@@ -384,7 +440,7 @@ describe("A-UT-010: Error Message Display", () => {
       error: "Invalid credentials",
     });
 
-    render(<AdminLoginPage />);
+    renderWithProvider(<AdminLoginPage />);
     const emailInput = screen.getByLabelText(/Email Address/i);
     const passwordInput = screen.getByLabelText(/Password/i);
     const submitButton = screen.getByRole("button", { name: /Sign In/i });
@@ -408,7 +464,7 @@ describe("A-UT-010: Error Message Display", () => {
       .mockResolvedValueOnce({ success: false, error: "First error" })
       .mockResolvedValueOnce({ success: true });
 
-    render(<AdminLoginPage />);
+    renderWithProvider(<AdminLoginPage />);
     const emailInput = screen.getByLabelText(/Email Address/i);
     const passwordInput = screen.getByLabelText(/Password/i);
     const submitButton = screen.getByRole("button", { name: /Sign In/i });
@@ -443,7 +499,7 @@ describe("A-UT-010: Error Message Display", () => {
   it("should handle network errors", async () => {
     mockLogin.mockRejectedValue(new Error("Network error"));
 
-    render(<AdminLoginPage />);
+    renderWithProvider(<AdminLoginPage />);
     const emailInput = screen.getByLabelText(/Email Address/i);
     const passwordInput = screen.getByLabelText(/Password/i);
     const submitButton = screen.getByRole("button", { name: /Sign In/i });
@@ -466,8 +522,7 @@ describe("A-UT-010: Error Message Display", () => {
 describe("A-UT-SNAPSHOT: Admin Login Page Snapshot Tests", () => {
   beforeEach(() => {
     jest.clearAllMocks();
-
-    mockUseAdminAuthFn.mockReturnValue({
+    mockUseAdminAuth.mockReturnValue({
       isAuthenticated: false,
       isLoading: false,
       login: mockLogin,
@@ -477,12 +532,12 @@ describe("A-UT-SNAPSHOT: Admin Login Page Snapshot Tests", () => {
   });
 
   it("should match admin login page snapshot (default state)", () => {
-    const { container } = render(<AdminLoginPage />);
+    const { container } = renderWithProvider(<AdminLoginPage />);
     expect(container.firstChild).toMatchSnapshot("admin-login-default");
   });
 
   it("should match admin login page snapshot (loading state)", () => {
-    mockUseAdminAuthFn.mockReturnValue({
+    mockUseAdminAuth.mockReturnValue({
       isAuthenticated: false,
       isLoading: true,
       login: mockLogin,
@@ -490,12 +545,12 @@ describe("A-UT-SNAPSHOT: Admin Login Page Snapshot Tests", () => {
       user: null,
     });
 
-    const { container } = render(<AdminLoginPage />);
+    const { container } = renderWithProvider(<AdminLoginPage />);
     expect(container.firstChild).toMatchSnapshot("admin-login-loading");
   });
 
   it("should match admin login page snapshot (with form values)", () => {
-    const { container } = render(<AdminLoginPage />);
+    const { container } = renderWithProvider(<AdminLoginPage />);
 
     const emailInput = screen.getByLabelText(/Email Address/i);
     const passwordInput = screen.getByLabelText(/Password/i);
@@ -519,7 +574,7 @@ describe("A-UT-SNAPSHOT: Admin Login Page Snapshot Tests", () => {
       error: "Invalid credentials",
     });
 
-    const { container } = render(<AdminLoginPage />);
+    const { container } = renderWithProvider(<AdminLoginPage />);
     const emailInput = screen.getByLabelText(/Email Address/i);
     const passwordInput = screen.getByLabelText(/Password/i);
     const submitButton = screen.getByRole("button", { name: /Sign In/i });
