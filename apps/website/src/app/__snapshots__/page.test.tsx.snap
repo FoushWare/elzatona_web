@@ -1,0 +1,181 @@
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+
+exports[`HomePage Snapshot Tests should match home page snapshot (default state): home-page-default 1`] = `
+<div
+  data-testid="error-boundary"
+>
+  <div
+    data-testid="home-page-layout"
+  >
+    <div
+      data-testid="user-type"
+    >
+      null
+    </div>
+    <div
+      data-testid="show-animation"
+    >
+      true
+    </div>
+    <div
+      data-testid="has-active-plan"
+    >
+      false
+    </div>
+    <button
+      data-testid="guided-click"
+    >
+      Guided Learning
+    </button>
+    <button
+      data-testid="freestyle-click"
+    >
+      Freestyle Practice
+    </button>
+  </div>
+</div>
+`;
+
+exports[`HomePage Snapshot Tests should match home page snapshot (loading state): home-page-loading 1`] = `
+<div
+  data-testid="error-boundary"
+>
+  <div
+    data-testid="home-page-layout"
+  >
+    <div
+      data-testid="user-type"
+    >
+      null
+    </div>
+    <div
+      data-testid="show-animation"
+    >
+      true
+    </div>
+    <div
+      data-testid="has-active-plan"
+    >
+      false
+    </div>
+    <button
+      data-testid="guided-click"
+    >
+      Guided Learning
+    </button>
+    <button
+      data-testid="freestyle-click"
+    >
+      Freestyle Practice
+    </button>
+  </div>
+</div>
+`;
+
+exports[`HomePage Snapshot Tests should match home page snapshot (with active plan): home-page-with-active-plan 1`] = `
+<div
+  data-testid="error-boundary"
+>
+  <div
+    data-testid="home-page-layout"
+  >
+    <div
+      data-testid="user-type"
+    >
+      null
+    </div>
+    <div
+      data-testid="show-animation"
+    >
+      false
+    </div>
+    <div
+      data-testid="has-active-plan"
+    >
+      true
+    </div>
+    <button
+      data-testid="guided-click"
+    >
+      Guided Learning
+    </button>
+    <button
+      data-testid="freestyle-click"
+    >
+      Freestyle Practice
+    </button>
+  </div>
+</div>
+`;
+
+exports[`HomePage Snapshot Tests should match home page snapshot (with guided user type): home-page-guided 1`] = `
+<div
+  data-testid="error-boundary"
+>
+  <div
+    data-testid="home-page-layout"
+  >
+    <div
+      data-testid="user-type"
+    >
+      guided
+    </div>
+    <div
+      data-testid="show-animation"
+    >
+      true
+    </div>
+    <div
+      data-testid="has-active-plan"
+    >
+      false
+    </div>
+    <button
+      data-testid="guided-click"
+    >
+      Guided Learning
+    </button>
+    <button
+      data-testid="freestyle-click"
+    >
+      Freestyle Practice
+    </button>
+  </div>
+</div>
+`;
+
+exports[`HomePage Snapshot Tests should match home page snapshot (with self-directed user type): home-page-self-directed 1`] = `
+<div
+  data-testid="error-boundary"
+>
+  <div
+    data-testid="home-page-layout"
+  >
+    <div
+      data-testid="user-type"
+    >
+      self-directed
+    </div>
+    <div
+      data-testid="show-animation"
+    >
+      true
+    </div>
+    <div
+      data-testid="has-active-plan"
+    >
+      false
+    </div>
+    <button
+      data-testid="guided-click"
+    >
+      Guided Learning
+    </button>
+    <button
+      data-testid="freestyle-click"
+    >
+      Freestyle Practice
+    </button>
+  </div>
+</div>
+`;
