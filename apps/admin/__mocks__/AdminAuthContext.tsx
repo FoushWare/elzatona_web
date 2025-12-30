@@ -1,7 +1,11 @@
 import React from "react";
 
 // Mock all context exports to ensure complete override
-export const AdminAuthProvider = ({ children }: { children: React.ReactNode }) => children;
+export const AdminAuthProvider = ({
+  children,
+}: {
+  children: React.ReactNode;
+}) => children;
 
 export const useAdminAuth = jest.fn(() => ({
   isAuthenticated: false,
@@ -34,8 +38,13 @@ export const useAuth = jest.fn(() => ({
 }));
 
 export const useCookieAuth = jest.fn(() => ({}));
-export const useLanguage = jest.fn(() => ({ language: "en", setLanguage: jest.fn() }));
-export const useMobileMenu = jest.fn(() => ({ setIsMobileMenuOpen: jest.fn() }));
+export const useLanguage = jest.fn(() => ({
+  language: "en",
+  setLanguage: jest.fn(),
+}));
+export const useMobileMenu = jest.fn(() => ({
+  setIsMobileMenuOpen: jest.fn(),
+}));
 export const useNotifications = jest.fn(() => ({
   notifications: [],
   unreadCount: 0,
@@ -46,10 +55,21 @@ export const useNotifications = jest.fn(() => ({
   refreshNotifications: jest.fn(),
 }));
 export const useOnboarding = jest.fn(() => ({}));
-export const useTheme = jest.fn(() => ({ isDarkMode: false, toggleDarkMode: jest.fn() }));
+export const useTheme = jest.fn(() => ({
+  isDarkMode: false,
+  toggleDarkMode: jest.fn(),
+}));
 export const useUserPreferences = jest.fn(() => ({}));
-export const useUserType = jest.fn(() => ({ userType: "guided", setUserType: jest.fn() }));
+export const useUserType = jest.fn(() => ({
+  userType: "guided",
+  setUserType: jest.fn(),
+}));
 
 // Mock providers
-export const NotificationProvider = ({ children }: { children: React.ReactNode }) => children;
-export const ThemeProvider = ({ children }: { children: React.ReactNode }) => children;
+export const NotificationProvider = ({
+  children,
+}: {
+  children: React.ReactNode;
+}) => children;
+export const ThemeProvider = ({ children }: { children: React.ReactNode }) =>
+  children;

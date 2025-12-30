@@ -41,9 +41,12 @@ const mockRefetch = jest.fn();
 // Override the specific AdminAuthContext to bypass the context check
 jest.mock("@elzatona/contexts", () => {
   const React = jest.requireActual("react");
-  
+
   return {
-    useUserType: jest.fn(() => ({ userType: "guided", setUserType: jest.fn() })),
+    useUserType: jest.fn(() => ({
+      userType: "guided",
+      setUserType: jest.fn(),
+    })),
     useMobileMenu: jest.fn(() => ({ setIsMobileMenuOpen: jest.fn() })),
     useTheme: jest.fn(() => ({ isDarkMode: false, toggleDarkMode: jest.fn() })),
     useAuth: jest.fn(() => ({
@@ -52,7 +55,8 @@ jest.mock("@elzatona/contexts", () => {
       isLoading: false,
       signOut: jest.fn(),
     })),
-    AdminAuthProvider: ({ children }: { children: React.ReactNode }) => children,
+    AdminAuthProvider: ({ children }: { children: React.ReactNode }) =>
+      children,
     // Mock useAdminAuth to return the mock data directly without context check
     useAdminAuth: jest.fn(() => ({
       isAuthenticated: false,
@@ -62,7 +66,8 @@ jest.mock("@elzatona/contexts", () => {
       user: null,
       error: null,
     })),
-    NotificationProvider: ({ children }: { children: React.ReactNode }) => children,
+    NotificationProvider: ({ children }: { children: React.ReactNode }) =>
+      children,
     useNotifications: jest.fn(() => ({
       notifications: [],
       unreadCount: 0,

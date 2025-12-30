@@ -46,7 +46,8 @@ const config = {
   moduleNameMapper: {
     "^@/(.*)$": "<rootDir>/src/$1",
     "^@elzatona/contexts$": "<rootDir>/__mocks__/AdminAuthContext.tsx",
-    "^@elzatona/contexts/lib/AdminAuthContext$": "<rootDir>/__mocks__/AdminAuthContext.tsx",
+    "^@elzatona/contexts/lib/AdminAuthContext$":
+      "<rootDir>/__mocks__/AdminAuthContext.tsx",
     "^@elzatona/common-ui$": "<rootDir>/../../libs/common-ui/src/index.ts",
     "^@elzatona/hooks$": "<rootDir>/../../libs/hooks/src/index.ts",
     "^lucide-react$":
