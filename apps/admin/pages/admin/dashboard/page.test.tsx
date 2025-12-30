@@ -3,11 +3,19 @@
  * Task: A-003 - Admin Dashboard
  */
 
+// Load environment variables automatically (detects test vs production)
+// Priority: .env.test.local > .env.test > .env.local
+// In CI: Uses GitHub Secrets automatically
+import { loadTestEnvironment } from "../lib/test-env-loader";
+loadTestEnvironment();
+
 import React from "react";
 import { render, screen, fireEvent } from "@testing-library/react";
 import "@testing-library/jest-dom";
 import AdminDashboard from "./page";
-import { useAdminAuth } from "@elzatona/contexts";
+
+// Declare mock functions at top level before jest.mock() calls
+const mockRefetch = jest.fn();
 
 // Mock shared contexts
 jest.mock("@elzatona/contexts", () => {
@@ -15,95 +23,71 @@ jest.mock("@elzatona/contexts", () => {
   return {
     ...actual,
     useAdminAuth: jest.fn(),
-    AdminAuthProvider: ({ children }: { children: React.ReactNode }) => (
-      <>{children}</>
-    ),
-    NotificationProvider: ({ children }: { children: React.ReactNode }) => (
-      <>{children}</>
-    ),
+    AdminAuthProvider: ({ children }) => children,
+    NotificationProvider: ({ children }) => children,
   };
 });
 
 // Mock shared hooks
-const mockRefetch = jest.fn();
 jest.mock("@elzatona/hooks", () => ({
-  useAdminStats: jest.fn(() => ({
-    data: {
-      questions: 100,
-      categories: 10,
-      topics: 50,
-      learningCards: 5,
-      learningPlans: 3,
-      frontendTasks: 20,
-      problemSolvingTasks: 15,
-      totalContent: 200,
-      totalUsers: 50,
-    },
-    isLoading: false,
-    error: null,
-    refetch: mockRefetch,
-    isRefetching: false,
-  })),
+  useAdminStats: jest.fn(),
 }));
 
 // Mock @elzatona/common-ui
 jest.mock("@elzatona/common-ui", () => {
   const React = jest.requireActual("react");
   return {
-    AdminDashboardTemplate: ({
-      welcomeTitle,
-      welcomeSubtitle,
-      refreshButton,
-      stats,
-      quickActions,
-    }: {
-      welcomeTitle: string;
-      welcomeSubtitle: React.ReactNode;
-      refreshButton?: {
-        onClick: () => void;
-        loading?: boolean;
-        disabled?: boolean;
-      };
-      stats: { metrics: unknown[]; loading?: boolean };
-      quickActions: {
-        actions: Array<{ title: string; description: string; href: string }>;
-      };
-    }) => (
-      <div data-testid="admin-dashboard-template">
-        <h1>{welcomeTitle}</h1>
-        <div>{welcomeSubtitle}</div>
-        {refreshButton && (
-          <button
-            onClick={refreshButton.onClick}
-            disabled={refreshButton.disabled}
-          >
-            {refreshButton.loading ? "Refreshing..." : "Refresh"}
-          </button>
-        )}
-        <div data-testid="stats-grid">
-          {stats.metrics.map(
-            (
-              metric: { label: string; value: string | number },
-              index: number,
-            ) => (
-              <div key={index}>
-                {metric.label}: {metric.value}
-              </div>
-            ),
-          )}
-        </div>
-        <div data-testid="quick-actions">
-          {quickActions.actions.map((action, index) => (
-            <button
-              key={index}
-              onClick={() => (window.location.href = action.href)}
-            >
-              {action.title}
-            </button>
-          ))}
-        </div>
-      </div>
-    ),
+    AdminDashboardTemplate: function AdminDashboardTemplate(props) {
+      const {
+        welcomeTitle,
+        welcomeSubtitle,
+        refreshButton,
+        stats,
+        quickActions,
+      } = props;
+      return React.createElement(
+        "div",
+        { "data-testid": "admin-dashboard-template" },
+        React.createElement("h1", null, welcomeTitle),
+        React.createElement("div", null, welcomeSubtitle),
+        refreshButton &&
+          React.createElement(
+            "button",
+            {
+              onClick: refreshButton.onClick,
+              disabled: refreshButton.disabled,
+            },
+            refreshButton.loading ? "Refreshing..." : "Refresh",
+          ),
+        React.createElement(
+          "div",
+          { "data-testid": "stats-grid" },
+          stats.metrics.map(function (metric, index) {
+            return React.createElement(
+              "div",
+              { key: index },
+              metric.label + ": " + metric.value,
+            );
+          }),
+        ),
+        React.createElement(
+          "div",
+          { "data-testid": "quick-actions" },
+          quickActions.actions.map(function (action, index) {
+            return React.createElement(
+              "button",
+              {
+                key: index,
+                onClick: function () {
+                  window.location.href = action.href;
+                },
+              },
+              action.title,
+            );
+          }),
+        ),
+      );
+    },
   };
 });
 
@@ -114,6 +98,8 @@ describe("A-UT-011: Dashboard Renders", () => {
   beforeEach(() => {
     jest.clearAllMocks();
 
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
+    const { useAdminAuth } = require("@elzatona/contexts");
     (useAdminAuth as jest.Mock).mockReturnValue({
       user: {
         id: "1",
@@ -121,6 +107,26 @@ describe("A-UT-011: Dashboard Renders", () => {
         role: "super_admin",
         name: "Admin User",
       },
+    });
+
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
+    const { useAdminStats } = require("@elzatona/hooks");
+    (useAdminStats as jest.Mock).mockReturnValue({
+      data: {
+        questions: 100,
+        categories: 10,
+        topics: 50,
+        learningCards: 5,
+        learningPlans: 3,
+        frontendTasks: 20,
+        problemSolvingTasks: 15,
+        totalContent: 200,
+        totalUsers: 50,
+      },
+      isLoading: false,
+      error: null,
+      refetch: mockRefetch,
+      isRefetching: false,
     });
   });
 
@@ -145,6 +151,8 @@ describe("A-UT-012: Stats Display", () => {
   beforeEach(() => {
     jest.clearAllMocks();
 
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
+    const { useAdminAuth } = require("@elzatona/contexts");
     (useAdminAuth as jest.Mock).mockReturnValue({
       user: {
         id: "1",
@@ -152,6 +160,26 @@ describe("A-UT-012: Stats Display", () => {
         role: "super_admin",
         name: "Admin User",
       },
+    });
+
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
+    const { useAdminStats } = require("@elzatona/hooks");
+    (useAdminStats as jest.Mock).mockReturnValue({
+      data: {
+        questions: 100,
+        categories: 10,
+        topics: 50,
+        learningCards: 5,
+        learningPlans: 3,
+        frontendTasks: 20,
+        problemSolvingTasks: 15,
+        totalContent: 200,
+        totalUsers: 50,
+      },
+      isLoading: false,
+      error: null,
+      refetch: mockRefetch,
+      isRefetching: false,
     });
   });
 
@@ -207,6 +235,8 @@ describe("A-UT-013: Refresh Functionality", () => {
     jest.clearAllMocks();
     mockRefetch.mockClear();
 
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
+    const { useAdminAuth } = require("@elzatona/contexts");
     (useAdminAuth as jest.Mock).mockReturnValue({
       user: {
         id: "1",
@@ -214,6 +244,26 @@ describe("A-UT-013: Refresh Functionality", () => {
         role: "super_admin",
         name: "Admin User",
       },
+    });
+
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
+    const { useAdminStats } = require("@elzatona/hooks");
+    (useAdminStats as jest.Mock).mockReturnValue({
+      data: {
+        questions: 100,
+        categories: 10,
+        topics: 50,
+        learningCards: 5,
+        learningPlans: 3,
+        frontendTasks: 20,
+        problemSolvingTasks: 15,
+        totalContent: 200,
+        totalUsers: 50,
+      },
+      isLoading: false,
+      error: null,
+      refetch: mockRefetch,
+      isRefetching: false,
     });
   });
 
@@ -236,6 +286,8 @@ describe("A-UT-SNAPSHOT: Admin Dashboard Snapshot Tests", () => {
   beforeEach(() => {
     jest.clearAllMocks();
 
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
+    const { useAdminAuth } = require("@elzatona/contexts");
     (useAdminAuth as jest.Mock).mockReturnValue({
       user: {
         id: "1",
@@ -244,6 +296,26 @@ describe("A-UT-SNAPSHOT: Admin Dashboard Snapshot Tests", () => {
         name: "Admin User",
       },
     });
+
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
+    const { useAdminStats } = require("@elzatona/hooks");
+    (useAdminStats as jest.Mock).mockReturnValue({
+      data: {
+        questions: 100,
+        categories: 10,
+        topics: 50,
+        learningCards: 5,
+        learningPlans: 3,
+        frontendTasks: 20,
+        problemSolvingTasks: 15,
+        totalContent: 200,
+        totalUsers: 50,
+      },
+      isLoading: false,
+      error: null,
+      refetch: mockRefetch,
+      isRefetching: false,
+    });
   });
 
   it("should match admin dashboard snapshot (with stats)", () => {
@@ -251,8 +323,9 @@ describe("A-UT-SNAPSHOT: Admin Dashboard Snapshot Tests", () => {
     expect(container.firstChild).toMatchSnapshot("admin-dashboard-with-stats");
   });
 
-  it("should match admin dashboard snapshot (loading state)", async () => {
-    const { useAdminStats } = await import("@elzatona/hooks");
+  it("should match admin dashboard snapshot (loading state)", () => {
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
+    const { useAdminStats } = require("@elzatona/hooks");
     (useAdminStats as jest.Mock).mockReturnValueOnce({
       data: null,
       isLoading: true,
@@ -266,8 +339,9 @@ describe("A-UT-SNAPSHOT: Admin Dashboard Snapshot Tests", () => {
     expect(container.firstChild).toMatchSnapshot("admin-dashboard-loading");
   });
 
-  it("should match admin dashboard snapshot (error state)", async () => {
-    const { useAdminStats } = await import("@elzatona/hooks");
+  it("should match admin dashboard snapshot (error state)", () => {
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
+    const { useAdminStats } = require("@elzatona/hooks");
     (useAdminStats as jest.Mock).mockReturnValueOnce({
       data: null,
       isLoading: false,
@@ -281,8 +355,9 @@ describe("A-UT-SNAPSHOT: Admin Dashboard Snapshot Tests", () => {
     expect(container.firstChild).toMatchSnapshot("admin-dashboard-error");
   });
 
-  it("should match admin dashboard snapshot (empty stats)", async () => {
-    const { useAdminStats } = await import("@elzatona/hooks");
+  it("should match admin dashboard snapshot (empty stats)", () => {
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
+    const { useAdminStats } = require("@elzatona/hooks");
     (useAdminStats as jest.Mock).mockReturnValueOnce({
       data: {
         questions: 0,
