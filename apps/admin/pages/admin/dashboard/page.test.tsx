@@ -18,11 +18,18 @@ import AdminDashboard from "./page";
 const mockRefetch = jest.fn();
 
 // Mock shared contexts
+// IMPORTANT: Do NOT use jest.requireActual here as it loads the real module
+// which includes the real useAdminAuth that throws if not in provider
 jest.mock("@elzatona/contexts", () => {
-  const actual = jest.requireActual("@elzatona/contexts");
   return {
-    ...actual,
-    useAdminAuth: jest.fn(),
+    useAdminAuth: jest.fn(() => ({
+      user: {
+        id: "1",
+        email: "admin@example.com",
+        role: "super_admin",
+        name: "Admin User",
+      },
+    })),
     AdminAuthProvider: ({ children }) => children,
     NotificationProvider: ({ children }) => children,
   };
