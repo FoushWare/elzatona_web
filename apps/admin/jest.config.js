@@ -42,6 +42,7 @@ const config = {
   cacheDirectory: "<rootDir>/.jest-cache",
   ...(process.env.JEST_RUN_IN_BAND === "true" ? { runInBand: true } : {}),
   // Add more setup options before each test is run
+  setupFiles: ["<rootDir>/jest.pre-setup.js"],
   setupFilesAfterEnv: ["<rootDir>/jest.setup.js"],
   moduleNameMapper: {
     "^@/(.*)$": "<rootDir>/src/$1",
