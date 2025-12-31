@@ -37,49 +37,7 @@ try {
 // Declare mock function at top level before jest.mock() calls
 const mockRefetch = jest.fn();
 
-// Mock shared contexts
-// Override the specific AdminAuthContext to bypass the context check
-jest.mock("@elzatona/contexts", () => {
-  const React = jest.requireActual("react");
-
-  return {
-    useUserType: jest.fn(() => ({
-      userType: "guided",
-      setUserType: jest.fn(),
-    })),
-    useMobileMenu: jest.fn(() => ({ setIsMobileMenuOpen: jest.fn() })),
-    useTheme: jest.fn(() => ({ isDarkMode: false, toggleDarkMode: jest.fn() })),
-    useAuth: jest.fn(() => ({
-      user: null,
-      isAuthenticated: false,
-      isLoading: false,
-      signOut: jest.fn(),
-    })),
-    AdminAuthProvider: ({ children }: { children: React.ReactNode }) =>
-      children,
-    // Mock useAdminAuth to return the mock data directly without context check
-    useAdminAuth: jest.fn(() => ({
-      isAuthenticated: false,
-      isLoading: false,
-      login: jest.fn(),
-      logout: jest.fn(),
-      user: null,
-      error: null,
-    })),
-    NotificationProvider: ({ children }: { children: React.ReactNode }) =>
-      children,
-    useNotifications: jest.fn(() => ({
-      notifications: [],
-      unreadCount: 0,
-      isLoading: false,
-      error: null,
-      markAsRead: jest.fn(),
-      markAllAsRead: jest.fn(),
-      refreshNotifications: jest.fn(),
-    })),
-    ThemeProvider: ({ children }: { children: React.ReactNode }) => children,
-  };
-});
+// Mock shared contexts are now handled in jest.setup.js
 
 // Get the mock function after the mock is set up
 let mockUseAdminAuth: jest.Mock;
