@@ -43,10 +43,10 @@ const eslintConfig = [
       "codeql-database/**", // CodeQL generated database files
     ],
   },
+  ...compat.extends("next/core-web-vitals", "next/typescript"),
   {
     // Configure Next.js app directory pages rule
     rules: {
-      "@next/next/no-html-link-for-pages": ["error", "apps/website/src/app"],
       // Allow variables prefixed with _ to be unused (common pattern for intentionally unused vars)
       "@typescript-eslint/no-unused-vars": [
         "warn",
@@ -60,16 +60,6 @@ const eslintConfig = [
       "@typescript-eslint/triple-slash-reference": "off",
       // Allow any types (warn instead of error to not block builds)
       "@typescript-eslint/no-explicit-any": "warn",
-    },
-  },
-  ...compat.extends("next/core-web-vitals", "next/typescript"),
-  {
-    // Override Next.js defaults AFTER extends to ensure our rules take precedence
-    rules: {
-      // Treat no-explicit-any as warning instead of error
-      "@typescript-eslint/no-explicit-any": "warn",
-      // Disable triple-slash-reference completely
-      "@typescript-eslint/triple-slash-reference": "off",
       // Allow unescaped entities (warnings only)
       "react/no-unescaped-entities": "warn",
     },
