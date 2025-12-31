@@ -62,13 +62,16 @@ const eslintConfig = [
       "@typescript-eslint/no-explicit-any": "warn",
       // Allow unescaped entities (warnings only)
       "react/no-unescaped-entities": "warn",
+      // Disable pages directory rule for app directory structure
+      "@next/next/no-html-link-for-pages": "off",
     },
   },
   {
     // Allow @ts-nocheck in storybook and test files
-    files: ["**/*.stories.tsx", "**/*.test.tsx", "**/*.test.ts"],
+    files: ["**/*.stories.tsx", "**/*.test.tsx", "**/*.test.ts", "**/jest.config.js", "**/jest.setup.js", "**/jest.pre-setup.js"],
     rules: {
       "@typescript-eslint/ban-ts-comment": "off",
+      "@typescript-eslint/no-require-imports": "off",
     },
   },
 ];
