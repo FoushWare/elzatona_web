@@ -1,0 +1,190 @@
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+
+exports[`A-UT-SNAPSHOT: Admin Login Page Snapshot Tests should match admin login page snapshot (default state): admin-login-default 1`] = `
+<div
+  data-testid="admin-login-page-template"
+>
+  <nav
+    data-testid="admin-login-navbar"
+  >
+    Admin Navbar
+  </nav>
+  <h1>
+    Admin Login
+  </h1>
+  <p>
+    Access the admin dashboard
+  </p>
+  <div>
+    <form
+      data-testid="admin-login-form"
+    >
+      <label
+        for="email"
+      >
+        Email Address
+      </label>
+      <input
+        aria-label="Email Address"
+        id="email"
+        required=""
+        type="email"
+        value=""
+      />
+      <label
+        for="password"
+      >
+        Password
+      </label>
+      <input
+        aria-label="Password"
+        id="password"
+        required=""
+        type="password"
+        value=""
+      />
+      <button
+        type="submit"
+      >
+        Sign In
+      </button>
+    </form>
+  </div>
+  <a
+    href="/"
+  >
+    ← Back to Home
+  </a>
+</div>
+`;
+
+exports[`A-UT-SNAPSHOT: Admin Login Page Snapshot Tests should match admin login page snapshot (error state): admin-login-error 1`] = `
+<div
+  data-testid="admin-login-page-template"
+>
+  <nav
+    data-testid="admin-login-navbar"
+  >
+    Admin Navbar
+  </nav>
+  <h1>
+    Admin Login
+  </h1>
+  <p>
+    Access the admin dashboard
+  </p>
+  <div>
+    <form
+      data-testid="admin-login-form"
+    >
+      <label
+        for="email"
+      >
+        Email Address
+      </label>
+      <input
+        aria-label="Email Address"
+        id="email"
+        required=""
+        type="email"
+        value="wrong@example.com"
+      />
+      <label
+        for="password"
+      >
+        Password
+      </label>
+      <input
+        aria-label="Password"
+        id="password"
+        required=""
+        type="password"
+        value="wrong"
+      />
+      <button
+        type="submit"
+      >
+        Sign In
+      </button>
+    </form>
+  </div>
+  <a
+    href="/"
+  >
+    ← Back to Home
+  </a>
+</div>
+`;
+
+exports[`A-UT-SNAPSHOT: Admin Login Page Snapshot Tests should match admin login page snapshot (loading state): admin-login-loading 1`] = `
+<div
+  data-testid="admin-login-page-template-loading"
+>
+  <nav
+    data-testid="admin-login-navbar"
+  >
+    Admin Navbar
+  </nav>
+  <div>
+    Loading...
+  </div>
+</div>
+`;
+
+exports[`A-UT-SNAPSHOT: Admin Login Page Snapshot Tests should match admin login page snapshot (with form values): admin-login-with-form-values 1`] = `
+<div
+  data-testid="admin-login-page-template"
+>
+  <nav
+    data-testid="admin-login-navbar"
+  >
+    Admin Navbar
+  </nav>
+  <h1>
+    Admin Login
+  </h1>
+  <p>
+    Access the admin dashboard
+  </p>
+  <div>
+    <form
+      data-testid="admin-login-form"
+    >
+      <label
+        for="email"
+      >
+        Email Address
+      </label>
+      <input
+        aria-label="Email Address"
+        id="email"
+        required=""
+        type="email"
+        value="test-admin@example.com"
+      />
+      <label
+        for="password"
+      >
+        Password
+      </label>
+      <input
+        aria-label="Password"
+        id="password"
+        required=""
+        type="password"
+        value="test-password-123"
+      />
+      <button
+        type="submit"
+      >
+        Sign In
+      </button>
+    </form>
+  </div>
+  <a
+    href="/"
+  >
+    ← Back to Home
+  </a>
+</div>
+`;

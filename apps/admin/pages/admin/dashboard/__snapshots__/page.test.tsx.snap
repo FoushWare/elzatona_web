@@ -1,0 +1,257 @@
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+
+exports[`A-UT-SNAPSHOT: Admin Dashboard Snapshot Tests should match admin dashboard snapshot (empty stats): admin-dashboard-empty-stats 1`] = `
+<div
+  data-testid="admin-dashboard-template"
+>
+  <h1>
+    🎯 Admin Dashboard
+  </h1>
+  <div>
+    Welcome back,
+     
+    <span
+      class="font-semibold text-blue-600 dark:text-blue-400"
+    >
+      Admin User
+    </span>
+     
+    (
+    super_admin
+    ) - Unified Learning Management System
+  </div>
+  <button>
+    Refresh
+  </button>
+  <div
+    data-testid="stats-grid"
+  >
+    <div>
+      Total Questions: 0
+    </div>
+    <div>
+      Learning Cards: 0
+    </div>
+    <div>
+      Learning Plans: 0
+    </div>
+    <div>
+      Topics: 0
+    </div>
+    <div>
+      Categories: 0
+    </div>
+    <div>
+      Total Tasks: 0
+    </div>
+  </div>
+  <div
+    data-testid="quick-actions"
+  >
+    <button>
+      Add New Question
+    </button>
+    <button>
+      Manage Learning Cards
+    </button>
+    <button>
+      Create Frontend Task
+    </button>
+    <button>
+      Add Problem Solving
+    </button>
+  </div>
+</div>
+`;
+
+exports[`A-UT-SNAPSHOT: Admin Dashboard Snapshot Tests should match admin dashboard snapshot (error state): admin-dashboard-error 1`] = `
+<div
+  data-testid="admin-dashboard-template"
+>
+  <h1>
+    🎯 Admin Dashboard
+  </h1>
+  <div>
+    Welcome back,
+     
+    <span
+      class="font-semibold text-blue-600 dark:text-blue-400"
+    >
+      Admin User
+    </span>
+     
+    (
+    super_admin
+    ) - Unified Learning Management System
+  </div>
+  <button>
+    Refresh
+  </button>
+  <div
+    data-testid="stats-grid"
+  >
+    <div>
+      Total Questions: 0
+    </div>
+    <div>
+      Learning Cards: 0
+    </div>
+    <div>
+      Learning Plans: 0
+    </div>
+    <div>
+      Topics: 0
+    </div>
+    <div>
+      Categories: 0
+    </div>
+    <div>
+      Total Tasks: 0
+    </div>
+  </div>
+  <div
+    data-testid="quick-actions"
+  >
+    <button>
+      Add New Question
+    </button>
+    <button>
+      Manage Learning Cards
+    </button>
+    <button>
+      Create Frontend Task
+    </button>
+    <button>
+      Add Problem Solving
+    </button>
+  </div>
+</div>
+`;
+
+exports[`A-UT-SNAPSHOT: Admin Dashboard Snapshot Tests should match admin dashboard snapshot (loading state): admin-dashboard-loading 1`] = `
+<div
+  data-testid="admin-dashboard-template"
+>
+  <h1>
+    🎯 Admin Dashboard
+  </h1>
+  <div>
+    Welcome back,
+     
+    <span
+      class="font-semibold text-blue-600 dark:text-blue-400"
+    >
+      Admin User
+    </span>
+     
+    (
+    super_admin
+    ) - Unified Learning Management System
+  </div>
+  <button>
+    Refresh
+  </button>
+  <div
+    data-testid="stats-grid"
+  >
+    <div>
+      Total Questions: 0
+    </div>
+    <div>
+      Learning Cards: 0
+    </div>
+    <div>
+      Learning Plans: 0
+    </div>
+    <div>
+      Topics: 0
+    </div>
+    <div>
+      Categories: 0
+    </div>
+    <div>
+      Total Tasks: 0
+    </div>
+  </div>
+  <div
+    data-testid="quick-actions"
+  >
+    <button>
+      Add New Question
+    </button>
+    <button>
+      Manage Learning Cards
+    </button>
+    <button>
+      Create Frontend Task
+    </button>
+    <button>
+      Add Problem Solving
+    </button>
+  </div>
+</div>
+`;
+
+exports[`A-UT-SNAPSHOT: Admin Dashboard Snapshot Tests should match admin dashboard snapshot (with stats): admin-dashboard-with-stats 1`] = `
+<div
+  data-testid="admin-dashboard-template"
+>
+  <h1>
+    🎯 Admin Dashboard
+  </h1>
+  <div>
+    Welcome back,
+     
+    <span
+      class="font-semibold text-blue-600 dark:text-blue-400"
+    >
+      Admin User
+    </span>
+     
+    (
+    super_admin
+    ) - Unified Learning Management System
+  </div>
+  <button>
+    Refresh
+  </button>
+  <div
+    data-testid="stats-grid"
+  >
+    <div>
+      Total Questions: 100
+    </div>
+    <div>
+      Learning Cards: 5
+    </div>
+    <div>
+      Learning Plans: 3
+    </div>
+    <div>
+      Topics: 50
+    </div>
+    <div>
+      Categories: 10
+    </div>
+    <div>
+      Total Tasks: 35
+    </div>
+  </div>
+  <div
+    data-testid="quick-actions"
+  >
+    <button>
+      Add New Question
+    </button>
+    <button>
+      Manage Learning Cards
+    </button>
+    <button>
+      Create Frontend Task
+    </button>
+    <button>
+      Add Problem Solving
+    </button>
+  </div>
+</div>
+`;
