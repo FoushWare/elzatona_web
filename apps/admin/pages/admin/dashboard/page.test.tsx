@@ -112,6 +112,20 @@ describe("A-UT-011: Dashboard Renders", () => {
   beforeEach(() => {
     jest.clearAllMocks();
 
+    // Set up user data in the mock
+    mockUseAdminAuth.mockReturnValue({
+      isAuthenticated: true,
+      isLoading: false,
+      login: jest.fn(),
+      logout: jest.fn(),
+      user: {
+        id: "1",
+        email: "admin@example.com",
+        role: "super_admin",
+        name: "Admin User",
+      },
+    });
+
     mockUseAdminAuthFn.mockReturnValue({
       user: {
         id: "1",
@@ -163,7 +177,12 @@ describe("A-UT-012: Stats Display", () => {
   beforeEach(() => {
     jest.clearAllMocks();
 
-    mockUseAdminAuthFn.mockReturnValue({
+    // Set up user data in the mock
+    mockUseAdminAuth.mockReturnValue({
+      isAuthenticated: true,
+      isLoading: false,
+      login: jest.fn(),
+      logout: jest.fn(),
       user: {
         id: "1",
         email: "admin@example.com",
@@ -211,12 +230,12 @@ describe("A-UT-012: Stats Display", () => {
 
   it("should display topics stat", () => {
     renderWithProvider(<AdminDashboard />);
-    expect(screen.getByText(/^Topics$/i)).toBeInTheDocument();
+    expect(screen.getByText(/Topics: 50/i)).toBeInTheDocument();
   });
 
   it("should display categories stat", () => {
     renderWithProvider(<AdminDashboard />);
-    expect(screen.getByText(/^Categories$/i)).toBeInTheDocument();
+    expect(screen.getByText(/Categories: 10/i)).toBeInTheDocument();
   });
 
   it("should display total tasks stat", () => {
@@ -244,7 +263,12 @@ describe("A-UT-013: Refresh Functionality", () => {
     jest.clearAllMocks();
     mockRefetch.mockClear();
 
-    mockUseAdminAuthFn.mockReturnValue({
+    // Set up user data in the mock
+    mockUseAdminAuth.mockReturnValue({
+      isAuthenticated: true,
+      isLoading: false,
+      login: jest.fn(),
+      logout: jest.fn(),
       user: {
         id: "1",
         email: "admin@example.com",
@@ -293,7 +317,12 @@ describe("A-UT-SNAPSHOT: Admin Dashboard Snapshot Tests", () => {
   beforeEach(() => {
     jest.clearAllMocks();
 
-    mockUseAdminAuthFn.mockReturnValue({
+    // Set up user data in the mock
+    mockUseAdminAuth.mockReturnValue({
+      isAuthenticated: true,
+      isLoading: false,
+      login: jest.fn(),
+      logout: jest.fn(),
       user: {
         id: "1",
         email: "admin@example.com",

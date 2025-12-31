@@ -114,7 +114,7 @@ if (global.Request === undefined) {
 // Mock the contexts module at the earliest possible moment
 jest.mock("@elzatona/contexts", () => {
   const React = require("react");
-  
+
   return {
     AdminAuthProvider: ({ children }) => children,
     useAdminAuth: jest.fn(() => ({
@@ -154,6 +154,9 @@ jest.mock("@elzatona/contexts", () => {
     UserPreferencesContext: React.createContext(undefined),
     useUserPreferences: jest.fn(() => ({})),
     UserTypeContextSafe: React.createContext(undefined),
-    useUserType: jest.fn(() => ({ userType: "guided", setUserType: jest.fn() })),
+    useUserType: jest.fn(() => ({
+      userType: "guided",
+      setUserType: jest.fn(),
+    })),
   };
 });

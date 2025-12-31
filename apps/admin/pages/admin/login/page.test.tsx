@@ -63,7 +63,11 @@ jest.mock("@elzatona/common-ui", () => {
   const React = jest.requireActual("react");
   return {
     AdminLoginNavbar: () =>
-      React.createElement("nav", { "data-testid": "admin-login-navbar" }, "Admin Navbar"),
+      React.createElement(
+        "nav",
+        { "data-testid": "admin-login-navbar" },
+        "Admin Navbar",
+      ),
     AdminLoginPageTemplate: ({
       children,
       isLoading,
@@ -74,59 +78,105 @@ jest.mock("@elzatona/common-ui", () => {
       // Get error state from the mocked useAdminAuth hook
       const contextsModule = require("@elzatona/contexts");
       const { error } = contextsModule.useAdminAuth();
-      
+
       if (isLoading) {
-        return React.createElement("div", { "data-testid": "admin-login-page-template-loading" }, [
-          React.createElement("nav", { key: "navbar", "data-testid": "admin-login-navbar" }, "Admin Navbar"),
-          React.createElement("div", { key: "loading" }, "Loading...")
-        ]);
+        return React.createElement(
+          "div",
+          { "data-testid": "admin-login-page-template-loading" },
+          [
+            React.createElement(
+              "nav",
+              { key: "navbar", "data-testid": "admin-login-navbar" },
+              "Admin Navbar",
+            ),
+            React.createElement("div", { key: "loading" }, "Loading..."),
+          ],
+        );
       }
-      return React.createElement("div", { "data-testid": "admin-login-page-template" }, [
-        React.createElement("nav", { key: "navbar", "data-testid": "admin-login-navbar" }, "Admin Navbar"),
-        React.createElement("h1", { key: "title" }, "Admin Login"),
-        React.createElement("p", { key: "description" }, "Access the admin dashboard"),
-        // Display error message if present
-        error ? React.createElement("div", { key: "error", "data-testid": "error-message" }, error) : null,
-        React.createElement("div", { key: "content" }, children),
-        React.createElement("a", { key: "home-link", href: "/" }, "\u2190 Back to Home"),
-      ]);
+      return React.createElement(
+        "div",
+        { "data-testid": "admin-login-page-template" },
+        [
+          React.createElement(
+            "nav",
+            { key: "navbar", "data-testid": "admin-login-navbar" },
+            "Admin Navbar",
+          ),
+          React.createElement("h1", { key: "title" }, "Admin Login"),
+          React.createElement(
+            "p",
+            { key: "description" },
+            "Access the admin dashboard",
+          ),
+          // Display error message if present
+          error
+            ? React.createElement(
+                "div",
+                { key: "error", "data-testid": "error-message" },
+                error,
+              )
+            : null,
+          React.createElement("div", { key: "content" }, children),
+          React.createElement(
+            "a",
+            { key: "home-link", href: "/" },
+            "\u2190 Back to Home",
+          ),
+        ],
+      );
     },
     AdminLoginFormMolecule: () => {
       const React = jest.requireActual("react");
       const [email, setEmail] = React.useState("");
       const [password, setPassword] = React.useState("");
-      
+
       // Get loading state from the mocked useAdminAuth hook
       const contextsModule = require("@elzatona/contexts");
       const { isLoading } = contextsModule.useAdminAuth();
-      
-      return React.createElement("form", { "data-testid": "admin-login-form" }, [
-        React.createElement("label", { key: "email-label", htmlFor: "email" }, "Email Address"),
-        React.createElement("input", {
-          key: "email-input",
-          id: "email",
-          type: "email",
-          value: email,
-          required: true,
-          onChange: (e) => setEmail(e.target.value),
-          "aria-label": "Email Address",
-        }),
-        React.createElement("label", { key: "password-label", htmlFor: "password" }, "Password"),
-        React.createElement("input", {
-          key: "password-input",
-          id: "password",
-          type: "password",
-          value: password,
-          required: true,
-          onChange: (e) => setPassword(e.target.value),
-          "aria-label": "Password",
-        }),
-        React.createElement("button", {
-          key: "submit-button",
-          type: "submit",
-          disabled: isLoading,
-        }, isLoading ? "Signing In..." : "Sign In"),
-      ]);
+
+      return React.createElement(
+        "form",
+        { "data-testid": "admin-login-form" },
+        [
+          React.createElement(
+            "label",
+            { key: "email-label", htmlFor: "email" },
+            "Email Address",
+          ),
+          React.createElement("input", {
+            key: "email-input",
+            id: "email",
+            type: "email",
+            value: email,
+            required: true,
+            onChange: (e) => setEmail(e.target.value),
+            "aria-label": "Email Address",
+          }),
+          React.createElement(
+            "label",
+            { key: "password-label", htmlFor: "password" },
+            "Password",
+          ),
+          React.createElement("input", {
+            key: "password-input",
+            id: "password",
+            type: "password",
+            value: password,
+            required: true,
+            onChange: (e) => setPassword(e.target.value),
+            "aria-label": "Password",
+          }),
+          React.createElement(
+            "button",
+            {
+              key: "submit-button",
+              type: "submit",
+              disabled: isLoading,
+            },
+            isLoading ? "Signing In..." : "Sign In",
+          ),
+        ],
+      );
     },
   };
 });
@@ -342,10 +392,12 @@ describe("A-UT-009: Loading State", () => {
     });
 
     renderWithProvider(<AdminLoginPage />);
-    
+
     // Should show loading state instead of form
     expect(screen.getByText(/Loading/i)).toBeInTheDocument();
-    expect(screen.getByTestId("admin-login-page-template-loading")).toBeInTheDocument();
+    expect(
+      screen.getByTestId("admin-login-page-template-loading"),
+    ).toBeInTheDocument();
   });
 
   it("should show loading spinner when isLoading is true", () => {
@@ -386,7 +438,7 @@ describe("A-UT-010: Error Message Display", () => {
     });
 
     renderWithProvider(<AdminLoginPage />);
-    
+
     // Check if error message is displayed
     expect(screen.getByText(/Invalid credentials/i)).toBeInTheDocument();
   });
@@ -403,7 +455,7 @@ describe("A-UT-010: Error Message Display", () => {
     });
 
     const { rerender } = renderWithProvider(<AdminLoginPage />);
-    
+
     // Verify error is displayed
     expect(screen.getByText(/First error/i)).toBeInTheDocument();
 
@@ -419,7 +471,7 @@ describe("A-UT-010: Error Message Display", () => {
 
     // Re-render to see the cleared state
     rerender(<AdminLoginPage />);
-    
+
     // Error should be cleared
     expect(screen.queryByText(/First error/i)).not.toBeInTheDocument();
   });
@@ -436,9 +488,11 @@ describe("A-UT-010: Error Message Display", () => {
     });
 
     renderWithProvider(<AdminLoginPage />);
-    
+
     // Check if error message is displayed
-    expect(screen.getByText(/An unexpected error occurred/i)).toBeInTheDocument();
+    expect(
+      screen.getByText(/An unexpected error occurred/i),
+    ).toBeInTheDocument();
   });
 });
 

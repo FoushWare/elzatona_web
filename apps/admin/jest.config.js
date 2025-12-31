@@ -37,13 +37,16 @@ const config = {
   },
   // Use ts-jest for TypeScript and JSX transformation
   transform: {
-    "^.+\\.(js|jsx|ts|tsx)$": ["ts-jest", {
-      tsconfig: {
-        jsx: "react-jsx",
-        esModuleInterop: true,
-        allowSyntheticDefaultImports: true,
-      }
-    }],
+    "^.+\\.(js|jsx|ts|tsx)$": [
+      "ts-jest",
+      {
+        tsconfig: {
+          jsx: "react-jsx",
+          esModuleInterop: true,
+          allowSyntheticDefaultImports: true,
+        },
+      },
+    ],
   },
   moduleFileExtensions: ["ts", "tsx", "js", "jsx", "json"],
   testMatch: [
