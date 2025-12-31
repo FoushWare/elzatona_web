@@ -106,15 +106,15 @@ jobs:
         run: |
           echo "🏗️ Building application for E2E tests..."
           echo "📊 Using TEST database: ${{ secrets.TEST_SUPABASE_URL }}"
-          
+
           # Clear any cached builds to ensure clean build
           rm -rf .next
           rm -rf node_modules/.cache
           rm -rf dist
-          
+
           # Reset Nx cache to prevent memory issues
           npx nx reset --verbose
-          
+
           # Build with increased memory and optimizations
           NODE_OPTIONS="--max-old-space-size=6144" npm run build
         env:
