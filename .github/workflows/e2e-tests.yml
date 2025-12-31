@@ -27,8 +27,8 @@ concurrency:
 jobs:
   e2e-tests:
     name: E2E Tests
-    runs-on: ubuntu-latest
-    timeout-minutes: 30
+    runs-on: ubuntu-latest-4-cores
+    timeout-minutes: 45
 
     steps:
       - name: Checkout repository
@@ -106,14 +106,29 @@ jobs:
         run: |
           echo "🏗️ Building application for E2E tests..."
           echo "📊 Using TEST database: ${{ secrets.TEST_SUPABASE_URL }}"
-          npm run build
+          
+          # Clear any cached builds to ensure clean build
+          rm -rf .next
+          rm -rf node_modules/.cache
+          rm -rf dist
+          
+          # Reset Nx cache to prevent memory issues
+          npx nx reset --verbose
+          
+          # Build with increased memory and optimizations
+          NODE_OPTIONS="--max-old-space-size=6144" npm run build
         env:
-          NODE_OPTIONS: "--max-old-space-size=2048"
+          NODE_OPTIONS: "--max-old-space-size=6144"
           NEXT_TELEMETRY_DISABLED: "1"
+          # Build optimizations
+          NODE_ENV: "production"
+          NEXT_BUILD_WORKERS: "1"
+          ANALYZE: "false"
+          NX_PARALLEL: "false"
+          NX_MAX_WORKERS: "1"
           # CRITICAL: Force test environment
           APP_ENV: "test"
           NEXT_PUBLIC_APP_ENV: "test"
-          NODE_ENV: "test"
           # CRITICAL: Use TEST database credentials
           NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.TEST_SUPABASE_URL }}
           NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.TEST_SUPABASE_ANON_KEY }}
