@@ -68,7 +68,14 @@ const eslintConfig = [
   },
   {
     // Allow @ts-nocheck in storybook and test files
-    files: ["**/*.stories.tsx", "**/*.test.tsx", "**/*.test.ts", "**/jest.config.js", "**/jest.setup.js", "**/jest.pre-setup.js"],
+    files: [
+      "**/*.stories.tsx",
+      "**/*.test.tsx",
+      "**/*.test.ts",
+      "**/jest.config.js",
+      "**/jest.setup.js",
+      "**/jest.pre-setup.js",
+    ],
     rules: {
       "@typescript-eslint/ban-ts-comment": "off",
       "@typescript-eslint/no-require-imports": "off",
