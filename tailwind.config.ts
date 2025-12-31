@@ -1,1 +1,1 @@
-apps/admin/tailwind.config.ts
+apps / admin / tailwind.config.ts;

@@ -388,4 +388,3 @@ If critical issues are found:
 3. Request immediate fixes for critical issues
 4. Schedule follow-up review
 5. Do not approve until all critical issues resolved
-

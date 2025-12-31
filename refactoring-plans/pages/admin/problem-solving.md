@@ -59,4 +59,3 @@
 - **Components**: 0 → 5 components
 - **Test Coverage**: ≥80%
 - **SonarQube**: PASS
-
