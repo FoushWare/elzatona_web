@@ -508,3 +508,4 @@ Generate monthly reports:
 - [SonarCloud Documentation](https://docs.sonarcloud.io/)
 - [Quality Gates](https://docs.sonarqube.org/latest/user-guide/quality-gates/)
 - [Security Hotspots](https://docs.sonarqube.org/latest/user-guide/security-hotspots/)
+

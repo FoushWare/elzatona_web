@@ -131,3 +131,4 @@ export { default } from "../../../page-components/admin/page";
 - This is a simple wrapper page
 - Main work is in the actual page component
 - Focus on error handling and loading states
+
