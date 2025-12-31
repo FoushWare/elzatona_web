@@ -117,7 +117,7 @@ jobs:
           echo "📸 Updating snapshot tests for Admin Login..."
           NODE_OPTIONS=--max-old-space-size=768 npx jest \
             pages/admin/login/page.test.tsx \
-            --updateSnapshot \
+            -u \
             --maxWorkers=1 \
             --silent \
             --config=jest.config.js || echo "⚠️  Snapshot update skipped"
