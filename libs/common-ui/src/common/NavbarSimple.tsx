@@ -318,21 +318,21 @@ export const NavbarSimple: React.FC = () => {
           {stableAuthState.isAuthenticated && (
             <div className="hidden lg:flex items-center space-x-6 flex-1 justify-center">
               <NavigationLink
-                href="/practice"
+                href="/questions"
                 isScrolled={isScrolled}
                 pathname={pathname}
               >
                 Practice
               </NavigationLink>
               <NavigationLink
-                href="/progress"
+                href="/dashboard"
                 isScrolled={isScrolled}
                 pathname={pathname}
               >
                 Progress
               </NavigationLink>
               <NavigationLink
-                href="/my-plans"
+                href="/learning-paths"
                 isScrolled={isScrolled}
                 pathname={pathname}
               >
@@ -341,13 +341,13 @@ export const NavbarSimple: React.FC = () => {
               <NavigationLink
                 href={
                   userType === "self-directed"
-                    ? "/free-style-roadmap"
-                    : "/learn"
+                    ? "/browse-practice-questions"
+                    : "/features/guided-learning"
                 }
                 isScrolled={isScrolled}
                 pathname={pathname}
               >
-                {userType === "self-directed" ? "My Roadmap" : "Learn"}
+                {userType === "self-directed" ? "Browse" : "Learn"}
               </NavigationLink>
             </div>
           )}
@@ -460,9 +460,9 @@ export const NavbarSimple: React.FC = () => {
             {stableAuthState.isAuthenticated && (
               <div className="flex-1 px-3 sm:px-4 py-4 sm:py-6 space-y-3 sm:space-y-4">
                 <Link
-                  href="/practice"
+                  href="/questions"
                   className={`block text-base sm:text-lg font-medium py-2 px-3 rounded-lg transition-colors ${
-                    isActiveLink("/practice")
+                    isActiveLink("/questions")
                       ? "text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-900/30 font-semibold"
                       : "text-gray-900 dark:text-white hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-gray-50 dark:hover:bg-gray-800"
                   }`}
@@ -471,9 +471,9 @@ export const NavbarSimple: React.FC = () => {
                   Practice
                 </Link>
                 <Link
-                  href="/progress"
+                  href="/dashboard"
                   className={`block text-base sm:text-lg font-medium py-2 px-3 rounded-lg transition-colors ${
-                    isActiveLink("/progress")
+                    isActiveLink("/dashboard")
                       ? "text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-900/30 font-semibold"
                       : "text-gray-900 dark:text-white hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-gray-50 dark:hover:bg-gray-800"
                   }`}
@@ -482,9 +482,9 @@ export const NavbarSimple: React.FC = () => {
                   Progress
                 </Link>
                 <Link
-                  href="/my-plans"
+                  href="/learning-paths"
                   className={`block text-base sm:text-lg font-medium py-2 px-3 rounded-lg transition-colors ${
-                    isActiveLink("/my-plans")
+                    isActiveLink("/learning-paths")
                       ? "text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-900/30 font-semibold"
                       : "text-gray-900 dark:text-white hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-gray-50 dark:hover:bg-gray-800"
                   }`}
@@ -495,21 +495,21 @@ export const NavbarSimple: React.FC = () => {
                 <Link
                   href={
                     userType === "self-directed"
-                      ? "/free-style-roadmap"
-                      : "/learn"
+                      ? "/browse-practice-questions"
+                      : "/features/guided-learning"
                   }
                   className={`block text-base sm:text-lg font-medium py-2 px-3 rounded-lg transition-colors ${
                     isActiveLink(
                       userType === "self-directed"
-                        ? "/free-style-roadmap"
-                        : "/learn",
+                        ? "/browse-practice-questions"
+                        : "/features/guided-learning",
                     )
                       ? "text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-900/30 font-semibold"
                       : "text-gray-900 dark:text-white hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-gray-50 dark:hover:bg-gray-800"
                   }`}
                   onClick={() => setIsOpen(false)}
                 >
-                  {userType === "self-directed" ? "My Roadmap" : "Learn"}
+                  {userType === "self-directed" ? "Browse" : "Learn"}
                 </Link>
 
                 {/* Mobile Learning Mode Switcher - Always show */}
