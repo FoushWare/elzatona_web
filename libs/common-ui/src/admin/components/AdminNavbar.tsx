@@ -137,6 +137,7 @@ export default function AdminNavbar() {
 
   return (
     <nav
+      suppressHydrationWarning
       className={`fixed top-0 left-0 right-0 z-[101] transition-all duration-300 ${
         isOpen
           ? "bg-red-600 dark:bg-red-800 shadow-xl border-b-2 border-red-700 dark:border-red-900"

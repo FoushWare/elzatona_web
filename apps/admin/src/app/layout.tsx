@@ -17,7 +17,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body>
+      <body suppressHydrationWarning>
         <NuqsAdapter>
           <ThemeProvider>
             <AdminAuthProvider>
