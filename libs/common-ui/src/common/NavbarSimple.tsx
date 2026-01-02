@@ -21,6 +21,7 @@ import {
   Settings,
 } from "lucide-react";
 import { AlzatonaLogo } from "./AlzatonaLogo";
+import { LearningModeSwitcher } from "./LearningModeSwitcher";
 
 // Helper function to get link styling
 const getLinkStyles = (isActive: boolean, isScrolled: boolean) => {
@@ -355,8 +356,10 @@ export const NavbarSimple: React.FC = () => {
           {/* Right Section - Desktop Only */}
           <div className="hidden lg:flex items-center space-x-4">
             {/* Language Switcher */}
-            {/* Learning Mode Switcher - Always show */}
-            {/* <LearningModeSwitcher isScrolled={isScrolled} /> */}
+            {/* Learning Mode Switcher - Show for non-authenticated users */}
+            {!stableAuthState.isAuthenticated && userType && (
+              <LearningModeSwitcher isScrolled={isScrolled} variant="desktop" />
+            )}
 
             {/* Sign In / Logout Link */}
             {stableAuthState.isLoading ? (
@@ -399,9 +402,14 @@ export const NavbarSimple: React.FC = () => {
           {/* Mobile/Tablet Menu Button */}
           <div className="flex items-center space-x-1 sm:space-x-2 lg:hidden">
             {/* Learning Mode Switcher for Mobile/Tablet - Hidden on very small screens */}
-            <div className="hidden xs:block">
-              {/* <LearningModeSwitcher isScrolled={isScrolled} /> */}
-            </div>
+            {!stableAuthState.isAuthenticated && userType && (
+              <div className="hidden xs:block">
+                <LearningModeSwitcher
+                  isScrolled={isScrolled}
+                  variant="mobile"
+                />
+              </div>
+            )}
 
             {/* Theme Toggle for Mobile/Tablet */}
             <button
