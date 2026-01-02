@@ -122,12 +122,11 @@ describe("NavbarSimple Component Tests", () => {
 
   describe("Learning Mode Switcher - Desktop", () => {
     beforeEach(() => {
-       
       jest.spyOn(require("@elzatona/contexts"), "useUserType").mockReturnValue({
         userType: "guided",
         setUserType: mockSetUserType,
       });
-       
+
       jest.spyOn(require("@elzatona/contexts"), "useAuth").mockReturnValue({
         user: null,
         isAuthenticated: false,
@@ -153,7 +152,6 @@ describe("NavbarSimple Component Tests", () => {
     });
 
     it("should not render learning mode switcher when userType is null", async () => {
-       
       jest.spyOn(require("@elzatona/contexts"), "useUserType").mockReturnValue({
         userType: null,
         setUserType: mockSetUserType,
@@ -167,7 +165,6 @@ describe("NavbarSimple Component Tests", () => {
     });
 
     it("should not render learning mode switcher for authenticated users", async () => {
-       
       jest.spyOn(require("@elzatona/contexts"), "useAuth").mockReturnValue({
         user: { id: "1", email: "test@example.com" },
         isAuthenticated: true,
@@ -185,12 +182,11 @@ describe("NavbarSimple Component Tests", () => {
 
   describe("Learning Mode Switcher - Mobile", () => {
     beforeEach(() => {
-       
       jest.spyOn(require("@elzatona/contexts"), "useUserType").mockReturnValue({
         userType: "guided",
         setUserType: mockSetUserType,
       });
-       
+
       jest.spyOn(require("@elzatona/contexts"), "useAuth").mockReturnValue({
         user: null,
         isAuthenticated: false,

@@ -46,7 +46,6 @@ global.fetch = jest.fn(() =>
 
 // Mock lucide-react using the shared mock
 jest.mock("lucide-react", () =>
-   
   require("../../test-utils/mocks/lucide-react.tsx"),
 );
 

@@ -43,7 +43,6 @@ const mockRefetch = jest.fn();
 let mockUseAdminAuth: jest.Mock;
 let AdminAuthProvider: React.FC<{ children: React.ReactNode }>;
 beforeAll(() => {
-   
   const contextsModule = require("@elzatona/contexts");
   mockUseAdminAuth = contextsModule.useAdminAuth as jest.Mock;
   AdminAuthProvider = contextsModule.AdminAuthProvider;

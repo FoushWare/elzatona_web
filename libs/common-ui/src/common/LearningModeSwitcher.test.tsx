@@ -31,7 +31,6 @@ describe("LearningModeSwitcher Component Tests", () => {
     });
 
     it("should not render when userType is null", () => {
-       
       jest.spyOn(require("@elzatona/contexts"), "useUserType").mockReturnValue({
         userType: null,
         setUserType: mockSetUserType,
@@ -49,7 +48,6 @@ describe("LearningModeSwitcher Component Tests", () => {
     });
 
     it("should display current mode (self-directed) in button", () => {
-       
       jest.spyOn(require("@elzatona/contexts"), "useUserType").mockReturnValue({
         userType: "self-directed",
         setUserType: mockSetUserType,
@@ -96,7 +94,6 @@ describe("LearningModeSwitcher Component Tests", () => {
     });
 
     it("should change mode to guided when guided option is clicked", async () => {
-       
       jest.spyOn(require("@elzatona/contexts"), "useUserType").mockReturnValue({
         userType: "self-directed",
         setUserType: mockSetUserType,
@@ -156,7 +153,6 @@ describe("LearningModeSwitcher Component Tests", () => {
     });
 
     it("should change mode to guided when guided button is clicked", () => {
-       
       jest.spyOn(require("@elzatona/contexts"), "useUserType").mockReturnValue({
         userType: "self-directed",
         setUserType: mockSetUserType,

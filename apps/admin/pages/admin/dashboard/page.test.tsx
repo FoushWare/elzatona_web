@@ -20,7 +20,6 @@ import AdminDashboard from "./page";
 let mockUseAdminAuth: jest.Mock;
 let AdminAuthProvider: React.FC<{ children: React.ReactNode }>;
 beforeAll(() => {
-   
   const contextsModule = require("@elzatona/contexts");
   mockUseAdminAuth = contextsModule.useAdminAuth as jest.Mock;
   AdminAuthProvider = contextsModule.AdminAuthProvider;
@@ -135,7 +134,6 @@ describe("A-UT-011: Dashboard Renders", () => {
       },
     });
 
-     
     const { useAdminStats } = require("@elzatona/hooks");
     (useAdminStats as jest.Mock).mockReturnValue({
       data: {
@@ -191,7 +189,6 @@ describe("A-UT-012: Stats Display", () => {
       },
     });
 
-     
     const { useAdminStats } = require("@elzatona/hooks");
     (useAdminStats as jest.Mock).mockReturnValue({
       data: {
@@ -277,7 +274,6 @@ describe("A-UT-013: Refresh Functionality", () => {
       },
     });
 
-     
     const { useAdminStats } = require("@elzatona/hooks");
     (useAdminStats as jest.Mock).mockReturnValue({
       data: {
@@ -331,7 +327,6 @@ describe("A-UT-SNAPSHOT: Admin Dashboard Snapshot Tests", () => {
       },
     });
 
-     
     const { useAdminStats } = require("@elzatona/hooks");
     (useAdminStats as jest.Mock).mockReturnValue({
       data: {
@@ -358,7 +353,6 @@ describe("A-UT-SNAPSHOT: Admin Dashboard Snapshot Tests", () => {
   });
 
   it("should match admin dashboard snapshot (loading state)", () => {
-     
     const { useAdminStats } = require("@elzatona/hooks");
     (useAdminStats as jest.Mock).mockReturnValueOnce({
       data: null,
@@ -374,7 +368,6 @@ describe("A-UT-SNAPSHOT: Admin Dashboard Snapshot Tests", () => {
   });
 
   it("should match admin dashboard snapshot (error state)", () => {
-     
     const { useAdminStats } = require("@elzatona/hooks");
     (useAdminStats as jest.Mock).mockReturnValueOnce({
       data: null,
@@ -390,7 +383,6 @@ describe("A-UT-SNAPSHOT: Admin Dashboard Snapshot Tests", () => {
   });
 
   it("should match admin dashboard snapshot (empty stats)", () => {
-     
     const { useAdminStats } = require("@elzatona/hooks");
     (useAdminStats as jest.Mock).mockReturnValueOnce({
       data: {
