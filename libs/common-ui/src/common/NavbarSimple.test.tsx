@@ -122,12 +122,12 @@ describe("NavbarSimple Component Tests", () => {
 
   describe("Learning Mode Switcher - Desktop", () => {
     beforeEach(() => {
-      // eslint-disable-next-line @typescript-eslint/no-require-imports
+       
       jest.spyOn(require("@elzatona/contexts"), "useUserType").mockReturnValue({
         userType: "guided",
         setUserType: mockSetUserType,
       });
-      // eslint-disable-next-line @typescript-eslint/no-require-imports
+       
       jest.spyOn(require("@elzatona/contexts"), "useAuth").mockReturnValue({
         user: null,
         isAuthenticated: false,
@@ -153,7 +153,7 @@ describe("NavbarSimple Component Tests", () => {
     });
 
     it("should not render learning mode switcher when userType is null", async () => {
-      // eslint-disable-next-line @typescript-eslint/no-require-imports
+       
       jest.spyOn(require("@elzatona/contexts"), "useUserType").mockReturnValue({
         userType: null,
         setUserType: mockSetUserType,
@@ -167,7 +167,7 @@ describe("NavbarSimple Component Tests", () => {
     });
 
     it("should not render learning mode switcher for authenticated users", async () => {
-      // eslint-disable-next-line @typescript-eslint/no-require-imports
+       
       jest.spyOn(require("@elzatona/contexts"), "useAuth").mockReturnValue({
         user: { id: "1", email: "test@example.com" },
         isAuthenticated: true,
@@ -185,12 +185,12 @@ describe("NavbarSimple Component Tests", () => {
 
   describe("Learning Mode Switcher - Mobile", () => {
     beforeEach(() => {
-      // eslint-disable-next-line @typescript-eslint/no-require-imports
+       
       jest.spyOn(require("@elzatona/contexts"), "useUserType").mockReturnValue({
         userType: "guided",
         setUserType: mockSetUserType,
       });
-      // eslint-disable-next-line @typescript-eslint/no-require-imports
+       
       jest.spyOn(require("@elzatona/contexts"), "useAuth").mockReturnValue({
         user: null,
         isAuthenticated: false,
