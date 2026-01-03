@@ -182,6 +182,7 @@ export function AdminAuthProvider({ children }: AdminAuthProviderProps) {
   useEffect(() => {
     if (isLoading) return;
     if (!router.isReady) return;
+    if (!isHydrated) return; // Don't redirect until client-side hydration is complete
 
     const isLoginPage = pathname === "/admin/login";
     const isAdminRootPage = pathname === "/admin";
@@ -225,7 +226,7 @@ export function AdminAuthProvider({ children }: AdminAuthProviderProps) {
       );
       router.replace("/admin/login");
     }
-  }, [isAuthenticated, isLoading, router, pathname]);
+  }, [isAuthenticated, isLoading, router, pathname, isHydrated]);
 
   // Login function
   const login = useCallback(

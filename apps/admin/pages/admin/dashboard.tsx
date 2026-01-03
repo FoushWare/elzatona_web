@@ -1,5 +1,3 @@
-"use client";
-
 import { useAdminAuth } from "@elzatona/contexts";
 import {
   Database,
@@ -22,6 +20,7 @@ import {
   type AdminMetricCardPropsType,
 } from "@elzatona/common-ui";
 import { type AdminQuickAction } from "@elzatona/types";
+import AdminLayout from "../../src/layouts/admin/layout";
 
 export default function AdminDashboard() {
   const { user } = useAdminAuth();
@@ -158,21 +157,23 @@ export default function AdminDashboard() {
   );
 
   return (
-    <AdminDashboardTemplate
-      welcomeTitle="🎯 Admin Dashboard"
-      welcomeSubtitle={welcomeSubtitle}
-      refreshButton={{
-        onClick: handleRefresh,
-        disabled: refreshing,
-        loading: refreshing,
-      }}
-      stats={{
-        metrics,
-        loading,
-      }}
-      quickActions={{
-        actions: quickActions,
-      }}
-    />
+    <AdminLayout>
+      <AdminDashboardTemplate
+        welcomeTitle="🎯 Admin Dashboard"
+        welcomeSubtitle={welcomeSubtitle}
+        refreshButton={{
+          onClick: handleRefresh,
+          disabled: refreshing,
+          loading: refreshing,
+        }}
+        stats={{
+          metrics,
+          loading,
+        }}
+        quickActions={{
+          actions: quickActions,
+        }}
+      />
+    </AdminLayout>
   );
 }

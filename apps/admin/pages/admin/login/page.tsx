@@ -1,5 +1,3 @@
-"use client";
-
 import { useAdminAuth } from "@elzatona/contexts";
 import {
   AdminLoginPageTemplate,
