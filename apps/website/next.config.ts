@@ -152,6 +152,19 @@ const nextConfig: NextConfig = {
   // Compression
   compress: true,
 
+  async rewrites() {
+    return [
+      {
+        source: "/admin",
+        destination: "http://localhost:3001/admin",
+      },
+      {
+        source: "/admin/:path*",
+        destination: "http://localhost:3001/admin/:path*",
+      },
+    ];
+  },
+
   // Bundle optimization
   webpack: (config, { dev, isServer }) => {
     // Ignore storybook and test files

@@ -4,7 +4,8 @@
   "description": "A platform for frontend developers to practice coding challenges and prepare for technical interviews",
   "private": true,
   "scripts": {
-    "dev": "APP_ENV=production NEXT_PUBLIC_APP_ENV=production NODE_ENV=development NODE_OPTIONS=--max-old-space-size=2048 dotenv -e .env.local --override -- nx serve website",
+    "dev": "APP_ENV=production NEXT_PUBLIC_APP_ENV=production NODE_ENV=development NODE_OPTIONS=--max-old-space-size=2048 dotenv -e .env.local --override -- nx run-many --target=serve --projects=website,admin --parallel",
+    "dev:website": "APP_ENV=production NEXT_PUBLIC_APP_ENV=production NODE_ENV=development NODE_OPTIONS=--max-old-space-size=2048 dotenv -e .env.local --override -- nx serve website",
     "dev:test": "APP_ENV=test NEXT_PUBLIC_APP_ENV=test NODE_ENV=development NODE_OPTIONS=--max-old-space-size=2048 dotenv -e .env.test.local --override -- nx serve website",
     "dev:prod": "APP_ENV=production NEXT_PUBLIC_APP_ENV=production NODE_ENV=development NODE_OPTIONS=--max-old-space-size=2048 dotenv -e .env.local --override -- nx serve website",
     "dev:dev": "APP_ENV=development NEXT_PUBLIC_APP_ENV=development NODE_ENV=development NODE_OPTIONS=--max-old-space-size=2048 dotenv -e .env.dev.local --override -- nx serve website",
@@ -12,7 +13,7 @@
     "dev:light:test": "APP_ENV=test NEXT_PUBLIC_APP_ENV=test NODE_ENV=development NODE_OPTIONS=--max-old-space-size=1536 dotenv -e .env.test.local --override -- nx serve website",
     "dev:light:dev": "APP_ENV=development NEXT_PUBLIC_APP_ENV=development NODE_ENV=development NODE_OPTIONS=--max-old-space-size=1536 dotenv -e .env.dev.local --override -- nx serve website",
     "dev:light:prod": "APP_ENV=production NEXT_PUBLIC_APP_ENV=production NODE_ENV=development NODE_OPTIONS=--max-old-space-size=1536 dotenv -e .env.local --override -- nx serve website",
-    "dev:admin": "NODE_OPTIONS=--max-old-space-size=2048 nx serve admin",
+    "dev:admin": "APP_ENV=production NEXT_PUBLIC_APP_ENV=production NODE_ENV=development NODE_OPTIONS=--max-old-space-size=2048 dotenv -e .env.local --override -- nx serve admin",
     "dev:turbo": "NODE_OPTIONS=--max-old-space-size=2048 nx serve website --turbopack",
     "build": "NODE_ENV=production nx build website",
     "build:admin": "nx build admin",

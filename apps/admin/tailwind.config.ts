@@ -6,8 +6,12 @@ const config: Config = {
     "./pages/**/*.{js,ts,jsx,tsx,mdx}",
     "./components/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/layouts/**/*.{js,ts,jsx,tsx,mdx}",
+    "../../libs/common-ui/src/**/*.{js,ts,jsx,tsx,mdx}",
+    "../../libs/shared-atoms/src/**/*.{js,ts,jsx,tsx,mdx}",
+    "../../libs/contexts/src/**/*.{js,ts,jsx,tsx,mdx}",
+    "../../libs/hooks/src/**/*.{js,ts,jsx,tsx,mdx}",
+    "../../libs/types/src/**/*.{js,ts,jsx,tsx,mdx}",
     "../../libs/ui/src/**/*.{js,ts,jsx,tsx,mdx}",
-    "../../libs/components/src/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   darkMode: "class",
   theme: {

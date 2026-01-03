@@ -8,7 +8,7 @@ import React, {
   createContext,
   useContext,
 } from "react";
-import { useRouter, usePathname } from "next/navigation";
+import { useRouter } from "next/router";
 import { createClient } from "@supabase/supabase-js";
 
 // Create Supabase client (environment variables required)
@@ -61,7 +61,7 @@ export function AdminAuthProvider({ children }: AdminAuthProviderProps) {
   const [isHydrated, setIsHydrated] = useState(false); // Start as not hydrated, will be set to true after check
 
   const router = useRouter();
-  const pathname = usePathname();
+  const pathname = router.asPath?.split("?")[0] || "";
 
   // Load session from localStorage on mount (for mock authentication)
   useEffect(() => {
@@ -181,6 +181,7 @@ export function AdminAuthProvider({ children }: AdminAuthProviderProps) {
   // Handle redirects for protected admin routes (excluding /admin root and /admin/login)
   useEffect(() => {
     if (isLoading) return;
+    if (!router.isReady) return;
 
     const isLoginPage = pathname === "/admin/login";
     const isAdminRootPage = pathname === "/admin";

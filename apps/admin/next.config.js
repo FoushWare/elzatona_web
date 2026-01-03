@@ -14,7 +14,15 @@ const nextConfig = {
     "nuqs",
   ],
   experimental: {
-    forceSwcTransforms: true,
+    // Remove unsupported option that causes Turbopack warning
+  },
+  async rewrites() {
+    return [
+      {
+        source: "/api/admin/:path*",
+        destination: "http://localhost:3000/api/admin/:path*",
+      },
+    ];
   },
   // Configure build to handle error pages
   generateBuildId: async () => {

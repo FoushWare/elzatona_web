@@ -2,6 +2,7 @@
 export * from "./learning-cards";
 export * from "./unified-question-schema";
 export * from "./admin";
+export * from "./constants/homePage.constants";
 // Export challenge types but exclude TestCase to avoid conflict with admin.ts
 export type { Difficulty, Category } from "./challenge";
 export type {
