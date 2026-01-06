@@ -6,7 +6,7 @@ import { QuestionPracticeView } from "./QuestionPracticeView";
 import {
   QuestionForm,
   type UnifiedQuestion,
-} from "../pages/admin/content/questions/components/QuestionForm";
+} from "../src/pages_legacy/admin/content/questions/components/QuestionForm";
 import { Edit, Eye } from "lucide-react";
 
 interface ViewQuestionModalProps {

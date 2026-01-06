@@ -320,21 +320,21 @@ export const NavbarSimple: React.FC = () => {
               <NavigationLink
                 href="/questions"
                 isScrolled={isScrolled}
-                pathname={pathname}
+                pathname={pathname ?? ""}
               >
                 Practice
               </NavigationLink>
               <NavigationLink
                 href="/dashboard"
                 isScrolled={isScrolled}
-                pathname={pathname}
+                pathname={pathname ?? ""}
               >
                 Progress
               </NavigationLink>
               <NavigationLink
                 href="/learning-paths"
                 isScrolled={isScrolled}
-                pathname={pathname}
+                pathname={pathname ?? ""}
               >
                 My Plans
               </NavigationLink>
@@ -345,7 +345,7 @@ export const NavbarSimple: React.FC = () => {
                     : "/features/guided-learning"
                 }
                 isScrolled={isScrolled}
-                pathname={pathname}
+                pathname={pathname ?? ""}
               >
                 {userType === "self-directed" ? "Browse" : "Learn"}
               </NavigationLink>

@@ -12,8 +12,8 @@ import { createClient } from "@supabase/supabase-js";
  * @throws Error if required environment variables are missing
  */
 export function getSupabaseClient() {
-  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-  const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+  const supabaseUrl = process.env["NEXT_PUBLIC_SUPABASE_URL"];
+  const supabaseServiceRoleKey = process.env["SUPABASE_SERVICE_ROLE_KEY"];
 
   if (!supabaseUrl || !supabaseServiceRoleKey) {
     throw new Error(
@@ -31,10 +31,10 @@ export function getSupabaseClient() {
  * @throws Error if required environment variables are missing
  */
 export function getSupabaseClientWithAnonKey() {
-  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const supabaseUrl = process.env["NEXT_PUBLIC_SUPABASE_URL"];
   const supabaseAnonKey =
-    process.env.SUPABASE_SERVICE_ROLE_KEY ||
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+    process.env["SUPABASE_SERVICE_ROLE_KEY"] ||
+    process.env["NEXT_PUBLIC_SUPABASE_ANON_KEY"];
 
   if (!supabaseUrl || !supabaseAnonKey) {
     throw new Error(

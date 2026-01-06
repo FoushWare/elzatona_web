@@ -29,11 +29,11 @@
       "@elzatona/shared-atoms": [
         "../../libs/shared-atoms/src/lib/shared-atoms"
       ],
-      "@elzatona/types": ["../../libs/types/src/lib/shared-types"],
+      "@elzatona/types": ["../../libs/types/src/index.ts"],
       "@elzatona/ui": ["../../libs/ui/src/lib/ui"],
       "@elzatona/auth": ["../../libs/auth/src/lib/auth"],
       "@elzatona/database": ["../../libs/database/src/lib/database"],
-      "@elzatona/utilities": ["../../libs/utilities/src/lib/utils"],
+      "@elzatona/utilities": ["../../libs/utilities/src/index.ts"],
       "@/components/*": ["../../libs/common-ui/src/components/*"],
       "@/hooks/*": ["../../libs/hooks/src/lib/hooks/*"],
       "@/contexts/*": ["../../libs/contexts/src/lib/contexts/*"],

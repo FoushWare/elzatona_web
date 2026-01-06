@@ -3,8 +3,7 @@
 import React, { useState, useEffect, useMemo, useRef } from "react";
 import { Card, CardContent, Button } from "@elzatona/common-ui";
 import { FormModal } from "@elzatona/common-ui";
-import {} from "../../../../components/QuestionPracticeView";
-import { ViewQuestionModal } from "../../../../components/ViewQuestionModal";
+import { ViewQuestionModal } from "../../../../../components/ViewQuestionModal";
 import { Loader2 } from "lucide-react";
 import { AdvancedSearch } from "@elzatona/common-ui";
 import { StatsCards } from "./components/StatsCards";

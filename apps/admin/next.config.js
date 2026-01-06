@@ -1,6 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   /* config options here */
+  output: "standalone",
   transpilePackages: [
     "ui",
     "auth",
@@ -13,9 +14,6 @@ const nextConfig = {
     "@elzatona/types",
     "nuqs",
   ],
-  experimental: {
-    forceSwcTransforms: true,
-  },
   // Configure build to handle error pages
   generateBuildId: async () => {
     // Use a static build ID to ensure consistent builds

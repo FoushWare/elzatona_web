@@ -1,3 +1,5 @@
+import type { ContentColor } from "@elzatona/types";
+
 // Utils library exports
 export const cn = (
   ...classes: (string | undefined | null | false)[]
@@ -69,3 +71,16 @@ export const truncateText = (text: string, maxLength: number): string => {
   if (text.length <= maxLength) return text;
   return text.substring(0, maxLength) + "...";
 };
+
+export function getColorClasses(color: ContentColor): string {
+  const colorMap: Record<ContentColor, string> = {
+    indigo:
+      "from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700",
+    purple:
+      "from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700",
+    green:
+      "from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700",
+  };
+
+  return colorMap[color];
+}

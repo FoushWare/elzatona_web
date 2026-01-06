@@ -92,22 +92,6 @@ export function getPersonalizedContent(
 }
 
 /**
- * Get Tailwind CSS gradient classes for CTA buttons based on color
- */
-export function getColorClasses(color: ContentColor): string {
-  const colorMap: Record<ContentColor, string> = {
-    indigo:
-      "from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700",
-    purple:
-      "from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700",
-    green:
-      "from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700",
-  };
-
-  return colorMap[color];
-}
-
-/**
  * Parse and validate active plan from localStorage
  */
 export function parseActivePlan(planData: string | null): ActivePlan | null {
