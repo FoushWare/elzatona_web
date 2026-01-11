@@ -7,6 +7,7 @@ const config: Config = {
     "./src/context/**/*.{js,ts,jsx,tsx,mdx}",
     "../../libs/components/src/**/*.{js,ts,jsx,tsx,mdx}",
     "../../libs/contexts/src/**/*.{js,ts,jsx,tsx,mdx}",
+    "../../libs/common-ui/src/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   darkMode: "class",
   theme: {
