@@ -12,7 +12,7 @@
     "dev:light:test": "APP_ENV=test NEXT_PUBLIC_APP_ENV=test NODE_ENV=development NODE_OPTIONS=--max-old-space-size=1536 dotenv -e .env.test.local --override -- nx serve website",
     "dev:light:dev": "APP_ENV=development NEXT_PUBLIC_APP_ENV=development NODE_ENV=development NODE_OPTIONS=--max-old-space-size=1536 dotenv -e .env.dev.local --override -- nx serve website",
     "dev:light:prod": "APP_ENV=production NEXT_PUBLIC_APP_ENV=production NODE_ENV=development NODE_OPTIONS=--max-old-space-size=1536 dotenv -e .env.local --override -- nx serve website",
-    "dev:admin": "NODE_OPTIONS=--max-old-space-size=2048 nx serve admin",
+    "dev:admin": "NODE_OPTIONS=--max-old-space-size=4096 nx serve admin --port=3001",
     "dev:turbo": "NODE_OPTIONS=--max-old-space-size=2048 nx serve website --turbopack",
     "build": "NODE_ENV=production nx build website",
     "build:admin": "nx build admin",

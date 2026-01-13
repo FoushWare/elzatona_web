@@ -3,11 +3,14 @@ import tailwindcssAnimate from "tailwindcss-animate";
 
 const config: Config = {
   content: [
-    "./pages/**/*.{js,ts,jsx,tsx,mdx}",
-    "./components/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
-    "../../libs/ui/src/**/*.{js,ts,jsx,tsx,mdx}",
-    "../../libs/components/src/**/*.{js,ts,jsx,tsx,mdx}",
+    "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
+    "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
+    "../../libs/common-ui/src/**/*.{js,ts,jsx,tsx,mdx}",
+    "../../libs/contexts/src/**/*.{js,ts,jsx,tsx,mdx}",
+    "../../libs/hooks/src/**/*.{js,ts,jsx,tsx,mdx}",
+    "../../libs/types/src/**/*.{js,ts,jsx,tsx,mdx}",
+    "../../libs/utilities/src/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   darkMode: "class",
   theme: {
