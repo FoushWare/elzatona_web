@@ -77,10 +77,21 @@ export { StatsSection } from "./admin/content-management/StatsSection";
 export { SearchAndFilters } from "./admin/content-management/SearchAndFilters";
 export { LearningCardsManager } from "./admin/content-management/LearningCardsManager";
 export { PlansManager } from "./admin/content-management/PlansManager";
+export { TopicsManager } from "./admin/content-management/TopicsManager";
+export { CategoriesManager } from "./admin/content-management/CategoriesManager";
 // Content Management Modals
 export { TopicQuestionsModal } from "./admin/content-management/modals/TopicQuestionsModal";
 export { DeleteConfirmationModal } from "./admin/content-management/modals/DeleteConfirmationModal";
 export { CardManagementModal } from "./admin/content-management/modals/CardManagementModal";
+
+// Admin Questions
+export * from "./admin/questions/QuestionForm";
+export * from "./admin/questions/QuestionsList";
+export * from "./admin/questions/QuestionItem";
+export * from "./admin/questions/FiltersCard";
+export * from "./admin/questions/StatsCards";
+export * from "./admin/questions/CategoriesOverview";
+export * from "./admin/questions/PaginationControls";
 
 // Atomic Design Components
 export * from "./components/atoms";

@@ -1,21 +1,23 @@
 "use client";
 
 import React, { useState, useRef } from "react";
-import { FormModal, Switch, Label } from "@elzatona/common-ui";
-import { QuestionPracticeView } from "./QuestionPracticeView";
 import {
-  QuestionForm,
-  type UnifiedQuestion,
-} from "../pages/admin/content/questions/components/QuestionForm";
+  FormModal,
+  Switch,
+  Label,
+  AdminQuestionForm,
+} from "@elzatona/common-ui";
+import { QuestionPracticeView } from "./QuestionPracticeView";
+import type { AdminUnifiedQuestion } from "@elzatona/types";
 import { Edit, Eye } from "lucide-react";
 
 interface ViewQuestionModalProps {
   isOpen: boolean;
   onClose: () => void;
-  question: UnifiedQuestion | null;
+  question: AdminUnifiedQuestion | null;
   cards: Array<{ id: string; title: string }>;
   allCategories: string[];
-  onUpdate: (question: Partial<UnifiedQuestion>) => Promise<void>;
+  onUpdate: (question: Partial<AdminUnifiedQuestion>) => Promise<void>;
   editFormRef: React.RefObject<HTMLFormElement>;
 }
 
@@ -52,7 +54,9 @@ export const ViewQuestionModal: React.FC<ViewQuestionModalProps> = ({
     }
   };
 
-  const handleUpdate = async (updatedQuestion: Partial<UnifiedQuestion>) => {
+  const handleUpdate = async (
+    updatedQuestion: Partial<AdminUnifiedQuestion>,
+  ) => {
     setIsSaving(true);
     try {
       await onUpdate(updatedQuestion);
@@ -116,7 +120,7 @@ export const ViewQuestionModal: React.FC<ViewQuestionModalProps> = ({
 
       {/* Content based on mode */}
       {isEditMode ? (
-        <QuestionForm
+        <AdminQuestionForm
           ref={editFormRef || localFormRef}
           initialData={question}
           onSubmit={handleUpdate}
@@ -132,7 +136,7 @@ export const ViewQuestionModal: React.FC<ViewQuestionModalProps> = ({
             id: question.id,
             title: question.title || "",
             content: question.content,
-            type: question.type || "multiple-choice",
+            type: (question.type as any) || "multiple-choice",
             difficulty:
               (question.difficulty === "beginner"
                 ? "easy"
@@ -140,9 +144,9 @@ export const ViewQuestionModal: React.FC<ViewQuestionModalProps> = ({
                   ? "medium"
                   : question.difficulty === "advanced"
                     ? "hard"
-                    : question.difficulty) || "medium",
+                    : (question.difficulty as any)) || "medium",
             explanation: question.explanation,
-            options: question.options,
+            options: question.options as any,
             correct_answer: question.correct_answer,
             resources: (question as { resources?: unknown[] }).resources || [],
           }}

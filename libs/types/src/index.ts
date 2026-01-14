@@ -18,3 +18,4 @@ export type {
   Category as AdminCategory,
   LearningCard as AdminLearningCard,
 } from "./lib/admin/content-management";
+export * from "./lib/admin/questions";
