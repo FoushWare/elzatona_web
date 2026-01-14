@@ -339,14 +339,12 @@ export function useContentManagement() {
           });
           toast.success("Removed from plan");
         } else {
-          const { error } = await supabase
-            .from("plan_questions")
-            .insert({
-              plan_id: planId,
-              question_id: questionId,
-              topic_id: topicId,
-              is_active: true,
-            });
+          const { error } = await supabase.from("plan_questions").insert({
+            plan_id: planId,
+            question_id: questionId,
+            topic_id: topicId,
+            is_active: true,
+          });
           if (error) throw error;
           setPlanQuestions((prev) => {
             const next = new Set(prev);
