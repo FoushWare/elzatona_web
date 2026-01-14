@@ -72,6 +72,15 @@ export {
   CollapsibleContent,
 } from "./components/ui/collapsible";
 export { ActivityFeed } from "./components/organisms/ActivityFeed";
+// Content Management Organisms
+export { StatsSection } from "./admin/content-management/StatsSection";
+export { SearchAndFilters } from "./admin/content-management/SearchAndFilters";
+export { LearningCardsManager } from "./admin/content-management/LearningCardsManager";
+export { PlansManager } from "./admin/content-management/PlansManager";
+// Content Management Modals
+export { TopicQuestionsModal } from "./admin/content-management/modals/TopicQuestionsModal";
+export { DeleteConfirmationModal } from "./admin/content-management/modals/DeleteConfirmationModal";
+export { CardManagementModal } from "./admin/content-management/modals/CardManagementModal";
 
 // Atomic Design Components
 export * from "./components/atoms";
