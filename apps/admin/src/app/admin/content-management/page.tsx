@@ -7,6 +7,8 @@ import {
   SearchAndFilters,
   LearningCardsManager,
   PlansManager,
+  TopicsManager,
+  CategoriesManager,
   TopicQuestionsModal,
   DeleteConfirmationModal,
   CardManagementModal,
@@ -145,6 +147,24 @@ export default function ContentManagementPage() {
           onSearchChange={setSearchTerm}
           filterCardType={filterCardType}
           onFilterChange={setFilterCardType}
+        />
+
+        {/* Topics Management Section */}
+        <TopicsManager
+          topics={topics}
+          onCreateTopic={() => console.log("Create topic")}
+          onEditTopic={(topic) => console.log("Edit topic", topic)}
+          onDeleteTopic={(topic) => console.log("Delete topic", topic)}
+        />
+
+        {/* Categories Management Section */}
+        <CategoriesManager
+          categories={categories}
+          onCreateCategory={() => console.log("Create category")}
+          onEditCategory={(category) => console.log("Edit category", category)}
+          onDeleteCategory={(category) =>
+            console.log("Delete category", category)
+          }
         />
 
         {/* Learning Cards Section */}
