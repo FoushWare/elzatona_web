@@ -93,6 +93,9 @@ export * from "./admin/questions/StatsCards";
 export * from "./admin/questions/CategoriesOverview";
 export * from "./admin/questions/PaginationControls";
 
+// Frontend Tasks
+export { FrontendTaskSolver } from "./features/frontend-tasks/FrontendTaskSolver";
+
 // Atomic Design Components
 export * from "./components/atoms";
 export * from "./components/molecules";

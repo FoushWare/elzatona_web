@@ -32,6 +32,16 @@ export const supabaseClient = isValidConfig
 // Export a helper to check if Supabase is available
 export const isSupabaseAvailable = () => supabaseClient !== null;
 
+// Helper to get the client instance, matching the website app's interface
+export const getSupabaseClient = () => {
+  if (!supabaseClient) {
+    throw new Error(
+      "Supabase client not initialized. Check environment variables.",
+    );
+  }
+  return supabaseClient;
+};
+
 // Mirror auth session to cookie for simple client persistence across reloads
 if (supabaseClient && typeof window !== "undefined") {
   supabaseClient.auth.onAuthStateChange((event, session) => {

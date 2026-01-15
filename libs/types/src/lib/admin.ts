@@ -33,11 +33,19 @@ export interface FrontendTask {
   solution: string;
   starterCode: string; // Legacy field for backward compatibility
   files: FrontendTaskFile[]; // New dynamic files structure
+  boilerplate?: string; // Optional boilerplate/starter code
   testCases?: FrontendTaskTestCase[]; // Added test cases
   tags: string[];
   created_at: Date;
   updated_at: Date;
   is_active: boolean;
+
+  // New fields mapping to DB columns
+  order?: number;
+  timeLimit?: number; // In minutes, alternative to estimatedTime
+  learningPathId?: string;
+  moduleId?: string;
+  metadata?: Record<string, any>;
 }
 
 export interface ProblemSolvingTask {
@@ -108,9 +116,16 @@ export interface FrontendTaskFormData {
   solution: string;
   starterCode: string; // Legacy field for backward compatibility
   files: FrontendTaskFile[]; // New dynamic files structure
+  boilerplate?: string;
   testCases?: FrontendTaskTestCase[]; // Added test cases
   tags: string[];
   is_active: boolean;
+
+  // New fields
+  timeLimit?: number;
+  learningPathId?: string;
+  moduleId?: string;
+  metadata?: Record<string, any>;
 }
 
 export interface ProblemSolvingTaskFormData {
