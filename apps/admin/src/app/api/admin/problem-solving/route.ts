@@ -1,7 +1,5 @@
-// v1.0 - API routes for problem solving tasks CRUD operations
-
 import { NextRequest, NextResponse } from "next/server";
-import { getSupabaseClient } from "../../../../get-supabase-client";
+import { getSupabaseClient } from "../../../../lib/supabase-client";
 import {
   ProblemSolvingTask,
   ProblemSolvingTaskFormData,
@@ -42,15 +40,30 @@ export async function GET(request: NextRequest) {
       throw error;
     }
 
-    let data: ProblemSolvingTask[] = snapshot.map((doc) => ({
-      id: doc.id,
-      ...doc,
-    })) as ProblemSolvingTask[];
+    // Map snake_case DB fields to camelCase TS types
+    const data: ProblemSolvingTask[] = (snapshot || []).map((t: any) => ({
+      id: t.id,
+      title: t.title,
+      description: t.description,
+      difficulty: t.difficulty,
+      category: t.category,
+      functionName: t.function_name || t.functionName, // Fallback for legacy data
+      starterCode: t.starter_code || t.starterCode,
+      solution: t.solution,
+      testCases: t.test_cases || t.testCases || [],
+      constraints: t.constraints || [],
+      examples: t.examples || [],
+      tags: t.tags || [],
+      created_at: t.created_at,
+      updated_at: t.updated_at,
+      is_active: t.is_active,
+    }));
 
     // Apply search filter (client-side since Supabase doesn't support full-text search)
+    let filteredData = data;
     if (search) {
       const lowerSearch = search.toLowerCase();
-      data = data.filter(
+      filteredData = data.filter(
         (task) =>
           task.title.toLowerCase().includes(lowerSearch) ||
           task.description.toLowerCase().includes(lowerSearch) ||
@@ -64,19 +77,19 @@ export async function GET(request: NextRequest) {
     // Client-side pagination
     const startIndex = (page - 1) * limit;
     const endIndex = startIndex + limit;
-    const paginatedData = data.slice(startIndex, endIndex);
+    const paginatedData = filteredData.slice(startIndex, endIndex);
 
     console.log(
-      `📊 API: Problem solving tasks fetched: ${data.length} total, ${paginatedData.length} returned`,
+      `📊 API: Problem solving tasks fetched: ${filteredData.length} total, ${paginatedData.length} returned`,
     );
 
     const response: PaginatedResponse<ProblemSolvingTask> = {
       success: true,
       data: paginatedData,
-      total: data.length,
+      total: filteredData.length,
       page,
       limit,
-      hasMore: endIndex < data.length,
+      hasMore: endIndex < filteredData.length,
     };
 
     return NextResponse.json(response);
@@ -118,9 +131,19 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Create the task data
+    // Create the task data with snake_case definition
     const taskData = {
-      ...body,
+      title: body.title,
+      description: body.description,
+      difficulty: body.difficulty,
+      category: body.category,
+      function_name: body.functionName,
+      starter_code: body.starterCode,
+      solution: body.solution,
+      test_cases: body.testCases,
+      constraints: body.constraints,
+      examples: body.examples,
+      tags: body.tags,
       is_active: true,
       created_at: new Date().toISOString(),
       updated_at: new Date().toISOString(),

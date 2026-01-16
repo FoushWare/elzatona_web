@@ -1,7 +1,5 @@
-// v1.0 - API routes for individual problem solving task operations
-
 import { NextRequest, NextResponse } from "next/server";
-import { getSupabaseClient } from "../../../../../get-supabase-client";
+import { getSupabaseClient } from "../../../../../lib/supabase-client";
 import {
   ProblemSolvingTask,
   ProblemSolvingTaskFormData,
@@ -40,10 +38,24 @@ export async function GET(
       );
     }
 
-    const taskData = {
-      id: taskDoc.id,
-      ...taskDoc,
-    } as ProblemSolvingTask;
+    const t = taskDoc;
+    const taskData: ProblemSolvingTask = {
+      id: t.id,
+      title: t.title,
+      description: t.description,
+      difficulty: t.difficulty,
+      category: t.category,
+      functionName: t.function_name || t.functionName,
+      starterCode: t.starter_code || t.starterCode,
+      solution: t.solution,
+      testCases: t.test_cases || t.testCases || [],
+      constraints: t.constraints || [],
+      examples: t.examples || [],
+      tags: t.tags || [],
+      created_at: t.created_at,
+      updated_at: t.updated_at,
+      is_active: t.is_active,
+    };
 
     console.log(`✅ API: Problem solving task fetched: ${taskData.title}`);
 
@@ -96,12 +108,24 @@ export async function PUT(
     }
 
     // Update task in Supabase
+    const updateData: any = {
+      ...body,
+      updated_at: new Date().toISOString(),
+    };
+
+    // Map specific fields back to snake_case if they exist in body
+    if (body.functionName) updateData.function_name = body.functionName;
+    if (body.starterCode) updateData.starter_code = body.starterCode;
+    if (body.testCases) updateData.test_cases = body.testCases;
+
+    // Cleanup camelCase fields before sending to DB (optional but cleaner)
+    delete updateData.functionName;
+    delete updateData.starterCode;
+    delete updateData.testCases;
+
     const { error: updateError } = await supabase
       .from("problem_solving_tasks")
-      .update({
-        ...body,
-        updated_at: new Date().toISOString(),
-      })
+      .update(updateData)
       .eq("id", id);
 
     if (updateError) {
@@ -125,7 +149,7 @@ export async function PUT(
   }
 }
 
-// DELETE /api/admin/problem-solving/[id] - Delete problem solving task (soft delete)
+// DELETE /api/admin/problem-solving/[id] - Delete problem solving task
 export async function DELETE(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> },
@@ -157,17 +181,14 @@ export async function DELETE(
       );
     }
 
-    // Soft delete by setting is_active to false
-    const { error: updateError } = await supabase
+    // Hard delete for now, or soft delete if preferred
+    const { error: deleteError } = await supabase
       .from("problem_solving_tasks")
-      .update({
-        is_active: false,
-        updated_at: new Date().toISOString(),
-      })
+      .delete()
       .eq("id", id);
 
-    if (updateError) {
-      throw updateError;
+    if (deleteError) {
+      throw deleteError;
     }
 
     console.log(`✅ API: Problem solving task deleted: ${id}`);

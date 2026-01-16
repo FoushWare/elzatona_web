@@ -32,6 +32,29 @@ export const supabaseClient = isValidConfig
 // Export a helper to check if Supabase is available
 export const isSupabaseAvailable = () => supabaseClient !== null;
 
+/**
+ * Get a Supabase client with service role key (lazy initialization)
+ * This function creates the client only when called, not at module load time
+ * This prevents build-time errors when environment variables are not available
+ */
+export function getSupabaseClient() {
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+
+  if (!supabaseUrl || !supabaseServiceRoleKey) {
+    throw new Error(
+      "Missing required Supabase environment variables: NEXT_PUBLIC_SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY must be set",
+    );
+  }
+
+  return createClient(supabaseUrl, supabaseServiceRoleKey, {
+    auth: {
+      autoRefreshToken: false,
+      persistSession: false,
+    },
+  });
+}
+
 // Mirror auth session to cookie for simple client persistence across reloads
 if (supabaseClient && typeof window !== "undefined") {
   supabaseClient.auth.onAuthStateChange((event, session) => {

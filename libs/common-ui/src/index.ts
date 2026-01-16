@@ -110,3 +110,7 @@ export {
   type QuickAction,
 } from "./components/organisms/QuickActions";
 export type { QuickActionsPropsType } from "./components/organisms/QuickActions";
+
+// Problem Solving Feature
+export { ProblemSolver } from "./features/problem-solving/ProblemSolver";
+export { useProblemSolver } from "./features/problem-solving/ProblemSolverHooks";
