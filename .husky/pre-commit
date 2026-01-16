@@ -1,10 +1,2 @@
-#!/usr/bin/env sh
-. "$(dirname -- "$0")/_/husky.sh"
-
 echo "🔍 Running pre-commit hooks..."
 npx lint-staged
-
-# Fast check for TypeScript to ensure basics are correct
-# (optional - move to pre-push if it's too slow)
-# echo "📘 Running TypeScript check..."
-# npm run type-check -- --noEmit
