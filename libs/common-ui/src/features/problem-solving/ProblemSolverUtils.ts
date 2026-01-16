@@ -40,7 +40,7 @@ export const executeCode = async (
     `;
 
     // Execute
-     
+
     const userFunction = new Function("console", wrappedCode)(capturedConsole);
 
     if (typeof userFunction !== "function") {
