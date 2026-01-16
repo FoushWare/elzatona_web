@@ -99,27 +99,36 @@ export function ToastContainer({ toasts, onRemove }: ToastContainerProps) {
 export function useToast() {
   const [toasts, setToasts] = React.useState<Toast[]>([]);
 
-  const addToast = (toast: Omit<Toast, "id">) => {
+  const addToast = React.useCallback((toast: Omit<Toast, "id">) => {
     const id = Math.random().toString(36).substring(2, 11);
     const newToast: Toast = { ...toast, id };
     setToasts((prev) => [...prev, newToast]);
-  };
+  }, []);
 
-  const removeToast = (id: string) => {
+  const removeToast = React.useCallback((id: string) => {
     setToasts((prev) => prev.filter((toast) => toast.id !== id));
-  };
+  }, []);
 
-  const showSuccess = (title: string, message?: string) => {
-    addToast({ type: "success", title, message });
-  };
+  const showSuccess = React.useCallback(
+    (title: string, message?: string) => {
+      addToast({ type: "success", title, message });
+    },
+    [addToast],
+  );
 
-  const showError = (title: string, message?: string) => {
-    addToast({ type: "error", title, message });
-  };
+  const showError = React.useCallback(
+    (title: string, message?: string) => {
+      addToast({ type: "error", title, message });
+    },
+    [addToast],
+  );
 
-  const showInfo = (title: string, message?: string) => {
-    addToast({ type: "info", title, message });
-  };
+  const showInfo = React.useCallback(
+    (title: string, message?: string) => {
+      addToast({ type: "info", title, message });
+    },
+    [addToast],
+  );
 
   return {
     toasts,

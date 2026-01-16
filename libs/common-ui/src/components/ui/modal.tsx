@@ -3,8 +3,8 @@
 
 import React from "react";
 import { X } from "lucide-react";
-import { Button } from "../../index";
-import { Card, CardContent, CardHeader, CardTitle } from "../../index";
+import { Button } from "./button";
+import { Card, CardContent, CardHeader, CardTitle } from "./card";
 
 interface ModalProps {
   isOpen: boolean;

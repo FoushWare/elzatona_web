@@ -1,14 +1,14 @@
 "use client";
 
 import React, { Suspense } from "react";
+import { Input } from "../../components/ui/input";
 import {
-  Input,
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "../../index";
+} from "../../components/ui/select";
 
 const LoadingSkeleton = () => (
   <div className="animate-pulse">

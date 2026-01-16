@@ -6,9 +6,9 @@ import {
   CardContent,
   CardHeader,
   CardTitle,
-  Button,
-  Badge,
-} from "../../index";
+} from "../../components/ui/card";
+import { Button } from "../../components/ui/button";
+import { Badge } from "../../components/ui/badge";
 import {
   Layers,
   Edit,

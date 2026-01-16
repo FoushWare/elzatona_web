@@ -1,7 +1,7 @@
 "use client";
 
 import React, { Suspense } from "react";
-import { Card, CardContent } from "../../index";
+import { Card, CardContent } from "../../components/ui/card";
 import { ContentManagementStats } from "@elzatona/types";
 import { Layers, Users, BookOpen, Target, MessageSquare } from "lucide-react";
 

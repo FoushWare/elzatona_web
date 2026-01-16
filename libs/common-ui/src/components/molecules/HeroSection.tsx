@@ -3,7 +3,7 @@
 import React from "react";
 import { AnimatedTitle } from "../atoms/AnimatedTitle";
 import { CTAButton } from "../atoms/CTAButton";
-import { UserStatistics } from "../../index";
+import { UserStatistics } from "../../common/UserStatistics";
 import type { PersonalizedContent } from "@elzatona/types";
 
 interface HeroSectionProps {

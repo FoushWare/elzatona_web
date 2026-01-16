@@ -2,7 +2,7 @@
 
 import React from "react";
 import Link from "next/link";
-import { AdminLoginNavbar } from "../../index";
+import AdminLoginNavbar from "../../auth/AdminLoginNavbar";
 
 interface AdminLoginPageTemplateProps {
   readonly children: React.ReactNode;

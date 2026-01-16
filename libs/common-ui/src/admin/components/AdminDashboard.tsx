@@ -17,15 +17,15 @@ import {
   Zap,
   Star,
 } from "lucide-react";
+import { MetricGrid } from "../../components/organisms/MetricGrid";
+import { ActivityFeed } from "../../components/organisms/ActivityFeed";
+import { DataTableHeader } from "../../components/molecules/DataTableHeader";
+import { WelcomeHeader } from "../../components/molecules/WelcomeHeader";
+import { ErrorAlert } from "../../components/molecules/ErrorAlert";
 import {
-  MetricGrid,
-  ActivityFeed,
-  DataTableHeader,
-  WelcomeHeader,
-  ErrorAlert,
   QuickActions,
   type QuickAction,
-} from "../../index";
+} from "../../components/organisms/QuickActions";
 
 // Simple dashboard template wrapper
 const DashboardTemplate = ({ children }: { children: React.ReactNode }) => (

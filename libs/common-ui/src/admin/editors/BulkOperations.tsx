@@ -1,25 +1,26 @@
 "use client";
 
 import React, { useState } from "react";
+import { Button } from "../../components/ui/button";
 import {
-  Button,
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-  Badge,
-  Progress,
+} from "../../components/ui/card";
+import { Badge } from "../../components/ui/badge";
+import { Progress } from "../../components/ui/progress";
+import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-  Input,
-  Label,
-  Alert,
-  AlertDescription,
-} from "../../index";
+} from "../../components/ui/select";
+import { Input } from "../../components/ui/input";
+import { Label } from "../../components/ui/label";
+import { Alert, AlertDescription } from "../../components/ui/alert";
 import {
   Trash2,
   Edit,
