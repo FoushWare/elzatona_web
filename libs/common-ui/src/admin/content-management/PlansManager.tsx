@@ -403,9 +403,9 @@ export const PlansManager: React.FC<PlansManagerProps> = ({
                                                       className="text-[10px] bg-green-50"
                                                     >
                                                       {
-                                                        [
-                                                          ...planQuestions,
-                                                        ].filter((pq) =>
+                                                        Array.from(
+                                                          planQuestions,
+                                                        ).filter((pq) =>
                                                           pq.startsWith(
                                                             `${plan.id}-`,
                                                           ),
