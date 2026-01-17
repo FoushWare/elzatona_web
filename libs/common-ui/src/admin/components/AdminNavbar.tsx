@@ -17,6 +17,7 @@ import {
   HelpCircle,
   Code,
   Calculator,
+  Layers,
 } from "lucide-react";
 import { useTheme, useAdminAuth } from "@elzatona/contexts";
 import AlzatonaLogo from "../../common/AlzatonaLogo";
@@ -126,6 +127,12 @@ export default function AdminNavbar() {
       label: "Problem Solving",
       icon: Calculator,
       description: "Create and manage algorithmic coding challenges",
+    },
+    {
+      href: "/admin/learning-cards",
+      label: "Learning Cards",
+      icon: Layers,
+      description: "Organize content areas, categories, and topics",
     },
   ];
 
