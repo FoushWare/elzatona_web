@@ -8,3 +8,6 @@ export * from "./types";
 
 // Export interfaces
 export * from "./interfaces";
+// Export factory and context
+export * from "./RepositoryFactory";
+export * from "./RepositoryContext";
