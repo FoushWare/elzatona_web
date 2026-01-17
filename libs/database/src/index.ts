@@ -1,5 +1,19 @@
 // Database library exports
-// v1.0 - Multi-database support with Dependency Inversion Principle
+// v2.0 - Multi-database support with Repository Pattern and Dependency Inversion Principle
+
+// ============================================
+// REPOSITORY PATTERN (NEW)
+// ============================================
+
+// Repository types and interfaces
+export * from "./repositories";
+
+// PostgreSQL adapters
+export * from "./adapters";
+
+// ============================================
+// LEGACY DATABASE SERVICE (DEPRECATED)
+// ============================================
 
 // Core interfaces and types
 export type {
