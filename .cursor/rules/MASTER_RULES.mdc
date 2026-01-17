@@ -251,6 +251,9 @@ For detailed information, refer to specific rule files:
 - **Code Standards:** [cursor_rules.mdc](mdc:.cursor/rules/cursor_rules.mdc), [enhanced_cursor_rules.mdc](mdc:.cursor/rules/enhanced_cursor_rules.mdc)
 - **Documentation:** [no-markdown-creation.mdc](mdc:.cursor/rules/no-markdown-creation.mdc) - Use `docs/` directory for documentation
 - **Workflow:** [taskmaster/dev_workflow.mdc](mdc:.cursor/rules/taskmaster/dev_workflow.mdc)
+- **Slash Commands:**
+  - `/generate`: [generate.mdc](mdc:.cursor/rules/generate.mdc) - Planning & Spec transformation
+  - `/implement`: [implement.mdc](mdc:.cursor/rules/implement.mdc) - Code execution & Task completion
 - **Self-Improvement:** [self_improve.mdc](mdc:.cursor/rules/self_improve.mdc)
 
 ---

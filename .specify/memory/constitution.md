@@ -25,7 +25,16 @@ Development must prioritize stability and predictability. This is achieved throu
 
 Follow the Atomic Design pattern (Atoms, Molecules, Organisms, Templates, Pages). Maintain strict size limits and clear separation of concerns. Reusability is a first-class citizen.
 
-### IV. Quality Gates (NON-NEGOTIABLE)
+### IV. Model Strategy
+
+Development uses a two-phase model approach to optimize cost and quality:
+
+- **Planning Phase (`/generate`)**: Use premium models (e.g., Opus 4.5) for architectural design, spec transformation, and task breakdown. Focus on comprehensive analysis and detailed planning.
+- **Implementation Phase (`/implement`)**: Use low-cost models (e.g., 0x) for focused code execution. Strict adherence to plans and tasks with minimal token consumption.
+
+This strategy ensures high-quality architecture while maintaining cost efficiency during execution.
+
+### V. Quality Gates (NON-NEGOTIABLE)
 
 All code must pass through strict quality gates:
 
