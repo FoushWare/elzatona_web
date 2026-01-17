@@ -127,12 +127,6 @@ export default function AdminNavbar() {
       icon: Calculator,
       description: "Create and manage algorithmic coding challenges",
     },
-    {
-      href: "/admin/reports",
-      label: "Feature Reports",
-      icon: BarChart3,
-      description: "View project features and progress",
-    },
   ];
 
   return (
