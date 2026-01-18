@@ -1,39 +1,27 @@
 import { NextRequest, NextResponse } from "next/server";
-import { createClient } from "@supabase/supabase-js";
-
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
+import { RepositoryFactory } from "@elzatona/database";
 
 export async function GET(request: NextRequest) {
   try {
-    const supabase = createClient(supabaseUrl, supabaseServiceKey);
+    // Use RepositoryFactory to get repository instances
+    const questionRepository = RepositoryFactory.getRepository("question");
+    const planRepository = RepositoryFactory.getRepository("plan");
+    const cardRepository = RepositoryFactory.getRepository("learning-card");
 
-    // Fetch counts for all entities
-    const [
-      questionsResult,
-      categoriesResult,
-      topicsResult,
-      cardsResult,
-      learningPlansResult,
-      adminsResult,
-    ] = await Promise.all([
-      supabase.from("questions").select("id", { count: "exact", head: true }),
-      supabase.from("categories").select("id", { count: "exact", head: true }),
-      supabase.from("topics").select("id", { count: "exact", head: true }),
-      supabase.from("cards").select("id", { count: "exact", head: true }),
-      supabase
-        .from("learning_plans")
-        .select("id", { count: "exact", head: true }),
-      supabase.from("admins").select("id", { count: "exact", head: true }),
+    // Fetch counts for all entities using repositories
+    const [questions, plans, cards] = await Promise.all([
+      questionRepository.findAll(),
+      planRepository.findAll(),
+      cardRepository.findAll(),
     ]);
 
     const stats = {
-      questions: questionsResult.count || 0,
-      categories: categoriesResult.count || 0,
-      topics: topicsResult.count || 0,
-      cards: cardsResult.count || 0,
-      learningPlans: learningPlansResult.count || 0,
-      admins: adminsResult.count || 0,
+      questions: questions?.length || 0,
+      categories: 0, // TODO: Implement category repository
+      topics: 0, // TODO: Implement topic repository
+      cards: cards?.length || 0,
+      learningPlans: plans?.length || 0,
+      admins: 0, // TODO: Implement admin repository or user repository with admin filter
       totalTasks: 0,
       lastUpdated: new Date().toISOString(),
     };
