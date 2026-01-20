@@ -227,10 +227,17 @@ done
 echo ""
 echo "📄 Log file: $LOG_FILE"
 
+
 if [ ${#FAILED_CHECKS[@]} -ne 0 ]; then
   echo ""
   echo -e "${YELLOW}⚠️  Fix issues or bypass with:${NC}"
   echo "   git push --no-verify"
+  echo -e "${RED}━━━ ERRORS & WARNINGS ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
+  # Print all error and warning lines from the log file
+  grep -E "\\[error]|\\[warn]|failed|SyntaxError|Declaration or statement expected|expected|❌" "$LOG_FILE" | sed 's/^/   /'
+  echo -e "${BLUE}━━━ LOG TAIL (last 40 lines) ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
+  tail -n 40 "$LOG_FILE" | sed 's/^/   /'
+  echo -e "${CYAN}📄 Full log: $LOG_FILE${NC}"
   exit 1
 fi
 
