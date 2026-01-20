@@ -17,7 +17,20 @@ vi.mock("@supabase/supabase-js", () => ({
       select: vi.fn().mockReturnThis(),
       eq: vi.fn().mockReturnThis(),
       single: vi.fn(() => ({ data: null, error: { code: "PGRST116" } })),
-      insert: vi.fn(() => ({ select: vi.fn().mockReturnThis(), single: vi.fn(() => ({ data: { id: 1, email: "newadmin@example.com", name: "New Admin", role: "admin", is_active: true, created_at: new Date().toISOString() }, error: null }) }))
+      insert: vi.fn(() => ({
+        select: vi.fn().mockReturnThis(),
+        single: vi.fn(() => ({
+          data: {
+            id: 1,
+            email: "newadmin@example.com",
+            name: "New Admin",
+            role: "admin",
+            is_active: true,
+            created_at: new Date().toISOString(),
+          },
+          error: null,
+        })),
+      })),
     })),
   })),
 }));
@@ -42,7 +55,10 @@ vi.mock("jsonwebtoken", () => ({
 
 // Mock api-config
 vi.mock("../../../../lib/utils/api-config", () => ({
-  getSupabaseConfig: vi.fn(() => ({ url: "https://test.supabase.co", serviceRoleKey: "test-service-role-key" })),
+  getSupabaseConfig: vi.fn(() => ({
+    url: "https://test.supabase.co",
+    serviceRoleKey: "test-service-role-key",
+  })),
 }));
 
 // Mock environment variables
@@ -136,7 +152,9 @@ describe("Admin Create API Route", () => {
       process.env.BCRYPT_SALT_ROUNDS = "12";
       const password = "new-password";
 
-      (bcrypt.hash as ReturnType<typeof vi.fn>).mockResolvedValue("hashed-password");
+      (bcrypt.hash as ReturnType<typeof vi.fn>).mockResolvedValue(
+        "hashed-password",
+      );
 
       const saltRounds = parseInt(process.env.BCRYPT_SALT_ROUNDS || "10", 10);
       await bcrypt.hash(password, saltRounds);
@@ -148,7 +166,9 @@ describe("Admin Create API Route", () => {
       delete process.env.BCRYPT_SALT_ROUNDS;
       const password = "new-password";
 
-      (bcrypt.hash as ReturnType<typeof vi.fn>).mockResolvedValue("hashed-password");
+      (bcrypt.hash as ReturnType<typeof vi.fn>).mockResolvedValue(
+        "hashed-password",
+      );
 
       const saltRounds = parseInt(process.env.BCRYPT_SALT_ROUNDS || "10", 10);
       await bcrypt.hash(password, saltRounds);
