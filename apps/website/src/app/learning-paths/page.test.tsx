@@ -10,7 +10,9 @@ import LearningPathsPage from "./page";
 import * as sharedContexts from "@elzatona/contexts";
 
 vi.mock("@elzatona/contexts", async () => {
-  const actual = await vi.importActual<any>("../../test-utils/mocks/shared-contexts");
+  const actual = await vi.importActual<any>(
+    "../../test-utils/mocks/shared-contexts",
+  );
   return {
     ...actual,
     useAuth: vi.fn(),

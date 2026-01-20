@@ -11,7 +11,9 @@ import * as sharedContexts from "@elzatona/contexts";
 
 // Mock shared contexts
 vi.mock("@elzatona/contexts", async () => {
-  const actual = await vi.importActual<any>("../../test-utils/mocks/shared-contexts");
+  const actual = await vi.importActual<any>(
+    "../../test-utils/mocks/shared-contexts",
+  );
   return {
     ...actual,
     useUserType: vi.fn(),
