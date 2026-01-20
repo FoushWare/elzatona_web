@@ -112,8 +112,10 @@ run_check() {
 
     [ -n "$fix_hint" ] && echo -e "${YELLOW}💡 $fix_hint${NC}"
 
-    echo -e "${BLUE}📄 Log tail:${NC}"
-    tail -n 12 "$LOG_FILE" | sed 's/^/   /'
+    echo -e "${BLUE}📄 Log tail (last 40 lines):${NC}"
+    tail -n 40 "$LOG_FILE" | sed 's/^/   /'
+    echo -e "${RED}🔎 Check '$name' failed with exit code $exit_code${NC}"
+    echo -e "${CYAN}📄 Full log: $LOG_FILE${NC}"
   fi
 
   return $exit_code
