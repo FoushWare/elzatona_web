@@ -4,7 +4,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createRepositoryFactoryFromEnv } from "../../../../../../libs/database/src/repositories/RepositoryFactory";
 
-// GET /api/sections - Get all sections
+export async function GET() {
   try {
     const factory = createRepositoryFactoryFromEnv();
     const sectionRepo = factory.getSectionRepository();
@@ -18,14 +18,15 @@ import { createRepositoryFactoryFromEnv } from "../../../../../../libs/database/
     return NextResponse.json(
       {
         success: false,
-        error: error instanceof Error ? error.message : "Failed to fetch sections",
+        error:
+          error instanceof Error ? error.message : "Failed to fetch sections",
       },
       { status: 500 },
     );
   }
 }
 
-// POST /api/sections - Create a new section
+export async function POST(request: NextRequest) {
   try {
     const sectionData = await request.json();
     // Basic validation
@@ -54,7 +55,8 @@ import { createRepositoryFactoryFromEnv } from "../../../../../../libs/database/
     return NextResponse.json(
       {
         success: false,
-        error: error instanceof Error ? error.message : "Failed to create section",
+        error:
+          error instanceof Error ? error.message : "Failed to create section",
       },
       { status: 500 },
     );

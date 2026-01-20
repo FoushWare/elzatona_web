@@ -17,7 +17,7 @@ export interface Category {
   updated_at: Date;
 }
 
-// GET /api/categories - Get all categories
+export async function GET() {
   try {
     const factory = createRepositoryFactoryFromEnv();
     const categoryRepo = factory.getCategoryRepository();
@@ -48,7 +48,7 @@ export interface Category {
   }
 }
 
-// POST /api/categories - Create a new category
+export async function POST(request: NextRequest) {
   try {
     const categoryData = await request.json();
     // Validate and sanitize category data

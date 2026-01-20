@@ -26,7 +26,7 @@ export interface Flashcard {
   source: "wrong_answer" | "manual" | "bookmark";
 }
 
-// Create a new flashcard
+export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
     const { question, answer, sectionId } = body;
@@ -58,7 +58,7 @@ export interface Flashcard {
   }
 }
 
-// Get flashcards for a user
+export async function GET() {
   try {
     const factory = createRepositoryFactoryFromEnv();
     const flashcardRepo = factory.getFlashcardRepository();

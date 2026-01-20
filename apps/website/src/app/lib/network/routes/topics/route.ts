@@ -6,7 +6,7 @@ import { createRepositoryFactoryFromEnv } from "../../../../../../libs/database/
 import { sanitizeObjectServer } from "../../../sanitize-server";
 import { validateAndSanitize, topicSchema } from "../../../validation";
 
-// GET /api/topics - Get all topics
+export async function GET() {
   try {
     const factory = createRepositoryFactoryFromEnv();
     const topicRepo = factory.getTopicRepository();
@@ -38,7 +38,7 @@ import { validateAndSanitize, topicSchema } from "../../../validation";
   }
 }
 
-// POST /api/topics - Create a new topic
+export async function POST(request: NextRequest) {
   try {
     const topicData = await request.json();
     // Validate and sanitize topic data
