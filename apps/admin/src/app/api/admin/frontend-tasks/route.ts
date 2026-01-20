@@ -20,8 +20,8 @@ export async function GET(request: NextRequest) {
     const difficulty = searchParams.get("difficulty") || "";
 
     // Use repository pattern: findByType for 'frontend-task'
-    let options = { page, limit };
-    let tasksResult = await questionRepo.findByType("frontend-task", options);
+    const options = { page, limit };
+    const tasksResult = await questionRepo.findByType("frontend-task", options);
     let data: FrontendTask[] = tasksResult.data || [];
 
     // Apply additional filters client-side if needed

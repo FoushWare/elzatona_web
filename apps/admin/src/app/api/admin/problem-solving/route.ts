@@ -20,8 +20,8 @@ export async function GET(request: NextRequest) {
     const difficulty = searchParams.get("difficulty") || "";
 
     // Use repository pattern: findByType for 'problem'
-    let options = { page, limit };
-    let tasksResult = await questionRepo.findByType("problem", options);
+    const options = { page, limit };
+    const tasksResult = await questionRepo.findByType("problem", options);
     let data: ProblemSolvingTask[] = tasksResult.data || [];
 
     // Apply additional filters client-side if needed
