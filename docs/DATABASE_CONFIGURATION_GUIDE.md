@@ -8,12 +8,12 @@ The Elzatona Web platform now supports multiple databases through a repository p
 
 ## Supported Databases
 
-| Database | Status | Configuration Required |
-|----------|--------|------------------------|
-| **PostgreSQL** | ✅ Fully Supported | Connection URL, API Key |
-| **MongoDB** | 🔄 Ready for Implementation | Adapter pending |
-| **MySQL** | 🔄 Ready for Implementation | Adapter pending |
-| **Firebase** | 🔄 Ready for Implementation | Adapter pending |
+| Database       | Status                      | Configuration Required  |
+| -------------- | --------------------------- | ----------------------- |
+| **PostgreSQL** | ✅ Fully Supported          | Connection URL, API Key |
+| **MongoDB**    | 🔄 Ready for Implementation | Adapter pending         |
+| **MySQL**      | 🔄 Ready for Implementation | Adapter pending         |
+| **Firebase**   | 🔄 Ready for Implementation | Adapter pending         |
 
 ---
 
@@ -94,18 +94,18 @@ API Routes → RepositoryFactory → Repository Interface → Database Adapter
 
 ```typescript
 // In your API route
-import { createRepositoryFactoryFromEnv } from '@/libs/database/src/repositories/RepositoryFactory';
+import { createRepositoryFactoryFromEnv } from "@/libs/database/src/repositories/RepositoryFactory";
 
 export async function GET() {
   // Factory reads DATABASE_TYPE from environment
   const factory = createRepositoryFactoryFromEnv();
-  
+
   // Get repository instance (database-agnostic)
   const categoryRepo = factory.getCategoryRepository();
-  
+
   // Perform operations (same code works for all databases)
   const categories = await categoryRepo.getAllCategories();
-  
+
   return Response.json({ categories });
 }
 ```
@@ -129,6 +129,7 @@ export async function GET() {
 ### Required Tables
 
 #### Categories
+
 ```sql
 CREATE TABLE categories (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
@@ -140,6 +141,7 @@ CREATE TABLE categories (
 ```
 
 #### Topics
+
 ```sql
 CREATE TABLE topics (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
@@ -152,6 +154,7 @@ CREATE TABLE topics (
 ```
 
 #### Sections
+
 ```sql
 CREATE TABLE sections (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
@@ -164,6 +167,7 @@ CREATE TABLE sections (
 ```
 
 #### Flashcards
+
 ```sql
 CREATE TABLE flashcards (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
@@ -176,6 +180,7 @@ CREATE TABLE flashcards (
 ```
 
 #### Progress
+
 ```sql
 CREATE TABLE progress (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
@@ -191,29 +196,29 @@ CREATE TABLE progress (
 ## Migration from Direct Database Calls
 
 ### Before (Direct Supabase)
+
 ```typescript
-import { getSupabaseClient } from '@/lib/supabase';
+import { getSupabaseClient } from "@/lib/supabase";
 
 export async function GET() {
   const supabase = getSupabaseClient();
-  const { data, error } = await supabase
-    .from('categories')
-    .select('*');
-    
+  const { data, error } = await supabase.from("categories").select("*");
+
   if (error) throw error;
   return Response.json(data);
 }
 ```
 
 ### After (Repository Pattern)
+
 ```typescript
-import { createRepositoryFactoryFromEnv } from '@/libs/database';
+import { createRepositoryFactoryFromEnv } from "@/libs/database";
 
 export async function GET() {
   const factory = createRepositoryFactoryFromEnv();
   const repo = factory.getCategoryRepository();
   const categories = await repo.getAllCategories();
-  
+
   return Response.json(categories);
 }
 ```
@@ -223,21 +228,25 @@ export async function GET() {
 ## Benefits
 
 ### 1. Database Flexibility
+
 - Switch databases without changing application code
 - Test with different databases
 - Use different databases for different environments
 
 ### 2. Improved Testability
+
 - Mock repositories for unit tests
 - No need for actual database in tests
 - Faster test execution
 
 ### 3. Cleaner Code
+
 - Single responsibility principle
 - Clear separation of concerns
 - Less boilerplate
 
 ### 4. Better Performance
+
 - Database-specific optimizations possible
 - Connection pooling managed by adapters
 - Easy to add caching layers
@@ -249,6 +258,7 @@ export async function GET() {
 ### Adding a New Repository
 
 1. **Define Interface** (`libs/database/src/repositories/interfaces/`)
+
 ```typescript
 export interface IMyEntityRepository {
   getById(id: string): Promise<MyEntity | null>;
@@ -260,38 +270,40 @@ export interface IMyEntityRepository {
 ```
 
 2. **Implement Adapter** (`libs/database/src/adapters/postgresql/`)
+
 ```typescript
 export class PostgreSQLMyEntityRepository implements IMyEntityRepository {
   private pool: Pool;
-  
+
   constructor(pool: Pool) {
     this.pool = pool;
   }
-  
+
   async getById(id: string): Promise<MyEntity | null> {
     const res = await this.pool.query(
-      'SELECT * FROM my_entities WHERE id = $1', 
-      [id]
+      "SELECT * FROM my_entities WHERE id = $1",
+      [id],
     );
     return res.rows[0] || null;
   }
-  
+
   // ... implement other methods
 }
 ```
 
 3. **Add to Factory** (`libs/database/src/repositories/RepositoryFactory.ts`)
+
 ```typescript
 export class RepositoryFactory {
   private myEntityRepository?: IMyEntityRepository;
-  
+
   getMyEntityRepository(): IMyEntityRepository {
     if (!this.myEntityRepository) {
       this.myEntityRepository = this.createMyEntityRepository();
     }
     return this.myEntityRepository;
   }
-  
+
   private createMyEntityRepository(): IMyEntityRepository {
     switch (this.config.database.type) {
       case "postgresql":
@@ -303,6 +315,7 @@ export class RepositoryFactory {
 ```
 
 4. **Use in API Routes**
+
 ```typescript
 const factory = createRepositoryFactoryFromEnv();
 const repo = factory.getMyEntityRepository();
@@ -314,19 +327,23 @@ const entities = await repo.getAll();
 ## Troubleshooting
 
 ### Error: "Unsupported database type"
+
 - Ensure `DATABASE_TYPE` is set in `.env.local`
 - Check spelling: `postgresql`, `mongodb`, `mysql`, or `firebase`
 
 ### Error: "Database connection failed"
+
 - Verify database credentials in `.env.local`
 - Check network connectivity
 - Ensure database service is running
 
 ### Error: "Repository not found"
+
 - Verify repository is registered in RepositoryFactory
 - Check import statements
 
 ### Performance Issues
+
 - Review query efficiency
 - Check connection pool settings
 - Consider adding indexes to database tables

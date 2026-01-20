@@ -5,11 +5,13 @@
 This document provides a comprehensive migration plan to convert all direct Supabase usage to the repository pattern, enabling support for multiple databases (PostgreSQL, MongoDB, Firebase, MySQL).
 
 **Current State:**
+
 - Admin app API routes: ✅ Mostly migrated
 - Website app: ❌ Uses direct Supabase calls extensively
 - Shared libraries: ❌ Some direct Supabase usage
 
 **Target State:**
+
 - All data access through repository interfaces
 - Database type configurable via `DATABASE_TYPE` env variable
 - Support for PostgreSQL, MongoDB, Firebase, MySQL
@@ -21,6 +23,7 @@ This document provides a comprehensive migration plan to convert all direct Supa
 ### Task 1.1: Extend Repository Interfaces for Missing Entities
 
 **Files to create/modify:**
+
 - `libs/database/src/repositories/interfaces/ICategoryRepository.ts`
 - `libs/database/src/repositories/interfaces/ITopicRepository.ts`
 - `libs/database/src/repositories/interfaces/ISectionRepository.ts`
@@ -81,7 +84,10 @@ export interface ICategoryRepository {
   findById(id: string): Promise<Category | null>;
   findBySlug(slug: string): Promise<Category | null>;
   findAll(options?: QueryOptions): Promise<PaginatedResult<Category>>;
-  findByParent(parentId: string | null, options?: QueryOptions): Promise<PaginatedResult<Category>>;
+  findByParent(
+    parentId: string | null,
+    options?: QueryOptions,
+  ): Promise<PaginatedResult<Category>>;
   findActive(options?: QueryOptions): Promise<PaginatedResult<Category>>;
 
   // UPDATE
@@ -91,7 +97,9 @@ export interface ICategoryRepository {
   delete(id: string): Promise<void>;
 
   // STATISTICS
-  getCategoryStatistics(id: string): Promise<{ questionCount: number; topicCount: number }>;
+  getCategoryStatistics(
+    id: string,
+  ): Promise<{ questionCount: number; topicCount: number }>;
 }
 ```
 
@@ -147,8 +155,14 @@ export interface ITopicRepository {
   findById(id: string): Promise<Topic | null>;
   findBySlug(slug: string): Promise<Topic | null>;
   findAll(options?: QueryOptions): Promise<PaginatedResult<Topic>>;
-  findByCategory(categoryId: string, options?: QueryOptions): Promise<PaginatedResult<Topic>>;
-  findByParent(parentId: string | null, options?: QueryOptions): Promise<PaginatedResult<Topic>>;
+  findByCategory(
+    categoryId: string,
+    options?: QueryOptions,
+  ): Promise<PaginatedResult<Topic>>;
+  findByParent(
+    parentId: string | null,
+    options?: QueryOptions,
+  ): Promise<PaginatedResult<Topic>>;
   findActive(options?: QueryOptions): Promise<PaginatedResult<Topic>>;
 
   // UPDATE
@@ -207,7 +221,10 @@ export interface ISectionRepository {
   // READ
   findById(id: string): Promise<Section | null>;
   findAll(options?: QueryOptions): Promise<PaginatedResult<Section>>;
-  findByPlan(planId: string, options?: QueryOptions): Promise<PaginatedResult<Section>>;
+  findByPlan(
+    planId: string,
+    options?: QueryOptions,
+  ): Promise<PaginatedResult<Section>>;
   findActive(options?: QueryOptions): Promise<PaginatedResult<Section>>;
 
   // UPDATE
@@ -271,9 +288,18 @@ export interface IFlashcardRepository {
   // READ
   findById(id: string): Promise<Flashcard | null>;
   findAll(options?: QueryOptions): Promise<PaginatedResult<Flashcard>>;
-  findByUser(userId: string, options?: QueryOptions): Promise<PaginatedResult<Flashcard>>;
-  findByCategory(categoryId: string, options?: QueryOptions): Promise<PaginatedResult<Flashcard>>;
-  findByTopic(topicId: string, options?: QueryOptions): Promise<PaginatedResult<Flashcard>>;
+  findByUser(
+    userId: string,
+    options?: QueryOptions,
+  ): Promise<PaginatedResult<Flashcard>>;
+  findByCategory(
+    categoryId: string,
+    options?: QueryOptions,
+  ): Promise<PaginatedResult<Flashcard>>;
+  findByTopic(
+    topicId: string,
+    options?: QueryOptions,
+  ): Promise<PaginatedResult<Flashcard>>;
 
   // UPDATE
   update(id: string, flashcard: UpdateFlashcardDTO): Promise<Flashcard>;
@@ -351,14 +377,32 @@ export interface IProgressRepository {
 
   // READ
   findProgressById(id: string): Promise<UserProgress | null>;
-  findProgressByUser(userId: string, options?: QueryOptions): Promise<PaginatedResult<UserProgress>>;
-  findProgressByPlan(userId: string, planId: string): Promise<UserProgress | null>;
-  findProgressByQuestion(userId: string, questionId: string): Promise<UserProgress | null>;
-  getAttemptsByUser(userId: string, options?: QueryOptions): Promise<PaginatedResult<QuestionAttempt>>;
-  getAttemptsByQuestion(userId: string, questionId: string): Promise<QuestionAttempt[]>;
+  findProgressByUser(
+    userId: string,
+    options?: QueryOptions,
+  ): Promise<PaginatedResult<UserProgress>>;
+  findProgressByPlan(
+    userId: string,
+    planId: string,
+  ): Promise<UserProgress | null>;
+  findProgressByQuestion(
+    userId: string,
+    questionId: string,
+  ): Promise<UserProgress | null>;
+  getAttemptsByUser(
+    userId: string,
+    options?: QueryOptions,
+  ): Promise<PaginatedResult<QuestionAttempt>>;
+  getAttemptsByQuestion(
+    userId: string,
+    questionId: string,
+  ): Promise<QuestionAttempt[]>;
 
   // UPDATE
-  updateProgress(id: string, progress: UpdateProgressDTO): Promise<UserProgress>;
+  updateProgress(
+    id: string,
+    progress: UpdateProgressDTO,
+  ): Promise<UserProgress>;
   upsertProgress(progress: CreateProgressDTO): Promise<UserProgress>;
 
   // STATISTICS
@@ -368,7 +412,10 @@ export interface IProgressRepository {
     averageScore: number;
     totalTimeSpent: number;
   }>;
-  getPlanProgress(userId: string, planId: string): Promise<{
+  getPlanProgress(
+    userId: string,
+    planId: string,
+  ): Promise<{
     completedSections: number;
     totalSections: number;
     percentage: number;
@@ -457,7 +504,9 @@ export class RepositoryFactory {
       case "mysql":
         throw new Error("MySQL adapter not yet implemented");
       default:
-        throw new Error(`Unsupported database type: ${this.config.database.type}`);
+        throw new Error(
+          `Unsupported database type: ${this.config.database.type}`,
+        );
     }
   }
 
@@ -470,7 +519,9 @@ export class RepositoryFactory {
       case "mysql":
         throw new Error("MySQL adapter not yet implemented");
       default:
-        throw new Error(`Unsupported database type: ${this.config.database.type}`);
+        throw new Error(
+          `Unsupported database type: ${this.config.database.type}`,
+        );
     }
   }
 
@@ -483,7 +534,9 @@ export class RepositoryFactory {
       case "mysql":
         throw new Error("MySQL adapter not yet implemented");
       default:
-        throw new Error(`Unsupported database type: ${this.config.database.type}`);
+        throw new Error(
+          `Unsupported database type: ${this.config.database.type}`,
+        );
     }
   }
 
@@ -496,7 +549,9 @@ export class RepositoryFactory {
       case "mysql":
         throw new Error("MySQL adapter not yet implemented");
       default:
-        throw new Error(`Unsupported database type: ${this.config.database.type}`);
+        throw new Error(
+          `Unsupported database type: ${this.config.database.type}`,
+        );
     }
   }
 
@@ -509,7 +564,9 @@ export class RepositoryFactory {
       case "mysql":
         throw new Error("MySQL adapter not yet implemented");
       default:
-        throw new Error(`Unsupported database type: ${this.config.database.type}`);
+        throw new Error(
+          `Unsupported database type: ${this.config.database.type}`,
+        );
     }
   }
 
@@ -611,7 +668,10 @@ export class PostgreSQLCategoryRepository implements ICategoryRepository {
       query = query.order("created_at", { ascending: false });
     }
 
-    const { data, error, count } = await query.range(offset, offset + limit - 1);
+    const { data, error, count } = await query.range(
+      offset,
+      offset + limit - 1,
+    );
 
     if (error) throw new Error(`Failed to fetch categories: ${error.message}`);
 
@@ -628,14 +688,12 @@ export class PostgreSQLCategoryRepository implements ICategoryRepository {
 
   async findByParent(
     parentId: string | null,
-    options?: QueryOptions
+    options?: QueryOptions,
   ): Promise<PaginatedResult<Category>> {
     const limit = options?.limit || 10;
     const offset = options?.offset || 0;
 
-    let query = this.client
-      .from(TABLE_NAME)
-      .select("*", { count: "exact" });
+    let query = this.client.from(TABLE_NAME).select("*", { count: "exact" });
 
     if (parentId === null) {
       query = query.is("parent_id", null);
@@ -645,7 +703,10 @@ export class PostgreSQLCategoryRepository implements ICategoryRepository {
 
     query = query.order("order_index", { ascending: true });
 
-    const { data, error, count } = await query.range(offset, offset + limit - 1);
+    const { data, error, count } = await query.range(
+      offset,
+      offset + limit - 1,
+    );
 
     if (error) throw new Error(`Failed to fetch categories: ${error.message}`);
 
@@ -703,7 +764,7 @@ export class PostgreSQLCategoryRepository implements ICategoryRepository {
   }
 
   async getCategoryStatistics(
-    id: string
+    id: string,
   ): Promise<{ questionCount: number; topicCount: number }> {
     const [questionsResult, topicsResult] = await Promise.all([
       this.client
@@ -813,7 +874,10 @@ export class PostgreSQLTopicRepository implements ITopicRepository {
       query = query.order("order_index", { ascending: true });
     }
 
-    const { data, error, count } = await query.range(offset, offset + limit - 1);
+    const { data, error, count } = await query.range(
+      offset,
+      offset + limit - 1,
+    );
 
     if (error) throw new Error(`Failed to fetch topics: ${error.message}`);
 
@@ -830,7 +894,7 @@ export class PostgreSQLTopicRepository implements ITopicRepository {
 
   async findByCategory(
     categoryId: string,
-    options?: QueryOptions
+    options?: QueryOptions,
   ): Promise<PaginatedResult<Topic>> {
     const limit = options?.limit || 10;
     const offset = options?.offset || 0;
@@ -857,7 +921,7 @@ export class PostgreSQLTopicRepository implements ITopicRepository {
 
   async findByParent(
     parentId: string | null,
-    options?: QueryOptions
+    options?: QueryOptions,
   ): Promise<PaginatedResult<Topic>> {
     const limit = options?.limit || 10;
     const offset = options?.offset || 0;
@@ -941,7 +1005,8 @@ export class PostgreSQLTopicRepository implements ITopicRepository {
       .select("id", { count: "exact", head: true })
       .eq("topic_id", id);
 
-    if (error) throw new Error(`Failed to get topic statistics: ${error.message}`);
+    if (error)
+      throw new Error(`Failed to get topic statistics: ${error.message}`);
 
     return { questionCount: count || 0 };
   }
@@ -1014,7 +1079,10 @@ export class PostgreSQLSectionRepository implements ISectionRepository {
       query = query.order("order_index", { ascending: true });
     }
 
-    const { data, error, count } = await query.range(offset, offset + limit - 1);
+    const { data, error, count } = await query.range(
+      offset,
+      offset + limit - 1,
+    );
 
     if (error) throw new Error(`Failed to fetch sections: ${error.message}`);
 
@@ -1031,7 +1099,7 @@ export class PostgreSQLSectionRepository implements ISectionRepository {
 
   async findByPlan(
     planId: string,
-    options?: QueryOptions
+    options?: QueryOptions,
   ): Promise<PaginatedResult<Section>> {
     const limit = options?.limit || 10;
     const offset = options?.offset || 0;
@@ -1176,7 +1244,10 @@ export class PostgreSQLFlashcardRepository implements IFlashcardRepository {
       query = query.order("created_at", { ascending: false });
     }
 
-    const { data, error, count } = await query.range(offset, offset + limit - 1);
+    const { data, error, count } = await query.range(
+      offset,
+      offset + limit - 1,
+    );
 
     if (error) throw new Error(`Failed to fetch flashcards: ${error.message}`);
 
@@ -1193,7 +1264,7 @@ export class PostgreSQLFlashcardRepository implements IFlashcardRepository {
 
   async findByUser(
     userId: string,
-    options?: QueryOptions
+    options?: QueryOptions,
   ): Promise<PaginatedResult<Flashcard>> {
     const limit = options?.limit || 10;
     const offset = options?.offset || 0;
@@ -1220,7 +1291,7 @@ export class PostgreSQLFlashcardRepository implements IFlashcardRepository {
 
   async findByCategory(
     categoryId: string,
-    options?: QueryOptions
+    options?: QueryOptions,
   ): Promise<PaginatedResult<Flashcard>> {
     const limit = options?.limit || 10;
     const offset = options?.offset || 0;
@@ -1247,7 +1318,7 @@ export class PostgreSQLFlashcardRepository implements IFlashcardRepository {
 
   async findByTopic(
     topicId: string,
-    options?: QueryOptions
+    options?: QueryOptions,
   ): Promise<PaginatedResult<Flashcard>> {
     const limit = options?.limit || 10;
     const offset = options?.offset || 0;
@@ -1366,7 +1437,7 @@ export class PostgreSQLProgressRepository implements IProgressRepository {
 
   async findProgressByUser(
     userId: string,
-    options?: QueryOptions
+    options?: QueryOptions,
   ): Promise<PaginatedResult<UserProgress>> {
     const limit = options?.limit || 10;
     const offset = options?.offset || 0;
@@ -1393,7 +1464,7 @@ export class PostgreSQLProgressRepository implements IProgressRepository {
 
   async findProgressByPlan(
     userId: string,
-    planId: string
+    planId: string,
   ): Promise<UserProgress | null> {
     const { data, error } = await this.client
       .from(PROGRESS_TABLE)
@@ -1410,7 +1481,7 @@ export class PostgreSQLProgressRepository implements IProgressRepository {
 
   async findProgressByQuestion(
     userId: string,
-    questionId: string
+    questionId: string,
   ): Promise<UserProgress | null> {
     const { data, error } = await this.client
       .from(PROGRESS_TABLE)
@@ -1427,7 +1498,7 @@ export class PostgreSQLProgressRepository implements IProgressRepository {
 
   async getAttemptsByUser(
     userId: string,
-    options?: QueryOptions
+    options?: QueryOptions,
   ): Promise<PaginatedResult<QuestionAttempt>> {
     const limit = options?.limit || 10;
     const offset = options?.offset || 0;
@@ -1454,7 +1525,7 @@ export class PostgreSQLProgressRepository implements IProgressRepository {
 
   async getAttemptsByQuestion(
     userId: string,
-    questionId: string
+    questionId: string,
   ): Promise<QuestionAttempt[]> {
     const { data, error } = await this.client
       .from(ATTEMPTS_TABLE)
@@ -1469,7 +1540,7 @@ export class PostgreSQLProgressRepository implements IProgressRepository {
 
   async updateProgress(
     id: string,
-    progress: UpdateProgressDTO
+    progress: UpdateProgressDTO,
   ): Promise<UserProgress> {
     const { data, error } = await this.client
       .from(PROGRESS_TABLE)
@@ -1513,7 +1584,7 @@ export class PostgreSQLProgressRepository implements IProgressRepository {
     const totalScore = completed.reduce((sum, p) => sum + (p.score || 0), 0);
     const totalTime = progressData.reduce(
       (sum, p) => sum + (p.time_spent || 0),
-      0
+      0,
     );
 
     return {
@@ -1526,7 +1597,7 @@ export class PostgreSQLProgressRepository implements IProgressRepository {
 
   async getPlanProgress(
     userId: string,
-    planId: string
+    planId: string,
   ): Promise<{
     completedSections: number;
     totalSections: number;
@@ -1578,6 +1649,7 @@ export class PostgreSQLProgressRepository implements IProgressRepository {
 **File:** `apps/website/src/app/lib/network/routes/categories/route.ts`
 
 #### Before (Direct Supabase):
+
 ```typescript
 import { getSupabaseClient } from "../../../get-supabase-client";
 
@@ -1592,6 +1664,7 @@ export async function GET() {
 ```
 
 #### After (Repository Pattern):
+
 ```typescript
 import { NextResponse } from "next/server";
 import { getRepositoryFactory } from "@elzatona/database";
@@ -1616,7 +1689,7 @@ export async function GET() {
     console.error("[Categories API] Error:", error);
     return NextResponse.json(
       { success: false, error: "Failed to fetch categories" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
@@ -1629,12 +1702,15 @@ export async function POST(request: Request) {
     const body = await request.json();
     const category = await categoryRepo.create(body);
 
-    return NextResponse.json({ success: true, data: category }, { status: 201 });
+    return NextResponse.json(
+      { success: true, data: category },
+      { status: 201 },
+    );
   } catch (error) {
     console.error("[Categories API] Error:", error);
     return NextResponse.json(
       { success: false, error: "Failed to create category" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
@@ -1645,13 +1721,14 @@ export async function POST(request: Request) {
 **File:** `apps/website/src/app/lib/network/routes/topics/[id]/route.ts`
 
 #### After (Repository Pattern):
+
 ```typescript
 import { NextRequest, NextResponse } from "next/server";
 import { getRepositoryFactory } from "@elzatona/database";
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: { id: string } },
 ) {
   try {
     const factory = getRepositoryFactory();
@@ -1662,7 +1739,7 @@ export async function GET(
     if (!topic) {
       return NextResponse.json(
         { success: false, error: "Topic not found" },
-        { status: 404 }
+        { status: 404 },
       );
     }
 
@@ -1671,14 +1748,14 @@ export async function GET(
     console.error("[Topics API] Error:", error);
     return NextResponse.json(
       { success: false, error: "Failed to fetch topic" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
 
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: { id: string } },
 ) {
   try {
     const factory = getRepositoryFactory();
@@ -1692,14 +1769,14 @@ export async function PUT(
     console.error("[Topics API] Error:", error);
     return NextResponse.json(
       { success: false, error: "Failed to update topic" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
 
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: { id: string } },
 ) {
   try {
     const factory = getRepositoryFactory();
@@ -1712,7 +1789,7 @@ export async function DELETE(
     console.error("[Topics API] Error:", error);
     return NextResponse.json(
       { success: false, error: "Failed to delete topic" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
@@ -1723,6 +1800,7 @@ export async function DELETE(
 **File:** `apps/website/src/app/lib/network/routes/questions/unified/route.ts`
 
 #### After (Repository Pattern):
+
 ```typescript
 import { NextRequest, NextResponse } from "next/server";
 import { getRepositoryFactory } from "@elzatona/database";
@@ -1749,7 +1827,10 @@ export async function GET(request: NextRequest) {
     } else if (topicId) {
       result = await questionRepo.findByTopic(topicId, { limit, offset });
     } else if (difficulty) {
-      result = await questionRepo.findByDifficulty(difficulty as any, { limit, offset });
+      result = await questionRepo.findByDifficulty(difficulty as any, {
+        limit,
+        offset,
+      });
     } else {
       result = await questionRepo.findAll({ limit, offset });
     }
@@ -1763,7 +1844,7 @@ export async function GET(request: NextRequest) {
     console.error("[Questions API] Error:", error);
     return NextResponse.json(
       { success: false, error: "Failed to fetch questions" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
@@ -1776,12 +1857,15 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
     const question = await questionRepo.create(body);
 
-    return NextResponse.json({ success: true, data: question }, { status: 201 });
+    return NextResponse.json(
+      { success: true, data: question },
+      { status: 201 },
+    );
   } catch (error) {
     console.error("[Questions API] Error:", error);
     return NextResponse.json(
       { success: false, error: "Failed to create question" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
@@ -1797,7 +1881,7 @@ export async function DELETE(request: NextRequest) {
     if (!id) {
       return NextResponse.json(
         { success: false, error: "Question ID required" },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -1808,7 +1892,7 @@ export async function DELETE(request: NextRequest) {
     console.error("[Questions API] Error:", error);
     return NextResponse.json(
       { success: false, error: "Failed to delete question" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
@@ -1819,6 +1903,7 @@ export async function DELETE(request: NextRequest) {
 **File:** `apps/website/src/app/lib/network/routes/flashcards/route.ts`
 
 #### After (Repository Pattern):
+
 ```typescript
 import { NextRequest, NextResponse } from "next/server";
 import { getRepositoryFactory } from "@elzatona/database";
@@ -1836,7 +1921,7 @@ export async function GET(request: NextRequest) {
     if (!userId) {
       return NextResponse.json(
         { success: false, error: "User ID required" },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -1851,7 +1936,7 @@ export async function GET(request: NextRequest) {
     console.error("[Flashcards API] Error:", error);
     return NextResponse.json(
       { success: false, error: "Failed to fetch flashcards" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
@@ -1864,12 +1949,15 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
     const flashcard = await flashcardRepo.create(body);
 
-    return NextResponse.json({ success: true, data: flashcard }, { status: 201 });
+    return NextResponse.json(
+      { success: true, data: flashcard },
+      { status: 201 },
+    );
   } catch (error) {
     console.error("[Flashcards API] Error:", error);
     return NextResponse.json(
       { success: false, error: "Failed to create flashcard" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
@@ -1880,6 +1968,7 @@ export async function POST(request: NextRequest) {
 **File:** `apps/website/src/app/lib/network/routes/progress/save/route.ts`
 
 #### After (Repository Pattern):
+
 ```typescript
 import { NextRequest, NextResponse } from "next/server";
 import { getRepositoryFactory } from "@elzatona/database";
@@ -1890,7 +1979,16 @@ export async function POST(request: NextRequest) {
     const progressRepo = factory.getProgressRepository();
 
     const body = await request.json();
-    const { user_id, question_id, plan_id, status, score, is_correct, answer_given, time_taken } = body;
+    const {
+      user_id,
+      question_id,
+      plan_id,
+      status,
+      score,
+      is_correct,
+      answer_given,
+      time_taken,
+    } = body;
 
     // Record the attempt if it's a question answer
     if (question_id && is_correct !== undefined) {
@@ -1917,7 +2015,7 @@ export async function POST(request: NextRequest) {
     console.error("[Progress API] Error:", error);
     return NextResponse.json(
       { success: false, error: "Failed to save progress" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
@@ -1932,6 +2030,7 @@ export async function POST(request: NextRequest) {
 **File:** `apps/website/src/app/lib/supabase-questions.ts`
 
 #### After (Repository Pattern):
+
 ```typescript
 import { getRepositoryFactory } from "@elzatona/database";
 
@@ -1945,7 +2044,13 @@ export async function getQuestions(options?: {
   const factory = getRepositoryFactory();
   const questionRepo = factory.getQuestionRepository();
 
-  const { categoryId, topicId, difficulty, limit = 10, offset = 0 } = options || {};
+  const {
+    categoryId,
+    topicId,
+    difficulty,
+    limit = 10,
+    offset = 0,
+  } = options || {};
 
   if (categoryId) {
     return questionRepo.findByCategory(categoryId, { limit, offset });
@@ -1986,7 +2091,10 @@ export async function deleteQuestion(id: string) {
   return questionRepo.delete(id);
 }
 
-export async function searchQuestions(query: string, options?: { limit?: number; offset?: number }) {
+export async function searchQuestions(
+  query: string,
+  options?: { limit?: number; offset?: number },
+) {
   const factory = getRepositoryFactory();
   const questionRepo = factory.getQuestionRepository();
   return questionRepo.search(query, options);
@@ -1998,10 +2106,14 @@ export async function searchQuestions(query: string, options?: { limit?: number;
 **File:** `apps/website/src/app/lib/supabase-flashcards.ts`
 
 #### After (Repository Pattern):
+
 ```typescript
 import { getRepositoryFactory } from "@elzatona/database";
 
-export async function getFlashcardsByUser(userId: string, options?: { limit?: number; offset?: number }) {
+export async function getFlashcardsByUser(
+  userId: string,
+  options?: { limit?: number; offset?: number },
+) {
   const factory = getRepositoryFactory();
   const flashcardRepo = factory.getFlashcardRepository();
   return flashcardRepo.findByUser(userId, options);
@@ -2037,6 +2149,7 @@ export async function deleteFlashcard(id: string) {
 **File:** `apps/website/src/app/lib/supabase-progress.ts`
 
 #### After (Repository Pattern):
+
 ```typescript
 import { getRepositoryFactory } from "@elzatona/database";
 
@@ -2092,6 +2205,7 @@ export async function getUserStatistics(userId: string) {
 **File:** `apps/admin/src/app/admin/learning-cards/hooks/useLearningCards.ts`
 
 #### After (Repository Pattern):
+
 ```typescript
 import { useState, useEffect, useCallback } from "react";
 import { getRepositoryFactory } from "@elzatona/database";
@@ -2207,6 +2321,7 @@ Remove direct Supabase dependency from apps (keep only in libs/database):
 ## Migration Checklist
 
 ### Phase 1: Core Infrastructure
+
 - [ ] Create ICategoryRepository interface
 - [ ] Create ITopicRepository interface
 - [ ] Create ISectionRepository interface
@@ -2216,6 +2331,7 @@ Remove direct Supabase dependency from apps (keep only in libs/database):
 - [ ] Export new interfaces from index.ts
 
 ### Phase 2: PostgreSQL Adapters
+
 - [ ] Create PostgreSQLCategoryRepository
 - [ ] Create PostgreSQLTopicRepository
 - [ ] Create PostgreSQLSectionRepository
@@ -2225,6 +2341,7 @@ Remove direct Supabase dependency from apps (keep only in libs/database):
 - [ ] Write unit tests for each adapter
 
 ### Phase 3: Website API Routes
+
 - [ ] Migrate categories route
 - [ ] Migrate topics routes
 - [ ] Migrate questions routes
@@ -2237,6 +2354,7 @@ Remove direct Supabase dependency from apps (keep only in libs/database):
 - [ ] Migrate guided-learning routes
 
 ### Phase 4: Services
+
 - [ ] Migrate supabase-questions.ts
 - [ ] Migrate supabase-flashcards.ts
 - [ ] Migrate supabase-progress.ts
@@ -2247,10 +2365,12 @@ Remove direct Supabase dependency from apps (keep only in libs/database):
 - [ ] Migrate auto-linking-service.ts
 
 ### Phase 5: Hooks
+
 - [ ] Migrate useLearningCards hook
 - [ ] Migrate any other direct Supabase hooks
 
 ### Phase 6: Cleanup
+
 - [ ] Remove legacy Supabase files
 - [ ] Update package.json dependencies
 - [ ] Run full test suite
@@ -2270,6 +2390,7 @@ Remove direct Supabase dependency from apps (keep only in libs/database):
 ## Environment Variables
 
 Ensure these are set:
+
 ```env
 DATABASE_TYPE=postgresql
 NEXT_PUBLIC_SUPABASE_URL=your_url

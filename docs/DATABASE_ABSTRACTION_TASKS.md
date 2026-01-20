@@ -19,6 +19,7 @@ This file contains structured tasks for implementing the full database abstracti
 **Output:** TypeScript interface for category operations
 
 **Code:**
+
 ```typescript
 /**
  * Category Repository Interface
@@ -68,11 +69,16 @@ export interface ICategoryRepository {
   findById(id: string): Promise<Category | null>;
   findBySlug(slug: string): Promise<Category | null>;
   findAll(options?: QueryOptions): Promise<PaginatedResult<Category>>;
-  findByParent(parentId: string | null, options?: QueryOptions): Promise<PaginatedResult<Category>>;
+  findByParent(
+    parentId: string | null,
+    options?: QueryOptions,
+  ): Promise<PaginatedResult<Category>>;
   findActive(options?: QueryOptions): Promise<PaginatedResult<Category>>;
   update(id: string, category: UpdateCategoryDTO): Promise<Category>;
   delete(id: string): Promise<void>;
-  getCategoryStatistics(id: string): Promise<{ questionCount: number; topicCount: number }>;
+  getCategoryStatistics(
+    id: string,
+  ): Promise<{ questionCount: number; topicCount: number }>;
 }
 ```
 
@@ -87,6 +93,7 @@ export interface ICategoryRepository {
 **File:** `libs/database/src/repositories/interfaces/ITopicRepository.ts`
 
 **Code:**
+
 ```typescript
 /**
  * Topic Repository Interface
@@ -133,8 +140,14 @@ export interface ITopicRepository {
   findById(id: string): Promise<Topic | null>;
   findBySlug(slug: string): Promise<Topic | null>;
   findAll(options?: QueryOptions): Promise<PaginatedResult<Topic>>;
-  findByCategory(categoryId: string, options?: QueryOptions): Promise<PaginatedResult<Topic>>;
-  findByParent(parentId: string | null, options?: QueryOptions): Promise<PaginatedResult<Topic>>;
+  findByCategory(
+    categoryId: string,
+    options?: QueryOptions,
+  ): Promise<PaginatedResult<Topic>>;
+  findByParent(
+    parentId: string | null,
+    options?: QueryOptions,
+  ): Promise<PaginatedResult<Topic>>;
   findActive(options?: QueryOptions): Promise<PaginatedResult<Topic>>;
   update(id: string, topic: UpdateTopicDTO): Promise<Topic>;
   delete(id: string): Promise<void>;
@@ -152,6 +165,7 @@ export interface ITopicRepository {
 **File:** `libs/database/src/repositories/interfaces/ISectionRepository.ts`
 
 **Code:**
+
 ```typescript
 /**
  * Section Repository Interface
@@ -190,7 +204,10 @@ export interface ISectionRepository {
   create(section: CreateSectionDTO): Promise<Section>;
   findById(id: string): Promise<Section | null>;
   findAll(options?: QueryOptions): Promise<PaginatedResult<Section>>;
-  findByPlan(planId: string, options?: QueryOptions): Promise<PaginatedResult<Section>>;
+  findByPlan(
+    planId: string,
+    options?: QueryOptions,
+  ): Promise<PaginatedResult<Section>>;
   findActive(options?: QueryOptions): Promise<PaginatedResult<Section>>;
   update(id: string, section: UpdateSectionDTO): Promise<Section>;
   delete(id: string): Promise<void>;
@@ -206,6 +223,7 @@ export interface ISectionRepository {
 **File:** `libs/database/src/repositories/interfaces/IFlashcardRepository.ts`
 
 **Code:**
+
 ```typescript
 /**
  * Flashcard Repository Interface
@@ -253,9 +271,18 @@ export interface IFlashcardRepository {
   createBatch(flashcards: CreateFlashcardDTO[]): Promise<Flashcard[]>;
   findById(id: string): Promise<Flashcard | null>;
   findAll(options?: QueryOptions): Promise<PaginatedResult<Flashcard>>;
-  findByUser(userId: string, options?: QueryOptions): Promise<PaginatedResult<Flashcard>>;
-  findByCategory(categoryId: string, options?: QueryOptions): Promise<PaginatedResult<Flashcard>>;
-  findByTopic(topicId: string, options?: QueryOptions): Promise<PaginatedResult<Flashcard>>;
+  findByUser(
+    userId: string,
+    options?: QueryOptions,
+  ): Promise<PaginatedResult<Flashcard>>;
+  findByCategory(
+    categoryId: string,
+    options?: QueryOptions,
+  ): Promise<PaginatedResult<Flashcard>>;
+  findByTopic(
+    topicId: string,
+    options?: QueryOptions,
+  ): Promise<PaginatedResult<Flashcard>>;
   update(id: string, flashcard: UpdateFlashcardDTO): Promise<Flashcard>;
   delete(id: string): Promise<void>;
   deleteBatch(ids: string[]): Promise<void>;
@@ -271,6 +298,7 @@ export interface IFlashcardRepository {
 **File:** `libs/database/src/repositories/interfaces/IProgressRepository.ts`
 
 **Code:**
+
 ```typescript
 /**
  * Progress Repository Interface
@@ -332,12 +360,30 @@ export interface IProgressRepository {
   createProgress(progress: CreateProgressDTO): Promise<UserProgress>;
   recordAttempt(attempt: CreateAttemptDTO): Promise<QuestionAttempt>;
   findProgressById(id: string): Promise<UserProgress | null>;
-  findProgressByUser(userId: string, options?: QueryOptions): Promise<PaginatedResult<UserProgress>>;
-  findProgressByPlan(userId: string, planId: string): Promise<UserProgress | null>;
-  findProgressByQuestion(userId: string, questionId: string): Promise<UserProgress | null>;
-  getAttemptsByUser(userId: string, options?: QueryOptions): Promise<PaginatedResult<QuestionAttempt>>;
-  getAttemptsByQuestion(userId: string, questionId: string): Promise<QuestionAttempt[]>;
-  updateProgress(id: string, progress: UpdateProgressDTO): Promise<UserProgress>;
+  findProgressByUser(
+    userId: string,
+    options?: QueryOptions,
+  ): Promise<PaginatedResult<UserProgress>>;
+  findProgressByPlan(
+    userId: string,
+    planId: string,
+  ): Promise<UserProgress | null>;
+  findProgressByQuestion(
+    userId: string,
+    questionId: string,
+  ): Promise<UserProgress | null>;
+  getAttemptsByUser(
+    userId: string,
+    options?: QueryOptions,
+  ): Promise<PaginatedResult<QuestionAttempt>>;
+  getAttemptsByQuestion(
+    userId: string,
+    questionId: string,
+  ): Promise<QuestionAttempt[]>;
+  updateProgress(
+    id: string,
+    progress: UpdateProgressDTO,
+  ): Promise<UserProgress>;
   upsertProgress(progress: CreateProgressDTO): Promise<UserProgress>;
   getUserStatistics(userId: string): Promise<{
     totalQuestions: number;
@@ -345,7 +391,10 @@ export interface IProgressRepository {
     averageScore: number;
     totalTimeSpent: number;
   }>;
-  getPlanProgress(userId: string, planId: string): Promise<{
+  getPlanProgress(
+    userId: string,
+    planId: string,
+  ): Promise<{
     completedSections: number;
     totalSections: number;
     percentage: number;
@@ -364,6 +413,7 @@ export interface IProgressRepository {
 **Action:** Add exports for new interfaces
 
 **Code to ADD:**
+
 ```typescript
 // Add these exports to existing file
 export * from "./ICategoryRepository";
@@ -444,6 +494,7 @@ export * from "./IProgressRepository";
 **File:** `libs/database/src/adapters/postgresql/index.ts`
 
 **Code to ADD:**
+
 ```typescript
 export * from "./PostgreSQLCategoryRepository";
 export * from "./PostgreSQLTopicRepository";
@@ -577,6 +628,7 @@ export * from "./PostgreSQLProgressRepository";
 **Action:** Delete files after all migrations complete
 
 **Files to delete:**
+
 - `apps/website/src/app/lib/supabase.ts`
 - `apps/website/src/app/lib/supabase-client.ts`
 - `apps/website/src/app/lib/get-supabase-client.ts`
@@ -600,14 +652,14 @@ Phase 5: Cleanup (TASK-023)
 
 ## Summary
 
-| Phase | Tasks | Estimated Time |
-|-------|-------|----------------|
-| Phase 1 | TASK-001 to TASK-006 | 1.5 hours |
-| Phase 2 | TASK-007 to TASK-013 | 3 hours |
-| Phase 3 | TASK-014 to TASK-018 | 2 hours |
-| Phase 4 | TASK-019 to TASK-022 | 1.5 hours |
-| Phase 5 | TASK-023 | 0.5 hours |
-| **Total** | **23 tasks** | **8.5 hours** |
+| Phase     | Tasks                | Estimated Time |
+| --------- | -------------------- | -------------- |
+| Phase 1   | TASK-001 to TASK-006 | 1.5 hours      |
+| Phase 2   | TASK-007 to TASK-013 | 3 hours        |
+| Phase 3   | TASK-014 to TASK-018 | 2 hours        |
+| Phase 4   | TASK-019 to TASK-022 | 1.5 hours      |
+| Phase 5   | TASK-023             | 0.5 hours      |
+| **Total** | **23 tasks**         | **8.5 hours**  |
 
 ---
 

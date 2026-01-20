@@ -39,10 +39,13 @@ tests/
 
 ```typescript
 // tests/unit/repositories/category.repository.test.ts
-import { describe, it, expect, beforeEach, vi } from 'vitest';
-import { ICategoryRepository, Category } from '@/libs/database/src/repositories/interfaces/ICategoryRepository';
+import { describe, it, expect, beforeEach, vi } from "vitest";
+import {
+  ICategoryRepository,
+  Category,
+} from "@/libs/database/src/repositories/interfaces/ICategoryRepository";
 
-describe('ICategoryRepository', () => {
+describe("ICategoryRepository", () => {
   let mockRepo: ICategoryRepository;
 
   beforeEach(() => {
@@ -55,90 +58,90 @@ describe('ICategoryRepository', () => {
     };
   });
 
-  describe('getCategoryById', () => {
-    it('should return category when found', async () => {
+  describe("getCategoryById", () => {
+    it("should return category when found", async () => {
       const mockCategory: Category = {
-        id: '1',
-        name: 'Test Category',
-        description: 'Test Description',
+        id: "1",
+        name: "Test Category",
+        description: "Test Description",
       };
-      
+
       vi.mocked(mockRepo.getCategoryById).mockResolvedValue(mockCategory);
-      
-      const result = await mockRepo.getCategoryById('1');
-      
+
+      const result = await mockRepo.getCategoryById("1");
+
       expect(result).toEqual(mockCategory);
-      expect(mockRepo.getCategoryById).toHaveBeenCalledWith('1');
+      expect(mockRepo.getCategoryById).toHaveBeenCalledWith("1");
     });
 
-    it('should return null when category not found', async () => {
+    it("should return null when category not found", async () => {
       vi.mocked(mockRepo.getCategoryById).mockResolvedValue(null);
-      
-      const result = await mockRepo.getCategoryById('non-existent');
-      
+
+      const result = await mockRepo.getCategoryById("non-existent");
+
       expect(result).toBeNull();
     });
   });
 
-  describe('getAllCategories', () => {
-    it('should return all categories', async () => {
+  describe("getAllCategories", () => {
+    it("should return all categories", async () => {
       const mockCategories: Category[] = [
-        { id: '1', name: 'Category 1', description: 'Desc 1' },
-        { id: '2', name: 'Category 2', description: 'Desc 2' },
+        { id: "1", name: "Category 1", description: "Desc 1" },
+        { id: "2", name: "Category 2", description: "Desc 2" },
       ];
-      
+
       vi.mocked(mockRepo.getAllCategories).mockResolvedValue(mockCategories);
-      
+
       const result = await mockRepo.getAllCategories();
-      
+
       expect(result).toEqual(mockCategories);
       expect(result).toHaveLength(2);
     });
 
-    it('should return empty array when no categories', async () => {
+    it("should return empty array when no categories", async () => {
       vi.mocked(mockRepo.getAllCategories).mockResolvedValue([]);
-      
+
       const result = await mockRepo.getAllCategories();
-      
+
       expect(result).toEqual([]);
     });
   });
 
-  describe('createCategory', () => {
-    it('should create category with valid data', async () => {
-      const input = { name: 'New Category', description: 'New Desc' };
-      const created: Category = { id: '1', ...input };
-      
+  describe("createCategory", () => {
+    it("should create category with valid data", async () => {
+      const input = { name: "New Category", description: "New Desc" };
+      const created: Category = { id: "1", ...input };
+
       vi.mocked(mockRepo.createCategory).mockResolvedValue(created);
-      
+
       const result = await mockRepo.createCategory(input);
-      
+
       expect(result).toEqual(created);
       expect(mockRepo.createCategory).toHaveBeenCalledWith(input);
     });
   });
 
-  describe('updateCategory', () => {
-    it('should update existing category', async () => {
-      const input = { name: 'Updated Category', description: 'Updated Desc' };
-      const updated: Category = { id: '1', ...input };
-      
+  describe("updateCategory", () => {
+    it("should update existing category", async () => {
+      const input = { name: "Updated Category", description: "Updated Desc" };
+      const updated: Category = { id: "1", ...input };
+
       vi.mocked(mockRepo.updateCategory).mockResolvedValue(updated);
-      
-      const result = await mockRepo.updateCategory('1', input);
-      
+
+      const result = await mockRepo.updateCategory("1", input);
+
       expect(result).toEqual(updated);
-      expect(mockRepo.updateCategory).toHaveBeenCalledWith('1', input);
+      expect(mockRepo.updateCategory).toHaveBeenCalledWith("1", input);
     });
   });
 
-  describe('deleteCategory', () => {
-    it('should delete category by id', async () => {
+  describe("deleteCategory", () => {
+    it("should delete category by id", async () => {
       vi.mocked(mockRepo.deleteCategory).mockResolvedValue(undefined);
-      
-      await mockRepo.deleteCategory('1');
-      
-      expect(mockRepo.deleteCategory).toHaveBeenCalledWith('1');
+
+      await mockRepo.deleteCategory("1");
+
+      expect(mockRepo.deleteCategory).toHaveBeenCalledWith("1");
     });
   });
 });
@@ -148,11 +151,11 @@ describe('ICategoryRepository', () => {
 
 ```typescript
 // tests/unit/adapters/postgresql-category.repository.test.ts
-import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
-import { Pool } from 'pg';
-import { PostgreSQLCategoryRepository } from '@/libs/database/src/adapters/postgresql/PostgreSQLCategoryRepository';
+import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
+import { Pool } from "pg";
+import { PostgreSQLCategoryRepository } from "@/libs/database/src/adapters/postgresql/PostgreSQLCategoryRepository";
 
-describe('PostgreSQLCategoryRepository', () => {
+describe("PostgreSQLCategoryRepository", () => {
   let pool: Pool;
   let repo: PostgreSQLCategoryRepository;
 
@@ -160,56 +163,55 @@ describe('PostgreSQLCategoryRepository', () => {
     pool = {
       query: vi.fn(),
     } as any;
-    
+
     repo = new PostgreSQLCategoryRepository(pool);
   });
 
-  describe('getCategoryById', () => {
-    it('should execute parameterized query', async () => {
+  describe("getCategoryById", () => {
+    it("should execute parameterized query", async () => {
       const mockResult = {
-        rows: [{ id: '1', name: 'Test', description: 'Desc' }],
+        rows: [{ id: "1", name: "Test", description: "Desc" }],
       };
-      
+
       vi.mocked(pool.query).mockResolvedValue(mockResult as any);
-      
-      await repo.getCategoryById('1');
-      
+
+      await repo.getCategoryById("1");
+
       expect(pool.query).toHaveBeenCalledWith(
-        'SELECT * FROM categories WHERE id = $1',
-        ['1']
+        "SELECT * FROM categories WHERE id = $1",
+        ["1"],
       );
     });
 
-    it('should prevent SQL injection', async () => {
+    it("should prevent SQL injection", async () => {
       const maliciousInput = "1'; DROP TABLE categories; --";
-      
+
       vi.mocked(pool.query).mockResolvedValue({ rows: [] } as any);
-      
+
       await repo.getCategoryById(maliciousInput);
-      
+
       // Verify parameterized query (not string concatenation)
-      expect(pool.query).toHaveBeenCalledWith(
-        expect.stringContaining('$1'),
-        [maliciousInput]
-      );
+      expect(pool.query).toHaveBeenCalledWith(expect.stringContaining("$1"), [
+        maliciousInput,
+      ]);
     });
   });
 
-  describe('createCategory', () => {
-    it('should insert category with valid data', async () => {
-      const input = { name: 'New Category', description: 'Desc' };
+  describe("createCategory", () => {
+    it("should insert category with valid data", async () => {
+      const input = { name: "New Category", description: "Desc" };
       const mockResult = {
-        rows: [{ id: '1', ...input }],
+        rows: [{ id: "1", ...input }],
       };
-      
+
       vi.mocked(pool.query).mockResolvedValue(mockResult as any);
-      
+
       const result = await repo.createCategory(input);
-      
-      expect(result).toEqual({ id: '1', ...input });
+
+      expect(result).toEqual({ id: "1", ...input });
       expect(pool.query).toHaveBeenCalledWith(
-        expect.stringContaining('INSERT INTO categories'),
-        [input.name, input.description]
+        expect.stringContaining("INSERT INTO categories"),
+        [input.name, input.description],
       );
     });
   });
@@ -220,50 +222,50 @@ describe('PostgreSQLCategoryRepository', () => {
 
 ```typescript
 // tests/unit/factory/repository-factory.test.ts
-import { describe, it, expect, beforeEach } from 'vitest';
-import { RepositoryFactory } from '@/libs/database/src/repositories/RepositoryFactory';
+import { describe, it, expect, beforeEach } from "vitest";
+import { RepositoryFactory } from "@/libs/database/src/repositories/RepositoryFactory";
 
-describe('RepositoryFactory', () => {
+describe("RepositoryFactory", () => {
   let factory: RepositoryFactory;
 
   beforeEach(() => {
     factory = new RepositoryFactory({
       database: {
-        type: 'postgresql',
-        url: 'postgresql://localhost',
-        key: 'test-key',
+        type: "postgresql",
+        url: "postgresql://localhost",
+        key: "test-key",
       },
     });
   });
 
-  describe('getCategoryRepository', () => {
-    it('should return same instance on multiple calls', () => {
+  describe("getCategoryRepository", () => {
+    it("should return same instance on multiple calls", () => {
       const repo1 = factory.getCategoryRepository();
       const repo2 = factory.getCategoryRepository();
-      
+
       expect(repo1).toBe(repo2);
     });
 
-    it('should create PostgreSQL repository for postgresql type', () => {
+    it("should create PostgreSQL repository for postgresql type", () => {
       const repo = factory.getCategoryRepository();
-      
+
       expect(repo).toBeDefined();
-      expect(repo.constructor.name).toBe('PostgreSQLCategoryRepository');
+      expect(repo.constructor.name).toBe("PostgreSQLCategoryRepository");
     });
   });
 
-  describe('unsupported database types', () => {
-    it('should throw error for mongodb (not yet implemented)', () => {
+  describe("unsupported database types", () => {
+    it("should throw error for mongodb (not yet implemented)", () => {
       const factory = new RepositoryFactory({
         database: {
-          type: 'mongodb',
-          url: 'mongodb://localhost',
-          key: 'test-key',
+          type: "mongodb",
+          url: "mongodb://localhost",
+          key: "test-key",
         },
       });
 
       expect(() => factory.getCategoryRepository()).toThrow(
-        'MongoDB adapter not yet implemented'
+        "MongoDB adapter not yet implemented",
       );
     });
   });
@@ -278,11 +280,11 @@ describe('RepositoryFactory', () => {
 
 ```typescript
 // tests/integration/postgresql/category.integration.test.ts
-import { describe, it, expect, beforeAll, afterAll, beforeEach } from 'vitest';
-import { Pool } from 'pg';
-import { PostgreSQLCategoryRepository } from '@/libs/database/src/adapters/postgresql/PostgreSQLCategoryRepository';
+import { describe, it, expect, beforeAll, afterAll, beforeEach } from "vitest";
+import { Pool } from "pg";
+import { PostgreSQLCategoryRepository } from "@/libs/database/src/adapters/postgresql/PostgreSQLCategoryRepository";
 
-describe('PostgreSQLCategoryRepository Integration', () => {
+describe("PostgreSQLCategoryRepository Integration", () => {
   let pool: Pool;
   let repo: PostgreSQLCategoryRepository;
 
@@ -291,9 +293,9 @@ describe('PostgreSQLCategoryRepository Integration', () => {
     pool = new Pool({
       connectionString: process.env.TEST_DATABASE_URL,
     });
-    
+
     repo = new PostgreSQLCategoryRepository(pool);
-    
+
     // Create test table
     await pool.query(`
       CREATE TABLE IF NOT EXISTS categories (
@@ -306,59 +308,59 @@ describe('PostgreSQLCategoryRepository Integration', () => {
 
   afterAll(async () => {
     // Cleanup
-    await pool.query('DROP TABLE IF EXISTS categories');
+    await pool.query("DROP TABLE IF EXISTS categories");
     await pool.end();
   });
 
   beforeEach(async () => {
     // Clear table before each test
-    await pool.query('DELETE FROM categories');
+    await pool.query("DELETE FROM categories");
   });
 
-  describe('CRUD operations', () => {
-    it('should create and retrieve category', async () => {
-      const input = { name: 'Test Category', description: 'Test Desc' };
-      
+  describe("CRUD operations", () => {
+    it("should create and retrieve category", async () => {
+      const input = { name: "Test Category", description: "Test Desc" };
+
       const created = await repo.createCategory(input);
       expect(created.id).toBeDefined();
       expect(created.name).toBe(input.name);
-      
+
       const retrieved = await repo.getCategoryById(created.id);
       expect(retrieved).toEqual(created);
     });
 
-    it('should update category', async () => {
+    it("should update category", async () => {
       const created = await repo.createCategory({
-        name: 'Original',
-        description: 'Original Desc',
+        name: "Original",
+        description: "Original Desc",
       });
-      
+
       const updated = await repo.updateCategory(created.id, {
-        name: 'Updated',
-        description: 'Updated Desc',
+        name: "Updated",
+        description: "Updated Desc",
       });
-      
-      expect(updated.name).toBe('Updated');
+
+      expect(updated.name).toBe("Updated");
     });
 
-    it('should delete category', async () => {
+    it("should delete category", async () => {
       const created = await repo.createCategory({
-        name: 'To Delete',
-        description: 'Will be deleted',
+        name: "To Delete",
+        description: "Will be deleted",
       });
-      
+
       await repo.deleteCategory(created.id);
-      
+
       const retrieved = await repo.getCategoryById(created.id);
       expect(retrieved).toBeNull();
     });
 
-    it('should list all categories', async () => {
-      await repo.createCategory({ name: 'Cat 1', description: 'Desc 1' });
-      await repo.createCategory({ name: 'Cat 2', description: 'Desc 2' });
-      
+    it("should list all categories", async () => {
+      await repo.createCategory({ name: "Cat 1", description: "Desc 1" });
+      await repo.createCategory({ name: "Cat 2", description: "Desc 2" });
+
       const all = await repo.getAllCategories();
-      
+
       expect(all).toHaveLength(2);
     });
   });
@@ -371,46 +373,49 @@ describe('PostgreSQLCategoryRepository Integration', () => {
 
 ```typescript
 // tests/integration/api/categories.api.test.ts
-import { describe, it, expect } from 'vitest';
-import { GET, POST } from '@/apps/website/src/app/lib/network/routes/categories/route';
+import { describe, it, expect } from "vitest";
+import {
+  GET,
+  POST,
+} from "@/apps/website/src/app/lib/network/routes/categories/route";
 
-describe('Categories API Routes', () => {
-  describe('GET /api/categories', () => {
-    it('should return all categories', async () => {
+describe("Categories API Routes", () => {
+  describe("GET /api/categories", () => {
+    it("should return all categories", async () => {
       const response = await GET();
       const data = await response.json();
-      
+
       expect(data.success).toBe(true);
       expect(data.data).toBeInstanceOf(Array);
     });
   });
 
-  describe('POST /api/categories', () => {
-    it('should create category with valid data', async () => {
-      const request = new Request('http://localhost/api/categories', {
-        method: 'POST',
+  describe("POST /api/categories", () => {
+    it("should create category with valid data", async () => {
+      const request = new Request("http://localhost/api/categories", {
+        method: "POST",
         body: JSON.stringify({
-          name: 'Test Category',
-          description: 'Test Description',
+          name: "Test Category",
+          description: "Test Description",
         }),
       });
-      
+
       const response = await POST(request as any);
       const data = await response.json();
-      
+
       expect(data.success).toBe(true);
-      expect(data.data.name).toBe('Test Category');
+      expect(data.data.name).toBe("Test Category");
     });
 
-    it('should validate required fields', async () => {
-      const request = new Request('http://localhost/api/categories', {
-        method: 'POST',
+    it("should validate required fields", async () => {
+      const request = new Request("http://localhost/api/categories", {
+        method: "POST",
         body: JSON.stringify({}),
       });
-      
+
       const response = await POST(request as any);
       const data = await response.json();
-      
+
       expect(data.success).toBe(false);
       expect(response.status).toBe(400);
     });
@@ -423,31 +428,37 @@ describe('Categories API Routes', () => {
 ## Running Tests
 
 ### All Tests
+
 ```bash
 npm test
 ```
 
 ### Unit Tests Only
+
 ```bash
 npm test -- tests/unit
 ```
 
 ### Integration Tests Only
+
 ```bash
 npm test -- tests/integration
 ```
 
 ### Specific Test File
+
 ```bash
 npm test -- category.repository.test.ts
 ```
 
 ### Watch Mode
+
 ```bash
 npm test -- --watch
 ```
 
 ### Coverage Report
+
 ```bash
 npm test -- --coverage
 ```
@@ -464,18 +475,19 @@ Per constitution requirements:
 
 ### Coverage Targets
 
-| Component | Target | Current |
-|-----------|--------|---------|
-| Repository Interfaces | 100% | Pending |
-| PostgreSQL Adapters | 90% | Pending |
-| RepositoryFactory | 100% | Pending |
-| API Routes | 90% | Pending |
+| Component             | Target | Current |
+| --------------------- | ------ | ------- |
+| Repository Interfaces | 100%   | Pending |
+| PostgreSQL Adapters   | 90%    | Pending |
+| RepositoryFactory     | 100%   | Pending |
+| API Routes            | 90%    | Pending |
 
 ---
 
 ## Mocking Strategies
 
 ### Mock Repository
+
 ```typescript
 const mockRepo: ICategoryRepository = {
   getCategoryById: vi.fn().mockResolvedValue(mockCategory),
@@ -487,6 +499,7 @@ const mockRepo: ICategoryRepository = {
 ```
 
 ### Mock Database Pool
+
 ```typescript
 const mockPool = {
   query: vi.fn().mockResolvedValue({ rows: [] }),
@@ -496,8 +509,9 @@ const mockPool = {
 ```
 
 ### Mock Factory
+
 ```typescript
-vi.mock('@/libs/database/src/repositories/RepositoryFactory', () => ({
+vi.mock("@/libs/database/src/repositories/RepositoryFactory", () => ({
   createRepositoryFactoryFromEnv: () => ({
     getCategoryRepository: () => mockRepo,
   }),
