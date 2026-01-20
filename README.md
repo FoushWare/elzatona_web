@@ -37,7 +37,6 @@ bun run dev
 
 Visit `http://localhost:3000` to see the application.
 
-
 ## 🧪 Testing & Quality Assurance
 
 ### Running All Tests

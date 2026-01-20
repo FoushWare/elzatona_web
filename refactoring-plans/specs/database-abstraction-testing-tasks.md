@@ -43,7 +43,7 @@
 
 ### Category Repository Tests
 
-- [ ] T007 [P] [UNIT] Create test file libs/database/src/repositories/__tests__/ICategoryRepository.test.ts
+- [ ] T007 [P] [UNIT] Create test file libs/database/src/repositories/**tests**/ICategoryRepository.test.ts
 - [ ] T008 [P] [UNIT] Test getCategoryById success case
 - [ ] T009 [P] [UNIT] Test getCategoryById returns null for non-existent
 - [ ] T010 [P] [UNIT] Test getAllCategories returns array
@@ -54,7 +54,7 @@
 
 ### Topic Repository Tests
 
-- [ ] T015 [P] [UNIT] Create test file libs/database/src/repositories/__tests__/ITopicRepository.test.ts
+- [ ] T015 [P] [UNIT] Create test file libs/database/src/repositories/**tests**/ITopicRepository.test.ts
 - [ ] T016 [P] [UNIT] Test getTopicById success and null cases
 - [ ] T017 [P] [UNIT] Test getAllTopics returns array
 - [ ] T018 [P] [UNIT] Test createTopic with categoryId reference
@@ -63,7 +63,7 @@
 
 ### Section Repository Tests
 
-- [ ] T021 [P] [UNIT] Create test file libs/database/src/repositories/__tests__/ISectionRepository.test.ts
+- [ ] T021 [P] [UNIT] Create test file libs/database/src/repositories/**tests**/ISectionRepository.test.ts
 - [ ] T022 [P] [UNIT] Test getSectionById success and null cases
 - [ ] T023 [P] [UNIT] Test getAllSections returns array
 - [ ] T024 [P] [UNIT] Test createSection with topicId reference
@@ -72,7 +72,7 @@
 
 ### Flashcard Repository Tests
 
-- [ ] T027 [P] [UNIT] Create test file libs/database/src/repositories/__tests__/IFlashcardRepository.test.ts
+- [ ] T027 [P] [UNIT] Create test file libs/database/src/repositories/**tests**/IFlashcardRepository.test.ts
 - [ ] T028 [P] [UNIT] Test getFlashcardById success and null cases
 - [ ] T029 [P] [UNIT] Test getAllFlashcards returns array
 - [ ] T030 [P] [UNIT] Test createFlashcard with sectionId reference
@@ -81,7 +81,7 @@
 
 ### Progress Repository Tests
 
-- [ ] T033 [P] [UNIT] Create test file libs/database/src/repositories/__tests__/IProgressRepository.test.ts
+- [ ] T033 [P] [UNIT] Create test file libs/database/src/repositories/**tests**/IProgressRepository.test.ts
 - [ ] T034 [P] [UNIT] Test getProgressById success and null cases
 - [ ] T035 [P] [UNIT] Test getAllProgress returns array
 - [ ] T036 [P] [UNIT] Test createProgress with userId and flashcardId
@@ -98,7 +98,7 @@
 
 ### PostgreSQL Category Adapter Tests
 
-- [ ] T039 [P] [UNIT] Create test file libs/database/src/adapters/postgresql/__tests__/PostgreSQLCategoryRepository.test.ts
+- [ ] T039 [P] [UNIT] Create test file libs/database/src/adapters/postgresql/**tests**/PostgreSQLCategoryRepository.test.ts
 - [ ] T040 [P] [UNIT] Test getCategoryById executes parameterized query
 - [ ] T041 [P] [UNIT] Test SQL injection prevention in getCategoryById
 - [ ] T042 [P] [UNIT] Test getAllCategories query execution
@@ -108,26 +108,26 @@
 
 ### PostgreSQL Topic Adapter Tests
 
-- [ ] T046 [P] [UNIT] Create test file libs/database/src/adapters/postgresql/__tests__/PostgreSQLTopicRepository.test.ts
+- [ ] T046 [P] [UNIT] Create test file libs/database/src/adapters/postgresql/**tests**/PostgreSQLTopicRepository.test.ts
 - [ ] T047 [P] [UNIT] Test all CRUD operations use parameterized queries
 - [ ] T048 [P] [UNIT] Test SQL injection prevention across all methods
 - [ ] T049 [P] [UNIT] Test proper error propagation
 
 ### PostgreSQL Section Adapter Tests
 
-- [ ] T050 [P] [UNIT] Create test file libs/database/src/adapters/postgresql/__tests__/PostgreSQLSectionRepository.test.ts
+- [ ] T050 [P] [UNIT] Create test file libs/database/src/adapters/postgresql/**tests**/PostgreSQLSectionRepository.test.ts
 - [ ] T051 [P] [UNIT] Test all CRUD operations use parameterized queries
 - [ ] T052 [P] [UNIT] Test SQL injection prevention across all methods
 
 ### PostgreSQL Flashcard Adapter Tests
 
-- [ ] T053 [P] [UNIT] Create test file libs/database/src/adapters/postgresql/__tests__/PostgreSQLFlashcardRepository.test.ts
+- [ ] T053 [P] [UNIT] Create test file libs/database/src/adapters/postgresql/**tests**/PostgreSQLFlashcardRepository.test.ts
 - [ ] T054 [P] [UNIT] Test all CRUD operations use parameterized queries
 - [ ] T055 [P] [UNIT] Test SQL injection prevention across all methods
 
 ### PostgreSQL Progress Adapter Tests
 
-- [ ] T056 [P] [UNIT] Create test file libs/database/src/adapters/postgresql/__tests__/PostgreSQLProgressRepository.test.ts
+- [ ] T056 [P] [UNIT] Create test file libs/database/src/adapters/postgresql/**tests**/PostgreSQLProgressRepository.test.ts
 - [ ] T057 [P] [UNIT] Test all CRUD operations use parameterized queries
 - [ ] T058 [P] [UNIT] Test SQL injection prevention across all methods
 
@@ -139,7 +139,7 @@
 
 **Purpose**: Test factory pattern implementation and singleton behavior
 
-- [ ] T059 [P] [UNIT] Create test file libs/database/src/repositories/__tests__/RepositoryFactory.test.ts
+- [ ] T059 [P] [UNIT] Create test file libs/database/src/repositories/**tests**/RepositoryFactory.test.ts
 - [ ] T060 [P] [UNIT] Test getCategoryRepository returns singleton instance
 - [ ] T061 [P] [UNIT] Test getTopicRepository returns singleton instance
 - [ ] T062 [P] [UNIT] Test getSectionRepository returns singleton instance
@@ -311,7 +311,8 @@
 ## Summary
 
 **Total Tasks**: 137
-**Estimated Effort**: 
+**Estimated Effort**:
+
 - Phase 1-4 (Unit Tests): ~20 hours
 - Phase 5 (Integration Tests): ~15 hours
 - Phase 6 (API Tests): ~10 hours
@@ -320,12 +321,14 @@
 - **Total**: ~60 hours
 
 **Parallel Opportunities**:
+
 - All unit tests can run in parallel (T007-T069)
 - Integration tests can run in parallel per entity (T073-T090)
 - API tests can run in parallel (T091-T111)
 - Documentation tasks can run in parallel (T130-T133)
 
 **Critical Path**:
+
 1. Phase 1: Test Infrastructure (blocking)
 2. Phase 2-4: Unit Tests (can parallelize)
 3. Phase 5-6: Integration Tests (depends on Phase 1)
@@ -333,11 +336,13 @@
 5. Phase 8-10: Quality & Documentation (final validation)
 
 **MVP Scope** (for initial delivery):
+
 - Phase 1: Test Infrastructure
 - Phase 2: Unit Tests - Repository Interfaces
 - Phase 8: Basic Coverage Report
 
 **Constitution Compliance**:
+
 - ✅ Test Coverage: ≥90% (Phase 8)
 - ✅ Quality Gates: SonarQube scan (Phase 10)
 - ✅ Security: SQL injection tests included

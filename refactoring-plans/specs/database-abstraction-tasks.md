@@ -344,6 +344,7 @@ T044, T045, T046, T047, T048, T049, T050, T051
 ### Parallel Team Strategy
 
 With 3 developers after Phase 2:
+
 - Developer A: Category + Topic repos (Phases 3-4)
 - Developer B: Section + Flashcard repos (Phases 5-6)
 - Developer C: Progress repo + Question routes (Phases 7-8)
@@ -352,23 +353,23 @@ With 3 developers after Phase 2:
 
 ## Summary
 
-| Phase | Tasks | Focus | Estimated Time |
-|-------|-------|-------|----------------|
-| 1 | T001-T003 | Setup | 30 min |
-| 2 | T004-T009 | Interfaces | 1.5 hours |
-| 3 | T010-T015 | Category | 2 hours |
-| 4 | T016-T022 | Topic | 2 hours |
-| 5 | T023-T028 | Section | 1.5 hours |
-| 6 | T029-T034 | Flashcard | 1.5 hours |
-| 7 | T035-T043 | Progress | 2.5 hours |
-| 8 | T044-T056 | Questions/Plans | 3 hours |
-| 9 | T057-T065 | Cards/Paths | 2 hours |
-| 10 | T066-T075 | Admin | 2.5 hours |
-| 11 | T076-T085 | Services | 2.5 hours |
-| 12 | T086-T088 | User/Dashboard | 1 hour |
-| 13 | T089-T093 | Hooks/Components | 1.5 hours |
-| 14 | T094-T103 | Polish | 2 hours |
-| **Total** | **103 tasks** | | **~25 hours** |
+| Phase     | Tasks         | Focus            | Estimated Time |
+| --------- | ------------- | ---------------- | -------------- |
+| 1         | T001-T003     | Setup            | 30 min         |
+| 2         | T004-T009     | Interfaces       | 1.5 hours      |
+| 3         | T010-T015     | Category         | 2 hours        |
+| 4         | T016-T022     | Topic            | 2 hours        |
+| 5         | T023-T028     | Section          | 1.5 hours      |
+| 6         | T029-T034     | Flashcard        | 1.5 hours      |
+| 7         | T035-T043     | Progress         | 2.5 hours      |
+| 8         | T044-T056     | Questions/Plans  | 3 hours        |
+| 9         | T057-T065     | Cards/Paths      | 2 hours        |
+| 10        | T066-T075     | Admin            | 2.5 hours      |
+| 11        | T076-T085     | Services         | 2.5 hours      |
+| 12        | T086-T088     | User/Dashboard   | 1 hour         |
+| 13        | T089-T093     | Hooks/Components | 1.5 hours      |
+| 14        | T094-T103     | Polish           | 2 hours        |
+| **Total** | **103 tasks** |                  | **~25 hours**  |
 
 ---
 

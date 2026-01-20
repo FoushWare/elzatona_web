@@ -1,16 +1,16 @@
-import { defineConfig } from 'vitest/config';
+import { defineConfig } from "vitest/config";
 
 export default defineConfig({
   test: {
     globals: true,
     // Use jsdom globally for browser-like tests
-    environment: 'jsdom',
-    setupFiles: ['./tests/utils/test-db-setup.ts'],
+    environment: "jsdom",
+    setupFiles: ["./tests/utils/test-db-setup.ts"],
     coverage: {
-      provider: 'v8',
-      reporter: ['text', 'json', 'lcov', 'html'],
-      reportsDirectory: './coverage',
-      exclude: ['**/node_modules/**', '**/dist/**'],
+      provider: "v8",
+      reporter: ["text", "json", "lcov", "html"],
+      reportsDirectory: "./coverage",
+      exclude: ["**/node_modules/**", "**/dist/**"],
     },
   },
 });

@@ -3,11 +3,6 @@
  * Creates and configures repository instances with dependency injection
  */
 
-
-
-
-
-
 import {
   IQuestionRepository,
   IUserRepository,
@@ -19,10 +14,6 @@ import {
   IFlashcardRepository,
   IProgressRepository,
 } from "../repositories";
-
-
-
-
 
 import {
   PostgreSQLConfig,
@@ -65,75 +56,75 @@ export class RepositoryFactory {
   private sectionRepository?: ISectionRepository;
   private flashcardRepository?: IFlashcardRepository;
   private progressRepository?: IProgressRepository;
-        /**
-         * Get or create Progress Repository instance
-         */
-        getProgressRepository(): IProgressRepository {
-          if (!this.progressRepository) {
-            this.progressRepository = this.createProgressRepository();
-          }
-          return this.progressRepository;
-        }
-        private createProgressRepository(): IProgressRepository {
-          switch (this.config.database.type) {
-            case "postgresql":
-              return new PostgreSQLProgressRepository(this.getPostgreSQLConfig());
-            case "mongodb":
-              throw new Error("MongoDB adapter not yet implemented");
-            case "mysql":
-              throw new Error("MySQL adapter not yet implemented");
-            default:
-              throw new Error(
-                `Unsupported database type: ${this.config.database.type}`,
-              );
-          }
-        }
-      /**
-       * Get or create Flashcard Repository instance
-       */
-      getFlashcardRepository(): IFlashcardRepository {
-        if (!this.flashcardRepository) {
-          this.flashcardRepository = this.createFlashcardRepository();
-        }
-        return this.flashcardRepository;
-      }
-      private createFlashcardRepository(): IFlashcardRepository {
-        switch (this.config.database.type) {
-          case "postgresql":
-            return new PostgreSQLFlashcardRepository(this.getPostgreSQLConfig());
-          case "mongodb":
-            throw new Error("MongoDB adapter not yet implemented");
-          case "mysql":
-            throw new Error("MySQL adapter not yet implemented");
-          default:
-            throw new Error(
-              `Unsupported database type: ${this.config.database.type}`,
-            );
-        }
-      }
-    /**
-     * Get or create Section Repository instance
-     */
-    getSectionRepository(): ISectionRepository {
-      if (!this.sectionRepository) {
-        this.sectionRepository = this.createSectionRepository();
-      }
-      return this.sectionRepository;
+  /**
+   * Get or create Progress Repository instance
+   */
+  getProgressRepository(): IProgressRepository {
+    if (!this.progressRepository) {
+      this.progressRepository = this.createProgressRepository();
     }
-    private createSectionRepository(): ISectionRepository {
-      switch (this.config.database.type) {
-        case "postgresql":
-          return new PostgreSQLSectionRepository(this.getPostgreSQLConfig());
-        case "mongodb":
-          throw new Error("MongoDB adapter not yet implemented");
-        case "mysql":
-          throw new Error("MySQL adapter not yet implemented");
-        default:
-          throw new Error(
-            `Unsupported database type: ${this.config.database.type}`,
-          );
-      }
+    return this.progressRepository;
+  }
+  private createProgressRepository(): IProgressRepository {
+    switch (this.config.database.type) {
+      case "postgresql":
+        return new PostgreSQLProgressRepository(this.getPostgreSQLConfig());
+      case "mongodb":
+        throw new Error("MongoDB adapter not yet implemented");
+      case "mysql":
+        throw new Error("MySQL adapter not yet implemented");
+      default:
+        throw new Error(
+          `Unsupported database type: ${this.config.database.type}`,
+        );
     }
+  }
+  /**
+   * Get or create Flashcard Repository instance
+   */
+  getFlashcardRepository(): IFlashcardRepository {
+    if (!this.flashcardRepository) {
+      this.flashcardRepository = this.createFlashcardRepository();
+    }
+    return this.flashcardRepository;
+  }
+  private createFlashcardRepository(): IFlashcardRepository {
+    switch (this.config.database.type) {
+      case "postgresql":
+        return new PostgreSQLFlashcardRepository(this.getPostgreSQLConfig());
+      case "mongodb":
+        throw new Error("MongoDB adapter not yet implemented");
+      case "mysql":
+        throw new Error("MySQL adapter not yet implemented");
+      default:
+        throw new Error(
+          `Unsupported database type: ${this.config.database.type}`,
+        );
+    }
+  }
+  /**
+   * Get or create Section Repository instance
+   */
+  getSectionRepository(): ISectionRepository {
+    if (!this.sectionRepository) {
+      this.sectionRepository = this.createSectionRepository();
+    }
+    return this.sectionRepository;
+  }
+  private createSectionRepository(): ISectionRepository {
+    switch (this.config.database.type) {
+      case "postgresql":
+        return new PostgreSQLSectionRepository(this.getPostgreSQLConfig());
+      case "mongodb":
+        throw new Error("MongoDB adapter not yet implemented");
+      case "mysql":
+        throw new Error("MySQL adapter not yet implemented");
+      default:
+        throw new Error(
+          `Unsupported database type: ${this.config.database.type}`,
+        );
+    }
+  }
   /**
    * Get or create Topic Repository instance
    */
@@ -271,7 +262,6 @@ export class RepositoryFactory {
     }
   }
 
-
   private createLearningCardRepository(): ILearningCardRepository {
     switch (this.config.database.type) {
       case "postgresql":
@@ -315,9 +305,11 @@ export class RepositoryFactory {
  * Create repository factory from environment variables
  */
 export function createRepositoryFactoryFromEnv(): RepositoryFactory {
-
   // Allow database type to be toggled via env variable (default: 'postgresql')
-  const dbType = (process.env.DATABASE_TYPE || "postgresql").toLowerCase() as "postgresql" | "mongodb" | "mysql";
+  const dbType = (process.env.DATABASE_TYPE || "postgresql").toLowerCase() as
+    | "postgresql"
+    | "mongodb"
+    | "mysql";
   const config: RepositoryFactoryConfig = {
     database: {
       type: dbType,

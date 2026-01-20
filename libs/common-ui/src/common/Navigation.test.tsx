@@ -49,9 +49,9 @@ Object.defineProperty(document, "documentElement", {
 describe("S-UT-001: Component Renders", () => {
   beforeEach(() => {
     vi.clearAllMocks();
-    (document.documentElement.classList.contains as ReturnType<typeof vi.fn>).mockReturnValue(
-      false,
-    );
+    (
+      document.documentElement.classList.contains as ReturnType<typeof vi.fn>
+    ).mockReturnValue(false);
   });
 
   it("should render navigation component", () => {
@@ -127,9 +127,9 @@ describe("S-UT-002: Navigation Links", () => {
 describe("S-UT-003: Dark Mode Toggle", () => {
   beforeEach(() => {
     vi.clearAllMocks();
-    (document.documentElement.classList.contains as ReturnType<typeof vi.fn>).mockReturnValue(
-      false,
-    );
+    (
+      document.documentElement.classList.contains as ReturnType<typeof vi.fn>
+    ).mockReturnValue(false);
     localStorageMock.getItem.mockReturnValue(null);
   });
 
@@ -154,9 +154,9 @@ describe("S-UT-003: Dark Mode Toggle", () => {
   });
 
   it("should remove dark mode when toggled from dark to light", () => {
-    (document.documentElement.classList.contains as ReturnType<typeof vi.fn>).mockReturnValue(
-      true,
-    );
+    (
+      document.documentElement.classList.contains as ReturnType<typeof vi.fn>
+    ).mockReturnValue(true);
 
     render(<Navigation />);
     const toggleButton = screen.getByRole("button", {
@@ -192,9 +192,9 @@ describe("S-UT-004: Logo and Branding", () => {
 describe("S-UT-SNAPSHOT: Navigation Component Snapshot Tests", () => {
   beforeEach(() => {
     vi.clearAllMocks();
-    (document.documentElement.classList.contains as ReturnType<typeof vi.fn>).mockReturnValue(
-      false,
-    );
+    (
+      document.documentElement.classList.contains as ReturnType<typeof vi.fn>
+    ).mockReturnValue(false);
   });
 
   it("should match navigation snapshot (light mode)", () => {
