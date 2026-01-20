@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getSupabaseClient } from "../../../../lib/supabase-client";
+import { getRepositoryFactory } from "@elzatona/database";
 import {
   FrontendTask,
   FrontendTaskFormData,
@@ -10,9 +10,8 @@ import {
 // GET /api/admin/frontend-tasks - List all frontend tasks
 export async function GET(request: NextRequest) {
   try {
-    const supabase = getSupabaseClient();
-    console.log("🔄 Admin API: Fetching frontend tasks...");
-
+    const factory = getRepositoryFactory();
+    const questionRepo = factory.getQuestionRepository();
     const { searchParams } = new URL(request.url);
     const page = parseInt(searchParams.get("page") || "1");
     const limit = parseInt(searchParams.get("limit") || "10");
@@ -20,29 +19,18 @@ export async function GET(request: NextRequest) {
     const category = searchParams.get("category") || "";
     const difficulty = searchParams.get("difficulty") || "";
 
-    // Fetch tasks from Supabase
-    let query = supabase.from("frontend_tasks").select("*");
+    // Use repository pattern: findByType for 'frontend-task'
+    let options = { page, limit };
+    let tasksResult = await questionRepo.findByType("frontend-task", options);
+    let data: FrontendTask[] = tasksResult.data || [];
 
-    // Apply filters
+    // Apply additional filters client-side if needed
     if (category) {
-      query = query.eq("category", category);
+      data = data.filter((task) => task.category === category);
     }
     if (difficulty) {
-      query = query.eq("difficulty", difficulty);
+      data = data.filter((task) => task.difficulty === difficulty);
     }
-
-    // Apply ordering
-    query = query.order("created_at", { ascending: false });
-
-    const { data: tasks, error } = await query;
-
-    if (error) {
-      throw error;
-    }
-
-    let data: FrontendTask[] = tasks || [];
-
-    // Apply search filter
     if (search) {
       const lowerSearch = search.toLowerCase();
       data = data.filter(
@@ -83,9 +71,8 @@ export async function GET(request: NextRequest) {
 // POST /api/admin/frontend-tasks - Create new frontend task
 export async function POST(request: NextRequest) {
   try {
-    const supabase = getSupabaseClient();
-    console.log("🔄 Admin API: Creating new frontend task...");
-
+    const factory = getRepositoryFactory();
+    const questionRepo = factory.getQuestionRepository();
     const body: FrontendTaskFormData = await request.json();
 
     // Validate required fields
@@ -98,36 +85,14 @@ export async function POST(request: NextRequest) {
 
     // Create the task data
     const taskData = {
-      title: body.title,
-      description: body.description,
-      requirements: body.requirements,
-      solution: body.solution,
-      starter_code: body.starterCode,
-      category: body.category,
-      difficulty: body.difficulty,
-      estimated_time: body.estimatedTime,
-      author: body.author,
-      company: body.company,
-      files: body.files,
-      test_cases: body.testCases,
-      tags: body.tags,
-      is_active: body.is_active !== false,
-      created_at: new Date().toISOString(),
-      updated_at: new Date().toISOString(),
+      ...body,
+      type: "frontend-task",
+      createdAt: new Date(),
+      updatedAt: new Date(),
     };
 
-    // Add to Supabase
-    const { data: newTask, error } = await supabase
-      .from("frontend_tasks")
-      .insert(taskData)
-      .select()
-      .single();
-
-    if (error) {
-      throw error;
-    }
-
-    console.log(`✅ Admin API: Frontend task created with ID: ${newTask.id}`);
+    // Add to repository
+    const newTask = await questionRepo.create(taskData);
 
     const response: ApiResponse<{ id: string }> = {
       success: true,

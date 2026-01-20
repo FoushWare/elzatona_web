@@ -1,12 +1,10 @@
 <!--
 Sync Impact Report:
-- Version change: N/A -> 1.0.0
-- List of modified principles: Established new project principles.
-- Added sections: Core Principles, Branching & Release Strategy, Development Workflow, Governance.
-- Templates requiring updates:
-  - .specify/templates/plan-template.md (✅ updated)
-  - .specify/templates/spec-template.md (✅ updated)
-  - .specify/templates/tasks-template.md (✅ updated)
+- Version change: 1.0.0 → 1.0.1
+- Modified: Last Amended date updated to 2026-01-18 (patch bump for governance metadata).
+- No changes to principles or sections.
+- Templates checked: all aligned (plan, spec, tasks).
+- No manual follow-up required.
 -->
 
 # Elzatona Web Constitution
@@ -79,4 +77,4 @@ This Constitution supersedes all other ad-hoc practices. Any deviation must be j
 
 All Pull Requests must be reviewed against these principles.
 
-**Version**: 1.0.0 | **Ratified**: 2026-01-17 | **Last Amended**: 2026-01-17
+**Version**: 1.0.1 | **Ratified**: 2026-01-17 | **Last Amended**: 2026-01-18

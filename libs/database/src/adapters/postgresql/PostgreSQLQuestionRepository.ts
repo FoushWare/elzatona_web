@@ -26,6 +26,33 @@ const TABLE_NAME = "questions";
  * PostgreSQL implementation of Question Repository
  */
 export class PostgreSQLQuestionRepository
+
+    /**
+     * Find questions by type (e.g., 'frontend-task', 'problem')
+     * @param type - The type of question to filter by
+     * @param options - Query options for filtering and pagination
+     * @returns Paginated result with questions
+     */
+    async findByType(type: string, options?: QueryOptions): Promise<PaginatedResult<Question>> {
+      try {
+        let query = this.client
+          .from(TABLE_NAME)
+          .select("*", { count: "exact" })
+          .eq("type", type);
+
+        query = this.applyPagination(query, options);
+
+        const { data, error, count } = await query;
+        if (error) throw error;
+
+        return {
+          data: (data || []).map((item) => this.mapToQuestion(item)),
+          meta: this.createPaginationMeta(count || 0, options),
+        };
+      } catch (error) {
+        this.handleError(error, "PostgreSQLQuestionRepository.findByType");
+      }
+    }
   extends BasePostgreSQLAdapter
   implements IQuestionRepository
 {

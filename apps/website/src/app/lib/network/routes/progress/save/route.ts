@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 
-import { getSupabaseClient } from "../../../../get-supabase-client";
+import { createRepositoryFactoryFromEnv } from "../../../../../../libs/database/src/repositories/RepositoryFactory";
 
 import { cookies } from "next/headers";
 import { verifySupabaseToken } from "../../../../server-auth";
@@ -99,28 +99,20 @@ export async function POST(request: NextRequest) {
 
     // Save progress to Supabase
     try {
-      const supabase = getSupabaseClient();
-      const { error: progressError } = await supabase
-        .from("user_progress")
-        .insert({
-          user_id: decodedToken.id,
-          question_id: progressData.question_id,
-          is_correct: progressData.isCorrect,
-          time_spent: progressData.timeSpent,
-          section: progressData.section,
-          difficulty: progressData.difficulty,
-          learning_mode: progressData.learningMode,
-          plan_id: progressData.planId,
-          created_at: new Date().toISOString(),
-        });
-      if (progressError) throw progressError;
-      console.log("✅ Progress saved to Supabase successfully");
-    } catch (supabaseError) {
+      const factory = createRepositoryFactoryFromEnv();
+      const progressRepo = factory.getProgressRepository();
+      await progressRepo.createProgress({
+        userId: decodedToken.id,
+        flashcardId: progressData.question_id,
+        status: progressData.isCorrect ? "correct" : "incorrect",
+      });
+      console.log("✅ Progress saved to repository successfully");
+    } catch (repoError) {
       console.error(
-        "❌ Error saving progress to Supabase:",
-        sanitizeForLog(supabaseError),
+        "❌ Error saving progress to repository:",
+        sanitizeForLog(repoError),
       );
-      // Continue with response even if Supabase fails
+      // Continue with response even if repository fails
     }
 
     // Update learning plan progress if guided mode

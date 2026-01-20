@@ -52,6 +52,14 @@ export interface IUserRepository {
   findByEmail(email: string): Promise<User | null>;
 
   /**
+   * Find an admin user by email (from admin_users table)
+   * @param email - Admin email
+   * @returns Admin user if found, null otherwise
+   * @throws RepositoryError if database error occurs
+   */
+  findAdminByEmail(email: string): Promise<any | null>;
+
+  /**
    * Find all users with optional pagination and filtering
    * @param options - Query options for filtering and pagination
    * @returns Paginated result with users

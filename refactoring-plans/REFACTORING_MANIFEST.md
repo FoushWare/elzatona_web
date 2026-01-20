@@ -307,6 +307,12 @@ The following features have been deferred or neglected for the current release t
 19. Settings (`/settings`)
 20. Remaining pages
 
+## Known Issues (Database Abstraction Layer)
+
+- Vitest coverage reporting is not fully integrated for all database abstraction code. Some files may not be included in lcov output due to toolchain or config limitations. See docs/testing/DATABASE_ABSTRACTION_TESTS.md for details and workarounds.
+- Some advanced DB-specific flows require manual verification beyond automated tests.
+- E2E test coverage for all CRUD flows is in progress; see apps/admin/tests/e2e/ for latest status.
+
 ## Next Steps
 
 1. ✅ Create refactoring documentation structure

@@ -1,1 +1,4 @@
-export { GET, POST } from "../../../../network/routes/categories/route";
+export {
+  GET,
+  POST,
+} from "../../../../../../website/src/app/lib/network/routes/categories/route";

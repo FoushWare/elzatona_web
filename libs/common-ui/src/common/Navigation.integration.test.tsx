@@ -9,7 +9,7 @@ import "@testing-library/jest-dom";
 import Navigation from "./Navigation";
 
 // Mock Next.js Link
-jest.mock("next/link", () => {
+vi.mock("next/link", () => {
   const MockLink = ({
     children,
     href,
@@ -25,10 +25,10 @@ jest.mock("next/link", () => {
 
 // Mock localStorage
 const localStorageMock = {
-  getItem: jest.fn(),
-  setItem: jest.fn(),
-  removeItem: jest.fn(),
-  clear: jest.fn(),
+  getItem: vi.fn(),
+  setItem: vi.fn(),
+  removeItem: vi.fn(),
+  clear: vi.fn(),
 };
 Object.defineProperty(window, "localStorage", {
   value: localStorageMock,
@@ -36,9 +36,9 @@ Object.defineProperty(window, "localStorage", {
 
 // Mock document.documentElement
 const mockClassList = {
-  contains: jest.fn(() => false),
-  add: jest.fn(),
-  remove: jest.fn(),
+  contains: vi.fn(() => false),
+  add: vi.fn(),
+  remove: vi.fn(),
 };
 
 Object.defineProperty(document, "documentElement", {
@@ -50,7 +50,7 @@ Object.defineProperty(document, "documentElement", {
 
 describe("S-IT-001: Navigation Routing", () => {
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
     mockClassList.contains.mockReturnValue(false);
   });
 
@@ -86,7 +86,7 @@ describe("S-IT-001: Navigation Routing", () => {
 
 describe("S-IT-002: Dark Mode Persistence", () => {
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
     mockClassList.contains.mockReturnValue(false);
     localStorageMock.getItem.mockReturnValue(null);
   });
@@ -130,7 +130,7 @@ describe("S-IT-002: Dark Mode Persistence", () => {
 
 describe("S-IT-003: Component Integration", () => {
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
     mockClassList.contains.mockReturnValue(false);
   });
 

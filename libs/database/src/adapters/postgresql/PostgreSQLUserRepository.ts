@@ -85,6 +85,26 @@ export class PostgreSQLUserRepository
     }
   }
 
+    async findAdminByEmail(email: string): Promise<User | null> {
+      try {
+        const { data, error } = await this.client
+          .from(TABLE_NAME)
+          .select("*")
+          .eq("email", email)
+          .eq("role", "admin")
+          .single();
+
+        if (error) {
+          if (error.code === "PGRST116") return null;
+          throw error;
+        }
+
+        return this.mapToUser(data);
+      } catch (error) {
+        this.handleError(error, "PostgreSQLUserRepository.findAdminByEmail");
+      }
+    }
+
   async findByEmail(email: string): Promise<User | null> {
     try {
       const { data, error } = await this.client

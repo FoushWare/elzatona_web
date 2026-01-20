@@ -22,6 +22,18 @@ export interface IQuestionRepository {
   // CREATE OPERATIONS
   // ============================================
 
+    /**
+     * Find questions by type (e.g., 'frontend-task', 'problem')
+     * @param type - The type of question to filter by
+     * @param options - Query options for filtering and pagination
+     * @returns Paginated result with questions
+     * @throws RepositoryError if database error occurs
+     */
+    findByType(
+      type: string,
+      options?: QueryOptions,
+    ): Promise<PaginatedResult<Question>>;
+
   /**
    * Create a new question
    * @param question - Question data to create

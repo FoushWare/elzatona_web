@@ -9,7 +9,7 @@ import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import AdminNavbar from "./AdminNavbar";
 
 // Mock Next.js
-jest.mock("next/link", () => {
+vi.mock("next/link", () => {
   const MockLink = ({
     children,
     href,
@@ -23,10 +23,10 @@ jest.mock("next/link", () => {
   return MockLink;
 });
 
-const mockPush = jest.fn();
-const mockReplace = jest.fn();
+const mockPush = vi.fn();
+const mockReplace = vi.fn();
 
-jest.mock("next/navigation", () => ({
+vi.mock("next/navigation", () => ({
   useRouter: () => ({
     push: mockPush,
     replace: mockReplace,
@@ -36,15 +36,15 @@ jest.mock("next/navigation", () => ({
 }));
 
 // Mock shared contexts
-const mockToggleDarkMode = jest.fn();
-const mockLogout = jest.fn();
+const mockToggleDarkMode = vi.fn();
+const mockLogout = vi.fn();
 
-jest.mock("@elzatona/contexts", () => ({
-  useTheme: jest.fn(() => ({
+vi.mock("@elzatona/contexts", () => ({
+  useTheme: vi.fn(() => ({
     isDarkMode: false,
     toggleDarkMode: mockToggleDarkMode,
   })),
-  useAdminAuth: jest.fn(() => ({
+  useAdminAuth: vi.fn(() => ({
     isAuthenticated: true,
     user: {
       id: "1",
@@ -57,21 +57,21 @@ jest.mock("@elzatona/contexts", () => ({
 }));
 
 // Mock NotificationDropdown
-jest.mock("../common/NotificationDropdown", () => ({
+vi.mock("../common/NotificationDropdown", () => ({
   NotificationDropdown: () => (
     <div data-testid="notification-dropdown">Notifications</div>
   ),
 }));
 
 // Mock AlzatonaLogo
-jest.mock("../common/AlzatonaLogo", () => {
+vi.mock("../common/AlzatonaLogo", () => {
   return function AlzatonaLogo() {
     return <div data-testid="alzatona-logo">Logo</div>;
   };
 });
 
 // Mock lucide-react icons
-jest.mock("lucide-react", () => ({
+vi.mock("lucide-react", () => ({
   Menu: () => <div data-testid="menu-icon">Menu</div>,
   X: () => <div data-testid="x-icon">X</div>,
   Sun: () => <div data-testid="sun-icon">Sun</div>,
@@ -100,7 +100,7 @@ Object.defineProperty(document.body, "style", {
 
 describe("A-IT-014: AdminNavbar Dropdown Integration", () => {
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
     window.scrollY = 0;
     Object.assign(document.body.style, {});
     // Set large screen viewport for dropdown tests (dropdown only shows on lg+)
