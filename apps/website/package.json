@@ -15,7 +15,11 @@
     "next": "^14.0.0",
     "react": "^18.0.0",
     "react-dom": "^18.0.0",
-    "@elzatona/database": "*"
+    "@elzatona/common-ui": "*",
+    "@elzatona/contexts": "*",
+    "@elzatona/database": "*",
+    "@elzatona/types": "*",
+    "@elzatona/utilities": "*"
   },
   "devDependencies": {
     "@types/node": "^20.0.0",

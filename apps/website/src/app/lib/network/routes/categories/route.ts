@@ -4,16 +4,11 @@
 
 import { NextRequest, NextResponse } from "next/server";
 // Empty import removed
-import { createRepositoryFactoryFromEnv } from "@elzatona/database";
+import { createRepositoryFactoryFromEnv, Category } from "@elzatona/database";
 import { sanitizeObjectServer } from "../../../sanitize-server";
 import { validateAndSanitize, categorySchema } from "../../../validation";
 
 // Use the Category type from the repository interface
-type DBCategory = {
-  id: string;
-  name: string;
-  description?: string;
-};
 
 export async function GET() {
   try {
@@ -21,7 +16,7 @@ export async function GET() {
     const categoryRepo = factory.getCategoryRepository();
     const categories = await categoryRepo.getAllCategories();
     // Transform data to match expected format
-    const transformedCategories = categories.map((category: DBCategory) => ({
+    const transformedCategories = categories.map((category: Category) => ({
       id: category.id,
       name: category.name,
       description: category.description,

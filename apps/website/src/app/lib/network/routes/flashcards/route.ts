@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { createRepositoryFactoryFromEnv } from "@elzatona/database/repositories/RepositoryFactory";
+import { createRepositoryFactoryFromEnv } from "@elzatona/database";
 import {
   sanitizeObjectServer,
   sanitizeRichContent,

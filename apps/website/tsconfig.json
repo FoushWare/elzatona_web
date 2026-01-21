@@ -26,7 +26,10 @@
       "@elzatona/types": ["../../libs/types/src/index.ts"],
       "@elzatona/utilities": ["../../libs/utilities/src/index.ts"],
       "@elzatona/shared-atoms": ["../../libs/shared-atoms/src/index.ts"],
-      "@elzatona/database": ["../../libs/database/src/index.ts"]
+      "@elzatona/database": ["../../libs/database/src/index.ts"],
+      "@elzatona/database/repositories/interfaces/ICategoryRepository": [
+        "../../libs/database/src/repositories/interfaces/ICategoryRepository.ts"
+      ]
     }
   },
   "include": [

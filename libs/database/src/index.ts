@@ -30,13 +30,11 @@ export type {
 export { SupabaseDatabaseService } from "./lib/SupabaseDatabaseService";
 
 // Context and hooks
-export {
-  DatabaseProvider,
-  useDatabase,
-  useDatabaseService,
-  createDatabaseService,
-  DatabaseServiceFactory,
-} from "./lib/DatabaseContext";
+// NOTE: `DatabaseContext` exports (React context and hooks) are intentionally
+// not re-exported from the package root to avoid importing client-only React
+// code into server modules (Next.js app routes). Consumers that need the
+// provider/hooks should import them explicitly from the library client entry
+// (or directly from `./lib/DatabaseContext`) in client components only.
 
 // Configuration
 export {
