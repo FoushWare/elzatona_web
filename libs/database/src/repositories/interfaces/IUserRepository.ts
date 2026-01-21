@@ -12,7 +12,7 @@ import {
   UserStatistics,
   QueryOptions,
   PaginatedResult,
-} from "../types";
+} from "../types/index";
 
 /**
  * Repository interface for User entity operations

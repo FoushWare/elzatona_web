@@ -11,7 +11,7 @@ import {
   QuestionStatistics,
   QueryOptions,
   PaginatedResult,
-} from "../types";
+} from "../types/index";
 
 /**
  * Repository interface for Question entity operations

@@ -11,7 +11,7 @@ import {
   PlanStatistics,
   QueryOptions,
   PaginatedResult,
-} from "../types";
+} from "../types/index";
 
 /**
  * Repository interface for Plan entity operations

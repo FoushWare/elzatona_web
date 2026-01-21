@@ -11,7 +11,7 @@ import {
   LearningCardStatistics,
   QueryOptions,
   PaginatedResult,
-} from "../types";
+} from "../types/index";
 
 /**
  * Repository interface for Learning Card entity operations
