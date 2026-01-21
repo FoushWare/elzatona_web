@@ -57,7 +57,7 @@ vi.mock("jsonwebtoken", () => ({
 vi.mock("../../../../lib/utils/api-config", () => ({
   getSupabaseConfig: vi.fn(() => ({
     url: "https://test.supabase.co",
-    serviceRoleKey: "test-service-role-key",
+    serviceRoleKey: "REDACTED_TEST_KEY",
   })),
 }));
 
@@ -67,7 +67,7 @@ const mockEnv = {
   ADMIN_OWNER_EMAIL: "owner@example.com",
   JWT_SECRET: "test-jwt-secret",
   NEXT_PUBLIC_SUPABASE_URL: "https://test.supabase.co",
-  SUPABASE_SERVICE_ROLE_KEY: "test-service-role-key",
+  SUPABASE_SERVICE_ROLE_KEY: "REDACTED_TEST_KEY",
 };
 
 describe("Admin Create API Route", () => {

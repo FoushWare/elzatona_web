@@ -16,8 +16,8 @@ describe("RepositoryFactory", () => {
       database: {
         type: "postgresql",
         url: "https://test.supabase.co",
-        key: "test-key",
-        serviceRoleKey: "test-service-role-key",
+        key: "REDACTED_TEST_KEY",
+        serviceRoleKey: "REDACTED_TEST_KEY",
       },
     };
   });

@@ -19,7 +19,7 @@ const mockEnv = {
   BCRYPT_SALT_ROUNDS: "10",
   JWT_SECRET: "test-jwt-secret",
   NEXT_PUBLIC_SUPABASE_URL: "https://test.supabase.co",
-  SUPABASE_SERVICE_ROLE_KEY: "test-service-role-key",
+  SUPABASE_SERVICE_ROLE_KEY: "REDACTED_TEST_KEY",
 };
 
 describe("Admin Auth API Route", () => {
