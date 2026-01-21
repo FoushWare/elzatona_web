@@ -16,17 +16,9 @@ Or manually search:
 
 ```bash
 # Search for specific patterns
-git log --all -p -S "AIzaSy" --oneline
-git log --all -p -S "YOUR_SUPABASE_KEY_HERE" --oneline
-<<<<<<< HEAD
-<<<<<<< HEAD
+git log --all -p -S "YOUR_GOOGLE_API_KEY_HERE" --oneline
+git log --all -p -S "YOUR_SUPABASE_ANON_KEY_HERE" --oneline
 git log --all -p -S "process.env.SUPABASE_SERVICE_ROLE_KEY" --oneline
-=======
-git log --all -p -S "BH3xSC7yk5DqX5bTgyedOyC45fNg1_vBcV04X_tkYLQ" --oneline
->>>>>>> origin/security/fix-gitleaks-config
-=======
-git log --all -p -S "BH3xSC7yk5DqX5bTgyedOyC45fNg1_vBcV04X_tkYLQ" --oneline
->>>>>>> origin/main
 ```
 
 ## Step 2: Rotate Exposed Keys FIRST
@@ -55,17 +47,9 @@ git log --all -p -S "BH3xSC7yk5DqX5bTgyedOyC45fNg1_vBcV04X_tkYLQ" --oneline
 pip install git-filter-repo
 
 # Remove specific strings from all commits
-git filter-repo --replace-text <(echo "YOUR_GOOGLE_API_KEY_HERE==>your-firebase-api-key-here")     
-git filter-repo --replace-text <(echo "YOUR_SUPABASE_KEY_HERE...==>your-supabase-anon-key-here")
-<<<<<<< HEAD
-<<<<<<< HEAD
+git filter-repo --replace-text <(echo "YOUR_GOOGLE_API_KEY_HERE==>your-firebase-api-key-here")
+git filter-repo --replace-text <(echo "YOUR_SUPABASE_ANON_KEY_HERE==>your-supabase-anon-key-here")
 git filter-repo --replace-text <(echo "process.env.SUPABASE_SERVICE_ROLE_KEY==>your-service-role-key-here")
-=======
-git filter-repo --replace-text <(echo "BH3xSC7yk5DqX5bTgyedOyC45fNg1_vBcV04X_tkYLQ==>your-service-role-key-here")
->>>>>>> origin/security/fix-gitleaks-config
-=======
-git filter-repo --replace-text <(echo "BH3xSC7yk5DqX5bTgyedOyC45fNg1_vBcV04X_tkYLQ==>your-service-role-key-here")
->>>>>>> origin/main
 ```
 
 ### Option B: Using BFG Repo-Cleaner
