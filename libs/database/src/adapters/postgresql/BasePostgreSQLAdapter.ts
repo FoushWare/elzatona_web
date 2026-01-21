@@ -9,7 +9,7 @@ import {
   RepositoryErrorType,
   QueryOptions,
   PaginationMeta,
-} from "../../repositories/types";
+} from "../../repositories/types/index";
 
 /**
  * Configuration for PostgreSQL adapter
