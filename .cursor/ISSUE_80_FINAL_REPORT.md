@@ -52,10 +52,10 @@
 2. # **Supabase Anon Key:** `YOUR_SUPABASE_KEY_HERE...`
 3. **Supabase Anon Key:** `YOUR_SUPABASE_KEY_HERE
    > > > > > > > origin/security/fix-gitleaks-config
-4. **Firebase API Key:** `AIzaSyBXlcfcdyIqoeJOb2gXcxpRSmQO7lEP82Y`
+4. **Firebase API Key:** `YOUR_GOOGLE_API_KEY_HERE`
 5. # **Project Identifiers:** `hpnewqkvpnthpohvxcmq`, `fir-demo-project-adffb`
 6. **Supabase Anon Key:** `YOUR_SUPABASE_KEY_HERE
-7. **Firebase API Key:** `AIzaSyBXlcfcdyIqoeJOb2gXcxpRSmQO7lEP82Y`
+7. **Firebase API Key:** `YOUR_GOOGLE_API_KEY_HERE`
 8. **Project Identifiers:** `hpnewqkvpnthpohvxcmq`, `fir-demo-project-adffb`
    > > > > > > > origin/main
 

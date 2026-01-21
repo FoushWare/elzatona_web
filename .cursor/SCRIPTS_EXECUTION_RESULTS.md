@@ -54,7 +54,7 @@ python3 .cursor/scripts/git-secrets-check.py
 
 ```bash
 # Search for Firebase key
-git log --all -p -S "AIzaSyBXlcfcdyIqoeJOb2gXcxpRSmQO7lEP82Y" --oneline
+git log --all -p -S "YOUR_GOOGLE_API_KEY_HERE" --oneline
 
 # Search for service role key
 git log --all -p -S "process.env.SUPABASE_SERVICE_ROLE_KEY" --oneline
@@ -67,7 +67,7 @@ git log --all -p -S "YOUR_SUPABASE_KEY_HERE" --oneline
 
 Since we found hardcoded secrets in current files, they **likely exist in git history**:
 
-1. **Firebase API Key:** `AIzaSyBXlcfcdyIqoeJOb2gXcxpRSmQO7lEP82Y`
+1. **Firebase API Key:** `YOUR_GOOGLE_API_KEY_HERE`
    - Likely in: setup files, documentation files, migration guides
    - Commits: Initial setup, documentation updates
 

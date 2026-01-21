@@ -23,7 +23,7 @@ alwaysApply: true
 ### **Secret Patterns to Avoid**
 ```typescript
 // ❌ DON'T: Hardcode secrets
-const apiKey = "AIzaSyBXlcfcdyIqoeJOb2gXcxpRSmQO7lEP82Y";
+const apiKey = "YOUR_GOOGLE_API_KEY_HERE";
 const token = "YOUR_SUPABASE_KEY_HERE...";
 
 // ✅ DO: Use environment variables

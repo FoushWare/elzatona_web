@@ -55,7 +55,7 @@ git log --all -p -S "BH3xSC7yk5DqX5bTgyedOyC45fNg1_vBcV04X_tkYLQ" --oneline
 pip install git-filter-repo
 
 # Remove specific strings from all commits
-git filter-repo --replace-text <(echo "AIzaSyBXlcfcdyIqoeJOb2gXcxpRSmQO7lEP82Y==>your-firebase-api-key-here")
+git filter-repo --replace-text <(echo "YOUR_GOOGLE_API_KEY_HERE==>your-firebase-api-key-here")     
 git filter-repo --replace-text <(echo "YOUR_SUPABASE_KEY_HERE...==>your-supabase-anon-key-here")
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -75,7 +75,7 @@ git filter-repo --replace-text <(echo "BH3xSC7yk5DqX5bTgyedOyC45fNg1_vBcV04X_tkY
 # https://rtyley.github.io/bfg-repo-cleaner/
 
 # Create a file with secrets to remove
-echo "AIzaSyBXlcfcdyIqoeJOb2gXcxpRSmQO7lEP82Y" > secrets.txt
+echo "YOUR_GOOGLE_API_KEY_HERE" > secrets.txt                                                      
 echo "YOUR_SUPABASE_KEY_HERE..." >> secrets.txt
 
 # Remove secrets

@@ -55,7 +55,7 @@ python3 .cursor/scripts/git-secrets-check.py
 
 ```bash
 git log --all -p -S "process.env.SUPABASE_SERVICE_ROLE_KEY" --oneline
-git log --all -p -S "AIzaSyBXlcfcdyIqoeJOb2gXcxpRSmQO7lEP82Y" --oneline
+git log --all -p -S "YOUR_GOOGLE_API_KEY_HERE" --oneline
 ```
 
 ### 4. Remove from Git History (After Rotating Keys)
@@ -72,7 +72,7 @@ pip install git-filter-repo
 
 # Create replacements file
 cat > /tmp/replacements.txt << 'EOF'
-AIzaSyBXlcfcdyIqoeJOb2gXcxpRSmQO7lEP82Y==>your-firebase-api-key-here
+YOUR_GOOGLE_API_KEY_HERE==>your-firebase-api-key-here
 process.env.SUPABASE_SERVICE_ROLE_KEY==>your-service-role-key-here
 <<<<<<< HEAD
 <<<<<<< HEAD

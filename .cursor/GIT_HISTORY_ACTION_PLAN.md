@@ -10,7 +10,7 @@ Since we found hardcoded secrets in current files, it's **highly likely** these 
 
 ### Secrets Likely in Git History:
 
-1. **Firebase API Key:** `AIzaSyBXlcfcdyIqoeJOb2gXcxpRSmQO7lEP82Y`
+1. **Firebase API Key:** `YOUR_GOOGLE_API_KEY_HERE`
    <<<<<<< HEAD
    <<<<<<< HEAD
 2. # **Supabase Anon Key:** `YOUR_SUPABASE_KEY_HERE.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhwbmV3cWt2cG50aHBvaHZ4Y21xIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjA2NjA0MTgsImV4cCI6MjA3NjIzNjQxOH0.UMmriJb5HRr9W_56GilNNDWksvlFEb1V9c_PuBK-H3s`
@@ -58,7 +58,7 @@ Run these commands to confirm:
 
 ```bash
 # Check for Firebase key
-git log --all -p -S "AIzaSyBXlcfcdyIqoeJOb2gXcxpRSmQO7lEP82Y" --oneline
+git log --all -p -S "YOUR_GOOGLE_API_KEY_HERE" --oneline
 
 # Check for Supabase keys
 git log --all -p -S "YOUR_SUPABASE_KEY_HERE" --oneline
@@ -77,7 +77,7 @@ pip install git-filter-repo
 
 # Create replacements file
 cat > /tmp/replacements.txt << 'EOF'
-AIzaSyBXlcfcdyIqoeJOb2gXcxpRSmQO7lEP82Y==>your-firebase-api-key-here
+YOUR_GOOGLE_API_KEY_HERE==>your-firebase-api-key-here
 <<<<<<< HEAD
 <<<<<<< HEAD
 YOUR_SUPABASE_KEY_HERE.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhwbmV3cWt2cG50aHBvaHZ4Y21xIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjA2NjA0MTgsImV4cCI6MjA3NjIzNjQxOH0.UMmriJb5HRr9W_56GilNNDWksvlFEb1V9c_PuBK-H3s==>your-supabase-anon-key-here
@@ -106,16 +106,8 @@ rm /tmp/replacements.txt
 
 # Create file with secrets
 cat > /tmp/secrets.txt << 'EOF'
-AIzaSyBXlcfcdyIqoeJOb2gXcxpRSmQO7lEP82Y
-<<<<<<< HEAD
-<<<<<<< HEAD
-YOUR_SUPABASE_KEY_HERE.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhwbmV3cWt2cG50aHBvaHZ4Y21xIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjA2NjA0MTgsImV4cCI6MjA3NjIzNjQxOH0.UMmriJb5HRr9W_56GilNNDWksvlFEb1V9c_PuBK-H3s
-=======
-YOUR_SUPABASE_KEY_HERE
->>>>>>> origin/security/fix-gitleaks-config
-=======
-YOUR_SUPABASE_KEY_HERE
->>>>>>> origin/main
+YOUR_GOOGLE_API_KEY_HERE
+YOUR_SUPABASE_ANON_KEY_HERE
 process.env.SUPABASE_SERVICE_ROLE_KEY
 EOF
 
