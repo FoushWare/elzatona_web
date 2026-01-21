@@ -2,7 +2,7 @@
 // v2.1 - Enhanced topic management with input sanitization
 
 import { NextRequest, NextResponse } from "next/server";
-import { createRepositoryFactoryFromEnv } from "../../../../../../libs/database/src/repositories/RepositoryFactory";
+import { createRepositoryFactoryFromEnv } from "@elzatona/database/repositories/RepositoryFactory";
 import { sanitizeObjectServer } from "../../../sanitize-server";
 import { validateAndSanitize, topicSchema } from "../../../validation";
 

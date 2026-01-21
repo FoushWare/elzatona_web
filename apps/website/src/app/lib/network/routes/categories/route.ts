@@ -4,7 +4,7 @@
 
 import { NextRequest, NextResponse } from "next/server";
 // Empty import removed
-import { createRepositoryFactoryFromEnv } from "../../../../../../libs/database/src/repositories/RepositoryFactory";
+import { createRepositoryFactoryFromEnv } from "@elzatona/database/repositories/RepositoryFactory";
 import { sanitizeObjectServer } from "../../../sanitize-server";
 import { validateAndSanitize, categorySchema } from "../../../validation";
 

@@ -2,7 +2,7 @@
 // v2.0 - Enhanced section management
 
 import { NextRequest, NextResponse } from "next/server";
-import { createRepositoryFactoryFromEnv } from "../../../../../../libs/database/src/repositories/RepositoryFactory";
+import { createRepositoryFactoryFromEnv } from "@elzatona/database/repositories/RepositoryFactory";
 
 export async function GET() {
   try {
