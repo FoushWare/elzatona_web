@@ -28,7 +28,10 @@ interface RepositoryContextValue {
 /**
  * Repository context
  */
-const RepositoryContext = createContext<RepositoryContextValue | null>(null);
+
+export const RepositoryContext = createContext<RepositoryContextValue | null>(
+  null,
+);
 
 /**
  * Repository provider props
