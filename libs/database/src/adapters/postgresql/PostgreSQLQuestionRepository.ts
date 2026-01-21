@@ -14,7 +14,7 @@ import {
   PaginatedResult,
   QuestionDifficulty,
   QuestionType,
-} from "../../repositories";
+} from "../../repositories/types/index";
 import {
   BasePostgreSQLAdapter,
   PostgreSQLConfig,

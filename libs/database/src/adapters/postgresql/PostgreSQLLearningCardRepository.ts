@@ -13,7 +13,7 @@ import {
   QueryOptions,
   PaginatedResult,
   CardType,
-} from "../../repositories";
+} from "../../repositories/types/index";
 import {
   BasePostgreSQLAdapter,
   PostgreSQLConfig,

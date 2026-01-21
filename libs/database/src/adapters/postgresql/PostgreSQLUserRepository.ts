@@ -13,7 +13,7 @@ import {
   UserStatistics,
   QueryOptions,
   PaginatedResult,
-} from "../../repositories";
+} from "../../repositories/types/index";
 import {
   BasePostgreSQLAdapter,
   PostgreSQLConfig,
