@@ -7,6 +7,7 @@
 
 // Repository types and interfaces
 export * from "./repositories";
+export * from "./repositories/RepositoryFactory";
 
 // PostgreSQL adapters
 export * from "./adapters";
