@@ -8,45 +8,71 @@ import {
   Flashcard,
   FlashcardInput,
 } from "../../repositories/interfaces/IFlashcardRepository";
-import { Pool } from "pg";
+import {
+  BasePostgreSQLAdapter,
+  PostgreSQLConfig,
+} from "./BasePostgreSQLAdapter";
 
-export class PostgreSQLFlashcardRepository implements IFlashcardRepository {
-  private pool: Pool;
-
-  constructor(pool: Pool) {
-    this.pool = pool;
+export class PostgreSQLFlashcardRepository
+  extends BasePostgreSQLAdapter
+  implements IFlashcardRepository
+{
+  constructor(config: PostgreSQLConfig) {
+    super(config);
   }
 
   async getFlashcardById(id: string): Promise<Flashcard | null> {
-    const res = await this.pool.query(
-      "SELECT * FROM flashcards WHERE id = $1",
-      [id],
-    );
-    return res.rows[0] || null;
+    const { data, error } = await this.client
+      .from("flashcards")
+      .select("*")
+      .eq("id", id)
+      .single();
+    if (error) throw error;
+    return data || null;
   }
 
   async getAllFlashcards(): Promise<Flashcard[]> {
-    const res = await this.pool.query("SELECT * FROM flashcards");
-    return res.rows;
+    const { data, error } = await this.client.from("flashcards").select("*");
+    if (error) throw error;
+    return data || [];
   }
 
   async createFlashcard(data: FlashcardInput): Promise<Flashcard> {
-    const res = await this.pool.query(
-      "INSERT INTO flashcards (question, answer, section_id) VALUES ($1, $2, $3) RETURNING *",
-      [data.question, data.answer, data.sectionId],
-    );
-    return res.rows[0];
+    const { data: created, error } = await this.client
+      .from("flashcards")
+      .insert([
+        {
+          question: data.question,
+          answer: data.answer,
+          section_id: data.sectionId,
+        },
+      ])
+      .select()
+      .single();
+    if (error) throw error;
+    return created;
   }
 
   async updateFlashcard(id: string, data: FlashcardInput): Promise<Flashcard> {
-    const res = await this.pool.query(
-      "UPDATE flashcards SET question = $1, answer = $2, section_id = $3 WHERE id = $4 RETURNING *",
-      [data.question, data.answer, data.sectionId, id],
-    );
-    return res.rows[0];
+    const { data: updated, error } = await this.client
+      .from("flashcards")
+      .update({
+        question: data.question,
+        answer: data.answer,
+        section_id: data.sectionId,
+      })
+      .eq("id", id)
+      .select()
+      .single();
+    if (error) throw error;
+    return updated;
   }
 
   async deleteFlashcard(id: string): Promise<void> {
-    await this.pool.query("DELETE FROM flashcards WHERE id = $1", [id]);
+    const { error } = await this.client
+      .from("flashcards")
+      .delete()
+      .eq("id", id);
+    if (error) throw error;
   }
 }

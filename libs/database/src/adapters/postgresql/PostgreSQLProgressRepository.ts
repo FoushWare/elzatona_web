@@ -8,44 +8,68 @@ import {
   Progress,
   ProgressInput,
 } from "../../repositories/interfaces/IProgressRepository";
-import { Pool } from "pg";
+import {
+  BasePostgreSQLAdapter,
+  PostgreSQLConfig,
+} from "./BasePostgreSQLAdapter";
 
-export class PostgreSQLProgressRepository implements IProgressRepository {
-  private pool: Pool;
-
-  constructor(pool: Pool) {
-    this.pool = pool;
+export class PostgreSQLProgressRepository
+  extends BasePostgreSQLAdapter
+  implements IProgressRepository
+{
+  constructor(config: PostgreSQLConfig) {
+    super(config);
   }
 
   async getProgressById(id: string): Promise<Progress | null> {
-    const res = await this.pool.query("SELECT * FROM progress WHERE id = $1", [
-      id,
-    ]);
-    return res.rows[0] || null;
+    const { data, error } = await this.client
+      .from("progress")
+      .select("*")
+      .eq("id", id)
+      .single();
+    if (error) throw error;
+    return data || null;
   }
 
   async getAllProgress(): Promise<Progress[]> {
-    const res = await this.pool.query("SELECT * FROM progress");
-    return res.rows;
+    const { data, error } = await this.client.from("progress").select("*");
+    if (error) throw error;
+    return data || [];
   }
 
   async createProgress(data: ProgressInput): Promise<Progress> {
-    const res = await this.pool.query(
-      "INSERT INTO progress (user_id, flashcard_id, status) VALUES ($1, $2, $3) RETURNING *",
-      [data.userId, data.flashcardId, data.status],
-    );
-    return res.rows[0];
+    const { data: created, error } = await this.client
+      .from("progress")
+      .insert([
+        {
+          user_id: data.userId,
+          flashcard_id: data.flashcardId,
+          status: data.status,
+        },
+      ])
+      .select()
+      .single();
+    if (error) throw error;
+    return created;
   }
 
   async updateProgress(id: string, data: ProgressInput): Promise<Progress> {
-    const res = await this.pool.query(
-      "UPDATE progress SET user_id = $1, flashcard_id = $2, status = $3 WHERE id = $4 RETURNING *",
-      [data.userId, data.flashcardId, data.status, id],
-    );
-    return res.rows[0];
+    const { data: updated, error } = await this.client
+      .from("progress")
+      .update({
+        user_id: data.userId,
+        flashcard_id: data.flashcardId,
+        status: data.status,
+      })
+      .eq("id", id)
+      .select()
+      .single();
+    if (error) throw error;
+    return updated;
   }
 
   async deleteProgress(id: string): Promise<void> {
-    await this.pool.query("DELETE FROM progress WHERE id = $1", [id]);
+    const { error } = await this.client.from("progress").delete().eq("id", id);
+    if (error) throw error;
   }
 }

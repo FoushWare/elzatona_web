@@ -8,44 +8,68 @@ import {
   Topic,
   TopicInput,
 } from "../../repositories/interfaces/ITopicRepository";
-import { Pool } from "pg";
+import {
+  BasePostgreSQLAdapter,
+  PostgreSQLConfig,
+} from "./BasePostgreSQLAdapter";
 
-export class PostgreSQLTopicRepository implements ITopicRepository {
-  private pool: Pool;
-
-  constructor(pool: Pool) {
-    this.pool = pool;
+export class PostgreSQLTopicRepository
+  extends BasePostgreSQLAdapter
+  implements ITopicRepository
+{
+  constructor(config: PostgreSQLConfig) {
+    super(config);
   }
 
   async getTopicById(id: string): Promise<Topic | null> {
-    const res = await this.pool.query("SELECT * FROM topics WHERE id = $1", [
-      id,
-    ]);
-    return res.rows[0] || null;
+    const { data, error } = await this.client
+      .from("topics")
+      .select("*")
+      .eq("id", id)
+      .single();
+    if (error) throw error;
+    return data || null;
   }
 
   async getAllTopics(): Promise<Topic[]> {
-    const res = await this.pool.query("SELECT * FROM topics");
-    return res.rows;
+    const { data, error } = await this.client.from("topics").select("*");
+    if (error) throw error;
+    return data || [];
   }
 
   async createTopic(data: TopicInput): Promise<Topic> {
-    const res = await this.pool.query(
-      "INSERT INTO topics (name, category_id, description) VALUES ($1, $2, $3) RETURNING *",
-      [data.name, data.categoryId, data.description || null],
-    );
-    return res.rows[0];
+    const { data: created, error } = await this.client
+      .from("topics")
+      .insert([
+        {
+          name: data.name,
+          category_id: data.categoryId,
+          description: data.description || null,
+        },
+      ])
+      .select()
+      .single();
+    if (error) throw error;
+    return created;
   }
 
   async updateTopic(id: string, data: TopicInput): Promise<Topic> {
-    const res = await this.pool.query(
-      "UPDATE topics SET name = $1, category_id = $2, description = $3 WHERE id = $4 RETURNING *",
-      [data.name, data.categoryId, data.description || null, id],
-    );
-    return res.rows[0];
+    const { data: updated, error } = await this.client
+      .from("topics")
+      .update({
+        name: data.name,
+        category_id: data.categoryId,
+        description: data.description || null,
+      })
+      .eq("id", id)
+      .select()
+      .single();
+    if (error) throw error;
+    return updated;
   }
 
   async deleteTopic(id: string): Promise<void> {
-    await this.pool.query("DELETE FROM topics WHERE id = $1", [id]);
+    const { error } = await this.client.from("topics").delete().eq("id", id);
+    if (error) throw error;
   }
 }

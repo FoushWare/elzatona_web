@@ -8,44 +8,68 @@ import {
   Section,
   SectionInput,
 } from "../../repositories/interfaces/ISectionRepository";
-import { Pool } from "pg";
+import {
+  BasePostgreSQLAdapter,
+  PostgreSQLConfig,
+} from "./BasePostgreSQLAdapter";
 
-export class PostgreSQLSectionRepository implements ISectionRepository {
-  private pool: Pool;
-
-  constructor(pool: Pool) {
-    this.pool = pool;
+export class PostgreSQLSectionRepository
+  extends BasePostgreSQLAdapter
+  implements ISectionRepository
+{
+  constructor(config: PostgreSQLConfig) {
+    super(config);
   }
 
   async getSectionById(id: string): Promise<Section | null> {
-    const res = await this.pool.query("SELECT * FROM sections WHERE id = $1", [
-      id,
-    ]);
-    return res.rows[0] || null;
+    const { data, error } = await this.client
+      .from("sections")
+      .select("*")
+      .eq("id", id)
+      .single();
+    if (error) throw error;
+    return data || null;
   }
 
   async getAllSections(): Promise<Section[]> {
-    const res = await this.pool.query("SELECT * FROM sections");
-    return res.rows;
+    const { data, error } = await this.client.from("sections").select("*");
+    if (error) throw error;
+    return data || [];
   }
 
   async createSection(data: SectionInput): Promise<Section> {
-    const res = await this.pool.query(
-      "INSERT INTO sections (name, topic_id, description) VALUES ($1, $2, $3) RETURNING *",
-      [data.name, data.topicId, data.description || null],
-    );
-    return res.rows[0];
+    const { data: created, error } = await this.client
+      .from("sections")
+      .insert([
+        {
+          name: data.name,
+          topic_id: data.topicId,
+          description: data.description || null,
+        },
+      ])
+      .select()
+      .single();
+    if (error) throw error;
+    return created;
   }
 
   async updateSection(id: string, data: SectionInput): Promise<Section> {
-    const res = await this.pool.query(
-      "UPDATE sections SET name = $1, topic_id = $2, description = $3 WHERE id = $4 RETURNING *",
-      [data.name, data.topicId, data.description || null, id],
-    );
-    return res.rows[0];
+    const { data: updated, error } = await this.client
+      .from("sections")
+      .update({
+        name: data.name,
+        topic_id: data.topicId,
+        description: data.description || null,
+      })
+      .eq("id", id)
+      .select()
+      .single();
+    if (error) throw error;
+    return updated;
   }
 
   async deleteSection(id: string): Promise<void> {
-    await this.pool.query("DELETE FROM sections WHERE id = $1", [id]);
+    const { error } = await this.client.from("sections").delete().eq("id", id);
+    if (error) throw error;
   }
 }
