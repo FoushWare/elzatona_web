@@ -1,12 +1,13 @@
 import { NextRequest, NextResponse } from "next/server";
-import { RepositoryFactory } from "@elzatona/database";
+import { getRepositoryFactory } from "@elzatona/database";
 
 export async function GET(request: NextRequest) {
   try {
     // Use RepositoryFactory to get repository instances
-    const questionRepository = RepositoryFactory.getRepository("question");
-    const planRepository = RepositoryFactory.getRepository("plan");
-    const cardRepository = RepositoryFactory.getRepository("learning-card");
+    const factory = getRepositoryFactory();
+    const questionRepository = factory.getQuestionRepository();
+    const planRepository = factory.getPlanRepository();
+    const cardRepository = factory.getLearningCardRepository();
 
     // Fetch counts for all entities using repositories
     const [questions, plans, cards] = await Promise.all([

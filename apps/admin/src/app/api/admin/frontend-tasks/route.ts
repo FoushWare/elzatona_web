@@ -22,7 +22,7 @@ export async function GET(request: NextRequest) {
     // Use repository pattern: findByType for 'frontend-task'
     const options = { page, limit };
     const tasksResult = await questionRepo.findByType("frontend-task", options);
-    let data: FrontendTask[] = tasksResult.data || [];
+    let data: any[] = tasksResult.data || [];
 
     // Apply additional filters client-side if needed
     if (category) {
@@ -92,7 +92,7 @@ export async function POST(request: NextRequest) {
     };
 
     // Add to repository
-    const newTask = await questionRepo.create(taskData);
+    const newTask = await questionRepo.create(taskData as any);
 
     const response: ApiResponse<{ id: string }> = {
       success: true,

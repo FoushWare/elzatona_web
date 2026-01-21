@@ -28,7 +28,7 @@ export async function GET(
         { status: 404 },
       );
     }
-    const response: ApiResponse<ProblemSolvingTask> = {
+    const response: ApiResponse<any> = {
       success: true,
       data: task,
     };
@@ -58,7 +58,7 @@ export async function PUT(
         { status: 400 },
       );
     }
-    await questionRepo.update(id, { ...body, updatedAt: new Date() });
+    await questionRepo.update(id, { ...body, updatedAt: new Date() } as any);
     const response: ApiResponse<{ id: string }> = {
       success: true,
       data: { id },

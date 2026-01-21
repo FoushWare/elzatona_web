@@ -22,7 +22,7 @@ export async function GET(request: NextRequest) {
     // Use repository pattern: findByType for 'problem'
     const options = { page, limit };
     const tasksResult = await questionRepo.findByType("problem", options);
-    let data: ProblemSolvingTask[] = tasksResult.data || [];
+    let data: any[] = tasksResult.data || [];
 
     // Apply additional filters client-side if needed
     if (category) {
@@ -116,7 +116,7 @@ export async function POST(request: NextRequest) {
       createdAt: new Date(),
       updatedAt: new Date(),
     };
-    const newTask = await questionRepo.create(taskData);
+    const newTask = await questionRepo.create(taskData as any);
     const response: ApiResponse<{ id: string }> = {
       success: true,
       data: { id: newTask.id },
