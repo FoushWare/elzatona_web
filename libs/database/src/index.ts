@@ -8,6 +8,7 @@
 // Repository types and interfaces
 export * from "./repositories";
 export * from "./repositories/RepositoryFactory";
+export { createRepositoryFactoryFromEnv } from "./repositories/RepositoryFactory";
 
 // PostgreSQL adapters
 export * from "./adapters";
