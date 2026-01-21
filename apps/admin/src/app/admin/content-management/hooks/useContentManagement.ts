@@ -97,9 +97,9 @@ export function useContentManagement() {
         questionRepository.findAll(),
       ]);
 
-      setCards(cardsData?.data || []);
-      setPlans(plansData?.data || []);
-      setQuestions(questionsData?.data || []);
+      setCards(cardsData?.items || []);
+      setPlans(plansData?.items || []);
+      setQuestions(questionsData?.items || []);
 
       // TODO: Fetch categories and topics from repositories
       // For now, keeping categories and topics empty as they need schema support
@@ -367,7 +367,7 @@ export function useContentManagement() {
         const current: any = [];
         const all = await cardRepository.findAll();
         setPlanCards(current || []);
-        setAvailableCards(all?.data || []);
+        setAvailableCards(all?.items || []);
       } catch (err) {
         toast.error("Failed to load cards");
       } finally {

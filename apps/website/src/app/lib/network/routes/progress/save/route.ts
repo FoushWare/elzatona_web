@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 
 import { createRepositoryFactoryFromEnv } from "@elzatona/database";
+import { getSupabaseClient } from "../../../../get-supabase-client";
 
 import { cookies } from "next/headers";
 import { verifySupabaseToken } from "../../../../server-auth";

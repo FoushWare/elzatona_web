@@ -4,7 +4,7 @@
 // This file uses 'any' types for example database operations
 
 import React from "react";
-import { DatabaseProvider, useDatabase } from "database";
+import { DatabaseProvider, useDatabase } from "./IDatabaseService";
 import { DatabaseResult } from "./IDatabaseService";
 
 // Example component using the database abstraction
