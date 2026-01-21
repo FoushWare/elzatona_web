@@ -8,14 +8,12 @@ import { createRepositoryFactoryFromEnv } from "@elzatona/database";
 import { sanitizeObjectServer } from "../../../sanitize-server";
 import { validateAndSanitize, categorySchema } from "../../../validation";
 
-export interface Category {
+// Use the Category type from the repository interface
+type DBCategory = {
   id: string;
   name: string;
   description?: string;
-  color?: string;
-  created_at: Date;
-  updated_at: Date;
-}
+};
 
 export async function GET() {
   try {
@@ -23,13 +21,10 @@ export async function GET() {
     const categoryRepo = factory.getCategoryRepository();
     const categories = await categoryRepo.getAllCategories();
     // Transform data to match expected format
-    const transformedCategories = categories.map((category) => ({
+    const transformedCategories = categories.map((category: DBCategory) => ({
       id: category.id,
       name: category.name,
       description: category.description,
-      color: category.color,
-      created_at: category.created_at,
-      updated_at: category.updated_at,
     }));
     return NextResponse.json({
       success: true,
