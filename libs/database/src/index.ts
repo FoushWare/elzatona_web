@@ -19,7 +19,7 @@ export * from "./adapters";
 export type {
   IDatabaseService,
   DatabaseConfig,
-  QueryOptions,
+  LegacyQueryOptions,
   DatabaseResult,
   BatchResult,
 } from "./lib/IDatabaseService";
