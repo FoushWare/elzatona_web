@@ -191,7 +191,7 @@ This document defines GitHub SAST (Static Application Security Testing) requirem
    }
 
    // ❌ BAD: Hardcoded secret
-   const apiKey = "sk_live_1234567890abcdef";
+   const apiKey = "REDACTED_SK";
    ```
 
 2. **Use Secret Management Services**
