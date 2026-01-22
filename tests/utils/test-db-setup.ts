@@ -2,6 +2,9 @@
 import "@testing-library/jest-dom";
 import { beforeAll, afterAll } from "vitest";
 
+// Start MSW server for tests
+import "./setup-msw";
+
 beforeAll(async () => {
   // TODO: Initialize test DB connection, run migrations, seed data
 });
