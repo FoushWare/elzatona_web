@@ -109,6 +109,7 @@
     "test:unit": "NODE_OPTIONS=--max-old-space-size=768 JEST_MAX_WORKERS=1 jest --config=apps/website/jest.config.js --maxWorkers=1 --silent",
     "test:unit:fast": "NODE_OPTIONS=--max-old-space-size=768 JEST_MAX_WORKERS=1 JEST_NO_CACHE=true jest --config=apps/website/jest.config.js --maxWorkers=1 --no-cache --silent",
     "test:unit:sequential": "NODE_OPTIONS=--max-old-space-size=512 JEST_RUN_IN_BAND=true jest --config=apps/website/jest.config.js --runInBand --silent",
+    "test:unit:vitest": "vitest run",
     "test:unit:guided-flow": "NODE_OPTIONS=--max-old-space-size=768 JEST_MAX_WORKERS=1 jest --config=apps/website/jest.config.js --testPathPatterns=guided-flow --maxWorkers=1 --silent",
     "test:unit:freestyle-flow": "NODE_OPTIONS=--max-old-space-size=768 JEST_MAX_WORKERS=1 jest --config=apps/website/jest.config.js --testPathPatterns=freestyle-flow --maxWorkers=1 --silent",
     "test:unit:admin": "NODE_OPTIONS=--max-old-space-size=768 JEST_MAX_WORKERS=1 jest --config=apps/website/jest.config.js --testPathPatterns=admin --maxWorkers=1 --silent",
@@ -245,7 +246,9 @@
     "ts-jest": "^29.4.5",
     "tsx": "^4.20.5",
     "typescript": "^5",
-    "vite": "^7.2.6"
+    "vite": "^7.2.6",
+    "msw": "^1.2.3",
+    "vitest": "^3.3.0"
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": [
