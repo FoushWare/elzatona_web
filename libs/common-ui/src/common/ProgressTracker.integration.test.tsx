@@ -10,7 +10,7 @@ import ProgressTracker, { useProgressTracking } from "./ProgressTracker";
 
 describe("S-IT-007: Progress Tracking Flow", () => {
   it("should track progress correctly", async () => {
-    const mockCallback = jest.fn();
+    const mockCallback = vi.fn();
     render(
       <ProgressTracker
         questionId="test-q1"
@@ -24,7 +24,7 @@ describe("S-IT-007: Progress Tracking Flow", () => {
   });
 
   it("should persist progress updates", () => {
-    const mockCallback = jest.fn();
+    const mockCallback = vi.fn();
     const { rerender } = render(
       <ProgressTracker questionId="test-q1" onProgressUpdate={mockCallback} />,
     );
@@ -62,7 +62,7 @@ describe("S-IT-008: Progress Data Integration", () => {
 
 describe("S-IT-009: Callback Handlers", () => {
   it("should call onProgressUpdate with correct data", () => {
-    const mockCallback = jest.fn();
+    const mockCallback = vi.fn();
     render(
       <ProgressTracker questionId="test-1" onProgressUpdate={mockCallback} />,
     );
@@ -72,7 +72,7 @@ describe("S-IT-009: Callback Handlers", () => {
   });
 
   it("should handle progress update callbacks correctly", () => {
-    const mockCallback = jest.fn();
+    const mockCallback = vi.fn();
     const { container } = render(
       <ProgressTracker challengeId="test-c1" onProgressUpdate={mockCallback} />,
     );

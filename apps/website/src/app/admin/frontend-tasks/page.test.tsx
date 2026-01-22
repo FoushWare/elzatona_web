@@ -11,29 +11,29 @@ import FrontendTasksAdminPage from "./page";
 // Mock TanStack Query hooks
 const mockTasksData = { data: [] };
 
-const mockUseFrontendTasks = jest.fn(() => ({
+const mockUseFrontendTasks = vi.fn(() => ({
   data: mockTasksData,
   isLoading: false,
   error: null,
 }));
 
-jest.mock("@elzatona/hooks", () => ({
+vi.mock("@elzatona/hooks", () => ({
   useFrontendTasks: mockUseFrontendTasks,
-  useCreateFrontendTask: jest.fn(() => ({
-    mutateAsync: jest.fn(),
+  useCreateFrontendTask: vi.fn(() => ({
+    mutateAsync: vi.fn(),
     isPending: false,
   })),
-  useUpdateFrontendTask: jest.fn(() => ({
-    mutateAsync: jest.fn(),
+  useUpdateFrontendTask: vi.fn(() => ({
+    mutateAsync: vi.fn(),
     isPending: false,
   })),
-  useDeleteFrontendTask: jest.fn(() => ({
-    mutateAsync: jest.fn(),
+  useDeleteFrontendTask: vi.fn(() => ({
+    mutateAsync: vi.fn(),
     isPending: false,
   })),
 }));
 
-jest.mock("@elzatona/common-ui", () => ({
+vi.mock("@elzatona/common-ui", () => ({
   FrontendTaskEditor: ({ onSave, onCancel }: any) => (
     <div data-testid="frontend-task-editor">
       <button onClick={() => onSave({})}>Save</button>
@@ -42,7 +42,7 @@ jest.mock("@elzatona/common-ui", () => ({
   ),
 }));
 
-jest.mock("lucide-react", () => ({
+vi.mock("lucide-react", () => ({
   Plus: () => <span>+</span>,
   Edit: () => <span>✏️</span>,
   Trash2: () => <span>🗑️</span>,
@@ -52,12 +52,12 @@ jest.mock("lucide-react", () => ({
   Code: () => <span>💻</span>,
 }));
 
-window.confirm = jest.fn(() => true);
-window.alert = jest.fn();
+window.confirm = vi.fn(() => true);
+window.alert = vi.fn();
 
 describe("A-UT-016: Component Renders", () => {
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   it("should render without errors", () => {

@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getSupabaseClient } from "../../../../../lib/supabase-client";
+import { getRepositoryFactory } from "@elzatona/database";
 import {
   FrontendTask,
   FrontendTaskFormData,
@@ -12,45 +12,26 @@ export async function GET(
   { params }: { params: Promise<{ id: string }> },
 ) {
   try {
-    const supabase = getSupabaseClient();
-    console.log("🔄 Admin API: Fetching frontend task by ID...");
-
+    const factory = getRepositoryFactory();
+    const questionRepo = factory.getQuestionRepository();
     const { id } = await params;
-
     if (!id) {
       return NextResponse.json(
         { success: false, error: "Task ID is required" },
         { status: 400 },
       );
     }
-
-    // Fetch task from Supabase
-    const { data: taskDoc, error } = await supabase
-      .from("frontend_tasks")
-      .select("*")
-      .eq("id", id)
-      .single();
-
-    if (error || !taskDoc) {
+    const task = await questionRepo.findById(id);
+    if (!task) {
       return NextResponse.json(
         { success: false, error: "Task not found" },
         { status: 404 },
       );
     }
-
-    const taskData: FrontendTask = {
-      ...taskDoc,
-      // Map database fields to camelCase types if necessary
-      estimatedTime: taskDoc.estimated_time,
-      starterCode: taskDoc.starter_code,
-      testCases: taskDoc.test_cases,
-    };
-
-    const response: ApiResponse<FrontendTask> = {
+    const response: ApiResponse<any> = {
       success: true,
-      data: taskData,
+      data: task,
     };
-
     return NextResponse.json(response);
   } catch (error) {
     console.error("❌ Admin API: Error fetching frontend task:", error);
@@ -67,63 +48,31 @@ export async function PUT(
   { params }: { params: Promise<{ id: string }> },
 ) {
   try {
-    const supabase = getSupabaseClient();
-    console.log("🔄 Admin API: Updating frontend task...");
-
+    const factory = getRepositoryFactory();
+    const questionRepo = factory.getQuestionRepository();
     const { id } = await params;
     const body: FrontendTaskFormData = await request.json();
-
     if (!id) {
       return NextResponse.json(
         { success: false, error: "Task ID is required" },
         { status: 400 },
       );
     }
-
-    // Validate required fields
     if (!body.title || !body.description || !body.category) {
       return NextResponse.json(
         { success: false, error: "Missing required fields" },
         { status: 400 },
       );
     }
-
-    // Prepare update data
     const updateData = {
-      title: body.title,
-      description: body.description,
-      requirements: body.requirements,
-      solution: body.solution,
-      starter_code: body.starterCode,
-      category: body.category,
-      difficulty: body.difficulty,
-      estimated_time: body.estimatedTime,
-      author: body.author,
-      company: body.company,
-      files: body.files,
-      test_cases: body.testCases,
-      tags: body.tags,
-      is_active: body.is_active !== false,
-      updated_at: new Date().toISOString(),
+      ...body,
+      updatedAt: new Date(),
     };
-
-    // Update task in Supabase
-    const { error: updateError } = await supabase
-      .from("frontend_tasks")
-      .update(updateData)
-      .eq("id", id);
-
-    if (updateError) {
-      throw updateError;
-    }
-
-    console.log(`✅ Admin API: Frontend task updated: ${id}`);
-
+    await questionRepo.update(id, updateData as any);
     const response: ApiResponse<{ id: string }> = {
       success: true,
       data: { id },
     };
-
     return NextResponse.json(response);
   } catch (error) {
     console.error("❌ Admin API: Error updating frontend task:", error);
@@ -140,35 +89,20 @@ export async function DELETE(
   { params }: { params: Promise<{ id: string }> },
 ) {
   try {
-    const supabase = getSupabaseClient();
-    console.log("🔄 Admin API: Deleting frontend task...");
-
+    const factory = getRepositoryFactory();
+    const questionRepo = factory.getQuestionRepository();
     const { id } = await params;
-
     if (!id) {
       return NextResponse.json(
         { success: false, error: "Task ID is required" },
         { status: 400 },
       );
     }
-
-    // Delete task from Supabase
-    const { error: deleteError } = await supabase
-      .from("frontend_tasks")
-      .delete()
-      .eq("id", id);
-
-    if (deleteError) {
-      throw deleteError;
-    }
-
-    console.log(`✅ Admin API: Frontend task deleted: ${id}`);
-
+    await questionRepo.delete(id);
     const response: ApiResponse<{ id: string }> = {
       success: true,
       data: { id },
     };
-
     return NextResponse.json(response);
   } catch (error) {
     console.error("❌ Admin API: Error deleting frontend task:", error);

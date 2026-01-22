@@ -29,6 +29,7 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 .pnpm-debug.log*
+package-lock.json
 
 # env files (can opt-in for committing if needed)
 .env*
@@ -213,6 +214,11 @@ trufflehog-current.json
 gitleaks-history.json
 **/*trufflehog*.json
 **/*gitleaks*.json
+gitleaks-git-history.json
+gitleaks-after-clean.json
+secrets-replacements.txt
+secrets/
+clean-secrets.sh
 
 # CodeQL database (generated files)
 codeql-database/

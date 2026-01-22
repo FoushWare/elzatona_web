@@ -7,6 +7,9 @@ trufflehog-history.json
 gitleaks-current.json
 gitleaks-history.json
 
+# Local security audit artifacts and remediation docs
+.cursor/
+
 # Build artifacts
 .next/
 build/

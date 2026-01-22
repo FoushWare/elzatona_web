@@ -182,7 +182,7 @@ const { data } = await supabase.from("users").select("*").eq("id", userId);
 
 ```typescript
 // ❌ DON'T: Hardcode secrets
-const apiKey = "sk_live_1234567890";
+const apiKey = "REDACTED_SK";
 
 // ✅ DO: Use environment variables
 const apiKey = process.env.API_KEY;
@@ -229,8 +229,8 @@ npm outdated
 **❌ DON'T:**
 
 ```typescript
-const apiKey = "sk_live_1234567890";
-const dbPassword = "mypassword123";
+const apiKey = "REDACTED_SK";
+const dbPassword = "REDACTED_SECRET";
 ```
 
 **✅ DO:**

@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import jwt from "jsonwebtoken";
-import { createClient } from "@supabase/supabase-js";
+import { getRepositoryFactory } from "@elzatona/database";
 import bcrypt from "bcryptjs";
 
 // Admin config - using environment variables directly
@@ -13,19 +13,6 @@ const adminConfig = {
     return process.env.JWT_SECRET || "default-secret";
   },
 };
-
-// Supabase client initialization
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
-
-function getSupabaseClient() {
-  return createClient(supabaseUrl, supabaseServiceKey, {
-    auth: {
-      autoRefreshToken: false,
-      persistSession: false,
-    },
-  });
-}
 
 export async function POST(request: NextRequest) {
   try {
@@ -45,19 +32,13 @@ export async function POST(request: NextRequest) {
       console.warn("[Admin Auth API] ⚠️ Using default or missing JWT_SECRET");
     }
 
-    const supabase = getSupabaseClient();
+    // Use repository pattern to find admin by email
+    const factory = getRepositoryFactory();
+    const userRepo = factory.getUserRepository();
+    const adminData = await userRepo.findAdminByEmail(email);
 
-    // Query admin from admin_users table (custom auth)
-    const { data: adminData, error } = await supabase
-      .from("admin_users")
-      .select("*")
-      .eq("email", email)
-      .single();
-
-    if (error || !adminData) {
-      console.log(
-        `[Admin Auth API] ❌ No admin found or DB error for ${email}`,
-      );
+    if (!adminData) {
+      console.log(`[Admin Auth API] \u274c No admin found for ${email}`);
       return NextResponse.json(
         { success: false, error: "Invalid email or password" },
         { status: 401 },

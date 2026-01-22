@@ -112,8 +112,10 @@ run_check() {
 
     [ -n "$fix_hint" ] && echo -e "${YELLOW}💡 $fix_hint${NC}"
 
-    echo -e "${BLUE}📄 Log tail:${NC}"
-    tail -n 12 "$LOG_FILE" | sed 's/^/   /'
+    echo -e "${BLUE}📄 Log tail (last 40 lines):${NC}"
+    tail -n 40 "$LOG_FILE" | sed 's/^/   /'
+    echo -e "${RED}🔎 Check '$name' failed with exit code $exit_code${NC}"
+    echo -e "${CYAN}📄 Full log: $LOG_FILE${NC}"
   fi
 
   return $exit_code
@@ -225,10 +227,17 @@ done
 echo ""
 echo "📄 Log file: $LOG_FILE"
 
+
 if [ ${#FAILED_CHECKS[@]} -ne 0 ]; then
   echo ""
   echo -e "${YELLOW}⚠️  Fix issues or bypass with:${NC}"
   echo "   git push --no-verify"
+  echo -e "${RED}━━━ ERRORS & WARNINGS ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
+  # Print all error and warning lines from the log file
+  grep -E "\\[error]|\\[warn]|failed|SyntaxError|Declaration or statement expected|expected|❌" "$LOG_FILE" | sed 's/^/   /'
+  echo -e "${BLUE}━━━ LOG TAIL (last 40 lines) ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
+  tail -n 40 "$LOG_FILE" | sed 's/^/   /'
+  echo -e "${CYAN}📄 Full log: $LOG_FILE${NC}"
   exit 1
 fi
 

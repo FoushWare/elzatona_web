@@ -9,22 +9,22 @@ import bcrypt from "bcryptjs";
 // import _jwt from "jsonwebtoken";
 
 // Mock dependencies
-jest.mock("@supabase/supabase-js");
-jest.mock("bcryptjs");
-jest.mock("jsonwebtoken");
-jest.mock("../../../../lib/utils/api-config");
+vi.mock("@supabase/supabase-js");
+vi.mock("bcryptjs");
+vi.mock("jsonwebtoken");
+vi.mock("../../../../lib/utils/api-config");
 
 // Mock environment variables
 const mockEnv = {
   BCRYPT_SALT_ROUNDS: "10",
   JWT_SECRET: "test-jwt-secret",
   NEXT_PUBLIC_SUPABASE_URL: "https://test.supabase.co",
-  SUPABASE_SERVICE_ROLE_KEY: "test-service-role-key",
+  SUPABASE_SERVICE_ROLE_KEY: "REDACTED_TEST_KEY",
 };
 
 describe("Admin Auth API Route", () => {
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
     // Set up environment variables
     process.env = { ...process.env, ...mockEnv };
   });
@@ -56,7 +56,7 @@ describe("Admin Auth API Route", () => {
       const mockPassword = "test-password";
       const mockHash = "hashed-password";
 
-      (bcrypt.compare as jest.Mock).mockResolvedValue(true);
+      (bcrypt.compare as ReturnType<typeof vi.fn>).mockResolvedValue(true);
 
       const result = await bcrypt.compare(mockPassword, mockHash);
 
@@ -68,7 +68,7 @@ describe("Admin Auth API Route", () => {
       const mockPassword = "wrong-password";
       const mockHash = "hashed-password";
 
-      (bcrypt.compare as jest.Mock).mockResolvedValue(false);
+      (bcrypt.compare as ReturnType<typeof vi.fn>).mockResolvedValue(false);
 
       const result = await bcrypt.compare(mockPassword, mockHash);
 

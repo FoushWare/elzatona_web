@@ -22,9 +22,9 @@ All automated security audit work is **COMPLETE**:
 2. # **Supabase Anon Key:** `YOUR_SUPABASE_KEY_HERE...`
 3. **Supabase Anon Key:** `YOUR_SUPABASE_KEY_HERE
    > > > > > > > origin/security/fix-gitleaks-config
-4. # **Firebase API Key:** `AIzaSyBXlcfcdyIqoeJOb2gXcxpRSmQO7lEP82Y`
+4. # **Firebase API Key:** `YOUR_GOOGLE_API_KEY_HERE`
 5. **Supabase Anon Key:** `YOUR_SUPABASE_KEY_HERE
-6. **Firebase API Key:** `AIzaSyBXlcfcdyIqoeJOb2gXcxpRSmQO7lEP82Y`
+6. **Firebase API Key:** `YOUR_GOOGLE_API_KEY_HERE`
    > > > > > > > origin/main
 
 **Follow:** `.cursor/KEY_ROTATION_GUIDE.md` for step-by-step instructions

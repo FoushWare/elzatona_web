@@ -1,12 +1,10 @@
 <!--
 Sync Impact Report:
-- Version change: N/A -> 1.0.0
-- List of modified principles: Established new project principles.
-- Added sections: Core Principles, Branching & Release Strategy, Development Workflow, Governance.
-- Templates requiring updates:
-  - .specify/templates/plan-template.md (✅ updated)
-  - .specify/templates/spec-template.md (✅ updated)
-  - .specify/templates/tasks-template.md (✅ updated)
+- Version change: 1.0.0 → 1.0.1
+- Modified: Last Amended date updated to 2026-01-18 (patch bump for governance metadata).
+- No changes to principles or sections.
+- Templates checked: all aligned (plan, spec, tasks).
+- No manual follow-up required.
 -->
 
 # Elzatona Web Constitution
@@ -25,7 +23,16 @@ Development must prioritize stability and predictability. This is achieved throu
 
 Follow the Atomic Design pattern (Atoms, Molecules, Organisms, Templates, Pages). Maintain strict size limits and clear separation of concerns. Reusability is a first-class citizen.
 
-### IV. Quality Gates (NON-NEGOTIABLE)
+### IV. Model Strategy
+
+Development uses a two-phase model approach to optimize cost and quality:
+
+- **Planning Phase (`/generate`)**: Use premium models (e.g., Opus 4.5) for architectural design, spec transformation, and task breakdown. Focus on comprehensive analysis and detailed planning.
+- **Implementation Phase (`/implement`)**: Use low-cost models (e.g., 0x) for focused code execution. Strict adherence to plans and tasks with minimal token consumption.
+
+This strategy ensures high-quality architecture while maintaining cost efficiency during execution.
+
+### V. Quality Gates (NON-NEGOTIABLE)
 
 All code must pass through strict quality gates:
 
@@ -70,4 +77,4 @@ This Constitution supersedes all other ad-hoc practices. Any deviation must be j
 
 All Pull Requests must be reviewed against these principles.
 
-**Version**: 1.0.0 | **Ratified**: 2026-01-17 | **Last Amended**: 2026-01-17
+**Version**: 1.0.1 | **Ratified**: 2026-01-17 | **Last Amended**: 2026-01-18

@@ -73,7 +73,7 @@ describe("S-UT-011: Progress Calculation", () => {
 
 describe("S-UT-012: Progress Updates", () => {
   it("should accept onProgressUpdate callback", () => {
-    const mockCallback = jest.fn();
+    const mockCallback = vi.fn();
     const { container } = render(
       <ProgressTracker
         questionId="test-1"
@@ -86,7 +86,7 @@ describe("S-UT-012: Progress Updates", () => {
   });
 
   it("should handle progress update callbacks", () => {
-    const mockCallback = jest.fn();
+    const mockCallback = vi.fn();
     render(
       <ProgressTracker questionId="test-1" onProgressUpdate={mockCallback} />,
     );

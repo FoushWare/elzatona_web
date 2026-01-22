@@ -9,10 +9,57 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 
 // Mock dependencies
-jest.mock("@supabase/supabase-js");
-jest.mock("bcryptjs");
-jest.mock("jsonwebtoken");
-jest.mock("../../../../lib/utils/api-config");
+
+// Mock Supabase client and its methods
+vi.mock("@supabase/supabase-js", () => ({
+  createClient: vi.fn(() => ({
+    from: vi.fn(() => ({
+      select: vi.fn().mockReturnThis(),
+      eq: vi.fn().mockReturnThis(),
+      single: vi.fn(() => ({ data: null, error: { code: "PGRST116" } })),
+      insert: vi.fn(() => ({
+        select: vi.fn().mockReturnThis(),
+        single: vi.fn(() => ({
+          data: {
+            id: 1,
+            email: "newadmin@example.com",
+            name: "New Admin",
+            role: "admin",
+            is_active: true,
+            created_at: new Date().toISOString(),
+          },
+          error: null,
+        })),
+      })),
+    })),
+  })),
+}));
+
+// Mock bcrypt
+vi.mock("bcryptjs", () => ({
+  hash: vi.fn(async () => "hashed-password"),
+}));
+
+// Mock jsonwebtoken
+vi.mock("jsonwebtoken", () => ({
+  sign: vi.fn((payload, secret) => `${payload.email}-token`),
+  verify: vi.fn((token, secret) => {
+    if (token.includes("owner@example.com")) {
+      return { adminId: "1", email: "owner@example.com", role: "super_admin" };
+    } else if (token.includes("regular@example.com")) {
+      return { adminId: "1", email: "regular@example.com", role: "admin" };
+    }
+    throw new Error("Invalid token");
+  }),
+}));
+
+// Mock api-config
+vi.mock("../../../../lib/utils/api-config", () => ({
+  getSupabaseConfig: vi.fn(() => ({
+    url: "https://test.supabase.co",
+    serviceRoleKey: "REDACTED_TEST_KEY",
+  })),
+}));
 
 // Mock environment variables
 const mockEnv = {
@@ -20,12 +67,12 @@ const mockEnv = {
   ADMIN_OWNER_EMAIL: "owner@example.com",
   JWT_SECRET: "test-jwt-secret",
   NEXT_PUBLIC_SUPABASE_URL: "https://test.supabase.co",
-  SUPABASE_SERVICE_ROLE_KEY: "test-service-role-key",
+  SUPABASE_SERVICE_ROLE_KEY: "REDACTED_TEST_KEY",
 };
 
 describe("Admin Create API Route", () => {
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
     // Set up environment variables
     process.env = { ...process.env, ...mockEnv };
   });
@@ -105,7 +152,9 @@ describe("Admin Create API Route", () => {
       process.env.BCRYPT_SALT_ROUNDS = "12";
       const password = "new-password";
 
-      (bcrypt.hash as jest.Mock).mockResolvedValue("hashed-password");
+      (bcrypt.hash as ReturnType<typeof vi.fn>).mockResolvedValue(
+        "hashed-password",
+      );
 
       const saltRounds = parseInt(process.env.BCRYPT_SALT_ROUNDS || "10", 10);
       await bcrypt.hash(password, saltRounds);
@@ -117,7 +166,9 @@ describe("Admin Create API Route", () => {
       delete process.env.BCRYPT_SALT_ROUNDS;
       const password = "new-password";
 
-      (bcrypt.hash as jest.Mock).mockResolvedValue("hashed-password");
+      (bcrypt.hash as ReturnType<typeof vi.fn>).mockResolvedValue(
+        "hashed-password",
+      );
 
       const saltRounds = parseInt(process.env.BCRYPT_SALT_ROUNDS || "10", 10);
       await bcrypt.hash(password, saltRounds);

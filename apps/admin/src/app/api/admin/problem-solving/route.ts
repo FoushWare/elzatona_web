@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getSupabaseClient } from "../../../../lib/supabase-client";
+import { getRepositoryFactory } from "@elzatona/database";
 import {
   ProblemSolvingTask,
   ProblemSolvingTaskFormData,
@@ -10,9 +10,8 @@ import {
 // GET /api/admin/problem-solving - List all problem solving tasks
 export async function GET(request: NextRequest) {
   try {
-    const supabase = getSupabaseClient();
-    console.log("🔄 API: Fetching problem solving tasks...");
-
+    const factory = getRepositoryFactory();
+    const questionRepo = factory.getQuestionRepository();
     const { searchParams } = new URL(request.url);
     const page = parseInt(searchParams.get("page") || "1");
     const limit = parseInt(searchParams.get("limit") || "10");
@@ -20,44 +19,30 @@ export async function GET(request: NextRequest) {
     const category = searchParams.get("category") || "";
     const difficulty = searchParams.get("difficulty") || "";
 
-    // Fetch tasks from Supabase
-    let query = supabase
-      .from("problem_solving_tasks")
-      .select("*")
-      .order("created_at", { ascending: false });
+    // Use repository pattern: findByType for 'problem'
+    const options = { page, limit };
+    const tasksResult = await questionRepo.findByType("problem", options);
+    let data: any[] = tasksResult.data || [];
 
-    // Apply filters
+    // Apply additional filters client-side if needed
     if (category) {
-      query = query.eq("category", category);
+      data = data.filter((task) => task.category === category);
     }
     if (difficulty) {
-      query = query.eq("difficulty", difficulty);
+      data = data.filter((task) => task.difficulty === difficulty);
     }
-
-    const { data: snapshot, error } = await query;
-
-    if (error) {
-      throw error;
+    if (search) {
+      const lowerSearch = search.toLowerCase();
+      data = data.filter(
+        (task) =>
+          task.title.toLowerCase().includes(lowerSearch) ||
+          task.description.toLowerCase().includes(lowerSearch) ||
+          task.category.toLowerCase().includes(lowerSearch) ||
+          task.tags?.some((tag: string) =>
+            tag.toLowerCase().includes(lowerSearch),
+          ),
+      );
     }
-
-    // Map snake_case DB fields to camelCase TS types
-    const data: ProblemSolvingTask[] = (snapshot || []).map((t: any) => ({
-      id: t.id,
-      title: t.title,
-      description: t.description,
-      difficulty: t.difficulty,
-      category: t.category,
-      functionName: t.function_name || t.functionName, // Fallback for legacy data
-      starterCode: t.starter_code || t.starterCode,
-      solution: t.solution,
-      testCases: t.test_cases || t.testCases || [],
-      constraints: t.constraints || [],
-      examples: t.examples || [],
-      tags: t.tags || [],
-      created_at: t.created_at,
-      updated_at: t.updated_at,
-      is_active: t.is_active,
-    }));
 
     // Apply search filter (client-side since Supabase doesn't support full-text search)
     let filteredData = data;
@@ -105,12 +90,9 @@ export async function GET(request: NextRequest) {
 // POST /api/admin/problem-solving - Create new problem solving task
 export async function POST(request: NextRequest) {
   try {
-    const supabase = getSupabaseClient();
-    console.log("🔄 API: Creating new problem solving task...");
-
+    const factory = getRepositoryFactory();
+    const questionRepo = factory.getQuestionRepository();
     const body: ProblemSolvingTaskFormData = await request.json();
-
-    // Validate required fields
     if (
       !body.title ||
       !body.description ||
@@ -122,51 +104,23 @@ export async function POST(request: NextRequest) {
         { status: 400 },
       );
     }
-
-    // Validate test cases
     if (!body.testCases || body.testCases.length === 0) {
       return NextResponse.json(
         { success: false, error: "At least one test case is required" },
         { status: 400 },
       );
     }
-
-    // Create the task data with snake_case definition
     const taskData = {
-      title: body.title,
-      description: body.description,
-      difficulty: body.difficulty,
-      category: body.category,
-      function_name: body.functionName,
-      starter_code: body.starterCode,
-      solution: body.solution,
-      test_cases: body.testCases,
-      constraints: body.constraints,
-      examples: body.examples,
-      tags: body.tags,
-      is_active: true,
-      created_at: new Date().toISOString(),
-      updated_at: new Date().toISOString(),
+      ...body,
+      type: "problem",
+      createdAt: new Date(),
+      updatedAt: new Date(),
     };
-
-    // Add to Supabase
-    const { data: newTask, error } = await supabase
-      .from("problem_solving_tasks")
-      .insert(taskData)
-      .select()
-      .single();
-
-    if (error) {
-      throw error;
-    }
-
-    console.log(`✅ API: Problem solving task created with ID: ${newTask.id}`);
-
+    const newTask = await questionRepo.create(taskData as any);
     const response: ApiResponse<{ id: string }> = {
       success: true,
       data: { id: newTask.id },
     };
-
     return NextResponse.json(response, { status: 201 });
   } catch (error) {
     console.error("❌ API: Error creating problem solving task:", error);

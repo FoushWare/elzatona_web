@@ -9,7 +9,7 @@ import "@testing-library/jest-dom";
 import Navigation from "./Navigation";
 
 // Mock Next.js Link
-jest.mock("next/link", () => {
+vi.mock("next/link", () => {
   const MockLink = ({
     children,
     href,
@@ -25,10 +25,10 @@ jest.mock("next/link", () => {
 
 // Mock localStorage
 const localStorageMock = {
-  getItem: jest.fn(),
-  setItem: jest.fn(),
-  removeItem: jest.fn(),
-  clear: jest.fn(),
+  getItem: vi.fn(),
+  setItem: vi.fn(),
+  removeItem: vi.fn(),
+  clear: vi.fn(),
 };
 Object.defineProperty(window, "localStorage", {
   value: localStorageMock,
@@ -38,9 +38,9 @@ Object.defineProperty(window, "localStorage", {
 Object.defineProperty(document, "documentElement", {
   value: {
     classList: {
-      contains: jest.fn(() => false),
-      add: jest.fn(),
-      remove: jest.fn(),
+      contains: vi.fn(() => false),
+      add: vi.fn(),
+      remove: vi.fn(),
     },
   },
   writable: true,
@@ -48,10 +48,10 @@ Object.defineProperty(document, "documentElement", {
 
 describe("S-UT-001: Component Renders", () => {
   beforeEach(() => {
-    jest.clearAllMocks();
-    (document.documentElement.classList.contains as jest.Mock).mockReturnValue(
-      false,
-    );
+    vi.clearAllMocks();
+    (
+      document.documentElement.classList.contains as ReturnType<typeof vi.fn>
+    ).mockReturnValue(false);
   });
 
   it("should render navigation component", () => {
@@ -75,7 +75,7 @@ describe("S-UT-001: Component Renders", () => {
 
 describe("S-UT-002: Navigation Links", () => {
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   it("should render all navigation links", () => {
@@ -126,10 +126,10 @@ describe("S-UT-002: Navigation Links", () => {
 
 describe("S-UT-003: Dark Mode Toggle", () => {
   beforeEach(() => {
-    jest.clearAllMocks();
-    (document.documentElement.classList.contains as jest.Mock).mockReturnValue(
-      false,
-    );
+    vi.clearAllMocks();
+    (
+      document.documentElement.classList.contains as ReturnType<typeof vi.fn>
+    ).mockReturnValue(false);
     localStorageMock.getItem.mockReturnValue(null);
   });
 
@@ -154,9 +154,9 @@ describe("S-UT-003: Dark Mode Toggle", () => {
   });
 
   it("should remove dark mode when toggled from dark to light", () => {
-    (document.documentElement.classList.contains as jest.Mock).mockReturnValue(
-      true,
-    );
+    (
+      document.documentElement.classList.contains as ReturnType<typeof vi.fn>
+    ).mockReturnValue(true);
 
     render(<Navigation />);
     const toggleButton = screen.getByRole("button", {
@@ -174,7 +174,7 @@ describe("S-UT-003: Dark Mode Toggle", () => {
 
 describe("S-UT-004: Logo and Branding", () => {
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   it("should render logo with correct text", () => {
@@ -191,10 +191,10 @@ describe("S-UT-004: Logo and Branding", () => {
 
 describe("S-UT-SNAPSHOT: Navigation Component Snapshot Tests", () => {
   beforeEach(() => {
-    jest.clearAllMocks();
-    (document.documentElement.classList.contains as jest.Mock).mockReturnValue(
-      false,
-    );
+    vi.clearAllMocks();
+    (
+      document.documentElement.classList.contains as ReturnType<typeof vi.fn>
+    ).mockReturnValue(false);
   });
 
   it("should match navigation snapshot (light mode)", () => {

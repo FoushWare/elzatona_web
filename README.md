@@ -7,7 +7,7 @@ A comprehensive platform for frontend developers to practice coding challenges a
 ### Prerequisites
 
 - **Node.js** 18+ or **Bun**
-- **Supabase** account and project
+- **Database** - PostgreSQL (Supabase), MongoDB, MySQL, or Firebase
 - **Git**
 
 ### Installation
@@ -27,7 +27,8 @@ cp .env.example .env.local
 cp .env.test.local.example .env.test.local
 cp .env.dev.local.example .env.dev.local
 
-# Fill in your Supabase credentials in .env.local
+# Fill in your database credentials in .env.local
+# Set DATABASE_TYPE environment variable (postgresql, mongodb, mysql, or firebase)
 # See docs/flows/environment-setup.md for details
 
 # Start development server
@@ -35,6 +36,48 @@ bun run dev
 ```
 
 Visit `http://localhost:3000` to see the application.
+
+## 🧪 Testing & Quality Assurance
+
+### Running All Tests
+
+```bash
+npm run test
+# or
+bun run test
+```
+
+### Running E2E Tests
+
+```bash
+npm run test:e2e
+# or
+bun run test:e2e
+```
+
+### Generating Coverage Report
+
+```bash
+npm run test -- --coverage
+# or
+bun run test --coverage
+```
+
+Coverage reports are generated in the `coverage/` directory. Ensure coverage is ≥90% for constitution compliance.
+
+### SonarQube Quality Gate
+
+Run SonarQube scan and verify quality gate passes:
+
+```bash
+# See docs/SONARQUBE_MCP_SETUP.md for setup
+npx sonar-scanner
+```
+
+### Test Summary & Documentation
+
+- See `refactoring-plans/specs/database-abstraction-testing-tasks.md` for full test plan
+- Coverage badge and summary are updated automatically after CI runs
 
 ## 📚 Documentation
 
@@ -311,6 +354,8 @@ See [docs/SECURITY.md](docs/SECURITY.md) for complete security guide.
 - **[Project Structure](docs/structure.md)**
 - **[Security Guide](docs/SECURITY.md)**
 - **[Testing Guide](docs/TESTING_SUMMARY.md)**
+- **[Database Abstraction Layer](docs/DATABASE_ABSTRACTION_MIGRATION_COMPLETED.md)**
+- **[Code Review Report](docs/DATABASE_ABSTRACTION_CODE_REVIEW.md)**
 
 ## 🤝 Contributing
 
