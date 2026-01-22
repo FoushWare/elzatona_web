@@ -28,7 +28,16 @@ export interface PaginationMeta {
  * Paginated result wrapper
  */
 export interface PaginatedResult<T> {
+  // Primary array of results
   data: T[];
+
+  // Backwards-compatible aliases: some callers expect `items` or `length`
+  // Keep these optional so implementations may provide either shape.
+  items?: T[];
+
+  // Convenience numeric alias for legacy code that used `.length`
+  length?: number;
+
   meta: PaginationMeta;
 }
 
