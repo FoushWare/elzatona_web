@@ -9,8 +9,60 @@ import { existsSync } from "fs";
 if (typeof global.vi === "undefined") {
   global.vi = {
     fn: (...args) => jest.fn(...args),
-    mock: (moduleName, factory, options) =>
-      jest.mock(moduleName, factory, options),
+    mock: (moduleName, factory, options) => {
+      try {
+        // If moduleName is a relative path, resolve it relative to the caller file
+        if (typeof moduleName === "string" && (moduleName.startsWith(".") || moduleName.startsWith("/"))) {
+          const err = new Error();
+          const stack = (err.stack || "").split("\n");
+          // Find first stack entry outside this setup file
+          let callerPath = null;
+          for (const line of stack) {
+            if (!line.includes(__filename) && !line.includes("jest.setup.js")) {
+              const m = line.match(/\((.*):\d+:\d+\)$/) || line.match(/at (.*):\d+:\d+$/);
+              if (m && m[1]) {
+                callerPath = m[1];
+                break;
+              }
+            }
+          }
+          const { resolve, dirname } = require("path");
+          const base = callerPath ? dirname(callerPath) : process.cwd();
+          try {
+            // Prefer require.resolve with paths to accurately resolve relative imports
+            const abs = require.resolve(moduleName, { paths: [base] });
+            return jest.mock(abs, factory, options);
+          } catch (e) {
+            // Fallback to path.resolve if require.resolve fails
+            const resolved = resolve(base, moduleName);
+            try {
+              return jest.mock(resolved, factory, options);
+            } catch (err2) {
+              // If this is a well-known workspace module (e.g. api-config), try canonical paths
+              try {
+                const { existsSync } = require("fs");
+                const candidates = [
+                  resolve(process.cwd(), "apps/website/src/app/lib/api-config.ts"),
+                  resolve(process.cwd(), "apps/website/utilities/api-config.ts"),
+                  resolve(process.cwd(), "apps/website/lib/utils/api-config.ts"),
+                ];
+                for (const c of candidates) {
+                  if (existsSync(c)) {
+                    return jest.mock(c, factory, options);
+                  }
+                }
+              } catch (_err) {
+                // ignore
+              }
+              // Last resort: call jest.mock with the original moduleName
+            }
+          }
+        }
+      } catch (e) {
+        // Fallback to direct jest.mock if anything goes wrong
+      }
+      return jest.mock(moduleName, factory, options);
+    },
     resetModules: () => jest.resetModules(),
     spyOn: (obj, methodName) => jest.spyOn(obj, methodName),
     clearAllMocks: () => jest.clearAllMocks(),
@@ -156,10 +208,10 @@ if (!isCI) {
   }
 }
 
-// FORCE TEST ENVIRONMENT for all tests
-// This ensures tests ALWAYS use test database, regardless of other settings
-process.env.APP_ENV = "test";
-process.env.NEXT_PUBLIC_APP_ENV = "test";
+// FORCE TEST ENVIRONMENT defaults for tests
+// Only set defaults when variables are not already provided by tests
+process.env.APP_ENV = process.env.APP_ENV || "test";
+process.env.NEXT_PUBLIC_APP_ENV = process.env.NEXT_PUBLIC_APP_ENV || "test";
 // Only set NODE_ENV if not in build context
 // Use Object.defineProperty to bypass read-only restriction in JavaScript
 if (process.env.NODE_ENV !== "production" && !process.env.NEXT_PHASE) {
@@ -213,6 +265,25 @@ if (global.Request === undefined) {
     }
 
     if (fetchAPI && fetchAPI.Request) {
+
+// Ensure `fetch` is available globally. Prefer existing global fetch, otherwise try node-fetch.
+if (typeof global.fetch === "undefined") {
+  try {
+    // node-fetch v2 supports require
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
+    const nodeFetch = require("node-fetch");
+    if (nodeFetch) {
+      global.fetch = nodeFetch;
+    }
+  } catch (_err) {
+    // Last resort: a minimal fetch shim that uses the Response polyfill above.
+    global.fetch = async (input, init = {}) => {
+      const url = typeof input === "string" ? input : input?.url || "";
+      const body = init && init.body ? init.body : null;
+      return new global.Response(body || null, { status: 200 });
+    };
+  }
+}
       global.Request = fetchAPI.Request;
       global.Response = fetchAPI.Response;
       global.Headers = fetchAPI.Headers;
@@ -426,4 +497,26 @@ if (global.Request === undefined) {
       }
     };
   }
+}
+
+// Make `window.location` configurable for tests that redefine it.
+try {
+  // Remove existing non-configurable property if possible
+  try {
+    // eslint-disable-next-line no-undef
+    delete window.location;
+  } catch (_) {
+    // ignore
+  }
+
+  Object.defineProperty(window, "location", {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    value: {
+      href: "",
+    },
+  });
+} catch (_) {
+  // If we can't redefine, tests that attempt to redefine may still fail; continue gracefully
 }

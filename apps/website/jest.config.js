@@ -31,7 +31,10 @@ const config = {
   // Log heap usage for debugging
   logHeapUsage: process.env.JEST_LOG_HEAP === "true",
   // Add more setup options before each test is run
-  setupFilesAfterEnv: ["<rootDir>/jest.setup.js"],
+  // `setupFiles` run before the test framework is installed and before modules are required.
+  // Add the fetch pre-setup to ensure `global.fetch` exists during module import time.
+  setupFiles: ["<rootDir>/jest.fetch.setup.js"],
+  setupFilesAfterEnv: ["<rootDir>/jest.setup.js", "<rootDir>/../../tests/utils/jest-mock-msw.js"],
   moduleNameMapper: {
     "^@/(.*)$": "<rootDir>/src/$1",
     "^@elzatona/contexts$": "<rootDir>/../../libs/contexts/src/index.ts",
@@ -42,8 +45,21 @@ const config = {
     "^nuqs$": "<rootDir>/test-utils/mocks/nuqs.ts",
     // Mock shiki ESM module
     "^shiki$": "<rootDir>/test-utils/mocks/shiki.ts",
+    "^shiki(/.*)?$": "<rootDir>/test-utils/mocks/shiki.ts",
     // Mock refractor ESM module (used by react-syntax-highlighter)
     "^refractor$": "<rootDir>/test-utils/mocks/refractor.ts",
+    "^refractor(/.*)?$": "<rootDir>/test-utils/mocks/refractor.ts",
+    // Provide a lightweight vitest shim for tests that import { vi } from 'vitest'
+    "^vitest$": "<rootDir>/test-utils/mocks/vitest.js",
+    "^nuqs(/.*)?$": "<rootDir>/test-utils/mocks/nuqs.ts",
+    // Mock react-syntax-highlighter (ESM) to avoid ESM parsing issues in Jest
+    "^react-syntax-highlighter(.*)?$": "<rootDir>/test-utils/mocks/react-syntax-highlighter.tsx",
+    "^react-markdown$": "<rootDir>/test-utils/mocks/react-markdown.tsx",
+    "^node-fetch$": "<rootDir>/../../tests/utils/node-fetch-mock.js",
+    // Resolve workspace-level tests utils when imported relatively from other packages
+    "^tests/utils/mock-repositories$": "<rootDir>/../../tests/utils/mock-repositories.js",
+    // Catch any relative import that ends with tests/utils/mock-repositories
+    ".*tests/utils/mock-repositories$": "<rootDir>/../../tests/utils/mock-repositories.js",
   },
   // Include tests from root tests directory, but exclude e2e tests (Playwright)
   // Note: testPathIgnorePatterns handles the exclusion, so we keep testMatch simple

@@ -1,3 +1,44 @@
+// Lightweight mock repositories for unit tests
+// Export a factory that returns repositories with jest.fn stubs.
+export function createMockRepositories() {
+  const userRepository = {
+    create: jest.fn(async (data: any) => ({ id: "1", ...data })),
+    getById: jest.fn(async (id: string) => null),
+    findByEmail: jest.fn(async (email: string) => null),
+  };
+
+  const topicRepository = {
+    getTopicById: jest.fn(async (id: string) => null),
+    listTopics: jest.fn(async () => []),
+  };
+
+  const sectionRepository = {
+    getSectionById: jest.fn(async (id: string) => null),
+  };
+
+  const progressRepository = {
+    getProgressById: jest.fn(async (id: string) => null),
+  };
+
+  const flashcardRepository = {
+    getFlashcardById: jest.fn(async (id: string) => null),
+  };
+
+  const categoryRepository = {
+    getCategoryById: jest.fn(async (id: string) => null),
+  };
+
+  return {
+    userRepository,
+    topicRepository,
+    sectionRepository,
+    progressRepository,
+    flashcardRepository,
+    categoryRepository,
+  };
+}
+
+export default createMockRepositories;
 // Factory for creating mock repository instances for tests
 import {
   ICategoryRepository,
