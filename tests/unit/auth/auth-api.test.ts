@@ -1,5 +1,3 @@
-import { describe, it, expect } from "vitest";
-
 describe("Auth API (MSW integration)", () => {
   it("should return a mocked user and token on login", async () => {
     const res = await fetch("/api/auth/login", {
