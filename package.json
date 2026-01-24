@@ -248,7 +248,7 @@
     "typescript": "^5",
     "vite": "^7.2.6",
     "msw": "^1.2.3",
-    "vitest": "^3.3.0"
+    "vitest": "3.2.4"
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": [
