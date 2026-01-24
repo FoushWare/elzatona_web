@@ -71,6 +71,10 @@ if (typeof global.vi === "undefined") {
   };
 }
 
+  // Note: `next/server` mocking is handled via moduleNameMapper and
+  // by providing an explicit test-utils mock where tests opt-in.
+  // Avoid calling `jest.mock()` here to prevent recursive require issues.
+
 // Check if we're in CI (GitHub Actions)
 const isCI =
   process.env.CI === "true" ||
@@ -180,6 +184,9 @@ if (!isTestProject && supabaseUrl && !supabaseUrl.includes("your-")) {
 }
 
 // Validate required variables are not placeholders (local dev only)
+// Allow bypass when running in ephemeral CI or when explicitly requested
+// via `JEST_SKIP_ENV_CHECK=true` or `SKIP_ENV_CHECK=true` (useful for
+// running UI/unit tests that don't need a live Supabase project).
 if (!isCI) {
   const requiredVars = [
     "NEXT_PUBLIC_SUPABASE_URL",
@@ -194,17 +201,38 @@ if (!isCI) {
       process.env[varName]?.includes("placeholder"),
   );
 
+  const skipEnvCheck =
+    process.env.JEST_SKIP_ENV_CHECK === "true" ||
+    process.env.SKIP_ENV_CHECK === "true";
+
   if (missingVars.length > 0) {
-    console.error(
-      "❌ .env.test.local has placeholder values for:",
-      missingVars.join(", "),
-    );
-    console.error(
-      "   Please update .env.test.local with real test database credentials.",
-    );
-    throw new Error(
-      `.env.test.local has placeholder values. Please update: ${missingVars.join(", ")}`,
-    );
+    if (skipEnvCheck) {
+      console.warn(
+        "⚠️ Skipping .env.test.local placeholder validation because JEST_SKIP_ENV_CHECK or SKIP_ENV_CHECK is set. Missing:",
+        missingVars.join(", "),
+      );
+      // Set safe defaults when validation is skipped
+      if (!process.env.NEXT_PUBLIC_SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL.includes('your-project-url')) {
+        process.env.NEXT_PUBLIC_SUPABASE_URL = 'http://localhost:54321';
+      }
+      if (!process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY.includes('your-anon-key')) {
+        process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY = 'test-anon-key';
+      }
+      if (!process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_SERVICE_ROLE_KEY.includes('your-service-role-key')) {
+        process.env.SUPABASE_SERVICE_ROLE_KEY = 'test-service-role-key';
+      }
+    } else {
+      console.error(
+        "❌ .env.test.local has placeholder values for:",
+        missingVars.join(", "),
+      );
+      console.error(
+        "   Please update .env.test.local with real test database credentials.",
+      );
+      throw new Error(
+        `.env.test.local has placeholder values. Please update: ${missingVars.join(", ")}`,
+      );
+    }
   }
 }
 

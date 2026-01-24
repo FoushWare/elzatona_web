@@ -4,7 +4,11 @@
  */
 
 import { POST } from "./route";
-import { NextRequest } from "next/server";
+// Use a local Next.js server mock directly to avoid resolver/mapping issues
+// when running under Jest. We require by absolute path so this is deterministic
+// in the test environment.
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const { NextRequest: MockNextRequest, Headers: MockHeaders } = require("/Users/a.fouad/S/New_elzatona/apps/website/test-utils/mocks/next-server.js");
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 
@@ -83,7 +87,7 @@ describe("Admin Create API Route", () => {
     });
 
     it("should reject requests without authentication token", async () => {
-      const request = new NextRequest(
+      const request = new MockNextRequest(
         "http://localhost:3000/api/admin/create",
         {
           method: "POST",
@@ -108,13 +112,11 @@ describe("Admin Create API Route", () => {
         mockEnv.JWT_SECRET,
       );
 
-      const request = new NextRequest(
+      const request = new MockNextRequest(
         "http://localhost:3000/api/admin/create",
         {
           method: "POST",
-          headers: {
-            authorization: `Bearer ${mockToken}`,
-          },
+          headers: new MockHeaders({ authorization: `Bearer ${mockToken}` }),
           body: JSON.stringify({
             email: "newadmin@example.com",
             password: "password123",
@@ -152,9 +154,7 @@ describe("Admin Create API Route", () => {
       process.env.BCRYPT_SALT_ROUNDS = "12";
       const password = "new-password";
 
-      (bcrypt.hash as ReturnType<typeof vi.fn>).mockResolvedValue(
-        "hashed-password",
-      );
+      jest.spyOn(bcrypt, 'hash').mockResolvedValue('hashed-password');
 
       const saltRounds = parseInt(process.env.BCRYPT_SALT_ROUNDS || "10", 10);
       await bcrypt.hash(password, saltRounds);
@@ -166,9 +166,7 @@ describe("Admin Create API Route", () => {
       delete process.env.BCRYPT_SALT_ROUNDS;
       const password = "new-password";
 
-      (bcrypt.hash as ReturnType<typeof vi.fn>).mockResolvedValue(
-        "hashed-password",
-      );
+      jest.spyOn(bcrypt, 'hash').mockResolvedValue('hashed-password');
 
       const saltRounds = parseInt(process.env.BCRYPT_SALT_ROUNDS || "10", 10);
       await bcrypt.hash(password, saltRounds);
@@ -179,13 +177,20 @@ describe("Admin Create API Route", () => {
 
   describe("Admin Creation", () => {
     it("should require email, password, and name", async () => {
-      const request = new NextRequest(
+      const mockToken = jwt.sign(
+        {
+          adminId: "1",
+          email: mockEnv.ADMIN_OWNER_EMAIL,
+          role: "super_admin",
+        },
+        mockEnv.JWT_SECRET,
+      );
+
+      const request = new MockNextRequest(
         "http://localhost:3000/api/admin/create",
         {
           method: "POST",
-          headers: {
-            authorization: "Bearer valid-token",
-          },
+          headers: new MockHeaders({ authorization: `Bearer ${mockToken}` }),
           body: JSON.stringify({}),
         },
       );
@@ -207,13 +212,11 @@ describe("Admin Create API Route", () => {
         mockEnv.JWT_SECRET,
       );
 
-      const request = new NextRequest(
+      const request = new MockNextRequest(
         "http://localhost:3000/api/admin/create",
         {
           method: "POST",
-          headers: {
-            authorization: `Bearer ${mockToken}`,
-          },
+          headers: new MockHeaders({ authorization: `Bearer ${mockToken}` }),
           body: JSON.stringify({
             email: "invalid-email",
             password: "password123",
@@ -239,13 +242,11 @@ describe("Admin Create API Route", () => {
         mockEnv.JWT_SECRET,
       );
 
-      const request = new NextRequest(
+      const request = new MockNextRequest(
         "http://localhost:3000/api/admin/create",
         {
           method: "POST",
-          headers: {
-            authorization: `Bearer ${mockToken}`,
-          },
+          headers: new MockHeaders({ authorization: `Bearer ${mockToken}` }),
           body: JSON.stringify({
             email: "newadmin@example.com",
             password: "short",

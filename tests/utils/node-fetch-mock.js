@@ -32,10 +32,34 @@ function nodeFetch(input, init = {}) {
 nodeFetch.default = nodeFetch;
 nodeFetch.Request = global.Request || (class Request {
   constructor(input, init = {}) {
-    this.url = typeof input === 'string' ? input : input?.url || '';
+    const urlVal = typeof input === 'string' ? input : input?.url || '';
     this.method = init.method || 'GET';
     this.headers = init.headers || {};
     this.body = init.body;
+
+    // Avoid assigning to `url` if the host object (e.g. NextRequest)
+    // already defines a read-only `url` getter. Try to define a safe
+    // own property; if that fails, store under `_url` and expose a getter.
+    try {
+      const desc = Object.getOwnPropertyDescriptor(this, 'url');
+      if (!desc) {
+        Object.defineProperty(this, 'url', {
+          value: urlVal,
+          writable: true,
+          configurable: true,
+          enumerable: true,
+        });
+      } else {
+        this._url = urlVal;
+      }
+    } catch (e) {
+      this._url = urlVal;
+    }
+  }
+
+  get url() {
+    // Prefer internal `_url` when available, otherwise undefined behavior
+    return this._url || undefined;
   }
 });
 nodeFetch.Response = global.Response || (class Response {});

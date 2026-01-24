@@ -21,9 +21,15 @@ const config = {
   setupFilesAfterEnv: ["<rootDir>/jest.setup.js"],
   testMatch: [
     "<rootDir>/**/*.{test,spec}.{js,jsx,ts,tsx}",
+    "!<rootDir>/tests/e2e/**", // Exclude Playwright E2E tests
     "<rootDir>/../pages/**/*.{test,spec}.{js,jsx,ts,tsx}",
     "<rootDir>/../components/**/*.{test,spec}.{js,jsx,ts,tsx}",
     "<rootDir>/../../libs/**/*.{test,spec}.{js,jsx,ts,tsx}",
+  ],
+  testPathIgnorePatterns: [
+    "/node_modules/",
+    "/.next/",
+    "/tests/e2e/", // Exclude Playwright E2E tests
   ],
 };
 

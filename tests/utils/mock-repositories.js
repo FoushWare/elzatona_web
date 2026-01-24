@@ -2,8 +2,10 @@
 const createMockRepositories = () => {
   const userRepository = {
     create: jest.fn(async (data) => ({ id: "1", ...data })),
-    getById: jest.fn(async (id) => (id === "1" ? { id: "1", email: "test@example.com" } : null)),
-    findByEmail: jest.fn(async (email) => (email === "test@example.com" ? { id: "1", email } : null)),
+    getById: jest.fn(async (id) => (id === "1" ? { id: "1", email: "user1@example.com" } : null)),
+    // API-compatible aliases
+    findById: jest.fn(async (id) => (id === "1" ? { id: "1", email: "user1@example.com" } : null)),
+    findByEmail: jest.fn(async (email) => (email === "user1@example.com" || email === "test@example.com" ? { id: "1", email } : null)),
     emailExists: jest.fn(async (email) => email === "user1@example.com"),
     count: jest.fn(async () => 1),
     countActive: jest.fn(async () => 1),

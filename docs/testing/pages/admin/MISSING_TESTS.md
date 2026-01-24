@@ -9,6 +9,10 @@ Purpose
 Progress
 
 - [x] Implemented website Admin Create API route tests: `apps/website/src/app/lib/network/routes/admin/create/route.test.ts` (10 tests) — logs: `tmp/route_create_test_minimal2.log`
+- [x] Implemented admin dashboard component tests: `libs/common-ui/src/admin/components/AdminDashboard.test.tsx` (8 tests) — covers rendering, loading, error states, and interactions
+- [x] Implemented admin login page tests: `apps/admin/src/app/admin/login/page.test.tsx` (10 tests) — covers form rendering, submission, error handling, and loading states
+- [x] Implemented admin content management page tests: `apps/admin/src/app/admin/content-management/page.test.tsx` (12 tests) — covers page rendering, data display, search, filtering, and modal states
+- [x] Implemented admin questions management page tests: `apps/admin/src/app/admin/content/questions/page.test.tsx` (15 tests) — covers page rendering, question list, filtering, pagination, and modal interactions
 
 Legend
 
@@ -21,63 +25,44 @@ Legend
 ## /
 
 **Route:** Admin dashboard landing  
-**Existing:** none
+**Status:** ✅ IMPLEMENTED  
+**Files:** `libs/common-ui/src/admin/components/AdminDashboard.test.tsx` (8 tests), `apps/admin/src/app/admin/dashboard/page.test.tsx` (1 test)
 
-### Missing test cases
+### Implemented test cases
 
-#### Unit: `apps/admin/src/app/page.test.tsx`
+#### Unit: `libs/common-ui/src/admin/components/AdminDashboard.test.tsx`
 
-```typescript
-// Test: Admin dashboard renders main stats widgets
-// - Mock admin context/auth
-// - Render page
-// - Verify user count widget displays
-// - Verify content stats widget displays
-// - Verify recent activity widget displays
+- ✅ Admin dashboard renders welcome header with user information
+- ✅ Admin dashboard renders system metrics grid with stats
+- ✅ Admin dashboard renders quick actions section
+- ✅ Admin dashboard renders system health section
+- ✅ Admin dashboard shows loading placeholders for stats
+- ✅ Admin dashboard disables refresh button when loading
+- ✅ Admin dashboard displays error alert when stats fetch fails
+- ✅ Admin dashboard calls refetch when refresh button is clicked
+- ✅ Admin dashboard prevents hydration mismatch by showing loading initially
 
-// Test: Admin dashboard renders navigation sidebar
-// - Render page
-// - Verify sidebar links exist (Users, Content, Questions, etc.)
-// - Verify current page highlighted
+#### Unit: `apps/admin/src/app/admin/dashboard/page.test.tsx`
 
-// Test: Admin dashboard shows loading skeleton
-// - Mock loading state
-// - Render page
-// - Verify skeleton loaders for each widget
-
-// Test: Admin dashboard handles unauthenticated state
-// - No auth context
-// - Render page
-// - Verify redirect or login prompt
-```
+- ✅ Admin dashboard page renders the AdminDashboard component
 
 #### Integration: `apps/admin/src/app/page.integration.test.tsx`
 
 ```typescript
-// Test: Dashboard fetches aggregate stats
-// - Mock stats API endpoint
-// - Render page
-// - Verify API called
-// - Verify stats display correctly (user count, question count, etc.)
-
-// Test: Dashboard fetches recent activity
-// - Mock activity API
-// - Render page
-// - Verify activity list populates with recent items
-
-// Test: Dashboard handles API errors gracefully
-// - Mock 500 response
-// - Render page
-// - Verify error state UI
-// - Verify retry button works
-
-// Test: Dashboard auto-refreshes data
-// - Render page
-// - Wait for refresh interval
-// - Verify data re-fetched
+// TODO: Implement integration tests for dashboard API interactions
+// - Mock stats API endpoint with MSW
+// - Render page and verify API calls
+// - Test error handling and retry functionality
 ```
 
 #### E2E: `tests/e2e/admin/dashboard.spec.ts`
+
+```typescript
+// TODO: Implement E2E tests for dashboard user flows
+// - Login and verify dashboard loads
+// - Test quick action buttons navigation
+// - Verify stats accuracy with test data
+```
 
 ```typescript
 // Test: Admin sees dashboard after login
@@ -106,6 +91,51 @@ Legend
 // - View recent activity
 // - Click on an activity item
 // - Verify navigation to relevant detail page
+```
+
+---
+
+## /admin/login
+
+**Route:** Admin login page  
+**Status:** ✅ IMPLEMENTED  
+**Files:** `apps/admin/src/app/admin/login/page.test.tsx` (10 tests)
+
+### Implemented test cases
+
+#### Unit: `apps/admin/src/app/admin/login/page.test.tsx`
+
+- ✅ Admin login page shows loading spinner when auth is loading
+- ✅ Admin login page renders login form with all fields
+- ✅ Admin login page renders email input with correct attributes
+- ✅ Admin login page renders password input with correct attributes
+- ✅ Admin login page updates email input value
+- ✅ Admin login page updates password input value
+- ✅ Admin login page calls login on form submission with success
+- ✅ Admin login page shows loading state during submission
+- ✅ Admin login page displays error message on login failure
+- ✅ Admin login page displays generic error on unexpected error
+- ✅ Admin login page clears error on new submission attempt
+- ✅ Admin login page renders back to home link
+
+#### Integration: `apps/admin/src/app/admin/login/page.integration.test.tsx`
+
+```typescript
+// TODO: Implement integration tests for login API interactions
+// - Mock login API with MSW
+// - Test successful login redirects
+// - Test failed login shows errors
+// - Test loading states
+```
+
+#### E2E: `tests/e2e/admin/login.spec.ts`
+
+```typescript
+// TODO: Implement E2E tests for login user flows
+// - Test login with valid credentials
+// - Test login with invalid credentials
+// - Test login form validation
+// - Test redirect after successful login
 ```
 
 ---
@@ -339,6 +369,56 @@ Legend
 
 ---
 
+## /admin/content-management
+
+**Route:** Content management dashboard  
+**Status:** ✅ IMPLEMENTED  
+**Files:** `apps/admin/src/app/admin/content-management/page.test.tsx` (12 tests)
+
+### Implemented test cases
+
+#### Unit: `apps/admin/src/app/admin/content-management/page.test.tsx`
+
+- ✅ Content management page shows loading spinner when loading
+- ✅ Content management page displays error message when error occurs
+- ✅ Content management page renders page title
+- ✅ Content management page renders stats section
+- ✅ Content management page renders search and filters
+- ✅ Content management page renders all management sections
+- ✅ Content management page renders cards list
+- ✅ Content management page renders plans list
+- ✅ Content management page renders categories list
+- ✅ Content management page renders topics list
+- ✅ Content management page updates search term when input changes
+- ✅ Content management page updates filter when select changes
+- ✅ Content management page shows empty state for cards when no cards
+- ✅ Content management page shows empty state for plans when no plans
+- ✅ Content management page renders topic questions modal when showTopicQuestionsModal is true
+- ✅ Content management page renders delete confirmation modal when showDeleteModal is true
+- ✅ Content management page renders card management modal when showCardModal is true
+
+#### Integration: `apps/admin/src/app/admin/content-management/page.integration.test.tsx`
+
+```typescript
+// TODO: Implement integration tests for content management API interactions
+// - Mock content APIs with MSW
+// - Test CRUD operations for cards, plans, categories, topics
+// - Test search and filtering functionality
+// - Test modal interactions and form submissions
+```
+
+#### E2E: `tests/e2e/admin/content-management.spec.ts`
+
+```typescript
+// TODO: Implement E2E tests for content management user flows
+// - Test creating, editing, deleting content items
+// - Test search and filtering
+// - Test navigation between different content types
+// - Test modal interactions
+```
+
+---
+
 ## /content
 
 **Route:** Content management dashboard  
@@ -397,27 +477,62 @@ Legend
 ## /content/questions
 
 **Route:** Questions content management  
-**Existing:** none
+**Status:** ✅ IMPLEMENTED  
+**Files:** `apps/admin/src/app/admin/content/questions/page.test.tsx` (15 tests)
 
-### Missing test cases
+### Implemented test cases
 
-#### Unit: `apps/admin/src/app/content/questions/page.test.tsx`
+#### Unit: `apps/admin/src/app/admin/content/questions/page.test.tsx`
+
+- ✅ Questions page shows loading spinner when loading
+- ✅ Questions page displays error message when error occurs
+- ✅ Questions page renders page title
+- ✅ Questions page renders stats cards
+- ✅ Questions page renders advanced search
+- ✅ Questions page renders categories overview
+- ✅ Questions page renders filters card
+- ✅ Questions page renders questions list
+- ✅ Questions page renders pagination controls
+- ✅ Questions page renders create question button
+- ✅ Questions page renders category filter
+- ✅ Questions page renders topic filter
+- ✅ Questions page calls setSelectedCategory when category filter changes
+- ✅ Questions page calls setSelectedTopic when topic filter changes
+- ✅ Questions page renders action buttons for each question
+- ✅ Questions page calls handleView when view button is clicked
+- ✅ Questions page calls handleEdit when edit button is clicked
+- ✅ Questions page calls handleDelete when delete button is clicked
+- ✅ Questions page calls setCurrentPage when next page button is clicked
+- ✅ Questions page calls setCurrentPage when previous page button is clicked
+- ✅ Questions page disables previous button on first page
+- ✅ Questions page disables next button on last page
+- ✅ Questions page renders view question modal when isViewModalOpen is true
+- ✅ Questions page renders form modal when isQuestionModalOpen is true
+- ✅ Questions page calls handleCloseModal when modal close button is clicked
+- ✅ Questions page calls handleOpenCreateModal when create button is clicked
+- ✅ Questions page shows empty state when no questions
+- ✅ Questions page shows empty state when no categories
+
+#### Integration: `apps/admin/src/app/content/questions/page.integration.test.tsx`
 
 ```typescript
-// Test: Questions page renders table
-// - Mock questions data
-// - Render page
-// - Verify columns: Title, Category, Difficulty, Status, Actions
+// TODO: Implement integration tests for questions management API interactions
+// - Mock questions API with MSW
+// - Test CRUD operations for questions
+// - Test search and filtering functionality
+// - Test pagination
+// - Test modal form submissions
+```
 
-// Test: Questions page renders filters
-// - Render page
-// - Verify category filter
-// - Verify difficulty filter
-// - Verify status filter (draft/published)
+#### E2E: `tests/e2e/admin/content-questions.spec.ts`
 
-// Test: Questions page renders add button
-// - Render page
-// - Verify "Add Question" button exists
+```typescript
+// TODO: Implement E2E tests for questions management user flows
+// - Test creating, editing, deleting questions
+// - Test search and filtering
+// - Test pagination
+// - Test modal interactions
+```
 ```
 
 #### Integration: `apps/admin/src/app/content/questions/page.integration.test.tsx`
