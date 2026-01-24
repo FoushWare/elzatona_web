@@ -6,6 +6,10 @@ Purpose
 - Another AI/model can implement the tests listed below.
 - Each test case includes file path, description, and implementation hints.
 
+Progress
+
+- [x] Implemented website Admin Create API route tests: `apps/website/src/app/lib/network/routes/admin/create/route.test.ts` (10 tests) — logs: `tmp/route_create_test_minimal2.log`
+
 Legend
 
 - Unit: component/page rendering tests (React Testing Library)
