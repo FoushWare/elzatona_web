@@ -2,11 +2,11 @@
 // Exports `hash` and `compare` as jest mock functions so tests can call
 // `.mockResolvedValue()` / `.mockResolvedValueOnce()` on them.
 const makeMockFn = () => {
-  if (typeof jest !== 'undefined' && typeof jest.fn === 'function') {
+  if (typeof jest !== "undefined" && typeof jest.fn === "function") {
     return jest.fn();
   }
 
-  const fn = (...args) => fn._impl ? fn._impl(...args) : Promise.resolve();
+  const fn = (...args) => (fn._impl ? fn._impl(...args) : Promise.resolve());
   fn._impl = null;
   fn.mockResolvedValue = (val) => {
     fn._impl = () => Promise.resolve(val);

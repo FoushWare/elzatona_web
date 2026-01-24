@@ -22,7 +22,9 @@ describe("guidedpracticePage Integration", () => {
       render(<guidedpracticePage />);
 
       expect(screen.getByText("guided-practice")).toBeInTheDocument();
-      expect(screen.getByText("Page component - needs implementation")).toBeInTheDocument();
+      expect(
+        screen.getByText("Page component - needs implementation"),
+      ).toBeInTheDocument();
     });
 
     it("should render with proper styling", () => {

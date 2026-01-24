@@ -62,10 +62,14 @@ describe("AdminLoginPage", () => {
       render(<AdminLoginPage />);
 
       expect(screen.getByText("Admin Login")).toBeInTheDocument();
-      expect(screen.getByText("Access the admin dashboard")).toBeInTheDocument();
+      expect(
+        screen.getByText("Access the admin dashboard"),
+      ).toBeInTheDocument();
       expect(screen.getByLabelText(/Email Address/i)).toBeInTheDocument();
       expect(screen.getByLabelText(/Password/i)).toBeInTheDocument();
-      expect(screen.getByRole("button", { name: /Sign In/i })).toBeInTheDocument();
+      expect(
+        screen.getByRole("button", { name: /Sign In/i }),
+      ).toBeInTheDocument();
       expect(screen.getByText("← Back to Home")).toBeInTheDocument();
     });
 
@@ -83,7 +87,10 @@ describe("AdminLoginPage", () => {
 
       const passwordInput = screen.getByLabelText(/Password/i);
       expect(passwordInput).toHaveAttribute("type", "password");
-      expect(passwordInput).toHaveAttribute("placeholder", "Enter your password");
+      expect(passwordInput).toHaveAttribute(
+        "placeholder",
+        "Enter your password",
+      );
       expect(passwordInput).toBeRequired();
     });
   });
@@ -128,7 +135,10 @@ describe("AdminLoginPage", () => {
       fireEvent.change(passwordInput, { target: { value: "password123" } });
       fireEvent.click(submitButton);
 
-      expect(mockLogin).toHaveBeenCalledWith("admin@example.com", "password123");
+      expect(mockLogin).toHaveBeenCalledWith(
+        "admin@example.com",
+        "password123",
+      );
 
       await waitFor(() => {
         expect(submitButton).toHaveTextContent("Sign In"); // Should reset after success
@@ -136,7 +146,12 @@ describe("AdminLoginPage", () => {
     });
 
     it("should show loading state during submission", async () => {
-      mockLogin.mockImplementation(() => new Promise(resolve => setTimeout(() => resolve({ success: true }), 100)));
+      mockLogin.mockImplementation(
+        () =>
+          new Promise((resolve) =>
+            setTimeout(() => resolve({ success: true }), 100),
+          ),
+      );
 
       render(<AdminLoginPage />);
 
@@ -156,7 +171,10 @@ describe("AdminLoginPage", () => {
     });
 
     it("should display error message on login failure", async () => {
-      mockLogin.mockResolvedValue({ success: false, error: "Invalid credentials" });
+      mockLogin.mockResolvedValue({
+        success: false,
+        error: "Invalid credentials",
+      });
 
       render(<AdminLoginPage />);
 
@@ -187,13 +205,16 @@ describe("AdminLoginPage", () => {
       fireEvent.click(submitButton);
 
       await waitFor(() => {
-        expect(screen.getByText("An unexpected error occurred")).toBeInTheDocument();
+        expect(
+          screen.getByText("An unexpected error occurred"),
+        ).toBeInTheDocument();
       });
     });
 
     it("should clear error on new submission attempt", async () => {
-      mockLogin.mockResolvedValueOnce({ success: false, error: "Invalid credentials" })
-              .mockResolvedValueOnce({ success: true });
+      mockLogin
+        .mockResolvedValueOnce({ success: false, error: "Invalid credentials" })
+        .mockResolvedValueOnce({ success: true });
 
       render(<AdminLoginPage />);
 
@@ -215,7 +236,9 @@ describe("AdminLoginPage", () => {
       fireEvent.click(submitButton);
 
       await waitFor(() => {
-        expect(screen.queryByText("Invalid credentials")).not.toBeInTheDocument();
+        expect(
+          screen.queryByText("Invalid credentials"),
+        ).not.toBeInTheDocument();
       });
     });
   });

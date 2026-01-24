@@ -126,17 +126,27 @@ describe("AdminDashboard", () => {
       render(<AdminDashboard />);
 
       expect(screen.getByText("🎯 Admin Dashboard")).toBeInTheDocument();
-      expect(screen.getByTestId("welcome-subtitle")).toHaveTextContent("admin@example.com");
-      expect(screen.getByTestId("welcome-subtitle")).toHaveTextContent("(admin)");
+      expect(screen.getByTestId("welcome-subtitle")).toHaveTextContent(
+        "admin@example.com",
+      );
+      expect(screen.getByTestId("welcome-subtitle")).toHaveTextContent(
+        "(admin)",
+      );
     });
 
     it("should render system metrics grid", () => {
       render(<AdminDashboard />);
 
       expect(screen.getByTestId("metric-grid")).toBeInTheDocument();
-      expect(screen.getByTestId("metric-Total Questions")).toHaveTextContent("150");
-      expect(screen.getByTestId("metric-Learning Cards")).toHaveTextContent("75");
-      expect(screen.getByTestId("metric-Learning Plans")).toHaveTextContent("30");
+      expect(screen.getByTestId("metric-Total Questions")).toHaveTextContent(
+        "150",
+      );
+      expect(screen.getByTestId("metric-Learning Cards")).toHaveTextContent(
+        "75",
+      );
+      expect(screen.getByTestId("metric-Learning Plans")).toHaveTextContent(
+        "30",
+      );
       expect(screen.getByTestId("metric-Total Tasks")).toHaveTextContent("250");
     });
 
@@ -144,16 +154,26 @@ describe("AdminDashboard", () => {
       render(<AdminDashboard />);
 
       expect(screen.getByTestId("quick-actions")).toBeInTheDocument();
-      expect(screen.getByTestId("quick-action-Add New Question")).toBeInTheDocument();
-      expect(screen.getByTestId("quick-action-Manage Learning Cards")).toBeInTheDocument();
-      expect(screen.getByTestId("quick-action-Create Frontend Task")).toBeInTheDocument();
-      expect(screen.getByTestId("quick-action-Add Problem Solving")).toBeInTheDocument();
+      expect(
+        screen.getByTestId("quick-action-Add New Question"),
+      ).toBeInTheDocument();
+      expect(
+        screen.getByTestId("quick-action-Manage Learning Cards"),
+      ).toBeInTheDocument();
+      expect(
+        screen.getByTestId("quick-action-Create Frontend Task"),
+      ).toBeInTheDocument();
+      expect(
+        screen.getByTestId("quick-action-Add Problem Solving"),
+      ).toBeInTheDocument();
     });
 
     it("should render system health section", () => {
       render(<AdminDashboard />);
 
-      expect(screen.getByTestId("data-table-header")).toHaveTextContent("System Health");
+      expect(screen.getByTestId("data-table-header")).toHaveTextContent(
+        "System Health",
+      );
       expect(screen.getByTestId("activity-feed")).toBeInTheDocument();
     });
   });
@@ -170,7 +190,9 @@ describe("AdminDashboard", () => {
       render(<AdminDashboard />);
 
       // Should show "..." for loading values
-      expect(screen.getByTestId("metric-Total Questions")).toHaveTextContent("...");
+      expect(screen.getByTestId("metric-Total Questions")).toHaveTextContent(
+        "...",
+      );
     });
 
     it("should disable refresh button when loading", () => {
@@ -201,7 +223,9 @@ describe("AdminDashboard", () => {
 
       expect(screen.getByTestId("error-alert")).toBeInTheDocument();
       expect(screen.getByText("Dashboard Stats Error")).toBeInTheDocument();
-      expect(screen.getByText("Failed to fetch dashboard stats")).toBeInTheDocument();
+      expect(
+        screen.getByText("Failed to fetch dashboard stats"),
+      ).toBeInTheDocument();
     });
   });
 
@@ -234,7 +258,9 @@ describe("AdminDashboard", () => {
 
       render(<AdminDashboard />);
 
-      expect(screen.getByTestId("metric-Total Questions")).toHaveTextContent("...");
+      expect(screen.getByTestId("metric-Total Questions")).toHaveTextContent(
+        "...",
+      );
     });
   });
 });

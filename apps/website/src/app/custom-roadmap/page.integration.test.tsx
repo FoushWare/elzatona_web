@@ -22,7 +22,9 @@ describe("customroadmapPage Integration", () => {
       render(<customroadmapPage />);
 
       expect(screen.getByText("custom-roadmap")).toBeInTheDocument();
-      expect(screen.getByText("Page component - needs implementation")).toBeInTheDocument();
+      expect(
+        screen.getByText("Page component - needs implementation"),
+      ).toBeInTheDocument();
     });
 
     it("should render with proper styling", () => {

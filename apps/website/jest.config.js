@@ -35,7 +35,10 @@ const config = {
   // Add the fetch pre-setup to ensure `global.fetch` exists during module import time.
   setupFiles: ["<rootDir>/jest.fetch.setup.js"],
   // Full setup for website tests (loads jest.setup.js which sets up env and shims)
-  setupFilesAfterEnv: ["<rootDir>/jest.setup.js", "<rootDir>/../../tests/utils/jest-mock-msw.js"],
+  setupFilesAfterEnv: [
+    "<rootDir>/jest.setup.js",
+    "<rootDir>/../../tests/utils/jest-mock-msw.js",
+  ],
   moduleNameMapper: {
     "^@/(.*)$": "<rootDir>/src/$1",
     "^@elzatona/contexts$": "<rootDir>/../../libs/contexts/src/index.ts",
@@ -54,16 +57,19 @@ const config = {
     "^vitest$": "<rootDir>/test-utils/mocks/vitest.js",
     "^nuqs(/.*)?$": "<rootDir>/test-utils/mocks/nuqs.ts",
     // Mock react-syntax-highlighter (ESM) to avoid ESM parsing issues in Jest
-    "^react-syntax-highlighter(.*)?$": "<rootDir>/test-utils/mocks/react-syntax-highlighter.tsx",
+    "^react-syntax-highlighter(.*)?$":
+      "<rootDir>/test-utils/mocks/react-syntax-highlighter.tsx",
     "^react-markdown$": "<rootDir>/test-utils/mocks/react-markdown.tsx",
     "^node-fetch$": "<rootDir>/../../tests/utils/node-fetch-mock.js",
     // Mock next and next/server imports to a lightweight NextRequest/NextResponse for unit tests
     "^next(/.*)?$": "<rootDir>/test-utils/mocks/next-server.js",
     "^next/server$": "<rootDir>/test-utils/mocks/next-server.js",
     // Resolve workspace-level tests utils when imported relatively from other packages
-    "^tests/utils/mock-repositories$": "<rootDir>/../../tests/utils/mock-repositories.js",
+    "^tests/utils/mock-repositories$":
+      "<rootDir>/../../tests/utils/mock-repositories.js",
     // Catch any relative import that ends with tests/utils/mock-repositories
-    ".*tests/utils/mock-repositories$": "<rootDir>/../../tests/utils/mock-repositories.js",
+    ".*tests/utils/mock-repositories$":
+      "<rootDir>/../../tests/utils/mock-repositories.js",
     // Provide a jest-compatible mock for bcryptjs used in auth tests
     "^bcryptjs$": "<rootDir>/../../tests/utils/mocks/bcryptjs.js",
   },

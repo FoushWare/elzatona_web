@@ -2,17 +2,36 @@
 const createMockRepositories = () => {
   const userRepository = {
     create: jest.fn(async (data) => ({ id: "1", ...data })),
-    getById: jest.fn(async (id) => (id === "1" ? { id: "1", email: "user1@example.com" } : null)),
+    getById: jest.fn(async (id) =>
+      id === "1" ? { id: "1", email: "user1@example.com" } : null,
+    ),
     // API-compatible aliases
-    findById: jest.fn(async (id) => (id === "1" ? { id: "1", email: "user1@example.com" } : null)),
-    findByEmail: jest.fn(async (email) => (email === "user1@example.com" || email === "test@example.com" ? { id: "1", email } : null)),
+    findById: jest.fn(async (id) =>
+      id === "1" ? { id: "1", email: "user1@example.com" } : null,
+    ),
+    findByEmail: jest.fn(async (email) =>
+      email === "user1@example.com" || email === "test@example.com"
+        ? { id: "1", email }
+        : null,
+    ),
     emailExists: jest.fn(async (email) => email === "user1@example.com"),
     count: jest.fn(async () => 1),
     countActive: jest.fn(async () => 1),
-    findAdminByEmail: jest.fn(async (email) => (email === "admin@example.com" ? { id: "99", email, role: "admin" } : null)),
-    findAll: jest.fn(async () => ({ items: [{ id: "1", name: "User", role: "admin" }], total: 1 })),
-    findByRole: jest.fn(async (role) => ({ items: [{ id: "1", name: "User", role }], total: 1 })),
-    search: jest.fn(async (q) => ({ items: [{ id: "1", name: "User" }], total: 1 })),
+    findAdminByEmail: jest.fn(async (email) =>
+      email === "admin@example.com" ? { id: "99", email, role: "admin" } : null,
+    ),
+    findAll: jest.fn(async () => ({
+      items: [{ id: "1", name: "User", role: "admin" }],
+      total: 1,
+    })),
+    findByRole: jest.fn(async (role) => ({
+      items: [{ id: "1", name: "User", role }],
+      total: 1,
+    })),
+    search: jest.fn(async (q) => ({
+      items: [{ id: "1", name: "User" }],
+      total: 1,
+    })),
     update: jest.fn(async (id, data) => ({ id, ...data })),
     deactivate: jest.fn(async (id) => ({ id, active: false })),
     activate: jest.fn(async (id) => ({ id, active: true })),
@@ -21,7 +40,9 @@ const createMockRepositories = () => {
   };
 
   const topicRepository = {
-    getTopicById: jest.fn(async (id) => (id === "1" ? { id: "1", name: "Topic 1" } : null)),
+    getTopicById: jest.fn(async (id) =>
+      id === "1" ? { id: "1", name: "Topic 1" } : null,
+    ),
     listTopics: jest.fn(async () => [{ id: "1", name: "Topic 1" }]),
     createTopic: jest.fn(async (data) => ({ id: "1", ...data })),
     updateTopic: jest.fn(async (id, data) => ({ id, ...data })),
@@ -30,7 +51,9 @@ const createMockRepositories = () => {
   };
 
   const sectionRepository = {
-    getSectionById: jest.fn(async (id) => (id === "1" ? { id: "1", name: "Section 1" } : null)),
+    getSectionById: jest.fn(async (id) =>
+      id === "1" ? { id: "1", name: "Section 1" } : null,
+    ),
     getAllSections: jest.fn(async () => [{ id: "1", name: "Section 1" }]),
     createSection: jest.fn(async (data) => ({ id: "1", ...data })),
     updateSection: jest.fn(async (id, data) => ({ id, ...data })),
@@ -38,7 +61,9 @@ const createMockRepositories = () => {
   };
 
   const progressRepository = {
-    getProgressById: jest.fn(async (id) => (id === "1" ? { id: "1", status: "new" } : null)),
+    getProgressById: jest.fn(async (id) =>
+      id === "1" ? { id: "1", status: "new" } : null,
+    ),
     getAllProgress: jest.fn(async () => [{ id: "1", status: "new" }]),
     createProgress: jest.fn(async (data) => ({ id: "1", ...data })),
     updateProgress: jest.fn(async (id, data) => ({ id, ...data })),
@@ -46,15 +71,21 @@ const createMockRepositories = () => {
   };
 
   const flashcardRepository = {
-    getFlashcardById: jest.fn(async (id) => (id === "1" ? { id: "1", question: "Q1", answer: "A1" } : null)),
-    getAllFlashcards: jest.fn(async () => [{ id: "1", question: "Q1", answer: "A1" }]),
+    getFlashcardById: jest.fn(async (id) =>
+      id === "1" ? { id: "1", question: "Q1", answer: "A1" } : null,
+    ),
+    getAllFlashcards: jest.fn(async () => [
+      { id: "1", question: "Q1", answer: "A1" },
+    ]),
     createFlashcard: jest.fn(async (data) => ({ id: "1", ...data })),
     updateFlashcard: jest.fn(async (id, data) => ({ id, ...data })),
     deleteFlashcard: jest.fn(async (id) => true),
   };
 
   const categoryRepository = {
-    getCategoryById: jest.fn(async (id) => (id === "1" ? { id: "1", name: "Math" } : null)),
+    getCategoryById: jest.fn(async (id) =>
+      id === "1" ? { id: "1", name: "Math" } : null,
+    ),
     getAllCategories: jest.fn(async () => [{ id: "1", name: "Math" }]),
     createCategory: jest.fn(async (data) => ({ id: "1", ...data })),
     updateCategory: jest.fn(async (id, data) => ({ id, ...data })),

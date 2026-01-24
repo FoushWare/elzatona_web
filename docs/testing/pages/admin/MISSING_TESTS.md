@@ -46,14 +46,13 @@ Legend
 
 - ✅ Admin dashboard page renders the AdminDashboard component
 
-#### Integration: `apps/admin/src/app/page.integration.test.tsx`
+#### Integration: `apps/admin/src/app/admin/dashboard/page.integration.test.tsx`
 
-```typescript
-// TODO: Implement integration tests for dashboard API interactions
-// - Mock stats API endpoint with MSW
-// - Render page and verify API calls
-// - Test error handling and retry functionality
-```
+- ✅ Renders dashboard with stats from API
+- ✅ Shows loading state initially
+- ✅ Handles API error gracefully
+- ✅ Handles network error gracefully
+- ✅ Refetch functionality works
 
 #### E2E: `tests/e2e/admin/dashboard.spec.ts`
 
@@ -120,13 +119,13 @@ Legend
 
 #### Integration: `apps/admin/src/app/admin/login/page.integration.test.tsx`
 
-```typescript
-// TODO: Implement integration tests for login API interactions
-// - Mock login API with MSW
-// - Test successful login redirects
-// - Test failed login shows errors
-// - Test loading states
-```
+- ✅ Renders login form with all fields
+- ✅ Submits login form with valid credentials
+- ✅ Shows loading state during submission
+- ✅ Displays error message on login failure
+- ✅ Displays generic error on unexpected error
+- ✅ Clears error on new submission attempt
+- ✅ Shows loading spinner when auth is loading
 
 #### E2E: `tests/e2e/admin/login.spec.ts`
 
@@ -399,13 +398,16 @@ Legend
 
 #### Integration: `apps/admin/src/app/admin/content-management/page.integration.test.tsx`
 
-```typescript
-// TODO: Implement integration tests for content management API interactions
-// - Mock content APIs with MSW
-// - Test CRUD operations for cards, plans, categories, topics
-// - Test search and filtering functionality
-// - Test modal interactions and form submissions
-```
+#### Integration: `apps/admin/src/app/admin/content-management/page.integration.test.tsx`
+
+- ✅ Renders content management page with stats
+- ✅ Renders search and filter components
+- ✅ Renders all management sections
+- ✅ Shows loading state
+- ✅ Displays error message when error occurs
+- ✅ Search functionality updates search term
+- ✅ Filter functionality updates filter type
+- ✅ Renders modal components when open
 
 #### E2E: `tests/e2e/admin/content-management.spec.ts`
 
@@ -515,14 +517,17 @@ Legend
 
 #### Integration: `apps/admin/src/app/content/questions/page.integration.test.tsx`
 
-```typescript
-// TODO: Implement integration tests for questions management API interactions
-// - Mock questions API with MSW
-// - Test CRUD operations for questions
-// - Test search and filtering functionality
-// - Test pagination
-// - Test modal form submissions
-```
+#### Integration: `apps/admin/src/app/admin/content/questions/page.integration.test.tsx`
+
+- ✅ Renders questions management page with data
+- ✅ Shows loading state initially
+- ✅ Displays error message when API fails
+- ✅ Renders filter components
+- ✅ Renders pagination controls
+- ✅ Renders search component
+- ✅ Opens view modal when question is clicked
+- ✅ Handles category filter change
+- ✅ Handles pagination
 
 #### E2E: `tests/e2e/admin/content-questions.spec.ts`
 
@@ -533,7 +538,8 @@ Legend
 // - Test pagination
 // - Test modal interactions
 ```
-```
+
+````
 
 #### Integration: `apps/admin/src/app/content/questions/page.integration.test.tsx`
 
@@ -571,7 +577,7 @@ Legend
 // - Select multiple questions
 // - Click bulk delete/publish
 // - Verify batch API called
-```
+````
 
 #### E2E: `tests/e2e/admin/content-questions.spec.ts`
 

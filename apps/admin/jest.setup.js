@@ -6,12 +6,16 @@
 import "@testing-library/jest-dom";
 
 // Stub TransformStream for Playwright tests running in Node environment
-if (typeof TransformStream === 'undefined') {
+if (typeof TransformStream === "undefined") {
   global.TransformStream = class TransformStream {
     constructor() {
       this.readable = { pipeTo: () => Promise.resolve() };
-      this.writable = { getWriter: () => ({ write: () => Promise.resolve(), close: () => Promise.resolve() }) };
+      this.writable = {
+        getWriter: () => ({
+          write: () => Promise.resolve(),
+          close: () => Promise.resolve(),
+        }),
+      };
     }
   };
 }
-

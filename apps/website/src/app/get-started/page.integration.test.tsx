@@ -22,7 +22,9 @@ describe("getstartedPage Integration", () => {
       render(<getstartedPage />);
 
       expect(screen.getByText("get-started")).toBeInTheDocument();
-      expect(screen.getByText("Page component - needs implementation")).toBeInTheDocument();
+      expect(
+        screen.getByText("Page component - needs implementation"),
+      ).toBeInTheDocument();
     });
 
     it("should render with proper styling", () => {

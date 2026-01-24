@@ -17,9 +17,14 @@ vi.mock("./hooks/useQuestionsManagement", () => ({
 // Mock components
 vi.mock("@elzatona/common-ui", () => ({
   Card: ({ children }: any) => <div data-testid="card">{children}</div>,
-  CardContent: ({ children }: any) => <div data-testid="card-content">{children}</div>,
-  Button: ({ children, ...props }: any) => <button {...props}>{children}</button>,
-  FormModal: ({ isOpen, children }: any) => isOpen ? <div data-testid="form-modal">{children}</div> : null,
+  CardContent: ({ children }: any) => (
+    <div data-testid="card-content">{children}</div>
+  ),
+  Button: ({ children, ...props }: any) => (
+    <button {...props}>{children}</button>
+  ),
+  FormModal: ({ isOpen, children }: any) =>
+    isOpen ? <div data-testid="form-modal">{children}</div> : null,
   AdvancedSearch: ({ onSearch }: any) => (
     <div data-testid="advanced-search">
       <input
@@ -48,7 +53,12 @@ vi.mock("@elzatona/common-ui", () => ({
       )) || "No categories"}
     </div>
   ),
-  FiltersCard: ({ selectedCategory, selectedTopic, onCategoryChange, onTopicChange }: any) => (
+  FiltersCard: ({
+    selectedCategory,
+    selectedTopic,
+    onCategoryChange,
+    onTopicChange,
+  }: any) => (
     <div data-testid="filters-card">
       <select
         data-testid="category-filter"
@@ -71,9 +81,15 @@ vi.mock("@elzatona/common-ui", () => ({
       {questions?.map((q: any) => (
         <div key={q.id} data-testid={`question-${q.id}`}>
           <span>{q.title}</span>
-          <button data-testid={`view-${q.id}`} onClick={() => onView(q)}>View</button>
-          <button data-testid={`edit-${q.id}`} onClick={() => onEdit(q)}>Edit</button>
-          <button data-testid={`delete-${q.id}`} onClick={() => onDelete(q)}>Delete</button>
+          <button data-testid={`view-${q.id}`} onClick={() => onView(q)}>
+            View
+          </button>
+          <button data-testid={`edit-${q.id}`} onClick={() => onEdit(q)}>
+            Edit
+          </button>
+          <button data-testid={`delete-${q.id}`} onClick={() => onDelete(q)}>
+            Delete
+          </button>
         </div>
       )) || "No questions"}
     </div>
@@ -105,7 +121,9 @@ vi.mock("../../../../components/ViewQuestionModal", () => ({
     isOpen ? (
       <div data-testid="view-question-modal">
         <div data-testid="modal-question-title">{question?.title}</div>
-        <button data-testid="close-modal" onClick={onClose}>Close</button>
+        <button data-testid="close-modal" onClick={onClose}>
+          Close
+        </button>
       </div>
     ) : null,
 }));
@@ -216,8 +234,12 @@ describe("QuestionManagementPage", () => {
       render(<QuestionManagementPage />);
 
       expect(screen.getByTestId("questions-list")).toBeInTheDocument();
-      expect(screen.getByTestId("question-1")).toHaveTextContent("What is React?");
-      expect(screen.getByTestId("question-2")).toHaveTextContent("How does useState work?");
+      expect(screen.getByTestId("question-1")).toHaveTextContent(
+        "What is React?",
+      );
+      expect(screen.getByTestId("question-2")).toHaveTextContent(
+        "How does useState work?",
+      );
     });
 
     it("should render pagination controls", () => {
@@ -268,7 +290,9 @@ describe("QuestionManagementPage", () => {
       const categoryFilter = screen.getByTestId("category-filter");
       fireEvent.change(categoryFilter, { target: { value: "programming" } });
 
-      expect(mockHookReturn.setSelectedCategory).toHaveBeenCalledWith("programming");
+      expect(mockHookReturn.setSelectedCategory).toHaveBeenCalledWith(
+        "programming",
+      );
     });
 
     it("should call setSelectedTopic when topic filter changes", () => {
@@ -296,7 +320,9 @@ describe("QuestionManagementPage", () => {
       const viewButton = screen.getByTestId("view-1");
       fireEvent.click(viewButton);
 
-      expect(mockHookReturn.handleView).toHaveBeenCalledWith(mockHookReturn.questions[0]);
+      expect(mockHookReturn.handleView).toHaveBeenCalledWith(
+        mockHookReturn.questions[0],
+      );
     });
 
     it("should call handleEdit when edit button is clicked", () => {
@@ -305,7 +331,9 @@ describe("QuestionManagementPage", () => {
       const editButton = screen.getByTestId("edit-1");
       fireEvent.click(editButton);
 
-      expect(mockHookReturn.handleEdit).toHaveBeenCalledWith(mockHookReturn.questions[0]);
+      expect(mockHookReturn.handleEdit).toHaveBeenCalledWith(
+        mockHookReturn.questions[0],
+      );
     });
 
     it("should call handleDelete when delete button is clicked", () => {
@@ -314,7 +342,9 @@ describe("QuestionManagementPage", () => {
       const deleteButton = screen.getByTestId("delete-1");
       fireEvent.click(deleteButton);
 
-      expect(mockHookReturn.handleDelete).toHaveBeenCalledWith(mockHookReturn.questions[0]);
+      expect(mockHookReturn.handleDelete).toHaveBeenCalledWith(
+        mockHookReturn.questions[0],
+      );
     });
   });
 
@@ -374,7 +404,9 @@ describe("QuestionManagementPage", () => {
       render(<QuestionManagementPage />);
 
       expect(screen.getByTestId("view-question-modal")).toBeInTheDocument();
-      expect(screen.getByTestId("modal-question-title")).toHaveTextContent("Test Question");
+      expect(screen.getByTestId("modal-question-title")).toHaveTextContent(
+        "Test Question",
+      );
     });
 
     it("should render form modal when isQuestionModalOpen is true", () => {
@@ -424,7 +456,9 @@ describe("QuestionManagementPage", () => {
 
       render(<QuestionManagementPage />);
 
-      expect(screen.getByTestId("questions-list")).toHaveTextContent("No questions");
+      expect(screen.getByTestId("questions-list")).toHaveTextContent(
+        "No questions",
+      );
     });
 
     it("should show empty state when no categories", () => {
@@ -435,7 +469,9 @@ describe("QuestionManagementPage", () => {
 
       render(<QuestionManagementPage />);
 
-      expect(screen.getByTestId("categories-overview")).toHaveTextContent("No categories");
+      expect(screen.getByTestId("categories-overview")).toHaveTextContent(
+        "No categories",
+      );
     });
   });
 });

@@ -12,7 +12,9 @@ import { useDashboardStats } from "@elzatona/hooks";
 
 // Mock the AdminDashboard component
 vi.mock("@elzatona/common-ui", () => ({
-  AdminDashboard: () => <div data-testid="admin-dashboard">Dashboard Content</div>,
+  AdminDashboard: () => (
+    <div data-testid="admin-dashboard">Dashboard Content</div>
+  ),
 }));
 
 // Mock hooks

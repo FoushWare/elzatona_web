@@ -12,14 +12,19 @@ if (typeof global.vi === "undefined") {
     mock: (moduleName, factory, options) => {
       try {
         // If moduleName is a relative path, resolve it relative to the caller file
-        if (typeof moduleName === "string" && (moduleName.startsWith(".") || moduleName.startsWith("/"))) {
+        if (
+          typeof moduleName === "string" &&
+          (moduleName.startsWith(".") || moduleName.startsWith("/"))
+        ) {
           const err = new Error();
           const stack = (err.stack || "").split("\n");
           // Find first stack entry outside this setup file
           let callerPath = null;
           for (const line of stack) {
             if (!line.includes(__filename) && !line.includes("jest.setup.js")) {
-              const m = line.match(/\((.*):\d+:\d+\)$/) || line.match(/at (.*):\d+:\d+$/);
+              const m =
+                line.match(/\((.*):\d+:\d+\)$/) ||
+                line.match(/at (.*):\d+:\d+$/);
               if (m && m[1]) {
                 callerPath = m[1];
                 break;
@@ -42,9 +47,18 @@ if (typeof global.vi === "undefined") {
               try {
                 const { existsSync } = require("fs");
                 const candidates = [
-                  resolve(process.cwd(), "apps/website/src/app/lib/api-config.ts"),
-                  resolve(process.cwd(), "apps/website/utilities/api-config.ts"),
-                  resolve(process.cwd(), "apps/website/lib/utils/api-config.ts"),
+                  resolve(
+                    process.cwd(),
+                    "apps/website/src/app/lib/api-config.ts",
+                  ),
+                  resolve(
+                    process.cwd(),
+                    "apps/website/utilities/api-config.ts",
+                  ),
+                  resolve(
+                    process.cwd(),
+                    "apps/website/lib/utils/api-config.ts",
+                  ),
                 ];
                 for (const c of candidates) {
                   if (existsSync(c)) {
@@ -71,9 +85,9 @@ if (typeof global.vi === "undefined") {
   };
 }
 
-  // Note: `next/server` mocking is handled via moduleNameMapper and
-  // by providing an explicit test-utils mock where tests opt-in.
-  // Avoid calling `jest.mock()` here to prevent recursive require issues.
+// Note: `next/server` mocking is handled via moduleNameMapper and
+// by providing an explicit test-utils mock where tests opt-in.
+// Avoid calling `jest.mock()` here to prevent recursive require issues.
 
 // Check if we're in CI (GitHub Actions)
 const isCI =
@@ -212,14 +226,23 @@ if (!isCI) {
         missingVars.join(", "),
       );
       // Set safe defaults when validation is skipped
-      if (!process.env.NEXT_PUBLIC_SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL.includes('your-project-url')) {
-        process.env.NEXT_PUBLIC_SUPABASE_URL = 'http://localhost:54321';
+      if (
+        !process.env.NEXT_PUBLIC_SUPABASE_URL ||
+        process.env.NEXT_PUBLIC_SUPABASE_URL.includes("your-project-url")
+      ) {
+        process.env.NEXT_PUBLIC_SUPABASE_URL = "http://localhost:54321";
       }
-      if (!process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY.includes('your-anon-key')) {
-        process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY = 'test-anon-key';
+      if (
+        !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ||
+        process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY.includes("your-anon-key")
+      ) {
+        process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY = "test-anon-key";
       }
-      if (!process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_SERVICE_ROLE_KEY.includes('your-service-role-key')) {
-        process.env.SUPABASE_SERVICE_ROLE_KEY = 'test-service-role-key';
+      if (
+        !process.env.SUPABASE_SERVICE_ROLE_KEY ||
+        process.env.SUPABASE_SERVICE_ROLE_KEY.includes("your-service-role-key")
+      ) {
+        process.env.SUPABASE_SERVICE_ROLE_KEY = "test-service-role-key";
       }
     } else {
       console.error(
@@ -293,25 +316,24 @@ if (global.Request === undefined) {
     }
 
     if (fetchAPI && fetchAPI.Request) {
-
-// Ensure `fetch` is available globally. Prefer existing global fetch, otherwise try node-fetch.
-if (typeof global.fetch === "undefined") {
-  try {
-    // node-fetch v2 supports require
-    // eslint-disable-next-line @typescript-eslint/no-var-requires
-    const nodeFetch = require("node-fetch");
-    if (nodeFetch) {
-      global.fetch = nodeFetch;
-    }
-  } catch (_err) {
-    // Last resort: a minimal fetch shim that uses the Response polyfill above.
-    global.fetch = async (input, init = {}) => {
-      const url = typeof input === "string" ? input : input?.url || "";
-      const body = init && init.body ? init.body : null;
-      return new global.Response(body || null, { status: 200 });
-    };
-  }
-}
+      // Ensure `fetch` is available globally. Prefer existing global fetch, otherwise try node-fetch.
+      if (typeof global.fetch === "undefined") {
+        try {
+          // node-fetch v2 supports require
+          // eslint-disable-next-line @typescript-eslint/no-var-requires
+          const nodeFetch = require("node-fetch");
+          if (nodeFetch) {
+            global.fetch = nodeFetch;
+          }
+        } catch (_err) {
+          // Last resort: a minimal fetch shim that uses the Response polyfill above.
+          global.fetch = async (input, init = {}) => {
+            const url = typeof input === "string" ? input : input?.url || "";
+            const body = init && init.body ? init.body : null;
+            return new global.Response(body || null, { status: 200 });
+          };
+        }
+      }
       global.Request = fetchAPI.Request;
       global.Response = fetchAPI.Response;
       global.Headers = fetchAPI.Headers;

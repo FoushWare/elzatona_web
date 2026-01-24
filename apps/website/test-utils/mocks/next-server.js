@@ -6,7 +6,9 @@ class NextHeaders {
   constructor(init = {}) {
     this._map = new Map();
     if (init) {
-      Object.entries(init).forEach(([k, v]) => this._map.set(k.toLowerCase(), String(v)));
+      Object.entries(init).forEach(([k, v]) =>
+        this._map.set(k.toLowerCase(), String(v)),
+      );
     }
   }
   get(name) {
@@ -25,15 +27,20 @@ class NextHeaders {
 
 class NextRequest {
   constructor(input, init = {}) {
-    this.url = typeof input === 'string' ? input : input?.url || '';
-    this.method = (init && init.method) || 'GET';
-    this.headers = init && init.headers instanceof NextHeaders ? init.headers : new NextHeaders(init.headers || {});
+    this.url = typeof input === "string" ? input : input?.url || "";
+    this.method = (init && init.method) || "GET";
+    this.headers =
+      init && init.headers instanceof NextHeaders
+        ? init.headers
+        : new NextHeaders(init.headers || {});
     this._body = init && init.body ? init.body : null;
   }
   async json() {
     if (!this._body) return {};
     try {
-      return typeof this._body === 'string' ? JSON.parse(this._body) : this._body;
+      return typeof this._body === "string"
+        ? JSON.parse(this._body)
+        : this._body;
     } catch {
       return {};
     }
@@ -47,10 +54,13 @@ class NextResponse {
     this.headers = new NextHeaders(init.headers || {});
   }
   static json(body, init = {}) {
-    return new NextResponse(JSON.stringify(body), { ...init, headers: { 'content-type': 'application/json', ...(init.headers || {}) } });
+    return new NextResponse(JSON.stringify(body), {
+      ...init,
+      headers: { "content-type": "application/json", ...(init.headers || {}) },
+    });
   }
   async json() {
-    if (typeof this._body === 'string') {
+    if (typeof this._body === "string") {
       try {
         return JSON.parse(this._body);
       } catch {

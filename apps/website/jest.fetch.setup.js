@@ -6,9 +6,9 @@
 // cache to register the provided factory output so subsequent requires return
 // the mocked module.
 try {
-  if (typeof global.vi === 'undefined') {
+  if (typeof global.vi === "undefined") {
     // eslint-disable-next-line @typescript-eslint/no-var-requires
-    const Module = require('module');
+    const Module = require("module");
     global.vi = {
       _registered: [],
       mock(moduleName, factory) {
@@ -21,7 +21,7 @@ try {
             // ignore resolution errors
           }
 
-          const exports = typeof factory === 'function' ? factory() : factory;
+          const exports = typeof factory === "function" ? factory() : factory;
 
           if (resolved) {
             const m = new Module.Module(resolved, module.parent);
@@ -36,7 +36,7 @@ try {
         }
       },
       fn() {
-        return function() {};
+        return function () {};
       },
       clearAllMocks() {},
     };
@@ -59,9 +59,12 @@ try {
         return rawFetch(url, init);
       };
       // node-fetch v2 exposes Headers/Request/Response on export
-      if (!global.Headers && nodeFetch.Headers) global.Headers = nodeFetch.Headers;
-      if (!global.Request && nodeFetch.Request) global.Request = nodeFetch.Request;
-      if (!global.Response && nodeFetch.Response) global.Response = nodeFetch.Response;
+      if (!global.Headers && nodeFetch.Headers)
+        global.Headers = nodeFetch.Headers;
+      if (!global.Request && nodeFetch.Request)
+        global.Request = nodeFetch.Request;
+      if (!global.Response && nodeFetch.Response)
+        global.Response = nodeFetch.Response;
     }
   }
 } catch (e) {
@@ -73,22 +76,22 @@ try {
 // that happen during module initialization in tests.
 try {
   // eslint-disable-next-line @typescript-eslint/no-var-requires
-  const Module = require('module');
-  const path = require('path');
+  const Module = require("module");
+  const path = require("path");
 
   // Pre-populate require.cache for common Next import specifiers so that
   // `require('next/server')` returns our lightweight mock before any code
   // attempts to import Next internals. This is a best-effort step to avoid
   // Next's own classes from being constructed in the test runtime.
   try {
-    const trySpecs = ['next/server', 'next'];
+    const trySpecs = ["next/server", "next"];
     for (const spec of trySpecs) {
       try {
         const resolved = Module._resolveFilename(spec, module);
         if (resolved && !require.cache[resolved]) {
           const m = new Module.Module(resolved, module.parent);
           m.filename = resolved;
-          m.exports = require('./test-utils/mocks/next-server.js');
+          m.exports = require("./test-utils/mocks/next-server.js");
           require.cache[resolved] = m;
         }
       } catch (_e) {
@@ -99,19 +102,28 @@ try {
     // ignore
   }
   const originalLoad = Module._load;
-  const mockPath = require.resolve('./test-utils/mocks/next-server.js');
+  const mockPath = require.resolve("./test-utils/mocks/next-server.js");
 
-  Module._load = function(request, parent, isMain) {
+  Module._load = function (request, parent, isMain) {
     try {
       // If request is a module name like 'next' or 'next/server'
-      if (typeof request === 'string' && (request === 'next' || request.startsWith('next/') || request === 'next/server' || request.startsWith('next/server') )) {
+      if (
+        typeof request === "string" &&
+        (request === "next" ||
+          request.startsWith("next/") ||
+          request === "next/server" ||
+          request.startsWith("next/server"))
+      ) {
         return originalLoad.call(this, mockPath, parent, isMain);
       }
 
       // Attempt to resolve the filename; if it lives under node_modules/next, redirect it.
       try {
         const resolved = Module._resolveFilename(request, parent);
-        if (typeof resolved === 'string' && resolved.includes(`${path.sep}node_modules${path.sep}next${path.sep}`)) {
+        if (
+          typeof resolved === "string" &&
+          resolved.includes(`${path.sep}node_modules${path.sep}next${path.sep}`)
+        ) {
           return originalLoad.call(this, mockPath, parent, isMain);
         }
       } catch (_err) {

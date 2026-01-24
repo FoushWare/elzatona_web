@@ -8,7 +8,10 @@ import { POST } from "./route";
 // when running under Jest. We require by absolute path so this is deterministic
 // in the test environment.
 // eslint-disable-next-line @typescript-eslint/no-var-requires
-const { NextRequest: MockNextRequest, Headers: MockHeaders } = require("/Users/a.fouad/S/New_elzatona/apps/website/test-utils/mocks/next-server.js");
+const {
+  NextRequest: MockNextRequest,
+  Headers: MockHeaders,
+} = require("/Users/a.fouad/S/New_elzatona/apps/website/test-utils/mocks/next-server.js");
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 
@@ -154,7 +157,7 @@ describe("Admin Create API Route", () => {
       process.env.BCRYPT_SALT_ROUNDS = "12";
       const password = "new-password";
 
-      jest.spyOn(bcrypt, 'hash').mockResolvedValue('hashed-password');
+      jest.spyOn(bcrypt, "hash").mockResolvedValue("hashed-password");
 
       const saltRounds = parseInt(process.env.BCRYPT_SALT_ROUNDS || "10", 10);
       await bcrypt.hash(password, saltRounds);
@@ -166,7 +169,7 @@ describe("Admin Create API Route", () => {
       delete process.env.BCRYPT_SALT_ROUNDS;
       const password = "new-password";
 
-      jest.spyOn(bcrypt, 'hash').mockResolvedValue('hashed-password');
+      jest.spyOn(bcrypt, "hash").mockResolvedValue("hashed-password");
 
       const saltRounds = parseInt(process.env.BCRYPT_SALT_ROUNDS || "10", 10);
       await bcrypt.hash(password, saltRounds);

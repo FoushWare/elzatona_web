@@ -16,7 +16,9 @@ vi.mock("./hooks/useContentManagement", () => ({
 
 // Mock common-ui components
 vi.mock("@elzatona/common-ui", () => ({
-  Button: ({ children, ...props }: any) => <button {...props}>{children}</button>,
+  Button: ({ children, ...props }: any) => (
+    <button {...props}>{children}</button>
+  ),
   StatsSection: ({ stats }: any) => (
     <div data-testid="stats-section">
       <div data-testid="stats-cards">{stats?.cards || 0}</div>
@@ -24,7 +26,12 @@ vi.mock("@elzatona/common-ui", () => ({
       <div data-testid="stats-categories">{stats?.categories || 0}</div>
     </div>
   ),
-  SearchAndFilters: ({ searchTerm, onSearchChange, filterCardType, onFilterChange }: any) => (
+  SearchAndFilters: ({
+    searchTerm,
+    onSearchChange,
+    filterCardType,
+    onFilterChange,
+  }: any) => (
     <div data-testid="search-filters">
       <input
         data-testid="search-input"
@@ -70,7 +77,11 @@ vi.mock("@elzatona/common-ui", () => ({
       )) || "No topics"}
     </div>
   ),
-  CategoriesManager: ({ categories, onCategoryUpdate, onCategoryDelete }: any) => (
+  CategoriesManager: ({
+    categories,
+    onCategoryUpdate,
+    onCategoryDelete,
+  }: any) => (
     <div data-testid="categories-manager">
       {categories?.map((category: any) => (
         <div key={category.id} data-testid={`category-${category.id}`}>
@@ -80,7 +91,9 @@ vi.mock("@elzatona/common-ui", () => ({
     </div>
   ),
   TopicQuestionsModal: () => <div data-testid="topic-questions-modal" />,
-  DeleteConfirmationModal: () => <div data-testid="delete-confirmation-modal" />,
+  DeleteConfirmationModal: () => (
+    <div data-testid="delete-confirmation-modal" />
+  ),
   CardManagementModal: () => <div data-testid="card-management-modal" />,
 }));
 
@@ -101,15 +114,9 @@ describe("ContentManagementPage", () => {
       { id: "1", title: "React Basics" },
       { id: "2", title: "JavaScript Fundamentals" },
     ],
-    filteredPlans: [
-      { id: "1", title: "Frontend Development" },
-    ],
-    categories: [
-      { id: "1", title: "Programming" },
-    ],
-    topics: [
-      { id: "1", title: "React" },
-    ],
+    filteredPlans: [{ id: "1", title: "Frontend Development" }],
+    categories: [{ id: "1", title: "Programming" }],
+    topics: [{ id: "1", title: "React" }],
     questions: [],
     expandedCards: new Set(),
     expandedCategories: new Set(),
@@ -161,7 +168,9 @@ describe("ContentManagementPage", () => {
 
       render(<ContentManagementPage />);
 
-      expect(screen.getByText("Loading content management...")).toBeInTheDocument();
+      expect(
+        screen.getByText("Loading content management..."),
+      ).toBeInTheDocument();
     });
   });
 
@@ -215,13 +224,17 @@ describe("ContentManagementPage", () => {
       render(<ContentManagementPage />);
 
       expect(screen.getByTestId("card-1")).toHaveTextContent("React Basics");
-      expect(screen.getByTestId("card-2")).toHaveTextContent("JavaScript Fundamentals");
+      expect(screen.getByTestId("card-2")).toHaveTextContent(
+        "JavaScript Fundamentals",
+      );
     });
 
     it("should render plans list", () => {
       render(<ContentManagementPage />);
 
-      expect(screen.getByTestId("plan-1")).toHaveTextContent("Frontend Development");
+      expect(screen.getByTestId("plan-1")).toHaveTextContent(
+        "Frontend Development",
+      );
     });
 
     it("should render categories list", () => {
@@ -253,7 +266,9 @@ describe("ContentManagementPage", () => {
       const filterSelect = screen.getByTestId("filter-select");
       fireEvent.change(filterSelect, { target: { value: "flashcard" } });
 
-      expect(mockHookReturn.setFilterCardType).toHaveBeenCalledWith("flashcard");
+      expect(mockHookReturn.setFilterCardType).toHaveBeenCalledWith(
+        "flashcard",
+      );
     });
   });
 
@@ -301,7 +316,9 @@ describe("ContentManagementPage", () => {
 
       render(<ContentManagementPage />);
 
-      expect(screen.getByTestId("delete-confirmation-modal")).toBeInTheDocument();
+      expect(
+        screen.getByTestId("delete-confirmation-modal"),
+      ).toBeInTheDocument();
     });
 
     it("should render card management modal when showCardModal is true", () => {
