@@ -1,7 +1,7 @@
 /**
  * Integration tests for Admin questions management page API interactions
  */
-import { render, screen, waitFor, fireEvent } from "@testing-library/react";
+import { render, screen, fireEvent } from "@testing-library/react";
 import { vi, describe, it, expect, beforeEach } from "vitest";
 import QuestionsManagementPage from "./page";
 
