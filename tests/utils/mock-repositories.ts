@@ -287,14 +287,32 @@ function createUserRepositoryMock(): IUserRepository {
       );
     },
     async findAll(options?: QueryOptions): Promise<PaginatedResult<User>> {
-      return { items: [...users], total: users.length };
+      return {
+        data: [...users],
+        items: [...users],
+        meta: {
+          total: users.length,
+          limit: options?.limit || users.length,
+          offset: options?.offset || 0,
+          hasMore: false,
+        },
+      };
     },
     async findByRole(
       role: string,
       options?: QueryOptions,
     ): Promise<PaginatedResult<User>> {
       const filtered = users.filter((u) => u.role === role);
-      return { items: filtered, total: filtered.length };
+      return {
+        data: filtered,
+        items: filtered,
+        meta: {
+          total: filtered.length,
+          limit: options?.limit || filtered.length,
+          offset: options?.offset || 0,
+          hasMore: false,
+        },
+      };
     },
     async search(
       query: string,
@@ -303,7 +321,16 @@ function createUserRepositoryMock(): IUserRepository {
       const filtered = users.filter(
         (u) => u.displayName?.includes(query) || u.email.includes(query),
       );
-      return { items: filtered, total: filtered.length };
+      return {
+        data: filtered,
+        items: filtered,
+        meta: {
+          total: filtered.length,
+          limit: options?.limit || filtered.length,
+          offset: options?.offset || 0,
+          hasMore: false,
+        },
+      };
     },
     async update(id: string, data: UpdateUserDTO): Promise<User> {
       const idx = users.findIndex((u) => u.id === id);
