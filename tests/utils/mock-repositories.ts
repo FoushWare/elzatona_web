@@ -25,14 +25,14 @@ import {
   Progress,
   ProgressInput,
 } from "../../libs/database/src/repositories/interfaces/IProgressRepository";
+import { IUserRepository } from "../../libs/database/src/repositories/interfaces/IUserRepository";
 import {
-  IUserRepository,
   User,
   CreateUserDTO,
   UpdateUserDTO,
   QueryOptions,
   PaginatedResult,
-} from "../../libs/database/src/repositories/interfaces/IUserRepository";
+} from "../../libs/database/src/repositories/types/index";
 import { UserRole } from "../../libs/database/src/repositories/types/user";
 
 function createCategoryRepositoryMock(): ICategoryRepository {
