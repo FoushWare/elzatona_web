@@ -4,6 +4,7 @@ import React, {
   useState,
   useEffect,
   useCallback,
+  useMemo,
   ReactNode,
   createContext,
   useContext,
@@ -291,14 +292,17 @@ export function AdminAuthProvider({ children }: AdminAuthProviderProps) {
     }
   }, []);
 
-  const value = {
-    isAuthenticated,
-    isLoading: isLoading || !isHydrated,
-    user,
-    login,
-    logout,
-    error,
-  };
+  const value = useMemo(
+    () => ({
+      isAuthenticated,
+      isLoading: isLoading || !isHydrated,
+      user,
+      login,
+      logout,
+      error,
+    }),
+    [isAuthenticated, isLoading, isHydrated, user, login, logout, error],
+  );
 
   // Show loading state during hydration to prevent mismatches
   if (!isHydrated) {

@@ -7,7 +7,7 @@ import { POST } from "./route";
 // Use a local Next.js server mock directly to avoid resolver/mapping issues
 // when running under Jest. We require by absolute path so this is deterministic
 // in the test environment.
-// eslint-disable-next-line @typescript-eslint/no-var-requires
+
 const {
   NextRequest: MockNextRequest,
   Headers: MockHeaders,

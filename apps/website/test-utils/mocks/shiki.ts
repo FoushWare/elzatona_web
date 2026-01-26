@@ -3,4 +3,5 @@ export const getHighlighter = async () => ({
   codeToHtml: (code: string) => code,
 });
 
-export default { getHighlighter };
+const shikiMock = { getHighlighter };
+export default shikiMock;

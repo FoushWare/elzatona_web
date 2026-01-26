@@ -1,5 +1,5 @@
 const nextJest = require("next/jest.js");
-const path = require("path");
+const path = require("node:path");
 
 // Get the absolute path to the website directory
 const websiteDir = path.resolve(__dirname);
@@ -17,10 +17,8 @@ const config = {
   // Performance optimizations for 8GB RAM Mac M2
   // Use 1 worker for low memory systems, 2 for normal use
   maxWorkers: process.env.JEST_MAX_WORKERS
-    ? parseInt(process.env.JEST_MAX_WORKERS)
-    : process.env.CI
-      ? 1
-      : 1, // Default to 1 worker for 8GB RAM
+    ? Number.parseInt(process.env.JEST_MAX_WORKERS)
+    : 1, // Default to 1 worker for 8GB RAM
   // Memory optimizations
   workerIdleMemoryLimit: "512MB", // Kill workers that exceed this memory
   // Cache settings - disable if memory is tight
@@ -89,8 +87,8 @@ const config = {
     "/.next/",
     "/tests/e2e/", // Exclude e2e directory
     ".*/e2e/.*", // Exclude any path with /e2e/ in it
-    ".*\\.spec\\.ts$", // Exclude .spec.ts files (Playwright convention)
-    ".*\\.spec\\.tsx$", // Exclude .spec.tsx files (Playwright convention)
+    String.raw`.*\.spec\.ts$`, // Exclude .spec.ts files (Playwright convention)
+    String.raw`.*\.spec\.tsx$`, // Exclude .spec.tsx files (Playwright convention)
     ".*/tests/e2e/.*", // More specific pattern for e2e tests
     ".*e2e.*", // Catch-all for any path containing "e2e"
   ],

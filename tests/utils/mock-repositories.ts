@@ -32,6 +32,9 @@ import {
   UpdateUserDTO,
   QueryOptions,
   PaginatedResult,
+  UserProgress,
+  UserPreferences,
+  UserStatistics,
 } from "../../libs/database/src/repositories/types/index";
 import { UserRole } from "../../libs/database/src/repositories/types/user";
 
@@ -338,10 +341,16 @@ function createUserRepositoryMock(): IUserRepository {
       users[idx] = { ...users[idx], ...data, updatedAt: new Date() };
       return users[idx];
     },
-    async updateProgress(id: string, progress: any): Promise<void> {
+    async updateProgress(
+      userId: string,
+      progress: UserProgress,
+    ): Promise<void> {
       return;
     },
-    async updatePreferences(id: string, preferences: any): Promise<void> {
+    async updatePreferences(
+      userId: string,
+      preferences: UserPreferences,
+    ): Promise<void> {
       return;
     },
     async updateLastLogin(id: string): Promise<User> {
@@ -370,13 +379,13 @@ function createUserRepositoryMock(): IUserRepository {
       const idx = users.findIndex((u) => u.id === id);
       if (idx !== -1) users.splice(idx, 1);
     },
-    async getProgress(id: string): Promise<any> {
+    async getProgress(userId: string): Promise<UserProgress> {
       return { completed: 0 };
     },
-    async getPreferences(id: string): Promise<any> {
+    async getPreferences(userId: string): Promise<UserPreferences> {
       return { theme: "light" };
     },
-    async getUserStatistics(id: string): Promise<any> {
+    async getUserStatistics(userId: string): Promise<UserStatistics> {
       return { logins: 0 };
     },
     async count(): Promise<number> {

@@ -7,7 +7,6 @@
 // the mocked module.
 try {
   if (typeof global.vi === "undefined") {
-    // eslint-disable-next-line @typescript-eslint/no-var-requires
     const Module = require("module");
     global.vi = {
       _registered: [],
@@ -47,7 +46,7 @@ try {
 try {
   if (typeof global.fetch === "undefined") {
     // Prefer node-fetch if available
-    // eslint-disable-next-line @typescript-eslint/no-var-requires
+
     const nodeFetch = require("node-fetch");
     if (nodeFetch) {
       // node-fetch export is a function; wrap to accept relative URLs used in tests
@@ -75,7 +74,6 @@ try {
 // to our lightweight mock. This runs early (setupFiles) so it can catch requires
 // that happen during module initialization in tests.
 try {
-  // eslint-disable-next-line @typescript-eslint/no-var-requires
   const Module = require("module");
   const path = require("path");
 

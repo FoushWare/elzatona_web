@@ -14,11 +14,27 @@ vi.mock("next/navigation", () => ({
 }));
 
 // Mock the admin auth context with controlled behavior
-let mockAuthState = {
+const mockAuthState = {
   isAuthenticated: false,
   isLoading: false,
   login: vi.fn(),
 };
+
+// Small helper to simulate async delays in tests without nested callbacks
+const sleep = (ms: number) => new Promise((res) => setTimeout(res, ms));
+
+// Helper to fill login form and submit; returns elements for assertions
+function fillAndSubmit(email: string, password: string) {
+  const emailInput = screen.getByLabelText(/email/i);
+  const passwordInput = screen.getByLabelText(/password/i);
+  const submitButton = screen.getByRole("button", { name: /sign in/i });
+
+  fireEvent.change(emailInput, { target: { value: email } });
+  fireEvent.change(passwordInput, { target: { value: password } });
+  fireEvent.click(submitButton);
+
+  return { emailInput, passwordInput, submitButton };
+}
 
 vi.mock("@elzatona/contexts", () => ({
   useAdminAuth: () => mockAuthState,
@@ -45,14 +61,7 @@ describe("Admin login page - Integration", () => {
     mockAuthState.login.mockResolvedValue({ success: true });
 
     render(<AdminLoginPage />);
-
-    const emailInput = screen.getByLabelText(/email/i);
-    const passwordInput = screen.getByLabelText(/password/i);
-    const submitButton = screen.getByRole("button", { name: /sign in/i });
-
-    fireEvent.change(emailInput, { target: { value: "admin@example.com" } });
-    fireEvent.change(passwordInput, { target: { value: "password123" } });
-    fireEvent.click(submitButton);
+    const { submitButton } = fillAndSubmit("admin@example.com", "password123");
 
     await waitFor(() => {
       expect(mockAuthState.login).toHaveBeenCalledWith(
@@ -65,22 +74,13 @@ describe("Admin login page - Integration", () => {
   });
 
   it("shows loading state during submission", async () => {
-    mockAuthState.login.mockImplementation(
-      () =>
-        new Promise((resolve) =>
-          setTimeout(() => resolve({ success: true }), 100),
-        ),
-    );
+    mockAuthState.login.mockImplementation(async () => {
+      await sleep(100);
+      return { success: true };
+    });
 
     render(<AdminLoginPage />);
-
-    const emailInput = screen.getByLabelText(/email/i);
-    const passwordInput = screen.getByLabelText(/password/i);
-    const submitButton = screen.getByRole("button", { name: /sign in/i });
-
-    fireEvent.change(emailInput, { target: { value: "admin@example.com" } });
-    fireEvent.change(passwordInput, { target: { value: "password123" } });
-    fireEvent.click(submitButton);
+    const { submitButton } = fillAndSubmit("admin@example.com", "password123");
 
     // Button should be disabled during submission
     expect(submitButton).toBeDisabled();
@@ -94,19 +94,13 @@ describe("Admin login page - Integration", () => {
     });
 
     render(<AdminLoginPage />);
-
-    const emailInput = screen.getByLabelText(/email/i);
-    const passwordInput = screen.getByLabelText(/password/i);
-    const submitButton = screen.getByRole("button", { name: /sign in/i });
-
-    fireEvent.change(emailInput, { target: { value: "admin@example.com" } });
-    fireEvent.change(passwordInput, { target: { value: "wrongpassword" } });
-    fireEvent.click(submitButton);
+    fillAndSubmit("admin@example.com", "wrongpassword");
 
     await waitFor(() => {
       expect(screen.getByText("Invalid credentials")).toBeInTheDocument();
     });
 
+    const submitButton = screen.getByRole("button", { name: /sign in/i });
     expect(submitButton).not.toBeDisabled();
   });
 
@@ -114,14 +108,7 @@ describe("Admin login page - Integration", () => {
     mockAuthState.login.mockRejectedValue(new Error("Network error"));
 
     render(<AdminLoginPage />);
-
-    const emailInput = screen.getByLabelText(/email/i);
-    const passwordInput = screen.getByLabelText(/password/i);
-    const submitButton = screen.getByRole("button", { name: /sign in/i });
-
-    fireEvent.change(emailInput, { target: { value: "admin@example.com" } });
-    fireEvent.change(passwordInput, { target: { value: "password123" } });
-    fireEvent.click(submitButton);
+    fillAndSubmit("admin@example.com", "password123");
 
     await waitFor(() => {
       expect(
@@ -137,22 +124,15 @@ describe("Admin login page - Integration", () => {
 
     render(<AdminLoginPage />);
 
-    const emailInput = screen.getByLabelText(/email/i);
-    const passwordInput = screen.getByLabelText(/password/i);
-    const submitButton = screen.getByRole("button", { name: /sign in/i });
-
     // First failed attempt
-    fireEvent.change(emailInput, { target: { value: "admin@example.com" } });
-    fireEvent.change(passwordInput, { target: { value: "wrongpassword" } });
-    fireEvent.click(submitButton);
+    fillAndSubmit("admin@example.com", "wrongpassword");
 
     await waitFor(() => {
       expect(screen.getByText("Invalid credentials")).toBeInTheDocument();
     });
 
     // Second successful attempt
-    fireEvent.change(passwordInput, { target: { value: "correctpassword" } });
-    fireEvent.click(submitButton);
+    fillAndSubmit("admin@example.com", "correctpassword");
 
     await waitFor(() => {
       expect(screen.queryByText("Invalid credentials")).not.toBeInTheDocument();

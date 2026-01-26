@@ -1,87 +1,36 @@
 import "@testing-library/jest-dom";
 import { config } from "dotenv";
-import { resolve } from "path";
-import { existsSync } from "fs";
+import { resolve } from "node:path";
+import { existsSync } from "node:fs";
 
 // Provide a minimal `vi` shim when running under Jest so tests written for
 // Vitest that reference `vi` don't immediately crash. This maps common
 // `vi` helpers to their Jest equivalents when possible.
-if (typeof global.vi === "undefined") {
-  global.vi = {
+if (typeof globalThis.vi === "undefined") {
+  globalThis.vi = {
     fn: (...args) => jest.fn(...args),
     mock: (moduleName, factory, options) => {
       try {
-        // If moduleName is a relative path, resolve it relative to the caller file
         if (
           typeof moduleName === "string" &&
           (moduleName.startsWith(".") || moduleName.startsWith("/"))
         ) {
-          const err = new Error();
-          const stack = (err.stack || "").split("\n");
-          // Find first stack entry outside this setup file
-          let callerPath = null;
-          for (const line of stack) {
-            if (!line.includes(__filename) && !line.includes("jest.setup.js")) {
-              const m =
-                line.match(/\((.*):\d+:\d+\)$/) ||
-                line.match(/at (.*):\d+:\d+$/);
-              if (m && m[1]) {
-                callerPath = m[1];
-                break;
-              }
-            }
-          }
-          const { resolve, dirname } = require("path");
-          const base = callerPath ? dirname(callerPath) : process.cwd();
           try {
-            // Prefer require.resolve with paths to accurately resolve relative imports
-            const abs = require.resolve(moduleName, { paths: [base] });
+            const abs = require.resolve(moduleName, { paths: [process.cwd()] });
             return jest.mock(abs, factory, options);
-          } catch (e) {
-            // Fallback to path.resolve if require.resolve fails
-            const resolved = resolve(base, moduleName);
-            try {
-              return jest.mock(resolved, factory, options);
-            } catch (err2) {
-              // If this is a well-known workspace module (e.g. api-config), try canonical paths
-              try {
-                const { existsSync } = require("fs");
-                const candidates = [
-                  resolve(
-                    process.cwd(),
-                    "apps/website/src/app/lib/api-config.ts",
-                  ),
-                  resolve(
-                    process.cwd(),
-                    "apps/website/utilities/api-config.ts",
-                  ),
-                  resolve(
-                    process.cwd(),
-                    "apps/website/lib/utils/api-config.ts",
-                  ),
-                ];
-                for (const c of candidates) {
-                  if (existsSync(c)) {
-                    return jest.mock(c, factory, options);
-                  }
-                }
-              } catch (_err) {
-                // ignore
-              }
-              // Last resort: call jest.mock with the original moduleName
-            }
+          } catch (error_) {
+            // fallback to original moduleName
           }
         }
-      } catch (e) {
-        // Fallback to direct jest.mock if anything goes wrong
+      } catch (error_) {
+        // ignore
       }
       return jest.mock(moduleName, factory, options);
     },
     resetModules: () => jest.resetModules(),
     spyOn: (obj, methodName) => jest.spyOn(obj, methodName),
     clearAllMocks: () => jest.clearAllMocks(),
-    restoreAllMocks: () =>
-      jest.restoreAllMocks ? jest.restoreAllMocks() : undefined,
+    restoreAllMocks: () => (jest.restoreAllMocks ? jest.restoreAllMocks() : undefined),
   };
 }
 
@@ -157,8 +106,8 @@ if (!isCI) {
   for (const envFile of envFiles) {
     try {
       config({ path: envFile, override: false }); // Don't override, respect priority
-    } catch (_error) {
-      // File doesn't exist, that's okay
+    } catch (error_) {
+  } catch (error_) {
     }
   }
 }
@@ -302,11 +251,15 @@ if (process.env.DEBUG_TEST_ENV === "true") {
 
 // Polyfill for Web APIs needed by Next.js in Node.js test environment
 // Next.js requires these globals to be available
-if (global.Request === undefined) {
+if (globalThis.Request === undefined) {
   try {
     let fetchAPI = undefined;
-    if (typeof global !== "undefined" && global.fetch && global.fetch.Request) {
-      fetchAPI = global.fetch;
+    if (
+      typeof globalThis !== "undefined" &&
+      globalThis.fetch &&
+      globalThis.fetch.Request
+    ) {
+      fetchAPI = globalThis.fetch;
     } else if (
       typeof globalThis !== "undefined" &&
       globalThis.fetch &&
@@ -317,29 +270,29 @@ if (global.Request === undefined) {
 
     if (fetchAPI && fetchAPI.Request) {
       // Ensure `fetch` is available globally. Prefer existing global fetch, otherwise try node-fetch.
-      if (typeof global.fetch === "undefined") {
+      if (typeof globalThis.fetch === "undefined") {
         try {
           // node-fetch v2 supports require
-          // eslint-disable-next-line @typescript-eslint/no-var-requires
+
           const nodeFetch = require("node-fetch");
           if (nodeFetch) {
-            global.fetch = nodeFetch;
+            globalThis.fetch = nodeFetch;
           }
         } catch (_err) {
           // Last resort: a minimal fetch shim that uses the Response polyfill above.
-          global.fetch = async (input, init = {}) => {
+          globalThis.fetch = async (input, init = {}) => {
             const url = typeof input === "string" ? input : input?.url || "";
             const body = init && init.body ? init.body : null;
-            return new global.Response(body || null, { status: 200 });
+            return new globalThis.Response(body || null, { status: 200 });
           };
         }
       }
-      global.Request = fetchAPI.Request;
-      global.Response = fetchAPI.Response;
-      global.Headers = fetchAPI.Headers;
+      globalThis.Request = fetchAPI.Request;
+      globalThis.Response = fetchAPI.Response;
+      globalThis.Headers = fetchAPI.Headers;
     } else {
       // Fallback: Create minimal polyfills
-      global.Headers = class Headers {
+      globalThis.Headers = class Headers {
         constructor(init = {}) {
           this._headers = {};
           if (init) {
@@ -367,11 +320,11 @@ if (global.Request === undefined) {
         }
       };
 
-      global.Request = class Request {
+      globalThis.Request = class Request {
         constructor(input, init = {}) {
           this._url = typeof input === "string" ? input : input?.url || "";
           this._method = init.method || "GET";
-          this._headers = new global.Headers(init.headers);
+          this._headers = new globalThis.Headers(init.headers);
           this._body = init.body;
         }
         get url() {
@@ -388,12 +341,12 @@ if (global.Request === undefined) {
         }
       };
 
-      global.Response = class Response {
+      globalThis.Response = class Response {
         constructor(body, init = {}) {
           this._body = body;
           this._status = init.status || 200;
           this._statusText = init.statusText || "OK";
-          this._headers = new global.Headers(init.headers);
+          this._headers = new globalThis.Headers(init.headers);
           this._ok = this._status >= 200 && this._status < 300;
         }
         get status() {
@@ -429,11 +382,11 @@ if (global.Request === undefined) {
         }
         static json(body, init = {}) {
           const bodyString = JSON.stringify(body);
-          const headers = new global.Headers({
+          const headers = new globalThis.Headers({
             "Content-Type": "application/json",
             ...init.headers,
           });
-          const response = new global.Response(bodyString, {
+          const response = new globalThis.Response(bodyString, {
             ...init,
             headers,
           });
@@ -444,7 +397,7 @@ if (global.Request === undefined) {
     }
   } catch (_e) {
     // If detection fails, provide minimal polyfills
-    global.Headers = class Headers {
+    globalThis.Headers = class Headers {
       constructor(init = {}) {
         this._headers = {};
         if (init) {
@@ -472,11 +425,11 @@ if (global.Request === undefined) {
       }
     };
 
-    global.Request = class Request {
+    globalThis.Request = class Request {
       constructor(input, init = {}) {
         this._url = typeof input === "string" ? input : input?.url || "";
         this._method = init.method || "GET";
-        this._headers = new global.Headers(init.headers);
+        this._headers = new globalThis.Headers(init.headers);
         this._body = init.body;
       }
       get url() {
@@ -493,12 +446,12 @@ if (global.Request === undefined) {
       }
     };
 
-    global.Response = class Response {
+    globalThis.Response = class Response {
       constructor(body, init = {}) {
         this._body = body;
         this._status = init.status || 200;
         this._statusText = init.statusText || "OK";
-        this._headers = new global.Headers(init.headers);
+        this._headers = new globalThis.Headers(init.headers);
         this._ok = this._status >= 200 && this._status < 300;
       }
       get status() {
@@ -534,13 +487,13 @@ if (global.Request === undefined) {
       }
       static json(body, init = {}) {
         const bodyString = JSON.stringify(body);
-        const headers = new global.Headers({
+        const headers = new globalThis.Headers({
           "Content-Type": "application/json",
           ...init.headers,
         });
-        const response = new global.Response(bodyString, {
+        const response = new globalThis.Response(bodyString, {
           ...init,
-          headers,
+        } catch (error_) {
         });
         response._body = bodyString;
         return response;
@@ -553,7 +506,6 @@ if (global.Request === undefined) {
 try {
   // Remove existing non-configurable property if possible
   try {
-    // eslint-disable-next-line no-undef
     delete window.location;
   } catch (_) {
     // ignore

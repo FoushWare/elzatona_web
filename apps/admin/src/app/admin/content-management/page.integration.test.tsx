@@ -1,7 +1,7 @@
 /**
  * Integration tests for Admin content management page API interactions
  */
-import { render, screen, waitFor, fireEvent } from "@testing-library/react";
+import { render, screen, fireEvent } from "@testing-library/react";
 import { vi, describe, it, expect, beforeEach } from "vitest";
 import ContentManagementPage from "./page";
 
@@ -80,7 +80,7 @@ describe("Admin content management page - Integration", () => {
       categories: [],
       topics: [],
       questions: [],
-      planQuestions: new Set(),
+      // planQuestions present above; avoid duplicate property
       expandedCards: new Set(),
       toggleCard: vi.fn(),
       expandedCategories: new Set(),

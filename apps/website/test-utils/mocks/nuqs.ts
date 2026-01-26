@@ -1,7 +1,6 @@
 // Minimal mock for nuqs module used by some components in tests
-export const createNuq = (..._args: any[]) => ({
+export const createNuq = (..._args: unknown[]) => ({
   execute: async () => ({ data: [] }),
 });
-export default {
-  createNuq,
-};
+const nuqsMock = { createNuq };
+export default nuqsMock;
