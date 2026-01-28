@@ -18,11 +18,6 @@ export const useAdminAuth = () => ({
   logout: () => {},
 });
 
-export default {
-  useUserType,
-  useMobileMenu,
-  useTheme,
-  useAuth,
 const sharedContextsMock = {
   useUserType,
   useMobileMenu,
