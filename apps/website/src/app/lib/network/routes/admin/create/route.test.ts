@@ -8,10 +8,10 @@ import { POST } from "./route";
 // when running under Jest. We require by absolute path so this is deterministic
 // in the test environment.
 
-const {
-  NextRequest: MockNextRequest,
-  Headers: MockHeaders,
-} = require("/Users/a.fouad/S/New_elzatona/apps/website/test-utils/mocks/next-server.js");
+import {
+  NextRequest as MockNextRequest,
+  Headers as MockHeaders,
+} from "../../../../../../../test-utils/mocks/next-server.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 

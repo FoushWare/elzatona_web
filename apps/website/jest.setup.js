@@ -107,7 +107,7 @@ if (!isCI) {
     try {
       config({ path: envFile, override: false }); // Don't override, respect priority
     } catch (error_) {
-  } catch (error_) {
+      // ignore load errors for optional env files
     }
   }
 }
@@ -272,8 +272,8 @@ if (globalThis.Request === undefined) {
       // Ensure `fetch` is available globally. Prefer existing global fetch, otherwise try node-fetch.
       if (typeof globalThis.fetch === "undefined") {
         try {
-          // node-fetch v2 supports require
-
+          // node-fetch v2 supports require — allow require here
+          /* eslint-disable-next-line @typescript-eslint/no-require-imports */
           const nodeFetch = require("node-fetch");
           if (nodeFetch) {
             globalThis.fetch = nodeFetch;
@@ -493,7 +493,7 @@ if (globalThis.Request === undefined) {
         });
         const response = new globalThis.Response(bodyString, {
           ...init,
-        } catch (error_) {
+          headers,
         });
         response._body = bodyString;
         return response;
