@@ -94,6 +94,13 @@ const eslintConfig = [
       "@typescript-eslint/ban-ts-comment": "off",
     },
   },
+  {
+    // Allow CommonJS requires and runtime helpers in test/setup and script files
+    files: ["**/tests/**", "**/tests/**/*.js", "**/jest*.js", "tests/**", "scripts/**", "**/test-utils/**"],
+    rules: {
+      "@typescript-eslint/no-require-imports": "off",
+    },
+  },
 ];
 
 export default eslintConfig;

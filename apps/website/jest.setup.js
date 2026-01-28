@@ -30,7 +30,8 @@ if (typeof globalThis.vi === "undefined") {
     resetModules: () => jest.resetModules(),
     spyOn: (obj, methodName) => jest.spyOn(obj, methodName),
     clearAllMocks: () => jest.clearAllMocks(),
-    restoreAllMocks: () => (jest.restoreAllMocks ? jest.restoreAllMocks() : undefined),
+    restoreAllMocks: () =>
+      jest.restoreAllMocks ? jest.restoreAllMocks() : undefined,
   };
 }
 
@@ -102,14 +103,15 @@ if (!isCI) {
     resolve(projectRoot, ".env.local"), // Fallback to dev (for backwards compatibility)
   ];
 
-  // Load environment files in priority order
-  for (const envFile of envFiles) {
+  // Load environment files in priority order. Use a simple, reliable pattern
+  // to avoid parser issues in various environments.
+  envFiles.forEach((envFile) => {
     try {
       config({ path: envFile, override: false }); // Don't override, respect priority
-    } catch (error_) {
+    } catch (_) {
       // ignore load errors for optional env files
     }
-  }
+  });
 }
 
 // Validate test database configuration
@@ -273,7 +275,7 @@ if (globalThis.Request === undefined) {
       if (typeof globalThis.fetch === "undefined") {
         try {
           // node-fetch v2 supports require — allow require here
-          /* eslint-disable-next-line @typescript-eslint/no-require-imports */
+
           const nodeFetch = require("node-fetch");
           if (nodeFetch) {
             globalThis.fetch = nodeFetch;

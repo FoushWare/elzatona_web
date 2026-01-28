@@ -380,7 +380,19 @@ function createUserRepositoryMock(): IUserRepository {
       if (idx !== -1) users.splice(idx, 1);
     },
     async getProgress(userId: string): Promise<UserProgress> {
-      return { completed: 0 };
+      return {
+        userId,
+        totalQuestionsAttempted: 0,
+        totalQuestionsCorrect: 0,
+        totalPoints: 0,
+        currentStreak: 0,
+        longestStreak: 0,
+        completedPlans: [],
+        inProgressPlans: [],
+        masteredTopics: [],
+        weakTopics: [],
+        lastActivityAt: new Date(),
+      } as UserProgress;
     },
     async getPreferences(userId: string): Promise<UserPreferences> {
       return { theme: "light" };
