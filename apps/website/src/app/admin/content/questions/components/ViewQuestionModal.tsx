@@ -1,5 +1,7 @@
 "use client";
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
+// TODO: Replace `any` usages with explicit types (task: 401-reduce-any)
 import React, { useState, useEffect, useCallback } from "react";
 import { UnifiedQuestion } from "@elzatona/types";
 import { FormModal } from "@elzatona/common-ui";

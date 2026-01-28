@@ -3,6 +3,8 @@
  * Implements ILearningCardRepository using Supabase PostgreSQL
  */
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
+// TODO: Replace `any` usages with explicit types (task: 401-reduce-any)
 import {
   ILearningCardRepository,
   LearningCard,

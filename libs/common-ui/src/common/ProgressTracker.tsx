@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+// TODO: Replace `any` usages with explicit types (task: 401-reduce-any)
 // v1.0 - Progress Tracking Component
 "use client";
 

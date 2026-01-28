@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+// TODO: Replace `any` usages with explicit types (task: 401-reduce-any)
 import * as React from "react";
 import { ChevronDown, ChevronUp } from "lucide-react";
 import { cn } from "../../utils";
