@@ -21,7 +21,7 @@ export const createSearchParamsCache = createMockFn(() => ({}));
 export const useQueryStateAdapter = createMockFn(() => noOpState);
 
 // Export default for compatibility
-export default {
+const nuqsMock = {
   useQueryState,
   parseAsString,
   parseAsInteger,
@@ -30,3 +30,5 @@ export default {
   createSearchParamsCache,
   useQueryStateAdapter,
 };
+
+export default nuqsMock;

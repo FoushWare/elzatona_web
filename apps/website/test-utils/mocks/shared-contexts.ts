@@ -17,8 +17,10 @@ export const useUserPreferences = jest.fn(() => ({
   emailUpdates: false,
 }));
 
-export default {
+const sharedContextsMock = {
   useUserType,
   useAuth,
   useUserPreferences,
 };
+
+export default sharedContextsMock;
