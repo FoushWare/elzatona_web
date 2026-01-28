@@ -23,5 +23,12 @@ export default {
   useMobileMenu,
   useTheme,
   useAuth,
+const sharedContextsMock = {
+  useUserType,
+  useMobileMenu,
+  useTheme,
+  useAuth,
   useAdminAuth,
 };
+
+export default sharedContextsMock;

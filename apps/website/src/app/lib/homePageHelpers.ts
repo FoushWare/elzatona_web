@@ -24,6 +24,5 @@ if (process.env.NODE_ENV === "test") {
   getPersonalizedContent = _mock;
 }
 
-export default {
-  getPersonalizedContent,
-};
+const homePageHelpers = { getPersonalizedContent };
+export default homePageHelpers;
