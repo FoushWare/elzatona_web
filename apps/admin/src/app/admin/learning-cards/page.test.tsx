@@ -4,6 +4,7 @@
 import { render, screen, fireEvent } from "@testing-library/react";
 import { vi, describe, it, expect, beforeEach } from "vitest";
 import LearningCardsPage from "./page";
+import * as useLearningCardsModule from "./hooks/useLearningCards";
 
 // Mock the common-ui components
 vi.mock("@elzatona/common-ui", () => ({
@@ -129,9 +130,7 @@ describe("Learning Cards Page - Unit", () => {
 
   it("handles form submission for creating a card", async () => {
     const mockCreateCard = vi.fn().mockResolvedValue(true);
-    vi.mocked(
-      require("./hooks/useLearningCards").useLearningCards,
-    ).mockReturnValue({
+    vi.mocked(useLearningCardsModule.useLearningCards).mockReturnValue({
       cards: [],
       categories: [],
       topics: [],
@@ -165,9 +164,7 @@ describe("Learning Cards Page - Unit", () => {
 
   it("handles form submission for updating a card", async () => {
     const mockUpdateCard = vi.fn().mockResolvedValue(true);
-    vi.mocked(
-      require("./hooks/useLearningCards").useLearningCards,
-    ).mockReturnValue({
+    vi.mocked(useLearningCardsModule.useLearningCards).mockReturnValue({
       cards: [{ id: "1", title: "Test Card" }],
       categories: [],
       topics: [],
@@ -201,9 +198,7 @@ describe("Learning Cards Page - Unit", () => {
 
   it("handles card deletion", async () => {
     const mockDeleteCard = vi.fn().mockResolvedValue(true);
-    vi.mocked(
-      require("./hooks/useLearningCards").useLearningCards,
-    ).mockReturnValue({
+    vi.mocked(useLearningCardsModule.useLearningCards).mockReturnValue({
       cards: [{ id: "1", title: "Test Card" }],
       categories: [],
       topics: [],
@@ -236,9 +231,7 @@ describe("Learning Cards Page - Unit", () => {
   });
 
   it("shows loading spinner when loading", () => {
-    vi.mocked(
-      require("./hooks/useLearningCards").useLearningCards,
-    ).mockReturnValue({
+    vi.mocked(useLearningCardsModule.useLearningCards).mockReturnValue({
       cards: [],
       categories: [],
       topics: [],
@@ -266,9 +259,7 @@ describe("Learning Cards Page - Unit", () => {
   });
 
   it("displays error message when there is an error", () => {
-    vi.mocked(
-      require("./hooks/useLearningCards").useLearningCards,
-    ).mockReturnValue({
+    vi.mocked(useLearningCardsModule.useLearningCards).mockReturnValue({
       cards: [],
       categories: [],
       topics: [],
