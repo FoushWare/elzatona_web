@@ -6,7 +6,7 @@ import { existsSync } from "node:fs";
 // Provide a minimal `vi` shim when running under Jest so tests written for
 // Vitest that reference `vi` don't immediately crash. This maps common
 // `vi` helpers to their Jest equivalents when possible.
-if (typeof globalThis.vi === "undefined") {
+if (globalThis.vi === undefined) {
   globalThis.vi = {
     fn: (...args) => jest.fn(...args),
     mock: (moduleName, factory, options) => {
@@ -255,18 +255,8 @@ if (process.env.DEBUG_TEST_ENV === "true") {
 // Next.js requires these globals to be available
 if (globalThis.Request === undefined) {
   try {
-    let fetchAPI = undefined;
-    if (
-      typeof globalThis !== "undefined" &&
-      globalThis.fetch &&
-      globalThis.fetch.Request
-    ) {
-      fetchAPI = globalThis.fetch;
-    } else if (
-      typeof globalThis !== "undefined" &&
-      globalThis.fetch &&
-      globalThis.fetch.Request
-    ) {
+    let fetchAPI;
+    if (globalThis && globalThis.fetch && globalThis.fetch.Request) {
       fetchAPI = globalThis.fetch;
     }
 
@@ -280,8 +270,9 @@ if (globalThis.Request === undefined) {
           if (nodeFetch) {
             globalThis.fetch = nodeFetch;
           }
-        } catch (_err) {
+        } catch (error_) {
           // Last resort: a minimal fetch shim that uses the Response polyfill above.
+          console.debug("node-fetch load failed, using minimal fetch shim:", error_);
           globalThis.fetch = async (input, init = {}) => {
             const url = typeof input === "string" ? input : input?.url || "";
             const body = init && init.body ? init.body : null;
@@ -397,8 +388,9 @@ if (globalThis.Request === undefined) {
         }
       };
     }
-  } catch (_e) {
-    // If detection fails, provide minimal polyfills
+    } catch (error_) {
+      // If detection fails, provide minimal polyfills and log
+      console.debug("fetch API detection error:", error_);
     globalThis.Headers = class Headers {
       constructor(init = {}) {
         this._headers = {};
@@ -505,22 +497,29 @@ if (globalThis.Request === undefined) {
 }
 
 // Make `window.location` configurable for tests that redefine it.
-try {
-  // Remove existing non-configurable property if possible
   try {
-    delete window.location;
-  } catch (_) {
-    // ignore
-  }
+    // Make `window.location` configurable for tests that redefine it.
+    if (typeof globalThis.window !== "undefined") {
+      try {
+        delete globalThis.window.location;
+      } catch (error_) {
+        console.debug("unable to delete window.location:", error_);
+      }
 
-  Object.defineProperty(window, "location", {
-    configurable: true,
-    enumerable: true,
-    writable: true,
-    value: {
-      href: "",
-    },
-  });
-} catch (_) {
-  // If we can't redefine, tests that attempt to redefine may still fail; continue gracefully
-}
+      try {
+        Object.defineProperty(globalThis.window, "location", {
+          configurable: true,
+          enumerable: true,
+          writable: true,
+          value: {
+            href: "",
+          },
+        });
+      } catch (error_) {
+        console.debug("unable to redefine window.location:", error_);
+      }
+    }
+  } catch (error_) {
+    // If we can't redefine, tests that attempt to redefine may still fail; continue gracefully
+    console.debug("window.location setup error:", error_);
+  }

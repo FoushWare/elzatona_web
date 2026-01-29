@@ -20,7 +20,8 @@ import DOMPurify from "dompurify";
 
 // Component to render question content safely
 const QuestionContent = ({ content }: { content: string }) => {
-  if (typeof window === "undefined") {
+  // Guard for SSR: use globalThis checks instead of direct `window`/`typeof` checks
+  if (typeof globalThis === "undefined" || !("window" in globalThis)) {
     return <div>{content}</div>;
   }
   const sanitized = DOMPurify.sanitize(content, {
@@ -97,7 +98,7 @@ const detectLanguage = (code: string): string => {
 
 // Security wrapper for Shiki HTML output
 const sanitizeShikiHtml = (html: string): string => {
-  if (typeof window === "undefined") {
+  if (typeof globalThis === "undefined" || !("window" in globalThis)) {
     return html; // Server-side: return as-is
   }
 
@@ -801,13 +802,13 @@ export function ViewQuestionModal({
 
   // Helper function to adjust HTML colors for light mode
   const adjustHtmlForLightMode = (html: string): string => {
-    if (globalThis.window === undefined) {
-      return html;
-    }
+    if (typeof globalThis === "undefined" || !("window" in globalThis)) {
+        return html;
+      }
 
-    const prefersDark = globalThis.window.matchMedia(
-      "(prefers-color-scheme: dark)",
-    ).matches;
+      const prefersDark = (globalThis as any).window.matchMedia(
+        "(prefers-color-scheme: dark)",
+      ).matches;
     if (prefersDark) {
       return html;
     }
@@ -901,7 +902,7 @@ export function ViewQuestionModal({
   // Helper function to log question data
   const logQuestionData = (question: UnifiedQuestion | null) => {
     if (question) {
-      console.log("ViewQuestionModal - Question data:", {
+      console.debug("ViewQuestionModal - Question data:", {
         id: question.id,
         hasCode: !!question.codeTemplate,
         codeType: typeof question.codeTemplate,

@@ -6,9 +6,9 @@
 // cache to register the provided factory output so subsequent requires return
 // the mocked module.
 try {
-  if (typeof global.vi === "undefined") {
-    const Module = require("module");
-    global.vi = {
+  if (globalThis.vi === undefined) {
+    const Module = require("node:module");
+    globalThis.vi = {
       _registered: [],
       mock(moduleName, factory) {
         try {
@@ -31,7 +31,8 @@ try {
             this._registered.push({ moduleName, exports });
           }
         } catch (e) {
-          // swallow - this is best-effort
+          // best-effort: log resolution errors for diagnostics
+          console.debug("vi.mock resolution error:", e);
         }
       },
       fn() {
@@ -40,42 +41,44 @@ try {
       clearAllMocks() {},
     };
   }
-} catch (e) {
-  // ignore if require isn't available
+} catch (error_) {
+  // If require isn't available or something unexpected happened, log for diagnosis
+  console.debug("jest.fetch.setup init error:", error_);
 }
 try {
-  if (typeof global.fetch === "undefined") {
+  if (globalThis.fetch === undefined) {
     // Prefer node-fetch if available
 
     const nodeFetch = require("node-fetch");
     if (nodeFetch) {
       // node-fetch export is a function; wrap to accept relative URLs used in tests
       const rawFetch = nodeFetch;
-      global.fetch = (input, init) => {
+      globalThis.fetch = (input, init) => {
         let url = typeof input === "string" ? input : input?.url || "";
         // If URL is relative, prefix with a localhost origin so node-fetch accepts it
         if (url.startsWith("/")) url = `http://localhost${url}`;
         return rawFetch(url, init);
       };
       // node-fetch v2 exposes Headers/Request/Response on export
-      if (!global.Headers && nodeFetch.Headers)
-        global.Headers = nodeFetch.Headers;
-      if (!global.Request && nodeFetch.Request)
-        global.Request = nodeFetch.Request;
-      if (!global.Response && nodeFetch.Response)
-        global.Response = nodeFetch.Response;
+      if (!globalThis.Headers && nodeFetch.Headers)
+        globalThis.Headers = nodeFetch.Headers;
+      if (!globalThis.Request && nodeFetch.Request)
+        globalThis.Request = nodeFetch.Request;
+      if (!globalThis.Response && nodeFetch.Response)
+        globalThis.Response = nodeFetch.Response;
     }
   }
 } catch (e) {
-  // No-op; tests will pick up the fetch polyfill in jest.setup.js as fallback
+  // Log but continue; tests may fallback to `jest.setup.js` polyfills
+  console.debug("fetch polyfill setup error:", e);
 }
 
 // Monkey-patch Node's module loader to redirect internal Next.js server imports
 // to our lightweight mock. This runs early (setupFiles) so it can catch requires
 // that happen during module initialization in tests.
 try {
-  const Module = require("module");
-  const path = require("path");
+  const Module = require("node:module");
+  const path = require("node:path");
 
   // Pre-populate require.cache for common Next import specifiers so that
   // `require('next/server')` returns our lightweight mock before any code
@@ -92,12 +95,14 @@ try {
           m.exports = require("./test-utils/mocks/next-server.js");
           require.cache[resolved] = m;
         }
-      } catch (_e) {
-        // ignore resolution failures
+      } catch (error_) {
+        // resolution failed — log for diagnostics
+        console.debug("next mock resolution failed for", spec, error_);
       }
     }
-  } catch (_e) {
+  } catch (error_) {
     // ignore
+    console.debug("next prepopulate error:", error_);
   }
   const originalLoad = Module._load;
   const mockPath = require.resolve("./test-utils/mocks/next-server.js");
@@ -124,14 +129,17 @@ try {
         ) {
           return originalLoad.call(this, mockPath, parent, isMain);
         }
-      } catch (_err) {
-        // resolution failed — ignore
+      } catch (error_) {
+        // resolution failed — log for diagnosis
+        console.debug("module resolve failed for", request, error_);
       }
     } catch (e) {
-      // ignore and fall through to original loader
+      // log unexpected loader errors and fall through to original loader
+      console.debug("module loader wrapper error:", e);
     }
     return originalLoad.call(this, request, parent, isMain);
   };
 } catch (e) {
-  // If the module system isn't available or patching fails, continue without monkey-patch
+  // If the module system isn't available or patching fails, log and continue without monkey-patch
+  console.debug("module monkey-patch failed:", e);
 }
