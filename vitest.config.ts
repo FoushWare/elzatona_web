@@ -1,7 +1,9 @@
 import { defineConfig } from "vitest/config";
 import path from "node:path";
+import tsconfigPaths from "vite-tsconfig-paths";
 
 export default defineConfig({
+  plugins: [tsconfigPaths()],
   test: {
     globals: true,
     // Use jsdom globally for browser-like tests
