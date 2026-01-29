@@ -256,6 +256,117 @@ if (process.env.DEBUG_TEST_ENV === "true") {
 
 // Polyfill for Web APIs needed by Next.js in Node.js test environment
 // Next.js requires these globals to be available
+
+// Factory functions to create polyfill classes (avoids duplication - S4144)
+function createHeadersClass() {
+  return class Headers {
+    constructor(init = {}) {
+      this._headers = {};
+      if (init) {
+        Object.entries(init).forEach(([key, value]) => {
+          this._headers[key.toLowerCase()] = value;
+        });
+      }
+    }
+    get(name) {
+      return this._headers[name.toLowerCase()];
+    }
+    set(name, value) {
+      this._headers[name.toLowerCase()] = value;
+    }
+    has(name) {
+      return name.toLowerCase() in this._headers;
+    }
+    entries() {
+      return Object.entries(this._headers)[Symbol.iterator]();
+    }
+    *[Symbol.iterator]() {
+      for (const [key, value] of Object.entries(this._headers)) {
+        yield [key, value];
+      }
+    }
+  };
+}
+
+function createRequestClass() {
+  return class Request {
+    constructor(input, init = {}) {
+      this._url = typeof input === "string" ? input : input?.url || "";
+      this._method = init.method || "GET";
+      this._headers = new (globalThis.Headers || createHeadersClass())(init.headers);
+      this._body = init.body;
+    }
+    get url() {
+      return this._url;
+    }
+    get method() {
+      return this._method;
+    }
+    get headers() {
+      return this._headers;
+    }
+    async json() {
+      return JSON.parse(this._body || "{}");
+    }
+  };
+}
+
+function createResponseClass() {
+  return class Response {
+    constructor(body, init = {}) {
+      this._body = body;
+      this._status = init.status || 200;
+      this._statusText = init.statusText || "OK";
+      this._headers = new (globalThis.Headers || createHeadersClass())(init.headers);
+      this._ok = this._status >= 200 && this._status < 300;
+    }
+    get status() {
+      return this._status;
+    }
+    get statusText() {
+      return this._statusText;
+    }
+    get headers() {
+      return this._headers;
+    }
+    get ok() {
+      return this._ok;
+    }
+    async json() {
+      if (typeof this._body === "string") {
+        try {
+          return JSON.parse(this._body);
+        } catch {
+          return {};
+        }
+      }
+      if (this._body && typeof this._body === "object") {
+        return this._body;
+      }
+      return {};
+    }
+    async text() {
+      if (typeof this._body === "string") {
+        return this._body;
+      }
+      return JSON.stringify(this._body || {});
+    }
+    static json(body, init = {}) {
+      const bodyString = JSON.stringify(body);
+      const headers = new (globalThis.Headers || createHeadersClass())({
+        "Content-Type": "application/json",
+        ...init.headers,
+      });
+      const response = new (globalThis.Response || createResponseClass())(bodyString, {
+        ...init,
+        headers,
+      });
+      response._body = bodyString;
+      return response;
+    }
+  };
+}
+
 if (globalThis.Request === undefined) {
   try {
     let fetchAPI;
@@ -281,7 +392,7 @@ if (globalThis.Request === undefined) {
           );
           globalThis.fetch = async (input, init = {}) => {
             const body = init && init.body ? init.body : null;
-            return new globalThis.Response(body || null, { status: 200 });
+            return new (globalThis.Response || createResponseClass())(body || null, { status: 200 });
           };
         }
       }
@@ -290,214 +401,16 @@ if (globalThis.Request === undefined) {
       globalThis.Headers = fetchAPI.Headers;
     } else {
       // Fallback: Create minimal polyfills
-      globalThis.Headers = class Headers {
-        constructor(init = {}) {
-          this._headers = {};
-          if (init) {
-            Object.entries(init).forEach(([key, value]) => {
-              this._headers[key.toLowerCase()] = value;
-            });
-          }
-        }
-        get(name) {
-          return this._headers[name.toLowerCase()];
-        }
-        set(name, value) {
-          this._headers[name.toLowerCase()] = value;
-        }
-        has(name) {
-          return name.toLowerCase() in this._headers;
-        }
-        entries() {
-          return Object.entries(this._headers)[Symbol.iterator]();
-        }
-        *[Symbol.iterator]() {
-          for (const [key, value] of Object.entries(this._headers)) {
-            yield [key, value];
-          }
-        }
-      };
-
-      globalThis.Request = class Request {
-        constructor(input, init = {}) {
-          this._url = typeof input === "string" ? input : input?.url || "";
-          this._method = init.method || "GET";
-          this._headers = new globalThis.Headers(init.headers);
-          this._body = init.body;
-        }
-        get url() {
-          return this._url;
-        }
-        get method() {
-          return this._method;
-        }
-        get headers() {
-          return this._headers;
-        }
-        async json() {
-          return JSON.parse(this._body || "{}");
-        }
-      };
-
-      globalThis.Response = class Response {
-        constructor(body, init = {}) {
-          this._body = body;
-          this._status = init.status || 200;
-          this._statusText = init.statusText || "OK";
-          this._headers = new globalThis.Headers(init.headers);
-          this._ok = this._status >= 200 && this._status < 300;
-        }
-        get status() {
-          return this._status;
-        }
-        get statusText() {
-          return this._statusText;
-        }
-        get headers() {
-          return this._headers;
-        }
-        get ok() {
-          return this._ok;
-        }
-        async json() {
-          if (typeof this._body === "string") {
-            try {
-              return JSON.parse(this._body);
-            } catch {
-              return {};
-            }
-          }
-          if (this._body && typeof this._body === "object") {
-            return this._body;
-          }
-          return {};
-        }
-        async text() {
-          if (typeof this._body === "string") {
-            return this._body;
-          }
-          return JSON.stringify(this._body || {});
-        }
-        static json(body, init = {}) {
-          const bodyString = JSON.stringify(body);
-          const headers = new globalThis.Headers({
-            "Content-Type": "application/json",
-            ...init.headers,
-          });
-          const response = new globalThis.Response(bodyString, {
-            ...init,
-            headers,
-          });
-          response._body = bodyString;
-          return response;
-        }
-      };
+      globalThis.Headers = createHeadersClass();
+      globalThis.Request = createRequestClass();
+      globalThis.Response = createResponseClass();
     }
   } catch (error_) {
     // If detection fails, provide minimal polyfills and log
     console.debug("fetch API detection error:", error_);
-    globalThis.Headers = class Headers {
-      constructor(init = {}) {
-        this._headers = {};
-        if (init) {
-          Object.entries(init).forEach(([key, value]) => {
-            this._headers[key.toLowerCase()] = value;
-          });
-        }
-      }
-      get(name) {
-        return this._headers[name.toLowerCase()];
-      }
-      set(name, value) {
-        this._headers[name.toLowerCase()] = value;
-      }
-      has(name) {
-        return name.toLowerCase() in this._headers;
-      }
-      entries() {
-        return Object.entries(this._headers)[Symbol.iterator]();
-      }
-      *[Symbol.iterator]() {
-        for (const [key, value] of Object.entries(this._headers)) {
-          yield [key, value];
-        }
-      }
-    };
-
-    globalThis.Request = class Request {
-      constructor(input, init = {}) {
-        this._url = typeof input === "string" ? input : input?.url || "";
-        this._method = init.method || "GET";
-        this._headers = new globalThis.Headers(init.headers);
-        this._body = init.body;
-      }
-      get url() {
-        return this._url;
-      }
-      get method() {
-        return this._method;
-      }
-      get headers() {
-        return this._headers;
-      }
-      async json() {
-        return JSON.parse(this._body || "{}");
-      }
-    };
-
-    globalThis.Response = class Response {
-      constructor(body, init = {}) {
-        this._body = body;
-        this._status = init.status || 200;
-        this._statusText = init.statusText || "OK";
-        this._headers = new globalThis.Headers(init.headers);
-        this._ok = this._status >= 200 && this._status < 300;
-      }
-      get status() {
-        return this._status;
-      }
-      get statusText() {
-        return this._statusText;
-      }
-      get headers() {
-        return this._headers;
-      }
-      get ok() {
-        return this._ok;
-      }
-      async json() {
-        if (typeof this._body === "string") {
-          try {
-            return JSON.parse(this._body);
-          } catch {
-            return {};
-          }
-        }
-        if (this._body && typeof this._body === "object") {
-          return this._body;
-        }
-        return {};
-      }
-      async text() {
-        if (typeof this._body === "string") {
-          return this._body;
-        }
-        return JSON.stringify(this._body || {});
-      }
-      static json(body, init = {}) {
-        const bodyString = JSON.stringify(body);
-        const headers = new globalThis.Headers({
-          "Content-Type": "application/json",
-          ...init.headers,
-        });
-        const response = new globalThis.Response(bodyString, {
-          ...init,
-          headers,
-        });
-        response._body = bodyString;
-        return response;
-      }
-    };
+    globalThis.Headers = createHeadersClass();
+    globalThis.Request = createRequestClass();
+    globalThis.Response = createResponseClass();
   }
 }
 

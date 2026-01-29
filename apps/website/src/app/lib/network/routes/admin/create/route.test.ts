@@ -18,29 +18,36 @@ import jwt from "jsonwebtoken";
 // Mock dependencies
 
 // Mock Supabase client and its methods
-vi.mock("@supabase/supabase-js", () => ({
-  createClient: vi.fn(() => ({
-    from: vi.fn(() => ({
-      select: vi.fn().mockReturnThis(),
-      eq: vi.fn().mockReturnThis(),
-      single: vi.fn(() => ({ data: null, error: { code: "PGRST116" } })),
-      insert: vi.fn(() => ({
-        select: vi.fn().mockReturnThis(),
-        single: vi.fn(() => ({
-          data: {
-            id: 1,
-            email: "newadmin@example.com",
-            name: "New Admin",
-            role: "admin",
-            is_active: true,
-            created_at: new Date().toISOString(),
-          },
-          error: null,
-        })),
-      })),
+// Using factory functions to reduce nesting depth (S2004)
+vi.mock("@supabase/supabase-js", () => {
+  const createSingleMock = () => vi.fn(() => ({ data: null, error: { code: "PGRST116" } }));
+  const createInsertMock = () => vi.fn(() => ({
+    select: vi.fn().mockReturnThis(),
+    single: vi.fn(() => ({
+      data: {
+        id: 1,
+        email: "newadmin@example.com",
+        name: "New Admin",
+        role: "admin",
+        is_active: true,
+        created_at: new Date().toISOString(),
+      },
+      error: null,
     })),
-  })),
-}));
+  }));
+  const createFromMock = () => vi.fn(() => ({
+    select: vi.fn().mockReturnThis(),
+    eq: vi.fn().mockReturnThis(),
+    single: createSingleMock(),
+    insert: createInsertMock(),
+  }));
+
+  return {
+    createClient: vi.fn(() => ({
+      from: createFromMock(),
+    })),
+  };
+});
 
 // Mock bcrypt
 vi.mock("bcryptjs", () => ({
@@ -77,6 +84,28 @@ const mockEnv = {
   SUPABASE_SERVICE_ROLE_KEY: "REDACTED_TEST_KEY",
 };
 
+// Helper functions to reduce nesting depth (S2004)
+function createTokenRequest(token: string, body: Record<string, unknown>) {
+  return new MockNextRequest(
+    "http://localhost:3000/api/admin/create",
+    {
+      method: "POST",
+      headers: new MockHeaders({ authorization: `Bearer ${token}` }),
+      body: JSON.stringify(body),
+    },
+  );
+}
+
+function createRequestWithoutToken(body: Record<string, unknown>) {
+  return new MockNextRequest(
+    "http://localhost:3000/api/admin/create",
+    {
+      method: "POST",
+      body: JSON.stringify(body),
+    },
+  );
+}
+
 describe("Admin Create API Route", () => {
   beforeEach(() => {
     vi.clearAllMocks();
@@ -90,17 +119,11 @@ describe("Admin Create API Route", () => {
     });
 
     it("should reject requests without authentication token", async () => {
-      const request = new MockNextRequest(
-        "http://localhost:3000/api/admin/create",
-        {
-          method: "POST",
-          body: JSON.stringify({
-            email: "newadmin@example.com",
-            password: "password123",
-            name: "New Admin",
-          }),
-        },
-      );
+      const request = createRequestWithoutToken({
+        email: "newadmin@example.com",
+        password: "password123",
+        name: "New Admin",
+      });
 
       const response = await POST(request);
       const data = await response.json();
@@ -115,18 +138,11 @@ describe("Admin Create API Route", () => {
         mockEnv.JWT_SECRET,
       );
 
-      const request = new MockNextRequest(
-        "http://localhost:3000/api/admin/create",
-        {
-          method: "POST",
-          headers: new MockHeaders({ authorization: `Bearer ${mockToken}` }),
-          body: JSON.stringify({
-            email: "newadmin@example.com",
-            password: "password123",
-            name: "New Admin",
-          }),
-        },
-      );
+      const request = createTokenRequest(mockToken, {
+        email: "newadmin@example.com",
+        password: "password123",
+        name: "New Admin",
+      });
 
       const response = await POST(request);
       const data = await response.json();

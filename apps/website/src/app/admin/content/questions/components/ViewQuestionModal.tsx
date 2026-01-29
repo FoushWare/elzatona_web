@@ -603,18 +603,24 @@ export function ViewQuestionModal({
     return "bg-gradient-to-br from-indigo-100 to-purple-100 dark:from-indigo-800/60 dark:to-purple-800/60 text-indigo-700 dark:text-indigo-200";
   };
 
+  const getCorrectOptionStyles = (): string => getCorrectOptionClasses();
+
+  const getIncorrectOptionStyles = (): string => getIncorrectOptionClasses();
+
+  const getDefaultOptionStyles = (): string => getDefaultOptionClasses();
+
   const getOptionStylingClasses = (
     isCorrect: boolean,
     isWrong: boolean,
     showFeedback: boolean,
   ): string => {
     if (isCorrect && showFeedback) {
-      return getCorrectOptionClasses();
-    } else if (isWrong) {
-      return getIncorrectOptionClasses();
-    } else {
-      return getDefaultOptionClasses();
+      return getCorrectOptionStyles();
     }
+    if (isWrong) {
+      return getIncorrectOptionStyles();
+    }
+    return getDefaultOptionStyles();
   };
 
   // Resource configuration object to reduce cognitive complexity

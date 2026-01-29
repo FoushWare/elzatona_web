@@ -235,7 +235,7 @@ export const isValidCode = (
 export const formatCodeContent = (code: string): string => {
   if (!code) return "";
 
-  let formatted = code.replaceAll(/\r\n/g, "\n").replaceAll(/\r/g, "\n");
+  let formatted = code.replaceAll("\r\n", "\n").replaceAll("\r", "\n");
   formatted = formatted.trim();
   const lines = formatted.split("\n").map((line) => line.trimEnd());
 
@@ -392,7 +392,7 @@ const decodeHtmlEntities = (text: string): string => {
 
   let decoded = text;
   for (const [entity, char] of Object.entries(entityMap)) {
-    decoded = decoded.replace(new RegExp(entity, "gi"), char);
+    decoded = decoded.replaceAll(new RegExp(entity, "gi"), char);
   }
 
   decoded = decoded.replaceAll(/&#(\d+);/g, (match, dec) => {
@@ -1239,7 +1239,7 @@ function processContent(content: string): string {
   // SECURITY: Process code blocks with bounded quantifiers
   // NOSONAR S7781: replaceAll() with function callback for complex replacement logic
   const codeTagRegex = /<code[^>]{0,200}>([^<]{1,50})<\/code>/gi;
-  fixedContent = fixedContent.replace(
+  fixedContent = fixedContent.replaceAll(
     codeTagRegex,
     (match, codeContent, offset) =>
       replaceCodeTagWithMarkdown(match, codeContent, offset, fixedContent),
@@ -1311,7 +1311,7 @@ function cleanTextWithCodeTags(text: string): string {
   let cleanText = decodeHtmlEntities(text);
   cleanText = sanitizeText(cleanText);
   // NOSONAR S7781: replaceAll() with function callback for capture group replacement
-  cleanText = cleanText.replace(
+  cleanText = cleanText.replaceAll(
     /<code[^>]{0,200}>([^<]{1,30})<\/code>/gi,
     (match, codeContent) => `\`${codeContent}\``,
   );
