@@ -14,3 +14,4 @@ export type {
   AdminQuickAction,
 } from "./AdminQuickActionsSection";
 export { TaskSidebar } from "./TaskSidebar";
+export { TaskCodeEditor } from "./TaskCodeEditor";

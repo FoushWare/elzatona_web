@@ -102,6 +102,7 @@ export { DifficultyBadge } from "./components/atoms/DifficultyBadge";
 export { TaskMetadata } from "./components/molecules/TaskMetadata";
 export { TaskDescription } from "./components/molecules/TaskDescription";
 export { TaskSidebar } from "./components/organisms/TaskSidebar";
+export { TaskCodeEditor } from "./components/organisms/TaskCodeEditor";
 export { ErrorAlert } from "./components/molecules/ErrorAlert";
 export type { ErrorAlertPropsType } from "./components/molecules/ErrorAlert";
 export { DataTableHeader } from "./components/molecules/DataTableHeader";
