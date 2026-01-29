@@ -38,48 +38,6 @@ export default function ProgressTracker({
   difficulty = "medium",
   onProgressUpdate,
 }: ProgressTrackerProps) {
-  // useUserProgress hook removed - not available in shared-hooks
-  const updateQuestion = async (_arg?: any) => {};
-  const updateChallenge = async (_arg?: any) => {};
-  const updateLearningPath = async (
-    _arg1?: any,
-    _arg2?: any,
-    _arg3?: any,
-    _arg4?: any,
-    _arg5?: any,
-  ) => {};
-
-  // Helper functions
-  const calculateQuestionPoints = (
-    difficulty: string,
-    answeredCorrectly: boolean,
-    attempts: number,
-  ): number => {
-    if (!answeredCorrectly) return 0;
-
-    const basePoints = {
-      easy: 5,
-      medium: 10,
-      hard: 20,
-    };
-
-    const points = basePoints[difficulty as keyof typeof basePoints] || 5;
-    const attemptPenalty = Math.max(0, (attempts - 1) * 2);
-
-    return Math.max(1, points - attemptPenalty);
-  };
-
-  const calculateChallengePoints = (
-    score: number,
-    maxScore: number,
-    completed: boolean,
-  ): number => {
-    if (!completed) return 0;
-
-    const percentage = score / maxScore;
-    return Math.round(percentage * 50); // Max 50 points per challenge
-  };
-
   // Expose tracking functions for external use
   useEffect(() => {
     // You can expose these functions through a ref or context if needed

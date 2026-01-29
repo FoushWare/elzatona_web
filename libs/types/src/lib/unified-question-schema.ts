@@ -264,7 +264,6 @@ export interface QuestionValidationResult {
 // Utility types
 export type QuestionType = UnifiedQuestion["type"];
 export type QuestionDifficulty = UnifiedQuestion["difficulty"];
-export type QuestionCategory = string;
 
 // Constants
 export const QUESTION_TYPES: QuestionType[] = [
@@ -526,7 +525,7 @@ export class UnifiedQuestionService {
       let date: string;
       if (typeof q.created_at === "string") {
         const parsedDate = new Date(q.created_at);
-        date = isNaN(parsedDate.getTime())
+        date = Number.isNaN(parsedDate.getTime())
           ? new Date().toISOString().split("T")[0]
           : parsedDate.toISOString().split("T")[0];
       } else if (
@@ -535,7 +534,7 @@ export class UnifiedQuestionService {
         "toDate" in q.created_at
       ) {
         const parsedDate = new Date(q.created_at);
-        date = isNaN(parsedDate.getTime())
+        date = Number.isNaN(parsedDate.getTime())
           ? new Date().toISOString().split("T")[0]
           : parsedDate.toISOString().split("T")[0];
       } else {

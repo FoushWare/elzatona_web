@@ -17,10 +17,10 @@ import {
 } from "lucide-react";
 
 interface BulkQuestionUploaderProps {
-  sectionId: string;
-  sectionName: string;
-  onQuestionsAdded?: (questions: unknown[]) => void;
-  onClose?: () => void;
+  readonly sectionId: string;
+  readonly sectionName: string;
+  readonly onQuestionsAdded?: (questions: unknown[]) => void;
+  readonly onClose?: () => void;
 }
 
 export default function BulkQuestionUploader({
@@ -361,9 +361,8 @@ export default function BulkQuestionUploader({
       console.log("📥 Firebase Import Result:", result);
 
       if (result.success > 0) {
-        setSuccess(
-          `${result.success} questions added successfully! ${result.failed > 0 ? `${result.failed} failed.` : ""}`,
-        );
+        const failedMessage = result.failed > 0 ? ` ${result.failed} failed.` : "";
+        setSuccess(`${result.success} questions added successfully!${failedMessage}`);
         setQuestions([
           {
             id: "",
@@ -482,7 +481,7 @@ export default function BulkQuestionUploader({
     a.download = "bulk-questions-template.json";
     document.body.appendChild(a);
     a.click();
-    document.body.removeChild(a);
+    a.remove();
     URL.revokeObjectURL(url);
   };
 
@@ -614,7 +613,7 @@ export default function BulkQuestionUploader({
         {inputMode === "json" && (
           <div className="space-y-4">
             <div className="flex items-center justify-between">
-              <label className="text-sm font-medium text-gray-700 dark:text-gray-300">
+              <label htmlFor="json-input" className="text-sm font-medium text-gray-700 dark:text-gray-300">
                 Paste JSON Array of Questions:
               </label>
               <div className="flex space-x-2">
@@ -633,6 +632,7 @@ export default function BulkQuestionUploader({
               </div>
             </div>
             <textarea
+              id="json-input"
               value={jsonInput}
               onChange={(e) => setJsonInput(e.target.value)}
               placeholder={`Paste your questions array here, for example:
@@ -704,7 +704,7 @@ then click "Add X Questions to Firebase" to save them.`}
         {inputMode === "markdown" && (
           <div className="space-y-4">
             <div className="flex items-center justify-between">
-              <label className="text-sm font-medium text-gray-700 dark:text-gray-300">
+              <label htmlFor="markdown-input" className="text-sm font-medium text-gray-700 dark:text-gray-300">
                 Paste Markdown Questions:
               </label>
               <div className="flex space-x-2">
@@ -718,6 +718,7 @@ then click "Add X Questions to Firebase" to save them.`}
               </div>
             </div>
             <textarea
+              id="markdown-input"
               value={markdownInput}
               onChange={(e) => setMarkdownInput(e.target.value)}
               placeholder={`Paste your markdown questions here, for example:
@@ -858,7 +859,7 @@ then click "Save X Questions" to add them to Firebase.`}
           <div className="space-y-2 max-h-40 overflow-y-auto">
             {questions.slice(0, 5).map((question, index) => (
               <div
-                key={index}
+                key={`q-${question.id || question.title || index}`}
                 className="text-sm text-blue-700 dark:text-blue-300"
               >
                 <span className="font-medium">{index + 1}.</span>{" "}
@@ -933,7 +934,7 @@ then click "Save X Questions" to add them to Firebase.`}
         <form onSubmit={handleSubmit} className="space-y-8">
           {questions.map((question, questionIndex) => (
             <div
-              key={questionIndex}
+              key={`form-${question.id || question.title || questionIndex}`}
               className="border border-gray-200 dark:border-gray-700 rounded-lg p-6"
             >
               <div className="flex items-center justify-between mb-4">
@@ -954,10 +955,11 @@ then click "Save X Questions" to add them to Firebase.`}
               <div className="space-y-4">
                 {/* Question Title */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  <label htmlFor={`title-${questionIndex}`} className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                     Question Title
                   </label>
                   <input
+                    id={`title-${questionIndex}`}
                     type="text"
                     value={question.title}
                     onChange={(e) =>
@@ -970,10 +972,11 @@ then click "Save X Questions" to add them to Firebase.`}
 
                 {/* Question Content */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  <label htmlFor={`content-${questionIndex}`} className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                     Question Content
                   </label>
                   <textarea
+                    id={`content-${questionIndex}`}
                     value={question.content}
                     onChange={(e) =>
                       updateQuestion(questionIndex, "content", e.target.value)
@@ -987,10 +990,11 @@ then click "Save X Questions" to add them to Firebase.`}
                 {/* Question Type and Difficulty */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                    <label htmlFor={`type-${questionIndex}`} className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                       Question Type
                     </label>
                     <select
+                      id={`type-${questionIndex}`}
                       value={question.type}
                       onChange={(e) =>
                         updateQuestion(questionIndex, "type", e.target.value)
@@ -1003,10 +1007,11 @@ then click "Save X Questions" to add them to Firebase.`}
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                    <label htmlFor={`difficulty-${questionIndex}`} className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                       Difficulty Level
                     </label>
                     <select
+                      id={`difficulty-${questionIndex}`}
                       value={question.difficulty}
                       onChange={(e) =>
                         updateQuestion(
@@ -1066,6 +1071,7 @@ then click "Save X Questions" to add them to Firebase.`}
                         </div>
                         <input
                           type="text"
+                          id={`option-${questionIndex}-${optionIndex}`}
                           value={option.text}
                           onChange={(e) =>
                             updateOption(
@@ -1096,10 +1102,11 @@ then click "Save X Questions" to add them to Firebase.`}
 
                 {/* Explanation */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  <label htmlFor={`explanation-${questionIndex}`} className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                     Explanation
                   </label>
                   <textarea
+                    id={`explanation-${questionIndex}`}
                     value={question.explanation}
                     onChange={(e) =>
                       updateQuestion(

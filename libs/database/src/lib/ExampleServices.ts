@@ -37,7 +37,7 @@ export interface Topic {
 
 // User Service using database abstraction
 export class UserService {
-  constructor(private database: IDatabaseService) {}
+  constructor(private readonly database: IDatabaseService) {}
 
   async getUser(id: string): Promise<User | null> {
     return await this.database.get<User>("users", id);
@@ -74,7 +74,7 @@ export class UserService {
 
 // Question Service using database abstraction
 export class QuestionService {
-  constructor(private database: IDatabaseService) {}
+  constructor(private readonly database: IDatabaseService) {}
 
   async getQuestion(id: string): Promise<Question | null> {
     return await this.database.get<Question>("questions", id);
@@ -138,7 +138,7 @@ export class QuestionService {
 
 // Topic Service using database abstraction
 export class TopicService {
-  constructor(private database: IDatabaseService) {}
+  constructor(private readonly database: IDatabaseService) {}
 
   async getTopic(id: string): Promise<Topic | null> {
     return await this.database.get<Topic>("topics", id);
@@ -177,7 +177,7 @@ export class TopicService {
 
 // Service Factory for easy service creation
 export class ServiceFactory {
-  constructor(private database: IDatabaseService) {}
+  constructor(private readonly database: IDatabaseService) {}
 
   createUserService(): UserService {
     return new UserService(this.database);
