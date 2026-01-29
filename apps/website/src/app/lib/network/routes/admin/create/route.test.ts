@@ -20,27 +20,30 @@ import jwt from "jsonwebtoken";
 // Mock Supabase client and its methods
 // Using factory functions to reduce nesting depth (S2004)
 vi.mock("@supabase/supabase-js", () => {
-  const createSingleMock = () => vi.fn(() => ({ data: null, error: { code: "PGRST116" } }));
-  const createInsertMock = () => vi.fn(() => ({
-    select: vi.fn().mockReturnThis(),
-    single: vi.fn(() => ({
-      data: {
-        id: 1,
-        email: "newadmin@example.com",
-        name: "New Admin",
-        role: "admin",
-        is_active: true,
-        created_at: new Date().toISOString(),
-      },
-      error: null,
-    })),
-  }));
-  const createFromMock = () => vi.fn(() => ({
-    select: vi.fn().mockReturnThis(),
-    eq: vi.fn().mockReturnThis(),
-    single: createSingleMock(),
-    insert: createInsertMock(),
-  }));
+  const createSingleMock = () =>
+    vi.fn(() => ({ data: null, error: { code: "PGRST116" } }));
+  const createInsertMock = () =>
+    vi.fn(() => ({
+      select: vi.fn().mockReturnThis(),
+      single: vi.fn(() => ({
+        data: {
+          id: 1,
+          email: "newadmin@example.com",
+          name: "New Admin",
+          role: "admin",
+          is_active: true,
+          created_at: new Date().toISOString(),
+        },
+        error: null,
+      })),
+    }));
+  const createFromMock = () =>
+    vi.fn(() => ({
+      select: vi.fn().mockReturnThis(),
+      eq: vi.fn().mockReturnThis(),
+      single: createSingleMock(),
+      insert: createInsertMock(),
+    }));
 
   return {
     createClient: vi.fn(() => ({
@@ -86,24 +89,18 @@ const mockEnv = {
 
 // Helper functions to reduce nesting depth (S2004)
 function createTokenRequest(token: string, body: Record<string, unknown>) {
-  return new MockNextRequest(
-    "http://localhost:3000/api/admin/create",
-    {
-      method: "POST",
-      headers: new MockHeaders({ authorization: `Bearer ${token}` }),
-      body: JSON.stringify(body),
-    },
-  );
+  return new MockNextRequest("http://localhost:3000/api/admin/create", {
+    method: "POST",
+    headers: new MockHeaders({ authorization: `Bearer ${token}` }),
+    body: JSON.stringify(body),
+  });
 }
 
 function createRequestWithoutToken(body: Record<string, unknown>) {
-  return new MockNextRequest(
-    "http://localhost:3000/api/admin/create",
-    {
-      method: "POST",
-      body: JSON.stringify(body),
-    },
-  );
+  return new MockNextRequest("http://localhost:3000/api/admin/create", {
+    method: "POST",
+    body: JSON.stringify(body),
+  });
 }
 
 describe("Admin Create API Route", () => {

@@ -361,8 +361,11 @@ export default function BulkQuestionUploader({
       console.log("📥 Firebase Import Result:", result);
 
       if (result.success > 0) {
-        const failedMessage = result.failed > 0 ? ` ${result.failed} failed.` : "";
-        setSuccess(`${result.success} questions added successfully!${failedMessage}`);
+        const failedMessage =
+          result.failed > 0 ? ` ${result.failed} failed.` : "";
+        setSuccess(
+          `${result.success} questions added successfully!${failedMessage}`,
+        );
         setQuestions([
           {
             id: "",
@@ -613,7 +616,10 @@ export default function BulkQuestionUploader({
         {inputMode === "json" && (
           <div className="space-y-4">
             <div className="flex items-center justify-between">
-              <label htmlFor="json-input" className="text-sm font-medium text-gray-700 dark:text-gray-300">
+              <label
+                htmlFor="json-input"
+                className="text-sm font-medium text-gray-700 dark:text-gray-300"
+              >
                 Paste JSON Array of Questions:
               </label>
               <div className="flex space-x-2">
@@ -704,7 +710,10 @@ then click "Add X Questions to Firebase" to save them.`}
         {inputMode === "markdown" && (
           <div className="space-y-4">
             <div className="flex items-center justify-between">
-              <label htmlFor="markdown-input" className="text-sm font-medium text-gray-700 dark:text-gray-300">
+              <label
+                htmlFor="markdown-input"
+                className="text-sm font-medium text-gray-700 dark:text-gray-300"
+              >
                 Paste Markdown Questions:
               </label>
               <div className="flex space-x-2">
@@ -955,7 +964,10 @@ then click "Save X Questions" to add them to Firebase.`}
               <div className="space-y-4">
                 {/* Question Title */}
                 <div>
-                  <label htmlFor={`title-${questionIndex}`} className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  <label
+                    htmlFor={`title-${questionIndex}`}
+                    className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
+                  >
                     Question Title
                   </label>
                   <input
@@ -972,7 +984,10 @@ then click "Save X Questions" to add them to Firebase.`}
 
                 {/* Question Content */}
                 <div>
-                  <label htmlFor={`content-${questionIndex}`} className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  <label
+                    htmlFor={`content-${questionIndex}`}
+                    className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
+                  >
                     Question Content
                   </label>
                   <textarea
@@ -990,7 +1005,10 @@ then click "Save X Questions" to add them to Firebase.`}
                 {/* Question Type and Difficulty */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
-                    <label htmlFor={`type-${questionIndex}`} className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                    <label
+                      htmlFor={`type-${questionIndex}`}
+                      className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
+                    >
                       Question Type
                     </label>
                     <select
@@ -1007,7 +1025,10 @@ then click "Save X Questions" to add them to Firebase.`}
                   </div>
 
                   <div>
-                    <label htmlFor={`difficulty-${questionIndex}`} className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                    <label
+                      htmlFor={`difficulty-${questionIndex}`}
+                      className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
+                    >
                       Difficulty Level
                     </label>
                     <select
@@ -1102,7 +1123,10 @@ then click "Save X Questions" to add them to Firebase.`}
 
                 {/* Explanation */}
                 <div>
-                  <label htmlFor={`explanation-${questionIndex}`} className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  <label
+                    htmlFor={`explanation-${questionIndex}`}
+                    className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
+                  >
                     Explanation
                   </label>
                   <textarea

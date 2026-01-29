@@ -293,7 +293,9 @@ function createRequestClass() {
     constructor(input, init = {}) {
       this._url = typeof input === "string" ? input : input?.url || "";
       this._method = init.method || "GET";
-      this._headers = new (globalThis.Headers || createHeadersClass())(init.headers);
+      this._headers = new (globalThis.Headers || createHeadersClass())(
+        init.headers,
+      );
       this._body = init.body;
     }
     get url() {
@@ -317,7 +319,9 @@ function createResponseClass() {
       this._body = body;
       this._status = init.status || 200;
       this._statusText = init.statusText || "OK";
-      this._headers = new (globalThis.Headers || createHeadersClass())(init.headers);
+      this._headers = new (globalThis.Headers || createHeadersClass())(
+        init.headers,
+      );
       this._ok = this._status >= 200 && this._status < 300;
     }
     get status() {
@@ -357,10 +361,13 @@ function createResponseClass() {
         "Content-Type": "application/json",
         ...init.headers,
       });
-      const response = new (globalThis.Response || createResponseClass())(bodyString, {
-        ...init,
-        headers,
-      });
+      const response = new (globalThis.Response || createResponseClass())(
+        bodyString,
+        {
+          ...init,
+          headers,
+        },
+      );
       response._body = bodyString;
       return response;
     }
@@ -392,7 +399,10 @@ if (globalThis.Request === undefined) {
           );
           globalThis.fetch = async (input, init = {}) => {
             const body = init && init.body ? init.body : null;
-            return new (globalThis.Response || createResponseClass())(body || null, { status: 200 });
+            return new (globalThis.Response || createResponseClass())(
+              body || null,
+              { status: 200 },
+            );
           };
         }
       }

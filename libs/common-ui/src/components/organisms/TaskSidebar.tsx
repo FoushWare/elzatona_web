@@ -1,3 +1,5 @@
+"use client";
+
 import React, { useRef, useEffect } from "react";
 
 export type TaskFile = { id: string; path: string };

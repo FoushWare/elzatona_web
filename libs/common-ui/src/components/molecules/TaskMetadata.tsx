@@ -36,7 +36,10 @@ export const TaskMetadata: React.FC<TaskMetadataProps> = ({
       <div className="mt-2 text-sm text-muted-foreground">
         <span>Estimated: {time}</span>
         <span className="mx-2">•</span>
-        <span>Author: {authorName}{company ? ` (${company})` : ""}</span>
+        <span>
+          Author: {authorName}
+          {company ? ` (${company})` : ""}
+        </span>
         {category && (
           <>
             <span className="mx-2">•</span>

@@ -1,3 +1,5 @@
+"use client";
+
 import React, { useEffect, useState } from "react";
 
 export type TaskFileContent = {
@@ -27,7 +29,7 @@ export const TaskCodeEditor: React.FC<TaskCodeEditorProps> = ({
 }) => {
   const initial = findFile(files, activeFileId);
   const [currentFileId, setCurrentFileId] = useState<string | undefined>(
-    initial?.id
+    initial?.id,
   );
   const [content, setContent] = useState<string>(initial?.content || "");
 
@@ -71,7 +73,9 @@ export const TaskCodeEditor: React.FC<TaskCodeEditorProps> = ({
             type="button"
             onClick={() => handleSelect(f.id)}
             className={`px-3 py-1 rounded-t ${
-              f.id === activeFile?.id ? "bg-white border-t border-l border-r" : "bg-gray-100"
+              f.id === activeFile?.id
+                ? "bg-white border-t border-l border-r"
+                : "bg-gray-100"
             }`}
           >
             {f.path}
