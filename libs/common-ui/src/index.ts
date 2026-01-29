@@ -98,6 +98,7 @@ export * from "./components/atoms";
 export * from "./components/molecules";
 export * from "./components/organisms";
 export * from "./components/templates";
+export { DifficultyBadge } from "./components/atoms/DifficultyBadge";
 export { ErrorAlert } from "./components/molecules/ErrorAlert";
 export type { ErrorAlertPropsType } from "./components/molecules/ErrorAlert";
 export { DataTableHeader } from "./components/molecules/DataTableHeader";

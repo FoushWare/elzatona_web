@@ -19,3 +19,6 @@ export type {
   LearningCard as AdminLearningCard,
 } from "./lib/admin/content-management";
 export * from "./lib/admin/questions";
+
+// Frontend tasks types
+export * from "./lib/frontend-tasks";
