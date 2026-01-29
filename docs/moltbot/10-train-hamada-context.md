@@ -158,6 +158,33 @@ npm run type-check       # TypeScript
 # Quality
 npm run sonar            # SonarQube scan
 npm run fix:all          # Auto-fix issues
+
+# Speckit workflow (for new features)
+# Read spec: specs/<feature-id>/spec.md
+# Follow plan: specs/<feature-id>/plan.md
+# Execute tasks: specs/<feature-id>/tasks.md
+```
+
+## 🆕 Implementing New Features
+
+When asked to implement a new feature:
+
+1. **Check for spec**: Look in `specs/` directory for feature spec
+2. **Follow the plan**: Use `plan.md` for architecture decisions
+3. **Execute tasks**: Work through `tasks.md` in order
+4. **Atomic Design**: Create components at correct level (atom→molecule→organism)
+5. **Types first**: Define TypeScript types before implementation
+6. **Test as you go**: Write tests alongside components
+7. **Quality gates**: Run lint, type-check, tests before PR
+
+### Feature Implementation Workflow
+```
+/implement <feature-name>
+  → Find spec in specs/<feature>/
+  → Create branch: feat/<feature-name>
+  → Execute tasks from tasks.md
+  → Run quality checks
+  → Create PR to develop
 ````
 
 ## 📝 GitHub Issues to Focus On
@@ -318,6 +345,21 @@ cat > ~/moltbot/context/skills.json << 'EOF'
         "Create achievements",
         "Build progress tracking",
         "Implement rewards"
+      ]
+    },
+    "implement": {
+      "name": "Implement New Features",
+      "description": "Build new features following spec-driven workflow",
+      "triggers": ["/implement", "new feature", "build feature", "create feature", "add feature"],
+      "actions": [
+        "Read feature spec from /specs/",
+        "Create feature branch",
+        "Follow implementation plan",
+        "Create components (atomic design)",
+        "Add TypeScript types",
+        "Write unit tests",
+        "Run quality checks",
+        "Create PR with documentation"
       ]
     }
   },
