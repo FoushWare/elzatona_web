@@ -1053,7 +1053,7 @@ then click "Save X Questions" to add them to Firebase.`}
                 {/* Options */}
                 <div>
                   <div className="flex items-center justify-between mb-3">
-                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300" id="options-label">
                       Answer Options
                     </label>
                     <button

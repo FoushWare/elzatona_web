@@ -249,10 +249,6 @@ export const QUESTION_VALIDATION_RULES = {
 
 // Unified Question Service Class
 export class UnifiedQuestionService {
-  constructor() {
-    // No initialization needed for Supabase
-  }
-
   // Get all questions with optional filters
   async getQuestions(filters?: QuestionFilter): Promise<UnifiedQuestion[]> {
     const supabase = getSupabaseClient();
@@ -452,20 +448,14 @@ export class UnifiedQuestionService {
     questions.forEach((q) => {
       // Handle both string and any timestamp formats
       let date: string;
-      if (typeof q.created_at === "string") {
-        const parsedDate = new Date(q.created_at);
-        date = Number.isNaN(parsedDate.getTime())
+      const parseDate = (dateValue: any) => {
+        const parsedDate = new Date(dateValue);
+        return Number.isNaN(parsedDate.getTime())
           ? new Date().toISOString().split("T")[0]
           : parsedDate.toISOString().split("T")[0];
-      } else if (
-        q.created_at &&
-        typeof q.created_at === "object" &&
-        "toDate" in q.created_at
-      ) {
-        const parsedDate = new Date(q.created_at);
-        date = Number.isNaN(parsedDate.getTime())
-          ? new Date().toISOString().split("T")[0]
-          : parsedDate.toISOString().split("T")[0];
+      };
+      if (typeof q.created_at === "string" || (q.created_at && typeof q.created_at === "object" && "toDate" in q.created_at)) {
+        date = parseDate(q.created_at);
       } else {
         date = new Date().toISOString().split("T")[0];
       }
@@ -527,12 +517,10 @@ export class UnifiedQuestionService {
         (q) =>
           q.title.toLowerCase().includes(searchLower) ||
           q.content.toLowerCase().includes(searchLower) ||
-          (q.explanation &&
-            q.explanation.toLowerCase().includes(searchLower)) ||
-          (q.tags &&
-            q.tags.some((tag: string) =>
-              tag.toLowerCase().includes(searchLower),
-            )),
+          q.explanation?.toLowerCase().includes(searchLower) ||
+          q.tags?.some((tag: string) =>
+            tag.toLowerCase().includes(searchLower),
+          ),
       );
     }
 

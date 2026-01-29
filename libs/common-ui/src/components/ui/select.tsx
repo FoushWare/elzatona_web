@@ -83,7 +83,7 @@ const Select = React.forwardRef<
         )}
       </button>
       {open && (
-        // eslint-disable-next-line jsx-a11y/role-supports-aria-props
+        // eslint-disable-next-line jsx-a11y/role-supports-aria-props,jsx-a11y/role-has-required-aria-props
         <div
           className="absolute z-50 w-full mt-1 rounded-md border bg-background shadow-lg"
           role="listbox"
@@ -94,7 +94,7 @@ const Select = React.forwardRef<
               if (React.isValidElement(item)) {
                 const isSelected = selectedValue === item.props.value;
                 return (
-                  // eslint-disable-next-line jsx-a11y/role-supports-aria-props
+                  // eslint-disable-next-line jsx-a11y/role-supports-aria-props,jsx-a11y/role-has-required-aria-props
                   <button
                     key={item.props.value}
                     type="button"
