@@ -395,10 +395,34 @@ function createUserRepositoryMock(): IUserRepository {
       } as UserProgress;
     },
     async getPreferences(userId: string): Promise<UserPreferences> {
-      return { theme: "light" };
+      return {
+        userId,
+        theme: "light",
+        language: "en",
+        emailNotifications: true,
+        pushNotifications: false,
+        difficulty: "mixed",
+        dailyGoal: 10,
+        preferredCategories: [],
+      } as UserPreferences;
     },
     async getUserStatistics(userId: string): Promise<UserStatistics> {
-      return { logins: 0 };
+      return {
+        userId,
+        totalQuestionsAttempted: 0,
+        totalQuestionsCorrect: 0,
+        successRate: 0,
+        totalPoints: 0,
+        currentStreak: 0,
+        longestStreak: 0,
+        plansCompleted: 0,
+        plansInProgress: 0,
+        topicsExplored: 0,
+        topicsMastered: 0,
+        averageSessionDuration: 0,
+        totalTimeSpent: 0,
+        lastActivityAt: new Date(),
+      } as UserStatistics;
     },
     async count(): Promise<number> {
       return users.length;
