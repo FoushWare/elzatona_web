@@ -13,3 +13,4 @@ export type {
   AdminQuickActionsSectionPropsType,
   AdminQuickAction,
 } from "./AdminQuickActionsSection";
+export { TaskSidebar } from "./TaskSidebar";

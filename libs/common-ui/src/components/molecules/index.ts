@@ -8,3 +8,4 @@ export { AdminLoginFormMolecule } from "./AdminLoginFormMolecule";
 export { AdminMetricCard } from "./AdminMetricCard";
 export type { AdminMetricCardPropsType } from "./AdminMetricCard";
 export { TaskMetadata } from "./TaskMetadata";
+export { TaskDescription } from "./TaskDescription";
