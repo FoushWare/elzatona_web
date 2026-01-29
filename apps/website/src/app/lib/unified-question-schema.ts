@@ -454,7 +454,12 @@ export class UnifiedQuestionService {
           ? new Date().toISOString().split("T")[0]
           : parsedDate.toISOString().split("T")[0];
       };
-      if (typeof q.created_at === "string" || (q.created_at && typeof q.created_at === "object" && "toDate" in q.created_at)) {
+      if (
+        typeof q.created_at === "string" ||
+        (q.created_at &&
+          typeof q.created_at === "object" &&
+          "toDate" in q.created_at)
+      ) {
         date = parseDate(q.created_at);
       } else {
         date = new Date().toISOString().split("T")[0];

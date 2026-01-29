@@ -1051,11 +1051,11 @@ then click "Save X Questions" to add them to Firebase.`}
                 </div>
 
                 {/* Options */}
-                <div>
+                <fieldset>
+                  <legend className="text-sm font-medium text-gray-700 dark:text-gray-300 block mb-3">
+                    Answer Options
+                  </legend>
                   <div className="flex items-center justify-between mb-3">
-                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300" id="options-label">
-                      Answer Options
-                    </label>
                     <button
                       type="button"
                       onClick={() => addOption(questionIndex)}

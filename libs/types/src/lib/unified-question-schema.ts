@@ -15,7 +15,7 @@ function getSupabaseClient(): SupabaseClient | null {
 
   // CRITICAL: Never create Supabase client in browser/client environment
   // Check if we're in a browser environment first
-  if (typeof globalThis.window !== "undefined") {
+  if (globalThis.window !== undefined) {
     // We're in a browser - Supabase client should not be created here
     // This file should only be used for types in client components
     return null;
