@@ -39,10 +39,11 @@ const makeMockTask = (id: string): FrontendTask => ({
   description: `<p>This is a mock task description for task <strong>${id}</strong>.</p>`,
 });
 
-type Props = { params: { id: string } };
+type Props = { params: Promise<{ id: string }> };
 
-export default function Page({ params }: Props) {
-  const task = makeMockTask(params.id);
+export default async function Page({ params }: Props) {
+  const { id } = await params;
+  const task = makeMockTask(id);
   const [files, setFiles] = useState(
     task.files.map((f) => ({ id: f.id, path: f.path, content: f.content })),
   );
