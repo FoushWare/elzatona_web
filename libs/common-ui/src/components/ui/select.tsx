@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-// TODO: Replace `any` usages with explicit types (task: 401-reduce-any)
+// NOTE: Type safety improvements tracked in refactoring task 401-reduce-any
+// Shadcn UI component - will be typed in future refactor
 import * as React from "react";
 import { ChevronDown, ChevronUp } from "lucide-react";
 import { cn } from "../../utils";

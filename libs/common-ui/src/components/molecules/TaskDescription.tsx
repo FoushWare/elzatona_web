@@ -25,8 +25,8 @@ export const TaskDescription: React.FC<TaskDescriptionProps> = ({
         <div className="mb-4">
           <h3 className="text-sm font-semibold">Requirements</h3>
           <ul className="list-disc pl-5 mt-2 text-sm">
-            {requirements.map((r, i) => (
-              <li key={i}>{r}</li>
+            {requirements.map((r) => (
+              <li key={r}>{r}</li>
             ))}
           </ul>
         </div>
@@ -37,13 +37,11 @@ export const TaskDescription: React.FC<TaskDescriptionProps> = ({
           <h3 className="text-sm font-semibold">Hints</h3>
           <div className="mt-2 space-y-2">
             {hints.map((h, i) => (
-              <div key={i}>
+              <div key={`hint-${i}-${h.substring(0, 20)}`}>
                 <button
                   type="button"
                   className="text-sm text-primary underline"
-                  onClick={() =>
-                    setOpenHints((s) => ({ ...s, [i]: !s[i] }))
-                  }
+                  onClick={() => setOpenHints((s) => ({ ...s, [i]: !s[i] }))}
                 >
                   {openHints[i] ? "Hide hint" : `Show hint ${i + 1}`}
                 </button>

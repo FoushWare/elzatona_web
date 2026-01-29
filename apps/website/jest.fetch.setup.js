@@ -16,8 +16,13 @@ try {
           let resolved = null;
           try {
             resolved = Module._resolveFilename(moduleName, module);
-          } catch (e) {
-            // ignore resolution errors
+          } catch (error_) {
+            console.debug(
+              "Module resolution failed for",
+              moduleName,
+              ":",
+              error_.message,
+            );
           }
 
           const exports = typeof factory === "function" ? factory() : factory;

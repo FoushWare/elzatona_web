@@ -159,7 +159,10 @@ describe("Admin Create API Route", () => {
 
       jest.spyOn(bcrypt, "hash").mockResolvedValue("hashed-password");
 
-      const saltRounds = parseInt(process.env.BCRYPT_SALT_ROUNDS || "10", 10);
+      const saltRounds = Number.parseInt(
+        process.env.BCRYPT_SALT_ROUNDS || "10",
+        10,
+      );
       await bcrypt.hash(password, saltRounds);
 
       expect(bcrypt.hash).toHaveBeenCalledWith(password, 12);
@@ -171,7 +174,10 @@ describe("Admin Create API Route", () => {
 
       jest.spyOn(bcrypt, "hash").mockResolvedValue("hashed-password");
 
-      const saltRounds = parseInt(process.env.BCRYPT_SALT_ROUNDS || "10", 10);
+      const saltRounds = Number.parseInt(
+        process.env.BCRYPT_SALT_ROUNDS || "10",
+        10,
+      );
       await bcrypt.hash(password, saltRounds);
 
       expect(bcrypt.hash).toHaveBeenCalledWith(password, 10);

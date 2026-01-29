@@ -19,11 +19,14 @@ if (globalThis.vi === undefined) {
             const abs = require.resolve(moduleName, { paths: [process.cwd()] });
             return jest.mock(abs, factory, options);
           } catch (error_) {
-            // fallback to original moduleName
+            console.debug(
+              "Module resolution failed, using original name:",
+              error_.message,
+            );
           }
         }
       } catch (error_) {
-        // ignore
+        console.debug("Mock setup failed:", error_.message);
       }
       return jest.mock(moduleName, factory, options);
     },
@@ -51,9 +54,9 @@ const projectRoot = process.cwd();
 const testEnvFile = resolve(projectRoot, ".env.test.local");
 
 // In local development, .env.test.local is REQUIRED
-if (!isCI) {
+if (isCI === false) {
   // Check if .env.test.local exists
-  if (!existsSync(testEnvFile)) {
+  if (existsSync(testEnvFile) === false) {
     console.error("❌ CRITICAL: .env.test.local file is missing!");
     console.error(`   Location: ${testEnvFile}`);
     console.error("\n📝 To fix:");
@@ -108,8 +111,8 @@ if (!isCI) {
   envFiles.forEach((envFile) => {
     try {
       config({ path: envFile, override: false }); // Don't override, respect priority
-    } catch (_) {
-      // ignore load errors for optional env files
+    } catch (error_) {
+      console.debug("Failed to load env file:", envFile, error_.message);
     }
   });
 }
@@ -262,7 +265,7 @@ if (globalThis.Request === undefined) {
 
     if (fetchAPI && fetchAPI.Request) {
       // Ensure `fetch` is available globally. Prefer existing global fetch, otherwise try node-fetch.
-      if (typeof globalThis.fetch === "undefined") {
+      if (globalThis.fetch === undefined) {
         try {
           // node-fetch v2 supports require — allow require here
 
@@ -272,9 +275,11 @@ if (globalThis.Request === undefined) {
           }
         } catch (error_) {
           // Last resort: a minimal fetch shim that uses the Response polyfill above.
-          console.debug("node-fetch load failed, using minimal fetch shim:", error_);
+          console.debug(
+            "node-fetch load failed, using minimal fetch shim:",
+            error_,
+          );
           globalThis.fetch = async (input, init = {}) => {
-            const url = typeof input === "string" ? input : input?.url || "";
             const body = init && init.body ? init.body : null;
             return new globalThis.Response(body || null, { status: 200 });
           };
@@ -388,9 +393,9 @@ if (globalThis.Request === undefined) {
         }
       };
     }
-    } catch (error_) {
-      // If detection fails, provide minimal polyfills and log
-      console.debug("fetch API detection error:", error_);
+  } catch (error_) {
+    // If detection fails, provide minimal polyfills and log
+    console.debug("fetch API detection error:", error_);
     globalThis.Headers = class Headers {
       constructor(init = {}) {
         this._headers = {};
@@ -497,29 +502,29 @@ if (globalThis.Request === undefined) {
 }
 
 // Make `window.location` configurable for tests that redefine it.
-  try {
-    // Make `window.location` configurable for tests that redefine it.
-    if (typeof globalThis.window !== "undefined") {
-      try {
-        delete globalThis.window.location;
-      } catch (error_) {
-        console.debug("unable to delete window.location:", error_);
-      }
-
-      try {
-        Object.defineProperty(globalThis.window, "location", {
-          configurable: true,
-          enumerable: true,
-          writable: true,
-          value: {
-            href: "",
-          },
-        });
-      } catch (error_) {
-        console.debug("unable to redefine window.location:", error_);
-      }
+try {
+  // Make `window.location` configurable for tests that redefine it.
+  if (globalThis.window !== undefined) {
+    try {
+      delete globalThis.window.location;
+    } catch (error_) {
+      console.debug("unable to delete window.location:", error_);
     }
-  } catch (error_) {
-    // If we can't redefine, tests that attempt to redefine may still fail; continue gracefully
-    console.debug("window.location setup error:", error_);
+
+    try {
+      Object.defineProperty(globalThis.window, "location", {
+        configurable: true,
+        enumerable: true,
+        writable: true,
+        value: {
+          href: "",
+        },
+      });
+    } catch (error_) {
+      console.debug("unable to redefine window.location:", error_);
+    }
   }
+} catch (error_) {
+  // If we can't redefine, tests that attempt to redefine may still fail; continue gracefully
+  console.debug("window.location setup error:", error_);
+}

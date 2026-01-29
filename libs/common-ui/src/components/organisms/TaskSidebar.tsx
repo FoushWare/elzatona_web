@@ -29,27 +29,34 @@ export const TaskSidebar: React.FC<TaskSidebarProps> = ({
     if (!el) return;
 
     const handleKey = (e: KeyboardEvent) => {
-      const focusable = Array.from(el.querySelectorAll<HTMLButtonElement>('button[data-file]'));
+      const focusable = Array.from(
+        el.querySelectorAll<HTMLButtonElement>("button[data-file]"),
+      );
       if (focusable.length === 0) return;
-      const idx = focusable.findIndex((b) => b === document.activeElement);
+      const idx = focusable.indexOf(
+        document.activeElement as HTMLButtonElement,
+      );
 
-      if (e.key === 'ArrowDown') {
+      if (e.key === "ArrowDown") {
         e.preventDefault();
         const next = focusable[(idx + 1) % focusable.length];
         next?.focus();
       }
-      if (e.key === 'ArrowUp') {
+      if (e.key === "ArrowUp") {
         e.preventDefault();
         const prev = focusable[(idx - 1 + focusable.length) % focusable.length];
         prev?.focus();
       }
-      if (e.key === 'Enter' && document.activeElement instanceof HTMLButtonElement) {
-        (document.activeElement as HTMLButtonElement).click();
+      if (
+        e.key === "Enter" &&
+        document.activeElement instanceof HTMLButtonElement
+      ) {
+        document.activeElement.click();
       }
     };
 
-    el.addEventListener('keydown', handleKey);
-    return () => el.removeEventListener('keydown', handleKey);
+    el.addEventListener("keydown", handleKey);
+    return () => el.removeEventListener("keydown", handleKey);
   }, []);
 
   return (
@@ -81,12 +88,12 @@ export const TaskSidebar: React.FC<TaskSidebarProps> = ({
 
         <div className="mt-2">
           <h4 className="text-sm font-medium">Files</h4>
-          <ul ref={listRef} tabIndex={0} className="mt-2 space-y-1 text-sm" role="list">
-            {files.map((f, idx) => (
-              <li key={f.id} role="listitem">
+          <ul ref={listRef} className="mt-2 space-y-1 text-sm">
+            {files.map((f) => (
+              <li key={f.id}>
                 <button
                   data-file={f.id}
-                  aria-selected={f.id === activeFileId}
+                  aria-current={f.id === activeFileId ? "true" : undefined}
                   type="button"
                   onClick={() => onFileSelect?.(f.id)}
                   className={`w-full text-left px-2 py-1 rounded ${

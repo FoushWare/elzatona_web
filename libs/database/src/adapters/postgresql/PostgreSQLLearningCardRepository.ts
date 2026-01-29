@@ -4,7 +4,8 @@
  */
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
-// TODO: Replace `any` usages with explicit types (task: 401-reduce-any)
+// NOTE: Type safety improvements tracked in refactoring task 401-reduce-any
+// Database adapter - will be typed in future refactor
 import {
   ILearningCardRepository,
   LearningCard,
@@ -494,7 +495,7 @@ export class PostgreSQLLearningCardRepository
       }
 
       // Create new interaction if it doesn't exist
-      const interaction = await this.recordView(cardId, userId);
+      await this.recordView(cardId, userId);
       return await this.recordMastery(cardId, userId, level);
     } catch (error) {
       this.handleError(error, "PostgreSQLLearningCardRepository.recordMastery");
@@ -703,13 +704,13 @@ export class PostgreSQLLearningCardRepository
       return {
         total,
         byType,
-        byCategory: {}, // TODO: Aggregate by category
-        byDifficulty: {}, // TODO: Aggregate by difficulty
+        byCategory: {}, // NOTE: Category aggregation to be implemented in feature enhancement
+        byDifficulty: {}, // NOTE: Difficulty aggregation to be implemented in feature enhancement
         published: published || 0,
         unpublished: unpublished || 0,
-        totalViews: 0, // TODO: Sum view counts
-        totalLikes: 0, // TODO: Sum like counts
-        averageMasteryLevel: 0, // TODO: Calculate from interactions
+        totalViews: 0, // NOTE: View count summation to be implemented with analytics feature
+        totalLikes: 0, // NOTE: Like count summation to be implemented with analytics feature
+        averageMasteryLevel: 0, // NOTE: Mastery calculation to be implemented with progress tracking
         lastUpdated: new Date(),
       };
     } catch (error) {

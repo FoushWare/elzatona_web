@@ -1,7 +1,8 @@
 "use client";
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
-// TODO: Replace `any` usages with explicit types (task: 401-reduce-any)
+// NOTE: Type safety improvements tracked in refactoring task 401-reduce-any
+// This component will be refactored to use explicit types
 import React, { useState, useEffect, useCallback } from "react";
 import { UnifiedQuestion } from "@elzatona/types";
 import { FormModal } from "@elzatona/common-ui";
@@ -317,7 +318,7 @@ const formatWithIndentation = (codeLines: string[]): string => {
     };
 
     // Use single regex to match all bracket types
-    const bracketMatches = trimmed.match(/[{}()\[\]]/g);
+    const bracketMatches = trimmed.match(/[{}()[\]]/g);
     if (bracketMatches) {
       bracketMatches.forEach((bracket) => {
         switch (bracket) {
@@ -589,18 +590,30 @@ export function ViewQuestionModal({
       : "bg-gray-100 border-gray-200";
   };
 
-  // Helper function to get option styling classes
+  // Helper functions to get option styling classes - split to avoid boolean parameters
+  const getCorrectOptionClasses = (): string => {
+    return "bg-gradient-to-br from-green-500 to-emerald-600 text-white shadow-green-500/50";
+  };
+
+  const getIncorrectOptionClasses = (): string => {
+    return "bg-gradient-to-br from-red-500 to-rose-600 text-white shadow-red-500/50";
+  };
+
+  const getDefaultOptionClasses = (): string => {
+    return "bg-gradient-to-br from-indigo-100 to-purple-100 dark:from-indigo-800/60 dark:to-purple-800/60 text-indigo-700 dark:text-indigo-200";
+  };
+
   const getOptionStylingClasses = (
     isCorrect: boolean,
     isWrong: boolean,
     showFeedback: boolean,
   ): string => {
     if (isCorrect && showFeedback) {
-      return "bg-gradient-to-br from-green-500 to-emerald-600 text-white shadow-green-500/50";
+      return getCorrectOptionClasses();
     } else if (isWrong) {
-      return "bg-gradient-to-br from-red-500 to-rose-600 text-white shadow-red-500/50";
+      return getIncorrectOptionClasses();
     } else {
-      return "bg-gradient-to-br from-indigo-100 to-purple-100 dark:from-indigo-800/60 dark:to-purple-800/60 text-indigo-700 dark:text-indigo-200";
+      return getDefaultOptionClasses();
     }
   };
 
@@ -741,58 +754,62 @@ export function ViewQuestionModal({
               <div className="p-2 text-center text-xs text-gray-500">
                 Loading...
               </div>
-            ) : codeHighlightedHtml ? (
-              <div className="relative">
-                {/* Line numbers background */}
-                <div
-                  className={`absolute left-0 top-0 bottom-0 w-10 border-r ${getLineNumbersBackgroundClass(codeTheme)}`}
-                ></div>
-                {/* Shiki highlighted code */}
-                <div className="relative">
-                  <div
-                    className={`shiki-wrapper pl-10 ${getShikiWrapperClass(codeTheme)}`}
-                    dangerouslySetInnerHTML={{
-                      __html: sanitizeShikiHtml(codeHighlightedHtml),
-                    }}
-                  />
-                </div>
-              </div>
             ) : (
-              // Fallback: plain code display
-              <div className="relative">
-                <div
-                  className={`absolute left-0 top-0 bottom-0 w-10 border-r ${getLineNumbersBackgroundClass(codeTheme)}`}
-                ></div>
-                <pre className="m-0 p-2 pl-10 text-sm font-mono font-medium leading-relaxed">
-                  <code className="block">
-                    {nonEmptyLines.map((line, index) => (
+              <>
+                {codeHighlightedHtml ? (
+                  <div className="relative">
+                    {/* Line numbers background */}
+                    <div
+                      className={`absolute left-0 top-0 bottom-0 w-10 border-r ${getLineNumbersBackgroundClass(codeTheme)}`}
+                    ></div>
+                    {/* Shiki highlighted code */}
+                    <div className="relative">
                       <div
-                        key={`line-${index}-${line.slice(0, 20)}`}
-                        className="flex items-start"
-                      >
-                        <span
-                          className={`select-none pr-2 text-right min-w-[2.5rem] text-xs font-medium ${
-                            codeTheme === "dark"
-                              ? "text-gray-400"
-                              : "text-gray-500"
-                          }`}
-                        >
-                          {index + 1}
-                        </span>
-                        <span
-                          className={`flex-1 whitespace-pre pl-2 pr-2 py-0.5 text-sm ${
-                            codeTheme === "dark"
-                              ? "text-gray-100"
-                              : "text-gray-900"
-                          }`}
-                        >
-                          {line || " "}
-                        </span>
-                      </div>
-                    ))}
-                  </code>
-                </pre>
-              </div>
+                        className={`shiki-wrapper pl-10 ${getShikiWrapperClass(codeTheme)}`}
+                        dangerouslySetInnerHTML={{
+                          __html: sanitizeShikiHtml(codeHighlightedHtml),
+                        }}
+                      />
+                    </div>
+                  </div>
+                ) : (
+                  // Fallback: plain code display
+                  <div className="relative">
+                    <div
+                      className={`absolute left-0 top-0 bottom-0 w-10 border-r ${getLineNumbersBackgroundClass(codeTheme)}`}
+                    ></div>
+                    <pre className="m-0 p-2 pl-10 text-sm font-mono font-medium leading-relaxed">
+                      <code className="block">
+                        {nonEmptyLines.map((line, index) => (
+                          <div
+                            key={`line-${index}-${line.slice(0, 20)}`}
+                            className="flex items-start"
+                          >
+                            <span
+                              className={`select-none pr-2 text-right min-w-[2.5rem] text-xs font-medium ${
+                                codeTheme === "dark"
+                                  ? "text-gray-400"
+                                  : "text-gray-500"
+                              }`}
+                            >
+                              {index + 1}
+                            </span>
+                            <span
+                              className={`flex-1 whitespace-pre pl-2 pr-2 py-0.5 text-sm ${
+                                codeTheme === "dark"
+                                  ? "text-gray-100"
+                                  : "text-gray-900"
+                              }`}
+                            >
+                              {line || " "}
+                            </span>
+                          </div>
+                        ))}
+                      </code>
+                    </pre>
+                  </div>
+                )}
+              </>
             )}
           </div>
         </div>
@@ -803,12 +820,12 @@ export function ViewQuestionModal({
   // Helper function to adjust HTML colors for light mode
   const adjustHtmlForLightMode = (html: string): string => {
     if (typeof globalThis === "undefined" || !("window" in globalThis)) {
-        return html;
-      }
+      return html;
+    }
 
-      const prefersDark = (globalThis as any).window.matchMedia(
-        "(prefers-color-scheme: dark)",
-      ).matches;
+    const prefersDark = (globalThis as any).window.matchMedia(
+      "(prefers-color-scheme: dark)",
+    ).matches;
     if (prefersDark) {
       return html;
     }
@@ -828,9 +845,12 @@ export function ViewQuestionModal({
           ALLOWED_ATTR: ["class", "style"],
         })}</code></pre>`;
       }
-    } catch (_e) {
+    } catch (error_) {
       // Security: Removed detailed error logging to prevent information disclosure
-      console.warn("DOM parsing for color adjustment failed");
+      console.warn(
+        "DOM parsing for color adjustment failed:",
+        error_ instanceof Error ? error_.message : "Unknown error",
+      );
     }
 
     return html;

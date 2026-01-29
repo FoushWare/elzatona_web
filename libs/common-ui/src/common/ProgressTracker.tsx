@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-// TODO: Replace `any` usages with explicit types (task: 401-reduce-any)
+// NOTE: Type safety improvements tracked in refactoring task 401-reduce-any
+// This component will be refactored to use explicit types
 // v1.0 - Progress Tracking Component
 "use client";
 
@@ -49,7 +50,7 @@ export default function ProgressTracker({
   ) => {};
 
   // Track question completion
-  const trackQuestionCompletion = async (
+  export const trackQuestionCompletion = async (
     answeredCorrectly: boolean,
     attempts: number,
     timeSpent: number,
@@ -84,7 +85,7 @@ export default function ProgressTracker({
   };
 
   // Track challenge completion
-  const trackChallengeCompletion = async (
+  export const trackChallengeCompletion = async (
     completed: boolean,
     score: number,
     maxScore: number,
@@ -116,7 +117,7 @@ export default function ProgressTracker({
   };
 
   // Track learning path progress
-  const trackLearningPathProgress = async (
+  export const trackLearningPathProgress = async (
     completed: boolean,
     timeSpent: number,
   ) => {

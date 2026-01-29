@@ -47,7 +47,7 @@ const customJestConfig = {
   },
   transformIgnorePatterns: [
     "/node_modules/",
-    "^.+\\.module\\.(css|sass|scss)$",
+    String.raw`^.+\.module\.(css|sass|scss)$`,
   ],
   moduleFileExtensions: ["ts", "tsx", "js", "jsx", "json", "node"],
 };
