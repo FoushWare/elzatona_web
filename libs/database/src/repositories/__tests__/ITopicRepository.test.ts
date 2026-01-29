@@ -1,5 +1,4 @@
-import { describe, it, expect } from "vitest";
-import { createMockRepositories } from "../../../../../../tests/utils/mock-repositories";
+import { createMockRepositories } from "../../../../../tests/utils/mock-repositories";
 
 describe("ITopicRepository", () => {
   const { topicRepository } = createMockRepositories();
