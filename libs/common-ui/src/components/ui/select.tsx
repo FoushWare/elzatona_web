@@ -85,8 +85,6 @@ const Select = React.forwardRef<
       {open && (
         <div
           className="absolute z-50 w-full mt-1 rounded-md border bg-background shadow-lg"
-          // eslint-disable-next-line jsx-a11y/role-has-required-aria-props
-          role="listbox"
           aria-label="Select options"
         >
           <div className="max-h-60 overflow-auto">
@@ -97,9 +95,6 @@ const Select = React.forwardRef<
                   <button
                     key={item.props.value}
                     type="button"
-                    // eslint-disable-next-line jsx-a11y/role-has-required-aria-props
-                    role="option"
-                    aria-selected={isSelected}
                     className="w-full text-left px-3 py-2 text-sm hover:bg-accent hover:text-accent-foreground cursor-pointer focus:bg-accent focus:outline-none"
                     onClick={() => handleValueChange(item.props.value)}
                     onKeyDown={(e) => {

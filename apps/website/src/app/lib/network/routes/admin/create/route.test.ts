@@ -14,6 +14,7 @@ import {
 } from "../../../../../../../test-utils/mocks/next-server.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
+import { vi } from "vitest";
 
 // Mock dependencies
 

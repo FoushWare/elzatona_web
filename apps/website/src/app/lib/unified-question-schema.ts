@@ -545,64 +545,66 @@ export class UnifiedQuestionService {
     };
   }
 
-  // Validate a question
-  validateQuestion(
-    question: Partial<UnifiedQuestion>,
-  ): QuestionValidationResult {
-    const errors: QuestionValidationError[] = [];
-    const warnings: QuestionValidationError[] = [];
-
-    // Validate title
-    if (!question.title || question.title.trim().length === 0) {
+  private validateTitle(
+    title: string | undefined,
+    errors: QuestionValidationError[],
+    warnings: QuestionValidationError[],
+  ): void {
+    if (!title || title.trim().length === 0) {
       errors.push({
         field: "title",
         message: "Title is required",
         severity: "error",
       });
-    } else if (
-      question.title.length < QUESTION_VALIDATION_RULES.title.minLength
-    ) {
+      return;
+    }
+
+    if (title.length < QUESTION_VALIDATION_RULES.title.minLength) {
       errors.push({
         field: "title",
         message: `Title must be at least ${QUESTION_VALIDATION_RULES.title.minLength} characters`,
         severity: "error",
       });
-    } else if (
-      question.title.length > QUESTION_VALIDATION_RULES.title.maxLength
-    ) {
+    } else if (title.length > QUESTION_VALIDATION_RULES.title.maxLength) {
       warnings.push({
         field: "title",
-        message: `Title is very long (${question.title.length} characters)`,
+        message: `Title is very long (${title.length} characters)`,
         severity: "warning",
       });
     }
+  }
 
-    // Validate content
-    if (!question.content || question.content.trim().length === 0) {
+  private validateQuestionContent(
+    content: string | undefined,
+    errors: QuestionValidationError[],
+    warnings: QuestionValidationError[],
+  ): void {
+    if (!content || content.trim().length === 0) {
       errors.push({
         field: "content",
         message: "Content is required",
         severity: "error",
       });
-    } else if (
-      question.content.length < QUESTION_VALIDATION_RULES.content.minLength
-    ) {
+    } else if (content.length < QUESTION_VALIDATION_RULES.content.minLength) {
       errors.push({
         field: "content",
         message: `Content must be at least ${QUESTION_VALIDATION_RULES.content.minLength} characters`,
         severity: "error",
       });
-    } else if (
-      question.content.length > QUESTION_VALIDATION_RULES.content.maxLength
-    ) {
+    } else if (content.length > QUESTION_VALIDATION_RULES.content.maxLength) {
       warnings.push({
         field: "content",
-        message: `Content is very long (${question.content.length} characters)`,
+        message: `Content is very long (${content.length} characters)`,
         severity: "warning",
       });
     }
+  }
 
-    // Validate options for multiple choice questions
+  private validateQuestionOptions(
+    question: Partial<UnifiedQuestion>,
+    errors: QuestionValidationError[],
+    warnings: QuestionValidationError[],
+  ): void {
     if (question.type === "multiple-choice" && question.options) {
       if (
         question.options.length < QUESTION_VALIDATION_RULES.options.minCount
@@ -622,7 +624,6 @@ export class UnifiedQuestionService {
         });
       }
 
-      // Check if at least one option is correct
       const hasCorrectOption = question.options.some((opt) => opt.isCorrect);
       if (!hasCorrectOption) {
         errors.push({
@@ -632,40 +633,73 @@ export class UnifiedQuestionService {
         });
       }
     }
+  }
 
-    // Validate time limit
-    if (question.timeLimit !== undefined) {
-      if (question.timeLimit < QUESTION_VALIDATION_RULES.timeLimit.min) {
+  private validateQuestionTimeLimit(
+    timeLimit: number | undefined,
+    errors: QuestionValidationError[],
+    warnings: QuestionValidationError[],
+  ): void {
+    if (timeLimit !== undefined) {
+      if (timeLimit < QUESTION_VALIDATION_RULES.timeLimit.min) {
         errors.push({
           field: "timeLimit",
           message: `Time limit must be at least ${QUESTION_VALIDATION_RULES.timeLimit.min} seconds`,
           severity: "error",
         });
-      } else if (question.timeLimit > QUESTION_VALIDATION_RULES.timeLimit.max) {
+      } else if (timeLimit > QUESTION_VALIDATION_RULES.timeLimit.max) {
         warnings.push({
           field: "timeLimit",
-          message: `Time limit is very long (${question.timeLimit} seconds)`,
+          message: `Time limit is very long (${timeLimit} seconds)`,
           severity: "warning",
         });
       }
     }
+  }
 
-    // Validate points
-    if (question.points !== undefined) {
-      if (question.points < QUESTION_VALIDATION_RULES.points.min) {
+  private validateQuestionPoints(
+    points: number | undefined,
+    errors: QuestionValidationError[],
+    warnings: QuestionValidationError[],
+  ): void {
+    if (points !== undefined) {
+      if (points < QUESTION_VALIDATION_RULES.points.min) {
         errors.push({
           field: "points",
           message: `Points must be at least ${QUESTION_VALIDATION_RULES.points.min}`,
           severity: "error",
         });
-      } else if (question.points > QUESTION_VALIDATION_RULES.points.max) {
+      } else if (points > QUESTION_VALIDATION_RULES.points.max) {
         warnings.push({
           field: "points",
-          message: `Points are very high (${question.points})`,
+          message: `Points are very high (${points})`,
           severity: "warning",
         });
       }
     }
+  }
+
+  // Validate a question
+  validateQuestion(
+    question: Partial<UnifiedQuestion>,
+  ): QuestionValidationResult {
+    const errors: QuestionValidationError[] = [];
+    const warnings: QuestionValidationError[] = [];
+
+    // Validate title
+    this.validateTitle(question.title, errors, warnings);
+
+    // Validate content
+    this.validateQuestionContent(question.content, errors, warnings);
+
+    // Validate options for multiple choice questions
+    this.validateQuestionOptions(question, errors, warnings);
+
+    // Validate time limit
+    this.validateQuestionTimeLimit(question.timeLimit, errors, warnings);
+
+    // Validate points
+    this.validateQuestionPoints(question.points, errors, warnings);
 
     return {
       isValid: errors.length === 0,
