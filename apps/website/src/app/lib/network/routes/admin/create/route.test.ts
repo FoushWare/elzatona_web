@@ -8,10 +8,7 @@ import { POST } from "./route";
 // when running under Jest. We require by absolute path so this is deterministic
 // in the test environment.
 
-import {
-  NextRequest as MockNextRequest,
-  Headers as MockHeaders,
-} from "../../../../../../../test-utils/mocks/next-server.js";
+import { NextRequest } from "next/server";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { vi } from "vitest";
@@ -90,15 +87,15 @@ const mockEnv = {
 
 // Helper functions to reduce nesting depth (S2004)
 function createTokenRequest(token: string, body: Record<string, unknown>) {
-  return new MockNextRequest("http://localhost:3000/api/admin/create", {
+  return new NextRequest("http://localhost:3000/api/admin/create", {
     method: "POST",
-    headers: new MockHeaders({ authorization: `Bearer ${token}` }),
+    headers: { authorization: `Bearer ${token}` },
     body: JSON.stringify(body),
   });
 }
 
 function createRequestWithoutToken(body: Record<string, unknown>) {
-  return new MockNextRequest("http://localhost:3000/api/admin/create", {
+  return new NextRequest("http://localhost:3000/api/admin/create", {
     method: "POST",
     body: JSON.stringify(body),
   });
@@ -171,7 +168,7 @@ describe("Admin Create API Route", () => {
       process.env.BCRYPT_SALT_ROUNDS = "12";
       const password = "new-password";
 
-      jest.spyOn(bcrypt, "hash").mockResolvedValue("hashed-password");
+      vi.spyOn(bcrypt, "hash").mockResolvedValue("hashed-password" as any);
 
       const saltRounds = Number.parseInt(
         process.env.BCRYPT_SALT_ROUNDS || "10",
@@ -186,7 +183,7 @@ describe("Admin Create API Route", () => {
       delete process.env.BCRYPT_SALT_ROUNDS;
       const password = "new-password";
 
-      jest.spyOn(bcrypt, "hash").mockResolvedValue("hashed-password");
+      vi.spyOn(bcrypt, "hash").mockResolvedValue("hashed-password" as any);
 
       const saltRounds = Number.parseInt(
         process.env.BCRYPT_SALT_ROUNDS || "10",
@@ -209,11 +206,11 @@ describe("Admin Create API Route", () => {
         mockEnv.JWT_SECRET,
       );
 
-      const request = new MockNextRequest(
+      const request = new NextRequest(
         "http://localhost:3000/api/admin/create",
         {
           method: "POST",
-          headers: new MockHeaders({ authorization: `Bearer ${mockToken}` }),
+          headers: { authorization: `Bearer ${mockToken}` },
           body: JSON.stringify({}),
         },
       );
@@ -235,11 +232,11 @@ describe("Admin Create API Route", () => {
         mockEnv.JWT_SECRET,
       );
 
-      const request = new MockNextRequest(
+      const request = new NextRequest(
         "http://localhost:3000/api/admin/create",
         {
           method: "POST",
-          headers: new MockHeaders({ authorization: `Bearer ${mockToken}` }),
+          headers: { authorization: `Bearer ${mockToken}` },
           body: JSON.stringify({
             email: "invalid-email",
             password: "password123",
@@ -265,11 +262,11 @@ describe("Admin Create API Route", () => {
         mockEnv.JWT_SECRET,
       );
 
-      const request = new MockNextRequest(
+      const request = new NextRequest(
         "http://localhost:3000/api/admin/create",
         {
           method: "POST",
-          headers: new MockHeaders({ authorization: `Bearer ${mockToken}` }),
+          headers: { authorization: `Bearer ${mockToken}` },
           body: JSON.stringify({
             email: "newadmin@example.com",
             password: "short",
