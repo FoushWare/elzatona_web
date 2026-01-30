@@ -2,7 +2,11 @@
 
 import React, { useState, useEffect, useCallback } from "react";
 import { Plus, Search, Code, Layout, Edit, Trash2 } from "lucide-react";
-import { AdminFrontendTask, PaginatedResponse } from "@elzatona/types";
+import {
+  AdminFrontendTask,
+  AdminFrontendTaskFormData,
+  PaginatedResponse,
+} from "@elzatona/types";
 import {
   FrontendTaskEditor,
   Button,
@@ -88,7 +92,7 @@ export default function FrontendTasksPage() {
     }
   };
 
-  const handleSaveTask = async (taskData: FrontendTaskFormData) => {
+  const handleSaveTask = async (taskData: AdminFrontendTaskFormData) => {
     try {
       const url =
         editorMode === "create"

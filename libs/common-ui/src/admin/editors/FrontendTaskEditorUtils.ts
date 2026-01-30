@@ -1,4 +1,7 @@
-import { FrontendTaskFile, FrontendTaskFormData } from "@elzatona/types";
+import {
+  AdminFrontendTaskFile,
+  AdminFrontendTaskFormData,
+} from "@elzatona/types";
 
 interface FileNode {
   id: string;
@@ -327,7 +330,7 @@ export const generateCssStyles = (cssCode: string): string => {
 // Form handling helper functions
 export const extractFilesFromTree = (
   fileTree: FileNode[],
-): FrontendTaskFile[] => {
+): AdminFrontendTaskFile[] => {
   return fileTree
     .flatMap((folder) => folder.children || [])
     .map((file) => ({
@@ -340,9 +343,9 @@ export const extractFilesFromTree = (
 };
 
 export const createTaskData = (
-  formData: FrontendTaskFormData,
-  files: FrontendTaskFile[],
-): FrontendTaskFormData => {
+  formData: AdminFrontendTaskFormData,
+  files: AdminFrontendTaskFile[],
+): AdminFrontendTaskFormData => {
   return {
     ...formData,
     files,
