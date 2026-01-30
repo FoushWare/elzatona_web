@@ -1,89 +1,117 @@
-# Implementation Plan: [FEATURE]
+# Implementation Plan: Frontend Task Detail
 
-**Branch**: `[###-feature-name]` | **Date**: [DATE] | **Spec**: [link]
-**Input**: Feature specification from `/specs/[###-feature-name]/spec.md`
-
-**Note**: This template is filled in by the `/speckit.plan` command. See `.specify/templates/commands/plan.md` for the execution workflow.
+**Branch**: `004-frontend-task-detail` | **Date**: 2026-01-30 | **Spec**: [spec.md](./spec.md)
+**Input**: Feature specification from `/specs/004-frontend-task-detail/spec.md`
 
 ## Summary
 
-[Extract from feature spec: primary requirement + technical approach from research]
+Implement a reusable, testable, and accessible frontend task detail page for authoring and running coding tasks. The page will display task metadata (title, difficulty, author, tags, estimated time), provide a multi-file code editor with run/reset/solution actions, and follow Atomic Design patterns. Components will be developed in `libs/common-ui` and consumed by the website app at `/frontend-tasks/[id]`.
 
 ## Technical Context
 
-<!--
-  ACTION REQUIRED: Replace the content in this section with the technical details
-  for the project. The structure here is presented in advisory capacity to guide
-  the iteration process.
--->
-
-**Language/Version**: [e.g., Python 3.11, Swift 5.9, Rust 1.75 or NEEDS CLARIFICATION]  
-**Primary Dependencies**: [e.g., FastAPI, UIKit, LLVM or NEEDS CLARIFICATION]  
-**Storage**: [if applicable, e.g., PostgreSQL, CoreData, files or N/A]  
-**Testing**: [e.g., pytest, XCTest, cargo test or NEEDS CLARIFICATION]  
-**Target Platform**: [e.g., Linux server, iOS 15+, WASM or NEEDS CLARIFICATION]
-**Project Type**: [single/web/mobile - determines source structure]  
-**Performance Goals**: [domain-specific, e.g., 1000 req/s, 10k lines/sec, 60 fps or NEEDS CLARIFICATION]  
-**Constraints**: [domain-specific, e.g., <200ms p95, <100MB memory, offline-capable or NEEDS CLARIFICATION]  
-**Scale/Scope**: [domain-specific, e.g., 10k users, 1M LOC, 50 screens or NEEDS CLARIFICATION]
+**Language/Version**: TypeScript 5.x, React 18+, Next.js 15+ (App Router)  
+**Primary Dependencies**: React, Next.js, Monaco Editor (or CodeMirror), Tailwind CSS, @elzatona/common-ui, @elzatona/types  
+**Storage**: Supabase (PostgreSQL) via @elzatona/database repository pattern  
+**Testing**: Vitest for unit tests, React Testing Library for component tests, Playwright for E2E  
+**Target Platform**: Web (modern browsers - Chrome, Firefox, Safari, Edge)  
+**Project Type**: Web (Nx Monorepo)  
+**Performance Goals**: Initial page render < 1s with backend response < 200ms  
+**Constraints**: No `any` types, WCAG AA accessibility compliance, < 500KB JS bundle for the page  
+**Scale/Scope**: Single page feature, 8-12 new components, integration with existing FrontendTask type
 
 ## Constitution Check
 
 _GATE: Must pass before Phase 0 research. Re-check after Phase 1 design._
 
-- [ ] **Spec-Driven**: Feature has a detailed spec in `.github/specs/`?
-- [ ] **Testable**: Plan includes unit testing strategy with ≥ 90% coverage target?
-- [ ] **Strict Types**: No `any` types planned; strict mode adherence?
-- [ ] **Security**: Authentication/Authorization checks identified?
-- [ ] **Predictable**: Product scenarios clearly mapped to implementation?
+- [x] **Spec-Driven**: Feature has a detailed spec in `specs/004-frontend-task-detail/spec.md`
+- [x] **Testable**: Plan includes unit testing strategy with ≥ 90% coverage target for component logic
+- [x] **Strict Types**: No `any` types planned; strict mode enabled; using `FrontendTask` from `@elzatona/types`
+- [x] **Security**: User inputs sanitized before execution; no eval(); no secrets in frontend
+- [x] **Predictable**: 5 functional requirements mapped to implementation tasks via stable keys
 
 ## Project Structure
 
 ### Documentation (this feature)
 
 ```text
-specs/[###-feature]/
-├── plan.md              # This file (/speckit.plan command output)
-├── research.md          # Phase 0 output (/speckit.plan command)
-├── data-model.md        # Phase 1 output (/speckit.plan command)
-├── quickstart.md        # Phase 1 output (/speckit.plan command)
-├── contracts/           # Phase 1 output (/speckit.plan command)
-└── tasks.md             # Phase 2 output (/speckit.tasks command - NOT created by /speckit.plan)
+specs/004-frontend-task-detail/
+├── plan.md              # This file
+├── research.md          # Phase 0 output - technology decisions
+├── data-model.md        # Phase 1 output - data entities
+├── quickstart.md        # Phase 1 output - developer guide
+├── contracts/           # Phase 1 output - API contracts
+│   └── frontend-tasks-api.yaml
+└── tasks.md             # Phase 2 output (/speckit.tasks command)
 ```
 
 ### Source Code (repository root)
 
-<!--
-  ACTION REQUIRED: Replace the placeholder tree below with the concrete layout
-  for this feature. Delete unused options and expand the chosen structure with
-  real paths (e.g., apps/admin, packages/something). The delivered plan must
-  not include Option labels.
--->
-
 ```text
 # Nx Monorepo Structure
 apps/
-├── [app-name]/
+├── website/
 │   ├── src/
-│   │   ├── app/           # App Router
+│   │   ├── app/
+│   │   │   └── frontend-tasks/
+│   │   │       └── [id]/
+│   │   │           └── page.tsx        # Main page component
 │   │   └── components/
+│   │       └── frontend-tasks/
+│   │           └── TaskDetailPage.tsx  # Page organism
 │   └── project.json
 libs/
-├── [lib-name]/
+├── common-ui/
 │   ├── src/
 │   │   ├── lib/
-│   │   └── index.ts
+│   │   │   ├── atoms/
+│   │   │   │   ├── DifficultyBadge.tsx
+│   │   │   │   └── TagChip.tsx
+│   │   │   ├── molecules/
+│   │   │   │   ├── TaskMetadata.tsx
+│   │   │   │   ├── TaskDescription.tsx
+│   │   │   │   └── FileTab.tsx
+│   │   │   └── organisms/
+│   │   │       ├── TaskSidebar.tsx
+│   │   │       ├── CodeEditor.tsx
+│   │   │       └── ConsoleOutput.tsx
+│   │   └── index.ts                   # Exports all components
 │   └── project.json
+├── types/
+│   └── src/
+│       └── frontend-task.ts           # FrontendTask type (extend if needed)
+└── database/
+    └── src/
+        └── repositories/
+            └── FrontendTaskRepository.ts  # API integration
 ```
 
-**Structure Decision**: [Document the selected structure and reference the real
-directories captured above]
+**Structure Decision**: Following existing Nx monorepo patterns. New UI components go in `libs/common-ui` following Atomic Design. The page route lives in `apps/website` under `/frontend-tasks/[id]`. Reusing existing repository pattern from `libs/database` for API calls.
 
 ## Complexity Tracking
 
-> **Fill ONLY if Constitution Check has violations that must be justified**
+> No constitution violations identified. All requirements map to standard patterns.
 
-| Violation                  | Why Needed         | Simpler Alternative Rejected Because |
-| -------------------------- | ------------------ | ------------------------------------ |
-| [e.g., 4th project]        | [current need]     | [why 3 projects insufficient]        |
-| [e.g., Repository pattern] | [specific problem] | [why direct DB access insufficient]  |
+| Violation | Why Needed | Simpler Alternative Rejected Because |
+| --------- | ---------- | ------------------------------------ |
+| N/A       | N/A        | N/A                                  |
+
+## Phase 0 Output
+
+See [research.md](./research.md) for technology decisions and alternatives evaluated.
+
+## Phase 1 Output
+
+- [data-model.md](./data-model.md) - Entity definitions and validation rules
+- [contracts/frontend-tasks-api.yaml](./contracts/frontend-tasks-api.yaml) - OpenAPI specification
+- [quickstart.md](./quickstart.md) - Developer implementation guide
+
+## Requirement Traceability
+
+| Requirement Key                              | User Story | Components Affected                            |
+| -------------------------------------------- | ---------- | ---------------------------------------------- |
+| requirement:user-can-view-task               | US1        | TaskMetadata, DifficultyBadge, TaskDescription |
+| requirement:user-can-browse-files            | US2        | TaskSidebar, FileTab                           |
+| requirement:user-can-edit-code               | US2        | CodeEditor                                     |
+| requirement:user-can-run-reset-and-view-solution | US3    | ActionBar, ConsoleOutput, SolutionPanel        |
+| requirement:ui-accessibility                 | US1-3      | All components (ARIA, keyboard nav, contrast)  |
+| requirement:export-surface                   | All        | libs/common-ui/src/index.ts                    |

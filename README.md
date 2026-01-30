@@ -105,6 +105,91 @@ npx sonar-scanner
 - **[Testing Guide](docs/TESTING_SUMMARY.md)** - Testing strategy and coverage
 - **[Database Schema](docs/database/questions-schema.md)** - Database structure
 
+## 🔌 API Documentation
+
+Both applications provide interactive API documentation powered by Swagger UI:
+
+### Website API Documentation
+
+Access the interactive API documentation for the public-facing website:
+
+```
+http://localhost:3000/api-docs
+```
+
+**Available Endpoints:**
+- **Authentication** - Session management, logout
+- **Questions** - Practice questions, validation, statistics
+- **Categories & Topics** - Browse question categories and topics
+- **Learning Paths** - Structured learning paths
+- **Guided Learning** - Guided learning plans and sections
+- **Progress** - User progress tracking
+- **Flashcards** - Flashcard management
+- **Frontend Tasks** - Frontend coding challenges
+- **Code Execution** - Code compilation and testing
+
+### Admin API Documentation
+
+Access the interactive API documentation for the admin panel:
+
+```
+http://localhost:3001/api-docs
+```
+
+**Available Endpoints:**
+- **Dashboard** - Admin dashboard statistics
+- **Authentication** - Admin login and session management
+- **Users** - User management
+- **Frontend Tasks** - CRUD operations for frontend coding tasks
+- **Problem Solving** - CRUD operations for problem-solving questions
+- **Learning Cards** - Learning card management
+- **Questions** - Question management
+- **Categories & Topics** - Category and topic management
+
+### Using Swagger UI
+
+1. **Start the development servers:**
+   ```bash
+   # Website (runs on port 3000)
+   bun run dev
+
+   # Admin (runs on port 3001)
+   bun run dev:admin
+   ```
+
+2. **Navigate to the API docs:**
+   - Website: Open `http://localhost:3000/api-docs`
+   - Admin: Open `http://localhost:3001/api-docs`
+
+3. **Explore endpoints:**
+   - Click on any endpoint to view details
+   - View request/response schemas
+   - See required parameters and body structure
+   - Check authentication requirements
+
+4. **Test endpoints:**
+   - Click "Try it out" button on any endpoint
+   - Fill in required parameters
+   - For authenticated endpoints, click "Authorize" and enter your JWT token
+   - Click "Execute" to send the request
+   - View the response in real-time
+
+5. **Authentication:**
+   - Many endpoints require authentication
+   - Obtain a JWT token by logging in first
+   - Click the "Authorize" button at the top
+   - Enter: `Bearer YOUR_JWT_TOKEN`
+   - Click "Authorize" to apply to all requests
+
+### OpenAPI Specification
+
+The raw OpenAPI 3.0 specifications are also available:
+
+- Website: `http://localhost:3000/api/swagger`
+- Admin: `http://localhost:3001/api/swagger`
+
+You can import these into tools like Postman, Insomnia, or API testing frameworks.
+
 ## 🏗️ Project Structure
 
 This is an **Nx monorepo** with the following structure:

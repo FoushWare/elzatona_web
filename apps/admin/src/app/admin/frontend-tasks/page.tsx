@@ -3,8 +3,7 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { Plus, Search, Code, Layout, Edit, Trash2 } from "lucide-react";
 import {
-  FrontendTask,
-  FrontendTaskFormData,
+  AdminFrontendTask,
   PaginatedResponse,
 } from "@elzatona/types";
 import {
@@ -20,11 +19,11 @@ import {
 } from "@elzatona/common-ui";
 
 export default function FrontendTasksPage() {
-  const [tasks, setTasks] = useState<FrontendTask[]>([]);
+  const [tasks, setTasks] = useState<AdminFrontendTask[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
   const [isEditorOpen, setIsEditorOpen] = useState(false);
-  const [selectedTask, setSelectedTask] = useState<FrontendTask | null>(null);
+  const [selectedTask, setSelectedTask] = useState<AdminFrontendTask | null>(null);
   const [editorMode, setEditorMode] = useState<"create" | "edit">("create");
   const { showSuccess, showError } = useToast();
 
@@ -38,7 +37,7 @@ export default function FrontendTasksPage() {
       });
 
       const response = await fetch(`/api/admin/frontend-tasks?${params}`);
-      const data: PaginatedResponse<FrontendTask> = await response.json();
+      const data: PaginatedResponse<AdminFrontendTask> = await response.json();
 
       if (data.success) {
         setTasks(data.data);
@@ -63,7 +62,7 @@ export default function FrontendTasksPage() {
     setIsEditorOpen(true);
   };
 
-  const handleEditTask = (task: FrontendTask) => {
+  const handleEditTask = (task: AdminFrontendTask) => {
     setSelectedTask(task);
     setEditorMode("edit");
     setIsEditorOpen(true);
@@ -252,7 +251,7 @@ export default function FrontendTasksPage() {
                   ))}
                   {(task.tags?.length || 0) > 3 && (
                     <span className="text-[10px] text-gray-400 self-center">
-                      +{task.tags!.length - 3}
+                      +{(task.tags?.length || 0) - 3}
                     </span>
                   )}
                 </div>

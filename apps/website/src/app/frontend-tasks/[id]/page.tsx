@@ -90,8 +90,8 @@ function FrontendTaskPage({ task }: { task: FrontendTask }) {
           <div className="col-span-5">
             <TaskDescription
               description={task.description}
-              requirements={[]}
-              hints={[]}
+              requirements={[task.requirements]}
+              hints={task.hints || []}
             />
           </div>
 

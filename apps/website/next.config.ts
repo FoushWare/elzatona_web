@@ -1,8 +1,8 @@
 import type { NextConfig } from "next";
 import { withSentryConfig } from "@sentry/nextjs";
 import { config } from "dotenv";
-import { resolve } from "path";
-import { existsSync } from "fs";
+import { resolve } from "node:path";
+import { existsSync } from "node:fs";
 
 // CRITICAL: Load environment-specific files BEFORE Next.js loads .env.local
 // This ensures NEXT_PUBLIC_ variables are set correctly
@@ -99,6 +99,17 @@ const nextConfig: NextConfig = {
   // Disable automatic error page generation
   distDir: ".next",
 
+  // Redirect admin routes to admin app
+  async redirects() {
+    return [
+      {
+        source: "/admin/:path*",
+        destination: "http://localhost:3001/admin/:path*",
+        permanent: false,
+      },
+    ];
+  },
+
   // Disable automatic error page generation
   reactStrictMode: false,
 
@@ -158,31 +169,29 @@ const nextConfig: NextConfig = {
     config.module = config.module || {};
     config.module.rules = config.module.rules || [];
 
-    // Exclude storybook files from build
-    config.module.rules.push({
-      test: /\.stories\.(tsx?|jsx?)$/,
-      loader: "ignore-loader",
-    });
+    // Consolidate all ignored file patterns into a single rule
+    config.module.rules.push(
+      {
+        test: /\.stories\.(tsx?|jsx?)$/,
+        loader: "ignore-loader",
+      },
+      {
+        test: /\.(test|spec)\.(tsx?|jsx?)$/,
+        loader: "ignore-loader",
+      },
+      {
+        test: /\.ts$/,
+        include: /src\/scripts/,
+        use: "ignore-loader",
+      }
+    );
 
-    // Exclude test files from build
-    config.module.rules.push({
-      test: /\.(test|spec)\.(tsx?|jsx?)$/,
-      loader: "ignore-loader",
-    });
     // Exclude tests directory from build
     config.resolve = config.resolve || {};
     config.resolve.alias = {
       ...config.resolve.alias,
       "^tests/": false,
     };
-    // Exclude scripts directory from build
-    config.module.rules.push({
-      test: /\.ts$/,
-      include: /src\/scripts/,
-      use: "ignore-loader",
-    });
-
-    // Monaco Editor webpack configuration
     if (!isServer) {
       config.resolve.alias = {
         ...config.resolve.alias,

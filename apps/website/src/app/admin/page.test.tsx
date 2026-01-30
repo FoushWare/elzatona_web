@@ -1,60 +1,58 @@
 /**
- * Unit Tests for Admin Content Management
- * Task: 4 - Admin Content Management
- * Test IDs: A-UT-014, A-UT-015
+ * Unit Tests for Admin Redirect Page
+ * Tests the redirect functionality from website to admin app
  */
 
 import React from "react";
-import { render, waitFor } from "@testing-library/react";
+import { render, screen, waitFor } from "@testing-library/react";
 import "@testing-library/jest-dom";
-import UnifiedAdminPage from "./questions/page";
+import AdminRedirectPage from "./page";
 
-// Mock dependencies
-jest.mock("next/navigation", () => ({
-  useRouter: () => ({
-    push: jest.fn(),
-    replace: jest.fn(),
-    prefetch: jest.fn(),
-  }),
-  usePathname: () => "/admin/content",
-}));
+// Mock globalThis.location
+const mockLocation = {
+  href: "",
+};
 
-// Mock shared contexts
-jest.mock("@elzatona/contexts", () => {
-  const actual = jest.requireActual(
-    "../../../test-utils/mocks/shared-contexts",
-  );
-  return {
-    ...actual,
-    useAdminAuth: jest.fn(() => ({
-      isAuthenticated: true,
-      isLoading: false,
-      user: { id: "1", email: "admin@example.com", role: "super_admin" },
-    })),
-  };
+Object.defineProperty(globalThis, "location", {
+  value: mockLocation,
+  writable: true,
 });
 
-// Mock fetch
-global.fetch = jest.fn();
-
-describe("4: Component Renders", () => {
+describe("AdminRedirectPage", () => {
   beforeEach(() => {
-    jest.clearAllMocks();
-    (global.fetch as jest.Mock).mockResolvedValue({
-      ok: true,
-      json: async () => ({ data: [], pagination: { totalCount: 0 } }),
-    });
+    mockLocation.href = "";
   });
 
   it("should render without errors", () => {
-    const { container } = render(<UnifiedAdminPage />);
-    expect(container).toBeInTheDocument();
+    render(<AdminRedirectPage />);
+    expect(
+      screen.getByText(/Redirecting to Admin Dashboard/i)
+    ).toBeInTheDocument();
   });
 
-  it("should display main content", async () => {
-    render(<UnifiedAdminPage />);
+  it("should display loading spinner", () => {
+    render(<AdminRedirectPage />);
+    const spinner = document.querySelector(".animate-spin");
+    expect(spinner).toBeInTheDocument();
+  });
+
+  it("should display fallback link", () => {
+    render(<AdminRedirectPage />);
+    const link = screen.getByRole("link", { name: /click here/i });
+    expect(link).toHaveAttribute("href", "http://localhost:3001/admin");
+  });
+
+  it("should redirect to admin app on mount", async () => {
+    render(<AdminRedirectPage />);
     await waitFor(() => {
-      expect(document.body).toBeTruthy();
+      expect(mockLocation.href).toBe("http://localhost:3001/admin");
     });
+  });
+
+  it("should display helpful message about redirect", () => {
+    render(<AdminRedirectPage />);
+    expect(
+      screen.getByText(/Taking you to the admin application/i)
+    ).toBeInTheDocument();
   });
 });

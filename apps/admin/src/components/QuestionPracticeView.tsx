@@ -13,8 +13,7 @@ import {
   ExternalLink,
   Clock,
 } from "lucide-react";
-import { QuestionContent } from "@elzatona/common-ui";
-import { Button } from "@elzatona/common-ui";
+import { QuestionContent, Button } from "@elzatona/common-ui";
 
 interface Question {
   id: string;
@@ -179,7 +178,7 @@ export const QuestionPracticeView: React.FC<QuestionPracticeViewProps> = ({
           : Number.parseInt(correctAnswerStr, 10);
 
       if (
-        !isNaN(correctIndex) &&
+        !Number.isNaN(correctIndex) &&
         shuffledOptions[correctIndex]?.text.toLowerCase().trim() === answerStr
       ) {
         return true;
@@ -204,12 +203,12 @@ export const QuestionPracticeView: React.FC<QuestionPracticeViewProps> = ({
   const cleanQuestionTitle = (title: string): string => {
     if (!title) return "";
     return title
-      .replaceAll(/&nbsp;/g, " ")
-      .replaceAll(/&lt;/g, "<")
-      .replaceAll(/&gt;/g, ">")
-      .replaceAll(/&amp;/g, "&")
-      .replaceAll(/&quot;/g, '"')
-      .replaceAll(/&#39;/g, "'")
+      .replaceAll("&nbsp;", " ")
+      .replaceAll("&lt;", "<")
+      .replaceAll("&gt;", ">")
+      .replaceAll("&amp;", "&")
+      .replaceAll("&quot;", '"')
+      .replaceAll("&#39;", "'")
       .trim();
   };
 
