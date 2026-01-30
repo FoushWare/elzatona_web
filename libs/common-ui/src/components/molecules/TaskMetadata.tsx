@@ -34,7 +34,6 @@ export const TaskMetadata: React.FC<TaskMetadataProps> = ({
       </div>
       {/*NOSONAR*/}
       <div className="mt-2 text-sm text-muted-foreground">
-        {/* eslint-disable-next-line @sonarjs/no-empty-function */}
         <span>Estimated: {time}</span>
         <span className="mx-2">•</span>
         <span>
