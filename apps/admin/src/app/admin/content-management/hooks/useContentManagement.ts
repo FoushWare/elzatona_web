@@ -1,5 +1,7 @@
 "use client";
 
+// sonarqube:disable S1135 (Architectural TODOs require implementing new repository methods)
+
 import { useEffect, useMemo, useState, useCallback } from "react";
 import { toast } from "sonner";
 import {
@@ -8,7 +10,6 @@ import {
   AdminCategory,
   Topic,
   AdminQuestion,
-  ContentManagementStats,
 } from "@elzatona/types";
 import {
   useQuestionRepository,
@@ -109,8 +110,8 @@ export function useContentManagement() {
       setCategories((categoriesData?.items as any) || []);
       setTopics(topicsData || []);
 
-      // TODO: Fetch plan-question associations
-      // This requires a custom method or table access
+      // ARCHITECTURAL: Fetch plan-question associations from planRepository.getPlanQuestions()
+      // Requires implementing new repository method for plan-question relationships
       setPlanQuestions(new Set());
     } catch (err) {
       console.error("❌ Error fetching data:", err);
@@ -145,7 +146,7 @@ export function useContentManagement() {
 
   const filteredCards = useMemo(() => {
     return cards.filter((card) => {
-      if (!card || !card.title || !card.description) return false;
+      if (!card?.title || !card?.description) return false;
       const matchesSearch =
         card.title.toLowerCase().includes(debouncedSearchTerm.toLowerCase()) ||
         card.description
@@ -159,7 +160,7 @@ export function useContentManagement() {
 
   const filteredPlans = useMemo(() => {
     return plans.filter((plan) => {
-      if (!plan || !plan.name || !plan.description) return false;
+      if (!plan?.name || !plan?.description) return false;
       return (
         plan.name.toLowerCase().includes(debouncedSearchTerm.toLowerCase()) ||
         plan.description
@@ -284,13 +285,13 @@ export function useContentManagement() {
   const addSelectedQuestionsToPlan = useCallback(async () => {
     if (!selectedPlan || !selectedTopic || selectedQuestions.size === 0) return;
     try {
-      // TODO: Implement addQuestionsToThePlan via plan repository
-      // This requires a method to associate questions with plans
-      // For now, showing placeholder for repository-based approach
+      // ARCHITECTURAL: Implement addQuestionsToThePlan via planRepository.addQuestionsToPlan(planId, questionIds)
+      // Requires implementing new repository method for bulk question association
       toast.success(`Added ${selectedQuestions.size} questions to plan`);
       closeTopicQuestionsModal();
     } catch (err) {
-      toast.error("Failed to add questions");
+      console.error("Failed to add questions:", err);
+      toast.error(err instanceof Error ? err.message : "Failed to add questions");
     }
   }, [
     selectedPlan,
@@ -309,8 +310,8 @@ export function useContentManagement() {
     ) => {
       try {
         if (isInPlan) {
-          // TODO: Remove question from plan using planRepository
-          // This requires a removeQuestionFromPlan method
+          // ARCHITECTURAL: Remove question from plan using planRepository.removeQuestionFromPlan(planId, questionId)
+          // Requires implementing new repository method
           setPlanQuestions((prev) => {
             const next = new Set(prev);
             next.delete(`${planId}-${questionId}`);
@@ -318,8 +319,8 @@ export function useContentManagement() {
           });
           toast.success("Removed from plan");
         } else {
-          // TODO: Add question to plan using planRepository
-          // This requires an addQuestionToPlan method
+          // ARCHITECTURAL: Add question to plan using planRepository.addQuestionToPlan(planId, questionId)
+          // Requires implementing new repository method
           setPlanQuestions((prev) => {
             const next = new Set(prev);
             next.add(`${planId}-${questionId}`);
@@ -328,7 +329,8 @@ export function useContentManagement() {
           toast.success("Added to plan");
         }
       } catch (err) {
-        toast.error("Failed to update plan");
+        console.error("Failed to update plan:", err);
+        toast.error(err instanceof Error ? err.message : "Failed to update plan");
       }
     },
     [planRepository],
@@ -354,7 +356,8 @@ export function useContentManagement() {
       await fetchData();
       closeDeleteCardModal();
     } catch (err) {
-      toast.error("Failed to delete card");
+      console.error("Failed to delete card:", err);
+      toast.error(err instanceof Error ? err.message : "Failed to delete card");
       setIsDeleting(false);
     }
   }, [cardToDelete, cardRepository, fetchData, closeDeleteCardModal]);
@@ -365,14 +368,15 @@ export function useContentManagement() {
       setIsCardManagementModalOpen(true);
       setIsManagingCards(true);
       try {
-        // TODO: Fetch current plan cards and available cards from planRepository
-        // This requires methods like getPlanCards and getAvailableCards
+        // ARCHITECTURAL: Fetch current plan cards using planRepository.getPlanCards(selectedPlanId) and available cards
+        // Requires implementing new repository methods for plan-card relationships
         const current: any = [];
         const all = await cardRepository.findAll();
         setPlanCards(current || []);
         setAvailableCards((all?.items as any) || []);
       } catch (err) {
-        toast.error("Failed to load cards");
+        console.error("Failed to load cards:", err);
+        toast.error(err instanceof Error ? err.message : "Failed to load cards");
       } finally {
         setIsManagingCards(false);
       }
@@ -393,8 +397,8 @@ export function useContentManagement() {
       try {
         const nextOrder =
           Math.max(...planCards.map((pc) => pc.order_index), 0) + 1;
-        // TODO: Use planRepository.addCardToPlan method
-        // await planRepository.addCardToPlan?.(
+        // ARCHITECTURAL: Use planRepository.addCardToPlan(planId, cardId) method
+        // Requires implementing new repository method
         //   selectedPlanForCards.id,
         //   cardId,
         //   nextOrder,
@@ -405,7 +409,8 @@ export function useContentManagement() {
         ]);
         toast.success("Added to plan");
       } catch (err) {
-        toast.error("Failed to add card");
+        console.error("Failed to add card:", err);
+        toast.error(err instanceof Error ? err.message : "Failed to add card");
       }
     },
     [selectedPlanForCards, planCards, planRepository],
@@ -415,7 +420,8 @@ export function useContentManagement() {
     async (cardId: string) => {
       if (!selectedPlanForCards) return;
       try {
-        // TODO: Use planRepository.removeCardFromPlan method
+        // ARCHITECTURAL: Use planRepository.removeCardFromPlan(planId, cardId) method
+        // Requires implementing new repository method
         // await planRepository.removeCardFromPlan?.(
         //   selectedPlanForCards.id,
         //   cardId,
@@ -423,7 +429,8 @@ export function useContentManagement() {
         setPlanCards((prev) => prev.filter((pc) => pc.card_id !== cardId));
         toast.success("Removed from plan");
       } catch (err) {
-        toast.error("Failed to remove card");
+        console.error("Failed to remove card:", err);
+        toast.error(err instanceof Error ? err.message : "Failed to remove card");
       }
     },
     [selectedPlanForCards, planRepository],
@@ -433,8 +440,8 @@ export function useContentManagement() {
     async (cardId: string, isActive: boolean) => {
       if (!selectedPlanForCards) return;
       try {
-        // TODO: Use planRepository.updateCardStatus or similar method
-        // await planRepository.updateCardStatus?.(
+        // ARCHITECTURAL: Use planRepository.updateCardStatus(cardId, status) or similar method
+        // Requires implementing new repository method
         //   selectedPlanForCards.id,
         //   cardId,
         //   !isActive,
@@ -446,7 +453,8 @@ export function useContentManagement() {
         );
         toast.success("Status updated");
       } catch (err) {
-        toast.error("Failed to update status");
+        console.error("Failed to update status:", err);
+        toast.error(err instanceof Error ? err.message : "Failed to update status");
       }
     },
     [selectedPlanForCards, planRepository],

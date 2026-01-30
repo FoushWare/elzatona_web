@@ -5,7 +5,7 @@
 
 "use client";
 
-import React, { createContext, useContext, ReactNode } from "react";
+import React, { createContext, useContext, ReactNode, useMemo } from "react";
 import {
   IQuestionRepository,
   IUserRepository,
@@ -52,10 +52,10 @@ interface RepositoryProviderProps {
 export function RepositoryProvider({
   children,
   factory: customFactory,
-}: RepositoryProviderProps): JSX.Element {
+}: Readonly<RepositoryProviderProps>): JSX.Element {
   const factory = customFactory || getRepositoryFactory();
 
-  const value: RepositoryContextValue = {
+  const value = useMemo<RepositoryContextValue>(() => ({
     questionRepository: factory.getQuestionRepository(),
     userRepository: factory.getUserRepository(),
     planRepository: factory.getPlanRepository(),
@@ -63,7 +63,7 @@ export function RepositoryProvider({
     categoryRepository: factory.getCategoryRepository(),
     topicRepository: factory.getTopicRepository(),
     factory,
-  };
+  }), [factory]);
 
   return (
     <RepositoryContext.Provider value={value}>
