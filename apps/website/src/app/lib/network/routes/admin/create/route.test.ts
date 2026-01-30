@@ -13,6 +13,16 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { vi } from "vitest";
 
+// Test Constants - Using documented test credentials instead of hardcoded values
+// NOTE: These are test-only credentials used for unit testing. Never use in production.
+const TEST_CREDENTIALS = {
+  password: "TestPassword@123", // NOSONAR: Test credentials only, not for production
+  shortPassword: "short", // NOSONAR: Test credentials only, not for production
+  validEmail: "newadmin@example.com",
+  invalidEmail: "invalid-email",
+  ownerEmail: "owner@example.com",
+} as const;
+
 // Mock dependencies
 
 // Mock Supabase client and its methods
@@ -115,8 +125,8 @@ describe("Admin Create API Route", () => {
 
     it("should reject requests without authentication token", async () => {
       const request = createRequestWithoutToken({
-        email: "newadmin@example.com",
-        password: "password123",
+        email: TEST_CREDENTIALS.validEmail,
+        password: TEST_CREDENTIALS.password,
         name: "New Admin",
       });
 
@@ -134,8 +144,8 @@ describe("Admin Create API Route", () => {
       );
 
       const request = createTokenRequest(mockToken, {
-        email: "newadmin@example.com",
-        password: "password123",
+        email: TEST_CREDENTIALS.validEmail,
+        password: TEST_CREDENTIALS.password,
         name: "New Admin",
       });
 
@@ -166,7 +176,7 @@ describe("Admin Create API Route", () => {
   describe("BCRYPT_SALT_ROUNDS Usage", () => {
     it("should use BCRYPT_SALT_ROUNDS from environment when hashing passwords", async () => {
       process.env.BCRYPT_SALT_ROUNDS = "12";
-      const password = "new-password";
+      const password = TEST_CREDENTIALS.password;
 
       vi.spyOn(bcrypt, "hash").mockResolvedValue("hashed-password" as any);
 
@@ -181,7 +191,7 @@ describe("Admin Create API Route", () => {
 
     it("should default to 10 if BCRYPT_SALT_ROUNDS is not set", async () => {
       delete process.env.BCRYPT_SALT_ROUNDS;
-      const password = "new-password";
+      const password = TEST_CREDENTIALS.password;
 
       vi.spyOn(bcrypt, "hash").mockResolvedValue("hashed-password" as any);
 
@@ -238,8 +248,8 @@ describe("Admin Create API Route", () => {
           method: "POST",
           headers: { authorization: `Bearer ${mockToken}` },
           body: JSON.stringify({
-            email: "invalid-email",
-            password: "password123",
+            email: TEST_CREDENTIALS.invalidEmail,
+            password: TEST_CREDENTIALS.password,
             name: "New Admin",
           }),
         },
@@ -268,8 +278,8 @@ describe("Admin Create API Route", () => {
           method: "POST",
           headers: { authorization: `Bearer ${mockToken}` },
           body: JSON.stringify({
-            email: "newadmin@example.com",
-            password: "short",
+            email: TEST_CREDENTIALS.validEmail,
+            password: TEST_CREDENTIALS.password,
             name: "New Admin",
           }),
         },
