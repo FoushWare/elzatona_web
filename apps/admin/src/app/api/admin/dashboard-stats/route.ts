@@ -18,18 +18,35 @@ export async function GET(request: NextRequest) {
         questionRepository.findAll(),
         planRepository.findAll(),
         cardRepository.findAll(),
-        categoryRepository.findAll(),
+        categoryRepository.getAllCategories(),
         topicRepository.getAllTopics(),
         userRepository.findByRole("admin"),
       ]);
 
     const stats = {
-      questions: questions?.length || 0,
-      categories: categories?.length || 0,
-      topics: topics?.length || 0,
-      cards: cards?.length || 0,
-      learningPlans: plans?.length || 0,
-      admins: admins?.total || 0,
+      // PaginatedResult<T> may provide length, items, or data
+      questions:
+        (questions as any)?.length ??
+        (questions as any)?.items?.length ??
+        (questions as any)?.data?.length ??
+        0,
+      categories:
+        (categories as any)?.length ??
+        (categories as any)?.items?.length ??
+        (categories as any)?.data?.length ??
+        (Array.isArray(categories) ? (categories as any).length : 0),
+      topics: (topics as any)?.length ?? 0,
+      cards:
+        (cards as any)?.length ??
+        (cards as any)?.items?.length ??
+        (cards as any)?.data?.length ??
+        0,
+      learningPlans:
+        (plans as any)?.length ??
+        (plans as any)?.items?.length ??
+        (plans as any)?.data?.length ??
+        0,
+      admins: (admins as any)?.total ?? 0,
       totalTasks: 0,
       lastUpdated: new Date().toISOString(),
     };

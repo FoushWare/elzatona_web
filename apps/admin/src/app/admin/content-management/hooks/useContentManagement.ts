@@ -101,14 +101,15 @@ export function useContentManagement() {
           cardRepository.findAll(),
           planRepository.findAll(),
           questionRepository.findAll(),
-          categoryRepository.findAll(),
+          categoryRepository.getAllCategories(),
           topicRepository.getAllTopics(),
         ]);
 
       setCards((cardsData?.items as any) || []);
       setPlans((plansData?.items as any) || []);
       setQuestions((questionsData?.items as any) || []);
-      setCategories((categoriesData?.items as any) || []);
+      // categoryRepository.getAllCategories returns a plain array
+      setCategories((categoriesData as any) || []);
       setTopics(topicsData || []);
 
       // ARCHITECTURAL: Fetch plan-question associations from planRepository.getPlanQuestions()
