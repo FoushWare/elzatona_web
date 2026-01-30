@@ -10,14 +10,14 @@
 
 ## Phase 1: Setup
 
- - [ ] T001 Create feature branch `004-frontend-task-detail` from `develop`
-- [ ] T002 Create atoms directory if not exists at `libs/common-ui/src/atoms/`
-- [ ] T003 Create molecules directory if not exists at `libs/common-ui/src/molecules/`
-- [ ] T004 Create organisms directory if not exists at `libs/common-ui/src/organisms/`
+ - [X] T001 Create feature branch `004-frontend-task-detail` from `develop`
+- [X] T002 Create atoms directory if not exists at `libs/common-ui/src/atoms/`
+- [X] T003 Create molecules directory if not exists at `libs/common-ui/src/molecules/`
+- [X] T004 Create organisms directory if not exists at `libs/common-ui/src/organisms/`
 
 ## Phase 2: Foundational - Atoms (must complete before molecules)
 
-- [ ] T005 [P] Create DifficultyBadge atom in `libs/common-ui/src/atoms/DifficultyBadge.tsx`
+- [X] T005 [P] Create DifficultyBadge atom in `libs/common-ui/src/atoms/DifficultyBadge.tsx`
   - Props: `difficulty: "easy" | "medium" | "hard"`, `className?: string`
   - Styles: green (easy), yellow (medium), red (hard)
   - Max 30 lines
@@ -27,12 +27,12 @@
 **Goal**: User can view task metadata and description  
 **Test**: Navigate to `/frontend-tasks/[id]` and verify title, difficulty, time, author, tags display
 
-- [ ] T006 [US1] Create TaskMetadata molecule in `libs/common-ui/src/molecules/TaskMetadata.tsx`
+- [X] T006 [US1] Create TaskMetadata molecule in `libs/common-ui/src/molecules/TaskMetadata.tsx`
   - Props: difficulty, estimatedTime, author, company?, category, tags
   - Uses: DifficultyBadge, Badge, Clock/User/Building2/Tag icons
   - Max 80 lines
 
-- [ ] T007 [US1] Create TaskDescription molecule in `libs/common-ui/src/molecules/TaskDescription.tsx`
+- [X] T007 [US1] Create TaskDescription molecule in `libs/common-ui/src/molecules/TaskDescription.tsx`
   - Props: description, requirements, hints
   - Features: collapsible hints section, click-to-reveal individual hints
   - Uses: Card, CardContent, CardHeader, Button, Lightbulb/ChevronDown icons
@@ -43,12 +43,12 @@
 **Goal**: User can view and edit code files for the task  
 **Test**: Select different files in sidebar, edit code, verify changes persist in state
 
-- [ ] T008 [US2] Create TaskSidebar organism in `libs/common-ui/src/organisms/TaskSidebar.tsx`
+- [X] T008 [US2] Create TaskSidebar organism in `libs/common-ui/src/organisms/TaskSidebar.tsx`
   - Props: files, activeFileId, onFileSelect, onRun, onReset, onShowSolution, isRunning?
   - Features: Run/Reset/Solution buttons, file explorer with icons
   - Max 150 lines
 
-- [ ] T009 [US2] Create TaskCodeEditor organism in `libs/common-ui/src/organisms/TaskCodeEditor.tsx`
+- [X] T009 [US2] Create TaskCodeEditor organism in `libs/common-ui/src/organisms/TaskCodeEditor.tsx`
   - Props: files, activeFileId, onFileChange
   - Features: file tab header, textarea editor (upgrade to Monaco later)
   - Max 150 lines
@@ -58,14 +58,14 @@
 **Goal**: User can access full task detail page with all features  
 **Test**: Load page, verify all sections render, test run/reset/solution actions
 
-- [ ] T010 [US3] Export all new components in `libs/common-ui/src/index.ts`
+- [X] T010 [US3] Export all new components in `libs/common-ui/src/index.ts`
   - Add: DifficultyBadge, TaskMetadata, TaskDescription, TaskSidebar, TaskCodeEditor
 
-- [ ] T011 [US3] Create API route in `apps/website/src/app/api/frontend-tasks/[id]/route.ts`
+- [X] T011 [US3] Create API route in `apps/website/src/app/api/frontend-tasks/[id]/route.ts`
   - GET handler: fetch single task by ID from repository
   - Return: `{ success: true, data: FrontendTask }` or error
 
-- [ ] T012 [US3] Implement page in `apps/website/src/app/frontend-tasks/[id]/page.tsx`
+- [X] T012 [US3] Implement page in `apps/website/src/app/frontend-tasks/[id]/page.tsx`
   - State: task, files, activeFileId, isRunning, showSolution
   - Layout: 3-column grid (description | editor | sidebar)
   - Features: fetch task, file editing, reset, show solution
@@ -75,12 +75,12 @@
 
 - [ ] T013 [P] Add loading skeleton states to page component
 - [ ] T014 [P] Add error boundary and not-found handling
-- [ ] T015 [P] Verify dark mode support in all components
-- [ ] T016 [P] Add aria-labels and keyboard navigation to TaskSidebar
-- [ ] T017 Run `npm run format` on all new files
-- [ ] T018 Run `npm run lint` and fix any issues
-- [ ] T019 Run `npm run type-check` and fix any type errors
-- [ ] T020 Run `npm run build` to verify no build errors
+- [X] T015 [P] Verify dark mode support in all components
+- [X] T016 [P] Add aria-labels and keyboard navigation to TaskSidebar
+- [X] T017 Run `npm run format` on all new files
+- [X] T018 Run `npm run lint` and fix any issues
+- [X] T019 Run `npm run type-check` and fix any type errors
+- [X] T020 Run `npm run build` to verify no build errors
 
 ## Phase 7: Testing (if requested)
 

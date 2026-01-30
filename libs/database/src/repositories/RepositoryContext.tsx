@@ -11,6 +11,8 @@ import {
   IUserRepository,
   IPlanRepository,
   ILearningCardRepository,
+  ICategoryRepository,
+  ITopicRepository,
 } from "./interfaces";
 import { RepositoryFactory, getRepositoryFactory } from "./RepositoryFactory";
 
@@ -22,6 +24,8 @@ interface RepositoryContextValue {
   userRepository: IUserRepository;
   planRepository: IPlanRepository;
   learningCardRepository: ILearningCardRepository;
+  categoryRepository: ICategoryRepository;
+  topicRepository: ITopicRepository;
   factory: RepositoryFactory;
 }
 
@@ -56,6 +60,8 @@ export function RepositoryProvider({
     userRepository: factory.getUserRepository(),
     planRepository: factory.getPlanRepository(),
     learningCardRepository: factory.getLearningCardRepository(),
+    categoryRepository: factory.getCategoryRepository(),
+    topicRepository: factory.getTopicRepository(),
     factory,
   };
 
@@ -110,6 +116,22 @@ export function usePlanRepository(): IPlanRepository {
 export function useLearningCardRepository(): ILearningCardRepository {
   const { learningCardRepository } = useRepositories();
   return learningCardRepository;
+}
+
+/**
+ * Hook to access Category Repository
+ */
+export function useCategoryRepository(): ICategoryRepository {
+  const { categoryRepository } = useRepositories();
+  return categoryRepository;
+}
+
+/**
+ * Hook to access Topic Repository
+ */
+export function useTopicRepository(): ITopicRepository {
+  const { topicRepository } = useRepositories();
+  return topicRepository;
 }
 
 /**

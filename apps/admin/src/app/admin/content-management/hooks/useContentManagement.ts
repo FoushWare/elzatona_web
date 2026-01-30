@@ -14,6 +14,8 @@ import {
   useQuestionRepository,
   useLearningCardRepository,
   usePlanRepository,
+  useCategoryRepository,
+  useTopicRepository,
 } from "@elzatona/database";
 
 export function useContentManagement() {
@@ -21,6 +23,8 @@ export function useContentManagement() {
   const questionRepository = useQuestionRepository();
   const cardRepository = useLearningCardRepository();
   const planRepository = usePlanRepository();
+  const categoryRepository = useCategoryRepository();
+  const topicRepository = useTopicRepository();
 
   // State for data
   const [cards, setCards] = useState<AdminLearningCard[]>([]);
@@ -91,20 +95,19 @@ export function useContentManagement() {
       setError(null);
 
       // Fetch all data in parallel using repositories
-      const [cardsData, plansData, questionsData] = await Promise.all([
+      const [cardsData, plansData, questionsData, categoriesData, topicsData] = await Promise.all([
         cardRepository.findAll(),
         planRepository.findAll(),
         questionRepository.findAll(),
+        categoryRepository.findAll(),
+        topicRepository.getAllTopics(),
       ]);
 
       setCards((cardsData?.items as any) || []);
       setPlans((plansData?.items as any) || []);
       setQuestions((questionsData?.items as any) || []);
-
-      // TODO: Fetch categories and topics from repositories
-      // For now, keeping categories and topics empty as they need schema support
-      setCategories([]);
-      setTopics([]);
+      setCategories((categoriesData?.items as any) || []);
+      setTopics(topicsData || []);
 
       // TODO: Fetch plan-question associations
       // This requires a custom method or table access
@@ -115,7 +118,7 @@ export function useContentManagement() {
     } finally {
       setLoading(false);
     }
-  }, [questionRepository, cardRepository, planRepository]);
+  }, [questionRepository, cardRepository, planRepository, categoryRepository, topicRepository]);
 
   useEffect(() => {
     fetchData();
