@@ -44,6 +44,11 @@ type Props = { params: Promise<{ id: string }> };
 export default async function Page({ params }: Props) {
   const { id } = await params;
   const task = makeMockTask(id);
+
+  return <FrontendTaskPage task={task} />;
+}
+
+function FrontendTaskPage({ task }: { task: FrontendTask }) {
   const [files, setFiles] = useState(
     task.files.map((f) => ({ id: f.id, path: f.path, content: f.content })),
   );

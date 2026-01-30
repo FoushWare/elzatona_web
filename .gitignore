@@ -52,6 +52,8 @@ logs
 .logs/
 *.log
 .code-quality-check.log
+.code-quality-check.*.log
+.code-quality-check.latest.log
 *.log
 dev-debug.log
 # Dependency directories

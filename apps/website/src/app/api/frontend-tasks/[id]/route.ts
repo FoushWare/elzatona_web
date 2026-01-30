@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import type { FrontendTask, FrontendTaskFile } from "libs/types";
+import type { FrontendTask, FrontendTaskFile } from "@elzatona/types";
 
 const makeMockTask = (id: string): FrontendTask => {
   const files: FrontendTaskFile[] = [

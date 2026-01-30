@@ -90,7 +90,6 @@ const Select = React.forwardRef<
           <div className="max-h-60 overflow-auto">
             {selectItems.map((item) => {
               if (React.isValidElement(item)) {
-                const isSelected = selectedValue === item.props.value;
                 return (
                   <button
                     key={item.props.value}
