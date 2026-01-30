@@ -8,7 +8,6 @@ import {
   AdminLearningCard,
   LearningPlan,
   AdminCategory,
-  Topic,
   AdminQuestion,
 } from "@elzatona/types";
 import {
@@ -18,6 +17,7 @@ import {
   useCategoryRepository,
   useTopicRepository,
 } from "@elzatona/database";
+import type { Topic } from "@elzatona/database";
 
 export function useContentManagement() {
   // Inject repositories
