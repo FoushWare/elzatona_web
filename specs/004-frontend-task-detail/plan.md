@@ -107,11 +107,11 @@ See [research.md](./research.md) for technology decisions and alternatives evalu
 
 ## Requirement Traceability
 
-| Requirement Key                              | User Story | Components Affected                            |
-| -------------------------------------------- | ---------- | ---------------------------------------------- |
-| requirement:user-can-view-task               | US1        | TaskMetadata, DifficultyBadge, TaskDescription |
-| requirement:user-can-browse-files            | US2        | TaskSidebar, FileTab                           |
-| requirement:user-can-edit-code               | US2        | CodeEditor                                     |
-| requirement:user-can-run-reset-and-view-solution | US3    | ActionBar, ConsoleOutput, SolutionPanel        |
-| requirement:ui-accessibility                 | US1-3      | All components (ARIA, keyboard nav, contrast)  |
-| requirement:export-surface                   | All        | libs/common-ui/src/index.ts                    |
+| Requirement Key                                  | User Story | Components Affected                            |
+| ------------------------------------------------ | ---------- | ---------------------------------------------- |
+| requirement:user-can-view-task                   | US1        | TaskMetadata, DifficultyBadge, TaskDescription |
+| requirement:user-can-browse-files                | US2        | TaskSidebar, FileTab                           |
+| requirement:user-can-edit-code                   | US2        | CodeEditor                                     |
+| requirement:user-can-run-reset-and-view-solution | US3        | ActionBar, ConsoleOutput, SolutionPanel        |
+| requirement:ui-accessibility                     | US1-3      | All components (ARIA, keyboard nav, contrast)  |
+| requirement:export-surface                       | All        | libs/common-ui/src/index.ts                    |

@@ -64,9 +64,9 @@
 
 #### Import and Dependency Updates
 
-- [x] T018 [US1] Update all imports in migrated learning cards to use @elzatona/* packages
-- [x] T019 [US1] Update all imports in migrated logs to use @elzatona/* packages
-- [x] T020 [US1] Update all imports in migrated users to use @elzatona/* packages
+- [x] T018 [US1] Update all imports in migrated learning cards to use @elzatona/\* packages
+- [x] T019 [US1] Update all imports in migrated logs to use @elzatona/\* packages
+- [x] T020 [US1] Update all imports in migrated users to use @elzatona/\* packages
 - [x] T021 [US1] Update any hardcoded URLs/paths to admin app structure
 
 #### Duplicate Route Consolidation
@@ -96,7 +96,7 @@
 
 **Goal**: Website app has zero admin routes, clean codebase, reduced bundle size
 
-**Independent Test**: Attempt to access any /admin/* route on localhost:3000 and verify 404 or redirect
+**Independent Test**: Attempt to access any /admin/\* route on localhost:3000 and verify 404 or redirect
 
 ### Implementation for User Story 2
 
@@ -121,8 +121,8 @@
 
 #### Optional Redirects (if requested)
 
-- [x] T048 [US2] Add redirects in apps/website/next.config.js: /admin/* → admin app URLs
-- [x] T049 [US2] Test redirects work from localhost:3000/admin/* to localhost:3001/admin/*
+- [x] T048 [US2] Add redirects in apps/website/next.config.js: /admin/\* → admin app URLs
+- [x] T049 [US2] Test redirects work from localhost:3000/admin/_ to localhost:3001/admin/_
 
 #### Verification
 
@@ -220,6 +220,7 @@
 ## Dependencies
 
 ### User Story Completion Order
+
 1. **Phase 1 & 2** (Setup/Foundation) → **MUST complete before any user stories**
 2. **US1** (Admin Features) → Can start after Phase 2
 3. **US2** (Website Cleanup) → **MUST wait for US1 completion** (don't delete before migration complete)
@@ -229,11 +230,13 @@
 ### Parallel Execution Examples
 
 **After Phase 2 completion:**
+
 - T010, T011, T012 can run in parallel (different routes)
 - T014, T015, T016, T017 can run in parallel (different API routes)
 - T022, T023, T024, T025, T026 can run in parallel (independent comparisons)
 
 **After US1 completion:**
+
 - All US2 tasks can run in parallel (they're just deletions)
 - T055, T056, T058, T059 can run in parallel (independent builds)
 
@@ -242,13 +245,17 @@
 ## Implementation Strategy
 
 ### MVP (Minimum Viable Product)
+
 **Scope**: User Story 1 only
+
 - Admin app has all functionality
 - Website app still has duplicate routes
 - **Value**: Admins can use dedicated app immediately
 
 ### Complete Migration
+
 **Scope**: All user stories
+
 - Admin app exclusive for admin features
 - Website app clean of admin code
 - **Value**: Clean architecture, reduced maintenance burden
@@ -258,19 +265,22 @@
 ## Total Task Count: 86 tasks
 
 ### By User Story:
+
 - **Setup/Foundation**: 9 tasks (T001-T009)
 - **US1** (Admin Features): 25 tasks (T010-T034)
-- **US2** (Website Cleanup): 20 tasks (T035-T054)  
+- **US2** (Website Cleanup): 20 tasks (T035-T054)
 - **US3** (Builds): 11 tasks (T055-T065)
 - **US4** (Testing): 14 tasks (T066-T079)
 - **Polish**: 7 tasks (T080-T086)
 
 ### By Parallelization:
+
 - **Sequential**: 48 tasks
 - **Parallel**: 38 tasks
 - **Estimated Time Savings**: ~35% when running parallel tasks
 
 ### Risk Mitigation:
+
 - US2 tasks wait for US1 completion (no premature deletion)
 - Build verification at multiple checkpoints
 - Comprehensive testing before marking complete

@@ -118,6 +118,7 @@ http://localhost:3000/api-docs
 ```
 
 **Available Endpoints:**
+
 - **Authentication** - Session management, logout
 - **Questions** - Practice questions, validation, statistics
 - **Categories & Topics** - Browse question categories and topics
@@ -137,6 +138,7 @@ http://localhost:3001/api-docs
 ```
 
 **Available Endpoints:**
+
 - **Dashboard** - Admin dashboard statistics
 - **Authentication** - Admin login and session management
 - **Users** - User management
@@ -149,6 +151,7 @@ http://localhost:3001/api-docs
 ### Using Swagger UI
 
 1. **Start the development servers:**
+
    ```bash
    # Website (runs on port 3000)
    bun run dev

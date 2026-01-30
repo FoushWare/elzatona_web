@@ -33,18 +33,18 @@ interface RouteDefinition {
 ```typescript
 interface RouteMigration {
   id: string;
-  sourcePath: string;  // e.g., "apps/website/src/app/admin/content/"
-  targetPath: string;  // e.g., "apps/admin/src/app/admin/content/"
+  sourcePath: string; // e.g., "apps/website/src/app/admin/content/"
+  targetPath: string; // e.g., "apps/admin/src/app/admin/content/"
   status: "pending" | "in-progress" | "completed" | "verified";
   priority: "critical" | "high" | "medium" | "low";
-  
+
   // File tracking
   files: MigrationFile[];
-  
+
   // Dependencies
-  dependencies: string[];  // Lib dependencies
+  dependencies: string[]; // Lib dependencies
   localComponents: string[]; // Local component paths
-  
+
   // Metadata
   createdAt: Date;
   completedAt?: Date;
@@ -68,12 +68,12 @@ interface MigrationProgress {
   completedRoutes: number;
   inProgressRoutes: number;
   pendingRoutes: number;
-  
+
   phases: PhaseProgress[];
-  
+
   estimatedCompletionTime: number; // hours
   actualTimeSpent: number; // hours
-  
+
   lastUpdated: Date;
 }
 
@@ -104,8 +104,8 @@ interface TaskProgress {
 ```typescript
 interface SharedComponent {
   name: string;
-  library: string;  // e.g., "@elzatona/common-ui"
-  exportPath: string;  // e.g., "components/Button"
+  library: string; // e.g., "@elzatona/common-ui"
+  exportPath: string; // e.g., "components/Button"
   usedInApps: ("admin" | "website")[];
   dependencies: string[];
 }
@@ -115,8 +115,8 @@ interface SharedComponent {
 
 ```typescript
 interface RepositoryUsage {
-  repository: string;  // e.g., "QuestionRepository"
-  library: string;     // "@elzatona/database"
+  repository: string; // e.g., "QuestionRepository"
+  library: string; // "@elzatona/database"
   usedInRoutes: string[];
   operations: ("create" | "read" | "update" | "delete")[];
 }
@@ -128,18 +128,18 @@ interface RepositoryUsage {
 
 ### 3.1 Route Status Matrix
 
-| Route Path | Website Status | Admin Status | Migration Action |
-|------------|---------------|--------------|-----------------|
-| `/admin/content/` | EXISTS | EXISTS | VERIFY & DELETE FROM WEBSITE |
-| `/admin/content-management/` | EXISTS | EXISTS | VERIFY & DELETE FROM WEBSITE |
-| `/admin/frontend-tasks/` | EXISTS | EXISTS | VERIFY & DELETE FROM WEBSITE |
-| `/admin/login/` | EXISTS | EXISTS | VERIFY & DELETE FROM WEBSITE |
-| `/admin/problem-solving/` | EXISTS | EXISTS | VERIFY & DELETE FROM WEBSITE |
-| `/admin/learning-cards/` | EXISTS | MISSING | COPY TO ADMIN |
-| `/admin/logs/` | EXISTS | MISSING | COPY TO ADMIN |
-| `/admin/questions/` | EXISTS | MISSING | REDIRECT OR REMOVE |
-| `/admin/users/` | EXISTS | MISSING | COPY TO ADMIN |
-| `/admin/dashboard/` | MISSING | EXISTS | ALREADY MIGRATED |
+| Route Path                   | Website Status | Admin Status | Migration Action             |
+| ---------------------------- | -------------- | ------------ | ---------------------------- |
+| `/admin/content/`            | EXISTS         | EXISTS       | VERIFY & DELETE FROM WEBSITE |
+| `/admin/content-management/` | EXISTS         | EXISTS       | VERIFY & DELETE FROM WEBSITE |
+| `/admin/frontend-tasks/`     | EXISTS         | EXISTS       | VERIFY & DELETE FROM WEBSITE |
+| `/admin/login/`              | EXISTS         | EXISTS       | VERIFY & DELETE FROM WEBSITE |
+| `/admin/problem-solving/`    | EXISTS         | EXISTS       | VERIFY & DELETE FROM WEBSITE |
+| `/admin/learning-cards/`     | EXISTS         | MISSING      | COPY TO ADMIN                |
+| `/admin/logs/`               | EXISTS         | MISSING      | COPY TO ADMIN                |
+| `/admin/questions/`          | EXISTS         | MISSING      | REDIRECT OR REMOVE           |
+| `/admin/users/`              | EXISTS         | MISSING      | COPY TO ADMIN                |
+| `/admin/dashboard/`          | MISSING        | EXISTS       | ALREADY MIGRATED             |
 
 ---
 
@@ -187,13 +187,13 @@ interface MigrationValidation {
   sourceExists: boolean;
   targetPathValid: boolean;
   dependenciesResolved: boolean;
-  
+
   // Post-migration checks
   targetFilesExist: boolean;
   importsValid: boolean;
   buildSucceeds: boolean;
   testsPass: boolean;
-  
+
   // Final checks
   sourceDeleted: boolean;
   noOrphanedCode: boolean;
@@ -205,26 +205,26 @@ interface MigrationValidation {
 ```typescript
 function validateMigration(route: RouteMigration): ValidationResult {
   const errors: string[] = [];
-  
+
   // Check source exists
-  if (!route.files.some(f => f.sourceExists)) {
+  if (!route.files.some((f) => f.sourceExists)) {
     errors.push("Source route does not exist");
   }
-  
+
   // Check all dependencies are in shared libs
   for (const dep of route.dependencies) {
     if (!isSharedLib(dep)) {
       errors.push(`Dependency ${dep} is not in a shared library`);
     }
   }
-  
+
   // Check local components are handled
   for (const comp of route.localComponents) {
     if (!isInSharedLib(comp) && !isInTargetApp(comp)) {
       errors.push(`Local component ${comp} not migrated`);
     }
   }
-  
+
   return { valid: errors.length === 0, errors };
 }
 ```
@@ -265,13 +265,13 @@ function validateMigration(route: RouteMigration): ValidationResult {
 
 ### 7.1 Admin API Routes in Website App
 
-| Endpoint | Method | Purpose | Migration Status |
-|----------|--------|---------|-----------------|
-| `/api/admin/create` | POST | Create admin user | DUPLICATE |
-| `/api/admin/dashboard-stats` | GET | Dashboard statistics | VERIFY |
-| `/api/admin/update-permissions` | POST | Update user perms | VERIFY |
-| `/api/admin/questions/*` | ALL | Question CRUD | VERIFY |
-| `/api/admin/users/*` | ALL | User management | VERIFY |
+| Endpoint                        | Method | Purpose              | Migration Status |
+| ------------------------------- | ------ | -------------------- | ---------------- |
+| `/api/admin/create`             | POST   | Create admin user    | DUPLICATE        |
+| `/api/admin/dashboard-stats`    | GET    | Dashboard statistics | VERIFY           |
+| `/api/admin/update-permissions` | POST   | Update user perms    | VERIFY           |
+| `/api/admin/questions/*`        | ALL    | Question CRUD        | VERIFY           |
+| `/api/admin/users/*`            | ALL    | User management      | VERIFY           |
 
 ### 7.2 Required API Endpoints in Admin App
 
@@ -279,7 +279,7 @@ Each admin route requires corresponding API routes:
 
 ```typescript
 interface RequiredApiRoutes {
-  "/api/admin/auth": ["POST", "DELETE"];  // Login/logout
+  "/api/admin/auth": ["POST", "DELETE"]; // Login/logout
   "/api/admin/questions": ["GET", "POST", "PUT", "DELETE"];
   "/api/admin/users": ["GET", "POST", "PUT", "DELETE"];
   "/api/admin/learning-cards": ["GET", "POST", "PUT", "DELETE"];

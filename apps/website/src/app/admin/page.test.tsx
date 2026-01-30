@@ -26,7 +26,7 @@ describe("AdminRedirectPage", () => {
   it("should render without errors", () => {
     render(<AdminRedirectPage />);
     expect(
-      screen.getByText(/Redirecting to Admin Dashboard/i)
+      screen.getByText(/Redirecting to Admin Dashboard/i),
     ).toBeInTheDocument();
   });
 
@@ -52,7 +52,7 @@ describe("AdminRedirectPage", () => {
   it("should display helpful message about redirect", () => {
     render(<AdminRedirectPage />);
     expect(
-      screen.getByText(/Taking you to the admin application/i)
+      screen.getByText(/Taking you to the admin application/i),
     ).toBeInTheDocument();
   });
 });

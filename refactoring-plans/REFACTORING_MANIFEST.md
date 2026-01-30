@@ -5,6 +5,7 @@
 **Status**: 🟡 IN PROGRESS - PARTIAL COMPLETION
 
 The refactoring to separate admin and website apps is **INCOMPLETE**. Currently:
+
 - ✅ `apps/admin/` app created and partially populated
 - ✅ Core admin routes migrated (dashboard, content, problem-solving, etc.)
 - ⚠️ **DUPLICATE ROUTES** still exist in `apps/website/src/app/admin/`
@@ -333,11 +334,14 @@ The following features have been deferred or neglected for the current release t
 ## 🔴 CRITICAL: Admin/Website App Separation Status
 
 ### Current Issue
+
 Duplicate admin routes exist in both locations:
+
 - ⚠️ `apps/website/src/app/admin/` - OLD LOCATION (deprecated, should be removed)
 - ✅ `apps/admin/src/app/admin/` - NEW LOCATION (primary, use this)
 
 ### Impact
+
 - Code duplication causing maintenance burden
 - Routing ambiguity for developers
 - Increased bundle size for website app
@@ -346,6 +350,7 @@ Duplicate admin routes exist in both locations:
 **See**: `ADMIN_APP_MIGRATION_STATUS.md` for complete details, risks, and migration plan.
 
 ### App Architecture Goal
+
 ```
 apps/
 ├── website/          - User-facing routes only
@@ -356,6 +361,7 @@ apps/
 ```
 
 ### Current Status
+
 - ✅ Admin app created: `apps/admin/`
 - ✅ Core routes migrated (60%): dashboard, content, problem-solving
 - ⚠️ DUPLICATE ROUTES: Still exist in website app
@@ -363,6 +369,7 @@ apps/
 - ❌ INCOMPLETE: Some features still in website app only
 
 ### Action Required
+
 Consolidate all admin routes to `apps/admin/` and remove duplicates from `apps/website/` before merging major features.
 
 Estimated timeline: 6-10 hours

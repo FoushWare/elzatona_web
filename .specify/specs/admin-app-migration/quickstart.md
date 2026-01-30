@@ -70,6 +70,7 @@ pnpm nx run admin:build
 ```
 
 **Checklist:**
+
 - [ ] Copy directory structure
 - [ ] Verify all imports resolve
 - [ ] Test page renders at localhost:3001/admin/learning-cards
@@ -86,6 +87,7 @@ pnpm nx run admin:build
 ```
 
 **Checklist:**
+
 - [ ] Copy directory
 - [ ] Verify imports
 - [ ] Test page renders
@@ -102,6 +104,7 @@ pnpm nx run admin:build
 ```
 
 **Checklist:**
+
 - [ ] Copy directory
 - [ ] Verify imports
 - [ ] Test page renders
@@ -110,11 +113,12 @@ pnpm nx run admin:build
 #### Task 2.4: Handle `/admin/questions/`
 
 **Option A**: Redirect to content/questions
+
 ```typescript
 // apps/admin/src/app/admin/questions/page.tsx
-import { redirect } from 'next/navigation';
+import { redirect } from "next/navigation";
 export default function QuestionsPage() {
-  redirect('/admin/content/questions');
+  redirect("/admin/content/questions");
 }
 ```
 
@@ -171,8 +175,8 @@ module.exports = {
   async redirects() {
     return [
       {
-        source: '/admin/:path*',
-        destination: 'http://localhost:3001/admin/:path*', // Update for prod
+        source: "/admin/:path*",
+        destination: "http://localhost:3001/admin/:path*", // Update for prod
         permanent: true,
       },
     ];
@@ -188,16 +192,16 @@ module.exports = {
 
 Test each admin feature in the admin app:
 
-| Feature | URL | Expected Behavior | Status |
-|---------|-----|-------------------|--------|
-| Dashboard | /admin/dashboard | Stats display | ⬜ |
-| Login | /admin/login | Can login | ⬜ |
-| Content | /admin/content | List content | ⬜ |
-| Questions | /admin/content/questions | List questions | ⬜ |
-| Create Question | /admin/content/questions/new | Form works | ⬜ |
-| Learning Cards | /admin/learning-cards | List cards | ⬜ |
-| Users | /admin/users | List users | ⬜ |
-| Logs | /admin/logs | View logs | ⬜ |
+| Feature         | URL                          | Expected Behavior | Status |
+| --------------- | ---------------------------- | ----------------- | ------ |
+| Dashboard       | /admin/dashboard             | Stats display     | ⬜     |
+| Login           | /admin/login                 | Can login         | ⬜     |
+| Content         | /admin/content               | List content      | ⬜     |
+| Questions       | /admin/content/questions     | List questions    | ⬜     |
+| Create Question | /admin/content/questions/new | Form works        | ⬜     |
+| Learning Cards  | /admin/learning-cards        | List cards        | ⬜     |
+| Users           | /admin/users                 | List users        | ⬜     |
+| Logs            | /admin/logs                  | View logs         | ⬜     |
 
 #### Task 4.2: E2E Tests
 
@@ -228,6 +232,7 @@ pnpm nx run-many --target=typecheck --all
 **Problem**: Module not found errors after migration.
 
 **Solution**: Check that all imports use shared library paths:
+
 ```typescript
 // ✅ Correct
 import { Button } from "@elzatona/common-ui";
@@ -241,6 +246,7 @@ import { Button } from "../../../components/Button";
 **Problem**: Build fails after migration.
 
 **Solution**:
+
 1. Check for local component dependencies
 2. Ensure all components are in shared libs or copied
 3. Run `pnpm install` to update dependencies
@@ -250,6 +256,7 @@ import { Button } from "../../../components/Button";
 **Problem**: API routes return 404.
 
 **Solution**:
+
 1. Verify API routes are copied to admin app
 2. Check route file naming (route.ts vs route.tsx)
 3. Verify HTTP methods are exported
@@ -259,6 +266,7 @@ import { Button } from "../../../components/Button";
 **Problem**: Login doesn't work in admin app.
 
 **Solution**:
+
 1. Check JWT_SECRET matches between apps
 2. Verify cookie domain settings
 3. Check CORS configuration

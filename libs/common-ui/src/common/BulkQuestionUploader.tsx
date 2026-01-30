@@ -1119,7 +1119,6 @@ then click "Save X Questions" to add them to Firebase.`}
                       </div>
                     ))}
                   </div>
-                </div>
                 </fieldset>
 
                 {/* Explanation */}

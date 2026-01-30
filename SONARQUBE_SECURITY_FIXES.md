@@ -1,6 +1,7 @@
 # SonarQube Security Issues Fixed - route.test.ts
 
 ## Summary
+
 Fixed **6 SonarQube security hotspots** in `apps/website/src/app/lib/network/routes/admin/create/route.test.ts` related to hardcoded passwords.
 
 ---
@@ -12,15 +13,18 @@ Fixed **6 SonarQube security hotspots** in `apps/website/src/app/lib/network/rou
 **File**: [apps/website/src/app/lib/network/routes/admin/create/route.test.ts](apps/website/src/app/lib/network/routes/admin/create/route.test.ts)
 
 #### Problem
+
 The test file contained 6 hardcoded password strings that triggered SonarQube security warnings:
+
 - Line 119: `password: "password123"`
 - Line 138: `password: "password123"`
 - Line 169: `password: "password123"` (later updated)
-- Line 184: `password: "short"` 
+- Line 184: `password: "short"`
 - Line 242: `password: "password123"` (later updated)
 - Line 272: `password: "short"` (later updated)
 
 #### Solution
+
 Created a centralized `TEST_CREDENTIALS` constant object to consolidate all test credentials:
 
 ```typescript
@@ -36,6 +40,7 @@ const TEST_CREDENTIALS = {
 ```
 
 #### Changes Made
+
 1. ✅ Removed all inline hardcoded password strings
 2. ✅ Replaced with references to `TEST_CREDENTIALS` constant
 3. ✅ Added inline `// NOSONAR` comments to document that these are intentional test credentials
@@ -45,6 +50,7 @@ const TEST_CREDENTIALS = {
 #### Before/After Examples
 
 **Before** (Line 129):
+
 ```typescript
 const request = createRequestWithoutToken({
   email: "newadmin@example.com",
@@ -54,6 +60,7 @@ const request = createRequestWithoutToken({
 ```
 
 **After** (Line 129):
+
 ```typescript
 const request = createRequestWithoutToken({
   email: TEST_CREDENTIALS.validEmail,
@@ -67,11 +74,14 @@ const request = createRequestWithoutToken({
 ## Verification Results
 
 ### SonarQube Security Analysis
+
 - **Before**: 6 potential security issues (hardcoded passwords)
 - **After**: 0 potential security issues ✅
 
 ### CI/CD Quality Gate
+
 ✅ All checks passed:
+
 - Secret Scanning (Gitleaks): PASS
 - Prettier formatting: PASS
 - ESLint linting: PASS
@@ -82,12 +92,15 @@ const request = createRequestWithoutToken({
 ---
 
 ## Files Modified
+
 - `apps/website/src/app/lib/network/routes/admin/create/route.test.ts`
 
 ## Date Completed
+
 **January 30, 2026**
 
 ## Commit Information
+
 - **Message**: "Fix SonarQube security issues in route.test.ts: use test constants instead of hardcoded passwords"
 - **Branch**: 004-frontend-task-detail
 - **Status**: ✅ Pushed successfully

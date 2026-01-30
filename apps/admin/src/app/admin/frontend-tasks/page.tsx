@@ -2,10 +2,7 @@
 
 import React, { useState, useEffect, useCallback } from "react";
 import { Plus, Search, Code, Layout, Edit, Trash2 } from "lucide-react";
-import {
-  AdminFrontendTask,
-  PaginatedResponse,
-} from "@elzatona/types";
+import { AdminFrontendTask, PaginatedResponse } from "@elzatona/types";
 import {
   FrontendTaskEditor,
   Button,
@@ -23,7 +20,9 @@ export default function FrontendTasksPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
   const [isEditorOpen, setIsEditorOpen] = useState(false);
-  const [selectedTask, setSelectedTask] = useState<AdminFrontendTask | null>(null);
+  const [selectedTask, setSelectedTask] = useState<AdminFrontendTask | null>(
+    null,
+  );
   const [editorMode, setEditorMode] = useState<"create" | "edit">("create");
   const { showSuccess, showError } = useToast();
 

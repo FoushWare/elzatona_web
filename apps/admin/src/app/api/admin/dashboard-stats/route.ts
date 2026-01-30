@@ -13,14 +13,15 @@ export async function GET(request: NextRequest) {
     const userRepository = factory.getUserRepository();
 
     // Fetch counts for all entities using repositories
-    const [questions, plans, cards, categories, topics, admins] = await Promise.all([
-      questionRepository.findAll(),
-      planRepository.findAll(),
-      cardRepository.findAll(),
-      categoryRepository.findAll(),
-      topicRepository.getAllTopics(),
-      userRepository.findByRole("admin"),
-    ]);
+    const [questions, plans, cards, categories, topics, admins] =
+      await Promise.all([
+        questionRepository.findAll(),
+        planRepository.findAll(),
+        cardRepository.findAll(),
+        categoryRepository.findAll(),
+        topicRepository.getAllTopics(),
+        userRepository.findByRole("admin"),
+      ]);
 
     const stats = {
       questions: questions?.length || 0,

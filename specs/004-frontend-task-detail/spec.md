@@ -1,14 +1,17 @@
 # Frontend Task Detail — Specification
 
 ## Overview / Context
+
 Implement a reusable, testable, and accessible frontend task detail page for authoring and running coding tasks. The page displays task metadata and description, provides a code editor with multiple files, and offers run/reset/solution actions. This feature will live at `/frontend-tasks/[id]` and use shared UI primitives in `libs/common-ui` and the `FrontendTask` type in `libs/types`.
 
 ## Goals
+
 - Present task information clearly (title, author, difficulty, tags, estimated time).
 - Provide an in-browser editable code area with per-file editing, run/reset, and solution reveal.
 - Keep components small (atoms/molecules/organisms) and testable with TypeScript strict typing.
 
 ## Functional Requirements
+
 Each requirement has a stable key for traceability.
 
 - requirement:user-can-view-task
@@ -30,6 +33,7 @@ Each requirement has a stable key for traceability.
   - All new components must be exported from `libs/common-ui/src/index.ts` so other apps can consume them.
 
 ## Non-Functional Requirements
+
 - nfr:performance
   - Initial page render should be < 1s on a reasonably modern dev machine network if backend responds within 200ms.
 - nfr:typesafety
@@ -63,9 +67,11 @@ Each requirement has a stable key for traceability.
     - `Show Solution` toggles a read-only solution view; it does not overwrite user edits unless the user explicitly accepts.
 
 ## Data Model (example)
+
 Use the `FrontendTask` shape in `libs/types`; if missing fields are required, extend the type with backward-compatible optional fields.
 
 Example shape (for clarity):
+
 ```
 FrontendTask {
   id: string;
@@ -81,25 +87,30 @@ FrontendTask {
 ```
 
 ## Edge Cases
+
 - Missing `files` array: show a helpful message and disable editor controls.
 - Large file content (>100KB): warn and prevent editing in the browser; provide a download link.
 - Network failure fetching task: show retry CTA and a user-friendly error message.
 
 ## API Contract
+
 - GET `/api/frontend-tasks/:id` -> 200 `{ success: true, data: FrontendTask }` or 404/4xx error object.
 - No mutation endpoints are required for MVP; persistence is out-of-scope for initial iteration.
 
 ## Testing & Quality Gates
+
 - Add unit tests for `DifficultyBadge`, `TaskMetadata`, `TaskDescription` logic and `TaskSidebar` interactions.
 - Add an integration test verifying page fetch and render of key metadata.
 - Run `npm run format`, `npm run lint`, `npm run type-check`, `npm run test`, and `npm run build` in CI.
 
 ## Implementation Notes / References
+
 - Follow Atomic Design (Atoms → Molecules → Organisms) and keep files short (refer to `tasks.md` line limits).
 - Reference implementation examples in `implementation-guide.md` (co-located in this feature directory).
 - Export all components via `libs/common-ui/src/index.ts`.
 
 ## Traceability
+
 - Link functional requirements to tasks in `tasks.md` using the stable keys above (e.g., `requirement:user-can-view-task` → `T006/T007/T010/T012`).
 
 ---

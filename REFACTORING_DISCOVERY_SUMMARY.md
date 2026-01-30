@@ -11,15 +11,18 @@ During code review and SonarQube analysis, it was discovered that the refactorin
 ### Key Findings
 
 ✅ **Completed**:
+
 - `apps/admin/` app structure created
 - Core admin routes partially migrated (dashboard, content, problem-solving, frontend-tasks)
 - Separate Next.js app configured to run on port 3001
 
 ⚠️ **Partially Complete**:
+
 - ~60% of admin routes migrated
 - Some features present in both locations
 
 ❌ **NOT Done**:
+
 - Old routes in `apps/website/src/app/admin/` NOT deleted
 - Some features still only exist in website app (learning-cards, logs, questions routing)
 - No consolidation/cleanup performed
@@ -31,40 +34,42 @@ During code review and SonarQube analysis, it was discovered that the refactorin
 
 ### Duplicate Routes (11+ locations)
 
-| Route | Website App | Admin App | Status |
-|-------|-----------|-----------|--------|
-| `/admin` | ✅ | ✅ | DUPLICATE |
-| `/admin/content` | ✅ | ✅ | DUPLICATE |
-| `/admin/content-management` | ✅ | ✅ | DUPLICATE |
-| `/admin/dashboard` | ❌ | ✅ | MIGRATED |
-| `/admin/frontend-tasks` | ✅ | ✅ | DUPLICATE |
-| `/admin/learning-cards` | ✅ | ❌ | NOT MIGRATED |
-| `/admin/login` | ✅ | ✅ | DUPLICATE |
-| `/admin/logs` | ✅ | ❌ | NOT MIGRATED |
-| `/admin/problem-solving` | ✅ | ✅ | DUPLICATE |
-| `/admin/questions` | ✅ | ❌ | NOT MIGRATED |
-| `/admin/users` | ✅ | ❌ | NOT MIGRATED |
-| `/admin/layout.tsx` | ✅ | ✅ | DUPLICATE |
+| Route                       | Website App | Admin App | Status       |
+| --------------------------- | ----------- | --------- | ------------ |
+| `/admin`                    | ✅          | ✅        | DUPLICATE    |
+| `/admin/content`            | ✅          | ✅        | DUPLICATE    |
+| `/admin/content-management` | ✅          | ✅        | DUPLICATE    |
+| `/admin/dashboard`          | ❌          | ✅        | MIGRATED     |
+| `/admin/frontend-tasks`     | ✅          | ✅        | DUPLICATE    |
+| `/admin/learning-cards`     | ✅          | ❌        | NOT MIGRATED |
+| `/admin/login`              | ✅          | ✅        | DUPLICATE    |
+| `/admin/logs`               | ✅          | ❌        | NOT MIGRATED |
+| `/admin/problem-solving`    | ✅          | ✅        | DUPLICATE    |
+| `/admin/questions`          | ✅          | ❌        | NOT MIGRATED |
+| `/admin/users`              | ✅          | ❌        | NOT MIGRATED |
+| `/admin/layout.tsx`         | ✅          | ✅        | DUPLICATE    |
 
 ### Risks This Creates
 
-| Risk | Severity | Description |
-|------|----------|-------------|
-| Developer Confusion | 🔴 HIGH | Unclear which location is canonical |
-| Out-of-Sync Changes | 🔴 HIGH | Fixes in one location not reflected in other |
-| Code Duplication | 🟡 MEDIUM | Maintenance burden, larger bundle |
-| Routing Ambiguity | 🔴 HIGH | Which routes are actually active? |
-| Testing Issues | 🟡 MEDIUM | Tests may run against wrong implementation |
-| Deployment Risk | 🟡 MEDIUM | Unclear which code is deployed |
+| Risk                | Severity  | Description                                  |
+| ------------------- | --------- | -------------------------------------------- |
+| Developer Confusion | 🔴 HIGH   | Unclear which location is canonical          |
+| Out-of-Sync Changes | 🔴 HIGH   | Fixes in one location not reflected in other |
+| Code Duplication    | 🟡 MEDIUM | Maintenance burden, larger bundle            |
+| Routing Ambiguity   | 🔴 HIGH   | Which routes are actually active?            |
+| Testing Issues      | 🟡 MEDIUM | Tests may run against wrong implementation   |
+| Deployment Risk     | 🟡 MEDIUM | Unclear which code is deployed               |
 
 ---
 
 ## What We Did About It
 
 ### 1. Created Inventory & Migration Plan
+
 📄 **File**: `ADMIN_APP_MIGRATION_STATUS.md`
 
 Detailed document containing:
+
 - Complete list of duplicate routes
 - Which implementation is canonical
 - All code differences
@@ -74,9 +79,11 @@ Detailed document containing:
 - Notes for future developers
 
 ### 2. Updated Refactoring Manifest
+
 📄 **File**: `refactoring-plans/REFACTORING_MANIFEST.md`
 
 Added:
+
 - ⚠️ Critical warning at top of manifest
 - New "Admin/Website App Separation Status" section
 - Current status breakdown
@@ -84,6 +91,7 @@ Added:
 - Action items marked as 🔴 PRIORITY
 
 ### 3. Updated Next Steps
+
 - Flagged app separation as **Priority #1** before merging major features
 - Estimated timeline: **6-10 hours**
 - Recommended: Complete before Q1 ends
@@ -93,6 +101,7 @@ Added:
 ## What Needs to Happen Next
 
 ### Phase 1: Validation & Inventory
+
 ```
 ✓ [DONE] Identify all code differences
 ✓ [DONE] Document canonical location
@@ -100,6 +109,7 @@ Added:
 ```
 
 ### Phase 2: Migration Work (PENDING)
+
 ```
 ⏳ [ ] Migrate /admin/learning-cards to apps/admin
 ⏳ [ ] Migrate /admin/logs to apps/admin
@@ -110,6 +120,7 @@ Added:
 ```
 
 ### Phase 3: Cleanup (PENDING)
+
 ```
 ⏳ [ ] Delete apps/website/src/app/admin/ folder
 ⏳ [ ] Remove admin imports from website app
@@ -118,6 +129,7 @@ Added:
 ```
 
 ### Phase 4: Integration & Testing (PENDING)
+
 ```
 ⏳ [ ] Update routing/navigation
 ⏳ [ ] Test all routes on correct ports
@@ -126,6 +138,7 @@ Added:
 ```
 
 ### Phase 5: Cleanup & Documentation (PENDING)
+
 ```
 ✓ [DONE] Updated REFACTORING_MANIFEST.md
 ✓ [DONE] Created ADMIN_APP_MIGRATION_STATUS.md
@@ -138,9 +151,11 @@ Added:
 ## Documentation Created
 
 ### 1. ADMIN_APP_MIGRATION_STATUS.md
+
 **Purpose**: Complete reference guide for the incomplete separation
 
 **Sections**:
+
 - Current Issue (status, duplicate routes, actual usage)
 - What Happened (timeline of incomplete migration)
 - Which Routes Are Actually Used
@@ -155,7 +170,9 @@ Added:
 ---
 
 ### 2. Updated REFACTORING_MANIFEST.md
+
 **Changes Made**:
+
 - ⚠️ Added critical warning banner at top
 - 🔴 Added new "CRITICAL: Admin/Website App Separation Incomplete" section
 - 📊 Added "App Architecture Status" section with ASCII diagram
@@ -204,33 +221,36 @@ Project Structure (as of Jan 30, 2026):
 
 ## Key Metrics
 
-| Metric | Value |
-|--------|-------|
-| Duplicate Routes | 11 |
-| Incomplete Migrations | 5 |
-| Risk Level | 🔴 CRITICAL |
-| Estimated Fix Time | 6-10 hours |
-| Priority Level | 🔴 P0 (Before major features) |
-| Documentation Pages Created | 2 |
-| Manifest Updates | 2 sections added |
+| Metric                      | Value                         |
+| --------------------------- | ----------------------------- |
+| Duplicate Routes            | 11                            |
+| Incomplete Migrations       | 5                             |
+| Risk Level                  | 🔴 CRITICAL                   |
+| Estimated Fix Time          | 6-10 hours                    |
+| Priority Level              | 🔴 P0 (Before major features) |
+| Documentation Pages Created | 2                             |
+| Manifest Updates            | 2 sections added              |
 
 ---
 
 ## Recommendations
 
 ### For Immediate Action
+
 1. ✅ **Document complete** - DONE
 2. 👤 **Assign owner** - Who will lead migration?
 3. 📅 **Schedule** - Plan for next sprint or current sprint slack time
 4. 🚫 **Freeze** - No new admin features to website app until migration complete
 
 ### For Development Team
+
 1. Use `apps/admin/src/app/admin/` for all new admin features
 2. Don't add to `apps/website/src/app/admin/` anymore
 3. Refer to ADMIN_APP_MIGRATION_STATUS.md for architecture questions
 4. Document any discoveries about differences between implementations
 
 ### For Future
+
 1. Consider separate deployments for admin vs website
 2. Plan for scaling each app independently
 3. Establish clear ownership of each app
@@ -241,6 +261,7 @@ Project Structure (as of Jan 30, 2026):
 ## Related Issues
 
 This incomplete separation may contribute to:
+
 - Higher than expected bundle size for website app
 - Development confusion when fixing admin bugs
 - Testing ambiguity (which location is being tested?)
@@ -249,6 +270,7 @@ This incomplete separation may contribute to:
 ---
 
 ## Files Modified
+
 1. ✅ Created: `ADMIN_APP_MIGRATION_STATUS.md` (detailed reference)
 2. ✅ Updated: `refactoring-plans/REFACTORING_MANIFEST.md` (warning + status)
 3. ✅ Committed: All changes pushed to branch
@@ -256,6 +278,7 @@ This incomplete separation may contribute to:
 ---
 
 ## Next Meeting Agenda Items
+
 - [ ] Review ADMIN_APP_MIGRATION_STATUS.md findings
 - [ ] Assign developer(s) to complete migration
 - [ ] Decide on timeline (next sprint? current sprint?)

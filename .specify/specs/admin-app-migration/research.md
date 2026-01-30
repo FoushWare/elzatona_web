@@ -9,57 +9,62 @@
 ### 1.1 Duplicate Route Inventory
 
 #### `/admin/content/`
-| Aspect | Website App | Admin App | Canonical |
-|--------|-------------|-----------|-----------|
-| Location | `apps/website/src/app/admin/content/` | `apps/admin/src/app/admin/content/` | Admin App |
-| Status | Exists | Exists | Use Admin |
-| Key Differences | TBD - Needs file-level comparison | TBD | |
+
+| Aspect          | Website App                           | Admin App                           | Canonical |
+| --------------- | ------------------------------------- | ----------------------------------- | --------- |
+| Location        | `apps/website/src/app/admin/content/` | `apps/admin/src/app/admin/content/` | Admin App |
+| Status          | Exists                                | Exists                              | Use Admin |
+| Key Differences | TBD - Needs file-level comparison     | TBD                                 |           |
 
 #### `/admin/content-management/`
-| Aspect | Website App | Admin App | Canonical |
-|--------|-------------|-----------|-----------|
-| Location | `apps/website/src/app/admin/content-management/` | `apps/admin/src/app/admin/content-management/` | Admin App |
-| Status | Exists | Exists | Use Admin |
-| Key Differences | TBD - Needs file-level comparison | TBD | |
+
+| Aspect          | Website App                                      | Admin App                                      | Canonical |
+| --------------- | ------------------------------------------------ | ---------------------------------------------- | --------- |
+| Location        | `apps/website/src/app/admin/content-management/` | `apps/admin/src/app/admin/content-management/` | Admin App |
+| Status          | Exists                                           | Exists                                         | Use Admin |
+| Key Differences | TBD - Needs file-level comparison                | TBD                                            |           |
 
 #### `/admin/frontend-tasks/`
-| Aspect | Website App | Admin App | Canonical |
-|--------|-------------|-----------|-----------|
-| Location | `apps/website/src/app/admin/frontend-tasks/` | `apps/admin/src/app/admin/frontend-tasks/` | Admin App |
-| Status | Exists | Exists | Use Admin |
-| Key Differences | TBD - Needs file-level comparison | TBD | |
+
+| Aspect          | Website App                                  | Admin App                                  | Canonical |
+| --------------- | -------------------------------------------- | ------------------------------------------ | --------- |
+| Location        | `apps/website/src/app/admin/frontend-tasks/` | `apps/admin/src/app/admin/frontend-tasks/` | Admin App |
+| Status          | Exists                                       | Exists                                     | Use Admin |
+| Key Differences | TBD - Needs file-level comparison            | TBD                                        |           |
 
 #### `/admin/login/`
-| Aspect | Website App | Admin App | Canonical |
-|--------|-------------|-----------|-----------|
-| Location | `apps/website/src/app/admin/login/` | `apps/admin/src/app/admin/login/` | Admin App |
-| Status | Exists | Exists | Use Admin |
-| Key Differences | TBD - Needs file-level comparison | TBD | |
+
+| Aspect          | Website App                         | Admin App                         | Canonical |
+| --------------- | ----------------------------------- | --------------------------------- | --------- |
+| Location        | `apps/website/src/app/admin/login/` | `apps/admin/src/app/admin/login/` | Admin App |
+| Status          | Exists                              | Exists                            | Use Admin |
+| Key Differences | TBD - Needs file-level comparison   | TBD                               |           |
 
 #### `/admin/problem-solving/`
-| Aspect | Website App | Admin App | Canonical |
-|--------|-------------|-----------|-----------|
-| Location | `apps/website/src/app/admin/problem-solving/` | `apps/admin/src/app/admin/problem-solving/` | Admin App |
-| Status | Exists | Exists | Use Admin |
-| Key Differences | TBD - Needs file-level comparison | TBD | |
+
+| Aspect          | Website App                                   | Admin App                                   | Canonical |
+| --------------- | --------------------------------------------- | ------------------------------------------- | --------- |
+| Location        | `apps/website/src/app/admin/problem-solving/` | `apps/admin/src/app/admin/problem-solving/` | Admin App |
+| Status          | Exists                                        | Exists                                      | Use Admin |
+| Key Differences | TBD - Needs file-level comparison             | TBD                                         |           |
 
 ---
 
 ### 1.2 Routes Only in Website App (Need Migration)
 
-| Route | Website App Location | Migration Priority | Notes |
-|-------|---------------------|-------------------|-------|
-| `/admin/learning-cards/` | `apps/website/src/app/admin/learning-cards/` | HIGH | Copy entirely |
-| `/admin/logs/` | `apps/website/src/app/admin/logs/` | MEDIUM | Activity logging |
-| `/admin/questions/` | `apps/website/src/app/admin/questions/` | HIGH | May redirect to content/questions |
-| `/admin/users/` | `apps/website/src/app/admin/users/` | HIGH | User management |
+| Route                    | Website App Location                         | Migration Priority | Notes                             |
+| ------------------------ | -------------------------------------------- | ------------------ | --------------------------------- |
+| `/admin/learning-cards/` | `apps/website/src/app/admin/learning-cards/` | HIGH               | Copy entirely                     |
+| `/admin/logs/`           | `apps/website/src/app/admin/logs/`           | MEDIUM             | Activity logging                  |
+| `/admin/questions/`      | `apps/website/src/app/admin/questions/`      | HIGH               | May redirect to content/questions |
+| `/admin/users/`          | `apps/website/src/app/admin/users/`          | HIGH               | User management                   |
 
 ---
 
 ### 1.3 Routes Only in Admin App
 
-| Route | Admin App Location | Status |
-|-------|-------------------|--------|
+| Route               | Admin App Location                    | Status      |
+| ------------------- | ------------------------------------- | ----------- |
 | `/admin/dashboard/` | `apps/admin/src/app/admin/dashboard/` | ✅ Migrated |
 
 ---
@@ -82,6 +87,7 @@ Both apps use the following shared libraries:
 ### 2.2 Import Patterns
 
 #### Website App Admin Routes Import Pattern:
+
 ```typescript
 // Typical imports in apps/website/src/app/admin/**
 import { Button, Card, Modal } from "@elzatona/common-ui";
@@ -91,6 +97,7 @@ import { useAuth } from "@elzatona/contexts";
 ```
 
 #### Admin App Routes Import Pattern:
+
 ```typescript
 // Typical imports in apps/admin/src/app/admin/**
 import { Button, Card, Modal } from "@elzatona/common-ui";
@@ -104,6 +111,7 @@ import { useAuth } from "@elzatona/contexts";
 ### 2.3 Local Component Dependencies
 
 #### Website App Local Components:
+
 ```
 apps/website/src/app/admin/content/questions/components/
 ├── BulkUploadForm.tsx
@@ -113,6 +121,7 @@ apps/website/src/app/admin/content/questions/components/
 ```
 
 **Action Required**: These components should be:
+
 1. Already shared via libs OR
 2. Copied to admin app OR
 3. Moved to shared libs
@@ -143,6 +152,7 @@ apps/admin/src/app/api/
 **Decision**: Determine if admin app should have its own API routes or call website app's API.
 
 **Options**:
+
 1. **Separate APIs**: Admin app has own API routes (more isolation)
 2. **Shared API**: Admin app calls website app's API (less duplication)
 3. **Proxy**: Admin app proxies to website app's API (simple but coupled)
@@ -156,6 +166,7 @@ apps/admin/src/app/api/
 ### 4.1 Environment Variables
 
 **Website App (.env.local)**:
+
 ```
 NEXT_PUBLIC_SUPABASE_URL=...
 NEXT_PUBLIC_SUPABASE_ANON_KEY=...
@@ -165,6 +176,7 @@ BCRYPT_SALT_ROUNDS=...
 ```
 
 **Admin App (.env.local)**:
+
 ```
 # Should be identical for same database access
 NEXT_PUBLIC_SUPABASE_URL=...
@@ -177,10 +189,12 @@ BCRYPT_SALT_ROUNDS=...
 ### 4.2 Next.js Configuration
 
 **Website App (next.config.js)**:
+
 - Port: 3000 (default)
 - Build target: Standard Next.js
 
 **Admin App (next.config.js)**:
+
 - Port: 3001 (dev)
 - Build target: Standard Next.js
 - Possible: Separate vercel.json for deployment
@@ -191,39 +205,43 @@ BCRYPT_SALT_ROUNDS=...
 
 ### 5.1 Migration Risks
 
-| Risk | Severity | Mitigation |
-|------|----------|------------|
-| Feature loss during migration | HIGH | Comprehensive testing checklist |
-| Broken imports | MEDIUM | TypeScript will catch most |
-| Missing API routes | HIGH | API inventory before migration |
-| Auth flow issues | HIGH | Test login/logout flows |
-| Build failures | MEDIUM | Run builds after each task |
+| Risk                          | Severity | Mitigation                      |
+| ----------------------------- | -------- | ------------------------------- |
+| Feature loss during migration | HIGH     | Comprehensive testing checklist |
+| Broken imports                | MEDIUM   | TypeScript will catch most      |
+| Missing API routes            | HIGH     | API inventory before migration  |
+| Auth flow issues              | HIGH     | Test login/logout flows         |
+| Build failures                | MEDIUM   | Run builds after each task      |
 
 ### 5.2 Deployment Risks
 
-| Risk | Severity | Mitigation |
-|------|----------|------------|
-| DNS/routing changes | MEDIUM | Plan deployment separately |
-| Session sharing | LOW | Use same JWT secret |
-| CORS issues | LOW | Update CORS config if separate domains |
+| Risk                | Severity | Mitigation                             |
+| ------------------- | -------- | -------------------------------------- |
+| DNS/routing changes | MEDIUM   | Plan deployment separately             |
+| Session sharing     | LOW      | Use same JWT secret                    |
+| CORS issues         | LOW      | Update CORS config if separate domains |
 
 ---
 
 ## 6. Decisions Made
 
 ### Decision 1: Canonical Implementation
+
 **Decision**: Admin app (`apps/admin/`) is the canonical location for all admin routes.
 **Rationale**: It's the new, dedicated admin app and should be the single source of truth.
 
 ### Decision 2: API Strategy
+
 **Decision**: Admin app will have its own API routes.
 **Rationale**: Better isolation, easier to deploy independently, clearer separation of concerns.
 
 ### Decision 3: Questions Route
+
 **Decision**: `/admin/questions/` will redirect to `/admin/content/questions/`.
 **Rationale**: Avoid duplicate functionality, consolidate question management.
 
 ### Decision 4: Local Components
+
 **Decision**: Any local components needed should be in shared libs or duplicated in admin app.
 **Rationale**: Components like ViewQuestionModal should be in @elzatona/common-ui or admin app.
 
@@ -232,16 +250,19 @@ BCRYPT_SALT_ROUNDS=...
 ## 7. Alternatives Considered
 
 ### Alternative 1: Keep Both Apps with Different Routes
+
 **Pros**: No migration work
 **Cons**: Continued duplication, maintenance burden
 **Decision**: REJECTED - Technical debt too high
 
 ### Alternative 2: Merge Back into Single App
+
 **Pros**: Simple, no duplication
 **Cons**: Violates separation of concerns, larger bundle for users
 **Decision**: REJECTED - Goes against architecture goals
 
 ### Alternative 3: Complete Separation (Chosen)
+
 **Pros**: Clean architecture, independent deployments, clear ownership
 **Cons**: Migration effort required
 **Decision**: ACCEPTED - Best long-term solution

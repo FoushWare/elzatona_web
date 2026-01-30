@@ -26,14 +26,14 @@ describe("QuestionsRedirectPage", () => {
   it("should render without errors", () => {
     render(<QuestionsRedirectPage />);
     expect(
-      screen.getByText(/Redirecting to Questions Management/i)
+      screen.getByText(/Redirecting to Questions Management/i),
     ).toBeInTheDocument();
   });
 
   it("should display redirect message", () => {
     render(<QuestionsRedirectPage />);
     expect(
-      screen.getByText(/Taking you to \/admin\/content\/questions/i)
+      screen.getByText(/Taking you to \/admin\/content\/questions/i),
     ).toBeInTheDocument();
   });
 

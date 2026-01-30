@@ -183,7 +183,7 @@ const nextConfig: NextConfig = {
         test: /\.ts$/,
         include: /src\/scripts/,
         use: "ignore-loader",
-      }
+      },
     );
 
     // Exclude tests directory from build

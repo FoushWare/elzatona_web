@@ -1,9 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getRepositoryFactory } from "@elzatona/database";
-import {
-  AdminFrontendTaskFormData,
-  ApiResponse,
-} from "@elzatona/types";
+import { AdminFrontendTaskFormData, ApiResponse } from "@elzatona/types";
 
 // GET /api/admin/frontend-tasks/[id] - Get a specific frontend task
 export async function GET(

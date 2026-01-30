@@ -1,6 +1,7 @@
 # Frontend Task Detail Page - Tasks
 
 ## Feature: Frontend Task Detail
+
 **Route**: `/frontend-tasks/[id]`  
 **Priority**: High  
 **Phase**: 3 (Learning Features)
@@ -8,18 +9,21 @@
 ---
 
 ## Phase 1: Setup
+
 - [ ] T001 Create feature branch `refactor/frontend-task-detail` from `develop`
 - [ ] T002 Create atoms directory if not exists at `libs/common-ui/src/atoms/`
 - [ ] T003 Create molecules directory if not exists at `libs/common-ui/src/molecules/`
 - [ ] T004 Create organisms directory if not exists at `libs/common-ui/src/organisms/`
 
 ## Phase 2: Foundational - Atoms (must complete before molecules)
+
 - [ ] T005 [P] Create DifficultyBadge atom in `libs/common-ui/src/atoms/DifficultyBadge.tsx`
   - Props: `difficulty: "easy" | "medium" | "hard"`, `className?: string`
   - Styles: green (easy), yellow (medium), red (hard)
   - Max 30 lines
 
 ## Phase 3: User Story 1 - Task Information Display
+
 **Goal**: User can view task metadata and description  
 **Test**: Navigate to `/frontend-tasks/[id]` and verify title, difficulty, time, author, tags display
 
@@ -35,6 +39,7 @@
   - Max 100 lines
 
 ## Phase 4: User Story 2 - Code Editing Experience
+
 **Goal**: User can view and edit code files for the task  
 **Test**: Select different files in sidebar, edit code, verify changes persist in state
 
@@ -49,6 +54,7 @@
   - Max 150 lines
 
 ## Phase 5: User Story 3 - Complete Page Integration
+
 **Goal**: User can access full task detail page with all features  
 **Test**: Load page, verify all sections render, test run/reset/solution actions
 
@@ -66,6 +72,7 @@
   - Max 200 lines
 
 ## Phase 6: Polish & Cross-Cutting Concerns
+
 - [ ] T013 [P] Add loading skeleton states to page component
 - [ ] T014 [P] Add error boundary and not-found handling
 - [ ] T015 [P] Verify dark mode support in all components
@@ -76,6 +83,7 @@
 - [ ] T020 Run `npm run build` to verify no build errors
 
 ## Phase 7: Testing (if requested)
+
 - [ ] T021 [P] Create unit test for DifficultyBadge in `libs/common-ui/src/atoms/DifficultyBadge.test.tsx`
 - [ ] T022 [P] Create unit test for TaskMetadata in `libs/common-ui/src/molecules/TaskMetadata.test.tsx`
 - [ ] T023 [P] Create unit test for TaskDescription in `libs/common-ui/src/molecules/TaskDescription.test.tsx`
@@ -100,18 +108,23 @@ T017, T018, T019 → T020
 ## Parallel Execution Examples
 
 **Batch 1** (after T001-T004):
+
 - T005 (DifficultyBadge)
 
 **Batch 2** (after T005):
+
 - T006 (TaskMetadata) + T007 (TaskDescription) + T008 (TaskSidebar) + T009 (TaskCodeEditor)
 
 **Batch 3** (after Batch 2):
+
 - T010 (exports) + T011 (API route)
 
 **Batch 4** (after Batch 3):
+
 - T012 (page)
 
 **Batch 5** (after T012):
+
 - T013 + T014 + T015 + T016 (all parallel polish tasks)
 
 ---
@@ -124,16 +137,16 @@ T017, T018, T019 → T020
 
 ## File Paths Summary
 
-| Task | File Path |
-|------|-----------|
-| T005 | `libs/common-ui/src/atoms/DifficultyBadge.tsx` |
-| T006 | `libs/common-ui/src/molecules/TaskMetadata.tsx` |
-| T007 | `libs/common-ui/src/molecules/TaskDescription.tsx` |
-| T008 | `libs/common-ui/src/organisms/TaskSidebar.tsx` |
-| T009 | `libs/common-ui/src/organisms/TaskCodeEditor.tsx` |
-| T010 | `libs/common-ui/src/index.ts` |
+| Task | File Path                                               |
+| ---- | ------------------------------------------------------- |
+| T005 | `libs/common-ui/src/atoms/DifficultyBadge.tsx`          |
+| T006 | `libs/common-ui/src/molecules/TaskMetadata.tsx`         |
+| T007 | `libs/common-ui/src/molecules/TaskDescription.tsx`      |
+| T008 | `libs/common-ui/src/organisms/TaskSidebar.tsx`          |
+| T009 | `libs/common-ui/src/organisms/TaskCodeEditor.tsx`       |
+| T010 | `libs/common-ui/src/index.ts`                           |
 | T011 | `apps/website/src/app/api/frontend-tasks/[id]/route.ts` |
-| T012 | `apps/website/src/app/frontend-tasks/[id]/page.tsx` |
+| T012 | `apps/website/src/app/frontend-tasks/[id]/page.tsx`     |
 
 ---
 

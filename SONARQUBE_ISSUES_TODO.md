@@ -3,24 +3,28 @@
 ## Issues Identified (36 total)
 
 ### 1. ESLint Configuration Migration
+
 - **Issue**: `.eslintignore` file is deprecated, migrate to `ignores` in `eslint.config.js`
 - **Status**: ✅ Resolved (removed .eslintignore file)
 - **Impact**: ESLint warnings in CI
 - **Solution**: Removed deprecated .eslintignore file
 
 ### 2. Prettier Formatting Issues
+
 - **Issue**: Code style issues in `eslint.config.mjs`
 - **Status**: ✅ Resolved (ran `npm run format`)
 - **Impact**: CI formatting checks failing
 - **Solution**: Applied Prettier formatting
 
 ### 3. Jest Setup Syntax Error
+
 - **Issue**: Potential syntax error in `apps/website/jest.setup.js` (duplicate catch blocks)
 - **Status**: ✅ Resolved (no syntax errors found)
 - **Impact**: Prettier parsing failure
 - **Solution**: Verified syntax is correct
 
 ### 4. TODO Items in Codebase - Repository Implementation
+
 - **Issue**: TODOs for category, topic, and admin repositories
 - **Status**: 🔄 In Progress
 - **Impact**: Dashboard stats functionality incomplete
@@ -33,15 +37,17 @@
   - 🔄 Add/remove questions from plans require new repository methods (complex)
 
 ### 5. Pre-commit Hook Issues
+
 - **Issue**: ESLint failing in pre-commit hooks
 - **Status**: 🔍 Investigating
 - **Impact**: Cannot push changes
-- **Possible Causes**: 
+- **Possible Causes**:
   - ESLint configuration issues after removing .eslintignore
   - Syntax errors in modified files
   - TypeScript compilation issues
 
 ### 6. Test Coverage Gaps
+
 - **Issue**: Multiple test.todo() placeholders in admin pages
 - **Status**: 📋 Identified
 - **Impact**: Test coverage incomplete

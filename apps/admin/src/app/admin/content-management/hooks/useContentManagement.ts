@@ -96,13 +96,14 @@ export function useContentManagement() {
       setError(null);
 
       // Fetch all data in parallel using repositories
-      const [cardsData, plansData, questionsData, categoriesData, topicsData] = await Promise.all([
-        cardRepository.findAll(),
-        planRepository.findAll(),
-        questionRepository.findAll(),
-        categoryRepository.findAll(),
-        topicRepository.getAllTopics(),
-      ]);
+      const [cardsData, plansData, questionsData, categoriesData, topicsData] =
+        await Promise.all([
+          cardRepository.findAll(),
+          planRepository.findAll(),
+          questionRepository.findAll(),
+          categoryRepository.findAll(),
+          topicRepository.getAllTopics(),
+        ]);
 
       setCards((cardsData?.items as any) || []);
       setPlans((plansData?.items as any) || []);
@@ -119,7 +120,13 @@ export function useContentManagement() {
     } finally {
       setLoading(false);
     }
-  }, [questionRepository, cardRepository, planRepository, categoryRepository, topicRepository]);
+  }, [
+    questionRepository,
+    cardRepository,
+    planRepository,
+    categoryRepository,
+    topicRepository,
+  ]);
 
   useEffect(() => {
     fetchData();
@@ -291,7 +298,9 @@ export function useContentManagement() {
       closeTopicQuestionsModal();
     } catch (err) {
       console.error("Failed to add questions:", err);
-      toast.error(err instanceof Error ? err.message : "Failed to add questions");
+      toast.error(
+        err instanceof Error ? err.message : "Failed to add questions",
+      );
     }
   }, [
     selectedPlan,
@@ -330,7 +339,9 @@ export function useContentManagement() {
         }
       } catch (err) {
         console.error("Failed to update plan:", err);
-        toast.error(err instanceof Error ? err.message : "Failed to update plan");
+        toast.error(
+          err instanceof Error ? err.message : "Failed to update plan",
+        );
       }
     },
     [planRepository],
@@ -376,7 +387,9 @@ export function useContentManagement() {
         setAvailableCards((all?.items as any) || []);
       } catch (err) {
         console.error("Failed to load cards:", err);
-        toast.error(err instanceof Error ? err.message : "Failed to load cards");
+        toast.error(
+          err instanceof Error ? err.message : "Failed to load cards",
+        );
       } finally {
         setIsManagingCards(false);
       }
@@ -430,7 +443,9 @@ export function useContentManagement() {
         toast.success("Removed from plan");
       } catch (err) {
         console.error("Failed to remove card:", err);
-        toast.error(err instanceof Error ? err.message : "Failed to remove card");
+        toast.error(
+          err instanceof Error ? err.message : "Failed to remove card",
+        );
       }
     },
     [selectedPlanForCards, planRepository],
@@ -454,7 +469,9 @@ export function useContentManagement() {
         toast.success("Status updated");
       } catch (err) {
         console.error("Failed to update status:", err);
-        toast.error(err instanceof Error ? err.message : "Failed to update status");
+        toast.error(
+          err instanceof Error ? err.message : "Failed to update status",
+        );
       }
     },
     [selectedPlanForCards, planRepository],

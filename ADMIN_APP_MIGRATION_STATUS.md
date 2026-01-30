@@ -9,6 +9,7 @@ The refactoring to separate admin and website apps is **partially complete** wit
 ### Duplicate Routes Found
 
 **apps/website/src/app/admin/** (Old Location - SHOULD BE REMOVED)
+
 ```
 admin/
 ├── content/                    # Duplicate
@@ -26,6 +27,7 @@ admin/
 ```
 
 **apps/admin/src/app/admin/** (New Location - PRIMARY)
+
 ```
 admin/
 ├── content/                    # Primary
@@ -54,37 +56,40 @@ admin/
 ## Which Routes Are Actually Being Used?
 
 ### Current Routing Behavior
+
 - **Production/Staging**: Routes in `apps/website/src/app/admin/` are served (website app on primary port)
 - **Dev Admin Server**: Routes in `apps/admin/src/app/admin/` are available on port 3001
 - **Confusion Risk**: Developers may modify wrong location without realizing
 
 ### Routes Needing Consolidation
 
-| Route | Website App | Admin App | Status |
-|-------|-------------|-----------|--------|
-| `/admin` | ✅ Yes | ✅ Yes | **DUPLICATE** |
-| `/admin/content` | ✅ Yes | ✅ Yes | **DUPLICATE** |
-| `/admin/content-management` | ✅ Yes | ✅ Yes | **DUPLICATE** |
-| `/admin/dashboard` | ❌ No | ✅ Yes | **MIGRATED** |
-| `/admin/frontend-tasks` | ✅ Yes | ✅ Yes | **DUPLICATE** |
-| `/admin/learning-cards` | ✅ Yes | ❌ No | **NOT MIGRATED** |
-| `/admin/login` | ✅ Yes | ✅ Yes | **DUPLICATE** |
-| `/admin/logs` | ✅ Yes | ❌ No | **NOT MIGRATED** |
-| `/admin/problem-solving` | ✅ Yes | ✅ Yes | **DUPLICATE** |
-| `/admin/questions` | ✅ Yes | ❌ No | **NOT MIGRATED** |
-| `/admin/users` | ✅ Yes | ❌ No | **NOT MIGRATED** |
+| Route                       | Website App | Admin App | Status           |
+| --------------------------- | ----------- | --------- | ---------------- |
+| `/admin`                    | ✅ Yes      | ✅ Yes    | **DUPLICATE**    |
+| `/admin/content`            | ✅ Yes      | ✅ Yes    | **DUPLICATE**    |
+| `/admin/content-management` | ✅ Yes      | ✅ Yes    | **DUPLICATE**    |
+| `/admin/dashboard`          | ❌ No       | ✅ Yes    | **MIGRATED**     |
+| `/admin/frontend-tasks`     | ✅ Yes      | ✅ Yes    | **DUPLICATE**    |
+| `/admin/learning-cards`     | ✅ Yes      | ❌ No     | **NOT MIGRATED** |
+| `/admin/login`              | ✅ Yes      | ✅ Yes    | **DUPLICATE**    |
+| `/admin/logs`               | ✅ Yes      | ❌ No     | **NOT MIGRATED** |
+| `/admin/problem-solving`    | ✅ Yes      | ✅ Yes    | **DUPLICATE**    |
+| `/admin/questions`          | ✅ Yes      | ❌ No     | **NOT MIGRATED** |
+| `/admin/users`              | ✅ Yes      | ❌ No     | **NOT MIGRATED** |
 
 ---
 
 ## Incomplete Migration Items
 
 ### Not Yet Migrated to apps/admin
+
 - ❌ `/admin/learning-cards/` - Exists in website app only
 - ❌ `/admin/logs/` - Exists in website app only
 - ❌ `/admin/questions/` - Exists in website app only (merged with `/admin/content/questions`)
 - ❌ `/admin/users/` - Partial migration needed
 
 ### Old Routes to Remove from apps/website
+
 - ⚠️ `/admin/content/` - Has old implementation
 - ⚠️ `/admin/content-management/` - Has old implementation
 - ⚠️ `/admin/frontend-tasks/` - Has old implementation
@@ -98,6 +103,7 @@ admin/
 ## Risk Assessment
 
 ### 🔴 Critical Risks
+
 1. **Route Ambiguity**: Developers unclear which location is canonical
 2. **Sync Issues**: Changes in one location not reflected in other
 3. **Testing Confusion**: Tests may run against wrong implementation
@@ -105,12 +111,14 @@ admin/
 5. **API Duplication**: API endpoints defined in both apps
 
 ### 🟡 Medium Risks
+
 1. **Code Duplication**: Duplicate components and utilities
 2. **Bundle Size**: Both implementations bundled into website app
 3. **Maintenance Burden**: Bugs must be fixed in two places
 4. **Documentation**: Architecture docs don't reflect reality
 
 ### 🟢 Low Risks
+
 1. **Performance**: Currently acceptable despite duplication
 2. **User Impact**: Routing still works correctly
 3. **Security**: No cross-contamination of secrets
@@ -120,12 +128,14 @@ admin/
 ## Refactoring Completion Plan
 
 ### Phase 1: Validation & Inventory (1-2 hours)
+
 - [ ] Identify all code differences between duplicate routes
 - [ ] Document which implementation is "canonical"
 - [ ] Create mapping of features to keep
 - [ ] List all files and line counts
 
 ### Phase 2: Complete Migration (2-4 hours)
+
 - [ ] Migrate remaining routes to apps/admin:
   - [ ] `/admin/learning-cards/` (copy & refactor)
   - [ ] `/admin/logs/` (copy & refactor)
@@ -135,18 +145,21 @@ admin/
 - [ ] Verify all functionality in new location
 
 ### Phase 3: Remove Old Routes (1 hour)
+
 - [ ] Delete apps/website/src/app/admin/ folder
 - [ ] Remove admin-related imports from website app
 - [ ] Update website app layout.tsx (remove admin redirect)
 - [ ] Verify website app still builds
 
 ### Phase 4: Integrate & Test (2-3 hours)
+
 - [ ] Update routing/navigation to point to admin app
 - [ ] Test all routes on correct ports
 - [ ] Update documentation
 - [ ] Verify CI/CD pipelines
 
 ### Phase 5: Cleanup & Documentation (1 hour)
+
 - [ ] Update REFACTORING_MANIFEST.md
 - [ ] Create ADMIN_APP_MIGRATION.md
 - [ ] Add notes to migration tracking table
@@ -184,6 +197,7 @@ admin/
 ## Success Criteria
 
 ✅ Complete when:
+
 - [ ] All admin routes consolidated under `apps/admin/src/app/admin/`
 - [ ] No duplicate routes between apps
 - [ ] `apps/website/src/app/admin/` folder deleted

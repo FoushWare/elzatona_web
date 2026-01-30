@@ -37,20 +37,20 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/LoginRequest'
+              $ref: "#/components/schemas/LoginRequest"
       responses:
-        '200':
+        "200":
           description: Successful login
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/LoginResponse'
-        '401':
+                $ref: "#/components/schemas/LoginResponse"
+        "401":
           description: Invalid credentials
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: "#/components/schemas/ErrorResponse"
 
   /api/admin/auth/logout:
     post:
@@ -60,9 +60,9 @@ paths:
       security:
         - bearerAuth: []
       responses:
-        '200':
+        "200":
           description: Successful logout
-        '401':
+        "401":
           description: Unauthorized
 
   /api/admin/questions:
@@ -93,13 +93,13 @@ paths:
           schema:
             type: string
       responses:
-        '200':
+        "200":
           description: List of questions
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/QuestionListResponse'
-        '401':
+                $ref: "#/components/schemas/QuestionListResponse"
+        "401":
           description: Unauthorized
 
     post:
@@ -113,17 +113,17 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/CreateQuestionRequest'
+              $ref: "#/components/schemas/CreateQuestionRequest"
       responses:
-        '201':
+        "201":
           description: Question created
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Question'
-        '400':
+                $ref: "#/components/schemas/Question"
+        "400":
           description: Validation error
-        '401':
+        "401":
           description: Unauthorized
 
   /api/admin/questions/{id}:
@@ -141,13 +141,13 @@ paths:
             type: string
             format: uuid
       responses:
-        '200':
+        "200":
           description: Question details
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Question'
-        '404':
+                $ref: "#/components/schemas/Question"
+        "404":
           description: Question not found
 
     put:
@@ -168,15 +168,15 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/UpdateQuestionRequest'
+              $ref: "#/components/schemas/UpdateQuestionRequest"
       responses:
-        '200':
+        "200":
           description: Question updated
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Question'
-        '404':
+                $ref: "#/components/schemas/Question"
+        "404":
           description: Question not found
 
     delete:
@@ -193,9 +193,9 @@ paths:
             type: string
             format: uuid
       responses:
-        '204':
+        "204":
           description: Question deleted
-        '404':
+        "404":
           description: Question not found
 
   /api/admin/users:
@@ -222,12 +222,12 @@ paths:
             type: string
             enum: [admin, user, moderator]
       responses:
-        '200':
+        "200":
           description: List of users
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/UserListResponse'
+                $ref: "#/components/schemas/UserListResponse"
 
     post:
       tags: [Users]
@@ -240,14 +240,14 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/CreateUserRequest'
+              $ref: "#/components/schemas/CreateUserRequest"
       responses:
-        '201':
+        "201":
           description: User created
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/User'
+                $ref: "#/components/schemas/User"
 
   /api/admin/users/{id}:
     get:
@@ -264,12 +264,12 @@ paths:
             type: string
             format: uuid
       responses:
-        '200':
+        "200":
           description: User details
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/User'
+                $ref: "#/components/schemas/User"
 
     put:
       tags: [Users]
@@ -289,9 +289,9 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/UpdateUserRequest'
+              $ref: "#/components/schemas/UpdateUserRequest"
       responses:
-        '200':
+        "200":
           description: User updated
 
     delete:
@@ -308,7 +308,7 @@ paths:
             type: string
             format: uuid
       responses:
-        '204':
+        "204":
           description: User deleted
 
   /api/admin/learning-cards:
@@ -334,12 +334,12 @@ paths:
           schema:
             type: string
       responses:
-        '200':
+        "200":
           description: List of learning cards
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/LearningCardListResponse'
+                $ref: "#/components/schemas/LearningCardListResponse"
 
     post:
       tags: [LearningCards]
@@ -352,9 +352,9 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/CreateLearningCardRequest'
+              $ref: "#/components/schemas/CreateLearningCardRequest"
       responses:
-        '201':
+        "201":
           description: Learning card created
 
   /api/admin/learning-cards/{id}:
@@ -372,12 +372,12 @@ paths:
             type: string
             format: uuid
       responses:
-        '200':
+        "200":
           description: Learning card details
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/LearningCard'
+                $ref: "#/components/schemas/LearningCard"
 
     put:
       tags: [LearningCards]
@@ -397,9 +397,9 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/UpdateLearningCardRequest'
+              $ref: "#/components/schemas/UpdateLearningCardRequest"
       responses:
-        '200':
+        "200":
           description: Learning card updated
 
     delete:
@@ -416,7 +416,7 @@ paths:
             type: string
             format: uuid
       responses:
-        '204':
+        "204":
           description: Learning card deleted
 
   /api/admin/logs:
@@ -457,12 +457,12 @@ paths:
             type: string
             format: date-time
       responses:
-        '200':
+        "200":
           description: Activity logs
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/LogListResponse'
+                $ref: "#/components/schemas/LogListResponse"
 
   /api/admin/dashboard/stats:
     get:
@@ -472,12 +472,12 @@ paths:
       security:
         - bearerAuth: []
       responses:
-        '200':
+        "200":
           description: Dashboard statistics
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/DashboardStats'
+                $ref: "#/components/schemas/DashboardStats"
 
 components:
   securitySchemes:
@@ -504,7 +504,7 @@ components:
         token:
           type: string
         user:
-          $ref: '#/components/schemas/User'
+          $ref: "#/components/schemas/User"
         expiresAt:
           type: string
           format: date-time
@@ -582,9 +582,9 @@ components:
         data:
           type: array
           items:
-            $ref: '#/components/schemas/Question'
+            $ref: "#/components/schemas/Question"
         pagination:
-          $ref: '#/components/schemas/Pagination'
+          $ref: "#/components/schemas/Pagination"
 
     User:
       type: object
@@ -639,9 +639,9 @@ components:
         data:
           type: array
           items:
-            $ref: '#/components/schemas/User'
+            $ref: "#/components/schemas/User"
         pagination:
-          $ref: '#/components/schemas/Pagination'
+          $ref: "#/components/schemas/Pagination"
 
     LearningCard:
       type: object
@@ -701,9 +701,9 @@ components:
         data:
           type: array
           items:
-            $ref: '#/components/schemas/LearningCard'
+            $ref: "#/components/schemas/LearningCard"
         pagination:
-          $ref: '#/components/schemas/Pagination'
+          $ref: "#/components/schemas/Pagination"
 
     LogEntry:
       type: object
@@ -732,9 +732,9 @@ components:
         data:
           type: array
           items:
-            $ref: '#/components/schemas/LogEntry'
+            $ref: "#/components/schemas/LogEntry"
         pagination:
-          $ref: '#/components/schemas/Pagination'
+          $ref: "#/components/schemas/Pagination"
 
     DashboardStats:
       type: object
@@ -748,7 +748,7 @@ components:
         recentActivity:
           type: array
           items:
-            $ref: '#/components/schemas/LogEntry'
+            $ref: "#/components/schemas/LogEntry"
         questionsByCategory:
           type: object
           additionalProperties:

@@ -63,14 +63,14 @@ interface FrontendTaskTestCase {
 
 ### Component Breakdown
 
-| Component | Type | Max Lines | Location |
-|-----------|------|-----------|----------|
-| `DifficultyBadge` | Atom | 30 | `libs/common-ui/src/atoms/` |
-| `TaskMetadata` | Molecule | 80 | `libs/common-ui/src/molecules/` |
-| `TaskDescription` | Molecule | 100 | `libs/common-ui/src/molecules/` |
-| `CodeEditor` | Organism | 150 | `libs/common-ui/src/organisms/` |
-| `TaskSidebar` | Organism | 150 | `libs/common-ui/src/organisms/` |
-| `FrontendTaskDetailPage` | Page | 200 | `apps/website/src/app/frontend-tasks/[id]/` |
+| Component                | Type     | Max Lines | Location                                    |
+| ------------------------ | -------- | --------- | ------------------------------------------- |
+| `DifficultyBadge`        | Atom     | 30        | `libs/common-ui/src/atoms/`                 |
+| `TaskMetadata`           | Molecule | 80        | `libs/common-ui/src/molecules/`             |
+| `TaskDescription`        | Molecule | 100       | `libs/common-ui/src/molecules/`             |
+| `CodeEditor`             | Organism | 150       | `libs/common-ui/src/organisms/`             |
+| `TaskSidebar`            | Organism | 150       | `libs/common-ui/src/organisms/`             |
+| `FrontendTaskDetailPage` | Page     | 200       | `apps/website/src/app/frontend-tasks/[id]/` |
 
 ---
 
@@ -111,6 +111,7 @@ export default DifficultyBadge;
 ```
 
 **Export**: Add to `libs/common-ui/src/index.ts`:
+
 ```typescript
 export { DifficultyBadge } from "./atoms/DifficultyBadge";
 ```
@@ -189,6 +190,7 @@ export default TaskMetadata;
 ```
 
 **Export**: Add to `libs/common-ui/src/index.ts`:
+
 ```typescript
 export { TaskMetadata } from "./molecules/TaskMetadata";
 ```
@@ -315,6 +317,7 @@ export default TaskDescription;
 ```
 
 **Export**: Add to `libs/common-ui/src/index.ts`:
+
 ```typescript
 export { TaskDescription } from "./molecules/TaskDescription";
 ```
@@ -422,6 +425,7 @@ export default TaskSidebar;
 ```
 
 **Export**: Add to `libs/common-ui/src/index.ts`:
+
 ```typescript
 export { TaskSidebar } from "./organisms/TaskSidebar";
 ```
@@ -474,7 +478,7 @@ export function TaskCodeEditor({
         <span className="text-sm font-medium">{activeFile.name}</span>
         <span className="text-xs text-gray-500 uppercase">{activeFile.type}</span>
       </div>
-      
+
       {/* Editor Area */}
       <textarea
         value={activeFile.content}
@@ -490,12 +494,14 @@ export default TaskCodeEditor;
 ```
 
 **Note**: For production, replace `<textarea>` with Monaco Editor or CodeMirror:
+
 ```typescript
 // Future enhancement: Use @monaco-editor/react
 // import Editor from "@monaco-editor/react";
 ```
 
 **Export**: Add to `libs/common-ui/src/index.ts`:
+
 ```typescript
 export { TaskCodeEditor } from "./organisms/TaskCodeEditor";
 ```
@@ -526,7 +532,7 @@ export default function FrontendTaskDetailPage() {
   const params = useParams();
   const router = useRouter();
   const { showError, showSuccess } = useToast();
-  
+
   const [task, setTask] = useState<FrontendTask | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [files, setFiles] = useState<FrontendTaskFile[]>([]);
@@ -696,7 +702,7 @@ import { getDatabase } from "@elzatona/database";
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: { id: string } },
 ) {
   try {
     const db = getDatabase();
@@ -706,7 +712,7 @@ export async function GET(
     if (!task) {
       return NextResponse.json(
         { success: false, error: "Task not found" },
-        { status: 404 }
+        { status: 404 },
       );
     }
 
@@ -715,7 +721,7 @@ export async function GET(
     console.error("Error fetching frontend task:", error);
     return NextResponse.json(
       { success: false, error: "Internal server error" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

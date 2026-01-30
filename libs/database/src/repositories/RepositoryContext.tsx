@@ -55,15 +55,18 @@ export function RepositoryProvider({
 }: Readonly<RepositoryProviderProps>): JSX.Element {
   const factory = customFactory || getRepositoryFactory();
 
-  const value = useMemo<RepositoryContextValue>(() => ({
-    questionRepository: factory.getQuestionRepository(),
-    userRepository: factory.getUserRepository(),
-    planRepository: factory.getPlanRepository(),
-    learningCardRepository: factory.getLearningCardRepository(),
-    categoryRepository: factory.getCategoryRepository(),
-    topicRepository: factory.getTopicRepository(),
-    factory,
-  }), [factory]);
+  const value = useMemo<RepositoryContextValue>(
+    () => ({
+      questionRepository: factory.getQuestionRepository(),
+      userRepository: factory.getUserRepository(),
+      planRepository: factory.getPlanRepository(),
+      learningCardRepository: factory.getLearningCardRepository(),
+      categoryRepository: factory.getCategoryRepository(),
+      topicRepository: factory.getTopicRepository(),
+      factory,
+    }),
+    [factory],
+  );
 
   return (
     <RepositoryContext.Provider value={value}>
