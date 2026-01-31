@@ -1,10 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getRepositoryFactory } from "@elzatona/database";
-import {
-  FrontendTask,
-  FrontendTaskFormData,
-  ApiResponse,
-} from "@elzatona/types";
+import { AdminFrontendTaskFormData, ApiResponse } from "@elzatona/types";
 
 // GET /api/admin/frontend-tasks/[id] - Get a specific frontend task
 export async function GET(
@@ -51,7 +47,7 @@ export async function PUT(
     const factory = getRepositoryFactory();
     const questionRepo = factory.getQuestionRepository();
     const { id } = await params;
-    const body: FrontendTaskFormData = await request.json();
+    const body: AdminFrontendTaskFormData = await request.json();
     if (!id) {
       return NextResponse.json(
         { success: false, error: "Task ID is required" },

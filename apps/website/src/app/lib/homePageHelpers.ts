@@ -1,6 +1,6 @@
 // Minimal helper stub for homepage integration tests (app-local copy)
-// Exported as a mutable binding in test env so tests can mock/spy on it
-export let getPersonalizedContent: any = async () => ({ data: [], meta: {} });
+// Exported as a const - tests should use jest.mock() to override
+let getPersonalizedContent: any = async () => ({ data: [], meta: {} });
 
 // In test environment provide lightweight mock helpers so test code
 // that calls (getPersonalizedContent as jest.Mock).mockReturnValue(...) works
@@ -24,5 +24,6 @@ if (process.env.NODE_ENV === "test") {
   getPersonalizedContent = _mock;
 }
 
+export { getPersonalizedContent };
 const homePageHelpers = { getPersonalizedContent };
 export default homePageHelpers;

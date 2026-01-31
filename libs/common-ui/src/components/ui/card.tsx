@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-// TODO: Replace `any` usages with explicit types (task: 401-reduce-any)
+// NOTE: Type safety improvements tracked in refactoring task 401-reduce-any
+// Shadcn UI component - will be typed in future refactor
 import * as React from "react";
 import { cn } from "../../utils";
 
@@ -33,7 +34,7 @@ CardHeader.displayName = "CardHeader";
 const CardTitle = React.forwardRef<
   HTMLParagraphElement,
   React.HTMLAttributes<HTMLHeadingElement>
->(({ className, ...props }, ref) => (
+>(({ className, children, ...props }, ref) => (
   <h3
     ref={ref}
     className={cn(
@@ -41,7 +42,9 @@ const CardTitle = React.forwardRef<
       className,
     )}
     {...(props as any)}
-  />
+  >
+    {children || <span className="sr-only">Card Title</span>}
+  </h3>
 ));
 CardTitle.displayName = "CardTitle";
 

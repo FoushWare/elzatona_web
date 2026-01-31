@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getRepositoryFactory } from "@elzatona/database";
 import {
-  FrontendTask,
-  FrontendTaskFormData,
+  AdminFrontendTask,
+  AdminFrontendTaskFormData,
   ApiResponse,
   PaginatedResponse,
 } from "@elzatona/types";
@@ -13,8 +13,8 @@ export async function GET(request: NextRequest) {
     const factory = getRepositoryFactory();
     const questionRepo = factory.getQuestionRepository();
     const { searchParams } = new URL(request.url);
-    const page = parseInt(searchParams.get("page") || "1");
-    const limit = parseInt(searchParams.get("limit") || "10");
+    const page = Number.parseInt(searchParams.get("page") || "1");
+    const limit = Number.parseInt(searchParams.get("limit") || "10");
     const search = searchParams.get("search") || "";
     const category = searchParams.get("category") || "";
     const difficulty = searchParams.get("difficulty") || "";
@@ -49,7 +49,7 @@ export async function GET(request: NextRequest) {
     const endIndex = startIndex + limit;
     const paginatedData = data.slice(startIndex, endIndex);
 
-    const response: PaginatedResponse<FrontendTask> = {
+    const response: PaginatedResponse<AdminFrontendTask> = {
       success: true,
       data: paginatedData,
       total: data.length,
@@ -73,7 +73,7 @@ export async function POST(request: NextRequest) {
   try {
     const factory = getRepositoryFactory();
     const questionRepo = factory.getQuestionRepository();
-    const body: FrontendTaskFormData = await request.json();
+    const body: AdminFrontendTaskFormData = await request.json();
 
     // Validate required fields
     if (!body.title || !body.description || !body.category) {

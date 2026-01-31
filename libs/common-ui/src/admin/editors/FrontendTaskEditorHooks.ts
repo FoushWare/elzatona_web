@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
-import { FrontendTask, FrontendTaskFormData } from "@elzatona/types";
+import { AdminFrontendTask, AdminFrontendTaskFormData } from "@elzatona/types";
 
 interface FileNode {
   id: string;
@@ -37,8 +37,8 @@ export const useThemeManagement = () => {
 };
 
 // Hook for form data management
-export const useFormDataManagement = (task?: FrontendTask | null) => {
-  const [formData, setFormData] = useState<FrontendTaskFormData>({
+export const useFormDataManagement = (task?: AdminFrontendTask | null) => {
+  const [formData, setFormData] = useState<AdminFrontendTaskFormData>({
     title: "",
     description: "",
     requirements: "",
@@ -200,7 +200,7 @@ const createDefaultFiles = () => {
 };
 
 // Helper function to initialize from task files
-const initializeFromTask = (task: FrontendTask) => {
+const initializeFromTask = (task: AdminFrontendTask) => {
   const files = task.files.map((file) => ({
     id: file.id,
     name: file.name,
@@ -254,7 +254,7 @@ const initializeDefaults = () => {
 };
 
 // Hook for file management
-export const useFileManagement = (task?: FrontendTask | null) => {
+export const useFileManagement = (task?: AdminFrontendTask | null) => {
   const [activeFile, setActiveFile] = useState<string | null>(null);
   const [fileTree, setFileTree] = useState<FileNode[]>([]);
   const [expandedFolders, setExpandedFolders] = useState<Set<string>>(

@@ -5,12 +5,14 @@
 
 "use client";
 
-import React, { createContext, useContext, ReactNode } from "react";
+import React, { createContext, useContext, ReactNode, useMemo } from "react";
 import {
   IQuestionRepository,
   IUserRepository,
   IPlanRepository,
   ILearningCardRepository,
+  ICategoryRepository,
+  ITopicRepository,
 } from "./interfaces";
 import { RepositoryFactory, getRepositoryFactory } from "./RepositoryFactory";
 
@@ -22,6 +24,8 @@ interface RepositoryContextValue {
   userRepository: IUserRepository;
   planRepository: IPlanRepository;
   learningCardRepository: ILearningCardRepository;
+  categoryRepository: ICategoryRepository;
+  topicRepository: ITopicRepository;
   factory: RepositoryFactory;
 }
 
@@ -48,16 +52,21 @@ interface RepositoryProviderProps {
 export function RepositoryProvider({
   children,
   factory: customFactory,
-}: RepositoryProviderProps): JSX.Element {
+}: Readonly<RepositoryProviderProps>): JSX.Element {
   const factory = customFactory || getRepositoryFactory();
 
-  const value: RepositoryContextValue = {
-    questionRepository: factory.getQuestionRepository(),
-    userRepository: factory.getUserRepository(),
-    planRepository: factory.getPlanRepository(),
-    learningCardRepository: factory.getLearningCardRepository(),
-    factory,
-  };
+  const value = useMemo<RepositoryContextValue>(
+    () => ({
+      questionRepository: factory.getQuestionRepository(),
+      userRepository: factory.getUserRepository(),
+      planRepository: factory.getPlanRepository(),
+      learningCardRepository: factory.getLearningCardRepository(),
+      categoryRepository: factory.getCategoryRepository(),
+      topicRepository: factory.getTopicRepository(),
+      factory,
+    }),
+    [factory],
+  );
 
   return (
     <RepositoryContext.Provider value={value}>
@@ -110,6 +119,22 @@ export function usePlanRepository(): IPlanRepository {
 export function useLearningCardRepository(): ILearningCardRepository {
   const { learningCardRepository } = useRepositories();
   return learningCardRepository;
+}
+
+/**
+ * Hook to access Category Repository
+ */
+export function useCategoryRepository(): ICategoryRepository {
+  const { categoryRepository } = useRepositories();
+  return categoryRepository;
+}
+
+/**
+ * Hook to access Topic Repository
+ */
+export function useTopicRepository(): ITopicRepository {
+  const { topicRepository } = useRepositories();
+  return topicRepository;
 }
 
 /**

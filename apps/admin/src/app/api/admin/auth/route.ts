@@ -130,7 +130,8 @@ export async function GET(request: NextRequest) {
         role: decoded.role,
       },
     });
-  } catch (error) {
+  } catch (_error) {
+    console.error("[Admin Auth API] Token verification failed:", _error);
     return NextResponse.json(
       { success: false, error: "Invalid or expired token" },
       { status: 401 },

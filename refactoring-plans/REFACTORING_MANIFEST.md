@@ -1,5 +1,23 @@
 # Elzatona Web Refactoring Manifest
 
+## ⚠️ Critical Note: Incomplete Admin/Website App Separation
+
+**Status**: 🟡 IN PROGRESS - PARTIAL COMPLETION
+
+The refactoring to separate admin and website apps is **INCOMPLETE**. Currently:
+
+- ✅ `apps/admin/` app created and partially populated
+- ✅ Core admin routes migrated (dashboard, content, problem-solving, etc.)
+- ⚠️ **DUPLICATE ROUTES** still exist in `apps/website/src/app/admin/`
+- ❌ Old routes in website app NOT deleted
+- ❌ Some features NOT fully migrated (learning-cards, logs, questions)
+
+**See**: `ADMIN_APP_MIGRATION_STATUS.md` for complete details, risks, and migration plan.
+
+**Action Required**: Complete the consolidation of all admin routes to `apps/admin/` and remove duplicates from `apps/website/` before merging major features.
+
+---
+
 ## Overview
 
 This document outlines the comprehensive refactoring strategy for the Elzatona web application to achieve:
@@ -313,12 +331,56 @@ The following features have been deferred or neglected for the current release t
 - Some advanced DB-specific flows require manual verification beyond automated tests.
 - E2E test coverage for all CRUD flows is in progress; see apps/admin/tests/e2e/ for latest status.
 
+## 🔴 CRITICAL: Admin/Website App Separation Status
+
+### Current Issue
+
+Duplicate admin routes exist in both locations:
+
+- ⚠️ `apps/website/src/app/admin/` - OLD LOCATION (deprecated, should be removed)
+- ✅ `apps/admin/src/app/admin/` - NEW LOCATION (primary, use this)
+
+### Impact
+
+- Code duplication causing maintenance burden
+- Routing ambiguity for developers
+- Increased bundle size for website app
+- Risk of out-of-sync implementations
+
+**See**: `ADMIN_APP_MIGRATION_STATUS.md` for complete details, risks, and migration plan.
+
+### App Architecture Goal
+
+```
+apps/
+├── website/          - User-facing routes only
+│   └── src/app/ (no admin routes)
+│
+└── admin/           - Admin routes only
+    └── src/app/admin/
+```
+
+### Current Status
+
+- ✅ Admin app created: `apps/admin/`
+- ✅ Core routes migrated (60%): dashboard, content, problem-solving
+- ⚠️ DUPLICATE ROUTES: Still exist in website app
+- ❌ CLEANUP PENDING: Old routes not yet removed
+- ❌ INCOMPLETE: Some features still in website app only
+
+### Action Required
+
+Consolidate all admin routes to `apps/admin/` and remove duplicates from `apps/website/` before merging major features.
+
+Estimated timeline: 6-10 hours
+
 ## Next Steps
 
 1. ✅ Create refactoring documentation structure
 2. ✅ Establish code quality gates
-3. ⏳ Set up automated testing pipelines
-4. ⏳ Create component library standards
-5. ⏳ Begin Phase 1 refactoring
+3. 🔴 **PRIORITY**: Complete admin/website app separation (see ADMIN_APP_MIGRATION_STATUS.md)
+4. ⏳ Set up automated testing pipelines
+5. ⏳ Create component library standards
+6. ⏳ Continue Phase 1-5 refactoring
 
 This manifesto serves as the foundation for our refactoring journey, ensuring we maintain high standards while systematically improving the codebase.

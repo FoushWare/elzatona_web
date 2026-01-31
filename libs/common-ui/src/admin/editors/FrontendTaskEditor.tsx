@@ -2,7 +2,7 @@
 
 import React from "react";
 import { Code } from "lucide-react";
-import { FrontendTask, FrontendTaskFormData } from "@elzatona/types";
+import { AdminFrontendTask, AdminFrontendTaskFormData } from "@elzatona/types";
 import {
   useThemeManagement,
   useFormDataManagement,
@@ -22,14 +22,14 @@ import {
 } from "./FrontendTaskEditorUtils";
 
 interface FrontendTaskEditorProps {
-  readonly task?: FrontendTask | null;
-  readonly onSave: (taskData: FrontendTaskFormData) => Promise<void>;
+  readonly task?: AdminFrontendTask | null;
+  readonly onSave: (taskData: AdminFrontendTaskFormData) => Promise<void>;
   readonly onCancel: () => void;
   readonly mode?: "create" | "edit" | "view";
 }
 
 // Custom hook to consolidate all editor state management
-const useFrontendTaskEditorState = (task?: FrontendTask | null) => {
+const useFrontendTaskEditorState = (task?: AdminFrontendTask | null) => {
   // Extracted hooks for state management
   const { theme, setTheme, isDark } = useThemeManagement();
   const { formData, setFormData } = useFormDataManagement(task);

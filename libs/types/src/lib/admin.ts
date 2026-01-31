@@ -11,7 +11,7 @@ export interface FrontendTaskTestCase {
   timeout?: number;
 }
 
-export interface FrontendTaskFile {
+export interface AdminFrontendTaskFile {
   id: string;
   name: string;
   type: "tsx" | "ts" | "css" | "html" | "json" | "js";
@@ -19,7 +19,7 @@ export interface FrontendTaskFile {
   isEntryPoint?: boolean; // For main component files
 }
 
-export interface FrontendTask {
+export interface AdminFrontendTask {
   id: string;
   title: string;
   description: string;
@@ -32,7 +32,7 @@ export interface FrontendTask {
   hints: string[];
   solution: string;
   starterCode: string; // Legacy field for backward compatibility
-  files: FrontendTaskFile[]; // New dynamic files structure
+  files: AdminFrontendTaskFile[]; // New dynamic files structure
   testCases?: FrontendTaskTestCase[]; // Added test cases
   tags: string[];
   created_at: Date;
@@ -95,7 +95,7 @@ export interface PaginatedResponse<T> {
 }
 
 // Form data types
-export interface FrontendTaskFormData {
+export interface AdminFrontendTaskFormData {
   title: string;
   description: string;
   difficulty: "easy" | "medium" | "hard";
@@ -107,7 +107,7 @@ export interface FrontendTaskFormData {
   hints: string[];
   solution: string;
   starterCode: string; // Legacy field for backward compatibility
-  files: FrontendTaskFile[]; // New dynamic files structure
+  files: AdminFrontendTaskFile[]; // New dynamic files structure
   testCases?: FrontendTaskTestCase[]; // Added test cases
   tags: string[];
   is_active: boolean;

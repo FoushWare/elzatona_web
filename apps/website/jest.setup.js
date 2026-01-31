@@ -6,7 +6,7 @@ import { existsSync } from "node:fs";
 // Provide a minimal `vi` shim when running under Jest so tests written for
 // Vitest that reference `vi` don't immediately crash. This maps common
 // `vi` helpers to their Jest equivalents when possible.
-if (typeof globalThis.vi === "undefined") {
+if (globalThis.vi === undefined) {
   globalThis.vi = {
     fn: (...args) => jest.fn(...args),
     mock: (moduleName, factory, options) => {
@@ -19,11 +19,14 @@ if (typeof globalThis.vi === "undefined") {
             const abs = require.resolve(moduleName, { paths: [process.cwd()] });
             return jest.mock(abs, factory, options);
           } catch (error_) {
-            // fallback to original moduleName
+            console.debug(
+              "Module resolution failed, using original name:",
+              error_.message,
+            );
           }
         }
       } catch (error_) {
-        // ignore
+        console.debug("Mock setup failed:", error_.message);
       }
       return jest.mock(moduleName, factory, options);
     },
@@ -51,9 +54,9 @@ const projectRoot = process.cwd();
 const testEnvFile = resolve(projectRoot, ".env.test.local");
 
 // In local development, .env.test.local is REQUIRED
-if (!isCI) {
+if (isCI === false) {
   // Check if .env.test.local exists
-  if (!existsSync(testEnvFile)) {
+  if (existsSync(testEnvFile) === false) {
     console.error("❌ CRITICAL: .env.test.local file is missing!");
     console.error(`   Location: ${testEnvFile}`);
     console.error("\n📝 To fix:");
@@ -108,8 +111,8 @@ if (!isCI) {
   envFiles.forEach((envFile) => {
     try {
       config({ path: envFile, override: false }); // Don't override, respect priority
-    } catch (_) {
-      // ignore load errors for optional env files
+    } catch (error_) {
+      console.debug("Failed to load env file:", envFile, error_.message);
     }
   });
 }
@@ -253,26 +256,134 @@ if (process.env.DEBUG_TEST_ENV === "true") {
 
 // Polyfill for Web APIs needed by Next.js in Node.js test environment
 // Next.js requires these globals to be available
+
+// Factory functions to create polyfill classes (avoids duplication - S4144)
+function createHeadersClass() {
+  return class Headers {
+    constructor(init = {}) {
+      this._headers = {};
+      if (init) {
+        Object.entries(init).forEach(([key, value]) => {
+          this._headers[key.toLowerCase()] = value;
+        });
+      }
+    }
+    get(name) {
+      return this._headers[name.toLowerCase()];
+    }
+    set(name, value) {
+      this._headers[name.toLowerCase()] = value;
+    }
+    has(name) {
+      return name.toLowerCase() in this._headers;
+    }
+    entries() {
+      return Object.entries(this._headers)[Symbol.iterator]();
+    }
+    *[Symbol.iterator]() {
+      for (const [key, value] of Object.entries(this._headers)) {
+        yield [key, value];
+      }
+    }
+  };
+}
+
+function createRequestClass() {
+  return class Request {
+    constructor(input, init = {}) {
+      this._url = typeof input === "string" ? input : input?.url || "";
+      this._method = init.method || "GET";
+      this._headers = new (globalThis.Headers || createHeadersClass())(
+        init.headers,
+      );
+      this._body = init.body;
+    }
+    get url() {
+      return this._url;
+    }
+    get method() {
+      return this._method;
+    }
+    get headers() {
+      return this._headers;
+    }
+    async json() {
+      return JSON.parse(this._body || "{}");
+    }
+  };
+}
+
+function createResponseClass() {
+  return class Response {
+    constructor(body, init = {}) {
+      this._body = body;
+      this._status = init.status || 200;
+      this._statusText = init.statusText || "OK";
+      this._headers = new (globalThis.Headers || createHeadersClass())(
+        init.headers,
+      );
+      this._ok = this._status >= 200 && this._status < 300;
+    }
+    get status() {
+      return this._status;
+    }
+    get statusText() {
+      return this._statusText;
+    }
+    get headers() {
+      return this._headers;
+    }
+    get ok() {
+      return this._ok;
+    }
+    async json() {
+      if (typeof this._body === "string") {
+        try {
+          return JSON.parse(this._body);
+        } catch {
+          return {};
+        }
+      }
+      if (this._body && typeof this._body === "object") {
+        return this._body;
+      }
+      return {};
+    }
+    async text() {
+      if (typeof this._body === "string") {
+        return this._body;
+      }
+      return JSON.stringify(this._body || {});
+    }
+    static json(body, init = {}) {
+      const bodyString = JSON.stringify(body);
+      const headers = new (globalThis.Headers || createHeadersClass())({
+        "Content-Type": "application/json",
+        ...init.headers,
+      });
+      const response = new (globalThis.Response || createResponseClass())(
+        bodyString,
+        {
+          ...init,
+          headers,
+        },
+      );
+      response._body = bodyString;
+      return response;
+    }
+  };
+}
+
 if (globalThis.Request === undefined) {
   try {
-    let fetchAPI = undefined;
-    if (
-      typeof globalThis !== "undefined" &&
-      globalThis.fetch &&
-      globalThis.fetch.Request
-    ) {
-      fetchAPI = globalThis.fetch;
-    } else if (
-      typeof globalThis !== "undefined" &&
-      globalThis.fetch &&
-      globalThis.fetch.Request
-    ) {
+    let fetchAPI;
+    if (globalThis && globalThis.fetch && globalThis.fetch.Request) {
       fetchAPI = globalThis.fetch;
     }
 
     if (fetchAPI && fetchAPI.Request) {
       // Ensure `fetch` is available globally. Prefer existing global fetch, otherwise try node-fetch.
-      if (typeof globalThis.fetch === "undefined") {
+      if (globalThis.fetch === undefined) {
         try {
           // node-fetch v2 supports require — allow require here
 
@@ -280,12 +391,18 @@ if (globalThis.Request === undefined) {
           if (nodeFetch) {
             globalThis.fetch = nodeFetch;
           }
-        } catch (_err) {
+        } catch (error_) {
           // Last resort: a minimal fetch shim that uses the Response polyfill above.
+          console.debug(
+            "node-fetch load failed, using minimal fetch shim:",
+            error_,
+          );
           globalThis.fetch = async (input, init = {}) => {
-            const url = typeof input === "string" ? input : input?.url || "";
             const body = init && init.body ? init.body : null;
-            return new globalThis.Response(body || null, { status: 200 });
+            return new (globalThis.Response || createResponseClass())(
+              body || null,
+              { status: 200 },
+            );
           };
         }
       }
@@ -294,233 +411,43 @@ if (globalThis.Request === undefined) {
       globalThis.Headers = fetchAPI.Headers;
     } else {
       // Fallback: Create minimal polyfills
-      globalThis.Headers = class Headers {
-        constructor(init = {}) {
-          this._headers = {};
-          if (init) {
-            Object.entries(init).forEach(([key, value]) => {
-              this._headers[key.toLowerCase()] = value;
-            });
-          }
-        }
-        get(name) {
-          return this._headers[name.toLowerCase()];
-        }
-        set(name, value) {
-          this._headers[name.toLowerCase()] = value;
-        }
-        has(name) {
-          return name.toLowerCase() in this._headers;
-        }
-        entries() {
-          return Object.entries(this._headers)[Symbol.iterator]();
-        }
-        *[Symbol.iterator]() {
-          for (const [key, value] of Object.entries(this._headers)) {
-            yield [key, value];
-          }
-        }
-      };
-
-      globalThis.Request = class Request {
-        constructor(input, init = {}) {
-          this._url = typeof input === "string" ? input : input?.url || "";
-          this._method = init.method || "GET";
-          this._headers = new globalThis.Headers(init.headers);
-          this._body = init.body;
-        }
-        get url() {
-          return this._url;
-        }
-        get method() {
-          return this._method;
-        }
-        get headers() {
-          return this._headers;
-        }
-        async json() {
-          return JSON.parse(this._body || "{}");
-        }
-      };
-
-      globalThis.Response = class Response {
-        constructor(body, init = {}) {
-          this._body = body;
-          this._status = init.status || 200;
-          this._statusText = init.statusText || "OK";
-          this._headers = new globalThis.Headers(init.headers);
-          this._ok = this._status >= 200 && this._status < 300;
-        }
-        get status() {
-          return this._status;
-        }
-        get statusText() {
-          return this._statusText;
-        }
-        get headers() {
-          return this._headers;
-        }
-        get ok() {
-          return this._ok;
-        }
-        async json() {
-          if (typeof this._body === "string") {
-            try {
-              return JSON.parse(this._body);
-            } catch {
-              return {};
-            }
-          }
-          if (this._body && typeof this._body === "object") {
-            return this._body;
-          }
-          return {};
-        }
-        async text() {
-          if (typeof this._body === "string") {
-            return this._body;
-          }
-          return JSON.stringify(this._body || {});
-        }
-        static json(body, init = {}) {
-          const bodyString = JSON.stringify(body);
-          const headers = new globalThis.Headers({
-            "Content-Type": "application/json",
-            ...init.headers,
-          });
-          const response = new globalThis.Response(bodyString, {
-            ...init,
-            headers,
-          });
-          response._body = bodyString;
-          return response;
-        }
-      };
+      globalThis.Headers = createHeadersClass();
+      globalThis.Request = createRequestClass();
+      globalThis.Response = createResponseClass();
     }
-  } catch (_e) {
-    // If detection fails, provide minimal polyfills
-    globalThis.Headers = class Headers {
-      constructor(init = {}) {
-        this._headers = {};
-        if (init) {
-          Object.entries(init).forEach(([key, value]) => {
-            this._headers[key.toLowerCase()] = value;
-          });
-        }
-      }
-      get(name) {
-        return this._headers[name.toLowerCase()];
-      }
-      set(name, value) {
-        this._headers[name.toLowerCase()] = value;
-      }
-      has(name) {
-        return name.toLowerCase() in this._headers;
-      }
-      entries() {
-        return Object.entries(this._headers)[Symbol.iterator]();
-      }
-      *[Symbol.iterator]() {
-        for (const [key, value] of Object.entries(this._headers)) {
-          yield [key, value];
-        }
-      }
-    };
-
-    globalThis.Request = class Request {
-      constructor(input, init = {}) {
-        this._url = typeof input === "string" ? input : input?.url || "";
-        this._method = init.method || "GET";
-        this._headers = new globalThis.Headers(init.headers);
-        this._body = init.body;
-      }
-      get url() {
-        return this._url;
-      }
-      get method() {
-        return this._method;
-      }
-      get headers() {
-        return this._headers;
-      }
-      async json() {
-        return JSON.parse(this._body || "{}");
-      }
-    };
-
-    globalThis.Response = class Response {
-      constructor(body, init = {}) {
-        this._body = body;
-        this._status = init.status || 200;
-        this._statusText = init.statusText || "OK";
-        this._headers = new globalThis.Headers(init.headers);
-        this._ok = this._status >= 200 && this._status < 300;
-      }
-      get status() {
-        return this._status;
-      }
-      get statusText() {
-        return this._statusText;
-      }
-      get headers() {
-        return this._headers;
-      }
-      get ok() {
-        return this._ok;
-      }
-      async json() {
-        if (typeof this._body === "string") {
-          try {
-            return JSON.parse(this._body);
-          } catch {
-            return {};
-          }
-        }
-        if (this._body && typeof this._body === "object") {
-          return this._body;
-        }
-        return {};
-      }
-      async text() {
-        if (typeof this._body === "string") {
-          return this._body;
-        }
-        return JSON.stringify(this._body || {});
-      }
-      static json(body, init = {}) {
-        const bodyString = JSON.stringify(body);
-        const headers = new globalThis.Headers({
-          "Content-Type": "application/json",
-          ...init.headers,
-        });
-        const response = new globalThis.Response(bodyString, {
-          ...init,
-          headers,
-        });
-        response._body = bodyString;
-        return response;
-      }
-    };
+  } catch (error_) {
+    // If detection fails, provide minimal polyfills and log
+    console.debug("fetch API detection error:", error_);
+    globalThis.Headers = createHeadersClass();
+    globalThis.Request = createRequestClass();
+    globalThis.Response = createResponseClass();
   }
 }
 
 // Make `window.location` configurable for tests that redefine it.
 try {
-  // Remove existing non-configurable property if possible
-  try {
-    delete window.location;
-  } catch (_) {
-    // ignore
-  }
+  // Make `window.location` configurable for tests that redefine it.
+  if (globalThis.window !== undefined) {
+    try {
+      delete globalThis.window.location;
+    } catch (error_) {
+      console.debug("unable to delete window.location:", error_);
+    }
 
-  Object.defineProperty(window, "location", {
-    configurable: true,
-    enumerable: true,
-    writable: true,
-    value: {
-      href: "",
-    },
-  });
-} catch (_) {
+    try {
+      Object.defineProperty(globalThis.window, "location", {
+        configurable: true,
+        enumerable: true,
+        writable: true,
+        value: {
+          href: "",
+        },
+      });
+    } catch (error_) {
+      console.debug("unable to redefine window.location:", error_);
+    }
+  }
+} catch (error_) {
   // If we can't redefine, tests that attempt to redefine may still fail; continue gracefully
+  console.debug("window.location setup error:", error_);
 }

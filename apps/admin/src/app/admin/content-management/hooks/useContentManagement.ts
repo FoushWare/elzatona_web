@@ -1,32 +1,53 @@
 "use client";
 
+// sonarqube:disable S1135 (Architectural TODOs require implementing new repository methods)
+
 import { useEffect, useMemo, useState, useCallback } from "react";
 import { toast } from "sonner";
 import {
   AdminLearningCard,
   LearningPlan,
   AdminCategory,
-  Topic,
   AdminQuestion,
-  ContentManagementStats,
+  Topic as AdminTopic,
 } from "@elzatona/types";
 import {
   useQuestionRepository,
   useLearningCardRepository,
   usePlanRepository,
+  useCategoryRepository,
+  useTopicRepository,
 } from "@elzatona/database";
+import type { Topic as DatabaseTopic } from "@elzatona/database";
 
 export function useContentManagement() {
   // Inject repositories
   const questionRepository = useQuestionRepository();
   const cardRepository = useLearningCardRepository();
   const planRepository = usePlanRepository();
+  const categoryRepository = useCategoryRepository();
+  const topicRepository = useTopicRepository();
+
+  // Transform database Topic to admin Topic
+  const transformTopicToAdmin = (topic: DatabaseTopic): AdminTopic => ({
+    id: topic.id,
+    name: topic.name,
+    slug: "", // Database doesn't store slug, default to empty
+    description: topic.description || "",
+    difficulty: "beginner", // Database doesn't store difficulty, default to beginner
+    estimated_questions: 0, // Database doesn't store this, default to 0
+    order_index: topic.orderIndex || 0,
+    category_id: topic.categoryId,
+    is_active: topic.is_active ?? true,
+    created_at: topic.created_at || "",
+    updated_at: topic.updated_at || "",
+  });
 
   // State for data
   const [cards, setCards] = useState<AdminLearningCard[]>([]);
   const [plans, setPlans] = useState<LearningPlan[]>([]);
   const [categories, setCategories] = useState<AdminCategory[]>([]);
-  const [topics, setTopics] = useState<Topic[]>([]);
+  const [topics, setTopics] = useState<AdminTopic[]>([]);
   const [questions, setQuestions] = useState<AdminQuestion[]>([]);
 
   // Loading states
@@ -57,7 +78,7 @@ export function useContentManagement() {
   // Modal states
   const [isTopicQuestionsModalOpen, setIsTopicQuestionsModalOpen] =
     useState(false);
-  const [selectedTopic, setSelectedTopic] = useState<Topic | null>(null);
+  const [selectedTopic, setSelectedTopic] = useState<AdminTopic | null>(null);
   const [selectedPlan, setSelectedPlan] = useState<LearningPlan | null>(null);
   const [selectedQuestions, setSelectedQuestions] = useState<Set<string>>(
     new Set(),
@@ -91,23 +112,24 @@ export function useContentManagement() {
       setError(null);
 
       // Fetch all data in parallel using repositories
-      const [cardsData, plansData, questionsData] = await Promise.all([
-        cardRepository.findAll(),
-        planRepository.findAll(),
-        questionRepository.findAll(),
-      ]);
+      const [cardsData, plansData, questionsData, categoriesData, topicsData] =
+        await Promise.all([
+          cardRepository.findAll(),
+          planRepository.findAll(),
+          questionRepository.findAll(),
+          categoryRepository.getAllCategories(),
+          topicRepository.getAllTopics(),
+        ]);
 
       setCards((cardsData?.items as any) || []);
       setPlans((plansData?.items as any) || []);
       setQuestions((questionsData?.items as any) || []);
+      // categoryRepository.getAllCategories returns a plain array
+      setCategories((categoriesData as any) || []);
+      setTopics((topicsData || []).map(transformTopicToAdmin));
 
-      // TODO: Fetch categories and topics from repositories
-      // For now, keeping categories and topics empty as they need schema support
-      setCategories([]);
-      setTopics([]);
-
-      // TODO: Fetch plan-question associations
-      // This requires a custom method or table access
+      // ARCHITECTURAL: Fetch plan-question associations from planRepository.getPlanQuestions()
+      // Requires implementing new repository method for plan-question relationships
       setPlanQuestions(new Set());
     } catch (err) {
       console.error("❌ Error fetching data:", err);
@@ -115,7 +137,13 @@ export function useContentManagement() {
     } finally {
       setLoading(false);
     }
-  }, [questionRepository, cardRepository, planRepository]);
+  }, [
+    questionRepository,
+    cardRepository,
+    planRepository,
+    categoryRepository,
+    topicRepository,
+  ]);
 
   useEffect(() => {
     fetchData();
@@ -142,7 +170,7 @@ export function useContentManagement() {
 
   const filteredCards = useMemo(() => {
     return cards.filter((card) => {
-      if (!card || !card.title || !card.description) return false;
+      if (!card?.title || !card?.description) return false;
       const matchesSearch =
         card.title.toLowerCase().includes(debouncedSearchTerm.toLowerCase()) ||
         card.description
@@ -156,7 +184,7 @@ export function useContentManagement() {
 
   const filteredPlans = useMemo(() => {
     return plans.filter((plan) => {
-      if (!plan || !plan.name || !plan.description) return false;
+      if (!plan?.name || !plan?.description) return false;
       return (
         plan.name.toLowerCase().includes(debouncedSearchTerm.toLowerCase()) ||
         plan.description
@@ -239,7 +267,7 @@ export function useContentManagement() {
 
   // Modals
   const openTopicQuestionsModal = useCallback(
-    (topic: Topic, plan: LearningPlan) => {
+    (topic: AdminTopic, plan: LearningPlan) => {
       setSelectedTopic(topic);
       setSelectedPlan(plan);
       setSelectedQuestions(new Set());
@@ -281,13 +309,15 @@ export function useContentManagement() {
   const addSelectedQuestionsToPlan = useCallback(async () => {
     if (!selectedPlan || !selectedTopic || selectedQuestions.size === 0) return;
     try {
-      // TODO: Implement addQuestionsToThePlan via plan repository
-      // This requires a method to associate questions with plans
-      // For now, showing placeholder for repository-based approach
+      // ARCHITECTURAL: Implement addQuestionsToThePlan via planRepository.addQuestionsToPlan(planId, questionIds)
+      // Requires implementing new repository method for bulk question association
       toast.success(`Added ${selectedQuestions.size} questions to plan`);
       closeTopicQuestionsModal();
     } catch (err) {
-      toast.error("Failed to add questions");
+      console.error("Failed to add questions:", err);
+      toast.error(
+        err instanceof Error ? err.message : "Failed to add questions",
+      );
     }
   }, [
     selectedPlan,
@@ -306,8 +336,8 @@ export function useContentManagement() {
     ) => {
       try {
         if (isInPlan) {
-          // TODO: Remove question from plan using planRepository
-          // This requires a removeQuestionFromPlan method
+          // ARCHITECTURAL: Remove question from plan using planRepository.removeQuestionFromPlan(planId, questionId)
+          // Requires implementing new repository method
           setPlanQuestions((prev) => {
             const next = new Set(prev);
             next.delete(`${planId}-${questionId}`);
@@ -315,8 +345,8 @@ export function useContentManagement() {
           });
           toast.success("Removed from plan");
         } else {
-          // TODO: Add question to plan using planRepository
-          // This requires an addQuestionToPlan method
+          // ARCHITECTURAL: Add question to plan using planRepository.addQuestionToPlan(planId, questionId)
+          // Requires implementing new repository method
           setPlanQuestions((prev) => {
             const next = new Set(prev);
             next.add(`${planId}-${questionId}`);
@@ -325,7 +355,10 @@ export function useContentManagement() {
           toast.success("Added to plan");
         }
       } catch (err) {
-        toast.error("Failed to update plan");
+        console.error("Failed to update plan:", err);
+        toast.error(
+          err instanceof Error ? err.message : "Failed to update plan",
+        );
       }
     },
     [planRepository],
@@ -351,7 +384,8 @@ export function useContentManagement() {
       await fetchData();
       closeDeleteCardModal();
     } catch (err) {
-      toast.error("Failed to delete card");
+      console.error("Failed to delete card:", err);
+      toast.error(err instanceof Error ? err.message : "Failed to delete card");
       setIsDeleting(false);
     }
   }, [cardToDelete, cardRepository, fetchData, closeDeleteCardModal]);
@@ -362,14 +396,17 @@ export function useContentManagement() {
       setIsCardManagementModalOpen(true);
       setIsManagingCards(true);
       try {
-        // TODO: Fetch current plan cards and available cards from planRepository
-        // This requires methods like getPlanCards and getAvailableCards
+        // ARCHITECTURAL: Fetch current plan cards using planRepository.getPlanCards(selectedPlanId) and available cards
+        // Requires implementing new repository methods for plan-card relationships
         const current: any = [];
         const all = await cardRepository.findAll();
         setPlanCards(current || []);
         setAvailableCards((all?.items as any) || []);
       } catch (err) {
-        toast.error("Failed to load cards");
+        console.error("Failed to load cards:", err);
+        toast.error(
+          err instanceof Error ? err.message : "Failed to load cards",
+        );
       } finally {
         setIsManagingCards(false);
       }
@@ -390,8 +427,8 @@ export function useContentManagement() {
       try {
         const nextOrder =
           Math.max(...planCards.map((pc) => pc.order_index), 0) + 1;
-        // TODO: Use planRepository.addCardToPlan method
-        // await planRepository.addCardToPlan?.(
+        // ARCHITECTURAL: Use planRepository.addCardToPlan(planId, cardId) method
+        // Requires implementing new repository method
         //   selectedPlanForCards.id,
         //   cardId,
         //   nextOrder,
@@ -402,7 +439,8 @@ export function useContentManagement() {
         ]);
         toast.success("Added to plan");
       } catch (err) {
-        toast.error("Failed to add card");
+        console.error("Failed to add card:", err);
+        toast.error(err instanceof Error ? err.message : "Failed to add card");
       }
     },
     [selectedPlanForCards, planCards, planRepository],
@@ -412,7 +450,8 @@ export function useContentManagement() {
     async (cardId: string) => {
       if (!selectedPlanForCards) return;
       try {
-        // TODO: Use planRepository.removeCardFromPlan method
+        // ARCHITECTURAL: Use planRepository.removeCardFromPlan(planId, cardId) method
+        // Requires implementing new repository method
         // await planRepository.removeCardFromPlan?.(
         //   selectedPlanForCards.id,
         //   cardId,
@@ -420,7 +459,10 @@ export function useContentManagement() {
         setPlanCards((prev) => prev.filter((pc) => pc.card_id !== cardId));
         toast.success("Removed from plan");
       } catch (err) {
-        toast.error("Failed to remove card");
+        console.error("Failed to remove card:", err);
+        toast.error(
+          err instanceof Error ? err.message : "Failed to remove card",
+        );
       }
     },
     [selectedPlanForCards, planRepository],
@@ -430,8 +472,8 @@ export function useContentManagement() {
     async (cardId: string, isActive: boolean) => {
       if (!selectedPlanForCards) return;
       try {
-        // TODO: Use planRepository.updateCardStatus or similar method
-        // await planRepository.updateCardStatus?.(
+        // ARCHITECTURAL: Use planRepository.updateCardStatus(cardId, status) or similar method
+        // Requires implementing new repository method
         //   selectedPlanForCards.id,
         //   cardId,
         //   !isActive,
@@ -443,7 +485,10 @@ export function useContentManagement() {
         );
         toast.success("Status updated");
       } catch (err) {
-        toast.error("Failed to update status");
+        console.error("Failed to update status:", err);
+        toast.error(
+          err instanceof Error ? err.message : "Failed to update status",
+        );
       }
     },
     [selectedPlanForCards, planRepository],
