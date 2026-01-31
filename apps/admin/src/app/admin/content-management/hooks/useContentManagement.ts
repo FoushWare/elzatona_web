@@ -9,6 +9,7 @@ import {
   LearningPlan,
   AdminCategory,
   AdminQuestion,
+  Topic as AdminTopic,
 } from "@elzatona/types";
 import {
   useQuestionRepository,
@@ -17,7 +18,7 @@ import {
   useCategoryRepository,
   useTopicRepository,
 } from "@elzatona/database";
-import type { Topic } from "@elzatona/database";
+import type { Topic as DatabaseTopic } from "@elzatona/database";
 
 export function useContentManagement() {
   // Inject repositories
@@ -27,11 +28,26 @@ export function useContentManagement() {
   const categoryRepository = useCategoryRepository();
   const topicRepository = useTopicRepository();
 
+  // Transform database Topic to admin Topic
+  const transformTopicToAdmin = (topic: DatabaseTopic): AdminTopic => ({
+    id: topic.id,
+    name: topic.name,
+    slug: "", // Database doesn't store slug, default to empty
+    description: topic.description || "",
+    difficulty: "beginner", // Database doesn't store difficulty, default to beginner
+    estimated_questions: 0, // Database doesn't store this, default to 0
+    order_index: topic.orderIndex || 0,
+    category_id: topic.categoryId,
+    is_active: topic.is_active ?? true,
+    created_at: topic.created_at || "",
+    updated_at: topic.updated_at || "",
+  });
+
   // State for data
   const [cards, setCards] = useState<AdminLearningCard[]>([]);
   const [plans, setPlans] = useState<LearningPlan[]>([]);
   const [categories, setCategories] = useState<AdminCategory[]>([]);
-  const [topics, setTopics] = useState<Topic[]>([]);
+  const [topics, setTopics] = useState<AdminTopic[]>([]);
   const [questions, setQuestions] = useState<AdminQuestion[]>([]);
 
   // Loading states
@@ -62,7 +78,7 @@ export function useContentManagement() {
   // Modal states
   const [isTopicQuestionsModalOpen, setIsTopicQuestionsModalOpen] =
     useState(false);
-  const [selectedTopic, setSelectedTopic] = useState<Topic | null>(null);
+  const [selectedTopic, setSelectedTopic] = useState<AdminTopic | null>(null);
   const [selectedPlan, setSelectedPlan] = useState<LearningPlan | null>(null);
   const [selectedQuestions, setSelectedQuestions] = useState<Set<string>>(
     new Set(),
@@ -110,7 +126,7 @@ export function useContentManagement() {
       setQuestions((questionsData?.items as any) || []);
       // categoryRepository.getAllCategories returns a plain array
       setCategories((categoriesData as any) || []);
-      setTopics(topicsData || []);
+      setTopics((topicsData || []).map(transformTopicToAdmin));
 
       // ARCHITECTURAL: Fetch plan-question associations from planRepository.getPlanQuestions()
       // Requires implementing new repository method for plan-question relationships
@@ -251,7 +267,7 @@ export function useContentManagement() {
 
   // Modals
   const openTopicQuestionsModal = useCallback(
-    (topic: Topic, plan: LearningPlan) => {
+    (topic: AdminTopic, plan: LearningPlan) => {
       setSelectedTopic(topic);
       setSelectedPlan(plan);
       setSelectedQuestions(new Set());
