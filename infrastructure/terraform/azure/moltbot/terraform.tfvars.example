@@ -1,0 +1,24 @@
+# Development Environment Configuration
+environment             = "dev"
+location                = "eastus"
+resource_group_name     = "rg-moltbot-dev"
+storage_account_name    = "stmoltbotdev001"
+storage_replication_type = "LRS"
+app_service_plan_name   = "asp-moltbot-dev"
+app_service_sku         = "B1"
+web_app_name            = "app-moltbot-dev-001"
+app_insights_name       = "appi-moltbot-dev"
+key_vault_name          = "kv-moltbot-dev-001"
+
+allowed_origins = [
+  "http://localhost:3000",
+  "http://localhost:4200",
+  "http://localhost:5173"
+]
+
+tags = {
+  Project     = "MoltBot"
+  Environment = "Development"
+  ManagedBy   = "Terraform"
+  CostCenter  = "Engineering"
+}
