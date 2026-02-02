@@ -185,18 +185,20 @@
 **Steps**:
 
 1. SSH into VPS
-2. Create credentials file:
+2. Create credentials file in home directory:
    ```bash
-   nano ~/.moltbot-credentials
+   nano ~/.env
    ```
-3. Add content:
+3. Add content (all credentials in one file):
    ```bash
    TELEGRAM_BOT_TOKEN="your_bot_token"
    TELEGRAM_CHAT_ID="your_chat_id"
    ```
-4. Secure the file: `chmod 600 ~/.moltbot-credentials`
+4. Save and exit (Ctrl+O, Enter, Ctrl+X)
+5. Secure the file: `chmod 600 ~/.env`
+6. Verify: `cat ~/.env` (should show both credentials)
 
-**Validation**: File exists with proper permissions (600)
+**Validation**: ~/.env file exists with proper permissions (600) and contains both credentials
 
 ---
 
@@ -210,22 +212,26 @@
 **Steps**:
 
 1. Go to: https://console.groq.com/
-2. Sign in with GitHub
-3. Create API Key (starts with `gsk_`)
-4. Add to credentials file:
+2. Sign in with GitHub (or create free account)
+3. Navigate to API Keys section
+4. Create API Key (starts with `gsk_`)
+5. SSH to VPS: `ssh azureuser@104.40.244.55`
+6. Add to ~/.env:
    ```bash
-   GROQ_API_KEY="gsk_xxxxx"
+   echo 'GROQ_API_KEY="gsk_xxxxx"' >> ~/.env
    ```
-5. Test API:
+   (Replace xxxxx with your actual key)
+7. Verify added: `grep GROQ ~/.env`
+8. Test API access:
    ```bash
-   source ~/.moltbot-credentials
+   source ~/.env
    curl -s https://api.groq.com/openai/v1/chat/completions \
      -H "Authorization: Bearer $GROQ_API_KEY" \
      -H "Content-Type: application/json" \
      -d '{"model": "llama-3.1-8b-instant", "messages": [{"role": "user", "content": "Say OK"}], "max_tokens": 10}'
    ```
 
-**Validation**: API returns valid response
+**Validation**: API returns valid JSON response (not auth error)
 
 ---
 
