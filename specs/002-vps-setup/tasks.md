@@ -301,64 +301,159 @@
 
 ---
 
-## Phase 6: GitHub CLI Setup (Priority P6)
+## Phase 6.5: Train Hamada Context (Priority P6)
 
-### Task 6.1: Install and Authenticate GitHub CLI
+### Task 6.5.1: Create Hamada Context File
+
+**Time Estimate**: 20 minutes  
+**Status**: ⬜ Not Started
+
+**Steps**:
+
+1. Create context directory: `mkdir -p ~/moltbot/context`
+2. Create context file: `nano ~/moltbot/context/hamada-memory.md`
+3. Add comprehensive content including:
+   - Hamada's identity and role
+   - Creator info and goals
+   - Project overview (elzatona_web)
+   - Tech stack (Next.js 15+, TypeScript, Supabase, etc.)
+   - Project structure (apps, libs, monorepo)
+   - Coding standards and patterns
+   - Current priorities
+
+**Reference**: See docs/moltbot/10-train-hamada-context.md for complete template
+
+**Validation**: File contains at least 500 words of project knowledge
+
+---
+
+### Task 6.5.2: Load Context in MoltBot
 
 **Time Estimate**: 10 minutes  
 **Status**: ⬜ Not Started
 
 **Steps**:
 
-1. Install GitHub CLI:
-   ```bash
-   type -p curl >/dev/null || sudo apt install curl -y
-   curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | sudo dd of=/usr/share/keyrings/githubcli-archive-keyring.gpg
-   sudo chmod go+r /usr/share/keyrings/githubcli-archive-keyring.gpg
-   echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | sudo tee /etc/apt/sources.list.d/github-cli.list > /dev/null
-   sudo apt update
-   sudo apt install gh -y
+1. Update bot initialization: `nano ~/moltbot/index.js`
+2. Load context file on startup:
+   ```javascript
+   const fs = require("fs");
+   const hamadaMemory = fs.readFileSync(
+     process.env.HOME + "/moltbot/context/hamada-memory.md",
+     "utf-8",
+   );
    ```
-2. Authenticate: `gh auth login`
-3. Choose: GitHub.com → HTTPS → Login with web browser
-4. Use device code on local machine
+3. Pass context to AI provider initialization
+4. Test bot with `/context` command to verify context is loaded
 
-**Validation**: `gh auth status` shows "Logged in"
+**Validation**: Bot responds with knowledge about the project
 
 ---
 
-### Task 6.2: Configure Git Identity
+## Phase 7 (Optional): Cloudflare Tunnel (Priority P8 - Optional)
 
-**Time Estimate**: 3 minutes  
+### Task 7.1: Install cloudflared
+
+**Time Estimate**: 10 minutes  
 **Status**: ⬜ Not Started
 
 **Steps**:
 
-1. Set name: `git config --global user.name "Your Name"`
-2. Set email: `git config --global user.email "your@email.com"`
-3. Verify: `git config --list`
+1. Download cloudflared: `wget https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-linux-amd64.deb`
+2. Install: `sudo dpkg -i cloudflared-linux-amd64.deb`
+3. Verify: `cloudflared --version`
+4. Clean up: `rm cloudflared-linux-amd64.deb`
 
-**Validation**: Git identity configured
+**Validation**: cloudflared installed and version shows
 
 ---
 
-### Task 6.3: Clone Repository
+### Task 7.2: Authenticate Cloudflare
 
-**Time Estimate**: 5 minutes  
+**Time Estimate**: 10 minutes  
 **Status**: ⬜ Not Started
 
 **Steps**:
 
-1. Clone: `gh repo clone FoushWare/elzatona_web ~/elzatona_web`
-2. Verify: `cd ~/elzatona_web && git status`
+1. Login: `cloudflared tunnel login`
+2. Copy URL from terminal
+3. Open in browser on local machine
+4. Select Cloudflare account and authorize
+5. Wait for certificate to be saved
 
-**Validation**: Repository cloned successfully
+**Validation**: `~/.cloudflared/cert.pem` exists
 
 ---
 
-## Phase 7: Validation (Priority P7)
+### Task 7.3: Create Zero Trust Tunnel
 
-### Task 7.1: Run Pre-Test Checklist
+**Time Estimate**: 15 minutes  
+**Status**: ⬜ Not Started
+
+**Steps**:
+
+1. Create tunnel: `cloudflared tunnel create hamada-tunnel`
+2. Configure tunnel in `~/.cloudflared/config.yml`
+3. Route SSH traffic to localhost:22
+4. Test connection via tunnel
+5. (Optional) Close public SSH access
+
+**Reference**: See docs/moltbot/09-configure-cloudflare.md for full setup
+
+**Validation**: Can SSH through Cloudflare tunnel
+
+---
+
+## Phase 8: Validation (Priority P9)
+
+### Task 8.1: Run Pre-Test Checklist
+
+**Time Estimate**: 10 minutes  
+**Status**: ⬜ Not Started
+
+**Steps**:
+
+1. Run the validation script from docs/moltbot/11-test-and-validate.md
+2. Check all components show ✅
+3. Document any issues
+
+**Validation**: All checklist items pass
+
+---
+
+### Task 8.2: End-to-End Test
+
+**Time Estimate**: 15 minutes  
+**Status**: ⬜ Not Started
+
+**Steps**:
+
+1. Send `/start` to Telegram bot
+2. Verify welcome message received
+3. Send `/status` command
+4. Verify system status returned
+5. Test AI provider via bot command
+6. Verify AI response received
+
+**Validation**: Complete flow works end-to-end
+
+---
+
+## Summary
+
+| Phase                      | Name           | Tasks        | Est. Time    |
+| -------------------------- | -------------- | ------------ | ------------ |
+| 1                          | Security       | 3            | 25 min       |
+| 2                          | Dependencies   | 3            | 13 min       |
+| 3                          | Telegram       | 3            | 20 min       |
+| 4                          | AI Providers   | 2            | 20 min       |
+| 5                          | MoltBot        | 3            | 45 min       |
+| 6                          | GitHub CLI     | 3            | 18 min       |
+| 6.5                        | Hamada Context | 2            | 30 min       |
+| 7 (Optional)               | Cloudflare     | 3            | 35 min       |
+| 8                          | Validation     | 2            | 25 min       |
+| **Total**                  |                | **24 tasks** | **~3.5 hrs** |
+| **Total (w/o Cloudflare)** |                | **21 tasks** | **~3 hrs**   |
 
 **Time Estimate**: 10 minutes  
 **Status**: ⬜ Not Started

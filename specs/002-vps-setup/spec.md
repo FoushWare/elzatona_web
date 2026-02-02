@@ -109,7 +109,41 @@ As a developer, I want GitHub CLI configured so that MoltBot can interact with t
 
 ---
 
-### User Story 7 - Validate Complete Setup (Priority: P7)
+### User Story 7 - Train Hamada Context (Priority: P6)
+
+As a developer, I want to provide Hamada (the bot) with comprehensive knowledge about the elzatona_web project so that it can provide intelligent code assistance tailored to our specific codebase.
+
+**Why this priority**: Without project context, the AI is generic. With context, it understands our tech stack, patterns, and goals, making suggestions more relevant.
+
+**Independent Test**: Hamada responds to questions about the project with accurate information and provides context-aware code suggestions.
+
+**Acceptance Scenarios**:
+
+1. **Given** a context file created, **When** I describe the project structure, **Then** Hamada understands monorepo layout
+2. **Given** tech stack documented, **When** I ask about framework, **Then** Hamada responds "Next.js 15+ with TypeScript"
+3. **Given** project goals documented, **When** I request refactoring, **Then** Hamada considers open-source readiness
+4. **Given** coding standards defined, **When** I ask for a function, **Then** Hamada follows our patterns (Nx, ESLint, Prettier)
+
+---
+
+### User Story 8 - Configure Cloudflare Tunnel (Priority: P8 - Optional)
+
+As a VPS administrator, I want to optionally set up Cloudflare Zero Trust tunnel so that I can access the VPS securely without exposing public IP or open ports.
+
+**Why this priority**: Optional security enhancement. Useful if you want to hide the VM from public internet completely.
+
+**Independent Test**: Can SSH through Cloudflare tunnel instead of public IP.
+
+**Acceptance Scenarios**:
+
+1. **Given** Cloudflare account created, **When** I install cloudflared, **Then** `cloudflared --version` works
+2. **Given** cloudflared installed, **When** I authenticate, **Then** cert saved to `~/.cloudflared/cert.pem`
+3. **Given** tunnel created, **When** I route SSH traffic, **Then** I can connect via tunnel instead of public IP
+4. **Given** tunnel active, **When** I close public SSH access, **Then** only tunnel provides SSH access
+
+---
+
+### User Story 9 - Validate Complete Setup (Priority: P9)
 
 As a developer, I want to run validation tests to confirm all components work together before using the bot in production.
 
@@ -157,7 +191,13 @@ As a developer, I want to run validation tests to confirm all components work to
 - **FR-018**: System MUST install and authenticate GitHub CLI
 - **FR-019**: System MUST configure git identity (user.name, user.email)
 - **FR-020**: System MUST clone the elzatona_web repository
-- **FR-021**: System MUST run validation tests to confirm all components work
+- **FR-021**: System MUST create a comprehensive Hamada context file with project knowledge
+- **FR-022**: System MUST document Hamada's identity, project goals, and technical patterns
+- **FR-023**: System MUST create pairing code/templates for context-aware assistance
+- **FR-024**: System SHOULD (optional) install cloudflared for Cloudflare tunnel
+- **FR-025**: System SHOULD (optional) authenticate cloudflared with Cloudflare
+- **FR-026**: System SHOULD (optional) create Zero Trust tunnel for secure access
+- **FR-027**: System MUST run validation tests to confirm all components work
 
 ### Key Entities
 
@@ -178,8 +218,10 @@ As a developer, I want to run validation tests to confirm all components work to
 - **SC-004**: At least one AI provider returns valid responses to test queries
 - **SC-005**: MoltBot starts successfully and stays running after SSH disconnection
 - **SC-006**: GitHub CLI is authenticated and can clone/push to elzatona_web
-- **SC-007**: Pre-test checklist shows 100% pass rate (all ✅)
-- **SC-008**: End-to-end test completes: Telegram command → MoltBot → AI response → Telegram reply
+- **SC-007**: Hamada context file exists and bot can reference project knowledge
+- **SC-008**: Optional: Cloudflare tunnel created and alternate SSH access method available
+- **SC-009**: Pre-test checklist shows 100% pass rate (all ✅)
+- **SC-010**: End-to-end test completes: Telegram command → MoltBot → AI response → Telegram reply
 
 ## Assumptions
 
