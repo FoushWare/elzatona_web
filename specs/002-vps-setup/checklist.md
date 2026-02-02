@@ -284,7 +284,7 @@ ssh azureuser@104.40.244.55 "echo 'SSH works!'"
 
 ---
 
-## Phase 6: Setup GitHub CLI (18 min)
+## Phase 6: Setup GitHub CLI (21 min)
 
 **Goal**: Enable bot to interact with GitHub repositories  
 **Reference**: docs/moltbot/08-setup-github-cli.md
@@ -299,15 +299,26 @@ ssh azureuser@104.40.244.55 "echo 'SSH works!'"
 
 ---
 
-### Task 6.2: Authenticate with GitHub (8 min)
+### Task 6.2: Authenticate with GitHub (5 min)
 
 - [ ] Start auth: `gh auth login`
 - [ ] Choose: Use HTTPS (or SSH if preferred)
 - [ ] Choose: Authenticate with a token (recommended)
 - [ ] Paste your GitHub Personal Access Token (create at https://github.com/settings/tokens if needed)
-- [ ] Verify: `gh auth status`
+- [ ] Verify: `gh auth status` (should show "Logged in")
 
 **Expected Output**: GitHub CLI authenticated, shows current user and scopes
+
+---
+
+### Task 6.2.1: Clone elzatona_web Repository (3 min)
+
+- [ ] Run: `gh repo clone Abdelhamid-kh/elzatona_web ~/elzatona_web`
+- [ ] Verify: `ls ~/elzatona_web` (should show repo contents)
+- [ ] Check remote: `cd ~/elzatona_web && git remote -v`
+- [ ] Return home: `cd ~`
+
+**Expected Output**: Repository cloned successfully, shows GitHub origin remote
 
 ---
 
@@ -322,8 +333,9 @@ ssh azureuser@104.40.244.55 "echo 'SSH works!'"
 **Phase 6 Complete**:
 
 - [ ] GitHub CLI installed and authenticated
+- [ ] elzatona_web repository cloned to ~/elzatona_web
 - [ ] Git identity configured globally
-- [ ] Ready to clone and push repos
+- [ ] Ready to push repos and make commits
 
 ---
 
@@ -562,19 +574,19 @@ az vm start --resource-group rg-openclaw-dev --name vm-openclaw-dev
 
 ## Estimated Timeline
 
-| Phase       | Tasks               | Duration                              | Status      |
-| ----------- | ------------------- | ------------------------------------- | ----------- |
-| Setup Phase | Prerequisites check | ~5 min                                | ⏳          |
-| Phase 1     | Security            | 25 min                                | ⏳          |
-| Phase 2     | Dependencies        | 13 min                                | ⏳          |
-| Phase 3     | Telegram            | 20 min                                | ⏳          |
-| Phase 4     | AI Providers        | 20 min                                | ⏳          |
-| Phase 5     | MoltBot             | 45 min                                | ⏳          |
-| Phase 6     | GitHub CLI          | 18 min                                | ⏳          |
-| Phase 6.5   | Hamada Context      | 30 min                                | ⏳          |
-| Phase 7     | Cloudflare (opt)    | 35 min                                | ⏳ OPTIONAL |
-| Phase 8     | Validation          | 25 min                                | ⏳          |
-| **TOTAL**   | **24 tasks**        | **~3 hours** (or 3.5 with Cloudflare) | ⏳          |
+| Phase       | Tasks               | Duration                                 | Status      |
+| ----------- | ------------------- | ---------------------------------------- | ----------- |
+| Setup Phase | Prerequisites check | ~5 min                                   | ⏳          |
+| Phase 1     | Security            | 25 min                                   | ⏳          |
+| Phase 2     | Dependencies        | 13 min                                   | ⏳          |
+| Phase 3     | Telegram            | 20 min                                   | ⏳          |
+| Phase 4     | AI Providers        | 20 min                                   | ⏳          |
+| Phase 5     | MoltBot             | 45 min                                   | ⏳          |
+| Phase 6     | GitHub CLI          | 21 min                                   | ⏳          |
+| Phase 6.5   | Hamada Context      | 30 min                                   | ⏳          |
+| Phase 7     | Cloudflare (opt)    | 35 min                                   | ⏳ OPTIONAL |
+| Phase 8     | Validation          | 25 min                                   | ⏳          |
+| **TOTAL**   | **24 tasks**        | **~3.25 hours** (or 3.5 with Cloudflare) | ⏳          |
 
 ---
 
