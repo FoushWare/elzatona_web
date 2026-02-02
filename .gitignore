@@ -268,3 +268,8 @@ coverage/
 *.snap
 **/__snapshots__/
 **/*.snap
+
+# Terraform provider binaries
+**/.terraform/
+*.tfstate
+*.tfstate.backup

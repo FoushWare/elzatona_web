@@ -1,10 +1,18 @@
 <!--
 Sync Impact Report:
-- Version change: 1.0.0 → 1.0.1
-- Modified: Last Amended date updated to 2026-01-18 (patch bump for governance metadata).
-- No changes to principles or sections.
-- Templates checked: all aligned (plan, spec, tasks).
-- No manual follow-up required.
+- Version change: 1.0.1 → 1.0.2
+- Modified: Last Amended date updated to 2026-02-02 (patch bump for governance metadata).
+- Modified principles: none (titles and content unchanged)
+- Added sections: none
+- Removed sections: none
+- Templates checked:
+	- .specify/templates/plan-template.md ✅ updated/validated
+	- .specify/templates/spec-template.md ✅ updated/validated
+	- .specify/templates/tasks-template.md ✅ updated/validated
+	- .specify/templates/agent-file-template.md ⚠ pending (no direct governance references)
+- Follow-up TODOs:
+	- TODO(RATIFICATION_DATE): none — ratification date retained from prior record.
+	- No bracketed placeholders remain in the constitution.
 -->
 
 # Elzatona Web Constitution
@@ -77,4 +85,4 @@ This Constitution supersedes all other ad-hoc practices. Any deviation must be j
 
 All Pull Requests must be reviewed against these principles.
 
-**Version**: 1.0.1 | **Ratified**: 2026-01-17 | **Last Amended**: 2026-01-18
+**Version**: 1.0.2 | **Ratified**: 2026-01-17 | **Last Amended**: 2026-02-02
