@@ -1,0 +1,59 @@
+#cloud-config
+package_update: true
+package_upgrade: true
+packages:
+  - ufw
+  - fail2ban
+write_files:
+  - path: /etc/fail2ban/jail.local
+    content: |
+      [sshd]
+      enabled = true
+      port = ssh
+      filter = sshd
+      logpath = /var/log/auth.log
+      maxretry = 3
+      bantime = 3600
+      findtime = 600
+runcmd:
+  # UFW: default deny, allow SSH
+  - ufw --force reset
+  - ufw default deny incoming
+  - ufw default allow outgoing
+  - ufw allow 22/tcp
+  - ufw --force enable
+  # SSH hardening
+  - sed -i 's/^#*PasswordAuthentication.*/PasswordAuthentication no/' /etc/ssh/sshd_config
+  - sed -i 's/^#*PermitRootLogin.*/PermitRootLogin no/' /etc/ssh/sshd_config
+  - sed -i 's/^#*LoginGraceTime.*/LoginGraceTime 30/' /etc/ssh/sshd_config
+  - sed -i 's/^#*MaxAuthTries.*/MaxAuthTries 3/' /etc/ssh/sshd_config
+  - systemctl reload sshd
+  # Enable and start fail2ban
+  - systemctl enable fail2ban
+  - systemctl restart fail2ban
+  # Show status for logs
+  - ufw status verbose
+  - systemctl status fail2ban
+
+#
+# ---
+#
+# How to Test Security Hardening (for contributors)
+#
+# After deployment, SSH into the VM and run:
+#
+# 1. UFW status:
+#    sudo ufw status verbose
+#    # Should show "Status: active" and only port 22/tcp allowed.
+#
+# 2. SSH config:
+#    sudo grep -E 'PasswordAuthentication|PermitRootLogin|LoginGraceTime|MaxAuthTries' /etc/ssh/sshd_config
+#    # Should show PasswordAuthentication no, PermitRootLogin no, LoginGraceTime 30, MaxAuthTries 3.
+#
+# 3. fail2ban status:
+#    sudo systemctl status fail2ban
+#    # Should show "active (running)".
+#    sudo fail2ban-client status sshd
+#    # Should show jail is enabled and monitoring SSH.
+#
+# These checks ensure the VM is secured automatically for every deployment.

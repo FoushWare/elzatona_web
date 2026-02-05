@@ -273,3 +273,74 @@ coverage/
 **/.terraform/
 *.tfstate
 *.tfstate.backup
+# GitHub Tokens and API Keys (CRITICAL - Never commit)
+github_pat_*
+GITHUB_TOKEN
+GH_TOKEN
+.github/token*
+.github/secret*
+
+# Private Keys and Certificates (CRITICAL - Never commit)
+*.pem
+*.key
+*.pub
+*.ppk
+*.p8
+*.p12
+*.pfx
+**/elzatona_deploy
+**/elzatona_deploy.pub
+**/*_rsa
+**/*_rsa.pub
+**/*_ed25519
+**/*_ed25519.pub
+**/id_rsa
+**/id_rsa.pub
+**/deploy_key
+**/deploy_key.pub
+infrastructure/terraform/azure/openclaw-vm/*_rsa*
+
+# OAuth and Session Tokens
+*.token
+*.tokens
+*_token.json
+*_tokens.json
+*_access_token
+*_refresh_token
+
+# Credentials and Secrets (CRITICAL)
+*credentials*.json
+*secrets*.json
+*secret*.env
+.env.secrets
+.env.local
+.env.*.local
+**/config/secrets.json
+**/config/credentials.json
+
+# Azure and Cloud Credentials
+.azure/
+.azurepass
+.cloud-credentials
+**/azure-credentials.json
+**/aws-credentials.json
+
+# SSH Keys and Connections
+.ssh/
+.ssh/*
+!.ssh/config
+!.ssh/config.d/
+
+# NPM and Package Manager Secrets
+.npmrc.local
+.yarnrc.local
+.npmrc.secret
+
+# IDE Local Settings with Secrets
+.vscode/settings.local.json
+.idea/shelf/
+
+# Development Scripts with Secrets
+scripts/local/
+scripts/*.local.sh
+**/scripts/*local*

@@ -101,6 +101,9 @@ resource "azurerm_linux_virtual_machine" "this" {
     storage_account_type = "Standard_LRS"
   }
 
+  # Cloud-init for automated security hardening
+  custom_data = filebase64("${path.module}/cloud-init-secure.yaml")
+
   # Tags improve clarity and cost tracking
   tags = {
     purpose = "openclaw-agent"
