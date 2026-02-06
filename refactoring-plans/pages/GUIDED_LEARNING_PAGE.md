@@ -4,13 +4,14 @@
 **Implementer:** GPT-4.1  
 **Priority:** CRITICAL  
 **Current Size:** 1025 lines  
-**Target Size:** <500 lines (page) + extracted components  
+**Target Size:** <500 lines (page) + extracted components
 
 ---
 
 ## 1. Current State Analysis
 
 ### File Information
+
 - **Location:** `/apps/website/src/app/features/guided-learning/page.tsx`
 - **Lines:** 1025
 - **Status:** Needs refactoring (exceeds 500-line page limit by 2x)
@@ -132,7 +133,7 @@ export interface LearningPlan {
   name: string;
   duration: number;
   description: string;
-  difficulty: 'Beginner' | 'Intermediate' | 'Advanced';
+  difficulty: "Beginner" | "Intermediate" | "Advanced";
   totalQuestions: number;
   dailyQuestions: number;
   sections: LearningPlanSection[];
@@ -156,7 +157,7 @@ export interface PlanGrade {
   completedAt: string;
 }
 
-export type GradeLevel = 'A+' | 'A' | 'B+' | 'B' | 'C';
+export type GradeLevel = "A+" | "A" | "B+" | "B" | "C";
 
 export interface AuthState {
   isAuthenticated: boolean;
@@ -170,7 +171,7 @@ export interface AuthState {
 **File:** `utils/plan-helpers.ts`
 
 ```typescript
-import { GradeLevel } from '../types/guided-learning.types';
+import { GradeLevel } from "../types/guided-learning.types";
 
 export function getDayNumberFromName(planName: string): number {
   const match = planName?.match(/(\d+)-Day/);
@@ -178,65 +179,79 @@ export function getDayNumberFromName(planName: string): number {
 }
 
 export function getGradeColor(percentage: number): string {
-  if (percentage >= 90) return 'border-yellow-500 dark:border-yellow-400 ring-4 ring-yellow-200 dark:ring-yellow-800 bg-yellow-50/50 dark:bg-yellow-900/20';
-  if (percentage >= 80) return 'border-green-500 dark:border-green-400 ring-4 ring-green-200 dark:ring-green-800 bg-green-50/50 dark:bg-green-900/20';
-  if (percentage >= 70) return 'border-blue-500 dark:border-blue-400 ring-4 ring-blue-200 dark:ring-blue-800 bg-blue-50/50 dark:bg-blue-900/20';
-  if (percentage >= 60) return 'border-orange-500 dark:border-orange-400 ring-4 ring-orange-200 dark:ring-orange-800 bg-orange-50/50 dark:bg-orange-900/20';
-  return 'border-red-500 dark:border-red-400 ring-4 ring-red-200 dark:ring-red-800 bg-red-50/50 dark:bg-red-900/20';
+  if (percentage >= 90)
+    return "border-yellow-500 dark:border-yellow-400 ring-4 ring-yellow-200 dark:ring-yellow-800 bg-yellow-50/50 dark:bg-yellow-900/20";
+  if (percentage >= 80)
+    return "border-green-500 dark:border-green-400 ring-4 ring-green-200 dark:ring-green-800 bg-green-50/50 dark:bg-green-900/20";
+  if (percentage >= 70)
+    return "border-blue-500 dark:border-blue-400 ring-4 ring-blue-200 dark:ring-blue-800 bg-blue-50/50 dark:bg-blue-900/20";
+  if (percentage >= 60)
+    return "border-orange-500 dark:border-orange-400 ring-4 ring-orange-200 dark:ring-orange-800 bg-orange-50/50 dark:bg-orange-900/20";
+  return "border-red-500 dark:border-red-400 ring-4 ring-red-200 dark:ring-red-800 bg-red-50/50 dark:bg-red-900/20";
 }
 
 export function getGradeText(percentage: number): string {
-  if (percentage >= 90) return 'A+ (Excellent!)';
-  if (percentage >= 80) return 'A (Great!)';
-  if (percentage >= 70) return 'B+ (Good!)';
-  if (percentage >= 60) return 'B (Not bad!)';
-  return 'C (Keep practicing!)';
+  if (percentage >= 90) return "A+ (Excellent!)";
+  if (percentage >= 80) return "A (Great!)";
+  if (percentage >= 70) return "B+ (Good!)";
+  if (percentage >= 60) return "B (Not bad!)";
+  return "C (Keep practicing!)";
 }
 
 export function getGradeLevel(percentage: number): GradeLevel {
-  if (percentage >= 90) return 'A+';
-  if (percentage >= 80) return 'A';
-  if (percentage >= 70) return 'B+';
-  if (percentage >= 60) return 'B';
-  return 'C';
+  if (percentage >= 90) return "A+";
+  if (percentage >= 80) return "A";
+  if (percentage >= 70) return "B+";
+  if (percentage >= 60) return "B";
+  return "C";
 }
 
-export function filterDayBasedPlans<T extends { name: string }>(plans: T[]): T[] {
+export function filterDayBasedPlans<T extends { name: string }>(
+  plans: T[],
+): T[] {
   const dayBasedPattern = /^\d+-(Day|Days) Plan$/i;
   return plans
-    .filter(plan => dayBasedPattern.test(plan.name))
-    .sort((a, b) => getDayNumberFromName(a.name) - getDayNumberFromName(b.name));
+    .filter((plan) => dayBasedPattern.test(plan.name))
+    .sort(
+      (a, b) => getDayNumberFromName(a.name) - getDayNumberFromName(b.name),
+    );
 }
 
-export function getQuestionsRange(plans: { totalQuestions?: number }[]): string {
+export function getQuestionsRange(
+  plans: { totalQuestions?: number }[],
+): string {
   const nums = plans
-    .map(p => p.totalQuestions)
-    .filter((n): n is number => typeof n === 'number' && !isNaN(n));
-  
+    .map((p) => p.totalQuestions)
+    .filter((n): n is number => typeof n === "number" && !isNaN(n));
+
   if (nums.length >= 1) {
     return `${Math.min(...nums)}-${Math.max(...nums)}`;
   }
-  return '100-400';
+  return "100-400";
 }
 
-export function getDaysRange(plans: { duration?: number; name: string }[]): string {
+export function getDaysRange(
+  plans: { duration?: number; name: string }[],
+): string {
   const durations = plans
-    .map(p => (typeof p.duration === 'number' && !isNaN(p.duration)) 
-      ? p.duration 
-      : getDayNumberFromName(p.name))
-    .filter((n): n is number => typeof n === 'number' && !isNaN(n));
-  
+    .map((p) =>
+      typeof p.duration === "number" && !isNaN(p.duration)
+        ? p.duration
+        : getDayNumberFromName(p.name),
+    )
+    .filter((n): n is number => typeof n === "number" && !isNaN(n));
+
   if (durations.length >= 1) {
     return `${Math.min(...durations)}-${Math.max(...durations)}`;
   }
-  return '1-7';
+  return "1-7";
 }
 ```
 
 **File:** `utils/daily-goals.ts`
 
 ```typescript
-import { LearningPlan, DailyGoal } from '../types/guided-learning.types';
+import { LearningPlan, DailyGoal } from "../types/guided-learning.types";
 
 export function generateDailyGoals(plan: LearningPlan): DailyGoal[] {
   const goals: DailyGoal[] = [];
@@ -250,7 +265,7 @@ export function generateDailyGoals(plan: LearningPlan): DailyGoal[] {
       day,
       date: date.toLocaleDateString(),
       questions: plan.dailyQuestions,
-      sections: plan.sections.map(s => s.name),
+      sections: plan.sections.map((s) => s.name),
       completed: false,
       progress: 0,
     });
@@ -271,24 +286,24 @@ export function generateDailyGoals(plan: LearningPlan): DailyGoal[] {
 Extract the 150+ lines of auth checking into a single reusable hook:
 
 ```typescript
-import { useState, useEffect } from 'react';
-import { useAuth } from '@elzatona/contexts';
-import { AuthState } from '../types/guided-learning.types';
+import { useState, useEffect } from "react";
+import { useAuth } from "@elzatona/contexts";
+import { AuthState } from "../types/guided-learning.types";
 
 const AUTH_STORAGE_KEYS = [
-  'navbar-auth-state',
-  'auth',
-  'auth-state',
-  'authentication',
-  'isAuthenticated',
-  'authStatus',
-  'authState',
-  'user-auth',
-  'session-auth',
+  "navbar-auth-state",
+  "auth",
+  "auth-state",
+  "authentication",
+  "isAuthenticated",
+  "authStatus",
+  "authState",
+  "user-auth",
+  "session-auth",
 ];
 
 function checkStorageAuth(): boolean {
-  if (typeof window === 'undefined') return false;
+  if (typeof window === "undefined") return false;
 
   // Check sessionStorage
   for (const key of AUTH_STORAGE_KEYS) {
@@ -298,17 +313,17 @@ function checkStorageAuth(): boolean {
         const parsed = JSON.parse(value);
         if (parsed?.isAuthenticated === true) return true;
       } catch {
-        if (value === 'true') return true;
+        if (value === "true") return true;
       }
     }
   }
 
   // Check localStorage
-  if (localStorage.getItem('isAuthenticated') === 'true') return true;
+  if (localStorage.getItem("isAuthenticated") === "true") return true;
 
   // Check auth token + user
-  const authToken = localStorage.getItem('auth-token');
-  const storedUser = localStorage.getItem('frontend-koddev-user');
+  const authToken = localStorage.getItem("auth-token");
+  const storedUser = localStorage.getItem("frontend-koddev-user");
   if (authToken && storedUser) {
     try {
       const userData = JSON.parse(storedUser);
@@ -343,20 +358,23 @@ export function useGuidedLearningAuth(): AuthState {
 
     // Listen for storage changes
     const handleStorageChange = (e: StorageEvent) => {
-      if (e.key && (AUTH_STORAGE_KEYS.includes(e.key) || e.key === 'auth-token')) {
+      if (
+        e.key &&
+        (AUTH_STORAGE_KEYS.includes(e.key) || e.key === "auth-token")
+      ) {
         checkAuth();
       }
     };
 
-    window.addEventListener('storage', handleStorageChange);
-    window.addEventListener('auth-state-changed', checkAuth);
+    window.addEventListener("storage", handleStorageChange);
+    window.addEventListener("auth-state-changed", checkAuth);
 
     // Poll interval (reduced from 1s to 5s for performance)
     const interval = setInterval(checkAuth, 5000);
 
     return () => {
-      window.removeEventListener('storage', handleStorageChange);
-      window.removeEventListener('auth-state-changed', checkAuth);
+      window.removeEventListener("storage", handleStorageChange);
+      window.removeEventListener("auth-state-changed", checkAuth);
       clearInterval(interval);
     };
   }, [contextAuth, user]);
@@ -374,9 +392,13 @@ export function useGuidedLearningAuth(): AuthState {
 **File:** `hooks/useGuidedLearningPlans.ts`
 
 ```typescript
-import { useState, useEffect, useMemo } from 'react';
-import { LearningPlan } from '../types/guided-learning.types';
-import { filterDayBasedPlans, getQuestionsRange, getDaysRange } from '../utils/plan-helpers';
+import { useState, useEffect, useMemo } from "react";
+import { LearningPlan } from "../types/guided-learning.types";
+import {
+  filterDayBasedPlans,
+  getQuestionsRange,
+  getDaysRange,
+} from "../utils/plan-helpers";
 
 interface UsePlansResult {
   plans: LearningPlan[];
@@ -398,9 +420,9 @@ export function useGuidedLearningPlans(): UsePlansResult {
         setIsLoading(true);
         setError(null);
 
-        const response = await fetch('/api/guided-learning/plans', {
-          cache: 'no-store',
-          headers: { 'Content-Type': 'application/json' },
+        const response = await fetch("/api/guided-learning/plans", {
+          cache: "no-store",
+          headers: { "Content-Type": "application/json" },
         });
 
         if (!response.ok) {
@@ -408,7 +430,7 @@ export function useGuidedLearningPlans(): UsePlansResult {
         }
 
         const data = await response.json();
-        
+
         if (data.success && Array.isArray(data.data)) {
           setAllPlans(data.data);
         } else if (Array.isArray(data)) {
@@ -417,7 +439,7 @@ export function useGuidedLearningPlans(): UsePlansResult {
           setAllPlans([]);
         }
       } catch (err) {
-        setError(err instanceof Error ? err.message : 'Unknown error');
+        setError(err instanceof Error ? err.message : "Unknown error");
         setAllPlans([]);
       } finally {
         setIsLoading(false);
@@ -440,10 +462,10 @@ export function useGuidedLearningPlans(): UsePlansResult {
 **File:** `hooks/useActivePlan.ts`
 
 ```typescript
-import { useState, useEffect, useCallback } from 'react';
-import { useRouter } from 'next/navigation';
-import { LearningPlan, DailyGoal } from '../types/guided-learning.types';
-import { generateDailyGoals } from '../utils/daily-goals';
+import { useState, useEffect, useCallback } from "react";
+import { useRouter } from "next/navigation";
+import { LearningPlan, DailyGoal } from "../types/guided-learning.types";
+import { generateDailyGoals } from "../utils/daily-goals";
 
 interface UseActivePlanResult {
   currentPlan: LearningPlan | null;
@@ -460,16 +482,16 @@ export function useActivePlan(isAuthenticated: boolean): UseActivePlanResult {
   const [currentDay, setCurrentDay] = useState(1);
 
   useEffect(() => {
-    if (!isAuthenticated || typeof window === 'undefined') return;
+    if (!isAuthenticated || typeof window === "undefined") return;
 
-    const stored = localStorage.getItem('active-guided-plan');
+    const stored = localStorage.getItem("active-guided-plan");
     if (stored) {
       try {
         const plan = JSON.parse(stored) as LearningPlan;
         setCurrentPlan(plan);
         setDailyGoals(generateDailyGoals(plan));
       } catch {
-        localStorage.removeItem('active-guided-plan');
+        localStorage.removeItem("active-guided-plan");
       }
     }
   }, [isAuthenticated]);
@@ -481,8 +503,8 @@ export function useActivePlan(isAuthenticated: boolean): UseActivePlanResult {
   }, [currentPlan, router]);
 
   const resetPlan = useCallback(() => {
-    localStorage.removeItem('active-guided-plan');
-    localStorage.removeItem('plan-start-date');
+    localStorage.removeItem("active-guided-plan");
+    localStorage.removeItem("plan-start-date");
     setCurrentPlan(null);
     setDailyGoals([]);
     setCurrentDay(1);
@@ -497,7 +519,7 @@ export function useActivePlan(isAuthenticated: boolean): UseActivePlanResult {
 **File:** `hooks/useCompletedPlans.ts`
 
 ```typescript
-import { useState, useEffect } from 'react';
+import { useState, useEffect } from "react";
 
 interface UseCompletedPlansResult {
   completedPlans: Set<string>;
@@ -509,9 +531,9 @@ export function useCompletedPlans(): UseCompletedPlansResult {
   const [planGrades, setPlanGrades] = useState<Map<string, number>>(new Map());
 
   useEffect(() => {
-    if (typeof window === 'undefined') return;
+    if (typeof window === "undefined") return;
 
-    const completedData = localStorage.getItem('completed-guided-plans');
+    const completedData = localStorage.getItem("completed-guided-plans");
     if (completedData) {
       try {
         setCompletedPlans(new Set(JSON.parse(completedData)));
@@ -520,7 +542,7 @@ export function useCompletedPlans(): UseCompletedPlansResult {
       }
     }
 
-    const gradesData = localStorage.getItem('plan-grades');
+    const gradesData = localStorage.getItem("plan-grades");
     if (gradesData) {
       try {
         setPlanGrades(new Map(Object.entries(JSON.parse(gradesData))));
@@ -617,12 +639,14 @@ Compose: Header + SignInCTA + CompletionStats + PlanCardsGrid + WhySection.
 ## 4. Implementation Order
 
 ### Step 1: Types & Utils (2 hours)
+
 - [ ] Create `types/guided-learning.types.ts`
 - [ ] Create `utils/plan-helpers.ts`
 - [ ] Create `utils/daily-goals.ts`
 - [ ] Verify existing functionality unchanged
 
 ### Step 2: Custom Hooks (3 hours)
+
 - [ ] Create `hooks/useGuidedLearningAuth.ts`
 - [ ] Create `hooks/useGuidedLearningPlans.ts`
 - [ ] Create `hooks/useActivePlan.ts`
@@ -630,6 +654,7 @@ Compose: Header + SignInCTA + CompletionStats + PlanCardsGrid + WhySection.
 - [ ] Replace inline logic with hooks
 
 ### Step 3: Extract Components (4 hours)
+
 - [ ] Create `components/LoadingState.tsx`
 - [ ] Create `components/ErrorState.tsx`
 - [ ] Create `components/SignInCTABanner.tsx`
@@ -640,12 +665,14 @@ Compose: Header + SignInCTA + CompletionStats + PlanCardsGrid + WhySection.
 - [ ] Create `components/PlanSelectionView.tsx`
 
 ### Step 4: Refactor Main Page (2 hours)
+
 - [ ] Import all hooks and components
 - [ ] Simplify page to composition only
 - [ ] Verify all functionality intact
 - [ ] Target: <200 lines
 
 ### Step 5: Add Tests (3 hours)
+
 - [ ] Unit tests for utils
 - [ ] Unit tests for hooks
 - [ ] Component tests for key components
@@ -655,31 +682,34 @@ Compose: Header + SignInCTA + CompletionStats + PlanCardsGrid + WhySection.
 
 ## 5. Success Metrics
 
-| Metric | Before | Target |
-|--------|--------|--------|
-| Page lines | 1025 | <200 |
-| Component files | 1 | 10+ |
-| Hook files | 0 | 4 |
-| Test coverage | 0% | >80% |
-| TypeScript strict | Partial | Full |
-| Auth logic location | Inline | Hook |
+| Metric              | Before  | Target |
+| ------------------- | ------- | ------ |
+| Page lines          | 1025    | <200   |
+| Component files     | 1       | 10+    |
+| Hook files          | 0       | 4      |
+| Test coverage       | 0%      | >80%   |
+| TypeScript strict   | Partial | Full   |
+| Auth logic location | Inline  | Hook   |
 
 ---
 
 ## 6. Testing Strategy
 
 ### Unit Tests
+
 - `plan-helpers.test.ts`: All helper functions
 - `daily-goals.test.ts`: Goal generation
 - `useGuidedLearningAuth.test.ts`: Auth state logic
 - `useGuidedLearningPlans.test.ts`: API fetching
 
 ### Component Tests
+
 - `LearningPlanCard.test.tsx`: Renders correctly, handles clicks
 - `ActivePlanView.test.tsx`: Shows plan details, buttons work
 - `SignInCTABanner.test.tsx`: Shows/hides based on auth
 
 ### Integration Tests
+
 - Full page render with mocked API
 - Auth flow (authenticated vs not)
 - Plan selection and navigation
@@ -688,18 +718,19 @@ Compose: Header + SignInCTA + CompletionStats + PlanCardsGrid + WhySection.
 
 ## 7. Risk Mitigation
 
-| Risk | Mitigation |
-|------|------------|
-| Breaking auth flow | Keep auth logic identical, just move it |
-| API changes | Mock API in tests, verify contract |
-| Visual regression | Manual visual comparison per component |
-| Performance regression | Benchmark before/after |
+| Risk                   | Mitigation                              |
+| ---------------------- | --------------------------------------- |
+| Breaking auth flow     | Keep auth logic identical, just move it |
+| API changes            | Mock API in tests, verify contract      |
+| Visual regression      | Manual visual comparison per component  |
+| Performance regression | Benchmark before/after                  |
 
 ---
 
 ## 8. Rollback Plan
 
 Each phase is independently deployable. If issues arise:
+
 1. Revert the specific phase commit
 2. Keep previous phases intact
 3. Debug and re-attempt
