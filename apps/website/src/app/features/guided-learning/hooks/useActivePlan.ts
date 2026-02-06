@@ -68,7 +68,7 @@ export function useActivePlan(isAuthenticated: boolean): UseActivePlanResult {
       setCurrentDay(1);
       router.push(`/guided-practice?plan=${plan.id}`);
     },
-    [router]
+    [router],
   );
 
   return {

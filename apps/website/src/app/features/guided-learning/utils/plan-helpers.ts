@@ -34,16 +34,18 @@ export function getGradeLevel(percentage: number): GradeLevel {
 }
 
 export function filterDayBasedPlans<T extends { name: string }>(
-  plans: T[]
+  plans: T[],
 ): T[] {
   const dayBasedPattern = /^\d+-(Day|Days) Plan$/i;
   return plans
     .filter((plan) => dayBasedPattern.test(plan.name))
-    .sort((a, b) => getDayNumberFromName(a.name) - getDayNumberFromName(b.name));
+    .sort(
+      (a, b) => getDayNumberFromName(a.name) - getDayNumberFromName(b.name),
+    );
 }
 
 export function getQuestionsRange(
-  plans: { totalQuestions?: number }[]
+  plans: { totalQuestions?: number }[],
 ): string {
   const nums = plans
     .map((p) => p.totalQuestions)
@@ -56,13 +58,13 @@ export function getQuestionsRange(
 }
 
 export function getDaysRange(
-  plans: { duration?: number; name: string }[]
+  plans: { duration?: number; name: string }[],
 ): string {
   const durations = plans
     .map((p) =>
       typeof p.duration === "number" && !isNaN(p.duration)
         ? p.duration
-        : getDayNumberFromName(p.name)
+        : getDayNumberFromName(p.name),
     )
     .filter((n): n is number => typeof n === "number" && !isNaN(n));
 

@@ -22,10 +22,21 @@ export default function GuidedLearningPage() {
 
   // Custom hooks for clean separation
   const { isAuthenticated, isLoading: authLoading } = useGuidedLearningAuth();
-  const { plans, isLoading: plansLoading, error, questionsRange, daysRange } =
-    useGuidedLearningPlans();
-  const { currentPlan, dailyGoals, currentDay, resumePlan, resetPlan, selectPlan } =
-    useActivePlan(isAuthenticated);
+  const {
+    plans,
+    isLoading: plansLoading,
+    error,
+    questionsRange,
+    daysRange,
+  } = useGuidedLearningPlans();
+  const {
+    currentPlan,
+    dailyGoals,
+    currentDay,
+    resumePlan,
+    resetPlan,
+    selectPlan,
+  } = useActivePlan(isAuthenticated);
   const { completedPlans, planGrades } = useCompletedPlans();
 
   const handleSignIn = () => {
