@@ -99,13 +99,12 @@ const nextConfig: NextConfig = {
   // Disable automatic error page generation
   distDir: ".next",
 
-  // Redirect admin routes to admin app
-  async redirects() {
+  // Path-based routing: proxy /admin to admin app
+  async rewrites() {
     return [
       {
         source: "/admin/:path*",
         destination: "http://localhost:3001/admin/:path*",
-        permanent: false,
       },
     ];
   },

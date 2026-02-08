@@ -13,9 +13,9 @@ const nextConfig = {
     "@elzatona/types",
     "nuqs",
   ],
-  experimental: {
-    forceSwcTransforms: true,
-  },
+  // experimental: {
+  //   forceSwcTransforms: true,
+  // },
   // Configure build to handle error pages
   generateBuildId: async () => {
     // Use a static build ID to ensure consistent builds
