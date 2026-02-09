@@ -118,7 +118,7 @@ vercel env ls development
 
 ```bash
 # Try committing a file with a secret (should be blocked)
-echo "AIzaSyBXlcfcdyIqoeJOb2gXcxpRSmQO7lEP82Y" > test.txt
+echo "YOUR_GOOGLE_API_KEY_HERE" > test.txt
 git add test.txt
 git commit -m "test"  # Should be blocked
 rm test.txt

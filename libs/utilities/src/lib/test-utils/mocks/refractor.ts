@@ -21,7 +21,7 @@ export const alias = createMockFn(() => {});
 export const listLanguages = createMockFn(() => []);
 export const listPlugins = createMockFn(() => []);
 
-export default {
+const refractorMock = {
   highlight,
   register,
   registerLanguage,
@@ -29,3 +29,5 @@ export default {
   listLanguages,
   listPlugins,
 };
+
+export default refractorMock;

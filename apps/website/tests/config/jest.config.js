@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-require-imports */
 const nextJest = require("next/jest");
 
 const createJestConfig = nextJest({
@@ -46,7 +47,7 @@ const customJestConfig = {
   },
   transformIgnorePatterns: [
     "/node_modules/",
-    "^.+\\.module\\.(css|sass|scss)$",
+    String.raw`^.+\.module\.(css|sass|scss)$`,
   ],
   moduleFileExtensions: ["ts", "tsx", "js", "jsx", "json", "node"],
 };

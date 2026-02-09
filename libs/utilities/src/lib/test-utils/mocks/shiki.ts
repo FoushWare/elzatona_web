@@ -29,7 +29,7 @@ export const createHighlighter = createMockFn(highlighterImpl);
 export const getSingletonHighlighter = createMockFn(highlighterImpl);
 export const getLastGrammarState = createMockFn(() => null);
 
-export default {
+const shikiMock = {
   codeToHtml,
   codeToTokens,
   codeToTokensBase,
@@ -39,3 +39,5 @@ export default {
   getSingletonHighlighter,
   getLastGrammarState,
 };
+
+export default shikiMock;

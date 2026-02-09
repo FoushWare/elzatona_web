@@ -34,7 +34,7 @@
 
 ### Dependencies
 
-- `@elzatona/components` - UI components
+- `@elzatona/common-ui` - UI components
 - `@elzatona/hooks` - Data fetching hooks
 - React hooks (useState, useEffect, useMemo)
 - Form handling

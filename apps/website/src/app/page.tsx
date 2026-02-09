@@ -2,10 +2,10 @@
 
 import React from "react";
 import { useUserType } from "@elzatona/contexts";
-import { ErrorBoundary } from "@elzatona/components";
+import { ErrorBoundary } from "@elzatona/common-ui";
 import { useRouter } from "next/navigation";
 import { useLearningType } from "../context/LearningTypeContext";
-import { HomePageLayout } from "@elzatona/components";
+import { HomePageLayout } from "@elzatona/common-ui";
 import { useHomePageState } from "./lib/hooks/useHomePageState";
 import { getPersonalizedContent } from "@elzatona/utilities";
 import { ROUTES } from "@elzatona/types";

@@ -153,7 +153,7 @@ Types/
 Shared React components library with reusable UI components.
 
 ```
-libs/components/
+libs/common-ui/
 ├── src/
 │   ├── lib/
 │   │   ├── components/     # Reusable UI components
@@ -296,7 +296,7 @@ libs/utilities/
 
 ### Import Paths
 
-- Use `@elzatona/components` for shared components
+- Use `@elzatona/common-ui` for shared components
 - Use `@elzatona/hooks` for shared hooks
 - Use `@elzatona/contexts` for shared contexts
 - Use `@elzatona/types` for shared types
@@ -336,7 +336,7 @@ libs/utilities/
 - Keep components small and focused
 - Use TypeScript for type safety
 - Implement proper error boundaries
-- Write reusable components in `libs/components/`
+- Write reusable components in `libs/common-ui/`
 
 ### State Management
 

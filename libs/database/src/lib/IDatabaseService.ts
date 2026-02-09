@@ -44,7 +44,7 @@ export interface DatabaseConfig {
 }
 
 // Query options interface
-export interface QueryOptions {
+export interface LegacyQueryOptions {
   limit?: number;
   offset?: number;
   orderBy?: string;

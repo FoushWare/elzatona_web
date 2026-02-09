@@ -1,5 +1,5 @@
-import { dirname } from "path";
-import { fileURLToPath } from "url";
+import { dirname } from "node:path";
+import { fileURLToPath } from "node:url";
 import { FlatCompat } from "@eslint/eslintrc";
 
 const __filename = fileURLToPath(import.meta.url);
@@ -19,6 +19,19 @@ const eslintConfig = [
       "out/**",
       "build/**",
       "dist/**",
+      "coverage/**",
+      ".out/**",
+      ".env*",
+      "*.log",
+      ".vscode/**",
+      ".idea/**",
+      "__pycache__/**",
+      "*.pyc",
+      ".rpt2_cache/**",
+      ".rts2_cache_cjs/**",
+      ".rts2_cache_es/**",
+      ".rts2_cache_umd/**",
+      ".jest-cache/**",
       "next-env.d.ts",
       "tests/scripts/**", // Test utility scripts use CommonJS
       "scripts/**", // Build/utility scripts use CommonJS
@@ -79,6 +92,20 @@ const eslintConfig = [
     files: ["**/*.stories.tsx", "**/*.test.tsx", "**/*.test.ts"],
     rules: {
       "@typescript-eslint/ban-ts-comment": "off",
+    },
+  },
+  {
+    // Allow CommonJS requires and runtime helpers in test/setup and script files
+    files: [
+      "**/tests/**",
+      "**/tests/**/*.js",
+      "**/jest*.js",
+      "tests/**",
+      "scripts/**",
+      "**/test-utils/**",
+    ],
+    rules: {
+      "@typescript-eslint/no-require-imports": "off",
     },
   },
 ];

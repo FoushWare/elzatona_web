@@ -57,7 +57,7 @@
 
 ### 3. Firebase API Key
 
-**Exposed Key:** `AIzaSyBXlcfcdyIqoeJOb2gXcxpRSmQO7lEP82Y`
+**Exposed Key:** `YOUR_GOOGLE_API_KEY_HERE`
 
 **Steps:**
 

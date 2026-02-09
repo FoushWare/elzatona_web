@@ -60,7 +60,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Normalize language name
-    const normalizedLang = language.toLowerCase().replace(/[^a-z]/g, "");
+    const normalizedLang = language.toLowerCase().replaceAll(/[^a-z]/g, "");
     const langConfig = LANGUAGE_MAP[normalizedLang];
 
     if (!langConfig) {

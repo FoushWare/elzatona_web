@@ -19,3 +19,10 @@ export type { LearningResource, ResourceCategoryInfo } from "./resource";
 // export * from './problem-solving'; // File does not exist
 export * from "./progress";
 // export * from './user'; // File does not exist
+
+// Backward compatibility aliases for admin types (renamed to avoid conflicts)
+export type {
+  AdminFrontendTask as FrontendTaskAdmin,
+  AdminFrontendTaskFile as FrontendTaskFileAdmin,
+  AdminFrontendTaskFormData as FrontendTaskFormDataAdmin,
+} from "./admin";

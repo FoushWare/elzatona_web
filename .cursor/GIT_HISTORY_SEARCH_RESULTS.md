@@ -35,7 +35,7 @@ bash .cursor/scripts/search-git-history-for-secrets.sh
 
 ```bash
 # Search for Firebase API key
-git log --all -p -S "AIzaSyBXlcfcdyIqoeJOb2gXcxpRSmQO7lEP82Y" --oneline
+git log --all -p -S "YOUR_GOOGLE_API_KEY_HERE" --oneline
 
 # Search for Supabase anon key
 git log --all -p -S "YOUR_SUPABASE_KEY_HERE" --oneline
@@ -51,7 +51,7 @@ git log --all --oneline --grep="secret\|key\|password\|token" -i
 
 ### Known Secrets Found in Current Files:
 
-1. **Firebase API Key:** `AIzaSyBXlcfcdyIqoeJOb2gXcxpRSmQO7lEP82Y`
+1. **Firebase API Key:** `YOUR_GOOGLE_API_KEY_HERE`
    <<<<<<< HEAD
    <<<<<<< HEAD
 2. # **Supabase Anon Key:** `YOUR_SUPABASE_KEY_HERE.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhwbmV3cWt2cG50aHBvaHZ4Y21xIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjA2NjA0MTgsImV4cCI6MjA3NjIzNjQxOH0.UMmriJb5HRr9W_56GilNNDWksvlFEb1V9c_PuBK-H3s`
@@ -107,16 +107,8 @@ pip install git-filter-repo
 
 # Create replacements file
 cat > replacements.txt << EOF
-AIzaSyBXlcfcdyIqoeJOb2gXcxpRSmQO7lEP82Y==>your-firebase-api-key-here
-<<<<<<< HEAD
-<<<<<<< HEAD
-YOUR_SUPABASE_KEY_HERE...==>your-supabase-anon-key-here
-=======
-YOUR_SUPABASE_KEY_HERE
->>>>>>> origin/security/fix-gitleaks-config
-=======
-YOUR_SUPABASE_KEY_HERE
->>>>>>> origin/main
+YOUR_GOOGLE_API_KEY_HERE==>your-firebase-api-key-here
+YOUR_SUPABASE_ANON_KEY_HERE==>your-supabase-anon-key-here
 process.env.SUPABASE_SERVICE_ROLE_KEY==>your-service-role-key-here
 EOF
 

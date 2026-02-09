@@ -16,38 +16,38 @@
 
 ### Current Implementation ✅
 
-- ✅ Uses shared components from `@elzatona/components`
+- ✅ Uses shared components from `@elzatona/common-ui`
 - ✅ Clean separation: page logic in website app, components in shared library
-- ✅ Atomic design components moved to `libs/components/`
+- ✅ Atomic design components moved to `libs/common-ui/`
 - ✅ App-specific hook (`useHomePageState`) remains in website app
 
 ### Refactoring Completed ✅
 
-- ✅ **Components moved to `libs/components/`**:
+- ✅ **Components moved to `libs/common-ui/`**:
   - Atoms: `AnimatedTitle`, `CTAButton`, `LearningTypeCard`
   - Molecules: `HeroSection`, `LearningStyleSelector`, `AnimatedBackground`
   - Organisms: `HomePageLayout`, `PersonalizedContent`, `FinalCTASection`
 
 - ✅ **Page component simplified**:
   - Reduced from 566 lines to 66 lines
-  - Uses shared components via `@elzatona/components`
+  - Uses shared components via `@elzatona/common-ui`
   - Clean, maintainable structure
 
 ## Component Structure ✅
 
-### Atoms (in `libs/components/src/lib/components/atoms/`)
+### Atoms (`@elzatona/common-ui` → `components/atoms/`)
 
 - ✅ `AnimatedTitle` - Animated title with sparkles
 - ✅ `CTAButton` - Call-to-action button with hover effects
 - ✅ `LearningTypeCard` - Individual learning type selection card
 
-### Molecules (in `libs/components/src/lib/components/molecules/`)
+### Molecules (`@elzatona/common-ui` → `components/molecules/`)
 
 - ✅ `HeroSection` - Main hero section with title and CTA
 - ✅ `LearningStyleSelector` - Learning type selection interface
 - ✅ `AnimatedBackground` - Background animations and particles
 
-### Organisms (in `libs/components/src/lib/components/organisms/`)
+### Organisms (`@elzatona/common-ui` → `components/organisms/`)
 
 - ✅ `HomePageLayout` - Overall page layout structure
 - ✅ `PersonalizedContent` - User-specific content sections
@@ -71,18 +71,18 @@
 - [ ] Unit tests: 90% coverage
 - [ ] Integration tests: 80% coverage
 - [ ] E2E tests: Complete home page flow
-- [ ] Component tests in `libs/components/` (isolated)
+- [ ] Component tests in `libs/common-ui/` (isolated)
 
 ## Success Metrics ✅
 
 - **Line Count**: 566 → 66 lines (88% reduction) ✅
 - **Component Extraction**: 0/5 → 5/5 components extracted ✅
-- **Shared Components**: 0 → 9 components in `libs/components/` ✅
+- **Shared Components**: 0 → 9 components in `libs/common-ui/` ✅
 - **Code Reusability**: Components can be shared across apps ✅
 
 ## Next Steps
 
-1. ✅ Move atomic design components to `libs/components/` - **DONE**
+1. ✅ Move atomic design components to `libs/common-ui/` - **DONE**
 2. ⏳ Add comprehensive tests for shared components
 3. ⏳ Set up Storybook for component library
 4. ⏳ Move `homePage.types.ts` to `libs/types/` for proper sharing
@@ -90,7 +90,7 @@
 
 ## Notes
 
-- Components are now in `libs/components/` and can be:
+- Components are now in `libs/common-ui/` and can be:
   - Shared across apps (website, admin)
   - Tested in isolation
   - Used with Storybook
