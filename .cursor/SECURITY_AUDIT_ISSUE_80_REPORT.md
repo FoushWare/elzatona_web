@@ -70,7 +70,7 @@ A comprehensive security audit was performed on the codebase following the secur
    - # Supabase anon key: `YOUR_SUPABASE_KEY_HERE > > > > > > > origin/security/fix-gitleaks-config
    - Supabase anon key: `YOUR_SUPABASE_KEY_HERE
      > > > > > > > origin/main
-   - Firebase API key: `AIzaSyBXlcfcdyIqoeJOb2gXcxpRSmQO7lEP82Y`
+   - Firebase API key: `YOUR_GOOGLE_API_KEY_HERE`
    - Project-specific URLs
 
 2. `docs/setup/QUICK_SETUP_GUIDE.md`

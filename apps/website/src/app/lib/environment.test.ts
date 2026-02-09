@@ -20,7 +20,7 @@ describe("Environment Utility", () => {
 
   beforeEach(() => {
     // Reset environment variables before each test
-    jest.resetModules();
+    vi.resetModules();
     process.env = { ...originalEnv };
   });
 

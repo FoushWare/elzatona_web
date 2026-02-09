@@ -17,7 +17,7 @@ vi.mock("@elzatona/contexts", () => ({
   }),
 }));
 
-vi.mock("@elzatona/components", () => ({
+vi.mock("@elzatona/common-ui", () => ({
   ErrorBoundary: ({ children }: { children: React.ReactNode }) => (
     <div data-testid="error-boundary">{children}</div>
   ),

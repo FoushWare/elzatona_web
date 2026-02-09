@@ -253,7 +253,7 @@ export const updateUserStreak = async (userId: string): Promise<void> => {
       const today = new Date().toDateString();
       const lastActivity = new Date(currentProgress.updated_at).toDateString();
 
-      let newStreak = currentProgress.current_streak;
+      let newStreak: number;
 
       if (today === lastActivity) {
         // User already active today, maintain streak

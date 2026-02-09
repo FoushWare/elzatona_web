@@ -25,18 +25,18 @@
       "options": {
         "buildTarget": "admin:build",
         "dev": true,
-        "port": 3000
+        "port": 3001
       },
       "configurations": {
         "development": {
           "buildTarget": "admin:build:development",
           "dev": true,
-          "port": 3000
+          "port": 3001
         },
         "production": {
           "buildTarget": "admin:build:production",
           "dev": false,
-          "port": 3000
+          "port": 3001
         }
       }
     },
@@ -47,10 +47,10 @@
       }
     },
     "test": {
-      "executor": "@nx/jest:jest",
+      "executor": "vite:test",
       "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
       "options": {
-        "jestConfig": "apps/admin/jest.config.js",
+        "configFile": "../../vitest.config.ts",
         "passWithNoTests": true
       },
       "configurations": {

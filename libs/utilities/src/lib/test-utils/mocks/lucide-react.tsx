@@ -10,7 +10,8 @@ export const ArrowRight = () => <span data-testid="arrow-right-icon">→</span>;
 export const Play = () => <span data-testid="play-icon">▶</span>;
 export const BookOpen = () => <span data-testid="book-icon">📖</span>;
 export const Star = () => <span data-testid="star-icon">⭐</span>;
-export const Map = () => <span data-testid="map-icon">🗺️</span>;
+export const MapIcon = () => <span data-testid="map-icon">🗺️</span>;
+export { MapIcon as Map };
 export const Compass = () => <span data-testid="compass-icon">🧭</span>;
 export const Sparkles = () => <span data-testid="sparkles-icon">✨</span>;
 export const Zap = () => <span data-testid="zap-icon">⚡</span>;
@@ -60,12 +61,12 @@ export const LayoutDashboard = () => (
 );
 
 // Default export for any other icons
-export default {
+const lucideMock = {
   ArrowRight,
   Play,
   BookOpen,
   Star,
-  Map,
+  Map: MapIcon,
   Compass,
   Sparkles,
   Zap,
@@ -110,3 +111,5 @@ export default {
   Brain,
   LayoutDashboard,
 };
+
+export default lucideMock;

@@ -1,0 +1,7 @@
+// Minimal mock for shiki used by syntax highlighters in tests
+export const getHighlighter = async () => ({
+  codeToHtml: (code: string) => code,
+});
+
+const shikiMock = { getHighlighter };
+export default shikiMock;

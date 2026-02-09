@@ -5,16 +5,18 @@
 
 import React from "react";
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
-import "@testing-library/jest-dom";
+// DOM matchers are now set up globally via Vitest setup file
 import GetStartedPage from "./page";
 import * as sharedContexts from "@elzatona/contexts";
 
 // Mock shared contexts
-jest.mock("@elzatona/contexts", () => {
-  const actual = jest.requireActual("../../test-utils/mocks/shared-contexts");
+vi.mock("@elzatona/contexts", async () => {
+  const actual = await vi.importActual<any>(
+    "../../test-utils/mocks/shared-contexts",
+  );
   return {
     ...actual,
-    useUserType: jest.fn(),
+    useUserType: vi.fn(),
   };
 });
 
@@ -27,7 +29,7 @@ jest.mock("../../context/LearningTypeContext", () => ({
 }));
 
 // Mock lucide-react icons
-jest.mock("lucide-react", () => ({
+vi.mock("lucide-react", () => ({
   ArrowRight: () => <span data-testid="arrow-right-icon">→</span>,
   Play: () => <span data-testid="play-icon">▶</span>,
   Code: () => <span data-testid="code-icon">💻</span>,
@@ -42,8 +44,8 @@ jest.mock("lucide-react", () => ({
   ExternalLink: () => <span data-testid="external-icon">🔗</span>,
 }));
 
-const mockPush = jest.fn();
-const mockUseRouter = jest.fn();
+const mockPush = vi.fn();
+const mockUseRouter = vi.fn();
 
 jest.mock("next/navigation", () => ({
   useRouter: () => mockUseRouter(),
@@ -67,8 +69,8 @@ describe('G-UT-004: "I need guidance" Option Renders', () => {
   });
 
   afterEach(() => {
-    jest.runOnlyPendingTimers();
-    jest.useRealTimers();
+    vi.runOnlyPendingTimers();
+    vi.useRealTimers();
   });
 
   it('should have "I need guidance" option visible', () => {

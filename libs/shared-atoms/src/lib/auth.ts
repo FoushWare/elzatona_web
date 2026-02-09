@@ -41,7 +41,7 @@ export const signInAtom = atom(
   async (
     get,
     set,
-    { email, password }: { email: string; password: string },
+    { email, password: _password }: { email: string; password: string },
   ) => {
     set(authLoadingAtom, true);
     set(authErrorAtom, null);

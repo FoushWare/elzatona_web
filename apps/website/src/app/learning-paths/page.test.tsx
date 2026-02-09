@@ -9,26 +9,28 @@ import "@testing-library/jest-dom";
 import LearningPathsPage from "./page";
 import * as sharedContexts from "@elzatona/contexts";
 
-jest.mock("@elzatona/contexts", () => {
-  const actual = jest.requireActual("../../test-utils/mocks/shared-contexts");
+vi.mock("@elzatona/contexts", async () => {
+  const actual = await vi.importActual<any>(
+    "../../test-utils/mocks/shared-contexts",
+  );
   return {
     ...actual,
-    useAuth: jest.fn(),
+    useAuth: vi.fn(),
   };
 });
 
-const mockPush = jest.fn();
-jest.mock("next/navigation", () => ({
+const mockPush = vi.fn();
+vi.mock("next/navigation", () => ({
   useRouter: () => ({
     push: mockPush,
-    replace: jest.fn(),
-    prefetch: jest.fn(),
+    replace: vi.fn(),
+    prefetch: vi.fn(),
   }),
 }));
 
-global.fetch = jest.fn();
+global.fetch = vi.fn();
 
-jest.mock("lucide-react", () => ({
+vi.mock("lucide-react", () => ({
   BookOpen: () => <span>📖</span>,
   Play: () => <span>▶️</span>,
   Target: () => <span>🎯</span>,
@@ -55,15 +57,15 @@ jest.mock("lucide-react", () => ({
 
 describe("F-UT-009: Component Renders", () => {
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
 
-    (sharedContexts.useAuth as jest.Mock).mockReturnValue({
+    (sharedContexts.useAuth as ReturnType<typeof vi.fn>).mockReturnValue({
       isAuthenticated: true,
       user: { id: "1", email: "user@example.com" },
       isLoading: false,
     });
 
-    (global.fetch as jest.Mock).mockResolvedValue({
+    (global.fetch as ReturnType<typeof vi.fn>).mockResolvedValue({
       ok: true,
       json: async () => ({ data: [] }),
     });
@@ -86,15 +88,15 @@ describe("F-UT-009: Component Renders", () => {
 
 describe("F-UT-SNAPSHOT: Learning Paths Practice Snapshot Tests", () => {
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
 
-    (sharedContexts.useAuth as jest.Mock).mockReturnValue({
+    (sharedContexts.useAuth as ReturnType<typeof vi.fn>).mockReturnValue({
       isAuthenticated: true,
       user: { id: "1", email: "user@example.com" },
       isLoading: false,
     });
 
-    (global.fetch as jest.Mock).mockResolvedValue({
+    (global.fetch as ReturnType<typeof vi.fn>).mockResolvedValue({
       ok: true,
       json: async () => ({ data: [] }),
     });
@@ -108,7 +110,7 @@ describe("F-UT-SNAPSHOT: Learning Paths Practice Snapshot Tests", () => {
   });
 
   it("should match learning paths page snapshot (with categories)", async () => {
-    (global.fetch as jest.Mock).mockResolvedValue({
+    (global.fetch as ReturnType<typeof vi.fn>).mockResolvedValue({
       ok: true,
       json: async () => ({
         data: [

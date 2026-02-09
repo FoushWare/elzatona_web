@@ -50,7 +50,7 @@ bash .cursor/scripts/search-git-history-for-secrets.sh
 
 1. **Firebase API Keys:**
    - Pattern: `AIzaSy[A-Za-z0-9_-]{35}`
-   - Example: `AIzaSyBXlcfcdyIqoeJOb2gXcxpRSmQO7lEP82Y`
+   - Example: `YOUR_GOOGLE_API_KEY_HERE`
 
 2. **JWT Tokens:**
    - Pattern: `YOUR_SUPABASE_KEY_HERE`
@@ -95,7 +95,7 @@ pip install git-filter-repo
 
 # Create replacement file
 cat > replacements.txt << EOF
-AIzaSyBXlcfcdyIqoeJOb2gXcxpRSmQO7lEP82Y==>your-firebase-api-key-here
+YOUR_GOOGLE_API_KEY_HERE==>your-firebase-api-key-here
 <<<<<<< HEAD
 <<<<<<< HEAD
 YOUR_SUPABASE_KEY_HERE...==>your-supabase-anon-key-here

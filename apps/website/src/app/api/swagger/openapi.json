@@ -1,0 +1,713 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Elzatona Website API",
+    "version": "1.0.0",
+    "description": "API documentation for the Elzatona platform - practice questions, learning paths, guided learning, and user progress tracking",
+    "contact": {
+      "name": "Elzatona Team",
+      "url": "https://elzatona.com"
+    }
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3000/api",
+      "description": "Local development server"
+    },
+    {
+      "url": "https://elzatona.com/api",
+      "description": "Production server"
+    }
+  ],
+  "tags": [
+    {
+      "name": "Authentication",
+      "description": "User authentication and session management"
+    },
+    {
+      "name": "Questions",
+      "description": "Practice questions and validation"
+    },
+    {
+      "name": "Categories",
+      "description": "Question categories"
+    },
+    {
+      "name": "Topics",
+      "description": "Question topics"
+    },
+    {
+      "name": "Learning Paths",
+      "description": "Structured learning paths"
+    },
+    {
+      "name": "Plans",
+      "description": "Learning plans and hierarchy"
+    },
+    {
+      "name": "Guided Learning",
+      "description": "Guided learning plans and sections"
+    },
+    {
+      "name": "Progress",
+      "description": "User progress tracking"
+    },
+    {
+      "name": "Flashcards",
+      "description": "Flashcard management"
+    },
+    {
+      "name": "Frontend Tasks",
+      "description": "Frontend coding tasks"
+    },
+    {
+      "name": "Code Execution",
+      "description": "Code compilation and execution"
+    }
+  ],
+  "paths": {
+    "/auth/session": {
+      "get": {
+        "tags": ["Authentication"],
+        "summary": "Get current session",
+        "description": "Retrieve the current user session information",
+        "responses": {
+          "200": {
+            "description": "Session information",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Session"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          }
+        }
+      }
+    },
+    "/auth/clear-cookie": {
+      "post": {
+        "tags": ["Authentication"],
+        "summary": "Clear authentication cookie",
+        "description": "Log out the current user by clearing the session cookie",
+        "responses": {
+          "200": {
+            "description": "Cookie cleared successfully"
+          }
+        }
+      }
+    },
+    "/questions": {
+      "get": {
+        "tags": ["Questions"],
+        "summary": "List all questions",
+        "description": "Retrieve a paginated list of practice questions with optional filters",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "default": 1
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "default": 20
+            }
+          },
+          {
+            "name": "category",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "difficulty",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "enum": ["beginner", "intermediate", "advanced"]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of questions",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "questions": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Question"
+                      }
+                    },
+                    "pagination": {
+                      "$ref": "#/components/schemas/Pagination"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/questions/{id}": {
+      "get": {
+        "tags": ["Questions"],
+        "summary": "Get a question by ID",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Question details",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Question"
+                }
+              }
+            }
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        }
+      }
+    },
+    "/questions/validate-answer": {
+      "post": {
+        "tags": ["Questions"],
+        "summary": "Validate a question answer",
+        "description": "Check if the submitted answer is correct and provide feedback",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["questionId", "answer"],
+                "properties": {
+                  "questionId": {
+                    "type": "string"
+                  },
+                  "answer": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Answer validation result",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "correct": {
+                      "type": "boolean"
+                    },
+                    "feedback": {
+                      "type": "string"
+                    },
+                    "explanation": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ]
+      }
+    },
+    "/questions/stats": {
+      "get": {
+        "tags": ["Questions"],
+        "summary": "Get question statistics",
+        "description": "Retrieve overall statistics about questions",
+        "responses": {
+          "200": {
+            "description": "Question statistics",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "total": {
+                      "type": "integer"
+                    },
+                    "byDifficulty": {
+                      "type": "object"
+                    },
+                    "byCategory": {
+                      "type": "object"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/categories": {
+      "get": {
+        "tags": ["Categories"],
+        "summary": "List all categories",
+        "responses": {
+          "200": {
+            "description": "List of categories",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "categories": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Category"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/topics": {
+      "get": {
+        "tags": ["Topics"],
+        "summary": "List all topics",
+        "responses": {
+          "200": {
+            "description": "List of topics",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "topics": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Topic"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/topics/{id}/questions": {
+      "get": {
+        "tags": ["Topics"],
+        "summary": "Get questions by topic",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Questions for the topic"
+          }
+        }
+      }
+    },
+    "/learning-paths": {
+      "get": {
+        "tags": ["Learning Paths"],
+        "summary": "List all learning paths",
+        "responses": {
+          "200": {
+            "description": "List of learning paths",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "paths": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/LearningPath"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/learning-paths/{id}": {
+      "get": {
+        "tags": ["Learning Paths"],
+        "summary": "Get a learning path by ID",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Learning path details"
+          }
+        }
+      }
+    },
+    "/guided-learning/plans": {
+      "get": {
+        "tags": ["Guided Learning"],
+        "summary": "List all guided learning plans",
+        "responses": {
+          "200": {
+            "description": "List of guided learning plans"
+          }
+        }
+      }
+    },
+    "/guided-learning/plans/{planId}": {
+      "get": {
+        "tags": ["Guided Learning"],
+        "summary": "Get a guided learning plan",
+        "parameters": [
+          {
+            "name": "planId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Guided learning plan details"
+          }
+        }
+      }
+    },
+    "/progress": {
+      "get": {
+        "tags": ["Progress"],
+        "summary": "Get user progress",
+        "description": "Retrieve the current user's progress across all learning activities",
+        "responses": {
+          "200": {
+            "description": "User progress data"
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ]
+      }
+    },
+    "/flashcards": {
+      "get": {
+        "tags": ["Flashcards"],
+        "summary": "List all flashcards",
+        "responses": {
+          "200": {
+            "description": "List of flashcards"
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ]
+      }
+    },
+    "/frontend-tasks": {
+      "get": {
+        "tags": ["Frontend Tasks"],
+        "summary": "List all frontend tasks",
+        "description": "Retrieve available frontend coding tasks",
+        "responses": {
+          "200": {
+            "description": "List of frontend tasks"
+          }
+        }
+      }
+    },
+    "/code": {
+      "post": {
+        "tags": ["Code Execution"],
+        "summary": "Execute code",
+        "description": "Compile and execute user-submitted code",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["code", "language"],
+                "properties": {
+                  "code": {
+                    "type": "string",
+                    "example": "console.log('Hello, World!');"
+                  },
+                  "language": {
+                    "type": "string",
+                    "enum": ["javascript", "typescript", "python"],
+                    "example": "javascript"
+                  },
+                  "testCases": {
+                    "type": "array",
+                    "items": {
+                      "type": "object"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Code execution result",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "output": {
+                      "type": "string"
+                    },
+                    "error": {
+                      "type": "string"
+                    },
+                    "executionTime": {
+                      "type": "number"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Session": {
+        "type": "object",
+        "properties": {
+          "user": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "email": {
+                "type": "string"
+              },
+              "name": {
+                "type": "string"
+              }
+            }
+          },
+          "expiresAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "Question": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string",
+            "example": "What is a closure in JavaScript?"
+          },
+          "content": {
+            "type": "string"
+          },
+          "category": {
+            "type": "string",
+            "example": "JavaScript"
+          },
+          "difficulty": {
+            "type": "string",
+            "enum": ["beginner", "intermediate", "advanced"]
+          },
+          "tags": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "Category": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string",
+            "example": "JavaScript"
+          },
+          "description": {
+            "type": "string"
+          },
+          "questionCount": {
+            "type": "integer"
+          }
+        }
+      },
+      "Topic": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string",
+            "example": "Closures"
+          },
+          "categoryId": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          }
+        }
+      },
+      "LearningPath": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string",
+            "example": "Frontend Fundamentals"
+          },
+          "description": {
+            "type": "string"
+          },
+          "difficulty": {
+            "type": "string",
+            "enum": ["beginner", "intermediate", "advanced"]
+          },
+          "estimatedHours": {
+            "type": "integer"
+          }
+        }
+      },
+      "Pagination": {
+        "type": "object",
+        "properties": {
+          "page": {
+            "type": "integer"
+          },
+          "limit": {
+            "type": "integer"
+          },
+          "total": {
+            "type": "integer"
+          },
+          "totalPages": {
+            "type": "integer"
+          }
+        }
+      },
+      "Error": {
+        "type": "object",
+        "properties": {
+          "error": {
+            "type": "string"
+          },
+          "message": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "responses": {
+      "Unauthorized": {
+        "description": "Unauthorized - authentication required",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Error"
+            }
+          }
+        }
+      },
+      "NotFound": {
+        "description": "Resource not found",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Error"
+            }
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "BearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT",
+        "description": "JWT token obtained from authentication"
+      }
+    }
+  }
+}

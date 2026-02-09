@@ -1,0 +1,9 @@
+dist/
+build/
+coverage/
+node_modules/
+.env*
+.DS_Store
+.vscode/
+.idea/
+*.log

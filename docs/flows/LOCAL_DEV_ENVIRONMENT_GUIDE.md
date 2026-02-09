@@ -54,7 +54,7 @@ This means:
 
    ```bash
    NEXT_PUBLIC_SUPABASE_URL=https://kiycimlsatwfqxtfprlr.supabase.co
-   SUPABASE_SERVICE_ROLE_KEY=your-test-service-role-key
+   SUPABASE_SERVICE_ROLE_KEY=REDACTED_TEST_KEY
    ADMIN_EMAIL=your-test-email@example.com
    ADMIN_PASSWORD=your-test-password
    ```

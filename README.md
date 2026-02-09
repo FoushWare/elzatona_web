@@ -7,7 +7,7 @@ A comprehensive platform for frontend developers to practice coding challenges a
 ### Prerequisites
 
 - **Node.js** 18+ or **Bun**
-- **Supabase** account and project
+- **Database** - PostgreSQL (Supabase), MongoDB, MySQL, or Firebase
 - **Git**
 
 ### Installation
@@ -27,7 +27,8 @@ cp .env.example .env.local
 cp .env.test.local.example .env.test.local
 cp .env.dev.local.example .env.dev.local
 
-# Fill in your Supabase credentials in .env.local
+# Fill in your database credentials in .env.local
+# Set DATABASE_TYPE environment variable (postgresql, mongodb, mysql, or firebase)
 # See docs/flows/environment-setup.md for details
 
 # Start development server
@@ -35,6 +36,48 @@ bun run dev
 ```
 
 Visit `http://localhost:3000` to see the application.
+
+## 🧪 Testing & Quality Assurance
+
+### Running All Tests
+
+```bash
+npm run test
+# or
+bun run test
+```
+
+### Running E2E Tests
+
+```bash
+npm run test:e2e
+# or
+bun run test:e2e
+```
+
+### Generating Coverage Report
+
+```bash
+npm run test -- --coverage
+# or
+bun run test --coverage
+```
+
+Coverage reports are generated in the `coverage/` directory. Ensure coverage is ≥90% for constitution compliance.
+
+### SonarQube Quality Gate
+
+Run SonarQube scan and verify quality gate passes:
+
+```bash
+# See docs/SONARQUBE_MCP_SETUP.md for setup
+npx sonar-scanner
+```
+
+### Test Summary & Documentation
+
+- See `refactoring-plans/specs/database-abstraction-testing-tasks.md` for full test plan
+- Coverage badge and summary are updated automatically after CI runs
 
 ## 📚 Documentation
 
@@ -61,6 +104,94 @@ Visit `http://localhost:3000` to see the application.
 - **[Security Guide](docs/SECURITY.md)** - Security best practices and pipeline
 - **[Testing Guide](docs/TESTING_SUMMARY.md)** - Testing strategy and coverage
 - **[Database Schema](docs/database/questions-schema.md)** - Database structure
+
+## 🔌 API Documentation
+
+Both applications provide interactive API documentation powered by Swagger UI:
+
+### Website API Documentation
+
+Access the interactive API documentation for the public-facing website:
+
+```
+http://localhost:3000/api-docs
+```
+
+**Available Endpoints:**
+
+- **Authentication** - Session management, logout
+- **Questions** - Practice questions, validation, statistics
+- **Categories & Topics** - Browse question categories and topics
+- **Learning Paths** - Structured learning paths
+- **Guided Learning** - Guided learning plans and sections
+- **Progress** - User progress tracking
+- **Flashcards** - Flashcard management
+- **Frontend Tasks** - Frontend coding challenges
+- **Code Execution** - Code compilation and testing
+
+### Admin API Documentation
+
+Access the interactive API documentation for the admin panel:
+
+```
+http://localhost:3001/api-docs
+```
+
+**Available Endpoints:**
+
+- **Dashboard** - Admin dashboard statistics
+- **Authentication** - Admin login and session management
+- **Users** - User management
+- **Frontend Tasks** - CRUD operations for frontend coding tasks
+- **Problem Solving** - CRUD operations for problem-solving questions
+- **Learning Cards** - Learning card management
+- **Questions** - Question management
+- **Categories & Topics** - Category and topic management
+
+### Using Swagger UI
+
+1. **Start the development servers:**
+
+   ```bash
+   # Website (runs on port 3000)
+   bun run dev
+
+   # Admin (runs on port 3001)
+   bun run dev:admin
+   ```
+
+2. **Navigate to the API docs:**
+   - Website: Open `http://localhost:3000/api-docs`
+   - Admin: Open `http://localhost:3001/api-docs`
+
+3. **Explore endpoints:**
+   - Click on any endpoint to view details
+   - View request/response schemas
+   - See required parameters and body structure
+   - Check authentication requirements
+
+4. **Test endpoints:**
+   - Click "Try it out" button on any endpoint
+   - Fill in required parameters
+   - For authenticated endpoints, click "Authorize" and enter your JWT token
+   - Click "Execute" to send the request
+   - View the response in real-time
+
+5. **Authentication:**
+   - Many endpoints require authentication
+   - Obtain a JWT token by logging in first
+   - Click the "Authorize" button at the top
+   - Enter: `Bearer YOUR_JWT_TOKEN`
+   - Click "Authorize" to apply to all requests
+
+### OpenAPI Specification
+
+The raw OpenAPI 3.0 specifications are also available:
+
+- Website: `http://localhost:3000/api/swagger`
+- Admin: `http://localhost:3001/api/swagger`
+
+You can import these into tools like Postman, Insomnia, or API testing frameworks.
 
 ## 🏗️ Project Structure
 
@@ -311,6 +442,8 @@ See [docs/SECURITY.md](docs/SECURITY.md) for complete security guide.
 - **[Project Structure](docs/structure.md)**
 - **[Security Guide](docs/SECURITY.md)**
 - **[Testing Guide](docs/TESTING_SUMMARY.md)**
+- **[Database Abstraction Layer](docs/DATABASE_ABSTRACTION_MIGRATION_COMPLETED.md)**
+- **[Code Review Report](docs/DATABASE_ABSTRACTION_CODE_REVIEW.md)**
 
 ## 🤝 Contributing
 

@@ -10,7 +10,7 @@
 
 The following patterns were searched in git history:
 
-1. **Firebase API Key:** `AIzaSyBXlcfcdyIqoeJOb2gXcxpRSmQO7lEP82Y`
+1. **Firebase API Key:** `YOUR_GOOGLE_API_KEY_HERE`
    <<<<<<< HEAD
    <<<<<<< HEAD
 2. # **Supabase Anon Key:** `YOUR_SUPABASE_KEY_HERE...`
@@ -31,7 +31,7 @@ Due to terminal limitations, please run the following commands manually to check
 
 ```bash
 # Search for Firebase API key
-git log --all -p -S "AIzaSyBXlcfcdyIqoeJOb2gXcxpRSmQO7lEP82Y" --oneline
+git log --all -p -S "YOUR_GOOGLE_API_KEY_HERE" --oneline
 
 # Search for Supabase anon key
 git log --all -p -S "YOUR_SUPABASE_KEY_HERE" --oneline
