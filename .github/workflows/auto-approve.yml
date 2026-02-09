@@ -1,0 +1,14 @@
+name: Auto-approve PRs by foushware
+
+on:
+  pull_request:
+    types: [opened, reopened, synchronize]
+
+jobs:
+  auto-approve:
+    runs-on: ubuntu-latest
+    if: github.actor == 'foushware'
+    steps:
+      - uses: hmarr/auto-approve-action@v3
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}

@@ -1,0 +1,14 @@
+name: Auto-assign PRs to foushware
+
+on:
+  pull_request:
+    types: [opened, reopened, synchronize]
+
+jobs:
+  auto-assign:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: kentaro-m/auto-assign-action@v1.2.4
+        with:
+          assignees: foushware
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
