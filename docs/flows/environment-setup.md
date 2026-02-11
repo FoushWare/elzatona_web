@@ -60,11 +60,12 @@ The project supports multiple environments:
 
 ### Application Variables
 
-| Variable              | Description             | Options                             |
-| --------------------- | ----------------------- | ----------------------------------- |
-| `APP_ENV`             | Application environment | `production`, `test`, `development` |
-| `NEXT_PUBLIC_APP_ENV` | Public app environment  | `production`, `test`, `development` |
-| `NODE_ENV`            | Node environment        | `development`, `production`         |
+| Variable              | Description                                                                | Options                             | Required |
+| --------------------- | -------------------------------------------------------------------------- | ----------------------------------- | -------- |
+| `APP_ENV`             | Application environment                                                    | `production`, `test`, `development` | Yes      |
+| `NEXT_PUBLIC_APP_ENV` | Public app environment                                                     | `production`, `test`, `development` | Yes      |
+| `NODE_ENV`            | Node environment                                                           | `development`, `production`         | Yes      |
+| `ADMIN_URL`           | Admin application URL for redirects (e.g., https://admin.elzatona-web.com) | URL string                          | Yes      |
 
 ### Admin Variables
 
