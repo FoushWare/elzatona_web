@@ -255,6 +255,7 @@ build/
 libs/utilities/scripts/
 tools/
 !tools/code-scanning-to-issues/
+tools/*/node_modules/
 apps/*/tests/e2e/
 .cursor/
 .gitleaks.toml
