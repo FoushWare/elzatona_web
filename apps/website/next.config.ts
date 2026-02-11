@@ -104,7 +104,7 @@ const nextConfig: NextConfig = {
     return [
       {
         source: "/admin/:path*",
-        destination: "http://localhost:3001/admin/:path*",
+        destination: `${process.env.ADMIN_URL || "http://localhost:3001"}/admin/:path*`,
         permanent: false,
       },
     ];
