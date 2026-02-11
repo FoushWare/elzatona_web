@@ -1,0 +1,66 @@
+name: Code Scanning to Issues
+
+on:
+  # Run daily at midnight UTC
+  schedule:
+    - cron: '0 0 * * *'
+  
+  # Allow manual trigger
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: 'Run in dry-run mode (no issues created)'
+        required: false
+        type: boolean
+        default: false
+  
+  # Run after code scanning completes
+  workflow_run:
+    workflows: ["CodeQL Analysis"]
+    types:
+      - completed
+
+permissions:
+  contents: read
+  issues: write
+  security-events: read
+
+jobs:
+  convert-alerts-to-issues:
+    name: Convert Code Scanning Alerts to Issues
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        run: |
+          cd tools/code-scanning-to-issues
+          npm install
+
+      - name: Run conversion script
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+          GITHUB_REPOSITORY_OWNER: ${{ github.repository_owner }}
+          REPO_NAME: ${{ github.event.repository.name }}
+          DRY_RUN: ${{ github.event.inputs.dry_run || 'false' }}
+        run: |
+          cd tools/code-scanning-to-issues
+          npm start
+
+      - name: Upload logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: conversion-logs
+          path: |
+            tools/code-scanning-to-issues/*.log
+          retention-days: 7
+          if-no-files-found: ignore
