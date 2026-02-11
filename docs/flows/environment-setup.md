@@ -132,3 +132,66 @@ bun run dev:light:prod
 - Rotate keys if they are exposed
 
 See [docs/SECURITY.md](../SECURITY.md) for security best practices.
+
+## For Contributors: Environment Setup
+
+### Local Development
+
+1. **Copy environment files:**
+
+   ```bash
+   cp .env.example .env.local
+   cp .env.test.local.example .env.test.local
+   cp .env.dev.local.example .env.dev.local
+   ```
+
+2. **Configure Supabase credentials** in each `.env.*.local` file.
+
+3. **Set application variables:**
+   ```bash
+   # .env.local
+   APP_ENV=production
+   NEXT_PUBLIC_APP_ENV=production
+   NODE_ENV=development
+   ADMIN_URL=http://localhost:3001  # For local admin app
+   ```
+
+### Cloud Deployment (Vercel, Netlify, etc.)
+
+When deploying to cloud platforms, set these environment variables in your provider's dashboard:
+
+#### Required Variables
+
+- `NEXT_PUBLIC_SUPABASE_URL`
+- `NEXT_PUBLIC_SUPABASE_ANON_KEY`
+- `SUPABASE_SERVICE_ROLE_KEY`
+- `APP_ENV` (set to `production`)
+- `NEXT_PUBLIC_APP_ENV` (set to `production`)
+- `ADMIN_URL` (your production admin URL, e.g., `https://admin.yourdomain.com`)
+
+#### Optional Variables
+
+- `NEXT_PUBLIC_SENTRY_DSN`
+- `SENTRY_AUTH_TOKEN`
+- `SENTRY_ORG`
+- `SENTRY_PROJECT`
+
+### Admin App Configuration
+
+If deploying the admin app separately:
+
+1. Set `ADMIN_URL` to the admin app's production URL
+2. Ensure the admin app has its own environment variables configured
+3. Test the `/admin` redirect works correctly
+
+### Testing Environment Variables
+
+Run these commands to verify your setup:
+
+```bash
+# Check if variables are loaded
+bun run dev:check-env
+
+# Test admin redirect (if admin app is running)
+curl -I http://localhost:3000/admin
+```
