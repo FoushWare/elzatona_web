@@ -192,8 +192,8 @@ export const ProgressIndicator: React.FC<ProgressIndicatorProps> = ({
                 className="px-2 py-1 bg-indigo-100 dark:bg-indigo-900 text-indigo-800 dark:text-indigo-200 text-xs rounded-full"
               >
                 {section
-                  .replace("-", " ")
-                  .replace(/\b\w/g, (l) => l.toUpperCase())}
+                  .replaceAll("-", " ")
+                  .replaceAll(/\b\w/g, (l) => l.toUpperCase())}
               </span>
             ))}
             {progress.roadmapSections.length > 5 && (

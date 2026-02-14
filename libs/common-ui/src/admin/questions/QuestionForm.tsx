@@ -340,7 +340,7 @@ export const AdminQuestionForm = React.forwardRef<
                   {questionTypes.map((type) => (
                     <SelectItem key={type} value={type}>
                       {type.charAt(0).toUpperCase() +
-                        type.slice(1).replace("-", " ")}
+                        type.slice(1).replaceAll("-", " ")}
                     </SelectItem>
                   ))}
                 </SelectField>
