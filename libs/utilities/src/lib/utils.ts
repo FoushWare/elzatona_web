@@ -53,7 +53,12 @@ export const throttle = <T extends (...args: any[]) => any>(
 };
 
 export const generateId = (): string => {
-  return Math.random().toString(36).substring(2, 11);
+  // Use cryptographic randomness instead of Math.random() for secure ID generation
+  const array = new Uint8Array(8);
+  crypto.getRandomValues(array);
+  return Array.from(array, (b) => b.toString(36).padStart(2, '0'))
+    .join('')
+    .substring(0, 11);
 };
 
 export const sleep = (ms: number): Promise<void> => {

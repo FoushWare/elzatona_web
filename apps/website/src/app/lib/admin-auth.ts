@@ -1,6 +1,7 @@
 import bcrypt from "bcryptjs";
 import { adminConfig, getAdminApiUrl } from "../../../admin.config";
 import { getSupabaseClient } from "./get-supabase-client";
+import { generateId } from "@elzatona/utilities";
 
 // Types
 export interface AdminCredential {
@@ -298,6 +299,6 @@ export class AdminAuthService {
    * Generate unique admin ID
    */
   private static generateAdminId(): string {
-    return `admin_${Date.now()}_${Math.random().toString(36).substring(2, 11)}`;
+    return `admin_${Date.now()}_${generateId()}`;
   }
 }
