@@ -30,6 +30,14 @@ paths-ignore:
   - "apps/website/lib/challenges.ts"
   - "apps/website/lib/seniorInterviewQA.ts"
   - "apps/website/network/data/**"
+  # Exclude build/setup scripts — no production shell injection risk
+  - "scripts/**"
+  - "Rest/scripts/**"
+  - "tools/**"
+  - "infrastructure/**"
+  - ".specify/**"
+  - "refactoring-plans/**"
+  - "docs/**"
 
 # Focus only on critical source code directories
 paths:
