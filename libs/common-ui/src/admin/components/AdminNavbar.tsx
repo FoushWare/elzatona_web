@@ -286,7 +286,7 @@ export default function AdminNavbar() {
                         {user.email}
                       </p>
                       <p className="text-xs text-gray-500 dark:text-gray-400 capitalize">
-                        Role: {user.role.replace("_", " ")}
+                        Role: {user.role.replaceAll("_", " ")}
                       </p>
                     </div>
 

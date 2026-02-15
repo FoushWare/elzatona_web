@@ -39,11 +39,12 @@ const xssOptions: IFilterXSSOptions = {
       if (value.startsWith("http://") || value.startsWith("https://")) {
         // Escape attribute value manually
         const escaped = value
-          .replace(/&/g, "&amp;")
-          .replace(/"/g, "&quot;")
-          .replace(/'/g, "&#x27;")
-          .replace(/</g, "&lt;")
-          .replace(/>/g, "&gt;");
+          .replaceAll("\\", "&#x5C;")
+          .replaceAll("&", "&amp;")
+          .replaceAll('"', "&quot;")
+          .replaceAll("'", "&#x27;")
+          .replaceAll("<", "&lt;")
+          .replaceAll(">", "&gt;");
         return `${name}="${escaped}"`;
       }
       return "";
