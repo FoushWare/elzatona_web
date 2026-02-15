@@ -1,0 +1,19 @@
+Lint, Type Check, and Build	Run Prettier formatting check	﻿2026-02-15T04:17:45.2220277Z ##[group]Run echo "🎨 Running Prettier formatting check..."
+Lint, Type Check, and Build	Run Prettier formatting check	2026-02-15T04:17:45.2220772Z [36;1mecho "🎨 Running Prettier formatting check..."[0m
+Lint, Type Check, and Build	Run Prettier formatting check	2026-02-15T04:17:45.2221202Z [36;1m# Use --check flag to verify formatting without modifying files[0m
+Lint, Type Check, and Build	Run Prettier formatting check	2026-02-15T04:17:45.2221617Z [36;1m# Prettier will respect .prettierignore file[0m
+Lint, Type Check, and Build	Run Prettier formatting check	2026-02-15T04:17:45.2222331Z [36;1mnpx prettier --check . --ignore-path .prettierignore || (echo "⚠️  Prettier found formatting issues. Run 'npm run format' to fix them." && exit 1)[0m
+Lint, Type Check, and Build	Run Prettier formatting check	2026-02-15T04:17:45.2285057Z shell: /usr/bin/bash -e {0}
+Lint, Type Check, and Build	Run Prettier formatting check	2026-02-15T04:17:45.2285316Z ##[endgroup]
+Lint, Type Check, and Build	Run Prettier formatting check	2026-02-15T04:17:45.2359714Z 🎨 Running Prettier formatting check...
+Lint, Type Check, and Build	Run Prettier formatting check	2026-02-15T04:17:45.6483439Z Checking formatting...
+Lint, Type Check, and Build	Run Prettier formatting check	2026-02-15T04:17:46.3432353Z [[33mwarn[39m] .github/workflows/auto-assign.yml
+Lint, Type Check, and Build	Run Prettier formatting check	2026-02-15T04:17:46.3823431Z [[33mwarn[39m] .github/workflows/code-scanning-to-issues.yml
+Lint, Type Check, and Build	Run Prettier formatting check	2026-02-15T04:18:05.0148487Z [[33mwarn[39m] QUICKSTART-CODE-SCANNING-ISSUES.md
+Lint, Type Check, and Build	Run Prettier formatting check	2026-02-15T04:18:06.1154483Z [[33mwarn[39m] specs/006-code-scanning-to-issues/checklists/requirements.md
+Lint, Type Check, and Build	Run Prettier formatting check	2026-02-15T04:18:06.3641551Z [[33mwarn[39m] tools/code-scanning-to-issues/ARCHITECTURE.md
+Lint, Type Check, and Build	Run Prettier formatting check	2026-02-15T04:18:06.3820209Z [[33mwarn[39m] tools/code-scanning-to-issues/index.ts
+Lint, Type Check, and Build	Run Prettier formatting check	2026-02-15T04:18:06.3937458Z [[33mwarn[39m] tools/code-scanning-to-issues/README.md
+Lint, Type Check, and Build	Run Prettier formatting check	2026-02-15T04:18:06.4033953Z [[33mwarn[39m] Code style issues found in 7 files. Run Prettier with --write to fix.
+Lint, Type Check, and Build	Run Prettier formatting check	2026-02-15T04:18:06.4383983Z ⚠️  Prettier found formatting issues. Run 'npm run format' to fix them.
+Lint, Type Check, and Build	Run Prettier formatting check	2026-02-15T04:18:06.4399126Z ##[error]Process completed with exit code 1.
