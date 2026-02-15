@@ -39,11 +39,11 @@ const xssOptions: IFilterXSSOptions = {
       if (value.startsWith("http://") || value.startsWith("https://")) {
         // Escape attribute value manually
         const escaped = value
-          .replace(/&/g, "&amp;")
-          .replace(/"/g, "&quot;")
-          .replace(/'/g, "&#x27;")
-          .replace(/</g, "&lt;")
-          .replace(/>/g, "&gt;");
+          .replaceAll('&', '&amp;')
+          .replaceAll('"', '&quot;')
+          .replaceAll("'", '&#x27;')
+          .replaceAll('<', '&lt;')
+          .replaceAll('>', '&gt;');
         return `${name}="${escaped}"`;
       }
       return "";
@@ -102,7 +102,7 @@ export function sanitizeInputServer(input: string): string {
   }
 
   // Remove null bytes and control characters
-  let sanitized = input.replace(/[\x00-\x1F\x7F]/g, "");
+  let sanitized = input.replaceAll(/[\x00-\x1F\x7F]/g, "");
 
   // Trim whitespace
   sanitized = sanitized.trim();
@@ -154,8 +154,8 @@ export function sanitizeObjectServer<T extends Record<string, unknown>>(
         // Only remove dangerous control characters, but preserve newlines and tabs
         const content = String(sanitized[key]);
         const cleaned = content
-          .replace(/[\x00-\x08\x0B-\x0C\x0E-\x1F\x7F]/g, "") // Remove control chars except \n (0x0A), \r (0x0D), \t (0x09)
-          .replace(/\x00/g, ""); // Remove null bytes
+          .replaceAll(/[\x00-\x08\x0B-\x0C\x0E-\x1F\x7F]/g, "") // Remove control chars except \n (0x0A), \r (0x0D), \t (0x09)
+          .replaceAll("\x00", ""); // Remove null bytes
         sanitized[key] = cleaned as T[typeof key];
       } else {
         // For other string fields, use standard sanitization

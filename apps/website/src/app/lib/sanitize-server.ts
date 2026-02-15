@@ -39,11 +39,11 @@ const xssOptions: IFilterXSSOptions = {
       if (value.startsWith("http://") || value.startsWith("https://")) {
         // Escape attribute value manually
         const escaped = value
-          .replace(/&/g, "&amp;")
-          .replace(/"/g, "&quot;")
-          .replace(/'/g, "&#x27;")
-          .replace(/</g, "&lt;")
-          .replace(/>/g, "&gt;");
+          .replaceAll('&', '&amp;')
+          .replaceAll('"', '&quot;')
+          .replaceAll("'", '&#x27;')
+          .replaceAll('<', '&lt;')
+          .replaceAll('>', '&gt;');
         return `${name}="${escaped}"`;
       }
       return "";
@@ -102,7 +102,7 @@ export function sanitizeInputServer(input: string): string {
   }
 
   // Remove null bytes and control characters
-  let sanitized = input.replace(/[\x00-\x1F\x7F]/g, "");
+  let sanitized = input.replaceAll(/[\x00-\x1F\x7F]/g, "");
 
   // Trim whitespace
   sanitized = sanitized.trim();
@@ -135,8 +135,8 @@ function sanitizeFieldValue(
     if (preserveNewlinesFields.has(key)) {
       // Only remove dangerous control characters, but preserve newlines and tabs
       return value
-        .replace(/[\x00-\x08\x0B-\x0C\x0E-\x1F\x7F]/g, "") // Remove control chars except \n (0x0A), \r (0x0D), \t (0x09)
-        .replace(/\x00/g, ""); // Remove null bytes
+        .replaceAll(/[\x00-\x08\x0B-\x0C\x0E-\x1F\x7F]/g, "") // Remove control chars except \n (0x0A), \r (0x0D), \t (0x09)
+        .replaceAll("\x00", ""); // Remove null bytes
     }
     // For other string fields, use standard sanitization
     return sanitizeInputServer(value);
@@ -263,8 +263,8 @@ export function removeAllHTMLTags(text: string): string {
 
   // Additional safety: Remove any remaining < and > characters that might be part of incomplete tags
   // This catches edge cases where tags are malformed or incomplete
-  cleaned = cleaned.replace(/<[^>]*$/g, ""); // Remove incomplete tags at end
-  cleaned = cleaned.replace(/<[^<]*$/g, ""); // Remove any remaining < characters
+  cleaned = cleaned.replaceAll(/<[^>]*$/g, ""); // Remove incomplete tags at end
+  cleaned = cleaned.replaceAll(/<[^<]*$/g, ""); // Remove any remaining < characters
 
   return cleaned.trim();
 }
@@ -285,10 +285,10 @@ export function sanitizeForLogging(value: unknown): string {
 
   // SECURITY: Remove all control characters (including newlines, carriage returns, tabs, etc.)
   // This prevents log injection attacks where malicious input could break log format
-  sanitized = sanitized.replace(/[\x00-\x1F\x7F-\x9F]/g, "");
+  sanitized = sanitized.replaceAll(/[\x00-\x1F\x7F-\x9F]/g, "");
 
   // SECURITY: Remove any remaining newline-like patterns that could break log format
-  sanitized = sanitized.replace(/\r\n|\r|\n/g, " ");
+  sanitized = sanitized.replaceAll(/\r\n|\r|\n/g, " ");
 
   // SECURITY: Limit length to prevent log flooding attacks
   const maxLength = 200;
@@ -299,8 +299,8 @@ export function sanitizeForLogging(value: unknown): string {
   // SECURITY: Final pass - ensure no dangerous patterns remain
   // Remove any patterns that could be interpreted as log format specifiers
   sanitized = sanitized.replace(
-    /%[0-9]*[diouxXeEfFgGaAcspn%]/g,
-    "[format-removed]",
+    /%\d*[diouxXeEfFgGaAcspn%]/g,
+    '[format-removed]'
   );
 
   return sanitized;
