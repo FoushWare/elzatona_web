@@ -202,11 +202,12 @@ export const QuestionPracticeView: React.FC<QuestionPracticeViewProps> = ({
 
   const cleanQuestionTitle = (title: string): string => {
     if (!title) return "";
+    // Decode &amp; first to prevent double-escaping (e.g., &amp;lt; → &lt; → <)
     return title
-      .replaceAll("&nbsp;", " ")
+      .replaceAll("&amp;", "&")
       .replaceAll("&lt;", "<")
       .replaceAll("&gt;", ">")
-      .replaceAll("&amp;", "&")
+      .replaceAll("&nbsp;", " ")
       .replaceAll("&quot;", '"')
       .replaceAll("&#39;", "'")
       .trim();

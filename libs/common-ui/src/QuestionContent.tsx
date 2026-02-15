@@ -926,10 +926,10 @@ function processFinalTextContent(
   }
 
   cleanContent = cleanContent
-    .replace("&nbsp;", " ")
-    .replace("&lt;", "<")
-    .replace("&gt;", ">")
-    .replace("&amp;", "&")
+    .replace(/&amp;/g, "&")
+    .replace(/&lt;/g, "<")
+    .replace(/&gt;/g, ">")
+    .replace(/&nbsp;/g, " ")
     .trim();
 
   const codeValidation = isValidCode(cleanContent);
