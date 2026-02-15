@@ -102,7 +102,15 @@ export function sanitizeInputServer(input: string): string {
   }
 
   // Remove null bytes and control characters
-  let sanitized = input.replaceAll(/[\x00-\x1F\x7F]/g, "");
+  let sanitized = input.replaceAll(/[\x00-\x1F\x7F]/g, ""); // Remove control characters
+  sanitized = sanitized.replaceAll("\x1E", ""); // Remove specific control char
+  sanitized = sanitized.replaceAll("\x1F", "");
+  sanitized = sanitized.replaceAll("\x1D", "");
+  sanitized = sanitized.replaceAll("\x1C", "");
+  sanitized = sanitized.replaceAll("\x1B", "");
+  sanitized = sanitized.replaceAll("\x1A", "");
+  sanitized = sanitized.replaceAll("\x19", "");
+  sanitized = sanitized.replaceAll("\x18", "");
 
   // Trim whitespace
   sanitized = sanitized.trim();
@@ -136,7 +144,15 @@ function sanitizeFieldValue(
       // Only remove dangerous control characters, but preserve newlines and tabs
       return value
         .replaceAll(/[\x00-\x08\x0B-\x0C\x0E-\x1F\x7F]/g, "") // Remove control chars except \n (0x0A), \r (0x0D), \t (0x09)
-        .replaceAll("\x00", ""); // Remove null bytes
+        .replaceAll("\x00", "")
+        .replaceAll("\x1E", "")
+        .replaceAll("\x1F", "")
+        .replaceAll("\x1D", "")
+        .replaceAll("\x1C", "")
+        .replaceAll("\x1B", "")
+        .replaceAll("\x1A", "")
+        .replaceAll("\x19", "")
+        .replaceAll("\x18", "");
     }
     // For other string fields, use standard sanitization
     return sanitizeInputServer(value);
@@ -286,6 +302,14 @@ export function sanitizeForLogging(value: unknown): string {
   // SECURITY: Remove all control characters (including newlines, carriage returns, tabs, etc.)
   // This prevents log injection attacks where malicious input could break log format
   sanitized = sanitized.replaceAll(/[\x00-\x1F\x7F-\x9F]/g, "");
+  sanitized = sanitized.replaceAll("\x1E", "");
+  sanitized = sanitized.replaceAll("\x1F", "");
+  sanitized = sanitized.replaceAll("\x1D", "");
+  sanitized = sanitized.replaceAll("\x1C", "");
+  sanitized = sanitized.replaceAll("\x1B", "");
+  sanitized = sanitized.replaceAll("\x1A", "");
+  sanitized = sanitized.replaceAll("\x19", "");
+  sanitized = sanitized.replaceAll("\x18", "");
 
   // SECURITY: Remove any remaining newline-like patterns that could break log format
   sanitized = sanitized.replaceAll(/\r\n|\r|\n/g, " ");

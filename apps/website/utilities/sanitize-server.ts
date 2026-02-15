@@ -102,7 +102,15 @@ export function sanitizeInputServer(input: string): string {
   }
 
   // Remove null bytes and control characters
-  let sanitized = input.replaceAll(/[\x00-\x1F\x7F]/g, "");
+  let sanitized = input.replaceAll(/[\x00-\x1F\x7F]/g, ""); // Remove control characters
+  sanitized = sanitized.replaceAll("\x1E", ""); // Remove specific control char
+  sanitized = sanitized.replaceAll("\x1F", "");
+  sanitized = sanitized.replaceAll("\x1D", "");
+  sanitized = sanitized.replaceAll("\x1C", "");
+  sanitized = sanitized.replaceAll("\x1B", "");
+  sanitized = sanitized.replaceAll("\x1A", "");
+  sanitized = sanitized.replaceAll("\x19", "");
+  sanitized = sanitized.replaceAll("\x18", "");
 
   // Trim whitespace
   sanitized = sanitized.trim();
@@ -128,17 +136,17 @@ export function sanitizeObjectServer<T extends Record<string, unknown>>(
   const sanitized = { ...obj };
 
   // Fields that should preserve newlines and special characters (code, content, etc.)
-  const preserveNewlinesFields = [
+  const preserveNewlinesFields = new Set([
     "content",
     "explanation",
     "description",
     "starter_code",
     "code_template",
-  ];
+  ]);
 
   // Fields that should be completely skipped from sanitization (will use CSP protection instead)
   // These fields are preserved exactly as-is without any modification
-  const skipSanitizationFields = ["code"];
+  const skipSanitizationFields = new Set(["code"]);
 
   for (const key in sanitized) {
     if (typeof sanitized[key] === "string") {
