@@ -135,7 +135,7 @@ Consider:
   private static parseAIResponse(aiResponse: string): ValidationResult {
     try {
       // Try to extract JSON from the response
-      const jsonMatch = aiResponse.match(/\{[\s\S]*\}/);
+      const jsonMatch = /\{[\s\S]*\}/.exec(aiResponse);
       if (jsonMatch) {
         const parsed = JSON.parse(jsonMatch[0]);
         return {
@@ -151,8 +151,13 @@ Consider:
 
     // Fallback parsing
     const isCorrect = /correct|right|accurate|good/i.test(aiResponse);
-    const scoreMatch = aiResponse.match(/(\d+)\s*(?:%|percent|score)/i);
-    const score = scoreMatch ? parseInt(scoreMatch[1]) : isCorrect ? 100 : 0;
+    const scoreMatch = /(\d+)\s*(?:%|percent|score)/i.exec(aiResponse);
+    let score = 0;
+    if (scoreMatch) {
+      score = Number.parseInt(scoreMatch[1], 10);
+    } else if (isCorrect) {
+      score = 100;
+    }
 
     return {
       isCorrect,

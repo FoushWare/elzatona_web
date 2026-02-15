@@ -44,7 +44,7 @@ function removeAllHTMLTagsComprehensive(text: string): string {
   // Additional safety: Remove any remaining < and > characters that might be part of incomplete tags
   // This catches edge cases where tags are malformed or incomplete
   cleaned = cleaned.replace(/<[^>]*$/g, ""); // Remove incomplete tags at end
-  cleaned = cleaned.replace(/<[^<]*$/g, ""); // Remove any remaining < characters
+  cleaned = cleaned.replaceAll(/<[^<]*$/g, ""); // Remove any remaining < characters
 
   return cleaned.trim();
 }
@@ -200,7 +200,9 @@ export class MarkdownQuestionParser {
 
         // Extract question from header
         if (line.match(/^#{1,6}\s*\d+\./)) {
-          questionText = line.replace(/^#{1,6}\s*\d+\.?\s*/, "").trim();
+          questionText = /^#{1,6}\s*\d+\.?\s*/.exec(line)
+            ? line.replace(/^#{1,6}\s*\d+\.?\s*/, "").trim()
+            : line.trim();
           continue;
         }
 
@@ -530,8 +532,8 @@ export class MarkdownQuestionParser {
    * Extract points from question text
    */
   private static extractPoints(text: string): number {
-    const pointsMatch = text.match(/\[(\d+)\s*points?\]/i);
-    return pointsMatch ? parseInt(pointsMatch[1], 10) : 1;
+    const pointsMatch = /\[(\d+)\s*points?\]/i.exec(text);
+    return pointsMatch ? Number.parseInt(pointsMatch[1], 10) : 1;
   }
 
   /**
@@ -559,9 +561,9 @@ export class MarkdownQuestionParser {
       }
 
       // Check for valid option IDs
-      const validIds = question.options.map((opt) => opt.id);
+      const validIds = new Set(question.options.map((opt) => opt.id));
       const invalidAnswers = question.correctAnswers.filter(
-        (id) => !validIds.includes(id),
+        (id) => !validIds.has(id),
       );
       if (invalidAnswers.length > 0) {
         errors.push(
