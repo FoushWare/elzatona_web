@@ -111,6 +111,13 @@ export function sanitizeInputServer(input: string): string {
   sanitized = sanitized.replaceAll("\x1A", "");
   sanitized = sanitized.replaceAll("\x19", "");
   sanitized = sanitized.replaceAll("\x18", "");
+  sanitized = sanitized.replaceAll("\x1F", "");
+  sanitized = sanitized.replaceAll("\x1D", "");
+  sanitized = sanitized.replaceAll("\x1C", "");
+  sanitized = sanitized.replaceAll("\x1B", "");
+  sanitized = sanitized.replaceAll("\x1A", "");
+  sanitized = sanitized.replaceAll("\x19", "");
+  sanitized = sanitized.replaceAll("\x18", "");
 
   // Trim whitespace
   sanitized = sanitized.trim();
@@ -163,7 +170,15 @@ export function sanitizeObjectServer<T extends Record<string, unknown>>(
         const content = String(sanitized[key]);
         const cleaned = content
           .replaceAll(/[\x00-\x08\x0B-\x0C\x0E-\x1F\x7F]/g, "") // Remove control chars except \n (0x0A), \r (0x0D), \t (0x09)
-          .replaceAll("\x00", ""); // Remove null bytes
+          .replaceAll("\x00", "")
+          .replaceAll("\x1E", "")
+          .replaceAll("\x1F", "")
+          .replaceAll("\x1D", "")
+          .replaceAll("\x1C", "")
+          .replaceAll("\x1B", "")
+          .replaceAll("\x1A", "")
+          .replaceAll("\x19", "")
+          .replaceAll("\x18", "");
         sanitized[key] = cleaned as T[typeof key];
       } else {
         // For other string fields, use standard sanitization
