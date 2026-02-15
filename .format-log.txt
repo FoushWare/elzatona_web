@@ -1,0 +1,29 @@
+=== Format Fix Branches ===
+Sun Feb 15 06:21:54 EET 2026
+
+========================================
+Processing: fix/clear-text-logging
+========================================
+.github/workflows/auto-assign.yml 12ms
+.github/workflows/code-scanning-to-issues.yml 19ms
+QUICKSTART-CODE-SCANNING-ISSUES.md 31ms
+specs/006-code-scanning-to-issues/checklists/requirements.md 24ms
+Formatted 7 files
+[fix/clear-text-logging 26d0a3e6] style: fix Prettier formatting for CI compliance
+ 19 files changed, 621 insertions(+), 8 deletions(-)
+ create mode 100644 .checks.txt
+ create mode 100644 .cur-branch.txt
+ create mode 100644 .failed-log.txt
+ create mode 100644 .format-fix.sh
+ create mode 100644 .format-log.txt
+ create mode 100644 .pi.txt
+ create mode 100644 .pr-status.txt
+ create mode 100644 .push-err.txt
+ create mode 100644 .push-exit.txt
+ create mode 100644 .push-out.txt
+ create mode 100755 .rebase-all.sh
+ create mode 100644 .rebase-log.txt
+ create mode 100644 .runs.txt
+ create mode 100644 specs/007-codeql-bug-fixes/plan.md
+ create mode 100644 specs/007-codeql-bug-fixes/spec.md
+Committed formatting fix

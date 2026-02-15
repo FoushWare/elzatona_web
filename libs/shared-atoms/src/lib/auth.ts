@@ -49,8 +49,9 @@ export const signInAtom = atom(
     try {
       // This will be implemented with actual Firebase auth
       // For now, just a placeholder
-      // SECURITY: Never log passwords - only log email for debugging
-      console.log("Sign in attempt for:", email);
+      // SECURITY: Never log passwords or full emails
+      const maskedEmail = email.replace(/(.{2})(.*)(@.*)/, "$1***$3");
+      console.log("Sign in attempt for:", maskedEmail);
     } catch (error) {
       set(
         authErrorAtom,

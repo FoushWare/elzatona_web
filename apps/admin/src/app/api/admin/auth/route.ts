@@ -38,7 +38,8 @@ export async function POST(request: NextRequest) {
     const adminData = await userRepo.findAdminByEmail(email);
 
     if (!adminData) {
-      console.log(`[Admin Auth API] \u274c No admin found for ${email}`);
+      const maskedEmail = email.replace(/(.{2})(.*)(@.*)/, "$1***$3");
+      console.log(`[Admin Auth API] ❌ No admin found for ${maskedEmail}`);
       return NextResponse.json(
         { success: false, error: "Invalid email or password" },
         { status: 401 },
