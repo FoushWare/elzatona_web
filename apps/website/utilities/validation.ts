@@ -14,7 +14,7 @@ import { sanitizeInputServer } from "./sanitize-server";
 export const emailSchema = z
   .string()
   .min(1, "Email is required")
-  .email("Invalid email format")
+  .email({ message: "Invalid email format" })
   .transform((val) => sanitizeInputServer(val.toLowerCase().trim()));
 
 // Password validation
@@ -51,7 +51,7 @@ export const contentSchema = z
 // URL validation
 export const urlSchema = z
   .string()
-  .url("Invalid URL format")
+  .url({ message: "Invalid URL format" })
   .transform((val) => sanitizeInputServer(val));
 
 // ID validation (UUID or string ID)
@@ -93,7 +93,7 @@ export const questionSchema = z
     category: z.string().min(1).optional(), // Optional - used for lookup if category_id not provided
     category_id: z
       .union([
-        z.string().uuid("Invalid category ID format"),
+        z.string().uuid({ message: "Invalid category ID format" }),
         z.literal(""),
         z.undefined(),
         z.null(),
@@ -102,7 +102,7 @@ export const questionSchema = z
     topic: z.string().optional(), // Optional - used for lookup if topic_id not provided
     topic_id: z
       .union([
-        z.string().uuid("Invalid topic ID format"),
+        z.string().uuid({ message: "Invalid topic ID format" }),
         z.literal(""),
         z.undefined(),
         z.null(),
@@ -135,7 +135,7 @@ export const questionSchema = z
     time_limit: z.number().int().min(0).max(3600).optional(), // Accept snake_case (in seconds, max 1 hour)
     learningCardId: z
       .union([
-        z.string().uuid("Invalid learning card ID format"),
+        z.string().uuid({ message: "Invalid learning card ID format" }),
         z.string().min(1), // Allow non-UUID identifiers like "core-technologies"
         z.literal(""),
         z.undefined(),
@@ -144,7 +144,7 @@ export const questionSchema = z
       .optional(),
     learning_card_id: z
       .union([
-        z.string().uuid("Invalid learning card ID format"),
+        z.string().uuid({ message: "Invalid learning card ID format" }),
         z.string().min(1), // Allow non-UUID identifiers like "core-technologies"
         z.literal(""),
         z.undefined(),

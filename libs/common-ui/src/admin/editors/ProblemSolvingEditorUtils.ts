@@ -173,10 +173,10 @@ export const createTaskData = (
 export const copyToClipboard = async (content: string): Promise<void> => {
   try {
     await navigator.clipboard.writeText(content);
-    return Promise.resolve();
+    return;
   } catch (err) {
     console.error("Failed to copy code:", err);
-    return Promise.reject(err);
+    throw err;
   }
 };
 
@@ -309,5 +309,5 @@ export const validateFormData = (
 };
 
 export const sanitizeFunctionName = (name: string): string => {
-  return name.replace(/[^a-zA-Z0-9_]/g, "").replace(/^[0-9]/, "_");
+  return name.replace(/\W/g, "").replace(/^\d/, "_");
 };
