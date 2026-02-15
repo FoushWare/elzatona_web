@@ -4,6 +4,7 @@ import {
   getAdminApiUrl,
 } from "../../../../apps/website/admin.config";
 import { createClient } from "@supabase/supabase-js";
+import { generateId } from "./utils";
 
 const supabaseUrl = process.env["NEXT_PUBLIC_SUPABASE_URL"]!;
 const supabaseServiceRoleKey = process.env["SUPABASE_SERVICE_ROLE_KEY"]!;
@@ -300,6 +301,6 @@ export class AdminAuthService {
    * Generate unique admin ID
    */
   private static generateAdminId(): string {
-    return `admin_${Date.now()}_${Math.random().toString(36).substring(2, 11)}`;
+    return `admin_${Date.now()}_${generateId()}`;
   }
 }

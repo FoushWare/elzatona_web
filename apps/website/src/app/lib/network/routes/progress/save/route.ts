@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 
 import { createRepositoryFactoryFromEnv } from "@elzatona/database";
+import { generateId } from "@elzatona/utilities";
 import { getSupabaseClient } from "../../../../get-supabase-client";
 
 import { cookies } from "next/headers";
@@ -63,7 +64,7 @@ export async function POST(request: NextRequest) {
       // Security: Removed authentication token logging
       return NextResponse.json({
         success: true,
-        progressId: `progress_${Date.now()}_${Math.random().toString(36).substring(2, 11)}`,
+        progressId: `progress_${Date.now()}_${generateId()}`,
         message: "Progress saved successfully (development mode)",
         warning: "Using development mode - authentication not fully configured",
       });
@@ -76,7 +77,7 @@ export async function POST(request: NextRequest) {
 
       return NextResponse.json({
         success: true,
-        progressId: `progress_${Date.now()}_${Math.random().toString(36).substring(2, 11)}`,
+        progressId: `progress_${Date.now()}_${generateId()}`,
         message: "Progress saved successfully (development mode)",
         warning: "Using development mode - authentication not fully configured",
       });
@@ -158,7 +159,7 @@ export async function POST(request: NextRequest) {
 
     const savedProgress = {
       ...progressData,
-      id: `progress_${Date.now()}_${Math.random().toString(36).substring(2, 11)}`,
+      id: `progress_${Date.now()}_${generateId()}`,
       savedAt: new Date().toISOString(),
     };
 
@@ -192,7 +193,7 @@ export async function POST(request: NextRequest) {
     // Return success response for development instead of error
     return NextResponse.json({
       success: true,
-      progressId: `progress_${Date.now()}_${Math.random().toString(36).substring(2, 11)}`,
+      progressId: `progress_${Date.now()}_${generateId()}`,
       message: "Progress saved successfully (development mode)",
       warning: "Using development mode due to server error",
     });

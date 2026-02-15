@@ -1,4 +1,5 @@
 import { getSupabaseClient } from "./get-supabase-client";
+import { generateId } from "@elzatona/utilities";
 
 export interface BulkOperation {
   id: string;
@@ -85,7 +86,7 @@ export class BulkOperationsService {
     operationData?: Record<string, unknown>,
     createdBy: string = "admin",
   ): Promise<BulkOperation> {
-    const operationId = `bulk_${Date.now()}_${Math.random().toString(36).substring(2, 11)}`;
+    const operationId = `bulk_${Date.now()}_${generateId()}`;
 
     const operation: BulkOperation = {
       id: operationId,

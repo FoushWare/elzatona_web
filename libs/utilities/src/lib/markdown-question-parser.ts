@@ -3,6 +3,7 @@
 
 import { BulkQuestionData } from "./unified-question-schema";
 import { FilterXSS, type IFilterXSSOptions } from "xss";
+import { generateId } from "./utils";
 
 /**
  * Completely remove all HTML tags including incomplete ones
@@ -589,7 +590,7 @@ export class MarkdownQuestionParser {
    */
   static convertToBulkData(questions: MarkdownQuestion[]): BulkQuestionData {
     const unifiedQuestions = questions.map((question) => ({
-      id: `md_${Date.now()}_${Math.random().toString(36).substring(2, 11)}`,
+      id: `md_${Date.now()}_${generateId()}`,
       title: question.title,
       content: question.content,
       type: (question.type === "single"

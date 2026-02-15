@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useEffect } from "react";
+import { generateId } from "@elzatona/utilities";
 
 // Removed framer-motion dependency - using CSS animations instead
 import { CheckCircle, XCircle, Info, X } from "lucide-react";
@@ -100,7 +101,7 @@ export function useToast() {
   const [toasts, setToasts] = React.useState<Toast[]>([]);
 
   const addToast = React.useCallback((toast: Omit<Toast, "id">) => {
-    const id = Math.random().toString(36).substring(2, 11);
+    const id = generateId();
     const newToast: Toast = { ...toast, id };
     setToasts((prev) => [...prev, newToast]);
   }, []);

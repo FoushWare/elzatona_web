@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
+import { generateId } from "@elzatona/utilities";
 import { CheckCircle, XCircle, AlertCircle, X } from "lucide-react";
 
 export interface Notification {
@@ -104,7 +105,7 @@ export function NotificationContainer() {
     const handleNotification = (event: CustomEvent<Notification>) => {
       const notification = {
         ...event.detail,
-        id: Math.random().toString(36).substring(2, 11),
+        id: generateId(),
       };
       setNotifications((prev) => [...prev, notification]);
     };
