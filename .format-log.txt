@@ -1,0 +1,11 @@
+=== Format Fix Branches ===
+Sun Feb 15 06:21:54 EET 2026
+
+========================================
+Processing: fix/clear-text-logging
+========================================
+.github/workflows/auto-assign.yml 12ms
+.github/workflows/code-scanning-to-issues.yml 19ms
+QUICKSTART-CODE-SCANNING-ISSUES.md 31ms
+specs/006-code-scanning-to-issues/checklists/requirements.md 24ms
+Formatted 7 files
