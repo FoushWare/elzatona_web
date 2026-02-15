@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+// ...existing code...
 import React from "react";
 import { AdminFrontendTask, AdminFrontendTaskFormData } from "@elzatona/types";
 import {
@@ -15,10 +15,7 @@ import {
   FrontendTaskEditorMainContent,
 } from "./FrontendTaskEditorComponents";
 import {
-  extractFilesFromTree,
-  createTaskData,
-  copyToClipboard,
-  getCurrentFileContent,
+  // ...existing code...
 } from "./FrontendTaskEditorUtils";
 
 interface FrontendTaskEditorProps {
@@ -46,7 +43,6 @@ const useFrontendTaskEditorState = (task?: AdminFrontendTask | null) => {
   const { consoleOutput, setConsoleOutput } = useConsoleManagement();
 
   // Minimal local state
-  const [copied, setCopied] = React.useState(false);
   const [copied, setCopied] = React.useState(false);
   const [showPreview, setShowPreview] = React.useState(true);
   const [activeTab, setActiveTab] = React.useState<"description" | "solution">("description");
