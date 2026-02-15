@@ -103,7 +103,7 @@ export function sanitizeInputServer(input: string): string {
 
   // Remove null bytes and control characters
   let sanitized = input.replaceAll(/[\x00-\x1F\x7F]/g, ""); // Remove control characters
-  sanitized = sanitized.replaceAll("\x1E", ""); // Remove specific control char
+  // Removed explicit control character replacement; regex covers all control chars
   sanitized = sanitized.replaceAll("\x1F", "");
   sanitized = sanitized.replaceAll("\x1D", "");
   sanitized = sanitized.replaceAll("\x1C", "");
@@ -142,7 +142,6 @@ export function sanitizeObjectServer<T extends Record<string, unknown>>(
 
   const sanitized = { ...obj };
 
-  // Fields that should preserve newlines and special characters (code, content, etc.)
   const preserveNewlinesFields = new Set([
     "content",
     "explanation",
@@ -150,61 +149,38 @@ export function sanitizeObjectServer<T extends Record<string, unknown>>(
     "starter_code",
     "code_template",
   ]);
-
-  // Fields that should be completely skipped from sanitization (will use CSP protection instead)
-  // These fields are preserved exactly as-is without any modification
   const skipSanitizationFields = new Set(["code"]);
 
-  for (const key in sanitized) {
-    if (typeof sanitized[key] === "string") {
-      // For code field, skip sanitization entirely - we'll use CSP protection instead
-      if (skipSanitizationFields.includes(key)) {
-        // Don't sanitize code field at all - preserve it exactly as-is
-        // CSP (Content Security Policy) will protect against XSS attacks
-        // The field is already in sanitized object, just don't modify it
-        continue; // Skip processing this field - leave it as-is
+  function removeControlCharsExceptNewlines(str: string): string {
+    return str.replaceAll(/[\x00-\x08\x0B-\x0C\x0E-\x1F\x7F]/g, "");
+  }
+
+  Object.entries(sanitized).forEach(([key, value]) => {
+    if (typeof value === "string") {
+      if (skipSanitizationFields.has(key)) {
+        return;
       }
-      // For content and other rich text fields, preserve newlines - don't use sanitizeInputServer
-      else if (preserveNewlinesFields.includes(key)) {
-        // Only remove dangerous control characters, but preserve newlines and tabs
-        const content = String(sanitized[key]);
-        const cleaned = content
-          .replaceAll(/[\x00-\x08\x0B-\x0C\x0E-\x1F\x7F]/g, "") // Remove control chars except \n (0x0A), \r (0x0D), \t (0x09)
-          .replaceAll("\x00", "")
-          .replaceAll("\x1E", "")
-          .replaceAll("\x1F", "")
-          .replaceAll("\x1D", "")
-          .replaceAll("\x1C", "")
-          .replaceAll("\x1B", "")
-          .replaceAll("\x1A", "")
-          .replaceAll("\x19", "")
-          .replaceAll("\x18", "");
-        sanitized[key] = cleaned as T[typeof key];
+      if (preserveNewlinesFields.has(key)) {
+        sanitized[key] = removeControlCharsExceptNewlines(value) as T[typeof key];
       } else {
-        // For other string fields, use standard sanitization
-        sanitized[key] = sanitizeInputServer(sanitized[key]) as T[typeof key];
+        sanitized[key] = sanitizeInputServer(value) as T[typeof key];
       }
-    } else if (Array.isArray(sanitized[key])) {
-      sanitized[key] = sanitized[key].map((item: unknown) =>
+    } else if (Array.isArray(value)) {
+      sanitized[key] = value.map((item: unknown) =>
         typeof item === "string" ? sanitizeInputServer(item) : item,
       ) as T[typeof key];
     } else if (
-      sanitized[key] &&
-      typeof sanitized[key] === "object" &&
-      sanitized[key] !== null &&
-      !Array.isArray(sanitized[key])
+      value &&
+      typeof value === "object" &&
+      value !== null &&
+      !Array.isArray(value)
     ) {
-      // Check if it's a Date using a type guard
-      const value = sanitized[key] as unknown;
-      const isDate =
-        value && typeof value === "object" && value.constructor === Date;
+      const isDate = value.constructor === Date;
       if (!isDate) {
-        sanitized[key] = sanitizeObjectServer(
-          sanitized[key] as Record<string, unknown>,
-        ) as T[typeof key];
+        sanitized[key] = sanitizeObjectServer(value as Record<string, unknown>) as T[typeof key];
       }
     }
-  }
+  });
 
   return sanitized;
 }
