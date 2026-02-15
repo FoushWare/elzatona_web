@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { Code } from "lucide-react";
+import React from "react";
 import { AdminFrontendTask, AdminFrontendTaskFormData } from "@elzatona/types";
 import {
   useThemeManagement,
@@ -37,12 +37,9 @@ const useFrontendTaskEditorState = (task?: AdminFrontendTask | null) => {
   const {
     activeFile,
     fileTree,
-    expandedFolders,
     openFiles,
     showFileExplorer,
     setActiveFile,
-    setFileTree,
-    setExpandedFolders,
     setOpenFiles,
     setShowFileExplorer,
   } = useFileManagement(task);
@@ -50,13 +47,10 @@ const useFrontendTaskEditorState = (task?: AdminFrontendTask | null) => {
 
   // Minimal local state
   const [copied, setCopied] = React.useState(false);
+  const [copied, setCopied] = React.useState(false);
   const [showPreview, setShowPreview] = React.useState(true);
-  const [activeTab, setActiveTab] = React.useState<"description" | "solution">(
-    "description",
-  );
-  const [activeBrowserTab, setActiveBrowserTab] = React.useState<
-    "browser" | "console"
-  >("browser");
+  const [activeTab, setActiveTab] = React.useState<"description" | "solution">("description");
+  const [activeBrowserTab, setActiveBrowserTab] = React.useState<"browser" | "console">("browser");
   const [newHint, setNewHint] = React.useState("");
   const [newTag, setNewTag] = React.useState("");
   const [newFileName, setNewFileName] = React.useState("");
@@ -132,12 +126,9 @@ export default function FrontendTaskEditor({
     handleMouseDown,
     activeFile,
     fileTree,
-    expandedFolders,
     openFiles,
     showFileExplorer,
     setActiveFile,
-    setFileTree,
-    setExpandedFolders,
     setOpenFiles,
     setShowFileExplorer,
     consoleOutput,
@@ -165,36 +156,7 @@ export default function FrontendTaskEditor({
   } = editorState;
 
   // Simple form handlers
-  const handleSave = async () => {
-    const files = extractFilesFromTree(fileTree);
-    const taskData = createTaskData(formData, files);
-    await onSave(taskData);
-  };
-
-  const handleCopyCode = async () => {
-    try {
-      await copyToClipboard(getCurrentFileContent(openFiles, activeFile));
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
-    } catch (err) {
-      console.error("Failed to copy code:", err);
-    }
-  };
-
-  const handleReset = () => {
-    if (task?.files && task.files.length > 0) {
-      const files = task.files.map((file) => ({
-        id: file.id,
-        name: file.name,
-        type: file.type as any,
-        content: file.content,
-      }));
-      setOpenFiles(files);
-      setActiveFile(
-        files.find((f) => f.id === "app")?.id || files[0]?.id || null,
-      );
-    }
-  };
+  // ...existing code...
 
   return (
     <div
