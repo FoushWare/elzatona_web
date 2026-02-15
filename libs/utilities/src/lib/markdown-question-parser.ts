@@ -43,7 +43,7 @@ function removeAllHTMLTagsComprehensive(text: string): string {
 
   // Additional safety: Remove any remaining < and > characters that might be part of incomplete tags
   // This catches edge cases where tags are malformed or incomplete
-  cleaned = cleaned.replace(/<[^>]*$/g, ""); // Remove incomplete tags at end
+  cleaned = cleaned.replaceAll(/<[^>]*$/g, ""); // Remove incomplete tags at end
   cleaned = cleaned.replaceAll(/<[^<]*$/g, ""); // Remove any remaining < characters
 
   return cleaned.trim();
