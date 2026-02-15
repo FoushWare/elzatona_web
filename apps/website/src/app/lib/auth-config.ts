@@ -62,7 +62,11 @@ export const authOptions: NextAuthOptions = {
           };
         }
 
-        // TODO: Replace with real Firebase Auth validation
+        // Placeholder for real Firebase Auth validation
+        // Firebase Auth integration should be implemented here in production.
+        // Example:
+        // const user = await firebaseAuth.validate(credentials.email, credentials.password);
+        // if (user) return user;
         return null;
       },
     }),

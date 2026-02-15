@@ -1,3 +1,23 @@
+// Helper functions to flatten nested reduce/filter logic
+function countTopicsForCategories(categories, topics) {
+  return categories.reduce((total, cat) => {
+    const categoryTopics = topics.filter((topic) => topic.category_id === cat.id);
+    return total + categoryTopics.length;
+  }, 0);
+}
+
+function countQuestionsForCategories(categories, topics, questions) {
+  return categories.reduce((total, cat) => {
+    const categoryTopics = topics.filter((topic) => topic.category_id === cat.id);
+    return (
+      total +
+      categoryTopics.reduce((topicTotal, _topic) => {
+        const topicQuestions = questions.filter((q) => q.category_id === cat.id);
+        return topicTotal + topicQuestions.length;
+      }, 0)
+    );
+  }, 0);
+}
 "use client";
 
 import React, { useCallback } from "react";
@@ -164,33 +184,13 @@ export const LearningCardsManager: React.FC<LearningCardsManagerProps> = ({
                         variant="outline"
                         className="bg-purple-50 text-purple-700 dark:bg-purple-900 dark:text-purple-300"
                       >
-                        {cardCategories.reduce((total, cat) => {
-                          const categoryTopics = topics.filter(
-                            (topic) => topic.category_id === cat.id,
-                          );
-                          return total + categoryTopics.length;
-                        }, 0)}{" "}
-                        Topics
+                        {countTopicsForCategories(cardCategories, topics)} Topics
                       </Badge>
                       <Badge
                         variant="outline"
                         className="bg-green-50 text-green-700 dark:bg-green-900 dark:text-green-300"
                       >
-                        {cardCategories.reduce((total, cat) => {
-                          const categoryTopics = topics.filter(
-                            (topic) => topic.category_id === cat.id,
-                          );
-                          return (
-                            total +
-                            categoryTopics.reduce((topicTotal, _topic) => {
-                              const topicQuestions = questions.filter(
-                                (q) => q.category_id === cat.id,
-                              );
-                              return topicTotal + topicQuestions.length;
-                            }, 0)
-                          );
-                        }, 0)}{" "}
-                        Questions
+                        {countQuestionsForCategories(cardCategories, topics, questions)} Questions
                       </Badge>
                       <div className="flex items-center space-x-1 ml-2">
                         <Button

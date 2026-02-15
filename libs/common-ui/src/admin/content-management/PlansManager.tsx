@@ -1,3 +1,11 @@
+// Helper functions to flatten nested reduce/filter logic
+function countCategoriesForCard(card, categories) {
+  return categories.filter((cat) => cat.learning_card_id === card.id).length;
+}
+
+function countTopicsForCategory(category, topics) {
+  return topics.filter((topic) => topic.category_id === category.id).length;
+}
 "use client";
 
 import React from "react";
