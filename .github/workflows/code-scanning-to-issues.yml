@@ -3,17 +3,17 @@ name: Code Scanning to Issues
 on:
   # Run daily at midnight UTC
   schedule:
-    - cron: '0 0 * * *'
-  
+    - cron: "0 0 * * *"
+
   # Allow manual trigger
   workflow_dispatch:
     inputs:
       dry_run:
-        description: 'Run in dry-run mode (no issues created)'
+        description: "Run in dry-run mode (no issues created)"
         required: false
         type: boolean
         default: false
-  
+
   # Run after code scanning completes
   workflow_run:
     workflows: ["CodeQL Analysis"]
@@ -29,7 +29,7 @@ jobs:
   convert-alerts-to-issues:
     name: Convert Code Scanning Alerts to Issues
     runs-on: ubuntu-latest
-    
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -37,7 +37,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: "20"
 
       - name: Install dependencies
         run: |
