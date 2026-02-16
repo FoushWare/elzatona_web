@@ -1,27 +1,40 @@
 // Helper functions to flatten nested reduce/filter logic
 function countTopicsForCategories(categories, topics) {
   return categories.reduce((total, cat) => {
-    const categoryTopics = topics.filter((_topic) => _topic.category_id === cat.id);
+    const categoryTopics = topics.filter(
+      (_topic) => _topic.category_id === cat.id,
+    );
     return total + categoryTopics.length;
   }, 0);
 }
 
 function countQuestionsForCategories(categories, topics, questions) {
   return categories.reduce((total, cat) => {
-    const categoryTopics = topics.filter((topic) => topic.category_id === cat.id);
-    const categoryQuestionsCount = categoryTopics.reduce((topicTotal, topic) => {
-      return topicTotal + countQuestionsForCategory(cat.id, questions);
-    }, 0);
+    const categoryTopics = topics.filter(
+      (topic) => topic.category_id === cat.id,
+    );
+    const categoryQuestionsCount = categoryTopics.reduce(
+      (topicTotal, topic) => {
+        return topicTotal + countQuestionsForCategory(cat.id, questions);
+      },
+      0,
+    );
     return total + categoryQuestionsCount;
   }, 0);
 }
 
 // Helper functions to avoid nested filter operations
-function countQuestionsForCategory(categoryId: string, questions: AdminQuestion[]): number {
+function countQuestionsForCategory(
+  categoryId: string,
+  questions: AdminQuestion[],
+): number {
   return questions.filter((q) => q.category_id === categoryId).length;
 }
 
-function countQuestionsForTopic(topicId: string, questions: AdminQuestion[]): number {
+function countQuestionsForTopic(
+  topicId: string,
+  questions: AdminQuestion[],
+): number {
   return questions.filter((q) => q.topic_id === topicId).length;
 }
 
@@ -171,13 +184,19 @@ export const LearningCardsManager: React.FC<LearningCardsManagerProps> = ({
                         variant="outline"
                         className="bg-purple-50 text-purple-700 dark:bg-purple-900 dark:text-purple-300"
                       >
-                        {countTopicsForCategories(cardCategories, topics)} Topics
+                        {countTopicsForCategories(cardCategories, topics)}{" "}
+                        Topics
                       </Badge>
                       <Badge
                         variant="outline"
                         className="bg-green-50 text-green-700 dark:bg-green-900 dark:text-green-300"
                       >
-                        {countQuestionsForCategories(cardCategories, topics, questions)} Questions
+                        {countQuestionsForCategories(
+                          cardCategories,
+                          topics,
+                          questions,
+                        )}{" "}
+                        Questions
                       </Badge>
                       <div className="flex items-center space-x-1 ml-2">
                         <Button
@@ -247,7 +266,11 @@ export const LearningCardsManager: React.FC<LearningCardsManagerProps> = ({
                                   variant="outline"
                                   className="bg-green-50 text-green-700 dark:bg-green-900 dark:text-green-300"
                                 >
-                                  {countQuestionsForCategory(category.id, questions)} Questions
+                                  {countQuestionsForCategory(
+                                    category.id,
+                                    questions,
+                                  )}{" "}
+                                  Questions
                                 </Badge>
                               </div>
                             </div>
@@ -289,7 +312,11 @@ export const LearningCardsManager: React.FC<LearningCardsManagerProps> = ({
                                             variant="outline"
                                             className="bg-green-50 text-green-700 dark:bg-green-900 dark:text-green-300"
                                           >
-                                            {countQuestionsForTopic(topic.id, questions)} Questions
+                                            {countQuestionsForTopic(
+                                              topic.id,
+                                              questions,
+                                            )}{" "}
+                                            Questions
                                           </Badge>
                                         </div>
                                       </div>

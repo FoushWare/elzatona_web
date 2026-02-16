@@ -137,8 +137,9 @@ export function UserPreferencesProvider({
       if (theme === "system") {
         // Use system preference
         if (globalThis.window) {
-          const systemTheme = globalThis.window.matchMedia("(prefers-color-scheme: dark)")
-            .matches
+          const systemTheme = globalThis.window.matchMedia(
+            "(prefers-color-scheme: dark)",
+          ).matches
             ? "dark"
             : "light";
           document.documentElement.classList.toggle(
@@ -161,7 +162,9 @@ export function UserPreferencesProvider({
   // Listen for system theme changes when using system preference
   useEffect(() => {
     if (preferences.theme === "system" && globalThis.window) {
-      const mediaQuery = globalThis.window.matchMedia("(prefers-color-scheme: dark)");
+      const mediaQuery = globalThis.window.matchMedia(
+        "(prefers-color-scheme: dark)",
+      );
       const handleChange = () => {
         document.documentElement.classList.toggle("dark", mediaQuery.matches);
       };

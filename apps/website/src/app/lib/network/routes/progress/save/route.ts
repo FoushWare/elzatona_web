@@ -43,7 +43,10 @@ export async function POST(request: NextRequest) {
 
     const progressData = await parseProgressData(request);
     if (!progressData) {
-      return NextResponse.json({ error: "Invalid request body" }, { status: 400 });
+      return NextResponse.json(
+        { error: "Invalid request body" },
+        { status: 400 },
+      );
     }
 
     if (!token) {
@@ -56,7 +59,10 @@ export async function POST(request: NextRequest) {
     }
 
     if (!validateProgress(progressData)) {
-      return NextResponse.json({ error: "Invalid progress data" }, { status: 400 });
+      return NextResponse.json(
+        { error: "Invalid progress data" },
+        { status: 400 },
+      );
     }
     if (progressData.userId !== decodedToken.id) {
       return NextResponse.json({ error: "User ID mismatch" }, { status: 403 });
@@ -97,7 +103,9 @@ export async function POST(request: NextRequest) {
   }
 }
 
-function devModeResponse(warning = "Using development mode - authentication not fully configured") {
+function devModeResponse(
+  warning = "Using development mode - authentication not fully configured",
+) {
   return NextResponse.json({
     success: true,
     progressId: `progress_${Date.now()}_${Math.random().toString(36).substring(2, 11)}`,
@@ -106,7 +114,9 @@ function devModeResponse(warning = "Using development mode - authentication not 
   });
 }
 
-async function parseProgressData(request: NextRequest): Promise<ProgressData | null> {
+async function parseProgressData(
+  request: NextRequest,
+): Promise<ProgressData | null> {
   try {
     return await request.json();
   } catch (parseError) {
@@ -116,7 +126,9 @@ async function parseProgressData(request: NextRequest): Promise<ProgressData | n
 }
 
 function validateProgress(progressData: ProgressData): boolean {
-  return !!progressData.question_id && typeof progressData.isCorrect === "boolean";
+  return (
+    !!progressData.question_id && typeof progressData.isCorrect === "boolean"
+  );
 }
 
 async function saveProgressToRepo(userId: string, progressData: ProgressData) {
@@ -130,7 +142,10 @@ async function saveProgressToRepo(userId: string, progressData: ProgressData) {
     });
     console.log("✅ Progress saved to repository successfully");
   } catch (repoError) {
-    console.error("❌ Error saving progress to repository:", sanitizeForLog(repoError));
+    console.error(
+      "❌ Error saving progress to repository:",
+      sanitizeForLog(repoError),
+    );
   }
 }
 
@@ -151,7 +166,8 @@ async function updateLearningPlan(progressData: ProgressData) {
             questions_completed: (currentPlan.questions_completed || 0) + 1,
             progress: Math.round(
               (((currentPlan.questions_completed || 0) + 1) /
-                (currentPlan.total_questions || 1)) * 100,
+                (currentPlan.total_questions || 1)) *
+                100,
             ),
             updated_at: new Date().toISOString(),
           })
@@ -162,7 +178,10 @@ async function updateLearningPlan(progressData: ProgressData) {
         console.warn("⚠️ Learning plan not found, skipping plan update");
       }
     } catch (planError) {
-      console.error("❌ Error updating learning plan:", sanitizeForLog(planError));
+      console.error(
+        "❌ Error updating learning plan:",
+        sanitizeForLog(planError),
+      );
     }
   }
 }

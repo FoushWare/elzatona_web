@@ -1,6 +1,8 @@
 "use client";
 
 import { useEffect, useState, Suspense } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { createClient } from "@supabase/supabase-js";
 import { Loader2, CheckCircle, XCircle } from "lucide-react";
 
 const supabaseUrl = process.env["NEXT_PUBLIC_SUPABASE_URL"] || "";

@@ -23,7 +23,9 @@ const supabase = createClient(supabaseUrl, supabaseServiceRoleKey, {
     persistSession: false,
   },
 });
-console.log("✅ Supabase server initialized successfully with service role key!");
+console.log(
+  "✅ Supabase server initialized successfully with service role key!",
+);
 
 // Export Supabase client for server-side use
 export { supabase };

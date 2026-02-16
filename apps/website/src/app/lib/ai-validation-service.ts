@@ -134,10 +134,11 @@ Consider:
    */
   private static parseAIResponse(aiResponse: string): ValidationResult {
     try {
-      // Try to extract JSON from the response
-      const jsonMatch = /\{[\s\S]*\}/.exec(aiResponse);
-      if (jsonMatch) {
-        const parsed = JSON.parse(jsonMatch[0]);
+      // Extract JSON from the response using indexOf to avoid ReDoS
+      const start = aiResponse.indexOf("{");
+      const end = aiResponse.lastIndexOf("}");
+      if (start !== -1 && end > start) {
+        const parsed = JSON.parse(aiResponse.substring(start, end + 1));
         return {
           isCorrect: parsed.isCorrect || false,
           score: Math.max(0, Math.min(100, parsed.score || 0)),

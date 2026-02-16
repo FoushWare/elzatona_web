@@ -33,19 +33,20 @@ export class MarkdownQuestionParser {
   private static readonly QUESTION_PATTERNS = {
     // GitHub-style multiple choice with code blocks and options
     multipleChoice:
-      /^#{1,6}\s*(\d+)\.?\s*(.*?)\n```[\s\S]*?```\n((?:-?\s*[A-Z]:\s*.*\n?)+)/gm,
+      /^#{1,6}\s*(\d+)\.?\s*([^\n]*)\n```[^`]*```\n((?:-?\s*[A-Z]:\s*[^\n]*\n)+)/gm,
     // Simple multiple choice format
-    simpleMultipleChoice: /^(\d+\.?\s*.*?)\n((?:[a-zA-Z]\)\s*.*(?:\n|$))+)/gm,
+    simpleMultipleChoice:
+      /^(\d+\.?\s*[^\n]*)\n((?:[a-zA-Z]\)\s*[^\n]*(?:\n|$))+)/gm,
     // True/False questions
     trueFalse:
-      /^#{1,6}\s*(\d+)\.?\s*(.*?)\n```[\s\S]*?```\n-?\s*(True|False)\s*\[(?:correct|x|✓)\]/gm,
+      /^#{1,6}\s*(\d+)\.?\s*([^\n]*)\n```[^`]*```\n-?\s*(True|False)\s*\[(?:correct|x|✓)\]/gm,
     // Open-ended questions
     openEnded:
-      /^#{1,6}\s*(\d+)\.?\s*(.*?)\n```[\s\S]*?```\n(?:-?\s*Answer:?\s*(.*))?$/gm,
+      /^#{1,6}\s*(\d+)\.?\s*([^\n]*)\n```[^`]*```\n(?:-?\s*Answer:?\s*([^\n]*))?$/gm,
   };
 
   private static readonly OPTION_PATTERN =
-    /^([a-zA-Z])\)\s*(.*?)(?:\s*\[(?:correct|x|✓)\])?$/gm;
+    /^([a-zA-Z])\)\s*([^\n]*?)(?:\s*\[(?:correct|x|✓)\])?$/gm;
 
   /**
    * Parse markdown content to extract questions
@@ -247,7 +248,7 @@ export class MarkdownQuestionParser {
 
       // Find all option lines (a), b), c), etc.)
       const optionLines = lines.filter((line) =>
-        /^[a-zA-Z]\)\s/.exec(line.trim())),
+        /^[a-zA-Z]\)\s/.exec(line.trim()),
       );
 
       if (optionLines.length < 2) continue;
@@ -424,10 +425,13 @@ export class MarkdownQuestionParser {
    */
   private static extractExplanation(section: string): string | undefined {
     // First try to extract from HTML details/summary sections
-    const detailsMatch = /<details>[\s\S]*?<summary>[\s\S]*?<\/summary>[\s\S]*?<p>[\s\S]*?<\/p>[\s\S]*?<\/details>/i.exec(section);
+    const detailsMatch =
+      /<details>[^<]*(?:<(?!\/details>)[^<]*)*<\/details>/i.exec(section);
     if (detailsMatch) {
       // Extract content between <p> tags, removing HTML tags
-      const pMatch = /<p>([\s\S]*?)<\/p>/i.exec(detailsMatch[0]);
+      const pMatch = /<p>([^<]*(?:<(?!\/p>)[^<]*)*)<\/p>/i.exec(
+        detailsMatch[0],
+      );
       if (pMatch) {
         // Use comprehensive HTML tag removal function
         const cleaned = removeAllHTMLTags(pMatch[1]);
@@ -437,7 +441,7 @@ export class MarkdownQuestionParser {
       }
     }
     // Fallback to simple explanation format
-    const explanationMatch = /explanation[:\s]+(.*?)(?:\n\n|\n$|$)/i.exec(section);
+    const explanationMatch = /explanation:\s*([^\n]*)(?:\n|$)/i.exec(section);
     return explanationMatch ? explanationMatch[1].trim() : undefined;
   }
 
@@ -445,7 +449,7 @@ export class MarkdownQuestionParser {
    * Extract category from section
    */
   private static extractCategory(section: string): string | undefined {
-    const categoryMatch = /category[:\s]+(.*?)(?:\n|$)/i.exec(section);
+    const categoryMatch = /category:\s*([^\n]*)(?:\n|$)/i.exec(section);
     return categoryMatch ? categoryMatch[1].trim() : undefined;
   }
 
@@ -453,7 +457,8 @@ export class MarkdownQuestionParser {
    * Extract learning path from section
    */
   private static extractLearningPath(section: string): string | undefined {
-    const learningPathMatch = /(?:learning[_\s]?path|learningpath)[:\s]+(.*?)(?:\n|$)/i.exec(section);
+    const learningPathMatch =
+      /(?:learning[_\s]?path|learningpath):\s*([^\n]*)(?:\n|$)/i.exec(section);
     return learningPathMatch ? learningPathMatch[1].trim() : undefined;
   }
 
@@ -461,7 +466,7 @@ export class MarkdownQuestionParser {
    * Extract topic from section
    */
   private static extractTopic(section: string): string | undefined {
-    const topicMatch = /topic[:\s]+(.*?)(?:\n|$)/i.exec(section);
+    const topicMatch = /topic:\s*([^\n]*)(?:\n|$)/i.exec(section);
     return topicMatch ? topicMatch[1].trim() : undefined;
   }
 

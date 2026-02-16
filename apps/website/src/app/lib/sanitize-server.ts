@@ -94,7 +94,11 @@ function removeControlChars(value: string): string {
   let sanitized = "";
   for (const character of value) {
     const codePoint = character.codePointAt(0) ?? 0;
-    if (codePoint >= 32 && codePoint !== 127 && (codePoint < 128 || codePoint > 159)) {
+    if (
+      codePoint >= 32 &&
+      codePoint !== 127 &&
+      (codePoint < 128 || codePoint > 159)
+    ) {
       sanitized += character;
     }
   }
@@ -106,7 +110,8 @@ function removeControlCharsExceptNewlines(value: string): string {
   for (const character of value) {
     const codePoint = character.codePointAt(0) ?? 0;
     const isAllowedPrintable = codePoint >= 32 && codePoint !== 127;
-    const isAllowedWhitespace = character === "\n" || character === "\r" || character === "\t";
+    const isAllowedWhitespace =
+      character === "\n" || character === "\r" || character === "\t";
 
     if (isAllowedPrintable || isAllowedWhitespace) {
       sanitized += character;

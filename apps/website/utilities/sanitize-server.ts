@@ -39,11 +39,11 @@ const xssOptions: IFilterXSSOptions = {
       if (value.startsWith("http://") || value.startsWith("https://")) {
         // Escape attribute value manually
         const escaped = value
-          .replaceAll('&', '&amp;')
-          .replaceAll('"', '&quot;')
-          .replaceAll("'", '&#x27;')
-          .replaceAll('<', '&lt;')
-          .replaceAll('>', '&gt;');
+          .replaceAll("&", "&amp;")
+          .replaceAll('"', "&quot;")
+          .replaceAll("'", "&#x27;")
+          .replaceAll("<", "&lt;")
+          .replaceAll(">", "&gt;");
         return `${name}="${escaped}"`;
       }
       return "";
@@ -124,7 +124,8 @@ function removeControlCharsExceptNewlines(str: string): string {
   for (const character of str) {
     const codePoint = character.codePointAt(0) ?? 0;
     const isAllowedPrintable = codePoint >= 32 && codePoint !== 127;
-    const isAllowedWhitespace = character === "\n" || character === "\r" || character === "\t";
+    const isAllowedWhitespace =
+      character === "\n" || character === "\r" || character === "\t";
 
     if (isAllowedPrintable || isAllowedWhitespace) {
       sanitized += character;

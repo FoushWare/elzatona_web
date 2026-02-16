@@ -168,7 +168,10 @@ export class SectionService {
         } catch (saveError) {
           console.error("Error saving default sections:", saveError);
         }
-        console.warn("Default sections initialized due to missing file:", _error);
+        console.warn(
+          "Default sections initialized due to missing file:",
+          _error,
+        );
         return {
           success: true,
           message: "Default sections initialized successfully",

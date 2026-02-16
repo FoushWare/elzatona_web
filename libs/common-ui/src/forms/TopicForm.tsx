@@ -131,7 +131,7 @@ export const TopicForm: React.FC<TopicFormProps> = ({
   }, [formDataName, topic, isJsonMode, setFormData]);
 
   // Helper: Extract topics array from parsed JSON
-  const extractTopicsArray = (parsed: unknown): Array<{name?: string}> => {
+  const extractTopicsArray = (parsed: unknown): Array<{ name?: string }> => {
     if (Array.isArray(parsed)) {
       return parsed;
     }
@@ -141,7 +141,7 @@ export const TopicForm: React.FC<TopicFormProps> = ({
       "topics" in parsed &&
       Array.isArray((parsed as { topics: unknown }).topics)
     ) {
-      return (parsed as { topics: Array<{name?: string}> }).topics;
+      return (parsed as { topics: Array<{ name?: string }> }).topics;
     }
     return [];
   };

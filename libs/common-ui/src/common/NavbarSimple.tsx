@@ -59,24 +59,26 @@ const AuthSection: React.FC<{
     <div className="px-4 py-2 rounded-lg font-medium bg-gray-200 dark:bg-gray-700 text-gray-500 dark:text-gray-400">
       Loading...
     </div>
-  ) : (() => {
-    const buttonClasses = isScrolled
-      ? "bg-red-600 hover:bg-red-700 text-white shadow-md hover:shadow-lg"
-      : "bg-red-500 hover:bg-red-600 text-white shadow-md hover:shadow-lg";
+  ) : (
+    (() => {
+      const buttonClasses = isScrolled
+        ? "bg-red-600 hover:bg-red-700 text-white shadow-md hover:shadow-lg"
+        : "bg-red-500 hover:bg-red-600 text-white shadow-md hover:shadow-lg";
 
-    return stableAuthState.isAuthenticated ? (
-      <button
-        onClick={handleSignOut}
-        className={`px-4 py-2 rounded-lg font-medium transition-colors duration-200 ${buttonClasses}`}
-      >
-        Logout
-      </button>
-    ) : (
-      <Link href="/auth" className={getAuthLinkClassName("/auth")}>
-        Sign In
-      </Link>
-    );
-  })();
+      return stableAuthState.isAuthenticated ? (
+        <button
+          onClick={handleSignOut}
+          className={`px-4 py-2 rounded-lg font-medium transition-colors duration-200 ${buttonClasses}`}
+        >
+          Logout
+        </button>
+      ) : (
+        <Link href="/auth" className={getAuthLinkClassName("/auth")}>
+          Sign In
+        </Link>
+      );
+    })()
+  );
 };
 
 // Helper function to get loading state styling
@@ -398,24 +400,26 @@ export const NavbarSimple: React.FC = () => {
               <div className="px-4 py-2 rounded-lg font-medium bg-gray-200 dark:bg-gray-700 text-gray-500 dark:text-gray-400">
                 Loading...
               </div>
-            ) : (() => {
-              const buttonClasses = isScrolled
-                ? "bg-red-600 hover:bg-red-700 text-white shadow-md hover:shadow-lg"
-                : "bg-red-500 hover:bg-red-600 text-white shadow-md hover:shadow-lg";
+            ) : (
+              (() => {
+                const buttonClasses = isScrolled
+                  ? "bg-red-600 hover:bg-red-700 text-white shadow-md hover:shadow-lg"
+                  : "bg-red-500 hover:bg-red-600 text-white shadow-md hover:shadow-lg";
 
-              return stableAuthState.isAuthenticated ? (
-                <button
-                  onClick={handleSignOut}
-                  className={`px-4 py-2 rounded-lg font-medium transition-colors duration-200 ${buttonClasses}`}
-                >
-                  Logout
-                </button>
-              ) : (
-                <Link href="/auth" className={getAuthLinkClassName("/auth")}>
-                  Sign In
-                </Link>
-              );
-            })()}
+                return stableAuthState.isAuthenticated ? (
+                  <button
+                    onClick={handleSignOut}
+                    className={`px-4 py-2 rounded-lg font-medium transition-colors duration-200 ${buttonClasses}`}
+                  >
+                    Logout
+                  </button>
+                ) : (
+                  <Link href="/auth" className={getAuthLinkClassName("/auth")}>
+                    Sign In
+                  </Link>
+                );
+              })()
+            )}
 
             {/* Theme Toggle */}
             <button
@@ -533,16 +537,15 @@ export const NavbarSimple: React.FC = () => {
                       ? "/browse-practice-questions"
                       : "/features/guided-learning"
                   }
-                  className={`block text-base sm:text-lg font-medium py-2 px-3 rounded-lg transition-colors ${
-                    (() => {
-                      const targetHref = userType === "self-directed"
+                  className={`block text-base sm:text-lg font-medium py-2 px-3 rounded-lg transition-colors ${(() => {
+                    const targetHref =
+                      userType === "self-directed"
                         ? "/browse-practice-questions"
                         : "/features/guided-learning";
-                      return isActiveLink(targetHref)
-                        ? "text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-900/30 font-semibold"
-                        : "text-gray-900 dark:text-white hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-gray-50 dark:hover:bg-gray-800";
-                    })()
-                  }`}
+                    return isActiveLink(targetHref)
+                      ? "text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-900/30 font-semibold"
+                      : "text-gray-900 dark:text-white hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-gray-50 dark:hover:bg-gray-800";
+                  })()}`}
                   onClick={() => setIsOpen(false)}
                 >
                   {userType === "self-directed" ? "Browse" : "Learn"}
@@ -716,34 +719,36 @@ export const NavbarSimple: React.FC = () => {
                     <div className="block w-full text-center py-2.5 sm:py-3 font-medium text-sm sm:text-base rounded-lg bg-gray-200 dark:bg-gray-700 text-gray-500 dark:text-gray-400">
                       Loading...
                     </div>
-                  ) : (() => {
-                    return stableAuthState.isAuthenticated ? (
-                      <button
-                        onClick={() => {
-                          handleSignOut();
-                          setIsOpen(false);
-                        }}
-                        className="block w-full text-center py-2.5 sm:py-3 font-medium transition-colors duration-200 text-sm sm:text-base rounded-lg bg-red-600 hover:bg-red-700 text-white shadow-md hover:shadow-lg"
-                      >
-                        Logout
-                      </button>
-                    ) : (
-                      <Link
-                        href="/auth"
-                        className={(() => {
-                          const baseClasses =
-                            "block w-full text-center py-2.5 sm:py-3 font-medium transition-colors duration-200 text-sm sm:text-base rounded-lg";
-                          if (isActiveLink("/auth")) {
-                            return `${baseClasses} text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-900/30 font-semibold`;
-                          }
-                          return `${baseClasses} text-gray-700 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-gray-50 dark:hover:bg-gray-800`;
-                        })()}
-                        onClick={() => setIsOpen(false)}
-                      >
-                        Sign In
-                      </Link>
-                    );
-                  })()}
+                  ) : (
+                    (() => {
+                      return stableAuthState.isAuthenticated ? (
+                        <button
+                          onClick={() => {
+                            handleSignOut();
+                            setIsOpen(false);
+                          }}
+                          className="block w-full text-center py-2.5 sm:py-3 font-medium transition-colors duration-200 text-sm sm:text-base rounded-lg bg-red-600 hover:bg-red-700 text-white shadow-md hover:shadow-lg"
+                        >
+                          Logout
+                        </button>
+                      ) : (
+                        <Link
+                          href="/auth"
+                          className={(() => {
+                            const baseClasses =
+                              "block w-full text-center py-2.5 sm:py-3 font-medium transition-colors duration-200 text-sm sm:text-base rounded-lg";
+                            if (isActiveLink("/auth")) {
+                              return `${baseClasses} text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-900/30 font-semibold`;
+                            }
+                            return `${baseClasses} text-gray-700 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-gray-50 dark:hover:bg-gray-800`;
+                          })()}
+                          onClick={() => setIsOpen(false)}
+                        >
+                          Sign In
+                        </Link>
+                      );
+                    })()
+                  )}
                 </>
               )}
             </div>

@@ -53,14 +53,17 @@ export const contentSchema = z
 // URL validation
 export const urlSchema = z
   .string()
-  .refine((val) => {
-    try {
-      new URL(val);
-      return true;
-    } catch {
-      return false;
-    }
-  }, { message: "Invalid URL format" })
+  .refine(
+    (val) => {
+      try {
+        new URL(val);
+        return true;
+      } catch {
+        return false;
+      }
+    },
+    { message: "Invalid URL format" },
+  )
   .transform((val) => sanitizeInputServer(val));
 
 // ID validation (UUID or string ID)
@@ -102,9 +105,14 @@ export const questionSchema = z
     category: z.string().min(1).optional(), // Optional - used for lookup if category_id not provided
     category_id: z
       .union([
-        z.string().refine((val) => {
-          return /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(val);
-        }, { message: "Invalid category ID format" }),
+        z.string().refine(
+          (val) => {
+            return /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(
+              val,
+            );
+          },
+          { message: "Invalid category ID format" },
+        ),
         z.literal(""),
         z.undefined(),
         z.null(),
@@ -113,9 +121,14 @@ export const questionSchema = z
     topic: z.string().optional(), // Optional - used for lookup if topic_id not provided
     topic_id: z
       .union([
-        z.string().refine((val) => {
-          return /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(val);
-        }, { message: "Invalid topic ID format" }),
+        z.string().refine(
+          (val) => {
+            return /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(
+              val,
+            );
+          },
+          { message: "Invalid topic ID format" },
+        ),
         z.literal(""),
         z.undefined(),
         z.null(),
@@ -148,10 +161,17 @@ export const questionSchema = z
     time_limit: z.number().int().min(0).max(3600).optional(), // Accept snake_case (in seconds, max 1 hour)
     learningCardId: z
       .union([
-        z.string().refine((val) => {
-          // UUID v4 regex
-          return /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(val) || val.length > 0;
-        }, { message: "Invalid learning card ID format" }),
+        z.string().refine(
+          (val) => {
+            // UUID v4 regex
+            return (
+              /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(
+                val,
+              ) || val.length > 0
+            );
+          },
+          { message: "Invalid learning card ID format" },
+        ),
         z.literal(""),
         z.undefined(),
         z.null(),
@@ -159,9 +179,16 @@ export const questionSchema = z
       .optional(),
     learning_card_id: z
       .union([
-        z.string().refine((val) => {
-          return /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(val) || val.length > 0;
-        }, { message: "Invalid learning card ID format" }),
+        z.string().refine(
+          (val) => {
+            return (
+              /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(
+                val,
+              ) || val.length > 0
+            );
+          },
+          { message: "Invalid learning card ID format" },
+        ),
         z.literal(""),
         z.undefined(),
         z.null(),
@@ -304,7 +331,11 @@ function cleanupDataObject(dataObj: Record<string, unknown>): void {
  */
 function cleanupOptions(dataObj: Record<string, unknown>): void {
   if (dataObj.options !== undefined && dataObj.options !== null) {
-    if (typeof dataObj.options === "string" || !Array.isArray(dataObj.options) || (Array.isArray(dataObj.options) && dataObj.options.length === 0)) {
+    if (
+      typeof dataObj.options === "string" ||
+      !Array.isArray(dataObj.options) ||
+      (Array.isArray(dataObj.options) && dataObj.options.length === 0)
+    ) {
       delete dataObj.options;
     }
   }
@@ -316,7 +347,11 @@ function cleanupOptions(dataObj: Record<string, unknown>): void {
 function cleanupCategories(dataObj: Record<string, unknown>): void {
   if (dataObj.categories && Array.isArray(dataObj.categories)) {
     if (dataObj.categories.length > 0 && dataObj.categories[0]) {
-      dataObj.category = dataObj.categories[0]?.name || dataObj.categories[0]?.title || dataObj.category || "";
+      dataObj.category =
+        dataObj.categories[0]?.name ||
+        dataObj.categories[0]?.title ||
+        dataObj.category ||
+        "";
     }
     delete dataObj.categories;
   }
@@ -328,7 +363,11 @@ function cleanupCategories(dataObj: Record<string, unknown>): void {
 function cleanupTopics(dataObj: Record<string, unknown>): void {
   if (dataObj.topics && Array.isArray(dataObj.topics)) {
     if (dataObj.topics.length > 0 && dataObj.topics[0]) {
-      dataObj.topic = dataObj.topics[0]?.name || dataObj.topics[0]?.title || dataObj.topic || "";
+      dataObj.topic =
+        dataObj.topics[0]?.name ||
+        dataObj.topics[0]?.title ||
+        dataObj.topic ||
+        "";
     }
     delete dataObj.topics;
   }
@@ -339,7 +378,10 @@ function cleanupTopics(dataObj: Record<string, unknown>): void {
  */
 function cleanupMetadata(dataObj: Record<string, unknown>): void {
   if (dataObj.metadata !== undefined && dataObj.metadata !== null) {
-    if (typeof dataObj.metadata !== "object" || Array.isArray(dataObj.metadata)) {
+    if (
+      typeof dataObj.metadata !== "object" ||
+      Array.isArray(dataObj.metadata)
+    ) {
       delete dataObj.metadata;
     }
   }
@@ -348,22 +390,31 @@ function cleanupMetadata(dataObj: Record<string, unknown>): void {
 /**
  * Extract error message and path from ZodError
  */
-function extractZodErrorDetails(error: z.ZodError): { message: string; path: string } {
+function extractZodErrorDetails(error: z.ZodError): {
+  message: string;
+  path: string;
+} {
   const issues = error.issues || [];
   if (issues.length === 0) {
     return { message: "Validation failed", path: "root" };
   }
 
   const primaryIssue = issues[0];
-  const errorPath = primaryIssue?.path && primaryIssue.path.length > 0 ? primaryIssue.path.join(".") : "root";
+  const errorPath =
+    primaryIssue?.path && primaryIssue.path.length > 0
+      ? primaryIssue.path.join(".")
+      : "root";
   const errorMessage = primaryIssue?.message || "Validation failed";
 
   if (issues.length > 1) {
-    console.warn("Multiple validation errors:", issues.map((e) => ({
-      path: e.path?.join(".") || "root",
-      message: e.message,
-      code: e.code
-    })));
+    console.warn(
+      "Multiple validation errors:",
+      issues.map((e) => ({
+        path: e.path?.join(".") || "root",
+        message: e.message,
+        code: e.code,
+      })),
+    );
   }
 
   return { message: errorMessage, path: errorPath };
@@ -400,6 +451,9 @@ export function validateAndSanitize<T>(
       return { success: false, error: `Validation error: ${error.message}` };
     }
 
-    return { success: false, error: `Validation failed: ${typeof error === "string" ? error : "Unknown error"}` };
+    return {
+      success: false,
+      error: `Validation failed: ${typeof error === "string" ? error : "Unknown error"}`,
+    };
   }
 }

@@ -1,10 +1,17 @@
 // Helper functions to avoid nested filter operations
-function countSelectedQuestionsForPlan(planId: string, planQuestions: Set<string>): number {
-  return Array.from(planQuestions).filter((pq) => pq.startsWith(`${planId}-`)).length;
+function countSelectedQuestionsForPlan(
+  planId: string,
+  planQuestions: Set<string>,
+): number {
+  return Array.from(planQuestions).filter((pq) => pq.startsWith(`${planId}-`))
+    .length;
 }
 
 // Helper function to get topics for a category
-function getTopicsForCategory(categoryId: string, topics: Array<{ category_id: string }>): Array<{ category_id: string }> {
+function getTopicsForCategory(
+  categoryId: string,
+  topics: Array<{ category_id: string }>,
+): Array<{ category_id: string }> {
   return topics.filter((topic) => topic.category_id === categoryId);
 }
 
@@ -306,7 +313,10 @@ export const PlansManager: React.FC<PlansManagerProps> = ({
                             {expandedPlanCards.has(card.id) && (
                               <div className="ml-6 space-y-4">
                                 {cardCategories.map((category) => {
-                                  const categoryTopics = getTopicsForCategory(category.id, topics);
+                                  const categoryTopics = getTopicsForCategory(
+                                    category.id,
+                                    topics,
+                                  );
 
                                   return (
                                     <div
@@ -393,7 +403,11 @@ export const PlansManager: React.FC<PlansManagerProps> = ({
                                                       variant="outline"
                                                       className="text-[10px] bg-green-50"
                                                     >
-                                                      {countSelectedQuestionsForPlan(plan.id, planQuestions)} Selected
+                                                      {countSelectedQuestionsForPlan(
+                                                        plan.id,
+                                                        planQuestions,
+                                                      )}{" "}
+                                                      Selected
                                                     </Badge>
                                                   </div>
                                                 </div>
