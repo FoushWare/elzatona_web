@@ -48,7 +48,7 @@ vi.mock("url", () => ({
     map: Map<string, string>;
     constructor(params: string) {
       this.map = new Map(
-        params.split("&").map((p) => p.split("=") as [string, string])
+        params.split("&").map((p) => p.split("=") as [string, string]),
       );
     }
     toString() {

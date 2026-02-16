@@ -181,7 +181,7 @@ export function sanitizeObjectServer<T extends Record<string, unknown>>(
     return obj;
   }
 
-  const sanitized = { ...obj };
+  const sanitized: Record<string, unknown> = { ...obj };
 
   const preserveNewlinesFields = new Set([
     "content",
@@ -198,10 +198,10 @@ export function sanitizeObjectServer<T extends Record<string, unknown>>(
       value,
       preserveNewlinesFields,
       skipSanitizationFields,
-    ) as T[typeof key];
+    );
   }
 
-  return sanitized;
+  return sanitized as T;
 }
 
 /**
