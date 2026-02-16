@@ -56,15 +56,7 @@ const useFrontendTaskEditorState = (task?: AdminFrontendTask | null) => {
 
   return {
     // Theme management
-    theme,
-    setTheme,
-    isDark,
-    // Form data
-    formData,
-    setFormData,
-    // Panel layout
-    leftPanelWidth,
-    rightPanelWidth,
+  const { showFileExplorer, setShowFileExplorer } = useFileManagement(task);
     handleMouseDown,
     // File management
     activeFile,

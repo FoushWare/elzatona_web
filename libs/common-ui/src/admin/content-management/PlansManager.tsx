@@ -6,7 +6,11 @@ function countCategoriesForCard(card, categories) {
 function countTopicsForCategory(category, topics) {
   return topics.filter((topic) => topic.category_id === category.id).length;
 }
-"use client";
+
+// Helper functions to avoid nested filter operations
+function countSelectedQuestionsForPlan(planId: string, planQuestions: Set<string>): number {
+  return Array.from(planQuestions).filter((pq) => pq.startsWith(`${planId}-`)).length;
+}
 
 import React from "react";
 import {
@@ -360,10 +364,6 @@ export const PlansManager: React.FC<PlansManagerProps> = ({
                                       ) && (
                                         <div className="ml-6 space-y-2">
                                           {categoryTopics.map((topic) => {
-                                            const topicQuestions =
-                                              questions.filter(
-                                                (q) => q.topic_id === topic.id,
-                                              );
                                             return (
                                               <div
                                                 key={topic.id}
@@ -410,16 +410,7 @@ export const PlansManager: React.FC<PlansManagerProps> = ({
                                                       variant="outline"
                                                       className="text-[10px] bg-green-50"
                                                     >
-                                                      {
-                                                        Array.from(
-                                                          planQuestions,
-                                                        ).filter((pq) =>
-                                                          pq.startsWith(
-                                                            `${plan.id}-`,
-                                                          ),
-                                                        ).length
-                                                      }{" "}
-                                                      Selected
+                                                      {countSelectedQuestionsForPlan(plan.id, planQuestions)} Selected
                                                     </Badge>
                                                   </div>
                                                 </div>

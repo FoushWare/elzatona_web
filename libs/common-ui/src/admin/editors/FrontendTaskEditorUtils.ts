@@ -151,16 +151,16 @@ export const isReactCode = (code: string): boolean => {
 export const cleanReactCode = (reactCode: string): string => {
   // Remove import statements
   let cleanedCode = reactCode
-    .replace(/import\s+.*?from\s+['"][^'"]*['"];?\s*/g, "")
-    .replace(/import\s+.*?;/g, "");
+    .replaceAll(/import\s+.*?from\s+['"][^'"]*['"];?\s*/g, "")
+    .replaceAll(/import\s+.*?;/g, "");
 
   // Remove export statements
   cleanedCode = cleanedCode
-    .replace(/export\s+default\s+/g, "")
-    .replace(/export\s+/g, "");
+    .replaceAll(/export\s+default\s+/g, "")
+    .replaceAll(/export\s+/g, "");
 
   // Remove semicolons at the end of lines
-  cleanedCode = cleanedCode.replace(/;(\s*$)/gm, "$1");
+  cleanedCode = cleanedCode.replaceAll(/;(\s*$)/gm, "$1");
 
   return cleanedCode.trim();
 };
@@ -355,10 +355,10 @@ export const createTaskData = (
 export const copyToClipboard = async (content: string): Promise<void> => {
   try {
     await navigator.clipboard.writeText(content);
-    return Promise.resolve();
+    return;
   } catch (err) {
     console.error("Failed to copy code:", err);
-    return Promise.reject(err);
+    throw err;
   }
 };
 

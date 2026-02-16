@@ -12,15 +12,23 @@ function countQuestionsForCategories(categories, topics, questions) {
     return (
       total +
       categoryTopics.reduce((topicTotal, _topic) => {
-        const topicQuestions = questions.filter((q) => q.category_id === cat.id);
-        return topicTotal + topicQuestions.length;
+        const topicQuestionsCount = questions.filter((q) => q.category_id === cat.id).length;
+        return topicTotal + topicQuestionsCount;
       }, 0)
     );
   }, 0);
 }
-"use client";
 
-import React, { useCallback } from "react";
+// Helper functions to avoid nested filter operations
+function countQuestionsForCategory(categoryId: string, questions: AdminQuestion[]): number {
+  return questions.filter((q) => q.category_id === categoryId).length;
+}
+
+function countQuestionsForTopic(topicId: string, questions: AdminQuestion[]): number {
+  return questions.filter((q) => q.topic_id === topicId).length;
+}
+
+import React from "react";
 import {
   Card,
   CardContent,
@@ -38,25 +46,9 @@ import {
   BookOpen,
   Trash2,
   Target,
+  Puzzle,
+  Network,
 } from "lucide-react";
-import {
-  AdminLearningCard,
-  AdminCategory,
-  Topic,
-  AdminQuestion,
-  ContentManagementStats,
-} from "@elzatona/types";
-
-const CARD_ICONS = {
-  "Core Technologies": { icon: BookOpen, color: "#3B82F6" },
-  "Framework Questions": { icon: Layers, color: "#10B981" },
-  "Problem Solving": { icon: Puzzle, color: "#F59E0B" },
-  "System Design": { icon: Network, color: "#EF4444" },
-  "Frontend Tasks": { icon: Target, color: "#8B5CF6" },
-} as const;
-
-// Helper to avoid build errors with missing Icons
-import { Puzzle, Network } from "lucide-react";
 
 interface LearningCardsManagerProps {
   cards: AdminLearningCard[];
@@ -260,12 +252,7 @@ export const LearningCardsManager: React.FC<LearningCardsManagerProps> = ({
                                   variant="outline"
                                   className="bg-green-50 text-green-700 dark:bg-green-900 dark:text-green-300"
                                 >
-                                  {
-                                    questions.filter(
-                                      (q) => q.category_id === category.id,
-                                    ).length
-                                  }{" "}
-                                  Questions
+                                  {countQuestionsForCategory(category.id, questions)} Questions
                                 </Badge>
                               </div>
                             </div>
@@ -307,12 +294,7 @@ export const LearningCardsManager: React.FC<LearningCardsManagerProps> = ({
                                             variant="outline"
                                             className="bg-green-50 text-green-700 dark:bg-green-900 dark:text-green-300"
                                           >
-                                            {
-                                              questions.filter(
-                                                (q) => q.topic_id === topic.id,
-                                              ).length
-                                            }{" "}
-                                            Questions
+                                            {countQuestionsForTopic(topic.id, questions)} Questions
                                           </Badge>
                                         </div>
                                       </div>
