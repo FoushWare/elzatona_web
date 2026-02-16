@@ -1,13 +1,13 @@
 // Minimal MSW-like behavior implemented without msw dependency.
 // This file monkeypatches global.fetch to intercept specific API routes used by tests.
 const originalFetch =
-  global.fetch ||
-  (async (input, init) => new global.Response(null, { status: 501 }));
+  globalThis.fetch ||
+  (async (input, init) => new globalThis.Response(null, { status: 501 }));
 
 beforeAll(() => {
-  global.__jest_mock_msw_original_fetch = originalFetch;
+  globalThis.__jest_mock_msw_original_fetch = originalFetch;
   // Use jest.fn so tests can mock global.fetch
-  global.fetch = jest.fn(async (input, init = {}) => {
+  globalThis.fetch = jest.fn(async (input, init = {}) => {
     const url = typeof input === "string" ? input : input?.url || "";
     try {
       const pathname = new URL(url, "http://localhost").pathname;
@@ -64,9 +64,9 @@ afterEach(() => {
 });
 
 afterAll(() => {
-  if (global.__jest_mock_msw_original_fetch) {
-    global.fetch = global.__jest_mock_msw_original_fetch;
-    delete global.__jest_mock_msw_original_fetch;
+  if (globalThis.__jest_mock_msw_original_fetch) {
+    globalThis.fetch = globalThis.__jest_mock_msw_original_fetch;
+    delete globalThis.__jest_mock_msw_original_fetch;
   }
 });
 
