@@ -98,9 +98,9 @@ export function LearningPlanCard({
         {plan.features && plan.features.length > 0 && (
           <div className="mb-4">
             <div className="flex flex-wrap gap-2">
-              {plan.features.slice(0, 3).map((feature, index) => (
+              {plan.features.slice(0, 3).map((feature) => (
                 <span
-                  key={`${feature}-${index}`}
+                  key={feature}
                   className="px-2 py-1 bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 text-xs rounded-lg"
                 >
                   {feature}
