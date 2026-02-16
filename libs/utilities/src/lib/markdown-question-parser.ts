@@ -227,7 +227,7 @@ export class MarkdownQuestionParser {
     let questionText = "";
     let optionsText = "";
     let inCodeBlock = false;
-    let foundOptions = false;
+    const _foundOptions = false;
     let correctAnswer = "";
 
     for (let i = 0; i < lines.length; i++) {

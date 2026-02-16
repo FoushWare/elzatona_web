@@ -1,5 +1,16 @@
+import {
+  AdminLearningCard,
+  AdminCategory,
+  Topic,
+  AdminQuestion,
+  ContentManagementStats,
+} from "@elzatona/types";
+
 // Helper functions to flatten nested reduce/filter logic
-function countTopicsForCategories(categories, topics) {
+function countTopicsForCategories(
+  categories: AdminCategory[],
+  topics: Topic[],
+): number {
   return categories.reduce((total, cat) => {
     const categoryTopics = topics.filter(
       (_topic) => _topic.category_id === cat.id,
@@ -8,13 +19,17 @@ function countTopicsForCategories(categories, topics) {
   }, 0);
 }
 
-function countQuestionsForCategories(categories, topics, questions) {
+function countQuestionsForCategories(
+  categories: AdminCategory[],
+  topics: Topic[],
+  questions: AdminQuestion[],
+): number {
   return categories.reduce((total, cat) => {
     const categoryTopics = topics.filter(
       (topic) => topic.category_id === cat.id,
     );
     const categoryQuestionsCount = categoryTopics.reduce(
-      (topicTotal, topic) => {
+      (topicTotal, _topic) => {
         return topicTotal + countQuestionsForCategory(cat.id, questions);
       },
       0,
@@ -57,6 +72,14 @@ import {
   Trash2,
   Target,
 } from "lucide-react";
+
+const CARD_ICONS = {
+  "Core Technologies": { icon: Layers, color: "#3B82F6" },
+  "Framework Questions": { icon: Layers, color: "#10B981" },
+  "Problem Solving": { icon: Layers, color: "#F59E0B" },
+  "System Design": { icon: Layers, color: "#EF4444" },
+  "Frontend Tasks": { icon: Target, color: "#8B5CF6" },
+} as const;
 
 interface LearningCardsManagerProps {
   cards: AdminLearningCard[];

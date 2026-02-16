@@ -201,7 +201,11 @@ export default function FrontendTasksPage() {
                 <CardHeader className="pb-3">
                   <div className="flex justify-between items-start">
                     {(() => {
-                      let badgeVariant: string;
+                      let badgeVariant:
+                        | "default"
+                        | "destructive"
+                        | "outline"
+                        | "secondary";
                       if (task.difficulty === "easy") {
                         badgeVariant = "secondary";
                       } else if (task.difficulty === "medium") {

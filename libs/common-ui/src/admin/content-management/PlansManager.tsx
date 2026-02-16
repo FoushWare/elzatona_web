@@ -8,10 +8,7 @@ function countSelectedQuestionsForPlan(
 }
 
 // Helper function to get topics for a category
-function getTopicsForCategory(
-  categoryId: string,
-  topics: Array<{ category_id: string }>,
-): Array<{ category_id: string }> {
+function getTopicsForCategory(categoryId: string, topics: Topic[]): Topic[] {
   return topics.filter((topic) => topic.category_id === categoryId);
 }
 

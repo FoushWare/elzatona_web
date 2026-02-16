@@ -55,6 +55,7 @@ const eslintConfig = [
       "Rest/**", // All files in Rest/ directory use CommonJS (legacy scripts)
       ".cursor/**", // Cursor IDE scripts use CommonJS
       "codeql-database/**", // CodeQL generated database files
+      "tools/**", // Tool scripts (gitignored, may use CommonJS)
     ],
   },
   {

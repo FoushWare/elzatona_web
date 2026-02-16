@@ -33,9 +33,12 @@ const useFrontendTaskEditorState = (task?: AdminFrontendTask | null) => {
   const {
     activeFile,
     fileTree,
+    expandedFolders,
     openFiles,
     showFileExplorer,
     setActiveFile,
+    setFileTree,
+    setExpandedFolders,
     setOpenFiles,
     setShowFileExplorer,
   } = useFileManagement(task);
@@ -58,6 +61,17 @@ const useFrontendTaskEditorState = (task?: AdminFrontendTask | null) => {
   const [showAddFolder, setShowAddFolder] = React.useState(false);
 
   return {
+    // Theme management
+    theme,
+    setTheme,
+    isDark,
+    // Form data management
+    formData,
+    setFormData,
+    // Panel layout
+    leftPanelWidth,
+    rightPanelWidth,
+    handleMouseDown,
     // File management
     activeFile,
     fileTree,
@@ -144,7 +158,9 @@ export default function FrontendTaskEditor({
   } = editorState;
 
   // Simple form handlers
-  // ...existing code...
+  const handleSave = async () => {
+    await onSave(formData);
+  };
 
   return (
     <div

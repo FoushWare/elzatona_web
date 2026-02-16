@@ -82,12 +82,17 @@ codeql-database/**
 .nx/cache/
 .nx/workspace-data/
 
-# Utility scripts
-libs/utilities/scripts/setup-supabase-admin.js
+# Utility scripts (entire directory is gitignored)
+libs/utilities/scripts/
 
-# CodeQL security fix scripts
-libs/utilities/scripts/fix-option-text.js
-libs/utilities/scripts/fix-all-questions-comprehensive.js
+# Infrastructure / Terraform
+infrastructure/
+*.backup
+*.tfstate
+*.tfstate.*
 
-# Documentation files in scripts directory (ignored by git)
-libs/utilities/scripts/*.md
+# Tools directory
+tools/
+
+# Logs directories (matches gitignore pattern)
+**/logs/
