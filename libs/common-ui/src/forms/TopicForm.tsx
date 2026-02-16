@@ -367,6 +367,7 @@ export const TopicForm: React.FC<TopicFormProps> = ({
               className="sr-only peer"
             />
             <div className="relative w-9 h-5 bg-gray-300 dark:bg-gray-600 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-red-200 dark:peer-focus:ring-red-900 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-red-600 dark:peer-checked:bg-red-700"></div>
+            <span className="ml-2 text-sm">JSON Mode</span>
           </label>
         </div>
       )}

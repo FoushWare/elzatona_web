@@ -334,7 +334,7 @@ export const QuestionForm: React.FC<QuestionFormProps> = ({
           <Input
             value={tagInput}
             onChange={(e) => setTagInput(e.target.value)}
-            onKeyPress={handleKeyPress}
+            onKeyDown={handleKeyPress}
             placeholder="Add a tag..."
             className="flex-1"
           />
