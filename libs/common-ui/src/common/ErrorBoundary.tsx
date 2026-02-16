@@ -2,29 +2,6 @@
 
 import React, { Component, ReactNode, ErrorInfo } from "react";
 
-// Conditional Supabase client creation with fallback values
-const supabase = null;
-try {
-  // eslint-disable-next-line @typescript-eslint/no-require-imports
-  const { createClient } = require("@supabase/supabase-js");
-  const supabaseUrl =
-    process.env["NEXT_PUBLIC_SUPABASE_URL"] ||
-    "https://placeholder.supabase.co";
-  const supabaseServiceRoleKey =
-    process.env["SUPABASE_SERVICE_ROLE_KEY"] || "placeholder_key";
-
-  if (
-    supabaseUrl !== "https://placeholder.supabase.co" &&
-    supabaseServiceRoleKey !== "placeholder_key"
-  ) {
-    const _supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
-    // Supabase client created but not used in ErrorBoundary
-    // Reserved for future error logging functionality
-  }
-} catch (error) {
-  console.warn("Supabase client creation failed in ErrorBoundary:", error);
-}
-
 import { AlertTriangle, RefreshCw, Home, Bug } from "lucide-react";
 
 interface Props {

@@ -102,7 +102,13 @@ export function sanitizeInputServer(input: string): string {
   }
 
   // Remove null bytes and control characters
-  let sanitized = input.replaceAll(/[\x00-\x1F\x7F]/g, ""); // Remove control characters
+  let sanitized = "";
+  for (const character of input) {
+    const codePoint = character.codePointAt(0) ?? 0;
+    if ((codePoint >= 32 && codePoint !== 127) || character === "\n") {
+      sanitized += character;
+    }
+  }
 
   // Trim whitespace
   sanitized = sanitized.trim();
@@ -111,6 +117,55 @@ export function sanitizeInputServer(input: string): string {
   sanitized = sanitizeTextServer(sanitized);
 
   return sanitized;
+}
+
+function removeControlCharsExceptNewlines(str: string): string {
+  let sanitized = "";
+  for (const character of str) {
+    const codePoint = character.codePointAt(0) ?? 0;
+    const isAllowedPrintable = codePoint >= 32 && codePoint !== 127;
+    const isAllowedWhitespace = character === "\n" || character === "\r" || character === "\t";
+
+    if (isAllowedPrintable || isAllowedWhitespace) {
+      sanitized += character;
+    }
+  }
+  return sanitized;
+}
+
+function sanitizeObjectField(
+  key: string,
+  value: unknown,
+  preserveNewlinesFields: Set<string>,
+  skipSanitizationFields: Set<string>,
+): unknown {
+  if (typeof value === "string") {
+    if (skipSanitizationFields.has(key)) {
+      return value;
+    }
+    if (preserveNewlinesFields.has(key)) {
+      return removeControlCharsExceptNewlines(value);
+    }
+    return sanitizeInputServer(value);
+  }
+
+  if (Array.isArray(value)) {
+    return value.map((item: unknown) =>
+      typeof item === "string" ? sanitizeInputServer(item) : item,
+    );
+  }
+
+  if (
+    value &&
+    typeof value === "object" &&
+    value !== null &&
+    !Array.isArray(value) &&
+    value.constructor !== Date
+  ) {
+    return sanitizeObjectServer(value as Record<string, unknown>);
+  }
+
+  return value;
 }
 
 /**
@@ -136,38 +191,14 @@ export function sanitizeObjectServer<T extends Record<string, unknown>>(
   ]);
   const skipSanitizationFields = new Set(["code"]);
 
-  function removeControlCharsExceptNewlines(str: string): string {
-// Move to outer scope for S7721
-function removeControlCharsExceptNewlines(str: string): string {
-  return str.replaceAll(/[\x00-\x08\x0B-\x0C\x0E-\x1F\x7F]/g, "");
-}
-
-  Object.entries(sanitized).forEach(([key, value]) => {
-    if (typeof value === "string") {
-      if (skipSanitizationFields.has(key)) {
-        return;
-      }
-      if (preserveNewlinesFields.has(key)) {
-        sanitized[key] = removeControlCharsExceptNewlines(value) as T[typeof key];
-      } else {
-        sanitized[key] = sanitizeInputServer(value) as T[typeof key];
-      }
-    } else if (Array.isArray(value)) {
-      sanitized[key] = value.map((item: unknown) =>
-        typeof item === "string" ? sanitizeInputServer(item) : item,
-      ) as T[typeof key];
-    } else if (
-      value &&
-      typeof value === "object" &&
-      value !== null &&
-      !Array.isArray(value)
-    ) {
-      const isDate = value.constructor === Date;
-      if (!isDate) {
-        sanitized[key] = sanitizeObjectServer(value as Record<string, unknown>) as T[typeof key];
-      }
-    }
-  });
+  for (const [key, value] of Object.entries(sanitized)) {
+    sanitized[key] = sanitizeObjectField(
+      key,
+      value,
+      preserveNewlinesFields,
+      skipSanitizationFields,
+    ) as T[typeof key];
+  }
 
   return sanitized;
 }

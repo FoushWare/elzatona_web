@@ -12,14 +12,14 @@ export function useCompletedPlans(): UseCompletedPlansResult {
   const [planGrades, setPlanGrades] = useState<Map<string, number>>(new Map());
 
   useEffect(() => {
-    if (typeof window === "undefined") return;
+    if (globalThis.window === undefined) return;
 
     const completedData = localStorage.getItem("completed-guided-plans");
     if (completedData) {
       try {
         setCompletedPlans(new Set(JSON.parse(completedData)));
       } catch {
-        // Invalid data
+        console.warn("Invalid completed guided plans data in localStorage");
       }
     }
 
@@ -29,7 +29,7 @@ export function useCompletedPlans(): UseCompletedPlansResult {
         const parsed = JSON.parse(gradesData);
         setPlanGrades(new Map(Object.entries(parsed)));
       } catch {
-        // Invalid data
+        console.warn("Invalid plan grades data in localStorage");
       }
     }
   }, []);

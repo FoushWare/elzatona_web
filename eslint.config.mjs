@@ -20,6 +20,7 @@ const eslintConfig = [
       "build/**",
       "dist/**",
       "coverage/**",
+      "*.min.js",
       ".out/**",
       ".env*",
       "*.log",

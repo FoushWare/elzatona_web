@@ -90,6 +90,31 @@ export function sanitizeTextServer(text: string): string {
   return filter.process(text);
 }
 
+function removeControlChars(value: string): string {
+  let sanitized = "";
+  for (const character of value) {
+    const codePoint = character.codePointAt(0) ?? 0;
+    if (codePoint >= 32 && codePoint !== 127 && (codePoint < 128 || codePoint > 159)) {
+      sanitized += character;
+    }
+  }
+  return sanitized;
+}
+
+function removeControlCharsExceptNewlines(value: string): string {
+  let sanitized = "";
+  for (const character of value) {
+    const codePoint = character.codePointAt(0) ?? 0;
+    const isAllowedPrintable = codePoint >= 32 && codePoint !== 127;
+    const isAllowedWhitespace = character === "\n" || character === "\r" || character === "\t";
+
+    if (isAllowedPrintable || isAllowedWhitespace) {
+      sanitized += character;
+    }
+  }
+  return sanitized;
+}
+
 /**
  * Sanitize user input for form fields
  * Removes potentially dangerous characters and HTML
@@ -102,22 +127,7 @@ export function sanitizeInputServer(input: string): string {
   }
 
   // Remove null bytes and control characters
-  let sanitized = input.replaceAll(/[\x00-\x1F\x7F]/g, ""); // Remove control characters
-  sanitized = sanitized.replaceAll("\x1E", ""); // Remove specific control char
-  sanitized = sanitized.replaceAll("\x1F", "");
-  sanitized = sanitized.replaceAll("\x1D", "");
-  sanitized = sanitized.replaceAll("\x1C", "");
-  sanitized = sanitized.replaceAll("\x1B", "");
-  sanitized = sanitized.replaceAll("\x1A", "");
-  sanitized = sanitized.replaceAll("\x19", "");
-  sanitized = sanitized.replaceAll("\x18", "");
-  sanitized = sanitized.replaceAll("\x1F", "");
-  sanitized = sanitized.replaceAll("\x1D", "");
-  sanitized = sanitized.replaceAll("\x1C", "");
-  sanitized = sanitized.replaceAll("\x1B", "");
-  sanitized = sanitized.replaceAll("\x1A", "");
-  sanitized = sanitized.replaceAll("\x19", "");
-  sanitized = sanitized.replaceAll("\x18", "");
+  let sanitized = removeControlChars(input);
 
   // Trim whitespace
   sanitized = sanitized.trim();
@@ -149,17 +159,7 @@ function sanitizeFieldValue(
     // For content and other rich text fields, preserve newlines - don't use sanitizeInputServer
     if (preserveNewlinesFields.has(key)) {
       // Only remove dangerous control characters, but preserve newlines and tabs
-      return value
-        .replaceAll(/[\x00-\x08\x0B-\x0C\x0E-\x1F\x7F]/g, "") // Remove control chars except \n (0x0A), \r (0x0D), \t (0x09)
-        .replaceAll("\x00", "")
-        .replaceAll("\x1E", "")
-        .replaceAll("\x1F", "")
-        .replaceAll("\x1D", "")
-        .replaceAll("\x1C", "")
-        .replaceAll("\x1B", "")
-        .replaceAll("\x1A", "")
-        .replaceAll("\x19", "")
-        .replaceAll("\x18", "");
+      return removeControlCharsExceptNewlines(value);
     }
     // For other string fields, use standard sanitization
     return sanitizeInputServer(value);
@@ -308,22 +308,7 @@ export function sanitizeForLogging(value: unknown): string {
 
   // SECURITY: Remove all control characters (including newlines, carriage returns, tabs, etc.)
   // This prevents log injection attacks where malicious input could break log format
-  sanitized = sanitized.replaceAll(/[\x00-\x1F\x7F-\x9F]/g, "");
-  sanitized = sanitized.replaceAll("\x1E", "");
-  sanitized = sanitized.replaceAll("\x1F", "");
-  sanitized = sanitized.replaceAll("\x1D", "");
-  sanitized = sanitized.replaceAll("\x1C", "");
-  sanitized = sanitized.replaceAll("\x1B", "");
-  sanitized = sanitized.replaceAll("\x1A", "");
-  sanitized = sanitized.replaceAll("\x19", "");
-  sanitized = sanitized.replaceAll("\x18", "");
-  sanitized = sanitized.replaceAll("\x1F", "");
-  sanitized = sanitized.replaceAll("\x1D", "");
-  sanitized = sanitized.replaceAll("\x1C", "");
-  sanitized = sanitized.replaceAll("\x1B", "");
-  sanitized = sanitized.replaceAll("\x1A", "");
-  sanitized = sanitized.replaceAll("\x19", "");
-  sanitized = sanitized.replaceAll("\x18", "");
+  sanitized = removeControlChars(sanitized);
 
   // SECURITY: Remove any remaining newline-like patterns that could break log format
   sanitized = sanitized.replaceAll(/\r\n|\r|\n/g, " ");
@@ -336,7 +321,7 @@ export function sanitizeForLogging(value: unknown): string {
 
   // SECURITY: Final pass - ensure no dangerous patterns remain
   // Remove any patterns that could be interpreted as log format specifiers
-  sanitized = sanitized.replace(
+  sanitized = sanitized.replaceAll(
     /%\d*[diouxXeEfFgGaAcspn%]/g,
     "[format-removed]",
   );

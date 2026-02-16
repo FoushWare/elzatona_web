@@ -17,7 +17,7 @@ const AUTH_STORAGE_KEYS = [
 ];
 
 function checkStorageAuth(): boolean {
-  if (typeof window === "undefined") return false;
+  if (globalThis.window === undefined) return false;
 
   // Check sessionStorage for auth keys
   if (checkSessionStorageAuth()) return true;
@@ -85,15 +85,15 @@ export function useGuidedLearningAuth(): AuthState {
   };
 
   const setupEventListeners = () => {
-    window.addEventListener("storage", handleStorageChange);
-    window.addEventListener("auth-state-changed", checkAuth);
+    globalThis.window.addEventListener("storage", handleStorageChange);
+    globalThis.window.addEventListener("auth-state-changed", checkAuth);
 
     // Poll interval (reduced from 1s to 5s for performance)
     const interval = setInterval(checkAuth, 5000);
 
     return () => {
-      window.removeEventListener("storage", handleStorageChange);
-      window.removeEventListener("auth-state-changed", checkAuth);
+      globalThis.window.removeEventListener("storage", handleStorageChange);
+      globalThis.window.removeEventListener("auth-state-changed", checkAuth);
       clearInterval(interval);
     };
   };

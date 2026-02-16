@@ -4,7 +4,7 @@
  */
 
 import React from "react";
-import { render, screen, waitFor, fireEvent } from "@testing-library/react";
+import { render, screen, fireEvent } from "@testing-library/react";
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import AdminDashboard from "./AdminDashboard";
 import { useAdminAuth } from "@elzatona/contexts";
@@ -251,7 +251,7 @@ describe("AdminDashboard", () => {
   describe("Hydration handling", () => {
     it("should prevent hydration mismatch by showing loading initially", () => {
       // Mock that it's not client-side yet
-      Object.defineProperty(window, "document", {
+      Object.defineProperty(globalThis.window, "document", {
         value: undefined,
         writable: true,
       });
