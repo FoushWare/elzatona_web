@@ -293,30 +293,51 @@ export const planSchema = z.object({
  * Clean up data object by normalizing arrays and removing invalid fields
  */
 function cleanupDataObject(dataObj: Record<string, unknown>): void {
-  // Clean up options
+  cleanupOptions(dataObj);
+  cleanupCategories(dataObj);
+  cleanupTopics(dataObj);
+  cleanupMetadata(dataObj);
+}
+
+/**
+ * Clean up options field
+ */
+function cleanupOptions(dataObj: Record<string, unknown>): void {
   if (dataObj.options !== undefined && dataObj.options !== null) {
     if (typeof dataObj.options === "string" || !Array.isArray(dataObj.options) || (Array.isArray(dataObj.options) && dataObj.options.length === 0)) {
       delete dataObj.options;
     }
   }
+}
 
-  // Clean up categories
+/**
+ * Clean up categories field
+ */
+function cleanupCategories(dataObj: Record<string, unknown>): void {
   if (dataObj.categories && Array.isArray(dataObj.categories)) {
     if (dataObj.categories.length > 0 && dataObj.categories[0]) {
       dataObj.category = dataObj.categories[0]?.name || dataObj.categories[0]?.title || dataObj.category || "";
     }
     delete dataObj.categories;
   }
+}
 
-  // Clean up topics
+/**
+ * Clean up topics field
+ */
+function cleanupTopics(dataObj: Record<string, unknown>): void {
   if (dataObj.topics && Array.isArray(dataObj.topics)) {
     if (dataObj.topics.length > 0 && dataObj.topics[0]) {
       dataObj.topic = dataObj.topics[0]?.name || dataObj.topics[0]?.title || dataObj.topic || "";
     }
     delete dataObj.topics;
   }
+}
 
-  // Clean up metadata
+/**
+ * Clean up metadata field
+ */
+function cleanupMetadata(dataObj: Record<string, unknown>): void {
   if (dataObj.metadata !== undefined && dataObj.metadata !== null) {
     if (typeof dataObj.metadata !== "object" || Array.isArray(dataObj.metadata)) {
       delete dataObj.metadata;

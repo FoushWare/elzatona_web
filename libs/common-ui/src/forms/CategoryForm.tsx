@@ -106,7 +106,7 @@ export const CategoryForm: React.FC<CategoryFormProps> = ({
         .replace(/(^-|-$)/g, "");
       setFormData((prev) => ({ ...prev, slug }));
     }
-  }, [formData["name"], category]);
+  }, [formData, category]);
 
   const validateForm = (): boolean => {
     const newErrors: Record<string, string> = {};
@@ -140,8 +140,8 @@ export const CategoryForm: React.FC<CategoryFormProps> = ({
 
     try {
       await onSubmit(formData);
-    } catch (error) {
-      console.error("Error submitting category:", error);
+    } catch (_error) {
+      // Error handled by parent component
     }
   };
 

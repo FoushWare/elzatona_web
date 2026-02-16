@@ -62,16 +62,6 @@ export default function BulkQuestionUploader({
   const [jsonParsed, setJsonParsed] = useState(false);
   const [markdownParsed, setMarkdownParsed] = useState(false);
 
-  // Debug logging for state changes
-  React.useEffect(() => {
-    console.log("🔄 State changed:", {
-      inputMode,
-      markdownParsed,
-      questionsLength: questions.length,
-      markdownInputLength: markdownInput.length,
-    });
-  }, [inputMode, markdownParsed, questions.length, markdownInput.length]);
-
   const addQuestion = () => {
     setQuestions([
       ...questions,
@@ -280,10 +270,6 @@ export default function BulkQuestionUploader({
   };
 
   const submitQuestions = async () => {
-    console.log("🚀 Starting bulk question submission to Firebase...");
-    console.log("Section ID:", sectionId);
-    console.log("Questions to submit:", questions);
-
     // Basic validation
     const validQuestions = questions.filter(
       (q) =>
@@ -292,8 +278,6 @@ export default function BulkQuestionUploader({
         q.options?.some((opt) => opt.text.trim()) &&
         q.options?.some((opt) => opt.isCorrect),
     );
-
-    console.log("Valid questions after filtering:", validQuestions);
 
     if (validQuestions.length === 0) {
       setError("At least one complete question is required");
@@ -315,13 +299,6 @@ export default function BulkQuestionUploader({
         points: q.points || 1,
         timeLimit: q.timeLimit || 60,
       }));
-
-      console.log("📤 Calling bulkImportQuestions with Firebase...");
-      console.log("📊 Firebase questions to send:", {
-        count: firebaseQuestions.length,
-        firstQuestion: firebaseQuestions[0]?.title || "No title",
-        sampleQuestion: firebaseQuestions[0],
-      });
 
       const bulkData: BulkQuestionData = {
         questions: firebaseQuestions,
@@ -350,15 +327,7 @@ export default function BulkQuestionUploader({
         },
       };
 
-      console.log("📦 Bulk data structure:", {
-        questionsCount: bulkData.questions.length,
-        metadata: bulkData.metadata,
-        validation: bulkData.validation,
-      });
-
       const result = await bulkImportQuestions([bulkData]);
-
-      console.log("📥 Firebase Import Result:", result);
 
       if (result.success > 0) {
         const failedMessage =

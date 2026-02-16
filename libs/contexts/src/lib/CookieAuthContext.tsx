@@ -67,8 +67,7 @@ export function CookieAuthProvider({ children }: CookieAuthProviderProps) {
         } else {
           setUser(null);
         }
-      } catch (error) {
-        console.error("Auth initialization error:", error);
+      } catch (_error) {
         setUser(null);
       } finally {
         setIsLoading(false);
@@ -85,8 +84,7 @@ export function CookieAuthProvider({ children }: CookieAuthProviderProps) {
       // Redirect to NextAuth sign-in
       const signInUrl = `/api/auth/signin/${provider}`;
       window.location.href = signInUrl;
-    } catch (error) {
-      console.error("Sign in error:", error);
+    } catch (_error) {
       setIsLoading(false);
     }
   };
@@ -105,8 +103,7 @@ export function CookieAuthProvider({ children }: CookieAuthProviderProps) {
 
       // Redirect to NextAuth sign-out
       window.location.href = "/api/auth/signout";
-    } catch (error) {
-      console.error("Sign out error:", error);
+    } catch (_error) {
       setIsLoading(false);
     }
   };
@@ -121,8 +118,8 @@ export function CookieAuthProvider({ children }: CookieAuthProviderProps) {
       } else {
         setUser(null);
       }
-    } catch (error) {
-      console.error("Auth refresh error:", error);
+    } catch (_error) {
+      // Auth refresh failed
     }
   };
 

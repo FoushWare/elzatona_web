@@ -75,9 +75,8 @@ export function UserPreferencesProvider({
   children,
 }: UserPreferencesProviderProps) {
   const [user] = useState<{ id: string } | null>(null);
-  const updateUserProfile = async (data: { preferences: UserPreferences }) => {
+  const updateUserProfile = async (_data: { preferences: UserPreferences }) => {
     // Placeholder for user profile update
-    console.log("User profile update:", data);
     // If supabase is available, update user preferences in database
     if (supabase && user) {
       // Future implementation: update user preferences in Supabase
@@ -100,8 +99,7 @@ export function UserPreferencesProvider({
             ...parsed,
           });
         }
-      } catch (error) {
-        console.error("Error loading preferences:", error);
+      } catch (_error) {
         setPreferences(defaultPreferences);
       } finally {
         setIsLoading(false);
@@ -127,7 +125,6 @@ export function UserPreferencesProvider({
         });
       }
     } catch (error) {
-      console.error("Error updating preferences:", error);
       throw error;
     }
   };

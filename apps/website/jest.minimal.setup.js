@@ -1,7 +1,7 @@
 // Minimal setup for Jest runs to avoid recursive setup complexity.
 // Provides minimal Web API shims and a small `vi` shim mapped to Jest.
-if (typeof global.Headers === "undefined") {
-  global.Headers = class Headers {
+if (typeof globalThis.Headers === "undefined") {
+  globalThis.Headers = class Headers {
     constructor(init = {}) {
       this._map = {};
       Object.entries(init || {}).forEach(
@@ -23,12 +23,12 @@ if (typeof global.Headers === "undefined") {
   };
 }
 
-if (typeof global.Request === "undefined") {
-  global.Request = class Request {
+if (typeof globalThis.Request === "undefined") {
+  globalThis.Request = class Request {
     constructor(input, init = {}) {
       this._url = typeof input === "string" ? input : input?.url || "";
       this.method = init.method || "GET";
-      this.headers = new global.Headers(init.headers || {});
+      this.headers = new globalThis.Headers(init.headers || {});
       this._body = init.body;
     }
     get url() {
@@ -44,12 +44,12 @@ if (typeof global.Request === "undefined") {
   };
 }
 
-if (typeof global.Response === "undefined") {
-  global.Response = class Response {
+if (typeof globalThis.Response === "undefined") {
+  globalThis.Response = class Response {
     constructor(body, init = {}) {
       this._body = body;
       this.status = init.status || 200;
-      this.headers = new global.Headers(init.headers || {});
+      this.headers = new globalThis.Headers(init.headers || {});
     }
     async json() {
       if (typeof this._body === "string") {
@@ -64,8 +64,8 @@ if (typeof global.Response === "undefined") {
   };
 }
 
-if (typeof global.vi === "undefined") {
-  global.vi = {
+if (typeof globalThis.vi === "undefined") {
+  globalThis.vi = {
     fn: (...args) => jest.fn(...args),
     mock: (m, f) => {
       if (typeof jest !== "undefined" && jest.mock) jest.mock(m, f);

@@ -70,8 +70,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
           const userData = JSON.parse(storedUser);
           setUser(userData);
         }
-      } catch (error) {
-        console.error("Error checking auth status:", error);
+      } catch (_error) {
         localStorage.removeItem("frontend-koddev-user");
       } finally {
         setIsLoading(false);

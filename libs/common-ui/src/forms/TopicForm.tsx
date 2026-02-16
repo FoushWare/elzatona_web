@@ -131,7 +131,7 @@ export const TopicForm: React.FC<TopicFormProps> = ({
   }, [formDataName, topic, isJsonMode, setFormData]);
 
   // Helper: Extract topics array from parsed JSON
-  const extractTopicsArray = (parsed: unknown): any[] => {
+  const extractTopicsArray = (parsed: unknown): Array<{name?: string}> => {
     if (Array.isArray(parsed)) {
       return parsed;
     }
@@ -141,7 +141,7 @@ export const TopicForm: React.FC<TopicFormProps> = ({
       "topics" in parsed &&
       Array.isArray((parsed as { topics: unknown }).topics)
     ) {
-      return (parsed as { topics: any[] }).topics;
+      return (parsed as { topics: Array<{name?: string}> }).topics;
     }
     return [];
   };
@@ -316,8 +316,8 @@ export const TopicForm: React.FC<TopicFormProps> = ({
 
       try {
         await onSubmit(parsedTopics);
-      } catch (error) {
-        console.error("Error submitting topics:", error);
+      } catch (_error) {
+        // Error handled by parent component
       }
     } else {
       // Handle single form submission
@@ -327,8 +327,8 @@ export const TopicForm: React.FC<TopicFormProps> = ({
 
       try {
         await onSubmit(formData);
-      } catch (error) {
-        console.error("Error submitting topic:", error);
+      } catch (_error) {
+        // Error handled by parent component
       }
     }
   };

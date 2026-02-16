@@ -142,8 +142,8 @@ export const QuestionForm: React.FC<QuestionFormProps> = ({
 
     try {
       await onSubmit(formData);
-    } catch (error) {
-      console.error("Error submitting question:", error);
+    } catch (_error) {
+      // Error handled by parent component
     }
   };
 

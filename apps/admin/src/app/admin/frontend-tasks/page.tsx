@@ -263,11 +263,14 @@ export default function FrontendTasksPage() {
                         {tag}
                       </Badge>
                     ));
-                    const extraTag = tags.length > 3 ? (
-                      <span className="text-[10px] text-gray-400 self-center">
-                        +{tags.length - 3}
-                      </span>
-                    ) : null;
+                    let extraTag = null;
+                    if (tags.length > 3) {
+                      extraTag = (
+                        <span className="text-[10px] text-gray-400 self-center">
+                          {`+${tags.length - 3}`}
+                        </span>
+                      );
+                    }
                     return [tagBadges, extraTag];
                   })()}
                 </div>
@@ -289,3 +292,5 @@ export default function FrontendTasksPage() {
     </div>
   );
 }
+
+export default FrontendTasksPage;

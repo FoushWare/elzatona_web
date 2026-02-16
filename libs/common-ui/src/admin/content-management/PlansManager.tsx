@@ -4,7 +4,7 @@ function countSelectedQuestionsForPlan(planId: string, planQuestions: Set<string
 }
 
 // Helper function to get topics for a category
-function getTopicsForCategory(categoryId: string, topics: any[]): any[] {
+function getTopicsForCategory(categoryId: string, topics: Array<{ category_id: string }>): Array<{ category_id: string }> {
   return topics.filter((topic) => topic.category_id === categoryId);
 }
 
@@ -36,7 +36,6 @@ import {
   AdminLearningCard,
   AdminCategory,
   Topic,
-  AdminQuestion,
   ContentManagementStats,
 } from "@elzatona/types";
 
@@ -53,7 +52,6 @@ interface PlansManagerProps {
   cards: AdminLearningCard[];
   categories: AdminCategory[];
   topics: Topic[];
-  questions: AdminQuestion[];
   stats: ContentManagementStats;
   planQuestions: Set<string>;
   expandedPlans: Set<string>;
@@ -68,12 +66,6 @@ interface PlansManagerProps {
   onDeletePlan: (plan: LearningPlan) => void;
   onCreatePlan: () => void;
   onManageCards: (plan: LearningPlan) => void;
-  onToggleQuestionInPlan: (
-    questionId: string,
-    planId: string,
-    topicId: string,
-    isInPlan: boolean,
-  ) => void;
   openTopicQuestionsModal: (topic: Topic, plan: LearningPlan) => void;
 }
 
@@ -82,7 +74,6 @@ export const PlansManager: React.FC<PlansManagerProps> = ({
   cards,
   categories,
   topics,
-  _questions,
   stats,
   planQuestions,
   expandedPlans,
@@ -97,7 +88,6 @@ export const PlansManager: React.FC<PlansManagerProps> = ({
   onDeletePlan,
   onCreatePlan,
   onManageCards,
-  _onToggleQuestionInPlan,
   openTopicQuestionsModal,
 }) => {
   return (

@@ -1,7 +1,7 @@
 // Helper functions to flatten nested reduce/filter logic
 function countTopicsForCategories(categories, topics) {
   return categories.reduce((total, cat) => {
-    const categoryTopics = topics.filter((topic) => topic.category_id === cat.id);
+    const categoryTopics = topics.filter((_topic) => _topic.category_id === cat.id);
     return total + categoryTopics.length;
   }, 0);
 }
@@ -9,13 +9,10 @@ function countTopicsForCategories(categories, topics) {
 function countQuestionsForCategories(categories, topics, questions) {
   return categories.reduce((total, cat) => {
     const categoryTopics = topics.filter((topic) => topic.category_id === cat.id);
-    return (
-      total +
-      categoryTopics.reduce((topicTotal, _topic) => {
-        const topicQuestionsCount = questions.filter((q) => q.category_id === cat.id).length;
-        return topicTotal + topicQuestionsCount;
-      }, 0)
-    );
+    const categoryQuestionsCount = categoryTopics.reduce((topicTotal, topic) => {
+      return topicTotal + countQuestionsForCategory(cat.id, questions);
+    }, 0);
+    return total + categoryQuestionsCount;
   }, 0);
 }
 

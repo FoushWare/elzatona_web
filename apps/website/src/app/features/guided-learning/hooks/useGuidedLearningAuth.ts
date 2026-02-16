@@ -19,35 +19,43 @@ const AUTH_STORAGE_KEYS = [
 function checkStorageAuth(): boolean {
   if (typeof window === "undefined") return false;
 
-  // Check sessionStorage
-  for (const key of AUTH_STORAGE_KEYS) {
-    const value = sessionStorage.getItem(key);
-    if (value) {
-      try {
-        const parsed = JSON.parse(value);
-        if (parsed?.isAuthenticated === true) return true;
-      } catch {
-        if (value === "true") return true;
-      }
-    }
-  }
+  // Check sessionStorage for auth keys
+  if (checkSessionStorageAuth()) return true;
 
-  // Check localStorage
+  // Check localStorage for direct auth flag
   if (localStorage.getItem("isAuthenticated") === "true") return true;
 
-  // Check auth token + user
-  const authToken = localStorage.getItem("auth-token");
-  const storedUser = localStorage.getItem("frontend-koddev-user");
-  if (authToken && storedUser) {
+  // Check for auth token and user data
+  return checkTokenAndUserAuth();
+}
+
+function checkSessionStorageAuth(): boolean {
+  for (const key of AUTH_STORAGE_KEYS) {
+    const value = sessionStorage.getItem(key);
+    if (!value) continue;
+
     try {
-      const userData = JSON.parse(storedUser);
-      if (userData.id) return true;
+      const parsed = JSON.parse(value);
+      if (parsed?.isAuthenticated === true) return true;
     } catch {
-      // Invalid JSON
+      if (value === "true") return true;
     }
   }
-
   return false;
+}
+
+function checkTokenAndUserAuth(): boolean {
+  const authToken = localStorage.getItem("auth-token");
+  const storedUser = localStorage.getItem("frontend-koddev-user");
+
+  if (!authToken || !storedUser) return false;
+
+  try {
+    const userData = JSON.parse(storedUser);
+    return !!userData.id;
+  } catch {
+    return false;
+  }
 }
 
 export function useGuidedLearningAuth(): AuthState {
@@ -55,31 +63,28 @@ export function useGuidedLearningAuth(): AuthState {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
-  useEffect(() => {
-    const checkAuth = () => {
-      if (contextAuth && user) {
-        setIsAuthenticated(true);
-        setIsLoading(false);
-        return;
-      }
-
-      const storageAuth = checkStorageAuth();
-      setIsAuthenticated(storageAuth);
+  const checkAuth = () => {
+    if (contextAuth && user) {
+      setIsAuthenticated(true);
       setIsLoading(false);
-    };
+      return;
+    }
 
-    checkAuth();
+    const storageAuth = checkStorageAuth();
+    setIsAuthenticated(storageAuth);
+    setIsLoading(false);
+  };
 
-    // Listen for storage changes
-    const handleStorageChange = (e: StorageEvent) => {
-      if (
-        e.key &&
-        (AUTH_STORAGE_KEYS.includes(e.key) || e.key === "auth-token")
-      ) {
-        checkAuth();
-      }
-    };
+  const handleStorageChange = (e: StorageEvent) => {
+    if (
+      e.key &&
+      (AUTH_STORAGE_KEYS.includes(e.key) || e.key === "auth-token")
+    ) {
+      checkAuth();
+    }
+  };
 
+  const setupEventListeners = () => {
     window.addEventListener("storage", handleStorageChange);
     window.addEventListener("auth-state-changed", checkAuth);
 
@@ -91,7 +96,13 @@ export function useGuidedLearningAuth(): AuthState {
       window.removeEventListener("auth-state-changed", checkAuth);
       clearInterval(interval);
     };
-  }, [contextAuth, user]);
+  };
+
+  useEffect(() => {
+    checkAuth();
+    const cleanup = setupEventListeners();
+    return cleanup;
+  }, [checkAuth, setupEventListeners, contextAuth, user]);
 
   return {
     isAuthenticated,

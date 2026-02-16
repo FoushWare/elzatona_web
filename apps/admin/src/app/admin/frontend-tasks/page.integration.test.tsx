@@ -7,7 +7,7 @@ import FrontendTasksPage from "./page";
 
 // Mock the common-ui components
 vi.mock("@elzatona/common-ui", () => ({
-  FrontendTaskEditor: ({ isOpen, onClose, onSave, task, mode }: any) =>
+  FrontendTaskEditor: ({ isOpen, onClose, onSave, _task, _mode }: unknown) =>
     isOpen ? (
       <div data-testid="frontend-task-editor">
         <button onClick={onClose} data-testid="close-editor">
@@ -30,17 +30,17 @@ vi.mock("@elzatona/common-ui", () => ({
         </button>
       </div>
     ) : null,
-  Button: ({ children, onClick, ...props }: any) => (
+  Button: ({ children, onClick, ...props }: unknown) => (
     <button onClick={onClick} {...props}>
       {children}
     </button>
   ),
-  Input: ({ ...props }: any) => <input {...props} />,
-  Card: ({ children }: any) => <div data-testid="card">{children}</div>,
-  CardContent: ({ children }: any) => <div>{children}</div>,
-  CardHeader: ({ children }: any) => <div>{children}</div>,
-  CardTitle: ({ children }: any) => <h3>{children}</h3>,
-  Badge: ({ children }: any) => <span data-testid="badge">{children}</span>,
+  Input: ({ ...props }: unknown) => <input {...props} />,
+  Card: ({ children }: unknown) => <div data-testid="card">{children}</div>,
+  CardContent: ({ children }: unknown) => <div>{children}</div>,
+  CardHeader: ({ children }: unknown) => <div>{children}</div>,
+  CardTitle: ({ children }: unknown) => <h3>{children}</h3>,
+  Badge: ({ children }: unknown) => <span data-testid="badge">{children}</span>,
   useToast: () => ({
     showSuccess: vi.fn(),
     showError: vi.fn(),
@@ -49,7 +49,7 @@ vi.mock("@elzatona/common-ui", () => ({
 
 // Mock fetch
 const mockFetch = vi.fn();
-global.fetch = mockFetch;
+globalThis.fetch = mockFetch;
 
 describe("Frontend Tasks Page - Integration", () => {
   beforeEach(() => {
