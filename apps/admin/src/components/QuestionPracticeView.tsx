@@ -298,33 +298,47 @@ export const QuestionPracticeView: React.FC<QuestionPracticeViewProps> = ({
             const isSelected = selectedAnswer === option.text;
             const isWrong = isSelected && !isCorrect;
 
+            let buttonClass =
+              "w-full text-left p-4 sm:p-5 rounded-xl sm:rounded-2xl border-2 transition-all duration-300 transform ";
+            if (!selectedAnswer) {
+              buttonClass +=
+                "border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 hover:border-indigo-500 dark:hover:border-indigo-500 hover:bg-indigo-50 dark:hover:bg-indigo-900/30 hover:shadow-xl hover:shadow-indigo-200/50 dark:hover:shadow-indigo-900/30 hover:scale-[1.02] active:scale-[0.98] text-gray-900 dark:text-gray-100";
+            } else if (isCorrect) {
+              buttonClass +=
+                "border-green-500 dark:border-green-400 bg-gradient-to-r from-green-50 to-emerald-50 dark:from-green-900/40 dark:to-emerald-900/40 text-green-900 dark:text-green-100 shadow-xl shadow-green-200/50 dark:shadow-green-900/30 scale-[1.02]";
+            } else if (isWrong) {
+              buttonClass +=
+                "border-red-500 dark:border-red-400 bg-gradient-to-r from-red-50 to-rose-50 dark:from-red-900/40 dark:to-rose-900/40 text-red-900 dark:text-red-100 shadow-xl shadow-red-200/50 dark:shadow-red-900/30 scale-[1.02]";
+            } else {
+              buttonClass +=
+                "border-gray-300 dark:border-gray-600 bg-gray-100 dark:bg-gray-700/70 text-gray-500 dark:text-gray-500 opacity-70 dark:opacity-60";
+            }
+            buttonClass += selectedAnswer
+              ? " cursor-default"
+              : " cursor-pointer";
+
+            let divClass =
+              "w-10 h-10 sm:w-12 sm:h-12 rounded-xl flex items-center justify-center text-base sm:text-lg font-bold shadow-md transition-all duration-300 flex-shrink-0 ";
+            if (isCorrect) {
+              divClass +=
+                "bg-gradient-to-br from-green-500 to-emerald-600 text-white shadow-green-500/50";
+            } else if (isWrong) {
+              divClass +=
+                "bg-gradient-to-br from-red-500 to-rose-600 text-white shadow-red-500/50";
+            } else {
+              divClass +=
+                "bg-gradient-to-br from-indigo-100 to-purple-100 dark:from-indigo-800/60 dark:to-purple-800/60 text-indigo-700 dark:text-indigo-200";
+            }
+
             return (
               <button
                 key={optionId}
                 onClick={() => handleAnswerSelect(option.text)}
                 disabled={!!selectedAnswer}
-                className={`w-full text-left p-4 sm:p-5 rounded-xl sm:rounded-2xl border-2 transition-all duration-300 transform ${
-                  !selectedAnswer
-                    ? "border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 hover:border-indigo-500 dark:hover:border-indigo-500 hover:bg-indigo-50 dark:hover:bg-indigo-900/30 hover:shadow-xl hover:shadow-indigo-200/50 dark:hover:shadow-indigo-900/30 hover:scale-[1.02] active:scale-[0.98] text-gray-900 dark:text-gray-100"
-                    : isCorrect
-                      ? "border-green-500 dark:border-green-400 bg-gradient-to-r from-green-50 to-emerald-50 dark:from-green-900/40 dark:to-emerald-900/40 text-green-900 dark:text-green-100 shadow-xl shadow-green-200/50 dark:shadow-green-900/30 scale-[1.02]"
-                      : isWrong
-                        ? "border-red-500 dark:border-red-400 bg-gradient-to-r from-red-50 to-rose-50 dark:from-red-900/40 dark:to-rose-900/40 text-red-900 dark:text-red-100 shadow-xl shadow-red-200/50 dark:shadow-red-900/30 scale-[1.02]"
-                        : "border-gray-300 dark:border-gray-600 bg-gray-100 dark:bg-gray-700/70 text-gray-500 dark:text-gray-500 opacity-70 dark:opacity-60"
-                } ${selectedAnswer ? "cursor-default" : "cursor-pointer"}`}
+                className={buttonClass}
               >
                 <div className="flex items-center space-x-4 sm:space-x-5">
-                  <div
-                    className={`w-10 h-10 sm:w-12 sm:h-12 rounded-xl flex items-center justify-center text-base sm:text-lg font-bold shadow-md transition-all duration-300 flex-shrink-0 ${
-                      isCorrect
-                        ? "bg-gradient-to-br from-green-500 to-emerald-600 text-white shadow-green-500/50"
-                        : isWrong
-                          ? "bg-gradient-to-br from-red-500 to-rose-600 text-white shadow-red-500/50"
-                          : "bg-gradient-to-br from-indigo-100 to-purple-100 dark:from-indigo-800/60 dark:to-purple-800/60 text-indigo-700 dark:text-indigo-200"
-                    }`}
-                  >
-                    {optionLetter}
-                  </div>
+                  <div className={divClass}>{optionLetter}</div>
                   <div className="flex-1 min-w-0">
                     {formatOptionText(option.text)}
                   </div>

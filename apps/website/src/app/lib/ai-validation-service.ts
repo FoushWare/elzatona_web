@@ -49,8 +49,12 @@ export class AIValidationService {
   ): Promise<ValidationResult> {
     const prompt = this.buildValidationPrompt(request);
 
+    const apiKey = process.env.GOOGLE_API_KEY;
+    if (!apiKey) {
+      throw new Error("GOOGLE_API_KEY environment variable is not set.");
+    }
     const response = await fetch(
-      "https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=YOUR_API_KEY",
+      `https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${apiKey}`,
       {
         method: "POST",
         headers: {
@@ -130,10 +134,11 @@ Consider:
    */
   private static parseAIResponse(aiResponse: string): ValidationResult {
     try {
-      // Try to extract JSON from the response
-      const jsonMatch = aiResponse.match(/\{[\s\S]*\}/);
-      if (jsonMatch) {
-        const parsed = JSON.parse(jsonMatch[0]);
+      // Extract JSON from the response using indexOf to avoid ReDoS
+      const start = aiResponse.indexOf("{");
+      const end = aiResponse.lastIndexOf("}");
+      if (start !== -1 && end > start) {
+        const parsed = JSON.parse(aiResponse.substring(start, end + 1));
         return {
           isCorrect: parsed.isCorrect || false,
           score: Math.max(0, Math.min(100, parsed.score || 0)),
@@ -147,8 +152,13 @@ Consider:
 
     // Fallback parsing
     const isCorrect = /correct|right|accurate|good/i.test(aiResponse);
-    const scoreMatch = aiResponse.match(/(\d+)\s*(?:%|percent|score)/i);
-    const score = scoreMatch ? parseInt(scoreMatch[1]) : isCorrect ? 100 : 0;
+    const scoreMatch = /(\d+)\s*(?:%|percent|score)/i.exec(aiResponse);
+    let score = 0;
+    if (scoreMatch) {
+      score = Number.parseInt(scoreMatch[1], 10);
+    } else if (isCorrect) {
+      score = 100;
+    }
 
     return {
       isCorrect,

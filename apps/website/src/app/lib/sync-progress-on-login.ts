@@ -50,10 +50,6 @@ export async function syncAllGuidedProgress(
       }
     }
 
-    console.log(
-      `📦 Found ${guidedKeys.length} guided learning progress entries to sync`,
-    );
-
     // Sync each guided progress
     for (const key of guidedKeys) {
       try {
@@ -84,41 +80,30 @@ export async function syncAllGuidedProgress(
 
         if (response.ok) {
           synced.push(planId);
-          console.log(`✅ Synced guided progress for plan: ${planId}`);
 
           // Remove from localStorage after successful sync
           try {
             localStorage.removeItem(key);
-            console.log(`🗑️ Removed guided progress from localStorage: ${key}`);
-          } catch (removeError) {
-            console.warn(
-              `⚠️ Failed to remove ${key} from localStorage:`,
-              removeError,
-            );
+          } catch (_removeError) {
+            // Ignore localStorage removal errors
           }
         } else {
           const errorData = await response
             .json()
             .catch(() => ({ error: "Unknown error" }));
           errors.push(`Plan ${planId}: ${errorData.error || "Sync failed"}`);
-          console.error(
-            `❌ Failed to sync guided progress for plan ${planId}:`,
-            errorData,
-          );
         }
       } catch (error) {
         const planId = key.replace("guided-practice-progress-", "");
         errors.push(
           `Plan ${planId}: ${error instanceof Error ? error.message : "Parse error"}`,
         );
-        console.error(`❌ Error syncing guided progress for ${key}:`, error);
       }
     }
   } catch (error) {
     errors.push(
       `Guided progress scan: ${error instanceof Error ? error.message : "Unknown error"}`,
     );
-    console.error("❌ Error scanning guided progress:", error);
   }
 
   return {
@@ -140,7 +125,6 @@ export async function syncFreeStyleProgress(
   try {
     const progressData = localStorage.getItem("free-style-practice-progress");
     if (!progressData) {
-      console.log("📭 No free-style progress found in localStorage");
       return { success: true };
     }
 
@@ -165,17 +149,11 @@ export async function syncFreeStyleProgress(
     });
 
     if (response.ok) {
-      console.log("✅ Synced free-style practice progress");
-
       // Remove from localStorage after successful sync
       try {
         localStorage.removeItem("free-style-practice-progress");
-        console.log("🗑️ Removed free-style progress from localStorage");
       } catch (removeError) {
-        console.warn(
-          "⚠️ Failed to remove free-style progress from localStorage:",
-          removeError,
-        );
+        // Ignore localStorage removal errors
       }
 
       return { success: true };
@@ -183,11 +161,9 @@ export async function syncFreeStyleProgress(
       const errorData = await response
         .json()
         .catch(() => ({ error: "Unknown error" }));
-      console.error("❌ Failed to sync free-style progress:", errorData);
       return { success: false, error: errorData.error || "Sync failed" };
     }
   } catch (error) {
-    console.error("❌ Error syncing free-style progress:", error);
     return {
       success: false,
       error: error instanceof Error ? error.message : "Unknown error",
@@ -209,8 +185,6 @@ export async function syncAllProgressOnLogin(
   guided: { synced: number; errors: string[] };
   freeStyle: { success: boolean; error?: string };
 }> {
-  console.log("🔄 Starting progress sync on login...", { userId });
-
   const [guidedResult, freeStyleResult] = await Promise.allSettled([
     syncAllGuidedProgress(authToken, userId),
     syncFreeStyleProgress(authToken, userId),

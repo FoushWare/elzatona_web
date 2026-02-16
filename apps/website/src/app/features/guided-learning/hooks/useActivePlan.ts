@@ -21,7 +21,7 @@ export function useActivePlan(isAuthenticated: boolean): UseActivePlanResult {
   const [currentDay, setCurrentDay] = useState(1);
 
   useEffect(() => {
-    if (!isAuthenticated || typeof window === "undefined") return;
+    if (!isAuthenticated || globalThis.window === undefined) return;
 
     const stored = localStorage.getItem("active-guided-plan");
     if (stored) {
@@ -40,6 +40,7 @@ export function useActivePlan(isAuthenticated: boolean): UseActivePlanResult {
           setCurrentDay(Math.min(diffDays, plan.duration));
         }
       } catch {
+        console.warn("Failed to parse active guided plan from localStorage");
         localStorage.removeItem("active-guided-plan");
       }
     }

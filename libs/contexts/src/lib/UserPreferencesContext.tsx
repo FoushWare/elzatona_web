@@ -75,9 +75,8 @@ export function UserPreferencesProvider({
   children,
 }: UserPreferencesProviderProps) {
   const [user] = useState<{ id: string } | null>(null);
-  const updateUserProfile = async (data: { preferences: UserPreferences }) => {
+  const updateUserProfile = async (_data: { preferences: UserPreferences }) => {
     // Placeholder for user profile update
-    console.log("User profile update:", data);
     // If supabase is available, update user preferences in database
     if (supabase && user) {
       // Future implementation: update user preferences in Supabase
@@ -100,8 +99,7 @@ export function UserPreferencesProvider({
             ...parsed,
           });
         }
-      } catch (error) {
-        console.error("Error loading preferences:", error);
+      } catch (_error) {
         setPreferences(defaultPreferences);
       } finally {
         setIsLoading(false);
@@ -127,7 +125,6 @@ export function UserPreferencesProvider({
         });
       }
     } catch (error) {
-      console.error("Error updating preferences:", error);
       throw error;
     }
   };
@@ -139,14 +136,17 @@ export function UserPreferencesProvider({
 
       if (theme === "system") {
         // Use system preference
-        const systemTheme = window.matchMedia("(prefers-color-scheme: dark)")
-          .matches
-          ? "dark"
-          : "light";
-        document.documentElement.classList.toggle(
-          "dark",
-          systemTheme === "dark",
-        );
+        if (globalThis.window) {
+          const systemTheme = globalThis.window.matchMedia(
+            "(prefers-color-scheme: dark)",
+          ).matches
+            ? "dark"
+            : "light";
+          document.documentElement.classList.toggle(
+            "dark",
+            systemTheme === "dark",
+          );
+        }
       } else {
         // Use user preference
         document.documentElement.classList.toggle("dark", theme === "dark");
@@ -161,8 +161,10 @@ export function UserPreferencesProvider({
 
   // Listen for system theme changes when using system preference
   useEffect(() => {
-    if (preferences.theme === "system") {
-      const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
+    if (preferences.theme === "system" && globalThis.window) {
+      const mediaQuery = globalThis.window.matchMedia(
+        "(prefers-color-scheme: dark)",
+      );
       const handleChange = () => {
         document.documentElement.classList.toggle("dark", mediaQuery.matches);
       };

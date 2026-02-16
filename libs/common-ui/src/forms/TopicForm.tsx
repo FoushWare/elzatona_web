@@ -131,7 +131,9 @@ export const TopicForm: React.FC<TopicFormProps> = ({
   }, [formDataName, topic, isJsonMode, setFormData]);
 
   // Helper: Extract topics array from parsed JSON
-  const extractTopicsArray = (parsed: unknown): any[] => {
+  const extractTopicsArray = (
+    parsed: unknown,
+  ): Array<Partial<TopicFormData>> => {
     if (Array.isArray(parsed)) {
       return parsed;
     }
@@ -141,7 +143,7 @@ export const TopicForm: React.FC<TopicFormProps> = ({
       "topics" in parsed &&
       Array.isArray((parsed as { topics: unknown }).topics)
     ) {
-      return (parsed as { topics: any[] }).topics;
+      return (parsed as { topics: Array<Partial<TopicFormData>> }).topics;
     }
     return [];
   };
@@ -175,7 +177,7 @@ export const TopicForm: React.FC<TopicFormProps> = ({
           const topicErrors: string[] = [];
 
           // Validate required fields
-          if (!topicData.name || !topicData.name.trim()) {
+          if (!topicData.name?.trim()) {
             topicErrors.push(`Topic ${index + 1}: name is required`);
           }
           if (topicData.description && !topicData.description.trim()) {
@@ -220,9 +222,9 @@ export const TopicForm: React.FC<TopicFormProps> = ({
             }
 
             validatedTopics.push({
-              name: topicData.name.trim(),
-              description: topicData.description.trim(),
-              categoryId: topicData.categoryId,
+              name: (topicData.name ?? "").trim(),
+              description: (topicData.description ?? "").trim(),
+              categoryId: topicData.categoryId ?? "",
               difficulty: topicData.difficulty || "beginner",
               estimatedQuestions: topicData.estimatedQuestions || 10,
               slug: slug,
@@ -316,8 +318,8 @@ export const TopicForm: React.FC<TopicFormProps> = ({
 
       try {
         await onSubmit(parsedTopics);
-      } catch (error) {
-        console.error("Error submitting topics:", error);
+      } catch (_error) {
+        // Error handled by parent component
       }
     } else {
       // Handle single form submission
@@ -327,8 +329,8 @@ export const TopicForm: React.FC<TopicFormProps> = ({
 
       try {
         await onSubmit(formData);
-      } catch (error) {
-        console.error("Error submitting topic:", error);
+      } catch (_error) {
+        // Error handled by parent component
       }
     }
   };
@@ -367,6 +369,7 @@ export const TopicForm: React.FC<TopicFormProps> = ({
               className="sr-only peer"
             />
             <div className="relative w-9 h-5 bg-gray-300 dark:bg-gray-600 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-red-200 dark:peer-focus:ring-red-900 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-red-600 dark:peer-checked:bg-red-700"></div>
+            <span className="ml-2 text-sm">JSON Mode</span>
           </label>
         </div>
       )}
@@ -392,7 +395,7 @@ export const TopicForm: React.FC<TopicFormProps> = ({
             {parsedTopics.length > 0 && (
               <span className="ml-2 text-green-600 dark:text-green-400 font-semibold">
                 ✓ {parsedTopics.length} valid topic
-                {parsedTopics.length !== 1 ? "s" : ""} found
+                {parsedTopics.length === 1 ? "" : "s"} found
               </span>
             )}
           </p>
@@ -565,7 +568,7 @@ export const TopicForm: React.FC<TopicFormProps> = ({
             if (isLoading) return "Saving...";
             if (topic) return "Update Topic";
             if (isJsonMode) {
-              return `Create ${parsedTopics.length} Topic${parsedTopics.length !== 1 ? "s" : ""}`;
+              return `Create ${parsedTopics.length} Topic${parsedTopics.length === 1 ? "" : "s"}`;
             }
             return "Create Topic";
           })()}

@@ -1,10 +1,9 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { createClient } from "@supabase/supabase-js";
 import { Loader2, CheckCircle, XCircle } from "lucide-react";
-import { Suspense } from "react";
 
 const supabaseUrl = process.env["NEXT_PUBLIC_SUPABASE_URL"] || "";
 const supabaseAnonKey = process.env["NEXT_PUBLIC_SUPABASE_ANON_KEY"] || "";
@@ -73,7 +72,7 @@ function CallbackContent() {
           );
 
           // Dispatch custom event to notify other components
-          window.dispatchEvent(new Event("auth-state-changed"));
+          globalThis.dispatchEvent(new Event("auth-state-changed"));
 
           // Redirect after short delay
           const redirectTo = searchParams.get("redirect") || "/";
