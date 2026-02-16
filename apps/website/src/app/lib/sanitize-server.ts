@@ -39,11 +39,11 @@ const xssOptions: IFilterXSSOptions = {
       if (value.startsWith("http://") || value.startsWith("https://")) {
         // Escape attribute value manually
         const escaped = value
-          .replaceAll('&', '&amp;')
-          .replaceAll('"', '&quot;')
-          .replaceAll("'", '&#x27;')
-          .replaceAll('<', '&lt;')
-          .replaceAll('>', '&gt;');
+          .replaceAll("&", "&amp;")
+          .replaceAll('"', "&quot;")
+          .replaceAll("'", "&#x27;")
+          .replaceAll("<", "&lt;")
+          .replaceAll(">", "&gt;");
         return `${name}="${escaped}"`;
       }
       return "";
@@ -152,14 +152,6 @@ function sanitizeFieldValue(
       return value
         .replaceAll(/[\x00-\x08\x0B-\x0C\x0E-\x1F\x7F]/g, "") // Remove control chars except \n (0x0A), \r (0x0D), \t (0x09)
         .replaceAll("\x00", "")
-        .replaceAll("\x1E", "")
-        .replaceAll("\x1F", "")
-        .replaceAll("\x1D", "")
-        .replaceAll("\x1C", "")
-        .replaceAll("\x1B", "")
-        .replaceAll("\x1A", "")
-        .replaceAll("\x19", "")
-        .replaceAll("\x18", "");
         .replaceAll("\x1E", "")
         .replaceAll("\x1F", "")
         .replaceAll("\x1D", "")
@@ -346,7 +338,7 @@ export function sanitizeForLogging(value: unknown): string {
   // Remove any patterns that could be interpreted as log format specifiers
   sanitized = sanitized.replace(
     /%\d*[diouxXeEfFgGaAcspn%]/g,
-    '[format-removed]'
+    "[format-removed]",
   );
 
   return sanitized;

@@ -14,9 +14,8 @@ import {
   FrontendTaskEditorHeader,
   FrontendTaskEditorMainContent,
 } from "./FrontendTaskEditorComponents";
-import {
-  // ...existing code...
-} from "./FrontendTaskEditorUtils";
+import {} from // ...existing code...
+"./FrontendTaskEditorUtils";
 
 interface FrontendTaskEditorProps {
   readonly task?: AdminFrontendTask | null;
@@ -45,8 +44,12 @@ const useFrontendTaskEditorState = (task?: AdminFrontendTask | null) => {
   // Minimal local state
   const [copied, setCopied] = React.useState(false);
   const [showPreview, setShowPreview] = React.useState(true);
-  const [activeTab, setActiveTab] = React.useState<"description" | "solution">("description");
-  const [activeBrowserTab, setActiveBrowserTab] = React.useState<"browser" | "console">("browser");
+  const [activeTab, setActiveTab] = React.useState<"description" | "solution">(
+    "description",
+  );
+  const [activeBrowserTab, setActiveBrowserTab] = React.useState<
+    "browser" | "console"
+  >("browser");
   const [newHint, setNewHint] = React.useState("");
   const [newTag, setNewTag] = React.useState("");
   const [newFileName, setNewFileName] = React.useState("");
@@ -55,9 +58,6 @@ const useFrontendTaskEditorState = (task?: AdminFrontendTask | null) => {
   const [showAddFolder, setShowAddFolder] = React.useState(false);
 
   return {
-    // Theme management
-  const { showFileExplorer, setShowFileExplorer } = useFileManagement(task);
-    handleMouseDown,
     // File management
     activeFile,
     fileTree,

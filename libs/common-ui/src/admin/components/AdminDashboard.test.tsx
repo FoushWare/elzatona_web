@@ -27,7 +27,7 @@ vi.mock("../../components/organisms/MetricGrid", () => ({
         <div key={metric.label} data-testid={`metric-${metric.label}`}>
           {metric.label}: {metric.value}
         </div>
-      ))}}
+      ))}
     </div>
   ),
 }));
@@ -39,7 +39,7 @@ vi.mock("../../components/organisms/ActivityFeed", () => ({
         <div key={activity.label} data-testid={`activity-${activity.label}`}>
           {activity.label}: {activity.value}
         </div>
-      ))}}
+      ))}
     </div>
   ),
 }));

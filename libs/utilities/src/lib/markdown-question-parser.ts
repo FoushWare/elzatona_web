@@ -198,7 +198,9 @@ export class MarkdownQuestionParser {
   /**
    * Parse GitHub-style multiple choice questions
    */
-  private static parseGitHubStyleMultipleChoice(section: string): MarkdownQuestion[] {
+  private static parseGitHubStyleMultipleChoice(
+    section: string,
+  ): MarkdownQuestion[] {
     const questions: MarkdownQuestion[] = [];
 
     const githubSections = section
@@ -218,7 +220,9 @@ export class MarkdownQuestionParser {
   /**
    * Parse a single GitHub-style question block
    */
-  private static parseSingleGitHubQuestion(block: string): MarkdownQuestion | null {
+  private static parseSingleGitHubQuestion(
+    block: string,
+  ): MarkdownQuestion | null {
     const lines = block.split("\n");
     let questionText = "";
     let optionsText = "";
@@ -230,9 +234,8 @@ export class MarkdownQuestionParser {
       const line = lines[i].trim();
 
       // Extract question from header
-        if (/^#{1,6}\s*\d+\./.test(line)) {
-          ? line.replace(/^#{1,6}\s*\d+\.?\s*/, "").trim()
-          : line.trim();
+      if (/^#{1,6}\s*\d+\./.test(line)) {
+        questionText = line.replace(/^#{1,6}\s*\d+\.?\s*/, "").trim();
         continue;
       }
 
@@ -245,7 +248,7 @@ export class MarkdownQuestionParser {
       if (inCodeBlock) continue;
 
       // Look for options
-        if (/^-?\s*[A-Z]:\s*/.test(line)) {
+      if (/^-?\s*[A-Z]:\s*/.test(line)) {
         optionsText += line + "\n";
       }
 
@@ -299,7 +302,10 @@ export class MarkdownQuestionParser {
   /**
    * Extract answer from HTML details section
    */
-  private static extractAnswerFromDetails(lines: string[], startIndex: number): string {
+  private static extractAnswerFromDetails(
+    lines: string[],
+    startIndex: number,
+  ): string {
     for (let j = startIndex; j < Math.min(startIndex + 10, lines.length); j++) {
       const answerLine = lines[j].trim();
       if (answerLine.includes("Answer:") || answerLine.includes("**Answer:")) {
@@ -315,7 +321,9 @@ export class MarkdownQuestionParser {
   /**
    * Parse simple format multiple choice questions
    */
-  private static parseSimpleFormatMultipleChoice(section: string): MarkdownQuestion[] {
+  private static parseSimpleFormatMultipleChoice(
+    section: string,
+  ): MarkdownQuestion[] {
     const questions: MarkdownQuestion[] = [];
 
     const questionBlocks = section
@@ -335,12 +343,14 @@ export class MarkdownQuestionParser {
   /**
    * Parse a single simple format question block
    */
-  private static parseSingleSimpleQuestion(block: string): MarkdownQuestion | null {
+  private static parseSingleSimpleQuestion(
+    block: string,
+  ): MarkdownQuestion | null {
     const lines = block.split("\n").filter((line) => line.trim());
     if (lines.length < 2) return null;
 
     const questionText = lines[0].trim();
-      if (!/^\d+\./.test(questionText)) return null;
+    if (!/^\d+\./.test(questionText)) return null;
     // Find all option lines (a), b), c), etc.)
     const optionLines = lines.filter((line) =>
       /^[a-zA-Z]\)\s/.test(line.trim()),
@@ -517,7 +527,10 @@ export class MarkdownQuestionParser {
    */
   private static extractExplanation(section: string): string | undefined {
     // First try to extract from HTML details/summary sections
-    const detailsMatch = /<details>[\s\S]*?<summary>[\s\S]*?<\/summary>[\s\S]*?<p>[\s\S]*?<\/p>[\s\S]*?<\/details>/i.exec(section);
+    const detailsMatch =
+      /<details>[\s\S]*?<summary>[\s\S]*?<\/summary>[\s\S]*?<p>[\s\S]*?<\/p>[\s\S]*?<\/details>/i.exec(
+        section,
+      );
 
     if (detailsMatch) {
       // Extract content between <p> tags, removing HTML tags
@@ -531,7 +544,9 @@ export class MarkdownQuestionParser {
     }
 
     // Fallback to simple explanation format
-    const explanationMatch = /explanation[:\s]+(.*?)(?:\n\n|\n$|$)/i.exec(section);
+    const explanationMatch = /explanation[:\s]+(.*?)(?:\n\n|\n$|$)/i.exec(
+      section,
+    );
     return explanationMatch ? explanationMatch[1].trim() : undefined;
   }
 
@@ -541,7 +556,8 @@ export class MarkdownQuestionParser {
   }
 
   private static extractLearningPath(section: string): string | undefined {
-    const learningPathMatch = /(?:learning[_\s]?path|learningpath)[:\s]+(.*?)(?:\n|$)/i.exec(section);
+    const learningPathMatch =
+      /(?:learning[_\s]?path|learningpath)[:\s]+(.*?)(?:\n|$)/i.exec(section);
     return learningPathMatch ? learningPathMatch[1].trim() : undefined;
   }
 

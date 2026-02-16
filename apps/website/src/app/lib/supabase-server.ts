@@ -17,7 +17,7 @@ if (!supabaseUrl || !supabaseServiceRoleKey) {
 }
 
 // Initialize Supabase client (server-side with service role key)
-const supabase: ReturnType<typeof createClient> | null = null;
+let supabase: ReturnType<typeof createClient> | null = null;
 
 try {
   supabase = createClient(supabaseUrl, supabaseServiceRoleKey, {
