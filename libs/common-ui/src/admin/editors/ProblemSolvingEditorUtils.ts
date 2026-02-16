@@ -309,5 +309,5 @@ export const validateFormData = (
 };
 
 export const sanitizeFunctionName = (name: string): string => {
-  return name.replace(/\W/g, "").replace(/^\d/, "_");
+  return name.replaceAll(/\W/g, "").replace(/^\d/, "_");
 };

@@ -20,7 +20,6 @@ try {
     const _supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
     // Supabase client created but not used in ErrorBoundary
     // Reserved for future error logging functionality
-    void _supabase;
   }
 } catch (error) {
   console.warn("Supabase client creation failed in ErrorBoundary:", error);

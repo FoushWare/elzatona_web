@@ -1,15 +1,11 @@
-// Helper functions to flatten nested reduce/filter logic
-function countCategoriesForCard(card, categories) {
-  return categories.filter((cat) => cat.learning_card_id === card.id).length;
-}
-
-function countTopicsForCategory(category, topics) {
-  return topics.filter((topic) => topic.category_id === category.id).length;
-}
-
 // Helper functions to avoid nested filter operations
 function countSelectedQuestionsForPlan(planId: string, planQuestions: Set<string>): number {
   return Array.from(planQuestions).filter((pq) => pq.startsWith(`${planId}-`)).length;
+}
+
+// Helper function to get topics for a category
+function getTopicsForCategory(categoryId: string, topics: any[]): any[] {
+  return topics.filter((topic) => topic.category_id === categoryId);
 }
 
 import React from "react";
@@ -86,7 +82,7 @@ export const PlansManager: React.FC<PlansManagerProps> = ({
   cards,
   categories,
   topics,
-  questions,
+  _questions,
   stats,
   planQuestions,
   expandedPlans,
@@ -101,7 +97,7 @@ export const PlansManager: React.FC<PlansManagerProps> = ({
   onDeletePlan,
   onCreatePlan,
   onManageCards,
-  onToggleQuestionInPlan,
+  _onToggleQuestionInPlan,
   openTopicQuestionsModal,
 }) => {
   return (
@@ -320,10 +316,7 @@ export const PlansManager: React.FC<PlansManagerProps> = ({
                             {expandedPlanCards.has(card.id) && (
                               <div className="ml-6 space-y-4">
                                 {cardCategories.map((category) => {
-                                  const categoryTopics = topics.filter(
-                                    (topic) =>
-                                      topic.category_id === category.id,
-                                  );
+                                  const categoryTopics = getTopicsForCategory(category.id, topics);
 
                                   return (
                                     <div

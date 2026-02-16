@@ -46,8 +46,6 @@ import {
   BookOpen,
   Trash2,
   Target,
-  Puzzle,
-  Network,
 } from "lucide-react";
 
 interface LearningCardsManagerProps {

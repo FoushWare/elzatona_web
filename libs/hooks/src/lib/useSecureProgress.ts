@@ -121,7 +121,7 @@ export function useSecureProgress(): UseSecureProgressReturn {
         if (progressData.learningMode === "guided" && progressData.planId) {
           if (
             !cachedData.data.currentPlan ||
-            cachedData.data.currentPlan.planId !== progressData.planId
+            cachedData.data.currentPlan?.planId !== progressData.planId
           ) {
             cachedData.data.currentPlan = {
               plan_id: progressData.planId,
