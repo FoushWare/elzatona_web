@@ -1,8 +1,0 @@
-main
-?? .git-state.txt
-?? bugs-issues.md
-38fb0afa fix: trigger CI re-run after formatting fixes
-eb7641c0 refactor: change token env var from GITHUB_TOKEN to REPO_TOKEN for clarity
-eb18f058 docs: add dedicated contributor section for environment variable setup
-98746020 docs: add ADMIN_URL environment variable documentation for Vercel deployment
-132c5db3 fix: update admin redirect to use environment variable instead of hardcoded localhost

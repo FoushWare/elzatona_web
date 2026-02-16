@@ -13,7 +13,7 @@ Fix all 30 open CodeQL security alerts across 8 categories. Each category gets i
 **Storage**: Supabase (PostgreSQL)
 **Testing**: Vitest
 **Target Platform**: Vercel (Web)
-**Project Type**: Nx Monorepo (apps/admin, apps/website, libs/*)
+**Project Type**: Nx Monorepo (apps/admin, apps/website, libs/\*)
 
 ## Constitution Check
 
@@ -28,6 +28,7 @@ Fix all 30 open CodeQL security alerts across 8 categories. Each category gets i
 ## Task Execution Plan
 
 ### Task 1: Fix Clear-Text Logging
+
 - **Branch**: `fix/clear-text-logging`
 - **Issues**: #7500–#7509 (10 issues, ERROR severity)
 - **Files**:
@@ -37,6 +38,7 @@ Fix all 30 open CodeQL security alerts across 8 categories. Each category gets i
 - **PR**: → `main`
 
 ### Task 2: Fix Insecure Randomness
+
 - **Branch**: `fix/insecure-randomness`
 - **Issues**: #7497–#7498 (2 issues, WARNING)
 - **Files**:
@@ -46,6 +48,7 @@ Fix all 30 open CodeQL security alerts across 8 categories. Each category gets i
 - **PR**: → `main`
 
 ### Task 3: Fix XSS Through DOM
+
 - **Branch**: `fix/xss-through-dom`
 - **Issues**: #7492–#7494 (3 issues, WARNING)
 - **Files**:
@@ -55,6 +58,7 @@ Fix all 30 open CodeQL security alerts across 8 categories. Each category gets i
 - **PR**: → `main`
 
 ### Task 4: Fix Incomplete Multi-Character Sanitization
+
 - **Branch**: `fix/incomplete-multi-char-sanitization`
 - **Issues**: #7480–#7483 (4 issues, WARNING)
 - **Files**:
@@ -64,6 +68,7 @@ Fix all 30 open CodeQL security alerts across 8 categories. Each category gets i
 - **PR**: → `main`
 
 ### Task 5: Fix Double-Escaping
+
 - **Branch**: `fix/double-escaping`
 - **Issues**: #7488–#7491 (4 issues, WARNING)
 - **Files**:
@@ -74,6 +79,7 @@ Fix all 30 open CodeQL security alerts across 8 categories. Each category gets i
 - **PR**: → `main`
 
 ### Task 6: Fix Incomplete Sanitization
+
 - **Branch**: `fix/incomplete-sanitization`
 - **Issues**: #7484–#7487 (4 issues, WARNING)
 - **Files**:
@@ -83,6 +89,7 @@ Fix all 30 open CodeQL security alerts across 8 categories. Each category gets i
 - **PR**: → `main`
 
 ### Task 7: Fix Shell Command Injection
+
 - **Branch**: `fix/shell-command-injection`
 - **Issues**: #7495–#7496 (2 issues, WARNING)
 - **Status**: No production code affected. Issues reference `Rest/scripts/` which don't exist in current codebase
@@ -90,6 +97,7 @@ Fix all 30 open CodeQL security alerts across 8 categories. Each category gets i
 - **PR**: → `main` (config change only)
 
 ### Task 8: Add Rate Limiting
+
 - **Branch**: `fix/missing-rate-limiting`
 - **Issues**: #7499 (1 issue, WARNING)
 - **Files**:
@@ -100,13 +108,13 @@ Fix all 30 open CodeQL security alerts across 8 categories. Each category gets i
 
 ## Execution Order
 
-| Order | Task | Effort | Risk |
-|-------|------|--------|------|
-| 1 | Clear-text logging | 15 min | Low |
-| 2 | Insecure randomness | 20 min | Low |
-| 3 | Double-escaping | 20 min | Low |
-| 4 | Incomplete sanitization | 25 min | Low |
-| 5 | XSS through DOM | 15 min | Low |
-| 6 | Incomplete multi-char sanitization | 20 min | Low |
-| 7 | Shell command injection | 10 min | None |
-| 8 | Rate limiting | 45 min | Medium |
+| Order | Task                               | Effort | Risk   |
+| ----- | ---------------------------------- | ------ | ------ |
+| 1     | Clear-text logging                 | 15 min | Low    |
+| 2     | Insecure randomness                | 20 min | Low    |
+| 3     | Double-escaping                    | 20 min | Low    |
+| 4     | Incomplete sanitization            | 25 min | Low    |
+| 5     | XSS through DOM                    | 15 min | Low    |
+| 6     | Incomplete multi-char sanitization | 20 min | Low    |
+| 7     | Shell command injection            | 10 min | None   |
+| 8     | Rate limiting                      | 45 min | Medium |

@@ -56,8 +56,8 @@ export const generateId = (): string => {
   // Use cryptographic randomness instead of Math.random() for secure ID generation
   const array = new Uint8Array(8);
   crypto.getRandomValues(array);
-  return Array.from(array, (b) => b.toString(36).padStart(2, '0'))
-    .join('')
+  return Array.from(array, (b) => b.toString(36).padStart(2, "0"))
+    .join("")
     .substring(0, 11);
 };
 
