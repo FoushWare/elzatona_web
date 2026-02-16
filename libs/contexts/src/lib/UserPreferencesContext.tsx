@@ -136,14 +136,16 @@ export function UserPreferencesProvider({
 
       if (theme === "system") {
         // Use system preference
-        const systemTheme = window.matchMedia("(prefers-color-scheme: dark)")
-          .matches
-          ? "dark"
-          : "light";
-        document.documentElement.classList.toggle(
-          "dark",
-          systemTheme === "dark",
-        );
+        if (globalThis.window) {
+          const systemTheme = globalThis.window.matchMedia("(prefers-color-scheme: dark)")
+            .matches
+            ? "dark"
+            : "light";
+          document.documentElement.classList.toggle(
+            "dark",
+            systemTheme === "dark",
+          );
+        }
       } else {
         // Use user preference
         document.documentElement.classList.toggle("dark", theme === "dark");
@@ -158,8 +160,8 @@ export function UserPreferencesProvider({
 
   // Listen for system theme changes when using system preference
   useEffect(() => {
-    if (preferences.theme === "system") {
-      const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
+    if (preferences.theme === "system" && globalThis.window) {
+      const mediaQuery = globalThis.window.matchMedia("(prefers-color-scheme: dark)");
       const handleChange = () => {
         document.documentElement.classList.toggle("dark", mediaQuery.matches);
       };

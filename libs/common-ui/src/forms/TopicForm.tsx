@@ -175,7 +175,7 @@ export const TopicForm: React.FC<TopicFormProps> = ({
           const topicErrors: string[] = [];
 
           // Validate required fields
-          if (!topicData.name || !topicData.name.trim()) {
+          if (!topicData.name?.trim()) {
             topicErrors.push(`Topic ${index + 1}: name is required`);
           }
           if (topicData.description && !topicData.description.trim()) {
@@ -392,7 +392,7 @@ export const TopicForm: React.FC<TopicFormProps> = ({
             {parsedTopics.length > 0 && (
               <span className="ml-2 text-green-600 dark:text-green-400 font-semibold">
                 ✓ {parsedTopics.length} valid topic
-                {parsedTopics.length !== 1 ? "s" : ""} found
+                {parsedTopics.length === 1 ? "" : "s"} found
               </span>
             )}
           </p>
@@ -565,7 +565,7 @@ export const TopicForm: React.FC<TopicFormProps> = ({
             if (isLoading) return "Saving...";
             if (topic) return "Update Topic";
             if (isJsonMode) {
-              return `Create ${parsedTopics.length} Topic${parsedTopics.length !== 1 ? "s" : ""}`;
+              return `Create ${parsedTopics.length} Topic${parsedTopics.length === 1 ? "" : "s"}`;
             }
             return "Create Topic";
           })()}
