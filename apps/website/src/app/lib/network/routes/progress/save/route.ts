@@ -1,3 +1,24 @@
+// Helper: Parse progress data from request
+async function parseProgressData(request: NextRequest): Promise<ProgressData | null> {
+  try {
+    return await request.json();
+  } catch (parseError) {
+    console.error("❌ Error parsing request body:", sanitizeForLog(parseError));
+    return null;
+  }
+}
+
+// Helper: Development mode response
+function devModeResponse(
+  warning = "Using development mode - authentication not fully configured",
+): NextResponse {
+  return NextResponse.json({
+    success: true,
+    progressId: `progress_${Date.now()}_${Math.random().toString(36).substring(2, 11)}`,
+    message: "Progress saved successfully (development mode)",
+    warning,
+  });
+}
 import { NextRequest, NextResponse } from "next/server";
 
 import { createRepositoryFactoryFromEnv } from "@elzatona/database";

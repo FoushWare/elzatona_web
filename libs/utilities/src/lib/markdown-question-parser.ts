@@ -3,7 +3,7 @@
 
 import { BulkQuestionData } from "./unified-question-schema";
 import { FilterXSS, type IFilterXSSOptions } from "xss";
-import { generateId } from "./utils";
+
 
 /**
  * Completely remove all HTML tags including incomplete ones
@@ -34,15 +34,15 @@ const xssStripAllFilter = new FilterXSS(xssStripAllOptions);
  */
 function removeAllHTMLTagsComprehensive(text: string): string {
   if (!text || typeof text !== "string") {
-    return "";
-  }
-
-  // SECURITY: Use xss library to strip ALL HTML tags
-  // CodeQL recognizes the xss library as a safe HTML sanitization method
-  // Using empty whitelist ensures ALL tags including <script> are removed
-  let cleaned = xssStripAllFilter.process(text);
-
-  // Additional safety: Remove any remaining < and > characters that might be part of incomplete tags
+    return {
+      questions: unifiedQuestions,
+      metadata: {
+        source: "markdown-parser",
+        version: "1.0.0",
+        totalCount: unifiedQuestions.length,
+        categories: Array.from(new Set(unifiedQuestions.map((q) => q.category))),
+      },
+    };
   // This catches edge cases where tags are malformed or incomplete
   cleaned = cleaned.replaceAll(/<[^>]*$/g, ""); // Remove incomplete tags at end
   cleaned = cleaned.replaceAll(/<[^<]*$/g, ""); // Remove any remaining < characters
@@ -776,27 +776,6 @@ a) A CSS framework
 b) A JavaScript library [correct]
 c) A database
 d) A server
-
-Category: Frontend Development
-Learning Path: React Fundamentals
-Topic: JavaScript Libraries
-Tags: #react #javascript #frontend
-Difficulty: easy
-
-Explanation: React is a JavaScript library for building user interfaces.
-
-## Remember:
-- Use numbered lists for questions (1., 2., 3.)
-- Use 'a)', 'b)', 'c)' etc. for simple multiple-choice options
-- Use '- A:', '- B:', '- C:', '- D:' for GitHub-style options
-- Mark correct options with '[correct]' or use HTML details/summary with Answer: X
-- Use 'Category:', 'Learning Path:', 'Topic:', 'Tags:', 'Difficulty:', 'Points:' for metadata
-- Tags should be space or comma-separated, and can start with '#'
-- Difficulty can be 'easy', 'medium', 'hard', 'beginner', 'intermediate', 'advanced'
-- Points can be specified in the title like '[5 points]'
-- All metadata fields are optional - questions will work without them
-- For code questions, use \`\`\`language blocks
-- For detailed explanations, use HTML <details><summary>Answer</summary><p>explanation</p></details>
 `;
   }
 }
