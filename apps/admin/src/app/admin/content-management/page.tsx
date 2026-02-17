@@ -192,7 +192,6 @@ export default function ContentManagementPage() {
           cards={filteredCards}
           categories={categories}
           topics={topics}
-          questions={questions}
           stats={stats}
           planQuestions={planQuestions}
           expandedPlans={expandedPlans}
@@ -207,7 +206,6 @@ export default function ContentManagementPage() {
           onDeletePlan={(plan) => console.log("Delete plan", plan)}
           onCreatePlan={() => console.log("Create plan")}
           onManageCards={openCardManagementModal}
-          onToggleQuestionInPlan={toggleQuestionInPlan}
           openTopicQuestionsModal={openTopicQuestionsModal}
         />
 

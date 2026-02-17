@@ -31,8 +31,8 @@ jobs:
       fail-fast: false
       matrix:
         # CodeQL treats JavaScript and TypeScript as one language
-        # Using just "javascript" will analyze both .js and .ts files
-        language: ["javascript"]
+        # Including both for explicit coverage
+        language: ["javascript", "typescript"]
 
     steps:
       - name: Checkout repository

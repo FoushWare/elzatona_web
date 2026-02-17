@@ -163,106 +163,128 @@ export default function FrontendTasksPage() {
       </Card>
 
       {/* Task Grid */}
-      {isLoading ? (
-        <div className="flex justify-center py-12">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
-        </div>
-      ) : tasks.length === 0 ? (
-        <div className="text-center py-12 bg-gray-50 dark:bg-gray-800 rounded-lg border border-dashed border-gray-300 dark:border-gray-700">
-          <Layout className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-          <h3 className="text-lg font-medium text-gray-900 dark:text-white">
-            No tasks found
-          </h3>
-          <p className="text-gray-500 dark:text-gray-400 mt-1 mb-4">
-            {searchQuery
-              ? "No tasks match your search criteria"
-              : "Get started by creating your first frontend task"}
-          </p>
-          {!searchQuery && (
-            <Button onClick={handleCreateTask} variant="outline">
-              Create Task
-            </Button>
-          )}
-        </div>
-      ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {tasks.map((task) => (
-            <Card
-              key={task.id}
-              className="hover:shadow-lg transition-shadow duration-200"
-            >
-              <CardHeader className="pb-3">
-                <div className="flex justify-between items-start">
-                  <Badge
-                    variant={
-                      task.difficulty === "easy"
-                        ? "secondary"
-                        : task.difficulty === "medium"
-                          ? "default"
-                          : "destructive"
-                    }
-                    className={
-                      task.difficulty === "medium"
-                        ? "bg-yellow-500 hover:bg-yellow-600 text-white"
-                        : ""
-                    }
-                  >
-                    {task.difficulty}
-                  </Badge>
-                  <div className="flex gap-1">
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      className="h-8 w-8"
-                      onClick={() => handleEditTask(task)}
-                    >
-                      <Edit className="h-4 w-4 text-gray-500 hover:text-blue-600" />
-                    </Button>
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      className="h-8 w-8"
-                      onClick={() => handleDeleteTask(task.id)}
-                    >
-                      <Trash2 className="h-4 w-4 text-gray-500 hover:text-red-600" />
-                    </Button>
+      {(() => {
+        if (isLoading) {
+          return (
+            <div className="flex justify-center py-12">
+              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+            </div>
+          );
+        }
+        if (tasks.length === 0) {
+          return (
+            <div className="text-center py-12 bg-gray-50 dark:bg-gray-800 rounded-lg border border-dashed border-gray-300 dark:border-gray-700">
+              <Layout className="h-12 w-12 text-gray-400 mx-auto mb-4" />
+              <h3 className="text-lg font-medium text-gray-900 dark:text-white">
+                No tasks found
+              </h3>
+              <p className="text-gray-500 dark:text-gray-400 mt-1 mb-4">
+                {searchQuery
+                  ? "No tasks match your search criteria"
+                  : "Get started by creating your first frontend task"}
+              </p>
+              {!searchQuery && (
+                <Button onClick={handleCreateTask} variant="outline">
+                  Create Task
+                </Button>
+              )}
+            </div>
+          );
+        }
+        return (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {tasks.map((task) => (
+              <Card
+                key={task.id}
+                className="hover:shadow-lg transition-shadow duration-200"
+              >
+                <CardHeader className="pb-3">
+                  <div className="flex justify-between items-start">
+                    {(() => {
+                      let badgeVariant:
+                        | "default"
+                        | "destructive"
+                        | "outline"
+                        | "secondary";
+                      if (task.difficulty === "easy") {
+                        badgeVariant = "secondary";
+                      } else if (task.difficulty === "medium") {
+                        badgeVariant = "default";
+                      } else {
+                        badgeVariant = "destructive";
+                      }
+                      const badgeClass =
+                        task.difficulty === "medium"
+                          ? "bg-yellow-500 hover:bg-yellow-600 text-white"
+                          : "";
+                      return (
+                        <Badge variant={badgeVariant} className={badgeClass}>
+                          {task.difficulty}
+                        </Badge>
+                      );
+                    })()}
+                    <div className="flex gap-1">
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        className="h-8 w-8"
+                        onClick={() => handleEditTask(task)}
+                      >
+                        <Edit className="h-4 w-4 text-gray-500 hover:text-blue-600" />
+                      </Button>
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        className="h-8 w-8"
+                        onClick={() => handleDeleteTask(task.id)}
+                      >
+                        <Trash2 className="h-4 w-4 text-gray-500 hover:text-red-600" />
+                      </Button>
+                    </div>
                   </div>
-                </div>
-                <CardTitle className="mt-3 line-clamp-1">
-                  {task.title}
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-sm text-gray-500 dark:text-gray-400 line-clamp-2 mb-4">
-                  {task.description}
-                </p>
-                <div className="flex justify-between items-center text-xs text-gray-400 mt-auto">
-                  <Badge variant="outline" className="font-normal uppercase">
-                    {task.category}
-                  </Badge>
-                  <span>{task.files?.length || 0} Files</span>
-                </div>
-                <div className="flex flex-wrap gap-2 mt-4">
-                  {task.tags?.slice(0, 3).map((tag) => (
-                    <Badge
-                      key={tag}
-                      variant="secondary"
-                      className="text-[10px] bg-blue-50 text-blue-700 border-blue-100"
-                    >
-                      {tag}
+                  <CardTitle className="mt-3 line-clamp-1">
+                    {task.title}
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-sm text-gray-500 dark:text-gray-400 line-clamp-2 mb-4">
+                    {task.description}
+                  </p>
+                  <div className="flex justify-between items-center text-xs text-gray-400 mt-auto">
+                    <Badge variant="outline" className="font-normal uppercase">
+                      {task.category}
                     </Badge>
-                  ))}
-                  {(task.tags?.length || 0) > 3 && (
-                    <span className="text-[10px] text-gray-400 self-center">
-                      +{(task.tags?.length || 0) - 3}
-                    </span>
-                  )}
-                </div>
-              </CardContent>
-            </Card>
-          ))}
-        </div>
-      )}
+                    <span>{task.files?.length || 0} Files</span>
+                  </div>
+                  <div className="flex flex-wrap gap-2 mt-4">
+                    {(() => {
+                      const tags = task.tags || [];
+                      const tagBadges = tags.slice(0, 3).map((tag) => (
+                        <Badge
+                          key={tag}
+                          variant="secondary"
+                          className="text-[10px] bg-blue-50 text-blue-700 border-blue-100"
+                        >
+                          {tag}
+                        </Badge>
+                      ));
+                      let extraTag = null;
+                      if (tags.length > 3) {
+                        extraTag = (
+                          <span className="text-[10px] text-gray-400 self-center">
+                            {`+${tags.length - 3}`}
+                          </span>
+                        );
+                      }
+                      return [tagBadges, extraTag];
+                    })()}
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        );
+      })()}
 
       {/* Editor Modal/Overlay */}
       {isEditorOpen && (

@@ -37,7 +37,6 @@ export class CookieManager {
     try {
       const token = await user.getIdToken();
       await setAuthCookie(token);
-      console.log("✅ Auth cookie ensured successfully");
       return true;
     } catch (error) {
       console.error("Failed to ensure auth cookie:", error);
@@ -57,8 +56,7 @@ export class CookieManager {
         if (success) {
           return true;
         }
-      } catch (error) {
-        console.warn(`Auth cookie retry ${i + 1} failed:`, error);
+      } catch (_error) {
         if (i < maxRetries - 1) {
           // Wait before retrying
           await new Promise((resolve) => setTimeout(resolve, 1000 * (i + 1)));

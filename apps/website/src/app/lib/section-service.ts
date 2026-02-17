@@ -1,5 +1,5 @@
-import { promises as fs } from "fs";
-import path from "path";
+import { promises as fs } from "node:fs";
+import path from "node:path";
 import { generateId } from "@elzatona/utilities";
 
 // Types
@@ -119,7 +119,12 @@ export class SectionService {
       } catch (_error) {
         // File doesn't exist, return default sections
         sections = this.getDefaultSections();
-        await this.saveSections(sections);
+        try {
+          await this.saveSections(sections);
+        } catch (saveError) {
+          console.error("Error saving default sections:", saveError);
+        }
+        console.warn("Default sections loaded due to missing file:", _error);
       }
 
       return {
@@ -158,8 +163,15 @@ export class SectionService {
       } catch (_error) {
         // File doesn't exist, create it with default sections
         const defaultSections = this.getDefaultSections();
-        await this.saveSections(defaultSections);
-
+        try {
+          await this.saveSections(defaultSections);
+        } catch (saveError) {
+          console.error("Error saving default sections:", saveError);
+        }
+        console.warn(
+          "Default sections initialized due to missing file:",
+          _error,
+        );
         return {
           success: true,
           message: "Default sections initialized successfully",
@@ -616,7 +628,7 @@ export class SectionService {
         const questionsPath = this.getSectionQuestionsPath(sectionId);
         await fs.unlink(questionsPath);
       } catch (_error) {
-        console.log("No questions file found for section:", sectionId);
+        console.warn("No questions file found for section:", sectionId, _error);
       }
 
       return {
@@ -698,7 +710,7 @@ export class SectionService {
         questions = JSON.parse(fileContent);
       } catch (_error) {
         // File doesn't exist, return empty array
-        console.log(`No questions found for section: ${sectionId}`);
+        console.warn(`No questions found for section: ${sectionId}`, _error);
       }
 
       return {

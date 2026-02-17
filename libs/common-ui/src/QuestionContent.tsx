@@ -33,18 +33,20 @@ function checkCodeIndicators(trimmed: string): {
   });
 
   const structurePatterns = [
-    /\{\s*[\s\S]*\s*\}/,
-    /\[\s*[\s\S]*\s*\]/,
-    /\(\s*[\s\S]*\s*\)\s*\{/,
+    /\{[^}]*\}/,
+    /\[[^\]]*\]/,
+    /\([^)]*\)\s*\{/,
     /=\s*\{/,
     /=\s*\[/,
     /:\s*function/,
     /:\s*\(/,
   ];
 
-  structurePatterns.forEach(() => {
-    score += 2;
-    reasons.push("Code structure pattern found");
+  structurePatterns.forEach((pattern) => {
+    if (pattern.test(trimmed)) {
+      score += 2;
+      reasons.push("Code structure pattern found");
+    }
   });
 
   const operatorPatterns = [

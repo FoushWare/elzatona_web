@@ -50,7 +50,7 @@ function nodeFetch(input, init = {}) {
 // Expose default and named exports commonly used by node-fetch
 nodeFetch.default = nodeFetch;
 nodeFetch.Request =
-  global.Request ||
+  globalThis.Request ||
   class Request {
     constructor(input, init = {}) {
       const urlVal = typeof input === "string" ? input : input?.url || "";
@@ -83,8 +83,8 @@ nodeFetch.Request =
       return this._url || undefined;
     }
   };
-nodeFetch.Response = global.Response || class Response {};
-nodeFetch.Headers = global.Headers || class Headers {};
+nodeFetch.Response = globalThis.Response || class Response {};
+nodeFetch.Headers = globalThis.Headers || class Headers {};
 
 module.exports = nodeFetch;
 module.exports.default = nodeFetch;

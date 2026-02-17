@@ -1,6 +1,8 @@
 import { useState, useEffect, useCallback } from "react";
 import { AdminFrontendTask, AdminFrontendTaskFormData } from "@elzatona/types";
 
+type SupportedFileType = "tsx" | "css" | "html" | "js" | "json";
+
 interface FileNode {
   id: string;
   name: string;
@@ -215,7 +217,7 @@ const initializeFromTask = (task: AdminFrontendTask) => {
     openFiles: files.map((f) => ({
       id: f.id,
       name: f.name,
-      type: f.fileType as "tsx" | "css" | "html" | "js" | "json",
+      type: f.fileType as SupportedFileType,
       content: f.content,
     })),
     activeFile: files.find((f) => f.isEntryPoint)?.id || files[0]?.id || null,

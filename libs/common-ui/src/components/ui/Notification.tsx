@@ -67,15 +67,14 @@ function NotificationItem({ notification, onRemove }: NotificationProps) {
     }
   };
 
+  const containerClassName = [
+    getBackgroundColor(),
+    "border rounded-lg p-4 shadow-lg transition-all duration-300 transform max-w-sm w-full",
+    isVisible ? "translate-x-0 opacity-100" : "translate-x-full opacity-0",
+  ].join(" ");
+
   return (
-    <div
-      className={`
-        ${getBackgroundColor()}
-        border rounded-lg p-4 shadow-lg transition-all duration-300 transform
-        ${isVisible ? "translate-x-0 opacity-100" : "translate-x-full opacity-0"}
-        max-w-sm w-full
-      `}
-    >
+    <div className={containerClassName}>
       <div className="flex items-start gap-3">
         {getIcon()}
         <div className="flex-1 min-w-0">
@@ -110,12 +109,12 @@ export function NotificationContainer() {
       setNotifications((prev) => [...prev, notification]);
     };
 
-    window.addEventListener(
+    globalThis.window.addEventListener(
       "notification" as keyof WindowEventMap,
       handleNotification as EventListener,
     );
     return () => {
-      window.removeEventListener(
+      globalThis.window.removeEventListener(
         "notification" as keyof WindowEventMap,
         handleNotification as EventListener,
       );
@@ -144,7 +143,7 @@ export function NotificationContainer() {
 // Helper function to show notifications
 export function showNotification(notification: Omit<Notification, "id">) {
   const event = new CustomEvent("notification", { detail: notification });
-  window.dispatchEvent(event);
+  globalThis.window.dispatchEvent(event);
 }
 
 // Convenience functions

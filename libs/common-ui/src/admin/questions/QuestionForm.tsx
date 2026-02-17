@@ -172,7 +172,8 @@ const createFormHandlers = (
         ...prev,
         resources: parsed,
       }));
-    } catch (_error) {
+    } catch (error) {
+      console.warn("Failed to parse resources JSON, using raw value:", error);
       setFormData((prev) => ({
         ...prev,
         resources: value as unknown as string[],

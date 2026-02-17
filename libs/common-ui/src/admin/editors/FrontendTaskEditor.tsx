@@ -1,7 +1,7 @@
 "use client";
 
+// ...existing code...
 import React from "react";
-import { Code } from "lucide-react";
 import { AdminFrontendTask, AdminFrontendTaskFormData } from "@elzatona/types";
 import {
   useThemeManagement,
@@ -14,12 +14,8 @@ import {
   FrontendTaskEditorHeader,
   FrontendTaskEditorMainContent,
 } from "./FrontendTaskEditorComponents";
-import {
-  extractFilesFromTree,
-  createTaskData,
-  copyToClipboard,
-  getCurrentFileContent,
-} from "./FrontendTaskEditorUtils";
+import {} from // ...existing code...
+"./FrontendTaskEditorUtils";
 
 interface FrontendTaskEditorProps {
   readonly task?: AdminFrontendTask | null;
@@ -69,7 +65,7 @@ const useFrontendTaskEditorState = (task?: AdminFrontendTask | null) => {
     theme,
     setTheme,
     isDark,
-    // Form data
+    // Form data management
     formData,
     setFormData,
     // Panel layout
@@ -132,12 +128,9 @@ export default function FrontendTaskEditor({
     handleMouseDown,
     activeFile,
     fileTree,
-    expandedFolders,
     openFiles,
     showFileExplorer,
     setActiveFile,
-    setFileTree,
-    setExpandedFolders,
     setOpenFiles,
     setShowFileExplorer,
     consoleOutput,
@@ -166,34 +159,7 @@ export default function FrontendTaskEditor({
 
   // Simple form handlers
   const handleSave = async () => {
-    const files = extractFilesFromTree(fileTree);
-    const taskData = createTaskData(formData, files);
-    await onSave(taskData);
-  };
-
-  const handleCopyCode = async () => {
-    try {
-      await copyToClipboard(getCurrentFileContent(openFiles, activeFile));
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
-    } catch (err) {
-      console.error("Failed to copy code:", err);
-    }
-  };
-
-  const handleReset = () => {
-    if (task?.files && task.files.length > 0) {
-      const files = task.files.map((file) => ({
-        id: file.id,
-        name: file.name,
-        type: file.type as any,
-        content: file.content,
-      }));
-      setOpenFiles(files);
-      setActiveFile(
-        files.find((f) => f.id === "app")?.id || files[0]?.id || null,
-      );
-    }
+    await onSave(formData);
   };
 
   return (
