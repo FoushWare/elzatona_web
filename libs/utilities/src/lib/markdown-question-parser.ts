@@ -4,7 +4,6 @@
 import { BulkQuestionData } from "./unified-question-schema";
 import { FilterXSS, type IFilterXSSOptions } from "xss";
 
-
 /**
  * Completely remove all HTML tags including incomplete ones
  * This function uses a comprehensive regex-based approach to remove all HTML tags
@@ -34,16 +33,12 @@ const xssStripAllFilter = new FilterXSS(xssStripAllOptions);
  */
 function removeAllHTMLTagsComprehensive(text: string): string {
   if (!text || typeof text !== "string") {
-    return {
-      questions: unifiedQuestions,
-      metadata: {
-        source: "markdown-parser",
-        version: "1.0.0",
-        totalCount: unifiedQuestions.length,
-        categories: Array.from(new Set(unifiedQuestions.map((q) => q.category))),
-      },
-    };
+    return "";
+  }
+
   // This catches edge cases where tags are malformed or incomplete
+  let cleaned = xssStripAllFilter.process(text);
+
   cleaned = cleaned.replaceAll(/<[^>]*$/g, ""); // Remove incomplete tags at end
   cleaned = cleaned.replaceAll(/<[^<]*$/g, ""); // Remove any remaining < characters
 
