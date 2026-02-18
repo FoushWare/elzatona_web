@@ -70,7 +70,8 @@ export function AuthProvider({ children }: AuthProviderProps) {
           const userData = JSON.parse(storedUser);
           setUser(userData);
         }
-      } catch (_error) {
+      } catch (error) {
+        console.warn("Invalid stored auth user, clearing cache:", error);
         localStorage.removeItem("frontend-koddev-user");
       } finally {
         setIsLoading(false);

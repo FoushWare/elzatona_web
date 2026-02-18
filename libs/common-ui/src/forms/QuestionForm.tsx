@@ -101,7 +101,7 @@ export const QuestionForm: React.FC<QuestionFormProps> = ({
   useEffect(() => {
     if (
       formDataCategoryId &&
-      !filteredTopics.find((topic) => topic.id === formDataTopicId)
+      !filteredTopics.some((topic) => topic.id === formDataTopicId)
     ) {
       setFormData((prev) => ({
         ...prev,
@@ -142,8 +142,8 @@ export const QuestionForm: React.FC<QuestionFormProps> = ({
 
     try {
       await onSubmit(formData);
-    } catch (_error) {
-      // Error handled by parent component
+    } catch (error) {
+      console.error("Question form submit failed:", error);
     }
   };
 

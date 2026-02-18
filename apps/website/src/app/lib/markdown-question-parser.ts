@@ -3,7 +3,6 @@
 
 import { BulkQuestionData } from "./unified-question-schema";
 import { removeAllHTMLTags } from "./sanitize-server";
-import { generateId } from "@elzatona/utilities";
 
 export interface MarkdownQuestion {
   title: string;
@@ -43,7 +42,7 @@ export class MarkdownQuestionParser {
       /^#{1,6}\s*(\d+)\.?\s*([^\n]*)\n```[^`]*```\n-?\s*(True|False)\s*\[(?:correct|x|✓)\]/gm,
     // Open-ended questions
     openEnded:
-      /^#{1,6}\s*(\d+)\.?\s*([^\n]*)\n```[^`]*```\n(?:-?\s*Answer:?\s*([^\n]*))?$/gm,
+      /^#{1,6}\s*(\d+)\.?\s*([^\n]*)\n```[^`]*```\n(?:Answer:\s*([^\n]*))?$/gm,
   };
 
   private static readonly OPTION_PATTERN =
@@ -137,149 +136,237 @@ export class MarkdownQuestionParser {
    * Parse multiple choice questions
    */
   private static parseMultipleChoice(section: string): MarkdownQuestion[] {
-    const questions: MarkdownQuestion[] = [];
+    const githubQuestions = this.parseGithubStyleMultipleChoice(section);
+    if (githubQuestions.length > 0) {
+      return githubQuestions;
+    }
 
-    // Try GitHub-style format first - more flexible approach
+    return this.parseSimpleMultipleChoice(section);
+  }
+
+  private static parseGithubStyleMultipleChoice(
+    section: string,
+  ): MarkdownQuestion[] {
+    const questions: MarkdownQuestion[] = [];
     const githubSections = section
       .split(/(?=^#{1,6}\s*\d+\.)/gm)
       .filter((block) => block.trim());
 
     for (const block of githubSections) {
-      const lines = block.split("\n");
-      let questionText = "";
-      let optionsText = "";
-      let inCodeBlock = false;
-      let foundOptions = false;
-      let correctAnswer = "";
-
-      for (let i = 0; i < lines.length; i++) {
-        const line = lines[i].trim();
-
-        // Extract question from header
-        if (/^#{1,6}\s*\d+\./.exec(line)) {
-          questionText = line.replace(/^#{1,6}\s*\d+\.?\s*/, "").trim();
-          continue;
-        }
-
-        // Skip code blocks
-        if (line.startsWith("```")) {
-          inCodeBlock = !inCodeBlock;
-          continue;
-        }
-
-        if (inCodeBlock) continue;
-
-        // Look for options
-        if (/^-?\s*[A-Z]:\s*/.exec(line)) {
-          foundOptions = true;
-          optionsText += line + "\n";
-        } else if (foundOptions && /^-?\s*[A-Z]:\s*/.exec(line)) {
-          optionsText += line + "\n";
-        }
-
-        // Look for correct answer in HTML details/summary sections
-        if (line.includes("<details>") || line.includes("<summary>")) {
-          // Look ahead for the answer
-          for (let j = i; j < Math.min(i + 10, lines.length); j++) {
-            const answerLine = lines[j].trim();
-            if (
-              answerLine.includes("Answer:") ||
-              answerLine.includes("**Answer:")
-            ) {
-              const answerMatch = /Answer:\s*([A-D])/i.exec(answerLine);
-              if (answerMatch) {
-                correctAnswer = answerMatch[1].toLowerCase();
-                break;
-              }
-            }
-          }
-        }
-
-        // Also check for direct answer lines
-        if (line.includes("Answer:") || line.includes("**Answer:")) {
-          const answerMatch = /Answer:\s*([A-D])/i.exec(line);
-          if (answerMatch) {
-            correctAnswer = answerMatch[1].toLowerCase();
-          }
-        }
+      const parsedBlock = this.parseGithubMultipleChoiceBlock(block);
+      if (!parsedBlock) {
+        continue;
       }
 
-      if (questionText && optionsText) {
-        const options = this.parseOptions(optionsText, correctAnswer);
-        if (options.length >= 2) {
-          const correctAnswers = options
-            .filter((opt) => opt.isCorrect)
-            .map((opt) => opt.id);
+      const question = this.buildMultipleChoiceQuestion(
+        parsedBlock.questionText,
+        parsedBlock.options,
+        block,
+      );
 
-          if (correctAnswers.length > 0) {
-            questions.push({
-              title: this.extractTitle(questionText),
-              content: questionText,
-              type: correctAnswers.length === 1 ? "single" : "multiple",
-              difficulty: this.extractDifficulty(questionText),
-              options,
-              correctAnswers,
-              explanation: this.extractExplanation(block),
-              category: this.extractCategory(block),
-              learningPath: this.extractLearningPath(block),
-              topic: this.extractTopic(block),
-              tags: this.extractTags(block),
-              points: this.extractPoints(questionText),
-            });
-          }
-        }
+      if (question) {
+        questions.push(question);
       }
     }
 
-    if (questions.length > 0) {
-      return questions;
-    }
+    return questions;
+  }
 
-    // Fallback to simple format
+  private static parseSimpleMultipleChoice(
+    section: string,
+  ): MarkdownQuestion[] {
+    const questions: MarkdownQuestion[] = [];
     const questionBlocks = section
       .split(/(?=^\d+\.)/gm)
       .filter((block) => block.trim());
 
     for (const block of questionBlocks) {
       const lines = block.split("\n").filter((line) => line.trim());
-      if (lines.length < 2) continue;
+      if (lines.length < 2) {
+        continue;
+      }
 
       const questionText = lines[0].trim();
-      if (!/^\d+\./.exec(questionText)) continue;
+      if (!/^\d+\./.exec(questionText)) {
+        continue;
+      }
 
-      // Find all option lines (a), b), c), etc.)
       const optionLines = lines.filter((line) =>
         /^[a-zA-Z]\)\s/.exec(line.trim()),
       );
-
-      if (optionLines.length < 2) continue;
+      if (optionLines.length < 2) {
+        continue;
+      }
 
       const options = this.parseOptions(optionLines.join("\n"));
-      if (options.length < 2) continue;
-
-      const correctAnswers = options
-        .filter((opt) => opt.isCorrect)
-        .map((opt) => opt.id);
-
-      if (correctAnswers.length === 0) continue;
-
-      questions.push({
-        title: this.extractTitle(questionText),
-        content: questionText,
-        type: correctAnswers.length === 1 ? "single" : "multiple",
-        difficulty: this.extractDifficulty(questionText),
+      const question = this.buildMultipleChoiceQuestion(
+        questionText,
         options,
-        correctAnswers,
-        explanation: this.extractExplanation(block),
-        category: this.extractCategory(block),
-        learningPath: this.extractLearningPath(block),
-        topic: this.extractTopic(block),
-        tags: this.extractTags(block),
-        points: this.extractPoints(questionText),
-      });
+        block,
+      );
+
+      if (question) {
+        questions.push(question);
+      }
     }
 
     return questions;
+  }
+
+  private static parseGithubMultipleChoiceBlock(block: string): {
+    questionText: string;
+    options: MarkdownQuestion["options"];
+  } | null {
+    const lines = block.split("\n");
+    const { questionText, optionsText, correctAnswer } =
+      this.extractGithubBlockData(lines);
+
+    if (!questionText || !optionsText) {
+      return null;
+    }
+
+    const options = this.parseOptions(optionsText, correctAnswer);
+    if (options.length < 2) {
+      return null;
+    }
+
+    return { questionText, options };
+  }
+
+  private static extractGithubBlockData(lines: string[]): {
+    questionText: string;
+    optionsText: string;
+    correctAnswer: string;
+  } {
+    let questionText = "";
+    let optionsText = "";
+    let inCodeBlock = false;
+    let correctAnswer = "";
+
+    for (let i = 0; i < lines.length; i++) {
+      const line = lines[i].trim();
+      const result = this.processGithubBlockLine(line, lines, i, inCodeBlock);
+
+      inCodeBlock = result.inCodeBlock;
+
+      if (result.questionText) {
+        questionText = result.questionText;
+      }
+      if (result.optionLine) {
+        optionsText += `${result.optionLine}\n`;
+      }
+      if (result.correctAnswer) {
+        correctAnswer = result.correctAnswer;
+      }
+    }
+
+    return { questionText, optionsText, correctAnswer };
+  }
+
+  private static processGithubBlockLine(
+    line: string,
+    lines: string[],
+    index: number,
+    inCodeBlock: boolean,
+  ): {
+    inCodeBlock: boolean;
+    questionText?: string;
+    optionLine?: string;
+    correctAnswer?: string;
+  } {
+    if (/^#{1,6}\s*\d+\./.exec(line)) {
+      return {
+        inCodeBlock,
+        questionText: line.replace(/^#{1,6}\s*\d+\.?\s*/, "").trim(),
+      };
+    }
+
+    if (line.startsWith("```")) {
+      return { inCodeBlock: !inCodeBlock };
+    }
+
+    if (inCodeBlock) {
+      return { inCodeBlock };
+    }
+
+    const optionLine = /^-?\s*[A-Z]:\s*/.exec(line) ? line : undefined;
+    const inlineCorrectAnswer = this.extractAnswerFromLine(line) ?? undefined;
+
+    if (line.includes("<details>") || line.includes("<summary>")) {
+      const lookaheadAnswer = this.extractAnswerFromLookahead(lines, index);
+      return {
+        inCodeBlock,
+        optionLine,
+        correctAnswer: lookaheadAnswer ?? inlineCorrectAnswer,
+      };
+    }
+
+    return {
+      inCodeBlock,
+      optionLine,
+      correctAnswer: inlineCorrectAnswer,
+    };
+  }
+
+  private static extractAnswerFromLine(line: string): string | null {
+    if (!line.includes("Answer:") && !line.includes("**Answer:")) {
+      return null;
+    }
+
+    const answerMatch = /Answer:\s*([A-D])/i.exec(line);
+    if (!answerMatch) {
+      return null;
+    }
+
+    return answerMatch[1].toLowerCase();
+  }
+
+  private static extractAnswerFromLookahead(
+    lines: string[],
+    startIndex: number,
+  ): string | null {
+    for (let j = startIndex; j < Math.min(startIndex + 10, lines.length); j++) {
+      const answerLine = lines[j].trim();
+      const answer = this.extractAnswerFromLine(answerLine);
+      if (answer) {
+        return answer;
+      }
+    }
+
+    return null;
+  }
+
+  private static buildMultipleChoiceQuestion(
+    questionText: string,
+    options: MarkdownQuestion["options"],
+    block: string,
+  ): MarkdownQuestion | null {
+    if (options.length < 2) {
+      return null;
+    }
+
+    const correctAnswers = options
+      .filter((opt) => opt.isCorrect)
+      .map((opt) => opt.id);
+
+    if (correctAnswers.length === 0) {
+      return null;
+    }
+
+    return {
+      title: this.extractTitle(questionText),
+      content: questionText,
+      type: correctAnswers.length === 1 ? "single" : "multiple",
+      difficulty: this.extractDifficulty(questionText),
+      options,
+      correctAnswers,
+      explanation: this.extractExplanation(block),
+      category: this.extractCategory(block),
+      learningPath: this.extractLearningPath(block),
+      topic: this.extractTopic(block),
+      tags: this.extractTags(block),
+      points: this.extractPoints(questionText),
+    };
   }
 
   /**

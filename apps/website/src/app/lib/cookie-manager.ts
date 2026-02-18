@@ -51,16 +51,14 @@ export class CookieManager {
     maxRetries: number = 3,
   ): Promise<boolean> {
     for (let i = 0; i < maxRetries; i++) {
-      try {
-        const success = await this.ensureAuthCookie(user);
-        if (success) {
-          return true;
-        }
-      } catch (_error) {
-        if (i < maxRetries - 1) {
-          // Wait before retrying
-          await new Promise((resolve) => setTimeout(resolve, 1000 * (i + 1)));
-        }
+      const success = await this.ensureAuthCookie(user);
+      if (success) {
+        return true;
+      }
+
+      if (i < maxRetries - 1) {
+        // Wait before retrying
+        await new Promise((resolve) => setTimeout(resolve, 1000 * (i + 1)));
       }
     }
     return false;
