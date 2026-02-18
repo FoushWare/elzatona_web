@@ -1,6 +1,7 @@
 "use client";
 
 import React, { Component, ReactNode, ErrorInfo } from "react";
+import { generateId } from "@elzatona/utilities";
 
 import { AlertTriangle, RefreshCw, Home, Bug } from "lucide-react";
 
@@ -51,7 +52,7 @@ export class ErrorBoundary extends Component<Props, State> {
       console.error("Error info:", errorInfo);
 
       // Generate a simple error ID
-      const errorId = `error_${Date.now()}_${Math.random().toString(36).substring(2, 11)}`;
+      const errorId = `error_${Date.now()}_${generateId()}`;
       this.setState({ errorId });
     } catch (logError) {
       console.error("Failed to log error:", logError);

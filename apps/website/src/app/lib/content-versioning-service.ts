@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 // This file uses 'any' types for content versioning data which can be of various content types
 import { getSupabaseClient } from "./get-supabase-client";
+import { generateId } from "@elzatona/utilities";
 
 export interface ContentVersion {
   id: string;
@@ -320,7 +321,7 @@ export class ContentVersioningService {
     try {
       const supabase = getSupabaseClient();
       const auditLog: AuditLog = {
-        id: `audit_${Date.now()}_${Math.random().toString(36).substring(2, 11)}`,
+        id: `audit_${Date.now()}_${generateId()}`,
         ...logData,
       };
 

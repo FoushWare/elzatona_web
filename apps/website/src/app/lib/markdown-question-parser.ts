@@ -3,6 +3,7 @@
 
 import { BulkQuestionData } from "./unified-question-schema";
 import { removeAllHTMLTags } from "./sanitize-server";
+import { generateId } from "@elzatona/utilities";
 
 export interface MarkdownQuestion {
   title: string;

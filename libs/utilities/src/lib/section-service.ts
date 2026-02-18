@@ -1,6 +1,6 @@
-// ...existing code...
 import { promises as fs } from "node:fs";
 import path from "node:path";
+import { generateId } from "./utils";
 
 // Types
 export interface LearningSection {
@@ -747,7 +747,7 @@ export class SectionService {
 
       // Create new question with incomplete structure handling
       const newQuestion: SectionQuestion = {
-        id: `question_${Date.now()}_${Math.random().toString(36).substring(2, 11)}`,
+        id: `question_${Date.now()}_${generateId()}`,
         title: questionData.title || "",
         content: questionData.content || "",
         type: questionData.type || "single",
@@ -820,7 +820,7 @@ export class SectionService {
 
       questionsData.forEach((questionData, index) => {
         const newQuestion: SectionQuestion = {
-          id: `question_${Date.now()}_${index}_${Math.random().toString(36).substring(2, 11)}`,
+          id: `question_${Date.now()}_${index}_${generateId()}`,
           title: questionData.title || `Question ${index + 1}`,
           content: questionData.content || "",
           type: questionData.type || "single",

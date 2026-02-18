@@ -1,6 +1,30 @@
+// Helper: Parse progress data from request
+async function parseProgressData(
+  request: NextRequest,
+): Promise<ProgressData | null> {
+  try {
+    return await request.json();
+  } catch (parseError) {
+    console.error("❌ Error parsing request body:", sanitizeForLog(parseError));
+    return null;
+  }
+}
+
+// Helper: Development mode response
+function devModeResponse(
+  warning = "Using development mode - authentication not fully configured",
+): NextResponse {
+  return NextResponse.json({
+    success: true,
+    progressId: `progress_${Date.now()}_${Math.random().toString(36).substring(2, 11)}`,
+    message: "Progress saved successfully (development mode)",
+    warning,
+  });
+}
 import { NextRequest, NextResponse } from "next/server";
 
 import { createRepositoryFactoryFromEnv } from "@elzatona/database";
+import { generateId } from "@elzatona/utilities";
 import { getSupabaseClient } from "../../../../get-supabase-client";
 
 import { cookies } from "next/headers";
@@ -73,7 +97,7 @@ export async function POST(request: NextRequest) {
 
     const savedProgress = {
       ...progressData,
-      id: `progress_${Date.now()}_${Math.random().toString(36).substring(2, 11)}`,
+      id: `progress_${Date.now()}_${generateId()}`,
       savedAt: new Date().toISOString(),
     };
 
@@ -103,29 +127,7 @@ export async function POST(request: NextRequest) {
   }
 }
 
-function devModeResponse(
-  warning = "Using development mode - authentication not fully configured",
-) {
-  return NextResponse.json({
-    success: true,
-    progressId: `progress_${Date.now()}_${Math.random().toString(36).substring(2, 11)}`,
-    message: "Progress saved successfully (development mode)",
-    warning,
-  });
-}
-
-async function parseProgressData(
-  request: NextRequest,
-): Promise<ProgressData | null> {
-  try {
-    return await request.json();
-  } catch (parseError) {
-    console.error("❌ Error parsing request body:", sanitizeForLog(parseError));
-    return null;
-  }
-}
-
-function validateProgress(progressData: ProgressData): boolean {
+function validateProgress(progressData: ProgressData) {
   return (
     !!progressData.question_id && typeof progressData.isCorrect === "boolean"
   );

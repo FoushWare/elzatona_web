@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 // This file uses 'any' types for content versioning data which can be of various content types
 import { createClient } from "@supabase/supabase-js";
+import { generateId } from "./utils";
 
 const supabaseUrl = process.env["NEXT_PUBLIC_SUPABASE_URL"]!;
 const supabaseServiceRoleKey = process.env["SUPABASE_SERVICE_ROLE_KEY"]!;
@@ -317,7 +318,7 @@ export class ContentVersioningService {
   ): Promise<void> {
     try {
       const auditLog: AuditLog = {
-        id: `audit_${Date.now()}_${Math.random().toString(36).substring(2, 11)}`,
+        id: `audit_${Date.now()}_${generateId()}`,
         ...logData,
       };
 

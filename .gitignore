@@ -274,3 +274,14 @@ coverage/
 # Code scanning to issues tool - exclude dependencies but keep source
 tools/code-scanning-to-issues/node_modules/
 tools/code-scanning-to-issues/package-lock.json
+
+# Temporary state/debug files
+.checkout.txt
+.git-state.txt
+bugs-issues.md
+QUICKSTART-CODE-SCANNING-ISSUES.md
+_coverage.txt
+_git_status.txt
+_plan_head.txt
+_test_out.txt
+_vitest_coverage.txt

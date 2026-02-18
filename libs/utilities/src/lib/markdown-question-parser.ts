@@ -36,13 +36,9 @@ function removeAllHTMLTagsComprehensive(text: string): string {
     return "";
   }
 
-  // SECURITY: Use xss library to strip ALL HTML tags
-  // CodeQL recognizes the xss library as a safe HTML sanitization method
-  // Using empty whitelist ensures ALL tags including <script> are removed
+  // This catches edge cases where tags are malformed or incomplete
   let cleaned = xssStripAllFilter.process(text);
 
-  // Additional safety: Remove any remaining < and > characters that might be part of incomplete tags
-  // This catches edge cases where tags are malformed or incomplete
   cleaned = cleaned.replaceAll(/<[^>]*$/g, ""); // Remove incomplete tags at end
   cleaned = cleaned.replaceAll(/<[^<]*$/g, ""); // Remove any remaining < characters
 
@@ -637,30 +633,28 @@ export class MarkdownQuestionParser {
    */
   static convertToBulkData(questions: MarkdownQuestion[]): BulkQuestionData {
     const unifiedQuestions = questions.map((question) => {
-      // Map question type
-      let mappedType: "multiple-choice" | "true-false" | "code" | "mcq";
+      let type: "multiple-choice" | "true-false" | "code" | "mcq";
       if (question.type === "single" || question.type === "multiple") {
-        mappedType = "multiple-choice";
+        type = "multiple-choice";
+      } else if (question.type === "code") {
+        type = "code";
       } else {
-        mappedType = "code";
+        type = "mcq";
       }
-
-      // Map difficulty
-      let mappedDifficulty: "beginner" | "intermediate" | "advanced";
+      let difficulty: "beginner" | "intermediate" | "advanced";
       if (question.difficulty === "easy") {
-        mappedDifficulty = "beginner";
+        difficulty = "beginner";
       } else if (question.difficulty === "medium") {
-        mappedDifficulty = "intermediate";
+        difficulty = "intermediate";
       } else {
-        mappedDifficulty = "advanced";
+        difficulty = "advanced";
       }
-
       return {
         id: `md_${Date.now()}_${Math.random().toString(36).substring(2, 11)}`,
         title: question.title,
         content: question.content,
-        type: mappedType,
-        difficulty: mappedDifficulty,
+        type,
+        difficulty,
         options: question.options,
         correctAnswers: question.correctAnswers,
         explanation: question.explanation || "",
@@ -776,27 +770,6 @@ a) A CSS framework
 b) A JavaScript library [correct]
 c) A database
 d) A server
-
-Category: Frontend Development
-Learning Path: React Fundamentals
-Topic: JavaScript Libraries
-Tags: #react #javascript #frontend
-Difficulty: easy
-
-Explanation: React is a JavaScript library for building user interfaces.
-
-## Remember:
-- Use numbered lists for questions (1., 2., 3.)
-- Use 'a)', 'b)', 'c)' etc. for simple multiple-choice options
-- Use '- A:', '- B:', '- C:', '- D:' for GitHub-style options
-- Mark correct options with '[correct]' or use HTML details/summary with Answer: X
-- Use 'Category:', 'Learning Path:', 'Topic:', 'Tags:', 'Difficulty:', 'Points:' for metadata
-- Tags should be space or comma-separated, and can start with '#'
-- Difficulty can be 'easy', 'medium', 'hard', 'beginner', 'intermediate', 'advanced'
-- Points can be specified in the title like '[5 points]'
-- All metadata fields are optional - questions will work without them
-- For code questions, use \`\`\`language blocks
-- For detailed explanations, use HTML <details><summary>Answer</summary><p>explanation</p></details>
 `;
   }
 }

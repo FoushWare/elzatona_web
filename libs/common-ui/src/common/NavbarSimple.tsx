@@ -158,7 +158,7 @@ const useNavbarSimpleState = () => {
 // TECHNICAL DEBT: This component has high cognitive complexity (35 vs 15 allowed)
 // Requires refactoring: split into smaller sub-components for AuthSection, MobileMenu, DesktopNav
 // Tracked for future sprint improvement
-/* eslint-disable complexity */
+
 export const NavbarSimple: React.FC = () => {
   const {
     isScrolled,
