@@ -707,7 +707,10 @@ function cleanMalformedCode(code: string): string {
   code = decodeHtmlEntities(code);
   code = sanitizeText(code);
 
-  for (let i = 0; i < 3; i++) {
+  // Loop until content stabilizes — prevents incomplete multi-character sanitization
+  let previousCode = "";
+  for (let i = 0; i < 5 && code !== previousCode; i++) {
+    previousCode = code;
     code = code
       .replace("e>e>e>", "")
       .replace("e>e>", "")
@@ -719,9 +722,8 @@ function cleanMalformedCode(code: string): string {
       .replace("diameterameter", "diameter")
       .replace("perimeterimeter", "perimeter")
       .replace("newColorwColor", "newColor")
-      // codeql[js/incomplete-multi-character-sanitization]: sanitizeText() called immediately after this line removes all HTML
       .replace("NaNe>", "NaN");
-    // SECURITY: Final sanitization pass after each iteration to ensure no HTML remains
+    // SECURITY: Final sanitization pass after each iteration — DOMPurify removes all HTML tags
     code = sanitizeText(code);
   }
 
@@ -813,11 +815,14 @@ function processMarkdownCodeBlocks(fixedContent: string): Array<{
 
   while ((mdMatch = markdownCodeBlockRegex.exec(fixedContent)) !== null) {
     // SECURITY: Sanitize markdown code block content to prevent HTML injection
-    // codeql[js/incomplete-multi-character-sanitization]: Content is sanitized before being added to matches
     let sanitizedContent = mdMatch[2].trim();
-    // Decode HTML entities first, then sanitize to remove any HTML tags
+    // Decode HTML entities first, then loop-sanitize to remove any HTML tags (prevents nested tag bypass)
     sanitizedContent = decodeHtmlEntities(sanitizedContent);
-    sanitizedContent = sanitizeText(sanitizedContent);
+    let prev = "";
+    while (sanitizedContent !== prev) {
+      prev = sanitizedContent;
+      sanitizedContent = sanitizeText(sanitizedContent);
+    }
 
     markdownMatches.push({
       index: mdMatch.index,
@@ -840,7 +845,10 @@ function cleanTextContent(text: string): string {
     cleanText = cleanText.replace(codeMatch[0], `\`${codeMatch[1]}\``);
   }
   cleanText = sanitizeText(cleanText);
-  for (let i = 0; i < 3; i++) {
+  // Loop until content stabilizes — prevents incomplete multi-character sanitization
+  let previousClean = "";
+  for (let i = 0; i < 5 && cleanText !== previousClean; i++) {
+    previousClean = cleanText;
     cleanText = cleanText
       .replaceAll(/<pr<cod?/gi, "")
       .replaceAll(/<pr</gi, "")
@@ -858,9 +866,8 @@ function cleanTextContent(text: string): string {
       .replaceAll(/\s*e>\s*/g, " ")
       .replaceAll(/^>\s*/g, "")
       .replaceAll(/\s*>$/g, "")
-      // codeql[js/incomplete-multi-character-sanitization]: sanitizeText() called immediately after this line removes all HTML tags
       .replaceAll(/\s+>\s+/g, " ");
-    // SECURITY: Final sanitization pass after each iteration to ensure no HTML remains
+    // SECURITY: Final sanitization pass after each iteration — DOMPurify removes all HTML tags
     cleanText = sanitizeText(cleanText);
   }
   cleanText = cleanText
