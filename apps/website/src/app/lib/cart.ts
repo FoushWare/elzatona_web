@@ -11,21 +11,28 @@ export interface CartItem {
 
 const STORAGE_KEY = "question-cart:v1";
 
+function logCartStorageError(operation: string, error: unknown) {
+  console.warn(`Cart storage ${operation} failed`, error);
+}
+
 export function loadCart(): CartItem[] {
-  if (typeof window === "undefined") return [];
+  if (globalThis.window === undefined) return [];
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
     return raw ? (JSON.parse(raw) as CartItem[]) : [];
-  } catch (_) {
+  } catch (error) {
+    logCartStorageError("read", error);
     return [];
   }
 }
 
 export function saveCart(items: CartItem[]) {
-  if (typeof window === "undefined") return;
+  if (globalThis.window === undefined) return;
   try {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(items));
-  } catch (_) {}
+  } catch (error) {
+    logCartStorageError("write", error);
+  }
 }
 
 export function addToCart(item: CartItem) {

@@ -1,0 +1,26 @@
+failed to load config from /Users/a.fouad/S/New_elzatona/vitest.config.ts
+
+⎯⎯⎯⎯⎯⎯⎯ Startup Error ⎯⎯⎯⎯⎯⎯⎯⎯
+Error: Cannot find module 'vite-tsconfig-paths'
+Require stack:
+- /Users/a.fouad/S/New_elzatona/vitest.config.ts
+- /Users/a.fouad/S/New_elzatona/node_modules/vite/dist/node/chunks/config.js
+    at Function._resolveFilename (node:internal/modules/cjs/loader:1383:15)
+    at defaultResolveImpl (node:internal/modules/cjs/loader:1025:19)
+    at resolveForCJSWithHooks (node:internal/modules/cjs/loader:1030:22)
+    at Function._load (node:internal/modules/cjs/loader:1192:37)
+    at TracingChannel.traceSync (node:diagnostics_channel:328:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:237:24)
+    at Module.require (node:internal/modules/cjs/loader:1463:12)
+    at require (node:internal/modules/helpers:147:16)
+    at Object.<anonymous> (/Users/a.fouad/S/New_elzatona/vitest.config.ts:38:42)
+    at Module._compile (node:internal/modules/cjs/loader:1706:14) {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [
+    '/Users/a.fouad/S/New_elzatona/vitest.config.ts',
+    '/Users/a.fouad/S/New_elzatona/node_modules/vite/dist/node/chunks/config.js'
+  ]
+}
+
+
+

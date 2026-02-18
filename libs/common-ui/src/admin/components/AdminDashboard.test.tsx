@@ -4,7 +4,7 @@
  */
 
 import React from "react";
-import { render, screen, waitFor, fireEvent } from "@testing-library/react";
+import { render, screen, fireEvent } from "@testing-library/react";
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import AdminDashboard from "./AdminDashboard";
 import { useAdminAuth } from "@elzatona/contexts";
@@ -23,8 +23,8 @@ vi.mock("@elzatona/hooks", () => ({
 vi.mock("../../components/organisms/MetricGrid", () => ({
   MetricGrid: ({ metrics }: any) => (
     <div data-testid="metric-grid">
-      {metrics.map((metric: any, index: number) => (
-        <div key={index} data-testid={`metric-${metric.label}`}>
+      {metrics.map((metric: any) => (
+        <div key={metric.label} data-testid={`metric-${metric.label}`}>
           {metric.label}: {metric.value}
         </div>
       ))}
@@ -35,8 +35,8 @@ vi.mock("../../components/organisms/MetricGrid", () => ({
 vi.mock("../../components/organisms/ActivityFeed", () => ({
   ActivityFeed: ({ activities }: any) => (
     <div data-testid="activity-feed">
-      {activities.map((activity: any, index: number) => (
-        <div key={index} data-testid={`activity-${activity.label}`}>
+      {activities.map((activity: any) => (
+        <div key={activity.label} data-testid={`activity-${activity.label}`}>
           {activity.label}: {activity.value}
         </div>
       ))}
@@ -81,8 +81,8 @@ vi.mock("../../components/molecules/ErrorAlert", () => ({
 vi.mock("../../components/organisms/QuickActions", () => ({
   QuickActions: ({ actions }: any) => (
     <div data-testid="quick-actions">
-      {actions.map((action: any, index: number) => (
-        <div key={index} data-testid={`quick-action-${action.title}`}>
+      {actions.map((action: any) => (
+        <div key={action.title} data-testid={`quick-action-${action.title}`}>
           {action.title}
         </div>
       ))}
@@ -251,7 +251,7 @@ describe("AdminDashboard", () => {
   describe("Hydration handling", () => {
     it("should prevent hydration mismatch by showing loading initially", () => {
       // Mock that it's not client-side yet
-      Object.defineProperty(window, "document", {
+      Object.defineProperty(globalThis.window, "document", {
         value: undefined,
         writable: true,
       });

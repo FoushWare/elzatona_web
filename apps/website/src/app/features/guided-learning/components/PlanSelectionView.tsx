@@ -6,12 +6,12 @@ import { LoadingState } from "./LoadingState";
 import { ErrorState } from "./ErrorState";
 
 interface PlanSelectionViewProps {
-  plans: LearningPlan[];
-  isLoading: boolean;
-  error: string | null;
-  completedPlans: Set<string>;
-  planGrades: Map<string, number>;
-  onSelectPlan: (plan: LearningPlan) => void;
+  readonly plans: LearningPlan[];
+  readonly isLoading: boolean;
+  readonly error: string | null;
+  readonly completedPlans: Set<string>;
+  readonly planGrades: Map<string, number>;
+  readonly onSelectPlan: (plan: LearningPlan) => void;
 }
 
 export function PlanSelectionView({
@@ -21,7 +21,7 @@ export function PlanSelectionView({
   completedPlans,
   planGrades,
   onSelectPlan,
-}: PlanSelectionViewProps) {
+}: Readonly<PlanSelectionViewProps>) {
   if (isLoading) {
     return <LoadingState />;
   }

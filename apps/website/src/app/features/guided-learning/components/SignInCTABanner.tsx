@@ -3,10 +3,10 @@
 import { LogIn, Sparkles, Cloud, Trophy } from "lucide-react";
 
 interface SignInCTABannerProps {
-  onSignIn: () => void;
+  readonly onSignIn: () => void;
 }
 
-export function SignInCTABanner({ onSignIn }: SignInCTABannerProps) {
+export function SignInCTABanner({ onSignIn }: Readonly<SignInCTABannerProps>) {
   return (
     <div className="mb-8 p-6 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 rounded-2xl border border-blue-100 dark:border-blue-800">
       <div className="flex flex-col md:flex-row items-center justify-between gap-4">

@@ -20,9 +20,6 @@ if (
   if (existsSync(envTestLocal)) {
     // Load with override: true to ensure test vars take precedence
     config({ path: envTestLocal, override: true });
-    console.log(
-      "[Next.js Config] ✅ Loaded .env.test.local for test environment (overriding all other env files)",
-    );
 
     // Also set NEXT_PUBLIC_APP_ENV to ensure it's available
     if (!process.env.NEXT_PUBLIC_APP_ENV) {
@@ -40,9 +37,6 @@ if (
 
   if (existsSync(envDevLocal)) {
     config({ path: envDevLocal, override: true });
-    console.log(
-      "[Next.js Config] ✅ Loaded .env.dev.local for development environment (overriding .env.local)",
-    );
 
     // Also set NEXT_PUBLIC_APP_ENV to ensure it's available
     if (!process.env.NEXT_PUBLIC_APP_ENV) {

@@ -17,21 +17,15 @@ if (!supabaseUrl || !supabaseServiceRoleKey) {
 }
 
 // Initialize Supabase client (server-side with service role key)
-let supabase: ReturnType<typeof createClient> | null = null;
-
-try {
-  supabase = createClient(supabaseUrl, supabaseServiceRoleKey, {
-    auth: {
-      autoRefreshToken: false,
-      persistSession: false,
-    },
-  });
-  console.log(
-    "✅ Supabase server initialized successfully with service role key!",
-  );
-} catch (error) {
-  console.error("❌ Supabase server initialization failed:", error);
-}
+const supabase = createClient(supabaseUrl, supabaseServiceRoleKey, {
+  auth: {
+    autoRefreshToken: false,
+    persistSession: false,
+  },
+});
+console.log(
+  "✅ Supabase server initialized successfully with service role key!",
+);
 
 // Export Supabase client for server-side use
 export { supabase };
@@ -163,11 +157,11 @@ export const supabaseOperations = {
       ...categoryData,
       slug:
         categoryData.slug ||
-        categoryData.name.toLowerCase().replace(/\s+/g, "-"),
+        categoryData.name.toLowerCase().replaceAll(" ", "-"),
       card_type:
         categoryData.card_type ||
         categoryData.slug ||
-        categoryData.name.toLowerCase().replace(/\s+/g, "-"),
+        categoryData.name.toLowerCase().replaceAll(" ", "-"),
       created_at: new Date().toISOString(),
       updated_at: new Date().toISOString(),
       is_active: categoryData.is_active !== false,
@@ -218,7 +212,7 @@ export const supabaseOperations = {
 
     const data = {
       ...topicData,
-      slug: topicData.slug || topicData.name.toLowerCase().replace(/\s+/g, "-"),
+      slug: topicData.slug || topicData.name.toLowerCase().replaceAll(" ", "-"),
       created_at: new Date().toISOString(),
       updated_at: new Date().toISOString(),
       is_active: topicData.is_active !== false,
