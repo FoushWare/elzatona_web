@@ -897,7 +897,7 @@ function processFinalTextContent(
   fixedContent: string,
 ): React.ReactElement | null {
   const MAX_INPUT_SIZE = 100000;
-  let cleanContent = fixedContent;
+  let cleanContent = decodeHtmlEntities(fixedContent);
 
   if (cleanContent.length > MAX_INPUT_SIZE) {
     cleanContent = cleanContent.substring(0, MAX_INPUT_SIZE);
@@ -925,12 +925,7 @@ function processFinalTextContent(
       .replaceAll(/\s+>\s+/g, " ");
   }
 
-  cleanContent = cleanContent
-    .replace(/&amp;/g, "&")
-    .replace(/&lt;/g, "<")
-    .replace(/&gt;/g, ">")
-    .replace(/&nbsp;/g, " ")
-    .trim();
+  cleanContent = sanitizeText(cleanContent).trim();
 
   const codeValidation = isValidCode(cleanContent);
 
