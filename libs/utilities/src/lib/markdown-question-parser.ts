@@ -669,7 +669,6 @@ export class MarkdownQuestionParser {
         createdBy: "markdown-parser",
       };
     });
-    return unifiedQuestions;
 
     return {
       questions: unifiedQuestions,

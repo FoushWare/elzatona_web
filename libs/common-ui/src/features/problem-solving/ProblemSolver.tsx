@@ -1,7 +1,5 @@
 "use client";
 
-export default ProblemSolver;
-
 import React from "react";
 import { Play, CheckCircle } from "lucide-react";
 import MonacoEditor from "@monaco-editor/react";
