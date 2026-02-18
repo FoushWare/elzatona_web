@@ -55,7 +55,8 @@ export function createAuthMiddleware(options: AuthMiddlewareOptions = {}) {
           headers: requestHeaders,
         },
       });
-    } catch (_error) {
+    } catch (error) {
+      console.error("Auth middleware failed:", error);
       return NextResponse.json(
         { error: "Authentication failed" },
         { status: 500 },
@@ -83,7 +84,8 @@ function extractUserFromToken(token: string): {
       };
     }
     return null;
-  } catch (_error) {
+  } catch (error) {
+    console.warn("Token extraction failed:", error);
     return null;
   }
 }

@@ -28,6 +28,61 @@ interface FreeStyleProgressData {
   lastUpdated: number;
 }
 
+function getGuidedProgressKeys(): string[] {
+  const guidedKeys: string[] = [];
+  for (let i = 0; i < localStorage.length; i++) {
+    const key = localStorage.key(i);
+    if (key?.startsWith("guided-practice-progress-")) {
+      guidedKeys.push(key);
+    }
+  }
+  return guidedKeys;
+}
+
+function parseGuidedProgressEntry(key: string): {
+  planId: string;
+  progress: GuidedProgressData;
+} {
+  const progressData = localStorage.getItem(key);
+  if (!progressData) {
+    throw new Error("Missing progress data");
+  }
+
+  return {
+    planId: key.replace("guided-practice-progress-", ""),
+    progress: JSON.parse(progressData) as GuidedProgressData,
+  };
+}
+
+function buildGuidedSyncPayload(
+  planId: string,
+  progress: GuidedProgressData,
+  userId?: string,
+) {
+  return {
+    planId,
+    completedQuestions: progress.completedQuestions || [],
+    completedTopics: progress.completedTopics || [],
+    completedCategories: progress.completedCategories || [],
+    completedCards: progress.completedCards || [],
+    correctAnswers: progress.correctAnswers || [],
+    currentPosition: progress.currentPosition,
+    lastUpdated: progress.lastUpdated || new Date().toISOString(),
+    ...(userId && { userId }),
+  };
+}
+
+async function removeGuidedProgressKey(key: string): Promise<void> {
+  try {
+    localStorage.removeItem(key);
+  } catch (removeError) {
+    console.warn(
+      `Failed to remove guided progress key from localStorage: ${key}`,
+      removeError,
+    );
+  }
+}
+
 /**
  * Sync all guided learning progress from localStorage to database
  * @param authToken - The authentication token (for Authorization header)
@@ -39,71 +94,37 @@ export async function syncAllGuidedProgress(
 ): Promise<{ success: boolean; synced: number; errors: string[] }> {
   const synced: string[] = [];
   const errors: string[] = [];
+  const guidedKeys = getGuidedProgressKeys();
 
-  try {
-    // Find all guided-practice-progress-* keys
-    const guidedKeys: string[] = [];
-    for (let i = 0; i < localStorage.length; i++) {
-      const key = localStorage.key(i);
-      if (key && key.startsWith("guided-practice-progress-")) {
-        guidedKeys.push(key);
+  for (const key of guidedKeys) {
+    const planId = key.replace("guided-practice-progress-", "");
+    try {
+      const { progress } = parseGuidedProgressEntry(key);
+
+      const response = await fetch("/api/progress/guided-learning/sync", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${authToken}`,
+        },
+        body: JSON.stringify(buildGuidedSyncPayload(planId, progress, userId)),
+      });
+
+      if (!response.ok) {
+        const errorData = await response
+          .json()
+          .catch(() => ({ error: "Unknown error" }));
+        errors.push(`Plan ${planId}: ${errorData.error || "Sync failed"}`);
+        continue;
       }
+
+      synced.push(planId);
+      await removeGuidedProgressKey(key);
+    } catch (error) {
+      errors.push(
+        `Plan ${planId}: ${error instanceof Error ? error.message : "Parse error"}`,
+      );
     }
-
-    // Sync each guided progress
-    for (const key of guidedKeys) {
-      try {
-        const progressData = localStorage.getItem(key);
-        if (!progressData) continue;
-
-        const progress: GuidedProgressData = JSON.parse(progressData);
-        const planId = key.replace("guided-practice-progress-", "");
-
-        const response = await fetch("/api/progress/guided-learning/sync", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${authToken}`, // Pass auth token in header
-          },
-          body: JSON.stringify({
-            planId,
-            completedQuestions: progress.completedQuestions || [],
-            completedTopics: progress.completedTopics || [],
-            completedCategories: progress.completedCategories || [],
-            completedCards: progress.completedCards || [],
-            correctAnswers: progress.correctAnswers || [],
-            currentPosition: progress.currentPosition,
-            lastUpdated: progress.lastUpdated || new Date().toISOString(),
-            ...(userId && { userId }), // Pass user ID if provided (for custom auth)
-          }),
-        });
-
-        if (response.ok) {
-          synced.push(planId);
-
-          // Remove from localStorage after successful sync
-          try {
-            localStorage.removeItem(key);
-          } catch (_removeError) {
-            // Ignore localStorage removal errors
-          }
-        } else {
-          const errorData = await response
-            .json()
-            .catch(() => ({ error: "Unknown error" }));
-          errors.push(`Plan ${planId}: ${errorData.error || "Sync failed"}`);
-        }
-      } catch (error) {
-        const planId = key.replace("guided-practice-progress-", "");
-        errors.push(
-          `Plan ${planId}: ${error instanceof Error ? error.message : "Parse error"}`,
-        );
-      }
-    }
-  } catch (error) {
-    errors.push(
-      `Guided progress scan: ${error instanceof Error ? error.message : "Unknown error"}`,
-    );
   }
 
   return {
@@ -153,7 +174,10 @@ export async function syncFreeStyleProgress(
       try {
         localStorage.removeItem("free-style-practice-progress");
       } catch (removeError) {
-        // Ignore localStorage removal errors
+        console.warn(
+          "Failed to remove free-style progress key from localStorage",
+          removeError,
+        );
       }
 
       return { success: true };

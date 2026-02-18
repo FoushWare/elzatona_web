@@ -67,7 +67,8 @@ export function CookieAuthProvider({ children }: CookieAuthProviderProps) {
         } else {
           setUser(null);
         }
-      } catch (_error) {
+      } catch (error) {
+        console.warn("Failed to initialize cookie auth state:", error);
         setUser(null);
       } finally {
         setIsLoading(false);
@@ -86,7 +87,8 @@ export function CookieAuthProvider({ children }: CookieAuthProviderProps) {
       if (globalThis.window) {
         globalThis.window.location.href = signInUrl;
       }
-    } catch (_error) {
+    } catch (error) {
+      console.error("Cookie auth sign-in failed:", error);
       setIsLoading(false);
     }
   };
@@ -107,7 +109,8 @@ export function CookieAuthProvider({ children }: CookieAuthProviderProps) {
       if (globalThis.window) {
         globalThis.window.location.href = "/api/auth/signout";
       }
-    } catch (_error) {
+    } catch (error) {
+      console.error("Cookie auth sign-out failed:", error);
       setIsLoading(false);
     }
   };
@@ -122,8 +125,8 @@ export function CookieAuthProvider({ children }: CookieAuthProviderProps) {
       } else {
         setUser(null);
       }
-    } catch (_error) {
-      // Auth refresh failed
+    } catch (error) {
+      console.warn("Cookie auth refresh failed:", error);
     }
   };
 

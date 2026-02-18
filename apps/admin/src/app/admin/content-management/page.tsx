@@ -55,7 +55,6 @@ export default function ContentManagementPage() {
     deselectAllQuestions,
     addSelectedQuestionsToPlan,
     closeTopicQuestionsModal,
-    toggleQuestionInPlan,
     isDeleteCardModalOpen,
     setIsDeleteCardModalOpen,
     cardToDelete,
@@ -109,7 +108,7 @@ export default function ContentManagementPage() {
                 try refreshing the page.
               </p>
               <Button
-                onClick={() => window.location.reload()}
+                onClick={() => globalThis.location.reload()}
                 className="bg-blue-600 hover:bg-blue-700 text-white"
               >
                 Refresh Page

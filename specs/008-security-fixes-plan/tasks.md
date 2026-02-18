@@ -3,34 +3,34 @@
 ## Phase 1: Setup
 
 - [ ] T001 Create 008-security-fixes-plan branch from main
-- [ ] T002 Create project documentation structure in specs/008-security-fixes-plan/
-- [ ] T003 [P] Copy plan.md, spec.md, research.md, data-model.md, quickstart.md templates
+- [x] T002 Create project documentation structure in specs/008-security-fixes-plan/
+- [x] T003 [P] Copy plan.md, spec.md, research.md, data-model.md, quickstart.md templates
 
 ## Phase 2: Foundational
 
-- [ ] T004 [P] Validate SonarCloud CI and Prettier formatting in .github/workflows/
-- [ ] T005 [P] Validate gitleaks config in .gitleaks.toml
-- [ ] T006 [P] Validate nx monorepo config in nx.json, apps/, libs/
+- [x] T004 [P] Validate SonarCloud CI and Prettier formatting in .github/workflows/
+- [x] T005 [P] Validate gitleaks config in .gitleaks.toml
+- [x] T006 [P] Validate nx monorepo config in nx.json, apps/, libs/
 
 ## Phase 3: PR01 - Next.js CVE Upgrade
 
-- [ ] T007 [P] [US1] Update next version in package.json, apps/admin/package.json, apps/website/package.json
+- [x] T007 [P] [US1] Update next version in package.json, apps/admin/package.json, apps/website/package.json
 - [ ] T008 [US1] Run npm install and regenerate lockfile
 - [ ] T009 [US1] Verify build with npx nx run-many --target=build --all
 - [ ] T010 [US1] Commit upgrade with message in contracts/PR01-nextjs-cve-upgrade.md
 
 ## Phase 4: PR02 - Sonar Blocker Auth Config
 
-- [ ] T011 [P] [US2] Read apps/website/src/app/lib/auth-config.ts
-- [ ] T012 [US2] Refactor function at line 47 to return different values based on input
+- [x] T011 [P] [US2] Read apps/website/src/app/lib/auth-config.ts
+- [x] T012 [US2] Refactor function at line 47 to return different values based on input
 - [ ] T013 [US2] Verify build with npx nx run website:build
 - [ ] T014 [US2] Commit fix with message in contracts/PR02-sonar-blocker-auth-config.md
 
 ## Phase 5: PR03 - Sonar Quick Fixes
 
-- [ ] T015 [P] [US3] Refactor mutable let exports to const in homePageHelpers.ts, supabase-server.ts
-- [ ] T016 [US3] Remove void operator in ErrorBoundary.tsx
-- [ ] T017 [US3] Refactor Promise.resolve/reject in ProblemSolvingEditorUtils.ts, FrontendTaskEditorUtils.ts
+- [x] T015 [P] [US3] Refactor mutable let exports to const in homePageHelpers.ts, supabase-server.ts
+- [x] T016 [US3] Remove void operator in ErrorBoundary.tsx
+- [x] T017 [US3] Refactor Promise.resolve/reject in ProblemSolvingEditorUtils.ts, FrontendTaskEditorUtils.ts
 - [ ] T018 [US3] Add compare function to sort in validation.ts
 - [ ] T019 [US3] Commit fixes with message in contracts/PR03-sonar-quick-fixes.md
 

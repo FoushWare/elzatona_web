@@ -2,6 +2,7 @@ node_modules/
 .docker/
 .git
 .gitignore
+.dockerignore
 .env*
 Dockerfile*
 .next/

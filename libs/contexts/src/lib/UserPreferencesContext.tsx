@@ -99,7 +99,11 @@ export function UserPreferencesProvider({
             ...parsed,
           });
         }
-      } catch (_error) {
+      } catch (error) {
+        console.warn(
+          "Failed to load saved user preferences, using defaults:",
+          error,
+        );
         setPreferences(defaultPreferences);
       } finally {
         setIsLoading(false);
@@ -125,6 +129,7 @@ export function UserPreferencesProvider({
         });
       }
     } catch (error) {
+      console.error("Failed to update user preferences:", error);
       throw error;
     }
   };

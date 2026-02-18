@@ -2,13 +2,6 @@
 const globalObj = globalThis;
 
 module.exports = {
-  vi: {
-    mock: () => {},
-    fn: () => () => {},
-    spyOn: () => ({ mockImplementation: () => {} }),
-    clearAllMocks: () => {},
-    resetAllMocks: () => {},
-  },
   // Provide basic testing globals mapped to Jest equivalents if available
   describe: globalThis.describe || (() => {}),
   it: globalThis.it || globalThis.test || (() => {}),
