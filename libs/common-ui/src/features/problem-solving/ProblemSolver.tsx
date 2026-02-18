@@ -1,4 +1,5 @@
-"use client";
+export default ProblemSolver;
+("use client");
 
 import React from "react";
 import { Play, CheckCircle } from "lucide-react";
