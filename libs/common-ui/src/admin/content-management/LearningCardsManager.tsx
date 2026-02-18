@@ -99,6 +99,119 @@ interface LearningCardsManagerProps {
   onEditCategories: () => void;
 }
 
+const TopicNode: React.FC<{
+  topic: Topic;
+  questions: AdminQuestion[];
+  expandedTopics: Set<string>;
+  toggleTopic: (id: string) => void;
+}> = ({ topic, questions, expandedTopics, toggleTopic }) => {
+  return (
+    <div className="border-l-2 border-gray-100 pl-4 py-2">
+      <div className="flex items-center justify-between">
+        <div className="flex items-center space-x-2">
+          <button
+            onClick={() => toggleTopic(topic.id)}
+            className="p-1 hover:bg-gray-100 rounded"
+          >
+            {expandedTopics.has(topic.id) ? (
+              <ChevronDown className="h-4 w-4" />
+            ) : (
+              <ChevronRight className="h-4 w-4" />
+            )}
+          </button>
+          <Target className="h-4 w-4 text-orange-600" />
+          <div>
+            <h5 className="font-medium">{topic.name}</h5>
+            <p className="text-sm text-gray-600 dark:text-gray-400">
+              {topic.description}
+            </p>
+          </div>
+        </div>
+        <div className="flex items-center space-x-2">
+          <Badge
+            variant="outline"
+            className="bg-green-50 text-green-700 dark:bg-green-900 dark:text-green-300"
+          >
+            {countQuestionsForTopic(topic.id, questions)} Questions
+          </Badge>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const CategoryNode: React.FC<{
+  category: AdminCategory;
+  categoryTopics: Topic[];
+  questions: AdminQuestion[];
+  expandedCategories: Set<string>;
+  toggleCategory: (id: string) => void;
+  expandedTopics: Set<string>;
+  toggleTopic: (id: string) => void;
+}> = ({
+  category,
+  categoryTopics,
+  questions,
+  expandedCategories,
+  toggleCategory,
+  expandedTopics,
+  toggleTopic,
+}) => {
+  return (
+    <div className="ml-6 border-l-2 border-gray-200 pl-4">
+      <div className="flex items-center justify-between py-2">
+        <div className="flex items-center space-x-2">
+          <button
+            onClick={() => toggleCategory(category.id)}
+            className="p-1 hover:bg-gray-100 rounded"
+          >
+            {expandedCategories.has(category.id) ? (
+              <ChevronDown className="h-4 w-4" />
+            ) : (
+              <ChevronRight className="h-4 w-4" />
+            )}
+          </button>
+          <BookOpen className="h-4 w-4 text-purple-600" />
+          <div>
+            <h4 className="font-medium">{category.name}</h4>
+            <p className="text-sm text-gray-600 dark:text-gray-400">
+              {category.description}
+            </p>
+          </div>
+        </div>
+        <div className="flex items-center space-x-2">
+          <Badge
+            variant="outline"
+            className="bg-purple-50 text-purple-700 dark:bg-purple-900 dark:text-purple-300"
+          >
+            {categoryTopics.length} Topics
+          </Badge>
+          <Badge
+            variant="outline"
+            className="bg-green-50 text-green-700 dark:bg-green-900 dark:text-green-300"
+          >
+            {countQuestionsForCategory(category.id, questions)} Questions
+          </Badge>
+        </div>
+      </div>
+
+      {expandedCategories.has(category.id) && (
+        <div className="ml-6 space-y-2">
+          {categoryTopics.map((topic) => (
+            <TopicNode
+              key={topic.id}
+              topic={topic}
+              questions={questions}
+              expandedTopics={expandedTopics}
+              toggleTopic={toggleTopic}
+            />
+          ))}
+        </div>
+      )}
+    </div>
+  );
+};
+
 export const LearningCardsManager: React.FC<LearningCardsManagerProps> = ({
   cards,
   categories,
@@ -252,103 +365,16 @@ export const LearningCardsManager: React.FC<LearningCardsManagerProps> = ({
                         );
 
                         return (
-                          <div
+                          <CategoryNode
                             key={category.id}
-                            className="ml-6 border-l-2 border-gray-200 pl-4"
-                          >
-                            <div className="flex items-center justify-between py-2">
-                              <div className="flex items-center space-x-2">
-                                <button
-                                  onClick={() => toggleCategory(category.id)}
-                                  className="p-1 hover:bg-gray-100 rounded"
-                                >
-                                  {expandedCategories.has(category.id) ? (
-                                    <ChevronDown className="h-4 w-4" />
-                                  ) : (
-                                    <ChevronRight className="h-4 w-4" />
-                                  )}
-                                </button>
-                                <BookOpen className="h-4 w-4 text-purple-600" />
-                                <div>
-                                  <h4 className="font-medium">
-                                    {category.name}
-                                  </h4>
-                                  <p className="text-sm text-gray-600 dark:text-gray-400">
-                                    {category.description}
-                                  </p>
-                                </div>
-                              </div>
-                              <div className="flex items-center space-x-2">
-                                <Badge
-                                  variant="outline"
-                                  className="bg-purple-50 text-purple-700 dark:bg-purple-900 dark:text-purple-300"
-                                >
-                                  {categoryTopics.length} Topics
-                                </Badge>
-                                <Badge
-                                  variant="outline"
-                                  className="bg-green-50 text-green-700 dark:bg-green-900 dark:text-green-300"
-                                >
-                                  {countQuestionsForCategory(
-                                    category.id,
-                                    questions,
-                                  )}{" "}
-                                  Questions
-                                </Badge>
-                              </div>
-                            </div>
-
-                            {expandedCategories.has(category.id) && (
-                              <div className="ml-6 space-y-2">
-                                {categoryTopics.map((topic) => {
-                                  return (
-                                    <div
-                                      key={topic.id}
-                                      className="border-l-2 border-gray-100 pl-4 py-2"
-                                    >
-                                      <div className="flex items-center justify-between">
-                                        <div className="flex items-center space-x-2">
-                                          <button
-                                            onClick={() =>
-                                              toggleTopic(topic.id)
-                                            }
-                                            className="p-1 hover:bg-gray-100 rounded"
-                                          >
-                                            {expandedTopics.has(topic.id) ? (
-                                              <ChevronDown className="h-4 w-4" />
-                                            ) : (
-                                              <ChevronRight className="h-4 w-4" />
-                                            )}
-                                          </button>
-                                          <Target className="h-4 w-4 text-orange-600" />
-                                          <div>
-                                            <h5 className="font-medium">
-                                              {topic.name}
-                                            </h5>
-                                            <p className="text-sm text-gray-600 dark:text-gray-400">
-                                              {topic.description}
-                                            </p>
-                                          </div>
-                                        </div>
-                                        <div className="flex items-center space-x-2">
-                                          <Badge
-                                            variant="outline"
-                                            className="bg-green-50 text-green-700 dark:bg-green-900 dark:text-green-300"
-                                          >
-                                            {countQuestionsForTopic(
-                                              topic.id,
-                                              questions,
-                                            )}{" "}
-                                            Questions
-                                          </Badge>
-                                        </div>
-                                      </div>
-                                    </div>
-                                  );
-                                })}
-                              </div>
-                            )}
-                          </div>
+                            category={category}
+                            categoryTopics={categoryTopics}
+                            questions={questions}
+                            expandedCategories={expandedCategories}
+                            toggleCategory={toggleCategory}
+                            expandedTopics={expandedTopics}
+                            toggleTopic={toggleTopic}
+                          />
                         );
                       })}
                     </div>
