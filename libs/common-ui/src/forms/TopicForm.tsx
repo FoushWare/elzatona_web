@@ -572,7 +572,6 @@ export const TopicForm: React.FC<TopicFormProps> = ({
             }
             return "Create Topic";
           })()}
-
         </Button>
       </div>
     </form>

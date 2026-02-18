@@ -1,5 +1,7 @@
 // Helper: Parse progress data from request
-async function parseProgressData(request: NextRequest): Promise<ProgressData | null> {
+async function parseProgressData(
+  request: NextRequest,
+): Promise<ProgressData | null> {
   try {
     return await request.json();
   } catch (parseError) {
