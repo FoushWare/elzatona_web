@@ -1,4 +1,5 @@
 export default ProblemSolver;
+export default ProblemSolver;
 ("use client");
 
 import React from "react";
