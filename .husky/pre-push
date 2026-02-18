@@ -171,8 +171,14 @@ echo ""
 echo "STEP 2: Linting"
 run_check \
   "ESLint" \
-  "NODE_OPTIONS=\"--max-old-space-size=512\" npm run lint" \
+  "NODE_OPTIONS=\"--max-old-space-size=512\" npm run lint | tee /tmp/eslint-check.log" \
   "npm run lint:fix"
+
+# Print failed ESLint files/errors directly to terminal for clarity
+if grep -E 'error|problem|✖' /tmp/eslint-check.log; then
+  echo -e "${RED}❌ ESLint failed with the following errors:${NC}"
+  grep -E 'error|problem|✖' /tmp/eslint-check.log | sed 's/^/   /'
+fi
 
 ###############################################################################
 # STEP 3: TypeScript
