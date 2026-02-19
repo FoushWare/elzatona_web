@@ -57,6 +57,8 @@
     "codeql:upload": "bash libs/utilities/scripts/run-codeql-local.sh --upload",
     "codeql:precommit": "bash libs/utilities/scripts/check-codeql-precommit.sh",
     "codeql:fix": "node libs/utilities/scripts/fix-codeql-issues.js",
+    "code-scanning:batch:start": "bash scripts/code-scanning-batch-flow.sh start",
+    "code-scanning:batch:pr": "bash scripts/code-scanning-batch-flow.sh pr",
     "format": "prettier --write .",
     "cleanup:playwright-videos": "bash libs/utilities/scripts/cleanup-playwright-videos.sh",
     "prepare": "husky",

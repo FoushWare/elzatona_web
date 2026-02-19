@@ -121,6 +121,30 @@ codeql bqrs interpret codeql-results.sarif
 
 ## Recommended Workflow
 
+### Code Scanning Remediation Flow (main → branch → PR to main)
+
+Use this when addressing GitHub Code Scanning alerts and issues labeled `bugs`.
+
+```bash
+# 1) Always sync with latest main and create a fresh remediation branch
+npm run code-scanning:batch:start
+
+# 2) Apply fixes, commit changes
+git add -A
+git commit -m "fix(code-scanning): resolve batch findings"
+
+# 3) Push and open PR to main
+npm run code-scanning:batch:pr
+```
+
+What `code-scanning:batch:start` does automatically:
+
+- Fetches and fast-forwards local `main` from `origin/main`
+- Creates a new branch from latest `main`
+- Fetches open code-scanning alerts
+- Fetches open issues with label `bugs`
+- Generates a batch report in `docs/security/`
+
 ### Before Committing
 
 ```bash
