@@ -202,11 +202,10 @@ export const QuestionPracticeView: React.FC<QuestionPracticeViewProps> = ({
 
   const cleanQuestionTitle = (title: string): string => {
     if (!title) return "";
+    // Keep &lt; and &gt; encoded here so rendering/sanitization stays consistent in QuestionContent.
     return title
-      .replaceAll("&nbsp;", " ")
-      .replaceAll("&lt;", "<")
-      .replaceAll("&gt;", ">")
       .replaceAll("&amp;", "&")
+      .replaceAll("&nbsp;", " ")
       .replaceAll("&quot;", '"')
       .replaceAll("&#39;", "'")
       .trim();
