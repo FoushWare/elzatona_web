@@ -99,21 +99,14 @@ interface LearningCardsManagerProps {
   onEditCategories: () => void;
 }
 
-interface TopicRowProps {
+const TopicNode: React.FC<{
   topic: Topic;
+  questions: AdminQuestion[];
   expandedTopics: Set<string>;
   toggleTopic: (id: string) => void;
-  questions: AdminQuestion[];
-}
-
-const TopicRow: React.FC<TopicRowProps> = ({
-  topic,
-  expandedTopics,
-  toggleTopic,
-  questions,
-}) => {
+}> = ({ topic, questions, expandedTopics, toggleTopic }) => {
   return (
-    <div key={topic.id} className="border-l-2 border-gray-100 pl-4 py-2">
+    <div className="border-l-2 border-gray-100 pl-4 py-2">
       <div className="flex items-center justify-between">
         <div className="flex items-center space-x-2">
           <button
@@ -147,31 +140,25 @@ const TopicRow: React.FC<TopicRowProps> = ({
   );
 };
 
-interface CategorySectionProps {
+const CategoryNode: React.FC<{
   category: AdminCategory;
-  topics: Topic[];
+  categoryTopics: Topic[];
   questions: AdminQuestion[];
   expandedCategories: Set<string>;
   toggleCategory: (id: string) => void;
   expandedTopics: Set<string>;
   toggleTopic: (id: string) => void;
-}
-
-const CategorySection: React.FC<CategorySectionProps> = ({
+}> = ({
   category,
-  topics,
+  categoryTopics,
   questions,
   expandedCategories,
   toggleCategory,
   expandedTopics,
   toggleTopic,
 }) => {
-  const categoryTopics = topics.filter(
-    (topic) => topic.category_id === category.id,
-  );
-
   return (
-    <div key={category.id} className="ml-6 border-l-2 border-gray-200 pl-4">
+    <div className="ml-6 border-l-2 border-gray-200 pl-4">
       <div className="flex items-center justify-between py-2">
         <div className="flex items-center space-x-2">
           <button
@@ -211,12 +198,12 @@ const CategorySection: React.FC<CategorySectionProps> = ({
       {expandedCategories.has(category.id) && (
         <div className="ml-6 space-y-2">
           {categoryTopics.map((topic) => (
-            <TopicRow
+            <TopicNode
               key={topic.id}
               topic={topic}
+              questions={questions}
               expandedTopics={expandedTopics}
               toggleTopic={toggleTopic}
-              questions={questions}
             />
           ))}
         </div>
@@ -372,18 +359,24 @@ export const LearningCardsManager: React.FC<LearningCardsManagerProps> = ({
                 {expandedCards.has(card.id) && (
                   <CardContent className="pt-0">
                     <div className="space-y-4">
-                      {cardCategories.map((category) => (
-                        <CategorySection
-                          key={category.id}
-                          category={category}
-                          topics={topics}
-                          questions={questions}
-                          expandedCategories={expandedCategories}
-                          toggleCategory={toggleCategory}
-                          expandedTopics={expandedTopics}
-                          toggleTopic={toggleTopic}
-                        />
-                      ))}
+                      {cardCategories.map((category) => {
+                        const categoryTopics = topics.filter(
+                          (topic) => topic.category_id === category.id,
+                        );
+
+                        return (
+                          <CategoryNode
+                            key={category.id}
+                            category={category}
+                            categoryTopics={categoryTopics}
+                            questions={questions}
+                            expandedCategories={expandedCategories}
+                            toggleCategory={toggleCategory}
+                            expandedTopics={expandedTopics}
+                            toggleTopic={toggleTopic}
+                          />
+                        );
+                      })}
                     </div>
                   </CardContent>
                 )}
