@@ -15,7 +15,7 @@
 ## Phase 3: PR01 - Next.js CVE Upgrade
 
 - [x] T007 [P] [US1] Update next version in package.json, apps/admin/package.json, apps/website/package.json
-- [ ] T008 [US1] Run npm install and regenerate lockfile
+- [x] T008 [US1] Run npm install and regenerate lockfile
 - [ ] T009 [US1] Verify build with npx nx run-many --target=build --all
 - [ ] T010 [US1] Commit upgrade with message in contracts/PR01-nextjs-cve-upgrade.md
 
@@ -72,8 +72,8 @@
 
 ## Phase 12: PR10 - Gitleaks Artifacts Cleanup
 
-- [ ] T038 [P] [US10] Delete build artifacts (playwright-report/index.html, static/main.js, playwright-report/) per contracts/PR10-gitleaks-artifacts-cleanup.md
-- [ ] T039 [US10] Update .gitignore to prevent future commits
+- [x] T038 [P] [US10] Delete build artifacts (playwright-report/index.html, static/main.js, playwright-report/) per contracts/PR10-gitleaks-artifacts-cleanup.md
+- [x] T039 [US10] Update .gitignore to prevent future commits
 - [ ] T040 [US10] Commit fixes with message in contracts/PR10-gitleaks-artifacts-cleanup.md
 
 ## Phase 13: Existing PR Pipeline Resolution
