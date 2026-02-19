@@ -145,6 +145,22 @@ What `code-scanning:batch:start` does automatically:
 - Fetches open issues with label `bugs`
 - Generates a batch report in `docs/security/`
 
+### Reconcile PR-resolved and duplicate bugs issues
+
+```bash
+# Dry-run duplicate cleanup
+npm run issues:dedupe:bugs
+
+# Apply duplicate cleanup (close + delete duplicates)
+npm run issues:dedupe:bugs:apply
+
+# Resolve issues linked to a specific PR (dry-run)
+bash scripts/reconcile-code-scanning-issues.sh resolved-by-pr --pr 7525
+
+# Apply linked-issue reconciliation
+bash scripts/reconcile-code-scanning-issues.sh resolved-by-pr --pr 7525 --apply
+```
+
 ### Before Committing
 
 ```bash
