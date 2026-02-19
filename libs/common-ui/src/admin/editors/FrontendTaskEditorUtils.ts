@@ -29,20 +29,36 @@ export const isReactCode = (code: string): boolean => {
 
 export const cleanReactCode = (reactCode: string): string => {
   const lines = reactCode.split("\n");
+  let inImportBlock = false;
   const withoutImports = lines.filter((line) => {
     const trimmedLine = line.trimStart();
-    return !trimmedLine.startsWith("import ");
+
+    if (inImportBlock) {
+      if (trimmedLine.includes(" from ") || trimmedLine.endsWith(";")) {
+        inImportBlock = false;
+      }
+      return false;
+    }
+
+    if (trimmedLine.startsWith("import ")) {
+      inImportBlock =
+        !trimmedLine.includes(" from ") && !trimmedLine.endsWith(";");
+      return false;
+    }
+
+    return true;
   });
 
   const withoutExports = withoutImports.map((line) => {
-    const trimmedLine = line.trimStart();
+    const leadingWhitespace = /^\s*/.exec(line)?.[0] ?? "";
+    const trimmedLine = line.slice(leadingWhitespace.length);
 
     if (trimmedLine.startsWith("export default ")) {
-      return line.replace("export default ", "");
+      return leadingWhitespace + trimmedLine.replace(/^export default\s+/, "");
     }
 
     if (trimmedLine.startsWith("export ")) {
-      return line.replace("export ", "");
+      return leadingWhitespace + trimmedLine.replace(/^export\s+/, "");
     }
 
     return line;
