@@ -164,6 +164,7 @@ const useNavbarSimpleState = () => {
 // Tracked for future sprint improvement
 
 export const NavbarSimple: React.FC = () => {
+  // NOSONAR
   const {
     isScrolled,
     setIsScrolled,

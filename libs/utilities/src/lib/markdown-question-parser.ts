@@ -223,43 +223,21 @@ export class MarkdownQuestionParser {
     let questionText = "";
     let optionsText = "";
     let inCodeBlock = false;
-    const _foundOptions = false;
     let correctAnswer = "";
 
     for (let i = 0; i < lines.length; i++) {
       const line = lines[i].trim();
+      const lineResult = this.processGitHubQuestionLine(line, lines, i, {
+        inCodeBlock,
+        questionText,
+        optionsText,
+        correctAnswer,
+      });
 
-      // Extract question from header
-      if (/^#{1,6}\s*\d+\./.test(line)) {
-        questionText = line.replace(/^#{1,6}\s*\d+\.?\s*/, "").trim();
-        continue;
-      }
-
-      // Skip code blocks
-      if (line.startsWith("```")) {
-        inCodeBlock = !inCodeBlock;
-        continue;
-      }
-
-      if (inCodeBlock) continue;
-
-      // Look for options
-      if (/^-?\s*[A-Z]:\s*/.test(line)) {
-        optionsText += line + "\n";
-      }
-
-      // Look for correct answer in HTML details/summary sections
-      if (line.includes("<details>") || line.includes("<summary>")) {
-        correctAnswer = this.extractAnswerFromDetails(lines, i);
-      }
-
-      // Also check for direct answer lines
-      if (line.includes("Answer:") || line.includes("**Answer:")) {
-        const answerMatch = /Answer:\s*([A-D])/i.exec(line);
-        if (answerMatch) {
-          correctAnswer = answerMatch[1].toLowerCase();
-        }
-      }
+      inCodeBlock = lineResult.inCodeBlock;
+      questionText = lineResult.questionText;
+      optionsText = lineResult.optionsText;
+      correctAnswer = lineResult.correctAnswer;
     }
 
     if (!questionText || !optionsText) {
@@ -293,6 +271,86 @@ export class MarkdownQuestionParser {
       tags: this.extractTags(block),
       points: this.extractPoints(questionText),
     };
+  }
+
+  private static processGitHubQuestionLine(
+    line: string,
+    lines: string[],
+    lineIndex: number,
+    state: {
+      inCodeBlock: boolean;
+      questionText: string;
+      optionsText: string;
+      correctAnswer: string;
+    },
+  ) {
+    const nextState = { ...state };
+
+    if (this.isGitHubQuestionHeader(line)) {
+      nextState.questionText = this.extractGitHubHeaderText(line);
+      return nextState;
+    }
+
+    if (line.startsWith("```")) {
+      nextState.inCodeBlock = !state.inCodeBlock;
+      return nextState;
+    }
+
+    if (state.inCodeBlock) {
+      return nextState;
+    }
+
+    if (this.isGitHubOptionLine(line)) {
+      nextState.optionsText += `${line}\n`;
+    }
+
+    const detailsAnswer = this.extractAnswerFromDetailsIfPresent(
+      line,
+      lines,
+      lineIndex,
+    );
+    if (detailsAnswer) {
+      nextState.correctAnswer = detailsAnswer;
+    }
+
+    const directAnswer = this.extractDirectAnswer(line);
+    if (directAnswer) {
+      nextState.correctAnswer = directAnswer;
+    }
+
+    return nextState;
+  }
+
+  private static isGitHubQuestionHeader(line: string): boolean {
+    return /^#{1,6}\s*\d+\./.test(line);
+  }
+
+  private static extractGitHubHeaderText(line: string): string {
+    return line.replace(/^#{1,6}\s*\d+\.?\s*/, "").trim();
+  }
+
+  private static isGitHubOptionLine(line: string): boolean {
+    return /^-?\s*[A-Z]:\s*/.test(line);
+  }
+
+  private static extractAnswerFromDetailsIfPresent(
+    line: string,
+    lines: string[],
+    lineIndex: number,
+  ): string {
+    if (!line.includes("<details>") && !line.includes("<summary>")) {
+      return "";
+    }
+    return this.extractAnswerFromDetails(lines, lineIndex);
+  }
+
+  private static extractDirectAnswer(line: string): string {
+    if (!line.includes("Answer:") && !line.includes("**Answer:")) {
+      return "";
+    }
+
+    const answerMatch = /Answer:\s*([A-D])/i.exec(line);
+    return answerMatch ? answerMatch[1].toLowerCase() : "";
   }
 
   /**

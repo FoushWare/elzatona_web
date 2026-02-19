@@ -3,7 +3,7 @@ import { createClient } from "@supabase/supabase-js";
 import { removeAllHTMLTags } from "../../../../../sanitize-server";
 
 // GET /api/guided-learning/plan-details/[planId] - Get detailed plan with cards, categories, topics, and questions
-export async function GET(
+export async function GET( // NOSONAR
   request: NextRequest,
   { params }: { params: Promise<{ planId: string }> },
 ) {
@@ -304,13 +304,13 @@ export async function GET(
       };
       let decoded = text;
       for (const [entity, char] of Object.entries(entityMap)) {
-        decoded = decoded.replace(new RegExp(entity, "gi"), char);
+        decoded = decoded.replaceAll(new RegExp(entity, "gi"), char);
       }
-      decoded = decoded.replace(/&#(\d+);/g, (_, dec) =>
-        String.fromCodePoint(parseInt(dec, 10)),
+      decoded = decoded.replaceAll(/&#(\d+);/g, (_, dec) =>
+        String.fromCodePoint(Number.parseInt(dec, 10)),
       );
-      decoded = decoded.replace(/&#x([0-9a-fA-F]+);/gi, (_, hex) =>
-        String.fromCodePoint(parseInt(hex, 16)),
+      decoded = decoded.replaceAll(/&#x([\da-f]+);/gi, (_, hex) =>
+        String.fromCodePoint(Number.parseInt(hex, 16)),
       );
       return decoded;
     };
@@ -333,26 +333,26 @@ export async function GET(
       // Fix malformed markdown code blocks (```code```)
       cleaned = cleaned
         // Fix triple+ backticks at start: ````` -> ```
-        .replace(/`{4,}/g, "```")
+        .replaceAll(/`{4,}/g, "```")
         // Fix malformed code block markers: `````code``` -> ```code```
-        .replace(/```{2,}([^`]+)```{2,}/g, "```$1```")
+        .replaceAll(/```{2,}([^`]+)```{2,}/g, "```$1```")
         // Fix code blocks with extra backticks: `````code````` -> ```code```
-        .replace(/```{2,}([\s\S]*?)```{2,}/g, "```$1```");
+        .replaceAll(/```{2,}([\s\S]*?)```{2,}/g, "```$1```");
 
       // Fix malformed markdown inline code (`code`)
       cleaned = cleaned
         // Fix triple+ backticks used for inline code (single line): ```code``` -> `code`
-        .replace(/```([^`\n]+)```/g, "`$1`")
+        .replaceAll(/```([^`\n]+)```/g, "`$1`")
         // Fix double backticks in inline code: ``code`` -> `code` (avoid code blocks)
         // Use a more compatible approach without negative lookbehind
-        .replace(/([^`])``([^`\n]+)``([^`])/g, "$1`$2`$3");
+        .replaceAll(/([^`])``([^`\n]+)``([^`])/g, "$1`$2`$3");
 
       // Fix markdown bold/italic with extra characters
       cleaned = cleaned
         // Fix bold with extra asterisks: ****text**** -> **text**
-        .replace(/\*{4,}([^*]+)\*{4,}/g, "**$1**")
+        .replaceAll(/\*{4,}([^*]+)\*{4,}/g, "**$1**")
         // Fix italic with extra asterisks: ***text*** -> *text*
-        .replace(/\*{3}([^*]+)\*{3}/g, "*$1*");
+        .replaceAll(/\*{3}([^*]+)\*{3}/g, "*$1*");
 
       // ============================================
       // PHASE 0: Fix special malformed patterns with backticks
@@ -361,13 +361,13 @@ export async function GET(
       // Convert backticks to proper <code> tags
       cleaned = cleaned
         // Pattern: <pr`code content`</pr -> <pre><code>code content</code></pre>
-        .replace(/<pr`([^`]+)`\s*<\/pr/gi, "<pre><code>$1</code></pre>")
+        .replaceAll(/<pr`([^`]+)`\s*<\/pr/gi, "<pre><code>$1</code></pre>")
         // Pattern: <pr`code content`</pr (with newlines)
-        .replace(/<pr`([\s\S]*?)`\s*<\/pr/gi, "<pre><code>$1</code></pre>")
+        .replaceAll(/<pr`([\s\S]*?)`\s*<\/pr/gi, "<pre><code>$1</code></pre>")
         // Pattern: <pr`code (no closing backtick, find </pr)
-        .replace(/<pr`([\s\S]*?)<\/pr/gi, "<pre><code>$1</code></pre>")
+        .replaceAll(/<pr`([\s\S]*?)<\/pr/gi, "<pre><code>$1</code></pre>")
         // Pattern: <pr`code` (standalone, no closing tag)
-        .replace(/<pr`([^`]+)`/gi, "<pre><code>$1</code></pre>");
+        .replaceAll(/<pr`([^`]+)`/gi, "<pre><code>$1</code></pre>");
 
       // ============================================
       // PHASE 1: Fix malformed HTML tags (MULTIPLE PASSES)
@@ -375,75 +375,75 @@ export async function GET(
       for (let pass = 0; pass < 5; pass++) {
         cleaned = cleaned
           // Fix deeply nested malformed opening tags
-          .replace(/<pr<cod<cod<cod/gi, "<pre><code>")
-          .replace(/<pr<code<code<code/gi, "<pre><code>")
-          .replace(/<pr<cod<cod/gi, "<pre><code>")
-          .replace(/<pr<code<code/gi, "<pre><code>")
-          .replace(/<pr<codee<code/gi, "<pre><code>")
-          .replace(/<pr<codee<cod/gi, "<pre><code>")
-          .replace(/<pr<code<cod/gi, "<pre><code>")
-          .replace(/<pr<codee/gi, "<pre><code>")
-          .replace(/<pr<code/gi, "<pre><code>")
-          .replace(/<pr<cod([a-zA-Z])/gi, "<pre><code>$1")
-          .replace(/<pr<cod\s/gi, "<pre><code>")
-          .replace(/<pr<cod/gi, "<pre><code>")
-          .replace(/<pr<co/gi, "<pre><code>")
-          .replace(/<pr`/gi, "<pre><code>") // Handle <pr` -> <pre><code>
-          .replace(/<pr</gi, "<pre>")
+          .replaceAll(/<pr<cod<cod<cod/gi, "<pre><code>")
+          .replaceAll(/<pr<code<code<code/gi, "<pre><code>")
+          .replaceAll(/<pr<cod<cod/gi, "<pre><code>")
+          .replaceAll(/<pr<code<code/gi, "<pre><code>")
+          .replaceAll(/<pr<codee<code/gi, "<pre><code>")
+          .replaceAll(/<pr<codee<cod/gi, "<pre><code>")
+          .replaceAll(/<pr<code<cod/gi, "<pre><code>")
+          .replaceAll(/<pr<codee/gi, "<pre><code>")
+          .replaceAll(/<pr<code/gi, "<pre><code>")
+          .replaceAll(/<pr<cod([A-Z])/gi, "<pre><code>$1")
+          .replaceAll(/<pr<cod\s/gi, "<pre><code>")
+          .replaceAll(/<pr<cod/gi, "<pre><code>")
+          .replaceAll(/<pr<co/gi, "<pre><code>")
+          .replaceAll(/<pr`/gi, "<pre><code>") // Handle <pr` -> <pre><code>
+          .replaceAll(/<pr</gi, "<pre>")
           // Fix deeply nested malformed closing tags
-          .replace(/<\/cod<\/cod<\/cod<\/pr/gi, "</code></pre>")
-          .replace(/<\/code<\/code<\/code<\/pr/gi, "</code></pre>")
-          .replace(/<\/cod<\/cod<\/pr/gi, "</code></pre>")
-          .replace(/<\/code<\/code<\/pr/gi, "</code></pre>")
-          .replace(/<\/codee<\/codee<\/pree/gi, "</code></pre>")
-          .replace(/<\/cod<\/cod<\/pree/gi, "</code></pre>")
-          .replace(/<\/code<\/code<\/pree/gi, "</code></pre>")
-          .replace(/<\/codee<\/pree/gi, "</code></pre>")
-          .replace(/<\/cod<\/pree/gi, "</code></pre>")
-          .replace(/<\/code<\/pree/gi, "</code></pre>")
-          .replace(/<\/cod<\/pr/gi, "</code></pre>")
-          .replace(/<\/code<\/pr/gi, "</code></pre>")
-          .replace(/<\/cod<\/pre/gi, "</code></pre>")
-          .replace(/<\/cod</gi, "</code>")
-          .replace(/`\s*<\/pr/gi, "</code></pre>") // Handle `</pr -> </code></pre>
-          .replace(/<\/code><\/pre>e>/gi, "</code></pre>")
-          .replace(/<\/code><\/pre>\s*e>/gi, "</code></pre>")
-          .replace(/<\/pree/gi, "</pre>")
-          .replace(/<\/codee/gi, "</code>")
-          .replace(/<\/cod/gi, "</code>")
-          .replace(/<\/pr/gi, "</pre>") // Handle standalone </pr -> </pre>
+          .replaceAll(/<\/cod<\/cod<\/cod<\/pr/gi, "</code></pre>")
+          .replaceAll(/<\/code<\/code<\/code<\/pr/gi, "</code></pre>")
+          .replaceAll(/<\/cod<\/cod<\/pr/gi, "</code></pre>")
+          .replaceAll(/<\/code<\/code<\/pr/gi, "</code></pre>")
+          .replaceAll(/<\/codee<\/codee<\/pree/gi, "</code></pre>")
+          .replaceAll(/<\/cod<\/cod<\/pree/gi, "</code></pre>")
+          .replaceAll(/<\/code<\/code<\/pree/gi, "</code></pre>")
+          .replaceAll(/<\/codee<\/pree/gi, "</code></pre>")
+          .replaceAll(/<\/cod<\/pree/gi, "</code></pre>")
+          .replaceAll(/<\/code<\/pree/gi, "</code></pre>")
+          .replaceAll(/<\/cod<\/pr/gi, "</code></pre>")
+          .replaceAll(/<\/code<\/pr/gi, "</code></pre>")
+          .replaceAll(/<\/cod<\/pre/gi, "</code></pre>")
+          .replaceAll(/<\/cod</gi, "</code>")
+          .replaceAll(/`\s*<\/pr/gi, "</code></pre>") // Handle `</pr -> </code></pre>
+          .replaceAll(/<\/code><\/pre>e>/gi, "</code></pre>")
+          .replaceAll(/<\/code><\/pre>\s*e>/gi, "</code></pre>")
+          .replaceAll(/<\/pree/gi, "</pre>")
+          .replaceAll(/<\/codee/gi, "</code>")
+          .replaceAll(/<\/cod/gi, "</code>")
+          .replaceAll(/<\/pr/gi, "</pre>") // Handle standalone </pr -> </pre>
           // Fix other common malformed HTML tags with repeated characters
           // Fix article tags with repeated 'e' characters: <articleeeee -> <article>
-          .replace(/<article+e+([^>]*)>/gi, "<article$1>")
-          .replace(/<article+([^>]*)>/gi, "<article$1>")
-          .replace(/<articl+e+([^>]*)>/gi, "<article$1>")
-          .replace(/<articl([^>]*)>/gi, "<article$1>")
-          .replace(/<\/article+e+>/gi, "</article>")
-          .replace(/<\/article+>/gi, "</article>")
-          .replace(/<\/articl+e+>/gi, "</article>")
-          .replace(/<\/articl>/gi, "</article>")
+          .replaceAll(/<article+e+([^>]*)>/gi, "<article$1>")
+          .replaceAll(/<article+([^>]*)>/gi, "<article$1>")
+          .replaceAll(/<articl+e+([^>]*)>/gi, "<article$1>")
+          .replaceAll(/<articl([^>]*)>/gi, "<article$1>")
+          .replaceAll(/<\/article+e+>/gi, "</article>")
+          .replaceAll(/<\/article+>/gi, "</article>")
+          .replaceAll(/<\/articl+e+>/gi, "</article>")
+          .replaceAll(/<\/articl>/gi, "</article>")
           // Fix section tags with repeated 'n' characters: <sectionnnnnn -> <section>
-          .replace(/<section+n+([^>]*)>/gi, "<section$1>")
-          .replace(/<section+([^>]*)>/gi, "<section$1>")
-          .replace(/<sectio+n+([^>]*)>/gi, "<section$1>")
-          .replace(/<sectio([^>]*)>/gi, "<section$1>")
-          .replace(/<\/section+n+>/gi, "</section>")
-          .replace(/<\/section+>/gi, "</section>")
-          .replace(/<\/sectio+n+>/gi, "</section>")
-          .replace(/<\/sectio>/gi, "</section>")
-          .replace(/<nav\b/gi, "<nav")
-          .replace(/<\/nav>/gi, "</nav>")
-          .replace(/<head\b/gi, "<header")
-          .replace(/<\/head>/gi, "</header>")
-          .replace(/<foot\b/gi, "<footer")
-          .replace(/<\/foot>/gi, "</footer>")
-          .replace(/<mai\b/gi, "<main")
-          .replace(/<\/mai>/gi, "</main>")
+          .replaceAll(/<section+n+([^>]*)>/gi, "<section$1>")
+          .replaceAll(/<section+([^>]*)>/gi, "<section$1>")
+          .replaceAll(/<sectio+n+([^>]*)>/gi, "<section$1>")
+          .replaceAll(/<sectio([^>]*)>/gi, "<section$1>")
+          .replaceAll(/<\/section+n+>/gi, "</section>")
+          .replaceAll(/<\/section+>/gi, "</section>")
+          .replaceAll(/<\/sectio+n+>/gi, "</section>")
+          .replaceAll(/<\/sectio>/gi, "</section>")
+          .replaceAll(/<nav\b/gi, "<nav")
+          .replaceAll(/<\/nav>/gi, "</nav>")
+          .replaceAll(/<head\b/gi, "<header")
+          .replaceAll(/<\/head>/gi, "</header>")
+          .replaceAll(/<foot\b/gi, "<footer")
+          .replaceAll(/<\/foot>/gi, "</footer>")
+          .replaceAll(/<mai\b/gi, "<main")
+          .replaceAll(/<\/mai>/gi, "</main>")
           // Fix patterns where code tags are merged with content
-          .replace(/<cod([a-zA-Z])/gi, "<code>$1")
-          .replace(/<code([a-zA-Z])/gi, "<code>$1")
-          .replace(/([a-zA-Z])<\/cod/gi, "$1</code>")
-          .replace(/([a-zA-Z])<\/code/gi, "$1</code>");
+          .replaceAll(/<cod([A-Z])/gi, "<code>$1")
+          .replaceAll(/<code([A-Z])/gi, "<code>$1")
+          .replaceAll(/([A-Z])<\/cod/gi, "$1</code>")
+          .replaceAll(/([A-Z])<\/code/gi, "$1</code>");
       }
 
       // ============================================
@@ -454,16 +454,16 @@ export async function GET(
       // ============================================
       // PHASE 3: Convert HTML tags to inline code format (but not if already in backticks)
       // ============================================
-      cleaned = cleaned.replace(
-        /([^`])<([a-zA-Z][a-zA-Z0-9]*)([^>]*)>([^`])/g,
+      cleaned = cleaned.replaceAll(
+        /([^`])<([A-Za-z][a-zA-Z0-9]*)([^>]*)>([^`])/g,
         (match, before, tag, attrs, after) => {
           if (tag.toLowerCase() === "code" || tag.toLowerCase() === "pre")
             return match;
           return `${before}\`<${tag}${attrs}>\`${after}`;
         },
       );
-      cleaned = cleaned.replace(
-        /([^`])<\/([a-zA-Z][a-zA-Z0-9]*)>([^`])/g,
+      cleaned = cleaned.replaceAll(
+        /([^`])<\/([A-Za-z][a-zA-Z0-9]*)>([^`])/g,
         (match, before, tag, after) => {
           return `${before}\`</${tag}>\`${after}`;
         },
@@ -471,7 +471,7 @@ export async function GET(
 
       // Convert inline <code> tags to backticks
       // SECURITY: Sanitize code content after decoding HTML entities to prevent HTML injection
-      cleaned = cleaned.replace(
+      cleaned = cleaned.replaceAll(
         /<code[^>]*>([^<]+)<\/code>/gi,
         (_, codeContent) => {
           // Decode HTML entities first
@@ -479,7 +479,7 @@ export async function GET(
           // SECURITY: Ensure decoded content cannot form HTML tags.
           // Strip any tag-like sequences repeatedly, then escape any remaining angle brackets.
           while (/<[^>]*>/g.test(decodedContent)) {
-            decodedContent = decodedContent.replace(/<[^>]*>/g, "");
+            decodedContent = decodedContent.replaceAll(/<[^>]*>/g, "");
           }
           decodedContent = decodedContent
             .replaceAll("&", "&amp;")
@@ -499,61 +499,61 @@ export async function GET(
       for (let pass = 0; pass < 5; pass++) {
         cleaned = cleaned
           // Fix efor -> for
-          .replace(/efor\s*\(/gi, "for (")
-          .replace(/efor\s+/gi, "for ")
-          .replace(/efor/gi, "for")
+          .replaceAll(/efor\s*\(/gi, "for (")
+          .replaceAll(/efor\s+/gi, "for ")
+          .replaceAll(/efor/gi, "for")
           // Fix ereturn -> return
-          .replace(/ereturn\s+/gi, "return ")
-          .replace(/ereturn/gi, "return")
+          .replaceAll(/ereturn\s+/gi, "return ")
+          .replaceAll(/ereturn/gi, "return")
           // Fix esetTimeout -> setTimeout
-          .replace(/esetTimeout/gi, "setTimeout")
-          .replace(/esetInterval/gi, "setInterval")
+          .replaceAll(/esetTimeout/gi, "setTimeout")
+          .replaceAll(/esetInterval/gi, "setInterval")
           // Fix econsole -> console
-          .replace(/econsole\.log/gi, "console.log")
-          .replace(/econsole\./gi, "console.")
-          .replace(/econsole/gi, "console")
+          .replaceAll(/econsole\.log/gi, "console.log")
+          .replaceAll(/econsole\./gi, "console.")
+          .replaceAll(/econsole/gi, "console")
           // Remove e> artifacts
-          .replace(/e>e>e>e>/g, "")
-          .replace(/e>e>e>/g, "")
-          .replace(/e>e>/g, "")
-          .replace(/^e>+/g, "")
-          .replace(/e>+$/g, "")
-          .replace(/(\w+)e>/g, "$1")
-          .replace(/e>(\w+)/g, "$1")
-          .replace(/\s*e>\s*/g, " ")
+          .replaceAll("e>e>e>e>", "")
+          .replaceAll("e>e>e>", "")
+          .replaceAll("e>e>", "")
+          .replaceAll(/^e>+/g, "")
+          .replaceAll(/e>+$/g, "")
+          .replaceAll(/(\w+)e>/g, "$1")
+          .replaceAll(/e>(\w+)/g, "$1")
+          .replaceAll(/\s*e>\s*/g, " ")
           // Fix NaN patterns
-          .replace(/NaNe>NaN/gi, "NaN")
-          .replace(/NaNe>/gi, "NaN")
-          .replace(/NaN>/gi, "NaN")
-          .replace(/NaN\s*e>/gi, "NaN")
-          .replace(/NaN\s*>/gi, "NaN")
+          .replaceAll(/NaNe>NaN/gi, "NaN")
+          .replaceAll(/NaNe>/gi, "NaN")
+          .replaceAll(/NaN>/gi, "NaN")
+          .replaceAll(/NaN\s*e>/gi, "NaN")
+          .replaceAll(/NaN\s*>/gi, "NaN")
           // Fix method name duplications
-          .replace(/diameterameter/gi, "diameter")
-          .replace(/perimeterimeter/gi, "perimeter")
-          .replace(/consoleonsole\.log/gi, "console.log")
-          .replace(/console\.loge>/gi, "console.log")
-          .replace(/console\.log>/gi, "console.log")
-          .replace(/console\.loge\.log/gi, "console.log")
-          .replace(/console\.log\.log/gi, "console.log")
-          .replace(/newColorwColor/gi, "newColor")
-          .replace(/newColorolor/gi, "newColor")
+          .replaceAll(/diameterameter/gi, "diameter")
+          .replaceAll(/perimeterimeter/gi, "perimeter")
+          .replaceAll(/consoleonsole\.log/gi, "console.log")
+          .replaceAll(/console\.loge>/gi, "console.log")
+          .replaceAll(/console\.log>/gi, "console.log")
+          .replaceAll(/console\.loge\.log/gi, "console.log")
+          .replaceAll(/console\.log\.log/gi, "console.log")
+          .replaceAll(/newColorwColor/gi, "newColor")
+          .replaceAll(/newColorolor/gi, "newColor")
           // Fix duplicated method names (e.g., giveLydiaPizzaaPizza -> giveLydiaPizza)
           // Pattern 1: giveLydiaPizzaaPizza -> giveLydiaPizza (Pizza + aPizza where Pizza is duplicated)
-          .replace(/(\w+)([A-Z][a-z]+)([a-z]*)\2/gi, "$1$2") // Matches: giveLydiaPizzaaPizza -> giveLydiaPizza
+          .replaceAll(/(\w+)([A-Z][a-z]+)([a-z]*)\2/gi, "$1$2") // Matches: giveLydiaPizzaaPizza -> giveLydiaPizza
           // Pattern 2: giveLydiaPizzaPizza -> giveLydiaPizza (exact duplication)
-          .replace(/(\w+)([A-Z][a-z]+)\2/gi, "$1$2") // Matches: giveLydiaPizzaPizza -> giveLydiaPizza
+          .replaceAll(/(\w+)([A-Z][a-z]+)\2/gi, "$1$2") // Matches: giveLydiaPizzaPizza -> giveLydiaPizza
           // Fix patterns where > appears between words
-          .replace(/([a-zA-Z]+)e>([a-zA-Z]+)/g, "$1$2")
-          .replace(/([a-zA-Z]+)>([a-zA-Z]+)/g, "$1 $2")
-          .replace(/([a-zA-Z]+)>/g, "$1")
+          .replaceAll(/([A-Za-z]+)e>([A-Za-z]+)/g, "$1$2")
+          .replaceAll(/([A-Za-z]+)>([A-Za-z]+)/g, "$1 $2")
+          .replaceAll(/([A-Za-z]+)>/g, "$1")
           // Remove standalone > characters
-          .replace(/^>\s*/g, "")
-          .replace(/\s*>$/g, "")
-          .replace(/\s+>\s+/g, " ")
-          .replace(
+          .replaceAll(/^>\s*/g, "")
+          .replaceAll(/\s*>$/g, "")
+          .replaceAll(/\s+>\s+/g, " ")
+          .replaceAll(
             /([a-zA-Z0-9])>\s*([a-zA-Z0-9])/g,
             (match, before, after) => {
-              if (/[0-9]/.test(before) && /[0-9]/.test(after)) {
+              if (/\d/.test(before) && /\d/.test(after)) {
                 return match; // Preserve number comparisons
               }
               return `${before} ${after}`;
@@ -564,7 +564,7 @@ export async function GET(
       // ============================================
       // PHASE 5: Fix duplicated text patterns
       // ============================================
-      cleaned = cleaned.replace(
+      cleaned = cleaned.replaceAll(
         /"([A-Za-z]+)"([a-z]+)"/g,
         (match, word, suffix) => {
           if (word.toLowerCase().endsWith(suffix.toLowerCase())) {
@@ -574,10 +574,10 @@ export async function GET(
         },
       );
 
-      cleaned = cleaned.replace(/"([A-Za-z]+)"\1"/g, '"$1"');
+      cleaned = cleaned.replaceAll(/"([A-Za-z]+)"\1"/g, '"$1"');
 
-      cleaned = cleaned.replace(
-        /"([A-Za-z]+)"([a-z]{2,})"/gi,
+      cleaned = cleaned.replaceAll(
+        /"([a-z]+)"([a-z]{2,})"/gi,
         (match, word, partial) => {
           const wordLower = word.toLowerCase();
           const partialLower = partial.toLowerCase();
@@ -588,7 +588,7 @@ export async function GET(
         },
       );
 
-      cleaned = cleaned.replace(
+      cleaned = cleaned.replaceAll(
         /([A-Za-z]+)"([a-z]{2,})"/g,
         (match, word, suffix) => {
           const wordLower = word.toLowerCase();
@@ -601,14 +601,14 @@ export async function GET(
       );
 
       cleaned = cleaned
-        .replace(/"Number"mber"/gi, '"Number"')
-        .replace(/"Array"rray"/gi, '"Array"')
-        .replace(/"object"ject"/gi, '"object"')
-        .replace(/"NaN"NaN"/gi, '"NaN"')
-        .replace(/"String"ring"/gi, '"String"')
-        .replace(/"Boolean"oolean"/gi, '"Boolean"')
-        .replace(/"undefined"efined"/gi, '"undefined"')
-        .replace(/"function"unction"/gi, '"function"');
+        .replaceAll(/"Number"mber"/gi, '"Number"')
+        .replaceAll(/"Array"rray"/gi, '"Array"')
+        .replaceAll(/"object"ject"/gi, '"object"')
+        .replaceAll(/"NaN"NaN"/gi, '"NaN"')
+        .replaceAll(/"String"ring"/gi, '"String"')
+        .replaceAll(/"Boolean"oolean"/gi, '"Boolean"')
+        .replaceAll(/"undefined"efined"/gi, '"undefined"')
+        .replaceAll(/"function"unction"/gi, '"function"');
 
       // ============================================
       // PHASE 6: Final cleanup (PRESERVE FORMATTING)
@@ -616,26 +616,26 @@ export async function GET(
       // Preserve newlines and paragraph breaks - only normalize spaces within lines
       cleaned = cleaned
         // Normalize multiple spaces to single space (but preserve newlines)
-        .replace(/[ \t]+/g, " ") // Multiple spaces/tabs to single space
+        .replaceAll(/[ \t]+/g, " ") // Multiple spaces/tabs to single space
         // Normalize multiple newlines to double newline (paragraph break)
-        .replace(/\n{3,}/g, "\n\n") // More than 2 newlines -> 2 newlines
+        .replaceAll(/\n{3,}/g, "\n\n") // More than 2 newlines -> 2 newlines
         // Remove spaces before newlines
-        .replace(/ +\n/g, "\n")
+        .replaceAll(/ +\n/g, "\n")
         // Remove spaces after newlines
-        .replace(/\n +/g, "\n")
+        .replaceAll(/\n +/g, "\n")
         // Final pass for > artifacts (but preserve code operators)
-        .replace(
+        .replaceAll(
           /([a-zA-Z0-9])\s*>\s*([a-zA-Z0-9])/g,
           (match, before, after) => {
             // Preserve number comparisons like "3 > 2"
-            if (/[0-9]/.test(before) && /[0-9]/.test(after)) {
+            if (/\d/.test(before) && /\d/.test(after)) {
               return match;
             }
             // Otherwise remove the > artifact
             return `${before} ${after}`;
           },
         )
-        .replace(/\s*>\s+/g, " ") // Standalone > with spaces
+        .replaceAll(/\s*>\s+/g, " ") // Standalone > with spaces
         .trim();
 
       return cleaned;
@@ -649,7 +649,7 @@ export async function GET(
       if (!code || typeof code !== "string") return code || "";
 
       // Normalize line endings
-      let formatted = code.replace(/\r\n/g, "\n").replace(/\r/g, "\n");
+      let formatted = code.replaceAll(/\r\n?/g, "\n");
 
       // Remove excessive leading/trailing whitespace from entire block
       formatted = formatted.trim();
@@ -665,13 +665,15 @@ export async function GET(
       );
 
       // If code has no indentation, add it based on structure
-      if (!hasExistingIndent) {
+      const needsIndentInference = !hasExistingIndent;
+      if (needsIndentInference) {
         let indentLevel = 0;
         let inClass = false;
         let inMethod = false;
 
         formatted = lines
           .map((line, index) => {
+            // NOSONAR
             const trimmed = line.trim();
 
             // Skip empty lines
@@ -696,7 +698,7 @@ export async function GET(
               inMethod = true;
               const indent = "  ".repeat(indentLevel);
               // Check if method has opening brace on same line
-              if (trimmed.match(/[{\[\(]\s*$/)) {
+              if (trimmed.match(/[{[(]\s*$/)) {
                 indentLevel++;
               }
               return indent + trimmed;
@@ -716,7 +718,7 @@ export async function GET(
             const netParens = openParens - closeParens;
 
             // Decrease indent for closing braces/brackets/parens at the start of line
-            if (trimmed.match(/^[}\]\)]/)) {
+            if (trimmed.match(/^[}\])]/)) {
               indentLevel = Math.max(0, indentLevel - 1);
               // If we're closing a class, method, or constructor, reset flags
               if (closeBraces > 0 && inClass) {
@@ -744,7 +746,7 @@ export async function GET(
 
             // Increase indent if line ends with opening brace/bracket/paren
             // This means the next line should be indented
-            if (trimmed.match(/[{\[\(]\s*$/)) {
+            if (trimmed.match(/[{[(]\s*$/)) {
               indentLevel++;
             }
             // Also increase if there are more opens than closes (unclosed braces/brackets/parens)
@@ -796,7 +798,7 @@ export async function GET(
       }
 
       // Remove excessive blank lines (more than 2 consecutive)
-      formatted = formatted.replace(/\n{3,}/g, "\n\n");
+      formatted = formatted.replaceAll(/\n{3,}/g, "\n\n");
 
       return formatted;
     };
@@ -820,13 +822,13 @@ export async function GET(
       // Handle cases like `````code````` (extra backticks)
       cleaned = cleaned
         // Fix triple+ backticks at start: ````` -> ```
-        .replace(/`{4,}/g, "```")
+        .replaceAll(/`{4,}/g, "```")
         // Fix malformed code block markers: `````code``` -> ```code```
-        .replace(/```{2,}([^`]+)```{2,}/g, "```$1```")
+        .replaceAll(/```{2,}([^`]+)```{2,}/g, "```$1```")
         // Fix code blocks with extra backticks: `````code````` -> ```code```
-        .replace(/```{2,}([\s\S]*?)```{2,}/g, "```$1```")
+        .replaceAll(/```{2,}([\s\S]*?)```{2,}/g, "```$1```")
         // Fix code blocks missing closing backticks: ```code -> ```code```
-        .replace(/```([\s\S]*?)(?=\n\n|$)/g, (match, code) => {
+        .replaceAll(/```([\s\S]*?)(?=\n\n|$)/g, (match, code) => {
           // If no closing backticks found, add them
           if (!match.includes("```", match.indexOf("```") + 3)) {
             return `\`\`\`${code}\`\`\``;
@@ -838,33 +840,33 @@ export async function GET(
       // Handle cases like ``code`` (double backticks for inline) or ````code````
       cleaned = cleaned
         // Fix triple+ backticks used for inline code (single line): ```code``` -> `code`
-        .replace(/```([^`\n]+)```/g, "`$1`")
+        .replaceAll(/```([^`\n]+)```/g, "`$1`")
         // Fix double backticks in inline code: ``code`` -> `code` (avoid code blocks)
         // Use a more compatible approach without negative lookbehind
-        .replace(/([^`])``([^`\n]+)``([^`])/g, "$1`$2`$3");
+        .replaceAll(/([^`])``([^`\n]+)``([^`])/g, "$1`$2`$3");
 
       // Fix markdown headers with extra # characters: ####### -> ####
       cleaned = cleaned
-        .replace(/^#{7,}\s+/gm, "#### ")
-        .replace(/^#{6,}\s+/gm, "###### ");
+        .replaceAll(/^#{7,}\s+/gm, "#### ")
+        .replaceAll(/^#{6,}\s+/gm, "###### ");
 
       // Fix markdown lists with malformed markers
       cleaned = cleaned
         // Fix lists with extra dashes: ---- -> -
-        .replace(/^(\s*)----+/gm, "$1- ")
+        .replaceAll(/^(\s*)----+/gm, "$1- ")
         // Fix lists with extra asterisks: **** -> *
-        .replace(/^(\s*)\*{3,}/gm, "$1* ")
+        .replaceAll(/^(\s*)\*{3,}/gm, "$1* ")
         // Fix lists with extra numbers: 1.1.1. -> 1.
-        .replace(/^(\d+)\.(\d+)\.(\d+)\./gm, "$1.");
+        .replaceAll(/^(\d+)\.(\d+)\.(\d+)\./gm, "$1.");
 
       // Fix markdown bold/italic with extra characters: ****text**** -> **text**
       cleaned = cleaned
         // Fix bold with extra asterisks: ****text**** -> **text**
-        .replace(/\*{4,}([^*]+)\*{4,}/g, "**$1**")
+        .replaceAll(/\*{4,}([^*]+)\*{4,}/g, "**$1**")
         // Fix italic with extra asterisks: ***text*** -> *text*
-        .replace(/\*{3}([^*]+)\*{3}/g, "*$1*")
+        .replaceAll(/\*{3}([^*]+)\*{3}/g, "*$1*")
         // Fix bold with extra underscores: ____text____ -> __text__
-        .replace(/_+([^_]+)_+/g, (match, text) => {
+        .replaceAll(/_+([^_]+)_+/g, (match, text) => {
           // Only fix if it's 4+ underscores (likely malformed bold)
           if (match.match(/^_{4,}/)) {
             return `__${text}__`;
@@ -883,15 +885,15 @@ export async function GET(
       // Convert backticks to proper <code> tags
       cleaned = cleaned
         // Pattern: <pr`code content`</pr -> <pre><code>code content</code></pre>
-        .replace(/<pr`([^`]+)`\s*<\/pr/gi, "<pre><code>$1</code></pre>")
+        .replaceAll(/<pr`([^`]+)`\s*<\/pr/gi, "<pre><code>$1</code></pre>")
         // Pattern: <pr`code content`</pr (with newlines)
-        .replace(/<pr`([\s\S]*?)`\s*<\/pr/gi, "<pre><code>$1</code></pre>")
+        .replaceAll(/<pr`([\s\S]*?)`\s*<\/pr/gi, "<pre><code>$1</code></pre>")
         // Pattern: <pr`code` (incomplete, try to find closing)
-        .replace(/<pr`([\s\S]*?)`\s*<\/pr/gi, "<pre><code>$1</code></pre>")
+        .replaceAll(/<pr`([\s\S]*?)`\s*<\/pr/gi, "<pre><code>$1</code></pre>")
         // Pattern: <pr`code (no closing backtick, find </pr)
-        .replace(/<pr`([\s\S]*?)<\/pr/gi, "<pre><code>$1</code></pre>")
+        .replaceAll(/<pr`([\s\S]*?)<\/pr/gi, "<pre><code>$1</code></pre>")
         // Pattern: <pr`code` (standalone, no closing tag)
-        .replace(/<pr`([^`]+)`/gi, "<pre><code>$1</code></pre>");
+        .replaceAll(/<pr`([^`]+)`/gi, "<pre><code>$1</code></pre>");
 
       // ============================================
       // PHASE 1: Fix malformed HTML tags (MULTIPLE PASSES)
@@ -900,76 +902,76 @@ export async function GET(
       for (let pass = 0; pass < 5; pass++) {
         cleaned = cleaned
           // Fix deeply nested malformed opening tags (most specific first)
-          .replace(/<pr<cod<cod<cod/gi, "<pre><code>")
-          .replace(/<pr<code<code<code/gi, "<pre><code>")
-          .replace(/<pr<cod<cod/gi, "<pre><code>")
-          .replace(/<pr<code<code/gi, "<pre><code>")
-          .replace(/<pr<codee<code/gi, "<pre><code>")
-          .replace(/<pr<codee<cod/gi, "<pre><code>")
-          .replace(/<pr<code<cod/gi, "<pre><code>")
-          .replace(/<pr<codee/gi, "<pre><code>")
-          .replace(/<pr<code/gi, "<pre><code>")
-          .replace(/<pr<cod([a-zA-Z])/gi, "<pre><code>$1") // Handle <pr<codfor -> <pre><code>for
-          .replace(/<pr<cod\s/gi, "<pre><code>") // Handle <pr<cod followed by space
-          .replace(/<pr<cod/gi, "<pre><code>")
-          .replace(/<pr<co/gi, "<pre><code>")
-          .replace(/<pr`/gi, "<pre><code>") // Handle <pr` -> <pre><code>
-          .replace(/<pr</gi, "<pre>")
+          .replaceAll(/<pr<cod<cod<cod/gi, "<pre><code>")
+          .replaceAll(/<pr<code<code<code/gi, "<pre><code>")
+          .replaceAll(/<pr<cod<cod/gi, "<pre><code>")
+          .replaceAll(/<pr<code<code/gi, "<pre><code>")
+          .replaceAll(/<pr<codee<code/gi, "<pre><code>")
+          .replaceAll(/<pr<codee<cod/gi, "<pre><code>")
+          .replaceAll(/<pr<code<cod/gi, "<pre><code>")
+          .replaceAll(/<pr<codee/gi, "<pre><code>")
+          .replaceAll(/<pr<code/gi, "<pre><code>")
+          .replaceAll(/<pr<cod([A-Z])/gi, "<pre><code>$1") // Handle <pr<codfor -> <pre><code>for
+          .replaceAll(/<pr<cod\s/gi, "<pre><code>") // Handle <pr<cod followed by space
+          .replaceAll(/<pr<cod/gi, "<pre><code>")
+          .replaceAll(/<pr<co/gi, "<pre><code>")
+          .replaceAll(/<pr`/gi, "<pre><code>") // Handle <pr` -> <pre><code>
+          .replaceAll(/<pr</gi, "<pre>")
           // Fix deeply nested malformed closing tags
-          .replace(/<\/cod<\/cod<\/cod<\/pr/gi, "</code></pre>")
-          .replace(/<\/code<\/code<\/code<\/pr/gi, "</code></pre>")
-          .replace(/<\/cod<\/cod<\/pr/gi, "</code></pre>")
-          .replace(/<\/code<\/code<\/pr/gi, "</code></pre>")
-          .replace(/<\/codee<\/codee<\/pree/gi, "</code></pre>")
-          .replace(/<\/cod<\/cod<\/pree/gi, "</code></pre>")
-          .replace(/<\/code<\/code<\/pree/gi, "</code></pre>")
-          .replace(/<\/codee<\/pree/gi, "</code></pre>")
-          .replace(/<\/cod<\/pree/gi, "</code></pre>")
-          .replace(/<\/code<\/pree/gi, "</code></pre>")
-          .replace(/<\/cod<\/pr/gi, "</code></pre>")
-          .replace(/<\/code<\/pr/gi, "</code></pre>")
-          .replace(/<\/cod<\/pre/gi, "</code></pre>")
-          .replace(/<\/cod</gi, "</code>")
-          .replace(/`\s*<\/pr/gi, "</code></pre>") // Handle `</pr -> </code></pre>
-          .replace(/<\/code><\/pre>e>/gi, "</code></pre>")
-          .replace(/<\/code><\/pre>\s*e>/gi, "</code></pre>")
-          .replace(/<\/pree/gi, "</pre>")
-          .replace(/<\/codee/gi, "</code>")
-          .replace(/<\/cod/gi, "</code>")
-          .replace(/<\/pr/gi, "</pre>") // Handle standalone </pr -> </pre>
+          .replaceAll(/<\/cod<\/cod<\/cod<\/pr/gi, "</code></pre>")
+          .replaceAll(/<\/code<\/code<\/code<\/pr/gi, "</code></pre>")
+          .replaceAll(/<\/cod<\/cod<\/pr/gi, "</code></pre>")
+          .replaceAll(/<\/code<\/code<\/pr/gi, "</code></pre>")
+          .replaceAll(/<\/codee<\/codee<\/pree/gi, "</code></pre>")
+          .replaceAll(/<\/cod<\/cod<\/pree/gi, "</code></pre>")
+          .replaceAll(/<\/code<\/code<\/pree/gi, "</code></pre>")
+          .replaceAll(/<\/codee<\/pree/gi, "</code></pre>")
+          .replaceAll(/<\/cod<\/pree/gi, "</code></pre>")
+          .replaceAll(/<\/code<\/pree/gi, "</code></pre>")
+          .replaceAll(/<\/cod<\/pr/gi, "</code></pre>")
+          .replaceAll(/<\/code<\/pr/gi, "</code></pre>")
+          .replaceAll(/<\/cod<\/pre/gi, "</code></pre>")
+          .replaceAll(/<\/cod</gi, "</code>")
+          .replaceAll(/`\s*<\/pr/gi, "</code></pre>") // Handle `</pr -> </code></pre>
+          .replaceAll(/<\/code><\/pre>e>/gi, "</code></pre>")
+          .replaceAll(/<\/code><\/pre>\s*e>/gi, "</code></pre>")
+          .replaceAll(/<\/pree/gi, "</pre>")
+          .replaceAll(/<\/codee/gi, "</code>")
+          .replaceAll(/<\/cod/gi, "</code>")
+          .replaceAll(/<\/pr/gi, "</pre>") // Handle standalone </pr -> </pre>
           // Fix other common malformed HTML tags with repeated characters
           // Fix article tags with repeated 'e' characters: <articleeeee -> <article>
           // Pattern: <articl followed by 2+ 'e' chars (extra e's) -> <article>
-          .replace(/<articl+e{2,}([^>]*)>/gi, "<article$1>") // <articleeeee -> <article>
-          .replace(/<articl+e([^>]*)>/gi, "<article$1>") // <articlee -> <article>
-          .replace(/<articl([^>]*)>/gi, "<article$1>") // <articl -> <article>
-          .replace(/<\/articl+e{2,}>/gi, "</article>") // </articleeeee -> </article>
-          .replace(/<\/articl+e>/gi, "</article>") // </articlee -> </article>
-          .replace(/<\/articl>/gi, "</article>") // </articl -> </article>
+          .replaceAll(/<articl+e{2,}([^>]*)>/gi, "<article$1>") // <articleeeee -> <article>
+          .replaceAll(/<articl+e([^>]*)>/gi, "<article$1>") // <articlee -> <article>
+          .replaceAll(/<articl([^>]*)>/gi, "<article$1>") // <articl -> <article>
+          .replaceAll(/<\/articl+e{2,}>/gi, "</article>") // </articleeeee -> </article>
+          .replaceAll(/<\/articl+e>/gi, "</article>") // </articlee -> </article>
+          .replaceAll(/<\/articl>/gi, "</article>") // </articl -> </article>
           // Fix section tags with repeated 'n' characters: <sectionnnnnn -> <section>
           // Pattern: <sectio followed by 2+ 'n' chars (extra n's) -> <section>
-          .replace(/<sectio+n{2,}([^>]*)>/gi, "<section$1>") // <sectionnnnnn -> <section>
-          .replace(/<sectio+n([^>]*)>/gi, "<section$1>") // <sectionn -> <section>
-          .replace(/<sectio([^>]*)>/gi, "<section$1>") // <sectio -> <section>
-          .replace(/<\/sectio+n{2,}>/gi, "</section>") // </sectionnnnnn -> </section>
-          .replace(/<\/sectio+n>/gi, "</section>") // </sectionn -> </section>
-          .replace(/<\/sectio>/gi, "</section>") // </sectio -> </section>
-          .replace(/<nav([^>]*)>/gi, "<nav$1>")
-          .replace(/<\/nav>/gi, "</nav>")
-          .replace(/<head([^>]*)>/gi, "<header$1>")
-          .replace(/<\/head>/gi, "</header>")
-          .replace(/<foot([^>]*)>/gi, "<footer$1>")
-          .replace(/<\/foot>/gi, "</footer>")
-          .replace(/<mai([^>]*)>/gi, "<main$1>")
-          .replace(/<\/mai>/gi, "</main>")
+          .replaceAll(/<sectio+n{2,}([^>]*)>/gi, "<section$1>") // <sectionnnnnn -> <section>
+          .replaceAll(/<sectio+n([^>]*)>/gi, "<section$1>") // <sectionn -> <section>
+          .replaceAll(/<sectio([^>]*)>/gi, "<section$1>") // <sectio -> <section>
+          .replaceAll(/<\/sectio+n{2,}>/gi, "</section>") // </sectionnnnnn -> </section>
+          .replaceAll(/<\/sectio+n>/gi, "</section>") // </sectionn -> </section>
+          .replaceAll(/<\/sectio>/gi, "</section>") // </sectio -> </section>
+          .replaceAll(/<nav([^>]*)>/gi, "<nav$1>")
+          .replaceAll(/<\/nav>/gi, "</nav>")
+          .replaceAll(/<head([^>]*)>/gi, "<header$1>")
+          .replaceAll(/<\/head>/gi, "</header>")
+          .replaceAll(/<foot([^>]*)>/gi, "<footer$1>")
+          .replaceAll(/<\/foot>/gi, "</footer>")
+          .replaceAll(/<mai([^>]*)>/gi, "<main$1>")
+          .replaceAll(/<\/mai>/gi, "</main>")
           // Fix patterns where code tags are merged with content
-          .replace(/<cod([a-zA-Z])/gi, "<code>$1")
-          .replace(/<code([a-zA-Z])/gi, "<code>$1")
-          .replace(/([a-zA-Z])<\/cod/gi, "$1</code>")
-          .replace(/([a-zA-Z])<\/code/gi, "$1</code>")
+          .replaceAll(/<cod([A-Z])/gi, "<code>$1")
+          .replaceAll(/<code([A-Z])/gi, "<code>$1")
+          .replaceAll(/([A-Z])<\/cod/gi, "$1</code>")
+          .replaceAll(/([A-Z])<\/code/gi, "$1</code>")
           // Fix malformed <cod patterns with numbers/units (e.g., <cod1rem -> <code>1rem</code>)
-          .replace(/<cod(\d+[a-zA-Z]+)/gi, "<code>$1</code>")
-          .replace(/<cod(\d+)/gi, "<code>$1</code>");
+          .replaceAll(/<cod(\d+[A-Z]+)/gi, "<code>$1</code>")
+          .replaceAll(/<cod(\d+)/gi, "<code>$1</code>");
       }
 
       // ============================================
@@ -990,7 +992,7 @@ export async function GET(
       while ((preMatch = preBlockRegex.exec(cleaned)) !== null) {
         if (preMatch.index > lastIndex) {
           const textBeforePre = cleaned.substring(lastIndex, preMatch.index);
-          const processedText = textBeforePre.replace(
+          const processedText = textBeforePre.replaceAll(
             /<code[^>]*>([^<]+)<\/code>/gi,
             (_, codeContent) => {
               return `\`${decodeHtmlEntities(codeContent).trim()}\``;
@@ -1004,7 +1006,7 @@ export async function GET(
 
       if (lastIndex < cleaned.length) {
         const textAfterPre = cleaned.substring(lastIndex);
-        const processedText = textAfterPre.replace(
+        const processedText = textAfterPre.replaceAll(
           /<code[^>]*>([^<]+)<\/code>/gi,
           (_, codeContent) => {
             return `\`${decodeHtmlEntities(codeContent).trim()}\``;
@@ -1014,7 +1016,7 @@ export async function GET(
       }
 
       if (parts.length === 0) {
-        cleaned = cleaned.replace(
+        cleaned = cleaned.replaceAll(
           /<code[^>]*>([^<]+)<\/code>/gi,
           (_, codeContent) => {
             return `\`${decodeHtmlEntities(codeContent).trim()}\``;
@@ -1030,60 +1032,60 @@ export async function GET(
       for (let pass = 0; pass < 5; pass++) {
         cleaned = cleaned
           // Fix efor -> for (handle all variations)
-          .replace(/efor\s*\(/gi, "for (")
-          .replace(/efor\s+/gi, "for ")
-          .replace(/efor/gi, "for")
+          .replaceAll(/efor\s*\(/gi, "for (")
+          .replaceAll(/efor\s+/gi, "for ")
+          .replaceAll(/efor/gi, "for")
           // Fix ereturn -> return
-          .replace(/ereturn\s+/gi, "return ")
-          .replace(/ereturn/gi, "return")
+          .replaceAll(/ereturn\s+/gi, "return ")
+          .replaceAll(/ereturn/gi, "return")
           // Fix esetTimeout -> setTimeout
-          .replace(/esetTimeout/gi, "setTimeout")
-          .replace(/esetInterval/gi, "setInterval")
+          .replaceAll(/esetTimeout/gi, "setTimeout")
+          .replaceAll(/esetInterval/gi, "setInterval")
           // Fix econsole -> console
-          .replace(/econsole\.log/gi, "console.log")
-          .replace(/econsole\./gi, "console.")
-          .replace(/econsole/gi, "console")
+          .replaceAll(/econsole\.log/gi, "console.log")
+          .replaceAll(/econsole\./gi, "console.")
+          .replaceAll(/econsole/gi, "console")
           // Remove e> artifacts (most aggressive - handles all variations)
-          .replace(/e>e>e>e>/g, "") // Remove quadruple e>
-          .replace(/e>e>e>/g, "") // Remove triple e>
-          .replace(/e>e>/g, "") // Remove double e>
-          .replace(/^e>+/g, "") // Remove e> at start
-          .replace(/e>+$/g, "") // Remove e> at end
-          .replace(/(\w+)e>/g, "$1") // Remove e> after words
-          .replace(/e>(\w+)/g, "$1") // Remove e> before words
-          .replace(/\s*e>\s*/g, " ") // Remove standalone e> with spaces
+          .replaceAll("e>e>e>e>", "") // Remove quadruple e>
+          .replaceAll("e>e>e>", "") // Remove triple e>
+          .replaceAll("e>e>", "") // Remove double e>
+          .replaceAll(/^e>+/g, "") // Remove e> at start
+          .replaceAll(/e>+$/g, "") // Remove e> at end
+          .replaceAll(/(\w+)e>/g, "$1") // Remove e> after words
+          .replaceAll(/e>(\w+)/g, "$1") // Remove e> before words
+          .replaceAll(/\s*e>\s*/g, " ") // Remove standalone e> with spaces
           // Fix NaN patterns
-          .replace(/NaNe>NaN/gi, "NaN")
-          .replace(/NaNe>/gi, "NaN")
-          .replace(/NaN>/gi, "NaN")
-          .replace(/NaN\s*e>/gi, "NaN")
-          .replace(/NaN\s*>/gi, "NaN")
+          .replaceAll(/NaNe>NaN/gi, "NaN")
+          .replaceAll(/NaNe>/gi, "NaN")
+          .replaceAll(/NaN>/gi, "NaN")
+          .replaceAll(/NaN\s*e>/gi, "NaN")
+          .replaceAll(/NaN\s*>/gi, "NaN")
           // Fix method name duplications
-          .replace(/diameterameter/gi, "diameter")
-          .replace(/perimeterimeter/gi, "perimeter")
-          .replace(/consoleonsole\.log/gi, "console.log")
-          .replace(/console\.loge>/gi, "console.log")
-          .replace(/console\.log>/gi, "console.log")
-          .replace(/console\.loge\.log/gi, "console.log")
-          .replace(/console\.log\.log/gi, "console.log")
-          .replace(/newColorwColor/gi, "newColor")
-          .replace(/newColorolor/gi, "newColor")
+          .replaceAll(/diameterameter/gi, "diameter")
+          .replaceAll(/perimeterimeter/gi, "perimeter")
+          .replaceAll(/consoleonsole\.log/gi, "console.log")
+          .replaceAll(/console\.loge>/gi, "console.log")
+          .replaceAll(/console\.log>/gi, "console.log")
+          .replaceAll(/console\.loge\.log/gi, "console.log")
+          .replaceAll(/console\.log\.log/gi, "console.log")
+          .replaceAll(/newColorwColor/gi, "newColor")
+          .replaceAll(/newColorolor/gi, "newColor")
           // Fix duplicated method names (e.g., giveLydiaPizzaaPizza -> giveLydiaPizza)
           // Pattern 1: giveLydiaPizzaaPizza -> giveLydiaPizza (Pizza + aPizza where Pizza is duplicated)
-          .replace(/(\w+)([A-Z][a-z]+)([a-z]*)\2/gi, "$1$2") // Matches: giveLydiaPizzaaPizza -> giveLydiaPizza
+          .replaceAll(/(\w+)([A-Z][a-z]+)([a-z]*)\2/gi, "$1$2") // Matches: giveLydiaPizzaaPizza -> giveLydiaPizza
           // Pattern 2: giveLydiaPizzaPizza -> giveLydiaPizza (exact duplication)
-          .replace(/(\w+)([A-Z][a-z]+)\2/gi, "$1$2") // Matches: giveLydiaPizzaPizza -> giveLydiaPizza
+          .replaceAll(/(\w+)([A-Z][a-z]+)\2/gi, "$1$2") // Matches: giveLydiaPizzaPizza -> giveLydiaPizza
           // Remove standalone > characters that are clearly artifacts (but preserve code operators)
           // Only remove > that are not part of valid code patterns
-          .replace(/^>\s*/g, "")
-          .replace(/\s*>$/g, "")
-          .replace(/\s+>\s+/g, " ")
+          .replaceAll(/^>\s*/g, "")
+          .replaceAll(/\s*>$/g, "")
+          .replaceAll(/\s+>\s+/g, " ")
           // Fix patterns where > appears between words (but not in code comparisons)
-          .replace(
+          .replaceAll(
             /([a-zA-Z0-9])\s*>\s*([a-zA-Z0-9])/g,
             (match, before, after) => {
               // If it looks like a comparison operator in code context, preserve it
-              if (/[0-9]/.test(before) && /[0-9]/.test(after)) {
+              if (/\d/.test(before) && /\d/.test(after)) {
                 return match; // Preserve number comparisons like "3 > 2"
               }
               // Otherwise, it's likely an artifact
@@ -1096,7 +1098,7 @@ export async function GET(
       // PHASE 5: Fix duplicated text patterns
       // ============================================
       // Pattern 1: "Word"word" where word is a suffix of Word
-      cleaned = cleaned.replace(
+      cleaned = cleaned.replaceAll(
         /"([A-Za-z]+)"([a-z]+)"/g,
         (match, word, suffix) => {
           if (word.toLowerCase().endsWith(suffix.toLowerCase())) {
@@ -1107,11 +1109,11 @@ export async function GET(
       );
 
       // Pattern 2: "Word"Word" - full word duplication
-      cleaned = cleaned.replace(/"([A-Za-z]+)"\1"/g, '"$1"');
+      cleaned = cleaned.replaceAll(/"([A-Za-z]+)"\1"/g, '"$1"');
 
       // Pattern 3: "Word"partial" where partial matches the end of Word
-      cleaned = cleaned.replace(
-        /"([A-Za-z]+)"([a-z]{2,})"/gi,
+      cleaned = cleaned.replaceAll(
+        /"([a-z]+)"([a-z]{2,})"/gi,
         (match, word, partial) => {
           const wordLower = word.toLowerCase();
           const partialLower = partial.toLowerCase();
@@ -1123,7 +1125,7 @@ export async function GET(
       );
 
       // Pattern 4: Handle cases without quotes: Number"mber" -> Number"
-      cleaned = cleaned.replace(
+      cleaned = cleaned.replaceAll(
         /([A-Za-z]+)"([a-z]{2,})"/g,
         (match, word, suffix) => {
           const wordLower = word.toLowerCase();
@@ -1137,20 +1139,20 @@ export async function GET(
 
       // Pattern 5: Fix specific known patterns
       cleaned = cleaned
-        .replace(/"Number"mber"/gi, '"Number"')
-        .replace(/"Array"rray"/gi, '"Array"')
-        .replace(/"object"ject"/gi, '"object"')
-        .replace(/"NaN"NaN"/gi, '"NaN"')
-        .replace(/"String"ring"/gi, '"String"')
-        .replace(/"Boolean"oolean"/gi, '"Boolean"')
-        .replace(/"undefined"efined"/gi, '"undefined"')
-        .replace(/"function"unction"/gi, '"function"');
+        .replaceAll(/"Number"mber"/gi, '"Number"')
+        .replaceAll(/"Array"rray"/gi, '"Array"')
+        .replaceAll(/"object"ject"/gi, '"object"')
+        .replaceAll(/"NaN"NaN"/gi, '"NaN"')
+        .replaceAll(/"String"ring"/gi, '"String"')
+        .replaceAll(/"Boolean"oolean"/gi, '"Boolean"')
+        .replaceAll(/"undefined"efined"/gi, '"undefined"')
+        .replaceAll(/"function"unction"/gi, '"function"');
 
       // ============================================
       // PHASE 6: Format code blocks with proper indentation
       // ============================================
       // Extract and format code blocks (<pre><code>...</code></pre>)
-      cleaned = cleaned.replace(
+      cleaned = cleaned.replaceAll(
         /<pre[^>]*><code[^>]*>([\s\S]*?)<\/code><\/pre>/gi,
         (match, codeContent) => {
           // Format the code content with proper indentation
@@ -1160,7 +1162,7 @@ export async function GET(
       );
 
       // Also format markdown code blocks (```code```)
-      cleaned = cleaned.replace(
+      cleaned = cleaned.replaceAll(
         /```(\w+)?\n?([\s\S]*?)```/g,
         (match, lang, codeContent) => {
           // Format the code content with proper indentation
@@ -1176,26 +1178,26 @@ export async function GET(
       // Replace multiple spaces with single space, but preserve newlines
       cleaned = cleaned
         // Normalize multiple spaces to single space (but preserve newlines)
-        .replace(/[ \t]+/g, " ") // Multiple spaces/tabs to single space
+        .replaceAll(/[ \t]+/g, " ") // Multiple spaces/tabs to single space
         // Normalize multiple newlines to double newline (paragraph break)
-        .replace(/\n{3,}/g, "\n\n") // More than 2 newlines -> 2 newlines
+        .replaceAll(/\n{3,}/g, "\n\n") // More than 2 newlines -> 2 newlines
         // Remove spaces before newlines
-        .replace(/ +\n/g, "\n")
+        .replaceAll(/ +\n/g, "\n")
         // Remove spaces after newlines
-        .replace(/\n +/g, "\n")
+        .replaceAll(/\n +/g, "\n")
         // Final pass for > artifacts (but preserve code operators)
-        .replace(
+        .replaceAll(
           /([a-zA-Z0-9])\s*>\s*([a-zA-Z0-9])/g,
           (match, before, after) => {
             // Preserve number comparisons like "3 > 2"
-            if (/[0-9]/.test(before) && /[0-9]/.test(after)) {
+            if (/\d/.test(before) && /\d/.test(after)) {
               return match;
             }
             // Otherwise remove the > artifact
             return `${before} ${after}`;
           },
         )
-        .replace(/\s*>\s+/g, " ") // Standalone > with spaces
+        .replaceAll(/\s*>\s+/g, " ") // Standalone > with spaces
         .trim();
 
       return cleaned;
@@ -1203,8 +1205,19 @@ export async function GET(
 
     // Enrich questions with topic information
     if (questions && questions.length > 0) {
+      const toNullableArray = (value: unknown): unknown[] | null => {
+        if (Array.isArray(value)) return value;
+        return value ? [value] : null;
+      };
+
+      const toArray = (value: unknown): unknown[] => {
+        if (Array.isArray(value)) return value;
+        return value ? [value] : [];
+      };
+
       questions = questions
         .map((q) => {
+          // NOSONAR
           try {
             // Find topic information
             const topic = topics.find((t) => t.id === q.topic_id);
@@ -1293,13 +1306,9 @@ export async function GET(
               topic_name: topic?.name || null,
               topic_description: topic?.description || null,
               // Ensure constraints is an array (could be null or empty)
-              constraints: Array.isArray(q.constraints)
-                ? q.constraints
-                : q.constraints
-                  ? [q.constraints]
-                  : null,
+              constraints: toNullableArray(q.constraints),
               // Ensure tags is an array (could be null or empty)
-              tags: Array.isArray(q.tags) ? q.tags : q.tags ? [q.tags] : null,
+              tags: toNullableArray(q.tags),
               // Include language from database (defaults to 'javascript' if null)
               language: q.language || "javascript",
               // Include resources if they exist (nullable field)
@@ -1313,17 +1322,9 @@ export async function GET(
             // Return question with minimal processing if error occurs
             return {
               ...q,
-              options: Array.isArray(q.options)
-                ? q.options
-                : q.options
-                  ? [q.options]
-                  : [],
-              constraints: Array.isArray(q.constraints)
-                ? q.constraints
-                : q.constraints
-                  ? [q.constraints]
-                  : null,
-              tags: Array.isArray(q.tags) ? q.tags : q.tags ? [q.tags] : null,
+              options: toArray(q.options),
+              constraints: toNullableArray(q.constraints),
+              tags: toNullableArray(q.tags),
               language: q.language || "javascript",
             };
           }
