@@ -8,12 +8,36 @@ import DOMPurify from "dompurify";
  * Uses DOMPurify with a safe default config.
  */
 const sanitize = (html: string): string => {
-  if (typeof window === "undefined") return html;
+  if (globalThis.window === undefined) return html;
   return DOMPurify.sanitize(html, {
     ALLOWED_TAGS: [
-      "b", "i", "em", "strong", "a", "p", "br", "ul", "ol", "li",
-      "code", "pre", "span", "div", "h1", "h2", "h3", "h4", "h5", "h6",
-      "blockquote", "table", "thead", "tbody", "tr", "th", "td",
+      "b",
+      "i",
+      "em",
+      "strong",
+      "a",
+      "p",
+      "br",
+      "ul",
+      "ol",
+      "li",
+      "code",
+      "pre",
+      "span",
+      "div",
+      "h1",
+      "h2",
+      "h3",
+      "h4",
+      "h5",
+      "h6",
+      "blockquote",
+      "table",
+      "thead",
+      "tbody",
+      "tr",
+      "th",
+      "td",
     ],
     ALLOWED_ATTR: ["href", "target", "rel", "class", "style"],
   });
