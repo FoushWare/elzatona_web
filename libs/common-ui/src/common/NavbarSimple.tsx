@@ -1,116 +1,87 @@
 "use client";
-          {/* Mobile/Tablet Menu Button */}
-          <div className="flex items-center space-x-1 sm:space-x-2 lg:hidden">
-            <div className="hidden xs:block">{/* <LearningModeSwitcher isScrolled={isScrolled} /> */}</div>
 
-            <button
-              onClick={toggleDarkMode}
-              className={`p-2 sm:p-2.5 rounded-lg transition-colors duration-200 ${
-                isScrolled
-                  ? "bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-indigo-100 dark:hover:bg-indigo-800"
-                  : "bg-white/20 text-white hover:bg-white/30 border border-white/30"
-              }`}
-              aria-label="Toggle theme"
-            >
-              {isDarkMode ? (
-                <Sun size={18} className="sm:w-5 sm:h-5" />
-              ) : (
-                <Moon size={18} className="sm:w-5 sm:h-5" />
-              )}
-            </button>
+import React, { useState, useEffect } from "react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import {
+  useAuth,
+  useTheme,
+  useUserType,
+  useMobileMenu,
+} from "@elzatona/contexts";
+import {
+  Sun,
+  Moon,
+  Menu,
+  X,
+  Map,
+  Compass,
+  User,
+  LogOut,
+  Settings,
+} from "lucide-react";
+import { AlzatonaLogo } from "./AlzatonaLogo";
 
-            <button
-              onClick={() => setIsOpen(!isOpen)}
-              className={`p-2 sm:p-2.5 rounded-lg transition-colors duration-200 ${
-                isScrolled
-                  ? "bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-indigo-100 dark:hover:bg-indigo-800"
-                  : "bg-white/20 text-white hover:bg-white/30 border border-white/30"
-              }`}
-              aria-label="Toggle mobile menu"
-            >
-              {isOpen ? (
-                <X size={18} className="sm:w-5 sm:h-5" />
-              ) : (
-                <Menu size={18} className="sm:w-5 sm:h-5" />
-              )}
-            </button>
-          </div>
-        </div>
-      </div>
+// Helper function to get link styling
+const getLinkStyles = (isActive: boolean, isScrolled: boolean) => {
+  if (isActive) {
+    return isScrolled
+      ? "text-indigo-600 dark:text-indigo-400 font-semibold border-b-2 border-indigo-600 dark:border-indigo-400 pb-1"
+      : "text-indigo-100 font-semibold border-b-2 border-indigo-100 pb-1";
+  }
+  return isScrolled
+    ? "text-gray-700 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400"
+    : "text-white hover:text-indigo-100";
+};
 
-      {isOpen && (
-        <div className="fixed inset-0 bg-white dark:bg-gray-900 z-50 lg:hidden">
-          <div className="flex flex-col h-full">
-            <div className="flex items-center justify-between p-3 sm:p-4 border-b border-gray-200 dark:border-gray-700">
-              <AlzatonaLogo size="sm" showText={false} />
-              <button
-                onClick={() => setIsOpen(false)}
-                className="p-2 rounded-lg bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors"
-                aria-label="Close mobile menu"
-              >
-                <X size={20} />
-              </button>
-            </div>
+// Helper function to get logo styling
+const getLogoStyles = (isScrolled: boolean) => {
+  return isScrolled
+    ? "text-gray-900 dark:text-white hover:text-indigo-600 dark:hover:text-indigo-400"
+    : "text-white hover:text-indigo-100";
+};
 
-            {stableAuthState.isAuthenticated && (
-              <div className="flex-1 px-3 sm:px-4 py-4 sm:py-6 space-y-3 sm:space-y-4">
-                <Link
-                  href="/questions"
-                  className={getMobileNavLinkClassName(isActiveLink("/questions"))}
-                  onClick={() => setIsOpen(false)}
-                >
-                  Practice
-                </Link>
-                <Link
-                  href="/dashboard"
-                  className={getMobileNavLinkClassName(isActiveLink("/dashboard"))}
-                  onClick={() => setIsOpen(false)}
-                >
-                  Progress
-                </Link>
-                <Link
-                  href="/learning-paths"
-                  className={getMobileNavLinkClassName(isActiveLink("/learning-paths"))}
-                  onClick={() => setIsOpen(false)}
-                >
-                  My Plans
-                </Link>
-                <Link
-                  href={mobileLearningHref}
-                  className={getMobileNavLinkClassName(
-                    isActiveLink(mobileLearningHref),
-                  )}
-                  onClick={() => setIsOpen(false)}
-                >
-                  {userType === "self-directed" ? "Browse" : "Learn"}
-                </Link>
+// Helper function to get navbar styling
+const getNavbarStyles = (isScrolled: boolean) => {
+  return isScrolled
+    ? "bg-white/98 dark:bg-gray-900/98 backdrop-blur-lg shadow-xl border-b border-gray-200 dark:border-gray-700"
+    : "bg-gradient-to-r from-indigo-600 via-purple-600 to-blue-600";
+};
+
+// Helper component for auth section to reduce cognitive complexity
+const AuthSection: React.FC<{
+  stableAuthState: { isAuthenticated: boolean; isLoading: boolean };
   isScrolled: boolean;
   getAuthLinkClassName: (href: string) => string;
   handleSignOut: () => void;
 }> = ({ stableAuthState, isScrolled, getAuthLinkClassName, handleSignOut }) => {
-  return stableAuthState.isLoading ? (
-    <div className="px-4 py-2 rounded-lg font-medium bg-gray-200 dark:bg-gray-700 text-gray-500 dark:text-gray-400">
-      Loading...
-    </div>
-  ) : (
-    (() => {
-      const buttonClasses = isScrolled
-        ? "bg-red-600 hover:bg-red-700 text-white shadow-md hover:shadow-lg"
-        : "bg-red-500 hover:bg-red-600 text-white shadow-md hover:shadow-lg";
+  const buttonClasses = isScrolled
+    ? "bg-red-600 hover:bg-red-700 text-white shadow-md hover:shadow-lg"
+    : "bg-red-500 hover:bg-red-600 text-white shadow-md hover:shadow-lg";
 
-      return stableAuthState.isAuthenticated ? (
-        <button
-          onClick={handleSignOut}
-          className={`px-4 py-2 rounded-lg font-medium transition-colors duration-200 ${buttonClasses}`}
-        >
-          Logout
-        </button>
-      ) : (
-        <Link href="/auth" className={getAuthLinkClassName("/auth")}>
-          Sign In
-        </Link>
-      );
-    })()
+  if (stableAuthState.isLoading) {
+    return (
+      <div className="px-4 py-2 rounded-lg font-medium bg-gray-200 dark:bg-gray-700 text-gray-500 dark:text-gray-400">
+        Loading...
+      </div>
+    );
+  }
+
+  if (stableAuthState.isAuthenticated) {
+    return (
+      <button
+        onClick={handleSignOut}
+        className={`px-4 py-2 rounded-lg font-medium transition-colors duration-200 ${buttonClasses}`}
+      >
+        Logout
+      </button>
+    );
+  }
+
+  return (
+    <Link href="/auth" className={getAuthLinkClassName("/auth")}>
+      Sign In
+    </Link>
   );
 };
 
@@ -261,7 +232,10 @@ export const NavbarSimple: React.FC = () => {
 
   // Helper function to check if a link is active
   const isActiveLink = (href: string) => {
-    return isActiveLinkPath(pathname || "", href);
+    if (href === "/") {
+      return pathname === "/";
+    }
+    return pathname?.startsWith(href) || false;
   };
 
   // Extract link styling logic to reduce nested ternary operations
@@ -279,13 +253,23 @@ export const NavbarSimple: React.FC = () => {
 
   // Helper function to get auth link styling to reduce nested ternary
   const getAuthLinkClassName = (href: string) => {
-    return getDesktopAuthLinkClassName(href, pathname || "", isScrolled);
-  };
+    const baseClasses = "font-medium transition-colors duration-200";
+    const isActive = isActiveLink(href);
 
-  const mobileLearningHref =
-    userType === "self-directed"
-      ? "/browse-practice-questions"
-      : "/features/guided-learning";
+    if (isActive) {
+      return `${baseClasses} ${
+        isScrolled
+          ? "text-indigo-600 dark:text-indigo-400 font-semibold border-b-2 border-indigo-600 dark:border-indigo-400 pb-1"
+          : "text-indigo-100 font-semibold border-b-2 border-indigo-100 pb-1"
+      }`;
+    }
+
+    return `${baseClasses} ${
+      isScrolled
+        ? "text-gray-700 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400"
+        : "text-white hover:text-indigo-100"
+    }`;
+  };
 
   // Handle sign out
   const handleSignOut = async () => {
@@ -356,6 +340,53 @@ export const NavbarSimple: React.FC = () => {
       window.removeEventListener("beforeunload", handleBeforeUnload);
     };
   }, []);
+
+  const learningTargetHref =
+    userType === "self-directed"
+      ? "/browse-practice-questions"
+      : "/features/guided-learning";
+  const mobileLearningLinkClasses = isActiveLink(learningTargetHref)
+    ? "text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-900/30 font-semibold"
+    : "text-gray-900 dark:text-white hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-gray-50 dark:hover:bg-gray-800";
+  const authButtonClasses =
+    "block w-full text-center py-2.5 sm:py-3 font-medium transition-colors duration-200 text-sm sm:text-base rounded-lg";
+  const signInLinkClasses = isActiveLink("/auth")
+    ? `${authButtonClasses} text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-900/30 font-semibold`
+    : `${authButtonClasses} text-gray-700 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-gray-50 dark:hover:bg-gray-800`;
+
+  const renderGuestAuthAction = () => {
+    if (stableAuthState.isLoading) {
+      return (
+        <div className="block w-full text-center py-2.5 sm:py-3 font-medium text-sm sm:text-base rounded-lg bg-gray-200 dark:bg-gray-700 text-gray-500 dark:text-gray-400">
+          Loading...
+        </div>
+      );
+    }
+
+    if (stableAuthState.isAuthenticated) {
+      return (
+        <button
+          onClick={() => {
+            handleSignOut();
+            setIsOpen(false);
+          }}
+          className="block w-full text-center py-2.5 sm:py-3 font-medium transition-colors duration-200 text-sm sm:text-base rounded-lg bg-red-600 hover:bg-red-700 text-white shadow-md hover:shadow-lg"
+        >
+          Logout
+        </button>
+      );
+    }
+
+    return (
+      <Link
+        href="/auth"
+        className={signInLinkClasses}
+        onClick={() => setIsOpen(false)}
+      >
+        Sign In
+      </Link>
+    );
+  };
 
   return (
     <nav
@@ -461,6 +492,7 @@ export const NavbarSimple: React.FC = () => {
               )}
             </button>
 
+            {/* Mobile menu button */}
             <button
               onClick={() => setIsOpen(!isOpen)}
               className={`p-2 sm:p-2.5 rounded-lg transition-colors duration-200 ${
@@ -501,30 +533,40 @@ export const NavbarSimple: React.FC = () => {
               <div className="flex-1 px-3 sm:px-4 py-4 sm:py-6 space-y-3 sm:space-y-4">
                 <Link
                   href="/questions"
-                  className={getMobileNavLinkClassName(isActiveLink("/questions"))}
+                  className={`block text-base sm:text-lg font-medium py-2 px-3 rounded-lg transition-colors ${
+                    isActiveLink("/questions")
+                      ? "text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-900/30 font-semibold"
+                      : "text-gray-900 dark:text-white hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-gray-50 dark:hover:bg-gray-800"
+                  }`}
                   onClick={() => setIsOpen(false)}
                 >
                   Practice
                 </Link>
                 <Link
                   href="/dashboard"
-                  className={getMobileNavLinkClassName(isActiveLink("/dashboard"))}
+                  className={`block text-base sm:text-lg font-medium py-2 px-3 rounded-lg transition-colors ${
+                    isActiveLink("/dashboard")
+                      ? "text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-900/30 font-semibold"
+                      : "text-gray-900 dark:text-white hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-gray-50 dark:hover:bg-gray-800"
+                  }`}
                   onClick={() => setIsOpen(false)}
                 >
                   Progress
                 </Link>
                 <Link
                   href="/learning-paths"
-                  className={getMobileNavLinkClassName(isActiveLink("/learning-paths"))}
+                  className={`block text-base sm:text-lg font-medium py-2 px-3 rounded-lg transition-colors ${
+                    isActiveLink("/learning-paths")
+                      ? "text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-900/30 font-semibold"
+                      : "text-gray-900 dark:text-white hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-gray-50 dark:hover:bg-gray-800"
+                  }`}
                   onClick={() => setIsOpen(false)}
                 >
                   My Plans
                 </Link>
                 <Link
-                  href={mobileLearningHref}
-                  className={getMobileNavLinkClassName(
-                    isActiveLink(mobileLearningHref),
-                  )}
+                  href={learningTargetHref}
+                  className={`block text-base sm:text-lg font-medium py-2 px-3 rounded-lg transition-colors ${mobileLearningLinkClasses}`}
                   onClick={() => setIsOpen(false)}
                 >
                   {userType === "self-directed" ? "Browse" : "Learn"}
@@ -694,21 +736,7 @@ export const NavbarSimple: React.FC = () => {
                         Get Started
                       </Link>
                     )}
-                  {stableAuthState.isLoading ? (
-                    <div className="block w-full text-center py-2.5 sm:py-3 font-medium text-sm sm:text-base rounded-lg bg-gray-200 dark:bg-gray-700 text-gray-500 dark:text-gray-400">
-                      Loading...
-                    </div>
-                  ) : (
-                    <Link
-                      href="/auth"
-                      className={getMobileSignInLinkClassName(
-                        isActiveLink("/auth"),
-                      )}
-                      onClick={() => setIsOpen(false)}
-                    >
-                      Sign In
-                    </Link>
-                  )}
+                  {renderGuestAuthAction()}
                 </>
               )}
             </div>

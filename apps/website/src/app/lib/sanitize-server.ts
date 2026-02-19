@@ -40,6 +40,7 @@ const xssOptions: IFilterXSSOptions = {
         // Escape attribute value manually
         const escaped = value
           .replaceAll("&", "&amp;")
+          .replaceAll("\\", "&#x5C;")
           .replaceAll('"', "&quot;")
           .replaceAll("'", "&#x27;")
           .replaceAll("<", "&lt;")

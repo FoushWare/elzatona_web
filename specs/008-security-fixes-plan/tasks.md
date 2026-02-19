@@ -48,8 +48,8 @@
 
 ## Phase 8: PR06 - Sonar Complexity UI Components
 
-- [ ] T026 [P] [US6] Refactor NavbarSimple.tsx, EnhancedDashboard.tsx, ProblemSolvingEditorComponents.tsx, FrontendTaskEditorComponents.tsx, admin-learning-cards/editors/
-- [ ] T027 [US6] Extract nav sections and editor rendering into helpers/sub-components
+- [x] T026 [P] [US6] Refactor NavbarSimple.tsx, EnhancedDashboard.tsx, ProblemSolvingEditorComponents.tsx, FrontendTaskEditorComponents.tsx, admin-learning-cards/editors/
+- [x] T027 [US6] Extract nav sections and editor rendering into helpers/sub-components
 - [ ] T028 [US6] Commit fixes with message in contracts/PR06-sonar-complexity-ui-components.md
 
 ## Phase 9: PR07 - Sonar Complexity Utils

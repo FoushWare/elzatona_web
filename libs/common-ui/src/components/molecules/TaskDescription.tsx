@@ -1,6 +1,47 @@
 "use client";
 
 import React, { useState } from "react";
+import DOMPurify from "dompurify";
+
+/**
+ * Sanitize HTML content to prevent XSS attacks.
+ * Uses DOMPurify with a safe default config.
+ */
+const sanitize = (html: string): string => {
+  if (globalThis.window === undefined) return html;
+  return DOMPurify.sanitize(html, {
+    ALLOWED_TAGS: [
+      "b",
+      "i",
+      "em",
+      "strong",
+      "a",
+      "p",
+      "br",
+      "ul",
+      "ol",
+      "li",
+      "code",
+      "pre",
+      "span",
+      "div",
+      "h1",
+      "h2",
+      "h3",
+      "h4",
+      "h5",
+      "h6",
+      "blockquote",
+      "table",
+      "thead",
+      "tbody",
+      "tr",
+      "th",
+      "td",
+    ],
+    ALLOWED_ATTR: ["href", "target", "rel", "class", "style"],
+  });
+};
 
 export type TaskDescriptionProps = {
   description: string;
@@ -20,7 +61,7 @@ export const TaskDescription: React.FC<TaskDescriptionProps> = ({
   return (
     <div className={className}>
       <div className="prose max-w-none mb-4">
-        <div dangerouslySetInnerHTML={{ __html: description }} />
+        <div dangerouslySetInnerHTML={{ __html: sanitize(description) }} />
       </div>
 
       {requirements.length > 0 && (
@@ -49,7 +90,7 @@ export const TaskDescription: React.FC<TaskDescriptionProps> = ({
                 </button>
                 {openHints[i] && (
                   <div className="mt-1 p-2 bg-gray-50 rounded text-sm">
-                    <div dangerouslySetInnerHTML={{ __html: h }} />
+                    <div dangerouslySetInnerHTML={{ __html: sanitize(h) }} />
                   </div>
                 )}
               </div>

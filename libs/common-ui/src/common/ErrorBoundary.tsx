@@ -68,7 +68,7 @@ export class ErrorBoundary extends Component<Props, State> {
   };
 
   private readonly handleGoHome = () => {
-    if (typeof globalThis.window !== "undefined") {
+    if (globalThis.window !== undefined) {
       globalThis.window.location.href = "/";
     }
   };
