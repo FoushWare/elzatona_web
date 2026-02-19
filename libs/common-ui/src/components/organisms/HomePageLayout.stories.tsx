@@ -52,8 +52,8 @@ export const Default: Story = {
     hasActivePlan: false,
     activePlan: null,
     personalizedContent: defaultPersonalizedContent,
-    onGuidedClick: () => console.log("Guided clicked"),
-    onFreestyleClick: () => console.log("Freestyle clicked"),
+    onGuidedClick: () => {},
+    onFreestyleClick: () => {},
   },
 };
 
@@ -72,8 +72,8 @@ export const GuidedUserNoPlan: Story = {
       icon: React.createElement(Map),
       color: "indigo",
     },
-    onGuidedClick: () => console.log("Guided clicked"),
-    onFreestyleClick: () => console.log("Freestyle clicked"),
+    onGuidedClick: () => {},
+    onFreestyleClick: () => {},
   },
 };
 
@@ -95,8 +95,8 @@ export const GuidedUserWithPlan: Story = {
       icon: React.createElement(Play),
       color: "green",
     },
-    onGuidedClick: () => console.log("Guided clicked"),
-    onFreestyleClick: () => console.log("Freestyle clicked"),
+    onGuidedClick: () => {},
+    onFreestyleClick: () => {},
   },
 };
 
@@ -115,8 +115,8 @@ export const SelfDirectedUser: Story = {
       icon: React.createElement(Compass),
       color: "purple",
     },
-    onGuidedClick: () => console.log("Guided clicked"),
-    onFreestyleClick: () => console.log("Freestyle clicked"),
+    onGuidedClick: () => {},
+    onFreestyleClick: () => {},
   },
 };
 
@@ -128,8 +128,8 @@ export const NoAnimation: Story = {
     hasActivePlan: false,
     activePlan: null,
     personalizedContent: defaultPersonalizedContent,
-    onGuidedClick: () => console.log("Guided clicked"),
-    onFreestyleClick: () => console.log("Freestyle clicked"),
+    onGuidedClick: () => {},
+    onFreestyleClick: () => {},
   },
 };
 

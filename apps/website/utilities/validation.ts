@@ -14,7 +14,9 @@ import { sanitizeInputServer } from "./sanitize-server";
 export const emailSchema = z
   .string()
   .min(1, "Email is required")
-  .email("Invalid email format")
+  .refine((val) => /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(val), {
+    message: "Invalid email format",
+  })
   .transform((val) => sanitizeInputServer(val.toLowerCase().trim()));
 
 // Password validation
@@ -51,7 +53,17 @@ export const contentSchema = z
 // URL validation
 export const urlSchema = z
   .string()
-  .url("Invalid URL format")
+  .refine(
+    (val) => {
+      try {
+        new URL(val);
+        return true;
+      } catch {
+        return false;
+      }
+    },
+    { message: "Invalid URL format" },
+  )
   .transform((val) => sanitizeInputServer(val));
 
 // ID validation (UUID or string ID)
@@ -93,7 +105,14 @@ export const questionSchema = z
     category: z.string().min(1).optional(), // Optional - used for lookup if category_id not provided
     category_id: z
       .union([
-        z.string().uuid("Invalid category ID format"),
+        z.string().refine(
+          (val) => {
+            return /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(
+              val,
+            );
+          },
+          { message: "Invalid category ID format" },
+        ),
         z.literal(""),
         z.undefined(),
         z.null(),
@@ -102,7 +121,14 @@ export const questionSchema = z
     topic: z.string().optional(), // Optional - used for lookup if topic_id not provided
     topic_id: z
       .union([
-        z.string().uuid("Invalid topic ID format"),
+        z.string().refine(
+          (val) => {
+            return /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(
+              val,
+            );
+          },
+          { message: "Invalid topic ID format" },
+        ),
         z.literal(""),
         z.undefined(),
         z.null(),
@@ -135,8 +161,17 @@ export const questionSchema = z
     time_limit: z.number().int().min(0).max(3600).optional(), // Accept snake_case (in seconds, max 1 hour)
     learningCardId: z
       .union([
-        z.string().uuid("Invalid learning card ID format"),
-        z.string().min(1), // Allow non-UUID identifiers like "core-technologies"
+        z.string().refine(
+          (val) => {
+            // UUID v4 regex
+            return (
+              /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(
+                val,
+              ) || val.length > 0
+            );
+          },
+          { message: "Invalid learning card ID format" },
+        ),
         z.literal(""),
         z.undefined(),
         z.null(),
@@ -144,8 +179,16 @@ export const questionSchema = z
       .optional(),
     learning_card_id: z
       .union([
-        z.string().uuid("Invalid learning card ID format"),
-        z.string().min(1), // Allow non-UUID identifiers like "core-technologies"
+        z.string().refine(
+          (val) => {
+            return (
+              /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(
+                val,
+              ) || val.length > 0
+            );
+          },
+          { message: "Invalid learning card ID format" },
+        ),
         z.literal(""),
         z.undefined(),
         z.null(),
@@ -192,7 +235,7 @@ export const questionSchema = z
         }
       }),
   })
-  .passthrough(); // Allow extra fields that we'll filter out later
+  .catchall(z.any()); // Allow extra fields that we'll filter out later
 // Note: category_id and topic_id are optional in the database schema (nullable)
 // No refinement needed - both can be null/undefined
 
@@ -274,6 +317,110 @@ export const planSchema = z.object({
 });
 
 /**
+ * Clean up data object by normalizing arrays and removing invalid fields
+ */
+function cleanupDataObject(dataObj: Record<string, unknown>): void {
+  cleanupOptions(dataObj);
+  cleanupCategories(dataObj);
+  cleanupTopics(dataObj);
+  cleanupMetadata(dataObj);
+}
+
+/**
+ * Clean up options field
+ */
+function cleanupOptions(dataObj: Record<string, unknown>): void {
+  if (dataObj.options !== undefined && dataObj.options !== null) {
+    if (
+      typeof dataObj.options === "string" ||
+      !Array.isArray(dataObj.options) ||
+      (Array.isArray(dataObj.options) && dataObj.options.length === 0)
+    ) {
+      delete dataObj.options;
+    }
+  }
+}
+
+/**
+ * Clean up categories field
+ */
+function cleanupCategories(dataObj: Record<string, unknown>): void {
+  if (dataObj.categories && Array.isArray(dataObj.categories)) {
+    if (dataObj.categories.length > 0 && dataObj.categories[0]) {
+      dataObj.category =
+        dataObj.categories[0]?.name ||
+        dataObj.categories[0]?.title ||
+        dataObj.category ||
+        "";
+    }
+    delete dataObj.categories;
+  }
+}
+
+/**
+ * Clean up topics field
+ */
+function cleanupTopics(dataObj: Record<string, unknown>): void {
+  if (dataObj.topics && Array.isArray(dataObj.topics)) {
+    if (dataObj.topics.length > 0 && dataObj.topics[0]) {
+      dataObj.topic =
+        dataObj.topics[0]?.name ||
+        dataObj.topics[0]?.title ||
+        dataObj.topic ||
+        "";
+    }
+    delete dataObj.topics;
+  }
+}
+
+/**
+ * Clean up metadata field
+ */
+function cleanupMetadata(dataObj: Record<string, unknown>): void {
+  if (dataObj.metadata !== undefined && dataObj.metadata !== null) {
+    if (
+      typeof dataObj.metadata !== "object" ||
+      Array.isArray(dataObj.metadata)
+    ) {
+      delete dataObj.metadata;
+    }
+  }
+}
+
+/**
+ * Extract error message and path from ZodError
+ */
+function extractZodErrorDetails(error: z.ZodError): {
+  message: string;
+  path: string;
+} {
+  const issues = error.issues || [];
+  if (issues.length === 0) {
+    return { message: "Validation failed", path: "root" };
+  }
+
+  const primaryIssue = issues[0];
+  const errorPath =
+    primaryIssue?.path && primaryIssue.path.length > 0
+      ? primaryIssue.path.join(".")
+      : "root";
+  const errorMessage = primaryIssue?.message || "Validation failed";
+
+  if (issues.length > 1) {
+    console.warn(
+      "Multiple validation errors:",
+      issues.map((e) => ({
+        path: e.path?.join(".") || "root",
+        message: e.message,
+        code: e.code,
+      })),
+    );
+  }
+
+  return { message: errorMessage, path: errorPath };
+}
+
+/**
  * Validate and sanitize data using a schema
  * @param schema - Zod schema
  * @param data - Data to validate
@@ -284,158 +431,29 @@ export function validateAndSanitize<T>(
   data: unknown,
 ): { success: true; data: T } | { success: false; error: string } {
   try {
-    // Validate schema is a valid Zod schema
     if (!schema || typeof schema !== "object" || !("_def" in schema)) {
-      console.error("❌ Invalid schema provided to validateAndSanitize");
       return { success: false, error: "Validation error: Invalid schema" };
     }
 
-    // Pre-validate data structure to prevent "Cannot read properties of undefined" errors
     if (data && typeof data === "object" && !Array.isArray(data)) {
-      const dataObj = data as Record<string, unknown>;
-
-      // Ensure options is either undefined, null, or a valid array
-      if (dataObj.options !== undefined && dataObj.options !== null) {
-        if (typeof dataObj.options === "string") {
-          // Invalid: options is a string, remove it
-          delete dataObj.options;
-        } else if (!Array.isArray(dataObj.options)) {
-          // Invalid: options is not an array, remove it
-          delete dataObj.options;
-        } else if (
-          Array.isArray(dataObj.options) &&
-          dataObj.options.length === 0
-        ) {
-          // Empty array, remove it for optional field
-          delete dataObj.options;
-        }
-      }
-
-      // Ensure categories is not an array (should be a string name or undefined)
-      if (dataObj.categories && Array.isArray(dataObj.categories)) {
-        // If categories is an array, extract the first one's name or use empty string
-        if (dataObj.categories.length > 0 && dataObj.categories[0]) {
-          dataObj.category =
-            dataObj.categories[0]?.name ||
-            dataObj.categories[0]?.title ||
-            dataObj.category ||
-            "";
-        }
-        delete dataObj.categories; // Remove array, use category name instead
-      }
-
-      // Ensure topics is not an array (should be a string name or undefined)
-      if (dataObj.topics && Array.isArray(dataObj.topics)) {
-        // If topics is an array, extract the first one's name or use empty string
-        if (dataObj.topics.length > 0 && dataObj.topics[0]) {
-          dataObj.topic =
-            dataObj.topics[0]?.name ||
-            dataObj.topics[0]?.title ||
-            dataObj.topic ||
-            "";
-        }
-        delete dataObj.topics; // Remove array, use topic name instead
-      }
-
-      // Ensure metadata is an object or null/undefined
-      if (dataObj.metadata !== undefined && dataObj.metadata !== null) {
-        if (
-          typeof dataObj.metadata !== "object" ||
-          Array.isArray(dataObj.metadata)
-        ) {
-          // Invalid metadata format, remove it
-          delete dataObj.metadata;
-        }
-      }
+      cleanupDataObject(data as Record<string, unknown>);
     }
 
     const result = schema.parse(data);
     return { success: true, data: result };
   } catch (error: unknown) {
-    // Log the error type and details for debugging
-    const errorObj = error instanceof Error ? error : new Error(String(error));
-    console.error(
-      "🔴 Validation catch block - Error type:",
-      errorObj.constructor?.name,
-    );
-    console.error("🔴 Validation catch block - Error:", errorObj);
-    console.error(
-      "🔴 Validation catch block - Error message:",
-      errorObj.message,
-    );
-    console.error("🔴 Validation catch block - Error stack:", errorObj.stack);
-    console.error(
-      "🔴 Input data being validated:",
-      JSON.stringify(data, null, 2),
-    );
-
     if (error instanceof z.ZodError) {
-      // Zod stores errors in error.issues, not error.errors
-      const issues = error.issues || [];
-
-      // Log all errors for debugging
-      console.error(
-        "🔴 ZodError.issues array:",
-        JSON.stringify(issues, null, 2),
-      );
-      console.error("🔴 ZodError.issues length:", issues.length);
-
-      if (issues.length === 0) {
-        console.error("⚠️ ZodError with no issues - this should not happen");
-        console.error("⚠️ Full ZodError object:", {
-          name: error.name,
-          message: error.message,
-          stack: error.stack,
-          issues: error.issues,
-          errors: (error as unknown as Record<string, unknown>).errors,
-        });
-        return {
-          success: false,
-          error:
-            "Validation failed: Unknown error (no error details available)",
-        };
-      }
-
-      const firstIssue = issues[0];
-      const errorPath =
-        firstIssue?.path && firstIssue.path.length > 0
-          ? firstIssue.path.join(".")
-          : "root";
-      const errorMessage = firstIssue?.message || "Validation failed";
-
-      // Log all errors for debugging
-      if (issues.length > 1) {
-        console.warn(
-          `⚠️ Multiple validation errors for question:`,
-          issues.map((e: z.ZodIssue) => ({
-            path: e.path?.join(".") || "root",
-            message: e.message,
-            code: e.code,
-          })),
-        );
-      }
-
-      return {
-        success: false,
-        error: `${errorMessage} (field: ${errorPath})`,
-      };
+      const { message, path } = extractZodErrorDetails(error);
+      return { success: false, error: `${message} (field: ${path})` };
     }
-    // Handle non-Zod errors (like "Cannot read properties of undefined")
+
     if (error instanceof Error) {
-      console.error("Validation error (non-Zod):", error);
-      console.error("Validation error stack:", error.stack);
-      return {
-        success: false,
-        error: `Validation error: ${error.message}`,
-      };
+      return { success: false, error: `Validation error: ${error.message}` };
     }
-    // Handle any other error type
-    console.error("Validation error (unknown type):", error);
-    const errorMessage =
-      error instanceof Error ? error.message : "Unknown error";
+
     return {
       success: false,
-      error: `Validation failed: ${errorMessage}`,
+      error: `Validation failed: ${typeof error === "string" ? error : "Unknown error"}`,
     };
   }
 }

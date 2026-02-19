@@ -1,24 +1,17 @@
 // CommonJS mock for the 'vitest' package when tests accidentally import it
-const globalObj = typeof global !== "undefined" ? global : globalThis;
+const globalObj = globalThis;
 
 module.exports = {
-  vi: {
-    mock: () => {},
-    fn: () => () => {},
-    spyOn: () => ({ mockImplementation: () => {} }),
-    clearAllMocks: () => {},
-    resetAllMocks: () => {},
-  },
   // Provide basic testing globals mapped to Jest equivalents if available
-  describe: globalObj.describe || (() => {}),
-  it: globalObj.it || globalObj.test || (() => {}),
-  test: globalObj.test || globalObj.it || (() => {}),
-  expect: globalObj.expect || (() => {}),
+  describe: globalThis.describe || (() => {}),
+  it: globalThis.it || globalThis.test || (() => {}),
+  test: globalThis.test || globalThis.it || (() => {}),
+  expect: globalThis.expect || (() => {}),
   // lifecycle helpers
-  beforeEach: globalObj.beforeEach || (() => {}),
-  afterEach: globalObj.afterEach || (() => {}),
-  beforeAll: globalObj.beforeAll || (() => {}),
-  afterAll: globalObj.afterAll || (() => {}),
+  beforeEach: globalThis.beforeEach || (() => {}),
+  afterEach: globalThis.afterEach || (() => {}),
+  beforeAll: globalThis.beforeAll || (() => {}),
+  afterAll: globalThis.afterAll || (() => {}),
   // expose jest-compatible vi methods mapped to jest where possible
   vi: {
     mock: (moduleName, factory) => {

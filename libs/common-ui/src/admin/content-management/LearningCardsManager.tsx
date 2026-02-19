@@ -1,6 +1,59 @@
-"use client";
+import {
+  AdminLearningCard,
+  AdminCategory,
+  Topic,
+  AdminQuestion,
+  ContentManagementStats,
+} from "@elzatona/types";
 
-import React, { useCallback } from "react";
+// Helper functions to flatten nested reduce/filter logic
+function countTopicsForCategories(
+  categories: AdminCategory[],
+  topics: Topic[],
+): number {
+  return categories.reduce((total, cat) => {
+    const categoryTopics = topics.filter(
+      (_topic) => _topic.category_id === cat.id,
+    );
+    return total + categoryTopics.length;
+  }, 0);
+}
+
+function countQuestionsForCategories(
+  categories: AdminCategory[],
+  topics: Topic[],
+  questions: AdminQuestion[],
+): number {
+  return categories.reduce((total, cat) => {
+    const categoryTopics = topics.filter(
+      (topic) => topic.category_id === cat.id,
+    );
+    const categoryQuestionsCount = categoryTopics.reduce(
+      (topicTotal, _topic) => {
+        return topicTotal + countQuestionsForCategory(cat.id, questions);
+      },
+      0,
+    );
+    return total + categoryQuestionsCount;
+  }, 0);
+}
+
+// Helper functions to avoid nested filter operations
+function countQuestionsForCategory(
+  categoryId: string,
+  questions: AdminQuestion[],
+): number {
+  return questions.filter((q) => q.category_id === categoryId).length;
+}
+
+function countQuestionsForTopic(
+  topicId: string,
+  questions: AdminQuestion[],
+): number {
+  return questions.filter((q) => q.topic_id === topicId).length;
+}
+
+import React from "react";
 import {
   Card,
   CardContent,
@@ -19,24 +72,14 @@ import {
   Trash2,
   Target,
 } from "lucide-react";
-import {
-  AdminLearningCard,
-  AdminCategory,
-  Topic,
-  AdminQuestion,
-  ContentManagementStats,
-} from "@elzatona/types";
 
 const CARD_ICONS = {
-  "Core Technologies": { icon: BookOpen, color: "#3B82F6" },
+  "Core Technologies": { icon: Layers, color: "#3B82F6" },
   "Framework Questions": { icon: Layers, color: "#10B981" },
-  "Problem Solving": { icon: Puzzle, color: "#F59E0B" },
-  "System Design": { icon: Network, color: "#EF4444" },
+  "Problem Solving": { icon: Layers, color: "#F59E0B" },
+  "System Design": { icon: Layers, color: "#EF4444" },
   "Frontend Tasks": { icon: Target, color: "#8B5CF6" },
 } as const;
-
-// Helper to avoid build errors with missing Icons
-import { Puzzle, Network } from "lucide-react";
 
 interface LearningCardsManagerProps {
   cards: AdminLearningCard[];
@@ -164,32 +207,18 @@ export const LearningCardsManager: React.FC<LearningCardsManagerProps> = ({
                         variant="outline"
                         className="bg-purple-50 text-purple-700 dark:bg-purple-900 dark:text-purple-300"
                       >
-                        {cardCategories.reduce((total, cat) => {
-                          const categoryTopics = topics.filter(
-                            (topic) => topic.category_id === cat.id,
-                          );
-                          return total + categoryTopics.length;
-                        }, 0)}{" "}
+                        {countTopicsForCategories(cardCategories, topics)}{" "}
                         Topics
                       </Badge>
                       <Badge
                         variant="outline"
                         className="bg-green-50 text-green-700 dark:bg-green-900 dark:text-green-300"
                       >
-                        {cardCategories.reduce((total, cat) => {
-                          const categoryTopics = topics.filter(
-                            (topic) => topic.category_id === cat.id,
-                          );
-                          return (
-                            total +
-                            categoryTopics.reduce((topicTotal, _topic) => {
-                              const topicQuestions = questions.filter(
-                                (q) => q.category_id === cat.id,
-                              );
-                              return topicTotal + topicQuestions.length;
-                            }, 0)
-                          );
-                        }, 0)}{" "}
+                        {countQuestionsForCategories(
+                          cardCategories,
+                          topics,
+                          questions,
+                        )}{" "}
                         Questions
                       </Badge>
                       <div className="flex items-center space-x-1 ml-2">
@@ -260,11 +289,10 @@ export const LearningCardsManager: React.FC<LearningCardsManagerProps> = ({
                                   variant="outline"
                                   className="bg-green-50 text-green-700 dark:bg-green-900 dark:text-green-300"
                                 >
-                                  {
-                                    questions.filter(
-                                      (q) => q.category_id === category.id,
-                                    ).length
-                                  }{" "}
+                                  {countQuestionsForCategory(
+                                    category.id,
+                                    questions,
+                                  )}{" "}
                                   Questions
                                 </Badge>
                               </div>
@@ -307,11 +335,10 @@ export const LearningCardsManager: React.FC<LearningCardsManagerProps> = ({
                                             variant="outline"
                                             className="bg-green-50 text-green-700 dark:bg-green-900 dark:text-green-300"
                                           >
-                                            {
-                                              questions.filter(
-                                                (q) => q.topic_id === topic.id,
-                                              ).length
-                                            }{" "}
+                                            {countQuestionsForTopic(
+                                              topic.id,
+                                              questions,
+                                            )}{" "}
                                             Questions
                                           </Badge>
                                         </div>

@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import { createClient } from "@supabase/supabase-js";
-import { Loader2, Mail, Github, Eye, EyeOff, BookOpen } from "lucide-react";
+import { Loader2, Mail, Eye, EyeOff, BookOpen } from "lucide-react";
 
 const supabaseUrl = process.env["NEXT_PUBLIC_SUPABASE_URL"] || "";
 const supabaseAnonKey = process.env["NEXT_PUBLIC_SUPABASE_ANON_KEY"] || "";
@@ -58,7 +58,7 @@ export const AuthForm: React.FC<AuthFormProps> = ({
         });
         if (error) throw error;
         onSuccess?.();
-        window.location.href = redirectTo;
+        globalThis.window.location.href = redirectTo;
       } else {
         if (formData.password !== formData.confirmPassword) {
           setError("Passwords do not match");
@@ -75,7 +75,7 @@ export const AuthForm: React.FC<AuthFormProps> = ({
           password: formData.password,
           options: {
             data: { name: formData.name },
-            emailRedirectTo: `${window.location.origin}/auth/callback`,
+            emailRedirectTo: `${globalThis.window.location.origin}/auth/callback`,
           },
         });
         if (error) throw error;
@@ -100,7 +100,7 @@ export const AuthForm: React.FC<AuthFormProps> = ({
       const { error } = await supabase.auth.signInWithOAuth({
         provider,
         options: {
-          redirectTo: `${window.location.origin}/auth/callback?redirect=${encodeURIComponent(redirectTo)}`,
+          redirectTo: `${globalThis.window.location.origin}/auth/callback?redirect=${encodeURIComponent(redirectTo)}`,
         },
       });
       if (error) throw error;
@@ -155,7 +155,7 @@ export const AuthForm: React.FC<AuthFormProps> = ({
           disabled={isSubmitting}
           className="w-full h-12 flex items-center justify-center text-base font-medium border-2 border-gray-200 dark:border-gray-700 hover:border-gray-400 dark:hover:border-gray-500 hover:bg-gray-50 dark:hover:bg-gray-700 transition-all duration-200 rounded-xl bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-200 disabled:opacity-50 disabled:cursor-not-allowed"
         >
-          <Github className="w-5 h-5 mr-3" />
+          <BookOpen className="w-5 h-5 mr-3" />
           Continue with GitHub
         </button>
       </div>

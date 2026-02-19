@@ -55,7 +55,6 @@ export default function ContentManagementPage() {
     deselectAllQuestions,
     addSelectedQuestionsToPlan,
     closeTopicQuestionsModal,
-    toggleQuestionInPlan,
     isDeleteCardModalOpen,
     setIsDeleteCardModalOpen,
     cardToDelete,
@@ -109,7 +108,7 @@ export default function ContentManagementPage() {
                 try refreshing the page.
               </p>
               <Button
-                onClick={() => window.location.reload()}
+                onClick={() => globalThis.location.reload()}
                 className="bg-blue-600 hover:bg-blue-700 text-white"
               >
                 Refresh Page
@@ -192,7 +191,6 @@ export default function ContentManagementPage() {
           cards={filteredCards}
           categories={categories}
           topics={topics}
-          questions={questions}
           stats={stats}
           planQuestions={planQuestions}
           expandedPlans={expandedPlans}
@@ -207,7 +205,6 @@ export default function ContentManagementPage() {
           onDeletePlan={(plan) => console.log("Delete plan", plan)}
           onCreatePlan={() => console.log("Create plan")}
           onManageCards={openCardManagementModal}
-          onToggleQuestionInPlan={toggleQuestionInPlan}
           openTopicQuestionsModal={openTopicQuestionsModal}
         />
 

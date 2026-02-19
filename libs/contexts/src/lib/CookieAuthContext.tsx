@@ -68,7 +68,7 @@ export function CookieAuthProvider({ children }: CookieAuthProviderProps) {
           setUser(null);
         }
       } catch (error) {
-        console.error("Auth initialization error:", error);
+        console.warn("Failed to initialize cookie auth state:", error);
         setUser(null);
       } finally {
         setIsLoading(false);
@@ -84,9 +84,11 @@ export function CookieAuthProvider({ children }: CookieAuthProviderProps) {
 
       // Redirect to NextAuth sign-in
       const signInUrl = `/api/auth/signin/${provider}`;
-      window.location.href = signInUrl;
+      if (globalThis.window) {
+        globalThis.window.location.href = signInUrl;
+      }
     } catch (error) {
-      console.error("Sign in error:", error);
+      console.error("Cookie auth sign-in failed:", error);
       setIsLoading(false);
     }
   };
@@ -104,9 +106,11 @@ export function CookieAuthProvider({ children }: CookieAuthProviderProps) {
       setUser(null);
 
       // Redirect to NextAuth sign-out
-      window.location.href = "/api/auth/signout";
+      if (globalThis.window) {
+        globalThis.window.location.href = "/api/auth/signout";
+      }
     } catch (error) {
-      console.error("Sign out error:", error);
+      console.error("Cookie auth sign-out failed:", error);
       setIsLoading(false);
     }
   };
@@ -122,7 +126,7 @@ export function CookieAuthProvider({ children }: CookieAuthProviderProps) {
         setUser(null);
       }
     } catch (error) {
-      console.error("Auth refresh error:", error);
+      console.warn("Cookie auth refresh failed:", error);
     }
   };
 

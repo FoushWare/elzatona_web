@@ -1,0 +1,37 @@
+name: Close and Delete Issue After PR Merge
+
+on:
+  pull_request:
+    types:
+      - closed
+
+jobs:
+  close_and_delete_issue:
+    if: github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
+    steps:
+      - name: Extract issue number from branch name
+        id: extract
+        run: |
+          BRANCH_NAME="${{ github.event.pull_request.head.ref }}"
+          # Extract the first number in the branch name
+          ISSUE_NUMBER=$(echo "$BRANCH_NAME" | grep -oE '[0-9]+' | head -1)
+          echo "issue_number=$ISSUE_NUMBER" >> $GITHUB_OUTPUT
+      - name: Close GitHub Issue
+        if: steps.extract.outputs.issue_number != ''
+        uses: peter-evans/close-issue@v3
+        with:
+          issue-number: ${{ steps.extract.outputs.issue_number }}
+          comment: |
+            Closed automatically after PR #${{ github.event.pull_request.number }} was merged.
+      - name: Delete GitHub Issue (via API)
+        if: steps.extract.outputs.issue_number != ''
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          ISSUE_NUMBER: ${{ steps.extract.outputs.issue_number }}
+        run: |
+          # GitHub API for deleting issues is in preview and requires a special header
+          curl -X DELETE \
+            -H "Authorization: Bearer $GH_TOKEN" \
+            -H "Accept: application/vnd.github+json" \
+            "https://api.github.com/repos/${{ github.repository }}/issues/$ISSUE_NUMBER"

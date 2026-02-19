@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
+import { generateId } from "@elzatona/utilities";
 
 interface ProgressData {
   userId: string;
@@ -81,7 +82,7 @@ export function useSecureProgress(): UseSecureProgressReturn {
       return `session_${Date.now()}_${Array.from(array, (byte) => byte.toString(36)).join("")}`;
     }
     // Fallback for environments without crypto (should not happen in browser)
-    return `session_${Date.now()}_${Math.random().toString(36).substring(2, 11)}`;
+    return `session_${Date.now()}_${generateId()}`;
   };
 
   const updateLocalCache = useCallback(
@@ -121,7 +122,7 @@ export function useSecureProgress(): UseSecureProgressReturn {
         if (progressData.learningMode === "guided" && progressData.planId) {
           if (
             !cachedData.data.currentPlan ||
-            cachedData.data.currentPlan.planId !== progressData.planId
+            cachedData.data.currentPlan?.planId !== progressData.planId
           ) {
             cachedData.data.currentPlan = {
               plan_id: progressData.planId,

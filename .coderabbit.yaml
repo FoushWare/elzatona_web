@@ -1,0 +1,35 @@
+language: "en-US"
+
+tone_instructions: >
+  Review this Nx monorepo with practical, low-noise feedback. Prioritize correctness,
+  security, performance, and maintainability. Avoid nitpicks unless they affect
+  readability or defects.
+
+reviews:
+  high_level_summary: true
+  review_status: true
+  collapse_walkthrough: false
+  poem: false
+
+  auto_review:
+    enabled: true
+    drafts: false
+
+  path_filters:
+    - "!**/node_modules/**"
+    - "!**/.next/**"
+    - "!**/dist/**"
+    - "!**/build/**"
+    - "!**/coverage/**"
+    - "!**/playwright-report/**"
+    - "!**/test-results/**"
+    - "!**/.nx/**"
+    - "!**/.scannerwork/**"
+    - "!**/codeql-database/**"
+    - "!**/*.lock"
+    - "!**/pnpm-lock.yaml"
+    - "!**/yarn.lock"
+    - "!**/package-lock.json"
+
+chat:
+  auto_reply: true

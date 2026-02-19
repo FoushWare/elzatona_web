@@ -11,11 +11,11 @@ import {
 import { LearningPlan, DailyGoal } from "../types";
 
 interface ActivePlanViewProps {
-  plan: LearningPlan;
-  dailyGoals: DailyGoal[];
-  currentDay: number;
-  onResume: () => void;
-  onReset: () => void;
+  readonly plan: LearningPlan;
+  readonly dailyGoals: DailyGoal[];
+  readonly currentDay: number;
+  readonly onResume: () => void;
+  readonly onReset: () => void;
 }
 
 export function ActivePlanView({
@@ -24,7 +24,7 @@ export function ActivePlanView({
   currentDay,
   onResume,
   onReset,
-}: ActivePlanViewProps) {
+}: Readonly<ActivePlanViewProps>) {
   const completedDays = dailyGoals.filter((g) => g.completed).length;
   const progressPercent = Math.round((completedDays / plan.duration) * 100);
 

@@ -12,10 +12,10 @@ import { LearningPlan } from "../types";
 import { getGradeColor, getGradeText } from "../utils";
 
 interface LearningPlanCardProps {
-  plan: LearningPlan;
-  isCompleted: boolean;
-  grade?: number;
-  onSelect: (plan: LearningPlan) => void;
+  readonly plan: LearningPlan;
+  readonly isCompleted: boolean;
+  readonly grade?: number;
+  readonly onSelect: (plan: LearningPlan) => void;
 }
 
 export function LearningPlanCard({
@@ -23,7 +23,7 @@ export function LearningPlanCard({
   isCompleted,
   grade,
   onSelect,
-}: LearningPlanCardProps) {
+}: Readonly<LearningPlanCardProps>) {
   const difficultyColors = {
     Beginner:
       "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400",
@@ -98,9 +98,9 @@ export function LearningPlanCard({
         {plan.features && plan.features.length > 0 && (
           <div className="mb-4">
             <div className="flex flex-wrap gap-2">
-              {plan.features.slice(0, 3).map((feature, i) => (
+              {plan.features.slice(0, 3).map((feature) => (
                 <span
-                  key={i}
+                  key={feature}
                   className="px-2 py-1 bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 text-xs rounded-lg"
                 >
                   {feature}

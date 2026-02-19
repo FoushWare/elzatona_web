@@ -71,7 +71,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
           setUser(userData);
         }
       } catch (error) {
-        console.error("Error checking auth status:", error);
+        console.warn("Invalid stored auth user, clearing cache:", error);
         localStorage.removeItem("frontend-koddev-user");
       } finally {
         setIsLoading(false);
@@ -201,22 +201,22 @@ export function AuthProvider({ children }: AuthProviderProps) {
       localStorage.removeItem("isAuthenticated");
 
       // Dispatch auth state change event
-      if (typeof window !== "undefined") {
-        window.dispatchEvent(new Event("auth-state-changed"));
+      if (globalThis.window) {
+        globalThis.window.dispatchEvent(new Event("auth-state-changed"));
       }
 
       // Small delay to ensure state updates are processed
       await new Promise((resolve) => setTimeout(resolve, 100));
 
       // Navigate to home page
-      if (typeof window !== "undefined") {
-        window.location.href = "/";
+      if (globalThis.window) {
+        globalThis.window.location.href = "/";
       }
     } catch (error) {
       console.error("Logout error:", error);
       // Still navigate even if there's an error
-      if (typeof window !== "undefined") {
-        window.location.href = "/";
+      if (globalThis.window) {
+        globalThis.window.location.href = "/";
       }
     } finally {
       // This may not execute if navigation happens, but it's good to have
