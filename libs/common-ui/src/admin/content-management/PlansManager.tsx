@@ -73,6 +73,210 @@ interface PlansManagerProps {
   openTopicQuestionsModal: (topic: Topic, plan: LearningPlan) => void;
 }
 
+interface PlanTopicRowProps {
+  topic: Topic;
+  plan: LearningPlan;
+  expandedPlanTopics: Set<string>;
+  togglePlanTopic: (id: string) => void;
+  planQuestions: Set<string>;
+  openTopicQuestionsModal: (topic: Topic, plan: LearningPlan) => void;
+}
+
+const PlanTopicRow: React.FC<PlanTopicRowProps> = ({
+  topic,
+  plan,
+  expandedPlanTopics,
+  togglePlanTopic,
+  planQuestions,
+  openTopicQuestionsModal,
+}) => {
+  return (
+    <div key={topic.id} className="border-l-2 border-orange-100 pl-4 py-1">
+      <div className="flex items-center justify-between">
+        <div className="flex items-center space-x-2">
+          <button
+            onClick={() => togglePlanTopic(topic.id)}
+            className="p-1 hover:bg-gray-100 rounded"
+          >
+            {expandedPlanTopics.has(topic.id) ? (
+              <ChevronDown className="h-4 w-4" />
+            ) : (
+              <ChevronRight className="h-4 w-4" />
+            )}
+          </button>
+          <Target className="h-4 w-4 text-orange-600" />
+          <span className="text-xs">{topic.name}</span>
+        </div>
+        <div className="flex items-center space-x-2">
+          <Button
+            variant="ghost"
+            size="sm"
+            className="h-7 text-[10px] text-blue-600"
+            onClick={() => openTopicQuestionsModal(topic, plan)}
+          >
+            Add Questions
+          </Button>
+          <Badge variant="outline" className="text-[10px] bg-green-50">
+            {countSelectedQuestionsForPlan(plan.id, planQuestions)} Selected
+          </Badge>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+interface PlanCategorySectionProps {
+  category: AdminCategory;
+  plan: LearningPlan;
+  topics: Topic[];
+  expandedPlanCategories: Set<string>;
+  togglePlanCategory: (id: string) => void;
+  expandedPlanTopics: Set<string>;
+  togglePlanTopic: (id: string) => void;
+  planQuestions: Set<string>;
+  openTopicQuestionsModal: (topic: Topic, plan: LearningPlan) => void;
+}
+
+const PlanCategorySection: React.FC<PlanCategorySectionProps> = ({
+  category,
+  plan,
+  topics,
+  expandedPlanCategories,
+  togglePlanCategory,
+  expandedPlanTopics,
+  togglePlanTopic,
+  planQuestions,
+  openTopicQuestionsModal,
+}) => {
+  const categoryTopics = getTopicsForCategory(category.id, topics);
+
+  return (
+    <div key={category.id} className="border-l-2 border-purple-200 pl-4">
+      <div className="flex items-center justify-between py-1">
+        <div className="flex items-center space-x-2">
+          <button
+            onClick={() => togglePlanCategory(category.id)}
+            className="p-1 hover:bg-gray-100 rounded"
+          >
+            {expandedPlanCategories.has(category.id) ? (
+              <ChevronDown className="h-4 w-4" />
+            ) : (
+              <ChevronRight className="h-4 w-4" />
+            )}
+          </button>
+          <BookOpen className="h-4 w-4 text-purple-600" />
+          <span className="text-sm font-medium">{category.name}</span>
+        </div>
+        <Badge variant="outline" className="text-[10px] bg-purple-50">
+          {categoryTopics.length} Topics
+        </Badge>
+      </div>
+
+      {expandedPlanCategories.has(category.id) && (
+        <div className="ml-6 space-y-2">
+          {categoryTopics.map((topic) => (
+            <PlanTopicRow
+              key={topic.id}
+              topic={topic}
+              plan={plan}
+              expandedPlanTopics={expandedPlanTopics}
+              togglePlanTopic={togglePlanTopic}
+              planQuestions={planQuestions}
+              openTopicQuestionsModal={openTopicQuestionsModal}
+            />
+          ))}
+        </div>
+      )}
+    </div>
+  );
+};
+
+interface PlanCardSectionProps {
+  card: AdminLearningCard;
+  plan: LearningPlan;
+  categories: AdminCategory[];
+  topics: Topic[];
+  expandedPlanCards: Set<string>;
+  togglePlanCard: (id: string) => void;
+  expandedPlanCategories: Set<string>;
+  togglePlanCategory: (id: string) => void;
+  expandedPlanTopics: Set<string>;
+  togglePlanTopic: (id: string) => void;
+  planQuestions: Set<string>;
+  openTopicQuestionsModal: (topic: Topic, plan: LearningPlan) => void;
+}
+
+const PlanCardSection: React.FC<PlanCardSectionProps> = ({
+  card,
+  plan,
+  categories,
+  topics,
+  expandedPlanCards,
+  togglePlanCard,
+  expandedPlanCategories,
+  togglePlanCategory,
+  expandedPlanTopics,
+  togglePlanTopic,
+  planQuestions,
+  openTopicQuestionsModal,
+}) => {
+  const cardCategories = categories.filter(
+    (cat) => cat.learning_card_id === card.id,
+  );
+  const IconComponent =
+    CARD_ICONS[card.title as keyof typeof CARD_ICONS]?.icon || Layers;
+
+  return (
+    <div key={card.id} className="ml-4 border-l-2 border-blue-200 pl-4">
+      <div className="flex items-center justify-between py-2">
+        <div className="flex items-center space-x-2">
+          <button
+            onClick={() => togglePlanCard(card.id)}
+            className="p-1 hover:bg-gray-100 rounded"
+          >
+            {expandedPlanCards.has(card.id) ? (
+              <ChevronDown className="h-4 w-4" />
+            ) : (
+              <ChevronRight className="h-4 w-4" />
+            )}
+          </button>
+          <IconComponent className="h-4 w-4" style={{ color: card.color }} />
+          <div>
+            <h5 className="font-medium text-gray-900 dark:text-white">
+              {card.title}
+            </h5>
+          </div>
+        </div>
+        <Badge
+          variant="outline"
+          className="bg-blue-50 text-blue-700 dark:bg-blue-900 dark:text-blue-300"
+        >
+          {cardCategories.length} Categories
+        </Badge>
+      </div>
+
+      {expandedPlanCards.has(card.id) && (
+        <div className="ml-6 space-y-4">
+          {cardCategories.map((category) => (
+            <PlanCategorySection
+              key={category.id}
+              category={category}
+              plan={plan}
+              topics={topics}
+              expandedPlanCategories={expandedPlanCategories}
+              togglePlanCategory={togglePlanCategory}
+              expandedPlanTopics={expandedPlanTopics}
+              togglePlanTopic={togglePlanTopic}
+              planQuestions={planQuestions}
+              openTopicQuestionsModal={openTopicQuestionsModal}
+            />
+          ))}
+        </div>
+      )}
+    </div>
+  );
+};
+
 export const PlansManager: React.FC<PlansManagerProps> = ({
   plans,
   cards,
@@ -263,164 +467,23 @@ export const PlansManager: React.FC<PlansManagerProps> = ({
                         <Layers className="h-5 w-5 mr-2 text-blue-600" />
                         Plan Structure
                       </h4>
-
-                      {cards.map((card) => {
-                        const cardCategories = categories.filter(
-                          (cat) => cat.learning_card_id === card.id,
-                        );
-                        const IconComponent =
-                          CARD_ICONS[card.title as keyof typeof CARD_ICONS]
-                            ?.icon || Layers;
-
-                        return (
-                          <div
-                            key={card.id}
-                            className="ml-4 border-l-2 border-blue-200 pl-4"
-                          >
-                            <div className="flex items-center justify-between py-2">
-                              <div className="flex items-center space-x-2">
-                                <button
-                                  onClick={() => togglePlanCard(card.id)}
-                                  className="p-1 hover:bg-gray-100 rounded"
-                                >
-                                  {expandedPlanCards.has(card.id) ? (
-                                    <ChevronDown className="h-4 w-4" />
-                                  ) : (
-                                    <ChevronRight className="h-4 w-4" />
-                                  )}
-                                </button>
-                                <IconComponent
-                                  className="h-4 w-4"
-                                  style={{ color: card.color }}
-                                />
-                                <div>
-                                  <h5 className="font-medium text-gray-900 dark:text-white">
-                                    {card.title}
-                                  </h5>
-                                </div>
-                              </div>
-                              <Badge
-                                variant="outline"
-                                className="bg-blue-50 text-blue-700 dark:bg-blue-900 dark:text-blue-300"
-                              >
-                                {cardCategories.length} Categories
-                              </Badge>
-                            </div>
-
-                            {expandedPlanCards.has(card.id) && (
-                              <div className="ml-6 space-y-4">
-                                {cardCategories.map((category) => {
-                                  const categoryTopics = getTopicsForCategory(
-                                    category.id,
-                                    topics,
-                                  );
-
-                                  return (
-                                    <div
-                                      key={category.id}
-                                      className="border-l-2 border-purple-200 pl-4"
-                                    >
-                                      <div className="flex items-center justify-between py-1">
-                                        <div className="flex items-center space-x-2">
-                                          <button
-                                            onClick={() =>
-                                              togglePlanCategory(category.id)
-                                            }
-                                            className="p-1 hover:bg-gray-100 rounded"
-                                          >
-                                            {expandedPlanCategories.has(
-                                              category.id,
-                                            ) ? (
-                                              <ChevronDown className="h-4 w-4" />
-                                            ) : (
-                                              <ChevronRight className="h-4 w-4" />
-                                            )}
-                                          </button>
-                                          <BookOpen className="h-4 w-4 text-purple-600" />
-                                          <span className="text-sm font-medium">
-                                            {category.name}
-                                          </span>
-                                        </div>
-                                        <Badge
-                                          variant="outline"
-                                          className="text-[10px] bg-purple-50"
-                                        >
-                                          {categoryTopics.length} Topics
-                                        </Badge>
-                                      </div>
-
-                                      {expandedPlanCategories.has(
-                                        category.id,
-                                      ) && (
-                                        <div className="ml-6 space-y-2">
-                                          {categoryTopics.map((topic) => {
-                                            return (
-                                              <div
-                                                key={topic.id}
-                                                className="border-l-2 border-orange-100 pl-4 py-1"
-                                              >
-                                                <div className="flex items-center justify-between">
-                                                  <div className="flex items-center space-x-2">
-                                                    <button
-                                                      onClick={() =>
-                                                        togglePlanTopic(
-                                                          topic.id,
-                                                        )
-                                                      }
-                                                      className="p-1 hover:bg-gray-100 rounded"
-                                                    >
-                                                      {expandedPlanTopics.has(
-                                                        topic.id,
-                                                      ) ? (
-                                                        <ChevronDown className="h-4 w-4" />
-                                                      ) : (
-                                                        <ChevronRight className="h-4 w-4" />
-                                                      )}
-                                                    </button>
-                                                    <Target className="h-4 w-4 text-orange-600" />
-                                                    <span className="text-xs">
-                                                      {topic.name}
-                                                    </span>
-                                                  </div>
-                                                  <div className="flex items-center space-x-2">
-                                                    <Button
-                                                      variant="ghost"
-                                                      size="sm"
-                                                      className="h-7 text-[10px] text-blue-600"
-                                                      onClick={() =>
-                                                        openTopicQuestionsModal(
-                                                          topic,
-                                                          plan,
-                                                        )
-                                                      }
-                                                    >
-                                                      Add Questions
-                                                    </Button>
-                                                    <Badge
-                                                      variant="outline"
-                                                      className="text-[10px] bg-green-50"
-                                                    >
-                                                      {countSelectedQuestionsForPlan(
-                                                        plan.id,
-                                                        planQuestions,
-                                                      )}{" "}
-                                                      Selected
-                                                    </Badge>
-                                                  </div>
-                                                </div>
-                                              </div>
-                                            );
-                                          })}
-                                        </div>
-                                      )}
-                                    </div>
-                                  );
-                                })}
-                              </div>
-                            )}
-                          </div>
-                        );
-                      })}
+                      {cards.map((card) => (
+                        <PlanCardSection
+                          key={card.id}
+                          card={card}
+                          plan={plan}
+                          categories={categories}
+                          topics={topics}
+                          expandedPlanCards={expandedPlanCards}
+                          togglePlanCard={togglePlanCard}
+                          expandedPlanCategories={expandedPlanCategories}
+                          togglePlanCategory={togglePlanCategory}
+                          expandedPlanTopics={expandedPlanTopics}
+                          togglePlanTopic={togglePlanTopic}
+                          planQuestions={planQuestions}
+                          openTopicQuestionsModal={openTopicQuestionsModal}
+                        />
+                      ))}
                     </div>
                   </div>
                 </CardContent>
