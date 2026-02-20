@@ -70,8 +70,11 @@ Created issues include:
 
 The tool maintains a mapping of alert IDs to issue numbers by:
 1. Scanning all existing issues with "bugs" label
-2. Extracting alert numbers from issue titles/bodies
-3. Skipping alerts that already have corresponding issues
+2. Extracting alert numbers from a stable body marker (`code-scanning-alert-id`), title/body patterns, and alert URLs
+3. Running a final GitHub Search API check before creating an issue
+4. Skipping alerts that already have corresponding issues
+
+The workflow also uses a concurrency group so overlapping runs do not create duplicates during parallel executions.
 
 ## Rate Limiting
 
