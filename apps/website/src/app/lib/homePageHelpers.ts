@@ -1,6 +1,6 @@
 // Minimal helper stub for homepage integration tests (app-local copy)
 // Exported as a const function - tests should use jest.mock() to override
-const getPersonalizedContent = () => {
+export const getPersonalizedContent = () => {
   return Promise.resolve({ data: [], meta: {} });
 };
 
@@ -11,6 +11,5 @@ if (process.env.NODE_ENV === "test") {
   // No need to reassign here
 }
 
-export { getPersonalizedContent };
 const homePageHelpers = { getPersonalizedContent };
 export default homePageHelpers;

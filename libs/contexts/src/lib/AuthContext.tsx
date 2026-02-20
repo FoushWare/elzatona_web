@@ -5,6 +5,7 @@ import {
   useContext,
   useState,
   useEffect,
+  useMemo,
   ReactNode,
 } from "react";
 // import { UserAuthService } from '../../../../apps/website/lib/user-auth';
@@ -56,7 +57,7 @@ interface AuthProviderProps {
   children: ReactNode;
 }
 
-export function AuthProvider({ children }: AuthProviderProps) {
+export function AuthProvider({ children }: Readonly<AuthProviderProps>) {
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isLoggingOut, setIsLoggingOut] = useState(false);
@@ -201,22 +202,22 @@ export function AuthProvider({ children }: AuthProviderProps) {
       localStorage.removeItem("isAuthenticated");
 
       // Dispatch auth state change event
-      if (globalThis.window) {
-        globalThis.window.dispatchEvent(new Event("auth-state-changed"));
+      if (typeof globalThis !== "undefined") {
+        globalThis.dispatchEvent(new Event("auth-state-changed"));
       }
 
       // Small delay to ensure state updates are processed
       await new Promise((resolve) => setTimeout(resolve, 100));
 
       // Navigate to home page
-      if (globalThis.window) {
-        globalThis.window.location.href = "/";
+      if (typeof globalThis !== "undefined" && "location" in globalThis) {
+        globalThis.location.href = "/";
       }
     } catch (error) {
       console.error("Logout error:", error);
       // Still navigate even if there's an error
-      if (globalThis.window) {
-        globalThis.window.location.href = "/";
+      if (typeof globalThis !== "undefined" && "location" in globalThis) {
+        globalThis.location.href = "/";
       }
     } finally {
       // This may not execute if navigation happens, but it's good to have
@@ -232,16 +233,19 @@ export function AuthProvider({ children }: AuthProviderProps) {
     }
   };
 
-  const value: AuthContextType = {
-    user,
-    isAuthenticated: !!user,
-    isLoading,
-    isLoggingOut,
-    login,
-    signup,
-    logout,
-    updateUser,
-  };
+  const value: AuthContextType = useMemo(
+    () => ({
+      user,
+      isAuthenticated: !!user,
+      isLoading,
+      isLoggingOut,
+      login,
+      signup,
+      logout,
+      updateUser,
+    }),
+    [user, isLoading, isLoggingOut],
+  );
 
   return (
     <AuthContext.Provider value={value}>

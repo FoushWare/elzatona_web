@@ -1,4 +1,4 @@
-import { promises as fs } from "node:fs";
+import * as fs from "node:fs/promises";
 import path from "node:path";
 import { generateId } from "./utils";
 
@@ -103,6 +103,16 @@ export class SectionService {
     return path.join(this.QUESTIONS_DIR, `${sectionId}-questions.json`);
   }
 
+  private static isErrnoException(
+    error: unknown,
+  ): error is NodeJS.ErrnoException {
+    return error instanceof Error && "code" in error;
+  }
+
+  private static isMissingFileError(error: unknown): boolean {
+    return this.isErrnoException(error) && error.code === "ENOENT";
+  }
+
   /**
    * Get all sections
    */
@@ -116,15 +126,18 @@ export class SectionService {
       try {
         const fileContent = await fs.readFile(sectionsPath, "utf-8");
         sections = JSON.parse(fileContent);
-      } catch (_error) {
-        // File doesn't exist, return default sections
+      } catch (error) {
+        if (!this.isMissingFileError(error)) {
+          throw error;
+        }
+
         sections = this.getDefaultSections();
         try {
           await this.saveSections(sections);
         } catch (saveError) {
           console.error("Error saving default sections:", saveError);
         }
-        console.warn("Default sections loaded due to missing file:", _error);
+        console.warn("Default sections loaded due to missing file:", error);
       }
 
       return {
@@ -160,8 +173,11 @@ export class SectionService {
           message: "Sections file already exists",
           data: null,
         };
-      } catch (_error) {
-        // File doesn't exist, create it with default sections
+      } catch (error) {
+        if (!this.isMissingFileError(error)) {
+          throw error;
+        }
+
         const defaultSections = this.getDefaultSections();
         try {
           await this.saveSections(defaultSections);
@@ -170,7 +186,7 @@ export class SectionService {
         }
         console.warn(
           "Default sections initialized due to missing file:",
-          _error,
+          error,
         );
         return {
           success: true,
@@ -627,8 +643,11 @@ export class SectionService {
       try {
         const questionsPath = this.getSectionQuestionsPath(sectionId);
         await fs.unlink(questionsPath);
-      } catch (_error) {
-        console.warn("No questions file found for section:", sectionId, _error);
+      } catch (error) {
+        if (!this.isMissingFileError(error)) {
+          throw error;
+        }
+        console.warn("No questions file found for section:", sectionId, error);
       }
 
       return {
@@ -708,9 +727,11 @@ export class SectionService {
       try {
         const fileContent = await fs.readFile(questionsPath, "utf-8");
         questions = JSON.parse(fileContent);
-      } catch (_error) {
-        // File doesn't exist, return empty array
-        console.warn(`No questions found for section: ${sectionId}`, _error);
+      } catch (error) {
+        if (!this.isMissingFileError(error)) {
+          throw error;
+        }
+        console.warn(`No questions found for section: ${sectionId}`, error);
       }
 
       return {

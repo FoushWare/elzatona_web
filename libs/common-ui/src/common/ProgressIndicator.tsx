@@ -49,7 +49,7 @@ export const ProgressIndicator: React.FC<ProgressIndicatorProps> = ({
 
   const handleSignInClick = () => {
     if (
-      typeof globalThis.window !== "undefined" &&
+      globalThis.window !== undefined &&
       (globalThis.window as WindowWithGuidance).triggerSignInGuidance
     ) {
       (globalThis.window as WindowWithGuidance).triggerSignInGuidance?.(

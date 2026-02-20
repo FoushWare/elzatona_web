@@ -101,6 +101,8 @@ export function NotificationContainer() {
 
   // Listen for custom notification events
   useEffect(() => {
+    const eventTarget = globalThis as Window & typeof globalThis;
+
     const handleNotification = (event: CustomEvent<Notification>) => {
       const notification = {
         ...event.detail,
@@ -109,12 +111,12 @@ export function NotificationContainer() {
       setNotifications((prev) => [...prev, notification]);
     };
 
-    globalThis.window.addEventListener(
+    eventTarget.addEventListener(
       "notification" as keyof WindowEventMap,
       handleNotification as EventListener,
     );
     return () => {
-      globalThis.window.removeEventListener(
+      eventTarget.removeEventListener(
         "notification" as keyof WindowEventMap,
         handleNotification as EventListener,
       );
@@ -143,7 +145,7 @@ export function NotificationContainer() {
 // Helper function to show notifications
 export function showNotification(notification: Omit<Notification, "id">) {
   const event = new CustomEvent("notification", { detail: notification });
-  globalThis.window.dispatchEvent(event);
+  (globalThis as Window & typeof globalThis).dispatchEvent(event);
 }
 
 // Convenience functions
