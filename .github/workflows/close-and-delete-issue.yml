@@ -1,37 +1,225 @@
-name: Close and Delete Issue After PR Merge
+name: Close and Delete Linked Code Scanning Issues After PR Merge
 
 on:
   pull_request:
     types:
       - closed
+  workflow_dispatch:
+    inputs:
+      pr_number:
+        description: "PR number to reconcile linked issues (optional for manual runs)"
+        required: false
+        type: string
+      run_duplicate_cleanup:
+        description: "Also detect and clean duplicate open bugs issues"
+        required: false
+        type: boolean
+        default: true
+
+permissions:
+  contents: read
+  pull-requests: read
+  issues: write
 
 jobs:
-  close_and_delete_issue:
-    if: github.event.pull_request.merged == true
+  close_and_delete_linked_issues:
+    if: github.event_name == 'workflow_dispatch' || github.event.pull_request.merged == true
     runs-on: ubuntu-latest
     steps:
-      - name: Extract issue number from branch name
-        id: extract
-        run: |
-          BRANCH_NAME="${{ github.event.pull_request.head.ref }}"
-          # Extract the first number in the branch name
-          ISSUE_NUMBER=$(echo "$BRANCH_NAME" | grep -oE '[0-9]+' | head -1)
-          echo "issue_number=$ISSUE_NUMBER" >> $GITHUB_OUTPUT
-      - name: Close GitHub Issue
-        if: steps.extract.outputs.issue_number != ''
-        uses: peter-evans/close-issue@v3
-        with:
-          issue-number: ${{ steps.extract.outputs.issue_number }}
-          comment: |
-            Closed automatically after PR #${{ github.event.pull_request.number }} was merged.
-      - name: Delete GitHub Issue (via API)
-        if: steps.extract.outputs.issue_number != ''
+      - name: Close and delete linked issues
+        uses: actions/github-script@v7
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          ISSUE_NUMBER: ${{ steps.extract.outputs.issue_number }}
-        run: |
-          # GitHub API for deleting issues is in preview and requires a special header
-          curl -X DELETE \
-            -H "Authorization: Bearer $GH_TOKEN" \
-            -H "Accept: application/vnd.github+json" \
-            "https://api.github.com/repos/${{ github.repository }}/issues/$ISSUE_NUMBER"
+          DELETE_TOKEN: ${{ secrets.GH_ADMIN_TOKEN }}
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const prNumberFromEvent = context.payload.pull_request?.number;
+            const prNumberFromInput = core.getInput("pr_number");
+            const prNumber = prNumberFromEvent || (prNumberFromInput ? Number(prNumberFromInput) : null);
+            const owner = context.repo.owner;
+            const repo = context.repo.repo;
+            const runDuplicateCleanupInput = core.getInput("run_duplicate_cleanup");
+            const runDuplicateCleanup =
+              context.eventName === "pull_request"
+                ? true
+                : runDuplicateCleanupInput !== "false";
+
+            const deleteToken = process.env.DELETE_TOKEN;
+
+            const tryDeleteIssue = async (issueNodeId, issueNumber) => {
+              if (!deleteToken) {
+                core.warning(
+                  `Issue #${issueNumber} closed, but not deleted because GH_ADMIN_TOKEN is not configured.`
+                );
+                return;
+              }
+
+              try {
+                const deleteResult = await github.request("POST /graphql", {
+                  headers: {
+                    authorization: `bearer ${deleteToken}`,
+                  },
+                  query: `
+                    mutation($issueId: ID!) {
+                      deleteIssue(input: { issueId: $issueId }) {
+                        clientMutationId
+                      }
+                    }
+                  `,
+                  variables: {
+                    issueId: issueNodeId,
+                  },
+                });
+
+                if (deleteResult?.status === 200) {
+                  core.info(`Deleted issue #${issueNumber}.`);
+                }
+              } catch (error) {
+                core.warning(`Could not delete issue #${issueNumber}: ${error.message}`);
+              }
+            };
+
+            if (prNumber) {
+              const linkedIssuesQuery = `
+                query($owner: String!, $repo: String!, $number: Int!) {
+                  repository(owner: $owner, name: $repo) {
+                    pullRequest(number: $number) {
+                      closingIssuesReferences(first: 100) {
+                        nodes {
+                          id
+                          number
+                          title
+                          state
+                          labels(first: 20) {
+                            nodes {
+                              name
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              `;
+
+              const linkedData = await github.graphql(linkedIssuesQuery, {
+                owner,
+                repo,
+                number: prNumber,
+              });
+
+              const linkedIssues = linkedData.repository.pullRequest.closingIssuesReferences.nodes || [];
+
+              if (linkedIssues.length === 0) {
+                core.info(`No linked issues found for PR #${prNumber}.`);
+              }
+
+              const isCodeScanningIssue = (issue) => {
+                const labelNames = (issue.labels?.nodes || []).map((label) => label.name.toLowerCase());
+                const hasBugsLabel = labelNames.includes("bugs");
+                const looksLikeAlertTitle = /alert\s*#\d+/i.test(issue.title || "");
+                return hasBugsLabel || looksLikeAlertTitle;
+              };
+
+              const codeScanningIssues = linkedIssues.filter(isCodeScanningIssue);
+
+              if (codeScanningIssues.length === 0) {
+                core.info(`Linked issues found, but none matched code-scanning criteria for PR #${prNumber}.`);
+              }
+
+              for (const issue of codeScanningIssues) {
+                const issueNumber = issue.number;
+
+                if (issue.state !== "CLOSED") {
+                  await github.rest.issues.update({
+                    owner,
+                    repo,
+                    issue_number: issueNumber,
+                    state: "closed",
+                  });
+                }
+
+                await github.rest.issues.createComment({
+                  owner,
+                  repo,
+                  issue_number: issueNumber,
+                  body: `Closed automatically after PR #${prNumber} was merged.`,
+                });
+
+                await tryDeleteIssue(issue.id, issueNumber);
+              }
+            } else {
+              core.info("No PR number provided/found; skipping linked-issue reconciliation.");
+            }
+
+            if (!runDuplicateCleanup) {
+              core.info("Duplicate cleanup disabled for this run.");
+              return;
+            }
+
+            const openBugIssues = await github.paginate(github.rest.issues.listForRepo, {
+              owner,
+              repo,
+              state: "open",
+              labels: "bugs",
+              per_page: 100,
+            });
+
+            const extractAlertId = (issue) => {
+              const titleMatch = issue.title?.match(/alert\s*#(\d+)/i);
+              if (titleMatch) {
+                return titleMatch[1];
+              }
+
+              const bodyMatch = issue.body?.match(/Code\s+Scanning\s+Alert\s*#(\d+)/i);
+              if (bodyMatch) {
+                return bodyMatch[1];
+              }
+
+              return null;
+            };
+
+            const groupedByAlert = new Map();
+            for (const issue of openBugIssues) {
+              const alertId = extractAlertId(issue);
+              if (!alertId) {
+                continue;
+              }
+
+              if (!groupedByAlert.has(alertId)) {
+                groupedByAlert.set(alertId, []);
+              }
+              groupedByAlert.get(alertId).push(issue);
+            }
+
+            for (const [alertId, issues] of groupedByAlert.entries()) {
+              if (issues.length <= 1) {
+                continue;
+              }
+
+              issues.sort((a, b) => a.number - b.number);
+              const keeper = issues[0];
+              const duplicates = issues.slice(1);
+
+              core.info(
+                `Alert #${alertId} has ${issues.length} open issues. Keeping #${keeper.number}, cleaning ${duplicates.length} duplicates.`
+              );
+
+              for (const duplicate of duplicates) {
+                await github.rest.issues.createComment({
+                  owner,
+                  repo,
+                  issue_number: duplicate.number,
+                  body: `Closing duplicate of #${keeper.number} for Code Scanning Alert #${alertId}.`,
+                });
+
+                await github.rest.issues.update({
+                  owner,
+                  repo,
+                  issue_number: duplicate.number,
+                  state: "closed",
+                });
+
+                await tryDeleteIssue(duplicate.node_id, duplicate.number);
+              }
+            }
