@@ -449,10 +449,11 @@ export class MarkdownQuestionParser {
 
     // Try GitHub-style format first (- A: text)
     const githubPattern = /^-?\s*([A-Z]):\s*(.*?)$/gm;
-    const githubMatches = [...optionsText.matchAll(githubPattern)];
+    let githubMatch = githubPattern.exec(optionsText);
 
-    if (githubMatches.length > 0) {
-      for (const match of githubMatches) {
+    if (githubMatch) {
+      while (githubMatch) {
+        const match = githubMatch;
         const id = match[1].toLowerCase();
         const text = match[2].trim();
         const isCorrect = correctAnswer
@@ -464,14 +465,19 @@ export class MarkdownQuestionParser {
             text.includes("Answer:");
 
         options.push({ id, text, isCorrect });
+        githubMatch = githubPattern.exec(optionsText);
       }
       return options;
     }
 
     // Fallback to simple format (a) text)
-    const matches = [...optionsText.matchAll(this.OPTION_PATTERN)];
+    const optionPattern = new RegExp(
+      this.OPTION_PATTERN.source,
+      this.OPTION_PATTERN.flags,
+    );
+    let match = optionPattern.exec(optionsText);
 
-    for (const match of matches) {
+    while (match) {
       const id = match[1].toLowerCase();
       const text = match[2].trim();
       const isCorrect = correctAnswer
@@ -481,6 +487,7 @@ export class MarkdownQuestionParser {
           match[0].includes("[✓]");
 
       options.push({ id, text, isCorrect });
+      match = optionPattern.exec(optionsText);
     }
 
     return options;
@@ -546,7 +553,7 @@ export class MarkdownQuestionParser {
    */
   private static extractLearningPath(section: string): string | undefined {
     const learningPathMatch =
-      /(?:learning[_\s]?path|learningpath):\s*([^\n]*)(?:\n|$)/i.exec(section);
+      /(?:learning[_ ]?path|learningpath):\s*([^\n]*)(?:\n|$)/i.exec(section);
     return learningPathMatch ? learningPathMatch[1].trim() : undefined;
   }
 
@@ -555,7 +562,10 @@ export class MarkdownQuestionParser {
    */
   private static extractTopic(section: string): string | undefined {
     const topicMatch = /topic:\s*([^\n]*)(?:\n|$)/i.exec(section);
-    return topicMatch ? topicMatch[1].trim() : undefined;
+    if (!topicMatch) {
+      return undefined;
+    }
+    return topicMatch[1].trim();
   }
 
   /**

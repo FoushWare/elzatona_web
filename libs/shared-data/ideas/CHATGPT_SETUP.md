@@ -28,7 +28,7 @@ Create a `.env.local` file in your project root:
 
 ```bash
 # ChatGPT API Configuration
-OPENAI_API_KEY=your_openai_api_key_here
+OPENAI_API_KEY=<YOUR_OPENAI_API_KEY_HERE>
 
 # Optional: Custom API endpoint (if using a proxy service)
 # NEXT_PUBLIC_CHATGPT_API_URL=https://your-proxy-service.com/v1/chat/completions

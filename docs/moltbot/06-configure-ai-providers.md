@@ -98,7 +98,7 @@ Groq offers **free** access to Llama 3.1 70B with very fast inference.
 nano ~/.moltbot-credentials
 
 # Add this line:
-GROQ_API_KEY="gsk_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+GROQ_API_KEY="<YOUR_GROQ_API_KEY_HERE>"
 ```
 
 ### Test Groq API
@@ -198,7 +198,7 @@ For complex tasks that free models can't handle well.
 nano ~/.moltbot-credentials
 
 # Add this line:
-ANTHROPIC_API_KEY="sk-ant-api03-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+ANTHROPIC_API_KEY="<YOUR_ANTHROPIC_API_KEY_HERE>"
 ```
 
 ### Test Claude API
@@ -428,23 +428,23 @@ Your `~/.moltbot-credentials` should look like:
 # MoltBot Credentials - DO NOT SHARE OR COMMIT
 
 # Telegram Bot
-TELEGRAM_BOT_TOKEN="7123456789:AAHxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+TELEGRAM_BOT_TOKEN="<YOUR_TELEGRAM_BOT_TOKEN_HERE>"
 TELEGRAM_CHAT_ID="123456789"
 TELEGRAM_BOT_NAME="Hamada"
 
 # AI Providers (Free)
-GROQ_API_KEY="gsk_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
-GLM_API_KEY="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+GROQ_API_KEY="<YOUR_GROQ_API_KEY_HERE>"
+GLM_API_KEY="<YOUR_GLM_API_KEY_HERE>"
 GLM_API_BASE="https://open.bigmodel.cn/api/paas/v4"
 
 # AI Providers (Paid - Optional)
-ANTHROPIC_API_KEY="sk-ant-api03-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+ANTHROPIC_API_KEY="<YOUR_ANTHROPIC_API_KEY_HERE>"
 
 # Search (Optional)
-BRAVE_API_KEY="BSAxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+BRAVE_API_KEY="<YOUR_BRAVE_API_KEY_HERE>"
 
 # GitHub (from Task 8)
-GITHUB_TOKEN="ghp_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+GITHUB_TOKEN="<YOUR_GITHUB_TOKEN_HERE>"
 ```
 
 ---

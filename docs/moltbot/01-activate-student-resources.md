@@ -112,7 +112,7 @@ Groq provides extremely fast inference with a free tier.
 
 ```bash
 # Save your key
-export GROQ_API_KEY="gsk_xxx"
+export GROQ_API_KEY="<YOUR_GROQ_API_KEY_HERE>"
 ```
 
 ### Supported Models (Free)
@@ -149,7 +149,7 @@ For web search capabilities.
 4. Free: 2,000 queries/month
 
 ```bash
-export BRAVE_API_KEY="BSAxx"
+export BRAVE_API_KEY="<YOUR_BRAVE_API_KEY_HERE>"
 ```
 
 ---
@@ -167,18 +167,18 @@ cat > ~/.moltbot-credentials << 'EOF'
 AZURE_SUBSCRIPTION_ID="xxx"
 
 # AI Providers
-GROQ_API_KEY="gsk_xxx"
-GLM_API_KEY="xxx"
-ANTHROPIC_API_KEY="sk-ant-xxx"  # Optional, paid
+GROQ_API_KEY="<YOUR_GROQ_API_KEY_HERE>"
+GLM_API_KEY="<YOUR_GLM_API_KEY_HERE>"
+ANTHROPIC_API_KEY="<YOUR_ANTHROPIC_API_KEY_HERE>"  # Optional, paid
 
 # Search
-BRAVE_API_KEY="BSAxx"  # Optional
+BRAVE_API_KEY="<YOUR_BRAVE_API_KEY_HERE>"  # Optional
 
 # Telegram (from Task 5)
 TELEGRAM_BOT_TOKEN="xxx"
 
 # GitHub (from Task 8)
-GITHUB_TOKEN="ghp_xxx"
+GITHUB_TOKEN="<YOUR_GITHUB_TOKEN_HERE>"
 EOF
 
 # Secure the file

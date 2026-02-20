@@ -175,12 +175,20 @@ export const QuestionForm: React.FC<QuestionFormProps> = ({
     }));
   };
 
-  const handleKeyPress = (e: React.KeyboardEvent) => {
-    if (e.key === "Enter") {
-      e.preventDefault();
-      addTag();
+  const handleTagInputKeyDown = (event: React.KeyboardEvent) => {
+    if (event.key !== "Enter") {
+      return;
     }
+
+    event.preventDefault();
+    addTag();
   };
+
+  const submitLabel = isLoading
+    ? "Saving..."
+    : question
+      ? "Update Question"
+      : "Create Question";
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
@@ -334,7 +342,7 @@ export const QuestionForm: React.FC<QuestionFormProps> = ({
           <Input
             value={tagInput}
             onChange={(e) => setTagInput(e.target.value)}
-            onKeyDown={handleKeyPress}
+            onKeyDown={handleTagInputKeyDown}
             placeholder="Add a tag..."
             className="flex-1"
           />
@@ -369,11 +377,7 @@ export const QuestionForm: React.FC<QuestionFormProps> = ({
           Cancel
         </Button>
         <Button type="submit" disabled={isLoading}>
-          {isLoading
-            ? "Saving..."
-            : question
-              ? "Update Question"
-              : "Create Question"}
+          {submitLabel}
         </Button>
       </div>
     </form>

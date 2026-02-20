@@ -3,6 +3,29 @@ import GoogleProvider from "next-auth/providers/google";
 import GitHubProvider from "next-auth/providers/github";
 import CredentialsProvider from "next-auth/providers/credentials";
 
+function authorizeDemoCredentials(credentials?: {
+  email?: string;
+  password?: string;
+}) {
+  const email = credentials?.email?.trim().toLowerCase();
+  const password = credentials?.password;
+
+  if (!email || !password) {
+    return null;
+  }
+
+  if (email !== "test@example.com" || password !== "x") {
+    return null;
+  }
+
+  return {
+    id: "test-user",
+    email,
+    name: "Test User",
+    provider: "credentials",
+  };
+}
+
 // Extend the default session and user types
 declare module "next-auth" {
   interface Session {
@@ -45,29 +68,7 @@ export const authOptions: NextAuthOptions = {
         password: { label: "Password", type: "password" },
       },
       async authorize(credentials) {
-        if (!credentials?.email || !credentials?.password) {
-          return null;
-        }
-
-        // Demo: Accept a test user for coverage and SonarQube
-        if (
-          credentials.email === "test@example.com" &&
-          credentials.password === "x"
-        ) {
-          return {
-            id: "test-user",
-            email: credentials.email,
-            name: "Test User",
-            provider: "credentials",
-          };
-        }
-
-        // Placeholder for real Firebase Auth validation
-        // Firebase Auth integration should be implemented here in production.
-        // Example:
-        // const user = await firebaseAuth.validate(credentials.email, credentials.password);
-        // if (user) return user;
-        return null;
+        return authorizeDemoCredentials(credentials ?? undefined);
       },
     }),
   ],

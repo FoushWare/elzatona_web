@@ -18,7 +18,7 @@ Add your Daily.co API key to your environment file:
 
 ```bash
 # .env.local
-DAILY_API_KEY=your_daily_api_key_here
+DAILY_API_KEY=<YOUR_API_KEY_HERE>
 ```
 
 ### 3. Test the Integration
@@ -148,7 +148,7 @@ NEXT_PUBLIC_DEBUG_DAILY=true
 Make sure to set these in your production environment:
 
 ```bash
-DAILY_API_KEY=your_production_api_key
+DAILY_API_KEY=<YOUR_API_KEY_HERE>
 ```
 
 ### HTTPS Required

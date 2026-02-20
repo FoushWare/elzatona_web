@@ -78,7 +78,7 @@ Since VPS has no browser, use device code:
 2. Login with token:
 
 ```bash
-gh auth login --with-token < <(echo "ghp_xxxxxxxxxxxxxxxxxxxx")
+gh auth login --with-token < <(echo "$GITHUB_TOKEN")
 
 # Or interactively
 gh auth login
@@ -92,7 +92,7 @@ gh auth login
 nano ~/.moltbot-credentials
 
 # Add:
-GITHUB_TOKEN="ghp_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+GITHUB_TOKEN="<YOUR_GITHUB_TOKEN_HERE>"
 ```
 
 ---

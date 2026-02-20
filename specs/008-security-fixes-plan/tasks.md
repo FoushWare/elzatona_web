@@ -2,7 +2,7 @@
 
 ## Phase 1: Setup
 
-- [ ] T001 Create 008-security-fixes-plan branch from main
+- [x] T001 Create 008-security-fixes-plan branch from main
 - [x] T002 Create project documentation structure in specs/008-security-fixes-plan/
 - [x] T003 [P] Copy plan.md, spec.md, research.md, data-model.md, quickstart.md templates
 
@@ -42,8 +42,8 @@
 
 ## Phase 7: PR05 - Sonar Complexity API Routes
 
-- [ ] T023 [P] [US5] Refactor unified/route.ts, unified/[id]/route.ts, plans/route.ts, plan-details/[planId]/route.ts, questions/route.ts, dashboard/stats/route.ts, plans/[id]/hierarchy/route.ts
-- [ ] T024 [US5] Decompose main functions into helper functions per contract
+- [x] T023 [P] [US5] Refactor unified/route.ts, unified/[id]/route.ts, plans/route.ts, plan-details/[planId]/route.ts, questions/route.ts, dashboard/stats/route.ts, plans/[id]/hierarchy/route.ts
+- [x] T024 [US5] Decompose main functions into helper functions per contract
 - [ ] T025 [US5] Commit fixes with message in contracts/PR05-sonar-complexity-api-routes.md
 
 ## Phase 8: PR06 - Sonar Complexity UI Components
@@ -54,15 +54,15 @@
 
 ## Phase 9: PR07 - Sonar Complexity Utils
 
-- [ ] T029 [P] [US7] Refactor markdown-question-parser.ts, validation.ts, helpers/homePageHelpers.ts
-- [ ] T030 [US7] Decompose parser and validation logic into stages/functions
+- [x] T029 [P] [US7] Refactor markdown-question-parser.ts, validation.ts, helpers/homePageHelpers.ts
+- [x] T030 [US7] Decompose parser and validation logic into stages/functions
 - [ ] T031 [US7] Commit fixes with message in contracts/PR07-sonar-complexity-utils.md
 
 ## Phase 10: PR08 - Gitleaks Docs Secrets
 
-- [ ] T032 [P] [US8] Replace hardcoded secrets in documentation files listed in contracts/PR08-gitleaks-docs-secrets.md
-- [ ] T033 [US8] Update .gitleaks.toml allowlist for docs
-- [ ] T034 [US8] Commit fixes with message in contracts/PR08-gitleaks-docs-secrets.md
+- [x] T032 [P] [US8] Replace hardcoded secrets in documentation files listed in contracts/PR08-gitleaks-docs-secrets.md
+- [x] T033 [US8] Update .gitleaks.toml allowlist for docs
+- [x] T034 [US8] Commit fixes with message in contracts/PR08-gitleaks-docs-secrets.md
 
 ## Phase 11: PR09 - Gitleaks Scripts Secrets
 

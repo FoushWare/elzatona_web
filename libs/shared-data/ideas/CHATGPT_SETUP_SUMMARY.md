@@ -39,7 +39,7 @@ Your application already has a complete ChatGPT integration system with:
 
 ```bash
 # Replace with your actual API key
-OPENAI_API_KEY=sk-your_actual_api_key_here
+OPENAI_API_KEY=<YOUR_OPENAI_API_KEY_HERE>
 
 # Optional: Use GPT-4 for better responses
 # NEXT_PUBLIC_CHATGPT_MODEL=gpt-4

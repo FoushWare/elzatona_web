@@ -30,7 +30,7 @@ Create or update your `.env.local` file in the project root:
 
 ```bash
 # Required: OpenAI API Key
-OPENAI_API_KEY=sk-your_actual_api_key_here
+OPENAI_API_KEY=<YOUR_OPENAI_API_KEY_HERE>
 
 # Optional: Custom API endpoint (if using a proxy service)
 # NEXT_PUBLIC_CHATGPT_API_URL=https://your-proxy-service.com/v1/chat/completions
@@ -73,7 +73,7 @@ yarn dev
 
 ### Test 3: Error Handling
 
-1. **Set an invalid API key** in `.env.local` (e.g., `OPENAI_API_KEY=invalid_key`)
+1. **Set an invalid API key** in `.env.local` (e.g., `OPENAI_API_KEY=<INVALID_API_KEY>`)
 2. **Restart the server**
 3. **Open the chat** and send a message
 4. **Check the response** - it should show fallback content with error handling
@@ -135,7 +135,7 @@ Edit `src/components/ChatGPT.tsx` to customize:
 **Solutions**:
 
 - ✅ Check `.env.local` file exists in project root
-- ✅ Verify `OPENAI_API_KEY=sk-...` is correctly formatted
+- ✅ Verify `OPENAI_API_KEY` is correctly formatted
 - ✅ Restart the development server after adding the key
 - ✅ Check for typos in the environment variable name
 
@@ -209,7 +209,7 @@ For production deployment (Vercel, Netlify, etc.):
 
 ```bash
 # Add environment variable in Vercel dashboard
-OPENAI_API_KEY=sk-your_actual_api_key_here
+OPENAI_API_KEY=<YOUR_OPENAI_API_KEY_HERE>
 
 # Or use Vercel CLI
 vercel env add OPENAI_API_KEY

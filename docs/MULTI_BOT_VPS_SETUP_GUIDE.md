@@ -226,9 +226,9 @@ npm install
 nano ~/.aider.env
 
 # Add your API key (choose one):
-ANTHROPIC_API_KEY=sk-ant-xxx  # For Claude
+ANTHROPIC_API_KEY=<YOUR_ANTHROPIC_API_KEY_HERE>  # For Claude
 # OR
-OPENAI_API_KEY=sk-xxx         # For GPT-4
+OPENAI_API_KEY=<YOUR_OPENAI_API_KEY_HERE>         # For GPT-4
 
 # Load in shell
 echo 'source ~/.aider.env' >> ~/.bashrc
@@ -423,7 +423,7 @@ crontab -e
 
 ```bash
 # Use environment variables, never hardcode
-export ANTHROPIC_API_KEY="sk-ant-xxx"
+export ANTHROPIC_API_KEY="<YOUR_ANTHROPIC_API_KEY_HERE>"
 
 # Or use a secrets manager
 # Azure: Key Vault

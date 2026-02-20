@@ -13,7 +13,7 @@ For each file below, find the hardcoded secret value and replace it with a place
 ```markdown
 <!-- BEFORE: -->
 
-OPENAI_API_KEY=sk-abc123realkey456...
+OPENAI_API_KEY=<EXAMPLE_SECRET_VALUE>
 
 <!-- AFTER: -->
 

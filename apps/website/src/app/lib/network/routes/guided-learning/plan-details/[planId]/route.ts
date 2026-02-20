@@ -671,92 +671,92 @@ export async function GET( // NOSONAR
         let inClass = false;
         let inMethod = false;
 
-        formatted = lines
-          .map((line, index) => {
-            // NOSONAR
-            const trimmed = line.trim();
+        const isClassDeclaration = (value: string): boolean =>
+          /^(class|interface|type)\s+\w+/.test(value);
 
-            // Skip empty lines
-            if (trimmed.length === 0) return "";
+        const isClassMethodDeclaration = (value: string): boolean =>
+          /^(static\s+)?\w+\s*\(/.test(value) ||
+          /^constructor\s*\(/.test(value) ||
+          /^get\s+\w+\s*\(/.test(value) ||
+          /^set\s+\w+\s*\(/.test(value);
 
-            // Detect class declaration
-            if (/^(class|interface|type)\s+\w+/.test(trimmed)) {
-              inClass = true;
-              const indent = "  ".repeat(indentLevel);
-              indentLevel++;
-              return indent + trimmed;
-            }
+        const countMatches = (value: string, pattern: RegExp): number =>
+          (value.match(pattern) || []).length;
 
-            // Detect static methods, regular methods, or constructors
-            if (
-              inClass &&
-              (/^(static\s+)?\w+\s*\(/.test(trimmed) || // method declaration
-                /^constructor\s*\(/.test(trimmed) || // constructor
-                /^get\s+\w+\s*\(/.test(trimmed) || // getter
-                /^set\s+\w+\s*\(/.test(trimmed)) // setter
-            ) {
-              inMethod = true;
-              const indent = "  ".repeat(indentLevel);
-              // Check if method has opening brace on same line
-              if (trimmed.match(/[{[(]\s*$/)) {
-                indentLevel++;
-              }
-              return indent + trimmed;
-            }
+        const shouldResetClassState = (nextLine?: string): boolean =>
+          !nextLine ||
+          /^(class|interface|type|const|let|var|function)/.test(
+            nextLine.trim(),
+          );
 
-            // Count braces/brackets to determine net change
-            const openBraces = (trimmed.match(/{/g) || []).length;
-            const closeBraces = (trimmed.match(/}/g) || []).length;
-            const openBrackets = (trimmed.match(/\[/g) || []).length;
-            const closeBrackets = (trimmed.match(/\]/g) || []).length;
-            const openParens = (trimmed.match(/\(/g) || []).length;
-            const closeParens = (trimmed.match(/\)/g) || []).length;
+        const isNonEmptyLine = (value: string): boolean =>
+          value.trim().length > 0;
 
-            // Net change: positive = more opens, negative = more closes
-            const netBraces = openBraces - closeBraces;
-            const netBrackets = openBrackets - closeBrackets;
-            const netParens = openParens - closeParens;
+        const inferLineIndentation = (line: string, index: number): string => {
+          const trimmed = line.trim();
 
-            // Decrease indent for closing braces/brackets/parens at the start of line
-            if (trimmed.match(/^[}\])]/)) {
-              indentLevel = Math.max(0, indentLevel - 1);
-              // If we're closing a class, method, or constructor, reset flags
-              if (closeBraces > 0 && inClass) {
-                // Check if this is the end of a method or the class itself
-                const nextNonEmptyLine = lines
-                  .slice(index + 1)
-                  .find((l) => l.trim().length > 0);
-                if (
-                  !nextNonEmptyLine ||
-                  /^(class|interface|type|const|let|var|function)/.test(
-                    nextNonEmptyLine.trim(),
-                  )
-                ) {
-                  inClass = false;
-                  inMethod = false;
-                } else if (inMethod) {
-                  inMethod = false;
-                }
-              }
-            }
+          if (trimmed.length === 0) return "";
 
-            // Add indentation for current line
+          if (isClassDeclaration(trimmed)) {
+            inClass = true;
             const indent = "  ".repeat(indentLevel);
-            const result = indent + trimmed;
+            indentLevel++;
+            return indent + trimmed;
+          }
 
-            // Increase indent if line ends with opening brace/bracket/paren
-            // This means the next line should be indented
+          if (inClass && isClassMethodDeclaration(trimmed)) {
+            inMethod = true;
+            const indent = "  ".repeat(indentLevel);
             if (trimmed.match(/[{[(]\s*$/)) {
               indentLevel++;
             }
-            // Also increase if there are more opens than closes (unclosed braces/brackets/parens)
-            else if (netBraces > 0 || netBrackets > 0 || netParens > 0) {
-              indentLevel += Math.max(netBraces, netBrackets, netParens);
-            }
+            return indent + trimmed;
+          }
 
-            return result;
-          })
-          .join("\n");
+          const openBraces = countMatches(trimmed, /{/g);
+          const closeBraces = countMatches(trimmed, /}/g);
+          const openBrackets = countMatches(trimmed, /\[/g);
+          const closeBrackets = countMatches(trimmed, /\]/g);
+          const openParens = countMatches(trimmed, /\(/g);
+          const closeParens = countMatches(trimmed, /\)/g);
+          const netBraces = openBraces - closeBraces;
+          const netBrackets = openBrackets - closeBrackets;
+          const netParens = openParens - closeParens;
+
+          const handleClosingTokens = () => {
+            indentLevel = Math.max(0, indentLevel - 1);
+
+            if (closeBraces > 0 && inClass) {
+              const nextNonEmptyLine = lines
+                .slice(index + 1)
+                .find(isNonEmptyLine);
+
+              if (shouldResetClassState(nextNonEmptyLine)) {
+                inClass = false;
+                inMethod = false;
+              } else if (inMethod) {
+                inMethod = false;
+              }
+            }
+          };
+
+          if (trimmed.match(/^[}\])]/)) {
+            handleClosingTokens();
+          }
+
+          const indent = "  ".repeat(indentLevel);
+          const result = indent + trimmed;
+
+          if (trimmed.match(/[{[(]\s*$/)) {
+            indentLevel++;
+          } else if (netBraces > 0 || netBrackets > 0 || netParens > 0) {
+            indentLevel += Math.max(netBraces, netBrackets, netParens);
+          }
+
+          return result;
+        };
+
+        formatted = lines.map(inferLineIndentation).join("\n");
       } else {
         // Code already has indentation - normalize it to 2 spaces
         const indentations = lines
@@ -1215,118 +1215,113 @@ export async function GET( // NOSONAR
         return value ? [value] : [];
       };
 
+      const parseQuestionOptions = (question: any): any => {
+        let parsedOptions = question.options;
+
+        if (typeof question.options === "string") {
+          try {
+            parsedOptions = JSON.parse(question.options);
+          } catch (error) {
+            console.error(
+              `Failed to parse options for question ${question.id}:`,
+              error,
+            );
+            parsedOptions = null;
+          }
+        }
+
+        if (!Array.isArray(parsedOptions)) {
+          return parsedOptions;
+        }
+
+        return parsedOptions.map((option: any) => {
+          if (typeof option === "string") {
+            return cleanOptionText(option);
+          }
+
+          if (!option || typeof option !== "object") {
+            return option;
+          }
+
+          const cleanedOption = { ...option };
+          if (option.text && typeof option.text === "string") {
+            cleanedOption.text = cleanOptionText(option.text);
+          }
+
+          Object.keys(cleanedOption).forEach((key) => {
+            if (typeof cleanedOption[key] === "string" && key !== "id") {
+              cleanedOption[key] = cleanOptionText(cleanedOption[key]);
+            }
+          });
+
+          return cleanedOption;
+        });
+      };
+
+      const cleanQuestionHints = (hints: unknown): string[] | null => {
+        if (!hints) {
+          return null;
+        }
+
+        if (Array.isArray(hints)) {
+          return hints.map((hint: string) => cleanOptionText(hint));
+        }
+
+        return [cleanOptionText(String(hints))];
+      };
+
+      const processQuestion = (question: any) => {
+        const topic = topics.find((t) => t.id === question.topic_id);
+        const parsedOptions = parseQuestionOptions(question);
+
+        return {
+          ...question,
+          title:
+            question.title && typeof question.title === "string"
+              ? cleanContent(question.title)
+              : question.title || "",
+          content:
+            question.content && typeof question.content === "string"
+              ? cleanContent(question.content)
+              : question.content || "",
+          options: parsedOptions,
+          correct_answer:
+            question.correct_answer &&
+            typeof question.correct_answer === "string"
+              ? cleanOptionText(question.correct_answer)
+              : question.correct_answer || "",
+          explanation:
+            question.explanation && typeof question.explanation === "string"
+              ? cleanOptionText(question.explanation)
+              : question.explanation || "",
+          hints: cleanQuestionHints(question.hints),
+          topic_name: topic?.name || null,
+          topic_description: topic?.description || null,
+          constraints: toNullableArray(question.constraints),
+          tags: toNullableArray(question.tags),
+          language: question.language || "javascript",
+          resources: question.resources || null,
+        };
+      };
+
+      const fallbackQuestion = (question: any) => ({
+        ...question,
+        options: toArray(question.options),
+        constraints: toNullableArray(question.constraints),
+        tags: toNullableArray(question.tags),
+        language: question.language || "javascript",
+      });
+
       questions = questions
         .map((q) => {
-          // NOSONAR
           try {
-            // Find topic information
-            const topic = topics.find((t) => t.id === q.topic_id);
-
-            // Parse options if it's a string or ensure it's an array
-            let parsedOptions = q.options;
-
-            // If options is a string (JSON stringified), parse it
-            if (typeof q.options === "string") {
-              try {
-                parsedOptions = JSON.parse(q.options);
-              } catch (e) {
-                console.error(
-                  `Failed to parse options for question ${q.id}:`,
-                  e,
-                );
-                parsedOptions = null;
-              }
-            }
-
-            // Clean option text if options is an array
-            if (Array.isArray(parsedOptions)) {
-              parsedOptions = parsedOptions.map((opt: any) => {
-                if (typeof opt === "string") {
-                  // If option is just a string, clean and return it
-                  return cleanOptionText(opt);
-                } else if (opt && typeof opt === "object") {
-                  // If option is an object, clean the text property
-                  const cleanedOpt = { ...opt };
-                  if (opt.text && typeof opt.text === "string") {
-                    cleanedOpt.text = cleanOptionText(opt.text);
-                  }
-                  // Also clean any other string properties that might contain text
-                  Object.keys(cleanedOpt).forEach((key) => {
-                    if (typeof cleanedOpt[key] === "string" && key !== "id") {
-                      cleanedOpt[key] = cleanOptionText(cleanedOpt[key]);
-                    }
-                  });
-                  return cleanedOpt;
-                }
-                return opt;
-              });
-            }
-
-            // Clean title, content (preserves code blocks), correct_answer, and explanation
-            // Add null checks to prevent errors
-            const cleanedTitle =
-              q.title && typeof q.title === "string"
-                ? cleanContent(q.title)
-                : q.title || "";
-            const cleanedContent =
-              q.content && typeof q.content === "string"
-                ? cleanContent(q.content)
-                : q.content || "";
-            const cleanedCorrectAnswer =
-              q.correct_answer && typeof q.correct_answer === "string"
-                ? cleanOptionText(q.correct_answer)
-                : q.correct_answer || "";
-            const cleanedExplanation =
-              q.explanation && typeof q.explanation === "string"
-                ? cleanOptionText(q.explanation)
-                : q.explanation || "";
-
-            // Clean hints if they exist
-            let cleanedHints = null;
-            if (q.hints) {
-              if (Array.isArray(q.hints)) {
-                cleanedHints = q.hints.map((hint: string) =>
-                  cleanOptionText(hint),
-                );
-              } else {
-                cleanedHints = [cleanOptionText(q.hints)];
-              }
-            }
-
-            // Return question with properly parsed and cleaned options and enriched with topic info
-            return {
-              ...q,
-              title: cleanedTitle,
-              content: cleanedContent,
-              options: parsedOptions,
-              correct_answer: cleanedCorrectAnswer,
-              explanation: cleanedExplanation,
-              hints: cleanedHints,
-              // Add topic information
-              topic_name: topic?.name || null,
-              topic_description: topic?.description || null,
-              // Ensure constraints is an array (could be null or empty)
-              constraints: toNullableArray(q.constraints),
-              // Ensure tags is an array (could be null or empty)
-              tags: toNullableArray(q.tags),
-              // Include language from database (defaults to 'javascript' if null)
-              language: q.language || "javascript",
-              // Include resources if they exist (nullable field)
-              resources: q.resources || null,
-            };
+            return processQuestion(q);
           } catch (questionError) {
             console.error(
               `❌ Error processing question ${q?.id || "unknown"}:`,
               questionError,
             );
-            // Return question with minimal processing if error occurs
-            return {
-              ...q,
-              options: toArray(q.options),
-              constraints: toNullableArray(q.constraints),
-              tags: toNullableArray(q.tags),
-              language: q.language || "javascript",
-            };
+            return fallbackQuestion(q);
           }
         })
         .filter((q) => q !== null && q !== undefined); // Remove any null/undefined questions
