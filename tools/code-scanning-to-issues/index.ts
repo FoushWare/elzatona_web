@@ -56,7 +56,9 @@ interface GitHubIssue {
   number: number;
   title: string;
   body: string | null;
-  labels: Array<{ name: string }>;
+  labels: Array<{ name?: string } | string>;
+  state: string;
+  pull_request?: unknown;
 }
 
 interface AlertIssueMapping {
@@ -181,14 +183,21 @@ class CodeScanningToIssues {
         page,
       });
 
-      for (const issue of issues) {
+      for (const issue of issues as GitHubIssue[]) {
+        if ((issue as any).pull_request) {
+          continue;
+        }
+
         // Extract alert number from issue title or body
         const alertNumber = this.extractAlertNumber(
           issue.title,
           issue.body || "",
         );
         if (alertNumber) {
-          this.alertIssueMapping[alertNumber] = issue.number;
+          const current = this.alertIssueMapping[alertNumber];
+          if (!current || issue.state === 'open') {
+            this.alertIssueMapping[alertNumber] = issue.number;
+          }
         }
       }
 
@@ -205,14 +214,36 @@ class CodeScanningToIssues {
    * Extract alert number from issue title or body
    */
   private extractAlertNumber(title: string, body: string): string | null {
+    // Stable marker: <!-- code-scanning-alert-id:123 -->
+    const markerMatch = /code-scanning-alert-id:(\d+)/i.exec(body);
+    if (markerMatch) return markerMatch[1];
+
     // Look for pattern: "Alert #123" or "Alert: #123"
-    const titleMatch = title.match(/Alert[:\s]+#(\d+)/i);
+    const titleMatch = /Alert[:\s]+#(\d+)/i.exec(title);
     if (titleMatch) return titleMatch[1];
 
-    const bodyMatch = body.match(/Alert[:\s]+#(\d+)/i);
+    const bodyMatch = /Alert[:\s]+#(\d+)/i.exec(body);
     if (bodyMatch) return bodyMatch[1];
 
+    const urlMatch = /\/code-scanning\/alerts\/(\d+)/i.exec(body);
+    if (urlMatch) return urlMatch[1];
+
     return null;
+  }
+
+  /**
+   * Search for an existing issue for this alert number as a final safety net
+   */
+  private async findExistingIssueForAlert(alertNumber: number): Promise<number | null> {
+    const query = `repo:${this.owner}/${this.repo} is:issue label:bugs in:title,in:body "Alert #${alertNumber}"`;
+
+    const { data } = await this.octokit.search.issuesAndPullRequests({
+      q: query,
+      per_page: 10,
+    });
+
+    const candidate = data.items.find(item => !('pull_request' in item));
+    return candidate ? candidate.number : null;
   }
 
   /**
@@ -269,6 +300,13 @@ class CodeScanningToIssues {
       console.log(
         `⏭️  Alert #${alert.number}: Issue #${this.alertIssueMapping[alertKey]} already exists`,
       );
+      return true;
+    }
+
+    const fallbackIssue = await this.findExistingIssueForAlert(alert.number);
+    if (fallbackIssue) {
+      this.alertIssueMapping[alertKey] = fallbackIssue;
+      console.log(`⏭️  Alert #${alert.number}: Issue #${fallbackIssue} already exists (search fallback)`);
       return true;
     }
 
@@ -330,7 +368,7 @@ class CodeScanningToIssues {
       alert.most_recent_instance?.message?.text || alert.rule.description;
 
     let body = `## Code Scanning Alert #${alert.number}\n\n`;
-
+    body += `<!-- code-scanning-alert-id:${alert.number} -->\n\n`;
     // Alert information
     body += `**Severity:** ${alert.rule.severity?.toUpperCase() || "MEDIUM"}\n`;
     body += `**Rule:** ${alert.rule.id}\n`;

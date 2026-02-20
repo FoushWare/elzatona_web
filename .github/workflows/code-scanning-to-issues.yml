@@ -25,6 +25,10 @@ permissions:
   issues: write
   security-events: read
 
+concurrency:
+  group: code-scanning-to-issues-${{ github.repository }}
+  cancel-in-progress: false
+
 jobs:
   convert-alerts-to-issues:
     name: Convert Code Scanning Alerts to Issues
