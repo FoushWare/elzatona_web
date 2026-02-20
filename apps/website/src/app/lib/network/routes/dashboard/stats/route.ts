@@ -25,7 +25,7 @@ function calculateStreak(activityDates: string[]): {
         return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
       }),
     ),
-  ).sort();
+  ).sort((a, b) => a.localeCompare(b));
 
   if (uniqueDates.length === 0) {
     return { current: 0, longest: 0 };

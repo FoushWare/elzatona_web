@@ -31,7 +31,7 @@
 - [x] T015 [P] [US3] Refactor mutable let exports to const in homePageHelpers.ts, supabase-server.ts
 - [x] T016 [US3] Remove void operator in ErrorBoundary.tsx
 - [x] T017 [US3] Refactor Promise.resolve/reject in ProblemSolvingEditorUtils.ts, FrontendTaskEditorUtils.ts
-- [ ] T018 [US3] Add compare function to sort in validation.ts
+- [x] T018 [US3] Add compare function to sort in validation.ts
 - [ ] T019 [US3] Commit fixes with message in contracts/PR03-sonar-quick-fixes.md
 
 ## Phase 6: PR04 - Sonar Nested Functions
