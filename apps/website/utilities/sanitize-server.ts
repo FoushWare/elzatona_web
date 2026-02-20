@@ -39,11 +39,12 @@ const xssOptions: IFilterXSSOptions = {
       if (value.startsWith("http://") || value.startsWith("https://")) {
         // Escape attribute value manually
         const escaped = value
-          .replace(/&/g, "&amp;")
-          .replace(/"/g, "&quot;")
-          .replace(/'/g, "&#x27;")
-          .replace(/</g, "&lt;")
-          .replace(/>/g, "&gt;");
+          .replaceAll("&", "&amp;")
+          .replaceAll("\\", "&#x5C;")
+          .replaceAll('"', "&quot;")
+          .replaceAll("'", "&#x27;")
+          .replaceAll("<", "&lt;")
+          .replaceAll(">", "&gt;");
         return `${name}="${escaped}"`;
       }
       return "";
@@ -102,7 +103,13 @@ export function sanitizeInputServer(input: string): string {
   }
 
   // Remove null bytes and control characters
-  let sanitized = input.replace(/[\x00-\x1F\x7F]/g, "");
+  let sanitized = "";
+  for (const character of input) {
+    const codePoint = character.codePointAt(0) ?? 0;
+    if ((codePoint >= 32 && codePoint !== 127) || character === "\n") {
+      sanitized += character;
+    }
+  }
 
   // Trim whitespace
   sanitized = sanitized.trim();
@@ -111,6 +118,56 @@ export function sanitizeInputServer(input: string): string {
   sanitized = sanitizeTextServer(sanitized);
 
   return sanitized;
+}
+
+function removeControlCharsExceptNewlines(str: string): string {
+  let sanitized = "";
+  for (const character of str) {
+    const codePoint = character.codePointAt(0) ?? 0;
+    const isAllowedPrintable = codePoint >= 32 && codePoint !== 127;
+    const isAllowedWhitespace =
+      character === "\n" || character === "\r" || character === "\t";
+
+    if (isAllowedPrintable || isAllowedWhitespace) {
+      sanitized += character;
+    }
+  }
+  return sanitized;
+}
+
+function sanitizeObjectField(
+  key: string,
+  value: unknown,
+  preserveNewlinesFields: Set<string>,
+  skipSanitizationFields: Set<string>,
+): unknown {
+  if (typeof value === "string") {
+    if (skipSanitizationFields.has(key)) {
+      return value;
+    }
+    if (preserveNewlinesFields.has(key)) {
+      return removeControlCharsExceptNewlines(value);
+    }
+    return sanitizeInputServer(value);
+  }
+
+  if (Array.isArray(value)) {
+    return value.map((item: unknown) =>
+      typeof item === "string" ? sanitizeInputServer(item) : item,
+    );
+  }
+
+  if (
+    value &&
+    typeof value === "object" &&
+    value !== null &&
+    !Array.isArray(value) &&
+    value.constructor !== Date
+  ) {
+    return sanitizeObjectServer(value as Record<string, unknown>);
+  }
+
+  return value;
 }
 
 /**
@@ -125,65 +182,27 @@ export function sanitizeObjectServer<T extends Record<string, unknown>>(
     return obj;
   }
 
-  const sanitized = { ...obj };
+  const sanitized: Record<string, unknown> = { ...obj };
 
-  // Fields that should preserve newlines and special characters (code, content, etc.)
-  const preserveNewlinesFields = [
+  const preserveNewlinesFields = new Set([
     "content",
     "explanation",
     "description",
     "starter_code",
     "code_template",
-  ];
+  ]);
+  const skipSanitizationFields = new Set(["code"]);
 
-  // Fields that should be completely skipped from sanitization (will use CSP protection instead)
-  // These fields are preserved exactly as-is without any modification
-  const skipSanitizationFields = ["code"];
-
-  for (const key in sanitized) {
-    if (typeof sanitized[key] === "string") {
-      // For code field, skip sanitization entirely - we'll use CSP protection instead
-      if (skipSanitizationFields.includes(key)) {
-        // Don't sanitize code field at all - preserve it exactly as-is
-        // CSP (Content Security Policy) will protect against XSS attacks
-        // The field is already in sanitized object, just don't modify it
-        continue; // Skip processing this field - leave it as-is
-      }
-      // For content and other rich text fields, preserve newlines - don't use sanitizeInputServer
-      else if (preserveNewlinesFields.includes(key)) {
-        // Only remove dangerous control characters, but preserve newlines and tabs
-        const content = String(sanitized[key]);
-        const cleaned = content
-          .replace(/[\x00-\x08\x0B-\x0C\x0E-\x1F\x7F]/g, "") // Remove control chars except \n (0x0A), \r (0x0D), \t (0x09)
-          .replace(/\x00/g, ""); // Remove null bytes
-        sanitized[key] = cleaned as T[typeof key];
-      } else {
-        // For other string fields, use standard sanitization
-        sanitized[key] = sanitizeInputServer(sanitized[key]) as T[typeof key];
-      }
-    } else if (Array.isArray(sanitized[key])) {
-      sanitized[key] = sanitized[key].map((item: unknown) =>
-        typeof item === "string" ? sanitizeInputServer(item) : item,
-      ) as T[typeof key];
-    } else if (
-      sanitized[key] &&
-      typeof sanitized[key] === "object" &&
-      sanitized[key] !== null &&
-      !Array.isArray(sanitized[key])
-    ) {
-      // Check if it's a Date using a type guard
-      const value = sanitized[key] as unknown;
-      const isDate =
-        value && typeof value === "object" && value.constructor === Date;
-      if (!isDate) {
-        sanitized[key] = sanitizeObjectServer(
-          sanitized[key] as Record<string, unknown>,
-        ) as T[typeof key];
-      }
-    }
+  for (const [key, value] of Object.entries(sanitized)) {
+    sanitized[key] = sanitizeObjectField(
+      key,
+      value,
+      preserveNewlinesFields,
+      skipSanitizationFields,
+    );
   }
 
-  return sanitized;
+  return sanitized as T;
 }
 
 /**

@@ -4,11 +4,11 @@
 // v1.0 - Form for creating and editing categories
 
 import React, { useEffect, useState } from "react";
-import { Button } from "../index";
-import { Input } from "../index";
-import { Label } from "../index";
-import { Textarea } from "../index";
 import {
+  Button,
+  Input,
+  Label,
+  Textarea,
   Select,
   SelectContent,
   SelectItem,
@@ -106,7 +106,7 @@ export const CategoryForm: React.FC<CategoryFormProps> = ({
         .replace(/(^-|-$)/g, "");
       setFormData((prev) => ({ ...prev, slug }));
     }
-  }, [formData["name"], category]);
+  }, [formData, category]);
 
   const validateForm = (): boolean => {
     const newErrors: Record<string, string> = {};
@@ -141,7 +141,7 @@ export const CategoryForm: React.FC<CategoryFormProps> = ({
     try {
       await onSubmit(formData);
     } catch (error) {
-      console.error("Error submitting category:", error);
+      console.error("Category form submit failed:", error);
     }
   };
 
@@ -218,7 +218,7 @@ export const CategoryForm: React.FC<CategoryFormProps> = ({
             min="1"
             value={formData["order"]}
             onChange={(e) =>
-              handleChange("order", parseInt(e.target.value) || 1)
+              handleChange("order", Number.parseInt(e.target.value, 10) || 1)
             }
             className={errors["order"] ? "border-red-500" : ""}
           />

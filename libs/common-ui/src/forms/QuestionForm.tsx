@@ -101,7 +101,7 @@ export const QuestionForm: React.FC<QuestionFormProps> = ({
   useEffect(() => {
     if (
       formDataCategoryId &&
-      !filteredTopics.find((topic) => topic.id === formDataTopicId)
+      !filteredTopics.some((topic) => topic.id === formDataTopicId)
     ) {
       setFormData((prev) => ({
         ...prev,
@@ -143,7 +143,7 @@ export const QuestionForm: React.FC<QuestionFormProps> = ({
     try {
       await onSubmit(formData);
     } catch (error) {
-      console.error("Error submitting question:", error);
+      console.error("Question form submit failed:", error);
     }
   };
 
@@ -334,7 +334,7 @@ export const QuestionForm: React.FC<QuestionFormProps> = ({
           <Input
             value={tagInput}
             onChange={(e) => setTagInput(e.target.value)}
-            onKeyPress={handleKeyPress}
+            onKeyDown={handleKeyPress}
             placeholder="Add a tag..."
             className="flex-1"
           />

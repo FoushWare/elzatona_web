@@ -2,10 +2,10 @@
 
 /**
  * Code Scanning Alerts to GitHub Issues Automation
- * 
+ *
  * This script fetches code scanning alerts from GitHub and creates
  * corresponding issues labeled with "bugs" for tracking and remediation.
- * 
+ *
  * Features:
  * - Fetches open code scanning alerts from GitHub Advanced Security
  * - Creates detailed GitHub issues with alert information
@@ -14,7 +14,7 @@
  * - Handles API rate limits with retry logic
  */
 
-import { Octokit } from '@octokit/rest';
+import { Octokit } from "@octokit/rest";
 
 interface CodeScanningAlert {
   number: number;
@@ -72,7 +72,12 @@ class CodeScanningToIssues {
   private dryRun: boolean;
   private alertIssueMapping: AlertIssueMapping = {};
 
-  constructor(token: string, owner: string, repo: string, dryRun: boolean = false) {
+  constructor(
+    token: string,
+    owner: string,
+    repo: string,
+    dryRun: boolean = false,
+  ) {
     this.octokit = new Octokit({ auth: token });
     this.owner = owner;
     this.repo = repo;
@@ -83,9 +88,9 @@ class CodeScanningToIssues {
    * Main execution method
    */
   async execute(): Promise<void> {
-    console.log('🔍 Code Scanning Alerts to Issues - Starting...');
+    console.log("🔍 Code Scanning Alerts to Issues - Starting...");
     console.log(`📦 Repository: ${this.owner}/${this.repo}`);
-    console.log(`🏃 Mode: ${this.dryRun ? 'DRY RUN' : 'LIVE'}\n`);
+    console.log(`🏃 Mode: ${this.dryRun ? "DRY RUN" : "LIVE"}\n`);
 
     try {
       // Step 1: Ensure "bugs" label exists
@@ -99,7 +104,7 @@ class CodeScanningToIssues {
       console.log(`📊 Found ${alerts.length} open code scanning alerts\n`);
 
       if (alerts.length === 0) {
-        console.log('✅ No alerts to process. Exiting.');
+        console.log("✅ No alerts to process. Exiting.");
         return;
       }
 
@@ -116,13 +121,12 @@ class CodeScanningToIssues {
         }
       }
 
-      console.log('\n📈 Summary:');
+      console.log("\n📈 Summary:");
       console.log(`  ✅ Issues created: ${created}`);
       console.log(`  ⏭️  Issues skipped (already exist): ${skipped}`);
       console.log(`  📊 Total alerts processed: ${alerts.length}`);
-
     } catch (error) {
-      console.error('❌ Error:', error);
+      console.error("❌ Error:", error);
       throw error;
     }
   }
@@ -135,7 +139,7 @@ class CodeScanningToIssues {
       await this.octokit.issues.getLabel({
         owner: this.owner,
         repo: this.repo,
-        name: 'bugs',
+        name: "bugs",
       });
       console.log('✅ "bugs" label already exists');
     } catch (error: any) {
@@ -145,9 +149,9 @@ class CodeScanningToIssues {
           await this.octokit.issues.createLabel({
             owner: this.owner,
             repo: this.repo,
-            name: 'bugs',
-            color: 'd73a4a',
-            description: 'Code scanning security or quality issues',
+            name: "bugs",
+            color: "d73a4a",
+            description: "Code scanning security or quality issues",
           });
           console.log('✅ "bugs" label created');
         } else {
@@ -163,8 +167,8 @@ class CodeScanningToIssues {
    * Build mapping of code scanning alerts to existing issues
    */
   private async buildAlertIssueMapping(): Promise<void> {
-    console.log('🔍 Building alert-to-issue mapping...');
-    
+    console.log("🔍 Building alert-to-issue mapping...");
+
     let page = 1;
     const perPage = 100;
     let hasMore = true;
@@ -173,8 +177,8 @@ class CodeScanningToIssues {
       const { data: issues } = await this.octokit.issues.listForRepo({
         owner: this.owner,
         repo: this.repo,
-        labels: 'bugs',
-        state: 'all',
+        labels: "bugs",
+        state: "all",
         per_page: perPage,
         page,
       });
@@ -185,7 +189,10 @@ class CodeScanningToIssues {
         }
 
         // Extract alert number from issue title or body
-        const alertNumber = this.extractAlertNumber(issue.title, issue.body || '');
+        const alertNumber = this.extractAlertNumber(
+          issue.title,
+          issue.body || "",
+        );
         if (alertNumber) {
           const current = this.alertIssueMapping[alertNumber];
           if (!current || issue.state === 'open') {
@@ -198,7 +205,9 @@ class CodeScanningToIssues {
       page++;
     }
 
-    console.log(`✅ Mapped ${Object.keys(this.alertIssueMapping).length} existing issues\n`);
+    console.log(
+      `✅ Mapped ${Object.keys(this.alertIssueMapping).length} existing issues\n`,
+    );
   }
 
   /**
@@ -241,8 +250,8 @@ class CodeScanningToIssues {
    * Fetch all open code scanning alerts
    */
   private async fetchCodeScanningAlerts(): Promise<CodeScanningAlert[]> {
-    console.log('🔍 Fetching code scanning alerts...');
-    
+    console.log("🔍 Fetching code scanning alerts...");
+
     const alerts: CodeScanningAlert[] = [];
     let page = 1;
     const perPage = 100;
@@ -253,7 +262,7 @@ class CodeScanningToIssues {
         const { data } = await this.octokit.codeScanning.listAlertsForRepo({
           owner: this.owner,
           repo: this.repo,
-          state: 'open',
+          state: "open",
           per_page: perPage,
           page,
         });
@@ -267,8 +276,8 @@ class CodeScanningToIssues {
           await this.sleep(500);
         }
       } catch (error: any) {
-        if (error.status === 403 && error.message?.includes('rate limit')) {
-          console.log('⏳ Rate limit hit, waiting 60 seconds...');
+        if (error.status === 403 && error.message?.includes("rate limit")) {
+          console.log("⏳ Rate limit hit, waiting 60 seconds...");
           await this.sleep(60000);
           // Retry the same page
           continue;
@@ -288,7 +297,9 @@ class CodeScanningToIssues {
 
     // Check if issue already exists
     if (this.alertIssueMapping[alertKey]) {
-      console.log(`⏭️  Alert #${alert.number}: Issue #${this.alertIssueMapping[alertKey]} already exists`);
+      console.log(
+        `⏭️  Alert #${alert.number}: Issue #${this.alertIssueMapping[alertKey]} already exists`,
+      );
       return true;
     }
 
@@ -313,17 +324,19 @@ class CodeScanningToIssues {
           repo: this.repo,
           title,
           body,
-          labels: ['bugs'],
+          labels: ["bugs"],
         });
 
-        console.log(`✅ Created issue #${issue.number} for Alert #${alert.number}`);
+        console.log(
+          `✅ Created issue #${issue.number} for Alert #${alert.number}`,
+        );
         this.alertIssueMapping[alertKey] = issue.number;
 
         // Rate limit handling: small delay between creations
         await this.sleep(1000);
       } catch (error: any) {
-        if (error.status === 403 && error.message?.includes('rate limit')) {
-          console.log('⏳ Rate limit hit, waiting 60 seconds...');
+        if (error.status === 403 && error.message?.includes("rate limit")) {
+          console.log("⏳ Rate limit hit, waiting 60 seconds...");
           await this.sleep(60000);
           // Retry
           return await this.processAlert(alert);
@@ -331,7 +344,7 @@ class CodeScanningToIssues {
         throw error;
       }
     } else {
-      console.log('🔍 [DRY RUN] Would create issue');
+      console.log("🔍 [DRY RUN] Would create issue");
     }
 
     return false;
@@ -341,7 +354,7 @@ class CodeScanningToIssues {
    * Generate issue title from alert
    */
   private generateIssueTitle(alert: CodeScanningAlert): string {
-    const severity = alert.rule.severity?.toUpperCase() || 'MEDIUM';
+    const severity = alert.rule.severity?.toUpperCase() || "MEDIUM";
     const ruleName = alert.rule.name || alert.rule.id;
     return `[${severity}] ${ruleName} - Alert #${alert.number}`;
   }
@@ -351,18 +364,18 @@ class CodeScanningToIssues {
    */
   private generateIssueBody(alert: CodeScanningAlert): string {
     const location = alert.most_recent_instance?.location;
-    const message = alert.most_recent_instance?.message?.text || alert.rule.description;
+    const message =
+      alert.most_recent_instance?.message?.text || alert.rule.description;
 
     let body = `## Code Scanning Alert #${alert.number}\n\n`;
     body += `<!-- code-scanning-alert-id:${alert.number} -->\n\n`;
-    
     // Alert information
-    body += `**Severity:** ${alert.rule.severity?.toUpperCase() || 'MEDIUM'}\n`;
+    body += `**Severity:** ${alert.rule.severity?.toUpperCase() || "MEDIUM"}\n`;
     body += `**Rule:** ${alert.rule.id}\n`;
     if (alert.rule.name) {
       body += `**Rule Name:** ${alert.rule.name}\n`;
     }
-    body += `**Tool:** ${alert.tool.name}${alert.tool.version ? ` (${alert.tool.version})` : ''}\n`;
+    body += `**Tool:** ${alert.tool.name}${alert.tool.version ? ` (${alert.tool.version})` : ""}\n`;
     body += `**State:** ${alert.state}\n\n`;
 
     // Description
@@ -376,8 +389,8 @@ class CodeScanningToIssues {
       if (location.end_line !== location.start_line) {
         body += `-${location.end_line}`;
       }
-      body += '\n\n';
-      
+      body += "\n\n";
+
       // Link to code
       const commitSha = alert.most_recent_instance?.commit_sha;
       if (commitSha) {
@@ -388,7 +401,7 @@ class CodeScanningToIssues {
 
     // Tags
     if (alert.rule.tags && alert.rule.tags.length > 0) {
-      body += `### Tags\n\n${alert.rule.tags.map(tag => `\`${tag}\``).join(', ')}\n\n`;
+      body += `### Tags\n\n${alert.rule.tags.map((tag) => `\`${tag}\``).join(", ")}\n\n`;
     }
 
     // Links
@@ -409,7 +422,7 @@ class CodeScanningToIssues {
    * Sleep for specified milliseconds
    */
   private sleep(ms: number): Promise<void> {
-    return new Promise(resolve => setTimeout(resolve, ms));
+    return new Promise((resolve) => setTimeout(resolve, ms));
   }
 }
 
@@ -418,18 +431,23 @@ class CodeScanningToIssues {
  */
 async function main() {
   const token = process.env.GITHUB_TOKEN;
-  const owner = process.env.GITHUB_REPOSITORY_OWNER || process.env.GITHUB_REPOSITORY?.split('/')[0];
-  const repo = process.env.GITHUB_REPOSITORY?.split('/')[1] || process.env.REPO_NAME;
-  const dryRun = process.env.DRY_RUN === 'true';
+  const owner =
+    process.env.GITHUB_REPOSITORY_OWNER ||
+    process.env.GITHUB_REPOSITORY?.split("/")[0];
+  const repo =
+    process.env.GITHUB_REPOSITORY?.split("/")[1] || process.env.REPO_NAME;
+  const dryRun = process.env.DRY_RUN === "true";
 
   if (!token) {
-    console.error('❌ Error: GITHUB_TOKEN environment variable is required');
+    console.error("❌ Error: GITHUB_TOKEN environment variable is required");
     process.exit(1);
   }
 
   if (!owner || !repo) {
-    console.error('❌ Error: Repository information not found');
-    console.error('   Set GITHUB_REPOSITORY (format: owner/repo) or GITHUB_REPOSITORY_OWNER and REPO_NAME');
+    console.error("❌ Error: Repository information not found");
+    console.error(
+      "   Set GITHUB_REPOSITORY (format: owner/repo) or GITHUB_REPOSITORY_OWNER and REPO_NAME",
+    );
     process.exit(1);
   }
 
@@ -439,8 +457,8 @@ async function main() {
 
 // Run if executed directly
 if (require.main === module) {
-  main().catch(error => {
-    console.error('Fatal error:', error);
+  main().catch((error) => {
+    console.error("Fatal error:", error);
     process.exit(1);
   });
 }

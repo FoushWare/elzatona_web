@@ -1,30 +1,7 @@
 "use client";
 
 import React, { Component, ReactNode, ErrorInfo } from "react";
-
-// Conditional Supabase client creation with fallback values
-const supabase = null;
-try {
-  // eslint-disable-next-line @typescript-eslint/no-require-imports
-  const { createClient } = require("@supabase/supabase-js");
-  const supabaseUrl =
-    process.env["NEXT_PUBLIC_SUPABASE_URL"] ||
-    "https://placeholder.supabase.co";
-  const supabaseServiceRoleKey =
-    process.env["SUPABASE_SERVICE_ROLE_KEY"] || "placeholder_key";
-
-  if (
-    supabaseUrl !== "https://placeholder.supabase.co" &&
-    supabaseServiceRoleKey !== "placeholder_key"
-  ) {
-    const _supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
-    // Supabase client created but not used in ErrorBoundary
-    // Reserved for future error logging functionality
-    void _supabase;
-  }
-} catch (error) {
-  console.warn("Supabase client creation failed in ErrorBoundary:", error);
-}
+import { generateId } from "@elzatona/utilities";
 
 import { AlertTriangle, RefreshCw, Home, Bug } from "lucide-react";
 
@@ -75,7 +52,7 @@ export class ErrorBoundary extends Component<Props, State> {
       console.error("Error info:", errorInfo);
 
       // Generate a simple error ID
-      const errorId = `error_${Date.now()}_${Math.random().toString(36).substring(2, 11)}`;
+      const errorId = `error_${Date.now()}_${generateId()}`;
       this.setState({ errorId });
     } catch (logError) {
       console.error("Failed to log error:", logError);
@@ -91,7 +68,7 @@ export class ErrorBoundary extends Component<Props, State> {
   };
 
   private readonly handleGoHome = () => {
-    if (typeof globalThis.window !== "undefined") {
+    if (globalThis.window !== undefined) {
       globalThis.window.location.href = "/";
     }
   };

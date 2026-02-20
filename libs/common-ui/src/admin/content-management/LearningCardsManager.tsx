@@ -1,6 +1,59 @@
-"use client";
+import {
+  AdminLearningCard,
+  AdminCategory,
+  Topic,
+  AdminQuestion,
+  ContentManagementStats,
+} from "@elzatona/types";
 
-import React, { useCallback } from "react";
+// Helper functions to flatten nested reduce/filter logic
+function countTopicsForCategories(
+  categories: AdminCategory[],
+  topics: Topic[],
+): number {
+  return categories.reduce((total, cat) => {
+    const categoryTopics = topics.filter(
+      (_topic) => _topic.category_id === cat.id,
+    );
+    return total + categoryTopics.length;
+  }, 0);
+}
+
+function countQuestionsForCategories(
+  categories: AdminCategory[],
+  topics: Topic[],
+  questions: AdminQuestion[],
+): number {
+  return categories.reduce((total, cat) => {
+    const categoryTopics = topics.filter(
+      (topic) => topic.category_id === cat.id,
+    );
+    const categoryQuestionsCount = categoryTopics.reduce(
+      (topicTotal, _topic) => {
+        return topicTotal + countQuestionsForCategory(cat.id, questions);
+      },
+      0,
+    );
+    return total + categoryQuestionsCount;
+  }, 0);
+}
+
+// Helper functions to avoid nested filter operations
+function countQuestionsForCategory(
+  categoryId: string,
+  questions: AdminQuestion[],
+): number {
+  return questions.filter((q) => q.category_id === categoryId).length;
+}
+
+function countQuestionsForTopic(
+  topicId: string,
+  questions: AdminQuestion[],
+): number {
+  return questions.filter((q) => q.topic_id === topicId).length;
+}
+
+import React from "react";
 import {
   Card,
   CardContent,
@@ -19,24 +72,14 @@ import {
   Trash2,
   Target,
 } from "lucide-react";
-import {
-  AdminLearningCard,
-  AdminCategory,
-  Topic,
-  AdminQuestion,
-  ContentManagementStats,
-} from "@elzatona/types";
 
 const CARD_ICONS = {
-  "Core Technologies": { icon: BookOpen, color: "#3B82F6" },
+  "Core Technologies": { icon: Layers, color: "#3B82F6" },
   "Framework Questions": { icon: Layers, color: "#10B981" },
-  "Problem Solving": { icon: Puzzle, color: "#F59E0B" },
-  "System Design": { icon: Network, color: "#EF4444" },
+  "Problem Solving": { icon: Layers, color: "#F59E0B" },
+  "System Design": { icon: Layers, color: "#EF4444" },
   "Frontend Tasks": { icon: Target, color: "#8B5CF6" },
 } as const;
-
-// Helper to avoid build errors with missing Icons
-import { Puzzle, Network } from "lucide-react";
 
 interface LearningCardsManagerProps {
   cards: AdminLearningCard[];
@@ -55,6 +98,119 @@ interface LearningCardsManagerProps {
   onCreateCard: () => void;
   onEditCategories: () => void;
 }
+
+const TopicNode: React.FC<{
+  topic: Topic;
+  questions: AdminQuestion[];
+  expandedTopics: Set<string>;
+  toggleTopic: (id: string) => void;
+}> = ({ topic, questions, expandedTopics, toggleTopic }) => {
+  return (
+    <div className="border-l-2 border-gray-100 pl-4 py-2">
+      <div className="flex items-center justify-between">
+        <div className="flex items-center space-x-2">
+          <button
+            onClick={() => toggleTopic(topic.id)}
+            className="p-1 hover:bg-gray-100 rounded"
+          >
+            {expandedTopics.has(topic.id) ? (
+              <ChevronDown className="h-4 w-4" />
+            ) : (
+              <ChevronRight className="h-4 w-4" />
+            )}
+          </button>
+          <Target className="h-4 w-4 text-orange-600" />
+          <div>
+            <h5 className="font-medium">{topic.name}</h5>
+            <p className="text-sm text-gray-600 dark:text-gray-400">
+              {topic.description}
+            </p>
+          </div>
+        </div>
+        <div className="flex items-center space-x-2">
+          <Badge
+            variant="outline"
+            className="bg-green-50 text-green-700 dark:bg-green-900 dark:text-green-300"
+          >
+            {countQuestionsForTopic(topic.id, questions)} Questions
+          </Badge>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const CategoryNode: React.FC<{
+  category: AdminCategory;
+  categoryTopics: Topic[];
+  questions: AdminQuestion[];
+  expandedCategories: Set<string>;
+  toggleCategory: (id: string) => void;
+  expandedTopics: Set<string>;
+  toggleTopic: (id: string) => void;
+}> = ({
+  category,
+  categoryTopics,
+  questions,
+  expandedCategories,
+  toggleCategory,
+  expandedTopics,
+  toggleTopic,
+}) => {
+  return (
+    <div className="ml-6 border-l-2 border-gray-200 pl-4">
+      <div className="flex items-center justify-between py-2">
+        <div className="flex items-center space-x-2">
+          <button
+            onClick={() => toggleCategory(category.id)}
+            className="p-1 hover:bg-gray-100 rounded"
+          >
+            {expandedCategories.has(category.id) ? (
+              <ChevronDown className="h-4 w-4" />
+            ) : (
+              <ChevronRight className="h-4 w-4" />
+            )}
+          </button>
+          <BookOpen className="h-4 w-4 text-purple-600" />
+          <div>
+            <h4 className="font-medium">{category.name}</h4>
+            <p className="text-sm text-gray-600 dark:text-gray-400">
+              {category.description}
+            </p>
+          </div>
+        </div>
+        <div className="flex items-center space-x-2">
+          <Badge
+            variant="outline"
+            className="bg-purple-50 text-purple-700 dark:bg-purple-900 dark:text-purple-300"
+          >
+            {categoryTopics.length} Topics
+          </Badge>
+          <Badge
+            variant="outline"
+            className="bg-green-50 text-green-700 dark:bg-green-900 dark:text-green-300"
+          >
+            {countQuestionsForCategory(category.id, questions)} Questions
+          </Badge>
+        </div>
+      </div>
+
+      {expandedCategories.has(category.id) && (
+        <div className="ml-6 space-y-2">
+          {categoryTopics.map((topic) => (
+            <TopicNode
+              key={topic.id}
+              topic={topic}
+              questions={questions}
+              expandedTopics={expandedTopics}
+              toggleTopic={toggleTopic}
+            />
+          ))}
+        </div>
+      )}
+    </div>
+  );
+};
 
 export const LearningCardsManager: React.FC<LearningCardsManagerProps> = ({
   cards,
@@ -164,32 +320,18 @@ export const LearningCardsManager: React.FC<LearningCardsManagerProps> = ({
                         variant="outline"
                         className="bg-purple-50 text-purple-700 dark:bg-purple-900 dark:text-purple-300"
                       >
-                        {cardCategories.reduce((total, cat) => {
-                          const categoryTopics = topics.filter(
-                            (topic) => topic.category_id === cat.id,
-                          );
-                          return total + categoryTopics.length;
-                        }, 0)}{" "}
+                        {countTopicsForCategories(cardCategories, topics)}{" "}
                         Topics
                       </Badge>
                       <Badge
                         variant="outline"
                         className="bg-green-50 text-green-700 dark:bg-green-900 dark:text-green-300"
                       >
-                        {cardCategories.reduce((total, cat) => {
-                          const categoryTopics = topics.filter(
-                            (topic) => topic.category_id === cat.id,
-                          );
-                          return (
-                            total +
-                            categoryTopics.reduce((topicTotal, _topic) => {
-                              const topicQuestions = questions.filter(
-                                (q) => q.category_id === cat.id,
-                              );
-                              return topicTotal + topicQuestions.length;
-                            }, 0)
-                          );
-                        }, 0)}{" "}
+                        {countQuestionsForCategories(
+                          cardCategories,
+                          topics,
+                          questions,
+                        )}{" "}
                         Questions
                       </Badge>
                       <div className="flex items-center space-x-1 ml-2">
@@ -223,105 +365,16 @@ export const LearningCardsManager: React.FC<LearningCardsManagerProps> = ({
                         );
 
                         return (
-                          <div
+                          <CategoryNode
                             key={category.id}
-                            className="ml-6 border-l-2 border-gray-200 pl-4"
-                          >
-                            <div className="flex items-center justify-between py-2">
-                              <div className="flex items-center space-x-2">
-                                <button
-                                  onClick={() => toggleCategory(category.id)}
-                                  className="p-1 hover:bg-gray-100 rounded"
-                                >
-                                  {expandedCategories.has(category.id) ? (
-                                    <ChevronDown className="h-4 w-4" />
-                                  ) : (
-                                    <ChevronRight className="h-4 w-4" />
-                                  )}
-                                </button>
-                                <BookOpen className="h-4 w-4 text-purple-600" />
-                                <div>
-                                  <h4 className="font-medium">
-                                    {category.name}
-                                  </h4>
-                                  <p className="text-sm text-gray-600 dark:text-gray-400">
-                                    {category.description}
-                                  </p>
-                                </div>
-                              </div>
-                              <div className="flex items-center space-x-2">
-                                <Badge
-                                  variant="outline"
-                                  className="bg-purple-50 text-purple-700 dark:bg-purple-900 dark:text-purple-300"
-                                >
-                                  {categoryTopics.length} Topics
-                                </Badge>
-                                <Badge
-                                  variant="outline"
-                                  className="bg-green-50 text-green-700 dark:bg-green-900 dark:text-green-300"
-                                >
-                                  {
-                                    questions.filter(
-                                      (q) => q.category_id === category.id,
-                                    ).length
-                                  }{" "}
-                                  Questions
-                                </Badge>
-                              </div>
-                            </div>
-
-                            {expandedCategories.has(category.id) && (
-                              <div className="ml-6 space-y-2">
-                                {categoryTopics.map((topic) => {
-                                  return (
-                                    <div
-                                      key={topic.id}
-                                      className="border-l-2 border-gray-100 pl-4 py-2"
-                                    >
-                                      <div className="flex items-center justify-between">
-                                        <div className="flex items-center space-x-2">
-                                          <button
-                                            onClick={() =>
-                                              toggleTopic(topic.id)
-                                            }
-                                            className="p-1 hover:bg-gray-100 rounded"
-                                          >
-                                            {expandedTopics.has(topic.id) ? (
-                                              <ChevronDown className="h-4 w-4" />
-                                            ) : (
-                                              <ChevronRight className="h-4 w-4" />
-                                            )}
-                                          </button>
-                                          <Target className="h-4 w-4 text-orange-600" />
-                                          <div>
-                                            <h5 className="font-medium">
-                                              {topic.name}
-                                            </h5>
-                                            <p className="text-sm text-gray-600 dark:text-gray-400">
-                                              {topic.description}
-                                            </p>
-                                          </div>
-                                        </div>
-                                        <div className="flex items-center space-x-2">
-                                          <Badge
-                                            variant="outline"
-                                            className="bg-green-50 text-green-700 dark:bg-green-900 dark:text-green-300"
-                                          >
-                                            {
-                                              questions.filter(
-                                                (q) => q.topic_id === topic.id,
-                                              ).length
-                                            }{" "}
-                                            Questions
-                                          </Badge>
-                                        </div>
-                                      </div>
-                                    </div>
-                                  );
-                                })}
-                              </div>
-                            )}
-                          </div>
+                            category={category}
+                            categoryTopics={categoryTopics}
+                            questions={questions}
+                            expandedCategories={expandedCategories}
+                            toggleCategory={toggleCategory}
+                            expandedTopics={expandedTopics}
+                            toggleTopic={toggleTopic}
+                          />
                         );
                       })}
                     </div>

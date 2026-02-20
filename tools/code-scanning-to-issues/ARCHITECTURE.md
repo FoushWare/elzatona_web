@@ -71,6 +71,7 @@
 ## Data Flow
 
 ### Input: Code Scanning Alert
+
 ```json
 {
   "number": 42,
@@ -98,6 +99,7 @@
 ```
 
 ### Output: GitHub Issue
+
 ```markdown
 Title: [HIGH] Insufficient randomness - Alert #42
 
@@ -140,29 +142,30 @@ Please review the alert details and apply the necessary fixes to resolve this se
 ```typescript
 class CodeScanningToIssues {
   // Core functionality
-  execute()                      // Main entry point
-  
+  execute(); // Main entry point
+
   // Alert processing
-  fetchCodeScanningAlerts()      // Get all open alerts
-  processAlert(alert)            // Handle single alert
-  
+  fetchCodeScanningAlerts(); // Get all open alerts
+  processAlert(alert); // Handle single alert
+
   // Issue management
-  ensureBugsLabel()              // Create label if needed
-  buildAlertIssueMapping()       // Prevent duplicates
-  
+  ensureBugsLabel(); // Create label if needed
+  buildAlertIssueMapping(); // Prevent duplicates
+
   // Formatting
-  generateIssueTitle(alert)      // Format title
-  generateIssueBody(alert)       // Format body
-  
+  generateIssueTitle(alert); // Format title
+  generateIssueBody(alert); // Format body
+
   // Utilities
-  extractAlertNumber()           // Parse alert ID from issue
-  sleep(ms)                      // Rate limit handling
+  extractAlertNumber(); // Parse alert ID from issue
+  sleep(ms); // Rate limit handling
 }
 ```
 
 ## Error Handling
 
 ### Rate Limiting Strategy
+
 ```
 API Call
    │
@@ -175,6 +178,7 @@ API Call
 ```
 
 ### Duplicate Prevention Logic
+
 ```
 Process Alert #42
    │
@@ -191,15 +195,17 @@ Process Alert #42
 ## Deployment
 
 ### GitHub Actions Environment
+
 - **Trigger**: Daily cron, manual, or post-CodeQL
 - **Runner**: ubuntu-latest
 - **Node.js**: 20.x
-- **Permissions**: 
+- **Permissions**:
   - `contents: read`
   - `issues: write`
   - `security-events: read`
 
 ### Configuration
+
 - **GITHUB_TOKEN**: Automatic from Actions
 - **GITHUB_REPOSITORY**: Automatic from Actions
 - **DRY_RUN**: Optional input (default: false)
@@ -207,12 +213,14 @@ Process Alert #42
 ## Scalability
 
 ### Performance Characteristics
+
 - **Pagination**: 100 alerts per page
 - **Rate Limiting**: 1000ms delay between issue creations
 - **Concurrency**: Sequential processing (prevents race conditions)
 - **Memory**: Maintains in-memory mapping of all existing issues
 
 ### Limits
+
 - **GitHub API Rate Limit**: 5000 requests/hour (authenticated)
 - **Expected Volume**: < 100 new alerts/day
 - **Processing Time**: ~1-2 minutes for 100 alerts
@@ -220,6 +228,7 @@ Process Alert #42
 ## Monitoring
 
 ### Success Metrics
+
 ```
 📈 Summary:
   ✅ Issues created: N
@@ -228,6 +237,7 @@ Process Alert #42
 ```
 
 ### Logs Location
+
 - **GitHub Actions**: Workflow run logs
 - **Artifacts**: `conversion-logs` (7-day retention)
 
@@ -242,6 +252,7 @@ Process Alert #42
 ## Future Enhancements
 
 Potential improvements (currently out of scope):
+
 - Automatic issue assignment
 - Custom label configurations
 - Alert suppression/filtering

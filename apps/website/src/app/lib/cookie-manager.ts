@@ -37,7 +37,6 @@ export class CookieManager {
     try {
       const token = await user.getIdToken();
       await setAuthCookie(token);
-      console.log("✅ Auth cookie ensured successfully");
       return true;
     } catch (error) {
       console.error("Failed to ensure auth cookie:", error);
@@ -52,17 +51,14 @@ export class CookieManager {
     maxRetries: number = 3,
   ): Promise<boolean> {
     for (let i = 0; i < maxRetries; i++) {
-      try {
-        const success = await this.ensureAuthCookie(user);
-        if (success) {
-          return true;
-        }
-      } catch (error) {
-        console.warn(`Auth cookie retry ${i + 1} failed:`, error);
-        if (i < maxRetries - 1) {
-          // Wait before retrying
-          await new Promise((resolve) => setTimeout(resolve, 1000 * (i + 1)));
-        }
+      const success = await this.ensureAuthCookie(user);
+      if (success) {
+        return true;
+      }
+
+      if (i < maxRetries - 1) {
+        // Wait before retrying
+        await new Promise((resolve) => setTimeout(resolve, 1000 * (i + 1)));
       }
     }
     return false;

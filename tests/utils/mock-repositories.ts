@@ -283,7 +283,7 @@ function createUserRepositoryMock(): IUserRepository {
     async findByEmail(email: string): Promise<User | null> {
       return users.find((u) => u.email === email) || null;
     },
-    async findAdminByEmail(email: string): Promise<any | null> {
+    async findAdminByEmail(email: string): Promise<User | null> {
       return (
         users.find((u) => u.email === email && u.role === UserRole.ADMIN) ||
         null
@@ -342,14 +342,14 @@ function createUserRepositoryMock(): IUserRepository {
       return users[idx];
     },
     async updateProgress(
-      userId: string,
-      progress: UserProgress,
+      _userId: string,
+      _progress: UserProgress,
     ): Promise<void> {
       return;
     },
     async updatePreferences(
-      userId: string,
-      preferences: UserPreferences,
+      _userId: string,
+      _preferences: UserPreferences,
     ): Promise<void> {
       return;
     },

@@ -3,14 +3,14 @@
 import { BookOpen, Calendar, Target, HelpCircle } from "lucide-react";
 
 interface GuidedLearningHeaderProps {
-  questionsRange: string;
-  daysRange: string;
+  readonly questionsRange: string;
+  readonly daysRange: string;
 }
 
 export function GuidedLearningHeader({
   questionsRange,
   daysRange,
-}: GuidedLearningHeaderProps) {
+}: Readonly<GuidedLearningHeaderProps>) {
   return (
     <div className="mb-8">
       {/* Animated Icon */}

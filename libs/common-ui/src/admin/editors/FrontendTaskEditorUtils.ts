@@ -2,141 +2,20 @@ import {
   AdminFrontendTaskFile,
   AdminFrontendTaskFormData,
 } from "@elzatona/types";
+import type { EditorFileNode as FileNode } from "./sharedEditorFileUtils";
 
-interface FileNode {
-  id: string;
-  name: string;
-  type: "file" | "folder";
-  children?: FileNode[];
-  content?: string;
-  fileType?: string;
-  isEntryPoint?: boolean;
-}
-
-// File management helper functions
-export const createFileNode = (
-  name: string,
-  type: string,
-  content: string = "",
-): FileNode => {
-  const id = `file_${Date.now()}`;
-  return {
-    id,
-    name,
-    type: "file",
-    content,
-    fileType: type,
-  };
-};
-
-export const addFileToTree = (
-  fileTree: FileNode[],
-  newFile: FileNode,
-): FileNode[] => {
-  return fileTree.map((folder) => {
-    if (folder.type === "folder" && folder.children) {
-      return {
-        ...folder,
-        children: [...folder.children, newFile],
-      };
-    }
-    return folder;
-  });
-};
-
-export const removeFileFromTree = (
-  fileTree: FileNode[],
-  fileId: string,
-): FileNode[] => {
-  return fileTree.map((folder) => {
-    if (folder.type === "folder" && folder.children) {
-      return {
-        ...folder,
-        children: folder.children.filter((file) => file.id !== fileId),
-      };
-    }
-    return folder;
-  });
-};
-
-export const updateFileInTree = (
-  fileTree: FileNode[],
-  fileId: string,
-  content: string,
-): FileNode[] => {
-  return fileTree.map((folder) => {
-    if (folder.type === "folder" && folder.children) {
-      return {
-        ...folder,
-        children: folder.children.map((file) =>
-          file.id === fileId ? { ...file, content } : file,
-        ),
-      };
-    }
-    return folder;
-  });
-};
-
-// File UI and content helper functions
-export const getFileIcon = (fileType: string) => {
-  switch (fileType) {
-    case "tsx":
-    case "jsx":
-      return "blue";
-    case "css":
-      return "purple";
-    case "html":
-      return "orange";
-    case "js":
-      return "yellow";
-    case "json":
-      return "green";
-    default:
-      return "gray";
-  }
-};
-
-export const getFileById = (openFiles: any[], fileId: string) => {
-  return openFiles.find((file) => file.id === fileId);
-};
-
-export const getCurrentFileContent = (
-  openFiles: any[],
-  activeFile: string | null,
-) => {
-  if (!activeFile) return "";
-  const file = getFileById(openFiles, activeFile);
-  return file?.content || "";
-};
-
-export const setCurrentFileContent = (
-  openFiles: any[],
-  activeFile: string | null,
-  content: string,
-) => {
-  if (!activeFile) return openFiles;
-  return openFiles.map((file) =>
-    file.id === activeFile ? { ...file, content } : file,
-  );
-};
-
-export const getLanguageForType = (fileType: string) => {
-  switch (fileType) {
-    case "tsx":
-    case "jsx":
-      return "typescript";
-    case "css":
-      return "css";
-    case "html":
-      return "html";
-    case "js":
-      return "javascript";
-    case "json":
-      return "json";
-    default:
-      return "plaintext";
-  }
-};
+export {
+  addFileToTree,
+  copyToClipboard,
+  createFileNode,
+  getCurrentFileContent,
+  getFileById,
+  getFileIcon,
+  getLanguageForType,
+  removeFileFromTree,
+  setCurrentFileContent,
+  updateFileInTree,
+} from "./sharedEditorFileUtils";
 
 // Code generation helper functions
 export const isReactCode = (code: string): boolean => {
@@ -149,18 +28,46 @@ export const isReactCode = (code: string): boolean => {
 };
 
 export const cleanReactCode = (reactCode: string): string => {
-  // Remove import statements
-  let cleanedCode = reactCode
-    .replace(/import\s+.*?from\s+['"][^'"]*['"];?\s*/g, "")
-    .replace(/import\s+.*?;/g, "");
+  const lines = reactCode.split("\n");
+  let inImportBlock = false;
+  const withoutImports = lines.filter((line) => {
+    const trimmedLine = line.trimStart();
 
-  // Remove export statements
-  cleanedCode = cleanedCode
-    .replace(/export\s+default\s+/g, "")
-    .replace(/export\s+/g, "");
+    if (inImportBlock) {
+      if (trimmedLine.includes(" from ") || trimmedLine.endsWith(";")) {
+        inImportBlock = false;
+      }
+      return false;
+    }
+
+    if (trimmedLine.startsWith("import ")) {
+      inImportBlock =
+        !trimmedLine.includes(" from ") && !trimmedLine.endsWith(";");
+      return false;
+    }
+
+    return true;
+  });
+
+  const withoutExports = withoutImports.map((line) => {
+    const leadingWhitespace = /^\s*/.exec(line)?.[0] ?? "";
+    const trimmedLine = line.slice(leadingWhitespace.length);
+
+    if (trimmedLine.startsWith("export default ")) {
+      return leadingWhitespace + trimmedLine.replace(/^export default\s+/, "");
+    }
+
+    if (trimmedLine.startsWith("export ")) {
+      return leadingWhitespace + trimmedLine.replace(/^export\s+/, "");
+    }
+
+    return line;
+  });
+
+  let cleanedCode = withoutExports.join("\n");
 
   // Remove semicolons at the end of lines
-  cleanedCode = cleanedCode.replace(/;(\s*$)/gm, "$1");
+  cleanedCode = cleanedCode.replaceAll(/;(\s*$)/gm, "$1");
 
   return cleanedCode.trim();
 };
@@ -168,13 +75,6 @@ export const cleanReactCode = (reactCode: string): string => {
 export const generateConsoleCaptureCode = (): string => {
   return `
     // Console capture
-    const originalLog = dried = console.log(");
-    const originalError = x.error;
-    const originalWarn =一金.warn;
-    const originalInfo Info = console.info    const messages = = [];
-    
-   意义的.log = function    const messages = [];
-    
     const originalLog = console.log;
     const originalError = console.error;
     const originalWarn = console.warn;
@@ -350,16 +250,6 @@ export const createTaskData = (
     ...formData,
     files,
   };
-};
-
-export const copyToClipboard = async (content: string): Promise<void> => {
-  try {
-    await navigator.clipboard.writeText(content);
-    return Promise.resolve();
-  } catch (err) {
-    console.error("Failed to copy code:", err);
-    return Promise.reject(err);
-  }
 };
 
 export const getCategoryIcon = (category: string) => {

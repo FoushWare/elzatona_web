@@ -63,12 +63,7 @@ This guide documents all secrets that were exposed in the git repository history
 
 - `.cursor/mcp.json`
 
-<<<<<<< HEAD
-**Token:** `YOUR_GITHUB_TOKEN_HERE` (⚠️ Rotate immediately - token was exposed in git history)
-=======
 **Token:** `GH_OAUTH_TOKEN_PLACEHOLDER` (⚠️ Rotate immediately - token was exposed in git history)
-
-> > > > > > > origin/security/fix-gitleaks-config
 
 **Action Required:**
 
@@ -85,12 +80,7 @@ This guide documents all secrets that were exposed in the git repository history
 
 - `.cursor/mcp.json`
 
-<<<<<<< HEAD
-**Key:** `YOUR_OPENAI_API_KEY_HERE` (⚠️ Rotate immediately - key was exposed in git history)
-=======
 **Key:** `OPENAI_API_KEY_PLACEHOLDER` (⚠️ Rotate immediately - key was exposed in git history)
-
-> > > > > > > origin/security/fix-gitleaks-config
 
 **Action Required:**
 
@@ -107,12 +97,7 @@ This guide documents all secrets that were exposed in the git repository history
 
 - `Rest/docs/SENTRY_MCP_SETUP_COMPLETE.md`
 
-<<<<<<< HEAD
-**Token:** `YOUR_SENTRY_TOKEN_HERE` (⚠️ This token was exposed and should be rotated)
-=======
 **Token:** `SENTRY_TOKEN_PLACEHOLDER` (⚠️ This token was exposed and should be rotated)
-
-> > > > > > > origin/security/fix-gitleaks-config
 
 **Action Required:**
 

@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import jwt from "jsonwebtoken";
 import { getRepositoryFactory } from "@elzatona/database";
 import bcrypt from "bcryptjs";
+import { authRateLimiter } from "@elzatona/utilities";
 
 // Admin config - using environment variables directly
 const adminConfig = {
@@ -16,6 +17,29 @@ const adminConfig = {
 
 export async function POST(request: NextRequest) {
   try {
+    // Rate limiting: 10 auth attempts per minute per IP
+    const ip = request.headers.get("x-forwarded-for") ?? "anonymous";
+    const {
+      success: withinLimit,
+      remaining,
+      reset,
+    } = await authRateLimiter.check(10, ip);
+    if (!withinLimit) {
+      return NextResponse.json(
+        {
+          success: false,
+          error: "Too many login attempts. Please try again later.",
+        },
+        {
+          status: 429,
+          headers: {
+            "Retry-After": String(Math.ceil((reset - Date.now()) / 1000)),
+            "X-RateLimit-Remaining": String(remaining),
+          },
+        },
+      );
+    }
+
     const body = await request.json();
     const { email, password } = body;
 
@@ -38,7 +62,8 @@ export async function POST(request: NextRequest) {
     const adminData = await userRepo.findAdminByEmail(email);
 
     if (!adminData) {
-      console.log(`[Admin Auth API] \u274c No admin found for ${email}`);
+      const maskedEmail = email.replace(/^(.{2})[^@]*(@.*)$/, "$1***$2");
+      console.log(`[Admin Auth API] ❌ No admin found for ${maskedEmail}`);
       return NextResponse.json(
         { success: false, error: "Invalid email or password" },
         { status: 401 },

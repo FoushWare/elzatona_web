@@ -28,7 +28,7 @@ interface ProblemSolverProps {
 
 export const ProblemSolver: React.FC<ProblemSolverProps> = ({
   task,
-  onCompleted,
+  onCompleted: _onCompleted,
   className,
 }) => {
   const {
@@ -56,9 +56,9 @@ export const ProblemSolver: React.FC<ProblemSolverProps> = ({
 
             <div className="mt-8 space-y-4">
               <h3 className="font-semibold text-lg">Examples</h3>
-              {task.examples.map((example, idx) => (
+              {task.examples.map((example) => (
                 <div
-                  key={idx}
+                  key={`${example.input}-${example.output}`}
                   className="bg-gray-100 dark:bg-gray-800 p-3 rounded-lg text-sm"
                 >
                   <div>
@@ -79,8 +79,8 @@ export const ProblemSolver: React.FC<ProblemSolverProps> = ({
             <div className="mt-8">
               <h3 className="font-semibold text-lg mb-2">Constraints</h3>
               <ul className="list-disc pl-5 space-y-1">
-                {task.constraints.map((c, i) => (
-                  <li key={i} className="text-sm">
+                {task.constraints.map((c) => (
+                  <li key={c} className="text-sm">
                     {c}
                   </li>
                 ))}

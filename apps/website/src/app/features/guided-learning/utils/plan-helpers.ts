@@ -1,8 +1,9 @@
 import { GradeLevel } from "../types";
 
 export function getDayNumberFromName(planName: string): number {
-  const match = planName?.match(/(\d+)-Day/);
-  return match ? parseInt(match[1], 10) : NaN;
+  const regex = /(\d+)-Day/;
+  const match = regex.exec(planName);
+  return match ? Number.parseInt(match[1], 10) : Number.NaN;
 }
 
 export function getGradeColor(percentage: number): string {
@@ -49,7 +50,7 @@ export function getQuestionsRange(
 ): string {
   const nums = plans
     .map((p) => p.totalQuestions)
-    .filter((n): n is number => typeof n === "number" && !isNaN(n));
+    .filter((n): n is number => typeof n === "number" && !Number.isNaN(n));
 
   if (nums.length >= 1) {
     return `${Math.min(...nums)}-${Math.max(...nums)}`;
@@ -62,11 +63,11 @@ export function getDaysRange(
 ): string {
   const durations = plans
     .map((p) =>
-      typeof p.duration === "number" && !isNaN(p.duration)
+      typeof p.duration === "number" && !Number.isNaN(p.duration)
         ? p.duration
         : getDayNumberFromName(p.name),
     )
-    .filter((n): n is number => typeof n === "number" && !isNaN(n));
+    .filter((n): n is number => typeof n === "number" && !Number.isNaN(n));
 
   if (durations.length >= 1) {
     return `${Math.min(...durations)}-${Math.max(...durations)}`;

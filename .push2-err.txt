@@ -1,0 +1,6 @@
+remote: 
+remote: GitHub found 5 vulnerabilities on FoushWare/elzatona_web's default branch (2 high, 3 moderate). To find out more, visit:        
+remote:      https://github.com/FoushWare/elzatona_web/security/dependabot        
+remote: 
+To https://github.com/FoushWare/elzatona_web.git
+   e9c1c0b2..26d0a3e6  fix/clear-text-logging -> fix/clear-text-logging

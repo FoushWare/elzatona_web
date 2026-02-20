@@ -41,14 +41,19 @@ const makeMockTask = (id: string): FrontendTask => ({
 
 type Props = { params: Promise<{ id: string }> };
 
-export default async function Page({ params }: Props) {
-  const { id } = await params;
-  const task = makeMockTask(id);
+export default function Page({ params }: Props) {
+  const [task, setTask] = React.useState(null as any);
+  React.useEffect(() => {
+    params.then(({ id }) => {
+      setTask(makeMockTask(id));
+    });
+  }, [params]);
 
+  if (!task) return null;
   return <FrontendTaskPage task={task} />;
 }
 
-function FrontendTaskPage({ task }: { task: FrontendTask }) {
+function FrontendTaskPage({ task }: Readonly<{ task: FrontendTask }>) {
   const [files, setFiles] = useState(
     task.files.map((f) => ({ id: f.id, path: f.path, content: f.content })),
   );

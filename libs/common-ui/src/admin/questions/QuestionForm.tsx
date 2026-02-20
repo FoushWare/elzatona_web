@@ -172,7 +172,8 @@ const createFormHandlers = (
         ...prev,
         resources: parsed,
       }));
-    } catch (_error) {
+    } catch (error) {
+      console.warn("Failed to parse resources JSON, using raw value:", error);
       setFormData((prev) => ({
         ...prev,
         resources: value as unknown as string[],
@@ -340,7 +341,7 @@ export const AdminQuestionForm = React.forwardRef<
                   {questionTypes.map((type) => (
                     <SelectItem key={type} value={type}>
                       {type.charAt(0).toUpperCase() +
-                        type.slice(1).replace("-", " ")}
+                        type.slice(1).replaceAll("-", " ")}
                     </SelectItem>
                   ))}
                 </SelectField>

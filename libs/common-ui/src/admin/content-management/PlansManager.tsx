@@ -1,4 +1,16 @@
-"use client";
+// Helper functions to avoid nested filter operations
+function countSelectedQuestionsForPlan(
+  planId: string,
+  planQuestions: Set<string>,
+): number {
+  return Array.from(planQuestions).filter((pq) => pq.startsWith(`${planId}-`))
+    .length;
+}
+
+// Helper function to get topics for a category
+function getTopicsForCategory(categoryId: string, topics: Topic[]): Topic[] {
+  return topics.filter((topic) => topic.category_id === categoryId);
+}
 
 import React from "react";
 import {
@@ -28,7 +40,6 @@ import {
   AdminLearningCard,
   AdminCategory,
   Topic,
-  AdminQuestion,
   ContentManagementStats,
 } from "@elzatona/types";
 
@@ -45,7 +56,6 @@ interface PlansManagerProps {
   cards: AdminLearningCard[];
   categories: AdminCategory[];
   topics: Topic[];
-  questions: AdminQuestion[];
   stats: ContentManagementStats;
   planQuestions: Set<string>;
   expandedPlans: Set<string>;
@@ -60,21 +70,126 @@ interface PlansManagerProps {
   onDeletePlan: (plan: LearningPlan) => void;
   onCreatePlan: () => void;
   onManageCards: (plan: LearningPlan) => void;
-  onToggleQuestionInPlan: (
-    questionId: string,
-    planId: string,
-    topicId: string,
-    isInPlan: boolean,
-  ) => void;
   openTopicQuestionsModal: (topic: Topic, plan: LearningPlan) => void;
 }
+
+const PlanTopicNode: React.FC<{
+  topic: Topic;
+  plan: LearningPlan;
+  expandedPlanTopics: Set<string>;
+  togglePlanTopic: (id: string) => void;
+  openTopicQuestionsModal: (topic: Topic, plan: LearningPlan) => void;
+  selectedQuestionsCount: number;
+}> = ({
+  topic,
+  plan,
+  expandedPlanTopics,
+  togglePlanTopic,
+  openTopicQuestionsModal,
+  selectedQuestionsCount,
+}) => {
+  return (
+    <div className="border-l-2 border-orange-100 pl-4 py-1">
+      <div className="flex items-center justify-between">
+        <div className="flex items-center space-x-2">
+          <button
+            onClick={() => togglePlanTopic(topic.id)}
+            className="p-1 hover:bg-gray-100 rounded"
+          >
+            {expandedPlanTopics.has(topic.id) ? (
+              <ChevronDown className="h-4 w-4" />
+            ) : (
+              <ChevronRight className="h-4 w-4" />
+            )}
+          </button>
+          <Target className="h-4 w-4 text-orange-600" />
+          <span className="text-xs">{topic.name}</span>
+        </div>
+        <div className="flex items-center space-x-2">
+          <Button
+            variant="ghost"
+            size="sm"
+            className="h-7 text-[10px] text-blue-600"
+            onClick={() => openTopicQuestionsModal(topic, plan)}
+          >
+            Add Questions
+          </Button>
+          <Badge variant="outline" className="text-[10px] bg-green-50">
+            {selectedQuestionsCount} Selected
+          </Badge>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const PlanCategoryNode: React.FC<{
+  category: AdminCategory;
+  categoryTopics: Topic[];
+  plan: LearningPlan;
+  expandedPlanCategories: Set<string>;
+  togglePlanCategory: (id: string) => void;
+  expandedPlanTopics: Set<string>;
+  togglePlanTopic: (id: string) => void;
+  openTopicQuestionsModal: (topic: Topic, plan: LearningPlan) => void;
+  selectedQuestionsCount: number;
+}> = ({
+  category,
+  categoryTopics,
+  plan,
+  expandedPlanCategories,
+  togglePlanCategory,
+  expandedPlanTopics,
+  togglePlanTopic,
+  openTopicQuestionsModal,
+  selectedQuestionsCount,
+}) => {
+  return (
+    <div className="border-l-2 border-purple-200 pl-4">
+      <div className="flex items-center justify-between py-1">
+        <div className="flex items-center space-x-2">
+          <button
+            onClick={() => togglePlanCategory(category.id)}
+            className="p-1 hover:bg-gray-100 rounded"
+          >
+            {expandedPlanCategories.has(category.id) ? (
+              <ChevronDown className="h-4 w-4" />
+            ) : (
+              <ChevronRight className="h-4 w-4" />
+            )}
+          </button>
+          <BookOpen className="h-4 w-4 text-purple-600" />
+          <span className="text-sm font-medium">{category.name}</span>
+        </div>
+        <Badge variant="outline" className="text-[10px] bg-purple-50">
+          {categoryTopics.length} Topics
+        </Badge>
+      </div>
+
+      {expandedPlanCategories.has(category.id) && (
+        <div className="ml-6 space-y-2">
+          {categoryTopics.map((topic) => (
+            <PlanTopicNode
+              key={topic.id}
+              topic={topic}
+              plan={plan}
+              expandedPlanTopics={expandedPlanTopics}
+              togglePlanTopic={togglePlanTopic}
+              openTopicQuestionsModal={openTopicQuestionsModal}
+              selectedQuestionsCount={selectedQuestionsCount}
+            />
+          ))}
+        </div>
+      )}
+    </div>
+  );
+};
 
 export const PlansManager: React.FC<PlansManagerProps> = ({
   plans,
   cards,
   categories,
   topics,
-  questions,
   stats,
   planQuestions,
   expandedPlans,
@@ -89,7 +204,6 @@ export const PlansManager: React.FC<PlansManagerProps> = ({
   onDeletePlan,
   onCreatePlan,
   onManageCards,
-  onToggleQuestionInPlan,
   openTopicQuestionsModal,
 }) => {
   return (
@@ -308,119 +422,31 @@ export const PlansManager: React.FC<PlansManagerProps> = ({
                             {expandedPlanCards.has(card.id) && (
                               <div className="ml-6 space-y-4">
                                 {cardCategories.map((category) => {
-                                  const categoryTopics = topics.filter(
-                                    (topic) =>
-                                      topic.category_id === category.id,
+                                  const categoryTopics = getTopicsForCategory(
+                                    category.id,
+                                    topics,
                                   );
 
                                   return (
-                                    <div
+                                    <PlanCategoryNode
                                       key={category.id}
-                                      className="border-l-2 border-purple-200 pl-4"
-                                    >
-                                      <div className="flex items-center justify-between py-1">
-                                        <div className="flex items-center space-x-2">
-                                          <button
-                                            onClick={() =>
-                                              togglePlanCategory(category.id)
-                                            }
-                                            className="p-1 hover:bg-gray-100 rounded"
-                                          >
-                                            {expandedPlanCategories.has(
-                                              category.id,
-                                            ) ? (
-                                              <ChevronDown className="h-4 w-4" />
-                                            ) : (
-                                              <ChevronRight className="h-4 w-4" />
-                                            )}
-                                          </button>
-                                          <BookOpen className="h-4 w-4 text-purple-600" />
-                                          <span className="text-sm font-medium">
-                                            {category.name}
-                                          </span>
-                                        </div>
-                                        <Badge
-                                          variant="outline"
-                                          className="text-[10px] bg-purple-50"
-                                        >
-                                          {categoryTopics.length} Topics
-                                        </Badge>
-                                      </div>
-
-                                      {expandedPlanCategories.has(
-                                        category.id,
-                                      ) && (
-                                        <div className="ml-6 space-y-2">
-                                          {categoryTopics.map((topic) => {
-                                            const topicQuestions =
-                                              questions.filter(
-                                                (q) => q.topic_id === topic.id,
-                                              );
-                                            return (
-                                              <div
-                                                key={topic.id}
-                                                className="border-l-2 border-orange-100 pl-4 py-1"
-                                              >
-                                                <div className="flex items-center justify-between">
-                                                  <div className="flex items-center space-x-2">
-                                                    <button
-                                                      onClick={() =>
-                                                        togglePlanTopic(
-                                                          topic.id,
-                                                        )
-                                                      }
-                                                      className="p-1 hover:bg-gray-100 rounded"
-                                                    >
-                                                      {expandedPlanTopics.has(
-                                                        topic.id,
-                                                      ) ? (
-                                                        <ChevronDown className="h-4 w-4" />
-                                                      ) : (
-                                                        <ChevronRight className="h-4 w-4" />
-                                                      )}
-                                                    </button>
-                                                    <Target className="h-4 w-4 text-orange-600" />
-                                                    <span className="text-xs">
-                                                      {topic.name}
-                                                    </span>
-                                                  </div>
-                                                  <div className="flex items-center space-x-2">
-                                                    <Button
-                                                      variant="ghost"
-                                                      size="sm"
-                                                      className="h-7 text-[10px] text-blue-600"
-                                                      onClick={() =>
-                                                        openTopicQuestionsModal(
-                                                          topic,
-                                                          plan,
-                                                        )
-                                                      }
-                                                    >
-                                                      Add Questions
-                                                    </Button>
-                                                    <Badge
-                                                      variant="outline"
-                                                      className="text-[10px] bg-green-50"
-                                                    >
-                                                      {
-                                                        Array.from(
-                                                          planQuestions,
-                                                        ).filter((pq) =>
-                                                          pq.startsWith(
-                                                            `${plan.id}-`,
-                                                          ),
-                                                        ).length
-                                                      }{" "}
-                                                      Selected
-                                                    </Badge>
-                                                  </div>
-                                                </div>
-                                              </div>
-                                            );
-                                          })}
-                                        </div>
+                                      category={category}
+                                      categoryTopics={categoryTopics}
+                                      plan={plan}
+                                      expandedPlanCategories={
+                                        expandedPlanCategories
+                                      }
+                                      togglePlanCategory={togglePlanCategory}
+                                      expandedPlanTopics={expandedPlanTopics}
+                                      togglePlanTopic={togglePlanTopic}
+                                      openTopicQuestionsModal={
+                                        openTopicQuestionsModal
+                                      }
+                                      selectedQuestionsCount={countSelectedQuestionsForPlan(
+                                        plan.id,
+                                        planQuestions,
                                       )}
-                                    </div>
+                                    />
                                   );
                                 })}
                               </div>

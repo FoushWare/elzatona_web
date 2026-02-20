@@ -33,18 +33,20 @@ function checkCodeIndicators(trimmed: string): {
   });
 
   const structurePatterns = [
-    /\{\s*[\s\S]*\s*\}/,
-    /\[\s*[\s\S]*\s*\]/,
-    /\(\s*[\s\S]*\s*\)\s*\{/,
+    /\{[^}]*\}/,
+    /\[[^\]]*\]/,
+    /\([^)]*\)\s*\{/,
     /=\s*\{/,
     /=\s*\[/,
     /:\s*function/,
     /:\s*\(/,
   ];
 
-  structurePatterns.forEach(() => {
-    score += 2;
-    reasons.push("Code structure pattern found");
+  structurePatterns.forEach((pattern) => {
+    if (pattern.test(trimmed)) {
+      score += 2;
+      reasons.push("Code structure pattern found");
+    }
   });
 
   const operatorPatterns = [
@@ -534,30 +536,30 @@ function cleanCodePatterns(code: string): string {
   let cleaned = code;
   for (let pass = 0; pass < 3; pass++) {
     cleaned = cleaned
-      .replace("e>e>e>", "")
-      .replace("e>e>", "")
+      .replaceAll("e>e>e>", "")
+      .replaceAll("e>e>", "")
       .replaceAll(/^e>+/g, "")
       .replaceAll(/e>+$/g, "")
       .replaceAll(/(\w+)e>/g, "$1")
       .replaceAll(/e>(\w+)/g, "$1")
       .replaceAll(/\s*e>\s*/g, " ")
-      .replace("consoleonsole.loge>.log", "console.log")
-      .replace("consoleonsole.log", "console.log")
-      .replace("console.loge>.log", "console.log")
-      .replace("console.loge>", "console.log")
-      .replace("console.log>", "console.log")
-      .replace("console.loge.log", "console.log")
-      .replace("console.log.log", "console.log")
+      .replaceAll("consoleonsole.loge>.log", "console.log")
+      .replaceAll("consoleonsole.log", "console.log")
+      .replaceAll("console.loge>.log", "console.log")
+      .replaceAll("console.loge>", "console.log")
+      .replaceAll("console.log>", "console.log")
+      .replaceAll("console.loge.log", "console.log")
+      .replaceAll("console.log.log", "console.log")
       .replaceAll(/(\w+)onsole\.log/g, "console.log")
       .replaceAll(/console\.log([^a-zA-Z])/g, "console.log$1")
-      .replace("diameterameter", "diameter")
-      .replace("perimeterimeter", "perimeter")
-      .replace("newColorwColor", "newColor")
+      .replaceAll("diameterameter", "diameter")
+      .replaceAll("perimeterimeter", "perimeter")
+      .replaceAll("newColorwColor", "newColor")
       .replaceAll(/(\w+)ameter/g, "$1")
       .replaceAll(/(\w+)imeter/g, "$1")
-      .replace("NaNe>NaN", "NaN")
-      .replace("NaNe>", "NaN")
-      .replace("NaN>", "NaN")
+      .replaceAll("NaNe>NaN", "NaN")
+      .replaceAll("NaNe>", "NaN")
+      .replaceAll("NaN>", "NaN")
       .replaceAll(/(\w{1,50})\s*<\s*(\d{1,10})\s*>/g, "$1 < $2 >")
       .replaceAll(/(\w{1,50})\s*<\s*(\d{1,10})/g, "$1 < $2")
       .replaceAll(/(\d{1,10})\s*>/g, "$1 >")
@@ -569,8 +571,8 @@ function cleanCodePatterns(code: string): string {
 
   for (let i = 0; i < 2; i++) {
     cleaned = cleaned
-      .replace("e>e>e>", "")
-      .replace("e>e>", "")
+      .replaceAll("e>e>e>", "")
+      .replaceAll("e>e>", "")
       .replaceAll(/^e>+/g, "")
       .replaceAll(/e>+$/g, "")
       .replaceAll(/(\w+)e>/g, "$1")
@@ -705,20 +707,22 @@ function cleanMalformedCode(code: string): string {
   code = decodeHtmlEntities(code);
   code = sanitizeText(code);
 
-  for (let i = 0; i < 3; i++) {
+  // Loop until content stabilizes — prevents incomplete multi-character sanitization
+  let previousCode = "";
+  for (let i = 0; i < 5 && code !== previousCode; i++) {
+    previousCode = code;
     code = code
-      .replace("e>e>e>", "")
-      .replace("e>e>", "")
+      .replaceAll("e>e>e>", "")
+      .replaceAll("e>e>", "")
       .replaceAll(/^e>+/g, "")
       .replaceAll(/e>+$/g, "")
       .replaceAll(/(\w+)e>/g, "$1")
-      .replace("consoleonsole.log", "console.log")
-      .replace("console.loge>", "console.log")
-      .replace("diameterameter", "diameter")
-      .replace("perimeterimeter", "perimeter")
-      .replace("newColorwColor", "newColor")
-      // codeql[js/incomplete-multi-character-sanitization]: sanitizeText() called immediately after this line removes all HTML
-      .replace("NaNe>", "NaN");
+      .replaceAll("consoleonsole.log", "console.log")
+      .replaceAll("console.loge>", "console.log")
+      .replaceAll("diameterameter", "diameter")
+      .replaceAll("perimeterimeter", "perimeter")
+      .replaceAll("newColorwColor", "newColor")
+      .replaceAll("NaNe>", "NaN");
     // SECURITY: Final sanitization pass after each iteration to ensure no HTML remains
     code = sanitizeText(code);
   }
@@ -811,11 +815,14 @@ function processMarkdownCodeBlocks(fixedContent: string): Array<{
 
   while ((mdMatch = markdownCodeBlockRegex.exec(fixedContent)) !== null) {
     // SECURITY: Sanitize markdown code block content to prevent HTML injection
-    // codeql[js/incomplete-multi-character-sanitization]: Content is sanitized before being added to matches
     let sanitizedContent = mdMatch[2].trim();
-    // Decode HTML entities first, then sanitize to remove any HTML tags
+    // Decode HTML entities first, then loop-sanitize to remove any HTML tags (prevents nested tag bypass)
     sanitizedContent = decodeHtmlEntities(sanitizedContent);
-    sanitizedContent = sanitizeText(sanitizedContent);
+    let prev = "";
+    while (sanitizedContent !== prev) {
+      prev = sanitizedContent;
+      sanitizedContent = sanitizeText(sanitizedContent);
+    }
 
     markdownMatches.push({
       index: mdMatch.index,
@@ -838,7 +845,10 @@ function cleanTextContent(text: string): string {
     cleanText = cleanText.replace(codeMatch[0], `\`${codeMatch[1]}\``);
   }
   cleanText = sanitizeText(cleanText);
-  for (let i = 0; i < 3; i++) {
+  // Loop until content stabilizes — prevents incomplete multi-character sanitization
+  let previousClean = "";
+  for (let i = 0; i < 5 && cleanText !== previousClean; i++) {
+    previousClean = cleanText;
     cleanText = cleanText
       .replaceAll(/<pr<cod?/gi, "")
       .replaceAll(/<pr</gi, "")
@@ -847,8 +857,8 @@ function cleanTextContent(text: string): string {
       .replaceAll(/<\/cod?/gi, "")
       .replaceAll(/<\/pr/gi, "")
       .replaceAll(/<\/cod/gi, "")
-      .replace("e>e>e>", "")
-      .replace("e>e>", "")
+      .replaceAll("e>e>e>", "")
+      .replaceAll("e>e>", "")
       .replaceAll(/^e>+/g, "")
       .replaceAll(/e>+$/g, "")
       .replaceAll(/(\w+)e>/g, "$1")
@@ -856,9 +866,8 @@ function cleanTextContent(text: string): string {
       .replaceAll(/\s*e>\s*/g, " ")
       .replaceAll(/^>\s*/g, "")
       .replaceAll(/\s*>$/g, "")
-      // codeql[js/incomplete-multi-character-sanitization]: sanitizeText() called immediately after this line removes all HTML tags
       .replaceAll(/\s+>\s+/g, " ");
-    // SECURITY: Final sanitization pass after each iteration to ensure no HTML remains
+    // SECURITY: Final sanitization pass after each iteration — DOMPurify removes all HTML tags
     cleanText = sanitizeText(cleanText);
   }
   cleanText = cleanText
@@ -897,7 +906,7 @@ function processFinalTextContent(
   fixedContent: string,
 ): React.ReactElement | null {
   const MAX_INPUT_SIZE = 100000;
-  let cleanContent = fixedContent;
+  let cleanContent = decodeHtmlEntities(fixedContent);
 
   if (cleanContent.length > MAX_INPUT_SIZE) {
     cleanContent = cleanContent.substring(0, MAX_INPUT_SIZE);
@@ -913,8 +922,8 @@ function processFinalTextContent(
       .replaceAll(/<\/?[a-z][a-z0-9]{0,20}(?:\s+[^>]{0,200})?>/gi, "")
       .replaceAll(/<pr/gi, "")
       .replaceAll(/<[^>]+>/g, "")
-      .replace("e>e>e>", "")
-      .replace("e>e>", "")
+      .replaceAll("e>e>e>", "")
+      .replaceAll("e>e>", "")
       .replaceAll(/^e>+/g, "")
       .replaceAll(/e>+$/g, "")
       .replaceAll(/(\w+)e>/g, "$1")
@@ -925,12 +934,7 @@ function processFinalTextContent(
       .replaceAll(/\s+>\s+/g, " ");
   }
 
-  cleanContent = cleanContent
-    .replace("&nbsp;", " ")
-    .replace("&lt;", "<")
-    .replace("&gt;", ">")
-    .replace("&amp;", "&")
-    .trim();
+  cleanContent = sanitizeText(cleanContent).trim();
 
   const codeValidation = isValidCode(cleanContent);
 
