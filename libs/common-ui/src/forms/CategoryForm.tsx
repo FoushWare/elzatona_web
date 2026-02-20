@@ -102,11 +102,17 @@ export const CategoryForm: React.FC<CategoryFormProps> = ({
     if (!category && formData["name"]) {
       const slug = formData["name"]
         .toLowerCase()
-        .replace(/[^a-z0-9]+/g, "-")
-        .replace(/(^-|-$)/g, "");
+        .replaceAll(/[^a-z0-9]+/g, "-")
+        .replaceAll(/(^-|-$)/g, "");
       setFormData((prev) => ({ ...prev, slug }));
     }
   }, [formData, category]);
+
+  const submitLabel = isLoading
+    ? "Saving..."
+    : category
+      ? "Update Category"
+      : "Create Category";
 
   const validateForm = (): boolean => {
     const newErrors: Record<string, string> = {};
@@ -305,11 +311,7 @@ export const CategoryForm: React.FC<CategoryFormProps> = ({
           Cancel
         </Button>
         <Button type="submit" disabled={isLoading}>
-          {isLoading
-            ? "Saving..."
-            : category
-              ? "Update Category"
-              : "Create Category"}
+          {submitLabel}
         </Button>
       </div>
     </form>

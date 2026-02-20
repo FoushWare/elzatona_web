@@ -5,6 +5,7 @@ import {
   useContext,
   useState,
   useEffect,
+  useMemo,
   ReactNode,
 } from "react";
 
@@ -40,7 +41,9 @@ interface CookieAuthProviderProps {
   children: ReactNode;
 }
 
-export function CookieAuthProvider({ children }: CookieAuthProviderProps) {
+export function CookieAuthProvider({
+  children,
+}: Readonly<CookieAuthProviderProps>) {
   const [user, setUser] = useState<CookieUser | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -130,14 +133,17 @@ export function CookieAuthProvider({ children }: CookieAuthProviderProps) {
     }
   };
 
-  const value: CookieAuthContextType = {
-    user,
-    isAuthenticated: !!user,
-    isLoading,
-    signIn,
-    signOut,
-    refreshAuth,
-  };
+  const value: CookieAuthContextType = useMemo(
+    () => ({
+      user,
+      isAuthenticated: !!user,
+      isLoading,
+      signIn,
+      signOut,
+      refreshAuth,
+    }),
+    [user, isLoading],
+  );
 
   return (
     <CookieAuthContext.Provider value={value}>

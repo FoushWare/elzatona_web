@@ -83,6 +83,42 @@ async function removeGuidedProgressKey(key: string): Promise<void> {
   }
 }
 
+async function syncSingleGuidedProgress(
+  key: string,
+  authToken: string,
+  userId?: string,
+): Promise<{ planId: string; error?: string }> {
+  const planId = key.replace("guided-practice-progress-", "");
+
+  try {
+    const { progress } = parseGuidedProgressEntry(key);
+
+    const response = await fetch("/api/progress/guided-learning/sync", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${authToken}`,
+      },
+      body: JSON.stringify(buildGuidedSyncPayload(planId, progress, userId)),
+    });
+
+    if (!response.ok) {
+      const errorData = await response
+        .json()
+        .catch(() => ({ error: "Unknown error" }));
+      return { planId, error: errorData.error ?? "Sync failed" };
+    }
+
+    await removeGuidedProgressKey(key);
+    return { planId };
+  } catch (error) {
+    return {
+      planId,
+      error: error instanceof Error ? error.message : "Parse error",
+    };
+  }
+}
+
 /**
  * Sync all guided learning progress from localStorage to database
  * @param authToken - The authentication token (for Authorization header)
@@ -92,44 +128,23 @@ export async function syncAllGuidedProgress(
   authToken: string,
   userId?: string,
 ): Promise<{ success: boolean; synced: number; errors: string[] }> {
-  const synced: string[] = [];
+  let syncedCount = 0;
   const errors: string[] = [];
   const guidedKeys = getGuidedProgressKeys();
 
   for (const key of guidedKeys) {
-    const planId = key.replace("guided-practice-progress-", "");
-    try {
-      const { progress } = parseGuidedProgressEntry(key);
-
-      const response = await fetch("/api/progress/guided-learning/sync", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${authToken}`,
-        },
-        body: JSON.stringify(buildGuidedSyncPayload(planId, progress, userId)),
-      });
-
-      if (!response.ok) {
-        const errorData = await response
-          .json()
-          .catch(() => ({ error: "Unknown error" }));
-        errors.push(`Plan ${planId}: ${errorData.error || "Sync failed"}`);
-        continue;
-      }
-
-      synced.push(planId);
-      await removeGuidedProgressKey(key);
-    } catch (error) {
-      errors.push(
-        `Plan ${planId}: ${error instanceof Error ? error.message : "Parse error"}`,
-      );
+    const result = await syncSingleGuidedProgress(key, authToken, userId);
+    if (result.error) {
+      errors.push(`Plan ${result.planId}: ${result.error}`);
+      continue;
     }
+
+    syncedCount += 1;
   }
 
   return {
     success: errors.length === 0,
-    synced: synced.length,
+    synced: syncedCount,
     errors,
   };
 }
@@ -220,7 +235,7 @@ export async function syncAllProgressOnLogin(
       : {
           success: false,
           synced: 0,
-          errors: [guidedResult.reason?.message || "Unknown error"],
+          errors: [guidedResult.reason?.message ?? "Unknown error"],
         };
 
   const freeStyle =
@@ -228,7 +243,7 @@ export async function syncAllProgressOnLogin(
       ? freeStyleResult.value
       : {
           success: false,
-          error: freeStyleResult.reason?.message || "Unknown error",
+          error: freeStyleResult.reason?.message ?? "Unknown error",
         };
 
   const overallSuccess = guided.success && freeStyle.success;

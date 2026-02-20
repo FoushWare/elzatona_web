@@ -66,10 +66,10 @@ interface AlertIssueMapping {
 }
 
 class CodeScanningToIssues {
-  private octokit: Octokit;
-  private owner: string;
-  private repo: string;
-  private dryRun: boolean;
+  private readonly octokit: Octokit;
+  private readonly owner: string;
+  private readonly repo: string;
+  private readonly dryRun: boolean;
   private alertIssueMapping: AlertIssueMapping = {};
 
   constructor(
@@ -145,7 +145,9 @@ class CodeScanningToIssues {
     } catch (error: any) {
       if (error.status === 404) {
         console.log('📝 Creating "bugs" label...');
-        if (!this.dryRun) {
+        if (this.dryRun) {
+          console.log('🔍 [DRY RUN] Would create "bugs" label');
+        } else {
           await this.octokit.issues.createLabel({
             owner: this.owner,
             repo: this.repo,
@@ -154,8 +156,6 @@ class CodeScanningToIssues {
             description: "Code scanning security or quality issues",
           });
           console.log('✅ "bugs" label created');
-        } else {
-          console.log('🔍 [DRY RUN] Would create "bugs" label');
         }
       } else {
         throw error;
@@ -317,7 +317,9 @@ class CodeScanningToIssues {
     console.log(`📝 Creating issue for Alert #${alert.number}...`);
     console.log(`   Title: ${title}`);
 
-    if (!this.dryRun) {
+    if (this.dryRun) {
+      console.log("🔍 [DRY RUN] Would create issue");
+    } else {
       try {
         const { data: issue } = await this.octokit.issues.create({
           owner: this.owner,
@@ -343,8 +345,6 @@ class CodeScanningToIssues {
         }
         throw error;
       }
-    } else {
-      console.log("🔍 [DRY RUN] Would create issue");
     }
 
     return false;
@@ -375,7 +375,8 @@ class CodeScanningToIssues {
     if (alert.rule.name) {
       body += `**Rule Name:** ${alert.rule.name}\n`;
     }
-    body += `**Tool:** ${alert.tool.name}${alert.tool.version ? ` (${alert.tool.version})` : ""}\n`;
+    const toolVersionSuffix = alert.tool.version ? ` (${alert.tool.version})` : "";
+    body += `**Tool:** ${alert.tool.name}${toolVersionSuffix}\n`;
     body += `**State:** ${alert.state}\n\n`;
 
     // Description
@@ -401,7 +402,10 @@ class CodeScanningToIssues {
 
     // Tags
     if (alert.rule.tags && alert.rule.tags.length > 0) {
-      body += `### Tags\n\n${alert.rule.tags.map((tag) => `\`${tag}\``).join(", ")}\n\n`;
+      const formattedTags = alert.rule.tags
+        .map((tag) => `\`${tag}\``)
+        .join(", ");
+      body += `### Tags\n\n${formattedTags}\n\n`;
     }
 
     // Links
@@ -457,10 +461,12 @@ async function main() {
 
 // Run if executed directly
 if (require.main === module) {
-  main().catch((error) => {
+  try {
+    await main();
+  } catch (error) {
     console.error("Fatal error:", error);
     process.exit(1);
-  });
+  }
 }
 
 export { CodeScanningToIssues };
