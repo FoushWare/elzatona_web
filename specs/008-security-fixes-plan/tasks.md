@@ -60,8 +60,8 @@
 
 ## Phase 10: PR08 - Gitleaks Docs Secrets
 
-- [ ] T032 [P] [US8] Replace hardcoded secrets in documentation files listed in contracts/PR08-gitleaks-docs-secrets.md
-- [ ] T033 [US8] Update .gitleaks.toml allowlist for docs
+- [x] T032 [P] [US8] Replace hardcoded secrets in documentation files listed in contracts/PR08-gitleaks-docs-secrets.md
+- [x] T033 [US8] Update .gitleaks.toml allowlist for docs
 - [ ] T034 [US8] Commit fixes with message in contracts/PR08-gitleaks-docs-secrets.md
 
 ## Phase 11: PR09 - Gitleaks Scripts Secrets

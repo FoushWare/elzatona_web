@@ -72,7 +72,7 @@ This guide will help you set up Firebase authentication for the Frontend KodDev 
 
 ```env
 # Firebase Configuration
-NEXT_PUBLIC_FIREBASE_API_KEY=your_firebase_api_key_here
+NEXT_PUBLIC_FIREBASE_API_KEY=<YOUR_FIREBASE_API_KEY_HERE>
 NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=your-project.firebaseapp.com
 NEXT_PUBLIC_FIREBASE_PROJECT_ID=your-project-id
 NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET=your-project.appspot.com
@@ -80,7 +80,7 @@ NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=123456789
 NEXT_PUBLIC_FIREBASE_APP_ID=1:123456789:web:abcdef123456
 
 # OpenAI API Key (for ChatGPT integration)
-OPENAI_API_KEY=your_openai_api_key_here
+OPENAI_API_KEY=<YOUR_OPENAI_API_KEY_HERE>
 ```
 
 ## Step 6: Enable Firestore Database
