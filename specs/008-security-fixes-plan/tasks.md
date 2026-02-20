@@ -16,14 +16,14 @@
 
 - [x] T007 [P] [US1] Update next version in package.json, apps/admin/package.json, apps/website/package.json
 - [x] T008 [US1] Run npm install and regenerate lockfile
-- [ ] T009 [US1] Verify build with npx nx run-many --target=build --all
+- [x] T009 [US1] Verify build with npx nx run-many --target=build --all
 - [ ] T010 [US1] Commit upgrade with message in contracts/PR01-nextjs-cve-upgrade.md
 
 ## Phase 4: PR02 - Sonar Blocker Auth Config
 
 - [x] T011 [P] [US2] Read apps/website/src/app/lib/auth-config.ts
 - [x] T012 [US2] Refactor function at line 47 to return different values based on input
-- [ ] T013 [US2] Verify build with npx nx run website:build
+- [x] T013 [US2] Verify build with npx nx run website:build
 - [ ] T014 [US2] Commit fix with message in contracts/PR02-sonar-blocker-auth-config.md
 
 ## Phase 5: PR03 - Sonar Quick Fixes
