@@ -52,7 +52,7 @@ SUPABASE_SERVICE_ROLE_KEY=your-service-role-key
 ```bash
 # .env.local
 DATABASE_TYPE=mongodb
-MONGODB_URI=mongodb+srv://username:password@cluster.mongodb.net/database
+MONGODB_URI=MONGO_URL
 MONGODB_DATABASE=elzatona
 ```
 
