@@ -57,12 +57,12 @@ BotFather: Done! Congratulations on your new bot. You will find it at
           section and profile picture for your bot...
 
           Use this token to access the HTTP API:
-          7123456789:AAHxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+          7123456789:TOKEN
 
           Keep your token secure and store it safely...
 ```
 
-⚠️ **IMPORTANT**: Save the token! It looks like: `7123456789:AAHxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx`
+⚠️ **IMPORTANT**: Save the token! It looks like: `7123456789:TOKEN`
 
 ---
 
