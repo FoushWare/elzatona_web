@@ -67,7 +67,7 @@
 ## Phase 11: PR09 - Gitleaks Scripts Secrets
 
 - [ ] T035 [P] [US9] Move hardcoded secrets in scripts to env vars per contracts/PR09-gitleaks-scripts-secrets.md
-- [ ] T036 [US9] Create/update .env.example with required keys
+- [x] T036 [US9] Create/update .env.example with required keys
 - [ ] T037 [US9] Commit fixes with message in contracts/PR09-gitleaks-scripts-secrets.md
 
 ## Phase 12: PR10 - Gitleaks Artifacts Cleanup
