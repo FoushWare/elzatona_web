@@ -117,7 +117,7 @@ export function useTheme() {
     // wrapping them in the ThemeProvider. Return a safe default in test
     // environments to avoid noisy failures; production/runtime still
     // enforces the provider requirement.
-    if (process.env.NODE_ENV === "test" || process.env.JEST_WORKER_ID) {
+    if (process.env["NODE_ENV"] === "test" || process.env["JEST_WORKER_ID"]) {
       return {
         isDarkMode: true,
         toggleDarkMode: () => {},

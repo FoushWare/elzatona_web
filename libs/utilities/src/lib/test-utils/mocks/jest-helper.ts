@@ -4,14 +4,20 @@
  * In runtime, provides no-op implementations
  */
 
+type JestLike = {
+  fn: <T extends (...args: any[]) => any>(implementation?: T) => T;
+};
+
+const jestRef = (globalThis as { jest?: JestLike }).jest;
+
 export function createMockFn<T extends (...args: any[]) => any>(
   implementation?: T | any,
 ): T {
-  if (typeof jest !== "undefined") {
+  if (jestRef) {
     if (implementation) {
-      return jest.fn(implementation) as unknown as T;
+      return jestRef.fn(implementation) as unknown as T;
     }
-    return jest.fn() as unknown as T;
+    return jestRef.fn() as unknown as T;
   }
   // Runtime fallback - return a no-op function
   if (implementation && typeof implementation === "function") {
@@ -21,7 +27,7 @@ export function createMockFn<T extends (...args: any[]) => any>(
 }
 
 export function createMockObject<T extends object>(defaultValue: T): T {
-  if (typeof jest !== "undefined") {
+  if (jestRef) {
     // In test environment, return the object as-is (tests will mock it)
     return defaultValue;
   }

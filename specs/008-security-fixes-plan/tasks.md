@@ -16,14 +16,14 @@
 
 - [x] T007 [P] [US1] Update next version in package.json, apps/admin/package.json, apps/website/package.json
 - [x] T008 [US1] Run npm install and regenerate lockfile
-- [ ] T009 [US1] Verify build with npx nx run-many --target=build --all
+- [x] T009 [US1] Verify build with npx nx run-many --target=build --all
 - [ ] T010 [US1] Commit upgrade with message in contracts/PR01-nextjs-cve-upgrade.md
 
 ## Phase 4: PR02 - Sonar Blocker Auth Config
 
 - [x] T011 [P] [US2] Read apps/website/src/app/lib/auth-config.ts
 - [x] T012 [US2] Refactor function at line 47 to return different values based on input
-- [ ] T013 [US2] Verify build with npx nx run website:build
+- [x] T013 [US2] Verify build with npx nx run website:build
 - [ ] T014 [US2] Commit fix with message in contracts/PR02-sonar-blocker-auth-config.md
 
 ## Phase 5: PR03 - Sonar Quick Fixes
@@ -31,32 +31,32 @@
 - [x] T015 [P] [US3] Refactor mutable let exports to const in homePageHelpers.ts, supabase-server.ts
 - [x] T016 [US3] Remove void operator in ErrorBoundary.tsx
 - [x] T017 [US3] Refactor Promise.resolve/reject in ProblemSolvingEditorUtils.ts, FrontendTaskEditorUtils.ts
-- [ ] T018 [US3] Add compare function to sort in validation.ts
-- [ ] T019 [US3] Commit fixes with message in contracts/PR03-sonar-quick-fixes.md
+- [x] T018 [US3] Add compare function to sort in validation.ts
+- [x] T019 [US3] Commit fixes with message in contracts/PR03-sonar-quick-fixes.md
 
 ## Phase 6: PR04 - Sonar Nested Functions
 
-- [ ] T020 [P] [US4] Extract deeply nested functions in LearningCardsManager.tsx, PlansManager.tsx, hierarchy/route.ts
-- [ ] T021 [US4] Refactor callbacks to named component-level functions
-- [ ] T022 [US4] Commit fixes with message in contracts/PR04-sonar-nested-functions.md
+- [x] T020 [P] [US4] Extract deeply nested functions in LearningCardsManager.tsx, PlansManager.tsx, hierarchy/route.ts
+- [x] T021 [US4] Refactor callbacks to named component-level functions
+- [x] T022 [US4] Commit fixes with message in contracts/PR04-sonar-nested-functions.md
 
 ## Phase 7: PR05 - Sonar Complexity API Routes
 
 - [x] T023 [P] [US5] Refactor unified/route.ts, unified/[id]/route.ts, plans/route.ts, plan-details/[planId]/route.ts, questions/route.ts, dashboard/stats/route.ts, plans/[id]/hierarchy/route.ts
 - [x] T024 [US5] Decompose main functions into helper functions per contract
-- [ ] T025 [US5] Commit fixes with message in contracts/PR05-sonar-complexity-api-routes.md
+- [x] T025 [US5] Commit fixes with message in contracts/PR05-sonar-complexity-api-routes.md
 
 ## Phase 8: PR06 - Sonar Complexity UI Components
 
 - [x] T026 [P] [US6] Refactor NavbarSimple.tsx, EnhancedDashboard.tsx, ProblemSolvingEditorComponents.tsx, FrontendTaskEditorComponents.tsx, admin-learning-cards/editors/
 - [x] T027 [US6] Extract nav sections and editor rendering into helpers/sub-components
-- [ ] T028 [US6] Commit fixes with message in contracts/PR06-sonar-complexity-ui-components.md
+- [x] T028 [US6] Commit fixes with message in contracts/PR06-sonar-complexity-ui-components.md
 
 ## Phase 9: PR07 - Sonar Complexity Utils
 
 - [x] T029 [P] [US7] Refactor markdown-question-parser.ts, validation.ts, helpers/homePageHelpers.ts
 - [x] T030 [US7] Decompose parser and validation logic into stages/functions
-- [ ] T031 [US7] Commit fixes with message in contracts/PR07-sonar-complexity-utils.md
+- [x] T031 [US7] Commit fixes with message in contracts/PR07-sonar-complexity-utils.md
 
 ## Phase 10: PR08 - Gitleaks Docs Secrets
 

@@ -206,6 +206,219 @@ export const PlansManager: React.FC<PlansManagerProps> = ({
   onManageCards,
   openTopicQuestionsModal,
 }) => {
+  const getPlanCategories = (card: AdminLearningCard) =>
+    categories.filter((cat) => cat.learning_card_id === card.id);
+
+  const getSelectedQuestionsCount = (planId: string) =>
+    countSelectedQuestionsForPlan(planId, planQuestions);
+
+  const renderPlanCategoryNode = (
+    plan: LearningPlan,
+    category: AdminCategory,
+  ) => {
+    const categoryTopics = getTopicsForCategory(category.id, topics);
+
+    return (
+      <PlanCategoryNode
+        key={category.id}
+        category={category}
+        categoryTopics={categoryTopics}
+        plan={plan}
+        expandedPlanCategories={expandedPlanCategories}
+        togglePlanCategory={togglePlanCategory}
+        expandedPlanTopics={expandedPlanTopics}
+        togglePlanTopic={togglePlanTopic}
+        openTopicQuestionsModal={openTopicQuestionsModal}
+        selectedQuestionsCount={getSelectedQuestionsCount(plan.id)}
+      />
+    );
+  };
+
+  const renderPlanCard = (plan: LearningPlan, card: AdminLearningCard) => {
+    const cardCategories = getPlanCategories(card);
+    const IconComponent =
+      CARD_ICONS[card.title as keyof typeof CARD_ICONS]?.icon || Layers;
+
+    return (
+      <div key={card.id} className="ml-4 border-l-2 border-blue-200 pl-4">
+        <div className="flex items-center justify-between py-2">
+          <div className="flex items-center space-x-2">
+            <button
+              onClick={() => togglePlanCard(card.id)}
+              className="p-1 hover:bg-gray-100 rounded"
+            >
+              {expandedPlanCards.has(card.id) ? (
+                <ChevronDown className="h-4 w-4" />
+              ) : (
+                <ChevronRight className="h-4 w-4" />
+              )}
+            </button>
+            <IconComponent className="h-4 w-4" style={{ color: card.color }} />
+            <div>
+              <h5 className="font-medium text-gray-900 dark:text-white">
+                {card.title}
+              </h5>
+            </div>
+          </div>
+          <Badge
+            variant="outline"
+            className="bg-blue-50 text-blue-700 dark:bg-blue-900 dark:text-blue-300"
+          >
+            {cardCategories.length} Categories
+          </Badge>
+        </div>
+
+        {expandedPlanCards.has(card.id) && (
+          <div className="ml-6 space-y-4">
+            {cardCategories.map((category) =>
+              renderPlanCategoryNode(plan, category),
+            )}
+          </div>
+        )}
+      </div>
+    );
+  };
+
+  const renderPlan = (plan: LearningPlan) => {
+    const planCardNodes = cards.map((card) => renderPlanCard(plan, card));
+
+    const handlePlanToggle = () => togglePlan(plan.id);
+    const handleEditPlan = () => onEditPlan(plan);
+    const handleDeletePlan = () => onDeletePlan(plan);
+    const handleManageCards = () => onManageCards(plan);
+
+    return (
+      <Card key={plan.id} className="border-l-4 border-l-green-500">
+        <CardHeader className="pb-3">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-3">
+              <button
+                onClick={handlePlanToggle}
+                className="p-1 hover:bg-gray-100 rounded"
+              >
+                {expandedPlans.has(plan.id) ? (
+                  <ChevronDown className="h-4 w-4" />
+                ) : (
+                  <ChevronRight className="h-4 w-4" />
+                )}
+              </button>
+              <Calendar className="h-5 w-5 text-green-600" />
+              <div>
+                <CardTitle className="text-lg">{plan.name}</CardTitle>
+                <p className="text-sm text-gray-600 dark:text-gray-400">
+                  {plan.description}
+                </p>
+              </div>
+            </div>
+            <div className="flex items-center space-x-2">
+              <Badge variant="outline">{plan.estimated_duration} days</Badge>
+              <Badge variant="outline">
+                {plan.is_public ? "Public" : "Private"}
+              </Badge>
+              <div className="flex items-center space-x-1 ml-2">
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={handleEditPlan}
+                  className="h-8 w-8 p-0 hover:bg-green-100"
+                >
+                  <Edit className="h-4 w-4 text-green-600" />
+                </Button>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={handleDeletePlan}
+                  className="h-8 w-8 p-0 hover:bg-red-100"
+                >
+                  <Trash2 className="h-4 w-4 text-red-600" />
+                </Button>
+              </div>
+            </div>
+          </div>
+        </CardHeader>
+
+        {expandedPlans.has(plan.id) && (
+          <CardContent className="pt-0">
+            <div className="space-y-6">
+              {/* Plan Details Summary */}
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 p-4 bg-gray-50 dark:bg-gray-800 rounded-lg">
+                <div className="text-sm">
+                  <strong className="text-gray-900 dark:text-white">
+                    Duration:
+                  </strong>{" "}
+                  <span className="text-gray-600 dark:text-gray-400">
+                    {plan.estimated_duration} days
+                  </span>
+                </div>
+                <div className="text-sm">
+                  <strong className="text-gray-900 dark:text-white">
+                    Status:
+                  </strong>{" "}
+                  <Badge variant={plan.is_active ? "default" : "secondary"}>
+                    {plan.is_active ? "Active" : "Inactive"}
+                  </Badge>
+                </div>
+                <div className="text-sm">
+                  <strong className="text-gray-900 dark:text-white">
+                    Visibility:
+                  </strong>{" "}
+                  <Badge variant={plan.is_public ? "default" : "outline"}>
+                    {plan.is_public ? "Public" : "Private"}
+                  </Badge>
+                </div>
+              </div>
+
+              {/* Interaction Buttons */}
+              <div className="flex flex-wrap gap-2 p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
+                <Button
+                  size="sm"
+                  onClick={handleManageCards}
+                  className="flex items-center space-x-1 bg-blue-600 hover:bg-blue-700"
+                >
+                  <Layers className="h-4 w-4" />
+                  <span>Manage Cards</span>
+                </Button>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="flex items-center space-x-1"
+                >
+                  <MessageSquare className="h-4 w-4" />
+                  <span>Add Questions</span>
+                </Button>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="flex items-center space-x-1"
+                >
+                  <Target className="h-4 w-4" />
+                  <span>Copy from Plan</span>
+                </Button>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="flex items-center space-x-1"
+                >
+                  <Network className="h-4 w-4" />
+                  <span>Manage Structure</span>
+                </Button>
+              </div>
+
+              {/* Plan Structure */}
+              <div className="space-y-4">
+                <h4 className="text-lg font-semibold text-gray-900 dark:text-white flex items-center">
+                  <Layers className="h-5 w-5 mr-2 text-blue-600" />
+                  Plan Structure
+                </h4>
+                {planCardNodes}
+              </div>
+            </div>
+          </CardContent>
+        )}
+      </Card>
+    );
+  };
+
   return (
     <div className="mb-8">
       <div className="flex items-center justify-between mb-4">
@@ -248,218 +461,7 @@ export const PlansManager: React.FC<PlansManagerProps> = ({
             </CardContent>
           </Card>
         ) : (
-          plans.map((plan) => (
-            <Card key={plan.id} className="border-l-4 border-l-green-500">
-              <CardHeader className="pb-3">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center space-x-3">
-                    <button
-                      onClick={() => togglePlan(plan.id)}
-                      className="p-1 hover:bg-gray-100 rounded"
-                    >
-                      {expandedPlans.has(plan.id) ? (
-                        <ChevronDown className="h-4 w-4" />
-                      ) : (
-                        <ChevronRight className="h-4 w-4" />
-                      )}
-                    </button>
-                    <Calendar className="h-5 w-5 text-green-600" />
-                    <div>
-                      <CardTitle className="text-lg">{plan.name}</CardTitle>
-                      <p className="text-sm text-gray-600 dark:text-gray-400">
-                        {plan.description}
-                      </p>
-                    </div>
-                  </div>
-                  <div className="flex items-center space-x-2">
-                    <Badge variant="outline">
-                      {plan.estimated_duration} days
-                    </Badge>
-                    <Badge variant="outline">
-                      {plan.is_public ? "Public" : "Private"}
-                    </Badge>
-                    <div className="flex items-center space-x-1 ml-2">
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        onClick={() => onEditPlan(plan)}
-                        className="h-8 w-8 p-0 hover:bg-green-100"
-                      >
-                        <Edit className="h-4 w-4 text-green-600" />
-                      </Button>
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        onClick={() => onDeletePlan(plan)}
-                        className="h-8 w-8 p-0 hover:bg-red-100"
-                      >
-                        <Trash2 className="h-4 w-4 text-red-600" />
-                      </Button>
-                    </div>
-                  </div>
-                </div>
-              </CardHeader>
-
-              {expandedPlans.has(plan.id) && (
-                <CardContent className="pt-0">
-                  <div className="space-y-6">
-                    {/* Plan Details Summary */}
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4 p-4 bg-gray-50 dark:bg-gray-800 rounded-lg">
-                      <div className="text-sm">
-                        <strong className="text-gray-900 dark:text-white">
-                          Duration:
-                        </strong>{" "}
-                        <span className="text-gray-600 dark:text-gray-400">
-                          {plan.estimated_duration} days
-                        </span>
-                      </div>
-                      <div className="text-sm">
-                        <strong className="text-gray-900 dark:text-white">
-                          Status:
-                        </strong>{" "}
-                        <Badge
-                          variant={plan.is_active ? "default" : "secondary"}
-                        >
-                          {plan.is_active ? "Active" : "Inactive"}
-                        </Badge>
-                      </div>
-                      <div className="text-sm">
-                        <strong className="text-gray-900 dark:text-white">
-                          Visibility:
-                        </strong>{" "}
-                        <Badge variant={plan.is_public ? "default" : "outline"}>
-                          {plan.is_public ? "Public" : "Private"}
-                        </Badge>
-                      </div>
-                    </div>
-
-                    {/* Interaction Buttons */}
-                    <div className="flex flex-wrap gap-2 p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
-                      <Button
-                        size="sm"
-                        onClick={() => onManageCards(plan)}
-                        className="flex items-center space-x-1 bg-blue-600 hover:bg-blue-700"
-                      >
-                        <Layers className="h-4 w-4" />
-                        <span>Manage Cards</span>
-                      </Button>
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        className="flex items-center space-x-1"
-                      >
-                        <MessageSquare className="h-4 w-4" />
-                        <span>Add Questions</span>
-                      </Button>
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        className="flex items-center space-x-1"
-                      >
-                        <Target className="h-4 w-4" />
-                        <span>Copy from Plan</span>
-                      </Button>
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        className="flex items-center space-x-1"
-                      >
-                        <Network className="h-4 w-4" />
-                        <span>Manage Structure</span>
-                      </Button>
-                    </div>
-
-                    {/* Plan Structure */}
-                    <div className="space-y-4">
-                      <h4 className="text-lg font-semibold text-gray-900 dark:text-white flex items-center">
-                        <Layers className="h-5 w-5 mr-2 text-blue-600" />
-                        Plan Structure
-                      </h4>
-
-                      {cards.map((card) => {
-                        const cardCategories = categories.filter(
-                          (cat) => cat.learning_card_id === card.id,
-                        );
-                        const IconComponent =
-                          CARD_ICONS[card.title as keyof typeof CARD_ICONS]
-                            ?.icon || Layers;
-
-                        return (
-                          <div
-                            key={card.id}
-                            className="ml-4 border-l-2 border-blue-200 pl-4"
-                          >
-                            <div className="flex items-center justify-between py-2">
-                              <div className="flex items-center space-x-2">
-                                <button
-                                  onClick={() => togglePlanCard(card.id)}
-                                  className="p-1 hover:bg-gray-100 rounded"
-                                >
-                                  {expandedPlanCards.has(card.id) ? (
-                                    <ChevronDown className="h-4 w-4" />
-                                  ) : (
-                                    <ChevronRight className="h-4 w-4" />
-                                  )}
-                                </button>
-                                <IconComponent
-                                  className="h-4 w-4"
-                                  style={{ color: card.color }}
-                                />
-                                <div>
-                                  <h5 className="font-medium text-gray-900 dark:text-white">
-                                    {card.title}
-                                  </h5>
-                                </div>
-                              </div>
-                              <Badge
-                                variant="outline"
-                                className="bg-blue-50 text-blue-700 dark:bg-blue-900 dark:text-blue-300"
-                              >
-                                {cardCategories.length} Categories
-                              </Badge>
-                            </div>
-
-                            {expandedPlanCards.has(card.id) && (
-                              <div className="ml-6 space-y-4">
-                                {cardCategories.map((category) => {
-                                  const categoryTopics = getTopicsForCategory(
-                                    category.id,
-                                    topics,
-                                  );
-
-                                  return (
-                                    <PlanCategoryNode
-                                      key={category.id}
-                                      category={category}
-                                      categoryTopics={categoryTopics}
-                                      plan={plan}
-                                      expandedPlanCategories={
-                                        expandedPlanCategories
-                                      }
-                                      togglePlanCategory={togglePlanCategory}
-                                      expandedPlanTopics={expandedPlanTopics}
-                                      togglePlanTopic={togglePlanTopic}
-                                      openTopicQuestionsModal={
-                                        openTopicQuestionsModal
-                                      }
-                                      selectedQuestionsCount={countSelectedQuestionsForPlan(
-                                        plan.id,
-                                        planQuestions,
-                                      )}
-                                    />
-                                  );
-                                })}
-                              </div>
-                            )}
-                          </div>
-                        );
-                      })}
-                    </div>
-                  </div>
-                </CardContent>
-              )}
-            </Card>
-          ))
+          plans.map(renderPlan)
         )}
       </div>
     </div>
