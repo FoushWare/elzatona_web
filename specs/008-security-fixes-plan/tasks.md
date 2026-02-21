@@ -44,19 +44,19 @@
 
 - [x] T023 [P] [US5] Refactor unified/route.ts, unified/[id]/route.ts, plans/route.ts, plan-details/[planId]/route.ts, questions/route.ts, dashboard/stats/route.ts, plans/[id]/hierarchy/route.ts
 - [x] T024 [US5] Decompose main functions into helper functions per contract
-- [ ] T025 [US5] Commit fixes with message in contracts/PR05-sonar-complexity-api-routes.md
+- [x] T025 [US5] Commit fixes with message in contracts/PR05-sonar-complexity-api-routes.md
 
 ## Phase 8: PR06 - Sonar Complexity UI Components
 
 - [x] T026 [P] [US6] Refactor NavbarSimple.tsx, EnhancedDashboard.tsx, ProblemSolvingEditorComponents.tsx, FrontendTaskEditorComponents.tsx, admin-learning-cards/editors/
 - [x] T027 [US6] Extract nav sections and editor rendering into helpers/sub-components
-- [ ] T028 [US6] Commit fixes with message in contracts/PR06-sonar-complexity-ui-components.md
+- [x] T028 [US6] Commit fixes with message in contracts/PR06-sonar-complexity-ui-components.md
 
 ## Phase 9: PR07 - Sonar Complexity Utils
 
 - [x] T029 [P] [US7] Refactor markdown-question-parser.ts, validation.ts, helpers/homePageHelpers.ts
 - [x] T030 [US7] Decompose parser and validation logic into stages/functions
-- [ ] T031 [US7] Commit fixes with message in contracts/PR07-sonar-complexity-utils.md
+- [x] T031 [US7] Commit fixes with message in contracts/PR07-sonar-complexity-utils.md
 
 ## Phase 10: PR08 - Gitleaks Docs Secrets
 
