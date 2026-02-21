@@ -229,6 +229,117 @@ export const LearningCardsManager: React.FC<LearningCardsManagerProps> = ({
   onCreateCard,
   onEditCategories,
 }) => {
+  const getCardCategories = (card: AdminLearningCard) =>
+    categories.filter((cat) => cat.learning_card_id === card.id);
+
+  const getCategoryTopics = (category: AdminCategory) =>
+    topics.filter((topic) => topic.category_id === category.id);
+
+  const renderCategoryNode = (category: AdminCategory) => {
+    const categoryTopics = getCategoryTopics(category);
+
+    return (
+      <CategoryNode
+        key={category.id}
+        category={category}
+        categoryTopics={categoryTopics}
+        questions={questions}
+        expandedCategories={expandedCategories}
+        toggleCategory={toggleCategory}
+        expandedTopics={expandedTopics}
+        toggleTopic={toggleTopic}
+      />
+    );
+  };
+
+  const renderCard = (card: AdminLearningCard) => {
+    const cardCategories = getCardCategories(card);
+    const IconComponent =
+      CARD_ICONS[card.title as keyof typeof CARD_ICONS]?.icon || Layers;
+
+    return (
+      <Card
+        key={card.id}
+        className="border-l-4"
+        style={{ borderLeftColor: card.color }}
+      >
+        <CardHeader className="pb-3">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-3">
+              <button
+                onClick={() => toggleCard(card.id)}
+                className="p-1 hover:bg-gray-100 rounded"
+              >
+                {expandedCards.has(card.id) ? (
+                  <ChevronDown className="h-4 w-4" />
+                ) : (
+                  <ChevronRight className="h-4 w-4" />
+                )}
+              </button>
+              <IconComponent
+                className="h-5 w-5"
+                style={{ color: card.color }}
+              />
+              <div>
+                <CardTitle className="text-lg">{card.title}</CardTitle>
+                <p className="text-sm text-gray-600 dark:text-gray-400">
+                  {card.description}
+                </p>
+              </div>
+            </div>
+            <div className="flex items-center space-x-2">
+              <Badge
+                variant="outline"
+                className="bg-blue-50 text-blue-700 dark:bg-blue-900 dark:text-blue-300"
+              >
+                {cardCategories.length} Categories
+              </Badge>
+              <Badge
+                variant="outline"
+                className="bg-purple-50 text-purple-700 dark:bg-purple-900 dark:text-purple-300"
+              >
+                {countTopicsForCategories(cardCategories, topics)} Topics
+              </Badge>
+              <Badge
+                variant="outline"
+                className="bg-green-50 text-green-700 dark:bg-green-900 dark:text-green-300"
+              >
+                {countQuestionsForCategories(cardCategories, topics, questions)}{" "}
+                Questions
+              </Badge>
+              <div className="flex items-center space-x-1 ml-2">
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => onEditCard(card)}
+                  className="h-8 w-8 p-0 hover:bg-blue-100"
+                >
+                  <Edit className="h-4 w-4 text-blue-600" />
+                </Button>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => onDeleteCard(card)}
+                  className="h-8 w-8 p-0 hover:bg-red-100"
+                >
+                  <Trash2 className="h-4 w-4 text-red-600" />
+                </Button>
+              </div>
+            </div>
+          </div>
+        </CardHeader>
+
+        {expandedCards.has(card.id) && (
+          <CardContent className="pt-0">
+            <div className="space-y-4">
+              {cardCategories.map(renderCategoryNode)}
+            </div>
+          </CardContent>
+        )}
+      </Card>
+    );
+  };
+
   return (
     <div className="mb-8">
       <div className="flex items-center justify-between mb-4">
@@ -272,117 +383,7 @@ export const LearningCardsManager: React.FC<LearningCardsManagerProps> = ({
             </CardContent>
           </Card>
         ) : (
-          cards.map((card) => {
-            const cardCategories = categories.filter(
-              (cat) => cat.learning_card_id === card.id,
-            );
-            const IconComponent =
-              CARD_ICONS[card.title as keyof typeof CARD_ICONS]?.icon || Layers;
-
-            return (
-              <Card
-                key={card.id}
-                className="border-l-4"
-                style={{ borderLeftColor: card.color }}
-              >
-                <CardHeader className="pb-3">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center space-x-3">
-                      <button
-                        onClick={() => toggleCard(card.id)}
-                        className="p-1 hover:bg-gray-100 rounded"
-                      >
-                        {expandedCards.has(card.id) ? (
-                          <ChevronDown className="h-4 w-4" />
-                        ) : (
-                          <ChevronRight className="h-4 w-4" />
-                        )}
-                      </button>
-                      <IconComponent
-                        className="h-5 w-5"
-                        style={{ color: card.color }}
-                      />
-                      <div>
-                        <CardTitle className="text-lg">{card.title}</CardTitle>
-                        <p className="text-sm text-gray-600 dark:text-gray-400">
-                          {card.description}
-                        </p>
-                      </div>
-                    </div>
-                    <div className="flex items-center space-x-2">
-                      <Badge
-                        variant="outline"
-                        className="bg-blue-50 text-blue-700 dark:bg-blue-900 dark:text-blue-300"
-                      >
-                        {cardCategories.length} Categories
-                      </Badge>
-                      <Badge
-                        variant="outline"
-                        className="bg-purple-50 text-purple-700 dark:bg-purple-900 dark:text-purple-300"
-                      >
-                        {countTopicsForCategories(cardCategories, topics)}{" "}
-                        Topics
-                      </Badge>
-                      <Badge
-                        variant="outline"
-                        className="bg-green-50 text-green-700 dark:bg-green-900 dark:text-green-300"
-                      >
-                        {countQuestionsForCategories(
-                          cardCategories,
-                          topics,
-                          questions,
-                        )}{" "}
-                        Questions
-                      </Badge>
-                      <div className="flex items-center space-x-1 ml-2">
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          onClick={() => onEditCard(card)}
-                          className="h-8 w-8 p-0 hover:bg-blue-100"
-                        >
-                          <Edit className="h-4 w-4 text-blue-600" />
-                        </Button>
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          onClick={() => onDeleteCard(card)}
-                          className="h-8 w-8 p-0 hover:bg-red-100"
-                        >
-                          <Trash2 className="h-4 w-4 text-red-600" />
-                        </Button>
-                      </div>
-                    </div>
-                  </div>
-                </CardHeader>
-
-                {expandedCards.has(card.id) && (
-                  <CardContent className="pt-0">
-                    <div className="space-y-4">
-                      {cardCategories.map((category) => {
-                        const categoryTopics = topics.filter(
-                          (topic) => topic.category_id === category.id,
-                        );
-
-                        return (
-                          <CategoryNode
-                            key={category.id}
-                            category={category}
-                            categoryTopics={categoryTopics}
-                            questions={questions}
-                            expandedCategories={expandedCategories}
-                            toggleCategory={toggleCategory}
-                            expandedTopics={expandedTopics}
-                            toggleTopic={toggleTopic}
-                          />
-                        );
-                      })}
-                    </div>
-                  </CardContent>
-                )}
-              </Card>
-            );
-          })
+          cards.map(renderCard)
         )}
       </div>
     </div>

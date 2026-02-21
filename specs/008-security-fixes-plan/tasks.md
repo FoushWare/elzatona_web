@@ -36,9 +36,9 @@
 
 ## Phase 6: PR04 - Sonar Nested Functions
 
-- [ ] T020 [P] [US4] Extract deeply nested functions in LearningCardsManager.tsx, PlansManager.tsx, hierarchy/route.ts
-- [ ] T021 [US4] Refactor callbacks to named component-level functions
-- [ ] T022 [US4] Commit fixes with message in contracts/PR04-sonar-nested-functions.md
+- [x] T020 [P] [US4] Extract deeply nested functions in LearningCardsManager.tsx, PlansManager.tsx, hierarchy/route.ts
+- [x] T021 [US4] Refactor callbacks to named component-level functions
+- [x] T022 [US4] Commit fixes with message in contracts/PR04-sonar-nested-functions.md
 
 ## Phase 7: PR05 - Sonar Complexity API Routes
 

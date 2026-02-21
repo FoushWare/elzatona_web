@@ -13,6 +13,80 @@ function getSupabaseClient() {
   });
 }
 
+function buildTopicSummary(
+  topic: any,
+  questions: any[],
+  topicQuestionCounts: Map<string, number>,
+) {
+  const topicQuestions = questions.filter((q: any) => q.topic_id === topic.id);
+  const totalQuestionCount = topicQuestionCounts.get(topic.id) || 0;
+
+  return {
+    ...topic,
+    questions: topicQuestions,
+    totalQuestionCount,
+    planQuestionCount: topicQuestions.length,
+  };
+}
+
+function buildCategorySummary(
+  category: any,
+  topicsMap: Map<string, any>,
+  questions: any[],
+  topicQuestionCounts: Map<string, number>,
+) {
+  const catTopics = Array.from(topicsMap.values()).filter(
+    (topic: any) => topic.category_id === category.id,
+  );
+
+  const topics = catTopics.map((topic: any) =>
+    buildTopicSummary(topic, questions, topicQuestionCounts),
+  );
+
+  return {
+    ...category,
+    topics,
+  };
+}
+
+function buildCardHierarchy(
+  planCards: any[],
+  cardCategories: any[] | null | undefined,
+  topicsMap: Map<string, any>,
+  questions: any[],
+  topicQuestionCounts: Map<string, number>,
+) {
+  return planCards
+    .map((pc: any) => {
+      const card = pc.learning_cards;
+      if (!card) return null;
+
+      const cardCats = cardCategories?.filter(
+        (cc: any) => cc.card_id === pc.card_id,
+      );
+
+      const categories = (cardCats || [])
+        .map((cc: any) => {
+          const category = cc.categories;
+          if (!category) return null;
+          return buildCategorySummary(
+            category,
+            topicsMap,
+            questions,
+            topicQuestionCounts,
+          );
+        })
+        .filter(Boolean);
+
+      return {
+        ...card,
+        planCardId: pc.id,
+        categories,
+      };
+    })
+    .filter(Boolean);
+}
+
 // GET /api/plans/[id]/hierarchy - Get full hierarchy: Plan → Cards → Categories → Topics → Questions
 export async function GET(
   request: NextRequest,
@@ -266,56 +340,13 @@ export async function GET(
     }
 
     // Build hierarchical structure
-    const hierarchy = planCards
-      .map((pc) => {
-        const card = pc.learning_cards;
-        if (!card) return null;
-
-        // Get categories for this card
-        const cardCats =
-          cardCategories?.filter((cc) => cc.card_id === pc.card_id) || [];
-
-        const categories = cardCats
-          .map((cc) => {
-            const category = cc.categories;
-            if (!category) return null;
-
-            // Get topics for this category
-            const catTopics = Array.from(topicsMap.values()).filter(
-              (t: any) => t.category_id === category.id,
-            );
-
-            const topics = catTopics.map((topic) => {
-              // Get questions for this topic (filtered by plan)
-              const topicQuestions = questions.filter(
-                (q: any) => q.topic_id === topic.id,
-              );
-
-              // Get total question count for this topic (all questions, not just in plan)
-              const totalQuestionCount = topicQuestionCounts.get(topic.id) || 0;
-
-              return {
-                ...topic,
-                questions: topicQuestions,
-                totalQuestionCount: totalQuestionCount,
-                planQuestionCount: topicQuestions.length,
-              };
-            });
-
-            return {
-              ...category,
-              topics,
-            };
-          })
-          .filter(Boolean);
-
-        return {
-          ...card,
-          planCardId: pc.id,
-          categories,
-        };
-      })
-      .filter(Boolean);
+    const hierarchy = buildCardHierarchy(
+      planCards,
+      cardCategories,
+      topicsMap,
+      questions,
+      topicQuestionCounts,
+    );
 
     return NextResponse.json({
       success: true,
