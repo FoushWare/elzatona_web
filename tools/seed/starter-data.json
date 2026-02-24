@@ -1,0 +1,530 @@
+{
+    "categories": [
+        {
+            "name": "JavaScript",
+            "slug": "javascript",
+            "description": "Core JavaScript concepts and modern ES6+ features.",
+            "card_type": "Language Fundamentals",
+            "icon": "📜",
+            "color": "#F7DF1E",
+            "order_index": 1
+        },
+        {
+            "name": "CSS",
+            "slug": "css",
+            "description": "Modern CSS layout, styling, and design patterns.",
+            "card_type": "Design & Layout",
+            "icon": "🎨",
+            "color": "#264DE4",
+            "order_index": 2
+        }
+    ],
+    "topics": [
+        {
+            "category_slug": "javascript",
+            "name": "Basics & Hoisting",
+            "slug": "js-basics"
+        },
+        {
+            "category_slug": "javascript",
+            "name": "Scope & Closures",
+            "slug": "js-scope"
+        },
+        {
+            "category_slug": "javascript",
+            "name": "This & Arrow Functions",
+            "slug": "js-this"
+        },
+        {
+            "category_slug": "javascript",
+            "name": "Data Structures & References",
+            "slug": "js-data"
+        },
+        {
+            "category_slug": "javascript",
+            "name": "Classes & Static Methods",
+            "slug": "js-classes"
+        },
+        {
+            "category_slug": "css",
+            "name": "Specificity & Cascade",
+            "slug": "css-specificity"
+        },
+        {
+            "category_slug": "css",
+            "name": "Box Model & Layout",
+            "slug": "css-layout"
+        },
+        {
+            "category_slug": "css",
+            "name": "Responsive Units",
+            "slug": "css-units"
+        }
+    ],
+    "questions": [
+        {
+            "topic_slug": "js-basics",
+            "title": "Hoisting Output",
+            "content": "What is the output of this code?\n\n```javascript\nfunction sayHi() {\n  console.log(name);\n  console.log(age);\n  var name = 'Lydia';\n  let age = 21;\n}\nsayHi();\n```",
+            "type": "multiple-choice",
+            "difficulty": "intermediate",
+            "points": 15,
+            "options": [
+                {
+                    "text": "Lydia and undefined",
+                    "isCorrect": false
+                },
+                {
+                    "text": "Lydia and ReferenceError",
+                    "isCorrect": false
+                },
+                {
+                    "text": "undefined and ReferenceError",
+                    "isCorrect": true
+                },
+                {
+                    "text": "ReferenceError and 21",
+                    "isCorrect": false
+                }
+            ],
+            "explanation": "var variables are hoisted with undefined. let variables are hoisted but reside in the Temporal Dead Zone until their declaration is reached."
+        },
+        {
+            "topic_slug": "js-scope",
+            "title": "Loop Scoping",
+            "content": "What happens in these loops?\n\n```javascript\nfor (var i = 0; i < 3; i++) {\n  setTimeout(() => console.log(i), 1);\n}\nfor (let i = 0; i < 3; i++) {\n  setTimeout(() => console.log(i), 1);\n}\n```",
+            "type": "multiple-choice",
+            "difficulty": "intermediate",
+            "points": 15,
+            "options": [
+                {
+                    "text": "0 1 2 and 0 1 2",
+                    "isCorrect": false
+                },
+                {
+                    "text": "3 3 3 and 3 3 3",
+                    "isCorrect": false
+                },
+                {
+                    "text": "3 3 3 and 0 1 2",
+                    "isCorrect": true
+                }
+            ],
+            "explanation": "var is function-scoped; all callbacks share the final value (3). let is block-scoped; each iteration has its own independent value."
+        },
+        {
+            "topic_slug": "js-this",
+            "title": "Arrow Functions & This",
+            "content": "What is the output?\n\n```javascript\nconst shape = {\n  radius: 10,\n  diameter() { return this.radius * 2; },\n  perimeter: () => 2 * Math.PI * this.radius\n};\nconsole.log(shape.diameter());\nconsole.log(shape.perimeter());\n```",
+            "type": "multiple-choice",
+            "difficulty": "intermediate",
+            "points": 15,
+            "options": [
+                {
+                    "text": "20 and NaN",
+                    "isCorrect": true
+                },
+                {
+                    "text": "20 and 62.8",
+                    "isCorrect": false
+                },
+                {
+                    "text": "NaN and 20",
+                    "isCorrect": false
+                }
+            ],
+            "explanation": "Arrow functions do not have their own 'this'. They inherit it from the surrounding scope (usually window or undefined in modules)."
+        },
+        {
+            "topic_slug": "js-basics",
+            "title": "Type Coercion",
+            "content": "What is the result of `sum(1, '2')`?\n\n```javascript\nfunction sum(a, b) { return a + b; }\n```",
+            "type": "multiple-choice",
+            "difficulty": "beginner",
+            "points": 10,
+            "options": [
+                {
+                    "text": "3",
+                    "isCorrect": false
+                },
+                {
+                    "text": "'12'",
+                    "isCorrect": true
+                },
+                {
+                    "text": "NaN",
+                    "isCorrect": false
+                }
+            ],
+            "explanation": "JavaScript coerces the number into a string and concatenates them."
+        },
+        {
+            "topic_slug": "js-scope",
+            "title": "Variable Typo",
+            "content": "What happens here?\n\n```javascript\nlet greeting;\ngreetign = {}; // Typo!\nconsole.log(greetign);\n```",
+            "type": "multiple-choice",
+            "difficulty": "intermediate",
+            "points": 15,
+            "options": [
+                {
+                    "text": "{}",
+                    "isCorrect": true
+                },
+                {
+                    "text": "ReferenceError",
+                    "isCorrect": false
+                },
+                {
+                    "text": "undefined",
+                    "isCorrect": false
+                }
+            ],
+            "explanation": "Without 'use strict', assigning to an undeclared variable creates it as a property on the global object."
+        },
+        {
+            "topic_slug": "js-this",
+            "title": "Method Availability",
+            "content": "What happens when we call `member.getFullName()`?\n\n```javascript\nfunction Person(firstName, lastName) {\n  this.firstName = firstName;\n  this.lastName = lastName;\n}\nconst member = new Person('Lydia', 'Hallie');\nPerson.getFullName = function() {\n  return `${this.firstName} ${this.lastName}`;\n};\n```",
+            "type": "multiple-choice",
+            "difficulty": "intermediate",
+            "points": 15,
+            "options": [
+                {
+                    "text": "Lydia Hallie",
+                    "isCorrect": false
+                },
+                {
+                    "text": "TypeError",
+                    "isCorrect": true
+                },
+                {
+                    "text": "undefined undefined",
+                    "isCorrect": false
+                }
+            ],
+            "explanation": "The method was added to the constructor object itself, not the prototype. To be available to instances, it must be added to Person.prototype."
+        },
+        {
+            "topic_slug": "js-this",
+            "title": "Constructor Without New",
+            "content": "What is the result of `sarah`?\n\n```javascript\nfunction Person(firstName, lastName) {\n  this.firstName = firstName;\n  this.lastName = lastName;\n}\nconst lydia = new Person('Lydia', 'Hallie');\nconst sarah = Person('Sarah', 'Smith');\n```",
+            "type": "multiple-choice",
+            "difficulty": "intermediate",
+            "points": 15,
+            "options": [
+                {
+                    "text": "Person {firstName: 'Sarah', ...}",
+                    "isCorrect": false
+                },
+                {
+                    "text": "undefined",
+                    "isCorrect": true
+                },
+                {
+                    "text": "ReferenceError",
+                    "isCorrect": false
+                }
+            ],
+            "explanation": "Without 'new', 'this' refers to the global object. sarah is undefined because the function returns nothing."
+        },
+        {
+            "topic_slug": "js-basics",
+            "title": "Postfix vs Prefix",
+            "content": "What is the output?\n\n```javascript\nlet number = 0;\nconsole.log(number++);\nconsole.log(++number);\nconsole.log(number);\n```",
+            "type": "multiple-choice",
+            "difficulty": "intermediate",
+            "points": 15,
+            "options": [
+                {
+                    "text": "1 1 2",
+                    "isCorrect": false
+                },
+                {
+                    "text": "0 2 2",
+                    "isCorrect": true
+                },
+                {
+                    "text": "0 1 2",
+                    "isCorrect": false
+                }
+            ],
+            "explanation": "postfix++ returns the value then increments. ++prefix increments then returns the value."
+        },
+        {
+            "topic_slug": "js-data",
+            "title": "Object References",
+            "content": "What is the value of `d.greeting`?\n\n```javascript\nlet c = { greeting: 'Hey!' };\nlet d;\nd = c;\nc.greeting = 'Hello';\nconsole.log(d.greeting);\n```",
+            "type": "multiple-choice",
+            "difficulty": "intermediate",
+            "points": 15,
+            "options": [
+                {
+                    "text": "'Hey!'",
+                    "isCorrect": false
+                },
+                {
+                    "text": "'Hello'",
+                    "isCorrect": true
+                },
+                {
+                    "text": "undefined",
+                    "isCorrect": false
+                }
+            ],
+            "explanation": "In JavaScript, objects interact by reference. Changing 'c' also changes 'd' since they point to the same object."
+        },
+        {
+            "topic_slug": "js-classes",
+            "title": "Static Methods",
+            "content": "What happens when we call `freddie.colorChange('orange')`?\n\n```javascript\nclass Chameleon {\n  static colorChange(newColor) {\n    this.newColor = newColor;\n    return this.newColor;\n  }\n}\nconst freddie = new Chameleon();\n```",
+            "type": "multiple-choice",
+            "difficulty": "intermediate",
+            "points": 15,
+            "options": [
+                {
+                    "text": "'orange'",
+                    "isCorrect": false
+                },
+                {
+                    "text": "TypeError",
+                    "isCorrect": true
+                },
+                {
+                    "text": "undefined",
+                    "isCorrect": false
+                }
+            ],
+            "explanation": "Static methods live only on the class constructor, not on instances."
+        },
+        {
+            "topic_slug": "css-specificity",
+            "title": "CSS Specificity Order",
+            "content": "What is the correct order of specificity from highest to lowest?",
+            "type": "multiple-choice",
+            "difficulty": "intermediate",
+            "points": 15,
+            "options": [
+                {
+                    "text": "IDs > Classes > Elements",
+                    "isCorrect": true
+                },
+                {
+                    "text": "Classes > IDs > Elements",
+                    "isCorrect": false
+                },
+                {
+                    "text": "Inline > Elements > IDs",
+                    "isCorrect": false
+                }
+            ],
+            "explanation": "Specificity hierarchy: Inline > IDs > Classes/Pseudo-classes > Elements/Pseudo-elements."
+        },
+        {
+            "topic_slug": "css-layout",
+            "title": "Box Model Sizing",
+            "content": "What is the difference between `content-box` and `border-box`?",
+            "type": "multiple-choice",
+            "difficulty": "intermediate",
+            "points": 15,
+            "options": [
+                {
+                    "text": "border-box includes padding/border in the width",
+                    "isCorrect": true
+                },
+                {
+                    "text": "content-box includes padding/border in the width",
+                    "isCorrect": false
+                },
+                {
+                    "text": "They are identical in modern browsers",
+                    "isCorrect": false
+                }
+            ],
+            "explanation": "border-box makes width calculations much easier by including padding and border within the specified width."
+        },
+        {
+            "topic_slug": "css-layout",
+            "title": "Flexbox Alignment",
+            "content": "Which property aligns items along the cross-axis in Flexbox?",
+            "type": "multiple-choice",
+            "difficulty": "beginner",
+            "points": 10,
+            "options": [
+                {
+                    "text": "justify-content",
+                    "isCorrect": false
+                },
+                {
+                    "text": "align-items",
+                    "isCorrect": true
+                },
+                {
+                    "text": "flex-direction",
+                    "isCorrect": false
+                }
+            ],
+            "explanation": "justify-content is for the main axis; align-items is for the cross axis."
+        },
+        {
+            "topic_slug": "css-specificity",
+            "title": "The !important Flag",
+            "content": "What is the best practice for using `!important`?",
+            "type": "multiple-choice",
+            "difficulty": "intermediate",
+            "points": 15,
+            "options": [
+                {
+                    "text": "Use it whenever specificity is hard to manage",
+                    "isCorrect": false
+                },
+                {
+                    "text": "Use it only for utility classes or critical overrides",
+                    "isCorrect": true
+                },
+                {
+                    "text": "Never use it",
+                    "isCorrect": false
+                }
+            ],
+            "explanation": "!important should be used sparingly as it breaks the natural cascade and makes CSS hard to maintain."
+        },
+        {
+            "topic_slug": "css-layout",
+            "title": "Position: Absolute",
+            "content": "An element with `position: absolute` is positioned relative to:",
+            "type": "multiple-choice",
+            "difficulty": "intermediate",
+            "points": 15,
+            "options": [
+                {
+                    "text": "The viewport",
+                    "isCorrect": false
+                },
+                {
+                    "text": "The nearest positioned ancestor",
+                    "isCorrect": true
+                },
+                {
+                    "text": "Its previous sibling",
+                    "isCorrect": false
+                }
+            ],
+            "explanation": "Absolute positioning looks up the DOM tree for the nearest ancestor with a position other than 'static'."
+        },
+        {
+            "topic_slug": "css-specificity",
+            "title": "Inherited Properties",
+            "content": "Which of these properties is inherited by default?",
+            "type": "multiple-choice",
+            "difficulty": "intermediate",
+            "points": 15,
+            "options": [
+                {
+                    "text": "font-family",
+                    "isCorrect": true
+                },
+                {
+                    "text": "margin",
+                    "isCorrect": false
+                },
+                {
+                    "text": "border",
+                    "isCorrect": false
+                }
+            ],
+            "explanation": "Text-related properties like font-family, color, and line-height are inherited. Layout properties like margin/padding are not."
+        },
+        {
+            "topic_slug": "css-units",
+            "title": "em vs rem",
+            "content": "What is the main difference between `em` and `rem` units?",
+            "type": "multiple-choice",
+            "difficulty": "intermediate",
+            "points": 15,
+            "options": [
+                {
+                    "text": "em is relative to parent; rem is relative to root",
+                    "isCorrect": true
+                },
+                {
+                    "text": "em is relative to root; rem is relative to parent",
+                    "isCorrect": false
+                },
+                {
+                    "text": "They are exactly the same",
+                    "isCorrect": false
+                }
+            ],
+            "explanation": "rem (root em) always scales relative to the HTML element, while em scales relative to the parent's font size."
+        },
+        {
+            "topic_slug": "css-layout",
+            "title": "Hiding Elements",
+            "content": "What is the layout difference between `display: none` and `visibility: hidden`?",
+            "type": "multiple-choice",
+            "difficulty": "intermediate",
+            "points": 15,
+            "options": [
+                {
+                    "text": "display: none removes space; visibility: hidden keeps space",
+                    "isCorrect": true
+                },
+                {
+                    "text": "visibility: hidden removes space; display: none keeps space",
+                    "isCorrect": false
+                },
+                {
+                    "text": "Both remove space",
+                    "isCorrect": false
+                }
+            ],
+            "explanation": "display: none removes the element from the document flow as if it wasn't there. visibility: hidden just hides it visually."
+        },
+        {
+            "topic_slug": "css-layout",
+            "title": "CSS Grid Fractional Units",
+            "content": "What does the `1fr` unit represent in CSS Grid?",
+            "type": "multiple-choice",
+            "difficulty": "intermediate",
+            "points": 15,
+            "options": [
+                {
+                    "text": "1% of the container width",
+                    "isCorrect": false
+                },
+                {
+                    "text": "1 fraction of the available free space",
+                    "isCorrect": true
+                },
+                {
+                    "text": "1 pixel based on screen density",
+                    "isCorrect": false
+                }
+            ],
+            "explanation": "The 'fr' unit distributes available free space proportionally within the grid container."
+        },
+        {
+            "topic_slug": "css-layout",
+            "title": "Individual Flex Alignment",
+            "content": "Which property overrides `align-items` for a single flex item?",
+            "type": "multiple-choice",
+            "difficulty": "intermediate",
+            "points": 15,
+            "options": [
+                {
+                    "text": "align-content",
+                    "isCorrect": false
+                },
+                {
+                    "text": "align-self",
+                    "isCorrect": true
+                },
+                {
+                    "text": "justify-self",
+                    "isCorrect": false
+                }
+            ],
+            "explanation": "align-self allows you to override the default alignment for specific items in a flex container."
+        }
+    ]
+}

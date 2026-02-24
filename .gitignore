@@ -255,6 +255,9 @@ build/
 libs/utilities/scripts/
 tools/
 !tools/code-scanning-to-issues/
+!tools/seed/
+!tools/verify-system.mjs
+!tools/seed/starter-data.json
 tools/*/node_modules/
 apps/*/tests/e2e/
 .cursor/
@@ -325,3 +328,9 @@ trufflehog-history.json
 # Backup directories
 archived-backups/
 .backup.logs/
+
+# Agent skills and configurations
+.agents/
+.agent/
+.agent_resources/
+.agents_resources/
