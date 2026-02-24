@@ -325,3 +325,9 @@ trufflehog-history.json
 # Backup directories
 archived-backups/
 .backup.logs/
+
+# Agent skills and configurations
+.agents/
+.agent/
+.agent_resources/
+.agents_resources/
