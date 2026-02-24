@@ -1,1 +1,0 @@
-[{"conclusion":"success","databaseId":22029493076,"name":"Auto-assign PRs to foushware","status":"completed"},{"conclusion":"","databaseId":22029493068,"name":"SonarCloud Code Analysis","status":"in_progress"},{"conclusion":"success","databaseId":22029493066,"name":"Security Scan","status":"completed"}]

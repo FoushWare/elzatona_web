@@ -275,13 +275,53 @@ coverage/
 tools/code-scanning-to-issues/node_modules/
 tools/code-scanning-to-issues/package-lock.json
 
-# Temporary state/debug files
+# ─── Internal tracking / generated files (never commit) ───────────────────────
+# State & tracking files
 .checkout.txt
 .git-state.txt
+.cur-branch.txt
+.current-branch
+.runs.txt
+.pi.txt
+.pr-status.txt
+.log.txt
+.failed-log.txt
+.push-out.txt
+.push2-err.txt
+.push2-exit.txt
+.push2-out.txt
+.rebase-log.txt
+.format-log.txt
+.checks.txt
+.eslint-issues-report.txt
+
+# Internal scratch files
+replacements.txt
+secrets-replacements.txt
 bugs-issues.md
-QUICKSTART-CODE-SCANNING-ISSUES.md
 _coverage.txt
 _git_status.txt
 _plan_head.txt
 _test_out.txt
 _vitest_coverage.txt
+sample.test.ts
+
+# Internal shell scripts
+.format-fix.sh
+.push-fix.sh
+.merge-script.sh
+.rebase-all.sh
+
+# Generated dependency/build logs
+build-output.log
+deploy-output.log
+apply-final.log
+prettier-write.log
+tsc-output.log
+sonar-scanner.log
+deps.json
+trufflehog-history.json
+
+# Backup directories
+archived-backups/
+.backup.logs/
