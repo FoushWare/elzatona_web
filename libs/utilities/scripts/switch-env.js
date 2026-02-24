@@ -15,15 +15,17 @@ const fs = require("fs");
 const path = require("path");
 
 const projectRoot = process.cwd();
+const envDevelopment = path.join(projectRoot, ".env.development");
+const envProduction = path.join(projectRoot, ".env.production");
 const envTestLocal = path.join(projectRoot, ".env.test.local");
-const envLocal = path.join(projectRoot, ".env.local");
 
 function showCurrentEnv() {
   const { config } = require("dotenv");
 
   // Load in priority order
   config({ path: envTestLocal, override: false });
-  config({ path: envLocal, override: false });
+  config({ path: envDevelopment, override: false });
+  config({ path: envProduction, override: false });
 
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || "";
 
@@ -68,13 +70,13 @@ function switchToTest() {
 function switchToProduction() {
   console.log("🔄 Switching to PRODUCTION environment...\n");
 
-  if (!fs.existsSync(envLocal)) {
-    console.error("❌ .env.local not found!");
+  if (!fs.existsSync(envProduction)) {
+    console.error("❌ .env.production not found!");
     process.exit(1);
   }
 
-  // Check if .env.local has production project
-  const prodEnvContent = fs.readFileSync(envLocal, "utf-8");
+  // Check if .env.production has production project
+  const prodEnvContent = fs.readFileSync(envProduction, "utf-8");
   if (!prodEnvContent.includes("hpnewqkvpnthpohvxcmq")) {
     console.error("❌ .env.local does not contain production project URL");
     console.error("   Expected: hpnewqkvpnthpohvxcmq");
@@ -82,7 +84,7 @@ function switchToProduction() {
   }
 
   console.log("✅ Production environment is active");
-  console.log("   File: .env.local");
+  console.log("   File: .env.production");
   console.log("   Project: hpnewqkvpnthpohvxcmq");
   console.log("");
   console.log("💡 To use production environment:");
@@ -114,8 +116,9 @@ if (
   console.log("📋 How Environment Priority Works:");
   console.log("   1. .env.test.local (TEST - Highest Priority)");
   console.log("   2. .env.test (TEST)");
-  console.log("   3. .env.local (PRODUCTION)");
-  console.log("   4. .env (Default)\n");
+  console.log("   3. .env.development (DEVELOPMENT)");
+  console.log("   4. .env.production (PRODUCTION)");
+  console.log("   5. .env (Default)\n");
 
   console.log("💡 Methods to Switch:");
   console.log("");

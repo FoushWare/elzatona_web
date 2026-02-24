@@ -178,6 +178,16 @@ MyComponent.test.tsx              # Unit tests
 MyComponent.integration.test.tsx  # Integration tests
 ```
 
+### Behavior-Driven Development (BDD)
+
+For every new feature or major refactor, you must provide:
+
+1. **Scenarios** in `feature-BDD.md` using Gherkin syntax (Given/When/Then).
+2. **Technical Design** in `feature-TDD.md` covering architecture and API changes.
+3. **Automated Tests** that map directly to the BDD scenarios.
+
+We use **Playwright** for E2E scenarios and **Jest** for technical verification.
+
 ### Before Submitting
 
 ```bash
@@ -204,14 +214,14 @@ Coverage must stay ≥ 90%.
 
 ## Feature Ownership
 
-Each major feature is documented in [`features/`](./features/README.md). The feature doc includes:
+Each major feature is documented in a dedicated directory within [`features/`](./features/README.md). A complete feature doc set includes:
 
-- What the feature does and its user flow
-- Where the code lives in the monorepo
-- API endpoints
-- Test scenarios to cover in your PR
+- **`feature-spec.md`**: Business context and user flow.
+- **`feature-BDD.md`**: Behavioral scenarios for testing.
+- **`feature-TDD.md`**: Technical implementation details.
+- **`test-design.md`**: How the feature is verified.
 
-Before picking up a feature, read its feature doc to understand the expected behaviour.
+Before picking up a feature, read its documentation set to understand the expected behavior and technical constraints.
 
 ---
 
