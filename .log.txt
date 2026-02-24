@@ -1,3 +1,0 @@
-26d0a3e6 style: fix Prettier formatting for CI compliance
-e9c1c0b2 fix(security): mask email in auth logs to prevent clear-text logging
-af96d689 fix: trigger CI re-run after formatting fixes

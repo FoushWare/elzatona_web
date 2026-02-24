@@ -1,6 +1,0 @@
-
- NX   Unable to resolve vite:test.
-
-The "vite" package does not support Nx executors.
-Pass --verbose to see the stacktrace.
-
