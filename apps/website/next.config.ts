@@ -93,13 +93,12 @@ const nextConfig: NextConfig = {
   // Disable automatic error page generation
   distDir: ".next",
 
-  // Redirect admin routes to admin app
-  async redirects() {
+  // Replace redirects with rewrites for /admin to avoid loops on Vercel
+  async rewrites() {
     return [
       {
         source: "/admin/:path*",
         destination: `${process.env.ADMIN_URL || "http://localhost:3001"}/admin/:path*`,
-        permanent: false,
       },
     ];
   },
