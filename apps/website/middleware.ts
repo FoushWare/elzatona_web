@@ -92,6 +92,16 @@ export function middleware(request: NextRequest): NextResponse | Response {
     "geolocation=(), microphone=(), camera=()",
   );
 
+  response.headers.set("x-mw-debug-pathname", pathname);
+  response.headers.set(
+    "x-mw-debug-host",
+    request.headers.get("host") || "not-set",
+  );
+  response.headers.set(
+    "x-mw-debug-admin-url",
+    process.env.ADMIN_URL || "not-set",
+  );
+
   return response;
 }
 
