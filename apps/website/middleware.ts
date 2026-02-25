@@ -17,9 +17,17 @@ export function middleware(request: NextRequest): NextResponse | Response {
       // Prepare the proxy URL
       const url = new URL(pathname + search, adminUrl);
 
-      // Prepare headers for propagation (CodeRabbit logic: send to downstream)
+      // Prepare headers for propagation
       const requestHeaders = new Headers(request.headers);
       requestHeaders.set("x-elzatona-proxied", "true");
+
+      // CRITICAL: Set Host header to the target host for Vercel routing
+      // Without this, the target project will receive the "elzatona-web.com" host
+      // and reject the request with a 404.
+      requestHeaders.set("host", url.host);
+
+      // Remove headers that might cause the target to reject the request
+      requestHeaders.delete("x-forwarded-host");
 
       // Create the rewrite response with propagated headers
       return NextResponse.rewrite(url, {
