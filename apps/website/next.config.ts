@@ -93,14 +93,9 @@ const nextConfig: NextConfig = {
   // Disable automatic error page generation
   distDir: ".next",
 
-  // Replace redirects with rewrites for /admin to avoid loops on Vercel
+  // Rewrites are now primarily handled by middleware to prevent loop recursion
   async rewrites() {
-    return [
-      {
-        source: "/admin/:path*",
-        destination: `${process.env.ADMIN_URL || "http://localhost:3001"}/admin/:path*`,
-      },
-    ];
+    return [];
   },
 
   // Disable automatic error page generation

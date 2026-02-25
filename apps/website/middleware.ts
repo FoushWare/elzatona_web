@@ -1,7 +1,39 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
-export function middleware(request: NextRequest) {
+export function middleware(request: NextRequest): NextResponse | Response {
+  const { pathname, search } = request.nextUrl;
+
+  // Handle /admin proxying with loop detection
+  if (pathname === "/admin" || pathname.startsWith("/admin/")) {
+    const adminUrl = process.env.ADMIN_URL || "http://localhost:3001";
+
+    // Check for loop-detection header
+    if (request.headers.get("x-elzatona-proxied") === "true") {
+      return NextResponse.next();
+    }
+
+    try {
+      // Prepare the proxy URL
+      const url = new URL(pathname + search, adminUrl);
+
+      // Prepare headers for propagation (CodeRabbit logic: send to downstream)
+      const requestHeaders = new Headers(request.headers);
+      requestHeaders.set("x-elzatona-proxied", "true");
+
+      // Create the rewrite response with propagated headers
+      return NextResponse.rewrite(url, {
+        request: {
+          headers: requestHeaders,
+        },
+      });
+    } catch (error) {
+      console.error("Middleware rewrite error:", error);
+      // Fallback: if proxying fails, let the request proceed to avoid crashing the site
+      return NextResponse.next();
+    }
+  }
+
   const response = NextResponse.next();
 
   // Check if the request is for an API route
