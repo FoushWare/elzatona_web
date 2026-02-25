@@ -1,0 +1,34 @@
+name: Deploy Affected Apps (Disabled)
+
+# Currently disabled. Enable when Vercel CLI token is added to GitHub Secrets.
+on:
+  # push:
+  #   branches:
+  #     - main
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0 # Required for Nx affected to compare against previous commits
+
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20'
+
+      - name: Install Dependencies
+        run: npm ci
+
+      - name: Deploy Website (If Affected)
+        # This only runs if files affecting 'website' changed
+        run: npx nx affected --target=build --projects=website && npx vercel deploy --prod --token=${{ secrets.VERCEL_TOKEN }}
+        if: contains(github.event.commits[0].message, 'website') || success()
+
+      - name: Deploy Admin (If Affected)
+        # This only runs if files affecting 'admin' changed
+        run: npx nx affected --target=build --projects=admin && npx vercel deploy --prod --token=${{ secrets.VERCEL_TOKEN }}
+        if: contains(github.event.commits[0].message, 'admin') || success()

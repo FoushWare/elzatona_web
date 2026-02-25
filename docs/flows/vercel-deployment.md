@@ -2,58 +2,76 @@
 
 This document explains the architecture, issues, and solutions for deploying the Nx Monorepo (`website` and `admin`) to Vercel, specifically focusing on the Multi-Zonal setup.
 
-## The Problem: The "UI Lock" and Infinite Proxy Loops
+## The Problem: The Missing Admin Project and the "UI Lock"
 
-When attempting to deploy an Nx Monorepo to Vercel, you might encounter several critical issues:
+When attempting to deploy an Nx Monorepo to Vercel, the most common mistake is assuming that connecting the repository once will automatically detect and deploy all applications within it.
 
-1. **The Dashboard UI Lock Issue:**
-   If a `vercel.json` file is present in the **root** of the repository and contains build configuration overrides (like `"buildCommand": "npx nx build website"`), Vercel will **lock** the Build Command and Output Directory settings in the Web Dashboard UI.
-   - _Impact_: Any new project created in Vercel from this mono-repo will be forced to build the `website` instead of its respective app (e.g., `admin`), because the root `vercel.json` overrides the UI.
+**Mistake:** The repository was connected to Vercel, which automatically configured and built `apps/website`. However, **we forgot to create a second, separate Vercel project for the `admin` application.**
 
-2. **The `DEPLOYMENT_NOT_FOUND` Error:**
-   Because the UI was locked, the `admin` app could not be built properly. Our `website` middleware is configured to proxy `/admin` to the Admin Vercel project (Multi-Zonal routing). If the Admin project does not exist or fails to build, Vercel throws a `404 DEPLOYMENT_NOT_FOUND` when the proxy rewrite attempts to route traffic to it.
+Because the `admin` app was never actually deployed, the `website`'s proxy middleware (`elzatona-web.com/admin`) was trying to route traffic to a non-existent deployment, resulting in the following sequence of errors:
 
-3. **Infinite Loops (`ERR_TOO_MANY_REDIRECTS`):**
-   If the `ADMIN_URL` environment variable is mistakenly set to the same domain as the website (e.g., `https://elzatona-web.com`), the proxy routes the request back to itself, causing an infinite loop.
+1. **The `DEPLOYMENT_NOT_FOUND` Error:**
+   When the proxy rewrite attempts to route traffic to the Admin project, Vercel throws a `404 DEPLOYMENT_NOT_FOUND` because the target Vercel project was never created.
+
+2. **Infinite Loops (`ERR_TOO_MANY_REDIRECTS`):**
+   If the `ADMIN_URL` environment variable is mistakenly set to the same domain as the website (e.g., `https://elzatona-web.com`) in an attempt to fix the 404, the proxy routes the request back to the website, causing an infinite loop.
+
+3. **The Dashboard UI Lock Issue (The Blocker):**
+   To fix this, we needed to create a second Vercel project and change its **Build Command** to `npx nx build admin`. However, **the Vercel Dashboard UI for the Build Command was completely locked and disabled.**
+   - _Why?_ There was a `vercel.json` file in the **root** of the repository that hardcoded `"buildCommand": "npx nx build website"`.
+   - _Impact:_ Vercel disables the Dashboard UI when code-level configuration overrides are present. This meant _any_ new project created from this repository was forcefully locked into building the website, preventing us from deploying the admin app.
 
 ---
 
-## The Solution: Two-Project Architecture and API Configuration
+## The Solution: Two-Project Architecture and CLI Fixes
 
-To run both `website` and `admin` seamlessly under `elzatona-web.com/admin`, we must deploy them as **two separate Vercel projects**. Because of the UI lock, we had to fix this using the Vercel CLI and REST API.
+To resolve this, we must deploy the apps as **two separate Vercel projects**. Because of the UI lock, we had to fix the configuration using the Vercel CLI and REST API.
 
-### Step 1: Removing the Root Lock
+### Step 1: Install and Authenticate with Vercel CLI
 
-We removed the hardcoded `buildCommand` and `outputDirectory` from the root `vercel.json`. This instantly **unlocks the Vercel Dashboard UI** for all projects, allowing Vercel to respect project-specific settings.
-_(If you need project-specific configs, place `vercel.json` inside `apps/website/` or `apps/admin/` instead of the repo root)._
-
-### Step 2: Creating the Admin Project via CLI/API
-
-Because the UI was locked and the build command was disabled during the initial setup, we used the Vercel CLI and REST API to manually create and configure the `elzatona-admin` project.
-
-**Commands executed under the hood:**
+Since the UI was locked, we needed to use the CLI to bypass the dashboard.
 
 ```bash
-# 1. Authenticate with Vercel CLI
-npx vercel login
+# Install the Vercel CLI globally
+npm i -g vercel
 
-# 2. Add the new project
+# Authenticate with your Vercel account
+npx vercel login
+```
+
+### Step 2: Removing the Root Lock
+
+We removed the hardcoded `buildCommand` and `outputDirectory` from the root `vercel.json`.
+
+- **This instantly unlocks the Vercel Dashboard UI** for all projects, allowing Vercel to respect project-specific settings configurable in the browser.
+  _(Note: If you need project-specific configs in the future, place `vercel.json` inside `apps/website/` or `apps/admin/` instead of the repo root)._
+
+### Step 3: Creating and Configuring the Admin Project via CLI/API
+
+With the UI unlocked in the code, we used the CLI and API to manually create and configure the `elzatona-admin` project.
+
+**Commands executed to bypass the lock and configure the project:**
+
+```bash
+# 1. Add the new project to Vercel
 npx vercel project add elzatona-admin
 
-# 3. Use the Vercel REST API to override the locked build settings programmatically
+# 2. Extract your authorization token from the CLI
+cat ~/.vercel/auth.json
+
+# 3. Use the Vercel REST API to explicitly set the build command for this specific project
+# Note: Replace <Vercel_Token> and <Project_ID> with your actual values
 curl -s -X PATCH -H "Authorization: Bearer <Vercel_Token>" \
   -H "Content-Type: application/json" \
   -d '{"buildCommand": "npx nx build admin", "outputDirectory": "apps/admin/.next"}' \
-  https://api.vercel.com/v9/projects/prj_DxcGrySWK...
+  https://api.vercel.com/v9/projects/<Project_ID>
 ```
 
-### Step 3: Dynamic Multi-Zonal Middleware
+### Step 4: Dynamic Proxy Middleware
 
-The `apps/website/middleware.ts` was updated to dynamically resolve the `ADMIN_URL`. It will:
+The `apps/website/middleware.ts` handles the `/admin` proxy routing. It dynamically infers local development targets (`localhost:3001`), but in production, it strictly depends on the `ADMIN_URL` environment variable.
 
-1. Use `process.env.ADMIN_URL` if it is valid (not pointing back to `elzatona-web.com`).
-2. Fallback to `http://localhost:3001` for local development.
-3. Fallback to the known Vercel admin URL (e.g., `https://elzatona-admin-foushwares-projects.vercel.app`) if the environment variable is missing or misconfigured. This prevents infinite loops.
+- **CRITICAL:** Ensure `ADMIN_URL` in the **website** Vercel project exists and points to the newly created separate Admin project (e.g., `https://elzatona-admin-foushwares-projects.vercel.app`).
 
 ---
 

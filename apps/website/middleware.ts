@@ -14,14 +14,15 @@ function getAdminTargetUrl(request: NextRequest): string {
 
   const host = request.headers.get("host") || "";
 
-  // Local development
+  // Local development fallback
   if (host.includes("localhost") || host.includes("127.0.0.1")) {
     return "http://localhost:3001";
   }
 
-  // Absolute fallback for Production/Preview if ADMIN_URL is missing or misconfigured.
-  // This is the actual Vercel deployment URL for the admin project we created via CLI.
-  return "https://elzatona-admin-foushwares-projects.vercel.app";
+  // Fallback if environment variable is missing on Vercel preview/production
+  // Note: For this proxy to work in production, process.env.ADMIN_URL MUST be
+  // set to the separate Vercel project's URL.
+  return "http://localhost:3001";
 }
 
 export function middleware(request: NextRequest): NextResponse | Response {
