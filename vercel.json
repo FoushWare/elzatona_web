@@ -1,9 +1,5 @@
 {
-  "buildCommand": "npx nx build website",
-  "outputDirectory": "apps/website/.next",
   "framework": "nextjs",
-  "installCommand": "npm install",
-  "devCommand": "npx nx serve website",
   "rewrites": [
     {
       "source": "/api/(.*)",

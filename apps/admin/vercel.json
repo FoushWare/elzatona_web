@@ -1,0 +1,5 @@
+{
+  "buildCommand": "npx nx build admin",
+  "outputDirectory": ".next",
+  "framework": "nextjs"
+}
