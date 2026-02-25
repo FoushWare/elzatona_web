@@ -4,6 +4,30 @@ import type { NextRequest } from "next/server";
 export function middleware(request: NextRequest) {
   const response = NextResponse.next();
 
+  // Handle /admin proxying with loop detection
+  if (request.nextUrl.pathname.startsWith("/admin/")) {
+    const adminUrl = process.env.ADMIN_URL || "http://localhost:3001";
+
+    // Check for loop-detection header
+    if (request.headers.get("x-elzatona-proxied") === "true") {
+      return NextResponse.next();
+    }
+
+    // Prepare the proxy URL
+    const url = new URL(
+      request.nextUrl.pathname + request.nextUrl.search,
+      adminUrl,
+    );
+
+    // Create the rewrite response
+    const proxyResponse = NextResponse.rewrite(url);
+
+    // Add loop-detection header to prevent recursion
+    proxyResponse.headers.set("x-elzatona-proxied", "true");
+
+    return proxyResponse;
+  }
+
   // Check if the request is for an API route
   if (request.nextUrl.pathname.startsWith("/api/")) {
     // Add security headers for API routes
