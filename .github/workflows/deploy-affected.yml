@@ -1,11 +1,11 @@
 name: Deploy Affected Apps (Disabled)
 
 # Currently disabled. Enable when Vercel CLI token is added to GitHub Secrets.
-on:
-  # push:
-  #   branches:
-  #     - main
-  workflow_dispatch:
+# on:
+#   # push:
+#   #   branches:
+#   #     - main
+#   workflow_dispatch:
 
 jobs:
   deploy:
