@@ -37,8 +37,11 @@ export function middleware(request: NextRequest): NextResponse | Response {
       });
     } catch (error) {
       console.error("Middleware rewrite error:", error);
-      // Fallback: if proxying fails, let the request proceed to avoid crashing the site
-      return NextResponse.next();
+      const fallback = NextResponse.next();
+      fallback.headers.set("x-mw-debug-error", String(error));
+      fallback.headers.set("x-mw-debug-admin-url", adminUrl || "not-set");
+      fallback.headers.set("x-mw-debug-pathname", pathname);
+      return fallback;
     }
   }
 
