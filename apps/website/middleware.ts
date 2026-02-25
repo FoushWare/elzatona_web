@@ -1,12 +1,43 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
+// Helper to dynamically determine the Admin URL based on the incoming request host
+function getAdminTargetUrl(request: NextRequest): string {
+  // If an explicit override is provided and it doesn't point back to ourselves, use it
+  if (
+    process.env.ADMIN_URL &&
+    !process.env.ADMIN_URL.includes("elzatona-web.com")
+  ) {
+    return process.env.ADMIN_URL;
+  }
+
+  const host = request.headers.get("host") || "";
+
+  // Local development
+  if (host.includes("localhost") || host.includes("127.0.0.1")) {
+    return "http://localhost:3001";
+  }
+
+  // Preview environments (Vercel)
+  // For PRs, the admin and website usually deploy separately.
+  // We default to production admin for preview sites unless explicitly overridden.
+  if (host.includes("vercel.app") && !host.includes("elzatona-web.com")) {
+    // Note: If you have a specific preview admin URL pattern, adjust this.
+    return "https://elzatona-admin.vercel.app";
+  }
+
+  // Production
+  // Map the main domain to the admin domain
+  // We assume the admin project is deployed to this Vercel URL
+  return "https://elzatona-admin.vercel.app";
+}
+
 export function middleware(request: NextRequest): NextResponse | Response {
   const { pathname, search } = request.nextUrl;
 
   // Handle /admin proxying with loop detection
   if (pathname === "/admin" || pathname.startsWith("/admin/")) {
-    const adminUrl = process.env.ADMIN_URL || "http://localhost:3001";
+    const adminUrl = getAdminTargetUrl(request);
 
     // Check for loop-detection header
     if (request.headers.get("x-elzatona-proxied") === "true") {
@@ -22,12 +53,16 @@ export function middleware(request: NextRequest): NextResponse | Response {
       requestHeaders.set("x-elzatona-proxied", "true");
 
       // CRITICAL: Set Host header to the target host for Vercel routing
-      // Without this, the target project will receive the "elzatona-web.com" host
-      // and reject the request with a 404.
       requestHeaders.set("host", url.host);
 
       // Remove headers that might cause the target to reject the request
       requestHeaders.delete("x-forwarded-host");
+      requestHeaders.delete("x-vercel-forwarded-for");
+
+      // Clean up the debug headers so they don't pollute the proxied request
+      requestHeaders.delete("x-mw-debug-pathname");
+      requestHeaders.delete("x-mw-debug-host");
+      requestHeaders.delete("x-mw-debug-admin-url");
 
       // Create the rewrite response with propagated headers
       return NextResponse.rewrite(url, {
@@ -39,8 +74,6 @@ export function middleware(request: NextRequest): NextResponse | Response {
       console.error("Middleware rewrite error:", error);
       const fallback = NextResponse.next();
       fallback.headers.set("x-mw-debug-error", String(error));
-      fallback.headers.set("x-mw-debug-admin-url", adminUrl || "not-set");
-      fallback.headers.set("x-mw-debug-pathname", pathname);
       return fallback;
     }
   }
