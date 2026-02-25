@@ -25,6 +25,9 @@ Because the `admin` app was never actually deployed, the `website`'s proxy middl
 
 ## The Solution: Two-Project Architecture and CLI Fixes
 
+> [!IMPORTANT]
+> **Contributor Note:** Because this is an Nx Monorepo with multiple distinct applications (`website`, `admin`), **each application MUST be deployed as a separate Vercel project.** This is because each app requires a different build command (e.g., `npx nx build website` vs `npx nx build admin`). Attempting to deploy them as a single project will lead to configuration conflicts and build failures.
+
 To resolve this, we must deploy the apps as **two separate Vercel projects**. Because of the UI lock, we had to fix the configuration using the Vercel CLI and REST API.
 
 ### Step 1: Install and Authenticate with Vercel CLI
