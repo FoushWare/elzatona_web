@@ -3,12 +3,13 @@ import type { NextRequest } from "next/server";
 
 // Helper to dynamically determine the Admin URL based on the incoming request host
 function getAdminTargetUrl(request: NextRequest): string {
-  // If an explicit override is provided and it doesn't point back to ourselves, use it
+  // Always prioritize the environment variable, but ONLY if it is NOT configured
+  // to loop back to the same website domain.
   if (
     process.env.ADMIN_URL &&
     !process.env.ADMIN_URL.includes("elzatona-web.com")
   ) {
-    return process.env.ADMIN_URL;
+    return process.env.ADMIN_URL.replace(/\/+$/, ""); // Trim trailing slashes
   }
 
   const host = request.headers.get("host") || "";
@@ -18,18 +19,9 @@ function getAdminTargetUrl(request: NextRequest): string {
     return "http://localhost:3001";
   }
 
-  // Preview environments (Vercel)
-  // For PRs, the admin and website usually deploy separately.
-  // We default to production admin for preview sites unless explicitly overridden.
-  if (host.includes("vercel.app") && !host.includes("elzatona-web.com")) {
-    // Note: If you have a specific preview admin URL pattern, adjust this.
-    return "https://elzatona-admin.vercel.app";
-  }
-
-  // Production
-  // Map the main domain to the admin domain
-  // We assume the admin project is deployed to this Vercel URL
-  return "https://elzatona-admin.vercel.app";
+  // Absolute fallback for Production/Preview if ADMIN_URL is missing or misconfigured.
+  // This is the actual Vercel deployment URL for the admin project we created via CLI.
+  return "https://elzatona-admin-foushwares-projects.vercel.app";
 }
 
 export function middleware(request: NextRequest): NextResponse | Response {
